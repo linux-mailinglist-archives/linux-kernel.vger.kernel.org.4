@@ -2,216 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81477715F33
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C442F715F46
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjE3M0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53210 "EHLO
+        id S231150AbjE3M2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbjE3M0f (ORCPT
+        with ESMTP id S230471AbjE3M1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:26:35 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831BE123
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:26:30 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-973f78329e3so431863166b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685449589; x=1688041589;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ub2jFuE5gMHKMlSzwzuEodjcrijcn62V/6/B6MhqQhc=;
-        b=qh/qvot4P8OSccQ721U0TbPfiUZ2MkUkLg6GYmqJl98rznbMj+QrOBvbFVbkPydASF
-         LzW5QP1KmXdqZpRPgQVXcOSeptA6FqvQIOjFIfSwbSMdqfUOBLzOTXZLQi3y6/EEcw0J
-         aD4o2QYEVfOLOB3agcEmZ/iWEeqDC6pOp2aQFq/VKFpZJRVK7wcYRvse34daaVzlbkxr
-         9e6J8/OYAfxrmpm2Iot/cKE+rrBAmHt8RC13B3ex7bGKN5KvfezycTJkbxqT0/R4MKQW
-         ApqDL6AwTMuOUROHrTmqYSminYZWxQkGV+a4moxtBiev6iTHUD3einSrepKu7jpJYVsO
-         /TjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685449589; x=1688041589;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ub2jFuE5gMHKMlSzwzuEodjcrijcn62V/6/B6MhqQhc=;
-        b=QxysR+2QGTzN955PE5eA13332Q1c7+sOyP3S/Cj4DTwL1KBFIy4MMk7wA250GJsRF2
-         E/VrwZaUpCQWDleMayowxiZSHR7nI2om451JSh5jP70UATYYqJLRGaphwU1lRWlL0Fmf
-         qfdLYfljc2Lfq9zQpEkMklDMxNGyZBrUR4e4GzQwCGC+9tt6rEXQaOyP6LniUdm6OB8y
-         T5anCaUT+WeKbbh4vzlH4kB/LibZbTrbUVjDWCUz3ilGyTq8sJ3lrWFC5xnIPpM6Zjev
-         I8cewB8fa2AKJqSrtd7wdUqMYahGRvOGgqSKXga09jZyA96ysZIjImNlau44Em7gAqkx
-         mmVA==
-X-Gm-Message-State: AC+VfDx3Tc7RSHRYoOiMJB/su0S2YyTvpbdq3bIfH/WmzM+7LFNglm1p
-        S8AHItvafPjh3SAeoXKtYEQLMg==
-X-Google-Smtp-Source: ACHHUZ5N9YGr7jhYOHfatMd2J3ATCqrXHGlWqINWgXg89tGAE4MPMAg3iZYD7ksIssI/7q2AiyJ5Mg==
-X-Received: by 2002:a17:907:d88:b0:96a:43b9:95b1 with SMTP id go8-20020a1709070d8800b0096a43b995b1mr2447111ejc.59.1685449588892;
-        Tue, 30 May 2023 05:26:28 -0700 (PDT)
-Received: from krzk-bin ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id k17-20020a170906681100b0096f7105b3a6sm7242500ejr.189.2023.05.30.05.26.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 05:26:28 -0700 (PDT)
-Date:   Tue, 30 May 2023 14:26:25 +0200
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     miquel.raynal@bootlin.com, sebastian.hesselbarth@gmail.com,
-        gregory.clement@bootlin.com, vadym.kochan@plvision.eu,
-        linux-kernel@vger.kernel.org, vigneshr@ti.com, conor+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, andrew@lunn.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-mtd@lists.infradead.org, enachman@marvell.com,
-        devicetree@vger.kernel.org, richard@nod.at
-Subject: Re: [PATCH v6 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML
- DT scheme
-Message-ID: <20230530122625.7zu3ey5dnn6izeli@krzk-bin>
-References: <20230530005337.3687938-1-chris.packham@alliedtelesis.co.nz>
- <20230530005337.3687938-2-chris.packham@alliedtelesis.co.nz>
+        Tue, 30 May 2023 08:27:54 -0400
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FEE118;
+        Tue, 30 May 2023 05:27:26 -0700 (PDT)
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UAdRCa016483;
+        Tue, 30 May 2023 05:26:48 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=PPS06212021;
+ bh=orias90HcK5ybaKRu2NkMeMHm86NgGU3/kYoq+gDYmM=;
+ b=CZ61kTss7QB9Kwk2mGOLJL9gzA4n3SUnCFwfpLgDKLaFoeHhZMDrBmQO/XZuy0iJSa5G
+ sZz8gY9pq456+RkM/pw7TQna+j5WZc9lVwgyJh8yKP/T7/W3L6hSB1O06DktJYiMnpZF
+ ATMaNhHrM+xHre5p+Z7IF8InLM7CatKDad3VkSadKgyXUSLSR41sGymOlYQiIya5DXNt
+ 9zN6NqCHAQFeb7tZV+1D4IIVtPKjM2QFPWP+qVEkfvZw5t8Ax4ppauF0NmclQhKfaOBU
+ 9qiU5QKui/EA2k75abTun3jhsAKgX4I2FSM9Pypxoo86pnTagVCU5UWmklhOrx+OjIkk Sg== 
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3qud53ac6n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 05:26:47 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ab/gSddDI5Olcp1+CQ5d5hw14TUhpmk+ct90uH0t83KutUp0576L4L3OIT/laALPyngkSzLfDgCyDNNwzyvNa6NJr8LC9nd2a+jn3cQSdxHH1kpoU1TLSXHo6XiD8aK0oEm3jusYPR23cABJ1xkgBwpDUQFgHzDXlgyvK7FANTUqLGPB7Bu2ZyyV5JRjFD+9hqvFTF3Q9QT4zWYHf/lY0+dKbkMNtpZkyxsWbdSIKw4XDnUFvuMlq/w98+bmCRh0lxYIVwLXkiaUqa1EtBk9T5TNJYMDtllXkA7aW+0s/zUCITPJusMkCo6fjBL7e60vp6P/0KlO8r3wld8xP3sD9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=orias90HcK5ybaKRu2NkMeMHm86NgGU3/kYoq+gDYmM=;
+ b=CqY35GKq8v8pkBj8NflqK2m6UBb4B0Zf2dP2+fcdY+FarQoPVQPTuThX9HKgSQm9gy/JXibX3H9MLgCf7vJuLZacuV908eXYejED8XcN3qkxFakeD8FG3yWTxco5DQCx9PdbfRwzUkTnoNS1KyQtRj9tYlZS3SiEgfUrkjxdqidyYzy++/hSv/4VTtKyEcnXB9qXTaWk5mqYzgBbPJox4wMAHlu2fkJVMw22fXj7Vs8G0Ro1hl2QnKHgbm3ALhoB7v1T2SFpL7Ccb+KsZDvX9Js3H/AVXQccY0lHXjqDNGlnAJz9RaSni3WQPRQOJFHbf+bN1n7cFcpmUm0DDXPbdw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from PH0PR11MB4952.namprd11.prod.outlook.com (2603:10b6:510:40::15)
+ by DS0PR11MB7336.namprd11.prod.outlook.com (2603:10b6:8:11f::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Tue, 30 May
+ 2023 12:26:45 +0000
+Received: from PH0PR11MB4952.namprd11.prod.outlook.com
+ ([fe80::5693:5120:1f58:9efa]) by PH0PR11MB4952.namprd11.prod.outlook.com
+ ([fe80::5693:5120:1f58:9efa%3]) with mapi id 15.20.6433.022; Tue, 30 May 2023
+ 12:26:45 +0000
+From:   Dragos-Marian Panait <dragos.panait@windriver.com>
+To:     stable@vger.kernel.org
+Cc:     Ruihan Li <lrh2000@pku.edu.cn>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 6.1 0/1] Hardening against CVE-2023-2002
+Date:   Tue, 30 May 2023 15:26:28 +0300
+Message-Id: <20230530122629.231821-1-dragos.panait@windriver.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR08CA0129.eurprd08.prod.outlook.com
+ (2603:10a6:800:d4::31) To PH0PR11MB4952.namprd11.prod.outlook.com
+ (2603:10b6:510:40::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230530005337.3687938-2-chris.packham@alliedtelesis.co.nz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4952:EE_|DS0PR11MB7336:EE_
+X-MS-Office365-Filtering-Correlation-Id: e284f056-8936-4b09-c961-08db610921b0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pnaq9IfncYOBBE/8iGeiWEqNOycognFMOU1ZwFJ1Xj1wSqUu7mXuQGMt0adrlE+hmsJB4PZeASO8Q/l3CuZeHTURn5xS/jQFvbxgmsf/FWgFpWG5tq3dTZmH8FP/U++r5ofjQq8fFNuTjpw294b27n4YDTX8pPb3Jtqh5gMhSu07WKKocwC6SZRbBSnBpikU8o68gqrsxtD8AsJLIPQbspa7AOU6J/1RWy9dmqUQg2QJcOHEt1IpHc9opEcAf7DvbwGVJ6Ir+q+WBocvSZxgNZAfyaoUTDQDkSqaMPGq3BnzxcQRAHmj+23bs+u8ZW2M7dbk8De+K85nvyyUzZx/C/BFMEOeshVKQMz+D0SMqSd0iZzYyx7CXkmxFjO3xFFrqfM8jpJUjy7ch0XG5mtUfCAtWK5SOMPv9/euIGL2HdB+KbMsy3MoK2hUZ4+gvCJaMpNTBWiJT7cyD77oeGZPv37qaan7KdEe5lvCQH/XHj1A+NDyHmhJk3j0cehoaFLSxlcgDxC8r9GjBuiACbo6V+RbzjA1j42lI5eTZq+C9G+TYuX0TlKHkx9qnQcze1qahEqVCuGe723LWG7Ga8A21sDBGuHmTQWgFXekSM90RAA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4952.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39850400004)(366004)(376002)(396003)(136003)(451199021)(966005)(38100700002)(38350700002)(41300700001)(52116002)(6666004)(6506007)(1076003)(186003)(2616005)(6486002)(26005)(6512007)(478600001)(54906003)(66476007)(66556008)(66946007)(4326008)(6916009)(316002)(5660300002)(8676002)(8936002)(7416002)(2906002)(4744005)(86362001)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BmSEU1JfMqIFVYv7xHoUJ4ua3aiu6hK+1wNxYDGYgw5Lh/YCvtTRTM5ymxl0?=
+ =?us-ascii?Q?1rU7QTmBoU4iDuNvtG4BpC6cWGmp6lHOFaHuMVHhREVfsLS0HYoWm3+acyMY?=
+ =?us-ascii?Q?GJzkHUMi4jWK7w/nbHmRegYgeWZnM3MivN2SuoU1pO4bYv0afE1IadsMs0CG?=
+ =?us-ascii?Q?W9PKgVfSVYJZVbY1VdK7Aktfv5wAOlWSYad+80rm4aWwBrgDXKS324vmcNcK?=
+ =?us-ascii?Q?TcBuWqt4/I3uVnFKNekTEPK3fw071miSY/+YIRu7f1rJz64Y7Msb6NIZ/Lyj?=
+ =?us-ascii?Q?MtFgyV9QCeZp7ERatnTQxQFExuSIlfhBz9kMuF1MGWHzMG9qZ1dcfR9M1/XV?=
+ =?us-ascii?Q?obrMitDyL2gTTYmo7HzvzeHfFG1tsXQLthGEp0C/WxOYJ3iSmMI3r8bx9ZIk?=
+ =?us-ascii?Q?667IXwVBR3ehP90J8yV4KOGePZaEN0+z9qEjjCmVuy7yADEV5tSa8TABfKj7?=
+ =?us-ascii?Q?N1G+QVLiRbQxHB2N2an9se69YTpJotTRPB4TVDNscMzJF9mgBS74w8nQWkBj?=
+ =?us-ascii?Q?Baxayo53TuHyI2Np3jMIqW7Pa0XqCE0Kf0aFrKnPfUJkFCfRKAj3UP94Rg9l?=
+ =?us-ascii?Q?eAFKjQJEJBspXxbRXQkJelDD4JTalhku5P0c/nVzgODftqVhUPsoG+kACdKP?=
+ =?us-ascii?Q?qHE9fDSnGwkEel/I7rLI43Fdbf5iscF6XUGWX/QWEUrc58RDVuIhewKy1Ato?=
+ =?us-ascii?Q?bJwbS3y3CymXV9wOfDbj2sZmwYMRBBCAZeV/JmKWj3umPK9//+HIo9fTPYiH?=
+ =?us-ascii?Q?lL2bTqIcYLpwhQZw95QK365tFPtnYN0aim3rzSBriL7mTGEoRl+Lef49O6bI?=
+ =?us-ascii?Q?WLZVe/pn0EXc5W9yivsQ38YlJJ0P4ZvdtNGzMBD0GyDCNC8j5KISid3364Tz?=
+ =?us-ascii?Q?8DBwtwIRjWtg8MEWX1d3IByxAEVRLcpEj/AGiiqbs2kjkfFn3/VdvL/cgctw?=
+ =?us-ascii?Q?oXu+pvJ4Nv8KOeGr3Pdda8ve6yfB0tn/QLZYgNVdBGBQC2M5oMZp2ApIe54u?=
+ =?us-ascii?Q?r4BuIGHe9jC3dGSXCCrn8s4OFn3kgfWY+F2QtCPFYSy8pG7oDQH3QkrbZSbA?=
+ =?us-ascii?Q?2XCF04QP3w7XsyX7KI2J4pxYWTUebRsYNw+j47Y+tYfNCAWouoSRMSYuToTS?=
+ =?us-ascii?Q?lt5MDSXGoQkb13pcHVLAXspB77MPS52iYugP5XSDf5MPg0hDhHqHkqayzDWu?=
+ =?us-ascii?Q?0ZlozbaYe7jhLLGFL4lcl/33QAlZl5Ij9vK1qM4aQidw2y6Y5piNxUMXwOyX?=
+ =?us-ascii?Q?0WQhmdukkzSz5SJP37KQJGgendEl/QUyIYI5N2vxGZF5JbiC7Z8eHmrVS2OG?=
+ =?us-ascii?Q?cIkPHl2hjcEHzd/wn2KDAgUAOlvaKaYRY9cqvKFabd5/5an7q6cYAb1PQsh8?=
+ =?us-ascii?Q?hpqW1bE+MxZyO5HhOwwFCfV+w7dvQAbGcH0o1OLV2okC/qirFCVjMl6dLnk6?=
+ =?us-ascii?Q?HfmloiNjT4MN/vXB503U/pJUHrkiPWfi7lQhqsxcrBwwfPvMJ4tYccbdxVhG?=
+ =?us-ascii?Q?dDVmOViW0TeIvId1rhPzK4X/NCXXb5K1klM6fQubMNXxoT7mDl5GNLZUUZ7P?=
+ =?us-ascii?Q?9VhtqgGsPpGIrFCQF3m+ytznt+8dtLz1zCcuWZGNDJM22JlWL3qXAf9aKZM0?=
+ =?us-ascii?Q?Xg=3D=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e284f056-8936-4b09-c961-08db610921b0
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4952.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 12:26:45.4691
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vb5W2dWT6sXWPoJqhLoXXRSk7pxL/ozBPLm/7Ez6w5x5HLN9jhSdLMuVoHY8mYEEKWqlg+lJIiSIouhAVbdCm7yzHvK5ppwwmf9WQlAu/tY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7336
+X-Proofpoint-GUID: 2_keXzumSba5HSmOg_9OLXOzw-hpYiK4
+X-Proofpoint-ORIG-GUID: 2_keXzumSba5HSmOg_9OLXOzw-hpYiK4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_08,2023-05-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=602 spamscore=0
+ phishscore=0 bulkscore=0 priorityscore=1501 suspectscore=0 mlxscore=0
+ malwarescore=0 lowpriorityscore=0 impostorscore=0 clxscore=1011
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305300103
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 May 2023 12:53:36 +1200, Chris Packham wrote:
-> From: Vadym Kochan <vadym.kochan@plvision.eu>
-> 
-> Switch the DT binding to a YAML schema to enable the DT validation.
-> 
-> Dropped deprecated compatibles and properties described in txt file.
-> 
-> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
-> 
-> Notes:
->     Changes in v6:
->     - remove properties covered by nand-controller.yaml
->     - add example using armada-8k compatible
-> 
->     earlier changes:
-> 
->     v5:
->        1) Get back "label" and "partitions" properties but without
->           ref to the "partition.yaml" which was wrongly used.
-> 
->        2) Add "additionalProperties: false" for nand@ because all possible
->           properties are described.
-> 
->     v4:
->        1) Remove "label" and "partitions" properties
-> 
->        2) Use 2 clocks for A7K/8K platform which is a requirement
-> 
->     v3:
->       1) Remove txt version from the MAINTAINERS list
-> 
->       2) Use enum for some of compatible strings
-> 
->       3) Drop:
->             #address-cells
->             #size-cells:
-> 
->          as they are inherited from the nand-controller.yaml
-> 
->       4) Add restriction to use 2 clocks for A8K SoC
-> 
->       5) Dropped description for clock-names and extend it with
->          minItems: 1
-> 
->       6) Drop description for "dmas"
-> 
->       7) Use "unevalautedProperties: false"
-> 
->       8) Drop quites from yaml refs.
-> 
->       9) Use 4-space indentation for the example section
-> 
->     v2:
->       1) Fixed warning by yamllint with incorrect indentation for compatible list
-> 
->  .../bindings/mtd/marvell,nand-controller.yaml | 190 ++++++++++++++++++
->  .../devicetree/bindings/mtd/marvell-nand.txt  | 126 ------------
->  MAINTAINERS                                   |   1 -
->  3 files changed, 190 insertions(+), 127 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mtd/marvell-nand.txt
-> 
+The following commit is needed to harden against CVE-2023-2002:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=000c2fa2c144c499c881a101819cf1936a1f7cf2
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Ruihan Li (1):
+  bluetooth: Add cmd validity checks at the start of hci_sock_ioctl()
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
-
-Full log is available here: https://patchwork.ozlabs.org/patch/1787248
+ net/bluetooth/hci_sock.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
 
-nand@720000: $nodename:0: 'nand@720000' does not match '^nand-controller(@.*)?'
-	arch/arm64/boot/dts/marvell/armada-7040-db.dtb
-	arch/arm64/boot/dts/marvell/armada-7040-mochabin.dtb
-	arch/arm64/boot/dts/marvell/armada-8040-clearfog-gt-8k.dtb
-	arch/arm64/boot/dts/marvell/armada-8040-clearfog-gt-8k.dtb
-	arch/arm64/boot/dts/marvell/armada-8040-db.dtb
-	arch/arm64/boot/dts/marvell/armada-8040-db.dtb
-	arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtb
-	arch/arm64/boot/dts/marvell/armada-8040-mcbin.dtb
-	arch/arm64/boot/dts/marvell/armada-8040-mcbin-singleshot.dtb
-	arch/arm64/boot/dts/marvell/armada-8040-mcbin-singleshot.dtb
-	arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dtb
-	arch/arm64/boot/dts/marvell/armada-8040-puzzle-m801.dtb
-	arch/arm64/boot/dts/marvell/cn9130-crb-A.dtb
-	arch/arm64/boot/dts/marvell/cn9130-crb-B.dtb
-	arch/arm64/boot/dts/marvell/cn9130-db-B.dtb
-	arch/arm64/boot/dts/marvell/cn9130-db.dtb
-	arch/arm64/boot/dts/marvell/cn9131-db-B.dtb
-	arch/arm64/boot/dts/marvell/cn9131-db-B.dtb
-	arch/arm64/boot/dts/marvell/cn9131-db.dtb
-	arch/arm64/boot/dts/marvell/cn9131-db.dtb
-	arch/arm64/boot/dts/marvell/cn9132-db-B.dtb
-	arch/arm64/boot/dts/marvell/cn9132-db-B.dtb
-	arch/arm64/boot/dts/marvell/cn9132-db-B.dtb
-	arch/arm64/boot/dts/marvell/cn9132-db.dtb
-	arch/arm64/boot/dts/marvell/cn9132-db.dtb
-	arch/arm64/boot/dts/marvell/cn9132-db.dtb
+base-commit: fa74641fb6b93a19ccb50579886ecc98320230f9
+-- 
+2.40.1
 
-nand@720000: Unevaluated properties are not allowed ('#address-cells', '#size-cells' were unexpected)
-	arch/arm64/boot/dts/marvell/cn9130-db-B.dtb
-	arch/arm64/boot/dts/marvell/cn9131-db-B.dtb
-	arch/arm64/boot/dts/marvell/cn9132-db-B.dtb
-
-nand-controller@43100000: clock-names: ['core'] is too short
-	arch/arm/boot/dts/pxa300-raumfeld-connector.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-controller.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-speaker-l.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-speaker-m.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-speaker-one.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-speaker-s.dtb
-
-nand-controller@43100000: dma-names:0: 'rxtx' was expected
-	arch/arm/boot/dts/pxa300-raumfeld-connector.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-controller.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-speaker-l.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-speaker-m.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-speaker-one.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-speaker-s.dtb
-
-nand-controller@43100000: Unevaluated properties are not allowed ('dma-names' was unexpected)
-	arch/arm/boot/dts/pxa300-raumfeld-connector.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-controller.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-speaker-l.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-speaker-m.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-speaker-one.dtb
-	arch/arm/boot/dts/pxa300-raumfeld-speaker-s.dtb
-
-nand-controller@d0000: nand@0:partitions: Unevaluated properties are not allowed ('partition@errlog', 'partition@nand-bbt', 'partition@user' were unexpected)
-	arch/arm/boot/dts/armada-385-atl-x530.dtb
-
-nand-controller@d0000: Unevaluated properties are not allowed ('#address-cells', '#size-cells' were unexpected)
-	arch/arm/boot/dts/armada-385-atl-x530.dtb
