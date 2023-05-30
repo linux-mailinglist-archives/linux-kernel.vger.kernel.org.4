@@ -2,126 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B85716324
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2765F716329
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbjE3OHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
+        id S232924AbjE3OIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232910AbjE3OHa (ORCPT
+        with ESMTP id S232910AbjE3OH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:07:30 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2078.outbound.protection.outlook.com [40.107.244.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526D4B2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:07:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CG9jYYA9tuyUQ6UoF7+8jmZbS88U84GU9X/bcXgjj0Eka3QF8M6sh647PdjXBDKXPAhd/X7I1fwTm3IQXQpq1QM5tFPhRei/WNy5Ir/Z+/8BMtBfgzeGMQaAx/tvVS9ZeSlXSTD9Y6MOW/gdGj5WFWP8qVMuEmdhEgBEVM9+dxu/2/TNC0K0V19Ea2EpdmVADQEan4y6Y7ScFde2jLVgH4dOkZhyEnPuRZQvOojgTCUcXuGgD+eX79vWkSwWqJkXyf1+Or4WXxy6YH1I0SDfCuWFjwhKb4BAtIXQGgk9MxkxniOly8vSvQ7gwFyiFPZo6RHMeJ+WBow+/Wl2FetzBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TlFpg+FfbJlTAJGzhYqVisiB8Udx5E8bOP8mUFfyD1s=;
- b=XTjq8Kap2gwaYTmFLj93+6BUCAcnGpEjAMyHRU3YyAvvp87T2FD03zjW0SZ01VesSYH4BHSnILEshSJMMfucTuVsGxUVGhxs6Vs2rwBKoND2UW7vZ81vPuUsW8LGw17D6kbVV3kdofKqZaTIVDYMN0hiEgiRuL59eS41+L1kwP3D2QTYT+yM+LqmyWR1qSTLlKQ+LOnVYkvN7zSx/t22f7as4FURXuAuAgHNOKg+J16ghfMQ5ThsN7bgKht/oj0XMVvEj+veE5FYXSavldQ21v1ukTwGYK2mS0jSHgAvtTLCFp1ifF80jwlXVS9fYkkYXrzX35X2GDEdNXN6HHyv8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TlFpg+FfbJlTAJGzhYqVisiB8Udx5E8bOP8mUFfyD1s=;
- b=qINasptNov6dlcF8xsGKikTrJ/VS9ZlOD1k68iJInj/RT3K4EGgQKgVaLRfnphaq/2VvAUicjjng6faXR+2Fh5XbsJ7lmNDQXifPJHGAdZsYgdhX09dc9lpEJiS6hL36FSfF//uZP6xb4PoydQZOgtFH1wyTehXhwpCXyQtcG6F+ufpdlxdNoS8bdw+Wb/g/xclIpgECv5NsVvOlpPyOUD26ps9BBSR8H1fHEodJtAovtx428nJrl0ZEaFNkXG0DFcy5TLpUxaHR92K90GLAEuPVgQqfC0v7jh3aFHvJ8/XCkRj0/gKkJmoGHLV2VfTJAwVrGDncVjoscs/Ib/c1Ig==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6201.namprd12.prod.outlook.com (2603:10b6:930:26::16)
- by IA0PR12MB7508.namprd12.prod.outlook.com (2603:10b6:208:440::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
- 2023 14:07:27 +0000
-Received: from CY5PR12MB6201.namprd12.prod.outlook.com
- ([fe80::a7a3:1d9d:1fa:5136]) by CY5PR12MB6201.namprd12.prod.outlook.com
- ([fe80::a7a3:1d9d:1fa:5136%6]) with mapi id 15.20.6433.022; Tue, 30 May 2023
- 14:07:26 +0000
-Message-ID: <9d183df9-7047-0eee-b6d4-b0f9b8d21036@nvidia.com>
-Date:   Tue, 30 May 2023 10:07:23 -0400
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH v1] virtio-pci: Improve code style for including header
- files
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Jiri Pirko <jiri@nvidia.com>
-References: <20230529181729.15745-1-feliu@nvidia.com>
- <20230530072642-mutt-send-email-mst@kernel.org>
-From:   Feng Liu <feliu@nvidia.com>
-In-Reply-To: <20230530072642-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA0PR12CA0004.namprd12.prod.outlook.com
- (2603:10b6:806:6f::9) To CY5PR12MB6201.namprd12.prod.outlook.com
- (2603:10b6:930:26::16)
+        Tue, 30 May 2023 10:07:58 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34719E8;
+        Tue, 30 May 2023 07:07:53 -0700 (PDT)
+Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 8732785F52;
+        Tue, 30 May 2023 16:07:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1685455671;
+        bh=DxEeEwLI+riVU0nN82Dofb9kzcwsJO6WvuTfNK7QJ+I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VOtG3IcY80mysNE6AwRVh++cAWX+S/rFMGZRC34W6E3L1bh9tWOmtsf+gFtXgdp7r
+         7WqATGBTUlS+bp/V4WLdYzuWulSIaWCrrW4KCj1QnfwOnxcLETkIsY4nCqp1PNZz6v
+         EEMq8awIyqBr8JLt9Nm8L69jcU4gPDCpH5x9oWyTpk0QRITr42MGPFOVcqfuaDxuW4
+         Dlmd73wiZqTIML2z8R7e+YHhWc+eLDi1adn8alLL9++GsC5TcMDmpJKJhwsUgZnIR8
+         4XT2/5y9z5a7y/M6QcETrsdp473FxHyHa3PqGg0TwrpBx7oYX4MBRl/yciz3spESoD
+         9de0XsRxMu7Fg==
+Date:   Tue, 30 May 2023 16:07:43 +0200
+From:   Lukasz Majewski <lukma@denx.de>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] net: dsa: slave: Advertise correct EEE capabilities at
+ slave PHY setup
+Message-ID: <20230530160743.2c93a388@wsk>
+In-Reply-To: <ZHXzTBOtlPKqNfLw@shell.armlinux.org.uk>
+References: <20230530122621.2142192-1-lukma@denx.de>
+        <ZHXzTBOtlPKqNfLw@shell.armlinux.org.uk>
+Organization: denx.de
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6201:EE_|IA0PR12MB7508:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0e3d1ce8-c76e-43ee-68f4-08db611732cc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ADvUgFJxjNCDUL3Ea6Lnb7rtHa19DiOV3FgzaxTNg728NVKX2Q6J/YWv7Ip2RBcG5rfNCIlAjcTQywlJGn+V4D0VSLDOlBTSrHEdTLYI7SWI33LwDCSQfXwjCQa9KkfV0aG6lKpn3y9rvtlspyPzvieSY7rjb6yQGmeuNsozTfkPzonYpfpNTeTe32rb3QsAoFf+QaY3WLB8PZfVp0avxujrm2i1mECQ52dAJLVdfHQB8W3ZziO/RmaFktC4dbyx1pu0rv0a80FHuPFQbZmJNMhcXlnf9MI9o7VNu3hYuE2p+YdI8DvYpxg6Fi6rIp+LUjintDOjhaezk27maB7k+oaCksu+d+YoP6XEtYs2NCrEvMnxvttABZZLXNQdAeTQQiAtPNPUwcAjbtqCiIxolFRYXt+o9ERtFq8ax4BClBzF0ODYS+rPwJ0CrPCG2uq+8gIdUq2vVYxKw0UHT3PCFkSQX3TIorXt8N0YMmLrehU7fLgwjkp2OwJx2n0bODMDlN26C1CRv9d5Auk9pN2r6bFZQk3II4wxcHhPawnTMClAPRs+ESeXZAb+qiqTQJDZOr8AdJxI8Eci2ENyDZdZZemq/DiNXtxMBP1LRiYmXqFX1yjUniyhSdL7H0d06xvictA8Lh2J+Pg5p6a0WGpLfg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6201.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(366004)(346002)(136003)(376002)(451199021)(31686004)(38100700002)(478600001)(86362001)(66946007)(2616005)(66556008)(66476007)(83380400001)(54906003)(6916009)(31696002)(4326008)(2906002)(6666004)(6486002)(6512007)(186003)(26005)(316002)(6506007)(41300700001)(107886003)(5660300002)(8936002)(8676002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dldrMlhDaGtKYis2dnZTcGk1YVkvOEpkK1VDUGJSMEJOaTZaVHpSVjc0cWlp?=
- =?utf-8?B?MUpJQlRWKzZlMEFSOWdpQzgxN3h2azdsdmhvVTh3Vll2TkpMc0JsbXliRWdp?=
- =?utf-8?B?cFd4bUFKa3haQkdIZzZFU2lwNys5bUdBeXY1QWdhWDdVYVkvYzl0YWlBeGpx?=
- =?utf-8?B?TVBncUdmdE1YcE1FejF2eFh5N0JQbTdsdm1SMGtQYUIwMTQvWXhEam1mQ1hK?=
- =?utf-8?B?cmVCRlRJZnVEOTQyUXlXN2RxRDM2NzNDNlo2ejFpaGk5UUhsb3JOYVVnSHBY?=
- =?utf-8?B?dEFmMzhBeU1BRFVuU1VBL3dBbDR5NnlaQWtNRWp4bldDQmNiRDcxWUYwZlJ1?=
- =?utf-8?B?WE1TODZwQm5EUFVkVHhidWlpZXV6bEdQZnlaZVJ1NWl2YUc4RElCL1c0emxZ?=
- =?utf-8?B?R0p2K3RwTkF5US9oSENxeXNnRXhPWkgwcnhUeWcrTHlXZGhqQWoyazNVTXFr?=
- =?utf-8?B?aHhGaE5SL3JPU3NSelY0NHZzbHlOVXc1L3ZncWVwWUVNV1hDVGJXbHJrNVZj?=
- =?utf-8?B?MFpUWVU1VWNBaXdTSzBwdURWMDVkOXBlWUJSbGlGV0Z3SGRST21lRHVpbDBN?=
- =?utf-8?B?SGNkY0lvQXdQMU1lSGY5U1VXMVZPbHdvdGtMdi9LLzJIa1IxMXRkbFRmbE9u?=
- =?utf-8?B?WEQwMXIwZXc0YjdVaVNhTDd1YUFXMVdKVU9PMktSWGY3MllRaEthbW1qRXcz?=
- =?utf-8?B?em5yTFBMYnZJQ2RtQWlvTkpNdllXcFRxQ0ZINE1UQUsxME1KMEVLTnJSdW44?=
- =?utf-8?B?Qlcweng0VENFakpobThyU3lKVXM5ZWY3aHRnRmNiWEZBS0RSdE9TcFM4bWtP?=
- =?utf-8?B?a1J1MGpGL0M3TjlFdWVvazFMdi9MZkpuRnRBSUJKNkR0UmhhZTBwTUVQdGNn?=
- =?utf-8?B?KzJqd2txWTJ4QUVuZUVjeW1QaGxQRElsbThyNWpZVndKbmtUakxPTndHcm1S?=
- =?utf-8?B?TTdHdENhdzExWW5LQVJZQjN0VVg1ZmlzbE53dzJNWjg3MEFRYVdGN1FDVTFF?=
- =?utf-8?B?Qm9zVkI1Q2x6QlJ4Rll4eFZtcWZpOHdyQ0dRQzh2WEhYL2J0dkxUblBGUlNF?=
- =?utf-8?B?SWRyVC9sdXdYcFpheWRYOERrMzhCUEt4YXk5QmkxUTg5Sm9Ha0E1SkVRVWlt?=
- =?utf-8?B?ZUhOVVRMTFVMbCtHWDlVb285Vm1lWUpneWZLTmRNOEhYU0ZzMFpsSEJEcXA5?=
- =?utf-8?B?U3NUWm03bFdTcll3NlorcUhHRWhRTkNNT3ZDZ2NoV2x4Y2lWWnoxNFJtVk42?=
- =?utf-8?B?RVlzOWpnd3o3MUVpRVJEcTFiclRISUZ4WXVRYWtiOGdEeWpwS3R5UVV3WGVF?=
- =?utf-8?B?ZlVJS2ZPU09oTnJ1UUwyY0RkRXVIL2dQcEw5Uy9tVWlrT0c1alIvcVVvelB5?=
- =?utf-8?B?c0FXL2tqSnlLeUdKQkJtcVJGZEZzeDQ5Z3VJdW10dzhMZ0pQMStQTVRoRU9s?=
- =?utf-8?B?QTQzQUt0MFdVL2RweUs1c2dMRzJHQXRSVlNYaW1RbWlIZk95bUpEenRuZ0Q4?=
- =?utf-8?B?eEw0MGdtY2h4cmdCMElEZ1pJaE4vdmRXdjRPTWJkQjlVaUVLNEdBSFMxeXVS?=
- =?utf-8?B?ZzZWMlA4NUt0dlFad0w3MytmdWtIWWRlR3ViRVcrVGhINW1qazI1YTRhL2Fv?=
- =?utf-8?B?RVZKUmJvQ3U3cE55bktKbjhNKzB2UWREZGdKcnZ6TG1aeHF5NGtIYzN5bFZX?=
- =?utf-8?B?ZDd0WWNEQklOUUN4aEdkeSs5ekpxY2xZcWRvYi9tWnNuSkRIVHZJdWxrMktw?=
- =?utf-8?B?RXVqMEZXVCtpTXd2UmtsS2ltMXljWHI5S3dJbFl3aFRYOExhOW02akpyZkVT?=
- =?utf-8?B?YW53Um5CSmxYMnpGdGkyZjNWMmpWekNuc0J0UFUwWk9LZVJtZko3aUZMU0Nk?=
- =?utf-8?B?a25KNlAzenlTQld4RkxJRXorWm8wSWpnajYvYlRKekthaDc3UzBBYXVNekRU?=
- =?utf-8?B?S0ZHY1ZoR2g1K3pVeTIyTEM3QnFJYTk0VHdHZDl3ODBrdXpYWTBITDFwTm0y?=
- =?utf-8?B?OFk2QjBlRG40c01VMXpPZnZ4bTI4UldFcThEanlKb0UyZTAwTTBaVDhXV1B5?=
- =?utf-8?B?SURwL2RhNG5kUUdaTkhxZnN1NG9ZRTlkSjY1WWFxSDJNa3R3d1Y2ZDg2VGY5?=
- =?utf-8?Q?lEL69iDjqg0jDsw/rlFczsCsc?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e3d1ce8-c76e-43ee-68f4-08db611732cc
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6201.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 14:07:26.8826
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3FwGWcV3z4K9IAnUhukQ7Ij4RpOpbCPie50V44LIrPucZZfIgGLI4Q6lAZ91F2dxxY+oAPlgp5tl+AQpqtdqZg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7508
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: multipart/signed; boundary="Sig_/gukjY9rUgd.rLL7bPFTqt74";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,52 +64,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/gukjY9rUgd.rLL7bPFTqt74
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Russell,
+
+> On Tue, May 30, 2023 at 02:26:21PM +0200, Lukasz Majewski wrote:
+> > One can disable in device tree advertising of EEE capabilities of
+> > PHY when 'eee-broken-100tx' property is present in DTS.
+> >=20
+> > With DSA switch it also may happen that one would need to disable
+> > EEE due to some network issues.
+> >=20
+> > Corresponding switch DTS description:
+> >=20
+> >  switch@0 {
+> > 	 ports {
+> > 		port@0 {
+> > 		reg =3D <0>;
+> > 		label =3D "lan1";
+> > 		phy-handle =3D <&switchphy0>;
+> > 		};
+> > 	}
+> > 	mdio {
+> > 		switchphy0: switchphy@0 {
+> > 		reg =3D <0>;
+> > 		eee-broken-100tx;
+> > 	};
+> > 	};
+> >=20
+> > This patch adjusts the content of MDIO_AN_EEE_ADV in MDIO_MMD_AN
+> > "device" so the phydev->eee_broken_modes are taken into account
+> > from the start of the slave PHYs. =20
+>=20
+> This should be handled by phylib today in recent kernels without the
+> need for any patch (as I describe below, because the config_aneg PHY
+> method should be programming it.) Are you seeing a problem with it
+> in 6.4-rc?
+
+Unfortunately, for this project I use LTS 5.15.z kernel.
+
+My impression is that the mv88e6xxx driver is not handling EEE setup
+during initialization (even with v6.4-rc).
+
+I've tried to replace genphy_config_eee_advert() with phy_init_eee, but
+it lacks the part to program PCS advertise registers.
+
+>=20
+> > As a result the 'ethtool --show-eee lan1' shows that EEE is not
+> > supported from the outset.
+> >=20
+> > Questions:
+> >=20
+> > - Is the genphy_config_eee_advert() appropriate to be used here?
+> >   As I found this issue on 5.15 kernel, it looks like mainline now
+> > uses PHY features for handle EEE (but the aforementioned function
+> > is still present in newest mainline - v6.4-rc1).
+> >=20
+> > - I've also observed strange behaviour for EEE capability register:
+> >   Why the value in MDIO_MMD_PCS device; reg MDIO_PCS_EEE_ABLE is
+> > somewhat "volatile" - in a sense that when I use:
+> >   ethtool --set-eee lan2 eee off
+> >=20
+> >   It is cleared by PHY itself to 0x0 (from 0x2) and turning it on
+> > again is not working.
+> >=20
+> >   Is this expected? Or am I missing something? =20
+>=20
+> No - this register is supposed to report the capabilities of the PHY,
+> and bits 1..15 should be read-only, and as they report the
+> capabilities they should be fixed. Writing to bit 1 of this register
+> will therefore be ignored. It sounds like your PHY has some odd
+> behaviour - maybe someone misinterpreted 802.3 45.2.3.9?
+>=20
+
+It is a good question. Or maybe after EEE disabling I read some wrong
+data (however, up till this moment bit offsets and values seems
+reasonable).
+
+> > Signed-off-by: Lukasz Majewski <lukma@denx.de>
+> > ---
+> >  net/dsa/slave.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+> > index 353d8fff3166..712923c7d4e2 100644
+> > --- a/net/dsa/slave.c
+> > +++ b/net/dsa/slave.c
+> > @@ -2247,6 +2247,7 @@ static int dsa_slave_phy_setup(struct
+> > net_device *slave_dev) phylink_destroy(dp->pl);
+> >  	}
+> > =20
+> > +	genphy_config_eee_advert(slave_dev->phydev); =20
+>=20
+> No network driver (which includes DSA) should be calling any function
+> starting genphy_*. These functions are purely for phylib or phy
+> drivers to use, and no one else.
+
+As stated before, it looks like some PHY "update" in respect of EEE is
+not done when DSA framework creates phydevs for slave ports.
+
+>=20
+> genphy_config_eee_advert() is a deprecated function (see commit
+> 5827b168125d ("net: phy: c45: migrate to genphy_c45_write_eee_adv()")
+> and thus should not be used.
+
+Ok.
+
+>=20
+> genphy_c45_write_eee_adv() is called by
+> genphy_c45_an_config_eee_aneg() which will in turn be called by
+> genphy_config_aneg() for a clause 22 PHY, or by
+> genphy_c45_an_config_aneg() for a clause 45 PHY. These will write the
+> EEE advertisement mask to the PHY's AN MMD.
+>=20
+
+Ok.
+
+> So, EEE should be handled by phylib according to the firmware
+> settings.=20
+
+I also would expect, that phy core code parses DTS properties and then
+phydev->eee_broken_mode is used to mask EEE advertisement during PHY
+initialization and startup.
+
+> The only thing that network drivers that use phylib have to
+> deal with is setting their hardware for the LPI timeout and
+> enabling/disabling the timeout as necessary.
+>=20
+
+Yes. I do agree.
 
 
-On 2023-05-30 a.m.7:27, Michael S. Tsirkin wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> On Mon, May 29, 2023 at 02:17:29PM -0400, Feng Liu wrote:
->> Fix code style related to including header file. Include header files
->> before declaring macro definitions to avoid conflicts.
->>
->> Signed-off-by: Feng Liu <feliu@nvidia.com>
->> Reviewed-by: Jiri Pirko <jiri@nvidia.com>
-> 
-> Which conflicts? These macros are there precisely to change
-> how the header behaves.
-> 
+Best regards,
 
-Hi Michael
-     I think including the header files should be placed before the 
-macro definition.
-     If VIRTIO_PCI_NO_LEGACY and VIRTIO_RING_NO_LEGACY are needed for 
-control header file, we should put them at the beginning of 
-virtio_pci_common.h.
+Lukasz Majewski
 
-What do you think?
+--
 
->> ---
->>   drivers/virtio/virtio_pci_modern.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
->> index d6bb68ba84e5..b21a489e0086 100644
->> --- a/drivers/virtio/virtio_pci_modern.c
->> +++ b/drivers/virtio/virtio_pci_modern.c
->> @@ -15,9 +15,10 @@
->>    */
->>
->>   #include <linux/delay.h>
->> +#include "virtio_pci_common.h"
->> +
->>   #define VIRTIO_PCI_NO_LEGACY
->>   #define VIRTIO_RING_NO_LEGACY
->> -#include "virtio_pci_common.h"
->>
->>   static u64 vp_get_features(struct virtio_device *vdev)
->>   {
->> --
->> 2.37.1 (Apple Git-137.1)
-> 
+DENX Software Engineering GmbH,      Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+
+--Sig_/gukjY9rUgd.rLL7bPFTqt74
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmR2Ay8ACgkQAR8vZIA0
+zr0yNgf+MSmXQfSuHrYUlnCE2+UdHZnZS1IgUyT0DBnm7WkVggfh5/jWjgtlmkx7
+glfhaJYQRXUR9OKDnagJdpPzw4yrkX1S3N+5bAkqnFWHEO7idNnY9pgd7OJXg84r
+0p96obyfkIxpSjQXd1oBWFlrJ2rJjvMEougmQ9ANaZJajVmV80K1u3qgIiSDc0Va
+0dB/oAmGSi6JRgcrs3EARuCPL3Gt0KRo2Z4OllbhcqDZ6+bTShYffqfnNuyhG83E
+LRtpbgoLWqJsLTID4m1rfuo0hsrc06ewOuCeXdEDVO5P5Hm+f6VxrgxBpH6ymBm2
+h/JuCiarOt2WxEO2UZnDawsCG20L5g==
+=+NgL
+-----END PGP SIGNATURE-----
+
+--Sig_/gukjY9rUgd.rLL7bPFTqt74--
