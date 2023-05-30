@@ -2,84 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43EDA7157CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857B57157CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:00:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjE3IAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
+        id S229831AbjE3IAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 04:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjE3IA2 (ORCPT
+        with ESMTP id S229739AbjE3IAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 04:00:28 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EF1F7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:00:25 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f6e4554453so27579325e9.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:00:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685433624; x=1688025624;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bw+5vrlh0KQEe/ZrC9Pnuz5iO47khIwJxUk/pu1gpew=;
-        b=ibetnfGa8zwbkn/x1gxPY8DvlS1I3oy9L0hEzldvnZQfuPCq8VupX5M8Oh4JwI+N6G
-         PKnq46TGaLsGxijSv/v/7yGW73SYCN/3C2LqjVVzFk3QFeYXBE/+SMpF1F9yib6KRKZg
-         dw8BEOrDmnZ6EVkqerqJ4ctQIi3aQ4NcODtsZZNJS/FPWFuMd8cxzvn3VivknkwRNT8H
-         kL2qwjXXqCrpCM2aCNjyiJgHHnxx2HtRO56T08v+aUeh1oLObuLaJk36NK8oS7SzPti7
-         3LpXlNRZsXeJAOfWOOIDDt2eAj+q07KfnDOJiPxgj4N7TDW81/97qfqfRzA6r5BQ8WYD
-         lb7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685433624; x=1688025624;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bw+5vrlh0KQEe/ZrC9Pnuz5iO47khIwJxUk/pu1gpew=;
-        b=JVJi/AX0NlWkuAyP3Vz0wrpVlO1iiF+3z6NwNnE4bWnL4R2ejygldL4ji/l2YAQwSQ
-         UAMZ4sJxHmWQtS050kxJZXuBRqWxqmT9TU187HU4R8Gh7zt3z7AA7lHpxQEUv96tUGwS
-         qt50ceJwZqmKW2/Gm5OSEq0fN6lGOt1fRYDVZmhedGRG+hB37bsN8d1Pft3ojejNFHmr
-         /9aU7xPW2hEipdklz43DpAw7v85wg/0btxxme6TFv9Au1Pd7nqPzEAPgu/caFWszNfao
-         5I6mP7w0eAS60IUVYVKhqicQO74OKAihbU/LyQXfr9QweJzo5IXLuwFlP/FTxEx8q+L2
-         Qr8A==
-X-Gm-Message-State: AC+VfDzYUh6wGNvne7HEydQB0GLHIwDhJxhetpNN/xi1eC0D2NmQ52wi
-        NbBWsgLIlcjO8joNJNjniiCotWdVL/K2OfJHmO+02g==
-X-Google-Smtp-Source: ACHHUZ66WyhozjmS8SuHV4WWbgDfZBfLjKrJUYKJliPrYZCbi0ZUu5y02AZ0hWXhH82JdhKKhy6qnw==
-X-Received: by 2002:a05:600c:2055:b0:3f6:1c0:aa7a with SMTP id p21-20020a05600c205500b003f601c0aa7amr819793wmg.29.1685433623796;
+        Tue, 30 May 2023 04:00:25 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A817EDB;
         Tue, 30 May 2023 01:00:23 -0700 (PDT)
-Received: from [127.0.1.1] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id m6-20020a7bce06000000b003f6050d35c9sm16409978wmc.20.2023.05.30.01.00.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 01:00:23 -0700 (PDT)
-From:   Jerome Neanne <jneanne@baylibre.com>
-Subject: [PATCH v4 0/2] Add support for TI TPS65219 PMIC GPIO interface.
-Date:   Tue, 30 May 2023 09:59:58 +0200
-Message-Id: <20230511-tps65219-add-gpio-support-v4-0-b5d6a764d722@baylibre.com>
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34U3trF5017624;
+        Tue, 30 May 2023 10:00:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=F6s3aD3XjXvai6aASf5oktFqcXSWfCYGDRUtEZKcHTU=;
+ b=JiwR7fSL+Spg+EPI/ayGRMDGZe+2f1u/NpUH/q7aXfsopV7ie2mDahW8OLSZ3v5vYIUI
+ k8fOovmZEL+hbAyBQpA1pH9rWegcACyQ45cX2idDAWHxICeyJXug0XrbY1ZZsMfuSNgE
+ TK9eAm2/lN4fmY56I5uhvL2/I5LZGBZtDJxlcjbpNs/t6DyRAeiWUJtDGf58LhpR9BLw
+ 3cZ7X69JRBDhP4c0pvWG/CZ/Syhip1f0ajVN4kmKUvSSB69G6J1VjfmD83JMnZJW46Lk
+ sLcLvNCfAFrbjx16omnWL82R96MA8bkBRym024YLXWd08l26HzBDnvHPOtDbo6kUBhZd UA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3quahy634c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 10:00:02 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D281B10002A;
+        Tue, 30 May 2023 10:00:00 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C872C2138F6;
+        Tue, 30 May 2023 10:00:00 +0200 (CEST)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 30 May
+ 2023 10:00:00 +0200
+Message-ID: <8a4f3112-54ed-e0c1-52ee-395a41255163@foss.st.com>
+Date:   Tue, 30 May 2023 09:59:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAP6sdWQC/42Py27DIBBFfyVi3UlhwK+s+h9VFmDGMVUNCIiVK
- PK/F2dTtassr3TnzLkPlik5yux0eLBEq8su+BrU24GNs/YXAmdrZshR8kYIKDG3DYoBtLVwiS5
- AvsYYUgGJaKxRxHHoWL03OhOYpP0474S5lHiNuSTSy/uic6HEFW9Q7t2YaHK3p8fnueYphQXKX
- Lu/3xGVELKX3bHvFLYKBHx50t7Th9H3b2cSHcew7LjZ5RLS/blqxR36yoAVgUPLJzKtsq0a9F/
- u7rXKl2GywsRQdbVUtkf+D7Zt2w8fJUuGfQEAAA==
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>
-Cc:     khilman@baylibre.com, msp@baylibre.com, francesco@dolcini.it,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-omap@vger.kernel.org,
-        Jonathan Cormier <jcormier@criticallink.com>,
-        Jerome Neanne <jneanne@baylibre.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1685433622; l=3607;
- i=jneanne@baylibre.com; s=20230511; h=from:subject:message-id;
- bh=75fLodblHGAK8az+b3sKgWwZ6ptLjqBbZzqy8WiflR4=;
- b=+vetZhSC7TkflGwLDOj2AYFcBRUnPgVLW2aniFawu05B2Prd09qxSBUyqq64Iq6eJ/EXV25hQ
- t99OUQ4h6xjDIgPq8fBGtVMi2wXEDzOYF788K6F+Yylm6HTBxsBdaDJ
-X-Developer-Key: i=jneanne@baylibre.com; a=ed25519;
- pk=5rvbqNoG+28jQjC9/50ToY7TgKWf9rJukuCI8b6jkUo=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 7/8] ARM: dts: stm32: adopt generic iio bindings for adc
+ channels on dhcor-drc
+Content-Language: en-US
+To:     Olivier MOYSAN <olivier.moysan@foss.st.com>,
+        Marek Vasut <marex@denx.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+CC:     <kernel@dh-electronics.com>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230524133918.1439516-1-olivier.moysan@foss.st.com>
+ <20230524133918.1439516-8-olivier.moysan@foss.st.com>
+ <cc7a0a1a-31bb-92f4-6365-5e0c4a4bc85c@denx.de>
+ <5bb496d0-6dc1-6ba3-6126-6429037ecf5a@foss.st.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <5bb496d0-6dc1-6ba3-6126-6429037ecf5a@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_05,2023-05-29_02,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,105 +82,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes in v4:
-- andy.shevchenko review:
-	- Nits:
-		- move blank line before link in this cover.
-		- Kconfig indentation.
-		- Formatting: Comments; indentation; line length 100.
-		- Do not split string literals.
-	- Add var *dev = gpio->tps->dev and replace to get shorter blocks.
-	- Evaluate GPIO0 MULTI_DEVICE_ENABLE only once.
-	- Explicit include of bits.h
-Change to CONFIG_DEBUG_GPIO: debug options from Kconfig for GPIO only.
+Marek, Olivier
 
-- Link to v3: https://lore.kernel.org/r/20230511-tps65219-add-gpio-support-v3-0-19837a34d820@baylibre.com
-GPIO interface consist in 3 pins:
-Two GPIOS are output only: GPO1, GPO2.
+On 5/24/23 17:39, Olivier MOYSAN wrote:
+> Hi Marek,
+> 
+> On 5/24/23 15:54, Marek Vasut wrote:
+>> On 5/24/23 15:39, Olivier Moysan wrote:
+>>> Use STM32 ADC generic bindings instead of legacy bindings on
+>>> DHCOR DRC Compact board.
+>>>
+>>> The STM32 ADC specific binding to declare channels has been deprecated,
+>>> hence adopt the generic IIO channels bindings, instead.
+>>> The STM32MP151 device tree now exposes internal channels using the
+>>> generic binding. This makes the change mandatory here to avoid a mixed
+>>> use of legacy and generic binding, which is not supported by the driver.
+>>>
+>>> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+>>> ---
+>>>   .../dts/stm32mp15xx-dhcor-drc-compact.dtsi    | 28 ++++++++++++++++---
+>>>   1 file changed, 24 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcor-drc-compact.dtsi 
+>>> b/arch/arm/boot/dts/stm32mp15xx-dhcor-drc-compact.dtsi
+>>> index 39af79dc654c..92d906bfd5d7 100644
+>>> --- a/arch/arm/boot/dts/stm32mp15xx-dhcor-drc-compact.dtsi
+>>> +++ b/arch/arm/boot/dts/stm32mp15xx-dhcor-drc-compact.dtsi
+>>> @@ -57,15 +57,35 @@ &adc {    /* X11 ADC inputs */
+>>>       status = "okay";
+>>>       adc1: adc@0 {
+>>
+>>
+>> I sent similar patch recently too:
+>>
+>> [PATCH] ARM: dts: stm32: Update to generic ADC channel binding on 
+>> DHSOM systems
+>>
+>> But I needed to add #address-cells/#size-cells here and to adc@100, 
+>> otherwise DTB checker was complaining . Did you run DTB check and was 
+>> it OK on your side ?
+> 
+> The first patch in this serie adds the #address-cells/#size-cells to the 
+>   SoC DT. So, there is no need to add them later in the board DT.
+> 
+> I can send a v2 with your patch (after removing the cells properties 
+> from the patch). Having all the patches in the same serie, will help 
+> avoiding sequencing problems.
+> 
+> Do you agree with this ?
 
-GPIO0 is used for multi device support:
-- The input-functionality is only used in multi-PMIC configuration
-- In single-PMIC, it can be used as an output
+What is the status of this patch ?
 
-The configuration is static and flashed in NVM in factory.
-Description tps65219.pdf chapter 7.3.13
+Marek, I would prefer to take all ADC updates in this series if you agree.
 
-Linux must not change MULTI_DEVICE_ENABLE bit at run time.
+Alex
 
-This was done for test purpose only to check input/output
-correct behavior on EVM board (no access to different NVM config).
-
-Tested on k3-am62x-lp-sk board. This board MULTI_DEVICE_ENABLE=0
-
-Despite the register bits are out of order,
-driver is remapping in natural order:
-GPIO0 is gpiochip line 0
-GPO1/2 are gpiochip line 1/2
-
-Initial version by Jon Cormier on TI Mainline.
-Ported upstream by Jerome Neanne
-
-PMIC datasheet:
-
-Link: https://www.ti.com/lit/ds/symlink/tps65219.pdf
-Changes in v3:
-- Linus Walleij Review:
-	- put test code under IS_ENABLED(DEBUG)
-- Bartosz Golaszewski Review:
-	- nits: alphabetical ordering for includes, newline after
-	  return, 
-	- Add error message on regmap_update_bits failure.
-	- Change variable name in: tps65219_template_chip so that it's
-	  clear that gpio_chip get's a copy of this template structure.
-
-- Link to v2: https://lore.kernel.org/r/20230511-tps65219-add-gpio-support-v2-0-60feb64d649a@baylibre.com
-Changes in v2:
-andy.shevchenko review:
-	- Typo and indentation in commit message.
-	- Clarify Co-developer role.
-	- Specify name for module.
-	- Code simplification for tps65219_gpio_set
-	- Put test code into #if 0 ... #endif to make it easier to re-use
-	- Formatting for .driver
-	- remove dupplicated error management => dead code
-
-- Link to v1: https://lore.kernel.org/all/20230224113837.874264-1-jneanne@baylibre.com/
-
-Co-developed-by: Jonathan Cormier <jcormier@criticallink.com>
-Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
-Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
-
-Jerome Neanne (2):
-  gpio: tps65219: add GPIO support for TPS65219 PMIC
-  mfd: tps65219: Add gpio cell instance
-
- MAINTAINERS                  |   1 +
- drivers/gpio/Kconfig         |  13 +++
- drivers/gpio/Makefile        |   1 +
- drivers/gpio/gpio-tps65219.c | 167 +++++++++++++++++++++++++++++++++++
- drivers/mfd/tps65219.c       |   7 +-
- 5 files changed, 188 insertions(+), 1 deletion(-)
- create mode 100644 drivers/gpio/gpio-tps65219.c
-
---
-2.34.1
-
----
-Jerome Neanne (2):
-      gpio: tps65219: add GPIO support for TPS65219 PMIC
-      mfd: tps65219: Add gpio cell instance
-
- MAINTAINERS                  |   1 +
- drivers/gpio/Kconfig         |  15 ++++
- drivers/gpio/Makefile        |   1 +
- drivers/gpio/gpio-tps65219.c | 181 +++++++++++++++++++++++++++++++++++++++++++
- drivers/mfd/tps65219.c       |   2 +-
- 5 files changed, 199 insertions(+), 1 deletion(-)
----
-base-commit: 8ded96e4d9a6da88bdbad61350cc6147b7c0c00c
-change-id: 20230511-tps65219-add-gpio-support-322bdb4e0297
-
-Best regards,
--- 
-Jerome Neanne <jneanne@baylibre.com>
+> 
+> BRs
+> Olivier
+> 
+>>
+>>> -        st,adc-channels = <0 1 6>;
+>>> -        st,min-sample-time-nsecs = <5000>;
+>>>           status = "okay";
+>>> +        channel@0 {
+>>> +            reg = <0>;
+>>> +            st,min-sample-time-ns = <5000>;
+>>> +        };
+>>> +        channel@1 {
+>>> +            reg = <1>;
+>>> +            st,min-sample-time-ns = <5000>;
+>>> +        };
+>>> +        channel@6 {
+>>> +            reg = <6>;
+>>> +            st,min-sample-time-ns = <5000>;
+>>> +        };
+>>>       };
+>>
+>> [...]
 
