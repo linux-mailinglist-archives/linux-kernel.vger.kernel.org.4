@@ -2,122 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03F2715D12
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D5C715D1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjE3LYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
+        id S231802AbjE3LYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbjE3LYJ (ORCPT
+        with ESMTP id S231738AbjE3LYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:24:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74538138;
-        Tue, 30 May 2023 04:23:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A03562741;
-        Tue, 30 May 2023 11:23:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD52C433EF;
-        Tue, 30 May 2023 11:23:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685445828;
-        bh=ZVKevbhOi3dzPmyJza980ajLwMtxRIrR4uviPlUa+A8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MbrcdvGsLzurlPrOBYMkRNI1hTWwWfA0rF31VaibC7KUfqMbINONjVrTUO5zUeoDT
-         nBpn5wokj0OwXAQphyrclam1/VLQG6LTJ+kghgDsU+i20fS6xbjtjTRckfiwwi3ZO+
-         jBNgFeb6NZnkTkPEGCxDej8I47dQA0vDRa4KvTUs=
-Date:   Tue, 30 May 2023 12:23:46 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "D. Starke" <daniel.starke@siemens.com>
-Cc:     linux-serial@vger.kernel.org, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com, felix-haase@siemens.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 09/10] tty: n_gsm: expose configuration and statistics
- via proc fs
-Message-ID: <2023053053-cider-canopy-36ae@gregkh>
-References: <20230517155704.5701-1-daniel.starke@siemens.com>
- <20230517155704.5701-9-daniel.starke@siemens.com>
+        Tue, 30 May 2023 07:24:33 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA35116
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:24:26 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-392116ae103so2703689b6e.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:24:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685445866; x=1688037866;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fpeVFf4HYSFKWVkH4psx6XWClCE7Pw9O6mlEXg3ssXA=;
+        b=bRBy8OFF8M6ESV/CqxPG0Zm0fgDgnY+H+ScocLqDlCzx813Qj8hChJYzTWrA4S/3i6
+         zP8zv4usC/Hp5ttnexNyYUru/t9hJziAtQIWOwgKmv5iW8USBWHFVIwUMHSu3WQK6hfF
+         wlzBIRXbgD3m8PBJVwxPz0C/aOA1lzVddAC6xgB8bxMvRz8ZMotb2g/0LQWghPXfpbm2
+         eeCdAFIgsYdRnQnCoC3V/r4TNwMBqTTW4ke7rpgFg+s/IgEqQSAp6dR7iyIeY9Yoyo0N
+         /svdQssSVJZs6zc3F+x7j+p7GVCaz/q0QVj7dC4+ZeaJv9b3Py8QGYibLQ4fCovZC2jA
+         AZXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685445866; x=1688037866;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fpeVFf4HYSFKWVkH4psx6XWClCE7Pw9O6mlEXg3ssXA=;
+        b=QgmxQxkxp9blvl+U0zWVngrTErcBi4DNGRq5tWElLol+Jb1RtAgiXaKGIctiuiEfqf
+         hEBRydW1T0M0uIZhLguJFjbsFXtjHzszEo8fpM+LJ0ot5D9gyM67c6PMDFv1iQe7oMFy
+         gTgWbP+53Td45b2zZeU+FR77yq1wvcVrzsqZaw0MP4LT3zT5EKrwLaSJGOUZkL0ByxRo
+         p9g35ATKJSPiXmex6m6gPmP80FTyfitIcZrn66OgzvlRlY+Ko3mKY2e18pLjaKL4R9I6
+         wIaqM9S/oeGt3/Uh/9/TTDONk9XPBqRh4/eTs5yJ776EIiY6AYkhHKaX3XFMFJy64b/j
+         /Oxg==
+X-Gm-Message-State: AC+VfDyq4VLLFUcLJ4PQfRvNBm9Ud/IhmxGM5ECOMer3P2WO/B8digft
+        SL2XRWZHcGYRlg5m+NAe/A2EJm0l84JWJkevoXFA6Q==
+X-Google-Smtp-Source: ACHHUZ6g5bk0eLe2t86uVRj615HeQB1zD3d2iMcSb3N/hPHw2Pmi1tB/ZWiZnN1NttFUM5m5Gk8Qrg7ipL2x++lEDow=
+X-Received: by 2002:a05:6808:2184:b0:398:4b04:25ca with SMTP id
+ be4-20020a056808218400b003984b0425camr1292658oib.14.1685445866121; Tue, 30
+ May 2023 04:24:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230517155704.5701-9-daniel.starke@siemens.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230526130716.2932507-1-loic.poulain@linaro.org> <20230530-polytechnisch-besten-258f74577eff@brauner>
+In-Reply-To: <20230530-polytechnisch-besten-258f74577eff@brauner>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Tue, 30 May 2023 13:23:50 +0200
+Message-ID: <CAMZdPi_WE7eegcn3V+7tUsJL2GoGottz2fGY14tkmqG9Tgdbhg@mail.gmail.com>
+Subject: Re: [PATCH] init: Add support for rootwait timeout parameter
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     corbet@lwn.net, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 05:57:03PM +0200, D. Starke wrote:
-> From: Daniel Starke <daniel.starke@siemens.com>
-> 
-> The n_gsm mux collects various statistics about the mux and its channels.
-> These are currently not exposed to the user. There exists already a proc fs
-> path for tty ldiscs (/proc/tty/ldisc).
-> 
-> Extend this path by an 'n_gsm' node and create a proc file for each mux
-> instance if active. The file exposes protocol statistics and channel states
-> and configuration to the user. Mutex based locks are introduced to avoid
-> inconsistent states.
-> 
-> The following shows an example output:
->  tty:ttyS1 flags:
->  initiator:1 mode:1 mru:64 mtu:64 t1:10 t2:34 t3:10 n2:3 k:2 wc:0 ka:100
->  bad_fcs:0 malformed:0 io_error:0 open_error:0 bad_size:0 unsupported:0
-> 
->  dlci:0 state:OPEN cl:2 prio:0 i:UIH k:2 mtu:64 tx:35 rx:35
-> 
-> Description:
-> tty:         The underlying device used by this mux.
-> flags:       Tty flags relevant to the mux protocol.
-> initiator:   0 for responder, 1 for initiator.
-> mode:        0 for basic option mode, 1 for advanced option mode
-> mru:         Maximum receive unit size.
-> mtu:         Maximum transmission unit size.
-> t1:          Acknowledgment timer.
-> t2:          Response timer for multiplexer control channel.
-> t3:          Response timer for wake-up procedure.
-> n2:          Maximum number of retransmissions.
-> k:           Window size.
-> wc:          Wait for configuration before starting parameter negotiation?
-> ka:          Control channel keep-alive timer (0 if disabled).
-> bad_fcs:     Number of bad FCS.
-> malformed:   Number of malformed frames.
-> io_error:    Number of I/O errors on the underlying tty.
-> open_error:  Number of failed DLCI open attempts.
-> bad_size:    Number of n_gsm frames with bad size.
-> unsupported: Number of malformed control frames.
-> dlci:        Related channel number.
-> state:       Current channel state. Possible values are CLOSED,
->              WAITING_CONFIG, CONFIGURE, OPENING, OPEN and CLOSING.
-> cl:          Convergence layer type.
-> prio:        Priority.
-> i:           Framing. Possible values are UI and UIH.
-> k:           Window size.
-> mtu:         Maximum transmission unit size.
-> tx:          Transmitted payload size in bytes (incl. convergence layer
->              type header).
-> rx:          Received payload size in bytes (incl. convergence layer type
->              header).
-> 
-> All timers are in 1/100th of a second units.
+Hi Christian,
 
-Please no, procfs is NOT for driver/device statistics like this, that's
-what sysfs is for if you really need/want it.
+On Tue, 30 May 2023 at 11:45, Christian Brauner <brauner@kernel.org> wrote:
+>
+> On Fri, May 26, 2023 at 03:07:16PM +0200, Loic Poulain wrote:
+> > Add an optional timeout arg to 'rootwait' as the maximum time in
+> > seconds to wait for the root device to show up before attempting
+> > forced mount of the root filesystem.
+> >
+> > This can be helpful to force boot failure and restart in case the
+> > root device does not show up in time, allowing the bootloader to
+> > take any appropriate measures (e.g. recovery, A/B switch, retry...).
+> >
+> > In success case, mounting happens as soon as the root device is ready,
+> > contrary to the existing 'rootdelay' parameter (unconditional delay).
+> >
+> > Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
+> > ---
+>
+> Not terribly opposed and not terribly convinced yet.
+> So, we have rootdelay= with a timeout parameter that allows to specify a
+> delay before attempting to mount the root device. And we have rootwait
+> currently as an indefinite wait. Adding a timeout for rootwait doesn't
+> seem crazy and is backwards compatible. But there's no mention of any
+> concrete users or use-case for this which is usually preferable. If this
+> is just "could be useful for someone eventually" it's way less desirable
+> to merge this than when it's "here's a/multiple user/users"... So I
+> would love to see a use-case described here.
 
-What userspace tool is going to read/parse this thing?  Where does it
-live?
+I can integrate the following use case into a v2 if you think it makes sense:
 
-And what about the security issues involved with all of this new data
-that you are now exposing to all users?  Has it been audited to verify
-that it is safe to do so?
+In case of device mapper usage for the root filesystem (e.g.
+root=/dev/dm-0), if the mapper is not able to create the virtual block
+for any reasons (wrong arguments, bad dm-verity signature, etc), the
+`rootwait` parameter will cause the kernel to wait forever. Adding a
+timeout allows it to detect the 'error' (panic) and reset the device
+after a few seconds, the bootloader can then decide to mark this
+non-bootable partition/parameter and fallback to another partition
+(A/B case) or into a recovery mode.
 
-thanks,
+But it's not specific to device mapper, if a eMMC/SDCARD is not
+detected at boot time because of hardware or software problems (e.g.
+updated with a bad devicetree), it could be desirable to panic/reboot
+instead of waiting for something that will never happen.
 
-greg k-h
+>
+> And this is only useful if there isn't an early userspace init that
+> parses and manages root=. So we need to hit prepare_namespaces() as a
+> rootwait timeout isn't meaningful if this is done by and early init in
+> the initramfs for example.
+
+Indeed, and I do not use initramfs in the above use case, the mapped
+device is created directly from the kernel (thanks to dm-mod.create=),
+mostly for boot time optimization reason, and this is for the same
+reason that rootdelay does not fit.
+
+Regards,
+Loic
