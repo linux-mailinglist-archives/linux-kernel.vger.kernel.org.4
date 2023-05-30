@@ -2,186 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03041716AD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6D1716ACE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233462AbjE3RYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 13:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51040 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232951AbjE3RYX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233262AbjE3RYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 30 May 2023 13:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232991AbjE3RXl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 May 2023 13:23:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723D91A2;
-        Tue, 30 May 2023 10:23:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA47171F;
+        Tue, 30 May 2023 10:23:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFF9863127;
-        Tue, 30 May 2023 17:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD3DCC433D2;
-        Tue, 30 May 2023 17:22:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BEFC63114;
+        Tue, 30 May 2023 17:22:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B27E8C4339B;
+        Tue, 30 May 2023 17:22:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685467331;
-        bh=QewfULGDzQw9U8Sjf5XkcO2JdMdAuFaRZdNueC5s0yU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fn1PZNRTwL8dtH+YSdMWiNxKTQgLI4jjWZPrXGNCw2bmxXzetvhdi9uvapssaeNjy
-         PUrqQse5a27RfWC7mwGnoRmLnCWHKKUZvu/SFHvbUG37WakyZdMohzKouEQyHHfHhJ
-         ZSbBbqLMmyrTkkZ8TXpZNzLEtl73JaPbMr1QJ5Pnu6z1Ch3bOVgJtlFNx5N+RXEo6g
-         RkxZ935caiXca5SPQMLraZ2jZeGfO7fLcobwhwkvIVeY7Khm2/Ab2kb4rlbU8nR5Wv
-         UfCqBJ3I/pH4qW34pbsYZkdcyequfJKYDDvqj7d7uHGZ4YSYJAC4B3rl+/5DZdqajx
-         M84uaqqx+gPYw==
-Date:   Tue, 30 May 2023 18:22:06 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     fl.scratchpad@gmail.com
-Cc:     jic23@kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] dt-bindings: iio: ad7192: Allow selection of
- clock modes
-Message-ID: <20230530-cannabis-headstone-883c5b891dd3@spud>
-References: <20230530075311.400686-1-fl.scratchpad@gmail.com>
- <20230530075311.400686-6-fl.scratchpad@gmail.com>
+        s=k20201202; t=1685467363;
+        bh=fDJgY69hwhL+3CR1eSDi7/Wi+6ZsYK6idV3Bjue83t4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=AsG5JlLrY2cX845sSfS5azR6HQlCeFCiUku4z/OI1kmprAYseS23AbN8f98Fi3rmd
+         BA5ktDXruURv3Z6Sj+PwOCi77xwz8oDiQ9RRjbK0eW43FCaIb9nuhxtJkBYBcF7vUx
+         YkhX0ew6QPMf4muutU04vUK13p55mqmaogiwV8NngHd19MzL5J1bNtZeOY1pcUQD89
+         zjoLp7ouFi8Y+Z+1ac+s5gDXOlx03/oPKhf2ifkC7WldqVKoVdi2aekuaz3m+++IhM
+         01gfSG/NnM4S7lqg9W54Ay/DL93i+9E/51uGOkDGkQlGHbGJikAPmsClSl/8L6KNFd
+         06bnLO8U5F/EQ==
+Date:   Tue, 30 May 2023 12:22:42 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Owen Yang <ecs.taipeikernel@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Matthias Kaehlcke <mka@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>, Harvey <hunge@google.com>,
+        Gavin Lee <gavin.lee@ecs.com.tw>,
+        Abner Yen <abner.yen@ecs.com.tw>,
+        Bob Moragues <moragues@google.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>
+Subject: Re: [PATCH v3] PCI: Add suspend fixup for SSD on sc7280
+Message-ID: <ZHYw4mQ5I3y2XibL@bhelgaas>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="GOC40fJ/cBBzzJa4"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230530075311.400686-6-fl.scratchpad@gmail.com>
+In-Reply-To: <20230530102613.v3.1.Id388e4e2aa48fc56f9cd2d413aabd461ff81d615@changeid>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[+cc Manivannan]
 
---GOC40fJ/cBBzzJa4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, May 30, 2023 at 10:26:29AM +0800, Owen Yang wrote:
+> Implement this workaround to correct NVMe suspend process.
+> 
+> SSD will randomly crashed at 100~250+ suspend/resume cycle. Phison and
+> Qualcomm found that its due to NVMe entering D3cold instead of L1ss.
+> https://partnerissuetracker.corp.google.com/issues/275663637
+> 
+> According to Qualcomm. This issue has been found last year and they have
+> attempt to submit some patches to fix the pci suspend behavior.
+> (ref:https://patchwork.kernel.org/project/linux-arm-msm/list/?
+> series=665060&state=%2A&archive=both).
+> But somehow these patches were rejected because of its complexity. And
+> we've got advise from Google that it will be more efficient that we
+> implement a quirks to fix this issue.
+> 
+> The DECLARE_PCI_FIXUP_SUSPEND function has already specify the PCI device
+> ID. And this SSD will only be used at our Chromebook device only.
 
-On Tue, May 30, 2023 at 09:53:11AM +0200, fl.scratchpad@gmail.com wrote:
-> From: Fabrizio Lamarque <fl.scratchpad@gmail.com>
->=20
-> AD7192 supports external clock sources, generated by a digital clock
-> source or a crystal oscillator, or internally generated clock option
-> without external components.
->=20
-> Describe choice between internal and external clock, crystal or external
-> oscillator, and internal clock output enable.
->=20
-> Signed-off-by: Fabrizio Lamarque <fl.scratchpad@gmail.com>
+I'll wait for your response to Manivannan:
+https://lore.kernel.org/r/20230529164856.GE5633@thinkpad
+
+If the issue is caused by an out-of-tree patch, this fix needs to stay
+with that patch.  If the issue doesn't happen with the current
+upstream kernel, this patch isn't relevant for upstream.
+
+> Signed-off-by: Owen Yang <ecs.taipeikernel@gmail.com>
 > ---
->  .../bindings/iio/adc/adi,ad7192.yaml          | 27 ++++++++++++++++---
->  1 file changed, 24 insertions(+), 3 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml b/=
-Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
-> index 16def2985ab4..f7ecfd65ad80 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
-> @@ -32,7 +32,8 @@ properties:
-> =20
->    clocks:
->      maxItems: 1
-> -    description: phandle to the master clock (mclk)
-> +    description: |
-> +      Master clock (mclk). If not set, internal clock is used.
-> =20
->    clock-names:
->      items:
-> @@ -50,6 +51,17 @@ properties:
->    vref-supply:
->      description: VRef voltage supply
-> =20
-> +  adi,clock-xtal:
-> +    description: |
-> +      Select whether an external crystal oscillator or an external
-> +      clock is applied as master (mclk) clock.
-> +    type: boolean
-
-Am I being daft, or are these the same thing? If they are not, and use
-different input pins, I think it should be explained as it not clear.
-Could you explain why we actually care that the source is a xtal versus
-it being mclk, and why just having master clock is not sufficient?
-
-> +  adi,int-clock-output-enable:
-> +    description: |
-> +      When internal clock is selected, this bit enables clock out pin.
-> +    type: boolean
-
-And this one makes you a clock provider, so the devices advocate
-position would be that you know that this bit should be set if
-"clocks" is not present and a consumer requests a clock.
-I don't seem to have got the driver patches (at least not in this
-mailbox), so I have got no information on how you've actually implemented
-this.
-
-Cheers,
-Conor.
-
+> 
+> Changes in v3:
+> - Adjust comment about issue behavior, ASPM, and the sc7280 connection.
+> - Fix multi-line code comment.
+> 
+> Changes in v2:
+> - Fix subject line style from "drivers: pci: quirks:" to "PCI:"
+> - Adjust comment.
+> 
+>  drivers/pci/quirks.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index f4e2a88729fd..6d895a4da4b5 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -5945,6 +5945,21 @@ static void nvidia_ion_ahci_fixup(struct pci_dev *pdev)
+>  }
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NVIDIA, 0x0ab8, nvidia_ion_ahci_fixup);
+>  
+> +/* 
+> + * In Qualcomm 7c gen 3 sc7280 platform. Some of the SSD will enter
+> + * D3cold instead of L1ss.It cause the device will randomly crash after
+> + * suspend within 100~250+ cycles of suspend/resume test.
+> + *
+> + * After adding this fixup.We've verified that 10 devices passed
+> + * the suspend/resume 2500 cycles test.
+> + */
+> +static void phison_suspend_fixup(struct pci_dev *pdev)
+> +{
+> +	msleep(30);
+> +}
+> +DECLARE_PCI_FIXUP_SUSPEND(0x1987, 0x5013, phison_suspend_fixup);
+> +DECLARE_PCI_FIXUP_SUSPEND(0x1987, 0x5015, phison_suspend_fixup);
 > +
->    adi,rejection-60-Hz-enable:
->      description: |
->        This bit enables a notch at 60 Hz when the first notch of the sinc
-> @@ -84,11 +96,12 @@ properties:
->      description: see Documentation/devicetree/bindings/iio/adc/adc.yaml
->      type: boolean
-> =20
-> +dependencies:
-> +  adi,clock-xtal: ['clocks', 'clock-names']
-> +
->  required:
->    - compatible
->    - reg
-> -  - clocks
-> -  - clock-names
->    - interrupts
->    - dvdd-supply
->    - avdd-supply
-> @@ -98,6 +111,13 @@ required:
-> =20
->  allOf:
->    - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> +  - if:
-> +      required:
-> +        - clocks
-> +        - clock-names
-> +    then:
-> +      properties:
-> +        adi,int-clock-output-enable: false
-> =20
->  unevaluatedProperties: false
-> =20
-> @@ -115,6 +135,7 @@ examples:
->              spi-cpha;
->              clocks =3D <&ad7192_mclk>;
->              clock-names =3D "mclk";
-> +            adi,clock-xtal;
->              interrupts =3D <25 0x2>;
->              interrupt-parent =3D <&gpio>;
->              dvdd-supply =3D <&dvdd>;
-> --=20
-> 2.34.1
->=20
-
---GOC40fJ/cBBzzJa4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHYwvgAKCRB4tDGHoIJi
-0qkFAP9uZ1N8bFxZsXbgW8kQo1+vlYKpinjPWQHQw4vNab1QdAEAiMZn03LxwMx2
-/4Q9ctSo9xBk9Le4GVYdC0z4WQRcWgs=
-=KNs6
------END PGP SIGNATURE-----
-
---GOC40fJ/cBBzzJa4--
+>  static void rom_bar_overlap_defect(struct pci_dev *dev)
+>  {
+>  	pci_info(dev, "working around ROM BAR overlap defect\n");
+> -- 
+> 2.17.1
+> 
