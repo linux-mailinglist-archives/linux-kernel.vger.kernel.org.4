@@ -2,76 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CFF71647C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 439E471648B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbjE3OlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
+        id S232224AbjE3OmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjE3OlC (ORCPT
+        with ESMTP id S231649AbjE3Ol7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:41:02 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847E4123;
-        Tue, 30 May 2023 07:40:51 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 338C921A03;
-        Tue, 30 May 2023 14:40:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1685457650; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a9sB6H+XW8Y7WjDvQjfVnkpXnUAqYkrBI6CEECBeZUA=;
-        b=UGwjgMinTKp0NsJ7pZlarCt1OheuX6unt7XijzKaXk1mMO1rIPhdMjZBOd+sRPfBYEZTXf
-        3Exe5XXnF/9X9UqRSJdkgenu/x8GSb4mziBg7Ay1i9WhzKP/icDtGBDBRreSWdLf3bTTFp
-        N5ljukBANN3f+Pmdgj1Dp+CwZ/3c4fs=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E44292C141;
-        Tue, 30 May 2023 14:40:49 +0000 (UTC)
-Date:   Tue, 30 May 2023 16:40:49 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        sparclinux@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 04/10] watchdog/hardlockup: In
- watchdog_hardlockup_check() use cpumask_copy()
-Message-ID: <ZHYK8dP8-kQ-_pBi@alley>
-References: <20230527014153.2793931-1-dianders@chromium.org>
- <20230526184139.4.Iccee2d1ea19114dafb6553a854ea4d8ab2a3f25b@changeid>
+        Tue, 30 May 2023 10:41:59 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8159AB2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:41:56 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-96f850b32caso878050566b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:41:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685457715; x=1688049715;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HZ55BKQe5vzGyKOw1n9AfdmJAZ4/YqSEcizV/peiawc=;
+        b=dxSdSpU7OGIj4962KNBkgW1KbqPrzRKBhU9L5IBdAAvsWc2bKREhNjl4OUwgp2Yjz6
+         57RGn+qRr5GHadFP7aiwF9FNWndp3Ea+PktAySTiFwxOChucyZGyNnax4I06uYsZEOCG
+         1WYIY/zUsJSKO++7OVVxo5/s96vjvzDibfYVtb8XcOatHLDfxB5ivqFkWiTwX2PoL/42
+         NjSz2sA5OhnD4p1Dq1HTFDzg0NIr/l16awbBKW0tmzU2spc1IX9Jl+orMMhxktBbJl8q
+         fX79Rn48OqxJNi14gOKbkaTHiXsjnF/UH7uX3+D6kOOlepg0hj57LFeRRoS1gbTboW3m
+         AK3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685457715; x=1688049715;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HZ55BKQe5vzGyKOw1n9AfdmJAZ4/YqSEcizV/peiawc=;
+        b=L68a0amk//+nsAiSGLDrQbMy8/rfjd9BhaOVBvdp7p0QBxb84XFjkmy0S59QOrQnkH
+         YRY72pydEOMY6Q4V0i8baTroAWbT4DIOHN70TIY7fyl0H758aTKWUeYn+yEufChX0+zJ
+         of3VFsNdLleaagczI/djhzb2CLPM6ga47gk4LPBtCpGz6yFCPVRiqD8V6vIHkLKxRyog
+         sPR+qLWNRDN3X88B13oJZD2bn505Godz9k+MoqmVmEpN60SscvW4BWnMuANNVhayy/rb
+         OF2u7dnefPKhhvP0gbrE8N0tEMftaKjFodjYy8NjlpcHE10amybJLYme45YXWnIVyilb
+         jp8g==
+X-Gm-Message-State: AC+VfDytHrTdkDO2L60FivZ3+wJiDdnJAxEPQOGznryRshYXmxgLXMZy
+        QMc4NOPUVtR1TJN/bF6RnyJ5mg==
+X-Google-Smtp-Source: ACHHUZ7BxBV9LFJWkXWwzhZqkFq1FAFu83njQb+13RZvNUWZRprYqN594V5GTTGTi3Y5+Zght+O7Dw==
+X-Received: by 2002:a17:907:97d3:b0:94e:5679:d950 with SMTP id js19-20020a17090797d300b0094e5679d950mr2593647ejc.72.1685457714905;
+        Tue, 30 May 2023 07:41:54 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id fi13-20020a170906da0d00b0096fbc516a93sm7380282ejb.211.2023.05.30.07.41.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 07:41:54 -0700 (PDT)
+Message-ID: <f0edb172-46e7-e734-d469-dea1925d0a03@linaro.org>
+Date:   Tue, 30 May 2023 16:41:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526184139.4.Iccee2d1ea19114dafb6553a854ea4d8ab2a3f25b@changeid>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 12/12] dt-bindings: fsl-dma: fsl-edma: add edma3
+ compatible string
+Content-Language: en-US
+To:     Frank Li <Frank.li@nxp.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, peng.fan@nxp.com,
+        vkoul@kernel.org, devicetree@vger.kernel.org,
+        dmaengine@vger.kernel.org, imx@lists.linux.dev, joy.zou@nxp.com,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        shenwei.wang@nxp.com
+References: <20230529200453.1423796-1-Frank.Li@nxp.com>
+ <20230529200453.1423796-13-Frank.Li@nxp.com>
+ <65e7b6df-b83b-2d7c-5093-f5822050827a@linaro.org>
+ <ZHYAuOA6JHv6LYwl@lizhi-Precision-Tower-5810>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZHYAuOA6JHv6LYwl@lizhi-Precision-Tower-5810>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2023-05-26 18:41:34, Douglas Anderson wrote:
-> In the patch ("watchdog/hardlockup: add a "cpu" param to
-> watchdog_hardlockup_check()") we started using a cpumask to keep track
-> of which CPUs to backtrace. When setting up this cpumask, it's better
-> to use cpumask_copy() than to just copy the structure directly. Fix this.
+On 30/05/2023 15:57, Frank Li wrote:
+> On Tue, May 30, 2023 at 03:08:48PM +0200, Krzysztof Kozlowski wrote:
+>>> diff --git a/Documentation/devicetree/bindings/dma/fsl,edma.yaml b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
+>>> index 5fd8fc604261..eed12687b0c9 100644
+>>> --- a/Documentation/devicetree/bindings/dma/fsl,edma.yaml
+>>> +++ b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
+>>> @@ -21,6 +21,10 @@ properties:
+>>>        - enum:
+>>>            - fsl,vf610-edma
+>>>            - fsl,imx7ulp-edma
+>>> +          - fsl,imx8qm-edma
+>>> +          - fsl,imx8qm-adma
+>>> +          - fsl,imx93-edma3
+>>> +          - fsl,imx93-edma4
+>>
+>> What are these last two? What is "3" and "4"?
 > 
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> imx93 edma have two version, edma3(AHB) and edma4(AXI).
+> There are little bit difference at channel space size.
+> 
+> +static struct fsl_edma_drvdata imx93_data3 = {
+> +	.version = v3,
+> +	.flags = FSL_EDMA_DRV_HAS_CHMUX | FSL_EDMA_DRV_HAS_DMACLK,
+> +	.chreg_space_sz = 0x10000,
+> +	.chreg_off = 0x10000,
+> +	.setup_irq = fsl_edma3_irq_init,
+> +};
+> +
+> +static struct fsl_edma_drvdata imx93_data4 = {
+> +	.version = v4,
+> +	.flags = FSL_EDMA_DRV_HAS_CHMUX | FSL_EDMA_DRV_HAS_DMACLK,
+> +	.chreg_space_sz = 0x8000,
+> +	.chreg_off = 0x10000,
+> +	.setup_irq = fsl_edma3_irq_init,
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+OK
 
-Best Regards,
-Petr
+> +};
+> 
+>>
+>>>        - items:
+>>>            - const: fsl,ls1028a-edma
+>>>            - const: fsl,vf610-edma
+>>> @@ -101,6 +105,22 @@ allOf:
+>>>          reg:
+>>>            maxItems: 2
+>>>  
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            anyOf:
+>>> +              - const: fsl,imx8qm-edma
+>>> +              - const: fsl,imx8qm-adma
+>>> +              - const: fsl,imx93-edma3
+>>> +              - const: fsl,imx93-edma4
+>>> +    then:
+>>> +      properties:
+>>> +        reg:
+>>> +          maxItems: 1
+>>> +        interrupts:
+>>> +          maxItems: 64
+>>
+>> That's odd. What about the names? What about minItems? Anyway, this
+>> wasn't tested - you will have failures with dtbs_check.
+> 
+> It passed dtbs_check. interrupt-names is optional property, which
+> will no used after edma v3.
+> 
+> Planned dts look like:
+> 
+> +                       edma1: dma-controller@44000000{
+> +                               compatible = "fsl,imx93-edma3";
+> +                               reg = <0x44000000 0x200000>;
+> +                               #dma-cells = <3>;
+> +                               dma-channels = <31>;
+> +                               interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>,
+> +                                            <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
+> +                                            <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
+> 						....
+
+So add here interrupt-names and double check the result... Optional
+means it can appear.
+
+Best regards,
+Krzysztof
+
