@@ -2,153 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C00716ADE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E16716AE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233302AbjE3R0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 13:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
+        id S231952AbjE3R0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 13:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbjE3R0Z (ORCPT
+        with ESMTP id S233407AbjE3R0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 13:26:25 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC12FE7A;
-        Tue, 30 May 2023 10:25:56 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f4f8b94c06so3495226e87.1;
-        Tue, 30 May 2023 10:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685467498; x=1688059498;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9mcfBA7C2XEbgXjVDjCpK0Hf299E00EVQylWvc9g1Yw=;
-        b=Vzk1E4CsQnADdI4J7KpPHeOmHnbn9ALXbGt+Ef0Q1qZsnyNw7dJFNJEVoVMj4Opw6B
-         OsfGaZpw6UpFrGdnHGTSmS9vcFL+yqAAKCOMCNFd8tcs3IzlTE92tZ65dXUgMlugAfIS
-         3fP5/4bh8dNA2oO8H1DC6+mjZThe7fZctLwlUCdnKoHYRRjBcP6JaYhMf5LEBWmhXHvN
-         UovSDXFeYlc89BqZ352e30cK2xof3ikPOzf/1+yNADDXeV6tqXN6f9G+KawlmEHpni2o
-         LeTpLi+HKK28lZZMfvPhqJ1tWQBCDCY1e34Zs0rkIrrENSvGBfwd8g9yUllCfv1Yx/zj
-         To1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685467498; x=1688059498;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9mcfBA7C2XEbgXjVDjCpK0Hf299E00EVQylWvc9g1Yw=;
-        b=Q7pCtWu72APCwwCF579RjscFoPXWUpAhNhFlDRcOAVkroEA9KBr1yaqmIPYm8wywW7
-         GJDiXT0UJwzCZizqRa0mFQofPM/nIY8jeToK383d5Dc+rv6pHn8iS3tfSAc+WDNSK2L5
-         HU/uk7Iz8MXvCKYS7THFpiJSJrTiss1Ct4B635s2Zoos8PMEVGcUoYG0Hx6rTSJjf29f
-         fkjrJhuRksIrFEMyXTys/BtAHUHpxRivY4cpt1bByt/il81Cvn5TYPYC7M9pu5MHqaLw
-         Wk8/DK/zOhLG/xLbXsZsoWY/RuJmCixfRiLE0+1EC/BZ3+QE3Fq8EsUt3MJ+COYGklYs
-         q7Jg==
-X-Gm-Message-State: AC+VfDxbKUO7CIYRklzzBr6XGy4Klm3+xImzrbkTmu/iS+O0/nZcis9T
-        O76JxBda4upTW+xosGfcuaY=
-X-Google-Smtp-Source: ACHHUZ71EpQjOWoE0C2+ipu+Fj5FwrvOoRwzkItvSUH9dOdK/uSK0NCL5q2Qokp9iUPeSRZ/wTIjxA==
-X-Received: by 2002:a19:ae09:0:b0:4f2:40dd:e2cf with SMTP id f9-20020a19ae09000000b004f240dde2cfmr1121845lfc.55.1685467497822;
-        Tue, 30 May 2023 10:24:57 -0700 (PDT)
-Received: from Osmten.. ([223.123.107.215])
-        by smtp.gmail.com with ESMTPSA id k16-20020a5d66d0000000b0030ae6432504sm3932841wrw.38.2023.05.30.10.24.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 10:24:57 -0700 (PDT)
-From:   Osama Muhammad <osmtendev@gmail.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        angelogioacchino.delregno@collabora.com,
-        DLG-Adam.Ward.opensource@dm.renesas.com, amitk@kernel.org,
-        wenst@chromium.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Osama Muhammad <osmtendev@gmail.com>
-Subject: [PATCH] lvts_thermal.c: Drop error checking for debugfs_create_dir
-Date:   Tue, 30 May 2023 22:24:39 +0500
-Message-Id: <20230530172439.13683-1-osmtendev@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 30 May 2023 13:26:31 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C121BE;
+        Tue, 30 May 2023 10:26:04 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id E65975FD3D;
+        Tue, 30 May 2023 20:24:52 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1685467492;
+        bh=JC8G26p8JpCl7R7J4UNd1bRwiBp1AYCe1zqAjiOHqcE=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=EC/RIpEzM9aXwUf91T3IpewYvolXKQk+9/r3eeSu77OMswjV19CNTiSIa8t3gQ/SC
+         m9lHeb2ITeUUmVD8zuNiVthU1s18r4p+kNH+vCJFoSzTFQa9GkMX6Wb54P7SjrsItg
+         It8aCNJ+wK4wHoGfs9NjVYxPCKySnzPGpfJgXEpDlvxHZR0i10bz+KbYtzoSCLJCR2
+         VGsUwgbKSvOwtTKHJ4im4L4WNdeDSXQ/dqgJcXumYzJt9k8n5/yrCF+vtRGiGN7cy6
+         svywoj1HDJ+KCNQPWvQUnLSpUKqBVFRaQPBsbEhIg/ud3VdwOJmqZsGcahEKJTYNFw
+         wWRdkhfv7acfQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 30 May 2023 20:24:52 +0300 (MSK)
+Date:   Tue, 30 May 2023 20:24:46 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Jerome Brunet <jbrunet@baylibre.com>
+CC:     <neil.armstrong@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>, <jian.hu@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v15 0/6] add Amlogic A1 clock controller drivers
+Message-ID: <20230530172446.gqzx5derf7hhvuki@CAB-WSD-L081021>
+References: <20230517133309.9874-1-ddrokosov@sberdevices.ru><1jilc94x0d.fsf@starbuckisacylon.baylibre.com><20230530164933.m42ojv357atxd4gc@CAB-WSD-L081021>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230530164933.m42ojv357atxd4gc@CAB-WSD-L081021>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/30 11:20:00 #21377521
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch removes the error checking for debugfs_create_dir
-in lvts_thermal.c. This is because the debugfs_create_dir()
-does not return NULL but an ERR_PTR after an error.
-The DebugFS kernel API is developed in a way that the
-caller can safely ignore the errors that occur during
-the creation of DebugFS nodes.The debugfs Api handles
-it gracefully. The check is unnecessary.
+Jerome,
 
-Link to the comment above debugfs_create_dir:
-https://elixir.bootlin.com/linux/latest/source/fs/debugfs/inode.c#L451
+On Tue, May 30, 2023 at 07:49:33PM +0300, Dmitry Rokosov wrote:
+> Jerome,
+> 
+> On Tue, May 30, 2023 at 06:14:01PM +0200, Jerome Brunet wrote:
+> > On Wed 17 May 2023 at 16:33, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> > 
+> > > A1 SoC has four clock controllers on the board: PLL, Peripherals, CPU,
+> > > and Audio. The audio clock controller is different from others, but the
+> > > rest are very similar from a functional and regmap point of view.
+> > > This patch series add support for Amlogic A1 PLL and Peripherals clock
+> > > drivers.
+> > > It blocks all A1 peripherals mainline support and a couple of patch series,
+> > > which were already reviewed and acked, but weren't merged due to pending
+> > > clock controller drivers series, e.g.
+> > > https://lore.kernel.org/all/20230418111612.19479-1-ddrokosov@sberdevices.ru/
+> > >
+> > > TODO: CPU and Audio clock controllers are not included in this patch
+> > > series, it will be sent later. The following clks from these controllers
+> > > are not supported for now:
+> > > * Audio clks - vad, mclk_vad, mclk_d, resample_a, locker_in, mclk_b,
+> > >    pdmdclk, pdmsysclk, eqdrc, spdifin, mclk_a, audio2_toaudiotop,
+> > >    audio2_tovad, audio2_toddr_vad, audio2_tdmin_vad, audio2_pdm,
+> > >    audio2_ddr_arb, audio_audiolocker, audio_eqdrc, audio_resamplea,
+> > >    audio_spdifin, audio_toddrb, audio_toddra, audio_frddrb, audio_frddra,
+> > >    audio_tdmoutb, audio_tdmouta, audio_loopbacka, audio_tdminlb,
+> > >    audio_tdminb, audio_tdmina, audio_ddr_arb, mclk_c
+> > >
+> > > * CPU clks: cpu_fixed_source_sel0, cpu_fixed_source_div0,
+> > >             cpu_fixed_source_sel1, cpu_fixed_source_div1, cpu_clk
+> > >
+> > > Validation:
+> > > * to double check all clk flags run below helper script:
+> > >     pushd /sys/kernel/debug/clk
+> > >     for f in *; do
+> > >         if [[ -f "$f/clk_flags" ]]; then
+> > >             flags="$(cat $f/clk_flags | awk '{$1=$1};1' | sed ':a;N;$!ba;s/\n/ | /g')"
+> > >             echo -e "$f: $flags"
+> > >         fi
+> > >     done
+> > >     popd
+> > >
+> > > * to trace current clks state use '/sys/kernel/debug/clk/clk_dump' node
+> > >   with jq post-processing:
+> > >     $ cat /sys/kernel/debug/clk/clk_dump | jq '.' > clk_dump.json
+> > >
+> > > * to debug clk rate propagation, compile kernel with the following
+> > >   definition:
+> > >     $ sed -i "s/undef CLOCK_ALLOW_WRITE_DEBUGFS/define CLOCK_ALLOW_WRITE_DEBUGFS/g" drivers/clk/clk.c
+> > >   after that, clk_rate debug node for each clock will be available for
+> > >   write operation
+> > >
+> > 
+> > Applied, Thx
+> 
+> Thank you very much!
+> 
+> I noticed that you have applied version 15 of the patch. If I understand
+> correctly, this is because CLK_SET_RATE_NO_REPARENT for all RTC children
+> is preferred from your perspective. I agree with this decision. However,
+> version 16 includes a small refactoring patch that corrects a
+> misstyping by changing all sys_* related dividers and gates to
+> read-only operations, since they are set up from BootROM. Should I
+> submit this patch separately at a later time?
+> 
+> Also could you please clarify the official process for handling these
+> patches? Currently, I don't see them in the linux-amlogic for-next
+> branches. Is there a separate repository for clock changes? I believe
+> the next repository is a fork of the clock framework, but unfortunately,
+> I cannot seem to locate it on git.kernel.org... Apologies for the
+> potentially simple questions...
 
-Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
----
- drivers/thermal/mediatek/lvts_thermal.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+I came across your development tree on GitHub, and I noticed that you've
+applied the latest v16 version. Apologies for the noise!
 
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index d0a3f95b7884..da5e3652ff3b 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -179,7 +179,7 @@ static const struct debugfs_reg32 lvts_regs[] = {
- 	LVTS_DEBUG_FS_REGS(LVTS_CLKEN),
- };
- 
--static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
-+static void lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
- {
- 	struct debugfs_regset32 *regset;
- 	struct lvts_ctrl *lvts_ctrl;
-@@ -188,8 +188,6 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
- 	int i;
- 
- 	lvts_td->dom_dentry = debugfs_create_dir(dev_name(dev), NULL);
--	if (!lvts_td->dom_dentry)
--		return 0;
- 
- 	for (i = 0; i < lvts_td->num_lvts_ctrl; i++) {
- 
-@@ -197,8 +195,6 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
- 
- 		sprintf(name, "controller%d", i);
- 		dentry = debugfs_create_dir(name, lvts_td->dom_dentry);
--		if (!dentry)
--			continue;
- 
- 		regset = devm_kzalloc(dev, sizeof(*regset), GFP_KERNEL);
- 		if (!regset)
-@@ -211,7 +207,6 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
- 		debugfs_create_regset32("registers", 0400, dentry, regset);
- 	}
- 
--	return 0;
- }
- 
- static void lvts_debugfs_exit(struct lvts_domain *lvts_td)
-@@ -221,10 +216,9 @@ static void lvts_debugfs_exit(struct lvts_domain *lvts_td)
- 
- #else
- 
--static inline int lvts_debugfs_init(struct device *dev,
-+static inline void lvts_debugfs_init(struct device *dev,
- 				    struct lvts_domain *lvts_td)
- {
--	return 0;
- }
- 
- static void lvts_debugfs_exit(struct lvts_domain *lvts_td) { }
-@@ -1099,7 +1093,8 @@ static int lvts_domain_init(struct device *dev, struct lvts_domain *lvts_td,
- 		}
- 	}
- 
--	return lvts_debugfs_init(dev, lvts_td);
-+	lvts_debugfs_init(dev, lvts_td);
-+	return 0;
- }
- 
- static int lvts_probe(struct platform_device *pdev)
+https://github.com/BayLibre/clk-meson/commit/84af914404dbc01f388c440cac72428784b8a161#diff-9e8258bc44803391f868de351058eef033cf3828d52801e1711f786501bc5911
+
 -- 
-2.34.1
+Thank you,
+Dmitry
 
+  :      ,   ,   .     ,       , , ,  ,    ,         ,  .       , ,           .
+CONFIDENTIALITY NOTICE: This email and any files attached to it are confidential. If you are not the intended recipient you are notified that using, copying, distributing or taking any action in reliance on the contents of this information is strictly prohibited. If you have received this email in error please notify the sender and delete this email.
