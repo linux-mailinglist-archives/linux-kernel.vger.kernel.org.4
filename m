@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93DC67163F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C3A7163DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbjE3OZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37776 "EHLO
+        id S229806AbjE3OXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbjE3OYo (ORCPT
+        with ESMTP id S229902AbjE3OXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:24:44 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B2D1B8;
-        Tue, 30 May 2023 07:23:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NWEmuGkLTCUa79jBEH3/UxEeJ1XI0nknDfWdtfSsgPs=; b=Ct+KeY0bR7Fd2pFV938dRGSXTb
-        +T51wSDRsfKeMuSei4YQEsU4Xi76eoiaYVk/lttEnZJBJ2NUxa0nAwt21F7XjN8xiXMXaKvYxsPjv
-        1JwrujAB4owDEhg+CCV3cNBdBGPbJO1CWCIJ3zo7ADAp/AyyICHpHTcJDGSsXcUaQJ2nQQY3rFLU9
-        SCt5AhrjoGTUAJR4EssZvVmoJZxXtj67WW2fm46MJfmTOgqrwkt1CaD0nt4+OU3de5LcfLLr02uIQ
-        paqW6ykLF99/+KF3EKEe2ruu40MWJIAj+6KGzGVrsLeK2a2sThWNiV/lisP1NFlavwALCeW8DS4eD
-        ytHa5ABQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q40FD-006M99-Vy; Tue, 30 May 2023 14:22:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E4605300233;
-        Tue, 30 May 2023 16:22:32 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A11CD2414735F; Tue, 30 May 2023 16:22:32 +0200 (CEST)
-Date:   Tue, 30 May 2023 16:22:32 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     torvalds@linux-foundation.org
-Cc:     corbet@lwn.net, will@kernel.org, boqun.feng@gmail.com,
-        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-crypto@vger.kernel.org, sfr@canb.auug.org.au,
-        mpe@ellerman.id.au, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v3 08/11] slub: Replace cmpxchg_double()
-Message-ID: <20230530142232.GA200270@hirez.programming.kicks-ass.net>
-References: <20230515075659.118447996@infradead.org>
- <20230515080554.453785148@infradead.org>
- <20230524093246.GP83892@hirez.programming.kicks-ass.net>
+        Tue, 30 May 2023 10:23:31 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3946E192
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:22:55 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-3357fc32a31so753455ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:22:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685456572; x=1688048572;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SMQ9ry8AKTO2FR7tRHTRE93ffp9TP0HpWMZoGgQvYPQ=;
+        b=V05PqSXnA/o4aizLouT8C2GNTnWY6Jmz3rPcWRR6mywaAUXjuFQVBqL8n43YaW8lKZ
+         lh3UJRUh8Lx/GZPnqEfgKEkYJejr5+w4tQjI5MNHp9Ru6g7bYDRFAwYnfe4Bkqxdp9tU
+         CX0Y7d2iwsnVfC4nCDzPphTXgpfmA/iOjqRhzl3LHhb12Qq/P0SQ0ZWMj3Tooe8N6sui
+         F/785TkH0bWEk/ua64A6iLfNwNLnnDIVE0YvTALbpD8v0cF+NTQ7RWnosUA1k1V9/kgf
+         kJBfWKPN9lUlQozDDRB9eQimr3bc8ssAX/dhzR2wK523e9oQKyXo6c7E3JInD/9Ovt68
+         JiiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685456572; x=1688048572;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SMQ9ry8AKTO2FR7tRHTRE93ffp9TP0HpWMZoGgQvYPQ=;
+        b=Lt7vEj8lSULOrZzQZlbbFkQ8OKbliGKUwCcOBDS2mVrH5SWAu/JRde4XGjl0RNDjRC
+         qNLPRHkERvhyKKUAQXwjk4p4YyYj4U0lGa+6rVD+TlkXsRb63GI+P6UcSRNaObgeQX2B
+         bf+9mPDJDPtbgwDBiT9XD3AtudhlnBzj3bBhkYEqyZDgFEyDuFEZcg481KPapmYUkhxV
+         mt5jrz1Ov4yAz8kNXfLRNQ7ubpY8LQgtIoHwMpr7z3L65H1UYWagP5pTL1o+UtAJyobc
+         pKlo3RP30gRkFmj92OcQ7f/tUIbFLP+5vpiojUW9ltOGqaztkNGd55PdJGb5RekzTL1Q
+         UjHg==
+X-Gm-Message-State: AC+VfDxvR12tqA9NtzmplMNKUzUf8IzOTtFnEGmJyAMJgTGdGdia1tzn
+        UObNPkQQjZF5HHMgaZg+RAfv61jOfyoZf6HQ9+s=
+X-Google-Smtp-Source: ACHHUZ6bAQuuHXpQlR+iC5nEfSoFbg5j9AdJTp/kx+0TZ1coKbNYT8KiYZ6HXc/m0Q1/bl2BmHMSwg==
+X-Received: by 2002:a05:6e02:219d:b0:33b:3a14:c14c with SMTP id j29-20020a056e02219d00b0033b3a14c14cmr1520578ila.3.1685456572032;
+        Tue, 30 May 2023 07:22:52 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id v11-20020a056638250b00b004035b26b6d8sm761464jat.2.2023.05.30.07.22.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 07:22:51 -0700 (PDT)
+Message-ID: <8e874109-db4a-82e3-4020-0596eeabbadf@kernel.dk>
+Date:   Tue, 30 May 2023 08:22:50 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230524093246.GP83892@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 0/7] block layer patches for bcachefs
+Content-Language: en-US
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <20230525214822.2725616-1-kent.overstreet@linux.dev>
+ <ee03b7ce-8257-17f9-f83e-bea2c64aff16@kernel.dk>
+ <ZHEaKQH22Uxk9jPK@moria.home.lan>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <ZHEaKQH22Uxk9jPK@moria.home.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,87 +77,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 11:32:47AM +0200, Peter Zijlstra wrote:
-> On Mon, May 15, 2023 at 09:57:07AM +0200, Peter Zijlstra wrote:
+On 5/26/23 2:44?PM, Kent Overstreet wrote:
+> On Fri, May 26, 2023 at 08:35:23AM -0600, Jens Axboe wrote:
+>> On 5/25/23 3:48?PM, Kent Overstreet wrote:
+>>> Jens, here's the full series of block layer patches needed for bcachefs:
+>>>
+>>> Some of these (added exports, zero_fill_bio_iter?) can probably go with
+>>> the bcachefs pull and I'm just including here for completeness. The main
+>>> ones are the bio_iter patches, and the __invalidate_super() patch.
+>>>
+>>> The bio_iter series has a new documentation patch.
+>>>
+>>> I would still like the __invalidate_super() patch to get some review
+>>> (from VFS people? unclear who owns this).
+>>
+>> I wanted to check the code generation for patches 4 and 5, but the
+>> series doesn't seem to apply to current -git nor my for-6.5/block.
+>> There's no base commit in this cover letter either, so what is this
+>> against?
+>>
+>> Please send one that applies to for-6.5/block so it's a bit easier
+>> to take a closer look at this.
 > 
-> > @@ -3008,6 +3029,22 @@ static inline bool pfmemalloc_match(stru
-> >  }
-> >  
-> >  #ifndef CONFIG_SLUB_TINY
-> > +static inline bool
-> > +__update_cpu_freelist_fast(struct kmem_cache *s,
-> > +			   void *freelist_old, void *freelist_new,
-> > +			   unsigned long tid)
-> > +{
-> > +#ifdef system_has_freelist_aba
-> > +	freelist_aba_t old = { .freelist = freelist_old, .counter = tid };
-> > +	freelist_aba_t new = { .freelist = freelist_new, .counter = next_tid(tid) };
-> > +
-> > +	return this_cpu_cmpxchg_freelist(s->cpu_slab->freelist_tid.full,
-> > +					 old.full, new.full) == old.full;
-> > +#else
-> > +	return false;
-> > +#endif
-> > +}
-> > +
-> >  /*
-> >   * Check the slab->freelist and either transfer the freelist to the
-> >   * per cpu freelist or deactivate the slab.
-> > @@ -3359,11 +3396,7 @@ static __always_inline void *__slab_allo
-> >  		 * against code executing on this cpu *not* from access by
-> >  		 * other cpus.
-> >  		 */
-> > -		if (unlikely(!this_cpu_cmpxchg_double(
-> > -				s->cpu_slab->freelist, s->cpu_slab->tid,
-> > -				object, tid,
-> > -				next_object, next_tid(tid)))) {
-> > -
-> > +		if (unlikely(!__update_cpu_freelist_fast(s, object, next_object, tid))) {
-> >  			note_cmpxchg_failure("slab_alloc", s, tid);
-> >  			goto redo;
-> >  		}
-> > @@ -3736,11 +3769,7 @@ static __always_inline void do_slab_free
-> >  
-> >  		set_freepointer(s, tail_obj, freelist);
-> >  
-> > -		if (unlikely(!this_cpu_cmpxchg_double(
-> > -				s->cpu_slab->freelist, s->cpu_slab->tid,
-> > -				freelist, tid,
-> > -				head, next_tid(tid)))) {
-> > -
-> > +		if (unlikely(!__update_cpu_freelist_fast(s, freelist, head, tid))) {
-> >  			note_cmpxchg_failure("slab_free", s, tid);
-> >  			goto redo;
-> >  		}
-> 
-> This isn't right; the this_cpu_cmpxchg_double() was unconditional and
-> relied on the local_irq_save() fallback when no native cmpxchg128 is
-> present.
+> Here you go:
+> git pull https://evilpiepirate.org/git/bcachefs.git block-for-bcachefs
 
-This means this_cpu_cmpxchg128 is expected to be present on all 64bit
-archs, except Mark just found out that HPPA doens't support __int128
-until gcc-11.
+Thanks
 
-(I've been building using gcc-12.2)
+The re-exporting of helpers is somewhat odd - why is bcachefs special
+here and needs these, while others do not?
 
-And because the cmpxchg128 fallback relies on '==' we can't trivally
-fudge that with a struct type either :/ Now, afaict it all magically
-works if I use:
+But the main issue for me are the iterator changes, which mostly just
+seems like unnecessary churn. What's the justification for these? The
+commit messages don;t really have any. Doesn't seem like much of a
+simplification, and in fact it's more code than before and obviously
+more stack usage as well.
 
-#ifdef __SIZEOF_INT128__
-typedef __s128 s128
-typedef __u128 u128
-#else
-#if defined(CONFIG_PARISC) && defined(CONFIG_64BIT)
-typedef long double u128;
-#endif
-#endif
+-- 
+Jens Axboe
 
-but that is *super* gross.
-
-The alternative is raising the minimum GCC for PARISC to gcc-11..
-
-Yet another alternative is using a struct type and an equality function,
-just for this.
-
-Anybody?
