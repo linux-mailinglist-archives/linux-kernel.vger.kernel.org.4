@@ -2,130 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57831716DB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC7D716DB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbjE3Thn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 15:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
+        id S233027AbjE3Th4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 15:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjE3Thk (ORCPT
+        with ESMTP id S233157AbjE3Thx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 15:37:40 -0400
-Received: from out-46.mta0.migadu.com (out-46.mta0.migadu.com [91.218.175.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0495DF3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:37:37 -0700 (PDT)
-Date:   Tue, 30 May 2023 19:37:25 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685475455;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xJBcu8ATCUO1aDY2yQ8vOVcCThAxEWqTiihzn189BcI=;
-        b=oTgfsm6Y7m0cHeGsa3KJXNWXMuNSlm0sfaQCoEPDjFj6jxNxzseINRPUWevletZvuYk83p
-        +kFUfwmLUYdIL6pvdibsqLd2oceBrIf/xJKHf7O+W7xiGADvFsQD0goq381G/kYiPU+lqt
-        jv2kELueVaqLNY647oTCnG+i/dK3+OY=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Anup Patel <anup@brainfault.org>,
-        Ben Gardon <bgardon@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Gavin Shan <gshan@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Larabel <michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-        linux-mm@google.com
-Subject: Re: [PATCH mm-unstable v2 04/10] kvm/arm64: make stage2 page tables
- RCU safe
-Message-ID: <ZHZQdQAApIrw6fBu@linux.dev>
-References: <20230526234435.662652-1-yuzhao@google.com>
- <20230526234435.662652-5-yuzhao@google.com>
- <ZHJHJPBF6euzOFdw@linux.dev>
- <CAOUHufa74CufHziHSquO5bZwbFXz2MNssBzW+AH7=Xo5RCnQ0A@mail.gmail.com>
+        Tue, 30 May 2023 15:37:53 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44596F3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:37:50 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2af2ef0d0daso50838801fa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685475468; x=1688067468;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s4TpePdBcmf3Xw/fPvZUtcZlrHBAqUXKquGcCNg+8W4=;
+        b=dwqIw6MQH1tUrPDRdlGNfOTTTS4X4TGXQBY6HjdV5Kg/WHQzZi2rk7Z0ZKBU4R88To
+         87Gq0HTgwpKhiHITsrTyshd5kxb7AYHjQsTvJCVi4So0J1/KZ+WEV72qAqLGwkIf9tcA
+         j1BBmL89W2jhfWoI6aYtO4BDyJcFk8uOWSWT/CkDscbcr6PFBhwJHjTwvr1nQa25nrRM
+         SVg+N5WOIlmJwPm481pMcfUyC5hjhedozkJhHP7W4lIza4JckFXy+ZYyVrKPedcOJvyO
+         q1608se3L2Em3vQcjSv7Bw3clbM48BtRCN4MTtrYM8E8Xs5f3A5OF6Q6UIwX5Ud7Ey2A
+         4UxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685475468; x=1688067468;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s4TpePdBcmf3Xw/fPvZUtcZlrHBAqUXKquGcCNg+8W4=;
+        b=JykOrJnUHAduOfnOnXZFkF3Tt6Xxnxc9cRte2NCY43bPbCuRQsLu6VK4TuKAX4V8LK
+         wfQjCeC0bR5lfMaGEB7VYO6ED5Csd5eH4cyZ5fklKjt1wOlDW59+kj5IKBWB35V/KTGg
+         kc7aqr7xe8ZvAw4jkeaAObq9bGwxOd88I5Q56jYIdsD7jPMe+YROPFkMCjZ8FnP8dR9q
+         HJyZ2FbmQAeGd+4lLpgBSDvJKelqX8yC7XxgNBwrzw5zFAb8Ph1RQHYgMNu24Fizo/NK
+         SyY43lJN+Kq3FICMk0K83BAeFOywWyupo348oHwDU17W1tGTt4S9DGwfGU7KxYoHqyYi
+         U77w==
+X-Gm-Message-State: AC+VfDx4BZRKSrMJxP/4Lizut7HJ+P5JSeRqXQ/YO17P028N+qgJVZp4
+        CEAaotcIkDgt0dq//2KG8m7irLkCjI/KCJZ9Ad4=
+X-Google-Smtp-Source: ACHHUZ7pnAUM8bkHrV3d/NxVG64VyEJxxguXYTf7NQ+tfO8xq5mMB6Rk9GYLhNJX7tDJe9D0x1Tf0w==
+X-Received: by 2002:a2e:a212:0:b0:2aa:40dd:7a55 with SMTP id h18-20020a2ea212000000b002aa40dd7a55mr1376227ljm.8.1685475468466;
+        Tue, 30 May 2023 12:37:48 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id t10-20020a2e780a000000b002adb566dc10sm2962863ljc.129.2023.05.30.12.37.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 12:37:48 -0700 (PDT)
+Message-ID: <c9c232a4-519a-108f-3651-5af6ba812dc8@linaro.org>
+Date:   Tue, 30 May 2023 21:37:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOUHufa74CufHziHSquO5bZwbFXz2MNssBzW+AH7=Xo5RCnQ0A@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/2] dt-bindings: reserved-memory: rmtfs: Allow dynamic
+ allocation
+Content-Language: en-US
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230530193436.3833889-1-quic_bjorande@quicinc.com>
+ <20230530193436.3833889-2-quic_bjorande@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230530193436.3833889-2-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yu,
 
-On Sat, May 27, 2023 at 02:13:07PM -0600, Yu Zhao wrote:
-> On Sat, May 27, 2023 at 12:08 PM Oliver Upton <oliver.upton@linux.dev> wrote:
-> > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-> > index 3d61bd3e591d..bfbebdcb4ef0 100644
-> > --- a/arch/arm64/kvm/hyp/pgtable.c
-> > +++ b/arch/arm64/kvm/hyp/pgtable.c
-> > @@ -1019,7 +1019,7 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
-> >                                                kvm_granule_size(ctx->level));
-> >
-> >         if (childp)
-> > -               mm_ops->put_page(childp);
-> > +               mm_ops->free_removed_table(childp, ctx->level);
+
+On 30.05.2023 21:34, Bjorn Andersson wrote:
+> Allow instances of the qcom,rmtfs-mem either be defined as a
+> reserved-memory regoin, or just standalone given just a size.
 > 
-> Thanks, Oliver.
+> This relieve the DeviceTree source author the need to come up with a
+> static memory region for the region.
 > 
-> A couple of things I haven't had the chance to verify -- I'm hoping
-> you could help clarify:
-> 1. For unmapping, with free_removed_table(), wouldn't we have to look
-> into the table we know it's empty unnecessarily?
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+>  .../reserved-memory/qcom,rmtfs-mem.yaml       | 23 ++++++++++++++++---
+>  1 file changed, 20 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+> index bab982f00485..8b5de033f9ac 100644
+> --- a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+> +++ b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
+> @@ -14,13 +14,16 @@ description: |
+>  maintainers:
+>    - Bjorn Andersson <bjorn.andersson@linaro.org>
+>  
+> -allOf:
+> -  - $ref: reserved-memory.yaml
+> -
+>  properties:
+>    compatible:
+>      const: qcom,rmtfs-mem
+>  
+> +  qcom,alloc-size:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Requested size of the rmtfs memory allocation, when not defined as a
+> +      reserved-memory region.
+> +
+>    qcom,client-id:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description: >
+> @@ -36,6 +39,11 @@ properties:
+>  required:
+>    - qcom,client-id
+>  
+> +oneOf:
+> +  - $ref: reserved-memory.yaml
+> +  - required:
+> +      - qcom,alloc-size
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+> @@ -53,3 +61,12 @@ examples:
+>              qcom,client-id = <1>;
+>          };
+>      };
+> +  - |
+> +    rmtfs {
+> +        compatible = "qcom,rmtfs-mem";
+> +
+> +        qcom,alloc-size = <(2*1024*1024)>;
+2 nitty nits:
 
-As it is currently implemented, yes. But, there's potential to fast-path
-the implementation by checking page_count() before starting the walk.
+- Most uses of DT arithmetic put spaces between the operands
+- You could add a comment explaining what this example brings to
+  the table
 
-> 2. For remapping and unmapping, how does free_removed_table() put the
-> final refcnt on the table passed in? (Previously we had
-> put_page(childp) in stage2_map_walk_table_post(). So I'm assuming we'd
-> have to do something equivalent with free_removed_table().)
+Konrad
 
-Heh, that's a bug, and an embarrassing one at that!
-
-Sent out a fix for that, since it would appear we leak memory on
-table->block transitions. PTAL if you have a chance.
-
-https://lore.kernel.org/all/20230530193213.1663411-1-oliver.upton@linux.dev/
-
--- 
-Thanks,
-Oliver
+> +        qcom,client-id = <1>;
+> +        qcom,vmid = <15>;
+> +    };
+> +...
