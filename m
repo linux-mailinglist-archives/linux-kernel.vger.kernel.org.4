@@ -2,107 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E86AE717194
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFA1717193
 	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233825AbjE3XUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 19:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
+        id S233847AbjE3XUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 19:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233744AbjE3XUb (ORCPT
+        with ESMTP id S233367AbjE3XUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 19:20:31 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73422102
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:20:29 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 8FF822C0596;
-        Wed, 31 May 2023 11:20:26 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1685488826;
-        bh=pBukmPQ3it++bc32Xj8MsVYzyzLTR0p/rymwPyFTAGs=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=BYjlzXQYNAH+TTZndsi3Omsk4q6jlYGG9kp5bOIZWJZES36RecojF+CndtM+n25gG
-         j0zqQw1itQ5Jo3/yk6rjWLj8uRu+Ul5wdCyXeBzIYHrg9NSntophgYpmJDIYJVBTd0
-         MQkPZze968IAHvgBfqNDoDzacGCWFCwiHAbpbx7wUua/QJphwQwkzcbKsthAFokBMR
-         +O9AJkLitZrU0btKCt+sHwSoiIJTKDqBSotwyqaXhpDeBzqR4IPRXjqh7JLQx595dY
-         rr/QVem53M8zH8X1FY/XkqNgOIK+ERtUisSpVUzvPCUfKT+FyIb79kq1+kthtvJjTt
-         R6D5vsK1bn3Og==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B647684ba0001>; Wed, 31 May 2023 11:20:26 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.26; Wed, 31 May 2023 11:20:26 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
- SMTP Server (TLS) id 15.0.1497.48; Wed, 31 May 2023 11:20:26 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.026; Wed, 31 May 2023 11:20:25 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "vadym.kochan@plvision.eu" <vadym.kochan@plvision.eu>
-CC:     "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "enachman@marvell.com" <enachman@marvell.com>
-Subject: Re: [PATCH v6 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML DT
- scheme
-Thread-Topic: [PATCH v6 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML
- DT scheme
-Thread-Index: AQHZkpEvY3k2XQch4kKrVAHkTx0+pa9x9QcAgAC3TIA=
-Date:   Tue, 30 May 2023 23:20:25 +0000
-Message-ID: <bc538264-20f5-03e1-a4a6-6f9f076f15eb@alliedtelesis.co.nz>
-References: <20230530005337.3687938-1-chris.packham@alliedtelesis.co.nz>
- <20230530005337.3687938-2-chris.packham@alliedtelesis.co.nz>
- <a1b2caed-b314-59db-ee00-92fc983150f6@linaro.org>
-In-Reply-To: <a1b2caed-b314-59db-ee00-92fc983150f6@linaro.org>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <11A8F379D8E7434AA6EEC968A66617F4@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Tue, 30 May 2023 19:20:49 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84076107
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:20:46 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d5f65a2f7so3770298b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:20:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685488846; x=1688080846;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t1Vwudjwyl03xNqdmEt3B/zK+8nDlcD2+obxiHedFtc=;
+        b=UpKCPRGTApVb+TnbUkA1rmKWwn3cbDDqGG87xKnLphX3hLSXpvmZJ7vh4sbHMO4K/F
+         rReUuw4P2VmI92qdg7np8UhXfw4V0zswbJS9y7zcsH/wjthAk2oboKs8vzMoDI+VY9cs
+         xzHJYPVHMWUI/MT4C9/3+MzpMi7T5KAz1M6+M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685488846; x=1688080846;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t1Vwudjwyl03xNqdmEt3B/zK+8nDlcD2+obxiHedFtc=;
+        b=dthziis3EhVMcQFax+rN65l6SXSPJlp2dygFPlGajc4bAIAUegESigeZqTRB/OslzC
+         CyrR0tB14bbJHwKUh1a0vnEQW9YTilh9VoCJeFrnEFU/vDd9pma8yU2vYR9Kr1ErbsPV
+         7CBWd5hulh1XhA/O6+fgJdjTZrokVAongFdDtBgthpvGhNhM48as6xZwAokksbwXjBHW
+         +ksJQNWXyP5rckhh+7tl2bH/W9VXKcQQLGx/pCa1R0cTYeHggqL5yHWClH+EFHO1UFsq
+         Yt3Pc9An/uxiDGwO9ARIfd4Y2PgsWcWWpDuILnE5ZXsETDPPm3+Qt50Kpe8pPdtObORo
+         70Mw==
+X-Gm-Message-State: AC+VfDyIBmslE0PLFDrEG7mJ7XCyaQ7AxCHrLsIfcrQpDslYtUt15J5Q
+        X3rhyrT96gA1xHG14V4KeTMvBbM9Z0P+RbF+wKU=
+X-Google-Smtp-Source: ACHHUZ4/ikUrzoQRWgtj8W7r0NCpEjCwxIwlmB9MrrGvTXySQQTcE+FkqJIm8sbd4vfJu7fOFdam8Q==
+X-Received: by 2002:aa7:88c5:0:b0:63f:ffd:5360 with SMTP id k5-20020aa788c5000000b0063f0ffd5360mr5340134pff.21.1685488845916;
+        Tue, 30 May 2023 16:20:45 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id b15-20020aa7810f000000b0064ceb16a1a2sm2110446pfi.182.2023.05.30.16.20.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 16:20:45 -0700 (PDT)
+Date:   Tue, 30 May 2023 16:20:44 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc:     Michal Simek <monstr@monstr.eu>, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] of/flattree: Replace all non-returning strlcpy with
+ strscpy
+Message-ID: <202305301620.44CC8F786@keescook>
+References: <20230530162202.983558-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=cLieTWWN c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=jWhIqavZLoxoapoUxmoA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530162202.983558-1-azeemshaikh38@gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMzEvMDUvMjMgMDA6MjQsIEtyenlzenRvZiBLb3psb3dza2kgd3JvdGU6DQo+PiArDQo+PiAr
-cHJvcGVydGllczoNCj4+ICsgIGNvbXBhdGlibGU6DQo+PiArICAgIG9uZU9mOg0KPj4gKyAgICAg
-IC0gaXRlbXM6DQo+PiArICAgICAgICAgIC0gY29uc3Q6IG1hcnZlbGwsYXJtYWRhLThrLW5hbmQt
-Y29udHJvbGxlcg0KPj4gKyAgICAgICAgICAtIGNvbnN0OiBtYXJ2ZWxsLGFybWFkYTM3MC1uYW5k
-LWNvbnRyb2xsZXINCj4+ICsgICAgICAtIGVudW06DQo+PiArICAgICAgICAgIC0gbWFydmVsbCxh
-cm1hZGEzNzAtbmFuZC1jb250cm9sbGVyDQo+PiArICAgICAgICAgIC0gbWFydmVsbCxweGEzeHgt
-bmFuZC1jb250cm9sbGVyDQo+IFlvdSBtaXNzIGhlcmUgZGVwcmVjYXRlZCBjb21wYXRpYmxlcywg
-d2hpY2ggYXJlIEJUVyBzdGlsbCB1c2VkLiBEb24ndA0KPiBkcm9wIHByb3BlcnRpZXMgYW5kIGNv
-bXBhdGlibGVzIGR1cmluZyBjb252ZXJzaW9uLg0KSXMgdGhlcmUgYW55IHdheSB0byBpbmRpY2F0
-ZSB0aGF0IGEgY29tcGF0aWJsZSB2YWx1ZSBpcyBkZXByZWNhdGVkPyBJIA0Ka25vdyBob3cgdG8g
-bWFyayBhIHByb3BlcnR5IGFzIGRlcHJlY2F0ZWQgYnV0IGhvdyBkbyBJIGluZGljYXRlIHRoaXMg
-Zm9yIA0Kc3BlY2lmaWMgY29tcGF0aWJsZSB2YWx1ZXM/
+On Tue, May 30, 2023 at 04:22:02PM +0000, Azeem Shaikh wrote:
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
+> No return values were used, so direct replacement is safe.
+> 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> [2] https://github.com/KSPP/linux/issues/89
+> 
+> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-- 
+Kees Cook
