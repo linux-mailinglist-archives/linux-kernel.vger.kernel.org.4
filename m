@@ -2,179 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002777155ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA87715602
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbjE3G7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 02:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
+        id S230366AbjE3HAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbjE3G7p (ORCPT
+        with ESMTP id S230347AbjE3HAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 02:59:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3BDB2;
-        Mon, 29 May 2023 23:59:42 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E2DFF66058F8;
-        Tue, 30 May 2023 07:59:39 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685429981;
-        bh=LEEyS50uUZjJKNoFijv9Ne6IwUdkHPUoQgYBkOeP+Oo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fYUCe55szRdKFc+b170KtqwiMen1htHtk3aCD8aGXquRO59YyZVi/xHjj8Cd6K9Pa
-         32yuLQ49dHqKWYn6s7ZNRozZc4pU8JE5d/SYBeap1XAn7mb0Naau3ZL7tEkQ7NVCFZ
-         xPthGisDY0IAm/lq4eC8AiMfjmGwGJTcK1wmDwsp9z3n3hhfi3Ad3/nOuaTtMV46pw
-         4XhCcnWQjhgae7kAXWpbRp0F/ZLx/ubKmrLPKG6h7ZrR4Syi+a8+qg3as6NLemqsZK
-         dediYofmekeICFhUKz5+47wT2yEe9abuGhKamTLiLek/7H7ja2K54ludz3+iHSy8fv
-         T1wBrVp7B2ZiA==
-Message-ID: <d50e3c7e-0900-7cb5-f6cc-ddc1f474ff33@collabora.com>
-Date:   Tue, 30 May 2023 08:59:37 +0200
+        Tue, 30 May 2023 03:00:36 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1443107;
+        Tue, 30 May 2023 00:00:27 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-96f8d485ef3so635478766b.0;
+        Tue, 30 May 2023 00:00:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1685430026; x=1688022026;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=M1msovPDNghGN9XFlUePTnlnUqozar/gb+Z8CsE1tIE=;
+        b=bHbxhtlS02JYob4cLWY25pKPSoSWB7xd/mECYEhvKieroQgmVtpX+o/F+k8f8yaqeR
+         VdHVuZqGI9m24ZTCPt69OWTie/ag4co8PjyI/GxPLkJBjdJfIrOKHxg25tdczzIhbKoc
+         yc2Ij7GDNLoK3lQFSqHGxjOaKlYFyAU2Fj7TkAGOXS+P6p3BuyXxmN/MWEwPoxWXGuzl
+         F609cp8wawlJfxJtWRV20Ao6V15W6NUhMa65NaEQwsqe3pVRhemCVssiIxlOtXJKw+wk
+         xgDiGeyndKIdbuRyAaw8vVQa2Hpl5+9gzf8J4sQU8n84yriCYZ6bvhC0aXFsn9EfVf1j
+         LHGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685430026; x=1688022026;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M1msovPDNghGN9XFlUePTnlnUqozar/gb+Z8CsE1tIE=;
+        b=SAqeT4zOsHpJCIArznkiior6JNyum1Ue3PSS00iUUjew03EPuvellhB+o5jcYnJMYX
+         +KplRfCzuDHSRMyzDO/wD0zMxzSMugjgYnmwSGFujS78WDA+E8awybEAcqhgNurDM6+k
+         FHORLj09jyj1bnkQfcB107PxTQuujHuFl8xXaA5C5E7NV25GFmxWCx2sDXGEZp3ZiaoL
+         BGuzs5MGXeHGIF6GZqDIFlr6a7cECTS36OIgUkP/EpfxOOeA6vnr+oOn8CWMJneF+I0K
+         V6Ocl9hZJqeq+Emnmts/Tk8ihMNunM2yUsuy0IhIhDFiq4/15KynqmiTwfotGEP02/yn
+         etvQ==
+X-Gm-Message-State: AC+VfDzxmKYbAaGcKlSzqdWwbbEtm1NOH0XBgmt39IxiWDb0ySPWgoyn
+        WLLJqH8WbtOchXyUCfNFMuPyKRfhHByzeQ==
+X-Google-Smtp-Source: ACHHUZ6ng677kTRv2Vgonnc4DFhdnlPFEyac16iTc7CsRo169rylrIF4bloACNn6QbMGzlNT1vaobg==
+X-Received: by 2002:a17:906:9751:b0:96a:717:d452 with SMTP id o17-20020a170906975100b0096a0717d452mr1493039ejy.19.1685430026029;
+        Tue, 30 May 2023 00:00:26 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:810a:9640:26a8:d56e:8fdf:f926:4676])
+        by smtp.gmail.com with ESMTPSA id t7-20020a1709064f0700b009531d9efcc4sm6973767eju.133.2023.05.30.00.00.19
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 30 May 2023 00:00:22 -0700 (PDT)
+From:   Franziska Naepelt <franziska.naepelt@googlemail.com>
+X-Google-Original-From: Franziska Naepelt <franziska.naepelt@gmail.com>
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, linux-kernel@vger.kernel.org,
+        Franziska Naepelt <franziska.naepelt@gmail.com>,
+        Ladislav Michl <oss-lists@triops.cz>
+Subject: [PATCH v2] mips: Fix spacing issue
+Date:   Tue, 30 May 2023 08:59:49 +0200
+Message-Id: <20230530065949.22247-1-franziska.naepelt@gmail.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 4/5] arm64: dts: mediatek: mt8192: Add thermal nodes
- and thermal zones
-Content-Language: en-US
-To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        wenst@chromium.org, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com, nfraprado@collabora.com,
-        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-References: <20230529164605.3552619-1-bero@baylibre.com>
- <20230529164605.3552619-5-bero@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230529164605.3552619-5-bero@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 29/05/23 18:46, Bernhard Rosenkränzer ha scritto:
-> From: Balsam CHIHI <bchihi@baylibre.com>
-> 
-> Add thermal nodes and thermal zones for the mt8192.
-> The mt8192 SoC has several hotspots around the CPUs.
-> Specify the targeted temperature threshold to apply the mitigation
-> and define the associated cooling devices.
-> 
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> [bero@baylibre.com: cosmetic changes]
-> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 454 +++++++++++++++++++++++
->   1 file changed, 454 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 5c30caf740265..330c5bb4ebc85 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -14,6 +14,8 @@
->   #include <dt-bindings/phy/phy.h>
->   #include <dt-bindings/power/mt8192-power.h>
->   #include <dt-bindings/reset/mt8192-resets.h>
-> +#include <dt-bindings/thermal/thermal.h>
-> +#include <dt-bindings/thermal/mediatek,lvts-thermal.h>
->   
->   / {
->   	compatible = "mediatek,mt8192";
-> @@ -71,6 +73,7 @@ cpu0: cpu@0 {
->   			d-cache-sets = <128>;
->   			next-level-cache = <&l2_0>;
->   			capacity-dmips-mhz = <530>;
-> +			#cooling-cells = <2>;
->   		};
->   
->   		cpu1: cpu@100 {
-> @@ -88,6 +91,7 @@ cpu1: cpu@100 {
->   			d-cache-sets = <128>;
->   			next-level-cache = <&l2_0>;
->   			capacity-dmips-mhz = <530>;
-> +			#cooling-cells = <2>;
->   		};
->   
->   		cpu2: cpu@200 {
-> @@ -105,6 +109,7 @@ cpu2: cpu@200 {
->   			d-cache-sets = <128>;
->   			next-level-cache = <&l2_0>;
->   			capacity-dmips-mhz = <530>;
-> +			#cooling-cells = <2>;
->   		};
->   
->   		cpu3: cpu@300 {
-> @@ -122,6 +127,7 @@ cpu3: cpu@300 {
->   			d-cache-sets = <128>;
->   			next-level-cache = <&l2_0>;
->   			capacity-dmips-mhz = <530>;
-> +			#cooling-cells = <2>;
->   		};
->   
->   		cpu4: cpu@400 {
-> @@ -139,6 +145,7 @@ cpu4: cpu@400 {
->   			d-cache-sets = <256>;
->   			next-level-cache = <&l2_1>;
->   			capacity-dmips-mhz = <1024>;
-> +			#cooling-cells = <2>;
->   		};
->   
->   		cpu5: cpu@500 {
-> @@ -156,6 +163,7 @@ cpu5: cpu@500 {
->   			d-cache-sets = <256>;
->   			next-level-cache = <&l2_1>;
->   			capacity-dmips-mhz = <1024>;
-> +			#cooling-cells = <2>;
->   		};
->   
->   		cpu6: cpu@600 {
-> @@ -173,6 +181,7 @@ cpu6: cpu@600 {
->   			d-cache-sets = <256>;
->   			next-level-cache = <&l2_1>;
->   			capacity-dmips-mhz = <1024>;
-> +			#cooling-cells = <2>;
->   		};
->   
->   		cpu7: cpu@700 {
-> @@ -190,6 +199,7 @@ cpu7: cpu@700 {
->   			d-cache-sets = <256>;
->   			next-level-cache = <&l2_1>;
->   			capacity-dmips-mhz = <1024>;
-> +			#cooling-cells = <2>;
->   		};
->   
->   		cpu-map {
-> @@ -771,6 +781,17 @@ spi0: spi@1100a000 {
->   			status = "disabled";
->   		};
->   
-> +		lvts_ap: thermal-sensor@1100b000 {
-> +			compatible = "mediatek,mt8192-lvts-ap";
-> +			reg = <0 0x1100b000 0 0x1000>;
+Fix some indentation issues and remove the following checkpatch issue:
+- ERROR: need consistent spacing around '-' (ctx:WxV)
 
-reg = <0 0x1100b000 0 0xc00>;
+Co-Developed-by: Ladislav Michl <oss-lists@triops.cz>
+Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
+---
+v2:
+ - Apply review remarks
 
-...as 0xc00 should be more than sufficient. This is important for later
-when we'll get SVS support up (which is in the LVTS-AP iospace range).
+ arch/mips/sibyte/swarm/platform.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Regards,
-Angelo
+diff --git a/arch/mips/sibyte/swarm/platform.c b/arch/mips/sibyte/swarm/platform.c
+index 484969db7713..339d77a0a08f 100644
+--- a/arch/mips/sibyte/swarm/platform.c
++++ b/arch/mips/sibyte/swarm/platform.c
+@@ -88,15 +88,15 @@ device_initcall(swarm_pata_init);
+ #define sb1250_dev_struct(num) \
+ 	static struct resource sb1250_res##num = {		\
+ 		.name = "SB1250 MAC " __stringify(num),		\
+-		.flags = IORESOURCE_MEM,		\
+-		.start = A_MAC_CHANNEL_BASE(num),	\
+-		.end = A_MAC_CHANNEL_BASE(num + 1) -1,	\
++		.flags = IORESOURCE_MEM,			\
++		.start = A_MAC_CHANNEL_BASE(num),		\
++		.end = A_MAC_CHANNEL_BASE(num + 1) - 1,		\
+ 	};\
+ 	static struct platform_device sb1250_dev##num = {	\
+-		.name = "sb1250-mac",			\
+-	.id = num,					\
+-	.resource = &sb1250_res##num,			\
+-	.num_resources = 1,				\
++		.name = "sb1250-mac",				\
++		.id = num,					\
++		.resource = &sb1250_res##num,			\
++		.num_resources = 1,				\
+ 	}
 
+ sb1250_dev_struct(0);
+
+base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
+--
+2.39.2 (Apple Git-143)
 
