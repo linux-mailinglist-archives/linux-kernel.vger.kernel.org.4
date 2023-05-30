@@ -2,51 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0039F7171D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6207171E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbjE3Xj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 19:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
+        id S233948AbjE3Xkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 19:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233933AbjE3Xjz (ORCPT
+        with ESMTP id S233971AbjE3Xkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 19:39:55 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957B6106;
-        Tue, 30 May 2023 16:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=3VrqmgexwdgwvHDZsx2ibMTmVuKGqVCDhDSKwBieLuw=; b=yUPt2+JmTnZVpE4w+clXdg7x49
-        MbIDc1MjlHG4/lVqiVd6TXOrXwKpVgymmLA+ZgxlakJBUzgTjdFOdpi07belESGdmru5ueXNqVQVw
-        n5IEb2zDAsOkLhZnG5yWxFu41CpXGuEsI4w8eIWsOqRG0rU4zEkCJYy9xTwhkolJdBbmIXcOIVT3M
-        mYzIkXUt4MsagiYbnWppt3h/flvtA8tsgQLjn/TdhTY1E0WW5+ONDAkKhlQykcx8xtydrLaiwAg2M
-        q2qgpF93fl8Qv596ZoIOR7WUPRdGaZ1yhHlujCnypFWIKh7WfjXRLePDr5NsfHE7Z3v80XrYETRj7
-        MAnEAdIQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q48wT-00FV1Y-3D;
-        Tue, 30 May 2023 23:39:54 +0000
-Message-ID: <da07a09a-fa54-8147-fd04-161082bb46e9@infradead.org>
-Date:   Tue, 30 May 2023 16:39:53 -0700
+        Tue, 30 May 2023 19:40:32 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6F8F9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:40:23 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b04949e4e9so16213235ad.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:40:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685490022; x=1688082022;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U4NZTnB3HOnHtoHzo7ahpVbK7T9rabz3LAeBB2m5AVg=;
+        b=fmr7bTHb9dPBgzswN3RMWRcPe2e5CocBmP5VO5eZ99drQrCDkv1ydS46lrp+4oqHoz
+         accbzkX7lFaNSPJfJFAqZsEGpp/cdjctuf4exBahHwQe4pGGlyzssVRf6hBKFohCxgkC
+         x7aL7gsYAEQM2hnDAKBqMjdHuN/0mnWsbh+R8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685490022; x=1688082022;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U4NZTnB3HOnHtoHzo7ahpVbK7T9rabz3LAeBB2m5AVg=;
+        b=Id4pq3SogtOGdt9cZDoQNjCmDRBAmyHX/51JBf3x6YlOFPi/ilmuJdwLhhfqq2UNb4
+         4ehoX2hlrNwlA4l85msh+a4XZZDw/oUegTPqmVfAo9MPDOn9nExOQqM9tb40ybR+UyU1
+         6PdtmqZIgMTJxOh0j5Bhkof3wEuYiSS4lNFsyPdqu6B6s5DE2eFkibC8yUuVmmZUMcGh
+         ZwdUvpoAQQLwu3X4Urs0HAvEAdmqdKf0vlJpkWSIRlKuDeEydDyEnu2EdfGZ9OYlrS+4
+         3+D34gftZktDurSZM0xFQ0EujRIBxi0m/Dtl0u0/hFjq//K+vbQta9xu8Xn0mq8aiFFS
+         LM2g==
+X-Gm-Message-State: AC+VfDwyyHKL/fjYkjfhyXNKTJwQIv90xeO1/QN4RbzJoeb/1MIrCDGc
+        bXBe5HEGAZ4T6tmU7JTQq0p/pTiU2X1T4Q+DGOk=
+X-Google-Smtp-Source: ACHHUZ7PSq91ujI8SrrGb0C2VID+a14xW0uYQ/wXdiq76eaw9ogxMHKC9mQG+F+/rr4CXZ/DaHJefg==
+X-Received: by 2002:a17:902:ec8a:b0:1b0:36ad:fe13 with SMTP id x10-20020a170902ec8a00b001b036adfe13mr4316905plg.16.1685490022547;
+        Tue, 30 May 2023 16:40:22 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id u9-20020a17090341c900b001ac7af58b66sm10826031ple.224.2023.05.30.16.40.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 16:40:22 -0700 (PDT)
+Date:   Tue, 30 May 2023 16:40:21 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: undefined reference to `ftrace_likely_update'
+Message-ID: <202305301639.C19C2BE38@keescook>
+References: <202305221244.L4XDdQ1Q-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] KVM: MAINTAINERS: note that linux-kvm.org isn't
- current
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-References: <20230525153204.27960-1-rdunlap@infradead.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230525153204.27960-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202305221244.L4XDdQ1Q-lkp@intel.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,39 +67,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 5/25/23 08:32, Randy Dunlap wrote:
-> www.linux-kvm.org is not kept current. It contains antiquated
-> and historical information. Don't send people to it for current
-> information on KVM.
+On Mon, May 22, 2023 at 01:01:30PM +0800, kernel test robot wrote:
+> Hi Kees,
 > 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: kvm@vger.kernel.org
-> ---
-> v2: change wording; drop one bouncing email address (Ramkumar)
+> FYI, the error/warning still remains.
 > 
->  MAINTAINERS |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   44c026a73be8038f03dbdeef028b642880cf1511
+> commit: 54d9469bc515dc5fcbc20eecbe19cea868b70d68 fortify: Add run-time WARN for cross-field memcpy()
+
+The warning below does not seem to be due to this commit.
+
+> date:   9 months ago
+> config: s390-randconfig-r025-20230521
+> compiler: s390-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=54d9469bc515dc5fcbc20eecbe19cea868b70d68
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 54d9469bc515dc5fcbc20eecbe19cea868b70d68
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 > 
-> diff -- a/MAINTAINERS b/MAINTAINERS
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11359,7 +11359,7 @@ KERNEL VIRTUAL MACHINE (KVM)
->  M:	Paolo Bonzini <pbonzini@redhat.com>
->  L:	kvm@vger.kernel.org
->  S:	Supported
-> -W:	http://www.linux-kvm.org
-> +W:	http://www.linux-kvm.org (historical/not up-to-date)
->  T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
->  F:	Documentation/virt/kvm/
->  F:	include/asm-generic/kvm*
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202305221244.L4XDdQ1Q-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    s390-linux-ld: arch/s390/purgatory/purgatory: in function `sha256_update':
+> >> (.text+0x248c): undefined reference to `ftrace_likely_update'
+> >> s390-linux-ld: (.text+0x2984): undefined reference to `ftrace_likely_update'
 
-Any comments about this patch?
-Is there a problem with it?
-
-thanks.
+-Kees
 
 -- 
-~Randy
+Kees Cook
