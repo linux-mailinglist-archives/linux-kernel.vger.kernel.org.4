@@ -2,114 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7C871547F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 06:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF690715482
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 06:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjE3E2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 00:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
+        id S230035AbjE3EcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 00:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjE3E16 (ORCPT
+        with ESMTP id S229838AbjE3EcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 00:27:58 -0400
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD722E3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 21:27:56 -0700 (PDT)
-Received: by mail-ua1-x934.google.com with SMTP id a1e0cc1a2514c-786e09ce8c4so2562378241.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 21:27:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1685420876; x=1688012876;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CqPVTZY234jNlhHdNUZhbVwVkIfQLzs6+jJImbbW0oc=;
-        b=NwpcHc2RmO2WPCC0eQjuFi/66TqHOMBF90dFGk8KME5hgDEAShnNndIxvGh1KFsThj
-         rEs6XjukaaCpMqHlR0Cqq968Lbqyem9GdWBD0JZd+9XWWiNgkhPOUBddPR/3ckKcM8R1
-         m264uUvey9cObyxwIRDt7A3U1Z1drEEtxpCBFDgLvJH6hsPmVA3xDIdRbJY5Rk2m7hRs
-         UPLwmfoCBKp9wbS09GSH+Fgr9V5xzK6H88kiA7BpF71fP9ZSH9lvjfjnx0bVb5mdbK0Y
-         muhZVWTx7GLPSPdhhnh/AEzd3jPPNQfRHgo56rlOQjzraYQLgoE6fc9xFyO6oFXSnkHU
-         Q4fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685420876; x=1688012876;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CqPVTZY234jNlhHdNUZhbVwVkIfQLzs6+jJImbbW0oc=;
-        b=V5ZJrO/bkBoX+eO/r3wozcDjj9iuU6CdH7wx8g5o8gSy5HL0LejmtRJ4hJquo+GvTp
-         x9tQeN/ZTxa9F1k+I6mC4QsazUltc7gSA/xeyJNmREOZt9n36m+yDw0xoPLXKL+zkckJ
-         hy8N7ns7uMB3jBBLwYM82pfcUyNvw+lNOZswCjU6YoxdJQ+QZZm2+ghLNW2JW/tXnqUE
-         fkL4QsS30EKk1vWoB4COBimHdJxLuPNSecnuAZ/LeonIzMJth7uCNHTxT7D+zwIwtZxK
-         /26emy+1oh0WlS3u12+wRMC7YHi9fLSG7woDpc9KSnGgqoUqc9ZMc4NoWzKLKtmBlJ7z
-         92Ng==
-X-Gm-Message-State: AC+VfDxPNpy1r+wIj7xiLyyIJQEmJxrnl3Q1D88Uyoxj0B/UtS8/WSOJ
-        RKJn9BFfjfl6tqsSUdHtFjkxtvHD/Wmemfux+93kXM1gQvc=
-X-Google-Smtp-Source: ACHHUZ4KkkRptZkq/eP35CVOt0nvNyWgVAcP4B+q8u5qhIf5M/N8OpCzfiebzbKqp4aMRyyJhaKjBuaFv8L5sCE/YYg=
-X-Received: by 2002:a05:6102:3707:b0:434:5810:32a6 with SMTP id
- s7-20020a056102370700b00434581032a6mr3979292vst.8.1685420875918; Mon, 29 May
- 2023 21:27:55 -0700 (PDT)
+        Tue, 30 May 2023 00:32:21 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0162BE4;
+        Mon, 29 May 2023 21:32:19 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QVfcy0Q97z4x46;
+        Tue, 30 May 2023 14:32:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1685421138;
+        bh=U8n9Hde3DsbVeXiazBuQ1xk7QSZyvg9RTkdEpTMUxzc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=KhxG2/lu2ZYmaTaJApux+GzhYtZ4KdSpq/UwExYHeG43xweeYGftLEhUfKJjMKkJp
+         T+gC8iydc+wqBmxtlb/ikNIAtD7FWtlR5zVXwkUmRbCLWbb+Hvk4GO2GujXPzqfn7i
+         RL8gZaO/VrcJ6eeGj1mkHPaW2beTuU9xXfJq+uVsRuvT7kGWNSVqGWbfU2DfHbFKGl
+         0/LQDsGWXBT5ks75B5tbRPG67YKzDaWxHxWphSlbbsQOFfDW6cjAH3uoimts6+YStB
+         b4a7wKbuoqzVUYMWve9JXyv0ILM3wfeCLJajqFTaMO3oRebXYKE3Jq1SIWfQKRJLt/
+         fSzLnLskVs+gQ==
+Date:   Tue, 30 May 2023 14:32:17 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>
+Subject: linux-next: manual merge of the efi tree with the efi-fixes tree
+Message-ID: <20230530143217.49ae8cbf@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230529143333.19278-1-franziska.naepelt@gmail.com> <873fc37f5fc9ed04698c99feafca156699b2b1ee.camel@gmail.com>
-In-Reply-To: <873fc37f5fc9ed04698c99feafca156699b2b1ee.camel@gmail.com>
-From:   =?UTF-8?Q?Franziska_N=C3=A4pelt?= 
-        <franziska.naepelt@googlemail.com>
-Date:   Tue, 30 May 2023 06:27:44 +0200
-Message-ID: <CAAUT3iM9tTJPkvSjxOWSPYyxDp94trnjb2KuiTSzQGGwts5Svw@mail.gmail.com>
-Subject: Re: [PATCH] ARM: ep93xx: Fix whitespace issues
-To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, hsweeten@visionengravers.com,
-        linux@armlinux.org.uk, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Zta=SjlqHVMyuVoNmM/m3i1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
+--Sig_/Zta=SjlqHVMyuVoNmM/m3i1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Am Mo., 29. Mai 2023 um 17:19 Uhr schrieb Alexander Sverdlin
-<alexander.sverdlin@gmail.com>:
->
-> Hello Franziska,
->
-> On Mon, 2023-05-29 at 16:33 +0200, Franziska Naepelt wrote:
-> > This removes the following checkpatch issues:
-> > - ERROR: code indent should use tabs where possible
-> > - WARNING: please, no spaces at the start of a line
-> >
-> > Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
->
-> thanks for the patch!
-> However the file is going away at some point anyway:
-> https://lore.kernel.org/lkml/20230424123522.18302-40-nikita.shubin@maquefel.me/
+Hi all,
 
-Thanks for the heads up - I'm sorry I missed that.
+Today's linux-next merge of the efi tree got a conflict in:
 
->
-> > ---
-> >  arch/arm/mach-ep93xx/timer-ep93xx.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/arm/mach-ep93xx/timer-ep93xx.c b/arch/arm/mach-ep93xx/timer-ep93xx.c
-> > index dd4b164d1831..5bfabbdde463 100644
-> > --- a/arch/arm/mach-ep93xx/timer-ep93xx.c
-> > +++ b/arch/arm/mach-ep93xx/timer-ep93xx.c
-> > @@ -82,8 +82,8 @@ static int ep93xx_clkevt_set_next_event(unsigned long next,
-> >         /* Set next event */
-> >         writel(next, EP93XX_TIMER3_LOAD);
-> >         writel(tmode | EP93XX_TIMER123_CONTROL_ENABLE,
-> > -              EP93XX_TIMER3_CONTROL);
-> > -        return 0;
-> > +                  EP93XX_TIMER3_CONTROL);
-> > +       return 0;
-> >  }
-> >
->
-> --
-> Alexander Sverdlin.
->
+  include/linux/efi.h
 
-Franziska
+between commit:
+
+  fd936fd8ac10 ("efi: fix missing prototype warnings")
+
+from the efi-fixes tree and commit:
+
+  5b6e3aa08c62 ("efi: expose efivar generic ops register function")
+
+from the efi tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/efi.h
+index 571d1a6e1b74,657f7e203374..000000000000
+--- a/include/linux/efi.h
++++ b/include/linux/efi.h
+@@@ -1338,6 -1350,7 +1350,9 @@@ bool efi_config_table_is_usable(const e
+  	return xen_efi_config_table_is_usable(guid, table);
+  }
+ =20
+ +umode_t efi_attr_is_visible(struct kobject *kobj, struct attribute *attr,=
+ int n);
+ +
++ void efivars_generic_ops_register(void);
++ void efivars_generic_ops_unregister(void);
++=20
+  #endif /* _LINUX_EFI_H */
+
+--Sig_/Zta=SjlqHVMyuVoNmM/m3i1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR1fFEACgkQAVBC80lX
+0GxI0Af9FM1vbjoQ0dm4uairsYi5SbcHlOV8+L0sybP1V9Iq6tlyGnrm/xdBpQtq
+g4CDShQZo/+TOr+VKRSwkQiq8LeoBbctUiciE/tYHSjKCQVFz2iTIYYCQrnPo5XX
+zOHuyLDWOUEISua+DXI/xqHV6TdiMni0yuTZdpBdgyc+4cDo8ineKssRhEeYs7zY
+pl8hHZgYI9MtROhTHls7u+zhDTkJtfyq+PR6eXqgUf6wAvq+BgcrkY+PJyNT2xKl
+4YlaGGEHKVT4uLcDza9aISVicaL4hcICKzCaavKAGZujMYDTfp9KAIxRtm+0ydrG
+lX9jiNaAsKMV37LAjop/icoRar7I3w==
+=65db
+-----END PGP SIGNATURE-----
+
+--Sig_/Zta=SjlqHVMyuVoNmM/m3i1--
