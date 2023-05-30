@@ -2,137 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374D771711A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A78717115
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbjE3Wzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 18:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33814 "EHLO
+        id S233453AbjE3Wzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 18:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjE3Wzo (ORCPT
+        with ESMTP id S229794AbjE3Wzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 18:55:44 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEB493;
-        Tue, 30 May 2023 15:55:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jVMUeKDVpL/twR9uR7SJX7eIcOLgi/1Bm8xpXEwWW0c=; b=Yl8kq8eX48TbwyUeqTE4poqjHe
-        zyTGAWq3wulubZ/GxIaZn3S2EEKw8XRD0dHOV/SqMfNajJ7EyVGzQcTsaA2sqw3Q4bHesYOtM42iA
-        nx8Yb8Y3fPDm+xs+OVztwJn+RBOaZI0HzWQUqwW+uj11W3Kc0ysMKbtFTKU45o9H6M0wZO7zuhBWe
-        0rQB5i03V1YSksuDT5WqXGEyca5KHcaLuKFZaER/6zpyaqrx3/Lu8VXrak0NPxUwZKJ5w3swv2Wl+
-        uYmdCMEfdDjkdIMwjTQ5IFi0DF9HLHl3k66VyeXHA93+jnP52lkMRRZoFVR42fn292B/2JvW2Da/R
-        nKmh3QMQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q48FC-00FOeL-1U;
-        Tue, 30 May 2023 22:55:10 +0000
-Date:   Tue, 30 May 2023 15:55:10 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Joel Granados <j.granados@samsung.com>, ebiederm@xmission.com
-Cc:     keescook@chromium.org, yzaikin@google.com, dave.hansen@intel.com,
-        arnd@arndb.de, bp@alien8.de, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, tglx@linutronix.de, mingo@redhat.com,
-        x86@kernel.org, hpa@zytor.com, luto@kernel.org,
-        peterz@infradead.org, brgerst@gmail.com,
-        christophe.jaillet@wanadoo.fr, kirill.shutemov@linux.intel.com,
-        jroedel@suse.de, akpm@linux-foundation.org, willy@infradead.org,
-        linux-parisc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] sysctl: remove empty dev table
-Message-ID: <ZHZ+zsOTBhvn3rfu@bombadil.infradead.org>
-References: <20230526222207.982107-1-mcgrof@kernel.org>
- <CGME20230526222249eucas1p1d38aca6c5a5163bd6c48b3a56e2618b4@eucas1p1.samsung.com>
- <20230526222207.982107-2-mcgrof@kernel.org>
- <20230529200457.a42hwn7cq6np5ur4@localhost>
- <ZHYnXKb8g0zSJe7+@bombadil.infradead.org>
+        Tue, 30 May 2023 18:55:40 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DA2EC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:55:39 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64d341bdedcso3709526b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:55:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685487339; x=1688079339;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BkBhxE3ytz2kF3tpYV9IN2L47NlunYx7yD1fvIugVDg=;
+        b=JkL4TkmaBIayj5OCIMW991JmgQnj/gOpmqu0Jw8iYq3PMtBsrylqK5iciUUO1fhYgS
+         2o7CARmlg2bDXlKcJclJ9S/L2d10IK4UribgkAI3rT5ddfJwfkzp232e3xf8cjAq3sQt
+         imoZlKZvz+c0GKoP6pL6IeBJqKSiae+R/iNng=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685487339; x=1688079339;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BkBhxE3ytz2kF3tpYV9IN2L47NlunYx7yD1fvIugVDg=;
+        b=ganh58nfey4ZJ+Dag4rMYMBZfgSX25nu1ZrTVx/UUjIbOu/t74rDotPJIwYP18Gs4y
+         ZUwaAXuaVob98ZtToBNl2KK2xjV51ce7HBFoJOJXYHrOkQaNj4noz/sXlH7x18pw4ICe
+         03mIPAYu8A0ZJop8HTIAg8JDKLOYfi0fWg+sdTH0RCFe99vTP5OOpr3b8JIwCZXvBmeA
+         ojXg8zhoRszuz+3SDtl/srPe4IJvuedawxqyKtlBNtQiVWTBTFXWLOrfFjBG8cxgrQxk
+         9wimM84J1iFynqGHtfDRhDyPLgrvvSecIWWbnqcZyFyEv6djGCkdvsQtlYmtGOfnEqWz
+         SFeQ==
+X-Gm-Message-State: AC+VfDyymmQJuZL7TaFE7PXeQixvp1wBva8+1USZDcaQI7T9O92gMAiY
+        W9pukv+O/xblTECpElGghFVSKA==
+X-Google-Smtp-Source: ACHHUZ4QeCYlGPt+yRrQ988Mpa4bp68BlE3Y+Yn/n1L6hGlqQLXCt+xE8FWGrglyjI0IqtiDNi9FTQ==
+X-Received: by 2002:a05:6a00:2e12:b0:640:defd:a6d5 with SMTP id fc18-20020a056a002e1200b00640defda6d5mr4441213pfb.12.1685487338720;
+        Tue, 30 May 2023 15:55:38 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id s22-20020a63dc16000000b005344b30d449sm9336232pgg.86.2023.05.30.15.55.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 15:55:38 -0700 (PDT)
+Date:   Tue, 30 May 2023 15:55:37 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     John Johansen <john.johansen@canonical.com>
+Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] apparmor: aa_buffer: Convert 1-element array to flexible
+ array
+Message-ID: <202305301555.102E1890@keescook>
+References: <20230511213441.never.401-kees@kernel.org>
+ <7085879d-4d21-b90a-c08d-60450d1c7d38@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZHYnXKb8g0zSJe7+@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7085879d-4d21-b90a-c08d-60450d1c7d38@canonical.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 09:42:04AM -0700, Luis Chamberlain wrote:
-> On Mon, May 29, 2023 at 10:04:57PM +0200, Joel Granados wrote:
-> > On Fri, May 26, 2023 at 03:22:05PM -0700, Luis Chamberlain wrote:
-> > > Now that all the dev sysctls have been moved out we can remove the
-> > > dev sysctl base directory. We don't need to create base directories,
-> > > they are created for you as if using 'mkdir -p' with register_syctl()
-> > > and register_sysctl_init(). For details refer to sysctl_mkdir_p()
-> > > usage.
-> > > 
-> > > We save 90 bytes with this changes:
-> > > 
-> > > ./scripts/bloat-o-meter vmlinux.2.remove-sysctl-table vmlinux.3-remove-dev-table
-> > > add/remove: 0/1 grow/shrink: 0/1 up/down: 0/-90 (-90)
-> > > Function                                     old     new   delta
-> > > sysctl_init_bases                            111      85     -26
-> > > dev_table                                     64       -     -64
-> > > Total: Before=21257057, After=21256967, chg -0.00%
-> > > 
-> > > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> > > ---
-> > >  kernel/sysctl.c | 5 -----
-> > >  1 file changed, 5 deletions(-)
-> > > 
-> > > diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> > > index fa2aa8bd32b6..a7fdb828afb6 100644
-> > > --- a/kernel/sysctl.c
-> > > +++ b/kernel/sysctl.c
-> > > @@ -2344,16 +2344,11 @@ static struct ctl_table debug_table[] = {
-> > >  	{ }
-> > >  };
-> > >  
-> > > -static struct ctl_table dev_table[] = {
-> > > -	{ }
-> > > -};
-> > > -
-> > >  int __init sysctl_init_bases(void)
-> > >  {
-> > >  	register_sysctl_init("kernel", kern_table);
-> > >  	register_sysctl_init("vm", vm_table);
-> > >  	register_sysctl_init("debug", debug_table);
-> > > -	register_sysctl_init("dev", dev_table);
-> > >  
-> > >  	return 0;
-> > >  }
-> > > -- 
-> > > 2.39.2
-> > > 
-> > LGTM.
+On Thu, May 11, 2023 at 02:48:29PM -0700, John Johansen wrote:
+> On 5/11/23 14:34, Kees Cook wrote:
+> > In the ongoing effort to convert all fake flexible arrays to proper
+> > flexible arrays, replace aa_buffer's 1-element "buffer" member with a
+> > flexible array.
+> > 
+> > Cc: John Johansen <john.johansen@canonical.com>
+> > Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > Cc: Paul Moore <paul@paul-moore.com>
+> > Cc: James Morris <jmorris@namei.org>
+> > Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> > Cc: apparmor@lists.ubuntu.com
+> > Cc: linux-security-module@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
 > 
-> BTW, please use proper tags like Reviewed-by, and so on even if you use
-> LGTM so that then if anyone uses things like b4 it can pick the tags for
-> you.
+> Acked-by: John Johansen <john.johansen@canonical.com>
 > 
-> > But why was dev there to begin with?
-> 
-> I will enhance the commit log to mention that, it was there because
-> old APIs didn't create the directory for you, and now it is clear it
-> is not needed. I checked ant he dev table was there since the beginning
-> of sysctl.c on v2.5.0.
+> I have pulled this into my tree.
 
-I've extended the commmit log with this very importance piece of
-information:
+Just a quick ping: I haven't seen this show up in -next yet...
 
-The empty dev table has been in place since the v2.5.0 days because back
-then ordering was essentialy. But later commit 7ec66d06362d ("sysctl:
-Stop requiring explicit management of sysctl directories"), merged as of
-v3.4-rc1, the entire ordering of directories was replaced by allowing
-sysctl directory autogeneration. This new mechanism introduced on v3.4
-allows for sysctl directories to automatically be created for sysctl
-tables when they are needed and automatically removes them when no
-sysctl tables use them.  That commit also added a dedicated struct
-ctl_dir as a new type for these autogenerated directories.
-
-  Luis
+-- 
+Kees Cook
