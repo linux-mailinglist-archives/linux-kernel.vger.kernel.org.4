@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E390C7155B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38AAB7155B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjE3GwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 02:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
+        id S229879AbjE3Gwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 02:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjE3GwL (ORCPT
+        with ESMTP id S229551AbjE3Gw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 02:52:11 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72461E5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:52:10 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Tue, 30 May 2023 02:52:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70153107
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:52:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 963C26602121;
-        Tue, 30 May 2023 07:52:08 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685429529;
-        bh=N8OkzhPbnw0+40Fz41gVmzeKRGnKSGVpRy8eQG6Dhe0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DsjbEEDYb6sQm2KmN8lx+MXTGsmD7ysu8OPxeix+Z7dbDRfFqFCg10dW31jzqS+jc
-         Yf+PEH1RhH3gc+fy5+J5wVo4kCAAyHvzHRG+noVAH2tLAXbCN6okBtpqpm8zU5wRcM
-         FxN0P36++oARF0aDjW7zqT6OGh/z9KT136VnDWnJcko9cNRv6HF4uNgHEKHcLEc+IS
-         8TyFus8AnLksrpvht836lhiC0V07ELlBtNhE7nVRDwAW8/792+umDMDxxJndROySJB
-         Ujj5nznzEd13IH84WupL7U+ExkkQjwesz/hdeVBONoifMFurvc+oCEdMvh24EaAOfM
-         /CFzQ7gWu6ZkQ==
-Message-ID: <6d870923-ce25-08f6-c3aa-453a4737953b@collabora.com>
-Date:   Tue, 30 May 2023 08:52:06 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F01EB62AC2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:52:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D7B8C433A0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:52:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685429542;
+        bh=siy9Ko3UbHkih669rTBXTrvvQJb6+6k5h7kksul6NjI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hjuWY8Xz1RNVPltId3hJptIderckVfGZUOze/C01KfNLTniS/9JvZq2ZLrX62m+HX
+         EP8gdcj04gBtPPWvc9nwSGzRvfmKo0HA9WC7hNmtkBldqQyq3DGgLLvFO3BWlo2O9R
+         uAY0MOAIxcm/zSAvPsDy+tqReP/Qe2/TX+NraxQbqG7mhubXOytt1d8UjzkZMBWNil
+         h7iQqH3U8EKBI9YuUDTXf6jPR8tGkQSolZ8YcyWYnohyrWQegVohXQnwKZpug06zU5
+         jIlCETnkZ/11wjn4aC3gXIJJmgxTjUO3H68E3sZsyUw6WMApoWhKyKg7decYv1/0JK
+         CBW7gFicrQBNQ==
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5149aafef44so3153549a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:52:22 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyLT5Wg597PcO6kdK/LxZ4Tei//QJA3yrfP9xZQOl/QKVG+UpLQ
+        5KK7721VU3uTv8veyevEzTRWOVOuvohiE+bXq+8=
+X-Google-Smtp-Source: ACHHUZ7TPl4oqNW3y5WapM499wNVHLkNCZ/pq+hqHH1T3d3rEcKGogkr0Z5uJqSVymnmk+X6pAcpDng3aDt3ARvmnGk=
+X-Received: by 2002:aa7:c504:0:b0:504:b228:878d with SMTP id
+ o4-20020aa7c504000000b00504b228878dmr878888edq.25.1685429540598; Mon, 29 May
+ 2023 23:52:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 0/9] MediaTek DisplayPort: support eDP and aux-bus
-Content-Language: en-US
-To:     chunkuang.hu@kernel.org
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
-        matthias.bgg@gmail.com, dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
-        wenst@chromium.org
-References: <20230404104800.301150-1-angelogioacchino.delregno@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230404104800.301150-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+References: <20230529073845.2859178-1-guoren@kernel.org> <20230529-jasmine-amigo-6d01f6852b35@wendy>
+ <CAJF2gTRSoZbexqka=_7nf4+dHZW2FGf++BiTMypfTbeoGAbUiA@mail.gmail.com>
+In-Reply-To: <CAJF2gTRSoZbexqka=_7nf4+dHZW2FGf++BiTMypfTbeoGAbUiA@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 30 May 2023 14:52:09 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTzUfp7xDr8myA+xMcxGNEQ+XLEYMfoR91NShdBAQMu7Q@mail.gmail.com>
+Message-ID: <CAJF2gTTzUfp7xDr8myA+xMcxGNEQ+XLEYMfoR91NShdBAQMu7Q@mail.gmail.com>
+Subject: Re: [PATCH] riscv: vector: Fixup modules compile error
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     greentime.hu@sifive.com, vincent.chen@sifive.com,
+        andy.chiu@sifive.com, paul.walmsley@sifive.com,
+        palmer@rivosinc.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,125 +66,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 04/04/23 12:47, AngeloGioacchino Del Regno ha scritto:
+On Tue, May 30, 2023 at 10:59=E2=80=AFAM Guo Ren <guoren@kernel.org> wrote:
+>
+> On Mon, May 29, 2023 at 9:43=E2=80=AFPM Conor Dooley <conor.dooley@microc=
+hip.com> wrote:
+> >
+> > On Mon, May 29, 2023 at 03:38:45AM -0400, guoren@kernel.org wrote:
+> > > From: Guo Ren <guoren@linux.alibaba.com>
+> > >
+> > > Some .ko also need the riscv_v_user_allowed symbol.
+> > >
+> > > ERROR: modpost: "riscv_v_user_allowed" [arch/riscv/kvm/kvm.ko]
+> > > undefined!
+> > > make[3]: ***
+> > > [/home/guoren/source/kernel/linux/scripts/Makefile.modpost:136:
+> > > Module.symvers] Error 1
+> > >
+> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > > ---
+> > >  arch/riscv/kernel/vector.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.c
+> > > index 1c4ac821e008..3ae08816d608 100644
+> > > --- a/arch/riscv/kernel/vector.c
+> > > +++ b/arch/riscv/kernel/vector.c
+> > > @@ -129,6 +129,7 @@ bool riscv_v_user_allowed(void)
+> > >  {
+> > >       return riscv_v_get_cur_ctrl(current) =3D=3D PR_RISCV_V_VSTATE_C=
+TRL_ON;
+> > >  }
+> > > +EXPORT_SYMBOL(riscv_v_user_allowed);
+> >
+> > Is there a reason that this should not be EXPORT_SYMBOL_GPL()?
+> Good question, but I just follow our arch/riscv habbit, maybe we
+> should change all of that in another patch.
+>
+> =E2=9E=9C  linux-s64ilp32 git:(s64ilp32) =E2=9C=97 grep EXPORT_SYMBOL  ar=
+ch/riscv -r | wc -l
+> 66
+> =E2=9E=9C  linux-s64ilp32 git:(s64ilp32) =E2=9C=97 grep EXPORT_SYMBOL_GPL=
+  arch/riscv -r | wc -l
+> 15
 
-Hello CK,
+Why !MODULE_LICENSE(GPL) modules couldn't use riscv_v_user_allowed?
+Seems EXPORT_SYMBOL_GPL has more limitations.
 
-Gentle ping for this series.
+:c:func:`EXPORT_SYMBOL_GPL()`
+-----------------------------
 
-Thanks,
-Angelo
+Defined in ``include/linux/export.h``
 
-> Changes in v3:
->   - Added DPTX AUX block initialization before trying to communicate
->     to stop relying on the bootloader keeping it initialized before
->     booting Linux.
->   - Fixed commit description for patch [09/09] and removed commented
->     out code (that slipped from dev phase.. sorry!).
-> 
-> This series adds "real" support for eDP in the mtk-dp DisplayPort driver.
-> 
-> Explaining the "real":
-> Before this change, the DisplayPort driver did support eDP to some
-> extent, but it was treating it entirely like a regular DP interface
-> which is partially fine, after all, embedded DisplayPort *is* actually
-> DisplayPort, but there might be some differences to account for... and
-> this is for both small performance improvements and, more importantly,
-> for correct functionality in some systems.
-> 
-> Functionality first:
-> 
-> One of the common differences found in various boards implementing eDP
-> and machines using an eDP panel is that many times the HPD line is not
-> connected. This *must* be accounted for: at startup, this specific IP
-> will raise a HPD interrupt (which should maybe be ignored... as it does
-> not appear to be a "real" event...) that will make the eDP panel to be
-> detected and to actually work but, after a suspend-resume cycle, there
-> will be no HPD interrupt (as there's no HPD line in my case!) producing
-> a functionality issue - specifically, the DP Link Training fails because
-> the panel doesn't get powered up, then it stays black and won't work
-> until rebooting the machine (or removing and reinserting the module I
-> think, but I haven't tried that).
-> 
-> Now for.. both:
-> eDP panels are *e*DP because they are *not* removable (in the sense that
-> you can't unplug the cable without disassembling the machine, in which
-> case, the machine shall be powered down..!): this (correct) assumption
-> makes us able to solve some issues and to also gain a little performance
-> during PM operations.
-> 
-> What was done here is:
->   - Caching the EDID if the panel is eDP: we're always going to read the
->     same data everytime, so we can just cache that (as it's small enough)
->     shortening PM resume times for the eDP driver instance;
->   - Always return connector_status_connected if it's eDP: non-removable
->     means connector_status_disconnected can't happen during runtime...
->     this also saves us some time and even power, as we won't have to
->     perform yet another power cycle of the HW;
->   - Added aux-bus support!
->     This makes us able to rely on panel autodetection from the EDID,
->     avoiding to add more and more panel timings to panel-edp and, even
->     better, allowing to use one panel node in devicetrees for multiple
->     variants of the same machine since, at that point, it's not important
->     to "preventively know" what panel we have (eh, it's autodetected...!).
-> 
-> This was tested on a MT8195 Cherry Tomato Chromebook (panel-edp on aux-bus)
-> 
-> 
-> P.S.: For your own testing commodity, here's a reference devicetree:
-> &edp_tx {
-> 	status = "okay";
-> 
-> 	pinctrl-names = "default";
-> 	pinctrl-0 = <&edptx_pins_default>;
-> 
-> 	ports {
-> 		#address-cells = <1>;
-> 		#size-cells = <0>;
-> 
-> 		port@0 {
-> 			reg = <0>;
-> 			edp_in: endpoint {
-> 				remote-endpoint = <&dp_intf0_out>;
-> 			};
-> 		};
-> 
-> 		port@1 {
-> 			reg = <1>;
-> 			edp_out: endpoint {
-> 				data-lanes = <0 1 2 3>;
-> 				remote-endpoint = <&panel_in>;
-> 			};
-> 		};
-> 	};
-> 
-> 	aux-bus {
-> 		panel: panel {
-> 			compatible = "edp-panel";
-> 			power-supply = <&pp3300_disp_x>;
-> 			backlight = <&backlight_lcd0>;
-> 			port {
-> 				panel_in: endpoint {
-> 					remote-endpoint = <&edp_out>;
-> 				};
-> 			};
-> 		};
-> 	};
-> };
-> 
-> AngeloGioacchino Del Regno (9):
->    drm/mediatek: dp: Cache EDID for eDP panel
->    drm/mediatek: dp: Move AUX and panel poweron/off sequence to function
->    drm/mediatek: dp: Always return connected status for eDP in .detect()
->    drm/mediatek: dp: Always set cable_plugged_in at resume for eDP panel
->    drm/mediatek: dp: Change logging to dev for mtk_dp_aux_transfer()
->    drm/mediatek: dp: Enable event interrupt only when bridge attached
->    drm/mediatek: dp: Use devm variant of drm_bridge_add()
->    drm/mediatek: dp: Move AUX_P0 setting to
->      mtk_dp_initialize_aux_settings()
->    drm/mediatek: dp: Add support for embedded DisplayPort aux-bus
-> 
->   drivers/gpu/drm/mediatek/mtk_dp.c | 186 +++++++++++++++++++-----------
->   1 file changed, 116 insertions(+), 70 deletions(-)
-> 
+Similar to :c:func:`EXPORT_SYMBOL()` except that the symbols
+exported by :c:func:`EXPORT_SYMBOL_GPL()` can only be seen by
+modules with a :c:func:`MODULE_LICENSE()` that specifies a GPL
+compatible license. It implies that the function is considered an
+internal implementation issue, and not really an interface. Some
+maintainers and developers may however require EXPORT_SYMBOL_GPL()
+when adding any new APIs or functionality.
 
+For kvm is okay:
+
+MODULE_AUTHOR("Qumranet");
+MODULE_LICENSE("GPL");
+
+So, I would leave the decition to Andy. If he didn't want it used with
+other non-gpl modules, choose the EXPORT_SYMBOL_GPL.
+
+>
+> >
+> > I figure Andy will roll this into this next revision.
+> >
+> > Cheers,
+> > Conor.
+>
+>
+>
+> --
+> Best Regards
+>  Guo Ren
+
+
+
+--=20
+Best Regards
+ Guo Ren
