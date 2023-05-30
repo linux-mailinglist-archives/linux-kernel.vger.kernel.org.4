@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7AA7717170
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426FF71717A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233799AbjE3XQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 19:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
+        id S233695AbjE3XRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 19:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233792AbjE3XQM (ORCPT
+        with ESMTP id S233804AbjE3XRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 19:16:12 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688D2F7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:16:11 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d1a0d640cso3842684b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:16:11 -0700 (PDT)
+        Tue, 30 May 2023 19:17:00 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103FC10E
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:16:54 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f3b9755961so5719534e87.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:16:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685488571; x=1688080571;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=q6wOdCsvPcfL1AGuKhq7si1i+l1tB9VGHRhgBuI4hFQ=;
-        b=A6P9MRUqWxltKJ9Zgwok7DSDRoOxoww2FWlF6WQO1tYgoM5+Hi0Ez2oEaQQjsD1m8R
-         d4fRiNfemEoHsLbKtPfU643qi1eTaIaRbZTrXG8PIKxDT7zOE/fxQqSHWBsVd7zxgsD9
-         9LmT/yPeVeEdIlXyQ0jganlgblNgnS7PESvrk=
+        d=linaro.org; s=google; t=1685488612; x=1688080612;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eHug+pro+MudY8ybS89ytrVKoFyLIO/xxLOjL/J5B4s=;
+        b=fgn3hn4lkIINQIXKMizqRgo170331xYzH2+DVvgmQGdwBas6TztlaAQuDCEhuF+D8f
+         5Z98EekG+maUBzB65LKaK43z/9oEORo5Iksu5Fwypow/Ss/wsUnZZC+xjM187ojn5mWp
+         89t4Etr2oXJ+Vx5+KZhJ49iya5SkYq2aPs60kl730tFjt+cLafG5gcLaJ6b6aHszXev7
+         cdVUPHMdY3swZiff0Mt/neMyVcwbHVO0RVkNYYNHKJGm4cy2fxrHsDHKpXWM6ey3aBz8
+         pTV8qe/bBNE1MC4kdXSsMi7JBIfDbmHiC4gyJ7epIb/AoMTolIrOEHd7d7gV34CJQeT+
+         aGlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685488571; x=1688080571;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1685488612; x=1688080612;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q6wOdCsvPcfL1AGuKhq7si1i+l1tB9VGHRhgBuI4hFQ=;
-        b=NOqfOIGC+mDIz9ArMup+xTlK3OxCPKSrKm2Sr2QE6Oy72Fe3fIZ91+lpSF8RDin0J7
-         n7KC5Yz9VZARyG6SbNREnL77WsllqvZnzXLBVLNeIg17IpsqCJVcuBiqDrFDfopyiPKq
-         HFNqh5H3u8lUAkGyZeIssOSyXAesxHrcGcdqFFQwxyLsRfqzyDjzkJ3pTB5rBQpNeUc8
-         C05a/zReYPyk+nBnScwz9EAVrq7zu/CXuxAt1dT9XqXZ4l7Xei8i1Zv5AwP3sS1djRDt
-         1UOKVEyuVi1AK7sgehdZ3qnt53bkCKUVUJTFN+e5wLRxZMy324CPDu2Rlpu5FCNURVuA
-         c+Ew==
-X-Gm-Message-State: AC+VfDyrAYB8EUEVNh4PkQvpUgJ5e4D/Q9we3NAT9+PlZ+8cikPVHebC
-        gUqN1cZR2M+WVg0AGx1E37OFCg==
-X-Google-Smtp-Source: ACHHUZ5vUXK2I/pfuTav0TBfWy3DDrvFJsd+7uESTSUanu+Vl50RByVZpLds9PiU8F5GGbjiErQYOQ==
-X-Received: by 2002:a05:6a00:10c4:b0:646:663a:9d60 with SMTP id d4-20020a056a0010c400b00646663a9d60mr4308038pfu.10.1685488570875;
-        Tue, 30 May 2023 16:16:10 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id v22-20020aa78516000000b0063d3d776910sm2123773pfn.138.2023.05.30.16.16.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 16:16:10 -0700 (PDT)
-Date:   Tue, 30 May 2023 16:16:09 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc:     Wei Liu <wei.liu@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Alexander Graf <graf@amazon.com>,
-        Forrest Yuan Yu <yuanyu@google.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        John Andersen <john.s.andersen@intel.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Marian Rotariu <marian.c.rotariu@gmail.com>,
-        Mihai =?utf-8?B?RG9uyJt1?= <mdontu@bitdefender.com>,
-        =?utf-8?B?TmljdciZb3IgQ8OuyJt1?= <nicu.citu@icloud.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Thara Gopinath <tgopinath@microsoft.com>,
-        Will Deacon <will@kernel.org>,
-        Zahra Tarkhani <ztarkhani@microsoft.com>,
-        =?utf-8?Q?=C8=98tefan_=C8=98icleru?= <ssicleru@bitdefender.com>,
-        dev@lists.cloudhypervisor.org, kvm@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, qemu-devel@nongnu.org,
-        virtualization@lists.linux-foundation.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v1 5/9] KVM: x86: Add new hypercall to lock control
- registers
-Message-ID: <202305301614.BF8D80D3D5@keescook>
-References: <20230505152046.6575-1-mic@digikod.net>
- <20230505152046.6575-6-mic@digikod.net>
- <ZFlllHjntehpthma@liuwe-devbox-debian-v2>
- <901ff104-215c-8e81-fbae-5ecd8fa94449@digikod.net>
+        bh=eHug+pro+MudY8ybS89ytrVKoFyLIO/xxLOjL/J5B4s=;
+        b=Be7R3s7Vl6msJArVcMOLAaYM+A2cfg6eS8vubjq7Ufq6C2hW7V0ei87XTRBFb07Kao
+         fZU3PJxgJ66pQguGKE/n2OnL5SOJ69W/DGoFJ5fzorCM/qcuLbgf3JJ5ZOMxSerk7Mtx
+         9Xw7rKPoiylwX+KpqvUURUoF4AQ5ARbWOHhpLScc2ehDrqUc4BAgKE7UVrOTxjjJDgY+
+         94kfQCRnBR6qu+zW4JjGas+gcaPdVo3Tkzi38pk2fOnmnh4VR4i9qFgLOP+LM9f0ubTh
+         iezTs1hK6g4aAekJWFZeU7CJhRId8214UU6aZPZlCLp8zkTCeNuS9rYr8R9V1dsjOJib
+         zExA==
+X-Gm-Message-State: AC+VfDwTK0U814FWXu6Mh6A7QqfLXDfFrsLNHRH/8zPyGdcEmX3IjwR6
+        idfD/MSnlWsrXPt5QczZGTvszQ==
+X-Google-Smtp-Source: ACHHUZ5xyrcXeeDP9jMscfXBEp/Zc/l5dNv5cR6pkFdXzTeUTTZdd0KKzKASP8m6HURxobv2ZQyP4Q==
+X-Received: by 2002:ac2:4c8c:0:b0:4f2:5338:d0a8 with SMTP id d12-20020ac24c8c000000b004f25338d0a8mr1786464lfl.56.1685488612235;
+        Tue, 30 May 2023 16:16:52 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id w13-20020ac254ad000000b004eeec1261ecsm482940lfk.31.2023.05.30.16.16.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 16:16:51 -0700 (PDT)
+Message-ID: <1160ec55-2ce3-cc0e-3b59-5fec1f1e5809@linaro.org>
+Date:   Wed, 31 May 2023 02:16:50 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH RFC 03/10] drm/panel: Add LGD panel driver for Sony Xperia
+ XZ3
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     neil.armstrong@linaro.org, Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+References: <20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org>
+ <20230521-drm-panels-sony-v1-3-541c341d6bee@somainline.org>
+ <ccc97880-8e74-b85b-9679-9c12c44c4b99@linaro.org>
+ <71675a02-0801-62dc-2673-4a0907636b21@linaro.org>
+ <CAA8EJpq=HZqiBZ6bpUNH47VmASuH+Mi5OD5BHmg0TPwtsKHf8w@mail.gmail.com>
+ <oxgtbj7qmsdvz5gl4bud64jedmhdmvphjfge7uy6uwulefqfsa@pleslv2zgwbp>
+ <ebc3ff33-6e4f-b107-33c6-f35b03307058@linaro.org>
+ <00d30c09-d622-11c1-2e07-44a798659982@quicinc.com>
+ <2zwamlkhtcuu3c7lithcipb3h46gjg7zsefnhdinmsjwkjxrcc@jbj7ak2mdgeu>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <2zwamlkhtcuu3c7lithcipb3h46gjg7zsefnhdinmsjwkjxrcc@jbj7ak2mdgeu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <901ff104-215c-8e81-fbae-5ecd8fa94449@digikod.net>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -99,56 +102,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 06:48:03PM +0200, Micka�l Sala�n wrote:
+On 30/05/2023 21:13, Marijn Suijten wrote:
+> On 2023-05-30 10:54:17, Abhinav Kumar wrote:
+>>> On 30/05/2023 00:07, Marijn Suijten wrote:
+>>>> On 2023-05-22 15:58:56, Dmitry Baryshkov wrote:
+>>>>> On Mon, 22 May 2023 at 12:04, Neil Armstrong
+>>>>> <neil.armstrong@linaro.org> wrote:
+>>>>>>
+>>>>>> On 22/05/2023 03:16, Dmitry Baryshkov wrote:
+>>>>>>> On 22/05/2023 00:23, Marijn Suijten wrote:
+>>>>>>>> Sony provides an unlabeled LGD + Atmel maXTouch assembly in its
+>>>>>>>> Xperia
+>>>>>>>> XZ3 (tama akatsuki) phone, with custom DCS commands to match.
+>>>>>>>>
+>>>>>>>> This panel features Display Stream Compression 1.1.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>>>>>>> ---
+>>>>>>>>     drivers/gpu/drm/panel/Kconfig                   |  11 +
+>>>>>>>>     drivers/gpu/drm/panel/Makefile                  |   1 +
+>>>>>>>>     drivers/gpu/drm/panel/panel-sony-akatsuki-lgd.c | 362
+>>>>>>>> ++++++++++++++++++++++++
+>>>>>>>>     3 files changed, 374 insertions(+)
+>>>>>>>>
+>>>>>>>> diff --git a/drivers/gpu/drm/panel/Kconfig
+>>>>>>>> b/drivers/gpu/drm/panel/Kconfig
+>>>>>>>> index 67ef898d133f2..18bd116e78a71 100644
+>>>>>>>> --- a/drivers/gpu/drm/panel/Kconfig
+>>>>>>>> +++ b/drivers/gpu/drm/panel/Kconfig
+>>>>>>>> @@ -706,6 +706,17 @@ config DRM_PANEL_SONY_ACX565AKM
+>>>>>>>>           Say Y here if you want to enable support for the Sony
+>>>>>>>> ACX565AKM
+>>>>>>>>           800x600 3.5" panel (found on the Nokia N900).
+>>>>>>>> +config DRM_PANEL_SONY_AKATSUKI_LGD
+>>>>>>>> +    tristate "Sony Xperia XZ3 LGD panel"
+>>>>>>>> +    depends on GPIOLIB && OF
+>>>>>>>> +    depends on DRM_MIPI_DSI
+>>>>>>>> +    depends on BACKLIGHT_CLASS_DEVICE
+>>>>>>>> +    help
+>>>>>>>> +      Say Y here if you want to enable support for the Sony
+>>>>>>>> Xperia XZ3
+>>>>>>>> +      1440x2880@60 6.0" OLED DSI cmd mode panel produced by LG
+>>>>>>>> Display.
+>>>>>>>> +
+>>>>>>>> +      This panel uses Display Stream Compression 1.1.
+>>>>>>>> +
+>>>>>>>>     config DRM_PANEL_SONY_TD4353_JDI
+>>>>>>>>         tristate "Sony TD4353 JDI panel"
+>>>>>>>>         depends on GPIOLIB && OF
+>>>>>>>> diff --git a/drivers/gpu/drm/panel/Makefile
+>>>>>>>> b/drivers/gpu/drm/panel/Makefile
+>>>>>>>> index ff169781e82d7..85133f73558f3 100644
+>>>>>>>> --- a/drivers/gpu/drm/panel/Makefile
+>>>>>>>> +++ b/drivers/gpu/drm/panel/Makefile
+>>>>>>>> @@ -71,6 +71,7 @@ obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7701) +=
+>>>>>>>> panel-sitronix-st7701.o
+>>>>>>>>     obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7703) += panel-sitronix-st7703.o
+>>>>>>>>     obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7789V) +=
+>>>>>>>> panel-sitronix-st7789v.o
+>>>>>>>>     obj-$(CONFIG_DRM_PANEL_SONY_ACX565AKM) += panel-sony-acx565akm.o
+>>>>>>>> +obj-$(CONFIG_DRM_PANEL_SONY_AKATSUKI_LGD) +=
+>>>>>>>> panel-sony-akatsuki-lgd.o
+>>>>>>>>     obj-$(CONFIG_DRM_PANEL_SONY_TD4353_JDI) += panel-sony-td4353-jdi.o
+>>>>>>>>     obj-$(CONFIG_DRM_PANEL_SONY_TULIP_TRULY_NT35521) +=
+>>>>>>>> panel-sony-tulip-truly-nt35521.o
+>>>>>>>>     obj-$(CONFIG_DRM_PANEL_TDO_TL070WSH30) += panel-tdo-tl070wsh30.o
+>>>>>>>> diff --git a/drivers/gpu/drm/panel/panel-sony-akatsuki-lgd.c
+>>>>>>>> b/drivers/gpu/drm/panel/panel-sony-akatsuki-lgd.c
+>>>>>>>> new file mode 100644
+>>>>>>>> index 0000000000000..f55788f963dab
+>>>>>>>> --- /dev/null
+>>>>>>>> +++ b/drivers/gpu/drm/panel/panel-sony-akatsuki-lgd.c
+>>>>>>>> @@ -0,0 +1,362 @@
+>>>>>>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>>>>>>> +/*
+>>>>>>>> + * Copyright (c) 2023 Marijn Suijten <marijn.suijten@somainline.org>
+>>>>>>>> + *
+>>>>>>>> + * Based on Sony Downstream's "Atmel LGD ID5" Akatsuki panel dtsi.
+>>>>>>>> + */
+>>>>>>>> +
+>>>>>>>> +#include <linux/backlight.h>
+>>>>>>>> +#include <linux/delay.h>
+>>>>>>>> +#include <linux/gpio/consumer.h>
+>>>>>>>> +#include <linux/module.h>
+>>>>>>>> +#include <linux/of.h>
+>>>>>>>> +#include <linux/of_device.h>
+>>>>>>>> +#include <linux/regulator/consumer.h>
+>>>>>>>> +
+>>>>>>>> +#include <video/mipi_display.h>
+>>>>>>>> +
+>>>>>>>> +#include <drm/drm_mipi_dsi.h>
+>>>>>>>> +#include <drm/drm_modes.h>
+>>>>>>>> +#include <drm/drm_panel.h>
+>>>>>>>> +#include <drm/drm_probe_helper.h>
+>>>>>>>> +#include <drm/display/drm_dsc.h>
+>>>>>>>> +#include <drm/display/drm_dsc_helper.h>
+>>>>>>>> +
+>>>>>>>> +struct sony_akatsuki_lgd {
+>>>>>>>> +    struct drm_panel panel;
+>>>>>>>> +    struct mipi_dsi_device *dsi;
+>>>>>>>> +    struct regulator *vddio;
+>>>>>>>> +    struct gpio_desc *reset_gpio;
+>>>>>>>> +    bool prepared;
+>>>>>>>> +};
+>>>>>>>> +
+>>>>>>>> +static inline struct sony_akatsuki_lgd
+>>>>>>>> *to_sony_akatsuki_lgd(struct drm_panel *panel)
+>>>>>>>> +{
+>>>>>>>> +    return container_of(panel, struct sony_akatsuki_lgd, panel);
+>>>>>>>> +}
+>>>>>>>> +
+>>>>>>>> +static int sony_akatsuki_lgd_on(struct sony_akatsuki_lgd *ctx)
+>>>>>>>> +{
+>>>>>>>> +    struct mipi_dsi_device *dsi = ctx->dsi;
+>>>>>>>> +    struct device *dev = &dsi->dev;
+>>>>>>>> +    int ret;
+>>>>>>>> +
+>>>>>>>> +    dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+>>>>>>>> +
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0x7f, 0x5a, 0x5a);
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf1, 0x5a, 0x5a);
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x5a, 0x5a);
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0x02, 0x01);
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0x59, 0x01);
+>>>>>>>> +    /* Enable backlight control */
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_CONTROL_DISPLAY,
+>>>>>>>> BIT(5));
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0x57, 0x20, 0x80, 0xde, 0x60, 0x00);
+>>>>>>>> +
+>>>>>>>> +    ret = mipi_dsi_dcs_set_column_address(dsi, 0, 1440 - 1);
+>>>>>>>> +    if (ret < 0) {
+>>>>>>>> +        dev_err(dev, "Failed to set column address: %d\n", ret);
+>>>>>>>> +        return ret;
+>>>>>>>> +    }
+>>>>>>>> +
+>>>>>>>> +    ret = mipi_dsi_dcs_set_page_address(dsi, 0, 2880 - 1);
+>>>>>>>> +    if (ret < 0) {
+>>>>>>>> +        dev_err(dev, "Failed to set page address: %d\n", ret);
+>>>>>>>> +        return ret;
+>>>>>>>> +    }
+>>>>>>>> +
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_POWER_SAVE, 0x00);
+>>>>>>>> +
+>>>>>>>> +    ret = mipi_dsi_dcs_set_tear_on(dsi,
+>>>>>>>> MIPI_DSI_DCS_TEAR_MODE_VBLANK);
+>>>>>>>> +    if (ret < 0) {
+>>>>>>>> +        dev_err(dev, "Failed to set tear on: %d\n", ret);
+>>>>>>>> +        return ret;
+>>>>>>>> +    }
+>>>>>>>> +
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0x7f, 0x5a, 0x5a);
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf1, 0x5a, 0x5a);
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x5a, 0x5a);
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x03);
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf6, 0x04);
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x05);
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf6, 0x01, 0x7f, 0x00);
+>>>>>>>> +
+>>>>>>>> +    ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
+>>>>>>>> +    if (ret < 0) {
+>>>>>>>> +        dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
+>>>>>>>> +        return ret;
+>>>>>>>> +    }
+>>>>>>>> +    msleep(120);
+>>>>>>>> +
+>>>>>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xe3, 0xac, 0x19, 0x34, 0x14, 0x7d);
+>>>>>>>> +
+>>>>>>>> +    ret = mipi_dsi_dcs_set_display_on(dsi);
+>>>>>>>> +    if (ret < 0) {
+>>>>>>>> +        dev_err(dev, "Failed to turn display on: %d\n", ret);
+>>>>>>>> +        return ret;
+>>>>>>>> +    }
+>>>>>>>
+>>>>>>> My usual question: should the mipi_dsi_dcs_exit_sleep_mode() /
+>>>>>>> mipi_dsi_dcs_set_display_on() be moved from prepare() to enable()
+>>>>>>> part?
+>>>>>>
+>>>>>>
+>>>>>> No, prepare is called before the video stream is started and when
+>>>>>> display is still in LPM mode and the mode hasn't been set.
+>>>>>>
+>>>>>
+>>>>> Yes, that's my point. Shouldn't we enable the panel _after_ starting
+>>>>> the stream?
+>>>>
+>>>> I have never investigated what it takes to split these functions, but
+>>>> some of these panels do show some corruption at startup which may be
+>>>> circumvented by powering the panel on after starting the video stream?
+>>>>
+>>>> I'm just not sure where to make the split: downstream does describe a
+>>>> qcom,mdss-dsi-on-command and qcom,mdss-dsi-post-panel-on-command, where
+>>>> the latter only contains set_display_on() (not exit_sleep_mode()).
+>>>> It is documented like:
+>>>>
+>>>>       same as "qcom,mdss-dsi-on-command" except commands are sent after
+>>>>       displaying an image."
+>>>>
+>>>> So this seems like the right way to split them up, I'll test this out on
+>>>> all submitted panel drivers.
+>>>
+>>> Interesting enough, Neil suggested that sending all the commands during
+>>> pre_enable() is the correct sequence (especially for VIDEO mode panels),
+>>> since not all DSI hosts can send commands after switching to the VIDEO
+>>> mode.
+>>>
+>>
+>> I agree with Neil here.
+>>
+>> Yes, it does seem natural to think that sending the video stream before
+>> sending the on commands would avoid any potential corruption / garbage
+>> screen issues.
+>>
+>> But even from panel side should allow that. I have seen panel ON
+>> sequences where some explicitly ask for ON commands before the video stream.
+>>
+>> So, we cannot really generalize it and needs to be treated on a
+>> host-to-host and panel-to-panel basis.
 > 
-> On 08/05/2023 23:11, Wei Liu wrote:
-> > On Fri, May 05, 2023 at 05:20:42PM +0200, Micka�l Sala�n wrote:
-> > > This enables guests to lock their CR0 and CR4 registers with a subset of
-> > > X86_CR0_WP, X86_CR4_SMEP, X86_CR4_SMAP, X86_CR4_UMIP, X86_CR4_FSGSBASE
-> > > and X86_CR4_CET flags.
-> > > 
-> > > The new KVM_HC_LOCK_CR_UPDATE hypercall takes two arguments.  The first
-> > > is to identify the control register, and the second is a bit mask to
-> > > pin (i.e. mark as read-only).
-> > > 
-> > > These register flags should already be pinned by Linux guests, but once
-> > > compromised, this self-protection mechanism could be disabled, which is
-> > > not the case with this dedicated hypercall.
-> > > 
-> > > Cc: Borislav Petkov <bp@alien8.de>
-> > > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > > Cc: H. Peter Anvin <hpa@zytor.com>
-> > > Cc: Ingo Molnar <mingo@redhat.com>
-> > > Cc: Kees Cook <keescook@chromium.org>
-> > > Cc: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
-> > > Cc: Paolo Bonzini <pbonzini@redhat.com>
-> > > Cc: Sean Christopherson <seanjc@google.com>
-> > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
-> > > Cc: Wanpeng Li <wanpengli@tencent.com>
-> > > Signed-off-by: Micka�l Sala�n <mic@digikod.net>
-> > > Link: https://lore.kernel.org/r/20230505152046.6575-6-mic@digikod.net
-> > [...]
-> > >   	hw_cr4 = (cr4_read_shadow() & X86_CR4_MCE) | (cr4 & ~X86_CR4_MCE);
-> > >   	if (is_unrestricted_guest(vcpu))
-> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > > index ffab64d08de3..a529455359ac 100644
-> > > --- a/arch/x86/kvm/x86.c
-> > > +++ b/arch/x86/kvm/x86.c
-> > > @@ -7927,11 +7927,77 @@ static unsigned long emulator_get_cr(struct x86_emulate_ctxt *ctxt, int cr)
-> > >   	return value;
-> > >   }
-> > > +#ifdef CONFIG_HEKI
-> > > +
-> > > +extern unsigned long cr4_pinned_mask;
-> > > +
-> > 
-> > Can this be moved to a header file?
+> All four panel drivers in this series have a `post-panel-on` separation
+> (containing _just_ the panel_on DCS) and should be implemented with a
+> separate .enable callback.
 > 
-> Yep, but I'm not sure which one. Any preference Kees?
+> More importantly: is the API to enable/disable, and separately
+> prepare/unprepare the panel exposed to userspace?  And is there an app
+> (maybe as part of mesa/drm where modetest lives) that is able to trigger
+> these calls to test adequate behaviour?  In the past I've seen panels
+> working, until my userspace suspends and turn the panel off, where it
+> never comes back up properly after.
 
-Uh, er, I was never expecting that mask to be non-static. ;) To that
-end, how about putting it in arch/x86/kvm/x86.h ?
+No. The prepare/enable (and disable/unrepare) translate to the bridge's 
+pre_enable/enable and disable/post_disable callbacks, which are a part 
+of modesetting. One can not call them separately.
+
 
 -- 
-Kees Cook
+With best wishes
+Dmitry
+
