@@ -2,433 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC7E71579D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4127157A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjE3Hwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46886 "EHLO
+        id S229608AbjE3Hxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjE3Hwh (ORCPT
+        with ESMTP id S229588AbjE3Hxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:52:37 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0543AA8;
-        Tue, 30 May 2023 00:52:34 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126205206011.34.openmobile.ne.jp [126.205.206.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9170A27C;
-        Tue, 30 May 2023 09:52:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1685433132;
-        bh=KnvDw9sNiNP3DyTfZRaL2+6QBTeVToFZu9acKww5o4Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cy5GKgHeTgVib4AtSpZ/WBvSfvItBLLWFzNvRx4DP0aOHuBbiqmNzV7vsW+6Uy/uP
-         8toQ5jGanMObTd6jCCo7fyo+XaE1ypMGJUb0PesFFMqhqXdY1p9xRLs+rg9771LB7x
-         RbZMSUEIWzqeQA/ZrP832eqEtVuxzmrTPMPmxzys=
-Date:   Tue, 30 May 2023 10:52:33 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Andrew Davis <afd@ti.com>, Conor Dooley <conor+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Parth Gajjar <parth.gajjar@amd.com>,
-        Piyush Mehta <piyush.mehta@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        Tanmay Shah <tanmay.shah@amd.com>,
-        Vishal Sagar <vishal.sagar@amd.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] arm64: zynqmp: Switch to amd.com emails
-Message-ID: <20230530075233.GD6865@pendragon.ideasonboard.com>
-References: <80baafe923977bcfc4001dc5016de0731c1bf38e.1684766863.git.michal.simek@amd.com>
+        Tue, 30 May 2023 03:53:32 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF28118;
+        Tue, 30 May 2023 00:53:26 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f606912ebaso42741195e9.3;
+        Tue, 30 May 2023 00:53:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685433205; x=1688025205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iN1gw0mwm7WmvYXFIrcXk8pdCkRKPm8Ajl3S6Jy5MwI=;
+        b=ZrDagKrme3a6Hd3dwAsyc58nI93cJrUXLIBdL+tbD06gbNArOM7cJHn0IKhRdjXgX6
+         t9LUKxyWy/ySTqil0Ytjp7OyWIrGx/Mde1aNMbaBiY6uIKDg7nxH3xbEoG3sjNjIqfgH
+         BO/nNFRzjk9B1bkO84yjbOJg01t0xRpjJeqt+ymrsmIfVVpjtVOHkIgjmQrl3MnrPymj
+         DsEMdvtRXCEwoFSkSWpnT/TiyziFuhWUZ4Df77msnZ3mx1sXKrXMUYHJUM3Iim42H+nQ
+         +JYnmt2S7n8h48ILWkHU++/bmUjaRiHKqtmr5B4b6fNIpIzo8WgyBuYucxT5V3gNUCSU
+         nNAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685433205; x=1688025205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iN1gw0mwm7WmvYXFIrcXk8pdCkRKPm8Ajl3S6Jy5MwI=;
+        b=MkP8FcmClvbURcDmbY03Mu/deHtD6Z724zJyjT6GR8fVBml4N9lbCOrjm11YtRBcqo
+         6hkuNsI3IXDkR0Z2anQCZoQUvdCcUxOcgiHPXAw+SlEYQYSqznAHbonC5oxLe6V80Rew
+         MMGqIpJFPFZdmYzI8qdG9vAXdD5yic4hFIGIBQXPpC49qWTHiWgTw8hWMjJFO1Kmxh9J
+         EmYl/plz/50luBu8yN3LI83vmTlw3d3CON/XUcV+zZ2ghGX//shmlVK6vLz8VgG0CjXl
+         +3LEbCmzYK18CSWiTfBQwD1dsbJy26zjsgLLLdYNeMg24r8qFBAPE6XmiLGgw/N8cKtN
+         Ldyg==
+X-Gm-Message-State: AC+VfDzb3pF+IRnWPMmm0qTpZbCTQ+BX4iUDh6aqR+i92LxBCQkWWeSf
+        8QofiyKHekttLNgJsQZaGoZG8waMGKM=
+X-Google-Smtp-Source: ACHHUZ4IjHvxlNexzSJNUo0Ylft54bbV9bWzAgAp7tWi+uZLe5jkO6oJs/6XXcAjggoqHX48XH74LQ==
+X-Received: by 2002:a05:600c:b44:b0:3f2:48dc:5e02 with SMTP id k4-20020a05600c0b4400b003f248dc5e02mr811929wmr.27.1685433204598;
+        Tue, 30 May 2023 00:53:24 -0700 (PDT)
+Received: from PC-UT2.ad.ennebielettronica.com ([78.152.97.130])
+        by smtp.gmail.com with ESMTPSA id x21-20020a05600c21d500b003f6041f5a6csm16561275wmj.12.2023.05.30.00.53.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 00:53:24 -0700 (PDT)
+From:   fl.scratchpad@gmail.com
+To:     jic23@kernel.org
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Fabrizio Lamarque <fl.scratchpad@gmail.com>
+Subject: [PATCH v3 0/5] Fix ad7192 driver issues
+Date:   Tue, 30 May 2023 09:53:06 +0200
+Message-Id: <20230530075311.400686-1-fl.scratchpad@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <80baafe923977bcfc4001dc5016de0731c1bf38e.1684766863.git.michal.simek@amd.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
+From: Fabrizio Lamarque <fl.scratchpad@gmail.com>
 
-Thank you for the patch.
+Here is a patch set to overcome a number of issues in current ad7192
+adc driver implementation prevending the driver to be loaded and
+behave correctly:
 
-On Mon, May 22, 2023 at 04:48:00PM +0200, Michal Simek wrote:
-> Update my and DPs email address to match current setup.
-> 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
-> 
-> Changes in v2:
-> - Remove all copyright changes
-> - Fix DPs name
-> 
->  arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dts      | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi         | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso   | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso   | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts      | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dts     | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dts      | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dts      | 4 ++--
->  arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dts | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dts | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts      | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dts    | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dts    | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts      | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dts      | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts      | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts      | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts      | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts      | 2 +-
->  arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revA.dts     | 4 ++--
->  arch/arm64/boot/dts/xilinx/zynqmp.dtsi                 | 2 +-
->  24 files changed, 26 insertions(+), 26 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dts b/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dts
-> index 88aa06fa78a8..4c1bd69e7553 100644
-> --- a/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dts
-> +++ b/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2018, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi
-> index 719ea5d5ae88..f04716841a0c 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-clk-ccf.dtsi
-> @@ -5,7 +5,7 @@
->   * (C) Copyright 2017 - 2022, Xilinx, Inc.
->   * (C) Copyright 2022 - 2023, Advanced Micro Devices, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  #include <dt-bindings/clock/xlnx-zynqmp-clk.h>
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso
-> index bebbe955eec1..669fe6084f3f 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revA.dtso
-> @@ -9,7 +9,7 @@
->   * "Y" - A01 board modified with legacy interposer (Nexperia)
->   * "Z" - A01 board modified with Diode interposer
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  #include <dt-bindings/gpio/gpio.h>
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso
-> index 8e66448f35a9..7886a19139ee 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-sck-kv-g-revB.dtso
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2020 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  #include <dt-bindings/gpio/gpio.h>
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
-> index 464e28bf078a..c1ab1ab690df 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2020 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dts
-> index c70966c1f344..85b0d1677240 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2020 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  #include "zynqmp-sm-k26-revA.dts"
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dts
-> index f1598527e5ec..48d6a7202406 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2017 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dts
-> index 04efa1683eaa..e80484f9b137 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dts
-> @@ -4,8 +4,8 @@
->   *
->   * (C) Copyright 2015 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> - * Siva Durga Prasad Paladugu <sivadur@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
-> + * Siva Durga Prasad Paladugu <siva.durga.prasad.paladugu@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts
-> index f89ef2afcd9e..1a7995ee62ce 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2015 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts
-> index 868ca655a220..869b733a0634 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2015 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dts
-> index 381cc682cef9..38b0a312171b 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2016 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dts
-> index 6e0106bf1294..05be71eab722 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2015 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts
-> index ae2d03d98322..5ccb343df4fb 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dts
-> @@ -5,7 +5,7 @@
->   * (C) Copyright 2015 - 2021, Xilinx, Inc.
->   *
->   * Siva Durga Prasad <siva.durga.paladugu@xilinx.com>
+ - null pointer dereference causing kernel panic on driver probe;
+ - wrong internal clock selection;
+ - use of "avdd" regulator name in place of vref (reference voltage);
+ - missing clock options in bindings docs only (already implemented).
 
-Shouldn't this address be updated too ? You're using @amd.com above and
-below.
+The first two issues are regressions.
 
-With this fixed,
+Backported patches have been tested on a platform with an ARM Cortex-A7
+CPU from NXP with kernel 5.15.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+As a side note, on the tested platform there is still an issue with a
+pending interrupt that I worked around by setting the DRDY IRQ
+to LEVEL in place of EDGE sensing. Also, setting IRQ_DISABLE_UNLAZY
+flag does not help in my case.
 
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts
-> index 70c48079575d..544801814bd5 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2016 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   * Nathalie Chan King Choy
->   */
->  
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dts
-> index 6647e97edba3..c8f71a1aec89 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2016 - 2018, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  #include "zynqmp-zcu102-revB.dts"
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dts
-> index b6798394fcf4..705369766a55 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2016 - 2020, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  #include "zynqmp-zcu102-rev1.0.dts"
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
-> index d600eeb5b2b7..230ef94d5dcb 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2015 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dts
-> index f7d718ff116b..63419deb5b33 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2016 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  #include "zynqmp-zcu102-revA.dts"
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts
-> index 473fae564906..d178a4f898c9 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2017 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts
-> index c8ba9ed157be..38b11594c074 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2017 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts
-> index 09773b7200f8..8af0879806cf 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2016 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts
-> index e0305dcbb010..f76687914e30 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2017 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revA.dts
-> index 4874e0ad914e..e615286b8eff 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revA.dts
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revA.dts
-> @@ -4,8 +4,8 @@
->   *
->   * (C) Copyright 2017 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> - * Siva Durga Prasad Paladugu <sivadur@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
-> + * Siva Durga Prasad Paladugu <siva.durga.prasad.paladugu@amd.com>
->   */
->  
->  /dts-v1/;
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> index 850b497d7a81..a961bb6f31ff 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> @@ -4,7 +4,7 @@
->   *
->   * (C) Copyright 2014 - 2021, Xilinx, Inc.
->   *
-> - * Michal Simek <michal.simek@xilinx.com>
-> + * Michal Simek <michal.simek@amd.com>
->   *
->   * This program is free software; you can redistribute it and/or
->   * modify it under the terms of the GNU General Public License as
+You may find further information here:
+https://lore.kernel.org/all/CAPJMGm4GaSjD6bdqMwCr2EVZGenWzT-nCCf3BMRaD1TSfAabpA@mail.gmail.com/
+
+Version log:
+
+
+v2->v3
+ - Reworded commit messages
+ - Split binding fixes
+
+v1->v2
+ - Obtained ad7192_state from iio_dev pointer
+ - Added patch on bindings documentation
+
+
+Fabrizio Lamarque (5):
+  iio: adc: ad7192: Fix null ad7192_state pointer access
+  iio: adc: ad7192: Fix internal/external clock selection
+  iio: adc: ad7192: Use VRef instead of AVdd as reference voltage source
+  dt-bindings: iio: ad7192: Add mandatory reference voltage source
+  dt-bindings: iio: ad7192: Allow selection of clock modes
+
+ .../bindings/iio/adc/adi,ad7192.yaml          | 32 +++++++++++++++++--
+ drivers/iio/adc/ad7192.c                      | 31 +++++++++++++++---
+ 2 files changed, 55 insertions(+), 8 deletions(-)
 
 -- 
-Regards,
+2.34.1
 
-Laurent Pinchart
