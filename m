@@ -2,205 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90B5715A56
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 833E0715A78
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjE3JjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
+        id S230472AbjE3Jl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjE3JjV (ORCPT
+        with ESMTP id S231162AbjE3Jk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:39:21 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E639A3;
-        Tue, 30 May 2023 02:39:19 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QVnMk1sQQzLqBN;
-        Tue, 30 May 2023 17:36:18 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 30 May 2023 17:39:16 +0800
-Message-ID: <78f61c71-be47-cd4d-36c8-161c7a86c9c0@huawei.com>
-Date:   Tue, 30 May 2023 17:39:16 +0800
+        Tue, 30 May 2023 05:40:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A78135;
+        Tue, 30 May 2023 02:40:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 718A562C8D;
+        Tue, 30 May 2023 09:40:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6904C433EF;
+        Tue, 30 May 2023 09:40:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685439634;
+        bh=rNtDxPIemUYMFmDRq+2vO1N6CRtzqiO5qUW2YSDslnE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fVWCl+PdPozcwC62Y6L97YzJzDzJtHQQMnW9S2GOh4IlKRTtDE1NzxUxWU59ZEc4W
+         iPECpa8+tqxLd3ZkYeYq4ROellwQksMrelI2RSqOljy2x5OT1wolysjDdffhmBms+X
+         /i0tiBcH5MSwvo6em5tPHOA9/QaOytmnBVwVAL+2TtNpSw5fdUiSOX5r9N+Sco7nBI
+         aK0BQsipGmChcVfwRSE9LZXPOaCUVBCizzVlgw1m9mG4bbZdLjkSVTjhlPTfdrGPg+
+         BvRQOXd5jiIRC5GcyHmIgY2+CB1EmpfgwUO+GZnoJRtF0PlfGF/yxDmDEOYNaUxwkL
+         Q+YqAQLhAZs4w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q3vqE-0008S2-F8; Tue, 30 May 2023 11:40:35 +0200
+Date:   Tue, 30 May 2023 11:40:34 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com, david@redhat.com,
+        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
+        lennart@poettering.net
+Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
+Message-ID: <ZHXEktFq7NPYLtGn@hovoldconsulting.com>
+References: <CAHk-=wiPjcPL_50WRWOi-Fmi9TYO6yp_oj63a_N84FzG-rxGKQ@mail.gmail.com>
+ <6gwjomw6sxxmlglxfoilelswv4hgygqelomevb4k4wrlrk3gtm@wrakbmwztgeu>
+ <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
+ <ZG/a+nrt4/AAUi5z@bombadil.infradead.org>
+ <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
+ <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
+ <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
+ <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
+ <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
+ <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] ext4: fix race condition between buffer write and
- page_mkwrite
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <jun.nie@linaro.org>,
-        <ebiggers@kernel.org>, <yi.zhang@huawei.com>,
-        <yangerkun@huawei.com>, <yukuai3@huawei.com>,
-        <syzbot+a158d886ca08a3fecca4@syzkaller.appspotmail.com>,
-        <stable@vger.kernel.org>, Baokun Li <libaokun1@huawei.com>
-References: <20230529080148.3810143-1-libaokun1@huawei.com>
- <20230529144435.bj65ltbww5jbh2uc@quack3>
- <7f6ab488-9eef-fb94-b007-839eb1c1f487@huawei.com>
- <20230530074225.ly6vnolykqu5teos@quack3>
-Content-Language: en-US
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230530074225.ly6vnolykqu5teos@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/30 15:42, Jan Kara wrote:
-> On Tue 30-05-23 10:00:44, Baokun Li wrote:
->> On 2023/5/29 22:44, Jan Kara wrote:
->>> On Mon 29-05-23 16:01:48, Baokun Li wrote:
->>>> Syzbot reported a BUG_ON:
->>>> ==================================================================
->>>> EXT4-fs (loop0): mounted filesystem without journal. Quota mode: none.
->>>> EXT4-fs error (device loop0): ext4_mb_generate_buddy:1098: group 0, block
->>>>        bitmap and bg descriptor inconsistent: 25 vs 150994969 free clusters
->>>> ------------[ cut here ]------------
->>>> kernel BUG at fs/ext4/ext4_jbd2.c:53!
->>>> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
->>>> CPU: 1 PID: 494 Comm: syz-executor.0 6.1.0-rc7-syzkaller-ga4412fdd49dc #0
->>>> RIP: 0010:__ext4_journal_stop+0x1b3/0x1c0
->>>>    [...]
->>>> Call Trace:
->>>>    ext4_write_inline_data_end+0xa39/0xdf0
->>>>    ext4_da_write_end+0x1e2/0x950
->>>>    generic_perform_write+0x401/0x5f0
->>>>    ext4_buffered_write_iter+0x35f/0x640
->>>>    ext4_file_write_iter+0x198/0x1cd0
->>>>    vfs_write+0x8b5/0xef0
->>>>    [...]
->>>> ==================================================================
->>>>
->>>> The above BUG_ON is triggered by the following race:
->>>>
->>>>              cpu1                    cpu2
->>>> ________________________|________________________
->>>> ksys_write
->>>>    vfs_write
->>>>     new_sync_write
->>>>      ext4_file_write_iter
->>>>       ext4_buffered_write_iter
->>>>        generic_perform_write
->>>>         ext4_da_write_begin
->>>>                             do_fault
->>>>                              do_page_mkwrite
->>>>                               ext4_page_mkwrite
->>>>                                ext4_convert_inline_data
->>>>                                 ext4_convert_inline_data_nolock
->>>>                                  ext4_destroy_inline_data_nolock
->>>>                                   //clear EXT4_STATE_MAY_INLINE_DATA
->>>>                                  ext4_map_blocks --> return error
->>>>          ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
->>>>          ext4_block_write_begin
->>>>                                  ext4_restore_inline_data
->>>>                                   // set EXT4_STATE_MAY_INLINE_DATA
->>>>         ext4_da_write_end
->>>>          ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
->>>>          ext4_write_inline_data_end
->>>>           handle=NULL
->>>>           ext4_journal_stop(handle)
->>>>            __ext4_journal_stop
->>>>             ext4_put_nojournal(handle)
->>>>              ref_cnt = (unsigned long)handle
->>>>              BUG_ON(ref_cnt == 0)  ---> BUG_ON
->>>>
->>>> The root cause of this problem is that the ext4_convert_inline_data() in
->>>> ext4_page_mkwrite() does not grab i_rwsem, so it may race with
->>>> ext4_buffered_write_iter() and cause the write_begin() and write_end()
->>>> functions to be inconsistent and trigger BUG_ON.
->>>>
->>>> To solve the above issue, we cannot add inode_lock directly to
->>>> ext4_page_mkwrite(), because this function is a hot path and frequent calls
->>>> to inode_lock will cause performance degradation for multi-threaded reads
->>>> and writes. Hence, we move ext4_convert_inline_data() to ext4_file_mmap(),
->>>> and only when inline_data is enabled and mmap a file in shared write mode,
->>>> we hold the lock to convert, which can reduce the impact on performance.
->>>>
->>>> Reported-by: Jun Nie <jun.nie@linaro.org>
->>>> Closes: https://lore.kernel.org/lkml/63903521.5040307@huawei.com/t/
->>>> Reported-by: syzbot+a158d886ca08a3fecca4@syzkaller.appspotmail.com
->>>> Closes: https://syzkaller.appspot.com/bug?id=899b37f20ce4072bcdfecfe1647b39602e956e36
->>>> Fixes: 7b4cc9787fe3 ("ext4: evict inline data when writing to memory map")
->>>> CC: stable@vger.kernel.org # 4.12+
->>>> Signed-off-by: Baokun Li <libaokun1@huawei.com>
->>> Thanks for the patch! The problem with i_rwsem in ext4_page_mkwrite() is
->>> not so much about performance as about lock ordering. In
->>> ext4_page_mkwrite() we are called with mmap_sem held and so we cannot
->>> acquire i_rwsem because it ranks about it.
->> Thank you for your review!
->>
->> I'm sorry I didn't make myself clear here.
->>
->> Yes, we can't get i_rwsem after holding mmap_sem at any time, otherwise
->> ABBA deadlock may occur. The "add inode_lock directly" in my patch
->> description actually looks like this:
->> ```
->> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
->> index b98d2d58b900..c9318dc2a613 100644
->> --- a/fs/ext4/inode.c
->> +++ b/fs/ext4/inode.c
->> @@ -6025,12 +6025,14 @@ vm_fault_t ext4_page_mkwrite(struct vm_fault *vmf)
->>          sb_start_pagefault(inode->i_sb);
->>          file_update_time(vma->vm_file);
->>
->> -       filemap_invalidate_lock_shared(mapping);
->> -
->> +       inode_lock(inode);
->>          err = ext4_convert_inline_data(inode);
->> +       inode_unlock(inode);
->>          if (err)
->>                  goto out_ret;
->>
->> +       filemap_invalidate_lock_shared(mapping);
->> +
->>          /*
->>           * On data journalling we skip straight to the transaction handle:
->>           * there's no delalloc; page truncated will be checked later; the
->> ```
-> Yes, but even this could deadlock. The ABBA deadlock I'm speaking about
-> would not be created with mapping->invalidate_lock but rather with
-> task->mm->mmap_lock which is acquired at the beginning of page fault in the
-> arch code.
+On Mon, May 29, 2023 at 09:55:15PM -0400, Linus Torvalds wrote:
+> On Mon, May 29, 2023 at 11:18 AM Johan Hovold <johan@kernel.org> wrote:
+> >
+> > I took a closer look at some of the modules that failed to load and
+> > noticed a pattern in that they have dependencies that are needed by more
+> > than one device.
+> 
+> Ok, this is a "maybe something like this" RFC series of two patches -
+> one trivial one to re-organize things a bit so that we can then do the
+> real one which uses a filter based on the inode pointer to return an
+> "idempotent return value" for module loads that share the same inode.
+> 
+> It's entirely untested, and since I'm on the road I'm going to not
+> really be able to test it. It compiles for me, and the code looks
+> fairly straightforward, but it's probably buggy.
+> 
+> It's very loosely based on Luis' attempt,  but it
+>  (a) is internal to module loading
+>  (b) uses a reliable cookie
+>  (c) doesn't leave the cookie around randomly for later
+>  (d) has seen absolutely no testing
+> 
+> Put another way: if somebody wants to play with this, please treat it
+> as a starting point, not the final thing. You might need to debug
+> things, and fix silly mistakes.
 
-Thanks for the explanation!
+With the missing spinlock initialisation fixed:
 
-I thought the mmap_sem said was "&EXT4_I(inode)->i_mmap_sem".
+-static struct spinlock idem_lock;
++static DEFINE_SPINLOCK(idem_lock);
 
-But here are some more questions:
+this passes basic smoke testing and allows the X13s to boot.
 
-1) In the arch code page fault is handled by mmap_read_lock(mm) to get the
-    shared lock, why would this lead to ABBA deadlock?
+It does not seem to have any significant impact on boot time, but it
+avoids some of the unnecessary load attempts as intended:
 
-2) Why would page fault be triggered in the write process?
+Before:
 
-Could you explain it in more detail?
+         Mods ever loaded       131
+     Mods failed on kread       0
+Mods failed on decompress       0
+  Mods failed on becoming       24
+      Mods failed on load       14
+        Total module size       12587008
+      Total mod text size       5058560
+       Failed kread bytes       0
+  Failed decompress bytes       0
+    Failed becoming bytes       2437992
+        Failed kmod bytes       1858992
+ Virtual mem wasted bytes       4296984
+         Average mod size       96085
+    Average mod text size       38615
+  Avg fail becoming bytes       101583
+  Average fail load bytes       132786
 
-> And when you do write(2), you hold inode_lock() and then you
-> copy data from the use provided buffer to the pagecache pages and that can
-> cause a page fault on the user provided buffer which will try to grab
-> task->mm->mmap_lock.
->
-> This lock inversion is the main reason why inode lock cannot be used
-> anywhere in the page fault path.
->
-> 								Honza
->
-Looking forward to hearing from you! 🤔
+After:
 
--- 
-With Best Regards,
-Baokun Li
-.
+         Mods ever loaded       131
+     Mods failed on kread       0
+Mods failed on decompress       0
+  Mods failed on becoming       4
+      Mods failed on load       0
+        Total module size       12587008
+      Total mod text size       5058560
+       Failed kread bytes       0
+  Failed decompress bytes       0
+    Failed becoming bytes       109776
+        Failed kmod bytes       0
+ Virtual mem wasted bytes       109776
+         Average mod size       96085
+    Average mod text size       38615
+  Avg fail becoming bytes       27444
+
+Johan
