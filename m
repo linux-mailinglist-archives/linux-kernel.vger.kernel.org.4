@@ -2,79 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E039717076
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 028FD71707D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233635AbjE3WMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 18:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
+        id S233657AbjE3WNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 18:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233631AbjE3WL7 (ORCPT
+        with ESMTP id S233631AbjE3WNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 18:11:59 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF2311C;
-        Tue, 30 May 2023 15:11:52 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d2da69fdfso5795133b3a.0;
-        Tue, 30 May 2023 15:11:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685484712; x=1688076712;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EvBZHkvL1aURqZXFZC4d4YP3G3jQMOUC4RE4X8Qh5Qw=;
-        b=CoAnW59diY9DHipcXzl92JrThq8EFUsEcad9Jf6i91mXumHaIHaIQqeciTob+tSrNj
-         a+SJi6Zw0+DjqiYYYqQWTsUc/4yrU3ZmTUpqlOfzeU0eEmXl188pHRALWuMIAk64Wdii
-         CW9Y1frtGlSDYVpmP3bclZb34bsp22eyl2OJ90qrOGyU+/arg+WzEZEEHO4sIjLEnuwG
-         kauXuIpyHFQicElsset5CdKBa/Q6CGbiBWzIdgCEhYXM/M3aT/fAdj3ftbYSdp8BI6Mf
-         EaiAq2NWumpJvtI5cd89GKYWjDc8Rb9Mafl/DEIK38UsB27K8nLMZOHoTkXTt+UUbCOX
-         G5kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685484712; x=1688076712;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EvBZHkvL1aURqZXFZC4d4YP3G3jQMOUC4RE4X8Qh5Qw=;
-        b=AemTSZdbG8s0UbZf1qK8m3jAI2iMM6Gl50pr7FERIajPHO8tDcRtIAk4iKt/Gkqsc+
-         w0ljQjbpjGy3zUsoCX20lJffDH4Ytc61FYpXqonAJDf/h4+ZozICjsNwAWEHLqrO3XoM
-         1HR0gJULFClIE/yjgVOjHLa3jd70N70b/BJfSDv6fKq9VONTmI/dx0zyVCokDZGlH9MW
-         +R8biDBRMuOk9jsBWESNV3/RWK5Tw+zAnmkdJhO1OxbEnVsOOSEMOPqw6dWRUfKx1k3Y
-         e3dvtauDZHfVvZ5Lvw2tjV4drZEP2QFF4UcttVYUGpakVc5lw53l1AJCmysgnaG14qDs
-         PPng==
-X-Gm-Message-State: AC+VfDwbsqWqBt52NABf0uOBB+CwtUk1CZjT782EdvW5TabAjG9rPMBA
-        uJuKdwijrtYHR2Me4PslNyI=
-X-Google-Smtp-Source: ACHHUZ6Oy6C4x2AaSCz9oTPGdqSW7vv7F9On3t53axl555lthLjr6vcSYgbWnB4eOlMR5W9OtcGbdQ==
-X-Received: by 2002:a05:6a00:2488:b0:643:980:65b with SMTP id c8-20020a056a00248800b006430980065bmr4195560pfv.2.1685484711725;
-        Tue, 30 May 2023 15:11:51 -0700 (PDT)
-Received: from localhost ([192.55.54.50])
-        by smtp.gmail.com with ESMTPSA id n14-20020aa7904e000000b00625037cf695sm2092126pfo.86.2023.05.30.15.11.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 15:11:51 -0700 (PDT)
-Date:   Tue, 30 May 2023 15:11:49 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Wang, Wei W" <wei.w.wang@intel.com>
-Cc:     "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>,
-        "Chen, Bo2" <chen.bo@intel.com>
-Subject: Re: [PATCH v14 000/113] KVM TDX basic feature support
-Message-ID: <20230530221149.GE1234772@ls.amr.corp.intel.com>
-References: <cover.1685333727.git.isaku.yamahata@intel.com>
- <DS0PR11MB6373D94AE8420F45798E7D40DC4B9@DS0PR11MB6373.namprd11.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <DS0PR11MB6373D94AE8420F45798E7D40DC4B9@DS0PR11MB6373.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Tue, 30 May 2023 18:13:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9284EE5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:13:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DBD162C1D
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 22:13:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72B27C433D2;
+        Tue, 30 May 2023 22:13:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1685484787;
+        bh=y0tk1LhfJUoWojH29xQgBQAHyyiXOdXW+PIeggjfJ4M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GMqZ3gNKQSHgrxIW3VQKnJ3POD/m4f3LfkDLMUO9uTzwJ4TFhEJJnDfXfootzO017
+         PmgfE18SeCrd+MYkrstOTSn1rsgn/s6pf+LFlnoj3xWdvKFFDtmfjBN3T+SjWdns/W
+         nA8n1goiD5ektUFw7ElFB9J6q0dow8tBCGBAxK1w=
+Date:   Tue, 30 May 2023 15:13:06 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm: page_alloc: remove unneeded header files
+Message-Id: <20230530151306.b9f24b247c66ea7f80df6be8@linux-foundation.org>
+In-Reply-To: <20230527100728.267992-1-linmiaohe@huawei.com>
+References: <20230527100728.267992-1-linmiaohe@huawei.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,19 +51,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 07:34:44AM +0000,
-"Wang, Wei W" <wei.w.wang@intel.com> wrote:
+On Sat, 27 May 2023 18:07:28 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
 
-> On Monday, May 29, 2023 12:19 PM, isaku.yamahata@intel.com wrote:
-> > The tree can be found at https://github.com/intel/tdx/tree/kvm-upstream
-> > The corresponding qemu branch is found at
-> > https://github.com/yamahata/qemu/tree/tdx/qemu-upm
-> > How to run/test: It's describe at https://github.com/intel/tdx/wiki/TDX-KVM
+> Remove some unneeded header files. No functional change intended.
 > 
-> Seems the above wiki lacks some update, e.g. tdx needs to be enabled explicitly
-> when loading kvm_intel, example command line (e.g. private=true for
-> memoy-backend) to launch TD with gmem.
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/page_alloc.c | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index e671c747892f..beb6db613238 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -24,9 +24,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/kasan.h>
+>  #include <linux/kmsan.h>
+> -#include <linux/module.h>
 
-Thanks for pointing it out. I've updated those items.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+This contains the prototype for print_modules().  So we're now reliant
+upon module.h being included via some other header, which is fragile.
+
+>  #include <linux/suspend.h>
+> -#include <linux/pagevec.h>
+>  #include <linux/ratelimit.h>
+>  #include <linux/oom.h>
+>  #include <linux/topology.h>
+> @@ -36,8 +34,6 @@
+>  #include <linux/memory_hotplug.h>
+>  #include <linux/nodemask.h>
+>  #include <linux/vmstat.h>
+> -#include <linux/sort.h>
+> -#include <linux/pfn.h>
+>  #include <linux/fault-inject.h>
+>  #include <linux/compaction.h>
+>  #include <trace/events/kmem.h>
+> @@ -52,11 +48,9 @@
+>  #include <linux/memcontrol.h>
+>  #include <linux/ftrace.h>
+>  #include <linux/lockdep.h>
+> -#include <linux/nmi.h>
+>  #include <linux/psi.h>
+>  #include <linux/khugepaged.h>
+>  #include <linux/delayacct.h>
+> -#include <asm/div64.h>
+
+Needed for do_div()?
+
+>  #include "internal.h"
+>  #include "shuffle.h"
+>  #include "page_reporting.h"
+> -- 
+> 2.27.0
