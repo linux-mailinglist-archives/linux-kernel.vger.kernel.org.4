@@ -2,65 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D5C715D1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 762BD715D20
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231802AbjE3LYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
+        id S231837AbjE3LZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbjE3LYd (ORCPT
+        with ESMTP id S231738AbjE3LZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:24:33 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA35116
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:24:26 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-392116ae103so2703689b6e.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:24:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685445866; x=1688037866;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fpeVFf4HYSFKWVkH4psx6XWClCE7Pw9O6mlEXg3ssXA=;
-        b=bRBy8OFF8M6ESV/CqxPG0Zm0fgDgnY+H+ScocLqDlCzx813Qj8hChJYzTWrA4S/3i6
-         zP8zv4usC/Hp5ttnexNyYUru/t9hJziAtQIWOwgKmv5iW8USBWHFVIwUMHSu3WQK6hfF
-         wlzBIRXbgD3m8PBJVwxPz0C/aOA1lzVddAC6xgB8bxMvRz8ZMotb2g/0LQWghPXfpbm2
-         eeCdAFIgsYdRnQnCoC3V/r4TNwMBqTTW4ke7rpgFg+s/IgEqQSAp6dR7iyIeY9Yoyo0N
-         /svdQssSVJZs6zc3F+x7j+p7GVCaz/q0QVj7dC4+ZeaJv9b3Py8QGYibLQ4fCovZC2jA
-         AZXQ==
+        Tue, 30 May 2023 07:25:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB812123
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:24:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685445853;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FFKpZXmHv3EVEcNDqoXlVak203z2YTZFcHMcY6d15bo=;
+        b=TKwsr6dVPFOoTFhwRivD/dM5azroGX9EbK48TzjuvA9/dDbnsVM1UfgdvJItyqbcI2v8J7
+        v/LSaSWW+OQ3Oe4AUG/oODgepVkcPC1jnT0p019vgvx/nfPe0gQATRWd3gb08hQ/LmEonc
+        CXjsIZi1+Ka2Fz1WcbDjabv7vJgIb6c=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-524-_-y9fjH6NCCqctWnQjL9DA-1; Tue, 30 May 2023 07:24:12 -0400
+X-MC-Unique: _-y9fjH6NCCqctWnQjL9DA-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f60f085cd2so16362575e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:24:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685445866; x=1688037866;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fpeVFf4HYSFKWVkH4psx6XWClCE7Pw9O6mlEXg3ssXA=;
-        b=QgmxQxkxp9blvl+U0zWVngrTErcBi4DNGRq5tWElLol+Jb1RtAgiXaKGIctiuiEfqf
-         hEBRydW1T0M0uIZhLguJFjbsFXtjHzszEo8fpM+LJ0ot5D9gyM67c6PMDFv1iQe7oMFy
-         gTgWbP+53Td45b2zZeU+FR77yq1wvcVrzsqZaw0MP4LT3zT5EKrwLaSJGOUZkL0ByxRo
-         p9g35ATKJSPiXmex6m6gPmP80FTyfitIcZrn66OgzvlRlY+Ko3mKY2e18pLjaKL4R9I6
-         wIaqM9S/oeGt3/Uh/9/TTDONk9XPBqRh4/eTs5yJ776EIiY6AYkhHKaX3XFMFJy64b/j
-         /Oxg==
-X-Gm-Message-State: AC+VfDyq4VLLFUcLJ4PQfRvNBm9Ud/IhmxGM5ECOMer3P2WO/B8digft
-        SL2XRWZHcGYRlg5m+NAe/A2EJm0l84JWJkevoXFA6Q==
-X-Google-Smtp-Source: ACHHUZ6g5bk0eLe2t86uVRj615HeQB1zD3d2iMcSb3N/hPHw2Pmi1tB/ZWiZnN1NttFUM5m5Gk8Qrg7ipL2x++lEDow=
-X-Received: by 2002:a05:6808:2184:b0:398:4b04:25ca with SMTP id
- be4-20020a056808218400b003984b0425camr1292658oib.14.1685445866121; Tue, 30
- May 2023 04:24:26 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685445851; x=1688037851;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FFKpZXmHv3EVEcNDqoXlVak203z2YTZFcHMcY6d15bo=;
+        b=WTgYEcpklJ4dONU/ktYurfZWSD3IsrOm7n2YTkGTpicoZF72wp2nG5jFTfVSnavZ2H
+         rgtGKlmeshDUMPnzXlCxJkFclbjz4ZHhx1xV6TnPsoyj0huNLKMoFfI3p4QmtW4QmkfX
+         0x8WGKgwQcJJ6sNEYOxBjaWn2ws9UJpQ6z9O7bD+WmLT9HIBQIVhKYT81IsRBBlQHkv2
+         YJoW4vY4EiUBMf/wTh9C/YirGJMoZLqNAwE2nMLFytLLw/eQun2k4pLLfjogn17YaO3G
+         8wma14/Oy6FbGXYV+03RAXtiVtvjGjBWfWbtvVPjWZRu5pyOa+g+Q2Kwkx0zxB6c8D7T
+         vGqA==
+X-Gm-Message-State: AC+VfDzP/fwNJ6QZN4iLhXsZ6ApMkHKKolzmpY7KFwLtXMhnKCnEwktC
+        gWjP5U3jIFzb/+eVnACp2VVs/vRBqqTSl1uzFsK/s/AMoSWAeUNDra/k0el9bFZQ3l0vnnKt/g4
+        HzeJo4co7fgwLvmjLEcIQwJ0C
+X-Received: by 2002:a05:600c:228b:b0:3f6:13e1:16b7 with SMTP id 11-20020a05600c228b00b003f613e116b7mr1442249wmf.28.1685445850793;
+        Tue, 30 May 2023 04:24:10 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4olrB3T4242Hm657dR8k3m6TNwqGT1KzpvGbXMckpc6fTPwJMFCqvnLyJXIIbYPJ8cvXRQRA==
+X-Received: by 2002:a05:600c:228b:b0:3f6:13e1:16b7 with SMTP id 11-20020a05600c228b00b003f613e116b7mr1442231wmf.28.1685445850463;
+        Tue, 30 May 2023 04:24:10 -0700 (PDT)
+Received: from redhat.com ([2.52.11.69])
+        by smtp.gmail.com with ESMTPSA id k10-20020a7bc40a000000b003f606869603sm20719249wmi.6.2023.05.30.04.24.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 04:24:09 -0700 (PDT)
+Date:   Tue, 30 May 2023 07:24:06 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     syzbot <syzbot+d0d442c22fa8db45ff0e@syzkaller.appspotmail.com>
+Cc:     jasowang@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org,
+        Stefano Garzarella <sgarzare@redhat.com>, stefanha@redhat.com
+Subject: Re: [syzbot] [kvm?] [net?] [virt?] general protection fault in
+ vhost_work_queue
+Message-ID: <20230530072310-mutt-send-email-mst@kernel.org>
+References: <0000000000001777f605fce42c5f@google.com>
 MIME-Version: 1.0
-References: <20230526130716.2932507-1-loic.poulain@linaro.org> <20230530-polytechnisch-besten-258f74577eff@brauner>
-In-Reply-To: <20230530-polytechnisch-besten-258f74577eff@brauner>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Tue, 30 May 2023 13:23:50 +0200
-Message-ID: <CAMZdPi_WE7eegcn3V+7tUsJL2GoGottz2fGY14tkmqG9Tgdbhg@mail.gmail.com>
-Subject: Re: [PATCH] init: Add support for rootwait timeout parameter
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     corbet@lwn.net, viro@zeniv.linux.org.uk,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000001777f605fce42c5f@google.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,61 +81,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
+On Tue, May 30, 2023 at 12:30:06AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    933174ae28ba Merge tag 'spi-fix-v6.4-rc3' of git://git.ker..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=138d4ae5280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=f389ffdf4e9ba3f0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=d0d442c22fa8db45ff0e
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/21a81b8c2660/disk-933174ae.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/b4951d89e238/vmlinux-933174ae.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/21eb405303cc/bzImage-933174ae.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+d0d442c22fa8db45ff0e@syzkaller.appspotmail.com
+> 
+> general protection fault, probably for non-canonical address 0xdffffc000000000e: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000070-0x0000000000000077]
+> CPU: 0 PID: 29845 Comm: syz-executor.4 Not tainted 6.4.0-rc3-syzkaller-00032-g933174ae28ba #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/16/2023
+> RIP: 0010:vhost_work_queue drivers/vhost/vhost.c:259 [inline]
+> RIP: 0010:vhost_work_queue+0xfc/0x150 drivers/vhost/vhost.c:248
+> Code: 00 00 fc ff df 48 89 da 48 c1 ea 03 80 3c 02 00 75 56 48 b8 00 00 00 00 00 fc ff df 48 8b 1b 48 8d 7b 70 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 42 48 8b 7b 70 e8 95 9e ae f9 5b 5d 41 5c 41 5d e9
+> RSP: 0018:ffffc9000333faf8 EFLAGS: 00010202
+> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc9000d84d000
+> RDX: 000000000000000e RSI: ffffffff841221d7 RDI: 0000000000000070
+> RBP: ffff88804b6b95b0 R08: 0000000000000001 R09: 0000000000000000
+> R10: 0000000000000001 R11: 0000000000000000 R12: ffff88804b6b00b0
+> R13: 0000000000000000 R14: ffff88804b6b95e0 R15: ffff88804b6b95c8
+> FS:  00007f3b445ec700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000001b2e423000 CR3: 000000005d734000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 000000000000003b DR6: 00000000ffff0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  vhost_transport_send_pkt+0x268/0x520 drivers/vhost/vsock.c:288
+>  virtio_transport_send_pkt_info+0x54c/0x820 net/vmw_vsock/virtio_transport_common.c:250
+>  virtio_transport_connect+0xb1/0xf0 net/vmw_vsock/virtio_transport_common.c:813
+>  vsock_connect+0x37f/0xcd0 net/vmw_vsock/af_vsock.c:1414
+>  __sys_connect_file+0x153/0x1a0 net/socket.c:2003
+>  __sys_connect+0x165/0x1a0 net/socket.c:2020
+>  __do_sys_connect net/socket.c:2030 [inline]
+>  __se_sys_connect net/socket.c:2027 [inline]
+>  __x64_sys_connect+0x73/0xb0 net/socket.c:2027
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f3b4388c169
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f3b445ec168 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
+> RAX: ffffffffffffffda RBX: 00007f3b439ac050 RCX: 00007f3b4388c169
+> RDX: 0000000000000010 RSI: 0000000020000140 RDI: 0000000000000004
+> RBP: 00007f3b438e7ca1 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> R13: 00007f3b43acfb1f R14: 00007f3b445ec300 R15: 0000000000022000
+>  </TASK>
+> Modules linked in:
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:vhost_work_queue drivers/vhost/vhost.c:259 [inline]
+> RIP: 0010:vhost_work_queue+0xfc/0x150 drivers/vhost/vhost.c:248
+> Code: 00 00 fc ff df 48 89 da 48 c1 ea 03 80 3c 02 00 75 56 48 b8 00 00 00 00 00 fc ff df 48 8b 1b 48 8d 7b 70 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 42 48 8b 7b 70 e8 95 9e ae f9 5b 5d 41 5c 41 5d e9
+> RSP: 0018:ffffc9000333faf8 EFLAGS: 00010202
+> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc9000d84d000
+> RDX: 000000000000000e RSI: ffffffff841221d7 RDI: 0000000000000070
+> RBP: ffff88804b6b95b0 R08: 0000000000000001 R09: 0000000000000000
+> R10: 0000000000000001 R11: 0000000000000000 R12: ffff88804b6b00b0
+> R13: 0000000000000000 R14: ffff88804b6b95e0 R15: ffff88804b6b95c8
+> FS:  00007f3b445ec700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000001b2e428000 CR3: 000000005d734000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 000000000000003b DR6: 00000000ffff0ff0 DR7: 0000000000000400
+> ----------------
+> Code disassembly (best guess), 5 bytes skipped:
+>    0:	48 89 da             	mov    %rbx,%rdx
+>    3:	48 c1 ea 03          	shr    $0x3,%rdx
+>    7:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+>    b:	75 56                	jne    0x63
+>    d:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+>   14:	fc ff df
+>   17:	48 8b 1b             	mov    (%rbx),%rbx
+>   1a:	48 8d 7b 70          	lea    0x70(%rbx),%rdi
+>   1e:	48 89 fa             	mov    %rdi,%rdx
+>   21:	48 c1 ea 03          	shr    $0x3,%rdx
+> * 25:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+>   29:	75 42                	jne    0x6d
+>   2b:	48 8b 7b 70          	mov    0x70(%rbx),%rdi
+>   2f:	e8 95 9e ae f9       	callq  0xf9ae9ec9
+>   34:	5b                   	pop    %rbx
+>   35:	5d                   	pop    %rbp
+>   36:	41 5c                	pop    %r12
+>   38:	41 5d                	pop    %r13
+>   3a:	e9                   	.byte 0xe9
 
-On Tue, 30 May 2023 at 11:45, Christian Brauner <brauner@kernel.org> wrote:
->
-> On Fri, May 26, 2023 at 03:07:16PM +0200, Loic Poulain wrote:
-> > Add an optional timeout arg to 'rootwait' as the maximum time in
-> > seconds to wait for the root device to show up before attempting
-> > forced mount of the root filesystem.
-> >
-> > This can be helpful to force boot failure and restart in case the
-> > root device does not show up in time, allowing the bootloader to
-> > take any appropriate measures (e.g. recovery, A/B switch, retry...).
-> >
-> > In success case, mounting happens as soon as the root device is ready,
-> > contrary to the existing 'rootdelay' parameter (unconditional delay).
-> >
-> > Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
-> > ---
->
-> Not terribly opposed and not terribly convinced yet.
-> So, we have rootdelay= with a timeout parameter that allows to specify a
-> delay before attempting to mount the root device. And we have rootwait
-> currently as an indefinite wait. Adding a timeout for rootwait doesn't
-> seem crazy and is backwards compatible. But there's no mention of any
-> concrete users or use-case for this which is usually preferable. If this
-> is just "could be useful for someone eventually" it's way less desirable
-> to merge this than when it's "here's a/multiple user/users"... So I
-> would love to see a use-case described here.
 
-I can integrate the following use case into a v2 if you think it makes sense:
+Stefano, Stefan, take a look?
 
-In case of device mapper usage for the root filesystem (e.g.
-root=/dev/dm-0), if the mapper is not able to create the virtual block
-for any reasons (wrong arguments, bad dm-verity signature, etc), the
-`rootwait` parameter will cause the kernel to wait forever. Adding a
-timeout allows it to detect the 'error' (panic) and reset the device
-after a few seconds, the bootloader can then decide to mark this
-non-bootable partition/parameter and fallback to another partition
-(A/B case) or into a recovery mode.
 
-But it's not specific to device mapper, if a eMMC/SDCARD is not
-detected at boot time because of hardware or software problems (e.g.
-updated with a bad devicetree), it could be desirable to panic/reboot
-instead of waiting for something that will never happen.
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 
+> If the bug is already fixed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+> 
+> If you want to change bug's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
+> 
+> If the bug is a duplicate of another bug, reply with:
+> #syz dup: exact-subject-of-another-report
+> 
+> If you want to undo deduplication, reply with:
+> #syz undup
 
->
-> And this is only useful if there isn't an early userspace init that
-> parses and manages root=. So we need to hit prepare_namespaces() as a
-> rootwait timeout isn't meaningful if this is done by and early init in
-> the initramfs for example.
-
-Indeed, and I do not use initramfs in the above use case, the mapped
-device is created directly from the kernel (thanks to dm-mod.create=),
-mostly for boot time optimization reason, and this is for the same
-reason that rootdelay does not fit.
-
-Regards,
-Loic
