@@ -2,144 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C106671682A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D948871682B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232727AbjE3Pzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43244 "EHLO
+        id S232979AbjE3Pzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233207AbjE3PzX (ORCPT
+        with ESMTP id S232714AbjE3Pza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:55:23 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31BD8E5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:55:21 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-75b015c0508so275141285a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:55:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1685462120; x=1688054120;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vwWNOMoHZ+UIdNSWemfCGD87I++1r7zOSkWu1kWsMYM=;
-        b=sUQAliy2CXREXRDfURy5ytT1mp6Z2MVRnyOpeymtwMw7RdoAiL5YRa0MmQLydAuXqU
-         vgbFfj0rElE0lwudazbOwScQSfuVCq2SaymmgO86qe9hKMw/ieoDY+53ZOK4AQm2lRhQ
-         gYx9zKeUHwLdwVXr5FQTsRIifWNNqn7belm/2dqcnfyP1bxQO5ZVVRfGufqk9ZtKuStA
-         CbgGI4y5OkhmkAFo/a3fttbFCkE8XlTJ0oYoGcdxnxkk27aBVC3lNsNQQjzFVYZuJM3y
-         fhCQ8OvDtdubeZwbvOHhiNY23yo7i01SdMIfeb9L+njLvOQ+eN54eyTvajzX9aoRpz92
-         O9Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685462120; x=1688054120;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vwWNOMoHZ+UIdNSWemfCGD87I++1r7zOSkWu1kWsMYM=;
-        b=DOItsLgF428TE+Q7aE8aAe9Ti4o8xaED+EmacjQ3AeodHwsFNmJCdHBNVBWiRMirvK
-         UUKDd73Xo7vs/2jSX0the11X/DBIIWU+r7siRnwqAnH9R2v66lX/weYxn1hj+Abb1F62
-         2cRN9JOCu793m2UQWYW1uZgzadWl3WSjv3NtQU5w6VvAgy1poIhTl13YtbT3lkuS8AIC
-         222+LHrx2t8AfcWw6nTMejx4YvlcgviVXtGFHPaRVIkwQ+wE9KxXl3cnSCiZFa7/NnAB
-         IcEg+1cqtZkithJ486By4XpgRGk53N0wzgKm2+wdsP1sXzwjuizybL5mvMKCg/d2FzS/
-         FA9g==
-X-Gm-Message-State: AC+VfDxm9jeSwXXZ9wrdBHsz9iDT6nK6LSkG4QMbTQ4Sir0RM3uH2qYL
-        idLiIQtF8+4IelN7KUA0djQULQ==
-X-Google-Smtp-Source: ACHHUZ6OXMzPI6lr8A/TCW2P1241xJOMGwaC4wkP2J02sDjyQ6VmkPnb/K7M0hGqOVx+3+wuseTcLw==
-X-Received: by 2002:a05:620a:8e10:b0:75b:23a1:3663 with SMTP id re16-20020a05620a8e1000b0075b23a13663mr2024531qkn.36.1685462120300;
-        Tue, 30 May 2023 08:55:20 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:8bb6])
-        by smtp.gmail.com with ESMTPSA id v22-20020ac873d6000000b003f6b98018casm4760092qtp.77.2023.05.30.08.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 08:55:20 -0700 (PDT)
+        Tue, 30 May 2023 11:55:30 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2085.outbound.protection.outlook.com [40.107.220.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E6FEC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:55:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kfGF0Ya0vqHmXYgE/sf0DA6yGKLTjgHNQnN7IJGn4OI6aM008idHngUrpz2FARQ/IwkE+G2HP03Z/ASgNbe3XPSweNO3YYk3INEhXLj2i2gO+efqPGsIQCrx31oj15pcwP5Cscu+QTVB3T1vQu1hf5YXp9ESgDsN0e+p65XpJAdX9r+fx0udYzL3X2enc3Cmrj6IMOlpnT22oEz+tg7ePO+q7yDLu4J4CJWq4Fhdo9l/lVGtFbSfMfXZQ6uL0MHctBNpo03+HsGguwX9nVLEz/55H9e3MMkYU72Yxfmvh+yIxnhFgr6AFBlymonGWY0sHhTcjuyv1Q7UmIMyw6bVbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UMUXLd5R3eA4412p2LfuC9GusbWfiRolxMSQNfMK8c4=;
+ b=F9YbfhU48W74yGnB0eAXlQaI0DP3EXF5pt1qaYoA91aV9mS0sNo660Zw/1d8pOcNILQQgXMh3q/iR5xssQJXR+WJ1DyIyAWynDPdV86DADC6FESJky6WWd9naHToGe0VmmR+kZ6JCiLg2yWU3gBx5OuECE/91reWHL8dW1rDRK9Tqe6s5FYBrowZ96IwKI6iE2JwoCpUxiP1RnVtOTeJpUOxA3B5eNOnXwPfAVEl44xJpxbbuJwKLEjV1l3ZK+Oq/hfq/bzjP0mzNBSIkhZsR+gcJTvvpiIqIUj5811ir2kgqBGwuG1N8v3Pwf2v5efgGjXCoCBGFgV13CGq4DSpPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UMUXLd5R3eA4412p2LfuC9GusbWfiRolxMSQNfMK8c4=;
+ b=NKCRIQ8js1agTVhV5Be/5FdSU832HiwbmXwpUZlh2QAaEl/fxrlwi9PP4WZ5h9vsmbRWwCvdYgOqT1bi+clCUtHKGVdSNZ92P9mMBDAMiWhHEB8AOpqdU25yMwrT+zfdSv/+9ytzYjlNubvJndbQEK8h5OlzThv3ezS2/Zc0siU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ LV2PR12MB5797.namprd12.prod.outlook.com (2603:10b6:408:17b::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
+ 2023 15:55:25 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1%7]) with mapi id 15.20.6433.018; Tue, 30 May 2023
+ 15:55:24 +0000
+Message-ID: <0f2021ba-fab9-3438-950d-7b60882ae77a@amd.com>
 Date:   Tue, 30 May 2023 11:55:19 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Chris Li <chrisl@kernel.org>
-Cc:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
-        yosryahmed@google.com, kernel-team@fb.com
-Subject: Re: [PATCH] mm: zswap: shrink until can accept
-Message-ID: <20230530155519.GB97194@cmpxchg.org>
-References: <20230524065051.6328-1-cerasuolodomenico@gmail.com>
- <ZHE7KWId1fvXLpUy@google.com>
- <CA+CLi1iC35exSaKaCmVmTWtna=9xBKHSyGNGmHFo=OqiSECGoA@mail.gmail.com>
- <ZHUSfg+z3wcaIhAT@google.com>
- <20230530041341.GB84971@cmpxchg.org>
- <ZHYNaxgcKs7PSp9I@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm/amd/amdgpu: introduce DRM_AMDGPU_WERROR
+Content-Language: en-US
+To:     "Ho, Kenny" <Kenny.Ho@amd.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
+Cc:     "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Kuehling, Felix" <Felix.Kuehling@amd.com>,
+        "Wentland, Harry" <Harry.Wentland@amd.com>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        Andrew Davis <afd@ti.com>, Peter Foley <pefoley2@pefoley.com>,
+        "Zhang, Hawking" <Hawking.Zhang@amd.com>, "Ma, Le" <Le.Ma@amd.com>,
+        "Zhou1, Tao" <Tao.Zhou1@amd.com>,
+        "Lazar, Lijo" <Lijo.Lazar@amd.com>,
+        "Zhu, James" <James.Zhu@amd.com>,
+        "Chai, Thomas" <YiPeng.Chai@amd.com>,
+        "Li, Candice" <Candice.Li@amd.com>,
+        "Wang, Yang(Kevin)" <KevinYang.Wang@amd.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230525163827.548058-1-hamza.mahfooz@amd.com>
+ <85f47623-5ef1-b817-195b-c4ae39564247@amd.com>
+ <DM6PR12MB3996064F09E1C2FD782CC944834B9@DM6PR12MB3996.namprd12.prod.outlook.com>
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <DM6PR12MB3996064F09E1C2FD782CC944834B9@DM6PR12MB3996.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0130.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:5::33) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHYNaxgcKs7PSp9I@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|LV2PR12MB5797:EE_
+X-MS-Office365-Filtering-Correlation-Id: 25af7d35-7a9a-4063-d7d3-08db612647e2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FM1zAANEEoO5XIiacV4g+7A1efk9gOGb4blrOo5WaqaauIlgsMAGWKqYuhmdrZasyCseKzlEJeVZiBmnKMoY/XnfOW6AJHO4Cva4U445DAnsuNKG7PmZmAFmfgoWipTAZe6gT+/OMarwTdeNsqet+gX/rr9NOn+f1wj3yIvS+tlGxXSZP4v//0wX51O8PpTKpZm8pamj3gZIMw70XgpGubk8pqnXzFP+boP8IU7AALo0mFRsGjaTdmCR/tZdaFH2WuXCMyVogxDFtBqdkdQmXoPe44BC+b0LsXtI+1g3wZXV+kR4Mlj+UL/Q+pimDkwUMwDj22UhRl+HJ89b7IxIQmBxTQftMuztNKE8qx1e5NI4Ll9qPxuZs9xZbc0MJoAkb1JXdPmeIrLVt5miIf97b8DSRVIncA1fc5iqBiUHhBJugqMnDk+6bETkFb0OzQgPMdJbDU5WfELXSGHvBiJqiWMz5ZkBgn+391Zt1y/PA/zQqX53Xof20zkTp1u706UhXXk7SfkN36SVV4savd07ZPLOv2iCeSz+C08AIPF0okSwge+ze89jTRdxVdgYh7d0tDV6D9NmjnMGW/dgEhzKPotU9PjekuIH3CTf2cUq/nQl36lizbU6iXvszTEvFeX5n6eJyKe5J0lKH/YGICV67g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(346002)(396003)(366004)(136003)(451199021)(2616005)(31686004)(31696002)(53546011)(83380400001)(186003)(2906002)(5660300002)(4326008)(54906003)(110136005)(6506007)(6512007)(26005)(4744005)(36756003)(86362001)(44832011)(478600001)(8676002)(8936002)(66946007)(66476007)(66556008)(6666004)(316002)(38100700002)(6486002)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bWRsM2hBNnBFbG9TTW43N1Q5VnFzSHNiLy93UFFPcEdBWmgzUk5MYXJHcUtX?=
+ =?utf-8?B?dStLWjBkMExXS2tLa0RkbGhSaXJ2ajk5NjNaQTVLbTRXQXQ5RVRjQW1pTDNo?=
+ =?utf-8?B?bEpLeXk1RlFHR1NTWTgxNlduZENhaFFiVStGeHp3YlVwd21yV2o5OVYwbzVN?=
+ =?utf-8?B?QnhaNHJMVTdmdWZVSWxXWGphend1ZW9rZjFLUktFQlA5TXpuWmNTaDhESExE?=
+ =?utf-8?B?bmtpVVptZVVGVHJNYXJlMjJBSVZDdXFwSXpzelVNL08xeHZzZnYyOTBYMFNj?=
+ =?utf-8?B?ZkExTXJnZm42a3ZzTlQ0di9JaWdCMm94TVd2dVVrZTViallwNmd3Nmg0eGlh?=
+ =?utf-8?B?TVFZa3ZzVWdwZkFORStaNEFnRWZDS0YxY3F0ZVRlaGdMQkpsN2hLcXlPRnlk?=
+ =?utf-8?B?dnpQOEJHVTJQNm16ZUFGWlNteU1zeHpIMlR6NWQzY3hFRTV1bkhTbU9sRjlR?=
+ =?utf-8?B?Yzc3Myt1b0pneWlWUVRYRk51WVJVZTNXbC8wbTJXMEpqWmU5aERaenBLc1lN?=
+ =?utf-8?B?eGMwZFFiWVFxWlVvbDV1WWs2UlI2OHJuajhRbURpUVFqTmx1VTIyRis0ajFQ?=
+ =?utf-8?B?Ykl6TnJrSjdSQjRaWi9VeWZKRlBkQUNncWl5RXp5c1JXR0QyY3h4VkRka0ZI?=
+ =?utf-8?B?UEo1bFUrN01KS3Q4MytzRW4zbG5Kb2hxQ1hlQk5rclF0STZLZmNQWlExWXpC?=
+ =?utf-8?B?N3JHcEdGRmhmbVFYZ21ENkE5ZExsK0ZTL3lVSkZnc0MvUnY5ZzlzRHZROXlY?=
+ =?utf-8?B?eVBRemNHSGJTYkdxc0VRb2hTT0JZdUszeDZFYnpLOFFDTDdpeWwrbGJwREpL?=
+ =?utf-8?B?Y3dNL2lCQ2llRnB4bEhkNEtZQ3dxM29HRUNuaEYxZzYvd1ZNeXRwRlNVQzZk?=
+ =?utf-8?B?V05IREQxVEV5RjBWbmtNU2lNVVdPeklmKzRvT1ZPREhPWTN1ZHUvUlVsVlht?=
+ =?utf-8?B?aTdjNkYzajd5SUlQSXpnN20xSUxhdExPc2NxTTZNQjN2Wkc5a0UxOFhwUGRv?=
+ =?utf-8?B?b05XQUF0ZXA0SDNXbENHVk1IVUJrSXVtSEtiSkdOZTlLQkx4czB4WjMzTU9B?=
+ =?utf-8?B?NlVyRENyV3dIeW5IejNLanRIZ3g0M1c3bzlGby9uWkk0aTQ0SE8vRGlNREhw?=
+ =?utf-8?B?dU1XOUdLWFZsaWlBTXBIZXRuU056UG1QUlVtOC8zcmpWQ0hGWk95LzVDSEhJ?=
+ =?utf-8?B?T1JtWWxORkYrYThZR0lCTEhQelN0REtQaU5kcjZrTHlxMVkvSzZUeTlBMFpT?=
+ =?utf-8?B?VDhqK1VHMGpHNU12SkR0TzNkV3JXaFdPa0lOb0FrWGx6N3ZnbGZPd3ZJZCt0?=
+ =?utf-8?B?MDJuTFdnZzZjTjdZZFFhNHVPWUN0enVkUFc5U3JhMkRDU2JqTkthTjNaTkds?=
+ =?utf-8?B?S1FwQ2V0bTlMTFpuakg2OG1wN21Jb2dRdTUwd1BwZEI2Q2tQZ01XRG1pMzhi?=
+ =?utf-8?B?ektSZUl1c2lwTHVRMEZTWmFzeUhuQ1hyYzRoYWliVWthNnYveWRucUVKSGph?=
+ =?utf-8?B?NzZVc3hTT3o1UlpWeHBtODBYZ0hIYnBPd0dxaXNNcGFxSnd4ZnU3UlBGSjFU?=
+ =?utf-8?B?U3ZabHM3eUF6SGt4Rm1MYU9rMk83cU40dTBOL1RmanBEdjk0blhoWlJZL0l2?=
+ =?utf-8?B?Z0t0OXN3U0tnckZ0YXhxSFNyMHNiWkVQa2FZM3VIQm83b0F1MVJWZ1FVTVRB?=
+ =?utf-8?B?cjhVekxtdHAyUkgrYTNzTkQyQlNrclAybVRmb2JJYk1SVDJhajFtcVJSTFd6?=
+ =?utf-8?B?eTJBMHpRcU0yaGhtaW5uWm13THVxbG16U2VkdlRueTNIWC9kLzFWL0tEM3R0?=
+ =?utf-8?B?SDE3eGtybkc2UDc1WnBMTnFaYkhNb01FK1BMWXRrTnUzVnFNV25qL1ZmeUJ6?=
+ =?utf-8?B?aHVKNXJHT0tSVENhcDRNTldiSzRIMElLN1hEMzBrdnovdUdNaWd0Q0RSTUpv?=
+ =?utf-8?B?VzhLaWQwUzY3OUFYK0tqMlBCNlF1Q1JKVDlYOHJ0YVAyOWZOeXZPMlA5Y1Mr?=
+ =?utf-8?B?RmE3QVpOSGtGZnhRU2ZqUGZ6Uy9aQldldnNFSmNRQnFiUmx5MTN4OXRwV2x0?=
+ =?utf-8?B?a1g0bkwveklwWTRReWNFdm45ZCtTSnkzRSt2SFo1SlJnakZSblpjWXdGL3M3?=
+ =?utf-8?Q?UJyws10hZnuzrDkIjHWaR+Kkp?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25af7d35-7a9a-4063-d7d3-08db612647e2
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 15:55:24.8145
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EGtmyaVIUkfbbWdvG8HZuoPP4AWO8HVNA+lx+CJ/9Ku+tiYBKOwlQ9to/FGgfCR1IGkVR5oQh9nlsH3O1nK6WA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5797
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 07:51:23AM -0700, Chris Li wrote:
-> Thanks for pointing out -ENOMEM shouldn't be persistent.
-> Points taken.
+On 5/30/23 11:50, Ho, Kenny wrote:
+> [Public]
 > 
-> The original point of not retrying the persistent error
-> still holds.
-
-Okay, but what persistent errors are you referring to?
-
-Aside from -ENOMEM, writeback_entry will fail on concurrent swap
-invalidation or a racing swapin fault. In both cases we should
-absolutely keep trying other entries until the goal is met.
-
-> > Should it be fixed before merging this patch? I don't think the
-> > ordering matters. Right now the -ENOMEM case invokes OOM, so it isn't
-> > really persistent either. Retrying a few times in that case certainly
-> > doesn't seem to make things worse.
+> On 5/30/23 11:24, Hamza Mahfooz wrote:
+>> I am able to get clean builds with this enabled on GCC 11-13 and Clang
+>> 15, at least as of commit e786aef0869c ("drm/amd/display: remove unused
+>> definition") on amd-staging-drm-next.
 > 
-> If you already know the error is persistent, retrying is wasting
-> CPU. It can pertancial hold locks during the retry, which can
-> slow someone else down.
+> Did you try intentionally introducing a warning to see if the build indeed fail?
 
-That's a bit of a truism. How does this pertain to the zswap reclaim
-situation?
+Yes, I tried a couple of different ones.
 
-> > > > As I was writing to Yosry, the differentiation would be a great improvement
-> > > > here, I just have a patch set in the queue that moves the inner reclaim loop
-> > > > from the zpool driver up to zswap. With that, updating the error handling
-> > > > would be more convenient as it would be done in one place instead of three.i
-> > > 
-> > > This has tricky complications as well. The current shrink interface
-> > > doesn't support continuing from the previous error position. If you want
-> > > to avoid a repeat attempt if the page has a writeback error, you kinda
-> > > of need a way to skip that page.
-> > 
-> > A page that fails to reclaim is put back to the tail of the LRU, so
-> > for all intents and purposes it will be skipped. In the rare and
-> 
-> Do you mean the page is treated as hot again?
-> 
-> Wouldn't that be undesirable from the app's point of view?
+-- 
+Hamza
 
-That's current backend LRU behavior. Is it optimal? That's certainly
-debatable. But it's tangential to this patch. The point is that
-capping retries to a fixed number of failures works correctly as a
-safety precaution and introduces no (new) undesirable behavior.
-
-It's entirely moot once we refactor the backend page LRU to the zswap
-entry LRU. The only time we'll fail to reclaim an entry is if we race
-with something already freeing it, so it doesn't really matter where
-we put it.
-
-> > extreme case where it's the only page left on the list, I again don't
-> > see how retrying a few times will make the situation worse.
-> > 
-> > In practice, IMO there is little upside in trying to be more
-> > discerning about the error codes. Simple seems better here.
-> 
-> Just trying to think about what should be the precise loop termination
-> condition here.
-> 
-> I still feel blindly trying a few times is a very imprecise condition.
-
-The precise termination condition is when can_accept() returns true
-again. The safety cap is only added as precaution to avoid infinite
-loops if something goes wrong or unexpected, now or in the future.
