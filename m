@@ -2,160 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260717153BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A967153C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjE3Chw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 22:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
+        id S230099AbjE3Ch7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 22:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjE3Cht (ORCPT
+        with ESMTP id S230048AbjE3Ch4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 22:37:49 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2107.outbound.protection.outlook.com [40.107.215.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F80B5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 19:37:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QdG9qL7n6SeY+0F7mVWLqXfsXlqdkfXpt578IovnTJX3nVnZqQidgOTqRwmNAcnFvB4CKVoPwAK4aXaTRCGXkOrimDJ8JLZS4CgFrzAvNp5vSr9IGb36NiXeaOUfgFS9+qRFsp8REJnwdoOKFtMaCj0IiTa2DIApYnJ1ypSTYsHqfE19cBTkCeXN3kRpOCuTL5VvLUI60hcDCWDIeqnKKbgPTbj2BEsFxwSp8EdwwCQsHS6Cawi551zoIQ2ET1EwOdOulUZ6KOQ9um4KV+V47B+cVAygMrwcHvNGX/bIGsOBBOArhOq7wLN0oqijOSO0y6py1g4Bsx6RQxewRItQqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EZEE4sNFdgMdVs70pUWnwNW8fAEBYFJxb7UjnreesYo=;
- b=MRyAlGRQ1whMraMLgBJfp/ujF7UK3g4NctbwdKyXLYkIjO8CfjSea8FxA/tydzwyElkVI0AbkRkOcX3kXj377WwxpGVbjWD5ksi1iN0iRoM8hy9bnvazXgCPAuxKcZAS68MoUe86iyQMWvuAIS9qtI9rHA8U30N5cWD2sE7XUkKr//Q1O1oalFPjV24RLMJHPSBCDBN5LXZDJnzGKWQSEs7PHgA8sKbdaUjbO8QdaWCoiSfcDpezE0lESXqM9+2PoLVJk6UYGq/TTty4iOvD1SZfNEfQJB/PSucc5u5FlcLOx6vpratgkndyz2jkiAlNl2BP6MWmEM2lSYNruM66Ng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EZEE4sNFdgMdVs70pUWnwNW8fAEBYFJxb7UjnreesYo=;
- b=Djv7E0ypiHS3fUqB4oIzCrgLBbsvpSlUextD8qIlAcVqSk18XdErcllo9IhgKkF6FAl4oOeNvEzz2LtjMXhVMfJKz/22uMfc2UKySHYj2elHk0Y0xKhSOTx5qpf8nLGQGxAFhQXxkr3J/YJUJ0D9s3jSsl6AFQM1ZhbG/Z5jrhUo/O/21rjKD1J/f+ke17CT0A/SaR+K/DpIMHo/BfkbeLy/8Nwldh6E9M1R9hXXLH7d1EHN3DKmkRmdEa1S5xKwNHpHLgttPLZSiMVMLYFd5XNsHwA0zkn1IARLK4wKz/GHZ5/Z7ydXYeSjOSzpHj1D1NCQl26wh5uhjO7kM+UqIg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
- by KL1PR0601MB4433.apcprd06.prod.outlook.com (2603:1096:820:7b::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
- 2023 02:37:44 +0000
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::f652:a96b:482:409e%5]) with mapi id 15.20.6433.018; Tue, 30 May 2023
- 02:37:44 +0000
-From:   Lu Hongfei <luhongfei@vivo.com>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jun Lei <jun.lei@amd.com>,
-        Alvin Lee <Alvin.Lee2@amd.com>,
-        Nevenko Stupar <Nevenko.Stupar@amd.com>,
-        Dillon Varone <Dillon.Varone@amd.com>,
-        George Shen <george.shen@amd.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        amd-gfx@lists.freedesktop.org (open list:AMD DISPLAY CORE),
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
-Subject: [PATCH] gpu: Replace the ternary conditional operator with max()
-Date:   Tue, 30 May 2023 10:37:26 +0800
-Message-Id: <20230530023731.13534-1-luhongfei@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0191.apcprd01.prod.exchangelabs.com
- (2603:1096:4:189::6) To TYZPR06MB6697.apcprd06.prod.outlook.com
- (2603:1096:400:451::6)
+        Mon, 29 May 2023 22:37:56 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB6FC7;
+        Mon, 29 May 2023 19:37:54 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 8D13724E282;
+        Tue, 30 May 2023 10:37:52 +0800 (CST)
+Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 30 May
+ 2023 10:37:52 +0800
+Received: from [192.168.125.107] (113.72.147.198) by EXMBX062.cuchost.com
+ (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 30 May
+ 2023 10:37:51 +0800
+Message-ID: <3b4eff36-28db-5880-3094-efa491a69dc7@starfivetech.com>
+Date:   Tue, 30 May 2023 10:37:50 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|KL1PR0601MB4433:EE_
-X-MS-Office365-Filtering-Correlation-Id: f261455f-d6e5-4f57-5b07-08db60b6d8a0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vr22PIl5yQw4bQK0lhtEhQJsjjoniAbR4g8EUjssqVhqdFbPg/c1vyWsE61I9W1YnPW7yc7lAJgfNRseb37JDAoG7GD8zwp36bR5vjvUsgWqoC9I9xO4MyReMjcHoQM/xfdwU1IzdRcilpTsLSj3kzdNda3tunJAK77YFHL7XH7SyNqCEtMCX3rKijWft7RtgclsVw9GbSNUAUfubc53ZLGHTKLBfdvvlHa28ICsgYxCQBdwRhGdu2YjAQPyOSrNyU5bMVWZ5FcSc+YHWNrUrcMolkw4xfqd9WyRp1hnuvVijoOIJaa4r1PFvm0hMLYjFMwcqRHheadV9bN7BNm//PTeCYgeCh8Y5qubsz54v/wmAdPkJX/j+I/uhKw+CdiXuHCYMqQw/a/WcmrmUh4tcwz91SaBBRNnj4w0aCkGYfXQ5srgGzCWwfYVcj7kjue4MI2/hxYyPvz3XBEmPdRCf+dzUt1QkDsXSDSoD5MZFiqji+yyhXU7qothB2mx6u4GLr6gbM8aEsEdyf8PiDuFvzRBcMuuUr8bhVOgmDt48o/oDioIKBruO8ceGKCLo/DPEUeGvczP5qTS1w+EhA1BcAfSREcgUaNNjG2S9UrHq5/Aix40fLhn/N/TPageewrBtmv3RB+NIRJqr7hpvewm7w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(396003)(376002)(366004)(39860400002)(451199021)(478600001)(110136005)(8676002)(8936002)(7416002)(5660300002)(36756003)(2906002)(86362001)(66476007)(921005)(4326008)(66556008)(66946007)(316002)(38350700002)(38100700002)(41300700001)(2616005)(107886003)(186003)(6506007)(1076003)(26005)(6512007)(52116002)(6666004)(6486002)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1E8KOIfQbUG6RvcYLJjc9oy0wSuvqiE4kOLu5FrCicXYxWu8jfNYSGa1eoq+?=
- =?us-ascii?Q?LM7b7fqSjqVv3vV1wTR2Rd74XIGhOSXYmS5riCrn2HJU+XIJNcY1gGv5/v5x?=
- =?us-ascii?Q?EmLEIJAS36XanZQBrd/7CC3C19uSsCBNyz24fjXnDPkovfsc7EZ8YsXFibwf?=
- =?us-ascii?Q?xcq3mbBWCAfeXncGFodhZpae9RW4U9vUos/OGwR3YZdbJ/eD032mLEcPRQeC?=
- =?us-ascii?Q?eB9mpAXwolzLUkuvbJ2gwfpt+OYnmKN3bVUDeUT95DaHmsFjWQSNGUt37xPl?=
- =?us-ascii?Q?iarzj3AYl1Nl7vIuOmTcwFQpcIlOTFOExPQeqiSCLViM6hTI1ENLx8117d7L?=
- =?us-ascii?Q?6jqradbTiKCut/2X16i09DUEMIpVZnuqy7tMvMfHU9BvqSmh+iS7TDxConrt?=
- =?us-ascii?Q?/pFMUTt9mmu3uB/g/7NvVBzEIj1q3rjxFzOZfhHSvpkHD6qmjFskDps+siYB?=
- =?us-ascii?Q?JhFi+nDDuPXxCSVAYE1zDrkyEzG4LYYlQaRgaoai3hzinEjeEf79VWpdrupz?=
- =?us-ascii?Q?zZqzhll+AKIPyTqSwnvnFqk2IQULonqJyFlXzODDq2TbD6LJ2txVLat+sLO3?=
- =?us-ascii?Q?BIDmc+KkqXtqklsrSxM0qeQkhshuelv3EyD+oQC+muyl2k7lvzYwJ9xcvOJp?=
- =?us-ascii?Q?WRmjgIoIacG/VCW8CCknyaPOfHtTamAd/uEX37TkcZdyMD0SAQYgf15lTeqT?=
- =?us-ascii?Q?d3P8oAni9ZOvjMFxk/ZMKAm1Iy57kDwBsK8QH8h3crGyNS0GKi5TqeJ5MkEe?=
- =?us-ascii?Q?6vl+nLlvWWwvOTstp8U5fkFC/jYV50Jh0Au6AAPKq5gwcqwWDQe2oe06vfWO?=
- =?us-ascii?Q?Jz/0ZtevDfONsZoYroJUye8deCqmU9owwU5bBWwxmj/zl0qO9sx3qPnzyRq4?=
- =?us-ascii?Q?A0FO8loKq/wIS1zXOtHEo217h3fIprEQ9xGVAfxgZ9H6YPaZzMqxKwhnE426?=
- =?us-ascii?Q?subP1zcIkBuk4205DYHHkirKUKiETGo2XcP9o0CGvK+sM/NgqMS9TtNjK2yS?=
- =?us-ascii?Q?XqxgL984wR94VUd80o53aZWAk0Rl/TlisRBTh8SgVEsGEkyLfrx8v/PyDJ3+?=
- =?us-ascii?Q?vZxpgthsdLC6Pj6k6WZG9D4DOft9ZltB/eMFyLE9LVy6E3Ruvt0mIlLw6ITu?=
- =?us-ascii?Q?a5NthlU+4Lm7lMdAhxG4o/Ya8jTCjv4sGc6xsyZpJjCS23Y+omyQxro5YrHE?=
- =?us-ascii?Q?P8xql8UBw0BVIxSyNSPRbBsQiT2/pnPmJB1ICT6jhCLhbvVZA/RlMaD4giZP?=
- =?us-ascii?Q?efGATyfP4G0af49voZg2+6nn6+lRK/1liYqWxt8Nw+CK1CZ5aK4gxk+HgwMI?=
- =?us-ascii?Q?mCtec8YyAc5vld2+nP1DX+eRWJiXV/yr+16aQm0D+3u45Q9UBYuMOlKkYaco?=
- =?us-ascii?Q?fCEtPwlpBxmJn5VQaIHf6y1rtMCEcjR94W1O2jCk6GVzQr45wuxXxGmDNjkU?=
- =?us-ascii?Q?BLOO4RUlXiYJKCQWq3Ae95I/qQ0WpQpS9ktPwajmRlVSmMP6aljFAfg1t7iL?=
- =?us-ascii?Q?PCR5LtgTCagSoeU7WcXlk83D0q8P7IEgjqhaeIwdpZIx73GMBw1UP3hGqaMx?=
- =?us-ascii?Q?cJnmC5bAlFZEmghEScF7vSfEL7v7U7d9DbKXVJks?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f261455f-d6e5-4f57-5b07-08db60b6d8a0
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 02:37:43.9488
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: o8NZdCJdJ5kEOocRWQgqzNjK/U4E3MTvhlaHzkROvoY4KhW3tu+uL3lzdTvMURT4GxLNPIx7a9+eA8J5LW6/WA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4433
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 1/3] dt-bindings: phy: Add starfive,jh7110-dphy-rx
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+CC:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+References: <20230529121503.3544-1-changhuang.liang@starfivetech.com>
+ <20230529121503.3544-2-changhuang.liang@starfivetech.com>
+ <20230529-envy-itinerary-e4007cb0da9a@wendy>
+From:   Changhuang Liang <changhuang.liang@starfivetech.com>
+In-Reply-To: <20230529-envy-itinerary-e4007cb0da9a@wendy>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.147.198]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX062.cuchost.com
+ (172.16.6.62)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It would be better to replace the traditional ternary conditional
-operator with max()
 
-Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
----
- drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
- mode change 100644 => 100755 drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c b/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
-index 47beb4ea779d..bbc1f2011e99
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
-@@ -915,7 +915,7 @@ static bool subvp_drr_schedulable(struct dc *dc, struct dc_state *context, struc
- 	stretched_drr_us = drr_frame_us + mall_region_us + SUBVP_DRR_MARGIN_US;
- 	drr_stretched_vblank_us = (drr_timing->v_total - drr_timing->v_addressable) * drr_timing->h_total /
- 			(double)(drr_timing->pix_clk_100hz * 100) * 1000000 + (stretched_drr_us - drr_frame_us);
--	max_vblank_mallregion = drr_stretched_vblank_us > mall_region_us ? drr_stretched_vblank_us : mall_region_us;
-+	max_vblank_mallregion = max(drr_stretched_vblank_us, mall_region_us);
- 
- 	/* We consider SubVP + DRR schedulable if the stretched frame duration of the DRR display (i.e. the
- 	 * highest refresh rate + margin that can support UCLK P-State switch) passes the static analysis
-@@ -1008,7 +1008,7 @@ static bool subvp_vblank_schedulable(struct dc *dc, struct dc_state *context)
- 				(double)(vblank_timing->pix_clk_100hz * 100) * 1000000;
- 		subvp_active_us = main_timing->v_addressable * main_timing->h_total /
- 				(double)(main_timing->pix_clk_100hz * 100) * 1000000;
--		max_vblank_mallregion = vblank_blank_us > mall_region_us ? vblank_blank_us : mall_region_us;
-+		max_vblank_mallregion = max(vblank_blank_us, mall_region_us);
- 
- 		// Schedulable if VACTIVE region of the SubVP pipe can fit the MALL prefetch, VBLANK frame time,
- 		// and the max of (VBLANK blanking time, MALL region)
--- 
-2.39.0
+On 2023/5/29 22:05, Conor Dooley wrote:
+> Hey Changhuang,
+> 
+> Couple of minor bits from me here, you don't need to fix them unless
+> the binding has to change for other reasons.
+> 
 
+Thanks for your comments.
+
+[...]
+>> +$id: http://devicetree.org/schemas/phy/starfive,jh7110-dphy-rx.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: StarFive SoC MIPI D-PHY Rx Controller
+> 
+> nit: either s/SoC/JH7110/ or s/SoC//.
+> 
+
+Changed to "StarFive JH7110 SoC MIPI D-PHY Rx Controller"?
+
+>> +
+>> +maintainers:
+>> +  - Jack Zhu <jack.zhu@starfivetech.com>
+>> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
+>> +
+>> +description:
+>> +  The StarFive SoC uses the MIPI CSI D-PHY based on M31 IP to transfer
+>> +  CSI camera data.
+> 
+> nit: "Starfive SoCs contain a MIPI CSI D-PHY based on an M31 IP, used to
+> transfer CSI camera data."
+> 
+
+Will fixed this.
+
+>> +properties:
+>> +  compatible:
+>> +    const: starfive,jh7110-dphy-rx
+[...]
+>> +  resets:
+>> +    items:
+>> +      - description: DPHY_HW reset
+>> +      - description: DPHY_B09_ALWAYS_ON reset
+> 
+> I'd prefer not to have what looks like copy-paste from a datasheet
+> and instead a description of what they do.
+> 
+> Otherwise, this looks grand to me, but I don't understand the hardware
+> so there is no point in me leaving an R-b on this.
+> Hopefully Krzysztof can take a look at it in the coming days.
+> 
+I will wait for Krzysztof's comments.
