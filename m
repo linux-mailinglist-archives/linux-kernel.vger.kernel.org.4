@@ -2,59 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8711C716374
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0806B716395
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232965AbjE3OQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        id S232728AbjE3OSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbjE3OQH (ORCPT
+        with ESMTP id S231757AbjE3OS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:16:07 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B3CF1;
-        Tue, 30 May 2023 07:15:38 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 71C5D1FD96;
-        Tue, 30 May 2023 14:15:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1685456136; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f03SjuaWbgPFKDNHkccYfxdvERRD4V1UOqT9AnVf20c=;
-        b=qwneuzT8aVE62UwAlpeyfFZ8eI36IDinEAOaWAF5L4znVMIaf6zMod/lkB42XEy/NcnL2A
-        C+hZu4NVw46mIT0SZgCF7kkibghDwAAeOiAUxhgDsFJLco5k09k1bbmKdbw6adC+Nk7rpu
-        CJ0MBEUmWwYed0L2p4tEgaYiUAzHSJQ=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 30 May 2023 10:18:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B17411D
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:17:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685456220;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MWi+zmGc/Ddi01/GgCyhiHQp9bA5/4VLjJA2qlX57j4=;
+        b=fiGqG/wQDfEI4Yz9MNBLR0lGysiD522RuXgCcG/fOuMVuNDsFYNcoiEn1PLAGWow3QQUUB
+        kh+xEyfuXZ8bQhvBKXnBebymcIcixP8EHJxBGody1dRy557bxWrHoMwHp54Mw2UYWrYDCX
+        z3g6ds9zjDoqiPr5xM6sEb6Wj3wYPpM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-434-TTCJgiS3MASF7UDkH-Yhcw-1; Tue, 30 May 2023 10:16:56 -0400
+X-MC-Unique: TTCJgiS3MASF7UDkH-Yhcw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id DEA372C141;
-        Tue, 30 May 2023 14:15:33 +0000 (UTC)
-Date:   Tue, 30 May 2023 16:15:33 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        sparclinux@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 01/10] watchdog/hardlockup: Keep kernel.nmi_watchdog
- sysctl as 0444 if probe fails
-Message-ID: <ZHYFBUnXmjAvhUFT@alley>
-References: <20230527014153.2793931-1-dianders@chromium.org>
- <20230526184139.1.I0d75971cc52a7283f495aac0bd5c3041aadc734e@changeid>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E8D8780331C;
+        Tue, 30 May 2023 14:16:55 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3150148205E;
+        Tue, 30 May 2023 14:16:52 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-crypto@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 00/10] crypto, splice, net: Make AF_ALG handle sendmsg(MSG_SPLICE_PAGES)
+Date:   Tue, 30 May 2023 15:16:24 +0100
+Message-ID: <20230530141635.136968-1-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526184139.1.I0d75971cc52a7283f495aac0bd5c3041aadc734e@changeid>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,20 +66,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2023-05-26 18:41:31, Douglas Anderson wrote:
-> The permissions for the kernel.nmi_watchdog sysctl have always been
-> set at compile time despite the fact that a watchdog can fail to
-> probe. Let's fix this and set the permissions based on whether the
-> hardlockup detector actually probed.
-> 
-> Fixes: a994a3147e4c ("watchdog/hardlockup/perf: Implement init time detection of perf")
-> Reported-by: Petr Mladek <pmladek@suse.com>
-> Closes: https://lore.kernel.org/r/ZHCn4hNxFpY5-9Ki@alley
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Here's the fourth tranche of patches towards providing a MSG_SPLICE_PAGES
+internal sendmsg flag that is intended to replace the ->sendpage() op with
+calls to sendmsg().  MSG_SPLICE_PAGES is a hint that tells the protocol
+that it should splice the pages supplied if it can.
 
-Looks good to me:
+This set consists of the following parts:
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+ (1) Move netfs_extract_iter_to_sg() to somewhere more general and rename
+     it to drop the "netfs" prefix.  We use this to extract directly from
+     an iterator into a scatterlist.
 
-Best Regards,
-Petr
+ (2) Make AF_ALG use iov_iter_extract_pages().  This has the additional
+     effect of pinning pages obtained from userspace rather than taking
+     refs on them.  Pages from kernel-backed iterators would not be pinned,
+     but AF_ALG isn't really meant for use by kernel services.
+
+ (3) Change AF_ALG still further to use extract_iter_to_sg().
+
+ (4) Make af_alg_sendmsg() support MSG_SPLICE_PAGES support and make
+     af_alg_sendpage() just a wrapper around sendmsg().  This has to take
+     refs on the pages pinned for the moment.
+
+ (5) Make hash_sendmsg() support MSG_SPLICE_PAGES by simply ignoring it.
+     hash_sendpage() is left untouched to be removed later, after the
+     splice core has been changed to call sendmsg().
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=sendpage-4
+
+David
+
+ver #2)
+ - Put the "netfs_" prefix removal first to shorten lines and avoid
+   checkpatch 80-char warnings.
+ - Fix a couple of spelling mistakes.
+ - Wrap some lines at 80 chars.
+
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=51c78a4d532efe9543a4df019ff405f05c6157f6 # part 1
+Link: https://lore.kernel.org/r/20230526143104.882842-1-dhowells@redhat.com/ # v1
+
+David Howells (10):
+  Drop the netfs_ prefix from netfs_extract_iter_to_sg()
+  Fix a couple of spelling mistakes
+  Wrap lines at 80
+  Move netfs_extract_iter_to_sg() to lib/scatterlist.c
+  crypto: af_alg: Pin pages rather than ref'ing if appropriate
+  crypto: af_alg: Use extract_iter_to_sg() to create scatterlists
+  crypto: af_alg: Indent the loop in af_alg_sendmsg()
+  crypto: af_alg: Support MSG_SPLICE_PAGES
+  crypto: af_alg: Convert af_alg_sendpage() to use MSG_SPLICE_PAGES
+  crypto: af_alg/hash: Support MSG_SPLICE_PAGES
+
+ crypto/af_alg.c         | 185 ++++++++++++---------------
+ crypto/algif_aead.c     |  38 +++---
+ crypto/algif_hash.c     | 114 +++++++++++------
+ crypto/algif_skcipher.c |  10 +-
+ fs/cifs/smb2ops.c       |   4 +-
+ fs/cifs/smbdirect.c     |   2 +-
+ fs/netfs/iterator.c     | 266 ---------------------------------------
+ include/crypto/if_alg.h |   7 +-
+ include/linux/netfs.h   |   4 -
+ include/linux/uio.h     |   5 +
+ lib/scatterlist.c       | 269 ++++++++++++++++++++++++++++++++++++++++
+ 11 files changed, 459 insertions(+), 445 deletions(-)
+
