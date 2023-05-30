@@ -2,220 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1C3715E80
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9295715E86
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbjE3MHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
+        id S231450AbjE3MJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbjE3MHm (ORCPT
+        with ESMTP id S231362AbjE3MJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:07:42 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CF018B;
-        Tue, 30 May 2023 05:07:22 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 629495FD27;
-        Tue, 30 May 2023 15:06:42 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1685448402;
-        bh=bZ/3zHJMAac2f/gPspgrR1bhRNJwTftEFFtSQZKfL4w=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=T/VLAf3TNfoVJrOANf6hHbbJuExBwVn1s34Zx2Avqmyr6aXJUY2cIo81qtQqduPh8
-         BRa6Cbzg+AbH9OJ+qZd2mrV3FqE8gfStR9callJ9oUXpm3tjNzQK7h1HNqqAsu8rmg
-         eynLSLUc+P+lB580prvqse1tiznlr56Bbrcy6ount+MMBrPSPhXvWI9tx4IuO3CKFe
-         QGZOXXGVoUiOrKq64nQtTMBkGHDE6B7gW1H63mZOAW5pYCSvhg5H0CHwOFmL4NnLY1
-         xTyJlBAWxZgPUe7+fCSSzsXOkB1Gb1GfJ6UNLz9IYtm8fxH7vtJ4BHYVgUOKvswm0t
-         +/XTIkInKJ/oQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 30 May 2023 15:06:41 +0300 (MSK)
-Date:   Tue, 30 May 2023 15:06:40 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Jerome Brunet <jbrunet@baylibre.com>
-CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <neil.armstrong@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
-        <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
-        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v15 6/6] clk: meson: a1: add Amlogic A1 Peripherals clock
- controller driver
-Message-ID: <20230530120640.irugyrio3qa7czjy@CAB-WSD-L081021>
-References: <20230517133309.9874-1-ddrokosov@sberdevices.ru>
- <20230517133309.9874-7-ddrokosov@sberdevices.ru>
- <CAFBinCBs7-9CvfQLxLoG5=FjmSK+S5eGsLXOAyQN9kNOg2q-2g@mail.gmail.com>
- <20230522133212.fcxgsml4hmvj65bb@CAB-WSD-L081021>
- <1jr0qy42tn.fsf@starbuckisacylon.baylibre.com>
+        Tue, 30 May 2023 08:09:02 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED61FC5;
+        Tue, 30 May 2023 05:09:00 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UC4pTN018239;
+        Tue, 30 May 2023 14:08:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=eUMt/DGvSnsVrLlt9wTQ7XbXUJ6l9bqRdAwrT9NXRl4=;
+ b=gpY60mVqFAHm5rhYyUhnApTQy+VI+kpHjEhL+RL0V2FdWiHUyjZb48b4pLS6qiNbGX2e
+ 8xG4XR6+yUNpNSeUxA4EXa5JjMMkmNjj5IK73Vel8PP7cYDEwSL0b7/tylFqnodu4hur
+ fbTNPB4qVeEaXOjcwJERDAbMS+VHSlHWumhHWNtGtSfgWnexxbyY9outi7zR0CxkGOB4
+ PPVL1rjtBiY/OfGpBt6JBbHG3PcHaoPvvt9Zf3zcy80AcRq+f+/mewrlw4x+tQTT9vFl
+ zWUaCpiAUxiejXCqZ3+nZTRv+EaoIv/xBqq7cZpZoZgOpY4PQaXDVZztTUYO6JQAj1Yq hw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qwdm5hhgj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 14:08:32 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5F0C610002A;
+        Tue, 30 May 2023 14:08:30 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3839E21ED5D;
+        Tue, 30 May 2023 14:08:30 +0200 (CEST)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 30 May
+ 2023 14:08:29 +0200
+Message-ID: <4308327f-d2e2-e9a2-6add-5e0352d3f1e2@foss.st.com>
+Date:   Tue, 30 May 2023 14:08:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1jr0qy42tn.fsf@starbuckisacylon.baylibre.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/30 07:59:00 #21376339
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 02/11] pinctrl: stm32: add stm32mp257 pinctrl support
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+CC:     Conor Dooley <conor@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, <soc@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
+References: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
+ <20230529162034.20481-3-alexandre.torgue@foss.st.com>
+ <20230529-enrich-clammy-14b498baf09f@spud>
+ <879b7689-5663-28b5-9431-2fdd243ffff2@foss.st.com>
+ <20230530-payday-gravity-45a26bd7f2dc@wendy>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20230530-payday-gravity-45a26bd7f2dc@wendy>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_08,2023-05-30_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jerome,
+On 5/30/23 10:56, Conor Dooley wrote:
+> On Tue, May 30, 2023 at 10:38:30AM +0200, Alexandre TORGUE wrote:
+>> Hi Conor
+>>
+>> On 5/29/23 20:04, Conor Dooley wrote:
+>>> On Mon, May 29, 2023 at 06:20:25PM +0200, Alexandre Torgue wrote:
+>>>> Add stm32mp257 pinctrl support.
+>>>> diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.h b/drivers/pinctrl/stm32/pinctrl-stm32.h
+>>>> index e0c31c4c8bca..5e5de92ddd58 100644
+>>>> --- a/drivers/pinctrl/stm32/pinctrl-stm32.h
+>>>> +++ b/drivers/pinctrl/stm32/pinctrl-stm32.h
+>>>> @@ -24,6 +24,9 @@
+>>>>    #define STM32MP_PKG_AB		BIT(1)
+>>>>    #define STM32MP_PKG_AC		BIT(2)
+>>>>    #define STM32MP_PKG_AD		BIT(3)
+>>>> +#define STM32MP_PKG_AI		BIT(8)
+>>>> +#define STM32MP_PKG_AK		BIT(10)
+>>>> +#define STM32MP_PKG_AL		BIT(11)
+>>>
+>>> Mainly out of curiosity, why have you go duplicate defines for these?
+>>
+>> Mainly to fit with available packages for various STM32 MPU. Currently MP1
+>> SoCs are available with packages AB/AC/AD and MP2 series with AI/AK/AL but
+>> in the future we could have package AB/AC/AD/AI available for a particular
+>> SoC and then I need to anticipate this case.
+> 
+> Sorry, what I meant was "why have you got defines for these in this
+> header, when there is an existing set in
+> include/dt-bindings/pinctrl/stm32-pinfunc.h?".
 
-Thank you for the review!
+Ok, I see. To be honest I do it as we did in the past for STM32 MCU and 
+MP1 products. We had this discussion maybe 5 or 6 years ago about the 
+fact to include or not the "dt-bindings" file in the stm32 drivers. I 
+don't remember exactly the rational behind our choice. It is something 
+that we could improve for all our STM32 products. Sorry for this 
+imprecise answer.
 
-On Tue, May 30, 2023 at 10:32:57AM +0200, Jerome Brunet wrote:
+Alex
+
+
 > 
-> On Mon 22 May 2023 at 16:32, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> 
-> > Hello Martin,
-> >
-> > Thank you so much for the review, I really appreciate it!
-> > Please find my comments below.
-> >
-> > On Fri, May 19, 2023 at 11:03:54PM +0200, Martin Blumenstingl wrote:
-> >> Hi Dmitry,
-> >> 
-> >> On Wed, May 17, 2023 at 3:33 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> >> [...]
-> >> > +static struct clk_regmap sys_b_sel = {
-> >> > +       .data = &(struct clk_regmap_mux_data){
-> >> > +               .offset = SYS_CLK_CTRL0,
-> >> > +               .mask = 0x7,
-> >> > +               .shift = 26,
-> >> > +               .table = mux_table_sys,
-> >> > +       },
-> >> > +       .hw.init = &(struct clk_init_data){
-> >> > +               .name = "sys_b_sel",
-> >> > +               .ops = &clk_regmap_mux_ro_ops,
-> >> the sys_*_sel muxes and sys_*_gate are _ro...
-> >> 
-> >> > +               .parent_data = sys_parents,
-> >> > +               .num_parents = ARRAY_SIZE(sys_parents),
-> >> > +       },
-> >> > +};
-> >> > +
-> >> > +static struct clk_regmap sys_b_div = {
-> >> > +       .data = &(struct clk_regmap_div_data){
-> >> > +               .offset = SYS_CLK_CTRL0,
-> >> > +               .shift = 16,
-> >> > +               .width = 10,
-> >> > +       },
-> >> > +       .hw.init = &(struct clk_init_data){
-> >> > +               .name = "sys_b_div",
-> >> > +               .ops = &clk_regmap_divider_ops,
-> >> ...but the sys_*_div aren't
-> >> Is this on purpose? If it is: why can the divider be changed at
-> >> runtime but the mux can't?
-> >> 
-> >
-> > Ah, that's a good catch. Since the system clock is set up by the BootROM
-> > code, all sys_* dividers and gates should be read-only. I'll make sure
-> > to change that in the next version.
-> >
-> >> [...]
-> >> > +/*
-> >> > + * the index 2 is sys_pll_div16, it will be implemented in the CPU clock driver,
-> >> We need to add the "sys_pll_div16" input to the dt-bindings since they
-> >> should always describe the hardware (regardless of what the driver
-> >> implements currently).
-> >> I'm not sure how to manage this while we don't have the CPU clock
-> >> driver ready yet but I'm sure Rob or Krzysztof will be able to help us
-> >> here.
-> >> 
-> >
-> > I've shared my thoughts about it in the bindings thread. Please take a
-> > look.
-> >
-> >> > + * the index 4 is the clock measurement source, it's not supported yet
-> >> I suspect that this comes from the clock measurer IP block and if so
-> >> the dt-bindings should probably describe this input. But again, we'd
-> >> need to keep it optional for now since our clock measurer driver
-> >> doesn't even implement a clock controller.
-> >> 
-> >
-> > Indeed, this is a similar situation to what we have with the inputs and
-> > clocks of the CPU and Audio clock controllers. It seems like there is
-> > only one option here: we should mark it with a TODO tag...
-> >
-> >> [...]
-> >> > +static struct clk_regmap pwm_a_sel = {
-> >> > +       .data = &(struct clk_regmap_mux_data){
-> >> > +               .offset = PWM_CLK_AB_CTRL,
-> >> > +               .mask = 0x1,
-> >> > +               .shift = 9,
-> >> > +       },
-> >> > +       .hw.init = &(struct clk_init_data){
-> >> > +               .name = "pwm_a_sel",
-> >> > +               .ops = &clk_regmap_mux_ops,
-> >> > +               .parent_data = pwm_abcd_parents,
-> >> > +               .num_parents = ARRAY_SIZE(pwm_abcd_parents),
-> >> > +               /* For more information, please refer to rtc clock */
-> >> > +               .flags = CLK_SET_RATE_NO_REPARENT,
-> >> As mentioned in [0] we'll work with Heiner to see if we can improve
-> >> the decision making process of the PWM controller driver so that we
-> >> can just have .flags = 0 here.
-> >> This applies to all other occurrences of the same comment about the rtc clock.
-> >
-> > Sure, I'll make the change in v16. In my opinion, we should remove the
-> > CLK_SET_RATE_NO_REPARENT flag from all RTC related clock objects,
-> > including PWM, regardless of the outcome of the Heiner discussion. Based
-> > on our IRC talk, the decision has more pros than cons -
-> > https://libera.irclog.whitequark.org/linux-amlogic/2023-05-18
-> 
-> The clock scheme of PWM could indeed be handled like audio is but it
-> not strictly required.
-> 
-> In audio we have a limited number of PLLs (root sources). There is a lot
-> more consummers than there is root sources. If the root sources rate is
-> not carefully chosen to statisfy all needs, we could end in a situation
-> where we can't satisfy all consummers or we must glitch the source to do
-> so.
-> 
-> For the PWM, I think (but I'm not 100% sure) that the main clock controller
-> provides a source for each PWM. No risk of race there. That is why AML
-> decided to completly ignore the clock element in the PWM IP, because
-> they can do almost everything with what is in the main controller ... Still
-> ignoring those part is wrong
-> 
-> For the RTC, If you want/need to handle external RTCs, I don't think you
-> have much of a choice. If both the internal and external *report* the
-> same rate, CCF can't really know if one is best. It will just pick one,
-> no necessarily the one you want. I don't really see a way around manual
-> selection for this.
+> Cheers,
+> Conor.
 > 
 
-Per my understading, the rtc32k Amlogic clock is an internal clock and
-cannot be an external one. Amlogic has provided it as an internal 32k
-stable clock with low jitter.
-
-You're absolutely right that there is no data available to confirm the
-choice of an external RTC clock in the CCF. However, as per the approach
-we discussed with Martin and Heiner, we can still use the RTC clock as a
-parent for PWM in the current implementation. If the parent clock
-already has 32k, we do not change the rate from the PWM driver. The
-benefit of this approach is that reparenting is still available, but the
-PWM child cannot change the RTC frequency; it simply uses the
-appropriate parent clock. Additionally, if the parent is already set to
-rtc32k, we shouldn't change it.
-
--- 
-Thank you,
-Dmitry
