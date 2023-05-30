@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9F5715A69
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657F7715A71
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbjE3JkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S230383AbjE3Jkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjE3JkI (ORCPT
+        with ESMTP id S230307AbjE3JkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:40:08 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110A3F0;
-        Tue, 30 May 2023 02:40:03 -0700 (PDT)
+        Tue, 30 May 2023 05:40:17 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613ED121;
+        Tue, 30 May 2023 02:40:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685439602; x=1716975602;
+  t=1685439611; x=1716975611;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=eULxRW5HiZYtKwH0qN2snrG4MCmtG1cxN6q/9u0F8p4=;
-  b=hTVqjvR2ukbezJJIEWi+nYafV2tQY+O1RpAM+3xlyv+EGbNUWAe7p2t2
-   pEb2b/7hZxzCpA2XYIFYAhvisg25zfAfBTi3Uaq7Bgv0YMbj/rtSypSYv
-   PrpQOM5z/OLM1C3bozAR4NoovylJYfHtqs1p/ZoKqqlol1YjHQ0p2QiK1
-   YOvWgmYY/NAG+yClDO5Y+ntB/WIvCVuAf9AOaDBMlZJEBNxGx0rFuv1ff
-   8ow1kEzkLNem3sQDxM2gdAh/XTVjLRVbjo7MwKOZOQuqgBes1tpKVBxnn
-   NayLh6rz3wOCKASCrhODe+ZbHHK9FIQKLO78HRxfZ+DrniGQcYy4yuYmz
-   w==;
+  bh=Us7+wlAPXubVAW7Lf48y/+cKX9hpoUoHOhnB94iAUMI=;
+  b=cVwNF4zHOP8wGKS+54uM6LufaKx3AqCEe3w3VZhN+qu8z92J3ZTqd/9y
+   rjBPPJEtAvOykiYe5oz3n8OhMkNSl/UPdp4g/pj4688VmXqbkuhnVnHm1
+   LJNQY7ZeUKDncKKwhns6ueYQ0hgSIpxHevPeU+WUl3BEWZMg9e41T9oEh
+   RWVi8PJcZWZy7sA8EHoDfZ2GzNolgEFl4psBu+NaA0pqK565hSz9y1I8F
+   S+dQSt5SPEuNAHFWKs/pMoF3/u4p80Nsm9fMre8Ot/I6zs2RTNqH9RtPc
+   aQT6v23yL29CVPVxKe2cL8J1b75w5YAxJQKcJBhj888GhKrklry1I3ALB
+   Q==;
 X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="227558620"
+   d="scan'208";a="154569092"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 May 2023 02:40:02 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 May 2023 02:40:09 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 30 May 2023 02:40:01 -0700
+ 15.1.2507.21; Tue, 30 May 2023 02:40:06 -0700
 Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Tue, 30 May 2023 02:39:57 -0700
+ 15.1.2507.21 via Frontend Transport; Tue, 30 May 2023 02:40:02 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
         <luca.ceresoli@bootlin.com>, <nm@ti.com>, <kristo@kernel.org>,
@@ -51,9 +51,9 @@ CC:     <aford173@gmail.com>, <mike.looijmans@topic.nl>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-omap@vger.kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 5/8] clk: si5341: free unused memory on probe failure
-Date:   Tue, 30 May 2023 12:39:10 +0300
-Message-ID: <20230530093913.1656095-6-claudiu.beznea@microchip.com>
+Subject: [PATCH 6/8] clk: keystone: sci-clk: check return value of kasprintf()
+Date:   Tue, 30 May 2023 12:39:11 +0300
+Message-ID: <20230530093913.1656095-7-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230530093913.1656095-1-claudiu.beznea@microchip.com>
 References: <20230530093913.1656095-1-claudiu.beznea@microchip.com>
@@ -70,77 +70,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointers from synth_clock_names[] should be freed at the end of probe
-either on probe success or failure path.
+kasprintf() returns a pointer to dynamically allocated memory.
+Pointer could be NULL in case allocation fails. Check pointer validity.
+Identified with coccinelle (kmerr.cocci script).
 
-Fixes: b7bbf6ec4940 ("clk: si5341: Allow different output VDD_SEL values")
-Fixes: 9b13ff4340df ("clk: si5341: Add sysfs properties to allow checking/resetting device faults")
+Fixes: b745c0794e2f ("clk: keystone: Add sci-clk driver support")
+Depends-on: 96488c09b0f4 ("clk: keystone: sci-clk: cut down the clock name length")
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- drivers/clk/clk-si5341.c | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ drivers/clk/keystone/sci-clk.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/clk/clk-si5341.c b/drivers/clk/clk-si5341.c
-index b2cf7edc8b30..c7d8cbd22bac 100644
---- a/drivers/clk/clk-si5341.c
-+++ b/drivers/clk/clk-si5341.c
-@@ -1744,7 +1744,7 @@ static int si5341_probe(struct i2c_client *client)
- 		if (err) {
- 			dev_err(&client->dev,
- 				"output %u registration failed\n", i);
--			goto cleanup;
-+			goto free_clk_names;
- 		}
- 		if (config[i].always_on)
- 			clk_prepare(data->clk[i].hw.clk);
-@@ -1754,7 +1754,7 @@ static int si5341_probe(struct i2c_client *client)
- 			data);
- 	if (err) {
- 		dev_err(&client->dev, "unable to add clk provider\n");
--		goto cleanup;
-+		goto free_clk_names;
- 	}
+diff --git a/drivers/clk/keystone/sci-clk.c b/drivers/clk/keystone/sci-clk.c
+index 910ecd58c4ca..6c1df4f11536 100644
+--- a/drivers/clk/keystone/sci-clk.c
++++ b/drivers/clk/keystone/sci-clk.c
+@@ -294,6 +294,8 @@ static int _sci_clk_build(struct sci_clk_provider *provider,
  
- 	if (initialization_required) {
-@@ -1762,11 +1762,11 @@ static int si5341_probe(struct i2c_client *client)
- 		regcache_cache_only(data->regmap, false);
- 		err = regcache_sync(data->regmap);
- 		if (err < 0)
--			goto cleanup;
-+			goto free_clk_names;
+ 	name = kasprintf(GFP_KERNEL, "clk:%d:%d", sci_clk->dev_id,
+ 			 sci_clk->clk_id);
++	if (!name)
++		return -ENOMEM;
  
- 		err = si5341_finalize_defaults(data);
- 		if (err < 0)
--			goto cleanup;
-+			goto free_clk_names;
- 	}
+ 	init.name = name;
  
- 	/* wait for device to report input clock present and PLL lock */
-@@ -1775,21 +1775,19 @@ static int si5341_probe(struct i2c_client *client)
- 	       10000, 250000);
- 	if (err) {
- 		dev_err(&client->dev, "Error waiting for input clock or PLL lock\n");
--		goto cleanup;
-+		goto free_clk_names;
- 	}
- 
- 	/* clear sticky alarm bits from initialization */
- 	err = regmap_write(data->regmap, SI5341_STATUS_STICKY, 0);
- 	if (err) {
- 		dev_err(&client->dev, "unable to clear sticky status\n");
--		goto cleanup;
-+		goto free_clk_names;
- 	}
- 
- 	err = sysfs_create_files(&client->dev.kobj, si5341_attributes);
--	if (err) {
-+	if (err)
- 		dev_err(&client->dev, "unable to create sysfs files\n");
--		goto cleanup;
--	}
- 
- free_clk_names:
- 	/* Free the names, clk framework makes copies */
 -- 
 2.34.1
 
