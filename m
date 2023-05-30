@@ -2,195 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82BF7152D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 03:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DDF17152DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 03:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjE3BIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 21:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
+        id S229830AbjE3BJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 21:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjE3BIL (ORCPT
+        with ESMTP id S229578AbjE3BJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 21:08:11 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7652EDB
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 18:08:09 -0700 (PDT)
-Received: (qmail 389654 invoked by uid 1000); 29 May 2023 21:08:08 -0400
-Date:   Mon, 29 May 2023 21:08:08 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
-        balbi@ti.com, francesco@dolcini.it, alistair@alistair23.me,
-        stephan@gerhold.net, bagasdotme@gmail.com, luca@z3ntu.xyz,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: Re: [PATCH v4 3/3] usb: gadget: udc: core: Offload
- usb_udc_vbus_handler processing
-Message-ID: <eca2b381-2b1f-47de-8385-ea448f2cbdb3@rowland.harvard.edu>
-References: <20230529234816.3720623-1-badhri@google.com>
- <20230529234816.3720623-3-badhri@google.com>
+        Mon, 29 May 2023 21:09:24 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7232CF;
+        Mon, 29 May 2023 18:09:22 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-2568befcf1dso912564a91.0;
+        Mon, 29 May 2023 18:09:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685408962; x=1688000962;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=d1wG3ZzBNrC3Iuv0Sazp7NPX3sgvbpQA8Twr3uxU34s=;
+        b=kXw1U6akBeszmRiZ1MVvqGt5eDQuWhg17xwHKHH1jEX/9yaFkD1SOvWX/DEiaSJ8V9
+         a39ZEYAGgARyRX7UhQmHCk6Ej8CON2madP8nOXK+2PwuqPMl7c39mDtdlgUY2qONvt4O
+         17GOFsEwtbE1glmbzKXvHUnmFP86NdwnWvazFzlNQSlmKMm0RxUAnSXNw3RXzsnw3mma
+         adXNWyoyVDsjz+4PA2AMk3EJ9+cLtETJoBicLQLeaR+5EPBiZN0vSR7ej7T6bl5azXNN
+         gXCpv+CXrKKrWXCo74OPAUXxjC/6Kj8uND/4IW5e5bLShDEOZKg7DeX93UwgYWKlPIGn
+         TYuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685408962; x=1688000962;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d1wG3ZzBNrC3Iuv0Sazp7NPX3sgvbpQA8Twr3uxU34s=;
+        b=GZYbuKS9LvAHhiCTaKE6/o8aWjPJ4ZVYeQPWN+w3FNy51OnH6dS1N9DooT0/CHYKLP
+         5GFrE4auFAOf7AQvn+fI8SyQbq81WTLireYtp1XSw+2LLp5XMUPOfUbJvP07KRS7UKEP
+         5ZZH5F0sQwIDVvsh18PCxvjjYAqbMWR4fvl4Ky1UQZj3ZTh1WwDmdkTRoVvYo9bcbkHn
+         cbFaRO+AceO/UVRW7dLdgwfzfTOZO5iXFNaQfcfXcJXCqbQHi+AsAPIAef7xEAE1Tck2
+         sELSuSGvbW/3fFl24E4Y9lSVDnZlHzMXyXBHQxZPNaq889ygucZvzIGJrQFy7rwoi0X+
+         phxg==
+X-Gm-Message-State: AC+VfDwP5L7KbjyLUTDpSmgzleEelqj8U8lC13QMZqGMvJN+x8pjjLq3
+        9jjxsNYbmbfGkptFUS0S790=
+X-Google-Smtp-Source: ACHHUZ4lRcccoA8lGODePVC271WFd12PsoH9zTA9AafQ4ZPdWcMilHiDIITrvpbD1M0gojDXw1+KCw==
+X-Received: by 2002:a17:90b:3a91:b0:24e:3752:194f with SMTP id om17-20020a17090b3a9100b0024e3752194fmr9899966pjb.21.1685408961878;
+        Mon, 29 May 2023 18:09:21 -0700 (PDT)
+Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id b1-20020a17090a100100b002532eef4fc5sm8271339pja.34.2023.05.29.18.09.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 18:09:21 -0700 (PDT)
+Message-ID: <c9493f4d-8056-20a0-6ed2-161fbcc3d34e@gmail.com>
+Date:   Tue, 30 May 2023 09:09:16 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230529234816.3720623-3-badhri@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v11 10/10] tty: serial: Add Nuvoton ma35d1 serial driver
+ support
+From:   Jacky Huang <ychuang570808@gmail.com>
+To:     Jiri Slaby <jirislaby@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, tmaimon77@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, arnd@arndb.de, soc@kernel.org,
+        schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+References: <20230516075217.205401-1-ychuang570808@gmail.com>
+ <20230516075217.205401-11-ychuang570808@gmail.com>
+ <3d4acb20-c80e-fd39-c0d0-e9b1e0309d81@kernel.org>
+ <aaef529f-69dc-8bec-0ae1-959a1ede87e0@gmail.com>
+Content-Language: en-US
+In-Reply-To: <aaef529f-69dc-8bec-0ae1-959a1ede87e0@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 11:48:16PM +0000, Badhri Jagan Sridharan wrote:
-> chipidea udc calls usb_udc_vbus_handler from udc_start gadget
-> ops causing a deadlock. Avoid this by offloading usb_udc_vbus_handler
-> processing.
+Dear Jiri,
 
-This is not a good explanation.  In particular, it doesn't explain why 
-moving the processing to a workqueue is the proper solution.
 
-You should describe the issue I raised earlier, namely, that 
-usb_udc_vbus_handler() has to run in interrupt context but it calls 
-usb_udc_connect_control(), which has to run in process context.  And 
-explain _why_ these routines have to run in those contexts.
+On 2023/5/24 下午 04:34, Jacky Huang wrote:
+> Dear Jiri,
+>
+> Thanks for your advice.
+>
+> On 2023/5/24 下午 03:42, Jiri Slaby wrote:
+>> On 16. 05. 23, 9:52, Jacky Huang wrote:
+>>> +static void ma35d1serial_config_port(struct uart_port *port, int 
+>>> flags)
+>>> +{
+>>> +    /*
+>>> +     * Driver core for serial ports forces a non-zero value for 
+>>> port type.
+>>> +     * Write an arbitrary value here to accommodate the serial core 
+>>> driver,
+>>> +     * as ID part of UAPI is redundant.
+>>> +     */
+>>> +    port->type = 1;
+>>
+>> So this 1 translates to PORT_8250. Why not to use it directly? Or 
+>> something more saner like PORT_16550A?
+>>
+> It's not actually 8250 or 16550A.
+> Can we add the following definition to 
+> 'include/uapi/linux/serial_core.h' and use PORT_MA35 instead?
+>
+> #define PORT_MA35    124
+>
+>
+>>> +}
+>>> +
+>>> +static int ma35d1serial_verify_port(struct uart_port *port, struct 
+>>> serial_struct *ser)
+>>> +{
+>>> +    if (port->type != PORT_UNKNOWN && ser->type != 1)
+>>> +        return -EINVAL;
+>>> +
+>>> +    return 0;
+>>> +}
+>> ...
+>>> +static int __init ma35d1serial_console_setup(struct console *co, 
+>>> char *options)
+>>> +{
+>>> +    struct device_node *np = ma35d1serial_uart_nodes[co->index];
+>>> +    struct uart_ma35d1_port *p = &ma35d1serial_ports[co->index];
+>>> +    u32 val32[4];
+>>> +    struct uart_port *port;
+>>> +    int baud = 115200;
+>>> +    int bits = 8;
+>>> +    int parity = 'n';
+>>> +    int flow = 'n';
+>>> +
+>>> +    /*
+>>> +     * Check whether an invalid uart number has been specified, and
+>>
+>> You dereferenced ma35d1serial_uart_nodes already. Doesn't 
+>> console=ttyNVT1000 (or something like that) crash the system?
+>>
+>
+> I will add the following check before np = 
+> "ma35d1serial_uart_nodes[co->index]".
+>
+> if (co->index < 0 || co->index >= MA35_UART_NR)
+>     return -EINVAL;
+>
+>
+>>> +     * if so, search for the first available port that does have
+>>> +     * console support.
+>>
+>> The code below doesn't match this comment.
+>
+> Yes, I will remove the above comment.
+>
+>>
+>>> +     */
+>>> +    if ((co->index < 0) || (co->index >= MA35_UART_NR)) {
+>>> +        pr_debug("Console Port%x out of range\n", co->index);
+>>> +        return -EINVAL;
+>>> +    }
+>>> +
+>>> +    if (of_property_read_u32_array(np, "reg", val32, 4) != 0)
+>>
+>> Shouldn't that 4 be ARRAY_SIZE(val32) instead?
+>>
+>
+> Will be fixed.
+>
+>>> +        return -EINVAL;
+>>
+>> One \n here please.
+>>
+>
+> Okay, I will add it.
+>
+>>> +    p->port.iobase = val32[1];
+>>> +    p->port.membase = ioremap(p->port.iobase, MA35_UART_REG_SIZE);
+>>
+>> What if this fails?
+>>
+>
+> I will add a check for the return value.
+>
+>>> +    p->port.ops = &ma35d1serial_ops;
+>>> +    p->port.line = 0;
+>>> +    p->port.uartclk = MA35_UART_CONSOLE_CLK;
+>>> +
+>>> +    port = &ma35d1serial_ports[co->index].port;
+>>
+>> Isn't this:
+>>   port = &p->port;
+>> ?
+>>
+>> Either use port on all above lines or drop the "port" variable 
+>> completely and use "p->port" below instead.
+>>
+>
+> I will remove port variable and use p->port only.
+>
+>>> +
+>>> +    if (options)
+>>> +        uart_parse_options(options, &baud, &parity, &bits, &flow);
+>>> +
+>>> +    return uart_set_options(port, co, baud, parity, bits, flow);
+>>> +}
+>>> +
+>>> +static struct console ma35d1serial_console = {
+>>> +    .name    = "ttyNVT",
+>>> +    .write   = ma35d1serial_console_write,
+>>> +    .device  = uart_console_device,
+>>> +    .setup   = ma35d1serial_console_setup,
+>>> +    .flags   = CON_PRINTBUFFER | CON_ENABLED,
+>>> +    .index   = -1,
+>>> +    .data    = &ma35d1serial_reg,
+>>
+>> I don't see console->data used anywhere in the driver?
+>>
+>
+> I will remove it.
+>
 
-> ---
->  drivers/usb/gadget/udc/core.c | 269 ++++++++++++++++------------------
->  1 file changed, 123 insertions(+), 146 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index 4641153e9706..26380e621e9f 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -38,9 +38,10 @@ static const struct bus_type gadget_bus_type;
->   * for udcs who do not care about vbus status, this value is always true
->   * @started: the UDC's started state. True if the UDC had started.
->   * @connect_lock: protects udc->vbus, udc->started, gadget->connect, gadget->deactivate related
-> - * functions. usb_gadget_connect_locked, usb_gadget_disconnect_locked,
-> - * usb_udc_connect_control_locked, usb_gadget_udc_start_locked, usb_gadget_udc_stop_locked are
-> - * called with this lock held.
-> + * functions. usb_gadget_pullup_update_locked called with this lock held.
-> + * @vbus_events: list head for processing vbus updates on usb_udc_vbus_handler.
-> + * @vbus_events_lock: protects vbus_events list
-> + * @vbus_work: work item that invokes usb_gadget_pullup_update_locked.
->   *
->   * This represents the internal data structure which is used by the UDC-class
->   * to hold information about udc driver and gadget together.
-> @@ -53,6 +54,20 @@ struct usb_udc {
->  	bool				vbus;
->  	bool				started;
->  	struct mutex			connect_lock;
-> +	struct list_head		vbus_events;
-> +	spinlock_t			vbus_events_lock;
-> +	struct work_struct		vbus_work;
+I removed the " .data    = &ma35d1serial_reg", but kernel crashed in 
+'drivers/tty/serial/serial_core.c'.
 
-Do you really need three new fields here?  Isn't vbus_work sufficient?
+The variable 'p' of  uart_console_device() refer to a NULL, because 
+co->data is NULL.
+As a result, kernel crashed at 'p->tty_driver'.
 
-> +	bool				unbinding;
+struct tty_driver *uart_console_device(struct console *co, int *index)
+{
+     struct uart_driver *p = co->data;
+     *index = co->index;
+     return p->tty_driver;
+}
 
-Do not include this in the same patch.  The unbinding flag does 
-something different from the vbus_work structure, so it belongs in a 
-different patch.
+We seem to be unable to remove it.
+If there are no other considerations, I will keep it in the next version.
 
-> +};
-> +
-> +/**
-> + * struct vbus_event - used to notify vbus updates posted through usb_udc_vbus_handler.
-> + * @vbus_on: true when vbus is on. false other wise.
-> + * @node: list node for maintaining a list of pending updates to be processed.
-> + */
-> +struct vbus_event {
-> +	bool vbus_on;
-> +	struct list_head node;
->  };
+>>> +};
+>> ...
+>>> +static int ma35d1serial_probe(struct platform_device *pdev)
+>>> +{
+>>> +    struct resource *res_mem;
+>>> +    struct uart_ma35d1_port *up;
+>>> +    int ret = 0;
+>>> +
+>>> +    if (pdev->dev.of_node) {
+>>> +        ret = of_alias_get_id(pdev->dev.of_node, "serial");
+>>> +        if (ret < 0) {
+>>> +            dev_err(&pdev->dev, "failed to get alias/pdev id, errno 
+>>> %d\n", ret);
+>>> +            return ret;
+>>> +        }
+>>> +    }
+>>> +    up = &ma35d1serial_ports[ret];
+>>> +    up->port.line = ret;
+>>> +    res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>>> +    if (!res_mem)
+>>> +        return -ENODEV;
+>>> +
+>>> +    up->port.iobase = res_mem->start;
+>>> +    up->port.membase = ioremap(up->port.iobase, MA35_UART_REG_SIZE);
+>>
+>> Check this too.
+>>
+>
+> Okay, sure.
+>
+>>> +    up->port.ops = &ma35d1serial_ops;
+>>> +
+>>> +    spin_lock_init(&up->port.lock);
+>>> +
+>>> +    up->clk = of_clk_get(pdev->dev.of_node, 0);
+>>> +    if (IS_ERR(up->clk)) {
+>>> +        ret = PTR_ERR(up->clk);
+>>> +        dev_err(&pdev->dev, "failed to get core clk: %d\n", ret);
+>>> +        goto err_iounmap;
+>>> +    }
+>>> +
+>>> +    ret = clk_prepare_enable(up->clk);
+>>> +    if (ret)
+>>> +        goto err_iounmap;
+>>> +
+>>> +    if (up->port.line != 0)
+>>> +        up->port.uartclk = clk_get_rate(up->clk);
+>>> +
+>>> +    ret = platform_get_irq(pdev, 0);
+>>> +    if (ret < 0)
+>>> +        goto err_clk_disable;
+>>> +
+>>> +    up->port.irq = ret;
+>>> +    up->port.dev = &pdev->dev;
+>>> +    up->port.flags = UPF_BOOT_AUTOCONF;
+>>> +
+>>> +    platform_set_drvdata(pdev, up);
+>>> +
+>>> +    ret = uart_add_one_port(&ma35d1serial_reg, &up->port);
+>>> +    if (ret < 0)
+>>> +        goto err_free_irq;
+>>> +
+>>> +    return 0;
+>>> +
+>>> +err_free_irq:
+>>> +    free_irq(up->port.irq, &up->port);
+>>> +
+>>> +err_clk_disable:
+>>> +    clk_disable_unprepare(up->clk);
+>>> +
+>>> +err_iounmap:
+>>> +    iounmap(up->port.membase);
+>>> +    return ret;
+>>> +}
+>>
+>> thanks,
+>
+> Best regards,
+> Jacky Huang
+>
 
-Why do we need this?  Why can't the work routine simply set the pullup 
-according to the current setting of vbus and the other flags?  That's 
-what usb_udc_vbus_handler() does now.
+Best regards,
+Jacky Huang
 
->  
->  static struct class *udc_class;
-> @@ -693,40 +708,46 @@ int usb_gadget_vbus_disconnect(struct usb_gadget *gadget)
->  EXPORT_SYMBOL_GPL(usb_gadget_vbus_disconnect);
->  
->  /* Internal version of usb_gadget_connect needs to be called with connect_lock held. */
-> -static int usb_gadget_connect_locked(struct usb_gadget *gadget)
-> +static int usb_gadget_pullup_update_locked(struct usb_gadget *gadget)
->  	__must_hold(&gadget->udc->connect_lock)
->  {
->  	int ret = 0;
-> +	bool connect = !gadget->deactivated && gadget->udc->started && gadget->udc->vbus &&
-> +		       !gadget->udc->unbinding;
-
-Since you are wrapping this line anyway, you might as well wrap it 
-before column 76.
-
->  
->  	if (!gadget->ops->pullup) {
->  		ret = -EOPNOTSUPP;
->  		goto out;
->  	}
->  
-> -	if (gadget->connected)
-> -		goto out;
-> -
-> -	if (gadget->deactivated || !gadget->udc->started) {
-> -		/*
-> -		 * If gadget is deactivated we only save new state.
-> -		 * Gadget will be connected automatically after activation.
-> -		 *
-> -		 * udc first needs to be started before gadget can be pulled up.
-> -		 */
-> -		gadget->connected = true;
-> -		goto out;
-> +	if (connect != gadget->connected) {
-> +		ret = gadget->ops->pullup(gadget, connect);
-> +		if (!ret)
-> +			gadget->connected = connect;
-> +		mutex_lock(&udc_lock);
-> +		if (!connect)
-> +			gadget->udc->driver->disconnect(gadget);
-> +		mutex_unlock(&udc_lock);
->  	}
-
-What will happen if the gadget isn't deactivated, but it is started and 
-VBUS power is prevent and the driver isn't unbinding, but the gadget 
-driver decides to call usb_gadget_disconnect()?
-
->  
-> -	ret = gadget->ops->pullup(gadget, 1);
-> -	if (!ret)
-> -		gadget->connected = 1;
-> -
->  out:
->  	trace_usb_gadget_connect(gadget, ret);
->  
->  	return ret;
->  }
->  
-> +static int usb_gadget_set_vbus(struct usb_gadget *gadget, bool vbus)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&gadget->udc->connect_lock);
-> +	gadget->udc->vbus = vbus;
-
-Why does this have to be here?  What's wrong with setting vbus in 
-interrupt context?
-
-> +	ret = usb_gadget_pullup_update_locked(gadget);
-> +	mutex_unlock(&gadget->udc->connect_lock);
-
-Sorry, but at this point I'm getting tired of pointing out all the 
-problems in this patch, so I'm going to stop here.
-
-How about instead doing something really simple, like just make 
-usb_udc_vbus_handler() queue up a work routine that calls 
-usb_udc_connect_control()?  Just a minimal change that will be really 
-easy to review.
-
-Alan Stern
