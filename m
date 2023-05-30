@@ -2,129 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CBD7154E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 07:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8E987154EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 07:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjE3FVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 01:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
+        id S229936AbjE3F0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 01:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjE3FVr (ORCPT
+        with ESMTP id S229915AbjE3F02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 01:21:47 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0F7AD;
-        Mon, 29 May 2023 22:21:44 -0700 (PDT)
-X-QQ-mid: bizesmtp86t1685424093t09pbsru
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 13:21:32 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: q+yjhizk/eK4Twfz5/tkrE7vplCQXvJ4uATWgDp4FlclbHqgTQzECLOaM/5aW
-        ciP3qrlZXDUOoqXXgEGPnefG1bscVwQQcb7SNzzTIUIyuSYUnjA8MKAIs/4DWDkTv1UZ/hm
-        RMJH3jBhaBXbW+jZobqHikfj6kgNNqri+YL8Wf/avB5c+itkx6m82TmJENM86el0C6f/Hah
-        qDPSYwt8xGHJ0WHIxeW8UvilJGfwXk5SfSfWmTbHMizcoiuPY/0TCVlG/oPymB/LEqFCkxa
-        jd4aj/2GFDHuQnp5eeriEYwyGxXrr+Y3YlUbxdCrz7RaTK2mcAvBq2mBB0Fb9NGSN+dEcTt
-        TpvzNke228KrB4bPGDkzB13vfe9pBxTtmH12H0PsMyn3IJ2toM=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6904062556633079927
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, arnd@arndb.de, w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 04/13] tools/nolibc: add missing nanoseconds support for __NR_statx
-Date:   Tue, 30 May 2023 13:21:32 +0800
-Message-Id: <20230530052132.364685-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <3a3edd48-1ace-4c89-89e8-9c594dd1b3c9@t-8ch.de>
-References: <3a3edd48-1ace-4c89-89e8-9c594dd1b3c9@t-8ch.de>
+        Tue, 30 May 2023 01:26:28 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2C1EA;
+        Mon, 29 May 2023 22:26:27 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QVgqK0h7rz4x2c;
+        Tue, 30 May 2023 15:26:21 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1685424382;
+        bh=Qugt1Tk2BjDvxKJ01WVZs3TUzuT5I7W3h1n+/2K7BZM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JIP6J4XG2Kz+hsxhmzMT7dM2RroyFMeGgPJ8f5jMf6PtSjpTm+k9tRBrQoqbha7mC
+         pRSRNlxWelu3tX15dC+Th+34pAaOYAVxtaEogBT2//cSgwGLK4KBgH4AUXxF5p9ZxD
+         PTqjs17l2YA3OU04UR5N0wG+lhMNf/2SaMUmlYjyD1X5r2hTZPlPaoflHSdTO3DP5F
+         IT+NNsOFAhjvU3f/twhhEr/xWob+87e3WhUpzvOI2nxiK2s0oiebld0/aFBfIf6uCQ
+         l0LLdRc8zUDd9vmtk8AFP2uR7KiHvV5z7iR/9TzQ1L1LlBOMK2x4lGbn3mnXXa1h25
+         g7muAc3YDfswA==
+Date:   Tue, 30 May 2023 15:26:18 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning in Linus' tree
+Message-ID: <20230530152618.2d61a5da@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/kfl11/wQXWGmu80EInJEuFA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thomas, Arnd, Willy
+--Sig_/kfl11/wQXWGmu80EInJEuFA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On 2023-05-30 03:50:34+0800, Zhangjin Wu wrote:
-> > Commit a89c937d781a ("tools/nolibc: support nanoseconds in stat()")
-> > added nanoseconds for stat() but missed the statx case, this adds it.
-> 
-> Welp, I should have thought of that.
-> At least the testcase seems to have been useful.
->
+Hi all,
 
-yeah, your testcase telled me this issue.
+In Linus' tree, today's linux-next build (htmldocs) produced this warning:
 
-> Thanks for the fix!
-> 
-> > The stx_atime, stx_mtime, stx_ctime are in type of 'struct
-> > statx_timestamp', which is incompatible with 'struct timespec', should
-> > convert explicitly.
-> > 
-> >     /* include/uapi/linux/stat.h */
-> > 
-> >     struct statx_timestamp {
-> >     	__s64	tv_sec;
-> >     	__u32	tv_nsec;
-> >     	__s32	__reserved;
-> >     };
-> > 
-> >     /* include/uapi/linux/time_types.h */
-> >     struct __kernel_timespec {
-> >     	__kernel_time64_t       tv_sec;                 /* seconds */
-> >     	long long               tv_nsec;                /* nanoseconds */
-> >     };
-> > 
-> >     /* tools/include/nolibc/types.h */
-> >     #define timespec __kernel_timespec
-> > 
-> > Without this patch, the stat_timestamps test case would fail on rv32.
-> > 
-> > Fixes: a89c937d781a ("tools/nolibc: support nanoseconds in stat()")
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/include/nolibc/sys.h | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> > index 154194056962..98cfa2f6d021 100644
-> > --- a/tools/include/nolibc/sys.h
-> > +++ b/tools/include/nolibc/sys.h
-> > @@ -1175,9 +1175,9 @@ int sys_stat(const char *path, struct stat *buf)
-> >  	buf->st_size    = statx.stx_size;
-> >  	buf->st_blksize = statx.stx_blksize;
-> >  	buf->st_blocks  = statx.stx_blocks;
-> > -	buf->st_atime   = statx.stx_atime.tv_sec;
-> > -	buf->st_mtime   = statx.stx_mtime.tv_sec;
-> > -	buf->st_ctime   = statx.stx_ctime.tv_sec;
-> > +	buf->st_atim    = (struct timespec){ .tv_sec = statx.stx_atime.tv_sec, .tv_nsec = statx.stx_atime.tv_nsec };
-> > +	buf->st_mtim    = (struct timespec){ .tv_sec = statx.stx_mtime.tv_sec, .tv_nsec = statx.stx_mtime.tv_nsec };
-> > +	buf->st_ctim    = (struct timespec){ .tv_sec = statx.stx_ctime.tv_sec, .tv_nsec = statx.stx_ctime.tv_nsec };
-> 
-> I would prefer to split the compound assignment into two single
-> assignments, though.
-> 
-> buf->st_ctim.tv_sec = statx.stx_ctime.tv_sec;
-> buf->st_ctim.tv_nsec = statx.stx_ctime.tv_nsec;
->
+include/media/v4l2-subdev.h:1130: warning: Function parameter or member 'cl=
+ient_caps' not described in 'v4l2_subdev_fh'
 
-Ok, will update it in the v3 revision.
+Introduced by commit
 
-And further, what about removing the other !statx parts
-(__NR_newfstatat, __NR_stat)? just like we are doing for the other 64bit
-syscalls (llseek and time65).
+  f57fa2959244 ("media: v4l2-subdev: Add new ioctl for client capabilities")
 
-Best regards,
-Zhangjin
+I am not sure why this only turned up today.
 
-> >  	return ret;
-> >  }
-> >  #else
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/kfl11/wQXWGmu80EInJEuFA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR1iPoACgkQAVBC80lX
+0Gx0LwgAm6w3adSRxkawh/GZxrsIgfQE2IaYDNLQ6JzCg61/p35+ZwX0eihPfBmk
+jP1T3R93h6i9EihXDo2pCfKAYc1Eb7sQ1PmY3UeWN981zFmS/OCYLhK0zKHlj1vf
+i6ulrb3nD1YqOoEhKVbWdrJlU7SzMBDrr5xV4Dia6l+awYmxvIEoJRPWjL5YKUPW
+PW3xWIFhWrrIRpcj0j29IuEyVI1exib3LpEufR1qDqKtgifqaW2r7eHa5yQKGPg+
+4oE819ayztH9n/KmqnYYX/ybjYH/wnPHdpbsH3uOaMvQLtbhITXZ69j+IgzVie4d
+CPUDU3Ywr1LG2rxYZa+UsnWt21/Gkg==
+=9vbj
+-----END PGP SIGNATURE-----
+
+--Sig_/kfl11/wQXWGmu80EInJEuFA--
