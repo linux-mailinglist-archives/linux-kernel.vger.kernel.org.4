@@ -2,152 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF3E71628F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2736571629E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbjE3Nu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39154 "EHLO
+        id S231986AbjE3Nuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232716AbjE3NuI (ORCPT
+        with ESMTP id S231422AbjE3Nus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:50:08 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E89E8;
-        Tue, 30 May 2023 06:50:05 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QVtyb5x5Cz6D8wn;
-        Tue, 30 May 2023 21:48:23 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 30 May
- 2023 14:50:02 +0100
-Date:   Tue, 30 May 2023 14:50:01 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Namhyung Kim <namhyung@kernel.org>
-CC:     Liang Kan <kan.liang@linux.intel.com>, <linux-cxl@vger.kernel.org>,
-        <peterz@infradead.org>, <mark.rutland@arm.com>, <will@kernel.org>,
-        <dan.j.williams@intel.com>, <mingo@redhat.com>, <acme@kernel.org>,
-        <linuxarm@huawei.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Dave Jiang" <dave.jiang@intel.com>,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v7 4/5] perf: CXL Performance Monitoring Unit driver
-Message-ID: <20230530145001.00002560@Huawei.com>
-In-Reply-To: <CAM9d7cgYZs4DqLmjPZCYDVrp-KVYoZYDyJHLwB1fOM7ZdzM2Pg@mail.gmail.com>
-References: <20230526095824.16336-1-Jonathan.Cameron@huawei.com>
-        <20230526095824.16336-5-Jonathan.Cameron@huawei.com>
-        <CAM9d7cgYZs4DqLmjPZCYDVrp-KVYoZYDyJHLwB1fOM7ZdzM2Pg@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Tue, 30 May 2023 09:50:48 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE12113;
+        Tue, 30 May 2023 06:50:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685454643; x=1716990643;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=coaE20tPVJ7AZBZ9YIPPD7ohxPRVwifqLulonpO6f/c=;
+  b=fja4gN7hCJmVNFFIFoOIMG9fWwsaN7mLQ8X4uGWBjjO5p659dLetg0U4
+   JcA1wXe6s7760OvLEZ2GyVnhLraHDR0k2dvtCJIsHLApbZ/HNvjKO4biG
+   F+rzZRF3WbnsnJYYFd/cy97IOrjW9T82l6zL513+LLGcpwVAD+fatHpP1
+   F966BKV9YYgjumbo3k/H0x4JNjEOhUg9c8WirtQBPCPj4D+5c7Y1t3EmO
+   n5dZevGjnkOe2fzDH8sFSywSf9ZQKJBdzhP81zu3kxfw2wnOoCpMgmatb
+   zwAXA5cHvZ9rXzLeF4rIKk32imkepLz9HAKlS4nG5hyirBZUdLnAogtol
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="352418864"
+X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
+   d="scan'208";a="352418864"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 06:50:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="771552147"
+X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
+   d="scan'208";a="771552147"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 30 May 2023 06:50:23 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q3zjy-0000aN-2p;
+        Tue, 30 May 2023 13:50:22 +0000
+Date:   Tue, 30 May 2023 21:50:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Evan Quan <evan.quan@amd.com>, rafael@kernel.org, lenb@kernel.org,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        kvalo@kernel.org, nbd@nbd.name, lorenzo@kernel.org,
+        ryder.lee@mediatek.com, shayne.chen@mediatek.com,
+        sean.wang@mediatek.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, Mario.Limonciello@amd.com,
+        Lijo.Lazar@amd.com
+Cc:     oe-kbuild-all@lists.linux.dev, ath12k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-acpi@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, ath11k@lists.infradead.org
+Subject: Re: [PATCH 8/9] drm/amd/pm: enable Wifi RFI mitigation feature
+ support for SMU13.0.0
+Message-ID: <202305302118.3mARqykY-lkp@intel.com>
+References: <20230530024227.2139632-9-evan.quan@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530024227.2139632-9-evan.quan@amd.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Evan,
 
-Hi,
+kernel test robot noticed the following build errors:
 
-Tidied up the typos. Thanks,
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on kvalo-ath/ath-next wireless-next/main wireless/main linus/master v6.4-rc4]
+[cannot apply to next-20230530]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> > +static int cxl_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
-> > +{
-> > +       struct cxl_pmu_info *info = hlist_entry_safe(node, struct cxl_pmu_info, node);
-> > +       unsigned int target;
-> > +
-> > +       if (info->on_cpu != cpu)
-> > +               return 0;
-> > +
-> > +       info->on_cpu = -1;
-> > +       target = cpumask_any_but(cpu_online_mask, cpu);
-> > +       if (target >= nr_cpu_ids) {
-> > +               dev_err(info->pmu.dev, "Unable to find a suitable CPU\n");
-> > +               return 0;
-> > +       }
-> > +
-> > +       perf_pmu_migrate_context(&info->pmu, cpu, target);
-> > +       info->on_cpu = target;
-> > +       /*
-> > +        * CPU HP lock is held so we should be guaranteed that this CPU hasn't yet
-> > +        * gone away.
-> > +        */
-> > +       WARN_ON(irq_set_affinity(info->irq, cpumask_of(target)));
-> > +
-> > +       return 0;
-> > +}  
-> 
-> IIUC a CXL PMU hardware (say cxl_pmu_mem0.0) is shared across
-> all CPUs and it would return the same value when read from any CPU,
-> right?
+url:    https://github.com/intel-lab-lkp/linux/commits/Evan-Quan/drivers-acpi-Add-support-for-Wifi-band-RF-mitigations/20230530-104541
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230530024227.2139632-9-evan.quan%40amd.com
+patch subject: [PATCH 8/9] drm/amd/pm: enable Wifi RFI mitigation feature support for SMU13.0.0
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230530/202305302118.3mARqykY-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8ecc361da81a0915bb626156b47403a91b678de1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Evan-Quan/drivers-acpi-Add-support-for-Wifi-band-RF-mitigations/20230530-104541
+        git checkout 8ecc361da81a0915bb626156b47403a91b678de1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-Correct, it will return the same value when used from any CPU.
-I'm not sure what issue you are indicating.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305302118.3mARqykY-lkp@intel.com/
 
-My understanding is that, even for such cases, perf uses percpu
-variables that mean we still have to ensure that the interrupt
-handling occurs on the CPU we have migrated the context to.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-There are a lot of similar driver in perf already from a quick
-git grep cpumask_any_but\(cpu_online_mask, 
+>> ERROR: modpost: "__umoddi3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+>> ERROR: modpost: "__udivdi3" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
 
-It might be nice to enable perf to operate for these devices without
-the percpu context though. I haven't looked into whether that
-is worth doing.
-
-Jonathan
-
-
-
-
-> 
-> Thanks,
-> Namhyung
-> 
-> 
-> > +
-> > +static __init int cxl_pmu_init(void)
-> > +{
-> > +       int rc;
-> > +
-> > +       rc = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN,
-> > +                                    "AP_PERF_CXL_PMU_ONLINE",
-> > +                                    cxl_pmu_online_cpu, cxl_pmu_offline_cpu);
-> > +       if (rc < 0)
-> > +               return rc;
-> > +       cxl_pmu_cpuhp_state_num = rc;
-> > +
-> > +       rc = cxl_driver_register(&cxl_pmu_driver);
-> > +       if (rc)
-> > +               cpuhp_remove_multi_state(cxl_pmu_cpuhp_state_num);
-> > +
-> > +       return rc;
-> > +}
-> > +
-> > +static __exit void cxl_pmu_exit(void)
-> > +{
-> > +       cxl_driver_unregister(&cxl_pmu_driver);
-> > +       cpuhp_remove_multi_state(cxl_pmu_cpuhp_state_num);
-> > +}
-> > +
-> > +MODULE_LICENSE("GPL");
-> > +MODULE_IMPORT_NS(CXL);
-> > +module_init(cxl_pmu_init);
-> > +module_exit(cxl_pmu_exit);
-> > +MODULE_ALIAS_CXL(CXL_DEVICE_PMU);
-> > --
-> > 2.39.2
-> >  
-> 
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
