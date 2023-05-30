@@ -2,129 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F3F7168F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B177168FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233330AbjE3QO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        id S233410AbjE3QPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjE3QOZ (ORCPT
+        with ESMTP id S233526AbjE3QPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:14:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD501BC
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:13:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685463124;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=elhjqE3fNBnQQxlIlFk7OLjzO9acLMNW6reIgAraQ64=;
-        b=Ceh2WZ0FofG0wtkOo7eq6ZGCaIym/J6Eq5XmN+9skgjbeX2Jn4wtpbQcCzHK2xIUNbNCMk
-        qX2ZqR6S4N1ZNdgyoTi0Z+mDayi2gtVETvzi5iKH392vK0vxKyfwAy+tKrrvi8FgzaR4Kq
-        /2eV5iYJ0AyYpQZZtTP4papmqocPshM=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-277-CZ64rvBZOSeGEeC02aH0DQ-1; Tue, 30 May 2023 12:12:03 -0400
-X-MC-Unique: CZ64rvBZOSeGEeC02aH0DQ-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30af00323b0so798850f8f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:12:03 -0700 (PDT)
+        Tue, 30 May 2023 12:15:14 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6A111B
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:14:30 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f6e68cc738so33292805e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:14:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685463268; x=1688055268;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=8E/XALJcqXkwZP5gRRQxOrP1E6GYgsvl1mdzFrPwoHs=;
+        b=j7m5TLNGHYPks/DB5NwpJEaJxEUZvnwmAKhmJYFtmqFeCgOHe8TS50IiAFQL2HcLgq
+         lM7rpvgWzLPAF2PY6LDDwM+Ga+MCp4PWHjlq7IoaCp0mQytpFLLwlWqJW04FEdagUmh1
+         5F5WPw8m/NgBWnJ7Nlj+Y6b95Qp2ZvzXWn9jVPme1qcq6vYBxnWUtONnLfZ/2sDty/i2
+         lI1Mz/lSVzybNmw7d+ig33KtqN4Tmb7TGgXwql9s0F86XgS906kfLIhMAmD3OiOoOZK4
+         9jJb5VblFBNf9mKmyd9FZKKovWKueEBnzstsZUeIWoH9XIp6thMxkGUc7GNJRDbPCIc2
+         JlPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685463122; x=1688055122;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1685463268; x=1688055268;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=elhjqE3fNBnQQxlIlFk7OLjzO9acLMNW6reIgAraQ64=;
-        b=FGrRnPG7Nx2J7AGewqkn/TopGjY6yfLqQ9wyOVnMfyeqSvc581Kvxu3XHezbxVi1Qf
-         245SB/CHiBJzTJji9O6T5vEJuPFYx1EYUc5RkRtuWL+psxTjauWrhElLYdDvmi/xws1X
-         oBBZzm67P59mcBEDV/EtmDZnkmJxONhQ46gI/L63O0Iz57u2vRHFvaaXaXSO6Hak+ueF
-         oYskXcyJVydYsiRq5UXgAJ6QLixkKT03hwlSs7sbmLgzivUgqxaRNmo9BoKS5ZtV84t2
-         +sHX9haVpIR23tcryAw5TPYL3zYg1QxL8JltryjQ+QPvkOabYaA/YV6q85PxTJ9a48gh
-         67eQ==
-X-Gm-Message-State: AC+VfDxFM7PBBys1hh6ajxBLQ1qdddiqPU0NzjeHWIDkRUO+zHJs3NR0
-        4T1BMzpcAMzJdgvS2VHg4MjzvJHYlxXFXYw6AQXHG2S8FStpLWwNT8daHhX82D32rZrcPIsd6Ry
-        X8psAd80GExX+0IMKnixY1xHn
-X-Received: by 2002:a5d:5909:0:b0:309:4e64:7a28 with SMTP id v9-20020a5d5909000000b003094e647a28mr2029560wrd.49.1685463122245;
-        Tue, 30 May 2023 09:12:02 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ76yj+cHMYLKtEr2159YgsXI3xWTpZbjGYKy+isWK8mqhybl41e+higOqGxCzQ6/lC2tHLEZQ==
-X-Received: by 2002:a5d:5909:0:b0:309:4e64:7a28 with SMTP id v9-20020a5d5909000000b003094e647a28mr2029549wrd.49.1685463121984;
-        Tue, 30 May 2023 09:12:01 -0700 (PDT)
-Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
-        by smtp.gmail.com with ESMTPSA id l9-20020adfe589000000b00307c8d6b4a0sm3781887wrm.26.2023.05.30.09.12.00
+        bh=8E/XALJcqXkwZP5gRRQxOrP1E6GYgsvl1mdzFrPwoHs=;
+        b=IqydsypsqzqqCb0tq+Idnfv2EWfRTNB8KCciRn00KA7i2XfNccJgvZf0dK1nWM6QQf
+         LCEqJIkAQ2j80k/yNTDz3DxITV0KxB0oTMbt/TkJq+J0578OLFaaTXPM84aw+m2cLC8p
+         og7eAxofvcUVM184zu5FC38YC2ZDUotYjDER6aof2RQkaqJ8aoK0SR08Qqm4/T7j79zu
+         8yiRH2l1he0It/KQuBFimYElxJyPstk+ILsH/BvW/0flm1WBBXmtH5gzDEm4UMspJceF
+         BdoFisT/XqgS+u/MokyxsbyqRjt3pSsAS6vliRXyt1iMBc4zHyLx8UYF8is2B0H9AgKl
+         NHIw==
+X-Gm-Message-State: AC+VfDwr/XQHlFoU/V3kIrwKj/U8YuWFagrSYYz5aaH2WuiQOOBSza0N
+        K3zPydTpdNhBKXC9g/vbpigkpg==
+X-Google-Smtp-Source: ACHHUZ6WWApvC/NMBiE72EVqrmA/84lk/cV8yiAqD8+jVocG4E4+KuL2cR+91Sc1Wzm58YlqYiG3DQ==
+X-Received: by 2002:a05:600c:2214:b0:3f6:2d8:4823 with SMTP id z20-20020a05600c221400b003f602d84823mr2080466wml.3.1685463268024;
+        Tue, 30 May 2023 09:14:28 -0700 (PDT)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id 8-20020a05600c024800b003f4e8530696sm17729719wmj.46.2023.05.30.09.14.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 09:12:01 -0700 (PDT)
-Date:   Tue, 30 May 2023 18:11:58 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        syzbot <syzbot+d0d442c22fa8db45ff0e@syzkaller.appspotmail.com>,
-        jasowang@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org, stefanha@redhat.com
-Subject: Re: [syzbot] [kvm?] [net?] [virt?] general protection fault in
- vhost_work_queue
-Message-ID: <4opfq7hcowqwmz2hzpfcu3icx3z6ce4vmn6pkaeeqxnclgvjd6@x7lyji2owgae>
-References: <0000000000001777f605fce42c5f@google.com>
- <20230530072310-mutt-send-email-mst@kernel.org>
- <CAGxU2F7O7ef3mdvNXtiC0VtWiS2DMnoiGwSR=Z6SWbzqcrBF-g@mail.gmail.com>
- <85836a9b-b30a-bdb6-d058-1f7c17d8e48e@oracle.com>
- <c87f0768-027b-c192-1baf-05273aac382b@oracle.com>
+        Tue, 30 May 2023 09:14:27 -0700 (PDT)
+References: <20230517133309.9874-1-ddrokosov@sberdevices.ru>
+User-agent: mu4e 1.8.13; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        neil.armstrong@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        martin.blumenstingl@googlemail.com
+Cc:     jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v15 0/6] add Amlogic A1 clock controller drivers
+Date:   Tue, 30 May 2023 18:14:01 +0200
+In-reply-to: <20230517133309.9874-1-ddrokosov@sberdevices.ru>
+Message-ID: <1jilc94x0d.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <c87f0768-027b-c192-1baf-05273aac382b@oracle.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 11:01:11AM -0500, Mike Christie wrote:
->On 5/30/23 10:58 AM, Mike Christie wrote:
->> On 5/30/23 8:44 AM, Stefano Garzarella wrote:
->>>
->>> From a first glance, it looks like an issue when we call vhost_work_queue().
->>> @Mike, does that ring any bells since you recently looked at that code?
->>
->> I see the bug. needed to have set the dev->worker after setting worker->vtsk
 
-Yes, I came to the same conclusion (see my email sent at the same time
-:-).
+On Wed 17 May 2023 at 16:33, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
 
->> like below:
->>
->>
->> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
->> index a92af08e7864..7bd95984a501 100644
->> --- a/drivers/vhost/vhost.c
->> +++ b/drivers/vhost/vhost.c
->> @@ -564,7 +564,6 @@ static int vhost_worker_create(struct vhost_dev *dev)
->>  	if (!worker)
->>  		return -ENOMEM;
->>
->> -	dev->worker = worker;
->>  	worker->kcov_handle = kcov_common_handle();
->>  	init_llist_head(&worker->work_list);
->>  	snprintf(name, sizeof(name), "vhost-%d", current->pid);
->> @@ -576,6 +575,7 @@ static int vhost_worker_create(struct vhost_dev *dev)
->>  	}
->>
->>  	worker->vtsk = vtsk;
+> A1 SoC has four clock controllers on the board: PLL, Peripherals, CPU,
+> and Audio. The audio clock controller is different from others, but the
+> rest are very similar from a functional and regmap point of view.
+> This patch series add support for Amlogic A1 PLL and Peripherals clock
+> drivers.
+> It blocks all A1 peripherals mainline support and a couple of patch series,
+> which were already reviewed and acked, but weren't merged due to pending
+> clock controller drivers series, e.g.
+> https://lore.kernel.org/all/20230418111612.19479-1-ddrokosov@sberdevices.ru/
 >
->Shoot, oh wait, I think I needed a smp_wmb to always make sure worker->vtask
->is set before dev->worker or vhost_work_queue could still end up seeing
->dev->worker set before worker->vtsk right?
+> TODO: CPU and Audio clock controllers are not included in this patch
+> series, it will be sent later. The following clks from these controllers
+> are not supported for now:
+> * Audio clks - vad, mclk_vad, mclk_d, resample_a, locker_in, mclk_b,
+>    pdmdclk, pdmsysclk, eqdrc, spdifin, mclk_a, audio2_toaudiotop,
+>    audio2_tovad, audio2_toddr_vad, audio2_tdmin_vad, audio2_pdm,
+>    audio2_ddr_arb, audio_audiolocker, audio_eqdrc, audio_resamplea,
+>    audio_spdifin, audio_toddrb, audio_toddra, audio_frddrb, audio_frddra,
+>    audio_tdmoutb, audio_tdmouta, audio_loopbacka, audio_tdminlb,
+>    audio_tdminb, audio_tdmina, audio_ddr_arb, mclk_c
+>
+> * CPU clks: cpu_fixed_source_sel0, cpu_fixed_source_div0,
+>             cpu_fixed_source_sel1, cpu_fixed_source_div1, cpu_clk
+>
+> Validation:
+> * to double check all clk flags run below helper script:
+>     pushd /sys/kernel/debug/clk
+>     for f in *; do
+>         if [[ -f "$f/clk_flags" ]]; then
+>             flags="$(cat $f/clk_flags | awk '{$1=$1};1' | sed ':a;N;$!ba;s/\n/ | /g')"
+>             echo -e "$f: $flags"
+>         fi
+>     done
+>     popd
+>
+> * to trace current clks state use '/sys/kernel/debug/clk/clk_dump' node
+>   with jq post-processing:
+>     $ cat /sys/kernel/debug/clk/clk_dump | jq '.' > clk_dump.json
+>
+> * to debug clk rate propagation, compile kernel with the following
+>   definition:
+>     $ sed -i "s/undef CLOCK_ALLOW_WRITE_DEBUGFS/define CLOCK_ALLOW_WRITE_DEBUGFS/g" drivers/clk/clk.c
+>   after that, clk_rate debug node for each clock will be available for
+>   write operation
+>
 
-But should we pair smp_wmb() with an smp_rmb() wherever we check 
-dev->worker?
-
-Thanks,
-Stefano
-
+Applied, Thx
