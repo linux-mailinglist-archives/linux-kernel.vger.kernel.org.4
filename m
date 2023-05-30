@@ -2,101 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 547BA71584D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD33715851
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjE3IWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
+        id S229871AbjE3IWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 04:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbjE3IWB (ORCPT
+        with ESMTP id S229981AbjE3IWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 04:22:01 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593C2F7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:21:56 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7749ceb342fso605957139f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:21:56 -0700 (PDT)
+        Tue, 30 May 2023 04:22:48 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CFFA8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:22:46 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51491b87565so5232703a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:22:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685434965; x=1688026965;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B/06GITGnCR0InunQ97FoRRag82uonE7bPllWWYnN1M=;
+        b=U1TazgPBw5tN1EoHoX2aYS+f7yuRJQmgbSX8Faf0Bl+3Aen9PgAwjj/0rmvY9/jx/V
+         wxUIl2QoR9bQBNWCOFoGRZvur5o8ChrHMf5YTCBx7BSdQyb7i0mCLSc6Hvu1ROVnMOmR
+         qVL+77W7bRowiTu0GS4l1gbrykcmPub1l5cyvgiwp9qlcZkVHMv2glUWHW3XveLtjIbM
+         RzxBtF+OaPNpCMPPq8+YGn2mdyLtvUriEkuiTO9c+PqnSpUy80yLpaEWwgUBYIh2mEMA
+         m4Bfen7IRj2WfC0fXuHiXESe875Pr9nt/Neqkv41FZRzwKmqOGNKNFZKnTyBMO1nZe9J
+         lgZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685434915; x=1688026915;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H0PjtfHgEkkTfBjwGwBOt6JzxiRldvCH/yMO3ajZeos=;
-        b=Qw7Vnw7xPZtF6nCH6Gpv3f9dO++ygq3nqESExbjj2Lan8PeAnuMt8nMbaQRktBJwam
-         thuMh2QkaExE4bhZ4iwUhGzCIWhRPtPudQhp16y9SQE6Q5JGU6pD5Mt/DkEj4czwtvfq
-         8ZqxMYdRJz90g0P0826el0wrLXfCrw/F0GNiBu9HwlymbXocuU3wSAVhEpuMp+2lVcM8
-         vFSxIApbFnxXUAkVv7ugorFzjAt+ravJdwRwZvdrx/e8aEZ+9qvWR71h8v3qFmaBjUJx
-         TiiowD/2yCIrLzWMIazlvecrIhvgXJh+PLgJ3y64eAkEza7OkYKc5z7vKZB53PdV6zfz
-         +k2Q==
-X-Gm-Message-State: AC+VfDw00iCni7rizl3KPYGd38QBafJdpFAH+Rt/iGXvq4l7WSdMF4tM
-        3SAUGOUD5ljyLd+B17cFMpuV1aA5eSr4pqAjqROR5895GdHx
-X-Google-Smtp-Source: ACHHUZ523Nj7XJucoxcSG183lHb6UxLEmuDyK5jix5/bojPX6Kye3v5XAcW4PsK+YYQHIn3cwDhIjvbzc+E9MMj6421BV1wT0zGX
+        d=1e100.net; s=20221208; t=1685434965; x=1688026965;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B/06GITGnCR0InunQ97FoRRag82uonE7bPllWWYnN1M=;
+        b=TuCDA3ogy4vmeFTN8q+5TR1ysN9BFNMXTQxwOYISPPbU+hwwraHVGsWbE6Y5ypMb4B
+         WvibRGjlzuxbr4ZVqeqHiHiXP9s0+BoPd62x/UuxFXB5eMTDUV6vaYbPW1C7FYbYSZ5D
+         xHIJ6s8OepEQk6O+TBfK9zIeMbBQQpdhvEJlIXbKjGYwfxwjeAJOXvG/aDaSBr6WHHYZ
+         z/LXj3OTCcWouf6AmnAPG/8gnUGrtZOuTCv1HSZATRlLCk7s5Lao1GCt+0Z8Sgbu5aPf
+         1Mv0/6HHNa3wGTSA7LmOF7wUcvgq2DLpEvHttsVhu6CRH5IVSRIK8oJtwaFTN8wvgfBZ
+         39rg==
+X-Gm-Message-State: AC+VfDzZNCwOByUUlr3MC/+I9MhijAEdnDJA9uJ9jlxPSgjrGLnEnBR7
+        nQb+9mO68tzZbNBDCl8diML4Yg==
+X-Google-Smtp-Source: ACHHUZ75GDAqupUSVPJ5Aas4ogi42LerslQkAQXJPqBERjGGYbWLC0fwnXvjKlihSB0tFyOdHnUbNQ==
+X-Received: by 2002:a17:907:3da0:b0:974:1e0e:9bd3 with SMTP id he32-20020a1709073da000b009741e0e9bd3mr1622046ejc.23.1685434964999;
+        Tue, 30 May 2023 01:22:44 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id cf6-20020a170906b2c600b0096f272206b3sm6949583ejb.125.2023.05.30.01.22.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 01:22:44 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Artur Weber <aweber.kernel@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH 0/3] ARM: dts: samsung: Fix some typos in comments
+Date:   Tue, 30 May 2023 10:22:36 +0200
+Message-Id: <168543493680.14409.2040056469867223710.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230519190625.7844-1-aweber.kernel@gmail.com>
+References: <20230519190625.7844-1-aweber.kernel@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:298b:0:b0:40b:d54d:e5bf with SMTP id
- p133-20020a02298b000000b0040bd54de5bfmr778529jap.1.1685434915708; Tue, 30 May
- 2023 01:21:55 -0700 (PDT)
-Date:   Tue, 30 May 2023 01:21:55 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000716a8005fce4e592@google.com>
-Subject: [syzbot] Monthly btrfs report (May 2023)
-From:   syzbot <syzbot+list3e0431ddab075345f512@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello btrfs maintainers/developers,
 
-This is a 31-day syzbot report for the btrfs subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/btrfs
+On Fri, 19 May 2023 21:06:22 +0200, Artur Weber wrote:
+> Change 'specfic' to 'specific', 'optiosn' to 'options' and remove
+> duplicated 'are listed' in DTSI heading comments. While we're at it,
+> fix the s5pv210-pinctrl.dtsi header (seems like it was copied out of
+> the main DTSI file and never changed to match the new contents).
+> 
+> This patch has been split off from a patch in a separate series:
+> "[PATCH v3 11/13] ARM: dts: exynos: Fix some typos in comments"
+> https://lore.kernel.org/all/20230501195525.6268-12-aweber.kernel@gmail.com/
+> It has been split into 3 separate commits: one for Exynos chips,
+> one for s3c64xx and one for s5pv210.
+> 
+> [...]
 
-During the period, 5 new issues were detected and 1 were fixed.
-In total, 52 issues are still open and 26 have been fixed so far.
+Applied, thanks!
 
-Some of the still happening issues:
+[1/3] ARM: dts: exynos: Fix some typos in comments
+      https://git.kernel.org/krzk/linux/c/2f6905307a7bb998e819c03097f3cc54a51b015a
+[2/3] ARM: dts: s3c64xx: Fix some typos in comments
+      https://git.kernel.org/krzk/linux/c/316c31fba6eda4543d5e234b13d0c0605a83a643
+[3/3] ARM: dts: s5pv210: Fix typo in comments, fix pinctrl header
+      https://git.kernel.org/krzk/linux/c/6a988251c4e53da33107c1975f578904c0635b43
 
-Ref  Crashes Repro Title
-<1>  2986    Yes   kernel BUG in close_ctree
-                   https://syzkaller.appspot.com/bug?extid=2665d678fffcc4608e18
-<2>  677     Yes   VFS: Busy inodes after unmount (use-after-free)
-                   https://syzkaller.appspot.com/bug?extid=0af00f6a2cba2058b5db
-<3>  424     Yes   WARNING in __kernel_write_iter
-                   https://syzkaller.appspot.com/bug?extid=12e098239d20385264d3
-<4>  381     Yes   WARNING in btrfs_space_info_update_bytes_may_use
-                   https://syzkaller.appspot.com/bug?extid=8edfa01e46fd9fe3fbfb
-<5>  370     Yes   WARNING in btrfs_block_rsv_release
-                   https://syzkaller.appspot.com/bug?extid=dde7e853812ed57835ea
-<6>  193     Yes   WARNING in btrfs_remove_chunk
-                   https://syzkaller.appspot.com/bug?extid=e8582cc16881ec70a430
-<7>  191     Yes   WARNING in lookup_inline_extent_backref
-                   https://syzkaller.appspot.com/bug?extid=d6f9ff86c1d804ba2bc6
-<8>  189     Yes   WARNING in btrfs_chunk_alloc
-                   https://syzkaller.appspot.com/bug?extid=e8e56d5d31d38b5b47e7
-<9>  184     Yes   possible deadlock in btrfs_search_slot
-                   https://syzkaller.appspot.com/bug?extid=c06034aecf9f5eab1ac1
-<10> 151     Yes   kernel BUG in assertfail (2)
-                   https://syzkaller.appspot.com/bug?extid=c4614eae20a166c25bf0
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
