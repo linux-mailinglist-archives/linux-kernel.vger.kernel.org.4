@@ -2,227 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B4471614C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A700871613F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232578AbjE3NP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
+        id S231875AbjE3NOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232257AbjE3NP0 (ORCPT
+        with ESMTP id S232257AbjE3NOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:15:26 -0400
-Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC00A9C;
-        Tue, 30 May 2023 06:15:14 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1685452428tef2npwh
-Received: from localhost.localdomain ( [58.249.112.22])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 21:13:42 +0800 (CST)
-X-QQ-SSF: 01400000000000B0F000000A0000000
-X-QQ-FEAT: ILHsT53NKPgG+5rRPjqiuO3evje0npZ48HLQI9v8/GFZq0JxmwEJsZV091sRy
-        k4YIQzV9hPHcrHZSkwQLnYthg21UXwn6Wg6dLjKk6jt9ezYcLk0dvcVtpIB+gnowa4aAzOu
-        ofNirvBB0jkoxPV4sziz3ZprZgJnNPrdpIsVFEH/MNhCC3N2KnHWV9V+2cAWzBSLLxVAK8w
-        IgF6xUhnjj/ywTdOCoAuc8mUi4Hyg9UNE304g0GYSCIuq38QFiKeJt2yzElsQJPGfRJsTTO
-        pX0cMJeI9cV0g1WIa18A5++/izIp8RSxieXh4AtinS27DAbP98Q0JPyx1oJjqkBUsq2y4n9
-        3RYscFVahYQRgA7dmgBtM+DRu6+LwRjQWNd6CAEyQ0VGFz9bG+c5FzN4xAxUjGfCK/vvzR8
-        FvWF+XsK/fE=
-X-QQ-GoodBg: 2
-X-BIZMAIL-ID: 5297864074693950859
-From:   Shang Ye <yesh25@mail2.sysu.edu.cn>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Shang Ye <yesh25@mail2.sysu.edu.cn>,
-        Bernhard Kaindl <bernhard.kaindl@cloud.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] Input: atkbd - allow skipping the check of keyboard ID when probing
-Date:   Tue, 30 May 2023 21:13:40 +0800
-Message-Id: <20230530131340.39961-1-yesh25@mail2.sysu.edu.cn>
-X-Mailer: git-send-email 2.40.1
+        Tue, 30 May 2023 09:14:12 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::600])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C993A92;
+        Tue, 30 May 2023 06:14:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VdxJ0aK1sRg1mX4iKnCcOwBkHWdh+F+DEsoHmcorT+K2z0mzlFX1hgOSRzszkZz9FlBGtNkQ2aO7qUWhXsXkkaxcthPF2nhpOJWRgR9rvsJZpAur0X2BNOWW7HXAoUoBNWGXN4k6HHNfIInzEBzMUud5FiSBovbXPdIIZt9ZV4mdCTjXymdrEIoCDnC1sJYsjSm+kjNrG/ku33A+JhUK9d8Qr4wi6+HaT4iCmuNlA0f/iaj7cp9wmLSoQmDg/yLVhGw5VV8IJ7DVHrjz+ww8g9iBlGn2SvdmsQ7FEVkp0PFRJ+0qxYGwNHCXVrBbA4GApQ56gWUbobhXQW9gc5c8jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bzR0cKvRJ+9aZlXCu9vMzM/3LW3j3cxBH8VFBkp3cbQ=;
+ b=CdeVN2aUH6/2L/43jBF+dBVqj8/MZCjJ2nss6+5L10hcC/YF5yqCQU7IK4uKHEqgof8ed6NguYIsSXU5W3len8sLfb5uiyjnpm9IkWeRAOEW48pDmjZBaDtdTbFiTBOn9H50a3BucCMZOouKLqSkskcBmgOr0M6BfHzOg+PtavoMSr7N0XuXiybIBX953AwT29RhoRm3f5Zy2t4jbufeioWDqvHQsbgrOuo52s1zAALn3DFOri2pX4IcNpIMlqa2eosnHdJsOwEqIYKoNnqI6JZv2NnfuI6rRyv1OizGhuvLK/yKi6bgJQZ6b5RN6Zzqdp2EUtmOIiQDp25iaMYP7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bzR0cKvRJ+9aZlXCu9vMzM/3LW3j3cxBH8VFBkp3cbQ=;
+ b=Gz7eXxP+qSHVZu/gM/bCpsIqMd2S4OmNc8v25Sjq/J6qejN9BSy7srGyzzC1xB4FEzFDcxlvSwfc4o59ow4IptHWA42TNGE2qcC95RVXkPhJNeI69su+JkbUVHkvCY6uQw2s69tEkbuehbHeJefkciV0eZPTztzYsb25rrooCJE=
+Received: from MW4PR03CA0003.namprd03.prod.outlook.com (2603:10b6:303:8f::8)
+ by CYYPR12MB8750.namprd12.prod.outlook.com (2603:10b6:930:be::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Tue, 30 May
+ 2023 13:14:06 +0000
+Received: from CO1NAM11FT042.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8f:cafe::64) by MW4PR03CA0003.outlook.office365.com
+ (2603:10b6:303:8f::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23 via Frontend
+ Transport; Tue, 30 May 2023 13:14:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT042.mail.protection.outlook.com (10.13.174.250) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6455.22 via Frontend Transport; Tue, 30 May 2023 13:14:06 +0000
+Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 30 May
+ 2023 08:14:02 -0500
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     <ray.huang@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC:     <Mario.Limonciello@amd.com>, <Perry.Yuan@amd.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Wyes Karny <wyes.karny@amd.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>
+Subject: [PATCH v2] cpufreq/amd-pstate: Write CPPC enable bit per-socket
+Date:   Tue, 30 May 2023 13:13:48 +0000
+Message-ID: <20230530131348.4135-1-wyes.karny@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:mail2.sysu.edu.cn:qybglogicsvrsz:qybglogicsvrsz3a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT042:EE_|CYYPR12MB8750:EE_
+X-MS-Office365-Filtering-Correlation-Id: fbd8be1e-0981-4ed7-9d35-08db610fbf66
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 11pBRTSqjQPXKeQQ14mjL5of9Zp/5QJlE4WOhmHiw9Wa+Ixa2oIQWNNfc/N+oXnqRH6nVA/zfiKLgLOnffUStabcCGWs6U5XdPPjjZQhjs1hEUPrcVDgK4/EzL0rL61J1fioupXjpS7mPNPgrEpPVREQ1gtOs7oCUpliG9W/8RqqgjirtjLa4hZKu8isu06xr128uTOcX5UxixlRkWfH1lPoS9WRyT09mC8lyGqnLAthF6GLMndDc9z+8l1WN76mboFAoHB3nWCZEK8oGeCApb+WskaX0FFdwQqKRkSf1d1SshRKHLCSQMnvNnurWW4hI0l7JRU5jPmEExLUNLzm14gBxrndKLpcF4gJCpQ2eWXsHFxP53GEwjYqo6JSD5xMdGGvCglqJmTVGW686tZZoeKGAnjOBoXy7JogOVpaO9NgdOA6HP9REETGVNIVbaP/boAtzXsXx2CAyK0qcMUwU1peTJV0rz/vmQPwHEqpBvuI030An/cBLC753Rg3oFbmpTB0EXhivH37TANdrYS9it/S/LppooNzF9yKR5aLXewVEI/wmlk80f0IAV1XG7CGZ8ZkJugSvdC3Ug/5vRPvyTSt0MmLe28xWZaQTjPCo0hyDLyfc8IVQMjh58JmkGIAYtWb4MJabZlAM/tW3J3qGvOjYRJgdf3XT+BI8FX3GIfe/w6xZPDSZjokck+7QE3WeYLWlTDRNtR1SNBWUQdvwjnoLR8MCzs9Y3C4dtVUORB7Sov1xs7GrOQbywoqxaM30k7J9/MQYrinwV9r1Q+dbkNFsge1j9bwQmwcROGAGEA=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(346002)(136003)(451199021)(46966006)(40470700004)(36840700001)(356005)(1076003)(316002)(82310400005)(44832011)(81166007)(186003)(16526019)(7696005)(40480700001)(82740400003)(8676002)(8936002)(41300700001)(40460700003)(6666004)(26005)(5660300002)(47076005)(83380400001)(36756003)(36860700001)(4326008)(70206006)(70586007)(110136005)(54906003)(2906002)(2616005)(86362001)(336012)(478600001)(426003)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 13:14:06.5227
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fbd8be1e-0981-4ed7-9d35-08db610fbf66
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT042.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8750
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There have been several reports about keyboard not working on 9 types of
-Lenovo Yoga / XiaoXinPro / IdeaPad (14", Intel) laptops. Here is a dmesg
-log that illustrates the problem on a Yoga 14sIHU 2021:
-https://gist.github.com/yescallop/5a97d010f226172fafab0933ce8ea8af
+Currently amd_pstate sets CPPC enable bit in MSR_AMD_CPPC_ENABLE only
+for the CPU where the module_init happened. But MSR_AMD_CPPC_ENABLE is
+per-socket. This causes CPPC enable bit to set for only one socket for
+servers with more than one physical packages. To fix this write
+MSR_AMD_CPPC_ENABLE per-socket.
 
-At first the KBD port was successfully set up by `i8042`, but then the
-first initialization attempt by `atkbd` failed:
+Also, handle duplicate calls for cppc_enable, because it's called from
+per-policy/per-core callbacks and can result in duplicate MSR writes.
 
-    [    2.698474] i8042: [17] f2 -> i8042 (kbd-data)
-    [    2.698678] i8042: [17] fa <- i8042 (interrupt, 0, 1)
-    [    2.698746] i8042: [17] 83 <- i8042 (interrupt, 0, 1)
-    [    2.698767] i8042: [17] 60 -> i8042 (command)
-    [    2.698856] i8042: [17] 66 -> i8042 (parameter)
-    [    2.698951] i8042: [17] 60 -> i8042 (command)
-    [    2.699092] i8042: [17] 67 -> i8042 (parameter)
+Before the fix:
+amd@amd:~$ sudo rdmsr -a 0xc00102b1 | uniq --count
+	192 0
+    192 1
 
-It seems that the i8042 implementation on the laptop omitted the byte
-0xab from its response to the Get ID command, thus making atkbd_probe()
-fail on receiving an invalid keyboard ID (should normally be 0xab83).
+After the fix:
+amd@amd:~$ sudo rdmsr -a 0xc00102b1 | uniq --count
+    384 1
 
-This situation went on for a few rounds when I pressed and released the
-space key (scan code: 0x39 when pressed, 0xb9 when released). The sixth
-time I pressed the space key, something different happened:
-
-    [   48.188540] i8042: [13664] 39 <- i8042 (interrupt, 0, 1)
-    [   48.188658] i8042: [13664] f2 -> i8042 (kbd-data)
-    [   48.188998] i8042: [13664] fa <- i8042 (interrupt, 0, 1)
-    [   48.709743] i8042: [13821] ed -> i8042 (kbd-data)
-    [   48.913069] i8042: [13882] 60 -> i8042 (command)
-    [   48.913235] i8042: [13882] 66 -> i8042 (parameter)
-    [   48.913446] i8042: [13882] 60 -> i8042 (command)
-    [   48.913591] i8042: [13882] 67 -> i8042 (parameter)
-    [   48.913672] i8042: [13882] fa <- i8042 (interrupt, 0, 0)
-
-This time even the byte 0x83 was omitted, so the Get ID command failed
-and atkbd_probe() tried to set the LEDs on the keyboard, but failed
-again for not receiving an ACK to the command byte 0xed. However, when
-i8042_port_close() was later called, an ACK was read from the KBD port,
-which indicates that the i8042 implementation might have failed to raise
-an interrupt for this ACK.
-
-And the next time I released the space key, the byte 0x83 was omitted
-again, but atkbd_probe() somehow succeeded in receiving an ACK to the
-Set LEDs command, and the keyboard was finally initialized properly.
-
-Until now, the only workaround is to boot with the kernel parameter
-`i8042.dumbkbd`, which isn't very desirable as it disables the Caps Lock
-LED. I have considered an alternative, generic fix that involves
-flushing the keyboard buffer immediately after the Get ID command and
-trying to set the LEDs even if the keyboard ID is invalid. This worked
-on my laptop at least, but I really doubt that it won't cause any
-regressions.
-
-This patch adds a kernel parameter `atkbd.skip_id_check` that, when
-enabled, skip the check of keyboard ID when probing and try to set the
-LEDs directly, and adds quirks that enable the parameter by default on
-`82NC` and `82TK` models, as these are the only models on which the
-patch was tested to work.
-
-Part of the patch is based on Bernhard's initial work.
-
-Link: https://lore.kernel.org/linux-input/A3D566C5B262EC0F+4ede8371-9a20-6e5d-6a8c-b44d15634e26@mail2.sysu.edu.cn/
-Cc: Bernhard Kaindl <bernhard.kaindl@cloud.com>
-Reported-by: Bernhard Kaindl <bernhard.kaindl@cloud.com>
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=216994
-Signed-off-by: Shang Ye <yesh25@mail2.sysu.edu.cn>
+Suggested-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+Signed-off-by: Wyes Karny <wyes.karny@amd.com>
 ---
-V1 -> V2: Added kernel parameter and removed untested models
+v1 -> v2:
+- Made CPPC enable read/write per-socket
 
- .../admin-guide/kernel-parameters.txt         |  3 ++
- drivers/input/keyboard/atkbd.c                | 49 +++++++++++++++++--
- 2 files changed, 48 insertions(+), 4 deletions(-)
+ drivers/cpufreq/amd-pstate.c | 28 +++++++++++++++++++++++++++-
+ 1 file changed, 27 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 6221a1d057dd..2a679a81e6fa 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -421,6 +421,9 @@
- 	atkbd.scroll=	[HW] Enable scroll wheel on MS Office and similar
- 			keyboards
- 
-+	atkbd.skip_id_check=
-+			[HW] Skip the check of keyboard ID when probing
-+
- 	atkbd.softraw=	[HW] Choose between synthetic and real raw mode
- 			Format: <bool> (0 = real, 1 = synthetic (default))
- 
-diff --git a/drivers/input/keyboard/atkbd.c b/drivers/input/keyboard/atkbd.c
-index c92e544c792d..daf5a1821c42 100644
---- a/drivers/input/keyboard/atkbd.c
-+++ b/drivers/input/keyboard/atkbd.c
-@@ -65,6 +65,10 @@ static bool atkbd_terminal;
- module_param_named(terminal, atkbd_terminal, bool, 0);
- MODULE_PARM_DESC(terminal, "Enable break codes on an IBM Terminal keyboard connected via AT/PS2");
- 
-+static bool atkbd_skip_id_check;
-+module_param_named(skip_id_check, atkbd_skip_id_check, bool, 0);
-+MODULE_PARM_DESC(skip_id_check, "Skip the check of keyboard ID when probing");
-+
- #define SCANCODE(keymap)	((keymap >> 16) & 0xFFFF)
- #define KEYCODE(keymap)		(keymap & 0xFFFF)
- 
-@@ -794,12 +798,12 @@ static int atkbd_probe(struct atkbd *atkbd)
-  */
- 
- 	param[0] = param[1] = 0xa5;	/* initialize with invalid values */
--	if (ps2_command(ps2dev, param, ATKBD_CMD_GETID)) {
-+	if (atkbd_skip_id_check || ps2_command(ps2dev, param, ATKBD_CMD_GETID)) {
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 5a3d4aa0f45a..45b9e359f638 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -63,6 +63,7 @@ static struct cpufreq_driver *current_pstate_driver;
+ static struct cpufreq_driver amd_pstate_driver;
+ static struct cpufreq_driver amd_pstate_epp_driver;
+ static int cppc_state = AMD_PSTATE_DISABLE;
++static bool cppc_enabled;
  
  /*
-- * If the get ID command failed, we check if we can at least set the LEDs on
-- * the keyboard. This should work on every keyboard out there. It also turns
-- * the LEDs off, which we want anyway.
-+ * If the Get ID command failed or is skipped, we check if we can at least set
-+ * the LEDs on the keyboard. This should work on every keyboard out there. It
-+ * also turns the LEDs off, which we want anyway.
-  */
- 		param[0] = 0;
- 		if (ps2_command(ps2dev, param, ATKBD_CMD_SETLEDS))
-@@ -1751,6 +1755,12 @@ static int __init atkbd_deactivate_fixup(const struct dmi_system_id *id)
- 	return 1;
+  * AMD Energy Preference Performance (EPP)
+@@ -228,7 +229,28 @@ static int amd_pstate_set_energy_pref_index(struct amd_cpudata *cpudata,
+ 
+ static inline int pstate_enable(bool enable)
+ {
+-	return wrmsrl_safe(MSR_AMD_CPPC_ENABLE, enable);
++	int ret, cpu;
++	unsigned long logical_proc_id_mask = 0;
++
++	if (enable == cppc_enabled)
++		return 0;
++
++	for_each_present_cpu(cpu) {
++		unsigned long logical_id = topology_logical_die_id(cpu);
++
++		if (test_bit(logical_id, &logical_proc_id_mask))
++			continue;
++
++		set_bit(logical_id, &logical_proc_id_mask);
++
++		ret = wrmsrl_safe_on_cpu(cpu, MSR_AMD_CPPC_ENABLE,
++				enable);
++		if (ret)
++			return ret;
++	}
++
++	cppc_enabled = enable;
++	return 0;
  }
  
-+static int __init atkbd_id_check_fixup(const struct dmi_system_id *id)
-+{
-+	atkbd_skip_id_check = true;
-+	return 1;
-+}
-+
- /*
-  * NOTE: do not add any more "force release" quirks to this table.  The
-  * task of adjusting list of keys that should be "released" automatically
-@@ -1900,6 +1910,37 @@ static const struct dmi_system_id atkbd_dmi_quirk_table[] __initconst = {
- 		},
- 		.callback = atkbd_deactivate_fixup,
- 	},
-+	/*
-+	 * Some laptops have erroneous i8042 implementations that may randomly
-+	 * omit interrupts and/or bytes in response to the Get ID command and
-+	 * then cause atkbd_probe() to fail on receiving an invalid ID, or on
-+	 * receiving no ID and then no ACK to the consequent Set LEDs command.
-+	 * For this reason, we simply skip the Get ID command on these laptops
-+	 * to avoid any potential issues.
-+	 */
-+	{
-+		/*
-+		 * Lenovo Yoga 14sIHU 2021
-+		 * Lenovo XiaoXinPro 14IHU 2021
-+		 * Lenovo Yoga Slim 7 Pro 14IHU5
-+		 */
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "82NC"),
-+		},
-+		.callback = atkbd_id_check_fixup,
-+	},
-+	{
-+		/*
-+		 * Lenovo Yoga Pro 14s IAH7
-+		 * Lenovo Yoga Slim 7 ProX 14IAH7
-+		 */
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "82TK"),
-+		},
-+		.callback = atkbd_id_check_fixup,
-+	},
- 	{ }
- };
+ static int cppc_enable(bool enable)
+@@ -236,6 +258,9 @@ static int cppc_enable(bool enable)
+ 	int cpu, ret = 0;
+ 	struct cppc_perf_ctrls perf_ctrls;
  
-
-base-commit: b00315628095075da4af8d6d519d85d95117de09
++	if (enable == cppc_enabled)
++		return 0;
++
+ 	for_each_present_cpu(cpu) {
+ 		ret = cppc_set_enable(cpu, enable);
+ 		if (ret)
+@@ -251,6 +276,7 @@ static int cppc_enable(bool enable)
+ 		}
+ 	}
+ 
++	cppc_enabled = enable;
+ 	return ret;
+ }
+ 
 -- 
-2.40.1
+2.34.1
 
