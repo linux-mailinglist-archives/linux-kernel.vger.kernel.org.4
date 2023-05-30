@@ -2,206 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6CF0716634
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C86971663C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbjE3PIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S233160AbjE3PJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233099AbjE3PIU (ORCPT
+        with ESMTP id S232650AbjE3PJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:08:20 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E0311B;
-        Tue, 30 May 2023 08:07:42 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d247a023aso3314908b3a.2;
-        Tue, 30 May 2023 08:07:42 -0700 (PDT)
+        Tue, 30 May 2023 11:09:27 -0400
+Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC481BF
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:08:57 -0700 (PDT)
+Received: by mail-wr1-x449.google.com with SMTP id ffacd0b85a97d-30ae8a5006dso3994058f8f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:08:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685459250; x=1688051250;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=90qsX+BXhNStrskWzkrpuNl5PQEloie9F+kBEZPHuCs=;
-        b=j4GfH0/PuF5dQJVh6Ihur7bB6XH/WiiSoIaUXiM4/gBzCMxoPeQh/eeOjnFY+fufRP
-         ljK6fFM9FFNmoSbj6Bl/wDg7eE/mqVTxmms9OQR/7Zv+E6Lxm7m3fFvQZJiJ/0XoN3FR
-         PCM6LYn47vNASMnR0GYElqmeN1BuYde+9H8H0waUqWN6PrkEbYfRir4IhTNKjdotksQn
-         rw0LA0i4I0A7xKRJKLG/l2fh+gcReCBCXu0Efx2tXYMdNYt0/de2fXOHdS/nhHDTHXMu
-         Qiw0OAFelu7c1Kn9UoEAYbSOqPrm4YRKREgvWZloiw+fZnlsuIKmoAyv0xPP4OCxsF06
-         ACpA==
+        d=google.com; s=20221208; t=1685459331; x=1688051331;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=INyGt+QwuTfaFJp7EMJqWEOGoXUhxd+HBtKKNdnZww4=;
+        b=KCvwHCzwHpZZcpBVv1I1bLVHxO8Xn2ykPeOkv2+KApmacnGFPK6nf/m23byfUEnWss
+         JPn9KobcIzYTNjur4ig/onz6AWeR5RNE0aknK92u/onIH9hZ59bkBT/Z3kS42C5bDN2G
+         ijShs3+RjX/Kyug5HfHwMD6rf945IC5Rb60s1gop/te04Uwtr84EwbUEs7YrUqnreG/n
+         eREjm5sR5mqfWssu4wU3/quLaDOUC7QKSQaaiRRHSnhoF7+f+cK+dVXqf95XrN8AdMiI
+         1I08XmHJ2RwLI/M0G/GOXG10F6zNKZxndz8fVfWBLLp0OgpDirhtbwh8taxNGl9nduTd
+         AuiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685459250; x=1688051250;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=90qsX+BXhNStrskWzkrpuNl5PQEloie9F+kBEZPHuCs=;
-        b=UszlJ6DgblPFFw47WH8Mfe/3dz7Zl4qfB8rfhuLj54TS65V4LRqxoPnFTL56HBo/YH
-         9hSzRkAh5D6kGkTSNxFxVK9R1+abBrZJPLcfaxechj7qgbtyPzSaf7rp2B3+MuYKz/fL
-         IJJxgErden6QQA35mgmqDQ96n6iJeDkic28AvLMLfRS7PPOcINLmdquAvtnEzX02fbS4
-         MelDoow7iutqNrkZm0lGMoJUyqtpurDVjfTz/AyE1bgnv6bEkogl9/Ly4Mx5RjscwpFV
-         3NFIXfV3lT57vS9azK3/AoCA/UtaIUkVAWJN9HwRy7VLLnXfB6ow+8Chn98OCA1aKjqT
-         YIjw==
-X-Gm-Message-State: AC+VfDwhJGnJ8Ep5TOZgfEfBGeyukZ+fLvOZ69bB3TZMjRjHwvyuCurw
-        tL5MQVO+tzTjAb8blP29nYE=
-X-Google-Smtp-Source: ACHHUZ7hoTMjXkxSfzArgiEDlv0vTd070PUvxyvePERtHaXAgLushJfaxAEyPByxNT5mpqlfITBp7Q==
-X-Received: by 2002:a05:6a00:1491:b0:62a:4503:53ba with SMTP id v17-20020a056a00149100b0062a450353bamr3187328pfu.26.1685459249701;
-        Tue, 30 May 2023 08:07:29 -0700 (PDT)
-Received: from ?IPv6:2605:59c8:448:b800:82ee:73ff:fe41:9a02? ([2605:59c8:448:b800:82ee:73ff:fe41:9a02])
-        by smtp.googlemail.com with ESMTPSA id y14-20020aa7804e000000b0064dbf805ff7sm1757691pfm.72.2023.05.30.08.07.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 08:07:29 -0700 (PDT)
-Message-ID: <977d55210bfcb4f454b9d740fcbe6c451079a086.camel@gmail.com>
-Subject: Re: [PATCH net-next v2 2/3] page_pool: support non-frag page for
- page_pool_alloc_frag()
-From:   Alexander H Duyck <alexander.duyck@gmail.com>
-To:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Eric Dumazet <edumazet@google.com>
-Date:   Tue, 30 May 2023 08:07:28 -0700
-In-Reply-To: <20230529092840.40413-3-linyunsheng@huawei.com>
-References: <20230529092840.40413-1-linyunsheng@huawei.com>
-         <20230529092840.40413-3-linyunsheng@huawei.com>
+        d=1e100.net; s=20221208; t=1685459331; x=1688051331;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=INyGt+QwuTfaFJp7EMJqWEOGoXUhxd+HBtKKNdnZww4=;
+        b=bHZClQtxHfEz22GA+bQsNF0dnaoate2UkS1YNL4tXaCeZsU/3X6qORHFCukMH7Yy4d
+         lUQNEhiVbJFk6z5kZJrXAOa9hVtclji0N0wOSfSGyjtHV/hg+GKHNMX+sKkEkYcKZ1oA
+         Krk9W5vk0HYrKdFhaBgN1SY+3DSGWTKxkLArvLVHzd0auQOA5rai8Qwe4Nak5Jh+aLNE
+         NoX35OCtF4pudqTlHVMSPd4XnZEUs3Dqrrdqjb88c2FI4/4llUlCJkRVnEqj286EAQ7f
+         pF4yHLUlBlZTLtgtqvdRJce0vxOlMP/5wYFeU/+Oh7OQ9md1RGBt2p6lBEwJBdAzYehi
+         99bQ==
+X-Gm-Message-State: AC+VfDwJb3mX3cNDOZbJrocT1RzdK2vDzhPtSfiXXNdkg0IXmEtLrh9e
+        e6FX0gjV+98A3wuHKwlf5nIDkgaJTeLvcg==
+X-Google-Smtp-Source: ACHHUZ7trUbccosip83Jp1hHUHvUBBwTyfaeunBbCnY0yI3RJzF02Xs+ZkFq/94n82IAdm05j7g66a3Ser3rDQ==
+X-Received: from mostafa.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:333c])
+ (user=smostafa job=sendgmr) by 2002:a05:6000:46:b0:30a:b030:9ce1 with SMTP id
+ k6-20020a056000004600b0030ab0309ce1mr431213wrx.5.1685459330796; Tue, 30 May
+ 2023 08:08:50 -0700 (PDT)
+Date:   Tue, 30 May 2023 15:08:45 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230530150845.2856828-1-smostafa@google.com>
+Subject: [PATCH v3] KVM: arm64: Use BTI for nvhe
+From:   Mostafa Saleh <smostafa@google.com>
+To:     maz@kernel.org, oliver.upton@linux.dev,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     tabba@google.com, qperret@google.com, will@kernel.org,
+        catalin.marinas@arm.com, yuzenghui@huawei.com,
+        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
+        gshan@redhat.com, Mostafa Saleh <smostafa@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-3.fc36) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-05-29 at 17:28 +0800, Yunsheng Lin wrote:
-> There is performance penalty with using page frag support when
-> user requests a larger frag size and a page only supports one
-> frag user, see [1].
->=20
-> It seems like user may request different frag size depending
-> on the mtu and packet size, provide an option to allocate
-> non-frag page when a whole page is not able to hold two frags,
-> so that user has a unified interface for the memory allocation
-> with least memory utilization and performance penalty.
->=20
-> 1. https://lore.kernel.org/netdev/ZEU+vospFdm08IeE@localhost.localdomain/
->=20
-> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-> CC: Lorenzo Bianconi <lorenzo@kernel.org>
-> CC: Alexander Duyck <alexander.duyck@gmail.com>
-> ---
->  net/core/page_pool.c | 47 +++++++++++++++++++++++++++-----------------
->  1 file changed, 29 insertions(+), 18 deletions(-)
->=20
-> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> index 0868aa8f6323..e84ec6eabefd 100644
-> --- a/net/core/page_pool.c
-> +++ b/net/core/page_pool.c
-> @@ -699,14 +699,27 @@ struct page *page_pool_alloc_frag(struct page_pool =
-*pool,
->  	unsigned int max_size =3D PAGE_SIZE << pool->p.order;
->  	struct page *page =3D pool->frag_page;
-> =20
-> -	if (WARN_ON(!(pool->p.flags & PP_FLAG_PAGE_FRAG) ||
-> -		    size > max_size))
-> +	if (unlikely(size > max_size))
->  		return NULL;
-> =20
-> +	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT) {
-> +		*offset =3D 0;
-> +		return page_pool_alloc_pages(pool, gfp);
-> +	}
-> +
+CONFIG_ARM64_BTI_KERNEL compiles the kernel to support ARMv8.5-BTI.
+However, the nvhe code doesn't make use of it as it doesn't map any
+pages with Guarded Page(GP) bit.
 
-This is a recipe for pain. Rather than doing this I would say we should
-stick with our existing behavior and not allow page pool fragments to
-be used when the DMA address is consuming the region. Otherwise we are
-going to make things very confusing.
+kvm pgtable code is modified to map executable pages with GP bit
+if BTI is enabled for the kernel.
 
-If we have to have both version I would much rather just have some
-inline calls in the header wrapped in one #ifdef for
-PAGE_POOL_DMA_USE_PP_FRAG_COUNT that basically are a wrapper for
-page_pool pages treated as pp_frag.
+At hyp init, SCTLR_EL2.BT is set to 1 to match EL1 configuration
+(SCTLR_EL1.BT1) set in bti_enable().
 
->  	size =3D ALIGN(size, dma_get_cache_alignment());
-> -	*offset =3D pool->frag_offset;
-> =20
+One difference between kernel and nvhe code, is that the kernel maps
+.text with GP while nvhe maps all the executable pages, this makes
+nvhe code need to deal with special initialization code coming from
+other executable sections (.idmap.text).
+For this we need to add bti instruction at the beginning of
+__kvm_handle_stub_hvc as it can be called by  __host_hvc through
+branch instruction(br) and unlike SYM_FUNC_START, SYM_CODE_START
+doesn=E2=80=99t add bti instruction at the beginning, and it can=E2=80=99t =
+be modified
+to add it as it is used with vector tables.
+Another solution which is more intrusive is to convert
+__kvm_handle_stub_hvc to a function and inject =E2=80=9Cbti jc=E2=80=9D ins=
+tead of
+=E2=80=9Cbti c=E2=80=9D in SYM_FUNC_START
 
-If we are going to be allocating mono-frag pages they should be
-allocated here based on the size check. That way we aren't discrupting
-the performance for the smaller fragments and the code below could
-function undisturbed.
+Signed-off-by: Mostafa Saleh <smostafa@google.com>
+---
+v2 -> v3:
+- Map all executable pages with GP bit instead of just .text, this
+  simplifies the code and avoids hacks in pgtable code.
+v1 -> v2:
+- Enable BTI for nvhe also.
+- Only set GP bit for executable pages from pgtable code.
+- Set SCTLR_EL2.BT when BTI is used.
+- use system_supports_bti() for consistency.
+- Add hyp_init_valid_leaf_pte.
+v1: https://lore.kernel.org/all/20230516141846.792193-1-smostafa@google.com=
+/
+---
+ arch/arm64/include/asm/sysreg.h    |  1 +
+ arch/arm64/kvm/hyp/nvhe/hyp-init.S | 12 ++++++++++++
+ arch/arm64/kvm/hyp/pgtable.c       |  7 ++++++-
+ 3 files changed, 19 insertions(+), 1 deletion(-)
 
-> -	if (page && *offset + size > max_size) {
-> +	if (page) {
-> +		*offset =3D pool->frag_offset;
-> +
-> +		if (*offset + size <=3D max_size) {
-> +			pool->frag_users++;
-> +			pool->frag_offset =3D *offset + size;
-> +			alloc_stat_inc(pool, fast);
-> +			return page;
-> +		}
-> +
-> +		pool->frag_page =3D NULL;
->  		page =3D page_pool_drain_frag(pool, page);
->  		if (page) {
->  			alloc_stat_inc(pool, fast);
-> @@ -714,26 +727,24 @@ struct page *page_pool_alloc_frag(struct page_pool =
-*pool,
->  		}
->  	}
-> =20
-> -	if (!page) {
-> -		page =3D page_pool_alloc_pages(pool, gfp);
-> -		if (unlikely(!page)) {
-> -			pool->frag_page =3D NULL;
-> -			return NULL;
-> -		}
-> -
-> -		pool->frag_page =3D page;
-> +	page =3D page_pool_alloc_pages(pool, gfp);
-> +	if (unlikely(!page))
-> +		return NULL;
-> =20
->  frag_reset:
-> -		pool->frag_users =3D 1;
-> +	/* return page as non-frag page if a page is not able to
-> +	 * hold two frags for the current requested size.
-> +	 */
-
-This statement ins't exactly true since you make all page pool pages
-into fragmented pages.
-
-
-> +	if (unlikely(size << 1 > max_size)) {
-
-This should happen much sooner so you aren't mixing these allocations
-with the smaller ones and forcing the fragmented page to be evicted.
-
->  		*offset =3D 0;
-> -		pool->frag_offset =3D size;
-> -		page_pool_fragment_page(page, BIAS_MAX);
->  		return page;
->  	}
-> =20
-
-
-> -	pool->frag_users++;
-> -	pool->frag_offset =3D *offset + size;
-> -	alloc_stat_inc(pool, fast);
-> +	pool->frag_page =3D page;
-> +	pool->frag_users =3D 1;
-> +	*offset =3D 0;
-> +	pool->frag_offset =3D size;
-> +	page_pool_fragment_page(page, BIAS_MAX);
->  	return page;
->  }
->  EXPORT_SYMBOL(page_pool_alloc_frag);
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysre=
+g.h
+index e72d9aaab6b1..204124ce86c4 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -558,6 +558,7 @@
+ 			 (BIT(18)) | (BIT(22)) | (BIT(23)) | (BIT(28)) | \
+ 			 (BIT(29)))
+=20
++#define SCTLR_EL2_BT	(BIT(36))
+ #ifdef CONFIG_CPU_BIG_ENDIAN
+ #define ENDIAN_SET_EL2		SCTLR_ELx_EE
+ #else
+diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-init.S b/arch/arm64/kvm/hyp/nvhe/h=
+yp-init.S
+index a6d67c2bb5ae..f3ee66aa2f9d 100644
+--- a/arch/arm64/kvm/hyp/nvhe/hyp-init.S
++++ b/arch/arm64/kvm/hyp/nvhe/hyp-init.S
+@@ -128,6 +128,13 @@ alternative_if ARM64_HAS_ADDRESS_AUTH
+ 		     SCTLR_ELx_ENDA | SCTLR_ELx_ENDB)
+ 	orr	x0, x0, x1
+ alternative_else_nop_endif
++
++#ifdef CONFIG_ARM64_BTI_KERNEL
++alternative_if ARM64_BTI
++	orr	x0, x0, #SCTLR_EL2_BT
++alternative_else_nop_endif
++#endif /* CONFIG_ARM64_BTI_KERNEL */
++
+ 	msr	sctlr_el2, x0
+ 	isb
+=20
+@@ -196,6 +203,11 @@ SYM_CODE_START_LOCAL(__kvm_hyp_init_cpu)
+ SYM_CODE_END(__kvm_hyp_init_cpu)
+=20
+ SYM_CODE_START(__kvm_handle_stub_hvc)
++	/*
++	 * __kvm_handle_stub_hvc called from __host_hvc through branch instructio=
+n(br) so
++	 * we need bti j at beginning.
++	 */
++	bti j
+ 	cmp	x0, #HVC_SOFT_RESTART
+ 	b.ne	1f
+=20
+diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+index 3d61bd3e591d..a79a45fc4047 100644
+--- a/arch/arm64/kvm/hyp/pgtable.c
++++ b/arch/arm64/kvm/hyp/pgtable.c
+@@ -34,7 +34,7 @@
+ #define KVM_PTE_LEAF_ATTR_LO_S2_SH_IS	3
+ #define KVM_PTE_LEAF_ATTR_LO_S2_AF	BIT(10)
+=20
+-#define KVM_PTE_LEAF_ATTR_HI		GENMASK(63, 51)
++#define KVM_PTE_LEAF_ATTR_HI		GENMASK(63, 50)
+=20
+ #define KVM_PTE_LEAF_ATTR_HI_SW		GENMASK(58, 55)
+=20
+@@ -42,6 +42,8 @@
+=20
+ #define KVM_PTE_LEAF_ATTR_HI_S2_XN	BIT(54)
+=20
++#define KVM_PTE_LEAF_ATTR_HI_S1_GP	BIT(50)
++
+ #define KVM_PTE_LEAF_ATTR_S2_PERMS	(KVM_PTE_LEAF_ATTR_LO_S2_S2AP_R | \
+ 					 KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W | \
+ 					 KVM_PTE_LEAF_ATTR_HI_S2_XN)
+@@ -371,6 +373,9 @@ static int hyp_set_prot_attr(enum kvm_pgtable_prot prot=
+, kvm_pte_t *ptep)
+=20
+ 		if (device)
+ 			return -EINVAL;
++
++		if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) && system_supports_bti())
++			attr |=3D KVM_PTE_LEAF_ATTR_HI_S1_GP;
+ 	} else {
+ 		attr |=3D KVM_PTE_LEAF_ATTR_HI_S1_XN;
+ 	}
+--=20
+2.41.0.rc0.172.g3f132b7071-goog
 
