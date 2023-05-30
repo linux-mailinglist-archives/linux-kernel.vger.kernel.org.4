@@ -2,213 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F58716474
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7DBF716475
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbjE3Ok2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
+        id S232427AbjE3Oke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbjE3OkZ (ORCPT
+        with ESMTP id S232190AbjE3Ok3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:40:25 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DD7C5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:40:23 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5148e4a2f17so6854333a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:40:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685457621; x=1688049621;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xe6HK9Kb35n4rfCfNWtBuecD+uDUu7lqn2KbidhEueY=;
-        b=Plsb8fika+/zh+L/6FO0YtwBdpqBVezJiZNWFl1VRMvGSMEhCLKcxWhOraKns36TDF
-         uqdpMfUTfAhBc2/OkGK3xDCAmrng9gbAF9Z7hmf8ywWHpeBSoNUfCuFHIHkFfYhNFY96
-         ABDuCIcXn8HEA/RE6fhbKDjbQ8nMbpvdiA3CqiK8g+MUEm+JgasKDXesrpPNrUftMAI/
-         dARy6NLOm2X2M/OywmrqVCytL4CNoOk2hJAUZ+bjveYeC/zmXcmSU72Jtk6nZ9eeVUlF
-         EnXr6CimLZR8/UXu+JKsudTXoQhrmE9IA7sxOad2ae2PP3I9d1nqxJc7juXUhwEPUd6V
-         sGSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685457621; x=1688049621;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xe6HK9Kb35n4rfCfNWtBuecD+uDUu7lqn2KbidhEueY=;
-        b=LfexA1JR74Jcb5aymuRZ7WGgS4OGM8DKYfsD9rMYRJo9KlX5qiYrCFIayQVmli6LFi
-         jEvPZT1Wx7TsOLsWpY2hlxf6ReMo52aYGgNr8Ugo0pxyrRpT7IvwcRmy4twHbd2xcHpe
-         hyd4grjIAcm93mDydRTFVoYQ0/tXrS0WOn8z92KavLBqdTz2Rorkl7T6i0h7O2QduT+G
-         bwRT4c11gWuVwrKHUzlw1NCsxvV822jOnmkDPMgMvqRvIyTzNwVlm3qa4o5MD6ERrtKm
-         NzVd86eY/Meprkg47b07Zx0cyKU7edYOsvsX5AWbB+hqzJ2rZYE0W1/KLINQWJHKbzT/
-         1NfQ==
-X-Gm-Message-State: AC+VfDy7i7CEVBasdQm3n9cv0dxAMj2vUNPY12dCqYtfqZO7TUg5KbBL
-        YyR/VGSYJOTm+HNd9jCOB3CJqA==
-X-Google-Smtp-Source: ACHHUZ5Ta7S9kKaVrAx84G6ObMgsg+WsFPS9nY9M8aUCa8bxlB3xzf4hXlb1WcyJ4QEO+vwXrQsD+w==
-X-Received: by 2002:a17:907:7d90:b0:94a:8291:a1e3 with SMTP id oz16-20020a1709077d9000b0094a8291a1e3mr2573651ejc.74.1685457621030;
-        Tue, 30 May 2023 07:40:21 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id d7-20020a170906c20700b0096f55247570sm7412780ejz.0.2023.05.30.07.40.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 07:40:20 -0700 (PDT)
-Message-ID: <cd4177b1-d418-58fc-9643-d013b7aa7ec4@linaro.org>
-Date:   Tue, 30 May 2023 16:40:18 +0200
+        Tue, 30 May 2023 10:40:29 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FDAD9;
+        Tue, 30 May 2023 07:40:27 -0700 (PDT)
+Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id E654184771;
+        Tue, 30 May 2023 16:40:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1685457626;
+        bh=nCAsO6YzdaocrJisOtvhkHpnwIFZ8klzdEiTQeOXs58=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MZyIIttksS/gBqEIOIGNvY92AWhBWGmlzKYhQCitmBDCFrSbXHLuyczc/ncWrPJru
+         Yn1Z4QPp4dqn52rG+X05724EG2X+sb6DeiFlz3tGJRP32d/q7phs42ZWVTxn1J/osU
+         WfFOBr4O+MCQG+5D+CFv3v3aj2ICBw6io5eg9OAUB+IDf889KPPR72YoVhHcAOh1kn
+         H4kaDVOtp59tFZeHonxWpzmHeQKSPpoFrFAeWMizoRsxsaHy55pwXb8N/1oO65RRYh
+         2XCR206EAr406odJUgZuYEJCSSWxJxNRX+fFHgN8EuwTxYrrIbmguAbMivyKNfMfb0
+         qhaYQSLM69GAQ==
+Date:   Tue, 30 May 2023 16:40:25 +0200
+From:   Lukasz Majewski <lukma@denx.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] net: dsa: slave: Advertise correct EEE capabilities at
+ slave PHY setup
+Message-ID: <20230530164025.7a6d6bbd@wsk>
+In-Reply-To: <e7696621-38a9-41a1-afdf-0864e115d796@lunn.ch>
+References: <20230530122621.2142192-1-lukma@denx.de>
+        <ZHXzTBOtlPKqNfLw@shell.armlinux.org.uk>
+        <20230530160743.2c93a388@wsk>
+        <e7696621-38a9-41a1-afdf-0864e115d796@lunn.ch>
+Organization: denx.de
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 6/6] ASoC: dt-bindings: Add tas2781 amplifier
-Content-Language: en-US
-To:     Shenghao Ding <13916275206@139.com>, broonie@kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        robh+dt@kernel.org, lgirdwood@gmail.com, perex@perex.cz,
-        pierre-louis.bossart@linux.intel.com
-Cc:     kevin-lu@ti.com, shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
-        navada@ti.com, gentuser@gmail.com, Ryan_Chu@wistron.com,
-        Sam_Wu@wistron.com, tiwai@suse.de
-References: <20230527223632.11781-1-13916275206@139.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230527223632.11781-1-13916275206@139.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/z=PGOl1xXbXnvYC4ToDKDEA";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/05/2023 00:36, Shenghao Ding wrote:
-> Create tas2781.yaml for tas2781 driver.
-> 
-> Signed-off-by: Shenghao Ding <13916275206@139.com>
-> 
-> ---
-> Changes in v4:
->  - remove '\t' in the file
+--Sig_/z=PGOl1xXbXnvYC4ToDKDEA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Keep the rest of the changelog.
+Hi Andrew,
 
->  Changes to be committed:
-> 	new file:   Documentation/devicetree/bindings/sound/ti,tas2781.yaml
+> On Tue, May 30, 2023 at 04:07:43PM +0200, Lukasz Majewski wrote:
+> > Hi Russell,
+> >  =20
+> > > On Tue, May 30, 2023 at 02:26:21PM +0200, Lukasz Majewski wrote: =20
+> > > > One can disable in device tree advertising of EEE capabilities
+> > > > of PHY when 'eee-broken-100tx' property is present in DTS.
+> > > >=20
+> > > > With DSA switch it also may happen that one would need to
+> > > > disable EEE due to some network issues.
+> > > >=20
+> > > > Corresponding switch DTS description:
+> > > >=20
+> > > >  switch@0 {
+> > > > 	 ports {
+> > > > 		port@0 {
+> > > > 		reg =3D <0>;
+> > > > 		label =3D "lan1";
+> > > > 		phy-handle =3D <&switchphy0>;
+> > > > 		};
+> > > > 	}
+> > > > 	mdio {
+> > > > 		switchphy0: switchphy@0 {
+> > > > 		reg =3D <0>;
+> > > > 		eee-broken-100tx;
+> > > > 	};
+> > > > 	};
+> > > >=20
+> > > > This patch adjusts the content of MDIO_AN_EEE_ADV in MDIO_MMD_AN
+> > > > "device" so the phydev->eee_broken_modes are taken into account
+> > > > from the start of the slave PHYs.   =20
+> > >=20
+> > > This should be handled by phylib today in recent kernels without
+> > > the need for any patch (as I describe below, because the
+> > > config_aneg PHY method should be programming it.) Are you seeing
+> > > a problem with it in 6.4-rc? =20
+> >=20
+> > Unfortunately, for this project I use LTS 5.15.z kernel.
+> >=20
+> > My impression is that the mv88e6xxx driver is not handling EEE setup
+> > during initialization (even with v6.4-rc). =20
+>=20
+> In general, nearly every driver gets EEE wrong.=20
 
-This is useless, drop.
+Ach... I see :/
 
-Your mail threading is still broken. This breaks usage with b4, so I
-cannot easily make diffs or apply it easily (e.g. via any message ID). I
-already mentioned this and no improvements at v4.
+> I have a patchset
+> which basically rewrites EEE.
 
+Ok.
 
+> It has been posted as RFC a couple
+> times, and i plan to start posting it for merging this week.
 
-> ---
->  .../devicetree/bindings/sound/ti,tas2781.yaml | 88 +++++++++++++++++++
->  1 file changed, 88 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/ti,tas2781.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/ti,tas2781.yaml b/Documentation/devicetree/bindings/sound/ti,tas2781.yaml
-> new file mode 100644
-> index 000000000000..b3dcd7b18f5d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/ti,tas2781.yaml
-> @@ -0,0 +1,88 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) 2022 - 2023 Texas Instruments Incorporated
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/ti,tas2781.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments TAS2781 SmartAMP
-> +
-> +maintainers:
-> +  - Shenghao Ding <shenghao-ding@ti.com>
-> +
-> +description:
-> +  The TAS2781 is a mono, digital input Class-D audio amplifier
-> +  optimized for efficiently driving high peak power into small
-> +  loudspeakers. Integrated an on-chip DSP supports Texas Instruments
-> +  Smart Amp speaker protection algorithm. The integrated speaker
-> +  voltage and current sense provides for real time
-> +  monitoring of loudspeaker behavior.
-> +
-> +allOf:
-> +  - $ref: dai-common.yaml#
-> +
-> +properties:
-> +  '#address-cells':
-> +    const: 1
-> +  '#size-cells':
-> +    const: 0
+Ok. :-)
 
-Put compatible first. What's more I don't understand why added it. Your
-changelog does not explain it - you wrote there is only one change, fix
-of tab.
+>=20
+> But as a result, don't expect EEE to actually work with any LTS
+> kernel.
 
-> +
-> +  compatible:
-> +    enum:
-> +      - ti,tas2781
-> +
-> +  reg:
-> +    description:
-> +      I2C address, in multiple tas2781s case, all the i2c address
-> +      aggreate as one Audio Device to support multiple audio slots.
-> +    maxItems: 4
-> +    items:
-> +      minimum: 0x38
-> +      maximum: 0x3f
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  ti,broadcast-addr:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Generic I2C address for all the tas2781 devices in
-> +      purpose of I2C broadcast during the multi-device
-> +      writes, useless in mono case or remove this item to
-> +      disable broadcast mode.
-> +
-> +  '#sound-dai-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +   #include <dt-bindings/gpio/gpio.h>
-> +   i2c {
-> +     /* example with quad support, such as tablet or pad device */
-> +     #address-cells = <1>;
-> +     #size-cells = <0>;
-> +     quad: codec@38 {
-> +       compatible = "ti,tas2781";
-> +       reg = < 0x38 /* Audio slot 0 */
-> +               0x3a /* Audio slot 1 */
-> +               0x39 /* Audio slot 2 */
-> +               0x3b /* Audio slot 3 */
+Then, I think that it would be best to use the above "hack" until your
+patch set is not reviewed and merged. After that, when customer will
+mover forward with LTS kernel, I can test the EEE on the proper HW.
 
-These should be four items, right? <0x38>, <0x3a> etc. Drop spaces
-around <>, that's not DTS syntax.
+>=20
+> 	Andrew
 
-
-> +               >;
-> +       #sound-dai-cells = <1>;
-> +       reset-gpios = < &gpio1 10 GPIO_ACTIVE_HIGH >;
-
-Drop redundant white space.
 
 
 
 Best regards,
-Krzysztof
 
+Lukasz Majewski
+
+--
+
+DENX Software Engineering GmbH,      Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+
+--Sig_/z=PGOl1xXbXnvYC4ToDKDEA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmR2CtkACgkQAR8vZIA0
+zr2wMwf/ThyB1oVLay5mqG9rhyAeruSDYpuA/uGmNY4Pqhm1328aigl+OIoXx0AT
+fbMbpmRBzV2D+SWDcU4RI/B2h0KmNQTinvBmXU/5L1D3VDbD+vQW/KbNeupxBehr
+eta15sKjLszfsILZneloCcCow/pNLZ65TLgCtHb0wi6rnkAvMI0Cnn/8jTm2Lp6I
+MHvCMujniLDPp8EnifQN27fqGe1AQWjuQrRIU/yzsuSodSv5ekFk7iIX2dYWVAzg
+Rv0OnKM1gkJ6rqXk4YNFhDzDwlFIiAlDkR7OuXxt1alNax/D+WkT0LRsiPZsjijg
+5KI04xFlGZuZeD7jIty1oCV74JT2YQ==
+=Hxj6
+-----END PGP SIGNATURE-----
+
+--Sig_/z=PGOl1xXbXnvYC4ToDKDEA--
