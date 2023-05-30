@@ -2,83 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E3A7169C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5950C7169CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbjE3Qga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
+        id S232608AbjE3Qgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbjE3Qg2 (ORCPT
+        with ESMTP id S231460AbjE3Qgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:36:28 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1E58E;
-        Tue, 30 May 2023 09:36:09 -0700 (PDT)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id 25740207A3;
-        Tue, 30 May 2023 18:36:07 +0200 (CEST)
-Date:   Tue, 30 May 2023 18:36:03 +0200
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Nishanth Menon <nm@ti.com>
-Cc:     Francesco Dolcini <francesco@dolcini.it>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 3/5] arm64: dts: ti: add verdin am62
-Message-ID: <ZHYl8/8k4CTm/2LW@francesco-nb.int.toradex.com>
-References: <20230524143631.42471-1-francesco@dolcini.it>
- <20230524143631.42471-4-francesco@dolcini.it>
- <20230530121044.sjhv452b4hs4lyiy@flyer>
+        Tue, 30 May 2023 12:36:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1CED28F
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:36:28 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C3D816F2;
+        Tue, 30 May 2023 09:37:13 -0700 (PDT)
+Received: from [10.1.34.168] (e126864.cambridge.arm.com [10.1.34.168])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 75F7D3F663;
+        Tue, 30 May 2023 09:36:24 -0700 (PDT)
+Message-ID: <64701978-1b11-3dec-c0e4-57f1a0eee1fe@arm.com>
+Date:   Tue, 30 May 2023 17:36:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530121044.sjhv452b4hs4lyiy@flyer>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 07/11] arm64: mops: handle MOPS exceptions
+Content-Language: en-US
+To:     Colton Lewis <coltonlewis@google.com>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Luis Machado <luis.machado@arm.com>,
+        Vladimir Murzin <vladimir.murzin@arm.com>,
+        linux-kernel@vger.kernel.org
+References: <gsnta5xsb36u.fsf@coltonlewis-kvm.c.googlers.com>
+From:   Kristina Martsenko <kristina.martsenko@arm.com>
+In-Reply-To: <gsnta5xsb36u.fsf@coltonlewis-kvm.c.googlers.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 07:10:44AM -0500, Nishanth Menon wrote:
-> On 16:36-20230524, Francesco Dolcini wrote:
-> > +/* Verdin I2C_2_DSI */
-> > +&main_i2c2 {
-> > +	status = "okay";
+On 25/05/2023 20:50, Colton Lewis wrote:
+>> +    if (esr & ESR_ELx_MOPS_ISS_MEM_INST) {
+>> +        /* SET* instruction */
+>> +        if (option_a ^ wrong_option) {
+>> +            /* Format is from Option A; forward set */
+>> +            pt_regs_write_reg(regs, dstreg, dst + size);
+>> +            pt_regs_write_reg(regs, sizereg, -size);
+>> +        }
+>> +    } else {
+>> +        /* CPY* instruction */
+>> +        if (!(option_a ^ wrong_option)) {
+>> +            /* Format is from Option B */
+>> +            if (regs->pstate & PSR_N_BIT) {
+>> +                /* Backward copy */
+>> +                pt_regs_write_reg(regs, dstreg, dst - size);
+>> +                pt_regs_write_reg(regs, srcreg, src - size);
+>> +            }
+>> +        } else {
+>> +            /* Format is from Option A */
+>> +            if (size & BIT(63)) {
+>> +                /* Forward copy */
+>> +                pt_regs_write_reg(regs, dstreg, dst + size);
+>> +                pt_regs_write_reg(regs, srcreg, src + size);
+>> +                pt_regs_write_reg(regs, sizereg, -size);
+>> +            }
+>> +        }
+>> +    }
 > 
-> Here and few other dtsis:
-> you should set status along with pinmux.
-This is already done in the SoM dtsi, same applies to the other comment
-you have on this pinmux topic.
+> I can see an argument for styling things closely to the ARM manual as
+> you have done here, but Linux style recommends against deep nesting. In
+> this case it is unneeded. I believe this can be written as a single
+> if-else chain and that makes it easier to distinguish the three options.
+> 
+> if ((esr & ESR_ELx_MOPS_ISS_MEM_INST) && (option_a ^ wrong_option)) {
+>     /* Format is from Option A; forward set */
+>     pt_regs_write_reg(regs, dstreg, dst + size);
+>     pt_regs_write_reg(regs, sizereg, -size);
+> } else if ((option_a ^ wrong_option) && (size & BIT(63)) {
+>     /* Forward copy */
+>     pt_regs_write_reg(regs, dstreg, dst + size);
+>     pt_regs_write_reg(regs, srcreg, src + size);
+>     pt_regs_write_reg(regs, sizereg, -size);
+> } else if (regs-pstate & PSR_N_BIT) {
+>     /* Backward copy */
+>     pt_regs_write_reg(regs, dstreg, dst - size);
+>     pt_regs_write_reg(regs, srcreg, src - size);
+> }
 
-To rephrase what's hopefully is already written in the commit
-message/series description, or at least it was in my intention.
+Yeah, the nesting gets a bit deep here, but there are 6 cases in total, ie 6 
+ways the hardware can set up the registers and pstate (in 3 of them the kernel
+doesn't need to modify the registers), and I think the current structure makes
+it clearer what the 6 are, so I'd prefer to keep it as it is for now.
 
-The system is modular, with multiple SoM variant and multiple carrier
-boards. Standard interfaces are defined at the family level, e.g.
-already in the SoM, in the carrier board DT file peripherals are just
-enabled, the pinmux is already defined in the common som.dtsi [1][2][3]
-files and the carrier board just use those unless there is some kind of
-non-standard deviation.
+Thanks,
+Kristina
 
-This prevents duplication and simplify writing device tree file for board
-that use standard Verdin family interfaces. This should be visible
-looking at this series in which 3 different boards (Dev, Yavia and
-Dahlia) are added.
-
-All of that is clearly defined in our datasheets and publicly available
-documentation.
-
-Francesco
-
-[1] arch/arm64/boot/dts/ti/k3-am62-verdin.dtsi
-[2] arch/arm64/boot/dts/ti/k3-am62-verdin-nonwifi.dtsi
-[3] arch/arm64/boot/dts/ti/k3-am62-verdin-wifi.dtsi
