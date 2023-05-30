@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFEAD7157AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E057157AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjE3Hxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
+        id S229787AbjE3HyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjE3Hxi (ORCPT
+        with ESMTP id S229698AbjE3Hxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:53:38 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22ABBF;
-        Tue, 30 May 2023 00:53:36 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f70fc4682aso1202395e9.1;
-        Tue, 30 May 2023 00:53:36 -0700 (PDT)
+        Tue, 30 May 2023 03:53:46 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B002F0;
+        Tue, 30 May 2023 00:53:39 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f60804faf4so26869735e9.3;
+        Tue, 30 May 2023 00:53:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685433215; x=1688025215;
+        d=gmail.com; s=20221208; t=1685433217; x=1688025217;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=79m/nLTn+NpENaFTAI+QR5GINZyts+HlG6WpZNU+yIw=;
-        b=F5+vYVvaxjDo6inHzuMAL2MrxE+nEMCk+z9tMMKfMkiSuaCZrTZFRP0t59mWKWraYd
-         qa1coa90wCL5s/0VX3Fk92oI0DDn8vHfZXVbShaA0JcJtYFmhxp1MD3MujagIfwRCKZg
-         d3CdVqre2xpg8xFu6H1026eA771+DCRs/hw0/q9l+4juMCnDmOrZR/rYcSIOiBsz6QWW
-         dq6HYvrsWNUlbQl6AhlGxKCUnfPcQ2RU82Qlv0zAD3EsIBLD6uG5I0NRr8kxVrAX/wAO
-         XMzKH65MzQbx/QsQCv5PXKC1uTzZKnrcKsuUrHgriwofLv5md/ifahxjHnMS1NU3xFHV
-         Mbmw==
+        bh=mizo9gnkF3NdkFdByq3QjeHMqHH/cKSCHXOmzX7m6qI=;
+        b=CiTz7HwUaUiU19fDMjGcyNpQMym6AXUPkMPMO8RN85jgjhc8V2EJRvcFAuKM3jkWlR
+         mOxCIveZEZgC8sB4XDVKw0wAkALSGqd8UT2yl+ppK9eEeS7MIEuKZMQ+M+302iwfoD4U
+         O/cgGQdpm8a9V9Ss/woUm+e0X+pS8ahcLrwEut9BeePMmuql/voi0pHsmB1bSSmro5tr
+         HQcbtuwU4ZZaGUAuyWlKwEiMF0xcbu6sDrZA9aLcdgN48iOIy5Y3q9eHQPlVz2dd5UE7
+         1z862mWoekHg4sXcd8PcAMdmHcLuN0s9OlMhE4cbcF4ySmRtjcdzSJT7iThX8Z1IvR0I
+         NaRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685433215; x=1688025215;
+        d=1e100.net; s=20221208; t=1685433217; x=1688025217;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=79m/nLTn+NpENaFTAI+QR5GINZyts+HlG6WpZNU+yIw=;
-        b=YqFodE5wxVRzDEitq4tzOU9XdooP+m7ZjpQHvDNmZja4hda/wxyTPLjNeR1KiGuhnC
-         naSlO8gXzn4jVhOPkZx1JFbRATc/zNoIPoHGnV/4qaeV7qzVqVVMxvdoHvgusSBYqEri
-         YrbnmO4g0WeGUXqiPbh/6YYaYqOMZTnE0sDOqRj30xp/EEJ683UPS/ijDHVoZhpyR1S4
-         J8J56JE1JeDoPnYSn/QQinmf/mm4TKdRrf4EfBBMMNG7VeRnK5piOM2lUiT6KPp1dSY8
-         6MgfiWD44tem+QUOqKQ+AIZzTT1Gx2EiEXfVsa9Vin1uD9BRy5XocJj3ooKQ94i3wlR9
-         nqHw==
-X-Gm-Message-State: AC+VfDxiNnOew4jSCKwF0zg4eKqEcOBZLliBEOuFjLQ2ZRKx/IDQG2t4
-        VWOqFdMVXPKRWIjJCKDuwJ4=
-X-Google-Smtp-Source: ACHHUZ4Y35lfWLKOd4KKI0PoPFjBl9+AUjECZdfIJVdTTvYrvnGiUJQgTkTqIxohRARimju72GCFpw==
-X-Received: by 2002:a1c:7501:0:b0:3f7:5e3:c1f5 with SMTP id o1-20020a1c7501000000b003f705e3c1f5mr865894wmc.2.1685433215148;
-        Tue, 30 May 2023 00:53:35 -0700 (PDT)
+        bh=mizo9gnkF3NdkFdByq3QjeHMqHH/cKSCHXOmzX7m6qI=;
+        b=Y2r1Vw0tps22k1GmyvPbyVb8cvbAMMm3blyAxfQyDYMcHWsZo7wbBUX7oolWfxtoum
+         8LqbvxTAZ9MFYzK54tCrgdYsGCkb/EI4jOD2e5RO8aRnxeje8ZLWdZv8tUPDNRSpPmQ9
+         sC88L0WUEh5EXV+eqfYb320MB74WofQY1GPPNm8uRPwpajXWEuX+zP54iVxm6gFZ451f
+         B3rxwfW5cO6ssjB4LdaEsfEsSBLiky2CH658T+SYLj8QDSNxLbGEMEI1jjovvybDN4OX
+         CdiZ0zaeNeIQprHPtQU+6yLjw8s1/4MeVsbkA+DiG+0Ld494c9qIp8HMb6f+J0Dd6fWq
+         XfZA==
+X-Gm-Message-State: AC+VfDxg2DOfbaOf7iTiT29YsQ09V9lnEGCOtGY0UIEPh4CDmYKeqyI5
+        zchvnGdI8uuA7Ba4qSz36ws=
+X-Google-Smtp-Source: ACHHUZ4fRMBvqH4YW/Lcvfr+6QshvSlLHZ4Nnu6ybEKSJsxCfYPhuZP5/HGTlW0Nx89qpSvv7m/aPg==
+X-Received: by 2002:a1c:7716:0:b0:3f4:298b:d925 with SMTP id t22-20020a1c7716000000b003f4298bd925mr805890wmi.41.1685433217367;
+        Tue, 30 May 2023 00:53:37 -0700 (PDT)
 Received: from PC-UT2.ad.ennebielettronica.com ([78.152.97.130])
-        by smtp.gmail.com with ESMTPSA id x21-20020a05600c21d500b003f6041f5a6csm16561275wmj.12.2023.05.30.00.53.34
+        by smtp.gmail.com with ESMTPSA id x21-20020a05600c21d500b003f6041f5a6csm16561275wmj.12.2023.05.30.00.53.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 00:53:34 -0700 (PDT)
+        Tue, 30 May 2023 00:53:37 -0700 (PDT)
 From:   fl.scratchpad@gmail.com
-To:     jic23@kernel.org, Alexandru Tachici <alexandru.tachici@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
+To:     jic23@kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
         Michael Hennerich <Michael.Hennerich@analog.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>
 Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
         Fabrizio Lamarque <fl.scratchpad@gmail.com>,
         Michael Hennerich <michael.hennerich@analog.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         devicetree@vger.kernel.org
-Subject: [PATCH v3 4/5] dt-bindings: iio: ad7192: Add mandatory reference voltage source
-Date:   Tue, 30 May 2023 09:53:10 +0200
-Message-Id: <20230530075311.400686-5-fl.scratchpad@gmail.com>
+Subject: [PATCH v3 5/5] dt-bindings: iio: ad7192: Allow selection of clock modes
+Date:   Tue, 30 May 2023 09:53:11 +0200
+Message-Id: <20230530075311.400686-6-fl.scratchpad@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230530075311.400686-1-fl.scratchpad@gmail.com>
 References: <20230530075311.400686-1-fl.scratchpad@gmail.com>
@@ -82,47 +81,87 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Fabrizio Lamarque <fl.scratchpad@gmail.com>
 
-Add required reference voltage (VRef) supply regulator.
+AD7192 supports external clock sources, generated by a digital clock
+source or a crystal oscillator, or internally generated clock option
+without external components.
 
-AD7192 requires three independent voltage sources: DVdd, AVdd and VRef
-(on REFINx pin pairs).
+Describe choice between internal and external clock, crystal or external
+oscillator, and internal clock output enable.
 
-Fixes: b581f748cce0 ("staging: iio: adc: ad7192: move out of staging")
 Signed-off-by: Fabrizio Lamarque <fl.scratchpad@gmail.com>
 ---
- Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../bindings/iio/adc/adi,ad7192.yaml          | 27 ++++++++++++++++---
+ 1 file changed, 24 insertions(+), 3 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
-index d521d516088b..16def2985ab4 100644
+index 16def2985ab4..f7ecfd65ad80 100644
 --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
 +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
-@@ -47,6 +47,9 @@ properties:
-   avdd-supply:
-     description: AVdd voltage supply
+@@ -32,7 +32,8 @@ properties:
  
-+  vref-supply:
-+    description: VRef voltage supply
+   clocks:
+     maxItems: 1
+-    description: phandle to the master clock (mclk)
++    description: |
++      Master clock (mclk). If not set, internal clock is used.
+ 
+   clock-names:
+     items:
+@@ -50,6 +51,17 @@ properties:
+   vref-supply:
+     description: VRef voltage supply
+ 
++  adi,clock-xtal:
++    description: |
++      Select whether an external crystal oscillator or an external
++      clock is applied as master (mclk) clock.
++    type: boolean
++
++  adi,int-clock-output-enable:
++    description: |
++      When internal clock is selected, this bit enables clock out pin.
++    type: boolean
 +
    adi,rejection-60-Hz-enable:
      description: |
        This bit enables a notch at 60 Hz when the first notch of the sinc
-@@ -89,6 +92,7 @@ required:
+@@ -84,11 +96,12 @@ properties:
+     description: see Documentation/devicetree/bindings/iio/adc/adc.yaml
+     type: boolean
+ 
++dependencies:
++  adi,clock-xtal: ['clocks', 'clock-names']
++
+ required:
+   - compatible
+   - reg
+-  - clocks
+-  - clock-names
    - interrupts
    - dvdd-supply
    - avdd-supply
-+  - vref-supply
-   - spi-cpol
-   - spi-cpha
+@@ -98,6 +111,13 @@ required:
  
-@@ -115,6 +119,7 @@ examples:
+ allOf:
+   - $ref: /schemas/spi/spi-peripheral-props.yaml#
++  - if:
++      required:
++        - clocks
++        - clock-names
++    then:
++      properties:
++        adi,int-clock-output-enable: false
+ 
+ unevaluatedProperties: false
+ 
+@@ -115,6 +135,7 @@ examples:
+             spi-cpha;
+             clocks = <&ad7192_mclk>;
+             clock-names = "mclk";
++            adi,clock-xtal;
+             interrupts = <25 0x2>;
              interrupt-parent = <&gpio>;
              dvdd-supply = <&dvdd>;
-             avdd-supply = <&avdd>;
-+            vref-supply = <&vref>;
- 
-             adi,refin2-pins-enable;
-             adi,rejection-60-Hz-enable;
 -- 
 2.34.1
 
