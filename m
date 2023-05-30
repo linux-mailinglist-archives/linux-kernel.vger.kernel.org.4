@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31FC2716CDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1AE3716CDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjE3SyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 14:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
+        id S232735AbjE3SyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 14:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbjE3Sxx (ORCPT
+        with ESMTP id S232502AbjE3Sxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 May 2023 14:53:53 -0400
 Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9710E11A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9F711C;
         Tue, 30 May 2023 11:53:46 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34UIraC5103087;
-        Tue, 30 May 2023 13:53:36 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34UIrbxZ103091;
+        Tue, 30 May 2023 13:53:37 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1685472816;
-        bh=CyF6SW6HfaO/Jbyibzsjo2HNvNguoBsxC7LAz9g3V7I=;
-        h=From:To:CC:Subject:Date;
-        b=Zu/MozsqDMiYS2bvz0RnLhfjN0+oeM4w1yKy8MiZdTcpGWSRP4qVBdglyueMUahBC
-         oAxld3Azda8NuYbVb6T8SNS7vjPpmlBT5LkXQwnv2yZc50AcjD05pCDNdoyDk4F6Yi
-         nT5JxoNX8//kBKRHdnoHrOTdfZ7AXHyRC9HGF6Ik=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34UIra4n057176
+        s=ti-com-17Q1; t=1685472817;
+        bh=8MQJKd5tltnlPOML3VfiDZl1C1GQ9KeotjeqacAFZ14=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=hOVq7Y6KEf4uGKLQ6VgtiOjMEb/swSuaUW5AopLaXjjnuY9J/hAds+JWj+6aX+cSe
+         AqVu6wTe23LcWSBqVn9CY1ZZCW/QoblimaAYzxuO3kb8+Kq7vwPW/J7133w0gufWI7
+         yKTOkXG/gRtajP9X/Fv9zsZHWn4KVUZszHzkrSVI=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34UIrbhL003513
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 30 May 2023 13:53:36 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 30 May 2023 13:53:37 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 30
  May 2023 13:53:36 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
  Frontend Transport; Tue, 30 May 2023 13:53:36 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34UIrax3019046;
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34UIra8F080453;
         Tue, 30 May 2023 13:53:36 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Conor Dooley <conor+dt@kernel.org>,
@@ -51,10 +51,12 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Nishanth Menon <nm@ti.com>, Udit Kumar <u-kumar1@ti.com>,
         Nitin Yadav <n-yadav@ti.com>,
         Neha Malcom Francis <n-francis@ti.com>
-Subject: [PATCH 0/2] arm64: dts: ti: k3-am62/64: Add ESM Support
-Date:   Tue, 30 May 2023 13:53:33 -0500
-Message-ID: <20230530185335.79942-1-nm@ti.com>
+Subject: [PATCH 1/2] arm64: dts: ti: k3-am62: Add ESM support
+Date:   Tue, 30 May 2023 13:53:34 -0500
+Message-ID: <20230530185335.79942-2-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230530185335.79942-1-nm@ti.com>
+References: <20230530185335.79942-1-nm@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -69,20 +71,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Couple of follow on patches based on [1] adding ESM nodes and mapping
-for AM62/AM64.
+Add Error Signaling Module (ESM) instances in MCU and MAIN domains.
 
-Nishanth Menon (2):
-  arm64: dts: ti: k3-am62: Add ESM support
-  arm64: dts: ti: k3-am64: Add ESM support
+Signed-off-by: Nishanth Menon <nm@ti.com>
+---
+
+Depends on https://lore.kernel.org/all/20230504080526.133149-1-n-francis@ti.com/
+(to be merged via SoC tree)
 
  arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 6 ++++++
  arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi  | 6 ++++++
- arch/arm64/boot/dts/ti/k3-am64-main.dtsi | 6 ++++++
- arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi  | 6 ++++++
- 4 files changed, 24 insertions(+)
+ 2 files changed, 12 insertions(+)
 
-[1] https://lore.kernel.org/all/20230504080526.133149-1-n-francis@ti.com/
+diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+index bf3e054c72ce..2488e3a537fe 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+@@ -207,6 +207,12 @@ main_pmx0: pinctrl@f4000 {
+ 		pinctrl-single,function-mask = <0xffffffff>;
+ 	};
+ 
++	main_esm: esm@420000 {
++		compatible = "ti,j721e-esm";
++		reg = <0x00 0x420000 0x00 0x1000>;
++		ti,esm-pins = <160>, <161>, <162>, <163>, <177>, <178>;
++	};
++
+ 	main_timer0: timer@2400000 {
+ 		compatible = "ti,am654-timer";
+ 		reg = <0x00 0x2400000 0x00 0x400>;
+diff --git a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
+index 076601a41e84..19fc38157d94 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
+@@ -14,6 +14,12 @@ mcu_pmx0: pinctrl@4084000 {
+ 		pinctrl-single,function-mask = <0xffffffff>;
+ 	};
+ 
++	mcu_esm: esm@4100000 {
++		compatible = "ti,j721e-esm";
++		reg = <0x00 0x4100000 0x00 0x1000>;
++		ti,esm-pins = <0>, <1>, <2>, <85>;
++	};
++
+ 	/*
+ 	 * The MCU domain timer interrupts are routed only to the ESM module,
+ 	 * and not currently available for Linux. The MCU domain timers are
 -- 
 2.40.0
 
