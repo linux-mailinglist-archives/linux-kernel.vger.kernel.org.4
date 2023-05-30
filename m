@@ -2,158 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAF5716E5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12286716E5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232103AbjE3UHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 16:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
+        id S231538AbjE3UJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 16:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbjE3UHh (ORCPT
+        with ESMTP id S231193AbjE3UJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 16:07:37 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768F4F9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:07:33 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f6a6e9d90dso57911cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:07:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685477252; x=1688069252;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tnJw+gna055xgPY4k/D+ZQZ+/+poCudJDicda2AGR3k=;
-        b=DtfynU88O3z0/4oFgDiYM7qy14b7RLg4yomBzxL0dog8TFdWbHyo2tpb/B1SOYXfmp
-         NSRsIG+eVwPFOobh1xJCt8kwErPgylGUweOcutP0ywct+6P+S2IjeaikfhAUmhYPV+uH
-         Mv+j09gZh5WjQDA3Z/2Gy9TgffLJonGspryTqmY7mSq0d2Id3AeV0HEZ5ulNgRW7LXMq
-         4JCJAWgEwKAWSjc16VpDrPx50NJw92bJUlL+d9zw+H+Lfu/l9dON3ftxIU/zENGgXs4K
-         1cHj3nLx36gvePguvMtotajaF04WFwISrYvt1J6cDwX3ikwzIPGkd33waRKuVJi8J5gu
-         uXaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685477252; x=1688069252;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tnJw+gna055xgPY4k/D+ZQZ+/+poCudJDicda2AGR3k=;
-        b=Dw3y2IUYr9GWeXSbQ25bxdwSvKN1kxwxCA9G8Vmv9ANH48OPOU0aJQQ6O7PbGrn0kh
-         +bt5XCnfdqamXXl+qm3bd4rtAxG0Dlig0VolVskP9NekrF+YjC8/0DamIfLXpwxzIf9Q
-         HFkzMawMislZFFwfs8l9IiupLDSDYoVdIvUq8enzmXN0DBFJQ25QjzJQLzITvZWd87uT
-         +43IADWB/8UvGe0FBKb2Xq7qsNKnzi5xuv+lj0O96P3Zp8MrUYtIXu7pWaAgR+85MsaZ
-         R3AE79n8pBalcMiy3SiXaPX6wcmH6O2mhA75X79/UdE/Y6wDEcEX4S9rTjHYcuj6hcK9
-         E98w==
-X-Gm-Message-State: AC+VfDxUShZKLYXKVarJVLZr1/GruD/u67pxwPKHVwdh1qOl73zkeYtb
-        K/GbYXHvRjAO2KonOTDaonNO7fAzVhJ7heoFFVusag==
-X-Google-Smtp-Source: ACHHUZ6GXKZ8JX2tTyi2dAoKnrLtSo8EMFYdPNZnbJmbRABrmf7MX05SzfLq0yw9C6unlnFwzm3TaQimSQte4R7XEoY=
-X-Received: by 2002:a05:622a:1012:b0:3ef:2f55:2204 with SMTP id
- d18-20020a05622a101200b003ef2f552204mr6506qte.6.1685477252408; Tue, 30 May
- 2023 13:07:32 -0700 (PDT)
+        Tue, 30 May 2023 16:09:04 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA745F3;
+        Tue, 30 May 2023 13:09:03 -0700 (PDT)
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UIdwJa003875;
+        Tue, 30 May 2023 20:08:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=5rWZ2/PgxHy/y5NYiyjQh4DXegRR/1Cb3dzKDHLoPGs=;
+ b=TKfM+m5O14f2Y25lpdUqyKZaTU0vyltCCMdzdkdr+WLtlrbx3N6/UD0pbNnmI9WKmIlE
+ pxLdBjZuGOEG9qqJ/vvnfYYS25qvTmVEKA0nBMvqEv+AwSEoyRsgaXal2Lik1KROK75V
+ 3fqcRffZT7k9/A/JlLFc2tfXtOzBeYQDKuCWalJ0DxtQHdA/yCOUOfFeeQhy+tkhKk3u
+ aSaSRtEN1RnxhAxFZ1TwJwA9ugjxcbKE+ncYN0o+KejpBDBahueKkpfo7HfYkJe19agV
+ I89KD9lcbru5ftcNN2tfwdqFrEUPQuLv6uyNgeJEF9SCXjS8MruMNmFM8STgRRjr2H+4 0Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwjvf8huh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 20:08:58 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34UJ03jZ002236;
+        Tue, 30 May 2023 20:08:58 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwjvf8htx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 20:08:58 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34UHWvad003118;
+        Tue, 30 May 2023 20:08:56 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3qu9g5rdq7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 20:08:56 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34UK8sn634800156
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 May 2023 20:08:54 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B64A258045;
+        Tue, 30 May 2023 20:08:54 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C3F9E58050;
+        Tue, 30 May 2023 20:08:52 +0000 (GMT)
+Received: from [9.61.92.222] (unknown [9.61.92.222])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 30 May 2023 20:08:52 +0000 (GMT)
+Message-ID: <4c8f11e5-d97d-5c9a-69b1-ba11c5857799@linux.ibm.com>
+Date:   Tue, 30 May 2023 22:08:51 +0200
 MIME-Version: 1.0
-References: <20230526234435.662652-1-yuzhao@google.com> <20230526234435.662652-5-yuzhao@google.com>
- <ZHJHJPBF6euzOFdw@linux.dev> <CAOUHufa74CufHziHSquO5bZwbFXz2MNssBzW+AH7=Xo5RCnQ0A@mail.gmail.com>
- <ZHZQdQAApIrw6fBu@linux.dev>
-In-Reply-To: <ZHZQdQAApIrw6fBu@linux.dev>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Tue, 30 May 2023 14:06:55 -0600
-Message-ID: <CAOUHufZOkBmZJgCU2xW2B8S3P3TWERHezy0xKWY9_TeyV9K7Rg@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v2 04/10] kvm/arm64: make stage2 page tables
- RCU safe
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Anup Patel <anup@brainfault.org>,
-        Ben Gardon <bgardon@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Gavin Shan <gshan@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Larabel <michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-        linux-mm@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH net 1/2] net/smc: Scan from current RMB list when no
+ position specified
+To:     Wen Gu <guwen@linux.alibaba.com>, kgraul@linux.ibm.com,
+        jaka@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1685101741-74826-1-git-send-email-guwen@linux.alibaba.com>
+ <1685101741-74826-2-git-send-email-guwen@linux.alibaba.com>
+From:   Wenjia Zhang <wenjia@linux.ibm.com>
+In-Reply-To: <1685101741-74826-2-git-send-email-guwen@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: NZw55rljhcxjYUq1xtakSkwQSz7DlSI4
+X-Proofpoint-GUID: cmd8PxFCF0pWlGsjsyioEBINrEFIq511
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_15,2023-05-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ mlxlogscore=999 adultscore=0 priorityscore=1501 lowpriorityscore=0
+ bulkscore=0 mlxscore=0 impostorscore=0 phishscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305300163
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 1:37=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
-v> wrote:
->
-> Hi Yu,
->
-> On Sat, May 27, 2023 at 02:13:07PM -0600, Yu Zhao wrote:
-> > On Sat, May 27, 2023 at 12:08=E2=80=AFPM Oliver Upton <oliver.upton@lin=
-ux.dev> wrote:
-> > > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtabl=
-e.c
-> > > index 3d61bd3e591d..bfbebdcb4ef0 100644
-> > > --- a/arch/arm64/kvm/hyp/pgtable.c
-> > > +++ b/arch/arm64/kvm/hyp/pgtable.c
-> > > @@ -1019,7 +1019,7 @@ static int stage2_unmap_walker(const struct kvm=
-_pgtable_visit_ctx *ctx,
-> > >                                                kvm_granule_size(ctx->=
-level));
-> > >
-> > >         if (childp)
-> > > -               mm_ops->put_page(childp);
-> > > +               mm_ops->free_removed_table(childp, ctx->level);
-> >
-> > Thanks, Oliver.
-> >
-> > A couple of things I haven't had the chance to verify -- I'm hoping
-> > you could help clarify:
-> > 1. For unmapping, with free_removed_table(), wouldn't we have to look
-> > into the table we know it's empty unnecessarily?
->
-> As it is currently implemented, yes. But, there's potential to fast-path
-> the implementation by checking page_count() before starting the walk.
 
-Do you mind posting another patch? I'd be happy to ack it, as well as
-the one you suggested above.
 
-> > 2. For remapping and unmapping, how does free_removed_table() put the
-> > final refcnt on the table passed in? (Previously we had
-> > put_page(childp) in stage2_map_walk_table_post(). So I'm assuming we'd
-> > have to do something equivalent with free_removed_table().)
->
-> Heh, that's a bug, and an embarrassing one at that!
->
-> Sent out a fix for that, since it would appear we leak memory on
-> table->block transitions. PTAL if you have a chance.
->
-> https://lore.kernel.org/all/20230530193213.1663411-1-oliver.upton@linux.d=
-ev/
+On 26.05.23 13:49, Wen Gu wrote:
+> When finding the first RMB of link group, it should start from the
+> current RMB list whose index is 0. So fix it.
+> 
+> Fixes: b4ba4652b3f8 ("net/smc: extend LLC layer for SMC-Rv2")
+> Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+> ---
+>   net/smc/smc_llc.c | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/smc/smc_llc.c b/net/smc/smc_llc.c
+> index a0840b8..8423e8e 100644
+> --- a/net/smc/smc_llc.c
+> +++ b/net/smc/smc_llc.c
+> @@ -578,7 +578,10 @@ static struct smc_buf_desc *smc_llc_get_next_rmb(struct smc_link_group *lgr,
+>   {
+>   	struct smc_buf_desc *buf_next;
+>   
+> -	if (!buf_pos || list_is_last(&buf_pos->list, &lgr->rmbs[*buf_lst])) {
+> +	if (!buf_pos)
+> +		return _smc_llc_get_next_rmb(lgr, buf_lst);
+> +
+> +	if (list_is_last(&buf_pos->list, &lgr->rmbs[*buf_lst])) {
+>   		(*buf_lst)++;
+>   		return _smc_llc_get_next_rmb(lgr, buf_lst);
+>   	}
+It seems too late, but still, why not? :
 
-Awesome.
+-	if (!buf_pos || list_is_last(&buf_pos->list, &lgr->rmbs[*buf_lst])) {
+-  		(*buf_lst)++;
++	if (list_is_last(&buf_pos->list, &lgr->rmbs[(*buf_lst])++)) {
+
+
+Thanks,
+Wenjia
