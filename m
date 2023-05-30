@@ -2,76 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C5971627E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F82A716283
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbjE3NrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
+        id S232440AbjE3Nrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjE3NrH (ORCPT
+        with ESMTP id S231986AbjE3Nrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:47:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051DDE63
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:45:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685454283;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t2l6yxyTUoEVEB0Kn+V8wrTZ/yKFOTjoGrpOKOgaUnA=;
-        b=NmfgDD2VWgKWC3qm5ZrBZ5n9DLWsTAQJdLk4hGIPsqnNUFoKD5R238te6xtxQ2qKLXpj2c
-        gEZqm/KUakNYrclq16wLATFjMWYp2lQEN68IgIKr6fvyCaR5E732fDYX2kTx4bSk/hpfBx
-        68/ICenv15XTUk3GmB0uY18NFNXXoYY=
-Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
- [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-594-hSjFVaaVOYq4_3geouh87A-1; Tue, 30 May 2023 09:44:42 -0400
-X-MC-Unique: hSjFVaaVOYq4_3geouh87A-1
-Received: by mail-yb1-f200.google.com with SMTP id 3f1490d57ef6-bb05f0e6ef9so3937334276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:44:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685454282; x=1688046282;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t2l6yxyTUoEVEB0Kn+V8wrTZ/yKFOTjoGrpOKOgaUnA=;
-        b=FT20DRYd3mxo026Wb+CvmDlcncO/R5B4wfeNnsGTq+AUdue9W2oqhbvFYiqV2SdJas
-         XfOdle36OpPb9Chrx1tbiIwxpS6Iz+TSQuA023OC7Q4Z3fiBTCOM88IT02v4HAMjOh9X
-         fDob65QIb85ydH5bV02iFkJkmbMVSZydYBKzJwt6RJF6NefxbuUB1u6ddfpW9Roapl9a
-         co5qGU9DNEQLLCyNC1ycYwXtvSlsZfGV2sz2ZEslZJDHHpI4xeGJO2blwKSJXZUEs+FY
-         Jb/2E0sChgkVAlA+ObQQlQrjoj8XPJBnzFdnnWIMbtDeYc8c2rpllcGeGi5KZbPhTZNv
-         y5fw==
-X-Gm-Message-State: AC+VfDxR6fbQQi4Pvnsv2OwPFcnAQOyvtfzoCucoQQIp5a6Uj8veqP6Q
-        Picz2xfDmGf8RRmCK/dKvpyN2rQExVsv9pWvem6BBQbKcl5Ux3tDL6n4C8iKQt0CtajlWEk6tdW
-        SsBMLrzQilkPp7I7teJzAeBNmysKXg+4HoDMEET7T
-X-Received: by 2002:a25:b228:0:b0:b7e:6685:84a with SMTP id i40-20020a25b228000000b00b7e6685084amr2863675ybj.1.1685454282218;
-        Tue, 30 May 2023 06:44:42 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7IKY12NixqRNFVbAf3qxjOmgGASLwh4Am+aOp6PdVD5Ny3mpVShyuDa7/dV10V7UB1h+RLJ/ssT/rZQvxwZUM=
-X-Received: by 2002:a25:b228:0:b0:b7e:6685:84a with SMTP id
- i40-20020a25b228000000b00b7e6685084amr2863660ybj.1.1685454281946; Tue, 30 May
- 2023 06:44:41 -0700 (PDT)
+        Tue, 30 May 2023 09:47:33 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2100.outbound.protection.outlook.com [40.107.113.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283EDE42;
+        Tue, 30 May 2023 06:47:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KV/IZFaXTytcftXL91Vf9IHWFrHyKjUpUoex41/r4verLd+Zse6O5I+8z1VMBxmlgm/jMZTUrx8nCfgsS9aekpJZbgd7xIZWlh7e0iutIdLIDNi3unh6RwpGQlzWU+VTKafH8w2ZfCdhN11Y8faTz9dyAyIj1f5AjGFwpU3YeU9JnCSYktDBqEpJwVJn+rJuFIt/+pEY63MVSQrfqRBmyaMunjQbJdGvbAAzgyRylbD9TL3unybHrVgwylGup5uFDLIRvpf8QcKCxpSnQqfYe3ACbTjZNS5cz9Tmj63b5CnaM66K3tgu1xPajMFkmWgdT5T6dmWuzAqvaPxE7664wA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zINllwjL4cpC5VWo4251kHllA+kkuI/6c8+XdntqnjA=;
+ b=iTZPNTES++ohcSFBkw63APvHHf0JUGigVTx2ZAmhliFparECsTb3kYWp+XOdtSymWDQh0CgL4d9d7i7tCuKetwsoXZZwvZSEC1JiX1L+nnky7+AOxx04cJ2vwWKc3BllaTHM+KG5zdcpon6tPnkcLcduXqu725peQ1EHEQ+hkTHKS+aWXMQ9RtefulA41KmyN3x/jm2LqmorzOkIgPDBvnNh1KkEGz577h3gjv5hSPq8FdLKeVNUyPuUmxyQFKcovHLFuQ2UrmjK7Yg/o4pk3/ZQkbrICNNxK8uG/mryyFSrZtncvh2ywJSmGmjrZopJCwHNLGXAFu0BwZ5FODtwrw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zINllwjL4cpC5VWo4251kHllA+kkuI/6c8+XdntqnjA=;
+ b=pUcdgp68m7iCrIkHLUmIE4PLO1n1ADMk0/yYtJMGomcsLqTUQE/YBklr+cuMRRd0xQVuvUOJVnJJtvuyqhCWEWHPsrEf48wf92/VUjBDjipGTBLtqqVXbBDRYQoAt+4uEqwJxT6ShDXVxmc/V8P/OcHwLZoXBqI/HKQiNpU8o70=
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
+ by TYCPR01MB6189.jpnprd01.prod.outlook.com (2603:1096:400:4d::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.22; Tue, 30 May
+ 2023 13:47:12 +0000
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::bd0a:a38d:b4d2:5d2]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::bd0a:a38d:b4d2:5d2%6]) with mapi id 15.20.6455.020; Tue, 30 May 2023
+ 13:47:11 +0000
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Marc Zyngier <maz@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Zheng Wang <zyytlz.wz@163.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH] usb: gadget: udc: renesas_usb3: Fix RZ/V2M
+ {modprobe,bind} error
+Thread-Topic: [PATCH] usb: gadget: udc: renesas_usb3: Fix RZ/V2M
+ {modprobe,bind} error
+Thread-Index: AQHZj99wvrGBFYOn5Ea9mIuOTwGccK9wyqwAgAAi9sCAAAmpAIAABFqAgAF9FPCAAFmOAIAABUHA
+Date:   Tue, 30 May 2023 13:47:11 +0000
+Message-ID: <OS0PR01MB5922A75B0911A11A83029A72864B9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20230526143615.372338-1-biju.das.jz@bp.renesas.com>
+ <20230529061714.GA25984@pendragon.ideasonboard.com>
+ <OS0PR01MB592296756992262EC6D382D0864A9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <20230529085656.GL25984@pendragon.ideasonboard.com>
+ <86a5xncxhc.wl-maz@kernel.org>
+ <OS0PR01MB59227AF1F83A73620179CDF8864B9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <CAMuHMdXnF87BqcxESzOjB9hSMZ0HSnqzRNXEvCXGczDj+4yPjw@mail.gmail.com>
+In-Reply-To: <CAMuHMdXnF87BqcxESzOjB9hSMZ0HSnqzRNXEvCXGczDj+4yPjw@mail.gmail.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYCPR01MB6189:EE_
+x-ms-office365-filtering-correlation-id: e4dd03da-7854-4b7f-c225-08db61145eb9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cD4/dc7ak7JmBU6xJx9GfWB/rGvglZy6AcprCOMoYoB+h5c36nN4ebkR3OGMHvBffYnwTZCHgcsGyMaLQfJDuWC/elbKUQ3P3CMBYIYw8gWPLPw/z9bTUwEHydaDKq9W/mo7/koLqWu9N3FtVly9/PoFWxW9RALRV3dkByAuCXL7W15aSqChD49XgGBt6y8kt+/ZW7ZS0RkB/Bx9g4eNC1UTmqc3oGTqWvCdt8V6ABVWEpovmm/QuK/IHDZZe+Tal6IT4XH0LwOOEdR+TOa4kXCbS1CTg98zCiuAWqT+e2idDsdCj1fMcPt9cSFRvolkDsEgYKaYn/+etQ6qxvm8XIXmpuOdONfDoegXjgBjjyzCG+h4UdK3n6YgxwDlhMjdpSKOCQzORgS7gKFr5pwi7zXfTS8HvYN8NVLaJFi93HLdML45QHlu7VRiNKQowAN7kvARRF3F0N0vtp+ywAh0a3y8HnoK0SUbiQIofwAk3jh85m7b2/oLzP3mTwOGOKxzQCwyLGi71hWLI/I3xb4J+nIz+GqYAr2cJBGQghTJlj1j+FpSrtQ2I2AnIKJ5hn5ccM5xW3TGyUqdx99V9wV3ecgBYnFDqhOpWngaxZ1ODjsFp5RvhRgTx+uVj+NnEcJ4
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(366004)(396003)(39860400002)(451199021)(66946007)(7416002)(76116006)(4326008)(66446008)(64756008)(6916009)(66556008)(66476007)(83380400001)(52536014)(5660300002)(86362001)(41300700001)(38100700002)(186003)(7696005)(8676002)(8936002)(2906002)(122000001)(38070700005)(55016003)(71200400001)(6506007)(316002)(26005)(53546011)(33656002)(478600001)(54906003)(9686003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MFBaWTdqcytwU3d0M3hMcEM4U0IwemsvU2Vrdm8xSW9BbFBWbnFSLzg1M1BI?=
+ =?utf-8?B?aUZYbndIWkFBTmI4QllkcDdrZXJtNWZHNENMa0ZmUCtFZlF3anBxQnoxSkV3?=
+ =?utf-8?B?TDg3ckhWUWo5UGVDRmxsQTRlME56RTZPM09QSjBBRUFUL0RudW9lZis1bWdx?=
+ =?utf-8?B?UXB5T3VHZElXcTA3UDM5eVl1QjZUYlFLNjdYRjAzUjRDSnRKc3ZHc2Z1dWZx?=
+ =?utf-8?B?R1lBeEdwZjhNZEtxai9aZlFLUVQyV0V1QU5QbGVURVFHZjhrSWdpU1ZDaUor?=
+ =?utf-8?B?emd6S1pMaHpUdjhHdElQa2ZHMitQQ25vZXpaZ3ZJdmFYQnp5SGZ2QnVkTDBx?=
+ =?utf-8?B?dC95U0FBODl5MVRYQVA5KzZ0Z3kvUFRjMHhKQzhkN2k5dTlWMkpFUm8zL1pO?=
+ =?utf-8?B?MUJ3S25WWmk2UE5jV21nMEtORlRJdG1zYUJqbzNiMHZFVnlSZ0IrRU5vTzk3?=
+ =?utf-8?B?VTJzc1lLZnhYOTExWDBXcUlhMWQ3Q1ozekU4ZnUzVnp6aC9KeUp1NVJFay9E?=
+ =?utf-8?B?TDZkV3QyQWFwcmJMR3A0dGdFS0tTZmlQWjJaOXhxMDltcWkrelZKSVVzR09C?=
+ =?utf-8?B?ZXJCUnYzQkE5UDFhajlIL0MzcnNncFhCaWpHYWlQdW9hdzJKcVF3anR5bnU2?=
+ =?utf-8?B?NmQrQ0VmT2N2WW93Tk9zVkNWKzBhcml5eHF1ZlpNWWNjME42R1EyRGFzSTBx?=
+ =?utf-8?B?YVFGN3VYR2RlZ1lHdS8wWC9Ba0JxSFc3aGlkYkprNlp3Zm8reHFUL1J6Qmsx?=
+ =?utf-8?B?R3NNYjlhaGRHT0Z6Yy9CZm1aMlN6aE9MZExBSzFwekhudGJTL2RBOHBDZUpv?=
+ =?utf-8?B?Z1lxZWREcjJYNUw2Rk9yc0xmakdMNy9YQ1BjTWZUcWsrZTRnWm8zWWJpNnZW?=
+ =?utf-8?B?VGdzY1VkR0tmU3FMUHZlSmZxeGFNV0F3R05qZVpOTDFYZkpqTjFnczQwWSth?=
+ =?utf-8?B?bXdJQnNFL2J1WDg3R25mcHdEbCtpbk0waGRLVlVRS0pFcFFVT1RDQnErZTNH?=
+ =?utf-8?B?dDQ3diswcVlPREZONFFSMXJnZnNDenY1MlVjRWk1bVJzMGdVdjJLTFFIMk9t?=
+ =?utf-8?B?YkFRRldYcmxRbHFGa0t2WXlrQzB3bklQMHpVT3ZEL0FrLzZYWkZHNmJIcVRX?=
+ =?utf-8?B?NURpekdjaEFqb2gwOUF5Rk4wZklTdi8zSERLenA5aEQ3RjVpaVpnNjA2L2JN?=
+ =?utf-8?B?ZVBpZUE0Z3llZGRGRXZtVXlnUXpIQThvbUNQVENURUJBeVpQcmVCai85dnpJ?=
+ =?utf-8?B?OFkyZUxvdllkZFdFMFlZVjhKelB2V2tyS2Y3UEI2YmZ4SXBRdXVqelgxWWxJ?=
+ =?utf-8?B?UVZvS2pnM2p6bFBwS0RRbHVrRHRwR3VncU11TGtvbFpJdlUvYTVCY0hiZzVK?=
+ =?utf-8?B?cy9SamprK0dNTHhBcWJRdHFYZXVTV243WWViQ1dmVE9ZbnFKN0pRcUJCcHpN?=
+ =?utf-8?B?WUU5MERzWTNNWlNTcWsxbm4yUVJYOWhwT09XRTJGOSt1enFqSzZ6N3NBWEdS?=
+ =?utf-8?B?VERzelZRd3RHdFJSVFg0dWVMeDJhV1pzdTQ3THk4azJBR053ZHVWT3EzWXJh?=
+ =?utf-8?B?N2NJcEtxb2NCR1dOQWltNmlBMHVYL1VoeloydkRLOFNzdjB1ZGNyUUM3djQx?=
+ =?utf-8?B?UDYrY2o0bHJzYy9naDl4S3hZQ0RMa29vWkdNMGQ5cHg3N1RScnNva0NuRnJT?=
+ =?utf-8?B?c241a25sYzdEK21ybi9FcWgwdXBaUGNqSG4yOGhKMSt5SzZMMTJJMHVvSzBZ?=
+ =?utf-8?B?aGxBVzhIKzJIWjNSaWtFRVR3S1QrdzcvUHNhbm9NT2d4N1pLNFcwZDZ3Z3lz?=
+ =?utf-8?B?TkVmOCtnbVEyMGJBRFBFT0lVT3VDWkZxNkJzQVRvSUJPVnl4ZFBVVitySURZ?=
+ =?utf-8?B?WFpzWkU1Z1FuR1lZVjRwbHRzc09xcjBRUkJiT0dlSzdBNGQ0TmFiZW1BV3p6?=
+ =?utf-8?B?ck1yaTJEaE1UVm9ZeDViVlhKZEZ6M1UzL0V3WE45bzhvZHoreWdYM1pWcDFK?=
+ =?utf-8?B?dDQvSzgvRVJ1bTlDVEN2a0YvVTFwL2o3V3VRYzB4dG1PSjlyNkI5ZVFSczVB?=
+ =?utf-8?B?S1FFR2NyNWFaaHUwWGJaOC9IOEgyR0RtRUYyNi9zMmZZY2VVUGl0N2FUUFNC?=
+ =?utf-8?B?NHl5YXBvc09mK1pnUlhNZThya1Q2Qk9rSmVCRDJTUkE5T3NCcWlBSUVCVktS?=
+ =?utf-8?B?QVE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <0000000000001777f605fce42c5f@google.com> <20230530072310-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230530072310-mutt-send-email-mst@kernel.org>
-From:   Stefano Garzarella <sgarzare@redhat.com>
-Date:   Tue, 30 May 2023 15:44:30 +0200
-Message-ID: <CAGxU2F7O7ef3mdvNXtiC0VtWiS2DMnoiGwSR=Z6SWbzqcrBF-g@mail.gmail.com>
-Subject: Re: [syzbot] [kvm?] [net?] [virt?] general protection fault in vhost_work_queue
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>
-Cc:     syzbot <syzbot+d0d442c22fa8db45ff0e@syzkaller.appspotmail.com>,
-        jasowang@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org, stefanha@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4dd03da-7854-4b7f-c225-08db61145eb9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2023 13:47:11.9038
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6+oCaItO2E4iriIWGeS8gaLBMRRoe3VMR/nbjCLH2ofNSLxyn18mrczy1b/WypzpIIQo4p1SuMbvse+zED5r8xVrtOkxVwn1yPg0JAz7HRE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB6189
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,142 +145,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 1:24=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com>=
- wrote:
->
-> On Tue, May 30, 2023 at 12:30:06AM -0700, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    933174ae28ba Merge tag 'spi-fix-v6.4-rc3' of git://git.=
-ker..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D138d4ae5280=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Df389ffdf4e9=
-ba3f0
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3Dd0d442c22fa8d=
-b45ff0e
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binu=
-tils for Debian) 2.35.2
-> >
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/21a81b8c2660/d=
-isk-933174ae.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/b4951d89e238/vmli=
-nux-933174ae.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/21eb405303cc=
-/bzImage-933174ae.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
-> > Reported-by: syzbot+d0d442c22fa8db45ff0e@syzkaller.appspotmail.com
-> >
-> > general protection fault, probably for non-canonical address 0xdffffc00=
-0000000e: 0000 [#1] PREEMPT SMP KASAN
-> > KASAN: null-ptr-deref in range [0x0000000000000070-0x0000000000000077]
-> > CPU: 0 PID: 29845 Comm: syz-executor.4 Not tainted 6.4.0-rc3-syzkaller-=
-00032-g933174ae28ba #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS=
- Google 05/16/2023
-> > RIP: 0010:vhost_work_queue drivers/vhost/vhost.c:259 [inline]
-> > RIP: 0010:vhost_work_queue+0xfc/0x150 drivers/vhost/vhost.c:248
-> > Code: 00 00 fc ff df 48 89 da 48 c1 ea 03 80 3c 02 00 75 56 48 b8 00 00=
- 00 00 00 fc ff df 48 8b 1b 48 8d 7b 70 48 89 fa 48 c1 ea 03 <80> 3c 02 00 =
-75 42 48 8b 7b 70 e8 95 9e ae f9 5b 5d 41 5c 41 5d e9
-> > RSP: 0018:ffffc9000333faf8 EFLAGS: 00010202
-> > RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc9000d84d000
-> > RDX: 000000000000000e RSI: ffffffff841221d7 RDI: 0000000000000070
-> > RBP: ffff88804b6b95b0 R08: 0000000000000001 R09: 0000000000000000
-> > R10: 0000000000000001 R11: 0000000000000000 R12: ffff88804b6b00b0
-> > R13: 0000000000000000 R14: ffff88804b6b95e0 R15: ffff88804b6b95c8
-> > FS:  00007f3b445ec700(0000) GS:ffff8880b9800000(0000) knlGS:00000000000=
-00000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 0000001b2e423000 CR3: 000000005d734000 CR4: 00000000003506f0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 000000000000003b DR6: 00000000ffff0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  vhost_transport_send_pkt+0x268/0x520 drivers/vhost/vsock.c:288
-> >  virtio_transport_send_pkt_info+0x54c/0x820 net/vmw_vsock/virtio_transp=
-ort_common.c:250
-> >  virtio_transport_connect+0xb1/0xf0 net/vmw_vsock/virtio_transport_comm=
-on.c:813
-> >  vsock_connect+0x37f/0xcd0 net/vmw_vsock/af_vsock.c:1414
-> >  __sys_connect_file+0x153/0x1a0 net/socket.c:2003
-> >  __sys_connect+0x165/0x1a0 net/socket.c:2020
-> >  __do_sys_connect net/socket.c:2030 [inline]
-> >  __se_sys_connect net/socket.c:2027 [inline]
-> >  __x64_sys_connect+0x73/0xb0 net/socket.c:2027
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > RIP: 0033:0x7f3b4388c169
-> > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89=
- f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 =
-ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > RSP: 002b:00007f3b445ec168 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
-> > RAX: ffffffffffffffda RBX: 00007f3b439ac050 RCX: 00007f3b4388c169
-> > RDX: 0000000000000010 RSI: 0000000020000140 RDI: 0000000000000004
-> > RBP: 00007f3b438e7ca1 R08: 0000000000000000 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> > R13: 00007f3b43acfb1f R14: 00007f3b445ec300 R15: 0000000000022000
-> >  </TASK>
-> > Modules linked in:
-> > ---[ end trace 0000000000000000 ]---
-> > RIP: 0010:vhost_work_queue drivers/vhost/vhost.c:259 [inline]
-> > RIP: 0010:vhost_work_queue+0xfc/0x150 drivers/vhost/vhost.c:248
-> > Code: 00 00 fc ff df 48 89 da 48 c1 ea 03 80 3c 02 00 75 56 48 b8 00 00=
- 00 00 00 fc ff df 48 8b 1b 48 8d 7b 70 48 89 fa 48 c1 ea 03 <80> 3c 02 00 =
-75 42 48 8b 7b 70 e8 95 9e ae f9 5b 5d 41 5c 41 5d e9
-> > RSP: 0018:ffffc9000333faf8 EFLAGS: 00010202
-> > RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc9000d84d000
-> > RDX: 000000000000000e RSI: ffffffff841221d7 RDI: 0000000000000070
-> > RBP: ffff88804b6b95b0 R08: 0000000000000001 R09: 0000000000000000
-> > R10: 0000000000000001 R11: 0000000000000000 R12: ffff88804b6b00b0
-> > R13: 0000000000000000 R14: ffff88804b6b95e0 R15: ffff88804b6b95c8
-> > FS:  00007f3b445ec700(0000) GS:ffff8880b9900000(0000) knlGS:00000000000=
-00000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 0000001b2e428000 CR3: 000000005d734000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 000000000000003b DR6: 00000000ffff0ff0 DR7: 0000000000000400
-> > ----------------
-> > Code disassembly (best guess), 5 bytes skipped:
-> >    0: 48 89 da                mov    %rbx,%rdx
-> >    3: 48 c1 ea 03             shr    $0x3,%rdx
-> >    7: 80 3c 02 00             cmpb   $0x0,(%rdx,%rax,1)
-> >    b: 75 56                   jne    0x63
-> >    d: 48 b8 00 00 00 00 00    movabs $0xdffffc0000000000,%rax
-> >   14: fc ff df
-> >   17: 48 8b 1b                mov    (%rbx),%rbx
-> >   1a: 48 8d 7b 70             lea    0x70(%rbx),%rdi
-> >   1e: 48 89 fa                mov    %rdi,%rdx
-> >   21: 48 c1 ea 03             shr    $0x3,%rdx
-> > * 25: 80 3c 02 00             cmpb   $0x0,(%rdx,%rax,1) <-- trapping in=
-struction
-> >   29: 75 42                   jne    0x6d
-> >   2b: 48 8b 7b 70             mov    0x70(%rbx),%rdi
-> >   2f: e8 95 9e ae f9          callq  0xf9ae9ec9
-> >   34: 5b                      pop    %rbx
-> >   35: 5d                      pop    %rbp
-> >   36: 41 5c                   pop    %r12
-> >   38: 41 5d                   pop    %r13
-> >   3a: e9                      .byte 0xe9
->
->
-> Stefano, Stefan, take a look?
-
-I'll take a look.
-
-From a first glance, it looks like an issue when we call vhost_work_queue()=
-.
-@Mike, does that ring any bells since you recently looked at that code?
-
-Thanks,
-Stefano
-
+SGkgR2VlcnQsDQoNClRoYW5rcyBmb3IgdGhlIGZlZWRiYWNrLg0KDQo+IC0tLS0tT3JpZ2luYWwg
+TWVzc2FnZS0tLS0tDQo+IEZyb206IEdlZXJ0IFV5dHRlcmhvZXZlbiA8Z2VlcnRAbGludXgtbTY4
+ay5vcmc+DQo+IFNlbnQ6IFR1ZXNkYXksIE1heSAzMCwgMjAyMyAyOjE3IFBNDQo+IFRvOiBCaWp1
+IERhcyA8YmlqdS5kYXMuanpAYnAucmVuZXNhcy5jb20+DQo+IENjOiBNYXJjIFp5bmdpZXIgPG1h
+ekBrZXJuZWwub3JnPjsgTGF1cmVudCBQaW5jaGFydA0KPiA8bGF1cmVudC5waW5jaGFydEBpZGVh
+c29uYm9hcmQuY29tPjsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgR3JlZw0KPiBLcm9h
+aC1IYXJ0bWFuIDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz47IFpoZW5nIFdhbmcNCj4gPHp5
+eXRsei53ekAxNjMuY29tPjsgR2VlcnQgVXl0dGVyaG9ldmVuIDxnZWVydCtyZW5lc2FzQGdsaWRl
+ci5iZT47DQo+IFlvc2hpaGlybyBTaGltb2RhIDx5b3NoaWhpcm8uc2hpbW9kYS51aEByZW5lc2Fz
+LmNvbT47IFdvbGZyYW0gU2FuZw0KPiA8d3NhK3JlbmVzYXNAc2FuZy1lbmdpbmVlcmluZy5jb20+
+OyBLcnp5c3p0b2YgS296bG93c2tpDQo+IDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+
+OyBsaW51eC11c2JAdmdlci5rZXJuZWwub3JnOyBQcmFiaGFrYXINCj4gTWFoYWRldiBMYWQgPHBy
+YWJoYWthci5tYWhhZGV2LWxhZC5yakBicC5yZW5lc2FzLmNvbT47IGxpbnV4LXJlbmVzYXMtDQo+
+IHNvY0B2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSF0gdXNiOiBnYWRnZXQ6
+IHVkYzogcmVuZXNhc191c2IzOiBGaXggUlovVjJNDQo+IHttb2Rwcm9iZSxiaW5kfSBlcnJvcg0K
+PiANCj4gSGkgQmlqdSwNCj4gDQo+IE9uIFR1ZSwgTWF5IDMwLCAyMDIzIGF0IDI6MzfigK9QTSBC
+aWp1IERhcyA8YmlqdS5kYXMuanpAYnAucmVuZXNhcy5jb20+DQo+IHdyb3RlOg0KPiA+ID4gU3Vi
+amVjdDogUmU6IFtQQVRDSF0gdXNiOiBnYWRnZXQ6IHVkYzogcmVuZXNhc191c2IzOiBGaXggUlov
+VjJNDQo+ID4gPiB7bW9kcHJvYmUsYmluZH0gZXJyb3INCj4gPiA+DQo+ID4gPiBPbiBNb24sIDI5
+IE1heSAyMDIzIDA5OjU2OjU2ICswMTAwLA0KPiA+ID4gTGF1cmVudCBQaW5jaGFydCA8bGF1cmVu
+dC5waW5jaGFydEBpZGVhc29uYm9hcmQuY29tPiB3cm90ZToNCj4gPiA+ID4NCj4gPiA+ID4gVGhl
+IG5hbWUgaXMganVzdCBpbmZvcm1hdGl2ZSBzbyBJIHN1cHBvc2UgaXQncyBvay4gSXQgbWFrZXMg
+bWUNCj4gPiA+ID4gd29uZGVyLCB0aG91Z2gsIGlmIHRoZSB1c2IzZHJkIGRyaXZlciBzaG91bGRu
+J3QgcmVnaXN0ZXIgdGhlDQo+ID4gPiA+IGludGVycnVwdCBoYW5kbGVyIGl0c2VsZi4NCj4gPiA+
+DQo+ID4gPiBXZWxsLCBpdCByZWdpc3RlcnMgaXQgaXRzZWxmLCBidXQgcHJldGVuZGluZyB0byBi
+ZSBhbm90aGVyIGRldmljZS4NCj4gPiA+IFdoaWNoIGlzIHdyb25nIG9uIG1hbnkgbGV2ZWxzLg0K
+PiA+DQo+ID4gT0ssIFdpbGwgcmVnaXN0ZXIgdGhlIGhhbmRsZXIgaW4gdXNiM2RyZCBkcml2ZXIg
+YW5kIGV4cG9zZQ0KPiA+IHJlZ2lzdGVyL3VucmVnaXN0ZXIgaGFuZGxlciBBUEkgd2l0aCBjYiBm
+dW5jdGlvbiB0byBhdm9pZCBkdXBsaWNhdGlvbg0KPiBvZiB0aGUgY29kZSB3aXRoIHJlbmVzYXNf
+dXNiMyBkcml2ZXIuDQo+ID4NCj4gPiBCYXNpY2FsbHksIHRoZXJlIHdpbGwgYmUgMiBleHBvcnRl
+ZCBmdW5jdGlvbnMgKyAxIHNwaW5sb2NrIGludHJvZHVjZWQNCj4gPiBpbiB1c2IzZHJkIGRyaXZl
+cg0KPiA+DQo+ID4gVVNCM0RSRCBkcml2ZXIgcmVnaXN0ZXIgdGhlIElSUSBoYW5kbGVyDQo+ID4N
+Cj4gPiBQcm9iZS9yZW1vdmUgZnJvbSByZW5lc2FzX3VzYjMgZHJpdmVyIHJlZ2lzdGVyL3VucmVn
+aXN0ZXIgdGhlIGNiDQo+ID4gZnVuY3Rpb24uIFdoZW5ldmVyIHRoZXJlIGlzIGRyZCBpcnEgY2Ig
+ZnVuY3Rpb24gd2lsbCBiZSBjYWxsZWQuDQo+IA0KPiBQbGVhc2UgZG9uJ3QgbWFrZSBpdCBtb3Jl
+IGNvbXBsaWNhdGVkOiBpZiB0aGUgcGFyZW50IGRldmljZSBkb2VzIG5vdCB1c2UNCj4gdGhhdCBp
+bnRlcnJ1cHQsIHRoZXJlIGlzIG5vIG5lZWQgdG8gbW92ZSBpdHMgaGFuZGxpbmcgdG8gdGhlIHBh
+cmVudA0KPiBkZXZpY2UgZHJpdmVyLg0KPiANCj4gWW91ciBwYXRjaCBsb29rcyBmaW5lIHRvIG1l
+LCBqdXN0IHJlcGxhY2UgdGhlIHNlY29uZCBkZGF0YS0+ZGV2LCB0b28uDQoNCkFncmVlZCwgd2ls
+bCByZXBsYWNlICJkZXZfbmFtZShkZGF0YS0+ZGV2KSItPmRldl9uYW1lKCZwZGV2LT5kZXYpLg0K
+DQpXaXRoIEludGVycnVwdCBJRCAiMjc0IiB2cyAiMjc4Iiwgd2UgY2FuIGRpZmZlcmVudGlhdGUg
+ImRyZCIgdnMgInBlcmkiIGludGVycnVwdC4NCg0Kcm9vdEByenYybTp+IyBjYXQgL3Byb2MvaW50
+ZXJydXB0cyB8IGdyZXAgdXNiDQogMjI6ICAgICAgICAgIDAgICAgIEdJQ3YyIDI3NCBMZXZlbCAg
+ICAgODUwNzAwMDAudXNiM3BlcmkNCiAyODogICAgICAgICAgMCAgICAgR0lDdjIgMjc4IExldmVs
+ICAgICA4NTA3MDAwMC51c2IzcGVyaQ0KDQpDaGVlcnMsDQpCaWp1DQo=
