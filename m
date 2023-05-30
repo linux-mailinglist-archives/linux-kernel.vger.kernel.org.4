@@ -2,957 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63F0715777
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B94671577C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbjE3Ho3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39120 "EHLO
+        id S229613AbjE3HpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbjE3HnZ (ORCPT
+        with ESMTP id S231400AbjE3Hnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:43:25 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEAF1A5;
-        Tue, 30 May 2023 00:43:05 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b01d3bb571so21724095ad.2;
-        Tue, 30 May 2023 00:43:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685432585; x=1688024585;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wqj0aanNXwg+HQWxFVFJNjeRjgtCqk88a0YwI7QeJKs=;
-        b=kb5qbwCWxZCySR5XneN8iuS0OZITUv1yTuZIMvcq9V49uEB6cWY7CZ0+7EcOc5+ecc
-         OCrsC2xjyiwIvEkfnbkZ6iPBRTn4gxZdtHXVkBk1h01b8ziWxX94cLBLoe22xQRpknXF
-         eOTaQKMtYwMaj9vAtuqiphxhrsY7MGjDuk0HRIzYknDwKuiwb3Hw3dSQ12aRo9x6RalS
-         URGMLN/XHecfsdKW7TCnUFYJG0F/DWM7mN7LfIhBHOuxSaRLMLZXAqcsb1ZENlxPw/UA
-         wZX/PvzpLqNKpuegF9nvLij4OQyEkgK6xa4CXcrUIsZIzBGjGbrIxtkctshiaU7s04aR
-         lPcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685432585; x=1688024585;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Wqj0aanNXwg+HQWxFVFJNjeRjgtCqk88a0YwI7QeJKs=;
-        b=crO2gYPFAmEddxr2Nj5nzJvlWHeZRFPbJhYGG9kdSJ4IgGfykPBBZzUcBjMZzYb2y1
-         Z++kjkWgjYZ6epKOZw9BBmjwl0qzd9AYrRBM3sLlIJJu3Q7rDRwguxMCkr54lLUFhthQ
-         ajAjqV0ROSTIz1MrvK7AP/9m6ea3C7reehqBM8bc5/N7nEK6r1umaK+lw5M2au6Q0fok
-         WK14NAn3FqDTxEkDyeTNDJDyjRiXYOxfrIpVvES/Hr8b+j66DrX5YiBMjRbVl9gNoV1X
-         /Qy/2Q37rJV/3pwKuLFZqbDQkJ6ZYQPYE8ffXlLm+WGF0betExed5fymOea+uiBxymlz
-         9h1A==
-X-Gm-Message-State: AC+VfDwltDSmtkSpoPmEjz7N93vAseJlOREbvytjrCJAxvIM7tcrXHR8
-        gStCJg3KOdjfTi85Fc4mz+8=
-X-Google-Smtp-Source: ACHHUZ6A32JUh6fEIm4uccCLwhOsT5FAtnWGyU4yB5fH4si06Rcw96JRkvxv4oH/M+PcVtx5GqzNRg==
-X-Received: by 2002:a17:903:278b:b0:1ab:1bdd:b307 with SMTP id jw11-20020a170903278b00b001ab1bddb307mr1400870plb.51.1685432584770;
-        Tue, 30 May 2023 00:43:04 -0700 (PDT)
-Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id a14-20020a170902ecce00b001afb96f4b90sm5930793plh.274.2023.05.30.00.43.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 00:43:04 -0700 (PDT)
-From:   Jacky Huang <ychuang570808@gmail.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, tmaimon77@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, arnd@arndb.de, soc@kernel.org,
-        schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH v12 10/10] tty: serial: Add Nuvoton ma35d1 serial driver support
-Date:   Tue, 30 May 2023 07:42:21 +0000
-Message-Id: <20230530074221.1031011-11-ychuang570808@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230530074221.1031011-1-ychuang570808@gmail.com>
-References: <20230530074221.1031011-1-ychuang570808@gmail.com>
+        Tue, 30 May 2023 03:43:43 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0ADE73;
+        Tue, 30 May 2023 00:43:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1389321A47;
+        Tue, 30 May 2023 07:42:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1685432546; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mEZfIz5gAAYa7HrFBYddIf8SrJO/cplUxxq/Eo6y1l8=;
+        b=tW4TNONa5mfEK2pOrqKhPAaLsva/4YMzXBBUQXDaBttGsLrB+VaRRPSytylKKSe4Mu7M/w
+        Hp6EzDQVyiWSjKh7eVHacJ+Qv7u6Or/krLKXxe0/KRVYJSPDhfjcYOqVswyGFlCyxVtiHw
+        A2Vpgcunqiw/7G9w9ReEV6BAtBbPvfc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1685432546;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mEZfIz5gAAYa7HrFBYddIf8SrJO/cplUxxq/Eo6y1l8=;
+        b=OxkqGu9BHHeJ24QQt4IDPpcAj5wU7ZPgvDwEBrmFTckHKhxOpaArgYuFmbbM1IvSpn9pvr
+        rhFWCRQs8hXsuNDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F422113478;
+        Tue, 30 May 2023 07:42:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id DrGMO+GodWSdHwAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 30 May 2023 07:42:25 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 85754A0754; Tue, 30 May 2023 09:42:25 +0200 (CEST)
+Date:   Tue, 30 May 2023 09:42:25 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, jun.nie@linaro.org,
+        ebiggers@kernel.org, yi.zhang@huawei.com, yangerkun@huawei.com,
+        yukuai3@huawei.com,
+        syzbot+a158d886ca08a3fecca4@syzkaller.appspotmail.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] ext4: fix race condition between buffer write and
+ page_mkwrite
+Message-ID: <20230530074225.ly6vnolykqu5teos@quack3>
+References: <20230529080148.3810143-1-libaokun1@huawei.com>
+ <20230529144435.bj65ltbww5jbh2uc@quack3>
+ <7f6ab488-9eef-fb94-b007-839eb1c1f487@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <7f6ab488-9eef-fb94-b007-839eb1c1f487@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jacky Huang <ychuang3@nuvoton.com>
+On Tue 30-05-23 10:00:44, Baokun Li wrote:
+> On 2023/5/29 22:44, Jan Kara wrote:
+> > On Mon 29-05-23 16:01:48, Baokun Li wrote:
+> > > Syzbot reported a BUG_ON:
+> > > ==================================================================
+> > > EXT4-fs (loop0): mounted filesystem without journal. Quota mode: none.
+> > > EXT4-fs error (device loop0): ext4_mb_generate_buddy:1098: group 0, block
+> > >       bitmap and bg descriptor inconsistent: 25 vs 150994969 free clusters
+> > > ------------[ cut here ]------------
+> > > kernel BUG at fs/ext4/ext4_jbd2.c:53!
+> > > invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> > > CPU: 1 PID: 494 Comm: syz-executor.0 6.1.0-rc7-syzkaller-ga4412fdd49dc #0
+> > > RIP: 0010:__ext4_journal_stop+0x1b3/0x1c0
+> > >   [...]
+> > > Call Trace:
+> > >   ext4_write_inline_data_end+0xa39/0xdf0
+> > >   ext4_da_write_end+0x1e2/0x950
+> > >   generic_perform_write+0x401/0x5f0
+> > >   ext4_buffered_write_iter+0x35f/0x640
+> > >   ext4_file_write_iter+0x198/0x1cd0
+> > >   vfs_write+0x8b5/0xef0
+> > >   [...]
+> > > ==================================================================
+> > > 
+> > > The above BUG_ON is triggered by the following race:
+> > > 
+> > >             cpu1                    cpu2
+> > > ________________________|________________________
+> > > ksys_write
+> > >   vfs_write
+> > >    new_sync_write
+> > >     ext4_file_write_iter
+> > >      ext4_buffered_write_iter
+> > >       generic_perform_write
+> > >        ext4_da_write_begin
+> > >                            do_fault
+> > >                             do_page_mkwrite
+> > >                              ext4_page_mkwrite
+> > >                               ext4_convert_inline_data
+> > >                                ext4_convert_inline_data_nolock
+> > >                                 ext4_destroy_inline_data_nolock
+> > >                                  //clear EXT4_STATE_MAY_INLINE_DATA
+> > >                                 ext4_map_blocks --> return error
+> > >         ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
+> > >         ext4_block_write_begin
+> > >                                 ext4_restore_inline_data
+> > >                                  // set EXT4_STATE_MAY_INLINE_DATA
+> > >        ext4_da_write_end
+> > >         ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
+> > >         ext4_write_inline_data_end
+> > >          handle=NULL
+> > >          ext4_journal_stop(handle)
+> > >           __ext4_journal_stop
+> > >            ext4_put_nojournal(handle)
+> > >             ref_cnt = (unsigned long)handle
+> > >             BUG_ON(ref_cnt == 0)  ---> BUG_ON
+> > > 
+> > > The root cause of this problem is that the ext4_convert_inline_data() in
+> > > ext4_page_mkwrite() does not grab i_rwsem, so it may race with
+> > > ext4_buffered_write_iter() and cause the write_begin() and write_end()
+> > > functions to be inconsistent and trigger BUG_ON.
+> > > 
+> > > To solve the above issue, we cannot add inode_lock directly to
+> > > ext4_page_mkwrite(), because this function is a hot path and frequent calls
+> > > to inode_lock will cause performance degradation for multi-threaded reads
+> > > and writes. Hence, we move ext4_convert_inline_data() to ext4_file_mmap(),
+> > > and only when inline_data is enabled and mmap a file in shared write mode,
+> > > we hold the lock to convert, which can reduce the impact on performance.
+> > > 
+> > > Reported-by: Jun Nie <jun.nie@linaro.org>
+> > > Closes: https://lore.kernel.org/lkml/63903521.5040307@huawei.com/t/
+> > > Reported-by: syzbot+a158d886ca08a3fecca4@syzkaller.appspotmail.com
+> > > Closes: https://syzkaller.appspot.com/bug?id=899b37f20ce4072bcdfecfe1647b39602e956e36
+> > > Fixes: 7b4cc9787fe3 ("ext4: evict inline data when writing to memory map")
+> > > CC: stable@vger.kernel.org # 4.12+
+> > > Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> > Thanks for the patch! The problem with i_rwsem in ext4_page_mkwrite() is
+> > not so much about performance as about lock ordering. In
+> > ext4_page_mkwrite() we are called with mmap_sem held and so we cannot
+> > acquire i_rwsem because it ranks about it.
+> 
+> Thank you for your review!
+> 
+> I'm sorry I didn't make myself clear here.
+> 
+> Yes, we can't get i_rwsem after holding mmap_sem at any time, otherwise
+> ABBA deadlock may occur. The "add inode_lock directly" in my patch
+> description actually looks like this:
+> ```
+> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+> index b98d2d58b900..c9318dc2a613 100644
+> --- a/fs/ext4/inode.c
+> +++ b/fs/ext4/inode.c
+> @@ -6025,12 +6025,14 @@ vm_fault_t ext4_page_mkwrite(struct vm_fault *vmf)
+>         sb_start_pagefault(inode->i_sb);
+>         file_update_time(vma->vm_file);
+> 
+> -       filemap_invalidate_lock_shared(mapping);
+> -
+> +       inode_lock(inode);
+>         err = ext4_convert_inline_data(inode);
+> +       inode_unlock(inode);
+>         if (err)
+>                 goto out_ret;
+> 
+> +       filemap_invalidate_lock_shared(mapping);
+> +
+>         /*
+>          * On data journalling we skip straight to the transaction handle:
+>          * there's no delalloc; page truncated will be checked later; the
+> ```
 
-This adds UART and console driver for Nuvoton ma35d1 Soc.
-It supports full-duplex communication, FIFO control, and
-hardware flow control.
+Yes, but even this could deadlock. The ABBA deadlock I'm speaking about
+would not be created with mapping->invalidate_lock but rather with
+task->mm->mmap_lock which is acquired at the beginning of page fault in the
+arch code. And when you do write(2), you hold inode_lock() and then you
+copy data from the use provided buffer to the pagecache pages and that can
+cause a page fault on the user provided buffer which will try to grab
+task->mm->mmap_lock.
 
-Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
----
- drivers/tty/serial/Kconfig         |  18 +
- drivers/tty/serial/Makefile        |   1 +
- drivers/tty/serial/ma35d1_serial.c | 801 +++++++++++++++++++++++++++++
- include/uapi/linux/serial_core.h   |   3 +
- 4 files changed, 823 insertions(+)
- create mode 100644 drivers/tty/serial/ma35d1_serial.c
+This lock inversion is the main reason why inode lock cannot be used
+anywhere in the page fault path.
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 398e5aac2e77..85ac6fc1ff1d 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -1555,6 +1555,24 @@ config SERIAL_SUNPLUS_CONSOLE
- 	  you can alter that using a kernel command line option such as
- 	  "console=ttySUPx".
- 
-+config SERIAL_NUVOTON_MA35D1
-+	tristate "Nuvoton MA35D1 family UART support"
-+	depends on ARCH_MA35 || COMPILE_TEST
-+	select SERIAL_CORE
-+	help
-+	  This driver supports Nuvoton MA35D1 family UART ports. If you would
-+	  like to use them, you must answer Y or M to this option. Note that
-+	  for use as console, it must be included in kernel and not as a
-+	  module
-+
-+config SERIAL_NUVOTON_MA35D1_CONSOLE
-+	bool "Console on a Nuvotn MA35D1 family UART port"
-+	depends on SERIAL_NUVOTON_MA35D1=y
-+	select SERIAL_CORE_CONSOLE
-+	help
-+	  Select this options if you'd like to use the UART port0 of the
-+	  Nuvoton MA35D1 family as a console.
-+
- endmenu
- 
- config SERIAL_MCTRL_GPIO
-diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
-index cd9afd9e3018..0e823851c42c 100644
---- a/drivers/tty/serial/Makefile
-+++ b/drivers/tty/serial/Makefile
-@@ -93,3 +93,4 @@ obj-$(CONFIG_SERIAL_MCTRL_GPIO)	+= serial_mctrl_gpio.o
- 
- obj-$(CONFIG_SERIAL_KGDB_NMI) += kgdb_nmi.o
- obj-$(CONFIG_KGDB_SERIAL_CONSOLE) += kgdboc.o
-+obj-$(CONFIG_SERIAL_NUVOTON_MA35D1) += ma35d1_serial.o
-diff --git a/drivers/tty/serial/ma35d1_serial.c b/drivers/tty/serial/ma35d1_serial.c
-new file mode 100644
-index 000000000000..c0a8c1e4ca0e
---- /dev/null
-+++ b/drivers/tty/serial/ma35d1_serial.c
-@@ -0,0 +1,801 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ *  MA35D1 serial driver
-+ *  Copyright (C) 2023 Nuvoton Technology Corp.
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/serial_core.h>
-+#include <linux/slab.h>
-+#include <linux/tty_flip.h>
-+#include <linux/units.h>
-+
-+#define MA35_UART_NR		17
-+
-+#define MA35_RBR_REG		0x00
-+#define MA35_THR_REG		0x00
-+#define MA35_IER_REG		0x04
-+#define MA35_FCR_REG		0x08
-+#define MA35_LCR_REG		0x0C
-+#define MA35_MCR_REG		0x10
-+#define MA35_MSR_REG		0x14
-+#define MA35_FSR_REG		0x18
-+#define MA35_ISR_REG		0x1C
-+#define MA35_TOR_REG		0x20
-+#define MA35_BAUD_REG		0x24
-+#define MA35_ALTCTL_REG		0x2C
-+#define MA35_FUN_SEL_REG	0x30
-+#define MA35_WKCTL_REG		0x40
-+#define MA35_WKSTS_REG		0x44
-+
-+/* MA35_IER_REG - Interrupt Enable Register */
-+#define MA35_IER_RDA_IEN	BIT(0)  /* RBR Available Interrupt Enable */
-+#define MA35_IER_THRE_IEN	BIT(1)  /* THR Empty Interrupt Enable */
-+#define MA35_IER_RLS_IEN	BIT(2)  /* RX Line Status Interrupt Enable */
-+#define MA35_IER_RTO_IEN	BIT(4)  /* RX Time-out Interrupt Enable */
-+#define MA35_IER_BUFERR_IEN	BIT(5)  /* Buffer Error Interrupt Enable */
-+#define MA35_IER_TIME_OUT_EN	BIT(11) /* RX Buffer Time-out Counter Enable */
-+#define MA35_IER_AUTO_RTS	BIT(12) /* nRTS Auto-flow Control Enable */
-+#define MA35_IER_AUTO_CTS	BIT(13) /* nCTS Auto-flow Control Enable */
-+
-+/* MA35_FCR_REG - FIFO Control Register */
-+#define MA35_FCR_RFR		BIT(1)  /* RX Field Software Reset */
-+#define MA35_FCR_TFR		BIT(2)  /* TX Field Software Reset */
-+#define MA35_FCR_RFITL_MASK	GENMASK(7, 4) /* RX FIFO Interrupt Trigger Level */
-+#define MA35_FCR_RFITL_1BYTE	FIELD_PREP(MA35_FCR_RFITL_MASK, 0)
-+#define MA35_FCR_RFITL_4BYTES	FIELD_PREP(MA35_FCR_RFITL_MASK, 1)
-+#define MA35_FCR_RFITL_8BYTES	FIELD_PREP(MA35_FCR_RFITL_MASK, 2)
-+#define MA35_FCR_RFITL_14BYTES	FIELD_PREP(MA35_FCR_RFITL_MASK, 3)
-+#define MA35_FCR_RFITL_30BYTES	FIELD_PREP(MA35_FCR_RFITL_MASK, 4)
-+#define MA35_FCR_RTSTL_MASK	GENMASK(19, 16) /* nRTS Trigger Level */
-+#define MA35_FCR_RTSTL_1BYTE	FIELD_PREP(MA35_FCR_RTSTL_MASK, 0)
-+#define MA35_FCR_RTSTL_4BYTES	FIELD_PREP(MA35_FCR_RTSTL_MASK, 1)
-+#define MA35_FCR_RTSTL_8BYTES	FIELD_PREP(MA35_FCR_RTSTL_MASK, 2)
-+#define MA35_FCR_RTSTL_14BYTES	FIELD_PREP(MA35_FCR_RTSTL_MASK, 3)
-+#define MA35_FCR_RTSTLL_30BYTES	FIELD_PREP(MA35_FCR_RTSTL_MASK, 4)
-+
-+/* MA35_LCR_REG - Line Control Register */
-+#define	MA35_LCR_NSB		BIT(2)  /* Number of â€œSTOP Bitâ€ */
-+#define MA35_LCR_PBE		BIT(3)  /* Parity Bit Enable */
-+#define MA35_LCR_EPE		BIT(4)  /* Even Parity Enable */
-+#define MA35_LCR_SPE		BIT(5)  /* Stick Parity Enable */
-+#define MA35_LCR_BREAK		BIT(6)  /* Break Control */
-+#define MA35_LCR_WLS_MASK	GENMASK(1, 0) /* Word Length Selection */
-+#define MA35_LCR_WLS_5BITS	FIELD_PREP(MA35_LCR_WLS_MASK, 0)
-+#define MA35_LCR_WLS_6BITS	FIELD_PREP(MA35_LCR_WLS_MASK, 1)
-+#define MA35_LCR_WLS_7BITS	FIELD_PREP(MA35_LCR_WLS_MASK, 2)
-+#define MA35_LCR_WLS_8BITS	FIELD_PREP(MA35_LCR_WLS_MASK, 3)
-+
-+/* MA35_MCR_REG - Modem Control Register */
-+#define MA35_MCR_RTS_CTRL	BIT(1)  /* nRTS Signal Control */
-+#define MA35_MCR_RTSACTLV	BIT(9)  /* nRTS Pin Active Level */
-+#define MA35_MCR_RTSSTS		BIT(13) /* nRTS Pin Status (Read Only) */
-+
-+/* MA35_MSR_REG - Modem Status Register */
-+#define MA35_MSR_CTSDETF	BIT(0)  /* Detect nCTS State Change Flag */
-+#define MA35_MSR_CTSSTS		BIT(4)  /* nCTS Pin Status (Read Only) */
-+#define MA35_MSR_CTSACTLV	BIT(8)  /* nCTS Pin Active Level */
-+
-+/* MA35_FSR_REG - FIFO Status Register */
-+#define MA35_FSR_RX_OVER_IF	BIT(0)  /* RX Overflow Error Interrupt Flag */
-+#define MA35_FSR_PEF		BIT(4)  /* Parity Error Flag*/
-+#define MA35_FSR_FEF		BIT(5)  /* Framing Error Flag */
-+#define MA35_FSR_BIF		BIT(6)  /* Break Interrupt Flag */
-+#define MA35_FSR_RX_EMPTY	BIT(14) /* Receiver FIFO Empty (Read Only) */
-+#define MA35_FSR_RX_FULL	BIT(15) /* Receiver FIFO Full (Read Only) */
-+#define MA35_FSR_TX_EMPTY	BIT(22) /* Transmitter FIFO Empty (Read Only) */
-+#define MA35_FSR_TX_FULL	BIT(23) /* Transmitter FIFO Full (Read Only) */
-+#define MA35_FSR_TX_OVER_IF	BIT(24) /* TX Overflow Error Interrupt Flag */
-+#define MA35_FSR_TE_FLAG	BIT(28) /* Transmitter Empty Flag (Read Only) */
-+#define MA35_FSR_RXPTR_MSK	GENMASK(13, 8) /* TX FIFO Pointer mask */
-+#define MA35_FSR_TXPTR_MSK	GENMASK(21, 16) /* RX FIFO Pointer mask */
-+
-+/* MA35_ISR_REG - Interrupt Status Register */
-+#define MA35_ISR_RDA_IF		BIT(0)  /* RBR Available Interrupt Flag */
-+#define MA35_ISR_THRE_IF	BIT(1)  /* THR Empty Interrupt Flag */
-+#define MA35_ISR_RLSIF		BIT(2)  /* Receive Line Interrupt Flag */
-+#define MA35_ISR_MODEMIF	BIT(3)  /* MODEM Interrupt Flag */
-+#define MA35_ISR_RXTO_IF	BIT(4)  /* RX Time-out Interrupt Flag */
-+#define MA35_ISR_BUFEIF		BIT(5)  /* Buffer Error Interrupt Flag */
-+#define MA35_ISR_WK_IF		BIT(6)  /* UART Wake-up Interrupt Flag */
-+#define MA35_ISR_RDAINT		BIT(8)  /* RBR Available Interrupt Indicator */
-+#define MA35_ISR_THRE_INT	BIT(9)  /* THR Empty Interrupt Indicator */
-+#define MA35_ISR_ALL		0xFFFFFFFF
-+
-+/* MA35_BAUD_REG - Baud Rate Divider Register */
-+#define	MA35_BAUD_MODE_MASK	GENMASK(29, 28)
-+#define MA35_BAUD_MODE0		FIELD_PREP(MA35_BAUD_MODE_MASK, 0)
-+#define MA35_BAUD_MODE1		FIELD_PREP(MA35_BAUD_MODE_MASK, 2)
-+#define MA35_BAUD_MODE2		FIELD_PREP(MA35_BAUD_MODE_MASK, 3)
-+#define	MA35_BAUD_MASK		GENMASK(15, 0)
-+
-+/* MA35_ALTCTL_REG - Alternate Control/Status Register */
-+#define MA35_ALTCTL_RS485AUD	BIT(10) /* RS-485 Auto Direction Function */
-+
-+/* MA35_FUN_SEL_REG - Function Select Register */
-+#define MA35_FUN_SEL_MASK	GENMASK(2, 0)
-+#define MA35_FUN_SEL_UART	FIELD_PREP(MA35_FUN_SEL_MASK, 0)
-+#define MA35_FUN_SEL_RS485	FIELD_PREP(MA35_FUN_SEL_MASK, 3)
-+
-+/* The constrain for MA35D1 UART baud rate divider */
-+#define MA35_BAUD_DIV_MAX	0xFFFF
-+#define MA35_BAUD_DIV_MIN	11
-+
-+/* UART FIFO depth */
-+#define MA35_UART_FIFO_DEPTH	32
-+/* UART console clock */
-+#define MA35_UART_CONSOLE_CLK	(24 * HZ_PER_MHZ)
-+/* UART register ioremap size */
-+#define MA35_UART_REG_SIZE	0x100
-+/* Rx Timeout */
-+#define MA35_UART_RX_TOUT	0x40
-+
-+#define MA35_ISR_IF_CHECK	(MA35_ISR_RDA_IF | MA35_ISR_RXTO_IF | \
-+				 MA35_ISR_THRE_INT | MA35_ISR_BUFEIF)
-+
-+static struct uart_driver ma35d1serial_reg;
-+
-+struct uart_ma35d1_port {
-+	struct uart_port port;
-+	struct clk *clk;
-+	u16 capabilities; /* port capabilities */
-+	u8 ier;
-+	u8 lcr;
-+	u8 mcr;
-+	u32 baud_rate;
-+	u32 console_baud_rate;
-+	u32 console_line;
-+	u32 console_int;
-+};
-+
-+static struct uart_ma35d1_port ma35d1serial_ports[MA35_UART_NR];
-+
-+static struct uart_ma35d1_port *to_ma35d1_uart_port(struct uart_port *uart)
-+{
-+	return container_of(uart, struct uart_ma35d1_port, port);
-+}
-+
-+static u32 serial_in(struct uart_ma35d1_port *p, u32 offset)
-+{
-+	return readl_relaxed(p->port.membase + offset);
-+}
-+
-+static void serial_out(struct uart_ma35d1_port *p, u32 offset, u32 value)
-+{
-+	writel_relaxed(value, p->port.membase + offset);
-+}
-+
-+static void __stop_tx(struct uart_ma35d1_port *p)
-+{
-+	u32 ier;
-+
-+	ier = serial_in(p, MA35_IER_REG);
-+	if (ier & MA35_IER_THRE_IEN)
-+		serial_out(p, MA35_IER_REG, ier & ~MA35_IER_THRE_IEN);
-+}
-+
-+static void ma35d1serial_stop_tx(struct uart_port *port)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+
-+	__stop_tx(up);
-+}
-+
-+static void transmit_chars(struct uart_ma35d1_port *up)
-+{
-+	u32 count;
-+	u8 ch;
-+
-+	if (uart_tx_stopped(&up->port)) {
-+		ma35d1serial_stop_tx(&up->port);
-+		return;
-+	}
-+	count = MA35_UART_FIFO_DEPTH - FIELD_GET(MA35_FSR_TXPTR_MSK,
-+						 serial_in(up, MA35_FSR_REG));
-+	uart_port_tx_limited(&up->port, ch, count,
-+			     !(serial_in(up, MA35_FSR_REG) & MA35_FSR_TX_FULL),
-+			     serial_out(up, MA35_THR_REG, ch),
-+			     ({}));
-+}
-+
-+static void ma35d1serial_start_tx(struct uart_port *port)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	u32 ier;
-+
-+	ier = serial_in(up, MA35_IER_REG);
-+	serial_out(up, MA35_IER_REG, ier & ~MA35_IER_THRE_IEN);
-+	transmit_chars(up);
-+	serial_out(up, MA35_IER_REG, ier | MA35_IER_THRE_IEN);
-+}
-+
-+static void ma35d1serial_stop_rx(struct uart_port *port)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+
-+	serial_out(up, MA35_IER_REG, serial_in(up, MA35_IER_REG) & ~MA35_IER_RDA_IEN);
-+}
-+
-+static void receive_chars(struct uart_ma35d1_port *up)
-+{
-+	u8 ch, flag;
-+	u32 fsr;
-+	int max_count = 256;
-+
-+	fsr = serial_in(up, MA35_FSR_REG);
-+	do {
-+		flag = TTY_NORMAL;
-+		up->port.icount.rx++;
-+
-+		if (unlikely(fsr & (MA35_FSR_BIF | MA35_FSR_FEF |
-+				    MA35_FSR_PEF | MA35_FSR_RX_OVER_IF))) {
-+			if (fsr & MA35_FSR_BIF) {
-+				up->port.icount.brk++;
-+				if (uart_handle_break(&up->port))
-+					continue;
-+			}
-+			if (fsr & MA35_FSR_FEF)
-+				up->port.icount.frame++;
-+			if (fsr & MA35_FSR_PEF)
-+				up->port.icount.parity++;
-+			if (fsr & MA35_FSR_RX_OVER_IF)
-+				up->port.icount.overrun++;
-+
-+			serial_out(up, MA35_FSR_REG,
-+				   fsr & (MA35_FSR_BIF | MA35_FSR_FEF |
-+					  MA35_FSR_PEF | MA35_FSR_RX_OVER_IF));
-+			if (fsr & MA35_FSR_BIF)
-+				flag = TTY_BREAK;
-+			else if (fsr & MA35_FSR_PEF)
-+				flag = TTY_PARITY;
-+			else if (fsr & MA35_FSR_FEF)
-+				flag = TTY_FRAME;
-+		}
-+
-+		ch = serial_in(up, MA35_RBR_REG);
-+		if (uart_handle_sysrq_char(&up->port, ch))
-+			continue;
-+
-+		spin_lock(&up->port.lock);
-+		uart_insert_char(&up->port, fsr, MA35_FSR_RX_OVER_IF, ch, flag);
-+		spin_unlock(&up->port.lock);
-+
-+		fsr = serial_in(up, MA35_FSR_REG);
-+	} while (!(fsr & MA35_FSR_RX_EMPTY) && (max_count-- > 0));
-+
-+	spin_lock(&up->port.lock);
-+	tty_flip_buffer_push(&up->port.state->port);
-+	spin_unlock(&up->port.lock);
-+}
-+
-+static irqreturn_t ma35d1serial_interrupt(int irq, void *dev_id)
-+{
-+	struct uart_port *port = dev_id;
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	u32 isr, fsr;
-+
-+	isr = serial_in(up, MA35_ISR_REG);
-+	fsr = serial_in(up, MA35_FSR_REG);
-+
-+	if (!(isr & MA35_ISR_IF_CHECK))
-+		return IRQ_NONE;
-+
-+	if (isr & (MA35_ISR_RDA_IF | MA35_ISR_RXTO_IF))
-+		receive_chars(up);
-+	if (isr & MA35_ISR_THRE_INT)
-+		transmit_chars(up);
-+	if (fsr & MA35_FSR_TX_OVER_IF)
-+		serial_out(up, MA35_FSR_REG, MA35_FSR_TX_OVER_IF);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static u32 ma35d1serial_tx_empty(struct uart_port *port)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	u32 fsr;
-+
-+	fsr = serial_in(up, MA35_FSR_REG);
-+	return (fsr & (MA35_FSR_TE_FLAG | MA35_FSR_TX_EMPTY)) ==
-+		(MA35_FSR_TE_FLAG | MA35_FSR_TX_EMPTY) ? TIOCSER_TEMT : 0;
-+}
-+
-+static u32 ma35d1serial_get_mctrl(struct uart_port *port)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	u32 status;
-+	u32 ret = 0;
-+
-+	status = serial_in(up, MA35_MSR_REG);
-+	if (!(status & MA35_MSR_CTSSTS))
-+		ret |= TIOCM_CTS;
-+	return ret;
-+}
-+
-+static void ma35d1serial_set_mctrl(struct uart_port *port, u32 mctrl)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	u32 mcr;
-+	u32 ier;
-+
-+	mcr = serial_in(up, MA35_MCR_REG);
-+	mcr &= ~MA35_MCR_RTS_CTRL;
-+
-+	if (mctrl & TIOCM_RTS)
-+		mcr |= MA35_MCR_RTSACTLV;
-+	else
-+		mcr &= ~MA35_MCR_RTSACTLV;
-+
-+	if (up->mcr & UART_MCR_AFE) {
-+		serial_out(up, MA35_IER_REG, (serial_in(up, MA35_IER_REG) |
-+					     MA35_IER_AUTO_RTS |
-+					     MA35_IER_AUTO_CTS));
-+		up->port.flags |= UPF_HARD_FLOW;
-+	} else {
-+		ier = serial_in(up, MA35_IER_REG);
-+		ier &= ~(MA35_IER_AUTO_RTS | MA35_IER_AUTO_CTS);
-+		serial_out(up, MA35_IER_REG, ier);
-+		up->port.flags &= ~UPF_HARD_FLOW;
-+	}
-+	serial_out(up, MA35_MSR_REG, (serial_in(up, MA35_MSR_REG) |
-+				     MA35_MSR_CTSACTLV));
-+	serial_out(up, MA35_MCR_REG, mcr);
-+}
-+
-+static void ma35d1serial_break_ctl(struct uart_port *port, int break_state)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	unsigned long flags;
-+	u32 lcr;
-+
-+	spin_lock_irqsave(&up->port.lock, flags);
-+	lcr = serial_in(up, MA35_LCR_REG);
-+	if (break_state != 0)
-+		lcr |= MA35_LCR_BREAK;
-+	else
-+		lcr &= ~MA35_LCR_BREAK;
-+	serial_out(up, MA35_LCR_REG, lcr);
-+	spin_unlock_irqrestore(&up->port.lock, flags);
-+}
-+
-+static int ma35d1serial_startup(struct uart_port *port)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	int retval;
-+
-+	/* Reset FIFO */
-+	serial_out(up, MA35_FCR_REG, MA35_FCR_TFR | MA35_FCR_RFR);
-+
-+	/* Clear pending interrupts */
-+	serial_out(up, MA35_ISR_REG, MA35_ISR_ALL);
-+
-+	retval = request_irq(port->irq, ma35d1serial_interrupt, 0,
-+			     dev_name(port->dev), port);
-+	if (retval) {
-+		dev_err(up->port.dev, "request irq failed.\n");
-+		return retval;
-+	}
-+
-+	serial_out(up, MA35_FCR_REG, serial_in(up, MA35_FCR_REG) |
-+		   MA35_FCR_RFITL_4BYTES | MA35_FCR_RTSTL_8BYTES);
-+	serial_out(up, MA35_LCR_REG, MA35_LCR_WLS_8BITS);
-+	serial_out(up, MA35_TOR_REG, MA35_UART_RX_TOUT);
-+	serial_out(up, MA35_IER_REG, MA35_IER_RTO_IEN | MA35_IER_RDA_IEN |
-+		   MA35_IER_TIME_OUT_EN | MA35_IER_BUFERR_IEN);
-+	return 0;
-+}
-+
-+static void ma35d1serial_shutdown(struct uart_port *port)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+
-+	serial_out(up, MA35_IER_REG, 0);
-+	free_irq(port->irq, port);
-+}
-+
-+static void ma35d1serial_set_termios(struct uart_port *port,
-+				     struct ktermios *termios,
-+				     const struct ktermios *old)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+	u32 lcr = 0;
-+	unsigned long flags;
-+	u32 baud, quot;
-+
-+	lcr = UART_LCR_WLEN(tty_get_char_size(termios->c_cflag));
-+
-+	if (termios->c_cflag & CSTOPB)
-+		lcr |= MA35_LCR_NSB;
-+	if (termios->c_cflag & PARENB)
-+		lcr |= MA35_LCR_PBE;
-+	if (!(termios->c_cflag & PARODD))
-+		lcr |= MA35_LCR_EPE;
-+	if (termios->c_cflag & CMSPAR)
-+		lcr |= MA35_LCR_SPE;
-+
-+	baud = uart_get_baud_rate(port, termios, old,
-+				  port->uartclk / MA35_BAUD_DIV_MAX,
-+				  port->uartclk / MA35_BAUD_DIV_MIN);
-+
-+	/* MA35D1 UART baud rate equation: baudrate = UART_CLK / (quot + 2) */
-+	quot = (port->uartclk / baud) - 2;
-+
-+	/*
-+	 * Ok, we're now changing the port state.  Do it with
-+	 * interrupts disabled.
-+	 */
-+	spin_lock_irqsave(&up->port.lock, flags);
-+
-+	up->port.read_status_mask = MA35_FSR_RX_OVER_IF;
-+	if (termios->c_iflag & INPCK)
-+		up->port.read_status_mask |= MA35_FSR_FEF | MA35_FSR_PEF;
-+	if (termios->c_iflag & (BRKINT | PARMRK))
-+		up->port.read_status_mask |= MA35_FSR_BIF;
-+
-+	/* Characteres to ignore */
-+	up->port.ignore_status_mask = 0;
-+	if (termios->c_iflag & IGNPAR)
-+		up->port.ignore_status_mask |= MA35_FSR_FEF | MA35_FSR_PEF;
-+	if (termios->c_iflag & IGNBRK) {
-+		up->port.ignore_status_mask |= MA35_FSR_BIF;
-+		/*
-+		 * If we're ignoring parity and break indicators,
-+		 * ignore overruns too (for real raw support).
-+		 */
-+		if (termios->c_iflag & IGNPAR)
-+			up->port.ignore_status_mask |= MA35_FSR_RX_OVER_IF;
-+	}
-+	if (termios->c_cflag & CRTSCTS)
-+		up->mcr |= UART_MCR_AFE;
-+	else
-+		up->mcr &= ~UART_MCR_AFE;
-+
-+	uart_update_timeout(port, termios->c_cflag, baud);
-+
-+	ma35d1serial_set_mctrl(&up->port, up->port.mctrl);
-+
-+	serial_out(up, MA35_BAUD_REG, MA35_BAUD_MODE2 | FIELD_PREP(MA35_BAUD_MASK, quot));
-+
-+	serial_out(up, MA35_LCR_REG, lcr);
-+
-+	spin_unlock_irqrestore(&up->port.lock, flags);
-+}
-+
-+static const char *ma35d1serial_type(struct uart_port *port)
-+{
-+	return port->type == PORT_MA35 ? "ma35d1-uart" : NULL;
-+}
-+
-+static void ma35d1serial_config_port(struct uart_port *port, int flags)
-+{
-+	if (flags & UART_CONFIG_TYPE)
-+		port->type = PORT_MA35;
-+}
-+
-+static int ma35d1serial_verify_port(struct uart_port *port, struct serial_struct *ser)
-+{
-+	if (port->type != PORT_UNKNOWN && ser->type != PORT_MA35)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static const struct uart_ops ma35d1serial_ops = {
-+	.tx_empty     = ma35d1serial_tx_empty,
-+	.set_mctrl    = ma35d1serial_set_mctrl,
-+	.get_mctrl    = ma35d1serial_get_mctrl,
-+	.stop_tx      = ma35d1serial_stop_tx,
-+	.start_tx     = ma35d1serial_start_tx,
-+	.stop_rx      = ma35d1serial_stop_rx,
-+	.break_ctl    = ma35d1serial_break_ctl,
-+	.startup      = ma35d1serial_startup,
-+	.shutdown     = ma35d1serial_shutdown,
-+	.set_termios  = ma35d1serial_set_termios,
-+	.type         = ma35d1serial_type,
-+	.config_port  = ma35d1serial_config_port,
-+	.verify_port  = ma35d1serial_verify_port,
-+};
-+
-+static const struct of_device_id ma35d1_serial_of_match[] = {
-+	{ .compatible = "nuvoton,ma35d1-uart" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, ma35d1_serial_of_match);
-+
-+#ifdef CONFIG_SERIAL_NUVOTON_MA35D1_CONSOLE
-+
-+static struct device_node *ma35d1serial_uart_nodes[MA35_UART_NR];
-+
-+static void wait_for_xmitr(struct uart_ma35d1_port *up)
-+{
-+	unsigned int tmout;
-+
-+	/* Wait up to 10ms for the character(s) to be sent. */
-+	tmout = 10000;
-+	while (--tmout) {
-+		if (serial_in(up, MA35_FSR_REG) & MA35_FSR_TX_EMPTY)
-+			break;
-+		udelay(1);
-+	}
-+}
-+
-+static void ma35d1serial_console_putchar(struct uart_port *port, unsigned char ch)
-+{
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+
-+	wait_for_xmitr(up);
-+	serial_out(up, MA35_THR_REG, ch);
-+}
-+
-+/*
-+ *  Print a string to the serial port trying not to disturb
-+ *  any possible real use of the port...
-+ *
-+ *  The console_lock must be held when we get here.
-+ */
-+static void ma35d1serial_console_write(struct console *co, const char *s, u32 count)
-+{
-+	struct uart_ma35d1_port *up = &ma35d1serial_ports[co->index];
-+	unsigned long flags;
-+	u32 ier;
-+
-+	spin_lock_irqsave(&up->port.lock, flags);
-+
-+	/*
-+	 *  First save the IER then disable the interrupts
-+	 */
-+	ier = serial_in(up, MA35_IER_REG);
-+	serial_out(up, MA35_IER_REG, 0);
-+
-+	uart_console_write(&up->port, s, count, ma35d1serial_console_putchar);
-+
-+	wait_for_xmitr(up);
-+	serial_out(up, MA35_IER_REG, ier);
-+
-+	spin_unlock_irqrestore(&up->port.lock, flags);
-+}
-+
-+static int __init ma35d1serial_console_setup(struct console *co, char *options)
-+{
-+	struct device_node *np;
-+	struct uart_ma35d1_port *p;
-+	u32 val32[4];
-+	struct uart_port *port;
-+	int baud = 115200;
-+	int bits = 8;
-+	int parity = 'n';
-+	int flow = 'n';
-+
-+	if ((co->index < 0) || (co->index >= MA35_UART_NR)) {
-+		pr_debug("Console Port%x out of range\n", co->index);
-+		return -EINVAL;
-+	}
-+
-+	np = ma35d1serial_uart_nodes[co->index];
-+	p = &ma35d1serial_ports[co->index];
-+	if (!np || !p)
-+		return -ENODEV;
-+
-+	if (of_property_read_u32_array(np, "reg", val32, ARRAY_SIZE(val32)) != 0)
-+		return -EINVAL;
-+
-+	p->port.iobase = val32[1];
-+	p->port.membase = ioremap(p->port.iobase, MA35_UART_REG_SIZE);
-+	if (!p->port.membase)
-+		return -ENOMEM;
-+
-+	p->port.ops = &ma35d1serial_ops;
-+	p->port.line = 0;
-+	p->port.uartclk = MA35_UART_CONSOLE_CLK;
-+
-+	port = &ma35d1serial_ports[co->index].port;
-+
-+	if (options)
-+		uart_parse_options(options, &baud, &parity, &bits, &flow);
-+
-+	return uart_set_options(port, co, baud, parity, bits, flow);
-+}
-+
-+static struct console ma35d1serial_console = {
-+	.name    = "ttyNVT",
-+	.write   = ma35d1serial_console_write,
-+	.device  = uart_console_device,
-+	.setup   = ma35d1serial_console_setup,
-+	.flags   = CON_PRINTBUFFER | CON_ENABLED,
-+	.index   = -1,
-+	.data    = &ma35d1serial_reg,
-+};
-+
-+static void ma35d1serial_console_init_port(void)
-+{
-+	u32 i = 0;
-+	struct device_node *np;
-+
-+	for_each_matching_node(np, ma35d1_serial_of_match) {
-+		if (ma35d1serial_uart_nodes[i] == NULL) {
-+			of_node_get(np);
-+			ma35d1serial_uart_nodes[i] = np;
-+			i++;
-+			if (i == MA35_UART_NR)
-+				break;
-+		}
-+	}
-+}
-+
-+static int __init ma35d1serial_console_init(void)
-+{
-+	ma35d1serial_console_init_port();
-+	register_console(&ma35d1serial_console);
-+	return 0;
-+}
-+console_initcall(ma35d1serial_console_init);
-+
-+#define MA35D1SERIAL_CONSOLE    (&ma35d1serial_console)
-+#else
-+#define MA35D1SERIAL_CONSOLE    NULL
-+#endif
-+
-+static struct uart_driver ma35d1serial_reg = {
-+	.owner        = THIS_MODULE,
-+	.driver_name  = "serial",
-+	.dev_name     = "ttyNVT",
-+	.major        = TTY_MAJOR,
-+	.minor        = 64,
-+	.cons         = MA35D1SERIAL_CONSOLE,
-+	.nr           = MA35_UART_NR,
-+};
-+
-+/*
-+ * Register a set of serial devices attached to a platform device.
-+ * The list is terminated with a zero flags entry, which means we expect
-+ * all entries to have at least UPF_BOOT_AUTOCONF set.
-+ */
-+static int ma35d1serial_probe(struct platform_device *pdev)
-+{
-+	struct resource *res_mem;
-+	struct uart_ma35d1_port *up;
-+	int ret = 0;
-+
-+	if (pdev->dev.of_node) {
-+		ret = of_alias_get_id(pdev->dev.of_node, "serial");
-+		if (ret < 0) {
-+			dev_err(&pdev->dev, "failed to get alias/pdev id, errno %d\n", ret);
-+			return ret;
-+		}
-+	}
-+	up = &ma35d1serial_ports[ret];
-+	up->port.line = ret;
-+	res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res_mem)
-+		return -ENODEV;
-+
-+	up->port.iobase = res_mem->start;
-+	up->port.membase = ioremap(up->port.iobase, MA35_UART_REG_SIZE);
-+	up->port.ops = &ma35d1serial_ops;
-+
-+	spin_lock_init(&up->port.lock);
-+
-+	up->clk = of_clk_get(pdev->dev.of_node, 0);
-+	if (IS_ERR(up->clk)) {
-+		ret = PTR_ERR(up->clk);
-+		dev_err(&pdev->dev, "failed to get core clk: %d\n", ret);
-+		goto err_iounmap;
-+	}
-+
-+	ret = clk_prepare_enable(up->clk);
-+	if (ret)
-+		goto err_iounmap;
-+
-+	if (up->port.line != 0)
-+		up->port.uartclk = clk_get_rate(up->clk);
-+
-+	ret = platform_get_irq(pdev, 0);
-+	if (ret < 0)
-+		goto err_clk_disable;
-+
-+	up->port.irq = ret;
-+	up->port.dev = &pdev->dev;
-+	up->port.flags = UPF_BOOT_AUTOCONF;
-+
-+	platform_set_drvdata(pdev, up);
-+
-+	ret = uart_add_one_port(&ma35d1serial_reg, &up->port);
-+	if (ret < 0)
-+		goto err_free_irq;
-+
-+	return 0;
-+
-+err_free_irq:
-+	free_irq(up->port.irq, &up->port);
-+
-+err_clk_disable:
-+	clk_disable_unprepare(up->clk);
-+
-+err_iounmap:
-+	iounmap(up->port.membase);
-+	return ret;
-+}
-+
-+/*
-+ * Remove serial ports registered against a platform device.
-+ */
-+static int ma35d1serial_remove(struct platform_device *dev)
-+{
-+	struct uart_port *port = platform_get_drvdata(dev);
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+
-+	uart_remove_one_port(&ma35d1serial_reg, port);
-+	clk_disable_unprepare(up->clk);
-+	return 0;
-+}
-+
-+static int ma35d1serial_suspend(struct platform_device *dev, pm_message_t state)
-+{
-+	struct uart_port *port = platform_get_drvdata(dev);
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+
-+	uart_suspend_port(&ma35d1serial_reg, &up->port);
-+	if (up->port.line == 0) {
-+		up->console_baud_rate = serial_in(up, MA35_BAUD_REG);
-+		up->console_line = serial_in(up, MA35_LCR_REG);
-+		up->console_int = serial_in(up, MA35_IER_REG);
-+	}
-+	return 0;
-+}
-+
-+static int ma35d1serial_resume(struct platform_device *dev)
-+{
-+	struct uart_port *port = platform_get_drvdata(dev);
-+	struct uart_ma35d1_port *up = to_ma35d1_uart_port(port);
-+
-+	if (up->port.line == 0) {
-+		serial_out(up, MA35_BAUD_REG, up->console_baud_rate);
-+		serial_out(up, MA35_LCR_REG, up->console_line);
-+		serial_out(up, MA35_IER_REG, up->console_int);
-+	}
-+	uart_resume_port(&ma35d1serial_reg, &up->port);
-+	return 0;
-+}
-+
-+static struct platform_driver ma35d1serial_driver = {
-+	.probe      = ma35d1serial_probe,
-+	.remove     = ma35d1serial_remove,
-+	.suspend    = ma35d1serial_suspend,
-+	.resume     = ma35d1serial_resume,
-+	.driver     = {
-+		.name   = "ma35d1-uart",
-+		.owner  = THIS_MODULE,
-+		.of_match_table = of_match_ptr(ma35d1_serial_of_match),
-+	},
-+};
-+
-+static int __init ma35d1serial_init(void)
-+{
-+	int ret;
-+
-+	ret = uart_register_driver(&ma35d1serial_reg);
-+	if (ret)
-+		return ret;
-+
-+	ret = platform_driver_register(&ma35d1serial_driver);
-+	if (ret)
-+		uart_unregister_driver(&ma35d1serial_reg);
-+
-+	return ret;
-+}
-+
-+static void __exit ma35d1serial_exit(void)
-+{
-+	platform_driver_unregister(&ma35d1serial_driver);
-+	uart_unregister_driver(&ma35d1serial_reg);
-+}
-+
-+module_init(ma35d1serial_init);
-+module_exit(ma35d1serial_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("MA35D1 serial driver");
-diff --git a/include/uapi/linux/serial_core.h b/include/uapi/linux/serial_core.h
-index 281fa286555c..c11600bb1b0d 100644
---- a/include/uapi/linux/serial_core.h
-+++ b/include/uapi/linux/serial_core.h
-@@ -279,4 +279,7 @@
- /* Sunplus UART */
- #define PORT_SUNPLUS	123
- 
-+/* Nuvoton MA35 SoC */
-+#define PORT_MA35	124
-+
- #endif /* _UAPILINUX_SERIAL_CORE_H */
+								Honza
+
 -- 
-2.34.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
