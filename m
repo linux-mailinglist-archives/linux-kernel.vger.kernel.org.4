@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E5E7170FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A43A97170FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233441AbjE3Wt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 18:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
+        id S233568AbjE3WtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 18:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233592AbjE3WtS (ORCPT
+        with ESMTP id S233426AbjE3Ws6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 18:49:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D1C19C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:49:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D6ED62E3D
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 22:49:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B243FC43445;
-        Tue, 30 May 2023 22:49:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685486945;
-        bh=0IuCc4ZXrqDomHpXWfXNUBxYgu4rnYtwWDypsa5wpHU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ToGdzQYh7c7TbK+h9+ubtH9qr/elwlZQG/3NYRfX082sGoMBsCwx23XrscWImkWox
-         0H3+IA1U/mz/QipP+b7iDaz+bjF8tvdVSOtqy4gO1r6QLVQDpGrcV95+DyHGp8KCR+
-         g7FE4W91vlKlO4n59v/McfXuWiG71ZnV4kqdB0bDVHX4RU0JMtRJe2oJIejvFszrcB
-         ysymo8H4CDRWrYY0H4O7bbz0PYQaJDwjz0LYpTwXLZLzBTubECx0b1qd1Go65KPzOe
-         QFBWt4tMZACr6TZXIvGAEM4DUkfhTnMtrPIpk8hpsFb216y3P4eKfrcKowMz1HSAOQ
-         5jGbba+laAHOQ==
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-4f3a873476bso5674739e87.1;
-        Tue, 30 May 2023 15:49:05 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwpoJGOdxTZ8XA8vlVzBQfijEJ9VNCptQXUCE6jrejVCzNpDoaQ
-        h134rD0dAKXwn7A6qMP0dlOnBbBfKIh1jgzQeQQ=
-X-Google-Smtp-Source: ACHHUZ4bS0pN0vhbRQKYMialN1rGp+sHGugH3oihIijRD7zIcsyEyoMPZ5BwCJlvbUjzUrKdEXQxN6fKuKVldz1ZhpA=
-X-Received: by 2002:ac2:46d8:0:b0:4ea:fabb:4db1 with SMTP id
- p24-20020ac246d8000000b004eafabb4db1mr1442400lfo.1.1685486943732; Tue, 30 May
- 2023 15:49:03 -0700 (PDT)
+        Tue, 30 May 2023 18:48:58 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC03EC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:48:57 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64f47448aeaso3723971b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685486937; x=1688078937;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HVPCrHupYIDGk/MKCRILujiQNCUeyrDJevz6XX+Usd4=;
+        b=KVEG8WOB453pw3bsrybg3odMNxDwTfyBDoaAR2i9OPiLPocgECs47Wmmej6XhqOAhB
+         cfw+pgBcT9jdG8GZh+bfnU+Ts1mA7unuAq33Q51KqHuk6AXBLgfZ8ru4sDIKmNEbWP08
+         ApMZ12HOchUWAwGtRTv00JgDLh5YZ/aqFaDkY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685486937; x=1688078937;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HVPCrHupYIDGk/MKCRILujiQNCUeyrDJevz6XX+Usd4=;
+        b=A/75iZqzEXmp7ROWcLuowuGeCIxXSTBCM4vuFG0VCfgnoJpotsT4mVNyK2zLr+jwPF
+         rv+hihy9nzuyv/Gh7ajlTSQgmBhspCLf6wI967JjnVIvwQj7c+8FvvPF/A4iP2oNdcAj
+         5w40xv8gVbNOyAk2tIlMN2TNHdZYWYFV8/1ON+OdBdScrY0FfcdsGyAWWV68qZicOr2o
+         VkUGchORJk5hAXK76YE3+N37qGNsNUDOe2wWoASZBi7DGW/Yv7poM/PldfsWGOWohtgT
+         bVKwtCP6kzz+ytJpxF462KVq1+w2irqdjsOiYXwfQg8gypVr7KlKvLXzITp9ffRfSOTN
+         MhDA==
+X-Gm-Message-State: AC+VfDzPh+PfYWKeLKXbf+fp/xvDwdmT5zW0EnHMwHe9Z2aqdY5VtNTR
+        yVEcyk3M8AxgzgUlUcD8d3qYug==
+X-Google-Smtp-Source: ACHHUZ5ziYxeLseKuXJ6vSwvCP3DJ9ekeOEV041iNHAM9IYcsEDFitXyfeHMMgba5nR07eFxgpx6cw==
+X-Received: by 2002:a05:6a20:2d2a:b0:101:e4f3:5336 with SMTP id g42-20020a056a202d2a00b00101e4f35336mr4090246pzl.27.1685486936857;
+        Tue, 30 May 2023 15:48:56 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id g3-20020a62e303000000b0064fdf5b1d7esm2084298pfh.157.2023.05.30.15.48.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 15:48:56 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     arnd@kernel.org, kasan-dev@googlegroups.com
+Cc:     Kees Cook <keescook@chromium.org>, peterz@infradead.org,
+        ardb@kernel.org, maskray@google.com, mingo@kernel.org,
+        mark.rutland@arm.com, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org, mcgrof@kernel.org,
+        quic_mojha@quicinc.com
+Subject: Re: [PATCH] ubsan: add prototypes for internal functions
+Date:   Tue, 30 May 2023 15:48:55 -0700
+Message-Id: <168548693422.1303000.13322516962032319887.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230517125102.930491-1-arnd@kernel.org>
+References: <20230517125102.930491-1-arnd@kernel.org>
 MIME-Version: 1.0
-References: <20230526051529.3387103-1-song@kernel.org> <ZHGrjJ8PqAGN9OZK@moria.home.lan>
- <CAPhsuW4DAwx=7Nta5HGiPTJ1LQJCGJGY3FrsdKi62f_zJbsRFQ@mail.gmail.com> <ZHTuBdlhSI0mmQGE@moria.home.lan>
-In-Reply-To: <ZHTuBdlhSI0mmQGE@moria.home.lan>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 30 May 2023 15:48:51 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6hqzLuNhvkHFOmKTJdQm8A0JdUna=1iFdRC0y+kKmF4Q@mail.gmail.com>
-Message-ID: <CAPhsuW6hqzLuNhvkHFOmKTJdQm8A0JdUna=1iFdRC0y+kKmF4Q@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Type aware module allocator
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        mcgrof@kernel.org, peterz@infradead.org, tglx@linutronix.de,
-        x86@kernel.org, rppt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 11:25=E2=80=AFAM Kent Overstreet
-<kent.overstreet@linux.dev> wrote:
->
-> On Sat, May 27, 2023 at 10:58:37PM -0700, Song Liu wrote:
-> > I don't think we are exposing architecture specific options to users.
-> > Some layer need to handle arch specifics. If the new allocator is
-> > built on top of module_alloc, module_alloc is handling that. If the new
-> > allocator is to replace module_alloc, it needs to handle arch specifics=
-.
->
-> Ok, I went back and read more thoroughly, I got this part wrong. The
-> actual interface is the mod_mem_type enum, not mod_alloc_params or
-> vmalloc_params.
->
-> So this was my main complaint, but this actually looks ok now.
->
-> It would be better to have those structs in a .c file, not the header
-> file - it looks like those are the public interface the way you have it.
+On Wed, 17 May 2023 14:50:34 +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Most of the functions in ubsan that are only called from generated
+> code don't have a prototype, which W=1 builds warn about:
+> 
+> lib/ubsan.c:226:6: error: no previous prototype for '__ubsan_handle_divrem_overflow' [-Werror=missing-prototypes]
+> lib/ubsan.c:307:6: error: no previous prototype for '__ubsan_handle_type_mismatch' [-Werror=missing-prototypes]
+> lib/ubsan.c:321:6: error: no previous prototype for '__ubsan_handle_type_mismatch_v1' [-Werror=missing-prototypes]
+> lib/ubsan.c:335:6: error: no previous prototype for '__ubsan_handle_out_of_bounds' [-Werror=missing-prototypes]
+> lib/ubsan.c:352:6: error: no previous prototype for '__ubsan_handle_shift_out_of_bounds' [-Werror=missing-prototypes]
+> lib/ubsan.c:394:6: error: no previous prototype for '__ubsan_handle_builtin_unreachable' [-Werror=missing-prototypes]
+> lib/ubsan.c:404:6: error: no previous prototype for '__ubsan_handle_load_invalid_value' [-Werror=missing-prototypes]
+> 
+> [...]
 
-Thanks for this suggestion. It makes a lot of sense. But I am not quite
-sure how we can avoid putting it in the header yet. I will take a closer
-look. OTOH, if we plan to use Mike's new allocator to replace vmalloc,
-we probably don't need this part.
+Applied to for-next/hardening, thanks!
 
->
-> > > The memory protection interface also needs to go, we've got a better
-> > > interface to model after (text_poke(), although that code needs work
-> > > too!). And the instruction fill features need a thorough justificatio=
-n
-> > > if they're to be included.
-> >
-> > I guess the first step to use text_poke() is to make it available on al=
-l
-> > archs? That doesn't seem easy to me.
->
-> We just need a helper that either calls text_poke() or does the page
-> permission dance in a single place.
+[1/1] ubsan: add prototypes for internal functions
+      https://git.kernel.org/kees/c/d25ad53db59e
 
-AFAICT, we don't have a global text_poke() API yet. I can take a look
-into it (if it makes sense).
+-- 
+Kees Cook
 
->
-> If we do the same thing for other mod_mem_types, we could potentially
-> allow them to be shared on hugepages too.
-
-Yeah, that's part of the goal to extend the scope from executable to all
-types.
-
-Thanks,
-Song
