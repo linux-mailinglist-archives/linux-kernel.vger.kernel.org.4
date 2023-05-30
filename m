@@ -2,232 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25F17156AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C23A7156B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjE3H0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
+        id S231156AbjE3H2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjE3HZ2 (ORCPT
+        with ESMTP id S231138AbjE3H1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:25:28 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D31DB
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:25:22 -0700 (PDT)
-X-UUID: 202f9328febb11edb20a276fd37b9834-20230530
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=lIKAt4HMr2p4IkgApLRXAfBriTNNZGw4fHYmGN2BFrQ=;
-        b=TcE86lzxCrwiIpphKFBvjtAj1/9K3S3Yl42G1IbqDXqOquJR1oxodT5GZzbCfsHTARH4jJIVNXL4NSy+ZZBp1e3uDpY5ekkGRSvDHEBBnSHI+aaVMEm/WVKdbpPBcYecoGqdYbXzYcRle93OfGeYMYvG6WldxlXs64uPL9/OB7E=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:f31388f6-ff34-4a95-80be-39708c5c5cb5,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.25,REQID:f31388f6-ff34-4a95-80be-39708c5c5cb5,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:943cc93c-de1e-4348-bc35-c96f92f1dcbb,B
-        ulkID:230530152518J2789DCU,BulkQuantity:0,Recheck:0,SF:28|17|19|48|38|29,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 202f9328febb11edb20a276fd37b9834-20230530
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-        (envelope-from <trevor.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 730806003; Tue, 30 May 2023 15:25:17 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 30 May 2023 15:25:15 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 30 May 2023 15:25:15 +0800
-From:   Trevor Wu <trevor.wu@mediatek.com>
-To:     <broonie@kernel.org>, <lgirdwood@gmail.com>, <tiwai@suse.com>,
-        <perex@perex.cz>, <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>
-CC:     <trevor.wu@mediatek.com>, <dianders@chromium.org>,
-        <alsa-devel@alsa-project.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] ASoC: mediatek: mt8195: fix use-after-free in driver remove path
-Date:   Tue, 30 May 2023 15:25:14 +0800
-Message-ID: <20230530072514.22001-3-trevor.wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230530072514.22001-1-trevor.wu@mediatek.com>
-References: <20230530072514.22001-1-trevor.wu@mediatek.com>
-MIME-Version: 1.0
+        Tue, 30 May 2023 03:27:42 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2117.outbound.protection.outlook.com [40.107.215.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEA6131
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:27:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GR370He9LUpAZ+C49OkvP6ujKKGTrOYaGKaAO68biXwRhWi62Bu/VSegSSRyjaKZ+0QOuKgOn+N/VqMF+xJ5Cb6D+3pBXnjIcFhQ8z6waa/muNk3D+8lR88FSc9D6WqjAfHK9UQGdKkPKm/UEXV0FKw2ODF/NNP/6XwqkUhIEQI+QJn9oCiFXiBamwiNewTkmiXtq3gyMH7ei3sfSdz+LSuT80eBLoNL8Cnt0QFbj320Vv120tRaSecBa6Fy7Pr1TlJXXyuFdWoEOWmPgQE/+ZXsCJhpPHg2Tk3pyUzwhqB+3grAfp2rVhrwwshunfgwuQ4njYfFBdX96ywsXsqTrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uOrbsqZE2NtiZFd3LXLoXD3PLTMmCfCXoLJozvzxiX8=;
+ b=aLDFv1KSQvBcDfx18CN7E9MNgDj055Y977zOwYUNdyED0PwZSkSLpXbStqZ10izxcrLQaFunwsOhvO8JYIYjf5BBR4FoH2h4AzpDhUNB09InDEdU5M7gJnmzCn9qBIMHewEvc/TTWKVH23f+oVTHSdkOj/TAGw8OasaWUzNGxZBxa3YF51hPSLpImM3VawrjYkDTOL8qIWZs1r9zoo1Awr4yTLHdhwik+12BSRh6k0/Z3MNlzDtQTV1D7qHeRRjKQNM1I0IuVbEuYESE9IuGOfyP/vDI5MjqYmmG+9r4X/WDdrLOTEATpzUbXoUqAjBjc3Idrh7YJNkA2E4l6cOjPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uOrbsqZE2NtiZFd3LXLoXD3PLTMmCfCXoLJozvzxiX8=;
+ b=ok5zg+yHwfD6dWPumGx6kX3DPC0Bc9fhuic77KskX7mzILUixZCuCAznVK6hU81D+AI/c4kWx7ZBZdWU8n9s9y+yvRMR1ijy+AqE/lUsIb7/H7JLIgMwQ+YPZ+B20vXjVXtb+9WyMkglEEGUgtWfezSf199+hRoyoTMNYDaJhDJnWG2B5fas7/Z5HQWsc3ZcPe3BJN/awATCWuR9jbIdPa0ddn0CplYoOoWsfxSkd8+ogi6nef5FiZsFtgZyRArCIEmK2xjBmEVouSPbW+E5hGmkQ33SCtymyTrppZVBTEiC69/DC3SoIrgoIZMGVCsfYy4kSd7JwT+NibKG/v74ZQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
+ by TYZPR06MB4205.apcprd06.prod.outlook.com (2603:1096:400:2e::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.22; Tue, 30 May
+ 2023 07:27:00 +0000
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e%5]) with mapi id 15.20.6433.018; Tue, 30 May 2023
+ 07:27:00 +0000
+From:   Lu Hongfei <luhongfei@vivo.com>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        sound-open-firmware@alsa-project.org (moderated list:SOUND - SOUND OPEN
+        FIRMWARE (SOF) DRIVERS),
+        alsa-devel@alsa-project.org (moderated list:SOUND - SOC LAYER / DYNAMIC
+        AUDIO POWER MANAGEM...), linux-kernel@vger.kernel.org (open list)
+Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
+Subject: [PATCH] sound: Fix incorrect calculation of object size by sizeof
+Date:   Tue, 30 May 2023 15:26:48 +0800
+Message-Id: <20230530072648.13998-1-luhongfei@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-MTK:  N
+X-ClientProxiedBy: TYXPR01CA0052.jpnprd01.prod.outlook.com
+ (2603:1096:403:a::22) To TYZPR06MB6697.apcprd06.prod.outlook.com
+ (2603:1096:400:451::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|TYZPR06MB4205:EE_
+X-MS-Office365-Filtering-Correlation-Id: f40ae8b6-a380-4ac1-3320-08db60df4151
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Wk9XLz5EXIMUaO+tr6FAFl435dg0WaIkeTk0gsbLt2+yY0fdcEcBqXzOWLVeLDfW+jwTSRPuWWUuM1911NMeFo57mCozD0Vi51dJJKgXpP3BzReHmVVsopzuL+F8U2vpikAXpgDZd/lWmASJbVC4ToS9yauKQYgDH62X8Gk1AW044zMQOPw3k6ohbP7nRB9+L9V/p7o7Y32cgnvduRuPQhXclErxkGb+Klt+tHhu+P/XDU1ubRSMKcFCgugzzdhN7kPO/pbuV+DY4h3ZD4/W6hQNTZzOfYXaStrpCA+JBz5jPPuIwlViI2OqnwhbABRTvVanBIbn9HJrkyO0aMCINT9JIqT3oIC86G8OQPg0HufkZq4HnVz7uVEG8+TgD57Ks7LKzp0v+8OqZHyRmFxLBDRWEC0MHWjd61o5uaIl3HDWDxC9r5SKTjfblWF6UOjik7mT2uq5Q3QHaNK3Lz6TkmTy0MEHuR4MLhK2aUraqDAHhj2D9wlXquwTK0M3ciX2FRv7hMY2JPC6InHxEqo281gKWOeQftZ6fzuldpJYyuXdJqFWxKH5V6GsHeVv+IWK5g69sOY0rSliMRf/TMCx92l5GdCLehGJ2ldg9xw80drpEHpEWLcsNppd3Qlw8a0U
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(376002)(396003)(136003)(39850400004)(451199021)(478600001)(110136005)(5660300002)(7416002)(4744005)(8936002)(8676002)(2906002)(86362001)(36756003)(4326008)(66556008)(66946007)(66476007)(316002)(921005)(38100700002)(38350700002)(41300700001)(2616005)(107886003)(186003)(6512007)(26005)(1076003)(6506007)(6486002)(52116002)(6666004)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?q+kW9mJJ9GrXsj4igNeSrlSt9SJmFAM7BGcFc8IHcFo1uThXmnWYe0emtr1+?=
+ =?us-ascii?Q?DYT1icqq3SdT+U+CiuCsaMKtTQTTZ2l1FQrj7voZrtZ9EHe0T3pLuqzVpwV/?=
+ =?us-ascii?Q?gemH5SLTNFwmhTWNlPPnY+eLnFFfbgLw6CsvaagDThFtIQAbGbjz6yuAqRJg?=
+ =?us-ascii?Q?Qm0Fs+jINQnZlbTAJ1WqowbZXVyhdoq/6tD2rLTuNgZ1rtc8866UdO8t3Iu6?=
+ =?us-ascii?Q?+JVOlcVHKeEsP2NKdAEUpb96iVU3kwvr23gtrQ76zJ1L81TdQliKAjPzGVKd?=
+ =?us-ascii?Q?2YHLgv3BJwr8OdUmROMEBbJ+UsXJSEiNMp7EcIwgicHMeZuVq8vEwCF8cdgx?=
+ =?us-ascii?Q?OWu8Fr30BKMgjHKeoWor4DsIE80tp4ndNGDjOMDbTOo21mOr1cVYOUlYYiLn?=
+ =?us-ascii?Q?hYnXsQT4mSJR1PLhSmp9MxVJ0Uj8m1cfBPxHu5xu9Oeq3IHTdvyoZlsv4Z3Z?=
+ =?us-ascii?Q?DA9rkR3r/MiZBK/7rNIQS7J0uL0s1Q9VYXqovaAEAVDEcLUnfeGzyqXmVG/L?=
+ =?us-ascii?Q?gutvw3P3JOUHWgf/1ZO4DZlTgMp5PZsohnvoEX+ac/9dv1g3h3LlodR+jnl+?=
+ =?us-ascii?Q?GeqO1AIoXTCpoRO9Ovp34ktQ7o6bjYkNf/yBw84Lr8m/+0mLdHXHkb9sh/Zy?=
+ =?us-ascii?Q?x41olwHTKD+PeSKeQLjfUsa1jqRb+kCGWl2m0J2Zgvy9gwLPp3j9OFIrE+vW?=
+ =?us-ascii?Q?3WAquKN2Nwj4YH1wlyovfPTxcWlj2sNk3crIrs7Gyz72tZpjlDtLSh5EgpAk?=
+ =?us-ascii?Q?Zn6GGHQLIYpanWRwllLRUN+lURSSDe7UMD5gRE5kO3JfweXj3USrb47Lu3dH?=
+ =?us-ascii?Q?6Xe6yTTylS2TvMHvYh3CrNOAUpUt5fWLnIPdExS52SnEXI1mSIztyxvA9yh9?=
+ =?us-ascii?Q?z7EzH7sIQ2y+HtL+4F/v0QBb9ovEp1QPgLhxoWP89jAlfBXucdsLe1JoENyD?=
+ =?us-ascii?Q?0ydLlwD3e3wRSPgBhBv43/DkKLcuEJwKWBlcUPOc4s+ts2jsxmGtvyyppX4m?=
+ =?us-ascii?Q?cyUoik7OEqfEyLEp5UkctuHjy9AgoyyZirXOTlK+e0mcmZsACY8YRPSVuQnY?=
+ =?us-ascii?Q?wWQK9h3/0Td9WVHgGfkXsvmBNmPNmht/NENrB2fuAmGtUu7jNkaNhJ8edz7r?=
+ =?us-ascii?Q?klemASawMV8XTIVclpCGktcrzsDkNtTQjLstu+J7Y7woCkib/5preKPKGBQa?=
+ =?us-ascii?Q?dGa17D+Fhejl01/MYPs9ZC8CBREhJkdkMiZW6L9A6KW/hBmomzKELyeeKokJ?=
+ =?us-ascii?Q?VF/Xs76tunjhu1Lr7R4qTwzhh3eCT79ZXq0d0brqVNkIrYHhrQwOmsaSDW2Y?=
+ =?us-ascii?Q?LgZDg+vyp2EPBNAgfHMyCr7LzsvFWVG9BdqpolPEzpWlCtdIm/3knag5ffst?=
+ =?us-ascii?Q?GwUE2FsvQn7clQCrJSYw9GmwJCpIkF+LEw/YyLqYFcd0vTIolNN6Pmi+r6sw?=
+ =?us-ascii?Q?C+sEXDSEnlV+5Mb6IuDKVkk6fP3jEPrwwA2kk0xUPqUMcbZSLgx8GGkFGIVP?=
+ =?us-ascii?Q?pAzrBhj+YTgjPUk13DLMfVC1TqdrSoujdvZdJt9jkdDpKtckWd7pANgrzWIb?=
+ =?us-ascii?Q?saTAM2OY8JlwLHcpWr0b0IXcMCRqZqxel2SzN0GM?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f40ae8b6-a380-4ac1-3320-08db60df4151
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 07:26:59.8249
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1hH75LlhprBj4n9rNx0LlJ+Ij1bo0c8ACmGwNYu4mvbpZ5BqzLjYbvpWtFa+126GjD2UZb4viQfz9yDzzU+3/w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4205
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During mt8195_afe_init_clock(), mt8195_audsys_clk_register() was called
-followed by several other devm functions. At mt8195_afe_deinit_clock()
-located at mt8195_afe_pcm_dev_remove(), mt8195_audsys_clk_unregister()
-was called.
+What we need to calculate is the size of the object, not the size of the
+pointer. This patch can fix this error.
 
-However, there was an issue with the order in which these functions were
-called. Specifically, the remove callback of platform_driver was called
-before devres released the resource, resulting in a use-after-free issue
-during remove time.
-
-At probe time, the order of calls was:
-1. mt8195_audsys_clk_register
-2. afe_priv->clk = devm_kcalloc
-3. afe_priv->clk[i] = devm_clk_get
-
-At remove time, the order of calls was:
-1. mt8195_audsys_clk_unregister
-3. free afe_priv->clk[i]
-2. free afe_priv->clk
-
-To resolve the problem, we can utilize devm_add_action_or_reset() in
-mt8195_audsys_clk_register() so that the remove order can be changed to
-3->2->1.
-
-Fixes: 6746cc858259 ("ASoC: mediatek: mt8195: add platform driver")
-Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
 ---
- sound/soc/mediatek/mt8195/mt8195-afe-clk.c    |  5 --
- sound/soc/mediatek/mt8195/mt8195-afe-clk.h    |  1 -
- sound/soc/mediatek/mt8195/mt8195-afe-pcm.c    |  4 --
- sound/soc/mediatek/mt8195/mt8195-audsys-clk.c | 47 ++++++++++---------
- sound/soc/mediatek/mt8195/mt8195-audsys-clk.h |  1 -
- 5 files changed, 24 insertions(+), 34 deletions(-)
+ sound/soc/sof/ipc4-topology.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ mode change 100644 => 100755 sound/soc/sof/ipc4-topology.c
 
-diff --git a/sound/soc/mediatek/mt8195/mt8195-afe-clk.c b/sound/soc/mediatek/mt8195/mt8195-afe-clk.c
-index 9ca2cb8c8a9c..f35318ae0739 100644
---- a/sound/soc/mediatek/mt8195/mt8195-afe-clk.c
-+++ b/sound/soc/mediatek/mt8195/mt8195-afe-clk.c
-@@ -410,11 +410,6 @@ int mt8195_afe_init_clock(struct mtk_base_afe *afe)
- 	return 0;
- }
+diff --git a/sound/soc/sof/ipc4-topology.c b/sound/soc/sof/ipc4-topology.c
+index 5abe616a2054..29b6dede53b0
+--- a/sound/soc/sof/ipc4-topology.c
++++ b/sound/soc/sof/ipc4-topology.c
+@@ -220,7 +220,7 @@ static int sof_ipc4_get_audio_fmt(struct snd_soc_component *scomp,
  
--void mt8195_afe_deinit_clock(struct mtk_base_afe *afe)
--{
--	mt8195_audsys_clk_unregister(afe);
--}
--
- int mt8195_afe_enable_clk(struct mtk_base_afe *afe, struct clk *clk)
- {
- 	int ret;
-diff --git a/sound/soc/mediatek/mt8195/mt8195-afe-clk.h b/sound/soc/mediatek/mt8195/mt8195-afe-clk.h
-index 40663e31becd..a08c0ee6c860 100644
---- a/sound/soc/mediatek/mt8195/mt8195-afe-clk.h
-+++ b/sound/soc/mediatek/mt8195/mt8195-afe-clk.h
-@@ -101,7 +101,6 @@ int mt8195_afe_get_mclk_source_clk_id(int sel);
- int mt8195_afe_get_mclk_source_rate(struct mtk_base_afe *afe, int apll);
- int mt8195_afe_get_default_mclk_source_by_rate(int rate);
- int mt8195_afe_init_clock(struct mtk_base_afe *afe);
--void mt8195_afe_deinit_clock(struct mtk_base_afe *afe);
- int mt8195_afe_enable_clk(struct mtk_base_afe *afe, struct clk *clk);
- void mt8195_afe_disable_clk(struct mtk_base_afe *afe, struct clk *clk);
- int mt8195_afe_prepare_clk(struct mtk_base_afe *afe, struct clk *clk);
-diff --git a/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c b/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c
-index d22cf1664d8a..a0f2012211fb 100644
---- a/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c
-+++ b/sound/soc/mediatek/mt8195/mt8195-afe-pcm.c
-@@ -3224,15 +3224,11 @@ static int mt8195_afe_pcm_dev_probe(struct platform_device *pdev)
- 
- static void mt8195_afe_pcm_dev_remove(struct platform_device *pdev)
- {
--	struct mtk_base_afe *afe = platform_get_drvdata(pdev);
--
- 	snd_soc_unregister_component(&pdev->dev);
- 
- 	pm_runtime_disable(&pdev->dev);
- 	if (!pm_runtime_status_suspended(&pdev->dev))
- 		mt8195_afe_runtime_suspend(&pdev->dev);
--
--	mt8195_afe_deinit_clock(afe);
- }
- 
- static const struct of_device_id mt8195_afe_pcm_dt_match[] = {
-diff --git a/sound/soc/mediatek/mt8195/mt8195-audsys-clk.c b/sound/soc/mediatek/mt8195/mt8195-audsys-clk.c
-index e0670e0dbd5b..09bd1a020421 100644
---- a/sound/soc/mediatek/mt8195/mt8195-audsys-clk.c
-+++ b/sound/soc/mediatek/mt8195/mt8195-audsys-clk.c
-@@ -148,6 +148,29 @@ static const struct afe_gate aud_clks[CLK_AUD_NR_CLK] = {
- 	GATE_AUD6(CLK_AUD_GASRC19, "aud_gasrc19", "top_asm_h", 19),
- };
- 
-+static void mt8195_audsys_clk_unregister(void *data)
-+{
-+	struct mtk_base_afe *afe = (struct mtk_base_afe *)data;
-+	struct mt8195_afe_private *afe_priv = afe->platform_priv;
-+	struct clk *clk;
-+	struct clk_lookup *cl;
-+	int i;
-+
-+	if (!afe_priv)
-+		return;
-+
-+	for (i = 0; i < CLK_AUD_NR_CLK; i++) {
-+		cl = afe_priv->lookup[i];
-+		if (!cl)
-+			continue;
-+
-+		clk = cl->clk;
-+		clk_unregister_gate(clk);
-+
-+		clkdev_drop(cl);
-+	}
-+}
-+
- int mt8195_audsys_clk_register(struct mtk_base_afe *afe)
- {
- 	struct mt8195_afe_private *afe_priv = afe->platform_priv;
-@@ -188,27 +211,5 @@ int mt8195_audsys_clk_register(struct mtk_base_afe *afe)
- 		afe_priv->lookup[i] = cl;
- 	}
- 
--	return 0;
--}
--
--void mt8195_audsys_clk_unregister(struct mtk_base_afe *afe)
--{
--	struct mt8195_afe_private *afe_priv = afe->platform_priv;
--	struct clk *clk;
--	struct clk_lookup *cl;
--	int i;
--
--	if (!afe_priv)
--		return;
--
--	for (i = 0; i < CLK_AUD_NR_CLK; i++) {
--		cl = afe_priv->lookup[i];
--		if (!cl)
--			continue;
--
--		clk = cl->clk;
--		clk_unregister_gate(clk);
--
--		clkdev_drop(cl);
--	}
-+	return devm_add_action_or_reset(afe->dev, mt8195_audsys_clk_unregister, afe);
- }
-diff --git a/sound/soc/mediatek/mt8195/mt8195-audsys-clk.h b/sound/soc/mediatek/mt8195/mt8195-audsys-clk.h
-index 239d31016ba7..69db2dd1c9e0 100644
---- a/sound/soc/mediatek/mt8195/mt8195-audsys-clk.h
-+++ b/sound/soc/mediatek/mt8195/mt8195-audsys-clk.h
-@@ -10,6 +10,5 @@
- #define _MT8195_AUDSYS_CLK_H_
- 
- int mt8195_audsys_clk_register(struct mtk_base_afe *afe);
--void mt8195_audsys_clk_unregister(struct mtk_base_afe *afe);
- 
- #endif
+ 	ret = sof_update_ipc_object(scomp, available_fmt,
+ 				    SOF_AUDIO_FMT_NUM_TOKENS, swidget->tuples,
+-				    swidget->num_tuples, sizeof(available_fmt), 1);
++				    swidget->num_tuples, sizeof(*available_fmt), 1);
+ 	if (ret) {
+ 		dev_err(scomp->dev, "Failed to parse audio format token count\n");
+ 		return ret;
 -- 
-2.18.0
+2.39.0
 
