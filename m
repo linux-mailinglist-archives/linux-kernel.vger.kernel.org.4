@@ -2,48 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A79E715A3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA6E715A3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbjE3Jcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
+        id S229714AbjE3Jdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjE3JcN (ORCPT
+        with ESMTP id S229786AbjE3JdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:32:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25450135;
-        Tue, 30 May 2023 02:31:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 34EF02F4;
-        Tue, 30 May 2023 02:32:23 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B01563F663;
-        Tue, 30 May 2023 02:31:35 -0700 (PDT)
-Message-ID: <70e630b8-e577-a148-0179-61aedf910c09@arm.com>
-Date:   Tue, 30 May 2023 11:31:34 +0200
+        Tue, 30 May 2023 05:33:24 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77F8F9;
+        Tue, 30 May 2023 02:33:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685439202; x=1716975202;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=05BdlmfEmHrP3826u78d0bwZDk474BhNjCAib6bQs+I=;
+  b=MXBWCNv+l+yblVqIRbS2NBlrfpfT5P32BnnL4Yq2o3ULNTnxc/FeISQ7
+   eRpvcGLXA92nzKak3iXjAdktj5T/O7iZs+a/ZgrQI8tbYY0GC/fwyO41t
+   OmGBSpv8LpwUZWJgi6+IpN+ZhWh01DzeEDYmgDlCHxbiw+FW/kU67HQe8
+   DJ49Tr7EZ3lNwJJAwj3eWCvrJzs02Wh70OooH2/MJMZx62lLhp6t5IoRv
+   NmMsbZ4jsVlAHNP45XRMVYThKXN1U4qbbBA7KEVSTJz5hNr8aTddxI7f5
+   0Z9J0K0vqACr6J8OeMfqDHbcgLM1pn17xGZ3MgUeOU4lNuX/vD143jijm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="354877280"
+X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
+   d="scan'208";a="354877280"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 02:33:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="656775530"
+X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
+   d="scan'208";a="656775530"
+Received: from lkp-server01.sh.intel.com (HELO fd90924b3b99) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 30 May 2023 02:33:19 -0700
+Received: from kbuild by fd90924b3b99 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q3vjC-0000Fi-0P;
+        Tue, 30 May 2023 09:33:18 +0000
+Date:   Tue, 30 May 2023 17:32:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     jeffxu@chromium.org, dave.hansen@intel.com, luto@kernel.org,
+        jorgelo@chromium.org, keescook@chromium.org, groeck@chromium.org,
+        jannh@google.com, sroettger@google.com
+Cc:     oe-kbuild-all@lists.linux.dev, akpm@linux-foundation.org,
+        jeffxu@google.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v1 4/6] PKEY:selftest pkey_enforce_api for mprotect
+Message-ID: <202305301758.ddYd6um5-lkp@intel.com>
+References: <20230519011915.846407-5-jeffxu@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 06/17] PM: EM: Add update_power() callback for runtime
- modifications
-Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
-        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
-        rostedt@goodmis.org, mhiramat@kernel.org
-References: <20230512095743.3393563-1-lukasz.luba@arm.com>
- <20230512095743.3393563-7-lukasz.luba@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230512095743.3393563-7-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519011915.846407-5-jeffxu@chromium.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,60 +69,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2023 11:57, Lukasz Luba wrote:
-> The Energy Model (EM) is going to support runtime modifications. This
-> new callback would be used in the upcoming EM changes. The drivers
-> or frameworks which want to modify the EM have to implement the
-> update_power() callback and provide it via EM API
-> em_dev_update_perf_domain(). The callback is then used by the EM
-> framework to get new power values for each frequency in existing EM.
+Hi,
 
-Do we have any numbers or feedback that the chosen design (i.e. update
-per performance state through update_power()) is performant enough for
-the anticipated use case on real devices?
+kernel test robot noticed the following build warnings:
 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  include/linux/energy_model.h | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> index 8069f526c9d8..cc2bf607191e 100644
-> --- a/include/linux/energy_model.h
-> +++ b/include/linux/energy_model.h
-> @@ -158,6 +158,26 @@ struct em_data_callback {
->  	 */
->  	int (*get_cost)(struct device *dev, unsigned long freq,
->  			unsigned long *cost);
-> +
-> +	/**
-> +	 * update_power() - Provide new power at the given performance state of
-> +	 *		a device
-> +	 * @dev		: Device for which we do this operation (can be a CPU)
-> +	 * @freq	: Frequency at the performance state in kHz
-> +	 * @power	: New power value at the performance state
-> +	 *		(modified)
-> +	 * @priv	: Pointer to private data useful for tracking context
-> +	 *		during run-time modifications of EM.
-> +	 *
-> +	 * The update_power() is used by run-time modifiable EM. It aims to
-> +	 * provide updated power value for a given frequency, which is stored
-> +	 * in the performance state. The power value provided by this callback
-> +	 * should fit in the [0, EM_MAX_POWER] range.
-> +	 *
-> +	 * Return 0 on success, or appropriate error value in case of failure.
-> +	 */
-> +	int (*update_power)(struct device *dev, unsigned long freq,
-> +			    unsigned long *power, void *priv);
->  };
->  #define EM_SET_ACTIVE_POWER_CB(em_cb, cb) ((em_cb).active_power = cb)
->  #define EM_ADV_DATA_CB(_active_power_cb, _cost_cb)	\
-> @@ -165,6 +185,7 @@ struct em_data_callback {
->  	  .get_cost = _cost_cb }
->  #define EM_DATA_CB(_active_power_cb)			\
->  		EM_ADV_DATA_CB(_active_power_cb, NULL)
-> +#define EM_UPDATE_CB(_update_power_cb) { .update_power = &_update_power_cb }
->  
->  struct em_perf_domain *em_cpu_get(int cpu);
->  struct em_perf_domain *em_pd_get(struct device *dev);
+[auto build test WARNING on ba0ad6ed89fd5dada3b7b65ef2b08e95d449d4ab]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-chromium-org/PKEY-Introduce-PKEY_ENFORCE_API-flag/20230519-093355
+base:   ba0ad6ed89fd5dada3b7b65ef2b08e95d449d4ab
+patch link:    https://lore.kernel.org/r/20230519011915.846407-5-jeffxu%40chromium.org
+patch subject: [PATCH v1 4/6] PKEY:selftest pkey_enforce_api for mprotect
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/ee635a3d72bf9f400d3542d27d1df9d2813640dc
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review jeffxu-chromium-org/PKEY-Introduce-PKEY_ENFORCE_API-flag/20230519-093355
+        git checkout ee635a3d72bf9f400d3542d27d1df9d2813640dc
+        make O=/tmp/kselftest headers
+        make O=/tmp/kselftest -C tools/testing/selftests
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305301758.ddYd6um5-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from pkey_enforce_api.c:72:
+   pkey-x86.h: In function 'expect_fault_on_read_execonly_key':
+>> pkey-x86.h:165:13: warning: variable 'ptr_contents' set but not used [-Wunused-but-set-variable]
+     165 |         int ptr_contents;
+         |             ^~~~~~~~~~~~
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
