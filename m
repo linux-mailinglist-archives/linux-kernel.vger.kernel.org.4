@@ -2,72 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66A0716F58
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 23:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C15C8716F5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 23:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232613AbjE3VFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 17:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
+        id S232792AbjE3VGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 17:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjE3VFh (ORCPT
+        with ESMTP id S230154AbjE3VGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 17:05:37 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9051F99
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 14:05:35 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2af29b37bd7so54551411fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 14:05:35 -0700 (PDT)
+        Tue, 30 May 2023 17:06:23 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8892BC9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 14:06:20 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-33b7d2526d9so3410675ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 14:06:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685480734; x=1688072734;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lRlag3IP6WRuvIKALTZZ5sR/28OhDehgXmzr30sFnqw=;
-        b=IxRIhda7mJBVSqM0DNAHjz5FBFnKEO82bGPtbYgiu54O4JxFUWijDwy7RCJ5n0lBZh
-         RSximn2kYVXe5wlwgIOZw+c7wslvrCEPRXQ4fPE4YLMSodyQd3dtFSLgFlYytEqDk7p4
-         NayOoRfh7fA9QJp3m4Q7iZWDmKpU0MD+Sv2gZH6wkcpkS40NIIZrkwbLKHkfYcjyMP9s
-         8ZY73CHtNG465ZcvLs8i1hePNiyLzoU8y4mcVBGGquosx5cXdjypGiKvOasm7iUFSNQz
-         JvnGlqZymoyzPmliyqexvE2Xk0CoTIqxL7NqeiDLc4lOOaVIRnhibsoRMKpdyC0U7LgF
-         a9BA==
+        d=chromium.org; s=google; t=1685480780; x=1688072780;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=g/W4+fMbLyvPTIx2245PdFuagwhAk+C64FSemMkW2UM=;
+        b=GWTEm3W1HqO2zGOjVcoEgEy8JTHYtvWUdHsreZW0kzb5sX2O/2mKJoPeFA/q0ynbvH
+         SqdFJVTAlD6PuHRf5Vh/J4AFD4vDpdGBWp9LRLFmaSAf80rNKNo91WEGzfrEB2nnGLgN
+         QO06IclO39iDE+D9XO3ZPyF2thLdc+Q4+0W18=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685480734; x=1688072734;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lRlag3IP6WRuvIKALTZZ5sR/28OhDehgXmzr30sFnqw=;
-        b=VhtcKAfJI/xTzdmaIbmr2TpwO+w41XN6ZSP9fa2vSc4uZRM511aJpgwmJKNzcGCkpN
-         e9A+N/RD2+wg5qTVOzZN0xpAvzQf7yqmfZgQKB/amDSpHkWL1+cVQVU5r3bNsjlxSi3R
-         dGYX/SOjNJzldj+lhxyAyRNLhzVQhGRE7JIQPdMh71Qh9+SVejF+tUnF4HRM4T+UkxdW
-         MMsgv6ziY4HNuJSEkhG+RBhc2PmECm3+NPInw2W4iZNaWzfzFcRmyi9m2eCvliWr3fwP
-         UtnbSiFBl8s2Irc8vlw4hS6sMplkekeP4JUxiKiKXsnxy67rjgjtXSCMhUVBO0ie9270
-         CzHA==
-X-Gm-Message-State: AC+VfDy7BDS3nSHCS6W3rsS1HIlZDPyDLbqO9exuhCKLjAHM+Wi3/jPi
-        4qk7T89kFTwLh8F/HiApLko/FWfQ7rL8dwQw1ZK6sA==
-X-Google-Smtp-Source: ACHHUZ7Zp8oJbHvSFe3mBEKaiZhOHzYy8+TmMS6BK/n3/7mGCMRkjrQTfTp2QOU+zAUjpV8u7O/KVADsqjHV60dyB7w=
-X-Received: by 2002:a2e:8244:0:b0:2a8:ae7e:b9cb with SMTP id
- j4-20020a2e8244000000b002a8ae7eb9cbmr1570757ljh.42.1685480733570; Tue, 30 May
- 2023 14:05:33 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685480780; x=1688072780;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g/W4+fMbLyvPTIx2245PdFuagwhAk+C64FSemMkW2UM=;
+        b=lYT4S859mP4qjTb80Hw5KlN0oKbQhwEaiIW2Ein7lNqTiCQV5VPTvsfS7lTR6w+y2O
+         rb42ux1NIC3qUPToZtzZ9+e+wvhoO0QkVQ4ijrgGpvUzKp0s61TowoXMw+9ZIdUD9PJR
+         Hj1e8bEqvbRJbzdvgbvKnxzQt5TmHNr9ZiG9PqrjyQHvSknqvHrl17Z2QQD1SV30HLl6
+         m86Buu8tnrbjorA1zXDNrtRe8ecqHUumb3WAReKAWmshFp0w0IA5FL+8mX2xBWzl4ciu
+         NIsbepINRtwNy4TcaaCr2mI7tBy2sbBPCBVrAnEEzwA24ZtZ2dOXIjt2iqgHk7/hYiUN
+         WNGg==
+X-Gm-Message-State: AC+VfDzMltaJqCMJSiLlAWs+r023WMf615r3kKsGaHbCtQa+QseO2vc3
+        6EMZfiXxh8/vzZqHA1q2rSt/2A==
+X-Google-Smtp-Source: ACHHUZ4oQouosWLOAan/NlY1g7ARDDIDcAnRzfg15YFFFDchHSY1YFtu/S9EHFWVZMzmUpK8q/x45Q==
+X-Received: by 2002:a92:4b08:0:b0:335:fc8:9b4 with SMTP id m8-20020a924b08000000b003350fc809b4mr485691ilg.19.1685480779840;
+        Tue, 30 May 2023 14:06:19 -0700 (PDT)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id dj10-20020a0566384b8a00b00411af6e8091sm1006419jab.66.2023.05.30.14.06.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 14:06:19 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+X-Google-Original-From: Matthias Kaehlcke <mka@google.com>
+Date:   Tue, 30 May 2023 21:06:19 +0000
+To:     =?utf-8?B?5qWK5a6X57+w?= <ecs.taipeikernel@gmail.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bob Moragues <moragues@google.com>,
+        Abner Yen <abner.yen@ecs.com.tw>,
+        Doug Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>, Harvey <hunge@google.com>,
+        Gavin Lee <gavin.lee@ecs.com.tw>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v1] drivers: pci: quirks: Add suspend fixup for SSD on
+ sc7280
+Message-ID: <ZHZlS48EKigmNihh@google.com>
+References: <20230525163448.v1.1.Id388e4e2aa48fc56f9cd2d413aabd461ff81d615@changeid>
+ <ZG/c1+/mCp/PfFSO@bhelgaas>
+ <CAPao8GJNbXnh1R2-9rueMygyYyy-r3kqvQ55xdN61E7m6_dkdw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230530162153.836565-1-nphamcs@gmail.com> <CAJD7tkZJttvpYs4mgjL3pt8-jkX0fnWRJP7hVBZmm=i_Ef3Abg@mail.gmail.com>
- <20230530180038.GC97194@cmpxchg.org> <CAJD7tkYYQjumA6QPcrAv8c6YnqJfrDrMhPZzDSjAz2jv+uDvtg@mail.gmail.com>
- <20230530191336.GB101722@cmpxchg.org> <CAJD7tkb8BbPZfDR5=3eMmJ4=7E52mPAafuzeytsnxunDQGyEmg@mail.gmail.com>
- <20230530205940.GA102494@cmpxchg.org>
-In-Reply-To: <20230530205940.GA102494@cmpxchg.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 30 May 2023 14:04:57 -0700
-Message-ID: <CAJD7tkZA3L-Dpt4SvTK=J4TsN_OykazBMV110M4E3RK9J82G=g@mail.gmail.com>
-Subject: Re: [PATCH] zswap: do not shrink when memory.zswap.max is 0
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
-        cerasuolodomenico@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPao8GJNbXnh1R2-9rueMygyYyy-r3kqvQ55xdN61E7m6_dkdw@mail.gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,263 +80,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 1:59=E2=80=AFPM Johannes Weiner <hannes@cmpxchg.org=
-> wrote:
->
-> On Tue, May 30, 2023 at 01:19:12PM -0700, Yosry Ahmed wrote:
-> > On Tue, May 30, 2023 at 12:13=E2=80=AFPM Johannes Weiner <hannes@cmpxch=
-g.org> wrote:
-> > >
-> > > On Tue, May 30, 2023 at 11:41:32AM -0700, Yosry Ahmed wrote:
-> > > > On Tue, May 30, 2023 at 11:00=E2=80=AFAM Johannes Weiner <hannes@cm=
-pxchg.org> wrote:
-> > > > >
-> > > > > On Tue, May 30, 2023 at 09:52:36AM -0700, Yosry Ahmed wrote:
-> > > > > > On Tue, May 30, 2023 at 9:22=E2=80=AFAM Nhat Pham <nphamcs@gmai=
-l.com> wrote:
-> > > > > > >
-> > > > > > > Before storing a page, zswap first checks if the number of st=
-ored pages
-> > > > > > > exceeds the limit specified by memory.zswap.max, for each cgr=
-oup in the
-> > > > > > > hierarchy. If this limit is reached or exceeded, then zswap s=
-hrinking is
-> > > > > > > triggered and short-circuits the store attempt.
-> > > > > > >
-> > > > > > > However, if memory.zswap.max =3D 0 for a cgroup, no amount of=
- writeback
-> > > > > > > will allow future store attempts from processes in this cgrou=
-p to
-> > > > > > > succeed. Furthermore, this create a pathological behavior in =
-a system
-> > > > > > > where some cgroups have memory.zswap.max =3D 0 and some do no=
-t: the
-> > > > > > > processes in the former cgroups, under memory pressure, will =
-evict pages
-> > > > > > > stored by the latter continually, until the need for swap cea=
-ses or the
-> > > > > > > pool becomes empty.
-> > > > > > >
-> > > > > > > As a result of this, we observe a disproportionate amount of =
-zswap
-> > > > > > > writeback and a perpetually small zswap pool in our experimen=
-ts, even
-> > > > > > > though the pool limit is never hit.
-> > > > > > >
-> > > > > > > This patch fixes the issue by rejecting zswap store attempt w=
-ithout
-> > > > > > > shrinking the pool when memory.zswap.max is 0.
-> > > > > > >
-> > > > > > > Fixes: f4840ccfca25 ("zswap: memcg accounting")
-> > > > > > > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> > > > > > > ---
-> > > > > > >  include/linux/memcontrol.h | 6 +++---
-> > > > > > >  mm/memcontrol.c            | 8 ++++----
-> > > > > > >  mm/zswap.c                 | 9 +++++++--
-> > > > > > >  3 files changed, 14 insertions(+), 9 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/include/linux/memcontrol.h b/include/linux/memco=
-ntrol.h
-> > > > > > > index 222d7370134c..507bed3a28b0 100644
-> > > > > > > --- a/include/linux/memcontrol.h
-> > > > > > > +++ b/include/linux/memcontrol.h
-> > > > > > > @@ -1899,13 +1899,13 @@ static inline void count_objcg_event(=
-struct obj_cgroup *objcg,
-> > > > > > >  #endif /* CONFIG_MEMCG_KMEM */
-> > > > > > >
-> > > > > > >  #if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
-> > > > > > > -bool obj_cgroup_may_zswap(struct obj_cgroup *objcg);
-> > > > > > > +int obj_cgroup_may_zswap(struct obj_cgroup *objcg);
-> > > > > > >  void obj_cgroup_charge_zswap(struct obj_cgroup *objcg, size_=
-t size);
-> > > > > > >  void obj_cgroup_uncharge_zswap(struct obj_cgroup *objcg, siz=
-e_t size);
-> > > > > > >  #else
-> > > > > > > -static inline bool obj_cgroup_may_zswap(struct obj_cgroup *o=
-bjcg)
-> > > > > > > +static inline int obj_cgroup_may_zswap(struct obj_cgroup *ob=
-jcg)
-> > > > > > >  {
-> > > > > > > -       return true;
-> > > > > > > +       return 0;
-> > > > > > >  }
-> > > > > > >  static inline void obj_cgroup_charge_zswap(struct obj_cgroup=
- *objcg,
-> > > > > > >                                            size_t size)
-> > > > > > > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> > > > > > > index 4b27e245a055..09aad0e6f2ea 100644
-> > > > > > > --- a/mm/memcontrol.c
-> > > > > > > +++ b/mm/memcontrol.c
-> > > > > > > @@ -7783,10 +7783,10 @@ static struct cftype memsw_files[] =
-=3D {
-> > > > > > >   * spending cycles on compression when there is already no r=
-oom left
-> > > > > > >   * or zswap is disabled altogether somewhere in the hierarch=
-y.
-> > > > > > >   */
-> > > > > > > -bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
-> > > > > > > +int obj_cgroup_may_zswap(struct obj_cgroup *objcg)
-> > > > > > >  {
-> > > > > > >         struct mem_cgroup *memcg, *original_memcg;
-> > > > > > > -       bool ret =3D true;
-> > > > > > > +       int ret =3D 0;
-> > > > > > >
-> > > > > > >         if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
-> > > > > > >                 return true;
-> > > > > > > @@ -7800,7 +7800,7 @@ bool obj_cgroup_may_zswap(struct obj_cg=
-roup *objcg)
-> > > > > > >                 if (max =3D=3D PAGE_COUNTER_MAX)
-> > > > > > >                         continue;
-> > > > > > >                 if (max =3D=3D 0) {
-> > > > > > > -                       ret =3D false;
-> > > > > > > +                       ret =3D -ENODEV;
-> > > > > > >                         break;
-> > > > > > >                 }
-> > > > > > >
-> > > > > > > @@ -7808,7 +7808,7 @@ bool obj_cgroup_may_zswap(struct obj_cg=
-roup *objcg)
-> > > > > > >                 pages =3D memcg_page_state(memcg, MEMCG_ZSWAP=
-_B) / PAGE_SIZE;
-> > > > > > >                 if (pages < max)
-> > > > > > >                         continue;
-> > > > > > > -               ret =3D false;
-> > > > > > > +               ret =3D -ENOMEM;
-> > > > > > >                 break;
-> > > > > > >         }
-> > > > > > >         mem_cgroup_put(original_memcg);
-> > > > > > > diff --git a/mm/zswap.c b/mm/zswap.c
-> > > > > > > index 59da2a415fbb..7b13dc865438 100644
-> > > > > > > --- a/mm/zswap.c
-> > > > > > > +++ b/mm/zswap.c
-> > > > > > > @@ -1175,8 +1175,13 @@ static int zswap_frontswap_store(unsig=
-ned type, pgoff_t offset,
-> > > > > > >         }
-> > > > > > >
-> > > > > > >         objcg =3D get_obj_cgroup_from_page(page);
-> > > > > > > -       if (objcg && !obj_cgroup_may_zswap(objcg))
-> > > > > > > -               goto shrink;
-> > > > > > > +       if (objcg) {
-> > > > > > > +               ret =3D obj_cgroup_may_zswap(objcg);
-> > > > > > > +               if (ret =3D=3D -ENODEV)
-> > > > > > > +                       goto reject;
-> > > > > > > +               if (ret =3D=3D -ENOMEM)
-> > > > > > > +                       goto shrink;
-> > > > > > > +       }
-> > > > > >
-> > > > > > I wonder if we should just make this:
-> > > > > >
-> > > > > > if (objcg && !obj_cgroup_may_zswap(objcg))
-> > > > > >         goto reject;
-> > > > > >
-> > > > > > Even if memory.zswap.max is > 0, if the limit is hit, shrinking=
- the
-> > > > > > zswap pool will only help if we happen to writeback a page from=
- the
-> > > > > > same memcg that hit its limit. Keep in mind that we will only
-> > > > > > writeback one page every time we observe that the limit is hit =
-(even
-> > > > > > with Domenico's patch, because zswap_can_accept() should be tru=
-e).
-> > > > > >
-> > > > > > On a system with a handful of memcgs,
-> > > > > > it seems likely that we wrongfully writeback pages from other m=
-emcgs
-> > > > > > because of this. Achieving nothing for this memcg, while hurtin=
-g
-> > > > > > others. OTOH, without invoking writeback when the limit is hit,=
- the
-> > > > > > memcg will just not be able to use zswap until some pages are
-> > > > > > faulted back in or invalidated.
-> > > > > >
-> > > > > > I am not sure which is better, just thinking out loud.
-> > > > >
-> > > > > You're absolutely right.
-> > > > >
-> > > > > Currently the choice is writing back either everybody or nobody,
-> > > > > meaning between writeback and cgroup containment. They're both so=
- poor
-> > > > > that I can't say I strongly prefer one over the other.
-> > > > >
-> > > > > However, I have a lame argument in favor of this patch:
-> > > > >
-> > > > > The last few fixes from Nhat and Domenico around writeback show t=
-hat
-> > > > > few people, if anybody, are actually using writeback. So it might=
- not
-> > > > > actually matter that much in practice which way we go with this p=
-atch.
-> > > > > Per-memcg LRUs will be necessary for it to work right.
-> > > > >
-> > > > > However, what Nhat is proposing is how we want the behavior down =
-the
-> > > > > line. So between two equally poor choices, I figure we might as w=
-ell
-> > > > > go with the one that doesn't require another code change later on=
-.
-> > > > >
-> > > > > Doesn't that fill you with radiant enthusiasm?
-> > > >
-> > > > If we have per-memcg LRUs, and memory.zswap.max =3D=3D 0, then we s=
-hould
-> > > > be in one of two situations:
-> > > >
-> > > > (a) memory.zswap.max has always been 0, so the LRU for this memcg i=
-s
-> > > > empty, so we don't really need the special case for memory.zswap.ma=
-x
-> > > > =3D=3D 0.
-> > > >
-> > > > (b) memory.zswap.max was reduced to 0 at some point, and some pages
-> > > > are already in zswap. In this case, I don't think shrinking the mem=
-cg
-> > > > is such a bad idea, we would be lazily enforcing the limit.
-> > > >
-> > > > In that sense I am not sure that this change won't require another
-> > > > code change. It feels like special casing memory.zswap.max =3D=3D 0=
- is
-> > > > only needed now due to the lack of per-memcg LRUs.
-> > >
-> > > Good point. And I agree down the line we should just always send the
-> > > shrinker off optimistically on the cgroup's lru list.
-> > >
-> > > So I take back my lame argument. But that then still leaves us with
-> > > the situation that both choices are equal here, right?
-> > >
-> > > If so, my vote would be to go with the patch as-is.
-> >
-> > I *think* it's better to punish the memcg that exceeded its limit by
-> > not allowing it to use zswap until its usage goes down, rather than
-> > punish random memcgs on the machine because one memcg hit its limit.
-> > It also seems to me that on a system with a handful of memcgs, it is
-> > statistically more likely for zswap shrinking to writeback a page from
-> > the wrong memcg.
->
-> Right, but in either case a hybrid zswap + swap setup with cgroup
-> isolation is broken anyway. Without it being usable, I'm assuming
-> there are no users - maybe that's optimistic of me ;)
->
-> However, if you think it's better to just be conservative about taking
-> action in general, that's fine by me as well.
+On Mon, May 29, 2023 at 02:24:53PM +0800, 楊宗翰 wrote:
+> Hi Bjorn,
+> 
+> Thanks for your kindÂ directions.
+> 
+> Â  - Subject line in style of the file (use "git log --oneline
+> Â  Â  drivers/pci/quirks.c").
+> Done, and I resend in topic "[PATCH v1] PCI: Add suspend fixup for SSD
+> Â on sc7280", please review it.
+> 
+> Â  - Format commit log correctly (fill 75 columns, no leading spaces).
+> Done.
+> 
+> Â  - Description of incorrect behavior.Â  What does the user see?Â  If
+> Â  Â  there's a bug report, include a link to it.
+> This issue seems to be discovered in ChromeOS only. SSD will randomlyÂ 
+> crashed at 100~250+ suspend/resume cycle. Phison and QualcommÂ 
+> found that its due to NVMe entering D3cold instead of L1ss.
 
-Exactly, I just prefer erroring on the conservative side.
+It should be noted that D3cold (or whatever condition that causes the
+issue) is not always entered, but only in the failure case (at least
+that was the case for the Kioxia NVMe, which has a similar issue).
 
->
-> > The code would also be simpler if obj_cgroup_may_zswap() just returns
-> > a boolean and we do not shrink at all if it returns false. If it no
-> > longer returns a boolean we should at least rename it.
-> >
-> > Did you try just not shrinking at all if the memcg limit is hit in
-> > your experiments?
-> >
-> > I don't feel strongly, but my preference would be to just not shrink
-> > at all if obj_cgroup_may_zswap() returns false.
->
-> Sounds reasonable to me. Basically just replace the goto shrink with
-> goto reject for now. Maybe a comment that says "XXX: Writeback/reclaim
-> does not work with cgroups yet. Needs a cgroup-aware entry LRU first,
-> or we'd push out entries system-wide based on local cgroup limits."
+> Â  - Multi-line code comments in style of the file (look at existing
+> Â  Â  comments in the file).
+> Done.
+> 
+> Â  - Details of "the correct ASPM state".Â  ASPM may be enabled or
+> Â  Â  disabled by the user, so you can't assume any particular ASPM
+> Â  Â  configuration.
+> According to Qualcomm. This issue has been found last year and they have
+> attempt to submit some patches to fix the pci suspend behavior.Â 
+> (ref:https://patchwork.kernel.org/project/linux-arm-msm/list/?
+> series=665060&state=%2A&archive=both).Â 
+> But somehow these patches were rejected because of its complexity. AndÂ 
+> we've got advise from Google that it will be more efficient that we implementÂ 
+> a quirks to fix this issue.
 
-Yeah, exactly -- if Nhat agrees of course.
+IIRC the primary goal of this series was to be able to turn off the
+PCI clocks during suspend, to allow the SoC to enter a lower power
+state. This fixing element for NVMe with the issue described above
+is the the retry loop of "PCI: qcom: Add retry logic for link to be
+stable in L1ss" [1].
 
->
-> Nhat, does that sound good to you?
+It is currently unclear why *some* NVMe *sometimes* need a longer
+time to enter the L1 sub-state. That's something Qualcomm and the
+vendors of impacted NVMes should figure out.
+
+[1] https://patchwork.kernel.org/project/linux-arm-msm/patch/1659526134-22978-4-git-send-email-quic_krichai@quicinc.com/
+
+> Â  - Details on the Qualcomm sc7280 connection.Â  This quirk would
+> Â  Â  affect Phison SSDs on *all* platforms, not just sc7280.Â  I don't
+> Â  Â  want to slow down suspend on all platforms just for a sc7280
+> Â  Â  issue.
+
+As of now the issue has only been observed on QC SC7280, I don't
+know if ECS has tried this part on other platforms. The issue could
+be QC/SC7280-specific or not.
+
+> The DECLARE_PCI_FIXUP_SUSPEND function has already specify the PCI deviceÂ 
+> ID. And this SSD will only be used at our Chromebook device only.
+
+It could be used in devices that are produced by other manufacturers.
+
+A dedicated Kconfig option for the Phison NVMe could be an option.
+Or a QC specific #ifdef (ugh ...) with a comment explaining that the
+issue has been only observed on QC SC7280 *so far*.
