@@ -2,111 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2181E71536D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08654715370
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjE3CII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 22:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
+        id S229455AbjE3CIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 22:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjE3CIF (ORCPT
+        with ESMTP id S230116AbjE3CIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 22:08:05 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4EF131;
-        Mon, 29 May 2023 19:07:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=8b7axy2ugwNnYpSJ0ufdxmI8eLFv3CFyiX/N3qWXuJ8=; b=tfvBCuK4DDooO23JHHoy0i7lZ6
-        rIdQLSmZMncYs7N3rUt8W9Y9e+Vr7JZkGzKEnlZVhaqIMBA6zZQH7YV0CrWQqn0q8Q0DYObTsSkQ5
-        ECmUM8Y9UihOYWqKPkHSLvL1RaGq7Zcn46wQb/a0mAn5cc0C6RBD6lK63y8/dMRPGxIg=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:59646 helo=debian-acer)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q3olR-0002Pe-83; Mon, 29 May 2023 22:07:09 -0400
-Date:   Mon, 29 May 2023 22:07:08 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     andy.shevchenko@gmail.com
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230529220708.66f7825fed9ee36b181128cf@hugovil.com>
-In-Reply-To: <ZHUnwNNcU_EnS4bo@surfacebook>
-References: <20230529140711.896830-1-hugo@hugovil.com>
-        <ZHUnwNNcU_EnS4bo@surfacebook>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Mon, 29 May 2023 22:08:15 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC3AE3;
+        Mon, 29 May 2023 19:07:58 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QVbQL2WSYz4f3lVw;
+        Tue, 30 May 2023 10:07:54 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgCH77J6WnVk4dYPKg--.45958S3;
+        Tue, 30 May 2023 10:07:55 +0800 (CST)
+Subject: Re: [PATCH -next] block: fix blktrace debugfs entries leak
+To:     Yu Kuai <yukuai1@huaweicloud.com>, Christoph Hellwig <hch@lst.de>
+Cc:     ming.lei@redhat.com, axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230511065633.710045-1-yukuai1@huaweicloud.com>
+ <20230511152808.GA8641@lst.de>
+ <18db3894-d128-7857-4c11-25b59d82ff54@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <e26d37bc-0f09-426a-ef25-57bdbd716ae9@huaweicloud.com>
+Date:   Tue, 30 May 2023 10:07:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <18db3894-d128-7857-4c11-25b59d82ff54@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCH77J6WnVk4dYPKg--.45958S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXw15AFW7CF17KF1kZw1rXrb_yoW5Gr1xpF
+        Z2qan0kryUArsYva4jvw48Za4fK34rJFWkWF93GryS9FsxJr1agrW7XrsY9rW5Xr4v9r90
+        qw15ZrW7Ar18XFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUZa9
+        -UUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v4 0/9] serial: sc16is7xx: fix GPIO regression and rs485
- improvements
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 May 2023 01:31:28 +0300
-andy.shevchenko@gmail.com wrote:
+Hi, Christoph
 
-> Mon, May 29, 2023 at 10:07:02AM -0400, Hugo Villeneuve kirjoitti:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > Hello,
-> > this patch series mainly fixes a GPIO regression and improve RS485 flags and
-> > properties detection from DT.
-> > 
-> > It now also includes various small fixes and improvements that were previously
-> > sent as separate patches, but that made testing everything difficult.
-> > 
-> > Patch 1 fixes an issue when debugging IOcontrol register. After testing the GPIO
-> > regression patches (patches 6 and 7, tests done by Lech Perczak), it appers that
-> > this patch is also necessary for having the correct IOcontrol register values.
-> > 
-> > Patch 2 introduces a delay after a reset operation to respect datasheet
-> > timing recommandations.
+在 2023/05/12 15:14, Yu Kuai 写道:
+> Hi,
 > 
-> These two patches are w/o Fixes tag, they should be moved in the series further
-> as I explained before.
-
-Your explanation was not clear.
-
-Anyway, I moved them in position 7 and 8.
-
- 
-> > Patch 3 fixes an issue with init of first port during probing.
-> > 
-> > Patch 4 fixes a bug with the output value when first setting the GPIO direction.
-> > 
-> > Patch 5 is a refactor of GPIO registration code.
-> > 
-> > Patches 6 and 7 fix a GPIO regression by (re)allowing to choose GPIO function
-> > for GPIO pins shared with modem status lines.
-> > 
-> > Patch 8 allows to read common rs485 device-tree flags and properties.
-> > 
-> > Patch 9 improves comments about chip variants.
-> > 
-> > I have tested the changes on a custom board with two SC16IS752 DUART using a
-> > Variscite IMX8MN NANO SOM.
+> 在 2023/05/11 23:28, Christoph Hellwig 写道:
+>> On Thu, May 11, 2023 at 02:56:33PM +0800, Yu Kuai wrote:
+>>> From: Yu Kuai <yukuai3@huawei.com>
+>>>
+>>> Commit 99d055b4fd4b ("block: remove per-disk debugfs files in
+>>> blk_unregister_queue") moves blk_trace_shutdown() from
+>>> blk_release_queue() to blk_unregister_queue(), this is safe if blktrace
+>>> is created through sysfs, however, there are some regression in corner
+>>> cases:
+>>>
+>>> 1) for scsi, passthrough io can still be issued after del_gendisk, and
+>>>     blktrace debugfs entries will be removed immediately after
+>>>     del_gendisk(), therefor passthrough io can't be tracked and blktrace
+>>>     will complain:
+>>>
+>>>     failed read of /sys/kernel/debug/block/sdb/trace0: 5/Input/output 
+>>> error
+>>
+>> But that is the right thing.  The only thing that has a name is the
+>> gendisk and it is gone at this point.  Leaking the debugfs entries
+>> that are named after, and ultimatively associated with the gendisk
+>> (even if the code is still a bit confused about this) will create a lot
+>> of trouble for us.
+>>
+>>> 2) blktrace can still be enabled after del_gendisk() through ioctl if 
+>>> the
+>>>     disk is opened before del_gendisk(), and if blktrace is not shutdown
+>>>     through ioctl before closing the disk, debugfs entries will be
+>>>     leaked.
+>>
+>> Yes.
+>>
+>>> It seems 1) is not important, while 2) needs to be fixed apparently.
+>>>
+>>> Fix this problem by shutdown blktrace in blk_free_queue(),
+>>> disk_release() is not used because scsi sg support blktrace without
+>>> gendisk, and this is safe because queue is not freed yet, and
+>>> blk_trace_shutdown() is reentrant.
+>>
+>> I think disk_release is the right place for "normal" blktrace.  The
+>> odd cdev based blktrace for /dev/sg will need separate handling.
+>> To be honest I'm not even sure how /dev/sg based passthrough is
+>> even supposed to work in practice, but I'll need to spend some more
+>> time to familarize myself with it.
 > 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+> I'm not sure how to specail hanlde /dev/sg* for now, however,
+> If we don't care about blktrace for passthrough io after del_gendisk(),
+> and /dev/sg* has separate handling, I think it's better just to check
+> QUEUE_FLAG_REGISTERED in blk_trace_setup(), and don't enable blktrace
+> in the first place.
+
+Any suggestions about this problem? Should we use separate handling for
+/dev/sd? Or just free blktrace in blk_free_queue().
+> 
+> Thanks,
+> Kuai
+> 
+> .
+> 
+
