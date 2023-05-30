@@ -2,140 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D9071583E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF76271583F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjE3IT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
+        id S230228AbjE3IUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 04:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjE3ITi (ORCPT
+        with ESMTP id S230365AbjE3ITw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 04:19:38 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EC7CD;
-        Tue, 30 May 2023 01:19:22 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id 5614622812f47-399dfeeb96aso2606392b6e.1;
-        Tue, 30 May 2023 01:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685434761; x=1688026761;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rUslCAqAUHYdcANPf4Fjrc2wg7fzvi8y+ZTvGo2i9IM=;
-        b=i0wwwII1juT1nRrvNDcadTgBKYs+om94n4MzYfL1Pe1fadaeApJ3manBSFw08YEpG2
-         ZjrxPaH+iB0SxavT1BoxNjDPqqBWsgix7IORhO5wNXY7hFiPuRf8yjemg4Px+VTKtLgi
-         fgutNre26sLEpmf3MOrFQBN0ESE3iqKACYdo2wL49i1L7bbw4JmhcXY2zxGU+JzKw2g5
-         SVedmOmUo2P+P0Y8KlX4BqUGn/QsOfF3Ai8yFc/tEbEQHKr08Wart+jxr6S7iQOy7ZQU
-         sLBg4Yywp39/qRJOUStqG4+W+aqrhEhjrM4MK9/s3h3/DnPTCd6FArqx98efXA25ot9z
-         Dn8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685434761; x=1688026761;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rUslCAqAUHYdcANPf4Fjrc2wg7fzvi8y+ZTvGo2i9IM=;
-        b=JMbIKyF6+sWF1rlTCsPkD9x/IqiNgF9nV9UY5EjcwK1OYxdRrbsVp59ex22OmBo2C7
-         K0Kq2/tpdfPRNPRAv73VvhdeEwJ74Ol5BqEWn7PV1Qmsbf+Ai9TIanb9i8snFGwzp/S+
-         oUqvytLW5KaBqn4J6SJO4Kj61rUoZ8tunvR045LXLe8NZtMZFQ8vq3BC5hBrFMpIe764
-         j3aw81Ub5Htd/Ln0bh4YpAtZQSQnw9ZERkSNyIdXYLZihHvx/MFR9rIHpl1ZtEdyPnd6
-         ZFOZ8b4RlTWtP/qQ39EfOUo83tG1oVrsiPKWFjIsd0y6GJu2QlsTWCgHWCxPg7JKdzbl
-         zwWg==
-X-Gm-Message-State: AC+VfDxKvFpfQIbYFxy+9wVx0LPcsepXNH/wE8YTDrKJmsJDcWVxCAON
-        p4WuSZmCt2zaq8fJFKz415CIzUSoCQf17Xq6YH0=
-X-Google-Smtp-Source: ACHHUZ6veEt6z3yNhFECh8TzuY5A12HJ4x5l41Bqb+FARxHgypoWsrFhYK43yJl+GLvmhW3ZYF0aiVapsZ0yfxyx3u4=
-X-Received: by 2002:aca:bf86:0:b0:39a:4170:6840 with SMTP id
- p128-20020acabf86000000b0039a41706840mr83300oif.21.1685434761311; Tue, 30 May
- 2023 01:19:21 -0700 (PDT)
+        Tue, 30 May 2023 04:19:52 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4912CDB;
+        Tue, 30 May 2023 01:19:51 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34U3tvJT017961;
+        Tue, 30 May 2023 10:19:22 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=Dt2qDgO0BJH5VS1WqR/hx20Xk2xMe+9JCiqnd8yB2c4=;
+ b=kxmmwhPEmr1VkU9dGGWbG9iC3d1CcqZQsU9WeVrR0KwyhiMR+VXiXs7JlA7XZpxpZVDL
+ xT3fgf7uQZD9lN6QL52rK9uFm1r59B1WMzeKlt6n3ZAbNsIHJmc2uIF5Ni63Php42Wgn
+ NddmHnMuIRvDOhxQ6ZS9EvUWMFozEjp3K9qQyC7pe8wH5LkQlwdxHdtUPMHsYK9hGtBv
+ sakopbXPpvOHaZ+Zj4M1zoIYWRClEPCLzLLbUxk/9Wn4D6QZ7r56TUWSGVVZkrL9Xfdz
+ Tjq0j3rLyk/uT67ENQ4ov1ANcUcgKl49a3xYi5tzaDoZ/sL1doPDxxWxG7RCiIXshQ03 EQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3quahy689t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 10:19:22 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F2C8610002A;
+        Tue, 30 May 2023 10:19:20 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C683B21513C;
+        Tue, 30 May 2023 10:19:20 +0200 (CEST)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 30 May
+ 2023 10:19:20 +0200
+Message-ID: <df9061ee-dda1-5c46-13b9-0043c3173113@foss.st.com>
+Date:   Tue, 30 May 2023 10:19:19 +0200
 MIME-Version: 1.0
-References: <20230427055032.85015-1-rath@ibv-augsburg.de> <20230427055032.85015-2-rath@ibv-augsburg.de>
-In-Reply-To: <20230427055032.85015-2-rath@ibv-augsburg.de>
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-Date:   Tue, 30 May 2023 10:19:10 +0200
-Message-ID: <CAH9NwWfcjKw_e1qjo7bOPwjipfzVVVNh=9JEbB5Z+XAr6edd9w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: phy: cadence-torrent: Add latency properties
-To:     Dominic Rath <rath@ibv-augsburg.de>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        tjoseph@cadence.com, bhelgaas@google.com, lpieralisi@kernel.org,
-        nm@ti.com, vigneshr@ti.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        bahle@ibv-augsburg.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 0/4] STM32 warning cleanup
+Content-Language: en-US
+To:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Marek Vasut <marex@denx.de>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>
+CC:     <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@dh-electronics.com>
+References: <20230529091359.71987-1-raphael.gallais-pou@foss.st.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20230529091359.71987-1-raphael.gallais-pou@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_05,2023-05-29_02,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> From: Alexander Bahle <bahle@ibv-augsburg.de>
->
-> Add "tx-phy-latency-ps" and "rx-phy-latency-ps" DT bindings for
-> setting the PCIe PHY latencies.
-> The properties expect a list of uint32 PHY latencies in picoseconds for
-> every supported speed starting at PCIe Gen1, e.g.:
->
->   tx-phy-latency-ps = <100000 200000>; /* Gen1: 100ns, Gen2: 200ns */
->   rx-phy-latency-ps = <150000 250000>; /* Gen1: 150ns, Gen2: 250ns */
->
-> Signed-off-by: Alexander Bahle <bahle@ibv-augsburg.de>
-> Signed-off-by: Dominic Rath <rath@ibv-augsburg.de>
+Hi Raphael
 
-Reviewed-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+On 5/29/23 11:13, Raphael Gallais-Pou wrote:
+> This serie aims to reduce the number of device-tree warnings of
+> following boards :
+> 
+>    - STM32F469-DISCO
+>    - STM32MP15*
+> 
+> Those warnings were appearing either during build or when checking
+> dt-bindings and concern mostly LTDC and DSI IPs. They were due to the
+> following cases:
+> 
+>    - 'panel-dsi@0' instead of 'panel@0' according to the YAML
+>    - unnecessary #address-cells and #size-cells properties
+>    - residual 'reg' field on single endpoints
+> 
+> First patch fixes stm32f469-disco device-tree.
+> Second patch fixes st,stm32-dsi.yaml dt-bindings.
+> Third patch fixes DSI warnings on stm32mp15* device-trees.
+> Last patch fixes LTDC warnings on stm32mp15* device-trees.
+> 
+> Changes since v3:
+> 	* Added Conor's acked-by
+> 	* Added Marek's reviewed-by
+> 	* Split last patch into two separate for clearer review
+> 
+> Changes since v2:
+> 	* Added changelog
+> 	* Enhanced commit descriptions
+> 
+> Changes since v1:
+> 	* Added DSI subnode name change
+> 	* Included stm32f469-disco DT in the cleanup
+> 	* Included YAML fix to prevent regression
+> 
+> Raphael Gallais-Pou (4):
+>    ARM: dts: stm32: fix warnings on stm32f469-disco board
+>    dt-bindings: display: st,stm32-dsi: Remove unnecessary fields
+>    ARM: dts: stm32: fix dsi warnings on stm32mp15 boards
+>    ARM: dts: stm32: fix ltdc warnings in stm32mp15 boards
+> 
+>   .../bindings/display/st,stm32-dsi.yaml        |  2 --
+>   arch/arm/boot/dts/stm32f469-disco.dts         |  4 ++--
+>   arch/arm/boot/dts/stm32mp151.dtsi             |  5 -----
+>   arch/arm/boot/dts/stm32mp157.dtsi             |  7 -------
+>   arch/arm/boot/dts/stm32mp157a-dk1.dts         | 20 +++++++++++++++++++
+>   ...tm32mp157a-icore-stm32mp1-ctouch2-of10.dts |  6 ++++--
+>   .../stm32mp157a-icore-stm32mp1-edimm2.2.dts   |  6 ++++--
+>   ...157a-microgea-stm32mp1-microdev2.0-of7.dts |  3 +--
+>   arch/arm/boot/dts/stm32mp157c-dk2.dts         |  8 ++++++++
+>   arch/arm/boot/dts/stm32mp157c-ev1.dts         | 10 +++++++---
+>   arch/arm/boot/dts/stm32mp157c-lxa-mc1.dts     |  3 +--
+>   .../boot/dts/stm32mp15xx-dhcor-avenger96.dtsi |  6 +-----
+>   arch/arm/boot/dts/stm32mp15xx-dkx.dtsi        | 18 +----------------
+>   13 files changed, 49 insertions(+), 49 deletions(-)
+> 
 
-> ---
->  .../bindings/phy/phy-cadence-torrent.yaml     | 20 +++++++++++++++++++
->  1 file changed, 20 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/phy/phy-cadence-torrent.yaml b/Documentation/devicetree/bindings/phy/phy-cadence-torrent.yaml
-> index 2ad1faadda2a..93228a304395 100644
-> --- a/Documentation/devicetree/bindings/phy/phy-cadence-torrent.yaml
-> +++ b/Documentation/devicetree/bindings/phy/phy-cadence-torrent.yaml
-> @@ -126,6 +126,24 @@ patternProperties:
->          enum: [2160, 2430, 2700, 3240, 4320, 5400, 8100]
->          default: 8100
->
-> +      tx-phy-latency-ps:
-> +        description:
-> +          The PHY latencies for the TX direction applied to PCIe PTM timestamps. Most
-> +          PCIe PHYs have asynchronous latencies for their RX and TX paths. To obtain
-> +          accurate PTM timestamps, the PCIe PTM specification requires that the time
-> +          at which the first serial bit is present on the serial lines be taken.
-> +          Should contain picosecond latency values for each supported speed,
-> +          starting with Gen1 latency.
-> +
-> +      rx-phy-latency-ps:
-> +        description:
-> +          The PHY latencies for the RX direction applied to the PTM timestamps. Most
-> +          PCIe PHYs have asynchronous latencies for their RX and TX paths. To obtain
-> +          accurate PTM timestamps, the PCIe PTM specification requires that the time
-> +          at which the first serial bit is present on the serial lines be taken.
-> +          Should contain picosecond latency values for each supported speed,
-> +          starting with Gen1 latency.
-> +
->      required:
->        - reg
->        - resets
-> @@ -203,6 +221,8 @@ examples:
->                  cdns,phy-type = <PHY_TYPE_PCIE>;
->                  cdns,num-lanes = <2>;
->                  cdns,ssc-mode = <CDNS_SERDES_NO_SSC>;
-> +                tx-phy-latency-ps = <138800 69400>;
-> +                rx-phy-latency-ps = <185200 92600>;
->              };
->
->              phy@2 {
-> --
-> 2.36.0
->
+Thanks for this series! No more W=1 Warnings and no more YAML issue 
+regarding DSI/LTDC stuff. Thanks Marek for reviews and feedback.
 
+Series applied on stm32-next.
 
--- 
-greets
---
-Christian Gmeiner, MSc
-
-https://christian-gmeiner.info/privacypolicy
+Cheers
+Alx
