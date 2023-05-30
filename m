@@ -2,127 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27455715A1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33357715A13
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjE3J2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
+        id S231200AbjE3J1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbjE3J1b (ORCPT
+        with ESMTP id S230507AbjE3J1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:27:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9BAD9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:25:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685438722;
+        Tue, 30 May 2023 05:27:13 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C35712B;
+        Tue, 30 May 2023 02:26:16 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685438774;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iGFdC+Cr7aKjAl09TH5gAS+8YxPdVhcFSlEZ7wtzGTo=;
-        b=OZohiWF3dHisbx1uZQqPCD5/IXOBPtLNFiPA5WFSPG2OzAzr8YfpkMmSlUOaXaC2/6JhZ+
-        kJdccbosV9h6+74Sqp5m1x44qv6FyN8brvCYRE3VDrlVa2qcy4GBMB+fXJJBL0/ek42CM7
-        nJ2S3k/RSFOcPwwdmvFG4WzC6RiqTAA=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-31-0_gLDks5NVe_vrtYma0wAg-1; Tue, 30 May 2023 05:25:21 -0400
-X-MC-Unique: 0_gLDks5NVe_vrtYma0wAg-1
-Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-514777266a3so3283033a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:25:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685438720; x=1688030720;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iGFdC+Cr7aKjAl09TH5gAS+8YxPdVhcFSlEZ7wtzGTo=;
-        b=PQRrhWIKbo+00y3T9fxK2mqzla/u54pePfoy10Z80/hXjHfzDiFt2Ij9EWRbBZS5iw
-         dFGpJ29YiaqIbhS63LtbQoUdPlQBStq1jww71hxo7yHkDcXwyySNyxhrRfE/vasPeUjh
-         DvC7A6wPsST+05mqa5iVorFqPQQeB60om1cEKcwzxLE8tsUcXHvn/RmApp5eyKuvej+f
-         6UEg8CSgTfSvik7u4YrCYAsXG+cxlaqMe5tihx6LqQ9r9XrDh2a9YCguhNZgIrX+XkWf
-         3V2YlvgfVM1qaspSQfvgPcRPoLnGh2OGALaBz7lI+/L84dKDJglqJHhzblBbBJpYvQYQ
-         R3OQ==
-X-Gm-Message-State: AC+VfDyGiOHmcWnsmcLq4rOXwT2Jokp0bmVhg7i+4ERAxv2XRDMV5CT2
-        VkSNcTQoUGYfTvluC0p+qNUIc4pTrOIB2Haubsh2f0xmjI6+imfwvWUqlQMZk7jhVhPcKduFKj/
-        sPsxYjfn9tptgG3XjiM7zq58y
-X-Received: by 2002:aa7:d586:0:b0:508:3b1f:e6b5 with SMTP id r6-20020aa7d586000000b005083b1fe6b5mr1131319edq.15.1685438720208;
-        Tue, 30 May 2023 02:25:20 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ511i+IlMrjdQEJaICGOkr307RIVrnzNJvm1eJGPS5QvRTCkjJO0Vsv78u0FAcgUlNcYeeTIg==
-X-Received: by 2002:aa7:d586:0:b0:508:3b1f:e6b5 with SMTP id r6-20020aa7d586000000b005083b1fe6b5mr1131312edq.15.1685438720035;
-        Tue, 30 May 2023 02:25:20 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id ca28-20020aa7cd7c000000b0050bc6d0e880sm4100809edb.61.2023.05.30.02.25.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 02:25:19 -0700 (PDT)
-Message-ID: <1cd0a13e-1842-2e1c-524b-e9580ea48b52@redhat.com>
-Date:   Tue, 30 May 2023 11:25:19 +0200
+        bh=OuP6yOSR9XWm7UsYO6pZdZmKv2tnQHjp+lm/v984YCA=;
+        b=4M9Rhxb+Ak3/yFJgB1S859CSZLFWoXOP0uMTWtvEKyHSLqPJWzDtmdPw+nD7OakjHwTvL9
+        3H4QTINZn7/MOdikwDWln06pYSfL8jvb0I5oZP0DesRNI92ni3zwbDzgSLSlL/Pu5A7ayE
+        rYYGLRlzgJx7Mzzdxn0P+XOLdusRXdTLu2ZGz+x2RQA5bSNBrZJT2AeE+kvVPAgUR6estR
+        vY+t9gmb5UEUwYCeoMX6kP4VPGvNBn7Lz23Yllf7oRg5tOfqRvkOxsk2p5mTi2eG6HqWL4
+        i7ehXbcRL2W2gE3TOlBREPsOXH6v8kr/26nERrHEOZ95S6/lVpsHxw/6/+/DQA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685438774;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OuP6yOSR9XWm7UsYO6pZdZmKv2tnQHjp+lm/v984YCA=;
+        b=HcG/D4NiqXeHLfwKoko4UyTPezLO1CVsxR+RlJLjEUh5/8YeL4Jf/2ZxSLH+TzNJfOKKZT
+        r4jRkltXrdP6XoDg==
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
+In-Reply-To: <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
+References: <20230508181633.089804905@linutronix.de>
+ <20230508185218.962208640@linutronix.de>
+ <20230524204818.3tjlwah2euncxzmh@box.shutemov.name> <87y1lbl7r6.ffs@tglx>
+ <87sfbhlwp9.ffs@tglx> <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
+ <87bki3kkfi.ffs@tglx> <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
+Date:   Tue, 30 May 2023 11:26:03 +0200
+Message-ID: <87pm6ijhlg.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 0/2] platform/surface: aggregator_tabletsw: Add support
- for book mode
-Content-Language: en-US, nl
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230525213218.2797480-1-luzmaximilian@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230525213218.2797480-1-luzmaximilian@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, May 29 2023 at 23:31, Kirill A. Shutemov wrote:
+> Aaand the next patch that breaks TDX boot is... <drum roll>
+>
+> 	x86/smpboot/64: Implement arch_cpuhp_init_parallel_bringup() and enable it
+>
+> Disabling parallel bringup helps. I didn't look closer yet. If you have
+> an idea let me know.
 
-On 5/25/23 23:32, Maximilian Luz wrote:
-> Surface devices with a type-cover have an additional "book" mode. This
-> mode is activated when the device is oriented in portrait mode and the
-> type-cover is in an open position (including completely folded back;
-> unlike in landscape orientation there are no special modes for any of
-> the intermediate positions).
-> 
-> Currently, this mode is unsupported by the tablet switch driver, leading
-> to an error message (see individual commits for the exact messages).
-> Since the keyboard and touchpad input gets deactivated in this mode, map
-> it to tablet-mode.
-> 
-> I've split this change into two patches, one for each of the subsystems
-> (KIP and POS). This a) allows proper attribution via the "Fixes" tag and
-> b) with that should allow them to be backported fairly easily.
+So how does TDX end up with actual parallel bringup?
 
-Thank you for your patch series, I've applied this series
-to my fixes branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
+	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
+		pr_info("Parallel CPU startup disabled due to guest state encryption\n");
+		return false;
+	}
 
-I will include this series in my next fixes pull-req to Linus
-for the current kernel development cycle.
+It should take that path, no?
 
-Regards,
+Thanks,
 
-Hans
-
-
-
-
-
-
-> Maximilian Luz (2):
->   platform/surface: aggregator_tabletsw: Add support for book mode in
->     KIP subsystem
->   platform/surface: aggregator_tabletsw: Add support for book mode in
->     POS subsystem
-> 
->  drivers/platform/surface/surface_aggregator_tabletsw.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
+        tglx
 
