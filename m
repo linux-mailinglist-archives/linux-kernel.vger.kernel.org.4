@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5AD716CAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB85716CBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbjE3SmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 14:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
+        id S231368AbjE3SoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 14:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjE3SmM (ORCPT
+        with ESMTP id S233176AbjE3Snp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 14:42:12 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A15A7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:42:10 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-96fd3a658eeso694473966b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:42:10 -0700 (PDT)
+        Tue, 30 May 2023 14:43:45 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABA310C2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:43:13 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-514ab6cb529so210343a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:43:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685472129; x=1688064129;
+        d=google.com; s=20221208; t=1685472191; x=1688064191;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5ptpIq+v7Ig3U5NWDKCTVGQfDx2GQloUkHm5jynI61A=;
-        b=69R9E8I4Zp6RFpZAGlOwsQWVLQqWfrPKJtVs5l1TZfr+xlKXIIr5dPnxQcm5mTwNPX
-         9aQkraZShT9wGUnor0gOY/VrqirwNIJ/D1hgIWEPsppFsHzoaEsHr9xBq5aW+taoO52j
-         9C/cRAMIcCzg1oaqE/YVKXXeGlTaLFK8TF99fAFECv+Mlh6F9xTODxSu+H0C/fwPK/at
-         npbq4gya28vqbUrpL8vTHP5RKCoUxGchPTtX4vtuAof5D5FtCo8k8q3rjxqSul0dAIYZ
-         daX9U9pN75/8Rd3tPiggMITaM6Vpn60awJoGh6FOltUGbz4vVp0F+lyxx93UrFsPV7Mv
-         yx/Q==
+        bh=gYlC6f1ptZM9RLLhM2nAeeNeJg2ua4dk7rTUSObgR8A=;
+        b=eztyZFUdNTCsYWXIz8bXNkVgGqmeVODl99L+cyyUAHCyaDT66qPJExCC8yi4Fipu/G
+         KzP7gwyLFSGrwT6y3UyLF5jFLFaRXlxWxIgxGTVLSDkEp44GgQz+UhNsrpXJyDybbp+2
+         +9R5txif6Tq1Gshc+NQRqRyyj9cRFK4I4HPqrTgEIWd7LlKjDsnB2ZVO5rxIsRF2SuU/
+         PORCSSdJk3V+njyKDZ9s3QdOMtKV09CmQyn8SLuAn7e0trk+5MHTt4VjvtV4AP9F4Tns
+         U8x3pCsPQSMYYullXI5WBytvYTln9ewl6dSjFrtWu6H/T21edwMwaAGg23yP9LCru3WH
+         agEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685472129; x=1688064129;
+        d=1e100.net; s=20221208; t=1685472191; x=1688064191;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5ptpIq+v7Ig3U5NWDKCTVGQfDx2GQloUkHm5jynI61A=;
-        b=RLcjHhJYmqrw24bG7DCU3waaJq6VGcHfKmUqgJXSmWUB4VdliB+3yrsetTkw/5EywF
-         Fpeh6VMOZaIg+UdK4xsu7z8otJpjK+EEeWugTThj65i1StOus0KYiNDoIADI8ztF2Vi4
-         8ki/+yxzhtmAbA8meIxlMOBedXmQacx44ilDv9+d47+teaJ3ZQZH76qgrb1YbvaptNwV
-         u98T248m/q3OEQlBDv4i2xz9OWYqYWiJ3FGF2fblRfeQ9NwE5bgxLXO9YnTSq5BsepNY
-         4Y1WUU1KqkXnHAJ3mZM3DaMLWupNzfG7u3NfS7vaCJ1kaVtBrf+RlzzAHWGtKqvlKcAJ
-         Qn8w==
-X-Gm-Message-State: AC+VfDwWzpa2/oFmesocS/mPNCyn/jOAnd9rYdLi1bq9bKCvTQ6Tdt/v
-        IXodpeH/J6J8xPthGTmkHLnMFqAXCWY3BUeMRWp1Cw==
-X-Google-Smtp-Source: ACHHUZ5gQNuclOc8mrNfT/UmaKRWUPUZUJ44atI+RCtRLdySPU7GMw83jjQ5hgHmmfySZ/T6jGbkMbbHYPXQ6CDEd4U=
-X-Received: by 2002:a17:907:3e10:b0:94f:73db:b390 with SMTP id
- hp16-20020a1709073e1000b0094f73dbb390mr3469071ejc.65.1685472129098; Tue, 30
- May 2023 11:42:09 -0700 (PDT)
+        bh=gYlC6f1ptZM9RLLhM2nAeeNeJg2ua4dk7rTUSObgR8A=;
+        b=P4TNClMjhCeBiKMNlLLB8veM6E984wGHuM55thiXxfdgn/s8NXORa2TwRdAjuZIRaQ
+         GGJL+90dZfsQH0lAwLtAQnc2nnsXEZafGomm3Yu2CDuDTtVftu9Uqt+vKwXRpEzfBkt+
+         lMB928JR8EocSi5cBmxSg8h1GgjiCpBDVyAiNrTEjWupe6vuy7c7+F7B4Z/gXZlIQ0Iq
+         DexcQjpQcgXICyksPRsOB9FAq9ODYuMRvUxoAa6vB2x1U+WDM8KmunoFaP4qrBNzJD5l
+         120BVvteKOItOZoJ8KMZ4T4yL1byCGhNRdU4ftS1855nl6OrviL1JPWF6hugPIrcjRaE
+         twwA==
+X-Gm-Message-State: AC+VfDzthmSJTZzDcE3A6C1LHuiFj/XBO40v0wbZMLF21qxmuk8oM2Ad
+        5tNNBs9iYfB2SBGfovXS7aZMIBf7ZkyswyF4bhQVpKBbUr5Omn7eNck=
+X-Google-Smtp-Source: ACHHUZ4Up5j7j1dkGSw8jtZaye0oKfZ0iz4LLsDnW/efMFR9/mRGSpcrTUU9zlCHs3dveVNbfOkvYupOm5tj0mlvlms=
+X-Received: by 2002:a17:907:9721:b0:94f:2916:7d7 with SMTP id
+ jg33-20020a170907972100b0094f291607d7mr2884534ejc.19.1685472191237; Tue, 30
+ May 2023 11:43:11 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230530162153.836565-1-nphamcs@gmail.com> <CAJD7tkZJttvpYs4mgjL3pt8-jkX0fnWRJP7hVBZmm=i_Ef3Abg@mail.gmail.com>
- <20230530180038.GC97194@cmpxchg.org>
-In-Reply-To: <20230530180038.GC97194@cmpxchg.org>
+ <CAKEwX=OK5qK9DTYLKZUefE0eq8KooygT-nbkgUZaYjK72SKzFQ@mail.gmail.com>
+In-Reply-To: <CAKEwX=OK5qK9DTYLKZUefE0eq8KooygT-nbkgUZaYjK72SKzFQ@mail.gmail.com>
 From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 30 May 2023 11:41:32 -0700
-Message-ID: <CAJD7tkYYQjumA6QPcrAv8c6YnqJfrDrMhPZzDSjAz2jv+uDvtg@mail.gmail.com>
+Date:   Tue, 30 May 2023 11:42:34 -0700
+Message-ID: <CAJD7tkZUc=h+h4f1a+nas8KruFBaGMuaq67jZLk+LkdbwZVqKQ@mail.gmail.com>
 Subject: Re: [PATCH] zswap: do not shrink when memory.zswap.max is 0
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org,
         cerasuolodomenico@gmail.com, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, sjenning@redhat.com,
         ddstreet@ieee.org, vitaly.wool@konsulko.com, kernel-team@meta.com
@@ -73,10 +73,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 11:00=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.or=
-g> wrote:
+On Tue, May 30, 2023 at 11:27=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wrot=
+e:
 >
-> On Tue, May 30, 2023 at 09:52:36AM -0700, Yosry Ahmed wrote:
+> On Tue, May 30, 2023 at 9:53=E2=80=AFAM Yosry Ahmed <yosryahmed@google.co=
+m> wrote:
+> >
 > > On Tue, May 30, 2023 at 9:22=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> w=
 rote:
 > > >
@@ -213,44 +215,31 @@ GE_SIZE;
 > > faulted back in or invalidated.
 > >
 > > I am not sure which is better, just thinking out loud.
->
-> You're absolutely right.
->
-> Currently the choice is writing back either everybody or nobody,
-> meaning between writeback and cgroup containment. They're both so poor
-> that I can't say I strongly prefer one over the other.
->
-> However, I have a lame argument in favor of this patch:
->
-> The last few fixes from Nhat and Domenico around writeback show that
-> few people, if anybody, are actually using writeback. So it might not
-> actually matter that much in practice which way we go with this patch.
-> Per-memcg LRUs will be necessary for it to work right.
->
-> However, what Nhat is proposing is how we want the behavior down the
-> line. So between two equally poor choices, I figure we might as well
-> go with the one that doesn't require another code change later on.
->
-> Doesn't that fill you with radiant enthusiasm?
-
-If we have per-memcg LRUs, and memory.zswap.max =3D=3D 0, then we should
-be in one of two situations:
-
-(a) memory.zswap.max has always been 0, so the LRU for this memcg is
-empty, so we don't really need the special case for memory.zswap.max
-=3D=3D 0.
-
-(b) memory.zswap.max was reduced to 0 at some point, and some pages
-are already in zswap. In this case, I don't think shrinking the memcg
-is such a bad idea, we would be lazily enforcing the limit.
-
-In that sense I am not sure that this change won't require another
-code change. It feels like special casing memory.zswap.max =3D=3D 0 is
-only needed now due to the lack of per-memcg LRUs.
-
->
+> >
 > > Seems like this can be solved by having per-memcg LRUs, or at least
 > > providing an argument to the shrinker of which memcg to reclaim from.
 > > This would only be possible when the LRU is moved to zswap.
 >
-> +1
+> I totally agree! This seems like the logical next step in zswap's evoluti=
+on.
+> I actually proposed this fix with this future development in mind - with
+> a per-memcg LRU, we can trigger memcg-specific shrinking in
+> place of this indiscriminate writeback. It seems less drastic a change
+> (compared to removing shrinking here now, then reintroducing it later).
+
+As I stated in my reply to Johannes, I am just not sure that we will
+need to special case memory.zswap.max =3D=3D 0 when we have proper
+writeback. WDYT?
+
+>
+> Thanks for the feedback, Yosry!
+>
+> >
+> >
+> > >
+> > >         /* reclaim space if needed */
+> > >         if (zswap_is_full()) {
+> > > --
+> > > 2.34.1
+> > >
+> > >
