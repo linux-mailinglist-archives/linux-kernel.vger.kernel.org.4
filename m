@@ -2,79 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5040717173
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:16:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7AA7717170
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233789AbjE3XQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 19:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
+        id S233799AbjE3XQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 19:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbjE3XQK (ORCPT
+        with ESMTP id S233792AbjE3XQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 19:16:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8724CAA;
-        Tue, 30 May 2023 16:16:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F05863508;
-        Tue, 30 May 2023 23:16:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04EE2C433EF;
-        Tue, 30 May 2023 23:16:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685488568;
-        bh=e0CUxh2mVxfA/1Jqa3mCpXdqKlK7OJCF9M+9+uvD3e8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mtVhqmSh/FxtvcNO2dS318420LYe9zXJwprsV6aslB/NCw96f7b0j0eru+rU67Mmn
-         HYFvT37eIHSw7S1btjOwjDqDJ2Tf7fwuD8wlAm/Zc40ypVplZ3wIRwwq5aJk+/LWds
-         wyYdHvFoRSXpaPvsgK48yAMsvDqSpBwM1yI0FaIHkPV7LOPRqGNgS0q7TIwdYy4SQG
-         9g3D3pBo8lfGfDmsOArYDAmxPXqUL/jR4O5oJOjjib4r8i8gTNtw+kz5Y/efLjYs8r
-         5QQLnlirFWcv1lfmoYf/0Gyl33YBl87b/XVjlny1OIG23i5Epl/ofMCw3DP2gnxj4H
-         7vkBGDnLYyhkw==
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     live-patching@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: [PATCH] livepatch: Make 'klp_stack_entries' static
-Date:   Tue, 30 May 2023 16:15:58 -0700
-Message-Id: <5115752fca6537720700f4bf5b178959dfbca41a.1685488550.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        Tue, 30 May 2023 19:16:12 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688D2F7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:16:11 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d1a0d640cso3842684b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685488571; x=1688080571;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=q6wOdCsvPcfL1AGuKhq7si1i+l1tB9VGHRhgBuI4hFQ=;
+        b=A6P9MRUqWxltKJ9Zgwok7DSDRoOxoww2FWlF6WQO1tYgoM5+Hi0Ez2oEaQQjsD1m8R
+         d4fRiNfemEoHsLbKtPfU643qi1eTaIaRbZTrXG8PIKxDT7zOE/fxQqSHWBsVd7zxgsD9
+         9LmT/yPeVeEdIlXyQ0jganlgblNgnS7PESvrk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685488571; x=1688080571;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q6wOdCsvPcfL1AGuKhq7si1i+l1tB9VGHRhgBuI4hFQ=;
+        b=NOqfOIGC+mDIz9ArMup+xTlK3OxCPKSrKm2Sr2QE6Oy72Fe3fIZ91+lpSF8RDin0J7
+         n7KC5Yz9VZARyG6SbNREnL77WsllqvZnzXLBVLNeIg17IpsqCJVcuBiqDrFDfopyiPKq
+         HFNqh5H3u8lUAkGyZeIssOSyXAesxHrcGcdqFFQwxyLsRfqzyDjzkJ3pTB5rBQpNeUc8
+         C05a/zReYPyk+nBnScwz9EAVrq7zu/CXuxAt1dT9XqXZ4l7Xei8i1Zv5AwP3sS1djRDt
+         1UOKVEyuVi1AK7sgehdZ3qnt53bkCKUVUJTFN+e5wLRxZMy324CPDu2Rlpu5FCNURVuA
+         c+Ew==
+X-Gm-Message-State: AC+VfDyrAYB8EUEVNh4PkQvpUgJ5e4D/Q9we3NAT9+PlZ+8cikPVHebC
+        gUqN1cZR2M+WVg0AGx1E37OFCg==
+X-Google-Smtp-Source: ACHHUZ5vUXK2I/pfuTav0TBfWy3DDrvFJsd+7uESTSUanu+Vl50RByVZpLds9PiU8F5GGbjiErQYOQ==
+X-Received: by 2002:a05:6a00:10c4:b0:646:663a:9d60 with SMTP id d4-20020a056a0010c400b00646663a9d60mr4308038pfu.10.1685488570875;
+        Tue, 30 May 2023 16:16:10 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id v22-20020aa78516000000b0063d3d776910sm2123773pfn.138.2023.05.30.16.16.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 16:16:10 -0700 (PDT)
+Date:   Tue, 30 May 2023 16:16:09 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc:     Wei Liu <wei.liu@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Alexander Graf <graf@amazon.com>,
+        Forrest Yuan Yu <yuanyu@google.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        John Andersen <john.s.andersen@intel.com>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Marian Rotariu <marian.c.rotariu@gmail.com>,
+        Mihai =?utf-8?B?RG9uyJt1?= <mdontu@bitdefender.com>,
+        =?utf-8?B?TmljdciZb3IgQ8OuyJt1?= <nicu.citu@icloud.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Thara Gopinath <tgopinath@microsoft.com>,
+        Will Deacon <will@kernel.org>,
+        Zahra Tarkhani <ztarkhani@microsoft.com>,
+        =?utf-8?Q?=C8=98tefan_=C8=98icleru?= <ssicleru@bitdefender.com>,
+        dev@lists.cloudhypervisor.org, kvm@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, qemu-devel@nongnu.org,
+        virtualization@lists.linux-foundation.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v1 5/9] KVM: x86: Add new hypercall to lock control
+ registers
+Message-ID: <202305301614.BF8D80D3D5@keescook>
+References: <20230505152046.6575-1-mic@digikod.net>
+ <20230505152046.6575-6-mic@digikod.net>
+ <ZFlllHjntehpthma@liuwe-devbox-debian-v2>
+ <901ff104-215c-8e81-fbae-5ecd8fa94449@digikod.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <901ff104-215c-8e81-fbae-5ecd8fa94449@digikod.net>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'klp_stack_entries' percpu array is only used in transition.c.  Make
-it static.
+On Mon, May 29, 2023 at 06:48:03PM +0200, Mickaël Salaün wrote:
+> 
+> On 08/05/2023 23:11, Wei Liu wrote:
+> > On Fri, May 05, 2023 at 05:20:42PM +0200, Mickaël Salaün wrote:
+> > > This enables guests to lock their CR0 and CR4 registers with a subset of
+> > > X86_CR0_WP, X86_CR4_SMEP, X86_CR4_SMAP, X86_CR4_UMIP, X86_CR4_FSGSBASE
+> > > and X86_CR4_CET flags.
+> > > 
+> > > The new KVM_HC_LOCK_CR_UPDATE hypercall takes two arguments.  The first
+> > > is to identify the control register, and the second is a bit mask to
+> > > pin (i.e. mark as read-only).
+> > > 
+> > > These register flags should already be pinned by Linux guests, but once
+> > > compromised, this self-protection mechanism could be disabled, which is
+> > > not the case with this dedicated hypercall.
+> > > 
+> > > Cc: Borislav Petkov <bp@alien8.de>
+> > > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > > Cc: H. Peter Anvin <hpa@zytor.com>
+> > > Cc: Ingo Molnar <mingo@redhat.com>
+> > > Cc: Kees Cook <keescook@chromium.org>
+> > > Cc: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+> > > Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > > Cc: Sean Christopherson <seanjc@google.com>
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+> > > Cc: Wanpeng Li <wanpengli@tencent.com>
+> > > Signed-off-by: Mickaël Salaün <mic@digikod.net>
+> > > Link: https://lore.kernel.org/r/20230505152046.6575-6-mic@digikod.net
+> > [...]
+> > >   	hw_cr4 = (cr4_read_shadow() & X86_CR4_MCE) | (cr4 & ~X86_CR4_MCE);
+> > >   	if (is_unrestricted_guest(vcpu))
+> > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > > index ffab64d08de3..a529455359ac 100644
+> > > --- a/arch/x86/kvm/x86.c
+> > > +++ b/arch/x86/kvm/x86.c
+> > > @@ -7927,11 +7927,77 @@ static unsigned long emulator_get_cr(struct x86_emulate_ctxt *ctxt, int cr)
+> > >   	return value;
+> > >   }
+> > > +#ifdef CONFIG_HEKI
+> > > +
+> > > +extern unsigned long cr4_pinned_mask;
+> > > +
+> > 
+> > Can this be moved to a header file?
+> 
+> Yep, but I'm not sure which one. Any preference Kees?
 
-Fixes: e92606fa172f ("livepatch: Convert stack entries array to percpu")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202305171329.i0UQ4TJa-lkp@intel.com/
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- kernel/livepatch/transition.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Uh, er, I was never expecting that mask to be non-static. ;) To that
+end, how about putting it in arch/x86/kvm/x86.h ?
 
-diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-index e9fd83a02228..e54c3d60a904 100644
---- a/kernel/livepatch/transition.c
-+++ b/kernel/livepatch/transition.c
-@@ -15,7 +15,7 @@
- #include "transition.h"
- 
- #define MAX_STACK_ENTRIES  100
--DEFINE_PER_CPU(unsigned long[MAX_STACK_ENTRIES], klp_stack_entries);
-+static DEFINE_PER_CPU(unsigned long[MAX_STACK_ENTRIES], klp_stack_entries);
- 
- #define STACK_ERR_BUF_SIZE 128
- 
 -- 
-2.40.1
-
+Kees Cook
