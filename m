@@ -2,117 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B04AF716FD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 23:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85755716FE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 23:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbjE3VjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 17:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
+        id S233491AbjE3VkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 17:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbjE3VjC (ORCPT
+        with ESMTP id S232253AbjE3VkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 17:39:02 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084B9E5;
-        Tue, 30 May 2023 14:39:01 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-25669acf1b0so2799267a91.0;
-        Tue, 30 May 2023 14:39:01 -0700 (PDT)
+        Tue, 30 May 2023 17:40:13 -0400
+Received: from smtp-fw-80009.amazon.com (smtp-fw-80009.amazon.com [99.78.197.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E2111C
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 14:40:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685482740; x=1688074740;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7xr/xAflOQkbZrsxeuPZYwFlb7zpPHeI468vpcAX5x4=;
-        b=MYVgAVYH93wkCcEIhlmmH6g9Zc1E+ErBlGiidFNufGnX8QzVxqqxkhwP10RqbGTd/R
-         oGrRUb1hwDPn71/RBP8C7Eo/MsWjP4TG1XileHl3mrd+vB1/hu9FLHVZR5qVTDU6hzCW
-         xKe1pCbFLtteKQVNXd7pU2XyPUII74j+bxRuV4h4z75fpv22qkKfEn8pyZZIvgjvFne7
-         zccUzOmHaC5bKHV83afS/428Ah+3jw8xINqRvGJNXARHaYt82X6voYnZbq8W0A5hFJAp
-         HaoOSUO/31aFfd97h0JGuWttuc2qlp91zRxTb/W3DHuV8NtY6bsmt+TDTSVKU8UdN9iG
-         cqqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685482740; x=1688074740;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7xr/xAflOQkbZrsxeuPZYwFlb7zpPHeI468vpcAX5x4=;
-        b=amhFLC8Da+Oi2GewmyqgrkaRe8jbbC6rBoSdS64+g9hxCEvmyVu7nEqAC4dPPKuHai
-         JhkTYivNAC6C1qmvKPq0lFkFX2+pmwAW/UP9UC5Mcs/dYoq/oDvAmWg1asNGiVkTgT6J
-         ce9a213qPpIGaqNNSewauKVUmrNCnW8lOmmaZaVaYVtp/Jtd8G6m7TmGubZGCZy8bB3i
-         AK2/zzecPEIfa/Gk4y28z12Kk1pogHOci6+g9Ets6yQdhadlCCKbIMkUTTP0kOBsA6T/
-         0PUrG7PbbB3tD1nhtpJCRWKEcfztpfH3ig/heT1ToLaDLgVU77CLT491M4psiG3bWzHi
-         4esQ==
-X-Gm-Message-State: AC+VfDwE3/R19oRY5pY9mPugR61p/vFrFZl819JTBptO3NSQSPfY1jME
-        ED5NKCUj4DUe13iHrTsktq4=
-X-Google-Smtp-Source: ACHHUZ6JxdbT6JZxzP1Y6HZ3X/1+TEvqU2ggY7//bFW3ktDJ7Prr7l2ae1cQO5Euxnmx4K4wibaukw==
-X-Received: by 2002:a17:90b:1b49:b0:255:a1d9:4486 with SMTP id nv9-20020a17090b1b4900b00255a1d94486mr3967511pjb.1.1685482740343;
-        Tue, 30 May 2023 14:39:00 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id u5-20020a17090ae00500b0024dee5cbe29sm4750589pjy.27.2023.05.30.14.38.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 14:38:59 -0700 (PDT)
-Message-ID: <dd68b82b-7bb7-3f4f-7243-e3a4b745cd97@gmail.com>
-Date:   Tue, 30 May 2023 14:38:47 -0700
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1685482808; x=1717018808;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0lAuoGk56JFzvUQpYQHSf87YsEVvoUcUI9dkbr4Ucg0=;
+  b=rGgQWThtEoTsvcIi2kGPoAMR8vnSdKGvnwjrIXoL1E14TxDFlLRLDtgC
+   htx6uQJzJycrhGkBOa7BkYhO80ssaWc/OtIDXmQMmaYGfrOhvAVeiyiUu
+   8WH7lb1qXOcT8T/KcWckh7MCP8saBXQtX56B5HlneU8EdRMoCuGvQAnnp
+   A=;
+X-IronPort-AV: E=Sophos;i="6.00,205,1681171200"; 
+   d="scan'208";a="6913183"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-8a14c045.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80009.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 21:40:06 +0000
+Received: from EX19D014EUC004.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-m6i4x-8a14c045.us-west-2.amazon.com (Postfix) with ESMTPS id BA4F1805EA;
+        Tue, 30 May 2023 21:40:05 +0000 (UTC)
+Received: from u5d18b891348c5b.ant.amazon.com (10.146.13.226) by
+ EX19D014EUC004.ant.amazon.com (10.252.51.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 30 May 2023 21:40:01 +0000
+From:   James Gowans <jgowans@amazon.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+CC:     <linux-kernel@vger.kernel.org>, James Gowans <jgowans@amazon.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Liao Chang <liaochang1@huawei.com>
+Subject: [PATCH 1/2] genirq: Expand doc for PENDING and REPLAY flags
+Date:   Tue, 30 May 2023 23:38:47 +0200
+Message-ID: <20230530213848.3273006-1-jgowans@amazon.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v8 2/3] net: dsa: mv88e6xxx: add support for MV88E6020
- switch
-Content-Language: en-US
-To:     Lukasz Majewski <lukma@denx.de>, Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-References: <20230530083916.2139667-1-lukma@denx.de>
- <20230530083916.2139667-3-lukma@denx.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230530083916.2139667-3-lukma@denx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.146.13.226]
+X-ClientProxiedBy: EX19D046UWB004.ant.amazon.com (10.13.139.164) To
+ EX19D014EUC004.ant.amazon.com (10.252.51.182)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/23 01:39, Lukasz Majewski wrote:
-> From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> 
-> A mv88e6250 family switch with 2 PHY and RMII ports and
-> no PTP support.
-> 
-> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> Signed-off-by: Lukasz Majewski <lukma@denx.de>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Adding a bit more info about what the flags are used for may help future
+code readers.
 
-> ---
-[snip]
+Signed-off-by: James Gowans <jgowans@amazon.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Liao Chang <liaochang1@huawei.com>
+---
+ kernel/irq/internals.h | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
->   /* List of supported models */
->   enum mv88e6xxx_model {
-> +	MV88E6020,
->   	MV88E6085,
->   	MV88E6095,
->   	MV88E6097,
-> @@ -94,7 +95,7 @@ enum mv88e6xxx_family {
->   	MV88E6XXX_FAMILY_6097,	/* 6046 6085 6096 6097 */
->   	MV88E6XXX_FAMILY_6165,	/* 6123 6161 6165 */
->   	MV88E6XXX_FAMILY_6185,	/* 6108 6121 6122 6131 6152 6155 6182 6185 */
-> -	MV88E6XXX_FAMILY_6250,	/* 6220 6250 */
-> +	MV88E6XXX_FAMILY_6250,	/* 6220 6250 6020 */
-
-über nit: only if you have to resubmit, numbers in ascending order.
-
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
+index 5fdc0b557579..c443a0ddc07e 100644
+--- a/kernel/irq/internals.h
++++ b/kernel/irq/internals.h
+@@ -47,9 +47,12 @@ enum {
+  *				  detection
+  * IRQS_POLL_INPROGRESS		- polling in progress
+  * IRQS_ONESHOT			- irq is not unmasked in primary handler
+- * IRQS_REPLAY			- irq is replayed
++ * IRQS_REPLAY			- irq has been resent and will not be resent
++ * 				  again until the handler has run and cleared
++ * 				  this flag.
+  * IRQS_WAITING			- irq is waiting
+- * IRQS_PENDING			- irq is pending and replayed later
++ * IRQS_PENDING			- irq needs to be resent and should be resent
++ * 				  at the next available opportunity.
+  * IRQS_SUSPENDED		- irq is suspended
+  * IRQS_NMI			- irq line is used to deliver NMIs
+  * IRQS_SYSFS			- descriptor has been added to sysfs
 -- 
-Florian
+2.25.1
 
