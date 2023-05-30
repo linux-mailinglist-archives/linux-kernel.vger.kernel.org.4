@@ -2,104 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6693F715CED
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D00715CEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbjE3LU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbjE3LUY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231531AbjE3LUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 30 May 2023 07:20:24 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2752FE8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:20:21 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51456392cbbso8391525a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:20:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685445619; x=1688037619;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yd20fg17/wzyWFeVpB0r/Y/yZQClC31CURysYMhhkuU=;
-        b=baDQMQRBHrpQXjmgPj76DVAPn0aostT2Uq1RrXkdot38883uSNcgxjtRVCB/NDC91N
-         4f9hMlK9Nw3VUYDqcT2EHcEa8AaKq8AEU5+gzW4tGPGM1wIDhmq1zML4qigrSjZdpGJa
-         AOuJ8FL+Ze2f3oZLO+ZSS4fSDG496gQ0KdOCIQ+/7/cPUEoWaT+Mzxi/mirof3R89O6h
-         319mLvygA+sRrfxmFGq+o+7XbJRuBcIH5RQEjWUg0ySBJaCxTbU8QNjV5wZ+RdrjP/EG
-         FfFaVCp4aGFIifEJGcIbEAnRNFc+uV0yMqr8mlWZTBvbjgVExDF1ytB0DaVTHlrP/Gmx
-         1E5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685445619; x=1688037619;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yd20fg17/wzyWFeVpB0r/Y/yZQClC31CURysYMhhkuU=;
-        b=JRQ5P/lPspV4CkDJb8qTQTPzK3ADzxjwKACBHJ+SDQ73sL1kGKMQ7i08Gmqy2+ruaT
-         IKokh72SOkQsPFmcOlU7BGrJhtdyPdu7UpOrafN6MrvebiuIkAg737mp8Fumgv6T/r3p
-         0RQ3l+sOJOTbeD7GTMP3OkbKrvVav7zd/xSTSu9NUaQU2W6cITDqnFBwL03GM8hsyncv
-         lGud4MJPwZLV4TiZ6qaioPCin8LPE3kaLAmVlDLnWVypvS7+KgUG5+QefLbfc14W5InU
-         7Y2A+wXj1LFrH5RTdDvhKo85WZN9477P7DTxYyNlfJiL3wbov+dCnssfR9fZ7Jmq+ZiH
-         gpfw==
-X-Gm-Message-State: AC+VfDw4Jiz+9rC/PP6HgEFq+HD/MmVkoxlrR9l98+V+k/PdNz2hyV85
-        /x3o19dFjFzA/RR0Ie+3epWSiXxut9f1xdTr4P1sLMvu
-X-Google-Smtp-Source: ACHHUZ7i0rQP+G4NUnQ1Pzw44Mp8S1ZzLD4qDMbuKxpk6jJO6NiExe52FOsO4buRImy0W0OI/3FFvw==
-X-Received: by 2002:a17:907:1ca2:b0:953:834d:899b with SMTP id nb34-20020a1709071ca200b00953834d899bmr10294984ejc.29.1685445619558;
-        Tue, 30 May 2023 04:20:19 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id h3-20020a1709063c0300b00965ff04f9f6sm7314636ejg.161.2023.05.30.04.20.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 04:20:19 -0700 (PDT)
-Message-ID: <1c57f588-4101-3892-5797-4ffc6c654dd9@linaro.org>
-Date:   Tue, 30 May 2023 13:20:16 +0200
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231418AbjE3LUV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 May 2023 07:20:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921B0D9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:20:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27DB462DE7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 879A1C4339B;
+        Tue, 30 May 2023 11:20:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685445619;
+        bh=Kw0B/8XhmUXLGTGp3Rfh/cNTYSmZ/+xircdISkXbw3w=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uO4YoI90/CH58X+9SNu3TMI/CKp6tI/zRpkyYgkdUyYhFcDlwx/Q/GDDS3UGBGIRt
+         2nXqiBF0Om9WzebGX5cM5j0qFLmdVd3138IFAuTbvO2ZqIO/a+GpGhmzUn7C1CPoyI
+         BvvOl7EgAchv7mCS43nb5rcHGi/uC7ESyg1i4jtaVhDqDGkUzyfMhOIKwS5RHhZdgn
+         sYj3hERjaMr50NbYGWASfDVslc90Zj5FjSNKZp/e2UUo0LaRgNZnff6ktEA+mXkZlN
+         r6ZVup8QHoAYQBCNOytnJGlTeus38ZC5voxblZ7ME/gsQaMzG6ltvwBIVTnj2klWH6
+         5Vn3x2OgpY/1Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 69969E21EC5;
+        Tue, 30 May 2023 11:20:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3] arm64: zynqmp: Switch to amd.com emails
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Andrew Davis <afd@ti.com>, Conor Dooley <conor+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Parth Gajjar <parth.gajjar@amd.com>,
-        Piyush Mehta <piyush.mehta@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Sai Krishna Potthuri <lakshmi.sai.krishna.potthuri@xilinx.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        Tanmay Shah <tanmay.shah@amd.com>,
-        Vishal Sagar <vishal.sagar@amd.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <108cbbbab29e13d386d38a779fd582f10844a030.1685443337.git.michal.simek@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <108cbbbab29e13d386d38a779fd582f10844a030.1685443337.git.michal.simek@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v1 1/1] dsa: lan9303: Remove stray gpiod_unexport()
+ call
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168544561942.20232.5098259559740699879.git-patchwork-notify@kernel.org>
+Date:   Tue, 30 May 2023 11:20:19 +0000
+References: <20230528142531.38602-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230528142531.38602-1-andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     jerry.ray@microchip.com, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 12:42, Michal Simek wrote:
-> Update my and DPs email address to match current setup.
+Hello:
+
+This patch was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Sun, 28 May 2023 17:25:31 +0300 you wrote:
+> There is no gpiod_export() and gpiod_unexport() looks pretty much stray.
+> The gpiod_export() and gpiod_unexport() shouldn't be used in the code,
+> GPIO sysfs is deprecated. That said, simply drop the stray call.
 > 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
+>  drivers/net/dsa/lan9303-core.c | 1 -
+>  1 file changed, 1 deletion(-)
 
+Here is the summary with links:
+  - [net-next,v1,1/1] dsa: lan9303: Remove stray gpiod_unexport() call
+    https://git.kernel.org/netdev/net-next/c/3ea3c9cff7f9
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Best regards,
-Krzysztof
 
