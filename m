@@ -2,114 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B82715B0F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCDC715B11
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:07:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbjE3KHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S229938AbjE3KHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbjE3KGz (ORCPT
+        with ESMTP id S231437AbjE3KHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:06:55 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B8AFC
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:06:32 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f6a6b9bebdso118775e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685441191; x=1688033191;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xeYQzy8I8pwOViOP/HJ+F7u2H1xbPr3lN5quU+4f7GI=;
-        b=PgqzK/hDW97iHLuc12AnnGitFwZr9hSLSjrvf5dZrUtXqAUaJ6NBwun4VRCu4wjqxe
-         x3Y5N5Nr/ki6Epm5adFpLENYX0/JuMy4YCdWhwU7I36XtDMQ6xDyqBaIVUUT9FIoqpbH
-         TmBAZlSmRMWSpG1FkvwQ9GfuEuDLoQ29TkvSRyQZoa5oYQkCsq0nU3xPJqzjnm3DJAhk
-         Fb8f7pg2FwiJdshufIpGD90dCMZEV7LaR8heyS+OwijLOEhWBF4NdvyGx8OY7/7b4M4s
-         3MlBuQZDzMjsd6MY6L0F29A7PUAAoDzyVeuDL6h+aQB4uUuR4EpyBdHDjyB7xSpqgf+v
-         ANLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685441191; x=1688033191;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xeYQzy8I8pwOViOP/HJ+F7u2H1xbPr3lN5quU+4f7GI=;
-        b=GBCSWCOQWtZ1KAlTCo7mNUVCR+oVwx6It8P39BgZ7Jk3V5qjqZYsStl7XfS3XXS+OO
-         74ithAUVWQUDYZH6AfGGmExCfSjXH33a2yEXXV1sLJ3kT+T4BHb0riH7y2o0IETaJw/C
-         Fpo8SQsktjOlH/cLFCM+IPbvUTBEucRqYtzPLGMIaWlRYiQt72aaKYeBnZ9axo4Cc0uY
-         uGrTxmY8SJOgX0cU9dh6IQ7f9yid2C1hpMFiXCIYgzle3ogvSpOx4eMaFTXquKVIT51h
-         r0xgWOJ8AS8gTu2j8vbSExqYlQUvgR0kvBBir796X+foHNACRp7KBcOeviYGkx2JWyMj
-         2biw==
-X-Gm-Message-State: AC+VfDwJFiL8ZnxCW1ROfWZKrDSQKzCIDKogxEYxF2s5hG6M8teCf2B2
-        jC6AjiGl/EJIiIfE7Xl1At9AcfYKA184EF1GO1iT4w==
-X-Google-Smtp-Source: ACHHUZ7NrV4pTB41UQ3WcvwomdjUyc+xeV0U1MJWAY9A7nChiS5hLJNywDrIE7pO6g6O3L4ROeVzVY91r6QPreXdNQM=
-X-Received: by 2002:a05:600c:1906:b0:3f1:9a3d:4f7f with SMTP id
- j6-20020a05600c190600b003f19a3d4f7fmr94999wmq.1.1685441190893; Tue, 30 May
- 2023 03:06:30 -0700 (PDT)
+        Tue, 30 May 2023 06:07:01 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCFF11B;
+        Tue, 30 May 2023 03:06:35 -0700 (PDT)
+X-QQ-mid: bizesmtp74t1685441190tx4kv20c
+Received: from linux-lab-host.localdomain ( [119.123.130.226])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 30 May 2023 18:06:29 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: TD6ADCIf0ML9HinHlDnN+wla+kJWeZiGgZXr7K2zL1s+nKaOjUA+mLu8YWevX
+        oW+nIp2Or4iBsUmPqG7UbsXqjnN59kMfBy/O/soeeQv8ZdG6d7AWZlXI4U9MstgaW6RmWTj
+        HHEJ8Nmu//iopS7nsTw1beCT2vKbo+UexM7RlCEJZXqwvD1pkkOc0etvW1d4cp5CcHuhOPo
+        Xif25nTUaIoO3vQ4jkxPDd333CKNmvkc0nDnMYi0bCqRccmWO8JBJsesQFQm/x/zXpUrGLB
+        AIEpyZg5TvS41A649x+/rQqimoGrJRW1Kpvcq0miBukKflxOoJ+EmNz31uPMoHtz66KEDKR
+        ZlOCHkQTOgk+c772gubkRsWJFdCT5BYY9Efob4TV/Btb5oQc0SW4ldnw3NHQYbn6zbMTQ+M
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 7193763827501342085
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH 00/13] tools/nolibc: riscv: Add full rv32 support
+Date:   Tue, 30 May 2023 18:06:29 +0800
+Message-Id: <20230530100629.383892-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230529113143.GB2762@1wt.eu>
+References: <20230529113143.GB2762@1wt.eu>
 MIME-Version: 1.0
-References: <5fa8dfeb-8eb6-0de0-a335-e0b4336c29e0@I-love.SAKURA.ne.jp>
- <20230529190526.65d13658@kernel.org> <CANn89iLpeeJN=QA80c1wZZ0TB+ptzKN_Hq4Cf27C-URvKKbd2Q@mail.gmail.com>
- <c17ff3ff-b3af-fea2-f75e-68cefbc90636@I-love.SAKURA.ne.jp>
-In-Reply-To: <c17ff3ff-b3af-fea2-f75e-68cefbc90636@I-love.SAKURA.ne.jp>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 30 May 2023 12:06:19 +0200
-Message-ID: <CANn89iJbQ8rO8Mr-OaUcfXpcKiWEupuaT931NOsphQ-8BuPs5w@mail.gmail.com>
-Subject: Re: [PATCH] ref_tracker: add stack_depot_save() failure handling to ref_tracker_alloc()
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 11:52=E2=80=AFAM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
->
-> On 2023/05/30 16:22, Eric Dumazet wrote:
-> >>> Therefore, assume that stack_depot_save(GFP_KERNEL | __GFP_NOFAIL) fr=
-om
-> >>> ref_tracker_alloc() can silently fail, and emit "unreliable refcount
-> >>> tracker." message.
-> >
-> > Note: I never assumed stack_depot_save() would enforce/use NOFAIL.
->
-> Hmm, I misread this function.
->
->         if (gfp & __GFP_DIRECT_RECLAIM)
->                 gfp_mask |=3D __GFP_NOFAIL; // Or'ing to "gfp_mask" than =
-"gfp".
->         *trackerp =3D tracker =3D kzalloc(sizeof(*tracker), gfp_mask); //=
- <=3D This is "gfp_mask".
->         tracker->alloc_stack_handle =3D stack_depot_save(entries, nr_entr=
-ies, gfp); // <=3D This is "gfp".
->
-> So, stack_depot_save(GFP_KERNEL | __GFP_NOFAIL) is not happening.
+Hi, Thomas, Willy
 
-Yes.1
-
+> Hi Thomas,
+> 
+> On Mon, May 29, 2023 at 10:45:40AM +0200, Thomas Weißschuh wrote:
+> > <lots of implementation>
+> > 
+> > > usage:
+> > > 
+> > >     $ gcc -o nolibc-test tools/testing/selftests/nolibc/nolibc-test.c
+> > >     $ ./nolibc-test
+> > >     ...
+> > >     35 gettimeofday_tz = 0                                           [OK]
+> > >     36 gettimeofday_tv_tz = 0                                        [OK]
+> > >     37 gettimeofday_bad1 = -1                                       [FAIL] (continued by sigaction/siglongjmp/sigsetjmp)
+> > >     38 gettimeofday_bad2 = -1                                       [FAIL] (continued by sigaction/siglongjmp/sigsetjmp)
+> > >     39 getpagesize = 0                                               [OK]
+> > >     40 ioctl_tiocinq = 0                                             [OK]
+> > >     41 ioctl_tiocinq = 0                                             [OK]
+> > >     ...
+> > > 
+> > > It did work as expected, but for nolibc, we still need to add sigaction/siglongjump/sigsetjmp support.
+> > > 
+> > > Will send a patch based on Willy's latest branch, perhaps this may help us to
+> > > verify the future sigaction/siglongjump/sigsetjmp for nolibc.
+> > > 
+> > > ref: https://www.ibm.com/docs/en/i/7.1?topic=ssw_ibm_i_71/apis/sigsetj.html
+> > >      https://www.ibm.com/docs/en/zos/2.1.0?topic=functions-siglongjmp-restore-stack-environment-signal-mask
+> > 
+> > This seems very complicated for fairly limited gain to be honest.
+> 
+> I agree as well. I'm not denying the fact that one day we may want to
+> support signal, longjmp and friends but I'm not convinced we want to
+> go through that just to make a few uncertain tests succeed.
 >
-> Then, question becomes whether we want tracker->alloc_stack_handle !=3D N=
-ULL or not.
-> If tracker->alloc_stack_handle =3D=3D NULL is still useful, this patch wi=
-ll be useless...
->
 
-I think it is useful to have the tracker (as Jakub hinted).
-It is better than nothing.
-We even might be able to allocate memory later for the
-free_stack_handle which could give us
-developers enough clues for bug hunting.
+I agree too, I'm just interested in whether it is able to restore the
+whole test after a user-space invalid memory access ;-) 
 
-Thanks.
+> > If we really want to keep the current testcase we could also ensure that
+> > the pointer does not fall into the first page, as the first page is not
+> > mapped under Linux:
+> > 
+> > 0 <= addr < PAGE_SIZE
+> > 
+> > Or instead of PAGE_SIZE just hardcode 4096, as that should be the
+> > minimum size and and does not require a lookup.
+> 
+> I would not even do that. It brings nothing to the application layer and
+> inflates the code. I'd rather just get rid of the EFAULT test cases that
+> rely on an unreliable syscall (i.e. one that may either be a real syscall
+> or an emulated one). The value brought by these tests is extremely low
+> and they were implemented only because they were easy to do. If they're
+> causing pain, let's just drop them.
+
+Thanks, one of the sent v2 patches has dropped both of them.
+
+yesterday, based on the demo code pasted in this email thread, I went
+further to implement a cleaner user-space 'efault' handler, with this
+handler, it is able to continue next test, and without this handler,
+just skip the test, so, it can be used to add future test cases for
+sigaction/sigsetjmp/siglongjmp.
+
+besides, a multiple 'run' support is added too, will share the new code
+as a new standalone patchset later but I'm not expecting it is
+mergeable.
+
+Thanks,
+Zhangjin
+
+> 
+> Willy
