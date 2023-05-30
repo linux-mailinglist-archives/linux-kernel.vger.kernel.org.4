@@ -2,189 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A971716E26
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5E7716E30
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232734AbjE3Twc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 15:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S231635AbjE3TzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 15:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233456AbjE3Tw2 (ORCPT
+        with ESMTP id S230527AbjE3TzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 15:52:28 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D529B136;
-        Tue, 30 May 2023 12:52:03 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685476320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LJ3pwe5VO2kqAY2WBljz3EqXfTvvu+3J346IL0PSsq8=;
-        b=xpL4T8aPYWldl3m+QrLxN+At2fc+ZjAC6pEU4MuUjTSaZuj6IDFe6UakfjWnmmW8hKClix
-        t7yS6D3ihlSEIf30gGCLXhg08YwOKfQvUQI3IgIl2aHuedpFPvjibaFkiCGXlhLxeGBGkW
-        dGEwWvRoq2mQEzRs8oh56PiUJi2/s5QyH4qWIPL9JI/tQVBvtD0plLFK4LpxUmoH0fO1+H
-        nGl/daQybL4Usq3PzahflEHPTKXjDjpOAZxUsLIwJWvToU8rpo8vLXAXsklySZIyOPhZMU
-        EowGzZyfscIPTe6Qwpi0Biu3nomQmhobdOQI00py4ZRFq1Ph0F82SiNDS5umEg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685476320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LJ3pwe5VO2kqAY2WBljz3EqXfTvvu+3J346IL0PSsq8=;
-        b=lIHbo7YKz61HDwNtVfFSrVm0Wqi8uCKfx3OWvRqPS+VwOS/NPYknS3d/X/ObIVAcsa60Eq
-        QcFAHQnns6at8LBA==
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [patch] x86/smpboot: Disable parallel bootup if cc_vendor != NONE
-In-Reply-To: <ZHYqwsCURnrFdsVm@google.com>
-References: <87sfbhlwp9.ffs@tglx>
- <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name> <87bki3kkfi.ffs@tglx>
- <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
- <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name> <87mt1mjhk3.ffs@tglx>
- <87jzwqjeey.ffs@tglx> <87cz2ija1e.ffs@tglx>
- <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name> <87wn0pizbl.ffs@tglx>
- <ZHYqwsCURnrFdsVm@google.com>
-Date:   Tue, 30 May 2023 21:51:59 +0200
-Message-ID: <87leh5iom8.ffs@tglx>
+        Tue, 30 May 2023 15:55:18 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2107.outbound.protection.outlook.com [40.107.237.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B8AE8;
+        Tue, 30 May 2023 12:55:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q3ZwKE8RtH/lFGE4ZBu+44ko+o/KnPI/MlPxidaz+ip8c2fBZOi/Jq8dYY50kTGDq2RJbzRL3CyFqYSnueyFJv+n8Fs974SFs7T//TI9KpOkmTn0qU9CyLAx21ds/sSypRjHEaf59soSckXOmU9uhcelykKDquUIaIcL0RZDH6yBK1tgurE3khmBbP2QPwSLqyIzLd4BVnA39BqsZ1O4VQaZQ19hKxQr0/cqAT1ZK9n86bgIuBVmMaUCDXFuGinhmGGEnWmBmdHkcYpDYuMGqZwVsrygz3QmUcCi2qxX8yZqQkZgUmjpuntmJkyH3Z5sytJAJTnhLWrk2HvZlv4WVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=M2QibxGVOA+FGDY6sCosHoqKQJ+rnFs+kdwLi+r13AU=;
+ b=YN524pWy4729+RCn941UoxthBu3QiyZrThIKp1L4/Vcjyx9jUV1Wo4Wv49PsV23hOlK8sLTX9h3kc35EcxIRes8gdkP1210dd/oC3AuJ1UrKORwJ5TozPOePMpJm6anK9Zh7IqEKZNSiryFBMeW2UIrN0CssL04TH4ga1WVvcL5d18E5V/kLlAaf/LY6aZGzOctAQxihaNdUg2pD9vUZ8G7PfMy8F+1ZPrGVQGI9WxONdvpwI9a4JmDNW29Zb5Ua1W5k3o+2hBKl1zpDgoj6x11zyTu+DldkRLuJyaTXZ3J5gLROgNQA45qj9RRO9xRcIvB7jbpWMFjHy7FId48Eow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=M2QibxGVOA+FGDY6sCosHoqKQJ+rnFs+kdwLi+r13AU=;
+ b=ncnNb7xI5jmXtdslzj6qL62hs1fo9NtGNuPgrbHuI3sMCMBoEIOyDQE1Mx/028pJaUz7XpNHrjBg2a0QmNVWdsFbLriclp1PnhOjWkuVTdBqVi8fsyp7EY5WwtlQmG6QD1cQPSeKLUQ9EStcnbBRqXj3o0l9ZtyvkxVrvdSbdLg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH8PR13MB6182.namprd13.prod.outlook.com (2603:10b6:510:259::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.22; Tue, 30 May
+ 2023 19:55:15 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.022; Tue, 30 May 2023
+ 19:55:14 +0000
+Date:   Tue, 30 May 2023 21:55:06 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-crypto@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Jeff Layton <jlayton@kernel.org>,
+        Steve French <sfrench@samba.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 02/10] Fix a couple of spelling mistakes
+Message-ID: <ZHZUmj71oJYKYYLY@corigine.com>
+References: <20230530141635.136968-1-dhowells@redhat.com>
+ <20230530141635.136968-3-dhowells@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530141635.136968-3-dhowells@redhat.com>
+X-ClientProxiedBy: AM0PR10CA0102.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:e6::19) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH8PR13MB6182:EE_
+X-MS-Office365-Filtering-Correlation-Id: d2389c8b-f74f-4692-1dfe-08db6147c8d7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ounxAFoAEjYbTDoKI1qQVvxasgO5Yx9mGvTRH/JUgf2m9wLv1KGWGm71L6ZBjf5gEQWR/tigLort9JANn2mIXMAiKpDU+xZ27Ix6eDWbMRj1tXXxUBv6HTlH3J+RNJbzhhaNtbvjfUrmJtQfRPTUlWooZCsh/1CNg984qUZWlQ2P7XxB5nEaGj5rKltLDLtNOzKFq30DlHrUXchm2zHDxeEPNX8SEB9pDXblgpb4OR0QOkBi0yUMDghauNyHhGWAnKCsaD5o/ST2j7R3iJpZoY1GugRb2uL29yvYkVaoHz2rzVZNg46wb6e3LRwFJbsgvW9ZXexEo349VAoPDuIAwqrfdO+Yct3ehPBhhFfvvuNEz4EXs2ayc8UqDO1BSQfV00TKIWSMj/bMHujmJCMrjycbODa2OypsyLNPNVpRNfNTW6Y8ZH4FrphLSrgmfL3BOKJnCI4Olkh9avCiPRUs7YFcWsBJ5Few3SiQecoTYul4VwmRQHYoj65hs4/om+fcvVtHWZfGGFZmOPq91x4gYt51xDxSFs7ORZuO+f58LkY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(376002)(396003)(366004)(346002)(136003)(451199021)(4744005)(478600001)(2906002)(186003)(6506007)(6512007)(5660300002)(8676002)(54906003)(8936002)(38100700002)(2616005)(966005)(6486002)(86362001)(41300700001)(316002)(36756003)(6666004)(4326008)(7416002)(44832011)(66556008)(66476007)(66946007)(6916009);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ePV5Mg2v+nXuak1La6s9TxA66j4ne3Sd2idZAkFsNZEOJbvrQr36LZpHaVMj?=
+ =?us-ascii?Q?IR0JI2PDppAUUoOYrz2+jYws7caQcYWdTRWTu24Tdo28kvzjvtshCGP5bmt5?=
+ =?us-ascii?Q?Bp/W2wZul6rUMJMLRXXntGx3XH6UXTD2Ll58nbQPZm3sAIvuGst9/R6C7ylD?=
+ =?us-ascii?Q?9xcQa2tJUAb6N4Ro4orik5bBUWAmiotjKwCrsZl3AgR5QhaqzKHqYMSulPh8?=
+ =?us-ascii?Q?nfWDKKRPqARmFleLcys7bTPKTTeyKDocDYaV/MoVl2glwQw6YEG9j1W7r2Jz?=
+ =?us-ascii?Q?TNPNVpt+Dmq6G4KlfU+ZUUsos/jTnVBeCb5ae4ZhqLT+6dnNkTBLF6esPnS1?=
+ =?us-ascii?Q?4mnASXLsUIrxqjGT9woqUYVMe+AD5Hp5TJFc5yA7KGcD7wma8u23oraX8KHG?=
+ =?us-ascii?Q?xtynStSRqG71A73GiIQ62/BNOv38+eHHbVbtEam7+MnodaxqyJZUMBKqlb4e?=
+ =?us-ascii?Q?cdNIUlrRENgz7nkFQ0cT5Hi/O1zDzKUgytsL/F09bnuIWp/t0a1vcnZr+uif?=
+ =?us-ascii?Q?zSlLHlle3i8G8ufVhP0moX1QmyGt78c7VUHVnsVYOGnFUHVwLMTnJdH+lgP9?=
+ =?us-ascii?Q?037xhHmYo0xILIj4daCLM19ITZX9a0Hvn4YKgjjjx/6vXYnosLg/NhP4X+59?=
+ =?us-ascii?Q?F4ZOpxFyhcztTOeSCCVSXgiFrGK10QjI/7elhqaq7PQNvO/IwIliBlLJLlQn?=
+ =?us-ascii?Q?cgZo/sAJuV/spHa93v/cc9MtPb+MRwKb3rndhILMBFWXav1vbDpKDmMPukc1?=
+ =?us-ascii?Q?U+FXFItKefcawi8AUFwyKk57oLiNLs6FD8i25JXQnkmYEnNePR0PaNQA4YWN?=
+ =?us-ascii?Q?TEG/iF8bmdVjzDVg1x2qIZidaHmJ0nmdQqnOe3MNFcBnhrS3639Bs1uOf6qi?=
+ =?us-ascii?Q?xzWkRjGBAr+G1XuyvOKgV8n/1zDqMlP8nJz/jNQkoNbmyl3uaprK6BhUnK32?=
+ =?us-ascii?Q?qBWfzlansOwyteeSf6muX1LjWbf5yWmYxlBNR3J2/LtgCktNLKayQwJXWfjx?=
+ =?us-ascii?Q?+pANBgTxUN/JAcqZ2Ro0n6uljdqx/aSRYmJTRe+coh2gqRmC/ZH5Gso2AhQI?=
+ =?us-ascii?Q?43kNCaxSQBaTHBBHGWR8b+lIx2gJ451ra2zGFNgEod0gQww1G32rbwrhqnre?=
+ =?us-ascii?Q?v3BwhJO9ttSpouqicwGxPsFNLxF14jibF3TYUCbOQULrz+/QyLKkjZc14SQQ?=
+ =?us-ascii?Q?+7cq6pEhYwDWixp+J4WtUd0rkyrsrw5tCcHvUCKj5M47LtM2liXmbbXZciFc?=
+ =?us-ascii?Q?syVmO5X6vWVUqcjPC5sBwUcWUH0BVUEoToYe6VMBBtvjeDM8H6WV4rvIuikc?=
+ =?us-ascii?Q?MRn7KU9ygTXLq4Sued1X5Pciz5JwtyxlxXc4kU84DtYfrcG9pySwE5uRCdw1?=
+ =?us-ascii?Q?S58qLzRGCC+6Em+4Dp/HGlyTKwIYm8zxlcdW4iyFy3/aIecAxHy79y3Kmsoi?=
+ =?us-ascii?Q?aGH1IpKzkNsspVg6ets6si83AoSpFqAmT0+71MRb1a+gexK3Ngr+mJlWw9Ov?=
+ =?us-ascii?Q?379Bg1KoYrIxVbOfVWEgahUqTqOyMmutA+mVIGRaMBf9OnwXv7fuqLYk4rZl?=
+ =?us-ascii?Q?55CYYTpiaFAE2vhVGqa3LqqoXcE91qh4X+atsqgEWLOegirAADoj9BNsEls8?=
+ =?us-ascii?Q?LCtut+W61PgGdX0+9PEzFpBXjP/y+fRda4eidKlIXXJNH185xlb7cOhbAK+O?=
+ =?us-ascii?Q?bN4UFg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2389c8b-f74f-4692-1dfe-08db6147c8d7
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 19:55:14.8689
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rOD6j60HscxKHVJT0OMF+iZuqUTQhPWnBmxP+Wiczi6pOLFOtSy9A1ol1BSsV+5/npNal7PDE2jMUb6GH8RhJPABVskEwlYpwvCtGdyDy1M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR13MB6182
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30 2023 at 09:56, Sean Christopherson wrote:
-> On Tue, May 30, 2023, Thomas Gleixner wrote:
->> On Tue, May 30 2023 at 15:29, Kirill A. Shutemov wrote:
->> > On Tue, May 30, 2023 at 02:09:17PM +0200, Thomas Gleixner wrote:
->> >> The decision to allow parallel bringup of secondary CPUs checks
->> >> CC_ATTR_GUEST_STATE_ENCRYPT to detect encrypted guests. Those cannot use
->> >> parallel bootup because accessing the local APIC is intercepted and raises
->> >> a #VC or #VE, which cannot be handled at that point.
->> >> 
->> >> The check works correctly, but only for AMD encrypted guests. TDX does not
->> >> set that flag.
->> >> 
->> >> Check for cc_vendor != CC_VENDOR_NONE instead. That might be overbroad, but
->> >> definitely works for both AMD and Intel.
->> >
->> > It boots fine with TDX, but I think it is wrong. cc_get_vendor() will
->> > report CC_VENDOR_AMD even on bare metal if SME is enabled. I don't think
->> > we want it.
->> 
->> Right. Did not think about that.
->> 
->> But the same way is CC_ATTR_GUEST_MEM_ENCRYPT overbroad for AMD. Only
->> SEV-ES traps RDMSR if I'm understandig that maze correctly.
->
-> Ya, regular SEV doesn't encrypt register state.
+On Tue, May 30, 2023 at 03:16:26PM +0100, David Howells wrote:
+> Fix a couple of spelling mistakes in a comment.
+> 
+> Suggested-by: Simon Horman <simon.horman@corigine.com>
+> Link: https://lore.kernel.org/r/ZHH2mSRqeL4Gs1ft@corigine.com/
+> Link: https://lore.kernel.org/r/ZHH1nqZWOGzxlidT@corigine.com/
+> Signed-off-by: David Howells <dhowells@redhat.com>
 
-That aside. From a semantical POV making this decision about parallel
-bootup based on some magic CC encryption attribute is questionable.
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-I'm tending to just do the below and make this CC agnostic (except that
-I couldn't find the right spot for SEV-ES to clear that flag.)
-
-Thanks,
-
-        tglx
----
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -871,5 +871,7 @@ void __init tdx_early_init(void)
- 	x86_platform.guest.enc_tlb_flush_required   = tdx_tlb_flush_required;
- 	x86_platform.guest.enc_status_change_finish = tdx_enc_status_changed;
- 
-+	x86_cpuinit.parallel_bringup = false;
-+
- 	pr_info("Guest detected\n");
- }
---- a/arch/x86/include/asm/x86_init.h
-+++ b/arch/x86/include/asm/x86_init.h
-@@ -2,6 +2,7 @@
- #ifndef _ASM_X86_PLATFORM_H
- #define _ASM_X86_PLATFORM_H
- 
-+#include <linux/bits.h>
- #include <asm/bootparam.h>
- 
- struct ghcb;
-@@ -177,11 +178,14 @@ struct x86_init_ops {
-  * struct x86_cpuinit_ops - platform specific cpu hotplug setups
-  * @setup_percpu_clockev:	set up the per cpu clock event device
-  * @early_percpu_clock_init:	early init of the per cpu clock event device
-+ * @fixup_cpu_id:		fixup function for cpuinfo_x86::phys_proc_id
-+ * @parallel_bringup:		Parallel bringup control
-  */
- struct x86_cpuinit_ops {
- 	void (*setup_percpu_clockev)(void);
- 	void (*early_percpu_clock_init)(void);
- 	void (*fixup_cpu_id)(struct cpuinfo_x86 *c, int node);
-+	bool parallel_bringup;
- };
- 
- struct timespec64;
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1287,6 +1287,11 @@ bool __init arch_cpuhp_init_parallel_bri
- 		return false;
- 	}
- 
-+	if (!x86_cpuinit.parallel_bringup) {
-+		pr_info("Parallel CPU startup disabled by the platform\n");
-+		return false;
-+	}
-+
- 	smpboot_control = STARTUP_READ_APICID;
- 	pr_debug("Parallel CPU startup enabled: 0x%08x\n", smpboot_control);
- 	return true;
---- a/arch/x86/kernel/x86_init.c
-+++ b/arch/x86/kernel/x86_init.c
-@@ -126,6 +126,7 @@ struct x86_init_ops x86_init __initdata
- struct x86_cpuinit_ops x86_cpuinit = {
- 	.early_percpu_clock_init	= x86_init_noop,
- 	.setup_percpu_clockev		= setup_secondary_APIC_clock,
-+	.parallel_bringup		= true,
- };
- 
- static void default_nmi_init(void) { };
