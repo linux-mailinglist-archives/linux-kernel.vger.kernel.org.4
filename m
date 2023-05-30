@@ -2,334 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735B8715A7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8A4715A85
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjE3Jne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
+        id S230491AbjE3Jo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbjE3Jn0 (ORCPT
+        with ESMTP id S231226AbjE3Jox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:43:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9C421A5;
-        Tue, 30 May 2023 02:43:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A39F02F4;
-        Tue, 30 May 2023 02:43:59 -0700 (PDT)
-Received: from [192.168.1.3] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1BBC63F663;
-        Tue, 30 May 2023 02:43:12 -0700 (PDT)
-Message-ID: <431dc9d7-fab4-6935-51f9-3bd80c206271@arm.com>
-Date:   Tue, 30 May 2023 10:43:15 +0100
+        Tue, 30 May 2023 05:44:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF1B93;
+        Tue, 30 May 2023 02:44:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4BF8625E7;
+        Tue, 30 May 2023 09:44:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07AD6C433EF;
+        Tue, 30 May 2023 09:44:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685439891;
+        bh=sd0NR5+IWWwfFPPUGkzsCyqw3K/x2mgiKhFa7WH6Cs8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JM3UjGQf0wvmSGS1JsRRGMTCnGA8QxfRcmVrUfhvW/WNWqe5efz8z1oMOYipXgV8f
+         AtLTslE+SWRvVO3HFCWxO2xi8t5IYMSvr0IOGQyvNxQuhxqeQ3xd1L8j+pGPMuczeO
+         IZRNUw/myMh4JC6qxYBeMoR+Ed2aHB+38COrQ02U=
+Date:   Tue, 30 May 2023 10:44:48 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] usb: typec: intel_pmc_mux: Expose IOM port status to
+ debugfs
+Message-ID: <2023053013-playhouse-dad-1444@gregkh>
+References: <20230524104754.4154013-1-rajat.khandelwal@linux.intel.com>
+ <2023052917-juicy-calamity-4b35@gregkh>
+ <0367a134-cb04-8a1c-bb46-bb5553df6f8a@linux.intel.com>
+ <2023053049-dexterous-flatware-df04@gregkh>
+ <2da06c06-6617-bd02-f20a-a5ea7f9ae0b4@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 3/4] perf cs-etm: Track exception level
-Content-Language: en-US
-To:     Leo Yan <leo.yan@linaro.org>, Mike Leach <mike.leach@linaro.org>
-Cc:     coresight@lists.linaro.org, denik@chromium.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230524131958.2139331-1-james.clark@arm.com>
- <20230524131958.2139331-4-james.clark@arm.com>
- <20230528110516.GC886420@leoy-yangtze.lan>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20230528110516.GC886420@leoy-yangtze.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2da06c06-6617-bd02-f20a-a5ea7f9ae0b4@linux.intel.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 28/05/2023 12:05, Leo Yan wrote:
-> On Wed, May 24, 2023 at 02:19:57PM +0100, James Clark wrote:
->> Currently we assume all trace belongs to the host machine so when
->> the decoder should be looking at the guest kernel maps it can crash
->> because it looks at the host ones instead.
->>
->> Avoid one scenario (guest kernel running at EL1) by assigning the
->> default guest machine to this trace. For userspace trace it's still not
->> possible to determine guest vs host, but the PIDs should help in this
->> case.
->>
->> Signed-off-by: James Clark <james.clark@arm.com>
->> ---
->>  .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  7 +-
->>  tools/perf/util/cs-etm.c                      | 64 ++++++++++++++-----
->>  tools/perf/util/cs-etm.h                      |  5 +-
->>  3 files changed, 56 insertions(+), 20 deletions(-)
->>
->> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
->> index 82a27ab90c8b..ac227cd03eb0 100644
->> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
->> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
->> @@ -573,12 +573,13 @@ cs_etm_decoder__set_tid(struct cs_etm_queue *etmq,
->>  		break;
->>  	}
->>  
->> +	if (cs_etm__etmq_set_tid_el(etmq, tid, trace_chan_id,
->> +				 elem->context.exception_level))
->> +		return OCSD_RESP_FATAL_SYS_ERR;
->> +
->>  	if (tid == -1)
->>  		return OCSD_RESP_CONT;
->>  
->> -	if (cs_etm__etmq_set_tid(etmq, tid, trace_chan_id))
->> -		return OCSD_RESP_FATAL_SYS_ERR;
->> -
->>  	/*
->>  	 * A timestamp is generated after a PE_CONTEXT element so make sure
->>  	 * to rely on that coming one.
->> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
->> index a997fe79d458..b9ba19327f26 100644
->> --- a/tools/perf/util/cs-etm.c
->> +++ b/tools/perf/util/cs-etm.c
->> @@ -14,7 +14,6 @@
->>  #include <linux/types.h>
->>  #include <linux/zalloc.h>
->>  
->> -#include <opencsd/ocsd_if_types.h>
->>  #include <stdlib.h>
->>  
->>  #include "auxtrace.h"
->> @@ -87,6 +86,8 @@ struct cs_etm_traceid_queue {
->>  	union perf_event *event_buf;
->>  	struct thread *thread;
->>  	struct thread *prev_thread;
->> +	ocsd_ex_level prev_el;
->> +	ocsd_ex_level el;
->>  	struct branch_stack *last_branch;
->>  	struct branch_stack *last_branch_rb;
->>  	struct cs_etm_packet *prev_packet;
->> @@ -479,6 +480,7 @@ static int cs_etm__init_traceid_queue(struct cs_etm_queue *etmq,
->>  
->>  	queue = &etmq->etm->queues.queue_array[etmq->queue_nr];
->>  	tidq->trace_chan_id = trace_chan_id;
->> +	tidq->el = tidq->prev_el = ocsd_EL_unknown;
->>  	tidq->thread = machine__findnew_thread(&etm->session->machines.host, -1,
->>  					       queue->tid);
->>  	tidq->prev_thread = machine__idle_thread(&etm->session->machines.host);
->> @@ -618,6 +620,7 @@ static void cs_etm__packet_swap(struct cs_etm_auxtrace *etm,
->>  		tmp = tidq->packet;
->>  		tidq->packet = tidq->prev_packet;
->>  		tidq->prev_packet = tmp;
->> +		tidq->prev_el = tidq->el;
->>  		thread__put(tidq->prev_thread);
->>  		tidq->prev_thread = thread__get(tidq->thread);
->>  	}
->> @@ -879,11 +882,34 @@ static bool cs_etm__evsel_is_auxtrace(struct perf_session *session,
->>  	return evsel->core.attr.type == aux->pmu_type;
->>  }
->>  
->> -static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address)
->> +static struct machine *cs_etm__get_machine(struct cs_etm_auxtrace *etm,
->> +					   ocsd_ex_level el)
->>  {
->> -	struct machine *machine;
->> +	/*
->> +	 * Not perfect, but assume anything in EL1 is the default guest, and
->> +	 * everything else is the host. nHVE and pKVM may not work with this
+On Tue, May 30, 2023 at 03:06:15PM +0530, Rajat Khandelwal wrote:
+> Hi,
 > 
-> s/nHVE/nVHE ?
+> On 5/30/2023 2:57 PM, Greg KH wrote:
+> > On Tue, May 30, 2023 at 02:45:03PM +0530, Rajat Khandelwal wrote:
+> > > Hi,
+> > > 
+> > > On 5/29/2023 7:48 PM, Greg KH wrote:
+> > > > On Wed, May 24, 2023 at 04:17:54PM +0530, Rajat Khandelwal wrote:
+> > > > > IOM status has a crucial role during debugging to check the
+> > > > > current state of the type-C port.
+> > > > > There are ways to fetch the status, but all those require the
+> > > > > IOM port status offset, which could change with platform.
+> > > > > 
+> > > > > Make a debugfs directory for intel_pmc_mux and expose the status
+> > > > > under it per port basis.
+> > > > > 
+> > > > > Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+> > > > > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > > Does not apply to my tree :(
+> > > I have pushed the patch on top of the Linus's tree.
+> > > Had a quick check with the USB Linux tree and seems like its a lot
+> > > behind?
+> > What branch did you use?
+> > 
+> > Please use the usb-next branch of
+> > git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git, which as
+> > of right now, is at 6.4-rc4 + a bunch of USB-specific patches.
 > 
-> And it's good to say "if any virtulisation (e.g. pKVM) based on nVHE may
-> not work with this ....".
-> 
->> +	 * assumption. And distinguishing between guest and host userspaces
->> +	 * isn't currently supported either. Neither is multiple guest support.
->> +	 * All this does is reduce the likeliness of decode errors where we look
->> +	 * into the host kernel maps when it should have been the guest maps.
->> +	 */
->> +	switch (el) {
->> +	case ocsd_EL1:
->> +		return machines__find_guest(&etm->session->machines,
->> +					    DEFAULT_GUEST_KERNEL_ID);
-> 
-> I share the same concern with Mike that this will break perf for any
-> Armv8 CPUs with nVHE (like Cortex-CA53, etc).
-> 
+> I see. There is one commit additional in the usb-next tree:
+> ef0a3642b320 usb: typec: intel_pmc_mux: Convert to platform remove callback returning void
 
-I agree, I replied to Mike's comment with some thoughts.
+One?  I count a lot more:
 
-> You could see CoreSight has trace data "elem->context.vmid", when a
-> guest kernel runs in EL1, can we use "elem->context.vmid" as a guest
-> kernel ID and finally retrieve the corresponding machine pointer?
-> 
+$ git log --oneline main..usb-next | wc -l
+143
 
-Do you mean something like this?
+> Anyways, do you want me to re-work the patch for the usb-next branch?
 
-  static struct machine *cs_etm__get_machine(struct cs_etm_auxtrace *etm,
-					   ocsd_ex_level el)
-  {
-    u64 pid_fmt;
+Given that I can not take the patch as-is, it's up to you to rebase it
+if you wish to have it accepted.
 
-    cs_etm__get_pid_fmt(trace_chan_id, &pid_fmt);
+Isn't this all covered in the Intel kernel developer training class?
 
-    if (pid_fmt == BIT(ETM_OPT_CTXTID))
-      return return &etm->session->machines.host;
+thanks,
 
-    switch (el) {
-	case ocsd_EL1:
-		return machines__find_guest(&etm->session->machines,
-					    DEFAULT_GUEST_KERNEL_ID);
-	case ocsd_EL3:
-	case ocsd_EL2:
-	case ocsd_EL0:
-	case ocsd_EL_unknown:
-	default:
-		return &etm->session->machines.host;
-	}
-  }
-
-I think this might work, maybe it's not as bad as I thought and we can
-make it work out of the box.
-
-> Thanks,
-> Leo
-> 
->> +	case ocsd_EL3:
->> +	case ocsd_EL2:
->> +	case ocsd_EL0:
->> +	case ocsd_EL_unknown:
->> +	default:
->> +		return &etm->session->machines.host;
->> +	}
->> +}
->>  
->> -	machine = &etmq->etm->session->machines.host;
->> +static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address,
->> +			   ocsd_ex_level el)
->> +{
->> +	struct machine *machine = cs_etm__get_machine(etmq->etm, el);
->>  
->>  	if (address >= machine__kernel_start(machine)) {
->>  		if (machine__is_host(machine))
->> @@ -893,10 +919,14 @@ static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address)
->>  	} else {
->>  		if (machine__is_host(machine))
->>  			return PERF_RECORD_MISC_USER;
->> -		else if (perf_guest)
->> +		else {
->> +			/*
->> +			 * Can't really happen at the moment because
->> +			 * cs_etm__get_machine() will always return
->> +			 * machines.host for any non EL1 trace.
->> +			 */
->>  			return PERF_RECORD_MISC_GUEST_USER;
->> -		else
->> -			return PERF_RECORD_MISC_HYPERVISOR;
->> +		}
->>  	}
->>  }
->>  
->> @@ -913,11 +943,12 @@ static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
->>  	if (!etmq)
->>  		return 0;
->>  
->> -	cpumode = cs_etm__cpu_mode(etmq, address);
->>  	tidq = cs_etm__etmq_get_traceid_queue(etmq, trace_chan_id);
->>  	if (!tidq)
->>  		return 0;
->>  
->> +	cpumode = cs_etm__cpu_mode(etmq, address, tidq->el);
->> +
->>  	if (!thread__find_map(tidq->thread, cpumode, address, &al))
->>  		return 0;
->>  
->> @@ -1296,9 +1327,10 @@ cs_etm__get_trace(struct cs_etm_queue *etmq)
->>  }
->>  
->>  static void cs_etm__set_thread(struct cs_etm_auxtrace *etm,
->> -			       struct cs_etm_traceid_queue *tidq, pid_t tid)
->> +			       struct cs_etm_traceid_queue *tidq, pid_t tid,
->> +			       ocsd_ex_level el)
->>  {
->> -	struct machine *machine = &etm->session->machines.host;
->> +	struct machine *machine = cs_etm__get_machine(etm, el);
->>  
->>  	if (tid != -1) {
->>  		thread__zput(tidq->thread);
->> @@ -1308,10 +1340,12 @@ static void cs_etm__set_thread(struct cs_etm_auxtrace *etm,
->>  	/* Couldn't find a known thread */
->>  	if (!tidq->thread)
->>  		tidq->thread = machine__idle_thread(machine);
->> +
->> +	tidq->el = el;
->>  }
->>  
->> -int cs_etm__etmq_set_tid(struct cs_etm_queue *etmq,
->> -			 pid_t tid, u8 trace_chan_id)
->> +int cs_etm__etmq_set_tid_el(struct cs_etm_queue *etmq, pid_t tid, u8 trace_chan_id,
->> +			 ocsd_ex_level el)
->>  {
->>  	struct cs_etm_traceid_queue *tidq;
->>  
->> @@ -1319,7 +1353,7 @@ int cs_etm__etmq_set_tid(struct cs_etm_queue *etmq,
->>  	if (!tidq)
->>  		return -EINVAL;
->>  
->> -	cs_etm__set_thread(etmq->etm, tidq, tid);
->> +	cs_etm__set_thread(etmq->etm, tidq, tid, el);
->>  	return 0;
->>  }
->>  
->> @@ -1389,7 +1423,7 @@ static int cs_etm__synth_instruction_sample(struct cs_etm_queue *etmq,
->>  	struct perf_sample sample = {.ip = 0,};
->>  
->>  	event->sample.header.type = PERF_RECORD_SAMPLE;
->> -	event->sample.header.misc = cs_etm__cpu_mode(etmq, addr);
->> +	event->sample.header.misc = cs_etm__cpu_mode(etmq, addr, tidq->el);
->>  	event->sample.header.size = sizeof(struct perf_event_header);
->>  
->>  	/* Set time field based on etm auxtrace config. */
->> @@ -1448,7 +1482,7 @@ static int cs_etm__synth_branch_sample(struct cs_etm_queue *etmq,
->>  	ip = cs_etm__last_executed_instr(tidq->prev_packet);
->>  
->>  	event->sample.header.type = PERF_RECORD_SAMPLE;
->> -	event->sample.header.misc = cs_etm__cpu_mode(etmq, ip);
->> +	event->sample.header.misc = cs_etm__cpu_mode(etmq, ip, tidq->prev_el);
->>  	event->sample.header.size = sizeof(struct perf_event_header);
->>  
->>  	/* Set time field based on etm auxtrace config. */
->> diff --git a/tools/perf/util/cs-etm.h b/tools/perf/util/cs-etm.h
->> index 70cac0375b34..88e9b25a8a9f 100644
->> --- a/tools/perf/util/cs-etm.h
->> +++ b/tools/perf/util/cs-etm.h
->> @@ -232,10 +232,11 @@ int cs_etm__process_auxtrace_info(union perf_event *event,
->>  struct perf_event_attr *cs_etm_get_default_config(struct perf_pmu *pmu);
->>  
->>  #ifdef HAVE_CSTRACE_SUPPORT
->> +#include <opencsd/ocsd_if_types.h>
->>  int cs_etm__get_cpu(u8 trace_chan_id, int *cpu);
->>  int cs_etm__get_pid_fmt(u8 trace_chan_id, u64 *pid_fmt);
->> -int cs_etm__etmq_set_tid(struct cs_etm_queue *etmq,
->> -			 pid_t tid, u8 trace_chan_id);
->> +int cs_etm__etmq_set_tid_el(struct cs_etm_queue *etmq, pid_t tid, u8 trace_chan_id,
->> +			 ocsd_ex_level el);
->>  bool cs_etm__etmq_is_timeless(struct cs_etm_queue *etmq);
->>  void cs_etm__etmq_set_traceid_queue_timestamp(struct cs_etm_queue *etmq,
->>  					      u8 trace_chan_id);
->> -- 
->> 2.34.1
->>
+greg k-h
