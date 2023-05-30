@@ -2,170 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439E471648B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EB571648D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbjE3OmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
+        id S232233AbjE3OmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbjE3Ol7 (ORCPT
+        with ESMTP id S232201AbjE3OmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:41:59 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8159AB2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:41:56 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-96f850b32caso878050566b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685457715; x=1688049715;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HZ55BKQe5vzGyKOw1n9AfdmJAZ4/YqSEcizV/peiawc=;
-        b=dxSdSpU7OGIj4962KNBkgW1KbqPrzRKBhU9L5IBdAAvsWc2bKREhNjl4OUwgp2Yjz6
-         57RGn+qRr5GHadFP7aiwF9FNWndp3Ea+PktAySTiFwxOChucyZGyNnax4I06uYsZEOCG
-         1WYIY/zUsJSKO++7OVVxo5/s96vjvzDibfYVtb8XcOatHLDfxB5ivqFkWiTwX2PoL/42
-         NjSz2sA5OhnD4p1Dq1HTFDzg0NIr/l16awbBKW0tmzU2spc1IX9Jl+orMMhxktBbJl8q
-         fX79Rn48OqxJNi14gOKbkaTHiXsjnF/UH7uX3+D6kOOlepg0hj57LFeRRoS1gbTboW3m
-         AK3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685457715; x=1688049715;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HZ55BKQe5vzGyKOw1n9AfdmJAZ4/YqSEcizV/peiawc=;
-        b=L68a0amk//+nsAiSGLDrQbMy8/rfjd9BhaOVBvdp7p0QBxb84XFjkmy0S59QOrQnkH
-         YRY72pydEOMY6Q4V0i8baTroAWbT4DIOHN70TIY7fyl0H758aTKWUeYn+yEufChX0+zJ
-         of3VFsNdLleaagczI/djhzb2CLPM6ga47gk4LPBtCpGz6yFCPVRiqD8V6vIHkLKxRyog
-         sPR+qLWNRDN3X88B13oJZD2bn505Godz9k+MoqmVmEpN60SscvW4BWnMuANNVhayy/rb
-         OF2u7dnefPKhhvP0gbrE8N0tEMftaKjFodjYy8NjlpcHE10amybJLYme45YXWnIVyilb
-         jp8g==
-X-Gm-Message-State: AC+VfDytHrTdkDO2L60FivZ3+wJiDdnJAxEPQOGznryRshYXmxgLXMZy
-        QMc4NOPUVtR1TJN/bF6RnyJ5mg==
-X-Google-Smtp-Source: ACHHUZ7BxBV9LFJWkXWwzhZqkFq1FAFu83njQb+13RZvNUWZRprYqN594V5GTTGTi3Y5+Zght+O7Dw==
-X-Received: by 2002:a17:907:97d3:b0:94e:5679:d950 with SMTP id js19-20020a17090797d300b0094e5679d950mr2593647ejc.72.1685457714905;
-        Tue, 30 May 2023 07:41:54 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id fi13-20020a170906da0d00b0096fbc516a93sm7380282ejb.211.2023.05.30.07.41.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 07:41:54 -0700 (PDT)
-Message-ID: <f0edb172-46e7-e734-d469-dea1925d0a03@linaro.org>
-Date:   Tue, 30 May 2023 16:41:52 +0200
+        Tue, 30 May 2023 10:42:01 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B35F9C;
+        Tue, 30 May 2023 07:42:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=/lcVrnX7+XrRCgaaZHH0kp2gaMygkIh7ZjhZqlrEWnQ=; b=EnVrVJhkHR5/r+niPhrQYvRxwK
+        UuKXFO1S9WWlxix5yCgjlvETE7GYbOOhPqaQhkNlopxJ7Zg5O2Qyj4u16953KxgXNZqamA0PMO+4y
+        kIi3rTydXyld7uRPUC2DwwyU4OzeqITd9ayVOC/++ckz2gcmx45dbBcV8t3771hdWfBJaYowjhjoP
+        xZwKvS9Kx4EMKPuDiBlO7UGojuQxe9eyyx8EfYUol+YfyUbRwyG11U27kQ/1Nr1ysTOwbxWwWd1AK
+        PaIbhAlNauopBYk9gLmKdKyJBt5s1LnZfTkn534vq/b7nozqh04Wj8RWsL11NpKiDaJTYRcJPuaSC
+        0jvxhMPQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38996)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q40Xt-0002x1-CH; Tue, 30 May 2023 15:41:57 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q40Xs-00088R-8O; Tue, 30 May 2023 15:41:56 +0100
+Date:   Tue, 30 May 2023 15:41:56 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Lukasz Majewski <lukma@denx.de>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] net: dsa: slave: Advertise correct EEE capabilities at
+ slave PHY setup
+Message-ID: <ZHYLNGkG26QP/QAS@shell.armlinux.org.uk>
+References: <20230530122621.2142192-1-lukma@denx.de>
+ <ZHXzTBOtlPKqNfLw@shell.armlinux.org.uk>
+ <20230530160743.2c93a388@wsk>
+ <ZHYGv7zcJd/Ad4hH@shell.armlinux.org.uk>
+ <35546c34-17a6-4295-b263-3f2a97d53b94@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 12/12] dt-bindings: fsl-dma: fsl-edma: add edma3
- compatible string
-Content-Language: en-US
-To:     Frank Li <Frank.li@nxp.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, peng.fan@nxp.com,
-        vkoul@kernel.org, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, imx@lists.linux.dev, joy.zou@nxp.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        shenwei.wang@nxp.com
-References: <20230529200453.1423796-1-Frank.Li@nxp.com>
- <20230529200453.1423796-13-Frank.Li@nxp.com>
- <65e7b6df-b83b-2d7c-5093-f5822050827a@linaro.org>
- <ZHYAuOA6JHv6LYwl@lizhi-Precision-Tower-5810>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZHYAuOA6JHv6LYwl@lizhi-Precision-Tower-5810>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <35546c34-17a6-4295-b263-3f2a97d53b94@lunn.ch>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 15:57, Frank Li wrote:
-> On Tue, May 30, 2023 at 03:08:48PM +0200, Krzysztof Kozlowski wrote:
->>> diff --git a/Documentation/devicetree/bindings/dma/fsl,edma.yaml b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
->>> index 5fd8fc604261..eed12687b0c9 100644
->>> --- a/Documentation/devicetree/bindings/dma/fsl,edma.yaml
->>> +++ b/Documentation/devicetree/bindings/dma/fsl,edma.yaml
->>> @@ -21,6 +21,10 @@ properties:
->>>        - enum:
->>>            - fsl,vf610-edma
->>>            - fsl,imx7ulp-edma
->>> +          - fsl,imx8qm-edma
->>> +          - fsl,imx8qm-adma
->>> +          - fsl,imx93-edma3
->>> +          - fsl,imx93-edma4
->>
->> What are these last two? What is "3" and "4"?
+On Tue, May 30, 2023 at 04:26:49PM +0200, Andrew Lunn wrote:
+> > So, I'm wondering what's actually going on here... can you give
+> > any more details about the hardware setup?
 > 
-> imx93 edma have two version, edma3(AHB) and edma4(AXI).
-> There are little bit difference at channel space size.
-> 
-> +static struct fsl_edma_drvdata imx93_data3 = {
-> +	.version = v3,
-> +	.flags = FSL_EDMA_DRV_HAS_CHMUX | FSL_EDMA_DRV_HAS_DMACLK,
-> +	.chreg_space_sz = 0x10000,
-> +	.chreg_off = 0x10000,
-> +	.setup_irq = fsl_edma3_irq_init,
-> +};
-> +
-> +static struct fsl_edma_drvdata imx93_data4 = {
-> +	.version = v4,
-> +	.flags = FSL_EDMA_DRV_HAS_CHMUX | FSL_EDMA_DRV_HAS_DMACLK,
-> +	.chreg_space_sz = 0x8000,
-> +	.chreg_off = 0x10000,
-> +	.setup_irq = fsl_edma3_irq_init,
+> And what switch it actually is. I've not looked in too much detail,
+> but i think different switch families have different EEE capabilities.
+> But in general, as Russell pointed out, there is no MAC support for
+> EEE in the mv88e6xxx driver.
 
-OK
+... except for the built-in PHYs, which if they successfully negotiate
+EEE, that status is communicated back to the MAC in that one sees
+MV88E6352_PORT_STS_EEE set, which results in the MAC being able to
+signal LPI to the PHY... and I've stuck a 'scope on the PHY media-side
+signals in the past and have seen that activity does stop without there
+needing to be any help from the driver for this.
 
-> +};
-> 
->>
->>>        - items:
->>>            - const: fsl,ls1028a-edma
->>>            - const: fsl,vf610-edma
->>> @@ -101,6 +105,22 @@ allOf:
->>>          reg:
->>>            maxItems: 2
->>>  
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            anyOf:
->>> +              - const: fsl,imx8qm-edma
->>> +              - const: fsl,imx8qm-adma
->>> +              - const: fsl,imx93-edma3
->>> +              - const: fsl,imx93-edma4
->>> +    then:
->>> +      properties:
->>> +        reg:
->>> +          maxItems: 1
->>> +        interrupts:
->>> +          maxItems: 64
->>
->> That's odd. What about the names? What about minItems? Anyway, this
->> wasn't tested - you will have failures with dtbs_check.
-> 
-> It passed dtbs_check. interrupt-names is optional property, which
-> will no used after edma v3.
-> 
-> Planned dts look like:
-> 
-> +                       edma1: dma-controller@44000000{
-> +                               compatible = "fsl,imx93-edma3";
-> +                               reg = <0x44000000 0x200000>;
-> +                               #dma-cells = <3>;
-> +                               dma-channels = <31>;
-> +                               interrupts = <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>,
-> +                                            <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
-> +                                            <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
-> 						....
+At least reading the information I have for the 88E6352, there is no
+configuration of LPI timers, nor any seperate LPI enable. If EEE is
+enabled at the MAC, then LPI will be signalled according to whatever
+Marvell decided would be appropriate.
 
-So add here interrupt-names and double check the result... Optional
-means it can appear.
+For an external PHY that the PPU is not polling, the only way that
+we'd have EEE functional is if we forced EEE in port control register 1
+on switches that support those bits. In other words setting both the
+EEE and FORCE_EEE bits...
 
-Best regards,
-Krzysztof
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
