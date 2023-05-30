@@ -2,171 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE53715993
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDF671599A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjE3JKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
+        id S229961AbjE3JM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjE3JKj (ORCPT
+        with ESMTP id S229873AbjE3JMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:10:39 -0400
-Received: from mout.web.de (mout.web.de [212.227.15.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE47EE5;
-        Tue, 30 May 2023 02:10:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
- s=s29768273; t=1685437821; x=1686042621; i=spasswolf@web.de;
- bh=RowAy7vfc/W3m5IXjtWxalCBrofshNZILX1ZCuc28iM=;
- h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
- b=WTLIKpKLSF6HBEcWMPD/howHFNhRFg2N9g0FVHpkAP60F3c4LKKKVGZfPXOJBz7QHND68Xr
- OuilMeMOiQ3yFk5ewlEzMnNbV0O0Jhe6Z8mC1K+DeObK+tanlL0s5LDtabeV3ZhwXwk+xkT51
- 87xmX89e4g6oORLAqqCrGtCtHT129kFobEdvx55poaaZaroP9ONow6fEXk21n8jlWtMjq4H9Q
- Kj0dnX+DAvypcVvdR8XwfVDn2d9cH84rP7bZIajm6g8fHOC8iaPY2yc1b1usatFZvVEV312tg
- YDfp8N+phtJGW/44ubZZ7vWxjvy+N/l9zE4t21DApmSyBnv7A/GA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.0.101] ([176.198.191.160]) by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1MwjK2-1qJmUR0vve-00yU3R; Tue, 30
- May 2023 11:10:21 +0200
-Message-ID: <2b91165f667d3896a0aded39830905f62f725815.camel@web.de>
-Subject: Re: [PATCH net] net: ipa: Use the correct value for IPA_STATUS_SIZE
-From:   Bert Karwatzki <spasswolf@web.de>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, elder@linaro.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 30 May 2023 11:10:19 +0200
-In-Reply-To: <ZHWhEiWtEC9VKOS1@corigine.com>
-References: <7ae8af63b1254ab51d45c870e7942f0e3dc15b1e.camel@web.de>
-         <ZHWhEiWtEC9VKOS1@corigine.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+        Tue, 30 May 2023 05:12:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542D8CD
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:12:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685437927;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JM53ssDZ1pW2l3meo+OiWTQQLf/RYKK5DG6HuMkac1g=;
+        b=d13+ZTRT3ESjdw2Yk1GTGQ0SViIdp0zg2ztRYEoUxEDgJPcQ4RruZnNy1pf2Rk0t79bKE8
+        gVNoo1y0spwDG6zx6GIhFJmDQxKHbh9aTL+HwsDgon3hc5klWTxjlJ9v7XGqCYPHplfMuq
+        tWaU+EwZpCjUCv5OCJvOwE9OA6KKKx0=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-639-dTG9WXmiNpm0dJjcMgA3_g-1; Tue, 30 May 2023 05:12:05 -0400
+X-MC-Unique: dTG9WXmiNpm0dJjcMgA3_g-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30ae8776c12so1051357f8f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:12:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685437925; x=1688029925;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JM53ssDZ1pW2l3meo+OiWTQQLf/RYKK5DG6HuMkac1g=;
+        b=MwPqGlLFcs/DnNWr+VeQvAmgFrGneZH4TEQISLEP10MRtZoZxjFMRuxPaYgmIRCcw+
+         WlZTOe7Eu4ybcOIIVTHudtntWO5Jm4DMJfFOa31avvyD41Mird6TLNIwZJAAdwqf+0s/
+         /leA8/u1KG0Txx2h4uEBBfiqVCMuSN2Oj6KzBQe9eUjnND4BZlvaRtOpWep39KQ/s9ex
+         b8LpgR1WsUJ1zEs4f/1xGpMUNZXQWBQQfg5lLPSDc5L3aWfDkdp8bmkgo6wcI6jXEgJt
+         5OKiaMrcdwFIVZsndBvABxSRPDIusbya4g70YLDUSUS/vQfBPUWWWr814mT8d37G6myZ
+         xwTQ==
+X-Gm-Message-State: AC+VfDy6purIy9cJudkIVE45YrQC50baSKJ1zsIbk5KBc6buq5jVELE4
+        +/yOuubl75ZiBnFDAVS4XRQ7HkLfi3uHG4SyX4WRJHg1lphlJ6R6i8Stavh2CNeRWUB9fLOMlNs
+        Q4rRWXgmE/qD+KnT8UVSeRkEl
+X-Received: by 2002:adf:f485:0:b0:30a:c681:fd2e with SMTP id l5-20020adff485000000b0030ac681fd2emr1411991wro.22.1685437924903;
+        Tue, 30 May 2023 02:12:04 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4tviPM4BUy2+k3VQs0hpNDgkwiGjdPWwIma/uLVioVsCHBmAS9J8CtBKSFYLJttd72o8dzHw==
+X-Received: by 2002:adf:f485:0:b0:30a:c681:fd2e with SMTP id l5-20020adff485000000b0030ac681fd2emr1411973wro.22.1685437924564;
+        Tue, 30 May 2023 02:12:04 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c73c:d500:78e5:f448:8bef:a30? (p200300cbc73cd50078e5f4488bef0a30.dip0.t-ipconnect.de. [2003:cb:c73c:d500:78e5:f448:8bef:a30])
+        by smtp.gmail.com with ESMTPSA id e1-20020a5d65c1000000b00301a351a8d6sm2558387wrw.84.2023.05.30.02.12.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 02:12:04 -0700 (PDT)
+Message-ID: <e41791a5-229d-ad3c-7d5d-cc174e909763@redhat.com>
+Date:   Tue, 30 May 2023 11:12:03 +0200
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:vAmbHNn5RUg4uxRCEOhxAucgIJLGHr907DRoQKnjt00SX6NhbDS
- FRe2n3RtxZuM4uu65KLNjp7aOJDGwZx8VscLdai7cEgeGF7RxAqS8+EuDbllIbp2y0Xr3dp
- VW4DY7wtQed1RjPGohtOBehkZhtei252JCAiykewLQHFQwTV8nA8f4WgL43fWGZC/25uwGa
- i6CpgJAHPb5i14vbRNvwQ==
-UI-OutboundReport: notjunk:1;M01:P0:e7JqOYH10qA=;e+rlnv20da8hcJGA50ZinfEIkEG
- fYh73inPDTzIxJ+Paxu/duAkSdrj/cuLfLY5nIiGmcML1a02GXDX6w9cnR4FJAed3uKtR/XxU
- TVmY2vICGVgFDu25zYyTqCH6Bwm9nLP53hqzpeh5rro8qgB2Z+jDFl3PmtwMogFKzC40am8th
- pvbF3T0NePAzSKM+vv+A++OR6y13fj+X6eUTA+DgIw6KB/Tj5Rcxnswxk5qQOW2jbCwR2vx1E
- a6WAhy1hbRVdauV6aVW5Urg4pMvKvHbn4zsIwdZI/129Q5RLOeC/y8Jz+10s7nNt0oZhQ22yv
- m6xVA4euwz1Aih6A7kv7GydYAcVQ5yGCFC2IZg1Q5x21zbXoW/DzatuD7awp5cKW5IunXeq5G
- fZ7Z3g9KWZYuoe37T3sWzfvwjStVWzXq0L/k2wFHQ94t2l2h4ukvngUHDMhXUAoGKs2OO33sc
- pKI5OQhUo+zRZJeh9l4dOvu+vgnXWVnQUFJ9QSYi8MreeRlPSZmV5WYyIgUpN3um7GcPzAJxG
- +CXLTC6DkGwdNwp0I2BAA6wECfMrJ8aWXBKqOWhN69KMMMZvJmbllUMk7PAWKyJPTzO3/mZ6h
- cVkZR48q/M38LFp4dMsALlvniyzL6qmDgih2ocpWsyaEOog9CEqNpBoceCW66AaHNJQbPuUwD
- oF7McNxktkmU5EyHkoNTNC8cv/JPNShbYEBk4SjUvT0KMJ4yd9xx4NrQeJ7fCcDgYTHyykRQN
- vC7Zkdyt+z0c4pA88Qtu4xcuwKaB1Z88/QtAqYEbmzD/mLNs7cthIN1HdiaUBAZhwCrqSJX05
- 39xhYrSR3tHmKmxQ5ST2pPUO5T1aFZ1hOXHR3YQKDkSpXHc06Ze3bRrbcA219zbK3RiV11Li3
- 6Gy20Eb4F467VJNKT9KQKyCwM8VvLKUco7oIvbjqPlu17YTHvyYYBeW4CoDqeC59bwhoJU2jW
- X1RwCrFq0w53lEizlhNJ/CqOYbw=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v10 5/5] selftest: add a testcase of ksm zero pages
+To:     Yang Yang <yang.yang29@zte.com.cn>, akpm@linux-foundation.org
+Cc:     imbrenda@linux.ibm.com, jiang.xuexin@zte.com.cn,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com, xu.xin16@zte.com.cn
+References: <202305251341580149313@zte.com.cn>
+ <20230525055410.27423-1-yang.yang29@zte.com.cn>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230525055410.27423-1-yang.yang29@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, dem 30.05.2023 um 09:09 +0200 schrieb Simon Horman:
-> On Sat, May 27, 2023 at 10:46:25PM +0200, Bert Karwatzki wrote:
-> > commit b8dc7d0eea5a7709bb534f1b3ca70d2d7de0b42c introduced
-> > IPA_STATUS_SIZE as a replacement for the size of the removed struct
-> > ipa_status. sizeof(struct ipa_status) was sizeof(__le32[8]), use this
-> > as IPA_STATUS_SIZE.
-> >=20
-> > > From 0623148733819bb5d3648b1ed404d57c8b6b31d8 Mon Sep 17 00:00:00 200=
-1
-> > From: Bert Karwatzki <spasswolf@web.de>
-> > Date: Sat, 27 May 2023 22:16:52 +0200
-> > Subject: [PATCH] Use the correct value for IPA_STATUS_SIZE.
-> > IPA_STATUS_SIZE
-> > =C2=A0was introduced in commit b8dc7d0eea5a7709bb534f1b3ca70d2d7de0b42c=
- as a
-> > =C2=A0replacment for the size of the removed struct ipa_status which ha=
-d
-> > size =3D
-> > =C2=A0sizeof(__le32[8]).
-> >=20
-> > Signed-off-by: Bert Karwatzki <spasswolf@web.de>
->=20
-> Hi Bert,
->=20
-> As well as the feedback provided by Jakub elsewhere in this
-> thread I think it would be useful to CC the author of the above mentioned
-> commit, Alex Elder <elder@linaro.org>. I have CCed him on this email.
-> Please consider doing likewise when you post v2.
->=20
-> FWIIW, I did take a look.
-> And I do agree with your maths: struct ipa_status was 32 (=3D 8 x 4) byte=
-s long.
->=20
-> > ---
-> > =C2=A0drivers/net/ipa/ipa_endpoint.c | 2 +-
-> > =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/net/ipa/ipa_endpoint.c
-> > b/drivers/net/ipa/ipa_endpoint.c
-> > index 2ee80ed140b7..afa1d56d9095 100644
-> > --- a/drivers/net/ipa/ipa_endpoint.c
-> > +++ b/drivers/net/ipa/ipa_endpoint.c
-> > @@ -119,7 +119,7 @@ enum ipa_status_field_id {
-> > =C2=A0};
-> > =C2=A0
-> > =C2=A0/* Size in bytes of an IPA packet status structure */
-> > -#define IPA_STATUS_SIZE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0sizeof(__le32[4])
-> > +#define IPA_STATUS_SIZE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0sizeof(__le32[8])
-> > =C2=A0
-> > =C2=A0/* IPA status structure decoder; looks up field values for a stru=
-cture
-> > */
-> > =C2=A0static u32 ipa_status_extract(struct ipa *ipa, const void *data,
-> > --=20
-> > 2.40.1
-> >=20
-> > Bert Karwatzki
+On 25.05.23 07:54, Yang Yang wrote:
+> From: xu xin <xu.xin16@zte.com.cn>
+> 
+> Add a function test_unmerge_zero_page() to test the functionality on
+> unsharing and counting ksm-placed zero pages and counting of this patch
+> series.
+> 
+> test_unmerge_zero_page() actually contains four subjct test objects:
+> (1) whether the count of ksm zero pages can update correctly after merging;
+> (2) whether the count of ksm zero pages can update correctly after
+>      unmerging by madvise(...MADV_UNMERGEABLE);
+> (3) whether the count of ksm zero pages can update correctly after
+> 	unmerging by triggering write fault.
+> (4) whether ksm zero pages are really unmerged.
+> 
+> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+> Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
+> Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
+> ---
 
-Here is v2 of the patch, the first one was garbled by the linebreak setting=
- of
-evolution.
+Acked-by: David Hildenbrand <david@redhat.com>
 
-From: Bert Karwatzki <spasswolf@web.de>
-Date: Tue, 30 May 2023 10:55:55 +0200
-Subject: [PATCH] IPA_STATUS_SIZE was introduced in commit b8dc7d0eea5a as a
- replacement for the size of the removed struct ipa_status of size
- sizeof(__le32[8]). Use this value as IPA_STATUS_SIZE.
+Thanks!
 
-Signed-off-by: Bert Karwatzki <spasswolf@web.de>
----
- drivers/net/ipa/ipa_endpoint.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-- 
+Thanks,
 
-diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.=
-c
-index 2ee80ed140b7..afa1d56d9095 100644
---- a/drivers/net/ipa/ipa_endpoint.c
-+++ b/drivers/net/ipa/ipa_endpoint.c
-@@ -119,7 +119,7 @@ enum ipa_status_field_id {
- };
-=20
- /* Size in bytes of an IPA packet status structure */
--#define IPA_STATUS_SIZE			sizeof(__le32[4])
-+#define IPA_STATUS_SIZE			sizeof(__le32[8])
-=20
- /* IPA status structure decoder; looks up field values for a structure */
- static u32 ipa_status_extract(struct ipa *ipa, const void *data,
---=20
-2.40.1
-
+David / dhildenb
 
