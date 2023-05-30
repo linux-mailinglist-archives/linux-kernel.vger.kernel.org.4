@@ -2,127 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D7E7171A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A45167171A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233905AbjE3XZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 19:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
+        id S233912AbjE3X04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 19:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbjE3XZo (ORCPT
+        with ESMTP id S233570AbjE3X0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 19:25:44 -0400
-Received: from mout.web.de (mout.web.de [217.72.192.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA385E5;
-        Tue, 30 May 2023 16:25:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-        t=1685489121; i=spasswolf@web.de;
-        bh=bVokRTnSfY57dTFz84DYa/2uuA3gMO3FTvF8GJZpPz4=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=TPk9dso0nZHFZ4A9HGLPv5q19jICRkmhyy49NlwO5ZebFT0IP0aMZ/76th+/jdPNR
-         7Ujw+g3hlNdHEKWDXyCK1QOYl0m3jQZHrocZPSSyLqx8wDeuaxqyaVMEer0k6+cG4D
-         dAjQC2D8zA8eRB2UrKGs6MWeFcqiVh/TNpEYY+a45h7FSyUTWVJRIqRxtqei0/fid5
-         HjVlmDCvYg8vn2RbZwmCfBgpgylXHk3AYFneGRb0qRC4eE4HzbIeCxjP13uRx3YomC
-         eBuLhhFVpVkca1V7LOIVZ4dOSaVDLRk5R4AGURKuIT2bmGo2J2UihUm+Fs+tpBSLLF
-         xc+HsI7AfCd5Q==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.0.101] ([176.198.191.160]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MLAVc-1pm3rn1vpC-00I9Pv; Wed, 31
- May 2023 01:25:21 +0200
-Message-ID: <dcfb1ccd722af0e9c215c518ec2cd7a8602d2127.camel@web.de>
-Subject: Re: [PATCH net v2] net: ipa: Use the correct value for
- IPA_STATUS_SIZE
-From:   Bert Karwatzki <spasswolf@web.de>
-To:     Alex Elder <elder@linaro.org>,
-        Simon Horman <simon.horman@corigine.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 31 May 2023 01:25:20 +0200
-In-Reply-To: <f9ccdc27-7b5f-5894-46ab-84c1e1650d9f@linaro.org>
-References: <7ae8af63b1254ab51d45c870e7942f0e3dc15b1e.camel@web.de>
-         <ZHWhEiWtEC9VKOS1@corigine.com>
-         <2b91165f667d3896a0aded39830905f62f725815.camel@web.de>
-         <3c4d235d-8e49-61a2-a445-5d363962d3e7@linaro.org>
-         <8d0e0272c80a594e7425ffcdd7714df7117edde5.camel@web.de>
-         <f9ccdc27-7b5f-5894-46ab-84c1e1650d9f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.2-1 
+        Tue, 30 May 2023 19:26:53 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D8FAA
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:26:52 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-5289cf35eeaso248371a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:26:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685489211; x=1688081211;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=20rREOO4ExsqpWtT25NbGtwxcNpitkrMts/CeDpG8is=;
+        b=IOWJwO8cd4O72NmvBwHdGvQP3i7cqRoptJr1wMnEgtq33n37I4cIwcDx5x2FfX8XNk
+         D9rBNzdr6Dpl7jXKPEzy/bLZQzu8npHnbDZh4qVObIkn6hJIWIcE8RRob8BYMAzARfGF
+         H+KSnPUhh3BMrwv8YiDDXFpVabX4uDaPA6TjU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685489211; x=1688081211;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=20rREOO4ExsqpWtT25NbGtwxcNpitkrMts/CeDpG8is=;
+        b=k3dTaQp3H1g5qbE771Ys/Gzoi85YfBatgeUbNHNw8a3qf16zcWH7OL2oF7D4CBEj/X
+         JLyRiyKv7lxXri2MSIN4/QTfm70+s9rMosi6PERQX1cRnHogPa8EjnP/EdqJxD294CWc
+         UeXznjk2yNETKklnMKXYVDmWM7ZZ9ddrQHNSTmjun7HCl6fI0UdFTTMlIHYt2nXoSi6i
+         o+e3HcCGGbULffeU0XjNZIKdcR3mxBWyiXNuewMsUz6Q4nFrR8jhAwQldgRABO2IeOQX
+         l4vKhZolvgQSIslfiqirawB1KOHBxaY3MShWXv2jtCBaZj15yJ3dTMyxMsfb1e1cTSxw
+         dQzw==
+X-Gm-Message-State: AC+VfDz1Y3L0onjOYiuhrmvbTCr3X5MBEguNJJEcDTPkVBEIfMMsKYM2
+        DBbvGaAc43Q9arrSGF6Ly5RptmOrC08M6WF86ns=
+X-Google-Smtp-Source: ACHHUZ56FhVbFo+v/5QxJUxv9fOE+OkJsRH4Zi6ieowA+/ZNuWZvCGbZ7Trr9unf0U8xPAu9NSLSdA==
+X-Received: by 2002:a17:903:2350:b0:1a6:f93a:a136 with SMTP id c16-20020a170903235000b001a6f93aa136mr13179454plh.22.1685489211573;
+        Tue, 30 May 2023 16:26:51 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id d20-20020a170902b71400b001a4edbabad3sm10817628pls.230.2023.05.30.16.26.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 16:26:51 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     tglx@linutronix.de, jstultz@google.com, azeemshaikh38@gmail.com
+Cc:     Kees Cook <keescook@chromium.org>, sboyd@kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] clocksource: Replace all non-returning strlcpy with strscpy
+Date:   Tue, 30 May 2023 16:26:49 -0700
+Message-Id: <168548920884.1352363.14399780018411204130.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230530163546.986188-1-azeemshaikh38@gmail.com>
+References: <20230530163546.986188-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:ZMkfT2i9P4INUikDQKz7U3w4wYUXQxItqM4vtkNYOcVZXqlmqyA
- kHreVsbcUkyLoZ821vHruw/f97/55ieQ8/iN3lm0vLSlDDbrslwGOddHIYrrwEv/DUxlMCS
- 5NUTfzfHztrz0KJeIX6XiQVj5esLXnC9gKSO96nCktEaN7jMVy1RFqj96ZtQ6dMMFAwQHI4
- BY6fjxGDpfzUXLJ3IOzYw==
-UI-OutboundReport: notjunk:1;M01:P0:04ZzZfq6434=;Nt/AyWZ4sphIOxnLsgX3rexKZ9Q
- cr4OwuklmBkR/0hAXm+UTo3+iTcjiAspYvPYl+uImuco9R3fXrdb6ZpsfHb5wmXMykncph/SH
- +LGKb3Q1dLlxgePOzhChbcj3cVzsqyBQvMup9/kDQZ/L4bm5Gl4OFUGSwUp2AUBtlZfsMlA+h
- m3YIp+YXQKR4usmNt2O1k+mpCVZbJE6+Ndi6ugchJ6JsXttgHrxbLG1h81znR3eTmeA07zEgP
- 5ppnWtGR80DoIQKGCOtwly9L0DtgURBJd/d9M+79m2BFDnsy7oGRFptAcs2AM2hFOTJWNiOAS
- xkJpqhbGM0ophTV9hQcth7PDc4wfv1O6vE2MAHr40wTjl5eib12KQQfwLuzDdyGUnUent/X3W
- xUblI/Jk+g6KSG51vZJd/AkUX2swuGZNTFANyFVkwxLrboj27QRFil55vp175xU244Pv7/7ak
- 0Gdz1AppD8rd/YOt8+NiXa5hSoCl+TPKPNlON/Cmea/xikk2/b9YI7Y9pSX665G2yc3s4R4fU
- LtFjAgDQE+USYBhMvrqxpt077FgamsPwtjbEhoqCQZALNHVZLamOcaBLqPSccIPIi2WPUjUj6
- /+TJ1JUtzdZ8GRBVglavAMvshUz6krqq/Hkipyse2DhXZX0ieLzxwiHJ/w7b7w7Upth3qg6hb
- BuFeq5JYKtW8jxy4NiOQ10UJWDnVSeBpqeLWoZ26TqoIckC6mNwhWRBCBumRreMV6Iq+uB+XI
- ZGsAi/DKyvNPFFfXupLBuzR9mZPkDHl+up6RP1+gFxuVD2zbXKCaaQQGI5kpIBGLuVOtWaqBt
- e0uqWymNdmSgzCMm7KC0c2vsyTCc76F1bTrSwuLVTcMPrMyEy06PrwOK/qEvU3rEN4dXh/evz
- IEKRDhtRXuehsr/yZlG+JjMGGgo9p+cwiTNi73BXBGOiaAsJtfQDFlBCv/IrqMk8znl+fGRsu
- nQ3YQ12DMtMnUZVr3bPlglc2uzo=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From 2e5e4c07606a100fd4af0f08e4cd158f88071a3a Mon Sep 17 00:00:00 2001
-From: Bert Karwatzki <spasswolf@web.de>
-To: davem@davemloft.net
-To: edumazet@google.com
-To: kuba@kernel.org
-To: pabeni@redhat.com
-Cc: elder@kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Date: Wed, 31 May 2023 00:16:33 +0200
-Subject: [PATCH net v2] net: ipa: Use correct value for IPA_STATUS_SIZE
+On Tue, 30 May 2023 16:35:46 +0000, Azeem Shaikh wrote:
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
+> No return values were used, so direct replacement is safe.
+> 
+> [...]
 
-IPA_STATUS_SIZE was introduced in commit b8dc7d0eea5a as a replacement
-for the size of the removed struct ipa_status which had size
-sizeof(__le32[8]). Use this value as IPA_STATUS_SIZE.
+Applied to for-next/hardening, thanks!
 
-Fixes: b8dc7d0eea5a ("net: ipa: stop using sizeof(status)")
-Signed-off-by: Bert Karwatzki <spasswolf@web.de>
----
- drivers/net/ipa/ipa_endpoint.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[1/1] clocksource: Replace all non-returning strlcpy with strscpy
+      https://git.kernel.org/kees/c/40932d192ec8
 
-diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.=
-c
-index 2ee80ed140b7..afa1d56d9095 100644
---- a/drivers/net/ipa/ipa_endpoint.c
-+++ b/drivers/net/ipa/ipa_endpoint.c
-@@ -119,7 +119,7 @@ enum ipa_status_field_id {
- };
-=20
- /* Size in bytes of an IPA packet status structure */
--#define IPA_STATUS_SIZE			sizeof(__le32[4])
-+#define IPA_STATUS_SIZE			sizeof(__le32[8])
-=20
- /* IPA status structure decoder; looks up field values for a structure */
- static u32 ipa_status_extract(struct ipa *ipa, const void *data,
---=20
-2.40.1
+-- 
+Kees Cook
 
-As I'm sure that git send-email didn't work (probably due to sendmail/exim
-configuration issues), I'm sending this from evolution again.
-
-Bert Karwatzki
-=20
