@@ -2,126 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCDC715B11
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B94715B39
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjE3KHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
+        id S230193AbjE3KPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231437AbjE3KHB (ORCPT
+        with ESMTP id S231438AbjE3KPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:07:01 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCFF11B;
-        Tue, 30 May 2023 03:06:35 -0700 (PDT)
-X-QQ-mid: bizesmtp74t1685441190tx4kv20c
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 18:06:29 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: TD6ADCIf0ML9HinHlDnN+wla+kJWeZiGgZXr7K2zL1s+nKaOjUA+mLu8YWevX
-        oW+nIp2Or4iBsUmPqG7UbsXqjnN59kMfBy/O/soeeQv8ZdG6d7AWZlXI4U9MstgaW6RmWTj
-        HHEJ8Nmu//iopS7nsTw1beCT2vKbo+UexM7RlCEJZXqwvD1pkkOc0etvW1d4cp5CcHuhOPo
-        Xif25nTUaIoO3vQ4jkxPDd333CKNmvkc0nDnMYi0bCqRccmWO8JBJsesQFQm/x/zXpUrGLB
-        AIEpyZg5TvS41A649x+/rQqimoGrJRW1Kpvcq0miBukKflxOoJ+EmNz31uPMoHtz66KEDKR
-        ZlOCHkQTOgk+c772gubkRsWJFdCT5BYY9Efob4TV/Btb5oQc0SW4ldnw3NHQYbn6zbMTQ+M
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 7193763827501342085
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH 00/13] tools/nolibc: riscv: Add full rv32 support
-Date:   Tue, 30 May 2023 18:06:29 +0800
-Message-Id: <20230530100629.383892-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230529113143.GB2762@1wt.eu>
-References: <20230529113143.GB2762@1wt.eu>
+        Tue, 30 May 2023 06:15:04 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9EF93;
+        Tue, 30 May 2023 03:15:02 -0700 (PDT)
+Received: from stefanw-SCHENKER ([37.4.248.58]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MTzOe-1pe3Py0phi-00R2ux; Tue, 30 May 2023 12:09:08 +0200
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Marek Vasut <marex@denx.de>, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH V4 0/2] dt-bindings: imx: Fix dtbs_check warnings
+Date:   Tue, 30 May 2023 12:08:41 +0200
+Message-Id: <20230530100843.15072-1-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Provags-ID: V03:K1:cmG0J6+3RtVmaV1J0wWj307gxunjjnimgjFaE9b6lVjMHRQjufg
+ bczJG8hWuj3cBP0mZBDkoj0Rx0boCBSHEqMopw1W/fl3a1EBEJayHTZOi4yy71Rdp0QPX4p
+ SoC2FaxRJQfVTSVVZo/iU34Wa1jcSC+Plmp+kz+DzQZK5viI8M0AaMBXH7HH5Y4meA+X1wY
+ 3zBD4aY/eCzRVei9EVb9w==
+UI-OutboundReport: notjunk:1;M01:P0:MFVebADgs8M=;xnkBNB/IZ2UWaMjlN/W/WmW97Al
+ 8Ur6JxLVRiRyU3Y91c+1lvMElxZ/mS4v2hrJH5/7lXDMmnre9AE4aXY+nNeNtM4Nirc/LZ2WH
+ WEiOm6FoHBV4/bNAGNmLMgpKgfYCsg5uHtTfaCXBcpWGNwgqfwajCTrN7biTMtskOCAM7C8H3
+ UNCI5trU59lHwLrOCA3sqTYd5RlZ5IiOi2Z14nWp0he+mAjEEyDa14Vh8Usp3kYTPCr4YRLJa
+ YwRrQ1YcchfzBvqCkXAp+m519anBb11NIU7eOO98HUNFeusmAb/6ue0sGCp98KAln5P99Rm+3
+ LYAcw/KsmkgXu1R3ZvCw/2aWAWgCBmywX02CMTyvym5cJE3apezJU1pYjeHWGeITaChKI6afw
+ L4REzpuoCa+7KxFfQRkzUhkoC5sKsLk4NDvT9AZRlVIfd9Nko2JkPnTUcOY7CJz2GnNCVqcXM
+ Ft3d0TX1zRsC7vclohVP5qI93fnKvhNcdoodOS2Lfcn8+lA4/UalTOLfMuabpR9XZMT+r+4Bn
+ t0gHywGxYm05hUNVLwRlmg15WFgd54dK0vauXotvsahfAVjeRFodH9KUzoxUNyMnKpJSDzgDR
+ TCjZxbJBqxk0ZbGBnsDdNAjlUtngNTjJA8+Xa4v60DFgUyw9yMMhpJFivmGbXTZnHNSYNWg8Y
+ Q9zRzXrsSh2dWNBuIW6ZdUgSsuDcqeZ0w/XoyYtSRA==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thomas, Willy
+This series tries to address some dtbs_check warnings on i.MX6ULL.
 
-> Hi Thomas,
-> 
-> On Mon, May 29, 2023 at 10:45:40AM +0200, Thomas Weißschuh wrote:
-> > <lots of implementation>
-> > 
-> > > usage:
-> > > 
-> > >     $ gcc -o nolibc-test tools/testing/selftests/nolibc/nolibc-test.c
-> > >     $ ./nolibc-test
-> > >     ...
-> > >     35 gettimeofday_tz = 0                                           [OK]
-> > >     36 gettimeofday_tv_tz = 0                                        [OK]
-> > >     37 gettimeofday_bad1 = -1                                       [FAIL] (continued by sigaction/siglongjmp/sigsetjmp)
-> > >     38 gettimeofday_bad2 = -1                                       [FAIL] (continued by sigaction/siglongjmp/sigsetjmp)
-> > >     39 getpagesize = 0                                               [OK]
-> > >     40 ioctl_tiocinq = 0                                             [OK]
-> > >     41 ioctl_tiocinq = 0                                             [OK]
-> > >     ...
-> > > 
-> > > It did work as expected, but for nolibc, we still need to add sigaction/siglongjump/sigsetjmp support.
-> > > 
-> > > Will send a patch based on Willy's latest branch, perhaps this may help us to
-> > > verify the future sigaction/siglongjump/sigsetjmp for nolibc.
-> > > 
-> > > ref: https://www.ibm.com/docs/en/i/7.1?topic=ssw_ibm_i_71/apis/sigsetj.html
-> > >      https://www.ibm.com/docs/en/zos/2.1.0?topic=functions-siglongjmp-restore-stack-environment-signal-mask
-> > 
-> > This seems very complicated for fairly limited gain to be honest.
-> 
-> I agree as well. I'm not denying the fact that one day we may want to
-> support signal, longjmp and friends but I'm not convinced we want to
-> go through that just to make a few uncertain tests succeed.
->
+Changes in V4:
+- drop patch 1 from V3 which has already been addressed by Marek Vasut
+- drop already applied patches from V3 (#3, #5, #6) 
 
-I agree too, I'm just interested in whether it is able to restore the
-whole test after a user-space invalid memory access ;-) 
+Changes in V3:
+- add Krzysztof's Reviewed-Bys
+- fix indentation in Patch 6 found by Krzysztof Kozlowski
 
-> > If we really want to keep the current testcase we could also ensure that
-> > the pointer does not fall into the first page, as the first page is not
-> > mapped under Linux:
-> > 
-> > 0 <= addr < PAGE_SIZE
-> > 
-> > Or instead of PAGE_SIZE just hardcode 4096, as that should be the
-> > minimum size and and does not require a lookup.
-> 
-> I would not even do that. It brings nothing to the application layer and
-> inflates the code. I'd rather just get rid of the EFAULT test cases that
-> rely on an unreliable syscall (i.e. one that may either be a real syscall
-> or an emulated one). The value brought by these tests is extremely low
-> and they were implemented only because they were easy to do. If they're
-> causing pain, let's just drop them.
+Changes in V2:
+- new patch to fix fsl-imx-uart warnings 
+- fixed GPC typo found by Fabio Estevam
+- keep enum in bindings as suggested by Krzysztof Kozlowski
+- make imx6ul GPT compatible to imx6sx
 
-Thanks, one of the sent v2 patches has dropped both of them.
 
-yesterday, based on the demo code pasted in this email thread, I went
-further to implement a cleaner user-space 'efault' handler, with this
-handler, it is able to continue next test, and without this handler,
-just skip the test, so, it can be used to add future test cases for
-sigaction/sigsetjmp/siglongjmp.
+Stefan Wahren (2):
+  dt-bindings: crypto: fsl-dcp: add imx6sl and imx6ull compatible
+  dt-bindings: imxgpt: add imx6ul compatible
 
-besides, a multiple 'run' support is added too, will share the new code
-as a new standalone patchset later but I'm not expecting it is
-mergeable.
+ .../devicetree/bindings/crypto/fsl-dcp.yaml          | 12 +++++++++---
+ .../devicetree/bindings/timer/fsl,imxgpt.yaml        |  3 +++
+ 2 files changed, 12 insertions(+), 3 deletions(-)
 
-Thanks,
-Zhangjin
+-- 
+2.34.1
 
-> 
-> Willy
