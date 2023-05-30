@@ -2,112 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A318716183
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F06716184
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbjE3NU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
+        id S232630AbjE3NVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbjE3NUx (ORCPT
+        with ESMTP id S232624AbjE3NVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:20:53 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142B8B0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:20:51 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-514953b3aa6so3998379a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685452850; x=1688044850;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ea2LdewWSYBlTGL1pC0uVnJLZZioO8cfJgJDEPtNoG8=;
-        b=qvydoxNAZHcUiT+Wxla0aaBfxHooTFXK0IF/Trw7A2o/U95eS5pNGk7nya8DU3YaHN
-         VqSVNL8jYNpuvaMHVgCheZfgdBYEivZuPcOXK2wo0noNfFepqoA8vw/wYg/dXBRkXiK5
-         jbgKSMCokog2ZTK6X5VD4tK1bCoKDOk/JemiAimkGQ92Rqh711M8pa9yyEVMT0g034dW
-         iK2w9byBhHkDClsxWReyXeebR0jD2fus3SA/TKkJMPYK5qKVTLxO0H8330wH2m5nL3Ac
-         hsN891MLZjnN9/8xa7GMqvdRtdKOcxFyZCz0pEfO8uMWCW4QU2SbvHV5gDvhphB3dzBB
-         SU7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685452850; x=1688044850;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ea2LdewWSYBlTGL1pC0uVnJLZZioO8cfJgJDEPtNoG8=;
-        b=W/WsACJeSdPqU7xmTngxVdnLMKr1lLxzEUUfZVV9FgBqJpzX9j6EjLgnhLUceZNffZ
-         s/rsnhWgNJedW6bMJGK9Lb+0sQKFCeN3yR4jmTbnWB/uV02/Cb0O86Xr9MBWICwQreDf
-         n+KSuXp+dxckPiy6c0a0DQvIZ4ih4oZZ7h/1a+PO4YkQrrO0BWEgmSsOo3a13NHFX9ua
-         SxO4ODl4aOHZOtO3bzkWioan2oM2FV3qosLTRdQ/elnaloLlb7ltsce50XZLIIGH1pHU
-         AaLQyl6IBTOGqenU+SvqWk9Ka2nB0iCVGJp3ZkttTRy7utoyW/BZX2aP3GMjwxDQ10Rq
-         afQA==
-X-Gm-Message-State: AC+VfDx/CZqopz4VV613pxYjm0acY79clXKipYdvW81aWPaSCUK8Rw9f
-        ZIFReOBA9UNS4xEfZm3fm3/gnA==
-X-Google-Smtp-Source: ACHHUZ5Ec8mS0WQOTPmfsRcm8kG86wAB7r6cdlwRv8fyLj+55BTyGZ0d5j3fIeUVp34EMJ4rhBObtg==
-X-Received: by 2002:aa7:ce0c:0:b0:514:9422:37db with SMTP id d12-20020aa7ce0c000000b00514942237dbmr1488683edv.39.1685452850273;
-        Tue, 30 May 2023 06:20:50 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id i12-20020aa7dd0c000000b005149c3fa632sm2798999edv.13.2023.05.30.06.20.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 06:20:49 -0700 (PDT)
-Message-ID: <d2a69542-14e3-ea15-0c21-93d0df19fbf8@linaro.org>
-Date:   Tue, 30 May 2023 15:20:47 +0200
+        Tue, 30 May 2023 09:21:05 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A65D9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:21:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685452861; x=1716988861;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=X6n3CkRI8+JwdQaW9dpMbGRfCFGiJrQnTVujHVVXh0w=;
+  b=X/yJ+m8fGMMGbbJ21tUcoIQrm9Hwa+o1pojEbQ++ueMhnXdZy5mcZgQI
+   0wOSFRHCilbBGqE++jd6gx0aAQ+JclANZMN7FVPFMn2oPrNjdCugwU0RD
+   MdtgEVXMGXQ2kRNPgM1VfxiaKt4Rfdis6H2iLhXhFyLAZ+957lWsv0+yl
+   JSYvEUWYtrzyk5xEYHpS2dfVa+VbL9l0ACq3vQKOtCGNM0OkzO/9Rza4/
+   6NvGhW0WABcIgZqMKqIdZHrhZcs6o7vXbvVJ7Sp3fHUI3lON5wOkQ8oSV
+   1XWUMRddOyX94jdJRTmyGLuUFEx0VZaGZBuBwNsM0NMb/0znK9p0xhdl6
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="383166361"
+X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
+   d="scan'208";a="383166361"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 06:21:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="656853648"
+X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
+   d="scan'208";a="656853648"
+Received: from ndesilva-mobl1.amr.corp.intel.com (HELO [10.209.101.99]) ([10.209.101.99])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 06:21:00 -0700
+Message-ID: <d92c6deb-e73c-9425-52ae-230285388d8e@linux.intel.com>
+Date:   Tue, 30 May 2023 06:20:59 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 5/5] ARM: Add Samsung Galaxy Express support
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCHv2 3/3] x86/mm: Fix enc_status_change_finish_noop()
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        dave.hansen@intel.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de
+Cc:     decui@microsoft.com, rick.p.edgecombe@intel.com, seanjc@google.com,
+        thomas.lendacky@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230526120225.31936-1-kirill.shutemov@linux.intel.com>
+ <20230526120225.31936-4-kirill.shutemov@linux.intel.com>
 Content-Language: en-US
-To:     Rudraksha Gupta <guptarud@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     david@ixit.cz, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230524230459.120681-1-guptarud@gmail.com>
- <20230524230459.120681-5-guptarud@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230524230459.120681-5-guptarud@gmail.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230526120225.31936-4-kirill.shutemov@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/05/2023 01:04, Rudraksha Gupta wrote:
-> This adds a very basic device tree file for the Samsung Galaxy Express
-> SGH-I437. Currently, the following things work: UART, eMMC, SD Card, and
-> USB.
+
+
+On 5/26/23 5:02 AM, Kirill A. Shutemov wrote:
+> enc_status_change_finish_noop() defined as always-fail now which
+> doesn't make sense for noop.
 > 
-> Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
+> The change doesn't have user-visible effect because it only gets
+> called if the platform has CC_ATTR_MEM_ENCRYPT. All platforms with
+> the attribute override the callback with own implementation.
+> 
+
+Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 > ---
+>  arch/x86/kernel/x86_init.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
+> index f230d4d7d8eb..64664311ac2b 100644
+> --- a/arch/x86/kernel/x86_init.c
+> +++ b/arch/x86/kernel/x86_init.c
+> @@ -131,7 +131,7 @@ struct x86_cpuinit_ops x86_cpuinit = {
+>  static void default_nmi_init(void) { };
+>  
+>  static bool enc_status_change_prepare_noop(unsigned long vaddr, int npages, bool enc) { return true; }
+> -static bool enc_status_change_finish_noop(unsigned long vaddr, int npages, bool enc) { return false; }
+> +static bool enc_status_change_finish_noop(unsigned long vaddr, int npages, bool enc) { return true; }
+>  static bool enc_tlb_flush_required_noop(bool enc) { return false; }
+>  static bool enc_cache_flush_required_noop(void) { return false; }
+>  static bool is_private_mmio_noop(u64 addr) {return false; }
 
-
-
-> +
-> +&usb_hs1_phy {
-> +	v3p3-supply = <&pm8921_l3>;
-> +	v1p8-supply = <&pm8921_l4>;
-> +};
-> +
-> +&usb1 {
-> +	status = "okay";
-> +	dr_mode = "otg";
-> +};
-> +
-
-except what was said - drop stray blank line.
-
-Best regards,
-Krzysztof
-
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
