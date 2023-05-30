@@ -2,210 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A838B715C91
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D87A715C93
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231793AbjE3LFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
+        id S231448AbjE3LFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbjE3LF3 (ORCPT
+        with ESMTP id S231794AbjE3LFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:05:29 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858D7A8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:05:27 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-96fab30d1e1so895491966b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:05:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685444726; x=1688036726;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N4sX1vyijFMNeWfKmoR/4KsT2UJSP9PmehGEs93c7KM=;
-        b=UmJTCm9VA8s4tQsJJDK3s/LUv2htX2KSFyiTVwouUSphypqcz0od+3ZeiA+3INBDUB
-         ak3LKxd6CHI+NtjOxJoIqdAzs5lIGedpMb9Ta4rjv47wNx/e78A4AaY3GMTFLzk2AMuv
-         kf8yS+2L8ojaxZHN5tdrVQah1sTD4M1UWybTxfvuYSiKprRvmswSo2vHKCZcL/FugKzq
-         6VnfRfPvBQF+BiiAUXtqrtnFurljH89zWgwJhxzgdW5PfaSNMLE1N2al+ps/59aZ8yl5
-         XhLTGxnPJYHY0HrZudkIuy4oSIpwDy+sO0BLdN45il2Pf261FPC7/NdWBTeK4yaemuwh
-         vqKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685444726; x=1688036726;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N4sX1vyijFMNeWfKmoR/4KsT2UJSP9PmehGEs93c7KM=;
-        b=XEQQeXcVXsb2DqAfo9hw/11gdV/9fhW4HSeE57Ew1D+UMvj7qC/6/bLZmgbuKNgROj
-         ARR8Bhz+LiY16EwKLmDotYkKe7DuyUIaWcz31/j97XhSRCi4XvHfF7izQFtEEFOqL1Bm
-         E7ppVFSlFcHXXidpBYyAYkiLOAHbyY2j95xbraEbFzrYzpqIFh/qUi3dAGC6ppENB0Hm
-         Enj8pp7ME2kZD5hpOeZ399IZn08xKHZinKy0rUHz+p3FOZijrnlcBaWQhNRp2uLFylwn
-         74oCH2E1Kal+9HRwH1U0NpOOxFBnyZ9igVC7yJuVvSypUvyj3mZM8yGqbRs72pQmB4WL
-         evKA==
-X-Gm-Message-State: AC+VfDw7S+ZhfWyxyG6WRw28mG+GlqwyJaRu7WkaerH4Najk4KNb5zO2
-        hPhqS1iBu67BNK1+Ko96PnzQBw==
-X-Google-Smtp-Source: ACHHUZ41+3NcGslPWxTb5DUQ/IiCYNZi1sEkGm/E0WtTYKzNWbM6kyIZcza0RplwLacI0H3UHPl+xg==
-X-Received: by 2002:a17:907:9727:b0:971:55e2:82c3 with SMTP id jg39-20020a170907972700b0097155e282c3mr1772192ejc.20.1685444725655;
-        Tue, 30 May 2023 04:05:25 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id t24-20020a170906179800b00968db60e070sm7183903eje.67.2023.05.30.04.05.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 04:05:25 -0700 (PDT)
-Message-ID: <a33363d2-a0a8-f8c1-fbc0-f7a5422d07a9@linaro.org>
-Date:   Tue, 30 May 2023 13:05:19 +0200
+        Tue, 30 May 2023 07:05:40 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE56AE5;
+        Tue, 30 May 2023 04:05:37 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1685444733t0w0xo7y
+Received: from linux-lab-host.localdomain ( [119.123.130.226])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 30 May 2023 19:05:31 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: qTKqCPEPPMCW9B1ysKllWVaS1wh2y0szvr/5UcMtnZhWY6OZeO5K63HX3I6/W
+        atmSrvFCqT6B3PWqAH4eaVk9KM8ij4PXLpSQf/GawIFbw+MFWjENtkYYCm+naDAuhSnhq4o
+        +atjjVW3SRGVc0dHTJSWfZkCjNxM95CxppAWnLgiyovSI3Q2XLudaYo7w/UBTy1gAkDjVuH
+        FmnLv8kj/vZr2bVMhpwWuT1SvZ9BvFhk0SjKzItfPgeavl68QSlRSlZ6kr5e2b3WIC+1VD3
+        4wJ6i6DNRmFbIikucPYfFvJ8S+y5NTMbkGbrrH0vFJWYwDwNgKKXZtTYdpP036OuHTi3Y5e
+        E+xAC2HBsqZ+DRTj+RP7AcVM7Do3v5xQzuBIULzGLkcx+0utUD8sFgEwkcye24itOyMdb8z
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 1177987213565950779
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: [PATCH 3/4] selftests/nolibc: add user space efault handler
+Date:   Tue, 30 May 2023 19:05:29 +0800
+Message-Id: <ba63fb0dd083c679249c41cb7d931437ca3598a8.1685443199.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1685443199.git.falcon@tinylab.org>
+References: <cover.1685443199.git.falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V2 11/13] arm64: dtsi: qcom: ipq5018: enable nodes
- required for multipd
-Content-Language: en-US
-To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, jassisinghbrar@gmail.com,
-        mathieu.poirier@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, quic_eberman@quicinc.com, quic_mojha@quicinc.com,
-        kvalo@kernel.org, loic.poulain@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com, quic_varada@quicinc.com,
-        quic_devipriy@quicinc.com
-References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
- <20230521222852.5740-12-quic_mmanikan@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230521222852.5740-12-quic_mmanikan@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/05/2023 00:28, Manikanta Mylavarapu wrote:
-> Enable nodes required for multipd remoteproc bring up
+Some hooks are added to record the test case and the test context, while
+traps on invalid data pointer access, try to continue next test if
+possible.
 
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching.
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 151 ++++++++++++++++++-
+ 1 file changed, 149 insertions(+), 2 deletions(-)
 
-It is "dts". Not "dtsi".
-
-> 
-> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-> ---
-> Changes in V2:
-> 	- Corrected syntax like alignmnet and kept nodes in sorted order.
-> 	- Covered entire TCSR region.
-> 	- Added 'firmware-name' property.
-> 
->  arch/arm64/boot/dts/qcom/ipq5018.dtsi | 140 ++++++++++++++++++++++++++
->  1 file changed, 140 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> index 9f13d2dcdfd5..3772d54d89e4 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> @@ -85,6 +85,18 @@
->  			reg = <0x0 0x4ac00000 0x0 0x200000>;
->  			no-map;
->  		};
-> +
-> +		q6_region: wcnss@4b000000 {
-> +			reg = <0x0 0x4b000000 0x0 0x1700000>;
-> +			no-map;
-> +		};
-> +
-> +		smem@4ab00000 {
-> +			compatible = "qcom,smem";
-> +			reg = <0x0 0x4ab00000 0x0 0x100000>;
-> +			hwlocks = <&tcsr_mutex 0>;
-> +			no-map;
-> +		};
->  	};
-> 
->  	soc: soc@0 {
-> @@ -128,6 +140,12 @@
->  			#power-domain-cells = <1>;
->  		};
-> 
-> +		tcsr_mutex: hwlock@1905000 {
-> +			compatible = "qcom,tcsr-mutex";
-> +			reg = <0x01905000 0x20000>;
-> +			#hwlock-cells = <1>;
-> +		};
-> +
->  		sdhc_1: mmc@7804000 {
->  			compatible = "qcom,ipq5018-sdhci", "qcom,sdhci-msm-v5";
->  			reg = <0x7804000 0x1000>;
-> @@ -181,6 +199,14 @@
->  			};
->  		};
-> 
-> +		apcs_glb: mailbox@b111000 {
-> +			compatible = "qcom,ipq5018-apcs-apps-global",
-> +				     "qcom,ipq6018-apcs-apps-global";
-> +			reg = <0x0b111000 0x1000>;
-> +			#clock-cells = <1>;
-> +			#mbox-cells = <1>;
-> +		};
-> +
->  		timer@b120000 {
->  			compatible = "arm,armv7-timer-mem";
->  			reg = <0x0b120000 0x1000>;
-> @@ -238,6 +264,96 @@
->  				status = "disabled";
->  			};
->  		};
-> +
-> +		q6v5_wcss: remoteproc@cd00000 {
-> +			compatible = "qcom,ipq5018-q6-mpd";
-> +			reg = <0x0cd00000 0x4040>;
-> +			firmware-name = "IPQ5018/q6_fw.mdt",
-> +					"IPQ5018/m3_fw.mdt",
-> +					"qcn6122/m3_fw.mdt";
-> +			interrupts-extended = <&intc GIC_SPI 291 IRQ_TYPE_EDGE_RISING>,
-> +					      <&wcss_smp2p_in 0 0>,
-> +					      <&wcss_smp2p_in 1 0>,
-> +					      <&wcss_smp2p_in 2 0>,
-> +					      <&wcss_smp2p_in 3 0>;
-> +			interrupt-names = "wdog",
-> +					  "fatal",
-> +					  "ready",
-> +					  "handover",
-> +					  "stop-ack";
-> +
-> +			qcom,smem-states = <&wcss_smp2p_out 0>,
-> +					   <&wcss_smp2p_out 1>;
-> +			qcom,smem-state-names = "shutdown",
-> +						"stop";
-> +			memory-region = <&q6_region>;
-> +
-> +			glink-edge {
-> +				interrupts = <GIC_SPI 179 IRQ_TYPE_EDGE_RISING>;
-> +				label = "rtr";
-> +				qcom,remote-pid = <1>;
-> +				mboxes = <&apcs_glb 8>;
-> +			};
-> +
-> +			pd-1 {
-> +				compatible = "qcom,ipq5018-wcss-ahb-mpd";
-> +				firmware-name = "IPQ5018/q6_fw.mdt";
-> +				interrupts-extended = <&wcss_smp2p_in 8 0>,
-> +						      <&wcss_smp2p_in 9 0>,
-> +						      <&wcss_smp2p_in 12 0>,
-> +						      <&wcss_smp2p_in 11 0>;
-
-What "0" stands for?
-
-> +				interrupt-names = "fatal",
-> +						  "ready",
-Best regards,
-Krzysztof
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index b8fd7fcf56a6..9f9a09529a4f 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -114,6 +114,149 @@ const char *errorname(int err)
+ 	}
+ }
+ 
++/* emulate EFAULT return in user space with isigaction/sigsetjmp/siglongjmp */
++#ifndef NOLIBC
++#ifndef NO_USER_SPACE_EFAULT
++#define USER_SPACE_EFAULT
++#endif
++#endif
++
++#ifdef USER_SPACE_EFAULT
++#include <setjmp.h>
++
++static int next_test = 0;
++static int test_llen = 0;
++static int test_sig = 0;
++static int expect_sig = 0;
++static int test_idx = 0;
++static int test_ret = 0;
++static int test_iteration = 0;
++static int test_iterations = 0;
++static sigjmp_buf mark;
++
++static int pad_spc(int llen, int cnt, const char *fmt, ...);
++static struct test test_names[];
++typedef int (*func_t)(int min, int max);
++static func_t test_func = NULL;
++
++#define CASE_SIG(sig) \
++	case sig: return #sig
++
++/* returns the signal name or the decimal value for less common ones. */
++const char *signame(int sig)
++{
++	switch (sig) {
++	CASE_SIG(SIGSEGV);
++	default:
++		return itoa(sig);
++	}
++}
++
++static void record_test_context(int idx, int iteration, int iterations)
++{
++	test_idx = idx;
++	test_iteration = iteration;
++	test_iterations = iterations;
++}
++
++static void record_test_case(int test, int llen, int ret, char *name)
++{
++	test_llen = llen - 1;
++	test_ret = ret;
++	next_test = test + 1;
++}
++
++static void restore_from_trap(void)
++{
++	int idx;
++	int err;
++	int i;
++	int min = 0;
++	int max = INT_MAX;
++
++	test_llen += printf(" ! %d %s ", test_sig, signame(test_sig));
++	if (test_sig == expect_sig)
++		pad_spc(test_llen, 64, "[OK]\n");
++	else {
++		test_ret++;
++		pad_spc(test_llen, 64, "[FAIL]\n");
++	}
++
++	if (next_test <= test_names[test_idx].max) {
++		test_func = test_names[test_idx].func;
++		err = test_func(next_test, test_names[test_idx].max);
++		test_ret += err;
++		printf("Errors during this test: %d\n\n", err);
++	}
++
++	for (i = test_iteration; i < test_iterations; i++) {
++		/* for current iterations */
++		if (i == test_iteration) {
++			idx = test_idx + 1;
++		} else {
++			printf("Current iteration: %d\n\n", i + 1);
++
++			/* for left iterations */
++			idx = 0;
++			test_ret = 0;
++		}
++
++		for (; test_names[idx].name; idx++) {
++			if (test_names[idx].run != 0) {
++				printf("Running test '%s'\n", test_names[idx].name);
++				record_test_context(idx, i, test_iterations);
++				err = test_names[idx].func(test_names[idx].min, test_names[idx].max);
++				test_ret += err;
++				printf("Errors during this test: %d\n\n", err);
++			}
++		}
++		printf("Total number of errors in the %d iteration(s): %d\n\n", i + 1, test_ret);
++	}
++}
++
++static void trap_handler(int sig, siginfo_t *si, void *p)
++{
++	test_sig = sig;
++	if (sig != SIGKILL)
++		siglongjmp(mark, -1);
++}
++
++static void register_expect_trap(int experr1, int experr2)
++{
++	if (experr1 == EFAULT || experr2 == EFAULT)
++		expect_sig = SIGSEGV;
++	else
++		expect_sig = 0;
++}
++
++static void register_trap_handler(void)
++{
++	int ret = 0;
++
++	struct sigaction sa = {0};
++	sa.sa_sigaction = trap_handler;
++	sa.sa_flags = SA_SIGINFO;
++	ret = sigaction(SIGSEGV, &sa, NULL);
++	if (ret == -1) {
++		perror("sigaction");
++		exit(1);
++	}
++
++	if (sigsetjmp(mark, 1) != 0) {
++		restore_from_trap();
++		exit(0);
++	}
++}
++
++#define has_user_space_efault() (1)
++#else
++#define record_test_context(idx, iteration, iterations) do { } while (0)
++#define record_test_case(test, llen, name, ret) do { } while (0)
++#define register_expect_trap(experr1, experr2) do { } while (0)
++#define register_trap_handler() do { } while (0)
++#define has_user_space_efault() (0)
++#endif
++
+ static void putcharn(char c, size_t n)
+ {
+ 	char buf[64];
+@@ -304,7 +447,7 @@ static int expect_sysne(int expr, int llen, int val)
+ 
+ 
+ #define EXPECT_SYSER2(cond, expr, expret, experr1, experr2)		\
+-	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_syserr2(expr, expret, experr1, experr2, llen); } while (0)
++	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else { register_expect_trap(experr1, experr2); ret += expect_syserr2(expr, expret, experr1, experr2, llen); } } while (0)
+ 
+ #define EXPECT_SYSER(cond, expr, expret, experr)			\
+ 	EXPECT_SYSER2(cond, expr, expret, experr, 0)
+@@ -439,7 +582,7 @@ static int expect_strne(const char *expr, int llen, const char *cmp)
+ 
+ /* declare tests based on line numbers. There must be exactly one test per line. */
+ #define CASE_TEST(name) \
+-	case __LINE__: llen += printf("%d %s", test, #name);
++	case __LINE__: llen += printf("%d %s", test, #name); record_test_case(test, llen, ret, #name);
+ 
+ 
+ /* used by some syscall tests below */
+@@ -974,6 +1117,9 @@ int main(int argc, char **argv, char **envp)
+ 	if (getpid() == 1)
+ 		prepare();
+ 
++	/* register exception restore support if enabled */
++	register_trap_handler();
++
+ 	/* the definition of a series of tests comes from either argv[1] or the
+ 	 * "NOLIBC_TEST" environment variable. It's made of a comma-delimited
+ 	 * series of test names and optional ranges:
+@@ -1071,6 +1217,7 @@ int main(int argc, char **argv, char **envp)
+ 		for (idx = 0; test_names[idx].name; idx++) {
+ 			if (test_names[idx].run != 0) {
+ 				printf("Running test '%s', from %d to %d\n", test_names[idx].name, test_names[idx].min, test_names[idx].max);
++				record_test_context(idx, i, run);
+ 				err = test_names[idx].func(test_names[idx].min, test_names[idx].max);
+ 				ret += err;
+ 				printf("Errors during this test: %d\n\n", err);
+-- 
+2.25.1
 
