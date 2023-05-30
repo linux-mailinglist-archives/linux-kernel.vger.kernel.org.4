@@ -2,195 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AED716995
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56030716982
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232710AbjE3Qc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
+        id S233216AbjE3QbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbjE3QcR (ORCPT
+        with ESMTP id S233564AbjE3Qag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:32:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50E119B
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:31:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685464262;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oOIVzrI3vKBP/A6R0sJIuBO8sqm5648YHnsZrR5hri0=;
-        b=HhirIuKDXFnHxelk6asrHF21SZO9HAvz6shGYkbKSqTOt4eFbB3sLRomIPTYkhbIfevuHb
-        hnYp+YbsKqG/qDtdHSEUOEZuuK0efnha4ZGvlz4kH8JBknCITSpp++c8tdAkGoxt5QOlRx
-        osvaoOD6CLz7VDOgcE5odRyAkfixmqM=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-321--lubBf-DOFSbbkPSEco7Yw-1; Tue, 30 May 2023 12:27:17 -0400
-X-MC-Unique: -lubBf-DOFSbbkPSEco7Yw-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75cb96abcb5so289203385a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:27:17 -0700 (PDT)
+        Tue, 30 May 2023 12:30:36 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AD5196;
+        Tue, 30 May 2023 09:30:14 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-565c9109167so30948787b3.2;
+        Tue, 30 May 2023 09:30:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685464141; x=1688056141;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=RaH6YlQLj82X1bK0066HcpgE2an8J/ytXi93zQbg3cQ=;
+        b=NiGox1WIIjth2AXTGOrzWLBf8ocEgyj8zWCgZoMezoWh8FD6QM/0tPrXmn7BSHEMyV
+         Ghm66GNFV6l4CebnGoiMKEapSzx+VaH1b1A2mUJFdz+2xaOtAl1yB5Icir/ErZt0wGE6
+         JyIAjLMoPWWC1k2Syer1b/bsqCeXF0silPz2ctpTMt7r/Pe2/FPQqlFLc/FIsalEMmU0
+         0w7JItwNex+0rTcHsMg5mpbjpH4F87ZpEr8WqrSaTOrABPnnwpPxhhgSlDHzM8bBeAwN
+         Ly8AT2ssLYkRFmnOP4FAjUZVKbnfYBM/gqE1la3gTV/SVnnUQpN83OuEYSN/T8L9ktYv
+         mZPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685464036; x=1688056036;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oOIVzrI3vKBP/A6R0sJIuBO8sqm5648YHnsZrR5hri0=;
-        b=E9OkU8fqnq8UNM3gjImxECN8wGnQdpVELlVwtcak6eIeOSOxGCyjaiIFR8DEvdcw1z
-         x/w5m4Br9xY8edu9WJnq74LPI+wozDHfKdboG0Xxm1lcbxg9W3dA7l4tqBcWv8q6aP7N
-         24SZe8aU1IcjjGlkjcnZLB9jAMUcXmFFSwgU6GCB+ued8qOTk801rHIgULC4GypPdLiB
-         j8QjwiNNSjiAVRQ8G+E3H4a6UAOsCyKdcDzeg6jf3xTPyla2K2kcNBitYKT8t9dPiUek
-         chrh0I+xEMSOgIpjQ0GvC0Kqr6lKir/6CQXLhpN2XO1JlV171Z2vpj4M2MmaihPdaCG7
-         WVJA==
-X-Gm-Message-State: AC+VfDzgzCIRc1YceIrpz/KC5qkl+HVUWYRnZZFjkgbuXH+lp5Bb/cmW
-        hdgTmSQINSzifOKa0N5PZjujAWffN6xe58S8zWBu5RjaNZH74Kqd7Lzvfc3rq5QDnkASWZQtKP/
-        DDYdYUgqPMFjtZtsp9XbQmGCE
-X-Received: by 2002:a05:620a:2617:b0:75b:23a0:e7e7 with SMTP id z23-20020a05620a261700b0075b23a0e7e7mr2242378qko.72.1685464036593;
-        Tue, 30 May 2023 09:27:16 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7oC9aEVSBKMtLklQXrBPZMeMm21vFrPEYngDHux4hIbwN0xr0b2MneGdGNx1VH/PM57TmiVg==
-X-Received: by 2002:a05:620a:2617:b0:75b:23a0:e7e7 with SMTP id z23-20020a05620a261700b0075b23a0e7e7mr2242356qko.72.1685464036338;
-        Tue, 30 May 2023 09:27:16 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id a4-20020a05620a124400b0075b1c6f9628sm4202904qkl.71.2023.05.30.09.27.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 09:27:15 -0700 (PDT)
-Date:   Tue, 30 May 2023 09:27:14 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Michael =?utf-8?Q?Niew=C3=B6hner?= <linux@mniewoehner.de>
-Cc:     Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        peterz@infradead.org
-Subject: Re: [linus:master] [tpm, tpm_tis] e644b2f498: RIP:acpi_safe_halt
-Message-ID: <kjcmnmspnpzp7j64msdeygfv76fah5whslldczlfzlk57cxp7b@myllnwmy43vo>
-References: <202305041325.ae8b0c43-yujie.liu@intel.com>
- <d80b180a569a9f068d3a2614f062cfa3a78af5a6.camel@kernel.org>
- <42ea93a1-3186-b8ff-c317-d51f3e13856e@kunbus.com>
- <20230511141607.GA32208@wunner.de>
- <1a8ecf90-80a4-9aac-95e1-9ce0c4e09ba5@kunbus.com>
- <6nf5n6fdnkhx6taa2mecnsmyw7sdgaz6fbvkqy7jqkyd7jq2u7@ogsi6ije32in>
- <fcdc5a27817b17d91df84bb06ad5d382829d5467.camel@mniewoehner.de>
- <6hbzssr2byskuiznx6vvatcuvjkrbhscvorzm4qcheh3n6n4zj@2nrfawn6rbst>
- <0e837a2e859b4c633b068368f3c28ba30fc1af70.camel@mniewoehner.de>
+        d=1e100.net; s=20221208; t=1685464141; x=1688056141;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RaH6YlQLj82X1bK0066HcpgE2an8J/ytXi93zQbg3cQ=;
+        b=eA1jXlrzwY0gZQcaT+hA5UQIOpmZyYpfenqvyO9OXUzVn9aZjRJbZ2dPdmDv2ePWIa
+         eToZ+LDmLzf1VV4Z62XBU6ZGAT+sZtFuqOAijPKxgrhaj/XpMwVvVkiV58o4chHkSr2G
+         ctHzt6HOs6n0GevIbczPEAyZgLt6Cez30mKqMc63U8WrzSuoyWjYLc62oMKYBE9c6SGd
+         Ii8H4UH8Nc5YPogy2tM5GTy3qV4ZqrJQuAydasiAyz0R/4uRV94sQ5kme+oKZi6pBaN/
+         NHmkhNY1zdHhViXE3sm/XnE9qzK+BcYUUaxi9FeeTsAjgABIIrm6ZcMWIvvTG6P1qRnJ
+         qJfg==
+X-Gm-Message-State: AC+VfDxgR9GxfVpCGS6OvZrH/KoQIqPbSsCONFhhAikyv1Rjd4pvzmW3
+        NNLjfljH4aNbzUvngfKq406ZbdWOb220MS3dK6A=
+X-Google-Smtp-Source: ACHHUZ7pu7vphBMBZ8mAXs/tfRsKu1hhZ0D0tIefznTvYwXkKqBLlWSLtS0FFFsJK9fj4GTt5i9js4ELTS/MwImZplc=
+X-Received: by 2002:a81:778b:0:b0:55d:cf78:ed20 with SMTP id
+ s133-20020a81778b000000b0055dcf78ed20mr2741306ywc.42.1685464141132; Tue, 30
+ May 2023 09:29:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0e837a2e859b4c633b068368f3c28ba30fc1af70.camel@mniewoehner.de>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1685449706.git.ojaswin@linux.ibm.com> <ddcae9658e46880dfec2fb0aa61d01fb3353d202.1685449706.git.ojaswin@linux.ibm.com>
+In-Reply-To: <ddcae9658e46880dfec2fb0aa61d01fb3353d202.1685449706.git.ojaswin@linux.ibm.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Tue, 30 May 2023 18:28:22 +0200
+Message-ID: <CA+icZUXDFbxRvx8-pvEwsZAu+-28bX4VDTj6ZTPtvn4gWqGnCg@mail.gmail.com>
+Subject: Re: [PATCH v2 01/12] Revert "ext4: remove ac->ac_found >
+ sbi->s_mb_min_to_scan dead check in ext4_mb_check_limits"
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>,
+        Kemeng Shi <shikemeng@huaweicloud.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 04:40:26PM +0200, Michael Niewöhner wrote:
-> On Mon, 2023-05-29 at 13:58 -0700, Jerry Snitselaar wrote:
-> > On Mon, May 29, 2023 at 05:07:54PM +0200, Michael Niewöhner wrote:
-> > > Hi Jerry,
-> > > 
-> > > On Thu, 2023-05-11 at 07:59 -0700, Jerry Snitselaar wrote:
-> > > > 
-> > > > IIRC trying to catch the irq storm didn't work in the L490 case for
-> > > > some reason, so we might still need the dmi entry for that one.
-> > > > 
-> > > > The info that the T490s had a pin wired up wrong came from Lenovo, but
-> > > > this one even looks to be a different vendor so I wonder how often
-> > > > this happens or if there is something else going on. Is it possible to
-> > > > get info about the tpm used in the Inspur system? The datasheet online
-> > > > doesn't mention it.
-> > > 
-> > > Are you sure about T490s? To me the wiring looks right on both s and non-s:
-> > > Pin
-> > > 18 / PIRQ# goes to PIRQA# of the PCH/SoC.
-> > > 
-> > > However on L490 Pin 18 / PIRQ# is wired wrongly to SERIRQ, which probably is
-> > > the
-> > > reason that catching the interrupt storm didn't work: I guess this
-> > > completely
-> > > messes up LPC communication and causes way more problems. In this case only
-> > > a
-> > > DMI quirk can help.
-> > > 
-> > > BR
-> > > Michael
-> > > 
-> > 
-> > I'm searching to see if I can find the old bug/email where that info
-> > from Lenovo originated.  It could be that the info was wrong, and
-> > it was some firmware issue instead. IIRC the the T490s issue could be
-> > solved with the code looking for the irq storm, but the L490 needed
-> > the dmi check even with the irq storm checking code.
-> 
-> Tbh I wonder why the T490s suffers from that interrupt storm at all, but that
-> might be a FW bug (it's not handling the interrupt). L490 definitely needs that
-> DMI check, right.
-> 
-> > 
-> > 
-> > I haven't found the info yet, but I did find some other reports from back
-> > then.
-> > 
-> > Spurious irq reported with 5.5.7, so after the irq reverts in v5.5:
-> > 
-> > tpm_tis IFX0785:00: 2.0 TPM
-> > Hardware name: Entroware Proteus/Proteus, BIOS 1.07.07TE0 11/15/2019
-> 
-> That's actually a Clevo N151CU. According to schematics it's wired correctly to
-> PIRQA#, so probably a FW bug as well.
-> 
-> > 
-> > Thinkpad P53
-> > tpm_tis STM7308:00: 2.0 TPM
-> > Hardware name: LENOVO 20QNCTO1WW/20QNCTO1WW, BIOS N2NET34W (1.19 ) 11/28/2019
-> > 
-> > 
-> > 
-> > Reports from before the 5.5 reverts:
-> > 
-> > tpm_tis MSFT0101:00: 2.0 TPM
-> > Hyperbook NH5/Clevo NH55RCQ
-> 
-> PIRQ# wired to GPP_B0 - needs correct setup in firmware -> probably a firmware
-> bug.
-> 
-> > 
-> > tpm_tis IFX0785:00: 2.0 TPM 
-> > Clevo N151CU-derived notebook
-> 
-> Same device as Entroware Proteus.
-> 
+On Tue, May 30, 2023 at 3:25=E2=80=AFPM Ojaswin Mujoo <ojaswin@linux.ibm.co=
+m> wrote:
+>
+> This reverts commit 32c0869370194ae5ac9f9f501953ef693040f6a1.
+>
+> The reverted commit was intended to remove a dead check however it was ob=
+served
+> that this check was actually being used to exit early instead of looping
+> sbi->s_mb_max_to_scan times when we are able to find a free extent bigger=
+ than
+> the goal extent. Due to this, a my performance tests (fsmark, parallel fi=
+le
+> writes in a highly fragmented FS) were seeing a 2x-3x regression.
+>
+> Example, the default value of the following variables is:
+>
+> sbi->s_mb_max_to_scan =3D 200
+> sbi->s_mb_min_to_scan =3D 10
+>
+> In ext4_mb_check_limits() if we find an extent smaller than goal, then we=
+ return
+> early and try again. This loop will go on until we have processed
+> sbi->s_mb_max_to_scan(=3D200) number of free extents at which point we ex=
+it and
+> just use whatever we have even if it is smaller than goal extent.
+>
+> Now, the regression comes when we find an extent bigger than goal. Earlie=
+r, in
+> this case we would loop only sbi->s_mb_min_to_scan(=3D10) times and then =
+just use
+> the bigger extent. However with commit 32c08693 that check was removed an=
+d hence
+> we would loop sbi->s_mb_max_to_scan(=3D200) times even though we have a b=
+ig enough
+> free extent to satisfy the request. The only time we would exit early wou=
+ld be
+> when the free extent is *exactly* the size of our goal, which is pretty u=
+ncommon
+> occurrence and so we would almost always end up looping 200 times.
+>
+> Hence, revert the commit by adding the check back to fix the regression. =
+Also
+> add a comment to outline this policy.
+>
 
-Hi Michael,
+Hi,
 
-Out of curiousity, where are you grabbing the schematics from?
+I applied this single patch of your series v2 on top of Linux v6.4-rc4.
+
+So, if this is a regression I ask myself if this is material for Linux 6.4?
+
+Can you comment on this, please?
+
+Thanks.
 
 Regards,
-Jerry
+-Sedat-
 
 
-> > 
-> > 
-> > Regards,
-> > Jerry
-> > 
-> > > > 
-> > > > Regards,
-> > > > Jerry
-> > > > 
-> > > > > > Thanks,
-> > > > > > 
-> > > > > > Lukas
-> > > > 
-> > > 
-> > 
-> 
-
+> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+> Reviewed-by: Kemeng Shi <shikemeng@huaweicloud.com>
+> ---
+>  fs/ext4/mballoc.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
+>
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index d4b6a2c1881d..7ac6d3524f29 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -2063,7 +2063,7 @@ static void ext4_mb_check_limits(struct ext4_alloca=
+tion_context *ac,
+>         if (bex->fe_len < gex->fe_len)
+>                 return;
+>
+> -       if (finish_group)
+> +       if (finish_group || ac->ac_found > sbi->s_mb_min_to_scan)
+>                 ext4_mb_use_best_found(ac, e4b);
+>  }
+>
+> @@ -2075,6 +2075,20 @@ static void ext4_mb_check_limits(struct ext4_alloc=
+ation_context *ac,
+>   * in the context. Later, the best found extent will be used, if
+>   * mballoc can't find good enough extent.
+>   *
+> + * The algorithm used is roughly as follows:
+> + *
+> + * * If free extent found is exactly as big as goal, then
+> + *   stop the scan and use it immediately
+> + *
+> + * * If free extent found is smaller than goal, then keep retrying
+> + *   upto a max of sbi->s_mb_max_to_scan times (default 200). After
+> + *   that stop scanning and use whatever we have.
+> + *
+> + * * If free extent found is bigger than goal, then keep retrying
+> + *   upto a max of sbi->s_mb_min_to_scan times (default 10) before
+> + *   stopping the scan and using the extent.
+> + *
+> + *
+>   * FIXME: real allocation policy is to be designed yet!
+>   */
+>  static void ext4_mb_measure_extent(struct ext4_allocation_context *ac,
+> --
+> 2.31.1
+>
