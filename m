@@ -2,72 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE48716BD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8EE716BDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbjE3SC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 14:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46022 "EHLO
+        id S231161AbjE3SDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 14:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233048AbjE3SCE (ORCPT
+        with ESMTP id S232318AbjE3SD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 14:02:04 -0400
-Received: from out-18.mta0.migadu.com (out-18.mta0.migadu.com [91.218.175.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4401CA3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:01:53 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685469711;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YTW2WZcJbmr3F/89QdtMcHmMfxHGHqRJaYPa9+0DRL8=;
-        b=v/5QRLtEoombNtt+OOiLmFWsyg32+NKE+BEak9MXWHACKSaIj4LmJivYz+94pXHqf2WbFK
-        1Xtqv05pJTvcYhpEQyTjyuUkuZQnOsIqs7bST5GMHi98Rck9LMVesKA7Qxs/3b+8SE8E/z
-        f58m02RHd/vTGR+670um7/9j91svoHo=
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     linux-kernel@vger.kernel.org, Mostafa Saleh <smostafa@google.com>,
-        linux-arm-kernel@lists.infradead.org, maz@kernel.org,
-        kvmarm@lists.linux.dev
-Cc:     Oliver Upton <oliver.upton@linux.dev>, bgardon@google.com,
-        suzuki.poulose@arm.com, gshan@redhat.com, tabba@google.com,
-        yuzenghui@huawei.com, will@kernel.org, james.morse@arm.com,
-        qperret@google.com, catalin.marinas@arm.com
-Subject: Re: [PATCH v3] KVM: arm64: Use BTI for nvhe
-Date:   Tue, 30 May 2023 18:01:40 +0000
-Message-ID: <168546969288.1201076.8549235994369669662.b4-ty@linux.dev>
-In-Reply-To: <20230530150845.2856828-1-smostafa@google.com>
-References: <20230530150845.2856828-1-smostafa@google.com>
+        Tue, 30 May 2023 14:03:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E71E5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:03:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A793E62C1E
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 18:03:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB31C4339B;
+        Tue, 30 May 2023 18:03:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685469803;
+        bh=rRFiekp/e4p9IosGOeiClcA0ZQRFHAsurfVAIwKYtNA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kfKhO+115F+K6AN+J8c3KwpDdC0A/fljxKFJOwFNZTrsM0wqJ47qSC4SmyDG/ywQa
+         rpWpiB6ciiDy+op+OmmhgwSRoI3V7MI0SkNvepDwfBp02IZq1cX02k1ZXMOVDTtsg4
+         abXf+RQ9Hl4Enio2jc8gYZ85+o1svPLjfQ3Exim4U7LMa+rj/fl61MfnwhFhXhZrGv
+         jHw/nlB7deHg/gajRIxZidsczL0WIRfX0lnwPgKL8RR2ZIZTpEeVnxr+/1GRq2lNza
+         oASt27IP2SarlOpnEDJt5txd4KdxEMyg0xE8jYiyCHqhpElaemCQkpW/B5ESBXJGSr
+         A+haUxRPOhcfw==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     patches@armlinux.org.uk
+Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Russell King <linux@armlinux.org.uk>
+Subject: [PATCH] ARM: module: use sign_extend32() to extend the signedness
+Date:   Wed, 31 May 2023 03:03:08 +0900
+Message-Id: <20230530180308.112297-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 May 2023 15:08:45 +0000, Mostafa Saleh wrote:
-> CONFIG_ARM64_BTI_KERNEL compiles the kernel to support ARMv8.5-BTI.
-> However, the nvhe code doesn't make use of it as it doesn't map any
-> pages with Guarded Page(GP) bit.
-> 
-> kvm pgtable code is modified to map executable pages with GP bit
-> if BTI is enabled for the kernel.
-> 
-> [...]
+The function name clarifies the intention.
 
-Applied to kvmarm/next, thanks!
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-[1/1] KVM: arm64: Use BTI for nvhe
-      https://git.kernel.org/kvmarm/kvmarm/c/b53d4a272349
+KernelVersion: v6.4-rc1
 
---
-Best,
-Oliver
+ arch/arm/kernel/module.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/arch/arm/kernel/module.c b/arch/arm/kernel/module.c
+index d59c36dc0494..e74d84f58b77 100644
+--- a/arch/arm/kernel/module.c
++++ b/arch/arm/kernel/module.c
+@@ -169,8 +169,7 @@ apply_relocate(Elf32_Shdr *sechdrs, const char *strtab, unsigned int symindex,
+ 
+ 			offset = __mem_to_opcode_arm(*(u32 *)loc);
+ 			offset = (offset & 0x00ffffff) << 2;
+-			if (offset & 0x02000000)
+-				offset -= 0x04000000;
++			offset = sign_extend32(offset, 25);
+ 
+ 			offset += sym->st_value - loc;
+ 
+@@ -236,7 +235,7 @@ apply_relocate(Elf32_Shdr *sechdrs, const char *strtab, unsigned int symindex,
+ 		case R_ARM_MOVT_PREL:
+ 			offset = tmp = __mem_to_opcode_arm(*(u32 *)loc);
+ 			offset = ((offset & 0xf0000) >> 4) | (offset & 0xfff);
+-			offset = (offset ^ 0x8000) - 0x8000;
++			offset = sign_extend32(offset, 15);
+ 
+ 			offset += sym->st_value;
+ 			if (ELF32_R_TYPE(rel->r_info) == R_ARM_MOVT_PREL ||
+@@ -344,8 +343,7 @@ apply_relocate(Elf32_Shdr *sechdrs, const char *strtab, unsigned int symindex,
+ 				((~(j2 ^ sign) & 1) << 22) |
+ 				((upper & 0x03ff) << 12) |
+ 				((lower & 0x07ff) << 1);
+-			if (offset & 0x01000000)
+-				offset -= 0x02000000;
++			offset = sign_extend32(offset, 24);
+ 			offset += sym->st_value - loc;
+ 
+ 			/*
+@@ -401,7 +399,7 @@ apply_relocate(Elf32_Shdr *sechdrs, const char *strtab, unsigned int symindex,
+ 			offset = ((upper & 0x000f) << 12) |
+ 				((upper & 0x0400) << 1) |
+ 				((lower & 0x7000) >> 4) | (lower & 0x00ff);
+-			offset = (offset ^ 0x8000) - 0x8000;
++			offset = sign_extend32(offset, 15);
+ 			offset += sym->st_value;
+ 
+ 			if (ELF32_R_TYPE(rel->r_info) == R_ARM_THM_MOVT_PREL ||
+-- 
+2.39.2
+
