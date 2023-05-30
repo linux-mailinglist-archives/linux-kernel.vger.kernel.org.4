@@ -2,133 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32992715797
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC6F71579B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjE3HvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
+        id S229577AbjE3Hvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjE3HvI (ORCPT
+        with ESMTP id S229612AbjE3Hv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:51:08 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FDAE58;
-        Tue, 30 May 2023 00:50:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1685433048; x=1716969048;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=W2RJCAhGRPaAGBO95KvplbcQKgF5ovbdTVy+xWn2k3M=;
-  b=pdr2cNblqvCBxxdJakDjEUvQLPXYDpS2ixKSJe0zwUY8O4LVtWTDXw52
-   a1mtULmNcA9Ih4p1eV2suhLzu3q+N3nzdRVYpCD1ksl4uD2C4BlHLBvnm
-   GFR4kUPOo3PNhP1c5DJgvOwl9eJoNjSY2qk/Qrc5cwb3bwEcazuAvNDfz
-   TnhbkAHPn1NgYApPjN4ecnN58ZV+EVKKvlBm2rROE1Wz6KjyN0Rf/Fwl0
-   wZuUQr/V2q2oGyAiDPXVUh0sfQ8HiRIh2iKnaYVa45ju1nxk4YreS75zs
-   1IVtgOaw8mss9015ZCnoP2s3xLP7Fy3oCphpVPsjtLbxRjN3S1GzO+eIp
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,203,1681142400"; 
-   d="scan'208";a="231871569"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 30 May 2023 15:50:47 +0800
-IronPort-SDR: RxpAn2xnF5aYozWyv6SkTGapNbE5ni6TbOnlTMm33VXnTKrT5xRFN3bd+v6/TpS6QVewXyr6c/
- IaQ146CFeTK98NuiO7jZQ3cM7uaJi+9SfvXuCmhtT/p8gnBd6GmYIeypBkNk7qsDAgUc8JIV1A
- vmFqX9ctjkn7x92+qjinfpkt1oSRe6JewNn+d+dkDjcB1jCU9mQS9vdj+39S4n083ZfySuXdY6
- rctPZ07dRsyVGEm5qD2jJRlCU/zhudo6DyzMCz4F+ozZ6Ja/rdUJx1HLdw1jsskD6EsyJtS3uq
- hcs=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 May 2023 00:00:00 -0700
-IronPort-SDR: Hi/ewd4lS/E07568jT+oGMB4pKs7YvpTq1Cre3NYnTwM55i7s1pSNVhvm1HrVBjxTwzKvW/dWk
- iVeNbyhuGWkR9qaEbDuYDUDTwnykA4SNktkASB5cgxkGNYrcyDqqyE+G0DgWvWn8BX+ag2g+7h
- XpfmV6oWbZFWir9daDKn3q0eSyVh/0WzoPxYeDmb/fzxvyizy2q77aI4f4Pe7eYls4YmWaZatP
- ejt779MtgTbzjPMaBI0lqcJZP+CyoxS4Bhf8fVBTfb7fSUkCHD8jnf8+q/AGM7d4FjcN+m6HW8
- 4BQ=
-WDCIronportException: Internal
-Received: from bxygm33.ad.shared ([10.45.31.229])
-  by uls-op-cesaip02.wdc.com with ESMTP; 30 May 2023 00:50:45 -0700
-From:   Avri Altman <avri.altman@wdc.com>
-To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Avri Altman <avri.altman@wdc.com>
-Subject: [PATCH] scsi: ufs: core: Do not open code SZ_x
-Date:   Tue, 30 May 2023 10:50:33 +0300
-Message-Id: <20230530075033.11006-1-avri.altman@wdc.com>
-X-Mailer: git-send-email 2.40.0
+        Tue, 30 May 2023 03:51:27 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08F2F0;
+        Tue, 30 May 2023 00:51:18 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51456392cbbso8008964a12.0;
+        Tue, 30 May 2023 00:51:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685433077; x=1688025077;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LQIR5DFpp5iUilrR8vViN4w9K1Mm/gEAPWprW58oW94=;
+        b=mertAjHwgLSeKppxYqHSupclimphDdYbropmfjNpp5t30+xS08obLqFKFEO4VOrwau
+         OEWmo5WSdLnsGg9Mx6rJ+56p5XZ/h7AOgWdeg7zi1CHSHBh/KSiBNs3V/g1lCSwrWOCi
+         0pQWXTu5KdNkhT0Xp5+JwWjD0jkJ5p4ui1ISTOwuR3+ByqqsePBzbNweKpRlRV22Bofu
+         aVTeKZmMcQBwtQg+6crMQF7Dsus+IITZ0ebiaYYaEnvW9Advum10LZ5fjKW4vXJVv+C1
+         l+t8yG/6saaeQqsaDZCqzR2vlCSBSl7ys21Jyv9KnWTYKAi4vK0L3vuR5O1dhyMt/8NK
+         9tuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685433077; x=1688025077;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LQIR5DFpp5iUilrR8vViN4w9K1Mm/gEAPWprW58oW94=;
+        b=klQdASec1ZFLJYA5zqYop/JHVvv43/ZttH3KuDYhh4GDkhJq9efwEsjsOE7UmIVu66
+         v5b0LPMISrZ/IcEampY2OeB+6g36h/PNPa+Sllp0ZHr5sxMNEb5zS5i4H9mTQlDUjEYu
+         ZyU8Szp6LQEUawmz+ehnbz4NjIdtwAOLUP/g31DagBYlmuS8edtw0g5MiJet0FJEtyJr
+         WusgEHX6ZPtva+EMviy5FWua9bA9pWqtiAYXxJiSeJ7dvGAgQygYwmvGniXHVUgNmU+v
+         XOxTOD6ke/V3DDKwNzRnU7gEEq7ldYFl/wyvCNIHvaKy50woH3d+Z8++FJdgkIxya1qr
+         F80A==
+X-Gm-Message-State: AC+VfDyWLn8DEu7AVFWSwjNasEV6F4QUh6BhcV1UJskrL3g8dHHfJhuQ
+        COwbBkCWhpeROMKVSqM/hYw=
+X-Google-Smtp-Source: ACHHUZ5mI5B0095JkBMcm/CSudhY8cevl2alHRTR43ikC7Z50gjwwnwyxdYxAtOQV609Kvk+FU2v3w==
+X-Received: by 2002:a17:907:930c:b0:973:7096:60c2 with SMTP id bu12-20020a170907930c00b00973709660c2mr9048421ejc.20.1685433077052;
+        Tue, 30 May 2023 00:51:17 -0700 (PDT)
+Received: from [192.168.0.107] ([77.124.85.177])
+        by smtp.gmail.com with ESMTPSA id h27-20020a170906111b00b00969cbd5718asm6907261eja.48.2023.05.30.00.51.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 00:51:16 -0700 (PDT)
+Message-ID: <3e154812-3306-1d04-e7d7-9d1f5aef60b6@gmail.com>
+Date:   Tue, 30 May 2023 10:51:13 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net-next] net/mlx5e: Remove a useless function call
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org
+References: <fc535be629990acef5e2a3dfecd64a5f9661fd25.1685349266.git.christophe.jaillet@wanadoo.fr>
+Content-Language: en-US
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <fc535be629990acef5e2a3dfecd64a5f9661fd25.1685349266.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A tad cleanup - No functional change.
 
-Signed-off-by: Avri Altman <avri.altman@wdc.com>
----
- drivers/ufs/core/ufshcd.c | 8 ++++----
- include/ufs/ufshci.h      | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index fdf5073c7c6c..1f206bd453cf 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -2519,7 +2519,7 @@ static void ufshcd_sgl_to_prdt(struct ufs_hba *hba, struct ufshcd_lrb *lrbp, int
- 			 * 11b to indicate Dword granularity. A value of '3'
- 			 * indicates 4 bytes, '7' indicates 8 bytes, etc."
- 			 */
--			WARN_ONCE(len > 256 * 1024, "len = %#x\n", len);
-+			WARN_ONCE(len > SZ_256K, "len = %#x\n", len);
- 			prd->size = cpu_to_le32(len - 1);
- 			prd->addr = cpu_to_le64(sg->dma_address);
- 			prd->reserved = 0;
-@@ -3765,7 +3765,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
- 
- 	/*
- 	 * Allocate memory for UTP Transfer descriptors
--	 * UFSHCI requires 1024 byte alignment of UTRD
-+	 * UFSHCI requires 1KB alignment of UTRD
- 	 */
- 	utrdl_size = (sizeof(struct utp_transfer_req_desc) * hba->nutrs);
- 	hba->utrdl_base_addr = dmam_alloc_coherent(hba->dev,
-@@ -3773,7 +3773,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
- 						   &hba->utrdl_dma_addr,
- 						   GFP_KERNEL);
- 	if (!hba->utrdl_base_addr ||
--	    WARN_ON(hba->utrdl_dma_addr & (1024 - 1))) {
-+	    WARN_ON(hba->utrdl_dma_addr & (SZ_1K - 1))) {
- 		dev_err(hba->dev,
- 			"Transfer Descriptor Memory allocation failed\n");
- 		goto out;
-@@ -8760,7 +8760,7 @@ static const struct scsi_host_template ufshcd_driver_template = {
- 	.cmd_per_lun		= UFSHCD_CMD_PER_LUN,
- 	.can_queue		= UFSHCD_CAN_QUEUE,
- 	.max_segment_size	= PRDT_DATA_BYTE_COUNT_MAX,
--	.max_sectors		= (1 << 20) / SECTOR_SIZE, /* 1 MiB */
-+	.max_sectors		= SZ_1M / SECTOR_SIZE,
- 	.max_host_blocked	= 1,
- 	.track_queue_depth	= 1,
- 	.skip_settle_delay	= 1,
-diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
-index 11424bb03814..db2d5db5c88e 100644
---- a/include/ufs/ufshci.h
-+++ b/include/ufs/ufshci.h
-@@ -453,7 +453,7 @@ enum {
- };
- 
- /* The maximum length of the data byte count field in the PRDT is 256KB */
--#define PRDT_DATA_BYTE_COUNT_MAX	(256 * 1024)
-+#define PRDT_DATA_BYTE_COUNT_MAX	SZ_256K
- /* The granularity of the data byte count field in the PRDT is 32-bit */
- #define PRDT_DATA_BYTE_COUNT_PAD	4
- 
--- 
-2.40.0
+On 29/05/2023 11:34, Christophe JAILLET wrote:
+> 'handle' is known to be NULL here. There is no need to kfree() it.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>   drivers/net/ethernet/mellanox/mlx5/core/en/tc/post_act.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/post_act.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/post_act.c
+> index 0290e0dea539..4e923a2874ae 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/post_act.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/post_act.c
+> @@ -112,10 +112,8 @@ mlx5e_tc_post_act_add(struct mlx5e_post_act *post_act, struct mlx5_flow_attr *po
+>   	int err;
+>   
+>   	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
+> -	if (!handle) {
+> -		kfree(handle);
+> +	if (!handle)
+>   		return ERR_PTR(-ENOMEM);
+> -	}
+>   
+>   	post_attr->chain = 0;
+>   	post_attr->prio = 0;
 
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+
+Thanks for your patch.
