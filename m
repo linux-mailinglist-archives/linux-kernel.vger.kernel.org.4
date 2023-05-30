@@ -2,315 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98ABA71562D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B484F71562F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbjE3HFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43354 "EHLO
+        id S230353AbjE3HGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbjE3HFJ (ORCPT
+        with ESMTP id S230106AbjE3HGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:05:09 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B87F4
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:05:06 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QVjyp169RzFqWW;
-        Tue, 30 May 2023 15:02:58 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+        Tue, 30 May 2023 03:06:11 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F62A0;
+        Tue, 30 May 2023 00:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685430370; x=1716966370;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=M1sCd9loaRSAp2UF0iAYNVoLAiUwvMeulIqIsDc44pM=;
+  b=gE30t64U3BvepdRJsgi9J2Cjv5MCwIm2NOeQNE/aDtrFE45LnOdiS3uY
+   JbAX82fYazYp+BvBEaRq9S0RxBS6+cRfOGQlnHPDjaumNmi4+mKbtzG+U
+   hIlgASHkPKhgfinjmW1oIb4DyiN+3T0270RXRNygxZAn85pLFu7F/IcgR
+   VGWZWONIk1w71Z3iTa2OjeNpQ94f6I1mrfZHHdY2NCtEYd1bgC/ZJS/8V
+   W8iKB5E1vX1xocuxqD9IEEAlTQ3Huakfj7GkvOc5QJpn8wlOw43/jR413
+   f1kfa+mLBnc8EjT3YfN4fObLjeU/AiIKQGLUYvbSjzhtqPBA/6XgZSNQm
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
+   d="scan'208";a="213663059"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 May 2023 00:06:09 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 30 May 2023 15:04:32 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <tim.c.chen@linux.intel.com>,
-        <yu.c.chen@intel.com>, <gautham.shenoy@amd.com>, <mgorman@suse.de>,
-        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <rostedt@goodmis.org>, <bsegall@google.com>, <bristot@redhat.com>,
-        <prime.zeng@huawei.com>, <yangyicong@hisilicon.com>,
-        <jonathan.cameron@huawei.com>, <ego@linux.vnet.ibm.com>,
-        <srikar@linux.vnet.ibm.com>, <linuxarm@huawei.com>,
-        <21cnbao@gmail.com>, <kprateek.nayak@amd.com>,
-        <wuyun.abel@bytedance.com>, Barry Song <song.bao.hua@hisilicon.com>
-Subject: [PATCH v8 2/2] sched/fair: Scan cluster before scanning LLC in wake-up path
-Date:   Tue, 30 May 2023 15:02:53 +0800
-Message-ID: <20230530070253.33306-3-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20230530070253.33306-1-yangyicong@huawei.com>
-References: <20230530070253.33306-1-yangyicong@huawei.com>
+ 15.1.2507.21; Tue, 30 May 2023 00:06:07 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 30 May 2023 00:06:07 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZdyX+I7MCEJcufOVI+Wicmc8ufVWcRQxvStEwN8nDWeRZEea+ZfhD1lZSliOCps6mXne/hYxoL/S3Cb3Fyd9KWRorZJRTVygpc9ezChZpnjZZvOnrChw3Fd5xTswGiMi8MMWJF2TksqWDOaeQ7ZmFuo5/iVLpP7m7X30MH1z2q/q5YQdgqCMwx6f65Zkjk4Q52mvTNtD7ozLGl9sCqNLKUqjqTDFKsRZ+mLaSex+HQB1up46uD+dA9+Ox7NO181Ql5SAC/JyKoemV2pEs4tTYsflvWb8wKNVF9gxQF9oiHvpTSHP7xh4+5ohE0wf4pThqF8cYm9dmCf9nquKjZAX+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=M1sCd9loaRSAp2UF0iAYNVoLAiUwvMeulIqIsDc44pM=;
+ b=XdZvaSF8vSI2LYy2pHDlSToeDccgTLpzROz1SahMBWcuIv6QlRtRhzjG5ZAyOd5TJVE4kCX5LwYiKowJ4OtJydqJjwr5H7/7F8s6+groWFbQfY54nRdiqqdBCkaVAJpyLETFzrlTlq8x0/tR4PcRyxp8fnx/wjXwcX3zSGR7Kua3ws+ReFFS6E9vTkW3L/EbhwqH4qb7iAeP+YvjtRZDk5GGTp8HSL97JBcd+X23G0JHV2vOHIzOBoj1BHzs/tYE9E96K/83D//1jlOR59YJodtfz0xIam5QvzKuRshyEWnmJxkstcAAtylNhFiJ3jjxXW4jQTtoksAbywART1AUXg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=M1sCd9loaRSAp2UF0iAYNVoLAiUwvMeulIqIsDc44pM=;
+ b=GhTXgpS5Oj4euUVeBKwdKecRvhg/9fu6JS61zQ+M4cHZt6XKyCNGE1yf5WkroNZKj3KhWdYFA/oAQEZJh/SKtTzXRWfSD9KmEL6AGCN/OlpnwkmHTjIvkXyNjmRfEkbDuLgcjLQ61DMRgfWQcfl2CqesT8iov2O6kjoSmMLnAuw=
+Received: from SJ2PR11MB7648.namprd11.prod.outlook.com (2603:10b6:a03:4c3::17)
+ by CY5PR11MB6284.namprd11.prod.outlook.com (2603:10b6:930:20::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
+ 2023 07:06:04 +0000
+Received: from SJ2PR11MB7648.namprd11.prod.outlook.com
+ ([fe80::27bf:a69f:806f:67be]) by SJ2PR11MB7648.namprd11.prod.outlook.com
+ ([fe80::27bf:a69f:806f:67be%5]) with mapi id 15.20.6433.020; Tue, 30 May 2023
+ 07:06:04 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <walker.chen@starfivetech.com>, <broonie@kernel.org>,
+        <lgirdwood@gmail.com>, <perex@perex.cz>, <tiwai@suse.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <Conor.Dooley@microchip.com>, <emil.renner.berthing@canonical.com>,
+        <hal.feng@starfivetech.com>
+CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v5 2/3] ASoC: starfive: Add JH7110 TDM driver
+Thread-Topic: [PATCH v5 2/3] ASoC: starfive: Add JH7110 TDM driver
+Thread-Index: AQHZksLQbOi9N2ZAKkCgvv+8WuoIua9yZN8A
+Date:   Tue, 30 May 2023 07:06:04 +0000
+Message-ID: <7a1a3ac3-10ec-9935-bca1-023cec6c0024@microchip.com>
+References: <20230526145402.450-1-walker.chen@starfivetech.com>
+ <20230526145402.450-3-walker.chen@starfivetech.com>
+ <143e2fa2-e85d-8036-4f74-ca250c026c1b@microchip.com>
+In-Reply-To: <143e2fa2-e85d-8036-4f74-ca250c026c1b@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ2PR11MB7648:EE_|CY5PR11MB6284:EE_
+x-ms-office365-filtering-correlation-id: 08b1d116-f1d8-40c2-1aa6-08db60dc555b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /cnmVuIwtldZpVhn18/e2B8Zou6Gf+rq9qLtHznPxnO57jIyWyLC/TjukoQQR8c6tbthfYbG+cNPrcaMeBAW6OPbf6Yamj8LB48ZHWsurtvhcM4KJu984YyajQi6jnZ5GSaRVblTjBfMmk1dpEEbajT5PpWYvX+jAi6M/2oFtqnucCLYNu6O+LUkTS6DeLG+h70zM8df0s/a4EytedkNPgcMRtN9FoYVvo1CrCX95o2BSMFU76+L+ElJBPA3i0vzXWfF2ZArh9Y6sde+FRLO1Tb0sYb8HjRsKqrn1eBKSNIzWD2Q22vapwJ0Bavbwe03bib2LEnF4n3mzKHWTHda6lJaoiGxXrxSgn8C2t11uqVGr4dTf2BGcTHLkHynTkQNySabtfMj5lsxXj4URJNGqyxAZFfzTOAWUvmucFhyyZ2Uyip01jqKrc6PfwxWIkAJCWZq0X6/lpdGSVqPrtro5tSokALPyF694FXOQHjvQ62iBW2PGgHHofeAhB8R1FaJgmN0h7Jk1/aHkK/dxLZo4ut2tln0B0xDrPa5RVESuplYRqrdUFCYBjI/Tqa49yedi+hL5zz0ElsC5LcwbvPW/EqXbSMkDtf3nT+ctDZZlA0SOrofaRs+Khd5Rt+YF2ednOgSkBEUEqrgOpEbQbiKSFEvZpCEPTv8gZQwnKs0DPRp1sFWX6SQZwL1dpNvO9SJoQ6i42hLjf7oOc/Rn04ttw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7648.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(396003)(39860400002)(136003)(346002)(451199021)(31686004)(478600001)(66446008)(91956017)(64756008)(76116006)(66946007)(66556008)(66476007)(38070700005)(110136005)(54906003)(4326008)(316002)(36756003)(86362001)(31696002)(6512007)(6506007)(53546011)(26005)(186003)(41300700001)(8676002)(8936002)(7416002)(4744005)(2906002)(6486002)(71200400001)(5660300002)(38100700002)(2616005)(122000001)(921005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Q3RiKzB5OW9ua2wwY1JodWFLWXhtV1M5TVo0QS92ekNrNjQ3UVZxZ3NQQ1hh?=
+ =?utf-8?B?M0U5OXczWlZpbk5VdkNyZjZnczl2R2FwMU9FK0VjZ0grczcxdzAzbDVPR2I1?=
+ =?utf-8?B?VkFJRTlqTno3NkxUbG9XUkV0QnoxbjRWU1RCY2hGejVTakxLbHNEbDg5MHNL?=
+ =?utf-8?B?bGd5MExlaUhvc2IwVW1ZNDR1dHQvTExUYmtzZW9kTlhTS3c2Z3o4VkVoemc0?=
+ =?utf-8?B?ejk3Ylp6RWhFcWF1aC8xcXVzeTNPZlJqUEoxTldqamthM1FNczFHOFM2OWMx?=
+ =?utf-8?B?Vm5YSmJrRm9qc0MxRUtnOWo5RXNNdjQwUDRPTFlDTFJGTVZKWDlhLzVpRjEr?=
+ =?utf-8?B?d0FOakJhWWpIcjl4bDlYMUlKNDUyd3VtVzN0UGNHS3ZUcWN2QllQK3BVeTBO?=
+ =?utf-8?B?dHBaM2YxS0hPYkZKRGR4YnpmbGM4TlJGWEttYk5GWGY3L1MyNER2dlh3WGVQ?=
+ =?utf-8?B?a09WcFd3UzloMGJrK3FoNlp1SHpNVU9KZVhSZ2JXU2swYytmNENOZnFLNDMy?=
+ =?utf-8?B?QUhzdlZBU2xIeDdIcXRjaGZPUzkrMEEzdVE1RGdQbzRvSms5NS9wTzROc2ZW?=
+ =?utf-8?B?VnpFQnpENGhyUS9LYW5qd2kyTzdTZVZLTkpOUllnM0lhd3Z6alFsenJ1K29s?=
+ =?utf-8?B?bHpvNDVCTHB5Q0xYWnJSUnN2MVFxVlJMSm0vNDl0ajhEZFBtdWNCeGZvS2RY?=
+ =?utf-8?B?dGZHNmZsV0w3MU1mczBKT2wzUms0ZjQrR05xaW5mdFhuYmttbjFSMUJzY1lx?=
+ =?utf-8?B?K3BvMXlFbHBHY3dOYzRRVlAyME1oUkIrZFM4SGZ1aWJEV1ZMNlBhOE16QWpq?=
+ =?utf-8?B?Wk5nZ2RKVE16eldLaXpNZzBsVHhtRE5sTS9RNWIveU9PdVZuMGtPSlJpU2tI?=
+ =?utf-8?B?ZWt5cUZzREgxbTVTMDJYQ0loMC9RNjQ2SS9YNVNkRHhWdXlUeVM0RVlkRSts?=
+ =?utf-8?B?MFg1SWNFZG5Sb1dlZ01oVVR2TWZQMzd2Rlh3cGk5UnBTcnZzZ0pCTmVyQ01U?=
+ =?utf-8?B?eFEvb0ZpNmxPYkxlMUUrSGVuKyt5MnBRWmorVzFURHBMQ1oxbzhsUWJ2TXIr?=
+ =?utf-8?B?MWpQSWM0aEpUREhSZmpFTXlaWGJYREljNEZvM0ZxNFE5aUFyY0hXTHZTMUJO?=
+ =?utf-8?B?cU8weTNDcDQ3bmFPME5NeHBhZVZ6QUtJTVoyY0ZBK3BOQnN5MDlHN2g2T1FZ?=
+ =?utf-8?B?VXBkbVNYbkZob29SRU1hamNKVkhuMC9EbWRBOGZnN0Z2U3l2VVBJTVlkcXl0?=
+ =?utf-8?B?RnREVlJJTVU2TGkxWUxocU5YeXBMbm50aER0SEFLTjRzNFBScGJDNlRhSXV4?=
+ =?utf-8?B?Yms0eG1LZHVZWCtmM0tReGNpNmxSQjVUZHcrdGp5cXdrV29zWmlZS2NMY3lH?=
+ =?utf-8?B?cWpQSFNNdHZTL1ZwNlluVmhmS25WZFpTcVMyUGlOdGJ4NjlQWkVCL3gzRTNY?=
+ =?utf-8?B?QWVQcGkyRjVDaTVOQmsxTVdBVzA0S0U2eUhmOWtOQTV3eDAwNjR2bXFjK0Vn?=
+ =?utf-8?B?NzFpS2dCdVlGZWwwYVpmMk1VTFY5TmZlUFJEMHM5UGFFTjR3cUsvb3BFekNi?=
+ =?utf-8?B?NDBjaVZtOVh1UXFmUjkrcEYyQjVNV1VRWXY0bEdlVG41dGJOaVhMQlo5aWQx?=
+ =?utf-8?B?RFJFbTFLY3Y4bHY2K3ZoWnVlTnd2b1Q2bmhpMVZndEJyRmNzQ2RWdHUrem4x?=
+ =?utf-8?B?WFdjMTBoTHFJblM0eVF2eGZUd1I3RmdraWI2OVhVMk9iVmdheTIveHkwblpC?=
+ =?utf-8?B?ZGRabVBZVlpabXNGaDZDQnkzZldvZ2E4dlF2dUt3RTBmZkYxQ0VvUWtMWTBT?=
+ =?utf-8?B?K2R6NWZSV09DREZPR05LTDFzQk5MRDBkb2pGNk9sTDZ2YTRtRXVBWk4vNFZ3?=
+ =?utf-8?B?ZUt6VW4zcmdWbnhQRDllWXdLYW40Z24ycGJTN1BidU9LQkVjUEVvRWJMMXVC?=
+ =?utf-8?B?U0E5ZVlrY1Fnano3WUd4bzRETkNxNksrR3ZkRnR3NHlib0NxQm1RL3FBM0Na?=
+ =?utf-8?B?blFKbWlJOFB6MCtndjE1SGQwU3c0WnFka2h1dkxhR0R3OUp0SEVod2o5Z21V?=
+ =?utf-8?B?Q1lhOGlqWTRmMWEvMVBpYllMUUtZcHI1YlNzSFNWUjB4UDNZTXNtMGtsVWZW?=
+ =?utf-8?B?MGU0WGxwR0kxcDVLV1p5UENIMktXdVVoNUgrOUlmTXhPc2luWWFUdVJwM0kz?=
+ =?utf-8?B?Rnc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <78087D165833404BB92F5459463720DA@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7648.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 08b1d116-f1d8-40c2-1aa6-08db60dc555b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2023 07:06:04.4101
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: n2uapvBBYAXHw21n4/ASm1U8U2BNgqPdLtFV0rwcHFK2u7vabyKWDqUlVjK92dlAZshR1atWYPJtHdBQmdEytxU7IvJ+cJoRb3Ls6rX2A78=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6284
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Barry Song <song.bao.hua@hisilicon.com>
-
-For platforms having clusters like Kunpeng920, CPUs within the same cluster
-have lower latency when synchronizing and accessing shared resources like
-cache. Thus, this patch tries to find an idle cpu within the cluster of the
-target CPU before scanning the whole LLC to gain lower latency. This
-will be implemented in 3 steps in select_idle_sibling():
-1. When the prev_cpu/recent_used_cpu are good wakeup candidates, use them
-   if they're sharing cluster with the target CPU. Otherwise record them
-   and do the scanning first.
-2. Scanning the cluster prior to the LLC of the target CPU for an
-   idle CPU to wakeup.
-3. If no idle CPU found after scanning and the prev_cpu/recent_used_cpu
-   can be used, use them.
-
-Testing has been done on Kunpeng920 by pinning tasks to one numa and two
-numa. On Kunpeng920, Each numa has 8 clusters and each cluster has 4 CPUs.
-
-With this patch, We noticed enhancement on tbench and netperf within one
-numa or cross two numa on 6.4-rc4:
-tbench results (node 0):
-            baseline                     patched
-  1:        326.2337        372.0611 (   14.05%)
-  4:       1311.0912       1467.6606 (   11.94%)
-  8:       2635.7595       2919.4199 (   10.76%)
- 16:       5280.4710       5881.6082 (   11.38%)
- 32:      10013.8106      10295.7659 (    2.82%)
- 64:       7866.9267       7990.9609 (    1.58%)
-128:       6643.0075       6773.0634 (    1.96%)
-tbench results (node 0-1):
-            baseline                     patched
-  1:        328.2215        371.8220 (   13.28%)
-  4:       1318.7803       1463.8069 (   11.00%)
-  8:       2610.1637       2890.8220 (   10.75%)
- 16:       5191.1229       5608.0970 (    8.03%)
- 32:       9255.6653      10312.0177 (   11.41%)
- 64:      16053.9385      17516.5449 (    9.11%)
-128:      14145.9979      14190.7678 (    0.32%)
-netperf results TCP_RR (node 0):
-            baseline                     patched
-  1:      77045.1699      92320.0580 (   19.83%)
-  4:      78419.5796      92010.5521 (   17.33%)
-  8:      79044.9299      92154.7030 (   16.59%)
- 16:      80559.1244      92531.6847 (   14.86%)
- 32:      78005.1397      79176.5900 (    1.50%)
- 64:      29246.8246      29312.8208 (    0.23%)
-128:      12098.8488      12169.5650 (    0.58%)
-netperf results TCP_RR (node 0-1):
-            baseline                     patched
-  1:      77614.5377      92504.7655 (   19.18%)
-  4:      79324.3967      91717.0429 (   15.62%)
-  8:      79281.3608      91807.1218 (   15.80%)
- 16:      79064.0960      92004.1390 (   16.37%)
- 32:      78033.7068      86588.8343 (   10.96%)
- 64:      75946.3002      76128.3367 (    0.24%)
-128:      28518.5077      27985.0884 (   -1.87%)
-netperf results UDP_RR (node 0):
-            baseline                     patched
-  1:      93981.2392     105321.3925 (   12.07%)
-  4:      94939.0909     104816.2619 (   10.40%)
-  8:      96025.7748     105125.4418 (    9.48%)
- 16:      96218.2809     104576.4454 (    8.69%)
- 32:      80740.3541      83242.5556 (    3.10%)
- 64:      30622.1298      30805.0830 (    0.60%)
-128:      12369.6187      12659.8038 (    2.35%)
-netperf results UDP_RR (node 0-1):
-            baseline                     patched
-  1:      94372.8042     105957.8761 (   12.28%)
-  4:      92867.0020     103963.9574 (   11.95%)
-  8:      92832.1536     103722.3126 (   11.73%)
- 16:      93171.2927     103496.3700 (   11.08%)
- 32:      76859.0806      95176.8247 (   23.83%)
- 64:      53131.3217      77129.8854 (   45.17%)
-128:      24055.1642      30826.3553 (   28.15%)
-
-Note neither Kunpeng920 nor x86 Jacobsville supports SMT, so the SMT branch
-in the code has not been tested but it supposed to work.
-
-Chen Yu also noticed this will improve the performance of tbench and
-netperf on a 24 CPUs Jacobsville machine, there are 4 CPUs in one
-cluster sharing L2 Cache.
-
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-[https://lore.kernel.org/lkml/Ytfjs+m1kUs0ScSn@worktop.programming.kicks-ass.net]
-Tested-by: Yicong Yang <yangyicong@hisilicon.com>
-Signed-off-by: Barry Song <song.bao.hua@hisilicon.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
-Reviewed-by: Chen Yu <yu.c.chen@intel.com>
----
- kernel/sched/fair.c     | 51 +++++++++++++++++++++++++++++++++++++----
- kernel/sched/sched.h    |  1 +
- kernel/sched/topology.c | 10 ++++++++
- 3 files changed, 57 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 373ff5f55884..b8c129ed8b47 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6994,6 +6994,30 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
- 		}
- 	}
- 
-+	if (static_branch_unlikely(&sched_cluster_active)) {
-+		struct sched_domain *sdc = rcu_dereference(per_cpu(sd_cluster, target));
-+
-+		if (sdc) {
-+			for_each_cpu_wrap(cpu, sched_domain_span(sdc), target + 1) {
-+				if (!cpumask_test_cpu(cpu, cpus))
-+					continue;
-+
-+				if (has_idle_core) {
-+					i = select_idle_core(p, cpu, cpus, &idle_cpu);
-+					if ((unsigned int)i < nr_cpumask_bits)
-+						return i;
-+				} else {
-+					if (--nr <= 0)
-+						return -1;
-+					idle_cpu = __select_idle_cpu(cpu, p);
-+					if ((unsigned int)idle_cpu < nr_cpumask_bits)
-+						return idle_cpu;
-+				}
-+			}
-+			cpumask_andnot(cpus, cpus, sched_domain_span(sdc));
-+		}
-+	}
-+
- 	for_each_cpu_wrap(cpu, cpus, target + 1) {
- 		if (has_idle_core) {
- 			i = select_idle_core(p, cpu, cpus, &idle_cpu);
-@@ -7001,7 +7025,7 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
- 				return i;
- 
- 		} else {
--			if (!--nr)
-+			if (--nr <= 0)
- 				return -1;
- 			idle_cpu = __select_idle_cpu(cpu, p);
- 			if ((unsigned int)idle_cpu < nr_cpumask_bits)
-@@ -7103,7 +7127,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 	bool has_idle_core = false;
- 	struct sched_domain *sd;
- 	unsigned long task_util, util_min, util_max;
--	int i, recent_used_cpu;
-+	int i, recent_used_cpu, prev_aff = -1;
- 
- 	/*
- 	 * On asymmetric system, update task utilization because we will check
-@@ -7130,8 +7154,11 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 	 */
- 	if (prev != target && cpus_share_cache(prev, target) &&
- 	    (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
--	    asym_fits_cpu(task_util, util_min, util_max, prev))
--		return prev;
-+	    asym_fits_cpu(task_util, util_min, util_max, prev)) {
-+		if (cpus_share_lowest_cache(prev, target))
-+			return prev;
-+		prev_aff = prev;
-+	}
- 
- 	/*
- 	 * Allow a per-cpu kthread to stack with the wakee if the
-@@ -7158,7 +7185,10 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 	    (available_idle_cpu(recent_used_cpu) || sched_idle_cpu(recent_used_cpu)) &&
- 	    cpumask_test_cpu(p->recent_used_cpu, p->cpus_ptr) &&
- 	    asym_fits_cpu(task_util, util_min, util_max, recent_used_cpu)) {
--		return recent_used_cpu;
-+		if (cpus_share_lowest_cache(recent_used_cpu, target))
-+			return recent_used_cpu;
-+	} else {
-+		recent_used_cpu = -1;
- 	}
- 
- 	/*
-@@ -7199,6 +7229,17 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
- 	if ((unsigned)i < nr_cpumask_bits)
- 		return i;
- 
-+	/*
-+	 * For cluster machines which have lower sharing cache like L2 or
-+	 * LLC Tag, we tend to find an idle CPU in the target's cluster
-+	 * first. But prev_cpu or recent_used_cpu may also be a good candidate,
-+	 * use them if possible when no idle CPU found in select_idle_cpu().
-+	 */
-+	if ((unsigned int)prev_aff < nr_cpumask_bits)
-+		return prev_aff;
-+	if ((unsigned int)recent_used_cpu < nr_cpumask_bits)
-+		return recent_used_cpu;
-+
- 	return target;
- }
- 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 23dabfc3668b..5097f93b635f 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1816,6 +1816,7 @@ DECLARE_PER_CPU(struct sched_domain __rcu *, sd_numa);
- DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
- DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
- extern struct static_key_false sched_asym_cpucapacity;
-+extern struct static_key_false sched_cluster_active;
- 
- static __always_inline bool sched_asym_cpucap_active(void)
- {
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 2c4cc6c95a9a..69968ed9ffb9 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -672,7 +672,9 @@ DEFINE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
- DEFINE_PER_CPU(struct sched_domain __rcu *, sd_numa);
- DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
- DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
-+
- DEFINE_STATIC_KEY_FALSE(sched_asym_cpucapacity);
-+DEFINE_STATIC_KEY_FALSE(sched_cluster_active);
- 
- static void update_top_cache_domain(int cpu)
- {
-@@ -2363,6 +2365,7 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
- 	struct rq *rq = NULL;
- 	int i, ret = -ENOMEM;
- 	bool has_asym = false;
-+	bool has_cluster = false;
- 
- 	if (WARN_ON(cpumask_empty(cpu_map)))
- 		goto error;
-@@ -2384,6 +2387,7 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
- 			sd = build_sched_domain(tl, cpu_map, attr, sd, i);
- 
- 			has_asym |= sd->flags & SD_ASYM_CPUCAPACITY;
-+			has_cluster |= sd->flags & SD_CLUSTER;
- 
- 			if (tl == sched_domain_topology)
- 				*per_cpu_ptr(d.sd, i) = sd;
-@@ -2494,6 +2498,9 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
- 	if (has_asym)
- 		static_branch_inc_cpuslocked(&sched_asym_cpucapacity);
- 
-+	if (has_cluster)
-+		static_branch_inc_cpuslocked(&sched_cluster_active);
-+
- 	if (rq && sched_debug_verbose) {
- 		pr_info("root domain span: %*pbl (max cpu_capacity = %lu)\n",
- 			cpumask_pr_args(cpu_map), rq->rd->max_cpu_capacity);
-@@ -2593,6 +2600,9 @@ static void detach_destroy_domains(const struct cpumask *cpu_map)
- 	if (rcu_access_pointer(per_cpu(sd_asym_cpucapacity, cpu)))
- 		static_branch_dec_cpuslocked(&sched_asym_cpucapacity);
- 
-+	if (rcu_access_pointer(per_cpu(sd_cluster, cpu)))
-+		static_branch_dec_cpuslocked(&sched_cluster_active);
-+
- 	rcu_read_lock();
- 	for_each_cpu(i, cpu_map)
- 		cpu_attach_domain(NULL, &def_root_domain, i);
--- 
-2.24.0
-
+T24gMzAuMDUuMjAyMyAwOTo0NywgQ2xhdWRpdSBCZXpuZWEgLSBNMTgwNjMgd3JvdGU6DQo+PiAr
+ICAgICAgICNkZWZpbmUgQ0xLUE9MX0JJVCAgICAgICAgICAgICAgNQ0KPj4gKyAgICAgICAjZGVm
+aW5lIFRSSVRYRU5fQklUICAgICAgICAgICAgIDQNCj4+ICsgICAgICAgI2RlZmluZSBFTE1fQklU
+ICAgICAgICAgICAgICAgICAzDQo+PiArICAgICAgICNkZWZpbmUgU1lOQ01fQklUICAgICAgICAg
+ICAgICAgMg0KPj4gKyAgICAgICAjZGVmaW5lIE1TX0JJVCAgICAgICAgICAgICAgICAgIDENCj4g
+SW5zdGVhZCBvZiB0aGVzZSAqX0JJVCBkZWZpbmVzIGFzIHBsYWluIG51bWJlcnMgeW91IGNhbiBk
+ZWZpbmVkIHRoZW0gdXNpbmcNCj4gQklUKCkgbWFjcm8gYW5kIHVzZSBtYWNyb3MgaW4gcGxhY2Ug
+aW5zdGVhZCBvZg0KPiAgICAgICAgZW51bSBURE1fQ0xLUE9MIGNsa3BvbGl0eTsNCj4gICAgICAg
+IGVudW0gVERNX0VMTSAgICBlbG07DQo+ICAgICAgICBlbnVtIFRETV9TWU5DTSAgc3luY207DQo+
+ICAgICAgICBlbnVtIFRETV9NQVNURVJfU0xBVkVfTU9ERSBtc19tb2RlOw0KDQpTb21ldGhpbmcg
+aGFwcGVucyB3LyBteSBlbWFpbCBjbGllbnQgYW5kIEkgc2VudCB0aGlzIHNlY3Rpb24gYnkgYWNj
+aWRlbnQuDQpUaHVzIHlvdSBjYW4gaWdub3JlIGl0Lg0K
