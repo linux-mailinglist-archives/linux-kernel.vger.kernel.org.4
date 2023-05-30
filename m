@@ -2,237 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E88717067
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C81B71706C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233627AbjE3WEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 18:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
+        id S233644AbjE3WE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 18:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbjE3WE1 (ORCPT
+        with ESMTP id S233659AbjE3WEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 18:04:27 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2071.outbound.protection.outlook.com [40.107.220.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C109EBE;
-        Tue, 30 May 2023 15:04:25 -0700 (PDT)
+        Tue, 30 May 2023 18:04:50 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2042.outbound.protection.outlook.com [40.107.15.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F406F11D;
+        Tue, 30 May 2023 15:04:42 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nusnB+UHU38R9z1fr4y/ICVKIFr/6X9Ncdigbf+jR5TLLJcrtRFITBkg+9SMUTJ1BbMIhj7i564t+mAOlocotSKmHf+0oaP7FftiIrT3VdFu2Ql6M+IPoZT8B8w/6qFr06mgYoIStZUqdFzVJAL5wRPjmNCRoL0u/8OUzWNwX2C9oE3VpJo00eBSD3JPNxDuFXLzfBzwJB1fK5mL+ugoXyuzyPrBxRHoRYK/KRpTtChQDKNcNM8ubsuig+mrhS0KvnN/akvQ7gAijIytt1K68dKGg6Jp2pkJnYlcs3spQvL61y2KG81clUbA8+TDSZWWx2fNd54+K6t2uYx4ALKFBQ==
+ b=ftH0J+/N89Nwz9UGuB57LmaNUYKgCAdzD8S8UO/uqyNgbWnN8c2MhDzAt1+V/p/01O3wX9hynMM7E0e7CGrgdhKNj8uTS38MUtnysbn6ecaUwhiQxWNcaWQjLDQdnS7sFqyK2C5KakiEgAQ0vvzLw8Fg6juIhxfhkCwyPWxshMWKmvLyd2Y//sbMaHzae6rRqHJF6qczIFdl/7tFC3b6sx8qGgSgGMLnvUHtcOy1WGwlWvm60XqIjNjbY19LLM0Pd83re/6dixgrQz6CifWO6MQnsHF4SsYQHBS5TT5KKx0iHiIRu942n5NWAy141p79+e0DzG97Bgpl3K1eMv1lfg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JCC/g6c6odjb1J23E9tyj2tfR65P6J7bCE5VfHHgJPM=;
- b=aP+0Jvs9EFSjNbkkbxH4ENEah9oViQpEUt7sYyPXEmeWx/k/0SPdAYaoYjTavOfQr4mb9+/3OoLZmci9/nUsy8HZloOQcAS4UeoiH22lNaKdHJpLcaRdu5xdEZd1tNY6QgUSch4s3fjPC6UqkfR49AqBL9WOfYhD3Jtvrj/fFPYywaqquEy2SYSePmQNxY4LoSPzGCuoDAr+zq2/Pec5TfuSf8YSERbmPVTARVczyO6423Lg18Wtsvu+A5SXDMR52MWIWlwWebFZYKUoEugxjbsRsk0Pic/fzEJGkoIAqCJS0CGbXKWh74OM4CYMFh8OoJxeErdh24dWSmDYHHXtKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux-m68k.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=qGJK/d6YNlRmzVfTCKf3xMj2KYmNZrBFRKPramYl/2U=;
+ b=WbKQQLmk8YRmnjz2aqtLKlP/lMvJguue9h9p7qgOZxnVHtFiu7RwaXi3EDOJWNdMSgeeAhNYza0ivE/0iPbvyZfIVZPdcDqY6DUWYmZv5MqNSneflmsCOHNpIa8MzyNR0P7fZx4Tc9NFvprs9taGATBeKuTvysF0Muyb9ubhx+XihTk88Hi9CkaIyarybDAMIT7d1PwJhQ4I7K2Q3jSv9R2bvOavLnNfRD6wdadS7TelubgI1cSArjel6KXvL0wb+jngiz/fA9tI06kGvKJ8qPV/6Eunr/ZnuWOM2yL6+N2yOYK39qUDiHb3nulC4dbSsu1so6zljRTldtwnseya2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JCC/g6c6odjb1J23E9tyj2tfR65P6J7bCE5VfHHgJPM=;
- b=TY9QpTbZa1NLdCVcfflZDADUcSvNmjt4oNKluYyytHsNq/KITPCd496BSDpWuYLRE0LWIq1AJZjnHjUe24Ygcv8kYH0Mv5ax/x2I2lLw7mRkYlOxfr+dZJhS2TGarmYVTjGTiwzYPqc3xRXCUpn1Jad69qm/KUSbYQFcw8rCOEc=
-Received: from BN9PR03CA0728.namprd03.prod.outlook.com (2603:10b6:408:110::13)
- by IA1PR12MB6259.namprd12.prod.outlook.com (2603:10b6:208:3e5::17) with
+ bh=qGJK/d6YNlRmzVfTCKf3xMj2KYmNZrBFRKPramYl/2U=;
+ b=etQ0ndL7hfzRcdtaonm2X3qMptTkMb3EJOYnVEBjzLxEjgywesVdTxNEnQ/rn3JQKjHbRlM8Kq1rgluhKA3jH5KAPpIe30n8jMQlbQadKISk1yOlDnyOYP12n2hU2zomFfbGnLB1a2CvehEKJPkpglVsHIvWO1NX1Din+x1msqI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB8PR04MB6459.eurprd04.prod.outlook.com (2603:10a6:10:103::19)
+ by DU2PR04MB9131.eurprd04.prod.outlook.com (2603:10a6:10:2f6::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.22; Tue, 30 May
- 2023 22:04:22 +0000
-Received: from BN8NAM11FT089.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:110:cafe::28) by BN9PR03CA0728.outlook.office365.com
- (2603:10b6:408:110::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22 via Frontend
- Transport; Tue, 30 May 2023 22:04:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT089.mail.protection.outlook.com (10.13.176.105) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6455.22 via Frontend Transport; Tue, 30 May 2023 22:04:22 +0000
-Received: from platform-dev1.pensando.io (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 30 May 2023 17:04:17 -0500
-From:   Brad Larson <blarson@amd.com>
-To:     <geert@linux-m68k.org>
-CC:     <adrian.hunter@intel.com>, <alcooperx@gmail.com>,
-        <andy.shevchenko@gmail.com>, <arnd@arndb.de>, <blarson@amd.com>,
-        <brendan.higgins@linux.dev>, <briannorris@chromium.org>,
-        <broonie@kernel.org>, <catalin.marinas@arm.com>,
-        <conor+dt@kernel.org>, <davidgow@google.com>,
-        <devicetree@vger.kernel.org>, <fancer.lancer@gmail.com>,
-        <gerg@linux-m68k.org>, <gsomlo@gmail.com>,
-        <hal.feng@starfivetech.com>, <hasegawa-hitomi@fujitsu.com>,
-        <j.neuschaefer@gmx.net>, <joel@jms.id.au>, <kernel@esmil.dk>,
-        <krzk@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <lee.jones@linaro.org>, <lee@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <michal.simek@amd.com>,
-        <p.zabel@pengutronix.de>, <rdunlap@infradead.org>,
-        <robh+dt@kernel.org>, <samuel@sholland.org>,
-        <skhan@linuxfoundation.org>, <suravee.suthikulpanit@amd.com>,
-        <thomas.lendacky@amd.com>, <tonyhuang.sunplus@gmail.com>,
-        <ulf.hansson@linaro.org>, <vaishnav.a@ti.com>,
-        <walker.chen@starfivetech.com>, <will@kernel.org>,
-        <zhuyinbo@loongson.cn>
-Subject: Re: [PATCH v14 6/8] arm64: dts: Add AMD Pensando Elba SoC support
-Date:   Tue, 30 May 2023 15:03:47 -0700
-Message-ID: <20230530220347.14049-1-blarson@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CAMuHMdX_Sdb3RFrLthcwThK__GKhJvJuXWu5+2RsQpGgFRkrXQ@mail.gmail.com>
-References: <CAMuHMdX_Sdb3RFrLthcwThK__GKhJvJuXWu5+2RsQpGgFRkrXQ@mail.gmail.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
+ 2023 22:04:40 +0000
+Received: from DB8PR04MB6459.eurprd04.prod.outlook.com
+ ([fe80::5ca3:2022:337:7c40]) by DB8PR04MB6459.eurprd04.prod.outlook.com
+ ([fe80::5ca3:2022:337:7c40%7]) with mapi id 15.20.6433.022; Tue, 30 May 2023
+ 22:04:40 +0000
+Date:   Wed, 31 May 2023 01:04:36 +0300
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org, netdev@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH pci] PCI: don't skip probing entire device if first fn OF
+ node has status = "disabled"
+Message-ID: <20230530220436.fooxifm47irxqlrj@skbuf>
+References: <20230521115141.2384444-1-vladimir.oltean@nxp.com>
+ <ZHZxn0a3/EJbthYO@bhelgaas>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHZxn0a3/EJbthYO@bhelgaas>
+X-ClientProxiedBy: FR0P281CA0052.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:48::20) To DB8PR04MB6459.eurprd04.prod.outlook.com
+ (2603:10a6:10:103::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT089:EE_|IA1PR12MB6259:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6d6e20a6-e6b4-478d-0596-08db6159d2ea
+X-MS-TrafficTypeDiagnostic: DB8PR04MB6459:EE_|DU2PR04MB9131:EE_
+X-MS-Office365-Filtering-Correlation-Id: dd769c17-599e-4637-6277-08db6159dd51
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: osA6rXPcaNgUpRnuXwFfrs5mzASPSvKGIbtd2Jmg4IkzF8gMyOusDG2RNTFW/8bfk+NntqSFqUVliTocuEpf2NMBMGGOZRyPCnCo9UvHvl9QRfPPPXzNHPHLdID284M0tcP9h1gNap8//igx62FSEmCs+kKJL+B0Lp16tZMkZ7hhhkHOw36AnCzfNrU4DldEmHuiY2gTieB6jRxsd2hbrHUNoxt0TRnYpmSJXZpM18nDpmhJE5OSx9cpJuGNxmcicagPg90XHyq35P3TvfDN+uGOp0BsdpWsiqvKZ8Z7tMJMEN129SzuwzULZHmEgfOQ7sHE9Ut2C2t0dohlwC2eOJPFVUbcvIO8HnNCWnnGsFMr/33gbUPCUfNSwLs0piI3BU+/P+ZQdTdxhEcI+fnaK2fdRdflQevZuiJuAmrG8hqxE999CP85O06N9dgBN/8h7QH389wXvU3RPaGe01P22bNlJBO0a8dmk/BmYyNJSyaIhoed/crUurPSWAyeceqqf1caaCmvOal3vbcqKYrOBdb3sHshHFw4t2Mfbj6P557TKcYK7xWys3Hofiea0eJ2soVXV4d9xZRXt1B0VMvLFm0VobdzWR1WL1htkWc9HJnwRX30Ux+s2ZMG5Dh6u3zNSe3blZKX03tjQPhYd0jGl63DAv+fmPL3fdHFuc/2At4ukU11uEztUPgcCrj950hz/kQKuvcGkmNHJPxcCYBQbGuq5FdDO4c4vRPAq6kjyBPOKEBz2E0Pz6WQnFO/UcxPuYZgN8mmxGup9JJ/nHS77Q==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(376002)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(426003)(478600001)(336012)(83380400001)(40460700003)(36860700001)(40480700001)(47076005)(5660300002)(186003)(16526019)(6916009)(4326008)(8676002)(82310400005)(2906002)(8936002)(41300700001)(356005)(81166007)(82740400003)(316002)(6666004)(1076003)(26005)(2616005)(70586007)(70206006)(7406005)(7416002)(54906003)(53546011)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 22:04:22.1124
+X-Microsoft-Antispam-Message-Info: Fted+wFUE6oT5a1YTjzXM56Ub+P6lVGtSTdkQcwFWtDl5mcavvDwbzd2kCp6Au76hzBHTA9OlptPjYxSFVZV9ebVNk44OQ7GGVZ7nW5j8eo9H2qdHpujrP65yxasq4S8MXY5l71TvGs42S9zNxbUDYrp/KmobKEGkPHTt79l4ryBWML13eJf6ebN2dbJz4rbzJ2WxtO98v9JJBWuwrUIgaYoeYMXFV7/AbUxMPcqe9M0lMgdRcWVx+7AluIIrfFDVTmkkg9N+s5VokSBEZ7A3ZoPq/DgebD2N3ksbialuKC/r7XcQKltj/t+v05BRYv1QUWPcKunK+Id5rUMfxD0E5820c5ggVYi1vHl+TrLn+mM/TzzD6RWOjmYnd2PXgXcH+TZiKhU6T4IZ3DvXmDbEMNFOsY8DGfIwf3BbopO1Im+xn/PhcKlKvQbeASPACsJjaDV0yQZqh0kVugQfdISgqozOLtoqCdBX6jmYWlUCFTzNF2x9Z3w7/ZlQ1kQgXc06Qr1fNzcLr1wOI0K9+bjgURRMATfhMI8pQLnG0L+AQrIHlNUHE3D3k1HitQZRLAo
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(396003)(366004)(346002)(39860400002)(136003)(376002)(451199021)(33716001)(83380400001)(41300700001)(26005)(9686003)(6512007)(1076003)(6506007)(186003)(44832011)(66476007)(66556008)(316002)(66946007)(8676002)(5660300002)(4326008)(8936002)(86362001)(478600001)(54906003)(6916009)(38100700002)(6486002)(6666004)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gOx1NtRnJel12Y3LxS0twQtymKlcMh/WlN0+g27r6L/q7KnA9QAJd2syIcH8?=
+ =?us-ascii?Q?F7njaYrALTgg74/q7FPaHnAk8AEWLMYGy2/GLor9lDlLhdlNB6GSHS21nnXt?=
+ =?us-ascii?Q?ZOjWYK4ya8dpxwuTBn7F9nk7zT+G8JLtZj63/+OAjm1da8PSgogF5EVJkMZv?=
+ =?us-ascii?Q?qmuVDcXp65P3Oj3izq0kI18L8UMuM4zFdeKWZpdyJvUPyvf+UHsSPJ+lZZXd?=
+ =?us-ascii?Q?jVLxbNzIIlua0H43l6oKtRWn18Avtmh/8WtP55SfmpTMr2dEx0shuFvCwC6W?=
+ =?us-ascii?Q?Wg0hkGnGeq6FIUOawGQFtWL4tFbntp66PlRSugrHk3y+YGph8A8tLmE6mBc4?=
+ =?us-ascii?Q?gyLEyhZk8GgJ2brjsJN1//GGB0VqETSrt7QDH9fAMUGVAFEQxZ8yvM6uS6nc?=
+ =?us-ascii?Q?qh1blQBwUu3Mt26O6aVBvS+NIS0UfqQp2bds5aAu77lG7YejGloukoXDA4kH?=
+ =?us-ascii?Q?TjEY5V50SJ2EfDJlmyEP7r5OJHcl7IAIaKElmZzA4ybiK/e4XMN6hy7FDdRM?=
+ =?us-ascii?Q?K0/Poj+FKxW1eVfJUYlpwiNdv1hV7PoOhmvIDetTt2AMGwSNwymtA9/Z+Ixg?=
+ =?us-ascii?Q?GA/p7MdD6lGLdyOJxyoTy/w66lOpCYif2SAU2XdoWZ3cAdiHFvCdfzFRM5Lp?=
+ =?us-ascii?Q?P9k+H2zmKpN4LawL68e4qMyh1b6TTDVuMyxs9vZSIlRSCQohgVmSfZFvskxr?=
+ =?us-ascii?Q?u1LqQqpU8eZf5fQQtsxuvjcfHQNZEx4kEZw4a9asN8JlaZcZDfcQPZhQ1k2s?=
+ =?us-ascii?Q?opo4hWjbYTvjqx91GjUp9xxXY2tl+KUwLwKUMbWML5WnCOGoDE7E0c0eRiW7?=
+ =?us-ascii?Q?0qOd2BSR77sl7hYsiMCoTPDItzEP4HD7XjAd9wUvvLtmOmJy6JguoAMZlks9?=
+ =?us-ascii?Q?NRLf1cKxbgfEqef74sGulQdd217HbpD1FIzAn1WgW8r0MxOz4lerjv1D1ijZ?=
+ =?us-ascii?Q?YlEC1V4w8qvftYcyYoG7yIrktdJZAAa7uHi8cFgeU8qNNsC9ZIkfzN3L6SWm?=
+ =?us-ascii?Q?d2NIbkP/CUyi7QQhapZ7ohCbBuFvyc5iFAYLNtrxJQIK/arMU8L9HxKnJgHj?=
+ =?us-ascii?Q?lRXTTyhg/dLHC/irM/LlyvQGRMVIHX43MdCTU+IbfNWIJe1pkv7Mf5EcrK40?=
+ =?us-ascii?Q?iQZTy5w7LzeU6o0Be6umuQlAb9HqjH37yVOeyT2GPQZGykAgj7FAYa62NbII?=
+ =?us-ascii?Q?wj09ZTnLSDqkMxo+XqkgoJQixqpMEaHg7L6oPhbI/gmnLw6L7UHvvIwLZvmq?=
+ =?us-ascii?Q?MkwJP6ID+Bf29DUEQ4LXvvuAqEP7nj48vVEwHsKl4IEz9dIRS1LFEDiCEGnv?=
+ =?us-ascii?Q?T/s/l6uNLzmuqoP8k+tSg6ZQW1nBQ4DdxWrUJufmQ3M8ZFENE1I/ZL9cpmwK?=
+ =?us-ascii?Q?/MzzftaTgwhFnEpZf1WhrxZh4xeDtvfNLoQPd5t0MABW6zSkompKb56Pzudq?=
+ =?us-ascii?Q?6jwa/Gga7rFGkLtJHofPkSdABghX0lKZ4/me8YVmaraz6DR3bnbIYUjQfK5v?=
+ =?us-ascii?Q?HsRbLQh+vWRjBlYs+duAsk9KSu05BaJIopY+x5mP5xR/tsW/znXCRFhfPFvt?=
+ =?us-ascii?Q?w+cRpkFVLioNc43gP4wqrYSXlDsxZ5t1wsIJjaerfObaFd4bhGGaGBBh0lPJ?=
+ =?us-ascii?Q?5Q=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dd769c17-599e-4637-6277-08db6159dd51
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6459.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 22:04:39.9357
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d6e20a6-e6b4-478d-0596-08db6159d2ea
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT089.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6259
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i9fHBWtG1j2AgVD4wvEca4293TtsKPPhuAm/0PkJtYA2qpbyH4GlocVxcvk9uccSkyLT+k/mDsWCYsOEaG/jcg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9131
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Tue, May 30, 2023 at 04:58:55PM -0500, Bjorn Helgaas wrote:
+> Can you write this description in terms of PCI topology?  The
+> nitty-gritty SERDES details are not relevant at this level, except to
+> say that Function 0 is present in some cases but not others, and when
+> it is not present, *other* functions may be present.
 
-On Wed, May 24, 2023 at 13:52 Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Tue, May 23, 2023 at 9:30â¯PM Brad Larson <blarson@amd.com> wrote:
->> On 5/16/23 09:54, Michal Simek wrote:
->> > On 5/15/23 20:16, Brad Larson wrote:
->> >> --- /dev/null
->> >> +++ b/arch/arm64/boot/dts/amd/elba-16core.dtsi
->> >> @@ -0,0 +1,197 @@
->> >> +// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
->> >> +/*
->> >> + * Copyright 2020-2022 Advanced Micro Devices, Inc.
->> >
->> > 2023 and the same below.
->>
->> I'll update the copyright in the next submit
->
-> Did you make any substantial changes in 2023?
+No. It is to say that within the device, all PCIe functions (including 0)
+are always available and have the same number, but depending on SERDES
+configuration, their PCIe presence might be practically useful or not.
+So that's how function 0 may end having status = "disabled" in the
+device tree.
 
-Yes, additional properties were added to l2-cache*
+> Sigh.  Per spec (PCIe r6.0, sec 7.5.1.1.9), software is not permitted
+> to probe for Functions other than 0 unless "explicitly indicated by
+> another mechanism, such as an ARI or SR-IOV Capability."
+> 
+> Does it "work" to probe when the spec prohibits it?  Probably.  Does
+> it lead to some breakage elsewhere eventually?  Quite possibly.  They
+> didn't put "software must not probe" in the spec just to make
+> enumeration faster.
+> 
+> So I'm a little grumpy about further complicating this already messy
+> path just to accommodate a new non-compliant SoC.  Everybody pays the
+> price of understanding all this stuff, and it doesn't seem in balance.
+> 
+> Can you take advantage of some existing mechanism like
+> PCI_SCAN_ALL_PCIE_DEVS or hypervisor_isolated_pci_functions() (which
+> could be renamed and made more general)?
 
->> >> + */
->> >> +
->> >> +/ {
->> >> +    cpus {
->> >> +            #address-cells = <2>;
->> >> +            #size-cells = <0>;
->> >> +
->> >> +            cpu-map {
->> >> +                    cluster0 {
->> >> +                            core0 { cpu = <&cpu0>; };
->> >> +                            core1 { cpu = <&cpu1>; };
->> >> +                            core2 { cpu = <&cpu2>; };
->> >> +                            core3 { cpu = <&cpu3>; };
->> >> +                    };
->> >> +
->> >> +                    cluster1 {
->> >> +                            core0 { cpu = <&cpu4>; };
->> >> +                            core1 { cpu = <&cpu5>; };
->> >> +                            core2 { cpu = <&cpu6>; };
->> >> +                            core3 { cpu = <&cpu7>; };
->> >> +                    };
->> >> +
->> >> +                    cluster2 {
->> >> +                            core0 { cpu = <&cpu8>; };
->> >> +                            core1 { cpu = <&cpu9>; };
->> >> +                            core2 { cpu = <&cpu10>; };
->> >> +                            core3 { cpu = <&cpu11>; };
->> >> +                    };
->> >> +
->> >> +                    cluster3 {
->> >> +                            core0 { cpu = <&cpu12>; };
->> >> +                            core1 { cpu = <&cpu13>; };
->> >> +                            core2 { cpu = <&cpu14>; };
->> >> +                            core3 { cpu = <&cpu15>; };
->> >> +                    };
->> >> +            };
->> >> +
->> >> +            /* CLUSTER 0 */
->> >> +            cpu0: cpu@0 {
->> >> +                    device_type = "cpu";
->> >> +                    compatible = "arm,cortex-a72";
->> >> +                    reg = <0 0x0>;
->> >
->> > Do you really need 2/0 split here. The first cell is 0 anyway.
->>
->> Yes following 64-bit system definition
->
-> You mean for the 64-bit main address space?
-> The CPU address space under /cpus is unrelated.
-
-Yes, the reg prop for this node is CPU/threads per dt spec.  Checked the history and
-the Elba dt was derived from socionext for these nodes and this is how those device
-trees are configured along with over a dozen other devices.  I changed to 
-address-cells = <1> and dropped the leading zero from all cpu* reg<> and booting
-the system I'm observing no change.  Looking in drivers/of I'm not seeing where
-cpu*/reg is read and used, any recommendation?
-
->> >> +++ b/arch/arm64/boot/dts/amd/elba-flash-parts.dtsi
->> >> @@ -0,0 +1,106 @@
->> >> +// SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
->> >> +/*
->> >> + * Copyright 2020-2022 Advanced Micro Devices, Inc.
->> >> + */
->> >> +
->> >> +&flash0 {
->> 0xf0000>> +     partitions {
->> >> +            compatible = "fixed-partitions";
->> >> +            #address-cells = <1>;
->> >> +            #size-cells = <1>;
->> >> +            partition@0 {
->> >> +                    label = "flash";
->> >> +                    reg = <0x10000 0xfff0000>;
->> >
->> > This doesn't fit with partition@0 above.
->> > Also size is weird.
->>
->> This is intended to not expose sector 0.
->
-> The unit address should still match the first reg entry
-> => partition@10000.
-
-Changed to this:
-
-                partition@0 {
-                        label = "rsvd";
-                        reg = <0x0 0x10000>;
-                        read-only;
-                };
-
-                partition@10000 {
-                        label = "flash";
-                        reg = <0x10000 0xfff0000>;
-                };
-
-Regards,
-Brad
+Not responding yet to the rest of the email since it's not clear to me
+that you've understood function 0 is absolutely present and responds
+to all config space accesses - it's just disabled in the device tree
+because the user doesn't have something useful to do with it.
