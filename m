@@ -2,125 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330B2716DD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63EA8716DE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjE3Tnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 15:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
+        id S233272AbjE3TpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 15:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjE3Tnq (ORCPT
+        with ESMTP id S230193AbjE3TpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 15:43:46 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748E5E8;
-        Tue, 30 May 2023 12:43:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685475825; x=1717011825;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nvmOvQoNmAoTsH+wEqnxySP1xPrfiw2o/cbFmdtW2O8=;
-  b=SUJRuj8zGDkMsNBWBqi9DuQ/DnpO2dt10OQtWa/2fXsGitHAxinCb1fI
-   CnRXNKVy0DhgxN3cGl8xQe10MpXPNPZSg68uuk/RjiMNi+8pRvj3MCCdz
-   wZrskjlkKUdf3C5RkKkSbWcLN5I3qIISXhbxx43+MOF+8vNmLRoH1R4t4
-   HTqT+y8Kw/n5pbhoeGV3WmSEQ0rrrqYqoQ3T7h9RSC6GrxOFzvG74tRfT
-   9yCNCBAEb6D1aHtfcrsO5hJ0W0jMDKnDrvhdYALrt+KZAxC2ywJ7M3lJd
-   Qf8NfFSGNG4/gZEuv6YayRFgBmKfmfKel7VfJdAKNmdP4vAVDovAL0rNH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="357410329"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="357410329"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 12:43:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="776476045"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="776476045"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 30 May 2023 12:43:39 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q45Fr-0000lq-06;
-        Tue, 30 May 2023 19:43:39 +0000
-Date:   Wed, 31 May 2023 03:43:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Evan Quan <evan.quan@amd.com>, rafael@kernel.org, lenb@kernel.org,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        kvalo@kernel.org, nbd@nbd.name, lorenzo@kernel.org,
-        ryder.lee@mediatek.com, shayne.chen@mediatek.com,
-        sean.wang@mediatek.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, Mario.Limonciello@amd.com,
-        Lijo.Lazar@amd.com
-Cc:     oe-kbuild-all@lists.linux.dev, ath12k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-acpi@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, ath11k@lists.infradead.org
-Subject: Re: [PATCH 9/9] drm/amd/pm: enable Wifi RFI mitigation feature
- support for SMU13.0.7
-Message-ID: <202305310314.EAMX2AeE-lkp@intel.com>
-References: <20230530024227.2139632-10-evan.quan@amd.com>
+        Tue, 30 May 2023 15:45:16 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5ECB2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:45:14 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f4b256a0c9so5462278e87.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:45:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685475912; x=1688067912;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KPBl7CVyGi7z3EnEqP8i0l1/Rp7cAONGFh5tesIqeUQ=;
+        b=wtwhG4hRQYmLsKNHr6yPT4PxwE86DRjpaU6CInTtWe3dQ2ORJ8RSSIXgYsctPq6pHo
+         bsA42IlNLmBkPQ/aQjb3MZy6gU3CFsIMPdeyzO5j4eGvo6PIt1UYhJ6JtG0JRkrjaWE/
+         YEPRJBYadY2QY5eqwR5qbTGk/gIuL7tzHKSoHirm3c9fjHaqMXhIqFETJLAJiR0SsQZt
+         UteV3tsJK9l88yPqJbBHlLCTQ/TTfIPTf9CupsZwVq80qHHlujm3eCXZ5+6O7iHp23Qa
+         xsyrUjkluvR9qYqvCyl6wKxZcjBrwKPcJRWYpUkob8CYw6mvzJUXwLLExLRFHhshXXLi
+         ENfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685475912; x=1688067912;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KPBl7CVyGi7z3EnEqP8i0l1/Rp7cAONGFh5tesIqeUQ=;
+        b=J5IVyoUkzGNxzv19xBEGGrBodW7MdASARM530UPdUGTdErQejTiGdkZfIUezd+CiTY
+         1+Xk8wmOo5eUeoW71Lp/xyPqnMBQ9GHaSR57q/4J0ealC+1FaeJgMQqnC7C7DOfgQ9yo
+         Tc55aDryxpwaMwXWYI9SAqiA6aumaQ0Yt7GGTmjqSRJHWahmyW/KRwkxZgt5/fvl7N9G
+         0gSVXbNX9MjYWCCWkf6/beXHJsnywjivK2CZGJ7+2ZxD9Xbq+TZLiOSIvn7vLTMlqXaw
+         ZkTRhL21hTzGdENPkQoX071OjnOPB2pvdaSnXVB1UiPdFBCu+MuVdmzNJmCVHQm5Ov7y
+         Lskg==
+X-Gm-Message-State: AC+VfDxk6tCkCo5EH17VaZPVDV5zKhUEo7rrTO38/77XtVpI3SpM8FaH
+        mRYey2QBZPc+YndWrQxC+Qlkag==
+X-Google-Smtp-Source: ACHHUZ48qmvzgPiAm4eIF9ZN57Y01/3tKsrZOTUz5daAvG3cHRT2GRkwsPORqWGpzNxu5zinnU4l0w==
+X-Received: by 2002:a2e:3101:0:b0:2a8:e642:8cdb with SMTP id x1-20020a2e3101000000b002a8e6428cdbmr1345004ljx.49.1685475912524;
+        Tue, 30 May 2023 12:45:12 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id a24-20020a2e8618000000b002a76c16ad65sm3017684lji.87.2023.05.30.12.45.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 12:45:12 -0700 (PDT)
+Message-ID: <0e9903c0-4669-9298-e0ee-72fc775998c3@linaro.org>
+Date:   Tue, 30 May 2023 21:45:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530024227.2139632-10-evan.quan@amd.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Content-Language: en-US
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230530193436.3833889-1-quic_bjorande@quicinc.com>
+ <20230530193436.3833889-3-quic_bjorande@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH 2/2] soc: qcom: rmtfs: Support dynamic placement of region
+In-Reply-To: <20230530193436.3833889-3-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Evan,
 
-kernel test robot noticed the following build errors:
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on kvalo-ath/ath-next wireless-next/main wireless/main]
-[cannot apply to linus/master v6.4-rc4 next-20230530]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On 30.05.2023 21:34, Bjorn Andersson wrote:
+> In some configurations, the exact placement of the rmtfs shared memory
+> region isn't so strict. In the current implementation the author of the
+> DeviceTree source is forced to make up a memory region.
+IIUC the test here would be... "works" / "doesn't", just as if one
+misplaced the fixed region?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Evan-Quan/drivers-acpi-Add-support-for-Wifi-band-RF-mitigations/20230530-104541
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230530024227.2139632-10-evan.quan%40amd.com
-patch subject: [PATCH 9/9] drm/amd/pm: enable Wifi RFI mitigation feature support for SMU13.0.7
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20230531/202305310314.EAMX2AeE-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/8c935eeab7a439739f3dd369516f18ddd86ef348
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Evan-Quan/drivers-acpi-Add-support-for-Wifi-band-RF-mitigations/20230530-104541
-        git checkout 8c935eeab7a439739f3dd369516f18ddd86ef348
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Does the downstream sharedmem-uio driver do any additional cryptic
+magic or does it simply rely on the vendor's cma/dma pool settings?
+Can we replicate its behavior to stop hardcoding rmtfs, period?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305310314.EAMX2AeE-lkp@intel.com/
+> 
+> Extend the rmtfs memory driver to relieve the author of this
+> responsibility by introducing support for using dynamic allocation in
+> the driver.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845-mtp.dts | 10 ++++
+>  drivers/soc/qcom/rmtfs_mem.c            | 66 +++++++++++++++++++------
+>  2 files changed, 61 insertions(+), 15 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
+> index d1440b790fa6..e6191b8ba4c6 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
+> @@ -12,6 +12,8 @@
+>  #include "pm8998.dtsi"
+>  #include "pmi8998.dtsi"
+>  
+> +/delete-node/ &rmtfs_mem;
+> +
+>  / {
+>  	model = "Qualcomm Technologies, Inc. SDM845 MTP";
+>  	compatible = "qcom,sdm845-mtp", "qcom,sdm845";
+> @@ -48,6 +50,14 @@ vreg_s4a_1p8: pm8998-smps4 {
+>  		vin-supply = <&vph_pwr>;
+>  	};
+>  
+> +	rmtfs {
+> +		compatible = "qcom,rmtfs-mem";
+> +
+> +		qcom,alloc-size = <(2*1024*1024)>;
+> +		qcom,client-id = <1>;
+> +		qcom,vmid = <15>;
+> +	};
+This should have been a separate patch.
 
-All errors (new ones prefixed by >>):
+> +
+>  	thermal-zones {
+>  		xo_thermal: xo-thermal {
+>  			polling-delay-passive = <0>;
+> diff --git a/drivers/soc/qcom/rmtfs_mem.c b/drivers/soc/qcom/rmtfs_mem.c
+> index f83811f51175..5f56ded9f905 100644
+> --- a/drivers/soc/qcom/rmtfs_mem.c
+> +++ b/drivers/soc/qcom/rmtfs_mem.c
+> @@ -3,6 +3,8 @@
+>   * Copyright (c) 2017 Linaro Ltd.
+>   */
+>  
+> +#include "linux/gfp_types.h"
+> +#include "linux/sizes.h"
+<>?
 
-   arm-linux-gnueabi-ld: drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.o: in function `smu_v13_0_0_set_wbrf_exclusion_ranges':
-   smu_v13_0_0_ppt.c:(.text+0xfa8): undefined reference to `__aeabi_uldivmod'
-   arm-linux-gnueabi-ld: smu_v13_0_0_ppt.c:(.text+0xfc0): undefined reference to `__aeabi_uldivmod'
-   arm-linux-gnueabi-ld: smu_v13_0_0_ppt.c:(.text+0xfd4): undefined reference to `__aeabi_uldivmod'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.o: in function `smu_v13_0_7_set_wbrf_exclusion_ranges':
->> smu_v13_0_7_ppt.c:(.text+0xe9c): undefined reference to `__aeabi_uldivmod'
->> arm-linux-gnueabi-ld: smu_v13_0_7_ppt.c:(.text+0xeb4): undefined reference to `__aeabi_uldivmod'
-   arm-linux-gnueabi-ld: drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.o:smu_v13_0_7_ppt.c:(.text+0xec8): more undefined references to `__aeabi_uldivmod' follow
+>  #include <linux/kernel.h>
+>  #include <linux/cdev.h>
+>  #include <linux/err.h>
+> @@ -168,23 +170,63 @@ static void qcom_rmtfs_mem_release_device(struct device *dev)
+>  	kfree(rmtfs_mem);
+>  }
+>  
+> +static int qcom_rmtfs_acquire_mem(struct device *dev, struct qcom_rmtfs_mem *rmtfs_mem)
+> +{
+> +	struct device_node *node = dev->of_node;
+> +	struct reserved_mem *rmem;
+> +	dma_addr_t dma_addr;
+> +	void *mem;
+> +	u32 size;
+> +	int ret;
+> +
+> +	rmem = of_reserved_mem_lookup(node);
+> +	if (rmem) {
+> +		rmtfs_mem->addr = rmem->base;
+> +		rmtfs_mem->size = rmem->size;
+> +
+> +		rmtfs_mem->base = devm_memremap(&rmtfs_mem->dev, rmtfs_mem->addr,
+> +						rmtfs_mem->size, MEMREMAP_WC);
+> +		if (IS_ERR(rmtfs_mem->base)) {
+> +			dev_err(dev, "failed to remap rmtfs_mem region\n");
+> +			return PTR_ERR(rmtfs_mem->base);
+> +		}
+> +
+> +		return 0;
+> +	}
+> +
+> +	ret = of_property_read_u32(node, "qcom,alloc-size", &size);
+> +	if (ret < 0) {
+> +		dev_err(dev, "rmtfs of unknown size\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/*
+> +	 * Ensure that the protected region isn't adjacent to other protected
+> +	 * regions by allocating an empty page on either side.
+> +	 */
+> +	mem = dma_alloc_coherent(dev, size + 2 * SZ_4K, &dma_addr, GFP_KERNEL);
+Should this be made pagesize-independent? Can we even run non-4K kernels on msm?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Konrad
+> +	if (mem) {
+> +		rmtfs_mem->base = mem + SZ_4K;
+> +		rmtfs_mem->addr = dma_addr + SZ_4K;
+> +		rmtfs_mem->size = size;
+> +
+> +		return 0;
+> +	}
+> +
+> +	dev_err(dev, "unable to allocate memory for rmtfs mem\n");
+> +	return -ENOMEM;
+> +}
+> +
+>  static int qcom_rmtfs_mem_probe(struct platform_device *pdev)
+>  {
+>  	struct device_node *node = pdev->dev.of_node;
+>  	struct qcom_scm_vmperm perms[NUM_MAX_VMIDS + 1];
+> -	struct reserved_mem *rmem;
+>  	struct qcom_rmtfs_mem *rmtfs_mem;
+>  	u32 client_id;
+>  	u32 vmid[NUM_MAX_VMIDS];
+>  	int num_vmids;
+>  	int ret, i;
+>  
+> -	rmem = of_reserved_mem_lookup(node);
+> -	if (!rmem) {
+> -		dev_err(&pdev->dev, "failed to acquire memory region\n");
+> -		return -EINVAL;
+> -	}
+> -
+>  	ret = of_property_read_u32(node, "qcom,client-id", &client_id);
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "failed to parse \"qcom,client-id\"\n");
+> @@ -196,22 +238,16 @@ static int qcom_rmtfs_mem_probe(struct platform_device *pdev)
+>  	if (!rmtfs_mem)
+>  		return -ENOMEM;
+>  
+> -	rmtfs_mem->addr = rmem->base;
+>  	rmtfs_mem->client_id = client_id;
+> -	rmtfs_mem->size = rmem->size;
+>  
+>  	device_initialize(&rmtfs_mem->dev);
+>  	rmtfs_mem->dev.parent = &pdev->dev;
+>  	rmtfs_mem->dev.groups = qcom_rmtfs_mem_groups;
+>  	rmtfs_mem->dev.release = qcom_rmtfs_mem_release_device;
+>  
+> -	rmtfs_mem->base = devm_memremap(&rmtfs_mem->dev, rmtfs_mem->addr,
+> -					rmtfs_mem->size, MEMREMAP_WC);
+> -	if (IS_ERR(rmtfs_mem->base)) {
+> -		dev_err(&pdev->dev, "failed to remap rmtfs_mem region\n");
+> -		ret = PTR_ERR(rmtfs_mem->base);
+> +	ret = qcom_rmtfs_acquire_mem(&pdev->dev, rmtfs_mem);
+> +	if (ret < 0)
+>  		goto put_device;
+> -	}
+>  
+>  	cdev_init(&rmtfs_mem->cdev, &qcom_rmtfs_mem_fops);
+>  	rmtfs_mem->cdev.owner = THIS_MODULE;
