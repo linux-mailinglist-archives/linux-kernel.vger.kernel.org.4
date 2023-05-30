@@ -2,208 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4230B7152F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 03:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F9A7152F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 03:20:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjE3BUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 21:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
+        id S229873AbjE3BUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 21:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjE3BUD (ORCPT
+        with ESMTP id S229569AbjE3BUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 21:20:03 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350A2E0;
-        Mon, 29 May 2023 18:19:56 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QVZLv5PqJz4f3kkd;
-        Tue, 30 May 2023 09:19:51 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAHcLM2T3Vk3lMNKg--.7603S3;
-        Tue, 30 May 2023 09:19:51 +0800 (CST)
-Subject: Re: [PATCH -next v2 7/7] md/raid1-10: limit the number of plugged bio
-To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     song@kernel.org, akpm@osdl.org, neilb@suse.de,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230426082031.1299149-1-yukuai1@huaweicloud.com>
- <20230426082031.1299149-8-yukuai1@huaweicloud.com>
- <CALTww2-yTsHXNFgkAVu0v++HHahZCnvXEUv2qJqbvcGUhKanDw@mail.gmail.com>
- <5e9852fe-0d47-92fc-f6a9-16d028d09ad4@huaweicloud.com>
- <CALTww28ur_S0UpGQqq0TubSgkxGG7dicc1ZKrJ3Pno4CpSOWUw@mail.gmail.com>
- <25279079-2600-b0d3-5279-caaf6f664d71@huaweicloud.com>
- <CALTww2-PjJ74J61jYz032t8K5tszN1tnhEbcv5h+MJjkKuVq2A@mail.gmail.com>
- <c56e7e9c-90ca-29ca-2003-1a9a88d75fa6@huaweicloud.com>
- <CALTww2_JAmqU19Stb1UBVVL-w=ecRFt8WNZo+TmMJVD+O2RJqw@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <37fc3178-c812-ee5e-bd90-34f8e0816a3d@huaweicloud.com>
-Date:   Tue, 30 May 2023 09:19:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 29 May 2023 21:20:45 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FED0B0;
+        Mon, 29 May 2023 18:20:45 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d5b4c3ffeso2786023b3a.2;
+        Mon, 29 May 2023 18:20:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685409644; x=1688001644;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GeB1bn1Ql5+eICLY4RZmbNRSVw+MUH1bfVzmbTWRzaw=;
+        b=kxaOaWbBY428vRJIztcvhlJfpi2EqM9xng1XqnaSI0/WeKxi7fcb1NgjlMfuAa3Y9I
+         W8L3wak/i0x1zSmGAQyhHzboFI8y+RonApN7gT7VJJAfslrCZ9zxOCXAe8T7P46UeoRj
+         i4H9UrUCTg+iJGIQCRL871Cv8QfTrqu6hheXHP95ezCqQ4mqINVtuje6nw3xxAlbgd1l
+         pSZZCdAktY4d2j/+U+cRIpHt/Cuy+G8BupxStOiQ6mNDGVVOrtA/AdJoppfwyqSmaWCM
+         4NyWrbB71NH+17razGhwvC0i7t4q5SsCI0BR4q04EwTyIXM+92Uu9gqLCDUvRctd2vDI
+         DW2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685409644; x=1688001644;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GeB1bn1Ql5+eICLY4RZmbNRSVw+MUH1bfVzmbTWRzaw=;
+        b=WoNxoTuYo6bZqwXDu7OAmRE+kWy0HI9zZy03HQYKtFVBD2DEqjNKkyKPatBgSudN5Z
+         h6LFQbNSO64sGxxkttMYXMNe0jVEvR5BosgSSe3incrV8XcGeC1Tw7sEI3QKPIfd4hNO
+         cJQzaQt7IDyQFBN4+R2EY+DuWagfLInxbtZPcYxUSNRnR+6I48vUv6otkNoaxN/sRYOo
+         FDRLN7E69CnzvYmEAWNVrgNxwdC1VN8dlMlRlpdv6iBKr2f0ITP6VukQHZu/HD8yfMPp
+         WKS53XuLIeEEQEL3KhAw86PeNDBrS4lQAfrTLyXTaCGUuXdmMiQp+JFIF7d8Vj9ljtla
+         3dSw==
+X-Gm-Message-State: AC+VfDxGSuQCfK0jUzg1KT2JgHKxOOZ2KzvBBgkZwY+g4ZdX6HfmI5yQ
+        cEYAKcTyOv/f92xUeMznc7Q=
+X-Google-Smtp-Source: ACHHUZ7DdXmy6fDeXqOHbYEVSqFa35aqm0taGsyDqf5kW5W5EOM+zjEpxFGezYDOh/Nl8POn1X5Aqw==
+X-Received: by 2002:a05:6a20:5483:b0:10b:2f5a:83af with SMTP id i3-20020a056a20548300b0010b2f5a83afmr860114pzk.16.1685409644530;
+        Mon, 29 May 2023 18:20:44 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-46.three.co.id. [116.206.12.46])
+        by smtp.gmail.com with ESMTPSA id w123-20020a636281000000b00528b78ddbcesm7683403pgb.70.2023.05.29.18.20.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 18:20:44 -0700 (PDT)
+Message-ID: <f569e819-9391-0a52-fcda-24946687690d@gmail.com>
+Date:   Tue, 30 May 2023 08:20:39 +0700
 MIME-Version: 1.0
-In-Reply-To: <CALTww2_JAmqU19Stb1UBVVL-w=ecRFt8WNZo+TmMJVD+O2RJqw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHcLM2T3Vk3lMNKg--.7603S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxuFW5uryxAryUuF4fJrWUArb_yoW7XF17pa
-        9xG3WYkr1DJw12yrsIyry0v34Syw4xXr45Wry5Cry2y390gF12gFyIgrWF93ZF9r17Ww4j
-        vr4qq3s7Zrn0kF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] docs: split subtitle of Submitting patches
+To:     Costa Shulyupin <costa.shul@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Rong Tao <rtoax@foxmail.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230425072644.868535-1-costa.shul@redhat.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20230425072644.868535-1-costa.shul@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-在 2023/05/30 8:58, Xiao Ni 写道:
-> On Mon, May 29, 2023 at 4:50 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>
->> Hi,
->>
->> 在 2023/05/29 15:57, Xiao Ni 写道:
->>> On Mon, May 29, 2023 at 11:18 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>>>
->>>> Hi,
->>>>
->>>> 在 2023/05/29 11:10, Xiao Ni 写道:
->>>>> On Mon, May 29, 2023 at 10:20 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>>>>>
->>>>>> Hi,
->>>>>>
->>>>>> 在 2023/05/29 10:08, Xiao Ni 写道:
->>>>>>> Hi Kuai
->>>>>>>
->>>>>>> There is a limitation of the memory in your test. But for most
->>>>>>> situations, customers should not set this. Can this change introduce a
->>>>>>> performance regression against other situations?
->>>>>>
->>>>>> Noted that this limitation is just to triggered writeback as soon as
->>>>>> possible in the test, and it's 100% sure real situations can trigger
->>>>>> dirty pages write back asynchronously and continue to produce new dirty
->>>>>> pages.
->>>>>
->>>>> Hi
->>>>>
->>>>> I'm confused here. If we want to trigger write back quickly, it needs
->>>>> to set these two values with a smaller number, rather than 0 and 60.
->>>>> Right?
->>>>
->>>> 60 is not required, I'll remove this setting.
->>>>
->>>> 0 just means write back if there are any dirty pages.
->>>
->>> Hi Kuai
->>>
->>> Does 0 mean disabling write back? I tried to find the doc that
->>> describes the meaning when setting dirty_background_ratio to 0, but I
->>> didn't find it.
->>> In https://www.kernel.org/doc/html/next/admin-guide/sysctl/vm.html it
->>> doesn't describe this. But it says something like this
->>>
->>> Note:
->>>     dirty_background_bytes is the counterpart of dirty_background_ratio. Only
->>>     one of them may be specified at a time. When one sysctl is written it is
->>>     immediately taken into account to evaluate the dirty memory limits and the
->>>     other appears as 0 when read.
->>>
->>> Maybe you can specify dirty_background_ratio to 1 if you want to
->>> trigger write back ASAP.
->>
->> The purpose here is to trigger write back ASAP, I'm not an expert here,
->> but based on test result, 0 obviously doesn't mean disable write back.
->>
->> Set dirty_background_bytes to a value, dirty_background_ratio will be
->> set to 0 together, which means dirty_background_ratio is disabled.
->> However, change dirty_background_ratio from default value to 0, will end
->> up both dirty_background_ratio and dirty_background_bytes to be 0, and
->> based on following related code, I think 0 just means write back if
->> there are any dirty pages.
->>
->> domain_dirty_limits:
->>    bg_bytes = dirty_background_bytes -> 0
->>    bg_ratio = (dirty_background_ratio * PAGE_SIZE) / 100 -> 0
->>
->>    if (bg_bytes)
->>           bg_thresh = DIV_ROUND_UP(bg_bytes, PAGE_SIZE);
->>    else
->>           bg_thresh = (bg_ratio * available_memory) / PAGE_SIZE; -> 0
->>
->>    dtc->bg_thresh = bg_thresh; -> 0
->>
->> balance_dirty_pages
->>    nr_reclaimable = global_node_page_state(NR_FILE_DIRTY);
->>    if (!laptop_mode && nr_reclaimable > gdtc->bg_thresh &&
->>         !writeback_in_progress(wb))
->>      wb_start_background_writeback(wb); -> writeback ASAP
->>
->> Thanks,
->> Kuai
+On 4/25/23 14:26, Costa Shulyupin wrote:
+> Motivation:
 > 
-> Hi Kuai
+> The original long page title in the left Content pane spans three lines:
 > 
-> I'm not an expert about this either. Thanks for all your patches, I
-> can study more things too. But I still have some questions.
+> Submitting patches: the essential
+>   guide to getting your code into
+>   the kernel
 > 
-> I did a test in my environment something like this:
-> modprobe brd rd_nr=4 rd_size=10485760
-> mdadm -CR /dev/md0 -l10 -n4 /dev/ram[0123] --assume-clean
-> echo 0 > /proc/sys/vm/dirty_background_ratio
-> fio -filename=/dev/md0 -ioengine=libaio -rw=write -thread -bs=1k-8k
-> -numjobs=1 -iodepth=128 --runtime=10 -name=xxx
-> It will cause OOM and the system hangs
 
-OOM means you trigger this problem... Plug hold lots of bios and cost
-lots of memory, it's not that write back is disabled, you can verify
-this by monitor md inflight, noted that don't use too much memory for
-ramdisk(rd_nr * rd_size) in the test so that OOM won't be triggered.
+I think it's OK to have that, if the title can't be further condensed.
 
-Have you tried to test with this patchset?
-
+> Issues:
+> - It is not readable.
+> - It further inflates already overpopulated Contents pane.
 > 
-> modprobe brd rd_nr=4 rd_size=10485760
-> mdadm -CR /dev/md0 -l10 -n4 /dev/ram[0123] --assume-clean
-> echo 1 > /proc/sys/vm/dirty_background_ratio (THIS is the only different place)
-> fio -filename=/dev/md0 -ioengine=libaio -rw=write -thread -bs=1k-8k
-> -numjobs=1 -iodepth=128 --runtime=10 -name=xxx
-> It can finish successfully.  The value of dirty_background_ration is 1
-> here means it flushes ASAP
 
-This really doesn't mean flushes ASAP, our test report this problem in
-the real test that doesn't modify dirty_background_ratio. I guess
-somewhere triggers io_scheduler(), probably background thread think
-dirty pages doesn't match threshold, but I'm not sure for now.
+table of contents?
 
-Thanks,
-Kuai
+> The solution:
+> - Split the long title to title and subtitle.
+> - Vertical bar '|' in Sphinx-doc introduces empty line to
+>   make the subtitle closer to the title than to the following text.
 > 
-> So your method should be the opposite way as you designed. All the
-> memory can't be flushed in time, so it uses all memory very soon and
-> the memory runs out and the system hangs. The reason I'm looking at
-> the test is that do we really need this change. Because in the real
-> world, most customers don't disable write back. Anyway, it depends on
-> Song's decision and thanks for your patches again. I'll review V3 and
-> try to do some performance tests.
-> 
-> Best Regards
-> Xiao
+
+Nope.
+
+The title (as a whole) is already descriptive enough for
+describing the text.
+
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
 
