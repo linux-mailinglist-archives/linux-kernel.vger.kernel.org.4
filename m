@@ -2,198 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C86971663C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E1D71663D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233160AbjE3PJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
+        id S231651AbjE3PJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232650AbjE3PJ1 (ORCPT
+        with ESMTP id S232176AbjE3PJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 May 2023 11:09:27 -0400
-Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC481BF
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:08:57 -0700 (PDT)
-Received: by mail-wr1-x449.google.com with SMTP id ffacd0b85a97d-30ae8a5006dso3994058f8f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:08:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685459331; x=1688051331;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=INyGt+QwuTfaFJp7EMJqWEOGoXUhxd+HBtKKNdnZww4=;
-        b=KCvwHCzwHpZZcpBVv1I1bLVHxO8Xn2ykPeOkv2+KApmacnGFPK6nf/m23byfUEnWss
-         JPn9KobcIzYTNjur4ig/onz6AWeR5RNE0aknK92u/onIH9hZ59bkBT/Z3kS42C5bDN2G
-         ijShs3+RjX/Kyug5HfHwMD6rf945IC5Rb60s1gop/te04Uwtr84EwbUEs7YrUqnreG/n
-         eREjm5sR5mqfWssu4wU3/quLaDOUC7QKSQaaiRRHSnhoF7+f+cK+dVXqf95XrN8AdMiI
-         1I08XmHJ2RwLI/M0G/GOXG10F6zNKZxndz8fVfWBLLp0OgpDirhtbwh8taxNGl9nduTd
-         AuiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685459331; x=1688051331;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=INyGt+QwuTfaFJp7EMJqWEOGoXUhxd+HBtKKNdnZww4=;
-        b=bHZClQtxHfEz22GA+bQsNF0dnaoate2UkS1YNL4tXaCeZsU/3X6qORHFCukMH7Yy4d
-         lUQNEhiVbJFk6z5kZJrXAOa9hVtclji0N0wOSfSGyjtHV/hg+GKHNMX+sKkEkYcKZ1oA
-         Krk9W5vk0HYrKdFhaBgN1SY+3DSGWTKxkLArvLVHzd0auQOA5rai8Qwe4Nak5Jh+aLNE
-         NoX35OCtF4pudqTlHVMSPd4XnZEUs3Dqrrdqjb88c2FI4/4llUlCJkRVnEqj286EAQ7f
-         pF4yHLUlBlZTLtgtqvdRJce0vxOlMP/5wYFeU/+Oh7OQ9md1RGBt2p6lBEwJBdAzYehi
-         99bQ==
-X-Gm-Message-State: AC+VfDwJb3mX3cNDOZbJrocT1RzdK2vDzhPtSfiXXNdkg0IXmEtLrh9e
-        e6FX0gjV+98A3wuHKwlf5nIDkgaJTeLvcg==
-X-Google-Smtp-Source: ACHHUZ7trUbccosip83Jp1hHUHvUBBwTyfaeunBbCnY0yI3RJzF02Xs+ZkFq/94n82IAdm05j7g66a3Ser3rDQ==
-X-Received: from mostafa.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:333c])
- (user=smostafa job=sendgmr) by 2002:a05:6000:46:b0:30a:b030:9ce1 with SMTP id
- k6-20020a056000004600b0030ab0309ce1mr431213wrx.5.1685459330796; Tue, 30 May
- 2023 08:08:50 -0700 (PDT)
-Date:   Tue, 30 May 2023 15:08:45 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230530150845.2856828-1-smostafa@google.com>
-Subject: [PATCH v3] KVM: arm64: Use BTI for nvhe
-From:   Mostafa Saleh <smostafa@google.com>
-To:     maz@kernel.org, oliver.upton@linux.dev,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A2DBE;
+        Tue, 30 May 2023 08:08:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ONi2LwfLt+xRG9bIQ5QSjdvNMAUWxk00n5O1GQIOnrk=; b=tDsBXVtnCAiKExB8uTsH5FcT1Q
+        N6VzbZ20z+HfPZyq+Csfu4wFUvYbz+74B5mmuieLDkXAsjOtOcqCnOsCG2cbJLjSID7hFZCjusHzn
+        wFrd23RMw7axitU8e+eBmCqugF75Pva+RCXnNESt/+vYfodWTHlhn3HzU740mFa7qLbcUlR9uaOJm
+        hioXHpL7vy17P8XAcAZaEThGtYf0PZ/AA+FhqZAAIFOjagyKktqwQbPH6QIEUdbsrJ6Af9ywdh9ll
+        R6gf/IQpkU9NVzxcD83jrZRG8ujwh40rbG+A1Oom9TgaIaFnXCqvuv/deTGm0zS4tZiuc2xhYeHwb
+        DRdMIfag==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56642)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q40xt-000307-Ka; Tue, 30 May 2023 16:08:49 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q40xs-00088o-Ab; Tue, 30 May 2023 16:08:48 +0100
+Date:   Tue, 30 May 2023 16:08:48 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     tabba@google.com, qperret@google.com, will@kernel.org,
-        catalin.marinas@arm.com, yuzenghui@huawei.com,
-        suzuki.poulose@arm.com, james.morse@arm.com, bgardon@google.com,
-        gshan@redhat.com, Mostafa Saleh <smostafa@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [RFC] net: dsa: slave: Advertise correct EEE capabilities at
+ slave PHY setup
+Message-ID: <ZHYRgIb6UCYq1n/Z@shell.armlinux.org.uk>
+References: <20230530122621.2142192-1-lukma@denx.de>
+ <ZHXzTBOtlPKqNfLw@shell.armlinux.org.uk>
+ <20230530160743.2c93a388@wsk>
+ <ZHYGv7zcJd/Ad4hH@shell.armlinux.org.uk>
+ <35546c34-17a6-4295-b263-3f2a97d53b94@lunn.ch>
+ <20230530164731.0b711649@wsk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530164731.0b711649@wsk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CONFIG_ARM64_BTI_KERNEL compiles the kernel to support ARMv8.5-BTI.
-However, the nvhe code doesn't make use of it as it doesn't map any
-pages with Guarded Page(GP) bit.
+On Tue, May 30, 2023 at 04:47:31PM +0200, Lukasz Majewski wrote:
+> Hi Andrew,
+> 
+> > > So, I'm wondering what's actually going on here... can you give
+> > > any more details about the hardware setup?  
+> > 
+> > And what switch it actually is.
+> 
+> It is mv88e6071.
+> 
+> > I've not looked in too much detail,
+> > but i think different switch families have different EEE capabilities.
+> 
+> Yes, some (like b53) have the ability to disable EEE in the HW.
+> 
+> The above one from Marvell seems to have EEE always enabled (in silicon)
+> and the only possibility is to not advertise it [*].
 
-kvm pgtable code is modified to map executable pages with GP bit
-if BTI is enabled for the kernel.
+Right, and that tells the remote end "we don't support EEE" so the
+remote end should then disable EEE support.
 
-At hyp init, SCTLR_EL2.BT is set to 1 to match EL1 configuration
-(SCTLR_EL1.BT1) set in bti_enable().
+Meanwhile the local MAC will _still_ signal LPI towards its PHY. I
+have no idea whether the PHY will pass that LPI signal onwards to
+the media in that case, or if it prevents entering low power mode.
 
-One difference between kernel and nvhe code, is that the kernel maps
-.text with GP while nvhe maps all the executable pages, this makes
-nvhe code need to deal with special initialization code coming from
-other executable sections (.idmap.text).
-For this we need to add bti instruction at the beginning of
-__kvm_handle_stub_hvc as it can be called by  __host_hvc through
-branch instruction(br) and unlike SYM_FUNC_START, SYM_CODE_START
-doesn=E2=80=99t add bti instruction at the beginning, and it can=E2=80=99t =
-be modified
-to add it as it is used with vector tables.
-Another solution which is more intrusive is to convert
-__kvm_handle_stub_hvc to a function and inject =E2=80=9Cbti jc=E2=80=9D ins=
-tead of
-=E2=80=9Cbti c=E2=80=9D in SYM_FUNC_START
+It would be interesting to connect two of these switches together,
+put a 'scope on the signals between the PHY and the media isolation
+transformer, and see whether it's entering low power mode,
+comparing when EEE is successfully negotiated vs not negotiated.
 
-Signed-off-by: Mostafa Saleh <smostafa@google.com>
----
-v2 -> v3:
-- Map all executable pages with GP bit instead of just .text, this
-  simplifies the code and avoids hacks in pgtable code.
-v1 -> v2:
-- Enable BTI for nvhe also.
-- Only set GP bit for executable pages from pgtable code.
-- Set SCTLR_EL2.BT when BTI is used.
-- use system_supports_bti() for consistency.
-- Add hyp_init_valid_leaf_pte.
-v1: https://lore.kernel.org/all/20230516141846.792193-1-smostafa@google.com=
-/
----
- arch/arm64/include/asm/sysreg.h    |  1 +
- arch/arm64/kvm/hyp/nvhe/hyp-init.S | 12 ++++++++++++
- arch/arm64/kvm/hyp/pgtable.c       |  7 ++++++-
- 3 files changed, 19 insertions(+), 1 deletion(-)
+My suspicion would be that in the case where the MAC always signals
+LPI to the PHY, the result of negotiation won't make a blind bit of
+difference.
 
-diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysre=
-g.h
-index e72d9aaab6b1..204124ce86c4 100644
---- a/arch/arm64/include/asm/sysreg.h
-+++ b/arch/arm64/include/asm/sysreg.h
-@@ -558,6 +558,7 @@
- 			 (BIT(18)) | (BIT(22)) | (BIT(23)) | (BIT(28)) | \
- 			 (BIT(29)))
-=20
-+#define SCTLR_EL2_BT	(BIT(36))
- #ifdef CONFIG_CPU_BIG_ENDIAN
- #define ENDIAN_SET_EL2		SCTLR_ELx_EE
- #else
-diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-init.S b/arch/arm64/kvm/hyp/nvhe/h=
-yp-init.S
-index a6d67c2bb5ae..f3ee66aa2f9d 100644
---- a/arch/arm64/kvm/hyp/nvhe/hyp-init.S
-+++ b/arch/arm64/kvm/hyp/nvhe/hyp-init.S
-@@ -128,6 +128,13 @@ alternative_if ARM64_HAS_ADDRESS_AUTH
- 		     SCTLR_ELx_ENDA | SCTLR_ELx_ENDB)
- 	orr	x0, x0, x1
- alternative_else_nop_endif
-+
-+#ifdef CONFIG_ARM64_BTI_KERNEL
-+alternative_if ARM64_BTI
-+	orr	x0, x0, #SCTLR_EL2_BT
-+alternative_else_nop_endif
-+#endif /* CONFIG_ARM64_BTI_KERNEL */
-+
- 	msr	sctlr_el2, x0
- 	isb
-=20
-@@ -196,6 +203,11 @@ SYM_CODE_START_LOCAL(__kvm_hyp_init_cpu)
- SYM_CODE_END(__kvm_hyp_init_cpu)
-=20
- SYM_CODE_START(__kvm_handle_stub_hvc)
-+	/*
-+	 * __kvm_handle_stub_hvc called from __host_hvc through branch instructio=
-n(br) so
-+	 * we need bti j at beginning.
-+	 */
-+	bti j
- 	cmp	x0, #HVC_SOFT_RESTART
- 	b.ne	1f
-=20
-diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-index 3d61bd3e591d..a79a45fc4047 100644
---- a/arch/arm64/kvm/hyp/pgtable.c
-+++ b/arch/arm64/kvm/hyp/pgtable.c
-@@ -34,7 +34,7 @@
- #define KVM_PTE_LEAF_ATTR_LO_S2_SH_IS	3
- #define KVM_PTE_LEAF_ATTR_LO_S2_AF	BIT(10)
-=20
--#define KVM_PTE_LEAF_ATTR_HI		GENMASK(63, 51)
-+#define KVM_PTE_LEAF_ATTR_HI		GENMASK(63, 50)
-=20
- #define KVM_PTE_LEAF_ATTR_HI_SW		GENMASK(58, 55)
-=20
-@@ -42,6 +42,8 @@
-=20
- #define KVM_PTE_LEAF_ATTR_HI_S2_XN	BIT(54)
-=20
-+#define KVM_PTE_LEAF_ATTR_HI_S1_GP	BIT(50)
-+
- #define KVM_PTE_LEAF_ATTR_S2_PERMS	(KVM_PTE_LEAF_ATTR_LO_S2_S2AP_R | \
- 					 KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W | \
- 					 KVM_PTE_LEAF_ATTR_HI_S2_XN)
-@@ -371,6 +373,9 @@ static int hyp_set_prot_attr(enum kvm_pgtable_prot prot=
-, kvm_pte_t *ptep)
-=20
- 		if (device)
- 			return -EINVAL;
-+
-+		if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) && system_supports_bti())
-+			attr |=3D KVM_PTE_LEAF_ATTR_HI_S1_GP;
- 	} else {
- 		attr |=3D KVM_PTE_LEAF_ATTR_HI_S1_XN;
- 	}
---=20
-2.41.0.rc0.172.g3f132b7071-goog
+> > But in general, as Russell pointed out, there is no MAC support for
+> > EEE in the mv88e6xxx driver.
+> 
+> I may be wrong, but aren't we accessing this switch PHYs via c45 ?
+> (MDIO_MMD_PCS devices and e.g. MDIO_PCS_EEE_ABLE registers)?
 
+As I've said - EEE is a MAC-to-MAC thing. The PHYs do the capability
+negotiation and handle the media dependent part of EEE. However, it's
+the MACs that signal to the PHY "I'm idle, please enter low power
+mode" and when both ends that they're idle, the media link only then
+drops into low power mode. This is the basic high-level operation of
+EEE in an 802.3 compliant system.
+
+As I've also said, there are PHYs out there which do their own thing
+as an "enhancement" to allow MACs that aren't EEE capable to gain
+*some* of the power savings from EEE (and I previously noted one
+such example.)
+
+The PHY EEE configuration is always done via Clause 45 - either through
+proper clause 45 cycles on the MDIO bus, or through the MMD access
+through a couple of clause 22 registers. There aren't the registers in
+the clause 22 address space for EEE.
+
+The MDIO_PCS_EEE_ABLE registers describe what the capabilities of the
+PHY is to the management software (in this case phylib). These are not
+supposed to change. The advertisements are programmed via the
+autonegotiation MMD register set. There's some additional configuration
+bits in the PHY which control whether the clock to the MAC is stopped
+when entering EEE low-power mode.
+
+However, even with all that, the MAC is still what is involved in
+giving the PHY permission to enter EEE low-power mode.
+
+The broad outline sequence in an 802.3 compliant setup is:
+
+- Whenever the MAC sends a packet, it resets the LPI timer.
+- When LPI timer expires, MAC signals to PHY that it can enter
+  low-power mode.
+- When the PHY at both ends both agree that they have permission from
+  their respective MACs to enter low power mode, they initiate the
+  process to put the media into low power mode.
+- If the PHY has been given permission from management software to stop
+  clock, the PHY will stop the clock to the MAC.
+- When the MAC has a packet to send, the MAC stops signalling low-power
+  mode to the PHY.
+- The PHY restores the clock if it was stopped, and wakes up the link,
+  thereby causing the remote PHY to also wake up.
+- Normal operation resumes.
+
+802.3 EEE is not a PHY-to-PHY thing, it's MAC-to-MAC.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
