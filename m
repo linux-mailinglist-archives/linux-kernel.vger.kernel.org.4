@@ -2,119 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ACC6715746
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4687E71576F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbjE3HnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
+        id S229941AbjE3HoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjE3HnH (ORCPT
+        with ESMTP id S231289AbjE3HnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:43:07 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2124.outbound.protection.outlook.com [40.107.93.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCD4E46;
-        Tue, 30 May 2023 00:42:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZUA/TKDOtgLVZP5+7JrD8J6OblR06w8s63NJJ8xraumWO8/bEnJq8WUOE6wuVXaBHhyZgRixRbnYfwFFFk7IRpfr6wRqF+kkivz54p/lp3yFQMH9m6Rv3o+50X1B2I9sGowhsSC5XmrQO3HFaYxOerd39b8EEzcm62D4wFThuK154tWmPbogUsqzxi6rhlSlWmJ9NMcdMHrdKSkEv+pb4whZZT093dOof+U6UCULRhPmOxSJFdS7WZPz4VRAxN2cWdOgO7G5Pv2BG2S7KOGTUmBEhHu2WIpr4o3z7hK1JlwasLCIX9tgkypjVaKgNc5GkJw31YdDeR2iy4LiJzXMhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A0iTJoOUKYcCHUVonbCEsrr0Qn+TXSrDhfbjQeh8Mgs=;
- b=IjpuOAqa6dCQVoUIvdjwmtadplDBZWd5YK5fE4tJaj3zZ+r0m58bYRmHLW1fMD3Px6zVadEYgGai/R5LxitrWCZ50k/LNI9XTLEdYZl5dr9BdIoWpLbFiLrsFHFjfaN0FaQ5X5uI2uCfehN5WR6lmxwDOQgc96Ttguj9xRIQrgpmyWOFnrqUqc+ZFWPjJ4gANTD9viTBNRTRTpatZi4q6qmcUQvjXRyh+4ywyKsY+Y7osJAdEfk1RPS9qTnO8DUzL/n0vg/DwdBn8LqPFHUiq3SY2nT21bxwACThRyxrPNeQ8xglnt2e2BxS0bpJWb2wXh3xEEUgmGzUjJgTbGecog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Tue, 30 May 2023 03:43:25 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEDA11B;
+        Tue, 30 May 2023 00:43:04 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b041ccea75so12702515ad.2;
+        Tue, 30 May 2023 00:43:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A0iTJoOUKYcCHUVonbCEsrr0Qn+TXSrDhfbjQeh8Mgs=;
- b=aXvzQD3Zyn27kXKCq9DC8R+23hhMrRKXtoXRep0wUJFFbEFhm/xpKAAduRVl/lGY2Us6F8paXlE+IksTs0OqESqySv0Rn3QH/lWLYf6d1N5UY/AiTLLHFHQ2hJvH33QuX18oTVMWCJhnqBhel0bM8En6P0YDe0T4RoO3f1L4Lbk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by LV8PR13MB6494.namprd13.prod.outlook.com (2603:10b6:408:190::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.21; Tue, 30 May
- 2023 07:42:26 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.022; Tue, 30 May 2023
- 07:42:26 +0000
-Date:   Tue, 30 May 2023 09:42:20 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Stefan Schmidt <stefan@datenfreihafen.org>,
-        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexander Aring <alex.aring@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next v1 1/1] ieee802154: ca8210: Remove stray
- gpiod_unexport() call
-Message-ID: <ZHWo3LHLunOkXaqW@corigine.com>
-References: <20230528140938.34034-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230528140938.34034-1-andriy.shevchenko@linux.intel.com>
-X-ClientProxiedBy: AS4P189CA0019.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:5db::10) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20221208; t=1685432581; x=1688024581;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wh4S3DCs0K/sx0d0emXPkFW/k+nrYsVpD6MXHagOka8=;
+        b=BeuzAaT4hlrlDV5Bta7Tqvjr3FA9SzJDD3BDaQwbLad69CE1q9SF4yagSulQ3znqAz
+         P6gTRS6z5GjXBXdltMkG84IXAVsJtsSK5qaO/DQNbW7YD+uLIcOqX4ka2ofMvpVLEshq
+         NooJfzAFBjF0/Y0yZ1pC+5zL6a8Ct+EHwdBuY5ImL04YRrFLF1DiOWzzRQW2C8FhaQd0
+         CilVUmZ+Bfe3i2OizJnEOmlDbfdPvvJZx52uHT5TQdM/+WhWr3lqQFRlDS9Q3P653L7t
+         kZunIGCZN3W8/CvOvxNFVEVKWQyIfcvIbM9pP8fICDvgSEqzO7ZDO21YEaADQwR7BBx6
+         lngA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685432581; x=1688024581;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wh4S3DCs0K/sx0d0emXPkFW/k+nrYsVpD6MXHagOka8=;
+        b=iYEK2ga/buzivWqGouaozRch365rC81NROWc6WH9wSKtl8SapnCB+QXURoAA79rcpm
+         u+fuFfIR25JX2+50WsDL+M4uQs1AhY7mwc6kTLfCK9Iwr4himyIZQ21YzSMb9JHDYepf
+         joXQQQRSAAQh7qrFSf851rNVltCqrMKxE4a3LniSPMRy+hB2GuGu+ghMD/ov1q94nNxB
+         L+2BqXEK01fdevRXa5ez474FerbqGKDZEVU324ax4hn0JOYFWKU8KAx5xE3M0tZAIR6q
+         HbBieXbHEQ0nUWDuYVBP03qBI2LPkAu6R7bvA29PUOmwDsRtkGU5yRHqE6rUyuuCgZ/N
+         Z2RA==
+X-Gm-Message-State: AC+VfDyZOyY8M5Liuhss6E1Ys95nLgmiHANfGJQb8+C/4fZDLqml+482
+        PgItJzi3/vhEh+r37lKgmPKyVx099mk=
+X-Google-Smtp-Source: ACHHUZ7GBF4O1qXSBR/+7WtyXCA4nLQdc7hJRuWJqP7HUZg6KWOLcb9FCYsYwmXRQXhrVrMEWZJ5Bw==
+X-Received: by 2002:a17:903:182:b0:1b0:2bc1:94bc with SMTP id z2-20020a170903018200b001b02bc194bcmr1910322plg.65.1685432581221;
+        Tue, 30 May 2023 00:43:01 -0700 (PDT)
+Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id a14-20020a170902ecce00b001afb96f4b90sm5930793plh.274.2023.05.30.00.42.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 00:43:00 -0700 (PDT)
+From:   Jacky Huang <ychuang570808@gmail.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, tmaimon77@gmail.com, catalin.marinas@arm.com,
+        will@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, arnd@arndb.de, soc@kernel.org,
+        schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v12 09/10] reset: Add Nuvoton ma35d1 reset driver support
+Date:   Tue, 30 May 2023 07:42:20 +0000
+Message-Id: <20230530074221.1031011-10-ychuang570808@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230530074221.1031011-1-ychuang570808@gmail.com>
+References: <20230530074221.1031011-1-ychuang570808@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|LV8PR13MB6494:EE_
-X-MS-Office365-Filtering-Correlation-Id: 147bafe8-0630-40b2-7bd6-08db60e169b9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yIx8WZlsgCbrXKLR2DHKBdZmyv8lMGjLelfncKv9MItdhM1nZnIjxzAnh5lvBdcZoNSolHQGnvpIT9/552RN7rfX7d6TMnxPUBVa62vyXKx4egf4cHjBFljMYv7Wda2GpFBZfl9b2wb9Z69UR4Csffx5Rmiqo02gpeiZD4NehiwVnURuQiDVhAzdlfruXXyB1oztAOPOU9KIjxyzi/qmZzaki4+Matawi4ewvpX3/HkVHC4sMTPFthu622pasCGlt929q9j8s4bJWK6wAofiojO1lAw4Tpm8hxSk8Kg2pZomHRlCR0eIjxcMArK5zDkCYhTsgMwtX80WKXv1NugOqK5qja12h9LybzVYkmu6cTfEXVM3UCql74gb2fb7HAYwpY4N7coBFnIDwjdg7DZb9V148XEbQ9Tj0rxN9kD5b3UzNNNqfLAvZzfoFP+5JsgpNrbLs8e1tO/9M2/+BLV96Mn6+oDdadT326c2CpnW02Q7RB/xzNR9wqqcwwXHOSS/uHIVzhLs+6v57q1M0IbXpuX7lHRjWFR0pv+Ix2Rve4Hw7Kr60wYNECiidrgOUxPm
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(396003)(346002)(376002)(366004)(136003)(451199021)(478600001)(54906003)(8676002)(8936002)(7416002)(44832011)(5660300002)(36756003)(2906002)(4744005)(86362001)(4326008)(6916009)(66556008)(66476007)(66946007)(316002)(38100700002)(41300700001)(2616005)(186003)(6506007)(6512007)(6486002)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JmCjG4Sp4T1ByPBNA06rVgXOe1TpcqGHATgK2Cc8tqItJWPzbOMMv1wcoFg6?=
- =?us-ascii?Q?J6dUNCylMD1opbaNPuX+yPs+0maNDk5Zkv/jg92FFz8SouWHy23KkEk4Idfs?=
- =?us-ascii?Q?JzzB6fi+jlq1hYqDGUDeZWWLWRZenFarb82NvdtyF5m28E8BVvApHHQ0Ka7M?=
- =?us-ascii?Q?liE9dareWgbFhZFM3A+JY1rx/V3HzZJDf9mDvjg9GUQwHQ3G/j1zGXkt2pDg?=
- =?us-ascii?Q?jwx78SYTtHXZKzE+uwh36unP2dyttZqEy/4TjK70HXKSNzTKG4smU66JQVh1?=
- =?us-ascii?Q?okvzga/53sxwyiEcQ6CxXQ9atxHkg2LWqS2iBZ86niQKC65XTZLN7bVvFfon?=
- =?us-ascii?Q?JQTfsr5TWagyij9U0vMLy8mOa/+2N7RjayMwQMUI9w+7u65JuULxB90mXvMS?=
- =?us-ascii?Q?QB0AvDSDeIx1ihHuMjDFkRSf5KrkmbCjT2cXjFiivGA9aIEzirfAOAaF7WOw?=
- =?us-ascii?Q?e5Y6Alhia9Z33j/PO2Pub/mlHObaozLtybxPq+1PMsh/QLSZK62nNGB36HrQ?=
- =?us-ascii?Q?hBaqC4I4nhuO4KHZGp7+YYnVDAvj9iSLtbsCaMB3ZQibA8gZlLYUeDmbqKNl?=
- =?us-ascii?Q?naN+MFrO7f0ntLoD7v1lFRulBnQvQkqR34PJU3RnnKXvCM11Zhr9bOOr3AGm?=
- =?us-ascii?Q?QarZNxnsNCyELT3EvUHeM+2bm5mMdF0HvSDnxosV97o7JPxkSPfgcxht1kxQ?=
- =?us-ascii?Q?tmba8pRzsVZvYaVYr105FjuWDwgONGyNC9af+fdZmM+z4Fuez8XrITnLlRnY?=
- =?us-ascii?Q?Kl7GDxyz5pNRo5/gpXl625XJ/0ig5Tt94/a6emOAuVAtrwls+WcUC3iCGTcJ?=
- =?us-ascii?Q?uSOKoPd3U8eX3Uot+L0a8k6SaAbsihcPBzDuUfSfSEJsN71wb7Fr8W7TnVDj?=
- =?us-ascii?Q?cfttr/uuFPzAc+nyd6ktxxGac4VUemtjIdw5vSDKGK9T08ipuibeW2hXPDUu?=
- =?us-ascii?Q?o+3Y5lC7MGysIb5+BbygblVhlX4g6JT9fQbD5zKDoGo/M8JNaf7Xx4WyT2vm?=
- =?us-ascii?Q?GVKJcQCgjI3qkyq5xw1u02PHPOpD/+SLerJv8A9P+VNWxwF8AN6wSWOLXDbe?=
- =?us-ascii?Q?IrPgiLMaO615Fra5ZI2oLuwGHrlaRYbnZzUoWRm3I+r1gamUAqzm6RuvbiKC?=
- =?us-ascii?Q?HwuaBYGCbPLm7YDhWeJvOQBJzGCHrNtqDXfsePGiaGVeziOY5EEKH7ysFYCt?=
- =?us-ascii?Q?TayICZRytZhPQ2LstB3AxHEPH+lPShjAe1CCewGa/4WRmTVYowcKbI1H5ej7?=
- =?us-ascii?Q?t6NBx1tHnIEj7+w99uekdAtvuiL8XOusmScUAlsRsp9eXyFk2eoCmELpkYg6?=
- =?us-ascii?Q?Pe42VF66PeLPWn3DCzgfjnXfyVlYEslqsP3Rpw1QDJnaDLK3I5phC9DlAeu0?=
- =?us-ascii?Q?EBN9v/COZgYV77W4V0ltjWG7IxIWMPYUdITzDCDuetuAvRgkaksJBYfYPgqH?=
- =?us-ascii?Q?Ll2P8jnKnhBpRD/umMhACMY4thGnxd5Xr2y1+sRLrH/8UfZf0RfQKjdP85pI?=
- =?us-ascii?Q?MKQvx+wWnaXl1YzJzvVdDLiKWCX59hbXXPSk/V9sc1bVi+7NJ1yZU56wc2A3?=
- =?us-ascii?Q?gg9Ro7zC4TF7Y6eYkEPbUCbBcKmWwz5/NzvJNfQaCHym80Z/IRZtBuJYfuC5?=
- =?us-ascii?Q?xrNrmBmVRG7u1ZQ1bYEWt9pmlJ8L2FwrSrWKGjgINBG8QWH3qag/WxTMZyjQ?=
- =?us-ascii?Q?mYjaKA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 147bafe8-0630-40b2-7bd6-08db60e169b9
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 07:42:26.2517
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Etn4apLQLs655MVtJCHO1BpWYEhPV3srsuCRCss9M+n0BHOEo5Ouq/GwtehdNyK7EyB2zV/RI5ynTxgVBBwFJJ7avpyFQGJEbRx5P14hEX4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR13MB6494
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,12 +81,291 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 05:09:38PM +0300, Andy Shevchenko wrote:
-> There is no gpiod_export() and gpiod_unexport() looks pretty much stray.
-> The gpiod_export() and gpiod_unexport() shouldn't be used in the code,
-> GPIO sysfs is deprecated. That said, simply drop the stray call.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Jacky Huang <ychuang3@nuvoton.com>
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+This driver supports individual IP reset for the MA35D1. The reset
+control registers are a subset of the system control registers.
+
+Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/reset/Kconfig        |   6 +
+ drivers/reset/Makefile       |   1 +
+ drivers/reset/reset-ma35d1.c | 235 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 242 insertions(+)
+ create mode 100644 drivers/reset/reset-ma35d1.c
+
+diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+index 6aa8f243b30c..07499177a266 100644
+--- a/drivers/reset/Kconfig
++++ b/drivers/reset/Kconfig
+@@ -143,6 +143,12 @@ config RESET_NPCM
+ 	  This enables the reset controller driver for Nuvoton NPCM
+ 	  BMC SoCs.
+ 
++config RESET_NUVOTON_MA35D1
++	bool "Nuvton MA35D1 Reset Driver"
++	default ARCH_MA35 || COMPILE_TEST
++	help
++	  This enables the reset controller driver for Nuvoton MA35D1 SoC.
++
+ config RESET_OXNAS
+ 	bool
+ 
+diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+index 7fec5af6c964..411b45ba0da7 100644
+--- a/drivers/reset/Makefile
++++ b/drivers/reset/Makefile
+@@ -21,6 +21,7 @@ obj-$(CONFIG_RESET_MCHP_SPARX5) += reset-microchip-sparx5.o
+ obj-$(CONFIG_RESET_MESON) += reset-meson.o
+ obj-$(CONFIG_RESET_MESON_AUDIO_ARB) += reset-meson-audio-arb.o
+ obj-$(CONFIG_RESET_NPCM) += reset-npcm.o
++obj-$(CONFIG_RESET_NUVOTON_MA35D1) += reset-ma35d1.o
+ obj-$(CONFIG_RESET_OXNAS) += reset-oxnas.o
+ obj-$(CONFIG_RESET_PISTACHIO) += reset-pistachio.o
+ obj-$(CONFIG_RESET_POLARFIRE_SOC) += reset-mpfs.o
+diff --git a/drivers/reset/reset-ma35d1.c b/drivers/reset/reset-ma35d1.c
+new file mode 100644
+index 000000000000..54e53863c98a
+--- /dev/null
++++ b/drivers/reset/reset-ma35d1.c
+@@ -0,0 +1,235 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2023 Nuvoton Technology Corp.
++ * Author: Chi-Fang Li <cfli0@nuvoton.com>
++ */
++
++#include <linux/bits.h>
++#include <linux/container_of.h>
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/reboot.h>
++#include <linux/reset-controller.h>
++#include <linux/spinlock.h>
++#include <dt-bindings/reset/nuvoton,ma35d1-reset.h>
++
++struct ma35d1_reset_data {
++	struct reset_controller_dev rcdev;
++	struct notifier_block restart_handler;
++	void __iomem *base;
++	/* protect registers against concurrent read-modify-write */
++	spinlock_t lock;
++};
++
++static const struct {
++	u32 reg_ofs;
++	u32 bit;
++} ma35d1_reset_map[] = {
++	[MA35D1_RESET_CHIP] =    {0x20, 0},
++	[MA35D1_RESET_CA35CR0] = {0x20, 1},
++	[MA35D1_RESET_CA35CR1] = {0x20, 2},
++	[MA35D1_RESET_CM4] =     {0x20, 3},
++	[MA35D1_RESET_PDMA0] =   {0x20, 4},
++	[MA35D1_RESET_PDMA1] =   {0x20, 5},
++	[MA35D1_RESET_PDMA2] =   {0x20, 6},
++	[MA35D1_RESET_PDMA3] =   {0x20, 7},
++	[MA35D1_RESET_DISP] =    {0x20, 9},
++	[MA35D1_RESET_VCAP0] =   {0x20, 10},
++	[MA35D1_RESET_VCAP1] =   {0x20, 11},
++	[MA35D1_RESET_GFX] =     {0x20, 12},
++	[MA35D1_RESET_VDEC] =    {0x20, 13},
++	[MA35D1_RESET_WHC0] =    {0x20, 14},
++	[MA35D1_RESET_WHC1] =    {0x20, 15},
++	[MA35D1_RESET_GMAC0] =   {0x20, 16},
++	[MA35D1_RESET_GMAC1] =   {0x20, 17},
++	[MA35D1_RESET_HWSEM] =   {0x20, 18},
++	[MA35D1_RESET_EBI] =     {0x20, 19},
++	[MA35D1_RESET_HSUSBH0] = {0x20, 20},
++	[MA35D1_RESET_HSUSBH1] = {0x20, 21},
++	[MA35D1_RESET_HSUSBD] =  {0x20, 22},
++	[MA35D1_RESET_USBHL] =   {0x20, 23},
++	[MA35D1_RESET_SDH0] =    {0x20, 24},
++	[MA35D1_RESET_SDH1] =    {0x20, 25},
++	[MA35D1_RESET_NAND] =    {0x20, 26},
++	[MA35D1_RESET_GPIO] =    {0x20, 27},
++	[MA35D1_RESET_MCTLP] =   {0x20, 28},
++	[MA35D1_RESET_MCTLC] =   {0x20, 29},
++	[MA35D1_RESET_DDRPUB] =  {0x20, 30},
++	[MA35D1_RESET_TMR0] =    {0x24, 2},
++	[MA35D1_RESET_TMR1] =    {0x24, 3},
++	[MA35D1_RESET_TMR2] =    {0x24, 4},
++	[MA35D1_RESET_TMR3] =    {0x24, 5},
++	[MA35D1_RESET_I2C0] =    {0x24, 8},
++	[MA35D1_RESET_I2C1] =    {0x24, 9},
++	[MA35D1_RESET_I2C2] =    {0x24, 10},
++	[MA35D1_RESET_I2C3] =    {0x24, 11},
++	[MA35D1_RESET_QSPI0] =   {0x24, 12},
++	[MA35D1_RESET_SPI0] =    {0x24, 13},
++	[MA35D1_RESET_SPI1] =    {0x24, 14},
++	[MA35D1_RESET_SPI2] =    {0x24, 15},
++	[MA35D1_RESET_UART0] =   {0x24, 16},
++	[MA35D1_RESET_UART1] =   {0x24, 17},
++	[MA35D1_RESET_UART2] =   {0x24, 18},
++	[MA35D1_RESET_UART3] =   {0x24, 19},
++	[MA35D1_RESET_UART4] =   {0x24, 20},
++	[MA35D1_RESET_UART5] =   {0x24, 21},
++	[MA35D1_RESET_UART6] =   {0x24, 22},
++	[MA35D1_RESET_UART7] =   {0x24, 23},
++	[MA35D1_RESET_CANFD0] =  {0x24, 24},
++	[MA35D1_RESET_CANFD1] =  {0x24, 25},
++	[MA35D1_RESET_EADC0] =   {0x24, 28},
++	[MA35D1_RESET_I2S0] =    {0x24, 29},
++	[MA35D1_RESET_SC0] =     {0x28, 0},
++	[MA35D1_RESET_SC1] =     {0x28, 1},
++	[MA35D1_RESET_QSPI1] =   {0x28, 4},
++	[MA35D1_RESET_SPI3] =    {0x28, 6},
++	[MA35D1_RESET_EPWM0] =   {0x28, 16},
++	[MA35D1_RESET_EPWM1] =   {0x28, 17},
++	[MA35D1_RESET_QEI0] =    {0x28, 22},
++	[MA35D1_RESET_QEI1] =    {0x28, 23},
++	[MA35D1_RESET_ECAP0] =   {0x28, 26},
++	[MA35D1_RESET_ECAP1] =   {0x28, 27},
++	[MA35D1_RESET_CANFD2] =  {0x28, 28},
++	[MA35D1_RESET_ADC0] =    {0x28, 31},
++	[MA35D1_RESET_TMR4] =    {0x2C, 0},
++	[MA35D1_RESET_TMR5] =    {0x2C, 1},
++	[MA35D1_RESET_TMR6] =    {0x2C, 2},
++	[MA35D1_RESET_TMR7] =    {0x2C, 3},
++	[MA35D1_RESET_TMR8] =    {0x2C, 4},
++	[MA35D1_RESET_TMR9] =    {0x2C, 5},
++	[MA35D1_RESET_TMR10] =   {0x2C, 6},
++	[MA35D1_RESET_TMR11] =   {0x2C, 7},
++	[MA35D1_RESET_UART8] =   {0x2C, 8},
++	[MA35D1_RESET_UART9] =   {0x2C, 9},
++	[MA35D1_RESET_UART10] =  {0x2C, 10},
++	[MA35D1_RESET_UART11] =  {0x2C, 11},
++	[MA35D1_RESET_UART12] =  {0x2C, 12},
++	[MA35D1_RESET_UART13] =  {0x2C, 13},
++	[MA35D1_RESET_UART14] =  {0x2C, 14},
++	[MA35D1_RESET_UART15] =  {0x2C, 15},
++	[MA35D1_RESET_UART16] =  {0x2C, 16},
++	[MA35D1_RESET_I2S1] =    {0x2C, 17},
++	[MA35D1_RESET_I2C4] =    {0x2C, 18},
++	[MA35D1_RESET_I2C5] =    {0x2C, 19},
++	[MA35D1_RESET_EPWM2] =   {0x2C, 20},
++	[MA35D1_RESET_ECAP2] =   {0x2C, 21},
++	[MA35D1_RESET_QEI2] =    {0x2C, 22},
++	[MA35D1_RESET_CANFD3] =  {0x2C, 23},
++	[MA35D1_RESET_KPI] =     {0x2C, 24},
++	[MA35D1_RESET_GIC] =     {0x2C, 28},
++	[MA35D1_RESET_SSMCC] =   {0x2C, 30},
++	[MA35D1_RESET_SSPCC] =   {0x2C, 31}
++};
++
++static int ma35d1_restart_handler(struct notifier_block *this, unsigned long mode, void *cmd)
++{
++	struct ma35d1_reset_data *data =
++				 container_of(this, struct ma35d1_reset_data, restart_handler);
++	u32 id = MA35D1_RESET_CHIP;
++
++	writel_relaxed(BIT(ma35d1_reset_map[id].bit),
++		       data->base + ma35d1_reset_map[id].reg_ofs);
++	return 0;
++}
++
++static int ma35d1_reset_update(struct reset_controller_dev *rcdev, unsigned long id, bool assert)
++{
++	struct ma35d1_reset_data *data = container_of(rcdev, struct ma35d1_reset_data, rcdev);
++	unsigned long flags;
++	u32 reg;
++
++	if (WARN_ON_ONCE(id >= ARRAY_SIZE(ma35d1_reset_map)))
++		return -EINVAL;
++
++	spin_lock_irqsave(&data->lock, flags);
++	reg = readl_relaxed(data->base + ma35d1_reset_map[id].reg_ofs);
++	if (assert)
++		reg |= BIT(ma35d1_reset_map[id].bit);
++	else
++		reg &= ~(BIT(ma35d1_reset_map[id].bit));
++	writel_relaxed(reg, data->base + ma35d1_reset_map[id].reg_ofs);
++	spin_unlock_irqrestore(&data->lock, flags);
++
++	return 0;
++}
++
++static int ma35d1_reset_assert(struct reset_controller_dev *rcdev, unsigned long id)
++{
++	return ma35d1_reset_update(rcdev, id, true);
++}
++
++static int ma35d1_reset_deassert(struct reset_controller_dev *rcdev, unsigned long id)
++{
++	return ma35d1_reset_update(rcdev, id, false);
++}
++
++static int ma35d1_reset_status(struct reset_controller_dev *rcdev, unsigned long id)
++{
++	struct ma35d1_reset_data *data = container_of(rcdev, struct ma35d1_reset_data, rcdev);
++	u32 reg;
++
++	if (WARN_ON_ONCE(id >= ARRAY_SIZE(ma35d1_reset_map)))
++		return -EINVAL;
++
++	reg = readl_relaxed(data->base + ma35d1_reset_map[id].reg_ofs);
++	return !!(reg & BIT(ma35d1_reset_map[id].bit));
++}
++
++static const struct reset_control_ops ma35d1_reset_ops = {
++	.assert = ma35d1_reset_assert,
++	.deassert = ma35d1_reset_deassert,
++	.status = ma35d1_reset_status,
++};
++
++static const struct of_device_id ma35d1_reset_dt_ids[] = {
++	{ .compatible = "nuvoton,ma35d1-reset" },
++	{ },
++};
++
++static int ma35d1_reset_probe(struct platform_device *pdev)
++{
++	struct ma35d1_reset_data *reset_data;
++	struct device *dev = &pdev->dev;
++	int err;
++
++	if (!pdev->dev.of_node) {
++		dev_err(&pdev->dev, "Device tree node not found\n");
++		return -EINVAL;
++	}
++
++	reset_data = devm_kzalloc(dev, sizeof(*reset_data), GFP_KERNEL);
++	if (!reset_data)
++		return -ENOMEM;
++
++	reset_data->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(reset_data->base))
++		return PTR_ERR(reset_data->base);
++
++	reset_data->rcdev.owner = THIS_MODULE;
++	reset_data->rcdev.nr_resets = MA35D1_RESET_COUNT;
++	reset_data->rcdev.ops = &ma35d1_reset_ops;
++	reset_data->rcdev.of_node = dev->of_node;
++	reset_data->restart_handler.notifier_call = ma35d1_restart_handler;
++	reset_data->restart_handler.priority = 192;
++	spin_lock_init(&reset_data->lock);
++
++	err = register_restart_handler(&reset_data->restart_handler);
++	if (err)
++		dev_warn(&pdev->dev, "failed to register restart handler\n");
++
++	return devm_reset_controller_register(dev, &reset_data->rcdev);
++}
++
++static struct platform_driver ma35d1_reset_driver = {
++	.probe = ma35d1_reset_probe,
++	.driver = {
++		.name = "ma35d1-reset",
++		.of_match_table	= ma35d1_reset_dt_ids,
++	},
++};
++
++builtin_platform_driver(ma35d1_reset_driver);
+-- 
+2.34.1
 
