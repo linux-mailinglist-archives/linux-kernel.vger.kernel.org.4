@@ -2,111 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AABF9715F7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98DD2715F7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbjE3Mae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
+        id S231689AbjE3Mah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231630AbjE3M34 (ORCPT
+        with ESMTP id S231627AbjE3M3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:29:56 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FCB1B6;
+        Tue, 30 May 2023 08:29:55 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842E11B5;
         Tue, 30 May 2023 05:29:41 -0700 (PDT)
-X-UUID: 99030328fee511edb20a276fd37b9834-20230530
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=YTvp1+nWrPxMBNE5/oc4Jz/jhl2v9kooVmO33g1yZ58=;
-        b=WjAjeO/WUUXNR4UQl1IbomcN3csjog6qpGDuUi1T2hCSSnBz3KPe+KEAVFe8MCWAy9GQod+ooVddgT2RIO+JcKmdeQikAvkTC1uX1yGWkhERQNAojmrqNbvf9LYgoBgbJl65RcTrO7JCfiZ9Veu9k+x+5fLTheaWeDYk93BksxU=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:52074f6a-9fc6-4230-8c8c-ea1f0461f2ea,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:b9d2766d-2f20-4998-991c-3b78627e4938,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 99030328fee511edb20a276fd37b9834-20230530
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1955339449; Tue, 30 May 2023 20:29:18 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 30 May 2023 20:29:17 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 30 May 2023 20:29:16 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>, Nathan Hebert <nhebert@chromium.org>
-CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v6,7/8] media: mediatek: vcodec: Add encode to support dbgfs
-Date:   Tue, 30 May 2023 20:29:07 +0800
-Message-ID: <20230530122908.19267-8-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230530122908.19267-1-yunfei.dong@mediatek.com>
-References: <20230530122908.19267-1-yunfei.dong@mediatek.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685449781; x=1716985781;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rURsonAWbqRN3vUMqXSgbcSJQ8+RR/S84Z2YjMifaro=;
+  b=m6G8tVd/sP7mpIS6jlPA9kelMUiGbru72hrZ7AdLqxNvNFtaGivMeApj
+   btGRw69O0dqAstsk9LdlGPcs/YKB6vhRu3iUqKozj2rzEn4VxMLFi7Ozr
+   EadN2JP/irPWnf9w/F0PdwrMXqfNFSI0MlFzELYcjm0x+gsKho1xTeq+O
+   P6UED+CA8Xg6s60HcW+STlwaR1ep1MjRcLhKZNgPV+4dlei+ApuRfJzfK
+   A3lL9YDjNqfx4LCIzJum+JvGlqLqoLV+AFEpYPmc9v1uV2UNqC4jN49pD
+   Nbvth3ofzRKgVCxq8sXnJMo2Im+FpoNXacXDZN8yeIv1tMUmqKuJWNy7F
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
+   d="scan'208";a="217938016"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 May 2023 05:29:28 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 30 May 2023 05:29:17 -0700
+Received: from [10.159.205.49] (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Tue, 30 May 2023 05:29:15 -0700
+Message-ID: <83f32f3a-ed3e-e0d3-f7a0-d137a273c667@microchip.com>
+Date:   Tue, 30 May 2023 14:29:07 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 0/3] dt-bindings: timer: Microchip AT91 convert to YAML
+Content-Language: en-US
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <alexandre.belloni@bootlin.com>,
+        <daniel.lezcano@linaro.org>, <tglx@linutronix.de>,
+        <wim@linux-watchdog.org>, <linux@roeck-us.net>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
+References: <20230530090758.1652329-1-claudiu.beznea@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20230530090758.1652329-1-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add encode to support dbgfs.
+On 30/05/2023 at 11:07, Claudiu Beznea wrote:
+> Hi,
+> 
+> Series converts Microchip AT91 timers DT bindings to YAML. Along with it the
+> atmel,at91rm9200-wdt has been converted and introduced in this series
+> as it is referenced by atmel,at91rm9200-st.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c | 2 ++
- 1 file changed, 2 insertions(+)
+For the whole series:
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-index 168004a08888..5df0a22ff3b5 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-@@ -358,6 +358,7 @@ static int mtk_vcodec_probe(struct platform_device *pdev)
- 		goto err_enc_reg;
- 	}
- 
-+	mtk_vcodec_dbgfs_init(dev, true);
- 	mtk_v4l2_debug(0, "encoder %d registered as /dev/video%d",
- 		       dev->venc_pdata->core_id, vfd_enc->num);
- 
-@@ -468,6 +469,7 @@ static void mtk_vcodec_enc_remove(struct platform_device *pdev)
- 	if (dev->vfd_enc)
- 		video_unregister_device(dev->vfd_enc);
- 
-+	mtk_vcodec_dbgfs_deinit(dev);
- 	v4l2_device_unregister(&dev->v4l2_dev);
- 	pm_runtime_disable(dev->pm.dev);
- 	mtk_vcodec_fw_release(dev->fw_handler);
+Thanks Claudiu and Conor.
+Best regards,
+   Nicolas
+
+> Changes in v3:
+> - removed patch 1/4 from v2
+> - in patch 1/3 keep interrupt description only for PIT case (not for PIT64b)
+>    and updated interrupt description to emphasize blocks part of the system
+>    controller; note that system controller components may be different b/w
+>    different Microchip AT91 SoCs;
+> - in patch 3/3 updated interrupt description to emphasize blocks part of the
+>    system controller; also, corrected Alexandre's email address
+> - collected tags.
+> 
+> Changes in v2:
+> - fixed compilation errors (sorry for that in v1)
+> - moved DTS patch as the 1st patch in series
+> - squash PIT and PIT64B into the same documentation file
+> - use Microchip in titles, descriptions and commit message
+> - in patch 4/4 remove oneOf from compatible section
+> 
+> Claudiu Beznea (3):
+>    dt-bindings: timer: atmel,at91sam9260-pit: convert to yaml
+>    dt-bindings: watchdog: atmel,at91rm9200-wdt: convert to yaml
+>    dt-bindings: timer: atmel,at91rm9200-st: convert to yaml
+> 
+>   .../devicetree/bindings/arm/atmel-sysregs.txt | 21 ----
+>   .../bindings/timer/atmel,at91rm9200-st.yaml   | 66 +++++++++++++
+>   .../bindings/timer/atmel,at91sam9260-pit.yaml | 99 +++++++++++++++++++
+>   .../watchdog/atmel,at91rm9200-wdt.yaml        | 29 ++++++
+>   .../watchdog/atmel-at91rm9200-wdt.txt         |  9 --
+>   5 files changed, 194 insertions(+), 30 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml
+>   create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
+>   create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
+>   delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
+> 
+
 -- 
-2.18.0
+Nicolas Ferre
 
