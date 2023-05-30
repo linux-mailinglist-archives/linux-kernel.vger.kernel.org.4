@@ -2,105 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55956715887
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D1F71588A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjE3I3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
+        id S230126AbjE3IbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 04:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjE3I3r (ORCPT
+        with ESMTP id S229884AbjE3IbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 04:29:47 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D166A1;
-        Tue, 30 May 2023 01:29:44 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34U7RvcM022664;
-        Tue, 30 May 2023 08:29:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=J6ZRgZCTa3hC+H6Maw8K9aW1d2MfIdeGlfQUcJff9S4=;
- b=aUO3rNGP72Z0gY7vzPjK8dBazOiQ2eHeerPMJ4VkL7dCPrhfVvBfzYYXpwaDIUDWowJP
- 50MLZevup2noAWLhgPzQvAhnWnDo+9HgtNk0fsj2lVSBDHh5F3QmRlRjgDiJAyK2VjwN
- HjRQkBj47LEyQCYSkbUCRV7jjmxtrVOu19hwCumc486RDfenBuEoc/8A/8TTYW2Q+Jsf
- 7yC/6hxD3cMwqqq5Vkz+SAFO2yNnzYXoHVWGqBy8NKc7pC6k0c3PSZYpnxTizqx5NO10
- 5d9+WY2VDFWhHcuWNU7wAgl0eUJ1i9yKIuFDKGlLbBPsQ0pOZry4ISRYkBJbQ5N1jLKO Iw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qvws8hd7c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 08:29:35 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34U8TYTT026280
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 08:29:34 GMT
-Received: from tjiang-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 30 May 2023 01:29:31 -0700
-From:   Tim Jiang <quic_tjiang@quicinc.com>
-To:     <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>
-CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_bgodavar@quicinc.com>,
-        <quic_hemantg@quicinc.com>, Tim Jiang <quic_tjiang@quicinc.com>
-Subject: [PATCH v2] dt-bindings: net: Add QCA2066 Bluetooth
-Date:   Tue, 30 May 2023 16:29:22 +0800
-Message-ID: <20230530082922.2208-1-quic_tjiang@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 30 May 2023 04:31:03 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9981AA8;
+        Tue, 30 May 2023 01:31:00 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id 71dfb90a1353d-456d534f403so2710102e0c.2;
+        Tue, 30 May 2023 01:31:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685435459; x=1688027459;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vAlYUMVoTgINlE2ocSHP8Vr62dJ4pHluRJc9g9INcEU=;
+        b=D47tqMBFjsl7TeJNaoYnAx0DNSZPSt4iFNajnB+Qh43GFOewu5Lr8jW30kJreXspQK
+         xOQb7Y0Y8e/Cpg7RTKEbv4zppgP0XUxK4a2zO7ybOOXO2VuycuYtYhmGhE+U8hCINRLa
+         extr6N2yXJdI7IzPgUotVJ/f879fBC9Y6PkMlmSkMI3jUaaMori4u3jo//QpMD0yE4qm
+         nzPnskNMm/RRtjkmaDdvBT2GomzMdZHsWE9q9is5kqcVV6dPcI+9PHHefEZj6qeClcog
+         uxq2MZfHdU5i4vK5t5E+W/LsZVvvV1aAyI9QFqlYv8DRisy2D2s1GH2lhtvL79p3kDnf
+         USHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685435459; x=1688027459;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vAlYUMVoTgINlE2ocSHP8Vr62dJ4pHluRJc9g9INcEU=;
+        b=VbH8k16zAlAf5VovPLRCr7AM+JJx61gWZyC2nR8bbixNKImHUoWjIt+8nj1ZoLJkro
+         Ox2MGmHZmTxvYgoUjY3yCFSrTIDXnnmWNmVNNgXe1nWcjhYBm4V1JoLUfXUpwrX5oM1F
+         958uS/Cp0NjR94yjF78x5w6nKAraA+YF4yE8vTzJ2puiB8y3AKXRnVFM78v9fQOL7tTk
+         M2Qh5xgC+Y93jY6eMTH+kH4G+X7zaKzcchWUfM2q0cTR2fVfHCXCfHtw7AqdgEWzCLBz
+         PnWkebP55R8Pspq4jvD1k2HBVYmb+Dk4KVZozA1wvPG6AlD5U3TXtHi9kTvgARpJuVeR
+         WxTA==
+X-Gm-Message-State: AC+VfDwtANECLu6WifuYuuqN8vM2EUSXt3WLJLGCKlgKBhjuL5rwftaS
+        u08MTsBMOqh5Jvcpn6wcNyoH1e9079lk5wJeeWg=
+X-Google-Smtp-Source: ACHHUZ7U5uvuaRU2XQx3fWPq48tXSMo+4gvRAtJWWGsNOucGTPfPvzlMCOGgwinW52VweuMJvCobK+Kc5tdm+cWSWa4=
+X-Received: by 2002:a67:ff08:0:b0:439:4284:3f74 with SMTP id
+ v8-20020a67ff08000000b0043942843f74mr460985vsp.16.1685435459529; Tue, 30 May
+ 2023 01:30:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: hPgNw92--PY-uI2aho5NGB4nAwr1O1Y4
-X-Proofpoint-GUID: hPgNw92--PY-uI2aho5NGB4nAwr1O1Y4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_04,2023-05-29_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=934
- suspectscore=0 mlxscore=0 adultscore=0 impostorscore=0 phishscore=0
- bulkscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 clxscore=1011 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305300069
+References: <20230530022917.18574-1-listdansp@mail.ru> <20230530022917.18574-2-listdansp@mail.ru>
+In-Reply-To: <20230530022917.18574-2-listdansp@mail.ru>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Tue, 30 May 2023 11:30:48 +0300
+Message-ID: <CAOQ4uxgCizoAT1fWLKy6hytdhBiCwV0nSwkqzyVckozx5EACPA@mail.gmail.com>
+Subject: Re: [PATCH 5.10 1/1] ovl: fail on invalid uid/gid mapping at copy up
+To:     Danila Chernetsov <listdansp@mail.ru>
+Cc:     stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Seth Forshee <sforshee@kernel.org>,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for the QCA2066 chipset.
+On Tue, May 30, 2023 at 5:44=E2=80=AFAM Danila Chernetsov <listdansp@mail.r=
+u> wrote:
+>
+> From: Miklos Szeredi <mszeredi@redhat.com>
+>
+> commit  4f11ada10d0ad3fd53e2bd67806351de63a4f9c3 upstream.
+>
+> If st_uid/st_gid doesn't have a mapping in the mounter's user_ns, then
+> copy-up should fail, just like it would fail if the mounter task was doin=
+g
+> the copy using "cp -a".
+>
+> There's a corner case where the "cp -a" would succeed but copy up fail: i=
+f
+> there's a mapping of the invalid uid/gid (65534 by default) in the user
+> namespace.  This is because stat(2) will return this value if the mapping
+> doesn't exist in the current user_ns and "cp -a" will in turn be able to
+> create a file with this uid/gid.
+>
+> This behavior would be inconsistent with POSIX ACL's, which return -1 for
+> invalid uid/gid which result in a failed copy.
+>
+> For consistency and simplicity fail the copy of the st_uid/st_gid are
+> invalid.
+>
+> Fixes: 459c7c565ac3 ("ovl: unprivieged mounts")
+> Cc: <stable@vger.kernel.org> # v5.11
+> Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+> Reviewed-by: Christian Brauner <brauner@kernel.org>
+> Reviewed-by: Seth Forshee <sforshee@kernel.org>
+> Signed-off-by: Danila Chernetsov <listdansp@mail.ru>
+> ---
+>  fs/overlayfs/copy_up.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/fs/overlayfs/copy_up.c b/fs/overlayfs/copy_up.c
+> index e466c58f9ec4..fd33abc0edc0 100644
+> --- a/fs/overlayfs/copy_up.c
+> +++ b/fs/overlayfs/copy_up.c
+> @@ -882,6 +882,10 @@ static int ovl_copy_up_one(struct dentry *parent, st=
+ruct dentry *dentry,
+>         if (err)
+>                 return err;
+>
+> +       if (!kuid_has_mapping(current_user_ns(), ctx.stat.uid) ||
+> +           !kgid_has_mapping(current_user_ns(), ctx.stat.gid))
+> +               return -EOVERFLOW;
+> +
+>         ctx.metacopy =3D ovl_need_meta_copy_up(dentry, ctx.stat.mode, fla=
+gs);
+>
+>         if (parent) {
+> --
+> 2.25.1
+>
 
-Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
----
- .../devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml   | 2 ++
- 1 file changed, 2 insertions(+)
+You are requesting to backport to kernel 5.10.y a fix to a bug that is tagg=
+ed as
+introduced in 5.11 with overlayfs unprivileged mounts.
 
-diff --git a/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml b/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml
-index 68f78b90d23a..28296b6d35b2 100644
---- a/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml
-+++ b/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml
-@@ -16,6 +16,7 @@ description:
- properties:
-   compatible:
-     enum:
-+      - qcom,qca2066-bt
-       - qcom,qca6174-bt
-       - qcom,qca9377-bt
-       - qcom,wcn3990-bt
-@@ -95,6 +96,7 @@ allOf:
-         compatible:
-           contains:
-             enum:
-+              - qcom,qca2066-bt
-               - qcom,qca6174-bt
-     then:
-       required:
--- 
-2.17.1
+IOW, in kernel 5.10, current_user_ns() would always be init_user_ns.
 
+Am I missing something?
+
+Thanks,
+Amir.
