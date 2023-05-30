@@ -2,114 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95EDE716EFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0EC716F04
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233522AbjE3UkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 16:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
+        id S232375AbjE3UoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 16:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbjE3Ujr (ORCPT
+        with ESMTP id S230194AbjE3UoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 16:39:47 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBC399;
-        Tue, 30 May 2023 13:39:46 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685479184;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ulmrcImbtRvzqGgwE3a2VNEOCnRPGxt2UYSBYI3GTxQ=;
-        b=4qWCcJKQCkNkGPqM/Rfcb/VSCOwDyDojxTr5YkT3yoCg+h+F4OXwKDoF2GjtKdG3kd2wY8
-        L6bWsrD3kwGyYxrBlWcx8MzjAlMZB6uXNTfvj3b9vg3gdFNgUQPGfyCbjSp51zbj1DtDUf
-        ZjhuZVqHtZUcqLZbFThMCPsY5zK/aJ3WXndEd7hP4OxuJTEM55rjMY4KMg2bFxvvHz6wsE
-        N9v3mPnUudrr0MrxZTNc1yl0Htt+qivGdQJImDDVV7QN/OKhjJMU+C93JgoYjKHuK5xZ6E
-        cCzobMUk50hG/fjlycbXB22hdFz/Ih2wozkyllmdvsLBgk3kP7tJ+RO+prCUDw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685479184;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ulmrcImbtRvzqGgwE3a2VNEOCnRPGxt2UYSBYI3GTxQ=;
-        b=OCsvGQbDF6UOTjQKlqYKNmvbthDBtxG8seNlKDn/Ru8sYGzf7Qdj9re6e3JcMKWoHbPnwS
-        H9C/y8wZ1kg41FCA==
-To:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [patch] x86/smpboot: Disable parallel bootup if cc_vendor != NONE
-In-Reply-To: <8751e955-e975-c6d4-630c-02912b9ef9da@amd.com>
-References: <87sfbhlwp9.ffs@tglx>
- <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name> <87bki3kkfi.ffs@tglx>
- <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
- <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name> <87mt1mjhk3.ffs@tglx>
- <87jzwqjeey.ffs@tglx> <87cz2ija1e.ffs@tglx>
- <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name> <87wn0pizbl.ffs@tglx>
- <ZHYqwsCURnrFdsVm@google.com> <87leh5iom8.ffs@tglx>
- <8751e955-e975-c6d4-630c-02912b9ef9da@amd.com>
-Date:   Tue, 30 May 2023 22:39:44 +0200
-Message-ID: <871qiximen.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 30 May 2023 16:44:06 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73B8EC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:44:03 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-75b08ceddd1so572518985a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:44:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1685479443; x=1688071443;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=p3b6DJXDHbh5GF3m9xX7f8I5wETK6FJ7eZD5W780N34=;
+        b=H8aFyZm3Qhu8NIYvE1PRPnX288KvaYVZZXkoFuMHVfJqFodJ5I7+uxHp3Gtj0CJTzE
+         TbTKl/nZUghbEzPW8yYzymxrBjiFDLmxyuXBxD2KpcFqRaaQqHa4rtJiRWrzND50AGAp
+         CvBbnVex8eVuiT3ydy+eknz0OivaSFH3IbQEtM8On+3WtBaqbfQA/5R4asixjaHLD/K9
+         w89M6yUQyavCuKSAqrGhpuO6p+BAfVwP945XC9m90O7MRpjTTqY2uNxeVzeudrPtIyJX
+         Xmm+Kv5EaYwd9K55z7cfpovLQqtS/Mnc0sj8hHrca9cVOjaYU96qo2z4B4KQ2xBbZEp9
+         I1nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685479443; x=1688071443;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p3b6DJXDHbh5GF3m9xX7f8I5wETK6FJ7eZD5W780N34=;
+        b=H3g565CallwxPSUjvc1dUn5NpBUjnYG9ByPVRd7U+zBEzs215g2sJV96BIkNDoZQ5N
+         SBvJEEyjHbCbW3ujGhH8YKdgxcY6sG16k57ywq6z1UHM1SuNb5dlvsxh9NGjLlxh6YEn
+         CHkGh5CvYJijwsRv4pf2D/xzdRCKHsNs13oa2UA0UF4eyW1oL9QnqSLUwHVflzbyKolk
+         d035yFB3xyG5Kr/jc6s6MY94f2nE6vJu7BmYjdAfx9weT5sOZ9LeaX7pPxXq6FOBbtfv
+         FiwMd+Xenn31Z+AtVQoGMHqmvJ23zWBvJ7M2CtcXyhuOqggCeXGi7gGCFmIiV8bcvScT
+         iqrg==
+X-Gm-Message-State: AC+VfDwX9lYRD0ADjC+DTM1wEO00UwoabV46fhwtjYf4fxz1UQlvYl2c
+        h4XNwh03zPx8BNqjAtSnCSbRG1/gFt69p+aW3Q==
+X-Google-Smtp-Source: ACHHUZ6f1GRV0UvgvtPovTzxRNuNEYf9LHwcVykqRhwmJG0WLF3q48vPcI++gmwVj4HdFGuZNETV/A==
+X-Received: by 2002:a05:620a:8c93:b0:75b:23a0:de93 with SMTP id ra19-20020a05620a8c9300b0075b23a0de93mr3049981qkn.17.1685479442851;
+        Tue, 30 May 2023 13:44:02 -0700 (PDT)
+Received: from localhost (pool-108-26-161-203.bstnma.fios.verizon.net. [108.26.161.203])
+        by smtp.gmail.com with ESMTPSA id j2-20020a05620a146200b00759300a1ef9sm4409270qkl.31.2023.05.30.13.44.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 13:44:02 -0700 (PDT)
+Date:   Tue, 30 May 2023 16:44:01 -0400
+Message-ID: <cdf6d7b33765b8509a6a700175f0fa09.paul@paul-moore.com>
+From:   Paul Moore <paul@paul-moore.com>
+To:     Xiu Jianfeng <xiujianfeng@huaweicloud.com>,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com
+Cc:     selinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selinux: cleanup exit_sel_fs() declaration
+References: <20230529130018.89391-1-xiujianfeng@huaweicloud.com>
+In-Reply-To: <20230529130018.89391-1-xiujianfeng@huaweicloud.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30 2023 at 15:03, Tom Lendacky wrote:
-> On 5/30/23 14:51, Thomas Gleixner wrote:
->> That aside. From a semantical POV making this decision about parallel
->> bootup based on some magic CC encryption attribute is questionable.
->> 
->> I'm tending to just do the below and make this CC agnostic (except that
->> I couldn't find the right spot for SEV-ES to clear that flag.)
->
-> Maybe in sme_sev_setup_real_mode() in arch/x86/realmode/init.c? You could 
-> clear the flag within the CC_ATTR_GUEST_STATE_ENCRYPT check.
+On May 29, 2023 Xiu Jianfeng <xiujianfeng@huaweicloud.com> wrote:
+> 
+> exit_sel_fs() has been removed since commit f22f9aaf6c3d ("selinux:
+> remove the runtime disable functionality").
+> 
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> ---
+>  security/selinux/include/security.h | 1 -
+>  1 file changed, 1 deletion(-)
 
-Eeew.
+Merged into selinux/next, thanks.
 
-Can we please have a AMD SEV-ES init specific place and not hijack some
-random code which has to check CC_ATTR_GUEST_STATE_ENCRYPT?
-
-Thanks,
-
-        tglx
+--
+paul-moore.com
