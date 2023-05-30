@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDA37164E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B1D7164E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbjE3OtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
+        id S232888AbjE3OtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232665AbjE3OtJ (ORCPT
+        with ESMTP id S232788AbjE3OtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:49:09 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07C9A7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:49:06 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2af2ef0d0daso46807481fa.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:49:06 -0700 (PDT)
+        Tue, 30 May 2023 10:49:11 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6C39C
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:49:09 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-514953b3aa6so4188850a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:49:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685458145; x=1688050145;
+        d=linaro.org; s=google; t=1685458148; x=1688050148;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IYFfkWfA3QoQgVvoKYaWNHgXlyKDc3MLd+zuCLSKJyA=;
-        b=cNmu0nPgKOyLJPsM0EDcisLnunATo7htMuua8fjjb2dhKb/bdEMfj0asRSzmGsuh7P
-         44j7Vq1bzp6YWznZJLTZKq9bX9Z3Y91EY6efqTnbDcYlS+17WXOfAJyDYBBeO0P2PLpY
-         Ew5/3U+6ptw6SD59IJt1h2M8GgCyLrFIuSdA0ZRwApWRnnHYfCd3qwfbTFeLjA8jUcob
-         zagphslihs9ef2gj/4YWtdblbVQEHcZE+ZmFnDSeLxgPfiZfYLR2qh68RjdNaRYaKsgo
-         ydoZ+VXgm0D+DG+h+FoHCLSaTTFTZyv5Wjgaee+3q2hGOMaZfSi14hWdrFXBSP52xi4+
-         P6YA==
+        bh=EDtOZScMEhQcxZ0qCP2mG/VW4cw5TvuSdeS8G5ww6IY=;
+        b=QXG1N9nMirFW5x9su+89Sr2YJxHMWbZ7KcizZ5iER13vf1DLIImohOn0evXipGmnBk
+         e2KrLr9sWalAqVL9rZdCzITLPKLYpYgTu5KVHeJc2PPYQaoA9PnCswuJSsDJifPlH7Iq
+         MivJ36BgLvk8rAGSn63g8E5VzaUbsSVNSzKJ91fAf4BNNBtR85ni5HYHTu8Hy64NX0Hu
+         JYoHtS3br90Trzl+YOkYrkIEVZOsfeAOEUi9GLF9Qkrh5i1yR1snbODHovA8Wp66MyEA
+         w1yfm3AmfAb6N21GieYTVCoXvRpNXIPyrYul8/w2zEjQ4axkaLtK0wR5uP/h0woXs/gW
+         dZag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685458145; x=1688050145;
+        d=1e100.net; s=20221208; t=1685458148; x=1688050148;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IYFfkWfA3QoQgVvoKYaWNHgXlyKDc3MLd+zuCLSKJyA=;
-        b=QLMkRIzLpyW8VxQpC3PbNBUCzBlfE/j1Dca+EBQPkrz9+A/tIw1hiRcAn4dVmJp97Y
-         PBq6hVy8STdA6/Xqmf7kyC+6Ky0RB1J7Zk9Uu+bWN/c7P049HrQco8qDOeNlR/rLEAmG
-         mtmi1APK6893qzXG0wwbBWoaCzRT/7UYInnMJoaxltTG02CF5TvyyQPhDcpyduoEV9Ti
-         4Jff42Y6tKcVb4TcLdAmOLvELDDb3KLqErLeuOeO9k9u1Pa+JUQ7/8GF3YNLWbaJ4qbG
-         TPftHE74TcCKUCJ3e71oSh+gjf0qSOeHJp1ItTTckYR8EeSYQM9Ou7kpGnXU/ysBcZpJ
-         HJPA==
-X-Gm-Message-State: AC+VfDz1BeALq5IMqZi5mIbILULy9L+4tYU5i6N1lwr3GNvauTVs2w5N
-        10G5aNs1uV2qvq/49Vb+6XYkeA==
-X-Google-Smtp-Source: ACHHUZ5jvz5LnAumNP/2xr9PcMdbMsGITdxeArnebJmxulNAPz1T+umYnd5f3D0F0Ae9rFUUNWklSw==
-X-Received: by 2002:a05:651c:87:b0:2af:1fd4:9011 with SMTP id 7-20020a05651c008700b002af1fd49011mr906793ljq.34.1685458144944;
-        Tue, 30 May 2023 07:49:04 -0700 (PDT)
+        bh=EDtOZScMEhQcxZ0qCP2mG/VW4cw5TvuSdeS8G5ww6IY=;
+        b=Mpzwfhl34BEMGdpIQReAsUYE1Hvh7/ZQpqf9o/OhJPDTNuqDNNgjEjVBziNnBEQSE3
+         2wttCZGHr5yj++97bxBwKzy7FOq1Xa13Rkxs0As4ZW7D5BHXJ8az87tEbPlsevWwmnPF
+         CSkNFOSZ3hWz9YCoSVK1YGZi/vSPrmt/sjlJX5AFUZFdOJ7W/fyg3LhqyrZzW0iSmKCN
+         QVrLDYm2P23RHdNVGgQEAs4l/xVk3tyuACybDtWK4v8pwYDZieFYlOSYtlJowPkTs8UO
+         uVn3J4Q0Tp62gvBJ/beSZJ99sVtiGvo7RTIE69ioVDhINjTY0sDXVyPEwXRWUt6bmZjj
+         U6XA==
+X-Gm-Message-State: AC+VfDz9qGCsVaVNjz42ZfYwCVNSJdlnqlrtvclzMiJIh8uXnMPXWG0x
+        sMl/cY0k1if3NsVwBRgQgy/Y3w==
+X-Google-Smtp-Source: ACHHUZ5gmAumXj2b1GIfXBoPyWfnVelqgUTij3Kbup650+F2Nc8xc8UrKiGkys3OMi8/buw0FLqxBg==
+X-Received: by 2002:a50:ee04:0:b0:514:90de:423e with SMTP id g4-20020a50ee04000000b0051490de423emr1958340eds.36.1685458147907;
+        Tue, 30 May 2023 07:49:07 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id q21-20020aa7cc15000000b00514b2717ec6sm631283edt.28.2023.05.30.07.49.02
+        by smtp.gmail.com with ESMTPSA id q21-20020aa7cc15000000b00514b2717ec6sm631283edt.28.2023.05.30.07.49.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 07:49:04 -0700 (PDT)
+        Tue, 30 May 2023 07:49:07 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Vinod Koul <vkoul@kernel.org>,
         Kishon Vijay Abraham I <kishon@kernel.org>,
@@ -76,9 +76,9 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh@kernel.org>,
         Tony Lindgren <tony@atomide.com>,
         Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH 3/7] dt-bindings: rtc: restrict node name suffixes
-Date:   Tue, 30 May 2023 16:48:47 +0200
-Message-Id: <20230530144851.92059-4-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 4/7] dt-bindings: slimbus: restrict node name suffixes
+Date:   Tue, 30 May 2023 16:48:48 +0200
+Message-Id: <20230530144851.92059-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
 References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
@@ -87,7 +87,7 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -107,22 +107,22 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: Tony Lindgren <tony@atomide.com>
 Cc: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- Documentation/devicetree/bindings/rtc/rtc.yaml | 2 +-
+ Documentation/devicetree/bindings/slimbus/slimbus.yaml | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
-index c6fff5486fe6..efb66df82782 100644
---- a/Documentation/devicetree/bindings/rtc/rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
-@@ -15,7 +15,7 @@ description: |
+diff --git a/Documentation/devicetree/bindings/slimbus/slimbus.yaml b/Documentation/devicetree/bindings/slimbus/slimbus.yaml
+index 22513fb7c59a..3b8cae9d1016 100644
+--- a/Documentation/devicetree/bindings/slimbus/slimbus.yaml
++++ b/Documentation/devicetree/bindings/slimbus/slimbus.yaml
+@@ -15,7 +15,7 @@ description:
  
  properties:
    $nodename:
--    pattern: "^rtc(@.*|-[0-9a-f])*$"
-+    pattern: "^rtc(@.*|-([0-9]|[1-9][0-9]+))?$"
+-    pattern: "^slim(@.*|-[0-9a-f])*$"
++    pattern: "^slim(@.*|-([0-9]|[1-9][0-9]+))?$"
  
-   aux-voltage-chargeable:
-     $ref: /schemas/types.yaml#/definitions/uint32
+   "#address-cells":
+     const: 2
 -- 
 2.34.1
 
