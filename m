@@ -2,65 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C480A715A14
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71077715A1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbjE3J1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43490 "EHLO
+        id S231135AbjE3J2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbjE3J1S (ORCPT
+        with ESMTP id S229870AbjE3J1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:27:18 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C091E77;
-        Tue, 30 May 2023 02:26:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YGnwDGPWaj1wM5ohiXtoRKNtCYZ1i8Q7KV5owZIHFf0=; b=DjY1MJJiu6hf7xjfPEede0fXKw
-        EXw5HsAeuiGhaxVwsAzllEUOGYYYTU2DfOei8MfAgi8mPP3FnZCJsFJcTI5NV8xSlfKocHHeZx02U
-        wMh5+a8lqTNEEytvd9QmKxxCQf+6Vz0q2lt39tRfv15c5uYwTWWedBzls+f1+FyRWZ6mLJVpmjdjL
-        nmxRAYDGnwnfMhJa3/Cfm3F92l0eCQRXFBiSzZwi4mThZPgCtaQhcqmrA8N2tQYlR805K3CUoGTb2
-        7+dYhZckEr89Dboqd3SWEwI+hf2rR9S22cowGo1cHj+O+bZERYADKgZDcNikJEeAe4cH7PzHsj0iF
-        ljLI86ag==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q3vcF-006AJ1-T4; Tue, 30 May 2023 09:26:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 75C8F3001C3;
-        Tue, 30 May 2023 11:26:07 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5D396214873C3; Tue, 30 May 2023 11:26:07 +0200 (CEST)
-Date:   Tue, 30 May 2023 11:26:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
-        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de
-Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
-Message-ID: <20230530092607.GB149947@hirez.programming.kicks-ass.net>
-References: <20230526205204.861311518@infradead.org>
- <CAHk-=wg2RHZKTN29Gr7MhgYfaNtzz58wry9jCNP75LAmQ9t8-A@mail.gmail.com>
+        Tue, 30 May 2023 05:27:49 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE8018E;
+        Tue, 30 May 2023 02:27:04 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685438823;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1NMbaaXeWKdobW1XvAcSDK/dQsnYJNRF0z8NSxF7l9g=;
+        b=3WlfyRf4MaHC/vnZ5XtmVOPXOLK+ZAlD6lhDlx3nxtYIx2aAF4vsyl4Fynj3non8rbgMrN
+        sNrp+9JQLFYFbN/XqXCv9byGDKlv0RHWDCZwas9ku3sVJVgKghH6SR2F8V6+xNDQOkLcyD
+        5qqJAyewlvw6f3Z/VcU7uuPM8NAolzMZEkhAvRU0VhntTSbYmIp8ge4zTpPWzrBil5oYlf
+        DgeSLbc5m4g4ajmFKq5V5ym/tqWGbgOPaXXQPMUx1NtL/3KwVT8w9aL6e8LA+TS2nYZbmJ
+        Q7LfBFEK9KhVtex48u51MPzAYtklC43xcJIdIGSYeuPXzECaBk3uOeXt5h/Wqg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685438823;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1NMbaaXeWKdobW1XvAcSDK/dQsnYJNRF0z8NSxF7l9g=;
+        b=GRvc8oucVrh5HH/FHNK9eWoRJUeKKRlfRG0kkGtIqetJQ9TTAPtqn+q5w5PfQy3yr3tFYY
+        syTijd9671JLttAA==
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
+In-Reply-To: <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name>
+References: <20230508181633.089804905@linutronix.de>
+ <20230508185218.962208640@linutronix.de>
+ <20230524204818.3tjlwah2euncxzmh@box.shutemov.name> <87y1lbl7r6.ffs@tglx>
+ <87sfbhlwp9.ffs@tglx> <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
+ <87bki3kkfi.ffs@tglx> <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
+ <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name>
+Date:   Tue, 30 May 2023 11:26:52 +0200
+Message-ID: <87mt1mjhk3.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wg2RHZKTN29Gr7MhgYfaNtzz58wry9jCNP75LAmQ9t8-A@mail.gmail.com>
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,17 +92,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 27, 2023 at 12:18:04PM -0700, Linus Torvalds wrote:
+On Tue, May 30 2023 at 03:54, Kirill A. Shutemov wrote:
+> On Mon, May 29, 2023 at 11:31:29PM +0300, Kirill A. Shutemov wrote:
+>> Disabling parallel bringup helps. I didn't look closer yet. If you have
+>> an idea let me know.
+>
+> Okay, it crashes around .Lread_apicid due to touching MSRs that trigger #VE.
+>
+> Looks like the patch had no intention to enable parallel bringup on TDX.
+>
+> +        * Intel-TDX has a secure RDMSR hypercall, but that needs to be
+> +        * implemented seperately in the low level startup ASM code.
+>
+> But CC_ATTR_GUEST_STATE_ENCRYPT that used to filter it out is
+> SEV-ES-specific thingy and doesn't cover TDX. I don't think we have an
+> attribute that fits nicely here.
 
-> And before you say "unlock order doesn't matter" - that's actually not
-> true. Unlock order does matter when you have things like
-> "spin_lock_irq()" where the irq-off region then protects other locks
-> too.
-
-So I had already verified that GCC keeps them ordered, I see the
-subthread with Ian and the documentation update request -- so all good
-there.
-
-Also, lockdep would scream bloody murder if you get that wrong, so I
-can certainly add something to the selftests that would detect this.
-
+Bah. That sucks.
