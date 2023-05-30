@@ -2,91 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83C3717215
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F59717217
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbjE3Xyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 19:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
+        id S233798AbjE3Xyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 19:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232828AbjE3Xyp (ORCPT
+        with ESMTP id S233683AbjE3Xyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 19:54:45 -0400
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38904107;
-        Tue, 30 May 2023 16:54:31 -0700 (PDT)
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1b011cffef2so44895495ad.3;
-        Tue, 30 May 2023 16:54:31 -0700 (PDT)
+        Tue, 30 May 2023 19:54:51 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68A6B2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:54:49 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-3f805551a19so27550311cf.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:54:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1685490889; x=1688082889;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=egonHliL0X+PhNSvnZlUOZqOsOTQyugVPFh8DdfCZ20=;
+        b=P4EcgYkCe3WPJDm6MXwEAxb4UbGk2nUKlRxx2Ey9gdMpYWDKI4iaSshcyPgqBLFlZZ
+         YBcMPOvEEPwoCk20+ZTWluhBnn+mLQ37bYJbkhBVMRuOnCutXR/UsnQ92jAIfB14kFCI
+         Q5Uh+VFAAYXsAXZaGXgTEB8UWEn8cla5NP1UzH0QFed+3e73Doz0E1bxcuEaN3zajiDS
+         foX5baIQpGNJLosCWT/k+Tp6b+OVYrhiSHK+7/8FQELWMrOtwIAKMFk6RxX14H2gpL9X
+         a1mNnivdxrbtAPD+yHlbpdJF6SBpNelg+i2oqPC1Bkn5byS+Yf2pxiikKKqNbaOqpV7g
+         yzXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685490870; x=1688082870;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f+iWViYCQVb/xzSsBfREywiRrxXxPKruIfOn3/8DPd0=;
-        b=PfbMHhMP2LLKMw9XGyURqueUhWTCT7V7YIOzCq57NrJYML2+dcvBKBuGorPV1NeweL
-         AD+PKOD9RuLoxCa1xlouHCO78kXShhQOclSCk1D5Gzfe2dEeR1nLNHdrqWE/cO+UrovJ
-         UiUPUAx5zGsjxEC4HrlCrtB7G69mes7aubGxFAXb7HzMWUpCngtPWuOwCm2nM2zAoaNr
-         REscmsKY2W2jgvzXsVHlqWjIDFAWfAd/ap7/v5kcnp2n/Me+4yOA1dvTZMAo6/ka1ezu
-         zQGJvKFjEm9v2AFdqvehXldBMTUXwZkvS9DyjD1odIFyaWUQkpXrMsLBv/NkmGF8LYZ9
-         rK5Q==
-X-Gm-Message-State: AC+VfDyBq742Ms5B4Jjg9rZ5EfPLQLeoHHUkkZxSlHXSHxs4Jn34Hr0n
-        Pod8gxJP9AXbx03HTqarLhU=
-X-Google-Smtp-Source: ACHHUZ6aA6UX+ERfkedHwLCP3QGXLJg26VTfEDrtGYzZXT3pXM/s2icGJNVn/HpUNxbK93SptJYO0g==
-X-Received: by 2002:a17:902:d4cc:b0:1b1:1168:6571 with SMTP id o12-20020a170902d4cc00b001b111686571mr1192834plg.36.1685490870603;
-        Tue, 30 May 2023 16:54:30 -0700 (PDT)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id jg3-20020a17090326c300b001b033873744sm6111930plb.249.2023.05.30.16.54.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 16:54:30 -0700 (PDT)
-Message-ID: <1c182151-6e8c-5068-b38c-f8e842e6e13b@acm.org>
-Date:   Tue, 30 May 2023 16:54:29 -0700
+        d=1e100.net; s=20221208; t=1685490889; x=1688082889;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=egonHliL0X+PhNSvnZlUOZqOsOTQyugVPFh8DdfCZ20=;
+        b=TJuOcqDQs6JaGzqt/5zIdM1v3G/CpfZULDzZGVxZnIPTfS+TfXc7wdRM0UH8VaBHOy
+         r73H305o0NgCbCCXUappwTUmEd2LHV+YPvMEVptA3PhZ9HBgh/lRPJrgFQ8K1FL570CZ
+         byQxU/DhICde5WrhK6T10NHsZW4oeMZkARZCF+CrltRCExfxE4V1M3rrmVQ+VCvyEH59
+         CM8OnPx7vQrRV+vdPfaYbGlESKLFqxmhNwZsw998M1aBpCR6cqPhur++ArhKX4rwr80o
+         YJqMaFcA3Nr/K6KIH2/WHvcLWdFBioXEtHm4R+2o7aEXBCFQIH5oBEblRuDLemFlj/2x
+         FiVQ==
+X-Gm-Message-State: AC+VfDzBEFlIjiW/VBUQ9M0CroJzbyTwU8tTpJjruMFDTK1qfmihmb7l
+        bMWnrMFL3G5qH/NSqYkz4iWq7Q==
+X-Google-Smtp-Source: ACHHUZ49fFO7aKT0uDHqtFxnSbOV7EgxqJVMEueZvO1Uex0RJBiEL6n+MBPNRpenvsjbBwecqZI9lA==
+X-Received: by 2002:a05:622a:199b:b0:3f6:ba82:f24d with SMTP id u27-20020a05622a199b00b003f6ba82f24dmr3841966qtc.31.1685490888795;
+        Tue, 30 May 2023 16:54:48 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:8bb6])
+        by smtp.gmail.com with ESMTPSA id k3-20020ac84783000000b003f7fd3ce69fsm5167965qtq.59.2023.05.30.16.54.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 16:54:48 -0700 (PDT)
+Date:   Tue, 30 May 2023 19:54:47 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Nhat Pham <nphamcs@gmail.com>,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
+        Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: zswap: support exclusive loads
+Message-ID: <20230530235447.GB102494@cmpxchg.org>
+References: <20230530210251.493194-1-yosryahmed@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/3] scsi: ufs: core: Introduce mcq ops to config cqid
-Content-Language: en-US
-To:     Po-Wen Kao <powen.kao@mediatek.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     wsd_upstream@mediatek.com, peter.wang@mediatek.com,
-        stanley.chu@mediatek.com, alice.chao@mediatek.com,
-        naomi.chu@mediatek.com, chun-hung.wu@mediatek.com,
-        cc.chou@mediatek.com, eddie.huang@mediatek.com
-References: <20230530023227.16653-1-powen.kao@mediatek.com>
- <20230530023227.16653-2-powen.kao@mediatek.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230530023227.16653-2-powen.kao@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530210251.493194-1-yosryahmed@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/29/23 19:32, Po-Wen Kao wrote:
-> MCQ sq/cq mapping is not just one for one, could many for one.
-> This patch allow host driver to change the mapping, assign cqid
-> for each hw queue.
+On Tue, May 30, 2023 at 09:02:51PM +0000, Yosry Ahmed wrote:
+> @@ -216,8 +216,13 @@ int __frontswap_load(struct page *page)
+>  
+>  	/* Try loading from each implementation, until one succeeds. */
+>  	ret = frontswap_ops->load(type, offset, page);
+> -	if (ret == 0)
+> +	if (ret == 0) {
+>  		inc_frontswap_loads();
+> +		if (frontswap_ops->exclusive_loads) {
+> +			SetPageDirty(page);
+> +			__frontswap_clear(sis, offset);
+> +		}
 
-What use case do you have in mind for associating multiple submission 
-queues with a single completion queue?
+Somewhat tangential, but is there still a point to the frontswap
+layer? It seems usecases other than zswap have never materialized, at
+least not in tree. Life would be a lot easier if we were to just
+hardcode the zswap callbacks in the swap functions.
 
-No matter what the use case is, I think that which submission queues are 
-associated with a completion queue is independent of the host driver and 
-hence that such logic should exist in the UFS core instead of in a host 
-driver.
+It's not the patch's fault, but it highlights the boiler plate the
+indirection causes. ->load() already has the page and could just dirty
+it directly. Instead now both layers have to handle invalidation,
+which is a vector for bugs.
 
-Bart.
+Can somebody think of reasons to keep it? If not, I'd take a stab at
+removing it.
