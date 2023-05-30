@@ -2,124 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451C2715AD0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A9D715AD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjE3J4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
+        id S230132AbjE3J5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbjE3J4Q (ORCPT
+        with ESMTP id S229559AbjE3J5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:56:16 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A8C126
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:55:50 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f3b39cea1eso4577567e87.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685440548; x=1688032548;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fV0A9lh1lqDIlbdillmGoiC07mhiQejFpkRc8wrmkBo=;
-        b=X1jGllTD0rXkJr8JvHV5/Wa7WZbZl8pQ2KKM/ClxFhWq5Wdi8vv/pI8WxMwIZBVaCl
-         knL9wVpmeGls3FR9tjZizHWswdcQ6vyMjTLjhjZMUHGEfi8tvznbiPOBFUjEPqVQhMlV
-         Aqo1Sd3lAlwSFz/Fghan0mAZlKc9bfP5xpbDO9ZJaRVtvo+EavvNmzQf7797HyHA7C+q
-         wS2WQmYogIbJws6dI26ZXx9V6CA0lN3mbNQBw5fzmunUGB7H3LqIkl+88zyqhVL+N9EY
-         0fAhDj0zRMm1GBXmlWc/TlxLSDq/MsRkrEmDcHmgdtL0dHbLv10t/OXtalqd3cAS9uMR
-         CKwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685440548; x=1688032548;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fV0A9lh1lqDIlbdillmGoiC07mhiQejFpkRc8wrmkBo=;
-        b=OcCcKCVSETB6r5AhnTCaC6iK08ZgkSlxkbGpdHGTDtLuJn8DQDSiHqVFpM6P54QnaF
-         8xBeFSNGATuC+0teC1gmUGU5Ys1fDhXYpGp4jsKDlf9wVU2EIgrai+FEE9QKRRe6bDKf
-         sTp3pqYAnZ0mKbxwNjwU1NbXuzhMFuLPFZiV97vZcde72/kO6VWrvbVseucxh3KGlJBh
-         zuSKOCcHk4VeuKPhgxyCJnfzueMMtTzL0/dTzga+dER8w1jop7+QqzTaUOVtotXhQG92
-         7/A5WKMDTZSiOgc2B0nmusRZkCS3S/frCJHWboyuor5tUIKyAJ0qrxGO4QrV7vypcldQ
-         TfFA==
-X-Gm-Message-State: AC+VfDyiunAGaelG/mTwAQ5BP+K7CVsdFDtu5vzkb8IWqSfB//LXipdl
-        8/DeFbQ5cxepqJNrlY3dbpSy/Q==
-X-Google-Smtp-Source: ACHHUZ740qedWBuyEGK8mzdvZtJt6JQ5S/1PcHOCvgFR5t2BGLsVlByelp1mqEzCOksVeqG2W2EfFQ==
-X-Received: by 2002:a05:6512:21aa:b0:4f3:8223:eb81 with SMTP id c10-20020a05651221aa00b004f38223eb81mr487631lft.6.1685440548632;
-        Tue, 30 May 2023 02:55:48 -0700 (PDT)
-Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id b3-20020ac25e83000000b004f377f317d4sm282857lfq.285.2023.05.30.02.55.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 02:55:48 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] PM: domains: Move the verification of in-params from genpd_add_device()
-Date:   Tue, 30 May 2023 11:55:36 +0200
-Message-Id: <20230530095536.61907-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 30 May 2023 05:57:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B12A49C;
+        Tue, 30 May 2023 02:57:20 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB4A5AB6;
+        Tue, 30 May 2023 02:58:05 -0700 (PDT)
+Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D7603F67D;
+        Tue, 30 May 2023 02:57:18 -0700 (PDT)
+Message-ID: <4c3572f8-9710-0955-72c6-a9907ce6ce8b@arm.com>
+Date:   Tue, 30 May 2023 10:57:16 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V5 6/6] coresight: etm4x: Add ACPI support in platform
+ driver
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Cc:     scclevenger@os.amperecomputing.com,
+        Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230529062511.52016-1-anshuman.khandual@arm.com>
+ <20230529062511.52016-7-anshuman.khandual@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20230529062511.52016-7-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit f38d1a6d0025 ("PM: domains: Allocate governor data dynamically
-based on a genpd governor") started to use the in-parameters in
-genpd_add_device(), without first doing a verification of them.
+Hi Rafael
 
-This isn't really a big problem, as most callers do a verification already.
-Therefore, let's drop the verification from genpd_add_device() and make
-sure all the callers take care of it instead.
+On 29/05/2023 07:25, Anshuman Khandual wrote:
+> From: Suzuki K Poulose <suzuki.poulose@arm.com>
+> 
+> Drop ETM4X ACPI ID from the AMBA ACPI device list, and instead just move it
+> inside the new ACPI devices list detected and used via platform driver.
+> 
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Mike Leach <mike.leach@linaro.org>
+> Cc: Leo Yan <leo.yan@linaro.org>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
+> Cc: linux-acpi@vger.kernel.org
+> Cc: coresight@lists.linaro.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com> (for ACPI specific changes)
+> Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>   drivers/acpi/acpi_amba.c                           |  1 -
 
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Fixes: f38d1a6d0025 ("PM: domains: Allocate governor data dynamically based on a genpd governor")
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/base/power/domain.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+We would like to push this via the coresight tree. Please could you Ack 
+this change if you are happy with the proposal and the change ?
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 51b9d4eaab5e..5cb2023581d4 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -1632,9 +1632,6 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
- 
- 	dev_dbg(dev, "%s()\n", __func__);
- 
--	if (IS_ERR_OR_NULL(genpd) || IS_ERR_OR_NULL(dev))
--		return -EINVAL;
--
- 	gpd_data = genpd_alloc_dev_data(dev, gd);
- 	if (IS_ERR(gpd_data))
- 		return PTR_ERR(gpd_data);
-@@ -1676,6 +1673,9 @@ int pm_genpd_add_device(struct generic_pm_domain *genpd, struct device *dev)
- {
- 	int ret;
- 
-+	if (!genpd || !dev)
-+		return -EINVAL;
-+
- 	mutex_lock(&gpd_list_lock);
- 	ret = genpd_add_device(genpd, dev, dev);
- 	mutex_unlock(&gpd_list_lock);
-@@ -2523,6 +2523,9 @@ int of_genpd_add_device(struct of_phandle_args *genpdspec, struct device *dev)
- 	struct generic_pm_domain *genpd;
- 	int ret;
- 
-+	if (!dev)
-+		return -EINVAL;
-+
- 	mutex_lock(&gpd_list_lock);
- 
- 	genpd = genpd_get_from_provider(genpdspec);
--- 
-2.34.1
+Suzuki
+
+
+>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 10 ++++++++++
+>   2 files changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/acpi/acpi_amba.c b/drivers/acpi/acpi_amba.c
+> index f5b443ab01c2..099966cbac5a 100644
+> --- a/drivers/acpi/acpi_amba.c
+> +++ b/drivers/acpi/acpi_amba.c
+> @@ -22,7 +22,6 @@
+>   static const struct acpi_device_id amba_id_list[] = {
+>   	{"ARMH0061", 0}, /* PL061 GPIO Device */
+>   	{"ARMH0330", 0}, /* ARM DMA Controller DMA-330 */
+> -	{"ARMHC500", 0}, /* ARM CoreSight ETM4x */
+>   	{"ARMHC501", 0}, /* ARM CoreSight ETR */
+>   	{"ARMHC502", 0}, /* ARM CoreSight STM */
+>   	{"ARMHC503", 0}, /* ARM CoreSight Debug */
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> index e10f6676dd9b..fd6f9dff5881 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> @@ -3,6 +3,7 @@
+>    * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+>    */
+>   
+> +#include <linux/acpi.h>
+>   #include <linux/bitops.h>
+>   #include <linux/kernel.h>
+>   #include <linux/moduleparam.h>
+> @@ -2344,12 +2345,21 @@ static const struct of_device_id etm4_sysreg_match[] = {
+>   	{}
+>   };
+>   
+> +#ifdef CONFIG_ACPI
+> +static const struct acpi_device_id etm4x_acpi_ids[] = {
+> +	{"ARMHC500", 0}, /* ARM CoreSight ETM4x */
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(acpi, etm4x_acpi_ids);
+> +#endif
+> +
+>   static struct platform_driver etm4_platform_driver = {
+>   	.probe		= etm4_probe_platform_dev,
+>   	.remove		= etm4_remove_platform_dev,
+>   	.driver			= {
+>   		.name			= "coresight-etm4x",
+>   		.of_match_table		= etm4_sysreg_match,
+> +		.acpi_match_table	= ACPI_PTR(etm4x_acpi_ids),
+>   		.suppress_bind_attrs	= true,
+>   		.pm			= &etm4_dev_pm_ops,
+>   	},
 
