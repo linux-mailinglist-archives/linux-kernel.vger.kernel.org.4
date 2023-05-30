@@ -2,122 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2E4716E36
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03080716E44
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232977AbjE3Tzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 15:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
+        id S229667AbjE3UBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 16:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbjE3Tze (ORCPT
+        with ESMTP id S229540AbjE3UBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 15:55:34 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E346129;
-        Tue, 30 May 2023 12:55:29 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-5148ebc4b89so7126707a12.3;
-        Tue, 30 May 2023 12:55:28 -0700 (PDT)
+        Tue, 30 May 2023 16:01:11 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B21F3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:01:09 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-33b7f217dd0so45625ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:01:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1685476527; x=1688068527;
+        d=google.com; s=20221208; t=1685476869; x=1688068869;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JosYzEY1lGmppLDev48gkCgWxDTfd3euZCE7PWnGECE=;
-        b=JRMxSf2z2l5ohNt0RMgYCYxWjbyqpDdm1OrbpPj43wHx4EBfg1PjnEt9XDhLl9nwIS
-         jMOsDOPB6K3tKj7imM/7qXNSCr69jY0ngoXTrHdI6pn3ItphR4sLe2+POS3Mw/Mltmey
-         1f7/+oTEhumsfTLYumWWb26roMeyb+JoxfysZ2q0nm/GHAhZfp7KoKR/l7PdLZ0j30hn
-         +dDsVpOAc0kCrbrGIcjGUlbkIZMLjN3zjdwQX8zsflGGMjEQYfyjIaTvTocfKaPY8wSe
-         Z97RtyYlmM4r1mpbMSm/x0TCIzz/d2I8tatGJSZU9h2ylaZ9w4Ii3bLPRUM49TlQOwHL
-         HdyA==
+        bh=GOgW2DmdPpAa5gxVGXjS+ma4aLYG4S9BuG54lTeIOm0=;
+        b=jlAbPq2VKtPtKLOqQdEcwmfJf5DsTcDWL7JREPeRfD5h2d+PTIDrydmk4MmfGq+9oT
+         P35Cuq1QCDm+xU3vVvh82DdxhLUTBERA8yLSi0Mwz2++t1sVibtgYBPCW85yRzOrsHy3
+         G7lOTvC17x5qzumqRQtC0bCwlQLFKxyZqwTENtu8PayaBuuaAZpVvN0w912GxQS+vEx9
+         KEeaEjRinzBWOGPqItNsxASEZAHecdC+UkhWwml9bdU6hZEHzBymfMLccFLtKEPCVHFl
+         aHEE9vu9MPe+BYa3NnCXePhQKCtLL6eDARSd/rZrwpS8QXXtqto53FrQ0Ulu+M6FzKfd
+         I3Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685476527; x=1688068527;
+        d=1e100.net; s=20221208; t=1685476869; x=1688068869;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JosYzEY1lGmppLDev48gkCgWxDTfd3euZCE7PWnGECE=;
-        b=fnDZRDfeNkTcI4xVYeDdjAw0YN7jhaE+1h+Med4B7zr4A3kfvnhi5v7Rn8D2k0IOqb
-         XAw7LKDoded5l5omucaDKrwHLZ5NADcqu5qFAAyQ8J5vxWxFOI/cjZ98oONtcgrqCJMz
-         KC6air92v3TTLdJTOO1qadHGeETIz+zbHyoc8QpHUOdpffw25M6Psy9b/zj8ebedJLbY
-         a7d54x1zDp6vnhGjMuppQ3HM/0IwqB2PGa3WkPQJSoQ0PMdHRbRTQI8dEKfuhEFxNSKt
-         RpvnNkdLD0jJ2YlvYJ5UjZphFBJBJ7KXfabIH/inWFvRxou3i6lF64Fvp2dr8LIdnR1s
-         y5yg==
-X-Gm-Message-State: AC+VfDwn2DYKGwA5dyVl3CS97o43LYtDveHCWIsBSwdaO4o4hzbkTdzo
-        09om3f58uJBmWJ1rLsH9DC7zyYnWCfv9G/MUXVc=
-X-Google-Smtp-Source: ACHHUZ4P8r71ifJ+3o1ntKGm5WKvUQG9mQEAudtmzYAquTKx6MuMQE9ysPL3S5YD6wpSRL7NZm6o//GZQRb4UWb/U9Y=
-X-Received: by 2002:a17:907:318d:b0:961:69a2:c8d6 with SMTP id
- xe13-20020a170907318d00b0096169a2c8d6mr3858560ejb.69.1685476527225; Tue, 30
- May 2023 12:55:27 -0700 (PDT)
+        bh=GOgW2DmdPpAa5gxVGXjS+ma4aLYG4S9BuG54lTeIOm0=;
+        b=jS+ojJ+z4FISrPMC9sSlKSWH2qWvY7xInQcOMDIlDZvko5mHujDoNucEw2PSLxJLuu
+         bG6WMGk3Pgh+H3JUvqInYceGYDe42E1xE7l2SXAOMY2dFfBXMUdNdFrRE8+mcqrnr2AH
+         MC4zQCUdhzHAvOeTpVSL1CBC6h3UI5YcFXCiFQk5xdRKIWDEgp+VYiCE2TWfZsVyFzrw
+         /S8PX1r1th8BxvaEmhFDxW3/cDLJBXzIsn19P+yjHmxUTGYF/6V9jikt3O0YKvRCh73j
+         1o8Q0rpSgJtqDwaa5FVJOtr8l2RTCs1UfV1WZXAGpUHAZKRV09TWSXn/0qYbC48Mg0A2
+         6sfw==
+X-Gm-Message-State: AC+VfDwMlep7JZTzffOGhkaJ++Kg0A/cHBJSY3OJbI1RpWkMP9UqSUiQ
+        TLC20RNtei9IwZsZrp2ELL2b8cxFE/dT9Z71Xr61uw==
+X-Google-Smtp-Source: ACHHUZ7zRW004Pqa4fbvUS9wuvWBXleaORnVrVWL7uDs5GctGak3K26b9kpF74wS50tfBmKhL/MCN368lITTv1zMHLc=
+X-Received: by 2002:a92:c56e:0:b0:33b:5343:c1be with SMTP id
+ b14-20020a92c56e000000b0033b5343c1bemr18534ilj.29.1685476868683; Tue, 30 May
+ 2023 13:01:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230517133309.9874-1-ddrokosov@sberdevices.ru>
- <20230517133309.9874-6-ddrokosov@sberdevices.ru> <CAFBinCC3kQ9Nz3R2W-Qj9tbPJfS8JsB_4AkmPgS6xpQ96DBy2w@mail.gmail.com>
- <20230522130033.a47vlybocme66rev@CAB-WSD-L081021> <CAFBinCAk9+Km3BssA8d8nc_Z_GbhY87FD3qQRpZ2k7ChKt7TBg@mail.gmail.com>
- <20230530-illusive-pushpin-1e35d0a50e0d@wendy> <20230530160334.z6sclbmqccs6ju4y@CAB-WSD-L081021>
-In-Reply-To: <20230530160334.z6sclbmqccs6ju4y@CAB-WSD-L081021>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 30 May 2023 21:55:16 +0200
-Message-ID: <CAFBinCCZcT=7BZsgXDjzbcqAZpEkKYZRBDRwDX1poWZHa9Hxdg@mail.gmail.com>
-Subject: Re: [PATCH v15 5/6] dt-bindings: clock: meson: add A1 Peripherals
- clock controller bindings
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     Conor Dooley <conor.dooley@microchip.com>, jbrunet@baylibre.com,
-        krzysztof.kozlowski+dt@linaro.org, neil.armstrong@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        khilman@baylibre.com, jian.hu@amlogic.com, kernel@sberdevices.ru,
-        rockosov@gmail.com, linux-amlogic@lists.infradead.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230310105346.12302-1-likexu@tencent.com> <20230310105346.12302-6-likexu@tencent.com>
+ <ZC99f+AO1tZguu1I@google.com> <509b697f-4e60-94e5-f785-95f7f0a14006@gmail.com>
+ <ZDAvDhV/bpPyt3oX@google.com> <34b5dd08-edac-e32f-1884-c8f2b85f7971@gmail.com>
+ <59ef9af0-9528-e220-625a-ff16e6971f23@amd.com> <ZG52cgmjgaqY8jvq@google.com>
+ <CALMp9eR_xYapRm=zJ3OdAzBVFjpzeQWYv9nTs1ZstAsugEwWRQ@mail.gmail.com>
+ <ZG6BrSXDnOdDvUZh@google.com> <CALMp9eQrDX6=gJzybegjzDJ665NCuWmESt-sZrKHcncnuENdpA@mail.gmail.com>
+ <ec42501c-2e66-5248-5b97-4827344418f3@gmail.com>
+In-Reply-To: <ec42501c-2e66-5248-5b97-4827344418f3@gmail.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Tue, 30 May 2023 13:00:57 -0700
+Message-ID: <CALMp9eSQWTTGQoJQ+f=ondF2wiiCaMiO-PMV0eaYJNXXrt4gQA@mail.gmail.com>
+Subject: Re: [PATCH 5/5] KVM: x86/pmu: Hide guest counter updates from the
+ VMRUN instruction
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Santosh Shukla <santosh.shukla@amd.com>,
+        "Tom Lendacky (AMD)" <thomas.lendacky@amd.com>,
+        Ananth Narayan <ananth.narayan@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, May 30, 2023 at 6:03=E2=80=AFPM Dmitry Rokosov <ddrokosov@sberdevic=
-es.ru> wrote:
-[...]
-> > If I am understanding correctly, this series implements the child
-> > controller and a parent, which is unimplemented, provides the child wit=
-h
-> > sys_pll_div16.
-> > The thing I am missing is whether the child controller has some outputs
-> > that depend on this sys_pll_div16 input & whether those are documented
-> > in this series. Regardless, you should be able to add more output clock=
-s
-> > without compatibility issues.
-Conor, the short answer is yes, the "gen_sel" mux (see patch 6/6 from
-this series, which is then part of a clock tree that's an output of
-the peripheral clock controller) uses sys_pll_div16 as input.
-Dmitry goes into more details below.
-
-[...]
-> As for new input clock connections, such as the cpu_clock
-> (sys_pll_div16), these are handled by clock muxing abstraction, allowing
-> CCF to find the clock object by fw.name and returning -ENOENT if the
-> connection is missing without breaking any CCF flow. It happens in the
-> kernel function clk_core_fill_parent_index()
-> https://elixir.bootlin.com/linux/latest/source/drivers/clk/clk.c#L424
-> Despite not having the connection for the new input in the old Device
-> Tree version, this will not break kernel boot flow and workflow, and the
-> new clock object just would not be utilized.
+On Mon, May 29, 2023 at 7:51=E2=80=AFAM Like Xu <like.xu.linux@gmail.com> w=
+rote:
 >
-> Based on the presented arguments, I fully agree with Jerome's position.
-> We can add new connections and objects in new driver versions, but their
-> removal is prohibited.
+> On 25/5/2023 5:32 am, Jim Mattson wrote:
+> > On Wed, May 24, 2023 at 2:29=E2=80=AFPM Sean Christopherson <seanjc@goo=
+gle.com> wrote:
+> >>
+> >> On Wed, May 24, 2023, Jim Mattson wrote:
+> >>> On Wed, May 24, 2023 at 1:41=E2=80=AFPM Sean Christopherson <seanjc@g=
+oogle.com> wrote:
+> >>>>
+> >>>> On Wed, Apr 26, 2023, Sandipan Das wrote:
+> >>>>> Hi Sean, Like,
+> >>>>>
+> >>>>> On 4/19/2023 7:11 PM, Like Xu wrote:
+> >>>>>>> Heh, it's very much explicable, it's just not desirable, and you =
+and I would argue
+> >>>>>>> that it's also incorrect.
+> >>>>>>
+> >>>>>> This is completely inaccurate from the end guest pmu user's perspe=
+ctive.
+> >>>>>>
+> >>>>>> I have a toy that looks like virtio-pmu, through which guest users=
+ can get hypervisor performance data.
+> >>>>>> But the side effect of letting the guest see the VMRUN instruction=
+ by default is unacceptable, isn't it ?
+> >>>>>>
+> >>>>>>>
+> >>>>>>> AMD folks, are there plans to document this as an erratum?=C3=AF=
+=C2=BF=C2=BD I agree with Like that
+> >>>>>>> counting VMRUN as a taken branch in guest context is a CPU bug, e=
+ven if the behavior
+> >>>>>>> is known/expected.
+> >>>>>>
+> >>>>>
+> >>>>> This behaviour is architectural and an erratum will not be issued. =
+However, for clarity, a future
+> >>>>> release of the APM will include additional details like the followi=
+ng:
+> >>>>>
+> >>>>>    1) From the perspective of performance monitoring counters, VMRU=
+Ns are considered as far control
+> >>>>>       transfers and VMEXITs as exceptions.
+> >>>>>
+> >>>>>    2) When the performance monitoring counters are set up to count =
+events only in certain modes
+> >>>>>       through the "OsUserMode" and "HostGuestOnly" bits, instructio=
+ns and events that change the
+> >>>>>       mode are counted in the target mode. For example, a SYSCALL f=
+rom CPL 3 to CPL 0 with a
+> >>>>>       counter set to count retired instructions with USR=3D1 and OS=
+=3D0 will not cause an increment of
+> >>>>>       the counter. However, the SYSRET back from CPL 0 to CPL 3 wil=
+l cause an increment of the
+> >>>>>       counter and the total count will end up correct. Similarly, w=
+hen counting PMCx0C6 (retired
+> >>>>>       far control transfers, including exceptions and interrupts) w=
+ith Guest=3D1 and Host=3D0, a VMRUN
+> >>>>>       instruction will cause an increment of the counter. However, =
+the subsequent VMEXIT that occurs,
+> >>>>>       since the target is in the host, will not cause an increment =
+of the counter and so the total
+> >>>>>       count will end up correct.
+> >>>>
+> >>>> The count from the guest's perspective does not "end up correct".  U=
+nlike SYSCALL,
+> >>>> where _userspace_ deliberately and synchronously executes a branch i=
+nstruction,
+> >>>> VMEXIT and VMRUN are supposed to be transparent to the guest and can=
+ be completely
+> >>>> asynchronous with respect to guest code execution, e.g. if the host =
+is spamming
+> >>>> IRQs, the guest will see a potentially large number of bogus (from i=
+t's perspective)
+> >>>> branches retired.
+> >>>
+> >>> The reverse problem occurs when a PMC is configured to count "CPUID
+> >>> instructions retired." Since KVM intercepts CPUID and emulates it, th=
+e
+> >>> PMC will always read 0, even if the guest executes a tight loop of
+> >>> CPUID instructions.
 >
-> If it's alright with you, I would prefer to keep the Peripherals and PLL
-> clock driver and their bindings as they are, and continue with the CPU
-> and Audio clock controllers in a separate patch series. Would that be
-> feasible for you?
-To me this sounds good!
+> Unlikely. KVM will count any emulated instructions based on kvm_pmu_incr_=
+counter().
+> Did I miss some conditions ?
 
+That code only increments PMCs configured to count "instructions
+retired" and "branch instructions retired." It does not increment PMCs
+configured to count "CPUID instructions retired."
 
-Best regards,
-Martin
+> >>>
+> >>> The PMU is not virtualizable on AMD CPUs without significant
+> >>> hypervisor corrections. I have to wonder if it's really worth the
+> >>> effort.
+>
+> I used to think so, until I saw the AMD64_EVENTSEL_GUESTONLY bit.
+> Hardware architects are expected to put more effort into this area.
+>
+> >>
+> >> Per our offlist chat, my understanding is that there are caveats with =
+vPMUs that
+> >> it's simply not feasible for a hypervisor to handle.  I.e. virtualizin=
+g any x86
+> >> PMU with 100% accuracy isn't happening anytime soon.
+>
+> Indeed, and any more detailed complaints ?
+
+Reference cycles unhalted fails to increment outside of guest mode.
+
+SMIs received counts *physical* rather than virtual SMIs
+
+Interrupts taken counts *physical* rather than virtual interrupts taken.
+
+> >>
+> >> The way forward is likely to evaluate each caveat on a case-by-case ba=
+sis to
+> >> determine whether or not the cost of the fixup in KVM is worth the ben=
+efit to
+> >> the guest.  E.g. emulating "CPUID instructions retired" seems like it =
+would be
+> >> fairly straightforward.  AFAICT, fixing up the VMRUN stuff is quite di=
+fficult though.
+> >
+> > Yeah. The problem with fixing up "CPUID instructions retired" is
+> > tracking what the event encoding is for every F/M/S out there. It's
+> > not worth it.
+>
+> I don't think it's feasible to emulate 100% accuracy on Intel. For guest =
+pmu
+> users, it is motivated by wanting to know how effective they are running =
+on
+> the current pCPU, and any vPMU eimulation behavior that helps this
+> understanding would be valuable.
+
+But at least Intel has a list of architected events, which are mostly
+amenable to virtualization.
