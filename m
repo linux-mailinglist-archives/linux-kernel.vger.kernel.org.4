@@ -2,61 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA10715B1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB9D715B15
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbjE3KKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        id S230176AbjE3KJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbjE3KJn (ORCPT
+        with ESMTP id S229626AbjE3KJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:09:43 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F5593;
-        Tue, 30 May 2023 03:09:37 -0700 (PDT)
-Received: from stefanw-SCHENKER ([37.4.248.58]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N1gac-1qEl5B15OC-0121IH; Tue, 30 May 2023 12:09:09 +0200
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Marek Vasut <marex@denx.de>, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH V4 2/2] dt-bindings: imxgpt: add imx6ul compatible
-Date:   Tue, 30 May 2023 12:08:43 +0200
-Message-Id: <20230530100843.15072-3-stefan.wahren@i2se.com>
+        Tue, 30 May 2023 06:09:37 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFE693
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:09:32 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685441370;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7IMC2N+5zMwD2FcWd+tBkCCpbpprLJnpD6w1wRdFkaw=;
+        b=Y0+XUcSb3Wb2Gdh9tqkbaQyn1zicWZ/OXq1Yp69pLbd5egwE+11UsvfVY7fbBFTtSCqYmA
+        Xu41FnnenyVpH0/c842AoJmVI8Yq4XOo89c52I3vQS7wBhCoqp8kDqCwN9yHL15Tr3y66b
+        5bZjaZ7TzrKcQRrtM7l3MdmhdwTjJB5uuOgGf9H+OEO8vG7OXA3m/PhT4+Yj8f2LeRWtbI
+        ZpKT2wsdrK3MhXkBVByiKmh/GCZrjtOyhM+avrK0uDI5ihhXA2AYer0qQqLhqcd/Vaxvc9
+        6PdkijubyAUuZ9tajEdSqcu2nFHxAsvLh13almkxHXIWd9rpC0a4389932+a5w==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2FFD42000D;
+        Tue, 30 May 2023 10:09:30 +0000 (UTC)
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        <linux-kernel@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v2 0/2] NVMEM cells in sysfs
+Date:   Tue, 30 May 2023 12:09:27 +0200
+Message-Id: <20230530100929.285235-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230530100843.15072-1-stefan.wahren@i2se.com>
-References: <20230530100843.15072-1-stefan.wahren@i2se.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:q+6glmaBLTUjizXeKRScM+ThD4mzq5bQPImbRnYuNw8FauQ0lb+
- jXdEnpleoDdFRUXr73DrVn4cbennLfQOBxp8n8uljUgB0rn3s1QEU7qC6yfJD0y2uMinpaq
- EjAo/a+3MrrCGf13y7uwHIGdkuYzV8tyzbtCGLWJz48PQmgEhmXyxvn0pWlhMOQUHhVDsjS
- aQyASebSuJcP0uJnimhew==
-UI-OutboundReport: notjunk:1;M01:P0:6JsSqUpKsQg=;LuYs2rRX5rdwDRMVXWTFSE4j3Vm
- Cg9nHmh1jE7c8FEvQJl7dbq5iAGCQSBk9ldl0JOiXykrpkOc1T8+HW+kDUjgGt888s5Xuaa+F
- q8F86TVVbf9Ac31OpdxBBNdyRhfoQmoSMgFd+xeQKvVGf6eDcrbE9FSY/cmLTIh43oeEF4yCg
- VD63RfaSYVNbN5vusaGJv6uMmS/JEc4hByCZMGMul//BksgYpq3gyAa5UMCq539lhDuCQLVP9
- ulGOsqt94023ctjxyny+AtvAco5df6kS4PmDQZL/hllp/AzFSD0qLNcfzyK+HG0fDWuuNts/v
- 9QkszW96oGzF0Hqs2FTmWflKGeh5Y54XDTkciwt+9bC6zUoiBj9jy+r986o2GWC5GNMgt/wJd
- r3qQUCccUL9lr4w3aWOKaM++/O1X6KXi5RwO7j8+kArlTnJHcqzzt09KAN3OoZky8JOHewlT3
- Fi97Kc5BpwHu9S7MR+bGDLDDRmnkZGI/GDYt3LE6tlQQdv4/pniS0O4qS7KxTaV5zTu4uII1p
- mPWhMjJFC6gVrp2tju06Y4P4efRJBYpj9a2OGBGTjp4ty25RVLUHMN+jjuDi7v8s3InF9R6q/
- yLiVU9YWeCIZUhyzLCTztQOSq40FoRFEFQU6+nDqH6ue+aZv40D4hiCpPE+f58qjJpzQ8BstI
- NgPlOb8Y5uzXduHoQSNfHXLTdFNrJ5AAPU1L/jYvzA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,35 +59,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the dtbs_check for imx6ul generates warnings like this:
+Hello,
 
-['fsl,imx6ul-gpt', 'fsl,imx6sx-gpt'] is too long
+As part of a previous effort, support for dynamic NVMEM layouts was
+brought into mainline, helping a lot in getting information from NVMEM
+devices at non-static locations. One common example of NVMEM cell is the
+MAC address that must be used. Sometimes the cell content is mainly (or
+only) useful to the kernel, and sometimes it is not. Users might also
+want to know the content of cells such as: the manufacturing place and
+date, the hardware version, the unique ID, etc. Two possibilities in
+this case: either the users re-implement their own parser to go through
+the whole device and search for the information they want, or the kernel
+can expose the content of the cells if deemed relevant. This second
+approach sounds way more relevant than the first one to avoid useless
+code duplication, so here is a series bringing NVMEM cells content to
+the user through sysfs.
 
-According to the timer-imx-gpt driver all imx6 use the same imx6dl data,
-but according to the existing DTS files the imx6ul GPT IP is derived from
-imx6sx. So better follow the DTS files here and make the imx6ul GPT
-compatible to the imx6sl one to fix the warning.
+Here is a real life example with a Marvell Armada 7040 TN48m switch:
 
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+$ nvmem=/sys/bus/nvmem/devices/1-00563/
+$ for i in `ls -1 $nvmem/cells/*`; do basename $i; hexdump -C $i | head -n1; done
+country-code
+00000000  54 57                                             |TW|
+crc32
+00000000  bb cd 51 98                                       |..Q.|
+device-version
+00000000  02                                                |.|
+diag-version
+00000000  56 31 2e 30 2e 30                                 |V1.0.0|
+label-revision
+00000000  44 31                                             |D1|
+mac-address
+00000000  18 be 92 13 9a 00                                 |......|
+manufacture-date
+00000000  30 32 2f 32 34 2f 32 30  32 31 20 31 38 3a 35 39  |02/24/2021 18:59|
+manufacturer
+00000000  44 4e 49                                          |DNI|
+num-macs
+00000000  00 40                                             |.@|
+onie-version
+00000000  32 30 32 30 2e 31 31 2d  56 30 31                 |2020.11-V01|
+platform-name
+00000000  38 38 46 37 30 34 30 2f  38 38 46 36 38 32 30     |88F7040/88F6820|
+product-name
+00000000  54 4e 34 38 4d 2d 50 2d  44 4e                    |TN48M-P-DN|
+serial-number
+00000000  54 4e 34 38 31 50 32 54  57 32 30 34 32 30 33 32  |TN481P2TW2042032|
+vendor
+00000000  44 4e 49                                          |DNI|
 
-diff --git a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-index 716c6afcca1f..685137338ac9 100644
---- a/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-+++ b/Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml
-@@ -34,6 +34,9 @@ properties:
-               - fsl,imxrt1050-gpt
-               - fsl,imxrt1170-gpt
-           - const: fsl,imx6dl-gpt
-+      - items:
-+          - const: fsl,imx6ul-gpt
-+          - const: fsl,imx6sx-gpt
- 
-   reg:
-     maxItems: 1
+Here is a list of known limitations though:
+* It is currently not possible to know whether the cell contains ASCII
+  or binary data, so by default all cells are exposed in binary form.
+* For now the implementation focuses on the read aspect. Technically
+  speaking, in some cases, it could be acceptable to write the cells, I
+  guess, but for now read-only files sound more than enough. A writable
+  path can be added later anyway.
+* The sysfs entries are created when the device probes, not when the
+  NVMEM driver does. This means, if an NVMEM layout is used *and*
+  compiled as a module *and* not installed properly in the system (a
+  usermode helper tries to load the module otherwise), then the sysfs
+  cells won't appear when the layout is actually insmod'ed because the
+  sysfs folders/files have already been populated.
+
+Changes in v2:
+* Do not mention the cells might become writable in the future in the
+  ABI documentation.
+* Fix a wrong return value reported by Dan and kernel test robot.
+* Implement .is_bin_visible().
+* Avoid overwriting the list of attribute groups, but keep the cells
+  attribute group writable as we need to populate it at run time.
+* Improve the commit messages.
+* Give a real life example in the cover letter.
+
+Miquel Raynal (2):
+  ABI: sysfs-nvmem-cells: Expose cells through sysfs
+  nvmem: core: Expose cells through sysfs
+
+ Documentation/ABI/testing/sysfs-nvmem-cells |  19 +++
+ drivers/nvmem/core.c                        | 145 +++++++++++++++++++-
+ 2 files changed, 160 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-nvmem-cells
+
 -- 
 2.34.1
 
