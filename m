@@ -2,84 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A26716A25
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2174A716A28
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbjE3Q4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
+        id S232935AbjE3Q4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjE3Q4e (ORCPT
+        with ESMTP id S231591AbjE3Q4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:56:34 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E1E9D
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:56:33 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-33baee0235cso2695ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:56:33 -0700 (PDT)
+        Tue, 30 May 2023 12:56:37 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F7098
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:56:36 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-5340957a1f1so2608336a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:56:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685465793; x=1688057793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F4saRnoXm29F46lt8r9s8eZWy2RiZg/7MPw1IC2AIu4=;
-        b=vmD2nxEkM5VZgF0z4VKdntqKmWYMwOU/7ppjyUarV+pDN5m1KUWmAA+uKRh+Zg0BYv
-         Phd68Abs+auvFE4D8cdwFkOj/lkGcojoA1yozZ2pdpFJ3r9q+b2hoZ73NrcLRtfcfAUJ
-         aZd0y6h04tN7Kk1TALhDnvfe6ojLCzj+HvQCzG9CwbLPTv+H6C+qpeWmtfNHdP856pPN
-         NUd7ShdFnBsNOWaGUKUqmhz5O2mwm5xPj6ivlawSJd1NkrV7f4QpcugMSpXJ4hgdItaA
-         Qxub9Q4YXcFzUEoup0M4y9QrIr/LqnXsbLfjx8V7nw3nLVHSgtWWJxya5hyubyRpDrwB
-         SjpQ==
+        d=google.com; s=20221208; t=1685465796; x=1688057796;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zUIF7qczhJfL0tzqN+Wk4Y8s0fyjf+/encaeJ8i8zo8=;
+        b=RbEfFAAf2kcBOjvt74s5UVZKgWrUGFDUy+sd7fobbo+fCQD0px8ov63e8OeZXSJ8fh
+         HG4hHegtTrDVP700YjLnXteCxE6guE54Vbd8zH/t2rCli4QSiy5tmFSofJYIZgEMn1zj
+         Qsp4LrQqCDZwVqc25d9x6Ot8kXQSMfXIZ9gqaurkMyf4wf+UYa4w1aAbMwazKXlrtuiS
+         Kk616ydOwBRsdeEiUal2WEabr5ltpvlk9LlkPPxhELMLDRXHyhZJZ3Til0KRYe81otj+
+         tS/p/kiytx6/XARdF4p/h7eKZckIQCkqvbC4w6UMN19z2FxazUFpiFD2Hr1ZsYeU6F4t
+         XCEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685465793; x=1688057793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F4saRnoXm29F46lt8r9s8eZWy2RiZg/7MPw1IC2AIu4=;
-        b=axgieyhlzZz9oUI4qbclLMDQhHHhMbeefOsliBcqhkacRU+hOd4KEzkC48n4I5Dwy4
-         okyHbDNIGi9LIDi3AXYQXSXkAEXqUqyTzncSi6JuTR47vXjevSL3L17pBPsu38QT5810
-         dQMyac4cwkRv0wNoIV/3jav7fh6mjyPYLr29XcVpWc1EykItQDdSep/zejGNELSg6wz5
-         wnNm1IBs1C7d1QA/mmzJC8jf84hdOTgPVpaLd1HoaJZ+AFhZHYxBjhnoMBwl4+82RVcG
-         MNim/3EsAllUgNChpgEIh1K8ytL8l8lmjGtTXCAPWVSWQPb0ops8bBY/2FIhz1NPAyuq
-         XQFw==
-X-Gm-Message-State: AC+VfDx4mFMqAphrVtm+cWlsntURGsHwnHq+lH5HvVi18H/gvuFJts29
-        dfMjc1kMKGORzXc4MCPQljSRRMHL0yOou7zKYbVgLg==
-X-Google-Smtp-Source: ACHHUZ5y/iD2FePf4vPxl8EfHEhPUNPWYGHIIZTuc+5SlHhXurVNAz3+YkQrWL+XnqbVk1QkZSl+CD+AzvvaUTDwcXg=
-X-Received: by 2002:a05:6e02:1bc1:b0:337:c28c:3d0f with SMTP id
- x1-20020a056e021bc100b00337c28c3d0fmr187437ilv.6.1685465792930; Tue, 30 May
- 2023 09:56:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230523194949.96149-1-twiederh@redhat.com> <20230530102358.16430-1-twiederh@redhat.com>
-In-Reply-To: <20230530102358.16430-1-twiederh@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Tue, 30 May 2023 09:56:21 -0700
-Message-ID: <CALMp9eSsx0WLd0RdkpXnDkyKGM2CZxSwgtfmFtH2hxYprfvhAA@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/msr: Allow unprivileged read access to some MSRs
-To:     Tim Wiederhake <twiederh@redhat.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        d=1e100.net; s=20221208; t=1685465796; x=1688057796;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zUIF7qczhJfL0tzqN+Wk4Y8s0fyjf+/encaeJ8i8zo8=;
+        b=ejBr37nho4eRmfAtEYEP4qw4ZQaDH0QWV3DQf4IQyfA4ssbBuZcsZeTB5vyt4s+9qN
+         tzMxIZjq/ry5j3DjzuUnVLAV58Eabi116k+u85EGrpiQRjTfYUMZYIwccguvA6ON5IB5
+         N4jOnHzMO90njc9U1JHJy30ROnWrahzJ7HAkAY+uj0x9Ze3MkzbF9N2fOaBKrS0nTbWb
+         zNkKyFMpM2jgf3kFMH1OQasyyhegg/TSsJabLC97oYgU9iVKBbdUQS82FrMz6d+RXr7g
+         TIqvb7hGPgrpQwN8zYyCEHqrkAkHe+yoLSp3jCUi3FNdLyIjuSzzD++cTL588Lc7dQT4
+         OjmA==
+X-Gm-Message-State: AC+VfDzVRMVTTUui7KqKqjwd26qVeRIspm9xL6E/wuhB4ZtYdZmktnzm
+        8o3imV89Q4jd7GojOV0yAmfsZDHmSjc=
+X-Google-Smtp-Source: ACHHUZ6elIb9Xawt5kHr4iARsASD1eAmXyJrU7yMOnucjGsQDVEv6w8ENbA+wCa+rqHlmqnxd6WixqOcZs8=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:512:0:b0:52c:9e55:61ee with SMTP id
+ 18-20020a630512000000b0052c9e5561eemr545525pgf.3.1685465795799; Tue, 30 May
+ 2023 09:56:35 -0700 (PDT)
+Date:   Tue, 30 May 2023 09:56:34 -0700
+In-Reply-To: <87wn0pizbl.ffs@tglx>
+Mime-Version: 1.0
+References: <87sfbhlwp9.ffs@tglx> <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
+ <87bki3kkfi.ffs@tglx> <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
+ <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name> <87mt1mjhk3.ffs@tglx>
+ <87jzwqjeey.ffs@tglx> <87cz2ija1e.ffs@tglx> <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name>
+ <87wn0pizbl.ffs@tglx>
+Message-ID: <ZHYqwsCURnrFdsVm@google.com>
+Subject: Re: [patch] x86/smpboot: Disable parallel bootup if cc_vendor != NONE
+From:   Sean Christopherson <seanjc@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Paul McKenney <paulmck@kernel.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 3:28=E2=80=AFAM Tim Wiederhake <twiederh@redhat.com=
-> wrote:
->
-> Software such as qemu and libvirt require the raw content of some MSRs
+On Tue, May 30, 2023, Thomas Gleixner wrote:
+> On Tue, May 30 2023 at 15:29, Kirill A. Shutemov wrote:
+> > On Tue, May 30, 2023 at 02:09:17PM +0200, Thomas Gleixner wrote:
+> >> The decision to allow parallel bringup of secondary CPUs checks
+> >> CC_ATTR_GUEST_STATE_ENCRYPT to detect encrypted guests. Those cannot use
+> >> parallel bootup because accessing the local APIC is intercepted and raises
+> >> a #VC or #VE, which cannot be handled at that point.
+> >> 
+> >> The check works correctly, but only for AMD encrypted guests. TDX does not
+> >> set that flag.
+> >> 
+> >> Check for cc_vendor != CC_VENDOR_NONE instead. That might be overbroad, but
+> >> definitely works for both AMD and Intel.
+> >
+> > It boots fine with TDX, but I think it is wrong. cc_get_vendor() will
+> > report CC_VENDOR_AMD even on bare metal if SME is enabled. I don't think
+> > we want it.
+> 
+> Right. Did not think about that.
+> 
+> But the same way is CC_ATTR_GUEST_MEM_ENCRYPT overbroad for AMD. Only
+> SEV-ES traps RDMSR if I'm understandig that maze correctly.
 
-Note that KVM doesn't return the raw value of IA32_ARCH_CAPABILITIES.
-First, it filters out unsupported bits, and then it massages the
-result a bit. See kvm_get_arch_capabilities(). Isn't this what qemu
-actually wants?
+Ya, regular SEV doesn't encrypt register state.
