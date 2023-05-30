@@ -2,108 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F53A715D78
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C7A715D77
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbjE3Lki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
+        id S230187AbjE3Lkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbjE3LkU (ORCPT
+        with ESMTP id S231315AbjE3LkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:40:20 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8617DB0;
-        Tue, 30 May 2023 04:40:19 -0700 (PDT)
-Received: from vefanov-Precision-3650-Tower.intra.ispras.ru (unknown [10.10.2.69])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 7398E44C100D;
-        Tue, 30 May 2023 11:40:16 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 7398E44C100D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1685446816;
-        bh=xfu3uFYPCa0mI19qMfmeJz1jquM9eNx9AbVYikppbu4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Or6shdGE1tqZfXHhKNT99XR84T92eJk7L9U1L+PgI/iDvAViNNlmguPSl00lhxNvT
-         xOcYXS0JVKtY/2QVC9ZG2jfh7PE5t8rvHrzFujOxxqkXnA+jRKdDWp8WlneWfn0SW3
-         fEhq6rMnwQhHgvIIZ5srRf/KeFfb1JF9BbFEV3CA=
-From:   Vladislav Efanov <VEfanov@ispras.ru>
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     Vladislav Efanov <VEfanov@ispras.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: [PATCH v2] udp6: Fix race condition in udp6_sendmsg & connect
-Date:   Tue, 30 May 2023 14:39:41 +0300
-Message-Id: <20230530113941.1674072-1-VEfanov@ispras.ru>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <27614af23cd7ae4433b909194062c553a6ae16ac.camel@redhat.com>
-References: 
+        Tue, 30 May 2023 07:40:18 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63C2E8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:40:17 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-566586b180fso27509097b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685446817; x=1688038817;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VFrFetT34al7dY2BrfnDPxUxtiofpIRGCaJ+XqhiDX4=;
+        b=TpfUtTZ1W/Yt2DgAh1Qr2g1B6Gyb+eJ7Da1iS0OiAt1+hHYEe73P4TXINLT78xJt7d
+         pcFlR4CTbCS6Bw0LMDF8+MJQeady3WjEtA2hqjTYrNqhXBX0blH3S42PA9GZNT8TnU5x
+         5R8EXtNm/zQSQBA6Iyj+wcFCh5unwzQk6ufi2EXRjJVp9td8C2a90Bq+GLNhI5hbfw1u
+         soMD0+1bYoRT3a8gg/pLswtghap9Vr/CKbYhokZi2HH8kC4vRV2x/Dp4J1gJ86JnTNCh
+         hzxWn62tQqIq2oQgRwQFkjf3x9ZIz23RHplQmY8DR7kZLRP9R+Or4C+LLGpcCwxx5gQ+
+         HEUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685446817; x=1688038817;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VFrFetT34al7dY2BrfnDPxUxtiofpIRGCaJ+XqhiDX4=;
+        b=O8fsrl2hy2zaJ7dhRpnENCwWGdI4Gu5zr8JA5nUT+LEEeXat+0S5dxniAE3cvex2WM
+         JFGHuCd6WVbtNgAAUilW84rxYpR4sXpx67e7VEblQHFeUPn3dhj/XJRCzNgAITCo04lS
+         szqCK9i9aLj1fGe7l4OjMPU8ans1VDVhLBaE9dG1rhC1Vh5PPG9ZfbrE3rR5vTP0H7p8
+         aeL5Xl3YMipMJDyGk4mq2/eNAJ/nnuz6xUT4ErJ6rgnMhQWn0h10H+HxtaAzSluMeHBS
+         aoHsSaTJ51rnk2TzCLF1W1aWKyjJrnH1ObKzwAGMZjGWJBZ0hR+5FGTPEtLPU+XCStIw
+         v4Dg==
+X-Gm-Message-State: AC+VfDwW3jCxHUHXw6Aq5IMf9MqvJMiZKSI5IZcivdIuT+7L2VTf4e5T
+        R60X0y/4myxzg1WLqC7PI3L1Ubji1yOESM11ksg4DA==
+X-Google-Smtp-Source: ACHHUZ5XmULc9FTyBBvgQcWLH94hoB0C9vcu8vQ76DEyhu1q8GmASIFkf5ZYFTu+hJly3PUfEtFtJQcgJHjoziMfpHs=
+X-Received: by 2002:a81:4e06:0:b0:568:9e3f:4ca4 with SMTP id
+ c6-20020a814e06000000b005689e3f4ca4mr1989202ywb.34.1685446816980; Tue, 30 May
+ 2023 04:40:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230529025011.2806-1-xingtong_wu@163.com> <20230529025011.2806-2-xingtong_wu@163.com>
+ <ZHSZ9cK78qc5QeZD@localhost> <CACRpkdbiRsJqxVZPNLvLPK-MzEhyjSBGffuaTgP7tt40pGGoRw@mail.gmail.com>
+ <ZHSunJyh2AU1eb0H@localhost>
+In-Reply-To: <ZHSunJyh2AU1eb0H@localhost>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 30 May 2023 13:40:06 +0200
+Message-ID: <CACRpkdZY_azRbk8TW8r7JG=TqGLOSHCt8gyk3p5NE57tkxANcQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] gpio-f7188x: fix base values conflicts with other
+ gpio pins
+To:     simon.guinot@sequanux.org
+Cc:     xingtong_wu@163.com, brgl@bgdev.pl, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, henning.schild@siemens.com,
+        xingtong.wu@siemens.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller got the following report:
-BUG: KASAN: use-after-free in sk_setup_caps+0x621/0x690 net/core/sock.c:2018
-Read of size 8 at addr ffff888027f82780 by task syz-executor276/3255
+On Mon, May 29, 2023 at 3:56=E2=80=AFPM <simon.guinot@sequanux.org> wrote:
 
-The function sk_setup_caps (called by ip6_sk_dst_store_flow->
-ip6_dst_store) referenced already freed memory as this memory was
-freed by parallel task in udpv6_sendmsg->ip6_sk_dst_lookup_flow->
-sk_dst_check.
+> This way the assignation would be dynamic and the pin numbers found in
+> controller datasheet would be meaningful as well.
 
-          task1 (connect)              task2 (udp6_sendmsg)
-        sk_setup_caps->sk_dst_set |
-                                  |  sk_dst_check->
-                                  |      sk_dst_set
-                                  |      dst_release
-        sk_setup_caps references  |
-        to already freed dst_entry|
+I always had in my mind that this is what you should use the
+.dbg_show() callback in struct gpio_chip for.
 
-The reason for this race condition is: sk_setup_caps() keeps using
-the dst after transferring the ownership to the dst cache.
+It is for debugging, not ABI and cross-referencing datasheets is definitely
+debugging, so use that and look in /proc/sys/kernel/debug/gpio
+for the data you want for cross-referencing.
 
-Found by Linux Verification Center (linuxtesting.org) with syzkaller.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
----
-v2: Move sk_dst_set() call in sk_setup_caps() as
-Paolo Abeni <pabeni@redhat.com> suggested.
- net/core/sock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 5440e67bcfe3..24f2761bdb1d 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -2381,7 +2381,6 @@ void sk_setup_caps(struct sock *sk, struct dst_entry *dst)
- {
- 	u32 max_segs = 1;
- 
--	sk_dst_set(sk, dst);
- 	sk->sk_route_caps = dst->dev->features;
- 	if (sk_is_tcp(sk))
- 		sk->sk_route_caps |= NETIF_F_GSO;
-@@ -2400,6 +2399,7 @@ void sk_setup_caps(struct sock *sk, struct dst_entry *dst)
- 		}
- 	}
- 	sk->sk_gso_max_segs = max_segs;
-+	sk_dst_set(sk, dst);
- }
- EXPORT_SYMBOL_GPL(sk_setup_caps);
- 
--- 
-2.34.1
-
+Yours,
+Linus Walleij
