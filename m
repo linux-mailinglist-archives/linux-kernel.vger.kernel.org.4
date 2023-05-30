@@ -2,155 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6EE715C52
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4403A715C57
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbjE3K4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        id S231718AbjE3K5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbjE3K4V (ORCPT
+        with ESMTP id S231534AbjE3K46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:56:21 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E598AF7;
-        Tue, 30 May 2023 03:56:17 -0700 (PDT)
-X-QQ-mid: bizesmtp72t1685444172tvjqxqzn
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 18:56:11 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: IV30oiqrgAYLeAVOtqPY/w4sV51ufOZgvH9veDK9Ln5rvQZwJVqfvQebBNkb0
-        rWdg0XWxELEr+D+JJDpmJRKXEGbTrqUmljotAwMSeKgbivwAh8Yc83kjym3D0j3G2Y/rfbT
-        rmDMziIaF1RHSZ0VHwappE4cH+2ibJvPOUXuZeZixvII0+kcxU/CNsIAfWDAPnGiPA/X4Ry
-        uhcwpAPuHw//KlJZuq0nj2KBV/mhrO1z6IjLwWZl6tEPenU5NHMlwsxmdxFUZgT39wwGWzW
-        zUWW0R3DR8s36VqJKPbbMYeeSntiCd0UAIcDVkGpuo+W1S9x5EyFdJl4W5eKH6bam/lftYQ
-        9/imcDdRSqPSe6FQ4g46x2VQalG7yfX6OA+ka7s9XC8huDYjbWd2rJlVOqjkRRquGnxwI1c
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 16230640011585094560
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: [PATCH 1/4] selftests/nolibc: allow rerun with the same settings
-Date:   Tue, 30 May 2023 18:56:10 +0800
-Message-Id: <32d4ec1c3cabae5c1baabf85627b81d6ede01518.1685443199.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685443199.git.falcon@tinylab.org>
-References: <cover.1685443199.git.falcon@tinylab.org>
+        Tue, 30 May 2023 06:56:58 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A4FF7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:56:56 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-33826fb9d0fso22354705ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:56:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685444216; x=1688036216;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B2MXCgTNPKfxKRGLHYFjMw3S62/mrODmRY8sffg8JIM=;
+        b=IhyTQF9DrjXFwTp948ct8Y4CRF5ojzGhkVsPEQCBKKbHQDVf4dYjioQPPnUgeBDSSw
+         9TsBVpwxZrpJ0L//9lBcdon5r0rf+RP+w/T4C9m5tjtVHfFRyeBbs16dPtSuGrCyFRgv
+         ub0q4yZg8yRJrihUTeH4VvNRPab0e8zm5ORFkgGrCPG6/gu1awM4p6h5jRbox7VjVhfZ
+         mKsDtJcZx/MfCRw+04hIwNEtI+vtSBkVszrYyEWOu5VI+5P+WMgy57YrU0IKbHqFO22c
+         pCne0EFIvgVNvDumkoSmhoah4VqH7yc2wuC8TVOdKf1wyXHdSX+c3n4J3GUtnYCl1iXj
+         pHeg==
+X-Gm-Message-State: AC+VfDzEZw7pvNTQMss4a4rCEm4gN8AP41z7M0SJxZIaLG5hrBqBsDzv
+        gGlo00tHc3S4lj0/8hU9Epj0Qr2vsqcJDFlx2gYTsHO1EGDZBU0=
+X-Google-Smtp-Source: ACHHUZ77XvY3N2+clQmovB0BYpuU6b6Mt4VnhEXOgMa9EA7Y4eFygYpSareAQxBLgDU7450lBoRAHKY6+p0bpaVoTvBZ3Eny92ZO
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:cc43:0:b0:335:908b:8fb with SMTP id
+ t3-20020a92cc43000000b00335908b08fbmr925354ilq.1.1685444216237; Tue, 30 May
+ 2023 03:56:56 -0700 (PDT)
+Date:   Tue, 30 May 2023 03:56:56 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cc339905fce70fee@google.com>
+Subject: [syzbot] Monthly net report (May 2023)
+From:   syzbot <syzbot+list0c78593482015785d68d@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Record the user settings from NOLIBC_TEST and allow reuse them in
-another run iteration.
+Hello net maintainers/developers,
 
-This allows to rerun the test cases with the same setting.
+This is a 31-day syzbot report for the net subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/net
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+During the period, 6 new issues were detected and 7 were fixed.
+In total, 75 issues are still open and 1261 have been fixed so far.
+
+Some of the still happening issues:
+
+Ref  Crashes Repro Title
+<1>  6348    Yes   WARNING in dev_watchdog (2)
+                   https://syzkaller.appspot.com/bug?extid=d55372214aff0faa1f1f
+<2>  3665    Yes   KMSAN: uninit-value in eth_type_trans (2)
+                   https://syzkaller.appspot.com/bug?extid=0901d0cc75c3d716a3a3
+<3>  820     Yes   INFO: task hung in switchdev_deferred_process_work (2)
+                   https://syzkaller.appspot.com/bug?extid=8ecc009e206a956ab317
+<4>  442     Yes   INFO: task hung in rtnetlink_rcv_msg
+                   https://syzkaller.appspot.com/bug?extid=8218a8a0ff60c19b8eae
+<5>  380     Yes   KMSAN: uninit-value in IP6_ECN_decapsulate
+                   https://syzkaller.appspot.com/bug?extid=bf7e6250c7ce248f3ec9
+<6>  322     Yes   WARNING in kcm_write_msgs
+                   https://syzkaller.appspot.com/bug?extid=52624bdfbf2746d37d70
+<7>  310     No    KMSAN: uninit-value in __hw_addr_add_ex
+                   https://syzkaller.appspot.com/bug?extid=cec7816c907e0923fdcc
+<8>  258     No    BUG: stack guard page was hit in rtnl_newlink
+                   https://syzkaller.appspot.com/bug?extid=399cbcbb7917bd2f96ee
+<9>  240     Yes   KASAN: slab-out-of-bounds Read in decode_session6
+                   https://syzkaller.appspot.com/bug?extid=2bcc71839223ec82f056
+<10> 215     Yes   KMSAN: uninit-value in xfrm_state_find
+                   https://syzkaller.appspot.com/bug?extid=131cd4c6d21724b99a26
+
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 46 ++++++++++++--------
- 1 file changed, 29 insertions(+), 17 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index fd7515f6b1d2..be718fa5dc86 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -46,6 +46,9 @@ char **environ;
- /* definition of a series of tests */
- struct test {
- 	const char *name;              /* test name */
-+	int min;
-+	int max;
-+	int run;
- 	int (*func)(int min, int max); /* handler */
- };
- 
-@@ -940,12 +943,12 @@ int prepare(void)
- }
- 
- /* This is the definition of known test names, with their functions */
--static const struct test test_names[] = {
-+static struct test test_names[] = {
- 	/* add new tests here */
--	{ .name = "syscall",    .func = run_syscall    },
--	{ .name = "stdlib",     .func = run_stdlib     },
--	{ .name = "vfprintf",   .func = run_vfprintf   },
--	{ .name = "protection", .func = run_protection },
-+	{ .name = "syscall",    .min = 0, .max = INT_MAX, .run = -1, .func = run_syscall    },
-+	{ .name = "stdlib",     .min = 0, .max = INT_MAX, .run = -1, .func = run_stdlib     },
-+	{ .name = "vfprintf",   .min = 0, .max = INT_MAX, .run = -1, .func = run_vfprintf   },
-+	{ .name = "protection", .min = 0, .max = INT_MAX, .run = -1, .func = run_protection },
- 	{ 0 }
- };
- 
-@@ -994,7 +997,11 @@ int main(int argc, char **argv, char **envp)
- 					break;
- 			}
- 
--			if (test_names[idx].name) {
-+			if (!test_names[idx].name) {
-+				printf("Ignoring unknown test name '%s'\n", test);
-+			} else {
-+				test_names[idx].run = 1;
-+
- 				/* The test was named, it will be called at least
- 				 * once. We may have an optional range at <colon>
- 				 * here, which defaults to the full range.
-@@ -1022,27 +1029,32 @@ int main(int argc, char **argv, char **envp)
- 						value = colon;
- 					}
- 
--					/* now's time to call the test */
--					printf("Running test '%s'\n", test_names[idx].name);
--					err = test_names[idx].func(min, max);
--					ret += err;
--					printf("Errors during this test: %d\n\n", err);
-+					test_names[idx].min = min;
-+					test_names[idx].max = max;
- 				} while (colon && *colon);
--			} else
--				printf("Ignoring unknown test name '%s'\n", test);
-+			}
- 
- 			test = comma;
- 		} while (test && *test);
--	} else {
--		/* no test mentioned, run everything */
-+
-+		/* disable the left tests */
- 		for (idx = 0; test_names[idx].name; idx++) {
--			printf("Running test '%s'\n", test_names[idx].name);
--			err = test_names[idx].func(min, max);
-+			if (test_names[idx].run != 1)
-+				test_names[idx].run = 0;
-+		}
-+	}
-+
-+	/* run everything or the test mentioned */
-+	for (idx = 0; test_names[idx].name; idx++) {
-+		if (test_names[idx].run != 0) {
-+			printf("Running test '%s', from %d to %d\n", test_names[idx].name, test_names[idx].min, test_names[idx].max);
-+			err = test_names[idx].func(test_names[idx].min, test_names[idx].max);
- 			ret += err;
- 			printf("Errors during this test: %d\n\n", err);
- 		}
- 	}
- 
-+
- 	printf("Total number of errors: %d\n", ret);
- 
- 	if (getpid() == 1) {
--- 
-2.25.1
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
