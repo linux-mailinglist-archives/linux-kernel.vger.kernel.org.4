@@ -2,91 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742F771549E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 06:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DA67154A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 06:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjE3Eyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 00:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
+        id S230096AbjE3E5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 00:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjE3Eyo (ORCPT
+        with ESMTP id S229614AbjE3E5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 00:54:44 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76441E3;
-        Mon, 29 May 2023 21:54:43 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34U24C7N010022;
-        Mon, 29 May 2023 21:54:22 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=3C7rqfTKs3OhE/59qADlZbdCdA2iSx6m3r61x8RXtlM=;
- b=BzJ+K6AX7uRNYwLgkl1/kcp2g8XshZ9uWZrKPUrC+1zOYgBcTIxDybmctApvy0iV8UIh
- /jSnP0c1cZLV2399AfY6Q4kxXB2POUbgf1R2vnIgvrBnB86WcbvEnxxLDRupwj1Rfk/s
- 78lq0jd9u7Dkw7SoXvL0CzEsxa3kmv2TPpABGAgHzVGH72DtJqrnrKruDeXHMHN57k71
- drhM2IGou0pw0tY8PEiIs01a89aTKWT3AW1UweXvwn3m593kRLDpgNyyCmgc38YHByuQ
- M91kdKjwajz4392oOuEcV7rSQMa/Ggx7MnmACyU+6cCb3Xqf7l6VPow1CNk201N6e3Q6 xw== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3quhcm70u9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 29 May 2023 21:54:21 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 29 May
- 2023 21:54:19 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Mon, 29 May 2023 21:54:19 -0700
-Received: from localhost.localdomain (unknown [10.28.36.165])
-        by maili.marvell.com (Postfix) with ESMTP id 542A03F7058;
-        Mon, 29 May 2023 21:54:14 -0700 (PDT)
-From:   Ratheesh Kannoth <rkannoth@marvell.com>
-To:     <starmiku1207184332@gmail.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
-        <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
-        <yhs@fb.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-        <haoluo@google.com>, <jolsa@kernel.org>, <davem@davemloft.net>,
-        <kuba@kernel.org>, <hawk@kernel.org>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-Subject: [PATCH] kernel: bpf: syscall: fix a possible sleep-in-atomic bug in __bpf_prog_put()
-Date:   Tue, 30 May 2023 10:24:09 +0530
-Message-ID: <20230530045409.440958-1-rkannoth@marvell.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230529155327.585056-1-starmiku1207184332@gmail.com>
-References: <20230529155327.585056-1-starmiku1207184332@gmail.com>
+        Tue, 30 May 2023 00:57:36 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D75C9;
+        Mon, 29 May 2023 21:57:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685422655; x=1716958655;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BsdtVrFGCJbQ+fRw/SSLLWJvAmhHbsbfCItALlMk470=;
+  b=GQCDc6WBp0Q9CKAhM98FUIYws+Luoff5PiAbjb5b29WY2h6JF0dal7iP
+   bOrwsnRKfGz1BVrP2dZX8QV7/miZ/BTi+3B9KkYq+puWGuE+zsxKsnR39
+   QY70ExO9dS8t00Al5YtEDrDYS80n+EREIyQdfVZGDazHYxzm+YwVP6Wca
+   A2mBWrh/7pV1g5WRcYI17Tfk3ml+Q9s7xGjR/uHd1Ce49fQ1/SrGtawpf
+   NkEz0GPmEyjx+MrOgqeeG1U5PWuyIgy4Teo774VdtTzdRogtmfihcCSAY
+   SNwtEt1K6hvZFqJZnT/RUtmpsx/5wa5Ec+RvE7yADvg9XTwWpGzEm90we
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="339405183"
+X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
+   d="scan'208";a="339405183"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 21:57:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="830595390"
+X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
+   d="scan'208";a="830595390"
+Received: from tassilo.jf.intel.com (HELO tassilo) ([10.54.38.190])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 21:57:35 -0700
+Date:   Mon, 29 May 2023 21:57:33 -0700
+From:   Andi Kleen <ak@linux.intel.com>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Ross Zwisler <zwisler@chromium.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v2 00/16] Address some perf memory/data size issues
+Message-ID: <ZHWCPXKo2fFJmtlT@tassilo>
+References: <20230526183401.2326121-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: y_V4fOJnu-uHhzWQxJt3PXDizA7mUnaa
-X-Proofpoint-ORIG-GUID: y_V4fOJnu-uHhzWQxJt3PXDizA7mUnaa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_02,2023-05-29_02,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526183401.2326121-1-irogers@google.com>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: starmiku1207184332@gmail.com
 
->
->+			// safely calling vfree() under any context
-do we need this comment as code is self explanatory.
+FWIW I think the whole patchkit could be replaced with a one liner
+that disables THP for the BSS segment. I suspect that would be roughly
+equivalent for memory consumption because 4K pages that are never
+touched would never be allocated.
 
-> 			INIT_WORK(&aux->work, bpf_prog_put_deferred);
-> 			schedule_work(&aux->work);
-> 		} else {
->+			// depending on the vfree_atomic() branch in vfree()
-same as above.
-
-> 			bpf_prog_put_deferred(&aux->work);
-> 		}
-> 	}
->--
->2.25.1
+-Andi
