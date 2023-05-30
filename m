@@ -2,154 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CA6715404
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3551715408
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjE3Crt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 22:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
+        id S230092AbjE3CtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 22:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjE3Crq (ORCPT
+        with ESMTP id S230324AbjE3CtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 22:47:46 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4051E4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 19:47:14 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b025d26f4fso24628585ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 19:47:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20221208.gappssmtp.com; s=20221208; t=1685414834; x=1688006834;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=alV8inSLdkpveU+gErF0Hqmj8NeaEg9f/ZBWhD5ez2U=;
-        b=VXyb2L0Lk9rF7WpImdHVoDcV+wHY1TpjAjC6TnDsrpgVCNTBuP+09WDoovYSiQjFKp
-         EyxL1UVZBQ8nW28vfQL72iihabRnhi/EkD8gk5OONuEfLhM+7gyFIuZ7gyhMgwCU+N4W
-         pezZ+Dmt9GIkAGHjmh34aCGDBos3FhMi9ipGNE/4+KA2Jldfys+/6gNvVkHEqP2srBq3
-         T0H6/N5WI5tiwwj9Vk+x1MlRC9IL1vjeh4j22arGcxuzaoP267EdprZlv6D2nwJHQrn6
-         LLBLFXd1d0JlKwxP+YzIDQSbUuT51wptUFFfemshptbvqcUslGnBI1URWLf7UVKDT83K
-         35QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685414834; x=1688006834;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=alV8inSLdkpveU+gErF0Hqmj8NeaEg9f/ZBWhD5ez2U=;
-        b=KjVoIPMXzrkCslNxbNAkLqG4WYvnADDQc1ZQlR0T48bJH1G7hdowFd7HRom+ed9yRR
-         igIFus7wZQRiU8GJpK+kOv4lsE35NgP1yAmrOYDo02KpkKfhLPhpRMn/2Xem8s/lZ8oL
-         9HUgqHeO/4mKkMk8yOh1r1iSme+MyeikX+mMiL0eE7whanKSMf+iNvorQQq3ZaTMzTbK
-         08aAOsGS4MvEcTLcPjIDO6S+H3LRGoQEmQzq2vo5TtyKUvNhf24Cg3qfKzhjzKCPGEYK
-         2+Z37H6GzUGtRknwN+FXDmZavuNkEgyJGGlKHf3Sk6Lvwscwoe+wi0P94JmwMtXUpMnh
-         /T0A==
-X-Gm-Message-State: AC+VfDyRWo3kFjqrX6w+sSFsEsLVZ+A9Jh/qCO9NM7t1LeQNMQ8edwmd
-        f2bve3xKCKlZM9fsYe6HB7/mwg==
-X-Google-Smtp-Source: ACHHUZ5esirN+GjiMvMiqRhafSMP/4L6Nwl3/8gg9VPgzza/IsiTQ+IctgDBLZQizuhsmpqFTzEGGg==
-X-Received: by 2002:a17:902:da82:b0:1b0:5ce9:adbb with SMTP id j2-20020a170902da8200b001b05ce9adbbmr967084plx.45.1685414834012;
-        Mon, 29 May 2023 19:47:14 -0700 (PDT)
-Received: from fedora.. ([157.82.203.71])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170902c10200b001aaf370b1c7sm8926329pli.278.2023.05.29.19.47.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 19:47:13 -0700 (PDT)
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        Mon, 29 May 2023 22:49:02 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522C6CD
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 19:48:43 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:42588)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1q3pPe-007jSW-3z; Mon, 29 May 2023 20:48:42 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:56626 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1q3pPd-009vMy-1g; Mon, 29 May 2023 20:48:41 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     michael.christie@oracle.com
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux@leemhuis.info, nicolas.dichtel@6wind.com, axboe@kernel.dk,
         linux-kernel@vger.kernel.org,
-        Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [PATCH v2] KVM: arm64: Populate fault info for watchpoint
-Date:   Tue, 30 May 2023 11:46:51 +0900
-Message-Id: <20230530024651.10014-1-akihiko.odaki@daynix.com>
-X-Mailer: git-send-email 2.40.1
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
+        brauner@kernel.org
+References: <20230524141022.GA19091@redhat.com>
+        <87ttw1zt4i.fsf@email.froward.int.ebiederm.org>
+        <20230525115512.GA9229@redhat.com>
+        <87y1lcxwcj.fsf@email.froward.int.ebiederm.org>
+        <CAHk-=wj4DS=2F5mW+K2P7cVqrsuGd3rKE_2k2BqnnPeeYhUCvg@mail.gmail.com>
+        <87cz2mrtnk.fsf@email.froward.int.ebiederm.org>
+        <CAHk-=whsi9JFP-okH3jXHrA8rh8bMuuSt6ZgkmPwiDMAn437qA@mail.gmail.com>
+        <87mt1pmezu.fsf@email.froward.int.ebiederm.org>
+        <20230529111859.GA15193@redhat.com>
+        <022f4de6-9eae-0a94-0f55-b84be4982fc3@oracle.com>
+        <20230529174646.GB15193@redhat.com>
+        <ff1bce1a-62d8-1b2e-4560-1ce1ffc209bc@oracle.com>
+        <723ac1ba-31d2-92fe-4010-42d8cd70d5df@oracle.com>
+Date:   Mon, 29 May 2023 21:48:34 -0500
+In-Reply-To: <723ac1ba-31d2-92fe-4010-42d8cd70d5df@oracle.com> (michael
+        christie's message of "Mon, 29 May 2023 14:46:57 -0500")
+Message-ID: <87bki2h6v1.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1q3pPd-009vMy-1g;;;mid=<87bki2h6v1.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX19wSqLMTVFEWgLETMysNGRtJ36mwutxbSI=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;michael.christie@oracle.com
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 402 ms - load_scoreonly_sql: 0.07 (0.0%),
+        signal_user_changed: 11 (2.7%), b_tie_ro: 10 (2.4%), parse: 0.92
+        (0.2%), extract_message_metadata: 3.5 (0.9%), get_uri_detail_list:
+        1.44 (0.4%), tests_pri_-2000: 3.2 (0.8%), tests_pri_-1000: 2.5 (0.6%),
+        tests_pri_-950: 1.25 (0.3%), tests_pri_-900: 1.03 (0.3%),
+        tests_pri_-200: 0.86 (0.2%), tests_pri_-100: 3.2 (0.8%),
+        tests_pri_-90: 59 (14.8%), check_bayes: 58 (14.4%), b_tokenize: 7
+        (1.8%), b_tok_get_all: 8 (2.0%), b_comp_prob: 2.4 (0.6%),
+        b_tok_touch_all: 37 (9.2%), b_finish: 0.74 (0.2%), tests_pri_0: 289
+        (71.9%), check_dkim_signature: 0.52 (0.1%), check_dkim_adsp: 8 (2.0%),
+        poll_dns_idle: 6 (1.6%), tests_pri_10: 3.6 (0.9%), tests_pri_500: 14
+        (3.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
+ regression
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When handling ESR_ELx_EC_WATCHPT_LOW, far_el2 member of struct
-kvm_vcpu_fault_info will be copied to far member of struct
-kvm_debug_exit_arch and exposed to the userspace. The userspace will
-see stale values from older faults if the fault info does not get
-populated.
+michael.christie@oracle.com writes:
 
-Fixes: 8fb2046180a0 ("KVM: arm64: Move early handlers to per-EC handlers")
-Suggested-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
----
- arch/arm64/kvm/hyp/include/hyp/switch.h | 8 ++++++--
- arch/arm64/kvm/hyp/nvhe/switch.c        | 2 ++
- arch/arm64/kvm/hyp/vhe/switch.c         | 1 +
- 3 files changed, 9 insertions(+), 2 deletions(-)
+> On 5/29/23 2:35 PM, Mike Christie wrote:
+>>> Hmm... If we you CLONE_THREAD the exiting vhost_worker() will auto-reap itself,
+>> Oh wait, are you saying that when we get auto-reaped then we would do the last
+>> fput and call the file_operations->release function right? We actually set
+>> task_struct->files = NULL for the vhost_task task_struct, so I think we call
+>> release a little sooner than you think.
+>> 
+>> vhost_task_create() sets kernel_clone_args->no_files, so the vhost_task task_struc
+>> that gets created works like kthreads where it doesn't do a CLONE_FILES and it
+>> doesn't do a dup_fd.
+>> 
+>> So when we do de_thread() -> zap_other_threads(), that will kill all the threads
+>> in the group right? So when they exit, it will call our release function since
+>> we don't have refcount on ourself.
+>> 
+>
+> Just to make sure I'm on the same page now.
+>
+> In the past thread when were discussing the patch below and you guys were saying
+> that it doesn't really ignore SIGKILL because we will hit the
+> SIGNAL_GROUP_EXIT/group_exec_task checks and the parent is going to exit, it was
+> on purpose.
+>
+> Instead of a signal to tell me when do exit, I was using the parent exiting and doing
+> the last fput on the vhost device's file which calls our release function. That then
+> allowed the vhost code to use the vhost_task to handle the outstanding IOs and then
+> do vhost_task_should_stop to tell the vhost_task to exit when the oustanding IO
+> had completed.
+>
+> On the vhost side of things it's really nice, because all the shutdown paths work
+> the same and we don't need rcu/locking in the main IO path to handle the vhost_task
+> exiting while we are using it.
 
-diff --git a/arch/arm64/kvm/hyp/include/hyp/switch.h b/arch/arm64/kvm/hyp/include/hyp/switch.h
-index 07d37ff88a3f..33f4d4200329 100644
---- a/arch/arm64/kvm/hyp/include/hyp/switch.h
-+++ b/arch/arm64/kvm/hyp/include/hyp/switch.h
-@@ -351,17 +351,21 @@ static bool kvm_hyp_handle_cp15_32(struct kvm_vcpu *vcpu, u64 *exit_code)
- 	return false;
- }
- 
--static bool kvm_hyp_handle_iabt_low(struct kvm_vcpu *vcpu, u64 *exit_code)
-+static bool kvm_hyp_handle_memory_fault(struct kvm_vcpu *vcpu, u64 *exit_code)
- {
- 	if (!__populate_fault_info(vcpu))
- 		return true;
- 
- 	return false;
- }
-+static bool kvm_hyp_handle_iabt_low(struct kvm_vcpu *vcpu, u64 *exit_code)
-+	__alias(kvm_hyp_handle_memory_fault);
-+static bool kvm_hyp_handle_watchpt_low(struct kvm_vcpu *vcpu, u64 *exit_code)
-+	__alias(kvm_hyp_handle_memory_fault);
- 
- static bool kvm_hyp_handle_dabt_low(struct kvm_vcpu *vcpu, u64 *exit_code)
- {
--	if (!__populate_fault_info(vcpu))
-+	if (kvm_hyp_handle_memory_fault(vcpu, exit_code))
- 		return true;
- 
- 	if (static_branch_unlikely(&vgic_v2_cpuif_trap)) {
-diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
-index c2cb46ca4fb6..895fb3200076 100644
---- a/arch/arm64/kvm/hyp/nvhe/switch.c
-+++ b/arch/arm64/kvm/hyp/nvhe/switch.c
-@@ -186,6 +186,7 @@ static const exit_handler_fn hyp_exit_handlers[] = {
- 	[ESR_ELx_EC_FP_ASIMD]		= kvm_hyp_handle_fpsimd,
- 	[ESR_ELx_EC_IABT_LOW]		= kvm_hyp_handle_iabt_low,
- 	[ESR_ELx_EC_DABT_LOW]		= kvm_hyp_handle_dabt_low,
-+	[ESR_ELx_EC_WATCHPT_LOW]	= kvm_hyp_handle_watchpt_low,
- 	[ESR_ELx_EC_PAC]		= kvm_hyp_handle_ptrauth,
- };
- 
-@@ -196,6 +197,7 @@ static const exit_handler_fn pvm_exit_handlers[] = {
- 	[ESR_ELx_EC_FP_ASIMD]		= kvm_hyp_handle_fpsimd,
- 	[ESR_ELx_EC_IABT_LOW]		= kvm_hyp_handle_iabt_low,
- 	[ESR_ELx_EC_DABT_LOW]		= kvm_hyp_handle_dabt_low,
-+	[ESR_ELx_EC_WATCHPT_LOW]	= kvm_hyp_handle_watchpt_low,
- 	[ESR_ELx_EC_PAC]		= kvm_hyp_handle_ptrauth,
- };
- 
-diff --git a/arch/arm64/kvm/hyp/vhe/switch.c b/arch/arm64/kvm/hyp/vhe/switch.c
-index 1a97391fedd2..45ac4a59cc2c 100644
---- a/arch/arm64/kvm/hyp/vhe/switch.c
-+++ b/arch/arm64/kvm/hyp/vhe/switch.c
-@@ -110,6 +110,7 @@ static const exit_handler_fn hyp_exit_handlers[] = {
- 	[ESR_ELx_EC_FP_ASIMD]		= kvm_hyp_handle_fpsimd,
- 	[ESR_ELx_EC_IABT_LOW]		= kvm_hyp_handle_iabt_low,
- 	[ESR_ELx_EC_DABT_LOW]		= kvm_hyp_handle_dabt_low,
-+	[ESR_ELx_EC_WATCHPT_LOW]	= kvm_hyp_handle_watchpt_low,
- 	[ESR_ELx_EC_PAC]		= kvm_hyp_handle_ptrauth,
- };
- 
--- 
-2.40.1
+The code below does nothing for exec.
 
+You really need to call get_signal to handle SIGSTOP/freeze/process exit.
+
+A variant on my coredump proposal looks like it can handle exec as well.
+It isn't pretty but it looks good enough for right now.
+
+If you could test the patch I posted up thread I think that is something
+imperfect that is good enough for now.
+
+Eric
