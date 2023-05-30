@@ -2,97 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D337716FDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 23:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C33F716FDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 23:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbjE3VjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 17:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54804 "EHLO
+        id S233317AbjE3Vj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 17:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbjE3VjG (ORCPT
+        with ESMTP id S233537AbjE3Vjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 17:39:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF5BC7;
-        Tue, 30 May 2023 14:39:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9ECDD633DB;
-        Tue, 30 May 2023 21:39:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 504F1C4339B;
-        Tue, 30 May 2023 21:39:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685482745;
-        bh=K8tnh3E6cz2urAtYiHrxzL4PLY6sjrXzK1nJAzkm1l8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iIfcx+aLwdykV7AH9GpWQV3R0vRhMc95o68dX/6k/c+0KdjCVsjZyH01qTdmABgzU
-         CmfvK/Of1GJVPgdKi+JX667/jEJ919uBVvwZIuLiCFT8jIDlw2gjNnpiC7SUasAuyw
-         JaN0rsll7ad3dKGrvjRQQXv+xjfFNpmIEcM1Ih3+8hVEt6Dfu7WHkzTunfbYEpakC8
-         40T3uMyekZvqL4gwh+xgRuo3Ou0FNUDmwBXkownXDZqWzyVO7JqJTPEY8iBgcWaH9Q
-         51+S/QLLuw1n7AS3CbewwpLaMk0TOc6G+JdRAO5fasbIKk39G5J/8S4no25/aC9n8/
-         5u/2ImEVWfLoA==
-Date:   Tue, 30 May 2023 22:39:00 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Florian Fainelli <florian.fainelli@broadcom.com>
-Cc:     stable@vger.kernel.org, Pierre Gondois <pierre.gondois@arm.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "open list:GENERIC ARCHITECTURE TOPOLOGY" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH stable 6.3 v2] arch_topology: Remove early cacheinfo
- error message if -ENOENT
-Message-ID: <20230530-basically-wildly-84415a94171d@spud>
-References: <20230530201955.848176-1-florian.fainelli@broadcom.com>
+        Tue, 30 May 2023 17:39:46 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E3A107;
+        Tue, 30 May 2023 14:39:35 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d41d8bc63so3971816b3a.0;
+        Tue, 30 May 2023 14:39:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685482775; x=1688074775;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hpYvhVTjZdMJvafiF5KeDRaJxYCBLlgjL89QGECGd2c=;
+        b=VEtP8MlZUbBdCeag89T6zqxQ/9VbRcsFGtw5aENS/07d2LPfUlaKj+jvRTabjG8XZQ
+         TfxkKPscjIaSfgzLJKs0RqOztakMfu0Mv3Flui6h6NS8Fyjsh0GdJif2fQdtpvm6LKzB
+         rqx+MgT7A3uAfw4c9yStaoq74JbNbwuzIbwr4jyvwBmfYOj694o0KP5socGqmU33UTqY
+         Xl48QqV/dxLiieWbYLlPw6FmoK2PltfVqKS370q70dqHEta5nTaGyEFconDj2A8ykhcK
+         4kNgQw9dv/ePUNOsDM9xR3x6hveuqIi7Z22jYs4xVT3GMIkGuDAssRza2Pwlj/X65v0c
+         sbfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685482775; x=1688074775;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hpYvhVTjZdMJvafiF5KeDRaJxYCBLlgjL89QGECGd2c=;
+        b=gCS5fc44AGLMkfAzF2ql2AmXI5GUznLAA4f+DUpibkhaWDjSDxLSZ2dxf5OotVwpY/
+         QXKhlsXvoDzpWYE6OlchUXC+JD0T/yvcgbFd/NJ/l7BOy1RI/bj/+rzkGZsZelMoCj14
+         cNsIVW9VtEpw/0u8oos1euKhROkSmYsip6bUzloHDq4yttzDGJjNIgD6ekY+pmnwRDm1
+         B+KCPE2jlLCqUQBnyKrFTLYPxtuCF/RFKM83ciFe/UxlGWd8bnxOfvjaSohIRzZy1B0G
+         ZWWnRFkyS5daiklz4v+SPdhD1eWVAyuXcuEbjxvn7j33dHwBnOuRACXV04GdBRFxUCQz
+         HyqA==
+X-Gm-Message-State: AC+VfDz/fdsYkCDVIH3qigQvzV9MhwrPJkwo0tvXrtJhhY3Qz7kXebmp
+        BvW3WALbnlKcKpYvLYXkwsYnNTKGoXAH5w==
+X-Google-Smtp-Source: ACHHUZ7t9gh5pLLnj1uDj4zm7URp6+6nXn1PCHcmEpJFIBsMX5xvRzBSoif/mjJCWSzh0dIfg3TLvg==
+X-Received: by 2002:a05:6a20:ae1a:b0:10b:92b8:9845 with SMTP id dp26-20020a056a20ae1a00b0010b92b89845mr2902340pzb.7.1685482774686;
+        Tue, 30 May 2023 14:39:34 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id z5-20020aa791c5000000b0064fabbc047dsm2100744pfa.55.2023.05.30.14.39.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 14:39:34 -0700 (PDT)
+Message-ID: <c4008f3b-455f-5e8a-7381-6a73c192f675@gmail.com>
+Date:   Tue, 30 May 2023 14:39:20 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230530201955.848176-1-florian.fainelli@broadcom.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v8 3/3] net: dsa: mv88e6xxx: add support for MV88E6071
+ switch
+Content-Language: en-US
+To:     Lukasz Majewski <lukma@denx.de>, Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230530083916.2139667-1-lukma@denx.de>
+ <20230530083916.2139667-4-lukma@denx.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230530083916.2139667-4-lukma@denx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yo Florian,
+On 5/30/23 01:39, Lukasz Majewski wrote:
+> A mv88e6250 family switch with 5 internal PHYs, 2 RMIIs
+> and no PTP support.
+> 
+> Signed-off-by: Lukasz Majewski <lukma@denx.de>
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-On Tue, May 30, 2023 at 01:19:55PM -0700, Florian Fainelli wrote:
-> From: Pierre Gondois <pierre.gondois@arm.com>
->=20
-> commit 3522340199cc060b70f0094e3039bdb43c3f6ee1 upstream
->=20
-> fetch_cache_info() tries to get the number of cache leaves/levels
-> for each CPU in order to pre-allocate memory for cacheinfo struct.
-> Allocating this memory later triggers a:
->   'BUG: sleeping function called from invalid context'
-> in PREEMPT_RT kernels.
->=20
-> If there is no cache related information available in DT or ACPI,
-> fetch_cache_info() fails and an error message is printed:
->   'Early cacheinfo failed, ret =3D ...'
->=20
-> Not having cache information should be a valid configuration.
-> Remove the error message if fetch_cache_info() fails with -ENOENT.
->=20
-> Suggested-by: Conor Dooley <conor.dooley@microchip.com>
-> Link: https://lore.kernel.org/all/20230404-hatred-swimmer-6fecdf33b57a@sp=
-ud/
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Link: https://lore.kernel.org/r/20230414081453.244787-4-pierre.gondois@ar=
-m.com
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 
-How come this now needs a backport? Did the rest of the series get
-backported, but not this one since it has no fixes tag?
+Same comment as in patch #2.
+-- 
+Florian
 
-Cheers,
-Conor.
