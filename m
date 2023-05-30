@@ -2,174 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B030715EE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F34E4715EEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjE3MU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
+        id S230490AbjE3MVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjE3MUz (ORCPT
+        with ESMTP id S229691AbjE3MVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:20:55 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F215EC5;
-        Tue, 30 May 2023 05:20:53 -0700 (PDT)
-From:   Kurt Kanzenbach <kurt@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685449252;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tdnAZsjhgls6Ysa0NOeGOUiZJaoZowNmTdGhfiI/C5U=;
-        b=fZ8qv0Te23M/bJLqj9Tgbb6ugLulO4dv61shIIvrlyKEBW41yLyUKBn0iNHMPNtKFd2821
-        hkp0tNq3kBGxqPg684mBxMVGyGc6ykkwnDkaPUujjhu9YJmZYGSaqC4W2YOG4JJzhci0Pl
-        P4IyAJ+Kfg7WpBsb0U7owvrkNiMuqsJ8A91b5BUWCk5dbZmDvPJ3HtQySAozCDWlvBwRge
-        JX+21vUpL52Ye+ta5dvu1tUOZcum/Yq4f3F92883L//eYymb5IRXX5WLJrGvfnt40WjdfI
-        X9BiPl0QuRP43rXkBw1qFMXIWOi4i54hjjPcSJruT5/z9TtqmyblvbcbaMrMvQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685449252;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tdnAZsjhgls6Ysa0NOeGOUiZJaoZowNmTdGhfiI/C5U=;
-        b=xzMIJMURQ7ginLdQaR9ahBUEgohs1yMYQ3L6XcZKS7DdsKI8IGT0ffq+b4ML/g1j3pSCMm
-        nW3/uAatyUQETvBg==
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Amritha Nambiar <amritha.nambiar@intel.com>,
-        Ferenc Fejes <ferenc.fejes@ericsson.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Pranavi Somisetty <pranavi.somisetty@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        intel-wired-lan@lists.osuosl.org,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>
-Subject: Re: [PATCH net-next 2/5] net/sched: taprio: replace
- tc_taprio_qopt_offload :: enable with a "cmd" enum
-In-Reply-To: <20230530091948.1408477-3-vladimir.oltean@nxp.com>
-References: <20230530091948.1408477-1-vladimir.oltean@nxp.com>
- <20230530091948.1408477-3-vladimir.oltean@nxp.com>
-Date:   Tue, 30 May 2023 14:20:50 +0200
-Message-ID: <87leh6qacd.fsf@kurt>
+        Tue, 30 May 2023 08:21:30 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E37C5;
+        Tue, 30 May 2023 05:21:29 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UBAOkI020617;
+        Tue, 30 May 2023 07:21:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=2GgFwvas2rFXV4McY7VMK9G2VCTdQUXyqwVMLSgXHI8=;
+ b=UA3y3BVM/HgEl3CvdA4HZc2gbM8jFUqQi/CiHcc0ZFNZhofB6Z4XmmYumWJtz5foHWTt
+ BKrnlyvQbPQwV5iz49jSEfT+Q9i1f2500/Suca2P+00WIbeZjJ0Dzpa8hPZSWja6uaSP
+ vv897JhneMBD31sFIKQ6pEQESlXwvsyW0HPzsJw6dO+VKSrVTxMi5mvOedE7Z2DvSEhB
+ ZeGNwSx6Hz1zgd3SWFhxnvog33uNSUBqSlXOCaudeplmUzw2v+7JIs98VR5oUkt6AOCu
+ nCi8gwPIvN09qcOjof8KSdWRBYp2Z/y93qrDEo8qe6Nk3Z8ej3UupkGWAp4dvPEb9IKm IA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3quf90u2t5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 07:21:14 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 30 May
+ 2023 13:21:12 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Tue, 30 May 2023 13:21:12 +0100
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 840C745;
+        Tue, 30 May 2023 12:21:12 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <broonie@kernel.org>, <lee@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
+        <vkoul@kernel.org>
+CC:     <robh+dt@kernel.org>, <conor+dt@kernel.org>, <lgirdwood@gmail.com>,
+        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/6] Add cs42l43 PC focused SoundWire CODEC
+Date:   Tue, 30 May 2023 13:21:06 +0100
+Message-ID: <20230530122112.1314458-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha512; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: mDDcEAkFiQSYVCUwRek4aYj5J8slS2_p
+X-Proofpoint-ORIG-GUID: mDDcEAkFiQSYVCUwRek4aYj5J8slS2_p
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+This patch chain adds support for the Cirrus Logic cs42l43 PC focused
+SoundWire CODEC. The chain is currently based of Lee's for-mfd-next
+branch.
 
-On Tue May 30 2023, Vladimir Oltean wrote:
-> Inspired from struct flow_cls_offload :: cmd, in order for taprio to be
-> able to report statistics (which is future work), it seems that we need
-> to drill one step further with the ndo_setup_tc(TC_SETUP_QDISC_TAPRIO)
-> multiplexing, and pass the command as part of the common portion of the
-> muxed structure.
->
-> Since we already have an "enable" variable in tc_taprio_qopt_offload,
-> refactor all drivers to check for "cmd" instead of "enable", and reject
-> every other command except "replace" and "destroy" - to be future proof.
->
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
-
-[...]
-
-> diff --git a/drivers/net/dsa/hirschmann/hellcreek.c b/drivers/net/dsa/hir=
-schmann/hellcreek.c
-> index 595a548bb0a8..af50001ccdd4 100644
-> --- a/drivers/net/dsa/hirschmann/hellcreek.c
-> +++ b/drivers/net/dsa/hirschmann/hellcreek.c
-> @@ -1885,13 +1885,17 @@ static int hellcreek_port_setup_tc(struct dsa_swi=
-tch *ds, int port,
->  	case TC_SETUP_QDISC_TAPRIO: {
->  		struct tc_taprio_qopt_offload *taprio =3D type_data;
->=20=20
-> -		if (!hellcreek_validate_schedule(hellcreek, taprio))
-> -			return -EOPNOTSUPP;
-> +		switch (taprio->cmd) {
-> +		case TAPRIO_CMD_REPLACE:
-> +			if (!hellcreek_validate_schedule(hellcreek, taprio))
-> +				return -EOPNOTSUPP;
->=20=20
-> -		if (taprio->enable)
->  			return hellcreek_port_set_schedule(ds, port, taprio);
-> -
-> -		return hellcreek_port_del_schedule(ds, port);
-> +		case TAPRIO_CMD_DESTROY:
-> +			return hellcreek_port_del_schedule(ds, port);
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
->  	}
->  	default:
->  		return -EOPNOTSUPP;
-
-Uhm, seems like the current code validates the schedule even for
-removing a schedule which seems a bit odd. With your changes it looks
-correct.
-
-Acked-by: Kurt Kanzenbach <kurt@linutronix.de> # hellcreek
-
-Anyway, the hellcreek device has Tx overrun counters per TC. Even though
-they should be zero, simply because the hardware Length Aware Shaper is
-enabled by default.
+Change notes are included with each patch, most of the changes are
+trivial, the notable ones are moving the IRQs out of irqchip and into
+the MFD, and moving the DT binding to sound.
 
 Thanks,
-Kurt
+Charles
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+Charles Keepax (4):
+  dt-bindings: mfd: cirrus,cs42l43: Add initial DT binding
+  mfd: cs42l43: Add support for cs42l43 core driver
+  pinctrl: cs42l43: Add support for the cs42l43
+  ASoC: cs42l43: Add support for the cs42l43
 
------BEGIN PGP SIGNATURE-----
+Lucas Tanure (2):
+  soundwire: bus: Allow SoundWire peripherals to register IRQ handlers
+  spi: cs42l43: Add SPI controller support
 
-iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmR16iITHGt1cnRAbGlu
-dXRyb25peC5kZQAKCRDBk9HyqkZzgkgAD/sH6+pSNn/XkaMNq42jziiZnqWffmMr
-Nh0eHkqZEXNIBdYtaHhMDv+UySQW2mYItvt+A5sEWzMGDphJluPslMtYdrm98yaE
-LMklWNsKSD0Rp4r74n9b1nFjwSYUbdFX9juS4d/fWMlLAdxfIQ5+ADem4v+82nHa
-h8STScKKSQLU2L6js/NO1vRXqlOI2Kk2dycw7PPDcCLme/GaWygQG2u8SNE7g+ij
-wp/3sh4O1N6P7wIPHJoRhpr+LU5qBpRjkkE89t/7l7aj91XqnSQ1e08Pe7ryZ5wz
-Uq2sVg8oDtGpmv6xciMGGpkAYrIYG/qCjLEz+w15Nq6ur9dwvrNqsyYmTUu84GqH
-bSQLxYIPynAOacF7oLy2I+YVMdWJwSw/3iP63LSszGmv7igjaWk/rKRW/OnBLKNj
-5q+SVPvCaMGl7PRlaEGnW2QMy4ua2CWIL0nBsJLpe26UFljXA860aytaV1zCItGg
-s5GlMspLwC0OEbL8s/E+l8InjJoqIMTn7I6Pqh/G+Wk0QfCD+3vZenRo/uyOBCuc
-/xOs0fevBDhGNGqbYR0y6oX/fwzSvwEfjYBb/pWFov5Vh1gh7Dbd6TG2PUq/0g9H
-TEc/Qqzr3JDPy1kKkrDVnjOdxwYmFXDcQ3I3V+TmOG2hSkMgdCdZqGE0ygem6W7X
-nI5BAnq+D8if4g==
-=C7wP
------END PGP SIGNATURE-----
---=-=-=--
+ .../bindings/sound/cirrus,cs42l43.yaml        |  320 +++
+ MAINTAINERS                                   |    5 +
+ drivers/mfd/Kconfig                           |   23 +
+ drivers/mfd/Makefile                          |    3 +
+ drivers/mfd/cs42l43-i2c.c                     |   86 +
+ drivers/mfd/cs42l43-sdw.c                     |  213 ++
+ drivers/mfd/cs42l43.c                         | 1141 +++++++++
+ drivers/mfd/cs42l43.h                         |   23 +
+ drivers/pinctrl/cirrus/Kconfig                |   11 +
+ drivers/pinctrl/cirrus/Makefile               |    2 +
+ drivers/pinctrl/cirrus/pinctrl-cs42l43.c      |  609 +++++
+ drivers/soundwire/bus.c                       |   31 +
+ drivers/soundwire/bus_type.c                  |   12 +
+ drivers/spi/Kconfig                           |    7 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-cs42l43.c                     |  279 ++
+ include/linux/mfd/cs42l43-regs.h              | 1172 +++++++++
+ include/linux/mfd/cs42l43.h                   |  102 +
+ include/linux/soundwire/sdw.h                 |    9 +
+ include/sound/cs42l43.h                       |   17 +
+ sound/soc/codecs/Kconfig                      |   16 +
+ sound/soc/codecs/Makefile                     |    4 +
+ sound/soc/codecs/cs42l43-jack.c               |  951 +++++++
+ sound/soc/codecs/cs42l43-sdw.c                |   75 +
+ sound/soc/codecs/cs42l43.c                    | 2275 +++++++++++++++++
+ sound/soc/codecs/cs42l43.h                    |  126 +
+ 26 files changed, 7513 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/cirrus,cs42l43.yaml
+ create mode 100644 drivers/mfd/cs42l43-i2c.c
+ create mode 100644 drivers/mfd/cs42l43-sdw.c
+ create mode 100644 drivers/mfd/cs42l43.c
+ create mode 100644 drivers/mfd/cs42l43.h
+ create mode 100644 drivers/pinctrl/cirrus/pinctrl-cs42l43.c
+ create mode 100644 drivers/spi/spi-cs42l43.c
+ create mode 100644 include/linux/mfd/cs42l43-regs.h
+ create mode 100644 include/linux/mfd/cs42l43.h
+ create mode 100644 include/sound/cs42l43.h
+ create mode 100644 sound/soc/codecs/cs42l43-jack.c
+ create mode 100644 sound/soc/codecs/cs42l43-sdw.c
+ create mode 100644 sound/soc/codecs/cs42l43.c
+ create mode 100644 sound/soc/codecs/cs42l43.h
+
+-- 
+2.30.2
+
