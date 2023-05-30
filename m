@@ -2,83 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DD8715645
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11CD071564E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjE3HMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
+        id S230311AbjE3HNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjE3HMj (ORCPT
+        with ESMTP id S230093AbjE3HM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:12:39 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01ED90;
-        Tue, 30 May 2023 00:12:37 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f60804faf4so26488965e9.3;
-        Tue, 30 May 2023 00:12:37 -0700 (PDT)
+        Tue, 30 May 2023 03:12:57 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8813AA0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:12:54 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f6a6b9bebdso105965e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:12:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685430756; x=1688022756;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EhiYOnsYcT5eT162fH50ozvyNeO9MUK81ojzqXqppDY=;
-        b=U83neCvrC1S8vKrCVu6eew6hp0L1KaCWdX+0LE6hOcZvfUkVF3y9EJvWzgJDTtj4Ed
-         n4M3B8h4PCfuB2DdbM9zErpdK8206Dx8woGg27lb5kyuDd/yMjCclmDFb0stcl5A9UWr
-         uxU4I0ObOSXW2BlMzr/L3HliTb6Cer24nlCyqV0T+CnIdOsQjgUMkP7IPCKsZtOZsven
-         MTAhXEPrXhWWSAcCb6ySl6h7wipC2u9xKdiHnTDlgEtdSX6H2QLJ+9zxe03Pg7faC1AA
-         1mb7c6alVJYHJJMUl5DqFW6S6/Wq8djM9+m2qXbk+Kd4QkPOn9ybxBr/AGWSu9KE7WP9
-         kDjg==
+        d=google.com; s=20221208; t=1685430773; x=1688022773;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G3cFc7RANIcJvhNws8+gRe8zCxvl6o1XPZ5v1xwbSug=;
+        b=SubZmdtd6BrT9ZSk/axpRBkjpmFSRrYOgoNERl/VVvEjnQ18kfxvhGgBB7eGjbTdpR
+         3QX2fzyILCkU2LXT8dK6W4EbsZAQAKGecc1TOHbTg4P5a6FcRYJLUTP4w5MygPv7DQ6m
+         bfI8HhKHVzQ7l0OHIxuULTH0QJdydlaglAqh1+fq7FPMAHeh1yHIc2V4WmFerCVO34Qt
+         g6Tc77W0xk2L+WDOKPQsNPVq0gxQQxwEWNnL8POgxt7Wyqa/MEchpSuWdoUWgAltL2+7
+         wTRWEnlvo85pdNTcknk3y0TmbtoWyaNXY5KLSCmaB0EcFcOE0eLE2/j56jNIQBvt+3xQ
+         shUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685430756; x=1688022756;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EhiYOnsYcT5eT162fH50ozvyNeO9MUK81ojzqXqppDY=;
-        b=U8yt7+suts1fU19oJKBM0w+c7c8AF/2PHVr4O7PFYniji4JYW+riany/dzXYKYMUp6
-         hHypJFfu4q+16aBMU/0WVuaZRk46r959CMET9md2ZR8CpsCcd1aW1mTIMx+/m7jXsTkC
-         wKBxaoyd9NOd8P71tIQo/mJvt4NVfMrv0CP/1ztc+6qFmRiWmnNHAZI+iojzGE1XuUnT
-         gapa9066uCM5u7VPNKThu8x0s0XAktiQxiUYYxEePgrX8KT/uBQGLPCjLLD4ve9wrkMP
-         VmKGF8cfWVMPU3bRxgC58/jHPyvJaH5NzPsTyAlox4T8w+kdJg8hRNb3fz4I6G0HzaAp
-         2fLQ==
-X-Gm-Message-State: AC+VfDybh8EA7M7BTGvI3YJFNlwhSvqhD9DjTQy+quFPIwVQMDcRdHbI
-        XVzCX012JymDUXUu18gDckQ=
-X-Google-Smtp-Source: ACHHUZ4TXP7FM+FJLQx0g9zOkQnADdQ6DuE8ZawqR+xzm9uue4UInlabGeS+fHbG8n0MP2sy32jqHg==
-X-Received: by 2002:a05:600c:21c7:b0:3f5:176:c398 with SMTP id x7-20020a05600c21c700b003f50176c398mr809351wmj.31.1685430756217;
-        Tue, 30 May 2023 00:12:36 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id 24-20020a05600c021800b003f080b2f9f4sm19926196wmi.27.2023.05.30.00.12.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 00:12:34 -0700 (PDT)
-Message-ID: <34d3298c-7d50-468b-b8e6-36440ccc0790@gmail.com>
-Date:   Tue, 30 May 2023 09:12:33 +0200
+        d=1e100.net; s=20221208; t=1685430773; x=1688022773;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G3cFc7RANIcJvhNws8+gRe8zCxvl6o1XPZ5v1xwbSug=;
+        b=lLA0XMNrFxed5bX7Xxb3nZ+ga5eBpmwGhfaLkQsu0akFiNU9NJMlSs2ZWXrrCqSRHZ
+         ZvufP91ymRCsC4OBXR90le+hW3dJWh8qSm6Zp5TLvA5O/tXrR77hdmodVTQhdBPcolCq
+         /FeMdzZEeu9bSI6nC/h9u079bLO35nXSEl2gVLvh7lQE0izsydEcMz8W9pmeZoP4SUmZ
+         n9pnx32rYIpSKwKImU6I91SilIsx7e6RIGU40DQVLpb6z9BIn4i2PPKqnSk/4exFkzab
+         vGfMiEebEwy1uSChVsx8qeGHdUxo06r5ZBTrPeWXX7VhegiW9WoHqr+RFQm0U7IatogQ
+         ns3g==
+X-Gm-Message-State: AC+VfDxkH/RUytb1k0zodsld8AGSg7sEbO53srurOvRPfSx1NdhE05+8
+        RDBOZp9B5ILleYvRLKbtqy5M9cJtAV0tsU4xj0UV/w==
+X-Google-Smtp-Source: ACHHUZ4M+bfA7oxAhuF6afKbVNiydRb78sigbaLhPnwo4W5tC7arlCGy5P4CBIa93OCpiIM4uxd7aPbBaeIyY8RDqe0=
+X-Received: by 2002:a05:600c:3b1c:b0:3f3:3855:c5d8 with SMTP id
+ m28-20020a05600c3b1c00b003f33855c5d8mr90815wms.6.1685430772813; Tue, 30 May
+ 2023 00:12:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 3/5] thermal/drivers/mediatek/lvts_thermal: Add mt8192
- support
-Content-Language: en-US, ca-ES, es-ES
-To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        wenst@chromium.org, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com, nfraprado@collabora.com,
-        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-References: <20230529164605.3552619-1-bero@baylibre.com>
- <20230529164605.3552619-4-bero@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230529164605.3552619-4-bero@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230529113804.GA20300@didi-ThinkCentre-M920t-N000>
+In-Reply-To: <20230529113804.GA20300@didi-ThinkCentre-M920t-N000>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 30 May 2023 09:12:41 +0200
+Message-ID: <CANn89iJw3Ehoj7GfYnc6Xv5N2wULqNuP3zNBwQx97i-YJD5avg@mail.gmail.com>
+Subject: Re: [PATCH net] tcp: introduce a compack timer handler in sack compression
+To:     Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Neal Cardwell <ncardwell@google.com>, netdev@vger.kernel.org,
+        Jason Xing <kerneljasonxing@gmail.com>,
+        zhangweiping <zhangweiping@didiglobal.com>,
+        tiozhang <tiozhang@didiglobal.com>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,145 +77,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 29, 2023 at 1:38=E2=80=AFPM fuyuanli <fuyuanli@didiglobal.com> =
+wrote:
+>
+> We've got some issues when sending a compressed ack is deferred to
+> release phrase due to the socket owned by another user:
+> 1. a compressed ack would not be sent because of lack of ICSK_ACK_TIMER
+> flag.
 
+Are you sure ? Just add it then, your patch will be a one-liner
+instead of a complex one adding
+more code in a fast path.
 
-On 29/05/2023 18:46, Bernhard Rosenkränzer wrote:
-> From: Balsam CHIHI <bchihi@baylibre.com>
-> 
-> Add LVTS Driver support for MT8192.
-> 
-> Co-developed-by : Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
-
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
+> 2. the tp->compressed_ack counter should be decremented by 1.
+> 3. we cannot pass timeout check and reset the delack timer in
+> tcp_delack_timer_handler().
+> 4. we are not supposed to increment the LINUX_MIB_DELAYEDACKS counter.
+> ...
+>
+> The reason why it could happen is that we previously reuse the delayed
+> ack logic when handling the sack compression. With this patch applied,
+> the sack compression logic would go into the same function
+> (tcp_compack_timer_handler()) whether we defer sending ack or not.
+> Therefore, those two issued could be easily solved.
+>
+> Here are more details in the old logic:
+> When sack compression is triggered in the tcp_compressed_ack_kick(),
+> if the sock is owned by user, it will set TCP_DELACK_TIMER_DEFERRED and
+> then defer to the release cb phrase. Later once user releases the sock,
+> tcp_delack_timer_handler() should send a ack as expected, which, however,
+> cannot happen due to lack of ICSK_ACK_TIMER flag. Therefore, the receiver
+> would not sent an ack until the sender's retransmission timeout. It
+> definitely increases unnecessary latency.
+>
+> This issue happens rarely in the production environment. I used kprobe
+> to hook some key functions like tcp_compressed_ack_kick, tcp_release_cb,
+> tcp_delack_timer_handler and then found that when tcp_delack_timer_handle=
+r
+> was called, value of icsk_ack.pending was 1, which means we only had
+> flag ICSK_ACK_SCHED set, not including ICSK_ACK_TIMER. It was against
+> our expectations.
+>
+> In conclusion, we chose to separate the sack compression from delayed
+> ack logic to solve issues only happening when the process is deferred.
+>
+> Fixes: 5d9f4262b7ea ("tcp: add SACK compression")
+> Signed-off-by: fuyuanli <fuyuanli@didiglobal.com>
+> Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
 > ---
->   drivers/thermal/mediatek/lvts_thermal.c | 95 +++++++++++++++++++++++++
->   1 file changed, 95 insertions(+)
-> 
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-> index 5ea8a9d569ea6..d5e5214784ece 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -80,6 +80,7 @@
->   #define LVTS_MSR_FILTERED_MODE		1
->   
->   #define LVTS_HW_SHUTDOWN_MT8195		105000
-> +#define LVTS_HW_SHUTDOWN_MT8192		105000
->   
->   static int golden_temp = LVTS_GOLDEN_TEMP_DEFAULT;
->   static int coeff_b = LVTS_COEFF_B;
-> @@ -1280,6 +1281,88 @@ static const struct lvts_ctrl_data mt8195_lvts_ap_data_ctrl[] = {
->   	}
->   };
->   
-> +static const struct lvts_ctrl_data mt8192_lvts_mcu_data_ctrl[] = {
-> +	{
-> +		.cal_offset = { 0x04, 0x08 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_MCU_BIG_CPU0 },
-> +			{ .dt_id = MT8192_MCU_BIG_CPU1 }
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x0,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	},
-> +	{
-> +		.cal_offset = { 0x0c, 0x10 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_MCU_BIG_CPU2 },
-> +			{ .dt_id = MT8192_MCU_BIG_CPU3 }
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x100,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	},
-> +	{
-> +		.cal_offset = { 0x14, 0x18, 0x1c, 0x20 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_MCU_LITTLE_CPU0 },
-> +			{ .dt_id = MT8192_MCU_LITTLE_CPU1 },
-> +			{ .dt_id = MT8192_MCU_LITTLE_CPU2 },
-> +			{ .dt_id = MT8192_MCU_LITTLE_CPU3 }
-> +		},
-> +		.num_lvts_sensor = 4,
-> +		.offset = 0x200,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	}
-> +};
+>  include/linux/tcp.h   |  2 ++
+>  include/net/tcp.h     |  1 +
+>  net/ipv4/tcp_output.c |  4 ++++
+>  net/ipv4/tcp_timer.c  | 28 +++++++++++++++++++---------
+>  4 files changed, 26 insertions(+), 9 deletions(-)
+>
+> diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+> index b4c08ac86983..cd15a9972c48 100644
+> --- a/include/linux/tcp.h
+> +++ b/include/linux/tcp.h
+> @@ -461,6 +461,7 @@ enum tsq_enum {
+>         TCP_MTU_REDUCED_DEFERRED,  /* tcp_v{4|6}_err() could not call
+>                                     * tcp_v{4|6}_mtu_reduced()
+>                                     */
+> +       TCP_COMPACK_TIMER_DEFERRED, /* tcp_compressed_ack_kick() found so=
+cket was owned */
+>  };
+>
+>  enum tsq_flags {
+> @@ -470,6 +471,7 @@ enum tsq_flags {
+>         TCPF_WRITE_TIMER_DEFERRED       =3D (1UL << TCP_WRITE_TIMER_DEFER=
+RED),
+>         TCPF_DELACK_TIMER_DEFERRED      =3D (1UL << TCP_DELACK_TIMER_DEFE=
+RRED),
+>         TCPF_MTU_REDUCED_DEFERRED       =3D (1UL << TCP_MTU_REDUCED_DEFER=
+RED),
+> +       TCPF_COMPACK_TIMER_DEFERRED     =3D (1UL << TCP_DELACK_TIMER_DEFE=
+RRED),
+>  };
+>
+>  #define tcp_sk(ptr) container_of_const(ptr, struct tcp_sock, inet_conn.i=
+csk_inet.sk)
+> diff --git a/include/net/tcp.h b/include/net/tcp.h
+> index 18a038d16434..e310d7bf400c 100644
+> --- a/include/net/tcp.h
+> +++ b/include/net/tcp.h
+> @@ -342,6 +342,7 @@ void tcp_release_cb(struct sock *sk);
+>  void tcp_wfree(struct sk_buff *skb);
+>  void tcp_write_timer_handler(struct sock *sk);
+>  void tcp_delack_timer_handler(struct sock *sk);
+> +void tcp_compack_timer_handler(struct sock *sk);
+>  int tcp_ioctl(struct sock *sk, int cmd, unsigned long arg);
+>  int tcp_rcv_state_process(struct sock *sk, struct sk_buff *skb);
+>  void tcp_rcv_established(struct sock *sk, struct sk_buff *skb);
+> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+> index cfe128b81a01..1703caab6632 100644
+> --- a/net/ipv4/tcp_output.c
+> +++ b/net/ipv4/tcp_output.c
+> @@ -1110,6 +1110,10 @@ void tcp_release_cb(struct sock *sk)
+>                 tcp_delack_timer_handler(sk);
+>                 __sock_put(sk);
+>         }
+> +       if (flags & TCPF_COMPACK_TIMER_DEFERRED) {
+> +               tcp_compack_timer_handler(sk);
+> +               __sock_put(sk);
+> +       }
+
+Please do not add another test in the fast path.
+
+Just make sure tcp_delack_timer_handler() handles the case (this
+certainly was my intent)
+
+
+>         if (flags & TCPF_MTU_REDUCED_DEFERRED) {
+>                 inet_csk(sk)->icsk_af_ops->mtu_reduced(sk);
+>                 __sock_put(sk);
+> diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
+> index b839c2f91292..069f6442069b 100644
+> --- a/net/ipv4/tcp_timer.c
+> +++ b/net/ipv4/tcp_timer.c
+> @@ -318,6 +318,23 @@ void tcp_delack_timer_handler(struct sock *sk)
+>         }
+>  }
+>
+> +/* Called with BH disabled */
+> +void tcp_compack_timer_handler(struct sock *sk)
+> +{
+> +       struct tcp_sock *tp =3D tcp_sk(sk);
 > +
-> +static const struct lvts_ctrl_data mt8192_lvts_ap_data_ctrl[] = {
-> +		{
-> +		.cal_offset = { 0x24, 0x28 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_AP_VPU0 },
-> +			{ .dt_id = MT8192_AP_VPU1 }
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x0,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +	},
-> +	{
-> +		.cal_offset = { 0x2c, 0x30 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_AP_GPU0 },
-> +			{ .dt_id = MT8192_AP_GPU1 }
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x100,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +	},
-> +	{
-> +		.cal_offset = { 0x34, 0x38 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_AP_INFRA },
-> +			{ .dt_id = MT8192_AP_CAM },
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x200,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +	},
-> +	{
-> +		.cal_offset = { 0x3c, 0x40, 0x44 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_AP_MD0 },
-> +			{ .dt_id = MT8192_AP_MD1 },
-> +			{ .dt_id = MT8192_AP_MD2 }
-> +		},
-> +		.num_lvts_sensor = 3,
-> +		.offset = 0x300,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +	}
-> +};
+> +       if (((1 << sk->sk_state) & (TCPF_CLOSE | TCPF_LISTEN)))
+> +               return;
 > +
->   static const struct lvts_data mt8195_lvts_mcu_data = {
->   	.lvts_ctrl	= mt8195_lvts_mcu_data_ctrl,
->   	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_mcu_data_ctrl),
-> @@ -1290,9 +1373,21 @@ static const struct lvts_data mt8195_lvts_ap_data = {
->   	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_ap_data_ctrl),
->   };
->   
-> +static const struct lvts_data mt8192_lvts_mcu_data = {
-> +	.lvts_ctrl	= mt8192_lvts_mcu_data_ctrl,
-> +	.num_lvts_ctrl	= ARRAY_SIZE(mt8192_lvts_mcu_data_ctrl),
-> +};
-> +
-> +static const struct lvts_data mt8192_lvts_ap_data = {
-> +	.lvts_ctrl	= mt8192_lvts_ap_data_ctrl,
-> +	.num_lvts_ctrl	= ARRAY_SIZE(mt8192_lvts_ap_data_ctrl),
-> +};
-> +
->   static const struct of_device_id lvts_of_match[] = {
->   	{ .compatible = "mediatek,mt8195-lvts-mcu", .data = &mt8195_lvts_mcu_data },
->   	{ .compatible = "mediatek,mt8195-lvts-ap", .data = &mt8195_lvts_ap_data },
-> +	{ .compatible = "mediatek,mt8192-lvts-mcu", .data = &mt8192_lvts_mcu_data },
-> +	{ .compatible = "mediatek,mt8192-lvts-ap", .data = &mt8192_lvts_ap_data },
->   	{},
->   };
->   MODULE_DEVICE_TABLE(of, lvts_of_match);
+> +       if (tp->compressed_ack) {
+> +               /* Since we have to send one ack finally,
+> +                * subtract one from tp->compressed_ack to keep
+> +                * LINUX_MIB_TCPACKCOMPRESSED accurate.
+> +                */
+> +               tp->compressed_ack--;
+> +               tcp_send_ack(sk);
+> +       }
+> +}
+>
+>  /**
+>   *  tcp_delack_timer() - The TCP delayed ACK timeout handler
+> @@ -757,16 +774,9 @@ static enum hrtimer_restart tcp_compressed_ack_kick(=
+struct hrtimer *timer)
+>
+>         bh_lock_sock(sk);
+>         if (!sock_owned_by_user(sk)) {
+> -               if (tp->compressed_ack) {
+> -                       /* Since we have to send one ack finally,
+> -                        * subtract one from tp->compressed_ack to keep
+> -                        * LINUX_MIB_TCPACKCOMPRESSED accurate.
+> -                        */
+> -                       tp->compressed_ack--;
+> -                       tcp_send_ack(sk);
+> -               }
+> +               tcp_compack_timer_handler(sk);
+>         } else {
+> -               if (!test_and_set_bit(TCP_DELACK_TIMER_DEFERRED,
+
+See, I was clearly intending to let tcp_delack_timer_handler() deal with th=
+is.
+
+> +               if (!test_and_set_bit(TCP_COMPACK_TIMER_DEFERRED,
+>                                       &sk->sk_tsq_flags))
+>                         sock_hold(sk);
+>         }
+> --
+> 2.17.1
+>
