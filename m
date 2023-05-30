@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30DD716BFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC809716C02
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbjE3SL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 14:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
+        id S233281AbjE3SMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 14:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232673AbjE3SLw (ORCPT
+        with ESMTP id S233309AbjE3SL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 14:11:52 -0400
+        Tue, 30 May 2023 14:11:58 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78439A3;
-        Tue, 30 May 2023 11:11:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6275F3;
+        Tue, 30 May 2023 11:11:54 -0700 (PDT)
 Received: from localhost (unknown [188.27.34.213])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 312836605840;
-        Tue, 30 May 2023 19:11:50 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3512C6606E76;
+        Tue, 30 May 2023 19:11:53 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685470310;
-        bh=sMhuZ+7skk9Nz8F8CqkKKe/JQIPAguLL7MXGBbO2Dt8=;
+        s=mail; t=1685470313;
+        bh=iHcb9BFc/X1bbxtUKpaxg5GTnEgeVVJ1yraooXSIn1k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jSeuSeX3vb9uNFXqB5SBwWMN/i7ouAXBywLxiMCsC7i+7SUEN9TsHC+eJ331EeZ6p
-         FQc2qNLPcePsPRIsRr7JxQ2KhT7Zo7xILISvaPxW2pkuA8kkEsUfHgrRk6DfmX6W8K
-         xlwJwrNcAujY06uE1+n2TrzSyFs95Cz6kXxkGlfxLFW1BrFxGV1yLonTBQIHR5lAfh
-         Nk1+djddCn+ffS8paqMobLyhoGEohaOYxQ/IQC7ZK++2BlVtcKopJDS3eHDItAaUwU
-         8NCXUzcM81o5Z18Z938O0rIAZJWIHrYLmEn6Qy7ZkgrnHwHJYhp6UKBMY//7wR3Tvt
-         Dm5BhJH4Sa8Zg==
+        b=kVgtbEN3hqRjjWYAhVn3DNUVrLbzogAUD3ZcQ6srLv0f6+cM8SjLXGVgwHRq751qy
+         AgUnx+6VWIYyHU8oLQ5/WBDwbY/Z8sGpfUwOCuKp/2LH5EYVhEsRfBDh/X4tvdhXAK
+         FCABiS0A1FDOV/C7rJMrx8UdWqQvf6fPQeJI94xn6D091IxAsBvJYBFq5LLbo97eY5
+         f4csibbvqoXLChNyuFKbc/4iblvSsZhz+hY5RBjlTyE9Nil/Xz4qxaa47CLjFASdfv
+         xwM3QLj7S02aaP9MQ2X2T057l51nlM6kDQeyq0HtRfZJg5ovfDqT05zaL07SIavHbt
+         Oeov1kSSDiI/Q==
 From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -51,9 +51,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         alsa-devel@alsa-project.org, kernel@collabora.com
-Subject: [PATCH v2 2/3] ASoC: es8316: Do not set rate constraints for unsupported MCLKs
-Date:   Tue, 30 May 2023 21:11:39 +0300
-Message-Id: <20230530181140.483936-3-cristian.ciocaltea@collabora.com>
+Subject: [PATCH v2 3/3] arm64: dts: rockchip: Assign ES8316 MCLK rate on rk3588-rock-5b
+Date:   Tue, 30 May 2023 21:11:40 +0300
+Message-Id: <20230530181140.483936-4-cristian.ciocaltea@collabora.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230530181140.483936-1-cristian.ciocaltea@collabora.com>
 References: <20230530181140.483936-1-cristian.ciocaltea@collabora.com>
@@ -69,82 +69,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using the codec through the generic audio graph card, there are at
-least two calls of es8316_set_dai_sysclk(), with the effect of limiting
-the allowed sample rates according to the MCLK/LRCK ratios supported by
-the codec:
+The I2S0_8CH_MCLKOUT clock rate on Rock 5B board defaults to 12 MHz and
+it is used to provide the master clock (MCLK) for the ES8316 audio
+codec.
 
-1. During audio card setup, to set the initial MCLK - see
-   asoc_simple_init_dai().
+On sound card initialization, this limits the allowed sample rates
+according to the MCLK/LRCK ratios supported by the codec, which results
+in the following non-standard rates: 15625, 30000, 31250, 46875.
 
-2. Before opening a stream, to update MCLK, according to the stream
-   sample rate and the multiplication factor - see
-   asoc_simple_hw_params().
+Hence, the very first access of the sound card fails:
 
-In some cases the initial MCLK might be set to a frequency that doesn't
-match any of the supported ratios, e.g. 12287999 instead of 12288000,
-which is only 1 Hz below the supported clock, as that is what the
-hardware reports. This creates an empty list of rate constraints, which
-is further passed to snd_pcm_hw_constraint_list() via
-es8316_pcm_startup(), and causes the following error on the very first
-access of the sound card:
-
-  $ speaker-test -D hw:Analog,0 -F S16_LE -c 2 -t wav
   Broken configuration for playback: no configurations available: Invalid argument
   Setting of hwparams failed: Invalid argument
 
-Note that all subsequent retries succeed thanks to the updated MCLK set
-at point 2 above, which uses a computed frequency value instead of a
-reading from the hardware registers. Normally this would have mitigated
-the issue, but es8316_pcm_startup() executes before the 2nd call to
-es8316_set_dai_sysclk(), hence it cannot make use of the updated
-constraints.
+However, all subsequent attempts will succeed, as the audio graph card
+will request a correct clock frequency, based on the stream sample rate
+and the multiplication factor.
 
-Since es8316_pcm_hw_params() performs anyway a final validation of MCLK
-against the stream sample rate and the supported MCLK/LRCK ratios, fix
-the issue by ensuring that sysclk_constraints list is only set when at
-least one supported sample rate is autodetected by the codec.
+Assign MCLK to 12.288 MHz, which allows the codec to advertise most of
+the standard sample rates.
 
-Fixes: b8b88b70875a ("ASoC: add es8316 codec driver")
+Fixes: 55529fe3f32d ("arm64: dts: rockchip: Add rk3588-rock-5b analog audio")
 Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 ---
- sound/soc/codecs/es8316.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/sound/soc/codecs/es8316.c b/sound/soc/codecs/es8316.c
-index 8f0625b45b7c..069f1ce1cd50 100644
---- a/sound/soc/codecs/es8316.c
-+++ b/sound/soc/codecs/es8316.c
-@@ -369,13 +369,11 @@ static int es8316_set_dai_sysclk(struct snd_soc_dai *codec_dai,
- 	int count = 0;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+index 3e4aee8f70c1..30cdd366813f 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+@@ -133,6 +133,8 @@ es8316: audio-codec@11 {
+ 		reg = <0x11>;
+ 		clocks = <&cru I2S0_8CH_MCLKOUT>;
+ 		clock-names = "mclk";
++		assigned-clocks = <&cru I2S0_8CH_MCLKOUT>;
++		assigned-clock-rates = <12288000>;
+ 		#sound-dai-cells = <0>;
  
- 	es8316->sysclk = freq;
-+	es8316->sysclk_constraints.list = NULL;
-+	es8316->sysclk_constraints.count = 0;
- 
--	if (freq == 0) {
--		es8316->sysclk_constraints.list = NULL;
--		es8316->sysclk_constraints.count = 0;
--
-+	if (freq == 0)
- 		return 0;
--	}
- 
- 	ret = clk_set_rate(es8316->mclk, freq);
- 	if (ret)
-@@ -391,8 +389,10 @@ static int es8316_set_dai_sysclk(struct snd_soc_dai *codec_dai,
- 			es8316->allowed_rates[count++] = freq / ratio;
- 	}
- 
--	es8316->sysclk_constraints.list = es8316->allowed_rates;
--	es8316->sysclk_constraints.count = count;
-+	if (count) {
-+		es8316->sysclk_constraints.list = es8316->allowed_rates;
-+		es8316->sysclk_constraints.count = count;
-+	}
- 
- 	return 0;
- }
+ 		port {
 -- 
 2.40.1
 
