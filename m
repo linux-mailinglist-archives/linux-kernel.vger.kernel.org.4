@@ -2,59 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5FF716C1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D282716C24
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbjE3STH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 14:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
+        id S231371AbjE3STi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 14:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbjE3SSz (ORCPT
+        with ESMTP id S233274AbjE3STa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 14:18:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C266FA7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:18:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 30 May 2023 14:19:30 -0400
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B40F9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:19:23 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56BE160E92
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 18:18:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637D9C4339C;
-        Tue, 30 May 2023 18:18:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685470733;
-        bh=GSoJuOKRdY+uRAsGoUp8M6lD7U0u8mQi49JYAbktU9U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HbsjnUKjcjDwjDBgQ5g4mt2ee+gpdY2yXecyHxE/5hujI30cFSqea0ycWzHcL81rT
-         Mfr3M+KeDBwyVG8wGbmB3kBb3lzVPSTnZXtLdj2NQG+nbccDO2IXHWGlQIBkUOB9au
-         oAW2PbOv2XKJzGjYmq07qE4hKm4OSZzNn7qitSAtF3cZ3aJQfQdmfmtG8FUfqSIUWV
-         eIadpWXL3xmWRS3aZekd7viWkoV6I04WuQbWW2EE+iCds6XzUFPe3Cr7yFp+MGoA/O
-         8ZK/DKacTit9g01Bph9xXyfJSQUxoaz0C2XJySRvgeSj0hf2s50rv3Q98U0tmOlXmd
-         JVjlNbIm8Rh5Q==
-Date:   Tue, 30 May 2023 11:18:51 -0700
-From:   Chris Li <chrisl@kernel.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
-        yosryahmed@google.com, kernel-team@fb.com
-Subject: Re: [PATCH] mm: zswap: shrink until can accept
-Message-ID: <ZHY+C0ICTah8/+V3@google.com>
-References: <20230524065051.6328-1-cerasuolodomenico@gmail.com>
- <ZHE7KWId1fvXLpUy@google.com>
- <CA+CLi1iC35exSaKaCmVmTWtna=9xBKHSyGNGmHFo=OqiSECGoA@mail.gmail.com>
- <ZHUSfg+z3wcaIhAT@google.com>
- <20230530041341.GB84971@cmpxchg.org>
- <ZHYNaxgcKs7PSp9I@google.com>
- <20230530155519.GB97194@cmpxchg.org>
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 7F1FB3EF11;
+        Tue, 30 May 2023 20:19:21 +0200 (CEST)
+Date:   Tue, 30 May 2023 20:19:20 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     neil.armstrong@linaro.org, Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+Subject: Re: [PATCH RFC 03/10] drm/panel: Add LGD panel driver for Sony
+ Xperia XZ3
+Message-ID: <iboet2dgdgxdailepqnq74yiwxhtxodgn4dss7seqzklxeco4f@scugkjmgz6m6>
+References: <20230521-drm-panels-sony-v1-3-541c341d6bee@somainline.org>
+ <ccc97880-8e74-b85b-9679-9c12c44c4b99@linaro.org>
+ <71675a02-0801-62dc-2673-4a0907636b21@linaro.org>
+ <CAA8EJpq=HZqiBZ6bpUNH47VmASuH+Mi5OD5BHmg0TPwtsKHf8w@mail.gmail.com>
+ <oxgtbj7qmsdvz5gl4bud64jedmhdmvphjfge7uy6uwulefqfsa@pleslv2zgwbp>
+ <ebc3ff33-6e4f-b107-33c6-f35b03307058@linaro.org>
+ <v3ac2ihqjce7vxcsjnm7ett2vc6wb4hb3bb6x4widd55eintw7@fgkyipbbl2ei>
+ <d52b384f-9853-3921-d4f2-5aedb7ef4c61@linaro.org>
+ <ao2w7eiuc4olqbycmdviqrpqbdpoltusixlllied7jbo5fucap@xv6xvgi43yio>
+ <CAA8EJpqt_VCE+Nz8w5mRMrg_oN87xByk2NKy8v+9LLPjP-nLYw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230530155519.GB97194@cmpxchg.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAA8EJpqt_VCE+Nz8w5mRMrg_oN87xByk2NKy8v+9LLPjP-nLYw@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,91 +70,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 11:55:19AM -0400, Johannes Weiner wrote:
-> On Tue, May 30, 2023 at 07:51:23AM -0700, Chris Li wrote:
-> > Thanks for pointing out -ENOMEM shouldn't be persistent.
-> > Points taken.
-> > 
-> > The original point of not retrying the persistent error
-> > still holds.
+On 2023-05-30 14:11:06, Dmitry Baryshkov wrote:
+> On Tue, 30 May 2023 at 11:27, Marijn Suijten
+> <marijn.suijten@somainline.org> wrote:
+> >
+> > On 2023-05-30 01:39:10, Dmitry Baryshkov wrote:
+> > > On 30/05/2023 01:37, Marijn Suijten wrote:
+> > > > On 2023-05-30 01:18:40, Dmitry Baryshkov wrote:
+> > > > <snip>
+> > > >>>>>>> +    ret = mipi_dsi_dcs_set_display_on(dsi);
+> > > >>>>>>> +    if (ret < 0) {
+> > > >>>>>>> +        dev_err(dev, "Failed to turn display on: %d\n", ret);
+> > > >>>>>>> +        return ret;
+> > > >>>>>>> +    }
+> > > >>>>>>
+> > > >>>>>> My usual question: should the mipi_dsi_dcs_exit_sleep_mode() / mipi_dsi_dcs_set_display_on() be moved from prepare() to enable() part?
+> > > >>>>>
+> > > >>>>>
+> > > >>>>> No, prepare is called before the video stream is started and when display is still in LPM mode and the mode hasn't been set.
+> > > >>>>>
+> > > >>>>
+> > > >>>> Yes, that's my point. Shouldn't we enable the panel _after_ starting the stream?
+> > > >>>
+> > > >>> I have never investigated what it takes to split these functions, but
+> > > >>> some of these panels do show some corruption at startup which may be
+> > > >>> circumvented by powering the panel on after starting the video stream?
+> > > >>>
+> > > >>> I'm just not sure where to make the split: downstream does describe a
+> > > >>> qcom,mdss-dsi-on-command and qcom,mdss-dsi-post-panel-on-command, where
+> > > >>> the latter only contains set_display_on() (not exit_sleep_mode()).
+> > > >>> It is documented like:
+> > > >>>
+> > > >>>       same as "qcom,mdss-dsi-on-command" except commands are sent after
+> > > >>>       displaying an image."
+> > > >>>
+> > > >>> So this seems like the right way to split them up, I'll test this out on
+> > > >>> all submitted panel drivers.
+> > > >>
+> > > >> Interesting enough, Neil suggested that sending all the commands during
+> > > >> pre_enable() is the correct sequence (especially for VIDEO mode panels),
+> > > >> since not all DSI hosts can send commands after switching to the VIDEO mode.
+> > > >
+> > > > Note that all these panels and Driver-ICs are command-mode, and/or
+> > > > programmed to run in command-mode, so there shouldn't be any notion of a
+> > > > VIDEO stream (any command-mode frame is just an "arbitrary command" as
+> > > > far as I understood).
+> > >
+> > > Yes, from the data stream point of view. I was talking about the DSI
+> > > host being able to send arbitrary commands or not after enabling the
+> > > video/cmd stream.
+> >
+> > Is this a known limitation of SM8250 then?  Or is the brightness_set
+> > issue more likely a "problem" with the panel that the downstream kernel
+> > is "somehow" working around or aware of, and I just haven't found
+> > how/where it deals with that?
+> > (Alternatively we could be "doing it wrong" for other panels but it
+> >  turns out to be working anyway)
 > 
-> Okay, but what persistent errors are you referring to?
+> Please excuse me for not being explicit enough. Qualcomm hardware
+> doesn't have this problem. Thus I was completely unaware of it before
+> talking to Neil.
+> So, our hardware works in most of the cases.
 
-Maybe ENOMEM is a bad example. How about if the swap device
-just went bad and can't complete new IO writes?
+Also excuse me for mocking the hardware here; it seems quite illogical
+for it to not work on this specific device which is more likely a
+failure in porting the panel DT to the driver than related to this
+specific SoC. There's probably one of the hundred-or-so DT params
+responsible for triggering a setting, delay, or other magic sequence
+that gets the brightness toggle working.
 
-> Aside from -ENOMEM, writeback_entry will fail on concurrent swap
-> invalidation or a racing swapin fault. In both cases we should
-> absolutely keep trying other entries until the goal is met.
-
-How about a narrower fix recognizing those error cases and making
-the inner loop continue in those errors?
-
-> > > Should it be fixed before merging this patch? I don't think the
-> > > ordering matters. Right now the -ENOMEM case invokes OOM, so it isn't
-> > > really persistent either. Retrying a few times in that case certainly
-> > > doesn't seem to make things worse.
-> > 
-> > If you already know the error is persistent, retrying is wasting
-> > CPU. It can pertancial hold locks during the retry, which can
-> > slow someone else down.
-> 
-> That's a bit of a truism. How does this pertain to the zswap reclaim
-> situation?
-
-See the above narrower fix alternative.
-> 
-> > > > > As I was writing to Yosry, the differentiation would be a great improvement
-> > > > > here, I just have a patch set in the queue that moves the inner reclaim loop
-> > > > > from the zpool driver up to zswap. With that, updating the error handling
-> > > > > would be more convenient as it would be done in one place instead of three.i
-> > > > 
-> > > > This has tricky complications as well. The current shrink interface
-> > > > doesn't support continuing from the previous error position. If you want
-> > > > to avoid a repeat attempt if the page has a writeback error, you kinda
-> > > > of need a way to skip that page.
-> > > 
-> > > A page that fails to reclaim is put back to the tail of the LRU, so
-> > > for all intents and purposes it will be skipped. In the rare and
-> > 
-> > Do you mean the page is treated as hot again?
-> > 
-> > Wouldn't that be undesirable from the app's point of view?
-> 
-> That's current backend LRU behavior. Is it optimal? That's certainly
-> debatable. But it's tangential to this patch. The point is that
-> capping retries to a fixed number of failures works correctly as a
-> safety precaution and introduces no (new) undesirable behavior.
-> 
-> It's entirely moot once we refactor the backend page LRU to the zswap
-> entry LRU. The only time we'll fail to reclaim an entry is if we race
-> with something already freeing it, so it doesn't really matter where
-> we put it.
-
-Agree with you there. A bit side tracked.
-
-> > > extreme case where it's the only page left on the list, I again don't
-> > > see how retrying a few times will make the situation worse.
-> > > 
-> > > In practice, IMO there is little upside in trying to be more
-> > > discerning about the error codes. Simple seems better here.
-> > 
-> > Just trying to think about what should be the precise loop termination
-> > condition here.
-> > 
-> > I still feel blindly trying a few times is a very imprecise condition.
-> 
-> The precise termination condition is when can_accept() returns true
-> again. The safety cap is only added as precaution to avoid infinite
-> loops if something goes wrong or unexpected, now or in the future.
-
-In my mind, that statement already suggests can_accept() is not
-*precise*, considering the avoid infinite loop.
-e.g. Do we know what is the optimal cap value and why that value
-is optical?
-
-Putting the definition of precise aside, I do see the unconditional
-retry can have unwanted effects.
-
-Chris
-
+- Marijn
