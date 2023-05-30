@@ -2,171 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D131D715D4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84351715D4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjE3LdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40370 "EHLO
+        id S230206AbjE3Ldo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjE3LdR (ORCPT
+        with ESMTP id S230025AbjE3Ldm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:33:17 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1723DB0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:33:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WB+yIqgigjsMJU+pmIJhr0L5/N01D3S4/hmCXl95j2w=; b=Ok5AOcmXDveW4ul2r2wvht3ODo
-        m8IurmHuSCIwNHChjXeUSH0OhSfbxMg30gsWqF8dgXHU8zQnNZzthRpSzuBm5j6/yLtyhOhp5wYLW
-        Yg00SSCvKD8Xlj5poqNQM0EOzAOUtCqPT0rzQsiQA1fJwv81OqvhI+VOD0R+EzoL9HcoDx8iOjEX3
-        EPqtVQFajziFcRdHGOCNORTJnJKpZ+Hex0SwOv13LzSPJYlLzUeyTEDXuR/oQ06c4rs96NylBrhPz
-        L35gqkLVATQ5each8vR5w/V5J8g1h1XiijEbCpy15RDXIkNZz4MVNP1q4w2couzqtzgdzjkJoN55J
-        Hke4m/NQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q3xat-00DhiJ-0e;
-        Tue, 30 May 2023 11:32:52 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 44FF8300454;
-        Tue, 30 May 2023 13:32:49 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 29AEE24AEF73C; Tue, 30 May 2023 13:32:49 +0200 (CEST)
-Date:   Tue, 30 May 2023 13:32:49 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     jiangshanlai@gmail.com, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        joshdon@google.com, brho@google.com, briannorris@chromium.org,
-        nhuck@google.com, agk@redhat.com, snitzer@kernel.org,
-        void@manifault.com, gautham.shenoy@amd.com,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCHSET v1 wq/for-6.5] workqueue: Improve unbound workqueue
- execution locality
-Message-ID: <20230530113249.GA156198@hirez.programming.kicks-ass.net>
-References: <20230519001709.2563-1-tj@kernel.org>
- <20230523111818.GH4253@hirez.programming.kicks-ass.net>
- <ZHAHjXL1e-H1PCqQ@slm.duckdns.org>
+        Tue, 30 May 2023 07:33:42 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23410B0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:33:41 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-565cd2fc9acso40504617b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:33:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685446420; x=1688038420;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zO/hEIm/6vFm+Ve2jfklUx8YwRrMLFv0UwuU9t+2qT8=;
+        b=AMemBWUvnvX0G0MDmnf8f/zVF0q9PNYTQ6bTUriXGy7KkrQEgnontw/Rtf9Mdm+nKw
+         neUaH++nwf7A4ncvxc5inevGIC7S/TnIYxNRnPAHuSAXyfgOp4pgUO+u8Bth0LoTiHcd
+         93M2sORUXM35A4h2G54YotHEcuxq9Z0jmGtIxq5n6F3AMMYVN15L97TB5woGOoQk/dfl
+         Z2ETVLE9UNJ18AvVV6ozW5UcamPts81RLcS8ZaiJt2yrv3nj4LlD/SaxHrChTv4qXCF6
+         aBvSSCdzK+qBAXqwWR89gVfFH0fV44QxViYHFTmWkGvpZVxFVvj86Jw3R89tpkgA/588
+         6mlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685446420; x=1688038420;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zO/hEIm/6vFm+Ve2jfklUx8YwRrMLFv0UwuU9t+2qT8=;
+        b=OUSDPe4SoPBp4psK3hPfnNb4BXShzLwGUXvzm8Todqvodu9/t/9EO4yMZSFNzDaBJH
+         d3fpXZ2teq+SHVRaLO6quuXi0+ZzLJi6YE2OMaj2K81rBi6A5HcB+GEBRbB+ahag3SaD
+         qlSUOSHhUPcxtZwKqMiSt8E9yRDANDqgi4FCCv83y0DzJpLeIDujJq9wi4knxQjMTVl3
+         9xat/x5M/qYt8TNXWZmRmr1ZE4OuJokrByb5+1NAG1ryBt1CoFnLiPbMkapIE9yBYqid
+         caYVHUyHngzDOlzWoFCWZHFPwZjpirzhnh5JtDx4zyYS0FUznrT1HoGGlMHGKbx7ZWrC
+         xw/w==
+X-Gm-Message-State: AC+VfDyp7Ubi/2Kbqrps1h+Ua+sw/lcE6C+MwvRlCS0w2K+bVRgaQ4q9
+        xnkqUJrDL2vzAokCgstEP4xUh4d9ubTJ+/N1JWEruA==
+X-Google-Smtp-Source: ACHHUZ5OqCG1+FL/F18LVpp4TSjuAEWgttMpiOAuDfgIrf50Bf1rJPTXcD2dr152yi2w5mvi/Cgzm9bpg7BtykybcCI=
+X-Received: by 2002:a0d:d741:0:b0:565:dff1:d1e2 with SMTP id
+ z62-20020a0dd741000000b00565dff1d1e2mr2408888ywd.18.1685446420350; Tue, 30
+ May 2023 04:33:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHAHjXL1e-H1PCqQ@slm.duckdns.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230315215027.30685-1-asmaa@nvidia.com> <20230315215027.30685-2-asmaa@nvidia.com>
+ <CAHp75VfnNOsfcyLM-UP61CMAF9sLOwMbRkAe5Ljhs2p8F=4Pgw@mail.gmail.com> <CH2PR12MB3895BDF9D79D61420A2F2BA8D7479@CH2PR12MB3895.namprd12.prod.outlook.com>
+In-Reply-To: <CH2PR12MB3895BDF9D79D61420A2F2BA8D7479@CH2PR12MB3895.namprd12.prod.outlook.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 30 May 2023 13:33:29 +0200
+Message-ID: <CACRpkdbN3oa=chsoh8ko74xKBPXA_yh1K07MSaghnMMk5PWYYw@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] gpio: mlxbf3: Add gpio driver support
+To:     Asmaa Mnebhi <asmaa@nvidia.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 03:12:45PM -1000, Tejun Heo wrote:
+On Fri, May 26, 2023 at 3:49=E2=80=AFPM Asmaa Mnebhi <asmaa@nvidia.com> wro=
+te:
 
-> CONCLUSION
-> ==========
-> 
-> With the SIS_NODE enabled, there's no downside to CACHE. It always
-> outperforms or matches SYSTEM. It's possible that the overhead of searching
-> further for an idle CPU is more pronounced on bigger machines but most
-> likely so will be the gains. This looks like a no brainer improvement to me.
+> Hi Andy, Hi Linus,
+>
+> I see that the pinctl-mlxbf3.c is in v6.4 kernel but I am not seeing gpio=
+-mlxbf3.c, not
+> even in Linux next. Do you know when this driver will be integrated?
 
-OK, looking at it again, I think it can be done a little simpler, but it
-should be mostly the same.
+Bartosz is applying GPIO patches, I am sure he will get around to it once
+all things are reviewed, but you need to use the right email address to
+him (see MAINTAINERS).
 
-I'll go queue the below in sched/core, we'll see if anything comes up
-negative.
-
----
-Subject: sched/fair: Multi-LLC select_idle_sibling()
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Tue May 30 13:20:46 CEST 2023
-
-Tejun reported that when he targets workqueues towards a specific LLC
-on his Zen2 machine with 3 cores / LLC and 4 LLCs in total, he gets
-significant idle time.
-
-This is, of course, because of how select_idle_sibling() will not
-consider anything outside of the local LLC, and since all these tasks
-are short running the periodic idle load balancer is ineffective.
-
-And while it is good to keep work cache local, it is better to not
-have significant idle time. Therefore, have select_idle_sibling() try
-other LLCs inside the same node when the local one comes up empty.
-
-Reported-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- kernel/sched/fair.c     |   38 ++++++++++++++++++++++++++++++++++++++
- kernel/sched/features.h |    1 +
- 2 files changed, 39 insertions(+)
-
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -7028,6 +7028,38 @@ static int select_idle_cpu(struct task_s
- }
- 
- /*
-+ * For the multiple-LLC per node case, make sure to try the other LLC's if the
-+ * local LLC comes up empty.
-+ */
-+static int
-+select_idle_node(struct task_struct *p, struct sched_domain *sd, int target)
-+{
-+	struct sched_domain *parent = sd->parent;
-+	struct sched_group *sg;
-+
-+	/* Make sure to not cross nodes. */
-+	if (!parent || parent->flags & SD_NUMA)
-+		return -1;
-+
-+	sg = parent->groups;
-+	do {
-+		int cpu = cpumask_first(sched_group_span(sg));
-+		struct sched_domain *sd_child;
-+
-+		sd_child = per_cpu(sd_llc, cpu);
-+		if (sd_child != sd) {
-+			int i = select_idle_cpu(p, sd_child, test_idle_cores(cpu), cpu);
-+			if ((unsigned)i < nr_cpumask_bits)
-+				return i;
-+		}
-+
-+		sg = sg->next;
-+	} while (sg != parent->groups);
-+
-+	return -1;
-+}
-+
-+/*
-  * Scan the asym_capacity domain for idle CPUs; pick the first idle one on which
-  * the task fits. If no CPU is big enough, but there are idle ones, try to
-  * maximize capacity.
-@@ -7199,6 +7231,12 @@ static int select_idle_sibling(struct ta
- 	if ((unsigned)i < nr_cpumask_bits)
- 		return i;
- 
-+	if (sched_feat(SIS_NODE)) {
-+		i = select_idle_node(p, sd, target);
-+		if ((unsigned)i < nr_cpumask_bits)
-+			return i;
-+	}
-+
- 	return target;
- }
- 
---- a/kernel/sched/features.h
-+++ b/kernel/sched/features.h
-@@ -62,6 +62,7 @@ SCHED_FEAT(TTWU_QUEUE, true)
-  */
- SCHED_FEAT(SIS_PROP, false)
- SCHED_FEAT(SIS_UTIL, true)
-+SCHED_FEAT(SIS_NODE, true)
- 
- /*
-  * Issue a WARN when we do multiple update_rq_clock() calls
+Yours,
+Linus Walleij
