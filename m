@@ -2,113 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF347157BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2655D7157C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjE3H7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
+        id S229805AbjE3H7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjE3H7S (ORCPT
+        with ESMTP id S229815AbjE3H7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:59:18 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965EF90
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:59:16 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4372F1F889;
-        Tue, 30 May 2023 07:59:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1685433555; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aR5mnon4zhDf1c/NKhS1CdKNreGelh3NU7PyzV1RfKI=;
-        b=IdefEP5Vs8tPnDdV939qTvhz0n/itBbSr7uiMbjaWXqpkL195D+dpTilo7cKs5sCRMyRQ7
-        Ovx49GhI8bh8QnDoq3y9Cu07TIczVegXm1iUtdpH1t0VDjdojy58DnySwNlkm9O21YVpMs
-        w+23whnoI2l7jzruE8Gm8XIhMD6iAV8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1685433555;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aR5mnon4zhDf1c/NKhS1CdKNreGelh3NU7PyzV1RfKI=;
-        b=I4k39qnPl7RKRD2hKCXntATiTlRtXQrFCBUUtSOakMGk7ZiB4xfZO2PNh/YeZJi82kkPMA
-        5WA0lRi+NhG5Z5CA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 283B613478;
-        Tue, 30 May 2023 07:59:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DyItCdOsdWQHJQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 30 May 2023 07:59:15 +0000
-Message-ID: <415a2266-868c-b0d8-b45c-d92eaf02611c@suse.cz>
-Date:   Tue, 30 May 2023 09:59:14 +0200
+        Tue, 30 May 2023 03:59:39 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D0AEC;
+        Tue, 30 May 2023 00:59:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685433572; x=1716969572;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=k2wQjHFnZKBKTamAwk9amhA1vwnpcm0OjoXqFO3kzPY=;
+  b=iZ0aa6qWMtTYjazlpSn1Qo7FUuS8MosEW71J6Ms/6X52rLwXUAzqCRj8
+   fzwNPfvQAqv+kML+kr01Xpurea4ylNcsDBLA9pYjajkSMKolrO71GeQu7
+   wi2/O6lSLDwB/bSZj6uKlEmXwV+wKbwnZI3kp+ibUTeP6bwG4XCf9950Y
+   nUQARTLZOyrH65i4PW7axEKUIApyOhYmjDCJAf2MXBpkxTbz7wGiFc5cq
+   +Hmzzv6e1X3O3FtTBRFsMNMMg2W2Kf4kx8cYddXiT2itng0SJtcabAdYX
+   cueOHDT2+ztnRlRfDomFTtxknCIiSTG60t0+sD9YhOuVUPEm3xr40mRvY
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="441203217"
+X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
+   d="scan'208";a="441203217"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 00:59:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="776207742"
+X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
+   d="scan'208";a="776207742"
+Received: from tassilo.jf.intel.com (HELO tassilo) ([10.54.38.190])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 00:59:31 -0700
+Date:   Tue, 30 May 2023 00:59:30 -0700
+From:   Andi Kleen <ak@linux.intel.com>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Ross Zwisler <zwisler@chromium.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v2 00/16] Address some perf memory/data size issues
+Message-ID: <ZHWs4o9SBqfspNds@tassilo>
+References: <20230526183401.2326121-1-irogers@google.com>
+ <ZHWCPXKo2fFJmtlT@tassilo>
+ <CAP-5=fXXykcwjXjd+W=8Eez79JhmuKhf1Z-1R_8+AD4XdY4a8A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 3/6] mm: compaction: skip more fully scanned pageblock
-Content-Language: en-US
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org
-Cc:     mgorman@techsingularity.net, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1685018752.git.baolin.wang@linux.alibaba.com>
- <f4efd2fa08735794a6d809da3249b6715ba6ad38.1685018752.git.baolin.wang@linux.alibaba.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <f4efd2fa08735794a6d809da3249b6715ba6ad38.1685018752.git.baolin.wang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fXXykcwjXjd+W=8Eez79JhmuKhf1Z-1R_8+AD4XdY4a8A@mail.gmail.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/25/23 14:53, Baolin Wang wrote:
-> In fast_isolate_around(), it assumes the pageblock is fully scanned if
-> cc->nr_freepages < cc->nr_migratepages after trying to isolate some free
-> pages, and will set skip flag to avoid scanning in future. However this
-> can miss setting the skip flag for a fully scanned pageblock (returned
-> 'start_pfn' is equal to 'end_pfn') in the case where cc->nr_freepages
-> is larger than cc->nr_migratepages.
-> 
-> So using the returned 'start_pfn' from isolate_freepages_block() and
-> 'end_pfn' to decide if a pageblock is fully scanned makes more sense.
-> It can also cover the case where cc->nr_freepages < cc->nr_migratepages,
-> which means the 'start_pfn' is usually equal to 'end_pfn' except some
-> uncommon fatal error occurs after non-strict mode isolation.
-> 
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> BSS won't count toward file size, which the patches were primarily
+> going after - but checking the size numbers I have miscalculated from
+> reading size's output that I'm not familiar with. The numbers are
+> still improved, but I just see a 37kb saving, with 5kb more in
+> .rodata. Something but not much. .data.rel.ro is larger, which imo is
+> good, but those pages will still be dirtied so a mute point wrt file
+> size and memory overhead.
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+The way perf is written (lots of separate code depending on a single high level
+switch) most pages probably won't be dirtied.
 
-> ---
->  mm/compaction.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 3737c6591bfb..1e5183f39ca9 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -1411,7 +1411,7 @@ fast_isolate_around(struct compact_control *cc, unsigned long pfn)
->  	isolate_freepages_block(cc, &start_pfn, end_pfn, &cc->freepages, 1, false);
->  
->  	/* Skip this pageblock in the future as it's full or nearly full */
-> -	if (cc->nr_freepages < cc->nr_migratepages)
-> +	if (start_pfn == end_pfn)
->  		set_pageblock_skip(page);
->  
->  	return;
+> For huge pages I thought it was correct that things are aligned by max
+> page size which I thought on x86-64 was 2MB, so I tried:
+> EXTRA_LDFLAGS="-z max-page-size=4096"
+> but it made no difference to anything, and with:
+> EXTRA_CFLAGS="-Wl,-z,max-page-size=4096"
+> EXTRA_CXXFLAGS="-Wl,-z,max-page-size=4096"
+> file size just got worse.
 
+The default alignment to 2MB was dropped in the GNU toolchain in 2018 or
+so.
+
+-Andi
