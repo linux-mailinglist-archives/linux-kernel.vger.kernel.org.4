@@ -2,175 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488FD71641E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A00716421
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbjE3O33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41276 "EHLO
+        id S232571AbjE3O3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbjE3O3X (ORCPT
+        with ESMTP id S231841AbjE3O3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 May 2023 10:29:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC78FE49;
-        Tue, 30 May 2023 07:28:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E3A816F2;
-        Tue, 30 May 2023 07:28:58 -0700 (PDT)
-Received: from [192.168.1.3] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B86233F663;
-        Tue, 30 May 2023 07:28:10 -0700 (PDT)
-Message-ID: <630ab636-107d-4b12-5454-2ee91ad43543@arm.com>
-Date:   Tue, 30 May 2023 15:28:09 +0100
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCF6E5C;
+        Tue, 30 May 2023 07:29:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40B1463145;
+        Tue, 30 May 2023 14:28:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 519A8C433EF;
+        Tue, 30 May 2023 14:28:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685456901;
+        bh=Bq55rc2J+HUdltrUUbPsYFHA+48AK8kpYxgdqHpZXrE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HDMWMf7gDcNEXsUd9WcexvgkjNIB4UE7evyc6LZdCaBGPtHJ3zuL2RMebFVhqVp4k
+         g+enKCI0ujIW7xO4XJiltNguNjRf1cbPMuFp5B4yWoyc144SkZciBw0ZZQoSMfvdQ0
+         rNibuhlA2QimqzGdn3kQCbZ+2iT2Dzt0wcaviQv8=
+Date:   Tue, 30 May 2023 15:28:19 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Prashanth K <quic_prashk@quicinc.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Message-ID: <2023053058-baffling-unveiling-e597@gregkh>
+References: <1685421871-25391-1-git-send-email-quic_prashk@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/4] perf cs-etm: Use previous thread for branch sample
- source IP
-Content-Language: en-US
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     coresight@lists.linaro.org, denik@chromium.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230524131958.2139331-1-james.clark@arm.com>
- <20230524131958.2139331-3-james.clark@arm.com>
- <20230527090635.GB886420@leoy-yangtze.lan>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20230527090635.GB886420@leoy-yangtze.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1685421871-25391-1-git-send-email-quic_prashk@quicinc.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 27/05/2023 10:06, Leo Yan wrote:
-> On Wed, May 24, 2023 at 02:19:56PM +0100, James Clark wrote:
->> Branch samples currently use the IP of the previous packet as the from
->> IP, and the IP of the current packet as the to IP. But it incorrectly
->> uses the current thread. In some cases like a jump into a different
->> exception level this will attribute to the incorrect process.
+On Tue, May 30, 2023 at 10:14:31AM +0530, Prashanth K wrote:
+> Currently if we bootup a device without cable connected, then
+> usb-conn-gpio won't call set_role() since last_role is same as
+> current role. This happens because during probe last_role gets
+> initialised to zero.
 > 
-> It's about the timing that branch has taken or not taken :)
+> To avoid this, added a new constant in enum usb_role, last_role
+> is set to USB_ROLE_UNKNOWN before performing initial detection.
 > 
-> If we think the branch sample as 'branch has taken', then current code
-> is doning right thing, otherwise, we need this fix.
+> While at it, also handle default case for the usb_role switch
+> in cdns3 to avoid build warnings.
 > 
+> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
 
-If you diff the outputs side by side you can see it mainly has an effect
-where there is a discontinuity. At this point we set either the from or
-the to IPs to 0.
+Breaks the build :(
 
-For example here is a before and after perf script output. Without the
-change it looks like stress was running before it actually was. The
-schedule function that was attributed to ls on the first line hasn't
-finished running yet. But it's attributed to stress on the second line
-even though the destination IP is 0 meaning we don't even know where it
-went.
-
-Before:
-
-    ls  8350 [006] ... __schedule+0x394 => schedule+0x5c
-stress  8357 [006] ... schedule+0x84 => 0 [unknown]
-stress  8357 [006] ... 0 [unknown] => __unix_dgram_recvmsg+0x130
-
-After:
-
-    ls  8350 [006] ... __schedule+0x394 => schedule+0x5c
-    ls  8357 [006] ... schedule+0x84 => 0 [unknown]
-stress  8357 [006] ... 0 [unknown] => __unix_dgram_recvmsg+0x130
-
-I didn't see any decode differences that weren't around these
-discontinuity points, so it seems like a low risk change.
-
->> Fix it by tracking the previous thread in the same way the previous
->> packet is tracked.
->>
->> Signed-off-by: James Clark <james.clark@arm.com>
->> ---
->>  tools/perf/util/cs-etm.c | 9 +++++++--
->>  1 file changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
->> index ebffc9052561..a997fe79d458 100644
->> --- a/tools/perf/util/cs-etm.c
->> +++ b/tools/perf/util/cs-etm.c
->> @@ -86,6 +86,7 @@ struct cs_etm_traceid_queue {
->>  	size_t last_branch_pos;
->>  	union perf_event *event_buf;
->>  	struct thread *thread;
->> +	struct thread *prev_thread;
->>  	struct branch_stack *last_branch;
->>  	struct branch_stack *last_branch_rb;
->>  	struct cs_etm_packet *prev_packet;
->> @@ -480,6 +481,7 @@ static int cs_etm__init_traceid_queue(struct cs_etm_queue *etmq,
->>  	tidq->trace_chan_id = trace_chan_id;
->>  	tidq->thread = machine__findnew_thread(&etm->session->machines.host, -1,
->>  					       queue->tid);
->> +	tidq->prev_thread = machine__idle_thread(&etm->session->machines.host);
->>  
->>  	tidq->packet = zalloc(sizeof(struct cs_etm_packet));
->>  	if (!tidq->packet)
->> @@ -616,6 +618,8 @@ static void cs_etm__packet_swap(struct cs_etm_auxtrace *etm,
->>  		tmp = tidq->packet;
->>  		tidq->packet = tidq->prev_packet;
->>  		tidq->prev_packet = tmp;
->> +		thread__put(tidq->prev_thread);
->> +		tidq->prev_thread = thread__get(tidq->thread);
-> 
-> Maybe cs_etm__packet_swap() is not the best place to update
-> "tidq->prev_thread", since swapping packet doesn't mean it's necessarily
-> thread switching; can we move this change into the cs_etm__set_thread()?
-> 
-
-Yeah that might make more sense. I can move it there if we decide to
-keep this change.
-
-> Thanks,
-> Leo
-> 
->>  	}
->>  }
->>  
->> @@ -791,6 +795,7 @@ static void cs_etm__free_traceid_queues(struct cs_etm_queue *etmq)
->>  		/* Free this traceid_queue from the array */
->>  		tidq = etmq->traceid_queues[idx];
->>  		thread__zput(tidq->thread);
->> +		thread__zput(tidq->prev_thread);
->>  		zfree(&tidq->event_buf);
->>  		zfree(&tidq->last_branch);
->>  		zfree(&tidq->last_branch_rb);
->> @@ -1450,8 +1455,8 @@ static int cs_etm__synth_branch_sample(struct cs_etm_queue *etmq,
->>  	sample.time = cs_etm__resolve_sample_time(etmq, tidq);
->>  
->>  	sample.ip = ip;
->> -	sample.pid = tidq->thread->pid_;
->> -	sample.tid = tidq->thread->tid;
->> +	sample.pid = tidq->prev_thread->pid_;
->> +	sample.tid = tidq->prev_thread->tid;
->>  	sample.addr = cs_etm__first_executed_instr(tidq->packet);
->>  	sample.id = etmq->etm->branches_id;
->>  	sample.stream_id = etmq->etm->branches_id;
->> -- 
->> 2.34.1
->>
+Please be more careful when submitting stuff, especially on v6 of a
+patch :(
