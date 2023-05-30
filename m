@@ -2,99 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DCD07163D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6377163E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbjE3OXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
+        id S232463AbjE3OX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbjE3OXF (ORCPT
+        with ESMTP id S232052AbjE3OXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:23:05 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C89D10D1;
-        Tue, 30 May 2023 07:22:23 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-ba71cd7ce7fso6372545276.1;
-        Tue, 30 May 2023 07:22:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685456525; x=1688048525;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2Jh6LcDY7P7T8yfLhT0DmS4U1CqwRWBIBUieCoRWL0M=;
-        b=sgoKzqZfRp0hfI5s/9CKB1GdmFnm6Np7T/R/CIpwIt6KTVsWNn3xEp+h5XhvEwc/JB
-         wQGQeiMW9+IzNnQ36AdZMEWGFCk3ZFznd0+oFYXVti+kxGuH8qD0F4q5cP/rvh1RroLg
-         kNBwcqBMOuVsZYIQombYe9fxODb825w0ZVaOzMOu83J6ADvRI/l0qflb57jqf9VZMyCy
-         V2IQACKVZvN37C3PeXabtyW9Me89fR2kD7wywNLSMDAVhw/ujSMd9vEtBqOw46mh2gBA
-         rZG0y5tSfOm8MzGdsdYBJv0OgSbm21fXwRWrlV8QpVkSg9JHDio5Ruv2GHLPfZXidnb3
-         qFDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685456525; x=1688048525;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2Jh6LcDY7P7T8yfLhT0DmS4U1CqwRWBIBUieCoRWL0M=;
-        b=GlPpuQcLB4ly+xfbYk7R9MeT2ftJeKjDGtqiIxBlvcQbLTOcdhVE20FJ1EnP8+fXW0
-         6xt4VsG2zRualtjURE5KeWKxHc+i+7vZZTJilEQgF97XXNXTb9fBlVVEWwsyWvb74VP+
-         amBq7Ay26Yu7HfS5WVCpL9cz4xF8FG+T3nBEEP6S4erF6wiZca2xNW9sMfxCxCvPsZqZ
-         UWYLHqkiIfgyOpCdui7MKMMe4lbvqZMCeJ+z6F8pnW32hj22PtsM9/tgHAX3IIwNKztd
-         2zxHwmDmP5AVFYEVPupcFJVc3g9Igic65G+CQJdiidSskFj7+ZEw1D1+hHJsgERqtri+
-         PHrg==
-X-Gm-Message-State: AC+VfDzdxjQ9+nrbGDLUodEnh/flqrdvXA2JxyJL0z+jQ3UQRSa2fyOv
-        L1vMBDnxZBJtTCfNsVQkXFMMAXU8cvEsIF8wpUo=
-X-Google-Smtp-Source: ACHHUZ7GPn+dc6IDYTdATPz8zQ9VOnil9TacegtHgk83Qh3Un3O4GV5XOrrxJuPGFvUtBPi4+aQR46GGt/EhYJV7VH4=
-X-Received: by 2002:a25:d688:0:b0:ba6:9e94:ed26 with SMTP id
- n130-20020a25d688000000b00ba69e94ed26mr3390464ybg.19.1685456525593; Tue, 30
- May 2023 07:22:05 -0700 (PDT)
+        Tue, 30 May 2023 10:23:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB361E41;
+        Tue, 30 May 2023 07:23:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8776A62BD5;
+        Tue, 30 May 2023 14:22:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFEE8C4339C;
+        Tue, 30 May 2023 14:22:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685456529;
+        bh=k700hgbiU2x5v71H9KHKEiPJRC2HKKRUZbC/XC2nTNM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RQJ+edKK9vPos0wVd2D7Ef/BPog8efISHA8NkA697qyRU/yLVFgd2aEExM/wYh60/
+         /NE53C/NmCt+mdkOF9cmriwPSJRosIvPIjx71tuKUyL29P55idt7KB0g3QN4AJt9Og
+         +SHI/K2YqQOROccEoRLwpqGX4qQvhDYZNln4YCqSyvTH5497i6oBYP+jTGSrpKH0ds
+         Koow4LSFejvhNTTp2EODkAhGPRfS9TJEpEmI6+hHRmswqM1qhfev+mgJtykdWkjsjb
+         0XcqMYiPqembqFubXole0hEQ6rmDWV7IxWSuYyGr7+KRB7I0UUhCjb+goCvM4XYGxj
+         Mo/xF6ZkJNF+Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q40El-0007rF-BZ; Tue, 30 May 2023 16:22:11 +0200
+Date:   Tue, 30 May 2023 16:22:11 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [PATCH 0/2] Bluetooth: fix debugfs registration
+Message-ID: <ZHYGkxX-Z6deSgAH@hovoldconsulting.com>
+References: <20230424124852.12625-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-References: <20230530064821.1222290-1-changxian.cqs@antgroup.com> <20230530064821.1222290-3-changxian.cqs@antgroup.com>
-In-Reply-To: <20230530064821.1222290-3-changxian.cqs@antgroup.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 30 May 2023 16:21:54 +0200
-Message-ID: <CANiq72ntH+6nBHLpwbYbja189TX8WvOpD98=xNROPXPfmuwjtA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] samples: rust: add `SgTable` and `ScatterList` selftests
-To:     Qingsong Chen <changxian.cqs@antgroup.com>
-Cc:     linux-kernel@vger.kernel.org,
-        =?UTF-8?B?55Sw5rSq5Lqu?= <tate.thl@antgroup.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Asahi Lina <lina@asahilina.net>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Viktor Garske <viktor@v-gar.de>, Finn Behrens <me@kloenk.dev>,
-        rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424124852.12625-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 8:54=E2=80=AFAM Qingsong Chen
-<changxian.cqs@antgroup.com> wrote:
+On Mon, Apr 24, 2023 at 02:48:50PM +0200, Johan Hovold wrote:
+> The HCI controller debugfs interface is created during setup or when a
+> controller is configured, but there is nothing preventing a controller
+> from being configured multiple times (e.g. by setting the device
+> address), which results in a host of errors in the logs:
+> 
+> 	debugfs: File 'features' in directory 'hci0' already present!
+> 	debugfs: File 'manufacturer' in directory 'hci0' already present!
+> 	debugfs: File 'hci_version' in directory 'hci0' already present!
+> 	...
+> 	debugfs: File 'quirk_simultaneous_discovery' in directory 'hci0' already present!
+> 
+> The Qualcomm driver suffers from a related problem for controllers with
+> non-persistent setup.
 >
-> Add a selftest module to provide a temporary place to put "pure tests"
-> for Rust funtionality and wrappers.
+> 
+> Johan Hovold (2):
+>   Bluetooth: fix debugfs registration
+>   Bluetooth: hci_qca: fix debugfs registration
+> 
+>  drivers/bluetooth/hci_qca.c | 6 +++++-
+>  include/net/bluetooth/hci.h | 1 +
+>  net/bluetooth/hci_sync.c    | 3 +++
+>  3 files changed, 9 insertions(+), 1 deletion(-)
 
-Thanks for the patch series! Quick note on this: the `selftest` sample
-module was a temporary place we had in the `rust` branch to put some
-non-doctest tests until we had a better way to run them.
+Are there any more comments to this series or can we can get this merged
+for 6.5?
 
-Even if we wanted to keep this approach for tests like this, this part
-should be in its own patch -- that way you can credit Boqun properly
-and avoid adding his SoB on code he did not write (which he may not
-agree with).
+I hope this is not blocked on the bogus checkpatch warning the robot
+posted?
 
-Cheers,
-Miguel
+Johan
