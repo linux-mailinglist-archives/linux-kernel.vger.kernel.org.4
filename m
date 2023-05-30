@@ -2,92 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB92716035
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB79B716049
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjE3MoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
+        id S231555AbjE3Mpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjE3MoO (ORCPT
+        with ESMTP id S231163AbjE3Mps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:44:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DF60116;
-        Tue, 30 May 2023 05:43:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6470EC14;
-        Tue, 30 May 2023 05:43:45 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.25.100])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 310F33F67D;
-        Tue, 30 May 2023 05:42:58 -0700 (PDT)
-Date:   Tue, 30 May 2023 13:42:55 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        boqun.feng@gmail.com, corbet@lwn.net, keescook@chromium.org,
-        linux-arch@vger.kernel.org, linux@armlinux.org.uk,
-        linux-doc@vger.kernel.org, paulmck@kernel.org,
-        sstabellini@kernel.org, will@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 24/26] locking/atomic: scripts: generate kerneldoc
- comments
-Message-ID: <ZHXvT86FN/7lx/fv@FVFF77S0Q05N>
-References: <20230522122429.1915021-1-mark.rutland@arm.com>
- <20230522122429.1915021-25-mark.rutland@arm.com>
- <96d6930b-78b1-4b4c-63e3-c385a764d6e3@gmail.com>
- <20230524141152.GL4253@hirez.programming.kicks-ass.net>
- <e76c924a-762c-061d-02b8-13be884ab344@gmail.com>
- <c9399722-b2df-52ee-cefe-338b118aeb1e@infradead.org>
- <a5405368-d04c-f95c-ad18-95f429120dbe@gmail.com>
+        Tue, 30 May 2023 08:45:48 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2DBC5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:45:17 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-bad102ce9eeso5969820276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:45:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685450716; x=1688042716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=79R19rYlxuprBJRyr5z/YlA7zoEUwbCIoncrtvpWbd0=;
+        b=GR7hEh2u3m9oNv36D5Dzgayz9bGii0ew1XKwMOjvdDBDXdPtfey1hM/jCCCHd4yZ03
+         0fBnYKe1tqtjRBQeVT9YOB6MRADJIvVfeyCu+M62uvB3oqy3H8Y6Lt47MDNK+FXsAZ+o
+         4Fp6Vpl2iCoPuScZG++LVYhn4+E9R29d74IKtUdnh4bE3Rz4vXTXo3ahdX8BKdDu2EcT
+         IDc2oQZmI/ZzCmI4XZQHC/ukxIMC8cQ1EKnFwllVkhw7ns3z5YhlEY5h8MPTxUmZQxat
+         v+EQwOBQrfbUX3L/fifWsZg4j4BfZAbf/QZN+Pn4LABJokHJSmyEb/VcCr1AK/fptCQF
+         bSXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685450716; x=1688042716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=79R19rYlxuprBJRyr5z/YlA7zoEUwbCIoncrtvpWbd0=;
+        b=XEcHd63b7dD3NzDVh2UZTs3ToY5zbFlKgMq0XscDCVWCzO3+dFevHt0hfUJ2XUiont
+         Kq60vMhR17nQ+fd8FGiw6+NP10mkX2h+PkjgYGhn34bek5/mgbLlpY+s/EUfWBmrzgBm
+         F9bcztEHpaeYrZy1ZIhV8oI1fnH79MHUOmem8cemkMpFvzS71Qhz5Pb3sARaGs48V/iu
+         iVt8/M/u9ayqFHoMng+l8k1ooV1Fe+YNJa9yR2vxzuBlC2lYFhnOU73XIDV4mpTN6Mxd
+         G/GTuVmrPCdT4/aAW/IdL1XEc166FVDx6ctzzMfvROOzW64Ewf3i4xeH0SdpuaGq37P9
+         ogNA==
+X-Gm-Message-State: AC+VfDxsvUCVHMNUmxxNw2HjJ0cid+CSJD+JsSmqNLjEs2VeXcmB5LvZ
+        s9j90cH+dCcWSvAHSKneid49I3Kc05GC4TWEvQUijQ==
+X-Google-Smtp-Source: ACHHUZ5IF0zxpXfP+MK5/l8CKCW0KkcoXfJuyMyMb6GIoIrCyCjPNNuMb7I1dbl6KbQkfIeKFWhqVkrt/krStXPZs2U=
+X-Received: by 2002:a25:ad4f:0:b0:bac:f602:52c3 with SMTP id
+ l15-20020a25ad4f000000b00bacf60252c3mr2638406ybe.28.1685450716419; Tue, 30
+ May 2023 05:45:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a5405368-d04c-f95c-ad18-95f429120dbe@gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230529221446.87785-1-andriy.shevchenko@linux.intel.com> <20230529221446.87785-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230529221446.87785-2-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 30 May 2023 14:45:05 +0200
+Message-ID: <CACRpkda0Dak-jLLQhWZVx+5rCUbM8TtiBd==uJYXbTG9C4mcdg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] gpiolib: Kill unused GPIOF_OPEN_*
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-gpio@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Hu Haowen <src.res@email.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Akira,
+On Tue, May 30, 2023 at 12:14=E2=80=AFAM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-On Fri, May 26, 2023 at 07:27:56PM +0900, Akira Yokosawa wrote:
-> I think adding "~" to the substitution pattern added in [1] as follows
-> should do the trick (not well tested):
-> 
-> diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-> index 2486689ffc7b..eb70c1fd4e86 100755
-> --- a/scripts/kernel-doc
-> +++ b/scripts/kernel-doc
-> @@ -64,7 +64,7 @@ my $type_constant = '\b``([^\`]+)``\b';
->  my $type_constant2 = '\%([-_\w]+)';
->  my $type_func = '(\w+)\(\)';
->  my $type_param = '\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
-> -my $type_param_ref = '([\!]?)\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
-> +my $type_param_ref = '([\!~]?)\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
->  my $type_fp_param = '\@(\w+)\(\)';  # Special RST handling for func ptr params
->  my $type_fp_param2 = '\@(\w+->\S+)\(\)';  # Special RST handling for structs with func ptr params
->  my $type_env = '(\$\w+)';
+> There is no use of the GPIOF_OPEN_* in the kernel. Kill it for good.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Are you happy to send this as a patch?
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-I'd like to pick it into this series, so if you're happy to provide your
-Signed-off-by tag here, I'm happy to go write the commit message and so on.
-
-Thanks,
-Mark.
-
-> 
-> Thoughts?
-> 
->         Thanks, Akira
-> 
-> > 
-> > 
-> >> [1]: ee2aa7590398 ("scripts: kernel-doc: accept negation like !@var")
-> > 
-> > thanks.
+Yours,
+Linus Walleij
