@@ -2,188 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCC27161F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EDB37161F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232133AbjE3Nb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
+        id S229657AbjE3Nc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbjE3Nbx (ORCPT
+        with ESMTP id S230163AbjE3NcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:31:53 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE7AC7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:31:52 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f6a6b9c079so30742575e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:31:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685453511; x=1688045511;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O4TkSxjrXFcrtwILbeS9FwTTUMwJjznUHF2WZNJpwBU=;
-        b=KZxGd9Leab3vyVTua670SESofGfH/vNC8uJ9Ks4PZVINHELyk+1/3H7CokcsEJWai/
-         9Pk6jGg+MoBlyGzKk2cYHyzHY2usokRuZtaVj27zNrSF6d+LqEVqXFiksGqE7FQWj2Yk
-         7EImtBRAy/Gxp7F5BhhqJ4VgGrp5aiuIpJYqlm5R6eEhL8YEeAkR1WkloBdQMofcx4fB
-         euoMJhMNT+8KnCjB8gTzLxnm1JhlydhO7KOXi5Ij5vftg+PTRlTy/psHV2lr7TAq2Nd2
-         aLz8LxSVU/u4SNwRoCRnbz8R07xeDGKtW7dhVXQMo7Cqjn4bAks58xI5vZjWF456vqsk
-         7S3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685453511; x=1688045511;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O4TkSxjrXFcrtwILbeS9FwTTUMwJjznUHF2WZNJpwBU=;
-        b=MqRzoCy+2OEY3lGZZPXGWaH1OrQiBOd+JiFb7B+/3ACfvggQzGiSVeGFJdZ+56VXu+
-         mj6zHre9aZjhoWPwDciDLHJmghjTxQ8yjOt5z5bl88oaOisYQdYfIKq0bMCf2k/B6XPt
-         cvc89iE4/cVEtS1spVjQ5eOWo/JgjiNseD4ruNJWnVzXxsbxOAUw3OwIRm3r5Yi9+8ld
-         b4O8nge99TIuFCOQrHA8SBlLpJUuxaesiKBzN+sIohnM+1wcBAXebrigd9eWc0t0kbzW
-         gShMboAlp/5rOmsWMUK+C99b1A155rFOM9VG2j+lNKPqbVavAVcPTRhgaFdUcOEUkeCD
-         euDg==
-X-Gm-Message-State: AC+VfDw1Qw/rU0+Nfg2072EYfL1Bogik+mxwY4wZfTAM9uignYlQ4WST
-        9Qx+Ss+gdgSvhhzmClGyygEydQ==
-X-Google-Smtp-Source: ACHHUZ4S7Q0TZkKc2h+WlslbMqi6X7Va2BSFmmk0dtePu/I7yooYlXUSA/kGWkN7npTrb2BeQm95Lw==
-X-Received: by 2002:a1c:7206:0:b0:3f6:50e:315f with SMTP id n6-20020a1c7206000000b003f6050e315fmr1442827wmc.41.1685453510780;
-        Tue, 30 May 2023 06:31:50 -0700 (PDT)
-Received: from [192.168.0.84] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
-        by smtp.gmail.com with ESMTPSA id c21-20020a7bc855000000b003f1958eeadcsm20906694wml.17.2023.05.30.06.31.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 06:31:50 -0700 (PDT)
-Message-ID: <44ec7cce-cd7d-27a3-149b-49fda6308777@linaro.org>
-Date:   Tue, 30 May 2023 14:31:49 +0100
+        Tue, 30 May 2023 09:32:24 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64225A1;
+        Tue, 30 May 2023 06:32:23 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34UDW1CU010504;
+        Tue, 30 May 2023 08:32:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1685453521;
+        bh=TVuo4D7cz4/tEVfuFzYLxXwg0NBeCVTRyOotng1WRcs=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=SaIiBja+wsle1bsWMjGbHRz9yQalDYwsCqXj/8iXi4GH26M13G6np3C79uhB1z7fH
+         8aKOJoZxnNtpJDtnqFE6X2Yh6VYvIXFc0Q0TItAVyAsfAthDA+mcVT1VoqULm+vpWk
+         11Bl7CsVkx129Z3NkzeaOrW8BAe2bzXoysczXnig=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34UDW17I063353
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 30 May 2023 08:32:01 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 30
+ May 2023 08:32:01 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 30 May 2023 08:32:01 -0500
+Received: from [10.249.142.56] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34UDVvu7012242;
+        Tue, 30 May 2023 08:31:58 -0500
+Message-ID: <ae30ee49-6cd2-c80f-28fb-9538e8932010@ti.com>
+Date:   Tue, 30 May 2023 19:01:57 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 1/2] misc: fastrpc: support complete DMA pool access to
- the DSP
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1 3/5] arm64: dts: ti: add verdin am62
+To:     Nishanth Menon <nm@ti.com>,
+        Francesco Dolcini <francesco@dolcini.it>
+CC:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230524143631.42471-1-francesco@dolcini.it>
+ <20230524143631.42471-4-francesco@dolcini.it>
+ <20230530121044.sjhv452b4hs4lyiy@flyer>
 Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dylan Van Assche <me@dylanvanassche.be>,
-        amahesh@qti.qualcomm.com, arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        dan.carpenter@linaro.org, Ekansh Gupta <quic_ekangupt@quicinc.com>
-References: <20230511141146.30465-1-me@dylanvanassche.be>
- <20230511141146.30465-2-me@dylanvanassche.be>
- <e0365591-0f03-ab3d-61b4-c016541f2157@linaro.org>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <e0365591-0f03-ab3d-61b4-c016541f2157@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   "Raghavendra, Vignesh" <vigneshr@ti.com>
+In-Reply-To: <20230530121044.sjhv452b4hs4lyiy@flyer>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi
 
-
-On 30/05/2023 11:52, Srinivas Kandagatla wrote:
-> On 11/05/2023 15:11, Dylan Van Assche wrote:
->> To support FastRPC Context Banks which aren't mapped via the SMMU,
->> make the whole reserved memory region available to the DSP to allow
->> access to coherent buffers.
+On 5/30/2023 5:40 PM, Nishanth Menon wrote:
+> On 16:36-20230524, Francesco Dolcini wrote:
+> [...]
+>> diff --git a/arch/arm64/boot/dts/ti/k3-am62-verdin-dev.dtsi b/arch/arm64/boot/dts/ti/k3-am62-verdin-dev.dtsi
+>> new file mode 100644
+>> index 000000000000..e138b1c8ed14
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/ti/k3-am62-verdin-dev.dtsi
+>> @@ -0,0 +1,233 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+>> +/*
+>> + * Copyright 2023 Toradex
 > 
-> Mapping the whole region sounds very inefficient, and also possibly
-> making the cma region not usable by others.
-
-Probably I'm missing something obvious here... The downstream driver
-maps the whole region, what are the advantages to doing it on a
-per-allocation basis?
-
-What are the other users?
+> Please also add appropriate product links to dts/dtsi
 > 
->>
-> 
-> AFAIU SDM845 does not have any context banks for SDSP. All new SoCs
-> after 865 have moved to having a context bank.
-> 
-> For such cases (w/o cb) we can make fastrpc_session_alloc use channel
-> context device instead of session ctx device. As this is going to be an
-> issue when we try to allocate buffers dynamically for that cb.
-
-Right.. This is what patch 2 does, but presumably the ALLOC_DMA_BUF,
-MMAP, etc ioctls won't work with the current iteration?
-
-> 
-> In the newer platforms (from 865) there is support for iommu and context
-> banks on SDSP, so the existing code flow is identical for both ADSP and
-> SDSP.
-> 
-> 
-> We should be careful not to break newer platfroms while adding support
-> to this.
-> 
-> Both myself and Ekansh thought about this and see that the better way to
-> add support to this is by
-> 
-> 1. extend fastrpc_session_alloc() to support zero context banks.
-> 
-> 2. add flags to mark this and allocate meta data using secure allocation
-> when its required based on this flag.
-> 
-> 3.  buffer allocation can either go with 2 or with a new flag coming
-> from userspace.
-
-This sounds pretty good to me!
-> 
-> 
-> 
->> This is performed by assigning the memory to the DSP via a hypervisor
->> call to set the correct permissions for the Virtual Machines on the DSP.
->> This is only necessary when a memory region is provided for SLPI DSPs
->> so guard this with a domain ID check.
->>
->> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
->> Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
->> ---
->>   drivers/misc/fastrpc.c | 15 +++++++++++++++
->>   1 file changed, 15 insertions(+)
->>
->> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
->> index f48466960f1b..1ced553ae959 100644
->> --- a/drivers/misc/fastrpc.c
->> +++ b/drivers/misc/fastrpc.c
->> @@ -2231,6 +2231,8 @@ static int fastrpc_rpmsg_probe(struct
->> rpmsg_device *rpdev)
->>       int i, err, domain_id = -1, vmcount;
->>       const char *domain;
->>       bool secure_dsp;
->> +    struct device_node *rmem_node;
->> +    struct reserved_mem *rmem;
->>       unsigned int vmids[FASTRPC_MAX_VMIDS];
->>         err = of_property_read_string(rdev->of_node, "label", &domain);
->> @@ -2274,6 +2276,19 @@ static int fastrpc_rpmsg_probe(struct
->> rpmsg_device *rpdev)
->>           }
->>       }
->>   +    rmem_node = of_parse_phandle(rdev->of_node, "memory-region", 0);
->> +    if (domain_id == SDSP_DOMAIN_ID && rmem_node) {
->> +        rmem = of_reserved_mem_lookup(rmem_node);
->> +        if (!rmem) {
->> +            err = -EINVAL;
->> +            goto fdev_error;
->> +        }
+>> + */
 >> +
->> +        qcom_scm_assign_mem(rmem->base, rmem->size, &data->perms,
->> +                    data->vmperms, data->vmcount);
-> 
-> vmperms need to be a bit field.
-> 
+>> +/ {
+>> +	sound_card: sound-card {
+>> +		compatible = "simple-audio-card";
+>> +		simple-audio-card,bitclock-master = <&dailink_master>;
+>> +		simple-audio-card,format = "i2s";
+>> +		simple-audio-card,frame-master = <&dailink_master>;
+>> +		simple-audio-card,name = "verdin-nau8822";
+>> +		simple-audio-card,routing =
+>> +			"Headphones", "LHP",
+>> +			"Headphones", "RHP",
+>> +			"Speaker", "LSPK",
+>> +			"Speaker", "RSPK",
+>> +			"Line Out", "AUXOUT1",
+>> +			"Line Out", "AUXOUT2",
+>> +			"LAUX", "Line In",
+>> +			"RAUX", "Line In",
+>> +			"LMICP", "Mic In",
+>> +			"RMICP", "Mic In";
+>> +		simple-audio-card,widgets =
+>> +			"Headphones", "Headphones",
+>> +			"Line Out", "Line Out",
+>> +			"Speaker", "Speaker",
+>> +			"Microphone", "Mic In",
+>> +			"Line", "Line In";
 >> +
->> +    }
+>> +		dailink_master: simple-audio-card,codec {
+>> +			clocks = <&k3_clks 157 10>;
+>> +			sound-dai = <&nau8822_1a>;
+>> +		};
 >> +
->>       secure_dsp = !(of_property_read_bool(rdev->of_node,
->> "qcom,non-secure-domain"));
->>       data->secure = secure_dsp;
->>   
+>> +		simple-audio-card,cpu {
+>> +			sound-dai = <&mcasp0>;
+>> +		};
+>> +	};
+>> +};
+>> +
+>> +/* Verdin ETHs */
+>> +&cpsw3g {
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_rgmii1 &pinctrl_rgmii2>;
 > 
-> --srini
+> here and elsewhere:
+> pinctrl-0 = <&pinctrl_rgmii1>, <&pinctrl_rgmii2>;
+> 
+> 
+>> +	status = "okay";
+>> +};
+> [...]
+>> +	/* EEPROM */
+>> +	eeprom@57 {
+>> +		compatible = "st,24c02", "atmel,24c02";
+> 
+> checkpatch warns: DT compatible string "st,24c02" appears un-documented
+> 
 
--- 
-// Caleb (they/them)
+Checkpatch now seems outdated in favor of dtbs_check. DT schemas use
+regex for compatibles and thus simple grep in
+Doucmentation/devicetree-bindings/ doesn't help. Eg: In this case:
+
+Documentation/devicetree/bindings/eeprom/at24.yaml has the regex to
+cover the compatibles
+
+>> +		reg = <0x57>;
+>> +		pagesize = <16>;
+>> +	};
+>> +};
+>> +
+>> +/* Verdin I2C_2_DSI */
+>> +&main_i2c2 {
+>> +	status = "okay";
+> 
+> Here and few other dtsis:
+> you should set status along with pinmux.
+> 
+> [...]
+>> +
+>> +/* Verdin UART_2 */
+>> +&wkup_uart0 {
+>> +	/* FIXME: WKUP UART0 is used by DM firmware */
+>> +	status = "reserved";
+> 
+> If you do configure this in R5 SPL, you'd want to add the pinmux as
+> well.
+> 
+>> +};
+>> diff --git a/arch/arm64/boot/dts/ti/k3-am62-verdin-wifi.dtsi b/arch/arm64/boot/dts/ti/k3-am62-verdin-wifi.dtsi
+>> new file mode 100644
+>> index 000000000000..289db1666fc0
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/ti/k3-am62-verdin-wifi.dtsi
+>> @@ -0,0 +1,36 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+>> +/*
+>> + * Copyright 2023 Toradex
+>> + */
+>> +
+>> +/ {
+>> +	wifi_pwrseq: wifi-pwrseq {
+>> +		compatible = "mmc-pwrseq-simple";
+>> +		pinctrl-names = "default";
+>> +		pinctrl-0 = <&pinctrl_wifi_en>;
+>> +		reset-gpios = <&main_gpio0 22 GPIO_ACTIVE_LOW>;
+>> +	};
+>> +};
+>> +
+>> +
+> 
+> Drop extra EoLs.
+> 
+> [...]
+> 
+>> diff --git a/arch/arm64/boot/dts/ti/k3-am62-verdin.dtsi b/arch/arm64/boot/dts/ti/k3-am62-verdin.dtsi
+>> new file mode 100644
+>> index 000000000000..2e7cb607df45
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/ti/k3-am62-verdin.dtsi
+>> @@ -0,0 +1,1400 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> 
+> Assuming you really intent this instead of purely GPL-2.0
+> 
+> [...]
+> 
+>> +/* MDIO, shared by Verdin ETH_1 (On-module PHY) and Verdin ETH_2_RGMII */
+>> +&cpsw3g_mdio {
+>> +	assigned-clocks = <&k3_clks 157 20>;
+>> +	assigned-clock-parents = <&k3_clks 157 22>;
+>> +	assigned-clock-rates = <25000000>;
+>> +	pinctrl-names = "default";
+>> +	pinctrl-0 = <&pinctrl_eth_clock &pinctrl_mdio>;
+>> +	status = "disabled";
+>> +
+>> +	cpsw3g_phy0: ethernet-phy@0 {
+>> +		compatible = "ethernet-phy-id2000.a231";
+> 
+> Check binding - we don't include any compatibles that dont have yaml
+> conversion done (pinctrl is the only exception).
+
+Same here ;)
+Documentation/devicetree/bindings/net/ethernet-phy.yaml covers it
+
+> 
+> [...]
+> 
+>> +/* TODO: Verdin DSI_1 / TIDSS */
+> Drop the TODO.
+> 
+> [...]
+> 
