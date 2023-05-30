@@ -2,178 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEDB7162CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E537162D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232521AbjE3N6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
+        id S232593AbjE3N6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232519AbjE3N6h (ORCPT
+        with ESMTP id S232519AbjE3N6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:58:37 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AB7E8;
-        Tue, 30 May 2023 06:58:35 -0700 (PDT)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UDoD6H003097;
-        Tue, 30 May 2023 13:58:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : date : in-reply-to : references : content-type : mime-version
- : content-transfer-encoding; s=pp1;
- bh=rGG+oPY9bJ/m4dGb9PBIheOdj6gCxk4udPGdzcR3ybo=;
- b=n/LHYIO0XGq73K7CtORMpKU0h3jRSmWo5J/qEOAGWW0yTWwn9xPAuu+L30Jk52ax4ALQ
- XFIVh+kD9FovsJs4TIDhVPxiVszDugPPIYZkU44GBjrzeWFAIPO6gKWwSuMtJJ6MQScH
- 5SdCWYhWeBCmv7QiFXFTqlXFX+APhONqFblBVkG3lUcvh5fr7dnrDeYOsGhjIxXocCfD
- tYt2K8EIH7dpwxgAMpVT5TNZN0+17Ci9E7b+Df+3A9/KPIWoZm3f+9B2lf+gqZajM1WN
- pYVco/9p/ennDh6kAle4wqXSzM8Np/gNWyZN/E9zYLwuWJ9CYLpsPFvEyJkFOtgnGrXi cw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwhy1s08u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 13:58:24 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34UDtBPI022792;
-        Tue, 30 May 2023 13:58:24 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwhy1s08h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 13:58:24 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34UDPKXH009542;
-        Tue, 30 May 2023 13:58:23 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3qu9g5q3ps-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 13:58:23 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34UDwMjY4391596
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 May 2023 13:58:22 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE63758054;
-        Tue, 30 May 2023 13:58:21 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D83B358056;
-        Tue, 30 May 2023 13:58:20 +0000 (GMT)
-Received: from wecm-9-67-184-149.wecm.ibm.com (unknown [9.67.184.149])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 30 May 2023 13:58:20 +0000 (GMT)
-Message-ID: <01739d83cf13c83e0545c6d0d661ebea5ac39b6c.camel@linux.ibm.com>
-Subject: Re: [PATCH] integrity: Fix possible multiple allocation in
- integrity_inode_get()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 30 May 2023 09:58:20 -0400
-In-Reply-To: <20230530121453.10249-1-tianjia.zhang@linux.alibaba.com>
-References: <20230530121453.10249-1-tianjia.zhang@linux.alibaba.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: kdruNtFI7USR8EuFpGKSawc3EYq4bV4I
-X-Proofpoint-GUID: zX7zzHrxDgEGeSW-YJV5F9FnqIj723W3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_10,2023-05-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 mlxlogscore=458 impostorscore=0 malwarescore=0
- phishscore=0 mlxscore=0 clxscore=1015 suspectscore=0 bulkscore=0
- lowpriorityscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305300110
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 30 May 2023 09:58:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4F7103;
+        Tue, 30 May 2023 06:58:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64582622B2;
+        Tue, 30 May 2023 13:58:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8179C433EF;
+        Tue, 30 May 2023 13:58:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685455127;
+        bh=hcaXRRGzPBhBBLpEW0isVOB3DKBAASE/ESHMgHvcgQE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WiHDyUv0qet+LrK4Zo5p1pc0ctSRdXlGbGZ8tl02Vx1vVgIRAhB0H5UMaqqDHCAjZ
+         XQjzg7jCBTWXmvjejDMJipaWrKARky609Yw4j6YSdroUBzfV6QT0wSj8m6CaH3tf0a
+         g4ThSKzN/ETU2CeP8TDgy1vX+fJrEgQ9qrU3Cu+nWH+h4goHpMT99clf4C9yvIzoAB
+         u6Ie6MA2SMi94iAxjNCCjqDTP+kXpP/GK97lw9niukWZB/T5wC/9lm8/PN4UXluqrd
+         /1sYc6xTyVRqd7BZWVLzTIgi3XyklcdR9AufeJU8WFw8ZcapWsg4DCuEgpAdU784dC
+         miq8usuqEjdFQ==
+Date:   Tue, 30 May 2023 15:58:35 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+Cc:     Xiu Jianfeng <xiujianfeng@huawei.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, viro@zeniv.linux.org.uk, dhowells@redhat.com,
+        code@tyhicks.com, hirofumi@mail.parknet.co.jp,
+        linkinjeon@kernel.org, sfrench@samba.org, senozhatsky@chromium.org,
+        tom@talpey.com, chuck.lever@oracle.com, jlayton@kernel.org,
+        miklos@szeredi.hu, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com, dchinner@redhat.com,
+        john.johansen@canonical.com, mcgrof@kernel.org,
+        mortonm@chromium.org, fred@cloudflare.com, mpe@ellerman.id.au,
+        nathanl@linux.ibm.com, gnoack3000@gmail.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-cachefs@redhat.com,
+        ecryptfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        wangweiyang2@huawei.com, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH -next 0/2] lsm: Change inode_setattr() to take struct
+Message-ID: <20230530-mietfrei-zynisch-8b63a8566f66@brauner>
+References: <20230505081200.254449-1-xiujianfeng@huawei.com>
+ <20230515-nutzen-umgekehrt-eee629a0101e@brauner>
+ <75b4746d-d41e-7c9f-4bb0-42a46bda7f17@digikod.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <75b4746d-d41e-7c9f-4bb0-42a46bda7f17@digikod.net>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tianjia,
-
-On Tue, 2023-05-30 at 20:14 +0800, Tianjia Zhang wrote:
-> When integrity_inode_get() is querying and inserting the cache, there
-> is a conditional race in the concurrent environment.
+On Fri, May 26, 2023 at 06:33:05PM +0200, Mickaël Salaün wrote:
 > 
-> Query iint within the read-lock. If there is no result, allocate iint
-> first and insert the iint cache in the write-lock protection. When the
-> iint cache does not exist, and when multiple execution streams come at
-> the same time, there will be a race condition, and multiple copies of
-> iint will be allocated at the same time, and then put into the cache
-> one by one under the write-lock protection.
-
-Right, the race condition is the result of not properly implementing
-"double-checked locking".  In this case, it first checks to see if the
-iint cache record exists before taking the lock, but doesn't check
-again after taking the integrity_iint_lock.
-
+> On 15/05/2023 17:12, Christian Brauner wrote:
+> > On Fri, May 05, 2023 at 04:11:58PM +0800, Xiu Jianfeng wrote:
+> > > Hi,
+> > > 
+> > > I am working on adding xattr/attr support for landlock [1], so we can
+> > > control fs accesses such as chmod, chown, uptimes, setxattr, etc.. inside
+> > > landlock sandbox. the LSM hooks as following are invoved:
+> > > 1.inode_setattr
+> > > 2.inode_setxattr
+> > > 3.inode_removexattr
+> > > 4.inode_set_acl
+> > > 5.inode_remove_acl
+> > > which are controlled by LANDLOCK_ACCESS_FS_WRITE_METADATA.
+> > > 
+> > > and
+> > > 1.inode_getattr
+> > > 2.inode_get_acl
+> > > 3.inode_getxattr
+> > > 4.inode_listxattr
+> > > which are controlled by LANDLOCK_ACCESS_FS_READ_METADATA
+> > 
+> > It would be helpful to get the complete, full picture.
+> > 
+> > Piecemeal extending vfs helpers with struct path arguments is costly,
+> > will cause a lot of churn and will require a lot of review time from us.
+> > 
+> > Please give us the list of all security hooks to which you want to pass
+> > a struct path (if there are more to come apart from the ones listed
+> > here). Then please follow all callchains and identify the vfs helpers
+> > that would need to be updated. Then please figure out where those
+> > vfs helpers are called from and follow all callchains finding all
+> > inode_operations that would have to be updated and passed a struct path
+> > argument. So ultimately we'll end up with a list of vfs helpers and
+> > inode_operations that would have to be changed.
+> > 
+> > I'm very reluctant to see anything merged without knowing _exactly_ what
+> > you're getting us into.
 > 
-> This is mainly because the red-black tree insertion does not perform
-> duplicate detection. This is not the desired result, when this
-> happens, the repeated allocation should be freed and the existing
-> iint cache should be returned.
+> Ultimately we'd like the path-based LSMs to reach parity with the
+> inode-based LSMs. This proposal's goal is to provide users the ability to
+> control (in a complete and easy way) file metadata access. For these we need
+> to extend the inode_*attr hooks and inode_*acl hooks to handle paths. The
+> chown/chmod hooks are already good.
 > 
-> Fixes: bf2276d10ce5 ("ima: allocating iint improvements")
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-> Cc: <stable@vger.kernel.org> # v3.10+
-> ---
->  security/integrity/iint.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
+> In the future, I'd also like to be able to control directory traversals
+> (e.g. chdir), which currently only calls inode_permission().
 > 
-> diff --git a/security/integrity/iint.c b/security/integrity/iint.c
-> index c73858e8c6d5..d49c843a88ee 100644
-> --- a/security/integrity/iint.c
-> +++ b/security/integrity/iint.c
-> @@ -43,12 +43,10 @@ static struct integrity_iint_cache *__integrity_iint_find(struct inode *inode)
->  		else if (inode > iint->inode)
->  			n = n->rb_right;
->  		else
-> -			break;
-> +			return iint;
->  	}
-> -	if (!n)
-> -		return NULL;
->  
-> -	return iint;
-> +	return NULL;
->  }
->  
->  /*
-> @@ -115,8 +113,13 @@ struct integrity_iint_cache *integrity_inode_get(struct inode *inode)
->  				     rb_node);
->  		if (inode < test_iint->inode)
->  			p = &(*p)->rb_left;
-> -		else
-> +		else if (inode > test_iint->inode)
->  			p = &(*p)->rb_right;
-> +		else {
-> +			write_unlock(&integrity_iint_lock);
-> +			kmem_cache_free(iint_cache, iint);
-> +			return test_iint;
-> +		}
->  	}
->  
->  	iint->inode = inode;
+> What would be the best way to reach this goal?
 
-scripts/checkpatch.pl with the -strict option complains:
+The main concern which was expressed on other patchsets before is that
+modifying inode operations to take struct path is not the way to go.
+Passing struct path into individual filesystems is a clear layering
+violation for most inode operations, sometimes downright not feasible,
+and in general exposing struct vfsmount to filesystems is a hard no. At
+least as far as I'm concerned.
 
-CHECK: Unbalanced braces around else statement
-#56: FILE: security/integrity/iint.c:118:
-+		else {
+So the best way to achieve the landlock goal might be to add new hooks
+in cases where you would be required to modify inode operations
+otherwise. Taking the chdir() case as an example. That calls
+path_permission(). Since inode_permission() and generic_permission() are
+called in a lot of places where not even a dentry might be readily
+available we will not extend them to take a struct path argument. This
+would also involve extending the inode ->permission() method which is a
+no go. That's neither feasible and would involve modifying a good chunk
+of code for the sole purpose of an LSM.
 
-total: 0 errors, 0 warnings, 1 checks, 28 lines checked
+So in path_permission() you might have the potential to add an LSM hook.
+Or if you need to know what syscall this was called for you might have
+to add a hook into chdir() itself. That is still unpleasant but since
+the alternative to adding new LSM hooks might be endless layering
+violations that's a compromise that at least I can live with. Ultimately
+you have to convince more people.
 
--- 
-thanks,
+Some concerns around passing struct path to LSM hooks in general that I
+would like to just point out and ask you to keep in mind: As soon as
+there's an LSM hook that takes a path argument it means all LSMs have
+access to a struct path. At that point visibility into what's been done
+to that struct path is lost for the fs layer.
 
-Mimi
+One the one hand that's fine on the other hand sooner or later some LSM
+will try to get creative and do things like starting to infer
+relationships between mounts without understanding mount property and
+mount handling enough, or start trying to infer the parent of a path and
+perform permission checks on it in ways that aren't sane. And that sucks
+because this only becomes obvious when fs wide changes are done that
+affect LSM hooks as well.
 
+And that's the other thing. The more objects the LSM layer gets access
+to the greater the cost to do fs wide changes because the fs layer is
+now even closer entangled with the LSM layer. For example, even simple
+things like removing IOP_XATTR - even just for POSIX ACLs - suddenly
+become complicated not because of the fs layer but because of how the
+LSM layer makes use of it. It might start relying on internal flags that
+would be revoked later and so on. That also goes for struct vfsmount. So
+it means going through every LSM trying to figure out if a change is ok
+or not. And we keep adding new LSMs without deprecating older ones (A
+problem we also face in the fs layer.) and then they sit around but
+still need to be taken into account when doing changes.
