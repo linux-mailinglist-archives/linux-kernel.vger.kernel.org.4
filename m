@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85E0716717
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E442716719
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjE3Paz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
+        id S230486AbjE3Pbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjE3Pax (ORCPT
+        with ESMTP id S229630AbjE3Pba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:30:53 -0400
-Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93794C7;
-        Tue, 30 May 2023 08:30:51 -0700 (PDT)
-Received: from [192.168.178.25] (host-212-18-30-247.customer.m-online.net [212.18.30.247])
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by mail.tuxedocomputers.com (Postfix) with ESMTPSA id 877E82FC0073;
-        Tue, 30 May 2023 17:30:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
-        s=default; t=1685460649;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NAekkNJ91ucrLIslysTWlQCuNuST6srDBKEWW2bK6Mo=;
-        b=qEZDK44NVdqpg1+rzrDXlcwupOzeJedAwpZi32dVcZJ5L59k3L3Y6S/zSjvarosO+wFE6X
-        vETY2DoX/0G447KKZvmfO//RCgDCceb6LPWHp+p3KX18hgTsGUr5DENv8/Bh+h0Yk2Y/Gy
-        mYNDl5uPl5OALX7rYL4hxcfgU35xotw=
-Authentication-Results: mail.tuxedocomputers.com;
-        auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
-Message-ID: <fe88e20b-d192-4c35-5e54-53027b36797e@tuxedocomputers.com>
-Date:   Tue, 30 May 2023 17:30:48 +0200
+        Tue, 30 May 2023 11:31:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0895DBE
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:31:29 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q41Jd-0001Dl-UW; Tue, 30 May 2023 17:31:17 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q41Jc-003uHn-V1; Tue, 30 May 2023 17:31:16 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q41Jc-009Xg1-2o; Tue, 30 May 2023 17:31:16 +0200
+Date:   Tue, 30 May 2023 17:31:15 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clocksource/drivers/imx-gpt: Use only a single name for
+ functions
+Message-ID: <20230530153115.fpjgg6ubqjrbn73r@pengutronix.de>
+References: <20230328091514.874724-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] input: Add new keyboard backlight control keys to match
- modern notebooks
-Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Bastien Nocera <hadess@hadess.net>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230530110550.18289-1-wse@tuxedocomputers.com>
-From:   Werner Sembach <wse@tuxedocomputers.com>
-In-Reply-To: <20230530110550.18289-1-wse@tuxedocomputers.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SCC_BODY_URI_ONLY,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="45ksup5wl6ujl7av"
+Content-Disposition: inline
+In-Reply-To: <20230328091514.874724-1-u.kleine-koenig@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 30.05.23 um 13:05 schrieb Werner Sembach:
-> The old three KEY_KBDILLUM* keycodes don't reflect the current situation
-> modern notebooks anymore. Especially the ones with RGB keyboards.
->
-> e.g.
-> - Clevo NL50NU has a toggle, an up, a down and a color-cycle key
-> - TongFang PH4ARX1 doesn't have a toggle key, but one that cycles through
->    off, half-brightness, and full-brightness.
->
-> Also, on some devices these keys are already implemented in firmware. It
-> would still be nice if there is a way to let userspace know when one of
-> these keys is pressed to display the OSD, but don't advice it to actually
-> do anything. This is the intended purpose of the KEY_KBDILLUMCHANGE define.
-Nevermind the KEY_KBDILLUMCHANGE. I just found out there is already a way to 
-communicate this from kernel to userspace via sysfs 
-https://docs.kernel.org/leds/leds-class.html#led-registration-api -> 
-brightness_hw_changed
->
-> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-> ---
->   include/uapi/linux/input-event-codes.h | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
-> index 022a520e31fc2..05287bf9a77f7 100644
-> --- a/include/uapi/linux/input-event-codes.h
-> +++ b/include/uapi/linux/input-event-codes.h
-> @@ -803,6 +803,10 @@
->   #define BTN_TRIGGER_HAPPY39		0x2e6
->   #define BTN_TRIGGER_HAPPY40		0x2e7
->   
-> +#define KEY_KBDILLUMCYCLE		0x2e8
-> +#define KEY_KBDILLUMCOLORCYCLE		0x2e9
-> +#define KEY_KBDILLUMCHANGE		0x2ea
-> +
->   /* We avoid low common keys in module aliases so they don't get huge. */
->   #define KEY_MIN_INTERESTING	KEY_MUTE
->   #define KEY_MAX			0x2ff
+
+--45ksup5wl6ujl7av
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Helo Daniel,
+
+On Tue, Mar 28, 2023 at 11:15:14AM +0200, Uwe Kleine-K=F6nig wrote:
+> When looking at the data structs defining the different behaviours of
+> the GPT blocks in different SoCs it's not helpful that the same
+> functions are used with different names.
+>=20
+> So drop the cpp defines and use the original names.
+>=20
+> This commit was generated using:
+>=20
+> 	perl -i -e 'my %m; while (<>) { if (/^#define (imx[a-zA-Z0-6_]*)\s(imx[a=
+-zA-Z0-6_]*)/) {$m{$1} =3D $2; } else { foreach my $f (keys %m) {s/$f/$m{$f=
+}/; } print; } }' drivers/clocksource/timer-imx-gpt.c
+>=20
+> This patch has no effect on the generated code.
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+This patch was generated against v6.3-rc1. On the upside it still
+applies fine to v6.4-rc1 and even current next/master. On the downside I
+didn't get any feedback on it. Is this patch still on your radar?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--45ksup5wl6ujl7av
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmR2FsMACgkQj4D7WH0S
+/k7tDgf+Ps4cKXwCQQ104nlF6rNbXfTYDedYM2GQlYd5awgX6F5ZpHBswAhZsSER
+lzyAkAsTJyEY8IoUBFO9X8q+85itCr59Qz+1kHW6AVuf81T7R0QWAiXBHN+Xiu8Q
+6rRgvyPjpvSN9MSxW/1uzOzBztjiLltksqfHr6DOgIn1Z2mEstIEPjlsS+wzv71m
+28k4Byldr04qPkNeO7a3KiMOSUKzth6mGJZMmSjoJnYCBUIEuAupKs/95UgGw+4H
+BMpjZhSzH2RTMK0MOmz9O2HHS1uw0idx/QxOuZM+AXouDYey9oSFP15V1vbCF7BZ
+kzxcntMpvAADrevB0n1Uq68ufem4xA==
+=5Mdu
+-----END PGP SIGNATURE-----
+
+--45ksup5wl6ujl7av--
