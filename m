@@ -2,172 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A94F8716CF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE540716B2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233228AbjE3TAR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 30 May 2023 15:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
+        id S232565AbjE3Rc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 13:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233036AbjE3TAL (ORCPT
+        with ESMTP id S230521AbjE3RcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 15:00:11 -0400
-Received: from mail-b.sr.ht (mail-b.sr.ht [173.195.146.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FB2107
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:00:02 -0700 (PDT)
-Authentication-Results: mail-b.sr.ht; dkim=none 
-Received: from git.sr.ht (unknown [173.195.146.142])
-        by mail-b.sr.ht (Postfix) with ESMTPSA id 8CE6311F060;
-        Tue, 30 May 2023 18:50:50 +0000 (UTC)
-From:   ~akihirosuda <akihirosuda@git.sr.ht>
-Date:   Wed, 31 May 2023 02:31:11 +0900
-Subject: [PATCH linux 2/3] group_range: allow GID from 2147483648 to 4294967294
-Message-ID: <168547265011.24337.4306067683997517082-2@git.sr.ht>
-X-Mailer: git.sr.ht
-Reply-to: ~akihirosuda <suda.kyoto@gmail.com>
-In-Reply-To: <168547265011.24337.4306067683997517082-0@git.sr.ht>
-To:     linux-kernel@vger.kernel.org, containers@lists.linux.dev,
-        serge@hallyn.com, brauner@kernel.org, paul@paul-moore.com,
-        ebiederm@xmission.com
-Cc:     suda.kyoto@gmail.com, akihiro.suda.cz@hco.ntt.co.jp
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_REPLYTO,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Tue, 30 May 2023 13:32:24 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720B9F3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:31:52 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-53f2128ab1bso2602593a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:31:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685467912; x=1688059912;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5dIo9ozu/tftAp1UmpoAUrczqs99lWKXi5qA1UpHNYE=;
+        b=fcMt7E9oftWvnXylT0q0LSi2ovxYU6GROaZO/YpP+hWVROA5CGkN858ssUM/OEUsq+
+         cy2yKP5XxthrBWOhhRWmnMfaInbcFln+rmGuOYxtdLasZqdrf9i2ZKdgt/TEdCrBBjG7
+         ZT9ootqRsxe/NChBz/85WsRSsuU1KSVsGHKC2qIH/mmVq1mmccPpcHFqUeIQGRkih0S3
+         aGvDJJEkz3g8ZQ99QNMUDAP/dYZioxFkRygbUSwiPYm9+GJu5Jyv2dh2A01JO3qxQH41
+         6ykaek6RLxvtQMhW8/hOelD76pSAAtY75YP51exJDFZC+VMuMAXLJkFisg7dDXEPnO0i
+         fv+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685467912; x=1688059912;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5dIo9ozu/tftAp1UmpoAUrczqs99lWKXi5qA1UpHNYE=;
+        b=LZIvJkdKg961yf/kg7P4xggAeXeOwwqdQX53giZ6UpaZrID2Hndn90DukJbliq/GSO
+         rTlt+g6BVJMTYi7NZ0ITeqm0hkYPPPDcmPC5bKNhwmmR+uThUt2sC76hMzTXdEcNPFsJ
+         0ZfY/LtYlgurGhDQnZYZPrZSMG3JZcLoafLYJqZSzTnIcx5YWTM3XWpP7Vk9erzrxMJN
+         UW4n9gov8Z18CK3J27kp5348TMeh8rFw68ZrDAil5TuX2hIOQCqxn42lPjy7wW3Ih7OB
+         k0ElqyiACASSaO2P6GmRJ5tgw2rUvBWXThubyusqLRubHYhQdr9oiYA46xaNtKW3YYUT
+         DSoQ==
+X-Gm-Message-State: AC+VfDygx0cKW6yVQlofaYF/rWdMWmmYxJc6WiOpE/Ba2sxY18o48w33
+        o9uzAJ6UR+MNnC6cldQnKvY5JjZtJBI=
+X-Google-Smtp-Source: ACHHUZ5mA8belaIiWlXNNvjxlntxz+3HEXuwwih113OoUIVv+U+qOnHhtSEzZI4lNu6RqPJOqokzHLfKYhE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:510:0:b0:52c:9996:c1f8 with SMTP id
+ 16-20020a630510000000b0052c9996c1f8mr555070pgf.10.1685467911952; Tue, 30 May
+ 2023 10:31:51 -0700 (PDT)
+Date:   Tue, 30 May 2023 10:31:50 -0700
+In-Reply-To: <20230530170210.ujkv737uyjfvdoay@box.shutemov.name>
+Mime-Version: 1.0
+References: <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
+ <87bki3kkfi.ffs@tglx> <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
+ <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name> <87mt1mjhk3.ffs@tglx>
+ <87jzwqjeey.ffs@tglx> <87cz2ija1e.ffs@tglx> <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name>
+ <87wn0pizbl.ffs@tglx> <20230530170210.ujkv737uyjfvdoay@box.shutemov.name>
+Message-ID: <ZHYzBrLfT6DIKBw4@google.com>
+Subject: Re: [patch] x86/smpboot: Disable parallel bootup if cc_vendor != NONE
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+On Tue, May 30, 2023, Kirill A. Shutemov wrote:
+> On Tue, May 30, 2023 at 06:00:46PM +0200, Thomas Gleixner wrote:
+> > On Tue, May 30 2023 at 15:29, Kirill A. Shutemov wrote:
+> > > On Tue, May 30, 2023 at 02:09:17PM +0200, Thomas Gleixner wrote:
+> > >> The decision to allow parallel bringup of secondary CPUs checks
+> > >> CC_ATTR_GUEST_STATE_ENCRYPT to detect encrypted guests. Those cannot use
+> > >> parallel bootup because accessing the local APIC is intercepted and raises
+> > >> a #VC or #VE, which cannot be handled at that point.
+> > >> 
+> > >> The check works correctly, but only for AMD encrypted guests. TDX does not
+> > >> set that flag.
+> > >> 
+> > >> Check for cc_vendor != CC_VENDOR_NONE instead. That might be overbroad, but
+> > >> definitely works for both AMD and Intel.
+> > >
+> > > It boots fine with TDX, but I think it is wrong. cc_get_vendor() will
+> > > report CC_VENDOR_AMD even on bare metal if SME is enabled. I don't think
+> > > we want it.
+> > 
+> > Right. Did not think about that.
+> > 
+> > But the same way is CC_ATTR_GUEST_MEM_ENCRYPT overbroad for AMD. Only
+> > SEV-ES traps RDMSR if I'm understandig that maze correctly.
+> 
+> I don't know difference between SEV flavours that well.
+> 
+> I see there's that on SEV-SNP access to x2APIC MSR range (MSR 0x800-0x8FF)
+> is intercepted regardless if MSR_AMD64_SNP_ALT_INJ feature is present. But
+> I'm not sure what the state on SEV or SEV-ES.
 
-proc_dointvec_minmax is no longer used because it does not support GID
-from 2147483648 to 4294967294.
+With SEV-ES, if the hypervisor intercepts an MSR access, the VM-Exit is instead
+morphed to a #VC (except for EFER).  The guest needs to do an explicit VMGEXIT
+(i.e. a hypercall) to explicitly request MSR emulation (this *can* be done in the
+#VC handler, but the guest can also do VMGEXIT directly, e.g. in lieu of a RDMSR).
 
-proc_douintvec is not used either, because it does not support vectors,
-despite its function name.
-
-Signed-off-by: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
----
- include/linux/group_range.h |  6 -----
- kernel/group_range.c        | 52 ++++++++++++++++++++++++++++++-------
- 2 files changed, 42 insertions(+), 16 deletions(-)
-
-diff --git a/include/linux/group_range.h b/include/linux/group_range.h
-index 5bd837eced95..8f71dc956693 100644
---- a/include/linux/group_range.h
-+++ b/include/linux/group_range.h
-@@ -5,12 +5,6 @@
- #include <linux/seqlock.h>
- #include <linux/uidgid.h>
- 
--/*
-- * gid_t is either uint or ushort.  We want to pass it to
-- * proc_dointvec_minmax(), so it must not be larger than MAX_INT
-- */
--#define GROUP_RANGE_MAX (((gid_t)~0U) >> 1)
--
- struct group_range {
- 	seqlock_t       lock;
- 	kgid_t          range[2];
-diff --git a/kernel/group_range.c b/kernel/group_range.c
-index b5c7d35d680b..13db83b77832 100644
---- a/kernel/group_range.c
-+++ b/kernel/group_range.c
-@@ -4,6 +4,7 @@
- #include <linux/group_range.h>
- #include <linux/uidgid.h>
- #include <linux/seqlock.h>
-+#include <linux/slab.h>
- #include <linux/sysctl.h>
- 
- static void get_group_range(struct group_range *gr, kgid_t *low, kgid_t *high)
-@@ -26,9 +27,6 @@ static void set_group_range(struct group_range *gr, kgid_t low, kgid_t high)
- 	write_sequnlock(&gr->lock);
- }
- 
--static int group_range_min[] = { 0, 0 };
--static int group_range_max[] = { GROUP_RANGE_MAX, GROUP_RANGE_MAX };
--
- int sysctl_group_range(sysctl_group_range_func_t fn, struct ctl_table *table,
- 				 int write, void *buffer, size_t *lenp, loff_t *ppos)
- {
-@@ -37,24 +35,56 @@ int sysctl_group_range(sysctl_group_range_func_t fn, struct ctl_table *table,
- 	int ret;
- 	gid_t urange[2];
- 	kgid_t low, high;
-+	size_t slen = 256; /* total bytes including '\0' */
-+	char *s = kmalloc(slen, GFP_KERNEL); /* clobbered by strsep */
- 	struct ctl_table tmp = {
--		.data = &urange,
--		.maxlen = sizeof(urange),
-+		.data = s,
-+		.maxlen = slen,
- 		.mode = table->mode,
--		.extra1 = &group_range_min,
--		.extra2 = &group_range_max,
- 	};
- 
-+	if (unlikely(!s))
-+		return -ENOMEM;
-+
-+	/*
-+	 * proc_dointvec_minmax is no longer used because it does not support
-+	 * GID from 2147483648 to 4294967294.
-+	 *
-+	 * proc_douintvec is not used either, because it does not support
-+	 * vectors, despite its function name.
-+	 */
- 	get_group_range(gr, &low, &high);
- 	urange[0] = from_kgid_munged(user_ns, low);
- 	urange[1] = from_kgid_munged(user_ns, high);
--	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
-+	ret = snprintf(tmp.data, slen, "%u\t%u", urange[0], urange[1]);
-+	if (ret < 0)
-+		goto done;
-+	ret = proc_dostring(&tmp, write, buffer, lenp, ppos);
-+	if (*lenp >= slen - 1) /* truncated */
-+		ret = -EINVAL;
- 
- 	if (write && ret == 0) {
-+		char *tok[2];
-+		int i;
-+
-+		s = strim(s);
-+		tok[0] = strsep(&s, " \t");
-+		tok[1] = s;
-+		for (i = 0; i < 2; i++) {
-+			if (!tok[i]) {
-+				ret = -EINVAL;
-+				goto done;
-+			}
-+			ret = kstrtouint(tok[i], 0, &urange[i]);
-+			if (ret < 0)
-+				goto done;
-+		}
- 		low = make_kgid(user_ns, urange[0]);
- 		high = make_kgid(user_ns, urange[1]);
--		if (!gid_valid(low) || !gid_valid(high))
--			return -EINVAL;
-+		if (!gid_valid(low) || !gid_valid(high)) {
-+			ret = -EINVAL;
-+			goto done;
-+		}
- 		if (urange[1] < urange[0] || gid_lt(high, low)) {
- 			low = make_kgid(&init_user_ns, 1);
- 			high = make_kgid(&init_user_ns, 0);
-@@ -62,6 +92,8 @@ int sysctl_group_range(sysctl_group_range_func_t fn, struct ctl_table *table,
- 		set_group_range(gr, low, high);
- 	}
- 
-+done:
-+	kfree(tmp.data);
- 	return ret;
- }
- 
--- 
-2.38.4
-
+With regular SEV, VM-Exits aren't reflected into the guest.  Register state isn't
+encrypted so the hypervisor can emulate MSR accesses (and other instructions)
+without needing an explicit hypercall from the guest.
