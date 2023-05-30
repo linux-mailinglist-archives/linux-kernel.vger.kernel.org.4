@@ -2,133 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12CD715949
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE9D71594A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjE3JAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
+        id S229999AbjE3JBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbjE3JAV (ORCPT
+        with ESMTP id S229824AbjE3JBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:00:21 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7624B2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:00:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685437220; x=1716973220;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rTflTYiV3VKyBm981Ml2WLipgh57SbrnaZBjjFs8J7A=;
-  b=iqHEU7GNUpMwkO+cXY7zo4U/ulCJ1/GS3SYv4mpV7auZfUfsbuN9ABJC
-   7SoqNd/FFvX66DeH0VKEjYAq/QNx3j+I6Fi61EYSLnQO5L1fa678piisu
-   GBeXoZMoJSX9pXrkVblOzYY9Vdj1xxaY4beO/lcqZpNwxhV9/qlkCs25P
-   AMuooWEROHG4iou/BsVRzYurSoGbBGiDwu2ErXrL4FOXamR6j0yv8+X83
-   Ti33zqbit0DljPekfxH5yHKkGqHmp9BPcoTyVApDKytIZnJVg3i91d8K4
-   Tp0EKhfGvJ6DDltk3pOhaxS8xZl7jxuDEQ9n2dYvI0Qditay9UQrrnYEC
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="335207057"
-X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="335207057"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 02:00:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="880689121"
-X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="880689121"
-Received: from lkp-server01.sh.intel.com (HELO fd90924b3b99) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 30 May 2023 02:00:16 -0700
-Received: from kbuild by fd90924b3b99 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q3vDE-0000Eo-2X;
-        Tue, 30 May 2023 09:00:16 +0000
-Date:   Tue, 30 May 2023 17:00:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v5 5/6] drm/etnaviv: expand driver support for the PCI
- devices
-Message-ID: <202305301659.4guSLavL-lkp@intel.com>
-References: <20230529172452.2148819-6-suijingfeng@loongson.cn>
+        Tue, 30 May 2023 05:01:08 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C313BF7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:01:07 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b02085bf8dso21040785ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:01:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685437267; x=1688029267;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WV3wsCw/FpDpcDnxILFQglJVr4jgnkG2dwwOQEyMFLo=;
+        b=lLTGv4U2yc4jzgDmQmuni5WzYscIBSU1MfpO+7SOCbRatT6kY1ZPj2ohePOk2uhYbA
+         nOjjECEoVsIPxT18/+8i+yG7wYeqhrwGN+ZcEBa7/3rKkl+AMtitseVqJBtKk2qwfMba
+         gZXxtPysv+k++eyUG9CfVlkFflhRlf2vsBOqpLDxXLorAInq33nxHsM05JcSy3zMJfbX
+         iKfej4vLYlMgvQ+XAFjJH8Nxu7z7F/ypjG4TK/qgWZX9rYid6UswjqmNDKYrIJh5dnJg
+         tl6N4qNHYXtPbULh7O/bA1CLp68xUQBmSrRtEs/77AhE2MHi8AJHKVb85Js9Fv/cjuO2
+         r1ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685437267; x=1688029267;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WV3wsCw/FpDpcDnxILFQglJVr4jgnkG2dwwOQEyMFLo=;
+        b=dPrOAQoTlNkoFhiQgT9/gBES/5EKScHjoYpBrQ4VDwMJbpI2udj/oHRa4lnsX+ej+A
+         JlliLQVFgypPArq//biZUL6KSjgbZ5BfI8LxIwH3jnmYtbt8gQqNaFIe7fdZ+NoUNrJK
+         krWwnPHmpWnFBlZOjLyTyb4eKVu4oftVoUtedQWawwX8Iqt0j28C5YLzRVisnZHEmnxL
+         JBoE+0lDdI9jxcmt9+GDLQRXm07H5QGgL+eAz6mwf6OwWS2HlJUkuwQYLmFr7YqUCn2V
+         +PfTwMvRM3MeoDhxM9iU7uyimjDDqXA9Q6MDHwpInG509goaLKPMAq1JuiXCTSRRNFU/
+         pw4A==
+X-Gm-Message-State: AC+VfDwzfTECatkYbOPhyZjnjIikyS3bw7c+w5x5ZdIsriz3Ll1+H6AH
+        wXCvfHRbR4esrg0dZ4HJ2vyw9jTUbEmrnRznhPUlJuZp6Ww=
+X-Google-Smtp-Source: ACHHUZ6SixVI4KMeby83xSx6tSmQBXeDdy4GwBitnN9sH9m1a64BxVXboWuJN5UGHmjhB1FGDc8lipBMmVueZ5Y1x3I=
+X-Received: by 2002:a17:902:6903:b0:1b0:42ac:74ef with SMTP id
+ j3-20020a170902690300b001b042ac74efmr1472419plk.57.1685437266747; Tue, 30 May
+ 2023 02:01:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230529172452.2148819-6-suijingfeng@loongson.cn>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230530083546.4831-1-vaibhavgupta40@gmail.com>
+In-Reply-To: <20230530083546.4831-1-vaibhavgupta40@gmail.com>
+From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
+Date:   Tue, 30 May 2023 11:00:30 +0200
+Message-ID: <CAP+cEOPWWeUqOvbTi8ukFJYewhLuC+UtD0zSKMJ-0k29yinBQg@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Vaibhav Gupta is the new ipack maintainer
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?Q?Samuel_Iglesias_Gons=C3=A1lvez?= <siglesias@igalia.com>,
+        Jens Taprogge <jens.taprogge@taprogge.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        industrypack-devel@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sui,
+Please ignore this, by mistake I used `--reply-to` instead of `--in-reply-t=
+o`
 
-kernel test robot noticed the following build errors:
+--Vaibhav
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm/drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.4-rc4 next-20230530]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/drm-etnaviv-add-a-dedicated-function-to-register-an-irq-handler/20230530-012547
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230529172452.2148819-6-suijingfeng%40loongson.cn
-patch subject: [PATCH v5 5/6] drm/etnaviv: expand driver support for the PCI devices
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230530/202305301659.4guSLavL-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/1d05a5fa048dd4b2a934ffbb07c330ddd9279287
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sui-Jingfeng/drm-etnaviv-add-a-dedicated-function-to-register-an-irq-handler/20230530-012547
-        git checkout 1d05a5fa048dd4b2a934ffbb07c330ddd9279287
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/gpu/drm/etnaviv/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305301659.4guSLavL-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c: In function 'etnaviv_gpu_pci_fini':
->> drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:32:9: error: implicit declaration of function 'pci_clear_master'; did you mean 'pci_set_master'? [-Werror=implicit-function-declaration]
-      32 |         pci_clear_master(pdev);
-         |         ^~~~~~~~~~~~~~~~
-         |         pci_set_master
-   cc1: some warnings being treated as errors
-
-
-vim +32 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c
-
-    27	
-    28	static void etnaviv_gpu_pci_fini(struct etnaviv_gpu *gpu, bool component)
-    29	{
-    30		struct pci_dev *pdev = to_pci_dev(gpu->dev);
-    31	
-  > 32		pci_clear_master(pdev);
-    33	
-    34		dev_dbg(gpu->dev, "component is %s\n",
-    35			component ? "enabled" : "disabled");
-    36	}
-    37	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Tue, May 30, 2023 at 10:35=E2=80=AFAM Vaibhav Gupta <vaibhavgupta40@gmai=
+l.com> wrote:
+>
+> From: "Samuel Iglesias Gons=C3=A1lvez" <siglesias@igalia.com>
+>
+> I have no longer access to the HW, nor time to properly maintain it.
+>
+> Adding Vaibhav as maintainer as he currently has access to the HW, he
+> is working at CERN (user of these drivers) and he is maintaining them
+> internally there.
+>
+> Signed-off-by: Samuel Iglesias Gons=C3=A1lvez <siglesias@igalia.com>
+> Acked-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+> ---
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 207a65905f5e..49e384399ee3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10106,7 +10106,7 @@ S:      Maintained
+>  F:     Documentation/process/kernel-docs.rst
+>
+>  INDUSTRY PACK SUBSYSTEM (IPACK)
+> -M:     Samuel Iglesias Gonsalvez <siglesias@igalia.com>
+> +M:     Vaibhav Gupta <vaibhavgupta40@gmail.com>
+>  M:     Jens Taprogge <jens.taprogge@taprogge.org>
+>  M:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>  L:     industrypack-devel@lists.sourceforge.net
+> --
+> 2.34.1
+>
