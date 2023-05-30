@@ -2,143 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD5B715BE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C54F8715BEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbjE3Keg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33386 "EHLO
+        id S231577AbjE3KfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjE3Kee (ORCPT
+        with ESMTP id S231637AbjE3Kew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:34:34 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9499D93
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685442872; x=1716978872;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ezs7z46coeL8J/2z7XFwZEbihsgUQ3C+uMt9D0ovWjQ=;
-  b=x8C4TkzYXd2HfNPWOhDiytb5pBO5s8CZhKR02mVwrg8X5jnQ9HkCz6K6
-   H/3hgEUiAh8setLoH7jv+NKCB13wgKP1qCMarlplCKN8dO85yYtrRakRP
-   8/qiauZfGU2G1aoMVrRG8nFwfBf1ix440NGustNux5g7dVnx892Nc69Uc
-   xPoihb7qMVie7DaER+YO7Edc9lcE2FZyZI8dNbviGd7oTn7GEPp8ddA/o
-   7d+bN4MuTAV8keIWWRx+9RBCBBdC7DSZaMkEGVYkGuvZPtn+rXBt15nyN
-   +uACXEre6vAf0pUBmlvHsa77kwy17gtQCIAxyQqDD1iYCB2ASxc2M8L95
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
-   d="asc'?scan'208";a="154575603"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 May 2023 03:34:31 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 30 May 2023 03:34:30 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 30 May 2023 03:34:29 -0700
-Date:   Tue, 30 May 2023 11:34:06 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-CC:     Jisheng Zhang <jszhang@kernel.org>,
+        Tue, 30 May 2023 06:34:52 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5062C115;
+        Tue, 30 May 2023 03:34:48 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685442886;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=N5ajidpHHWOd1M+zXooDoN2CL1Doa07SpiUyV9RulE8=;
+        b=uwnjy/mtKr2+9HiMkSppEBJvhSBQeJYZy8y9yBLg+rfzmVqY1K2fbkQ0BK6atYsbdlb/kZ
+        OX0X95CEbPOmVVjWUm+w4pOuAY3qcbvl7jw9Z0BenrltybggdqR4c9qAM8x64i9YH37qey
+        O9JBKI7y/oKr72QRWkDpq+hYUst4bIaCugFeqfZmWg1LhT6voGsk3R6H6krFIw1PwzllcV
+        ucldO4NpvXDnORVDB9AFUwXdgJ89s7Ov7ICB6gREcPwIDmnuEeCUVFSvurBgxsiF9roVck
+        ep3RsDjejQbfVOSuPv04nD7vklCwo/Y4EbsS5SCA7EfqWM3aQeTimx2OFQGCyA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685442886;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=N5ajidpHHWOd1M+zXooDoN2CL1Doa07SpiUyV9RulE8=;
+        b=AxdWUb0SeD9XPAfvorylY2NPRS35OXUO70xmZChpaLP+3HhDz+9CZ0RcptudTwiisrOZW2
+        YPXQzLGGwMCVv4AQ==
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/6] riscv: allow kmalloc() caches aligned to the
- smallest value
-Message-ID: <20230530-gyration-handheld-ef4e44e89d61@wendy>
-References: <20230526165958.908-1-jszhang@kernel.org>
- <20230526165958.908-6-jszhang@kernel.org>
- <20230529-fidelity-booted-0d4055d1f559@wendy>
- <ZHXJDevEVwUEoOq4@arm.com>
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [patch v3 31/36] x86/apic: Provide cpu_primary_thread mask
+In-Reply-To: <87mt1mjhk3.ffs@tglx>
+References: <20230508181633.089804905@linutronix.de>
+ <20230508185218.962208640@linutronix.de>
+ <20230524204818.3tjlwah2euncxzmh@box.shutemov.name> <87y1lbl7r6.ffs@tglx>
+ <87sfbhlwp9.ffs@tglx> <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
+ <87bki3kkfi.ffs@tglx> <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
+ <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name> <87mt1mjhk3.ffs@tglx>
+Date:   Tue, 30 May 2023 12:34:45 +0200
+Message-ID: <87jzwqjeey.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="yLd8GXUEZrWQsGZ1"
-Content-Disposition: inline
-In-Reply-To: <ZHXJDevEVwUEoOq4@arm.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---yLd8GXUEZrWQsGZ1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, May 30 2023 at 11:26, Thomas Gleixner wrote:
+> On Tue, May 30 2023 at 03:54, Kirill A. Shutemov wrote:
+>> On Mon, May 29, 2023 at 11:31:29PM +0300, Kirill A. Shutemov wrote:
+>>> Disabling parallel bringup helps. I didn't look closer yet. If you have
+>>> an idea let me know.
+>>
+>> Okay, it crashes around .Lread_apicid due to touching MSRs that trigger #VE.
+>>
+>> Looks like the patch had no intention to enable parallel bringup on TDX.
+>>
+>> +        * Intel-TDX has a secure RDMSR hypercall, but that needs to be
+>> +        * implemented seperately in the low level startup ASM code.
+>>
+>> But CC_ATTR_GUEST_STATE_ENCRYPT that used to filter it out is
+>> SEV-ES-specific thingy and doesn't cover TDX. I don't think we have an
+>> attribute that fits nicely here.
+>
+> Bah. That sucks.
 
-On Tue, May 30, 2023 at 10:59:41AM +0100, Catalin Marinas wrote:
-> On Mon, May 29, 2023 at 12:17:46PM +0100, Conor Dooley wrote:
-> > On Sat, May 27, 2023 at 12:59:57AM +0800, Jisheng Zhang wrote:
-> > > After this patch, a simple test of booting to a small buildroot rootfs
-> > > on qemu shows:
-> > >=20
-> > > kmalloc-96           5041    5041     96  ...
-> > > kmalloc-64           9606    9606     64  ...
-> > > kmalloc-32           5128    5128     32  ...
-> > > kmalloc-16           7682    7682     16  ...
-> > > kmalloc-8           10246   10246      8  ...
-> > >=20
-> > > So we save about 1268KB memory. The saving will be much larger in nor=
-mal
-> > > OS env on real HW platforms.
-> > >=20
-> > > [1] Link: https://lore.kernel.org/linux-arm-kernel/20230524171904.396=
-7031-1-catalin.marinas@arm.com/
-
-While I think of it, Link: goes at the start of the line, the [1] should
-go at the end (although I don't think you actually reference the link
-anywhere in the text & it'll probably not be particularly relevant if a
-subsequent revision of that patchset is applied.
-
-> > >=20
-> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> >=20
-> > Fails to build chief, with loads of:
-> > linux/dma-mapping.h:546:19: error: redefinition of 'dma_get_cache_align=
-ment'
-> >=20
-> > And for 32-bit there's also a rake of:
-> > include/linux/slab.h:239:9: warning: 'ARCH_KMALLOC_MINALIGN' macro rede=
-fined [-Wmacro-redefined]
-> >=20
-> > At the very least, reproducable with rv32_defconfig.
->=20
-> Have you this it on top of the KMALLOC_MINALIGN preparation series?
->=20
-> https://lore.kernel.org/r/20230524171904.3967031-1-catalin.marinas@arm.co=
-m/
-
-Oh, no. Thanks for pointing that out.
-Our automation stuff only uses what is in riscv/{for-next,master,fixes}.
-Unless my reading comprehension is particularly bad of late it was
-non-obvious that this depended on something that had not yet been
-applied - it sounded like your series had already been merged last year.
-Apologies for the noise then on this patch, but please try to be more
-clear about what the dependencies actually are Jisheng.
-
-Cheers,
-Conor.
-
---yLd8GXUEZrWQsGZ1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHXRHgAKCRB4tDGHoIJi
-0m9uAP9AoI+JEAqv+9RR/YOu/MvDnbTegsXBk/n2SwQtBMLLUwEA8FMW1zWGymoE
-agKX1i07+HwjlUVKA0zZWmUkNoUpXQU=
-=N2cE
------END PGP SIGNATURE-----
-
---yLd8GXUEZrWQsGZ1--
+Can we have something consistent in this CC space or needs everything to
+be extra magic per CC variant?
