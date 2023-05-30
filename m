@@ -2,106 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17438715369
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA6D715371
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjE3CHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 22:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
+        id S230158AbjE3CIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 22:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjE3CG7 (ORCPT
+        with ESMTP id S230122AbjE3CIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 22:06:59 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321ED1B4;
-        Mon, 29 May 2023 19:06:26 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id B3D2424E271;
-        Tue, 30 May 2023 10:05:39 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 30 May
- 2023 10:05:39 +0800
-Received: from [192.168.120.57] (171.223.208.138) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 30 May
- 2023 10:05:39 +0800
-Message-ID: <86555925-b8dd-29a8-60cd-5c2ff2c1432a@starfivetech.com>
-Date:   Tue, 30 May 2023 10:05:38 +0800
+        Mon, 29 May 2023 22:08:16 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0574E5;
+        Mon, 29 May 2023 19:08:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685412486; x=1716948486;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=reNeQez1F7r8ZGoYnYWNc9HF8+Nb54iuzqiK4gjVInk=;
+  b=RvI0vc8nvPDXh9OLIdtAIF7/GgaoafLv076/HcdN4WE/vzhr6dz1oA3m
+   PhDlBq35suDKVciCo75k6z7s+c/+UaKtluCJIEORY1e96+tkWN9AW5e4A
+   C2VD8SwJ3Zn+pmM/gWBMhvYfVS0BE29hO4WwgIia5chBqRlENtWeVUj+E
+   fg1bocAL2cVIDs/GTin1saCL9sPw3E+rb6ycPBSZM01sAmH9IKViLE+at
+   FmhJqxKHTFfR+JuWFwgNhRUkjhC6a5kG5A0zasbHRMm5ELMHaiwAcvJ96
+   IDIzNF1PzytQvEd86UrQ+yCZXhr3Aa/qxr7haxWXFVUWIxSVb32ePMhnM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="354812291"
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="scan'208";a="354812291"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2023 19:06:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="952923391"
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="scan'208";a="952923391"
+Received: from crt-e302.sh.intel.com (HELO localhost.localdomain) ([10.239.45.181])
+  by fmsmga006.fm.intel.com with ESMTP; 29 May 2023 19:06:53 -0700
+From:   chenzhiyin <zhiyin.chen@intel.com>
+To:     viro@zeniv.linux.org.uk, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        nanhai.zou@intel.com, zhiyin.chen@intel.com
+Subject: [PATCH] fs.h: Optimize file struct to prevent false sharing
+Date:   Mon, 29 May 2023 22:06:26 -0400
+Message-Id: <20230530020626.186192-1-zhiyin.chen@intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1 2/3] spi: cadence-quadspi: Add clock configuration for
- StarFive JH7110 QSPI
-Content-Language: en-US
-From:   William Qiu <william.qiu@starfivetech.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Emil Renner Berthing" <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-References: <20230526062529.46747-1-william.qiu@starfivetech.com>
- <20230526062529.46747-3-william.qiu@starfivetech.com>
- <fecc9d6a-022e-49d9-a452-8a63c409ebf3@sirena.org.uk>
- <042c560d-1f36-8e97-3796-7423245592f4@starfivetech.com>
-In-Reply-To: <042c560d-1f36-8e97-3796-7423245592f4@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In the syscall test of UnixBench, performance regression occurred
+due to false sharing.
 
+The lock and atomic members, including file::f_lock, file::f_count
+and file::f_pos_lock are highly contended and frequently updated
+in the high-concurrency test scenarios. perf c2c indentified one
+affected read access, file::f_op.
+To prevent false sharing, the layout of file struct is changed as
+following
+(A) f_lock, f_count and f_pos_lock are put together to share the
+same cache line.
+(B) The read mostly members, including f_path, f_inode, f_op are
+put into a separate cache line.
+(C) f_mode is put together with f_count, since they are used
+frequently at the same time.
 
-On 2023/5/29 14:44, William Qiu wrote:
-> 
-> 
-> On 2023/5/26 23:36, Mark Brown wrote:
->> On Fri, May 26, 2023 at 02:25:28PM +0800, William Qiu wrote:
->> 
->>>  	if (of_device_is_compatible(pdev->dev.of_node, "starfive,jh7110-qspi")) {
->>> +		qspi_ahb = devm_clk_get(dev, "qspi-ahb");
->>> +		if (IS_ERR(qspi_ahb)) {
->>> +			dev_err(dev, "Cannot claim QSPI_AHB clock.\n");
->>> +			ret = PTR_ERR(qspi_ahb);
->>> +			return ret;
->>> +		}
->>> +
->>> +		ret = clk_prepare_enable(qspi_ahb);
->>> +		if (ret) {
->>> +			dev_err(dev, "Cannot enable QSPI AHB clock.\n");
->>> +			goto probe_clk_failed;
->>> +		}
->> 
->> Nothing ever disables or unprepares this clock as far as I can tell?
->> Perhaps also consider using the clk_bulk_ APIs.
-> 
-> I will add in next version.
-> 
-> Thanks for taking time to review this patch series and give useful
-> suggestions.
-> 
-> Best regards,
-> William
+The optimization has been validated in the syscall test of
+UnixBench. performance gain is 30~50%, when the number of parallel
+jobs is 16.
 
-Hi Mark,
+Signed-off-by: chenzhiyin <zhiyin.chen@intel.com>
+---
+ include/linux/fs.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-	Now I want to replace the original devm_clk_get API in the
-driver with devm_clk_bulk_get_all API, which can achieve compatibility,
-but it seems that it is not good for other ip with only one clock, so I
-want to ask about that can I replace it? Or define that inside jh7110?
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 21a981680856..01c55e3a1b96 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -962,23 +962,23 @@ struct file {
+ 		struct rcu_head 	f_rcuhead;
+ 		unsigned int 		f_iocb_flags;
+ 	};
+-	struct path		f_path;
+-	struct inode		*f_inode;	/* cached value */
+-	const struct file_operations	*f_op;
+ 
+ 	/*
+ 	 * Protects f_ep, f_flags.
+ 	 * Must not be taken from IRQ context.
+ 	 */
+ 	spinlock_t		f_lock;
+-	atomic_long_t		f_count;
+-	unsigned int 		f_flags;
+ 	fmode_t			f_mode;
++	atomic_long_t		f_count;
+ 	struct mutex		f_pos_lock;
++	unsigned int		f_flags;
+ 	loff_t			f_pos;
+ 	struct fown_struct	f_owner;
+ 	const struct cred	*f_cred;
+ 	struct file_ra_state	f_ra;
++	struct path		f_path;
++	struct inode		*f_inode;	/* cached value */
++	const struct file_operations	*f_op;
+ 
+ 	u64			f_version;
+ #ifdef CONFIG_SECURITY
+-- 
+2.39.1
 
-Best regards,
-William
