@@ -2,161 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20809715BBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88E8715BB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjE3K2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
+        id S229920AbjE3K1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbjE3K1w (ORCPT
+        with ESMTP id S229755AbjE3K10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:27:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D501FC9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685442283;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xsvjGa+MnzAcT7Atgh+LbY2eQJDEHuopXF1gXnP8V0E=;
-        b=BIJ449tz3ayEoMKixLbHrmiYvZmPbjTvKX/+hd+BicbLXKpzRRq/+1dmdnu5o8jyxbkDn3
-        PPckbcL1doOUlmlhsA9fG8uCHeyYQpjbruVURjd+L7NFIBCASdwdmC5wqu3SH+823DLL17
-        Z7GFviB9fogfcAL50G+adjBUh68F3sI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-628-NOWmwAIAPHuFk00q8Sb5YQ-1; Tue, 30 May 2023 06:24:40 -0400
-X-MC-Unique: NOWmwAIAPHuFk00q8Sb5YQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BE0EB85A5BD;
-        Tue, 30 May 2023 10:24:39 +0000 (UTC)
-Received: from work.fritz.box (unknown [10.39.193.151])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 493C2420AA;
-        Tue, 30 May 2023 10:24:38 +0000 (UTC)
-From:   Tim Wiederhake <twiederh@redhat.com>
-To:     "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, "Ingo Molnar" <mingo@redhat.com>,
-        "Paolo Bonzini" <pbonzini@redhat.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Tim Wiederhake <twiederh@redhat.com>
-Subject: [PATCH v2] x86/msr: Allow unprivileged read access to some MSRs
-Date:   Tue, 30 May 2023 12:23:58 +0200
-Message-Id: <20230530102358.16430-1-twiederh@redhat.com>
-In-Reply-To: <20230523194949.96149-1-twiederh@redhat.com>
-References: <20230523194949.96149-1-twiederh@redhat.com>
+        Tue, 30 May 2023 06:27:26 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C735710EB
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:25:38 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 040F63200932;
+        Tue, 30 May 2023 06:25:37 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 30 May 2023 06:25:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1685442337; x=1685528737; bh=AG
+        k4n3SGiqeevpI9FxzEEYvh1uhlOZ6fFwDSJrqySoI=; b=gQDPuNKfdOUu5CSOsl
+        jQvrCmYuJsFVBba1N1uuGvjkTD2+tQyB9XgqzpmI+bgmS14CvPYlCUYFJjaFDNs/
+        nb4sL/s3mENrVX662Ss8eNTAZbJ6KB/0yNg7GipWP7ylUc8CGkmxrmiWAvcosWml
+        UdPaXazdZUg/lQ9VkhcdESe12kCVp0So6vZdgwMSOSnuKkF7AaU9TrZ6IAwo+2h9
+        Gvqtex5xxu5WRwXXZKwa+tN25W00fdNbEj/GnLKEqmLKXLri75nWMiozKB0bKHaN
+        4dAMDni5NukN6P1PzBGPK+43T2USUj4JYq3WP6gUd4QispltOVNpONRc0IJXFWCp
+        r9eg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685442337; x=1685528737; bh=AGk4n3SGiqeev
+        pI9FxzEEYvh1uhlOZ6fFwDSJrqySoI=; b=jBjodJHRRWGYQJ29mNkKiCxVkM5XZ
+        CN4LUSzDeee48EbKHRI9Z/RTxxGGbij8Ab5qOhdDOmlxUj+twVOGwSHhtgRvAUn3
+        4F4ojTu9xq1OASlB6ypq2twFUT4EwSfPA500pCV/YxEp9FpL+1DRiJwDzZc/lV7+
+        DwTT0lxStQZfUQqxWdUqfc9320zdMaAN/5ec9EBAtmtsFInxY1TwXsfoF4uFiZrY
+        00sWUApbsLnK3U9YTDwrZxim64VtgeEgw+caZJWnJKwpLcu2fhSxvVP+p7Bjjeq3
+        kEC156W3heAeAsDr4HJsWJI6NGSuYgQQyXtueranr3WUpN0HvtlSpjCmw==
+X-ME-Sender: <xms:Ic91ZNRGMx7s3ENJGaFX-Z3hEgr-4OacRMGTuJ6w3sBaf16pF64jhQ>
+    <xme:Ic91ZGy83VgLQ2UWOF4_ekeRUOY9ZIET8caBiiytdplZM_dMlHwgSzWY0tR7hc_XB
+    nepoaexn6pcKGvT5Js>
+X-ME-Received: <xmr:Ic91ZC2aomCAez96-y2xa9rd9LcjjZAhQjiRfIBykOuCm1qJxAd8az__e6JNTjEo4F022XuWkwYnHYHNsHoyIzOjb7j9u99mLSsrA6-68FhWVw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgvdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpefvrghkrghshhhiucfurghkrghmohhtohcuoehoqdhtrghkrghs
+    hhhisehsrghkrghmohgttghhihdrjhhpqeenucggtffrrghtthgvrhhnpeeggfehleehje
+    eileehveefkefhtdeffedtfeeghfekffetudevjeegkeevhfdvueenucffohhmrghinhep
+    khgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
+X-ME-Proxy: <xmx:Ic91ZFB_H6iaHxNb1R7VCWpGF9wcIKRvhaP2yK1S7XLOGYyPmSQSxw>
+    <xmx:Ic91ZGjZztvfb3aAX7Rjy8tCPAuezHs2vfveKkcWoDGHMnkMA3G4Lw>
+    <xmx:Ic91ZJqdLItLLKWRWbcXWLfEBqinPyxm-slEqZBvJ5UYpPBVgR6Agw>
+    <xmx:Ic91ZKYkCW7yaS_SzfVDTcm1YWNUynVB-53lx_srjr1_IajY2EtYmQ>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 30 May 2023 06:25:36 -0400 (EDT)
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH] firewire: fix build failure due to missing module license
+Date:   Tue, 30 May 2023 19:25:32 +0900
+Message-Id: <20230530102532.56386-1-o-takashi@sakamocchi.jp>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Software such as qemu and libvirt require the raw content of some MSRs
-to calculate host CPU capabilities. This is currently done through
-/dev/cpu/*/msr which is locked behind both CAP_SYS_RAWIO and file mode
-0600, allowing only root to read and write MSRs.
+The added KUnit test has no MODULE_LICENSE even if built for tristate. It
+brings build failure in linux-next integration.
 
-Expose some non-security sensitive MSRs through sysfs to allow access
-for unprivileged processes. This also helps other programs that are
-interested in IA32_EFER for x86-64-v1 detection.
+This commit releases the test under GPL and fixes the bug.
 
-Signed-off-by: Tim Wiederhake <twiederh@redhat.com>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Closes: https://lore.kernel.org/lkml/20230530122450.1603af75@canb.auug.org.au/
+Fixes: dc7c51638f46 ("firewire: add KUnit test to check layout of UAPI structures")
+Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 ---
-Changes to v1 (https://lkml.org/lkml/2023/5/23/1230):
-* removed patch to limit reads to /dev/cpu/*/msr to 8 bytes per read
-* removed CAP_SYS_RAWIO-less access to /dev/cpu/*/msr
-* introduced sysfs interface to msrs
+ drivers/firewire/uapi-test.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-With this sysfs-based, unrestricted read access to some select msrs in
-place, a later patch could introduce checks for CAP_SYS_RAWIO for every
-access to /dev/cpu/*/msr as mentioned in the feedback to v1.
----
- arch/x86/kernel/msr.c | 45 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
-
-diff --git a/arch/x86/kernel/msr.c b/arch/x86/kernel/msr.c
-index 7bb17d37db01..3c8354f3c2bd 100644
---- a/arch/x86/kernel/msr.c
-+++ b/arch/x86/kernel/msr.c
-@@ -50,6 +50,31 @@ enum allow_write_msrs {
- 
- static enum allow_write_msrs allow_writes = MSR_WRITES_DEFAULT;
- 
-+struct allow_read_msrs {
-+	const char *procname;
-+	u32 index;
-+	u32 value[2];
-+};
+diff --git a/drivers/firewire/uapi-test.c b/drivers/firewire/uapi-test.c
+index c6ebf02e3d45..2fcbede4fab1 100644
+--- a/drivers/firewire/uapi-test.c
++++ b/drivers/firewire/uapi-test.c
+@@ -85,3 +85,5 @@ static struct kunit_suite structure_layout_test_suite = {
+ 	.test_cases = structure_layout_test_cases,
+ };
+ kunit_test_suite(structure_layout_test_suite);
 +
-+static struct allow_read_msrs allow_reads[] = {
-+	{
-+		.procname = "ia32_core_caps",
-+		.index = MSR_IA32_CORE_CAPS,
-+	},
-+	{
-+		.procname = "ia32_arch_capabilities",
-+		.index = MSR_IA32_ARCH_CAPABILITIES,
-+	},
-+	{
-+		.procname = "efer",
-+		.index = MSR_EFER,
-+	},
-+};
-+
-+static struct ctl_table msr_files[ARRAY_SIZE(allow_reads) + 1];
-+
-+static struct ctl_table_header *msr_files_header;
-+
- static ssize_t msr_read(struct file *file, char __user *buf,
- 			size_t count, loff_t *ppos)
- {
-@@ -258,6 +283,25 @@ static char *msr_devnode(const struct device *dev, umode_t *mode)
- static int __init msr_init(void)
- {
- 	int err;
-+	int i, j;
-+
-+	for (i = 0, j = 0; i < ARRAY_SIZE(allow_reads); ++i) {
-+		err = rdmsr_safe_on_cpu(0, allow_reads[i].index,
-+					&allow_reads[i].value[0],
-+					&allow_reads[i].value[1]);
-+		if (err)
-+			continue;
-+		msr_files[j].procname = allow_reads[i].procname;
-+		msr_files[j].data = &allow_reads[i].value;
-+		msr_files[j].maxlen = 2 * sizeof(u32);
-+		msr_files[j].mode = 0444;
-+		msr_files[j].proc_handler = proc_doulongvec_minmax;
-+		++j;
-+	}
-+
-+	msr_files_header = register_sysctl("vm/msr", msr_files);
-+	if (!msr_files_header)
-+		return -ENOMEM;
- 
- 	if (__register_chrdev(MSR_MAJOR, 0, NR_CPUS, "cpu/msr", &msr_fops)) {
- 		pr_err("unable to get major %d for msr\n", MSR_MAJOR);
-@@ -287,6 +331,7 @@ module_init(msr_init);
- 
- static void __exit msr_exit(void)
- {
-+	unregister_sysctl_table(msr_files_header);
- 	cpuhp_remove_state(cpuhp_msr_state);
- 	class_destroy(msr_class);
- 	__unregister_chrdev(MSR_MAJOR, 0, NR_CPUS, "cpu/msr");
++MODULE_LICENSE("GPL");
 -- 
 2.39.2
 
