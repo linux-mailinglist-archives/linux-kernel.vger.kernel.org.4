@@ -2,100 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B3D7169F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E151F7169ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232854AbjE3QnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
+        id S232297AbjE3Qlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232746AbjE3QnE (ORCPT
+        with ESMTP id S230491AbjE3Qlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:43:04 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27744B0;
-        Tue, 30 May 2023 09:43:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1685464952; i=linosanfilippo@gmx.de;
-        bh=u1Qi/uyeai+mxP4oIO4LBNtj6oBBjuv+rvd8DOos6DA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=HmYDWFS+CGdZg70bqpCf3Dic5L4jdOeIbQtheZlf2nloF21QvWfy3R0GzAwH6M0Se
-         YmPIQZIFHweJaadvK30RDb1frF1IBuu8XhGrhVR5W4gH7NWNuksDpuUA9LUofU5Ts1
-         IURs2C8PkKITbLoW9Vxc/+UKDdKQEe3P7FQ/6o08iCRWHZFc6mFvpagoRA47vB1rGi
-         9XpMIiAcaCirUTUxHsorwtucWfC/BZoui+sHcfBOMSFoCwfdH2fW6tpwIJEBiryCVB
-         M5b26FUoUM8PO0N4tmQjnEq5CXMP547iIoeMgy81seS36EEjyNhhQP9v1SH/IPq2D/
-         s4+QixkHMHsDg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from Venus.speedport.ip ([84.162.2.106]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MtOKi-1qMOan3hwk-00uqW5; Tue, 30
- May 2023 18:42:32 +0200
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     jarkko@kernel.org, gregkh@linuxfoundation.org, pavel@denx.de
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        linux-integrity@vger.kernel.org, l.sanfilippo@kunbus.com,
-        lukas@wunner.de, p.rosenberger@kunbus.com, stable@vger.kernel.org
-Subject: [PATCH] tpm, tpm_tis: correct tpm_tis_flags enumeration values
-Date:   Tue, 30 May 2023 18:41:16 +0200
-Message-Id: <20230530164116.20770-1-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.40.1
+        Tue, 30 May 2023 12:41:40 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975F6F9;
+        Tue, 30 May 2023 09:41:35 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-76c64da0e46so131049239f.0;
+        Tue, 30 May 2023 09:41:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685464894; x=1688056894;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mxSEcH8XMhad+l3757OBmVZiqWVuwlAI7XsQ8Ql9GBg=;
+        b=ldetHcwivAH9hVYdV2CfRIcyuc61rIzapE+qyz2t/m97jOZHGzsNiVUd45x7s+8UL8
+         rCOeR27eyPrrhK3PUlcz2ZbryZXFfOiCJVD4zj75ckfvNiDWMfM27EE62ZLqEtLzn68P
+         +bWRRv2CD2gIlWYjvr0XlDref1iAldl36VKGQlUhi+3pIMRe9eBgxFUbmByqApMisoyn
+         eXL1kFbB1xow/c+dymFzgHcGyprrmJd2c6pC3ufh14PJ/hV/08ORmehUXGJaOJZnEP1L
+         Saa1AayrCDJF5/ycm39fd+pGF+IeHwzXprxDAZn9EJO2Z5oPgUBgp/mecb891XovaogK
+         mnTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685464894; x=1688056894;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mxSEcH8XMhad+l3757OBmVZiqWVuwlAI7XsQ8Ql9GBg=;
+        b=EFAUmtaBTYngoPqNZd8El4mrxwkWE0dh23IuRi5GsGqGQ+r+jcNDKLoHJwwgu0fOYy
+         JQlp3aLEQVwMz0sR4GEIeSpT76rHmvnJeZ0MjpUs0bThTttm5X8DBT17TVDxPM1vICMU
+         n1jJSUF6JC412Y6HsyWwZKiqlTk1aD1DhOYHF7wa7gSRYWBhiTn5WcKfg1uIGg3Qnp9S
+         Gw5tvzokyxL5Rj/VUh8q2QwZds6sNO6MyCNsDJ4JioN0M8N/FtKLuIz5pMMo/69bBMMB
+         gMaQ/kRmqdC0ZuUfzvwdX61wLkUk2IJC2kwLAorHqRpCtYAH9BATt7auluLHi+WqdQtt
+         TNwg==
+X-Gm-Message-State: AC+VfDxXIidyfKBx7IVOx8Qtwz4uziQhmWtVoux9R+1KQGK5szXoYz8B
+        5h7+ghN4xuHBhTVt2ohON90L2Bfhhsh3nw==
+X-Google-Smtp-Source: ACHHUZ7h6h6Eq4wXXvU4DGcSXirjIMhqpxh4fzQEe6FxgI8QuLAp8ANtFCztbuHT2NEDst+MhgAR4g==
+X-Received: by 2002:a5d:87c2:0:b0:774:7a6d:8753 with SMTP id q2-20020a5d87c2000000b007747a6d8753mr1970436ios.9.1685464894493;
+        Tue, 30 May 2023 09:41:34 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id q22-20020a5ea616000000b007767a221ea0sm3255267ioi.11.2023.05.30.09.41.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 09:41:34 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-scsi@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH] scsi: ufs: Replace all non-returning strlcpy with strscpy
+Date:   Tue, 30 May 2023 16:41:31 +0000
+Message-ID: <20230530164131.987213-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:TUVoDoK2i79i8sGtpHBNTotsLMum/R0RJEoMsqgZp0r24XisBnL
- Ff93M1mjHQlxFQsP1RfB5Kv9C260ahJhyrDBi6qcnUq+JWpM40a4WR9u6+Og8dxZVOrLG2Y
- Wfgy2Bl7jcFaSAk74Ns0UUmBpLCQRhijzMQyGCxpJ7zZKaLeFALX1qLoezM1JTstx9vNjnx
- Z72OQUfUMCdTI/+Hyq6cA==
-UI-OutboundReport: notjunk:1;M01:P0:6GuG2S5CW2M=;hPugnMpdH8eeolGEee7DcQ92SGP
- HPxbNtb/5cmh+ZkisVbeA2rI9JrTZal7+tL4CCeFwKzB2INMLwYfLwin8mw4DHiMLT8xyZ83Q
- RvldsgU15PEy++idb8Ai3ESxTPQBOO2XTmskknWJz2INdz5H2ZXFhN81MhOj08r87kcY+Ebu4
- khWHpGmtw2+hCJAGi567yGwzGaUMEF1uF3TYocbUUZHrV+AChiLW76FCxvo8SsbIV4K0QR/5P
- skyVGihoRm2C1GsnLmFS4ro7eTVY6byNq1oeFE9EA0FL/8VToLdPbocAb9CT5hytM9IPeAt0o
- rOS+UFjTfvaZgjdYJ3uwuSw1KVzabCe1htXaorhj2WxSjSUXkixxZ2saeulMXjM4mU1wqButF
- /twZuoR6c93xC+RC9uwm88sOMOryy4cdU5noh4fGiILrSJc5/pxQQ2KWTFoMgT+y6gwOGSXaJ
- lypUOhGpIKdyBk7ciyhzOXVe0FB/HXsrynd3Dm/TIa+JSkz51fLIDaC3zuu6aQ4s//mDS8jvt
- +fTrwTQ3edOl39FzzoSKmWhDHBUIVNrG/vnSicc5UebUNWD9na1LGojjQd0k93lccT1oMHprJ
- yJFC0YhjIsAD31BUYUEw+iyKmr0aqOpPiqFGMf9WqIvOsabtSOv4XeJMn60DLJSx8Tjfob4Ke
- Pl1JN7GFezJ0gM11WnCn+CwZNBWdi5ofuhx6pKoWnDOa9B8VNN+H26ZwkOefs7LXDphlJ8sFw
- 6mdkKt9ODCgt3HRiCy2CWXSVCu7RTeqJAaeg7Z3hiVOFEtrM8IT+/djomWWiPESktzWHz48KK
- 3K267BwRWA7unQQUanCJW/O2rUjM+7mh5zu95IStXxzP0UV/JI5r5vRcfKaWaPEaUkkm7o83I
- lKXj/cF45tVQgUmor9mr5wLdknn10o34RqWlooKBrOH25Qxu5LB/y4ovUjF5/ySkh7KRuCpup
- iKzqYg==
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MIME_BASE64_TEXT,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KCldpdGggY29t
-bWl0IDg1OGU4Yjc5MmQwNiAoInRwbSwgdHBtX3RpczogQXZvaWQgY2FjaGUgaW5jb2hlcmVuY3kg
-aW4gdGVzdApmb3IgaW50ZXJydXB0cyIpIGJpdCBhY2Nlc3NvciBmdW5jdGlvbnMgYXJlIHVzZWQg
-dG8gYWNjZXNzIGZsYWdzIGluCnRwbV90aXNfZGF0YS0+ZmxhZ3MuCgpIb3dldmVyIHRoZXNlIGZ1
-bmN0aW9ucyBleHBlY3QgYml0IG51bWJlcnMsIHdoaWxlIHRoZSBmbGFncyBhcmUgZGVmaW5lZCBh
-cwpiaXQgbWFza3MgaW4gZW51bSB0cG1fdGlzX2ZsYWcuCgpGaXggdGhpcyBpbmNvbnNpc3RlbmN5
-IGJ5IHVzaW5nIG51bWJlcnMgaW5zdGVhZCBvZiBtYXNrcyBhbHNvIGZvciB0aGUgZmxhZ3MKaW4g
-dGhlIGVudW0uCgpSZXBvcnRlZC1ieTogUGF2ZWwgTWFjaGVrIDxwYXZlbEBkZW54LmRlPgpGaXhl
-czogODU4ZThiNzkyZDA2ICgidHBtLCB0cG1fdGlzOiBBdm9pZCBjYWNoZSBpbmNvaGVyZW5jeSBp
-biB0ZXN0IGZvciBpbnRlcnJ1cHRzIikKU2lnbmVkLW9mZi1ieTogTGlubyBTYW5maWxpcHBvIDxs
-LnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcKLS0tCiBk
-cml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5oIHwgOCArKysrLS0tLQogMSBmaWxlIGNoYW5n
-ZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJz
-L2NoYXIvdHBtL3RwbV90aXNfY29yZS5oIGIvZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUu
-aAppbmRleCBlOTc4ZjQ1N2ZkNGQuLjYxMGJmYWRiNmFjZiAxMDA2NDQKLS0tIGEvZHJpdmVycy9j
-aGFyL3RwbS90cG1fdGlzX2NvcmUuaAorKysgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29y
-ZS5oCkBAIC04NCwxMCArODQsMTAgQEAgZW51bSB0aXNfZGVmYXVsdHMgewogI2RlZmluZSBJTEJf
-UkVNQVBfU0laRQkJCTB4MTAwCiAKIGVudW0gdHBtX3Rpc19mbGFncyB7Ci0JVFBNX1RJU19JVFBN
-X1dPUktBUk9VTkQJCT0gQklUKDApLAotCVRQTV9USVNfSU5WQUxJRF9TVEFUVVMJCT0gQklUKDEp
-LAotCVRQTV9USVNfREVGQVVMVF9DQU5DRUxMQVRJT04JPSBCSVQoMiksCi0JVFBNX1RJU19JUlFf
-VEVTVEVECQk9IEJJVCgzKSwKKwlUUE1fVElTX0lUUE1fV09SS0FST1VORAkJPSAwLAorCVRQTV9U
-SVNfSU5WQUxJRF9TVEFUVVMJCT0gMSwKKwlUUE1fVElTX0RFRkFVTFRfQ0FOQ0VMTEFUSU9OCT0g
-MiwKKwlUUE1fVElTX0lSUV9URVNURUQJCT0gMywKIH07CiAKIHN0cnVjdCB0cG1fdGlzX2RhdGEg
-ewoKYmFzZS1jb21taXQ6IDc4NzdjYjkxZjEwODE3NTRhMTQ4N2MxNDRkODVkYzBkMmUyZTdmYzQK
-LS0gCjIuNDAuMQoK
+strlcpy() reads the entire source buffer first.
+This read may exceed the destination size limit.
+This is both inefficient and can lead to linear read
+overflows if a source string is not NUL-terminated [1].
+In an effort to remove strlcpy() completely [2], replace
+strlcpy() here with strscpy().
+No return values were used, so direct replacement is safe.
+
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
+
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+---
+ drivers/ufs/core/ufs-fault-injection.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/ufs/core/ufs-fault-injection.c b/drivers/ufs/core/ufs-fault-injection.c
+index 7ac7c4e7ff83..5b1184aac585 100644
+--- a/drivers/ufs/core/ufs-fault-injection.c
++++ b/drivers/ufs/core/ufs-fault-injection.c
+@@ -54,7 +54,7 @@ static int ufs_fault_set(const char *val, const struct kernel_param *kp)
+ 	if (!setup_fault_attr(attr, (char *)val))
+ 		return -EINVAL;
+ 
+-	strlcpy(kp->arg, val, FAULT_INJ_STR_SIZE);
++	strscpy(kp->arg, val, FAULT_INJ_STR_SIZE);
+ 
+ 	return 0;
+ }
+
