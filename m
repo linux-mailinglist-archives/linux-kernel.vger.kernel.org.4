@@ -2,125 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532F671642D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A9571642F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbjE3Oa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
+        id S232807AbjE3Oad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232631AbjE3O3w (ORCPT
+        with ESMTP id S233230AbjE3OaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:29:52 -0400
-Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FCC10D;
-        Tue, 30 May 2023 07:29:27 -0700 (PDT)
-Received: from [192.168.178.25] (host-212-18-30-247.customer.m-online.net [212.18.30.247])
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by mail.tuxedocomputers.com (Postfix) with ESMTPSA id 742152FC0061;
-        Tue, 30 May 2023 16:28:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
-        s=default; t=1685456932;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZXOvqfx5EPoWy3M4w6NpHFRCYWVyI+dh3j+HZl5EGZc=;
-        b=dcKMlKIuUuuB9sYxmVuyzspkyHBvshoP/HCEQWysEF24I+HRmUC0L1eJfYBJ1JP/QVmlff
-        uPZCa0srxJKkrJ2wk8FGCbRQTIg+XX8tat+FgdgCi8GV+x8rs8S8DUXkoSqfdjXJ2T0U7T
-        kKN2+trHzYJP1uVVFxQomzMuZ5ZOBUk=
-Authentication-Results: mail.tuxedocomputers.com;
-        auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
-Message-ID: <44574d05-3a2a-2249-b808-7e929feea36d@tuxedocomputers.com>
-Date:   Tue, 30 May 2023 16:28:51 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] input: Add new keyboard backlight control keys to match
- modern notebooks
-To:     Bastien Nocera <hadess@hadess.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230530110550.18289-1-wse@tuxedocomputers.com>
- <d4d6eb1da42de6536e708331100fc33e9cfae140.camel@hadess.net>
+        Tue, 30 May 2023 10:30:12 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2049.outbound.protection.outlook.com [40.107.94.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236A6129;
+        Tue, 30 May 2023 07:29:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CXqvCrkVZ8Kbgjicqnbu/gaWfyfhtFdSWUFqnvM8m2bmdw5f9pXoeY3MmrikWKiebshNUGyNEV8oPr6LIiZ3XxAPntmBQA+8XYcH5nKRTnsh/sTv2llhgqS+SaTVDt3bz5wjgIhbzvWu/mXbfj5WovWKwXmTe4yMn8W+lK83yVrxacKt5yU+9bFpeoTXrZoeBOKLOO46wsKB5mZTgLbZMaldrYJbir/W+a+xJixDUZBcHSu3MrbgKZG4xjSm7/z3hN2USKLtWmeCTCfQxTg8cjVJt8ruMOlG6D2yl0CAAXf1XfRvSmbtzapGwlf9CYSxKKnOFeRqX5ZEQU3NRa6USg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WYd195WRbufnGit5E4LTq15wf3SEZn7Vc/snEt2pD6E=;
+ b=SdQ3UqOp8nIKlYAa8B3gcET5HJvlNexnpdzZhw7rU3RhTeEzRqcgNcCgUueprJueBQUlOc+Jr7uedC91puIbgiy2wrXkBtRZJTw0n2Ba6g5Fxnd91lTpaxLbKqEkVv1O0Z5wmFaavml1WGkgoFdrHF0ph1cnTQsvMig7SxKJmzkCJAvZQ5lf5QcCWTcXRg/3zImTiYpDtJuiXR+4fwgURSifw/cVOxqxfJ14Se0YmyNDf3rxuO9x33pW8tEbtlro1tNMQbqisyO0Ur8rX6PDTnRIIbn5wQBWAO6jswZkth6JeV0NEZrKz06ejUpFnNqglOzg1YmcDcLhS7L06ZRyXg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WYd195WRbufnGit5E4LTq15wf3SEZn7Vc/snEt2pD6E=;
+ b=o8kI2HAfo93FosL6+1jEV9747aldwx5WjAPFpddDveix6hGaIlnlBHTVY+puPAprCa3bjwYmSSoIugW1nK1d3+9vmXRqW3QnUR5HxNxcavsdtRDDu9eeGRRCa5i/qrK8OHu8K7iQMYmPCfktUWW1INrPdwcz79FO4Q+DC1Mp48I=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM8PR12MB5398.namprd12.prod.outlook.com (2603:10b6:8:3f::5) by
+ CYYPR12MB8732.namprd12.prod.outlook.com (2603:10b6:930:c8::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6433.23; Tue, 30 May 2023 14:29:15 +0000
+Received: from DM8PR12MB5398.namprd12.prod.outlook.com
+ ([fe80::c80a:17d6:8308:838]) by DM8PR12MB5398.namprd12.prod.outlook.com
+ ([fe80::c80a:17d6:8308:838%4]) with mapi id 15.20.6433.022; Tue, 30 May 2023
+ 14:29:15 +0000
+Message-ID: <4ec4bcb1-fc18-578d-fee5-cad5166f3c2c@amd.com>
+Date:   Tue, 30 May 2023 15:29:09 +0100
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH] net: sched: fix possible OOB write in fl_set_geneve_opt()
 Content-Language: en-US
-From:   Werner Sembach <wse@tuxedocomputers.com>
-In-Reply-To: <d4d6eb1da42de6536e708331100fc33e9cfae140.camel@hadess.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Simon Horman <simon.horman@corigine.com>,
+        Hangyu Hua <hbh25y@gmail.com>
+Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230529043615.4761-1-hbh25y@gmail.com>
+ <ZHXf29es/yh3r6jq@corigine.com>
+From:   Pieter Jansen van Vuuren <pieter.jansen-van-vuuren@amd.com>
+In-Reply-To: <ZHXf29es/yh3r6jq@corigine.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0251.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:350::19) To DM8PR12MB5398.namprd12.prod.outlook.com
+ (2603:10b6:8:3f::5)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM8PR12MB5398:EE_|CYYPR12MB8732:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4ab5cdf8-193e-43dc-f520-08db611a3ec4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +XSjJwWAyzgk19iIKLxPGuGDh3qajX9qbZS8TF2sygNooEPEMp1T/qsy2rAVaJo8Db3Pe43E38jLwG0ggxX8y3vV2VK6PF5ohfrqTM01uaCrGTG0WXfsCLyKVU5qb0Kxfjv9UQ5RE2TjCTKrisn7Vsx2LGZokmMev4ZXmAOPEiorYEH4VUmM+NIKXUoVLwmRzXLY/mRls2cGzrrBAxTogN9RCpMOulQwputKYJVmF9eP3a7sVgtu6vdo89kpoCjMFAxOodBEidk56K0GigpsioTcMHGJJx/yZPORsUmvuooNKqmbBpvh+9oRHgX7lYzZoVNXfg4QMarGzJ9d6KHgEFLTISvHrxqOBm6qJtyzDuN54u8f54a4YgmsRWYh/3jhP8+HB7Zi53gNOBSgWmcvfgHxnezOfqp6smSSPau5nUf4WBrD5fvazo6NHgrtvybBo+rmW52/mXnMe3/3tfXBJQme7jHjxqj+oqOBoIQKa7aecBaXAWwBywvzqD447R1kS499YASTIeHfcanhoxV//WMTw4Qdd7Tq6TyeX4uCeIeAdLaSzzIjexdZBPRbRTcOpyfrSmBp3JKdHcTcD6TbjHHjW0xBcKjWHdAfUY9SN4Z3DaqD1FdIjLPatGDwUYeUddE+liSt/rtRHoKTyXciFQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5398.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(366004)(136003)(346002)(451199021)(478600001)(110136005)(8936002)(8676002)(5660300002)(7416002)(86362001)(36756003)(2906002)(31696002)(4326008)(66556008)(66476007)(66946007)(316002)(38100700002)(41300700001)(2616005)(186003)(6506007)(6512007)(53546011)(26005)(6486002)(6666004)(31686004)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QzdMWmVaMFE4Z0d0MUt6dTA3aGU4WWZsbWpJUjhkK1JoNGdsbUE5dDFYQWNr?=
+ =?utf-8?B?QXRMQTkzZFdBWHZteXJpQUdFN1dYN1VKV1BNRkI1MFBVVUh2VlVaMXZ1eUR2?=
+ =?utf-8?B?cWt1SVZIS2tIWVRSaEEvVTBBVHhsVjhjZ2dmb09Ib2JYbWtLc1BHSEl3ZktF?=
+ =?utf-8?B?L2RKYzBzWDZjdjNwYmgzakQzMVl5OURFSU5QdmtFaTVEN2hQQ1JBTE1SYkNa?=
+ =?utf-8?B?czFLU3hWMXViSmlhVjl6MXNpZ0RRSHhQTmcxWGtCaDZZMnNpL3pUdUxseEM3?=
+ =?utf-8?B?V1hRVmgrOXdSTko5QzhZQzNka3A2b0dIa25UbGJNWXVkN3FmOWs3NHZEbytG?=
+ =?utf-8?B?TUdIUm5NaWtWTCtmRGJCL0RXM3puTWFWaWE4clphMXBhMnRNcHk4UExJOUJz?=
+ =?utf-8?B?dktaS1Q2VTZyNW13Ujd2RW5iTGNMZThnWFlrbXZWdlZzdUhmeFJGS00zSlIv?=
+ =?utf-8?B?cVNaMTI4aGU2c2dBR3k4SmVwbEhaQUJhVmhLU3NJTjhJWkRiWEx5TktuWU5l?=
+ =?utf-8?B?bzRKZEIrQUxUQTJCeHFqWXFLaktaSGswNGlOM2JRTzBxZEtXV095aWdYRkFM?=
+ =?utf-8?B?elhUR0xXZWFYdExFNjgyWlBOcDUzZElZNE53anFhNDdpMlVQeHBZdXpsZEF0?=
+ =?utf-8?B?aTlrcjdvNGtLOGd0c3VyZDdtQjJwa3dxWHBlOURQRld0TnNFWjhuamg0dk5n?=
+ =?utf-8?B?ZjBDSWJHYkllb09QS3JMOExEZkE4WDRWOE8ydGQzOStEaUs5ZkdtUHJMQkJ3?=
+ =?utf-8?B?bm5wMWlJcTVrMUdKa3lKcjR1NVBLWmdXTjhSeFo4VkFDbGVCazJPZHN5eWw3?=
+ =?utf-8?B?NjRvT2Q4VDZYT3pGb3RyYzRqbFcrWk9nTkd6VE9sV0hBTXpqSGRydGQ3UHVP?=
+ =?utf-8?B?UHF2eFlvZVVFS3RHV1huS1E4elNGT1BRbWxFdlNrbVZLbml5VitSUVM1QURa?=
+ =?utf-8?B?Z1Jxa0NPemp4Ukx5TUc2RGk3a1FCS0gzR005OE5jVWFPSU9IRGJ3MkdwbDBF?=
+ =?utf-8?B?SlhJYXJSMFZEUDVEeEIzRFFob2hvMEM2OUc4eHZxZWtYZnZVdDBjcXhqZzRE?=
+ =?utf-8?B?NlQ4MXIxOGlxcUpXTkd2blRkQ0oyNTJwOFd6aFpDWTZPdW9la3JqMXhuNUFK?=
+ =?utf-8?B?MVFPWlhBZFpja0crUURoM1ZEYzZKWUF5SmJFNXg0M1ZyQUV6M016UldlMzhx?=
+ =?utf-8?B?ZWJ6SjlJT014K2FBWDhYYkdEKy9QaFE5eFNxbm13OGtzZjZma0ZJRjFoUm4y?=
+ =?utf-8?B?NHBZMTduTnpYeGZiY1B2Mm5UOXZSL3dLekcvbzJydHdSNzl6N09UbkxoQzlM?=
+ =?utf-8?B?SW5zRy9WOXNFeEhNcGNGSDV3blh5V1BFUjhUdnhiVEpndW1CSXJmbEVMQ0I1?=
+ =?utf-8?B?dTNZTzJoN3IzUitOMkNqZW9nSUN2NlpPV01yNW84WUJtWHVQNXU0bGtqYjI3?=
+ =?utf-8?B?eU9vTGFCeTU3aUVmQUxTMG1keEJhaHAvK3NnQ0ovMXl2SE56eU9EbWNQYU1k?=
+ =?utf-8?B?cXZvNmhtMlIwSXNmeWJnc1F0eFprdGxNc2lDRlZ3WGtmSEZaUUtxMDFKN1Nl?=
+ =?utf-8?B?b0VZYlFPTHJYVXRrUmlSOG16cUxmb0pmZnZad2RsMUZBYTJOcjdqZjdUSWFi?=
+ =?utf-8?B?emZoK1NjQ2sxQkladG9OdGplZUdCRFpIVFJJNXppUS9sZzFJbHF1N1VaU1Jt?=
+ =?utf-8?B?MWtEekZ1enplTFFnRlBnd1huZGkrNXozSG9zQ2ZsZyt5bGVmVVYrN1N4bEJq?=
+ =?utf-8?B?NG5GT0dxV1NlZVAwNTJvMXM1UlJqYk4zMGpmMWhxc1Vjc2FHdTI0QnhNeG9v?=
+ =?utf-8?B?MmF1VU9hUUQwOHBUeDY3NnBiWWNud2tLcWZicy8zT0JXOXpkVERTRzExZnh6?=
+ =?utf-8?B?UnpaY1VSMkQvdVpjNGNaaHVnbkZYYnozYU9PY1h5N0Z2SmU0c2NSMStyUFNB?=
+ =?utf-8?B?Qmh0VjJzc1JLTjNtcGRjZlpJK2ErTHJoTkNGSisyNFE1azA0RDdjZ2w4MmhD?=
+ =?utf-8?B?REc1bXM1L1BTTjFZLzNNL0V4Tm1PZi9oMU5kb01uTlFsSnRZeFYyajZaeXE0?=
+ =?utf-8?B?UTVkeStLbk43Y2R2dlRlS3R2YkhlL1BLM1RNS2lIYmNaNWNnNTJRc0c4c3VR?=
+ =?utf-8?Q?tdhGUSt2WIG/v5V0PqMFBwqUa?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ab5cdf8-193e-43dc-f520-08db611a3ec4
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5398.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 14:29:15.5066
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JsURqNYOYCe3YJhGA3dT80KsjQFT9tEk61fBGrM4iHoV1yfoPTLC/Xe2JOzWBPD7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8732
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-Am 30.05.23 um 15:33 schrieb Bastien Nocera:
-> On Tue, 2023-05-30 at 13:05 +0200, Werner Sembach wrote:
->> The old three KEY_KBDILLUM* keycodes don't reflect the current
->> situation
->> modern notebooks anymore. Especially the ones with RGB keyboards.
+
+On 30/05/2023 12:36, Simon Horman wrote:
+> [Updated Pieter's email address, dropped old email address of mine]
+
+Thank you Simon.
+
+> 
+> On Mon, May 29, 2023 at 12:36:15PM +0800, Hangyu Hua wrote:
+>> If we send two TCA_FLOWER_KEY_ENC_OPTS_GENEVE packets and their total
+>> size is 252 bytes(key->enc_opts.len = 252) then
+>> key->enc_opts.len = opt->length = data_len / 4 = 0 when the third
+>> TCA_FLOWER_KEY_ENC_OPTS_GENEVE packet enters fl_set_geneve_opt. This
+>> bypasses the next bounds check and results in an out-of-bounds.
 >>
->> e.g.
->> - Clevo NL50NU has a toggle, an up, a down and a color-cycle key
->> - TongFang PH4ARX1 doesn't have a toggle key, but one that cycles
->> through
->>    off, half-brightness, and full-brightness.
->>
->> Also, on some devices these keys are already implemented in firmware.
->> It
->> would still be nice if there is a way to let userspace know when one
->> of
->> these keys is pressed to display the OSD, but don't advice it to
->> actually
->> do anything. This is the intended purpose of the KEY_KBDILLUMCHANGE
->> define.
->>
->> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-> Can you please point to the user-space patches (or issues filed) that
-> would integrate the support for those keycodes, and make the key
-> presses do something?
+>> Fixes: 0a6e77784f49 ("net/sched: allow flower to match tunnel options")
+>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> 
+> Hi Hangyu Hua,
+> 
+> Thanks. I think I see the problem too.
+> But I do wonder, is this more general than Geneve options?
+> That is, can this occur with any sequence of options, that
+> consume space in enc_opts (configured in fl_set_key()) that
+> in total are more than 256 bytes?
+> 
 
-I'm sorry to say that these don't exist yet. So I guess the process is similar 
-to DRM uAPI additions? 
-https://docs.kernel.org/gpu/drm-uapi.html#open-source-userspace-requirements
+Hi Hangyu Hua,
 
->
-> Has anyone tested that those keycodes are fit for purpose when mixed
-> with other brightness changes that don't happen through key presses?
+Thank you for the patch. In addition to Simon's comment; I think the subject
+headline should include net, i.e. [PATCH net]. Also could you please provide
+an example tc filter add dev... command to replicate the issue? (Just to make
+it a bit easier to understand).
 
-Color control is not yet implemented in any DE afaik, so there is not yet a 
-collision with the color cycle key.
-
-For the brightness cycle key, I would assume that it functions the same as the 
-brightness up key unless brightness == brightness max. In this case it sets 
-brightness to 0. I don't see a logical collision here as brightness up and 
-brightness down are already implemented just fine in most DEs
-
->
 >> ---
->>   include/uapi/linux/input-event-codes.h | 4 ++++
->>   1 file changed, 4 insertions(+)
+>>  net/sched/cls_flower.c | 3 +++
+>>  1 file changed, 3 insertions(+)
 >>
->> diff --git a/include/uapi/linux/input-event-codes.h
->> b/include/uapi/linux/input-event-codes.h
->> index 022a520e31fc2..05287bf9a77f7 100644
->> --- a/include/uapi/linux/input-event-codes.h
->> +++ b/include/uapi/linux/input-event-codes.h
->> @@ -803,6 +803,10 @@
->>   #define BTN_TRIGGER_HAPPY39            0x2e6
->>   #define BTN_TRIGGER_HAPPY40            0x2e7
->>   
->> +#define KEY_KBDILLUMCYCLE              0x2e8
->> +#define KEY_KBDILLUMCOLORCYCLE         0x2e9
->> +#define KEY_KBDILLUMCHANGE             0x2ea
+>> diff --git a/net/sched/cls_flower.c b/net/sched/cls_flower.c
+>> index e960a46b0520..a326fbfe4339 100644
+>> --- a/net/sched/cls_flower.c
+>> +++ b/net/sched/cls_flower.c
+>> @@ -1153,6 +1153,9 @@ static int fl_set_geneve_opt(const struct nlattr *nla, struct fl_flow_key *key,
+>>  	if (option_len > sizeof(struct geneve_opt))
+>>  		data_len = option_len - sizeof(struct geneve_opt);
+>>  
+>> +	if (key->enc_opts.len > FLOW_DIS_TUN_OPTS_MAX - 4)
+>> +		return -ERANGE;
 >> +
->>   /* We avoid low common keys in module aliases so they don't get
->> huge. */
->>   #define KEY_MIN_INTERESTING    KEY_MUTE
->>   #define KEY_MAX                        0x2ff
+>>  	opt = (struct geneve_opt *)&key->enc_opts.data[key->enc_opts.len];
+>>  	memset(opt, 0xff, option_len);
+>>  	opt->length = data_len / 4;
+>> -- 
+>> 2.34.1
+>>
+>>
