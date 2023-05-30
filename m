@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EA87164F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433447164F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233024AbjE3Otb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        id S233071AbjE3Oth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbjE3OtQ (ORCPT
+        with ESMTP id S232897AbjE3Ot1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:49:16 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91157107
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:49:12 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2af2b74d258so49133281fa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:49:12 -0700 (PDT)
+        Tue, 30 May 2023 10:49:27 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1BD125
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:49:15 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5149e65c244so3256503a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:49:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685458150; x=1688050150;
+        d=linaro.org; s=google; t=1685458153; x=1688050153;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=W1z7LKWFPOmfXdAKBPrDZn05nG/m3OsiksUdI+BUoo8=;
-        b=au3kKg8W7QqZlM184Mf3plRAjYuxNOiScsb1NkoNQrKhB+QKk+18S6EtrPRE58o5Rs
-         Q1/3o2Mjj9eY0FEkE53VAKcNAbApZFdG5q9x7+IyOwzMudLNMFi+sq4W0TzNG2QkGwHO
-         YnGuPKIwQhukjOLKYlXmRBvdNvqokIHxeYfj7hwnQ4hepXuizdGpVCLTdZusUyau/TGP
-         3Vj4v3F4Sg6f3/X2GB+44fSqmHH9eyb+nkIEeJFVpK5Ifb5peDRxxdT/JHpLmKDfKEph
-         /287kJIavDJMaiQ4wsKVKTqboEp2XQfs7llNgs/6FY4YQQ0C6Fz2iGXVoBHlZ2Iep6Ah
-         ZkVA==
+        bh=g8G0c0mpPhFQo7i+RrdSfLHYDtYE35R5vJ/b+M/gxuM=;
+        b=TwckJzmIHLNkTEHE3PeH0rFIRq6IgHs6ns9hHaVT+YPvGvMq0zVOCf9i3GguI1d4gZ
+         ++87FyS17cHjFpyYYP11L6B1mQU4Qo74fZSooFervsiBR+0ar8BkWpaVXwtpZJ22dllW
+         F4As95G3fMbOJoMJg6N8HhzdnsqtbXz5JGTeY2R8J4hUP1ovNUrwdSrIKFEDFkBMxgWS
+         VOOZWJYhhEWYhR9zQGpR4NKq5NMj69QmgmJqj/PlGAuQQv3USs+CB94ozMps71kYZ+cw
+         UxnmmPyVuSIi0a0b5aN2HgHzEreZKBY9iaovEdyc1IzjG70Ypp+EX32+456crShhdma/
+         B9aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685458150; x=1688050150;
+        d=1e100.net; s=20221208; t=1685458153; x=1688050153;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=W1z7LKWFPOmfXdAKBPrDZn05nG/m3OsiksUdI+BUoo8=;
-        b=l9m/KrwI5Cm1Hn6nfrAZ/7CQ+TuWLEPWGrjRN4kr83WiCCWDRbd8CZ+y+9eMEg12I6
-         a2Nte3AbGx3DyFMZUZAne/1R6XQ7ATOIpYlxSHNIr6WgNlUyrRekSxylVM6WDJmgajmQ
-         zBLf0iHbkgXszSsM3yf1tHPu+sZdtoLQ7pN3znlb0jhXzlla4VlnBw4N002iORJjxEGd
-         wX5f+QO2R79kT/rPicJ2QGNjfl4l7Tg49wy8rB8zDyODy5JYFE0Rk0XEMxup8HvOE4QL
-         vmo1KCQajbGnekISl8dQ7ajUHhbkunns0Zyfmsql5K5Vg6UMDBfR7a/uMEuLnUFIP+4D
-         qieQ==
-X-Gm-Message-State: AC+VfDxCSLtUVIAMe0WJwhfDXrP/jctpaOb9Z6sUhDw4Uw6U8mbhMAv1
-        8lGIW5A2WffHp+bBJRth3Rxkpg==
-X-Google-Smtp-Source: ACHHUZ6Q397O5W+0T36KU+LeZVZXavLXO/YPP87rL8qBwPyoOzxipjl3/WBbz3r85vX0ljLsQp0EWA==
-X-Received: by 2002:a2e:8382:0:b0:2ad:a12d:e458 with SMTP id x2-20020a2e8382000000b002ada12de458mr1016018ljg.41.1685458150736;
-        Tue, 30 May 2023 07:49:10 -0700 (PDT)
+        bh=g8G0c0mpPhFQo7i+RrdSfLHYDtYE35R5vJ/b+M/gxuM=;
+        b=lxDvlpqpwlEly2Lyo225029W2nlqru0pddZtRYMnjlAX1Vi8A/vfD965krocE1jSgF
+         kOOC9mm62u8dFyTrHl9R5Qh5i6zE8i3CdrNmU2P9NHbT8HimTOQuj93xh8HtCtlWCQNt
+         JnD0z+qJn4ScI07htU+SBu3MuK68WjSF3eZ1xzLnRiqW7mElfNJAD8TQii9gwUVo7Z7Y
+         C4ulPwYUJUq33CJVFJkO9rLFGc56BgdEkbBeVtfT/zriPI6EoXG9Eng3J9GeFc9DFqg8
+         s/aq5jalslzrn0r7zCwMLovEGlN+t4R7YvcNQnRJDSP5Twci5I3Wza9MKzGghzWI8+YN
+         3qAw==
+X-Gm-Message-State: AC+VfDyRy8P/kJAbYQcXPZ8A/+EEeQ1kMQFIHZeFxGo1X9SLuGf7OBzb
+        cGgEwo/LyWouw+UNPM0zT49nIQ==
+X-Google-Smtp-Source: ACHHUZ4bhaXhOGjXcCnROMILTcaXL9g90bzH/pnqZRsukzbQfT55KK4gcDyEoP7X+Mzn6P4JbZvAeA==
+X-Received: by 2002:aa7:c59a:0:b0:514:9319:ebff with SMTP id g26-20020aa7c59a000000b005149319ebffmr1869786edq.24.1685458153812;
+        Tue, 30 May 2023 07:49:13 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id q21-20020aa7cc15000000b00514b2717ec6sm631283edt.28.2023.05.30.07.49.08
+        by smtp.gmail.com with ESMTPSA id q21-20020aa7cc15000000b00514b2717ec6sm631283edt.28.2023.05.30.07.49.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 07:49:10 -0700 (PDT)
+        Tue, 30 May 2023 07:49:13 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Vinod Koul <vkoul@kernel.org>,
         Kishon Vijay Abraham I <kishon@kernel.org>,
@@ -76,9 +76,9 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh@kernel.org>,
         Tony Lindgren <tony@atomide.com>,
         Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH 5/7] spi: dt-bindings: restrict node name suffixes
-Date:   Tue, 30 May 2023 16:48:49 +0200
-Message-Id: <20230530144851.92059-6-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 6/7] dt-bindings: timestamp: restrict node name suffixes
+Date:   Tue, 30 May 2023 16:48:50 +0200
+Message-Id: <20230530144851.92059-7-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
 References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
@@ -95,9 +95,8 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Make the pattern matching node names a bit stricter to improve DTS
-consistency.  The pattern is restricted to:
-1. Only one unit address or one -N suffix,
-2. -N suffixes to decimal numbers.
+consistency.  The pattern is restricted to -N suffixes to decimal
+numbers.
 
 Suggested-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
@@ -107,22 +106,22 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: Tony Lindgren <tony@atomide.com>
 Cc: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- Documentation/devicetree/bindings/spi/spi-controller.yaml | 2 +-
+ .../bindings/timestamp/hardware-timestamps-common.yaml          | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-index 90945f59b7e8..524f6fe8c27b 100644
---- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-@@ -17,7 +17,7 @@ description: |
+diff --git a/Documentation/devicetree/bindings/timestamp/hardware-timestamps-common.yaml b/Documentation/devicetree/bindings/timestamp/hardware-timestamps-common.yaml
+index fd6a7b51f571..95f42acd0c54 100644
+--- a/Documentation/devicetree/bindings/timestamp/hardware-timestamps-common.yaml
++++ b/Documentation/devicetree/bindings/timestamp/hardware-timestamps-common.yaml
+@@ -17,7 +17,7 @@ description:
  
  properties:
    $nodename:
--    pattern: "^spi(@.*|-[0-9a-f])*$"
-+    pattern: "^spi(@.*|-([0-9]|[1-9][0-9]+))?$"
+-    pattern: "^timestamp(@.*|-[0-9a-f])?$"
++    pattern: "^timestamp(@.*|-([0-9]|[1-9][0-9]+))?$"
  
-   "#address-cells":
-     enum: [0, 1]
+   "#timestamp-cells":
+     description:
 -- 
 2.34.1
 
