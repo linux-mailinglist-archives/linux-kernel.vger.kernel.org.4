@@ -2,140 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5E7716E30
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2E4716E36
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbjE3TzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 15:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
+        id S232977AbjE3Tzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 15:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbjE3TzS (ORCPT
+        with ESMTP id S233401AbjE3Tze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 15:55:18 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2107.outbound.protection.outlook.com [40.107.237.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B8AE8;
-        Tue, 30 May 2023 12:55:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q3ZwKE8RtH/lFGE4ZBu+44ko+o/KnPI/MlPxidaz+ip8c2fBZOi/Jq8dYY50kTGDq2RJbzRL3CyFqYSnueyFJv+n8Fs974SFs7T//TI9KpOkmTn0qU9CyLAx21ds/sSypRjHEaf59soSckXOmU9uhcelykKDquUIaIcL0RZDH6yBK1tgurE3khmBbP2QPwSLqyIzLd4BVnA39BqsZ1O4VQaZQ19hKxQr0/cqAT1ZK9n86bgIuBVmMaUCDXFuGinhmGGEnWmBmdHkcYpDYuMGqZwVsrygz3QmUcCi2qxX8yZqQkZgUmjpuntmJkyH3Z5sytJAJTnhLWrk2HvZlv4WVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M2QibxGVOA+FGDY6sCosHoqKQJ+rnFs+kdwLi+r13AU=;
- b=YN524pWy4729+RCn941UoxthBu3QiyZrThIKp1L4/Vcjyx9jUV1Wo4Wv49PsV23hOlK8sLTX9h3kc35EcxIRes8gdkP1210dd/oC3AuJ1UrKORwJ5TozPOePMpJm6anK9Zh7IqEKZNSiryFBMeW2UIrN0CssL04TH4ga1WVvcL5d18E5V/kLlAaf/LY6aZGzOctAQxihaNdUg2pD9vUZ8G7PfMy8F+1ZPrGVQGI9WxONdvpwI9a4JmDNW29Zb5Ua1W5k3o+2hBKl1zpDgoj6x11zyTu+DldkRLuJyaTXZ3J5gLROgNQA45qj9RRO9xRcIvB7jbpWMFjHy7FId48Eow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Tue, 30 May 2023 15:55:34 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E346129;
+        Tue, 30 May 2023 12:55:29 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-5148ebc4b89so7126707a12.3;
+        Tue, 30 May 2023 12:55:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M2QibxGVOA+FGDY6sCosHoqKQJ+rnFs+kdwLi+r13AU=;
- b=ncnNb7xI5jmXtdslzj6qL62hs1fo9NtGNuPgrbHuI3sMCMBoEIOyDQE1Mx/028pJaUz7XpNHrjBg2a0QmNVWdsFbLriclp1PnhOjWkuVTdBqVi8fsyp7EY5WwtlQmG6QD1cQPSeKLUQ9EStcnbBRqXj3o0l9ZtyvkxVrvdSbdLg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH8PR13MB6182.namprd13.prod.outlook.com (2603:10b6:510:259::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.22; Tue, 30 May
- 2023 19:55:15 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.022; Tue, 30 May 2023
- 19:55:14 +0000
-Date:   Tue, 30 May 2023 21:55:06 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-crypto@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Jeff Layton <jlayton@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 02/10] Fix a couple of spelling mistakes
-Message-ID: <ZHZUmj71oJYKYYLY@corigine.com>
-References: <20230530141635.136968-1-dhowells@redhat.com>
- <20230530141635.136968-3-dhowells@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530141635.136968-3-dhowells@redhat.com>
-X-ClientProxiedBy: AM0PR10CA0102.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:e6::19) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=googlemail.com; s=20221208; t=1685476527; x=1688068527;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JosYzEY1lGmppLDev48gkCgWxDTfd3euZCE7PWnGECE=;
+        b=JRMxSf2z2l5ohNt0RMgYCYxWjbyqpDdm1OrbpPj43wHx4EBfg1PjnEt9XDhLl9nwIS
+         jMOsDOPB6K3tKj7imM/7qXNSCr69jY0ngoXTrHdI6pn3ItphR4sLe2+POS3Mw/Mltmey
+         1f7/+oTEhumsfTLYumWWb26roMeyb+JoxfysZ2q0nm/GHAhZfp7KoKR/l7PdLZ0j30hn
+         +dDsVpOAc0kCrbrGIcjGUlbkIZMLjN3zjdwQX8zsflGGMjEQYfyjIaTvTocfKaPY8wSe
+         Z97RtyYlmM4r1mpbMSm/x0TCIzz/d2I8tatGJSZU9h2ylaZ9w4Ii3bLPRUM49TlQOwHL
+         HdyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685476527; x=1688068527;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JosYzEY1lGmppLDev48gkCgWxDTfd3euZCE7PWnGECE=;
+        b=fnDZRDfeNkTcI4xVYeDdjAw0YN7jhaE+1h+Med4B7zr4A3kfvnhi5v7Rn8D2k0IOqb
+         XAw7LKDoded5l5omucaDKrwHLZ5NADcqu5qFAAyQ8J5vxWxFOI/cjZ98oONtcgrqCJMz
+         KC6air92v3TTLdJTOO1qadHGeETIz+zbHyoc8QpHUOdpffw25M6Psy9b/zj8ebedJLbY
+         a7d54x1zDp6vnhGjMuppQ3HM/0IwqB2PGa3WkPQJSoQ0PMdHRbRTQI8dEKfuhEFxNSKt
+         RpvnNkdLD0jJ2YlvYJ5UjZphFBJBJ7KXfabIH/inWFvRxou3i6lF64Fvp2dr8LIdnR1s
+         y5yg==
+X-Gm-Message-State: AC+VfDwn2DYKGwA5dyVl3CS97o43LYtDveHCWIsBSwdaO4o4hzbkTdzo
+        09om3f58uJBmWJ1rLsH9DC7zyYnWCfv9G/MUXVc=
+X-Google-Smtp-Source: ACHHUZ4P8r71ifJ+3o1ntKGm5WKvUQG9mQEAudtmzYAquTKx6MuMQE9ysPL3S5YD6wpSRL7NZm6o//GZQRb4UWb/U9Y=
+X-Received: by 2002:a17:907:318d:b0:961:69a2:c8d6 with SMTP id
+ xe13-20020a170907318d00b0096169a2c8d6mr3858560ejb.69.1685476527225; Tue, 30
+ May 2023 12:55:27 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH8PR13MB6182:EE_
-X-MS-Office365-Filtering-Correlation-Id: d2389c8b-f74f-4692-1dfe-08db6147c8d7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ounxAFoAEjYbTDoKI1qQVvxasgO5Yx9mGvTRH/JUgf2m9wLv1KGWGm71L6ZBjf5gEQWR/tigLort9JANn2mIXMAiKpDU+xZ27Ix6eDWbMRj1tXXxUBv6HTlH3J+RNJbzhhaNtbvjfUrmJtQfRPTUlWooZCsh/1CNg984qUZWlQ2P7XxB5nEaGj5rKltLDLtNOzKFq30DlHrUXchm2zHDxeEPNX8SEB9pDXblgpb4OR0QOkBi0yUMDghauNyHhGWAnKCsaD5o/ST2j7R3iJpZoY1GugRb2uL29yvYkVaoHz2rzVZNg46wb6e3LRwFJbsgvW9ZXexEo349VAoPDuIAwqrfdO+Yct3ehPBhhFfvvuNEz4EXs2ayc8UqDO1BSQfV00TKIWSMj/bMHujmJCMrjycbODa2OypsyLNPNVpRNfNTW6Y8ZH4FrphLSrgmfL3BOKJnCI4Olkh9avCiPRUs7YFcWsBJ5Few3SiQecoTYul4VwmRQHYoj65hs4/om+fcvVtHWZfGGFZmOPq91x4gYt51xDxSFs7ORZuO+f58LkY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(376002)(396003)(366004)(346002)(136003)(451199021)(4744005)(478600001)(2906002)(186003)(6506007)(6512007)(5660300002)(8676002)(54906003)(8936002)(38100700002)(2616005)(966005)(6486002)(86362001)(41300700001)(316002)(36756003)(6666004)(4326008)(7416002)(44832011)(66556008)(66476007)(66946007)(6916009);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ePV5Mg2v+nXuak1La6s9TxA66j4ne3Sd2idZAkFsNZEOJbvrQr36LZpHaVMj?=
- =?us-ascii?Q?IR0JI2PDppAUUoOYrz2+jYws7caQcYWdTRWTu24Tdo28kvzjvtshCGP5bmt5?=
- =?us-ascii?Q?Bp/W2wZul6rUMJMLRXXntGx3XH6UXTD2Ll58nbQPZm3sAIvuGst9/R6C7ylD?=
- =?us-ascii?Q?9xcQa2tJUAb6N4Ro4orik5bBUWAmiotjKwCrsZl3AgR5QhaqzKHqYMSulPh8?=
- =?us-ascii?Q?nfWDKKRPqARmFleLcys7bTPKTTeyKDocDYaV/MoVl2glwQw6YEG9j1W7r2Jz?=
- =?us-ascii?Q?TNPNVpt+Dmq6G4KlfU+ZUUsos/jTnVBeCb5ae4ZhqLT+6dnNkTBLF6esPnS1?=
- =?us-ascii?Q?4mnASXLsUIrxqjGT9woqUYVMe+AD5Hp5TJFc5yA7KGcD7wma8u23oraX8KHG?=
- =?us-ascii?Q?xtynStSRqG71A73GiIQ62/BNOv38+eHHbVbtEam7+MnodaxqyJZUMBKqlb4e?=
- =?us-ascii?Q?cdNIUlrRENgz7nkFQ0cT5Hi/O1zDzKUgytsL/F09bnuIWp/t0a1vcnZr+uif?=
- =?us-ascii?Q?zSlLHlle3i8G8ufVhP0moX1QmyGt78c7VUHVnsVYOGnFUHVwLMTnJdH+lgP9?=
- =?us-ascii?Q?037xhHmYo0xILIj4daCLM19ITZX9a0Hvn4YKgjjjx/6vXYnosLg/NhP4X+59?=
- =?us-ascii?Q?F4ZOpxFyhcztTOeSCCVSXgiFrGK10QjI/7elhqaq7PQNvO/IwIliBlLJLlQn?=
- =?us-ascii?Q?cgZo/sAJuV/spHa93v/cc9MtPb+MRwKb3rndhILMBFWXav1vbDpKDmMPukc1?=
- =?us-ascii?Q?U+FXFItKefcawi8AUFwyKk57oLiNLs6FD8i25JXQnkmYEnNePR0PaNQA4YWN?=
- =?us-ascii?Q?TEG/iF8bmdVjzDVg1x2qIZidaHmJ0nmdQqnOe3MNFcBnhrS3639Bs1uOf6qi?=
- =?us-ascii?Q?xzWkRjGBAr+G1XuyvOKgV8n/1zDqMlP8nJz/jNQkoNbmyl3uaprK6BhUnK32?=
- =?us-ascii?Q?qBWfzlansOwyteeSf6muX1LjWbf5yWmYxlBNR3J2/LtgCktNLKayQwJXWfjx?=
- =?us-ascii?Q?+pANBgTxUN/JAcqZ2Ro0n6uljdqx/aSRYmJTRe+coh2gqRmC/ZH5Gso2AhQI?=
- =?us-ascii?Q?43kNCaxSQBaTHBBHGWR8b+lIx2gJ451ra2zGFNgEod0gQww1G32rbwrhqnre?=
- =?us-ascii?Q?v3BwhJO9ttSpouqicwGxPsFNLxF14jibF3TYUCbOQULrz+/QyLKkjZc14SQQ?=
- =?us-ascii?Q?+7cq6pEhYwDWixp+J4WtUd0rkyrsrw5tCcHvUCKj5M47LtM2liXmbbXZciFc?=
- =?us-ascii?Q?syVmO5X6vWVUqcjPC5sBwUcWUH0BVUEoToYe6VMBBtvjeDM8H6WV4rvIuikc?=
- =?us-ascii?Q?MRn7KU9ygTXLq4Sued1X5Pciz5JwtyxlxXc4kU84DtYfrcG9pySwE5uRCdw1?=
- =?us-ascii?Q?S58qLzRGCC+6Em+4Dp/HGlyTKwIYm8zxlcdW4iyFy3/aIecAxHy79y3Kmsoi?=
- =?us-ascii?Q?aGH1IpKzkNsspVg6ets6si83AoSpFqAmT0+71MRb1a+gexK3Ngr+mJlWw9Ov?=
- =?us-ascii?Q?379Bg1KoYrIxVbOfVWEgahUqTqOyMmutA+mVIGRaMBf9OnwXv7fuqLYk4rZl?=
- =?us-ascii?Q?55CYYTpiaFAE2vhVGqa3LqqoXcE91qh4X+atsqgEWLOegirAADoj9BNsEls8?=
- =?us-ascii?Q?LCtut+W61PgGdX0+9PEzFpBXjP/y+fRda4eidKlIXXJNH185xlb7cOhbAK+O?=
- =?us-ascii?Q?bN4UFg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d2389c8b-f74f-4692-1dfe-08db6147c8d7
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 19:55:14.8689
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rOD6j60HscxKHVJT0OMF+iZuqUTQhPWnBmxP+Wiczi6pOLFOtSy9A1ol1BSsV+5/npNal7PDE2jMUb6GH8RhJPABVskEwlYpwvCtGdyDy1M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR13MB6182
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230517133309.9874-1-ddrokosov@sberdevices.ru>
+ <20230517133309.9874-6-ddrokosov@sberdevices.ru> <CAFBinCC3kQ9Nz3R2W-Qj9tbPJfS8JsB_4AkmPgS6xpQ96DBy2w@mail.gmail.com>
+ <20230522130033.a47vlybocme66rev@CAB-WSD-L081021> <CAFBinCAk9+Km3BssA8d8nc_Z_GbhY87FD3qQRpZ2k7ChKt7TBg@mail.gmail.com>
+ <20230530-illusive-pushpin-1e35d0a50e0d@wendy> <20230530160334.z6sclbmqccs6ju4y@CAB-WSD-L081021>
+In-Reply-To: <20230530160334.z6sclbmqccs6ju4y@CAB-WSD-L081021>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Tue, 30 May 2023 21:55:16 +0200
+Message-ID: <CAFBinCCZcT=7BZsgXDjzbcqAZpEkKYZRBDRwDX1poWZHa9Hxdg@mail.gmail.com>
+Subject: Re: [PATCH v15 5/6] dt-bindings: clock: meson: add A1 Peripherals
+ clock controller bindings
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     Conor Dooley <conor.dooley@microchip.com>, jbrunet@baylibre.com,
+        krzysztof.kozlowski+dt@linaro.org, neil.armstrong@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        khilman@baylibre.com, jian.hu@amlogic.com, kernel@sberdevices.ru,
+        rockosov@gmail.com, linux-amlogic@lists.infradead.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 03:16:26PM +0100, David Howells wrote:
-> Fix a couple of spelling mistakes in a comment.
-> 
-> Suggested-by: Simon Horman <simon.horman@corigine.com>
-> Link: https://lore.kernel.org/r/ZHH2mSRqeL4Gs1ft@corigine.com/
-> Link: https://lore.kernel.org/r/ZHH1nqZWOGzxlidT@corigine.com/
-> Signed-off-by: David Howells <dhowells@redhat.com>
+Hi,
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+On Tue, May 30, 2023 at 6:03=E2=80=AFPM Dmitry Rokosov <ddrokosov@sberdevic=
+es.ru> wrote:
+[...]
+> > If I am understanding correctly, this series implements the child
+> > controller and a parent, which is unimplemented, provides the child wit=
+h
+> > sys_pll_div16.
+> > The thing I am missing is whether the child controller has some outputs
+> > that depend on this sys_pll_div16 input & whether those are documented
+> > in this series. Regardless, you should be able to add more output clock=
+s
+> > without compatibility issues.
+Conor, the short answer is yes, the "gen_sel" mux (see patch 6/6 from
+this series, which is then part of a clock tree that's an output of
+the peripheral clock controller) uses sys_pll_div16 as input.
+Dmitry goes into more details below.
 
+[...]
+> As for new input clock connections, such as the cpu_clock
+> (sys_pll_div16), these are handled by clock muxing abstraction, allowing
+> CCF to find the clock object by fw.name and returning -ENOENT if the
+> connection is missing without breaking any CCF flow. It happens in the
+> kernel function clk_core_fill_parent_index()
+> https://elixir.bootlin.com/linux/latest/source/drivers/clk/clk.c#L424
+> Despite not having the connection for the new input in the old Device
+> Tree version, this will not break kernel boot flow and workflow, and the
+> new clock object just would not be utilized.
+>
+> Based on the presented arguments, I fully agree with Jerome's position.
+> We can add new connections and objects in new driver versions, but their
+> removal is prohibited.
+>
+> If it's alright with you, I would prefer to keep the Peripherals and PLL
+> clock driver and their bindings as they are, and continue with the CPU
+> and Audio clock controllers in a separate patch series. Would that be
+> feasible for you?
+To me this sounds good!
+
+
+Best regards,
+Martin
