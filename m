@@ -2,113 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62D8716CC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AB2716CC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbjE3Spo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 14:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
+        id S232284AbjE3Sqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 14:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjE3Spg (ORCPT
+        with ESMTP id S231263AbjE3Sqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 14:45:36 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36F9C9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:45:35 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51478f6106cso7901068a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:45:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685472334; x=1688064334;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uToXJ+fOWkpnn5Y/56EQgrrTUY3apSu6OqRigzUlyIc=;
-        b=Bx1VXp1lL1lr/7Wg4nAZ/8axfexaAsOa5wdsT0oRkjQoSAlr/s2ZxkRzDYWGF5JzY0
-         jgZC646MNyQRsm7TAkynXNGDr7V04SO4B0NwGP2V3vPF1vhSesCmL3/mEnMJTQw3Ujdk
-         /REcVYg+ph1BCux4hWvJFck0XFyK9F2a2yr9unJoLygRbFoT3c9bguF4D/hDysaxF7a5
-         7kNhXL6FfSL6x15DosMBfLRZsS3njv/j7lchGd540xy5yJok7PXaQyS5sEBQIRWD5MK2
-         V7/uC3cHqK8r1oRZSTuGH4dZ/3a5iq+VEkvHfuxPigsc9H3qbtoz84wxK5yO/myq+lQN
-         Bcog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685472334; x=1688064334;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uToXJ+fOWkpnn5Y/56EQgrrTUY3apSu6OqRigzUlyIc=;
-        b=hIb3hkI6C9NVknNDki6zTqvoE66fM4RUL6Ev7+V8JYVaMH5d4wn9mgBVdowApVu+xu
-         br98Ul90QY324KYMOjY5HaQboi2RtuVxfcBvTQFAIsyGELEBFZ9dc/SJ2SWjJazJ5D7/
-         bvMachqzmpr/OvpfuKKcO1FFo/p6L//kRq8GgjVfYemqq6h0QpL+mY13AVJ3yGvqJV8Y
-         KvR55aJaerTPRpdy5jRRk6fHc6sGh7wdY9NhHxjnLJHrTEOF/LUbQSuB+h+vtvxPOa/S
-         4i76VpJafkM8sfE7Un3FKGrmG8HKV2hQbr6YumxpiunyNdGYrvtJJrkSkcJxAexyem8/
-         cSdw==
-X-Gm-Message-State: AC+VfDzNUzPgOfyho6ryRVjhbwbFaOu/rMY9qYDiw4kLAoRuRluNfCkM
-        UDpljPtkrTraqs3DP8z5oYYH9QeJGvXkeQ==
-X-Google-Smtp-Source: ACHHUZ7iBBEKE+toubaVfH5MLKrEnuzzySKWPjZ7fHNs67mYDXW5fh0fbYrECQwxAPCIA3fJeHK3YA==
-X-Received: by 2002:a17:907:9609:b0:947:335f:5a0d with SMTP id gb9-20020a170907960900b00947335f5a0dmr3678436ejc.62.1685472334056;
-        Tue, 30 May 2023 11:45:34 -0700 (PDT)
-Received: from andrea (host-95-247-65-76.retail.telecomitalia.it. [95.247.65.76])
-        by smtp.gmail.com with ESMTPSA id f6-20020a1709064dc600b0094f4d2d81d9sm7726268ejw.94.2023.05.30.11.45.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 11:45:33 -0700 (PDT)
-Date:   Tue, 30 May 2023 20:45:28 +0200
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     ajones@ventanamicro.com, heiko@sntech.de,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kernel@vger.kernel.org, christoph.muellner@vrull.eu,
-        David.Laight@aculab.com, heiko.stuebner@vrull.eu
-Subject: Re: [PATCH v3 2/2] riscv: Add Zawrs support for spinlocks
-Message-ID: <ZHZESDWJZvhuJ3Af@andrea>
-References: <20230524-35efcabbbfd6a1ef83865fb4@orel>
- <mhng-d92f84d8-03db-4fb1-93c3-0d5bfbe7a796@palmer-ri-x1c9a>
+        Tue, 30 May 2023 14:46:36 -0400
+Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6DAFC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:46:31 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 44MPqYngtbOsk44MPqezJs; Tue, 30 May 2023 20:46:24 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1685472384;
+        bh=wAisxzg8dfWOsHsZpM0v+nS0EU1aAoqe1cA6dlcGUok=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=cxt0b70ongh8rsgRilK/5wy7YAeEmoJ6BLvRFuDAttIFdCTyIEADSZEsZ9Pt/f9gp
+         /8DhWc68KV2UcjVYvivWz3kq7O1O5X9Fvi+CTn0I+rEO+d1jf933J2/xdcymkleJIs
+         RGan+1ir9Dzt6Z2N2nRYOgW+dALxxgKqJyoZ08xKxpyGFNSYD55OYnqZuVmjkitpp3
+         OkzZbMEnIRnMELQqRlpZvf5Rq/ylVz+Wt/if9U9hWAXQpfz3S6DnWFAg16Y0fgONQI
+         riQDrtvrRSoEXkaj3RRjcnrJI0HLg8cxj48aDPbFtEAeUBTYdtjAf4VinNLHypXG1o
+         KGXxJF0XHpo/Q==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 30 May 2023 20:46:24 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <1335982c-70ea-6af2-19cf-73a4332ae510@wanadoo.fr>
+Date:   Tue, 30 May 2023 20:46:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mhng-d92f84d8-03db-4fb1-93c3-0d5bfbe7a796@palmer-ri-x1c9a>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] dmaengine: idxd: No need to clear memory after a
+ dma_alloc_coherent() call
+To:     Bernd Petrovitsch <bernd@petrovitsch.priv.at>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        dmaengine@vger.kernel.org
+References: <f44be04317387f8936d31d5470963541615f30ef.1685283065.git.christophe.jaillet@wanadoo.fr>
+ <1e87f3fa-58c5-d47f-3335-cd0a554b3144@petrovitsch.priv.at>
+Content-Language: fr, en-US
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <1e87f3fa-58c5-d47f-3335-cd0a554b3144@petrovitsch.priv.at>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 04:00:43PM -0700, Palmer Dabbelt wrote:
-> On Wed, 24 May 2023 10:05:52 PDT (-0700), ajones@ventanamicro.com wrote:
-
-> > I guess this peeling off of the first iteration is because it's expected
-> > that the load generated by READ_ONCE() is more efficient than lr.w/d? If
-> > we're worried about unnecessary use of lr.w/d, then shouldn't we look
-> > for a solution that doesn't issue those instructions when we don't have
-> > the Zawrs extension?
+Le 30/05/2023 à 17:54, Bernd Petrovitsch a écrit :
+> On 28/05/2023 16:11, Christophe JAILLET wrote:
+>> dma_alloc_coherent() already clear the allocated memory, there is no need
+>> to explicitly call memset().
 > 
-> It's actually just a consequence of how the Linux hooks are described:
-> they're macros that take a C expression to test in the loop, and we can't
-> handle C expressions in LR/SC loops as that'd require compiler support and
-> nobody's figured out how to do that correctly yet (there were some patches,
-> but they had issues).  So we need to do this awkward bit of checking without
-> the reservation and then waiting with the reservation.
+> Hmm, so wouldn't be dma_zalloc_coherent() a better name for the function?
+> 
+> Kind regards,
+>      Bernd
 
-I believe Andrew was really just hinting to something like (from
-arch/arm64/):
+Hi,
 
-#define smp_cond_load_relaxed(ptr, cond_expr)				\
-({									\
-	typeof(ptr) __PTR = (ptr);					\
-	__unqual_scalar_typeof(*ptr) VAL;				\
-	for (;;) {							\
-		VAL = READ_ONCE(*__PTR);				\
-		if (cond_expr)						\
-			break;						\
-		__cmpwait_relaxed(__PTR, VAL);				\
-	}								\
-	(typeof(*ptr))VAL;						\
-})
+No strong opinion about it.
+It is not malloc either !)
 
-where the __cmpwait_relaxed() would issue NOPs without Zawrs, a
-sequence "lr.* ; beq ; wrs.sto" otherwise.  (with the "dangling
-reservation" when we branch, similarly to CMPXCHG)?
+When dma_zalloc_coherent() has been deprecated (see [1]), for some 
+reason, it was decided to keep the "alloc" version.
 
-  Andrea
+CJ
+
+
+[1]: 
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/include/linux/dma-mapping.h?id=06d4dd2f2ce1cdb625f77c0676d5af6ba310c01d
