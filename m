@@ -2,95 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780E771609D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7C47160B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232401AbjE3Mxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
+        id S232494AbjE3M4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbjE3Mxc (ORCPT
+        with ESMTP id S232192AbjE3M4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:53:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413D8E67;
-        Tue, 30 May 2023 05:53:13 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7CAEB6606E99;
-        Tue, 30 May 2023 13:52:55 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685451176;
-        bh=YtD3nSjY4iTnCSBgu8N7wfNObpaGkqwVKKaA+WzbZOI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fNBVPndH+6jIxa4ONTK3bRFZC0x+eSJl6YGMX6RRmhrjBLxmkSvP0Rki6hN2YpyTM
-         o/SHDuRMA/+Znnj++LYdUOBwqdI4KWacsrkxaWaNGJ1pDToSU1I7uWOJtpWZtALg8l
-         StoIKZjSWgHr7aN4orkwe1vHVk3uJScz31uMXPoCR//vBN873VniUvnx4KXLRUVRpO
-         pqLO5E0NbZymwcmNVTPx1XJbgi0oPM/QdqIfBFYj1ZGzLrw8j83ezlj6IvK96LH6Tz
-         00O1ewEJfbINAuQgFE0YmFqmGFuLnoENxarkFCbZdw7mkYIOivtGIUKRVma/txelgX
-         csPWSid6A0Whw==
-Message-ID: <8247660d-4b95-0ed7-9444-b23da23560ac@collabora.com>
-Date:   Tue, 30 May 2023 15:52:52 +0300
+        Tue, 30 May 2023 08:56:08 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FD0116;
+        Tue, 30 May 2023 05:55:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=64mK1OFe4COwzCMhVQzo8IqxnAghr5xj5oLavsN+gKE=; b=ps0Jpq5zIVKU0r+7buVHk6F1aW
+        hZz075udJuzE5LaIUrotew7YmMl1daG3V5pCSGzA0SaaagB129AuEqNa3pg48otK6yibizZNcHsex
+        HsGmFdTxJ/wvyBiZxpwqu9sqn01b1UFkrqXV3LGRbhIGl+rv5jJAC3l9wIP4k0gSwC54=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q3yrg-00EKHq-2y; Tue, 30 May 2023 14:54:16 +0200
+Date:   Tue, 30 May 2023 14:54:16 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-leds@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next PATCH v4 00/13] leds: introduce new LED hw control APIs
+Message-ID: <7e5d1ed6-3fd7-4110-8171-9efd19b59023@lunn.ch>
+References: <20230529163243.9555-1-ansuelsmth@gmail.com>
+ <20230529221722.549dfbd8@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/3] ASoC: es8316: Increment max value for ALC Capture
- Target Volume control
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Zhu Ning <zhuning0077@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        David Yang <yangxiaohua@everest-semi.com>,
-        Daniel Drake <drake@endlessm.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, kernel@collabora.com
-References: <20230524074156.147387-1-cristian.ciocaltea@collabora.com>
- <20230524074156.147387-2-cristian.ciocaltea@collabora.com>
- <5dbcbf84-602a-44de-ad99-268d4d5b4b2f@sirena.org.uk>
- <cfa23203-1626-440b-ec27-efe56cb297d2@collabora.com>
- <01fd1a9f-56c7-4864-bb2b-8b004284c8cc@sirena.org.uk>
- <3c6b67a4-4892-0057-3dfc-65ed6c7ebc37@collabora.com>
- <4a3f54a3-2cbd-4a22-9742-9ba60e78643b@sirena.org.uk>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <4a3f54a3-2cbd-4a22-9742-9ba60e78643b@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230529221722.549dfbd8@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/23 14:36, Mark Brown wrote:
-> On Fri, May 26, 2023 at 09:11:49PM +0300, Cristian Ciocaltea wrote:
+On Mon, May 29, 2023 at 10:17:22PM -0700, Jakub Kicinski wrote:
+> On Mon, 29 May 2023 18:32:30 +0200 Christian Marangi wrote:
+> > Since this series is cross subsystem between LED and netdev,
+> > a stable branch was created to facilitate merging process.
+> > 
+> > This is based on top of branch ib-leds-netdev-v6.5 present here [1]
+> > and rebased on top of net-next since the LED stable branch got merged.
+> > 
+> > This is a continue of [2]. It was decided to take a more gradual
+> > approach to implement LEDs support for switch and phy starting with
+> > basic support and then implementing the hw control part when we have all
+> > the prereq done.
+> > 
+> > This is the main part of the series, the one that actually implement the
+> > hw control API.
 > 
->> -1.5 dB  |  50-51 %
->> -0.0 dB  |  50-51 %
-> 
->> So it seems the specs are correct, and the problem is the hardware default.
-> 
->> Is there a better approach to handle this than extending the volume range?
-> 
-> The other option would be to change the value in the register during
-> probe to one that's in range, that wouldn't stop any existing saved
-> settings from generating errors but would mean there wouldn't be any new
-> ones.  Either approach is probably fine.
+> Just to be 100% sure - these go into netdev/net-next directly, right?
+> No stable branch needed?
 
-Thanks, I will prepare v2 and keep the current approach.
+From Christian and my side, yes. Ideally with Acked-by from Lee. We
+have more patches to come, and we will just stack them on top in
+net-next. The majority of those patches are for network drivers, not
+the LED subsystem.
+
+If there are going to be any merge conflicts, they will be to the core
+LED header files. And such conflicts should be simple to resolve in
+linux-next. If anybody else starts hacking on ledtrig-netdev.c then we
+have problems, especially if it is an LED wide change. I don't know
+how easy it is to create a stable branch from net-next, which could be
+pulled into led-next, without it actually pulling in a huge number of
+networking patches?
+
+Lee?
+
+	Andrew
+
