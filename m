@@ -2,118 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715EE715DAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B7E715DA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbjE3Loo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
+        id S230296AbjE3Lnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231963AbjE3Ln6 (ORCPT
+        with ESMTP id S232030AbjE3LnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:43:58 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B93E8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:43:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685447032; x=1716983032;
-  h=from:to:subject:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=6JK6GfSo8ZIvaNztCv9bRQqNHJQKx6PWj0vQ3SQJIHw=;
-  b=RyLtvvYp+eAq9kGtvvJufNZd6L/2e7n0xCIGakFRVUipWaI5tbRkmSvo
-   8inveQCu2r4ktBRnpTHs2LjRPmgIgJZdqx0Wem4HWUMlLjCmTRCM76RcL
-   EBldCIi3a1ArS7fHicPS1+gX6HPGAT20Bvi1ZxleDi1Fn/uZKAyA2oNu+
-   9rRSIvB8EfcOc2PpCVjCAd6PAN48Swu+42Ni0FaEcC0w6aGuf2r1yijvs
-   +xDgXE7mLICaYh2x6wtwvzYoGiofoSOjk/0/qMbRBuoetZJYyk9aYaJ8i
-   2n8WREzNhOBQhyblrfxJTa7zmtYdPRxcHomEXsQcUd7lwErsaN9CjreE1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="383145414"
-X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
-   d="scan'208";a="383145414"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 04:43:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="700588786"
-X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
-   d="scan'208";a="700588786"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 30 May 2023 04:43:26 -0700
-From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ravi Shankar <ravi.v.shankar@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Sohil Mehta <sohil.mehta@intel.com>,
-        Paul Lai <paul.c.lai@intel.com>
-Subject: [RFC v2 12/12] x86/efi: Disable LASS enforcement when switching to EFI MM
-Date:   Tue, 30 May 2023 14:42:47 +0300
-Message-Id: <20230530114247.21821-13-alexander.shishkin@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230530114247.21821-1-alexander.shishkin@linux.intel.com>
-References: <20230530114247.21821-1-alexander.shishkin@linux.intel.com>
+        Tue, 30 May 2023 07:43:14 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77159131;
+        Tue, 30 May 2023 04:42:54 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id D075F8479B;
+        Tue, 30 May 2023 13:42:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1685446971;
+        bh=fPulCLOn1mDw2aXbZrWUn9R4dyD+ptp9MMeZ6zuSx4s=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fQOI2qQIliHlw5IBVoVQPjBW8dfbxdCD/zknMLgW+WX7i+RCMkehb3tGYYhLracTA
+         K+6OsEGYkX9yTYUvqZUinTcRc0x3wEvAaj7H85kchvnCMpMT+Pp8kiHDPTcDnbm6zE
+         XHHSpPvPSDfZOEBiW0alPBrw3x79efxt8g/XZE/E/EWAXgV9JqJ9M3sUV0YhqEnUKk
+         HfrlFCdHX5aFDd9deniXm6paoU0ZYl4u/RPoq4e8T86i6djNn2l2joyJKkZDjZQpXA
+         rvPZlWqmBJOffSxwjn85DrPymQUktn/6q1c8zNyOjGF+zydZRe/9bW4/whGaccCfTT
+         wSN0fBx1Oz8JA==
+Message-ID: <974c3ce3-5081-67d0-ae80-444e99e437e5@denx.de>
+Date:   Tue, 30 May 2023 13:42:50 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 7/8] ARM: dts: stm32: adopt generic iio bindings for adc
+ channels on dhcor-drc
+To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        Olivier MOYSAN <olivier.moysan@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc:     kernel@dh-electronics.com, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230524133918.1439516-1-olivier.moysan@foss.st.com>
+ <20230524133918.1439516-8-olivier.moysan@foss.st.com>
+ <cc7a0a1a-31bb-92f4-6365-5e0c4a4bc85c@denx.de>
+ <5bb496d0-6dc1-6ba3-6126-6429037ecf5a@foss.st.com>
+ <8a4f3112-54ed-e0c1-52ee-395a41255163@foss.st.com>
+Content-Language: en-US
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <8a4f3112-54ed-e0c1-52ee-395a41255163@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sohil Mehta <sohil.mehta@intel.com>
+On 5/30/23 09:59, Alexandre TORGUE wrote:
+> Marek, Olivier
+> 
+> On 5/24/23 17:39, Olivier MOYSAN wrote:
+>> Hi Marek,
+>>
+>> On 5/24/23 15:54, Marek Vasut wrote:
+>>> On 5/24/23 15:39, Olivier Moysan wrote:
+>>>> Use STM32 ADC generic bindings instead of legacy bindings on
+>>>> DHCOR DRC Compact board.
+>>>>
+>>>> The STM32 ADC specific binding to declare channels has been deprecated,
+>>>> hence adopt the generic IIO channels bindings, instead.
+>>>> The STM32MP151 device tree now exposes internal channels using the
+>>>> generic binding. This makes the change mandatory here to avoid a mixed
+>>>> use of legacy and generic binding, which is not supported by the 
+>>>> driver.
+>>>>
+>>>> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+>>>> ---
+>>>>   .../dts/stm32mp15xx-dhcor-drc-compact.dtsi    | 28 
+>>>> ++++++++++++++++---
+>>>>   1 file changed, 24 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcor-drc-compact.dtsi 
+>>>> b/arch/arm/boot/dts/stm32mp15xx-dhcor-drc-compact.dtsi
+>>>> index 39af79dc654c..92d906bfd5d7 100644
+>>>> --- a/arch/arm/boot/dts/stm32mp15xx-dhcor-drc-compact.dtsi
+>>>> +++ b/arch/arm/boot/dts/stm32mp15xx-dhcor-drc-compact.dtsi
+>>>> @@ -57,15 +57,35 @@ &adc {    /* X11 ADC inputs */
+>>>>       status = "okay";
+>>>>       adc1: adc@0 {
+>>>
+>>>
+>>> I sent similar patch recently too:
+>>>
+>>> [PATCH] ARM: dts: stm32: Update to generic ADC channel binding on 
+>>> DHSOM systems
+>>>
+>>> But I needed to add #address-cells/#size-cells here and to adc@100, 
+>>> otherwise DTB checker was complaining . Did you run DTB check and was 
+>>> it OK on your side ?
+>>
+>> The first patch in this serie adds the #address-cells/#size-cells to 
+>> the   SoC DT. So, there is no need to add them later in the board DT.
+>>
+>> I can send a v2 with your patch (after removing the cells properties 
+>> from the patch). Having all the patches in the same serie, will help 
+>> avoiding sequencing problems.
+>>
+>> Do you agree with this ?
+> 
+> What is the status of this patch ?
+> 
+> Marek, I would prefer to take all ADC updates in this series if you agree.
 
-[Code is experimental and not yet ready to be merged upstream]
-
-PeterZ suggested that EFI memory can be mapped in user virtual address
-space which would trigger LASS violation upon access. It isn't exactly
-clear how and when these user address mapping happen. It may be possible
-this is related to EFI mixed mode.
-Link:https://lore.kernel.org/lkml/Y73S56t%2FwDIGEPlK@hirez.programming.kicks-ass.net/
-
-stac()/clac() calls in the EFI MM enter and exit functions trigger
-objtool warnings due to switch_mm() not being classified as
-func_uaccess_safe. Refer Objtool warnings section #9 in the document
-tools/objtool/Documentation/objtool.txt. This would need to be resolved
-before even considering merging.
-
-Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
----
- arch/x86/platform/efi/efi_64.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/arch/x86/platform/efi/efi_64.c b/arch/x86/platform/efi/efi_64.c
-index 232acf418cfb..20966efcd87a 100644
---- a/arch/x86/platform/efi/efi_64.c
-+++ b/arch/x86/platform/efi/efi_64.c
-@@ -473,9 +473,14 @@ void __init efi_dump_pagetable(void)
-  * while the EFI-mm is borrowed. mmgrab()/mmdrop() is not used because the mm
-  * can not change under us.
-  * It should be ensured that there are no concurrent calls to this function.
-+ *
-+ * Disable LASS enforcement temporarily when switching to EFI MM since it could
-+ * be mapped into the low 64-bit virtual address space with address bit 63 set
-+ * to 0.
-  */
- void efi_enter_mm(void)
- {
-+	stac();
- 	efi_prev_mm = current->active_mm;
- 	current->active_mm = &efi_mm;
- 	switch_mm(efi_prev_mm, &efi_mm, NULL);
-@@ -485,6 +490,7 @@ void efi_leave_mm(void)
- {
- 	current->active_mm = efi_prev_mm;
- 	switch_mm(&efi_mm, efi_prev_mm, NULL);
-+	clac();
- }
- 
- static DEFINE_SPINLOCK(efi_runtime_lock);
--- 
-2.39.2
-
+I missed the reply from Olivier, sorry. Please pick the whole thing.
