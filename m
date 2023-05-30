@@ -2,120 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D8C715C30
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69038715C32
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjE3KrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
+        id S231701AbjE3KsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjE3Kqx (ORCPT
+        with ESMTP id S231730AbjE3Krn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:46:53 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A25110;
-        Tue, 30 May 2023 03:46:51 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 8290B1C0D20; Tue, 30 May 2023 12:46:50 +0200 (CEST)
-Date:   Tue, 30 May 2023 12:46:49 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        l.sanfilippo@kunbus.com, jarkko@kernel.org
-Subject: Wrong/strange TPM patches was Re: [PATCH 6.1 000/119] 6.1.31-rc1
- review
-Message-ID: <ZHXUGdFMIcB5HL8s@duo.ucw.cz>
-References: <20230528190835.386670951@linuxfoundation.org>
+        Tue, 30 May 2023 06:47:43 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD45FE8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:47:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QVpxl6C6cz4x1R;
+        Tue, 30 May 2023 20:47:23 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1685443644;
+        bh=G20+Sdm/98wI46f2WRdfsERiE5mRdZTpwi6+jvG8R1U=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=d+o7t46BGfbpB2ob36lRdXwMjgQzcU5NBOtF/Kj7UJztuuPyk2IJwa73ehmTZJQZo
+         lvophwgIwGtC8ggYJcCw84/aiAJxtLUARSGeIkR/a/WeQWaJf4d5aL3btthULw/ymK
+         dUN3IYKTAdv1A9ZqJmKYbWoAUGf68BGtcBZmWCXtuZkI3i1CwSoWzqGU66PE9lgAtg
+         o0TyPjR/HLQXmG6vR4z6WibmSmBFnhzNC+sbSnk3pP8LwhuOSdCI4I/trcM/k8aBRr
+         dkab/MWQeszlLgVUVkCgRfpuf4j5ULMqcer+eONXtqEJqnh3qwntA9qAq2Tv7NJxnX
+         sKg7GkCAT7jfQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Greg KH <gregkh@linuxfoundation.org>, mirimmad@outlook.com
+Cc:     Immad Mir <mirimmad17@gmail.com>,
+        Ivan Orlov <ivan.orlov0322@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc: fix debugfs_create_dir error checking
+In-Reply-To: <2023052835-oxidant-doily-404f@gregkh>
+References: <CY5PR12MB64553EE96EBB3927311DB598C6459@CY5PR12MB6455.namprd12.prod.outlook.com>
+ <2023052835-oxidant-doily-404f@gregkh>
+Date:   Tue, 30 May 2023 20:47:21 +1000
+Message-ID: <87zg5mrt8m.fsf@mail.lhotse>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="r+EjDeRDCk4IF0FL"
-Content-Disposition: inline
-In-Reply-To: <20230528190835.386670951@linuxfoundation.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Greg KH <gregkh@linuxfoundation.org> writes:
+> On Sun, May 28, 2023 at 01:16:44PM +0530, mirimmad@outlook.com wrote:
+>> From: Immad Mir <mirimmad17@gmail.com>
+>> 
+>> The debugfs_create_dir returns ERR_PTR incase of an error and the
+>> correct way of checking it by using the IS_ERR inline function, and
+>> not the simple null comparision. This patch fixes this.
+>> 
+>> Suggested-By: Ivan Orlov <ivan.orlov0322@gmail.com>
+>> Signed-off-by: Immad Mir <mirimmad17@gmail.com>
+>> ---
+>>  arch/powerpc/platforms/powernv/opal-xscom.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/arch/powerpc/platforms/powernv/opal-xscom.c b/arch/powerpc/platforms/powernv/opal-xscom.c
+>> index 6b4eed2ef..262cd6fac 100644
+>> --- a/arch/powerpc/platforms/powernv/opal-xscom.c
+>> +++ b/arch/powerpc/platforms/powernv/opal-xscom.c
+>> @@ -168,7 +168,7 @@ static int scom_debug_init_one(struct dentry *root, struct device_node *dn,
+>>  	ent->path.size = strlen((char *)ent->path.data);
+>> 
+>>  	dir = debugfs_create_dir(ent->name, root);
+>> -	if (!dir) {
+>> +	if (IS_ERR(dir)) {
+>>  		kfree(ent->path.data);
+>>  		kfree(ent);
+>>  		return -1;
+>
+> Why is this driver caring if debugfs is working or not at all?  It
+> should just ignore the error and keep moving forward.
 
---r+EjDeRDCk4IF0FL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's creating directories and then creating files in those directories.
+So I think it makes sense that it checks that the directory was created
+successfully. It doesn't check whether the files were created.
 
-Hi!
+> And -1 is not a valid error number :(
 
-> This is the start of the stable review cycle for the 6.1.31 release.
-> There are 119 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+It's EPERM :) - but yeah probably not really the right error in this
+case.
 
-> Lino Sanfilippo <l.sanfilippo@kunbus.com>
->     tpm, tpm_tis: Avoid cache incoherency in test for interrupts
+Still I think this patch is an improvement so I'll plan to merge it.
 
-Description on this one is wrong/confused. There's no cache problem in
-the code. Plus test_bit and friend already use bit number, so
-
--       bool itpm =3D priv->flags & TPM_TIS_ITPM_WORKAROUND;
-+       bool itpm =3D test_bit(TPM_TIS_ITPM_WORKAROUND, &priv->flags);
-
-@@ -87,6 +87,7 @@ enum tpm_tis_flags {
-        TPM_TIS_ITPM_WORKAROUND         =3D BIT(0),
-        TPM_TIS_INVALID_STATUS          =3D BIT(1),
-        TPM_TIS_DEFAULT_CANCELLATION    =3D BIT(2),
-+       TPM_TIS_IRQ_TESTED              =3D BIT(3),
- };
-
-this enum needs to go from BIT() to raw numbers.
-
-You can just do return tpm_pm_resume();
-
-> Jarkko Sakkinen <jarkko@kernel.org>
->     tpm: Prevent hwrng from activating during resume
-
-@@ -429,6 +431,14 @@ int tpm_pm_resume(struct device *dev)
-        if (chip =3D=3D NULL)
-                return -ENODEV;
-=20
-+       chip->flags &=3D ~TPM_CHIP_FLAG_SUSPENDED;
-+
-+       /*
-+        * Guarantee that SUSPENDED is written last, so that hwrng does not
-+        * activate before the chip has been fully resumed.
-+        */
-+       wmb();
-+
-        return 0;
- }
- EXPORT_SYMBOL_GPL(tpm_pm_resume);
-
-This code is confused. First, either you don't need memory barriers
-here, or you need real locking. Second, if you want to guarantee flags
-are written last, you need to put the barrier before the
-assignment. (But ... get rid of that confusion, first).
-
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,        Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---r+EjDeRDCk4IF0FL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZHXUGQAKCRAw5/Bqldv6
-8vR3AJ4nYbfXozM6RjMtZmKWdj4QU5PQEwCfY+5LyyJ/Ps5vEN0Kd3dHPkF55gM=
-=wiN5
------END PGP SIGNATURE-----
-
---r+EjDeRDCk4IF0FL--
+cheers
