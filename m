@@ -2,91 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A27677159AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174127159B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjE3JPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
+        id S229898AbjE3JSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjE3JPR (ORCPT
+        with ESMTP id S229663AbjE3JSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:15:17 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519E0CD;
-        Tue, 30 May 2023 02:15:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685438115; x=1716974115;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ht5FlU3n6y7nFuAmHBrSvsNrWfyhEwrb7dbJw+ZY6no=;
-  b=FCmN+a6+E/r6afHE4cYsPSBkwFNFv8gGllmZJZhOOq3ZLW9gaOorYrCk
-   9YiiZcEF0jrF2NPNs5nmdw4wJntn5Udx8SVQcl9gjYNt80bwgsssqNCIt
-   3biam7ONBZCKKFaUxOFZBzZLZIzYtvYF3wTjEcNII1Bes8FlnaqxhF8uW
-   9+dRS5bX3BPaj+RtMnEhHcCAQax6t/yCbOBGqGip/8RJIDa3sOYAsb9ZT
-   wwlIE3UE1GL8LtSAAlSBmSKzTyiAAudTHDZf17xcaW8CXsmkV1Q3nlm5n
-   KwCGKGDDkJj1jMyDE6nHpII929fYH5HfvKHBCn2uWdX+ro7wjSbC5AkbC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="352361799"
-X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="352361799"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 02:15:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="796199877"
-X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="796199877"
-Received: from rajatkha-mobl.gar.corp.intel.com (HELO [10.67.146.41]) ([10.67.146.41])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 02:15:06 -0700
-Message-ID: <0367a134-cb04-8a1c-bb46-bb5553df6f8a@linux.intel.com>
-Date:   Tue, 30 May 2023 14:45:03 +0530
+        Tue, 30 May 2023 05:18:09 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC40FE8;
+        Tue, 30 May 2023 02:18:07 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1685438285;
+        bh=GOtVnXfIJlGURLj2ERPngUrj5IRyyiUMPq6o2r0EbhE=;
+        h=From:Date:Subject:To:Cc:From;
+        b=pmfwR3LJPtVG6ULCMXXmvrxPwnuXsJA93eTyeeR2KUCBvHrcOQCj8ziKxAiXM6HLr
+         5zgIjk0MgL1AFO0UJok7z0u1jI4FoXILUU0Tha0vv4ZVtGyIwxJ0ctKXkEhY2BdEcB
+         wZ+MBssUXnaSTB8qkwiSdOVsrBPzqzgShQ0p4MGk=
+Date:   Tue, 30 May 2023 11:18:00 +0200
+Subject: [PATCH] tools/nolibc: ensure fast64 integer types have 64 bits
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v5] usb: typec: intel_pmc_mux: Expose IOM port status to
- debugfs
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230524104754.4154013-1-rajat.khandelwal@linux.intel.com>
- <2023052917-juicy-calamity-4b35@gregkh>
-From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-In-Reply-To: <2023052917-juicy-calamity-4b35@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230530-nolibc-fast64-v1-1-883dea6bc666@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAEe/dWQC/x2NywrCQAwAf6XkbGD70BV/RTzspqkNLKlsWhFK/
+ 93Q4wwMs4NxFTZ4NDtU/orJog7tpQGak74ZZXSGLnR9uPYBdSmSCadk623Ae4yRxkyRQwve5GS
+ MuSal2SvdSnH5qTzJ75w8X8fxB/hkzyR0AAAA
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Vincent Dagonneau <v@vda.io>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685438284; l=2858;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=GOtVnXfIJlGURLj2ERPngUrj5IRyyiUMPq6o2r0EbhE=;
+ b=eCm+xH2GZu1IbNP0TDgCOh3vmlEw8pcefoAp5YcxRxoQ89BgMVhVmIKnNAIN7VtZCVE6oxyuL
+ iRk3stIxcuAD3qkezPIEcO+xISsIk8tnq6efc6yysJpg/5vfTIb5wti
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 32bit platforms size_t is not enough to represent [u]int_fast64_t.
 
-On 5/29/2023 7:48 PM, Greg KH wrote:
-> On Wed, May 24, 2023 at 04:17:54PM +0530, Rajat Khandelwal wrote:
->> IOM status has a crucial role during debugging to check the
->> current state of the type-C port.
->> There are ways to fetch the status, but all those require the
->> IOM port status offset, which could change with platform.
->>
->> Make a debugfs directory for intel_pmc_mux and expose the status
->> under it per port basis.
->>
->> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
->> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Does not apply to my tree :(
+Fixes: 3e9fd4e9a1d5 ("tools/nolibc: add integer types and integer limit macros")
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Cc: Vincent Dagonneau <v@vda.io>
 
-I have pushed the patch on top of the Linus's tree.
-Had a quick check with the USB Linux tree and seems like its a lot
-behind?
-Can you please confirm once and come back?
+Note: We could also fall back to compiler-provided data like:
 
-Thanks
-Rajat
+__UINT_FAST{8,16,32,64}_{TYPE,MIN,MAX}__
+---
+ tools/include/nolibc/stdint.h                | 4 ++--
+ tools/testing/selftests/nolibc/nolibc-test.c | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/tools/include/nolibc/stdint.h b/tools/include/nolibc/stdint.h
+index c1ce4f5e0603..3fc418cfc3d7 100644
+--- a/tools/include/nolibc/stdint.h
++++ b/tools/include/nolibc/stdint.h
+@@ -36,8 +36,8 @@ typedef  ssize_t       int_fast16_t;
+ typedef   size_t      uint_fast16_t;
+ typedef  ssize_t       int_fast32_t;
+ typedef   size_t      uint_fast32_t;
+-typedef  ssize_t       int_fast64_t;
+-typedef   size_t      uint_fast64_t;
++typedef  int64_t       int_fast64_t;
++typedef uint64_t      uint_fast64_t;
+ 
+ typedef  int64_t           intmax_t;
+ typedef uint64_t          uintmax_t;
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 7de46305f419..65be0317d184 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -696,9 +696,9 @@ int run_stdlib(int min, int max)
+ 		CASE_TEST(limit_int_fast32_min);    EXPECT_EQ(1, INT_FAST32_MIN,   (int_fast32_t)    INTPTR_MIN); break;
+ 		CASE_TEST(limit_int_fast32_max);    EXPECT_EQ(1, INT_FAST32_MAX,   (int_fast32_t)    INTPTR_MAX); break;
+ 		CASE_TEST(limit_uint_fast32_max);   EXPECT_EQ(1, UINT_FAST32_MAX,  (uint_fast32_t)   UINTPTR_MAX); break;
+-		CASE_TEST(limit_int_fast64_min);    EXPECT_EQ(1, INT_FAST64_MIN,   (int_fast64_t)    INTPTR_MIN); break;
+-		CASE_TEST(limit_int_fast64_max);    EXPECT_EQ(1, INT_FAST64_MAX,   (int_fast64_t)    INTPTR_MAX); break;
+-		CASE_TEST(limit_uint_fast64_max);   EXPECT_EQ(1, UINT_FAST64_MAX,  (uint_fast64_t)   UINTPTR_MAX); break;
++		CASE_TEST(limit_int_fast64_min);    EXPECT_EQ(1, INT_FAST64_MIN,   (int_fast64_t)    INT64_MIN); break;
++		CASE_TEST(limit_int_fast64_max);    EXPECT_EQ(1, INT_FAST64_MAX,   (int_fast64_t)    INT64_MAX); break;
++		CASE_TEST(limit_uint_fast64_max);   EXPECT_EQ(1, UINT_FAST64_MAX,  (uint_fast64_t)   UINT64_MAX); break;
+ #if __SIZEOF_LONG__ == 8
+ 		CASE_TEST(limit_intptr_min);        EXPECT_EQ(1, INTPTR_MIN,       (intptr_t)        0x8000000000000000LL); break;
+ 		CASE_TEST(limit_intptr_max);        EXPECT_EQ(1, INTPTR_MAX,       (intptr_t)        0x7fffffffffffffffLL); break;
+
+---
+base-commit: 5b21219d67d3483144d10332709d0c04f733ab93
+change-id: 20230530-nolibc-fast64-8777cdbc7e01
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
