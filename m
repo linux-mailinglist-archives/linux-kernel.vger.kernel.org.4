@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB52716974
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6532716977
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233316AbjE3Q1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
+        id S232795AbjE3Q1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233356AbjE3Q0U (ORCPT
+        with ESMTP id S232903AbjE3Q04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:26:20 -0400
+        Tue, 30 May 2023 12:26:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0FDE73;
-        Tue, 30 May 2023 09:25:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C99210D8;
+        Tue, 30 May 2023 09:25:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A130362D06;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F07560CA4;
+        Tue, 30 May 2023 16:25:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93A3BC433A4;
         Tue, 30 May 2023 16:25:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EE27C433A0;
-        Tue, 30 May 2023 16:25:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685463950;
-        bh=IhfrXSRYeppBiKSQbUE6Zdvbaibxo47NgA49aejhbtU=;
+        s=k20201202; t=1685463953;
+        bh=DQJlbIaRxUzhLoeiwqosedaH1XHXalJoWDyse+of4CI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AZaNOD4B+QV9brTRzuZx0sNrvAn7BVuNv2f5NImvIYKipTr0NfzfixsymHjTnuLmP
-         h+/hHl7K0aRZ7S2Lun95hZxE4paYL2UIXnkMtXg3jrQUL9/euh9Dpq9K+qSr4i2a9R
-         XhYSLyljmBIu/S6CEmVRZpll9lxJQmgAZOq/K6QepVHdjgw6y6DvYd6GVRmmSJvMR6
-         by/xbF9WMeqJi3Fzvdku3RikUZd8YJThX01Atdm9SYkyKRE3MVT3//hZm8CfKcldVa
-         k3tqRjrHZTxJhV16fOkjdf2+63UmwRPhve/n/rD3iWpsAJRAfjTHO5n81h4+cB+j5T
-         /3gtkOygBGiLQ==
+        b=cydra5ADxT90xRPEsVe5EL4qA7nsqeF8RuBi2WAlTq5RHwPC7da3oDlHtzK0mZLwB
+         Ls8lLGORTXyGJJd4NqH5i3F38v3Ld1wP775fstP2PII9KrimkIcubA9Ma11NpzzePv
+         gkheXQ8aNdRiu5GFt+HoJBsSzekyR9pOn/mLFdPAuGmjrEdrfGJVGBR6WTiCtTYYOr
+         VaTA960VAGX7SEA48A0lbOM+f83rzkWrhfdGFAfa0H513fDyogKMXQxbhV2G8vcdd6
+         qNRrZJKVKHtouuERarqOCk+w2T3HPbN9OH8eRM4Mh8uEnTPg+B1z0NUamNvHjrYlkC
+         3slkUnq8sZC9g==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Bjorn Andersson <andersson@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org,
@@ -40,9 +40,9 @@ Cc:     linux-arm-msm@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH v3 14/15] arm64: dts: qcom: sc8180x: Introduce Primus
-Date:   Tue, 30 May 2023 21:54:53 +0530
-Message-Id: <20230530162454.51708-15-vkoul@kernel.org>
+Subject: [PATCH v3 15/15] arm64: dts: qcom: sc8180x: Introduce Lenovo Flex 5G
+Date:   Tue, 30 May 2023 21:54:54 +0530
+Message-Id: <20230530162454.51708-16-vkoul@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230530162454.51708-1-vkoul@kernel.org>
 References: <20230530162454.51708-1-vkoul@kernel.org>
@@ -60,35 +60,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Introduce support for the SC8180X reference device, aka Primus, with
-debug UART, regulators, UFS and USB support.
+Introduce support for the Lenovo Flex 5G laptop, built on the Qualcomm
+SC8180X platform. Supported peripherals includes keyboard, touchpad,
+UFS storage, external USB and WiFi.
 
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/Makefile           |   1 +
- arch/arm64/boot/dts/qcom/sc8180x-primus.dts | 706 ++++++++++++++++++++
- 2 files changed, 707 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sc8180x-primus.dts
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ .../boot/dts/qcom/sc8180x-lenovo-flex-5g.dts  | 583 ++++++++++++++++++
+ 2 files changed, 584 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
 
 diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index d42c59572ace..29bfc13d3425 100644
+index 29bfc13d3425..89faec765eff 100644
 --- a/arch/arm64/boot/dts/qcom/Makefile
 +++ b/arch/arm64/boot/dts/qcom/Makefile
 @@ -140,6 +140,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-zombie-nvme-lte.dtb
  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc8180x-primus.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sc8180x-lenovo-flex-5g.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc8180x-primus.dtb
  dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-crd.dtb
  dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-lenovo-thinkpad-x13s.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sda660-inforce-ifc6560.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sc8180x-primus.dts b/arch/arm64/boot/dts/qcom/sc8180x-primus.dts
+diff --git a/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts b/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
 new file mode 100644
-index 000000000000..cca663bcb92d
+index 000000000000..fe3b366e1435
 --- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc8180x-primus.dts
-@@ -0,0 +1,706 @@
++++ b/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
+@@ -0,0 +1,583 @@
 +// SPDX-License-Identifier: BSD-3-Clause
 +/*
 + * Copyright (c) 2017-2019, The Linux Foundation. All rights reserved.
@@ -105,12 +106,11 @@ index 000000000000..cca663bcb92d
 +#include "sc8180x-pmics.dtsi"
 +
 +/ {
-+	model = "Qualcomm SC8180x Primus";
-+	compatible = "qcom,sc8180x-primus", "qcom,sc8180x";
++	model = "Lenovo Flex 5G";
++	compatible = "lenovo,flex-5g", "qcom,sc8180x";
 +
 +	aliases {
-+		serial0 = &uart12;
-+		serial1 = &uart13;
++		serial0 = &uart13;
 +	};
 +
 +	backlight: backlight {
@@ -118,22 +118,18 @@ index 000000000000..cca663bcb92d
 +		pwms = <&pmc8180c_lpg 4 1000000>;
 +		enable-gpios = <&pmc8180c_gpios 8 GPIO_ACTIVE_HIGH>;
 +
-+		pinctrl-names = "default";
 +		pinctrl-0 = <&bl_pwm_default>;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
++		pinctrl-names = "default";
 +	};
 +
 +	gpio-keys {
 +		compatible = "gpio-keys";
 +
-+		pinctrl-names = "default";
 +		pinctrl-0 = <&hall_int_active_state>;
++		pinctrl-names = "default";
 +
-+		lid-switch {
-+			gpios = <&tlmm 121 GPIO_ACTIVE_HIGH>;
++		lid {
++			gpios = <&tlmm 121 GPIO_ACTIVE_LOW>;
 +			linux,input-type = <EV_SW>;
 +			linux,code = <SW_LID>;
 +			wakeup-source;
@@ -156,63 +152,25 @@ index 000000000000..cca663bcb92d
 +			no-map;
 +		};
 +
-+		adsp_mem: adsp-region@96e00000 {
-+			reg = <0x0 0x96e00000 0x0 0x1c00000>;
-+			no-map;
-+		};
-+
 +		mpss_mem: mpss-region@8d800000 {
-+			reg = <0x0 0x8d800000 0x0 0x9600000>;
++			reg = <0x0 0x8d800000 0x0 0x3000000>;
 +			no-map;
 +		};
 +
-+		gpu_mem: gpu-region@98a00000 {
-+			reg = <0x0 0x98a00000 0x0 0x2000>;
++		adsp_mem: adsp-region@90800000 {
++			reg = <0x0 0x90800000 0x0 0x1c00000>;
 +			no-map;
 +		};
 +
-+		reserved-region@9a500000 {
-+			reg = <0x0 0x9a500000 0x0 0x600000>;
++		gpu_mem: gpu-region@98715000 {
++			reg = <0x0 0x98715000 0x0 0x2000>;
 +			no-map;
 +		};
-+	};
 +
-+	vreg_nvme_0p9: nvme-0p9-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vreg_nvme_0p9";
-+
-+		regulator-min-microvolt = <900000>;
-+		regulator-max-microvolt = <900000>;
-+
-+		regulator-always-on;
-+	};
-+
-+	vreg_nvme_3p3: nvme-3p3-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vreg_nvme_3p3";
-+
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+
-+		gpio = <&pmc8180c_gpios 11 0>;
-+		enable-active-high;
-+
-+		regulator-always-on;
-+	};
-+
-+	vdd_kb_tp_3v3: vdd-kb-tp-3v3-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vdd_kb_tp_3v3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+
-+		gpio = <&tlmm 4 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+
-+		regulator-always-on;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&kb_tp_3v3_en_active_state>;
++		cdsp_mem: cdsp-region@98900000 {
++			reg = <0x0 0x98900000 0x0 0x1400000>;
++			no-map;
++		};
 +	};
 +
 +	vph_pwr: vph-pwr-regulator {
@@ -222,7 +180,7 @@ index 000000000000..cca663bcb92d
 +		regulator-max-microvolt = <3700000>;
 +	};
 +
-+	vreg_s4a_1p8: pm8150-s4 {
++	vreg_s4a_1p8: pm8150-s4-regulator {
 +		compatible = "regulator-fixed";
 +		regulator-name = "vreg_s4a_1p8";
 +
@@ -273,7 +231,6 @@ index 000000000000..cca663bcb92d
 +		qcom,pmic-id = "c";
 +
 +		vdd-s6-supply = <&vph_pwr>;
-+		vdd-s8-supply = <&vph_pwr>;
 +		vdd-l2-l3-supply = <&vreg_s6c_1p35>;
 +		vdd-bob-supply = <&vph_pwr>;
 +
@@ -283,22 +240,9 @@ index 000000000000..cca663bcb92d
 +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
 +		};
 +
-+		vreg_s8c_1p8: smps8 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-always-on;
-+		};
-+
 +		vreg_l3c_1p2: ldo3 {
 +			regulator-min-microvolt = <1200000>;
 +			regulator-max-microvolt = <1200000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l4c_3p3: ldo4 {
-+			regulator-min-microvolt = <3008000>;
-+			regulator-max-microvolt = <3008000>;
 +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
 +		};
 +
@@ -368,22 +312,12 @@ index 000000000000..cca663bcb92d
 +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
 +		};
 +
-+		vreg_l12e: ldo12 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
 +		vreg_l16e_3p0: ldo16 {
 +			regulator-min-microvolt = <3072000>;
 +			regulator-max-microvolt = <3072000>;
 +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
 +		};
 +	};
-+};
-+
-+&dispcc {
-+	status = "okay";
 +};
 +
 +&gpu {
@@ -398,59 +332,42 @@ index 000000000000..cca663bcb92d
 +&i2c1 {
 +	clock-frequency = <100000>;
 +
++	pinctrl-0 = <&i2c1_active>, <&i2c1_hid_active>;
 +	pinctrl-names = "default";
-+	pinctrl-0 = <&ts_i2c_active_state>;
 +
 +	status = "okay";
 +
-+	touchscreen@10 {
++	hid@10 {
 +		compatible = "hid-over-i2c";
 +		reg = <0x10>;
 +		hid-descr-addr = <0x1>;
 +
-+		vdd-supply = <&vreg_l4c_3p3>;
-+		vddl-supply = <&vreg_l12e>;
-+
-+		post-power-on-delay-ms = <20>;
-+
 +		interrupts-extended = <&tlmm 122 IRQ_TYPE_LEVEL_LOW>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ts_active_state>;
 +	};
 +};
 +
 +&i2c7 {
 +	clock-frequency = <100000>;
 +
++	pinctrl-0 = <&i2c7_active>, <&i2c7_hid_active>;
 +	pinctrl-names = "default";
-+	pinctrl-0 = <&aux_i2c_active_state>;
 +
 +	status = "okay";
 +
-+	touchpad@15 {
++	hid@5 {
 +		compatible = "hid-over-i2c";
-+		reg = <0x15>;
-+		hid-descr-addr = <0x1>;
++		reg = <0x5>;
++		hid-descr-addr = <0x20>;
 +
-+		interrupts-extended = <&tlmm 24 IRQ_TYPE_LEVEL_LOW>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&tp_int_active_state>;
-+
-+		vdd-supply = <&vdd_kb_tp_3v3>;
++		interrupts-extended = <&tlmm 37 IRQ_TYPE_LEVEL_LOW>;
 +	};
 +
-+	keyboard@3a {
++	hid@2c {
 +		compatible = "hid-over-i2c";
-+		reg = <0x3a>;
-+		hid-descr-addr = <0x1>;
-+		interrupts-extended = <&tlmm 37 IRQ_TYPE_LEVEL_LOW>;
++		reg = <0x2c>;
++		hid-descr-addr = <0x20>;
 +
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&kb_int_active_state>;
-+
-+		vdd-supply = <&vdd_kb_tp_3v3>;
++		interrupts-extended = <&tlmm 24 IRQ_TYPE_LEVEL_LOW>;
 +	};
 +};
 +
@@ -461,20 +378,21 @@ index 000000000000..cca663bcb92d
 +&mdss_edp {
 +	data-lanes = <0 1 2 3>;
 +
-+	pinctrl-names = "default";
 +	pinctrl-0 = <&edp_hpd_active>;
++	pinctrl-names = "default";
 +
 +	status = "okay";
 +
 +	aux-bus {
 +		panel {
 +			compatible = "edp-panel";
++			no-hpd;
 +
 +			backlight = <&backlight>;
 +
 +			ports {
 +				port {
-+					auo_b133han05_in: endpoint {
++					auo_b140han06_in: endpoint {
 +						remote-endpoint = <&mdss_edp_out>;
 +					};
 +				};
@@ -486,22 +404,22 @@ index 000000000000..cca663bcb92d
 +		port@1 {
 +			reg = <1>;
 +			mdss_edp_out: endpoint {
-+				remote-endpoint = <&auo_b133han05_in>;
++				remote-endpoint = <&auo_b140han06_in>;
 +			};
 +		};
 +	};
 +};
 +
-+&pcie1 {
-+	perst-gpio = <&tlmm 175 GPIO_ACTIVE_LOW>;
-+	wake-gpio = <&tlmm 177 GPIO_ACTIVE_HIGH>;
++&pcie3 {
++	perst-gpio = <&tlmm 178 GPIO_ACTIVE_LOW>;
++	wake-gpio = <&tlmm 180 GPIO_ACTIVE_HIGH>;
++	pinctrl-0 = <&pcie3_default_state>;
 +	pinctrl-names = "default";
-+	pinctrl-0 = <&pcie2_default_state>;
 +
 +	status = "okay";
 +};
 +
-+&pcie1_phy {
++&pcie3_phy {
 +	vdda-phy-supply = <&vreg_l5e_0p88>;
 +	vdda-pll-supply = <&vreg_l3c_1p2>;
 +
@@ -526,26 +444,28 @@ index 000000000000..cca663bcb92d
 +
 +&remoteproc_adsp {
 +	memory-region = <&adsp_mem>;
-+	firmware-name = "qcom/sc8180x/qcadsp8180.mbn";
++	firmware-name = "qcom/sc8180x/LENOVO/82AK/qcadsp8180.mbn";
++
++	status = "okay";
++};
++
++&remoteproc_cdsp {
++	memory-region = <&cdsp_mem>;
++	firmware-name = "qcom/sc8180x/LENOVO/82AK/qccdsp8180.mbn";
 +
 +	status = "okay";
 +};
 +
 +&remoteproc_mpss {
 +	memory-region = <&mpss_mem>;
-+	firmware-name = "qcom/sc8180x/qcmpss8180.mbn";
++	firmware-name = "qcom/sc8180x/LENOVO/82AK/qcmpss8180_nm.mbn";
 +
-+	status = "okay";
-+};
-+
-+&uart12 {
-+	compatible = "qcom,geni-debug-uart";
 +	status = "okay";
 +};
 +
 +&uart13 {
-+	pinctrl-names = "default";
 +	pinctrl-0 = <&uart13_state>;
++	pinctrl-names = "default";
 +
 +	status = "okay";
 +
@@ -660,14 +580,6 @@ index 000000000000..cca663bcb92d
 +&tlmm {
 +	gpio-reserved-ranges = <0 4>, <47 4>, <126 4>;
 +
-+	aux_i2c_active_state: aux-i2c-active-state {
-+		pins = "gpio98", "gpio99";
-+		function = "qup7";
-+
-+		bias-disable;
-+		drive-strength = <16>;
-+	};
-+
 +	edp_hpd_active: epd-hpd-active-state {
 +		pins = "gpio10";
 +		function = "edp_hot";
@@ -681,39 +593,49 @@ index 000000000000..cca663bcb92d
 +		bias-disable;
 +	};
 +
-+	kb_int_active_state: kb-int-active-state {
-+		int-n-pins {
-+			pins = "gpio37";
-+			function = "gpio";
++	i2c1_active: i2c1-active-state {
++		pins = "gpio114", "gpio115";
++		function = "qup1";
 +
-+			bias-pull-up;
-+			intput-enable;
-+		};
-+
-+		kp-disable-pins {
-+			pins = "gpio135";
-+			function = "gpio";
-+
-+			output-high;
-+		};
++		bias-pull-up = <1>;
++		drive-strength = <2>;
 +	};
 +
-+	kb_tp_3v3_en_active_state: kb-tp-3v3-en-active-state {
-+		pins = "gpio4";
++	i2c1_hid_active: i2c1-hid-active-state {
++		pins = "gpio122";
 +		function = "gpio";
 +
-+		bias-disable;
++		input-enable;
++		bias-pull-up;
++		drive-strength = <2>;
 +	};
 +
-+	pcie2_default_state: pcie2-default-state {
++	i2c7_active: i2c7-active-state {
++		pins = "gpio98", "gpio99";
++		function = "qup7";
++
++		bias-pull-up;
++		drive-strength = <2>;
++	};
++
++	i2c7_hid_active: i2c7-hid-active-state {
++		pins = "gpio37", "gpio24";
++		function = "gpio";
++
++		input-enable;
++		bias-pull-up;
++		drive-strength = <2>;
++	};
++
++	pcie3_default_state: pcie3-default-state {
 +		clkreq-pins {
-+			pins = "gpio176";
-+			function = "pci_e2";
++			pins = "gpio179";
++			function = "pci_e3";
 +			bias-pull-up;
 +		};
 +
 +		reset-n-pins {
-+			pins = "gpio175";
++			pins = "gpio178";
 +			function = "gpio";
 +
 +			drive-strength = <2>;
@@ -722,56 +644,12 @@ index 000000000000..cca663bcb92d
 +		};
 +
 +		wake-n-pins {
-+			pins = "gpio177";
++			pins = "gpio180";
 +			function = "gpio";
 +
 +			drive-strength = <2>;
 +			bias-pull-up;
 +		};
-+	};
-+
-+	tp_int_active_state: tp-int-active-state {
-+		tp-int-pins {
-+			pins = "gpio24";
-+			function = "gpio";
-+
-+			bias-disable;
-+			input-enable;
-+		};
-+
-+		tp-close-n-pins {
-+			pins = "gpio116";
-+			function = "gpio";
-+
-+			bias-disable;
-+			input-enable;
-+		};
-+	};
-+
-+	ts_active_state: ts-active-state {
-+		int-n-pins {
-+			pins = "gpio122";
-+			function = "gpio";
-+
-+			input-enable;
-+			bias-disable;
-+		};
-+
-+		reset-n-pins {
-+			pins = "gpio54";
-+			function = "gpio";
-+
-+			output-high;
-+		};
-+	};
-+
-+	ts_i2c_active_state: ts-i2c-active-state {
-+		pins = "gpio114", "gpio115";
-+		function = "qup1";
-+
-+		/* External pull up */
-+		bias-disable;
-+		drive-strength = <2>;
 +	};
 +
 +	uart13_state: uart13-state {
