@@ -2,249 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EA8716DE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A69716DE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233272AbjE3TpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 15:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
+        id S233380AbjE3TrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 15:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjE3TpQ (ORCPT
+        with ESMTP id S233336AbjE3TrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 15:45:16 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5ECB2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:45:14 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f4b256a0c9so5462278e87.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:45:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685475912; x=1688067912;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KPBl7CVyGi7z3EnEqP8i0l1/Rp7cAONGFh5tesIqeUQ=;
-        b=wtwhG4hRQYmLsKNHr6yPT4PxwE86DRjpaU6CInTtWe3dQ2ORJ8RSSIXgYsctPq6pHo
-         bsA42IlNLmBkPQ/aQjb3MZy6gU3CFsIMPdeyzO5j4eGvo6PIt1UYhJ6JtG0JRkrjaWE/
-         YEPRJBYadY2QY5eqwR5qbTGk/gIuL7tzHKSoHirm3c9fjHaqMXhIqFETJLAJiR0SsQZt
-         UteV3tsJK9l88yPqJbBHlLCTQ/TTfIPTf9CupsZwVq80qHHlujm3eCXZ5+6O7iHp23Qa
-         xsyrUjkluvR9qYqvCyl6wKxZcjBrwKPcJRWYpUkob8CYw6mvzJUXwLLExLRFHhshXXLi
-         ENfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685475912; x=1688067912;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KPBl7CVyGi7z3EnEqP8i0l1/Rp7cAONGFh5tesIqeUQ=;
-        b=J5IVyoUkzGNxzv19xBEGGrBodW7MdASARM530UPdUGTdErQejTiGdkZfIUezd+CiTY
-         1+Xk8wmOo5eUeoW71Lp/xyPqnMBQ9GHaSR57q/4J0ealC+1FaeJgMQqnC7C7DOfgQ9yo
-         Tc55aDryxpwaMwXWYI9SAqiA6aumaQ0Yt7GGTmjqSRJHWahmyW/KRwkxZgt5/fvl7N9G
-         0gSVXbNX9MjYWCCWkf6/beXHJsnywjivK2CZGJ7+2ZxD9Xbq+TZLiOSIvn7vLTMlqXaw
-         ZkTRhL21hTzGdENPkQoX071OjnOPB2pvdaSnXVB1UiPdFBCu+MuVdmzNJmCVHQm5Ov7y
-         Lskg==
-X-Gm-Message-State: AC+VfDxk6tCkCo5EH17VaZPVDV5zKhUEo7rrTO38/77XtVpI3SpM8FaH
-        mRYey2QBZPc+YndWrQxC+Qlkag==
-X-Google-Smtp-Source: ACHHUZ48qmvzgPiAm4eIF9ZN57Y01/3tKsrZOTUz5daAvG3cHRT2GRkwsPORqWGpzNxu5zinnU4l0w==
-X-Received: by 2002:a2e:3101:0:b0:2a8:e642:8cdb with SMTP id x1-20020a2e3101000000b002a8e6428cdbmr1345004ljx.49.1685475912524;
-        Tue, 30 May 2023 12:45:12 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id a24-20020a2e8618000000b002a76c16ad65sm3017684lji.87.2023.05.30.12.45.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 12:45:12 -0700 (PDT)
-Message-ID: <0e9903c0-4669-9298-e0ee-72fc775998c3@linaro.org>
-Date:   Tue, 30 May 2023 21:45:10 +0200
+        Tue, 30 May 2023 15:47:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC809F3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:46:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685475994;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=+KY4BUiF/MOGCSpYc6yuZgQvcU8BMAhBhRLvP6scM8I=;
+        b=TQ6paMIhLx+6pX69Nt/RM0naD1OMuhxhKJ1eS4AQrYYlD7AFaLhR3aNS/T8RH+3+O/oydK
+        kSHa6hrqi4IQQ9a+DW2r3ZJe7neNnlf8aXuiZ2Tot1GGkgmNwZZSsfzNK1n9ttDn+8jzxY
+        O/tnc07OZGjhMArXwhL6nMdZ+99eJAM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-558-BEpvqfrANCit7Dl09nGqLw-1; Tue, 30 May 2023 15:46:30 -0400
+X-MC-Unique: BEpvqfrANCit7Dl09nGqLw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C8098185A793;
+        Tue, 30 May 2023 19:46:29 +0000 (UTC)
+Received: from localhost (unknown [10.22.16.189])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E8F14112132C;
+        Tue, 30 May 2023 19:46:28 +0000 (UTC)
+Date:   Tue, 30 May 2023 16:46:28 -0300
+From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt <stable-rt@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Pavel Machek <pavel@denx.de>,
+        Jeff Brady <jeffreyjbrady@gmail.com>,
+        Luis Goncalves <lgoncalv@redhat.com>
+Subject: [ANNOUNCE] 5.10.180-rt88
+Message-ID: <ZHZSlJFnTK1IpXeg@uudg.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230530193436.3833889-1-quic_bjorande@quicinc.com>
- <20230530193436.3833889-3-quic_bjorande@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH 2/2] soc: qcom: rmtfs: Support dynamic placement of region
-In-Reply-To: <20230530193436.3833889-3-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello RT-list!
 
+I'm pleased to announce the 5.10.180-rt88 stable release.
 
-On 30.05.2023 21:34, Bjorn Andersson wrote:
-> In some configurations, the exact placement of the rmtfs shared memory
-> region isn't so strict. In the current implementation the author of the
-> DeviceTree source is forced to make up a memory region.
-IIUC the test here would be... "works" / "doesn't", just as if one
-misplaced the fixed region?
+This release is an update to the new stable 5.10.180 version, with one
+RT-specific change required to fix a build error due to the lack of
+support for deferred printing in v5.10-rt.
 
-Does the downstream sharedmem-uio driver do any additional cryptic
-magic or does it simply rely on the vendor's cma/dma pool settings?
-Can we replicate its behavior to stop hardcoding rmtfs, period?
+Support for deferred printing was removed in v5.10-rc1-rt1 by commit
+9153e3c5cb0c9 ("printk: remove deferred printing").
 
-> 
-> Extend the rmtfs memory driver to relieve the author of this
-> responsibility by introducing support for using dynamic allocation in
-> the driver.
-> 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sdm845-mtp.dts | 10 ++++
->  drivers/soc/qcom/rmtfs_mem.c            | 66 +++++++++++++++++++------
->  2 files changed, 61 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-> index d1440b790fa6..e6191b8ba4c6 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-> @@ -12,6 +12,8 @@
->  #include "pm8998.dtsi"
->  #include "pmi8998.dtsi"
->  
-> +/delete-node/ &rmtfs_mem;
-> +
->  / {
->  	model = "Qualcomm Technologies, Inc. SDM845 MTP";
->  	compatible = "qcom,sdm845-mtp", "qcom,sdm845";
-> @@ -48,6 +50,14 @@ vreg_s4a_1p8: pm8998-smps4 {
->  		vin-supply = <&vph_pwr>;
->  	};
->  
-> +	rmtfs {
-> +		compatible = "qcom,rmtfs-mem";
-> +
-> +		qcom,alloc-size = <(2*1024*1024)>;
-> +		qcom,client-id = <1>;
-> +		qcom,vmid = <15>;
-> +	};
-This should have been a separate patch.
+You can get this release via the git tree at:
 
-> +
->  	thermal-zones {
->  		xo_thermal: xo-thermal {
->  			polling-delay-passive = <0>;
-> diff --git a/drivers/soc/qcom/rmtfs_mem.c b/drivers/soc/qcom/rmtfs_mem.c
-> index f83811f51175..5f56ded9f905 100644
-> --- a/drivers/soc/qcom/rmtfs_mem.c
-> +++ b/drivers/soc/qcom/rmtfs_mem.c
-> @@ -3,6 +3,8 @@
->   * Copyright (c) 2017 Linaro Ltd.
->   */
->  
-> +#include "linux/gfp_types.h"
-> +#include "linux/sizes.h"
-<>?
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
->  #include <linux/kernel.h>
->  #include <linux/cdev.h>
->  #include <linux/err.h>
-> @@ -168,23 +170,63 @@ static void qcom_rmtfs_mem_release_device(struct device *dev)
->  	kfree(rmtfs_mem);
->  }
->  
-> +static int qcom_rmtfs_acquire_mem(struct device *dev, struct qcom_rmtfs_mem *rmtfs_mem)
-> +{
-> +	struct device_node *node = dev->of_node;
-> +	struct reserved_mem *rmem;
-> +	dma_addr_t dma_addr;
-> +	void *mem;
-> +	u32 size;
-> +	int ret;
-> +
-> +	rmem = of_reserved_mem_lookup(node);
-> +	if (rmem) {
-> +		rmtfs_mem->addr = rmem->base;
-> +		rmtfs_mem->size = rmem->size;
-> +
-> +		rmtfs_mem->base = devm_memremap(&rmtfs_mem->dev, rmtfs_mem->addr,
-> +						rmtfs_mem->size, MEMREMAP_WC);
-> +		if (IS_ERR(rmtfs_mem->base)) {
-> +			dev_err(dev, "failed to remap rmtfs_mem region\n");
-> +			return PTR_ERR(rmtfs_mem->base);
-> +		}
-> +
-> +		return 0;
-> +	}
-> +
-> +	ret = of_property_read_u32(node, "qcom,alloc-size", &size);
-> +	if (ret < 0) {
-> +		dev_err(dev, "rmtfs of unknown size\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/*
-> +	 * Ensure that the protected region isn't adjacent to other protected
-> +	 * regions by allocating an empty page on either side.
-> +	 */
-> +	mem = dma_alloc_coherent(dev, size + 2 * SZ_4K, &dma_addr, GFP_KERNEL);
-Should this be made pagesize-independent? Can we even run non-4K kernels on msm?
+  branch: v5.10-rt
+  Head SHA1: 442a576e3b9afa5272c3d0a996a0d1a260f259b8
 
-Konrad
-> +	if (mem) {
-> +		rmtfs_mem->base = mem + SZ_4K;
-> +		rmtfs_mem->addr = dma_addr + SZ_4K;
-> +		rmtfs_mem->size = size;
-> +
-> +		return 0;
-> +	}
-> +
-> +	dev_err(dev, "unable to allocate memory for rmtfs mem\n");
-> +	return -ENOMEM;
-> +}
-> +
->  static int qcom_rmtfs_mem_probe(struct platform_device *pdev)
->  {
->  	struct device_node *node = pdev->dev.of_node;
->  	struct qcom_scm_vmperm perms[NUM_MAX_VMIDS + 1];
-> -	struct reserved_mem *rmem;
->  	struct qcom_rmtfs_mem *rmtfs_mem;
->  	u32 client_id;
->  	u32 vmid[NUM_MAX_VMIDS];
->  	int num_vmids;
->  	int ret, i;
->  
-> -	rmem = of_reserved_mem_lookup(node);
-> -	if (!rmem) {
-> -		dev_err(&pdev->dev, "failed to acquire memory region\n");
-> -		return -EINVAL;
-> -	}
-> -
->  	ret = of_property_read_u32(node, "qcom,client-id", &client_id);
->  	if (ret) {
->  		dev_err(&pdev->dev, "failed to parse \"qcom,client-id\"\n");
-> @@ -196,22 +238,16 @@ static int qcom_rmtfs_mem_probe(struct platform_device *pdev)
->  	if (!rmtfs_mem)
->  		return -ENOMEM;
->  
-> -	rmtfs_mem->addr = rmem->base;
->  	rmtfs_mem->client_id = client_id;
-> -	rmtfs_mem->size = rmem->size;
->  
->  	device_initialize(&rmtfs_mem->dev);
->  	rmtfs_mem->dev.parent = &pdev->dev;
->  	rmtfs_mem->dev.groups = qcom_rmtfs_mem_groups;
->  	rmtfs_mem->dev.release = qcom_rmtfs_mem_release_device;
->  
-> -	rmtfs_mem->base = devm_memremap(&rmtfs_mem->dev, rmtfs_mem->addr,
-> -					rmtfs_mem->size, MEMREMAP_WC);
-> -	if (IS_ERR(rmtfs_mem->base)) {
-> -		dev_err(&pdev->dev, "failed to remap rmtfs_mem region\n");
-> -		ret = PTR_ERR(rmtfs_mem->base);
-> +	ret = qcom_rmtfs_acquire_mem(&pdev->dev, rmtfs_mem);
-> +	if (ret < 0)
->  		goto put_device;
-> -	}
->  
->  	cdev_init(&rmtfs_mem->cdev, &qcom_rmtfs_mem_fops);
->  	rmtfs_mem->cdev.owner = THIS_MODULE;
+Or to build 5.10.180-rt88 directly, the following patches should be applied:
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.10.180.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/older/patch-5.10.180-rt88.patch.xz
+
+Signing key fingerprint:
+
+  9354 0649 9972 8D31 D464  D140 F394 A423 F8E6 7C26
+
+All keys used for the above files and repositories can be found on the
+following git repository:
+
+   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
+
+Enjoy!
+Luis
+---
+ include/linux/printk.h |    4 ++--
+ mm/page_alloc.c        |    2 --
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+---
+diff --git a/include/linux/printk.h b/include/linux/printk.h
+index 83c7734e98025..92e0656841128 100644
+--- a/include/linux/printk.h
++++ b/include/linux/printk.h
+@@ -609,7 +609,7 @@ static inline void print_hex_dump_debug(const char *prefix_str, int prefix_type,
+ #define print_hex_dump_bytes(prefix_str, prefix_type, buf, len)	\
+ 	print_hex_dump_debug(prefix_str, prefix_type, 16, 1, buf, len, true)
+ 
+-#ifdef CONFIG_PRINTK
++#if defined(CONFIG_PRINTK) && !defined(CONFIG_PREEMPT_RT)
+ extern void __printk_safe_enter(void);
+ extern void __printk_safe_exit(void);
+ /*
+@@ -619,7 +619,7 @@ extern void __printk_safe_exit(void);
+  */
+ #define printk_deferred_enter __printk_safe_enter
+ #define printk_deferred_exit __printk_safe_exit
+-#else
++#else /* defined(CONFIG_PRINTK) && !defined(CONFIG_PREEMPT_RT) */
+ static inline void printk_deferred_enter(void)
+ {
+ }
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 5f1c50a6bebc5..7e65e3ef16e3a 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -6057,7 +6057,6 @@ static void __build_all_zonelists(void *data)
+ 	 * tty_insert_flip_string_and_push_buffer() on other CPU might be
+ 	 * calling kmalloc(GFP_ATOMIC | __GFP_NOWARN) with port->lock held.
+ 	 */
+-	printk_deferred_enter();
+ 	write_seqlock(&zonelist_update_seq);
+ 
+ #ifdef CONFIG_NUMA
+@@ -6092,7 +6091,6 @@ static void __build_all_zonelists(void *data)
+ 	}
+ 
+ 	write_sequnlock(&zonelist_update_seq);
+-	printk_deferred_exit();
+ 	local_irq_restore(flags);
+ }
+ 
+-- 
+2.40.1
+
