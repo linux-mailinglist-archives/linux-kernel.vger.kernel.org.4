@@ -2,97 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE12F716A63
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C3C716A68
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233116AbjE3RCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 13:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
+        id S233390AbjE3RDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 13:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233146AbjE3RCv (ORCPT
+        with ESMTP id S233300AbjE3RDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 13:02:51 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779E0135;
-        Tue, 30 May 2023 10:02:29 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-256a41d3e81so1446166a91.1;
-        Tue, 30 May 2023 10:02:29 -0700 (PDT)
+        Tue, 30 May 2023 13:03:04 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F184EA
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:02:50 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-76c304efb8fso23443939f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:02:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685466149; x=1688058149;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=R8y7yMNzZ1Qqhpw6rilc+hpdM25AgZyUqwGPTyZvG30=;
-        b=JVzcVggwmyRveToNOSRrzjG4a7ygx+T88EwX6Jiqkm6w+4l3PEXGCSlVKcgEHLB8kG
-         ZxlGgChiCIQLHOiVqWQ0SQmwA3Jm57JvGACwNps1r7tmZ8t3iNuhHC8NK1BLTTqWLdYq
-         KQj2UaqLp3bY3B5H0VdMQWRMX88fLheJh5jpLSF4BnGXfgPIC4/ZwAfQGJ02J0AiJD2C
-         4+XsjvN+XO0iQnlGPmZrmv3tTdMjzkN4/1b1YrU4WtfN0xnb39T2bYhJYP0/T6+bOrNN
-         VKAPqbEJKX5KePCzaQJsxdfU9wXQ9mWSYzC0LUMVSvN2QreNLxMyWuoet8iCBzXHF70g
-         CJcQ==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685466169; x=1688058169;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hRoDmakO8mrN7BvELyyzaW32Q2l2bnomKWiwa5cHUpA=;
+        b=be4Ruwzg4H/6dypcz6TQR2g21cAynOFpZugTdkH/nePfKZg/I7DE/R6DZjIOANPgfm
+         EAZ1UP9ba9X+Vx317rQuKLUuIFNw/meR3q9d9Zko6p7didG6zgOhXETAXIHhJvjbSezT
+         vlHtWsO1NVQlXphb44pIScjiowuV/Kf/RkoWMGRQIN7O9eIBdfZleNxY4y19kGQMdVW6
+         wNoZoQwSNWUuLzx+TbleFYQtMY1GGeQYuAnCBXZqZQfX16/md2jVEC4sRBgeRZaO+0Hc
+         YnYPWRkVvi+ozXjs9yfcPtAnYV198p8a8ZOLtE7QGIMdLHBzRT7knB5kruCdwYNmDmsl
+         yySw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685466149; x=1688058149;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R8y7yMNzZ1Qqhpw6rilc+hpdM25AgZyUqwGPTyZvG30=;
-        b=Ve4TqVAYqgY0mkYVcaliqs05Nzwesw4tk5cAKnEDW811exrf7CPq0OX7FY9srA+Vud
-         a2nFLslXMKJXaCTEkno7tChR/SG70fCUCgVAK+4HUWzDwW3Ow47Rz9CbGwTCxZHIaCGb
-         kpYdKiaZLu2LFKzqlNf6CACWXbNledYFlub9LpyXj7cdApT6HqvGzd9lU5MQKbb3Uxbh
-         BznbGRgvSfHHuk52hQPP1XVyews4GHj0ffecr3Ldcoqqiz1P24zOhi0t2qW7xp93khLA
-         LJNSkXlwrclt1rUX1ih3asHFzovMkWO11vsPRW0eQOs+VIvSN33GxVPwkbgJC8bpm8Ex
-         Cngg==
-X-Gm-Message-State: AC+VfDyTfRlzw/oJF5agYBr+4wcp/ZYglkm190Mi+DaRfSSy3g26ivVV
-        TkWSd+x1HXI2L48Zmz4MMSSMMPrCMzvWjASIAD8=
-X-Google-Smtp-Source: ACHHUZ7h6bz8p9RbMa12RIVDXgKFTfWqgt7XTokWmigWLZSciY6OzVC41VUTCh37/71OMtc3oZUIKTC2sEYLvnncv7g=
-X-Received: by 2002:a17:90a:cc9:b0:256:6f35:fd60 with SMTP id
- 9-20020a17090a0cc900b002566f35fd60mr2934376pjt.17.1685466148757; Tue, 30 May
- 2023 10:02:28 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685466169; x=1688058169;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hRoDmakO8mrN7BvELyyzaW32Q2l2bnomKWiwa5cHUpA=;
+        b=juiGGOfqXFKCYKqQn5Aw9h2tma7TuSvCNgFBJ5TMoT3MCsO+swRCclJFQaubgpWLPq
+         TdKGk/MVuNaE2ATcNMHT2JcMV6usqTVgml5qTU3gDS9A/oDyQG2lFk2xdl0bs7cm9/sp
+         S3CTKpmDKY7TnBc+n4U+EB24piu+tDGlxi0eVZAW6BSTLVt+5AtPmIvQVSuApVF/wd/c
+         quFWSA5AfZp9x8EkMSE5i2I6z6B5QHxtXSg3DwCZTZno8RSb8lVwkiW24rzGRGCHeRtG
+         izCgOvnVbgLgmkk+sxUfaTgk1NowUoXjokrhC0y9t8Y70Q6lsNISpIXehXhjp5W8T/ek
+         xjBg==
+X-Gm-Message-State: AC+VfDy65nPshgVjiK7vwjg1bmhs9ZCdcopbiUv7WneBySMOqCkDurJ7
+        4OUafvTgr3fT7WNDKRjlypmF3L/1j3NVqoCb6sU=
+X-Google-Smtp-Source: ACHHUZ6xqxRUQnK9LwqsJczYvkyFp5/L3wIJn+R0nqdGP4nB/d5h2eGBwNj8PrSrGnWnQ+dnnCA5SA==
+X-Received: by 2002:a05:6e02:1248:b0:33b:3a14:c14c with SMTP id j8-20020a056e02124800b0033b3a14c14cmr14294ilq.3.1685466169616;
+        Tue, 30 May 2023 10:02:49 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id s185-20020a0251c2000000b004187f6d4e78sm877638jaa.105.2023.05.30.10.02.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 10:02:47 -0700 (PDT)
+Message-ID: <00c4aa95-a096-0487-c162-e8817dfc0b96@kernel.dk>
+Date:   Tue, 30 May 2023 11:02:46 -0600
 MIME-Version: 1.0
-References: <20230528190835.386670951@linuxfoundation.org>
-In-Reply-To: <20230528190835.386670951@linuxfoundation.org>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Tue, 30 May 2023 10:02:17 -0700
-Message-ID: <CAJq+SaCyTfTuD5Qte7cA4HhSqUzUOwDXWnNp10zTBLM9Gh5UQg@mail.gmail.com>
-Subject: Re: [PATCH 6.1 000/119] 6.1.31-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 0/4] block: constify some structures of
+ partitions/core.c
+Content-Language: en-US
+To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas@t-8ch.de>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+References: <20230419-const-partition-v2-0-817b58f85cd1@weissschuh.net>
+ <5aeb26f6-aeca-4f77-8328-a753f9a5141b@t-8ch.de>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <5aeb26f6-aeca-4f77-8328-a753f9a5141b@t-8ch.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is the start of the stable review cycle for the 6.1.31 release.
-> There are 119 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Tue, 30 May 2023 19:08:13 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.31-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+On 5/30/23 10:52 AM, Thomas Weißschuh wrote:
+> Hi Jens,
+> 
+> could you take a look at this?
 
-Compiled and booted on my x86_64 and ARM64 test systems. No errors or
-regressions.
+Looks fine to me, more const always a good thing. Can you respin
+it against for-6.5/block?
 
-Tested-by: Allen Pais <apais@linux.microsoft.com>
+-- 
+Jens Axboe
 
-Thanks.
+
