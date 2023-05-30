@@ -2,138 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB7A7160D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D8C716114
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbjE3M7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
+        id S232539AbjE3NHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbjE3M7h (ORCPT
+        with ESMTP id S229649AbjE3NHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:59:37 -0400
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FBD103;
-        Tue, 30 May 2023 05:59:12 -0700 (PDT)
-Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UCNOsd001382;
-        Tue, 30 May 2023 05:57:51 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=PPS06212021;
- bh=kI9Zo3fFkCHxqi623JLnhEv4feSEkvPl07NiLV+9i0U=;
- b=jzVbrDkNHbn++iDDRZf+xzxkKN7MpABMZnM8Pik6+lmVBVW6O157k+dqN2OeuRTR9VaX
- snPb79tsRFkiqNixdZ13/mjSJcDxr+uq+Rxr5AMI2txvADmd/iTDlaN4ZDNLPk2sDzc9
- +TbkYr1ndwuHHfQs3zvNgoDNUeEDZVN3pk4mGZi4htkafDfBf6K/r2B6tSj8D63OIvFR
- lNyfJqsqflFAHwF5+kmVZQUUgzuoa8aGggCZiA5kQdfXpbuG0jYMFQza8ZK4SZhLIf/p
- QyrCZIjanozBpAWIRA5vhRKPw7GCgk23X2giUY1xy1ZHGe6bqA/wLlzn2dqvcTuLTYs9 iw== 
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2175.outbound.protection.outlook.com [104.47.55.175])
-        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3qud53ad0k-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 05:57:50 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KhKTYb5BgTwySdKlSqHod7dRzzyuUOVJjrpO82azzuSifuGWPfGpyDg7JDEs9VayJ4t2nfqKoD7W6F5CoysalZEh3DQWtjzD/iXpCtKefahB5SmFOl4Q/uwbu4AHad7nu4gpL3XfMIqYBmas6PhNNgMW7NYPAOFf5951gimQf6qP3Vtnlf8cf5IQC99IlF1C8OHzLtuz2rZvfkZ2us4mUwybjMxqCspTVqH3tkHWHaaMl3gFm+DeKCFzp+NQr1ruu6trzLCaKD0jtBts7QCv1yzgqEmBX530pGI59gLf1510csukTxFKDFgyNMQYJUCtbjiryt6GATo5nBg73F5nEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kI9Zo3fFkCHxqi623JLnhEv4feSEkvPl07NiLV+9i0U=;
- b=KIP5GYuWZxrT66GUNJJNw3ewBrJkeHKW/913WGsRjVk31VQREsOLtYWH45s2lt9dbu6i6WOYPYHURcPj+CfEq4PyioaH1T+DQW1wls/jpEBzybR//OOm5g6O97incAYVgSSPZ6X8WB/KKX7Myyok/vUZTNSv6AcQNJuJJXi0l0qfh3bHYsPZ9LljaY47uX6UPEnqNvJhuf+DBKdBzHTGEeeOV0fZFiZunbcG6Oijg9sivSxUI/ZayF5vcGSOytdaQvlYsXeBgRQnh6PsBLul0bF5Ono3OnW2Uck8UxztYatoWy5V4HXwe2nJ6WNkwVlITCm7oROJ8TT3Dv8gocLeYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-Received: from PH0PR11MB4952.namprd11.prod.outlook.com (2603:10b6:510:40::15)
- by PH8PR11MB6562.namprd11.prod.outlook.com (2603:10b6:510:1c1::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Tue, 30 May
- 2023 12:57:48 +0000
-Received: from PH0PR11MB4952.namprd11.prod.outlook.com
- ([fe80::5693:5120:1f58:9efa]) by PH0PR11MB4952.namprd11.prod.outlook.com
- ([fe80::5693:5120:1f58:9efa%3]) with mapi id 15.20.6433.022; Tue, 30 May 2023
- 12:57:48 +0000
-From:   Dragos-Marian Panait <dragos.panait@windriver.com>
-To:     stable@vger.kernel.org
-Cc:     Ruihan Li <lrh2000@pku.edu.cn>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4.19 1/1] bluetooth: Add cmd validity checks at the start of hci_sock_ioctl()
-Date:   Tue, 30 May 2023 15:57:31 +0300
-Message-Id: <20230530125731.253442-2-dragos.panait@windriver.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230530125731.253442-1-dragos.panait@windriver.com>
-References: <20230530125731.253442-1-dragos.panait@windriver.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR0102CA0027.eurprd01.prod.exchangelabs.com
- (2603:10a6:802::40) To PH0PR11MB4952.namprd11.prod.outlook.com
- (2603:10b6:510:40::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB4952:EE_|PH8PR11MB6562:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5d393c40-1141-4312-abe5-08db610d781f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dCuTvhLxNk+6jjH0o8+F75pAyKYnYCBlNJ9zoTzWdKaBgT8T6D8/F2sedSWiO9kWERz6ETn4ItVGFdsMc1ey/n5ISuTDSVFvTzeJAPbHAHK0oKS5pNG0BhPeOcJju37IbS28fga77+1a3vBVnD6GATAj+BKA6QnQ9bys44JsPve/B7KexvQ7raJdIDtQpM7qig3/h1CpwPQyBIwOIAByqYfP/XFFtIqYILiw1zBHqayQ1D7+JvREVg+avgXSoCfMxKor5b2gAAVjSW2hOTT2Bv1VCpIDeEYGva2APYpkk2bYr10kQHQ0w1ngVNBkGM2QJ8avfC/+jqR1NsaE+M6HM6jRnJJmsHdOBfBgXfVGqc5JmfuQviutQUR95/UfyQh386y7EaJOAaGWydykm5mYLCyqqbP7HCmhSeF5y+FqPcT9mRO092bVoctWSY567kZ+7x/XMXlPHi6f4G8cj/7eaOIUPlQWW67E4z/rR4W6kPMOaWIGHg9Azt/BqxeMsx2CaspaH2BzTidZY5MqN4nVOD5uRDPWZTiE/2oXSZCIh7ALZ1rPzPsyVk+CBYlt78U4QKimazK/OpMnG4G6qNPkvfNZKU2tAzG6qleFBP83P1gfFFZXOHCCcgHUHb5gQHbV
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4952.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(396003)(366004)(136003)(39850400004)(451199021)(6486002)(52116002)(186003)(5660300002)(41300700001)(6666004)(38100700002)(36756003)(8936002)(8676002)(6512007)(26005)(1076003)(6506007)(38350700002)(83380400001)(54906003)(86362001)(2906002)(66556008)(66946007)(6916009)(66476007)(4326008)(478600001)(2616005)(316002)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GGOsz1iHtC7CAXbmLfMNYj9H07T4SsHNy3ptvT7f7en3qof19QuVFfEreK6F?=
- =?us-ascii?Q?OhFE0ix8kaNTXo1i+pHF9Pmk/Q2miMw2jftM0I9VaeTVTeGw37nSREejIAbs?=
- =?us-ascii?Q?JR4YFjsKEvbCFt3hO86Po2rUbu0m7e6N1WNgV69EMvjFHw4EMJsSPCwnucGJ?=
- =?us-ascii?Q?Z+C/0AaQlDFu+84cUzZ9k3TLLX4cWuFZv81nIrkXhhx5kHx75uheTq+Tsj7S?=
- =?us-ascii?Q?WB9XiWh8B+uwiDB7sM7J6RmRkEm+Uautd2gvDpFqQxNC0YTQ5BGY8ZAHXL3P?=
- =?us-ascii?Q?p0GV5+YiYad3RSIZ8y34KryHE00Kne2jB4O8yvfYQHaDTNBj619XxWSJ4CdB?=
- =?us-ascii?Q?9Nl6k8GhreGhA3Uhem+Lbay+tzrS0FuuoXFGVQ/Ia0wSilb6+zLQidc+CqyQ?=
- =?us-ascii?Q?oqrX3paCQf3NKffvNZ0WE0iXe381kITH2YLVP1Yw94jZlzqu9x+dXfiRZm91?=
- =?us-ascii?Q?+lbVi5sWoK0ffbtfJuHfm0Nhkq91gYdaRmJ+4lDrG4OFGq/WwFMG5EcsA1TA?=
- =?us-ascii?Q?rapT+nNO/bB8ybvpCCQL2owkLHxewOJnzO72LsDJcT642z4Vf5cmteujY/zx?=
- =?us-ascii?Q?sO0haKSspHMrIrpWiENNpHxnad5VFPNogbtYeXVMcT20VyTU+6aLJVCz8KQR?=
- =?us-ascii?Q?94yCJyJLnPPkYO9L0SKPng+o0FIRGskQpusNJ8CkCtTC6Y5Wiz0qbDF3oPQR?=
- =?us-ascii?Q?lwL372HNTpgLLyPNSepQT6k4XjP0kD7YKrIenoP+ZaPlq9DmzrVOSmd4T5qc?=
- =?us-ascii?Q?M0w6YwDaWruH5eJiQkw8l+vFlt/IEgvMDROv6Verb4rrgFypY0SLwlEgXl0z?=
- =?us-ascii?Q?3RNqdGbyGzjk2dO5UTUnTayDfuB4xldt+P5lGV5VsNfmfv+HQfhW6vv8+xTa?=
- =?us-ascii?Q?S5HBKp2lf6o5TwQLw4y4dUyn7e6oxpdiROCIRb7jjixxf+QITeeQiCzCiOo+?=
- =?us-ascii?Q?eq0VgcDKFS8ctZPqBN/zZ69EbsCvFUp/JTFd93sXgHJ/pm0zSgjPXxceBavX?=
- =?us-ascii?Q?hKFyNQrbMA6qo7/91l7lEEW4bLLPt35RFfBIWfaS8TI+W4pMAp/pwiMFoeB2?=
- =?us-ascii?Q?pZPbcNVnottZhrufI7ZEGqTSF5TSb7Ohm6Ys/N4sKruQ3D6FBivVDhgSj/UP?=
- =?us-ascii?Q?E9TSJfG0Wc7f5gbuoZB0yXkZUI3G5OPHc2jsnoyML0NRRVmbklWtixr58ra+?=
- =?us-ascii?Q?+yC5dyVZ4wFoyV7axHI3jMI0YOeYaNgkuX9PAw7R2UGH5UEFwPV0Q6qdwsLa?=
- =?us-ascii?Q?iXuOb4jrA1q9YgVzePom807pWgodlMw5kZElU9EtECIpjMcTshNL9R2KLZB1?=
- =?us-ascii?Q?dq23h8v2Hq1deG/nx266tdRVomeKoTAImw8pseLoYvdWc5FyJzF0ojjQLqML?=
- =?us-ascii?Q?llZj2mEA0Un+1o03WwbL5Y56tIDIjH6wQoG/19IeZMlDzRZqJfUJH+HKz1t3?=
- =?us-ascii?Q?K6XmdpV0U8lRad8ztCZpYVPalhcMy8Sl04SUIeiqNj9bAWo3I272GeYEuk9l?=
- =?us-ascii?Q?JgUBLrmUbqFIW8r45/YEP/VigbEPD4LpBx0L0QHAUZ/Zc7AOtre92WEVFSDC?=
- =?us-ascii?Q?xkjBO1DOktrcDZAdXm9gxGTny2ByTc/2yARWAf+ad/JyKpwrmTA8if7ZU7xF?=
- =?us-ascii?Q?8A=3D=3D?=
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d393c40-1141-4312-abe5-08db610d781f
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4952.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 12:57:48.3140
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PWSPVWLcrnTVVmIMUjx6TNatJmh/EhVSJqA1tycQmKlGipqPtbGV+kOpZaSQLPPwtmfJnEJji8IUfvfUbuybXjhOrhtQtkOzutrLBRFfAn8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6562
-X-Proofpoint-GUID: U8DQ10O_Idp9d4QeOQdz54Doi0bn_zg8
-X-Proofpoint-ORIG-GUID: U8DQ10O_Idp9d4QeOQdz54Doi0bn_zg8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_09,2023-05-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- phishscore=0 bulkscore=0 priorityscore=1501 suspectscore=0 mlxscore=0
- malwarescore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305300105
+        Tue, 30 May 2023 09:07:15 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974A992;
+        Tue, 30 May 2023 06:07:14 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id D709C5C0154;
+        Tue, 30 May 2023 08:57:51 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 30 May 2023 08:57:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1685451471; x=1685537871; bh=/vngq095dMysS+VQMtZnh+O7OIzkDlS3aNu
+        +O6rzhPE=; b=O0MGN6+EIEinJG8m8aHuQe4WKepJbOGM2WgIvnMr052EKTYpHob
+        6xWjFcXm9dZaxW8gk2DNluYy1dpk2k/AU5T3PVvv0xNP3WnNwbwLqYbgVuKjjZom
+        0pwd/L69SmQTKslO/aJOirchlXpZIHXpXsGWI5vtwxTfJ0Qw3CpuyXLl8ght/9y5
+        2xfD5MqAWxJvj1+wunfu664Rg5ShcgC4nfqlsQMno4cJZTcwlmuExxaa35CSSF2/
+        Alao5kPhckY8xJcvDSBwN7AUVJTaoMTxt6BtVrXs834j9usukgqtD1GaDv5IDZLh
+        WZm7kEnZ7TqROxe1Q76dxc/wkNZNju5T9wA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1685451471; x=1685537871; bh=/vngq095dMysS+VQMtZnh+O7OIzkDlS3aNu
+        +O6rzhPE=; b=E2JYlRp+jiwOQVGCHZRqJZWsLf2VC3olZc+Kp4S/vbmKfcOAs5y
+        AHn/i9i/WiM6E4eYuTyOY2hwYEjLBaIuk0/fKX9UA9otFP+iZbUUylxf0EfZVQyI
+        q8FYSS0KVBaLlEjgAW5TsJ8dackyKvE1gj3zBBsa0fA8eJtuFmAZpQ1T1tEE8bvX
+        sQ5LdhCOtgo0YWbx201d/VJkK64uxn3kqF4vQnoh9pqz1fgtF1WUkd1mKaHVG/wg
+        pSjryfxxnYKZomHUYy4FUClvVFxmRf2H3n4Kjl9SlL5hICMoaA1n6BR8Oc3Ftx4g
+        HVmFN8BRySzL+ZNXol/rjdRB/L54p+qEgCg==
+X-ME-Sender: <xms:z_J1ZJbeFpPQu7FyXMhjUHT95HKEzhSwkDb6t9LMIRtMuOCggrvc7Q>
+    <xme:z_J1ZAam9bpTHbNY1q1BHYMQ5Hf8vJagYOHpp1wva1pweqQ6DA441wtF7UxifAldB
+    BEJip471Tz0LHBIAzg>
+X-ME-Received: <xmr:z_J1ZL9sqYbmmlwnK57zI7suQzLBE-LaTESBd_gglnm3KyVZoaqMYG-4tAKFz6acqVc2>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgheejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:z_J1ZHpTzrR-5hV2-OLYk00s1az84i83oXBnejnVDIn4CmdflQQ6kg>
+    <xmx:z_J1ZErrlFelpHlffg-VG9DJm2dIAGjWM4nvgazmCcLxlvxN8ZH-Nw>
+    <xmx:z_J1ZNRG66oE-Ck1llyOdLqRi7w48jSgWAJ6y0nina7jThizzh0jFw>
+    <xmx:z_J1ZNlvk9jdo0e-9U1DTgW7kAd49BmodPXowZc94Ry1EypcLeiz_w>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 30 May 2023 08:57:50 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH 1/2] MIPS: Allow MIPS32R2 kernel to run on P5600 and M5150
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <20230530125100.bd626syvkbfv7zhv@mobilestation>
+Date:   Tue, 30 May 2023 13:57:39 +0100
+Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Paul Cercueil <paul@crapouillou.net>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <9BBD5835-ACD8-48BD-AED9-E23473237FAD@flygoat.com>
+References: <20230529135245.4085-1-jiaxun.yang@flygoat.com>
+ <alpine.DEB.2.21.2305300321520.25569@angie.orcam.me.uk>
+ <684C1A48-C743-4045-AF12-B0846FCE8EBE@flygoat.com>
+ <alpine.DEB.2.21.2305301152080.42601@angie.orcam.me.uk>
+ <BCECE3BF-7A4D-43BF-8AA8-2232D974CD71@flygoat.com>
+ <alpine.DEB.2.21.2305301315120.42601@angie.orcam.me.uk>
+ <20230530124127.z5rr5vauw43rafrt@mobilestation>
+ <20230530125100.bd626syvkbfv7zhv@mobilestation>
+To:     Serge Semin <fancer.lancer@gmail.com>
+X-Mailer: Apple Mail (2.3731.500.231)
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -142,69 +98,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ruihan Li <lrh2000@pku.edu.cn>
 
-commit 000c2fa2c144c499c881a101819cf1936a1f7cf2 upstream.
 
-Previously, channel open messages were always sent to monitors on the first
-ioctl() call for unbound HCI sockets, even if the command and arguments
-were completely invalid. This can leave an exploitable hole with the abuse
-of invalid ioctl calls.
+> 2023=E5=B9=B45=E6=9C=8830=E6=97=A5 13:51=EF=BC=8CSerge Semin =
+<fancer.lancer@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Tue, May 30, 2023 at 03:41:30PM +0300, Serge Semin wrote:
+>> On Tue, May 30, 2023 at 01:16:32PM +0100, Maciej W. Rozycki wrote:
+>>> On Tue, 30 May 2023, Jiaxun Yang wrote:
+>>>=20
+>>>>> Sure, but this change is not needed for it.  You just need to =
+declare=20
+>>>>> which ISA revisions your platform supports and leave =
+`__get_cpu_type'=20
+>>>>> alone.  It has worked like that for a decade now.
+>>>>=20
+>>>> I=E2=80=99m afraid it won=E2=80=99t work as you expected.
+>>>>=20
+>>>> Actually I ran into a problem that `case CPU_P5600` in c-r4k.c is =
+optimised out
+>>>> by compiler, because the codepath is marked as unreachable.
+>>>=20
+>>> Maybe there's a bug elsewhere then.  Send me your .config and I'll =
+try to=20
+>>> reproduce it.
+>>=20
+>> I may have misunderstood something, but it seems like there is no =
+such
+>> problem on my P5600 system:
+>>=20
+>> [fancer@mobilestation] kernel $ grep -r P5600 -B2 -A2 =
+arch/mips/mm/c-r4k.c=20
+>>        case CPU_1004K:
+>>        case CPU_INTERAPTIV:
+>>        case CPU_P5600:
+>>        case CPU_PROAPTIV:
+>>        case CPU_M5150:
+>> --
+>>        case CPU_P6600:
+>>        case CPU_M6250:
+>>                pr_info("MIPS P5600 is here\n");
+>>                if (!(read_c0_config7() & MIPS_CONF7_IAR) &&
+>>                    (c->icache.waysize > PAGE_SIZE))
+>>=20
+>> Log:
+>> [    0.000000] Linux version 6.4.0-rc1-bt1-00235-gf9efd6b74b12-dirty =
+(fancer@mobilestation) (mipsel-baikal-linux-gcc (GCC) 7.3.0, GNU ld (GNU =
+Binutils) 2.30.0.20180208) #1
+>> 275 SMP PREEMPT Tue May 30 15:30:48 MSK 2023
+>> [    0.000000] CPU0 revision is: 0001a830 (MIPS P5600)
+>> [    0.000000] FPU revision is: 30f30320
+>> [    0.000000] MSA revision is: 00000320
+>> ...
+>> [    0.000000] VPE topology {1,1} total 2
+>> [    0.000000] MIPS P5600 is here
+>> ...
+>=20
+> Here is the CPU-related kernel configs:
+> root@msbt2:~# cat /proc/config.gz | gunzip | grep CPU_MIPS
+> # CONFIG_CPU_MIPS32_R2 is not set
+> # CONFIG_CPU_MIPS32_R5 is not set
+> # CONFIG_CPU_MIPS32_3_5_FEATURES is not set
+> CONFIG_CPU_MIPS32_R5_FEATURES=3Dy
+> CONFIG_CPU_MIPS32_R5_XPA=3Dy
+> CONFIG_SYS_HAS_CPU_MIPS32_R2=3Dy
+> CONFIG_SYS_HAS_CPU_MIPS32_R3_5=3Dy
+> CONFIG_SYS_HAS_CPU_MIPS32_R5=3Dy
+> CONFIG_CPU_MIPS32=3Dy
+> CONFIG_CPU_MIPSR5=3Dy
+> CONFIG_CPU_MIPSR2_IRQ_VI=3Dy
+> CONFIG_CPU_MIPSR2_IRQ_EI=3Dy
 
-This commit hardens the ioctl processing logic by first checking if the
-command is valid, and immediately returning with an ENOIOCTLCMD error code
-if it is not. This ensures that ioctl calls with invalid commands are free
-of side effects, and increases the difficulty of further exploitation by
-forcing exploitation to find a way to pass a valid command first.
+I was trying to run kernel compiled with CONFIG_CPU_MIPS32_R2 on P5600.
 
-Signed-off-by: Ruihan Li <lrh2000@pku.edu.cn>
-Co-developed-by: Marcel Holtmann <marcel@holtmann.org>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
----
- net/bluetooth/hci_sock.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+Thanks
+- Jiaxun
 
-diff --git a/net/bluetooth/hci_sock.c b/net/bluetooth/hci_sock.c
-index 908a57578794..182c3c5b8385 100644
---- a/net/bluetooth/hci_sock.c
-+++ b/net/bluetooth/hci_sock.c
-@@ -973,6 +973,34 @@ static int hci_sock_ioctl(struct socket *sock, unsigned int cmd,
- 
- 	BT_DBG("cmd %x arg %lx", cmd, arg);
- 
-+	/* Make sure the cmd is valid before doing anything */
-+	switch (cmd) {
-+	case HCIGETDEVLIST:
-+	case HCIGETDEVINFO:
-+	case HCIGETCONNLIST:
-+	case HCIDEVUP:
-+	case HCIDEVDOWN:
-+	case HCIDEVRESET:
-+	case HCIDEVRESTAT:
-+	case HCISETSCAN:
-+	case HCISETAUTH:
-+	case HCISETENCRYPT:
-+	case HCISETPTYPE:
-+	case HCISETLINKPOL:
-+	case HCISETLINKMODE:
-+	case HCISETACLMTU:
-+	case HCISETSCOMTU:
-+	case HCIINQUIRY:
-+	case HCISETRAW:
-+	case HCIGETCONNINFO:
-+	case HCIGETAUTHINFO:
-+	case HCIBLOCKADDR:
-+	case HCIUNBLOCKADDR:
-+		break;
-+	default:
-+		return -ENOIOCTLCMD;
-+	}
-+
- 	lock_sock(sk);
- 
- 	if (hci_pi(sk)->channel != HCI_CHANNEL_RAW) {
--- 
-2.40.1
+>=20
+> -Serge(y)
+>=20
+>>=20
+>> -Serge(y)
+>>=20
+>>>=20
+>>>  Maciej
+
 
