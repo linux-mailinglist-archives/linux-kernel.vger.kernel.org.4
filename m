@@ -2,108 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D37715374
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEFB715379
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjE3CIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 22:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
+        id S229712AbjE3CKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 22:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbjE3CIu (ORCPT
+        with ESMTP id S229547AbjE3CKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 22:08:50 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3A61BD;
-        Mon, 29 May 2023 19:08:29 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34U201hL022203;
-        Tue, 30 May 2023 02:08:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=BU/Zh7gAVl7zuLey3Sc2DV5MP6qQi28dn/deIGn+bE8=;
- b=nyPaH9dDAjZ4hXlFB37OJF0ifEnQqWuUGufBGyFCEnDMa0GXFJ73E/BrwSLnhz00wiwC
- S1BlkDR82DC63QDBSgrfNcel+9ZelFrlw/+atGMwsK+oAetKxFgdj5PfPgLtXqC4yThJ
- GHdSh5qRAJAOmqXnopxvcXkyjTzupIxTofI0PpjPnouZKQSb4z5KTnswD4KIohyI5Nyo
- 5Uy+PgqiZru1mjIX6wXyo7Vr8nRU1XPw+WQ0mQL9WUiDu4FEdeGeO4Xl+9aTVkJf9NlX
- 2k5eTXxXcHmApt1s0TlF/Fi1GnIEISspBeRSFojoboCYmxOg57zphR5Il9ivQIQHnasU +A== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qvws8gt58-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 02:08:25 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34U28OM6004526
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 02:08:24 GMT
-Received: from [10.216.20.79] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 29 May
- 2023 19:08:20 -0700
-Message-ID: <b85216b3-8e6a-b3ea-4c01-680b1339a623@quicinc.com>
-Date:   Tue, 30 May 2023 07:38:17 +0530
+        Mon, 29 May 2023 22:10:44 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D780BB7;
+        Mon, 29 May 2023 19:10:41 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QVbTX0LcVz4x3g;
+        Tue, 30 May 2023 12:10:40 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1685412640;
+        bh=wDYppAoDJWMdt7tdGl5WSBq+MGJG+/ZQyPPcIBRD7Y0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ukOe2dCr+kWkOAVuA0TKoGo9HBDaSysy+fC+C7d8ZoMJMDVKNn7PMDY/mSFQCuIMj
+         C54KQ1jN6lWRw4+8qzx8vPCj8alLiYiSdClFCYChy7dDI/tT4Gy/EYokyX5rDJGaVZ
+         Q20fpe/dorOhRGsr4zlxjQ9w/ZnaDPXcPmk+8+SJzcXcTfQWq/8KVkD4bWUxh6npT7
+         q61JlS9pZrEn4DBjLYuHDOMFcuC2iXPfcfkxGc49mImVoBCcsMpbZCHiy1Otm6+boU
+         tEyExQF9STfGohFjMoIbspT+/8I7Y8LmvYAeMxDPkQwVCda+g8Rj/QOBKM2g1zyOzh
+         iKzRKqhAdwVyQ==
+Date:   Tue, 30 May 2023 12:10:39 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Dave Airlie <airlied@redhat.com>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Fei Yang <fei.yang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matt Roper <matthew.d.roper@intel.com>
+Subject: Re: linux-next: manual merge of the drm-intel tree with the drm
+ tree
+Message-ID: <20230530121039.6a2037c9@canb.auug.org.au>
+In-Reply-To: <20230530115752.14f0f1b5@canb.auug.org.au>
+References: <20230530115752.14f0f1b5@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH V3 0/3] Minor updates in the IPQ5332 DTS files
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230519133844.23512-1-quic_kathirav@quicinc.com>
-Content-Language: en-US
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-In-Reply-To: <20230519133844.23512-1-quic_kathirav@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: HxBdie4wuRl7l4QO8YQujraezCU8NvBb
-X-Proofpoint-GUID: HxBdie4wuRl7l4QO8YQujraezCU8NvBb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-29_14,2023-05-29_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=589
- suspectscore=0 mlxscore=0 adultscore=0 impostorscore=0 phishscore=0
- bulkscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305300015
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/5vtcpJN63QOoP2wlS0l_0Zw";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UPPERCASE_50_75,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/5vtcpJN63QOoP2wlS0l_0Zw
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 5/19/2023 7:08 PM, Kathiravan T wrote:
-> Rename the MI01.2 DTS after Reference Design Platform(RDP) number to align
-> with ipq5332-rdp468.dts, add UART1 node and reserve memory for U-boot
-> and SBL to avoid losing the RAM contents which will be used in post
-> morterm analysis.
+Hi all,
 
-
-Gentle Reminder...
-
-
+On Tue, 30 May 2023 11:57:52 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> Kathiravan T (3):
->    arm64: dts: qcom: ipq5332: rename mi01.2 dts to rdp441
->    arm64: dts: qcom: ipq5332: define UART1
->    arm64: dts: qcom: ipq5332: add few more reserved memory region
->
->   arch/arm64/boot/dts/qcom/Makefile             |  2 +-
->   ...{ipq5332-mi01.2.dts => ipq5332-rdp441.dts} |  0
->   arch/arm64/boot/dts/qcom/ipq5332.dtsi         | 24 ++++++++++++++++++-
->   3 files changed, 24 insertions(+), 2 deletions(-)
->   rename arch/arm64/boot/dts/qcom/{ipq5332-mi01.2.dts => ipq5332-rdp441.dts} (100%)
->
+> @@@ -920,33 -587,8 +640,9 @@@ static const struct intel_device_info j
+>   #define GEN12_FEATURES \
+>   	GEN11_FEATURES, \
+>   	GEN(12), \
+> - 	.display.abox_mask =3D GENMASK(2, 1), \
+> - 	.__runtime.pipe_mask =3D BIT(PIPE_A) | BIT(PIPE_B) | BIT(PIPE_C) | BIT=
+(PIPE_D), \
+> - 	.__runtime.cpu_transcoder_mask =3D BIT(TRANSCODER_A) | BIT(TRANSCODER_=
+B) | \
+> - 		BIT(TRANSCODER_C) | BIT(TRANSCODER_D) | \
+> - 		BIT(TRANSCODER_DSI_0) | BIT(TRANSCODER_DSI_1), \
+> - 	.display.pipe_offsets =3D { \
+> - 		[TRANSCODER_A] =3D PIPE_A_OFFSET, \
+> - 		[TRANSCODER_B] =3D PIPE_B_OFFSET, \
+> - 		[TRANSCODER_C] =3D PIPE_C_OFFSET, \
+> - 		[TRANSCODER_D] =3D PIPE_D_OFFSET, \
+> - 		[TRANSCODER_DSI_0] =3D PIPE_DSI0_OFFSET, \
+> - 		[TRANSCODER_DSI_1] =3D PIPE_DSI1_OFFSET, \
+> - 	}, \
+> - 	.display.trans_offsets =3D { \
+> - 		[TRANSCODER_A] =3D TRANSCODER_A_OFFSET, \
+> - 		[TRANSCODER_B] =3D TRANSCODER_B_OFFSET, \
+> - 		[TRANSCODER_C] =3D TRANSCODER_C_OFFSET, \
+> - 		[TRANSCODER_D] =3D TRANSCODER_D_OFFSET, \
+> - 		[TRANSCODER_DSI_0] =3D TRANSCODER_DSI0_OFFSET, \
+> - 		[TRANSCODER_DSI_1] =3D TRANSCODER_DSI1_OFFSET, \
+> - 	}, \
+> - 	TGL_CURSOR_OFFSETS, \
+> - 	TGL_CACHELEVEL, \
+> ++	.max_pat_index =3D 3 \
+
+I fixed the above up to have a ',' after the '3'
+
+>   	.has_global_mocs =3D 1, \
+> - 	.has_pxp =3D 1, \
+> - 	.display.has_dsb =3D 1, \
+> - 	.max_pat_index =3D 3
+> + 	.has_pxp =3D 1
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/5vtcpJN63QOoP2wlS0l_0Zw
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR1Wx8ACgkQAVBC80lX
+0Gw+SAf+Ilv/tNfr1MSGBJMxlVyniZfQkGznYVHPJJ/VECE06jL+2+aotBU6Ygt2
+sgw7fI3865uFbcMzirfj7ny2wMSQQ4grVrWeBVTlbdtqgRqJtWoH5te5DrNNEdM6
+7JdWLaWGZmI6au/Nl6tZ5Plcui8jHTe+DDGNKL+I5fhmGKtLZE+MXn7V5aV8o44Q
+47B7wYS+xHqPDZ746/UyG4gCBJJ3h+Fzt6wGZp3mEE5Jh+gTWLhCavA04kcntxpv
+FFv3PzrbLq+DDIQ+AUmcjeGXNDb+KYwW/er1pqrLkqARuGiLb1X5s4Ak39xm6XQc
+HkNDUSJzgMpfARd8GBMIHwTVPsh1Bw==
+=Ghjg
+-----END PGP SIGNATURE-----
+
+--Sig_/5vtcpJN63QOoP2wlS0l_0Zw--
