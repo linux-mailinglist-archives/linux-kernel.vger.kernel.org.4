@@ -2,171 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2919E715849
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 547BA71584D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbjE3IWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
+        id S230351AbjE3IWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 04:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjE3IVx (ORCPT
+        with ESMTP id S230284AbjE3IWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 04:21:53 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E14D9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:21:47 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685434906;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L7k/WfCxpV4Wb3Zf5dT6zrNqHZZm4+YA1ttDwgyZUUY=;
-        b=hr0vWnFnLsrmGlwaEPeP0BZVQwmQQBY7HJ0zKb/nJ7Jh9iXFeqJpxXFjLeQHR89kaxYXrH
-        YyjAhBfk0o8KXYQqHT5DUz9SVLYG7cWIgLCEkQBiQI4Nf2FG8oD8HW+DFn2H4Mo9Zhr1z5
-        G7iwIg557uEeAhSJoBBmmAjNEFjMpxq0sjbNNQZSIptstl1ZYNwqwScOEyZ5RlpWBDB25l
-        CKDu3PaBETbpHzbbyTdjehvI3qkiUZUCfyZDMTyc+tjFpdYbSqRVgbJlfpOldlAzBa7fEm
-        DOy8oC4s9vgRp5Gy4nOonwL9f+j6BMr3QOIOSDy0sHtfyKkDUa70DeBJy3ab5g==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 282FDC0005;
-        Tue, 30 May 2023 08:21:43 +0000 (UTC)
-Date:   Tue, 30 May 2023 10:21:43 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>, <oxffffaa@gmail.com>,
-        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 2/5] mtd: rawnand: meson: move OOB to non-protected
- ECC area
-Message-ID: <20230530102143.6b2a199a@xps-13>
-In-Reply-To: <1f4c90c4-e436-c53f-bb6f-416db374ae52@sberdevices.ru>
-References: <20230515094440.3552094-1-AVKrasnov@sberdevices.ru>
-        <20230515094440.3552094-3-AVKrasnov@sberdevices.ru>
-        <20230522173334.7aa6f917@xps-13>
-        <ebbc26e3-6a1c-eead-051c-8f93beba41f3@sberdevices.ru>
-        <20230526190347.6e34a2be@xps-13>
-        <b9f0a38a-0d50-23f0-4509-c38362d05f12@sberdevices.ru>
-        <20230530094420.06281ab5@xps-13>
-        <1f4c90c4-e436-c53f-bb6f-416db374ae52@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 30 May 2023 04:22:01 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593C2F7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:21:56 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7749ceb342fso605957139f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:21:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685434915; x=1688026915;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H0PjtfHgEkkTfBjwGwBOt6JzxiRldvCH/yMO3ajZeos=;
+        b=Qw7Vnw7xPZtF6nCH6Gpv3f9dO++ygq3nqESExbjj2Lan8PeAnuMt8nMbaQRktBJwam
+         thuMh2QkaExE4bhZ4iwUhGzCIWhRPtPudQhp16y9SQE6Q5JGU6pD5Mt/DkEj4czwtvfq
+         8ZqxMYdRJz90g0P0826el0wrLXfCrw/F0GNiBu9HwlymbXocuU3wSAVhEpuMp+2lVcM8
+         vFSxIApbFnxXUAkVv7ugorFzjAt+ravJdwRwZvdrx/e8aEZ+9qvWR71h8v3qFmaBjUJx
+         TiiowD/2yCIrLzWMIazlvecrIhvgXJh+PLgJ3y64eAkEza7OkYKc5z7vKZB53PdV6zfz
+         +k2Q==
+X-Gm-Message-State: AC+VfDw00iCni7rizl3KPYGd38QBafJdpFAH+Rt/iGXvq4l7WSdMF4tM
+        3SAUGOUD5ljyLd+B17cFMpuV1aA5eSr4pqAjqROR5895GdHx
+X-Google-Smtp-Source: ACHHUZ523Nj7XJucoxcSG183lHb6UxLEmuDyK5jix5/bojPX6Kye3v5XAcW4PsK+YYQHIn3cwDhIjvbzc+E9MMj6421BV1wT0zGX
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:298b:0:b0:40b:d54d:e5bf with SMTP id
+ p133-20020a02298b000000b0040bd54de5bfmr778529jap.1.1685434915708; Tue, 30 May
+ 2023 01:21:55 -0700 (PDT)
+Date:   Tue, 30 May 2023 01:21:55 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000716a8005fce4e592@google.com>
+Subject: [syzbot] Monthly btrfs report (May 2023)
+From:   syzbot <syzbot+list3e0431ddab075345f512@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
+Hello btrfs maintainers/developers,
 
-avkrasnov@sberdevices.ru wrote on Tue, 30 May 2023 11:09:10 +0300:
+This is a 31-day syzbot report for the btrfs subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/btrfs
 
-> Hi Miquel,
->=20
-> On 30.05.2023 10:44, Miquel Raynal wrote:
-> > Hi Arseniy,
-> >  =20
-> >>>>>> -static void meson_nfc_get_user_byte(struct nand_chip *nand, u8 *o=
-ob_buf)
-> >>>>>> -{
-> >>>>>> -	struct meson_nfc_nand_chip *meson_chip =3D to_meson_nand(nand);
-> >>>>>> -	__le64 *info;
-> >>>>>> -	int i, count;
-> >>>>>> +	int i;
-> >>>>>> =20
-> >>>>>> -	for (i =3D 0, count =3D 0; i < nand->ecc.steps; i++, count +=3D =
-2) {
-> >>>>>> +	for (i =3D 0; i < nand->ecc.steps; i++) {
-> >>>>>>  		info =3D &meson_chip->info_buf[i];
-> >>>>>> -		oob_buf[count] =3D *info;
-> >>>>>> -		oob_buf[count + 1] =3D *info >> 8;
-> >>>>>> +		/* Always ignore user bytes programming. */     =20
-> >>>>>
-> >>>>> Why?     =20
-> >>>>
-> >>>> I think comment message is wrong a little bit. Here "user bytes" are
-> >>>> user bytes protected by ECC (e.g. location of these bytes differs fr=
-om new
-> >>>> OOB layout introduced by this patch). During page write this hardware
-> >>>> always writes these bytes along with data. But, new OOB layout alway=
-s ignores
-> >>>> these 4 bytes, so set them to 0xFF always.   =20
-> >>>
-> >>> When performing page reads/writes, you need to take the data as it's
-> >>> been provided. You may move the data around in the buffer provided to
-> >>> the controller, so that it get the ECC data at the right location, and
-> >>> you need of course to reorganize the data when reading as well, so th=
-at
-> >>> the user sees XkiB of data + YB of OOB. That's all you need to do in
-> >>> these helpers.
-> >>>    =20
-> >>
-> >> I think there is some misunderstanding about these "user bytes" above:=
- there are 4
-> >> bytes which this NAND controller always writes to page in ECC mode - i=
-t was free OOB
-> >> bytes covered by ECC. Controller grabs values from DMA buffer (second =
-DMA buffer which
-> >> doesn't contains page data) and writes it along with data and ECC code=
-s. Idea of this
-> >> change is to always suppress this write by setting them to 0xFF (may b=
-e there is some
-> >> command option to not write it, but I don't have doc), because all of =
-them (4 bytes)
-> >> become unavailable to reader/writer. =20
-> >=20
-> > At the NAND controller level, I would rather avoid doing things like
-> > that.
-> >=20
-> > I believe you can just update the ooblayout so that protected OOB bytes
-> > are not exposed to the user as free bytes. Then your buffers should
-> > already contain 0xffffff at the problematic location. =20
->=20
-> So Your idea is to continue fill DMA buffer (for these 4 bytes) from prov=
-ided OOB buffer,
-> relying on that as these bytes are unused, they will be 0xFF in OOB buffe=
-r so we get the same result?
+During the period, 5 new issues were detected and 1 were fixed.
+In total, 52 issues are still open and 26 have been fixed so far.
 
-Yes.
+Some of the still happening issues:
 
-The problem you face is due to jffs2 using free OOB bytes to store some
-data. If this data is in the protected area -> BOOM.
+Ref  Crashes Repro Title
+<1>  2986    Yes   kernel BUG in close_ctree
+                   https://syzkaller.appspot.com/bug?extid=2665d678fffcc4608e18
+<2>  677     Yes   VFS: Busy inodes after unmount (use-after-free)
+                   https://syzkaller.appspot.com/bug?extid=0af00f6a2cba2058b5db
+<3>  424     Yes   WARNING in __kernel_write_iter
+                   https://syzkaller.appspot.com/bug?extid=12e098239d20385264d3
+<4>  381     Yes   WARNING in btrfs_space_info_update_bytes_may_use
+                   https://syzkaller.appspot.com/bug?extid=8edfa01e46fd9fe3fbfb
+<5>  370     Yes   WARNING in btrfs_block_rsv_release
+                   https://syzkaller.appspot.com/bug?extid=dde7e853812ed57835ea
+<6>  193     Yes   WARNING in btrfs_remove_chunk
+                   https://syzkaller.appspot.com/bug?extid=e8582cc16881ec70a430
+<7>  191     Yes   WARNING in lookup_inline_extent_backref
+                   https://syzkaller.appspot.com/bug?extid=d6f9ff86c1d804ba2bc6
+<8>  189     Yes   WARNING in btrfs_chunk_alloc
+                   https://syzkaller.appspot.com/bug?extid=e8e56d5d31d38b5b47e7
+<9>  184     Yes   possible deadlock in btrfs_search_slot
+                   https://syzkaller.appspot.com/bug?extid=c06034aecf9f5eab1ac1
+<10> 151     Yes   kernel BUG in assertfail (2)
+                   https://syzkaller.appspot.com/bug?extid=c4614eae20a166c25bf0
 
-If another application wants to use all the bytes and writes them all
-in the same PROGRAM operation it's fine.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Jffs2 accesses the free area through the OOB layouts only, so just
-tweaking the OOB layouts should work.
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
-Thanks,
-Miqu=C3=A8l
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
