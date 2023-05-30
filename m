@@ -2,114 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BE971717F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E86AE717194
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233841AbjE3XS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 19:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
+        id S233825AbjE3XUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 19:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233844AbjE3XS4 (ORCPT
+        with ESMTP id S233744AbjE3XUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 19:18:56 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F6418C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:18:27 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b01d912a76so30902775ad.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:18:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685488704; x=1688080704;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Ch+QGZuDvVPqFvut3Fm3+Q/Pf0opluuawwoMyLnyLA=;
-        b=CTfNkSMXbEuK4v0Su6woV8ktAXJIQa0eTx8ShMV1zqZYDaGUCjkWgXoC+I5KwLCiK4
-         z4XtcGo2+1Dr6TPHsdz70M/hGLkKC/EEBRHBrsnzVukFWrelsdajx1aHIosqntKkhD8f
-         dBXmMMZP2oDxGKA0lIrgm8sZVo9Y7M5yRS9o8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685488704; x=1688080704;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/Ch+QGZuDvVPqFvut3Fm3+Q/Pf0opluuawwoMyLnyLA=;
-        b=BR3H6zdOunLptjLm9uYivQrnFrHQXnWDCIfYd4vOSTqcwr+UUo4rgsBlvmq/6OCAqx
-         5q69mCNRj4xYiWVSunPcdXkTsXAyTrNfI0Rtn0fdqrof0mSTtziguSPnzK0TGxzWesqt
-         JyidQQEgFX7386XntpSTN4VDW5Lf0EDHnfFAwu/VsgGXV4c6b1krNlMSzN19q8XVOcZt
-         Guy2nX1izzEIqou8K6IhOnbyHSD2YguWY2kpvwDHRjHRxg4Y8uqIum3NSeYtiisOAt+1
-         iM6TaVS6MGnbwrrvjHXvmKfGOpRirvLfZbJLISg+1B7dA04lUDyp86DDp6vw1tiZaagb
-         oFSA==
-X-Gm-Message-State: AC+VfDy6+bbrpuz1jL2daRqZikD44adFBR0IbP6/lCwDQE6bVj70KEl5
-        zeXezyAYHAzuQnZUV6NbWw0JYA==
-X-Google-Smtp-Source: ACHHUZ4sNV8/Cu4fg7LbHNMOQJaXy+dGJJoOgpGk7rq+5bd5EcGtaOkMVMSxm44jUL2Odl7n17M/iA==
-X-Received: by 2002:a17:902:ce81:b0:1aa:86a4:37ed with SMTP id f1-20020a170902ce8100b001aa86a437edmr4226230plg.55.1685488704705;
-        Tue, 30 May 2023 16:18:24 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170902e9d100b00199203a4fa3sm10866444plk.203.2023.05.30.16.18.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 16:18:24 -0700 (PDT)
-Date:   Tue, 30 May 2023 16:18:23 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Johan Hovold <johan@kernel.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] lib/ucs2_string: Add UCS-2 strlcpy function
-Message-ID: <202305301617.4858B5672@keescook>
-References: <20230528230351.168210-1-luzmaximilian@gmail.com>
- <20230528230351.168210-2-luzmaximilian@gmail.com>
- <202305300820.9B2154B@keescook>
- <3255010d-82d5-e8e8-2e11-7de25d538d72@gmail.com>
- <CAMj1kXGy1hfEyHBNmPkBFeGF9W5zx=+8z5deH3E7usdsHHB2=A@mail.gmail.com>
+        Tue, 30 May 2023 19:20:31 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73422102
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:20:29 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 8FF822C0596;
+        Wed, 31 May 2023 11:20:26 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1685488826;
+        bh=pBukmPQ3it++bc32Xj8MsVYzyzLTR0p/rymwPyFTAGs=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=BYjlzXQYNAH+TTZndsi3Omsk4q6jlYGG9kp5bOIZWJZES36RecojF+CndtM+n25gG
+         j0zqQw1itQ5Jo3/yk6rjWLj8uRu+Ul5wdCyXeBzIYHrg9NSntophgYpmJDIYJVBTd0
+         MQkPZze968IAHvgBfqNDoDzacGCWFCwiHAbpbx7wUua/QJphwQwkzcbKsthAFokBMR
+         +O9AJkLitZrU0btKCt+sHwSoiIJTKDqBSotwyqaXhpDeBzqR4IPRXjqh7JLQx595dY
+         rr/QVem53M8zH8X1FY/XkqNgOIK+ERtUisSpVUzvPCUfKT+FyIb79kq1+kthtvJjTt
+         R6D5vsK1bn3Og==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B647684ba0001>; Wed, 31 May 2023 11:20:26 +1200
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.26; Wed, 31 May 2023 11:20:26 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
+ SMTP Server (TLS) id 15.0.1497.48; Wed, 31 May 2023 11:20:26 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.026; Wed, 31 May 2023 11:20:25 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
+        "vadym.kochan@plvision.eu" <vadym.kochan@plvision.eu>
+CC:     "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "enachman@marvell.com" <enachman@marvell.com>
+Subject: Re: [PATCH v6 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML DT
+ scheme
+Thread-Topic: [PATCH v6 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML
+ DT scheme
+Thread-Index: AQHZkpEvY3k2XQch4kKrVAHkTx0+pa9x9QcAgAC3TIA=
+Date:   Tue, 30 May 2023 23:20:25 +0000
+Message-ID: <bc538264-20f5-03e1-a4a6-6f9f076f15eb@alliedtelesis.co.nz>
+References: <20230530005337.3687938-1-chris.packham@alliedtelesis.co.nz>
+ <20230530005337.3687938-2-chris.packham@alliedtelesis.co.nz>
+ <a1b2caed-b314-59db-ee00-92fc983150f6@linaro.org>
+In-Reply-To: <a1b2caed-b314-59db-ee00-92fc983150f6@linaro.org>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.33.22.30]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <11A8F379D8E7434AA6EEC968A66617F4@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGy1hfEyHBNmPkBFeGF9W5zx=+8z5deH3E7usdsHHB2=A@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=cLieTWWN c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=jWhIqavZLoxoapoUxmoA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 06:17:35PM +0200, Ard Biesheuvel wrote:
-> On Tue, 30 May 2023 at 18:15, Maximilian Luz <luzmaximilian@gmail.com> wrote:
-> >
-> > On 5/30/23 17:25, Kees Cook wrote:
-> > > On Mon, May 29, 2023 at 01:03:48AM +0200, Maximilian Luz wrote:
-> > >> Add a ucs2_strlcpy() function for UCS-2 strings. The behavior is
-> > >> equivalent to the standard strlcpy() function, just for 16-bit character
-> > >> UCS-2 strings.
-> > >
-> > > Eek, no. strlcpy() is dangerous in multiple ways[1]. Please implement
-> > > strscpy() (i.e. use strnlen(), negative error on truncation, etc).
-> >
-> > Right, make sense, thanks. Somehow I missed that the kernel has a better
-> > function than the C stdlib for that...
-> >
-> > > Additionally, it'd be nice of the ucs2 helpers here also implemented the
-> > > rest of the CONFIG_FORTIFY_SOURCE mitigations (i.e. checking for source
-> > > and destination buffer size overflows at compile-time and run-time with
-> > > __builtin_object_size() and __builtin_dynamoc_object_size() respectively).
-> >
-> > I can certainly try that, but I think this might be better suited for a
-> > follow-up series, given that we then should also add those to the other
-> > helpers.
-> >
-> 
-> Agreed. Let's log the followup work as a kspp work item, no need to
-> make that part of this series.
-
-Yeah, that's fine. Can you please open a KSSP issue for it so we don't
-forget?  :)
-
--- 
-Kees Cook
+T24gMzEvMDUvMjMgMDA6MjQsIEtyenlzenRvZiBLb3psb3dza2kgd3JvdGU6DQo+PiArDQo+PiAr
+cHJvcGVydGllczoNCj4+ICsgIGNvbXBhdGlibGU6DQo+PiArICAgIG9uZU9mOg0KPj4gKyAgICAg
+IC0gaXRlbXM6DQo+PiArICAgICAgICAgIC0gY29uc3Q6IG1hcnZlbGwsYXJtYWRhLThrLW5hbmQt
+Y29udHJvbGxlcg0KPj4gKyAgICAgICAgICAtIGNvbnN0OiBtYXJ2ZWxsLGFybWFkYTM3MC1uYW5k
+LWNvbnRyb2xsZXINCj4+ICsgICAgICAtIGVudW06DQo+PiArICAgICAgICAgIC0gbWFydmVsbCxh
+cm1hZGEzNzAtbmFuZC1jb250cm9sbGVyDQo+PiArICAgICAgICAgIC0gbWFydmVsbCxweGEzeHgt
+bmFuZC1jb250cm9sbGVyDQo+IFlvdSBtaXNzIGhlcmUgZGVwcmVjYXRlZCBjb21wYXRpYmxlcywg
+d2hpY2ggYXJlIEJUVyBzdGlsbCB1c2VkLiBEb24ndA0KPiBkcm9wIHByb3BlcnRpZXMgYW5kIGNv
+bXBhdGlibGVzIGR1cmluZyBjb252ZXJzaW9uLg0KSXMgdGhlcmUgYW55IHdheSB0byBpbmRpY2F0
+ZSB0aGF0IGEgY29tcGF0aWJsZSB2YWx1ZSBpcyBkZXByZWNhdGVkPyBJIA0Ka25vdyBob3cgdG8g
+bWFyayBhIHByb3BlcnR5IGFzIGRlcHJlY2F0ZWQgYnV0IGhvdyBkbyBJIGluZGljYXRlIHRoaXMg
+Zm9yIA0Kc3BlY2lmaWMgY29tcGF0aWJsZSB2YWx1ZXM/
