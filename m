@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07AAE71558F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57442715591
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjE3GhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 02:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58626 "EHLO
+        id S230196AbjE3GiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 02:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjE3GhW (ORCPT
+        with ESMTP id S229934AbjE3GiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 02:37:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41875B2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:37:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6F9F62A92
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:37:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4C60C433EF;
-        Tue, 30 May 2023 06:37:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685428640;
-        bh=SsEFykTTr1Y+kZYyRqrdoefiJQaCTMcgpE7uD+V55Ow=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=OWDqbvWlIm7OcMQaGlT+EtXnC54BfSzGWgOzgp5j/7ydS/dewMezjQOwRKCHPIOHe
-         TL051HGjO/RDOZjAL0Y+hLp1zKulj0+SdesJUstAg7+V1AYaACvbwkWZOFwyOLoquG
-         awMoPUgNJ8SVHbU98ceJNJxa+JjwbY8tOzQtF2AMzz0d8qRkmgx9DpmFFTa3dZ5zl1
-         zp0pnAAu8cf8xuN/gn/mMGXQo3SsfxZT5anmzHl+FPItlPFjQv/g+hIRFpHqmMMIDZ
-         ykHwy9qcqwBUlDwGHk7LUvgSux9HeyHuTv2yp/sv4ee1+ADOPUQeky9Us0pLZNu0XU
-         NMy7pb6+v+YLA==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-Cc:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux@rivosinc.com, Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Joerg Roedel <joro@8bytes.org>
-Subject: Re: [PATCH] riscv: mm: Pre-allocate PGD entries vmalloc/modules area
-In-Reply-To: <20230529180023.289904-1-bjorn@kernel.org>
-References: <20230529180023.289904-1-bjorn@kernel.org>
-Date:   Tue, 30 May 2023 08:37:17 +0200
-Message-ID: <871qiyfhpe.fsf@all.your.base.are.belong.to.us>
+        Tue, 30 May 2023 02:38:07 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B0292;
+        Mon, 29 May 2023 23:38:05 -0700 (PDT)
+X-QQ-mid: bizesmtp79t1685428676txj83914
+Received: from linux-lab-host.localdomain ( [119.123.130.226])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 30 May 2023 14:37:55 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: jXjag1m6xl6889Jpgjswy33PSiv3wgSWqoIFui+aUZWHp4mxjk63aUjgGRhFQ
+        LMNAUVD9PsUqGVCwHm0hlN5+3sRmrdAVW2PozVMKCw9Db26XQE0Rh65aO20dBDmZGj3g4xj
+        i0rY9p/BqHACni0/Ku/45kqRCIc8paxw41FdN7fY/4035HCnWNSJbxMVMhFOplBnbmzw8Uj
+        7H8k4Zi9eFlRPn45MvIkFwKtCXWWYCjKOBYpCJo6sBYqsqhYKgEE3ZMUhvXrDB4qltlfFcI
+        eEYwBS++g4usHpxxiA4zwoqVlVzpjQpulO0AMmg4eRMb0Xyg9adG8t6O6FU1yxpRCC7RwvM
+        WdoOxhFh2t5cqot1k+y9uv06H+ORfS64hQ0rQdFKcCI0nsoYxqCit5lHLyUIzyiFRTz6La0
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 15317070203822882915
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: [PATCH 1/2] selftests/nolibc: add new gettimeofday test cases
+Date:   Tue, 30 May 2023 14:37:49 +0800
+Message-Id: <bfc3dba52300dcce03ae1c7c41f2bb8984cf459b.1685428087.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1685428087.git.falcon@tinylab.org>
+References: <cover.1685428087.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,40 +52,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> writes:
+These 3 test cases are added to cover the normal using scenes of
+gettimeofday().
 
-> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
->
-> The RISC-V port requires that kernel PGD entries are to be
-> synchronized between MMs. This is done via the vmalloc_fault()
-> function, that simply copies the PGD entries from init_mm to the
-> faulting one.
->
-> Historically, faulting in PGD entries have been a source for both bugs
-> [1], and poor performance.
->
-> One way to get rid of vmalloc faults is by pre-allocating the PGD
-> entries. Pre-allocating the entries potientially wastes 64 * 4K (65 on
-> SV39). The pre-allocation function is pulled from J=C3=B6rg R=C3=B6del's =
-x86
-> work, with the addition of 3-level page tables (PMD allocations).
->
-> The pmd_alloc() function needs the ptlock cache to be initialized
-> (when split page locks is enabled), so the pre-allocation is done in a
-> RISC-V specific pgtable_cache_init() implementation.
->
-> Pre-allocate the kernel PGD entries for the vmalloc/modules area, but
-> only for 64b platforms.
->
-> Link: https://lore.kernel.org/lkml/20200508144043.13893-1-joro@8bytes.org=
-/ # [1]
-> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+They have been used to trigger and fix up such issue:
 
-...and the build was bitten by nommu [1]. I'll hold off the v2 a bit, to
-see if there's any other comments.
+    nolibc-test.c:(.text.gettimeofday+0x54): undefined reference to `__aeabi_ldivmod'
 
+This issue happens while there is no "unsigned int" conversion in the
+new clock_gettime / clock_gettime64 syscall path of gettimeofday():
 
-Bj=C3=B6rn
+    tv->tv_usec = ts.tv_nsec / 1000;
 
-[1] https://patchwork.kernel.org/project/linux-riscv/patch/20230529180023.2=
-89904-1-bjorn@kernel.org/
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 8ba8c2fc71a0..20d184da9a2b 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -533,6 +533,8 @@ static int test_stat_timestamps(void)
+  */
+ int run_syscall(int min, int max)
+ {
++	struct timeval tv;
++	struct timezone tz;
+ 	struct stat stat_buf;
+ 	int euid0;
+ 	int proc;
+@@ -588,6 +590,9 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
+ 		CASE_TEST(getdents64_null);   EXPECT_SYSER(1, test_getdents64("/dev/null"), -1, ENOTDIR); break;
+ 		CASE_TEST(gettimeofday_null); EXPECT_SYSZR(1, gettimeofday(NULL, NULL)); break;
++		CASE_TEST(gettimeofday_tv);   EXPECT_SYSZR(1, gettimeofday(&tv, NULL)); break;
++		CASE_TEST(gettimeofday_tz);   EXPECT_SYSZR(1, gettimeofday(NULL, &tz)); break;
++		CASE_TEST(gettimeofday_tv_tz);EXPECT_SYSZR(1, gettimeofday(&tv, &tz)); break;
+ 		CASE_TEST(getpagesize);       EXPECT_SYSZR(1, test_getpagesize()); break;
+ 		CASE_TEST(ioctl_tiocinq);     EXPECT_SYSZR(1, ioctl(0, TIOCINQ, &tmp)); break;
+ 		CASE_TEST(ioctl_tiocinq);     EXPECT_SYSZR(1, ioctl(0, TIOCINQ, &tmp)); break;
+-- 
+2.25.1
+
