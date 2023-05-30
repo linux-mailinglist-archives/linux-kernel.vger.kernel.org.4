@@ -2,101 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548D9716909
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D8F71690C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbjE3QR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
+        id S233095AbjE3QSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjE3QR4 (ORCPT
+        with ESMTP id S232213AbjE3QSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:17:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045B7E5;
-        Tue, 30 May 2023 09:17:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F22061B4A;
-        Tue, 30 May 2023 16:17:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC285C433EF;
-        Tue, 30 May 2023 16:17:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685463472;
-        bh=NZCtGj23YyfoZNBDlOVpHJDJs2sd7pwkNJtRrSH9AbI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oXzx2PJXEDK6dQEql2b1WXznOy7mRtKk/XWd5/r5U5MixPapuJmg7JBVJkTiSuGbY
-         VEKtPHdhP0Txmpb0Hitxmpos3r4hDO4/Rhr5htPtqBLXYxCnjLoP+1DAyUIknEb9Ee
-         gJgHHBiCfW4pHvgEs7hDWKc+KjYtPZ4iQJb9sIH2mgfn4j6GX8UonmZDCSCQZ73KJb
-         E98ANqd73K3/uNFT0DL2CaIzCwoyEyT0qZNcGqJRBvt58he08xcS+mLS1X9+2TpKj9
-         QJVFtOel9Yu7nHKti7cyNco8+k/qYq1YiLO3pC/y4EmY7jjEDJn2/yrmqKu1Ror9Qa
-         4MG/zojw7gZCw==
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2af290cf9b7so48123071fa.3;
-        Tue, 30 May 2023 09:17:51 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzX59bBHpU0gw7eMGLQ48kKkS2JfKbFn26oLzOInlaRWwQmyere
-        3O5KyQAaHlBsZjGUk9EA1iqybf0IF5Ls1BM2/5c=
-X-Google-Smtp-Source: ACHHUZ7u68ggq5zpXltoROmbLYGFi+eo1YBnyWeF5XMz3GcUl+ZOEYC1f5wxP63D1fBZ87TpRaleROLpjTKhCdTcB9w=
-X-Received: by 2002:a2e:8018:0:b0:2ad:99b6:1728 with SMTP id
- j24-20020a2e8018000000b002ad99b61728mr1118768ljg.24.1685463469979; Tue, 30
- May 2023 09:17:49 -0700 (PDT)
+        Tue, 30 May 2023 12:18:14 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02555C7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:18:08 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f6cbdf16d2so32165935e9.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:18:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685463487; x=1688055487;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ii3O+FiaiXPgUUO3kXXrARz1zx/omFCilxvfJov9FLU=;
+        b=GId8MLiYDaNO741mhSW+w3x+w3XizQLrM6VaPIM/DsquBPArwmC32vWkvQZXnBoqhD
+         G0p5WR2+S8MZfUO86OAZTjTrkQOhUYQyT5LFh/ZRWreAOUMTvEFUZ+i3/phOXbPbJeGD
+         jwvJ3tsQQzYS7mtl2F38Tz4nNKZAogBUnW27lrEaXkYl4F1iFY3C0OZQjSdmUGY5I3Dr
+         iA8UIehnHfr0ZfJuf9CUMf4kzlV8FBMCtgcluaB1BfiyQ6E+WLmDh9uhAbVLJCcU/Uxn
+         jiT39PFuBHjXFqwM/GsOuxFf7DUuzPZ62IURlCGDFlXTHXXvI22e/NEewYe5Zm9S86ry
+         mvNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685463487; x=1688055487;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ii3O+FiaiXPgUUO3kXXrARz1zx/omFCilxvfJov9FLU=;
+        b=GCr2Xxb5fRKcDxl6dQbjZAD3D2V9gwR0c8/PYGfeescbFeDSvjuUjaTEkD5s4NhwD6
+         +INSDfO5G21Nk+ruIsZrKo3C2rfGCnqZee+L+rpRWXy5I8b3J/C3WzjaZkYp0vC8gs7S
+         MXcbemq5i2+Q+vMMRFjjnso3zKp/ezkDNf7YiTHuRv++HHN49bAjUjU41x8nZ4fv+j1l
+         6dJWkgn0d+FJWJgaOKnhIhAaD/Ow+tb2fH8eZQ8uQ4hB7J+f14wb/bOmAmAU5+nAHECD
+         9xwfWRpEkrZyjNv80eabP+E9msFigodo5o8qBJ/z8Pz4+dGpFcrk8n4GLT17M4GRpO1X
+         F8+Q==
+X-Gm-Message-State: AC+VfDwoJdbHrEV4aj4cQfIsgRyS38k/XmP6SF7fKRqEYjojqy3NOvff
+        qyQkE+QnJycvdJKqIupN0VK6Hw==
+X-Google-Smtp-Source: ACHHUZ6LWzkS3alCl4WtWgrbiIF662cVgxuzbcJ/rBa+VhIO5XJSXsAG/2ou4kdPlz6k7e9e1ehY2w==
+X-Received: by 2002:adf:cd02:0:b0:30a:a333:790e with SMTP id w2-20020adfcd02000000b0030aa333790emr2188131wrm.69.1685463487236;
+        Tue, 30 May 2023 09:18:07 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:dd1c:e75b:56ba:6bf? ([2a05:6e02:1041:c10:dd1c:e75b:56ba:6bf])
+        by smtp.googlemail.com with ESMTPSA id x15-20020adfdd8f000000b0030ae3a6be4asm3762807wrl.72.2023.05.30.09.18.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 09:18:06 -0700 (PDT)
+Message-ID: <5d0c2a64-9260-02b1-b2af-0cea4983d5b7@linaro.org>
+Date:   Tue, 30 May 2023 18:18:06 +0200
 MIME-Version: 1.0
-References: <20230528230351.168210-1-luzmaximilian@gmail.com>
- <20230528230351.168210-2-luzmaximilian@gmail.com> <202305300820.9B2154B@keescook>
- <3255010d-82d5-e8e8-2e11-7de25d538d72@gmail.com>
-In-Reply-To: <3255010d-82d5-e8e8-2e11-7de25d538d72@gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 30 May 2023 18:17:35 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGy1hfEyHBNmPkBFeGF9W5zx=+8z5deH3E7usdsHHB2=A@mail.gmail.com>
-Message-ID: <CAMj1kXGy1hfEyHBNmPkBFeGF9W5zx=+8z5deH3E7usdsHHB2=A@mail.gmail.com>
-Subject: Re: [PATCH v4 1/4] lib/ucs2_string: Add UCS-2 strlcpy function
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Johan Hovold <johan@kernel.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] clocksource/drivers/imx-gpt: Use only a single name for
+ functions
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+References: <20230328091514.874724-1-u.kleine-koenig@pengutronix.de>
+ <20230530153115.fpjgg6ubqjrbn73r@pengutronix.de>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230530153115.fpjgg6ubqjrbn73r@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 May 2023 at 18:15, Maximilian Luz <luzmaximilian@gmail.com> wrote:
->
-> On 5/30/23 17:25, Kees Cook wrote:
-> > On Mon, May 29, 2023 at 01:03:48AM +0200, Maximilian Luz wrote:
-> >> Add a ucs2_strlcpy() function for UCS-2 strings. The behavior is
-> >> equivalent to the standard strlcpy() function, just for 16-bit character
-> >> UCS-2 strings.
-> >
-> > Eek, no. strlcpy() is dangerous in multiple ways[1]. Please implement
-> > strscpy() (i.e. use strnlen(), negative error on truncation, etc).
->
-> Right, make sense, thanks. Somehow I missed that the kernel has a better
-> function than the C stdlib for that...
->
-> > Additionally, it'd be nice of the ucs2 helpers here also implemented the
-> > rest of the CONFIG_FORTIFY_SOURCE mitigations (i.e. checking for source
-> > and destination buffer size overflows at compile-time and run-time with
-> > __builtin_object_size() and __builtin_dynamoc_object_size() respectively).
->
-> I can certainly try that, but I think this might be better suited for a
-> follow-up series, given that we then should also add those to the other
-> helpers.
->
+On 30/05/2023 17:31, Uwe Kleine-König wrote:
+> Helo Daniel,
+> 
+> On Tue, Mar 28, 2023 at 11:15:14AM +0200, Uwe Kleine-König wrote:
+>> When looking at the data structs defining the different behaviours of
+>> the GPT blocks in different SoCs it's not helpful that the same
+>> functions are used with different names.
+>>
+>> So drop the cpp defines and use the original names.
+>>
+>> This commit was generated using:
+>>
+>> 	perl -i -e 'my %m; while (<>) { if (/^#define (imx[a-zA-Z0-6_]*)\s(imx[a-zA-Z0-6_]*)/) {$m{$1} = $2; } else { foreach my $f (keys %m) {s/$f/$m{$f}/; } print; } }' drivers/clocksource/timer-imx-gpt.c
+>>
+>> This patch has no effect on the generated code.
+>>
+>> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> 
+> This patch was generated against v6.3-rc1. On the upside it still
+> applies fine to v6.4-rc1 and even current next/master. On the downside I
+> didn't get any feedback on it. Is this patch still on your radar?
 
-Agreed. Let's log the followup work as a kspp work item, no need to
-make that part of this series.
+Well, it is back on the radar now :)
 
-Thanks,
+Without feedback from the driver maintainer I'll pick the patch in a few 
+days
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
