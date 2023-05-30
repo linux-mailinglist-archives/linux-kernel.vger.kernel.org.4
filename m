@@ -2,170 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D20715C44
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1164A715C47
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjE3Kw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
+        id S230504AbjE3Kw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjE3KwY (ORCPT
+        with ESMTP id S229739AbjE3Kwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:52:24 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6388D9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:52:21 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f6dbe3c230so44677705e9.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:52:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685443940; x=1688035940;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q8nDMmF4Rh/Bd+3WSVAUVjbCxPcVcJxjYrTTKFRXjQU=;
-        b=Iz6D0NJ9GiwWAnNbVNcYPRQp1/nDJGM6uiQ3d8ME2qjRhYpFokvrj3HXZO+ucf1bGW
-         d9Ffq98ymGW2mawVpYeqCS/f6tS+kYzrljXLPuZHvKBCtdF00m4WiEa05Hpx7/aIp8jI
-         H/udGK/kVmlyGfrPFR+W9iw3tYJ5YIABvC/f6nju4JgkKX9m9dRzAWsMwLAP4kTEhn0k
-         P4LO1tGnOqCYEcLSkZKRERpSDk6G3YFcKAYu97Pgo6Pv7ey5LirN3tAgmlRTlKSunvzF
-         iE5rTPan4HUXqkvZNTzZ9nL2CXlSLU5jOvYZh6NebzV6UXx7fnl/QJGwCrA/S4FZ9a7M
-         Oo/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685443940; x=1688035940;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q8nDMmF4Rh/Bd+3WSVAUVjbCxPcVcJxjYrTTKFRXjQU=;
-        b=hLSEusiZBOvGSfQV2EdcXtw5fnajNXhF73rMEUR52OAli3bh1hzhRuQrxIO461H0KV
-         0IAYrpCfRQ2Ui1Z+htWZ0gAUdNhBKPvNhtqv2KnqwA7YBE3AnDnfVjqRdIfamtFzK8sm
-         YMP1arnc0v2E8xfb7Ia9gprhcSWCQuIRSUxIMcypFpNLHIn4lIQK2p0+x6zpkgoDTsrl
-         GNjAw0ZfoKMxZl1wYMf3Bzp5ilid5UrxUwgVisUDF8zolyvkjo9Nrs8XvNmSTwN2qvXl
-         /kizgpSbCOI4+6WUWDIzekEPiT84W4/7rJ8bzJMueWscfE+dFN7mbJHRGT+2nMSzwbd4
-         nf0g==
-X-Gm-Message-State: AC+VfDwuhBiZ+bCE9y4ZW3vD17AA/BjiSBRQ3qhxKh8WEwozW7yhRE3b
-        efuSIr33h9ksoIWGZcXSa7V6QQ==
-X-Google-Smtp-Source: ACHHUZ7EeQU6wTwePyW5SsSph7bmWmzBh+YfoN1Ytx0QPg1J133jcsV49lUTfOYqjFJIGBKh6l84JA==
-X-Received: by 2002:a7b:cbc8:0:b0:3f6:3ad:16a with SMTP id n8-20020a7bcbc8000000b003f603ad016amr1741490wmi.31.1685443940263;
-        Tue, 30 May 2023 03:52:20 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id j18-20020a5d4492000000b002ffbf2213d4sm2870418wrq.75.2023.05.30.03.52.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 03:52:19 -0700 (PDT)
-Message-ID: <e0365591-0f03-ab3d-61b4-c016541f2157@linaro.org>
-Date:   Tue, 30 May 2023 11:52:18 +0100
+        Tue, 30 May 2023 06:52:55 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB31893;
+        Tue, 30 May 2023 03:52:54 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id B567032009BB;
+        Tue, 30 May 2023 06:52:53 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 30 May 2023 06:52:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1685443973; x=1685530373; bh=6D
+        AjeLvw+wKEwgsFPhuXSaW+FtA9B09IvVBcjDHsLhs=; b=SzxpiHYjP+znZcj7so
+        Z7zuEwScbae3+nH65JrfNeoZoaEN4CZa6HWU4qpKwVcdmcGQw1fsCih0VLq3eVu1
+        bFxDpEB2P7KL+76wtoP52giLaTm7gFigWOoGfpgVKEgHKCa2VetwRZIyZUfO6mjY
+        6jLPT/4VJXrpHfIZaJJ0ZWuMrCnkiSFnW+XY71voBKVFm2+VR2QQ+OWlNrfaxcN1
+        c6MkA0CW6SMQdJ8DQrCZyn+vww68auRp9N8yjTWXi98Y5HPkBw2GxqbMbdgFcfdG
+        k6HtzaS+BC9mw+YrJtmFzDInN5qshngRilZufAumfygk4e5HsoqCQFqLhK+JZAkS
+        p6Og==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685443973; x=1685530373; bh=6DAjeLvw+wKEw
+        gsFPhuXSaW+FtA9B09IvVBcjDHsLhs=; b=CpgMy1TY6ldkyZPtfK/yqn91MRYqp
+        i7vDR1vOo7cc3DIoIA/Fw0P8oceSrzdYm9RbnStammq+oR9xGWh8K9oKXNTRo1rH
+        +MoxmvqHhF0GfIYntgmazn0ZR0vSB1dDdkI1t0a6lmoqaN4kOFy096dpiw8ZjqgF
+        SE7t2D3lDLjtL2tQoanDHAQv6PB3MeruR9ZTR9Ex3kJcqfzbzpyBJbyX3x0W6BwS
+        K7Oazm/G/BPtz4Vzta3O3SJeigM3uix218tuDL7I8kwGCAeXDJ+389haZyny2169
+        LB3jvu/Be3AVcktJbV/UMcE9f79FtGI9Or9Wkijli0SS0b9NXyYczeOUw==
+X-ME-Sender: <xms:hdV1ZFWGv5qQ5bEtfKIjQZQ6VOC-3u4XZSCax5uLtEllmeqT60-Q3Q>
+    <xme:hdV1ZFmsjsor_hQPPlgQHSnwaCL30DH6HAO1qAhTJUfXOqz4thymV6w8rqD682tQn
+    z5vGhl1cjNOjOrPEBQ>
+X-ME-Received: <xmr:hdV1ZBawA3XutzMaQ-Cs16jHn5ZqTyxX4fVUgl9GndZdpidOTTnFi4qq__gcG-EU7zFdnbkp-CvHUx-hpnPbqaLJG3h4To4Z_gdvgPgfiH-6MA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgfedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepvfgrkhgrshhh
+    ihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
+    eqnecuggftrfgrthhtvghrnhepffdvueelffevkeduhfetjeduffeghfettdfguedtgfdv
+    gfeufeduheevheevkeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
+X-ME-Proxy: <xmx:hdV1ZIUp8c9MuoXqIr2VsSvlGt0r88ZEoNH45rnA6NcsdX5PjwpxZg>
+    <xmx:hdV1ZPnv2w2uywAiDK6KPvcOJUJVpQYyimqiPloJnxzx9ezkGG7NdQ>
+    <xmx:hdV1ZFd_sShtAnoHWtzg-9ikDUDcXkQ46hj_SU3qgDJQ-fCX5hGcgw>
+    <xmx:hdV1ZKtzlOVdSglq7A1Lc70euJE0LF6ApyBsQ0LPFAKOvXegGYxbEw>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 30 May 2023 06:52:51 -0400 (EDT)
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Documentation: Kunit: add MODULE_LICENSE to sample code
+Date:   Tue, 30 May 2023 19:52:48 +0900
+Message-Id: <20230530105248.68238-1-o-takashi@sakamocchi.jp>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 1/2] misc: fastrpc: support complete DMA pool access to
- the DSP
-Content-Language: en-US
-To:     Dylan Van Assche <me@dylanvanassche.be>, amahesh@qti.qualcomm.com,
-        arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        dan.carpenter@linaro.org,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Ekansh Gupta <quic_ekangupt@quicinc.com>
-References: <20230511141146.30465-1-me@dylanvanassche.be>
- <20230511141146.30465-2-me@dylanvanassche.be>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230511141146.30465-2-me@dylanvanassche.be>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2023 15:11, Dylan Van Assche wrote:
-> To support FastRPC Context Banks which aren't mapped via the SMMU,
-> make the whole reserved memory region available to the DSP to allow
-> access to coherent buffers.
+The sample code has Kconfig for tristate configuration. In the case, it
+could be friendly to developers that the code has MODULE_LICENSE, since
+the missing MODULE_LICENSE brings error to modpost when the code is built
+as loadable kernel module.
 
-Mapping the whole region sounds very inefficient, and also possibly 
-making the cma region not usable by others.
+Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+---
+ Documentation/dev-tools/kunit/start.rst | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> 
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index c736613c9b19..d4f99ef94f71 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -250,6 +250,8 @@ Now we are ready to write the test cases.
+ 	};
+ 	kunit_test_suite(misc_example_test_suite);
+ 
++	MODULE_LICENSE("GPL");
++
+ 2. Add the following lines to ``drivers/misc/Kconfig``:
+ 
+ .. code-block:: kconfig
+-- 
+2.39.2
 
-AFAIU SDM845 does not have any context banks for SDSP. All new SoCs 
-after 865 have moved to having a context bank.
-
-For such cases (w/o cb) we can make fastrpc_session_alloc use channel 
-context device instead of session ctx device. As this is going to be an 
-issue when we try to allocate buffers dynamically for that cb.
-
-In the newer platforms (from 865) there is support for iommu and context 
-banks on SDSP, so the existing code flow is identical for both ADSP and 
-SDSP.
-
-
-We should be careful not to break newer platfroms while adding support 
-to this.
-
-Both myself and Ekansh thought about this and see that the better way to 
-add support to this is by
-
-1. extend fastrpc_session_alloc() to support zero context banks.
-
-2. add flags to mark this and allocate meta data using secure allocation 
-when its required based on this flag.
-
-3.  buffer allocation can either go with 2 or with a new flag coming 
-from userspace.
-
-
-
-> This is performed by assigning the memory to the DSP via a hypervisor
-> call to set the correct permissions for the Virtual Machines on the DSP.
-> This is only necessary when a memory region is provided for SLPI DSPs
-> so guard this with a domain ID check.
-> 
-> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
-> Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
-> ---
->   drivers/misc/fastrpc.c | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
-> 
-> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-> index f48466960f1b..1ced553ae959 100644
-> --- a/drivers/misc/fastrpc.c
-> +++ b/drivers/misc/fastrpc.c
-> @@ -2231,6 +2231,8 @@ static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
->   	int i, err, domain_id = -1, vmcount;
->   	const char *domain;
->   	bool secure_dsp;
-> +	struct device_node *rmem_node;
-> +	struct reserved_mem *rmem;
->   	unsigned int vmids[FASTRPC_MAX_VMIDS];
->   
->   	err = of_property_read_string(rdev->of_node, "label", &domain);
-> @@ -2274,6 +2276,19 @@ static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
->   		}
->   	}
->   
-> +	rmem_node = of_parse_phandle(rdev->of_node, "memory-region", 0);
-> +	if (domain_id == SDSP_DOMAIN_ID && rmem_node) {
-> +		rmem = of_reserved_mem_lookup(rmem_node);
-> +		if (!rmem) {
-> +			err = -EINVAL;
-> +			goto fdev_error;
-> +		}
-> +
-> +		qcom_scm_assign_mem(rmem->base, rmem->size, &data->perms,
-> +				    data->vmperms, data->vmcount);
-
-vmperms need to be a bit field.
-
-> +
-> +	}
-> +
->   	secure_dsp = !(of_property_read_bool(rdev->of_node, "qcom,non-secure-domain"));
->   	data->secure = secure_dsp;
->   
-
---srini
