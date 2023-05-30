@@ -2,63 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5863C716E82
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9E3716E87
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbjE3UQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 16:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
+        id S233085AbjE3URc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 16:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjE3UQr (ORCPT
+        with ESMTP id S229920AbjE3URa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 16:16:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5B1114
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:15:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685477748;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=KwVegJycMDx8gT6rc6pZK7hnVF5FLPwEoaEPZ3IAKo0=;
-        b=FjRZkC+OKxvjhoneZvWCC3f7ywmAQEpUCwnJW+DDwlO31EQdLGxPDBoXqRZrMclkMTFx9n
-        RLNltKZNisrHZnSuQyGybhxNwoNCku5pZK1GWaNz2C9/mvSa3x4jCfwbRjBTQdReIq/CHa
-        Uhy/QoW8dFRLzwQLCqkp8zWtWHJmDlY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-270-OR7fTmg-MgKrCNNSmVK9bg-1; Tue, 30 May 2023 16:15:45 -0400
-X-MC-Unique: OR7fTmg-MgKrCNNSmVK9bg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 30 May 2023 16:17:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26BAF7;
+        Tue, 30 May 2023 13:17:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A8F663C0CEEE;
-        Tue, 30 May 2023 20:15:44 +0000 (UTC)
-Received: from localhost (unknown [10.22.16.189])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 415B335443;
-        Tue, 30 May 2023 20:15:44 +0000 (UTC)
-Date:   Tue, 30 May 2023 17:15:43 -0300
-From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Luis Goncalves <lgoncalv@redhat.com>
-Subject: [ANNOUNCE] 4.14.315-rt148
-Message-ID: <ZHZZbw4jJbFWxBBh@uudg.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F6F261463;
+        Tue, 30 May 2023 20:17:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59222C433EF;
+        Tue, 30 May 2023 20:17:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685477848;
+        bh=42kHNuWnr2NU1MRlrzNdvQutpo6umm6bTAEU71ctpEw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Wxtjib3qGYadfyYFl+JHdGXCHJkF21/tawbmw6oi1A2W5U3NB0mqdS5rA2lGdt2oF
+         x2J4yZcHyNHKtZ5uH1LVjgE/NzV0FSJFRlp8cKd7sSL7nZXmeueTs+i0WhD/NQ0PXm
+         aGl/LgmSfjgloljW60Db0858f24nVLIOa9kUhOPAQ20EyfdSq8rTpXpL2YCCY/LXsu
+         zMZNQ9TkoJB2a/uXnEg/6XYoByXgVXAVSzfE94OsjR5KEReuicyKuUsIhKYRPoARPD
+         Fvpn3AWLCw4Oy7Bruykxv18mXDwH7eoseXWMzg3ep3EiGWT0PdpxrdDWQrPczv5Ywq
+         ZixVq0mWOHorQ==
+Date:   Tue, 30 May 2023 15:17:26 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sui Jingfeng <suijingfeng@loongson.cn>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        loongson-kernel@lists.loongnix.cn, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Li Yi <liyi@loongson.cn>
+Subject: Re: [PATCH] pci/vgaarb: make vga_is_firmware_default() arch
+ independent
+Message-ID: <ZHZZ1qETtCOlmkXU@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20230529154504.2117953-1-suijingfeng@loongson.cn>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,37 +56,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
+On Mon, May 29, 2023 at 11:45:04PM +0800, Sui Jingfeng wrote:
+> The vga_is_firmware_default() function will work on non-x86 architectures
+> as long as the arch has UEFI GOP support, which passes the firmware
+> framebuffer base address and size.
+> 
+> This patch makes the vga_is_firmware_default() function arch-independent.
+> This could help the VGAARB subsystem make the right choice for multiple
+> GPU systems. Usually an integrated one and a discrete one for desktop
+> computers. Depending on the firmware framebuffer being put into which
+> GPU's VRAM, VGAARB could inherit the firmware's choice, which in turn,
+> is the exact choice of the user.
 
-I'm pleased to announce the 4.14.315-rt148 stable release.
+Is there a system that needs this change?  If so, the commit log
+should mention it.
 
-This release is just an update to the new stable 4.14.315
-version and no RT specific changes have been made.
+It's definitely nice to remove #ifdefs, but it's better if we have an
+actual reason and some testing of another arch that makes use of this.
 
-You can get this release via the git tree at:
+Also, take a look at the git history and match the subject line and
+commit log style (prefix, capitalization, imperative voice).
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> ---
+>  drivers/pci/vgaarb.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
+> index 5a696078b382..f81b6c54e327 100644
+> --- a/drivers/pci/vgaarb.c
+> +++ b/drivers/pci/vgaarb.c
+> @@ -61,7 +61,6 @@ static bool vga_arbiter_used;
+>  static DEFINE_SPINLOCK(vga_lock);
+>  static DECLARE_WAIT_QUEUE_HEAD(vga_wait_queue);
+>  
+> -
+>  static const char *vga_iostate_to_str(unsigned int iostate)
+>  {
+>  	/* Ignore VGA_RSRC_IO and VGA_RSRC_MEM */
+> @@ -545,7 +544,6 @@ EXPORT_SYMBOL(vga_put);
+>  
+>  static bool vga_is_firmware_default(struct pci_dev *pdev)
+>  {
+> -#if defined(CONFIG_X86) || defined(CONFIG_IA64)
+>  	u64 base = screen_info.lfb_base;
+>  	u64 size = screen_info.lfb_size;
+>  	struct resource *r;
+> @@ -571,7 +569,7 @@ static bool vga_is_firmware_default(struct pci_dev *pdev)
+>  
+>  		return true;
+>  	}
+> -#endif
+> +
+>  	return false;
+>  }
+>  
+> @@ -865,8 +863,7 @@ static bool vga_arbiter_del_pci_device(struct pci_dev *pdev)
+>  }
+>  
+>  /* this is called with the lock */
+> -static inline void vga_update_device_decodes(struct vga_device *vgadev,
+> -					     int new_decodes)
+> +static void vga_update_device_decodes(struct vga_device *vgadev, int new_decodes)
 
-  branch: v4.14-rt
-  Head SHA1: 1b54c8a70b1c44c89fb04f131e6721bd2bbfc9d9
+I don't mind removing the "inline" here, but it shouldn't be combined
+with the rest of the patch.  When it's combined, I can't tell whether
+there's a reason we need this change or if it's just a cleanup.
 
-Or to build 4.14.315-rt148 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.14.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.14.315.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/4.14/older/patch-4.14.315-rt148.patch.xz
-
-Signing key fingerprint:
-
-  9354 0649 9972 8D31 D464  D140 F394 A423 F8E6 7C26
-
-All keys used for the above files and repositories can be found on the
-following git repository:
-
-   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
-
-Enjoy!
-Luis
-
+>  {
+>  	struct device *dev = &vgadev->pdev->dev;
+>  	int old_decodes, decodes_removed, decodes_unlocked;
+> -- 
+> 2.25.1
+> 
