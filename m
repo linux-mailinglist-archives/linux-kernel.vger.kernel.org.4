@@ -2,184 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFEC7169D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BF17169E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232554AbjE3QhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
+        id S232717AbjE3Qko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjE3QhS (ORCPT
+        with ESMTP id S230096AbjE3Qkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:37:18 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E288F7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:37:09 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-53f70f7c2d2so1917490a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:37:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685464628; x=1688056628;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XmljBxLjijPPRFlX5mO8wqHeqzDYN0rcYWjJkP07F34=;
-        b=NHoWLT+l8y30+8KojH2SRMRDTxMrZHFJhQn7S2Toq69wa/LlbcKJE6IhF2ZMzx9SDp
-         dK9LoPCsEM6VZi2zqniJvlVdyDnFnoUi5FzAsKrgPhp4oVMgr9B2V7uimLUyp8bx9Xzz
-         UXGqP/4NcFjcZfA9O19RdWqqr+zm469inPAUA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685464628; x=1688056628;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XmljBxLjijPPRFlX5mO8wqHeqzDYN0rcYWjJkP07F34=;
-        b=V1TjoZbsUJDUpLgLu6NErbVOLWrNKJInwnf5YOknOCHNbN9CNlVMXkHvnVcbQGPTsX
-         UKWAEAVqxeWgGO3vI1ZXLaeDpOd+0z0C98qdD8Dz+U65d7prVLZvhxpZCOQzkRy9OdPP
-         u87GlB1pQ1czBVD3ZCFqctotohyhUfvsBVQWS5th9Qiwegqi9/EWP9oiq5SC1OA1xdrG
-         bUNv18oRzbcQmkR8W81XpCYo/TVxJCB32NU+1BeA5Y9l8KeuzzP2C1v/VfbueOGwibjM
-         SsR3/FMgmRPKp/jDN6342AsY9i77Yqb9qqWTwd/o1C1mhHyQTSFUMS83EKALVvwMyiNk
-         2ZBQ==
-X-Gm-Message-State: AC+VfDzBliYwwCO76jM5Clr1s5LKVELjInKa3V7Cwqs7T4SMQjBNZspk
-        1Frm6XDR0ASWNmSdwUzSag3yX+3jIkWR5nmUr2w=
-X-Google-Smtp-Source: ACHHUZ72OHk/Qz4vBRZ9DIZ4f8uMu9WIoGO3HuwENzzWmUd7FdiW8k9VBKNl/Il0KC8eVTfOqKFjfA==
-X-Received: by 2002:a17:903:41c1:b0:1b0:6541:91c2 with SMTP id u1-20020a17090341c100b001b0654191c2mr2490419ple.63.1685464628127;
-        Tue, 30 May 2023 09:37:08 -0700 (PDT)
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com. [209.85.214.170])
-        by smtp.gmail.com with ESMTPSA id i14-20020a17090332ce00b001ab0083c6c9sm5193444plr.261.2023.05.30.09.37.07
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 09:37:07 -0700 (PDT)
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1b025aaeddbso339485ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:37:07 -0700 (PDT)
-X-Received: by 2002:a05:6e02:1d1e:b0:33b:4a8c:2147 with SMTP id
- i30-20020a056e021d1e00b0033b4a8c2147mr183809ila.8.1685464606562; Tue, 30 May
- 2023 09:36:46 -0700 (PDT)
+        Tue, 30 May 2023 12:40:42 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2049.outbound.protection.outlook.com [40.107.92.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C038E;
+        Tue, 30 May 2023 09:40:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=auoYI/7tR/q/htwnsxypEFjjd3ANBIx/PntSX8pUDUPRrqPAPZUYnhU6q7SI5XBsgLSb6Q6R4Nr3Z6rQB0h47O00/DjwQLrAQ0E2whROCc5t7vWveKuIWw2lWyXJhYXoa62t8dV1g/63bEr76IslPbHik8O+r8nzbFA/Eaefaz1y/RpGlFKL2neLSi5n9NFszHu/+TOVVs3wq1ckBw2x5Zm+zaRPn9/tZZpc3txEaqHyLpC9M9yYc5zqkebIYvpWoU+54hfybZ2XvR42ADCBourUMy09oZbo17W0HK9l/SwtTwpzMAA4kEtUxRHYqicKDrDrMec1x+anEivY+nO6qg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yPd8OTGDycxlNwmgaxjuPJhy0mVv8FZr21RzRhTXfz8=;
+ b=NdS1wN16xtB/fW6Sxitkk//isfrzSY4RbEAUhCKSwAa3G6/z8pN4H6+K3idR38treXY2vkd4RSf98DxC12oIw2XlpGANQGMJExcLQoMZC3mxyoqLI4ZmF12BGVesgwE08391xFnS/rWSuGqYLBPXqumrQDKggHTWoiObbg+iCWni+EiKouUjI96i7HsJ7Kx3pW3ZiEFTs0hzmTwtjfETDh/hgAPMmWBBHrnQQqaKXTIq3diUpSWZXBitWvy8WunGwiqcdSVd8dL6AJrRKgX3Ld9bRZeN8rNiY0vpe1SK3Nkmu8r9RckttuT9Mv8S/Pq6kPEmFnlh4yjGcCFQs6Q7pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yPd8OTGDycxlNwmgaxjuPJhy0mVv8FZr21RzRhTXfz8=;
+ b=mlMypBv+5PIM+voLwkDgsn3y+c8cYZdFHMXbiPK+HCiczMuhbdQrkVCDTUDwDXncao/+E7T41Km01ZE7wshlHoIROMl9dcmXv2Cxi7HRYx9qZC4CW7svKJiuwb/3plY+nmVEGV1lVB83UfxOic/qaZ961+nmHrRd+23h4n8L6zE=
+Received: from BN9PR03CA0444.namprd03.prod.outlook.com (2603:10b6:408:113::29)
+ by PH8PR12MB8430.namprd12.prod.outlook.com (2603:10b6:510:259::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Tue, 30 May
+ 2023 16:40:38 +0000
+Received: from BN8NAM11FT023.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:113:cafe::e3) by BN9PR03CA0444.outlook.office365.com
+ (2603:10b6:408:113::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23 via Frontend
+ Transport; Tue, 30 May 2023 16:40:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT023.mail.protection.outlook.com (10.13.177.103) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6455.22 via Frontend Transport; Tue, 30 May 2023 16:40:37 +0000
+Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 30 May
+ 2023 11:40:35 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Mika Westerberg" <mika.westerberg@linux.intel.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        Deucher Alexander <Alexander.Deucher@amd.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        <linux-pm@vger.kernel.org>, Lukas Wunner <lukas@wunner.de>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v5 1/2] PCI: Refactor pci_bridge_d3_possible()
+Date:   Tue, 30 May 2023 11:39:46 -0500
+Message-ID: <20230530163947.230418-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230515131353.v2.cover@dianders> <20230515131353.v2.2.I88dc0a0eb1d9d537de61604cd8994ecc55c0cac1@changeid>
- <CAMuHMdWM_t7uQqkesM3fnSK7THrmLszA7U54==A0-98xPH90Bw@mail.gmail.com> <868rd6cfsy.wl-maz@kernel.org>
-In-Reply-To: <868rd6cfsy.wl-maz@kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 30 May 2023 09:36:34 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XbD3jPuy=eqnrsTyQpq89PFW12+fy_YufcEirJ9CYt1Q@mail.gmail.com>
-Message-ID: <CAD=FV=XbD3jPuy=eqnrsTyQpq89PFW12+fy_YufcEirJ9CYt1Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] irqchip/gic-v3: Disable pseudo NMIs on Mediatek
- devices w/ firmware issues
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, wenst@chromium.org,
-        yidilin@chromium.org, Tinghan Shen <tinghan.shen@mediatek.com>,
-        jwerner@chromium.org, Weiyi Lu <weiyi.lu@mediatek.com>,
-        Ben Ho <Ben.Ho@mediatek.com>,
-        Seiya Wang <seiya.wang@mediatek.com>,
-        linux-kernel@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT023:EE_|PH8PR12MB8430:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f4084fd-1b5f-41f1-f8c0-08db612c993c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ncbdg4dC8gpBttNSn0rC3eVfWU54EL5VIGsTFJFv3a9ZG6XyeO2KLQQb/ZpGdc6y5zljUeVHX+D35/aw9+ufnF0ApvPJkYe4EuKiBFUYToAmJBo6YCDVW7SWvGD1vzss37TKNUIZMGEONJsPg+3C3+uNEvuu42oZmQUTs0RWkWH03nfkEj7LDo3KwfSS+cyomZ+PcVqIoWL5bx1Lp6mOVN4uRt3O894BXVLbnOVYY8bBwRVwy0HsOSQF+qhhoDwl9y3fDi2XsfRWDw9XS36JNvG8HoqQzK7QnPqG3Gt8MZ4DvwDgjBpXW4rQlXABbE4VX+fdXeU54JYU1d0BVjp1DV+L2Z/mmKdw+6HxVo/r6fgMfGCax3Idrlmz4Xh4W9fX85SSEhb0EWZZvige2X609cslXpBCc1YikMEUf5A9lQdSII37kHjyobTIgDHVf0MkG9wE7D8JlMdu1VdhpBjyloWpYsL+d07kqG0mZeWO5dc2uU30k47sefFFB8yyvFHA1XhLpiz52/+L0adbs5W18pmZopN0cpTGmXV7tYcN1laDxMcE7uub+hRW89dnDCiPC93iQof/sya/ht3SRsWfU6tS0QZum0TRYiGtsCgqaSdZHfQIIGvAiGqLxmtqAncUXJNzMSCNOqf92V9ejFwr2GQBuzkj0IPU5TIXFzD0fN0o5kSG55KT2VK7ndt5f+VNpPSGSdtRilKrPufT0wvYTI6C02KGyHs5cZv9ujNrSl9OT/YnqhiGKGZp/qdV7nxR2Ibr2McR5Fzq0rbYa3Mz3A==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(39860400002)(376002)(451199021)(46966006)(40470700004)(36840700001)(7696005)(356005)(81166007)(40460700003)(26005)(40480700001)(6666004)(1076003)(82740400003)(36756003)(5660300002)(478600001)(36860700001)(186003)(16526019)(86362001)(2616005)(336012)(426003)(4326008)(70586007)(70206006)(6916009)(47076005)(54906003)(41300700001)(2906002)(82310400005)(316002)(83380400001)(8936002)(8676002)(44832011)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 16:40:37.9952
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f4084fd-1b5f-41f1-f8c0-08db612c993c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT023.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB8430
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+All of the cases handled by pci_bridge_d3_possible() are specific
+to these branches:
+```
+	case PCI_EXP_TYPE_ROOT_PORT:
+	case PCI_EXP_TYPE_UPSTREAM:
+	case PCI_EXP_TYPE_DOWNSTREAM:
+```
+Drop a level of indentation by returning false in the default case
+instead.  No intended functional changes.
 
-On Tue, May 30, 2023 at 2:46=E2=80=AFAM Marc Zyngier <maz@kernel.org> wrote=
-:
->
-> On Tue, 30 May 2023 09:29:02 +0100,
-> Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >
-> > Hi Douglas,
-> >
-> > On Mon, May 15, 2023 at 10:16=E2=80=AFPM Douglas Anderson <dianders@chr=
-omium.org> wrote:
-> > > Some Chromebooks with Mediatek SoCs have a problem where the firmware
-> > > doesn't properly save/restore certain GICR registers. Newer
-> > > Chromebooks should fix this issue and we may be able to do firmware
-> > > updates for old Chromebooks. At the moment, the only known issue with
-> > > these Chromebooks is that we can't enable "pseudo NMIs" since the
-> > > priority register can be lost. Enabling "pseudo NMIs" on Chromebooks
-> > > with the problematic firmware causes crashes and freezes.
-> > >
-> > > Let's detect devices with this problem and then disable "pseudo NMIs"
-> > > on them. We'll detect the problem by looking for the presence of the
-> > > "mediatek,broken-save-restore-fw" property in the GIC device tree
-> > > node. Any devices with fixed firmware will not have this property.
-> > >
-> > > Our detection plan works because we never bake a Chromebook's device
-> > > tree into firmware. Instead, device trees are always bundled with the
-> > > kernel. We'll update the device trees of all affected Chromebooks and
-> > > then we'll never enable "pseudo NMI" on a kernel that is bundled with
-> > > old device trees. When a firmware update is shipped that fixes this
-> > > issue it will know to patch the device tree to remove the property.
-> > >
-> > > In order to make this work, the quick detection mechanism of the GICv=
-3
-> > > code is extended to be able to look for properties in addition to
-> > > looking at "compatible".
-> > >
-> > > Reviewed-by: Julius Werner <jwerner@chromium.org>
-> > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > > ---
-> > >
-> > > Changes in v2:
-> > > - mediatek,gicr-save-quirk =3D> mediatek,broken-save-restore-fw
-> >
-> > Thanks for your patch, which is now commit 44bd78dd2b8897f5
-> > ("irqchip/gic-v3: Disable pseudo NMIs on Mediatek devices w/
-> > firmware issues") in v6.4-rc4.
-> >
-> > This causes enabling an unrelated workaround on R-Car V4H:
-> >
-> >     GIC: enabling workaround for GICv3: Cavium erratum 38539
-> >
-> > > --- a/drivers/irqchip/irq-gic-common.c
-> > > +++ b/drivers/irqchip/irq-gic-common.c
-> > > @@ -16,7 +16,11 @@ void gic_enable_of_quirks(const struct device_node=
- *np,
-> > >                           const struct gic_quirk *quirks, void *data)
-> > >  {
-> > >         for (; quirks->desc; quirks++) {
-> > > -               if (!of_device_is_compatible(np, quirks->compatible))
-> > > +               if (quirks->compatible &&
-> > > +                   !of_device_is_compatible(np, quirks->compatible))
-> > > +                       continue;
-> > > +               if (quirks->property &&
-> > > +                   !of_property_read_bool(np, quirks->property))
-> > >                         continue;
-> >
-> > Presumably the loop should continue if none of quirks-compatible
-> > or quirks->property is set?
->
-> Indeed, thanks for pointing that out. Can you give the following hack
-> a go (compile tested only)?
->
-> diff --git a/drivers/irqchip/irq-gic-common.c b/drivers/irqchip/irq-gic-c=
-ommon.c
-> index de47b51cdadb..7b591736ab58 100644
-> --- a/drivers/irqchip/irq-gic-common.c
-> +++ b/drivers/irqchip/irq-gic-common.c
-> @@ -16,6 +16,8 @@ void gic_enable_of_quirks(const struct device_node *np,
->                           const struct gic_quirk *quirks, void *data)
->  {
->         for (; quirks->desc; quirks++) {
-> +               if (!quirks->compatible && !quirks->property)
-> +                       continue;
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+v4->v5:
+ * Add tags
+v3->v4:
+ * New patch
+---
+ drivers/pci/pci.c | 68 +++++++++++++++++++++++------------------------
+ 1 file changed, 34 insertions(+), 34 deletions(-)
 
-Sorry for missing this and thanks for the fix. Looks like this is
-already committed, but in case it matters:
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 5ede93222bc1..d1fa040bcea7 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -2978,48 +2978,48 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
+ 	case PCI_EXP_TYPE_ROOT_PORT:
+ 	case PCI_EXP_TYPE_UPSTREAM:
+ 	case PCI_EXP_TYPE_DOWNSTREAM:
+-		if (pci_bridge_d3_disable)
+-			return false;
++		break;
++	default:
++		return false;
++	}
+ 
+-		/*
+-		 * Hotplug ports handled by firmware in System Management Mode
+-		 * may not be put into D3 by the OS (Thunderbolt on non-Macs).
+-		 */
+-		if (bridge->is_hotplug_bridge && !pciehp_is_native(bridge))
+-			return false;
++	if (pci_bridge_d3_disable)
++		return false;
+ 
+-		if (pci_bridge_d3_force)
+-			return true;
++	/*
++	 * Hotplug ports handled by firmware in System Management Mode
++	 * may not be put into D3 by the OS (Thunderbolt on non-Macs).
++	 */
++	if (bridge->is_hotplug_bridge && !pciehp_is_native(bridge))
++		return false;
+ 
+-		/* Even the oldest 2010 Thunderbolt controller supports D3. */
+-		if (bridge->is_thunderbolt)
+-			return true;
++	if (pci_bridge_d3_force)
++		return true;
+ 
+-		/* Platform might know better if the bridge supports D3 */
+-		if (platform_pci_bridge_d3(bridge))
+-			return true;
++	/* Even the oldest 2010 Thunderbolt controller supports D3. */
++	if (bridge->is_thunderbolt)
++		return true;
+ 
+-		/*
+-		 * Hotplug ports handled natively by the OS were not validated
+-		 * by vendors for runtime D3 at least until 2018 because there
+-		 * was no OS support.
+-		 */
+-		if (bridge->is_hotplug_bridge)
+-			return false;
++	/* Platform might know better if the bridge supports D3 */
++	if (platform_pci_bridge_d3(bridge))
++		return true;
+ 
+-		if (dmi_check_system(bridge_d3_blacklist))
+-			return false;
++	/*
++	 * Hotplug ports handled natively by the OS were not validated
++	 * by vendors for runtime D3 at least until 2018 because there
++	 * was no OS support.
++	 */
++	if (bridge->is_hotplug_bridge)
++		return false;
+ 
+-		/*
+-		 * It should be safe to put PCIe ports from 2015 or newer
+-		 * to D3.
+-		 */
+-		if (dmi_get_bios_year() >= 2015)
+-			return true;
+-		break;
+-	}
++	if (dmi_check_system(bridge_d3_blacklist))
++		return false;
+ 
+-	return false;
++	/*
++	 * It should be safe to put PCIe ports from 2015 or newer
++	 * to D3.
++	 */
++	return dmi_get_bios_year() >= 2015;
+ }
+ 
+ static int pci_dev_check_d3cold(struct pci_dev *dev, void *data)
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
+-- 
+2.34.1
+
