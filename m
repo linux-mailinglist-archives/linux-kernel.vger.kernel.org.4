@@ -2,63 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666B771675C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82819716776
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbjE3PoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
+        id S232466AbjE3PqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbjE3PoF (ORCPT
+        with ESMTP id S232258AbjE3PqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:44:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD90BF7;
-        Tue, 30 May 2023 08:43:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 30 May 2023 11:46:06 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CDDE5;
+        Tue, 30 May 2023 08:46:02 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id c85ce38deb63eb2c; Tue, 30 May 2023 17:46:01 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C144609FA;
-        Tue, 30 May 2023 15:43:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6126C433EF;
-        Tue, 30 May 2023 15:43:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685461438;
-        bh=yKpSUIDsI1YQx5+45dwZ2YU0mq3iYA9T6D3r+nll67w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PuzbYPnYGEelnZAB99dHr2kPCy/Z3ZGV5J63M05Cy5Uco9o+XggemD8+SpTdwyzlY
-         BVvM4WEZbK5xD/s/D6esxWLor5+a670bh95lE/mzPENY6X2yepubd9fGATdc1ZZRxQ
-         eK4jF7u6QV1gsfuAHEUqQyZH1LPzanJZtAtcLpvf/tYNuRiGLo7J8ANA+40uYecAh6
-         s+bTqiN65ckNjK+FCTbNsx9SOGFveLLxfDbA55/d6qkAuD0MEbT9Aft8U6VwtqN3k1
-         WhpxE/fuBVV6Bwpih39kb01RM7+Ll6HUwOP1/JbthTWWVuJf/3qIYCvRCQ7T0MXFDc
-         Zly11uKXtoqXA==
-Date:   Tue, 30 May 2023 17:43:53 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Loic Poulain <loic.poulain@linaro.org>, corbet@lwn.net,
-        viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] init: Add support for rootwait timeout parameter
-Message-ID: <20230530-angepackt-zahnpasta-3e24954150fc@brauner>
-References: <20230526130716.2932507-1-loic.poulain@linaro.org>
- <ZHYOucvIYTBwnzOb@infradead.org>
+        by v370.home.net.pl (Postfix) with ESMTPSA id D05D58BB094;
+        Tue, 30 May 2023 17:46:00 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michal Wilczynski <michal.wilczynski@intel.com>
+Subject: [PATCH v1 1/5] ACPI: thermal: Use BIT() macro for defining flags
+Date:   Tue, 30 May 2023 17:44:08 +0200
+Message-ID: <3229381.aeNJFYEL58@kreacher>
+In-Reply-To: <5675481.DvuYhMxLoT@kreacher>
+References: <5675481.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZHYOucvIYTBwnzOb@infradead.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgledtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehm
+ ihgthhgrlhdrfihilhgtiiihnhhskhhisehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 07:56:57AM -0700, Christoph Hellwig wrote:
-> This clashes a bit with my big rework in this area in the
-> "fix the name_to_dev_t mess" series. I need to resend that series
-> anyway, should I just include a rebased version of this patch?
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Sure, if this makes things easier for you then definitely.
+Use the BIT() macro for defining flag symbols in the ACPI thermal driver
+instead of using "raw" values for the flags.
+
+No functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/thermal.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+Index: linux-pm/drivers/acpi/thermal.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/thermal.c
++++ linux-pm/drivers/acpi/thermal.c
+@@ -232,11 +232,11 @@ static int acpi_thermal_set_cooling_mode
+ 	return 0;
+ }
+ 
+-#define ACPI_TRIPS_CRITICAL	0x01
+-#define ACPI_TRIPS_HOT		0x02
+-#define ACPI_TRIPS_PASSIVE	0x04
+-#define ACPI_TRIPS_ACTIVE	0x08
+-#define ACPI_TRIPS_DEVICES	0x10
++#define ACPI_TRIPS_CRITICAL	BIT(0)
++#define ACPI_TRIPS_HOT		BIT(1)
++#define ACPI_TRIPS_PASSIVE	BIT(2)
++#define ACPI_TRIPS_ACTIVE	BIT(3)
++#define ACPI_TRIPS_DEVICES	BIT(4)
+ 
+ #define ACPI_TRIPS_REFRESH_THRESHOLDS	(ACPI_TRIPS_PASSIVE | ACPI_TRIPS_ACTIVE)
+ #define ACPI_TRIPS_REFRESH_DEVICES	ACPI_TRIPS_DEVICES
+
+
+
