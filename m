@@ -2,92 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEE371719A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39C77171A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbjE3XVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 19:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
+        id S233581AbjE3XYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 19:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233898AbjE3XVt (ORCPT
+        with ESMTP id S233003AbjE3XYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 19:21:49 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E1AE5E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:21:21 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64d5b4c400fso5695264b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:21:21 -0700 (PDT)
+        Tue, 30 May 2023 19:24:40 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FADAF7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:24:37 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d1a0d640cso3847307b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:24:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685488880; x=1688080880;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=olkd5FdK39xwOU4GbWWKQgW5dE56bKupA6Kog3J0D9U=;
-        b=I66TxfywFbovbwxMYfgVqGu6OQ15EAfC3r2Nk3gU4AlgjbxZUqZpUbVpAQIfdtnc0h
-         FXdv3YrEUG2H/4wiPbkwiLFyuNcTd0PSOSnje+7kLQbCtU2x4t9OprLMMRCowpallEeS
-         F/GnpmvW0w9OTMOmfTk+HT/pzqBqo7VJ/JVhM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685488880; x=1688080880;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1685489076; x=1688081076;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=olkd5FdK39xwOU4GbWWKQgW5dE56bKupA6Kog3J0D9U=;
-        b=SXPTRZmTJJhXYgFAcrtdSHGqeyP/1G6SAus1teTeDwTMOCj3dtE5PvTVce3rGcMNhY
-         g2ZDyzWgJZiVzF44liXU6uFRcF/vyLDWVELXigfY1jwyjcZe5uWvp1kq398EDB9iEBZT
-         yZbgKN5cI1uD6U/Rsy+46VVj1B+4fas+mlBZFfwcvN2V+EhDIib/NQVNxNFrwpfGp/oq
-         nsL/0l9EK6OwSmpdkobmCqADOanFVP6SnNsoB6yuBgij+6orapfOjbXrCG4n1M49fHtm
-         T2ruDUMNfTvdW7LGQz6tJntD/pAm43ZhJ/avFV64If2McMSxYGkGl3J4fqnmZlvt347U
-         LlXQ==
-X-Gm-Message-State: AC+VfDyaJi8Ov2DBJ6tVMTxm2Zi0y+uy/3EAuFG6/N68GVtXhWifCH0I
-        MoKZ3V7vCP6C3AkWICcfKu/gEQ==
-X-Google-Smtp-Source: ACHHUZ5L6QnQe2Ow2yj0s6as1ruiWEChEcxKhwrITISgxHUHXQuY8n8FjIRUt7C3pCP0LPYNw5yo5w==
-X-Received: by 2002:a05:6a00:1787:b0:645:cfb0:2779 with SMTP id s7-20020a056a00178700b00645cfb02779mr4255573pfg.26.1685488880576;
-        Tue, 30 May 2023 16:21:20 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id u25-20020a62ed19000000b0063f2e729127sm2171189pfh.144.2023.05.30.16.21.19
+        bh=y478xapysK5Y6/1ukdDKp0Ru49aHZ8upe1tGcc0Bcjo=;
+        b=lgr7oULerKqHszxccCrJYVgD/4Mb+Xf93whmI0BJUZ3Rk1zoloaPVLlE5mgGs0zvXC
+         Hf2E5AFr6Mal6+7ICofW5MZOPuZN5QViJtY+7GNQcA/knXTMCcPkI455pTbJfnoRCh2Q
+         azLiQmFSA0z8hhb0tOjHeEYHnwGauMCNSH3Wn9v7hwAKGgLiVTKiSsLkUQPkbWjkmm5e
+         xcfmphymNFDSm7giK0ophLmOwbxkr2PkMsGTSLa62hlUXsUKiujKEFo8vbqPyQKblCDf
+         fIYB/qS8IdzILlDY8kcqQzAaoOP9nm/DzWcJD7VYDSFAeeznLTJyaihwFULB+1VoVTCb
+         fRfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685489076; x=1688081076;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y478xapysK5Y6/1ukdDKp0Ru49aHZ8upe1tGcc0Bcjo=;
+        b=EXFLm+RIwEaieR+l0dVE/hL4gtSSVGbdVCVXV84tcoaiYjarJ12Jmhd6K0WtDYXrwc
+         Kb3LRh8BospfDXiyZQtBHwEDg9v8kzT3acA8l/DvtC9B/S9osh5IgNRTyT4S1KmTLo5t
+         AXxVKQ6zVWxBS2wDagXT4v6xATPMASCq1KhrxafN1NvKPoZkFXsjR5st4KzEIRyLbMl+
+         9Mo2kKbkqxrmqfrl2UhFosy94OXtZpbPq3f6UHGkWDgooSFXENTeUKMVo6jtiZnwbfvb
+         iezwvyrBal9qfij4Qg8vXJ+TffGppAXgbhnVRyXhFg5CkqlOYKdqh0Cff047qRG8aMvz
+         tCyQ==
+X-Gm-Message-State: AC+VfDz356jMbYut8f2gqP0gmpEs/k8zdOJE9HajORV9EZNQnHh1m+Z7
+        BWAPteV8l4MeP4l3+zZ5Jt3RSpgux2I=
+X-Google-Smtp-Source: ACHHUZ6XC6V+fXFIqsU0xTsnhBmbya3jQDX3MU9I649f2Oze9PzKhOQsiGByYvvfL11dpEabCVA0/Q==
+X-Received: by 2002:a17:902:bb8d:b0:1ac:7ae7:3fdf with SMTP id m13-20020a170902bb8d00b001ac7ae73fdfmr3055806pls.41.1685489076332;
+        Tue, 30 May 2023 16:24:36 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-003.fbsv.net. [2a03:2880:ff:3::face:b00c])
+        by smtp.gmail.com with ESMTPSA id h6-20020a170902ac8600b001a1c721f7f8sm10821675plr.267.2023.05.30.16.24.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 16:21:20 -0700 (PDT)
-Date:   Tue, 30 May 2023 16:21:19 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-scsi@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] scsi: ufs: Replace all non-returning strlcpy with strscpy
-Message-ID: <202305301621.3D086C4C@keescook>
-References: <20230530164131.987213-1-azeemshaikh38@gmail.com>
+        Tue, 30 May 2023 16:24:36 -0700 (PDT)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     hannes@cmpxchg.org, cerasuolodomenico@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
+        yosryahmed@google.com, kernel-team@meta.com
+Subject: [PATCH v3] zswap: do not shrink if cgroup may not zswap
+Date:   Tue, 30 May 2023 16:24:35 -0700
+Message-Id: <20230530232435.3097106-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAJD7tkaveZ44agL0-iLfHdX1Pm_xEwBSYo=n5Tnm7pVWbsdTug@mail.gmail.com>
+References: <CAJD7tkaveZ44agL0-iLfHdX1Pm_xEwBSYo=n5Tnm7pVWbsdTug@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530164131.987213-1-azeemshaikh38@gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 04:41:31PM +0000, Azeem Shaikh wrote:
-> strlcpy() reads the entire source buffer first.
-> This read may exceed the destination size limit.
-> This is both inefficient and can lead to linear read
-> overflows if a source string is not NUL-terminated [1].
-> In an effort to remove strlcpy() completely [2], replace
-> strlcpy() here with strscpy().
-> No return values were used, so direct replacement is safe.
-> 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> [2] https://github.com/KSPP/linux/issues/89
-> 
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+Before storing a page, zswap first checks if the number of stored pages
+exceeds the limit specified by memory.zswap.max, for each cgroup in the
+hierarchy. If this limit is reached or exceeded, then zswap shrinking is
+triggered and short-circuits the store attempt.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+However, since the zswap's LRU is not memcg-aware, this can create the
+following pathological behavior: the cgroup whose zswap limit is 0 will
+evict pages from other cgroups continually, without lowering its own
+zswap usage. This means the shrinking will continue until the need for
+swap ceases or the pool becomes empty.
 
+As a result of this, we observe a disproportionate amount of zswap
+writeback and a perpetually small zswap pool in our experiments, even
+though the pool limit is never hit.
+
+More generally, a cgroup might unnecessarily evict pages from other
+cgroups before we drive the memcg back below its limit.
+
+This patch fixes the issue by rejecting zswap store attempt without
+shrinking the pool when obj_cgroup_may_zswap() returns false.
+
+Fixes: f4840ccfca25 ("zswap: memcg accounting")
+Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
+Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+---
+ mm/zswap.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/mm/zswap.c b/mm/zswap.c
+index 59da2a415fbb..cff93643a6ab 100644
+--- a/mm/zswap.c
++++ b/mm/zswap.c
+@@ -1174,9 +1174,14 @@ static int zswap_frontswap_store(unsigned type, pgoff_t offset,
+ 		goto reject;
+ 	}
+ 
++	/*
++	 * XXX: zswap reclaim does not work with cgroups yet. Without a
++	 * cgroup-aware entry LRU, we will push out entries system-wide based on
++	 * local cgroup limits.
++	 */
+ 	objcg = get_obj_cgroup_from_page(page);
+ 	if (objcg && !obj_cgroup_may_zswap(objcg))
+-		goto shrink;
++		goto reject;
+ 
+ 	/* reclaim space if needed */
+ 	if (zswap_is_full()) {
 -- 
-Kees Cook
+2.34.1
