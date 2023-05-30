@@ -2,127 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C52A715CA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC59B715CB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjE3LJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
+        id S229778AbjE3LKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjE3LI5 (ORCPT
+        with ESMTP id S229846AbjE3LKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:08:57 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB89115;
-        Tue, 30 May 2023 04:08:51 -0700 (PDT)
-X-QQ-mid: bizesmtp80t1685444926t3zkui9c
-Received: from linux-lab-host.localdomain ( [119.123.130.226])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 30 May 2023 19:08:45 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: 3M0okmaRx3gelAiWP5RoGbm4vjCvwZfJGtFNG1quZBYLTu71sj9RkgohxK606
-        a+q+BffDHTGq7hGQggq49Yc7b00q60k9Z0+rpko1hv5Qylsrh5Ru5dO7bo9KIloRo5ONmwQ
-        GxwAFUFc1x9e2wF81rgdmybkUrKQU2849rW+NYEvCIxyaTAiLxdNDZOpLSFnXpfxH1KVTqA
-        kWZIjSdm5YfAh46ijTIDBYTyYWqbWGo7WiVpC7CQnofDv7czmI4JoOidGAbFsd3/zSmwz2M
-        FtPx6NDMyIuosDDfYQm61GFTCo77Rlg8fJ/j2ZP4WDsV+0lFlJ8ptgtuyJp1957ue6tLVJi
-        LhH20tTwUUWtfUWeW8whrClc1ayhenyHlIvd/B9P/KKnGSV0gae3vPZ63kNu3sDlcC/m0Qm
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1574217579638465516
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: [PATCH 4/4] selftests/nolibc: add user-space efault restore test case
-Date:   Tue, 30 May 2023 19:08:43 +0800
-Message-Id: <69e9464e92fe8c60a421d6571a1139980103e8fd.1685443199.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685443199.git.falcon@tinylab.org>
-References: <cover.1685443199.git.falcon@tinylab.org>
+        Tue, 30 May 2023 07:10:49 -0400
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CEF11A;
+        Tue, 30 May 2023 04:10:40 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id 006d021491bc7-557e66063e8so1452310eaf.3;
+        Tue, 30 May 2023 04:10:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685445040; x=1688037040;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A1kgMM1rn+OmHNbylr6pTWSoB4vCb6k0PQTiaMpgViA=;
+        b=YHPIWc0/wLHVC9/wXGd+kvx1bBzX0RygFWqMRaW/YyOjaUnWISSdVh/rRtAeFSx7re
+         4EyWwSULMq59qCYdZ1X7PCZbbb2FA0feJacor5CO1kOZejXaSdFLrC50xUz/1eh1gTns
+         0iHdFDLZ8W1EvQ3p+MRV/ZtDT9dPDr6/3q+y5HNigh8q8nVbx779bovLXM2gBCQAC+IL
+         Jy5mAR0/9J40yX1p7/Da6T/BR5bUoDVkuMzcEtdLpL6IkATS4AWPRt8pKdHT0duThs7G
+         hiyquykJag/Tn+ZoHWl08JAE5yCiiDw0y3Qbpr2mPFzYdRS1LVr8rNOWMKKwzZmW3ooD
+         TOaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685445040; x=1688037040;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A1kgMM1rn+OmHNbylr6pTWSoB4vCb6k0PQTiaMpgViA=;
+        b=jDEI6FEEuLgzelRDyfGNF1q4I3wtzuI6jYezx/J1loBcXv8vQlo4uibZgmCnaZLNuP
+         VR4jpeIT5mUI/FiTbURl8xESWmhnBZkjFw/mr6Pr8PsRFy9emjAENYo2QHoiR9N39rZv
+         hFnq2Fgwmtz89CHcPb/gDyWhpevvUPaXT17RkEZnQGOa5M19FDwsFGQgXE9n9Ot2TrIV
+         eOaoiLZcwgcERC8K3R24cw7hoFsBTZlVg4mqJ6ZpKLPaYEoW3F2Rs/iRr7hO8qA4nhOY
+         qdFXBMTDBRuubZFPXtzZjY6jATrllZjkft2ypaaHFBkNIu36TpyLRBgDjVv979BrSk6Q
+         KLWQ==
+X-Gm-Message-State: AC+VfDwwf1Z2afFGFufLoDB1eev/KIeXqBYsUwm6jH0pCteKLQffdTd3
+        OXBjlPDGswmRK6i/QpVPp8x4RMIN6dxuwEUakitUbUu/5qJz0hN4
+X-Google-Smtp-Source: ACHHUZ6fEMbXV0Zsv5Ga4JMr4jB2FjO2k0a3JOXPTCMMvUg8MdqNlTaoyLMrRq9aH+Zdpzko1K3sQNcU+mZUtms04i4=
+X-Received: by 2002:a4a:52d7:0:b0:555:5ab5:a0e5 with SMTP id
+ d206-20020a4a52d7000000b005555ab5a0e5mr824455oob.7.1685445039946; Tue, 30 May
+ 2023 04:10:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230529113804.GA20300@didi-ThinkCentre-M920t-N000>
+ <CANn89iJw3Ehoj7GfYnc6Xv5N2wULqNuP3zNBwQx97i-YJD5avg@mail.gmail.com>
+ <CAL+tcoCRgpoYgQXdM2Es0gjRtRZj1hCK-5M04WZ1sy3vt_5JjA@mail.gmail.com> <CANn89iKCKTg0ExMRAxXWK200Q6UX2DeuUQzZzbZevt5kST7qQA@mail.gmail.com>
+In-Reply-To: <CANn89iKCKTg0ExMRAxXWK200Q6UX2DeuUQzZzbZevt5kST7qQA@mail.gmail.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Tue, 30 May 2023 19:10:03 +0800
+Message-ID: <CAL+tcoDd5M0=SzDVcuFnu_ntC7HASq9rrS_pZ5FXNyMa2aQrHQ@mail.gmail.com>
+Subject: Re: [PATCH net] tcp: introduce a compack timer handler in sack compression
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     toke@toke.dk, Yuchung Cheng <ycheng@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Neal Cardwell <ncardwell@google.com>, netdev@vger.kernel.org,
+        zhangweiping <zhangweiping@didiglobal.com>,
+        tiozhang <tiozhang@didiglobal.com>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, fuyuanli@didiglobal.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-while the libc supports sigaction/sigsetjmp/siglongjump, it is able to
-restore next test after an invalid data pointer access, add such a test
-case for these libcs, otherwise, skip it.
+On Tue, May 30, 2023 at 6:01=E2=80=AFPM Eric Dumazet <edumazet@google.com> =
+wrote:
+>
+> On Tue, May 30, 2023 at 9:45=E2=80=AFAM Jason Xing <kerneljasonxing@gmail=
+.com> wrote:
+> >
+> > On Tue, May 30, 2023 at 3:12=E2=80=AFPM Eric Dumazet <edumazet@google.c=
+om> wrote:
+> > >
+> > > On Mon, May 29, 2023 at 1:38=E2=80=AFPM fuyuanli <fuyuanli@didiglobal=
+.com> wrote:
+> > > >
+> > > > We've got some issues when sending a compressed ack is deferred to
+> > > > release phrase due to the socket owned by another user:
+> > > > 1. a compressed ack would not be sent because of lack of ICSK_ACK_T=
+IMER
+> > > > flag.
+> > >
+> > > Are you sure ? Just add it then, your patch will be a one-liner
+> > > instead of a complex one adding
+> > > more code in a fast path.
+> >
+> > Honestly, at the very beginning, we just added one line[1] to fix
+> > this. After I digged more into this part, I started to doubt if we
+> > should reuse the delayed ack logic.
+> >
+> > Because in the sack compression logic there is no need to do more
+> > things as delayed ack does in the tcp_delack_timer_handler() function.
+> >
+> > Besides, here are some things extra to be done if we defer to send an
+> > ack in sack compression:
+> > 1) decrease tp->compressed_ack. The same as "tp->compressed_ack--;" in
+> > tcp_compressed_ack_kick().
+> > 2) initialize icsk->icsk_ack.timeout. Actually we don't need to do
+> > this because we don't modify the expiration time in the sack
+> > compression hrtimer.
+>
+> Yes, we do not need this, see my following comment.
+>
+> > 3) don't need to count the LINUX_MIB_DELAYEDACKS counter.
+> > 4) I wonder even if those checks about the ack schedule or ping pong
+> > mode in tcp_delack_timer_handler() for sack compression? I'm not sure
+> > about it.
+> >
+> > So one line cannot solve it perfectly. That's the reason why we
+> > introduce a new logic which can be clearer.
+> >
+> > I'm wondering if adding one check in the fast path is really that
+> > unacceptable (it may hurt performance?) because a new logic would be
+> > clearer for the whole sack compression.
+>
+> We definitely can solve the minor issue by not polluting the fast path.
+>
+> We also want simple/localised fixes, not something invasive (and risky).
 
-With glibc/musl:
+Now I got it :)
 
-    29 efault_handler ! 11 SIGSEGV                                   [OK]
+>
+> >
+> > [1]
+> > diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+> > index cc072d2cfcd8..d9e76d761cc6 100644
+> > --- a/net/ipv4/tcp_input.c
+> > +++ b/net/ipv4/tcp_input.c
+> > @@ -5568,6 +5568,7 @@ static void __tcp_ack_snd_check(struct sock *sk,
+> > int ofo_possible)
+> >
+> > READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_comp_sack_delay_ns),
+> >                       rtt * (NSEC_PER_USEC >> 3)/20);
+> >         sock_hold(sk);
+> > +       inet_csk(sk)->icsk_ack.pending |=3D ICSK_ACK_TIMER;
+>
+> Why not simply use existing storage/variables (tp->compressed_ack),
+> instead of trying
+> to reuse something else or add another bit, then complain that this
+> does not work well ?
+>
+> Again, just fix tcp_delack_timer_handler(), it already can fetch existing=
+ state.
+>
+> As a bonus, no need to send one patch for net, and another in net-next,
+> trying to 'fix' issues that should have been fixed cleanly in a single pa=
+tch.
+>
+> Something like:
+>
+> diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
+> index b839c2f91292f7346f33d6dcbf597594473a5aca..16bc4cedceb8a5e88f61f9abc=
+2c0a8cc9322676a
+> 100644
+> --- a/net/ipv4/tcp_timer.c
+> +++ b/net/ipv4/tcp_timer.c
+> @@ -290,10 +290,20 @@ static int tcp_write_timeout(struct sock *sk)
+>  void tcp_delack_timer_handler(struct sock *sk)
+>  {
+>         struct inet_connection_sock *icsk =3D inet_csk(sk);
+> +       struct tcp_sock *tp =3D tcp_sk(sk);
+>
+> -       if (((1 << sk->sk_state) & (TCPF_CLOSE | TCPF_LISTEN)) ||
+> -           !(icsk->icsk_ack.pending & ICSK_ACK_TIMER))
+> +       if ((1 << sk->sk_state) & (TCPF_CLOSE | TCPF_LISTEN))
+> +               return;
+> +
+> +       if (!(icsk->icsk_ack.pending & ICSK_ACK_TIMER) &&
+> +           !tp->compressed_ack)
+> +               return;
+> +
+> +       if (tp->compressed_ack) {
+> +               tcp_mstamp_refresh(tp);
+> +               tcp_sack_compress_send_ack(sk);
 
-With current nolibc:
+I wonder if we could use this combination as below instead since the
+above function counts the snmp counter and clears the @compressed_ack,
+which is against what we normally do in tcp_compressed_ack_kick() if
+the socket is not owned?
 
-    29 efault_handler                                               [SKIPPED]
+"
+if (hrtimer_try_to_cancel(&tp->compressed_ack_timer) =3D=3D 1)
+    __sock_put(sk);
+tcp_send_ack(sk);
+"
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Above is extracted from tcp_sack_compress_send_ack()
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 9f9a09529a4f..6b4ebe4be4d6 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -248,6 +248,15 @@ static void register_trap_handler(void)
- 	}
- }
- 
-+static int test_efault(void)
-+{
-+	char *addr = (void *)1;
-+
-+	*addr = 'a';
-+
-+	return -1;
-+}
-+
- #define has_user_space_efault() (1)
- #else
- #define record_test_context(idx, iteration, iterations) do { } while (0)
-@@ -255,6 +264,7 @@ static void register_trap_handler(void)
- #define register_expect_trap(experr1, experr2) do { } while (0)
- #define register_trap_handler() do { } while (0)
- #define has_user_space_efault() (0)
-+#define test_efault(addr) (-1)
- #endif
- 
- static void putcharn(char c, size_t n)
-@@ -690,6 +700,7 @@ int run_syscall(int min, int max)
- 	struct stat stat_buf;
- 	int euid0;
- 	int proc;
-+	int efault;
- 	int test;
- 	int tmp;
- 	int ret = 0;
-@@ -701,6 +712,9 @@ int run_syscall(int min, int max)
- 	/* this will be used to skip certain tests that can't be run unprivileged */
- 	euid0 = geteuid() == 0;
- 
-+	/* user-space efault handler support */
-+	efault = has_user_space_efault();
-+
- 	for (test = min; test >= 0 && test <= max; test++) {
- 		int llen = 0; /* line length */
- 
-@@ -737,6 +751,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(dup2_m1);           tmp = dup2(-1, 100); EXPECT_SYSER(1, tmp, -1, EBADF); if (tmp != -1) close(tmp); break;
- 		CASE_TEST(dup3_0);            tmp = dup3(0, 100, 0);  EXPECT_SYSNE(1, tmp, -1); close(tmp); break;
- 		CASE_TEST(dup3_m1);           tmp = dup3(-1, 100, 0); EXPECT_SYSER(1, tmp, -1, EBADF); if (tmp != -1) close(tmp); break;
-+		CASE_TEST(efault_handler);    EXPECT_SYSER(efault, test_efault(), -1, EFAULT); break;
- 		CASE_TEST(execve_root);       EXPECT_SYSER(1, execve("/", (char*[]){ [0] = "/", [1] = NULL }, NULL), -1, EACCES); break;
- 		CASE_TEST(fork);              EXPECT_SYSZR(1, test_fork()); break;
- 		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
--- 
-2.25.1
+>                 return;
+> +       }
+>
+>         if (time_after(icsk->icsk_ack.timeout, jiffies)) {
+>                 sk_reset_timer(sk, &icsk->icsk_delack_timer,
+> icsk->icsk_ack.timeout);
+> @@ -312,7 +322,7 @@ void tcp_delack_timer_handler(struct sock *sk)
+>                         inet_csk_exit_pingpong_mode(sk);
+>                         icsk->icsk_ack.ato      =3D TCP_ATO_MIN;
+>                 }
+> -               tcp_mstamp_refresh(tcp_sk(sk));
+> +               tcp_mstamp_refresh(tp);
+>                 tcp_send_ack(sk);
+>                 __NET_INC_STATS(sock_net(sk), LINUX_MIB_DELAYEDACKS);
+>         }
 
+Thank you so much, Eric.
+
+I will let fuyuanli submit a v2 patch including that one without
+introducing a new logic/flag.
+
+Thanks again,
+Jason
