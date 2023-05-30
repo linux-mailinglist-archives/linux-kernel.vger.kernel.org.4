@@ -2,79 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7B27166D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277367166DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjE3PTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
+        id S231268AbjE3PUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjE3PTn (ORCPT
+        with ESMTP id S230403AbjE3PUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:19:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE58BE
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:18:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685459935;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UzUmgv4c0PPfLXFfcu4AEjs2wLKMpfg6cT4UKZmFGvQ=;
-        b=RigjoFfSk7Soflr72dqpJ8ucxZl8glpmwiliOrNjw7zl/j+zXaFQpKYaY8KBGiIHx7uPlf
-        Ltcd5l8btAbaQ3ns9McEmx92Tgc5iST0OozrXSTDpTxt+U8YQAsRTR6zhg+VoANaT7rcuE
-        MyMt6LltpMS5xKGkTNE0Xu5QfhqIuH4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-558-njIJ9U1NN2uPdW3Nv_c0Ow-1; Tue, 30 May 2023 11:18:51 -0400
-X-MC-Unique: njIJ9U1NN2uPdW3Nv_c0Ow-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f6069f764bso77279565e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:18:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685459930; x=1688051930;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UzUmgv4c0PPfLXFfcu4AEjs2wLKMpfg6cT4UKZmFGvQ=;
-        b=NLN2tZ4+4gfwTMU7bdRCboYwuAa0Qm4h1xz18XwhuSFhuuiA6DDfvEy1rdIZI1eJuo
-         luTj9+FFxUc1Kk71TgNxx+4U1B54hqeiVRC8ibX9qRU/svDiDatfW4W10OeejfH8KsPh
-         cMoKpbYiDW5IgZxovQX6YRIhnwdNFYtuyvWdaBBP+V0+yCGJ6wQ+bPnUpoS4LOOpCXRF
-         n3G0ss31cQmwM+E3i/EyWo5YPY5OkqWeqpP1tVkBMbwDAfCXEbFr/pMElLo1EB9jOUf3
-         f0qF1c/yJoUCDisRlBhJIUoTT8lnxlecM0eR4A7beyF6S9HjsD4g3l5aQ21RNY2E4NHh
-         syog==
-X-Gm-Message-State: AC+VfDxevy1y4TmoI4oEscTOmmieP04s9g4NmgE1rZW9hSICEIfQHZdC
-        ytaqlYttc9+Mj71HI/+BAnsqqQLjOSw7aQSZRHz1sCuounYLVdZ5MQGFyVQ9fottsjNnsKzapLh
-        Adpoeq3hteROYj+0YxHE098Kw
-X-Received: by 2002:a05:600c:2208:b0:3f6:a66:a36d with SMTP id z8-20020a05600c220800b003f60a66a36dmr1945449wml.10.1685459930664;
-        Tue, 30 May 2023 08:18:50 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ67j8zXMzDSexJ/DlnFeRckDXeWoBOmhzeJlskTQXAtICps4DBhodE0KhKNReQJ7N+WmLdGVw==
-X-Received: by 2002:a05:600c:2208:b0:3f6:a66:a36d with SMTP id z8-20020a05600c220800b003f60a66a36dmr1945441wml.10.1685459930398;
-        Tue, 30 May 2023 08:18:50 -0700 (PDT)
-Received: from redhat.com ([2.52.11.69])
-        by smtp.gmail.com with ESMTPSA id y5-20020a7bcd85000000b003f09d7b6e20sm17727697wmj.2.2023.05.30.08.18.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 08:18:49 -0700 (PDT)
-Date:   Tue, 30 May 2023 11:18:46 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Feng Liu <feliu@nvidia.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Jiri Pirko <jiri@nvidia.com>
-Subject: Re: [PATCH v1] virtio-pci: Improve code style for including header
- files
-Message-ID: <20230530111818-mutt-send-email-mst@kernel.org>
-References: <20230529181729.15745-1-feliu@nvidia.com>
- <20230530072642-mutt-send-email-mst@kernel.org>
- <9d183df9-7047-0eee-b6d4-b0f9b8d21036@nvidia.com>
+        Tue, 30 May 2023 11:20:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DF8F1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:20:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AA31626E6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFA54C433D2;
+        Tue, 30 May 2023 15:20:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685460018;
+        bh=aLPX3PSOw/E88e7TFUeDuK2/gbHOlb5J/baDelX6riE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lmggXXhRMDcRxte+RzkEIylCRuhOKU1BlJz27xtHfjwU+4rHLMD7qDBmYm7w0MAp4
+         6pY2GhpDXn0QpIwWL+1S4+RoiQ9/y8XIBWcQne/mgc+7dvTYn35wS8RgEwXN7CAInq
+         k9VG5iVrgCVAKxfgG/ITWXLnQpZMccZ41UHEllLuOzixKnmnP2gbmJayQLJzNW8bRn
+         6mPf74goHA42qkUMzr/8nVaOXP9iyWl+b5TrRQibKK9Rd+5Y5IbfadebHxJOIaeyD8
+         yJBe63Otg1q67bgB14yO017SZnWNOl0B+s/pjsD1+mMAi4I0CamzTQ7nvKRyHZDzZ0
+         Vf+q6wLQHjhJA==
+Date:   Tue, 30 May 2023 08:20:16 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        ndesaulniers@google.com, goldstein.w.n@gmail.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] x86/csum: Move csum_tail result parameter to a local
+ variable.
+Message-ID: <20230530152016.GA3503416@dev-arch.thelio-3990X>
+References: <20230530135953.3341174-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9d183df9-7047-0eee-b6d4-b0f9b8d21036@nvidia.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230530135953.3341174-1-trix@redhat.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,55 +57,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 10:07:23AM -0400, Feng Liu wrote:
-> 
-> 
-> On 2023-05-30 a.m.7:27, Michael S. Tsirkin wrote:
-> > External email: Use caution opening links or attachments
-> > 
-> > 
-> > On Mon, May 29, 2023 at 02:17:29PM -0400, Feng Liu wrote:
-> > > Fix code style related to including header file. Include header files
-> > > before declaring macro definitions to avoid conflicts.
-> > > 
-> > > Signed-off-by: Feng Liu <feliu@nvidia.com>
-> > > Reviewed-by: Jiri Pirko <jiri@nvidia.com>
-> > 
-> > Which conflicts? These macros are there precisely to change
-> > how the header behaves.
-> > 
-> 
-> Hi Michael
->     I think including the header files should be placed before the macro
-> definition.
->     If VIRTIO_PCI_NO_LEGACY and VIRTIO_RING_NO_LEGACY are needed for control
-> header file, we should put them at the beginning of virtio_pci_common.h.
-> 
-> What do you think?
+Hi Tom,
 
-I think you should read the code in question not make guesses.
+On Tue, May 30, 2023 at 09:59:53AM -0400, Tom Rix wrote:
+> clang with W=1 reports
+> arch/x86/lib/csum-partial_64.c:74:20: error: variable
+>   'result' is uninitialized when used here [-Werror,-Wuninitialized]
+>                 return csum_tail(result, temp64, odd);
+>                                  ^~~~~~
+> This is a false positive, but there is never an intermediate value
+> of result to pass into csum_trail, so move the parameter result to
+> a local variable.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-> > > ---
-> > >   drivers/virtio/virtio_pci_modern.c | 3 ++-
-> > >   1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
-> > > index d6bb68ba84e5..b21a489e0086 100644
-> > > --- a/drivers/virtio/virtio_pci_modern.c
-> > > +++ b/drivers/virtio/virtio_pci_modern.c
-> > > @@ -15,9 +15,10 @@
-> > >    */
-> > > 
-> > >   #include <linux/delay.h>
-> > > +#include "virtio_pci_common.h"
-> > > +
-> > >   #define VIRTIO_PCI_NO_LEGACY
-> > >   #define VIRTIO_RING_NO_LEGACY
-> > > -#include "virtio_pci_common.h"
-> > > 
-> > >   static u64 vp_get_features(struct virtio_device *vdev)
-> > >   {
-> > > --
-> > > 2.37.1 (Apple Git-137.1)
-> > 
+Thanks for the patch. I sent the same one last Friday, which should be
+in your inbox:
 
+https://lore.kernel.org/20230526-csum_partial-wuninitialized-v1-1-ebc0108dcec1@kernel.org/
+
+Dave picked it up yesterday, I guess -tip's auto-latest was not
+refreshed for today's -next:
+
+https://git.kernel.org/tip/2fe1e67e6987b6f05329740da79c8150a2205b0d
+
+Cheers,
+Nathan
+
+> ---
+>  arch/x86/lib/csum-partial_64.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/lib/csum-partial_64.c b/arch/x86/lib/csum-partial_64.c
+> index fe5861951b15..cea25ca8b8cf 100644
+> --- a/arch/x86/lib/csum-partial_64.c
+> +++ b/arch/x86/lib/csum-partial_64.c
+> @@ -21,8 +21,10 @@ static inline unsigned short from32to16(unsigned a)
+>  	return b;
+>  }
+>  
+> -static inline __wsum csum_tail(unsigned int result, u64 temp64, int odd)
+> +static inline __wsum csum_tail(u64 temp64, int odd)
+>  {
+> +	unsigned int result;
+> +
+>  	result = add32_with_carry(temp64 >> 32, temp64 & 0xffffffff);
+>  	if (unlikely(odd)) {
+>  		result = from32to16(result);
+> @@ -45,7 +47,7 @@ static inline __wsum csum_tail(unsigned int result, u64 temp64, int odd)
+>  __wsum csum_partial(const void *buff, int len, __wsum sum)
+>  {
+>  	u64 temp64 = (__force u64)sum;
+> -	unsigned odd, result;
+> +	unsigned odd;
+>  
+>  	odd = 1 & (unsigned long) buff;
+>  	if (unlikely(odd)) {
+> @@ -71,7 +73,7 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
+>  		    "adcq $0,%[res]"
+>  		    : [res] "+r"(temp64)
+>  		    : [src] "r"(buff), "m"(*(const char(*)[40])buff));
+> -		return csum_tail(result, temp64, odd);
+> +		return csum_tail(temp64, odd);
+>  	}
+>  	if (unlikely(len >= 64)) {
+>  		/*
+> @@ -141,7 +143,7 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
+>  		    : [res] "+r"(temp64)
+>  		    : [trail] "r"(trail));
+>  	}
+> -	return csum_tail(result, temp64, odd);
+> +	return csum_tail(temp64, odd);
+>  }
+>  EXPORT_SYMBOL(csum_partial);
+>  
+> -- 
+> 2.27.0
+> 
