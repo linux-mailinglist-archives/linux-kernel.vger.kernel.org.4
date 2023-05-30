@@ -2,162 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0759715C00
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8EE715B50
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231598AbjE3KmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
+        id S231360AbjE3KS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbjE3Kl6 (ORCPT
+        with ESMTP id S230373AbjE3KS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:41:58 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E82EE5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:41:56 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230530104154epoutp01617a5da7ae78f292293f04d409db53c7~j5cO2I1rh0928609286epoutp018
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:41:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230530104154epoutp01617a5da7ae78f292293f04d409db53c7~j5cO2I1rh0928609286epoutp018
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1685443314;
-        bh=e4TeZbW46dphNnP8CuNH+8k9Da2YCsqAHU9OQBI1OwI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Zkbl9mb3ylHviCR0tv364qYFl0onIn9JYq5uc2HBDHdAqdVqUcp6Gz2Fd4IMYNtnf
-         Mu6VEFA3JXrbMLNwB6GN3WEPRhqxla30s+fk3p8nsG6Mc9chhqosqGT4TTlXP5lT5m
-         kGvwI7+XNzRjr9CNm33p7dQfBbCFzzaXmWgWNv38=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20230530104153epcas5p2876a4c3f4e06f0e8e6c882b2fd33ffef~j5cN-Evjq0384103841epcas5p2h;
-        Tue, 30 May 2023 10:41:53 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.175]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4QVpqM4sc2z4x9Pw; Tue, 30 May
-        2023 10:41:51 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        3C.91.44881.FE2D5746; Tue, 30 May 2023 19:41:51 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230530102050epcas5p24882da82b49dc397d3ab694d51658705~j5J2J-5Pj2734627346epcas5p2e;
-        Tue, 30 May 2023 10:20:50 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230530102050epsmtrp2dd099d94863ef09ba0c46326022e7ff0~j5J2IXIeD0209902099epsmtrp2H;
-        Tue, 30 May 2023 10:20:50 +0000 (GMT)
-X-AuditID: b6c32a4a-c47ff7000001af51-2c-6475d2ef7820
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        93.4D.28392.20EC5746; Tue, 30 May 2023 19:20:50 +0900 (KST)
-Received: from green245 (unknown [107.99.41.245]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230530102045epsmtip13a67ba165c229e2b47ea3d055ff9f54b~j5Jw0ZBr42118821188epsmtip1C;
-        Tue, 30 May 2023 10:20:44 +0000 (GMT)
-Date:   Tue, 30 May 2023 15:47:40 +0530
-From:   Nitesh Shetty <nj.shetty@samsung.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        James.Bottomley@hansenpartnership.com, bvanassche@acm.org,
-        hare@suse.de, ming.lei@redhat.com, dlemoal@kernel.org,
-        anuj20.g@samsung.com, joshi.k@samsung.com, nitheshshetty@gmail.com,
-        gost.dev@samsung.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v11 2/9] block: Add copy offload support infrastructure
-Message-ID: <20230530101740.lsb3mnt5zx6n7tzn@green245>
+        Tue, 30 May 2023 06:18:26 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0744A93;
+        Tue, 30 May 2023 03:18:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08365AB6;
+        Tue, 30 May 2023 03:19:10 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 582F43F67D;
+        Tue, 30 May 2023 03:18:22 -0700 (PDT)
+Message-ID: <c4052a3d-ab24-6c20-ed07-d752098e6286@arm.com>
+Date:   Tue, 30 May 2023 12:18:21 +0200
 MIME-Version: 1.0
-In-Reply-To: <ZHTm/v1jTZhcpDei@casper.infradead.org>
-User-Agent: NeoMutt/20171215
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te1BUVRzHO3eXuxcH7LIr0xEyaLMxQXAXlvWgrFBa3UAbm9SZdISu7B2W
-        ZB/tZTWhAkFRNOIVhMtOPkJRQEB0cuWhsLwJ2pCQoHiYoJUpAgoKAe2ya+N/n9/3fL9zfr/f
-        mUNw+EaeGxGtimW0KjpGiC/i/lC/cqXP6A2dXHSveDkqa2viIENZCY6SMmY5qLg/HUf36scB
-        yn34lIOGrgejmgf5Dqi39iqGqk9nYeh8cSOGLqYTqOrUGIYa5+/jKMt0E6CRbj2Gavq8UXVN
-        Kxd1VRpwNFAy74BOnB3hoWM9RhwVNs9hyJSdjCHj8AGASu+NclFLnzsyzzY7oJknBjxkGdX1
-        SxilH+zAqav6fh5lHrjIpXKz2nDq0jkvqqtDR1UUpeJUxXgWj2rJm+FSlwoSqKreRJxKS36A
-        U2MjfVxq9Fo3Tn19uQhsEezYE6RgaDmj9WRUkWp5tCpKJgz7MGJDRIBUJPYRB6I1Qk8VrWRk
-        wo2btvi8Ex1jWZLQcy8do7NIW2iWFa5eH6RV62IZT4WajZUJGY08RiPR+LK0ktWponxVTOxa
-        sUjkF2AxfrxH0Tx3iavp5X1WdOo3biJowI8CRwKSEpg8Nck5ChYRfLIKwN72Y/ZiHMCDx3OA
-        1cUnJwA0l/s/SwzOmB1spkoAu+tPY7biDoBPzhZYCoLgkq/Dw22+VsRJb/jjPGHFJeQb8J/L
-        flY3h+zE4bj59kIXAjIMDv9UvpB0JqVwao62ys6kC2w9Psy1sqPl2rmmPzEru5Ivw7wzjxf6
-        hOQdR3hldNA+zUZ4JaXSzgL4d/Nlno3d4MSDGru+D57/5hxuCx8EUN+jB7aDYHioLZ1jZQ6p
-        gHkp/fbAMpjTVorZ9MUwbWYYs+nO0PjdM34NlpSdtPuXwptTB+xMwUcp1Tzbfu4CWPCVmZsB
-        PPTPTad/7j4br4WpD5Mc9JZlcEh3WDhH2HAlLKtcfRI4FIGljIZVRjFsgMZPxez7/70j1coK
-        sPCFvEKN4NbQQ18TwAhgApDgCJc4y2hWzneW0/vjGK06QquLYVgTCLA8VSbHzTVSbfmDqtgI
-        sSRQJJFKpZJAf6lY+JLzCllrJJ+MomOZPQyjYbTPchjh6JaIrQLp7VXbwgVh4k2dhxbTQ6Kf
-        rz1e1WJapokeDvUp3+yxvuNCmsskXFe9jT/o7/iFMXxFocfOF/796K9gHZiX7RRsTWhKfTPk
-        frdS0D59YjvrVFu7zTjJe/TBXGZlfnNpwqe7vLy3Nx7+drYz9Ogn63ridQFrZIZEXbggvSek
-        qtMznr9Uv3uSei/kbY/fv/w1+62h/Y3v1/U47XYiiz1Kcgqk6EUD0zA9E1In3t94duvyd103
-        jsSVu3xfHZCEsoMOP/08i4mPy9cCxfXbdTc2n2nIlLhn1N1qrR95NTdRubbPxTt+h2Z9k1m6
-        dyzFsDX3QtL2uF2mgVfubmifyDSoj/S7Tvf+IeSyClrsxdGy9H8wQ8YVywQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOIsWRmVeSWpSXmKPExsWy7bCSnC7TudIUg6MLdCzWnzrGbDFn/Ro2
-        i6YJf5ktVt/tZ7N4ffgTo8W0Dz+ZLR7st7fY+242q8XNAzuZLPYsmsRksXL1USaLjf0cFrsX
-        fmSyOPr/LZvFpEPXGC2eXp3FZLH3lrbFnr0nWSwu75rDZnFvzX9Wi/nLnrJbdF/fwWax/Pg/
-        JotDk5uZLHY8aWS0WPf6PYvFiVvSFuf/Hme1+P1jDpuDrMflK94es+6fZfPYOesuu8f5extZ
-        PKZNOsXmsXmFlsfls6Uem1Z1snls+jSJ3ePEjN8sHpuX1HvsvtnA5tHb/I7N4+PTWywe7/dd
-        ZfPo27KKMUA4issmJTUnsyy1SN8ugSvj6UzRgm7Wirubv7A0ME5g6WLk5JAQMJG4//s8K4gt
-        JLCDUeLNv1SIuKTEsr9HmCFsYYmV/56zdzFyAdU8YZT4cOYAWxcjBweLgKpE+yk9EJNNQFvi
-        9H8OEFNEQEPizRYjkGpmgetsEpOurQUbLyzgLfHk3AYmkBpeATOJ7/8SISY+Z5SYuOwaWA2v
-        gKDEyZlPwE5jBqqZt/khM0g9s4C0xPJ/HCBhTqCL/x17wQRiiwrISMxY+pV5AqPgLCTds5B0
-        z0LoXsDIvIpRMrWgODc9t9iwwCgvtVyvODG3uDQvXS85P3cTIzhtaGntYNyz6oPeIUYmDsZD
-        jBIczEoivLaJxSlCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeS90nYwXEkhPLEnNTk0tSC2CyTJx
-        cEo1MHk/vpn7nu+FXZZp20KzgNvLi+xrKy/Z3WYK7SlPcvo5WVvxc4xka95jE3XuY+uPz2jy
-        VcqYxF4+LyV9z6MA1vl7dgmmsXZy+mlf6vyuct4r+qOS9cWCawse3I9ifRmY+Ugz7vz+SzGh
-        wnn397UJ3X0j735+qdPUGOHlLRuuf1qQNdPsRcnd9E33NdcnN1TL7RPamXfeRH27oGf7fLFL
-        r8pZj+YWqzIYVLr2tHZmlLXWvOssf9JuukGVKfdeQ0BktLaRw/boohkrYxj2dlx78OOq7m0Z
-        YzbplB9ydflTu2UXz/yn/zRit1Ds04btD/R1F34x+9feebzt/N6N4sLyZ2Icr91wNq9Xe7j7
-        kk+nEktxRqKhFnNRcSIAIU/XjIoDAAA=
-X-CMS-MailID: 20230530102050epcas5p24882da82b49dc397d3ab694d51658705
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----dpMjS_Krfo.HeTa1.nqRY6lfIY-msh.FGO-xMH_14-IlSSmS=_312ff_"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230522104536epcas5p23dd8108dd267ec588e5c36e8f9eb9fe8
-References: <20230522104146.2856-1-nj.shetty@samsung.com>
-        <CGME20230522104536epcas5p23dd8108dd267ec588e5c36e8f9eb9fe8@epcas5p2.samsung.com>
-        <20230522104146.2856-3-nj.shetty@samsung.com>
-        <ZHTm/v1jTZhcpDei@casper.infradead.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 08/17] PM: EM: Introduce runtime modifiable table
+Content-Language: en-US
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
+        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
+        rostedt@goodmis.org, mhiramat@kernel.org
+References: <20230512095743.3393563-1-lukasz.luba@arm.com>
+ <20230512095743.3393563-9-lukasz.luba@arm.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230512095743.3393563-9-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------dpMjS_Krfo.HeTa1.nqRY6lfIY-msh.FGO-xMH_14-IlSSmS=_312ff_
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Disposition: inline
+On 12/05/2023 11:57, Lukasz Luba wrote:
+> This patch introduces the new feature: modifiable EM perf_state table.
+> The new runtime table would be populated with a new power data to better
+> reflect the actual power. The power can vary over time e.g. due to the
+> SoC temperature change. Higher temperature can increase power values.
+> For longer running scenarios, such as game or camera, when also other
+> devices are used (e.g. GPU, ISP) the CPU power can change. The new
+> EM framework is able to addresses this issue and change the data
+> at runtime safely. The runtime modifiable EM data is used by the Energy
+> Aware Scheduler (EAS) for the task placement.
 
-On 23/05/29 06:55PM, Matthew Wilcox wrote:
->On Mon, May 22, 2023 at 04:11:33PM +0530, Nitesh Shetty wrote:
->> +		token = alloc_page(gfp_mask);
->
->Why is PAGE_SIZE the right size for 'token'?  That seems quite unlikely.
->I could understand it being SECTOR_SIZE or something that's dependent on
->the device, but I cannot fathom it being dependent on the host' page size.
+It's important to say that EAS is the _only_user of the `runtime
+modifiable EM`. All the other users (thermal, etc.) are still using the
+default (basic) EM. IMHO, this fact drove the design here.
 
-This has nothing to do with block device at this point, merely a place
-holder to store information about copy offload such as src sectors, len.
-Token will be typecasted by driver to get copy info.
-SECTOR_SIZE also should work in this case, will update in next version.
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  include/linux/energy_model.h | 13 +++++++++++++
+>  kernel/power/energy_model.c  | 24 ++++++++++++++++++++++++
+>  2 files changed, 37 insertions(+)
+> 
+> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> index cc2bf607191e..a616006a8130 100644
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> @@ -36,9 +36,21 @@ struct em_perf_state {
+>   */
+>  #define EM_PERF_STATE_INEFFICIENT BIT(0)
+>  
+> +/**
+> + * struct em_perf_table - Performance states table, which can be
+> + *		runtime modifiable and protected with RCU
 
-------dpMjS_Krfo.HeTa1.nqRY6lfIY-msh.FGO-xMH_14-IlSSmS=_312ff_
-Content-Type: text/plain; charset="utf-8"
+which is `runtime modifiable` ? So `runtime modifiable performance state
+table`? RCU is obvious since we have `struct rcu_head rcu`.
 
+> + * @state:	List of performance states, in ascending order
+> + * @rcu:	RCU used for safe access and destruction
+> + */
+> +struct em_perf_table {
+> +	struct em_perf_state *state;
+> +	struct rcu_head rcu;
+> +};
+> +
+>  /**
+>   * struct em_perf_domain - Performance domain
+>   * @table:		List of performance states, in ascending order
+> + * @runtime_table:	Pointer to the runtime modified em_perf_table
 
-------dpMjS_Krfo.HeTa1.nqRY6lfIY-msh.FGO-xMH_14-IlSSmS=_312ff_--
+s/modified/modifiable
+
+[...]
+
+> @@ -237,12 +238,23 @@ static int em_create_pd(struct device *dev, int nr_states,
+>  			return -ENOMEM;
+>  	}
+>  
+> +	runtime_table = kzalloc(sizeof(*runtime_table), GFP_KERNEL);
+> +	if (!runtime_table) {
+> +		kfree(pd);
+> +		return -ENOMEM;
+> +	}
+> +
+>  	ret = em_create_perf_table(dev, pd, nr_states, cb, flags);
+>  	if (ret) {
+>  		kfree(pd);
+> +		kfree(runtime_table);
+>  		return ret;
+>  	}
+>  
+> +	/* Re-use temporally (till 1st modification) the memory */
+
+So this means that the runtime (modifiable) table
+(pd->runtime_table>state) is mapped to the default (basic) table
+(pd->default_table->state) until the first call to
+em_dev_update_perf_domain() (here mentioned as the 1st modification)?
+
+IMHO, not easy to understand since neither the cover letter, nor
+documentation patch 15/17 describes this in a consistent story.
+
+[...]
