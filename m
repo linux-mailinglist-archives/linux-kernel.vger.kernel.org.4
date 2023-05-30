@@ -2,104 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07CE7715D56
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD7E715D58
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbjE3LhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
+        id S231307AbjE3LhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjE3LhJ (ORCPT
+        with ESMTP id S230446AbjE3LhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:37:09 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0FEC5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:37:06 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-565a022ef06so60846597b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:37:06 -0700 (PDT)
+        Tue, 30 May 2023 07:37:12 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2119.outbound.protection.outlook.com [40.107.92.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852C1106;
+        Tue, 30 May 2023 04:37:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PrcshF1UZxJ6wQtYS3XCblvTSWtLQmjwHLnVVR3gVMHf56056tWFywDexSHlEKB4ADRTvLdY+2ZEptoiKcDgAeq0Do1kdx4t4du0RPuSNwld6hRMaJkFk2FA77dA+ux8M2duuYCllkKlcDu9ovVgEj6uFpoqasZbr/t3ker/P8A2hZxG3jLmaGzz5OK2OENezaGfToaKEoRLiKw7w8G9ffAojF0ICtWRXtPtRNPbd/UxmqPJJpsEws0Pzfe5+zR7A6w+nIgnfJ+2OvUiU5WS5Co7HTYMcjJJ4kSukLE2TNDGyrJ8LD5+5X//EAHP0N8cqKe0MUlm8rxeZWrNEMy93Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eHyq1pXZuelDWThSWRfLOszLF2oU308k65IQz1pq4jM=;
+ b=XgT+5vF0s7T/KLu6dwOlQ2q1vv1yV4L9tGSRQ4GVX/ict+hmKNrgigXXYodboTnITlv9w8G9ZBl004SlmFbgj4W6CU+abFj/wNGZwmqZsKPNjbiWbJ+p80FONNaEMFk7cjEdFNsRKhnfpJ+aj7MGu9k8UD5py1qNWyoP9MX1i0A6L+3+FFztIIIs5oUn7HR/Z1r11vKO9eZUU8TqFrBf/NKhn0mmNym67cQobHIwmGeGLNcS6/lfvu48IaIv0aS/rk5wTOklqJ2WMlMh4NL9M11AW/zTzkxPDRLKlGRTAfRkfaPtf0WLfYYS4G7ZH1UWEIXNTvqAydjsmCGF8M1tGA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685446626; x=1688038626;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fipiLZLGfX4/1UxxNAJShfinAkElOTmQ9bvtKEuEuxw=;
-        b=uOh+52nn4q+fLREJIUy7KO06MoLfqAQkv8mOsVNFntA6TzWyQ06Y2BThSyMq3wWhLq
-         zKHYrBOLNFciPFL+72Uz9eRSV5XrJLjOAksd1RdT5og8gKjik+lQ1KfTUgLYLE60IEmd
-         9zp1/8Fm1rhA6YA0IX+CtRsstIZSQZ/cqs3pJJGExe8gdxKRbaPwo6tuayptQlRdrqBD
-         2ZuCw5ZBp4s7fk5ezVtWmyPbe0g2YIQ7jtqxmoH6hZAsHnmK7xYsms6H/1QmRoS9jpVV
-         eV/4miN84WNTnl52fa2MISMlbcZfhKyJRkdJM3UV4mSfIVXpPmkV/rNFje09RhGigWJ7
-         8+qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685446626; x=1688038626;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fipiLZLGfX4/1UxxNAJShfinAkElOTmQ9bvtKEuEuxw=;
-        b=ICh4gF8zpe5T5upFttiBOFe1KjW2NqQJ1L/IzhDhMcj+zSFnmS2hh9qhflgO59P0GQ
-         JDAWUodAqoklC9dBQoagcVaOfQveLceObo50jOP4zXqjnfIPDAlDX7jpFdyY1JmOAYIZ
-         6WDC8EmzhRbB03nySlXVX/Uc/Zo45IOmAOmLcKRCTG7ueyDk2bY/soNotv3wO7V9I31B
-         +OSdNYJHHYwZM0Hm+O+4uYYIoOFyuWrCD6JvqhP7YJhs8mKYUsJS7MQmGZjsvJiJoJqZ
-         /KlmnOFLAw62jdhEFFGQoNc5dwivNdGXTtwHH1dZvCIlOvYYnVSpZCsAABTZagdeVmJU
-         XitQ==
-X-Gm-Message-State: AC+VfDxWlHdjUMBDf/Y9l9qOE/244UDZiWfz+tkz1c9fZI4jGMKx4+1v
-        o5AMzstbus2kk4pzhgoiYT6aQYBAXrkFnCXg9AJnFQ==
-X-Google-Smtp-Source: ACHHUZ7RV9zV0oEPR8Q7c7k6kqfUUzMEoSzKHD+O0Fj48PMvU5x4Uul6Uh+8k+/1HYAala5Qo0yQtHV5yNCcrwYwjo8=
-X-Received: by 2002:a0d:ed04:0:b0:560:befc:6682 with SMTP id
- w4-20020a0ded04000000b00560befc6682mr2020042ywe.42.1685446626022; Tue, 30 May
- 2023 04:37:06 -0700 (PDT)
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eHyq1pXZuelDWThSWRfLOszLF2oU308k65IQz1pq4jM=;
+ b=TH00mTHEfia6rpFWluM0rMHAZ0uaLXSUsiAQVeqmkK0hWBDnsq9etU2XifF+K+1SAzs5NvsRtUhBCtwWNqQQFhz57Vw5jLC4KwQyrND6UhowO/7OjLL5uADkEoz+Id7sRx1aVGNLNcdJfB/xzxOqEhJ616ylTPS/uKFr3UgDT6w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SN4PR13MB5711.namprd13.prod.outlook.com (2603:10b6:806:1ef::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
+ 2023 11:37:06 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.022; Tue, 30 May 2023
+ 11:37:06 +0000
+Date:   Tue, 30 May 2023 13:36:59 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Hangyu Hua <hbh25y@gmail.com>
+Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, simon.horman@netronome.com,
+        pieter.jansen-van-vuuren@amd.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: sched: fix possible OOB write in fl_set_geneve_opt()
+Message-ID: <ZHXf29es/yh3r6jq@corigine.com>
+References: <20230529043615.4761-1-hbh25y@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230529043615.4761-1-hbh25y@gmail.com>
+X-ClientProxiedBy: AM3PR07CA0060.eurprd07.prod.outlook.com
+ (2603:10a6:207:4::18) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-References: <20230511-tps65219-add-gpio-support-v4-0-b5d6a764d722@baylibre.com>
- <20230511-tps65219-add-gpio-support-v4-1-b5d6a764d722@baylibre.com>
-In-Reply-To: <20230511-tps65219-add-gpio-support-v4-1-b5d6a764d722@baylibre.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 30 May 2023 13:36:55 +0200
-Message-ID: <CACRpkdZfWF5Bq5id_JyDe2GLc7OojiD7R6g2ZiHswPD3D_UT_w@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] gpio: tps65219: add GPIO support for TPS65219 PMIC
-To:     Jerome Neanne <jneanne@baylibre.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>,
-        khilman@baylibre.com, msp@baylibre.com, francesco@dolcini.it,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-omap@vger.kernel.org,
-        Jonathan Cormier <jcormier@criticallink.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SN4PR13MB5711:EE_
+X-MS-Office365-Filtering-Correlation-Id: a3d22713-aaa8-4fcd-0557-08db610231e7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pPJWww7eoA55k+Tt1PX33yCc4whNwrRIvoaCr4vZX8Z+8nnehNArbofUJORf5E1CzF5Xr7jgIrag5yYJuM/0CjynMVQL6qGE1oOGbVHEP10MKnYMGog+NgQSNvpxLtn9r9C5ojVsyvDTzHEDckScpB98QWWYQh0UY19AL/K38EbIcoR7MYaTenC5emnmU97fWbFiDtmoGMO4K71yS64WXf48ee1trJSJoqRq1yn4eD5cLzrjEHxA5POp4UNWlPhBlAnwEjpY3mTljPT6S00fXECUDkphVb6SKwjYo0ilp3I/nvEWcdmx6hHZLRXc/BKgzs1Vx+j0wkPvu4zsdUj8YWCwUP+EJcaId21Z1LHeP8pYjbx7wLYGiQWXqFdwBcTIP3iClNrShRLBUuADU7APEDIGis3DbzIuhTcJCFIgO5Y39KoJlCJKe6OgAk1obQT4Pt6LvqBpCYJjp7kfYBTeCv3TKInsujm4PGL/qDlwwvCYGH6sgxIJil4V1lOLe2TOPQLfFccJfM9slg1pboeq4EOOtL0zF4/9VmJUptlXbK4hE755dNzLhK7cy8zc2x44
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39840400004)(366004)(346002)(136003)(451199021)(2906002)(186003)(6512007)(6506007)(2616005)(5660300002)(8936002)(8676002)(478600001)(83380400001)(38100700002)(6486002)(44832011)(86362001)(41300700001)(316002)(6666004)(36756003)(7416002)(66946007)(66476007)(66556008)(6916009)(4326008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DTZ9mKnAjhBQmVSQAcxCtr/RDeoqLXKnKSKuAPUN8LU1vK8BDsjMhmdoHFX1?=
+ =?us-ascii?Q?nkK/kG5/Ujjt9dR20q0PvDR2dnMxXX+rynHt7vXs8hEiHWftUp4Qju0xm6kM?=
+ =?us-ascii?Q?odxPcJFW+N/RhMCYShLAe8uiV+Ye22upSJDr/gOUxVWpawb8YhLVzxvyTKiR?=
+ =?us-ascii?Q?RbK1P5yRa9EwLH8ZkAca0jK2IK/GpFi2ZaFgKLzg55QsBrVe/0yznNv843ug?=
+ =?us-ascii?Q?7SDHIjFbDxHAjQRvQ09vayKfdS7xnWxP57GPa5TOFJtHux0G58kj1IyhBJoY?=
+ =?us-ascii?Q?5bESdfjCIxCd27IEU1qiSdwbS/wVonhoOa+YTRpni576gMxvD3RHXfLBlAIR?=
+ =?us-ascii?Q?95m5trwnYkbTz5HaIw6r7ap3Dc+5H71q++33Y/eqFOwHxvtuvvH/RJGdwPtW?=
+ =?us-ascii?Q?+3i9mgBgGBj3RZBqfuLEaBwYG8UsMM3e1ATKz2/Uu4DB/QN5p+KtTfvaDszF?=
+ =?us-ascii?Q?1IF9C7PDtM8pv/Q3mUnYRYughYfeicl3hR5357kuA63UfTx2J1etSo+57+Nx?=
+ =?us-ascii?Q?mkyWZ2pEUpugtmbYh0SITCE5MQ4PDbw0vA0HDnzMaxBrT3zGM8pb+uohyEL/?=
+ =?us-ascii?Q?k3xenjP7uZBL1R/GIBW4XdwiXniaODBTkxtCi7CtHmdTOxG+Q/rMRdkPjFgz?=
+ =?us-ascii?Q?7R/KdY8ysKLYOBhP4ors0EzJMTelhsHwgiTYOXanW0/+EQuRgGzYQjrl6OG5?=
+ =?us-ascii?Q?kdn7aHuE1PkTs64Oe+oDRAVmYKFl8KFHg/2adXY84S+g+1DY4rW8R+CR+B6p?=
+ =?us-ascii?Q?5V4NlT7qKXS3clIJLVNl7FLJ0VHsnKBDiL+SSfKmldPtgwefVQ88c/zuzSSX?=
+ =?us-ascii?Q?a0qF7EdQiOd4JAny0666P6PB33ybD27UA9rptVDBLD1j8PRvlL+rlV+7s8qC?=
+ =?us-ascii?Q?5H7/Ng2ALNZr5djV3bhjWvDCi1lWsXpofjnGECe73TzWfmyatQ8GKIbdcS55?=
+ =?us-ascii?Q?omniqFV5efd/d/g2arubcb9V6cn3HfHJM9k38yBrrhmsgcEoYeKSLRkQVwDK?=
+ =?us-ascii?Q?ABUnWbnZfwAke3tgIYUr1AsKaM1mfiBePOGaYAMnOccdbzxVJkdoolasRpvj?=
+ =?us-ascii?Q?28hWhSDLuyNvaRvIgubra6glZcYvuqhB6c1foCZZ0v+EmzcGd3P9knDzDMMH?=
+ =?us-ascii?Q?jJV7P7wQcKVPAoWLb1XeyOVvr47fYNTvraTp0sHteymcCzk83V2e/K3Wextz?=
+ =?us-ascii?Q?L12y8yZxOiI12NVJBUp2sD+jTlFL6wq51MOJ0w1LUFZiBKwV3lAQcOdlHeLu?=
+ =?us-ascii?Q?HRGAzmIhTat5559IBRVWbDzNFg7TwLlSk7bOFRjUCMXj4kh2eCP9UVL+DyTx?=
+ =?us-ascii?Q?UK+ba0ArMwJoPjeDx1z1E/AdWuPlqmBPBzlCiqxjndKt42IpnRkqeIGkYjHu?=
+ =?us-ascii?Q?pVPWonMMtS0/eZc0fVdFUm1zSk1m4A2WV5MxlrEb8X/9IkkVSE4CvXwFoQT9?=
+ =?us-ascii?Q?QODXlNJhSZYEW/zvVYeCpiaBwGM/4hswg1QQuui1iqD403uZ8WM07WlXWjEt?=
+ =?us-ascii?Q?hDAHwa29ikUFx/eQYA9+CCktXQOiRwoN7Q+tS1tPtP9Fak8ONOAJ5Dn9EFEM?=
+ =?us-ascii?Q?tf8VceluEI25Q++SBmCZRrxhn5oGhSadsml86GAmS+SqCZklJkx6queE1F4N?=
+ =?us-ascii?Q?ERc31vA1M8DevK+WOxO0cepoYbreVrJIg2MZxxdhxjwyeoSCGZPbaIEgwqT0?=
+ =?us-ascii?Q?QEaJyw=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3d22713-aaa8-4fcd-0557-08db610231e7
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 11:37:06.3087
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DD8mbsCJ/FeUP/LBnWxQeRohf39i90AybplzDaYv99aQF/4eT/0+POlY4eD5CEAI0u4giCyisjTvmvd4PVrTxpnmOlVpq7OmaGV+6w53Vow=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR13MB5711
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 10:00=E2=80=AFAM Jerome Neanne <jneanne@baylibre.co=
-m> wrote:
+[Updated Pieter's email address, dropped old email address of mine]
 
-> Add support for TPS65219 PMICs GPIO interface.
->
-> 3 GPIO pins:
-> - GPIO0 only is IO but input mode reserved for MULTI_DEVICE_ENABLE usage
-> - GPIO1 and GPIO2 are Output only and referred as GPO1 and GPO2 in spec
->
-> GPIO0 is statically configured as input or output prior to Linux boot.
-> it is used for MULTI_DEVICE_ENABLE function.
-> This setting is statically configured by NVM.
-> GPIO0 can't be used as a generic GPIO (specification Table 8-34).
-> It's either a GPO when MULTI_DEVICE_EN=3D0 or a GPI when MULTI_DEVICE_EN=
-=3D1.
->
-> Datasheet describes specific usage for non standard GPIO.
-> Link: https://www.ti.com/lit/ds/symlink/tps65219.pdf
->
-> Co-developed-by: Jonathan Cormier <jcormier@criticallink.com>
-> Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
-> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
+On Mon, May 29, 2023 at 12:36:15PM +0800, Hangyu Hua wrote:
+> If we send two TCA_FLOWER_KEY_ENC_OPTS_GENEVE packets and their total
+> size is 252 bytes(key->enc_opts.len = 252) then
+> key->enc_opts.len = opt->length = data_len / 4 = 0 when the third
+> TCA_FLOWER_KEY_ENC_OPTS_GENEVE packet enters fl_set_geneve_opt. This
+> bypasses the next bounds check and results in an out-of-bounds.
+> 
+> Fixes: 0a6e77784f49 ("net/sched: allow flower to match tunnel options")
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
 
-I agree with Andy's review comments, so fix these.
-Once those are fixed you can add my:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Hi Hangyu Hua,
 
-Yours,
-Linus Walleij
+Thanks. I think I see the problem too.
+But I do wonder, is this more general than Geneve options?
+That is, can this occur with any sequence of options, that
+consume space in enc_opts (configured in fl_set_key()) that
+in total are more than 256 bytes?
+
+> ---
+>  net/sched/cls_flower.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/net/sched/cls_flower.c b/net/sched/cls_flower.c
+> index e960a46b0520..a326fbfe4339 100644
+> --- a/net/sched/cls_flower.c
+> +++ b/net/sched/cls_flower.c
+> @@ -1153,6 +1153,9 @@ static int fl_set_geneve_opt(const struct nlattr *nla, struct fl_flow_key *key,
+>  	if (option_len > sizeof(struct geneve_opt))
+>  		data_len = option_len - sizeof(struct geneve_opt);
+>  
+> +	if (key->enc_opts.len > FLOW_DIS_TUN_OPTS_MAX - 4)
+> +		return -ERANGE;
+> +
+>  	opt = (struct geneve_opt *)&key->enc_opts.data[key->enc_opts.len];
+>  	memset(opt, 0xff, option_len);
+>  	opt->length = data_len / 4;
+> -- 
+> 2.34.1
+> 
+> 
