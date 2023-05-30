@@ -2,180 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DAB71664E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F22FD716653
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjE3PLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
+        id S232933AbjE3PMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjE3PLL (ORCPT
+        with ESMTP id S230015AbjE3PMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:11:11 -0400
-Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2058.outbound.protection.outlook.com [40.107.249.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFF88F;
-        Tue, 30 May 2023 08:11:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jTX0PHUZAHNJXLuJxgE5pi6svM989k6wNO9nre7dijsaMNQQUkkyxTk9foiQJQrRkzMMPGaJ2E4FNC1muVxwgVoKxKb8c6+RX2N+xwgc+/Z5YsxAePBtMK8ObHYfHKVOVWWI0cn1z7oSotDMuYVV5c0eB4UXPz7kohVA41Vc4dyXyvSMnOSWn2ZXCTBE7ymm+uuhwKZ7O4qOigF0G1ZEbsoPhxhDVlNUuKagzjNfYiKWtU0o9D1FNBcLSpLcimns59yMHfoQlEWVQDhiIs+SInSfRnWgkreTVObT3Zp9+k2M6lbnN/yEyRcf1pJIZOFA79qIuYsUt0C9BGc/G/PLZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6+hmlbP2DGELuiNJ60ADUpQe7VDNjwogAZfrkGjVpzA=;
- b=P9lj4iW6VZWeOOdjPpcVbg9se+mhr5aE9D7vB4vez75bO+Md5bA4af/ZAB29ZGbW3KAmW7FtGRtgMHgBAaRCMG7C69W2Qdi5gEyd9/GyHwSCOxV5fylVU+v4x00rGi+JvYcZNSO9eF1eHj+BVMgjwsieM2eFeBoLFEsmDVIXCQF9nSivZ1yjKpT3plM/7zOH73xrNQSIAJyeW5IxNc9yyt9ex6q5D6hOIm58EUQA4MXVIH5n35TlKkI/FkZywW37aQwDOgP6Lh40QPyjQqmzG56O1lw6PRPRasBRxEs1uTx/VKwqU1KhuGH9B1oPiaOZKrzO20jYuc5QEgYvDJ00IQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6+hmlbP2DGELuiNJ60ADUpQe7VDNjwogAZfrkGjVpzA=;
- b=sOoPI4lbm3Ab7aQZ4OQSTUvv5EOISOzSTZoV1KjzgfDQUFA8OKxGgmqIq8XGK7SDgrpIE7QZgkpLrbjEIQjId/zMIOh8NDlA+SH1MFILn6DXX81OJMEp4HfQqJzitQI52hXwy4wtEPNEpmDrZadWP6xs1W4k6zHIKcN/fTa9azreS1E3nUbDW3fsrMHCV+kaaqkVdVrpxz/RWCEk6RKWd3uQx2HQYdyuhBV5EJHZ3Nx+4I29fQIArPtlXhD/3ESt6pErYLtMrmP5/vWwk1VrbF5s2t8+prTOAMVU2DCfpcUOnDKMFcam+IjRHG54ySFcMXItp76CAxKepHQneVbQ6g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
- by VI1PR10MB3230.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:136::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.21; Tue, 30 May
- 2023 15:11:07 +0000
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::a171:a3f2:99b7:5f29]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::a171:a3f2:99b7:5f29%6]) with mapi id 15.20.6433.022; Tue, 30 May 2023
- 15:11:07 +0000
-Date:   Tue, 30 May 2023 17:11:00 +0200
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] leds: simatic-ipc-leds-gpio: add terminating
- entries to gpio tables
-Message-ID: <20230530171100.75e5b86c@md1za8fc.ad001.siemens.net>
-In-Reply-To: <ZHHFMPEYNz9jBBRd@smile.fi.intel.com>
-References: <20230524124628.32295-1-henning.schild@siemens.com>
-        <20230524124628.32295-2-henning.schild@siemens.com>
-        <ZHHFMPEYNz9jBBRd@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0161.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:b3::8) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:269::8)
+        Tue, 30 May 2023 11:12:12 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0CAB0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:12:10 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64d3fbb8c1cso5097442b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:12:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685459530; x=1688051530;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PXZe3EXlAkMKdJhgYvpR9WnbJkKx1aPWVPLYsgdSCp0=;
+        b=AHUi1Q0uxvq1yojNNWM27xAyY/5x1EvANnavaQWFqqA8Myu7acYzmXPy3PnG1zkD6h
+         wDMb/uyJ4XO0zwZEYPArfWxLOkOiOx63n4XoGLyDvbbPYtT3d5PITn8xAKdyokmjQHFw
+         hiNZXPsg5Pe8bF85Zn2riaUcxYV2br3/dMOR1z5CHdYbIy3k3zNACkN1EKlusTcNFkBA
+         Mmo9bGpJJeGtgCP6u8PO++LvSVnPRITOg4aOP1XBr3OndkjutibyS4/dJEpobaRNDLBb
+         CxDJ+xsc/9sMUUiUTqkk87rnorIW/wwaoFNhMZxfuXAZdXzM55ybuEmEIs8zj0hE3MtR
+         wtVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685459530; x=1688051530;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PXZe3EXlAkMKdJhgYvpR9WnbJkKx1aPWVPLYsgdSCp0=;
+        b=gKTYeqffUThGQGlDty7cHNfRX45XZgwx43O/OXJcBGP9r43X8VMNbiYycbZJGpxmD0
+         EGb8GZBlv4yejRtf/a4qUA9X2YHQRE4YQgKqzF6290zLw4BTHx4c4kFIRYrscLuBGrrR
+         BIz4T9JBHS7/mtC4oXg5HtI98Diei8HglfmFyckQ2gGCiJiMzmjLiVbON9EvtrrEINog
+         xr8qXXAq+usIv449MsSJS0uiDaoOejQfXzfxsRof/0bTZGhr1no9uWsMzbM65F1orYMD
+         1IV4UeF81AsXkiT/ET2fznz7vUOrgs34e6z3doSjuQoCK2fnVSip53eIHsby81F8NDqT
+         PXuA==
+X-Gm-Message-State: AC+VfDwzcWwDqqYz4+U/9MS4oY3RfeMI+kEww8ORfrZ6Ta06Ypq8B3ni
+        BS/5ERkextJI92S9M46t9mhib7yMWOYRBuBQer7P5g==
+X-Google-Smtp-Source: ACHHUZ6gJX/HNxjQ97t6UmNIGPvxKmCnXU4VBGb1OMIMZ79GfO8VpBvRPxPpgqVByZqJFmOq6s+D90C97NUyUE8YQVs=
+X-Received: by 2002:a05:6a20:8e2a:b0:10a:cb95:5aa3 with SMTP id
+ y42-20020a056a208e2a00b0010acb955aa3mr3301523pzj.7.1685459529601; Tue, 30 May
+ 2023 08:12:09 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5780:EE_|VI1PR10MB3230:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6171f370-f7c8-41f2-f84c-08db612017e2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dbKYJujlQ9dR1b5wARMS4JwpU6JWpvIc78EHXIAjk0SI0Sa4jlgUlvPpDsoLuo6wAuYbftbXN9BNdytyzhNvM4NX2QmcDxM8UmiKhfgs+3+i3GzZIx5QcvkMA/EAg4dGqgAI7x3+/EWQ5nAHoUiDhNBlCCoWyEKb7PfEsCZ4xRvUcJgsIGIVuvT5EM+aBC+UePdZMZiLmXjnpGafmEhOerH7VRESj3DtQr6I2osUU9KthE3/iMafMxL972VmtifR5Ay/yJldZdQzgVKdA5Kw1brlqK7Fx0sBXxyILWDnICKFXHYs2DqNlDJXbeVrqazkKLrzf1oIceKecPTUkgSl07DZ1ZPQgQORy4d7+s5hcsXDtD4brYff852xxFryYFdwDq8AxajzGvkGkEodYeTrTampWKA4jVCyPnqnS0bDhZoYPYUdwNmEZGNUlm8mrKAbp6LuWvCCrxU01VcwlonBGOoMgHURU7GsmerU4oblFLPadVK0nLYslvzCK6pd0s9/fmRsphg3fUJEtU5qcAtz30CykDlGQZOe6QzElcu6tOd1TVqLjsvgjk2HF26QaCi2
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(39860400002)(136003)(376002)(451199021)(6506007)(9686003)(6512007)(186003)(2906002)(54906003)(478600001)(1076003)(44832011)(86362001)(38100700002)(8676002)(82960400001)(41300700001)(6486002)(8936002)(5660300002)(66556008)(66946007)(66476007)(316002)(6666004)(6916009)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TVg8pPzogruTFM14+q1G2KB96YBm2EBTJ3iYuFzyu7ENMN8B0EHRr+CQgiXX?=
- =?us-ascii?Q?7bc6Q8B4bnXWn8dwt4emVa0i38qLACbkkHOqdIKwO5W7Qb90ReLKnU/erbPx?=
- =?us-ascii?Q?brHHwR634s9ryqOD0g0B5m8hjEje5NMvJupX4+NUFTFjEFi7DML7sCabQ/f9?=
- =?us-ascii?Q?Dt/JtcV30c/uH9LAF3IbQGTbYodF0jfulWTwVDsTpDJy/9eKLDwN56MmGkAs?=
- =?us-ascii?Q?IGIh8Ugfi07+GbJUF+Ebj05UAvEPs9U2giIj0d9f0GeghvYGpbkhe4sJ1Qs6?=
- =?us-ascii?Q?XxmAwXYC51/Kwsy2RBU130Vv4ryMW56eJy66+FWVTttf/as/CzDb3+X8TjVf?=
- =?us-ascii?Q?sx1QT7bQ2e7p14QxoGSCHZ3U5rbliYCAoJ8iyasa3xfbi1+V6nH5Dv5dc30V?=
- =?us-ascii?Q?MOG4JtqoDO+gMwscvO2BJ4TGHumRyyaVVBwaojeJ7TVykSG8ABbCmCmUKu1+?=
- =?us-ascii?Q?AGS6wGaJP9zYeZQlCHp5e3clYKzs/ajsmqefKsW78RNcrXDdcrsZXqbdWXYu?=
- =?us-ascii?Q?dZFNoxU2xalPM9gUsix4lh+9wurH5+DRHHmDlQJ9eem3YL4rDXasi2mWHyRA?=
- =?us-ascii?Q?MPriIJCiJgMw0/a+wnmyofz3xycjOauDj7mrwn9jbKzaOAa23zWIW3yqlDRc?=
- =?us-ascii?Q?oD4mKBgVXUuEHeG4zcmZMqXNt0+KxxkQrWANxi01oW/dq90xt6NUQCIaUJPb?=
- =?us-ascii?Q?aknyfschXDrw+Z+XYB31Q5sMRaXDNSdqxs/Qxga8eKIHdp7iGjuRefBHbBvE?=
- =?us-ascii?Q?NukKWWHOn1uJQOJl0Pn7NI+uCY6xTZ5W7Y6N+/FoijGWNBsgUZpQebtolPvC?=
- =?us-ascii?Q?9JMKfB1MbjMRSIwez9fJq27rZx6sM52nSaYhtCfdfGK1u5WqGidAjjoUOQWT?=
- =?us-ascii?Q?wL7EqXicci1O9Iq3CLOujd5OlLk/O/6HQpcnliaxpNfQg/00ni68bH+pLglt?=
- =?us-ascii?Q?zMdWK9p3rFyZDfIJfiJAZIEU4MQIe8F9dMlwcxoOq+62CaFUhvcXkUOvW1Ua?=
- =?us-ascii?Q?h1FrkvNDHqlxwZHhg+7YLWdFzqyj352Lcn3+LeSIaHsMe5ylD5I99vlrFwHQ?=
- =?us-ascii?Q?LnvftoePtCxGOmnKeB/6AgiRXDNzyDvFbopv60Z95Tl1gZ+D2KY8K5DaLkdN?=
- =?us-ascii?Q?4KAwMwaH4ljwGTJGA+hS5OWfJSJi+mDu+5lfNoz8vhlQz1tv8aCfwaKWAlZF?=
- =?us-ascii?Q?E7/kwY8g6TSfKpDcpEDEAtVQG4RVRfTbPGanqFh0Q2KtVQW+pMYUGjTS3IJd?=
- =?us-ascii?Q?iqmALwRhxOr0wBD/BN+KfvM26imklOzE/QR0PHxz4y4c6FsofO0ukIeNvmyC?=
- =?us-ascii?Q?AHarlYsgCQwfhtEZawNGFkwoGdadEh8O5Gzi7swtyRsfCN+7HRT4AdEGKWdH?=
- =?us-ascii?Q?7j8Sljw5/hfcu6bAhoqc68GhJIClcjjZjXJLzdd0fkFsnWiN+kBGYW1Pmtd+?=
- =?us-ascii?Q?4A81a3hHgPKDmmNZkuJgli/tI2TKrYYSmc3Io02FL/eDqr7PN7XPwtL4WRrH?=
- =?us-ascii?Q?bEtckxcfoJEPnUqr6g+NcnByBTEHmm9JPav8qAeKqOoaeGdMUdzwJZSSH90g?=
- =?us-ascii?Q?bDD3TGmrT3+szC6fQb/I6NqAMDtYPCr3L3fewMkn/AcQtW4mrEJ3qG1wYVBc?=
- =?us-ascii?Q?Uj9ojq5hL1jMbaEwgsc01Qa0ZtGu3d83IRmGyDT/DOevPUIxqytizKqu1YWc?=
- =?us-ascii?Q?qAEhCw=3D=3D?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6171f370-f7c8-41f2-f84c-08db612017e2
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 15:11:07.2011
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WTgaFeyCBDACKQ7qT3kNPFjALl1GVH1PuNw+pM8piaOz0OKHIJsUaojoOsbsi1ejuW7cQ4AEXpFJ7CId8KCyTmZVLu47rPFxKVklKdhDE9c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3230
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230526153508.6208-1-quic_jinlmao@quicinc.com>
+In-Reply-To: <20230526153508.6208-1-quic_jinlmao@quicinc.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Tue, 30 May 2023 16:11:58 +0100
+Message-ID: <CAJ9a7VhoMFqzSnvfq=kJzoPbTS3nPenyWPE5t-n9j+G2CL3SGA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] Add support for a streaming interface for TMC ETR
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Leo Yan <leo.yan@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sat, 27 May 2023 11:54:08 +0300
-schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+Hi,
 
-> On Wed, May 24, 2023 at 02:46:25PM +0200, Henning Schild wrote:
-> > The entries do not seem to be stricly needed when the number of
-> > entries is given via the number of LEDs. But adding them is a
-> > safeguard should anyone ever iterate over the tables to their end,
-> > it also gets us in line with other drivers that register
-> > "leds-gpio" tables.  
-> 
-> Reported-by?
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+I have a few general comments about this patch set.
 
-I think we could do
+Firstly, I am assuming that this is a standard TMC, with the new byte
+monitor functionality implemented in the CSR block.
 
-Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Now that being the case, all the byte counter operations, the sysfs
+block_size, file ops to read the data and interrupt handling should be
+in the CSR driver, not the TMC driver.
+This counter is not part of a generic TMC device - but a specific
+hardware addition into your system. As such I would expect it to be in
+a separate driver.
 
-on merge. But i would not want to send the whole series again for that
-one line.
+The specific enabling of the CSR counters from within the enable code
+of the TMC should be removed. If your device is set up correctly as a
+helper device with appropriate connections between TMC and CSR, then
+the enable operations can be handled automatically using the helper
+function mechnisms added in this patchset:-
+https://lists.linaro.org/archives/list/coresight@lists.linaro.org/thread/2BBWZCBJWP3AOLBJSB64I5727JZFA6QZ/
 
-Thanks!
-Henning
+I also see that you are assuming that you will be able to read the TMC
+memory faster than it fills - as there is no guard against overflow or
+detection when the TMC buffer wraps. Given the amount of trace that
+can be generated in a very short space of time, I cannot see how this
+can be guaranteed. Any undetected buffer wrap will result in
+significant decode failures.
 
-> > Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> > ---
-> >  drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/leds/simple/simatic-ipc-leds-gpio.c
-> > b/drivers/leds/simple/simatic-ipc-leds-gpio.c index
-> > e8d329b5a68c..1a1cfdad6218 100644 ---
-> > a/drivers/leds/simple/simatic-ipc-leds-gpio.c +++
-> > b/drivers/leds/simple/simatic-ipc-leds-gpio.c @@ -28,6 +28,7 @@
-> > static struct gpiod_lookup_table simatic_ipc_led_gpio_table_127e =
-> > { GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 51, NULL, 5,
-> > GPIO_ACTIVE_LOW), GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 56, NULL,
-> > 6, GPIO_ACTIVE_LOW), GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 59,
-> > NULL, 7, GPIO_ACTIVE_HIGH),
-> > +		{} /* Terminating entry */
-> >  	},
-> >  };
-> >  
-> > @@ -42,6 +43,7 @@ static struct gpiod_lookup_table
-> > simatic_ipc_led_gpio_table_227g = {
-> > GPIO_LOOKUP_IDX("gpio-f7188x-2", 5, NULL, 5, GPIO_ACTIVE_LOW),
-> > GPIO_LOOKUP_IDX("gpio-f7188x-3", 6, NULL, 6, GPIO_ACTIVE_HIGH),
-> > GPIO_LOOKUP_IDX("gpio-f7188x-3", 7, NULL, 7, GPIO_ACTIVE_HIGH),
-> > +		{} /* Terminating entry */
-> >  	}
-> >  };
-> >  
-> > -- 
-> > 2.39.3
-> >   
-> 
+The normal sysfs read operations synchronise the DMA using a system
+call and read the RRP and RWP to ensure determine the start and end
+positions of the buffer. This cannot be done safely without stopping
+the TMC. Moreover, you are assuming that the buffer allocated is a
+contiguous flat mapped buffer, and not scatter gather.
 
+The change to the TMC core code - even if this operation could be
+guaranteed to be reliable, should be limited to extracting the data
+only - ensuring that the above constraints are observed.
+
+I'll comment inline in a couple of the other patches
+
+Thanks and Regards
+
+Mike
+
+
+On Fri, 26 May 2023 at 16:35, Mao Jinlong <quic_jinlmao@quicinc.com> wrote:
+>
+> This patch series is to add support for a streaming interface for
+> TMC ETR to allow for continuous log collection to secondary storage.
+> An interrupt based mechanism is used to stream out the data from the device.
+>
+> QDSS_CS_QDSSCSR_ETRIRQCTRL register is used to set the IRQ byte counter
+> value. The value of this registers defines the number of bytes that when moved by
+> the ETR AXI interface. It will casues an interrupt which can be used by an
+> userspace program to know how much data is present in memory requiring copy to some
+> other location. A zero setting disables the interrupt.A one setting
+> means 8 bytes, two 16 bytes, etc. In other words, the value in this
+> register is the interrupt threshold times 8 bytes. ETR must be enabled
+> when use this interrupt function.
+>
+> Sample:
+> echo 4096 > /sys/bus/coresight/devices/tmc_etr0/block_size
+> echo 1 > /sys/bus/coresight/devices/tmc_etr0/enable_sink
+> echo 1 > /sys/bus/coresight/devices/stm0/enabl_source
+>
+> cat /dev/byte-cntr > /data/qdss_etr.bin &
+>
+> The log collection will stop after disabling the ETR.
+>
+> Commit link:
+> https://git.codelinaro.org/clo/linux-kernel/coresight/-/commits/coresight-byte-cntr-v1
+>
+> Mao Jinlong (3):
+>   Coresight: Add driver to support for CSR
+>   coresight-tmc: byte-cntr: Add support for streaming interface for ETR
+>   dt-bindings: arm: Adds CoreSight CSR hardware definitions
+>
+>  .../testing/sysfs-bus-coresight-devices-tmc   |   7 +
+>  .../bindings/arm/qcom,coresight-csr.yaml      |  62 ++++
+>  drivers/hwtracing/coresight/Kconfig           |  12 +
+>  drivers/hwtracing/coresight/Makefile          |   3 +-
+>  .../hwtracing/coresight/coresight-byte-cntr.c | 304 ++++++++++++++++++
+>  .../hwtracing/coresight/coresight-byte-cntr.h |  49 +++
+>  drivers/hwtracing/coresight/coresight-csr.c   | 168 ++++++++++
+>  drivers/hwtracing/coresight/coresight-csr.h   |  59 ++++
+>  .../hwtracing/coresight/coresight-tmc-core.c  |  66 ++++
+>  .../hwtracing/coresight/coresight-tmc-etr.c   |   8 +-
+>  drivers/hwtracing/coresight/coresight-tmc.h   |  12 +-
+>  11 files changed, 745 insertions(+), 5 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-csr.yaml
+>  create mode 100644 drivers/hwtracing/coresight/coresight-byte-cntr.c
+>  create mode 100644 drivers/hwtracing/coresight/coresight-byte-cntr.h
+>  create mode 100644 drivers/hwtracing/coresight/coresight-csr.c
+>  create mode 100644 drivers/hwtracing/coresight/coresight-csr.h
+>
+> --
+> 2.17.1
+>
+
+
+--
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK
