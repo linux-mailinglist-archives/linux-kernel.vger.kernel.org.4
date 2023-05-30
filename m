@@ -2,271 +2,524 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D6D715354
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 03:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F3471535C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjE3B6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 21:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
+        id S230036AbjE3CAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 22:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjE3B6H (ORCPT
+        with ESMTP id S230026AbjE3CAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 21:58:07 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB36120
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 18:57:34 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5147f4bbfdaso4850304a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 18:57:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685411755; x=1688003755;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qep/fhA3jgUMujeeTKyTERwp6K6SL5nBAck6MsjUsdI=;
-        b=EnbV6tkFbBc2CAQA8IMy/MxWCnRDxz7zBaDq5Hkjzbj2Rif9SoArsIaB+7Locsdl1D
-         dMOUH3IguEpwrMXzczClYnLMN3QhmEHSXhGUMBXNF6E2fHv2wIbq06ANedm42ExC9a72
-         BBOYlN9NdYMzf+IQ8rz8SSLN+m46FuaSHpswQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685411755; x=1688003755;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qep/fhA3jgUMujeeTKyTERwp6K6SL5nBAck6MsjUsdI=;
-        b=AT5qqZaOaJQvzerUtG7GHzKV8jFG4SHLQ4ulYrH1caIe/VRXq3jEipSK151dGl1Kpo
-         pktnJhwRdlWjIJMXgQUVulrNdoSyqSWpkoOheXX3m5clsaJPSEVU2t1f04Zv5ctyCX4/
-         uyHBwNApZxox4bg/TXMyOYcub7d//dTgET/Q/yRkYZwblMIfyF0JhW8ybV7qlLHWjuL6
-         TSLUORhybEL7WJS91Bt/Xurgtka2XpWM5NA0xCg2f0e0sXElgsV8+R+x9La/ERgTzKgx
-         EN2QiELjTgs6y7hyKHaBC1PHOfIzGgkCcLzmtSCPnN+MgjLFt1wwk/T/lx0RGGrFWZBT
-         sJug==
-X-Gm-Message-State: AC+VfDzDs5WeedkvmlE9+A5Bg/HQxDKj1l/OCPKidkU0uxnXYxUY9SVj
-        Z9mbdiUgwAHHqF4TdeT7o6XOFPtHzL/TijW/LmdeXGIR
-X-Google-Smtp-Source: ACHHUZ4ncp4NYGf734I6x/NyTZoe41vsB8tYrIpIeM2sWMkdo8jz4KTrWuo55wxd0ON+ukDJs+mzRw==
-X-Received: by 2002:aa7:ce0c:0:b0:514:9422:37db with SMTP id d12-20020aa7ce0c000000b00514942237dbmr346530edv.39.1685411755194;
-        Mon, 29 May 2023 18:55:55 -0700 (PDT)
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com. [209.85.218.44])
-        by smtp.gmail.com with ESMTPSA id j2-20020a50ed02000000b0050bc4600d38sm3280406eds.79.2023.05.29.18.55.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 18:55:54 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-96f6a9131fdso586767266b.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 18:55:53 -0700 (PDT)
-X-Received: by 2002:a17:907:26c7:b0:973:92d4:9f4e with SMTP id
- bp7-20020a17090726c700b0097392d49f4emr754163ejc.53.1685411732076; Mon, 29 May
- 2023 18:55:32 -0700 (PDT)
+        Mon, 29 May 2023 22:00:46 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820561A5;
+        Mon, 29 May 2023 19:00:12 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QVbBp3YVbz4x2c;
+        Tue, 30 May 2023 11:57:54 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1685411875;
+        bh=F4lGD1/qKcCBYCrQ7p5cZ8cJZ8QFNHvhrDk22QJDn7c=;
+        h=Date:From:To:Cc:Subject:From;
+        b=soa0HbXzRLHOCK7pYNUw3wzZ77a4t4M4+0TVLqLFRreQa2DW2sx2U+tAPLdCbgGjj
+         wKpAZfNVY2f0vqHBzdfWhAm+azgXqW9gBOY2DhLdjdL/ARoHx0C/Nz+DMTt/1GJ0Lh
+         XMvf7EAvLVy2Je57xaOTu4gdA3XkfZ44UNmXikWhMCdXIso7Hqy4n4VjgGXjhpwM7i
+         FboT0C7M2aUsQbRsyciOquUCM3PGG6b5GAGAosmA2xRfS5XLTOmh6B4IbpiWw/FM31
+         u42BndVNbLsKNz7Miv4tV8kZRtd9UZTHGH2PiiQGkxpWPrP6PSTZCdxrDcQSkXtI7k
+         ZEhnarHD5FCRw==
+Date:   Tue, 30 May 2023 11:57:52 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Dave Airlie <airlied@redhat.com>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Fei Yang <fei.yang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Matt Roper <matthew.d.roper@intel.com>
+Subject: linux-next: manual merge of the drm-intel tree with the drm tree
+Message-ID: <20230530115752.14f0f1b5@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230524213620.3509138-3-mcgrof@kernel.org> <8fc5b26b-d2f6-0c8f-34a1-af085dbef155@suse.com>
- <CAHk-=wiPjcPL_50WRWOi-Fmi9TYO6yp_oj63a_N84FzG-rxGKQ@mail.gmail.com>
- <6gwjomw6sxxmlglxfoilelswv4hgygqelomevb4k4wrlrk3gtm@wrakbmwztgeu>
- <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
- <ZG/a+nrt4/AAUi5z@bombadil.infradead.org> <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
- <ZHRpH-JXAxA6DnzR@hovoldconsulting.com> <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
- <ZHSeOUpKtyc8VKx5@hovoldconsulting.com> <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
-In-Reply-To: <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 29 May 2023 21:55:15 -0400
-X-Gmail-Original-Message-ID: <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
-Message-ID: <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
-        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com, david@redhat.com,
-        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
-        lennart@poettering.net
-Content-Type: multipart/mixed; boundary="0000000000009785e105fcdf7f38"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/80HTALxCF.GMDcmyyet5Nn4";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000009785e105fcdf7f38
-Content-Type: text/plain; charset="UTF-8"
+--Sig_/80HTALxCF.GMDcmyyet5Nn4
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 29, 2023 at 11:18=E2=80=AFAM Johan Hovold <johan@kernel.org> wr=
-ote:
->
-> I took a closer look at some of the modules that failed to load and
-> noticed a pattern in that they have dependencies that are needed by more
-> than one device.
+Hi all,
 
-Ok, this is a "maybe something like this" RFC series of two patches -
-one trivial one to re-organize things a bit so that we can then do the
-real one which uses a filter based on the inode pointer to return an
-"idempotent return value" for module loads that share the same inode.
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-It's entirely untested, and since I'm on the road I'm going to not
-really be able to test it. It compiles for me, and the code looks
-fairly straightforward, but it's probably buggy.
+  drivers/gpu/drm/i915/i915_pci.c
 
-It's very loosely based on Luis' attempt,  but it
- (a) is internal to module loading
- (b) uses a reliable cookie
- (c) doesn't leave the cookie around randomly for later
- (d) has seen absolutely no testing
+between commit:
 
-Put another way: if somebody wants to play with this, please treat it
-as a starting point, not the final thing. You might need to debug
-things, and fix silly mistakes.
+  5e352e32aec2 ("drm/i915: preparation for using PAT index")
 
-The idea is to just have a simple hash list of currently executing
-module loads, protected by a trivial spinlock. Every module loader
-adds itself to the right hash list, and if they were the *first* one
-(ie no other pending module loads for that inode), will actually do
-the module load.
+from the drm tree and commits:
 
-Everybody who *isn't* the first one will just wait for completion and
-return the same error code that the first one returned.
+  5af5169d7582 ("drm/i915: Convert INTEL_INFO()->display to a pointer")
+  18e0deeed8c8 ("drm/i915/display: Move display runtime info to display str=
+ucture")
 
-This is technically bogus. The first one might fail due to arguments.
-So the cookie shouldn't be just the inode, it should be the inode and
-a hash of the arguments or something like that. But it is what it is,
-and apart from possible show-stopper bugs this is no worse than the
-failed "exclusive write deny" attempt. IOW - maybe worth trying?
+from the drm-intel tree.
 
-And if *that* didn't sell people on this patch series, I don't know
-what will. I should be in marketing! Two drink minimums, here I come!
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-               Linus
+--=20
+Cheers,
+Stephen Rothwell
 
---0000000000009785e105fcdf7f38
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-module-split-up-finit_module-into-init_module_from_f.patch"
-Content-Disposition: attachment; 
-	filename="0001-module-split-up-finit_module-into-init_module_from_f.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_li9mlfcx0>
-X-Attachment-Id: f_li9mlfcx0
+diff --cc drivers/gpu/drm/i915/i915_pci.c
+index 75cbccd1a441,34bc732a6375..000000000000
+--- a/drivers/gpu/drm/i915/i915_pci.c
++++ b/drivers/gpu/drm/i915/i915_pci.c
+@@@ -27,9 -27,9 +27,10 @@@
+  #include <drm/i915_pciids.h>
+ =20
+  #include "display/intel_display.h"
++ #include "display/intel_display_driver.h"
+  #include "gt/intel_gt_regs.h"
+  #include "gt/intel_sa_media.h"
+ +#include "gem/i915_gem_object_types.h"
+ =20
+  #include "i915_driver.h"
+  #include "i915_drv.h"
+@@@ -40,162 -40,8 +41,40 @@@
+  #define PLATFORM(x) .platform =3D (x)
+  #define GEN(x) \
+  	.__runtime.graphics.ip.ver =3D (x), \
+- 	.__runtime.media.ip.ver =3D (x), \
+- 	.__runtime.display.ip.ver =3D (x)
+-=20
+- #define NO_DISPLAY .__runtime.pipe_mask =3D 0
+-=20
+- #define I845_PIPE_OFFSETS \
+- 	.display.pipe_offsets =3D { \
+- 		[TRANSCODER_A] =3D PIPE_A_OFFSET,	\
+- 	}, \
+- 	.display.trans_offsets =3D { \
+- 		[TRANSCODER_A] =3D TRANSCODER_A_OFFSET, \
+- 	}
+-=20
+- #define I9XX_PIPE_OFFSETS \
+- 	.display.pipe_offsets =3D { \
+- 		[TRANSCODER_A] =3D PIPE_A_OFFSET,	\
+- 		[TRANSCODER_B] =3D PIPE_B_OFFSET, \
+- 	}, \
+- 	.display.trans_offsets =3D { \
+- 		[TRANSCODER_A] =3D TRANSCODER_A_OFFSET, \
+- 		[TRANSCODER_B] =3D TRANSCODER_B_OFFSET, \
+- 	}
+-=20
+- #define IVB_PIPE_OFFSETS \
+- 	.display.pipe_offsets =3D { \
+- 		[TRANSCODER_A] =3D PIPE_A_OFFSET,	\
+- 		[TRANSCODER_B] =3D PIPE_B_OFFSET, \
+- 		[TRANSCODER_C] =3D PIPE_C_OFFSET, \
+- 	}, \
+- 	.display.trans_offsets =3D { \
+- 		[TRANSCODER_A] =3D TRANSCODER_A_OFFSET, \
+- 		[TRANSCODER_B] =3D TRANSCODER_B_OFFSET, \
+- 		[TRANSCODER_C] =3D TRANSCODER_C_OFFSET, \
+- 	}
+-=20
+- #define HSW_PIPE_OFFSETS \
+- 	.display.pipe_offsets =3D { \
+- 		[TRANSCODER_A] =3D PIPE_A_OFFSET,	\
+- 		[TRANSCODER_B] =3D PIPE_B_OFFSET, \
+- 		[TRANSCODER_C] =3D PIPE_C_OFFSET, \
+- 		[TRANSCODER_EDP] =3D PIPE_EDP_OFFSET, \
+- 	}, \
+- 	.display.trans_offsets =3D { \
+- 		[TRANSCODER_A] =3D TRANSCODER_A_OFFSET, \
+- 		[TRANSCODER_B] =3D TRANSCODER_B_OFFSET, \
+- 		[TRANSCODER_C] =3D TRANSCODER_C_OFFSET, \
+- 		[TRANSCODER_EDP] =3D TRANSCODER_EDP_OFFSET, \
+- 	}
+-=20
+- #define CHV_PIPE_OFFSETS \
+- 	.display.pipe_offsets =3D { \
+- 		[TRANSCODER_A] =3D PIPE_A_OFFSET, \
+- 		[TRANSCODER_B] =3D PIPE_B_OFFSET, \
+- 		[TRANSCODER_C] =3D CHV_PIPE_C_OFFSET, \
+- 	}, \
+- 	.display.trans_offsets =3D { \
+- 		[TRANSCODER_A] =3D TRANSCODER_A_OFFSET, \
+- 		[TRANSCODER_B] =3D TRANSCODER_B_OFFSET, \
+- 		[TRANSCODER_C] =3D CHV_TRANSCODER_C_OFFSET, \
+- 	}
+-=20
+- #define I845_CURSOR_OFFSETS \
+- 	.display.cursor_offsets =3D { \
+- 		[PIPE_A] =3D CURSOR_A_OFFSET, \
+- 	}
+-=20
+- #define I9XX_CURSOR_OFFSETS \
+- 	.display.cursor_offsets =3D { \
+- 		[PIPE_A] =3D CURSOR_A_OFFSET, \
+- 		[PIPE_B] =3D CURSOR_B_OFFSET, \
+- 	}
+-=20
+- #define CHV_CURSOR_OFFSETS \
+- 	.display.cursor_offsets =3D { \
+- 		[PIPE_A] =3D CURSOR_A_OFFSET, \
+- 		[PIPE_B] =3D CURSOR_B_OFFSET, \
+- 		[PIPE_C] =3D CHV_CURSOR_C_OFFSET, \
+- 	}
+-=20
+- #define IVB_CURSOR_OFFSETS \
+- 	.display.cursor_offsets =3D { \
+- 		[PIPE_A] =3D CURSOR_A_OFFSET, \
+- 		[PIPE_B] =3D IVB_CURSOR_B_OFFSET, \
+- 		[PIPE_C] =3D IVB_CURSOR_C_OFFSET, \
+- 	}
+-=20
+- #define TGL_CURSOR_OFFSETS \
+- 	.display.cursor_offsets =3D { \
+- 		[PIPE_A] =3D CURSOR_A_OFFSET, \
+- 		[PIPE_B] =3D IVB_CURSOR_B_OFFSET, \
+- 		[PIPE_C] =3D IVB_CURSOR_C_OFFSET, \
+- 		[PIPE_D] =3D TGL_CURSOR_D_OFFSET, \
+- 	}
+-=20
+- #define I845_COLORS \
+- 	.display.color =3D { .gamma_lut_size =3D 256 }
+- #define I9XX_COLORS \
+- 	.display.color =3D { .gamma_lut_size =3D 129, \
+- 		   .gamma_lut_tests =3D DRM_COLOR_LUT_NON_DECREASING, \
+- 	}
+- #define ILK_COLORS \
+- 	.display.color =3D { .gamma_lut_size =3D 1024 }
+- #define IVB_COLORS \
+- 	.display.color =3D { .degamma_lut_size =3D 1024, .gamma_lut_size =3D 102=
+4 }
+- #define CHV_COLORS \
+- 	.display.color =3D { \
+- 		.degamma_lut_size =3D 65, .gamma_lut_size =3D 257, \
+- 		.degamma_lut_tests =3D DRM_COLOR_LUT_NON_DECREASING, \
+- 		.gamma_lut_tests =3D DRM_COLOR_LUT_NON_DECREASING, \
+- 	}
+- #define GLK_COLORS \
+- 	.display.color =3D { \
+- 		.degamma_lut_size =3D 33, .gamma_lut_size =3D 1024, \
+- 		.degamma_lut_tests =3D DRM_COLOR_LUT_NON_DECREASING | \
+- 				     DRM_COLOR_LUT_EQUAL_CHANNELS, \
+- 	}
+- #define ICL_COLORS \
+- 	.display.color =3D { \
+- 		.degamma_lut_size =3D 33, .gamma_lut_size =3D 262145, \
+- 		.degamma_lut_tests =3D DRM_COLOR_LUT_NON_DECREASING | \
+- 				     DRM_COLOR_LUT_EQUAL_CHANNELS, \
+- 		.gamma_lut_tests =3D DRM_COLOR_LUT_NON_DECREASING, \
+- 	}
++ 	.__runtime.media.ip.ver =3D (x)
+ =20
+ +#define LEGACY_CACHELEVEL \
+ +	.cachelevel_to_pat =3D { \
+ +		[I915_CACHE_NONE]   =3D 0, \
+ +		[I915_CACHE_LLC]    =3D 1, \
+ +		[I915_CACHE_L3_LLC] =3D 2, \
+ +		[I915_CACHE_WT]     =3D 3, \
+ +	}
+ +
+ +#define TGL_CACHELEVEL \
+ +	.cachelevel_to_pat =3D { \
+ +		[I915_CACHE_NONE]   =3D 3, \
+ +		[I915_CACHE_LLC]    =3D 0, \
+ +		[I915_CACHE_L3_LLC] =3D 0, \
+ +		[I915_CACHE_WT]     =3D 2, \
+ +	}
+ +
+ +#define PVC_CACHELEVEL \
+ +	.cachelevel_to_pat =3D { \
+ +		[I915_CACHE_NONE]   =3D 0, \
+ +		[I915_CACHE_LLC]    =3D 3, \
+ +		[I915_CACHE_L3_LLC] =3D 3, \
+ +		[I915_CACHE_WT]     =3D 2, \
+ +	}
+ +
+ +#define MTL_CACHELEVEL \
+ +	.cachelevel_to_pat =3D { \
+ +		[I915_CACHE_NONE]   =3D 2, \
+ +		[I915_CACHE_LLC]    =3D 3, \
+ +		[I915_CACHE_L3_LLC] =3D 3, \
+ +		[I915_CACHE_WT]     =3D 1, \
+ +	}
+ +
+  /* Keep in gen based order, and chronological order within a gen */
+ =20
+  #define GEN_DEFAULT_PAGE_SIZES \
+@@@ -221,13 -61,8 +94,10 @@@
+  	.has_snoop =3D true, \
+  	.has_coherent_ggtt =3D false, \
+  	.dma_mask_size =3D 32, \
+ +	.max_pat_index =3D 3, \
+- 	I9XX_PIPE_OFFSETS, \
+- 	I9XX_CURSOR_OFFSETS, \
+- 	I9XX_COLORS, \
+  	GEN_DEFAULT_PAGE_SIZES, \
+ -	GEN_DEFAULT_REGIONS
+ +	GEN_DEFAULT_REGIONS, \
+ +	LEGACY_CACHELEVEL
+ =20
+  #define I845_FEATURES \
+  	GEN(2), \
+@@@ -244,13 -74,8 +109,10 @@@
+  	.has_snoop =3D true, \
+  	.has_coherent_ggtt =3D false, \
+  	.dma_mask_size =3D 32, \
+ +	.max_pat_index =3D 3, \
+- 	I845_PIPE_OFFSETS, \
+- 	I845_CURSOR_OFFSETS, \
+- 	I845_COLORS, \
+  	GEN_DEFAULT_PAGE_SIZES, \
+ -	GEN_DEFAULT_REGIONS
+ +	GEN_DEFAULT_REGIONS, \
+ +	LEGACY_CACHELEVEL
+ =20
+  static const struct intel_device_info i830_info =3D {
+  	I830_FEATURES,
+@@@ -285,13 -105,8 +142,10 @@@ static const struct intel_device_info i
+  	.has_snoop =3D true, \
+  	.has_coherent_ggtt =3D true, \
+  	.dma_mask_size =3D 32, \
+ +	.max_pat_index =3D 3, \
+- 	I9XX_PIPE_OFFSETS, \
+- 	I9XX_CURSOR_OFFSETS, \
+- 	I9XX_COLORS, \
+  	GEN_DEFAULT_PAGE_SIZES, \
+ -	GEN_DEFAULT_REGIONS
+ +	GEN_DEFAULT_REGIONS, \
+ +	LEGACY_CACHELEVEL
+ =20
+  static const struct intel_device_info i915g_info =3D {
+  	GEN3_FEATURES,
+@@@ -379,13 -166,8 +205,10 @@@ static const struct intel_device_info p
+  	.has_snoop =3D true, \
+  	.has_coherent_ggtt =3D true, \
+  	.dma_mask_size =3D 36, \
+ +	.max_pat_index =3D 3, \
+- 	I9XX_PIPE_OFFSETS, \
+- 	I9XX_CURSOR_OFFSETS, \
+- 	I9XX_COLORS, \
+  	GEN_DEFAULT_PAGE_SIZES, \
+ -	GEN_DEFAULT_REGIONS
+ +	GEN_DEFAULT_REGIONS, \
+ +	LEGACY_CACHELEVEL
+ =20
+  static const struct intel_device_info i965g_info =3D {
+  	GEN4_FEATURES,
+@@@ -435,13 -208,8 +249,10 @@@ static const struct intel_device_info g
+  	/* ilk does support rc6, but we do not implement [power] contexts */ \
+  	.has_rc6 =3D 0, \
+  	.dma_mask_size =3D 36, \
+ +	.max_pat_index =3D 3, \
+- 	I9XX_PIPE_OFFSETS, \
+- 	I9XX_CURSOR_OFFSETS, \
+- 	ILK_COLORS, \
+  	GEN_DEFAULT_PAGE_SIZES, \
+ -	GEN_DEFAULT_REGIONS
+ +	GEN_DEFAULT_REGIONS, \
+ +	LEGACY_CACHELEVEL
+ =20
+  static const struct intel_device_info ilk_d_info =3D {
+  	GEN5_FEATURES,
+@@@ -471,15 -234,10 +277,12 @@@ static const struct intel_device_info i
+  	.has_rc6p =3D 0, \
+  	.has_rps =3D true, \
+  	.dma_mask_size =3D 40, \
+ +	.max_pat_index =3D 3, \
+  	.__runtime.ppgtt_type =3D INTEL_PPGTT_ALIASING, \
+  	.__runtime.ppgtt_size =3D 31, \
+- 	I9XX_PIPE_OFFSETS, \
+- 	I9XX_CURSOR_OFFSETS, \
+- 	ILK_COLORS, \
+  	GEN_DEFAULT_PAGE_SIZES, \
+ -	GEN_DEFAULT_REGIONS
+ +	GEN_DEFAULT_REGIONS, \
+ +	LEGACY_CACHELEVEL
+ =20
+  #define SNB_D_PLATFORM \
+  	GEN6_FEATURES, \
+@@@ -526,15 -280,10 +325,12 @@@ static const struct intel_device_info s
+  	.has_reset_engine =3D true, \
+  	.has_rps =3D true, \
+  	.dma_mask_size =3D 40, \
+ +	.max_pat_index =3D 3, \
+  	.__runtime.ppgtt_type =3D INTEL_PPGTT_ALIASING, \
+  	.__runtime.ppgtt_size =3D 31, \
+- 	IVB_PIPE_OFFSETS, \
+- 	IVB_CURSOR_OFFSETS, \
+- 	IVB_COLORS, \
+  	GEN_DEFAULT_PAGE_SIZES, \
+ -	GEN_DEFAULT_REGIONS
+ +	GEN_DEFAULT_REGIONS, \
+ +	LEGACY_CACHELEVEL
+ =20
+  #define IVB_D_PLATFORM \
+  	GEN7_FEATURES, \
+@@@ -585,22 -331,14 +378,16 @@@ static const struct intel_device_info v
+  	.has_rc6 =3D 1,
+  	.has_reset_engine =3D true,
+  	.has_rps =3D true,
+- 	.display.has_gmch =3D 1,
+- 	.display.has_hotplug =3D 1,
+  	.dma_mask_size =3D 40,
+ +	.max_pat_index =3D 3,
+  	.__runtime.ppgtt_type =3D INTEL_PPGTT_ALIASING,
+  	.__runtime.ppgtt_size =3D 31,
+  	.has_snoop =3D true,
+  	.has_coherent_ggtt =3D false,
+  	.__runtime.platform_engine_mask =3D BIT(RCS0) | BIT(VCS0) | BIT(BCS0),
+- 	.display.mmio_offset =3D VLV_DISPLAY_BASE,
+- 	I9XX_PIPE_OFFSETS,
+- 	I9XX_CURSOR_OFFSETS,
+- 	I9XX_COLORS,
+  	GEN_DEFAULT_PAGE_SIZES,
+  	GEN_DEFAULT_REGIONS,
+ +	LEGACY_CACHELEVEL,
+  };
+ =20
+  #define G75_FEATURES  \
+@@@ -686,21 -415,14 +464,16 @@@ static const struct intel_device_info c
+  	.has_rc6 =3D 1,
+  	.has_rps =3D true,
+  	.has_logical_ring_contexts =3D 1,
+- 	.display.has_gmch =3D 1,
+  	.dma_mask_size =3D 39,
+ +	.max_pat_index =3D 3,
+  	.__runtime.ppgtt_type =3D INTEL_PPGTT_FULL,
+  	.__runtime.ppgtt_size =3D 32,
+  	.has_reset_engine =3D 1,
+  	.has_snoop =3D true,
+  	.has_coherent_ggtt =3D false,
+- 	.display.mmio_offset =3D VLV_DISPLAY_BASE,
+- 	CHV_PIPE_OFFSETS,
+- 	CHV_CURSOR_OFFSETS,
+- 	CHV_COLORS,
+  	GEN_DEFAULT_PAGE_SIZES,
+  	GEN_DEFAULT_REGIONS,
+ +	LEGACY_CACHELEVEL,
+  };
+ =20
+  #define GEN9_DEFAULT_PAGE_SIZES \
+@@@ -781,14 -482,8 +533,10 @@@ static const struct intel_device_info s
+  	.has_reset_engine =3D 1, \
+  	.has_snoop =3D true, \
+  	.has_coherent_ggtt =3D false, \
+- 	.display.has_ipc =3D 1, \
+ +	.max_pat_index =3D 3, \
+- 	HSW_PIPE_OFFSETS, \
+- 	IVB_CURSOR_OFFSETS, \
+- 	IVB_COLORS, \
+  	GEN9_DEFAULT_PAGE_SIZES, \
+ -	GEN_DEFAULT_REGIONS
+ +	GEN_DEFAULT_REGIONS, \
+ +	LEGACY_CACHELEVEL
+ =20
+  static const struct intel_device_info bxt_info =3D {
+  	GEN9_LP_FEATURES,
+@@@ -920,33 -587,8 +640,9 @@@ static const struct intel_device_info j
+  #define GEN12_FEATURES \
+  	GEN11_FEATURES, \
+  	GEN(12), \
+- 	.display.abox_mask =3D GENMASK(2, 1), \
+- 	.__runtime.pipe_mask =3D BIT(PIPE_A) | BIT(PIPE_B) | BIT(PIPE_C) | BIT(P=
+IPE_D), \
+- 	.__runtime.cpu_transcoder_mask =3D BIT(TRANSCODER_A) | BIT(TRANSCODER_B)=
+ | \
+- 		BIT(TRANSCODER_C) | BIT(TRANSCODER_D) | \
+- 		BIT(TRANSCODER_DSI_0) | BIT(TRANSCODER_DSI_1), \
+- 	.display.pipe_offsets =3D { \
+- 		[TRANSCODER_A] =3D PIPE_A_OFFSET, \
+- 		[TRANSCODER_B] =3D PIPE_B_OFFSET, \
+- 		[TRANSCODER_C] =3D PIPE_C_OFFSET, \
+- 		[TRANSCODER_D] =3D PIPE_D_OFFSET, \
+- 		[TRANSCODER_DSI_0] =3D PIPE_DSI0_OFFSET, \
+- 		[TRANSCODER_DSI_1] =3D PIPE_DSI1_OFFSET, \
+- 	}, \
+- 	.display.trans_offsets =3D { \
+- 		[TRANSCODER_A] =3D TRANSCODER_A_OFFSET, \
+- 		[TRANSCODER_B] =3D TRANSCODER_B_OFFSET, \
+- 		[TRANSCODER_C] =3D TRANSCODER_C_OFFSET, \
+- 		[TRANSCODER_D] =3D TRANSCODER_D_OFFSET, \
+- 		[TRANSCODER_DSI_0] =3D TRANSCODER_DSI0_OFFSET, \
+- 		[TRANSCODER_DSI_1] =3D TRANSCODER_DSI1_OFFSET, \
+- 	}, \
+- 	TGL_CURSOR_OFFSETS, \
+- 	TGL_CACHELEVEL, \
+++	.max_pat_index =3D 3 \
+  	.has_global_mocs =3D 1, \
+- 	.has_pxp =3D 1, \
+- 	.display.has_dsb =3D 1, \
+- 	.max_pat_index =3D 3
++ 	.has_pxp =3D 1
+ =20
+  static const struct intel_device_info tgl_info =3D {
+  	GEN12_FEATURES,
+@@@ -1162,24 -739,14 +795,16 @@@ static const struct intel_device_info p
+  	.__runtime.graphics.ip.rel =3D 60,
+  	.__runtime.media.ip.rel =3D 60,
+  	PLATFORM(INTEL_PONTEVECCHIO),
+- 	NO_DISPLAY,
+  	.has_flat_ccs =3D 0,
+ +	.max_pat_index =3D 7,
+  	.__runtime.platform_engine_mask =3D
+  		BIT(BCS0) |
+  		BIT(VCS0) |
+  		BIT(CCS0) | BIT(CCS1) | BIT(CCS2) | BIT(CCS3),
+  	.require_force_probe =3D 1,
+ +	PVC_CACHELEVEL,
+  };
+ =20
+- #define XE_LPDP_FEATURES	\
+- 	XE_LPD_FEATURES,	\
+- 	.__runtime.display.ip.ver =3D 14,	\
+- 	.display.has_cdclk_crawl =3D 1, \
+- 	.display.has_cdclk_squash =3D 1, \
+- 	.__runtime.fbc_mask =3D BIT(INTEL_FBC_A) | BIT(INTEL_FBC_B)
+-=20
+  static const struct intel_gt_definition xelpmp_extra_gt[] =3D {
+  	{
+  		.type =3D GT_MEDIA,
 
-RnJvbSBiN2QxOWFmMWIyYTNjYTlmNzg5ZGY5YzA0MTQ3NTc2ZmNhN2M1YjhmIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGludXgtZm91bmRh
-dGlvbi5vcmc+CkRhdGU6IE1vbiwgMjkgTWF5IDIwMjMgMjA6NTU6MTMgLTA0MDAKU3ViamVjdDog
-W1BBVENIIDEvMl0gbW9kdWxlOiBzcGxpdCB1cCAnZmluaXRfbW9kdWxlKCknIGludG8KIGluaXRf
-bW9kdWxlX2Zyb21fZmlsZSgpIGhlbHBlcgoKVGhpcyB3aWxsIHNpbXBsaWZ5IHRoZSBuZXh0IHN0
-ZXAsIHdoZXJlIHdlIGNhbiB0aGVuIGtleSBvZmYgdGhlIGlub2RlIHRvCmRvIG9uZSBpZGVtcG90
-ZW50IG1vZHVsZSBsb2FkLgoKTGV0J3MgZG8gdGhlIG9idmlvdXMgcmUtb3JnYW5pemF0aW9uIGlu
-IG9uZSBzdGVwLCBhbmQgdGhlbiB0aGUgbmV3IGNvZGUKaW4gYW5vdGhlci4KClNpZ25lZC1vZmYt
-Ynk6IExpbnVzIFRvcnZhbGRzIDx0b3J2YWxkc0BsaW51eC1mb3VuZGF0aW9uLm9yZz4KLS0tCiBr
-ZXJuZWwvbW9kdWxlL21haW4uYyB8IDQyICsrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0t
-LS0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDI3IGluc2VydGlvbnMoKyksIDE1IGRlbGV0aW9u
-cygtKQoKZGlmZiAtLWdpdCBhL2tlcm5lbC9tb2R1bGUvbWFpbi5jIGIva2VybmVsL21vZHVsZS9t
-YWluLmMKaW5kZXggMDQ0YWEyYzllM2NiLi40MjdiZmZhMjg0NGYgMTAwNjQ0Ci0tLSBhL2tlcm5l
-bC9tb2R1bGUvbWFpbi5jCisrKyBiL2tlcm5lbC9tb2R1bGUvbWFpbi5jCkBAIC0zMDU3LDI2ICsz
-MDU3LDE2IEBAIFNZU0NBTExfREVGSU5FMyhpbml0X21vZHVsZSwgdm9pZCBfX3VzZXIgKiwgdW1v
-ZCwKIAlyZXR1cm4gbG9hZF9tb2R1bGUoJmluZm8sIHVhcmdzLCAwKTsKIH0KIAotU1lTQ0FMTF9E
-RUZJTkUzKGZpbml0X21vZHVsZSwgaW50LCBmZCwgY29uc3QgY2hhciBfX3VzZXIgKiwgdWFyZ3Ms
-IGludCwgZmxhZ3MpCitzdGF0aWMgaW50IGluaXRfbW9kdWxlX2Zyb21fZmlsZShzdHJ1Y3QgZmls
-ZSAqZiwgY29uc3QgY2hhciBfX3VzZXIgKiB1YXJncywgaW50IGZsYWdzKQogewogCXN0cnVjdCBs
-b2FkX2luZm8gaW5mbyA9IHsgfTsKIAl2b2lkICpidWYgPSBOVUxMOwogCWludCBsZW47Ci0JaW50
-IGVycjsKIAotCWVyciA9IG1heV9pbml0X21vZHVsZSgpOwotCWlmIChlcnIpCi0JCXJldHVybiBl
-cnI7CisJaWYgKCFmIHx8ICEoZi0+Zl9tb2RlICYgRk1PREVfUkVBRCkpCisJCXJldHVybiAtRUJB
-REY7CiAKLQlwcl9kZWJ1ZygiZmluaXRfbW9kdWxlOiBmZD0lZCwgdWFyZ3M9JXAsIGZsYWdzPSVp
-XG4iLCBmZCwgdWFyZ3MsIGZsYWdzKTsKLQotCWlmIChmbGFncyAmIH4oTU9EVUxFX0lOSVRfSUdO
-T1JFX01PRFZFUlNJT05TCi0JCSAgICAgIHxNT0RVTEVfSU5JVF9JR05PUkVfVkVSTUFHSUMKLQkJ
-ICAgICAgfE1PRFVMRV9JTklUX0NPTVBSRVNTRURfRklMRSkpCi0JCXJldHVybiAtRUlOVkFMOwot
-Ci0JbGVuID0ga2VybmVsX3JlYWRfZmlsZV9mcm9tX2ZkKGZkLCAwLCAmYnVmLCBJTlRfTUFYLCBO
-VUxMLAotCQkJCSAgICAgICBSRUFESU5HX01PRFVMRSk7CisJbGVuID0ga2VybmVsX3JlYWRfZmls
-ZShmLCAwLCAmYnVmLCBJTlRfTUFYLCBOVUxMLCBSRUFESU5HX01PRFVMRSk7CiAJaWYgKGxlbiA8
-IDApIHsKIAkJbW9kX3N0YXRfaW5jKCZmYWlsZWRfa3JlYWRzKTsKIAkJbW9kX3N0YXRfYWRkX2xv
-bmcobGVuLCAmaW52YWxpZF9rcmVhZF9ieXRlcyk7CkBAIC0zMDg0LDcgKzMwNzQsNyBAQCBTWVND
-QUxMX0RFRklORTMoZmluaXRfbW9kdWxlLCBpbnQsIGZkLCBjb25zdCBjaGFyIF9fdXNlciAqLCB1
-YXJncywgaW50LCBmbGFncykKIAl9CiAKIAlpZiAoZmxhZ3MgJiBNT0RVTEVfSU5JVF9DT01QUkVT
-U0VEX0ZJTEUpIHsKLQkJZXJyID0gbW9kdWxlX2RlY29tcHJlc3MoJmluZm8sIGJ1ZiwgbGVuKTsK
-KwkJaW50IGVyciA9IG1vZHVsZV9kZWNvbXByZXNzKCZpbmZvLCBidWYsIGxlbik7CiAJCXZmcmVl
-KGJ1Zik7IC8qIGNvbXByZXNzZWQgZGF0YSBpcyBubyBsb25nZXIgbmVlZGVkICovCiAJCWlmIChl
-cnIpIHsKIAkJCW1vZF9zdGF0X2luYygmZmFpbGVkX2RlY29tcHJlc3MpOwpAQCAtMzA5OSw2ICsz
-MDg5LDI4IEBAIFNZU0NBTExfREVGSU5FMyhmaW5pdF9tb2R1bGUsIGludCwgZmQsIGNvbnN0IGNo
-YXIgX191c2VyICosIHVhcmdzLCBpbnQsIGZsYWdzKQogCXJldHVybiBsb2FkX21vZHVsZSgmaW5m
-bywgdWFyZ3MsIGZsYWdzKTsKIH0KIAorU1lTQ0FMTF9ERUZJTkUzKGZpbml0X21vZHVsZSwgaW50
-LCBmZCwgY29uc3QgY2hhciBfX3VzZXIgKiwgdWFyZ3MsIGludCwgZmxhZ3MpCit7CisJaW50IGVy
-cjsKKwlzdHJ1Y3QgZmQgZjsKKworCWVyciA9IG1heV9pbml0X21vZHVsZSgpOworCWlmIChlcnIp
-CisJCXJldHVybiBlcnI7CisKKwlwcl9kZWJ1ZygiZmluaXRfbW9kdWxlOiBmZD0lZCwgdWFyZ3M9
-JXAsIGZsYWdzPSVpXG4iLCBmZCwgdWFyZ3MsIGZsYWdzKTsKKworCWlmIChmbGFncyAmIH4oTU9E
-VUxFX0lOSVRfSUdOT1JFX01PRFZFUlNJT05TCisJCSAgICAgIHxNT0RVTEVfSU5JVF9JR05PUkVf
-VkVSTUFHSUMKKwkJICAgICAgfE1PRFVMRV9JTklUX0NPTVBSRVNTRURfRklMRSkpCisJCXJldHVy
-biAtRUlOVkFMOworCisJZiA9IGZkZ2V0KGZkKTsKKwllcnIgPSBpbml0X21vZHVsZV9mcm9tX2Zp
-bGUoZi5maWxlLCB1YXJncywgZmxhZ3MpOworCWZkcHV0KGYpOworCXJldHVybiBlcnI7Cit9CisK
-IC8qIEtlZXAgaW4gc3luYyB3aXRoIE1PRFVMRV9GTEFHU19CVUZfU0laRSAhISEgKi8KIGNoYXIg
-Km1vZHVsZV9mbGFncyhzdHJ1Y3QgbW9kdWxlICptb2QsIGNoYXIgKmJ1ZiwgYm9vbCBzaG93X3N0
-YXRlKQogewotLSAKMi40MC4wLnJjMS4yLmdkMTU2NDRmZTAyCgo=
---0000000000009785e105fcdf7f38
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0002-modules-catch-concurrent-module-loads-take-two.patch"
-Content-Disposition: attachment; 
-	filename="0002-modules-catch-concurrent-module-loads-take-two.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_li9mlkax1>
-X-Attachment-Id: f_li9mlkax1
+--Sig_/80HTALxCF.GMDcmyyet5Nn4
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-RnJvbSBjODQ0MDk5YWI0ZDMwMzI0MjRiNGJmODcyMGU3NjFmYmNjZjg4ZWE1IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGludXgtZm91bmRh
-dGlvbi5vcmc+CkRhdGU6IE1vbiwgMjkgTWF5IDIwMjMgMjE6Mzk6NTEgLTA0MDAKU3ViamVjdDog
-W1BBVENIIDIvMl0gbW9kdWxlczogY2F0Y2ggY29uY3VycmVudCBtb2R1bGUgbG9hZHMsIHRha2Ug
-dHdvCgpUaGlzIHRyZWF0cyBjb25jdXJyZW50IG1vZHVsZSBsb2FkcyBmcm9tIGEgZmlsZSBhcyAi
-aWRlbXBvdGVudCIgaW4gdGhlCmlub2RlLCBpZSBpZiBvbmUgbW9kdWxlIGxvYWQgaXMgb25nb2lu
-Zywgd2UgZG9uJ3Qgc3RhcnQgYSBuZXcgb25lLCBidXQKaW5zdGVhZCBqdXN0IGV4cGVjdCB0aGUg
-Zmlyc3Qgb25lIHRvIGNvbXBsZXRlIGFuZCByZXR1cm4gdGhlIHNhbWUgcmV0dXJuCnZhbHVlIGFz
-IGl0IGRpZC4KClNpZ25lZC1vZmYtYnk6IExpbnVzIFRvcnZhbGRzIDx0b3J2YWxkc0BsaW51eC1m
-b3VuZGF0aW9uLm9yZz4KLS0tCiBrZXJuZWwvbW9kdWxlL21haW4uYyB8IDczICsrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tCiAxIGZpbGUgY2hhbmdlZCwgNzEgaW5z
-ZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9rZXJuZWwvbW9kdWxlL21h
-aW4uYyBiL2tlcm5lbC9tb2R1bGUvbWFpbi5jCmluZGV4IDQyN2JmZmEyODQ0Zi4uODJiMGRjYzFm
-ZTc3IDEwMDY0NAotLS0gYS9rZXJuZWwvbW9kdWxlL21haW4uYworKysgYi9rZXJuZWwvbW9kdWxl
-L21haW4uYwpAQCAtMzA1NywxNSArMzA1Nyw4MiBAQCBTWVNDQUxMX0RFRklORTMoaW5pdF9tb2R1
-bGUsIHZvaWQgX191c2VyICosIHVtb2QsCiAJcmV0dXJuIGxvYWRfbW9kdWxlKCZpbmZvLCB1YXJn
-cywgMCk7CiB9CiAKK3N0cnVjdCBpZGVtcG90ZW50IHsKKwljb25zdCB2b2lkICpjb29raWU7CisJ
-c3RydWN0IGhsaXN0X25vZGUgZW50cnk7CisJc3RydWN0IGNvbXBsZXRpb24gY29tcGxldGU7CisJ
-aW50IHJldDsKK307CisKKyNkZWZpbmUgSURFTV9IQVNIX0JJVFMgOAorc3RhdGljIHN0cnVjdCBo
-bGlzdF9oZWFkIGlkZW1faGFzaFsxIDw8IElERU1fSEFTSF9CSVRTXTsKK3N0YXRpYyBzdHJ1Y3Qg
-c3BpbmxvY2sgaWRlbV9sb2NrOworCitzdGF0aWMgYm9vbCBpZGVtcG90ZW50KHN0cnVjdCBpZGVt
-cG90ZW50ICp1LCBjb25zdCB2b2lkICpjb29raWUpCit7CisJaW50IGhhc2ggPSBoYXNoX3B0cihj
-b29raWUsIElERU1fSEFTSF9CSVRTKTsKKwlzdHJ1Y3QgaGxpc3RfaGVhZCAqaGVhZCA9IGlkZW1f
-aGFzaCArIGhhc2g7CisJc3RydWN0IGlkZW1wb3RlbnQgKmV4aXN0aW5nOworCWJvb2wgZmlyc3Q7
-CisKKwl1LT5yZXQgPSAwOworCXUtPmNvb2tpZSA9IGNvb2tpZTsKKwlpbml0X2NvbXBsZXRpb24o
-JnUtPmNvbXBsZXRlKTsKKworCXNwaW5fbG9jaygmaWRlbV9sb2NrKTsKKwlmaXJzdCA9IHRydWU7
-CisJaGxpc3RfZm9yX2VhY2hfZW50cnkoZXhpc3RpbmcsIGhlYWQsIGVudHJ5KSB7CisJCWlmIChl
-eGlzdGluZy0+Y29va2llICE9IGNvb2tpZSkKKwkJCWNvbnRpbnVlOworCQlmaXJzdCA9IGZhbHNl
-OworCQlicmVhazsKKwl9CisJaGxpc3RfYWRkX2hlYWQoJnUtPmVudHJ5LCBpZGVtX2hhc2graGFz
-aCk7CisJc3Bpbl91bmxvY2soJmlkZW1fbG9jayk7CisKKwlyZXR1cm4gIWZpcnN0OworfQorCisv
-KgorICogV2Ugd2VyZSB0aGUgZmlyc3Qgb25lIHdpdGggJ2Nvb2tpZScgb24gdGhlIGxpc3QsIGFu
-ZCB3ZSBlbmRlZAorICogdXAgY29tcGxldGluZyB0aGUgb3BlcmF0aW9uLiBXZSBub3cgbmVlZCB0
-byB3YWxrIHRoZSBsaXN0LAorICogcmVtb3ZlIGV2ZXJ5Ym9keSAtIHdoaWNoIGluY2x1ZGVzIG91
-cnNlbGZzIC0gZmlsbCBpbiB0aGUgcmV0dXJuCisgKiB2YWx1ZSwgYW5kIHRoZW4gY29tcGxldGUg
-dGhlIG9wZXJhdGlvbi4KKyAqLworc3RhdGljIHZvaWQgaWRlbXBvdGVudF9jb21wbGV0ZShzdHJ1
-Y3QgaWRlbXBvdGVudCAqdSwgaW50IHJldCkKK3sKKwljb25zdCB2b2lkICpjb29raWUgPSB1LT5j
-b29raWU7CisJaW50IGhhc2ggPSBoYXNoX3B0cihjb29raWUsIElERU1fSEFTSF9CSVRTKTsKKwlz
-dHJ1Y3QgaGxpc3RfaGVhZCAqaGVhZCA9IGlkZW1faGFzaCArIGhhc2g7CisJc3RydWN0IGhsaXN0
-X25vZGUgKm5leHQ7CisJc3RydWN0IGlkZW1wb3RlbnQgKnBvczsKKworCXNwaW5fbG9jaygmaWRl
-bV9sb2NrKTsKKwlobGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZlKHBvcywgbmV4dCwgaGVhZCwgZW50
-cnkpIHsKKwkJaWYgKHBvcy0+Y29va2llICE9IGNvb2tpZSkKKwkJCWNvbnRpbnVlOworCQlobGlz
-dF9kZWwoJnBvcy0+ZW50cnkpOworCQlwb3MtPnJldCA9IHJldDsKKwkJY29tcGxldGUoJnBvcy0+
-Y29tcGxldGUpOworCX0KKwlzcGluX3VubG9jaygmaWRlbV9sb2NrKTsKK30KKwogc3RhdGljIGlu
-dCBpbml0X21vZHVsZV9mcm9tX2ZpbGUoc3RydWN0IGZpbGUgKmYsIGNvbnN0IGNoYXIgX191c2Vy
-ICogdWFyZ3MsIGludCBmbGFncykKIHsKKwlzdHJ1Y3QgaWRlbXBvdGVudCBpZGVtOwogCXN0cnVj
-dCBsb2FkX2luZm8gaW5mbyA9IHsgfTsKIAl2b2lkICpidWYgPSBOVUxMOwotCWludCBsZW47CisJ
-aW50IGxlbiwgcmV0OwogCiAJaWYgKCFmIHx8ICEoZi0+Zl9tb2RlICYgRk1PREVfUkVBRCkpCiAJ
-CXJldHVybiAtRUJBREY7CiAKKwlpZiAoaWRlbXBvdGVudCgmaWRlbSwgZmlsZV9pbm9kZShmKSkp
-IHsKKwkJd2FpdF9mb3JfY29tcGxldGlvbigmaWRlbS5jb21wbGV0ZSk7CisJCXJldHVybiBpZGVt
-LnJldDsKKwl9CisKIAlsZW4gPSBrZXJuZWxfcmVhZF9maWxlKGYsIDAsICZidWYsIElOVF9NQVgs
-IE5VTEwsIFJFQURJTkdfTU9EVUxFKTsKIAlpZiAobGVuIDwgMCkgewogCQltb2Rfc3RhdF9pbmMo
-JmZhaWxlZF9rcmVhZHMpOwpAQCAtMzA4Niw3ICszMTUzLDkgQEAgc3RhdGljIGludCBpbml0X21v
-ZHVsZV9mcm9tX2ZpbGUoc3RydWN0IGZpbGUgKmYsIGNvbnN0IGNoYXIgX191c2VyICogdWFyZ3Ms
-IGludAogCQlpbmZvLmxlbiA9IGxlbjsKIAl9CiAKLQlyZXR1cm4gbG9hZF9tb2R1bGUoJmluZm8s
-IHVhcmdzLCBmbGFncyk7CisJcmV0ID0gbG9hZF9tb2R1bGUoJmluZm8sIHVhcmdzLCBmbGFncyk7
-CisJaWRlbXBvdGVudF9jb21wbGV0ZSgmaWRlbSwgcmV0KTsKKwlyZXR1cm4gcmV0OwogfQogCiBT
-WVNDQUxMX0RFRklORTMoZmluaXRfbW9kdWxlLCBpbnQsIGZkLCBjb25zdCBjaGFyIF9fdXNlciAq
-LCB1YXJncywgaW50LCBmbGFncykKLS0gCjIuNDAuMC5yYzEuMi5nZDE1NjQ0ZmUwMgoK
---0000000000009785e105fcdf7f38--
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR1WCAACgkQAVBC80lX
+0GwDCQgAkCIOWxrmIQ+J0WNx8ZK+Uqt9GT8oUhlI7TPuB0Fhq190TvFJfP6XaVM8
+KFJPy1HHhB0NJP6+V9Tp+azF0IzTYsTSUFBgz0chjEAFFkxtQkT8SEKXdYLv635w
+L5+TxTYOa0mn93Yhsj0NVxh1MPUfWcK4YiTMbbyJSXKIXJnv2R8r1Hm0/qgwH+ao
+nnGj+CRQiDuct55d78virIXbK9VjQX6uSUy+q3rrnDWLm3MqhaauFfuu0BRrpzFJ
+WzZQTOWpyRTqUgRhfoZ+O3WDx4NqqG6MTYmcWjiIRQlfdjn4B7CktvG+jrmVYroL
+ZDBM0Jw1jWC2hzbcr/Sow4Z1LM1D7g==
+=HB54
+-----END PGP SIGNATURE-----
+
+--Sig_/80HTALxCF.GMDcmyyet5Nn4--
