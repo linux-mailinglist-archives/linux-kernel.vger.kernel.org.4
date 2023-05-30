@@ -2,110 +2,378 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7FF716103
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A32716107
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232514AbjE3NDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
+        id S232532AbjE3NEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbjE3NDu (ORCPT
+        with ESMTP id S232402AbjE3NEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:03:50 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BC5184
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:03:41 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f4bdcde899so4802991e87.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685451819; x=1688043819;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LzBOsqpAKP1GRqHJCHjWzM7W2wtshKvbHikXn0UNJ+w=;
-        b=g+GY++Kpi5N3bKfymnIQM842X84OVDlDN+hE3wY4F2UDq32bZPqdm4xzBkOKzUEIFE
-         OlrcdAlziwNyx16w0vk/XHjiCc9HWdqZJmT5l9rEGAGIyJlFZUtWGQNHBdB6EgvtqV+5
-         hEBbIZnITz2FwK3kWe4x0ZM9Lxxj0l2j649YVBmvF10UZXAV91Fy8cw3KMA3zflJJzTY
-         +FRtMtPlTe92w1im/HXgt0e8nJcH2LZXBqHd+zsBmskl7lP39bUMmkefU9lnmOSAb27+
-         t4fMOvi7Dk4AnzoYp2h2GwXWfy+omwEA2h2wj9/TQQpcy75uanJ9h4H6FdPhi1nKP8iu
-         fZiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685451819; x=1688043819;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LzBOsqpAKP1GRqHJCHjWzM7W2wtshKvbHikXn0UNJ+w=;
-        b=BJHhlbA5vtrkDTAVoD5bNOLcch1GkRWSIsDJeFTUkRDxdH9YRAKm2dteibRuBFRir3
-         GCW59V5L/lWv2fJAhsZ3gv+ZBjls0uHbfb/R2OyWAer+4WOlXUnf129xNZ6vvqyYZMhd
-         dtksu09Wyc4qZFl5+OHiy0eGxS35QgG1Lc1dTnGxCoY7Fzs+YB+meRM70U2h+vZwUdJH
-         EwLpMc3TRrOqv6inAaeMFvPn0CJEXqRM1slsxqtS4qiJcNP1b8VDea8m8J5sQ3hUrHw+
-         /4YiJJ3bFF6XGTf9xNmG97EqKdcx/Z0A7dz9YmLUTjGeiJlSGsacg4mnpfGyKTUjzRdG
-         C5bw==
-X-Gm-Message-State: AC+VfDzVuDxHDlSxnpDh2pmE2umkl1A6LwF9UYP4z9/mF7gwc3fbMjbB
-        461nvq5lJ88UMrSthg1Sd5x4cQ==
-X-Google-Smtp-Source: ACHHUZ65QosLJ2p0+9l5Nwum/uDyPI90mQPSK+sfrYNDq2TI8JMX+RwDIAdHmNqeSqm9Bj5ej7UsfQ==
-X-Received: by 2002:ac2:53a4:0:b0:4e9:59cd:416c with SMTP id j4-20020ac253a4000000b004e959cd416cmr707366lfh.0.1685451819362;
-        Tue, 30 May 2023 06:03:39 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id a21-20020aa7d755000000b0050bc041d2a8sm4313379eds.15.2023.05.30.06.03.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 06:03:38 -0700 (PDT)
-Message-ID: <a8a03623-3189-b17f-6ca1-43b7d10ba5dd@linaro.org>
-Date:   Tue, 30 May 2023 15:03:36 +0200
+        Tue, 30 May 2023 09:04:48 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB8D92;
+        Tue, 30 May 2023 06:04:45 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685451884;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FmPQhv9rk2FY0Dj1q8NkqcUp7Unf/9KG3fhiEiMO6vs=;
+        b=TQUO+3sxL5DCRhX3BMmVIfaL9RungZMmhclyISx+IfTQHiG1ZWJVXEF3cC9oYsxOy4vTBP
+        CKr/02mY8n7nj3EPBfR9ezADtA3dtxctkTVQzG4H/KDoBNOjnmDFyjBYIgOGMcIxmWaAgf
+        ZyWrjh85YCg9uV+xfDH4MxMKVVhnFIOA3X6dHDyF2WS3DukwL+mu2uyYQCr7bVRajF2843
+        1bl9N8VySxpyDPHNrgToEwiRL5U1Q3mWnanODYT/hvspO07Oiqr471atD0S4MBmzi0hO2m
+        fllPUI1bOuZIwmdW8djbSTQl4UFoV5yiit1gpch4li9vcZ99hrhtDFAkuxGkVg==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 09C0DE0008;
+        Tue, 30 May 2023 13:04:40 +0000 (UTC)
+Date:   Tue, 30 May 2023 15:04:39 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>, richard@nod.at,
+        vigneshr@ti.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        andrew@lunn.ch, gregory.clement@bootlin.com,
+        sebastian.hesselbarth@gmail.com, vadym.kochan@plvision.eu,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        enachman@marvell.com
+Subject: Re: [PATCH v6 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML
+ DT scheme
+Message-ID: <20230530150439.7f287b7a@xps-13>
+In-Reply-To: <a1b2caed-b314-59db-ee00-92fc983150f6@linaro.org>
+References: <20230530005337.3687938-1-chris.packham@alliedtelesis.co.nz>
+        <20230530005337.3687938-2-chris.packham@alliedtelesis.co.nz>
+        <a1b2caed-b314-59db-ee00-92fc983150f6@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V2 1/4] dt-bindings: nvmem: qfprom: add compatible for few
- IPQ SoCs
-Content-Language: en-US
-To:     Kathiravan T <quic_kathirav@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230526125305.19626-1-quic_kathirav@quicinc.com>
- <20230526125305.19626-2-quic_kathirav@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230526125305.19626-2-quic_kathirav@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/05/2023 14:53, Kathiravan T wrote:
-> Add the QFPROM compatible for IPQ5332, IPQ6018 and IPQ9574
-> 
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> ---
-> Changes in V2:
-> 	- No changes
+Hi Krzysztof,
 
-This is a friendly reminder during the review process.
+krzysztof.kozlowski@linaro.org wrote on Tue, 30 May 2023 14:24:22 +0200:
 
-It looks like you received a tag and forgot to add it.
+> On 30/05/2023 02:53, Chris Packham wrote:
+> > From: Vadym Kochan <vadym.kochan@plvision.eu>
+> >=20
+> > Switch the DT binding to a YAML schema to enable the DT validation.
+> >=20
+> > Dropped deprecated compatibles and properties described in txt file.
+> >=20
+> > Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> > ---
+> >=20
+> > Notes:
+> >     Changes in v6:
+> >     - remove properties covered by nand-controller.yaml
+> >     - add example using armada-8k compatible
+> >    =20
+> >     earlier changes:
+> >    =20
+> >     v5:
+> >        1) Get back "label" and "partitions" properties but without =20
+>=20
+> Where are they? Did you drop them in v6?
 
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However, there's no need to repost patches *only* to add the
-tags. The upstream maintainer will do that for acks received on the
-version they apply.
+label and partitions are defined in partitions/partition.yaml,
+referenced by partitions.yaml, referenced by mtd.yaml, referenced by
+nand-chip.yaml, referenced by nand-controller.yaml, itself referenced
+in this file :-)
 
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+So I believe there is nothing else to add in the controller's binding
+for these two properties? They are very generic, it would not be
+optimal if we had to take care about them.
 
-If a tag was not added on purpose, please state why and what changed.
+> >           ref to the "partition.yaml" which was wrongly used. =20
+>=20
+>=20
+> >    =20
+> >        2) Add "additionalProperties: false" for nand@ because all possi=
+ble
+> >           properties are described. =20
+>=20
+> Where? This cannot be silently dropped!
+>=20
+> >    =20
+> >     v4:
+> >        1) Remove "label" and "partitions" properties
+> >    =20
+> >        2) Use 2 clocks for A7K/8K platform which is a requirement
+> >    =20
+> >     v3:
+> >       1) Remove txt version from the MAINTAINERS list
+> >    =20
+> >       2) Use enum for some of compatible strings
+> >    =20
+> >       3) Drop:
+> >             #address-cells
+> >             #size-cells:
+> >    =20
+> >          as they are inherited from the nand-controller.yaml
+> >    =20
+> >       4) Add restriction to use 2 clocks for A8K SoC
+> >    =20
+> >       5) Dropped description for clock-names and extend it with
+> >          minItems: 1
+> >    =20
+> >       6) Drop description for "dmas"
+> >    =20
+> >       7) Use "unevalautedProperties: false"
+> >    =20
+> >       8) Drop quites from yaml refs.
+> >    =20
+> >       9) Use 4-space indentation for the example section
+> >    =20
+> >     v2:
+> >       1) Fixed warning by yamllint with incorrect indentation for compa=
+tible list
+> >=20
+> >  .../bindings/mtd/marvell,nand-controller.yaml | 190 ++++++++++++++++++
+> >  .../devicetree/bindings/mtd/marvell-nand.txt  | 126 ------------
+> >  MAINTAINERS                                   |   1 -
+> >  3 files changed, 190 insertions(+), 127 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/mtd/marvell,nand-=
+controller.yaml
+> >  delete mode 100644 Documentation/devicetree/bindings/mtd/marvell-nand.=
+txt
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/mtd/marvell,nand-control=
+ler.yaml b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.ya=
+ml
+> > new file mode 100644
+> > index 000000000000..c4b003f5fa9f
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
+> > @@ -0,0 +1,190 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/mtd/marvell,nand-controller.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Marvell NAND Flash Controller (NFC)
+> > +
+> > +maintainers:
+> > +  - Miquel Raynal <miquel.raynal@bootlin.com> =20
+>=20
+> Is it correct person for Marvell NAND? This should be not a subsystem
+> maintainer, but a device maintainer.
 
-Best regards,
-Krzysztof
+I did not bother converting this file yet but I actually rewrote the
+corresponding Linux driver (5 years ago) entirely so I don't mind.
 
+>=20
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - items:
+> > +          - const: marvell,armada-8k-nand-controller
+> > +          - const: marvell,armada370-nand-controller
+
+I don't think we ever wanted having these two compatibles to describe a
+single hardware block?
+
+> > +      - enum:
+> > +          - marvell,armada370-nand-controller
+> > +          - marvell,pxa3xx-nand-controller =20
+>=20
+> You miss here deprecated compatibles, which are BTW still used. Don't
+> drop properties and compatibles during conversion.
+>=20
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    description:
+> > +      Shall reference the NAND controller clocks, the second one is
+> > +      is only needed for the Armada 7K/8K SoCs
+> > +    minItems: 1
+> > +    maxItems: 2
+> > +
+> > +  clock-names: =20
+>=20
+> Missing minItems: 1
+>=20
+> > +    items:
+> > +      - const: core
+> > +      - const: reg
+> > +
+> > +  dmas:
+> > +    maxItems: 1
+> > +
+> > +  dma-names:
+> > +    items:
+> > +      - const: rxtx
+> > +
+> > +  marvell,system-controller:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > +    description: Syscon node that handles NAND controller related regi=
+sters
+> > +
+> > +patternProperties:
+> > +  "^nand@[0-3]$":
+> > +    type: object =20
+>=20
+> Missing unevaluatedProperties: false on this level.
+>
+> > +    properties:
+> > +      reg:
+> > +        minimum: 0
+> > +        maximum: 3
+
+Same as below, it is an array as well IIRC.
+
+> > +
+> > +      nand-rb:
+> > +        minimum: 0
+> > +        maximum: 1 =20
+>=20
+> It's an array, so this does not sound right. You might want to put it
+> under items:.  Then you also miss min/maxItems.
+
+That's true, you can have either one or two members with the value
+[0-1], so you need both.
+
+> > +
+> > +      nand-ecc-step-size:
+> > +        const: 512
+> > +
+> > +      nand-ecc-strength:
+> > +        enum: [1, 4, 8]
+
+The controller (and the driver) actually supports 1, 4, 8, 12, 16.
+
+> > +
+> > +      marvell,nand-keep-config:
+> > +        description: |
+> > +          Orders the driver not to take the timings from the core and
+> > +          leaving them completely untouched. Bootloader timings will t=
+hen
+> > +          be used.
+> > +        $ref: /schemas/types.yaml#/definitions/flag
+> > +
+> > +      marvell,nand-enable-arbiter:
+> > +        description: |
+> > +          To enable the arbiter, all boards blindly used it,
+> > +          this bit was set by the bootloader for many boards and even =
+if
+> > +          it is marked reserved in several datasheets, it might be nee=
+ded to set
+> > +          it (otherwise it is harmless) so whether or not this propert=
+y is set,
+> > +          the bit is selected by the driver.
+
+Maybe we should slightly rephrase this to avoid driver related
+information.
+
+> > +        $ref: /schemas/types.yaml#/definitions/flag
+> > +        deprecated: true
+> > +
+> > +    required:
+> > +      - reg
+> > +      - nand-rb
+> > +
+> > +allOf:
+> > +  - $ref: nand-controller.yaml
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            const: marvell,pxa3xx-nand-controller
+> > +    then:
+> > +      required:
+> > +        - dmas
+> > +        - dma-names
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            const: marvell,armada-8k-nand-controller
+> > +    then:
+> > +      properties:
+> > +        clocks:
+> > +          minItems: 2
+> > +          maxItems: 2 =20
+>=20
+> Drop maxItems. You don't have it in clock-names.
+>=20
+> > +
+> > +        clock-names:
+> > +          minItems: 2
+> > +
+> > +      required:
+> > +        - marvell,system-controller
+> > +    else:
+> > +      properties:
+> > +        clocks:
+> > +          maxItems: 1
+> > +
+> > +        clock-names:
+> > +          maxItems: 1 =20
+>=20
+> I doubt that you tested it in above variant...
+>=20
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    nand_controller: nand-controller@d0000 {
+> > +        compatible =3D "marvell,armada370-nand-controller";
+> > +        reg =3D <0xd0000 0x54>;
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>; =20
+>=20
+>=20
+> Best regards,
+> Krzysztof
+>=20
+
+Thanks for doing this!
+
+Miqu=C3=A8l
