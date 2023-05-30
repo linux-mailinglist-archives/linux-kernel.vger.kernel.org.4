@@ -2,130 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7F9716584
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F17EF716600
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbjE3PAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
+        id S233006AbjE3PEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232555AbjE3PAb (ORCPT
+        with ESMTP id S232999AbjE3PEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:00:31 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196D59D;
-        Tue, 30 May 2023 08:00:23 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UBxQBT017376;
-        Tue, 30 May 2023 17:00:10 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=OCnHecsp5UxiV8JTlQGc9ogoMM35ZUP0jx/iE9+z3bc=;
- b=Ndb076wsztMFwoq8SavyLWdQRMbY8O726wZJBmo1X81kXwQwblZigIgLj50d9sM8zkyt
- z+VM03fUpQZpkdkCX70mkuGYzgBuvRf1c09biBP7PLdo8YcrBdFAYkyZ/LQNZmeC/lGI
- bzaXyRQiWPvbYP6GRH8EwRRKJygwZbkL6x6ZUAWdGCEBVbqLi9ARQ2udozMGK9iykANC
- qIAVRrwOxS9RKOyF55xnKnSZFib6yFcRBPiT7A8wDk/awL2Co78s6hP3Bbw34lnDYzox
- MkKUAjjSjbaxvHegVPy6iiRTqnmxJkZ7/cHnwl7EM3ZXbGnZKgxIK3WHwpRQaD2r3cNh cA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3quahy8uvg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 17:00:09 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8D94B10002A;
-        Tue, 30 May 2023 17:00:08 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7641322D164;
-        Tue, 30 May 2023 17:00:08 +0200 (CEST)
-Received: from [10.252.5.129] (10.252.5.129) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 30 May
- 2023 17:00:07 +0200
-Message-ID: <d4a98500-5cb0-b3fd-7f40-8b56a2258619@foss.st.com>
-Date:   Tue, 30 May 2023 17:00:07 +0200
+        Tue, 30 May 2023 11:04:06 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304B9BE;
+        Tue, 30 May 2023 08:04:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685459045; x=1716995045;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fUAq4wbgsz1SejWCkHqlnI+GpKDj8KfUTf02IkbfZbk=;
+  b=EI4le25izOHpA3lHzhx8PQCmpkkM107Y+CAAjKD5wiMrbzxS9GQlDWDm
+   ONOuDjTlFsGZkxSk5HnzG2bgV2OU/EoBrsPJ6CJA2anSIg2/a1qO3ojUA
+   W5YXnXxZbnPxwULC7vwks4y/VwEsmugdgZZzlkqjj4vmMhad+zY42P3hi
+   Bjx3Ca1/BbvrYoRWfstKYNbC9AGPDDkpqoAvKxbss0KeBIBr6Qy3ZpWJL
+   LUd/9UkOMyQsT3d3XPb3215tk7gbwQO+LsWETw/yJ3zv3tud8ts3WQ51P
+   SN0RXK+kwdNavA7Mwe6qRk2VdGtvLSa99kH77kX2vZ6hg1raQOcQDv7vd
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="358192160"
+X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
+   d="scan'208";a="358192160"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 08:03:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="796304135"
+X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
+   d="scan'208";a="796304135"
+Received: from newjersey.igk.intel.com ([10.102.20.203])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 May 2023 08:03:05 -0700
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Paul Menzel <pmenzel@molgen.mpg.de>, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v3 00/12] net: intel: start The Great Code Dedup + Page Pool for iavf
+Date:   Tue, 30 May 2023 17:00:23 +0200
+Message-Id: <20230530150035.1943669-1-aleksander.lobakin@intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH 3/4] dt-bindings: remoteproc: add compatibility for
- TEE support
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>
-CC:     <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <op-tee@lists.trustedfirmware.org>
-References: <20230523091350.292221-1-arnaud.pouliquen@foss.st.com>
- <20230523091350.292221-4-arnaud.pouliquen@foss.st.com>
- <1b4eba7e-2771-b0c8-ec23-2ed882374e5d@kernel.org>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Organization: STMicroelectronics
-In-Reply-To: <1b4eba7e-2771-b0c8-ec23-2ed882374e5d@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.252.5.129]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_10,2023-05-30_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Krzysztof,
+Here's a two-shot: introduce Intel Ethernet common library (libie) and
+switch iavf to Page Pool. Details in the commit messages; here's
+summary:
 
-On 5/30/23 13:50, Krzysztof Kozlowski wrote:
-> On 23/05/2023 11:13, Arnaud Pouliquen wrote:
->> Rework compatibility description according to the support of
->> the authenticated firmware relying on OP-TEE authentication.
->>
->> The expected behavior is:
->> - with legacy compatible "st,stm32mp1-m4" the Linux kernel loads a
->>   non-signed (ELF) firmware image,
->> - with compatible "st,stm32mp1-m4-tee" the Linux kernel load a signed
->>   firmware image. In this case it calls TEE services to manage the firmware
->>   loading and the remoteproc life-cycle.
->>
->> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
->> ---
->>  .../bindings/remoteproc/st,stm32-rproc.yaml   | 33 +++++++++++++++++--
->>  1 file changed, 30 insertions(+), 3 deletions(-)
-> 
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC.  It might happen, that command when run on an older
-> kernel, gives you outdated entries.  Therefore please be sure you base
-> your patches on recent Linux kernel.
-> 
-> You missed at least DT list (maybe more), so this won't be tested.
-> Please resend and include all necessary entries.
-> 
-> Because of above and RFC, I assume there is no need for review. Just to
-> be clear - that's a no.
+Not a secret there's a ton of code duplication between two and more Intel
+ethernet modules. Before introducing new changes, which would need to be
+copied over again, start decoupling the already existing duplicate
+functionality into a new module, which will be shared between several
+Intel Ethernet drivers.
+The first thing that came to my mind was "libie" -- "Intel Ethernet
+common library". Also this sounds like "lovelie" and can be expanded as
+"lib Internet Explorer" :P I'm open for anything else (but justified).
+The series is only the beginning. From now on, adding every new feature
+or doing any good driver refactoring will remove much more lines than add
+for quite some time. There's a basic roadmap with some deduplications
+planned already, not speaking of that touching every line now asks: "can
+I share this?".
+PP conversion for iavf lands within the same series as these two are tied
+closely. libie will support Page Pool model only, so a driver can't use
+much of the lib until it's converted. iavf is only the example, the rest
+will eventually be converted soon on a per-driver basis. That is when it
+gets really interesting. Stay tech.
 
-I did not add DT list and maintainers intentionally to avoid that you
-review it.
-As in a first step the associated OP-TEE pull request has to be reviewed.
-And my plan was just to share the Linux implementation part until the
-OP-TEE review cycle is finished.
+Alexander Lobakin (12):
+  net: intel: introduce Intel Ethernet common library
+  iavf: kill "legacy-rx" for good
+  iavf: optimize Rx buffer allocation a bunch
+  iavf: remove page splitting/recycling
+  iavf: always use a full order-0 page
+  net: skbuff: don't include <net/page_pool.h> into <linux/skbuff.h>
+  net: page_pool: avoid calling no-op externals when possible
+  net: page_pool: add DMA-sync-for-CPU inline helpers
+  iavf: switch to Page Pool
+  libie: add common queue stats
+  libie: add per-queue Page Pool stats
+  iavf: switch queue stats to libie
 
-Now regarding your mail (and very interesting feedback from Christoph Hellwig),
-it was clearly not the good strategy.
-So my apologize and next time whatever the objective of the series I will add
-all peoples and lists in the loop.
+ MAINTAINERS                                   |   3 +-
+ drivers/net/ethernet/engleder/tsnep_main.c    |   1 +
+ drivers/net/ethernet/freescale/fec_main.c     |   1 +
+ drivers/net/ethernet/intel/Kconfig            |  12 +-
+ drivers/net/ethernet/intel/Makefile           |   1 +
+ drivers/net/ethernet/intel/i40e/i40e_common.c | 253 -------
+ drivers/net/ethernet/intel/i40e/i40e_main.c   |   1 +
+ .../net/ethernet/intel/i40e/i40e_prototype.h  |   7 -
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c   |  74 +-
+ drivers/net/ethernet/intel/i40e/i40e_type.h   |  88 ---
+ drivers/net/ethernet/intel/iavf/iavf.h        |   2 +-
+ drivers/net/ethernet/intel/iavf/iavf_common.c | 253 -------
+ .../net/ethernet/intel/iavf/iavf_ethtool.c    | 227 +-----
+ drivers/net/ethernet/intel/iavf/iavf_main.c   |  45 +-
+ .../net/ethernet/intel/iavf/iavf_prototype.h  |   7 -
+ drivers/net/ethernet/intel/iavf/iavf_txrx.c   | 715 +++++-------------
+ drivers/net/ethernet/intel/iavf/iavf_txrx.h   | 185 +----
+ drivers/net/ethernet/intel/iavf/iavf_type.h   |  90 ---
+ .../net/ethernet/intel/iavf/iavf_virtchnl.c   |  16 +-
+ .../net/ethernet/intel/ice/ice_lan_tx_rx.h    | 316 --------
+ drivers/net/ethernet/intel/ice/ice_main.c     |   1 +
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c |  74 +-
+ drivers/net/ethernet/intel/libie/Makefile     |   7 +
+ drivers/net/ethernet/intel/libie/internal.h   |  23 +
+ drivers/net/ethernet/intel/libie/rx.c         | 158 ++++
+ drivers/net/ethernet/intel/libie/stats.c      | 190 +++++
+ .../marvell/octeontx2/nic/otx2_common.c       |   1 +
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |   1 +
+ .../ethernet/mellanox/mlx5/core/en/params.c   |   1 +
+ .../net/ethernet/mellanox/mlx5/core/en/xdp.c  |   1 +
+ drivers/net/wireless/mediatek/mt76/mt76.h     |   1 +
+ include/linux/net/intel/libie/rx.h            | 170 +++++
+ include/linux/net/intel/libie/stats.h         | 214 ++++++
+ include/linux/skbuff.h                        |   4 +-
+ include/net/page_pool.h                       |  69 +-
+ net/core/page_pool.c                          |  10 +
+ 36 files changed, 1141 insertions(+), 2081 deletions(-)
+ create mode 100644 drivers/net/ethernet/intel/libie/Makefile
+ create mode 100644 drivers/net/ethernet/intel/libie/internal.h
+ create mode 100644 drivers/net/ethernet/intel/libie/rx.c
+ create mode 100644 drivers/net/ethernet/intel/libie/stats.c
+ create mode 100644 include/linux/net/intel/libie/rx.h
+ create mode 100644 include/linux/net/intel/libie/stats.h
 
-Thanks,
-Arnaud
+---
+Directly to net-next, has non-Intel code changes (0006-0008).
 
-> 
-> Best regards,
-> Krzysztof
-> 
+From v2[0]:
+* 0006: fix page_pool.h include in OcteonTX2 files (Jakub, Patchwork);
+* no functional changes.
+
+From v1[1]:
+* 0006: new (me, Jakub);
+* 0008: give the helpers more intuitive names (Jakub, Ilias);
+*  -^-: also expand their kdoc a bit for the same reason;
+*  -^-: fix kdoc copy-paste issue (Patchwork, Jakub);
+* 0011: drop `inline` from C file (Patchwork, Jakub).
+
+[0] https://lore.kernel.org/netdev/20230525125746.553874-1-aleksander.lobakin@intel.com
+[1] https://lore.kernel.org/netdev/20230516161841.37138-1-aleksander.lobakin@intel.com
+
+-- 
+2.40.1
+
