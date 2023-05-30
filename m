@@ -2,119 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A77C716D44
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67769716D4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbjE3TQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 15:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
+        id S233357AbjE3TQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 15:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbjE3TQ0 (ORCPT
+        with ESMTP id S233318AbjE3TQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 15:16:26 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A31F7;
-        Tue, 30 May 2023 12:16:25 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-ba849c9e769so720457276.1;
-        Tue, 30 May 2023 12:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685474184; x=1688066184;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ReF3huZIX5MctcfmMwDZUJKJfR+aqdvurL3+etSGPTE=;
-        b=eX75pXiciwV/nPpOs0cNYiWqohYG7dS/oJdv84zYd60x7tsg0skrvDTgTACmmG/nW7
-         NftcHo7jZiGXqGHTCMqelg3PoyQa+gIlCuLk25vwXUHg/KgoavIB80kuil7ODR00NCRC
-         Tw6jll+NN2TSm0Y9Q+DDOVvsHCczp49nOJjh/mYUfncelDFoXLJvbm7iuq20tYWltWxp
-         oBNfeqihCPhl+XDHiYCPbeaLHj0CWjlvpSflv3CmpQ9B94aEeNiDdEbH/3O6n0EHSmWf
-         QByVctJMof4P3L8NGej/AoSobqnpKF4yRgpLAf8AXaVXUbthYpWLP83jjmSfSJx4oY5l
-         jFpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685474184; x=1688066184;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ReF3huZIX5MctcfmMwDZUJKJfR+aqdvurL3+etSGPTE=;
-        b=WY8g4metQIlxwKfvXU57BDMouBOHmtwSX63HkIxBrG46YLmkX1xfiBImhpK6cc8CEL
-         tfwXtKAfKQeZhlkJNkuGzWJ2EwwNLaoyTGV8RfJ5pmgwH357jxGrkaWKoqxTgdiAYT76
-         XCffiJKcGAbKfDx8QNuuR79AcCghlJR6n6M2Gt13rBNohNfFgMHLWgRhwuRN4mlGpv0f
-         NlT2hKA7n1Xt487BM9H+sy3gihzXdUoyy5onNo/uVEjQbEzhsAxIY+t9xVKi9TxqJdwG
-         uneeox2brhoSi7ewtNjyftfyOY5NDu4O3h+orrCWcp+vLS5sProbce1+N8JVO1DB+DH+
-         i99Q==
-X-Gm-Message-State: AC+VfDzv3tdNZY2Bhu3aoeEXebjDnq2zoVWrVyb19bGtjkffB7prMTVK
-        oM30iw0gS/Hl6x9oNWik7pkkHPf78ZN8sYG8Su4=
-X-Google-Smtp-Source: ACHHUZ5KF5sP458BAcc4MOaFQx+ppx14Rr714fryU4Pc0VR6ggbBG74ErZ8JzB+32dZEQBBzsN8PE9WmIWTSyjqnO48=
-X-Received: by 2002:a81:1a05:0:b0:565:be47:55d9 with SMTP id
- a5-20020a811a05000000b00565be4755d9mr277679ywa.1.1685474184541; Tue, 30 May
- 2023 12:16:24 -0700 (PDT)
+        Tue, 30 May 2023 15:16:33 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6668E;
+        Tue, 30 May 2023 12:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685474193; x=1717010193;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R42q5r0P/ryqRzajsObEsjAX6NX4QX6aC3P0KATi28E=;
+  b=YCYatZZipKGCvLbYL04RKceU31TtrCemcc5i0ej7gMeYl4kcLKakberY
+   ZMXc4V/9Ig56o1o/lm64pxPsUmVs0AocT0IHNLxDFLkP2OX3xL8+2uP1x
+   NHNy0L5ue5webtYnod3VSDxqNqKDyR1IQy5wMdn30JMKH+DXAvJ6DxXtj
+   CZP8Tl/Dxoq87o0+LFvLaZPBN/AYQtmfnJopoHGwMx2OEvW1Th6+TwOfh
+   7kVQVJhHAQGFM7fWfJbbb+ydLjCQQnL26OB+cBGtZW8TXhCojzty9inHB
+   QK37va/cLm4DLa9ZZDereT1JEviTxXSInZ/MjLTlrrPMyV8/u40f9pudN
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="358278350"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="358278350"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 12:16:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="776467133"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="776467133"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.252.140.233])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 12:16:30 -0700
+Date:   Tue, 30 May 2023 12:16:29 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     tony.luck@intel.com, bp@alien8.de, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
+        x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/mce: remove unused mce_vaddr
+Message-ID: <ZHZLjRPSYCOYjkBo@aschofie-mobl2>
+References: <20230528113545.650533-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
-References: <20230530155745.343032-1-azeemshaikh38@gmail.com>
-In-Reply-To: <20230530155745.343032-1-azeemshaikh38@gmail.com>
-From:   Justin Tee <justintee8345@gmail.com>
-Date:   Tue, 30 May 2023 12:16:13 -0700
-Message-ID: <CABPRKS8Gx8kaSXXbyV2Ms=mPTvuR1grAcxbXROCVq3WFr3KL5Q@mail.gmail.com>
-Subject: Re: [PATCH] scsi: lpfc: Replace all non-returning strlcpy with strscpy
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        linux-hardening@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230528113545.650533-1-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Azeem,
+On Sun, May 28, 2023 at 07:35:45PM +0800, Miaohe Lin wrote:
+> Since commit a6e3cf70b772 ("x86/mce: Change to not send SIGBUS error during
+> copy from user"), mce_vaddr is not used anymore. Remove it and clean up the
+> relevant code.
 
-Looks good.
+Hi Miaohe,
 
-Reviewed-by: Justin Tee <justin.tee@broadcom.com>
+Not so sure that the 'clean up' part is useful. See below.
 
-Thanks,
-Justin
 
-On Tue, May 30, 2023 at 8:59=E2=80=AFAM Azeem Shaikh <azeemshaikh38@gmail.c=
-om> wrote:
->
-> strlcpy() reads the entire source buffer first.
-> This read may exceed the destination size limit.
-> This is both inefficient and can lead to linear read
-> overflows if a source string is not NUL-terminated [1].
-> In an effort to remove strlcpy() completely [2], replace
-> strlcpy() here with strscpy().
-> No return values were used, so direct replacement is safe.
->
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcp=
-y
-> [2] https://github.com/KSPP/linux/issues/89
->
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 > ---
->  drivers/scsi/lpfc/lpfc_hbadisc.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hb=
-adisc.c
-> index 5ba3a9ad9501..239a6537b987 100644
-> --- a/drivers/scsi/lpfc/lpfc_hbadisc.c
-> +++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-> @@ -4835,7 +4835,7 @@ lpfc_nlp_state_name(char *buffer, size_t size, int =
-state)
->         };
->
->         if (state < NLP_STE_MAX_STATE && states[state])
-> -               strlcpy(buffer, states[state], size);
-> +               strscpy(buffer, states[state], size);
->         else
->                 snprintf(buffer, size, "unknown (%d)", state);
->         return buffer;
->
+>  arch/x86/kernel/cpu/mce/severity.c | 7 +------
+>  include/linux/sched.h              | 1 -
+>  2 files changed, 1 insertion(+), 7 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
+> index c4477162c07d..0acc0039de81 100644
+> --- a/arch/x86/kernel/cpu/mce/severity.c
+> +++ b/arch/x86/kernel/cpu/mce/severity.c
+> @@ -252,12 +252,7 @@ static bool is_copy_from_user(struct pt_regs *regs)
+>  		return false;
+>  	}
+>  
+> -	if (fault_in_kernel_space(addr))
+> -		return false;
+> -
+> -	current->mce_vaddr = (void __user *)addr;
+> -
+> -	return true;
+> +	return !fault_in_kernel_space(addr);
+>  }
+
+
+Refactoring the return is unnecessary and seems less readable.
+How about removing the assignment, and leaving the rest, as is:
+
+diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
+index c4477162c07d..1c03221ddcb1 100644
+--- a/arch/x86/kernel/cpu/mce/severity.c
++++ b/arch/x86/kernel/cpu/mce/severity.c
+@@ -255,8 +255,6 @@ static bool is_copy_from_user(struct pt_regs *regs)
+        if (fault_in_kernel_space(addr))
+                return false;
+ 
+-       current->mce_vaddr = (void __user *)addr;
+-
+        return true;
+ }
+
+
+Alison
+
+
+
+
+>  
+>  /*
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index eed5d65b8d1f..3054a7087230 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -1493,7 +1493,6 @@ struct task_struct {
+>  #endif
+>  
+>  #ifdef CONFIG_X86_MCE
+> -	void __user			*mce_vaddr;
+>  	__u64				mce_kflags;
+>  	u64				mce_addr;
+>  	__u64				mce_ripv : 1,
+> -- 
+> 2.27.0
+> 
