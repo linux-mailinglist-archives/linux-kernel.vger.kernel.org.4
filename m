@@ -2,49 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FEF471537A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BF1715380
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbjE3CLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 22:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
+        id S230099AbjE3COt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 22:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjE3CK5 (ORCPT
+        with ESMTP id S229931AbjE3COr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 22:10:57 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4A1F1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 19:10:55 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QVbNS2DTgzqTTd;
-        Tue, 30 May 2023 10:06:16 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 30 May 2023 10:10:53 +0800
-Message-ID: <38ea4ea3-cd7f-abf4-e992-2f748e3b1fcb@huawei.com>
-Date:   Tue, 30 May 2023 10:10:52 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH -next] mm: page_alloc: simplify has_managed_dma()
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, Baoquan He <bhe@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>
-References: <20230529144022.42927-1-wangkefeng.wang@huawei.com>
- <ZHS2AgVvrT3n/hlM@casper.infradead.org>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <ZHS2AgVvrT3n/hlM@casper.infradead.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 29 May 2023 22:14:47 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7743ADB
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 19:14:45 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-babb7aaa605so7726605276.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 19:14:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685412884; x=1688004884;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=JhVHx6Y59p5BY8t5ggwZZWj9vUfyNel0Ky85ZYEFuAQ=;
+        b=InsqZGOJ8EtlyykvbzTnPldxO38j91PX4e0Wsotwu+NodzSXdYiMpivRU0QSwVhmgA
+         PvdDh/ml27/UcuJiGcxeh29Prl9V032QAtsU7qknhXV/mpBgHBxHNSnwOVK9xrbb48aR
+         FXu4mKQAINxI/zrIiQj1FIyg4ow3NLsZnoDSXcxdUtq6tHuzBVFuABOC5XqZeWs0DFHT
+         LXO3w2zFtyR4Uq3m5DwuE84v92IsXGfM07qGZryjSYmpD1opQNmBweK3brerWdHGe6jK
+         7EpQ2lj58OIRGuHdFp3j+6udKL3uKrm4iardBl4Bx8X5m08GDB4NIJovcYIPB9YD2V3r
+         yotw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685412884; x=1688004884;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JhVHx6Y59p5BY8t5ggwZZWj9vUfyNel0Ky85ZYEFuAQ=;
+        b=gFb0DX8/2YIMhIPnDt5xLmBGZWm6YvjJn/XTgG6VCHeH/x4frgWB8EDicMeWhzxZsx
+         FSMaUWZbI3YMER+Fryj0cUHxokMoog83m5QMEaLgWpAypnTvdJabyTOrxcqnYAnklZZX
+         R5F1vie+NMjkcbIWJEt0WGB7UK2orvYmtHFqWIolVivQl7pqZAy0jEsuhotOyYFLR4Hn
+         D1VkHEMINBGAMwwMb3iGbxm8oUC0zbeq+lxOpVWbYjN0yJGIQc7k/H43PsjQS7cYKJlL
+         taIroOaaOfT0Mhyf1o382bE6e4zwRVf5rkSArZpKoVkAoQRDbsrZyUrLRHBph9s8utTw
+         kRLg==
+X-Gm-Message-State: AC+VfDxzIP4pQzAKpd4dtUR3uBDEo9/PD5DLrqc83gvtGozNY1/142bk
+        AUpUA05pwCi3RrGdADcPyfud4U1rAnBN
+X-Google-Smtp-Source: ACHHUZ40kBnwrflyP7QwyQ27rx4j9fPFlP9lRnsFh7lo51Wo4mstGXpGsMCgJkQ0vA9xClr1/QSe2E7yORBu
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:8bc9:a316:5479:7adf])
+ (user=irogers job=sendgmr) by 2002:a25:8412:0:b0:ba8:757c:2523 with SMTP id
+ u18-20020a258412000000b00ba8757c2523mr577356ybk.9.1685412884707; Mon, 29 May
+ 2023 19:14:44 -0700 (PDT)
+Date:   Mon, 29 May 2023 19:14:33 -0700
+Message-Id: <20230530021433.3107580-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Subject: [PATCH v1] perf kvm: Fix powerpc build
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,42 +76,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Missed function rename from pmu_have_event to perf_pmus__have_event.
 
+Fixes: 1eaf496ed386 ("perf pmu: Separate pmu and pmus")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/arch/powerpc/util/kvm-stat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 2023/5/29 22:26, Matthew Wilcox wrote:
-> On Mon, May 29, 2023 at 10:40:22PM +0800, Kefeng Wang wrote:
->> The ZONE_DMA should only exists on Node 0, only check NODE_DATA(0)
->> is enough, so simplify has_managed_dma() and make it inline.
-> 
-> That's true on x86, but is it true on all architectures?
-
-There is no document about numa node info for the DMA_ZONE, + Mike
-
-I used 'git grep -w ZONE_DMA arch/'
-
-1) the following archs without NUMA support, so it's true for them,
-
-arch/alpha/mm/init.c:	max_zone_pfn[ZONE_DMA] = dma_pfn;
-arch/arm/mm/init.c:	max_zone_pfn[ZONE_DMA] = min(arm_dma_pfn_limit, 
-max_low);
-arch/m68k/mm/init.c:	max_zone_pfn[ZONE_DMA] = end_mem >> PAGE_SHIFT;
-arch/m68k/mm/mcfmmu.c:	max_zone_pfn[ZONE_DMA] = PFN_DOWN(_ramend);
-arch/m68k/mm/motorola.c:	max_zone_pfn[ZONE_DMA] = memblock_end_of_DRAM();
-arch/m68k/mm/sun3mmu.c:	max_zone_pfn[ZONE_DMA] = ((unsigned 
-long)high_memory) >> PAGE_SHIFT;
-arch/microblaze/mm/init.c:	zones_size[ZONE_DMA] = max_low_pfn;
-arch/microblaze/mm/init.c:	zones_size[ZONE_DMA] = max_pfn;
-
-
-2) Simple check following archs, it seems that it is yes to them too.
-
-arch/mips/mm/init.c:	max_zone_pfns[ZONE_DMA] = MAX_DMA_PFN;
-arch/powerpc/mm/mem.c:	max_zone_pfns[ZONE_DMA]	= min(max_low_pfn,
-arch/s390/mm/init.c:	max_zone_pfns[ZONE_DMA] = PFN_DOWN(MAX_DMA_ADDRESS);
-arch/sparc/mm/srmmu.c:		max_zone_pfn[ZONE_DMA] = max_low_pfn;
-arch/x86/mm/init.c:	max_zone_pfns[ZONE_DMA]		= min(MAX_DMA_PFN, 
-max_low_pfn);
-arch/arm64/mm/init.c:	max_zone_pfns[ZONE_DMA] = 
-PFN_DOWN(arm64_dma_phys_limit);
-arch/loongarch/mm/init.c:	max_zone_pfns[ZONE_DMA] = MAX_DMA_PFN;
+diff --git a/tools/perf/arch/powerpc/util/kvm-stat.c b/tools/perf/arch/powerpc/util/kvm-stat.c
+index ea1220d66b67..1039e15c27c9 100644
+--- a/tools/perf/arch/powerpc/util/kvm-stat.c
++++ b/tools/perf/arch/powerpc/util/kvm-stat.c
+@@ -204,7 +204,7 @@ int kvm_add_default_arch_event(int *argc, const char **argv)
+ 
+ 	parse_options(j, tmp, event_options, NULL, PARSE_OPT_KEEP_UNKNOWN);
+ 	if (!event) {
+-		if (pmu_have_event("trace_imc", "trace_cycles")) {
++		if (perf_pmus__have_event("trace_imc", "trace_cycles")) {
+ 			argv[j++] = strdup("-e");
+ 			argv[j++] = strdup("trace_imc/trace_cycles/");
+ 			*argc += 2;
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
 
