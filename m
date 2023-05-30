@@ -2,110 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF54C715787
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC4F715789
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjE3HsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
+        id S229682AbjE3HsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjE3Hrs (ORCPT
+        with ESMTP id S229543AbjE3Hrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:47:48 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92140F3;
-        Tue, 30 May 2023 00:47:06 -0700 (PDT)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34U7TchY016713;
-        Tue, 30 May 2023 07:45:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=ZpcHDZDWblUj44cxQI7N7BsV6xz7H1WgFRESaho8JCY=;
- b=EpnrpQaKOmEvmU2I7k3NI1OaaOiN5tZY+yuWcLuY0W6GVSh1xZlo+1tNOZtc/wiPT+YU
- qahGi6YGlRhmlyAmmOTcsw/o0S3CGptDX6lESXARY58ooacRGSpGayBKS2w7sEw3O/MB
- a2Nqtu+cRAUrViIja2z/HjwPSwsXlUKF1VqB22V58Ffi/9YV9/YHUfSyrWjyVjsKPUgv
- tn53aHHApffzJcZQ3wWlD5LzDNy7VEGj8Fqh9zHcUmYrSkEr7y8WCdSkjbHJedlGr/hA
- Jc6XgcIaIU65HDKU1CULypkYxfCZHjngKeytPA9rsRRqwyMmzuP8SmjUG0sh1mbyG7yT PQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwct70fjf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 07:45:06 +0000
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34U7TlDF017442;
-        Tue, 30 May 2023 07:45:05 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwct70fh4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 07:45:05 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34U5TfSi021888;
-        Tue, 30 May 2023 07:45:03 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qu9g59b8y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 07:45:02 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34U7j0s84981390
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 May 2023 07:45:00 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A2D0B20043;
-        Tue, 30 May 2023 07:45:00 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2F26320040;
-        Tue, 30 May 2023 07:45:00 +0000 (GMT)
-Received: from [9.152.212.239] (unknown [9.152.212.239])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 30 May 2023 07:45:00 +0000 (GMT)
-Message-ID: <0075d8a9-2df4-86eb-8171-8995f59904e0@linux.ibm.com>
-Date:   Tue, 30 May 2023 09:45:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 3/4] perf/core: Remove pmu linear searching code
-To:     Marc Zyngier <maz@kernel.org>, Ian Rogers <irogers@google.com>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Nathan Chancellor <nathan@kernel.org>, namhyung@kernel.org,
-        eranian@google.com, acme@kernel.org, mark.rutland@arm.com,
-        jolsa@kernel.org, bp@alien8.de, kan.liang@linux.intel.com,
-        adrian.hunter@intel.com, maddy@linux.ibm.com, x86@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com,
-        santosh.shukla@amd.com, kvmarm@lists.linux.dev
-References: <20230504110003.2548-1-ravi.bangoria@amd.com>
- <20230504110003.2548-4-ravi.bangoria@amd.com>
- <20230524214133.GA2359762@dev-arch.thelio-3990X>
- <f02c78e2-34b9-4985-640a-279dae1004a9@amd.com> <ZG8KLbZSECiYaKFc@linux.dev>
- <20230525142031.GU83892@hirez.programming.kicks-ass.net>
- <ZG+FLdP2kkfI1m2Z@linux.dev>
- <CAP-5=fWYbzmTETgqJ11y22=JaXDM0gnb4qR6KYeRGmFXw08f-Q@mail.gmail.com>
- <86jzwtdhmk.wl-maz@kernel.org>
- <CAP-5=fVW6KbUbbEfF3mEFvTfFDC5yKSjSpa+w3D55dG3CNUERw@mail.gmail.com>
- <86h6rxd3gh.wl-maz@kernel.org>
-Content-Language: en-US
-From:   Thomas Richter <tmricht@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <86h6rxd3gh.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ppNikiQ3tamMC7fotzsEoqutl8Y94htH
-X-Proofpoint-ORIG-GUID: 5mdJ7FG5-E7JpA2pmsw4ejsREHtyfAnA
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 30 May 2023 03:47:55 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA8912A;
+        Tue, 30 May 2023 00:47:22 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-19e7008a20aso1702872fac.1;
+        Tue, 30 May 2023 00:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685432752; x=1688024752;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WukN48JVyq9DRAjSb8JSkJvW4f5bLXfZTlDO2yITOYA=;
+        b=Ny6Rz4uvZEpeRblyHtTWHFkPLV7MOdxZQdJHWLneK/ytoYkf6sZx95/Hnc8Ow1YGF/
+         JcbphtycCJccK/WOjOLrEtvazCbSY2Ahz8pdkKjgWjjcb6YH5FvveABUvHg74wXv8tdY
+         GOcplxPTAIgSst4L7ywwZJk8PrxmW1euOw9nROC42h6PBnALysFTa3MtTg/3dpNDhaWH
+         4muHQJVVRsdEYqrdsEq9hUH7PYpEi85RmSTPqj5MT10GzL/a1sjVzX4Lissa1AT2GsWG
+         ioI2T8056nscWGQHbaUqmMCS7Kd+ZAGfPSeIPUmEwrwRElURwcRTbweT6BNEE8pMPRtR
+         4LSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685432752; x=1688024752;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WukN48JVyq9DRAjSb8JSkJvW4f5bLXfZTlDO2yITOYA=;
+        b=NZmYjqJGgHueTlyShdGdnF8s1oOckHtz/yhhZzWsThLuNfVmYcrT8CTIY28w7RABzv
+         eAQVimEtw865qH+zxFDo+euBJPJRRV2em75rCKsiFlr3kRfDlyRkxn+MZePmerWiXRaV
+         SczPjSLmaAQafbPf6q3HBNgsrdFvzTlAC/PUfeqXXqaX31bGSE7yZoqB2AFj29uBJxke
+         HWAvnJ9p79NMTtoqpYkCSOOi3AeAABCNU9cU8LRbEaM4ynrN+uL7HUrpHhltsi0O7h4N
+         8oacAxwQ9tJcE2fJuYDQYshfdw/zSVlgeeW0CwkUCYA6jBowWxwm9UR59Umz7XTPyOPJ
+         JZLA==
+X-Gm-Message-State: AC+VfDyFadM2VMH9aD4SKSq/5kYW251GiVg68+71Ac4NJ+Q3JKqEay61
+        CudHRY8lXIZd70owWCnyY0pHHbNUH810T8mNsbc=
+X-Google-Smtp-Source: ACHHUZ6kzQI29klyAUPFIFVDCuL0rotHWt30KqFXblnFEGRmxltonQdNPYet2fNyJUf+EstYFQELZXjJbu0HL9oAnuU=
+X-Received: by 2002:a05:6870:98b0:b0:195:fd22:ab05 with SMTP id
+ eg48-20020a05687098b000b00195fd22ab05mr535931oab.55.1685432751718; Tue, 30
+ May 2023 00:45:51 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_04,2023-05-29_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
- priorityscore=1501 malwarescore=0 spamscore=0 suspectscore=0
- mlxlogscore=999 mlxscore=0 lowpriorityscore=0 impostorscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305300062
+References: <20230529113804.GA20300@didi-ThinkCentre-M920t-N000> <CANn89iJw3Ehoj7GfYnc6Xv5N2wULqNuP3zNBwQx97i-YJD5avg@mail.gmail.com>
+In-Reply-To: <CANn89iJw3Ehoj7GfYnc6Xv5N2wULqNuP3zNBwQx97i-YJD5avg@mail.gmail.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Tue, 30 May 2023 15:45:15 +0800
+Message-ID: <CAL+tcoCRgpoYgQXdM2Es0gjRtRZj1hCK-5M04WZ1sy3vt_5JjA@mail.gmail.com>
+Subject: Re: [PATCH net] tcp: introduce a compack timer handler in sack compression
+To:     Eric Dumazet <edumazet@google.com>, toke@toke.dk,
+        Yuchung Cheng <ycheng@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Neal Cardwell <ncardwell@google.com>, netdev@vger.kernel.org,
+        zhangweiping <zhangweiping@didiglobal.com>,
+        tiozhang <tiozhang@didiglobal.com>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, fuyuanli@didiglobal.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,135 +76,229 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/27/23 20:38, Marc Zyngier wrote:
-> On Sat, 27 May 2023 18:00:13 +0100,
-> Ian Rogers <irogers@google.com> wrote:
->>
->> On Sat, May 27, 2023 at 6:32 AM Marc Zyngier <maz@kernel.org> wrote:
->>>
->>> On Sat, 27 May 2023 00:00:47 +0100,
->>> Ian Rogers <irogers@google.com> wrote:
->>>>
->>>> On Thu, May 25, 2023 at 8:56 AM Oliver Upton <oliver.upton@linux.dev> wrote:
->>>>>
->>>>> On Thu, May 25, 2023 at 04:20:31PM +0200, Peter Zijlstra wrote:
->>>>>> On Thu, May 25, 2023 at 07:11:41AM +0000, Oliver Upton wrote:
->>>>>>
->>>>>>> The PMUv3 driver does pass a name, but it relies on getting back an
->>>>>>> allocated pmu id as @type is -1 in the call to perf_pmu_register().
->>>>>>>
->>>>>>> What actually broke is how KVM probes for a default core PMU to use for
->>>>>>> a guest. kvm_pmu_probe_armpmu() creates a counter w/ PERF_TYPE_RAW and
->>>>>>> reads the pmu from the returned perf_event. The linear search had the
->>>>>>> effect of eventually stumbling on the correct core PMU and succeeding.
->>>>>>>
->>>>>>> Perf folks: is this WAI for heterogenous systems?
->>>>>>
->>>>>> TBH, I'm not sure. hetero and virt don't mix very well AFAIK and I'm not
->>>>>> sure what ARM64 does here.
->>>>>>
->>>>>> IIRC the only way is to hard affine things; that is, force vCPU of
->>>>>> 'type' to the pCPU mask of 'type' CPUs.
->>>>>
->>>>> We provide absolutely no illusion of consistency across implementations.
->>>>> Userspace can select the PMU type, and then it is a userspace problem
->>>>> affining vCPUs to the right pCPUs.
->>>>>
->>>>> And if they get that wrong, we just bail and refuse to run the vCPU.
->>>>>
->>>>>> If you don't do that; or let userspace 'override' that, things go
->>>>>> sideways *real* fast.
->>>>>
->>>>> Oh yeah, and I wish PMUs were the only problem with these hetero
->>>>> systems...
->>>>
->>>> Just to add some context from what I understand. There are inbuilt
->>>> type numbers for PMUs:
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/include/uapi/linux/perf_event.h?h=perf-tools-next#n34
->>>> so the PMU generally called /sys/devices/cpu should have type 4 (ARM
->>>> give it another name). For heterogeneous ARM there is a single PMU and
->>>> the same events are programmed regardless of whether it is a big or a
->>>> little core - the cpumask lists all CPUs.
->>>
->>> I think you misunderstood the way heterogeneous arm64 systems are
->>> described . Each CPU type gets its own PMU type, and its own event
->>> list. Case in point:
->>>
->>> $ grep . /sys/devices/*pmu/{type,cpus}
->>> /sys/devices/apple_avalanche_pmu/type:9
->>> /sys/devices/apple_blizzard_pmu/type:8
->>> /sys/devices/apple_avalanche_pmu/cpus:4-9
->>> /sys/devices/apple_blizzard_pmu/cpus:0-3
->>>
->>> Type 4 (aka PERF_EVENT_RAW) is AFAICT just a way to encode the raw
->>> event number, nothing else.
->>
->> Which PMU will a raw event open on?
-> 
-> On the PMU that matches the current CPU.
-> 
->> Note, the raw events don't support
->> the extended type that is present in PERF_TYPE_HARDWARE and
->> PERF_TYPE_HW_CACHE:
->> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/tree/include/uapi/linux/perf_event.h#n41
->> as the bits are already in use for being just plain config values.
-> 
-> I'm not sure how relevant this is to the numbering of PMUs on arm64.
-> 
->> I suspect not being type 4 is a bug on apple ARM here.
-> 
-> If that's a bug on this machine, it's a bug on all machines, at which
-> point it is the de-facto API:
-> 
-> $ grep . /sys/devices/armv8*/{type,cpus}
-> /sys/devices/armv8_cortex_a53/type:8
-> /sys/devices/armv8_cortex_a72/type:9
-> /sys/devices/armv8_cortex_a53/cpus:0-3
-> /sys/devices/armv8_cortex_a72/cpus:4-5
-> 
-> See, non-Apple HW. And now for a system with homogeneous CPUs:
-> 
-> $ grep . /sys/devices/armv8*/{type,cpus}
-> /sys/devices/armv8_pmuv3_0/type:8
-> /sys/devices/armv8_pmuv3_0/cpus:0-159
-> 
-> Still no type 4. I could go on for hours, I have plenty of HW around
-> me!
-> 
-> So whatever your source of information is, it doesn't match reality.
-> Our PMUs are numbered arbitrarily, and have been so for... a very long
-> time. At least since perf_pmu_register has supported dynamic
-> registration (see 2e80a82a49c4c).
-> 
-> Thanks,
-> 
-> 	M.
-> 
+On Tue, May 30, 2023 at 3:12=E2=80=AFPM Eric Dumazet <edumazet@google.com> =
+wrote:
+>
+> On Mon, May 29, 2023 at 1:38=E2=80=AFPM fuyuanli <fuyuanli@didiglobal.com=
+> wrote:
+> >
+> > We've got some issues when sending a compressed ack is deferred to
+> > release phrase due to the socket owned by another user:
+> > 1. a compressed ack would not be sent because of lack of ICSK_ACK_TIMER
+> > flag.
+>
+> Are you sure ? Just add it then, your patch will be a one-liner
+> instead of a complex one adding
+> more code in a fast path.
 
+Honestly, at the very beginning, we just added one line[1] to fix
+this. After I digged more into this part, I started to doubt if we
+should reuse the delayed ack logic.
 
-I agree with Marc,
-on s390 we have 5 different PMUs and all have arbitrary numbers
-and have totally different features:
+Because in the sack compression logic there is no need to do more
+things as delayed ack does in the tcp_delack_timer_handler() function.
 
-# ll /sys/devices/{cpum,pai}*/type
--r--r--r-- 1 root root 4096 May 30 09:33 /sys/devices/cpum_cf_diag/type
--r--r--r-- 1 root root 4096 May 30 09:33 /sys/devices/cpum_cf/type
--r--r--r-- 1 root root 4096 May 30 09:33 /sys/devices/cpum_sf/type
--r--r--r-- 1 root root 4096 May 30 09:33 /sys/devices/pai_crypto/type
--r--r--r-- 1 root root 4096 May 30 09:33 /sys/devices/pai_ext/type
-# grep . /sys/devices/{cpum,pai}*/type
-/sys/devices/cpum_cf_diag/type:9
-/sys/devices/cpum_cf/type:8
-/sys/devices/cpum_sf/type:4
-/sys/devices/pai_crypto/type:10
-/sys/devices/pai_ext/type:11
-# 
+Besides, here are some things extra to be done if we defer to send an
+ack in sack compression:
+1) decrease tp->compressed_ack. The same as "tp->compressed_ack--;" in
+tcp_compressed_ack_kick().
+2) initialize icsk->icsk_ack.timeout. Actually we don't need to do
+this because we don't modify the expiration time in the sack
+compression hrtimer.
+3) don't need to count the LINUX_MIB_DELAYEDACKS counter.
+4) I wonder even if those checks about the ack schedule or ping pong
+mode in tcp_delack_timer_handler() for sack compression? I'm not sure
+about it.
 
-Thanks Thomas
--- 
-Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
---
-Vorsitzender des Aufsichtsrats: Gregor Pillen
-Geschäftsführung: David Faller
-Sitz der Gesellschaft: Böblingen / Registergericht: Amtsgericht Stuttgart, HRB 243294
+So one line cannot solve it perfectly. That's the reason why we
+introduce a new logic which can be clearer.
 
+I'm wondering if adding one check in the fast path is really that
+unacceptable (it may hurt performance?) because a new logic would be
+clearer for the whole sack compression.
+
+[1]
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index cc072d2cfcd8..d9e76d761cc6 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -5568,6 +5568,7 @@ static void __tcp_ack_snd_check(struct sock *sk,
+int ofo_possible)
+
+READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_comp_sack_delay_ns),
+                      rtt * (NSEC_PER_USEC >> 3)/20);
+        sock_hold(sk);
++       inet_csk(sk)->icsk_ack.pending |=3D ICSK_ACK_TIMER;
+        hrtimer_start_range_ns(&tp->compressed_ack_timer, ns_to_ktime(delay=
+),
+
+READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_comp_sack_slack_ns),
+                               HRTIMER_MODE_REL_PINNED_SOFT);
+
+>
+> > 2. the tp->compressed_ack counter should be decremented by 1.
+> > 3. we cannot pass timeout check and reset the delack timer in
+> > tcp_delack_timer_handler().
+> > 4. we are not supposed to increment the LINUX_MIB_DELAYEDACKS counter.
+> > ...
+> >
+> > The reason why it could happen is that we previously reuse the delayed
+> > ack logic when handling the sack compression. With this patch applied,
+> > the sack compression logic would go into the same function
+> > (tcp_compack_timer_handler()) whether we defer sending ack or not.
+> > Therefore, those two issued could be easily solved.
+> >
+> > Here are more details in the old logic:
+> > When sack compression is triggered in the tcp_compressed_ack_kick(),
+> > if the sock is owned by user, it will set TCP_DELACK_TIMER_DEFERRED and
+> > then defer to the release cb phrase. Later once user releases the sock,
+> > tcp_delack_timer_handler() should send a ack as expected, which, howeve=
+r,
+> > cannot happen due to lack of ICSK_ACK_TIMER flag. Therefore, the receiv=
+er
+> > would not sent an ack until the sender's retransmission timeout. It
+> > definitely increases unnecessary latency.
+> >
+> > This issue happens rarely in the production environment. I used kprobe
+> > to hook some key functions like tcp_compressed_ack_kick, tcp_release_cb=
+,
+> > tcp_delack_timer_handler and then found that when tcp_delack_timer_hand=
+ler
+> > was called, value of icsk_ack.pending was 1, which means we only had
+> > flag ICSK_ACK_SCHED set, not including ICSK_ACK_TIMER. It was against
+> > our expectations.
+> >
+> > In conclusion, we chose to separate the sack compression from delayed
+> > ack logic to solve issues only happening when the process is deferred.
+> >
+> > Fixes: 5d9f4262b7ea ("tcp: add SACK compression")
+> > Signed-off-by: fuyuanli <fuyuanli@didiglobal.com>
+> > Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
+> > ---
+> >  include/linux/tcp.h   |  2 ++
+> >  include/net/tcp.h     |  1 +
+> >  net/ipv4/tcp_output.c |  4 ++++
+> >  net/ipv4/tcp_timer.c  | 28 +++++++++++++++++++---------
+> >  4 files changed, 26 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+> > index b4c08ac86983..cd15a9972c48 100644
+> > --- a/include/linux/tcp.h
+> > +++ b/include/linux/tcp.h
+> > @@ -461,6 +461,7 @@ enum tsq_enum {
+> >         TCP_MTU_REDUCED_DEFERRED,  /* tcp_v{4|6}_err() could not call
+> >                                     * tcp_v{4|6}_mtu_reduced()
+> >                                     */
+> > +       TCP_COMPACK_TIMER_DEFERRED, /* tcp_compressed_ack_kick() found =
+socket was owned */
+> >  };
+> >
+> >  enum tsq_flags {
+> > @@ -470,6 +471,7 @@ enum tsq_flags {
+> >         TCPF_WRITE_TIMER_DEFERRED       =3D (1UL << TCP_WRITE_TIMER_DEF=
+ERRED),
+> >         TCPF_DELACK_TIMER_DEFERRED      =3D (1UL << TCP_DELACK_TIMER_DE=
+FERRED),
+> >         TCPF_MTU_REDUCED_DEFERRED       =3D (1UL << TCP_MTU_REDUCED_DEF=
+ERRED),
+> > +       TCPF_COMPACK_TIMER_DEFERRED     =3D (1UL << TCP_DELACK_TIMER_DE=
+FERRED),
+> >  };
+> >
+> >  #define tcp_sk(ptr) container_of_const(ptr, struct tcp_sock, inet_conn=
+.icsk_inet.sk)
+> > diff --git a/include/net/tcp.h b/include/net/tcp.h
+> > index 18a038d16434..e310d7bf400c 100644
+> > --- a/include/net/tcp.h
+> > +++ b/include/net/tcp.h
+> > @@ -342,6 +342,7 @@ void tcp_release_cb(struct sock *sk);
+> >  void tcp_wfree(struct sk_buff *skb);
+> >  void tcp_write_timer_handler(struct sock *sk);
+> >  void tcp_delack_timer_handler(struct sock *sk);
+> > +void tcp_compack_timer_handler(struct sock *sk);
+> >  int tcp_ioctl(struct sock *sk, int cmd, unsigned long arg);
+> >  int tcp_rcv_state_process(struct sock *sk, struct sk_buff *skb);
+> >  void tcp_rcv_established(struct sock *sk, struct sk_buff *skb);
+> > diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+> > index cfe128b81a01..1703caab6632 100644
+> > --- a/net/ipv4/tcp_output.c
+> > +++ b/net/ipv4/tcp_output.c
+> > @@ -1110,6 +1110,10 @@ void tcp_release_cb(struct sock *sk)
+> >                 tcp_delack_timer_handler(sk);
+> >                 __sock_put(sk);
+> >         }
+> > +       if (flags & TCPF_COMPACK_TIMER_DEFERRED) {
+> > +               tcp_compack_timer_handler(sk);
+> > +               __sock_put(sk);
+> > +       }
+>
+> Please do not add another test in the fast path.
+>
+> Just make sure tcp_delack_timer_handler() handles the case (this
+> certainly was my intent)
+>
+>
+> >         if (flags & TCPF_MTU_REDUCED_DEFERRED) {
+> >                 inet_csk(sk)->icsk_af_ops->mtu_reduced(sk);
+> >                 __sock_put(sk);
+> > diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
+> > index b839c2f91292..069f6442069b 100644
+> > --- a/net/ipv4/tcp_timer.c
+> > +++ b/net/ipv4/tcp_timer.c
+> > @@ -318,6 +318,23 @@ void tcp_delack_timer_handler(struct sock *sk)
+> >         }
+> >  }
+> >
+> > +/* Called with BH disabled */
+> > +void tcp_compack_timer_handler(struct sock *sk)
+> > +{
+> > +       struct tcp_sock *tp =3D tcp_sk(sk);
+> > +
+> > +       if (((1 << sk->sk_state) & (TCPF_CLOSE | TCPF_LISTEN)))
+> > +               return;
+> > +
+> > +       if (tp->compressed_ack) {
+> > +               /* Since we have to send one ack finally,
+> > +                * subtract one from tp->compressed_ack to keep
+> > +                * LINUX_MIB_TCPACKCOMPRESSED accurate.
+> > +                */
+> > +               tp->compressed_ack--;
+> > +               tcp_send_ack(sk);
+> > +       }
+> > +}
+> >
+> >  /**
+> >   *  tcp_delack_timer() - The TCP delayed ACK timeout handler
+> > @@ -757,16 +774,9 @@ static enum hrtimer_restart tcp_compressed_ack_kic=
+k(struct hrtimer *timer)
+> >
+> >         bh_lock_sock(sk);
+> >         if (!sock_owned_by_user(sk)) {
+> > -               if (tp->compressed_ack) {
+> > -                       /* Since we have to send one ack finally,
+> > -                        * subtract one from tp->compressed_ack to keep
+> > -                        * LINUX_MIB_TCPACKCOMPRESSED accurate.
+> > -                        */
+> > -                       tp->compressed_ack--;
+> > -                       tcp_send_ack(sk);
+> > -               }
+> > +               tcp_compack_timer_handler(sk);
+> >         } else {
+> > -               if (!test_and_set_bit(TCP_DELACK_TIMER_DEFERRED,
+>
+> See, I was clearly intending to let tcp_delack_timer_handler() deal with =
+this.
+
+I knew that :)
+
+Thanks,
+Jason
+
+>
+> > +               if (!test_and_set_bit(TCP_COMPACK_TIMER_DEFERRED,
+> >                                       &sk->sk_tsq_flags))
+> >                         sock_hold(sk);
+> >         }
+> > --
+> > 2.17.1
+> >
