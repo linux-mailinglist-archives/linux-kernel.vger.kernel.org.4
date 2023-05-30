@@ -2,108 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1687163C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 875477163A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbjE3OUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:20:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
+        id S229449AbjE3OTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233080AbjE3OTn (ORCPT
+        with ESMTP id S232930AbjE3OS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:19:43 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048F8E59;
-        Tue, 30 May 2023 07:18:36 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f6ef9a928fso28677565e9.3;
-        Tue, 30 May 2023 07:18:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685456300; x=1688048300;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XVlZv4IjpPagcS+VHOYSJtQKJ9NE7q5BSElLM0HACv0=;
-        b=oFzeUk+o8LI4KfFOcfOUKZbbNjemEJafLUaRbDlRkMhaAuHrAkrcZ4CiGOE52leCcj
-         WYVN3xq1hOH55Yj7Sbc6ngnuJBWefXzDjg+fpCF/LaaHAjLiIpqTjPCmVnn3u7/E4Kvs
-         9l7PmY9FyqH9Pwud1zB57sQLmhlAEYemhaxhUTF3JBR79wooqE75ckjDrlo89Q9MZ15s
-         XIcSWj2TPu+1rF42bHAYTfRCiYh8eDgYPrR7FbSUXN/famGXl5VxyRSDnhrCK0h/6E2y
-         ha5ZxW5mhua19RvwTL8NKAcu1euPBNN2lcGBEGpnW4toYFsdBZCvJ1mkunWzbKLb+Wcp
-         nsww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685456300; x=1688048300;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XVlZv4IjpPagcS+VHOYSJtQKJ9NE7q5BSElLM0HACv0=;
-        b=BkaxD5BTkeZtNs0CEeYKzV8j4IxWhawbTbQTNHYpLq0zP2IUa2Ymd3uFBOoWyJCnb2
-         bh23ByRsDOiorkD8HzbbsAjzMWrixEra0V9yTh7ZWFvL6xG5MgzIyuPGaqKtEGqHtXOw
-         Rrns/WpocERp0XRzV5r8m2E6jFkeyFmBEBi0Jsf0R0I4jYPK2cC4ICCcolz4mlljuEc/
-         rgh66OxKBvrCqKHx+Q/WBRMSuu2yDv2HzlhhbxfMscaODFVP9X/1m1Cn87io09nityGf
-         hRC4OWDlY2yTjqJiTxgdHmiMYH2gIW1OZ0TZLOgST1NWWFUqYANKfg+fFBk9hm4sMGA9
-         gyqA==
-X-Gm-Message-State: AC+VfDze4/Mbu1Itfgg3OD1nVdKGHCLEsOh8FeKcOJnLSV4ARV4k8CWQ
-        MLjq+AIlK0jYW+hwLnyOMiU=
-X-Google-Smtp-Source: ACHHUZ7fbWofkLr8DR+0tiiebQDTwMVAH7kGC0nnOcANKAyFWvcTIqbopYQuf7XnmxEPzNUCD6jQMw==
-X-Received: by 2002:a7b:ce95:0:b0:3f6:fb2:add4 with SMTP id q21-20020a7bce95000000b003f60fb2add4mr1722676wmj.33.1685456299592;
-        Tue, 30 May 2023 07:18:19 -0700 (PDT)
-Received: from localhost.localdomain (cpc157791-rdng31-2-0-cust585.15-3.cable.virginm.net. [86.24.214.74])
-        by smtp.gmail.com with ESMTPSA id x11-20020a1c7c0b000000b003f50876905dsm17573347wmc.6.2023.05.30.07.18.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 07:18:19 -0700 (PDT)
-From:   Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     Stuart Hayhurst <stuart.a.hayhurst@gmail.com>, jikos@kernel.org,
-        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] HID: logitech-hidpp: Add USB and Bluetooth IDs for the Logitech G915 TKL Keyboard
-Date:   Tue, 30 May 2023 15:16:29 +0100
-Message-ID: <20230530141628.21290-1-stuart.a.hayhurst@gmail.com>
-X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8
-In-Reply-To: <f395a434756b7f35336b541cdbdb61ef5b6fe0b1.camel@hadess.net>
-References: <f395a434756b7f35336b541cdbdb61ef5b6fe0b1.camel@hadess.net>
+        Tue, 30 May 2023 10:18:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8467711B
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:17:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685456261;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=S6Cj3Wp9DlUBqB3ssDU9rjwPMpP7CzOqqIN8IX2Zg2c=;
+        b=ed07V7kAhG3hD1duElcZVZwg6PQpRL98Y4imIMPSHpC0DFnYNHTqYpw8Hips+9SdydJeb+
+        AKieyiRHbjt0O54bmHAJprCvJ2LmkE92MoK/d+Uv7P/xR9ojwdWMmlsrlA4JJ60PlQdW5d
+        hbS+TZjLEyAYbEioeyHnNItyRr/z0O4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-498-cs3AdqQuO9qpdCoxRFGrbA-1; Tue, 30 May 2023 10:17:36 -0400
+X-MC-Unique: cs3AdqQuO9qpdCoxRFGrbA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B0582811E88;
+        Tue, 30 May 2023 14:17:34 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 24263C154D1;
+        Tue, 30 May 2023 14:17:32 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-crypto@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 06/10] crypto: af_alg: Use extract_iter_to_sg() to create scatterlists
+Date:   Tue, 30 May 2023 15:16:30 +0100
+Message-ID: <20230530141635.136968-7-dhowells@redhat.com>
+In-Reply-To: <20230530141635.136968-1-dhowells@redhat.com>
+References: <20230530141635.136968-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds the USB and Bluetooth IDs for the Logitech G915 TKL keyboard, for device detection
-For this device, this provides battery reporting on top of hid-generic
+Use extract_iter_to_sg() to decant the destination iterator into a
+scatterlist in af_alg_get_rsgl().  af_alg_make_sg() can then be removed.
 
-Signed-off-by: Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Herbert Xu <herbert@gondor.apana.org.au>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: linux-crypto@vger.kernel.org
+cc: netdev@vger.kernel.org
 ---
- drivers/hid/hid-logitech-hidpp.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
-index b2cd7527de19..28761272afe5 100644
---- a/drivers/hid/hid-logitech-hidpp.c
-+++ b/drivers/hid/hid-logitech-hidpp.c
-@@ -4403,6 +4403,8 @@ static const struct hid_device_id hidpp_devices[] = {
- 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC086) },
- 	{ /* Logitech G903 Hero Gaming Mouse over USB */
- 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC091) },
-+	{ /* Logitech G915 TKL Keyboard over USB */
-+	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC343) },
- 	{ /* Logitech G920 Wheel over USB */
- 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_G920_WHEEL),
- 		.driver_data = HIDPP_QUIRK_CLASS_G920 | HIDPP_QUIRK_FORCE_OUTPUT_REPORTS},
-@@ -4418,6 +4420,8 @@ static const struct hid_device_id hidpp_devices[] = {
- 	{ /* MX5500 keyboard over Bluetooth */
- 	  HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH, 0xb30b),
- 	  .driver_data = HIDPP_QUIRK_HIDPP_CONSUMER_VENDOR_KEYS },
-+	{ /* Logitech G915 TKL keyboard over Bluetooth */
-+	  HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH, 0xb35f) },
- 	{ /* M-RCQ142 V470 Cordless Laser Mouse over Bluetooth */
- 	  HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH, 0xb008) },
- 	{ /* MX Master mouse over Bluetooth */
--- 
-2.40.1.521.gf1e218fcd8
+Notes:
+    ver #2)
+     - Fix some checkpatch warnings.
+
+ crypto/af_alg.c         | 57 +++++++++++------------------------------
+ crypto/algif_aead.c     | 16 +++++++-----
+ crypto/algif_hash.c     | 18 +++++++++----
+ crypto/algif_skcipher.c |  2 +-
+ include/crypto/if_alg.h |  6 ++---
+ 5 files changed, 40 insertions(+), 59 deletions(-)
+
+diff --git a/crypto/af_alg.c b/crypto/af_alg.c
+index 7caff10df643..b8bf6d8525ba 100644
+--- a/crypto/af_alg.c
++++ b/crypto/af_alg.c
+@@ -531,45 +531,11 @@ static const struct net_proto_family alg_family = {
+ 	.owner	=	THIS_MODULE,
+ };
+ 
+-int af_alg_make_sg(struct af_alg_sgl *sgl, struct iov_iter *iter, int len)
+-{
+-	struct page **pages = sgl->pages;
+-	size_t off;
+-	ssize_t n;
+-	int npages, i;
+-
+-	n = iov_iter_extract_pages(iter, &pages, len, ALG_MAX_PAGES, 0, &off);
+-	if (n < 0)
+-		return n;
+-
+-	sgl->need_unpin = iov_iter_extract_will_pin(iter);
+-
+-	npages = DIV_ROUND_UP(off + n, PAGE_SIZE);
+-	if (WARN_ON(npages == 0))
+-		return -EINVAL;
+-	/* Add one extra for linking */
+-	sg_init_table(sgl->sg, npages + 1);
+-
+-	for (i = 0, len = n; i < npages; i++) {
+-		int plen = min_t(int, len, PAGE_SIZE - off);
+-
+-		sg_set_page(sgl->sg + i, sgl->pages[i], plen, off);
+-
+-		off = 0;
+-		len -= plen;
+-	}
+-	sg_mark_end(sgl->sg + npages - 1);
+-	sgl->npages = npages;
+-
+-	return n;
+-}
+-EXPORT_SYMBOL_GPL(af_alg_make_sg);
+-
+ static void af_alg_link_sg(struct af_alg_sgl *sgl_prev,
+ 			   struct af_alg_sgl *sgl_new)
+ {
+-	sg_unmark_end(sgl_prev->sg + sgl_prev->npages - 1);
+-	sg_chain(sgl_prev->sg, sgl_prev->npages + 1, sgl_new->sg);
++	sg_unmark_end(sgl_prev->sgt.sgl + sgl_prev->sgt.nents - 1);
++	sg_chain(sgl_prev->sgt.sgl, sgl_prev->sgt.nents + 1, sgl_new->sgt.sgl);
+ }
+ 
+ void af_alg_free_sg(struct af_alg_sgl *sgl)
+@@ -577,8 +543,8 @@ void af_alg_free_sg(struct af_alg_sgl *sgl)
+ 	int i;
+ 
+ 	if (sgl->need_unpin)
+-		for (i = 0; i < sgl->npages; i++)
+-			unpin_user_page(sgl->pages[i]);
++		for (i = 0; i < sgl->sgt.nents; i++)
++			unpin_user_page(sg_page(&sgl->sgt.sgl[i]));
+ }
+ EXPORT_SYMBOL_GPL(af_alg_free_sg);
+ 
+@@ -1292,8 +1258,8 @@ int af_alg_get_rsgl(struct sock *sk, struct msghdr *msg, int flags,
+ 
+ 	while (maxsize > len && msg_data_left(msg)) {
+ 		struct af_alg_rsgl *rsgl;
++		ssize_t err;
+ 		size_t seglen;
+-		int err;
+ 
+ 		/* limit the amount of readable buffers */
+ 		if (!af_alg_readable(sk))
+@@ -1310,16 +1276,23 @@ int af_alg_get_rsgl(struct sock *sk, struct msghdr *msg, int flags,
+ 				return -ENOMEM;
+ 		}
+ 
+-		rsgl->sgl.npages = 0;
++		rsgl->sgl.sgt.sgl = rsgl->sgl.sgl;
++		rsgl->sgl.sgt.nents = 0;
++		rsgl->sgl.sgt.orig_nents = 0;
+ 		list_add_tail(&rsgl->list, &areq->rsgl_list);
+ 
+-		/* make one iovec available as scatterlist */
+-		err = af_alg_make_sg(&rsgl->sgl, &msg->msg_iter, seglen);
++		sg_init_table(rsgl->sgl.sgt.sgl, ALG_MAX_PAGES);
++		err = extract_iter_to_sg(&msg->msg_iter, seglen, &rsgl->sgl.sgt,
++					 ALG_MAX_PAGES, 0);
+ 		if (err < 0) {
+ 			rsgl->sg_num_bytes = 0;
+ 			return err;
+ 		}
+ 
++		sg_mark_end(rsgl->sgl.sgt.sgl + rsgl->sgl.sgt.nents - 1);
++		rsgl->sgl.need_unpin =
++			iov_iter_extract_will_pin(&msg->msg_iter);
++
+ 		/* chain the new scatterlist with previous one */
+ 		if (areq->last_rsgl)
+ 			af_alg_link_sg(&areq->last_rsgl->sgl, &rsgl->sgl);
+diff --git a/crypto/algif_aead.c b/crypto/algif_aead.c
+index 42493b4d8ce4..829878025dba 100644
+--- a/crypto/algif_aead.c
++++ b/crypto/algif_aead.c
+@@ -210,7 +210,7 @@ static int _aead_recvmsg(struct socket *sock, struct msghdr *msg,
+ 	 */
+ 
+ 	/* Use the RX SGL as source (and destination) for crypto op. */
+-	rsgl_src = areq->first_rsgl.sgl.sg;
++	rsgl_src = areq->first_rsgl.sgl.sgt.sgl;
+ 
+ 	if (ctx->enc) {
+ 		/*
+@@ -224,7 +224,8 @@ static int _aead_recvmsg(struct socket *sock, struct msghdr *msg,
+ 		 * RX SGL: AAD || PT || Tag
+ 		 */
+ 		err = crypto_aead_copy_sgl(null_tfm, tsgl_src,
+-					   areq->first_rsgl.sgl.sg, processed);
++					   areq->first_rsgl.sgl.sgt.sgl,
++					   processed);
+ 		if (err)
+ 			goto free;
+ 		af_alg_pull_tsgl(sk, processed, NULL, 0);
+@@ -242,7 +243,8 @@ static int _aead_recvmsg(struct socket *sock, struct msghdr *msg,
+ 
+ 		 /* Copy AAD || CT to RX SGL buffer for in-place operation. */
+ 		err = crypto_aead_copy_sgl(null_tfm, tsgl_src,
+-					   areq->first_rsgl.sgl.sg, outlen);
++					   areq->first_rsgl.sgl.sgt.sgl,
++					   outlen);
+ 		if (err)
+ 			goto free;
+ 
+@@ -267,10 +269,10 @@ static int _aead_recvmsg(struct socket *sock, struct msghdr *msg,
+ 		if (usedpages) {
+ 			/* RX SGL present */
+ 			struct af_alg_sgl *sgl_prev = &areq->last_rsgl->sgl;
++			struct scatterlist *sg = sgl_prev->sgt.sgl;
+ 
+-			sg_unmark_end(sgl_prev->sg + sgl_prev->npages - 1);
+-			sg_chain(sgl_prev->sg, sgl_prev->npages + 1,
+-				 areq->tsgl);
++			sg_unmark_end(sg + sgl_prev->sgt.nents - 1);
++			sg_chain(sg, sgl_prev->sgt.nents + 1, areq->tsgl);
+ 		} else
+ 			/* no RX SGL present (e.g. authentication only) */
+ 			rsgl_src = areq->tsgl;
+@@ -278,7 +280,7 @@ static int _aead_recvmsg(struct socket *sock, struct msghdr *msg,
+ 
+ 	/* Initialize the crypto operation */
+ 	aead_request_set_crypt(&areq->cra_u.aead_req, rsgl_src,
+-			       areq->first_rsgl.sgl.sg, used, ctx->iv);
++			       areq->first_rsgl.sgl.sgt.sgl, used, ctx->iv);
+ 	aead_request_set_ad(&areq->cra_u.aead_req, ctx->aead_assoclen);
+ 	aead_request_set_tfm(&areq->cra_u.aead_req, tfm);
+ 
+diff --git a/crypto/algif_hash.c b/crypto/algif_hash.c
+index 63af72e19fa8..16c69c4b9c62 100644
+--- a/crypto/algif_hash.c
++++ b/crypto/algif_hash.c
+@@ -91,13 +91,21 @@ static int hash_sendmsg(struct socket *sock, struct msghdr *msg,
+ 		if (len > limit)
+ 			len = limit;
+ 
+-		len = af_alg_make_sg(&ctx->sgl, &msg->msg_iter, len);
++		ctx->sgl.sgt.sgl = ctx->sgl.sgl;
++		ctx->sgl.sgt.nents = 0;
++		ctx->sgl.sgt.orig_nents = 0;
++
++		len = extract_iter_to_sg(&msg->msg_iter, len, &ctx->sgl.sgt,
++					 ALG_MAX_PAGES, 0);
+ 		if (len < 0) {
+ 			err = copied ? 0 : len;
+ 			goto unlock;
+ 		}
++		sg_mark_end(ctx->sgl.sgt.sgl + ctx->sgl.sgt.nents);
++
++		ctx->sgl.need_unpin = iov_iter_extract_will_pin(&msg->msg_iter);
+ 
+-		ahash_request_set_crypt(&ctx->req, ctx->sgl.sg, NULL, len);
++		ahash_request_set_crypt(&ctx->req, ctx->sgl.sgt.sgl, NULL, len);
+ 
+ 		err = crypto_wait_req(crypto_ahash_update(&ctx->req),
+ 				      &ctx->wait);
+@@ -141,8 +149,8 @@ static ssize_t hash_sendpage(struct socket *sock, struct page *page,
+ 		flags |= MSG_MORE;
+ 
+ 	lock_sock(sk);
+-	sg_init_table(ctx->sgl.sg, 1);
+-	sg_set_page(ctx->sgl.sg, page, size, offset);
++	sg_init_table(ctx->sgl.sgl, 1);
++	sg_set_page(ctx->sgl.sgl, page, size, offset);
+ 
+ 	if (!(flags & MSG_MORE)) {
+ 		err = hash_alloc_result(sk, ctx);
+@@ -151,7 +159,7 @@ static ssize_t hash_sendpage(struct socket *sock, struct page *page,
+ 	} else if (!ctx->more)
+ 		hash_free_result(sk, ctx);
+ 
+-	ahash_request_set_crypt(&ctx->req, ctx->sgl.sg, ctx->result, size);
++	ahash_request_set_crypt(&ctx->req, ctx->sgl.sgl, ctx->result, size);
+ 
+ 	if (!(flags & MSG_MORE)) {
+ 		if (ctx->more)
+diff --git a/crypto/algif_skcipher.c b/crypto/algif_skcipher.c
+index ee8890ee8f33..a251cd6bd5b9 100644
+--- a/crypto/algif_skcipher.c
++++ b/crypto/algif_skcipher.c
+@@ -105,7 +105,7 @@ static int _skcipher_recvmsg(struct socket *sock, struct msghdr *msg,
+ 	/* Initialize the crypto operation */
+ 	skcipher_request_set_tfm(&areq->cra_u.skcipher_req, tfm);
+ 	skcipher_request_set_crypt(&areq->cra_u.skcipher_req, areq->tsgl,
+-				   areq->first_rsgl.sgl.sg, len, ctx->iv);
++				   areq->first_rsgl.sgl.sgt.sgl, len, ctx->iv);
+ 
+ 	if (msg->msg_iocb && !is_sync_kiocb(msg->msg_iocb)) {
+ 		/* AIO operation */
+diff --git a/include/crypto/if_alg.h b/include/crypto/if_alg.h
+index 46494b33f5bc..34224e77f5a2 100644
+--- a/include/crypto/if_alg.h
++++ b/include/crypto/if_alg.h
+@@ -56,9 +56,8 @@ struct af_alg_type {
+ };
+ 
+ struct af_alg_sgl {
+-	struct scatterlist sg[ALG_MAX_PAGES + 1];
+-	struct page *pages[ALG_MAX_PAGES];
+-	unsigned int npages;
++	struct sg_table sgt;
++	struct scatterlist sgl[ALG_MAX_PAGES + 1];
+ 	bool need_unpin;
+ };
+ 
+@@ -164,7 +163,6 @@ int af_alg_release(struct socket *sock);
+ void af_alg_release_parent(struct sock *sk);
+ int af_alg_accept(struct sock *sk, struct socket *newsock, bool kern);
+ 
+-int af_alg_make_sg(struct af_alg_sgl *sgl, struct iov_iter *iter, int len);
+ void af_alg_free_sg(struct af_alg_sgl *sgl);
+ 
+ static inline struct alg_sock *alg_sk(struct sock *sk)
 
