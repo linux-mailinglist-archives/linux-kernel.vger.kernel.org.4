@@ -2,40 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA5F715E7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1C3715E80
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjE3MHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
+        id S231400AbjE3MHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjE3MHb (ORCPT
+        with ESMTP id S231298AbjE3MHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:07:31 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FB071BC;
-        Tue, 30 May 2023 05:07:10 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 34UC50Vg015106;
-        Tue, 30 May 2023 14:05:00 +0200
-Date:   Tue, 30 May 2023 14:05:00 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 1/2] selftests/nolibc: add new gettimeofday test cases
-Message-ID: <ZHXmbNg4BdJNd4cO@1wt.eu>
-References: <cover.1685428087.git.falcon@tinylab.org>
- <bfc3dba52300dcce03ae1c7c41f2bb8984cf459b.1685428087.git.falcon@tinylab.org>
- <96f1134d-ce6e-4d82-ae00-1cd4038809c4@t-8ch.de>
+        Tue, 30 May 2023 08:07:42 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CF018B;
+        Tue, 30 May 2023 05:07:22 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 629495FD27;
+        Tue, 30 May 2023 15:06:42 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1685448402;
+        bh=bZ/3zHJMAac2f/gPspgrR1bhRNJwTftEFFtSQZKfL4w=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=T/VLAf3TNfoVJrOANf6hHbbJuExBwVn1s34Zx2Avqmyr6aXJUY2cIo81qtQqduPh8
+         BRa6Cbzg+AbH9OJ+qZd2mrV3FqE8gfStR9callJ9oUXpm3tjNzQK7h1HNqqAsu8rmg
+         eynLSLUc+P+lB580prvqse1tiznlr56Bbrcy6ount+MMBrPSPhXvWI9tx4IuO3CKFe
+         QGZOXXGVoUiOrKq64nQtTMBkGHDE6B7gW1H63mZOAW5pYCSvhg5H0CHwOFmL4NnLY1
+         xTyJlBAWxZgPUe7+fCSSzsXOkB1Gb1GfJ6UNLz9IYtm8fxH7vtJ4BHYVgUOKvswm0t
+         +/XTIkInKJ/oQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 30 May 2023 15:06:41 +0300 (MSK)
+Date:   Tue, 30 May 2023 15:06:40 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Jerome Brunet <jbrunet@baylibre.com>
+CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <neil.armstrong@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
+        <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v15 6/6] clk: meson: a1: add Amlogic A1 Peripherals clock
+ controller driver
+Message-ID: <20230530120640.irugyrio3qa7czjy@CAB-WSD-L081021>
+References: <20230517133309.9874-1-ddrokosov@sberdevices.ru>
+ <20230517133309.9874-7-ddrokosov@sberdevices.ru>
+ <CAFBinCBs7-9CvfQLxLoG5=FjmSK+S5eGsLXOAyQN9kNOg2q-2g@mail.gmail.com>
+ <20230522133212.fcxgsml4hmvj65bb@CAB-WSD-L081021>
+ <1jr0qy42tn.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <96f1134d-ce6e-4d82-ae00-1cd4038809c4@t-8ch.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <1jr0qy42tn.fsf@starbuckisacylon.baylibre.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/30 07:59:00 #21376339
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,64 +77,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 12:59:31PM +0200, Thomas Weißschuh wrote:
-> On 2023-05-30 14:37:49+0800, Zhangjin Wu wrote:
-> > These 3 test cases are added to cover the normal using scenes of
-> > gettimeofday().
-> > 
-> > They have been used to trigger and fix up such issue:
-> > 
-> >     nolibc-test.c:(.text.gettimeofday+0x54): undefined reference to `__aeabi_ldivmod'
-> > 
-> > This issue happens while there is no "unsigned int" conversion in the
-> > new clock_gettime / clock_gettime64 syscall path of gettimeofday():
-> > 
-> >     tv->tv_usec = ts.tv_nsec / 1000;
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/testing/selftests/nolibc/nolibc-test.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> > index 8ba8c2fc71a0..20d184da9a2b 100644
-> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > @@ -533,6 +533,8 @@ static int test_stat_timestamps(void)
-> >   */
-> >  int run_syscall(int min, int max)
-> >  {
-> > +	struct timeval tv;
-> > +	struct timezone tz;
-> >  	struct stat stat_buf;
-> >  	int euid0;
-> >  	int proc;
-> > @@ -588,6 +590,9 @@ int run_syscall(int min, int max)
-> >  		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
-> >  		CASE_TEST(getdents64_null);   EXPECT_SYSER(1, test_getdents64("/dev/null"), -1, ENOTDIR); break;
-> >  		CASE_TEST(gettimeofday_null); EXPECT_SYSZR(1, gettimeofday(NULL, NULL)); break;
-> > +		CASE_TEST(gettimeofday_tv);   EXPECT_SYSZR(1, gettimeofday(&tv, NULL)); break;
-> > +		CASE_TEST(gettimeofday_tz);   EXPECT_SYSZR(1, gettimeofday(NULL, &tz)); break;
+Hello Jerome,
+
+Thank you for the review!
+
+On Tue, May 30, 2023 at 10:32:57AM +0200, Jerome Brunet wrote:
 > 
-> Calling gettimeofday(NULL, ...) will actually segfault on glibc.
-> It works when calling through the VDSO, but not the logic in glibc
-> itself, which is guess is allowed by POSIX.
+> On Mon 22 May 2023 at 16:32, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> 
+> > Hello Martin,
+> >
+> > Thank you so much for the review, I really appreciate it!
+> > Please find my comments below.
+> >
+> > On Fri, May 19, 2023 at 11:03:54PM +0200, Martin Blumenstingl wrote:
+> >> Hi Dmitry,
+> >> 
+> >> On Wed, May 17, 2023 at 3:33â€¯PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> >> [...]
+> >> > +static struct clk_regmap sys_b_sel = {
+> >> > +       .data = &(struct clk_regmap_mux_data){
+> >> > +               .offset = SYS_CLK_CTRL0,
+> >> > +               .mask = 0x7,
+> >> > +               .shift = 26,
+> >> > +               .table = mux_table_sys,
+> >> > +       },
+> >> > +       .hw.init = &(struct clk_init_data){
+> >> > +               .name = "sys_b_sel",
+> >> > +               .ops = &clk_regmap_mux_ro_ops,
+> >> the sys_*_sel muxes and sys_*_gate are _ro...
+> >> 
+> >> > +               .parent_data = sys_parents,
+> >> > +               .num_parents = ARRAY_SIZE(sys_parents),
+> >> > +       },
+> >> > +};
+> >> > +
+> >> > +static struct clk_regmap sys_b_div = {
+> >> > +       .data = &(struct clk_regmap_div_data){
+> >> > +               .offset = SYS_CLK_CTRL0,
+> >> > +               .shift = 16,
+> >> > +               .width = 10,
+> >> > +       },
+> >> > +       .hw.init = &(struct clk_init_data){
+> >> > +               .name = "sys_b_div",
+> >> > +               .ops = &clk_regmap_divider_ops,
+> >> ...but the sys_*_div aren't
+> >> Is this on purpose? If it is: why can the divider be changed at
+> >> runtime but the mux can't?
+> >> 
+> >
+> > Ah, that's a good catch. Since the system clock is set up by the BootROM
+> > code, all sys_* dividers and gates should be read-only. I'll make sure
+> > to change that in the next version.
+> >
+> >> [...]
+> >> > +/*
+> >> > + * the index 2 is sys_pll_div16, it will be implemented in the CPU clock driver,
+> >> We need to add the "sys_pll_div16" input to the dt-bindings since they
+> >> should always describe the hardware (regardless of what the driver
+> >> implements currently).
+> >> I'm not sure how to manage this while we don't have the CPU clock
+> >> driver ready yet but I'm sure Rob or Krzysztof will be able to help us
+> >> here.
+> >> 
+> >
+> > I've shared my thoughts about it in the bindings thread. Please take a
+> > look.
+> >
+> >> > + * the index 4 is the clock measurement source, it's not supported yet
+> >> I suspect that this comes from the clock measurer IP block and if so
+> >> the dt-bindings should probably describe this input. But again, we'd
+> >> need to keep it optional for now since our clock measurer driver
+> >> doesn't even implement a clock controller.
+> >> 
+> >
+> > Indeed, this is a similar situation to what we have with the inputs and
+> > clocks of the CPU and Audio clock controllers. It seems like there is
+> > only one option here: we should mark it with a TODO tag...
+> >
+> >> [...]
+> >> > +static struct clk_regmap pwm_a_sel = {
+> >> > +       .data = &(struct clk_regmap_mux_data){
+> >> > +               .offset = PWM_CLK_AB_CTRL,
+> >> > +               .mask = 0x1,
+> >> > +               .shift = 9,
+> >> > +       },
+> >> > +       .hw.init = &(struct clk_init_data){
+> >> > +               .name = "pwm_a_sel",
+> >> > +               .ops = &clk_regmap_mux_ops,
+> >> > +               .parent_data = pwm_abcd_parents,
+> >> > +               .num_parents = ARRAY_SIZE(pwm_abcd_parents),
+> >> > +               /* For more information, please refer to rtc clock */
+> >> > +               .flags = CLK_SET_RATE_NO_REPARENT,
+> >> As mentioned in [0] we'll work with Heiner to see if we can improve
+> >> the decision making process of the PWM controller driver so that we
+> >> can just have .flags = 0 here.
+> >> This applies to all other occurrences of the same comment about the rtc clock.
+> >
+> > Sure, I'll make the change in v16. In my opinion, we should remove the
+> > CLK_SET_RATE_NO_REPARENT flag from all RTC related clock objects,
+> > including PWM, regardless of the outcome of the Heiner discussion. Based
+> > on our IRC talk, the decision has more pros than cons -
+> > https://libera.irclog.whitequark.org/linux-amlogic/2023-05-18
+> 
+> The clock scheme of PWM could indeed be handled like audio is but it
+> not strictly required.
+> 
+> In audio we have a limited number of PLLs (root sources). There is a lot
+> more consummers than there is root sources. If the root sources rate is
+> not carefully chosen to statisfy all needs, we could end in a situation
+> where we can't satisfy all consummers or we must glitch the source to do
+> so.
+> 
+> For the PWM, I think (but I'm not 100% sure) that the main clock controller
+> provides a source for each PWM. No risk of race there. That is why AML
+> decided to completly ignore the clock element in the PWM IP, because
+> they can do almost everything with what is in the main controller ... Still
+> ignoring those part is wrong
+> 
+> For the RTC, If you want/need to handle external RTCs, I don't think you
+> have much of a choice. If both the internal and external *report* the
+> same rate, CCF can't really know if one is best. It will just pick one,
+> no necessarily the one you want. I don't really see a way around manual
+> selection for this.
+> 
 
-Then that's shocking, because the man page says:
+Per my understading, the rtc32k Amlogic clock is an internal clock and
+cannot be an external one. Amlogic has provided it as an internal 32k
+stable clock with low jitter.
 
-       If either tv or tz is NULL, the corresponding structure is not  set  or
-       returned.   (However, compilation warnings will result if tv is NULL.)
+You're absolutely right that there is no data available to confirm the
+choice of an external RTC clock in the CCF. However, as per the approach
+we discussed with Martin and Heiner, we can still use the RTC clock as a
+parent for PWM in the current implementation. If the parent clock
+already has 32k, we do not change the rate from the PWM driver. The
+benefit of this approach is that reparenting is still available, but the
+PWM child cannot change the RTC frequency; it simply uses the
+appropriate parent clock. Additionally, if the parent is already set to
+rtc32k, we shouldn't change it.
 
-I'd expect glibc to at least support what'd documented in the man
-page :-/
-
-> I propose to avoid doing it :-)
-
-If you're certain that's the case, then I agree.
-
-> Either we gate the existing test in #ifdef NOLIBC or we remove it.
-
-Better not keep tests specific to nolibc if they aim at verifying some
-compatibliity.
-
-Willy
+-- 
+Thank you,
+Dmitry
