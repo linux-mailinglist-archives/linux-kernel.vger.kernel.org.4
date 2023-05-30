@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C86715713
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF34A715719
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229446AbjE3Hi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
+        id S231158AbjE3HjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbjE3Hic (ORCPT
+        with ESMTP id S231143AbjE3Hic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 May 2023 03:38:32 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD0910D
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:38:23 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f603ff9c02so27644875e9.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:38:23 -0700 (PDT)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E26F118
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:38:24 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-309382efe13so2582547f8f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:38:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685432301; x=1688024301;
+        d=linaro.org; s=google; t=1685432303; x=1688024303;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=L8Wj+HDjZSnhs7OQTpUP21VKK/kmLLc0wW1eKOrWb7M=;
-        b=suZawle7XyCtmTwc9koewCMnKkWPXacwHsZLDFLFYQc3h8tUK/ExADY4dPmZuPA2hP
-         /2Otqa3QJVnMcWdz/ZIrVBE1/wHd1C0FynszMshKwVb1eP9jz9/Xb3PFlTps1pz6OegW
-         bWZiQVQtr4ErEeffk3KKdTOHQ7e+94+iSX2WzbaDAfQ5VVBgJDbfVmTLapSwfYTppFhv
-         oAfHRp68hwGYopDlGIkVcrZtNJJ+XlO/U1dRpOms/isnM0jfs0bVrwFRA7RfGWK6FxXb
-         452cNwWfHaqWUuoApq2gUPLFUKPJgmmbeOUh8DKRQn+XyYPKAY4xT/Lpw+Q2vBggAQj7
-         KfPw==
+        bh=iahTtbvqWeLBpjX1+R6MOcvn8qRZV/bBO4iQlxKXPRc=;
+        b=qKIJNodFI1eDSMKvOuX+HN31BbwkJxrLHUnP+3O5xRrglxzicL47QtkmEZyZPTZ+ED
+         xQ1T5DZbGNH5okD7A4EFrbGC8/vImRvcHlTUNzio/XYVnBEajm9idnuEKUPFQliKXaxl
+         DfmuD1Y59t/Snu0y7i6OGE6oZU9yeDJNBnp1g5HXnCNYjJ8ovgIbx8p+hib7niIK/eoX
+         2tE3z0UinH99WlDiFzmR917ZB2bai/NQvIgPxUj7r+A+e9GFwsrJesHiCWGuBi/vCu5M
+         K83y7juuBVpBYBxF6ZJIjaueFylPdy7kuB1dbJT2CHRIHMPlpd7B7chZEHxYbYcPvOM0
+         MEug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685432301; x=1688024301;
+        d=1e100.net; s=20221208; t=1685432303; x=1688024303;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=L8Wj+HDjZSnhs7OQTpUP21VKK/kmLLc0wW1eKOrWb7M=;
-        b=CGxEEPhtKY8UgnyxRwmPgJpyI/zf3Pu2hof8bAkULp7IxVxjdJPaZENhFW+93WHPUG
-         sMTc7JyfOezeFBE0xQX3Wv8dViPoG+W/pDAs2HdkC0G9C1N5xgYzGYjFWyvoy/Ki8/Y0
-         mIcEuErtjCb/SHugN8HY1ZjfzfF5yRHspgzC3SjoHuRX0c1e4R+cMwJGBulO40cFyv2u
-         bcBGywLd6ZnKzmamNw+hDVpoJ7erX7JwbqItoNQNoDvdGIF+Eqr8+fWtNyJjzA9K2YG8
-         fnVuw3SY30G3iGzt71vAhBJM5mBxK6C+8pnh6lxSZ7dXk2/z+l1HDbdXtwnrul4QRVtr
-         Q9Qw==
-X-Gm-Message-State: AC+VfDy75oqkZ3TyUGUUKRDOEeplQnL85V7lCQc8Ed4P7Ot2yoto6lCe
-        8wxSEebu25gWsf0W7rmx1fRxLA==
-X-Google-Smtp-Source: ACHHUZ4MbWC2LdJcXlvseLKtinFpCmjk45kQkUC4gyJQ6tXM3sCovJx5aDRdYpZlfNDPK2Ol6Xs8Wg==
-X-Received: by 2002:a5d:4003:0:b0:30a:f02a:b84d with SMTP id n3-20020a5d4003000000b0030af02ab84dmr898742wrp.13.1685432301659;
-        Tue, 30 May 2023 00:38:21 -0700 (PDT)
+        bh=iahTtbvqWeLBpjX1+R6MOcvn8qRZV/bBO4iQlxKXPRc=;
+        b=idxv96cjvqDOSfI6S2GXihjIxokmn+eGyjqiJk8e6m2H2CX9Q1Uc6+96qd9Ncse8Ho
+         kIWOf+afkt5G7Iw3QScDAlOLaPvDng6FxJh/vPdFizO2iQQM5h0XqIHAn2CVU+PjDUCA
+         PsEqqbny9gkynPuuyFREFBfmlUdOB1uC9x1IV8/dP6PVWUs+QYomoJFfHzFxNsj8HsBe
+         JBviHH0RTKmaxmk9nvXvsuaBNqg4hNI0Afx4z59MXMYSu/MPpj+TOzn6pV+qJolHOdME
+         DWZBXrpbkgnEyobnH6Cb2Dg1b3/A+T7jf8+VfKnIvsJF62D59ixb4cV/RbqVRR9yRZ6e
+         cFRA==
+X-Gm-Message-State: AC+VfDwcGSEdNbWnuGXq/SQFQyYzf0otYgmrYVHW+cAqFW0tZRI5p2pi
+        CwG6lwMsSSseCpPNxMFRU8XcqmmESzJsFkmQbz0Z9w==
+X-Google-Smtp-Source: ACHHUZ7hEv+SRU+om5OwekpJritdJ/v9ZXDhPMZ+N2a+X/vXmaRr91zRHO9sgLtMSUvFH4uBhSUDtA==
+X-Received: by 2002:adf:e8c5:0:b0:30a:f2a5:83dd with SMTP id k5-20020adfe8c5000000b0030af2a583ddmr853668wrn.7.1685432302819;
+        Tue, 30 May 2023 00:38:22 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id m4-20020a5d4a04000000b003079c402762sm2312013wrq.19.2023.05.30.00.38.20
+        by smtp.gmail.com with ESMTPSA id m4-20020a5d4a04000000b003079c402762sm2312013wrq.19.2023.05.30.00.38.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 00:38:21 -0700 (PDT)
+        Tue, 30 May 2023 00:38:22 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Tue, 30 May 2023 09:38:08 +0200
-Subject: [PATCH v5 07/17] dt-bindings: display: meson-vpu: add third DPI
- output port
+Date:   Tue, 30 May 2023 09:38:09 +0200
+Subject: [PATCH v5 08/17] drm/meson: fix unbind path if HDMI fails to bind
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-7-56eb7a4d5b8e@linaro.org>
+Message-Id: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-8-56eb7a4d5b8e@linaro.org>
 References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org>
 In-Reply-To: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org>
 To:     Jerome Brunet <jbrunet@baylibre.com>,
@@ -79,62 +78,112 @@ Cc:     "Lukas F. Hartmann" <lukas@mntre.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-phy@lists.infradead.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh@kernel.org>,
         Neil Armstrong <neil.armstrong@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1111;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2139;
  i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=ngaRaj/ff6scDRZWhYNPrhhh/3jRLEZndlPLfgP8m5M=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkdafgrQ+d6kVlnqgthYceWHgXDRj4X3G8yCwWhqxC
- zPMd+56JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZHWn4AAKCRB33NvayMhJ0eT3EA
- CaIP+cIiapaagNPLfNF2mzXan492id42Vf+UOmKe5aW23Bk7xsIVga2C3eORTyR87dGU0msoFj0M0o
- PspPAeNAg7DXsMG3N0tpN3pQU9joVnYJobwujt7fMlBo9h2LqkjTlvD1BrWSnOtkn92Amoj9lROpbd
- 296eS7FzQBOybBtYOICBCbI5Me8Epuh84+WZy9pqHaj44YiDeH9U4UsdteRPYutqED/1oGKZ0z6Eet
- Y6VNtS14EwxYbcB/hIoF07ReQFwqaSkuJOZFVVCVmABEfKsP7Civ8Kr5jWI70sI6eq9Uqn+aOEqUDT
- z2nnSHtmrzR6pIp1cWb9YbDB6YXQ1HUTx/PyXxp+M4Lj9Gw3laPdn0qRQ785bQSUSqFZgTXge26B0q
- xZVu4MnknfHXLTdZ1v2tPtErmaTrvGa9G0vadKqvqHbD0oqrSGHIlsg6zkw3c0GC8lzaFKdO6ZQ68D
- fm3GGGGjDrUvhgOdaMo4clJxq0mhDdRadCdwdWAJm1KikDaVwKShkRU87r5uu/kXur/uyQD/B5JLtU
- JGE2aZD4cvNjIywneK6eobQpnxStvcZs6mI3WOUwjNtYFqXnNKefvE9oP4lxjqMak0Mux0gf8vXtRL
- xJgFplqz2XADbImv2izEtL/ZAHgG1BZhNGjXQCZT1aImRaz9rH3OUOnzwSrg==
+ bh=8CpWFO/23ohWXtlw9VlUvRSsoZjkvEPG4DEcAI5MYHo=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkdafgS67it5Xd/IPSiDYVRkKBdEU3k4dSZcRJg6IY
+ IKzsY56JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZHWn4AAKCRB33NvayMhJ0VUhEA
+ DBaG9ujzD1I8t4CF/PcaEnEZkX3oRDTeUQ2mqXuf8uqKMsWiwUq4ejxXcT3M9558+/alirvGZSMGJR
+ je5yXs+uY81A+lDAN/Kfki1r5nLbnqchdCedEoVmGvFwsnzV/kgppLF9dnxOflfOb2BS3BccuktlSL
+ I6v0HTTCGbUJaDDms7NEHyl55fK0+CB7BCXNf68MpylOUs548WCOy8fl2QcPeR05x1BRjOIDHQT66Q
+ XY0Kh1vJYWOe7xhxE1oCFrJqYdv0s+w9WIIF5QjNd54oUF1/jCVL26uYwy6QniOrq+quZU4vav2B8A
+ 9x3xioYs6uEAbKQo8WCDtg/7xMRg+6436OB/XKOSITB/1bCelI1aAYCOhaJ2uf4uGhESocQtsgfS+y
+ 1Sz6eUxltr2DVz6vtzP5PIjalX4CvEzPEbBZdRdnLWpoxVCbI5PJIUtLDNSTEwxsNMm2I4jM5VcjmD
+ gdhMqkdV2yk/e7tSqEafcitTrOsrcQoFgbWgwDLYvTTUCIsmpat11MkLYGrODn/SjzfM0m2yYz9dc4
+ PyUwkUPBoyGcjqdSadGHYXLggtZQ/8WOTu9EUQPxzU3Tv8nQdfdkbWp4JsglxXP+A2HOxZYYFzib8i
+ Kp0vzZvGcm36bLWM3Btf2WRSkwVaM/nsMwg2nO/4Uq5h5NhDaL067x7/sKOQ==
 X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
  fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add third port corresponding to the ENCL DPI encoder used to connect
-to DSI or LVDS transceivers.
+If the case the HDMI controller fails to bind, we try to unbind
+all components before calling drm_dev_put() which makes drm_bridge_detach()
+crash because unbinding the HDMI controller frees the bridge memory.
 
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+The solution is the unbind all components at the end like in the remove
+path.
+
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- Documentation/devicetree/bindings/display/amlogic,meson-vpu.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/gpu/drm/meson/meson_drv.c | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/display/amlogic,meson-vpu.yaml b/Documentation/devicetree/bindings/display/amlogic,meson-vpu.yaml
-index 0c72120acc4f..cb0a90f02321 100644
---- a/Documentation/devicetree/bindings/display/amlogic,meson-vpu.yaml
-+++ b/Documentation/devicetree/bindings/display/amlogic,meson-vpu.yaml
-@@ -96,6 +96,11 @@ properties:
-     description:
-       A port node pointing to the HDMI-TX port node.
+diff --git a/drivers/gpu/drm/meson/meson_drv.c b/drivers/gpu/drm/meson/meson_drv.c
+index ca6d1e59e5d9..e060279dc80a 100644
+--- a/drivers/gpu/drm/meson/meson_drv.c
++++ b/drivers/gpu/drm/meson/meson_drv.c
+@@ -316,32 +316,34 @@ static int meson_drv_bind_master(struct device *dev, bool has_components)
+ 		goto exit_afbcd;
  
-+  port@2:
-+    $ref: /schemas/graph.yaml#/properties/port
-+    description:
-+      A port node pointing to the DPI port node (e.g. DSI or LVDS transceiver).
+ 	if (has_components) {
+-		ret = component_bind_all(drm->dev, drm);
++		ret = component_bind_all(dev, drm);
+ 		if (ret) {
+ 			dev_err(drm->dev, "Couldn't bind all components\n");
++			/* Do not try to unbind */
++			has_components = false;
+ 			goto exit_afbcd;
+ 		}
+ 	}
+ 
+ 	ret = meson_encoder_hdmi_init(priv);
+ 	if (ret)
+-		goto unbind_all;
++		goto exit_afbcd;
+ 
+ 	ret = meson_plane_create(priv);
+ 	if (ret)
+-		goto unbind_all;
++		goto exit_afbcd;
+ 
+ 	ret = meson_overlay_create(priv);
+ 	if (ret)
+-		goto unbind_all;
++		goto exit_afbcd;
+ 
+ 	ret = meson_crtc_create(priv);
+ 	if (ret)
+-		goto unbind_all;
++		goto exit_afbcd;
+ 
+ 	ret = request_irq(priv->vsync_irq, meson_irq, 0, drm->driver->name, drm);
+ 	if (ret)
+-		goto unbind_all;
++		goto exit_afbcd;
+ 
+ 	drm_mode_config_reset(drm);
+ 
+@@ -359,15 +361,18 @@ static int meson_drv_bind_master(struct device *dev, bool has_components)
+ 
+ uninstall_irq:
+ 	free_irq(priv->vsync_irq, drm);
+-unbind_all:
+-	if (has_components)
+-		component_unbind_all(drm->dev, drm);
+ exit_afbcd:
+ 	if (priv->afbcd.ops)
+ 		priv->afbcd.ops->exit(priv);
+ free_drm:
+ 	drm_dev_put(drm);
+ 
++	meson_encoder_hdmi_remove(priv);
++	meson_encoder_cvbs_remove(priv);
 +
-   "#address-cells":
-     const: 1
++	if (has_components)
++		component_unbind_all(dev, drm);
++
+ 	return ret;
+ }
  
 
 -- 
