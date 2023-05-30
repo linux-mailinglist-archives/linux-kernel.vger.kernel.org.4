@@ -2,90 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3192A71710B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EDF717105
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjE3WwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 18:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59362 "EHLO
+        id S233625AbjE3WxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 18:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjE3WwU (ORCPT
+        with ESMTP id S233495AbjE3WxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 18:52:20 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F4CE5;
-        Tue, 30 May 2023 15:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685487139; x=1717023139;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=3KqPLAaPdZRdqqIgS2W0nnEO/sGfCLdma7O0mD98SHg=;
-  b=eX7AvDVwXNukFoWY1iGhLO33+d5CBd50zcIX2SOPT3XSOXVrYRVKZy+v
-   JIs1IcnDOxb/7HoAole0/rLhOXJUmUlfJ8Hl+exS6hgccQ2HYkydQ+jBc
-   qZTp2mAjEDJfu6NoD+uin0lHZLM0kWZVP10RPFur5NDrlHoRvfW8uanS3
-   zAEncJds3jcsf3HIKyHoNhyWLNaV3JhD2HwsWa2ZLvC2HD08YcUZ9rr8A
-   PMrcYhAWf4STWzcCILnXbA5kkxIsm3GINfO5vDk50t7XiAlXk/wgUTXh0
-   2KP3+ubvx0Luv7c49J8Toi5OSTaoG3tCPrqv3T00RPWKvfU2aFno1hcVJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="334687242"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="334687242"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 15:52:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="953357490"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="953357490"
-Received: from vcostago-desk1.jf.intel.com (HELO vcostago-desk1) ([10.54.70.17])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 15:52:17 -0700
-From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Amritha Nambiar <amritha.nambiar@intel.com>,
-        Ferenc Fejes <ferenc.fejes@ericsson.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Pranavi Somisetty <pranavi.somisetty@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        intel-wired-lan@lists.osuosl.org,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>
-Subject: Re: [PATCH net-next 3/5] net/sched: taprio: add netlink reporting
- for offload statistics counters
-In-Reply-To: <20230530091948.1408477-4-vladimir.oltean@nxp.com>
-References: <20230530091948.1408477-1-vladimir.oltean@nxp.com>
- <20230530091948.1408477-4-vladimir.oltean@nxp.com>
-Date:   Tue, 30 May 2023 15:52:17 -0700
-Message-ID: <87wn0ptota.fsf@intel.com>
+        Tue, 30 May 2023 18:53:08 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C208A196
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:52:55 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-53482b44007so3207710a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:52:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685487175; x=1688079175;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2ueHzQ8Wa2okWJ0fmfLLo52MhtIRbhBte5ZK2h7JXro=;
+        b=Uq6HIEJPqhlC136Vr3uDaJx/LiLYTMr0ktJdq1gXrz3vbtj1rUBgix8iIftoJRJE0u
+         s0n2ZmNyvaXfahlPmLFPgKGLTC1R/PE/AexOHlFF+h4qCqm1X8Gzxt4UGEys9DU2AxMw
+         qJLvr9ylGvgEI/uCFvZqM2M+37XDZ6hkc6iNA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685487175; x=1688079175;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2ueHzQ8Wa2okWJ0fmfLLo52MhtIRbhBte5ZK2h7JXro=;
+        b=QMiioKf28n10quDa74fUQlYzJ9Kgp17/pL7tHp7/ykz4kimB20ji9oKokY0eLehoHv
+         kNkiNM3Ii7QaAgmvXbV5z7iULKb+ui/V1b21gx4YtvmC9G8kpw97bk3R6aXufrb7IsCO
+         QVqi3ualQXSE8ZFyG7HgsGo31HWkzNqP9NRDAQl1E4uJ1Vw7GqATn86YO0G0UfpV6nEa
+         3rQo80Ui/IAvdx+LpQ6GBD4ITkTdQlqtOCZt7rraWQKZibz7Qg7SHOP16JMUjAw83VCE
+         6ooyIOWtFveYLiVudeXQW92ccFBiKJgbZKpW2DJC22FOklfY6bg9//wMUr0ohahKRG7K
+         Mxjw==
+X-Gm-Message-State: AC+VfDy8Iu2aiFmKV95XSug7Wn0CVvUHeUegGw3WU+2fK7l4etoThCqE
+        qAF50jOX4QJ9fjjdu/eYDHglAg==
+X-Google-Smtp-Source: ACHHUZ5su34kJvySFp+kM+iyarUXA7DMydBxSrLfDVvbUYdac46CqF1AixOCK5hkgoXXlYbWPcfdPA==
+X-Received: by 2002:a17:902:d4c8:b0:1b1:76c2:296a with SMTP id o8-20020a170902d4c800b001b176c2296amr312445plg.60.1685487175088;
+        Tue, 30 May 2023 15:52:55 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id bg6-20020a1709028e8600b001a4fe00a8d4sm10829640plb.90.2023.05.30.15.52.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 15:52:54 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     christophe.jaillet@wanadoo.fr, Al Viro <viro@zeniv.linux.org.uk>,
+        brauner@kernel.org, ebiederm@xmission.com
+Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 1/2] binfmt: Use struct_size()
+Date:   Tue, 30 May 2023 15:52:50 -0700
+Message-Id: <168548716819.1348275.7939799619978451997.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <53150beae5dc04dac513dba391a2e4ae8696a7f3.1685290790.git.christophe.jaillet@wanadoo.fr>
+References: <53150beae5dc04dac513dba391a2e4ae8696a7f3.1685290790.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,258 +72,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vladimir Oltean <vladimir.oltean@nxp.com> writes:
+On Sun, 28 May 2023 18:20:24 +0200, Christophe JAILLET wrote:
+> Use struct_size() instead of hand-writing it. It is less verbose, more
+> robust and more informative.
+> 
+> 
 
-> Offloading drivers may report some additional statistics counters, some
-> of them even suggested by 802.1Q, like TransmissionOverrun.
->
-> In my opinion we don't have to limit ourselves to reporting counters
-> only globally to the Qdisc/interface, especially if the device has more
-> detailed reporting (per traffic class), since the more detailed info is
-> valuable for debugging and can help identifying who is exceeding its
-> time slot.
->
-> But on the other hand, some devices may not be able to report both per
-> TC and global stats.
->
-> So we end up reporting both ways, and use the good old ethtool_put_stat()
-> strategy to determine which statistics are supported by this NIC.
-> Statistics which aren't set are simply not reported to netlink. For this
-> reason, we need something dynamic (a nlattr nest) to be reported through
-> TCA_STATS_APP, and not something daft like the fixed-size and
-> inextensible struct tc_codel_xstats. A good model for xstats which are a
-> nlattr nest rather than a fixed struct seems to be cake.
->
->  # Global stats
->  $ tc -s qdisc show dev eth0 root
->  # Per-tc stats
->  $ tc -s class show dev eth0
->
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
->  include/net/pkt_sched.h        | 47 ++++++++++++++++----
->  include/uapi/linux/pkt_sched.h | 10 +++++
->  net/sched/sch_taprio.c         | 78 +++++++++++++++++++++++++++++++++-
->  3 files changed, 126 insertions(+), 9 deletions(-)
->
-> diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
-> index f5fb11da357b..530d33adec88 100644
-> --- a/include/net/pkt_sched.h
-> +++ b/include/net/pkt_sched.h
-> @@ -188,6 +188,27 @@ struct tc_taprio_caps {
->  enum tc_taprio_qopt_cmd {
->  	TAPRIO_CMD_REPLACE,
->  	TAPRIO_CMD_DESTROY,
-> +	TAPRIO_CMD_STATS,
-> +	TAPRIO_CMD_TC_STATS,
-> +};
-> +
-> +/**
-> + * struct tc_taprio_qopt_stats - IEEE 802.1Qbv statistics
-> + * @window_drops: Frames that were dropped because they were too large to be
-> + *	transmitted in any of the allotted time windows (open gates) for their
-> + *	traffic class.
-> + * @tx_overruns: Frames still being transmitted by the MAC after the
-> + *	transmission gate associated with their traffic class has closed.
-> + *	Equivalent to `12.29.1.1.2 TransmissionOverrun` from 802.1Q-2018.
-> + */
-> +struct tc_taprio_qopt_stats {
-> +	u64 window_drops;
-> +	u64 tx_overruns;
-> +};
-> +
-> +struct tc_taprio_qopt_tc_stats {
-> +	int tc;
-> +	struct tc_taprio_qopt_stats stats;
->  };
->  
->  struct tc_taprio_sched_entry {
-> @@ -199,16 +220,26 @@ struct tc_taprio_sched_entry {
->  };
->  
->  struct tc_taprio_qopt_offload {
-> -	struct tc_mqprio_qopt_offload mqprio;
-> -	struct netlink_ext_ack *extack;
->  	enum tc_taprio_qopt_cmd cmd;
-> -	ktime_t base_time;
-> -	u64 cycle_time;
-> -	u64 cycle_time_extension;
-> -	u32 max_sdu[TC_MAX_QUEUE];
->  
-> -	size_t num_entries;
-> -	struct tc_taprio_sched_entry entries[];
-> +	union {
-> +		/* TAPRIO_CMD_STATS */
-> +		struct tc_taprio_qopt_stats stats;
-> +		/* TAPRIO_CMD_TC_STATS */
-> +		struct tc_taprio_qopt_tc_stats tc_stats;
-> +		/* TAPRIO_CMD_REPLACE */
-> +		struct {
-> +			struct tc_mqprio_qopt_offload mqprio;
-> +			struct netlink_ext_ack *extack;
-> +			ktime_t base_time;
-> +			u64 cycle_time;
-> +			u64 cycle_time_extension;
-> +			u32 max_sdu[TC_MAX_QUEUE];
-> +
-> +			size_t num_entries;
-> +			struct tc_taprio_sched_entry entries[];
-> +		};
-> +	};
->  };
->  
->  #if IS_ENABLED(CONFIG_NET_SCH_TAPRIO)
-> diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
-> index 51a7addc56c6..00f6ff0aff1f 100644
-> --- a/include/uapi/linux/pkt_sched.h
-> +++ b/include/uapi/linux/pkt_sched.h
-> @@ -1259,6 +1259,16 @@ enum {
->  	TCA_TAPRIO_TC_ENTRY_MAX = (__TCA_TAPRIO_TC_ENTRY_CNT - 1)
->  };
->  
-> +enum {
-> +	TCA_TAPRIO_OFFLOAD_STATS_PAD = 1,	/* u64 */
-> +	TCA_TAPRIO_OFFLOAD_STATS_WINDOW_DROPS,	/* u64 */
-> +	TCA_TAPRIO_OFFLOAD_STATS_TX_OVERRUNS,	/* u64 */
-> +
-> +	/* add new constants above here */
-> +	__TCA_TAPRIO_OFFLOAD_STATS_CNT,
-> +	TCA_TAPRIO_OFFLOAD_STATS_MAX = (__TCA_TAPRIO_OFFLOAD_STATS_CNT - 1)
-> +};
-> +
->  enum {
->  	TCA_TAPRIO_ATTR_UNSPEC,
->  	TCA_TAPRIO_ATTR_PRIOMAP, /* struct tc_mqprio_qopt */
-> diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
-> index 06bf4c6355a5..3c4c2c334878 100644
-> --- a/net/sched/sch_taprio.c
-> +++ b/net/sched/sch_taprio.c
-> @@ -27,6 +27,8 @@
->  #include <net/sock.h>
->  #include <net/tcp.h>
->  
-> +#define TAPRIO_STAT_NOT_SET	(~0ULL)
-> +
->  #include "sch_mqprio_lib.h"
->  
->  static LIST_HEAD(taprio_list);
-> @@ -2289,6 +2291,72 @@ static int taprio_dump_tc_entries(struct sk_buff *skb,
->  	return -EMSGSIZE;
->  }
->  
-> +static int taprio_put_stat(struct sk_buff *skb, u64 val, u16 attrtype)
-> +{
-> +	if (val == TAPRIO_STAT_NOT_SET)
-> +		return 0;
-> +	if (nla_put_u64_64bit(skb, attrtype, val, TCA_TAPRIO_OFFLOAD_STATS_PAD))
-> +		return -EMSGSIZE;
-> +	return 0;
-> +}
-> +
-> +static int taprio_dump_xstats(struct Qdisc *sch, struct gnet_dump *d,
-> +			      struct tc_taprio_qopt_offload *offload,
-> +			      struct tc_taprio_qopt_stats *stats)
-> +{
-> +	struct net_device *dev = qdisc_dev(sch);
-> +	const struct net_device_ops *ops;
-> +	struct sk_buff *skb = d->skb;
-> +	struct nlattr *xstats;
-> +	int err;
-> +
-> +	ops = qdisc_dev(sch)->netdev_ops;
-> +
-> +	/* FIXME I could use qdisc_offload_dump_helper(), but that messes
-> +	 * with sch->flags depending on whether the device reports taprio
-> +	 * stats, and I'm not sure whether that's a good idea, considering
-> +	 * that stats are optional to the offload itself
-> +	 */
-> +	if (!ops->ndo_setup_tc)
-> +		return 0;
-> +
-> +	memset(stats, 0xff, sizeof(*stats));
+Applied to for-next/execve, thanks!
 
-The only part that I didn't like, at first, was this, that the
-initialization of the offload struct is divided into two parts: one to
-set the command/tc, and one to set the "invalid/not set" value to all
-stats fields.
-
-I was thinking of adding a macro to do initialization of the stats
-fields, but it has a problem that it won't complain when a new field is
-added. Your solution should always work. I don't have better
-suggestions.
-
-Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
-
-> +
-> +	err = ops->ndo_setup_tc(dev, TC_SETUP_QDISC_TAPRIO, offload);
-> +	if (err == -EOPNOTSUPP)
-> +		return 0;
-> +	if (err)
-> +		return err;
-> +
-> +	xstats = nla_nest_start(skb, TCA_STATS_APP);
-> +	if (!xstats)
-> +		goto err;
-> +
-> +	if (taprio_put_stat(skb, stats->window_drops,
-> +			    TCA_TAPRIO_OFFLOAD_STATS_WINDOW_DROPS) ||
-> +	    taprio_put_stat(skb, stats->tx_overruns,
-> +			    TCA_TAPRIO_OFFLOAD_STATS_TX_OVERRUNS))
-> +		goto err_cancel;
-> +
-> +	nla_nest_end(skb, xstats);
-> +
-> +	return 0;
-> +
-> +err_cancel:
-> +	nla_nest_cancel(skb, xstats);
-> +err:
-> +	return -EMSGSIZE;
-> +}
-> +
-> +static int taprio_dump_stats(struct Qdisc *sch, struct gnet_dump *d)
-> +{
-> +	struct tc_taprio_qopt_offload offload = {
-> +		.cmd = TAPRIO_CMD_STATS,
-> +	};
-> +
-> +	return taprio_dump_xstats(sch, d, &offload, &offload.stats);
-> +}
-> +
->  static int taprio_dump(struct Qdisc *sch, struct sk_buff *skb)
->  {
->  	struct taprio_sched *q = qdisc_priv(sch);
-> @@ -2389,11 +2457,18 @@ static int taprio_dump_class_stats(struct Qdisc *sch, unsigned long cl,
->  {
->  	struct netdev_queue *dev_queue = taprio_queue_get(sch, cl);
->  	struct Qdisc *child = dev_queue->qdisc_sleeping;
-> +	struct tc_taprio_qopt_offload offload = {
-> +		.cmd = TAPRIO_CMD_TC_STATS,
-> +		.tc_stats = {
-> +			.tc = cl - 1,
-> +		},
-> +	};
->  
->  	if (gnet_stats_copy_basic(d, NULL, &child->bstats, true) < 0 ||
->  	    qdisc_qstats_copy(d, child) < 0)
->  		return -1;
-> -	return 0;
-> +
-> +	return taprio_dump_xstats(sch, d, &offload, &offload.tc_stats.stats);
->  }
->  
->  static void taprio_walk(struct Qdisc *sch, struct qdisc_walker *arg)
-> @@ -2440,6 +2515,7 @@ static struct Qdisc_ops taprio_qdisc_ops __read_mostly = {
->  	.dequeue	= taprio_dequeue,
->  	.enqueue	= taprio_enqueue,
->  	.dump		= taprio_dump,
-> +	.dump_stats	= taprio_dump_stats,
->  	.owner		= THIS_MODULE,
->  };
->  
-> -- 
-> 2.34.1
->
+[1/2] binfmt: Use struct_size()
+      https://git.kernel.org/kees/c/e6302d5a285b
+[2/2] binfmt: Slightly simplify elf_fdpic_map_file()
+      https://git.kernel.org/kees/c/36650a357eac
 
 -- 
-Vinicius
+Kees Cook
+
