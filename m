@@ -2,61 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4127157A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17EC87157A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbjE3Hxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47374 "EHLO
+        id S229615AbjE3Hxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjE3Hxc (ORCPT
+        with ESMTP id S229622AbjE3Hxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:53:32 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF28118;
-        Tue, 30 May 2023 00:53:26 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f606912ebaso42741195e9.3;
-        Tue, 30 May 2023 00:53:26 -0700 (PDT)
+        Tue, 30 May 2023 03:53:35 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8085EEC;
+        Tue, 30 May 2023 00:53:30 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f6e72a1464so27541355e9.1;
+        Tue, 30 May 2023 00:53:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685433205; x=1688025205;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iN1gw0mwm7WmvYXFIrcXk8pdCkRKPm8Ajl3S6Jy5MwI=;
-        b=ZrDagKrme3a6Hd3dwAsyc58nI93cJrUXLIBdL+tbD06gbNArOM7cJHn0IKhRdjXgX6
-         t9LUKxyWy/ySTqil0Ytjp7OyWIrGx/Mde1aNMbaBiY6uIKDg7nxH3xbEoG3sjNjIqfgH
-         BO/nNFRzjk9B1bkO84yjbOJg01t0xRpjJeqt+ymrsmIfVVpjtVOHkIgjmQrl3MnrPymj
-         DsEMdvtRXCEwoFSkSWpnT/TiyziFuhWUZ4Df77msnZ3mx1sXKrXMUYHJUM3Iim42H+nQ
-         +JYnmt2S7n8h48ILWkHU++/bmUjaRiHKqtmr5B4b6fNIpIzo8WgyBuYucxT5V3gNUCSU
-         nNAA==
+        d=gmail.com; s=20221208; t=1685433209; x=1688025209;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XTV9XMaou7CNV6EOfKarXq32Ih9qfYOfAXq7949Wo3s=;
+        b=i3pP6u5EQ1lX1blR3asUXta00++/WeAJzJYpjVbmSSnNnM9b0JsK9O6GJxJK/PnERk
+         56eVs5Po9NTUHfW2hNAACiHF+mLRFee1xbwQ+xaakXR3hY3zSsjqctQxj1NeKlUedHyJ
+         v1BTlRzG5hfyJyh1+k8+YeUErve3Bo3YKYy7toHOX/e+ktdMhGud6tmX2SWmSp6F7cpV
+         yiGznVv7RIvdwo1swh6I+DgEuy18fKjE8FtSg8XQ49BPVrDgzkRQ6J0A56GCpFWPr/hh
+         eZC6V8HS505ZzoT2UAGRtRiiJ9+t+p4on4MYJyeLURencqsibXnxwHaOp7bYSgWSYhk/
+         p/pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685433205; x=1688025205;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iN1gw0mwm7WmvYXFIrcXk8pdCkRKPm8Ajl3S6Jy5MwI=;
-        b=MkP8FcmClvbURcDmbY03Mu/deHtD6Z724zJyjT6GR8fVBml4N9lbCOrjm11YtRBcqo
-         6hkuNsI3IXDkR0Z2anQCZoQUvdCcUxOcgiHPXAw+SlEYQYSqznAHbonC5oxLe6V80Rew
-         MMGqIpJFPFZdmYzI8qdG9vAXdD5yic4hFIGIBQXPpC49qWTHiWgTw8hWMjJFO1Kmxh9J
-         EmYl/plz/50luBu8yN3LI83vmTlw3d3CON/XUcV+zZ2ghGX//shmlVK6vLz8VgG0CjXl
-         +3LEbCmzYK18CSWiTfBQwD1dsbJy26zjsgLLLdYNeMg24r8qFBAPE6XmiLGgw/N8cKtN
-         Ldyg==
-X-Gm-Message-State: AC+VfDzb3pF+IRnWPMmm0qTpZbCTQ+BX4iUDh6aqR+i92LxBCQkWWeSf
-        8QofiyKHekttLNgJsQZaGoZG8waMGKM=
-X-Google-Smtp-Source: ACHHUZ4IjHvxlNexzSJNUo0Ylft54bbV9bWzAgAp7tWi+uZLe5jkO6oJs/6XXcAjggoqHX48XH74LQ==
-X-Received: by 2002:a05:600c:b44:b0:3f2:48dc:5e02 with SMTP id k4-20020a05600c0b4400b003f248dc5e02mr811929wmr.27.1685433204598;
-        Tue, 30 May 2023 00:53:24 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685433209; x=1688025209;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XTV9XMaou7CNV6EOfKarXq32Ih9qfYOfAXq7949Wo3s=;
+        b=ABXH0hKcXQWMdMcPGx+bxkdru7D56oedUxpIm1zUnqKdwrZH7hbp/Shk5uMrZNas4E
+         0oVWVKWhtegswXXFV4QD8EkfKYK2cShgJHpXBsN75zO4WsnUHAM/dFAaYfFzLJgLBQGR
+         wSA5CGkDdfIxAZ08hEMtDqrGJg4Ft2DpFszvRllRznRnDVS8sWulLePq4SRohVZ3T3HB
+         281aMW768WfcbfJBt3qDvN79QqooDQ7YqZkWkh6Bc6rn295fUwSF9h4FNwxq3DC4tcnB
+         oy0aYEnl+lHg5pGMqWlrNfafHREOEbejJ8sz/6BAkBXxOZrWzWkviiA3mKKKSZdeRF2a
+         SqHw==
+X-Gm-Message-State: AC+VfDyIS+60A3oOFNUlD2zq/27A2n5UBZkDe1ZkzWizSzKjYR62h/Ls
+        sT2VH6jBq7cZ3qyTsfxGH94=
+X-Google-Smtp-Source: ACHHUZ4/Os/xLZi9cKZd+cacH8GtfF0POVlxwYmzZcphgLW5DEqstlcIruTXf+kmAjOZbVhQb4TQ8A==
+X-Received: by 2002:a1c:7313:0:b0:3f4:2266:8cf0 with SMTP id d19-20020a1c7313000000b003f422668cf0mr872277wmb.10.1685433208715;
+        Tue, 30 May 2023 00:53:28 -0700 (PDT)
 Received: from PC-UT2.ad.ennebielettronica.com ([78.152.97.130])
-        by smtp.gmail.com with ESMTPSA id x21-20020a05600c21d500b003f6041f5a6csm16561275wmj.12.2023.05.30.00.53.23
+        by smtp.gmail.com with ESMTPSA id x21-20020a05600c21d500b003f6041f5a6csm16561275wmj.12.2023.05.30.00.53.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 00:53:24 -0700 (PDT)
+        Tue, 30 May 2023 00:53:28 -0700 (PDT)
 From:   fl.scratchpad@gmail.com
-To:     jic23@kernel.org
+To:     jic23@kernel.org, Alexandru Tachici <alexandru.tachici@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>
 Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fabrizio Lamarque <fl.scratchpad@gmail.com>
-Subject: [PATCH v3 0/5] Fix ad7192 driver issues
-Date:   Tue, 30 May 2023 09:53:06 +0200
-Message-Id: <20230530075311.400686-1-fl.scratchpad@gmail.com>
+        Fabrizio Lamarque <fl.scratchpad@gmail.com>,
+        Nuno Sa <nuno.sa@analog.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH v3 1/5] iio: adc: ad7192: Fix null ad7192_state pointer access
+Date:   Tue, 30 May 2023 09:53:07 +0200
+Message-Id: <20230530075311.400686-2-fl.scratchpad@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230530075311.400686-1-fl.scratchpad@gmail.com>
+References: <20230530075311.400686-1-fl.scratchpad@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,51 +79,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Fabrizio Lamarque <fl.scratchpad@gmail.com>
 
-Here is a patch set to overcome a number of issues in current ad7192
-adc driver implementation prevending the driver to be loaded and
-behave correctly:
+Pointer to indio_dev structure is obtained via spi_get_drvdata() at
+the beginning of function ad7192_setup(), but the spi->dev->driver_data
+member is not initialized, hence a NULL pointer is returned.
 
- - null pointer dereference causing kernel panic on driver probe;
- - wrong internal clock selection;
- - use of "avdd" regulator name in place of vref (reference voltage);
- - missing clock options in bindings docs only (already implemented).
+Fix by changing ad7192_setup() signature to take pointer to struct
+iio_dev, and get ad7192_state pointer via st = iio_priv(indio_dev);
 
-The first two issues are regressions.
+Fixes: bd5dcdeb3fd0 ("iio: adc: ad7192: convert to device-managed functions")
+Signed-off-by: Fabrizio Lamarque <fl.scratchpad@gmail.com>
+Reviewed-by: Nuno Sa <nuno.sa@analog.com>
+---
+ drivers/iio/adc/ad7192.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Backported patches have been tested on a platform with an ARM Cortex-A7
-CPU from NXP with kernel 5.15.
-
-As a side note, on the tested platform there is still an issue with a
-pending interrupt that I worked around by setting the DRDY IRQ
-to LEVEL in place of EDGE sensing. Also, setting IRQ_DISABLE_UNLAZY
-flag does not help in my case.
-
-You may find further information here:
-https://lore.kernel.org/all/CAPJMGm4GaSjD6bdqMwCr2EVZGenWzT-nCCf3BMRaD1TSfAabpA@mail.gmail.com/
-
-Version log:
-
-
-v2->v3
- - Reworded commit messages
- - Split binding fixes
-
-v1->v2
- - Obtained ad7192_state from iio_dev pointer
- - Added patch on bindings documentation
-
-
-Fabrizio Lamarque (5):
-  iio: adc: ad7192: Fix null ad7192_state pointer access
-  iio: adc: ad7192: Fix internal/external clock selection
-  iio: adc: ad7192: Use VRef instead of AVdd as reference voltage source
-  dt-bindings: iio: ad7192: Add mandatory reference voltage source
-  dt-bindings: iio: ad7192: Allow selection of clock modes
-
- .../bindings/iio/adc/adi,ad7192.yaml          | 32 +++++++++++++++++--
- drivers/iio/adc/ad7192.c                      | 31 +++++++++++++++---
- 2 files changed, 55 insertions(+), 8 deletions(-)
-
+diff --git a/drivers/iio/adc/ad7192.c b/drivers/iio/adc/ad7192.c
+index 55a6ab591016..94a9cf34a255 100644
+--- a/drivers/iio/adc/ad7192.c
++++ b/drivers/iio/adc/ad7192.c
+@@ -380,9 +380,9 @@ static int ad7192_of_clock_select(struct ad7192_state *st)
+ 	return clock_sel;
+ }
+ 
+-static int ad7192_setup(struct ad7192_state *st, struct device_node *np)
++static int ad7192_setup(struct iio_dev *indio_dev, struct device_node *np)
+ {
+-	struct iio_dev *indio_dev = spi_get_drvdata(st->sd.spi);
++	struct ad7192_state *st = iio_priv(indio_dev);
+ 	bool rej60_en, refin2_en;
+ 	bool buf_en, bipolar, burnout_curr_en;
+ 	unsigned long long scale_uv;
+@@ -1073,7 +1073,7 @@ static int ad7192_probe(struct spi_device *spi)
+ 		}
+ 	}
+ 
+-	ret = ad7192_setup(st, spi->dev.of_node);
++	ret = ad7192_setup(indio_dev, spi->dev.of_node);
+ 	if (ret)
+ 		return ret;
+ 
 -- 
 2.34.1
 
