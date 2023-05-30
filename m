@@ -2,177 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196B6716D15
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820B1716D2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjE3TEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 15:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
+        id S231169AbjE3THo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 15:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232679AbjE3TEh (ORCPT
+        with ESMTP id S231618AbjE3THm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 15:04:37 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A910B107
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:04:35 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-776fee32f12so333630239f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:04:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685473475; x=1688065475;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wfQuZmnPQJmPq4FD0skpyrp1OyYgS6QeSjx3Y7QLJpo=;
-        b=HmRpw8pGvyPSbo1Qzvek5/4weOk51Rnlxpp6EOvPssKH3D5hQ5EDzw0EoSd7xiUZus
-         mms608q4JqR/J3lQg/7HKynivqzzxZS7UppVP37EvxglMzvkpSsKDvOV28aW6L42SERH
-         SJ/y7tIVas1/E/bcbtlnn5M3X+cIKQiUNEYlvmyWmANy80Sa1xHxwRdCLY7FJvWUvbPQ
-         Z15dxzNpvzEGaRcjiV+7ndsDr30d3hH3TkjzvG0MCU3Tf4JLuSpQoc45cw4HNc+d2AIl
-         S61L/WYbLv72GF90UiZgLuA4usY//Xlm2bnxQbOV9jCeI8ZHIDqjgpJGcMTjbW96unsN
-         vt5A==
+        Tue, 30 May 2023 15:07:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D139F7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:06:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685473614;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fSmFtWgu65TksWT+Us90A+D3QMtRR1H00zZMfgSmti4=;
+        b=QzszITu9pKqNPFfMBBMa5xC9116n+6/rmfdzOhAMa7t33AK+aOrk/yp24XlOQgR6bE3CIU
+        SZSY+cwSEGSQj5L9wikVJ7c3cOWYS+dfJBcM10jeim4ayA0Zky1tkv0q+zevG4IMtH44oi
+        NvFZp2A9JCatBERWmsKNamUadFODUv4=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-635-g4BIxv5GMDu2uedCC5kgkA-1; Tue, 30 May 2023 15:06:52 -0400
+X-MC-Unique: g4BIxv5GMDu2uedCC5kgkA-1
+Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-4f4b7b4e7c5so2560235e87.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:06:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685473475; x=1688065475;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wfQuZmnPQJmPq4FD0skpyrp1OyYgS6QeSjx3Y7QLJpo=;
-        b=h49RzfPmBPQnHmN4v9B9Zj8sIrjFqUKuST2Tyih8Da4HKjZhlSp2Mjg6OYmL2t7EMR
-         z8g5zU5g3vWavJ4vC6C56XOwF2b82bMUE6Vgr1N2WH74D/Qz1P0TEnS+uEFRsYH8I/oA
-         lI/qlayReUqlFcWCzHCxW7bhDeTw/a5aYaznlSQmPEqiA6MtJ27FJLC0KgjcYa2gZs4m
-         xXvfmbbrsLVSAo038cR7RdubsNQ8JPcI7kt7IMuHLjfA4y2R+BVAjHCH1o6JGZbIEcJl
-         Sy7/Qgzqu8UWh+WlAltlSt+hMY/q+hgv8+KyrafUk/06BF0Fgw4yXhXMSXR6VB9Mc4+e
-         fD8Q==
-X-Gm-Message-State: AC+VfDx0MKv6BR2SmXZZNr+XmO2H+xxu53XirKqc3/R3eGptNPZ9EKzv
-        iJ9a/FWVptCWKiRoP6A7Gsf4Ag==
-X-Google-Smtp-Source: ACHHUZ6eBRiUgFq4mXt5B6sXnYlZU3E7fxaNdGF17ikXkootwxAujomGFgxAC2KRPKLqROgo4vGERw==
-X-Received: by 2002:a92:d581:0:b0:33b:151a:e29f with SMTP id a1-20020a92d581000000b0033b151ae29fmr363228iln.11.1685473474944;
-        Tue, 30 May 2023 12:04:34 -0700 (PDT)
-Received: from [172.22.22.28] ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id z96-20020a0293e9000000b004178754b24bsm920068jah.166.2023.05.30.12.04.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 12:04:34 -0700 (PDT)
-Message-ID: <f9ccdc27-7b5f-5894-46ab-84c1e1650d9f@linaro.org>
-Date:   Tue, 30 May 2023 14:04:32 -0500
+        d=1e100.net; s=20221208; t=1685473611; x=1688065611;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fSmFtWgu65TksWT+Us90A+D3QMtRR1H00zZMfgSmti4=;
+        b=ZfVOLwIpGBQN00DY+k2qOKNPJ6SmiQUwqlupk94mr58LcqJdeRksj/LQNdRowwTNUc
+         Q/3GMeWK+p61sMTzo8CEf77gMsOmUwYfluOkl8F3C9klqWwRTTUMSln9M//OJBvtJT9+
+         IAQLDQQ9jyKgE9i2ThyhjKHGvoNacTQqAp4Qjmojf0IdQoctOcaYZtuySmO0877cGgA4
+         aX9t4ZFhhX4HFljhrF+wDDqmmVzStO4oDZOAB2Kj47oNCglnToS4FuwCRiI3+QUdkPRs
+         cB2GG1izSgr5Di7Bbw4j7XSlGJ1JyFLf6mmV1ZfMd97x5KhCy5UxvMVVaJzBd3isdFg2
+         IJZA==
+X-Gm-Message-State: AC+VfDxBUzs/GAS7O3NeDeCaz+IfPUu2jilYQqCmnxJvaXYyfYESAaSz
+        O3r7agg7QJoTRRaThdEIIFm9CM68xyQEFImKPSqOavfHvwnpDCK3PO/tJcyfNMH9KdBCHBEbtt5
+        NpPm7zSGrGq7ouqtUdTsj1wmf
+X-Received: by 2002:ac2:43c7:0:b0:4f3:a49b:121f with SMTP id u7-20020ac243c7000000b004f3a49b121fmr1286298lfl.40.1685473611538;
+        Tue, 30 May 2023 12:06:51 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6i347dAklPJbPv8EkDS2YnvF4+V4rWvJj6xX7aXx26i4gIYG6DhV3FoTipjX8Q0zjzNeUxZQ==
+X-Received: by 2002:ac2:43c7:0:b0:4f3:a49b:121f with SMTP id u7-20020ac243c7000000b004f3a49b121fmr1286284lfl.40.1685473611189;
+        Tue, 30 May 2023 12:06:51 -0700 (PDT)
+Received: from redhat.com ([176.12.143.106])
+        by smtp.gmail.com with ESMTPSA id d10-20020ac24c8a000000b004f252f48e5fsm429049lfl.40.2023.05.30.12.06.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 12:06:50 -0700 (PDT)
+Date:   Tue, 30 May 2023 15:06:45 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Igor Mammedov <imammedo@redhat.com>, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, lenb@kernel.org, bhelgaas@google.com,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        mika.westerberg@linux.intel.com
+Subject: Re: [PATCH v2] PCI: acpiphp: Reassign resources on bridge if
+ necessary
+Message-ID: <20230530150019-mutt-send-email-mst@kernel.org>
+References: <20230530141321-mutt-send-email-mst@kernel.org>
+ <ZHZGkAg34ltZLV9J@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net] net: ipa: Use the correct value for IPA_STATUS_SIZE
-Content-Language: en-US
-To:     Bert Karwatzki <spasswolf@web.de>,
-        Simon Horman <simon.horman@corigine.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <7ae8af63b1254ab51d45c870e7942f0e3dc15b1e.camel@web.de>
- <ZHWhEiWtEC9VKOS1@corigine.com>
- <2b91165f667d3896a0aded39830905f62f725815.camel@web.de>
- <3c4d235d-8e49-61a2-a445-5d363962d3e7@linaro.org>
- <8d0e0272c80a594e7425ffcdd7714df7117edde5.camel@web.de>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <8d0e0272c80a594e7425ffcdd7714df7117edde5.camel@web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHZGkAg34ltZLV9J@bhelgaas>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/23 1:36 PM, Bert Karwatzki wrote:
-> Am Dienstag, dem 30.05.2023 um 07:29 -0500 schrieb Alex Elder:
->> On 5/30/23 4:10 AM, Bert Karwatzki wrote:
->>> Am Dienstag, dem 30.05.2023 um 09:09 +0200 schrieb Simon Horman:
->>>> On Sat, May 27, 2023 at 10:46:25PM +0200, Bert Karwatzki wrote:
->>>>> commit b8dc7d0eea5a7709bb534f1b3ca70d2d7de0b42c introduced
->>>>> IPA_STATUS_SIZE as a replacement for the size of the removed struct
->>>>> ipa_status. sizeof(struct ipa_status) was sizeof(__le32[8]), use this
->>>>> as IPA_STATUS_SIZE.
->>
->> This is better, however it really isn't done in a way that's
->> appropriate for a Linux kernel patch.  I will gladly help you
->> get it right if you have the patience for that.  But I'm not
->> going to say anything yet--until you say you want me to help
->> you do this.  If you prefer, I can submit the patch for you.
->>
->> The reason this is important is your commit is permanent, and
->> just like code, commit messages are best if kept consistent
->> and readable.  I also am offering to help you understand so
->> you avoid any trouble next time you want to send a kernel patch.
->>
->> Let me know what you prefer.
->>
->>                                          -Alex
->>
->>>>
+On Tue, May 30, 2023 at 01:55:12PM -0500, Bjorn Helgaas wrote:
+> On Tue, May 30, 2023 at 02:16:36PM -0400, Michael S. Tsirkin wrote:
+> > On Tue, May 30, 2023 at 12:12:44PM -0500, Bjorn Helgaas wrote:
+> > > On Mon, Apr 24, 2023 at 09:15:57PM +0200, Igor Mammedov wrote:
+> > > > When using ACPI PCI hotplug, hotplugging a device with
+> > > > large BARs may fail if bridge windows programmed by
+> > > > firmware are not large enough.
+> > > > 
+> > > > Reproducer:
+> > > >   $ qemu-kvm -monitor stdio -M q35  -m 4G \
+> > > >       -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=on \
+> > > >       -device id=rp1,pcie-root-port,bus=pcie.0,chassis=4 \
+> > > >       disk_image
+> > > > 
+> > > >  wait till linux guest boots, then hotplug device
+> > > >    (qemu) device_add qxl,bus=rp1
+> > > > 
+> > > >  hotplug on guest side fails with:
+> > > >    pci 0000:01:00.0: [1b36:0100] type 00 class 0x038000
+> > > >    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x03ffffff]
+> > > >    pci 0000:01:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
+> > > >    pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x00001fff]
+> > > >    pci 0000:01:00.0: reg 0x1c: [io  0x0000-0x001f]
+> > > >    pci 0000:01:00.0: BAR 0: no space for [mem size 0x04000000]
+> > > >    pci 0000:01:00.0: BAR 0: failed to assign [mem size 0x04000000]
+> > > >    pci 0000:01:00.0: BAR 1: no space for [mem size 0x04000000]
+> > > >    pci 0000:01:00.0: BAR 1: failed to assign [mem size 0x04000000]
+> > > >    pci 0000:01:00.0: BAR 2: assigned [mem 0xfe800000-0xfe801fff]
+> > > >    pci 0000:01:00.0: BAR 3: assigned [io  0x1000-0x101f]
+> > > >    qxl 0000:01:00.0: enabling device (0000 -> 0003)
+> > > 
+> > > Ugh, I just noticed that we turned on PCI_COMMAND_MEMORY even though
+> > > BARs 0 and 1 haven't been assigned.  How did that happen?  It looks
+> > > like pci_enable_resources() checks for that, but there must be a hole
+> > > somewhere.
+> > 
+> > Maybe because BAR2 was assigned? I think pci_enable_resources just
+> > does
+> >                 if (r->flags & IORESOURCE_MEM)
+> >                         cmd |= PCI_COMMAND_MEMORY;
+> > in a loop so if any memory BARs are assigned then PCI_COMMAND_MEMORY
+> > is set.
 > 
-> So here's v3 of the patch, done (I hope) in a way that is more standard
-> conforming.
+> It does, but it also bails out if it finds IORESOURCE_UNSET:
 > 
->  From e0dc802b5f6f41c0a388c7281aabe077a4e3c5a2 Mon Sep 17 00:00:00 2001
-> From: Bert Karwatzki <spasswolf@web.de>
-> Date: Tue, 30 May 2023 20:23:29 +0200
-> Subject: [PATCH] net/ipa: Use correct value for IPA_STATUS_SIZE
+>   pci_enable_resources()
+>   {
+>     ...
+>     pci_dev_for_each_resource(dev, r, i) {
+>       ...
+>       if (r->flags & IORESOURCE_UNSET) {
+>         pci_err(dev, "can't enable device: BAR %d %pR not assigned\n");
+>         return -EINVAL;
+>       }
+>       ...
+>       if (r->flags & IORESOURCE_MEM)
+>         cmd |= PCI_COMMAND_MEMORY;
+>     }
+>     ...
+>   }
 > 
-> IPA_STATUS_SIZE was introduced in commit b8dc7d0eea5a as a replacement
-> for the size of the removed struct ipa_status which had size
-> sizeof(__le32[8]). Use this value as IPA_STATUS_SIZE.
+> I expected that IORESOURCE_UNSET would still be there from
+> pci_assign_resource(), since we saw the "failed to assign" messages,
+> but there must be more going on.
 > 
-> Signed-off-by: Bert Karwatzki <spasswolf@web.de>
+> Bjorn
 
-This is better, but there are a few more things to do differently.
-- When re-submitting a patch, please indicate a (new) version in
-   the subject line.  Since you haven't been doing that, it should
-   be sufficient to just use "version 2", something like this:
-     [PATCH net v2] net: ipa: Use the correct value for IPA_STATUS_SIZE
-- Add a "Fixes" tag above your "Signed-off-by:" line:
-     Fixes: b8dc7d0eea5a ("net: ipa: stop using sizeof(status)")
-- Do not send information above the patch in the e-mail.  An easy
-   way to get it right is to use "git send-email".  For example:
-     - git format-patch -1
-     - Edit 0001-*.patch, adding lines like this below the "From:" line:
-	To: davem@davemloft.net
-	To: edumazet@google.com
-	To: kuba@kernel.org
-	To: pabeni@redhat.com
-	Cc: elder@kernel.org
-	Cc: netdev@vger.kernel.org
-	Cc: linux-arm-msm@vger.kernel.org
-	Cc: linux-kernel@vger.kernel.org
-     - Run this:
-         git send-email --dry-run 0001-*.patch
-       to try to catch any errors
-     - Finally, run this:
-         git send-email 0001-*.patch
-       to actually send the patch.  This will require a password.
+Oh you are right. I donnu.
 
-Even if you don't use "git send-email", just let the e-mail
-itself indicate the "From:" and "Subject:" lines.  And have
-the content of the e-mail be the patch itself.
-
-I hope this helps.
-
-					-Alex
-
-> ---
->   drivers/net/ipa/ipa_endpoint.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
-> index 2ee80ed140b7..afa1d56d9095 100644
-> --- a/drivers/net/ipa/ipa_endpoint.c
-> +++ b/drivers/net/ipa/ipa_endpoint.c
-> @@ -119,7 +119,7 @@ enum ipa_status_field_id {
->   };
->   
->   /* Size in bytes of an IPA packet status structure */
-> -#define IPA_STATUS_SIZE			sizeof(__le32[4])
-> +#define IPA_STATUS_SIZE			sizeof(__le32[8])
->   
->   /* IPA status structure decoder; looks up field values for a structure */
->   static u32 ipa_status_extract(struct ipa *ipa, const void *data,
+-- 
+MST
 
