@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F0A7158CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 874967158CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjE3IkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49058 "EHLO
+        id S230089AbjE3IkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 04:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjE3Ijq (ORCPT
+        with ESMTP id S230367AbjE3Ijq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 May 2023 04:39:46 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAF9A1;
-        Tue, 30 May 2023 01:39:44 -0700 (PDT)
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189CAB2;
+        Tue, 30 May 2023 01:39:45 -0700 (PDT)
 Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id CBCE1846F0;
-        Tue, 30 May 2023 10:39:41 +0200 (CEST)
+        by phobos.denx.de (Postfix) with ESMTPSA id 931F28471A;
+        Tue, 30 May 2023 10:39:42 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1685435982;
-        bh=cFxoSyVh9Mb73TPtXDZpGE2BFJ/+remD0M2nfSpO+L8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KzgrXwPokMo8NOnv4o9r17lhF/bsdsiIZy8hE1YWNHnLyE87qDUMCZX7v9N6kCgbr
-         pfthKu8yyyNlXJ7Q7o1/X+/GysLLSuQEMeggCAntfcaBAFuyrUIcSpgHUM6q8y4JVy
-         YCZ9tvBaIRxbMK+huv2pEdPW6iMk9hlMldXNVmrypZm/CugpuNie7k3g02uJ5YbbI6
-         hmut+ogkagJzzhXO3X+25LWoHr1V9Mdu4432D5jcJznn339q5gm7f/mNirb77ITQmw
-         5UehV4kuGAOGMbiXsK5MnMDftS2hf/RE7pHq/Fd2PpCD6eh82swBpAUjSc5yhkielN
-         L9bvzEmSPdTSA==
+        s=phobos-20191101; t=1685435983;
+        bh=cLZlrJ12olakaKifdtSsUoi0/xDFWi90I9u1jms08mI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=yruDc+ek+wMYzASJKALSqRryivig4frl2ME68o+GDmCresAOqS3RsFzTSwRbo187C
+         CY2sNILCzgENzfNDnNhOGJeWiC5hId4GSEHiBrIKW80GbsrWeJEEIMVpJ8QrX5MKpc
+         JB7Inv4jNoG3eqiSqHZr3zsMVfVlTATVm6XumxRCicXWyYq0WkCuGN8O0WTLJafOzB
+         6FvC55iJmKgnTzlj/V4BfcqGImuEJf3kU/M/4BemlU7AwQ9deBvteylTF2QWjrXhkm
+         1HxrubF3qfz/u/21w8s40SqSDW8OKaxZi72cqkj09uF5k/z09f8GYSjuVA9ukfjHrv
+         oF1JSY2ZtBH1Q==
 From:   Lukasz Majewski <lukma@denx.de>
 To:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
         Russell King <linux@armlinux.org.uk>
@@ -42,10 +42,12 @@ Cc:     Eric Dumazet <edumazet@google.com>,
         Alexander Duyck <alexander.duyck@gmail.com>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lukasz Majewski <lukma@denx.de>
-Subject: [PATCH v8 0/3] dsa: marvell: Add support for mv88e6071 and 6020  switches
-Date:   Tue, 30 May 2023 10:39:13 +0200
-Message-Id: <20230530083916.2139667-1-lukma@denx.de>
+Subject: [PATCH v8 1/3] net: dsa: Define .set_max_frame_size() callback for mv88e6250 SoC family
+Date:   Tue, 30 May 2023 10:39:14 +0200
+Message-Id: <20230530083916.2139667-2-lukma@denx.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230530083916.2139667-1-lukma@denx.de>
+References: <20230530083916.2139667-1-lukma@denx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
@@ -60,26 +62,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After the commit (SHA1: 7e9517375a14f44ee830ca1c3278076dd65fcc8f);
-"net: dsa: mv88e6xxx: fix max_mtu of 1492 on 6165, 6191, 6220, 6250, 6290" the
-error when mv88e6020 or mv88e6071 is used is not present anymore.
+Switches from mv88e6250 family (including mv88e6020 and mv88e6071) need
+the possibility to setup the maximal frame size, as they support frames
+up to 2048 bytes.
 
-As a result patches for adding max frame size are not required to provide
-working setup with aforementioned switches.
+Signed-off-by: Lukasz Majewski <lukma@denx.de>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+---
+Changes for v6:
+- New patch
 
-Lukasz Majewski (2):
-  net: dsa: Define .set_max_frame_size() callback for mv88e6250 SoC
-    family
-  net: dsa: mv88e6xxx: add support for MV88E6071 switch
+Changes for v7:
+- Update commit message
 
-Matthias Schiffer (1):
-  net: dsa: mv88e6xxx: add support for MV88E6020 switch
+Changes for v8:
+- Update commit message and subject line
+---
+ drivers/net/dsa/mv88e6xxx/chip.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- drivers/net/dsa/mv88e6xxx/chip.c | 41 ++++++++++++++++++++++++++++++++
- drivers/net/dsa/mv88e6xxx/chip.h |  4 +++-
- drivers/net/dsa/mv88e6xxx/port.h |  2 ++
- 3 files changed, 46 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index 64a2f2f83735..b5e43dd40431 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -5043,6 +5043,7 @@ static const struct mv88e6xxx_ops mv88e6250_ops = {
+ 	.avb_ops = &mv88e6352_avb_ops,
+ 	.ptp_ops = &mv88e6250_ptp_ops,
+ 	.phylink_get_caps = mv88e6250_phylink_get_caps,
++	.set_max_frame_size = mv88e6185_g1_set_max_frame_size,
+ };
+ 
+ static const struct mv88e6xxx_ops mv88e6290_ops = {
 -- 
 2.20.1
 
