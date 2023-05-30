@@ -2,110 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5B0715A4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 565AD715A4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjE3Jgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50026 "EHLO
+        id S230150AbjE3JiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbjE3JgV (ORCPT
+        with ESMTP id S229520AbjE3JiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:36:21 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2B093;
-        Tue, 30 May 2023 02:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685439380; x=1716975380;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3ckYj4cSZnQk9S/q4LoCZNhEtpmi9ONFZYxoANi2gzc=;
-  b=MxBgq9Fms3EcgnCxqVt3/RqSY/bbuxeoPcf4f2QA54/fvy7Cgag4nWE5
-   GTQwZ9AGNIyX5D+oU3ZqmdYQ+/8zEdTQzxY4TssTy8nt6NWyNnPJdn8L6
-   UL/rgahajokQBY7EDHtN6p8OBngigOOFRmdr2rer3OiltJaBRfzYf/XOf
-   mQsLGQ84rp2dwfFbbvtLLQeryoY+j6Cv6YK8LllTGfCL/qloS9Q2ujBQY
-   DcDHnmZumMjCCzwfaVppBGSBbhbzDiBKD0SdH6/pf7itECggJjKzC8u9I
-   xIA97sZumxI0yZHTEop7wVFC7a2lBFa+eccUU9kpuy1aoTzS/dFIWcNZ0
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="344367308"
-X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="344367308"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 02:36:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="683884089"
-X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="683884089"
-Received: from rajatkha-mobl.gar.corp.intel.com (HELO [10.67.146.41]) ([10.67.146.41])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 02:36:18 -0700
-Message-ID: <2da06c06-6617-bd02-f20a-a5ea7f9ae0b4@linux.intel.com>
-Date:   Tue, 30 May 2023 15:06:15 +0530
+        Tue, 30 May 2023 05:38:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D2793
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685439450;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g3KL3EHQXIEMhG+qF6ouz6Zrek1DaRJ8+MJLe7WdMsQ=;
+        b=WK3RWFE9qBP8vf+Z3YYEOdOXQTKX8/1a0pBF7HkcT52TuHrGXrRquuTsLQLIiylRvsG9Uw
+        02FaVSXh6aJTEXlL9FHXw8trKEyelCiOKdFqMhdGfUcKbNyeWuK/24xz27yrrEHuaDSTX9
+        9TaC0tHWEjzdiKlILuVZGP9wgwc9a+Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-590-1_ez37_sOBKnhBkfjuZVmg-1; Tue, 30 May 2023 05:37:29 -0400
+X-MC-Unique: 1_ez37_sOBKnhBkfjuZVmg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 68A0C85A5BB;
+        Tue, 30 May 2023 09:37:28 +0000 (UTC)
+Received: from localhost (ovpn-12-192.pek2.redhat.com [10.72.12.192])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3550F43E907;
+        Tue, 30 May 2023 09:37:26 +0000 (UTC)
+Date:   Tue, 30 May 2023 17:37:23 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
+        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+        schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
+        willy@infradead.org, deller@gmx.de
+Subject: Re: [PATCH v5 RESEND 14/17] mm/ioremap: Consider IOREMAP space in
+ generic ioremap
+Message-ID: <ZHXD082+VntWgbNo@MiWiFi-R3L-srv>
+References: <20230515090848.833045-1-bhe@redhat.com>
+ <20230515090848.833045-15-bhe@redhat.com>
+ <ZGR3Ft27kdgXKKfp@infradead.org>
+ <ZGR3yWIdjfJTupgY@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v5] usb: typec: intel_pmc_mux: Expose IOM port status to
- debugfs
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230524104754.4154013-1-rajat.khandelwal@linux.intel.com>
- <2023052917-juicy-calamity-4b35@gregkh>
- <0367a134-cb04-8a1c-bb46-bb5553df6f8a@linux.intel.com>
- <2023053049-dexterous-flatware-df04@gregkh>
-From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-In-Reply-To: <2023053049-dexterous-flatware-df04@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGR3yWIdjfJTupgY@infradead.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 05/16/23 at 11:44pm, Christoph Hellwig wrote:
+> On Tue, May 16, 2023 at 11:41:26PM -0700, Christoph Hellwig wrote:
+> > I think this would be cleaner if we'd just always use
+> > __get_vm_area_caller and at the top of the file add a:
+> > 
+> > #ifndef IOREMAP_START
+> > #define IOREMAP_START	VMALLOC_START
+> > #define IOREMAP_END	VMALLOC_END
+> > #endif
+> > 
+> > Together with a little comment that ioremap often, but not always
+> > uses the generic vmalloc area.
+> 
+> .. and with that we can also simply is_ioremap_addr by moving it
+> to ioremap.c and making it always operate on the IOREMAP constants.
 
-On 5/30/2023 2:57 PM, Greg KH wrote:
-> On Tue, May 30, 2023 at 02:45:03PM +0530, Rajat Khandelwal wrote:
->> Hi,
->>
->> On 5/29/2023 7:48 PM, Greg KH wrote:
->>> On Wed, May 24, 2023 at 04:17:54PM +0530, Rajat Khandelwal wrote:
->>>> IOM status has a crucial role during debugging to check the
->>>> current state of the type-C port.
->>>> There are ways to fetch the status, but all those require the
->>>> IOM port status offset, which could change with platform.
->>>>
->>>> Make a debugfs directory for intel_pmc_mux and expose the status
->>>> under it per port basis.
->>>>
->>>> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
->>>> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->>> Does not apply to my tree :(
->> I have pushed the patch on top of the Linus's tree.
->> Had a quick check with the USB Linux tree and seems like its a lot
->> behind?
-> What branch did you use?
->
-> Please use the usb-next branch of
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git, which as
-> of right now, is at 6.4-rc4 + a bunch of USB-specific patches.
+In the current code, is_ioremap_addr() is being used in kernel/iomem.c.
+However, mm/ioremap.c is only built in when CONFIG_GENERIC_IOREMAP is
+enabled. This will impact those architectures which haven't taken
+GENERIC_IOREMAP way.
 
-I see. There is one commit additional in the usb-next tree:
-ef0a3642b320 usb: typec: intel_pmc_mux: Convert to platform remove callback returning void
+[~]$ git grep is_ioremap_addr
+arch/powerpc/include/asm/pgtable.h:#define is_ioremap_addr is_ioremap_addr
+arch/powerpc/include/asm/pgtable.h:static inline bool is_ioremap_addr(const void *x)
+include/linux/mm.h:static inline bool is_ioremap_addr(const void *x)
+include/linux/mm.h:static inline bool is_ioremap_addr(const void *x)
+kernel/iomem.c: if (is_ioremap_addr(addr))
+mm/ioremap.c:   if (is_ioremap_addr(vaddr))
 
-Anyways, do you want me to re-work the patch for the usb-next branch?
+[bhe@MiWiFi-R3L-srv linux-arm64]$ git grep ioremap mm/Makefile
+mm/Makefile:obj-$(CONFIG_GENERIC_EARLY_IOREMAP) += early_ioremap.o
+mm/Makefile:obj-$(CONFIG_GENERIC_IOREMAP) += ioremap.o
 
-Thanks
-Rajat
+If we want to consolidate code, we can move is_ioremap_addr() to
+include/linux/mm.h libe below. Not sure if it's fine. With it,
+both kernel/iomem.c and mm/ioremap.c can use is_ioremap_addr().
 
->
-> thanks,
->
-> greg k-h
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 27ce77080c79..0fbb94f0f025 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1041,9 +1041,25 @@ unsigned long vmalloc_to_pfn(const void *addr);
+  * On nommu, vmalloc/vfree wrap through kmalloc/kfree directly, so there
+  * is no special casing required.
+  */
+-
+-#ifndef is_ioremap_addr
+-#define is_ioremap_addr(x) is_vmalloc_addr(x)
++#if defined(CONFIG_HAS_IOMEM) || defined(CONFIG_GENERIC_IOREMAP)
++/*
++ * Ioremap often, but not always uses the generic vmalloc area. E.g on
++ * Power ARCH, it could have different ioremap space. 
++ */
++#ifndef IOREMAP_START
++#define IOREMAP_START   VMALLOC_START
++#define IOREMAP_END     VMALLOC_END
++#endif
++static inline bool is_ioremap_addr(const void *x)
++{
++	unsigned long addr = (unsigned long)kasan_reset_tag(x);
++	return addr >= IOREMAP_START && addr < IOREMAP_END;
++}
++#else
++static inline bool is_ioremap_addr(const void *x)
++{
++	return false;
++}
+ #endif
+ 
+ #ifdef CONFIG_MMU
+
