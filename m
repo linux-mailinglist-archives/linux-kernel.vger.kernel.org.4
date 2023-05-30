@@ -2,181 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56030716982
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF0A716984
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233216AbjE3QbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
+        id S232802AbjE3QbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233564AbjE3Qag (ORCPT
+        with ESMTP id S231918AbjE3Qan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:30:36 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AD5196;
-        Tue, 30 May 2023 09:30:14 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-565c9109167so30948787b3.2;
-        Tue, 30 May 2023 09:30:14 -0700 (PDT)
+        Tue, 30 May 2023 12:30:43 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6206CE62;
+        Tue, 30 May 2023 09:30:22 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-33bb16ac2e9so1672085ab.3;
+        Tue, 30 May 2023 09:30:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685464141; x=1688056141;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=RaH6YlQLj82X1bK0066HcpgE2an8J/ytXi93zQbg3cQ=;
-        b=NiGox1WIIjth2AXTGOrzWLBf8ocEgyj8zWCgZoMezoWh8FD6QM/0tPrXmn7BSHEMyV
-         Ghm66GNFV6l4CebnGoiMKEapSzx+VaH1b1A2mUJFdz+2xaOtAl1yB5Icir/ErZt0wGE6
-         JyIAjLMoPWWC1k2Syer1b/bsqCeXF0silPz2ctpTMt7r/Pe2/FPQqlFLc/FIsalEMmU0
-         0w7JItwNex+0rTcHsMg5mpbjpH4F87ZpEr8WqrSaTOrABPnnwpPxhhgSlDHzM8bBeAwN
-         Ly8AT2ssLYkRFmnOP4FAjUZVKbnfYBM/gqE1la3gTV/SVnnUQpN83OuEYSN/T8L9ktYv
-         mZPg==
+        d=gmail.com; s=20221208; t=1685464205; x=1688056205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/LWWk7OiWzrpThqhVbFLSrSU5nSLgFLiDPfrnxleCDY=;
+        b=TQioqOjca+bUqcEeiDchD5sSjIHMiquSZWZJT8KvLIMJuKXOba+ePT3amyjsq1szBb
+         XomhM5aSn25xJj9YFCrEHDaHIJ9a8CYBqvCgmVecdW2n2QrGE1SYr0RJ3arZZbSkIlZ4
+         r+qL5UOPzAosqv9NxuFWeNQ5Kyv7sGOAWvAL7t5gkSzY09uctRXZE6cvXDXL53w1LmXv
+         LiLIShHLUxBX7cA3TyXI0+UtLCMRx10Hn71KHDu5ir02UHa/w6dsnidk4VdyFxh4A+uf
+         avDlFziEq+lNYzlRDrRWr9pOc/ZEANJ2CAkfuhDpIyJU1c4WLdSGvoNej98aNRlKMcTf
+         j5yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685464141; x=1688056141;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RaH6YlQLj82X1bK0066HcpgE2an8J/ytXi93zQbg3cQ=;
-        b=eA1jXlrzwY0gZQcaT+hA5UQIOpmZyYpfenqvyO9OXUzVn9aZjRJbZ2dPdmDv2ePWIa
-         eToZ+LDmLzf1VV4Z62XBU6ZGAT+sZtFuqOAijPKxgrhaj/XpMwVvVkiV58o4chHkSr2G
-         ctHzt6HOs6n0GevIbczPEAyZgLt6Cez30mKqMc63U8WrzSuoyWjYLc62oMKYBE9c6SGd
-         Ii8H4UH8Nc5YPogy2tM5GTy3qV4ZqrJQuAydasiAyz0R/4uRV94sQ5kme+oKZi6pBaN/
-         NHmkhNY1zdHhViXE3sm/XnE9qzK+BcYUUaxi9FeeTsAjgABIIrm6ZcMWIvvTG6P1qRnJ
-         qJfg==
-X-Gm-Message-State: AC+VfDxgR9GxfVpCGS6OvZrH/KoQIqPbSsCONFhhAikyv1Rjd4pvzmW3
-        NNLjfljH4aNbzUvngfKq406ZbdWOb220MS3dK6A=
-X-Google-Smtp-Source: ACHHUZ7pu7vphBMBZ8mAXs/tfRsKu1hhZ0D0tIefznTvYwXkKqBLlWSLtS0FFFsJK9fj4GTt5i9js4ELTS/MwImZplc=
-X-Received: by 2002:a81:778b:0:b0:55d:cf78:ed20 with SMTP id
- s133-20020a81778b000000b0055dcf78ed20mr2741306ywc.42.1685464141132; Tue, 30
- May 2023 09:29:01 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685464205; x=1688056205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/LWWk7OiWzrpThqhVbFLSrSU5nSLgFLiDPfrnxleCDY=;
+        b=cu+JbS3NPoUt5EEXvzP1zpJictd//jZpUV48gx31dMLFU+NYjM2fo7PZFrNePj954H
+         8r3f7PuUCq6c5dCHugeAu1OfWBwQB2l2SfEK/jxjjNi6fHDo3a29K6kJhAV+POM93pb4
+         97FXgFW5cUK6+sTv1Q7veaO0tnmGCQUMGY473c3JcsTKdMIz6q5O3GmalJAQC+hE2/BF
+         fUOdECI6H8lKGIubIVL/6BeC0WpXEHa3y1gex9zPux2hhTHTk5rCQIjegj7D2PsXiLwC
+         rUh0UrhiaH+95TSURfnN05izRPiwtf1Ph/Hop2P4oqjtuhU+YfAIX9/Yb/UrPppPSsl4
+         irGQ==
+X-Gm-Message-State: AC+VfDxrS82npn5CJplV8CF9R10vIJ6Mdo0igDbb4GaoUlMuGehE2uEJ
+        OW1OnbQatTTlSBqUenEuuHM=
+X-Google-Smtp-Source: ACHHUZ7OZ/XmHPC+oA4bkbBkK/58E7h3zga5Zp5f5CGOKNu0KJV57R9RZY4X0bC9fRZO7Ib1vNvT0Q==
+X-Received: by 2002:a92:d182:0:b0:335:3568:dc67 with SMTP id z2-20020a92d182000000b003353568dc67mr68169ilz.15.1685464205051;
+        Tue, 30 May 2023 09:30:05 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id d8-20020a0566380d4800b0041a9cf6651asm771148jak.138.2023.05.30.09.30.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 09:30:04 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] sparc64: Replace all non-returning strlcpy with strscpy
+Date:   Tue, 30 May 2023 16:30:01 +0000
+Message-ID: <20230530163001.985256-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-References: <cover.1685449706.git.ojaswin@linux.ibm.com> <ddcae9658e46880dfec2fb0aa61d01fb3353d202.1685449706.git.ojaswin@linux.ibm.com>
-In-Reply-To: <ddcae9658e46880dfec2fb0aa61d01fb3353d202.1685449706.git.ojaswin@linux.ibm.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Tue, 30 May 2023 18:28:22 +0200
-Message-ID: <CA+icZUXDFbxRvx8-pvEwsZAu+-28bX4VDTj6ZTPtvn4gWqGnCg@mail.gmail.com>
-Subject: Re: [PATCH v2 01/12] Revert "ext4: remove ac->ac_found >
- sbi->s_mb_min_to_scan dead check in ext4_mb_check_limits"
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Kemeng Shi <shikemeng@huaweicloud.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 3:25=E2=80=AFPM Ojaswin Mujoo <ojaswin@linux.ibm.co=
-m> wrote:
->
-> This reverts commit 32c0869370194ae5ac9f9f501953ef693040f6a1.
->
-> The reverted commit was intended to remove a dead check however it was ob=
-served
-> that this check was actually being used to exit early instead of looping
-> sbi->s_mb_max_to_scan times when we are able to find a free extent bigger=
- than
-> the goal extent. Due to this, a my performance tests (fsmark, parallel fi=
-le
-> writes in a highly fragmented FS) were seeing a 2x-3x regression.
->
-> Example, the default value of the following variables is:
->
-> sbi->s_mb_max_to_scan =3D 200
-> sbi->s_mb_min_to_scan =3D 10
->
-> In ext4_mb_check_limits() if we find an extent smaller than goal, then we=
- return
-> early and try again. This loop will go on until we have processed
-> sbi->s_mb_max_to_scan(=3D200) number of free extents at which point we ex=
-it and
-> just use whatever we have even if it is smaller than goal extent.
->
-> Now, the regression comes when we find an extent bigger than goal. Earlie=
-r, in
-> this case we would loop only sbi->s_mb_min_to_scan(=3D10) times and then =
-just use
-> the bigger extent. However with commit 32c08693 that check was removed an=
-d hence
-> we would loop sbi->s_mb_max_to_scan(=3D200) times even though we have a b=
-ig enough
-> free extent to satisfy the request. The only time we would exit early wou=
-ld be
-> when the free extent is *exactly* the size of our goal, which is pretty u=
-ncommon
-> occurrence and so we would almost always end up looping 200 times.
->
-> Hence, revert the commit by adding the check back to fix the regression. =
-Also
-> add a comment to outline this policy.
->
+strlcpy() reads the entire source buffer first.
+This read may exceed the destination size limit.
+This is both inefficient and can lead to linear read
+overflows if a source string is not NUL-terminated [1].
+In an effort to remove strlcpy() completely [2], replace
+strlcpy() here with strscpy().
+No return values were used, so direct replacement is safe.
 
-Hi,
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
 
-I applied this single patch of your series v2 on top of Linux v6.4-rc4.
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+---
+ arch/sparc/kernel/ioport.c   |    2 +-
+ arch/sparc/kernel/setup_32.c |    2 +-
+ arch/sparc/kernel/setup_64.c |    2 +-
+ arch/sparc/prom/bootstr_32.c |    2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-So, if this is a regression I ask myself if this is material for Linux 6.4?
+diff --git a/arch/sparc/kernel/ioport.c b/arch/sparc/kernel/ioport.c
+index 4e4f3d3263e4..a8cbe403301f 100644
+--- a/arch/sparc/kernel/ioport.c
++++ b/arch/sparc/kernel/ioport.c
+@@ -191,7 +191,7 @@ static void __iomem *_sparc_alloc_io(unsigned int busno, unsigned long phys,
+ 		tack += sizeof (struct resource);
+ 	}
+ 
+-	strlcpy(tack, name, XNMLN+1);
++	strscpy(tack, name, XNMLN+1);
+ 	res->name = tack;
+ 
+ 	va = _sparc_ioremap(res, busno, phys, size);
+diff --git a/arch/sparc/kernel/setup_32.c b/arch/sparc/kernel/setup_32.c
+index c8e0dd99f370..ace0e9adfd77 100644
+--- a/arch/sparc/kernel/setup_32.c
++++ b/arch/sparc/kernel/setup_32.c
+@@ -302,7 +302,7 @@ void __init setup_arch(char **cmdline_p)
+ 
+ 	/* Initialize PROM console and command line. */
+ 	*cmdline_p = prom_getbootargs();
+-	strlcpy(boot_command_line, *cmdline_p, COMMAND_LINE_SIZE);
++	strscpy(boot_command_line, *cmdline_p, COMMAND_LINE_SIZE);
+ 	parse_early_param();
+ 
+ 	boot_flags_init(*cmdline_p);
+diff --git a/arch/sparc/kernel/setup_64.c b/arch/sparc/kernel/setup_64.c
+index 48abee4eee29..6546ca9d4d3f 100644
+--- a/arch/sparc/kernel/setup_64.c
++++ b/arch/sparc/kernel/setup_64.c
+@@ -636,7 +636,7 @@ void __init setup_arch(char **cmdline_p)
+ {
+ 	/* Initialize PROM console and command line. */
+ 	*cmdline_p = prom_getbootargs();
+-	strlcpy(boot_command_line, *cmdline_p, COMMAND_LINE_SIZE);
++	strscpy(boot_command_line, *cmdline_p, COMMAND_LINE_SIZE);
+ 	parse_early_param();
+ 
+ 	boot_flags_init(*cmdline_p);
+diff --git a/arch/sparc/prom/bootstr_32.c b/arch/sparc/prom/bootstr_32.c
+index e3b731ff00f0..1c7cd258b0dc 100644
+--- a/arch/sparc/prom/bootstr_32.c
++++ b/arch/sparc/prom/bootstr_32.c
+@@ -52,7 +52,7 @@ prom_getbootargs(void)
+ 		 * V3 PROM cannot supply as with more than 128 bytes
+ 		 * of an argument. But a smart bootstrap loader can.
+ 		 */
+-		strlcpy(barg_buf, *romvec->pv_v2bootargs.bootargs, sizeof(barg_buf));
++		strscpy(barg_buf, *romvec->pv_v2bootargs.bootargs, sizeof(barg_buf));
+ 		break;
+ 	default:
+ 		break;
 
-Can you comment on this, please?
-
-Thanks.
-
-Regards,
--Sedat-
-
-
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-> Reviewed-by: Kemeng Shi <shikemeng@huaweicloud.com>
-> ---
->  fs/ext4/mballoc.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
->
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index d4b6a2c1881d..7ac6d3524f29 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -2063,7 +2063,7 @@ static void ext4_mb_check_limits(struct ext4_alloca=
-tion_context *ac,
->         if (bex->fe_len < gex->fe_len)
->                 return;
->
-> -       if (finish_group)
-> +       if (finish_group || ac->ac_found > sbi->s_mb_min_to_scan)
->                 ext4_mb_use_best_found(ac, e4b);
->  }
->
-> @@ -2075,6 +2075,20 @@ static void ext4_mb_check_limits(struct ext4_alloc=
-ation_context *ac,
->   * in the context. Later, the best found extent will be used, if
->   * mballoc can't find good enough extent.
->   *
-> + * The algorithm used is roughly as follows:
-> + *
-> + * * If free extent found is exactly as big as goal, then
-> + *   stop the scan and use it immediately
-> + *
-> + * * If free extent found is smaller than goal, then keep retrying
-> + *   upto a max of sbi->s_mb_max_to_scan times (default 200). After
-> + *   that stop scanning and use whatever we have.
-> + *
-> + * * If free extent found is bigger than goal, then keep retrying
-> + *   upto a max of sbi->s_mb_min_to_scan times (default 10) before
-> + *   stopping the scan and using the extent.
-> + *
-> + *
->   * FIXME: real allocation policy is to be designed yet!
->   */
->  static void ext4_mb_measure_extent(struct ext4_allocation_context *ac,
-> --
-> 2.31.1
->
