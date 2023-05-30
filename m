@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5332A7159E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFEE7159E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbjE3JUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
+        id S230404AbjE3JUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbjE3JUP (ORCPT
+        with ESMTP id S230360AbjE3JUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:20:15 -0400
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A32D131;
-        Tue, 30 May 2023 02:19:51 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0Vjt6o1W_1685438385;
-Received: from srmbuffer011165236051.sqa.net(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0Vjt6o1W_1685438385)
+        Tue, 30 May 2023 05:20:16 -0400
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9034109;
+        Tue, 30 May 2023 02:19:53 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0Vjt6o28_1685438386;
+Received: from srmbuffer011165236051.sqa.net(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0Vjt6o28_1685438386)
           by smtp.aliyun-inc.com;
-          Tue, 30 May 2023 17:19:46 +0800
+          Tue, 30 May 2023 17:19:47 +0800
 From:   Jing Zhang <renyu.zj@linux.alibaba.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
@@ -37,9 +37,9 @@ Cc:     James Clark <james.clark@arm.com>,
         linux-perf-users@vger.kernel.org,
         Zhuo Song <zhuo.song@linux.alibaba.com>,
         Jing Zhang <renyu.zj@linux.alibaba.com>
-Subject: [PATCH v3 6/7] perf vendor events: Add JSON metrics for Yitian 710 DDR
-Date:   Tue, 30 May 2023 17:19:33 +0800
-Message-Id: <1685438374-33287-7-git-send-email-renyu.zj@linux.alibaba.com>
+Subject: [PATCH v3 7/7] docs: perf: Update metric usage for Alibaba's T-Head PMU driver
+Date:   Tue, 30 May 2023 17:19:34 +0800
+Message-Id: <1685438374-33287-8-git-send-email-renyu.zj@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
 References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
@@ -53,42 +53,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add JSON metrics for T-HEAD Yitian 710 SoC DDR.
+Alibaba's T-Head ali_drw PMU supports DDR bandwidth metrics. Update
+its usage in the documentation.
 
 Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
-Acked-by: Ian Rogers <irogers@google.com>
-Reviewed-by: John Garry <john.g.garry@oracle.com>
 ---
- .../arch/arm64/freescale/yitian710/sys/metrics.json  | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
- create mode 100644 tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json
+ Documentation/admin-guide/perf/alibaba_pmu.rst | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json b/tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json
-new file mode 100644
-index 0000000..1a92477
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json
-@@ -0,0 +1,20 @@
-+[
-+	{
-+		"MetricName": "ddr_read_bandwidth.all",
-+		"BriefDescription": "The ddr read bandwidth(MB/s).",
-+		"MetricGroup": "ali_drw",
-+		"MetricExpr": "hif_rd * 64 / 1e6 / duration_time",
-+		"ScaleUnit": "1MB/s",
-+		"Unit": "ali_drw",
-+		"Compat": "ali_drw_pmu"
-+	},
-+	{
-+		"MetricName": "ddr_write_bandwidth.all",
-+		"BriefDescription": "The ddr write bandwidth(MB/s).",
-+		"MetricGroup": "ali_drw",
-+		"MetricExpr": "(hif_wr + hif_rmw) * 64 / 1e6 / duration_time",
-+		"ScaleUnit": "1MB/s",
-+		"Unit": "ali_drw",
-+		"Compat": "ali_drw_pmu"
-+	}
-+]
+diff --git a/Documentation/admin-guide/perf/alibaba_pmu.rst b/Documentation/admin-guide/perf/alibaba_pmu.rst
+index 11de998..7d84002 100644
+--- a/Documentation/admin-guide/perf/alibaba_pmu.rst
++++ b/Documentation/admin-guide/perf/alibaba_pmu.rst
+@@ -88,6 +88,11 @@ data bandwidth::
+     -e ali_drw_27080/hif_rmw/ \
+     -e ali_drw_27080/cycle/ -- sleep 10
+ 
++Example usage of counting all memory read/write bandwidth by metric::
++
++  perf stat -M ddr_read_bandwidth.all -- sleep 10
++  perf stat -M ddr_write_bandwidth.all -- sleep 10
++
+ The average DRAM bandwidth can be calculated as follows:
+ 
+ - Read Bandwidth =  perf_hif_rd * DDRC_WIDTH * DDRC_Freq / DDRC_Cycle
 -- 
 1.8.3.1
 
