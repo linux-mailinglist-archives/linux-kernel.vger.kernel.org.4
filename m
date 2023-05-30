@@ -2,86 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 195FC715944
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E12CD715949
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjE3I7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57990 "EHLO
+        id S229941AbjE3JAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjE3I7U (ORCPT
+        with ESMTP id S230428AbjE3JAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 04:59:20 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C71BE;
-        Tue, 30 May 2023 01:59:18 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 91EE81F8D9;
-        Tue, 30 May 2023 08:59:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1685437157; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G22ruJ68JY2gjnCl3J/tk16VWb8N9hrSL5V+P1DY8aw=;
-        b=spkBo6kek5HXdJ+Ps51CIj7ivCB0CzLzZ+qf2jaG3s+TPpMFEjTLYiFju5XMlrBwFA1K0E
-        ec6IB2UKXhlGjyv9V3BGLpIWjbbNQyPzkn3ch1fhUERosZ5blbavla1uiDgDtAG4BNJSfo
-        LIQKkwdK7g7X9Ap82aOyzpqYy8KIGbg=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 12E3B2C141;
-        Tue, 30 May 2023 08:59:17 +0000 (UTC)
-Date:   Tue, 30 May 2023 10:59:16 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Maninder Singh <maninder1.s@samsung.com>
-Cc:     bcain@quicinc.com, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, keescook@chromium.org,
-        nathanl@linux.ibm.com, ustavoars@kernel.org, alex.gaynor@gmail.com,
-        gary@garyguo.net, ojeda@kernel.org, wedsonaf@google.com,
-        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, Onkarnath <onkarnath.1@samsung.com>
-Subject: Re: [PATCH 1/2] hexagon/traps.c: use KSYM_NAME_LEN in array size
-Message-ID: <ZHW65KTxiZKHFbOZ@alley>
-References: <CGME20230529111350epcas5p46a1fa16ffb2a39008c26d03c5c63f109@epcas5p4.samsung.com>
- <20230529111337.352990-1-maninder1.s@samsung.com>
+        Tue, 30 May 2023 05:00:21 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7624B2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685437220; x=1716973220;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rTflTYiV3VKyBm981Ml2WLipgh57SbrnaZBjjFs8J7A=;
+  b=iqHEU7GNUpMwkO+cXY7zo4U/ulCJ1/GS3SYv4mpV7auZfUfsbuN9ABJC
+   7SoqNd/FFvX66DeH0VKEjYAq/QNx3j+I6Fi61EYSLnQO5L1fa678piisu
+   GBeXoZMoJSX9pXrkVblOzYY9Vdj1xxaY4beO/lcqZpNwxhV9/qlkCs25P
+   AMuooWEROHG4iou/BsVRzYurSoGbBGiDwu2ErXrL4FOXamR6j0yv8+X83
+   Ti33zqbit0DljPekfxH5yHKkGqHmp9BPcoTyVApDKytIZnJVg3i91d8K4
+   Tp0EKhfGvJ6DDltk3pOhaxS8xZl7jxuDEQ9n2dYvI0Qditay9UQrrnYEC
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="335207057"
+X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
+   d="scan'208";a="335207057"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 02:00:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="880689121"
+X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
+   d="scan'208";a="880689121"
+Received: from lkp-server01.sh.intel.com (HELO fd90924b3b99) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 30 May 2023 02:00:16 -0700
+Received: from kbuild by fd90924b3b99 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q3vDE-0000Eo-2X;
+        Tue, 30 May 2023 09:00:16 +0000
+Date:   Tue, 30 May 2023 17:00:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sui Jingfeng <suijingfeng@loongson.cn>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v5 5/6] drm/etnaviv: expand driver support for the PCI
+ devices
+Message-ID: <202305301659.4guSLavL-lkp@intel.com>
+References: <20230529172452.2148819-6-suijingfeng@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230529111337.352990-1-maninder1.s@samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230529172452.2148819-6-suijingfeng@loongson.cn>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2023-05-29 16:43:36, Maninder Singh wrote:
-> kallsyms_lookup which in turn calls for kallsyms_lookup_buildid()
-> writes on index "KSYM_NAME_LEN - 1".
-> 
-> Thus array size should be KSYM_NAME_LEN.
-> 
-> for hexagon it was defined as "128" directly.
-> and commit '61968dbc2d5d' changed define value to 512,
-> So both were missed to update with new size.
-> 
-> Fixes: 61968dbc2d5d ("kallsyms: increase maximum kernel symbol length to 512")
+Hi Sui,
 
-As mentioned by Michael Ellerman for the 2nd patch, the right upstream
-commit is:
+kernel test robot noticed the following build errors:
 
-b8a94bfb3395 ("kallsyms: increase maximum kernel symbol length to 512")
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on drm/drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.4-rc4 next-20230530]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Co-developed-by: Onkarnath <onkarnath.1@samsung.com>
-> Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
-> Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Sui-Jingfeng/drm-etnaviv-add-a-dedicated-function-to-register-an-irq-handler/20230530-012547
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230529172452.2148819-6-suijingfeng%40loongson.cn
+patch subject: [PATCH v5 5/6] drm/etnaviv: expand driver support for the PCI devices
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230530/202305301659.4guSLavL-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1d05a5fa048dd4b2a934ffbb07c330ddd9279287
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sui-Jingfeng/drm-etnaviv-add-a-dedicated-function-to-register-an-irq-handler/20230530-012547
+        git checkout 1d05a5fa048dd4b2a934ffbb07c330ddd9279287
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/gpu/drm/etnaviv/
 
-With the updated commit hash:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305301659.4guSLavL-lkp@intel.com/
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+All errors (new ones prefixed by >>):
 
-Best Regards,
-Petr
+   drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c: In function 'etnaviv_gpu_pci_fini':
+>> drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:32:9: error: implicit declaration of function 'pci_clear_master'; did you mean 'pci_set_master'? [-Werror=implicit-function-declaration]
+      32 |         pci_clear_master(pdev);
+         |         ^~~~~~~~~~~~~~~~
+         |         pci_set_master
+   cc1: some warnings being treated as errors
+
+
+vim +32 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c
+
+    27	
+    28	static void etnaviv_gpu_pci_fini(struct etnaviv_gpu *gpu, bool component)
+    29	{
+    30		struct pci_dev *pdev = to_pci_dev(gpu->dev);
+    31	
+  > 32		pci_clear_master(pdev);
+    33	
+    34		dev_dbg(gpu->dev, "component is %s\n",
+    35			component ? "enabled" : "disabled");
+    36	}
+    37	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
