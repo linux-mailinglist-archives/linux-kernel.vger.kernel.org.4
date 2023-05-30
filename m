@@ -2,126 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A967E716A22
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F12716A23
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbjE3Qz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
+        id S232680AbjE3Qzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjE3Qz1 (ORCPT
+        with ESMTP id S230138AbjE3Qz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:55:27 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2041.outbound.protection.outlook.com [40.107.220.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209339D;
+        Tue, 30 May 2023 12:55:28 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288D0A7;
         Tue, 30 May 2023 09:55:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TObN0pPeUj34oixgr2qmtABrx0+PHoa00pyT6BVmthXcHnAJ10yP//bS6w6eMz2WmnsmFnPd6HJ3488abvkXS16oa5lZD44/QoqGoWQzKsMtpgPfxJY26pq7Q4RrY1J8+4J/4FnUHahdUnlLYAV9ODgEYxrjNdGn+EAsBYpEtOV7Vgmd43XlX3vpr++LIqC7VUr5wakU1COuiu2YY5FDDb+Ac4IQXP8PB9xBAxl6VU5yW0s3i674YvwGG2Dl3plNUb79lxnyTHSy4cQdmyAo8Bcpnuqx2jpgdBdTu3CDemGEFfEdL1XpX5e52Ff1cUpxndVQAmlRhxSazYV0O8vyng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DywuabSfePjJfJPzHwAASdYCt+qTvIowPs904Hqf+CM=;
- b=R0BzQno9BXHHpN77f0fTwBkTSTHIhjo1rhJQaHEXB+rz1aSK8Ze8syVaEvGr8q/eqQTA6F63vpkNLEcg382MHtkG+B14cNoBk+k33s8mYAohw3Q8z/vAH3QnTMoEF9ynH2Pk6xvxZKdjKxdzuRPgOc7e60hjZKsHXX2M88cYYLcKswfdS2QNKa2P1kyVpfRcapB7mvsVXh9e+koAcxjzC+qwRwKx27KroYN5vN9FOuNFLj6T8gKgAKA73ICnQtg7jJSmSLopBfqf/aXHJjPEdWMRpeTrmHVRWZ0frCQzq77Nd1jF/5F1Zm5ARCmMtsOB+6QE076g623fGJJQvrA7Mw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DywuabSfePjJfJPzHwAASdYCt+qTvIowPs904Hqf+CM=;
- b=RsFWOUbKDKvzVFvW/9rnrBgYxtY+YJd1Tu1UB+rBdvOfoi/+XhljWMbaqbArd3065lWfeR+Pf9t+Eutttq+hsQhpa0AFVFox9wA4UxmXGbM7LBkETcRbioIRZYUszxymJog6CDjZJUWbRgfnlqup7QLolZ9wLj44QRFyAMsoSzOQv1saGsipoV8Dp7hYp3c6wwM9ZHQBZMudbHCjtEFTBPyOg4ixPK+ZjbzslU/ciCWVeJ0WmPLMA1BLq6/kwTJGrya5P33JNppXDwryUCEXWXoUk9usKZllHB2wK4hsehB++MwbKS0AU3oDq06YfReLQc/Po/O1uNugoPA0MgeS2A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CH3PR12MB8904.namprd12.prod.outlook.com (2603:10b6:610:167::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
- 2023 16:55:23 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6433.017; Tue, 30 May 2023
- 16:55:23 +0000
-Date:   Tue, 30 May 2023 13:55:21 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        narayan.ranganathan@intel.com
-Subject: Re: [PATCH v6 3/4] iommu/vt-d: Add set_dev_pasid callback for dma
- domain
-Message-ID: <ZHYqebpMC12ck6gQ@nvidia.com>
-References: <20230519203223.2777255-1-jacob.jun.pan@linux.intel.com>
- <20230519203223.2777255-4-jacob.jun.pan@linux.intel.com>
- <ZHUBoBev2Vzp8nGF@nvidia.com>
- <ba26db48-4102-d6bc-add8-5449423158ca@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ba26db48-4102-d6bc-add8-5449423158ca@linux.intel.com>
-X-ClientProxiedBy: CH2PR11CA0008.namprd11.prod.outlook.com
- (2603:10b6:610:54::18) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+Received: from pendragon.ideasonboard.com (om126205198071.34.openmobile.ne.jp [126.205.198.71])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0B0569CA;
+        Tue, 30 May 2023 18:55:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685465704;
+        bh=g9Dh7SAZiYqZ9SM8oCgF1ZQFtlAUSvdUGF3wCcUvtts=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Jo+vZlcrrohe3KydEVZgpWOLdc1Xjl5oVTSznuzyYaq8MF5SiOhz4JnPxyLZpzOxX
+         V5c2+o1eRNiOjO1W7dk4U+hxOyFDqUYjogo07h903V4+jgNRDoawHLZgBRKcx7zopr
+         2Pqj4POoOJCWuYs95yBjph4xRUhlVUys/GvqTNzM=
+Date:   Tue, 30 May 2023 19:55:23 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: Re: [PATCH 2/2] media: video-mux: update driver to active state
+Message-ID: <20230530165523.GC22516@pendragon.ideasonboard.com>
+References: <20230524-video-mux-active-state-v1-0-325c69937ac3@pengutronix.de>
+ <20230524-video-mux-active-state-v1-2-325c69937ac3@pengutronix.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH3PR12MB8904:EE_
-X-MS-Office365-Filtering-Correlation-Id: 520ecae1-1f98-4757-42e9-08db612ea8cd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LLd9BLtEJPyw/H4lE/h/D3ad2+EHeoAiVaHa87qsyJVdAASFYxcDU86r/yxEM0pINRqJj4ZNi30F7TPqLRQFH70+sOayiTZV+IbU666Yzo0w9ZVEIwVv66Xo7WxuIX6gs6+s8dU/LsKNMQXc+N+cBrPd4jVLnRTUwzA4VMxzUteUMSx13AREJvq+4fHFflXFNhiDIdoIT2bTzLJbUd+epnQiKk4V2nkpUMuaQrhQNXx9MlDJOm4hUfMsBSHWtmG1Jb2kwVUSR3ZLPaJpTszrL8XQxTSA8RKlE6v4Gcii+TRbs7Qd5rmHsmi3+MEkIGI6BhnsF5CvUtG+VFnSaPzvQEJZHeUdZCVe7wR91dX//S2gW3si06NIQztiD8vAy1LYs7Y7lvnpqlMT1w9bMYwwNMxrYApnsKVMSE7/WFd0IKilBmK0c59FU0WkxyQg/Tcei+9yzYAzhLl2rO5eAab0AFNCOEB7loety6jsT+3/3KC/EmhpmPWO2CK23RZIQmksazHng1llm0fcdAd6QhF55s+L7ErV1pOL9RcEs0uSRdUEvP/E2zBVSC/YhjgJ6Le1
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(366004)(346002)(376002)(451199021)(86362001)(36756003)(316002)(54906003)(4326008)(6916009)(66556008)(66946007)(66476007)(478600001)(6486002)(83380400001)(5660300002)(8936002)(8676002)(41300700001)(2906002)(7416002)(38100700002)(2616005)(53546011)(6512007)(26005)(186003)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EX/RtAqi4hyxEa5te8pQg08T0jqgqz/UuHhMbSvK9EoRqYhl/X8YwKqr9APA?=
- =?us-ascii?Q?YePAEHzyew/bBfbGDYtQub8TRLuFPf7LVWDOjjvDslGnNfpe6DZLHSPvso+N?=
- =?us-ascii?Q?GCPcqTluZA7bNTDmOWvB/v/ZRTwxJUcTrsaZ9NWI6adeOBxyEN/xCYxEixpG?=
- =?us-ascii?Q?OWCouIeaI3BdluB7rVIx3SifTKAU0hdoXhW6JVZbUR7SV3n2KXIz8c4uuHN5?=
- =?us-ascii?Q?tDoj+o05HiVa0kH9HARILYoauq3t/ISw48EX9XG9lkZtpsZxdAjrGnXcdrz6?=
- =?us-ascii?Q?t3njTsHaRD93YrvQ/ogSZNbTTzo/vOc51HzNUd00+R+bLJ3kWWtGnDwgk0NN?=
- =?us-ascii?Q?7vx73CLP+u4DX6GhO6CTjuKEkqBrKK2bZ3ZpGDiyi05KEZPpFD8lGQc/FNqM?=
- =?us-ascii?Q?jexcqK1Qk9DMrAQF+sZneavsL2QmTAXS+OdG0uN6AYgr+G9YSI/2yo4/CFwO?=
- =?us-ascii?Q?H5fpH/uJjXLHWH0q7fckx9xVNwQgDt2nrgh665Sn8/bPev9gTEL+5ubTw0vu?=
- =?us-ascii?Q?eW9AVp4xixUKiBm94bGC+Drd1JeOHfPo8ix+18ieFpeRO7ioLJcYsdOfGuqg?=
- =?us-ascii?Q?136+8XTXNVnxG/gcFBK1stpf7lSaP7nvx/cv+hjivBVLcrDtcKWV0iNANzyW?=
- =?us-ascii?Q?uJLloy1zM0hUDxY4RHnTqDUxNAr+RkpdFD4SzsYSfuDtM+6h97EBQhJg7chK?=
- =?us-ascii?Q?disl1l3q4qqSqqRkMriSePmBoSzG7yv9B3q3eAKbWnQzUDcLML4VlOdlu+pc?=
- =?us-ascii?Q?VTA73Es4NIgbo78e8fEUPdiULjZyAplBuX8tegWn6L8LhwXbWTpXmumBs9p0?=
- =?us-ascii?Q?CHtqvBM6tf3ZME5qBKxZsHwQEbiF3/quk6O82czglEJqJEH/j5J8FF5i4bbO?=
- =?us-ascii?Q?HvbeWVA6zM0kyCmYRoRccH7k7k4E81e2AxlHWgWVb+OoyCsFjWdKk++56+Z0?=
- =?us-ascii?Q?X+ParhCPcQXVjIMaSFIL93voJjeWDg3xqkp+FbPUVDnSsp4i1iDuLTlqn+JQ?=
- =?us-ascii?Q?HO0mCnHYN0IR2AiqjFT324Gb0Kx7GaP5cBmoJZbi7zc8rqhXKj1pwLLq+6lp?=
- =?us-ascii?Q?UDn7NXE1/1ZbwyF6jW3QdmQK7B+ArSXj++j7+R7qe89IQ6Kwte8TMtolaOVO?=
- =?us-ascii?Q?k6TvXXAqLnervsPc3M0pQF2kitvgTNzi3Vs8sPmjpYCj7UHqm8EMxBBJeUFp?=
- =?us-ascii?Q?aMNnJNEaGgdAl0uun/QaSL4lVR1df0eVPLamofh8QL8vS/a5Yt75aIPVm8Oz?=
- =?us-ascii?Q?3cH7/xpaLQoPaZEl4XQVuJPpuF613LMOMGZ/brF4zY8NTn5jliAYh3HoHen/?=
- =?us-ascii?Q?AqxFLmRdaW3v9JT145Uk3UTWP6fk++V6Q8HWQZ9CigcmJ6UUx2XVVRTszmIl?=
- =?us-ascii?Q?xiJbIABMt/Xk82nQCwZvp6Jh0H5KJMhB3sbi4evH9pBmVytm6kFGaWb04/+w?=
- =?us-ascii?Q?pvc4i9gm8/9IlMC3B6mbMuW3mOekCzgeNx1UPLJ25H/BH/mTAyZGXcBp/nDx?=
- =?us-ascii?Q?nTbSrjnPNeVmGH0gvWirkl6d3tPt1TP2uka1GhYgVJhJNNmMI3deqhGJBeNo?=
- =?us-ascii?Q?vZ8rFjqYDY6s0wcmWPabuu141jeue1H0x7uKqm/s?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 520ecae1-1f98-4757-42e9-08db612ea8cd
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 16:55:23.3156
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Zwl3Jo6malbkdWVTQykPScbu6zD63TAR0SIipoMxsaghBay9zJ0UZcc2Q9p58IzB
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8904
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230524-video-mux-active-state-v1-2-325c69937ac3@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,83 +51,206 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 10:19:05AM +0800, Baolu Lu wrote:
-> On 5/30/23 3:48 AM, Jason Gunthorpe wrote:
-> > On Fri, May 19, 2023 at 01:32:22PM -0700, Jacob Pan wrote:
-> > 
-> > > @@ -4720,25 +4762,99 @@ static void intel_iommu_iotlb_sync_map(struct iommu_domain *domain,
-> > >   static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
-> > >   {
-> > >   	struct intel_iommu *iommu = device_to_iommu(dev, NULL, NULL);
-> > > +	struct dev_pasid_info *curr, *dev_pasid = NULL;
-> > > +	struct dmar_domain *dmar_domain;
-> > >   	struct iommu_domain *domain;
-> > > +	unsigned long flags;
-> > > -	/* Domain type specific cleanup: */
-> > >   	domain = iommu_get_domain_for_dev_pasid(dev, pasid, 0);
-> > > -	if (domain) {
-> > > -		switch (domain->type) {
-> > > -		case IOMMU_DOMAIN_SVA:
-> > > -			intel_svm_remove_dev_pasid(dev, pasid);
-> > > -			break;
-> > > -		default:
-> > > -			/* should never reach here */
-> > > -			WARN_ON(1);
-> > > +	if (!domain)
-> > > +		goto out_tear_down;
-> > > +
-> > > +	/*
-> > > +	 * The SVA implementation needs to stop mm notification, drain the
-> > > +	 * pending page fault requests before tearing down the pasid entry.
-> > > +	 * The VT-d spec (section 6.2.3.1) also recommends that software
-> > > +	 * could use a reserved domain id for all first-only and pass-through
-> > > +	 * translations. Hence there's no need to call domain_detach_iommu()
-> > > +	 * in the sva domain case.
-> > > +	 */
-> > > +	if (domain->type == IOMMU_DOMAIN_SVA) {
-> > > +		intel_svm_remove_dev_pasid(dev, pasid);
-> > > +		goto out_tear_down;
-> > > +	}
-> > 
-> > But why don't you need to do all the other
-> > intel_pasid_tear_down_entry(), intel_svm_drain_prq() (which is
-> > misnamed) and other stuff from intel_svm_remove_dev_pasid() ?
+Hi Philipp,
+
+(CC'ing Tomi)
+
+Thank you for the patch.
+
+On Wed, May 24, 2023 at 03:29:25PM +0200, Philipp Zabel wrote:
+> Drop the open coded pad format array, use subdev active state instead.
 > 
-> Perhaps,
+> Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+> ---
+>  drivers/media/platform/video-mux.c | 78 ++++++++++++--------------------------
+>  1 file changed, 24 insertions(+), 54 deletions(-)
 > 
-> 	if (domain->type == IOMMU_DOMAIN_SVA) {
-> 		intel_svm_remove_dev_pasid(dev, pasid);
-> 		return;
-> 	}
-> 
-> ?
+> diff --git a/drivers/media/platform/video-mux.c b/drivers/media/platform/video-mux.c
+> index 4fe31386afc7..6d273abfe16c 100644
+> --- a/drivers/media/platform/video-mux.c
+> +++ b/drivers/media/platform/video-mux.c
+> @@ -24,7 +24,6 @@ struct video_mux {
+>  	struct v4l2_subdev subdev;
+>  	struct v4l2_async_notifier notifier;
+>  	struct media_pad *pads;
+> -	struct v4l2_mbus_framefmt *format_mbus;
+>  	struct mux_control *mux;
+>  	struct mutex lock;
+>  	int active;
+> @@ -71,6 +70,9 @@ static int video_mux_link_setup(struct media_entity *entity,
+>  	mutex_lock(&vmux->lock);
+>  
+>  	if (flags & MEDIA_LNK_FL_ENABLED) {
+> +		struct v4l2_subdev_state *sd_state;
+> +		struct v4l2_mbus_framefmt *source_mbusformat;
+> +
+>  		if (vmux->active == local->index)
+>  			goto out;
+>  
+> @@ -86,7 +88,12 @@ static int video_mux_link_setup(struct media_entity *entity,
+>  		vmux->active = local->index;
+>  
+>  		/* Propagate the active format to the source */
+> -		vmux->format_mbus[source_pad] = vmux->format_mbus[vmux->active];
+> +		sd_state = v4l2_subdev_lock_and_get_active_state(sd);
+> +		source_mbusformat = v4l2_subdev_get_pad_format(sd, sd_state,
+> +							       source_pad);
+> +		*source_mbusformat = *v4l2_subdev_get_pad_format(sd, sd_state,
+> +								 vmux->active);
 
-I would expect only stuff directly connected to SVM be in the SVM
-function.
+This only handles the active state, try states will not reflect the link
+configuration. That's a limitation of the MC API though, there isn't
+much we can do about it.
 
-De-initalizing PRI and any other pasid destruction should be in this
-function.
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-> > There still seems to be waaay too much "SVM" in the PASID code.
-> 
-> This segment of code is destined to be temporary. From a long-term
-> perspective, I hope to move SVA specific staffs such as mm notification,
-> prq draining, etc. to the iommu core. They are generic rather than Intel
-> iommu specific.
+If this were to be implemented from scratch today, we should use the
+subdev internal routing to configure the mux, not MC links. That would
+be nice, but I doubt the resulting userspace ABI breakage would be
+appreciated. I'm tempted, however, to not use the existing video-mux
+driver for new platforms, and implement a new mux driver based on the
+routing API instead (or possibly support both in the same driver). Any
+thought from anyone ?
 
-Yes, sort of, but.. That is just the mmu notifier bits
+> +		v4l2_subdev_unlock_state(sd_state);
+>  	} else {
+>  		if (vmux->active != local->index)
+>  			goto out;
+> @@ -138,40 +145,6 @@ static const struct v4l2_subdev_video_ops video_mux_subdev_video_ops = {
+>  	.s_stream = video_mux_s_stream,
+>  };
+>  
+> -static struct v4l2_mbus_framefmt *
+> -__video_mux_get_pad_format(struct v4l2_subdev *sd,
+> -			   struct v4l2_subdev_state *sd_state,
+> -			   unsigned int pad, u32 which)
+> -{
+> -	struct video_mux *vmux = v4l2_subdev_to_video_mux(sd);
+> -
+> -	switch (which) {
+> -	case V4L2_SUBDEV_FORMAT_TRY:
+> -		return v4l2_subdev_get_try_format(sd, sd_state, pad);
+> -	case V4L2_SUBDEV_FORMAT_ACTIVE:
+> -		return &vmux->format_mbus[pad];
+> -	default:
+> -		return NULL;
+> -	}
+> -}
+> -
+> -static int video_mux_get_format(struct v4l2_subdev *sd,
+> -			    struct v4l2_subdev_state *sd_state,
+> -			    struct v4l2_subdev_format *sdformat)
+> -{
+> -	struct video_mux *vmux = v4l2_subdev_to_video_mux(sd);
+> -
+> -	mutex_lock(&vmux->lock);
+> -
+> -	sdformat->format = *__video_mux_get_pad_format(sd, sd_state,
+> -						       sdformat->pad,
+> -						       sdformat->which);
+> -
+> -	mutex_unlock(&vmux->lock);
+> -
+> -	return 0;
+> -}
+> -
+>  static int video_mux_set_format(struct v4l2_subdev *sd,
+>  			    struct v4l2_subdev_state *sd_state,
+>  			    struct v4l2_subdev_format *sdformat)
+> @@ -181,14 +154,11 @@ static int video_mux_set_format(struct v4l2_subdev *sd,
+>  	struct media_pad *pad = &vmux->pads[sdformat->pad];
+>  	u16 source_pad = sd->entity.num_pads - 1;
+>  
+> -	mbusformat = __video_mux_get_pad_format(sd, sd_state, sdformat->pad,
+> -						sdformat->which);
+> +	mbusformat = v4l2_subdev_get_pad_format(sd, sd_state, sdformat->pad);
+>  	if (!mbusformat)
+>  		return -EINVAL;
+>  
+> -	source_mbusformat = __video_mux_get_pad_format(sd, sd_state,
+> -						       source_pad,
+> -						       sdformat->which);
+> +	source_mbusformat = v4l2_subdev_get_pad_format(sd, sd_state, source_pad);
+>  	if (!source_mbusformat)
+>  		return -EINVAL;
+>  
+> @@ -298,7 +268,8 @@ static int video_mux_set_format(struct v4l2_subdev *sd,
+>  
+>  	/* Source pad mirrors active sink pad, no limitations on sink pads */
+>  	if ((pad->flags & MEDIA_PAD_FL_SOURCE) && vmux->active >= 0)
+> -		sdformat->format = vmux->format_mbus[vmux->active];
+> +		sdformat->format = *v4l2_subdev_get_pad_format(sd, sd_state,
+> +							       vmux->active);
+>  
+>  	*mbusformat = sdformat->format;
+>  
+> @@ -321,7 +292,7 @@ static int video_mux_init_cfg(struct v4l2_subdev *sd,
+>  	mutex_lock(&vmux->lock);
+>  
+>  	for (i = 0; i < sd->entity.num_pads; i++) {
+> -		mbusformat = v4l2_subdev_get_try_format(sd, sd_state, i);
+> +		mbusformat = v4l2_subdev_get_pad_format(sd, sd_state, i);
+>  		*mbusformat = video_mux_format_mbus_default;
+>  	}
+>  
+> @@ -332,7 +303,7 @@ static int video_mux_init_cfg(struct v4l2_subdev *sd,
+>  
+>  static const struct v4l2_subdev_pad_ops video_mux_pad_ops = {
+>  	.init_cfg = video_mux_init_cfg,
+> -	.get_fmt = video_mux_get_format,
+> +	.get_fmt = v4l2_subdev_get_fmt,
+>  	.set_fmt = video_mux_set_format,
+>  };
+>  
+> @@ -462,17 +433,9 @@ static int video_mux_probe(struct platform_device *pdev)
+>  	if (!vmux->pads)
+>  		return -ENOMEM;
+>  
+> -	vmux->format_mbus = devm_kcalloc(dev, num_pads,
+> -					 sizeof(*vmux->format_mbus),
+> -					 GFP_KERNEL);
+> -	if (!vmux->format_mbus)
+> -		return -ENOMEM;
+> -
+> -	for (i = 0; i < num_pads; i++) {
+> +	for (i = 0; i < num_pads; i++)
+>  		vmux->pads[i].flags = (i < num_pads - 1) ? MEDIA_PAD_FL_SINK
+>  							 : MEDIA_PAD_FL_SOURCE;
+> -		vmux->format_mbus[i] = video_mux_format_mbus_default;
+> -	}
+>  
+>  	vmux->subdev.entity.function = MEDIA_ENT_F_VID_MUX;
+>  	ret = media_entity_pads_init(&vmux->subdev.entity, num_pads,
+> @@ -482,12 +445,18 @@ static int video_mux_probe(struct platform_device *pdev)
+>  
+>  	vmux->subdev.entity.ops = &video_mux_ops;
+>  
+> +	ret = v4l2_subdev_init_finalize(&vmux->subdev);
+> +	if (ret < 0)
+> +		goto err_entity_cleanup;
+> +
+>  	ret = video_mux_async_register(vmux, num_pads - 1);
+>  	if (ret)
+> -		goto err_entity_cleanup;
+> +		goto err_subdev_cleanup;
+>  
+>  	return 0;
+>  
+> +err_subdev_cleanup:
+> +	v4l2_subdev_cleanup(&vmux->subdev);
+>  err_entity_cleanup:
+>  	media_entity_cleanup(&vmux->subdev.entity);
+>  	return ret;
+> @@ -501,6 +470,7 @@ static void video_mux_remove(struct platform_device *pdev)
+>  	v4l2_async_nf_unregister(&vmux->notifier);
+>  	v4l2_async_nf_cleanup(&vmux->notifier);
+>  	v4l2_async_unregister_subdev(sd);
+> +	v4l2_subdev_cleanup(sd);
+>  	media_entity_cleanup(&sd->entity);
+>  }
+>  
 
-All the PRI/PASID teardown needs to be unlinked from SVM
+-- 
+Regards,
 
-> > It would be nice if the different domain types had their own ops..
-> 
-> Good suggestion!
-> 
-> We can add a domain ops in the Intel domain structure which is
-> responsible for how to install an Intel iommu domain onto the VT-d
-> hardware.
-
-We should have seperate iommu_domain_ops at least, I think that would
-cover alot of it?
-
-Jason
+Laurent Pinchart
