@@ -2,77 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 258C6716BD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18629716ADA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232777AbjE3SDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 14:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
+        id S233494AbjE3R0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 13:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbjE3SDF (ORCPT
+        with ESMTP id S232417AbjE3RZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 14:03:05 -0400
-X-Greylist: delayed 2235 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 May 2023 11:03:02 PDT
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CC6EC
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:03:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=24Ry0beQgWrLSFF8krNBwN4KJRINBEkewKnwBgtX8s0=; b=IXdLdyGG3/j+MW0vZgOMVsZew4
-        EQGHw0rZ/Qs/tVekOd/EA0IXxQUyJ4eUybgB6Zqzh80ikhKQd9h6gxjv7NX53TEOoYyG/LhjowQmn
-        TG/u7iYYPAwDYfVtPtfHtbBXcQTKfgck38ghgHXddVNwdaybMLMEz9YSjFNcA6owTljt2GczGBWvC
-        N5a/P+mDnHmGlQ8AxESLLF8Y+W2+Y3j14xHBInQkanZR0k5I7MBvp3+AxjZBa/GsgbdYgWKuSlpCj
-        Yndybi5XQK5GV2xuzH1nFjq/yf3FQ8auqtcDKz4CxK6GYh2GI23rhZvuGflKVMvvDjwIld9cJVWjA
-        65a9QJUw==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1q433y-00DzWB-3A; Tue, 30 May 2023 11:23:14 -0600
-Message-ID: <8a411404-a2fc-694c-c41e-5d7efba38472@deltatee.com>
-Date:   Tue, 30 May 2023 11:23:12 -0600
+        Tue, 30 May 2023 13:25:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79AF10E3;
+        Tue, 30 May 2023 10:25:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90DE56311F;
+        Tue, 30 May 2023 17:23:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A21C433D2;
+        Tue, 30 May 2023 17:23:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685467431;
+        bh=UzR1fj++02HkyWwFEbtMSGXQjQFGcPmg+nk6CBoorTQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XRVqqSg7l3gtvrJQiZxWUs3sW3dpPsMZeLs0xK9uSL6mJjYdIfftdEHjGyAasA93F
+         vp0gLpUnS8qcpk9a3/voHcP+fe0HcgZAQiKxsgSvam2RRuNhrt3VDiHL2skxmXmfz0
+         UHgEUyQ6JGLAJM989kYc/NlVsmrAxHCIIr/mJrjU+z/jyfCIDmpYobEEaG7Jdff0aL
+         ptUgFtjkatqQWlWJzTIrFj/ck17aguEcEqHWg/QiVbq37aW3cLY4mOtG4O/KNC2yLK
+         zZBBLpYcKu8Wous2xnJ4zlBIq3hDm3aDhdBZB4h0Yjhi4MLkcdhGk2cSj+YnhXzP9N
+         A6/p2tUZSaTqw==
+Date:   Tue, 30 May 2023 18:23:44 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "Lukas F. Hartmann" <lukas@mntre.com>,
+        Nicolas Belin <nbelin@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-phy@lists.infradead.org
+Subject: Re: [PATCH v5 16/17] dt-bindings: arm: amlogic: Document the MNT
+ Reform 2 CM4 adapter with a BPI-CM4 Module
+Message-ID: <20230530-switch-riverbank-8a2ae8e5ea4a@spud>
+References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org>
+ <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-16-56eb7a4d5b8e@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-CA
-To:     Robin Murphy <robin.murphy@arm.com>, hch@infradead.org
-Cc:     m.szyprowski@samsung.com, iommu@lists.linux.dev,
-        catalin.marinas@arm.com, linux-kernel@vger.kernel.org
-References: <fa2eca2862c7ffc41b50337abffb2dfd2864d3ea.1685036694.git.robin.murphy@arm.com>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <fa2eca2862c7ffc41b50337abffb2dfd2864d3ea.1685036694.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: robin.murphy@arm.com, hch@infradead.org, m.szyprowski@samsung.com, iommu@lists.linux.dev, catalin.marinas@arm.com, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: logang@deltatee.com
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="U7YSC210J2lnKh/+"
+Content-Disposition: inline
+In-Reply-To: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-16-56eb7a4d5b8e@linaro.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH] dma-mapping: Name SG DMA flag helpers consistently
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--U7YSC210J2lnKh/+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2023-05-25 11:46, Robin Murphy wrote:
-> sg_is_dma_bus_address() is inconsistent with the naming pattern of its
-> corresponding setters and its own kerneldoc, so take the majority vote
-> and rename it sg_dma_is_bus_address() (and fix up the missing
-> underscores in the kerneldoc too). This gives us a nice clear pattern
-> where SG DMA flags are SG_DMA_<NAME>, and the helpers for acting on them
-> are sg_dma_<action>_<name>().
-> 
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+On Tue, May 30, 2023 at 09:38:17AM +0200, Neil Armstrong wrote:
+> The MNT Reform 2 CM4 adapter can be populated with any Raspberry Pi CM4
+> compatible module such as a BPI-CM4 Module, document that.
+>=20
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-Looks good to me. Thanks.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+Thanks,
+Conor.
+
+--U7YSC210J2lnKh/+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHYxIAAKCRB4tDGHoIJi
+0jYwAQCUXtrTR7MIODftWUrB77h5/mo+g9I8GUIGCkjmSOVnAwD/fepTgXRQjx2p
+dKfe5rmv2Fw9D0GFz7KPFbFjaNP3Wgc=
+=vEeV
+-----END PGP SIGNATURE-----
+
+--U7YSC210J2lnKh/+--
