@@ -2,245 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34471715382
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA793715387
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjE3CP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 22:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S229931AbjE3CRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 22:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjE3CP4 (ORCPT
+        with ESMTP id S229829AbjE3CRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 22:15:56 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE9AA0;
-        Mon, 29 May 2023 19:15:55 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-5559e296433so2730293eaf.0;
-        Mon, 29 May 2023 19:15:55 -0700 (PDT)
+        Mon, 29 May 2023 22:17:09 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76556E0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 19:17:08 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f6a6e9d90dso346781cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 19:17:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685412954; x=1688004954;
-        h=content-transfer-encoding:to:subject:message-id:date:from
+        d=google.com; s=20221208; t=1685413027; x=1688005027;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kj6w/nQ+DaN6Ioar2LxJRCroPn6xto7HRGwItvd9JSg=;
-        b=BEpmL7AOAAd3XVj1gCkN73QCbSp2WXZAMLWpfCT4K39LSegqmYhDvyNZGcSa4FFnwM
-         2I89K07XIFp/UoW0E5/lI1zutGQIwH0xoA2M7FvHiuqE4MCcdXtYrYT1b4Oa1cDirX4z
-         ZeR7uIx3SyMHzEilAi3siaZsSnI2cDzaAIMsjIpRTYlmkAjcxBkiieKOmeKy0BnLL/4W
-         2nbOAHtGdKZUaCGLWU3L1x2VsjOICI1rymYqTLTWbusn15vj3MgQosc6vSIt6L1j0lS4
-         r6g7Zz8TSoUWAOAUYyoF+nOFmJkg5kjgh8tk12RxBqk+iFPaHTWNUDusK2EiZ/mIjbZb
-         qqTQ==
+        bh=eCd8A6+3IGMfG7RQWMiqJwf4Gzf+IgYaeXtS7a4feCI=;
+        b=LzVWZQ+z+GwxTgKPK5mFSi/IgncNwmvJoZziKMNZksF/g6G2PgK0bzjxEIEpeXSN6D
+         8OS+i8d2W532Xk+2OF6JgSV0Pc3YIFyhJczfbcGCFap9RXPI5HkHOPEC3PCOlQiQEqMx
+         Uxe3GMpt4Q2hw3bm8An8FklLUvrhH9QNT4oxeKjjRhkZSBfzgUWtDOmw1lcBp42AHg6q
+         lQ/AsbT+eD/XG5clAnHZ8KbZC3uqIXyrEup5J1uZLN/yKw8UZG1LeeiFXPDJYYo3M0It
+         hnhVJ6qQujTSdTbhgWo5ZcH+oDWccPEHWTsJui71h1Mw8s6F6WVRk8OzqA8d7rA1B0kp
+         0Gkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685412954; x=1688004954;
-        h=content-transfer-encoding:to:subject:message-id:date:from
+        d=1e100.net; s=20221208; t=1685413027; x=1688005027;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kj6w/nQ+DaN6Ioar2LxJRCroPn6xto7HRGwItvd9JSg=;
-        b=ZQ/7yPfK+Ex0RWuTWI9oUebeo5i2ryh5+CjPxXkodg2Ae6tafGHax1KZFAKBDqU1eu
-         xPQwMchOYXz6VRjiJcMyYgPkSnoGJiPUmsgUhDUokxyFxvoQrj3l5Z5ZEI5D9keIgq3U
-         NxRk7JfbGfS4AmOaikdgHWwHam8Lf7BRc+UXjMTTr9skj356HZNR5xlStYf0k4L1AWk4
-         UnP4L8pKHsNR1bYT1Cb8yRUs9QqlM8rbAMhSzaxn4ZbVlAS3h0SMAJdvRaskFX1d5qYO
-         +w93x94pCIcK+me8J0gaxwx2QJdKsPrpIujuTwtBKTvU6dBsna2ZMdqKpcQxoVHSQx8w
-         lWEA==
-X-Gm-Message-State: AC+VfDxPcWcyfHT8htchoBiy7u99YATV+CxkM6B7db7YmT1rTw6WYqQt
-        mTEymosqNn0+z0l31F7jy3FEjs5IO1kfti09Xzm7AO4Yrg7VmVrz
-X-Google-Smtp-Source: ACHHUZ4GYZuV99/EX6AvqaPbK2sGe5kY/pOSlJ4xxNIvyrdsy4NgUbwFhUNT88dVRe+Lm/tKyT457gj8ayhHFUfRRvY=
-X-Received: by 2002:a05:6870:a2cb:b0:199:fa90:a62 with SMTP id
- w11-20020a056870a2cb00b00199fa900a62mr5606177oak.8.1685412954613; Mon, 29 May
- 2023 19:15:54 -0700 (PDT)
+        bh=eCd8A6+3IGMfG7RQWMiqJwf4Gzf+IgYaeXtS7a4feCI=;
+        b=ByaeIKJBvVC28kRz0Yu/KzxAFY+SI4jmeO7Vb6y3GAhEoCpz+V0ZEvBXFvoXzLUX7E
+         2Dx29zEXMoAn+47iVDSyou66PcOAb9sf5HrcZ49PiEAFZtV7tU7Fw2hWhmaA9XVAy0cT
+         3aS6uhjj0xrpoU2Hs66ykqy1fHJil4LAzdXjyKwFjjcYs2qLwdk9b9PB03Nk7puctJ3G
+         KTCQz+rl70x7yfamfFp+vrc/ueK5RJMtfDPoa5ibLn7HIoiJgl5d/kcsn0iOO1IPQocf
+         6vdMa09DWnBVezTgB5UaAnbphGX1hm2c6Njlcur5qzeS3N09WNd2OeOWEzqH/jB41ll2
+         1/bg==
+X-Gm-Message-State: AC+VfDzbcH8LAXQWx9g8gIWcXQKQmlYm7OJ28cDxCWgy+0t3mUNIsDj3
+        qTAS4etN4o5urD5nskL9WdRj4uQxByRrNCotpL6PqgJlW8ZIgK6t/ty4Aw==
+X-Google-Smtp-Source: ACHHUZ7B3l7zFW68ZasVyf/oDmTGu2WANcTV1dVtzykLfoXkfsTLicAhIB2XNgScnQAj23X8eOA3nUqd1Wp5VjB9AEk=
+X-Received: by 2002:a05:622a:24a:b0:3f2:1441:3c11 with SMTP id
+ c10-20020a05622a024a00b003f214413c11mr49067qtx.2.1685413027478; Mon, 29 May
+ 2023 19:17:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230529113804.GA20300@didi-ThinkCentre-M920t-N000>
-In-Reply-To: <20230529113804.GA20300@didi-ThinkCentre-M920t-N000>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Tue, 30 May 2023 10:15:18 +0800
-Message-ID: <CAL+tcoACOnUZjWLXgs7Yxr0cD31X1AvGtog35XufYhVS_Tzx9Q@mail.gmail.com>
-Subject: Re: [PATCH net] tcp: introduce a compack timer handler in sack compression
-To:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Neal Cardwell <ncardwell@google.com>, netdev@vger.kernel.org,
-        Jason Xing <kerneljasonxing@gmail.com>,
-        zhangweiping <zhangweiping@didiglobal.com>,
-        tiozhang <tiozhang@didiglobal.com>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Yuchung Cheng <ycheng@google.com>,
-        toke@toke.dk
+References: <20230530090525.43a8d23e@canb.auug.org.au>
+In-Reply-To: <20230530090525.43a8d23e@canb.auug.org.au>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 29 May 2023 19:16:54 -0700
+Message-ID: <CAP-5=fVdM0mgZpdgZBMUEvxyfGjPw65_-b_Pj5yLZN8Ddp1a8A@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the perf tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 7:38=E2=80=AFPM fuyuanli <fuyuanli@didiglobal.com> =
-wrote:
+On Mon, May 29, 2023 at 4:05=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
 >
-> We've got some issues when sending a compressed ack is deferred to
-> release phrase due to the socket owned by another user:
-> 1. a compressed ack would not be sent because of lack of ICSK_ACK_TIMER
-> flag.
-> 2. the tp->compressed_ack counter should be decremented by 1.
-> 3. we cannot pass timeout check and reset the delack timer in
-> tcp_delack_timer_handler().
-> 4. we are not supposed to increment the LINUX_MIB_DELAYEDACKS counter.
-> ...
+> Hi all,
 >
-> The reason why it could happen is that we previously reuse the delayed
-> ack logic when handling the sack compression. With this patch applied,
-> the sack compression logic would go into the same function
-> (tcp_compack_timer_handler()) whether we defer sending ack or not.
-> Therefore, those two issued could be easily solved.
+> After merging the perf tree, today's linux-next build (powerpc perf)
+> failed like this:
 >
-> Here are more details in the old logic:
-> When sack compression is triggered in the tcp_compressed_ack_kick(),
-> if the sock is owned by user, it will set TCP_DELACK_TIMER_DEFERRED and
-> then defer to the release cb phrase. Later once user releases the sock,
-> tcp_delack_timer_handler() should send a ack as expected, which, however,
-> cannot happen due to lack of ICSK_ACK_TIMER flag. Therefore, the receiver
-> would not sent an ack until the sender's retransmission timeout. It
-> definitely increases unnecessary latency.
+> arch/powerpc/util/kvm-stat.c: In function 'kvm_add_default_arch_event':
+> arch/powerpc/util/kvm-stat.c:207:21: error: implicit declaration of funct=
+ion 'pmu_have_event'; did you mean 'perf_pmu__have_event'? [-Werror=3Dimpli=
+cit-function-declaration]
+>   207 |                 if (pmu_have_event("trace_imc", "trace_cycles")) =
+{
+>       |                     ^~~~~~~~~~~~~~
+>       |                     perf_pmu__have_event
 >
-> This issue happens rarely in the production environment. I used kprobe
-> to hook some key functions like tcp_compressed_ack_kick, tcp_release_cb,
-> tcp_delack_timer_handler and then found that when tcp_delack_timer_handle=
-r
-> was called, value of icsk_ack.pending was 1, which means we only had
-> flag ICSK_ACK_SCHED set, not including ICSK_ACK_TIMER. It was against
-> our expectations.
+> Caused by commit
 >
-> In conclusion, we chose to separate the sack compression from delayed
-> ack logic to solve issues only happening when the process is deferred.
+>   1eaf496ed386 ("perf pmu: Separate pmu and pmus")
 >
-> Fixes: 5d9f4262b7ea ("tcp: add SACK compression")
-> Signed-off-by: fuyuanli <fuyuanli@didiglobal.com>
-> Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
-> ---
->  include/linux/tcp.h   |  2 ++
->  include/net/tcp.h     |  1 +
->  net/ipv4/tcp_output.c |  4 ++++
->  net/ipv4/tcp_timer.c  | 28 +++++++++++++++++++---------
->  4 files changed, 26 insertions(+), 9 deletions(-)
->
-> diff --git a/include/linux/tcp.h b/include/linux/tcp.h
-> index b4c08ac86983..cd15a9972c48 100644
-> --- a/include/linux/tcp.h
-> +++ b/include/linux/tcp.h
-> @@ -461,6 +461,7 @@ enum tsq_enum {
->         TCP_MTU_REDUCED_DEFERRED,  /* tcp_v{4|6}_err() could not call
->                                     * tcp_v{4|6}_mtu_reduced()
->                                     */
-> +       TCP_COMPACK_TIMER_DEFERRED, /* tcp_compressed_ack_kick() found so=
-cket was owned */
->  };
->
->  enum tsq_flags {
-> @@ -470,6 +471,7 @@ enum tsq_flags {
->         TCPF_WRITE_TIMER_DEFERRED       =3D (1UL << TCP_WRITE_TIMER_DEFER=
-RED),
->         TCPF_DELACK_TIMER_DEFERRED      =3D (1UL << TCP_DELACK_TIMER_DEFE=
-RRED),
->         TCPF_MTU_REDUCED_DEFERRED       =3D (1UL << TCP_MTU_REDUCED_DEFER=
-RED),
-> +       TCPF_COMPACK_TIMER_DEFERRED     =3D (1UL << TCP_DELACK_TIMER_DEFE=
-RRED),
->  };
->
->  #define tcp_sk(ptr) container_of_const(ptr, struct tcp_sock, inet_conn.i=
-csk_inet.sk)
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index 18a038d16434..e310d7bf400c 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-> @@ -342,6 +342,7 @@ void tcp_release_cb(struct sock *sk);
->  void tcp_wfree(struct sk_buff *skb);
->  void tcp_write_timer_handler(struct sock *sk);
->  void tcp_delack_timer_handler(struct sock *sk);
-> +void tcp_compack_timer_handler(struct sock *sk);
->  int tcp_ioctl(struct sock *sk, int cmd, unsigned long arg);
->  int tcp_rcv_state_process(struct sock *sk, struct sk_buff *skb);
->  void tcp_rcv_established(struct sock *sk, struct sk_buff *skb);
-> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> index cfe128b81a01..1703caab6632 100644
-> --- a/net/ipv4/tcp_output.c
-> +++ b/net/ipv4/tcp_output.c
-> @@ -1110,6 +1110,10 @@ void tcp_release_cb(struct sock *sk)
->                 tcp_delack_timer_handler(sk);
->                 __sock_put(sk);
->         }
-> +       if (flags & TCPF_COMPACK_TIMER_DEFERRED) {
-> +               tcp_compack_timer_handler(sk);
-> +               __sock_put(sk);
-> +       }
->         if (flags & TCPF_MTU_REDUCED_DEFERRED) {
->                 inet_csk(sk)->icsk_af_ops->mtu_reduced(sk);
->                 __sock_put(sk);
-> diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
-> index b839c2f91292..069f6442069b 100644
-> --- a/net/ipv4/tcp_timer.c
-> +++ b/net/ipv4/tcp_timer.c
-> @@ -318,6 +318,23 @@ void tcp_delack_timer_handler(struct sock *sk)
->         }
->  }
->
-> +/* Called with BH disabled */
-> +void tcp_compack_timer_handler(struct sock *sk)
-> +{
-> +       struct tcp_sock *tp =3D tcp_sk(sk);
-> +
-> +       if (((1 << sk->sk_state) & (TCPF_CLOSE | TCPF_LISTEN)))
-> +               return;
-> +
-> +       if (tp->compressed_ack) {
-> +               /* Since we have to send one ack finally,
-> +                * subtract one from tp->compressed_ack to keep
-> +                * LINUX_MIB_TCPACKCOMPRESSED accurate.
-> +                */
-> +               tp->compressed_ack--;
-> +               tcp_send_ack(sk);
-> +       }
-> +}
->
->  /**
->   *  tcp_delack_timer() - The TCP delayed ACK timeout handler
-> @@ -757,16 +774,9 @@ static enum hrtimer_restart tcp_compressed_ack_kick(=
-struct hrtimer *timer)
->
->         bh_lock_sock(sk);
->         if (!sock_owned_by_user(sk)) {
-> -               if (tp->compressed_ack) {
-> -                       /* Since we have to send one ack finally,
-> -                        * subtract one from tp->compressed_ack to keep
-> -                        * LINUX_MIB_TCPACKCOMPRESSED accurate.
-> -                        */
-> -                       tp->compressed_ack--;
-> -                       tcp_send_ack(sk);
-> -               }
-> +               tcp_compack_timer_handler(sk);
->         } else {
-> -               if (!test_and_set_bit(TCP_DELACK_TIMER_DEFERRED,
-> +               if (!test_and_set_bit(TCP_COMPACK_TIMER_DEFERRED,
->                                       &sk->sk_tsq_flags))
->                         sock_hold(sk);
->         }
-> --
-> 2.17.1
->
+> I have used the perf tree from next-20230525 for today.
 
-I checked the patchwork and then found that it warns me because of not
-CCing two other maintainers: ycheng and toke. But what made me curious
-is I cannot find them in the MAINTAINERS file.
+Apologies, the function was renamed to perf_pmus__have_event. I've
+sent out a patch and confirmed this was the only issue on a cross
+compile build with "NO_LIBELF=3D1 NO_LIBTRACEEVENT=3D1".
 
-so CC them here and wait for more suggestions about this patch during
-this period before fuyuanli submits v2 patch with all the maintainers
-CC'ed.
-
-CC:
-ycheng@google.com and toke@toke.dk
+The 1-liner fix is here:
+https://lore.kernel.org/lkml/20230530021433.3107580-1-irogers@google.com/
 
 Thanks,
-Jason
+Ian
+
+
+
+> --
+> Cheers,
+> Stephen Rothwell
