@@ -2,324 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680A7715794
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32992715797
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjE3Hui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S229587AbjE3HvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjE3HuX (ORCPT
+        with ESMTP id S229543AbjE3HvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:50:23 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4EC12A;
-        Tue, 30 May 2023 00:49:53 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id 46e09a7af769-6af86627460so3140552a34.1;
-        Tue, 30 May 2023 00:49:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685432991; x=1688024991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VBnKfNedfF8GkKs+JJUwxB53s3qBEZPidNvLcBHzWMs=;
-        b=h0KtlLHDpvMJstbjOCBXS/T0XZHkbR7CfRE7rLCJCkzyZUWIlQhnUhis/LQv81j+9R
-         RBC5MLdj+l+kYvVq2tvim3pkMQX5GuipyShJs0tyQAfywspRgzk3+7Wktq7z7QeqavMh
-         Ujc744bAKa/AUj6IgtH1WfSKMS5TasrzCXlfbq1tA4BbHYMB9fCCPq7+xKO7KuFSfUoU
-         ptfRy3EK+mqZ8opR8opZOIfHZvpvOsdd28s7zqNnk04tzZmArcfulnuNfdIJf8mm0LHy
-         tOaPk+t2PjmtaYlZDAQj+G7S8TzzuS5QGspuuRxQU0XkPDhHFEEfy8v6t932s+Alumw8
-         5K8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685432991; x=1688024991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VBnKfNedfF8GkKs+JJUwxB53s3qBEZPidNvLcBHzWMs=;
-        b=Zs5mYJ/eCZQJ7F3PJG8pXiCj5BF9QtqImA7CeaM83jbGKdXZw/bbzRKIvTqwPBTV2O
-         c/fTWstWHGSpMV7btbKTOTHlH41hBzJyRUp2T511FESMsBNarR43zaMgGvUIoefwxJS+
-         FEOL3Eu3W/IhRcFCegBXDmTKhvop9rgUVYPj3UDtqG/cIl0PFcfDNn62TntvmouLQnNB
-         TCMJSzf5ZulTOT23BD1z0ylqdcbvuRtpSfmS+OYmhw+Dqw1CCjScVZdCKPXEGZ4Ze39u
-         rnzic5E2puz9FbxidQgCYSeD5Vocnob82uvkTpQmo4kwGOfGnmuBhJyj9LwFX/F8YuLF
-         xg+w==
-X-Gm-Message-State: AC+VfDwQMufCVh9QJcV00lqcibt4ia7pGyyFeRNtThksIUyRQA9Ma7Wb
-        MLtJX6qD+IE0/YohO+ZZVL0qnDLKW2aVSuwbp/w=
-X-Google-Smtp-Source: ACHHUZ5gj8GQGhaxlK2kzd2sCXXlCOh9ob/Zjku+sVRL/uIP3lA3m/JX7OgRnaw/o6lOh/qTh/f2GesKM0LH9mcQ8qU=
-X-Received: by 2002:a05:6808:6185:b0:392:5ce5:d1c with SMTP id
- dn5-20020a056808618500b003925ce50d1cmr663821oib.7.1685432990813; Tue, 30 May
- 2023 00:49:50 -0700 (PDT)
+        Tue, 30 May 2023 03:51:08 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FDAE58;
+        Tue, 30 May 2023 00:50:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1685433048; x=1716969048;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=W2RJCAhGRPaAGBO95KvplbcQKgF5ovbdTVy+xWn2k3M=;
+  b=pdr2cNblqvCBxxdJakDjEUvQLPXYDpS2ixKSJe0zwUY8O4LVtWTDXw52
+   a1mtULmNcA9Ih4p1eV2suhLzu3q+N3nzdRVYpCD1ksl4uD2C4BlHLBvnm
+   GFR4kUPOo3PNhP1c5DJgvOwl9eJoNjSY2qk/Qrc5cwb3bwEcazuAvNDfz
+   TnhbkAHPn1NgYApPjN4ecnN58ZV+EVKKvlBm2rROE1Wz6KjyN0Rf/Fwl0
+   wZuUQr/V2q2oGyAiDPXVUh0sfQ8HiRIh2iKnaYVa45ju1nxk4YreS75zs
+   1IVtgOaw8mss9015ZCnoP2s3xLP7Fy3oCphpVPsjtLbxRjN3S1GzO+eIp
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,203,1681142400"; 
+   d="scan'208";a="231871569"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 30 May 2023 15:50:47 +0800
+IronPort-SDR: RxpAn2xnF5aYozWyv6SkTGapNbE5ni6TbOnlTMm33VXnTKrT5xRFN3bd+v6/TpS6QVewXyr6c/
+ IaQ146CFeTK98NuiO7jZQ3cM7uaJi+9SfvXuCmhtT/p8gnBd6GmYIeypBkNk7qsDAgUc8JIV1A
+ vmFqX9ctjkn7x92+qjinfpkt1oSRe6JewNn+d+dkDjcB1jCU9mQS9vdj+39S4n083ZfySuXdY6
+ rctPZ07dRsyVGEm5qD2jJRlCU/zhudo6DyzMCz4F+ozZ6Ja/rdUJx1HLdw1jsskD6EsyJtS3uq
+ hcs=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 May 2023 00:00:00 -0700
+IronPort-SDR: Hi/ewd4lS/E07568jT+oGMB4pKs7YvpTq1Cre3NYnTwM55i7s1pSNVhvm1HrVBjxTwzKvW/dWk
+ iVeNbyhuGWkR9qaEbDuYDUDTwnykA4SNktkASB5cgxkGNYrcyDqqyE+G0DgWvWn8BX+ag2g+7h
+ XpfmV6oWbZFWir9daDKn3q0eSyVh/0WzoPxYeDmb/fzxvyizy2q77aI4f4Pe7eYls4YmWaZatP
+ ejt779MtgTbzjPMaBI0lqcJZP+CyoxS4Bhf8fVBTfb7fSUkCHD8jnf8+q/AGM7d4FjcN+m6HW8
+ 4BQ=
+WDCIronportException: Internal
+Received: from bxygm33.ad.shared ([10.45.31.229])
+  by uls-op-cesaip02.wdc.com with ESMTP; 30 May 2023 00:50:45 -0700
+From:   Avri Altman <avri.altman@wdc.com>
+To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Avri Altman <avri.altman@wdc.com>
+Subject: [PATCH] scsi: ufs: core: Do not open code SZ_x
+Date:   Tue, 30 May 2023 10:50:33 +0300
+Message-Id: <20230530075033.11006-1-avri.altman@wdc.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230529113804.GA20300@didi-ThinkCentre-M920t-N000>
- <CANn89iJw3Ehoj7GfYnc6Xv5N2wULqNuP3zNBwQx97i-YJD5avg@mail.gmail.com> <CAL+tcoCRgpoYgQXdM2Es0gjRtRZj1hCK-5M04WZ1sy3vt_5JjA@mail.gmail.com>
-In-Reply-To: <CAL+tcoCRgpoYgQXdM2Es0gjRtRZj1hCK-5M04WZ1sy3vt_5JjA@mail.gmail.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Tue, 30 May 2023 15:49:14 +0800
-Message-ID: <CAL+tcoAnBEk7tFM8x+VmkBBxmrAFWAG8wMQhoS3efW0hWjuNDw@mail.gmail.com>
-Subject: Re: [PATCH net] tcp: introduce a compack timer handler in sack compression
-To:     Eric Dumazet <edumazet@google.com>, toke@toke.dk,
-        Yuchung Cheng <ycheng@google.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Neal Cardwell <ncardwell@google.com>, netdev@vger.kernel.org,
-        zhangweiping <zhangweiping@didiglobal.com>,
-        tiozhang <tiozhang@didiglobal.com>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, fuyuanli@didiglobal.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 3:45=E2=80=AFPM Jason Xing <kerneljasonxing@gmail.c=
-om> wrote:
->
-> On Tue, May 30, 2023 at 3:12=E2=80=AFPM Eric Dumazet <edumazet@google.com=
-> wrote:
-> >
-> > On Mon, May 29, 2023 at 1:38=E2=80=AFPM fuyuanli <fuyuanli@didiglobal.c=
-om> wrote:
-> > >
-> > > We've got some issues when sending a compressed ack is deferred to
-> > > release phrase due to the socket owned by another user:
-> > > 1. a compressed ack would not be sent because of lack of ICSK_ACK_TIM=
-ER
-> > > flag.
-> >
-> > Are you sure ? Just add it then, your patch will be a one-liner
-> > instead of a complex one adding
-> > more code in a fast path.
->
-> Honestly, at the very beginning, we just added one line[1] to fix
-> this. After I digged more into this part, I started to doubt if we
-> should reuse the delayed ack logic.
->
-> Because in the sack compression logic there is no need to do more
-> things as delayed ack does in the tcp_delack_timer_handler() function.
->
-> Besides, here are some things extra to be done if we defer to send an
-> ack in sack compression:
-> 1) decrease tp->compressed_ack. The same as "tp->compressed_ack--;" in
-> tcp_compressed_ack_kick().
-> 2) initialize icsk->icsk_ack.timeout. Actually we don't need to do
-> this because we don't modify the expiration time in the sack
-> compression hrtimer.
-> 3) don't need to count the LINUX_MIB_DELAYEDACKS counter.
-> 4) I wonder even if those checks about the ack schedule or ping pong
-> mode in tcp_delack_timer_handler() for sack compression? I'm not sure
-> about it.
->
-> So one line cannot solve it perfectly. That's the reason why we
-> introduce a new logic which can be clearer.
->
-> I'm wondering if adding one check in the fast path is really that
-> unacceptable (it may hurt performance?) because a new logic would be
-> clearer for the whole sack compression.
->
-> [1]
-> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> index cc072d2cfcd8..d9e76d761cc6 100644
-> --- a/net/ipv4/tcp_input.c
-> +++ b/net/ipv4/tcp_input.c
-> @@ -5568,6 +5568,7 @@ static void __tcp_ack_snd_check(struct sock *sk,
-> int ofo_possible)
->
-> READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_comp_sack_delay_ns),
->                       rtt * (NSEC_PER_USEC >> 3)/20);
->         sock_hold(sk);
-> +       inet_csk(sk)->icsk_ack.pending |=3D ICSK_ACK_TIMER;
+A tad cleanup - No functional change.
 
-Oh, one more thing I forget to say is adding this flag here would
-cause us to handle when and where to remove this flag without messing
-up with the delayed ack logic.
+Signed-off-by: Avri Altman <avri.altman@wdc.com>
+---
+ drivers/ufs/core/ufshcd.c | 8 ++++----
+ include/ufs/ufshci.h      | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Thanks,
-Jason
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index fdf5073c7c6c..1f206bd453cf 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -2519,7 +2519,7 @@ static void ufshcd_sgl_to_prdt(struct ufs_hba *hba, struct ufshcd_lrb *lrbp, int
+ 			 * 11b to indicate Dword granularity. A value of '3'
+ 			 * indicates 4 bytes, '7' indicates 8 bytes, etc."
+ 			 */
+-			WARN_ONCE(len > 256 * 1024, "len = %#x\n", len);
++			WARN_ONCE(len > SZ_256K, "len = %#x\n", len);
+ 			prd->size = cpu_to_le32(len - 1);
+ 			prd->addr = cpu_to_le64(sg->dma_address);
+ 			prd->reserved = 0;
+@@ -3765,7 +3765,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+ 
+ 	/*
+ 	 * Allocate memory for UTP Transfer descriptors
+-	 * UFSHCI requires 1024 byte alignment of UTRD
++	 * UFSHCI requires 1KB alignment of UTRD
+ 	 */
+ 	utrdl_size = (sizeof(struct utp_transfer_req_desc) * hba->nutrs);
+ 	hba->utrdl_base_addr = dmam_alloc_coherent(hba->dev,
+@@ -3773,7 +3773,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+ 						   &hba->utrdl_dma_addr,
+ 						   GFP_KERNEL);
+ 	if (!hba->utrdl_base_addr ||
+-	    WARN_ON(hba->utrdl_dma_addr & (1024 - 1))) {
++	    WARN_ON(hba->utrdl_dma_addr & (SZ_1K - 1))) {
+ 		dev_err(hba->dev,
+ 			"Transfer Descriptor Memory allocation failed\n");
+ 		goto out;
+@@ -8760,7 +8760,7 @@ static const struct scsi_host_template ufshcd_driver_template = {
+ 	.cmd_per_lun		= UFSHCD_CMD_PER_LUN,
+ 	.can_queue		= UFSHCD_CAN_QUEUE,
+ 	.max_segment_size	= PRDT_DATA_BYTE_COUNT_MAX,
+-	.max_sectors		= (1 << 20) / SECTOR_SIZE, /* 1 MiB */
++	.max_sectors		= SZ_1M / SECTOR_SIZE,
+ 	.max_host_blocked	= 1,
+ 	.track_queue_depth	= 1,
+ 	.skip_settle_delay	= 1,
+diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
+index 11424bb03814..db2d5db5c88e 100644
+--- a/include/ufs/ufshci.h
++++ b/include/ufs/ufshci.h
+@@ -453,7 +453,7 @@ enum {
+ };
+ 
+ /* The maximum length of the data byte count field in the PRDT is 256KB */
+-#define PRDT_DATA_BYTE_COUNT_MAX	(256 * 1024)
++#define PRDT_DATA_BYTE_COUNT_MAX	SZ_256K
+ /* The granularity of the data byte count field in the PRDT is 32-bit */
+ #define PRDT_DATA_BYTE_COUNT_PAD	4
+ 
+-- 
+2.40.0
 
->         hrtimer_start_range_ns(&tp->compressed_ack_timer, ns_to_ktime(del=
-ay),
->
-> READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_comp_sack_slack_ns),
->                                HRTIMER_MODE_REL_PINNED_SOFT);
->
-> >
-> > > 2. the tp->compressed_ack counter should be decremented by 1.
-> > > 3. we cannot pass timeout check and reset the delack timer in
-> > > tcp_delack_timer_handler().
-> > > 4. we are not supposed to increment the LINUX_MIB_DELAYEDACKS counter=
-.
-> > > ...
-> > >
-> > > The reason why it could happen is that we previously reuse the delaye=
-d
-> > > ack logic when handling the sack compression. With this patch applied=
-,
-> > > the sack compression logic would go into the same function
-> > > (tcp_compack_timer_handler()) whether we defer sending ack or not.
-> > > Therefore, those two issued could be easily solved.
-> > >
-> > > Here are more details in the old logic:
-> > > When sack compression is triggered in the tcp_compressed_ack_kick(),
-> > > if the sock is owned by user, it will set TCP_DELACK_TIMER_DEFERRED a=
-nd
-> > > then defer to the release cb phrase. Later once user releases the soc=
-k,
-> > > tcp_delack_timer_handler() should send a ack as expected, which, howe=
-ver,
-> > > cannot happen due to lack of ICSK_ACK_TIMER flag. Therefore, the rece=
-iver
-> > > would not sent an ack until the sender's retransmission timeout. It
-> > > definitely increases unnecessary latency.
-> > >
-> > > This issue happens rarely in the production environment. I used kprob=
-e
-> > > to hook some key functions like tcp_compressed_ack_kick, tcp_release_=
-cb,
-> > > tcp_delack_timer_handler and then found that when tcp_delack_timer_ha=
-ndler
-> > > was called, value of icsk_ack.pending was 1, which means we only had
-> > > flag ICSK_ACK_SCHED set, not including ICSK_ACK_TIMER. It was against
-> > > our expectations.
-> > >
-> > > In conclusion, we chose to separate the sack compression from delayed
-> > > ack logic to solve issues only happening when the process is deferred=
-.
-> > >
-> > > Fixes: 5d9f4262b7ea ("tcp: add SACK compression")
-> > > Signed-off-by: fuyuanli <fuyuanli@didiglobal.com>
-> > > Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
-> > > ---
-> > >  include/linux/tcp.h   |  2 ++
-> > >  include/net/tcp.h     |  1 +
-> > >  net/ipv4/tcp_output.c |  4 ++++
-> > >  net/ipv4/tcp_timer.c  | 28 +++++++++++++++++++---------
-> > >  4 files changed, 26 insertions(+), 9 deletions(-)
-> > >
-> > > diff --git a/include/linux/tcp.h b/include/linux/tcp.h
-> > > index b4c08ac86983..cd15a9972c48 100644
-> > > --- a/include/linux/tcp.h
-> > > +++ b/include/linux/tcp.h
-> > > @@ -461,6 +461,7 @@ enum tsq_enum {
-> > >         TCP_MTU_REDUCED_DEFERRED,  /* tcp_v{4|6}_err() could not call
-> > >                                     * tcp_v{4|6}_mtu_reduced()
-> > >                                     */
-> > > +       TCP_COMPACK_TIMER_DEFERRED, /* tcp_compressed_ack_kick() foun=
-d socket was owned */
-> > >  };
-> > >
-> > >  enum tsq_flags {
-> > > @@ -470,6 +471,7 @@ enum tsq_flags {
-> > >         TCPF_WRITE_TIMER_DEFERRED       =3D (1UL << TCP_WRITE_TIMER_D=
-EFERRED),
-> > >         TCPF_DELACK_TIMER_DEFERRED      =3D (1UL << TCP_DELACK_TIMER_=
-DEFERRED),
-> > >         TCPF_MTU_REDUCED_DEFERRED       =3D (1UL << TCP_MTU_REDUCED_D=
-EFERRED),
-> > > +       TCPF_COMPACK_TIMER_DEFERRED     =3D (1UL << TCP_DELACK_TIMER_=
-DEFERRED),
-> > >  };
-> > >
-> > >  #define tcp_sk(ptr) container_of_const(ptr, struct tcp_sock, inet_co=
-nn.icsk_inet.sk)
-> > > diff --git a/include/net/tcp.h b/include/net/tcp.h
-> > > index 18a038d16434..e310d7bf400c 100644
-> > > --- a/include/net/tcp.h
-> > > +++ b/include/net/tcp.h
-> > > @@ -342,6 +342,7 @@ void tcp_release_cb(struct sock *sk);
-> > >  void tcp_wfree(struct sk_buff *skb);
-> > >  void tcp_write_timer_handler(struct sock *sk);
-> > >  void tcp_delack_timer_handler(struct sock *sk);
-> > > +void tcp_compack_timer_handler(struct sock *sk);
-> > >  int tcp_ioctl(struct sock *sk, int cmd, unsigned long arg);
-> > >  int tcp_rcv_state_process(struct sock *sk, struct sk_buff *skb);
-> > >  void tcp_rcv_established(struct sock *sk, struct sk_buff *skb);
-> > > diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> > > index cfe128b81a01..1703caab6632 100644
-> > > --- a/net/ipv4/tcp_output.c
-> > > +++ b/net/ipv4/tcp_output.c
-> > > @@ -1110,6 +1110,10 @@ void tcp_release_cb(struct sock *sk)
-> > >                 tcp_delack_timer_handler(sk);
-> > >                 __sock_put(sk);
-> > >         }
-> > > +       if (flags & TCPF_COMPACK_TIMER_DEFERRED) {
-> > > +               tcp_compack_timer_handler(sk);
-> > > +               __sock_put(sk);
-> > > +       }
-> >
-> > Please do not add another test in the fast path.
-> >
-> > Just make sure tcp_delack_timer_handler() handles the case (this
-> > certainly was my intent)
-> >
-> >
-> > >         if (flags & TCPF_MTU_REDUCED_DEFERRED) {
-> > >                 inet_csk(sk)->icsk_af_ops->mtu_reduced(sk);
-> > >                 __sock_put(sk);
-> > > diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
-> > > index b839c2f91292..069f6442069b 100644
-> > > --- a/net/ipv4/tcp_timer.c
-> > > +++ b/net/ipv4/tcp_timer.c
-> > > @@ -318,6 +318,23 @@ void tcp_delack_timer_handler(struct sock *sk)
-> > >         }
-> > >  }
-> > >
-> > > +/* Called with BH disabled */
-> > > +void tcp_compack_timer_handler(struct sock *sk)
-> > > +{
-> > > +       struct tcp_sock *tp =3D tcp_sk(sk);
-> > > +
-> > > +       if (((1 << sk->sk_state) & (TCPF_CLOSE | TCPF_LISTEN)))
-> > > +               return;
-> > > +
-> > > +       if (tp->compressed_ack) {
-> > > +               /* Since we have to send one ack finally,
-> > > +                * subtract one from tp->compressed_ack to keep
-> > > +                * LINUX_MIB_TCPACKCOMPRESSED accurate.
-> > > +                */
-> > > +               tp->compressed_ack--;
-> > > +               tcp_send_ack(sk);
-> > > +       }
-> > > +}
-> > >
-> > >  /**
-> > >   *  tcp_delack_timer() - The TCP delayed ACK timeout handler
-> > > @@ -757,16 +774,9 @@ static enum hrtimer_restart tcp_compressed_ack_k=
-ick(struct hrtimer *timer)
-> > >
-> > >         bh_lock_sock(sk);
-> > >         if (!sock_owned_by_user(sk)) {
-> > > -               if (tp->compressed_ack) {
-> > > -                       /* Since we have to send one ack finally,
-> > > -                        * subtract one from tp->compressed_ack to ke=
-ep
-> > > -                        * LINUX_MIB_TCPACKCOMPRESSED accurate.
-> > > -                        */
-> > > -                       tp->compressed_ack--;
-> > > -                       tcp_send_ack(sk);
-> > > -               }
-> > > +               tcp_compack_timer_handler(sk);
-> > >         } else {
-> > > -               if (!test_and_set_bit(TCP_DELACK_TIMER_DEFERRED,
-> >
-> > See, I was clearly intending to let tcp_delack_timer_handler() deal wit=
-h this.
->
-> I knew that :)
->
-> Thanks,
-> Jason
->
-> >
-> > > +               if (!test_and_set_bit(TCP_COMPACK_TIMER_DEFERRED,
-> > >                                       &sk->sk_tsq_flags))
-> > >                         sock_hold(sk);
-> > >         }
-> > > --
-> > > 2.17.1
-> > >
