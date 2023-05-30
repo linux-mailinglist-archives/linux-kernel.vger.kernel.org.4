@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEC2715DB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1D0715DC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:47:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbjE3LqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
+        id S231688AbjE3LrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbjE3Lpz (ORCPT
+        with ESMTP id S229705AbjE3LrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:45:55 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E5EE5A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:45:23 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-566586b180fso27572837b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:45:23 -0700 (PDT)
+        Tue, 30 May 2023 07:47:03 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6618121
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:46:37 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-ba827a34ba8so6351199276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:46:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685447117; x=1688039117;
+        d=linaro.org; s=google; t=1685447181; x=1688039181;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NXwxmYeftYzF4jtqCiLrlUMOqQIXZv6xuhc1OQJvYiE=;
-        b=HJgN16ooshsHiGI4V9zZekl8WfBy0TCwlt4G4xj0wTN4T0V5SPWaECI89YjxMfYqZ7
-         5J0+lobIDDpFs8nyZLHxt5X02ikL160kPbWvnId/jSEED27yjhRfOJnfa3AQgIHRQ36s
-         8fptYF6EhjEtpUyBtKluUOw8En7dFNPlpOS0gCy6+CeFbSEhk+9gPlxPMEkU+HCFNXIq
-         XUxlKnb0y0HRT2MknggVsoTrvukOAXFXoMV3sEJhWwBC7bApfAcCwwi1SrGcvdZ13Db0
-         Ys3OVcirp6azO7+heXcstqN7opBBGbNqbBg6GpzgkjWWaz7U/pcK6K4XfId0vSM6UbBx
-         DB9A==
+        bh=HUJILdtJMJoGIdgauKb6V4jUFqAoPR4Aj10k+ul/UDE=;
+        b=IMWC0wjY59bzCGS7zJk3bSQYlIXqw+JeQ3y1IWQWhQiLXF2vaTJtZJmQh9zf2CmT/M
+         DDhnX+WopwHeb5JG+ZbwPMualrcvR2RzAUySfQTek1xnsdICL2hD2phnyJoLU7Rna3Km
+         wgUeYMrWbpk4R2vbpDNVFt7XlDg/efUR0iOCtWY39X/czK03aOmLF53ZFAhaEo2Tc0Jk
+         LLVsjfeFPEMcncWvdCQtotATPrGD9ibH6jagYVr+s0krbxSnc73BP58bZ4BQT8kTt7Yg
+         NzeEgvwW7ZLNQnkOZjFujIU7cSH2hbIdOi7Iio4f8z2jxiX1C5i1iL4Gr++KacL5xPuQ
+         bqWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685447117; x=1688039117;
+        d=1e100.net; s=20221208; t=1685447181; x=1688039181;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NXwxmYeftYzF4jtqCiLrlUMOqQIXZv6xuhc1OQJvYiE=;
-        b=iS3eP+W1rK+DV+fZLhvcX0Rg/UsENWERAwL/YVGolUTn45N4+LWLMLqq2gAQT6/a7U
-         xG1X8CryEqI/gD3nTLw4H/5Wf0qOniqhc+RjnP2oJGbBpUniT11c5q+XIP1VHcp88Rwq
-         eihmEoBZw+V8h3LXBhW5osOjXIJvm54DeBszF8qylnu9Jzd8Ls9Edce4gC22BaTOSIbz
-         1TkS7yyIfTfglu6JX1ieuxkZkopa5J6kVfy95iSTxP6bLVDsbwVDxr2yFSjGngy/EBC+
-         68QWkJbuOTkHnLfahR9077mzJl8rACrgYOCy2fiWHfqyDoL0gUzq6SEnKXSDOLYZYo+t
-         c3ew==
-X-Gm-Message-State: AC+VfDw9+dxTDrZT9EyAenDVZYLnkU2kSSvb0vWbRx9aVpvwKPKnbD5Z
-        qn9XVOakNXJ3xQAOa7VEeXWqzCkXl7y0UKacCy5wIQ==
-X-Google-Smtp-Source: ACHHUZ54QNO/+6fZku62PNi90U4Qj5ZC1Ba0zmVJNFZwpokSvXDXq1LvXMXcoGLGYfuyN0jRafVEeT9V0RJEt/njhSg=
-X-Received: by 2002:a81:5cc3:0:b0:562:7f3:bee6 with SMTP id
- q186-20020a815cc3000000b0056207f3bee6mr1880035ywb.45.1685447116862; Tue, 30
- May 2023 04:45:16 -0700 (PDT)
+        bh=HUJILdtJMJoGIdgauKb6V4jUFqAoPR4Aj10k+ul/UDE=;
+        b=YaNlG1a5XDynrMm9rFzHPN/pVTGk/bB4Is8+lZz2m+bQymfeApeyub1rF29qb/ms8e
+         KLqWcqms2pL0VzmgstXlA9Dmz0lGKnGGDZKUkojo6JSwJ5tIKRJ4ktlQEsPGqQDhNc+r
+         rRiCKWt+luOqHxZx+ItxqUH7tW3Wd2C5SEEUndk+jM2bq3+tYdQpn2lO+OYn3l9da6od
+         b9JXc3BisRV/+1QnIBSr2UwUuFZJbFs0cfnhjjD1JfXZWwb0HhY2Hod9MZtq+jXqF8Wq
+         ByrdsByu8KqE6z5Txf5vmFnjXdBM4Ccd9Ne6oRL2yT48QBPjSn/KHsUMMUbh+S5DDBso
+         NMog==
+X-Gm-Message-State: AC+VfDzmohlGDnVKvOY0+ul5k1FiPf53UnShtZtXWpHkvPSt1p4GhV1h
+        Y5f2H1hXDVu4uOuGfwK7ar0V3Y0mXkM5EtdC0Q0w6Q==
+X-Google-Smtp-Source: ACHHUZ6qeK1VUlzVVoYriVl36VUfxvr4XRHsg/sZx0twYHip1poh59C0DDAZeBtvwHO44f/HwXpTzoDZGovs/QbkI0Y=
+X-Received: by 2002:a81:5b55:0:b0:561:a422:f3cd with SMTP id
+ p82-20020a815b55000000b00561a422f3cdmr1795570ywb.30.1685447181672; Tue, 30
+ May 2023 04:46:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230527114057.36091-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230527114057.36091-1-andriy.shevchenko@linux.intel.com>
+References: <20230527114057.36091-1-andriy.shevchenko@linux.intel.com> <20230527114057.36091-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230527114057.36091-2-andriy.shevchenko@linux.intel.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 30 May 2023 13:45:05 +0200
-Message-ID: <CACRpkdZadKSnRQXVaWTWKEhYJ+19XM2eQzqNmoGDZSMJq+csag@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] gpiolib: Consolidate the allocated mask freeing APIs
+Date:   Tue, 30 May 2023 13:46:10 +0200
+Message-ID: <CACRpkdbnKngR7x2pvvvvbhj-4z+EyCiwchrrEbbwO=MSOn-HsQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] gpiolib: Unify allocation and initialization of
+ GPIO valid mask
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -73,13 +74,13 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Sat, May 27, 2023 at 1:41=E2=80=AFPM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
 
-> There is a common API to allocate a mask, but more than one duplicative
-> counterparts. Consolidate the latter into a single common API beneath.
+> Now that the of_gpiochip_add() doesn't use valid mask, we may
+> unify GPIO valid mask allocation and initialization. With this
+> it makes a symmetry to the similar which we done for IRQ chip.
 >
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Microoptimization, but I'm game for this one because it has a good
-descriptive name making the code more readable.
+Neat!
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
