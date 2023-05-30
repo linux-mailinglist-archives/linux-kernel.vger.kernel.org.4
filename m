@@ -2,117 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F4D71666C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 639997166BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbjE3PMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
+        id S231860AbjE3PN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233184AbjE3PMh (ORCPT
+        with ESMTP id S231978AbjE3PN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:12:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210A5BE;
-        Tue, 30 May 2023 08:12:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7F9462906;
-        Tue, 30 May 2023 15:12:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C417FC433EF;
-        Tue, 30 May 2023 15:12:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685459555;
-        bh=4kszkiKYQZZBlC9XFCYpDiNYoZ19gI+fLwDPLNndKzU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=G0Jabv367okXjl+PR0dnMMOSyHI2z+LaykTYgyjXEbYiilKX+419JA7ARffaR9t3M
-         7cMpsTljIe7hGzmFHVwwoOjLJXsexJP6f7vKSKbG/cs5qyGAuOnkpI5SCdxvSnXk9x
-         RYzAccWTtYwzSChWOR9HXWuRkXSs/38eAOUWd1ortKwryWdX1lWcZySyCoiZCKQdtE
-         Sry3mSrPcmr/QRG4P/80TCJV+yW6/UTJTZTMrOtkDIBz+3EUrfFRbH3qXe6hou2apm
-         6BHkjatycqfh/rPqPiMeEZlVC8P4yJdZkrjmMLsqE0QzsAxExeBVBq8uZOJtVVBc8Q
-         RpQxhWY9/9jrA==
-Message-ID: <7bdb0e44-eaf7-8085-2ea5-6bb06b01ef35@kernel.org>
-Date:   Tue, 30 May 2023 17:12:28 +0200
+        Tue, 30 May 2023 11:13:27 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286E9C7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:13:25 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2af2696fd1cso48708541fa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:13:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685459603; x=1688051603;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q0/z84vpwzDI0aF57Cc6ksVNfZpqpUHT2FEMjJzlh94=;
+        b=DLZkgFZOM1gND9DmdiaAJM9g+tCWyWEsy1rkK9h2UTsv0Xf9cVeV39g4AF38Q4a/Hw
+         N6HHkBeepqYGI9sL+Ukzk6jnP7mAPiRveUI36F787m14Px3yeYH7NzwNJF/AZafarbVq
+         XHnNv5dQTUQ6/m4RGdrYDAW0Dqd2mWwiyd2xjia9Q+oZsYiMigwHxBusSGdfTTZBdIna
+         z+TYxlrWo8LbxJFUjuv79mi5xPR7boJfEpvpRTpFXH6APgKufjExoZ68nUzFXjBhlQjJ
+         xYhGnSOM33ER6+mwu5KyqFhFGrvaKyrkH+KNckfje7ENSrETpl2ps6DKAk1ZUm/dqRj3
+         E2Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685459603; x=1688051603;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q0/z84vpwzDI0aF57Cc6ksVNfZpqpUHT2FEMjJzlh94=;
+        b=itjQ0xJQhkUyVEMNvXUBoHVUT2iSWUBDSO4rTGfBEU1pFdryugLFsjZVTbBNC3pvKw
+         oJ/L1Dcm70ARtsNyUXcQbUBuvha19W5AhXxGw5poIG1mFIlgXxXjaSUdXQRbzgCzMqID
+         Em/xD6idiCknj6wbjqtBCGCJjShCaEo0960ssAHSfoGt0eAVLO0NMqs3bTf157XNaoAR
+         XGR0JdCY/5VdiRq44AY9PFTl3SJqoOryCM7WAchiHZ2NAtHqnQ4uFA7J7e1oA4FUHFtS
+         z8phiQxaEkpLrynV7skxUrXqQsyatpAmtxbKXMeGv9AOjxrv0dI4QaqPOB8RhHV9gxSA
+         36Sw==
+X-Gm-Message-State: AC+VfDzcQK4fCi8MNWeZVCKXAsLcxYtfS1GXlrtiIC1AyeV0hSh9KJCG
+        HzBJQq71+EwkGHe+D+Ckh+NUVw==
+X-Google-Smtp-Source: ACHHUZ7SvKJbZWJPmeT0C+ABZU3yfrSxqfz3eGl3iFFeZe4ORHtBEQZ2gfN0Dz9DmIpJ5trb7iGK5w==
+X-Received: by 2002:a2e:9e59:0:b0:2af:1119:8c77 with SMTP id g25-20020a2e9e59000000b002af11198c77mr972198ljk.49.1685459603419;
+        Tue, 30 May 2023 08:13:23 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id q26-20020a17090622da00b0096f7cf96525sm7578171eja.146.2023.05.30.08.13.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 08:13:23 -0700 (PDT)
+Message-ID: <bf204c54-a51b-21d0-9fbf-3729d277ef76@linaro.org>
+Date:   Tue, 30 May 2023 17:13:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [RFC PATCH 3/4] dt-bindings: remoteproc: add compatibility for
- TEE support
+Subject: Re: [PATCH v4 2/4] dt-bindings: display: st,stm32-dsi: Remove
+ unnecessary fields
 Content-Language: en-US
-To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>
+To:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Alexandre TORGUE <alexandre.torgue@foss.st.com>
 Cc:     linux-stm32@st-md-mailman.stormreply.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        kernel@dh-electronics.com, Marek Vasut <marex@denx.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        op-tee@lists.trustedfirmware.org
-References: <20230523091350.292221-1-arnaud.pouliquen@foss.st.com>
- <20230523091350.292221-4-arnaud.pouliquen@foss.st.com>
- <1b4eba7e-2771-b0c8-ec23-2ed882374e5d@kernel.org>
- <d4a98500-5cb0-b3fd-7f40-8b56a2258619@foss.st.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <d4a98500-5cb0-b3fd-7f40-8b56a2258619@foss.st.com>
+        Conor Dooley <conor+dt@kernel.org>
+References: <20230529091359.71987-1-raphael.gallais-pou@foss.st.com>
+ <20230529091359.71987-3-raphael.gallais-pou@foss.st.com>
+ <20230530122736.tflfu5cugbd7ooup@krzk-bin>
+ <92d5a699-9f5d-2e40-ca73-4604f3e5a657@foss.st.com>
+ <af31ae21-2711-2fac-e885-b3bbbcb12be8@foss.st.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <af31ae21-2711-2fac-e885-b3bbbcb12be8@foss.st.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 17:00, Arnaud POULIQUEN wrote:
-> Hello Krzysztof,
+On 30/05/2023 15:38, Raphael Gallais-Pou wrote:
 > 
-> On 5/30/23 13:50, Krzysztof Kozlowski wrote:
->> On 23/05/2023 11:13, Arnaud Pouliquen wrote:
->>> Rework compatibility description according to the support of
->>> the authenticated firmware relying on OP-TEE authentication.
+> On 5/30/23 15:30, Alexandre TORGUE wrote:
+>> On 5/30/23 14:27, Krzysztof Kozlowski wrote:
+>>> On Mon, 29 May 2023 11:13:57 +0200, Raphael Gallais-Pou wrote:
+>>>> "#address-cells" and "#size-cells" are two properties that are not
+>>>> mandatory. For instance, the DSI could refer to a bridge outside the scope
+>>>> of the node rather than include a 'panel@0' subnode. By doing so, address
+>>>> and size fields become then unnecessary, creating a warning at build time.
+>>>>
+>>>> Signed-off-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+>>>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+>>>> Reviewed-by: Marek Vasut <marex@denx.de>
+>>>> ---
+>>>>   Documentation/devicetree/bindings/display/st,stm32-dsi.yaml | 2 --
+>>>>   1 file changed, 2 deletions(-)
+>>>>
 >>>
->>> The expected behavior is:
->>> - with legacy compatible "st,stm32mp1-m4" the Linux kernel loads a
->>>   non-signed (ELF) firmware image,
->>> - with compatible "st,stm32mp1-m4-tee" the Linux kernel load a signed
->>>   firmware image. In this case it calls TEE services to manage the firmware
->>>   loading and the remoteproc life-cycle.
->>>
->>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
->>> ---
->>>  .../bindings/remoteproc/st,stm32-rproc.yaml   | 33 +++++++++++++++++--
->>>  1 file changed, 30 insertions(+), 3 deletions(-)
+>>> Running 'make dtbs_check' with the schema in this patch gives the
+>>> following warnings. Consider if they are expected or the schema is
+>>> incorrect. These may not be new warnings
+>> I checked it before merging the series on stm32-next tree. I didn't get this
+>> error. I didn't check commit per commit.
 >>
->> Please use scripts/get_maintainers.pl to get a list of necessary people
->> and lists to CC.  It might happen, that command when run on an older
->> kernel, gives you outdated entries.  Therefore please be sure you base
->> your patches on recent Linux kernel.
->>
->> You missed at least DT list (maybe more), so this won't be tested.
->> Please resend and include all necessary entries.
->>
->> Because of above and RFC, I assume there is no need for review. Just to
->> be clear - that's a no.
+>> Do you get this error after merging the whole series ?
 > 
-> I did not add DT list and maintainers intentionally to avoid that you
-> review it.
-> As in a first step the associated OP-TEE pull request has to be reviewed.
-> And my plan was just to share the Linux implementation part until the
-> OP-TEE review cycle is finished.
-
-Sure, that's fine. I just don't know whether this is intentional or not.
-Many people skip list without such reason...
-
 > 
-> Now regarding your mail (and very interesting feedback from Christoph Hellwig),
-> it was clearly not the good strategy.
-> So my apologize and next time whatever the objective of the series I will add
-> all peoples and lists in the loop.
+> I think this is because of the order of the patches within the serie. The patch
+> correcting the yaml is before those modifying the device-trees. This could
+> explain warnings rise up when checking patch per patch. However I did not get
+> any errors on top of  the whole serie.
 
-No worries! Thanks.
+Yeah. Ignore the report if you tested it by yourself.
 
 Best regards,
 Krzysztof
