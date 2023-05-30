@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00B5715A5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77257715A62
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjE3Jjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
+        id S230368AbjE3JkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbjE3Jjm (ORCPT
+        with ESMTP id S230331AbjE3Jjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:39:42 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EE5EA;
-        Tue, 30 May 2023 02:39:41 -0700 (PDT)
+        Tue, 30 May 2023 05:39:47 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB80F1;
+        Tue, 30 May 2023 02:39:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685439580; x=1716975580;
+  t=1685439585; x=1716975585;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=nmVGwDvjtH8SjM5DgD/DxYkOVw0e2bHjD/47RTMYLJM=;
-  b=SBv8CAXZFYnUjL+0AJigD8lHNqRmysvhBmqWO7txGCU45QmrZfpQxd93
-   2Y2IN7dBmDbvjV0KXMoFtJZQGObECIsMpkDnMKJp+U/D5/ADe5kbKwoB7
-   lbppRHUS1WS5mEnG5JqBbupJw5WXVXWrobEdlmHPnUgnYMjEL0ifmrMVA
-   llZBnTI/kHaItvpCJYDdBaGwcwx6BJ5MFqZjVSLLQNtMYg5iLysoYMvtk
-   iqaIy6e7cpUwYMWGR5dJGgbWZrQ6bkF2Vzd5B0ShaJMa5aRWSpi4MAwng
-   M9pN5qxophAOqFffquztK/jx1G02EwK3sZCioxR9aaa4aqqCxZSeYcFXR
+  bh=yiEmmbelkqld6VEDr+dlG9UbkFCO18sqg02xHz8i2rM=;
+  b=FF8p/FcCqo7T31aNwxpNA2IZsXOS1vyk/RvTvbhcSCzrc8SltzBixfeW
+   Vc77HYR9/mEYe3SJItpNBQ8ovBv/rc1wfOmHYhfZtmMN9J0PMj8blTw4M
+   f+HiMTDiE3J5SsYll+EWx2hKW6gmGdKUb4pXR5NHcR5HoF6OJOrMCImoM
+   hmXYkIq1OECGxUd7YGtOItlvBa0p23Evfq9wHRO+CfiLYCvFtVMJcFzeI
+   gq1BOwmyFBPTpisps5vO3eZwyILqSLzzu454neC+nmrV0L2pgW0gmt66L
+   nAkfdqy7RiwfpiuOLSsLqcMDVQaTzLcJa18ZwKOFr7BFMgZ2WPU8Uik6M
    w==;
 X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="227558484"
+   d="scan'208";a="213686407"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 May 2023 02:39:40 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 May 2023 02:39:44 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 30 May 2023 02:39:39 -0700
+ 15.1.2507.21; Tue, 30 May 2023 02:39:44 -0700
 Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Tue, 30 May 2023 02:39:35 -0700
+ 15.1.2507.21 via Frontend Transport; Tue, 30 May 2023 02:39:40 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
         <luca.ceresoli@bootlin.com>, <nm@ti.com>, <kristo@kernel.org>,
@@ -51,9 +51,9 @@ CC:     <aford173@gmail.com>, <mike.looijmans@topic.nl>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-omap@vger.kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 1/8] clk: vc5: check memory returned by kasprintf()
-Date:   Tue, 30 May 2023 12:39:06 +0300
-Message-ID: <20230530093913.1656095-2-claudiu.beznea@microchip.com>
+Subject: [PATCH 2/8] clk: cdce925: check return value of kasprintf()
+Date:   Tue, 30 May 2023 12:39:07 +0300
+Message-ID: <20230530093913.1656095-3-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230530093913.1656095-1-claudiu.beznea@microchip.com>
 References: <20230530093913.1656095-1-claudiu.beznea@microchip.com>
@@ -74,94 +74,50 @@ kasprintf() returns a pointer to dynamically allocated memory.
 Pointer could be NULL in case allocation fails. Check pointer validity.
 Identified with coccinelle (kmerr.cocci script).
 
-Fixes: f491276a5168 ("clk: vc5: Allow Versaclock driver to support multiple instances")
+Fixes: 19fbbbbcd3a3 ("Add TI CDCE925 I2C controlled clock synthesizer driver")
+Depends-on: e665f029a283 ("clk: Convert to using %pOFn instead of device_node.name")
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- drivers/clk/clk-versaclock5.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ drivers/clk/clk-cdce925.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
-index fa71a57875ce..40fdf2564aa7 100644
---- a/drivers/clk/clk-versaclock5.c
-+++ b/drivers/clk/clk-versaclock5.c
-@@ -1028,6 +1028,11 @@ static int vc5_probe(struct i2c_client *client)
- 	}
- 
- 	init.name = kasprintf(GFP_KERNEL, "%pOFn.mux", client->dev.of_node);
-+	if (!init.name) {
-+		ret = -ENOMEM;
-+		goto err_clk;
-+	}
-+
- 	init.ops = &vc5_mux_ops;
- 	init.flags = 0;
- 	init.parent_names = parent_names;
-@@ -1042,6 +1047,10 @@ static int vc5_probe(struct i2c_client *client)
- 		memset(&init, 0, sizeof(init));
- 		init.name = kasprintf(GFP_KERNEL, "%pOFn.dbl",
- 				      client->dev.of_node);
-+		if (!init.name) {
-+			ret = -ENOMEM;
-+			goto err_clk;
+diff --git a/drivers/clk/clk-cdce925.c b/drivers/clk/clk-cdce925.c
+index 6350682f7e6d..87890669297d 100644
+--- a/drivers/clk/clk-cdce925.c
++++ b/drivers/clk/clk-cdce925.c
+@@ -701,6 +701,10 @@ static int cdce925_probe(struct i2c_client *client)
+ 	for (i = 0; i < data->chip_info->num_plls; ++i) {
+ 		pll_clk_name[i] = kasprintf(GFP_KERNEL, "%pOFn.pll%d",
+ 			client->dev.of_node, i);
++		if (!pll_clk_name[i]) {
++			err = -ENOMEM;
++			goto error;
 +		}
- 		init.ops = &vc5_dbl_ops;
- 		init.flags = CLK_SET_RATE_PARENT;
- 		init.parent_names = parent_names;
-@@ -1057,6 +1066,10 @@ static int vc5_probe(struct i2c_client *client)
- 	/* Register PFD */
- 	memset(&init, 0, sizeof(init));
- 	init.name = kasprintf(GFP_KERNEL, "%pOFn.pfd", client->dev.of_node);
+ 		init.name = pll_clk_name[i];
+ 		data->pll[i].chip = data;
+ 		data->pll[i].hw.init = &init;
+@@ -742,6 +746,10 @@ static int cdce925_probe(struct i2c_client *client)
+ 	init.num_parents = 1;
+ 	init.parent_names = &parent_name; /* Mux Y1 to input */
+ 	init.name = kasprintf(GFP_KERNEL, "%pOFn.Y1", client->dev.of_node);
 +	if (!init.name) {
-+		ret = -ENOMEM;
-+		goto err_clk;
++		err = -ENOMEM;
++		goto error;
 +	}
- 	init.ops = &vc5_pfd_ops;
- 	init.flags = CLK_SET_RATE_PARENT;
- 	init.parent_names = parent_names;
-@@ -1074,6 +1087,10 @@ static int vc5_probe(struct i2c_client *client)
- 	/* Register PLL */
- 	memset(&init, 0, sizeof(init));
- 	init.name = kasprintf(GFP_KERNEL, "%pOFn.pll", client->dev.of_node);
-+	if (!init.name) {
-+		ret = -ENOMEM;
-+		goto err_clk;
-+	}
- 	init.ops = &vc5_pll_ops;
- 	init.flags = CLK_SET_RATE_PARENT;
- 	init.parent_names = parent_names;
-@@ -1093,6 +1110,10 @@ static int vc5_probe(struct i2c_client *client)
- 		memset(&init, 0, sizeof(init));
- 		init.name = kasprintf(GFP_KERNEL, "%pOFn.fod%d",
- 				      client->dev.of_node, idx);
+ 	data->clk[0].chip = data;
+ 	data->clk[0].hw.init = &init;
+ 	data->clk[0].index = 0;
+@@ -760,6 +768,10 @@ static int cdce925_probe(struct i2c_client *client)
+ 	for (i = 1; i < data->chip_info->num_outputs; ++i) {
+ 		init.name = kasprintf(GFP_KERNEL, "%pOFn.Y%d",
+ 			client->dev.of_node, i+1);
 +		if (!init.name) {
-+			ret = -ENOMEM;
-+			goto err_clk;
++			err = -ENOMEM;
++			goto error;
 +		}
- 		init.ops = &vc5_fod_ops;
- 		init.flags = CLK_SET_RATE_PARENT;
- 		init.parent_names = parent_names;
-@@ -1111,6 +1132,10 @@ static int vc5_probe(struct i2c_client *client)
- 	memset(&init, 0, sizeof(init));
- 	init.name = kasprintf(GFP_KERNEL, "%pOFn.out0_sel_i2cb",
- 			      client->dev.of_node);
-+	if (!init.name) {
-+		ret = -ENOMEM;
-+		goto err_clk;
-+	}
- 	init.ops = &vc5_clk_out_ops;
- 	init.flags = CLK_SET_RATE_PARENT;
- 	init.parent_names = parent_names;
-@@ -1137,6 +1162,10 @@ static int vc5_probe(struct i2c_client *client)
- 		memset(&init, 0, sizeof(init));
- 		init.name = kasprintf(GFP_KERNEL, "%pOFn.out%d",
- 				      client->dev.of_node, idx + 1);
-+		if (!init.name) {
-+			ret = -ENOMEM;
-+			goto err_clk;
-+		}
- 		init.ops = &vc5_clk_out_ops;
- 		init.flags = CLK_SET_RATE_PARENT;
- 		init.parent_names = parent_names;
+ 		data->clk[i].chip = data;
+ 		data->clk[i].hw.init = &init;
+ 		data->clk[i].index = i;
 -- 
 2.34.1
 
