@@ -2,74 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C3A7163DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3DF7163E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjE3OXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
+        id S232513AbjE3OYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbjE3OXb (ORCPT
+        with ESMTP id S232505AbjE3OXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:23:31 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3946E192
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:22:55 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-3357fc32a31so753455ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:22:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685456572; x=1688048572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SMQ9ry8AKTO2FR7tRHTRE93ffp9TP0HpWMZoGgQvYPQ=;
-        b=V05PqSXnA/o4aizLouT8C2GNTnWY6Jmz3rPcWRR6mywaAUXjuFQVBqL8n43YaW8lKZ
-         lh3UJRUh8Lx/GZPnqEfgKEkYJejr5+w4tQjI5MNHp9Ru6g7bYDRFAwYnfe4Bkqxdp9tU
-         CX0Y7d2iwsnVfC4nCDzPphTXgpfmA/iOjqRhzl3LHhb12Qq/P0SQ0ZWMj3Tooe8N6sui
-         F/785TkH0bWEk/ua64A6iLfNwNLnnDIVE0YvTALbpD8v0cF+NTQ7RWnosUA1k1V9/kgf
-         kJBfWKPN9lUlQozDDRB9eQimr3bc8ssAX/dhzR2wK523e9oQKyXo6c7E3JInD/9Ovt68
-         JiiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685456572; x=1688048572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SMQ9ry8AKTO2FR7tRHTRE93ffp9TP0HpWMZoGgQvYPQ=;
-        b=Lt7vEj8lSULOrZzQZlbbFkQ8OKbliGKUwCcOBDS2mVrH5SWAu/JRde4XGjl0RNDjRC
-         qNLPRHkERvhyKKUAQXwjk4p4YyYj4U0lGa+6rVD+TlkXsRb63GI+P6UcSRNaObgeQX2B
-         bf+9mPDJDPtbgwDBiT9XD3AtudhlnBzj3bBhkYEqyZDgFEyDuFEZcg481KPapmYUkhxV
-         mt5jrz1Ov4yAz8kNXfLRNQ7ubpY8LQgtIoHwMpr7z3L65H1UYWagP5pTL1o+UtAJyobc
-         pKlo3RP30gRkFmj92OcQ7f/tUIbFLP+5vpiojUW9ltOGqaztkNGd55PdJGb5RekzTL1Q
-         UjHg==
-X-Gm-Message-State: AC+VfDxvR12tqA9NtzmplMNKUzUf8IzOTtFnEGmJyAMJgTGdGdia1tzn
-        UObNPkQQjZF5HHMgaZg+RAfv61jOfyoZf6HQ9+s=
-X-Google-Smtp-Source: ACHHUZ6bAQuuHXpQlR+iC5nEfSoFbg5j9AdJTp/kx+0TZ1coKbNYT8KiYZ6HXc/m0Q1/bl2BmHMSwg==
-X-Received: by 2002:a05:6e02:219d:b0:33b:3a14:c14c with SMTP id j29-20020a056e02219d00b0033b3a14c14cmr1520578ila.3.1685456572032;
-        Tue, 30 May 2023 07:22:52 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id v11-20020a056638250b00b004035b26b6d8sm761464jat.2.2023.05.30.07.22.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 07:22:51 -0700 (PDT)
-Message-ID: <8e874109-db4a-82e3-4020-0596eeabbadf@kernel.dk>
-Date:   Tue, 30 May 2023 08:22:50 -0600
+        Tue, 30 May 2023 10:23:35 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891CB1702;
+        Tue, 30 May 2023 07:23:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=JB5w856AbvIstOIyH1LRsT5NgKxcolH3MM5jEqlJpow=; b=Dx/UbQ2+nJfzbKxm5WLF/uKidM
+        3kD4QT3lf/3HTuA8Ahtwxt7R6dN2z+nqhxKbhVRbhfR1Doz2TRbqI6DLG1AgdzV8sjzsSk6l4Tkby
+        U2Ky6b4JgsTEgUYRa0H40dVQAA6s6EMM1ezaGqZf99S2MA80xE4Dv9WWEiyue2XmyB2rEWLBhPfaj
+        9FT/8M6I7Q1OqcYS4J0ykR1k06f2FBQuu9wtPp+8Rr0Zuyb6XCGhtY42JrLAQIIA21n6tH9GJYXLV
+        f7HGhc044YMzcADGy618pBpVkY0x4fJ1qHCGVpVkijJ8O0JXROFXaQuTcLoBGIPEmydbrENX0YCre
+        Xs4N5zdQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55210)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q40FU-0002vl-PU; Tue, 30 May 2023 15:22:56 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q40FT-00087Q-2P; Tue, 30 May 2023 15:22:55 +0100
+Date:   Tue, 30 May 2023 15:22:55 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] net: dsa: slave: Advertise correct EEE capabilities at
+ slave PHY setup
+Message-ID: <ZHYGv7zcJd/Ad4hH@shell.armlinux.org.uk>
+References: <20230530122621.2142192-1-lukma@denx.de>
+ <ZHXzTBOtlPKqNfLw@shell.armlinux.org.uk>
+ <20230530160743.2c93a388@wsk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 0/7] block layer patches for bcachefs
-Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-References: <20230525214822.2725616-1-kent.overstreet@linux.dev>
- <ee03b7ce-8257-17f9-f83e-bea2c64aff16@kernel.dk>
- <ZHEaKQH22Uxk9jPK@moria.home.lan>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ZHEaKQH22Uxk9jPK@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530160743.2c93a388@wsk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,42 +66,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/26/23 2:44?PM, Kent Overstreet wrote:
-> On Fri, May 26, 2023 at 08:35:23AM -0600, Jens Axboe wrote:
->> On 5/25/23 3:48?PM, Kent Overstreet wrote:
->>> Jens, here's the full series of block layer patches needed for bcachefs:
->>>
->>> Some of these (added exports, zero_fill_bio_iter?) can probably go with
->>> the bcachefs pull and I'm just including here for completeness. The main
->>> ones are the bio_iter patches, and the __invalidate_super() patch.
->>>
->>> The bio_iter series has a new documentation patch.
->>>
->>> I would still like the __invalidate_super() patch to get some review
->>> (from VFS people? unclear who owns this).
->>
->> I wanted to check the code generation for patches 4 and 5, but the
->> series doesn't seem to apply to current -git nor my for-6.5/block.
->> There's no base commit in this cover letter either, so what is this
->> against?
->>
->> Please send one that applies to for-6.5/block so it's a bit easier
->> to take a closer look at this.
+On Tue, May 30, 2023 at 04:07:43PM +0200, Lukasz Majewski wrote:
+> Hi Russell,
 > 
-> Here you go:
-> git pull https://evilpiepirate.org/git/bcachefs.git block-for-bcachefs
+> > On Tue, May 30, 2023 at 02:26:21PM +0200, Lukasz Majewski wrote:
+> > > One can disable in device tree advertising of EEE capabilities of
+> > > PHY when 'eee-broken-100tx' property is present in DTS.
+> > > 
+> > > With DSA switch it also may happen that one would need to disable
+> > > EEE due to some network issues.
+> > > 
+> > > Corresponding switch DTS description:
+> > > 
+> > >  switch@0 {
+> > > 	 ports {
+> > > 		port@0 {
+> > > 		reg = <0>;
+> > > 		label = "lan1";
+> > > 		phy-handle = <&switchphy0>;
+> > > 		};
+> > > 	}
+> > > 	mdio {
+> > > 		switchphy0: switchphy@0 {
+> > > 		reg = <0>;
+> > > 		eee-broken-100tx;
+> > > 	};
+> > > 	};
+> > > 
+> > > This patch adjusts the content of MDIO_AN_EEE_ADV in MDIO_MMD_AN
+> > > "device" so the phydev->eee_broken_modes are taken into account
+> > > from the start of the slave PHYs.  
+> > 
+> > This should be handled by phylib today in recent kernels without the
+> > need for any patch (as I describe below, because the config_aneg PHY
+> > method should be programming it.) Are you seeing a problem with it
+> > in 6.4-rc?
+> 
+> Unfortunately, for this project I use LTS 5.15.z kernel.
+> 
+> My impression is that the mv88e6xxx driver is not handling EEE setup
+> during initialization (even with v6.4-rc).
+> 
+> I've tried to replace genphy_config_eee_advert() with phy_init_eee, but
+> it lacks the part to program PCS advertise registers.
 
-Thanks
+Firstly, I would advise backporting the EEE changes. The older EEE
+implementation was IMHO not particularly good (I think you can find
+a record in the archives of me stating that the old interfaces were
+just too quirky.)
 
-The re-exporting of helpers is somewhat odd - why is bcachefs special
-here and needs these, while others do not?
+Secondly, even if you program the PHY for EEE, unless you have
+something like an Atheros AR803x PHY with its SmartEEE, EEE needs
+the support of both the PHY and the MAC to which its connected to
+in order to work. It's the MAC which is the "client" which says
+to the PHY "I'm idle" and when both ends tell their PHYs that
+they're idle, the media link can then drop into the low power
+state.
 
-But the main issue for me are the iterator changes, which mostly just
-seems like unnecessary churn. What's the justification for these? The
-commit messages don;t really have any. Doesn't seem like much of a
-simplification, and in fact it's more code than before and obviously
-more stack usage as well.
+The 88e6xxx internal PHYs will communicate their EEE negotiation
+state back to the MACs, but for an external PHY, that won't happen,
+and there is no code in the 88e6xxx driver to configure the MAC to
+program the MAC to do EEE.
+
+So, I'm wondering what's actually going on here... can you give
+any more details about the hardware setup?
 
 -- 
-Jens Axboe
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
