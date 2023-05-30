@@ -2,86 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785B27169FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D1F7169FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbjE3Qnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
+        id S232771AbjE3Qne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjE3Qnd (ORCPT
+        with ESMTP id S232022AbjE3Qnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:43:33 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903C313E;
+        Tue, 30 May 2023 12:43:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8EB136;
         Tue, 30 May 2023 09:43:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xYpmKMQmPPeBdM21QayEVgKLDqZ+OIn6t8tDa7bpcxs=; b=WtHfSpWCRwXoq+kq2JbstX6p/c
-        YX+EIQlMpx2XWHFoCo4ZsG2THm5d1qtR/HPMmPJkuQ6doVJfHCPAeiK3B/xIguMHpyufiuMdDOY0H
-        YoKhAGE6AnMWyg9nRKGQ7jxgIn8rhaK0H0czFxWaZNnJlWCfnZDIs1q2Ac/Pm+MJMeNoVukUiYDuX
-        E7MbdiJYJOJLmMmx/GFQaAtHYAE3qjYaISQl7KkISWpkv7mpXtv7EqKf7crF+9tKkgepP7DTP4wmF
-        kf/UbMoxUapHGc2R1DOG6/zW1BXxqe6uVc6/Efo+UvgiP+ArjQCYcav/8nSOLEB0y3yUj+MoaqZdE
-        /Q/1qS0g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55382)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q42RH-00039H-OL; Tue, 30 May 2023 17:43:15 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q42RE-0008DR-6J; Tue, 30 May 2023 17:43:12 +0100
-Date:   Tue, 30 May 2023 17:43:12 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Lizhe <sensor1010@163.com>
-Cc:     andrew@lunn.ch, sebastian.hesselbarth@gmail.com,
-        gregory.clement@bootlin.com, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, linus.walleij@linaro.org,
-        brgl@bgdev.pl, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Subject: Re: [PATCH] drivers/gpio : Remove redundant clearing of
- IRQ_TYPE_SENSE_MASK
-Message-ID: <ZHYnoHK7YDCC7AMg@shell.armlinux.org.uk>
-References: <20230530162034.4004-1-sensor1010@163.com>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DA3E62A23;
+        Tue, 30 May 2023 16:43:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D53C433D2;
+        Tue, 30 May 2023 16:43:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685465001;
+        bh=SX7UeiLhXb5cPPeAxGsmaERjxLzomdFIpLg43h9HsBI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G7AcSZeaQi2zDTX6sWT3r7dQjqAz2JQpnfNxRlAsfFxKw8suEcMQ6zm45uvqTTHRL
+         rup3+qRHi0Hwdh+qrbSwe32RY62oFeyp/DRwSAtklT333grZNQkmZLzHT33ZalbSBP
+         kGxedLsRGE9vmPR9NlNFIE86u/xCsT22K5ckVzWQ=
+Date:   Tue, 30 May 2023 17:43:18 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Prashanth K <quic_prashk@quicinc.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Message-ID: <2023053037-entertain-challenge-5e27@gregkh>
+References: <1685421871-25391-1-git-send-email-quic_prashk@quicinc.com>
+ <2023053058-baffling-unveiling-e597@gregkh>
+ <498a0b96-4c40-cad6-8da7-e9819035ef22@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230530162034.4004-1-sensor1010@163.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <498a0b96-4c40-cad6-8da7-e9819035ef22@quicinc.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 12:20:34AM +0800, Lizhe wrote:
-> Before executing microchip_sgpio_irq_set_type(),
-> type has already been cleared IRQ_TYPE_SENSE_MASK, see __irq_set_trigger().
+On Tue, May 30, 2023 at 08:56:26PM +0530, Prashanth K wrote:
 > 
-> Signed-off-by: Lizhe <sensor1010@163.com>
+> 
+> On 30-05-23 07:58 pm, Greg Kroah-Hartman wrote:
+> > On Tue, May 30, 2023 at 10:14:31AM +0530, Prashanth K wrote:
+> > > Currently if we bootup a device without cable connected, then
+> > > usb-conn-gpio won't call set_role() since last_role is same as
+> > > current role. This happens because during probe last_role gets
+> > > initialised to zero.
+> > > 
+> > > To avoid this, added a new constant in enum usb_role, last_role
+> > > is set to USB_ROLE_UNKNOWN before performing initial detection.
+> > > 
+> > > While at it, also handle default case for the usb_role switch
+> > > in cdns3 to avoid build warnings.
+> > > 
+> > > Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+> > > Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+> > 
+> > Breaks the build :(
+> > 
+> > Please be more careful when submitting stuff, especially on v6 of a
+> > patch :(
+> 
+> Hi, sorry for the trouble, I didn't see any issue in while building locally
+> nor any warning/errors from test robot. Can you please point me to the error
+> report if available. If the build is breaking due to enum value
+> USB_ROLE_UNKNOWN unhandled in switch cases of other drivers, then i will
+> revert thing back to v1 where i used a macro for USB_ROLE_UNKNOWN in
+> usb-conn-gpio driver. Something like this in usb-conn-gpio.c would can help
+> us avoid adding default case in other drivers using usb_role.
+> 
+> #define USB_ROLE_UNKNWON (USB_ROLE_NONE - 1)
 
-Please do as Bart has requested.
+Just fix up the drivers that need it at the same time:
 
-Your patch touches two files, each of which are managed by *different*
-people via *different* trees. Re-posting your patch will *not* get it
-applied, because the reason it can't be applied is because you have not
-split it as people have asked you to do.
+  CC [M]  drivers/usb/roles/intel-xhci-usb-role-switch.o
+drivers/usb/roles/intel-xhci-usb-role-switch.c: In function ‘intel_xhci_usb_set_role’:
+drivers/usb/roles/intel-xhci-usb-role-switch.c:84:9: error: enumeration value ‘USB_ROLE_UNKNOWN’ not handled in switch [-Werror=switch]
+   84 |         switch (role) {
+      |         ^~~~~~
+cc1: all warnings being treated as errors
 
-So, there is no point you re-posting it in its current form. You will
-only make people frustrated, and if that continues, you will end up
-being ignored.
+thanks,
 
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+greg k-h
