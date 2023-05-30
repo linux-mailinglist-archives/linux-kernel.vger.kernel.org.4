@@ -2,272 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07AF0716FC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 23:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2D4716FC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 23:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbjE3Vbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 17:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
+        id S231199AbjE3VcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 17:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbjE3Vbp (ORCPT
+        with ESMTP id S233513AbjE3VcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 17:31:45 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4263C7;
-        Tue, 30 May 2023 14:31:43 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34ULM2dL022120;
-        Tue, 30 May 2023 21:31:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=7NRpPg4lmFN/kBzznPAjKO91BJzU63zyR8+mdkzWhfI=;
- b=kKcUGgxiB7a7915/O6Ma91PH1MIH15uI2Y1VnSEhgJHbo4yAMuCm/09hxZ39YZ9psCXt
- LaloZBrmXXvangRfVQO4/VotFfPXcC1STIVMHfXvepsBbeOHOJRnUKUY8yxE+URKZLF6
- Sus6b1FuBbvKdeu0q0l+gvckzIB7J48aUmZ0lGs+vlMaXuqWzKKFexgf3u+bIvij2bSU
- jQwjttQ4takU76i0sqsAu8N6g71XJLsFYVClEc9oqo3r+eiKpHnft4zafUmZSzBFLOQ0
- uYlPjGOZZ7DhBHQhA6UZJR7zHsQvlEzIjodzwdv7sqb21G4il4gxfVVXHpuz9STZRIXw Kg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwryer0j6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 21:31:40 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34ULVdMA007635
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 21:31:39 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 30 May 2023 14:31:39 -0700
-Date:   Tue, 30 May 2023 14:31:37 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] soc: qcom: rmtfs: Support dynamic placement of region
-Message-ID: <20230530213137.GA3645274@hu-bjorande-lv.qualcomm.com>
-References: <20230530193436.3833889-1-quic_bjorande@quicinc.com>
- <20230530193436.3833889-3-quic_bjorande@quicinc.com>
- <0e9903c0-4669-9298-e0ee-72fc775998c3@linaro.org>
+        Tue, 30 May 2023 17:32:14 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6519310B
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 14:32:01 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-565cfe4ece7so47641417b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 14:32:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685482320; x=1688074320;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oUp9Fa1pjHqmOtpYsaGQqzSHj8q6VMat88zgfBHsgW8=;
+        b=kHHoHsOf7lF6CDUvaNtAyCEgnCyP2bGwfuJMq9gXCZXWZqqx1WbUvB56MlrzA7Hotc
+         uJO3M0szvLU4CuMhFXOAUKDIhYljnrgoC4AH+aoNOtV0K9wgQCsP7qMrhS8Ki1OcmqW0
+         LS8gi4BJeroukpoORFTdpZPloWqNpbFpJNHalT3njf8z4LXUPD9K07U6lfqESESfQhky
+         TqzINm2hEPMxC0rQXw6dFm24K0uDkjmu5Ot2mVR89Ji57WKBL23txYOb3F0BXfwOFbhi
+         OtosBmxaF2CwDx6BZAXzdQJhktJCSZWEN7O2vQepDqhXKsiUvQAAM2sq6z+XvjBh8tpM
+         C4SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685482320; x=1688074320;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oUp9Fa1pjHqmOtpYsaGQqzSHj8q6VMat88zgfBHsgW8=;
+        b=HF5LmkSpybtmNfyS2QunuoD0g33/kpCYCq4zS5XnJaiTXhHUAcYLFFu8E8uNfjOzMq
+         Xn806SzrKdzu0sWiSLU+P3iBbvwmcuo9GcqApQYjiAfxhFGaIEk9XB1/vr0JsvLBcnO8
+         yyTzGIGPIOAYu5ow+SzO+VmFgnJCmRnRe4mxeP08s+glzFPXRlZ9pb8ifcJRYJqliCd0
+         bjc5g5qX2nIIBKcWeP4AoE2k7tXIkh8BX37+9ZVTe2Eh/cSZxniYZBy6BhQRfehKK0Xi
+         b5SAr9INWAEP99AAjTuUbU+z2YBUx8tdV8I3jEVF3oM8lRvRURmtnwPoYEcbGLjxtgqz
+         AQDg==
+X-Gm-Message-State: AC+VfDz615QgBgPUUThv0lluJsiKAjFNFdKbLI89tp2mI+3jQDml+oj4
+        PTxPW+V3i3VGvddKjtpNRtLKFO4AAEYGExGADHevIQ==
+X-Google-Smtp-Source: ACHHUZ5kjfq40HDnWtqS+JslKUrd3YahK0/x0fqljpS9+q38/inMNSUkw8fIogeUcXU3oZyoJPDSFWihbMH+PxASMYg=
+X-Received: by 2002:a81:4987:0:b0:565:ef60:3f2f with SMTP id
+ w129-20020a814987000000b00565ef603f2fmr3643003ywa.44.1685482320210; Tue, 30
+ May 2023 14:32:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <0e9903c0-4669-9298-e0ee-72fc775998c3@linaro.org>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rkcRdzAobJpBDzC1W823f2ayeOEdiF28
-X-Proofpoint-ORIG-GUID: rkcRdzAobJpBDzC1W823f2ayeOEdiF28
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_16,2023-05-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 clxscore=1015 spamscore=0 bulkscore=0 mlxscore=0
- impostorscore=0 priorityscore=1501 phishscore=0 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305300174
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230428004139.2899856-1-jiaqiyan@google.com> <20230428004139.2899856-5-jiaqiyan@google.com>
+ <20230530022456.GA1434147@hori.linux.bs1.fc.nec.co.jp>
+In-Reply-To: <20230530022456.GA1434147@hori.linux.bs1.fc.nec.co.jp>
+From:   Jiaqi Yan <jiaqiyan@google.com>
+Date:   Tue, 30 May 2023 14:31:49 -0700
+Message-ID: <CACw3F51shtGh97t3A3qhyg3E16stSifkgpcAZOi9JZuFFywfxA@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 4/7] mm/memory_failure: unmap raw HWPoison PTEs
+ when possible
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+Cc:     "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "duenwen@google.com" <duenwen@google.com>,
+        "axelrasmussen@google.com" <axelrasmussen@google.com>,
+        "jthoughton@google.com" <jthoughton@google.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>,
+        "shy828301@gmail.com" <shy828301@gmail.com>,
+        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
+        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 09:45:10PM +0200, Konrad Dybcio wrote:
-> 
-> 
-> On 30.05.2023 21:34, Bjorn Andersson wrote:
-> > In some configurations, the exact placement of the rmtfs shared memory
-> > region isn't so strict. In the current implementation the author of the
-> > DeviceTree source is forced to make up a memory region.
-> IIUC the test here would be... "works" / "doesn't", just as if one
-> misplaced the fixed region?
-> 
-
-The patch makes no effort to clarify this part.
-
-> Does the downstream sharedmem-uio driver do any additional cryptic
-> magic or does it simply rely on the vendor's cma/dma pool settings?
-> Can we replicate its behavior to stop hardcoding rmtfs, period?
-> 
-
-Alignment on that is the intention with this patchset.
-
-> > 
-> > Extend the rmtfs memory driver to relieve the author of this
-> > responsibility by introducing support for using dynamic allocation in
-> > the driver.
-> > 
-> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+On Mon, May 29, 2023 at 7:25=E2=80=AFPM HORIGUCHI NAOYA(=E5=A0=80=E5=8F=A3=
+=E3=80=80=E7=9B=B4=E4=B9=9F)
+<naoya.horiguchi@nec.com> wrote:
+>
+> On Fri, Apr 28, 2023 at 12:41:36AM +0000, Jiaqi Yan wrote:
+> > When a folio's VMA is HGM eligible, try_to_unmap_one now only unmaps
+> > the raw HWPOISON page (previously split and mapped at PTE size).
+> > If HGM failed to be enabled on eligible VMA or splitting failed,
+> > try_to_unmap_one fails.
+> >
+> > For VMS that is not HGM eligible, try_to_unmap_one still unmaps
+> > the whole P*D.
+> >
+> > When only the raw HWPOISON subpage is unmapped but others keep mapped,
+> > the old way in memory_failure to check if unmapping successful doesn't
+> > work. So introduce is_unmapping_successful() to cover both existing and
+> > new unmapping behavior.
+> >
+> > For the new unmapping behavior, store how many times a raw HWPOISON pag=
+e
+> > is expected to be unmapped, and how many times it is actually unmapped
+> > in try_to_unmap_one(). A HWPOISON raw page is expected to be unmapped
+> > from a VMA if splitting succeeded in try_to_split_huge_mapping(), so
+> > unmap_success =3D (nr_expected_unamps =3D=3D nr_actual_unmaps).
+> >
+> > Old folio_set_hugetlb_hwpoison returns -EHWPOISON if a folio has any
+> > raw HWPOISON subpage, and try_memory_failure_hugetlb won't attempt
+> > recovery actions again because recovery used to be done on the entire
+> > hugepage. With the new unmapping behavior, this doesn't hold. More
+> > subpages in the hugepage can become corrupted, and needs to be recovere=
+d
+> > (i.e. unmapped) individually. New folio_set_hugetlb_hwpoison returns
+> > 0 after adding a new raw subpage to raw_hwp_list.
+> >
+> > Unmapping raw HWPOISON page requires allocating raw_hwp_page
+> > successfully in folio_set_hugetlb_hwpoison, so try_memory_failure_huget=
+lb
+> > now may fail due to OOM.
+> >
+> > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
 > > ---
-> >  arch/arm64/boot/dts/qcom/sdm845-mtp.dts | 10 ++++
-> >  drivers/soc/qcom/rmtfs_mem.c            | 66 +++++++++++++++++++------
-> >  2 files changed, 61 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-> > index d1440b790fa6..e6191b8ba4c6 100644
-> > --- a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-> > +++ b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-> > @@ -12,6 +12,8 @@
-> >  #include "pm8998.dtsi"
-> >  #include "pmi8998.dtsi"
-> >  
-> > +/delete-node/ &rmtfs_mem;
-> > +
-> >  / {
-> >  	model = "Qualcomm Technologies, Inc. SDM845 MTP";
-> >  	compatible = "qcom,sdm845-mtp", "qcom,sdm845";
-> > @@ -48,6 +50,14 @@ vreg_s4a_1p8: pm8998-smps4 {
-> >  		vin-supply = <&vph_pwr>;
-> >  	};
-> >  
-> > +	rmtfs {
-> > +		compatible = "qcom,rmtfs-mem";
-> > +
-> > +		qcom,alloc-size = <(2*1024*1024)>;
-> > +		qcom,client-id = <1>;
-> > +		qcom,vmid = <15>;
-> > +	};
-> This should have been a separate patch.
-> 
-
-Of course, I should have paid more attention when I did the last git
-add, to not include test code...
-
-> > +
-> >  	thermal-zones {
-> >  		xo_thermal: xo-thermal {
-> >  			polling-delay-passive = <0>;
-> > diff --git a/drivers/soc/qcom/rmtfs_mem.c b/drivers/soc/qcom/rmtfs_mem.c
-> > index f83811f51175..5f56ded9f905 100644
-> > --- a/drivers/soc/qcom/rmtfs_mem.c
-> > +++ b/drivers/soc/qcom/rmtfs_mem.c
-> > @@ -3,6 +3,8 @@
-> >   * Copyright (c) 2017 Linaro Ltd.
-> >   */
-> >  
-> > +#include "linux/gfp_types.h"
-> > +#include "linux/sizes.h"
-> <>?
-> 
-> >  #include <linux/kernel.h>
-> >  #include <linux/cdev.h>
-> >  #include <linux/err.h>
-> > @@ -168,23 +170,63 @@ static void qcom_rmtfs_mem_release_device(struct device *dev)
-> >  	kfree(rmtfs_mem);
-> >  }
-> >  
-> > +static int qcom_rmtfs_acquire_mem(struct device *dev, struct qcom_rmtfs_mem *rmtfs_mem)
+> ...
+>
+> > @@ -1827,6 +1879,31 @@ EXPORT_SYMBOL_GPL(mf_dax_kill_procs);
+> >
+> >  #ifdef CONFIG_HUGETLB_PAGE
+> >
+> > +/*
+> > + * Given a HWPOISON @subpage as raw page, find its location in @folio'=
+s
+> > + * _hugetlb_hwpoison. Return NULL if @subpage is not in the list.
+> > + */
+> > +struct raw_hwp_page *find_in_raw_hwp_list(struct folio *folio,
+> > +                                       struct page *subpage)
 > > +{
-> > +	struct device_node *node = dev->of_node;
-> > +	struct reserved_mem *rmem;
-> > +	dma_addr_t dma_addr;
-> > +	void *mem;
-> > +	u32 size;
-> > +	int ret;
+> > +     struct llist_node *t, *tnode;
+> > +     struct llist_head *raw_hwp_head =3D raw_hwp_list_head(folio);
+> > +     struct raw_hwp_page *hwp_page =3D NULL;
+> > +     struct raw_hwp_page *p;
 > > +
-> > +	rmem = of_reserved_mem_lookup(node);
-> > +	if (rmem) {
-> > +		rmtfs_mem->addr = rmem->base;
-> > +		rmtfs_mem->size = rmem->size;
-> > +
-> > +		rmtfs_mem->base = devm_memremap(&rmtfs_mem->dev, rmtfs_mem->addr,
-> > +						rmtfs_mem->size, MEMREMAP_WC);
-> > +		if (IS_ERR(rmtfs_mem->base)) {
-> > +			dev_err(dev, "failed to remap rmtfs_mem region\n");
-> > +			return PTR_ERR(rmtfs_mem->base);
-> > +		}
-> > +
-> > +		return 0;
-> > +	}
-> > +
-> > +	ret = of_property_read_u32(node, "qcom,alloc-size", &size);
-> > +	if (ret < 0) {
-> > +		dev_err(dev, "rmtfs of unknown size\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Ensure that the protected region isn't adjacent to other protected
-> > +	 * regions by allocating an empty page on either side.
-> > +	 */
-> > +	mem = dma_alloc_coherent(dev, size + 2 * SZ_4K, &dma_addr, GFP_KERNEL);
-> Should this be made pagesize-independent? Can we even run non-4K kernels on msm?
-> 
+> > +     VM_BUG_ON_PAGE(PageHWPoison(subpage), subpage);
+>
+> I'm testing the series (on top of v6.2-rc4 + HGM v2 patchset) and found t=
+he
+> following error triggered by this VM_BUG_ON_PAGE().  The testcase is just=
+ to
+> inject hwpoison on an anonymous page (it's not hugetlb-related one).
 
-Yes, I fixed the issue in UFS and I believe Alex corrected the bug in
-IPA. With that I've been able to boot the few platforms where I've tried
-it with 16KB PAGE_SIZE.
+Thanks for reporting this problem, Naoya!
 
-That's however the Linux page size, the numbers here relates to things
-on the secure side.
+My mistake, this assertion meant to be "if !PageHWPoison(subpage)", to
+make sure the caller of find_in_raw_hwp_list is sure that subpage is
+hw corrupted.
 
-Regards,
-Bjorn
+>
+>   [  790.610985] =3D=3D=3D> testcase 'mm/hwpoison/base/backend-anonymous_=
+error-hard-offline_access-avoid.auto3' start
+>   [  793.304927] page:000000006743177b refcount:1 mapcount:0 mapping:0000=
+000000000000 index:0x700000000 pfn:0x14d739
+>   [  793.309322] memcg:ffff8a30c50b6000
+>   [  793.310934] anon flags: 0x57ffffe08a001d(locked|uptodate|dirty|lru|m=
+appedtodisk|swapbacked|hwpoison|node=3D1|zone=3D2|lastcpupid=3D0x1fffff)
+>   [  793.316665] raw: 0057ffffe08a001d ffffe93cc5353c88 ffffe93cc5685fc8 =
+ffff8a30c91878f1
+>   [  793.320211] raw: 0000000700000000 0000000000000000 00000001ffffffff =
+ffff8a30c50b6000
+>   [  793.323665] page dumped because: VM_BUG_ON_PAGE(PageHWPoison(subpage=
+))
+>   [  793.326764] ------------[ cut here ]------------
+>   [  793.329080] kernel BUG at mm/memory-failure.c:1894!
+>   [  793.331895] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+>   [  793.334854] CPU: 4 PID: 2644 Comm: mceinj.sh Tainted: G            E=
+    N 6.2.0-rc4-v6.2-rc2-230529-1404+ #63
+>   [  793.340710] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), B=
+IOS 1.16.1-2.fc37 04/01/2014
+>   [  793.345875] RIP: 0010:hwpoison_user_mappings+0x654/0x780
+>   [  793.349066] Code: ef 89 de e8 6e bc f8 ff 48 8b 7c 24 20 48 83 c7 58=
+ e8 10 bb d9 ff e9 5f fb ff ff 48 c7 c6 80 ce 4c b1 4c 89 ef e8 1c 38 f6 ff=
+ <0f> 0b 48 c7 c6 7b c8 4c b1 4c 89 ef e8 0b 38 f6 ff 0f 0b 8b 45 58
+>   [  793.359732] RSP: 0018:ffffa3ff85ed3d28 EFLAGS: 00010296
+>   [  793.362367] RAX: 000000000000003a RBX: 0000000000000018 RCX: 0000000=
+000000000
+>   [  793.365763] RDX: 0000000000000001 RSI: ffffffffb14ac451 RDI: 0000000=
+0ffffffff
+>   [  793.368698] RBP: ffffe93cc535ce40 R08: 0000000000000000 R09: ffffa3f=
+f85ed3ba0
+>   [  793.370837] R10: 0000000000000003 R11: ffffffffb1d3ed28 R12: 0000000=
+00014d739
+>   [  793.372903] R13: ffffe93cc535ce40 R14: ffffe93cc535ce40 R15: ffffe93=
+cc535ce40
+>   [  793.374931] FS:  00007f6ccc42a740(0000) GS:ffff8a31bbc00000(0000) kn=
+lGS:0000000000000000
+>   [  793.377136] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>   [  793.378656] CR2: 0000561aad6474b2 CR3: 00000001492d4005 CR4: 0000000=
+000170ee0
+>   [  793.380514] DR0: ffffffffb28ed7d0 DR1: ffffffffb28ed7d1 DR2: fffffff=
+fb28ed7d2
+>   [  793.382296] DR3: ffffffffb28ed7d3 DR6: 00000000ffff0ff0 DR7: 0000000=
+000000600
+>   [  793.384028] Call Trace:
+>   [  793.384655]  <TASK>
+>   [  793.385210]  ? __lru_add_drain_all+0x164/0x1f0
+>   [  793.386316]  memory_failure+0x352/0xaa0
+>   [  793.387249]  ? __pfx_bpf_lsm_capable+0x10/0x10
+>   [  793.388323]  ? __pfx_security_capable+0x10/0x10
+>   [  793.389350]  hard_offline_page_store+0x46/0x80
+>   [  793.390397]  kernfs_fop_write_iter+0x11e/0x200
+>   [  793.391441]  vfs_write+0x1e4/0x3a0
+>   [  793.392221]  ksys_write+0x53/0xd0
+>   [  793.392976]  do_syscall_64+0x3a/0x90
+>   [  793.393790]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>
+> I'm wondering how this code path is called, one possible path is like thi=
+s:
+>
+>   hwpoison_user_mappings
+>     if PageHuge(hpage) && !PageAnon(hpage)
+>       try_to_split_huge_mapping()
+>         find_in_raw_hwp_list
+>           VM_BUG_ON_PAGE(PageHWPoison(subpage), subpage)
+>
+> but this looks unlikely because the precheck "PageHuge(hpage) && !PageAno=
+n(hpage)" is
+> false for anonymous pages.
+>
+> Another possible code path is:
+>
+>   hwpoison_user_mappings
+>     if PageHuge(hpage) && !PageAnon(hpage)
+>       ...
+>     else
+>       try_to_unmap
+>         rmap_walk
+>           rmap_walk_anon
+>             try_to_unmap_one
+>               if folio_test_hugetlb
+>                 if hgm_eligible
+>                   find_in_raw_hwp_list
+>                     VM_BUG_ON_PAGE(PageHWPoison(subpage), subpage)
+>
+> but this looks also unlikely because of checking folio_test_hugetlb and h=
+gm_eligible
+> (I think both are false in this testcase.)
+> Maybe I miss something (and I'll dig this more), but let me share the iss=
+ue.
 
-> Konrad
-> > +	if (mem) {
-> > +		rmtfs_mem->base = mem + SZ_4K;
-> > +		rmtfs_mem->addr = dma_addr + SZ_4K;
-> > +		rmtfs_mem->size = size;
-> > +
-> > +		return 0;
-> > +	}
-> > +
-> > +	dev_err(dev, "unable to allocate memory for rmtfs mem\n");
-> > +	return -ENOMEM;
-> > +}
-> > +
-> >  static int qcom_rmtfs_mem_probe(struct platform_device *pdev)
-> >  {
-> >  	struct device_node *node = pdev->dev.of_node;
-> >  	struct qcom_scm_vmperm perms[NUM_MAX_VMIDS + 1];
-> > -	struct reserved_mem *rmem;
-> >  	struct qcom_rmtfs_mem *rmtfs_mem;
-> >  	u32 client_id;
-> >  	u32 vmid[NUM_MAX_VMIDS];
-> >  	int num_vmids;
-> >  	int ret, i;
-> >  
-> > -	rmem = of_reserved_mem_lookup(node);
-> > -	if (!rmem) {
-> > -		dev_err(&pdev->dev, "failed to acquire memory region\n");
-> > -		return -EINVAL;
-> > -	}
-> > -
-> >  	ret = of_property_read_u32(node, "qcom,client-id", &client_id);
-> >  	if (ret) {
-> >  		dev_err(&pdev->dev, "failed to parse \"qcom,client-id\"\n");
-> > @@ -196,22 +238,16 @@ static int qcom_rmtfs_mem_probe(struct platform_device *pdev)
-> >  	if (!rmtfs_mem)
-> >  		return -ENOMEM;
-> >  
-> > -	rmtfs_mem->addr = rmem->base;
-> >  	rmtfs_mem->client_id = client_id;
-> > -	rmtfs_mem->size = rmem->size;
-> >  
-> >  	device_initialize(&rmtfs_mem->dev);
-> >  	rmtfs_mem->dev.parent = &pdev->dev;
-> >  	rmtfs_mem->dev.groups = qcom_rmtfs_mem_groups;
-> >  	rmtfs_mem->dev.release = qcom_rmtfs_mem_release_device;
-> >  
-> > -	rmtfs_mem->base = devm_memremap(&rmtfs_mem->dev, rmtfs_mem->addr,
-> > -					rmtfs_mem->size, MEMREMAP_WC);
-> > -	if (IS_ERR(rmtfs_mem->base)) {
-> > -		dev_err(&pdev->dev, "failed to remap rmtfs_mem region\n");
-> > -		ret = PTR_ERR(rmtfs_mem->base);
-> > +	ret = qcom_rmtfs_acquire_mem(&pdev->dev, rmtfs_mem);
-> > +	if (ret < 0)
-> >  		goto put_device;
-> > -	}
-> >  
-> >  	cdev_init(&rmtfs_mem->cdev, &qcom_rmtfs_mem_fops);
-> >  	rmtfs_mem->cdev.owner = THIS_MODULE;
+I bet it is in "is_unmapping_successful". So another problem with this
+patch is, "is_unmapping_successful" should only calls
+find_in_raw_hwp_list after it handles non hugetlb and non shared
+mapping, i.e.:
+
+struct raw_hwp_page *hwp_page =3D NULL;
+
+if (!folio_test_hugetlb(folio) ||
+    folio_test_anon(folio) ||
+    !IS_ENABLED(CONFIG_HUGETLB_HIGH_GRANULARITY_MAPPING)) {
+        ...
+}
+
+hwp_page =3D find_in_raw_hwp_list(folio, poisoned_page);
+VM_BUG_ON_PAGE(!hwp_page, poisoned_page);
+
+I will make sure these two issues get fixed up in follow-up revisions.
+
+>
+> Thanks,
+> Naoya Horiguchi
