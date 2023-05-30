@@ -2,119 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66A5716867
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C02D716886
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233126AbjE3QAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48132 "EHLO
+        id S233243AbjE3QCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233089AbjE3QAu (ORCPT
+        with ESMTP id S233185AbjE3QBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:00:50 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B074B2;
+        Tue, 30 May 2023 12:01:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCA9B2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:00:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685462455;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cpizXiy/LDrr+SJt8KqJ4lnndh1NLm4zehYJ/eyPviI=;
+        b=CMiDdP//t65tTmqHCoavUMdLTLRMXiOCGG3IPm127QAzSoCb12kPYQewuwwdjuUYRoL9xa
+        BIEFvX3GcUlBo+HmxpAkYRRmISrpUP82uI6aRiWGtUYkokxGqR1fB3FVdaTXlUE28RjsaW
+        fPaCRs1BvHmS88MSlIvPc9CZ9zAyPC8=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-394-Cv1D08M1OLS-jG3QHhkikA-1; Tue, 30 May 2023 12:00:52 -0400
+X-MC-Unique: Cv1D08M1OLS-jG3QHhkikA-1
+Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2af2059164fso20823911fa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:00:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685462450; x=1688054450;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cpizXiy/LDrr+SJt8KqJ4lnndh1NLm4zehYJ/eyPviI=;
+        b=dYC3g4R7Rz16yG+ORdWMf3NtR7Ea4KlAt1FNUJ0qr1TkIf/IWjSdkNoV3i67TL0pi0
+         2Pd5CH4tRXBsbqjHAQQR8c7nwf2CTYz0Yb6U5CsKYfuWxcDlnV9ylkalHv5KARME1EDM
+         Ea/iLzgVtqWoqDgzKAqf1IQ5l/uMIVKrhpiZ4129CR5qVOLOblD+BUSviSaa6VLJ3wZC
+         XjfNAI1tB6kq5Wr83XUz7cw3aRpnXh6cU6C/L7U0ToAaU+g/v1sbgWoqywrSvuSNN55+
+         wPjpb3AToqupuYdE9mDBKmiIFg2s0loDyqLoZqRd3vXcSH2G85LE3KvKSxahq57CRt44
+         HXEw==
+X-Gm-Message-State: AC+VfDzc28Ogjrngl9lVuf4yY58QCzkGsaa7/CxG18oC29+DUvdOqUhu
+        zF/idRO4hdHnyfkFC18WSDSyTQLV1GFB/OXla0RmaC92QxORgfpg+WjR27hLwV2WHgaF/gnWfvL
+        xapvgODs/j5VzmGYMrOQyfIDn
+X-Received: by 2002:a2e:2e08:0:b0:2ac:8c5e:e151 with SMTP id u8-20020a2e2e08000000b002ac8c5ee151mr1108268lju.31.1685462450416;
+        Tue, 30 May 2023 09:00:50 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ65CUAQ0psNpySoTjwhH9D51FR0/IOamyhQpQTFmaHfXN81xSEWPOXkE63QmqLY9ZD61r047Q==
+X-Received: by 2002:a2e:2e08:0:b0:2ac:8c5e:e151 with SMTP id u8-20020a2e2e08000000b002ac8c5ee151mr1108234lju.31.1685462449966;
         Tue, 30 May 2023 09:00:49 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685462447;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m93yS995VjAenJm1Tq30bXHcCehNtX8a6hAD3sks2W4=;
-        b=AfBAWRGV89Mc653n/xLqy7vteib+6M5/l2mZj+wR8AGKO3PMoCQnprQPz2JjGFxvFh3npR
-        75LwJDM0EE4g+P7BnJV6fDBo0D5A2wsMq2qcoO+Epgc1++GT/hm/IsyZQlfl88sd3wNdLj
-        HacEZyX2iikiKMUlVpHMaBRfI2+ABpbUurQzM9ir/bGUnTaJbVHwLys+6ejBpuK/Ql2gfK
-        8t5edlP2m1H7BWSDdUEp+QUPxhedXZYO6JcbMtV5DS0rwT2VI36zKlSE9ot+0iGtjPkQ+7
-        L4moXOZFPonmdPVRaj68CTj/NyhRRfgqXsWZ04Esn64uoqL2rtpo8bp2DKqCyA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685462447;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m93yS995VjAenJm1Tq30bXHcCehNtX8a6hAD3sks2W4=;
-        b=kHOcw6J0QHtLvp0yEL0d0xC3npNrA5vZH/XdZXuEI3If84/jq/yLIElk56Kjr2Nz9yF9mV
-        nI3pJZIHdR0bsSDw==
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [patch] x86/smpboot: Disable parallel bootup if cc_vendor != NONE
-In-Reply-To: <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name>
-References: <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
- <87y1lbl7r6.ffs@tglx> <87sfbhlwp9.ffs@tglx>
- <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name> <87bki3kkfi.ffs@tglx>
- <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
- <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name> <87mt1mjhk3.ffs@tglx>
- <87jzwqjeey.ffs@tglx> <87cz2ija1e.ffs@tglx>
- <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name>
-Date:   Tue, 30 May 2023 18:00:46 +0200
-Message-ID: <87wn0pizbl.ffs@tglx>
+Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
+        by smtp.gmail.com with ESMTPSA id j13-20020a170906474d00b0096a5d341b50sm7520587ejs.111.2023.05.30.09.00.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 09:00:49 -0700 (PDT)
+Date:   Tue, 30 May 2023 18:00:47 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>
+Cc:     syzbot <syzbot+d0d442c22fa8db45ff0e@syzkaller.appspotmail.com>,
+        jasowang@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org, stefanha@redhat.com
+Subject: Re: [syzbot] [kvm?] [net?] [virt?] general protection fault in
+ vhost_work_queue
+Message-ID: <CAGxU2F7HK5KRggiY7xnKHeXFRXJmqcKbjf3JnXC3mbmn9xqRtw@mail.gmail.com>
+References: <0000000000001777f605fce42c5f@google.com>
+ <20230530072310-mutt-send-email-mst@kernel.org>
+ <CAGxU2F7O7ef3mdvNXtiC0VtWiS2DMnoiGwSR=Z6SWbzqcrBF-g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGxU2F7O7ef3mdvNXtiC0VtWiS2DMnoiGwSR=Z6SWbzqcrBF-g@mail.gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30 2023 at 15:29, Kirill A. Shutemov wrote:
-> On Tue, May 30, 2023 at 02:09:17PM +0200, Thomas Gleixner wrote:
->> The decision to allow parallel bringup of secondary CPUs checks
->> CC_ATTR_GUEST_STATE_ENCRYPT to detect encrypted guests. Those cannot use
->> parallel bootup because accessing the local APIC is intercepted and raises
->> a #VC or #VE, which cannot be handled at that point.
->> 
->> The check works correctly, but only for AMD encrypted guests. TDX does not
->> set that flag.
->> 
->> Check for cc_vendor != CC_VENDOR_NONE instead. That might be overbroad, but
->> definitely works for both AMD and Intel.
+On Tue, May 30, 2023 at 3:44 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
 >
-> It boots fine with TDX, but I think it is wrong. cc_get_vendor() will
-> report CC_VENDOR_AMD even on bare metal if SME is enabled. I don't think
-> we want it.
+> On Tue, May 30, 2023 at 1:24 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Tue, May 30, 2023 at 12:30:06AM -0700, syzbot wrote:
+> > > Hello,
+> > >
+> > > syzbot found the following issue on:
+> > >
+> > > HEAD commit:    933174ae28ba Merge tag 'spi-fix-v6.4-rc3' of git://git.ker..
+> > > git tree:       upstream
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=138d4ae5280000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=f389ffdf4e9ba3f0
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=d0d442c22fa8db45ff0e
+> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > >
+> > > Unfortunately, I don't have any reproducer for this issue yet.
+> > >
+> > > Downloadable assets:
+> > > disk image: https://storage.googleapis.com/syzbot-assets/21a81b8c2660/disk-933174ae.raw.xz
+> > > vmlinux: https://storage.googleapis.com/syzbot-assets/b4951d89e238/vmlinux-933174ae.xz
+> > > kernel image: https://storage.googleapis.com/syzbot-assets/21eb405303cc/bzImage-933174ae.xz
+> > >
+> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > Reported-by: syzbot+d0d442c22fa8db45ff0e@syzkaller.appspotmail.com
+> > >
+> > > general protection fault, probably for non-canonical address 0xdffffc000000000e: 0000 [#1] PREEMPT SMP KASAN
+> > > KASAN: null-ptr-deref in range [0x0000000000000070-0x0000000000000077]
+> > > CPU: 0 PID: 29845 Comm: syz-executor.4 Not tainted 6.4.0-rc3-syzkaller-00032-g933174ae28ba #0
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/16/2023
+> > > RIP: 0010:vhost_work_queue drivers/vhost/vhost.c:259 [inline]
+> > > RIP: 0010:vhost_work_queue+0xfc/0x150 drivers/vhost/vhost.c:248
+> > > Code: 00 00 fc ff df 48 89 da 48 c1 ea 03 80 3c 02 00 75 56 48 b8 00 00 00 00 00 fc ff df 48 8b 1b 48 8d 7b 70 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 42 48 8b 7b 70 e8 95 9e ae f9 5b 5d 41 5c 41 5d e9
+> > > RSP: 0018:ffffc9000333faf8 EFLAGS: 00010202
+> > > RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc9000d84d000
+> > > RDX: 000000000000000e RSI: ffffffff841221d7 RDI: 0000000000000070
+> > > RBP: ffff88804b6b95b0 R08: 0000000000000001 R09: 0000000000000000
+> > > R10: 0000000000000001 R11: 0000000000000000 R12: ffff88804b6b00b0
+> > > R13: 0000000000000000 R14: ffff88804b6b95e0 R15: ffff88804b6b95c8
+> > > FS:  00007f3b445ec700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > CR2: 0000001b2e423000 CR3: 000000005d734000 CR4: 00000000003506f0
+> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > DR3: 000000000000003b DR6: 00000000ffff0ff0 DR7: 0000000000000400
+> > > Call Trace:
+> > >  <TASK>
+> > >  vhost_transport_send_pkt+0x268/0x520 drivers/vhost/vsock.c:288
+> > >  virtio_transport_send_pkt_info+0x54c/0x820 net/vmw_vsock/virtio_transport_common.c:250
+> > >  virtio_transport_connect+0xb1/0xf0 net/vmw_vsock/virtio_transport_common.c:813
+> > >  vsock_connect+0x37f/0xcd0 net/vmw_vsock/af_vsock.c:1414
+> > >  __sys_connect_file+0x153/0x1a0 net/socket.c:2003
+> > >  __sys_connect+0x165/0x1a0 net/socket.c:2020
+> > >  __do_sys_connect net/socket.c:2030 [inline]
+> > >  __se_sys_connect net/socket.c:2027 [inline]
+> > >  __x64_sys_connect+0x73/0xb0 net/socket.c:2027
+> > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > >  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > RIP: 0033:0x7f3b4388c169
+> > > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > > RSP: 002b:00007f3b445ec168 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
+> > > RAX: ffffffffffffffda RBX: 00007f3b439ac050 RCX: 00007f3b4388c169
+> > > RDX: 0000000000000010 RSI: 0000000020000140 RDI: 0000000000000004
+> > > RBP: 00007f3b438e7ca1 R08: 0000000000000000 R09: 0000000000000000
+> > > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> > > R13: 00007f3b43acfb1f R14: 00007f3b445ec300 R15: 0000000000022000
+> > >  </TASK>
+> > > Modules linked in:
+> > > ---[ end trace 0000000000000000 ]---
+> > > RIP: 0010:vhost_work_queue drivers/vhost/vhost.c:259 [inline]
+> > > RIP: 0010:vhost_work_queue+0xfc/0x150 drivers/vhost/vhost.c:248
+> > > Code: 00 00 fc ff df 48 89 da 48 c1 ea 03 80 3c 02 00 75 56 48 b8 00 00 00 00 00 fc ff df 48 8b 1b 48 8d 7b 70 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 42 48 8b 7b 70 e8 95 9e ae f9 5b 5d 41 5c 41 5d e9
+> > > RSP: 0018:ffffc9000333faf8 EFLAGS: 00010202
+> > > RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc9000d84d000
+> > > RDX: 000000000000000e RSI: ffffffff841221d7 RDI: 0000000000000070
+> > > RBP: ffff88804b6b95b0 R08: 0000000000000001 R09: 0000000000000000
+> > > R10: 0000000000000001 R11: 0000000000000000 R12: ffff88804b6b00b0
+> > > R13: 0000000000000000 R14: ffff88804b6b95e0 R15: ffff88804b6b95c8
+> > > FS:  00007f3b445ec700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > CR2: 0000001b2e428000 CR3: 000000005d734000 CR4: 00000000003506e0
+> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > DR3: 000000000000003b DR6: 00000000ffff0ff0 DR7: 0000000000000400
+> > > ----------------
+> > > Code disassembly (best guess), 5 bytes skipped:
+> > >    0: 48 89 da                mov    %rbx,%rdx
+> > >    3: 48 c1 ea 03             shr    $0x3,%rdx
+> > >    7: 80 3c 02 00             cmpb   $0x0,(%rdx,%rax,1)
+> > >    b: 75 56                   jne    0x63
+> > >    d: 48 b8 00 00 00 00 00    movabs $0xdffffc0000000000,%rax
+> > >   14: fc ff df
+> > >   17: 48 8b 1b                mov    (%rbx),%rbx
+> > >   1a: 48 8d 7b 70             lea    0x70(%rbx),%rdi
+> > >   1e: 48 89 fa                mov    %rdi,%rdx
+> > >   21: 48 c1 ea 03             shr    $0x3,%rdx
+> > > * 25: 80 3c 02 00             cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+> > >   29: 75 42                   jne    0x6d
+> > >   2b: 48 8b 7b 70             mov    0x70(%rbx),%rdi
+> > >   2f: e8 95 9e ae f9          callq  0xf9ae9ec9
+> > >   34: 5b                      pop    %rbx
+> > >   35: 5d                      pop    %rbp
+> > >   36: 41 5c                   pop    %r12
+> > >   38: 41 5d                   pop    %r13
+> > >   3a: e9                      .byte 0xe9
+> >
+> >
+> > Stefano, Stefan, take a look?
+>
+> I'll take a look.
+>
+> From a first glance, it looks like an issue when we call vhost_work_queue().
+> @Mike, does that ring any bells since you recently looked at that code?
 
-Right. Did not think about that.
+I think it is partially related to commit 6e890c5d5021 ("vhost: use
+vhost_tasks for worker threads") and commit 1a5f8090c6de ("vhost: move
+worker thread fields to new struct"). Maybe that commits just
+highlighted the issue and it was already existing.
 
-But the same way is CC_ATTR_GUEST_MEM_ENCRYPT overbroad for AMD. Only
-SEV-ES traps RDMSR if I'm understandig that maze correctly.
+In this case I think there is a race between vhost_worker_create() and
+vhost_transport_send_pkt(). vhost_transport_send_pkt() calls
+vhost_work_queue() without holding the vhost device mutex, so it can run
+while vhost_worker_create() set dev->worker, but has not yet set
+worker->vtsk.
+
+Before commit 1a5f8090c6de ("vhost: move worker thread fields to new
+struct"), dev->worker is set when everything was ready, but maybe it was
+just a case of the instructions not being re-ordered and the problem
+could still occur.
+
+This happens because VHOST_VSOCK_SET_GUEST_CID can be called before
+VHOST_SET_OWNER and then vhost_transport_send_pkt() finds the guest's
+CID and tries to send it a packet.
+But is it correct to handle VHOST_VSOCK_SET_GUEST_CID, before
+VHOST_SET_OWNER?
+
+QEMU always calls VHOST_SET_OWNER before anything, but I don't know
+about the other VMMs.
+
+So, could it be an acceptable solution to reject
+VHOST_VSOCK_SET_GUEST_CID before VHOST_SET_OWNER?
+
+I mean somethig like this:
+
+diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+index 6578db78f0ae..33fc0805d189 100644
+--- a/drivers/vhost/vsock.c
++++ b/drivers/vhost/vsock.c
+@@ -829,7 +829,12 @@ static long vhost_vsock_dev_ioctl(struct file *f, unsigned int ioctl,
+        case VHOST_VSOCK_SET_GUEST_CID:
+                if (copy_from_user(&guest_cid, argp, sizeof(guest_cid)))
+                        return -EFAULT;
+-               return vhost_vsock_set_cid(vsock, guest_cid);
++               mutex_lock(&vsock->dev.mutex);
++               r = vhost_dev_check_owner(&vsock->dev);
++               if (!r)
++                       r = vhost_vsock_set_cid(vsock, guest_cid);
++               mutex_unlock(&vsock->dev.mutex);
++               return r;
+        case VHOST_VSOCK_SET_RUNNING:
+                if (copy_from_user(&start, argp, sizeof(start)))
+                        return -EFAULT;
+
+In the documentation, we say:
+
+  /* Set current process as the (exclusive) owner of this file descriptor.  This
+   * must be called before any other vhost command.  Further calls to
+   * VHOST_OWNER_SET fail until VHOST_OWNER_RESET is called. */
+
+This should prevents the issue, but could break a wrong userspace.
+
+Others idea that I have in mind are:
+- hold vsock->dev.mutex while calling vhost_work_queue() (performance 
+  degradation?)
+- use RCU to protect dev->worker
+
+WDYT?
 
 Thanks,
+Stefano
 
-        tglx
