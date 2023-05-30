@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012E77152A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 02:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B267152B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 02:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjE3ArC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 20:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
+        id S229726AbjE3Axy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 20:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjE3ArB (ORCPT
+        with ESMTP id S229571AbjE3Axu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 20:47:01 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id E81FDD9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 17:46:59 -0700 (PDT)
-Received: (qmail 389283 invoked by uid 1000); 29 May 2023 20:46:59 -0400
-Date:   Mon, 29 May 2023 20:46:59 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
-        balbi@ti.com, francesco@dolcini.it, alistair@alistair23.me,
-        stephan@gerhold.net, bagasdotme@gmail.com, luca@z3ntu.xyz,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] Revert "Revert "usb: gadget: udc: core: Invoke
- usb_gadget_connect only when started""
-Message-ID: <012c8b5b-0697-4965-bed8-fbed4c8910c9@rowland.harvard.edu>
-References: <20230529234816.3720623-1-badhri@google.com>
- <6547e73e-81e4-4a29-babf-13f852f1eb8b@rowland.harvard.edu>
+        Mon, 29 May 2023 20:53:50 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2092BDB
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 17:53:46 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 7073C2C0274;
+        Tue, 30 May 2023 12:53:44 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1685408024;
+        bh=9oONG5DFPFlhzS1QB858urQ+CpfCihmaDd33W3cYZy8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=e76VX0Oa5F2rjWhxJ9xKbie3DpqXYr0+taEfAv0B2s07Wo5aFmXkUSZPaE0nVwwJ5
+         FAwm2qYgqW3AmS4RjJi5+178eyhPe2b6wtOCEPr3LMQdRl7WkrILIvmpcgCZGZVzy8
+         csNWT0X9tPTiHAkXnE/GcZqoFoO29e3jMxIFQd7ycMjwqpYZpRO1pflC9Bz3vEjt+m
+         we/wbwzlUSgnb+rHHn6pv138f1zgDX8HGF8S3crc/C0t1gs89mP1XzimiSbBAW/t+z
+         aO31k8XI3HozoiurgLKxBn+NA2Zf6dbxx/jcJOllm0aO2H5PqPE+xVx6nIqOMdL25q
+         9M9g+iGBo7sDQ==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B647549180000>; Tue, 30 May 2023 12:53:44 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id 3AAD813EE41;
+        Tue, 30 May 2023 12:53:44 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id 38E2E283D16; Tue, 30 May 2023 12:53:44 +1200 (NZST)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, andrew@lunn.ch, gregory.clement@bootlin.com,
+        sebastian.hesselbarth@gmail.com, vadym.kochan@plvision.eu
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        enachman@marvell.com,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v6 0/2] dt-bindings: mtd: marvell-nand: Add YAML scheme
+Date:   Tue, 30 May 2023 12:53:35 +1200
+Message-Id: <20230530005337.3687938-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6547e73e-81e4-4a29-babf-13f852f1eb8b@rowland.harvard.edu>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=cLieTWWN c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=P0xRbXHiH_UA:10 a=YqPRQZ2WnNP4KUIKbxQA:9
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 08:42:18PM -0400, Alan Stern wrote:
-> On Mon, May 29, 2023 at 11:48:14PM +0000, Badhri Jagan Sridharan wrote:
-> > This reverts commit f22e9b67f19ccc73de1ae04375d4b30684e261f8.
+Add YAML scheme for the Marvell's NAND controller
+to validate it's DT bindings. Old txt file is deleted,
+not included the compatibles and properties which were marked as
+deprecated.
 
-This is not the format we use for referring to commits.
+Also fix node name in cp11x DTSI acording to nand-controller.yaml
 
-> > 
-> > The regression reported in
-> > https://lore.kernel.org/all/ZF4bMptC3Lf2Hnee@gerhold.net/ is being
-> > fixed in
-> > commit 7d7863db7cc0 ("usb: gadget: udc: core: Offload usb_udc_vbus_handler processing").
+I've picked up this series to hopefully get it over the line. I think I'v=
+e
+addressed all the feedback from the last round of review.
 
-That is the correct format.
+Vadym Kochan (2):
+  dt-bindings: mtd: marvell-nand: Convert to YAML DT scheme
+  arm64: dts: marvell: cp11x: Fix nand_controller node name according to
+    YAML
 
-> What commit is that?  It doesn't exist yet, at least, not in the 
-> mainline kernel.
-> 
-> > Hence reverting the revert.
-> > 
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> 
-> No!  Do not do this.  If you do, there will again be a version of the 
-> kernel that has the bug that caused the revert in the first place.  Even 
-> if it's only temporary, it could still affect people who are (for 
-> example) trying to run bisections.
-> 
-> Instead, reorder the patches.  First fix the underlying problem that 
-> led to the deadlocks.  Once that's in good shape then you can safely 
-> make this change.
+ .../bindings/mtd/marvell,nand-controller.yaml | 190 ++++++++++++++++++
+ .../devicetree/bindings/mtd/marvell-nand.txt  | 126 ------------
+ MAINTAINERS                                   |   1 -
+ arch/arm64/boot/dts/marvell/armada-cp11x.dtsi |   2 +-
+ 4 files changed, 191 insertions(+), 128 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mtd/marvell,nand-co=
+ntroller.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mtd/marvell-nand.tx=
+t
 
-I forgot to mention...  When you do eventually resubmit this, do NOT use 
-the commit message above.  It says absolutely nothing about what the 
-patch actually does or why it is needed.
+--=20
+2.40.1
 
-It's okay to mention that this reinstates something that had to be 
-reverted.  But you also need to include the information that was in the 
-original commit.
-
-Alan Stern
