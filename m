@@ -2,56 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE2F7154E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 07:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8CBD7154E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 07:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjE3FU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 01:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
+        id S229976AbjE3FVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 01:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjE3FUX (ORCPT
+        with ESMTP id S229507AbjE3FVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 01:20:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E108FAD;
-        Mon, 29 May 2023 22:20:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74863620FE;
-        Tue, 30 May 2023 05:20:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C2835C433D2;
-        Tue, 30 May 2023 05:20:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685424019;
-        bh=wZZq4xCSbnEzSxxDzNSdM/f6gmgE/fPraERIcsOOXSY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=KPdzcVFcU1Dj/iaZ6ZXL7f7Y77v6LV9i2v6bsRwu7tfn6E9qvSTUrN0ngTBezl5Z1
-         iZopWniLKkd1Bz4DdXk3p+TeiOxJVgqCkYIA037TAXLnZbGfAhZBCC/2wgO7dfdR/x
-         RXf8rhJw9CVe9qTjzDZb5x/MrkmmnOyghBYODzsFJuoDHqUfx3C3sdMwASvK6G1uE2
-         pw1YnrBMvMjfb8FRRhjfeAtjObVyrw71UTthasvqlKjWt7RwCUy/M+jlC/wtskFbJJ
-         npLPR3O/G3votTZ1nIcY8/VXnAqUqVBLi8GG0Vz0n+POshW3jB1di7pz8I7eg+0WKj
-         1wU6EoXTCPwkQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9EA69E52BF7;
-        Tue, 30 May 2023 05:20:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 30 May 2023 01:21:47 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0F7AD;
+        Mon, 29 May 2023 22:21:44 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1685424093t09pbsru
+Received: from linux-lab-host.localdomain ( [119.123.130.226])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 30 May 2023 13:21:32 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: q+yjhizk/eK4Twfz5/tkrE7vplCQXvJ4uATWgDp4FlclbHqgTQzECLOaM/5aW
+        ciP3qrlZXDUOoqXXgEGPnefG1bscVwQQcb7SNzzTIUIyuSYUnjA8MKAIs/4DWDkTv1UZ/hm
+        RMJH3jBhaBXbW+jZobqHikfj6kgNNqri+YL8Wf/avB5c+itkx6m82TmJENM86el0C6f/Hah
+        qDPSYwt8xGHJ0WHIxeW8UvilJGfwXk5SfSfWmTbHMizcoiuPY/0TCVlG/oPymB/LEqFCkxa
+        jd4aj/2GFDHuQnp5eeriEYwyGxXrr+Y3YlUbxdCrz7RaTK2mcAvBq2mBB0Fb9NGSN+dEcTt
+        TpvzNke228KrB4bPGDkzB13vfe9pBxTtmH12H0PsMyn3IJ2toM=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 6904062556633079927
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, arnd@arndb.de, w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 04/13] tools/nolibc: add missing nanoseconds support for __NR_statx
+Date:   Tue, 30 May 2023 13:21:32 +0800
+Message-Id: <20230530052132.364685-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <3a3edd48-1ace-4c89-89e8-9c594dd1b3c9@t-8ch.de>
+References: <3a3edd48-1ace-4c89-89e8-9c594dd1b3c9@t-8ch.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: usb: qmi_wwan: Set DTR quirk for BroadMobi BM818
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168542401964.30709.17776180857500968814.git-patchwork-notify@kernel.org>
-Date:   Tue, 30 May 2023 05:20:19 +0000
-References: <20230526-bm818-dtr-v1-1-64bbfa6ba8af@puri.sm>
-In-Reply-To: <20230526-bm818-dtr-v1-1-64bbfa6ba8af@puri.sm>
-To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-Cc:     bjorn@mork.no, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, angus@akkea.ca,
-        bob.ham@puri.sm, netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@puri.sm,
-        stable@vger.kernel.org
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,30 +51,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Thomas, Arnd, Willy
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 26 May 2023 16:38:11 +0200 you wrote:
-> BM818 is based on Qualcomm MDM9607 chipset.
+> On 2023-05-30 03:50:34+0800, Zhangjin Wu wrote:
+> > Commit a89c937d781a ("tools/nolibc: support nanoseconds in stat()")
+> > added nanoseconds for stat() but missed the statx case, this adds it.
 > 
-> Fixes: 9a07406b00cd ("net: usb: qmi_wwan: Add the BroadMobi BM818 card")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-> ---
->  drivers/net/usb/qmi_wwan.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Welp, I should have thought of that.
+> At least the testcase seems to have been useful.
+>
+
+yeah, your testcase telled me this issue.
+
+> Thanks for the fix!
 > 
-> [...]
+> > The stx_atime, stx_mtime, stx_ctime are in type of 'struct
+> > statx_timestamp', which is incompatible with 'struct timespec', should
+> > convert explicitly.
+> > 
+> >     /* include/uapi/linux/stat.h */
+> > 
+> >     struct statx_timestamp {
+> >     	__s64	tv_sec;
+> >     	__u32	tv_nsec;
+> >     	__s32	__reserved;
+> >     };
+> > 
+> >     /* include/uapi/linux/time_types.h */
+> >     struct __kernel_timespec {
+> >     	__kernel_time64_t       tv_sec;                 /* seconds */
+> >     	long long               tv_nsec;                /* nanoseconds */
+> >     };
+> > 
+> >     /* tools/include/nolibc/types.h */
+> >     #define timespec __kernel_timespec
+> > 
+> > Without this patch, the stat_timestamps test case would fail on rv32.
+> > 
+> > Fixes: a89c937d781a ("tools/nolibc: support nanoseconds in stat()")
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/include/nolibc/sys.h | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > index 154194056962..98cfa2f6d021 100644
+> > --- a/tools/include/nolibc/sys.h
+> > +++ b/tools/include/nolibc/sys.h
+> > @@ -1175,9 +1175,9 @@ int sys_stat(const char *path, struct stat *buf)
+> >  	buf->st_size    = statx.stx_size;
+> >  	buf->st_blksize = statx.stx_blksize;
+> >  	buf->st_blocks  = statx.stx_blocks;
+> > -	buf->st_atime   = statx.stx_atime.tv_sec;
+> > -	buf->st_mtime   = statx.stx_mtime.tv_sec;
+> > -	buf->st_ctime   = statx.stx_ctime.tv_sec;
+> > +	buf->st_atim    = (struct timespec){ .tv_sec = statx.stx_atime.tv_sec, .tv_nsec = statx.stx_atime.tv_nsec };
+> > +	buf->st_mtim    = (struct timespec){ .tv_sec = statx.stx_mtime.tv_sec, .tv_nsec = statx.stx_mtime.tv_nsec };
+> > +	buf->st_ctim    = (struct timespec){ .tv_sec = statx.stx_ctime.tv_sec, .tv_nsec = statx.stx_ctime.tv_nsec };
+> 
+> I would prefer to split the compound assignment into two single
+> assignments, though.
+> 
+> buf->st_ctim.tv_sec = statx.stx_ctime.tv_sec;
+> buf->st_ctim.tv_nsec = statx.stx_ctime.tv_nsec;
+>
 
-Here is the summary with links:
-  - net: usb: qmi_wwan: Set DTR quirk for BroadMobi BM818
-    https://git.kernel.org/netdev/net/c/36936a56e181
+Ok, will update it in the v3 revision.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+And further, what about removing the other !statx parts
+(__NR_newfstatat, __NR_stat)? just like we are doing for the other 64bit
+syscalls (llseek and time65).
 
+Best regards,
+Zhangjin
 
+> >  	return ret;
+> >  }
+> >  #else
