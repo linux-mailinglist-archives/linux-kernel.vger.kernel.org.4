@@ -2,247 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CD071564E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFC5715650
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjE3HNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
+        id S230115AbjE3HNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjE3HM5 (ORCPT
+        with ESMTP id S230262AbjE3HNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:12:57 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8813AA0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:12:54 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f6a6b9bebdso105965e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:12:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685430773; x=1688022773;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G3cFc7RANIcJvhNws8+gRe8zCxvl6o1XPZ5v1xwbSug=;
-        b=SubZmdtd6BrT9ZSk/axpRBkjpmFSRrYOgoNERl/VVvEjnQ18kfxvhGgBB7eGjbTdpR
-         3QX2fzyILCkU2LXT8dK6W4EbsZAQAKGecc1TOHbTg4P5a6FcRYJLUTP4w5MygPv7DQ6m
-         bfI8HhKHVzQ7l0OHIxuULTH0QJdydlaglAqh1+fq7FPMAHeh1yHIc2V4WmFerCVO34Qt
-         g6Tc77W0xk2L+WDOKPQsNPVq0gxQQxwEWNnL8POgxt7Wyqa/MEchpSuWdoUWgAltL2+7
-         wTRWEnlvo85pdNTcknk3y0TmbtoWyaNXY5KLSCmaB0EcFcOE0eLE2/j56jNIQBvt+3xQ
-         shUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685430773; x=1688022773;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G3cFc7RANIcJvhNws8+gRe8zCxvl6o1XPZ5v1xwbSug=;
-        b=lLA0XMNrFxed5bX7Xxb3nZ+ga5eBpmwGhfaLkQsu0akFiNU9NJMlSs2ZWXrrCqSRHZ
-         ZvufP91ymRCsC4OBXR90le+hW3dJWh8qSm6Zp5TLvA5O/tXrR77hdmodVTQhdBPcolCq
-         /FeMdzZEeu9bSI6nC/h9u079bLO35nXSEl2gVLvh7lQE0izsydEcMz8W9pmeZoP4SUmZ
-         n9pnx32rYIpSKwKImU6I91SilIsx7e6RIGU40DQVLpb6z9BIn4i2PPKqnSk/4exFkzab
-         vGfMiEebEwy1uSChVsx8qeGHdUxo06r5ZBTrPeWXX7VhegiW9WoHqr+RFQm0U7IatogQ
-         ns3g==
-X-Gm-Message-State: AC+VfDxkH/RUytb1k0zodsld8AGSg7sEbO53srurOvRPfSx1NdhE05+8
-        RDBOZp9B5ILleYvRLKbtqy5M9cJtAV0tsU4xj0UV/w==
-X-Google-Smtp-Source: ACHHUZ4M+bfA7oxAhuF6afKbVNiydRb78sigbaLhPnwo4W5tC7arlCGy5P4CBIa93OCpiIM4uxd7aPbBaeIyY8RDqe0=
-X-Received: by 2002:a05:600c:3b1c:b0:3f3:3855:c5d8 with SMTP id
- m28-20020a05600c3b1c00b003f33855c5d8mr90815wms.6.1685430772813; Tue, 30 May
- 2023 00:12:52 -0700 (PDT)
+        Tue, 30 May 2023 03:13:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA06A7;
+        Tue, 30 May 2023 00:13:00 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AC49A66059A8;
+        Tue, 30 May 2023 08:12:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685430779;
+        bh=FbpwufshqCYmNrpgiCFM4ItKYbmX+m5YBtViqULXOjE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VOKg+P6tVPHrrKQ0M/uf+I1xV1pegKrpKuwLHG5M0HBi+Pm64B+cGXL8DUXlkHvOR
+         GhrCP/MhPAZ6YeebuMDGhauYBfsxo3xEBkcBBsqFMcyLcH8hj8hFZu6WAlLiakNB8J
+         0Nw6SRWMLBe9Uy58PHGmgqpVJcg2XnjwiScXu6pDiXrR1llIWuRj2h7AC0BWXHiCv7
+         s1YS/pXBUwaTkSfXvpeMpyo88tK8j8yh9pynh2Vx/jZOdjuj0IMdneiWkL+HCSFE7M
+         GR4OF+rTQSd7qBm0uWgsmI9O13w5/I8EmyRTUUvvqlbJKisQq766z1N653hWyLp4Vo
+         LEeyBf5s/JnaA==
+Message-ID: <d39b0e77-e013-fe7e-9523-9bdbaacb5853@collabora.com>
+Date:   Tue, 30 May 2023 09:12:55 +0200
 MIME-Version: 1.0
-References: <20230529113804.GA20300@didi-ThinkCentre-M920t-N000>
-In-Reply-To: <20230529113804.GA20300@didi-ThinkCentre-M920t-N000>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 30 May 2023 09:12:41 +0200
-Message-ID: <CANn89iJw3Ehoj7GfYnc6Xv5N2wULqNuP3zNBwQx97i-YJD5avg@mail.gmail.com>
-Subject: Re: [PATCH net] tcp: introduce a compack timer handler in sack compression
-To:     Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Neal Cardwell <ncardwell@google.com>, netdev@vger.kernel.org,
-        Jason Xing <kerneljasonxing@gmail.com>,
-        zhangweiping <zhangweiping@didiglobal.com>,
-        tiozhang <tiozhang@didiglobal.com>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] arm64: dts: mediatek: mt8183: kukui: Add scp
+ firmware-name
+Content-Language: en-US
+To:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230220093343.3447381-1-hsinyi@chromium.org>
+ <CAGXv+5E4_k1jKTnninYkuT6Tf=skB00AowHpM+hc8j_VFM-RfQ@mail.gmail.com>
+ <CAJMQK-hnK69iVJhqW_8UtKHHLQ3608Cb74Jk_b+xHH0BBu4yVw@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAJMQK-hnK69iVJhqW_8UtKHHLQ3608Cb74Jk_b+xHH0BBu4yVw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 1:38=E2=80=AFPM fuyuanli <fuyuanli@didiglobal.com> =
-wrote:
->
-> We've got some issues when sending a compressed ack is deferred to
-> release phrase due to the socket owned by another user:
-> 1. a compressed ack would not be sent because of lack of ICSK_ACK_TIMER
-> flag.
+Il 30/05/23 07:12, Hsin-Yi Wang ha scritto:
+> On Tue, Feb 21, 2023 at 11:25 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
+>>
+>> On Mon, Feb 20, 2023 at 5:34 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>>>
+>>> The upstream SCP firmware path is /lib/firmware/mediatek/mt8183/scp.img
+>>>
+>>> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+>>
+>> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> 
+> hi Matthias,
+> 
+> Kindly ping on the patch, thanks!
 
-Are you sure ? Just add it then, your patch will be a one-liner
-instead of a complex one adding
-more code in a fast path.
+Agreed. Matthias, please pick this one.
 
-> 2. the tp->compressed_ack counter should be decremented by 1.
-> 3. we cannot pass timeout check and reset the delack timer in
-> tcp_delack_timer_handler().
-> 4. we are not supposed to increment the LINUX_MIB_DELAYEDACKS counter.
-> ...
->
-> The reason why it could happen is that we previously reuse the delayed
-> ack logic when handling the sack compression. With this patch applied,
-> the sack compression logic would go into the same function
-> (tcp_compack_timer_handler()) whether we defer sending ack or not.
-> Therefore, those two issued could be easily solved.
->
-> Here are more details in the old logic:
-> When sack compression is triggered in the tcp_compressed_ack_kick(),
-> if the sock is owned by user, it will set TCP_DELACK_TIMER_DEFERRED and
-> then defer to the release cb phrase. Later once user releases the sock,
-> tcp_delack_timer_handler() should send a ack as expected, which, however,
-> cannot happen due to lack of ICSK_ACK_TIMER flag. Therefore, the receiver
-> would not sent an ack until the sender's retransmission timeout. It
-> definitely increases unnecessary latency.
->
-> This issue happens rarely in the production environment. I used kprobe
-> to hook some key functions like tcp_compressed_ack_kick, tcp_release_cb,
-> tcp_delack_timer_handler and then found that when tcp_delack_timer_handle=
-r
-> was called, value of icsk_ack.pending was 1, which means we only had
-> flag ICSK_ACK_SCHED set, not including ICSK_ACK_TIMER. It was against
-> our expectations.
->
-> In conclusion, we chose to separate the sack compression from delayed
-> ack logic to solve issues only happening when the process is deferred.
->
-> Fixes: 5d9f4262b7ea ("tcp: add SACK compression")
-> Signed-off-by: fuyuanli <fuyuanli@didiglobal.com>
-> Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
-> ---
->  include/linux/tcp.h   |  2 ++
->  include/net/tcp.h     |  1 +
->  net/ipv4/tcp_output.c |  4 ++++
->  net/ipv4/tcp_timer.c  | 28 +++++++++++++++++++---------
->  4 files changed, 26 insertions(+), 9 deletions(-)
->
-> diff --git a/include/linux/tcp.h b/include/linux/tcp.h
-> index b4c08ac86983..cd15a9972c48 100644
-> --- a/include/linux/tcp.h
-> +++ b/include/linux/tcp.h
-> @@ -461,6 +461,7 @@ enum tsq_enum {
->         TCP_MTU_REDUCED_DEFERRED,  /* tcp_v{4|6}_err() could not call
->                                     * tcp_v{4|6}_mtu_reduced()
->                                     */
-> +       TCP_COMPACK_TIMER_DEFERRED, /* tcp_compressed_ack_kick() found so=
-cket was owned */
->  };
->
->  enum tsq_flags {
-> @@ -470,6 +471,7 @@ enum tsq_flags {
->         TCPF_WRITE_TIMER_DEFERRED       =3D (1UL << TCP_WRITE_TIMER_DEFER=
-RED),
->         TCPF_DELACK_TIMER_DEFERRED      =3D (1UL << TCP_DELACK_TIMER_DEFE=
-RRED),
->         TCPF_MTU_REDUCED_DEFERRED       =3D (1UL << TCP_MTU_REDUCED_DEFER=
-RED),
-> +       TCPF_COMPACK_TIMER_DEFERRED     =3D (1UL << TCP_DELACK_TIMER_DEFE=
-RRED),
->  };
->
->  #define tcp_sk(ptr) container_of_const(ptr, struct tcp_sock, inet_conn.i=
-csk_inet.sk)
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index 18a038d16434..e310d7bf400c 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-> @@ -342,6 +342,7 @@ void tcp_release_cb(struct sock *sk);
->  void tcp_wfree(struct sk_buff *skb);
->  void tcp_write_timer_handler(struct sock *sk);
->  void tcp_delack_timer_handler(struct sock *sk);
-> +void tcp_compack_timer_handler(struct sock *sk);
->  int tcp_ioctl(struct sock *sk, int cmd, unsigned long arg);
->  int tcp_rcv_state_process(struct sock *sk, struct sk_buff *skb);
->  void tcp_rcv_established(struct sock *sk, struct sk_buff *skb);
-> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> index cfe128b81a01..1703caab6632 100644
-> --- a/net/ipv4/tcp_output.c
-> +++ b/net/ipv4/tcp_output.c
-> @@ -1110,6 +1110,10 @@ void tcp_release_cb(struct sock *sk)
->                 tcp_delack_timer_handler(sk);
->                 __sock_put(sk);
->         }
-> +       if (flags & TCPF_COMPACK_TIMER_DEFERRED) {
-> +               tcp_compack_timer_handler(sk);
-> +               __sock_put(sk);
-> +       }
+Hsin-Yi, can you also please send a version of this patch for stable?
 
-Please do not add another test in the fast path.
-
-Just make sure tcp_delack_timer_handler() handles the case (this
-certainly was my intent)
-
-
->         if (flags & TCPF_MTU_REDUCED_DEFERRED) {
->                 inet_csk(sk)->icsk_af_ops->mtu_reduced(sk);
->                 __sock_put(sk);
-> diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
-> index b839c2f91292..069f6442069b 100644
-> --- a/net/ipv4/tcp_timer.c
-> +++ b/net/ipv4/tcp_timer.c
-> @@ -318,6 +318,23 @@ void tcp_delack_timer_handler(struct sock *sk)
->         }
->  }
->
-> +/* Called with BH disabled */
-> +void tcp_compack_timer_handler(struct sock *sk)
-> +{
-> +       struct tcp_sock *tp =3D tcp_sk(sk);
-> +
-> +       if (((1 << sk->sk_state) & (TCPF_CLOSE | TCPF_LISTEN)))
-> +               return;
-> +
-> +       if (tp->compressed_ack) {
-> +               /* Since we have to send one ack finally,
-> +                * subtract one from tp->compressed_ack to keep
-> +                * LINUX_MIB_TCPACKCOMPRESSED accurate.
-> +                */
-> +               tp->compressed_ack--;
-> +               tcp_send_ack(sk);
-> +       }
-> +}
->
->  /**
->   *  tcp_delack_timer() - The TCP delayed ACK timeout handler
-> @@ -757,16 +774,9 @@ static enum hrtimer_restart tcp_compressed_ack_kick(=
-struct hrtimer *timer)
->
->         bh_lock_sock(sk);
->         if (!sock_owned_by_user(sk)) {
-> -               if (tp->compressed_ack) {
-> -                       /* Since we have to send one ack finally,
-> -                        * subtract one from tp->compressed_ack to keep
-> -                        * LINUX_MIB_TCPACKCOMPRESSED accurate.
-> -                        */
-> -                       tp->compressed_ack--;
-> -                       tcp_send_ack(sk);
-> -               }
-> +               tcp_compack_timer_handler(sk);
->         } else {
-> -               if (!test_and_set_bit(TCP_DELACK_TIMER_DEFERRED,
-
-See, I was clearly intending to let tcp_delack_timer_handler() deal with th=
-is.
-
-> +               if (!test_and_set_bit(TCP_COMPACK_TIMER_DEFERRED,
->                                       &sk->sk_tsq_flags))
->                         sock_hold(sk);
->         }
-> --
-> 2.17.1
->
+Thanks,
+Angelo
