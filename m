@@ -2,77 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688A3716BE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A293716BEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233120AbjE3SEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 14:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
+        id S232558AbjE3SIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 14:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbjE3SEe (ORCPT
+        with ESMTP id S232007AbjE3SIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 14:04:34 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83018A3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:04:30 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-30aef0b8837so1704676f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:04:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1685469869; x=1688061869;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uURBJv3g3ArZjasZD7kZVLWPQS4crCRORUOeGLZEc5w=;
-        b=rCUYS0XDeitzk6/vdzhfmQ41b+Q/9ZjTuImmhA13YTNiQ+DUzem67lU9gOA71a9mzs
-         cp3bCFVuUTHqp1tmYAjVf4v5ysdDLuzNC1kOoGdYJnRYZKx1iy93cEb2xJULiwdjq0MP
-         XuWqfhxnPio9zYN+9Id+54Ut4jFCNzbPQsHtM/XlzyyrAS9W7TKQiZpr3YGwmIMz2bzY
-         4npL2miIWklD5rqGaTc0+jsImOSJKWb33VFo39vhdET1GpKEf+LFF3JOd+0Pcl/cKnXN
-         wkSFchuNlT2muLwsruVnQe/T6c60AcuxQg3PhFNBvizGDbckiWDUQAIdFHYmYCTDr9x4
-         GKEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685469869; x=1688061869;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uURBJv3g3ArZjasZD7kZVLWPQS4crCRORUOeGLZEc5w=;
-        b=SwIRCc18BXvIzL2bTkDrL5063G2OgKmtVig1Ge5RK12ThIOse9qDF82lRoinVhKNwD
-         0M91SmIkr1KjoYyZvjo+PSfzSW+ZcOWjGAzTLK6O8ar6HbheQoyf7sNWMDPnBmEXav4u
-         FQ/UEqYN0CTgTfsFtolR1L4Dx/wNB4YpFzLH9y27puQYrg9LNIOzl/Q4oojLYc/ntyMm
-         PXhAUIdHsPxBNxKinXcfgSjT7qxe6766MuW5PAVHielgcs0I6HGAypqbtGk0RMYaF/Ud
-         ZWRSjlH2eSmA4EbtnXf5fAkSAI/7cJ+x11lGE/V/lpHnVAif+wVbujFPONU1hG4K0K6k
-         JYpQ==
-X-Gm-Message-State: AC+VfDyL+f/n6M3UUvyTwlndWlk8+1ZLv4KR8dgtikAisIe5C0rJvCaA
-        tPJxLmhArEOqzYlIO7PwTivomUaXGjKL7qOryX4X7g==
-X-Google-Smtp-Source: ACHHUZ4TTBov4Ybg5E9FJ1qhnxNQ7HpfJ7GUFJKCEGWtauoRcccHns1I61grv9X0MCvQWxeUv5Og1A6WRUn6K8+U8Y4=
-X-Received: by 2002:adf:e84d:0:b0:2f2:9198:f0f with SMTP id
- d13-20020adfe84d000000b002f291980f0fmr2308885wrn.10.1685469868973; Tue, 30
- May 2023 11:04:28 -0700 (PDT)
+        Tue, 30 May 2023 14:08:38 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F0CB2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:08:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685470116; x=1717006116;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+QEGqPfFVuk+E/tI4xSylaB0JnSmbuyjuMwlxacAFwY=;
+  b=RdYa8MBHQzWbmq2PLlmMn+8xfDniu52X0K1iIALdK/UYzmEUFu6SGrJr
+   ENzNnWGdaw1DTUs2fs1jjANRybc5YzEm81nRArIaDxsTTx2+mnMICDJV6
+   ZJBOdAkhW5TW5sa/AzcXS8vsALVS0ApcjzoF6DgffKB1rNmiAUWRJbKDI
+   wzikHB0Vgutd7hpguYWe1E5leK+hxp1KJv0YpW8Otf7wrHrbbvwkrZ0CC
+   LQgDdBQ+a2cDyYJbzj1LzYtgagp8hQZJoIyzsoKYmPFWX69HMQ5GgL/JB
+   CAQ07yveQJRC0Wj8cFj13kc39lWGykIsIHjYe3PM05xaTe61eB0fzCBA7
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="383264085"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="383264085"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 11:08:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="1036697414"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="1036697414"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 30 May 2023 11:08:35 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q43lr-0000jP-0n;
+        Tue, 30 May 2023 18:08:35 +0000
+Date:   Wed, 31 May 2023 02:08:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: include/linux/compiler_types.h:338:45: error: call to
+ '__compiletime_assert_304' declared with attribute error: BUILD_BUG_ON
+ failed: SECTIONS_WIDTH + NODES_WIDTH + ZONES_WIDTH +
+ ilog2(roundup_pow_of_two(NR_CPUS)) > 32
+Message-ID: <202305310229.cc0htUa0-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230527-hyperlink-doctrine-ef22cfcb508a@spud>
- <CAHVXubgx3uBEjMLHXTxr0192ZHbSb=qK4NggZyWQTDfgrJt2-g@mail.gmail.com>
- <20230528-darkness-grandly-6cb9e014391d@spud> <cf0d2d2a-c407-7b3d-a5ab-ea5c19e7b890@ghiti.fr>
- <20230528-uneatable-earpiece-3f8673548863@spud> <b71dc2f5-fdc0-2a8d-e1f9-696cd9a1529e@ghiti.fr>
- <20230529-skillet-quarters-3fbc3b6edb3a@spud> <41e57bb9-ce0c-7772-abeb-5c01d5ec19bb@ghiti.fr>
- <20230530-polka-trifle-7ccd7a093099@wendy> <92d4aaa8-a1ed-74e1-3a22-df9be1ca1e4a@ghiti.fr>
- <20230530-hatchery-unifier-64d7a2ffe0d0@spud>
-In-Reply-To: <20230530-hatchery-unifier-64d7a2ffe0d0@spud>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Tue, 30 May 2023 20:04:17 +0200
-Message-ID: <CAHVXubgG31moSNOe3fRqFzUSJK9tRWKH1KPP_BO7wRNC4WzxTQ@mail.gmail.com>
-Subject: Re: [PATCH -fixes] riscv: Fix relocatable kernels with early
- alternatives using -fno-pie
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Alexandre Ghiti <alex@ghiti.fr>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andreas Schwab <schwab@linux-m68k.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,102 +65,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 7:47=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> On Tue, May 30, 2023 at 04:33:45PM +0200, Alexandre Ghiti wrote:
-> >
-> > On 30/05/2023 13:27, Conor Dooley wrote:
-> > > On Mon, May 29, 2023 at 09:37:28PM +0200, Alexandre Ghiti wrote:
-> > > > On 29/05/2023 21:06, Conor Dooley wrote:
-> > > > > On Mon, May 29, 2023 at 08:51:57PM +0200, Alexandre Ghiti wrote:
-> > > > > > On 28/05/2023 15:56, Conor Dooley wrote:
-> > > > > > > On Sun, May 28, 2023 at 03:42:59PM +0200, Alexandre Ghiti wro=
-te:
-> > > > > > > > Hmmm, it still works for me with both clang and gcc-9.
-> > > > > > > gcc-9 is a bit of a relic, do you have more recent compilers =
-lying
-> > > > > > > around? If not, I can try some older compilers at some point.
-> > > > > > >
-> > > > > > > > You don't have to do that now but is there a way I could ge=
-t your compiled
-> > > > > > > > image? With the sha1 used to build it? Sorry, I don't see w=
-hat happens, I
-> > > > > > > > need to get my hands dirty in some debug!
-> > > > > > > What do you mean by "sha1"? It falls with v6.4-rc1 which is a=
- stable
-> > > > > > > hash, if that's what you're looking for.
-> > > > > > >
-> > > > > > > Otherwise,
-> > > > > > > https://github.com/ConchuOD/riscv-env/releases/download/v2022=
-.03/vmlinux.bin
-> > > > > > > (ignore the release crap haha, too lazy to find a proper host=
-ing
-> > > > > > > mechanism)
-> > > > > > Ok, I don't get much info without the symbols, can you also pro=
-vide the
-> > > > > > vmlinux please? But at least your image does not boot, not duri=
-ng the early
-> > > > > > boot though because the mmu is enabled.
-> > > > > Do you see anything print when you try it? Cos I do not. Iff I ha=
-ve time
-> > > > > tomorrow, I'll go poking with gdb. I'm sorry I have not really do=
-ne any
-> > > > > investigating, I have been really busy this last week or so with
-> > > > > dt-binding stuff but I should be freer again from tomorrow.
-> > > > >
-> > > > > https://github.com/ConchuOD/riscv-env/releases/download/v2022.03/=
-vmlinux
-> > > >
-> > > > Better, the trap happens in kasan_early_init() when it tries to acc=
-ess a
-> > > > global symbol using the GOT but ends up with a NULL pointer, which =
-is weird.
-> > > > So to me, this is not related to kasan, it happens that kasan_early=
-_init()
-> > > > is the first function called after enabling the mmu, I think you ma=
-y have an
-> > > > issue with the filling of the relocations.
-> > > Yeah, it reproduces without KASAN.
-> > >
-> > > > Sorry to bother you again, but if
-> > > > at some point you can recompile with DEBUG_INFO enabled, that would=
- be
-> > > > perfect! And also provide the vmlinux.relocs file. Sorry for all th=
-at, too
-> > > > bad I can't reproduce it.
-> > > New vmlinux & vmlinux.relocs here:
-> > > https://microchiptechnology-my.sharepoint.com/:u:/g/personal/conor_do=
-oley_microchip_com/EZpFNxYYrnNAh5Z3c-rf0pUBBpdPGTLafqdtfcXRUUBkXw?e=3D7KKMH=
-X
-> > > They're pretty massive unfortunately & hopefully that is not some
-> > > garbage internal-only link.
-> > > .config is a wee bit different, cos different build machine, but the
-> > > problem still manifests on a icicle. I've added it to the tarball jus=
-t
-> > > in case.
-> >
-> >
-> > Ok so I had to recreate the Image from the files you gave me and it boo=
-ts
-> > fine using qemu: is that expected? Because you only mention the icicle
-> > above.
->
-> Unfortunately you sent this one right as I left work..
-> I ssh'ed in though and ran the vmlinux.bin & had the same issues.
-> Silly question perhaps - is it just not possible to boot something that
-> has been hit with `objcopy -O binary vmlinux vmlinux.bin` with
-> CONFIG_RELOCATABLE? At this point that's the main thing that sticks out
-> to me as being different. You couldn't boot the vmlinux.bin that I sent
-> you either.
+Hi Will,
 
-Ahah, I think we found the culprit!
+FYI, the error/warning still remains.
 
-With CONFIG_RELOCATABLE, vmlinux is actually stripped from all the
-relocations (so that it can be shipped) and vmlinux.relocs is what you
-should use instead, since it is just a copy of vmlinux before the
-removal of the relocations!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   8b817fded42d8fe3a0eb47b1149d907851a3c942
+commit: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
+date:   2 years, 10 months ago
+config: sparc-randconfig-r016-20230530 (https://download.01.org/0day-ci/archive/20230531/202305310229.cc0htUa0-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash arch/sparc/mm/
 
->
-> Cheers,
-> Conor.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305310229.cc0htUa0-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   arch/sparc/mm/init_64.c: In function 'arch_hugetlb_valid_size':
+   arch/sparc/mm/init_64.c:354:24: error: variable 'hv_pgsz_idx' set but not used [-Werror=unused-but-set-variable]
+     354 |         unsigned short hv_pgsz_idx;
+         |                        ^~~~~~~~~~~
+   In file included from <command-line>:
+   arch/sparc/mm/init_64.c: In function 'paging_init':
+>> include/linux/compiler_types.h:338:45: error: call to '__compiletime_assert_304' declared with attribute error: BUILD_BUG_ON failed: SECTIONS_WIDTH + NODES_WIDTH + ZONES_WIDTH + ilog2(roundup_pow_of_two(NR_CPUS)) > 32
+     338 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:319:25: note: in definition of macro '__compiletime_assert'
+     319 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:338:9: note: in expansion of macro '_compiletime_assert'
+     338 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   arch/sparc/mm/init_64.c:2306:9: note: in expansion of macro 'BUILD_BUG_ON'
+    2306 |         BUILD_BUG_ON(SECTIONS_WIDTH + NODES_WIDTH + ZONES_WIDTH +
+         |         ^~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+
+
+vim +/__compiletime_assert_304 +338 include/linux/compiler_types.h
+
+   324	
+   325	#define _compiletime_assert(condition, msg, prefix, suffix) \
+   326		__compiletime_assert(condition, msg, prefix, suffix)
+   327	
+   328	/**
+   329	 * compiletime_assert - break build and emit msg if condition is false
+   330	 * @condition: a compile-time constant condition to check
+   331	 * @msg:       a message to emit if condition is false
+   332	 *
+   333	 * In tradition of POSIX assert, this macro will break the build if the
+   334	 * supplied condition is *false*, emitting the supplied error message if the
+   335	 * compiler has support to do so.
+   336	 */
+   337	#define compiletime_assert(condition, msg) \
+ > 338		_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+   339	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
