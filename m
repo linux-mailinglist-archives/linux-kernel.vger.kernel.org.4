@@ -2,107 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E537716CD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6202716CD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232870AbjE3SxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 14:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
+        id S231756AbjE3SxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 14:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232541AbjE3SxL (ORCPT
+        with ESMTP id S229630AbjE3SxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 14:53:11 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B30106;
-        Tue, 30 May 2023 11:53:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6s4clEUBhhObMRbaHbpA0SDItwb8X/szVpDv0tngd0A=; b=AeSDmHAYyUo4rOKMXZZk+/nFPL
-        FJw7VkJZdv6K3ADKyqTZXfhZ1ix3cKN+04ysDnLWBUwDTOLPY8earrajsV5xyrfwinAq5KjnK0Ele
-        qaDnhSk4MhoUsenWd6lACG+tCHHMONTgTw5NB5NaGiAaAIdryJWxXgVGq/XxT2C/BxAO7mtPhSQ+w
-        bC8cl53NYPCTpYas0neg5kccPXTQ9a7b0DZ8BNProB4z//TPKmZgTwmqqJ/kLKMTmd4ufTTlhpV5f
-        Jw1vY0vEdulVKgF4FYt4bHs0tpVdNgPfX/MIopAXv1kePNq+/gw+28aAPsjXMnQIoRAbKCmitw4C4
-        2drd0a8A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q44SR-006XRv-6t; Tue, 30 May 2023 18:52:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D6079300194;
-        Tue, 30 May 2023 20:52:32 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BDB2124147355; Tue, 30 May 2023 20:52:32 +0200 (CEST)
-Date:   Tue, 30 May 2023 20:52:32 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     "Gupta, Pankaj" <pankaj.gupta@amd.com>,
-        Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, ashish.kalra@amd.com,
-        srutherford@google.com, akpm@linux-foundation.org,
-        anshuman.khandual@arm.com, pawan.kumar.gupta@linux.intel.com,
-        adrian.hunter@intel.com, daniel.sneddon@linux.intel.com,
-        alexander.shishkin@linux.intel.com, sandipan.das@amd.com,
-        ray.huang@amd.com, brijesh.singh@amd.com, michael.roth@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
-        pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH V6 01/14] x86/sev: Add a #HV exception handler
-Message-ID: <20230530185232.GA211927@hirez.programming.kicks-ass.net>
-References: <20230515165917.1306922-1-ltykernel@gmail.com>
- <20230515165917.1306922-2-ltykernel@gmail.com>
- <20230516093010.GC2587705@hirez.programming.kicks-ass.net>
- <d43c14d9-a149-860c-71d6-e5c62b7c356f@amd.com>
- <20230530143504.GA200197@hirez.programming.kicks-ass.net>
- <0f0ab135-cdd0-0691-e0c1-42645671fe15@amd.com>
+        Tue, 30 May 2023 14:53:03 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC2BA7;
+        Tue, 30 May 2023 11:53:02 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-75b050b75a1so302359385a.1;
+        Tue, 30 May 2023 11:53:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685472781; x=1688064781;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RL9pdM2o2z5T2G6D8vKneXdh0c/zBkvXlO/Xd4J2Dvo=;
+        b=DGgqnQd/dBiyyqsSxI+b2XTa+20cfxjVDJaDl2Epu6HDMH7RF4AeYJTD9iPfaUwL3w
+         iAY5W7YZ9rivRl5OuGSRHcY6/yINZLmUEFlzhu9K02PMfLF67tj/gAOWMqMHqqgZXkDy
+         /J81plLJ7DELb92OJxLfTMrCHnZ8Wg62yKwIMU4YOfITqdjChrgxsgHHMHjVDgPWbIfE
+         x2inywZXeRdPh06LntO61d5faRcUgT3uTRCfgMW8avu7wrOiiYgNBQPGgJeA1qECtlKi
+         b3D20uG/j0drXlLl1wAE9kGB7Z8ndbXCNpzpfvQLBpmwxN9EpHdxj9ldWFvjHaunRK9u
+         8ybQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685472781; x=1688064781;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RL9pdM2o2z5T2G6D8vKneXdh0c/zBkvXlO/Xd4J2Dvo=;
+        b=ZTYjwVDvhwdF3iXB4jEtmwpZ/5I6DCnxk86S2RkTwEYcTEML8JTBs47jkdJssE9rgT
+         DjwYx9Aw+U8ns/c+D6TtjhIfnwzUXDR3Wv+HoFD9WysORUXBDgEzhI5pciuyxzClz3CK
+         LL5RqiLsRcAzSkVqXCRRLEmGKlQfZrXqsKBzFSe14VFvZVdkMwuWJtyyp52H95pZyM2N
+         t5hylNIgXU1tQmTZhn3ATLf6+hRzaa/wrzrM1KQxSeOn9BeyRhQIWhKcD4eUgYKRx2gC
+         AKX8/loiZRRwIo71h0a0oT3Q1yi6Z/eoBE/oRVIpEA/wJTYc97RkJNSiOEa/6jdclO/q
+         FafA==
+X-Gm-Message-State: AC+VfDxB5ahAy3wocF+fmTH+uLhdyzFVFzWlNu3eKxGoPYr1hm0eIDy3
+        qzi07nwkGbcCs4DsQfk+COU=
+X-Google-Smtp-Source: ACHHUZ6s76j5kRhXWMwfpodXJ9vyN0EYG6XWzpPvY+UVc5uwXrLtoAlo4bG9Ra7fznbwLOtrZ3SLvw==
+X-Received: by 2002:a05:6214:c4c:b0:5e3:d150:3163 with SMTP id r12-20020a0562140c4c00b005e3d1503163mr3754919qvj.20.1685472781325;
+        Tue, 30 May 2023 11:53:01 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id f16-20020a05621400d000b006262d158ab9sm1343897qvs.124.2023.05.30.11.52.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 11:53:00 -0700 (PDT)
+Message-ID: <904bcc86-71a0-021f-55cd-bbef94b13801@gmail.com>
+Date:   Tue, 30 May 2023 11:52:48 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0f0ab135-cdd0-0691-e0c1-42645671fe15@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 5.15 00/69] 5.15.114-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230528190828.358612414@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230528190828.358612414@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 10:59:01AM -0500, Tom Lendacky wrote:
-> On 5/30/23 09:35, Peter Zijlstra wrote:
-> > On Tue, May 30, 2023 at 02:16:55PM +0200, Gupta, Pankaj wrote:
-> > > 
-> > > > > Add a #HV exception handler that uses IST stack.
-> > > > > 
-> > > > 
-> > > > Urgh.. that is entirely insufficient. Like it doesn't even begin to
-> > > > start to cover things.
-> > > > 
-> > > > The whole existing VC IST stack abuse is already a nightmare and you're
-> > > > duplicating that.. without any explanation for why this would be needed
-> > > > and how it is correct.
-> > > > 
-> > > > Please try again.
-> > > 
-> > > #HV handler handles both #NMI & #MCE in the guest and nested #HV is never
-> > > raised by the hypervisor.
-> > 
-> > I thought all this confidental computing nonsense was about not trusting
-> > the hypervisor, so how come we're now relying on the hypervisor being
-> > sane?
+On 5/28/23 12:11, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.114 release.
+> There are 69 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> That should really say that a nested #HV should never be raised by the
-> hypervisor, but if it is, then the guest should detect that and
-> self-terminate knowing that the hypervisor is possibly being malicious.
+> Responses should be made by Tue, 30 May 2023 19:08:13 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.114-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-I've yet to see code that can do that reliably.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
+
+Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
+
