@@ -2,94 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12286716E5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D7F716E60
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 22:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbjE3UJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 16:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+        id S232340AbjE3UKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 16:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbjE3UJE (ORCPT
+        with ESMTP id S230433AbjE3UJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 16:09:04 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA745F3;
-        Tue, 30 May 2023 13:09:03 -0700 (PDT)
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UIdwJa003875;
-        Tue, 30 May 2023 20:08:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=5rWZ2/PgxHy/y5NYiyjQh4DXegRR/1Cb3dzKDHLoPGs=;
- b=TKfM+m5O14f2Y25lpdUqyKZaTU0vyltCCMdzdkdr+WLtlrbx3N6/UD0pbNnmI9WKmIlE
- pxLdBjZuGOEG9qqJ/vvnfYYS25qvTmVEKA0nBMvqEv+AwSEoyRsgaXal2Lik1KROK75V
- 3fqcRffZT7k9/A/JlLFc2tfXtOzBeYQDKuCWalJ0DxtQHdA/yCOUOfFeeQhy+tkhKk3u
- aSaSRtEN1RnxhAxFZ1TwJwA9ugjxcbKE+ncYN0o+KejpBDBahueKkpfo7HfYkJe19agV
- I89KD9lcbru5ftcNN2tfwdqFrEUPQuLv6uyNgeJEF9SCXjS8MruMNmFM8STgRRjr2H+4 0Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwjvf8huh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 20:08:58 +0000
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34UJ03jZ002236;
-        Tue, 30 May 2023 20:08:58 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwjvf8htx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 20:08:58 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34UHWvad003118;
-        Tue, 30 May 2023 20:08:56 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3qu9g5rdq7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 20:08:56 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34UK8sn634800156
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 May 2023 20:08:54 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B64A258045;
-        Tue, 30 May 2023 20:08:54 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C3F9E58050;
-        Tue, 30 May 2023 20:08:52 +0000 (GMT)
-Received: from [9.61.92.222] (unknown [9.61.92.222])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 30 May 2023 20:08:52 +0000 (GMT)
-Message-ID: <4c8f11e5-d97d-5c9a-69b1-ba11c5857799@linux.ibm.com>
-Date:   Tue, 30 May 2023 22:08:51 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH net 1/2] net/smc: Scan from current RMB list when no
- position specified
-To:     Wen Gu <guwen@linux.alibaba.com>, kgraul@linux.ibm.com,
-        jaka@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1685101741-74826-1-git-send-email-guwen@linux.alibaba.com>
- <1685101741-74826-2-git-send-email-guwen@linux.alibaba.com>
-From:   Wenjia Zhang <wenjia@linux.ibm.com>
-In-Reply-To: <1685101741-74826-2-git-send-email-guwen@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Tue, 30 May 2023 16:09:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965369D
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 13:09:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30E2C62EFF
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 20:09:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BCA8C433EF;
+        Tue, 30 May 2023 20:09:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1685477388;
+        bh=EqzuJeBD8W0a4J7cFQ8JgaCPj41wztauFHAzGU/TFJY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YthwCQBjp/rV4SJKc7dML2Um491iha4xNQT6UYafxLvOm+RrmymkwrFWJEa+B50Vs
+         rUZ9fGv9W1yznyK08EWeEeJoc7o0CcuT7C175z0QD1oRnaNYL19RX5lMD8yPOkBNZi
+         4nUY80Bl9bTrvTwbLIom3Piidx4BN5JRVLiYhBKo=
+Date:   Tue, 30 May 2023 13:09:47 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH 3/4] workqueue: add schedule_on_each_cpumask helper
+Message-Id: <20230530130947.37edbab6b672bfce6f481295@linux-foundation.org>
+In-Reply-To: <20230530145335.930262644@redhat.com>
+References: <20230530145234.968927611@redhat.com>
+        <20230530145335.930262644@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NZw55rljhcxjYUq1xtakSkwQSz7DlSI4
-X-Proofpoint-GUID: cmd8PxFCF0pWlGsjsyioEBINrEFIq511
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_15,2023-05-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- mlxlogscore=999 adultscore=0 priorityscore=1501 lowpriorityscore=0
- bulkscore=0 mlxscore=0 impostorscore=0 phishscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305300163
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,40 +57,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 30 May 2023 11:52:37 -0300 Marcelo Tosatti <mtosatti@redhat.com> wrote:
 
-
-On 26.05.23 13:49, Wen Gu wrote:
-> When finding the first RMB of link group, it should start from the
-> current RMB list whose index is 0. So fix it.
+> Add a schedule_on_each_cpumask function, equivalent to
+> schedule_on_each_cpu but accepting a cpumask to operate.
 > 
-> Fixes: b4ba4652b3f8 ("net/smc: extend LLC layer for SMC-Rv2")
-> Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+> 
 > ---
->   net/smc/smc_llc.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/net/smc/smc_llc.c b/net/smc/smc_llc.c
-> index a0840b8..8423e8e 100644
-> --- a/net/smc/smc_llc.c
-> +++ b/net/smc/smc_llc.c
-> @@ -578,7 +578,10 @@ static struct smc_buf_desc *smc_llc_get_next_rmb(struct smc_link_group *lgr,
->   {
->   	struct smc_buf_desc *buf_next;
->   
-> -	if (!buf_pos || list_is_last(&buf_pos->list, &lgr->rmbs[*buf_lst])) {
-> +	if (!buf_pos)
-> +		return _smc_llc_get_next_rmb(lgr, buf_lst);
+> Index: linux-vmstat-remote/kernel/workqueue.c
+> ===================================================================
+> --- linux-vmstat-remote.orig/kernel/workqueue.c
+> +++ linux-vmstat-remote/kernel/workqueue.c
+> @@ -3455,6 +3455,56 @@ int schedule_on_each_cpu(work_func_t fun
+>  	return 0;
+>  }
+>  
 > +
-> +	if (list_is_last(&buf_pos->list, &lgr->rmbs[*buf_lst])) {
->   		(*buf_lst)++;
->   		return _smc_llc_get_next_rmb(lgr, buf_lst);
->   	}
-It seems too late, but still, why not? :
+> +/**
+> + * schedule_on_each_cpumask - execute a function synchronously on each
+> + * CPU in "cpumask", for those which are online.
+> + *
+> + * @func: the function to call
+> + * @mask: the CPUs which to call function on
+> + *
+> + * schedule_on_each_cpu() executes @func on each specified CPU that is online,
+> + * using the system workqueue and blocks until all such CPUs have completed.
+> + * schedule_on_each_cpu() is very slow.
+> + *
+> + * Return:
+> + * 0 on success, -errno on failure.
+> + */
+> +int schedule_on_each_cpumask(work_func_t func, cpumask_t *cpumask)
+> +{
+> +	int cpu;
+> +	struct work_struct __percpu *works;
+> +	cpumask_var_t effmask;
+> +
+> +	works = alloc_percpu(struct work_struct);
+> +	if (!works)
+> +		return -ENOMEM;
+> +
+> +	if (!alloc_cpumask_var(&effmask, GFP_KERNEL)) {
+> +		free_percpu(works);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	cpumask_and(effmask, cpumask, cpu_online_mask);
+> +
+> +	cpus_read_lock();
+> +
+> +	for_each_cpu(cpu, effmask) {
 
--	if (!buf_pos || list_is_last(&buf_pos->list, &lgr->rmbs[*buf_lst])) {
--  		(*buf_lst)++;
-+	if (list_is_last(&buf_pos->list, &lgr->rmbs[(*buf_lst])++)) {
+Should we check here that the cpu is still online?
 
+> +		struct work_struct *work = per_cpu_ptr(works, cpu);
+> +
+> +		INIT_WORK(work, func);
+> +		schedule_work_on(cpu, work);
+> +	}
+> +
+> +	for_each_cpu(cpu, effmask)
+> +		flush_work(per_cpu_ptr(works, cpu));
+> +
+> +	cpus_read_unlock();
+> +	free_percpu(works);
+> +	free_cpumask_var(effmask);
+> +	return 0;
+> +}
+> +
+>  /**
+>   * execute_in_process_context - reliably execute the routine with user context
+>   * @fn:		the function to execute
+> --- linux-vmstat-remote.orig/include/linux/workqueue.h
+> +++ linux-vmstat-remote/include/linux/workqueue.h
+> @@ -450,6 +450,7 @@ extern void __flush_workqueue(struct wor
+>  extern void drain_workqueue(struct workqueue_struct *wq);
+>  
+>  extern int schedule_on_each_cpu(work_func_t func);
+> +extern int schedule_on_each_cpumask(work_func_t func, cpumask_t *cpumask);
 
-Thanks,
-Wenjia
+May as well make schedule_on_each_cpu() call
+schedule_on_each_cpumask()?  Save a bit of text, and they're hardly
+performance-critical to that extent.
