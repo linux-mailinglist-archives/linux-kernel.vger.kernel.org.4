@@ -2,159 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA84715D14
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB7F715CE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbjE3LYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
+        id S231271AbjE3LT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbjE3LYK (ORCPT
+        with ESMTP id S229873AbjE3LT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:24:10 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24B713E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:23:49 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 9B7155FD2C;
-        Tue, 30 May 2023 14:23:46 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1685445826;
-        bh=/2VvlUBuwK951x+75yuFgWs7gQ9TMyja2/uS8g7dZvs=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=W3vlx6ZsnwPU8yTJla34qUgzxmWVw3GHjtFLYJeTmn1ZwWy6rqXivAOeD0YEsHzz0
-         16kcIJqfHZD0n+HscQR7PMJ3d553RfRaY0m+ZZkRPWYf7nUjbM2rgKd6XYCRAkhES+
-         c81/4FFLwFwg8P6QaWYgrXuMrh53sF/3u2FXi/QVWdxYH5t+JVQWPS+Hd68ieCZ4pa
-         xgW9XTYBTJmviIJAsHwSNxKePg3r5IGCJUX+ef3BIkdYCjapZy3O1fotL5YzEBXH7C
-         ymdNTq4Hug4Vl/Sc6CnRHw3DG9fp4NeHsZB6viaF+6riGJuzzmtbr33Q4mEaayeaJ/
-         Bv7AwCH9RK6WQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 30 May 2023 14:23:45 +0300 (MSK)
-Message-ID: <6077c959-f566-d399-d2be-8460eb063415@sberdevices.ru>
-Date:   Tue, 30 May 2023 14:19:08 +0300
+        Tue, 30 May 2023 07:19:26 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390B8EC;
+        Tue, 30 May 2023 04:19:25 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-6262be06e2eso6833296d6.1;
+        Tue, 30 May 2023 04:19:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685445564; x=1688037564;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4JcaGk53DfoljsKEc0Vqh4/+1ZEOZS900niaaCgJ++s=;
+        b=C2wDD805ebGsBV7b0K81S5Eb8pSn0DdvY2plhQ2gb9qX9Yc7JMgWFs16+iG8k/PL7d
+         Vh/G674aaMIecEd3AsU84A9PZcegaZiYkUvaOPXzGWz86nGsaE2MdYq2fTBWcpfJ6+0c
+         u9ZBexHLihF2fVBIfwb8eYxzRM2sZgPSBcCeNASGxO0CBKjpGu1owbw7G3ZDuxQoYCKh
+         q0Mna3NfUGyNzTuPtoUnsXvzvLH/2PfPj+NfwjTD3vxmin6ybiA43QNaW8kVxJAiE/pa
+         h8TxQs3NRqxvWg+s48i59MqnlRuUnd3GxL8Gw11vw/bMS0gTFI1XQ+6JeJxWyJ1zhcnB
+         wJKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685445564; x=1688037564;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4JcaGk53DfoljsKEc0Vqh4/+1ZEOZS900niaaCgJ++s=;
+        b=XW7n3NzvFdUZcC7i3Q1eyOGhZORnk5SbvRFfcpXRGqkHbUc25ApiH8hxbHiF3D29oA
+         I5a7RiU6eUxSNz0zgHnvOWUxskbVdCcaEwAW1b0eVG8oCw2tSMlNMKE1PJaivv8sFZB/
+         X1VLt2kCvBdAqjlDPTAtvYebSeuYW/207W6NBg6Ps15grvglIVtDpJqvs51NAKbjZpIp
+         FVDUWluVMOlZcRhn0EH/wUEyH8yGqrDkK1JItK3mBk1EvRnaG81pIMy7QZQSuj5wJZnL
+         moUFdjfHNelKM2I/SyM+pyVSr63AOYLD4Ddm/JrQpJi77LgIn7VPooWInD2fbSrVvImj
+         8B8w==
+X-Gm-Message-State: AC+VfDyqPz5+s6+VDWOwwQiyxDEnh7k4WS0FaNPDDCDUnQzsXHDiEaBR
+        7+daQz2QOMuSfo2fv66hksjWyhVRYdZ/IlELCHc=
+X-Google-Smtp-Source: ACHHUZ5DBOUiWsRXCdlSENWFz5Kmv7KFin+OkFZ+1MD7nnexfUJEN1pyBDQ9HHsusXK2WSP6vMn4DZZaMjG9/b5DC9E=
+X-Received: by 2002:a05:6214:2627:b0:623:c96a:e735 with SMTP id
+ gv7-20020a056214262700b00623c96ae735mr1861312qvb.1.1685445563839; Tue, 30 May
+ 2023 04:19:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 1/5] mtd: rawnand: meson: fix command sequence for
- read/write
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>, <oxffffaa@gmail.com>,
-        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230515094440.3552094-1-AVKrasnov@sberdevices.ru>
- <20230515094440.3552094-2-AVKrasnov@sberdevices.ru>
- <20230522170526.6486755a@xps-13>
- <9013b0e2-c923-43f8-0bd6-979bf0c23ebc@sberdevices.ru>
- <abeadc03-a69c-be1c-3c6a-6ce492a5e4f6@sberdevices.ru>
- <20230526192205.4a69ca79@xps-13>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230526192205.4a69ca79@xps-13>
+References: <20230524160352.19704-1-osmtendev@gmail.com> <87v8gajeni.fsf@kernel.org>
+ <CAK6rUAPUKNREyYL-d5Y23SOV__-zPY8KJL+MMzWX8ShOhDGWLA@mail.gmail.com>
+In-Reply-To: <CAK6rUAPUKNREyYL-d5Y23SOV__-zPY8KJL+MMzWX8ShOhDGWLA@mail.gmail.com>
+From:   Osama Muhammad <osmtendev@gmail.com>
+Date:   Tue, 30 May 2023 16:19:13 +0500
+Message-ID: <CAK6rUANkoGLAMSQjy5Wrav02u10MKxK8ov1Xekq-goMNu0Tcug@mail.gmail.com>
+Subject: Re: [PATCH] debugfs.c: Fix error checking for debugfs_create_dir
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     nbd@nbd.name, ryder.lee@mediatek.com, lorenzo@kernel.org,
+        shayne.chen@mediatek.com, davem@davemloft.net,
+        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/30 07:59:00 #21376339
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+In the previous email mistakenly I have referenced debugfs_create_file
+but it's the same for debugfs_create_dir also.
 
-On 26.05.2023 20:22, Miquel Raynal wrote:
-> Hi Arseniy,
-> 
-> avkrasnov@sberdevices.ru wrote on Wed, 24 May 2023 12:05:47 +0300:
-> 
->> On 23.05.2023 12:12, Arseniy Krasnov wrote:
->>> Hello Miquel, Liang
->>>
->>> On 22.05.2023 18:05, Miquel Raynal wrote:  
->>>> Hi Arseniy,
->>>>
->>>> AVKrasnov@sberdevices.ru wrote on Mon, 15 May 2023 12:44:35 +0300:
->>>>  
->>>>> This fixes read/write functionality by:
->>>>> 1) Changing NFC_CMD_RB_INT bit value.  
->>>>
->>>> I guess this is a separate fix
->>>>  
->>>
->>> Ok, I'll move it to separate patch
->>>   
->>>>> 2) Adding extra NAND_CMD_STATUS command on each r/w request.  
->>>>
->>>> Is this really needed? Looks like you're delaying the next op only. Is
->>>> using a delay enough? If yes, then it's probably the wrong approach.  
->>
->> Hi Miquel, small update, I found some details from @Liang's message in v1 talks from the last month:
->>
->> *
->> After sending NAND_CMD_READ0, address, NAND_CMD_READSTART and read status(NAND_CMD_STATUS = 0x70) commands, it should send
->> NAND_CMD_READ0 command for exiting the read status mode from the datasheet from NAND device.
-> 
-> That is true.
-> 
->> but previous meson_nfc_queue_rb()
->> only checks the Ready/Busy pin and it doesn't send read status(NAND_CMD_STATUS = 0x70) command.
->> i think there is something wrong with the Ready/Busy pin(please check the hardware whether this
->> Ready/Busy pin is connected with SOC) or the source code. i have the board without Ready/Busy pin and prefer to use the
->> nfc command called RB_IO6. it sends NAND_CMD_STATUS command and checks bit6 of the status register of NAND device from the
->> data bus and generate IRQ if ready.
->> *
->>
->> I guess, that sequence of commands from this patch is described in datasheet (unfortunately I don't have it and relied on the old driver).
->> Yesterday I tried to remove sending of NAND_CMD_STATUS from this patch, but it broke current driver - i had ECC errors, so it looks like
->> "shot in the dark" situation, to understand this logic.
-> 
-> When an operation on the NAND array happens (eg. read, prog, erase),
-> you need to wait "some time" before accessing the internal sram or even
-> the chip which is "busy" until it gets "ready" again. You can probe the
-> ready/busy pin (that's the hardware way, fast and reliable) or you can
-> poll a status with NAND_CMD_STATUS. The chips are designed so they can
-> actually process that command while they are doing time consuming tasks
-> to update the host. But IIRC every byte read will return the status
-> until you send READ0 again, which means "I'm done with the status
-> read" somehow.
-> 
-> Please see nand_soft_waitrdy() in order to understand how this is
-> supposed to work. You can even use that helper (which is exported)
-> instead of open-coding it in your driver. See atmel or sunxi
-> implementations for instance.
-> 
-> As using the native RB pin is better, you would need to identify
-> whether you have one or not at probe time and then either poll the
-> relevant bit of your controller if there is one, or fallback to the
-> soft read (which should fallback on exec_op in the end).
+Here is the link to comment above the function debugfs_create_dir
+https://elixir.bootlin.com/linux/latest/source/fs/debugfs/inode.c#L564
 
-Thanks for this information! I'll use 'nand_soft_waitrdy()' at least, because i guess that
-there is no RB pin on my device.
+Thanks,
+Osmten
 
-Thanks, Arseniy
-
-> 
+On Tue, 30 May 2023 at 16:02, Osama Muhammad <osmtendev@gmail.com> wrote:
+>
+> Hi,
+>
+> I will keep that in mind and send with the right subject while
+> submitting a revision of the patch.
+>
+> Regarding the patch after researching more into it I have come to know
+> that the debugfs
+> API will not return null on error but an ERR_PTR. The modern wisdom
+> about it is to ignore the errors returned by the function as stated in
+> the comment  above the function debugfs_create_file.
+>
+> > * NOTE: it's expected that most callers should _ignore_ the errors returned
+>  >* by this function. Other debugfs functions handle the fact that the "dentry"
+>  >* passed to them could be an error and they don't crash in that case.
+> > * Drivers should generally work fine even if debugfs fails to init anyway.
+> Here is the link to comment :-
+> https://elixir.bootlin.com/linux/latest/source/fs/debugfs/inode.c#L451
+>
+> Considering this, I will send the revision of the patch by removing
+> error checks. Please correct me if  there are any concerns with this.
+>
 > Thanks,
-> Miquèl
+> Osmten
+>
+> On Tue, 30 May 2023 at 15:29, Kalle Valo <kvalo@kernel.org> wrote:
+> >
+> > Osama Muhammad <osmtendev@gmail.com> writes:
+> >
+> > > This patch fixes the error checking in debugfs.c in
+> > > debugfs_create_dir. The correct way to check if an error occurred
+> > > is using 'IS_ERR' inline function.
+> > >
+> > > Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+> >
+> > The title is wrong, please see the wiki page below how to create titles.
+> >
+> > Also no need to say "This patch fixes..", saying "Fix..." is enough.
+> >
+> > --
+> > https://patchwork.kernel.org/project/linux-wireless/list/
+> >
+> > https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
