@@ -2,113 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59253716AAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 258C6716BD8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233224AbjE3RTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 13:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48608 "EHLO
+        id S232777AbjE3SDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 14:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233001AbjE3RTI (ORCPT
+        with ESMTP id S232318AbjE3SDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 13:19:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6391BD9;
-        Tue, 30 May 2023 10:19:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE7B7630C8;
-        Tue, 30 May 2023 17:19:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA22EC433D2;
-        Tue, 30 May 2023 17:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685467146;
-        bh=PIBi+WICffiBvaB2Kw9KN3H9bNAFCDH01ZgbVaQGbpg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E2Xa4JrAvvdRGyRf3zxeWBvkc5cuOtjqlw0qF7dZxyI06ngCrCEr+2VfwVIRMVVdd
-         V5zTylUXQRCf1KW4HPXzMIdv+9vrMt1yP+n7FUDa+t2FjNJ4LF5+BlKFZwjSqNBqRe
-         ZHB1IFdqYD9OcZl9/+Ecs/JcoSOvUOC9V09t4ZzWib5Tw6UHYj9RtfWvo7heP6Av47
-         dD3CVQoa6UM26DNqLEt2ojddXXiZcVQpH+lX3kslYjvfSLtg1sWzEWznuptvI921Y/
-         KH17pTxqsO/dGyBabW1mpfH4P2fEriexl3TKpaNOhSUcu+Vgyc5AIWsf3E+ZScPJZ6
-         l+0N0Pn0M1pBQ==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-pci@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-scsi@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Georgi Djakov <djakov@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: (subset) [PATCH v3 00/15] Introduce the SC8180x devices
-Date:   Tue, 30 May 2023 10:22:49 -0700
-Message-Id: <168546732606.2227271.7267063763992454803.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230530162454.51708-1-vkoul@kernel.org>
-References: <20230530162454.51708-1-vkoul@kernel.org>
+        Tue, 30 May 2023 14:03:05 -0400
+X-Greylist: delayed 2235 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 May 2023 11:03:02 PDT
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CC6EC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:03:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=24Ry0beQgWrLSFF8krNBwN4KJRINBEkewKnwBgtX8s0=; b=IXdLdyGG3/j+MW0vZgOMVsZew4
+        EQGHw0rZ/Qs/tVekOd/EA0IXxQUyJ4eUybgB6Zqzh80ikhKQd9h6gxjv7NX53TEOoYyG/LhjowQmn
+        TG/u7iYYPAwDYfVtPtfHtbBXcQTKfgck38ghgHXddVNwdaybMLMEz9YSjFNcA6owTljt2GczGBWvC
+        N5a/P+mDnHmGlQ8AxESLLF8Y+W2+Y3j14xHBInQkanZR0k5I7MBvp3+AxjZBa/GsgbdYgWKuSlpCj
+        Yndybi5XQK5GV2xuzH1nFjq/yf3FQ8auqtcDKz4CxK6GYh2GI23rhZvuGflKVMvvDjwIld9cJVWjA
+        65a9QJUw==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1q433y-00DzWB-3A; Tue, 30 May 2023 11:23:14 -0600
+Message-ID: <8a411404-a2fc-694c-c41e-5d7efba38472@deltatee.com>
+Date:   Tue, 30 May 2023 11:23:12 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-CA
+To:     Robin Murphy <robin.murphy@arm.com>, hch@infradead.org
+Cc:     m.szyprowski@samsung.com, iommu@lists.linux.dev,
+        catalin.marinas@arm.com, linux-kernel@vger.kernel.org
+References: <fa2eca2862c7ffc41b50337abffb2dfd2864d3ea.1685036694.git.robin.murphy@arm.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <fa2eca2862c7ffc41b50337abffb2dfd2864d3ea.1685036694.git.robin.murphy@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: robin.murphy@arm.com, hch@infradead.org, m.szyprowski@samsung.com, iommu@lists.linux.dev, catalin.marinas@arm.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] dma-mapping: Name SG DMA flag helpers consistently
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 May 2023 21:54:39 +0530, Vinod Koul wrote:
-> This introduces Qualcomm SC8180x SoC which features in Lenovo Flex 5G
-> laptop. This also adds support for Primus platform as well as Lenovo Flex 5G
-> laptop.
+
+
+On 2023-05-25 11:46, Robin Murphy wrote:
+> sg_is_dma_bus_address() is inconsistent with the naming pattern of its
+> corresponding setters and its own kerneldoc, so take the majority vote
+> and rename it sg_dma_is_bus_address() (and fix up the missing
+> underscores in the kerneldoc too). This gives us a nice clear pattern
+> where SG DMA flags are SG_DMA_<NAME>, and the helpers for acting on them
+> are sg_dma_<action>_<name>().
 > 
-> Changes in v3:
->  - Split DTS patch into smaller check
->  - checkpatch and dtbs check error fixes
->  - fix comments from Konrad/Krzysztof
-> 
-> [...]
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 
-Quite a few DT validation warnings left, but let's get it merged so that we can
-work on those together.
+Looks good to me. Thanks.
 
-Applied, thanks!
-
-[06/15] arm64: dts: qcom: Introduce the SC8180x platform
-        commit: 8575f197b077001591ef3ff709cdee48785daf0d
-[07/15] arm64: dts: qcom: sc8180x: Add interconnects and lmh
-        commit: f3be8a111d7eaf4e291b6c2d51dd0adb39934b32
-[08/15] arm64: dts: qcom: sc8180x: Add thermal zones
-        commit: d1d3ca03554e51be44546638f83169bb05b20ef8
-[09/15] arm64: dts: qcom: sc8180x: Add QUPs
-        commit: 0018761d1564f64d567e119fd9156c473b4592d7
-[10/15] arm64: dts: qcom: sc8180x: Add PCIe instances
-        commit: d20b6c84f56ae3a9823cc0fa5cfad330536ba0d1
-[11/15] arm64: dts: qcom: sc8180x: Add remoteprocs, wifi and usb nodes
-        commit: b080f53a8f44eeaa9db9628d8d339ab5a2afb5bd
-[12/15] arm64: dts: qcom: sc8180x: Add display and gpu nodes
-        commit: 494dec9b6f541451b2e82905b0eebd9a4ac9848b
-[13/15] arm64: dts: qcom: sc8180x: Add pmics
-        commit: d3302290f59e8533a56a8fa2455357f843d8dcf6
-[14/15] arm64: dts: qcom: sc8180x: Introduce Primus
-        commit: 2ce38cc1e8fea4e251e4563e436104369bf3b322
-[15/15] arm64: dts: qcom: sc8180x: Introduce Lenovo Flex 5G
-        commit: 20dea72a393c6d5572088b8ad01dbb9e9aca64ce
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
