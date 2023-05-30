@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE06271670D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F13716710
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjE3PaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
+        id S230409AbjE3PaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjE3PaC (ORCPT
+        with ESMTP id S229630AbjE3PaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:30:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B00EB0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:30:01 -0700 (PDT)
+        Tue, 30 May 2023 11:30:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C35BE
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:30:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C4C8762D61
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:30:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E0D7C4339B;
-        Tue, 30 May 2023 15:29:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B98E62B66
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:30:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4B15C433D2;
+        Tue, 30 May 2023 15:30:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685460600;
-        bh=vsD5m4iJ4+NY2hP2qZr9HzAWD+GIDugO2KNzUU//2Io=;
+        s=k20201202; t=1685460601;
+        bh=e2E4jC26coX5c1y3+7Fc39dfP9OX6Dh5LENB0B5Tr84=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=goNe//XAAZO5kKndhAUNyceOMq+N3/kL9qBf3cIPU5QQQJARRk+w04TFjtkQOxqcy
-         WrEKwMRD5NIsNpGhWtex1rvOFyP2jqMWdEHUAISs01w5U2uuyKXManB4ctSv2dpOTJ
-         vghMjjGs89aQAYhKDQ/PQoF45mEz9Uz46rbrWhdgnILARZikYXruSf1nTLuc4NFveq
-         /pBip85LqVd/2hhUMHnwdr3awrQqBsDUnZH3jV8pLXw6l7XsL9UC8kB7tjbzN3xV90
-         fXuCYFhEUofdrgBKVuniqyiAeVi/j23YIfwOViZw9gpmWVcSB5X9RXW1Ssm4aQp9mI
-         L/3A9aRC3CGiw==
+        b=H3rMLQeKIf5bw8ux2MBDypocZsF9WE+v1q0YVrbK5kYF/NYUJfxxqRRaEfZHG1NHx
+         t8Ddroyy3DDpkNTEAH7jO+x1LFVgqaQJdiChOgbrfI3hKH2eF/DcPZByXK4/4023AC
+         AhWI/dlFSQ5wVzEhLcpVt12oGZy+5I3LoPAOBudTcNJH5u4JblnZsn36ZhUGsZYvLJ
+         PcxyPU/qbkuvtidZjbm/GBEispnNM2dVgrQGOKzPvMTECg1l0DNVULiEs+LMuY11UG
+         PkIV0+MuEce9Z24MjBICGySLnfYk0MxhwkklIIy7dHniVW8YN5VzZRhz5cPUMk+bjo
+         9MPBTWsJw9zog==
 From:   Mark Brown <broonie@kernel.org>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Osama Muhammad <osmtendev@gmail.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>
 Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <cover.1684930647.git.geert+renesas@glider.be>
-References: <cover.1684930647.git.geert+renesas@glider.be>
-Subject: Re: [PATCH v2 0/2] regulator: core: Fix error checking and
+In-Reply-To: <cover.1685013051.git.geert+renesas@glider.be>
+References: <cover.1685013051.git.geert+renesas@glider.be>
+Subject: Re: [PATCH v3 0/2] regulator: core: Fix error checking and
  messages
-Message-Id: <168546059901.564321.11681079059781030918.b4-ty@kernel.org>
-Date:   Tue, 30 May 2023 16:29:59 +0100
+Message-Id: <168546060038.564321.3576170619046713914.b4-ty@kernel.org>
+Date:   Tue, 30 May 2023 16:30:00 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,16 +57,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 May 2023 14:22:16 +0200, Geert Uytterhoeven wrote:
+On Thu, 25 May 2023 13:13:57 +0200, Geert Uytterhoeven wrote:
 > 	Hi all,
 > 
 > This patch series corrects an error check, fixes error messages when
 > debugfs is not enabled, and improves debugfs error handling in the
 > regulator core.
 > 
-> Changes compared to v1:
->   - Split in two patches,
->   - Improve rationale.
+> Changes compared to v2:
+>   - Fix build after patch 1.
 > 
 > [...]
 
