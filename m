@@ -2,89 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84351715D4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFB5716CF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjE3Ldo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
+        id S233101AbjE3TAO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 30 May 2023 15:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbjE3Ldm (ORCPT
+        with ESMTP id S230183AbjE3TAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:33:42 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23410B0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:33:41 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-565cd2fc9acso40504617b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:33:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685446420; x=1688038420;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zO/hEIm/6vFm+Ve2jfklUx8YwRrMLFv0UwuU9t+2qT8=;
-        b=AMemBWUvnvX0G0MDmnf8f/zVF0q9PNYTQ6bTUriXGy7KkrQEgnontw/Rtf9Mdm+nKw
-         neUaH++nwf7A4ncvxc5inevGIC7S/TnIYxNRnPAHuSAXyfgOp4pgUO+u8Bth0LoTiHcd
-         93M2sORUXM35A4h2G54YotHEcuxq9Z0jmGtIxq5n6F3AMMYVN15L97TB5woGOoQk/dfl
-         Z2ETVLE9UNJ18AvVV6ozW5UcamPts81RLcS8ZaiJt2yrv3nj4LlD/SaxHrChTv4qXCF6
-         aBvSSCdzK+qBAXqwWR89gVfFH0fV44QxViYHFTmWkGvpZVxFVvj86Jw3R89tpkgA/588
-         6mlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685446420; x=1688038420;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zO/hEIm/6vFm+Ve2jfklUx8YwRrMLFv0UwuU9t+2qT8=;
-        b=OUSDPe4SoPBp4psK3hPfnNb4BXShzLwGUXvzm8Todqvodu9/t/9EO4yMZSFNzDaBJH
-         d3fpXZ2teq+SHVRaLO6quuXi0+ZzLJi6YE2OMaj2K81rBi6A5HcB+GEBRbB+ahag3SaD
-         qlSUOSHhUPcxtZwKqMiSt8E9yRDANDqgi4FCCv83y0DzJpLeIDujJq9wi4knxQjMTVl3
-         9xat/x5M/qYt8TNXWZmRmr1ZE4OuJokrByb5+1NAG1ryBt1CoFnLiPbMkapIE9yBYqid
-         caYVHUyHngzDOlzWoFCWZHFPwZjpirzhnh5JtDx4zyYS0FUznrT1HoGGlMHGKbx7ZWrC
-         xw/w==
-X-Gm-Message-State: AC+VfDyp7Ubi/2Kbqrps1h+Ua+sw/lcE6C+MwvRlCS0w2K+bVRgaQ4q9
-        xnkqUJrDL2vzAokCgstEP4xUh4d9ubTJ+/N1JWEruA==
-X-Google-Smtp-Source: ACHHUZ5OqCG1+FL/F18LVpp4TSjuAEWgttMpiOAuDfgIrf50Bf1rJPTXcD2dr152yi2w5mvi/Cgzm9bpg7BtykybcCI=
-X-Received: by 2002:a0d:d741:0:b0:565:dff1:d1e2 with SMTP id
- z62-20020a0dd741000000b00565dff1d1e2mr2408888ywd.18.1685446420350; Tue, 30
- May 2023 04:33:40 -0700 (PDT)
+        Tue, 30 May 2023 15:00:10 -0400
+Received: from mail-b.sr.ht (mail-b.sr.ht [173.195.146.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC227106
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:00:02 -0700 (PDT)
+Authentication-Results: mail-b.sr.ht; dkim=none 
+Received: from git.sr.ht (unknown [173.195.146.142])
+        by mail-b.sr.ht (Postfix) with ESMTPSA id B8D4811F074;
+        Tue, 30 May 2023 18:50:50 +0000 (UTC)
+From:   ~akihirosuda <akihirosuda@git.sr.ht>
+Date:   Tue, 30 May 2023 20:34:33 +0900
+Subject: [PATCH linux 3/3] userns: add sysctl "kernel.userns_group_range"
+Message-ID: <168547265011.24337.4306067683997517082-3@git.sr.ht>
+X-Mailer: git.sr.ht
+Reply-to: ~akihirosuda <suda.kyoto@gmail.com>
+In-Reply-To: <168547265011.24337.4306067683997517082-0@git.sr.ht>
+To:     linux-kernel@vger.kernel.org, containers@lists.linux.dev,
+        serge@hallyn.com, brauner@kernel.org, paul@paul-moore.com,
+        ebiederm@xmission.com
+Cc:     suda.kyoto@gmail.com, akihiro.suda.cz@hco.ntt.co.jp
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <20230315215027.30685-1-asmaa@nvidia.com> <20230315215027.30685-2-asmaa@nvidia.com>
- <CAHp75VfnNOsfcyLM-UP61CMAF9sLOwMbRkAe5Ljhs2p8F=4Pgw@mail.gmail.com> <CH2PR12MB3895BDF9D79D61420A2F2BA8D7479@CH2PR12MB3895.namprd12.prod.outlook.com>
-In-Reply-To: <CH2PR12MB3895BDF9D79D61420A2F2BA8D7479@CH2PR12MB3895.namprd12.prod.outlook.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 30 May 2023 13:33:29 +0200
-Message-ID: <CACRpkdbN3oa=chsoh8ko74xKBPXA_yh1K07MSaghnMMk5PWYYw@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] gpio: mlxbf3: Add gpio driver support
-To:     Asmaa Mnebhi <asmaa@nvidia.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        FREEMAIL_FORGED_REPLYTO,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 3:49=E2=80=AFPM Asmaa Mnebhi <asmaa@nvidia.com> wro=
-te:
+From: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
 
-> Hi Andy, Hi Linus,
->
-> I see that the pinctl-mlxbf3.c is in v6.4 kernel but I am not seeing gpio=
--mlxbf3.c, not
-> even in Linux next. Do you know when this driver will be integrated?
+This sysctl limits groups who can create a new userns without CAP_SYS_ADMIN
+in the current userns, so as to mitigate potential kernel vulnerabilities
+around userns.
 
-Bartosz is applying GPIO patches, I am sure he will get around to it once
-all things are reviewed, but you need to use the right email address to
-him (see MAINTAINERS).
+The sysctl value format is same as "net.ipv4.ping_group_range".
 
-Yours,
-Linus Walleij
+To disable creating new unprivileged userns, set the sysctl value to "1 0"
+in the initial userns.
+
+To allow everyone to create new userns, set the sysctl value to
+"0 4294967294". This is the default value.
+
+This sysctl replaces "kernel.unprivileged_userns_clone" that is found in
+Ubuntu [1] and Debian GNU/Linux.
+
+Link: https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy/commit?id=3422764 [1]
+
+Signed-off-by: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+---
+ include/linux/user_namespace.h |  5 +++++
+ kernel/fork.c                  | 24 ++++++++++++++++++++++++
+ kernel/sysctl.c                | 30 ++++++++++++++++++++++++++++++
+ kernel/user.c                  |  9 +++++++++
+ 4 files changed, 68 insertions(+)
+
+diff --git a/include/linux/user_namespace.h b/include/linux/user_namespace.h
+index 45f09bec02c4..b8b5a982f818 100644
+--- a/include/linux/user_namespace.h
++++ b/include/linux/user_namespace.h
+@@ -11,6 +11,10 @@
+ #include <linux/sysctl.h>
+ #include <linux/err.h>
+ 
++#ifdef CONFIG_SYSCTL
++#include <linux/group_range.h>
++#endif
++
+ #define UID_GID_MAP_MAX_BASE_EXTENTS 5
+ #define UID_GID_MAP_MAX_EXTENTS 340
+ 
+@@ -98,6 +102,7 @@ struct user_namespace {
+ #ifdef CONFIG_SYSCTL
+ 	struct ctl_table_set	set;
+ 	struct ctl_table_header *sysctls;
++	struct group_range group_range;
+ #endif
+ 	struct ucounts		*ucounts;
+ 	long ucount_max[UCOUNT_COUNTS];
+diff --git a/kernel/fork.c b/kernel/fork.c
+index ed4e01daccaa..1e8debdf0896 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -111,6 +111,10 @@
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/task.h>
+ 
++#ifdef CONFIG_USER_NS
++#include <linux/group_range.h>
++#endif
++
+ /*
+  * Minimum number of threads to boot the kernel
+  */
+@@ -2235,6 +2239,16 @@ static void rv_task_fork(struct task_struct *p)
+ #define rv_task_fork(p) do {} while (0)
+ #endif
+ 
++#ifdef CONFIG_USER_NS
++static bool userns_clone_is_allowed(void)
++{
++	if (capable(CAP_SYS_ADMIN))
++		return true;
++
++	return check_current_group_range(&current_user_ns()->group_range);
++}
++#endif
++
+ /*
+  * This creates a new process as a copy of the old one,
+  * but does not actually start it yet.
+@@ -2266,6 +2280,11 @@ __latent_entropy struct task_struct *copy_process(
+ 	if ((clone_flags & (CLONE_NEWUSER|CLONE_FS)) == (CLONE_NEWUSER|CLONE_FS))
+ 		return ERR_PTR(-EINVAL);
+ 
++#ifdef CONFIG_USER_NS
++	if ((clone_flags & CLONE_NEWUSER) && !userns_clone_is_allowed())
++		return ERR_PTR(-EPERM);
++#endif
++
+ 	/*
+ 	 * Thread groups must share signals as well, and detached threads
+ 	 * can only be started up within the thread group.
+@@ -3340,6 +3359,11 @@ static int check_unshare_flags(unsigned long unshare_flags)
+ 			return -EINVAL;
+ 	}
+ 
++#ifdef CONFIG_USER_NS
++	if ((unshare_flags & CLONE_NEWUSER) && !userns_clone_is_allowed())
++		return -EPERM;
++#endif
++
+ 	return 0;
+ }
+ 
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index bfe53e835524..ace7bf0fe9fc 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -80,6 +80,9 @@
+ #ifdef CONFIG_RT_MUTEXES
+ #include <linux/rtmutex.h>
+ #endif
++#ifdef CONFIG_USER_NS
++#include <linux/group_range.h>
++#endif
+ 
+ /* shared constants to be used in various sysctls */
+ const int sysctl_vals[] = { 0, 1, 2, 3, 4, 100, 200, 1000, 3000, INT_MAX, 65535, -1 };
+@@ -1615,6 +1618,24 @@ int proc_do_static_key(struct ctl_table *table, int write,
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_USER_NS
++static struct group_range *userns_group_range_func(struct ctl_table *table)
++{
++	struct user_namespace *user_ns =
++		container_of(table->data, struct user_namespace, group_range.range);
++
++	return &user_ns->group_range;
++}
++
++/* Validate changes from /proc interface. */
++static int userns_group_range(struct ctl_table *table, int write,
++	void *buffer, size_t *lenp, loff_t *ppos)
++{
++	return sysctl_group_range(userns_group_range_func, table,
++		write, buffer, lenp, ppos);
++}
++#endif
++
+ static struct ctl_table kern_table[] = {
+ 	{
+ 		.procname	= "panic",
+@@ -1623,6 +1644,15 @@ static struct ctl_table kern_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dointvec,
+ 	},
++#ifdef CONFIG_USER_NS
++	{
++		.procname	= "userns_group_range",
++		.data = &init_user_ns.group_range.range,
++		.maxlen		= sizeof(init_user_ns.group_range.range),
++		.mode		= 0644,
++		.proc_handler	= userns_group_range,
++	},
++#endif
+ #ifdef CONFIG_PROC_SYSCTL
+ 	{
+ 		.procname	= "tainted",
+diff --git a/kernel/user.c b/kernel/user.c
+index d667debeafd6..4704c93f62f9 100644
+--- a/kernel/user.c
++++ b/kernel/user.c
+@@ -20,6 +20,10 @@
+ #include <linux/user_namespace.h>
+ #include <linux/proc_ns.h>
+ 
++#ifdef CONFIG_SYSCTL
++#include <linux/group_range.h>
++#endif
++
+ /*
+  * userns count is 1 for root user, 1 for init_uts_ns,
+  * and 1 for... ?
+@@ -67,6 +71,11 @@ struct user_namespace init_user_ns = {
+ 	.keyring_name_list = LIST_HEAD_INIT(init_user_ns.keyring_name_list),
+ 	.keyring_sem = __RWSEM_INITIALIZER(init_user_ns.keyring_sem),
+ #endif
++#ifdef CONFIG_SYSCTL
++	.group_range = {
++		.range = {0, ((gid_t)~0U) - 1},
++	},
++#endif
+ };
+ EXPORT_SYMBOL_GPL(init_user_ns);
+ 
+-- 
+2.38.4
