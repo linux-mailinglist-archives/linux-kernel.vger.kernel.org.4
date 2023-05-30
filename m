@@ -2,129 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976B07164FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0447271650A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232803AbjE3Ote (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
+        id S232861AbjE3OuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232683AbjE3OtU (ORCPT
+        with ESMTP id S232806AbjE3OuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:49:20 -0400
-Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E0E10D;
-        Tue, 30 May 2023 07:49:13 -0700 (PDT)
-Received: from [192.168.178.25] (host-212-18-30-247.customer.m-online.net [212.18.30.247])
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by mail.tuxedocomputers.com (Postfix) with ESMTPSA id D6B8B2FC0065;
-        Tue, 30 May 2023 16:49:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
-        s=default; t=1685458152;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AMUqh28DgoFTNwRf6KsF7Z16+cJUk83SN2OZrbC5UfY=;
-        b=CsXaqUGPPErC5qEw9d5SXfmT0Ku9JVVf1MO6KhlZEJ/j5+jUtZnsH7K5/nS3Ju38fF4mAP
-        TL2ruMHSSEOk5kJ6zHmmhiNqQ3i/BIA16lCU/qaCv8bpnkrqwYzKd2fDqJ4RJeHZQMfzk7
-        I7e99U7pPhqNVcQEPj4QkwjJHYmqXMo=
-Authentication-Results: mail.tuxedocomputers.com;
-        auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
-Message-ID: <ba9085ce-ce3a-9c3a-f32c-df2995fd84a1@tuxedocomputers.com>
-Date:   Tue, 30 May 2023 16:49:11 +0200
+        Tue, 30 May 2023 10:50:08 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3BB8F
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:49:45 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f6042d610fso46958005e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:49:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1685458181; x=1688050181;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=udNghephkvKhPZuJBjEix+UuL920fK/8W/QzTCO5Pcg=;
+        b=W+7ofkddfcWJ06zeU0Da9XAhr+E4Vfz4rR3jL63NhJI+86PbNPD1NqbIUy2FS+9h4p
+         jbzV2VPtF3LhpyKSiJWN5UqkQmx5LK2/wCHSuLL5wy2qILsQ4nDcgQkrmCwY9n1rrOIr
+         GlDCNJ6jgx3+e7ql8RJFM9G1LgUfgjr4Io1MCLTwjyBw+1ngsJy1uKqsGnkhcZR9GmWr
+         zEU8kIuY6sMgHKNnu7tYrkVtm3OlR9kxLlWmtLGGb2X4v9nNMQ1Gv1BCp0H9b/nDi0EH
+         4eY/QLB97/Jo6DF4CjJ/AToKbqAsAuxeydt6ifJBMflL9KnCYnQfLLB2LGwrvc2ZaVdG
+         JLew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685458181; x=1688050181;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=udNghephkvKhPZuJBjEix+UuL920fK/8W/QzTCO5Pcg=;
+        b=EVKFYLybZ7PHn27eyq/jQ4wESjw5yp2UTpsampKqWMOwBEy7TRcyqcQG82lWmB6nkt
+         F5nq4nVgFG5/uhsvzO78yByoBWtMzlUW6QlXnrDvdbTteXl4J+wmJg62k83qtllPl4RA
+         7rHOUWnWkpOScdGjh7N9QHu+gcJhIeTtozElTxGzq7Yyjyav7tF5I5af3G7ZGIpFkrWT
+         PVdUcp/9AvA/0r6TLMD2vY9BXYsdDR1dKGIZJnWL5QHWtogPjPHypyw6sfXJt6XwEJHm
+         1pMs1YIY6qA4+Xtn/KLdpAL8Im8POygHjOIdmBdfE3Lb71F+ylB/vJhpJ8uACiw1c61m
+         Ak7w==
+X-Gm-Message-State: AC+VfDwF9HlED1/8IF/1kjhn3EgSehtQ/5fGwFRkjF+LKdMEZJqCW9Pf
+        6/oefvawQPrJObJyHKP01e8/bSjgLuxV+xo0Gwo=
+X-Google-Smtp-Source: ACHHUZ75uX94LvL6Mu4X8bBwL6aHIfbExTPA32GAruz4VRZiaZa0LwAOuzBPJm+FdPrWQQgM8rwz0w==
+X-Received: by 2002:a1c:790e:0:b0:3f6:72ec:5fc3 with SMTP id l14-20020a1c790e000000b003f672ec5fc3mr2087614wme.12.1685458181458;
+        Tue, 30 May 2023 07:49:41 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:5bdd:98ce:604e:9cf0])
+        by smtp.gmail.com with ESMTPSA id t19-20020a7bc3d3000000b003f423508c6bsm17323488wmj.44.2023.05.30.07.49.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 07:49:41 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [RESEND PATCH] dt-bindings: iommu: arm,smmu: enable clocks for sa8775p Adreno SMMU
+Date:   Tue, 30 May 2023 16:49:31 +0200
+Message-Id: <20230530144931.188900-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] input: Add new keyboard backlight control keys to match
- modern notebooks
-Content-Language: en-US
-From:   Werner Sembach <wse@tuxedocomputers.com>
-To:     Bastien Nocera <hadess@hadess.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230530110550.18289-1-wse@tuxedocomputers.com>
- <d4d6eb1da42de6536e708331100fc33e9cfae140.camel@hadess.net>
- <44574d05-3a2a-2249-b808-7e929feea36d@tuxedocomputers.com>
-In-Reply-To: <44574d05-3a2a-2249-b808-7e929feea36d@tuxedocomputers.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 30.05.23 um 16:28 schrieb Werner Sembach:
-> Hi,
->
-> Am 30.05.23 um 15:33 schrieb Bastien Nocera:
->> On Tue, 2023-05-30 at 13:05 +0200, Werner Sembach wrote:
->>> The old three KEY_KBDILLUM* keycodes don't reflect the current
->>> situation
->>> modern notebooks anymore. Especially the ones with RGB keyboards.
->>>
->>> e.g.
->>> - Clevo NL50NU has a toggle, an up, a down and a color-cycle key
->>> - TongFang PH4ARX1 doesn't have a toggle key, but one that cycles
->>> through
->>>    off, half-brightness, and full-brightness.
->>>
->>> Also, on some devices these keys are already implemented in firmware.
->>> It
->>> would still be nice if there is a way to let userspace know when one
->>> of
->>> these keys is pressed to display the OSD, but don't advice it to
->>> actually
->>> do anything. This is the intended purpose of the KEY_KBDILLUMCHANGE
->>> define.
->>>
->>> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
->> Can you please point to the user-space patches (or issues filed) that
->> would integrate the support for those keycodes, and make the key
->> presses do something?
->
-> I'm sorry to say that these don't exist yet. So I guess the process is similar 
-> to DRM uAPI additions? 
-> https://docs.kernel.org/gpu/drm-uapi.html#open-source-userspace-requirements
-I asked the KDE and Gnome maintainers for feedback: 
-https://bugs.kde.org/show_bug.cgi?id=470453 
-https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/issues/746
->
->>
->> Has anyone tested that those keycodes are fit for purpose when mixed
->> with other brightness changes that don't happen through key presses?
->
-> Color control is not yet implemented in any DE afaik, so there is not yet a 
-> collision with the color cycle key.
->
-> For the brightness cycle key, I would assume that it functions the same as the 
-> brightness up key unless brightness == brightness max. In this case it sets 
-> brightness to 0. I don't see a logical collision here as brightness up and 
-> brightness down are already implemented just fine in most DEs
->
->>
->>> ---
->>>   include/uapi/linux/input-event-codes.h | 4 ++++
->>>   1 file changed, 4 insertions(+)
->>>
->>> diff --git a/include/uapi/linux/input-event-codes.h
->>> b/include/uapi/linux/input-event-codes.h
->>> index 022a520e31fc2..05287bf9a77f7 100644
->>> --- a/include/uapi/linux/input-event-codes.h
->>> +++ b/include/uapi/linux/input-event-codes.h
->>> @@ -803,6 +803,10 @@
->>>   #define BTN_TRIGGER_HAPPY39            0x2e6
->>>   #define BTN_TRIGGER_HAPPY40            0x2e7
->>>   +#define KEY_KBDILLUMCYCLE              0x2e8
->>> +#define KEY_KBDILLUMCOLORCYCLE         0x2e9
->>> +#define KEY_KBDILLUMCHANGE             0x2ea
->>> +
->>>   /* We avoid low common keys in module aliases so they don't get
->>> huge. */
->>>   #define KEY_MIN_INTERESTING    KEY_MUTE
->>>   #define KEY_MAX                        0x2ff
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+
+The GPU SMMU will require the clocks property to be set so put the
+relevant compatible into the adreno if-then block.
+
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Resending with all IOMMU maintainers in CC.
+
+ Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+index ba677d401e24..53bed0160be8 100644
+--- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
++++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+@@ -79,6 +79,7 @@ properties:
+       - description: Qcom Adreno GPUs implementing "qcom,smmu-500" and "arm,mmu-500"
+         items:
+           - enum:
++              - qcom,sa8775p-smmu-500
+               - qcom,sc7280-smmu-500
+               - qcom,sm6115-smmu-500
+               - qcom,sm6125-smmu-500
+@@ -331,7 +332,9 @@ allOf:
+       properties:
+         compatible:
+           contains:
+-            const: qcom,sc7280-smmu-500
++            enum:
++              - qcom,sa8775p-smmu-500
++              - qcom,sc7280-smmu-500
+     then:
+       properties:
+         clock-names:
+@@ -413,7 +416,6 @@ allOf:
+               - nvidia,smmu-500
+               - qcom,qcm2290-smmu-500
+               - qcom,qdu1000-smmu-500
+-              - qcom,sa8775p-smmu-500
+               - qcom,sc7180-smmu-500
+               - qcom,sc8180x-smmu-500
+               - qcom,sc8280xp-smmu-500
+-- 
+2.39.2
+
