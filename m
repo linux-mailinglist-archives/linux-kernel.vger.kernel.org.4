@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C515715D53
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CE7715D56
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjE3Lgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
+        id S231488AbjE3LhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjE3Lgt (ORCPT
+        with ESMTP id S230133AbjE3LhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:36:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1BCB0;
-        Tue, 30 May 2023 04:36:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D5C962314;
-        Tue, 30 May 2023 11:36:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72E40C433EF;
-        Tue, 30 May 2023 11:36:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685446607;
-        bh=iXCnSpqvku5TBvKgY0SIrL7G7nudm6YESXMmzmXUbU8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GTcik89aH1GnRIFAEfVubBgatbsO1FId7GW/IRBcONL4z03EgtErF/yMgEsdsRQZA
-         WCHlU8TMmnjd2fEuOhJP9psrh5ZK3tq2H6sMZS5IVwsn1cqklw6knLDGF83906Mm3b
-         hV5DxEd/3g6UpXojZxw/xkh8dNMZdKcCeAjcLFEoV9tByq24DlBt/giTfLEVxcNORk
-         +Qo1KszQrpQG/fQhf174Ns/NlDzklyZLJezgBL+lEPX2RUnFo+Me7vUnP+oFyZDPKR
-         OCKfgjykoQy0fVdFmIdVZnNXgw/jZnRwyh7edoQyrn5XMt4KWCxJjHjmLUinu0zfBs
-         ZUMkezRxrGs2A==
-Date:   Tue, 30 May 2023 12:36:40 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Zhu Ning <zhuning0077@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        David Yang <yangxiaohua@everest-semi.com>,
-        Daniel Drake <drake@endlessm.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, kernel@collabora.com
-Subject: Re: [PATCH 1/3] ASoC: es8316: Increment max value for ALC Capture
- Target Volume control
-Message-ID: <4a3f54a3-2cbd-4a22-9742-9ba60e78643b@sirena.org.uk>
-References: <20230524074156.147387-1-cristian.ciocaltea@collabora.com>
- <20230524074156.147387-2-cristian.ciocaltea@collabora.com>
- <5dbcbf84-602a-44de-ad99-268d4d5b4b2f@sirena.org.uk>
- <cfa23203-1626-440b-ec27-efe56cb297d2@collabora.com>
- <01fd1a9f-56c7-4864-bb2b-8b004284c8cc@sirena.org.uk>
- <3c6b67a4-4892-0057-3dfc-65ed6c7ebc37@collabora.com>
+        Tue, 30 May 2023 07:37:09 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0FEC5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:37:06 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-565a022ef06so60846597b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:37:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685446626; x=1688038626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fipiLZLGfX4/1UxxNAJShfinAkElOTmQ9bvtKEuEuxw=;
+        b=uOh+52nn4q+fLREJIUy7KO06MoLfqAQkv8mOsVNFntA6TzWyQ06Y2BThSyMq3wWhLq
+         zKHYrBOLNFciPFL+72Uz9eRSV5XrJLjOAksd1RdT5og8gKjik+lQ1KfTUgLYLE60IEmd
+         9zp1/8Fm1rhA6YA0IX+CtRsstIZSQZ/cqs3pJJGExe8gdxKRbaPwo6tuayptQlRdrqBD
+         2ZuCw5ZBp4s7fk5ezVtWmyPbe0g2YIQ7jtqxmoH6hZAsHnmK7xYsms6H/1QmRoS9jpVV
+         eV/4miN84WNTnl52fa2MISMlbcZfhKyJRkdJM3UV4mSfIVXpPmkV/rNFje09RhGigWJ7
+         8+qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685446626; x=1688038626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fipiLZLGfX4/1UxxNAJShfinAkElOTmQ9bvtKEuEuxw=;
+        b=ICh4gF8zpe5T5upFttiBOFe1KjW2NqQJ1L/IzhDhMcj+zSFnmS2hh9qhflgO59P0GQ
+         JDAWUodAqoklC9dBQoagcVaOfQveLceObo50jOP4zXqjnfIPDAlDX7jpFdyY1JmOAYIZ
+         6WDC8EmzhRbB03nySlXVX/Uc/Zo45IOmAOmLcKRCTG7ueyDk2bY/soNotv3wO7V9I31B
+         +OSdNYJHHYwZM0Hm+O+4uYYIoOFyuWrCD6JvqhP7YJhs8mKYUsJS7MQmGZjsvJiJoJqZ
+         /KlmnOFLAw62jdhEFFGQoNc5dwivNdGXTtwHH1dZvCIlOvYYnVSpZCsAABTZagdeVmJU
+         XitQ==
+X-Gm-Message-State: AC+VfDxWlHdjUMBDf/Y9l9qOE/244UDZiWfz+tkz1c9fZI4jGMKx4+1v
+        o5AMzstbus2kk4pzhgoiYT6aQYBAXrkFnCXg9AJnFQ==
+X-Google-Smtp-Source: ACHHUZ7RV9zV0oEPR8Q7c7k6kqfUUzMEoSzKHD+O0Fj48PMvU5x4Uul6Uh+8k+/1HYAala5Qo0yQtHV5yNCcrwYwjo8=
+X-Received: by 2002:a0d:ed04:0:b0:560:befc:6682 with SMTP id
+ w4-20020a0ded04000000b00560befc6682mr2020042ywe.42.1685446626022; Tue, 30 May
+ 2023 04:37:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="d7bOgmCsIJ4exiLW"
-Content-Disposition: inline
-In-Reply-To: <3c6b67a4-4892-0057-3dfc-65ed6c7ebc37@collabora.com>
-X-Cookie: I've read SEVEN MILLION books!!
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230511-tps65219-add-gpio-support-v4-0-b5d6a764d722@baylibre.com>
+ <20230511-tps65219-add-gpio-support-v4-1-b5d6a764d722@baylibre.com>
+In-Reply-To: <20230511-tps65219-add-gpio-support-v4-1-b5d6a764d722@baylibre.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 30 May 2023 13:36:55 +0200
+Message-ID: <CACRpkdZfWF5Bq5id_JyDe2GLc7OojiD7R6g2ZiHswPD3D_UT_w@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] gpio: tps65219: add GPIO support for TPS65219 PMIC
+To:     Jerome Neanne <jneanne@baylibre.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>,
+        khilman@baylibre.com, msp@baylibre.com, francesco@dolcini.it,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-omap@vger.kernel.org,
+        Jonathan Cormier <jcormier@criticallink.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 30, 2023 at 10:00=E2=80=AFAM Jerome Neanne <jneanne@baylibre.co=
+m> wrote:
 
---d7bOgmCsIJ4exiLW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> Add support for TPS65219 PMICs GPIO interface.
+>
+> 3 GPIO pins:
+> - GPIO0 only is IO but input mode reserved for MULTI_DEVICE_ENABLE usage
+> - GPIO1 and GPIO2 are Output only and referred as GPO1 and GPO2 in spec
+>
+> GPIO0 is statically configured as input or output prior to Linux boot.
+> it is used for MULTI_DEVICE_ENABLE function.
+> This setting is statically configured by NVM.
+> GPIO0 can't be used as a generic GPIO (specification Table 8-34).
+> It's either a GPO when MULTI_DEVICE_EN=3D0 or a GPI when MULTI_DEVICE_EN=
+=3D1.
+>
+> Datasheet describes specific usage for non standard GPIO.
+> Link: https://www.ti.com/lit/ds/symlink/tps65219.pdf
+>
+> Co-developed-by: Jonathan Cormier <jcormier@criticallink.com>
+> Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
+> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
 
-On Fri, May 26, 2023 at 09:11:49PM +0300, Cristian Ciocaltea wrote:
+I agree with Andy's review comments, so fix these.
+Once those are fixed you can add my:
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-> -1.5 dB  |  50-51 %
-> -0.0 dB  |  50-51 %
-
-> So it seems the specs are correct, and the problem is the hardware default.
-
-> Is there a better approach to handle this than extending the volume range?
-
-The other option would be to change the value in the register during
-probe to one that's in range, that wouldn't stop any existing saved
-settings from generating errors but would mean there wouldn't be any new
-ones.  Either approach is probably fine.
-
---d7bOgmCsIJ4exiLW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR138cACgkQJNaLcl1U
-h9AZDQf8CRVQJfTeFq5Qw9fVO1/pJlyLSgRpJGmTNzHtJqiQWeIHUvhUdQk308MA
-F8c9ONRYZYqB1lr26oNF0MWRJYI8BQJC35xYxLiK2EyKYLvyiK7K9JekQybKdzpk
-o4fAXlKCjlMHBqVF9ivHEBUjMyM2aZrLc7D0DSX2N+VhVP9evvNNNyccAKxGUE91
-7UDcJARuzCs1ENlzyaJKrZxiGDKbVapt6KMcnz7evtqAQpKgjfdDYOoKWyZcRSAp
-5yQjcYk7+XfGkn8KddHjGbgAV6ZJ9BKcZfJ4PwwMm9iJhoVTONpUBPn6UQMb4PN0
-PmKgoDkU7j2X/W+b/zWraTxZvy6O/g==
-=buze
------END PGP SIGNATURE-----
-
---d7bOgmCsIJ4exiLW--
+Yours,
+Linus Walleij
