@@ -2,110 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C31671710C
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E256D717104
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbjE3Wwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 18:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
+        id S233389AbjE3Wwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 18:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232209AbjE3Wwj (ORCPT
+        with ESMTP id S233194AbjE3Wwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 18:52:39 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB00113
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:52:34 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b034ca1195so21393425ad.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:52:34 -0700 (PDT)
+        Tue, 30 May 2023 18:52:44 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC6DEC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:52:36 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64d604cc0aaso4005604b3a.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:52:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1685487154; x=1688079154;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2OFnMT8j50mrfAxAZ7k3VmBCQhjSG5fp8qjNnxIyPMw=;
-        b=YqXbEYCZVCJthCHi80Vm9lMV+ZY7wzzXJI0fUhLxCEnsZUvzOWWe6Impr+kVjuMvnP
-         R+JK8tIkKHl+YNt0jT3jKbZ67T6BeQPAqkemLM5zmzswSpWdUniMAxeOt097qS/iqo9N
-         OsCP//oPv3EeEpsxXY6p5OH2zstXqQ4udq8GA=
+        d=broadcom.com; s=google; t=1685487156; x=1688079156;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=M3rAYjkkHYPU/OK4ZEufLlpPfAsJjD+qxWbkdRp2kH4=;
+        b=NuAS7EC5qFf3tPtS0R8PRJY2szySViFSxr9yxEUWX0Gyn4yt/lMZq5AKeJ92nCsjBK
+         S8ID2zsOHwHXMr358b1Ols09P1lDR5fyFRNSrW5t4Yev5k80OPWWuNBONEP2aNaU/x5Y
+         RPhu1L3vIOCgCL0UcQN8e1boC5uu6qJc7Rk0Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685487154; x=1688079154;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2OFnMT8j50mrfAxAZ7k3VmBCQhjSG5fp8qjNnxIyPMw=;
-        b=Hzlanmf+eJvT9hdJ12NSpIHdB+r6H2wF7odspokW9gZNjB4uehCVxXwcuqPchfe8oJ
-         1mxEFaZ16NMwjsow61K9so70K4RZvKReIJhPHb7vDTrYYlI1saXahuASZ3+Gp/1wzZeC
-         wmFckAhcoysOU3X86qECXkqevTF8NEAdjDh2kgjO8+EOHCI2yqtVmaHdTZjKNKyJOXsM
-         KAbhFhWyGiDBa8n347k1KD9wYoXRmn1Yxk1fGnGMZSrG/AaJS8PzIJKv6EE/FK97gWof
-         RlF7zUNb30F8rYwytChImBhnkMizEZaH8ywJvar7/zCgEQidX1k4h++Z2R30B9K/dKcj
-         feLg==
-X-Gm-Message-State: AC+VfDxxcX+RWsWnPULZ+n3V6rFnQEgJOsn1xL7La/OnIHxwlTg7hint
-        HcR6uwGwdh4RPUZBGbfRgZuO1LjWd3VyGim5oUY=
-X-Google-Smtp-Source: ACHHUZ5v9FJSB4q3cFFTbyb4++ww0LabKVA61RxerkbfqA0+wnoEX8UdsS2ycrxWQ9k2MXDDJukiqg==
-X-Received: by 2002:a17:902:c948:b0:1ac:750e:33f4 with SMTP id i8-20020a170902c94800b001ac750e33f4mr4379222pla.32.1685487154312;
-        Tue, 30 May 2023 15:52:34 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685487156; x=1688079156;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M3rAYjkkHYPU/OK4ZEufLlpPfAsJjD+qxWbkdRp2kH4=;
+        b=ZIoom6Zd38VJLhvNAuZIVha866CbMFEF+qGUO9qpd9bT2MFBCcalIXbZVLrzJYA0Xa
+         A5hb867uEOxCWGD2MTliEO6tGXikylgioY0NrjfgEh+ttnk7EHH7BvnN8B1bgvJv3VzA
+         vP6E+OCzU904YxG2+g50+v4ALCaxiUJ5Rrm17PIh9/tPfc6Wd7wk+u1fGiYTwT7j08xm
+         go9Z3doXB/TLLpF7p3OBxvNBAex7i6BgZwtla25DI1NzVCikXBpiAfMh+WVY2jbAA7vm
+         cACE4xQgQKrn5AdABGSyrtpjbRNZECW3yxYpRPY+A+Oqv7d9eiJggGxSI5tn/0TbW2lh
+         T+ow==
+X-Gm-Message-State: AC+VfDzLh/oTN2XjsVh07voAU/+KdHGqHslao6TcxpvR2zSJ8cz3k08O
+        W9ohztBdVXWZmzQDK2cctwpLQQ==
+X-Google-Smtp-Source: ACHHUZ5WlODrDTtoZX8GEYCbVj1jaRCwAA3DgwgGADMmFo2HRbK/qQRzvL7JF/EDSPcmpXzYCOp4Sw==
+X-Received: by 2002:a17:903:644:b0:1af:babd:7b6d with SMTP id kh4-20020a170903064400b001afbabd7b6dmr3075052plb.52.1685487156127;
+        Tue, 30 May 2023 15:52:36 -0700 (PDT)
 Received: from stbirv-lnx-3.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id s3-20020a170902b18300b001a1b66af22fsm10805011plr.62.2023.05.30.15.52.32
+        by smtp.gmail.com with ESMTPSA id s3-20020a170902b18300b001a1b66af22fsm10805011plr.62.2023.05.30.15.52.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 15:52:33 -0700 (PDT)
+        Tue, 30 May 2023 15:52:35 -0700 (PDT)
 From:   Florian Fainelli <florian.fainelli@broadcom.com>
 To:     stable@vger.kernel.org
-Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
+Cc:     Pierre Gondois <pierre.gondois@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pierre Gondois <pierre.gondois@arm.com>,
         Akihiko Odaki <akihiko.odaki@daynix.com>,
         Palmer Dabbelt <palmer@rivosinc.com>,
         Gavin Shan <gshan@redhat.com>,
         Jeremy Linton <jeremy.linton@arm.com>,
         linux-arm-kernel@lists.infradead.org (moderated list:ARM64 PORT
         (AARCH64 ARCHITECTURE)), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH stable 6.3 0/4] Missing cacheinfo backports
-Date:   Tue, 30 May 2023 15:49:10 -0700
-Message-Id: <20230530224914.1251409-1-florian.fainelli@broadcom.com>
+Subject: [PATCH stable 6.3 1/4] cacheinfo: Add use_arch[|_cache]_info field/function
+Date:   Tue, 30 May 2023 15:49:11 -0700
+Message-Id: <20230530224914.1251409-2-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230530224914.1251409-1-florian.fainelli@broadcom.com>
+References: <20230530224914.1251409-1-florian.fainelli@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000206add05fcf10ffe"
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        boundary="0000000000003cf91105fcf10f5b"
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000206add05fcf10ffe
+--0000000000003cf91105fcf10f5b
 Content-Transfer-Encoding: 8bit
 
-These patches resolve the following errors seen with linux-6.3.y on our
-ARCH_BRCMSTB platforms which contain cache information in the Device
-Tree:
+From: Pierre Gondois <pierre.gondois@arm.com>
 
-[    0.002072] Early cacheinfo failed, ret = -22
+commit ef9f643a9f8b62bcbcc51f0e0af8599adc2e17ed upstream
 
-Pierre Gondois (1):
-  cacheinfo: Add use_arch[|_cache]_info field/function
+The cache information can be extracted from either a Device
+Tree (DT), the PPTT ACPI table, or arch registers (clidr_el1
+for arm64).
 
-Radu Rendec (3):
-  cacheinfo: Add arch specific early level initializer
-  cacheinfo: Add arm64 early level initializer implementation
-  cacheinfo: Allow early level detection when DT/ACPI info is
-    missing/broken
+The clidr_el1 register is used only if DT/ACPI information is not
+available. It does not states how caches are shared among CPUs.
 
- arch/arm64/kernel/cacheinfo.c | 25 ++++++++--
- drivers/base/arch_topology.c  |  4 +-
- drivers/base/cacheinfo.c      | 87 +++++++++++++++++++++++++----------
- include/linux/cacheinfo.h     |  8 ++++
- 4 files changed, 95 insertions(+), 29 deletions(-)
+Add a use_arch_cache_info field/function to identify when the
+DT/ACPI doesn't provide cache information. Use this information
+to assume L1 caches are privates and L2 and higher are shared among
+all CPUs.
 
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+Link: https://lore.kernel.org/r/20230414081453.244787-5-pierre.gondois@arm.com
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+---
+ drivers/base/cacheinfo.c  | 12 ++++++++++--
+ include/linux/cacheinfo.h |  6 ++++++
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
+index ea8f416852bd..8120ac1ddbe4 100644
+--- a/drivers/base/cacheinfo.c
++++ b/drivers/base/cacheinfo.c
+@@ -28,6 +28,9 @@ static DEFINE_PER_CPU(struct cpu_cacheinfo, ci_cpu_cacheinfo);
+ #define per_cpu_cacheinfo_idx(cpu, idx)		\
+ 				(per_cpu_cacheinfo(cpu) + (idx))
+ 
++/* Set if no cache information is found in DT/ACPI. */
++static bool use_arch_info;
++
+ struct cpu_cacheinfo *get_cpu_cacheinfo(unsigned int cpu)
+ {
+ 	return ci_cacheinfo(cpu);
+@@ -40,7 +43,8 @@ static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
+ 	 * For non DT/ACPI systems, assume unique level 1 caches,
+ 	 * system-wide shared caches for all other levels.
+ 	 */
+-	if (!(IS_ENABLED(CONFIG_OF) || IS_ENABLED(CONFIG_ACPI)))
++	if (!(IS_ENABLED(CONFIG_OF) || IS_ENABLED(CONFIG_ACPI)) ||
++	    use_arch_info)
+ 		return (this_leaf->level != 1) && (sib_leaf->level != 1);
+ 
+ 	if ((sib_leaf->attributes & CACHE_ID) &&
+@@ -343,6 +347,10 @@ static int cache_setup_properties(unsigned int cpu)
+ 	else if (!acpi_disabled)
+ 		ret = cache_setup_acpi(cpu);
+ 
++	// Assume there is no cache information available in DT/ACPI from now.
++	if (ret && use_arch_cache_info())
++		use_arch_info = true;
++
+ 	return ret;
+ }
+ 
+@@ -361,7 +369,7 @@ static int cache_shared_cpu_map_setup(unsigned int cpu)
+ 	 * to update the shared cpu_map if the cache attributes were
+ 	 * populated early before all the cpus are brought online
+ 	 */
+-	if (!last_level_cache_is_valid(cpu)) {
++	if (!last_level_cache_is_valid(cpu) && !use_arch_info) {
+ 		ret = cache_setup_properties(cpu);
+ 		if (ret)
+ 			return ret;
+diff --git a/include/linux/cacheinfo.h b/include/linux/cacheinfo.h
+index 908e19d17f49..b91cc9991c7c 100644
+--- a/include/linux/cacheinfo.h
++++ b/include/linux/cacheinfo.h
+@@ -129,4 +129,10 @@ static inline int get_cpu_cacheinfo_id(int cpu, int level)
+ 	return -1;
+ }
+ 
++#ifdef CONFIG_ARM64
++#define use_arch_cache_info()	(true)
++#else
++#define use_arch_cache_info()	(false)
++#endif
++
+ #endif /* _LINUX_CACHEINFO_H */
 -- 
 2.25.1
 
 
---000000000000206add05fcf10ffe
+--0000000000003cf91105fcf10f5b
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -176,14 +241,14 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIGsygsqAPjaZCow5
-NCB2wXPLJWFc7Lw/C994cMWJ/0MfMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDUzMDIyNTIzNFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBHQ1JVQ+C48W79k
+V1+NCGwLEK9eLXJC0NC6bfhEuz+rMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDUzMDIyNTIzNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDFOovXsB9kjXYHTgyokDBCc0CHFhnAcvvx
-OeCpu9ltI/tYtUki0L1qBgN7LtyddgejsZZHpJLOXPvmQeQdah5jHj8rAemQJ0Id9IScI2y5cHyX
-SB5PVAKhpEIFRlWCvzNS/zuwMOXcla73Z0R6O0wkXcUpOHeCqrx9gvqR4oz04GtxHwJqdGrbav+P
-G0ImZMnB0eLBn6jTG+QCMTZiqAcRe59aiaiyvblwZ4t+LmUMbcecQzRLyGRLBHVlhqQzpw7GYTgO
-4W0iIPcf7DnCJvbt+jZoGaRL0I2kfJLZSxzlq61qcBRvjX89UlwOup/xISXfcgyX1JZkf8v6Hx4t
-eD93
---000000000000206add05fcf10ffe--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDDb+Apaii5Gc/OIbtrgPeZqJ2VDoqh+Bzv
+Zuo3kG/QbjGHWILx+Bd0wd4Kr1/rn+F+02G6Ftx0wKqG4OZ9Z509kkk1k17R6x0Pv1ePXpLuEp8v
+0I46MaTJDgr7qhloCjqpDOKIHvppd506f3oNXEp1Gf8hAga80+2oJjq+CSBdU9+Wog4WtAzHLMeq
+hGwjzJk1WnaQEFCB93pAqFhju/XYiPMIwO/Zk1/QQKg2DgN2e9wtMprBTGPtxOinKuVQJkNrVnqh
+IWXkTa7fkfwHZvJFpMolHFoXUvmyUejdO+eGtnmxk2KjEHJeRaDaHHw3AbOI7CRD71ntD/ZKcTtc
+m/ac
+--0000000000003cf91105fcf10f5b--
