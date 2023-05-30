@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 004147157B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8B67157B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjE3Hzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
+        id S229724AbjE3H4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjE3Hzd (ORCPT
+        with ESMTP id S229735AbjE3H4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:55:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2E6F7;
-        Tue, 30 May 2023 00:55:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B05C762349;
-        Tue, 30 May 2023 07:55:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71025C433EF;
-        Tue, 30 May 2023 07:55:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685433322;
-        bh=8ZdTOa03jdrIEEMTRubaTPNotfGUbHnWuYuQN/xtOPA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pZTF2iPEAyO8W9Utdy4WVirRx29yvcU1kmInYUI3eNQMllXS+VOlwBK05kE4cjMxm
-         iT9hShvfgQRfHdzjKYv0DOEqATP1TAWzLwnevJEwSTONFyqhoUJow0AyIu9DOmiuf/
-         FrofSDhfMRE4axz/VDizJeMojrALTfc8JO5H6NEBKIJww4JAw+HE/ifoy8w7RZ5XTM
-         qav5qHfQL/LZqApbRShIy2S4xYnoc4V2YwhXkLIF31fE41+oJqdf61xZIYtkFz8Hj0
-         sXAXTjeGZy7wLLDsAyg0GKY24Z1D/n5oKbLDtnqMHzs77yXpHvyuFYSMVMWsvwcj8N
-         gusvJxpYikayw==
-Message-ID: <43d8b745-ea0e-4359-8291-be750abab41a@kernel.org>
-Date:   Tue, 30 May 2023 09:55:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] dt-bindings: net: Add QCA2066 Bluetooth
-Content-Language: en-US
-To:     "Tim Jiang (QUIC)" <quic_tjiang@quicinc.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Balakrishna Godavarthi (QUIC)" <quic_bgodavar@quicinc.com>,
-        "Hemant Gupta (QUIC)" <quic_hemantg@quicinc.com>
-References: <20230518092719.11308-1-quic_tjiang@quicinc.com>
- <fb3678d67fd4428eaec98365288384ed@quicinc.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <fb3678d67fd4428eaec98365288384ed@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Tue, 30 May 2023 03:56:32 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C922F13A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:56:11 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-561eadd916fso88542057b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 00:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685433371; x=1688025371;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=K7ytfWF+UN+RaMrVhdC48WtmycV9AzSbc9oaKd9zjxk=;
+        b=hOUtLNfZE60vJA625/94v7A5IkhIJF8qwaDymhZkbTk20AZUukm+XNUXuRkmOqBxTQ
+         emjuInDHpiaGcWk91ywLezj4ftmluptwp8vSo4w8KefDtWj+D2Ps2OOU1mbcK1i5du9q
+         yMy3ZkSEaRjVafp68Qak+SPnUEp1k5F7V+1YHfWozVmiQcFDYWWNL39pvnJS6RdEHRkV
+         mqqbnxM6DNQZ5I1bY2FVhqtq2EL1PeXX8affZ7fIFz9mMhdRvy2yrCUJ1bhyB4zfv9Lh
+         jZBiWW68kOSEKWOgWGv3/UQVe5AWDzLldoYAa5pbq6d3fxUtiv4OqwznQkvfId9VTOdJ
+         29ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685433371; x=1688025371;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K7ytfWF+UN+RaMrVhdC48WtmycV9AzSbc9oaKd9zjxk=;
+        b=JcJgiprVGwl705SdpFIuzAlr0uOFVn67ZaAMqQyLzEzQADCfUUvGmgh3wnCK7WhJ2s
+         bpSXhMYAqXtEpGra7IGT4L6TkV6FcikLtt/Hm2ovVr1o7x2bnImya20UvLqHxIZWxD8p
+         R7E9AHtgax8hhsV9qzSyVvMN7nJ8pn0LZwRMOD2GlZFaU4PaSIjw7puUB+pbWTKLqNPE
+         SOnnQCN6ro6rU9tAg1D4YoG1qFEUeCaIZR199w/zK6W5jR5DXr3k4oi4bYhsSh+uP6mU
+         rDyQ9UGh+lpl2EzKavqUMECPm2nHy64k+2aLxw2VbWtVilAyBXRCPuIyQTMP+5yZBwfC
+         XrNA==
+X-Gm-Message-State: AC+VfDzb2sQvTOmt52d+lmihvepfY/MGtV66Z+y2gQ54QJLeYVDqShib
+        uUctx1JKcW7SOnxl8zsfOXotd5V8Uwbx6A==
+X-Google-Smtp-Source: ACHHUZ5JSMwZMnDvGVI6Ii/vsemPy+HbaWLd8oh0flzFpYKfGfN+sd93pJ/SZfyB3wUb5YMJUtNRmqnRoHcAaA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a81:ae09:0:b0:560:d237:43dc with SMTP id
+ m9-20020a81ae09000000b00560d23743dcmr911546ywh.3.1685433371096; Tue, 30 May
+ 2023 00:56:11 -0700 (PDT)
+Date:   Tue, 30 May 2023 15:55:57 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230530075557.1558422-2-davidgow@google.com>
+Subject: [PATCH] kunit: Fix obsolete name in documentation headers (func->action)
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Benjamin Berg <benjamin.berg@intel.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,25 +70,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/05/2023 09:49, Tim Jiang (QUIC) wrote:
-> Hi krzk:
->   Could you help review this patch ?
+The kunit_add_action() and related functions named the kunit_action_t
+parameter 'func' in early drafts, which was later renamed to 'action'
+However, the doc comments were not properly updated.
 
-Did you send it to me (as asked by get_maintainers.pl)?
+Fix these to avoid confusion and 'make htmldocs' warnings.
 
-> 
-> Regards.
-> Tim
-> 
-> 
-> -----Original Message-----
-> From: Tim Jiang (QUIC) <quic_tjiang@quicinc.com> 
-> Sent: Thursday, May 18, 2023 5:27 PM
-> To: krzk@kernel.org
-> Cc: netdev@vger.kernel.org; devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; Balakrishna Godavarthi (QUIC) <quic_bgodavar@quicinc.com>; Hemant Gupta (QUIC) <quic_hemantg@quicinc.com>; Tim Jiang (QUIC) <quic_tjiang@quicinc.com>
+Fixes: b9dce8a1ed3e ("kunit: Add kunit_add_action() to defer a call until test exit")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Closes: https://lore.kernel.org/lkml/20230530151840.16a56460@canb.auug.org.au/
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ include/kunit/resource.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-I think not...
-
-Best regards,
-Krzysztof
+diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+index b64eb783b1bc..c7383e90f5c9 100644
+--- a/include/kunit/resource.h
++++ b/include/kunit/resource.h
+@@ -393,7 +393,7 @@ typedef void (kunit_action_t)(void *);
+ /**
+  * kunit_add_action() - Call a function when the test ends.
+  * @test: Test case to associate the action with.
+- * @func: The function to run on test exit
++ * @action: The function to run on test exit
+  * @ctx: Data passed into @func
+  *
+  * Defer the execution of a function until the test exits, either normally or
+@@ -415,7 +415,7 @@ int kunit_add_action(struct kunit *test, kunit_action_t *action, void *ctx);
+ /**
+  * kunit_add_action_or_reset() - Call a function when the test ends.
+  * @test: Test case to associate the action with.
+- * @func: The function to run on test exit
++ * @action: The function to run on test exit
+  * @ctx: Data passed into @func
+  *
+  * Defer the execution of a function until the test exits, either normally or
+@@ -441,7 +441,7 @@ int kunit_add_action_or_reset(struct kunit *test, kunit_action_t *action,
+ /**
+  * kunit_remove_action() - Cancel a matching deferred action.
+  * @test: Test case the action is associated with.
+- * @func: The deferred function to cancel.
++ * @action: The deferred function to cancel.
+  * @ctx: The context passed to the deferred function to trigger.
+  *
+  * Prevent an action deferred via kunit_add_action() from executing when the
+@@ -459,7 +459,7 @@ void kunit_remove_action(struct kunit *test,
+ /**
+  * kunit_release_action() - Run a matching action call immediately.
+  * @test: Test case the action is associated with.
+- * @func: The deferred function to trigger.
++ * @action: The deferred function to trigger.
+  * @ctx: The context passed to the deferred function to trigger.
+  *
+  * Execute a function deferred via kunit_add_action()) immediately, rather than
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
 
