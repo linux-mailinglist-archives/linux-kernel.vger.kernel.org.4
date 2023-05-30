@@ -2,107 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E557170E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77FFA7170E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233236AbjE3WnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 18:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
+        id S231826AbjE3Wow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 18:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbjE3WnT (ORCPT
+        with ESMTP id S230224AbjE3Wot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 18:43:19 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBCAEC
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:43:15 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-96f7bf29550so783928566b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:43:15 -0700 (PDT)
+        Tue, 30 May 2023 18:44:49 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF36107
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:44:47 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-25676b4fb78so1912382a91.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:44:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685486593; x=1688078593;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F8RVXLYgdzUMV2q+6sOMeXIaKNwf83t9uqStvN0uPe4=;
-        b=dKveP6ipxEp3Shiie7EcNlQLqfCSPHCSuSWwct2C8fNa3z2smQZ5x82L1AfFtbZQbE
-         f+mbLo34TgNhELb1iYmU7oZhFFePacmZDYZTF7mw7LMD581jzm70W14PbDE1LZY0YB3z
-         N5LLs90PPDPiQO8+LzNDbYKdgp/f4wr4O2Zck=
+        d=chromium.org; s=google; t=1685486686; x=1688078686;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Lpvk61m8kV2Aob9IF7acV7Nqq1ETfXj91v2zUEXV06I=;
+        b=FyuD76bD6Wx498UScEb7wg6Rz8mBirQ2uKMnwVjGlWl+JnnfoMVLYTLTLb6Dz7eCCx
+         9sg+TmgYzSf87RA5ZS9sdKb8F3kyfoDx2e0u0CYpJVOUANBRnVDrnYwILvBO14qAm2XC
+         0OdiEZ2im2nHX8lMWTLHHqtRq9xra53m1vgBI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685486593; x=1688078593;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F8RVXLYgdzUMV2q+6sOMeXIaKNwf83t9uqStvN0uPe4=;
-        b=Ilo6hNrXxWCJehxkOQMKEveX9bkgPw/CIWCuIss520zo1JM7veLeOisfEN3zQ2g9Tj
-         CYnv3y679aJ28DwOfP46mdiUIaALrOKWC7dc71kim8nkWgwpmACZBxEpNzF72nwrJ91M
-         0vLI4RkaFc1yKBpA5vbJ0abWejDF0uje2F1tFe0/pU31rtXQiM2RYC9ig9i3E7AuRJyp
-         Wb010gvi6O0RLe1jnlB4udoDoiEbmD5Rrumm775b8cTBQXHfkYgYpo865KQCjp7b5sO0
-         BbMybYJgRDwHcM4/jRvdO38Yn6rXjuwQUDktHoG7T8B9sQk+TmP9B8dZfDO2kPZ+nPzF
-         FAaw==
-X-Gm-Message-State: AC+VfDwIz6vfWWmkLFQZupJQaPoWF1hTcF/dOWgDdVYNyVCWqjOasvp8
-        ENuPghCdAbbA6Nh56oseLY+OIpuJP3+j9yQ1G3dsc4MU
-X-Google-Smtp-Source: ACHHUZ65PfgHaos5MWAPMnENBSaiXHf3MUD2i9V7V81c8iYyxIZtuLQ+BpbFXHc+/LN9ewRP4qF6xw==
-X-Received: by 2002:a17:907:7285:b0:96b:e92:4feb with SMTP id dt5-20020a170907728500b0096b0e924febmr3578912ejc.60.1685486593337;
-        Tue, 30 May 2023 15:43:13 -0700 (PDT)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
-        by smtp.gmail.com with ESMTPSA id v19-20020a1709060b5300b0096621340285sm7955300ejg.198.2023.05.30.15.43.12
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 15:43:12 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-96f7bf29550so783926366b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:43:12 -0700 (PDT)
-X-Received: by 2002:a17:907:3da1:b0:96f:aacb:6f15 with SMTP id
- he33-20020a1709073da100b0096faacb6f15mr2905332ejc.31.1685486592131; Tue, 30
- May 2023 15:43:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685486686; x=1688078686;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lpvk61m8kV2Aob9IF7acV7Nqq1ETfXj91v2zUEXV06I=;
+        b=MEl1f5sRruOY2PFqujG7AL/3lVFdsDkxgKNeRreQ8d+VchPyys9y25Fc54sAHP5TYV
+         fS7sK26OO6GyadKbdqjEjNl3dcfQASTmMDsUUqZovJSTJiskvsTMOYuVgoFsbX6RE6ci
+         XA9lyZpCRi8xsBZvPwSYsfmZyZytqOfUrJeGWDQRKF3SU/V9e1dD+nEetRIF87nj1UzM
+         jT10tgPs5SNGpoB38VqshJQ2w9EC1h2nu9w9iZ4ornsfiHvyfQT90o98YSrSAVsKqnDd
+         kGsgGzVDWUy4THDZeF8fg0gCOuAZ7yc6i/jdiR9qHRsVZQ3y1hds0k3s/IA0Qwqb2BID
+         Af/w==
+X-Gm-Message-State: AC+VfDzsGRLeIcJYzXZ2503cMNGqFT+6x08NMYB7YGQZGLZa+ExLipB4
+        aGwQjbxvz8ySMQ4iYwtg7b/E4A==
+X-Google-Smtp-Source: ACHHUZ4eSr7YyjxG6IwmG9+W0DZTBBwsbnm9MEeWUHeWyz1UYQNtYfRsgqJaKxB95SIn6RfICpOaSw==
+X-Received: by 2002:a17:90a:f2c3:b0:256:7e70:309c with SMTP id gt3-20020a17090af2c300b002567e70309cmr3803420pjb.44.1685486686640;
+        Tue, 30 May 2023 15:44:46 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id x2-20020a17090aa38200b0025069c8a151sm9285560pjp.53.2023.05.30.15.44.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 15:44:46 -0700 (PDT)
+Date:   Tue, 30 May 2023 15:44:45 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] scsi: lpfc: Avoid -Wstringop-overflow warning
+Message-ID: <202305301529.1EEA11B@keescook>
+References: <ZHZq7AV9Q2WG1xRB@work>
+ <fe0739cbe279cf9db2ebff1146e7ae540cc1ad6c.camel@linux.ibm.com>
 MIME-Version: 1.0
-References: <CA+icZUVZSBx-=Sm8ZM12dWY4hmpnfDdhmg6UwXsR4OLSgPXY2w@mail.gmail.com>
- <64766df07f013_e067a29410@dwillia2-xfh.jf.intel.com.notmuch>
- <CAHk-=whWJFw8+HP=0-ZaQYq2VVPtv1StFhUxgiJW1_FWdtgJSA@mail.gmail.com> <64767669744d4_168e29489@dwillia2-xfh.jf.intel.com.notmuch>
-In-Reply-To: <64767669744d4_168e29489@dwillia2-xfh.jf.intel.com.notmuch>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 30 May 2023 18:42:55 -0400
-X-Gmail-Original-Message-ID: <CAHk-=whHjT-KWPjQK8iSaHJa7WX_LuKgZt_iX+jDxRxDD2Zjdg@mail.gmail.com>
-Message-ID: <CAHk-=whHjT-KWPjQK8iSaHJa7WX_LuKgZt_iX+jDxRxDD2Zjdg@mail.gmail.com>
-Subject: Re: Revert "module: error out early on concurrent load of the same
- module file"
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Sedat Dilek <sedat.dilek@gmail.com>,
-        Johan Hovold <johan@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-cxl@vger.kernel.org, mcgrof@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fe0739cbe279cf9db2ebff1146e7ae540cc1ad6c.camel@linux.ibm.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 6:19=E2=80=AFPM Dan Williams <dan.j.williams@intel.=
-com> wrote:
->
-> I know that the "Link:" for "mailing-list thread where patch originated"
-> is mostly useless information [1], but when it comes to quickly reporting
-> test results on the output of "git bisect", it comes in handy.
+On Tue, May 30, 2023 at 05:36:06PM -0400, James Bottomley wrote:
+> On Tue, 2023-05-30 at 15:30 -0600, Gustavo A. R. Silva wrote:
+> > Avoid confusing the compiler about possible negative sizes.
+> > Use size_t instead of int for variables size and copied.
+> > 
+> > Address the following warning found with GCC-13:
+> > In function ‘lpfc_debugfs_ras_log_data’,
+> >     inlined from ‘lpfc_debugfs_ras_log_open’ at
+> > drivers/scsi/lpfc/lpfc_debugfs.c:2271:15:
+> > drivers/scsi/lpfc/lpfc_debugfs.c:2210:25: warning: ‘memcpy’ specified
+> > bound between 18446744071562067968 and 18446744073709551615 exceeds
+> > maximum object size 9223372036854775807 [-Wstringop-overflow=]
+> >  2210 |                         memcpy(buffer + copied, dmabuf->virt,
+> >       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >  2211 |                                size - copied - 1);
+> >       |                                ~~~~~~~~~~~~~~~~~~
+> > 
+> 
+> This looks like a compiler bug to me and your workaround would have us
+> using unsigned types everywhere for sizes, which seems wrong.  There
+> are calls which return size or error for which we have ssize_t and that
+> type has to be usable in things like memcpy, so the compiler must be
+> fixed or the warning disabled.
 
-It was literally there in this case. We had multiple links, and you
-may just have been overwhelmed by the pure cornucopia of links.
+The compiler is (correctly) noticing that the calculation involving
+"size" (from which "copied" is set) could go negative.
 
-In this case is was the third one:
+The "unsigned types everywhere" is a slippery slope argument that
+doesn't apply: this is fixing a specific case of a helper taking a
+size that is never expected to go negative in multiple places
+(open-coded multiplication, vmalloc, lpfc_debugfs_ras_log_data, etc). It
+should be bounds checked at the least...
 
-    Link: https://lore.kernel.org/lkml/ZG%2Fa+nrt4%2FAAUi5z@bombadil.infrad=
-ead.org/
-[3]
 
-which linked to that thread.
+struct lpfc_hba {
+	...
+	uint32_t cfg_ras_fwlog_buffsize;
+	...
+};
 
-It's the links to pure patch submissions that are useless (ie the
-"this is where I sent the patch"). Those lore can find for you
-automatically.
+lpfc_debugfs_ras_log_open():
+	...
+        struct lpfc_hba *phba = inode->i_private;
+        int size;
+	...
+	size = LPFC_RAS_MIN_BUFF_POST_SIZE * phba->cfg_ras_fwlog_buffsize;
+        debug->buffer = vmalloc(size);
+	...
+        debug->len = lpfc_debugfs_ras_log_data(phba, debug->buffer, size);
+	...
 
-Links to actual threads with background and test commentary are
-useful, and I add those myself. There were several of them.
+lpfc_debugfs_ras_log_data():
+	...
+                if ((copied + LPFC_RAS_MAX_ENTRY_SIZE) >= (size - 1)) {
+                        memcpy(buffer + copied, dmabuf->virt,
+                               size - copied - 1);
 
-                  Linus
+Honestly, the "if" above is the weirdest part, and perhaps that should
+just be adjusted instead:
+
+	if (size <= LPFC_RAS_MAX_ENTRY_SIZE)
+		return -ENOMEM;
+	...
+		if (size - copied <= LPFC_RAS_MAX_ENTRY_SIZE) {
+			memcpy(..., size - copied - 1);
+                        copied += size - copied - 1;
+                        break;
+		}
+		...
+        }
+        return copied;
+
+
+
+-- 
+Kees Cook
