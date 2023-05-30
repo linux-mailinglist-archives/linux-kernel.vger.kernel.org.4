@@ -2,78 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1AF1716C1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5FF716C1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232909AbjE3SRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 14:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
+        id S232931AbjE3STH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 14:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbjE3SRg (ORCPT
+        with ESMTP id S231231AbjE3SSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 14:17:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E508B2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:16:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685470607;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LboiJrYnAi/py5cGBQDQMSaCfDnf6CASAq+urrSZpQ0=;
-        b=JIp6OkyU4j51uq6HKLfj4Yg2Ubpkour7PHp8VvZHDnHe84IqZsgC2gHy9CPhIvP69+vFmt
-        ZzQ/PW0yv1KDmSC9XuQr0vty1qP0vUqwnZn1Y5lk6P5tnoMPBCEehz87L6SlSask7dosBJ
-        Mqo+IGazwGO5nk4Uk9lWvfiUJ73oFbA=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-489-rdbkMR3-M0KnPW8xrj1w-A-1; Tue, 30 May 2023 14:16:45 -0400
-X-MC-Unique: rdbkMR3-M0KnPW8xrj1w-A-1
-Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2af2ffb4e5aso21521821fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:16:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685470604; x=1688062604;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LboiJrYnAi/py5cGBQDQMSaCfDnf6CASAq+urrSZpQ0=;
-        b=lPYRMPMuOcbv2l9G6m6Ayq+2tInfNJJ8TGAtBE6TCHjKNO+i7H4jXVhEJeJUe7PWfk
-         Yufa7pGlLiDhJEjCvaHirgcdRrdru00b8W7GdOIAfMqmnT/MV9hLExN+3Kz0sns40Psp
-         Td5yfNS+6nkRpg2nUG0+vOL3YiqvVI8z35500MG+akE6C+OuKRe6UGbQEX1MWuoWYc0Q
-         mMqCNVs7JTKqOkilRvvQ4/3uUAmFAIVIMPChtG0e/FwMQ7PMsogoQCxnDlTFPQWYIxTv
-         r6pzjzg7NOdr66fzDe60UhY1cA+xfJdmhDk8f9kb8jlrb2jETlh+u+GH04qnEC/Jd8u/
-         e5nA==
-X-Gm-Message-State: AC+VfDzSxDO30kRkeyKDTJMxmotDtLiw1e3fNHc1RM/i0BwQh5WHTeOM
-        +lE9YQHGcIvxzQW2xOteeh0TOrq7yn/fCKDLKZwJTewUImuVUHpHfOaJQ0+Zxp4nE0iVuIvLaCv
-        EMoAYjROD88ZkOLY742hiu6li
-X-Received: by 2002:a2e:c52:0:b0:2a2:47a8:728b with SMTP id o18-20020a2e0c52000000b002a247a8728bmr1425276ljd.13.1685470603872;
-        Tue, 30 May 2023 11:16:43 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6L+/RfkbhNFet6mCP3WipllloDSKB6gbN/OJcXr/yJVtnkSj+T0yms3k/Tma6Qn+mxAQxBOg==
-X-Received: by 2002:a2e:c52:0:b0:2a2:47a8:728b with SMTP id o18-20020a2e0c52000000b002a247a8728bmr1425268ljd.13.1685470603541;
-        Tue, 30 May 2023 11:16:43 -0700 (PDT)
-Received: from redhat.com ([176.12.143.106])
-        by smtp.gmail.com with ESMTPSA id c10-20020a2e9d8a000000b002af03f75edasm2932561ljj.80.2023.05.30.11.16.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 11:16:43 -0700 (PDT)
-Date:   Tue, 30 May 2023 14:16:36 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Igor Mammedov <imammedo@redhat.com>, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, lenb@kernel.org, bhelgaas@google.com,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        mika.westerberg@linux.intel.com
-Subject: Re: [PATCH v2] PCI: acpiphp: Reassign resources on bridge if
- necessary
-Message-ID: <20230530141321-mutt-send-email-mst@kernel.org>
-References: <20230424191557.2464760-1-imammedo@redhat.com>
- <ZHYujEM3o6iWIB1B@bhelgaas>
+        Tue, 30 May 2023 14:18:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C266FA7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:18:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56BE160E92
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 18:18:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637D9C4339C;
+        Tue, 30 May 2023 18:18:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685470733;
+        bh=GSoJuOKRdY+uRAsGoUp8M6lD7U0u8mQi49JYAbktU9U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HbsjnUKjcjDwjDBgQ5g4mt2ee+gpdY2yXecyHxE/5hujI30cFSqea0ycWzHcL81rT
+         Mfr3M+KeDBwyVG8wGbmB3kBb3lzVPSTnZXtLdj2NQG+nbccDO2IXHWGlQIBkUOB9au
+         oAW2PbOv2XKJzGjYmq07qE4hKm4OSZzNn7qitSAtF3cZ3aJQfQdmfmtG8FUfqSIUWV
+         eIadpWXL3xmWRS3aZekd7viWkoV6I04WuQbWW2EE+iCds6XzUFPe3Cr7yFp+MGoA/O
+         8ZK/DKacTit9g01Bph9xXyfJSQUxoaz0C2XJySRvgeSj0hf2s50rv3Q98U0tmOlXmd
+         JVjlNbIm8Rh5Q==
+Date:   Tue, 30 May 2023 11:18:51 -0700
+From:   Chris Li <chrisl@kernel.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
+        yosryahmed@google.com, kernel-team@fb.com
+Subject: Re: [PATCH] mm: zswap: shrink until can accept
+Message-ID: <ZHY+C0ICTah8/+V3@google.com>
+References: <20230524065051.6328-1-cerasuolodomenico@gmail.com>
+ <ZHE7KWId1fvXLpUy@google.com>
+ <CA+CLi1iC35exSaKaCmVmTWtna=9xBKHSyGNGmHFo=OqiSECGoA@mail.gmail.com>
+ <ZHUSfg+z3wcaIhAT@google.com>
+ <20230530041341.GB84971@cmpxchg.org>
+ <ZHYNaxgcKs7PSp9I@google.com>
+ <20230530155519.GB97194@cmpxchg.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZHYujEM3o6iWIB1B@bhelgaas>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230530155519.GB97194@cmpxchg.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,47 +62,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 12:12:44PM -0500, Bjorn Helgaas wrote:
-> On Mon, Apr 24, 2023 at 09:15:57PM +0200, Igor Mammedov wrote:
-> > When using ACPI PCI hotplug, hotplugging a device with
-> > large BARs may fail if bridge windows programmed by
-> > firmware are not large enough.
+On Tue, May 30, 2023 at 11:55:19AM -0400, Johannes Weiner wrote:
+> On Tue, May 30, 2023 at 07:51:23AM -0700, Chris Li wrote:
+> > Thanks for pointing out -ENOMEM shouldn't be persistent.
+> > Points taken.
 > > 
-> > Reproducer:
-> >   $ qemu-kvm -monitor stdio -M q35  -m 4G \
-> >       -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=on \
-> >       -device id=rp1,pcie-root-port,bus=pcie.0,chassis=4 \
-> >       disk_image
-> > 
-> >  wait till linux guest boots, then hotplug device
-> >    (qemu) device_add qxl,bus=rp1
-> > 
-> >  hotplug on guest side fails with:
-> >    pci 0000:01:00.0: [1b36:0100] type 00 class 0x038000
-> >    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x03ffffff]
-> >    pci 0000:01:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
-> >    pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x00001fff]
-> >    pci 0000:01:00.0: reg 0x1c: [io  0x0000-0x001f]
-> >    pci 0000:01:00.0: BAR 0: no space for [mem size 0x04000000]
-> >    pci 0000:01:00.0: BAR 0: failed to assign [mem size 0x04000000]
-> >    pci 0000:01:00.0: BAR 1: no space for [mem size 0x04000000]
-> >    pci 0000:01:00.0: BAR 1: failed to assign [mem size 0x04000000]
-> >    pci 0000:01:00.0: BAR 2: assigned [mem 0xfe800000-0xfe801fff]
-> >    pci 0000:01:00.0: BAR 3: assigned [io  0x1000-0x101f]
-> >    qxl 0000:01:00.0: enabling device (0000 -> 0003)
+> > The original point of not retrying the persistent error
+> > still holds.
 > 
-> Ugh, I just noticed that we turned on PCI_COMMAND_MEMORY even though
-> BARs 0 and 1 haven't been assigned.  How did that happen?  It looks
-> like pci_enable_resources() checks for that, but there must be a hole
-> somewhere.
+> Okay, but what persistent errors are you referring to?
 
-Maybe because BAR2 was assigned? I think pci_enable_resources just
-does
-                if (r->flags & IORESOURCE_MEM)
-                        cmd |= PCI_COMMAND_MEMORY;
-in a loop so if any memory BARs are assigned then PCI_COMMAND_MEMORY
-is set.
+Maybe ENOMEM is a bad example. How about if the swap device
+just went bad and can't complete new IO writes?
 
-> >    Unable to create vram_mapping
-> >    qxl: probe of 0000:01:00.0 failed with error -12
+> Aside from -ENOMEM, writeback_entry will fail on concurrent swap
+> invalidation or a racing swapin fault. In both cases we should
+> absolutely keep trying other entries until the goal is met.
+
+How about a narrower fix recognizing those error cases and making
+the inner loop continue in those errors?
+
+> > > Should it be fixed before merging this patch? I don't think the
+> > > ordering matters. Right now the -ENOMEM case invokes OOM, so it isn't
+> > > really persistent either. Retrying a few times in that case certainly
+> > > doesn't seem to make things worse.
+> > 
+> > If you already know the error is persistent, retrying is wasting
+> > CPU. It can pertancial hold locks during the retry, which can
+> > slow someone else down.
+> 
+> That's a bit of a truism. How does this pertain to the zswap reclaim
+> situation?
+
+See the above narrower fix alternative.
+> 
+> > > > > As I was writing to Yosry, the differentiation would be a great improvement
+> > > > > here, I just have a patch set in the queue that moves the inner reclaim loop
+> > > > > from the zpool driver up to zswap. With that, updating the error handling
+> > > > > would be more convenient as it would be done in one place instead of three.i
+> > > > 
+> > > > This has tricky complications as well. The current shrink interface
+> > > > doesn't support continuing from the previous error position. If you want
+> > > > to avoid a repeat attempt if the page has a writeback error, you kinda
+> > > > of need a way to skip that page.
+> > > 
+> > > A page that fails to reclaim is put back to the tail of the LRU, so
+> > > for all intents and purposes it will be skipped. In the rare and
+> > 
+> > Do you mean the page is treated as hot again?
+> > 
+> > Wouldn't that be undesirable from the app's point of view?
+> 
+> That's current backend LRU behavior. Is it optimal? That's certainly
+> debatable. But it's tangential to this patch. The point is that
+> capping retries to a fixed number of failures works correctly as a
+> safety precaution and introduces no (new) undesirable behavior.
+> 
+> It's entirely moot once we refactor the backend page LRU to the zswap
+> entry LRU. The only time we'll fail to reclaim an entry is if we race
+> with something already freeing it, so it doesn't really matter where
+> we put it.
+
+Agree with you there. A bit side tracked.
+
+> > > extreme case where it's the only page left on the list, I again don't
+> > > see how retrying a few times will make the situation worse.
+> > > 
+> > > In practice, IMO there is little upside in trying to be more
+> > > discerning about the error codes. Simple seems better here.
+> > 
+> > Just trying to think about what should be the precise loop termination
+> > condition here.
+> > 
+> > I still feel blindly trying a few times is a very imprecise condition.
+> 
+> The precise termination condition is when can_accept() returns true
+> again. The safety cap is only added as precaution to avoid infinite
+> loops if something goes wrong or unexpected, now or in the future.
+
+In my mind, that statement already suggests can_accept() is not
+*precise*, considering the avoid infinite loop.
+e.g. Do we know what is the optimal cap value and why that value
+is optical?
+
+Putting the definition of precise aside, I do see the unconditional
+retry can have unwanted effects.
+
+Chris
 
