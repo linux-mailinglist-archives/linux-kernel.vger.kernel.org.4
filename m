@@ -2,268 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A21A7163C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50F4716382
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbjE3OUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
+        id S231338AbjE3ORt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233109AbjE3OTE (ORCPT
+        with ESMTP id S230359AbjE3ORr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:19:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1CE129
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:17:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685456277;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NBXOPllhnShhjBRylpaDepFHduJQFj0kF52MtSgNo3M=;
-        b=dw2gWkT2I3uiW8WBQR+VJzE0DdacOQAyTNJ+7oeP/Mkdh7hiHeAP+5aoR26XeNAugufkKa
-        Nz/2l8/yfv3hOSK8kIqPXIXiY1/vIDT3lsyVtLGyXlvW81epmCPSbEB1parGD590Iwn4SS
-        010N14dm9t3gkA4j518WR609Fx4aw84=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-454-lYgHP-yeNMaEfEacsos-nA-1; Tue, 30 May 2023 10:17:52 -0400
-X-MC-Unique: lYgHP-yeNMaEfEacsos-nA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D6652185A797;
-        Tue, 30 May 2023 14:17:49 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6DB6E140E956;
-        Tue, 30 May 2023 14:17:47 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-crypto@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 10/10] crypto: af_alg/hash: Support MSG_SPLICE_PAGES
-Date:   Tue, 30 May 2023 15:16:34 +0100
-Message-ID: <20230530141635.136968-11-dhowells@redhat.com>
-In-Reply-To: <20230530141635.136968-1-dhowells@redhat.com>
-References: <20230530141635.136968-1-dhowells@redhat.com>
+        Tue, 30 May 2023 10:17:47 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8540011C;
+        Tue, 30 May 2023 07:17:14 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5147e40bbbbso6669803a12.3;
+        Tue, 30 May 2023 07:17:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685456233; x=1688048233;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GI3jhV+Vj7XpnF0lh8amuDJfzIo0HvGNKEWD6ZzT4hk=;
+        b=InHsCi99/gMi1BBPKYIhmcEGOct3pxWnS2wKLY42I0CbMyqFx6ma+JjiZJ3QZB+iMZ
+         Ds+CXOqrRnKCTP7WAhGCmL+xLS5Diu3AIoon10Q3uOBgjBNRYbqBy+xBgXpep4hXS8E4
+         RtiGV1g5l0/tkM8rCp2TtmdP2PJ+F5urls5NAr8elczFfPnhHATqbpaTk3Z10gHKPttl
+         5X/UUCB3YRQ1zp/Kw5FBqU12/muJuYEVTw4o8KwnhSQbT7HoqUCgNABXPYrzI5R4Laa2
+         p+3zqcVmATGucC8RLZqdwA6KZJarDPF3nJOxGUlrzWhg8IXDoQZzdIqN7OyEhyOAT/sR
+         /Qpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685456233; x=1688048233;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GI3jhV+Vj7XpnF0lh8amuDJfzIo0HvGNKEWD6ZzT4hk=;
+        b=cmEg8aLGOJr8ZshbEaiu2fl2/onr8W+fhyPS1BqAgkPwQ3B2Wo9Y2TIOkwwhj3gEAw
+         t4yPpK+03NfEuWdlvHraCZzKy4LpLl97hNbht4eiTUWfiZCOqfALWwaYVICj+IFdMEQY
+         vIPl3Cck0FpXESPLa/ohCJijUnuaemZBiTZ68uDNwQ8uU3d7d/5nFsMRvV6hSXspKLps
+         XBmEPzU8Qe8gVTngCaK7XmLezGA00g5w4HnWRse7H9zWQ42ybmH/aVO8Fvn/FFI7P7dk
+         XKHYuguKb4iJIGTSkglK1JGfLJYMZZ9UglnZz0vY2DPJGW6c/XU3Tb4DiBulc/WtbswT
+         m47Q==
+X-Gm-Message-State: AC+VfDx1WH3JZf4E7sMq8gR2IahkF1sN/aJUpPAQZfsbRa1vfXhe6P/g
+        TF7tI0BFRqgJz2sMweiE4yg=
+X-Google-Smtp-Source: ACHHUZ5htGFef6Q921aVNSnqK3yVVjnGL91bR0YghMLaO2Prvqo7GUT3xS6fLQnHhSCxy6YCop7OQg==
+X-Received: by 2002:a17:906:fe48:b0:96f:4927:7a96 with SMTP id wz8-20020a170906fe4800b0096f49277a96mr2397732ejb.70.1685456232630;
+        Tue, 30 May 2023 07:17:12 -0700 (PDT)
+Received: from wslxew193.ultratronik.de (p200300c78700c900796a998533c043af.dip0.t-ipconnect.de. [2003:c7:8700:c900:796a:9985:33c0:43af])
+        by smtp.gmail.com with ESMTPSA id n20-20020a170906089400b0094e96e46cc0sm7354359eje.69.2023.05.30.07.17.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 07:17:12 -0700 (PDT)
+From:   Boerge Struempfel <boerge.struempfel@gmail.com>
+Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
+        andy.shevchenko@gmail.com, festevam@gmail.com,
+        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v7 0/5] spi: add SPI_MOSI_IDLE_LOW mode bit
+Date:   Tue, 30 May 2023 16:16:36 +0200
+Message-Id: <20230530141641.1155691-1-boerge.struempfel@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make AF_ALG sendmsg() support MSG_SPLICE_PAGES in the hashing code.  This
-causes pages to be spliced from the source iterator if possible.
+Some spi controller switch the mosi line to high, whenever they are
+idle. This may not be desired in all use cases. For example neopixel
+leds can get confused and flicker due to misinterpreting the idle state.
+Therefore, we introduce a new spi-mode bit, with which the idle behaviour
+can be overwritten on a per device basis.
 
-This allows ->sendpage() to be replaced by something that can handle
-multiple multipage folios in a single transaction.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Herbert Xu <herbert@gondor.apana.org.au>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: linux-crypto@vger.kernel.org
-cc: netdev@vger.kernel.org
 ---
 
-Notes:
-    ver #2)
-     - Fixed some checkpatch warnings.
+Link for versions:
+  v1 and v2: https://lore.kernel.org/linux-spi/20230511135632.78344-1-bstruempfel@ultratronik.de/
+  v3: https://lore.kernel.org/linux-spi/20230517103007.26287-1-boerge.struempfel@gmail.com/T/#t
+  v4: https://lore.kernel.org/linux-spi/CAEktqctboF3=ykVNtPsifcmHzF6dWwoEcVh+O4H1u-R=TT6gHg@mail.gmail.com/T/#t
+  v5: https://lore.kernel.org/linux-spi/20230520190856.34720-1-boerge.struempfel@gmail.com/T/#t
+  v6: https://lore.kernel.org/linux-spi/20230524091948.41779-1-boerge.struempfel@gmail.com/T/#t
 
- crypto/af_alg.c     |  11 +++--
- crypto/algif_hash.c | 104 ++++++++++++++++++++++++++++----------------
- 2 files changed, 74 insertions(+), 41 deletions(-)
+Changes from V6:
+  - Adjusted the patches for next/master
 
-diff --git a/crypto/af_alg.c b/crypto/af_alg.c
-index e2fc9051ba39..b78a399d0e19 100644
---- a/crypto/af_alg.c
-+++ b/crypto/af_alg.c
-@@ -542,9 +542,14 @@ void af_alg_free_sg(struct af_alg_sgl *sgl)
- {
- 	int i;
- 
--	if (sgl->need_unpin)
--		for (i = 0; i < sgl->sgt.nents; i++)
--			unpin_user_page(sg_page(&sgl->sgt.sgl[i]));
-+	if (sgl->sgt.sgl) {
-+		if (sgl->need_unpin)
-+			for (i = 0; i < sgl->sgt.nents; i++)
-+				unpin_user_page(sg_page(&sgl->sgt.sgl[i]));
-+		if (sgl->sgt.sgl != sgl->sgl)
-+			kvfree(sgl->sgt.sgl);
-+		sgl->sgt.sgl = NULL;
-+	}
- }
- EXPORT_SYMBOL_GPL(af_alg_free_sg);
- 
-diff --git a/crypto/algif_hash.c b/crypto/algif_hash.c
-index 16c69c4b9c62..2f7a98b0eae3 100644
---- a/crypto/algif_hash.c
-+++ b/crypto/algif_hash.c
-@@ -63,78 +63,106 @@ static void hash_free_result(struct sock *sk, struct hash_ctx *ctx)
- static int hash_sendmsg(struct socket *sock, struct msghdr *msg,
- 			size_t ignored)
- {
--	int limit = ALG_MAX_PAGES * PAGE_SIZE;
- 	struct sock *sk = sock->sk;
- 	struct alg_sock *ask = alg_sk(sk);
- 	struct hash_ctx *ctx = ask->private;
--	long copied = 0;
-+	ssize_t copied = 0;
-+	size_t len, max_pages = ALG_MAX_PAGES, npages;
-+	bool continuing = ctx->more, need_init = false;
- 	int err;
- 
--	if (limit > sk->sk_sndbuf)
--		limit = sk->sk_sndbuf;
-+	/* Don't limit to ALG_MAX_PAGES if the pages are all already pinned. */
-+	if (!user_backed_iter(&msg->msg_iter))
-+		max_pages = INT_MAX;
-+	else
-+		max_pages = min_t(size_t, max_pages,
-+				  DIV_ROUND_UP(sk->sk_sndbuf, PAGE_SIZE));
- 
- 	lock_sock(sk);
--	if (!ctx->more) {
-+	if (!continuing) {
- 		if ((msg->msg_flags & MSG_MORE))
- 			hash_free_result(sk, ctx);
--
--		err = crypto_wait_req(crypto_ahash_init(&ctx->req), &ctx->wait);
--		if (err)
--			goto unlock;
-+		need_init = true;
- 	}
- 
- 	ctx->more = false;
- 
- 	while (msg_data_left(msg)) {
--		int len = msg_data_left(msg);
--
--		if (len > limit)
--			len = limit;
--
- 		ctx->sgl.sgt.sgl = ctx->sgl.sgl;
- 		ctx->sgl.sgt.nents = 0;
- 		ctx->sgl.sgt.orig_nents = 0;
- 
--		len = extract_iter_to_sg(&msg->msg_iter, len, &ctx->sgl.sgt,
--					 ALG_MAX_PAGES, 0);
--		if (len < 0) {
--			err = copied ? 0 : len;
--			goto unlock;
-+		err = -EIO;
-+		npages = iov_iter_npages(&msg->msg_iter, max_pages);
-+		if (npages == 0)
-+			goto unlock_free;
-+
-+		if (npages > ARRAY_SIZE(ctx->sgl.sgl)) {
-+			err = -ENOMEM;
-+			ctx->sgl.sgt.sgl =
-+				kvmalloc(array_size(npages,
-+						    sizeof(*ctx->sgl.sgt.sgl)),
-+					 GFP_KERNEL);
-+			if (!ctx->sgl.sgt.sgl)
-+				goto unlock_free;
- 		}
--		sg_mark_end(ctx->sgl.sgt.sgl + ctx->sgl.sgt.nents);
-+		sg_init_table(ctx->sgl.sgl, npages);
- 
- 		ctx->sgl.need_unpin = iov_iter_extract_will_pin(&msg->msg_iter);
- 
--		ahash_request_set_crypt(&ctx->req, ctx->sgl.sgt.sgl, NULL, len);
-+		err = extract_iter_to_sg(&msg->msg_iter, LONG_MAX,
-+					 &ctx->sgl.sgt, npages, 0);
-+		if (err < 0)
-+			goto unlock_free;
-+		len = err;
-+		sg_mark_end(ctx->sgl.sgt.sgl + ctx->sgl.sgt.nents - 1);
- 
--		err = crypto_wait_req(crypto_ahash_update(&ctx->req),
--				      &ctx->wait);
--		af_alg_free_sg(&ctx->sgl);
--		if (err) {
--			iov_iter_revert(&msg->msg_iter, len);
--			goto unlock;
-+		if (!msg_data_left(msg)) {
-+			err = hash_alloc_result(sk, ctx);
-+			if (err)
-+				goto unlock_free;
- 		}
- 
--		copied += len;
--	}
-+		ahash_request_set_crypt(&ctx->req, ctx->sgl.sgt.sgl,
-+					ctx->result, len);
- 
--	err = 0;
-+		if (!msg_data_left(msg) && !continuing &&
-+		    !(msg->msg_flags & MSG_MORE)) {
-+			err = crypto_ahash_digest(&ctx->req);
-+		} else {
-+			if (need_init) {
-+				err = crypto_wait_req(
-+					crypto_ahash_init(&ctx->req),
-+					&ctx->wait);
-+				if (err)
-+					goto unlock_free;
-+				need_init = false;
-+			}
-+
-+			if (msg_data_left(msg) || (msg->msg_flags & MSG_MORE))
-+				err = crypto_ahash_update(&ctx->req);
-+			else
-+				err = crypto_ahash_finup(&ctx->req);
-+			continuing = true;
-+		}
- 
--	ctx->more = msg->msg_flags & MSG_MORE;
--	if (!ctx->more) {
--		err = hash_alloc_result(sk, ctx);
-+		err = crypto_wait_req(err, &ctx->wait);
- 		if (err)
--			goto unlock;
-+			goto unlock_free;
- 
--		ahash_request_set_crypt(&ctx->req, NULL, ctx->result, 0);
--		err = crypto_wait_req(crypto_ahash_final(&ctx->req),
--				      &ctx->wait);
-+		copied += len;
-+		af_alg_free_sg(&ctx->sgl);
- 	}
- 
-+	ctx->more = msg->msg_flags & MSG_MORE;
-+	err = 0;
- unlock:
- 	release_sock(sk);
-+	return copied ?: err;
- 
--	return err ?: copied;
-+unlock_free:
-+	af_alg_free_sg(&ctx->sgl);
-+	goto unlock;
- }
- 
- static ssize_t hash_sendpage(struct socket *sock, struct page *page,
+Changes from V5:
+  - Added a patch to reorder the command line options for
+    spidev_test in order to increase usability. The indentation
+    fixes were also done in this patch.
+
+Changes from V4:
+  - Added the SPI_3WIRE_HIZ mode bit to spidev
+  - Added the SPI_MOSI_IDLE_LOW mode bit to the spidev_test
+    userspace tool and added the two other missing spi mode
+    bits (SPI_3WIRE_HIZ and SPI_RX_CPHA_FLIP) to it as well.
+
+Changes from V3:
+  - Added missing paranthesis which caused builderrors
+
+Changes from V2:
+  - Removed the device-tree binding since this should not be managed by
+    the DT but by the device itself.
+  - Replaced all occurences of spi->chip_select with the corresponding
+    macro spi_get_chipselect(spi,0)
+
+Changes from V1:
+  - Added patch, introducing the new devicetree binding flag
+  - Split the generic spi part of the patch from the imx-spi specific
+    part
+  - Replaced SPI_CPOL and SPI_CPHA by the combined SPI_MODE_X_MASK bit
+    in the imx-spi.c modebits.
+  - Added the SPI_MOSI_IDLE_LOW bit to spidev
+
+Boerge Struempfel (5):
+  spi: add SPI_MOSI_IDLE_LOW mode bit
+  spi: spi-imx: add support for SPI_MOSI_IDLE_LOW mode bit
+  spi: spidev: add two new spi mode bits
+  spi: spidev_test: Sorted the options into logical groups
+  spi: spidev_test Add three missing spi mode bits
+
+ drivers/spi/spi-imx.c        |   9 ++-
+ drivers/spi/spidev.c         |   3 +-
+ include/uapi/linux/spi/spi.h |   3 +-
+ tools/spi/spidev_test.c      | 107 +++++++++++++++++++++--------------
+ 4 files changed, 76 insertions(+), 46 deletions(-)
+
+-- 
+2.40.1
 
