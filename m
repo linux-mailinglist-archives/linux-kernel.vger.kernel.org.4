@@ -2,44 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C932715E52
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2D3715E5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbjE3MDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
+        id S232195AbjE3MEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjE3MDc (ORCPT
+        with ESMTP id S231295AbjE3MED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:03:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1821B90
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:03:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0F92618CA
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:03:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A60C0C433D2;
-        Tue, 30 May 2023 12:03:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685448210;
-        bh=UECY/hnJSADC5VZOEzQM/ZORHs49xzHx0KxZggsN5bQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=oNBpB/hYPgbieR3LAb8RyTn0hMOvaNjt3wA20v7QuNyoCEDxE/Tg95LDzCctAeetO
-         irViKVtHpMwNN4yDfeJyfv5NCRvQ6Uu/uJCFgDMdz/Ht/9Ui54rCUBQlsGgrZT+0rA
-         x/gcEFuL0E15o4bv2mKiQEZUVKW11ni0l3leuzmX3oOJbtaXxPpbypeSJOhrqluDwx
-         Z5+ZWJLG6ZEeSYpzZgSShOxJMRWg2mGoFOgDpLfs9vuwuxusnxdWjyvjOH9wXE4Jv6
-         /FtNR5FtKoFN038s4IWR+fbn0DTq906YvU0Hp+7/Le23IG1htHku4CHBs76Yp5xsBn
-         qAAouJHKJ/SDQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] regmap fixes for v6.4-rc4
-Date:   Tue, 30 May 2023 13:03:15 +0100
-Message-Id: <20230530120329.A60C0C433D2@smtp.kernel.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Tue, 30 May 2023 08:04:03 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED899D
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:04:01 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q3y4q-0000AS-LN; Tue, 30 May 2023 14:03:48 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q3y4p-003rWP-Km; Tue, 30 May 2023 14:03:47 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q3y4o-00C3uC-Ll; Tue, 30 May 2023 14:03:46 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH v1 00/15] Maintenance updates for Protonic Holland boards
+Date:   Tue, 30 May 2023 14:03:30 +0200
+Message-Id: <20230530120345.2874900-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,47 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+This patchset consists of several updates that address issues on
+Protonic Holland's supported i.MX6-based devices, with a particular
+focus on the USB subsystem configuration, thermal zones, and the naming
+of GPIO keys. Some of these changes include the activation of USB over-
+current detection on certain ports, the disabling of unused USB PHY
+nodes, fixing USB-related warnings, adding trip points to thermal zones
+on several devices, and renaming the 'power' key to meet the necessary
+conventions.
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+David Jander (1):
+  ARM: dts: imx6dl: prtvt7: Remove touchscreen inversion
 
-are available in the Git repository at:
+Oleksij Rempel (11):
+  ARM: dts: imx6dl: lanmcu: Disable unused USB PHY nodes
+  ARM: dts: imx6dl: lanmcu: Configure over-current polarity for USB OTG
+    node
+  ARM: dts: imx6dl: Add trip points to thermal zones on several devices
+  ARM: dts: imx6dl: vicut1: Address USB related warnings
+  ARM: dts: imx6dl: alti6p: fix different USB related warnings
+  ARM: dts: imx6dl: prtmvt: fix different USB related warnings
+  ARM: dts: imx6qp: prtwd3: Enable USB over current detection on USB OTG
+    port
+  ARM: dts: imx6ul: prti6g: fix USB over-current detection on USB OTG
+    port
+  ARM: dts: imx6dl: plybas: fix USB over-current detection on USB OTG
+    port
+  ARM: dts: imx6dl: prtrvt, prtvt7, prti6q, prtwd2: fix USB related
+    warnings
+  ARM: dts: imx6qdl: vicut1: rename power to power-button
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/regmap-fix-v6.4-rc4
+Robin van der Gracht (3):
+  ARM: dts: imx6qdl: vicut1: The sgtl5000 uses i2s not ac97
+  ARM: dts: imx6dl: prtvt7: Adjust default backlight brightness to 65
+  ARM: dts: imx6q: prtwd2: Correct iomux configuration for ENET MDIO and
+    MDC
 
-for you to fetch changes up to 0cc6578048e0980d254aee345130cced4912f723:
+ arch/arm/boot/dts/imx6dl-alti6p.dts          | 10 +++++++
+ arch/arm/boot/dts/imx6dl-lanmcu.dts          |  9 +++++++
+ arch/arm/boot/dts/imx6dl-plybas.dts          |  2 +-
+ arch/arm/boot/dts/imx6dl-plym2m.dts          | 24 +++++++++++++++++
+ arch/arm/boot/dts/imx6dl-prtmvt.dts          | 11 +++++++-
+ arch/arm/boot/dts/imx6dl-prtrvt.dts          |  4 +++
+ arch/arm/boot/dts/imx6dl-prtvt7.dts          | 28 +++++++++++++++++---
+ arch/arm/boot/dts/imx6dl-victgo.dts          | 24 +++++++++++++++++
+ arch/arm/boot/dts/imx6q-prtwd2.dts           |  3 ---
+ arch/arm/boot/dts/imx6qdl-prti6q.dtsi        | 11 +++++++-
+ arch/arm/boot/dts/imx6qdl-vicut1-12inch.dtsi |  2 +-
+ arch/arm/boot/dts/imx6qdl-vicut1.dtsi        | 19 +++++++++++--
+ arch/arm/boot/dts/imx6qp-prtwd3.dts          |  2 +-
+ arch/arm/boot/dts/imx6ul-prti6g.dts          |  1 +
+ 14 files changed, 137 insertions(+), 13 deletions(-)
 
-  regmap: maple: Drop the RCU read lock while syncing registers (2023-05-24 11:21:52 +0100)
+-- 
+2.39.2
 
-----------------------------------------------------------------
-regmap: Fixes for v6.4
-
-The most important fix here is for missing dropping of the RCU read lock
-when syncing maple tree register caches, the physical devices I have
-that use the code don't do any syncing so I'd only ever tested this with
-virtual devices and missed the fact that we need to drop the lock in
-order to write to buses that need to sleep.  Otherwise there's a fix for
-an edge case when splitting up large batch writes which has been lurking
-for a long time, a check to make sure nobody writes new drivers with a
-bug that was found in several SoundWire drivers and a tweak to the way
-the new kunit tests are enabled to ensure they don't cause regmap to be
-enabled when it wouldn't otherwise be.
-
-----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      regmap: REGMAP_KUNIT should not select REGMAP
-
-Jim Wylder (1):
-      regmap: Account for register length when chunking
-
-Mark Brown (1):
-      regmap: maple: Drop the RCU read lock while syncing registers
-
-Srinivas Kandagatla (1):
-      regmap: sdw: check for invalid multi-register writes config
-
- drivers/base/regmap/Kconfig          | 13 ++++++++++---
- drivers/base/regmap/regcache-maple.c |  5 ++++-
- drivers/base/regmap/regmap-sdw.c     |  4 ++++
- drivers/base/regmap/regmap.c         |  6 ++++--
- 4 files changed, 22 insertions(+), 6 deletions(-)
