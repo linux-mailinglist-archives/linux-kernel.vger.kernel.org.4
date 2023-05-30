@@ -2,100 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2174A716A28
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E00716A37
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232935AbjE3Q4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34270 "EHLO
+        id S233065AbjE3Q6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbjE3Q4h (ORCPT
+        with ESMTP id S233027AbjE3Q6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:56:37 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F7098
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:56:36 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-5340957a1f1so2608336a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:56:36 -0700 (PDT)
+        Tue, 30 May 2023 12:58:20 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE82698
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:58:16 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-38c35975545so3180761b6e.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:58:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685465796; x=1688057796;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zUIF7qczhJfL0tzqN+Wk4Y8s0fyjf+/encaeJ8i8zo8=;
-        b=RbEfFAAf2kcBOjvt74s5UVZKgWrUGFDUy+sd7fobbo+fCQD0px8ov63e8OeZXSJ8fh
-         HG4hHegtTrDVP700YjLnXteCxE6guE54Vbd8zH/t2rCli4QSiy5tmFSofJYIZgEMn1zj
-         Qsp4LrQqCDZwVqc25d9x6Ot8kXQSMfXIZ9gqaurkMyf4wf+UYa4w1aAbMwazKXlrtuiS
-         Kk616ydOwBRsdeEiUal2WEabr5ltpvlk9LlkPPxhELMLDRXHyhZJZ3Til0KRYe81otj+
-         tS/p/kiytx6/XARdF4p/h7eKZckIQCkqvbC4w6UMN19z2FxazUFpiFD2Hr1ZsYeU6F4t
-         XCEw==
+        d=chromium.org; s=google; t=1685465894; x=1688057894;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gQLTtDtW2MQvZzbg1+YtroMwuASMRT+NGV7h3iEinfc=;
+        b=jKXOLdmMGDtcuMnS0qzDKS4DqEurX+SoZtJ3H1yf0l6aQMdvReO4ODlE4ao1iQ1Ahc
+         Ey4z8uk9iBlbNnn5/qLiK8PRmKnJiFfjnvrEzGq1kumQ3cuTGdWI+FB90ofY07NuJYqj
+         uweY7TVrJ7OrjBo3OVNl30ZzLxzwvTg1ciz1g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685465796; x=1688057796;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zUIF7qczhJfL0tzqN+Wk4Y8s0fyjf+/encaeJ8i8zo8=;
-        b=ejBr37nho4eRmfAtEYEP4qw4ZQaDH0QWV3DQf4IQyfA4ssbBuZcsZeTB5vyt4s+9qN
-         tzMxIZjq/ry5j3DjzuUnVLAV58Eabi116k+u85EGrpiQRjTfYUMZYIwccguvA6ON5IB5
-         N4jOnHzMO90njc9U1JHJy30ROnWrahzJ7HAkAY+uj0x9Ze3MkzbF9N2fOaBKrS0nTbWb
-         zNkKyFMpM2jgf3kFMH1OQasyyhegg/TSsJabLC97oYgU9iVKBbdUQS82FrMz6d+RXr7g
-         TIqvb7hGPgrpQwN8zYyCEHqrkAkHe+yoLSp3jCUi3FNdLyIjuSzzD++cTL588Lc7dQT4
-         OjmA==
-X-Gm-Message-State: AC+VfDzVRMVTTUui7KqKqjwd26qVeRIspm9xL6E/wuhB4ZtYdZmktnzm
-        8o3imV89Q4jd7GojOV0yAmfsZDHmSjc=
-X-Google-Smtp-Source: ACHHUZ6elIb9Xawt5kHr4iARsASD1eAmXyJrU7yMOnucjGsQDVEv6w8ENbA+wCa+rqHlmqnxd6WixqOcZs8=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:512:0:b0:52c:9e55:61ee with SMTP id
- 18-20020a630512000000b0052c9e5561eemr545525pgf.3.1685465795799; Tue, 30 May
- 2023 09:56:35 -0700 (PDT)
-Date:   Tue, 30 May 2023 09:56:34 -0700
-In-Reply-To: <87wn0pizbl.ffs@tglx>
-Mime-Version: 1.0
-References: <87sfbhlwp9.ffs@tglx> <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
- <87bki3kkfi.ffs@tglx> <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
- <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name> <87mt1mjhk3.ffs@tglx>
- <87jzwqjeey.ffs@tglx> <87cz2ija1e.ffs@tglx> <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name>
- <87wn0pizbl.ffs@tglx>
-Message-ID: <ZHYqwsCURnrFdsVm@google.com>
-Subject: Re: [patch] x86/smpboot: Disable parallel bootup if cc_vendor != NONE
-From:   Sean Christopherson <seanjc@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        d=1e100.net; s=20221208; t=1685465894; x=1688057894;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gQLTtDtW2MQvZzbg1+YtroMwuASMRT+NGV7h3iEinfc=;
+        b=FuPr6338QZop9MBy16Zums2Xy7z7+K/YV7hyVP7m9LFZJu7uNsvuV1r/j2UDzppdFN
+         tI+244WuhojKkMnsrSX46tSUtlaw9MK7jJk1dvVxWGn0ckSvfj9btob/OsbuLlfuB7Cj
+         xuvEHJvkFW4R5YmqRKdVZ253Tmm1XztHhtkPozM2fV18AuCpEUZ/2r3npQcYDfGNLUTg
+         cTTQccW2WqGd1ix3+aHmwj/Rc2DsC+Hr04gQT6yHu8zC6TQSzR/ti07Oib9DYgDsvk8u
+         BTZKa+zXHq5B5n9amWpYf+fF+4i+VcKTR4nDTZuW9Sg1hKGqOXulPWlWAEViiJk8gYdm
+         Ru5g==
+X-Gm-Message-State: AC+VfDwhnC3A3NP6+vW/v5i8j8whLUFcXhEEFHeOW7gMUOuTWRem08xO
+        gXSAuNxMpxF7oL+en14js36qLofA7VZeC/hni1I=
+X-Google-Smtp-Source: ACHHUZ6ONdSrXEYWu2Nryj9cFYHOm6Jl6cY/1wVNFzG8yexuQM2gLeRWN5/G9/yFaLh5GLS3HYgnSA==
+X-Received: by 2002:a05:6808:1b0b:b0:396:3b9d:7ee0 with SMTP id bx11-20020a0568081b0b00b003963b9d7ee0mr1717367oib.41.1685465894530;
+        Tue, 30 May 2023 09:58:14 -0700 (PDT)
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com. [209.85.166.172])
+        by smtp.gmail.com with ESMTPSA id n7-20020a02a187000000b00418a5e0e93esm825374jah.162.2023.05.30.09.58.14
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 09:58:14 -0700 (PDT)
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-33baee0235cso3225ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 09:58:14 -0700 (PDT)
+X-Received: by 2002:a05:6e02:b24:b0:338:9f6a:d546 with SMTP id
+ e4-20020a056e020b2400b003389f6ad546mr181095ilu.20.1685465893122; Tue, 30 May
+ 2023 09:58:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAD=FV=VYfPSwar2AXBxB3vX0dV1kjQ5bZMxsEBFhUnMNRXbBCw@mail.gmail.com>
+ <20230520050649.2494497-1-yangcong5@huaqin.corp-partner.google.com>
+ <20230520050649.2494497-3-yangcong5@huaqin.corp-partner.google.com>
+ <CAD=FV=Wm_SK0V6WJUkuvu8yFfiP60JBuOdw9cy=0Ck2Jbn-X2A@mail.gmail.com> <bd19f71b-59ee-80e7-9ff1-1cc26ecc49a7@kernel.org>
+In-Reply-To: <bd19f71b-59ee-80e7-9ff1-1cc26ecc49a7@kernel.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 30 May 2023 09:58:01 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WaVXUr8=4MrZQgA7t=yUBDt-iMvOFSeWhsKZ8XHJAREA@mail.gmail.com>
+Message-ID: <CAD=FV=WaVXUr8=4MrZQgA7t=yUBDt-iMvOFSeWhsKZ8XHJAREA@mail.gmail.com>
+Subject: Re: [v2 2/2] dt-bindings: input: touchscreen: Add ilitek 9882T
+ touchscreen chip
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>,
+        benjamin.tissoires@redhat.com, devicetree@vger.kernel.org,
+        dmitry.torokhov@gmail.com, hsinyi@google.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org, Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,27 +84,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023, Thomas Gleixner wrote:
-> On Tue, May 30 2023 at 15:29, Kirill A. Shutemov wrote:
-> > On Tue, May 30, 2023 at 02:09:17PM +0200, Thomas Gleixner wrote:
-> >> The decision to allow parallel bringup of secondary CPUs checks
-> >> CC_ATTR_GUEST_STATE_ENCRYPT to detect encrypted guests. Those cannot use
-> >> parallel bootup because accessing the local APIC is intercepted and raises
-> >> a #VC or #VE, which cannot be handled at that point.
-> >> 
-> >> The check works correctly, but only for AMD encrypted guests. TDX does not
-> >> set that flag.
-> >> 
-> >> Check for cc_vendor != CC_VENDOR_NONE instead. That might be overbroad, but
-> >> definitely works for both AMD and Intel.
-> >
-> > It boots fine with TDX, but I think it is wrong. cc_get_vendor() will
-> > report CC_VENDOR_AMD even on bare metal if SME is enabled. I don't think
-> > we want it.
-> 
-> Right. Did not think about that.
-> 
-> But the same way is CC_ATTR_GUEST_MEM_ENCRYPT overbroad for AMD. Only
-> SEV-ES traps RDMSR if I'm understandig that maze correctly.
+Hi,
 
-Ya, regular SEV doesn't encrypt register state.
+On Tue, May 30, 2023 at 4:56=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+>
+> On 22/05/2023 17:33, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Fri, May 19, 2023 at 10:07=E2=80=AFPM Cong Yang
+> > <yangcong5@huaqin.corp-partner.google.com> wrote:
+> >>
+> >> Add an ilitek touch screen chip ili9882t.
+> >>
+> >> Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+> >> ---
+> >>  .../devicetree/bindings/input/elan,ekth6915.yaml         | 9 +++++++-=
+-
+> >>  1 file changed, 7 insertions(+), 2 deletions(-)
+> >
+> > I'm curious about the DT maintainers opinion here. Should this be a
+> > new bindings file, or should it be together in the elan file. If
+> > nothing else, I think the secondary voltage rail name is wrong. I took
+> > a quick peek at a datasheet I found and I don't even see a 3.3V rail
+> > going to the ili9882t. That makes it weird to reuse "vcc33-supply" for
+> > a second supply...
+>
+> It's easier if they are CCed...
+
+Crud. I just assumed and didn't check the CC list. Cong: can you
+resend and make sure you're CCing the people that get_maintainers
+points at. One way to find that would be:
+
+./scripts/get_maintainer.pl -f
+Documentation/devicetree/bindings/input/elan,ekth6915.yaml
