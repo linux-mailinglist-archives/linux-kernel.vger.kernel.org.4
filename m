@@ -2,46 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E07715A8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A355715A90
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjE3Jqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
+        id S230390AbjE3Jqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjE3Jqg (ORCPT
+        with ESMTP id S229739AbjE3Jqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:46:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1EAC0EC
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:46:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 192C92F4;
-        Tue, 30 May 2023 02:47:20 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.25.100])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 199643F663;
-        Tue, 30 May 2023 02:46:32 -0700 (PDT)
-Date:   Tue, 30 May 2023 10:46:27 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Eric Chan <ericchancf@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: Fix 'lock held when returning to user space'
- lockdep warning
-Message-ID: <ZHXF86CioMoyWD1d@FVFF77S0Q05N>
-References: <20230526184823.1230974-1-ericchancf@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526184823.1230974-1-ericchancf@google.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 30 May 2023 05:46:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8BBA3;
+        Tue, 30 May 2023 02:46:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3619625E7;
+        Tue, 30 May 2023 09:46:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B3AFC433EF;
+        Tue, 30 May 2023 09:46:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685440000;
+        bh=jRdh+GkRfDWttXL/fmD+LV2d9JEAsUu+MFteor4o3v8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NWQkW7oqD1s/xQaFLgewy15nv1KOWGXsn0f6FF/858zpx8bI3nhSwnRXEShDXDMkx
+         piTiQBqj89sTUkdaMIMcfWKRnJjeK35AreN69JjZp2umweAEJrjrWJ8M/8H4NLUBM9
+         +WVdgprovyGlGiPrKHjvBKi8A6MoAd3USs2SgXo8M3qo+Mk/CSaHQfquRrR+cYF8VP
+         33/FKZgiQHACj/TMzi3XFg7aBUN+S4EoKZZ9V4Ktn1xgYi+6rIYy+csL6WcARJXv/S
+         Bl81LUJeWfbjgLHWweh59yJ1G0l8RdwcMEMmvruI9W6NFd3kc8QXVwJEJlOYce6iT9
+         8Nfj481yN1BmQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q3vw5-001GVk-R1;
+        Tue, 30 May 2023 10:46:37 +0100
+Date:   Tue, 30 May 2023 10:46:37 +0100
+Message-ID: <868rd6cfsy.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        linux-mediatek@lists.infradead.org,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, wenst@chromium.org,
+        yidilin@chromium.org, Tinghan Shen <tinghan.shen@mediatek.com>,
+        jwerner@chromium.org, Weiyi Lu <weiyi.lu@mediatek.com>,
+        Ben Ho <Ben.Ho@mediatek.com>,
+        Seiya Wang <seiya.wang@mediatek.com>,
+        linux-kernel@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v2 2/5] irqchip/gic-v3: Disable pseudo NMIs on Mediatek devices w/ firmware issues
+In-Reply-To: <CAMuHMdWM_t7uQqkesM3fnSK7THrmLszA7U54==A0-98xPH90Bw@mail.gmail.com>
+References: <20230515131353.v2.cover@dianders>
+        <20230515131353.v2.2.I88dc0a0eb1d9d537de61604cd8994ecc55c0cac1@changeid>
+        <CAMuHMdWM_t7uQqkesM3fnSK7THrmLszA7U54==A0-98xPH90Bw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: geert@linux-m68k.org, dianders@chromium.org, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, allen-kh.cheng@mediatek.com, linux-mediatek@lists.infradead.org, eddie.huang@mediatek.com, hsin-hsiung.wang@mediatek.com, angelogioacchino.delregno@collabora.com, wenst@chromium.org, yidilin@chromium.org, tinghan.shen@mediatek.com, jwerner@chromium.org, weiyi.lu@mediatek.com, Ben.Ho@mediatek.com, seiya.wang@mediatek.com, linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,84 +85,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+On Tue, 30 May 2023 09:29:02 +0100,
+Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>=20
+> Hi Douglas,
+>=20
+> On Mon, May 15, 2023 at 10:16=E2=80=AFPM Douglas Anderson <dianders@chrom=
+ium.org> wrote:
+> > Some Chromebooks with Mediatek SoCs have a problem where the firmware
+> > doesn't properly save/restore certain GICR registers. Newer
+> > Chromebooks should fix this issue and we may be able to do firmware
+> > updates for old Chromebooks. At the moment, the only known issue with
+> > these Chromebooks is that we can't enable "pseudo NMIs" since the
+> > priority register can be lost. Enabling "pseudo NMIs" on Chromebooks
+> > with the problematic firmware causes crashes and freezes.
+> >
+> > Let's detect devices with this problem and then disable "pseudo NMIs"
+> > on them. We'll detect the problem by looking for the presence of the
+> > "mediatek,broken-save-restore-fw" property in the GIC device tree
+> > node. Any devices with fixed firmware will not have this property.
+> >
+> > Our detection plan works because we never bake a Chromebook's device
+> > tree into firmware. Instead, device trees are always bundled with the
+> > kernel. We'll update the device trees of all affected Chromebooks and
+> > then we'll never enable "pseudo NMI" on a kernel that is bundled with
+> > old device trees. When a firmware update is shipped that fixes this
+> > issue it will know to patch the device tree to remove the property.
+> >
+> > In order to make this work, the quick detection mechanism of the GICv3
+> > code is extended to be able to look for properties in addition to
+> > looking at "compatible".
+> >
+> > Reviewed-by: Julius Werner <jwerner@chromium.org>
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > ---
+> >
+> > Changes in v2:
+> > - mediatek,gicr-save-quirk =3D> mediatek,broken-save-restore-fw
+>=20
+> Thanks for your patch, which is now commit 44bd78dd2b8897f5
+> ("irqchip/gic-v3: Disable pseudo NMIs on Mediatek devices w/
+> firmware issues") in v6.4-rc4.
+>=20
+> This causes enabling an unrelated workaround on R-Car V4H:
+>=20
+>     GIC: enabling workaround for GICv3: Cavium erratum 38539
+>=20
+> > --- a/drivers/irqchip/irq-gic-common.c
+> > +++ b/drivers/irqchip/irq-gic-common.c
+> > @@ -16,7 +16,11 @@ void gic_enable_of_quirks(const struct device_node *=
+np,
+> >                           const struct gic_quirk *quirks, void *data)
+> >  {
+> >         for (; quirks->desc; quirks++) {
+> > -               if (!of_device_is_compatible(np, quirks->compatible))
+> > +               if (quirks->compatible &&
+> > +                   !of_device_is_compatible(np, quirks->compatible))
+> > +                       continue;
+> > +               if (quirks->property &&
+> > +                   !of_property_read_bool(np, quirks->property))
+> >                         continue;
+>=20
+> Presumably the loop should continue if none of quirks-compatible
+> or quirks->property is set?
 
-The subject line for this patch is misleading, as it makes it sound like we're
-currently hitting a warning of the form:
+Indeed, thanks for pointing that out. Can you give the following hack
+a go (compile tested only)?
 
-  lock held when returning to user space
+diff --git a/drivers/irqchip/irq-gic-common.c b/drivers/irqchip/irq-gic-com=
+mon.c
+index de47b51cdadb..7b591736ab58 100644
+--- a/drivers/irqchip/irq-gic-common.c
++++ b/drivers/irqchip/irq-gic-common.c
+@@ -16,6 +16,8 @@ void gic_enable_of_quirks(const struct device_node *np,
+ 			  const struct gic_quirk *quirks, void *data)
+ {
+ 	for (; quirks->desc; quirks++) {
++		if (!quirks->compatible && !quirks->property)
++			continue;
+ 		if (quirks->compatible &&
+ 		    !of_device_is_compatible(np, quirks->compatible))
+ 			continue;
 
-... when in actuality this patch is *adding* support for that warning.
+If that works for you, I'll queue it ASAP.
 
-This is a missing feature, not a fix (and e.g. doesn't require backporting to
-stable).
+Cheers,
 
-On Fri, May 26, 2023 at 06:48:23PM +0000, Eric Chan wrote:
-> The arm64 architecture lacks support for CONFIG_GENERIC_ENTRY, resulting
-> in the failure to report the lockdep warning
-> "lock held when returning to user space" when lockdep is enabled.
-> 
-> Rename the function to align with exit_to_user_mode_prepare in
-> kernel/entry/common.c to improve readability.
+	M.
 
-Considering the point about the commit title, could you please reword this to
-be clear that we're adding support for a feature, rather than fixing something
-that's broken, e.g.
-
-| arm64: lockdep: enable checks for held locks when returning to userspace
-|
-| Currently arm64 doesn't use CONFIG_GENERIC_ENTRY and doesn't call
-| lockdep_sys_exit() when returning to userspace. This means that lockdep won't
-| check for held locks when returning to userspace, which would be useful to
-| detect kernel bugs.
-|
-| Call lockdep_sys_exit() when returning to userspace, enabling checking for
-| held locks.
-|
-| At the same time, rename arm64's prepare_exit_to_user_mode() to
-| exit_to_user_mode_prepare() to more clearly align with the naming in the
-| generic entry code.
-
-With that wording:
-
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-
-Thanks,
-Mark.
-
-> Signed-off-by: Eric Chan <ericchancf@google.com>
-> ---
->  arch/arm64/kernel/entry-common.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
-> index 3af3c01c93a6..9d6827201b6c 100644
-> --- a/arch/arm64/kernel/entry-common.c
-> +++ b/arch/arm64/kernel/entry-common.c
-> @@ -126,7 +126,7 @@ static __always_inline void __exit_to_user_mode(void)
->  	lockdep_hardirqs_on(CALLER_ADDR0);
->  }
->  
-> -static __always_inline void prepare_exit_to_user_mode(struct pt_regs *regs)
-> +static __always_inline void exit_to_user_mode_prepare(struct pt_regs *regs)
->  {
->  	unsigned long flags;
->  
-> @@ -135,11 +135,13 @@ static __always_inline void prepare_exit_to_user_mode(struct pt_regs *regs)
->  	flags = read_thread_flags();
->  	if (unlikely(flags & _TIF_WORK_MASK))
->  		do_notify_resume(regs, flags);
-> +
-> +	lockdep_sys_exit();
->  }
->  
->  static __always_inline void exit_to_user_mode(struct pt_regs *regs)
->  {
-> -	prepare_exit_to_user_mode(regs);
-> +	exit_to_user_mode_prepare(regs);
->  	mte_check_tfsr_exit();
->  	__exit_to_user_mode();
->  }
-> -- 
-> 2.41.0.rc0.172.g3f132b7071-goog
-> 
+--=20
+Without deviation from the norm, progress is not possible.
