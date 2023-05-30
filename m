@@ -2,58 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518737158D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8987158D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjE3IkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
+        id S230385AbjE3IkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 04:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbjE3Ijr (ORCPT
+        with ESMTP id S230349AbjE3IkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 04:39:47 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD65BF;
-        Tue, 30 May 2023 01:39:45 -0700 (PDT)
-Received: from localhost.localdomain (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id BD3AC8479D;
-        Tue, 30 May 2023 10:39:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1685435984;
-        bh=6GJwBDDct10oVmEZtBr/h4GZj5W9Lqzw3dL+25QIt4w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0LR4fbbSlqmLJewmYht1nMbAK+cugHwex89ZhC3ZfNu8z8WrP+rTP2anEQf1jwbRG
-         rn1uTMWURbmTbW+HgZ4RIZNl7n/efc5wPo/P1zHxkjG0p4++ymd4ZMFfLk+vdzVFRf
-         eYhmlKAuIHr7pFlfMO44eP3XUsJm8r4TI36sFSxhCKTVkmEdDuuqOoR4S1xrfxEe6x
-         ioFZTNI/zdFHO+D+4ocWqW+7/h0pCXO1xb3R/D4FnBUPJzJMWSokQNe2ljlul0mzc7
-         vJzTPF6Of4LQCK6TNjHCzRxqW/v7HR4lB2ktRI1AV99vzaA6HSM0YSTwD5QDgrKizL
-         8NK2QBr43MExg==
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukasz Majewski <lukma@denx.de>
-Subject: [PATCH v8 3/3] net: dsa: mv88e6xxx: add support for MV88E6071 switch
-Date:   Tue, 30 May 2023 10:39:16 +0200
-Message-Id: <20230530083916.2139667-4-lukma@denx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230530083916.2139667-1-lukma@denx.de>
-References: <20230530083916.2139667-1-lukma@denx.de>
+        Tue, 30 May 2023 04:40:03 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1224CA1;
+        Tue, 30 May 2023 01:40:01 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34U8MjXf017376;
+        Tue, 30 May 2023 10:39:45 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=84NI3Im0/UBTUuzj57IODVViLeQOqPGq0/uHAbqCAkQ=;
+ b=qsLGTjBNOu+hu7xyM+O6BW9SZkTJYNMZwAV+6/dphOsdonvtc13HIW4iHa8/Y00nod2M
+ AfsMumh6ec/lNGOHB0wTRdLD8spo+pnM3Zw88A+/qQXYcAosNl5QgulJ5Jn9M3gRDqFO
+ 1lpOZ1gpKaytuibdopnjcKgWTVRHhxfd4jArppasmOqZfI6VI0P2JUE8I3vYfSNQxzEP
+ 5ep/TDdTDszPabTWZGGSwrXcdmNBSWMVBZV1rfJbvDfs8wBNbMjGZ9J75r2UnzrmY7Ba
+ TbGEUOG17T9hmb4/pMjcCIinxldNDrMo6E8U12Vc9E6xie9U177Yn6mMqb/83kzWwmut cQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3quahy6djp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 10:39:45 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0197E10002A;
+        Tue, 30 May 2023 10:39:45 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EC397216840;
+        Tue, 30 May 2023 10:39:44 +0200 (CEST)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 30 May
+ 2023 10:39:44 +0200
+Message-ID: <c805cd5f-92b1-eb56-d9bc-66814705e848@foss.st.com>
+Date:   Tue, 30 May 2023 10:39:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 04/11] dt-bindings: stm32: add st,stm32mp25 compatibles to
+ the stm32 family
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, <soc@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
+References: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
+ <20230529162034.20481-5-alexandre.torgue@foss.st.com>
+ <20230529-backlit-dealing-b099e4eb5210@spud>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20230529-backlit-dealing-b099e4eb5210@spud>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_06,2023-05-29_02,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,104 +83,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A mv88e6250 family switch with 5 internal PHYs, 2 RMIIs
-and no PTP support.
+Hi Conor
 
-Signed-off-by: Lukasz Majewski <lukma@denx.de>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
----
-Changes for v2:
-- Update commit message
-- Add information about max frame size
+On 5/29/23 20:05, Conor Dooley wrote:
+> On Mon, May 29, 2023 at 06:20:27PM +0200, Alexandre Torgue wrote:
+>> STM32 family is extended by the addition of the STM32MP25 SoCs. It is composed
+>> of 4 SoCs: STM32MP251, STM32MP253, STM32MP255 and STM32MP257.
+>>
+>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+>> index 4af5b8f4f803..7d7ca33d2e61 100644
+>> --- a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+>> @@ -161,6 +161,15 @@ properties:
+>>             - const: phytec,phycore-stm32mp157c-som
+>>             - const: st,stm32mp157
+>>   
+>> +      - items:
+>> +          - const: st,stm32mp251
+>> +      - items:
+>> +          - const: st,stm32mp253
+>> +      - items:
+>> +          - const: st,stm32mp255
+>> +      - items:
+>> +          - const: st,stm32mp257
+> 
+> I assume the slightly odd format is just to avoid churn when adding
+> the board compatibles.
 
-Changes for v3:
-- None
+Yes, exactly.
 
-Changes for v4:
-- None
+Alex
 
-Changes for v5:
-- None
-
-Changes for v6:
-- Reorder patches for better readiness
-
-Changes for v7:
-- Provide just support for this IC (remove the part with setting
-  max frame info as it is not needed anymore)
-
-Changes for v8:
-- Update commit message and comment regarding mv88e6250 family
----
- drivers/net/dsa/mv88e6xxx/chip.c | 20 ++++++++++++++++++++
- drivers/net/dsa/mv88e6xxx/chip.h |  3 ++-
- drivers/net/dsa/mv88e6xxx/port.h |  1 +
- 3 files changed, 23 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 9cb76a5b8ff5..8d4c1ab4c85d 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -5663,6 +5663,26 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
- 		.ops = &mv88e6250_ops,
- 	},
- 
-+	[MV88E6071] = {
-+		.prod_num = MV88E6XXX_PORT_SWITCH_ID_PROD_6071,
-+		.family = MV88E6XXX_FAMILY_6250,
-+		.name = "Marvell 88E6071",
-+		.num_databases = 64,
-+		.num_ports = 7,
-+		.num_internal_phys = 5,
-+		.max_vid = 4095,
-+		.port_base_addr = 0x08,
-+		.phy_base_addr = 0x00,
-+		.global1_addr = 0x0f,
-+		.global2_addr = 0x07,
-+		.age_time_coeff = 15000,
-+		.g1_irqs = 9,
-+		.g2_irqs = 5,
-+		.atu_move_port_mask = 0xf,
-+		.dual_chip = true,
-+		.ops = &mv88e6250_ops,
-+	},
-+
- 	[MV88E6085] = {
- 		.prod_num = MV88E6XXX_PORT_SWITCH_ID_PROD_6085,
- 		.family = MV88E6XXX_FAMILY_6097,
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
-index e249d4a3f853..150a06de633f 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.h
-+++ b/drivers/net/dsa/mv88e6xxx/chip.h
-@@ -55,6 +55,7 @@ enum mv88e6xxx_frame_mode {
- /* List of supported models */
- enum mv88e6xxx_model {
- 	MV88E6020,
-+	MV88E6071,
- 	MV88E6085,
- 	MV88E6095,
- 	MV88E6097,
-@@ -95,7 +96,7 @@ enum mv88e6xxx_family {
- 	MV88E6XXX_FAMILY_6097,	/* 6046 6085 6096 6097 */
- 	MV88E6XXX_FAMILY_6165,	/* 6123 6161 6165 */
- 	MV88E6XXX_FAMILY_6185,	/* 6108 6121 6122 6131 6152 6155 6182 6185 */
--	MV88E6XXX_FAMILY_6250,	/* 6220 6250 6020 */
-+	MV88E6XXX_FAMILY_6250,	/* 6220 6250 6020 6071 */
- 	MV88E6XXX_FAMILY_6320,	/* 6320 6321 */
- 	MV88E6XXX_FAMILY_6341,	/* 6141 6341 */
- 	MV88E6XXX_FAMILY_6351,	/* 6171 6175 6350 6351 */
-diff --git a/drivers/net/dsa/mv88e6xxx/port.h b/drivers/net/dsa/mv88e6xxx/port.h
-index 56efba08abdc..e423ef13a827 100644
---- a/drivers/net/dsa/mv88e6xxx/port.h
-+++ b/drivers/net/dsa/mv88e6xxx/port.h
-@@ -112,6 +112,7 @@
- #define MV88E6XXX_PORT_SWITCH_ID		0x03
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_MASK	0xfff0
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6020	0x0200
-+#define MV88E6XXX_PORT_SWITCH_ID_PROD_6071	0x0710
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6085	0x04a0
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6095	0x0950
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6097	0x0990
--- 
-2.20.1
+> 
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Thanks,
+> Conor.
+> 
+>> +
+>>   additionalProperties: true
+>>   
+>>   ...
+>> -- 
+>> 2.17.1
+>>
 
