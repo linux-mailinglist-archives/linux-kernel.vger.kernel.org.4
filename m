@@ -2,119 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CC67155AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E390C7155B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbjE3Gtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 02:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        id S229843AbjE3GwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 02:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjE3Gtb (ORCPT
+        with ESMTP id S229551AbjE3GwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 02:49:31 -0400
-Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD55118
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:49:15 -0700 (PDT)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 6DF4710042E34
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:49:15 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 3tARqoZBpNX2a3tARqLeoe; Tue, 30 May 2023 06:49:15 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=64759c6b
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=P0xRbXHiH_UA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Nt2OwzZRszP/LUy2aUTUdRvLWDJpR8D8eBeU819kHME=; b=gp91556VqlG8dLzEOBa2jYJIiO
-        c7/43T8UemkAXVUhxvzB1DfZrLuSS9WWCRY9NTNWhN1NTOGDkvC5jvey+FWa+e2JmhBgK3W0HpIL7
-        G6l99kJA/2HAJO11XAhjMs0yUk/z9meAuLR6r6PLB/6UTsM7Hw4AYx+B4YPH9kH8J0s+ATOd9iuZv
-        zFeZIEcMxkfXWAQesgietrfx7n6uWyV5OxM/WeIaHHo//pSNSxinV3M50FzaUOHOobvGNrbjey0RX
-        juTPCqh5B7kq5LkvriIi++zvMsscxocig+RY7B0GNNArMzBFCXA3MJ0ImcxbDiUjYgQoCREukFdlO
-        kdxQ1Qig==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:42112 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1q3tAQ-000htZ-Cb;
-        Tue, 30 May 2023 00:49:14 -0600
-Subject: Re: [PATCH 5.15 00/69] 5.15.114-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230528190828.358612414@linuxfoundation.org>
-In-Reply-To: <20230528190828.358612414@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <be132458-69db-b4fa-41ee-0cb1ad126b1a@w6rz.net>
-Date:   Mon, 29 May 2023 23:49:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 30 May 2023 02:52:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72461E5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:52:10 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 963C26602121;
+        Tue, 30 May 2023 07:52:08 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685429529;
+        bh=N8OkzhPbnw0+40Fz41gVmzeKRGnKSGVpRy8eQG6Dhe0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DsjbEEDYb6sQm2KmN8lx+MXTGsmD7ysu8OPxeix+Z7dbDRfFqFCg10dW31jzqS+jc
+         Yf+PEH1RhH3gc+fy5+J5wVo4kCAAyHvzHRG+noVAH2tLAXbCN6okBtpqpm8zU5wRcM
+         FxN0P36++oARF0aDjW7zqT6OGh/z9KT136VnDWnJcko9cNRv6HF4uNgHEKHcLEc+IS
+         8TyFus8AnLksrpvht836lhiC0V07ELlBtNhE7nVRDwAW8/792+umDMDxxJndROySJB
+         Ujj5nznzEd13IH84WupL7U+ExkkQjwesz/hdeVBONoifMFurvc+oCEdMvh24EaAOfM
+         /CFzQ7gWu6ZkQ==
+Message-ID: <6d870923-ce25-08f6-c3aa-453a4737953b@collabora.com>
+Date:   Tue, 30 May 2023 08:52:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 0/9] MediaTek DisplayPort: support eDP and aux-bus
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1q3tAQ-000htZ-Cb
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:42112
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+To:     chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com,
+        wenst@chromium.org
+References: <20230404104800.301150-1-angelogioacchino.delregno@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230404104800.301150-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/28/23 12:11 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.114 release.
-> There are 69 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Tue, 30 May 2023 19:08:13 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.114-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Il 04/04/23 12:47, AngeloGioacchino Del Regno ha scritto:
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Hello CK,
 
-Tested-by: Ron Economos <re@w6rz.net>
+Gentle ping for this series.
+
+Thanks,
+Angelo
+
+> Changes in v3:
+>   - Added DPTX AUX block initialization before trying to communicate
+>     to stop relying on the bootloader keeping it initialized before
+>     booting Linux.
+>   - Fixed commit description for patch [09/09] and removed commented
+>     out code (that slipped from dev phase.. sorry!).
+> 
+> This series adds "real" support for eDP in the mtk-dp DisplayPort driver.
+> 
+> Explaining the "real":
+> Before this change, the DisplayPort driver did support eDP to some
+> extent, but it was treating it entirely like a regular DP interface
+> which is partially fine, after all, embedded DisplayPort *is* actually
+> DisplayPort, but there might be some differences to account for... and
+> this is for both small performance improvements and, more importantly,
+> for correct functionality in some systems.
+> 
+> Functionality first:
+> 
+> One of the common differences found in various boards implementing eDP
+> and machines using an eDP panel is that many times the HPD line is not
+> connected. This *must* be accounted for: at startup, this specific IP
+> will raise a HPD interrupt (which should maybe be ignored... as it does
+> not appear to be a "real" event...) that will make the eDP panel to be
+> detected and to actually work but, after a suspend-resume cycle, there
+> will be no HPD interrupt (as there's no HPD line in my case!) producing
+> a functionality issue - specifically, the DP Link Training fails because
+> the panel doesn't get powered up, then it stays black and won't work
+> until rebooting the machine (or removing and reinserting the module I
+> think, but I haven't tried that).
+> 
+> Now for.. both:
+> eDP panels are *e*DP because they are *not* removable (in the sense that
+> you can't unplug the cable without disassembling the machine, in which
+> case, the machine shall be powered down..!): this (correct) assumption
+> makes us able to solve some issues and to also gain a little performance
+> during PM operations.
+> 
+> What was done here is:
+>   - Caching the EDID if the panel is eDP: we're always going to read the
+>     same data everytime, so we can just cache that (as it's small enough)
+>     shortening PM resume times for the eDP driver instance;
+>   - Always return connector_status_connected if it's eDP: non-removable
+>     means connector_status_disconnected can't happen during runtime...
+>     this also saves us some time and even power, as we won't have to
+>     perform yet another power cycle of the HW;
+>   - Added aux-bus support!
+>     This makes us able to rely on panel autodetection from the EDID,
+>     avoiding to add more and more panel timings to panel-edp and, even
+>     better, allowing to use one panel node in devicetrees for multiple
+>     variants of the same machine since, at that point, it's not important
+>     to "preventively know" what panel we have (eh, it's autodetected...!).
+> 
+> This was tested on a MT8195 Cherry Tomato Chromebook (panel-edp on aux-bus)
+> 
+> 
+> P.S.: For your own testing commodity, here's a reference devicetree:
+> &edp_tx {
+> 	status = "okay";
+> 
+> 	pinctrl-names = "default";
+> 	pinctrl-0 = <&edptx_pins_default>;
+> 
+> 	ports {
+> 		#address-cells = <1>;
+> 		#size-cells = <0>;
+> 
+> 		port@0 {
+> 			reg = <0>;
+> 			edp_in: endpoint {
+> 				remote-endpoint = <&dp_intf0_out>;
+> 			};
+> 		};
+> 
+> 		port@1 {
+> 			reg = <1>;
+> 			edp_out: endpoint {
+> 				data-lanes = <0 1 2 3>;
+> 				remote-endpoint = <&panel_in>;
+> 			};
+> 		};
+> 	};
+> 
+> 	aux-bus {
+> 		panel: panel {
+> 			compatible = "edp-panel";
+> 			power-supply = <&pp3300_disp_x>;
+> 			backlight = <&backlight_lcd0>;
+> 			port {
+> 				panel_in: endpoint {
+> 					remote-endpoint = <&edp_out>;
+> 				};
+> 			};
+> 		};
+> 	};
+> };
+> 
+> AngeloGioacchino Del Regno (9):
+>    drm/mediatek: dp: Cache EDID for eDP panel
+>    drm/mediatek: dp: Move AUX and panel poweron/off sequence to function
+>    drm/mediatek: dp: Always return connected status for eDP in .detect()
+>    drm/mediatek: dp: Always set cable_plugged_in at resume for eDP panel
+>    drm/mediatek: dp: Change logging to dev for mtk_dp_aux_transfer()
+>    drm/mediatek: dp: Enable event interrupt only when bridge attached
+>    drm/mediatek: dp: Use devm variant of drm_bridge_add()
+>    drm/mediatek: dp: Move AUX_P0 setting to
+>      mtk_dp_initialize_aux_settings()
+>    drm/mediatek: dp: Add support for embedded DisplayPort aux-bus
+> 
+>   drivers/gpu/drm/mediatek/mtk_dp.c | 186 +++++++++++++++++++-----------
+>   1 file changed, 116 insertions(+), 70 deletions(-)
+> 
 
