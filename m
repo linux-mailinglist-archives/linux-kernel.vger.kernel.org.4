@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A5B715665
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94BEF715668
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 09:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjE3HPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 03:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
+        id S230464AbjE3HQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 03:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjE3HPq (ORCPT
+        with ESMTP id S230422AbjE3HPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 03:15:46 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D59AB;
-        Tue, 30 May 2023 00:15:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685430934; cv=none;
+        Tue, 30 May 2023 03:15:49 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E0AEA;
+        Tue, 30 May 2023 00:15:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685430935; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=nf9nMjP48Sd9hcS1tc+v6N/Tmduzaw+BKm0Kdi1x6dyQk2NlWM0DcTVN/VufdOM/op
-    nhOCAQ5nr1gI5sGrNrlbWeTq1DByp7xkXAI77mAspvbJtIgILV79nHCapDczdhpdCsfu
-    GmfstUqOnuB8MmmXfCqjy8MOxR/6xAagMp4NzRTyJ0UMIeZZCFJjcbhwPrY81hMj4u1m
-    ncdi2sIjDoRrBzj+hserjjUz6IOxwaOyV6SmC0bYrca+Fa5wDOoWwUMhWIKRj4RAy8fO
-    wHmduvjHKTNohHNPhykl46/3Tx/kRSop53F1gA3qTqBeK2Ja1kYyjlVIn1nlwNLqs+Mi
-    2wTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685430934;
+    b=iKQrW/LwEUj5g5qWd2T53e2IibjR7kv4AHItSJyYbvxUATRUi/3BdeWHfvqEnGWQON
+    1VnLgNXOc8Qx+b5rK8uvUUmIj2IQ0VfdMIm+M+ZYJBMPY34Xg8d2CGRK0ylU020tvTo+
+    qkezf8bVJlxtUajdUPZRZvAdudDUZp7bv0kMrL8ysYhaMYdhT6HQzqsiIaC71Y4O9fzY
+    F5+4+qDQ+V8IOwSWGt5QAwtUV8m/+yvRlK52TH1Np2RMtMJiUha1r1Fdp3H5dgjhSH9m
+    lyvEfyIpzTnkQ+aeTRdLiIZN0Z0f1/wQVf2qOeikfHcu5WC5T2kiCSwnSFcEZlcBAqzf
+    TtHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685430935;
     s=strato-dkim-0002; d=strato.com;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=Sv7f/uwIQNs4uzL3fXbDn/p3AwUHH+0+SfXLctQcQtw=;
-    b=UXzuJgNSnE65crDpFHlRqQeRe2HN7JU1KyCh6y0GoP9BPpqRFmlDDYEVdh9JZm2d1i
-    8vl2ivziGt5elEmVeCSOVzNBVQdSuLFUOWs1CQT+tsCI8fO3UaQPJUYTQV58PlPe4joN
-    m9UqNprOfJTPuE8zdAIoT3MALcK/+OdaQVWW+6iBl99CyztnTgrQepskljYrB1mnONR6
-    aiaXJFMyN8mfBmAHmPTYDhQJYLgYvjWhxdefEUWqOmcmYU9rELGUVviQZco/1GxkkvZo
-    E4ffesn33CuJLbQMKG87+cYCfXFP3MjbDaxXFO8oAGvFIVr3o1Tjfoh4XtnhnStO7yPH
-    qf5Q==
+    bh=FrRqAmlYMs1uqjCYxD7SIqb5+Y+8KCQISt/f7anAssw=;
+    b=XHB36zskoz+3KjQkAQ6I0AA6Bo6z/KS0SDe/UwcMYLH5MfOCBzlnVwSnkgJzHdLL3+
+    AxnHI79THeDxZNYlktmEFaZ5dw4ZLhP/nuWijMMcdMTHmem1UcfTVGpP4VDF/33b7thQ
+    ySJzu9xe3J+OtLHMx8KfFRk1eHlK9f5qXCHCAG2DackNO8Uojq9PWsrL/5LpCvDktYXP
+    OybDdzvrIkD7Umy24fccv+pgDPYqDLjHNMm8EeMEXF67MNcjxDoZ/1YHx/6H/1CVQ18N
+    2KCyFupFAOc4jH0i3mQmw8Ohp7cZJkBn+F25/AdLfwUWUbIjVvoYANisF/nAiGMAFv4A
+    3rOw==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685430934;
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685430935;
     s=strato-dkim-0002; d=gerhold.net;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=Sv7f/uwIQNs4uzL3fXbDn/p3AwUHH+0+SfXLctQcQtw=;
-    b=iD6dEVDkJGEIgmXOxcgMj9HBAlHL5hoKkea/FC0CEqtXXpiOtV7vUv/f3UJ5R3h9AU
-    +cBteAcvB5d/j62EBbrwqofGO9kRGCis9xNyJXMotNJQu2SON+fTLEDooA57fJd6/JN9
-    4YhEOtj5ELrEjuqrP82EKbnd8fUJMFiCZmHuSQ94D+A0FAmYzY1tCEXkELuuC6Gdu609
-    OsJXqJ3jCSlS4io0ezQuM3hOkmZoRnbc6hvI7IIZ27rfejI8nG3cj6/B2yput6M3Vkcb
-    OFG0SEfmFDaru62kFZCF6v7R4blG5gNLhlq/SlbqXqdfZOAx4fCn10GvLNihKHv7sg6c
-    xciA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685430934;
+    bh=FrRqAmlYMs1uqjCYxD7SIqb5+Y+8KCQISt/f7anAssw=;
+    b=siGcMWLa/hAf4ZK+uDTd4oYFw2MTp+flcL/+Z8LbGciATJomUi0YNxE45vObXJ01Ju
+    SLE7w7XIF8KdFIBNGKZyp0jzf/EjAVWUpj4EvXQ2kRsBZd+Zoz2E/nU3aGC+UdsveIws
+    V0McDiNM9YlgTcLemPdRR/ZX0CKd/5JrugcMURSVOYx/o8zdwVDaUJFas9BCb2VkAxU9
+    SQHpWIO6Yz9/+2BiDO6F9vgGaX+YID05d6oaFFMhO/x4aaSvwkYF/85o4gs2O2Q1Q/AY
+    wJJm+ExSxuuUhjNkj87MbfqeDzw+NnYC9YXV4FYE4G0jketG48snO3Chu9QoCBA7LqCv
+    H4XQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685430935;
     s=strato-dkim-0003; d=gerhold.net;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=Sv7f/uwIQNs4uzL3fXbDn/p3AwUHH+0+SfXLctQcQtw=;
-    b=aNH2rxSnkpPND6uqAXhoPA5AgqgrYtsvCnAYlMQl0zItA2g+McYOb3UJvDbiArQ0mF
-    JIgueBqNb/sj4aDX+ACQ==
+    bh=FrRqAmlYMs1uqjCYxD7SIqb5+Y+8KCQISt/f7anAssw=;
+    b=q6MgcjQz6fl3KvrU1pB4sgWD/kHqVX6uOg/wugkLIQV+wqB+y7rc0j/GJes0R/9sB8
+    Ly/xlSEVEggKPQBahbCQ==
 X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn8u4xxmw=="
 Received: from [192.168.244.3]
     by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az4U7FYgXz
+    with ESMTPSA id j6420az4U7FYgY0
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
     Tue, 30 May 2023 09:15:34 +0200 (CEST)
 From:   Stephan Gerhold <stephan@gerhold.net>
-Date:   Tue, 30 May 2023 09:15:22 +0200
-Subject: [PATCH 1/6] arm64: dts: qcom: msm8916/39: Fix SD card detect
- pinctrl
+Date:   Tue, 30 May 2023 09:15:23 +0200
+Subject: [PATCH 2/6] arm64: dts: qcom: msm8916/39: Consolidate SDC pinctrl
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230529-msm8916-pinctrl-v1-1-11f540b51c93@gerhold.net>
+Message-Id: <20230529-msm8916-pinctrl-v1-2-11f540b51c93@gerhold.net>
 References: <20230529-msm8916-pinctrl-v1-0-11f540b51c93@gerhold.net>
 In-Reply-To: <20230529-msm8916-pinctrl-v1-0-11f540b51c93@gerhold.net>
 To:     Bjorn Andersson <andersson@kernel.org>
@@ -92,424 +91,620 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current SD card detect pinctrl setup configures bias-pull-up for
-the "default" (active) case and bias-disable for the "sleep" case.
-Before commit b5c833b703cc ("mmc: sdhci-msm: Set IO pins in low power
-state during suspend") the pull up was permanently active. Since then
-it is only active when a valid SD card is inserted.
+MSM8939 has the SDC pinctrl consolidated in two &sdcN_default and
+&sdcN_sleep states, while MSM8916 has all pins separated. Make this
+consistent by consolidating them for MSM8916 well.
 
-This does not really make sense: For an active-low CD, the pull up is
-needed to pull the GPIO high when the card is not inserted. When the
-card gets inserted CD is shorted to ground (low). This means right now
-the pull-up is removed exactly when it is needed to detect the next
-card insertion. Generally, applying different bias for CD does not
-really make sense. It should always stay the same so card removals and
-insertions can be detected properly.
+Use this as a chance to define default pinctrl in the SoC.dtsi and only
+let boards that add additional definitions (such as cd-gpios) override it.
 
-The reason why card detection still works fine in practice is that most
-boards seem to have external pull up on the CD pin. However, this means
-that there is no need to configure an internal pull-up at all and we
-can keep bias-disable permanently.
-
-There are also some boards with different CD polarity (acer-a1-724) and
-with different GPIO number (huawei-g7). All in all this makes it
-obvious that the CD pin is board-specific and the pinctrl for it should
-be defined in the board DT.
-
-Move it to the boards that need it and use bias-disable permanently for
-the boards that seem to have external pull-up. The vendor device tree
-for msm8939-sony-xperia-kanuti-tulip suggests that it needs the
-internal pull-up permanently [1] so it gets bias-pull-up to be sure.
-
-[1]: https://github.com/sonyxperiadev/kernel/blob/57b5050e340f40a88e1ddb8d16fd9adb44418923/arch/arm/boot/dts/qcom/msm8939-kanuti_tulip.dtsi#L634-L636
+For MSM8939 just make the label consistent with the other pinctrl
+definitions (they do not have a _state suffix).
 
 Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 ---
- arch/arm64/boot/dts/qcom/apq8016-sbc.dts                | 11 +++++++++--
- arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts        | 11 +++++++++--
- arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts    | 11 +++++++++--
- arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts          | 11 +++++++++--
- arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts      | 11 +++++++++--
- arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts          |  6 +++---
- arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts    | 11 +++++++++--
- arch/arm64/boot/dts/qcom/msm8916-pins.dtsi              | 17 -----------------
- .../boot/dts/qcom/msm8916-samsung-a2015-common.dtsi     | 11 +++++++++--
- .../arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi | 11 +++++++++--
- arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi | 11 +++++++++--
- .../boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts  | 11 +++++++++--
- arch/arm64/boot/dts/qcom/msm8939.dtsi                   | 14 --------------
- 13 files changed, 93 insertions(+), 54 deletions(-)
+ arch/arm64/boot/dts/qcom/apq8016-sbc.dts           |  8 +--
+ arch/arm64/boot/dts/qcom/apq8039-t2.dts            |  3 -
+ arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts   |  8 +--
+ .../boot/dts/qcom/msm8916-alcatel-idol347.dts      |  8 +--
+ arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts     |  8 +--
+ arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts |  8 +--
+ arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts     |  8 +--
+ .../boot/dts/qcom/msm8916-longcheer-l8150.dts      |  9 ---
+ .../boot/dts/qcom/msm8916-longcheer-l8910.dts      |  8 +--
+ arch/arm64/boot/dts/qcom/msm8916-pins.dtsi         | 74 ++++++++++------------
+ .../dts/qcom/msm8916-samsung-a2015-common.dtsi     |  8 +--
+ .../boot/dts/qcom/msm8916-samsung-gt5-common.dtsi  |  8 +--
+ .../boot/dts/qcom/msm8916-samsung-j5-common.dtsi   |  8 +--
+ .../boot/dts/qcom/msm8916-samsung-serranove.dts    |  9 ---
+ arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi          |  4 --
+ .../boot/dts/qcom/msm8916-wingtech-wt88047.dts     |  9 ---
+ arch/arm64/boot/dts/qcom/msm8916.dtsi              |  6 ++
+ .../dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts  |  7 +-
+ arch/arm64/boot/dts/qcom/msm8939.dtsi              | 14 ++--
+ 19 files changed, 72 insertions(+), 143 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
-index 56dfca61253e..b8537fe576a8 100644
+index b8537fe576a8..23e3b86186ac 100644
 --- a/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
 +++ b/arch/arm64/boot/dts/qcom/apq8016-sbc.dts
-@@ -380,8 +380,8 @@ &sdhc_2 {
+@@ -370,18 +370,14 @@ pm8916_l17: l17 {
+ 
+ &sdhc_1 {
+ 	status = "okay";
+-
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+-	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+ };
+ 
+ &sdhc_2 {
  	status = "okay";
  
  	pinctrl-names = "default", "sleep";
--	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
--	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
-+	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
-+	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
+-	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
+-	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
++	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
++	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
  
  	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
  };
-@@ -642,6 +642,13 @@ &tlmm {
- 		"USR_LED_2_CTRL", /* GPIO 120 */
- 		"SB_HS_ID";
+diff --git a/arch/arm64/boot/dts/qcom/apq8039-t2.dts b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
+index e783b0af355e..107795bf7e5c 100644
+--- a/arch/arm64/boot/dts/qcom/apq8039-t2.dts
++++ b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
+@@ -253,9 +253,6 @@ pm8916_l18: l18 {
+ };
  
-+	sdc2_cd_default: sdc2-cd-default-state {
-+		pins = "gpio38";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
- 	tlmm_leds: tlmm-leds-state {
- 		pins = "gpio21", "gpio120";
- 		function = "gpio";
+ &sdhc_1 {
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc1_default_state>;
+-	pinctrl-1 = <&sdc1_sleep_state>;
+ 	status = "okay";
+ };
+ 
 diff --git a/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts b/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts
-index 5025c08e4817..9846584daf64 100644
+index 9846584daf64..5ad49fe999db 100644
 --- a/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts
 +++ b/arch/arm64/boot/dts/qcom/msm8916-acer-a1-724.dts
-@@ -142,8 +142,8 @@ &sdhc_1 {
+@@ -133,17 +133,13 @@ &pm8916_vib {
+ };
+ 
+ &sdhc_1 {
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+-	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+-
+ 	status = "okay";
+ };
  
  &sdhc_2 {
  	pinctrl-names = "default", "sleep";
--	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on>;
--	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off>;
-+	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
-+	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
+-	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
+-	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
++	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
++	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
  
  	cd-gpios = <&tlmm 38 GPIO_ACTIVE_HIGH>;
  
-@@ -184,6 +184,13 @@ gpio_keys_default: gpio-keys-default-state {
- 		bias-pull-up;
- 	};
- 
-+	sdc2_cd_default: sdc2-cd-default-state {
-+		pins = "gpio38";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
- 	touchscreen_default: touchscreen-default-state {
- 		reset-pins {
- 			pins = "gpio12";
 diff --git a/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts b/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
-index 7b629243ef0d..4ad7d36cf350 100644
+index 4ad7d36cf350..1c43f3d6a0b4 100644
 --- a/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
 +++ b/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
-@@ -181,8 +181,8 @@ &sdhc_2 {
+@@ -171,18 +171,14 @@ &pm8916_vib {
+ 
+ &sdhc_1 {
+ 	status = "okay";
+-
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+-	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+ };
+ 
+ &sdhc_2 {
  	status = "okay";
  
  	pinctrl-names = "default", "sleep";
--	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
--	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
-+	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
-+	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
+-	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
+-	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
++	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
++	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
  
  	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
  };
-@@ -276,6 +276,13 @@ proximity_int_default: proximity-int-default-state {
- 		bias-pull-up;
- 	};
- 
-+	sdc2_cd_default: sdc2-cd-default-state {
-+		pins = "gpio38";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
- 	ts_int_reset_default: ts-int-reset-default-state {
- 		pins = "gpio13", "gpio100";
- 		function = "gpio";
 diff --git a/arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts b/arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts
-index b8c217b04a3b..33ca4e157cd5 100644
+index 33ca4e157cd5..92f695481769 100644
 --- a/arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts
 +++ b/arch/arm64/boot/dts/qcom/msm8916-asus-z00l.dts
-@@ -150,8 +150,8 @@ &sdhc_2 {
+@@ -139,10 +139,6 @@ pm8916_l17: l17 {
+ 
+ &sdhc_1 {
+ 	status = "okay";
+-
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+-	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+ };
+ 
+ &sdhc_2 {
+@@ -150,8 +146,8 @@ &sdhc_2 {
  	vmmc-supply = <&reg_sd_vmmc>;
  
  	pinctrl-names = "default", "sleep";
--	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
--	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
-+	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
-+	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
+-	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
+-	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
++	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
++	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
  	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
  };
  
-@@ -205,6 +205,13 @@ sd_vmmc_en_default: sd-vmmc-en-default-state {
- 		bias-disable;
- 	};
- 
-+	sdc2_cd_default: sdc2-cd-default-state {
-+		pins = "gpio38";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
- 	touchscreen_default: touchscreen-default-state {
- 		touch-pins {
- 			pins = "gpio13";
 diff --git a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts b/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-index 56c42b0c9733..0d387d9507c3 100644
+index 0d387d9507c3..f4dbc515c47a 100644
 --- a/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
 +++ b/arch/arm64/boot/dts/qcom/msm8916-gplus-fl8005a.dts
-@@ -136,8 +136,8 @@ &sdhc_1 {
+@@ -128,16 +128,12 @@ &pm8916_vib {
+ };
+ 
+ &sdhc_1 {
+-	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+-	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+-	pinctrl-names = "default", "sleep";
+-
+ 	status = "okay";
  };
  
  &sdhc_2 {
--	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on>;
--	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off>;
-+	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
-+	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
+-	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
+-	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
++	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
++	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
  	pinctrl-names = "default", "sleep";
  
  	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
-@@ -184,6 +184,13 @@ gpio_leds_default: gpio-led-default-state {
- 		bias-disable;
- 	};
- 
-+	sdc2_cd_default: sdc2-cd-default-state {
-+		pins = "gpio38";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
- 	touchscreen_default: touchscreen-default-state {
- 		reset-pins {
- 			pins = "gpio12";
 diff --git a/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts b/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts
-index 175ca011998c..39be7b6b1695 100644
+index 39be7b6b1695..abd409f10cfe 100644
 --- a/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts
 +++ b/arch/arm64/boot/dts/qcom/msm8916-huawei-g7.dts
-@@ -270,8 +270,8 @@ &sdhc_2 {
+@@ -260,18 +260,14 @@ &pm8916_vib {
+ 
+ &sdhc_1 {
+ 	status = "okay";
+-
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+-	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+ };
+ 
+ &sdhc_2 {
  	status = "okay";
  
  	pinctrl-names = "default", "sleep";
--	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdhc2_cd_default>;
--	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdhc2_cd_default>;
-+	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
-+	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
+-	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
+-	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
++	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
++	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
  
  	/*
  	 * The Huawei device tree sets cd-gpios = <&tlmm 38 GPIO_ACTIVE_HIGH>.
-@@ -397,7 +397,7 @@ reg_lcd_en_default: reg-lcd-en-default-state {
- 		bias-disable;
- 	};
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts b/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts
+index 9560ba632c6f..97262b8519b3 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts
++++ b/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8150.dts
+@@ -242,19 +242,10 @@ &pm8916_vib {
  
--	sdhc2_cd_default: sdhc2-cd-default-state {
-+	sdc2_cd_default: sdc2-cd-default-state {
- 		pins = "gpio56";
- 		function = "gpio";
+ &sdhc_1 {
+ 	status = "okay";
+-
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+-	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+ };
+ 
+ &sdhc_2 {
+ 	status = "okay";
+-
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on>;
+-	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off>;
+-
+ 	non-removable;
+ };
  
 diff --git a/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts b/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts
-index f23cfb2bf793..04e598a436cb 100644
+index 04e598a436cb..9757182fba3e 100644
 --- a/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts
 +++ b/arch/arm64/boot/dts/qcom/msm8916-longcheer-l8910.dts
-@@ -135,8 +135,8 @@ &sdhc_2 {
+@@ -125,18 +125,14 @@ &pm8916_vib {
+ 
+ &sdhc_1 {
+ 	status = "okay";
+-
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+-	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+ };
+ 
+ &sdhc_2 {
  	status = "okay";
  
  	pinctrl-names = "default", "sleep";
--	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
--	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
-+	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
-+	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
+-	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
+-	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
++	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
++	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
  
  	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
  };
-@@ -190,6 +190,13 @@ mag_reset_default: mag-reset-default-state {
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-pins.dtsi b/arch/arm64/boot/dts/qcom/msm8916-pins.dtsi
+index c2149bcf53c4..cbf0f3d311af 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-pins.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8916-pins.dtsi
+@@ -290,44 +290,41 @@ blsp_i2c6_sleep: blsp-i2c6-sleep-state {
  		bias-disable;
  	};
  
-+	sdc2_cd_default: sdc2-cd-default-state {
-+		pins = "gpio38";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
- 	usb_id_default: usb-id-default-state {
- 		pins = "gpio110";
- 		function = "gpio";
-diff --git a/arch/arm64/boot/dts/qcom/msm8916-pins.dtsi b/arch/arm64/boot/dts/qcom/msm8916-pins.dtsi
-index 1b60d42a13c7..c2149bcf53c4 100644
---- a/arch/arm64/boot/dts/qcom/msm8916-pins.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8916-pins.dtsi
-@@ -380,23 +380,6 @@ sdc2_data_off: data-off-pins {
- 		};
- 	};
+-	pmx-sdc1-clk-state {
+-		sdc1_clk_on: clk-on-pins {
++	sdc1_default: sdc1-default-state {
++		clk-pins {
+ 			pins = "sdc1_clk";
  
--	pmx-sdc2-cd-pin-state {
--		sdc2_cd_on: cd-on-pins {
--			pins = "gpio38";
--			function = "gpio";
+ 			bias-disable;
+ 			drive-strength = <16>;
+ 		};
+-		sdc1_clk_off: clk-off-pins {
+-			pins = "sdc1_clk";
 -
--			drive-strength = <2>;
--			bias-pull-up;
--		};
--		sdc2_cd_off: cd-off-pins {
--			pins = "gpio38";
--			function = "gpio";
--
--			drive-strength = <2>;
 -			bias-disable;
+-			drive-strength = <2>;
 -		};
 -	};
 -
- 	cdc-pdm-lines-state {
- 		cdc_pdm_lines_act: pdm-lines-on-pins {
- 			pins = "gpio63", "gpio64", "gpio65", "gpio66",
+-	pmx-sdc1-cmd-state {
+-		sdc1_cmd_on: cmd-on-pins {
++		cmd-pins {
+ 			pins = "sdc1_cmd";
+ 
+ 			bias-pull-up;
+ 			drive-strength = <10>;
+ 		};
+-		sdc1_cmd_off: cmd-off-pins {
+-			pins = "sdc1_cmd";
++		data-pins {
++			pins = "sdc1_data";
+ 
+ 			bias-pull-up;
+-			drive-strength = <2>;
++			drive-strength = <10>;
+ 		};
+ 	};
+ 
+-	pmx-sdc1-data-state {
+-		sdc1_data_on: data-on-pins {
+-			pins = "sdc1_data";
++	sdc1_sleep: sdc1-sleep-state {
++		clk-pins {
++			pins = "sdc1_clk";
++
++			bias-disable;
++			drive-strength = <2>;
++		};
++		cmd-pins {
++			pins = "sdc1_cmd";
+ 
+ 			bias-pull-up;
+-			drive-strength = <10>;
++			drive-strength = <2>;
+ 		};
+-		sdc1_data_off: data-off-pins {
++		data-pins {
+ 			pins = "sdc1_data";
+ 
+ 			bias-pull-up;
+@@ -335,44 +332,41 @@ sdc1_data_off: data-off-pins {
+ 		};
+ 	};
+ 
+-	pmx-sdc2-clk-state {
+-		sdc2_clk_on: clk-on-pins {
++	sdc2_default: sdc2-default-state {
++		clk-pins {
+ 			pins = "sdc2_clk";
+ 
+ 			bias-disable;
+ 			drive-strength = <16>;
+ 		};
+-		sdc2_clk_off: clk-off-pins {
+-			pins = "sdc2_clk";
+-
+-			bias-disable;
+-			drive-strength = <2>;
+-		};
+-	};
+-
+-	pmx-sdc2-cmd-state {
+-		sdc2_cmd_on: cmd-on-pins {
++		cmd-pins {
+ 			pins = "sdc2_cmd";
+ 
+ 			bias-pull-up;
+ 			drive-strength = <10>;
+ 		};
+-		sdc2_cmd_off: cmd-off-pins {
+-			pins = "sdc2_cmd";
++		data-pins {
++			pins = "sdc2_data";
+ 
+ 			bias-pull-up;
+-			drive-strength = <2>;
++			drive-strength = <10>;
+ 		};
+ 	};
+ 
+-	pmx-sdc2-data-state {
+-		sdc2_data_on: data-on-pins {
+-			pins = "sdc2_data";
++	sdc2_sleep: sdc2-sleep-state {
++		clk-pins {
++			pins = "sdc2_clk";
++
++			bias-disable;
++			drive-strength = <2>;
++		};
++		cmd-pins {
++			pins = "sdc2_cmd";
+ 
+ 			bias-pull-up;
+-			drive-strength = <10>;
++			drive-strength = <2>;
+ 		};
+-		sdc2_data_off: data-off-pins {
++		data-pins {
+ 			pins = "sdc2_data";
+ 
+ 			bias-pull-up;
 diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi b/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-index 895036fb6eb8..3c145a0aac99 100644
+index 3c145a0aac99..019bf73178fa 100644
 --- a/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
 +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-@@ -273,8 +273,8 @@ &sdhc_2 {
+@@ -263,18 +263,14 @@ pm8916_l17: l17 {
+ 
+ &sdhc_1 {
+ 	status = "okay";
+-
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+-	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+ };
+ 
+ &sdhc_2 {
  	status = "okay";
  
  	pinctrl-names = "default", "sleep";
--	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
--	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
-+	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
-+	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
+-	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
+-	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
++	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
++	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
  
  	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
  };
-@@ -391,6 +391,13 @@ nfc_i2c_default: nfc-i2c-default-state {
- 		bias-disable;
- 	};
- 
-+	sdc2_cd_default: sdc2-cd-default-state {
-+		pins = "gpio38";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
- 	tkey_default: tkey-default-state {
- 		pins = "gpio98";
- 		function = "gpio";
 diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
-index 94cfb3200496..057ce62c0305 100644
+index 057ce62c0305..7943bb619116 100644
 --- a/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
 +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-gt5-common.dtsi
-@@ -143,8 +143,8 @@ &sdhc_1 {
+@@ -135,16 +135,12 @@ &pm8916_usbin {
+ };
+ 
+ &sdhc_1 {
+-	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+-	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+-	pinctrl-names = "default", "sleep";
+-
+ 	status = "okay";
  };
  
  &sdhc_2 {
--	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
--	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
-+	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
-+	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
+-	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
+-	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
++	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
++	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
  	pinctrl-names = "default", "sleep";
  
  	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
-@@ -199,4 +199,11 @@ gpio_hall_sensor_default: gpio-hall-sensor-default-state {
- 		drive-strength = <2>;
- 		bias-disable;
- 	};
-+
-+	sdc2_cd_default: sdc2-cd-default-state {
-+		pins = "gpio38";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
- };
 diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi b/arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi
-index f2a5800f1605..36233a31b98b 100644
+index 36233a31b98b..f4fd5d72b28b 100644
 --- a/arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi
 +++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-j5-common.dtsi
-@@ -107,8 +107,8 @@ &sdhc_2 {
+@@ -97,18 +97,14 @@ &pm8916_resin {
+ 
+ &sdhc_1 {
+ 	status = "okay";
+-
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+-	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+ };
+ 
+ &sdhc_2 {
  	status = "okay";
  
  	pinctrl-names = "default", "sleep";
--	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
--	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
-+	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
-+	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
+-	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_default>;
+-	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_default>;
++	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
++	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
  
  	cd-gpios = <&tlmm 38 GPIO_ACTIVE_LOW>;
  };
-@@ -162,4 +162,11 @@ muic_int_default: muic-int-default-state {
- 		drive-strength = <2>;
- 		bias-disable;
- 	};
-+
-+	sdc2_cd_default: sdc2-cd-default-state {
-+		pins = "gpio38";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
- };
-diff --git a/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
-index 85a8d8fe212f..80e4f0a6eea1 100644
---- a/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
-@@ -43,6 +43,13 @@ &mdss {
- };
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts b/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
+index 3637e7d80d0a..15dc246e84e2 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
++++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
+@@ -276,19 +276,10 @@ &pm8916_vib {
  
- &tlmm {
-+	sdc2_cd_default: sdc2-cd-default-state {
-+		pins = "gpio38";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
- 	usb_id_default: usb-id-default-state {
- 		pins = "gpio110";
- 		function = "gpio";
-@@ -158,8 +165,8 @@ &sdhc_1 {
+ &sdhc_1 {
+ 	status = "okay";
+-
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+-	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
  };
  
  &sdhc_2 {
--	pinctrl-0 = <&sdc2_default_state>;
--	pinctrl-1 = <&sdc2_sleep_state>;
-+	pinctrl-0 = <&sdc2_default_state &sdc2_cd_default>;
-+	pinctrl-1 = <&sdc2_sleep_state &sdc2_cd_default>;
+ 	status = "okay";
+-
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on>;
+-	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off>;
+-
+ 	non-removable;
+ 
+ 	/*
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi b/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
+index dafa5bd82328..004a129a2ee2 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8916-ufi.dtsi
+@@ -101,10 +101,6 @@ &pm8916_usbin {
+ };
+ 
+ &sdhc_1 {
+-	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+-	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+-	pinctrl-names = "default", "sleep";
+-
+ 	status = "okay";
+ };
+ 
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts b/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
+index 733917531218..c94d36b38651 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
++++ b/arch/arm64/boot/dts/qcom/msm8916-wingtech-wt88047.dts
+@@ -173,19 +173,10 @@ &pm8916_vib {
+ 
+ &sdhc_1 {
+ 	status = "okay";
+-
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc1_clk_on &sdc1_cmd_on &sdc1_data_on>;
+-	pinctrl-1 = <&sdc1_clk_off &sdc1_cmd_off &sdc1_data_off>;
+ };
+ 
+ &sdhc_2 {
+ 	status = "okay";
+-
+-	pinctrl-names = "default", "sleep";
+-	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on>;
+-	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off>;
+-
+ 	non-removable;
+ };
+ 
+diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+index 9494b6512d87..c0aa6a53fbca 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+@@ -1562,6 +1562,9 @@ sdhc_1: mmc@7824900 {
+ 				 <&gcc GCC_SDCC1_APPS_CLK>,
+ 				 <&xo_board>;
+ 			clock-names = "iface", "core", "xo";
++			pinctrl-0 = <&sdc1_default>;
++			pinctrl-1 = <&sdc1_sleep>;
++			pinctrl-names = "default", "sleep";
+ 			mmc-ddr-1_8v;
+ 			bus-width = <8>;
+ 			non-removable;
+@@ -1580,6 +1583,9 @@ sdhc_2: mmc@7864900 {
+ 				 <&gcc GCC_SDCC2_APPS_CLK>,
+ 				 <&xo_board>;
+ 			clock-names = "iface", "core", "xo";
++			pinctrl-0 = <&sdc2_default>;
++			pinctrl-1 = <&sdc2_sleep>;
++			pinctrl-names = "default", "sleep";
+ 			bus-width = <4>;
+ 			status = "disabled";
+ 		};
+diff --git a/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+index 80e4f0a6eea1..a9df8dab5481 100644
+--- a/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
++++ b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+@@ -158,15 +158,12 @@ pm8916_l18: l18 {
+ };
+ 
+ &sdhc_1 {
+-	pinctrl-0 = <&sdc1_default_state>;
+-	pinctrl-1 = <&sdc1_sleep_state>;
+-	pinctrl-names = "default", "sleep";
+ 	status = "okay";
+ };
+ 
+ &sdhc_2 {
+-	pinctrl-0 = <&sdc2_default_state &sdc2_cd_default>;
+-	pinctrl-1 = <&sdc2_sleep_state &sdc2_cd_default>;
++	pinctrl-0 = <&sdc2_default &sdc2_cd_default>;
++	pinctrl-1 = <&sdc2_sleep &sdc2_cd_default>;
  	pinctrl-names = "default", "sleep";
  	cd-gpios = <&tlmm 38 GPIO_ACTIVE_HIGH>;
  	status = "okay";
 diff --git a/arch/arm64/boot/dts/qcom/msm8939.dtsi b/arch/arm64/boot/dts/qcom/msm8939.dtsi
-index 0d9f8b951b66..2cbd4baa9b95 100644
+index 2cbd4baa9b95..1f79444bc250 100644
 --- a/arch/arm64/boot/dts/qcom/msm8939.dtsi
 +++ b/arch/arm64/boot/dts/qcom/msm8939.dtsi
-@@ -1138,13 +1138,6 @@ data-pins {
- 					bias-pull-up;
- 					drive-strength = <10>;
+@@ -1080,7 +1080,7 @@ ext_sec_tlmm_lines_sus: tlmm-lines-off-pins {
  				};
--
--				cd-pins {
--					pins = "gpio38";
--					function = "gpio";
--					drive-strength = <2>;
--					bias-pull-up;
--				};
  			};
  
- 			sdc2_sleep_state: sdc2-sleep-state {
-@@ -1165,13 +1158,6 @@ data-pins {
- 					bias-pull-up;
- 					drive-strength = <2>;
+-			sdc1_default_state: sdc1-default-state {
++			sdc1_default: sdc1-default-state {
+ 				clk-pins {
+ 					pins = "sdc1_clk";
+ 					bias-disable;
+@@ -1100,7 +1100,7 @@ data-pins {
  				};
--
--				cd-pins {
--					pins = "gpio38";
--					function = "gpio";
--					drive-strength = <2>;
--					bias-disable;
--				};
  			};
  
- 			wcnss_pin_a: wcnss-active-state {
+-			sdc1_sleep_state: sdc1-sleep-state {
++			sdc1_sleep: sdc1-sleep-state {
+ 				clk-pins {
+ 					pins = "sdc1_clk";
+ 					bias-disable;
+@@ -1120,7 +1120,7 @@ data-pins {
+ 				};
+ 			};
+ 
+-			sdc2_default_state: sdc2-default-state {
++			sdc2_default: sdc2-default-state {
+ 				clk-pins {
+ 					pins = "sdc2_clk";
+ 					bias-disable;
+@@ -1140,7 +1140,7 @@ data-pins {
+ 				};
+ 			};
+ 
+-			sdc2_sleep_state: sdc2-sleep-state {
++			sdc2_sleep: sdc2-sleep-state {
+ 				clk-pins {
+ 					pins = "sdc2_clk";
+ 					bias-disable;
+@@ -1632,6 +1632,9 @@ sdhc_1: mmc@7824900 {
+ 				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+ 			clock-names = "iface", "core", "xo";
+ 			resets = <&gcc GCC_SDCC1_BCR>;
++			pinctrl-0 = <&sdc1_default>;
++			pinctrl-1 = <&sdc1_sleep>;
++			pinctrl-names = "default", "sleep";
+ 			mmc-ddr-1_8v;
+ 			bus-width = <8>;
+ 			non-removable;
+@@ -1651,6 +1654,9 @@ sdhc_2: mmc@7864900 {
+ 				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+ 			clock-names =  "iface", "core", "xo";
+ 			resets = <&gcc GCC_SDCC2_BCR>;
++			pinctrl-0 = <&sdc2_default>;
++			pinctrl-1 = <&sdc2_sleep>;
++			pinctrl-names = "default", "sleep";
+ 			bus-width = <4>;
+ 			status = "disabled";
+ 		};
 
 -- 
 2.40.1
