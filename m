@@ -2,180 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FAF8715F62
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E009715F7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbjE3MaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
+        id S231162AbjE3Mam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjE3M3z (ORCPT
+        with ESMTP id S231317AbjE3MaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:29:55 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F791B1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:29:40 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-3352b8b9b70so13607685ab.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:29:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685449778; x=1688041778;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=db7pOK2qWllgoSD+hdy9un8RIi8jDZibrX+vbM0TbcI=;
-        b=E3f6YBkCcce5sNygYmsqPom7hQcebcWA4FKh0jB+WuU4bCUNTTiVDOQ4oYLgDlkbaa
-         +RIM1noTWHCjhF2Ve3BVHBooqefxmRSfa04XfNOEIjU3UVbYw6PptOdhcb86Pft+JLK3
-         zrKLc5jfK02NFqj8hKTzoDVR42EKfq9IpM1KCGtmLoFN0dwef3sDgsRdxDF6HWltZGWe
-         OPUuAcdUCowRP1t2kwVk1JqpElJ0HUP7QDw1pp3ZXNAmPvcOsdM3Bj5JG6BfUKZA5GEC
-         TjNm4TPYZRmP+WRzwsS0MRUcGlExjiaeAuIEI1y7C5GuR1ISYq9tEEE2/qvQJgjIBycC
-         C9UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685449778; x=1688041778;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=db7pOK2qWllgoSD+hdy9un8RIi8jDZibrX+vbM0TbcI=;
-        b=M9gL5krOxFFQ94MNtUe0XtcgUtSe28QiWl3iIsw/Obhc1nZm9nHeYIP2nP54/vQtkR
-         CdyTKK0w2x+eCNQ3MKeiPQsTRKEBDZej8ceuJfgOP6P0UCDyhi7mAIAu2LrOc+xuV1Ij
-         5KwZb1TigfG9Up484ZYZoti26WTzJbp9MmShqIsXDF5JLe+saUSgILp/ODv4XVESAE1z
-         7S5EFiwZNr6doFuP1qb1lokcYjApo6tytmJDuV7H0xRZBlbb25M7+hgJGYgEFlTYjQ2y
-         t1CjnFW0ugymgKXdgqQYeXDt0HbWNVYqhkMftHfxbrsKX40zn/pK2acHHFRMG8RDD4by
-         4bGA==
-X-Gm-Message-State: AC+VfDzsfFmnVUqJodbKps2v1wCUGHpOSjJqGSHc5e+LHiOCvwO/n90I
-        3CvXFGi3ItMouwgCzYUWolD/Dg==
-X-Google-Smtp-Source: ACHHUZ6TM/HJSRb/wKW1p0GHS4HzM3dN4kBjO5DaLuSqMt0fzSDZPsxL+zNlyWRu2e+sQg2eZZRvHQ==
-X-Received: by 2002:a92:d688:0:b0:331:107d:e96e with SMTP id p8-20020a92d688000000b00331107de96emr1311753iln.16.1685449777883;
-        Tue, 30 May 2023 05:29:37 -0700 (PDT)
-Received: from [172.22.22.28] ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id g186-20020a025bc3000000b0041643b78cbesm707344jab.120.2023.05.30.05.29.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 05:29:37 -0700 (PDT)
-Message-ID: <3c4d235d-8e49-61a2-a445-5d363962d3e7@linaro.org>
-Date:   Tue, 30 May 2023 07:29:36 -0500
+        Tue, 30 May 2023 08:30:00 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A1ED9;
+        Tue, 30 May 2023 05:29:59 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0F49D5C0187;
+        Tue, 30 May 2023 08:29:56 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 30 May 2023 08:29:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685449796; x=
+        1685536196; bh=EEiwGlX0Rwp4JD9gZJQ2+HoBg+CT8hF4DrYL0banGb4=; b=J
+        hSWsjxiEcHNkhsyc3AMDUebr4x6d+5Z/IPmQcP3r3HEa2PV4iCNRm3rpXjqMalMw
+        /OE0m3uI6TqVPy5TXs2laPgrna5SS91VjYoT0EXhAxxqYtnfxHMo7QJ6Jnmck2VP
+        qm3TSO2CTWhnzg3XOjo+mkHnuk/QAm3oPsYysD8xP3lNHGWahS0Xzz2Vdy00xqfC
+        yAn6/IaCpooPjW/r5dFkd/NaFIY0S16nWFqTsAWzyPFXWDFJvzH1dM+PTmRZ6g7j
+        2o0X6GJUAtrKbuNWm0yrLAHjaZxrzujAqghJbB5Pgmh3apFHgN+WZcMp8TtzR5PN
+        UmtTiyLIs/YDkMAzAHUpw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685449796; x=1685536196; bh=EEiwGlX0Rwp4J
+        D9gZJQ2+HoBg+CT8hF4DrYL0banGb4=; b=O8gpcmbIa+lNB390LgDoxjyCM0VpN
+        DeUDIRCCkjdQ+WpdGdzcgnse0TwvjzKgs5YriXR9QomUEOgfslSoIJc3vkGujs74
+        VPkfaqeBhzNmKSfdheBPc28aFjtzgiElyb8XMQ0DCHEgvEKGVEHWluQY5NUAZeJE
+        0lhHFHNpkdZmPZZBdDmvBiTp7eiVYb6eCW3ZjMWdk153TSS6tRrEHYat++3ogA0G
+        Z8/iPnkXzgVKZDv3CCQVLAT94m9xNd1Y4sHfuu5+Nx2HBWBDzJVK/E2qPoDde2j0
+        6E+pDcEqROIFws3Einak7j/Pec39SrUOUvx1BCXKNueY+QbbjiTx3jhIA==
+X-ME-Sender: <xms:Qux1ZDpZHdZDdRqzuQ3oUtp4N6AbptLlyGyPf-zqztvLum_Wpk8xEg>
+    <xme:Qux1ZNo1F15jgz6IzDPB24Axf7HXd1_RtRQC-fw6kQbdty6wE8mBYqfLb7uXR-P_r
+    JVGo2mcRT2J7JcrdCo>
+X-ME-Received: <xmr:Qux1ZAMinJKpb7I-Q699cMCl5dTtv9S_hHYYcGI6fA9B46v2Q7yLRFaxadSo-LlFaSYPXQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedghedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:Qux1ZG6ZsOw6xeVtxhzYN2s1-Hwz6qJfUWen7z_-iQrz1HVXN1ijxA>
+    <xmx:Qux1ZC7stYJcdgzWQepJmmrvNf0MLSMCayxkwEJj9btY7h4-oM2Vrw>
+    <xmx:Qux1ZOh_9TgCy4k005YOTV8O1Ry7xm6HbvZqesWx4liI3OpUdnIllw>
+    <xmx:ROx1ZAaQz7AjEzvPi21kVUbjMxYAZy5wCX2Z0W4XoTeRn9P4Z4ohSw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 30 May 2023 08:29:54 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id EB5E1104992; Tue, 30 May 2023 15:29:51 +0300 (+03)
+Date:   Tue, 30 May 2023 15:29:51 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [patch] x86/smpboot: Disable parallel bootup if cc_vendor != NONE
+Message-ID: <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name>
+References: <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
+ <87y1lbl7r6.ffs@tglx>
+ <87sfbhlwp9.ffs@tglx>
+ <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
+ <87bki3kkfi.ffs@tglx>
+ <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
+ <20230530005428.jyrc2ezx5raohlrt@box.shutemov.name>
+ <87mt1mjhk3.ffs@tglx>
+ <87jzwqjeey.ffs@tglx>
+ <87cz2ija1e.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net] net: ipa: Use the correct value for IPA_STATUS_SIZE
-Content-Language: en-US
-To:     Bert Karwatzki <spasswolf@web.de>,
-        Simon Horman <simon.horman@corigine.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <7ae8af63b1254ab51d45c870e7942f0e3dc15b1e.camel@web.de>
- <ZHWhEiWtEC9VKOS1@corigine.com>
- <2b91165f667d3896a0aded39830905f62f725815.camel@web.de>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <2b91165f667d3896a0aded39830905f62f725815.camel@web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87cz2ija1e.ffs@tglx>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/23 4:10 AM, Bert Karwatzki wrote:
-> Am Dienstag, dem 30.05.2023 um 09:09 +0200 schrieb Simon Horman:
->> On Sat, May 27, 2023 at 10:46:25PM +0200, Bert Karwatzki wrote:
->>> commit b8dc7d0eea5a7709bb534f1b3ca70d2d7de0b42c introduced
->>> IPA_STATUS_SIZE as a replacement for the size of the removed struct
->>> ipa_status. sizeof(struct ipa_status) was sizeof(__le32[8]), use this
->>> as IPA_STATUS_SIZE.
-
-This is better, however it really isn't done in a way that's
-appropriate for a Linux kernel patch.  I will gladly help you
-get it right if you have the patience for that.  But I'm not
-going to say anything yet--until you say you want me to help
-you do this.  If you prefer, I can submit the patch for you.
-
-The reason this is important is your commit is permanent, and
-just like code, commit messages are best if kept consistent
-and readable.  I also am offering to help you understand so
-you avoid any trouble next time you want to send a kernel patch.
-
-Let me know what you prefer.
-
-					-Alex
-
->>>
->>>>  From 0623148733819bb5d3648b1ed404d57c8b6b31d8 Mon Sep 17 00:00:00 2001
->>> From: Bert Karwatzki <spasswolf@web.de>
->>> Date: Sat, 27 May 2023 22:16:52 +0200
->>> Subject: [PATCH] Use the correct value for IPA_STATUS_SIZE.
->>> IPA_STATUS_SIZE
->>>   was introduced in commit b8dc7d0eea5a7709bb534f1b3ca70d2d7de0b42c as a
->>>   replacment for the size of the removed struct ipa_status which had
->>> size =
->>>   sizeof(__le32[8]).
->>>
->>> Signed-off-by: Bert Karwatzki <spasswolf@web.de>
->>
->> Hi Bert,
->>
->> As well as the feedback provided by Jakub elsewhere in this
->> thread I think it would be useful to CC the author of the above mentioned
->> commit, Alex Elder <elder@linaro.org>. I have CCed him on this email.
->> Please consider doing likewise when you post v2.
->>
->> FWIIW, I did take a look.
->> And I do agree with your maths: struct ipa_status was 32 (= 8 x 4) bytes long.
->>
->>> ---
->>>   drivers/net/ipa/ipa_endpoint.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/net/ipa/ipa_endpoint.c
->>> b/drivers/net/ipa/ipa_endpoint.c
->>> index 2ee80ed140b7..afa1d56d9095 100644
->>> --- a/drivers/net/ipa/ipa_endpoint.c
->>> +++ b/drivers/net/ipa/ipa_endpoint.c
->>> @@ -119,7 +119,7 @@ enum ipa_status_field_id {
->>>   };
->>>   
->>>   /* Size in bytes of an IPA packet status structure */
->>> -#define IPA_STATUS_SIZE                        sizeof(__le32[4])
->>> +#define IPA_STATUS_SIZE                        sizeof(__le32[8])
->>>   
->>>   /* IPA status structure decoder; looks up field values for a structure
->>> */
->>>   static u32 ipa_status_extract(struct ipa *ipa, const void *data,
->>> -- 
->>> 2.40.1
->>>
->>> Bert Karwatzki
+On Tue, May 30, 2023 at 02:09:17PM +0200, Thomas Gleixner wrote:
+> The decision to allow parallel bringup of secondary CPUs checks
+> CC_ATTR_GUEST_STATE_ENCRYPT to detect encrypted guests. Those cannot use
+> parallel bootup because accessing the local APIC is intercepted and raises
+> a #VC or #VE, which cannot be handled at that point.
 > 
-> Here is v2 of the patch, the first one was garbled by the linebreak setting of
-> evolution.
+> The check works correctly, but only for AMD encrypted guests. TDX does not
+> set that flag.
 > 
-> From: Bert Karwatzki <spasswolf@web.de>
-> Date: Tue, 30 May 2023 10:55:55 +0200
-> Subject: [PATCH] IPA_STATUS_SIZE was introduced in commit b8dc7d0eea5a as a
->   replacement for the size of the removed struct ipa_status of size
->   sizeof(__le32[8]). Use this value as IPA_STATUS_SIZE.
-> 
-> Signed-off-by: Bert Karwatzki <spasswolf@web.de>
-> ---
->   drivers/net/ipa/ipa_endpoint.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
-> index 2ee80ed140b7..afa1d56d9095 100644
-> --- a/drivers/net/ipa/ipa_endpoint.c
-> +++ b/drivers/net/ipa/ipa_endpoint.c
-> @@ -119,7 +119,7 @@ enum ipa_status_field_id {
->   };
->   
->   /* Size in bytes of an IPA packet status structure */
-> -#define IPA_STATUS_SIZE			sizeof(__le32[4])
-> +#define IPA_STATUS_SIZE			sizeof(__le32[8])
->   
->   /* IPA status structure decoder; looks up field values for a structure */
->   static u32 ipa_status_extract(struct ipa *ipa, const void *data,
+> Check for cc_vendor != CC_VENDOR_NONE instead. That might be overbroad, but
+> definitely works for both AMD and Intel.
 
+It boots fine with TDX, but I think it is wrong. cc_get_vendor() will
+report CC_VENDOR_AMD even on bare metal if SME is enabled. I don't think
+we want it.
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
