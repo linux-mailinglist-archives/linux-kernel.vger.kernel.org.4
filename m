@@ -2,176 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A355715A90
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0918D715A96
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjE3Jqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
+        id S230492AbjE3Jr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjE3Jqm (ORCPT
+        with ESMTP id S229701AbjE3JrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:46:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8BBA3;
-        Tue, 30 May 2023 02:46:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3619625E7;
-        Tue, 30 May 2023 09:46:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B3AFC433EF;
-        Tue, 30 May 2023 09:46:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685440000;
-        bh=jRdh+GkRfDWttXL/fmD+LV2d9JEAsUu+MFteor4o3v8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NWQkW7oqD1s/xQaFLgewy15nv1KOWGXsn0f6FF/858zpx8bI3nhSwnRXEShDXDMkx
-         piTiQBqj89sTUkdaMIMcfWKRnJjeK35AreN69JjZp2umweAEJrjrWJ8M/8H4NLUBM9
-         +WVdgprovyGlGiPrKHjvBKi8A6MoAd3USs2SgXo8M3qo+Mk/CSaHQfquRrR+cYF8VP
-         33/FKZgiQHACj/TMzi3XFg7aBUN+S4EoKZZ9V4Ktn1xgYi+6rIYy+csL6WcARJXv/S
-         Bl81LUJeWfbjgLHWweh59yJ1G0l8RdwcMEMmvruI9W6NFd3kc8QXVwJEJlOYce6iT9
-         8Nfj481yN1BmQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1q3vw5-001GVk-R1;
-        Tue, 30 May 2023 10:46:37 +0100
-Date:   Tue, 30 May 2023 10:46:37 +0100
-Message-ID: <868rd6cfsy.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        Eddie Huang <eddie.huang@mediatek.com>,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, wenst@chromium.org,
-        yidilin@chromium.org, Tinghan Shen <tinghan.shen@mediatek.com>,
-        jwerner@chromium.org, Weiyi Lu <weiyi.lu@mediatek.com>,
-        Ben Ho <Ben.Ho@mediatek.com>,
-        Seiya Wang <seiya.wang@mediatek.com>,
+        Tue, 30 May 2023 05:47:21 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9D3A3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:47:19 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id ada2fe7eead31-43ac1ebb646so1997256137.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:47:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1685440038; x=1688032038;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OIzhChYUNLfm+XWki27JvZkO7NGgI4DFHIFwo2T7aS0=;
+        b=bBkPAO2St5nJS4Kko98Tl60g8CTrz4Nn54qpkMWme+FATa5T6sx8k0544Cm0V518eu
+         PguWspaNIRycRueuC4UxrB5+FuCj+dXJQqiidL/e4ukbPdlKmQtSaGNAfbrJvaJRHaKR
+         2GJssxV+7AtQZya8RptndBvMoSMt7hR55I+NR4/oqy6yMh9VJS+UExy+y/n1QvpRDogx
+         OojCNQDKPQsRIJ7R/ysgwyw8V1Y/E/p1Z3nPl0T6EAo/5BJcFHdoqkDfEqjtdzCBaQZc
+         rFPDmyI0qCr74+oj8ETtfvkADEXaovqDyxO2vPxHX0Y33RjKrc5GqBu6mo2fSdn17Ir5
+         e+3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685440038; x=1688032038;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OIzhChYUNLfm+XWki27JvZkO7NGgI4DFHIFwo2T7aS0=;
+        b=IryQ2VV8x/kPD7JFWYnHwcK0zIgRj2zg5vjMnTIA4VPenZ8DTV5+CIYoCzY3WAQre0
+         Q1H4JuALAxL+Jc6/4npERI+lKbNQD6LLOF5DAIzn+EsO7GAdFFcMnuW8ugeypDAdBvv2
+         5tPr5ozzCt2eQfRZffdU43C5nVBUCbPAqv1rsUCG0ixCzCILu/uErEUnRct9bX9XwO9Z
+         Tbeoee9z2f++tPpKqhpioWyAoSi1IJqoHdYZvdlPhiKIQFl20OOtiUHUlqwISNAC8pXV
+         vF+FWPHIxriKRhoYiBRmaQdphinHq5VHSBxmg9wXe7JXPhD9Dt7R0EWkLAFVSQGadYBT
+         u4fw==
+X-Gm-Message-State: AC+VfDzvi3yvuioqu1T92GiozKVUGMaH66rzUqptC71MoWdxb1ipnrSl
+        iBaqqURI9QILN9yZiN1S2cMTEc4LRr+nNtR82ZzLUw==
+X-Google-Smtp-Source: ACHHUZ6YElDOMjsnjuiqQPgxgQ7QloYBoa4ZvDWgRo3oSyyufZR6kZTSCoJ6Bf8lfwaaT/BrhKvzzzC/ep67kdjyrlU=
+X-Received: by 2002:a67:f24a:0:b0:430:acc:a150 with SMTP id
+ y10-20020a67f24a000000b004300acca150mr502826vsm.3.1685440038182; Tue, 30 May
+ 2023 02:47:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230411130446.401440-1-brgl@bgdev.pl> <20230411130446.401440-2-brgl@bgdev.pl>
+ <CAMRc=MdDct0UzJPpOTuKHmm23Jc529NwkBWJJmXfeevpkQaSxQ@mail.gmail.com> <CAMRc=Me4EQ_7ArCeJASzKTimuSH=yNkrwm9DgE93s7kjdS5Nrw@mail.gmail.com>
+In-Reply-To: <CAMRc=Me4EQ_7ArCeJASzKTimuSH=yNkrwm9DgE93s7kjdS5Nrw@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 30 May 2023 11:47:07 +0200
+Message-ID: <CAMRc=MfhYu6sxhFABjyQUT5NGwNu1oJuRjMBqPvQ0Z8MhjoSRg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] dt-bindings: ufs: qcom: add compatible for sa8775p
+To:     Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
         linux-kernel@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v2 2/5] irqchip/gic-v3: Disable pseudo NMIs on Mediatek devices w/ firmware issues
-In-Reply-To: <CAMuHMdWM_t7uQqkesM3fnSK7THrmLszA7U54==A0-98xPH90Bw@mail.gmail.com>
-References: <20230515131353.v2.cover@dianders>
-        <20230515131353.v2.2.I88dc0a0eb1d9d537de61604cd8994ecc55c0cac1@changeid>
-        <CAMuHMdWM_t7uQqkesM3fnSK7THrmLszA7U54==A0-98xPH90Bw@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-scsi@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: geert@linux-m68k.org, dianders@chromium.org, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, allen-kh.cheng@mediatek.com, linux-mediatek@lists.infradead.org, eddie.huang@mediatek.com, hsin-hsiung.wang@mediatek.com, angelogioacchino.delregno@collabora.com, wenst@chromium.org, yidilin@chromium.org, tinghan.shen@mediatek.com, jwerner@chromium.org, weiyi.lu@mediatek.com, Ben.Ho@mediatek.com, seiya.wang@mediatek.com, linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 May 2023 09:29:02 +0100,
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->=20
-> Hi Douglas,
->=20
-> On Mon, May 15, 2023 at 10:16=E2=80=AFPM Douglas Anderson <dianders@chrom=
-ium.org> wrote:
-> > Some Chromebooks with Mediatek SoCs have a problem where the firmware
-> > doesn't properly save/restore certain GICR registers. Newer
-> > Chromebooks should fix this issue and we may be able to do firmware
-> > updates for old Chromebooks. At the moment, the only known issue with
-> > these Chromebooks is that we can't enable "pseudo NMIs" since the
-> > priority register can be lost. Enabling "pseudo NMIs" on Chromebooks
-> > with the problematic firmware causes crashes and freezes.
+On Thu, May 25, 2023 at 11:37=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl=
+> wrote:
+>
+> On Tue, May 16, 2023 at 12:06=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.=
+pl> wrote:
 > >
-> > Let's detect devices with this problem and then disable "pseudo NMIs"
-> > on them. We'll detect the problem by looking for the presence of the
-> > "mediatek,broken-save-restore-fw" property in the GIC device tree
-> > node. Any devices with fixed firmware will not have this property.
+> > On Tue, Apr 11, 2023 at 3:04=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev=
+.pl> wrote:
+> > >
+> > > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > >
+> > > Add the compatible string for the UFS on sa8775p platforms.
+> > >
+> > > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > > ---
+> > >  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Do=
+cumentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> > > index c5a06c048389..b1c00424c2b0 100644
+> > > --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> > > +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> > > @@ -26,6 +26,7 @@ properties:
+> > >            - qcom,msm8994-ufshc
+> > >            - qcom,msm8996-ufshc
+> > >            - qcom,msm8998-ufshc
+> > > +          - qcom,sa8775p-ufshc
+> > >            - qcom,sc8280xp-ufshc
+> > >            - qcom,sdm845-ufshc
+> > >            - qcom,sm6350-ufshc
+> > > @@ -105,6 +106,7 @@ allOf:
+> > >            contains:
+> > >              enum:
+> > >                - qcom,msm8998-ufshc
+> > > +              - qcom,sa8775p-ufshc
+> > >                - qcom,sc8280xp-ufshc
+> > >                - qcom,sm8250-ufshc
+> > >                - qcom,sm8350-ufshc
+> > > --
+> > > 2.37.2
+> > >
 > >
-> > Our detection plan works because we never bake a Chromebook's device
-> > tree into firmware. Instead, device trees are always bundled with the
-> > kernel. We'll update the device trees of all affected Chromebooks and
-> > then we'll never enable "pseudo NMI" on a kernel that is bundled with
-> > old device trees. When a firmware update is shipped that fixes this
-> > issue it will know to patch the device tree to remove the property.
+> > Bjorn,
 > >
-> > In order to make this work, the quick detection mechanism of the GICv3
-> > code is extended to be able to look for properties in addition to
-> > looking at "compatible".
+> > Are you picking this one up as well or should it go through Rob's tree?
 > >
-> > Reviewed-by: Julius Werner <jwerner@chromium.org>
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> >
-> > Changes in v2:
-> > - mediatek,gicr-save-quirk =3D> mediatek,broken-save-restore-fw
->=20
-> Thanks for your patch, which is now commit 44bd78dd2b8897f5
-> ("irqchip/gic-v3: Disable pseudo NMIs on Mediatek devices w/
-> firmware issues") in v6.4-rc4.
->=20
-> This causes enabling an unrelated workaround on R-Car V4H:
->=20
->     GIC: enabling workaround for GICv3: Cavium erratum 38539
->=20
-> > --- a/drivers/irqchip/irq-gic-common.c
-> > +++ b/drivers/irqchip/irq-gic-common.c
-> > @@ -16,7 +16,11 @@ void gic_enable_of_quirks(const struct device_node *=
-np,
-> >                           const struct gic_quirk *quirks, void *data)
-> >  {
-> >         for (; quirks->desc; quirks++) {
-> > -               if (!of_device_is_compatible(np, quirks->compatible))
-> > +               if (quirks->compatible &&
-> > +                   !of_device_is_compatible(np, quirks->compatible))
-> > +                       continue;
-> > +               if (quirks->property &&
-> > +                   !of_property_read_bool(np, quirks->property))
-> >                         continue;
->=20
-> Presumably the loop should continue if none of quirks-compatible
-> or quirks->property is set?
+> > Bart
+>
+> Gentle ping.
+>
+> Bart
 
-Indeed, thanks for pointing that out. Can you give the following hack
-a go (compile tested only)?
+Hey UFS maintainers, could you please pick this one up for the next
+merge window?
 
-diff --git a/drivers/irqchip/irq-gic-common.c b/drivers/irqchip/irq-gic-com=
-mon.c
-index de47b51cdadb..7b591736ab58 100644
---- a/drivers/irqchip/irq-gic-common.c
-+++ b/drivers/irqchip/irq-gic-common.c
-@@ -16,6 +16,8 @@ void gic_enable_of_quirks(const struct device_node *np,
- 			  const struct gic_quirk *quirks, void *data)
- {
- 	for (; quirks->desc; quirks++) {
-+		if (!quirks->compatible && !quirks->property)
-+			continue;
- 		if (quirks->compatible &&
- 		    !of_device_is_compatible(np, quirks->compatible))
- 			continue;
-
-If that works for you, I'll queue it ASAP.
-
-Cheers,
-
-	M.
-
---=20
-Without deviation from the norm, progress is not possible.
+Thanks in advance,
+Bartosz
