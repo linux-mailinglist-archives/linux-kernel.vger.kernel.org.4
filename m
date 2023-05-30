@@ -2,96 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166017166E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5665F7166F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjE3PZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
+        id S231403AbjE3P0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjE3PZO (ORCPT
+        with ESMTP id S231351AbjE3P0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:25:14 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2239CBE
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:25:13 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64fd7723836so1818811b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685460312; x=1688052312;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=65YOy14KMjF5ua6wfSM9SgJP7pUpC09nseL8YabAbGE=;
-        b=bUIqXb3Z6M2ZIfHony+JhWR0leab4kufYLvG4tsfYd6A/MdB1pXPaiBeeP8o9bUTvb
-         pUQkYgK0CFqSNK1paP9VTpFgxvG46E7a7qfNRJ7fIx/hAPUQhchaUCGqEgEJmtJWMB/D
-         BXuW97S23yiqbslmLlg4mtC4C9k1KtZu4iHmY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685460312; x=1688052312;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=65YOy14KMjF5ua6wfSM9SgJP7pUpC09nseL8YabAbGE=;
-        b=a3gdIOfgstaBfsm8Bo2tPFfiXNZU3a4Ad4PaQ0kzivc7LDX2oGV7sXsjR/Pl0MxiYj
-         XdG8NbBEA4jprf5IIKIs45g1ZFygch7nCuDwf/op2nuZdIpyrndynmk2m7WJsmnfG8iM
-         GtJVriHTeevVPKSY/AI3oP4/6DE/ZEsmrAB1N3GtQAL04qlS6KHM8eRvlmCh21Glrnuw
-         mw2oBJQTr1xPaeWcbD1+NKdFkRV9S7xsRESix7goDMqjID4T8bI9ykXgexYzIj7KO4sf
-         3n7I6XiSVDWuNc5Y4SBE34XFVqvNqR6nMwcvGmUW711SufjoKkvRdAbFXLQtRh5+A6qc
-         1dVg==
-X-Gm-Message-State: AC+VfDzPG9Iqq70JLrrz9B2vUzTWO1vPBBaVa5ekx23IzkcoUVY/154E
-        xyGWYFPZUORIGjbNrnmTmJ6dBw==
-X-Google-Smtp-Source: ACHHUZ7H4UAKXt+/KKSohvZbKFyJ73bR2I/IFmH9FxmHt9seSR1k0sRz31SKI5rIqFcM31JnCVqY3Q==
-X-Received: by 2002:a05:6a20:9c8f:b0:110:9210:f6af with SMTP id mj15-20020a056a209c8f00b001109210f6afmr2699102pzb.27.1685460312650;
-        Tue, 30 May 2023 08:25:12 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id a3-20020a634d03000000b0053f3797fc4asm8308349pgb.0.2023.05.30.08.25.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 08:25:11 -0700 (PDT)
-Date:   Tue, 30 May 2023 08:25:10 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Johan Hovold <johan@kernel.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] lib/ucs2_string: Add UCS-2 strlcpy function
-Message-ID: <202305300820.9B2154B@keescook>
-References: <20230528230351.168210-1-luzmaximilian@gmail.com>
- <20230528230351.168210-2-luzmaximilian@gmail.com>
+        Tue, 30 May 2023 11:26:39 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8AEE5;
+        Tue, 30 May 2023 08:26:38 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UFOP9N017821;
+        Tue, 30 May 2023 15:26:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=oUOQK8Iz8aYCeBXG6GeIOPm60eWDEU6fa3vZrPfglYE=;
+ b=bfx10SnjEyW4j8IUPsFHElgMu0ci6XZ5U6b5E6ERkzpOeks/Uh3FgilKHpaxp23yYG3W
+ XtewSnKbzATaalYsJaJ/rAlQ2cXAvgz03riYUYjkR8wW/aR9p6ok6zXlyZOeLkwIrqMs
+ 1iJxQL3hO5W2x4/VnEcaw2LqShZ52EF3HS2TcpFtuyiUFBI+2Tp2NdvAfFHX7Pr4ybAT
+ bLolT8EHQ/9cTXscUyv2T84lGUsn159ijs/HO4vZ81Blxaz8CW+IAi8BG9IU5j8LbNpd
+ Rq6gb91FhZzBK8aRD2ksHbYtkcSaDkwa7VhG8YXKlm53LBy5uEm2lRCEEpRo6/Olspwb Ow== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qw83csg47-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 15:26:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34UFQX5x006278
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 May 2023 15:26:33 GMT
+Received: from [10.216.63.60] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 30 May
+ 2023 08:26:30 -0700
+Message-ID: <498a0b96-4c40-cad6-8da7-e9819035ef22@quicinc.com>
+Date:   Tue, 30 May 2023 20:56:26 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230528230351.168210-2-luzmaximilian@gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1685421871-25391-1-git-send-email-quic_prashk@quicinc.com>
+ <2023053058-baffling-unveiling-e597@gregkh>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <2023053058-baffling-unveiling-e597@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: zPe4zLltf7nXpYY-Sg6lJUPjos-AOlzU
+X-Proofpoint-GUID: zPe4zLltf7nXpYY-Sg6lJUPjos-AOlzU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_11,2023-05-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ suspectscore=0 lowpriorityscore=0 malwarescore=0 mlxscore=0 bulkscore=0
+ mlxlogscore=822 priorityscore=1501 spamscore=0 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305300123
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 01:03:48AM +0200, Maximilian Luz wrote:
-> Add a ucs2_strlcpy() function for UCS-2 strings. The behavior is
-> equivalent to the standard strlcpy() function, just for 16-bit character
-> UCS-2 strings.
 
-Eek, no. strlcpy() is dangerous in multiple ways[1]. Please implement
-strscpy() (i.e. use strnlen(), negative error on truncation, etc).
-Additionally, it'd be nice of the ucs2 helpers here also implemented the
-rest of the CONFIG_FORTIFY_SOURCE mitigations (i.e. checking for source
-and destination buffer size overflows at compile-time and run-time with
-__builtin_object_size() and __builtin_dynamoc_object_size() respectively).
 
--Kees
+On 30-05-23 07:58 pm, Greg Kroah-Hartman wrote:
+> On Tue, May 30, 2023 at 10:14:31AM +0530, Prashanth K wrote:
+>> Currently if we bootup a device without cable connected, then
+>> usb-conn-gpio won't call set_role() since last_role is same as
+>> current role. This happens because during probe last_role gets
+>> initialised to zero.
+>>
+>> To avoid this, added a new constant in enum usb_role, last_role
+>> is set to USB_ROLE_UNKNOWN before performing initial detection.
+>>
+>> While at it, also handle default case for the usb_role switch
+>> in cdns3 to avoid build warnings.
+>>
+>> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+> 
+> Breaks the build :(
+> 
+> Please be more careful when submitting stuff, especially on v6 of a
+> patch :(
 
-[1] https://docs.kernel.org/process/deprecated.html#strlcpy
+Hi, sorry for the trouble, I didn't see any issue in while building 
+locally nor any warning/errors from test robot. Can you please point me 
+to the error report if available. If the build is breaking due to enum 
+value USB_ROLE_UNKNOWN unhandled in switch cases of other drivers, then 
+i will revert thing back to v1 where i used a macro for USB_ROLE_UNKNOWN 
+in usb-conn-gpio driver. Something like this in usb-conn-gpio.c would 
+can help us avoid adding default case in other drivers using usb_role.
 
--- 
-Kees Cook
+#define USB_ROLE_UNKNWON (USB_ROLE_NONE - 1)
+
+Please let me know.
+
+Thanks,
+Prashanth K
