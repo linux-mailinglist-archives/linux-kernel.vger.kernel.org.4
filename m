@@ -2,90 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE64716A96
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F2A716A99
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231551AbjE3ROW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 13:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
+        id S231693AbjE3RQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 13:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbjE3ROU (ORCPT
+        with ESMTP id S230143AbjE3RP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 13:14:20 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58E7F9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:14:17 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-64d24df4852so3108093b3a.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685466857; x=1688058857;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oW5kBn+PdJEe6rnXOx+ck1CwnlYyJC8NqkWMcNa5q8w=;
-        b=5tqIC4aQWleru/7zEQ0O/WXJ4FaBYf8tAGYm6xgyYMK7b5MfPQD9AYDQ4YYAtrWSov
-         sBHidJlws2X4SVko9faCr5yMOkwlEig9tMKy1cR+PrS6TJ//Uby+sck61oO29XO31jl1
-         OxwY51SC8xVggRqjPel2Md8LNUuwnqlXJ8x5DG0An4gTYsKEmprDK736L5gwekv/MiWL
-         VD0mRxnXpuF+S0DWCgL590UkgyZj3C69nzVCIaiB7+es2moWAfLtqrydqaEhdQyvJw7+
-         IA23MdOc3WAECAZjKkoJe1yglPb6B+6MjV4nKmKwToSLcfLOlPTZBOqJf64uEpk0NQsl
-         i6EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685466857; x=1688058857;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oW5kBn+PdJEe6rnXOx+ck1CwnlYyJC8NqkWMcNa5q8w=;
-        b=VIl2Pq2npubloYQaDoErs6MD7uRgG5l6Et/Jq0DyM4pO90dJZw/9hn8tABpXSGDt11
-         hFAwfqynRdH8jtrzqeU2wZ/LE0JkYGZLzt3oENIXem9/z25yX/dPwsVs3PQx5RppkLV5
-         N4VGy9Qa5AMdxw1cNQpmaqpK/lFm25TyEbmEp94LrW2DloHG9DMXRnSwwXgSMk6qJvCS
-         JNfpNTFoZGGSHhb+JfZqUCLDAuQBiKIzsi0vu1nRuYUFAZ1WI6d+hYPlLEk+ltuZtHQX
-         oWSYOGnVmzU381K6DEUw0U1MxBMFD+5119vsJcD6JWKlgr7z7yUt839Dgr0kJGTPbSOL
-         IodQ==
-X-Gm-Message-State: AC+VfDxU15AR+1dYFJyhHnidoeDpnJknswKldZsqs87Y6y4nwQtAZlKG
-        txlGlSs9ZghO2BtBnFll7T10OlTACLM=
-X-Google-Smtp-Source: ACHHUZ7Yj3FRLJmuyE2r93i9n0+xfvuQ5ZojKX+qIj+lPi2L12IcMOFH/kvwC3UzWxnLDX34U4WpmBgLQac=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:a0e:b0:643:53b6:d86d with SMTP id
- p14-20020a056a000a0e00b0064353b6d86dmr1072552pfh.4.1685466857070; Tue, 30 May
- 2023 10:14:17 -0700 (PDT)
-Date:   Tue, 30 May 2023 10:14:15 -0700
-In-Reply-To: <20230530215036.000066d9.zhi.wang.linux@gmail.com>
-Mime-Version: 1.0
-References: <cover.1685333727.git.isaku.yamahata@intel.com>
- <e628e2d235d9b6c00b9bd5d81bb69136b77d13c4.1685333727.git.isaku.yamahata@intel.com>
- <20230530215036.000066d9.zhi.wang.linux@gmail.com>
-Message-ID: <ZHYu5yvtw7oMDUAP@google.com>
-Subject: Re: [PATCH v14 004/113] KVM: TDX: Initialize the TDX module when
- loading the KVM intel kernel module
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>, chen.bo@intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 30 May 2023 13:15:59 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8976198;
+        Tue, 30 May 2023 10:15:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Y5litxN3gyJeHFGeMaTtqwxYqx5JbPyncdwNmEDY4KU=; b=CVH0HFffWk++s38eFUMzA37F0l
+        g+OxRHSnHnbU9j4gFyOXNz4qsFYiG11+iHanP7bE06Whdeat8de8YKn0uv7JUBQToXFuIv+S5MphF
+        VKWp3j7nNqHc1EHPo9cNH0PLqfxXcRZUtOLYXs4MSbc4Q10xDmgRbyOXfW9aQcUDbfMM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q42wp-00EMSD-Of; Tue, 30 May 2023 19:15:51 +0200
+Date:   Tue, 30 May 2023 19:15:51 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] net: dsa: slave: Advertise correct EEE capabilities at
+ slave PHY setup
+Message-ID: <b9950909-0fa3-46f9-a250-c4eef6ca1786@lunn.ch>
+References: <20230530122621.2142192-1-lukma@denx.de>
+ <ZHXzTBOtlPKqNfLw@shell.armlinux.org.uk>
+ <20230530160743.2c93a388@wsk>
+ <e7696621-38a9-41a1-afdf-0864e115d796@lunn.ch>
+ <20230530164025.7a6d6bbd@wsk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530164025.7a6d6bbd@wsk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023, Zhi Wang wrote:
-> On Sun, 28 May 2023 21:18:46 -0700 isaku.yamahata@intel.com wrote:
-> > +	/* tdx_enable() in tdx_module_setup() requires cpus lock. */
-> > +	cpus_read_lock();
-> > +	on_each_cpu(vmx_tdx_on, &err, true);	/* TDX requires vmxon. */
-> > +	r = atomic_read(&err);
-> > +	if (!r)
-> > +		r = tdx_module_setup();
-> > +	on_each_cpu(vmx_off, NULL, true);
+> > But as a result, don't expect EEE to actually work with any LTS
+> > kernel.
 > 
-> Out of curiosity, why VMX has to be turned off after tdx_module_setup()?
+> Then, I think that it would be best to use the above "hack" until your
+> patch set is not reviewed and merged. After that, when customer will
+> mover forward with LTS kernel, I can test the EEE on the proper HW.
 
-KVM has historically enabled VMX if and only if KVM has active VMs.  Whether or
-not it still makes sense to do dynamic enabling is debatable, but that's a
-discussion for another day.
+Just to be clear, Since EEE never really worked, i doubt these
+patchset will fulfil the stable rules. They are not minimal fixes, but
+pretty much a re-write.  So you will need to wait for the LTS released
+December 2023. Or you do your own backport.
+
+	 Andrew
