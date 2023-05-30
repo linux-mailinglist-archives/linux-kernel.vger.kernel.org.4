@@ -2,99 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AD9716A92
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE64716A96
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbjE3RN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 13:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
+        id S231551AbjE3ROW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 13:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbjE3RNY (ORCPT
+        with ESMTP id S232670AbjE3ROU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 13:13:24 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD66210E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:13:15 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-338bd590bc1so751245ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:13:15 -0700 (PDT)
+        Tue, 30 May 2023 13:14:20 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58E7F9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:14:17 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-64d24df4852so3108093b3a.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:14:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685466795; x=1688058795;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X9lZV7bV7fcpjfbgqIwMWLtZa7MEtpBcanyjWNz9SA4=;
-        b=xyLFhYk7xI5CYPvLeQkuOD1Z89KueAAajRiTaDrZh07ITGjo9jHqbiKMRbYZNbWzv+
-         HmqqhLHdAzzjmAJTVdhuSMPg3cI9nGuwVAMhg2Ep8MLU9EtD+G4iOjxIA/b6N7IM1sao
-         PUThVWll/0JIgxIiHuGwZ2BSuxITRKUZZ5Solv/TPxkLNQEJxplaEMDGjCPJQ/1zJdrn
-         lDN4I0wagYiQuROt+XpyZZ5vDDKUrX3tum8wJOej2yoID/95poYBmxfHyD5pe8dx3SKX
-         Eap3C+aY+sOde5CJZi+AqyFha0Lw1FxVoxW7//8A0MyKUyVK9TZA1KwGojvFzrLhWzce
-         4P1w==
+        d=google.com; s=20221208; t=1685466857; x=1688058857;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oW5kBn+PdJEe6rnXOx+ck1CwnlYyJC8NqkWMcNa5q8w=;
+        b=5tqIC4aQWleru/7zEQ0O/WXJ4FaBYf8tAGYm6xgyYMK7b5MfPQD9AYDQ4YYAtrWSov
+         sBHidJlws2X4SVko9faCr5yMOkwlEig9tMKy1cR+PrS6TJ//Uby+sck61oO29XO31jl1
+         OxwY51SC8xVggRqjPel2Md8LNUuwnqlXJ8x5DG0An4gTYsKEmprDK736L5gwekv/MiWL
+         VD0mRxnXpuF+S0DWCgL590UkgyZj3C69nzVCIaiB7+es2moWAfLtqrydqaEhdQyvJw7+
+         IA23MdOc3WAECAZjKkoJe1yglPb6B+6MjV4nKmKwToSLcfLOlPTZBOqJf64uEpk0NQsl
+         i6EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685466795; x=1688058795;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X9lZV7bV7fcpjfbgqIwMWLtZa7MEtpBcanyjWNz9SA4=;
-        b=cl23uPDpiPkT1un89Ojd40k1k7D0RmLEg4hWLgmdyh748nE6kk1qFtz3P+5+YcujrL
-         HAnPCFX8VOrMulOnuOFykrCUmv7+w8Mce9Qlo4bpr4JmtV6METtlS2Am5xR2GFHSMylK
-         lM79ZMnyVW+Uh+yKFQnE3EeTgp7/ZrUOTSRvVH2b54+diYcUNOBnBUZ4HP9X/wghnvu4
-         yPB+5f6hGCwgsB2ibs1qB128Rn1/MZlrQgWepiTitffDOzopX5uzs/onIku7pV2ijiUK
-         4LeNikYzZQmBNr/YxPxYcFMlJE9UVLyf+6rFlJJmMa56gmygDkdfDbRkrPWqSp8Kb/r7
-         1ZBA==
-X-Gm-Message-State: AC+VfDxKr0HYQEBTMsvmmsRfICFENaOexwUXWULHrDb8YjqERGf0da6Y
-        vBVESUI28R+yAEDBEkuX8KKMbA==
-X-Google-Smtp-Source: ACHHUZ4H0t7i48FfHuwAM9EvQXL2x+v9wdYmg8vgH6Bl+e7aisaRBhtMo7bNHYR/aHixz5BEUVFlkw==
-X-Received: by 2002:a92:c568:0:b0:33b:c4c:f425 with SMTP id b8-20020a92c568000000b0033b0c4cf425mr60590ilj.3.1685466794987;
-        Tue, 30 May 2023 10:13:14 -0700 (PDT)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id y59-20020a029541000000b0040fa32ccb0bsm817352jah.79.2023.05.30.10.13.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 10:13:14 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-In-Reply-To: <20230419-const-partition-v3-0-4e14e48be367@weissschuh.net>
-References: <20230419-const-partition-v3-0-4e14e48be367@weissschuh.net>
-Subject: Re: [PATCH v3 0/4] block: constify some structures of
- partitions/core.c
-Message-Id: <168546679410.36719.118353258344450301.b4-ty@kernel.dk>
-Date:   Tue, 30 May 2023 11:13:14 -0600
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1685466857; x=1688058857;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oW5kBn+PdJEe6rnXOx+ck1CwnlYyJC8NqkWMcNa5q8w=;
+        b=VIl2Pq2npubloYQaDoErs6MD7uRgG5l6Et/Jq0DyM4pO90dJZw/9hn8tABpXSGDt11
+         hFAwfqynRdH8jtrzqeU2wZ/LE0JkYGZLzt3oENIXem9/z25yX/dPwsVs3PQx5RppkLV5
+         N4VGy9Qa5AMdxw1cNQpmaqpK/lFm25TyEbmEp94LrW2DloHG9DMXRnSwwXgSMk6qJvCS
+         JNfpNTFoZGGSHhb+JfZqUCLDAuQBiKIzsi0vu1nRuYUFAZ1WI6d+hYPlLEk+ltuZtHQX
+         oWSYOGnVmzU381K6DEUw0U1MxBMFD+5119vsJcD6JWKlgr7z7yUt839Dgr0kJGTPbSOL
+         IodQ==
+X-Gm-Message-State: AC+VfDxU15AR+1dYFJyhHnidoeDpnJknswKldZsqs87Y6y4nwQtAZlKG
+        txlGlSs9ZghO2BtBnFll7T10OlTACLM=
+X-Google-Smtp-Source: ACHHUZ7Yj3FRLJmuyE2r93i9n0+xfvuQ5ZojKX+qIj+lPi2L12IcMOFH/kvwC3UzWxnLDX34U4WpmBgLQac=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:a0e:b0:643:53b6:d86d with SMTP id
+ p14-20020a056a000a0e00b0064353b6d86dmr1072552pfh.4.1685466857070; Tue, 30 May
+ 2023 10:14:17 -0700 (PDT)
+Date:   Tue, 30 May 2023 10:14:15 -0700
+In-Reply-To: <20230530215036.000066d9.zhi.wang.linux@gmail.com>
+Mime-Version: 1.0
+References: <cover.1685333727.git.isaku.yamahata@intel.com>
+ <e628e2d235d9b6c00b9bd5d81bb69136b77d13c4.1685333727.git.isaku.yamahata@intel.com>
+ <20230530215036.000066d9.zhi.wang.linux@gmail.com>
+Message-ID: <ZHYu5yvtw7oMDUAP@google.com>
+Subject: Re: [PATCH v14 004/113] KVM: TDX: Initialize the TDX module when
+ loading the KVM intel kernel module
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>, chen.bo@intel.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Tue, 30 May 2023 19:09:56 +0200, Thomas Weißschuh wrote:
-> A few structures containing function pointers that could and should be
-> const are not. Change that.
+On Tue, May 30, 2023, Zhi Wang wrote:
+> On Sun, 28 May 2023 21:18:46 -0700 isaku.yamahata@intel.com wrote:
+> > +	/* tdx_enable() in tdx_module_setup() requires cpus lock. */
+> > +	cpus_read_lock();
+> > +	on_each_cpu(vmx_tdx_on, &err, true);	/* TDX requires vmxon. */
+> > +	r = atomic_read(&err);
+> > +	if (!r)
+> > +		r = tdx_module_setup();
+> > +	on_each_cpu(vmx_off, NULL, true);
 > 
-> 
+> Out of curiosity, why VMX has to be turned off after tdx_module_setup()?
 
-Applied, thanks!
-
-[1/4] block: constify partition prober array
-      commit: 539050f92ea7666bca17c2c380d8071d2f93dcde
-[2/4] block: constify struct part_type part_type
-      commit: cdb37f73cf05631c4f7401f2cd99878733c0c3d9
-[3/4] block: constify struct part_attr_group
-      commit: 0bd478005cfc7f50ccb769744d952e9687ee75b4
-[4/4] block: constify the whole_disk device_attribute
-      commit: a378f6a40fac4a2f1812adea7017613d2bd5dab6
-
-Best regards,
--- 
-Jens Axboe
-
-
-
+KVM has historically enabled VMX if and only if KVM has active VMs.  Whether or
+not it still makes sense to do dynamic enabling is debatable, but that's a
+discussion for another day.
