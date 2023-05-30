@@ -2,181 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4FF715A9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65BB715AA4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjE3JtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
+        id S231193AbjE3JuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjE3JtN (ORCPT
+        with ESMTP id S231129AbjE3JuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:49:13 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF069C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:49:10 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2af2e908163so45355791fa.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:49:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1685440149; x=1688032149;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=akFeIP35hj3g/G+iX6470TrZtzvrlyZ/wSZAMe9T/g0=;
-        b=ZkFDkzFUsH5KXBNpXNmt1EMKU1KBzFwY6BpSvt1ArrWqjTb5rdDoNDbTNikXR7huGt
-         fQJ6xgJyPw6unI3NCW/2oyq8/4vrcRNTvfVYqmyCskwmZv6pbW9adBOxkb3ibrjO5KFV
-         Kli4o68Zk7WRZ1ciGWzoGbq1zIakSAfD3OO3vpkJP23/k064hLH8WUctLUjUn0Juu9SQ
-         d0+vDwAQGbKrGSFaeyOMywktq84h6iJ+Rx+usDQi374pKPXwYVLKQQ9gmlGL2hc4o+7H
-         Fq/aDxotAYvY8Q+wAKC5qPI8ArZRhSFmzhUpspui7mPSqFty1ftrzV4tHkQmDVp1N/Ty
-         4zCA==
+        Tue, 30 May 2023 05:50:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1FEF9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:49:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685440163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B2gmQ/a+oAFA19ljaGNIngxILT41zCscP4KKC+5R6wc=;
+        b=acjlA1erYI6bLQ4RjrKRHJtFBz494YsMlVBwI8Uf2+QDKAoCr9CiyDbvc8we9s+4hG1VDs
+        vg1FY71uGWH0gVN3lrQG9FQSh6LAECucoJVF4sSbKKtFpXNQWyYedgCsytXcJUFAiZXOwC
+        qPeLMLPKMjDW1W/AB3vIV5VMsucseA8=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-624-WyZUjyTsMtq3Wz6P_g5Vcw-1; Tue, 30 May 2023 05:49:21 -0400
+X-MC-Unique: WyZUjyTsMtq3Wz6P_g5Vcw-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75b147a2548so37371485a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:49:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685440149; x=1688032149;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=akFeIP35hj3g/G+iX6470TrZtzvrlyZ/wSZAMe9T/g0=;
-        b=AeW2qw9XjpBeU7FtGCC0dh2yoGBqJUGJleJZtoRLJ2zELNqGVMvmMuRj5dlGEnMua/
-         RQq9SgfRuhwNhszVA0TKqb/vHx4V6gjwX0s6OLYfTmKjZcwRkx7EooJ6yiUKvU8OQsax
-         xNBeACmhFgMy5jpSVmXdzJ8liKVNS8kqfMAM7re0+vGL+kEilS/vAunDFRoRsPloechE
-         54rKnCbHggKe5xp0DEuH10Vwl4l/eeQ8/XkU6QGTa3WgTzr4t9/e5/Jq89wuEJkoqwn3
-         b9qLfnOl0dvJgpJmD4nyX0cL6/DTTNN8jwZuwfWiqUo19DJL7/LDI8kmrqJxvtBGWeKo
-         BP+Q==
-X-Gm-Message-State: AC+VfDyHJlTeVzDRq/Khajv/eyp6nDVjJLhgJKylvSDnJPD081oBBozk
-        47qr5sWR5hA/Sc/2Gf3i3B/whkLC5T+tzzU97Je9Ig==
-X-Google-Smtp-Source: ACHHUZ5YWqP22yH/TFgEMZysIl3zCGKuxwVw9dO0MFanWlPnZpSLAEzO0Xhx6Xxury2RcCwUjqyiKc8DzcOxVy2dsaI=
-X-Received: by 2002:a2e:a445:0:b0:2a9:ee54:9fad with SMTP id
- v5-20020a2ea445000000b002a9ee549fadmr476463ljn.7.1685440149056; Tue, 30 May
- 2023 02:49:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230529073845.2859178-1-guoren@kernel.org> <20230529-jasmine-amigo-6d01f6852b35@wendy>
- <CAJF2gTRSoZbexqka=_7nf4+dHZW2FGf++BiTMypfTbeoGAbUiA@mail.gmail.com> <CAJF2gTTzUfp7xDr8myA+xMcxGNEQ+XLEYMfoR91NShdBAQMu7Q@mail.gmail.com>
-In-Reply-To: <CAJF2gTTzUfp7xDr8myA+xMcxGNEQ+XLEYMfoR91NShdBAQMu7Q@mail.gmail.com>
-From:   Andy Chiu <andy.chiu@sifive.com>
-Date:   Tue, 30 May 2023 17:48:58 +0800
-Message-ID: <CABgGipXu7iq-J5v6GVMPrnHiGVLuMxabB0_hPb+o+04T2MAwpw@mail.gmail.com>
-Subject: Re: [PATCH] riscv: vector: Fixup modules compile error
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>, greentime.hu@sifive.com,
-        vincent.chen@sifive.com, paul.walmsley@sifive.com,
-        palmer@rivosinc.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+        d=1e100.net; s=20221208; t=1685440161; x=1688032161;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B2gmQ/a+oAFA19ljaGNIngxILT41zCscP4KKC+5R6wc=;
+        b=DsOZzfV4DizTzLhzlz0+cKIWvtWBYfmWg4fDHUG+ycsurB9tYWP+dWgwqRbOVA+oLc
+         DdYu//hdjFRMuBiSAm3Z9CufbNPA8I8qQHQKzhwzUV98ddNYMq1EE82M5fVzyomNEAyk
+         yaz7TEFNkGRjjDy/rYALm/X5XedPWQhpXEfPf16+mtqTQ5m/zNUp3x7N+jQFzexarGUl
+         V+IF3fUYc55HDKbZdBVigw/lUV96l9r9nwNSzfWfKe7ieGeI27/BduRXfpmanOXgZ+/l
+         Xm3r5gFJ7VYl0MUR3pbccWjfcIg6kLFpXc89H/ELfhaG1a9fs1TTiZVNTthiuAn8tuvW
+         8joQ==
+X-Gm-Message-State: AC+VfDy/gN4tFGaCvBAAjpN99EXec4ZgM8/pn6bN8cfbsXflbOaRlQi+
+        g27SGsPCy0aPiU53qlLn8x1DxqbgXqZ1UcGI1wVQ1wEhF9i3DUV7DjSnUSzN4TjrakAFca46XbX
+        oMbq9zanaijEKlqMviDBDnzWs
+X-Received: by 2002:a05:622a:1883:b0:3f7:fab0:6308 with SMTP id v3-20020a05622a188300b003f7fab06308mr1340937qtc.6.1685440160945;
+        Tue, 30 May 2023 02:49:20 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7w88awc4basn85TiY7eWn8aDcCDQdVwwZSYAOezEQ1vOtXU0iBSdWaMjHX4FEB7CRfaaqqig==
+X-Received: by 2002:a05:622a:1883:b0:3f7:fab0:6308 with SMTP id v3-20020a05622a188300b003f7fab06308mr1340932qtc.6.1685440160704;
+        Tue, 30 May 2023 02:49:20 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-248-97.dyn.eolo.it. [146.241.248.97])
+        by smtp.gmail.com with ESMTPSA id gd22-20020a05622a5c1600b003f0af201a2dsm4572151qtb.81.2023.05.30.02.49.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 02:49:20 -0700 (PDT)
+Message-ID: <0939d69afbf1173f4b62758d1d448c85217abcf1.camel@redhat.com>
+Subject: Re: [PATCH net-next v4 6/6] net: phy: microchip_t1s: add support
+ for Microchip LAN865x Rev.B0 PHYs
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     =?ISO-8859-1?Q?Ram=F3n?= Nordin Rodriguez 
+        <ramon.nordin.rodriguez@ferroamp.se>,
+        Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        horatiu.vultur@microchip.com, Woojung.Huh@microchip.com,
+        Nicolas.Ferre@microchip.com, Thorsten.Kummermehr@microchip.com
+Date:   Tue, 30 May 2023 11:49:16 +0200
+In-Reply-To: <ZHRPRBwJ5jHs6vLz@debian>
+References: <20230526152348.70781-1-Parthiban.Veerasooran@microchip.com>
+         <20230526152348.70781-7-Parthiban.Veerasooran@microchip.com>
+         <ZHRPRBwJ5jHs6vLz@debian>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 2:52=E2=80=AFPM Guo Ren <guoren@kernel.org> wrote:
->
-> On Tue, May 30, 2023 at 10:59=E2=80=AFAM Guo Ren <guoren@kernel.org> wrot=
-e:
-> >
-> > On Mon, May 29, 2023 at 9:43=E2=80=AFPM Conor Dooley <conor.dooley@micr=
-ochip.com> wrote:
-> > >
-> > > On Mon, May 29, 2023 at 03:38:45AM -0400, guoren@kernel.org wrote:
-> > > > From: Guo Ren <guoren@linux.alibaba.com>
-> > > >
-> > > > Some .ko also need the riscv_v_user_allowed symbol.
-> > > >
-> > > > ERROR: modpost: "riscv_v_user_allowed" [arch/riscv/kvm/kvm.ko]
-> > > > undefined!
-> > > > make[3]: ***
-> > > > [/home/guoren/source/kernel/linux/scripts/Makefile.modpost:136:
-> > > > Module.symvers] Error 1
-> > > >
-> > > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > > ---
-> > > >  arch/riscv/kernel/vector.c | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > >
-> > > > diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.=
-c
-> > > > index 1c4ac821e008..3ae08816d608 100644
-> > > > --- a/arch/riscv/kernel/vector.c
-> > > > +++ b/arch/riscv/kernel/vector.c
-> > > > @@ -129,6 +129,7 @@ bool riscv_v_user_allowed(void)
-> > > >  {
-> > > >       return riscv_v_get_cur_ctrl(current) =3D=3D PR_RISCV_V_VSTATE=
-_CTRL_ON;
-> > > >  }
-> > > > +EXPORT_SYMBOL(riscv_v_user_allowed);
-> > >
-> > > Is there a reason that this should not be EXPORT_SYMBOL_GPL()?
-> > Good question, but I just follow our arch/riscv habbit, maybe we
-> > should change all of that in another patch.
-> >
-> > =E2=9E=9C  linux-s64ilp32 git:(s64ilp32) =E2=9C=97 grep EXPORT_SYMBOL  =
-arch/riscv -r | wc -l
-> > 66
-> > =E2=9E=9C  linux-s64ilp32 git:(s64ilp32) =E2=9C=97 grep EXPORT_SYMBOL_G=
-PL  arch/riscv -r | wc -l
-> > 15
->
-> Why !MODULE_LICENSE(GPL) modules couldn't use riscv_v_user_allowed?
-> Seems EXPORT_SYMBOL_GPL has more limitations.
->
-> :c:func:`EXPORT_SYMBOL_GPL()`
-> -----------------------------
->
-> Defined in ``include/linux/export.h``
->
-> Similar to :c:func:`EXPORT_SYMBOL()` except that the symbols
-> exported by :c:func:`EXPORT_SYMBOL_GPL()` can only be seen by
-> modules with a :c:func:`MODULE_LICENSE()` that specifies a GPL
-> compatible license. It implies that the function is considered an
-> internal implementation issue, and not really an interface. Some
-> maintainers and developers may however require EXPORT_SYMBOL_GPL()
-> when adding any new APIs or functionality.
->
-> For kvm is okay:
->
-> MODULE_AUTHOR("Qumranet");
-> MODULE_LICENSE("GPL");
->
-> So, I would leave the decition to Andy. If he didn't want it used with
-> other non-gpl modules, choose the EXPORT_SYMBOL_GPL.
+On Mon, 2023-05-29 at 09:07 +0200, Ram=C3=B3n Nordin Rodriguez wrote:
+> On Fri, May 26, 2023 at 08:53:48PM +0530, Parthiban Veerasooran wrote:
+> > Add support for the Microchip LAN865x Rev.B0 10BASE-T1S Internal PHYs
+> > (LAN8650/1). The LAN865x combines a Media Access Controller (MAC) and a=
+n
+> > internal 10BASE-T1S Ethernet PHY to access 10BASE=E2=80=91T1S networks.=
+ As
+> > LAN867X and LAN865X are using the same function for the read_status,
+> > rename the function as lan86xx_read_status.
+> >=20
+> > Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+> > Signed-off-by: Parthiban Veerasooran <Parthiban.Veerasooran@microchip.c=
+om>
+> > ---
+>=20
+> I accidentally sent both reviewed-by and tested by, should only have
+> been reviewed-by.
 
-Do you have any use case for exporting this function to non-GPL
-licensed modules? I exported the function with EXPORT_SYMBOL_GPL() in
-v20[1] because I thought most maintainers would accept GPL rather than
-non-GPL one. And it seems most drivers would never call this function
-anyway.
-
->
-> >
-> > >
-> > > I figure Andy will roll this into this next revision.
-
-The fix for this has been included in v20[1]. However, I also changed
-the function name
-s/riscv_v_user_allowed/riscv_v_vstate_ctrl_user_allowed/.
-
-> > >
-> > > Cheers,
-> > > Conor.
-> >
-> >
-> >
-> > --
-> > Best Regards
-> >  Guo Ren
->
->
->
-> --
-> Best Regards
->  Guo Ren
-
-[1]: https://lore.kernel.org/all/20230518161949.11203-21-andy.chiu@sifive.c=
-om/
+N.P. I'll strip your tested-by tag from this patch when I'll apply it.
 
 Cheers,
-Andy
+
+Paolo
+
