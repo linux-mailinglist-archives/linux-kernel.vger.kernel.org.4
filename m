@@ -2,153 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38AAB7155B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38BFD7155BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjE3Gwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 02:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
+        id S229937AbjE3Gy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 02:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjE3Gw1 (ORCPT
+        with ESMTP id S229989AbjE3Gyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 02:52:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70153107
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:52:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F01EB62AC2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:52:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D7B8C433A0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:52:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685429542;
-        bh=siy9Ko3UbHkih669rTBXTrvvQJb6+6k5h7kksul6NjI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hjuWY8Xz1RNVPltId3hJptIderckVfGZUOze/C01KfNLTniS/9JvZq2ZLrX62m+HX
-         EP8gdcj04gBtPPWvc9nwSGzRvfmKo0HA9WC7hNmtkBldqQyq3DGgLLvFO3BWlo2O9R
-         uAY0MOAIxcm/zSAvPsDy+tqReP/Qe2/TX+NraxQbqG7mhubXOytt1d8UjzkZMBWNil
-         h7iQqH3U8EKBI9YuUDTXf6jPR8tGkQSolZ8YcyWYnohyrWQegVohXQnwKZpug06zU5
-         jIlCETnkZ/11wjn4aC3gXIJJmgxTjUO3H68E3sZsyUw6WMApoWhKyKg7decYv1/0JK
-         CBW7gFicrQBNQ==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5149aafef44so3153549a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:52:22 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyLT5Wg597PcO6kdK/LxZ4Tei//QJA3yrfP9xZQOl/QKVG+UpLQ
-        5KK7721VU3uTv8veyevEzTRWOVOuvohiE+bXq+8=
-X-Google-Smtp-Source: ACHHUZ7TPl4oqNW3y5WapM499wNVHLkNCZ/pq+hqHH1T3d3rEcKGogkr0Z5uJqSVymnmk+X6pAcpDng3aDt3ARvmnGk=
-X-Received: by 2002:aa7:c504:0:b0:504:b228:878d with SMTP id
- o4-20020aa7c504000000b00504b228878dmr878888edq.25.1685429540598; Mon, 29 May
- 2023 23:52:20 -0700 (PDT)
+        Tue, 30 May 2023 02:54:51 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E847AF0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:54:49 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f6a6e9d90dso374741cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:54:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685429689; x=1688021689;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MoU/9v3bmYe5em3pZ8Qm6c8p1nDaciuv1tADFddxFDM=;
+        b=VgSGtYt8W1Zn1mWK6alB2rA8GfNplLqkPko2JeDNGlDw/kQ2EhQxziA+Ed4UJVS2Sm
+         BySebuU8gxZ1aZO2XJgXoasR/NUf47cz5ibFtJNJ//72Z4wyV2RxK0afTSThMlrIckES
+         oc7jyOrY6+PJDD19LXHUpun3h8pIfVYAEljSmnDwOiYgcANxFQbyLaN2OrLeju9NHc1r
+         +oS07EwqQJHAhoLZXzl47XbM3A4YzdyOL3hX4n0FlzdNOj5ztbiBSsdI0hzTCQABJnO6
+         TzEF5Hic7mVbB+Or8HAHwCrglukaFk22x0CQdX4sXQpRsQzkJnwXjE2i1rLfue05N0Bq
+         1wfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685429689; x=1688021689;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MoU/9v3bmYe5em3pZ8Qm6c8p1nDaciuv1tADFddxFDM=;
+        b=Bf21Z86pmwmpHLBFWIOTvBQWchrh1kPgONK1AE2lOgDMOXkz86v27Cxb45sXlIGfJU
+         cmkYJK1pBVCpQPem5bm2sjDFKQITMGqVtSUlmtCJHJQTNSeqYQSHQq/gwWbqEH5PAXM1
+         ZwiHgHpIvHyEXljpkCr0NkIQvylwKMY5P8IUQEwKJM3W8AqPu4qjFn/y0Lnj5aN0zh4+
+         lZSzdgBT24tiMKuzTzPcDcAuj8IZn9ulACuDQ4mU/5K6NJkan3asJLeR24Y1V38MNBLC
+         ifP9VjRVOS6MERYLmLCJdQy+P1JFcUaH0zpaMcm+lz0N88swIDT0RyPTHZs3fvH5v8Io
+         wQpg==
+X-Gm-Message-State: AC+VfDxXa90ekum4Cql+3LPNH5deZFLG867JgceiYYH03gxu4K6nMWG9
+        5z7QBbb8x2OsOrr/OCuwFqAfG6aT3LHLXhUVr6kQjw==
+X-Google-Smtp-Source: ACHHUZ7Bqqw3I8bqs/tZq64LmP9ot1bwhIvJaNEHAr866PaE/BvwE6qtfdTos3qHAMNbXlWJUuTI5Ld4xvYI99Zs4Rs=
+X-Received: by 2002:a05:622a:1aa3:b0:3f6:97b4:1a4b with SMTP id
+ s35-20020a05622a1aa300b003f697b41a4bmr61520qtc.21.1685429688703; Mon, 29 May
+ 2023 23:54:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230529073845.2859178-1-guoren@kernel.org> <20230529-jasmine-amigo-6d01f6852b35@wendy>
- <CAJF2gTRSoZbexqka=_7nf4+dHZW2FGf++BiTMypfTbeoGAbUiA@mail.gmail.com>
-In-Reply-To: <CAJF2gTRSoZbexqka=_7nf4+dHZW2FGf++BiTMypfTbeoGAbUiA@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 30 May 2023 14:52:09 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTzUfp7xDr8myA+xMcxGNEQ+XLEYMfoR91NShdBAQMu7Q@mail.gmail.com>
-Message-ID: <CAJF2gTTzUfp7xDr8myA+xMcxGNEQ+XLEYMfoR91NShdBAQMu7Q@mail.gmail.com>
-Subject: Re: [PATCH] riscv: vector: Fixup modules compile error
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     greentime.hu@sifive.com, vincent.chen@sifive.com,
-        andy.chiu@sifive.com, paul.walmsley@sifive.com,
-        palmer@rivosinc.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+References: <20230526183401.2326121-1-irogers@google.com> <ZHWCPXKo2fFJmtlT@tassilo>
+In-Reply-To: <ZHWCPXKo2fFJmtlT@tassilo>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 29 May 2023 23:54:37 -0700
+Message-ID: <CAP-5=fXXykcwjXjd+W=8Eez79JhmuKhf1Z-1R_8+AD4XdY4a8A@mail.gmail.com>
+Subject: Re: [PATCH v2 00/16] Address some perf memory/data size issues
+To:     Andi Kleen <ak@linux.intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Ross Zwisler <zwisler@chromium.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 10:59=E2=80=AFAM Guo Ren <guoren@kernel.org> wrote:
->
-> On Mon, May 29, 2023 at 9:43=E2=80=AFPM Conor Dooley <conor.dooley@microc=
-hip.com> wrote:
-> >
-> > On Mon, May 29, 2023 at 03:38:45AM -0400, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > Some .ko also need the riscv_v_user_allowed symbol.
-> > >
-> > > ERROR: modpost: "riscv_v_user_allowed" [arch/riscv/kvm/kvm.ko]
-> > > undefined!
-> > > make[3]: ***
-> > > [/home/guoren/source/kernel/linux/scripts/Makefile.modpost:136:
-> > > Module.symvers] Error 1
-> > >
-> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > ---
-> > >  arch/riscv/kernel/vector.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.c
-> > > index 1c4ac821e008..3ae08816d608 100644
-> > > --- a/arch/riscv/kernel/vector.c
-> > > +++ b/arch/riscv/kernel/vector.c
-> > > @@ -129,6 +129,7 @@ bool riscv_v_user_allowed(void)
-> > >  {
-> > >       return riscv_v_get_cur_ctrl(current) =3D=3D PR_RISCV_V_VSTATE_C=
-TRL_ON;
-> > >  }
-> > > +EXPORT_SYMBOL(riscv_v_user_allowed);
-> >
-> > Is there a reason that this should not be EXPORT_SYMBOL_GPL()?
-> Good question, but I just follow our arch/riscv habbit, maybe we
-> should change all of that in another patch.
->
-> =E2=9E=9C  linux-s64ilp32 git:(s64ilp32) =E2=9C=97 grep EXPORT_SYMBOL  ar=
-ch/riscv -r | wc -l
-> 66
-> =E2=9E=9C  linux-s64ilp32 git:(s64ilp32) =E2=9C=97 grep EXPORT_SYMBOL_GPL=
-  arch/riscv -r | wc -l
-> 15
-
-Why !MODULE_LICENSE(GPL) modules couldn't use riscv_v_user_allowed?
-Seems EXPORT_SYMBOL_GPL has more limitations.
-
-:c:func:`EXPORT_SYMBOL_GPL()`
------------------------------
-
-Defined in ``include/linux/export.h``
-
-Similar to :c:func:`EXPORT_SYMBOL()` except that the symbols
-exported by :c:func:`EXPORT_SYMBOL_GPL()` can only be seen by
-modules with a :c:func:`MODULE_LICENSE()` that specifies a GPL
-compatible license. It implies that the function is considered an
-internal implementation issue, and not really an interface. Some
-maintainers and developers may however require EXPORT_SYMBOL_GPL()
-when adding any new APIs or functionality.
-
-For kvm is okay:
-
-MODULE_AUTHOR("Qumranet");
-MODULE_LICENSE("GPL");
-
-So, I would leave the decition to Andy. If he didn't want it used with
-other non-gpl modules, choose the EXPORT_SYMBOL_GPL.
-
->
-> >
-> > I figure Andy will roll this into this next revision.
-> >
-> > Cheers,
-> > Conor.
+On Mon, May 29, 2023 at 9:57=E2=80=AFPM Andi Kleen <ak@linux.intel.com> wro=
+te:
 >
 >
+> FWIW I think the whole patchkit could be replaced with a one liner
+> that disables THP for the BSS segment. I suspect that would be roughly
+> equivalent for memory consumption because 4K pages that are never
+> touched would never be allocated.
 >
-> --
-> Best Regards
->  Guo Ren
+> -Andi
 
+So, it is worth reading some of the comments on the code to see why a
+wider clean up is worth it:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/p=
+erf/util/path.c?h=3Dperf-tools#n7
+"It's obviously not thread-safe. Sue me."
+(a comment stemming back to the git origins of the code base)
 
+BSS won't count toward file size, which the patches were primarily
+going after - but checking the size numbers I have miscalculated from
+reading size's output that I'm not familiar with. The numbers are
+still improved, but I just see a 37kb saving, with 5kb more in
+.rodata. Something but not much. .data.rel.ro is larger, which imo is
+good, but those pages will still be dirtied so a mute point wrt file
+size and memory overhead.
 
---=20
-Best Regards
- Guo Ren
+For huge pages I thought it was correct that things are aligned by max
+page size which I thought on x86-64 was 2MB, so I tried:
+EXTRA_LDFLAGS=3D"-z max-page-size=3D4096"
+but it made no difference to anything, and with:
+EXTRA_CFLAGS=3D"-Wl,-z,max-page-size=3D4096"
+EXTRA_CXXFLAGS=3D"-Wl,-z,max-page-size=3D4096"
+file size just got worse.
+
+Thanks,
+Ian
