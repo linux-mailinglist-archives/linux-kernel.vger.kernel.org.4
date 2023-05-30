@@ -2,127 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C58437162A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC39D7162B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbjE3Nw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        id S231614AbjE3Nyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbjE3Nw1 (ORCPT
+        with ESMTP id S232414AbjE3Nys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:52:27 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C48C5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:52:26 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b01d912924so35321265ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:52:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685454745; x=1688046745;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MZIQCOgBOMHXALjgqieEEifK+z8JLOURT7ke2XH+ZqQ=;
-        b=g0SDWp9B4DZcM2zDBU+B8vGC6UW9J4pY9ibR1ExH00e/fECd1sDgW8XNhRm5fgSwpM
-         IxpXziEE8B/17sC6bJY8L07SXbRaEibjmlQ9aBZAjevvxdOjGt6RNz1uM9f3dnvpSDHZ
-         cFAxFxmM9VsYxMVMwP+1Z7xxpl8AdvMTa6zk+UK1pyiTjMvxXMebBSYjs5/eJc0BxHxJ
-         hNtI/ml1jXlCGxq7aX3s3C7ofUI3tmLyQ7mIay+YcA9gw8/W4gtlPSPwyYex3eJouO+x
-         JQKBLz5qsbXQl5bweDBmi2DZUt/n+poj3OY+CL207O4PlygQ8MIcfarcn6d11tSQ2qbt
-         JBFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685454745; x=1688046745;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MZIQCOgBOMHXALjgqieEEifK+z8JLOURT7ke2XH+ZqQ=;
-        b=UqrUMGwgp4UCGDylrCpBEo3qKvrwSCaKzyPxevq3SuKlQz3pR4nkeemT8jDFLapU3q
-         cMtNJxFnQXUJfjurF9QYiQhpI5jfHDlu/0pZ5F9QFgpahUsbpRvLBCGQKzEwhRPZHzmR
-         gv6PfXNajve8DzuUilE0WR6Uoyvcqd95DlDd8Qui+2HtUPmRMzJ/N8i487j6JZNn8rBz
-         sDClcMeUTsSMiofu5/tnS0zWjhRWyLmKUkzfi3PtwlW4T+fbn9ZkJ91Aiq5EP+YZRFXZ
-         RM9x9aeEF3+hR0yzI47oM//UONw0DjVefHYh6GXUDNb0i+fWpNlz9zMksAOq7kl0os3n
-         VL9g==
-X-Gm-Message-State: AC+VfDxRX+quHSNSyEOfLzMffD/+KkkJnwW6rDLapsKNY7iQXNnCicWC
-        wUvAoi+YjhvNeP9tolFAaCY=
-X-Google-Smtp-Source: ACHHUZ5yPQK/rwAqbQJJTqIy7YWcl6WdJjYVEsunpe2v1CBi5yYWjYGbfi4xfzLjUPET3PErqG6IKw==
-X-Received: by 2002:a17:902:a508:b0:1b0:31a8:2f74 with SMTP id s8-20020a170902a50800b001b031a82f74mr1898293plq.68.1685454745464;
-        Tue, 30 May 2023 06:52:25 -0700 (PDT)
-Received: from localhost.localdomain ([2405:201:682f:3801:8cf:2f92:e53c:5c4])
-        by smtp.gmail.com with ESMTPSA id b8-20020a170903228800b00198d7b52eefsm1461385plh.257.2023.05.30.06.52.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 06:52:25 -0700 (PDT)
-From:   Deepanshu Kartikey <kartikey406@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Deepanshu Kartikey <kartikey406@gmail.com>
-Subject: [PATCH v5] Staging: rts5208: rtsx: Removed new line in else and else if
-Date:   Tue, 30 May 2023 19:21:20 +0530
-Message-Id: <20230530135120.37637-1-kartikey406@gmail.com>
+        Tue, 30 May 2023 09:54:48 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132A08E;
+        Tue, 30 May 2023 06:54:45 -0700 (PDT)
+X-QQ-mid: bizesmtp67t1685454874tcbczm6n
+Received: from linux-lab-host.localdomain ( [119.123.130.226])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 30 May 2023 21:54:33 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: xwvWJGGFd7M6Lf9NrCrasfk6SUbNPheOBSL8ua9DdJsxRZlXQL39nTjnTvL+d
+        XLdpGp9SJk9zYuni6DU/NAh7tFSEqaWm7zDN6JJbcoR9OmNKi9eEzB8kiWo06NR4+QJwJek
+        E07Tsl/YYyT5/LMOIPqhsXJaey7sesek4fBbqIZJjUpPPCWiF/nyzN5OQFsNv0/EVNAfKEA
+        tiOsJO2gCV132ZfqipSRr17DV49vHO0GcMmZsXh1r1ok7mw8jjufV6jL00g3s1kawQ4aCMd
+        JRF+DFJ8gSGzm9bI0ZTGRTuepiJIUBs7L+9IWBple5DQXdVqYQmTgbjkgNEHBXU4JMXKFpn
+        AIEZI3yhqlGyRoKT96g9LDL1yqF719Sphr20qfdQ1JWK1TbhJm0kAwMwj5wUf1heIRNNMOT
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 9011537490340992174
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     arnd@arndb.de
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de, w@1wt.eu
+Subject: Re: [PATCH v2 07/13] tools/nolibc: sys_lseek: add pure 64bit lseek
+Date:   Tue, 30 May 2023 21:54:33 +0800
+Message-Id: <20230530135433.405051-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com>
+References: <5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Removed new line in else and else if,
-this warning was given by checkpatch.pl
+Hi, Arnd, Willy
 
-Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
+> On Mon, May 29, 2023, at 21:54, Zhangjin Wu wrote:
+> > use sys_llseek instead of sys_lseek to add 64bit seek even in 32bit
+> > platforms.
+> >
+> > This code is based on sysdeps/unix/sysv/linux/lseek.c of glibc and
+> > src/unistd/lseek.c of musl.
+> >
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > Signed-off-by: Willy Tarreau <w@1wt.eu>
+> > ---
+> >  tools/include/nolibc/sys.h | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > index 98cfa2f6d021..d0720af84b6d 100644
+> > --- a/tools/include/nolibc/sys.h
+> > +++ b/tools/include/nolibc/sys.h
+> > @@ -672,7 +672,17 @@ int link(const char *old, const char *new)
+> >  static __attribute__((unused))
+> >  off_t sys_lseek(int fd, off_t offset, int whence)
+> >  {
+> > +#if defined(__NR_llseek) || defined(__NR__llseek)
+> > +#ifndef __NR__llseek
+> > +#define __NR__llseek __NR_llseek
+> > +#endif
+> > +	off_t result;
+> > +	return my_syscall5(__NR__llseek, fd, offset >> 32, offset, &result, 
+> > whence) ?: result;
+> > +#elif defined(__NR_lseek)
+> >  	return my_syscall3(__NR_lseek, fd, offset, whence);
+> > +#else
+> > +#error None of __NR_lseek, __NR_llseek nor __NR__llseek defined, 
+> > cannot implement sys_lseek()
+> > +#endif
+> >  }
+> 
+> This is not technically wrong, but I think a different approach
+> would be clearer: Instead of having a sys_lseek() that works
+> differently depending on the macros, why not define the low-level
+> helpers to match the kernel arguments like
+> 
+> static inline __attribute__((unused))
+> __kernel_loff_t sys_lseek(int fd, __kernel_loff_t offset, int whence)
+> {
+> #ifdef __NR__llseek
+> 	__kernel_loff_t result;
+> 	return my_syscall5(__NR__llseek, fd, offset >> 32, offset, &result,  whence) ?: result;
+> #else
+>         
+> #endif
+> }
+> 
+> static inline __attribute__((unused))
+> __kernel_off_t sys_lseek(int fd, __kernel_off_t offset, int whence)
+> {
+> #ifdef __NR_lseek
+> 	return my_syscall3(__NR_lseek, fd, offset, whence);
+> #else
+>         return -ENOSYS;
+> #endif
+> }
+> 
+> And then do the selection inside of the actual lseek,
+> something like
+> 
+> static __attribute__((unused))
+> off_t lseek(int fd, off_t offset, int whence)
+> {
+>         off_t ret = -ENOSYS;
+> 
+>         if (BITS_PER_LONG == 32)
+>                ret = sys_llseek(fd, offset, whence);
+> 
+>         if (ret == -ENOSYS)
+>                ret = sys_lseek(fd, offset, whence);
+> 
+>         if (ret < 0) {
+>                 SET_ERRNO(-ret);
+>                 ret = -1;
+>         }
+>         return ret;
+>        
+> }
 
----
-Changes in V5
-	- Moved else and else if to the same line
-	- Moved comment on else and else if statement to inside of it
----
----
- drivers/staging/rts5208/rtsx.c | 20 +++++++-------------
- 1 file changed, 7 insertions(+), 13 deletions(-)
+Yes, It is clearer, thanks. will learn carefully about the kernel types.
 
-diff --git a/drivers/staging/rts5208/rtsx.c b/drivers/staging/rts5208/rtsx.c
-index 2284a96abcff..3f06db93e176 100644
---- a/drivers/staging/rts5208/rtsx.c
-+++ b/drivers/staging/rts5208/rtsx.c
-@@ -382,27 +382,21 @@ static int rtsx_control_thread(void *__dev)
- 		if (chip->srb->sc_data_direction == DMA_BIDIRECTIONAL) {
- 			dev_err(&dev->pci->dev, "UNKNOWN data direction\n");
- 			chip->srb->result = DID_ERROR << 16;
--		}
--
--		/* reject if target != 0 or if LUN is higher than
--		 * the maximum known LUN
--		 */
--		else if (chip->srb->device->id) {
-+		} else if (chip->srb->device->id) {
-+			/* reject if target != 0 or if LUN is higher than
-+			 * the maximum known LUN
-+			 */
- 			dev_err(&dev->pci->dev, "Bad target number (%d:%d)\n",
- 				chip->srb->device->id,
- 				(u8)chip->srb->device->lun);
- 			chip->srb->result = DID_BAD_TARGET << 16;
--		}
--
--		else if (chip->srb->device->lun > chip->max_lun) {
-+		} else if (chip->srb->device->lun > chip->max_lun) {
- 			dev_err(&dev->pci->dev, "Bad LUN (%d:%d)\n",
- 				chip->srb->device->id,
- 				(u8)chip->srb->device->lun);
- 			chip->srb->result = DID_BAD_TARGET << 16;
--		}
--
--		/* we've got a command, let's do it! */
--		else {
-+		} else {
-+			/* we've got a command, let's do it! */
- 			scsi_show_command(chip);
- 			rtsx_invoke_transport(chip->srb, chip);
- 		}
--- 
-2.25.1
+> 
+> For the loff_t selection, there is no real need to handle the
+> fallback, so this could just be an if()/else to select 32-bit
+> or 64-bit, but for the time_t ones the fallback is required
+> for pre-5.6 kernels.
+>
 
+Ok, will test it on the pre-5.6 versions too.
+
+Hi, Willy, what's your suggestion about the oldest kernel versions we plan to support? ;-)
+
+Best regards,
+Zhangjin
+
+>        Arnd
