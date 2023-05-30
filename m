@@ -2,236 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA4A716DA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C11F716DA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233326AbjE3TfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 15:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S232712AbjE3TgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 15:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbjE3Tet (ORCPT
+        with ESMTP id S230219AbjE3Tf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 15:34:49 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB234BE;
-        Tue, 30 May 2023 12:34:47 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UJUK2e022992;
-        Tue, 30 May 2023 19:34:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=mpiQCMZW0ekrzjHH3XqOVdBgVCerwNUa7fbHPWFc3w0=;
- b=cwmkFQVFM0fSFMol5lg5WiSWlDsUGibN+TNzI4IxMsKOVGeotSiIUxcTlRFE9tOdVb0B
- nRLzWczDpEOt1nsRgjbfjzt8Ccq2y9xdk02EWEWfc1aq+WY/HgAXk96sJy0j+5UvN3qc
- 0pWCVIJdVrNAeKFkp5uNL3069P8qVKy8Bur8v64wX+UO50lraWYCQ5C78Y8lHZONGqUz
- B9ilMC/TMr7l7FnzAI6LVa+TQgdE8aR/PARY4NpIvtxNZ6OLIhLFFwLN2ALQb/n8mQR4
- GK5Ljz/EBf8RAucy3a8m2YAtprX9XrgEIuN3ACySCxhZ86Cs3OVgviczzH4WjogmoV8m /A== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwp69g54a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 19:34:43 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34UJYhhM023375
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 19:34:43 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 30 May 2023 12:34:42 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] soc: qcom: rmtfs: Support dynamic placement of region
-Date:   Tue, 30 May 2023 12:34:36 -0700
-Message-ID: <20230530193436.3833889-3-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230530193436.3833889-1-quic_bjorande@quicinc.com>
-References: <20230530193436.3833889-1-quic_bjorande@quicinc.com>
+        Tue, 30 May 2023 15:35:59 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2104.outbound.protection.outlook.com [40.107.94.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD7611A;
+        Tue, 30 May 2023 12:35:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FMbHtbq+jVzoZamDzGUoiqgReZXtsvXUftAksKBSO+UmvksJfsRRSMAgFlkKTC7oSHCyWm6smvruqr9t3tVvSEMdnEDDw6FNEZIDeY/kbENG0/lf4cUXCW+qPcV4WCldsGL8MOYggld6WPN5031jCElhKc1rSkRvytQjbvExbmnyfKSo3ZGu5gTq5VqdhCj/FlmsojLDflVzQirzlRLM5exv0mIRsMSTgOj3KZJKeNbFeNj/uYinpFbkoEsYhCIuaHMCGcdVyZ+qLsGnreHIBzNTjW9QkfupsQD4aF1XHFlISTnRcvNQVTRxgCDmXAehbKX1ZPgOUZjV1yZzEKGiYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bywrRULDtWMXbD9q8bK7DujeGHhWUdiLd4bVDtxJ7yw=;
+ b=oSxJn1+Q5lJ12BsbNXkh1yjiEBiTYm9mFk+7fp0LJlu4S/r7TmYxtVqPYpn4Gf3357elREnzQrwr1YVzveciC8RULGREOLUga1naqXg/35nkgZlBrvfGGNCYKLkY3D2vIQkt0+1zaHUpC9lwDzSUMCT1fAgzP9BE6Mf16a5Z5gzs4heywKmXWWBGi/r/sjUg2j0k0GFgqNFTrC6IIPMYBHCbhczVKXK5qTEOdcUrHGd2sovBphgeuYETVEsgB30qcHpMo13xs0bEC4vTUFP3tfcfPo489lC+4Au6r5lLnYPh7FRtMVovyM3ne6RWkla2u8U8joXPcK/mKNPc3hOesg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bywrRULDtWMXbD9q8bK7DujeGHhWUdiLd4bVDtxJ7yw=;
+ b=QXKJCOqVH/3PRPOqUQv2Tco+AWyaacwMilxrs2BNDFCIqSYFhxhtxglVL5vSahK0EkN89nAXqhLt+cHnj6TZr0itTJv4wgCnvqAGQXHZa3ro/54mv4aAE7KwzDpifoLBmGw5qcUz9DHYepUVHeTceXBkZ6uc/OZfvaSJEQP06lI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by LV8PR13MB6352.namprd13.prod.outlook.com (2603:10b6:408:18e::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.21; Tue, 30 May
+ 2023 19:35:46 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.022; Tue, 30 May 2023
+ 19:35:46 +0000
+Date:   Tue, 30 May 2023 21:35:39 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Shay Drory <shayd@nvidia.com>, Saeed Mahameed <saeedm@nvidia.com>,
+        Eli Cohen <elic@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH net] net/mlx5: Fix setting of irq->map.index for static
+ IRQ case
+Message-ID: <ZHZQC99+0ccZPdvF@corigine.com>
+References: <20230530141304.1850195-1-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530141304.1850195-1-schnelle@linux.ibm.com>
+X-ClientProxiedBy: AM0PR08CA0005.eurprd08.prod.outlook.com
+ (2603:10a6:208:d2::18) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: xGUzTctcTjN6jw_tTIYXeNywOv9BRaZJ
-X-Proofpoint-GUID: xGUzTctcTjN6jw_tTIYXeNywOv9BRaZJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_14,2023-05-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 malwarescore=0
- suspectscore=0 spamscore=0 mlxlogscore=999 phishscore=0 adultscore=0
- bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305300158
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|LV8PR13MB6352:EE_
+X-MS-Office365-Filtering-Correlation-Id: b1d38d4d-f3f4-41db-2645-08db614510d4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2tPz+IfVRGL6U7ZOw6vLr+9LexUhg7WJbF0AV2k53lvPaeoX9rSixm2sSiiq36YYRHO4CZ5g9qbdrhB3y6hD5UNt7vXpKWgHjoIqhFeru4h8Plo+QFQ8Hrj9hL/cnnMvEAo13eyvNBq4Rpk/9voY2Z3rJzMo+gfvVo8vb/0Jh8xxnrSiwlFBdCl2ro3MZr/0TJVe1YQcD9fGPlVMXkyVruHOLRQB6ZFHPQ4v3Q/uqeEc5CvXM42Boweap5GrOrWRy0vR8drIfmcHi71J1teCvmqkSxiHKJCeBOrjB4lZgdgGHLlwwPno9UHy3XXqLYd7PTWlYD/jtIHnxQBGruUaoCTusRwhm39AsimLM6CerjQuNlk0tq0vmGUY49SWZ1HAYcIleUIoPvSR0lWS9ZDSF0SgFpifFWJDprly2YDRtuDPRquj0HNuh4IwpmGt5ckiZCYRcwWAyP8qs/zc2BxZJ6AI34J8f6ClhZWShKqbMyv7857wnF3neL9MeXnOAfAGv4wGX7+3kKxEOhHZV4mJONzwALbyjtb7hYEfN3VcGr/APp4USPJZDL/l9dBtph4TDe49JTs8j1A2cuw0geXoa+pyo5HgWouFtiSknX2fVBs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39840400004)(136003)(376002)(366004)(451199021)(83380400001)(6666004)(66476007)(5660300002)(36756003)(316002)(66946007)(66556008)(7416002)(4326008)(6916009)(38100700002)(41300700001)(8936002)(8676002)(6486002)(86362001)(6506007)(186003)(2616005)(6512007)(54906003)(44832011)(478600001)(66899021)(2906002)(4744005)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XLaOfH1jIsbJI9tdGYIPkbeWhFp9tmrkibMoRypZs8UZIHwhe+w8rDRLuXzm?=
+ =?us-ascii?Q?ISGxRBV3fK1GcORCVDfme4iuC4ICuCOf1uVRfLnJD2xhRJ53GGS4xUugh4Z9?=
+ =?us-ascii?Q?yj1S9V1MmuceLy36MfbpcU22bQb/S5M9AEPv4Bkuy+d4a1f2wrCwFsVVKt6h?=
+ =?us-ascii?Q?Hx0wJ6nTKcu05dDZGQqcxmivmxegINvjF+VZyrdqJ6Hy02iDStDQ2P6+U9up?=
+ =?us-ascii?Q?5AlDrF2JscBd27eRDI4rfWFxyeLW0kId9zrLZSLMiRRElKbPNg5VpFIjr+uZ?=
+ =?us-ascii?Q?ztMC7SLt5nGVp/t2lazVICvcR5627wVUIZuo/DtrduqjwQUHwe6+BtX9eRUD?=
+ =?us-ascii?Q?uiR9OvML+slprQKzIOZ4fAu44t3m+lrKwhcW7XyEOVvaSFl6dpDS09ZB0jt3?=
+ =?us-ascii?Q?ZNQWke+qhqmdxAqZIJ9sZbAUjYGcUbYsS8rPzJMPcP0SCQwKmdW3IQkiQ0EA?=
+ =?us-ascii?Q?s9jL9m1D013FFxiq/P1ILcvrAMyRjH09zuC3YTtQ6dQkHPW5gVYPj3vuoahi?=
+ =?us-ascii?Q?kCLUiWgqXhSxkz0zt0Agz6SaxjtLLNVlQC/j/tQ3K4yJ5WjSOJuUyKTsfpzV?=
+ =?us-ascii?Q?jGuqJIsXITNGLHhVkit3rMddxbvLUOKuGaP92mohh678yDFOOeNW9IMtT2no?=
+ =?us-ascii?Q?cwD51ikoXQblmroQAiG06ab3c+cYBsaF13iah3LCycXkdow2IIx0c7ulsBVh?=
+ =?us-ascii?Q?W1cHGufM7mmdaVyKusUiqqoWmq2UpoM123AJXlPuvHZNFcX/41fu02s6YBSU?=
+ =?us-ascii?Q?/C+HGXvLgflNQpHdHI+CqIBXOkB02iEkPuSIdgH2X/0Th3VClrZaF9QSTP3K?=
+ =?us-ascii?Q?JRo6P2n8fk1KICHDkXYwWjtipBfExL8XJqvlPyHRllZ/vCN5vFFCv90WeI7q?=
+ =?us-ascii?Q?o9Zu3MP3XHWSBccvnRsl6I0rW7obbzPtysVXsFUjb2zBrg+XatGXc7OPbHPb?=
+ =?us-ascii?Q?Ibf0CamgYYY083UdTeu+eH0IwK6Pnc1X62kylXgYObOI4yGDFayazEspp/6/?=
+ =?us-ascii?Q?xkPixBIKBPN3jHv2AnIlOOuiXzCG+MfPdAGl5N4lQM0CBuk1SggdyJ7zSC0c?=
+ =?us-ascii?Q?bTTlcCqI8wSiMLaIUgpR9zWqJcTLcBT//eP2Pt0a6vvIkRTzXhnQqLOJGkIe?=
+ =?us-ascii?Q?AMHgfVJBPAtg/gsOn7upICS43SzoBiYWr3wk86zQ1lv8303hQ/vxqQXFwN6M?=
+ =?us-ascii?Q?XPF4PmWfskwF3VPOJRbs5d70pZjExU4yFjrQ4XLhJXjmTUzNBtTyyIEWhpo8?=
+ =?us-ascii?Q?qUxqSs1U0C5EyFpff0UWZFLLOontSCt0ix8tYR5/Za+UJmixjl20vuXhYex+?=
+ =?us-ascii?Q?10rduoTWtMPxYTtbZJeT9Z+vXvKfftaiAJ5AjdMapY5j6V7kzxIMNdommqJ2?=
+ =?us-ascii?Q?4B1ZQq12ZUJJZtSo4bX+/MZFs6Fiqkrsdfsvz7EXzu6YXSqu3C50O0GOI+MW?=
+ =?us-ascii?Q?t2zqmcfo/iihgDr8+7ZE+6CW2CcrU39QgmqeZgEvEhXy9UJlxQ2CJELdy5p4?=
+ =?us-ascii?Q?ngDG8iV7q8UuRhJm41yATaGcsf84ww/YdBcBWVDVeVeg9FAJNSBnzG5YmX4g?=
+ =?us-ascii?Q?ddxTo68slQyuBI5j5ZFe7uYKbn1lhjmkebY+21UJVvU3iClz8KvkNyTPOb3A?=
+ =?us-ascii?Q?CGoL7/RaDGOb76bWZZZphmuyQeyQxHyZP3o/NADPYaKSBD0JMhaIlU8xVS/8?=
+ =?us-ascii?Q?nzMoYg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1d38d4d-f3f4-41db-2645-08db614510d4
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 19:35:46.7420
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Mgr5AAktap9n3Gb3Uz8jy7CArOnbysXSAcvS+AO5gXpYeGSRyNpI7eje+iveAJPKGiTp02yP2zGh7cLKfBn8uFHsJE/3hI/fcZZ92T042X8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR13MB6352
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some configurations, the exact placement of the rmtfs shared memory
-region isn't so strict. In the current implementation the author of the
-DeviceTree source is forced to make up a memory region.
+On Tue, May 30, 2023 at 04:13:04PM +0200, Niklas Schnelle wrote:
+> When dynamic IRQ allocation is not supported all IRQs are allocated up
+> front in mlx5_irq_table_create() instead of dynamically as part of
+> mlx5_irq_alloc(). In the latter dynamic case irq->map.index is set
+> via the mapping returned by pci_msix_alloc_irq_at(). In the static case
+> and prior to commit 1da438c0ae02 ("net/mlx5: Fix indexing of mlx5_irq")
+> irq->map.index was set in mlx4_irq_alloc() twice once initially to 0 and
+> then to the requested index before storing in the xarray. After this
+> commit it is only set to 0 which breaks all other IRQ mappins.
+> 
+> Fix this by setting irq->map.index to the requested index together with
+> irq->map.virq and improve the related comment to make it clearer which
+> cases it deals with.
+> 
+> Fixes: 1da438c0ae02 ("net/mlx5: Fix indexing of mlx5_irq")
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Extend the rmtfs memory driver to relieve the author of this
-responsibility by introducing support for using dynamic allocation in
-the driver.
-
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sdm845-mtp.dts | 10 ++++
- drivers/soc/qcom/rmtfs_mem.c            | 66 +++++++++++++++++++------
- 2 files changed, 61 insertions(+), 15 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-index d1440b790fa6..e6191b8ba4c6 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-@@ -12,6 +12,8 @@
- #include "pm8998.dtsi"
- #include "pmi8998.dtsi"
- 
-+/delete-node/ &rmtfs_mem;
-+
- / {
- 	model = "Qualcomm Technologies, Inc. SDM845 MTP";
- 	compatible = "qcom,sdm845-mtp", "qcom,sdm845";
-@@ -48,6 +50,14 @@ vreg_s4a_1p8: pm8998-smps4 {
- 		vin-supply = <&vph_pwr>;
- 	};
- 
-+	rmtfs {
-+		compatible = "qcom,rmtfs-mem";
-+
-+		qcom,alloc-size = <(2*1024*1024)>;
-+		qcom,client-id = <1>;
-+		qcom,vmid = <15>;
-+	};
-+
- 	thermal-zones {
- 		xo_thermal: xo-thermal {
- 			polling-delay-passive = <0>;
-diff --git a/drivers/soc/qcom/rmtfs_mem.c b/drivers/soc/qcom/rmtfs_mem.c
-index f83811f51175..5f56ded9f905 100644
---- a/drivers/soc/qcom/rmtfs_mem.c
-+++ b/drivers/soc/qcom/rmtfs_mem.c
-@@ -3,6 +3,8 @@
-  * Copyright (c) 2017 Linaro Ltd.
-  */
- 
-+#include "linux/gfp_types.h"
-+#include "linux/sizes.h"
- #include <linux/kernel.h>
- #include <linux/cdev.h>
- #include <linux/err.h>
-@@ -168,23 +170,63 @@ static void qcom_rmtfs_mem_release_device(struct device *dev)
- 	kfree(rmtfs_mem);
- }
- 
-+static int qcom_rmtfs_acquire_mem(struct device *dev, struct qcom_rmtfs_mem *rmtfs_mem)
-+{
-+	struct device_node *node = dev->of_node;
-+	struct reserved_mem *rmem;
-+	dma_addr_t dma_addr;
-+	void *mem;
-+	u32 size;
-+	int ret;
-+
-+	rmem = of_reserved_mem_lookup(node);
-+	if (rmem) {
-+		rmtfs_mem->addr = rmem->base;
-+		rmtfs_mem->size = rmem->size;
-+
-+		rmtfs_mem->base = devm_memremap(&rmtfs_mem->dev, rmtfs_mem->addr,
-+						rmtfs_mem->size, MEMREMAP_WC);
-+		if (IS_ERR(rmtfs_mem->base)) {
-+			dev_err(dev, "failed to remap rmtfs_mem region\n");
-+			return PTR_ERR(rmtfs_mem->base);
-+		}
-+
-+		return 0;
-+	}
-+
-+	ret = of_property_read_u32(node, "qcom,alloc-size", &size);
-+	if (ret < 0) {
-+		dev_err(dev, "rmtfs of unknown size\n");
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * Ensure that the protected region isn't adjacent to other protected
-+	 * regions by allocating an empty page on either side.
-+	 */
-+	mem = dma_alloc_coherent(dev, size + 2 * SZ_4K, &dma_addr, GFP_KERNEL);
-+	if (mem) {
-+		rmtfs_mem->base = mem + SZ_4K;
-+		rmtfs_mem->addr = dma_addr + SZ_4K;
-+		rmtfs_mem->size = size;
-+
-+		return 0;
-+	}
-+
-+	dev_err(dev, "unable to allocate memory for rmtfs mem\n");
-+	return -ENOMEM;
-+}
-+
- static int qcom_rmtfs_mem_probe(struct platform_device *pdev)
- {
- 	struct device_node *node = pdev->dev.of_node;
- 	struct qcom_scm_vmperm perms[NUM_MAX_VMIDS + 1];
--	struct reserved_mem *rmem;
- 	struct qcom_rmtfs_mem *rmtfs_mem;
- 	u32 client_id;
- 	u32 vmid[NUM_MAX_VMIDS];
- 	int num_vmids;
- 	int ret, i;
- 
--	rmem = of_reserved_mem_lookup(node);
--	if (!rmem) {
--		dev_err(&pdev->dev, "failed to acquire memory region\n");
--		return -EINVAL;
--	}
--
- 	ret = of_property_read_u32(node, "qcom,client-id", &client_id);
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to parse \"qcom,client-id\"\n");
-@@ -196,22 +238,16 @@ static int qcom_rmtfs_mem_probe(struct platform_device *pdev)
- 	if (!rmtfs_mem)
- 		return -ENOMEM;
- 
--	rmtfs_mem->addr = rmem->base;
- 	rmtfs_mem->client_id = client_id;
--	rmtfs_mem->size = rmem->size;
- 
- 	device_initialize(&rmtfs_mem->dev);
- 	rmtfs_mem->dev.parent = &pdev->dev;
- 	rmtfs_mem->dev.groups = qcom_rmtfs_mem_groups;
- 	rmtfs_mem->dev.release = qcom_rmtfs_mem_release_device;
- 
--	rmtfs_mem->base = devm_memremap(&rmtfs_mem->dev, rmtfs_mem->addr,
--					rmtfs_mem->size, MEMREMAP_WC);
--	if (IS_ERR(rmtfs_mem->base)) {
--		dev_err(&pdev->dev, "failed to remap rmtfs_mem region\n");
--		ret = PTR_ERR(rmtfs_mem->base);
-+	ret = qcom_rmtfs_acquire_mem(&pdev->dev, rmtfs_mem);
-+	if (ret < 0)
- 		goto put_device;
--	}
- 
- 	cdev_init(&rmtfs_mem->cdev, &qcom_rmtfs_mem_fops);
- 	rmtfs_mem->cdev.owner = THIS_MODULE;
--- 
-2.25.1
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
