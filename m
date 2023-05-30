@@ -2,103 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E25716C99
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FE8716C9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 20:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233448AbjE3SfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 14:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
+        id S233088AbjE3Sgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 14:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232417AbjE3Set (ORCPT
+        with ESMTP id S231769AbjE3Sgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 14:34:49 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C73E10C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 11:34:44 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 02EB266020E9;
-        Tue, 30 May 2023 19:34:41 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685471682;
-        bh=Mc4XFuvSXqyxxvNjISIQlJNJFdT5sV7i4Xq+tgbBWFc=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=LkGV3TU4pj1obj3spTh8Sn2Hw3iy6O9lEPbnHhxNnCacHT5LFpNUuQHVrAVeOx+lG
-         qx0WXIj1X99Vs4ezsCKhoNr6K1NHcTauVZNiZkP2Exwwk/uD4YCdE92KPEAmgCoqho
-         m+k1ya3b9WaAOmBZ7Hy+knUptuCp9tl5b+YsAaFURV8C+nyjAG3Cbm8Gh804gR7yuG
-         ce1rryb8dZUUA4wpvC2fw8JIqp6DvAGQRm0YPiSYenWB3q11+ozzQ2dobofIfrmqp0
-         0z4o81YzMyZg13SE5UtK23crqIEzq/zaC9UJTJM4KqIUSHMRbE87jfyqmMshWuQJtJ
-         FCbwAOqoqwshA==
-Message-ID: <05b97262-85e7-e9e6-7a38-84ec88f95e71@collabora.com>
-Date:   Tue, 30 May 2023 21:34:38 +0300
+        Tue, 30 May 2023 14:36:37 -0400
+Received: from mout.web.de (mout.web.de [212.227.15.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3DEA7;
+        Tue, 30 May 2023 11:36:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+        t=1685471780; i=spasswolf@web.de;
+        bh=2v7T90+EZYWcRweNwX+3tMDTLQwY1YpThpclSmEMtDg=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=MB1a2xDJY2XJgsPR+GIX+370ThGorfknQItcFu1lKv1wc//Nsljm68ClGBJMo6EKY
+         PYcaxk4vUvBDYXOjc8iRFw4IiiXuRc7UEqEyZVXo2L5rzi3LA3NVJeZziGSHSwAfNi
+         zT3EB0dlu8pXg3Puq5dTnBAOXn5MYu2Xyax2Uo1gIKfFGvCMdj7d7YUIsXFYs4GsSV
+         jLt+8RDGg7NQ672nfMhdOHaV52AYFPDcXnsQKHd4+QriLygOOiH2FezP1RXcf7Yr9d
+         CGKOS4q1sh3DCuX1KkPr3laUaW8khZn/mAVtnxmitQ/FMlY/SqaGWVrMF9l0VXsuNr
+         C8QuqQIreYEPw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.0.101] ([176.198.191.160]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MFayw-1prTob3wA2-00HLCg; Tue, 30
+ May 2023 20:36:20 +0200
+Message-ID: <8d0e0272c80a594e7425ffcdd7714df7117edde5.camel@web.de>
+Subject: Re: [PATCH net] net: ipa: Use the correct value for IPA_STATUS_SIZE
+From:   Bert Karwatzki <spasswolf@web.de>
+To:     Alex Elder <elder@linaro.org>,
+        Simon Horman <simon.horman@corigine.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 30 May 2023 20:36:18 +0200
+In-Reply-To: <3c4d235d-8e49-61a2-a445-5d363962d3e7@linaro.org>
+References: <7ae8af63b1254ab51d45c870e7942f0e3dc15b1e.camel@web.de>
+         <ZHWhEiWtEC9VKOS1@corigine.com>
+         <2b91165f667d3896a0aded39830905f62f725815.camel@web.de>
+         <3c4d235d-8e49-61a2-a445-5d363962d3e7@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.2-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RESEND] arm64: defconfig: Enable Rockchip I2S TDM and
- ES8316 drivers
-Content-Language: en-US
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230504201916.1121243-1-cristian.ciocaltea@collabora.com>
-In-Reply-To: <20230504201916.1121243-1-cristian.ciocaltea@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:nvDrN31wa6BU9wTREw0mivrP59WXptU/X0viLPNSxPxk4CLeyr1
+ HRVMzwdttRXcgJcTa67MSVOkkXZTcieQ2f1hHsE61La/ZM2FDYAtZCvAkimm/1A4m5NpWzx
+ dvHE5rlF1iPeh4/mfJWEhoE/EPYDQrzi8Sa++gFQyL1V8+AmUErVXat/HgVdKUDnPjDKZl6
+ srUs9/ICtEkrBJmEXtP2A==
+UI-OutboundReport: notjunk:1;M01:P0:u5nL76XZm54=;f37AL66HylzsArkAIjKAdXyQ2/P
+ vCzRaQnIGOPuwYLmoJtQpJzaUpo9dDwp3xfv+4Fa9kXkpHvL+BM36MmayKvDTsRa+SpTfD/Rr
+ YsNuyLFVo3HN8KCHjRTGJX5q9xn9zErEEOKxICpfXIHhmA1Q7ypeYw0QeqLF2cbbmGbycnhoq
+ pztWSPrHI+iNP1+9qH1Jk/sxkdy5ZGms1cuu6d7lKgOjtK3S0tKBh6q0bZ/U0bBfdVJMqkG3O
+ CQr3PBlG1AuZTRuTWg6qfb41nTKe55npgxb1q0hKRfYT6aMuabxrNSXDaBG7LH2BPjFQLBqH/
+ zqR1SPL7RaExNtZY6fIKQo5wDvAUO9/rxHejcIXcGKVOFelrHxJ7Moga6dgKPeIqQRmMNb/QH
+ 0MgabqwtJQByRGfaED6Br+zA9PqRS35GL/CIThHCyZr8+rKq0J7zLO2sTNwVnkwqu0TMxsD7m
+ JxqLpnsexZ6TWE71Zk06SM+FVzwohPZxAwQrFnoQhiLdo+HmB3h769qii4PD4Af8avsnwR94/
+ TUEsNTa/T1ZWF8L3lEBcA+pZqiCo8gpcPtwAV6SMRsNM4MVuNlF0t5NviD1ktHKECsBukdafa
+ iOG8r3IYbDNCB3+8K9WsuWiHHcs6DUTCX8Xzwx5ydRoMn9tFUJ7aQnqdLfAMhuJmsM3/VyJeG
+ KbV1tCHP6LFWB+OokHO23F75FY/Ys3d0jjLuONLLz91kIE51XRMJ941ZZj5b6ruUjabBWVtII
+ jB2OeFRkGJ7VMs8bqqby4HhoOvcM20VfSDQ0ZVxCmLZfasibip9yrFR+5+lb7f5LAqWCF7N8P
+ migieMlUX3fLat76mhqglogypSOAPtXLIR8L8TsKbegsn2W8hc7P589sUV8ohRWDhgiLSp49w
+ x/G8ysbdJu4Cpezclv3enAhRCB5L0/iMiaD+JoyTnp5VUuaD0CIWbEkJlLB3eUEChSzXbKASq
+ vI/NcQKUvj3kAp8vJV9D7QwrLlI=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/4/23 23:19, Cristian Ciocaltea wrote:
-> The Rockchip I2S TDM driver and the Everest Semi ES8316 codec are used
-> to provide analog audio support on the RK3588 SoC based Rock 5B board.
-> 
-> Enable both of them as modules.
-> 
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-> ---
->  arch/arm64/configs/defconfig | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 1e7021ead7f5..dff4c4296c08 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -867,6 +867,7 @@ CONFIG_SND_SOC_SM8250=m
->  CONFIG_SND_SOC_SC7180=m
->  CONFIG_SND_SOC_SC7280=m
->  CONFIG_SND_SOC_ROCKCHIP=m
-> +CONFIG_SND_SOC_ROCKCHIP_I2S_TDM=m
->  CONFIG_SND_SOC_ROCKCHIP_SPDIF=m
->  CONFIG_SND_SOC_ROCKCHIP_RT5645=m
->  CONFIG_SND_SOC_RK3399_GRU_SOUND=m
-> @@ -897,6 +898,7 @@ CONFIG_SND_SOC_AK4613=m
->  CONFIG_SND_SOC_DA7213=m
->  CONFIG_SND_SOC_ES7134=m
->  CONFIG_SND_SOC_ES7241=m
-> +CONFIG_SND_SOC_ES8316=m
->  CONFIG_SND_SOC_GTM601=m
->  CONFIG_SND_SOC_MSM8916_WCD_ANALOG=m
->  CONFIG_SND_SOC_MSM8916_WCD_DIGITAL=m
+Am Dienstag, dem 30.05.2023 um 07:29 -0500 schrieb Alex Elder:
+> On 5/30/23 4:10 AM, Bert Karwatzki wrote:
+> > Am Dienstag, dem 30.05.2023 um 09:09 +0200 schrieb Simon Horman:
+> > > On Sat, May 27, 2023 at 10:46:25PM +0200, Bert Karwatzki wrote:
+> > > > commit b8dc7d0eea5a7709bb534f1b3ca70d2d7de0b42c introduced
+> > > > IPA_STATUS_SIZE as a replacement for the size of the removed struct
+> > > > ipa_status. sizeof(struct ipa_status) was sizeof(__le32[8]), use th=
+is
+> > > > as IPA_STATUS_SIZE.
+>=20
+> This is better, however it really isn't done in a way that's
+> appropriate for a Linux kernel patch.=C2=A0 I will gladly help you
+> get it right if you have the patience for that.=C2=A0 But I'm not
+> going to say anything yet--until you say you want me to help
+> you do this.=C2=A0 If you prefer, I can submit the patch for you.
+>=20
+> The reason this is important is your commit is permanent, and
+> just like code, commit messages are best if kept consistent
+> and readable.=C2=A0 I also am offering to help you understand so
+> you avoid any trouble next time you want to send a kernel patch.
+>=20
+> Let me know what you prefer.
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0-Alex
+>=20
+> > >=20
 
-Could we get this reviewed/merged, please?
+So here's v3 of the patch, done (I hope) in a way that is more standard
+conforming.
 
-Thanks,
-Cristian
+From e0dc802b5f6f41c0a388c7281aabe077a4e3c5a2 Mon Sep 17 00:00:00 2001
+From: Bert Karwatzki <spasswolf@web.de>
+Date: Tue, 30 May 2023 20:23:29 +0200
+Subject: [PATCH] net/ipa: Use correct value for IPA_STATUS_SIZE
+
+IPA_STATUS_SIZE was introduced in commit b8dc7d0eea5a as a replacement
+for the size of the removed struct ipa_status which had size
+sizeof(__le32[8]). Use this value as IPA_STATUS_SIZE.
+
+Signed-off-by: Bert Karwatzki <spasswolf@web.de>
+---
+ drivers/net/ipa/ipa_endpoint.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.=
+c
+index 2ee80ed140b7..afa1d56d9095 100644
+--- a/drivers/net/ipa/ipa_endpoint.c
++++ b/drivers/net/ipa/ipa_endpoint.c
+@@ -119,7 +119,7 @@ enum ipa_status_field_id {
+ };
+=20
+ /* Size in bytes of an IPA packet status structure */
+-#define IPA_STATUS_SIZE			sizeof(__le32[4])
++#define IPA_STATUS_SIZE			sizeof(__le32[8])
+=20
+ /* IPA status structure decoder; looks up field values for a structure */
+ static u32 ipa_status_extract(struct ipa *ipa, const void *data,
+--=20
+2.40.1
+
+
+Bert Karwatzki
