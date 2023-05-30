@@ -2,228 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CACD71635E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FD8716356
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 16:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232950AbjE3OOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 10:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
+        id S233008AbjE3ONu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 10:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232820AbjE3ONz (ORCPT
+        with ESMTP id S232869AbjE3ONr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 10:13:55 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FA1134
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:13:19 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f7024e66adso92655e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 07:13:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685455967; x=1688047967;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DfNot7KNj2VwPiVK9ENaX+APjAvDSF0tv9rTi2wIpLs=;
-        b=o3+tgDbk9I/rOOfgBCbTaqUjjcn4/f9vkjaD8spOlXD6sIVbR1r4Nhdy+2740z9su8
-         vaMsB6/6nrR9nFjGz53/aQSiI4VqKDXefM4Qyjzg3gQ9Y9jsqCVNpJi9iQ50C54+/+7g
-         3NNX667Mqkk/ijZLulhv99L4QWmR9wkbWjDcy1gpJb/vVKlJ0t/GxGW0axzeq7aN4axY
-         WOLxMwU1clzTELMwDarj1hwFRL3qTR/H21W1/jywJrqebjBEM8yus9fWO1+P/obx0OZv
-         4RcBP5nGUH/xO3mnU5YbNeImpmDhwhusg9h7VlOojzop4C4rMDoFWloVYrpguyWrnIPF
-         oD5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685455967; x=1688047967;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DfNot7KNj2VwPiVK9ENaX+APjAvDSF0tv9rTi2wIpLs=;
-        b=bgaCOqkC907e02c2LYOYe3HPjG6uSW/trSBigXp2SLzelaoqraZxneCqm0KRkBOt9g
-         USE7xiASR0qer/8J9QLdk6fyR3YF88YX7fu/WqHe86GqXxc4bwjJT8cBYnLsfepgNyJD
-         T6UUe7BrFyJ3VjfAkBnzfKjKjZFLSBhoOT7B8p/qvkV/vNHhEpNtbVCb2pemVmTrhjsi
-         uJIbid/30MhMFtActlZaUv5xWdmPUXly4P183zcdRUm9BRJ9fCKDuiUCaDGs1QaakTxF
-         aWiDtFzOP+i1Y5Qc2WYsRphSd9q2hC9b0cVV7CfBc+Ask2e2+quGpEg0BsCnHPXVPSLB
-         MhYg==
-X-Gm-Message-State: AC+VfDwdchuifeSPAXBHHRV17tBQHyT8pUXQS/NgTeCoWrUJzTAAlQ6A
-        WvG8guxGaOg7OSfkz2v+Yz62LCaOtSJfXwsUn4ZaZg==
-X-Google-Smtp-Source: ACHHUZ5GPzKO5WYgTfz+nXPalr+DLmUiejqRNl4VatYCnhv5JF6RHplbm9Q+5gER7MKBNzMLFA5b920Ng5BXI2oxpZg=
-X-Received: by 2002:a05:600c:1c12:b0:3f4:2594:118a with SMTP id
- j18-20020a05600c1c1200b003f42594118amr168111wms.2.1685455966606; Tue, 30 May
- 2023 07:12:46 -0700 (PDT)
+        Tue, 30 May 2023 10:13:47 -0400
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2043.outbound.protection.outlook.com [40.107.13.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D638FE44;
+        Tue, 30 May 2023 07:13:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=APo6s2276U3Mr+asOHZKjBES3luAUxXf59e6ZkBJ8VuktcLcNZuRNxpvBczIYCBqeptIQ7I/aTCH7JFpF0SFi1sXFpXEy3kf45Wi5nOPV2r2iNoqXks7h6h74T2ofe/EyWeJEpEu4V5Aim4XX4kPL2aofbiOrHSr/5hj6sbDzaQsnlmp7ifrC/dnsiJIM3tYEjk8tffr4K/I5rZtzZYBK7OU7ASPUz1IhY6F2ANMJcImP4cZAsxUGoqjnwbUv5ZLqB1kUkRyFTX1T4bsl4SHn1kEDY3duldxkGp2eBWeXQlw5JbYE7jmSp/weqqm9Qx1YURJ9GYcTn47bLSotRBPUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3qBLjUiWq+OdoCD9JPD2suteEWFG+t70JrtUnc7Tal8=;
+ b=njT75ZvCQJQPOmwI2dIJI61nI9xwx+65zxSXtC8Xlw+eHpPNrThJBgNVuVvcfo/pFRcxSppqYVRmYj4znnqAvpaJpIQdc2c9DRCtFBeSGwXmidsfPwViEHZHJBIFXx2LWadQlETociNSVonz4fy9itArJabKe5vRJiDQzR710c6ZUPztWbOgwd4Y3Cb4SdfatOvHC1Q4dkSAvxd7qNiE1lQuLggtLGIkcy2ZjC91H+JWJ49GlPbu0SROWAYGYnhBxoZ/V1hroDjJQixii4xgwfa+MSB9Dl9Isz+ZZbFohOukfj55dehwhsFcY1I5P8oIy7uGGcE5obyJ00PBvXALAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=santannapisa.it; dmarc=pass action=none
+ header.from=santannapisa.it; dkim=pass header.d=santannapisa.it; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=santannapisa.it;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3qBLjUiWq+OdoCD9JPD2suteEWFG+t70JrtUnc7Tal8=;
+ b=jLYzQMjzCwG2ybKNJBcm/ZVX/KCKGgQ9Noa/xHnEnozJTMkUjajf1SQc3CdMIPM2gT37iKrvEI/TC6QR2sxNKIhdYqS2CL3At15dy4i2KS0vRHUsENc+UL0SG2e+HasDKxEuN48oKBIYGjQs6idGy6W1EgTFNFKUFJ50x/xhTLg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=santannapisa.it;
+Received: from VI1PR03MB2880.eurprd03.prod.outlook.com (2603:10a6:802:2d::21)
+ by PAWPR03MB9033.eurprd03.prod.outlook.com (2603:10a6:102:339::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Tue, 30 May
+ 2023 14:12:49 +0000
+Received: from VI1PR03MB2880.eurprd03.prod.outlook.com
+ ([fe80::8925:5293:e478:c934]) by VI1PR03MB2880.eurprd03.prod.outlook.com
+ ([fe80::8925:5293:e478:c934%6]) with mapi id 15.20.6433.020; Tue, 30 May 2023
+ 14:12:49 +0000
+Date:   Tue, 30 May 2023 16:12:46 +0200
+From:   luca abeni <luca.abeni@santannapisa.it>
+To:     Vineeth Pillai <vineeth@bitbyteword.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        youssefesmat@google.com,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] sched/deadline: Update GRUB description in the
+ documentation
+Message-ID: <20230530161246.4328421d@nowhere>
+In-Reply-To: <20230530135526.2385378-2-vineeth@bitbyteword.org>
+References: <20230530135526.2385378-1-vineeth@bitbyteword.org>
+        <20230530135526.2385378-2-vineeth@bitbyteword.org>
+Organization: Scuola Superiore Sant'Anna
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZR0P278CA0142.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:40::21) To VI1PR03MB2880.eurprd03.prod.outlook.com
+ (2603:10a6:802:2d::21)
 MIME-Version: 1.0
-References: <d2b08adaa6654692a15b57c9cbbc0bd7@huawei.com>
-In-Reply-To: <d2b08adaa6654692a15b57c9cbbc0bd7@huawei.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 30 May 2023 16:12:34 +0200
-Message-ID: <CANn89i+Hzz4yjrxFPe2UMZZaYBqdeh74ovnkyRQTHa_tW4h-HA@mail.gmail.com>
-Subject: Re: [BUG REPORT] softlock up in net/core cleanup_net
-To:     "jiangheng (G)" <jiangheng14@huawei.com>
-Cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
-        shaozhengchao <shaozhengchao@huawei.com>,
-        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR03MB2880:EE_|PAWPR03MB9033:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4e4a8510-12ac-4a14-c60b-08db6117f329
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: V1LSlvXy/QMhedDYDJy8dE3MUIh+2XUCf5+k074W1IXn7lkWK5DoWt3LLf9FWjDmgxZKjdtkn5a7W4pl15trwRDlVlH3eQSbfOkOw3HRoBDpCKudmAEkHqR/U+xuIrkGE+3cNd0r8jZ7rCMukaMLev4yfHC0LI8o0IBf8nigABhuZx7ZRqSzNF6tqfEfNDTJf7JeOufhQUcAP3YDJ4V8sF9ijMbUAz0G/up2oHcmHIJDiBrMRwRrnF0NJVDT9JpkQ7F0xJ+3W0d/YXXMkpTpySoeOGuizdtavBUbsKBz+fSJekqdImOKEUxz05B+cte0RM3J22CiwwmrnyERVGufiQ0DB0ICVoW1N+YCSJaDb8ppkDvAiB5jUGVmzwpYVnYwLZJjbS9RbSw/nUQL6jlwPuoH90MoeuajE/MTDukZ6p4XevU5JbZlbxEIB+fjeWTHOn43SYr55GmJDVRPp02jouGemYYdqVtcSng5uRIqlta5ClfQBERRd7VJDxKFS+5Kj8miqYYSuHK654PqlL8qwjWzS9/QQIaC9fJaMm8c/C9DuYZZbhW1rqJuEDPxGwx3
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR03MB2880.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(376002)(346002)(39850400004)(366004)(136003)(396003)(451199021)(86362001)(66946007)(66556008)(66476007)(6916009)(54906003)(4326008)(786003)(316002)(478600001)(83380400001)(6512007)(1076003)(26005)(9686003)(186003)(6506007)(41300700001)(8936002)(8676002)(15650500001)(7416002)(2906002)(5660300002)(6486002)(36916002)(6666004)(33716001)(41320700001)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?A5RtKxSZSXndDxPc3zes9kzWsYViA+OlAxToUsuJxYPSIe0kqju85V5k4ROe?=
+ =?us-ascii?Q?FDW7pCCGw7xE8bNu2uj565apS2HbI/4HyKqeDP8iVkQv7hFrJ0ZFADjONGla?=
+ =?us-ascii?Q?RoGeXpYhUQGEykHe1QKh2Fe7+AHbuNsbQcHq/cK7PjLx3a9URyS3Eo1DEW7S?=
+ =?us-ascii?Q?P12ihjqBo7aI8xgvmrlbZAG9Mr895L4am2VFI3gqXEWtlPZEMuzw69MNrDgl?=
+ =?us-ascii?Q?bksGuUrAtR8mI2WntGXndfS9g2jMavoxBouScbo9rKi8qojhlypFsF0yjmmW?=
+ =?us-ascii?Q?zdHySZ8uiOqiIvqRY2Pc6t4fuEq1As9KSTwT/32abKa0UUphZhygF3J41+OQ?=
+ =?us-ascii?Q?cJMskfz6vLivyi/YqhddopTDMiklyi3jqisSCiPLiIuChVA9/gjlOXfCSQmv?=
+ =?us-ascii?Q?yj/00LY9AB5Halik99LeO5+R6dWve0ikmGMBEO75UU/NPIeDxdWQAEZDCaRC?=
+ =?us-ascii?Q?RMmKiIlnke0KSIpBakngm0+ZhpglwWWDPzIB7SPB/QGVENJW6hna4MCFUSLF?=
+ =?us-ascii?Q?J//up5rHt+UAbjrdPTfu5I1QTUDe9bLUJZBfCAummhg4pWIlSIkNzA+uzgDK?=
+ =?us-ascii?Q?+OsVag4QISTvODnWxFpgxjz0764sZEcEi6/4YoJS5YL0w82YRqkcC/ydo3Dx?=
+ =?us-ascii?Q?Z+g0l/yfLXFyuh3PmjVB3WKlT9S4qnrsqJRDfsmAQxEJO60UKIjVUtr21VFv?=
+ =?us-ascii?Q?PnoMSB835PLcKGWTXMOz9dHWsrBFv/PwntVxQnAcojOND3mHZnk1xngaeSXJ?=
+ =?us-ascii?Q?dwH7nFoWPbmVY4/FRqozLwDcu62o0gLiprX0VdLZlHpJNmgU8va6ncfZS6uv?=
+ =?us-ascii?Q?saRABrlUbeFaI7jb42aqntPMZVMe7jfo4BmdfqqJZp15lAghEoJBwq1WFwij?=
+ =?us-ascii?Q?QbubDzvYxQGOM71ySViLsLQOrcNtDj0TiyO1gaG2FiToGOQJxjDGLnvzKHKK?=
+ =?us-ascii?Q?UIAzzjo8VEe42JWZdJrH9vvZWNcgQwbpFJG9IEX6IeTa3kyzwxG1EhaNdLiH?=
+ =?us-ascii?Q?qiS+QM7TEeMFHZD1KDdto6f12opy3hoK5ZdD7qD2BcVzqTulc9e2BVyKu5tt?=
+ =?us-ascii?Q?OThlLUVCETRF+yv3p0j26W+Q3YPlJPF9icOh202Kp/pacMIWLBANcd+sPpmZ?=
+ =?us-ascii?Q?Gz5PosffhbVmyo7zNSV79lmeEFQ6GOcDHIJTCNsJNYenz8aZGCoTR6UtPi4S?=
+ =?us-ascii?Q?xXfIPtitTffBZPVdrvWzQTJpSb6TzjhMobxA+ooF1zTSTo/hzwV66xCtYWty?=
+ =?us-ascii?Q?TLNWtM3DNQvibGmCOsv1va5ztMyd41Zq2E7728duQQXHMcJrL9QH5EMIj2BZ?=
+ =?us-ascii?Q?oOQeJ+hTghtH9IpqCeHhkR8r3tf+aVeegGYbioxfd5DcSSWlyB9Nh2bztMgr?=
+ =?us-ascii?Q?0sE13ag8W94x4P3dtPvNOjhYyhHPIAnWt7q4RtMj9bLi6oUZBPKPEz8DiTmt?=
+ =?us-ascii?Q?iViH4qf7eJWgywGDk+pPKK8mUnbz1iKKgzqIFqfp4ZajLcGbxK3TmpKh1G6P?=
+ =?us-ascii?Q?5KIARH2hTDLBE7hpNyAiu5CbfGwgVIlqP5Prg8gZ9X/GOgw8VtTly07RXw47?=
+ =?us-ascii?Q?LvdBAOh1LkiimSwxYZONi+y/e8pvtrnuMGz2uqeUe55xvS28g7Ie/68NNnuE?=
+ =?us-ascii?Q?Rw=3D=3D?=
+X-OriginatorOrg: santannapisa.it
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e4a8510-12ac-4a14-c60b-08db6117f329
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR03MB2880.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 14:12:49.6181
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d97360e3-138d-4b5f-956f-a646c364a01e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RCjZrsra8u/1kQg8eRpzYkBrNA01O/jq9nhBEORdE5N9zQU189BH7E/4fR8TpDghaTNoTopdwhWbmoJhbzHy1d6oopJW9OyEodPTH9BfnV4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR03MB9033
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 3:57=E2=80=AFPM jiangheng (G) <jiangheng14@huawei.c=
-om> wrote:
->
-> Hi all,
-> on linux 5.10,  we want to use docker interactively when testing an inter=
-nal feature. When docker restarts the container, it will call cleanup_net a=
-nd a crash will occur.
->
-
-Do not use 5.10, please. This is too old.
-
-Back in 5.18, we made some improvements
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
-id=3D4caaf75888d893b6525173a1537980e13c141988
+I think this patch is also OK
 
 
+			Thanks,
+				Luca
 
-> [  843.330515] CPU: 0 PID: 158 Comm: kworker/u8:2 Kdump: loaded Tainted: =
-G    B      OEL    #1 [  843.330516] Hardware name: QEMU KVM Virtual Machin=
-e, BIOS 0.0.0 02/06/2015 [  843.330523] Workqueue: netns cleanup_net [  843=
-.330526] pstate: 60400085 (nZCv daIf +PAN -UAO -TCO BTYPE=3D--) [  843.3305=
-29] pc : machine_kexec+0x48/0x2b0 [  843.330531] lr : machine_kexec+0x48/0x=
-2b0 [  843.330531] sp : ffff80010284bb10 [  843.330533] x29: ffff80010284bb=
-10 x28: ffff0000ff851cf8 [  843.330535] x27: ffff0000ff851d78 x26: ffff8001=
-0284bda0 [  843.330537] x25: ffff800101d9c000 x24: 0000000000000001 [  843.=
-330539] x23: ffff800101d9c650 x22: ffff800101eb6000 [  843.330541] x21: fff=
-f800101eb6000 x20: ffff0000cba23c00 [  843.330543] x19: ffff0000cba23c00 x1=
-8: 0000000000000020 [  843.330545] x17: 0000000000000000 x16: ffff800100d27=
-a3c [  843.330548] x15: ffffffffffffffff x14: 0000000060000085 [  843.33055=
-0] x13: ffff8001001c090c x12: 0000000000000040 [  843.330552] x11: ffff8001=
-01aad158 x10: 00000000ffff8000 [  843.330554] x9 : ffff800100157654 x8 : 00=
-00000000000000 [  843.330556] x7 : ffff8001017ed158 x6 : 0000000000017ffd [=
-  843.330559] x5 : ffff0000ff84b410 x4 : ffff80010284b910 [  843.330561] x3=
- : 0000000000000001 x2 : 0000000000000000 [  843.330563] x1 : 0000000000000=
-000 x0 : ffff0000c09eb9c0 [  843.330566] Call trace:
-> [  843.330569]  machine_kexec+0x48/0x2b0 [  843.330573]  __crash_kexec+0x=
-90/0x13c [  843.330578]  panic+0x314/0x4d8 [  843.330582]  watchdog_timer_f=
-n+0x26c/0x2f0 [  843.330585]  __run_hrtimer+0x98/0x2b4 [  843.330586]  __hr=
-timer_run_queues+0xbc/0x130 [  843.330588]  hrtimer_interrupt+0x150/0x3e4 [=
-  843.330592]  arch_timer_handler_virt+0x3c/0x50 [  843.330596]  handle_per=
-cpu_devid_irq+0x90/0x1f4
-> [  843.330599]  __handle_domain_irq+0x84/0x100 [  843.330601]  gic_handle=
-_irq+0x88/0x2b0 [  843.330603]  el1_irq+0xb8/0x140 [  843.330605]  smp_call=
-_function_single+0x1b8/0x1dc
-> [  843.330608]  rcu_barrier+0x1c4/0x2d0
-> [  843.330612]  netdev_run_todo+0x7c/0x330 [  843.330615]  rtnl_unlock+0x=
-18/0x24 [  843.330616]  default_device_exit_batch+0x15c/0x190
-> [  843.330621]  ops_exit_list+0x70/0x84
-> [  843.330622]  cleanup_net+0x184/0x2e0
-> [  843.330625]  process_one_work+0x1d4/0x4bc [  843.330627]  worker_threa=
-d+0x150/0x400 [  843.330629]  kthread+0x108/0x134 [  843.330631]  ret_from_=
-fork+0x10/0x18 [  843.330633] ---[ end trace 8378c01c76c90cc4 ]--- [  843.3=
-30637] Bye!
->
-> Crash:bt -l
-> PID: 158    TASK: ffff0000c09eb9c0  CPU: 0   COMMAND: "kworker/u8:2"
-> PID: 158    TASK: ffff0000c09eb9c0  CPU: 0   COMMAND: "kworker/u8:2"
-> bt: invalid kernel virtual address: 0  type: "IRQ stack contents"
-> bt: read of IRQ stack at 0 failed
-> #0 [ffff80010284bb60] __crash_kexec at ffff8001001c0908
->     /usr/src/debug/kernel/./arch/arm64/include/asm/kexec.h: 57
-> #1 [ffff80010284bcf0] panic at ffff800100d256a4
->     /usr/src/debug/kernel/kernel/panic.c: 392
-> #2 [ffff80010284bde0] watchdog_timer_fn at ffff80010020a5c8
->     /usr/src/debug/kernel/kernel/watchdog.c: 578
-> #3 [ffff80010284be30] __run_hrtimer at ffff800100191d24
->     /usr/src/debug/kernel/kernel/time/hrtimer.c: 1586
-> #4 [ffff80010284be80] __hrtimer_run_queues at ffff800100191ffc
->     /usr/src/debug/kernel/kernel/time/hrtimer.c: 1650
-> #5 [ffff80010284bee0] hrtimer_interrupt at ffff80010019267c
->     /usr/src/debug/kernel/kernel/time/hrtimer.c: 1712
-> #6 [ffff80010284bf50] arch_timer_handler_virt at ffff800100aa9a38
->     /usr/src/debug/kernel/drivers/clocksource/arm_arch_timer.c: 674
-> #7 [ffff80010284bf60] handle_percpu_devid_irq at ffff80010016500c
->     /usr/src/debug/kernel/./arch/arm64/include/asm/percpu.h: 45
-> #8 [ffff80010284bf90] __handle_domain_irq at ffff80010015b840
->     /usr/src/debug/kernel/./include/linux/irqdesc.h: 153
-> #9 [ffff80010284bfd0] gic_handle_irq at ffff800100010144
->     /usr/src/debug/kernel/./include/linux/irqdesc.h: 171
-> --- <IRQ stack> ---
-> #10 [ffff800102d4bb20] el1_irq at ffff800100012374
->     /usr/src/debug/kernel/arch/arm64/kernel/entry.S: 672
-> #11 [ffff800102d4bb40] smp_call_function_single at ffff8001001b1e68
->     /usr/src/debug/kernel/./arch/arm64/include/asm/cmpxchg.h: 278
-> #12 [ffff800102d4bba0] rcu_barrier at ffff800100178ba0
->     /usr/src/debug/kernel/kernel/rcu/tree.c: 3920
-> #13 [ffff800102d4bc00] netdev_run_todo at ffff800100b3f768
->     /usr/src/debug/kernel/net/core/dev.c: 10313
-> #14 [ffff800102d4bc80] rtnl_unlock at ffff800100b4cb54
->     /usr/src/debug/kernel/net/core/rtnetlink.c: 114
-> #15 [ffff800102d4bc90] default_device_exit_batch at ffff800100b378d8
->     /usr/src/debug/kernel/net/core/dev.c: 11287
-> #16 [ffff800102d4bd00] ops_exit_list at ffff800100b2337c
->     /usr/src/debug/kernel/net/core/net_namespace.c: 200
-> #17 [ffff800102d4bd30] cleanup_net at ffff800100b25ab0
->     /usr/src/debug/kernel/net/core/net_namespace.c: 616
-> #18 [ffff800102d4bd90] process_one_work at ffff8001000de784
->     /usr/src/debug/kernel/kernel/workqueue.c: 2354
-> #19 [ffff800102d4bdf0] worker_thread at ffff8001000df18c
->     /usr/src/debug/kernel/kernel/workqueue.c: 2500
-> #20 [ffff800102d4be50] kthread at ffff8001000e75a4
->     /usr/src/debug/kernel/kernel/kthread.c: 313
->
-> The above backtrace seems to be caused func:netdev_run_todo() that the si=
-ze of list not null.
-> void netdev_run_todo(void)
-> {
->          struct net_device *dev, *tmp;
->          struct list_head list;
-> #ifdef CONFIG_LOCKDEP
->          struct list_head unlink_list;
->
->          list_replace_init(&net_unlink_list, &unlink_list);
->
->          while (!list_empty(&unlink_list)) {
->                    struct net_device *dev =3D list_first_entry(&unlink_li=
-st,
->                                                     struct net_device,
->                                                unlink_list);
->                    list_del_init(&dev->unlink_list);
->                    dev->nested_level =3D dev->lower_level - 1;
->          }
-> #endif
->
->          /* Snapshot list, allow later requests */
->          list_replace_init(&net_todo_list, &list);
->
->          __rtnl_unlock();
->
->          /* Wait for rcu callbacks to finish before next phase */
->          if !(list_empty(&list))
->                    rcu_barrier();
->
-> I wonder if softlockup is due to the above code? Please help analyze the =
-possible causes of this.
+On Tue, 30 May 2023 09:55:26 -0400
+Vineeth Pillai <vineeth@bitbyteword.org> wrote:
 
-I have seen similar reports about RTNL starvation from syzbot reports.
+> Update the details of GRUB to reflect the updated logic.
+> 
+> Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
+> ---
+>  Documentation/scheduler/sched-deadline.rst | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/scheduler/sched-deadline.rst
+> b/Documentation/scheduler/sched-deadline.rst index
+> 9d9be52f221a..9fe4846079bb 100644 ---
+> a/Documentation/scheduler/sched-deadline.rst +++
+> b/Documentation/scheduler/sched-deadline.rst @@ -203,12 +203,15 @@
+> Deadline Task Scheduling
+>    - Total bandwidth (this_bw): this is the sum of all tasks
+> "belonging" to the runqueue, including the tasks in Inactive state.
+>  
+> +  - Maximum usable bandwidth (max_bw): This is the maximum bandwidth
+> usable by
+> +    deadline tasks and is currently set to the RT capacity.
+> +
+>  
+>   The algorithm reclaims the bandwidth of the tasks in Inactive state.
+>   It does so by decrementing the runtime of the executing task Ti at
+> a pace equal to
+>  
+> -           dq = -max{ Ui / Umax, (1 - Uinact - Uextra) } dt
+> +           dq = -(max{ Ui, (Umax - Uinact - Uextra) } / Umax) dt
+>  
+>   where:
+>  
 
-How many netns do you dismantle per second ?
-
-On recent kernels this is how fast things run :
-
-# time (for i in {1..1000}; do unshare -n /bin/bash -c "ifconfig lo up"; do=
-ne)
-
-real 0m3.379s
-user 0m1.708s
-sys 0m1.553s
