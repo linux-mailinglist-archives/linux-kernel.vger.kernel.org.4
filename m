@@ -2,107 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB06B715CE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA84715D14
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjE3LTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
+        id S231878AbjE3LYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjE3LTL (ORCPT
+        with ESMTP id S231578AbjE3LYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:19:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A41EB0;
-        Tue, 30 May 2023 04:19:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9C6162A36;
-        Tue, 30 May 2023 11:19:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A42D0C433EF;
-        Tue, 30 May 2023 11:19:05 +0000 (UTC)
-Date:   Tue, 30 May 2023 16:48:53 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Damien Le Moal <dlemoal@kernel.org>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>, kw@linux.com,
-        kishon@kernel.org, bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v4 7/7] PCI: endpoint: Add PCI Endpoint function driver
- for MHI bus
-Message-ID: <20230530111853.GH6379@thinkpad>
-References: <20230519144215.25167-1-manivannan.sadhasivam@linaro.org>
- <20230519144215.25167-8-manivannan.sadhasivam@linaro.org>
- <ZHSkdakXJegKRD+q@lpieralisi>
- <20230529173815.GG5633@thinkpad>
- <dd4b1867-204d-8ee0-fcfc-29c52abddb48@kernel.org>
+        Tue, 30 May 2023 07:24:10 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24B713E
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:23:49 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 9B7155FD2C;
+        Tue, 30 May 2023 14:23:46 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1685445826;
+        bh=/2VvlUBuwK951x+75yuFgWs7gQ9TMyja2/uS8g7dZvs=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=W3vlx6ZsnwPU8yTJla34qUgzxmWVw3GHjtFLYJeTmn1ZwWy6rqXivAOeD0YEsHzz0
+         16kcIJqfHZD0n+HscQR7PMJ3d553RfRaY0m+ZZkRPWYf7nUjbM2rgKd6XYCRAkhES+
+         c81/4FFLwFwg8P6QaWYgrXuMrh53sF/3u2FXi/QVWdxYH5t+JVQWPS+Hd68ieCZ4pa
+         xgW9XTYBTJmviIJAsHwSNxKePg3r5IGCJUX+ef3BIkdYCjapZy3O1fotL5YzEBXH7C
+         ymdNTq4Hug4Vl/Sc6CnRHw3DG9fp4NeHsZB6viaF+6riGJuzzmtbr33Q4mEaayeaJ/
+         Bv7AwCH9RK6WQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 30 May 2023 14:23:45 +0300 (MSK)
+Message-ID: <6077c959-f566-d399-d2be-8460eb063415@sberdevices.ru>
+Date:   Tue, 30 May 2023 14:19:08 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 1/5] mtd: rawnand: meson: fix command sequence for
+ read/write
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Yixun Lan <yixun.lan@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>, <oxffffaa@gmail.com>,
+        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230515094440.3552094-1-AVKrasnov@sberdevices.ru>
+ <20230515094440.3552094-2-AVKrasnov@sberdevices.ru>
+ <20230522170526.6486755a@xps-13>
+ <9013b0e2-c923-43f8-0bd6-979bf0c23ebc@sberdevices.ru>
+ <abeadc03-a69c-be1c-3c6a-6ce492a5e4f6@sberdevices.ru>
+ <20230526192205.4a69ca79@xps-13>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230526192205.4a69ca79@xps-13>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <dd4b1867-204d-8ee0-fcfc-29c52abddb48@kernel.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/30 07:59:00 #21376339
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 08:37:07AM +0900, Damien Le Moal wrote:
-> On 5/30/23 02:38, Manivannan Sadhasivam wrote:
-> [...]
-> >>> +static void pci_epf_mhi_unmap_free(struct mhi_ep_cntrl *mhi_cntrl, u64 pci_addr,
-> >>> +				   phys_addr_t phys_addr, void __iomem *virt_addr, size_t size)
-> >>> +{
-> >>> +	struct pci_epf_mhi *epf_mhi = container_of(mhi_cntrl, struct pci_epf_mhi, mhi_cntrl);
-> >>> +	struct pci_epf *epf = epf_mhi->epf;
-> >>> +	struct pci_epc *epc = epf->epc;
-> >>> +	size_t offset = pci_addr & (epc->mem->window.page_size - 1);
-> >>> +
-> >>> +	pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, phys_addr - offset);
-> >>> +	pci_epc_mem_free_addr(epc, phys_addr - offset, virt_addr - offset, size + offset);
-> >>> +}
-> >>> +
-> >>> +static void pci_epf_mhi_raise_irq(struct mhi_ep_cntrl *mhi_cntrl, u32 vector)
-> >>> +{
-> >>> +	struct pci_epf_mhi *epf_mhi = container_of(mhi_cntrl, struct pci_epf_mhi, mhi_cntrl);
-> >>> +	struct pci_epf *epf = epf_mhi->epf;
-> >>> +	struct pci_epc *epc = epf->epc;
-> >>> +
-> >>> +	/*
-> >>> +	 * Vector is incremented by 1 here as the DWC core will decrement it before
-> >>> +	 * writing to iATU.
-> >>
-> >> This isn't OK. It is an API, you can't write code explicitly relying on
-> >> the underlying implementation. I assume the API is not well specified,
-> >> that's why we need these tricks ?
-> >>
-> > 
-> > Well, this is not an API issue but rather an implementation detail of the DWC EP
-> > core driver. The DWC driver expects the interrupt vectors to be 1 based, so it
-> > decrements it before writing to the MSI address:
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/dwc/pcie-designware-ep.c#n537
+
+
+On 26.05.2023 20:22, Miquel Raynal wrote:
+> Hi Arseniy,
 > 
-> Then the driver should be fixed so that this peculiarity is not visible at the
-> user API level, resulting in a uniform usage of the API for all functions
-> regardless of the controller being used.
+> avkrasnov@sberdevices.ru wrote on Wed, 24 May 2023 12:05:47 +0300:
 > 
-
-Just checked with Kishon offline and confirmed that this is an API behavior.
-I also checked other drivers and they all doing the same.
-
-But unfortunately, this behavior is not documented in the API. Will add a patch
-for that.
-
-- Mani
-
-> -- 
-> Damien Le Moal
-> Western Digital Research
+>> On 23.05.2023 12:12, Arseniy Krasnov wrote:
+>>> Hello Miquel, Liang
+>>>
+>>> On 22.05.2023 18:05, Miquel Raynal wrote:  
+>>>> Hi Arseniy,
+>>>>
+>>>> AVKrasnov@sberdevices.ru wrote on Mon, 15 May 2023 12:44:35 +0300:
+>>>>  
+>>>>> This fixes read/write functionality by:
+>>>>> 1) Changing NFC_CMD_RB_INT bit value.  
+>>>>
+>>>> I guess this is a separate fix
+>>>>  
+>>>
+>>> Ok, I'll move it to separate patch
+>>>   
+>>>>> 2) Adding extra NAND_CMD_STATUS command on each r/w request.  
+>>>>
+>>>> Is this really needed? Looks like you're delaying the next op only. Is
+>>>> using a delay enough? If yes, then it's probably the wrong approach.  
+>>
+>> Hi Miquel, small update, I found some details from @Liang's message in v1 talks from the last month:
+>>
+>> *
+>> After sending NAND_CMD_READ0, address, NAND_CMD_READSTART and read status(NAND_CMD_STATUS = 0x70) commands, it should send
+>> NAND_CMD_READ0 command for exiting the read status mode from the datasheet from NAND device.
 > 
+> That is true.
+> 
+>> but previous meson_nfc_queue_rb()
+>> only checks the Ready/Busy pin and it doesn't send read status(NAND_CMD_STATUS = 0x70) command.
+>> i think there is something wrong with the Ready/Busy pin(please check the hardware whether this
+>> Ready/Busy pin is connected with SOC) or the source code. i have the board without Ready/Busy pin and prefer to use the
+>> nfc command called RB_IO6. it sends NAND_CMD_STATUS command and checks bit6 of the status register of NAND device from the
+>> data bus and generate IRQ if ready.
+>> *
+>>
+>> I guess, that sequence of commands from this patch is described in datasheet (unfortunately I don't have it and relied on the old driver).
+>> Yesterday I tried to remove sending of NAND_CMD_STATUS from this patch, but it broke current driver - i had ECC errors, so it looks like
+>> "shot in the dark" situation, to understand this logic.
+> 
+> When an operation on the NAND array happens (eg. read, prog, erase),
+> you need to wait "some time" before accessing the internal sram or even
+> the chip which is "busy" until it gets "ready" again. You can probe the
+> ready/busy pin (that's the hardware way, fast and reliable) or you can
+> poll a status with NAND_CMD_STATUS. The chips are designed so they can
+> actually process that command while they are doing time consuming tasks
+> to update the host. But IIRC every byte read will return the status
+> until you send READ0 again, which means "I'm done with the status
+> read" somehow.
+> 
+> Please see nand_soft_waitrdy() in order to understand how this is
+> supposed to work. You can even use that helper (which is exported)
+> instead of open-coding it in your driver. See atmel or sunxi
+> implementations for instance.
+> 
+> As using the native RB pin is better, you would need to identify
+> whether you have one or not at probe time and then either poll the
+> relevant bit of your controller if there is one, or fallback to the
+> soft read (which should fallback on exec_op in the end).
 
--- 
-மணிவண்ணன் சதாசிவம்
+Thanks for this information! I'll use 'nand_soft_waitrdy()' at least, because i guess that
+there is no RB pin on my device.
+
+Thanks, Arseniy
+
+> 
+> Thanks,
+> Miquèl
