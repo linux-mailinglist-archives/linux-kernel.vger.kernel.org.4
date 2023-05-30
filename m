@@ -2,71 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0361D715CA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E00B715CA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbjE3LH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
+        id S231812AbjE3LHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjE3LH2 (ORCPT
+        with ESMTP id S229724AbjE3LHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:07:28 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F1FC93;
-        Tue, 30 May 2023 04:07:26 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 39AC492009C; Tue, 30 May 2023 13:07:26 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 3298B92009B;
-        Tue, 30 May 2023 12:07:26 +0100 (BST)
-Date:   Tue, 30 May 2023 12:07:26 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-cc:     Paul Cercueil <paul@crapouillou.net>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH 1/2] MIPS: Allow MIPS32R2 kernel to run on P5600 and
- M5150
-In-Reply-To: <684C1A48-C743-4045-AF12-B0846FCE8EBE@flygoat.com>
-Message-ID: <alpine.DEB.2.21.2305301152080.42601@angie.orcam.me.uk>
-References: <20230529135245.4085-1-jiaxun.yang@flygoat.com> <alpine.DEB.2.21.2305300321520.25569@angie.orcam.me.uk> <684C1A48-C743-4045-AF12-B0846FCE8EBE@flygoat.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Tue, 30 May 2023 07:07:40 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5A0EA0;
+        Tue, 30 May 2023 04:07:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D21132F4;
+        Tue, 30 May 2023 04:08:23 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4961B3F67D;
+        Tue, 30 May 2023 04:07:36 -0700 (PDT)
+Message-ID: <45bd04e4-d5f4-3469-d3f0-62e8fdcaacf4@arm.com>
+Date:   Tue, 30 May 2023 13:07:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 00/17] Introduce runtime modifiable Energy Model
+Content-Language: en-US
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
+        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
+        rostedt@goodmis.org, mhiramat@kernel.org
+References: <20230512095743.3393563-1-lukasz.luba@arm.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230512095743.3393563-1-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 May 2023, Jiaxun Yang wrote:
-
-> >> M5150 and P5600 are two MIPS32R5 kernels, however as MIPS32R5 is
-> >> backward compatible with MIPS32R2 there is no reason to forbid
-> >> M5150 and P5600 on MIPS32R2 kernel.
-> > 
-> > What problem are you trying to solve?  The CONFIG_SYS_HAS_CPU_* settings 
-> > denote overall platform's support for the given CPU and have nothing to do 
-> > with what architecture level a given kernel has been configured for.  You 
-> > do need to get the settings right for your platform, just as you do in 
-> > 2/2, but this 1/2 part looks wrong to me.
+On 12/05/2023 11:57, Lukasz Luba wrote:
+> Hi all,
 > 
-> Well the universal target is to allow R2 generic kernel to run on R5 CPUs.
-> As R5 is backward compatible we can just have one universal kernel binary.
+> This patch set adds a new feature which allows to modify Energy Model (EM)
+> power values at runtime. It will allow to better reflect power model of
+> a recent SoCs and silicon. Different characteristics of the power usage
+> can be leveraged and thus better decisions made during task placement in EAS.
+> 
+> It's part of feature set know as Dynamic Energy Model. It has been presented
+> and discussed recently at OSPM2023 [3]. This patch set implements the 1st
+> improvement for the EM.
 
- Sure, but this change is not needed for it.  You just need to declare 
-which ISA revisions your platform supports and leave `__get_cpu_type' 
-alone.  It has worked like that for a decade now.
+Why is the feature set called Dynamic Energy Model?
 
- Back in the day I used to run R1 kernels on R2 hardware myself.  And 
-maybe MIPS IV on R1 even, as we had MIPS Malta CPU modules with both MIPS 
-IV devices (QED RM5261/RM7061) and MIPS64r1 devices (MIPS 5Kc/20Kc/25Kf) 
-and switching the kernel when swapping modules was a nuisance.  The Malta 
-config still supports these devices although some may not exist anymore.
+Dynamic Energy Model:
 
-  Maciej
+  Runtime modifiable EM
+
+  Proper CPU performance state evaluation
+
+  CPU idle wakeup costs
+
+  CPU capacity as new EM data
+
+Didn't this `Dynamic` stand for the modifiability of the EM only?
+
+> The concepts:
+> 1. The CPU power usage can vary due to the workload that it's running or due
+> to the temperature of the SoC. The same workload can use more power when the
+> temperature of the silicon has increased (e.g. due to hot GPU or ISP).
+> In such situation or EM can be adjusted and reflect the fact of increased
+> power usage. That power increase is due to a factor called static power
+> (sometimes called simply: leakage). The CPUs in recent SoCs are different.
+> We have heterogeneous SoCs with 3 (or even 4) different microarchitectures.
+> They are also built differently with High Performance (HP) cells or
+> Low Power (LP) cells. They are affected by the temperature increase
+> differently: HP cells have bigger leakage. The SW model can leverage that
+> knowledge.
+> 2. It is also possible to change the EM to better reflect the currently
+> running workload. Usually the EM is derived from some average power values
+> taken from experiments with benchmark (e.g. Dhrystone). The model derived
+> from such scenario might not represent properly the workloads usually running
+> on the device. Therefore, runtime modification of the EM allows to switch to
+> a different model, when there is a need.
+> 3. The EM can be adjusted after boot, when all the modules are loaded and
+> more information about the SoC is available e.g. chip binning. This would help
+> to better reflect the silicon characteristics. Thus, this EM modification
+> API allows it now. It wasn't possible in the past and the EM had to be
+> 'set in stone'.
+> 
+> Some design details:
+> The internal mechanisms for the memory allocation are handled internally in the 
+> EM. Kernel modules can just call the new API to update the EM data and the 
+> new memory would be provided and owned by the EM. The EM memory is used by
+> EAS, which impacts those design decisions. The EM writers are protected by
+> a mutex. This new runtime modified EM table is protected using RCU mechanism,
+> which fits the current EAS hot path (which already uses RCU read lock).
+> The unregister API handles only non-CPU (e.g. GPU, ISP) devices and uses the
+> same mutex as EM modifiers to make sure the memory is safely freed.
+
+This only mentions memory allocation and locking? A global design
+overview, containing e.g.
+
+  Why 2 tables, modifiable (a) and default (b)?
+
+  Why does only EAS use (a)?
+
+  (a) and (b) being the same performance state table until first call to
+  modify (a) ()
+
+as an introduction into the patches would be more helpful here.
+
+> More detailed explanation and background can be found in presentations
+> during LPC2022 [1][2] or in the documentation patches.
+
+I checked 15/17 as well but could find any of this information there either.
+
+[...]
