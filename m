@@ -2,145 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B55B7170CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A937170D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233529AbjE3Wf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 18:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50952 "EHLO
+        id S233336AbjE3Whh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 18:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233440AbjE3Wfr (ORCPT
+        with ESMTP id S231664AbjE3Whe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 18:35:47 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0F393;
-        Tue, 30 May 2023 15:35:46 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UKehde029395;
-        Tue, 30 May 2023 22:35:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=vyK0SFfPtxGTegWHGbHIf/of/w0CUmEM1+FAEBe90To=;
- b=ULbZQCyVxDg07PJ1+qIZsNdb1k93vVclmYUR9AdeFjnfOjP3L+OREBke6bMt7qyKVX7n
- iZYdXILJaiDMu6rWvpNTGNDJCYzfpsPe2L018iowDFG3ouc75V3YSdXW1jFevOlBZ6Ra
- d5TfrVrtzyqMORqJN0mdVJiQdm5XxlGy0tLwLEs4N5McqnGsq9HsqvHgjfB9AIihnCms
- ozy0/CvRnAg9S/SeHaXPqv22ctxkKwRdXBfirje40VnryAojaoP1cahAft9/joUU35Pe
- QHW8yV57iuS8glHP3w3V52hsLZa7UX8tJ8oiLLFsFmmvN4NbRMKyGdNNvGhXvbBskGyH DQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwm1pgrqg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 22:35:45 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34UMQS2H024001;
-        Tue, 30 May 2023 22:35:45 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwm1pgrq0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 22:35:45 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34UFPYm9017360;
-        Tue, 30 May 2023 22:35:44 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3qu9g55tqx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 22:35:44 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34UMZhZf22216984
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 May 2023 22:35:43 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 59AF55810B;
-        Tue, 30 May 2023 22:35:43 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9E8A95810A;
-        Tue, 30 May 2023 22:35:42 +0000 (GMT)
-Received: from li-2c1e724c-2c76-11b2-a85c-ae42eaf3cb3d.ibm.com.com (unknown [9.61.88.233])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 30 May 2023 22:35:42 +0000 (GMT)
-From:   Tony Krowiak <akrowiak@linux.ibm.com>
-To:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     jjherne@linux.ibm.com, pasic@linux.ibm.com, farman@linux.ibm.com,
-        mjrosato@linux.ibm.com, alex.williamson@redhat.com,
-        borntraeger@linux.ibm.com
-Subject: [PATCH 3/3] s390/vfio-ap: Wire in the vfio_device_ops request callback
-Date:   Tue, 30 May 2023 18:35:38 -0400
-Message-Id: <20230530223538.279198-4-akrowiak@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230530223538.279198-1-akrowiak@linux.ibm.com>
-References: <20230530223538.279198-1-akrowiak@linux.ibm.com>
+        Tue, 30 May 2023 18:37:34 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDE5E5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:37:33 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-96f8d485ef3so785671566b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:37:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685486252; x=1688078252;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FboEU1CkVwXltLGLCCWwSeN6ivraaVY6culNTHoYYKs=;
+        b=ubY4da6wd2iDhpbYhSe4ROFvsRt+fF8tfL4FWHQaQ+L4zXrUXcQny//D8sMNYTMsCw
+         PqQZqc+PZQEPCx84OgHVbJXcxaGfZLHEcIeRGYerRGYNmN9C2IbgM33xQZ2thgW6BPQK
+         gCssbE4OdIVfJwW6htV716ZVoGk0x/thL/kWrrKQ+QEkNR8XhE7KUTfi89BC03Rk0fvi
+         KL71rDqD7b5Tm4n+8ImtDTIOj1dkusxEPiWYhAg0F/x2pAm/BsPaR3lNWwJIH6skJ4p/
+         x9ZLeELJN83P1ZUfNLpYvi6qQZcAwTOITRQz6NaGvGCVt/9hZBrjnMDWgQf4ITxtwG0K
+         3UqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685486252; x=1688078252;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FboEU1CkVwXltLGLCCWwSeN6ivraaVY6culNTHoYYKs=;
+        b=E1ic6U9PIDH29OxOKTT8WhJCyUE86PwwJ6y0u9lLjD5sUW4Pwc0Y9RAO7Z8aZhUjHw
+         xdPDAXuP1owPaJV3l66PGJb4JrXm1aNt0SczjNtLkn/o2GHSWquki3A5waxDmo3vyeJq
+         EKjX1nFUwgY1r7Q9r29KaAMeimXo1dJYEcmgGyee47msLGZNHIdm4y+oHmY5BlUpfji+
+         N0FnsnjXn8Xtx0gLjB8FY8d/qyiBzp8J7axH/+I4ChQJRWgfRNLnJ9+MZwizAIzAa1JD
+         m21TRqlBVN31DmBN6OcnUvYVif3++9MicMVUIWCJWvaHcPecddo2U3hwjn+uZdMoDm4u
+         T++g==
+X-Gm-Message-State: AC+VfDws6GPI9tOcj+9CvEVS47MjxXqFryNQz65HzEn/bMvY2K+T5bJO
+        y3OO6bIEZTVuoJfJwX3S3qgWfZlcFCx6kXXbIwRPiA==
+X-Google-Smtp-Source: ACHHUZ5rincErcVqOc8V3DItvsdWvDR95KKXLS5s/ouCVauIKh/djhVUDt11i0mD8SL6udii2uGbUp6CUegi51KSXjk=
+X-Received: by 2002:a17:907:8692:b0:973:7dfc:f052 with SMTP id
+ qa18-20020a170907869200b009737dfcf052mr3122689ejc.30.1685486251914; Tue, 30
+ May 2023 15:37:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: xX-B1izHkR6zFY2YYoIuutFE6MDxWm5u
-X-Proofpoint-GUID: UKrVQEiqSptqVbE2baZZz3J5cSThbSWt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_16,2023-05-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- mlxlogscore=999 priorityscore=1501 bulkscore=0 mlxscore=0 suspectscore=0
- lowpriorityscore=0 spamscore=0 adultscore=0 malwarescore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305300184
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAKEwX=PrqV+cCGmdTcFPMqP-48Y=abQTkSOUzJnOWWpc4rR4cA@mail.gmail.com>
+ <20230530222440.2777700-1-nphamcs@gmail.com>
+In-Reply-To: <20230530222440.2777700-1-nphamcs@gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 30 May 2023 15:36:55 -0700
+Message-ID: <CAJD7tkaveZ44agL0-iLfHdX1Pm_xEwBSYo=n5Tnm7pVWbsdTug@mail.gmail.com>
+Subject: Re: [PATCH] zswap: do not shrink if cgroup may not zswap
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org,
+        cerasuolodomenico@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mdev device is being removed, so pass the request to userspace to
-ask for a graceful cleanup. This should free up the thread that
-would otherwise loop waiting for the device to be fully released.
+On Tue, May 30, 2023 at 3:24=E2=80=AFPM Nhat Pham <nphamcs@gmail.com> wrote=
+:
+>
+> Before storing a page, zswap first checks if the number of stored pages
+> exceeds the limit specified by memory.zswap.max, for each cgroup in the
+> hierarchy. If this limit is reached or exceeded, then zswap shrinking is
+> triggered and short-circuits the store attempt.
+>
+> However, since the zswap's LRU is not memcg-aware, this can create the
+> following pathological behavior: the cgroup whose zswap limit is
+> reached will evict pages from other cgroups continually, without
+> lowering its own zswap usage. This means the shrinking will continue
+> until the need for swap ceases or the pool becomes empty.
 
-Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
----
- drivers/s390/crypto/vfio_ap_ops.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+This pathological behavior will only happen if the zswap limit is 0.
+Otherwise, we will see a different pathological behavior where we
+unnecessarily evict X pages from other cgroups before we drive the
+memcg back below its limit.
 
-diff --git a/drivers/s390/crypto/vfio_ap_ops.c b/drivers/s390/crypto/vfio_ap_ops.c
-index 44f159136891..a8f58e133e6e 100644
---- a/drivers/s390/crypto/vfio_ap_ops.c
-+++ b/drivers/s390/crypto/vfio_ap_ops.c
-@@ -1736,6 +1736,26 @@ static void vfio_ap_mdev_close_device(struct vfio_device *vdev)
- 	vfio_ap_mdev_unset_kvm(matrix_mdev);
- }
- 
-+static void vfio_ap_mdev_request(struct vfio_device *vdev, unsigned int count)
-+{
-+	struct device *dev = vdev->dev;
-+	struct ap_matrix_mdev *matrix_mdev;
-+
-+	matrix_mdev = container_of(vdev, struct ap_matrix_mdev, vdev);
-+
-+	if (matrix_mdev->req_trigger) {
-+		if (!(count % 10))
-+			dev_notice_ratelimited(dev,
-+					       "Relaying device request to user (#%u)\n",
-+					       count);
-+
-+		eventfd_signal(matrix_mdev->req_trigger, 1);
-+	} else if (count == 0) {
-+		dev_notice(dev,
-+			   "No device request registered, blocked until released by user\n");
-+	}
-+}
-+
- static int vfio_ap_mdev_get_device_info(unsigned long arg)
- {
- 	unsigned long minsz;
-@@ -1955,6 +1975,7 @@ static const struct vfio_device_ops vfio_ap_matrix_dev_ops = {
- 	.bind_iommufd = vfio_iommufd_emulated_bind,
- 	.unbind_iommufd = vfio_iommufd_emulated_unbind,
- 	.attach_ioas = vfio_iommufd_emulated_attach_ioas,
-+	.request = vfio_ap_mdev_request
- };
- 
- static struct mdev_driver vfio_ap_matrix_driver = {
--- 
-2.31.1
+Perhaps we should clarify this?
 
+>
+> As a result of this, we observe a disproportionate amount of zswap
+> writeback and a perpetually small zswap pool in our experiments, even
+> though the pool limit is never hit.
+
+I am guessing this is also related to the case where the limit is 0.
+It would be useful to clarify this.
+
+>
+> This patch fixes the issue by rejecting zswap store attempt without
+> shrinking the pool when obj_cgroup_may_zswap() returns false.
+>
+> Fixes: f4840ccfca25 ("zswap: memcg accounting")
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> ---
+>  mm/zswap.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/mm/zswap.c b/mm/zswap.c
+> index 59da2a415fbb..cff93643a6ab 100644
+> --- a/mm/zswap.c
+> +++ b/mm/zswap.c
+> @@ -1174,9 +1174,14 @@ static int zswap_frontswap_store(unsigned type, pg=
+off_t offset,
+>                 goto reject;
+>         }
+>
+> +       /*
+> +        * XXX: zswap reclaim does not work with cgroups yet. Without a
+> +        * cgroup-aware entry LRU, we will push out entries system-wide b=
+ased on
+> +        * local cgroup limits.
+> +        */
+>         objcg =3D get_obj_cgroup_from_page(page);
+>         if (objcg && !obj_cgroup_may_zswap(objcg))
+> -               goto shrink;
+> +               goto reject;
+>
+>         /* reclaim space if needed */
+>         if (zswap_is_full()) {
+> --
+> 2.34.1
+>
+
+With commit log nits above:
+
+Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
