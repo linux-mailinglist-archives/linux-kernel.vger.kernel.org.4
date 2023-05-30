@@ -2,110 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47879715C7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A54F715C7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 13:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbjE3LCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 07:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48552 "EHLO
+        id S231764AbjE3LCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 07:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbjE3LCA (ORCPT
+        with ESMTP id S229509AbjE3LCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 07:02:00 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5D593
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:01:59 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-970028cfb6cso840337366b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 04:01:59 -0700 (PDT)
+        Tue, 30 May 2023 07:02:40 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D6993;
+        Tue, 30 May 2023 04:02:39 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-6237faa8677so22225806d6.1;
+        Tue, 30 May 2023 04:02:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685444518; x=1688036518;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mqiWOENTW3CXASLaJvgBSl36DYvfzKWd32k4rlj7DMg=;
-        b=H5RC3j865FAkcJKpJ/ImrNlvbdo31/emM6ok7cpJchEr0x4ZdnJzW73LU0aJHGocVV
-         iXaCR0WcQn3vCAOZafxYLlnBmYIwdwfhegTN3434QMDH0ofJnlsFWSY7NhSZdrmeMK0P
-         zE/7APOBqhl3uaLroZfRizOOBWKccBdmyEl4KH6C6tSg5NLHeuWwdEFOjont8awy7+yz
-         6Z3f8LrJSxqkVXGzlP/qlF21fPBe0wBiKcTlsTC006jJMmYxHouEfwhb7Zbj/lXLA3G6
-         hT3BarKJkSqwZnPwBaK/Zz+2hGEJVD1BX4TuH8BQaKJKOLKuVfVXjeencjTVOumwne2T
-         Vqtg==
+        d=gmail.com; s=20221208; t=1685444558; x=1688036558;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qKJRw70btDvw6dzoRPZe1V0n3W0ShFothndLD85zokQ=;
+        b=ddbwUXkiE48vFE2zz7Fh1VMI2SkkBKiWtS23kb1YI4nSv4xUWs+Sg5xz0/ycdXsjEp
+         oDENZSNXp5erZRt6f2KyTXTxvHMrKcNjdXaKHrZKzQMTP3EN6ZqhJP+vsY8PFHg9ZFlt
+         PVJiuE50WxSwHfeprajWksMW0MTA/psTVfTeynP/GufAWpcfH/B+Y726AcHvzTG5jw28
+         9Dc08fAC4vXudjSv6+aLOEdHLaJeDcwSvJTV0L20WFENfPnjGxoTFE/xi+WlYylVUxDk
+         wVhJ3zjBf564+7o9sdAWXw6YxZ69wGlS0qcSFZ9NQ89s9tHIm5tR2/7KpOdEhqTvHaAj
+         yiww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685444518; x=1688036518;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mqiWOENTW3CXASLaJvgBSl36DYvfzKWd32k4rlj7DMg=;
-        b=VsAYjqryr5Cv4QFpI2QXvt1CrNPtvyMl9EtYwRSssxrVi1RllVieazdzQJxZaUo0xB
-         Rs8qazJM1ud4tXADvGFXAQfXECROWzcz2cn+IIQcO9Ujw0EmDAxZFbaPN73a5E7j5aYk
-         S8ghWcI8eiHIVxUNoWY5bSxW7lq42PV/6HAsXM1NBE3StziIcXAQifk5xbsedH7+JOyV
-         n5OU2OVLC+FZdyQkv9Ra+h/yrqc3Q6QOKd6bwFda4tBmBJSTebgyK4CYSHq7Yy8gY70J
-         JjToy+W6yszX5uGfZpC3KFF91tC5KeT6uXE8AZbXcKwbj0xP8IGf4MlRcEHbypNv4H+9
-         JXcw==
-X-Gm-Message-State: AC+VfDyY+O1YVxXzTDSKqChoPgcGhl1nSahBuK+tzSt2ClyXiZfOQlYO
-        5HdAA86ijJwNJ2Uf3S2w1hwAkA==
-X-Google-Smtp-Source: ACHHUZ7EdPsQUATI97T7TTNuUDnDStW+T3FEAeWPo+yfm29Wp4MOkToA00AJYrowOetUBHDSlDJRIg==
-X-Received: by 2002:a17:907:2d9f:b0:94e:e97b:c65 with SMTP id gt31-20020a1709072d9f00b0094ee97b0c65mr2301544ejc.60.1685444518085;
-        Tue, 30 May 2023 04:01:58 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id kb9-20020a1709070f8900b00967004187b8sm7195515ejc.36.2023.05.30.04.01.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 04:01:57 -0700 (PDT)
-Message-ID: <514a9e26-aeb9-ce05-1055-337646098ec1@linaro.org>
-Date:   Tue, 30 May 2023 13:01:55 +0200
+        d=1e100.net; s=20221208; t=1685444558; x=1688036558;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qKJRw70btDvw6dzoRPZe1V0n3W0ShFothndLD85zokQ=;
+        b=WkFA4ZZqGJ3RuIUxGHgysKCGuU6+Kq3zNrnDo29TYNcjYDf8+vh37DQRFbAKb1FqrF
+         aD73xIMZ9Fiy7PsA9BZvbI2XKPsbeyYSiIv2ybTcfUhUbrgSu1Co5BS+3ZTaAC6vr+jP
+         AiHzO2xbxf6sAZO24iUGK9GiMDf2TEtLfZEg5eyiaS5KDMGbiP71hip1UNzA6purm26T
+         tlmhy9NZklyGhFT7xkHYBqcelKG+7syyalGYdMYmGvFK8UVHwoj74Ou7rBzjIbjc3jFo
+         5TGkC1eNtr8AlNJZy9RqlyhPR+n0NlMSRu/qnW6qAEED38tYpikYh+CVH+s0ubVsaM7z
+         H6bQ==
+X-Gm-Message-State: AC+VfDxjMgaJFSpKM6Lj6kKWDi2HOoy3sWB96b6hsTuIlqad+hypt8th
+        LUm+pGOBagDb2VImHWgvXVGj0WFkKniXEvOUXYXH5y95s1BnFA==
+X-Google-Smtp-Source: ACHHUZ6V2oyzYSC9B8OgIPn2MIpfB098Yw//lpK0uP02DNwlKin+3aIcnmVspzn0674k6LFbXQu1RHfDfYo4IpheSfk=
+X-Received: by 2002:ad4:5baa:0:b0:626:1be5:1777 with SMTP id
+ 10-20020ad45baa000000b006261be51777mr1296836qvq.52.1685444558153; Tue, 30 May
+ 2023 04:02:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V2 04/13] dt-bindings: clock: qcom: gcc-ipq5018: remove q6
- clocks macros
-Content-Language: en-US
-To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, jassisinghbrar@gmail.com,
-        mathieu.poirier@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, quic_eberman@quicinc.com, quic_mojha@quicinc.com,
-        kvalo@kernel.org, loic.poulain@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com, quic_varada@quicinc.com,
-        quic_devipriy@quicinc.com
-References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
- <20230521222852.5740-5-quic_mmanikan@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230521222852.5740-5-quic_mmanikan@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230524160352.19704-1-osmtendev@gmail.com> <87v8gajeni.fsf@kernel.org>
+In-Reply-To: <87v8gajeni.fsf@kernel.org>
+From:   Osama Muhammad <osmtendev@gmail.com>
+Date:   Tue, 30 May 2023 16:02:27 +0500
+Message-ID: <CAK6rUAPUKNREyYL-d5Y23SOV__-zPY8KJL+MMzWX8ShOhDGWLA@mail.gmail.com>
+Subject: Re: [PATCH] debugfs.c: Fix error checking for debugfs_create_dir
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     nbd@nbd.name, ryder.lee@mediatek.com, lorenzo@kernel.org,
+        shayne.chen@mediatek.com, davem@davemloft.net,
+        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/05/2023 00:28, Manikanta Mylavarapu wrote:
-> Since Q6 firmware takes care of bring up clocks in multipd
-> model, remove bring up clock macros.
-> 
-> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-> ---
->  include/dt-bindings/clock/qcom,gcc-ipq5018.h | 21 --------------------
->  1 file changed, 21 deletions(-)
-> 
+Hi,
 
-I am fine with this if it still compiles... I have doubts about it,
-unless of some depedencies (you mentioned three !)... but then it gets
-complicated.
+I will keep that in mind and send with the right subject while
+submitting a revision of the patch.
 
-Keep patches doing same logical change in same patchset. This dependency
-dance in recent submissions is making things tricky and prolonging your
-upstreaming process significantly.
+Regarding the patch after researching more into it I have come to know
+that the debugfs
+API will not return null on error but an ERR_PTR. The modern wisdom
+about it is to ignore the errors returned by the function as stated in
+the comment  above the function debugfs_create_file.
 
-Best regards,
-Krzysztof
+> * NOTE: it's expected that most callers should _ignore_ the errors returned
+ >* by this function. Other debugfs functions handle the fact that the "dentry"
+ >* passed to them could be an error and they don't crash in that case.
+> * Drivers should generally work fine even if debugfs fails to init anyway.
+Here is the link to comment :-
+https://elixir.bootlin.com/linux/latest/source/fs/debugfs/inode.c#L451
 
+Considering this, I will send the revision of the patch by removing
+error checks. Please correct me if  there are any concerns with this.
+
+Thanks,
+Osmten
+
+On Tue, 30 May 2023 at 15:29, Kalle Valo <kvalo@kernel.org> wrote:
+>
+> Osama Muhammad <osmtendev@gmail.com> writes:
+>
+> > This patch fixes the error checking in debugfs.c in
+> > debugfs_create_dir. The correct way to check if an error occurred
+> > is using 'IS_ERR' inline function.
+> >
+> > Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+>
+> The title is wrong, please see the wiki page below how to create titles.
+>
+> Also no need to say "This patch fixes..", saying "Fix..." is enough.
+>
+> --
+> https://patchwork.kernel.org/project/linux-wireless/list/
+>
+> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
