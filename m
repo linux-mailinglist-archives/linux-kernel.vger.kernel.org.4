@@ -2,233 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE2E7152BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 02:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0DD17152BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 02:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjE3A5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 20:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
+        id S229775AbjE3A7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 20:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjE3A5k (ORCPT
+        with ESMTP id S229455AbjE3A7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 20:57:40 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED819D;
-        Mon, 29 May 2023 17:57:39 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 064A35C010A;
-        Mon, 29 May 2023 20:57:39 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 29 May 2023 20:57:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685408259; x=
-        1685494659; bh=jWG2cb261aJIx2WDI0uGrh8JxOzjxCXM6ks6s69gakA=; b=v
-        g1yecJTFZ9UHBWKYQcrs5WovDrUX8fUG8pHtHYDZtbypYqVBFX78M0kGPr9BNNWO
-        6xM7lfUGo6s7CqCO8qLu4JhvNM6YUXrCcX55mZduO6IzA0KKvRjvQLtvXz1Hcssh
-        PmccWY354ZSlce0wK/pLxOjkN8Q2K7HpBdVAiChlCVpWTAqL83q3DzfN9ksysrX2
-        Om1vTCoizJusi+bmH5CSpm3FBtACQXIF1YiMRubpprVAduUkVOzfYzFkJwf5hgQF
-        l5ihljgkr1groMSKW6d2NT6C23sW672L5++IlPM1dnfEl1VH4iVlLS+cV9IsqE1c
-        xOM5XAK8FJU6oIp9O6Euw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685408259; x=1685494659; bh=jWG2cb261aJIx
-        2WDI0uGrh8JxOzjxCXM6ks6s69gakA=; b=mFWHJleA5DFx4XkGhADOfmWDYMS/S
-        I5eryTd8lQ2Ve1ld4ekGoYC5gC23Iq4V49e5IIJvOAaVIMuXPH37zBq6knV2p/bH
-        7JCde9czBQTtzPj2KjyVWYQwpJnEivlcS2KgKOnMA3RqcGJ2beyncPgp7464XJ37
-        4caDJg0Q3RPn3RWyN+KuVOcoBKcY+12d9G1iP9p/ou09E+kC2S6r7OuBjB59qcZV
-        RsVxuECCCAzckcGFS4hymuY80e2i6UH43R41rbZUvcD6yLFoeWQwkjxmsO5urQdG
-        kK+bk8Fx8ciItVhPGEQQ+TW/WxFHMmSp/fJiIneQmQkA1bXLgUpNx0yPQ==
-X-ME-Sender: <xms:Akp1ZBiqxp1eniQDQZXT-neHKHS0mHosErjFiMjQJXf2pOiSV5K3cw>
-    <xme:Akp1ZGAYfpBfkf7AFPXdS76pE_S_zlYWKlcumf1Rw4FU0imA6EG1QZPibpd_6Uh6n
-    1-gl-7HDzXaoAcgJVU>
-X-ME-Received: <xmr:Akp1ZBH5dn_bzVBerB9Wb8BuvZxJ1YRh0PLgh6ZjCx10bjAC0gOqvF68T_PwkHgfA34saA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekiedgfeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:Akp1ZGS-_McBDqNUY-pOY0MDK_mLP_eSOM0Bfx475K_S_KNk1FEHcQ>
-    <xmx:Akp1ZOysHrLqxVeZxV1x0hWVVm5NfkG3H_PE-AhvRhaj6aMtEdijJA>
-    <xmx:Akp1ZM5E4vid5nORMMTxGqi5ifjobLUwFipCDxFc4a76NW0MUmHgBQ>
-    <xmx:A0p1ZA4n66E0zTSyBEuel8_kq5ncBsWubNcL2fFKyAaLTe4iefEkog>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 29 May 2023 20:57:37 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 138CB102633; Tue, 30 May 2023 03:57:36 +0300 (+03)
-Date:   Tue, 30 May 2023 03:57:36 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        thomas.lendacky@amd.com
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        dave.hansen@intel.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, decui@microsoft.com, rick.p.edgecombe@intel.com,
-        seanjc@google.com, x86@kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCHv2 2/3] x86/tdx: Fix race between set_memory_encrypted()
- and load_unaligned_zeropad()
-Message-ID: <20230530005736.ndwza2i5n7wrki5h@box.shutemov.name>
-References: <20230526120225.31936-1-kirill.shutemov@linux.intel.com>
- <20230526120225.31936-3-kirill.shutemov@linux.intel.com>
- <19d9977f-bf07-2948-1b45-456af9c09e2f@linux.intel.com>
+        Mon, 29 May 2023 20:59:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BBFC7
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 17:58:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685408323;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aXGAF0eFaU8FvA7WXhPqBXzyXcEEu4exGsf04nQzAHM=;
+        b=Kicx7s+uivP34e5bpbopCjq5vuRwD/yt7GNyNL8F7+yPHAxEQtUynnyyjmypeFoZC7TF2s
+        LyNs4LhDjSfDBrS0Wuv0EyUI4u2kyhmf4EfIl/mu28+j4yO/iE47+Fbnd5WnW+8fRihvLQ
+        UNlW5nvc2OkdavgDSzIMjTCnhxOp3fQ=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-230-tMeTgLv-PquGdT9V_OQAYQ-1; Mon, 29 May 2023 20:58:42 -0400
+X-MC-Unique: tMeTgLv-PquGdT9V_OQAYQ-1
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-256797b570eso946805a91.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 17:58:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685408321; x=1688000321;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aXGAF0eFaU8FvA7WXhPqBXzyXcEEu4exGsf04nQzAHM=;
+        b=amImwwAPJH3w7VuLI1MCa2wLGQI6jXUhRE2kYnOmXiDCjxih/qw6NSpkV+sWysos5q
+         u0DEgj4ejgJizxM3iIiJ85CsaQK4fNgbbxvIUSY9g0oeZ5e7li9LPgEQOPutYjWwaGom
+         TNHERlgfDzKVv1IR5YM/OphU0D3Q8iKcn/Xchd0GaaGq8OecyYTuh2IvOueYEJv/+QjB
+         GtfFZSXE1GCLUvrVQCeWfecuPeX0HuAYUhx0Cxp1ZDavPktHwnInYJr67PG5br/+yCvs
+         DYt31YFC4HRzhglLdq6/v8HTwEoSwDc3PGEfGJmn2KbFM+BCrzuu5Dfrn0QonhB/59HI
+         9Krw==
+X-Gm-Message-State: AC+VfDw99ZLNIDA1ggKhQvNYIqve0MA3lJ8kyaAP3xAHtrjXAP0tsvk5
+        xifcDyEqfo+6JsVgNiEAYnNIQ2YlyahWjTPoBVQwX3q+1xA8jWbWG6DkVDGjXvb14M3sNfbmPqi
+        PMn8wfgRN7thURpbhA3nIsi5bSnj3HfiesJGHY26x
+X-Received: by 2002:a17:902:e74f:b0:1b0:2658:db00 with SMTP id p15-20020a170902e74f00b001b02658db00mr974412plf.31.1685408321149;
+        Mon, 29 May 2023 17:58:41 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6vdKPRmgtsWroXvtduGgX5e+Q7zW8blNKEpgwDOA9HggBzhA/WOPXz6InXjMtmBbFzt3GiDQ99XEjljmn1sYY=
+X-Received: by 2002:a17:902:e74f:b0:1b0:2658:db00 with SMTP id
+ p15-20020a170902e74f00b001b02658db00mr974392plf.31.1685408320745; Mon, 29 May
+ 2023 17:58:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <19d9977f-bf07-2948-1b45-456af9c09e2f@linux.intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230426082031.1299149-1-yukuai1@huaweicloud.com>
+ <20230426082031.1299149-8-yukuai1@huaweicloud.com> <CALTww2-yTsHXNFgkAVu0v++HHahZCnvXEUv2qJqbvcGUhKanDw@mail.gmail.com>
+ <5e9852fe-0d47-92fc-f6a9-16d028d09ad4@huaweicloud.com> <CALTww28ur_S0UpGQqq0TubSgkxGG7dicc1ZKrJ3Pno4CpSOWUw@mail.gmail.com>
+ <25279079-2600-b0d3-5279-caaf6f664d71@huaweicloud.com> <CALTww2-PjJ74J61jYz032t8K5tszN1tnhEbcv5h+MJjkKuVq2A@mail.gmail.com>
+ <c56e7e9c-90ca-29ca-2003-1a9a88d75fa6@huaweicloud.com>
+In-Reply-To: <c56e7e9c-90ca-29ca-2003-1a9a88d75fa6@huaweicloud.com>
+From:   Xiao Ni <xni@redhat.com>
+Date:   Tue, 30 May 2023 08:58:29 +0800
+Message-ID: <CALTww2_JAmqU19Stb1UBVVL-w=ecRFt8WNZo+TmMJVD+O2RJqw@mail.gmail.com>
+Subject: Re: [PATCH -next v2 7/7] md/raid1-10: limit the number of plugged bio
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     song@kernel.org, akpm@osdl.org, neilb@suse.de,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 03:10:56PM -0700, Sathyanarayanan Kuppuswamy wrote:
-> 
-> 
-> On 5/26/23 5:02 AM, Kirill A. Shutemov wrote:
-> > Touching privately mapped GPA that is not properly converted to private
-> > with MapGPA and accepted leads to unrecoverable exit to VMM.
-> > 
-> > load_unaligned_zeropad() can touch memory that is not owned by the
-> > caller, but just happened to next after the owned memory.
-> 
-> /s/to/to be ?
+On Mon, May 29, 2023 at 4:50=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> w=
+rote:
+>
+> Hi,
+>
+> =E5=9C=A8 2023/05/29 15:57, Xiao Ni =E5=86=99=E9=81=93:
+> > On Mon, May 29, 2023 at 11:18=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.c=
+om> wrote:
+> >>
+> >> Hi,
+> >>
+> >> =E5=9C=A8 2023/05/29 11:10, Xiao Ni =E5=86=99=E9=81=93:
+> >>> On Mon, May 29, 2023 at 10:20=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud=
+.com> wrote:
+> >>>>
+> >>>> Hi,
+> >>>>
+> >>>> =E5=9C=A8 2023/05/29 10:08, Xiao Ni =E5=86=99=E9=81=93:
+> >>>>> Hi Kuai
+> >>>>>
+> >>>>> There is a limitation of the memory in your test. But for most
+> >>>>> situations, customers should not set this. Can this change introduc=
+e a
+> >>>>> performance regression against other situations?
+> >>>>
+> >>>> Noted that this limitation is just to triggered writeback as soon as
+> >>>> possible in the test, and it's 100% sure real situations can trigger
+> >>>> dirty pages write back asynchronously and continue to produce new di=
+rty
+> >>>> pages.
+> >>>
+> >>> Hi
+> >>>
+> >>> I'm confused here. If we want to trigger write back quickly, it needs
+> >>> to set these two values with a smaller number, rather than 0 and 60.
+> >>> Right?
+> >>
+> >> 60 is not required, I'll remove this setting.
+> >>
+> >> 0 just means write back if there are any dirty pages.
+> >
+> > Hi Kuai
+> >
+> > Does 0 mean disabling write back? I tried to find the doc that
+> > describes the meaning when setting dirty_background_ratio to 0, but I
+> > didn't find it.
+> > In https://www.kernel.org/doc/html/next/admin-guide/sysctl/vm.html it
+> > doesn't describe this. But it says something like this
+> >
+> > Note:
+> >    dirty_background_bytes is the counterpart of dirty_background_ratio.=
+ Only
+> >    one of them may be specified at a time. When one sysctl is written i=
+t is
+> >    immediately taken into account to evaluate the dirty memory limits a=
+nd the
+> >    other appears as 0 when read.
+> >
+> > Maybe you can specify dirty_background_ratio to 1 if you want to
+> > trigger write back ASAP.
+>
+> The purpose here is to trigger write back ASAP, I'm not an expert here,
+> but based on test result, 0 obviously doesn't mean disable write back.
+>
+> Set dirty_background_bytes to a value, dirty_background_ratio will be
+> set to 0 together, which means dirty_background_ratio is disabled.
+> However, change dirty_background_ratio from default value to 0, will end
+> up both dirty_background_ratio and dirty_background_bytes to be 0, and
+> based on following related code, I think 0 just means write back if
+> there are any dirty pages.
+>
+> domain_dirty_limits:
+>   bg_bytes =3D dirty_background_bytes -> 0
+>   bg_ratio =3D (dirty_background_ratio * PAGE_SIZE) / 100 -> 0
+>
+>   if (bg_bytes)
+>          bg_thresh =3D DIV_ROUND_UP(bg_bytes, PAGE_SIZE);
+>   else
+>          bg_thresh =3D (bg_ratio * available_memory) / PAGE_SIZE; -> 0
+>
+>   dtc->bg_thresh =3D bg_thresh; -> 0
+>
+> balance_dirty_pages
+>   nr_reclaimable =3D global_node_page_state(NR_FILE_DIRTY);
+>   if (!laptop_mode && nr_reclaimable > gdtc->bg_thresh &&
+>        !writeback_in_progress(wb))
+>     wb_start_background_writeback(wb); -> writeback ASAP
+>
+> Thanks,
+> Kuai
 
-Yep, my bad.
+Hi Kuai
 
-> > This load_unaligned_zeropad() behaviour makes it important when kernel
-> > asks VMM to convert a GPA from shared to private or back. Kernel must
-> > never have a page mapped into direct mapping (and aliases) as private
-> > when the GPA is already converted to shared or when GPA is not yet
-> > converted to private.
-> 
-> I am wondering whether this issue exist in the AMD code? 
-> 
-> IMO, you can add some info on the window in set_memory_encrypted()
-> where this race exists.
+I'm not an expert about this either. Thanks for all your patches, I
+can study more things too. But I still have some questions.
 
-I don't think AMD affected by load_unaligned_zeropad() the same way as
-Intel does. But I'm not sure.
+I did a test in my environment something like this:
+modprobe brd rd_nr=3D4 rd_size=3D10485760
+mdadm -CR /dev/md0 -l10 -n4 /dev/ram[0123] --assume-clean
+echo 0 > /proc/sys/vm/dirty_background_ratio
+fio -filename=3D/dev/md0 -ioengine=3Dlibaio -rw=3Dwrite -thread -bs=3D1k-8k
+-numjobs=3D1 -iodepth=3D128 --runtime=3D10 -name=3Dxxx
+It will cause OOM and the system hangs
 
-Tom, do you have any comments?
+modprobe brd rd_nr=3D4 rd_size=3D10485760
+mdadm -CR /dev/md0 -l10 -n4 /dev/ram[0123] --assume-clean
+echo 1 > /proc/sys/vm/dirty_background_ratio (THIS is the only different pl=
+ace)
+fio -filename=3D/dev/md0 -ioengine=3Dlibaio -rw=3Dwrite -thread -bs=3D1k-8k
+-numjobs=3D1 -iodepth=3D128 --runtime=3D10 -name=3Dxxx
+It can finish successfully.  The value of dirty_background_ration is 1
+here means it flushes ASAP
 
-> 
-> > 
-> > guest.enc_status_change_prepare() called before adjusting direct mapping
-> > and therefore it is responsible for converting the memory to private.
-> > 
-> > guest.enc_status_change_finish() called after adjusting direct mapping
-> > and it converts the memory to shared.
-> > 
-> > It is okay to have a shared mapping of memory that is not converted
-> > properly. handle_mmio() knows how to deal with load_unaligned_zeropad()
-> > stepping on it.
-> 
-> > 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > Fixes: 7dbde7631629 ("x86/mm/cpa: Add support for TDX shared memory")
-> > Cc: stable@vger.kernel.org
-> > ---
-> >  arch/x86/coco/tdx/tdx.c | 56 ++++++++++++++++++++++++++++++++++++++---
-> >  1 file changed, 53 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> > index e146b599260f..59cc13e41aa6 100644
-> > --- a/arch/x86/coco/tdx/tdx.c
-> > +++ b/arch/x86/coco/tdx/tdx.c
-> > @@ -840,6 +840,30 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
-> >  	return true;
-> >  }
-> >  
-> > +static bool tdx_enc_status_change_prepare(unsigned long vaddr, int numpages,
-> > +					  bool enc)
-> > +{
-> > +	/*
-> > +	 * Only handle shared->private conversion here.
-> > +	 * See the comment in tdx_early_init().
-> > +	 */
-> > +	if (enc)
-> > +		return tdx_enc_status_changed(vaddr, numpages, enc);
-> > +	return true;
-> > +}
-> > +
-> > +static bool tdx_enc_status_change_finish(unsigned long vaddr, int numpages,
-> > +					 bool enc)
-> > +{
-> > +	/*
-> > +	 * Only handle private->shared conversion here.
-> > +	 * See the comment in tdx_early_init().
-> > +	 */
-> > +	if (!enc)
-> > +		return tdx_enc_status_changed(vaddr, numpages, enc);
-> > +	return true;
-> > +}
-> > +
-> >  void __init tdx_early_init(void)
-> >  {
-> >  	u64 cc_mask;
-> > @@ -867,9 +891,35 @@ void __init tdx_early_init(void)
-> >  	 */
-> >  	physical_mask &= cc_mask - 1;
-> >  
-> > -	x86_platform.guest.enc_cache_flush_required = tdx_cache_flush_required;
-> > -	x86_platform.guest.enc_tlb_flush_required   = tdx_tlb_flush_required;
-> 
-> I think you don't need to change the order here.
+So your method should be the opposite way as you designed. All the
+memory can't be flushed in time, so it uses all memory very soon and
+the memory runs out and the system hangs. The reason I'm looking at
+the test is that do we really need this change. Because in the real
+world, most customers don't disable write back. Anyway, it depends on
+Song's decision and thanks for your patches again. I'll review V3 and
+try to do some performance tests.
 
-I wanted to emphasise that the comment is for _prepare/_finish callbacks
-and I hoped re-order would help with this.
+Best Regards
+Xiao
+> >
+> >>>>
+> >>>> If a lot of bio is not plugged, then it's the same as before; if a l=
+ot
+> >>>> of bio is plugged, noted that before this patchset, these bio will s=
+pent
+> >>>> quite a long time in plug, and hence I think performance should be
+> >>>> better.
+> >>>
+> >>> Hmm, it depends on if it's sequential or not? If it's a big io
+> >>> request, can it miss the merge opportunity?
+> >>
+> >> The bio will still be merged to underlying disks' rq(if it's rq based)=
+,
+> >> underlying disk won't flush plug untill the number of request exceed
+> >> threshold.
+> >
+> > Thanks for this.
+> >
+> > Regards
+> > Xiao
+> >>
+> >> Thanks,
+> >> Kuai
+> >>>
+> >>> Regards
+> >>> Xiao
+> >>>
+> >>>>
+> >>>> Thanks,
+> >>>> Kuai
+> >>>>>
+> >>>>> Best Regards
+> >>>>> Xiao
+> >>>>>
+> >>>>> On Wed, Apr 26, 2023 at 4:24=E2=80=AFPM Yu Kuai <yukuai1@huaweiclou=
+d.com> wrote:
+> >>>>>>
+> >>>>>> From: Yu Kuai <yukuai3@huawei.com>
+> >>>>>>
+> >>>>>> bio can be added to plug infinitely, and following writeback test =
+can
+> >>>>>> trigger huge amount of plugged bio:
+> >>>>>>
+> >>>>>> Test script:
+> >>>>>> modprobe brd rd_nr=3D4 rd_size=3D10485760
+> >>>>>> mdadm -CR /dev/md0 -l10 -n4 /dev/ram[0123] --assume-clean
+> >>>>>> echo 0 > /proc/sys/vm/dirty_background_ratio
+> >>>>>> echo 60 > /proc/sys/vm/dirty_ratio
+> >>>>>> fio -filename=3D/dev/md0 -ioengine=3Dlibaio -rw=3Dwrite -bs=3D4k -=
+numjobs=3D1 -iodepth=3D128 -name=3Dtest
+> >>>>>>
+> >>>>>> Test result:
+> >>>>>> Monitor /sys/block/md0/inflight will found that inflight keep incr=
+easing
+> >>>>>> until fio finish writing, after running for about 2 minutes:
+> >>>>>>
+> >>>>>> [root@fedora ~]# cat /sys/block/md0/inflight
+> >>>>>>           0  4474191
+> >>>>>>
+> >>>>>> Fix the problem by limiting the number of plugged bio based on the=
+ number
+> >>>>>> of copies for original bio.
+> >>>>>>
+> >>>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> >>>>>> ---
+> >>>>>>     drivers/md/raid1-10.c | 9 ++++++++-
+> >>>>>>     drivers/md/raid1.c    | 2 +-
+> >>>>>>     drivers/md/raid10.c   | 2 +-
+> >>>>>>     3 files changed, 10 insertions(+), 3 deletions(-)
+> >>>>>>
+> >>>>>> diff --git a/drivers/md/raid1-10.c b/drivers/md/raid1-10.c
+> >>>>>> index 98d678b7df3f..35fb80aa37aa 100644
+> >>>>>> --- a/drivers/md/raid1-10.c
+> >>>>>> +++ b/drivers/md/raid1-10.c
+> >>>>>> @@ -21,6 +21,7 @@
+> >>>>>>     #define IO_MADE_GOOD ((struct bio *)2)
+> >>>>>>
+> >>>>>>     #define BIO_SPECIAL(bio) ((unsigned long)bio <=3D 2)
+> >>>>>> +#define MAX_PLUG_BIO 32
+> >>>>>>
+> >>>>>>     /* for managing resync I/O pages */
+> >>>>>>     struct resync_pages {
+> >>>>>> @@ -31,6 +32,7 @@ struct resync_pages {
+> >>>>>>     struct raid1_plug_cb {
+> >>>>>>            struct blk_plug_cb      cb;
+> >>>>>>            struct bio_list         pending;
+> >>>>>> +       unsigned int            count;
+> >>>>>>     };
+> >>>>>>
+> >>>>>>     static void rbio_pool_free(void *rbio, void *data)
+> >>>>>> @@ -127,7 +129,7 @@ static inline void md_submit_write(struct bio =
+*bio)
+> >>>>>>     }
+> >>>>>>
+> >>>>>>     static inline bool md_add_bio_to_plug(struct mddev *mddev, str=
+uct bio *bio,
+> >>>>>> -                                     blk_plug_cb_fn unplug)
+> >>>>>> +                                     blk_plug_cb_fn unplug, int c=
+opies)
+> >>>>>>     {
+> >>>>>>            struct raid1_plug_cb *plug =3D NULL;
+> >>>>>>            struct blk_plug_cb *cb;
+> >>>>>> @@ -147,6 +149,11 @@ static inline bool md_add_bio_to_plug(struct =
+mddev *mddev, struct bio *bio,
+> >>>>>>
+> >>>>>>            plug =3D container_of(cb, struct raid1_plug_cb, cb);
+> >>>>>>            bio_list_add(&plug->pending, bio);
+> >>>>>> +       if (++plug->count / MAX_PLUG_BIO >=3D copies) {
+> >>>>>> +               list_del(&cb->list);
+> >>>>>> +               cb->callback(cb, false);
+> >>>>>> +       }
+> >>>>>> +
+> >>>>>>
+> >>>>>>            return true;
+> >>>>>>     }
+> >>>>>> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
+> >>>>>> index 639e09cecf01..c6066408a913 100644
+> >>>>>> --- a/drivers/md/raid1.c
+> >>>>>> +++ b/drivers/md/raid1.c
+> >>>>>> @@ -1562,7 +1562,7 @@ static void raid1_write_request(struct mddev=
+ *mddev, struct bio *bio,
+> >>>>>>                                                  r1_bio->sector);
+> >>>>>>                    /* flush_pending_writes() needs access to the r=
+dev so...*/
+> >>>>>>                    mbio->bi_bdev =3D (void *)rdev;
+> >>>>>> -               if (!md_add_bio_to_plug(mddev, mbio, raid1_unplug)=
+) {
+> >>>>>> +               if (!md_add_bio_to_plug(mddev, mbio, raid1_unplug,=
+ disks)) {
+> >>>>>>                            spin_lock_irqsave(&conf->device_lock, f=
+lags);
+> >>>>>>                            bio_list_add(&conf->pending_bio_list, m=
+bio);
+> >>>>>>                            spin_unlock_irqrestore(&conf->device_lo=
+ck, flags);
+> >>>>>> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> >>>>>> index bd9e655ca408..7135cfaf75db 100644
+> >>>>>> --- a/drivers/md/raid10.c
+> >>>>>> +++ b/drivers/md/raid10.c
+> >>>>>> @@ -1306,7 +1306,7 @@ static void raid10_write_one_disk(struct mdd=
+ev *mddev, struct r10bio *r10_bio,
+> >>>>>>
+> >>>>>>            atomic_inc(&r10_bio->remaining);
+> >>>>>>
+> >>>>>> -       if (!md_add_bio_to_plug(mddev, mbio, raid10_unplug)) {
+> >>>>>> +       if (!md_add_bio_to_plug(mddev, mbio, raid10_unplug, conf->=
+copies)) {
+> >>>>>>                    spin_lock_irqsave(&conf->device_lock, flags);
+> >>>>>>                    bio_list_add(&conf->pending_bio_list, mbio);
+> >>>>>>                    spin_unlock_irqrestore(&conf->device_lock, flag=
+s);
+> >>>>>> --
+> >>>>>> 2.39.2
+> >>>>>>
+> >>>>>
+> >>>>> .
+> >>>>>
+> >>>>
+> >>>
+> >>> .
+> >>>
+> >>
+> >
+> > .
+> >
+>
 
-> > -	x86_platform.guest.enc_status_change_finish = tdx_enc_status_changed;
-> > +	/*
-> > +	 * Touching privately mapped GPA that is not properly converted to
-> > +	 * private with MapGPA and accepted leads to unrecoverable exit
-> > +	 * to VMM.
-> > +	 *
-> > +	 * load_unaligned_zeropad() can touch memory that is not owned by
-> > +	 * the caller, but just happened to next after the owned memory.
-> > +	 * This load_unaligned_zeropad() behaviour makes it important when
-> > +	 * kernel asks VMM to convert a GPA from shared to private or back.
-> > +	 * Kernel must never have a page mapped into direct mapping (and
-> > +	 * aliases) as private when the GPA is already converted to shared or
-> > +	 * when GPA is not yet converted to private.
-> > +	 *
-> > +	 * guest.enc_status_change_prepare() called before adjusting direct
-> > +	 * mapping and therefore it is responsible for converting the memory
-> > +	 * to private.
-> > +	 *
-> > +	 * guest.enc_status_change_finish() called after adjusting direct
-> > +	 * mapping and it converts the memory to shared.
-> > +	 *
-> > +	 * It is okay to have a shared mapping of memory that is not converted
-> > +	 * properly. handle_mmio() knows how to deal with load_unaligned_zeropad()
-> > +	 * stepping on it.
-> > +	 */
-> > +	x86_platform.guest.enc_status_change_prepare = tdx_enc_status_change_prepare;
-> > +	x86_platform.guest.enc_status_change_finish  = tdx_enc_status_change_finish;
-> > +
-> > +	x86_platform.guest.enc_cache_flush_required  = tdx_cache_flush_required;
-> > +	x86_platform.guest.enc_tlb_flush_required    = tdx_tlb_flush_required;
-> >  
-> >  	pr_info("Guest detected\n");
-> >  }
-> 
-> -- 
-> Sathyanarayanan Kuppuswamy
-> Linux Kernel Developer
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
