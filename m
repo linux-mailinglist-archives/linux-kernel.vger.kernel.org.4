@@ -2,145 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D916071548D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 06:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAAC2715496
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 06:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjE3EpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 00:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
+        id S229911AbjE3EvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 00:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjE3Eo7 (ORCPT
+        with ESMTP id S229551AbjE3EvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 00:44:59 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88EABEA;
-        Mon, 29 May 2023 21:44:56 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34U3f17d022534;
-        Tue, 30 May 2023 04:44:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=ARpI1vp8nkCFJtP0O5zGcbQNQXbYtxd1j/fx2C1yJ54=;
- b=nHlMwoqoWdGtYK/+1myvOzbG3wfYbtN8KPBTVBVuiCG6MfvOc0G+NdRLpRqgpCKcjm39
- 98tVhBEeQtP+jdz5yKEt7H1ciaaftDUW3Q4/QTITbM5MoWwljP13RNe4yYAYCqirXc+F
- Ofc9GtUlvg5/zfZfRVwdXQN4WJepiJZ+H5WltGTmECwRiFkFbfEXK3ajZLEcS/m8U7I9
- haPhuTFBxNqJ28TKDY28DgWrY/fs+/3aX8tAGmV2ljDv1r+IG+7MWJDRYWwJFLsmHdsw
- jnHJVEqQgz4Jd3Damwtp06giCeUMazojJ5qsXbfT2xhJcXtAYpvO7X4YdJopUsfQh7a3 Bw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qub56vs9u-1
+        Tue, 30 May 2023 00:51:16 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137A9C9
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 21:51:15 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34U4jEkJ003079;
+        Tue, 30 May 2023 04:51:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : content-type :
+ content-transfer-encoding : mime-version : subject : message-id : date :
+ cc : to; s=pp1; bh=ol2AgSMG3WBrhopJbYAgsKsjvvOflnzitJU0Mg7jUM4=;
+ b=bKbZg5t0qHNmNzmpIPIZpNslIKVD1H18ZLpsfWKeuvx32lIcSv//Npi19jjwf9OVqOLX
+ IMfvoNyBelGTfL77zqmLLviOqNzzFp1Cjd/4zlsSTfiYvdwiWrvBRkQPXUlxC5hQqPgX
+ LeYixqYpfpGz9kfp5T87sw/on1+RwqLT14H2oj0vO1Dt8QQVkfZuwaCLG2uD961k0Nhc
+ G3dRJ8O3MmRtaVWWtaZ9mpvHPtC3/+isWCieWH/ZTI+dwPGVM2u00CAKmhoYW1/Fl8zk
+ fN0sP1yOx0TMBS1fwhH6yMy2VwApMaErBQV7+rdF33n7RKfa3kFVWkypjOifXtIN24v2 pA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwa27gh9j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 04:44:53 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34U4iqh5016807
+        Tue, 30 May 2023 04:51:11 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34U2f73P007278;
+        Tue, 30 May 2023 04:51:09 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qu9g5992m-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 04:44:52 GMT
-Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 29 May 2023 21:44:49 -0700
-From:   Prashanth K <quic_prashk@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Prashanth K <quic_prashk@quicinc.com>
-Subject: [PATCH v6] usb: common: usb-conn-gpio: Set last role to unknown before initial detection
-Date:   Tue, 30 May 2023 10:14:31 +0530
-Message-ID: <1685421871-25391-1-git-send-email-quic_prashk@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eojhkxHtQg3dSMoAGFNQHSDRD2_Go3qh
-X-Proofpoint-ORIG-GUID: eojhkxHtQg3dSMoAGFNQHSDRD2_Go3qh
+        Tue, 30 May 2023 04:51:08 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34U4p64V21693076
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 May 2023 04:51:06 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9CB9520049;
+        Tue, 30 May 2023 04:51:06 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D141F20043;
+        Tue, 30 May 2023 04:51:05 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.43.23.5])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 30 May 2023 04:51:05 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.ibm.com>
+Content-Type: text/plain;
+        charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Kernel crash with ftrace tests 
+Message-Id: <A8DCEA9E-BBB4-4B73-9D2F-12C31318AB96@linux.ibm.com>
+Date:   Tue, 30 May 2023 10:20:54 +0530
+Cc:     open list <linux-kernel@vger.kernel.org>
+To:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Oi98zOWbm86gSn1UNbO6jMd8MNgL2X32
+X-Proofpoint-GUID: Oi98zOWbm86gSn1UNbO6jMd8MNgL2X32
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-05-30_02,2023-05-29_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=999 clxscore=1015 mlxscore=0 suspectscore=0
- adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305300037
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
+ lowpriorityscore=0 adultscore=0 suspectscore=0 priorityscore=1501
+ spamscore=0 mlxscore=0 phishscore=0 impostorscore=0 malwarescore=0
+ mlxlogscore=690 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305300036
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently if we bootup a device without cable connected, then
-usb-conn-gpio won't call set_role() since last_role is same as
-current role. This happens because during probe last_role gets
-initialised to zero.
+While running ftrace specific kernel selftests on IBM Power9 server,
+following crash is observed. I have observed this crash only on Power9.
+Similar test run on a Power10 server works.
 
-To avoid this, added a new constant in enum usb_role, last_role
-is set to USB_ROLE_UNKNOWN before performing initial detection.
+[14350.791484] Kernel attempted to read user page (8) - exploit attempt? =
+(uid: 0)
+[14350.791507] BUG: Kernel NULL pointer dereference on read at =
+0x00000008
+[14350.791514] Faulting instruction address: 0xc0000000004bf0e0
+[14350.791521] Oops: Kernel access of bad area, sig: 11 [#1]
+[14350.791526] LE PAGE_SIZE=3D64K MMU=3DHash SMP NR_CPUS=3D8192 NUMA =
+pSeries
+[14350.791532] Modules linked in: nvram rpadlpar_io rpaphp uinput =
+torture dummy veth tun nfsv3 nfs_acl nfs lockd grace fscache netfs brd =
+overlay exfat vfat fat xfs loop sctp ip6_udp_tunnel udp_tunnel dm_mod =
+nft_fib_inet nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet =
+nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_ct nft_chain_nat nf_nat =
+nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set bonding tls rfkill =
+nf_tables libcrc32c nfnetlink sunrpc pseries_rng vmx_crypto ext4 mbcache =
+jbd2 sd_mod t10_pi crc64_rocksoft crc64 sg ibmvscsi scsi_transport_srp =
+ibmveth fuse [last unloaded: test_cpuidle_latency(O)]
+[14350.791616] CPU: 8 PID: 1169868 Comm: perl Tainted: G O =
+6.4.0-rc4-g8b817fded42d #1
+[14350.791623] Hardware name: IBM,8375-42A POWER9 (raw) 0x4e0202 =
+0xf000005 of:IBM,FW950.50 (VL950_105) hv:phyp pSeries
+[14350.791629] NIP: c0000000004bf0e0 LR: c000000000498924 CTR: =
+c0000000002e8f60
+[14350.791635] REGS: c0000002c8313830 TRAP: 0300 Tainted: G O =
+(6.4.0-rc4-g8b817fded42d)
+[14350.791641] MSR: 8000000000009033 <SF,EE,ME,IR,DR,RI,LE> CR: 483139c4 =
+XER: 20040000
+[14350.791655] CFAR: c00000000000dbbc DAR: 0000000000000008 DSISR: =
+40000000 IRQMASK: 0=20
+[14350.791655] GPR00: c000000000498924 c0000002c8313ad0 c000000001411300 =
+0000000000000000=20
+[14350.791655] GPR04: c00000001d939d68 0000000000000000 0000000000010000 =
+0000000000000008=20
+[14350.791655] GPR08: ffffffffffffffff 0000000000008000 0000000000000800 =
+0000000000000001=20
+[14350.791655] GPR12: 0000000000003000 c00000001ec56700 0000000000000000 =
+0000000000000000=20
+[14350.791655] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[14350.791655] GPR20: 0000000000000000 c000000002c67400 c0000001be8b4000 =
+c000000002c67378=20
+[14350.791655] GPR24: c00000001a41d200 c00000001a41d200 00007fffb8eb0000 =
+0000000000000000=20
+[14350.791655] GPR28: 8603721f020000c0 c00000001d939d68 0000000000000000 =
+c0000002c8313c18=20
+[14350.791724] NIP [c0000000004bf0e0] page_remove_rmap+0x40/0x320
+[14350.791732] LR [c000000000498924] wp_page_copy+0x384/0xde0
+[14350.791738] Call Trace:
+[14350.791741] [c0000002c8313ad0] [c00000001a41d200] 0xc00000001a41d200 =
+(unreliable)
+[14350.791749] [c0000002c8313b20] [c000000000498924] =
+wp_page_copy+0x384/0xde0
+[14350.791756] [c0000002c8313bf0] [c0000000004a1a34] =
+__handle_mm_fault+0x9a4/0xf90
+[14350.791764] [c0000002c8313cf0] [c0000000004a2110] =
+handle_mm_fault+0xf0/0x350
+[14350.791771] [c0000002c8313d40] [c000000000094b8c] =
+___do_page_fault+0x47c/0xc20
+[14350.791780] [c0000002c8313df0] [c000000000095540] =
+hash__do_page_fault+0x30/0x70
+[14350.791788] [c0000002c8313e20] [c00000000009e378] =
+do_hash_fault+0x278/0x470
+[14350.791794] [c0000002c8313e50] [c000000000008be0] =
+data_access_common_virt+0x210/0x220
+[14350.791802] --- interrupt: 300 at 0x7fffb8e91968
+[14350.791807] NIP: 00007fffb8e91968 LR: 00007fffb8e91958 CTR: =
+0000000000000000
+[14350.791812] REGS: c0000002c8313e80 TRAP: 0300 Tainted: G O =
+(6.4.0-rc4-g8b817fded42d)
+[14350.791818] MSR: 800000000280f033 =
+<SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE> CR: 24000422 XER: 00000000
+[14350.791835] CFAR: 00007fffb8e9185c DAR: 00007fffb8eb0000 DSISR: =
+0a000000 IRQMASK: 0=20
+[14350.791835] GPR00: 00007fffb9684d14 00007fffc55f14f0 00007fffb8eb7f00 =
+00007fffb8eb0000=20
+[14350.791835] GPR04: 0000000000000001 00007fffb9122840 0000000000000001 =
+0000000000000000=20
+[14350.791835] GPR08: 00007fffb9122890 0000000000000001 0000000000000000 =
+00007fffc55f1440=20
+[14350.791835] GPR12: 0000000000000000 00007fffb96dce80 0000000000000000 =
+0000000000000000=20
+[14350.791835] GPR16: 0000000000000000 0000000000000000 0000000000000000 =
+0000000000000000=20
+[14350.791835] GPR20: 00007fffb8eafb38 00007fffc55f15a8 00007fffc55f1560 =
+00007fffc55f1550=20
+[14350.791835] GPR24: 0000010022406210 0000000000000000 00007fffb96d0988 =
+00007fffb96d0000=20
+[14350.791835] GPR28: 0000000000000000 00007fffb96d0000 00007fffb8eafb38 =
+00007fffc55f1550=20
+[14350.791902] NIP [00007fffb8e91968] 0x7fffb8e91968
+[14350.791907] LR [00007fffb8e91958] 0x7fffb8e91958
+[14350.791911] --- interrupt: 300
+[14350.791914] Code: 7c0802a6 7d908026 fb61ffd8 fba1ffe8 fbc1fff0 =
+fbe1fff8 7c7e1b78 7c9d2378 7cbb2b78 91810008 f8010010 f821ffb1 =
+<e9230008> 712a0001 3929ffff 7fe3489e=20
+[14350.791937] ---[ end trace 0000000000000000 ]---
+[14350.793185] pstore: backend (nvram) writing error (-1)
+[14350.793190]=20
+[14351.793195] Kernel panic - not syncing: Fatal exception
 
-While at it, also handle default case for the usb_role switch
-in cdns3 to avoid build warnings.
-
-Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
-Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
----
-v6: Moved USB_ROLE_UNKNOWN towards the end of enum usb_role.
-v5: Update commit text to mention the changes made in cdns3 driver.
-v4: Added Reviewed-by tag.
-v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
-    the test robot.
-v2: Added USB_ROLE_UNKNWON to enum usb_role.
-
- drivers/usb/cdns3/core.c           | 2 ++
- drivers/usb/common/usb-conn-gpio.c | 3 +++
- include/linux/usb/role.h           | 1 +
- 3 files changed, 6 insertions(+)
-
-diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-index dbcdf3b..69d2921 100644
---- a/drivers/usb/cdns3/core.c
-+++ b/drivers/usb/cdns3/core.c
-@@ -252,6 +252,8 @@ static enum usb_role cdns_hw_role_state_machine(struct cdns *cdns)
- 		if (!vbus)
- 			role = USB_ROLE_NONE;
- 		break;
-+	default:
-+		break;
- 	}
- 
- 	dev_dbg(cdns->dev, "role %d -> %d\n", cdns->role, role);
-diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-index e20874c..30bdb81 100644
---- a/drivers/usb/common/usb-conn-gpio.c
-+++ b/drivers/usb/common/usb-conn-gpio.c
-@@ -257,6 +257,9 @@ static int usb_conn_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, info);
- 	device_set_wakeup_capable(&pdev->dev, true);
- 
-+	/* Set last role to unknown before performing the initial detection */
-+	info->last_role = USB_ROLE_UNKNOWN;
-+
- 	/* Perform initial detection */
- 	usb_conn_queue_dwork(info, 0);
- 
-diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
-index b5deafd..65e790a 100644
---- a/include/linux/usb/role.h
-+++ b/include/linux/usb/role.h
-@@ -11,6 +11,7 @@ enum usb_role {
- 	USB_ROLE_NONE,
- 	USB_ROLE_HOST,
- 	USB_ROLE_DEVICE,
-+	USB_ROLE_UNKNOWN,
- };
- 
- typedef int (*usb_role_switch_set_t)(struct usb_role_switch *sw,
--- 
-2.7.4
-
+- Sachin=
