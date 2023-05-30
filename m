@@ -2,74 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25822716F93
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 23:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16567716F96
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 23:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233446AbjE3VTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 17:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
+        id S233487AbjE3VUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 17:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233383AbjE3VTe (ORCPT
+        with ESMTP id S231458AbjE3VUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 17:19:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBC8C9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 14:19:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AB06633BC
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 21:19:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9CE82C433D2;
-        Tue, 30 May 2023 21:19:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685481572;
-        bh=NOO26cqnTWEsAYU2cQM0VTpfVyTQP8oNbdPhKwh9oOc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=LJg73qZnwvID0rEC+Pf66GcjiTm9kRCtCYiz49AyRTiAFSCp0djRu0FJ+BDrOl+dT
-         Dygdicl7LUlug+QCy6TOf/QFSqiLNs2tkN+4I89wgxyoTbNw3MPgXs2ZKzWj86nbkf
-         X6D/zKbz4Ig5hDDyxYrKId2ksQolScwfpEYl47Xovkwq3rHQPgQSI90+nzqRREo7zx
-         +e/iwwSmNhOfK4/M4XxeH1qynbVtpF22wtR4OncEnGCwHBDChHIWQzrNSn03edlSfd
-         4xObEg5NhSHd97xRbSqpedyWz4N2dzJEJCO8fv/UGyR394AFSq1x9OBqwNM1Bu8y2o
-         PCIj4f3ovMYqg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 85AABE52BF6;
-        Tue, 30 May 2023 21:19:32 +0000 (UTC)
-Subject: Re: [GIT PULL] regmap fixes for v6.4-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230530120329.A60C0C433D2@smtp.kernel.org>
-References: <20230530120329.A60C0C433D2@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230530120329.A60C0C433D2@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/regmap-fix-v6.4-rc4
-X-PR-Tracked-Commit-Id: 0cc6578048e0980d254aee345130cced4912f723
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 1683c329b6a2ee54989811089854a8ac2d5b5fc1
-Message-Id: <168548157254.4416.6159937987116978484.pr-tracker-bot@kernel.org>
-Date:   Tue, 30 May 2023 21:19:32 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 30 May 2023 17:20:41 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01B2C0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 14:20:39 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-96f683e8855so716397466b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 14:20:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685481638; x=1688073638;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jMgiLGfQY4K8q8It6kJThVSmE1j01dNv8Q5A098cJZg=;
+        b=OLK4N2ZVIECTEdD542qtMV4UeyeOcMLKuxHtrmbJLAN09hdUPkJjgO/Om1wh+36n78
+         reU0DbmtM0Skg20UOwEKxmrMHMGhw3M4Qj1jbiuzaJUGhAmpkzaRLaFgl4MCOB5h7Ltu
+         CNOcR0i+gkVIiSX2mZ3zxTP6yVS7OTi77hTo1nxYTzvXKBFXpTed7QXmVqbh9ZkAp2+q
+         5mw18/wxpdL7ZiZydH/hY4WCD78hUg67Qm1PwaaGEkkBsM04p8NNpt8QAmtdZxKrxJW1
+         5BSTIbAR9Fj7sJkcEWTqhWSRtjhBFI3vUCostXcEa2ZrsFBZJ5KZcbc9nYgl2hvFgxRX
+         29UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685481638; x=1688073638;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jMgiLGfQY4K8q8It6kJThVSmE1j01dNv8Q5A098cJZg=;
+        b=Ym6BqqUEjSr+Zf9vKPP2up/UF6rhaniBbudCGHpLlPPyu9KjwSJYfSWL9o8wYQNy+6
+         FbAthHHiyLU02ypEPJfVeEi5INGy7GvA77MBrPWg3UaCeu3keZqUtw+jvqklrEXBVeP8
+         Dm/RHSagYyO0icwVj64M3zvMGbznXNvh5DR5ePKw1+nhUmIGwh7z/cQDEkQ6RCDnpqjE
+         WALClVY0b8ElioM/tAcof6LM+vY6pci0UqN9ZGSYa20vmsXnvihhU/75DOmnnUqgeGjr
+         TkpgO5BxDaXRV2gjmZFHYu+631MW+dxLi6f08a7spCYHOvzX9NWXXPbrq5Ov5eyI+Ot0
+         +jHg==
+X-Gm-Message-State: AC+VfDxcaELSIXL/3hPfIPtH69YOJ2JcFYQVhuyr4jlFU8xLXHoJr898
+        LP4OLdEYo0KUVIyqDo9A95mU6seGVBxmh3KIZkr+pA==
+X-Google-Smtp-Source: ACHHUZ67GOY7kKYCgiNWjTC19+TLUBNL/QCaivt1MXil5qIddaAYtxcvL4i/gEoXq+hYlFCPot6GKoKeYdwedhr6d0I=
+X-Received: by 2002:a17:907:9813:b0:965:6cb9:b768 with SMTP id
+ ji19-20020a170907981300b009656cb9b768mr2770998ejc.31.1685481638228; Tue, 30
+ May 2023 14:20:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230530210251.493194-1-yosryahmed@google.com> <20230530141547.609c4a434470c3fbf7570ff8@linux-foundation.org>
+In-Reply-To: <20230530141547.609c4a434470c3fbf7570ff8@linux-foundation.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 30 May 2023 14:20:01 -0700
+Message-ID: <CAJD7tkYwHufwgzBkyycjW=LXYUKB9cS74uDaUseaLDe5mpQ+VA@mail.gmail.com>
+Subject: Re: [PATCH] mm: zswap: support exclusive loads
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Nhat Pham <nphamcs@gmail.com>,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
+        Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 30 May 2023 13:03:15 +0100:
+On Tue, May 30, 2023 at 2:15=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
+>
+> On Tue, 30 May 2023 21:02:51 +0000 Yosry Ahmed <yosryahmed@google.com> wr=
+ote:
+>
+> > Commit 71024cb4a0bf ("frontswap: remove frontswap_tmem_exclusive_gets")
+> > removed support for exclusive loads from frontswap as it was not used.
+> >
+> > Bring back exclusive loads support to frontswap by adding an
+> > exclusive_loads argument to frontswap_ops. Add support for exclusive
+> > loads to zswap behind CONFIG_ZSWAP_EXCLUSIVE_LOADS.
+>
+> Why is this Kconfigurable?  Why not just enable the feature for all
+> builds?
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/regmap-fix-v6.4-rc4
+I assumed that some users want the current behavior, where reclaiming
+clean pages that were once in zswap would be faster. If no one cares,
+I can remove the config option and have it always on.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/1683c329b6a2ee54989811089854a8ac2d5b5fc1
+>
+> > Refactor zswap entry invalidation in zswap_frontswap_invalidate_page()
+> > into zswap_invalidate_entry() to reuse it in zswap_frontswap_load().
+> >
+> > With exclusive loads, we avoid having two copies of the same page in
+> > memory (compressed & uncompressed) after faulting it in from zswap. On
+> > the other hand, if the page is to be reclaimed again without being
+> > dirtied, it will be re-compressed. Compression is not usually slow, and
+> > a page that was just faulted in is less likely to be reclaimed again
+> > soon.
+> >
+> > --- a/mm/Kconfig
+> > +++ b/mm/Kconfig
+> > @@ -46,6 +46,19 @@ config ZSWAP_DEFAULT_ON
+> >         The selection made here can be overridden by using the kernel
+> >         command line 'zswap.enabled=3D' option.
+> >
+> > +config ZSWAP_EXCLUSIVE_LOADS
+> > +     bool "Invalidate zswap entries when pages are loaded"
+> > +     depends on ZSWAP
+> > +     help
+> > +       If selected, when a page is loaded from zswap, the zswap entry =
+is
+> > +       invalidated at once, as opposed to leaving it in zswap until th=
+e
+> > +       swap entry is freed.
+> > +
+> > +       This avoids having two copies of the same page in memory
+> > +       (compressed and uncompressed) after faulting in a page from zsw=
+ap.
+> > +       The cost is that if the page was never dirtied and needs to be
+> > +       swapped out again, it will be re-compressed.
+>
+> So it's a speed-vs-space tradeoff?  I'm not sure how users are to
+> decide whether they want this.  Did we help them as much as possible?
 
-Thank you!
+Yes, it is a reclaim speed vs. space tradeoff.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+My intuition is that it should be more useful to have this enabled, as
+the memory savings should be more important than having reclaim be a
+little bit faster in some specific situations. We can make the
+configuration on by default if others agree.
+
+I would imagine users would turn this configuration on and observe
+memory usage of zswap vs. reclaim speed, and decide based on the
+numbers.
+
+>
+>
