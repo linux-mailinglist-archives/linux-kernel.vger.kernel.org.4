@@ -2,102 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FAF57161AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502D07161B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232459AbjE3NYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 09:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S232664AbjE3NZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbjE3NYp (ORCPT
+        with ESMTP id S232747AbjE3NZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 09:24:45 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949ABD9;
-        Tue, 30 May 2023 06:24:42 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QVtR938J0z4f3nTh;
-        Tue, 30 May 2023 21:24:37 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgBH_rEU+XVkWUMyKg--.13490S3;
-        Tue, 30 May 2023 21:24:38 +0800 (CST)
-Subject: Re: [PATCH V1] block: Fix null pointer dereference issue on struct
- io_cq
-To:     Pradeep Pragallapati <quic_pragalla@quicinc.com>,
-        Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230517084434.18932-1-quic_pragalla@quicinc.com>
- <07b8b870-a464-25a9-c0a6-c123fad05ff5@huaweicloud.com>
- <a29dcfa5-bb6a-d3b9-9fb7-cce87a8f8620@huaweicloud.com>
- <4648819c-2115-a981-1b74-0495b94d4233@huaweicloud.com>
- <b1b7e7f1-55c2-4833-040f-6cdb75f8c11b@quicinc.com>
- <00eefae6-8db4-139b-9f8a-9ed326817561@quicinc.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <b7d92802-8403-874d-0cf5-d492e3ea96ae@huaweicloud.com>
-Date:   Tue, 30 May 2023 21:24:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 30 May 2023 09:25:04 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA57D9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 06:25:03 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QVtRQ3yk7zTkDs;
+        Tue, 30 May 2023 21:24:50 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 30 May 2023 21:24:58 +0800
+CC:     <yangyicong@hisilicon.com>, <mingo@redhat.com>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <tim.c.chen@linux.intel.com>,
+        <yu.c.chen@intel.com>, <gautham.shenoy@amd.com>, <mgorman@suse.de>,
+        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <bristot@redhat.com>,
+        <prime.zeng@huawei.com>, <jonathan.cameron@huawei.com>,
+        <ego@linux.vnet.ibm.com>, <srikar@linux.vnet.ibm.com>,
+        <linuxarm@huawei.com>, <21cnbao@gmail.com>,
+        <kprateek.nayak@amd.com>, <wuyun.abel@bytedance.com>,
+        Barry Song <song.bao.hua@hisilicon.com>
+Subject: Re: [PATCH v8 1/2] sched: Add per_cpu cluster domain info and
+ cpus_share_lowest_cache API
+To:     Peter Zijlstra <peterz@infradead.org>
+References: <20230530070253.33306-1-yangyicong@huawei.com>
+ <20230530070253.33306-2-yangyicong@huawei.com>
+ <20230530113820.GB156198@hirez.programming.kicks-ass.net>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <70bf599c-6338-f4b6-afe9-75ec97912b0a@huawei.com>
+Date:   Tue, 30 May 2023 21:24:58 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-In-Reply-To: <00eefae6-8db4-139b-9f8a-9ed326817561@quicinc.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBH_rEU+XVkWUMyKg--.13490S3
-X-Coremail-Antispam: 1UD129KBjvdXoW7JryrJFWfJF4xWF1fur1kAFb_yoW3WFc_Ww
-        4UuasrGwn0gw4xtrn8Krnaq34vqF18KF13JrWxAF4xG3s7Zas5AF4rJ393A347GrW7Jw48
-        Cr1qga4SqFsxKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb4xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CEbIxv
-        r21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUU
-        UU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+In-Reply-To: <20230530113820.GB156198@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-在 2023/05/30 21:15, Pradeep Pragallapati 写道:
-> Hi,
-> 
-> On 5/22/2023 11:49 AM, Pradeep Pragallapati wrote:
+On 2023/5/30 19:38, Peter Zijlstra wrote:
+> On Tue, May 30, 2023 at 03:02:52PM +0800, Yicong Yang wrote:
+>> From: Barry Song <song.bao.hua@hisilicon.com>
 >>
->> On 5/18/2023 6:14 PM, Yu Kuai wrote:
->>> Hi,
->>>
->>> 在 2023/05/18 20:16, Yu Kuai 写道:
->>>
->>>> @@ -173,18 +171,17 @@ void ioc_clear_queue(struct request_queue *q)
->>>>   {
->>>>          LIST_HEAD(icq_list);
->>>>
->>>> +       rcu_read_lock();
->>>
->>> Sorry that I realized this is still not enough, following list_empty()
->>> and list_entry() can still concurrent with list_del(). Please try the
->>> following patch:
->> sure will try and update the results.
+>> Add per-cpu cluster domain info and cpus_share_lowest_cache() API.
 > 
+> Lowest cache is weird; that would be L1, but your implementation is for
+> L2/L3.
 > 
-> At least for 80+hrs of testing, i didn't see the issue reproduced. seems 
-> like it is helping my case.
 
-Thanks for the test, I'll send a patch soon.
+ok there seems a history about this naming.
 
-Kuai
+In the first version we make it cpus_share_cluster(), since on non-cluster
+machine it actually behaves as cpus_share_cache() so "cluster" maybe inaccurate.
+Then we make it cpus_share_resources() [1]. Tim mentioned cpus_share_lowest_cache()
+maybe more informative in [2] so we use it.
 
+Since lowest cache may refer to L1 as mentioned, maybe we should use
+cpus_share_resources() again to avoid confusion?
+
+[1] https://lore.kernel.org/lkml/CAKfTPtBKLDyNPXg7uLbQ3jUnEwppfC+E29=oJ1tWzzqHsNpApw@mail.gmail.com/
+[2] https://lore.kernel.org/lkml/05472b4ed10c694bce1a2b6dd4a0ef13ea337db3.camel@linux.intel.com/
+
+Thanks,
+Yicong
