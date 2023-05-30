@@ -2,238 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC520715390
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D6E715365
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 04:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjE3CUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 22:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
+        id S229967AbjE3CE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 22:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbjE3CUR (ORCPT
+        with ESMTP id S229753AbjE3CEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 22:20:17 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4245CF3;
-        Mon, 29 May 2023 19:20:12 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QVbFx114BzTkwx;
-        Tue, 30 May 2023 10:00:37 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 30 May 2023 10:00:44 +0800
-Message-ID: <7f6ab488-9eef-fb94-b007-839eb1c1f487@huawei.com>
-Date:   Tue, 30 May 2023 10:00:44 +0800
+        Mon, 29 May 2023 22:04:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1CA10A;
+        Mon, 29 May 2023 19:03:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB6BC629AB;
+        Tue, 30 May 2023 02:01:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77CA4C433D2;
+        Tue, 30 May 2023 02:01:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685412105;
+        bh=k9eghuxYpGj4/wVpX1B6WX24RA+gPm9dTmY/xLxTuY0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=q+c0VsJG2rCWfnyG4P3hpyZwueFtaL/RnQppU/JL3jzuf6qnYmCCv9zHx9L9OORNU
+         Erls76MId6q1NGOzYLZF/o4tr5h6tP3B4xbb6YaB9FjgFrfAVI9DWOUj/EBLz3mdDU
+         jnrvv0CKx2TT0iZ5PHrd/2bcAl4amuL8hoyc1YSoyaAuNxv1cZX5k41PaJ8IxwvpAD
+         wh7tHeefBB+B1Dobu9dLF3CraVr/jRaxJWdk+psAXwmMXMYYRzz4V5h93wZoDcTzVY
+         ZbJAzbef3o4NofmbiWTGUcGEr/GJ6iAYWl2VQyeFFY171dIcjXW1exjMljvnyU4j81
+         j0WRuoZeugm9Q==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-integrity@vger.kernel.org
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Alejandro Cabrera <alejandro.cabreraaldaya@tuni.fi>,
+        Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>,
+        stable@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RFC v2] tpm: tpm_vtpm_proxy: do not reference kernel memory as user memory
+Date:   Tue, 30 May 2023 05:01:32 +0300
+Message-Id: <20230530020133.235765-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] ext4: fix race condition between buffer write and
- page_mkwrite
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <jun.nie@linaro.org>,
-        <ebiggers@kernel.org>, <yi.zhang@huawei.com>,
-        <yangerkun@huawei.com>, <yukuai3@huawei.com>,
-        <syzbot+a158d886ca08a3fecca4@syzkaller.appspotmail.com>,
-        <stable@vger.kernel.org>
-References: <20230529080148.3810143-1-libaokun1@huawei.com>
- <20230529144435.bj65ltbww5jbh2uc@quack3>
-Content-Language: en-US
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230529144435.bj65ltbww5jbh2uc@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/29 22:44, Jan Kara wrote:
-> On Mon 29-05-23 16:01:48, Baokun Li wrote:
->> Syzbot reported a BUG_ON:
->> ==================================================================
->> EXT4-fs (loop0): mounted filesystem without journal. Quota mode: none.
->> EXT4-fs error (device loop0): ext4_mb_generate_buddy:1098: group 0, block
->>       bitmap and bg descriptor inconsistent: 25 vs 150994969 free clusters
->> ------------[ cut here ]------------
->> kernel BUG at fs/ext4/ext4_jbd2.c:53!
->> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
->> CPU: 1 PID: 494 Comm: syz-executor.0 6.1.0-rc7-syzkaller-ga4412fdd49dc #0
->> RIP: 0010:__ext4_journal_stop+0x1b3/0x1c0
->>   [...]
->> Call Trace:
->>   ext4_write_inline_data_end+0xa39/0xdf0
->>   ext4_da_write_end+0x1e2/0x950
->>   generic_perform_write+0x401/0x5f0
->>   ext4_buffered_write_iter+0x35f/0x640
->>   ext4_file_write_iter+0x198/0x1cd0
->>   vfs_write+0x8b5/0xef0
->>   [...]
->> ==================================================================
->>
->> The above BUG_ON is triggered by the following race:
->>
->>             cpu1                    cpu2
->> ________________________|________________________
->> ksys_write
->>   vfs_write
->>    new_sync_write
->>     ext4_file_write_iter
->>      ext4_buffered_write_iter
->>       generic_perform_write
->>        ext4_da_write_begin
->>                            do_fault
->>                             do_page_mkwrite
->>                              ext4_page_mkwrite
->>                               ext4_convert_inline_data
->>                                ext4_convert_inline_data_nolock
->>                                 ext4_destroy_inline_data_nolock
->>                                  //clear EXT4_STATE_MAY_INLINE_DATA
->>                                 ext4_map_blocks --> return error
->>         ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
->>         ext4_block_write_begin
->>                                 ext4_restore_inline_data
->>                                  // set EXT4_STATE_MAY_INLINE_DATA
->>        ext4_da_write_end
->>         ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
->>         ext4_write_inline_data_end
->>          handle=NULL
->>          ext4_journal_stop(handle)
->>           __ext4_journal_stop
->>            ext4_put_nojournal(handle)
->>             ref_cnt = (unsigned long)handle
->>             BUG_ON(ref_cnt == 0)  ---> BUG_ON
->>
->> The root cause of this problem is that the ext4_convert_inline_data() in
->> ext4_page_mkwrite() does not grab i_rwsem, so it may race with
->> ext4_buffered_write_iter() and cause the write_begin() and write_end()
->> functions to be inconsistent and trigger BUG_ON.
->>
->> To solve the above issue, we cannot add inode_lock directly to
->> ext4_page_mkwrite(), because this function is a hot path and frequent calls
->> to inode_lock will cause performance degradation for multi-threaded reads
->> and writes. Hence, we move ext4_convert_inline_data() to ext4_file_mmap(),
->> and only when inline_data is enabled and mmap a file in shared write mode,
->> we hold the lock to convert, which can reduce the impact on performance.
->>
->> Reported-by: Jun Nie <jun.nie@linaro.org>
->> Closes: https://lore.kernel.org/lkml/63903521.5040307@huawei.com/t/
->> Reported-by: syzbot+a158d886ca08a3fecca4@syzkaller.appspotmail.com
->> Closes: https://syzkaller.appspot.com/bug?id=899b37f20ce4072bcdfecfe1647b39602e956e36
->> Fixes: 7b4cc9787fe3 ("ext4: evict inline data when writing to memory map")
->> CC: stable@vger.kernel.org # 4.12+
->> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> Thanks for the patch! The problem with i_rwsem in ext4_page_mkwrite() is
-> not so much about performance as about lock ordering. In
-> ext4_page_mkwrite() we are called with mmap_sem held and so we cannot
-> acquire i_rwsem because it ranks about it.
+From: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
 
-Thank you for your review!
+The driver has two issues (in priority order) in the locality change:
 
-I'm sorry I didn't make myself clear here.
+1. The driver uses __user pointer and copy_to_user() and
+   copy_from_user() with a kernel address during the locality change.
+2. For invalid locality change request from user space, the driver
+   sets errno to EFAULT, while for invalid input data EINVAL should
+   be used.
 
-Yes, we can't get i_rwsem after holding mmap_sem at any time, otherwise
-ABBA deadlock may occur. The "add inode_lock directly" in my patch
-description actually looks like this:
-```
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index b98d2d58b900..c9318dc2a613 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -6025,12 +6025,14 @@ vm_fault_t ext4_page_mkwrite(struct vm_fault *vmf)
-         sb_start_pagefault(inode->i_sb);
-         file_update_time(vma->vm_file);
+Address this by:
 
--       filemap_invalidate_lock_shared(mapping);
+1. Introduce __vtpm_proxy_read_unlocked(),  __vtpm_proxy_write_unlocked()
+   and __vtpm_proxy_read_write_locked().
+2. Make locality change atomic by calling __vtpm_proxy_read_write_locked(),
+   instead of tpm_transmit_cmd().
+
+Cc: stable@vger.kernel.org
+Fixes: be4c9acfe297 ("tpm: vtpm_proxy: Implement request_locality function.")
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
+---
+v2:
+* Acquiring and releasing mutex in-between should not be an issue
+  because they are executed with the chip locked.
+---
+ drivers/char/tpm/tpm_vtpm_proxy.c | 162 ++++++++++++++----------------
+ 1 file changed, 73 insertions(+), 89 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
+index 30e953988cab..8f43a82e5590 100644
+--- a/drivers/char/tpm/tpm_vtpm_proxy.c
++++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+@@ -38,7 +38,6 @@ struct proxy_dev {
+ #define STATE_OPENED_FLAG        BIT(0)
+ #define STATE_WAIT_RESPONSE_FLAG BIT(1)  /* waiting for emulator response */
+ #define STATE_REGISTERED_FLAG	 BIT(2)
+-#define STATE_DRIVER_COMMAND     BIT(3)  /* sending a driver specific command */
+ 
+ 	size_t req_len;              /* length of queued TPM request */
+ 	size_t resp_len;             /* length of queued TPM response */
+@@ -58,106 +57,112 @@ static void vtpm_proxy_delete_device(struct proxy_dev *proxy_dev);
+  * Functions related to 'server side'
+  */
+ 
+-/**
+- * vtpm_proxy_fops_read - Read TPM commands on 'server side'
+- *
+- * @filp: file pointer
+- * @buf: read buffer
+- * @count: number of bytes to read
+- * @off: offset
+- *
+- * Return:
+- *	Number of bytes read or negative error code
+- */
+-static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
+-				    size_t count, loff_t *off)
++static ssize_t __vtpm_proxy_read_unlocked(struct proxy_dev *proxy_dev, char __user *buf,
++					  size_t count)
+ {
+-	struct proxy_dev *proxy_dev = filp->private_data;
+ 	size_t len;
+-	int sig, rc;
 -
-+       inode_lock(inode);
-         err = ext4_convert_inline_data(inode);
-+       inode_unlock(inode);
-         if (err)
-                 goto out_ret;
-
-+       filemap_invalidate_lock_shared(mapping);
+-	sig = wait_event_interruptible(proxy_dev->wq,
+-		proxy_dev->req_len != 0 ||
+-		!(proxy_dev->state & STATE_OPENED_FLAG));
+-	if (sig)
+-		return -EINTR;
+-
+-	mutex_lock(&proxy_dev->buf_lock);
++	int rc;
+ 
+-	if (!(proxy_dev->state & STATE_OPENED_FLAG)) {
+-		mutex_unlock(&proxy_dev->buf_lock);
++	if (!(proxy_dev->state & STATE_OPENED_FLAG))
+ 		return -EPIPE;
+-	}
+ 
+ 	len = proxy_dev->req_len;
+ 
+ 	if (count < len || len > sizeof(proxy_dev->buffer)) {
+-		mutex_unlock(&proxy_dev->buf_lock);
+ 		pr_debug("Invalid size in recv: count=%zd, req_len=%zd\n",
+ 			 count, len);
+ 		return -EIO;
+ 	}
+ 
+-	rc = copy_to_user(buf, proxy_dev->buffer, len);
++	if (buf)
++		rc = copy_to_user(buf, proxy_dev->buffer, len);
 +
-         /*
-          * On data journalling we skip straight to the transaction handle:
-          * there's no delalloc; page truncated will be checked later; the
-```
-Originally, ext4_page_mkwrite could be freely concurrent with write,
-but after adding inode_lock as in the above scenario, the two would
-compete for inode_lock, thus having a performance impact on the
-scenario where ext4_page_mkwrite and write are called at the same
-time. The ext4_file_map will definitely be called before calling
-ext4_page_mkwrite, and ext4_file_map will be called much less often,
-so the logic for locking and performing convert is moved here to
-reduce the performance impact.
-
-
->> ---
->>   fs/ext4/file.c  | 24 +++++++++++++++++++++++-
->>   fs/ext4/inode.c |  4 ----
->>   2 files changed, 23 insertions(+), 5 deletions(-)
->>
->> diff --git a/fs/ext4/file.c b/fs/ext4/file.c
->> index d101b3b0c7da..7a04376c33f2 100644
->> --- a/fs/ext4/file.c
->> +++ b/fs/ext4/file.c
->> @@ -795,7 +795,8 @@ static const struct vm_operations_struct ext4_file_vm_ops = {
->>   static int ext4_file_mmap(struct file *file, struct vm_area_struct *vma)
->>   {
->>   	struct inode *inode = file->f_mapping->host;
->> -	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
->> +	struct super_block *sb = inode->i_sb;
->> +	struct ext4_sb_info *sbi = EXT4_SB(sb);
->>   	struct dax_device *dax_dev = sbi->s_daxdev;
->>   
->>   	if (unlikely(ext4_forced_shutdown(sbi)))
->> @@ -808,6 +809,27 @@ static int ext4_file_mmap(struct file *file, struct vm_area_struct *vma)
->>   	if (!daxdev_mapping_supported(vma, dax_dev))
->>   		return -EOPNOTSUPP;
->>   
->> +	/*
->> +	 * Writing via mmap has no logic to handle inline data, so we
->> +	 * need to call ext4_convert_inline_data() to convert the inode
->> +	 * to normal format before doing so, otherwise a BUG_ON will be
->> +	 * triggered in ext4_writepages() due to the
->> +	 * EXT4_STATE_MAY_INLINE_DATA flag. Moreover, we need to grab
->> +	 * i_rwsem during conversion, since clearing and setting the
->> +	 * inline data flag may race with ext4_buffered_write_iter()
->> +	 * to trigger a BUG_ON.
->> +	 */
->> +	if (ext4_has_feature_inline_data(sb) &&
->> +	    vma->vm_flags & VM_SHARED && vma->vm_flags & VM_WRITE) {
-> Sadly this does not work because we can mmap(2) the file read-only and then
-> use mprotect(2) to make file writeable.
-
-I'm very sorry I didn't take this situation into account.
-
-Thank you for pointing out the problem!
-
-> But we can test for VM_MAYWRITE
-> which gets set when mapping can be made writeable (basically anytime when
-> the file descriptor itself is writeable).
->
-> Otherwise the patch looks good.
->
-> 								Honza
-
-Indeed!
-
-I will send a patch V2 with the changes suggested by you.
-
-Thanks again!
-
+ 	memset(proxy_dev->buffer, 0, len);
+ 	proxy_dev->req_len = 0;
+ 
+ 	if (!rc)
+ 		proxy_dev->state |= STATE_WAIT_RESPONSE_FLAG;
+ 
+-	mutex_unlock(&proxy_dev->buf_lock);
+-
+ 	if (rc)
+ 		return -EFAULT;
+ 
+ 	return len;
+ }
+ 
+-/**
+- * vtpm_proxy_fops_write - Write TPM responses on 'server side'
+- *
+- * @filp: file pointer
+- * @buf: write buffer
+- * @count: number of bytes to write
+- * @off: offset
+- *
+- * Return:
+- *	Number of bytes read or negative error value
+- */
+-static ssize_t vtpm_proxy_fops_write(struct file *filp, const char __user *buf,
+-				     size_t count, loff_t *off)
++static ssize_t __vtpm_proxy_write_unlocked(struct proxy_dev *proxy_dev, const char __user *buf,
++					   size_t count)
+ {
+-	struct proxy_dev *proxy_dev = filp->private_data;
+-
+-	mutex_lock(&proxy_dev->buf_lock);
+-
+-	if (!(proxy_dev->state & STATE_OPENED_FLAG)) {
+-		mutex_unlock(&proxy_dev->buf_lock);
++	if (!(proxy_dev->state & STATE_OPENED_FLAG))
+ 		return -EPIPE;
+-	}
+ 
+ 	if (count > sizeof(proxy_dev->buffer) ||
+-	    !(proxy_dev->state & STATE_WAIT_RESPONSE_FLAG)) {
+-		mutex_unlock(&proxy_dev->buf_lock);
++	    !(proxy_dev->state & STATE_WAIT_RESPONSE_FLAG))
+ 		return -EIO;
+-	}
+ 
+ 	proxy_dev->state &= ~STATE_WAIT_RESPONSE_FLAG;
+ 
+ 	proxy_dev->req_len = 0;
+ 
+-	if (copy_from_user(proxy_dev->buffer, buf, count)) {
+-		mutex_unlock(&proxy_dev->buf_lock);
++	if (buf && copy_from_user(proxy_dev->buffer, buf, count))
+ 		return -EFAULT;
+-	}
+ 
+ 	proxy_dev->resp_len = count;
++	return count;
++}
+ 
++static ssize_t __vtpm_proxy_read_write_unlocked(struct proxy_dev *proxy_dev, char __user *buf,
++						size_t count)
++{
++	ssize_t rc;
++
++	do {
++		rc = __vtpm_proxy_write_unlocked(proxy_dev, buf, count);
++		if (rc < 0)
++			break;
++		rc = __vtpm_proxy_read_unlocked(proxy_dev, buf, rc);
++	} while (0);
++
++	return rc;
++}
++
++/*
++ * See struct file_operations.
++ */
++static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
++				    size_t count, loff_t *off)
++{
++	struct proxy_dev *proxy_dev = filp->private_data;
++	ssize_t rc;
++	int sig;
++
++	sig = wait_event_interruptible(proxy_dev->wq,
++		proxy_dev->req_len != 0 ||
++		!(proxy_dev->state & STATE_OPENED_FLAG));
++	if (sig)
++		return -EINTR;
++
++	mutex_lock(&proxy_dev->buf_lock);
++	rc = __vtpm_proxy_read_unlocked(proxy_dev, buf, count);
+ 	mutex_unlock(&proxy_dev->buf_lock);
+ 
++	return rc;
++}
++
++/*
++ * See struct file_operations.
++ */
++static ssize_t vtpm_proxy_fops_write(struct file *filp, const char __user *buf,
++				     size_t count, loff_t *off)
++{
++	struct proxy_dev *proxy_dev = filp->private_data;
++	int rc;
++
++	mutex_lock(&proxy_dev->buf_lock);
++	rc = __vtpm_proxy_write_unlocked(proxy_dev, buf, count);
++	mutex_unlock(&proxy_dev->buf_lock);
+ 	wake_up_interruptible(&proxy_dev->wq);
+ 
+-	return count;
++	return rc;
+ }
+ 
+ /*
+@@ -295,28 +300,6 @@ static int vtpm_proxy_tpm_op_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+ 	return len;
+ }
+ 
+-static int vtpm_proxy_is_driver_command(struct tpm_chip *chip,
+-					u8 *buf, size_t count)
+-{
+-	struct tpm_header *hdr = (struct tpm_header *)buf;
+-
+-	if (count < sizeof(struct tpm_header))
+-		return 0;
+-
+-	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
+-		switch (be32_to_cpu(hdr->ordinal)) {
+-		case TPM2_CC_SET_LOCALITY:
+-			return 1;
+-		}
+-	} else {
+-		switch (be32_to_cpu(hdr->ordinal)) {
+-		case TPM_ORD_SET_LOCALITY:
+-			return 1;
+-		}
+-	}
+-	return 0;
+-}
+-
+ /*
+  * Called when core TPM driver forwards TPM requests to 'server side'.
+  *
+@@ -330,6 +313,7 @@ static int vtpm_proxy_is_driver_command(struct tpm_chip *chip,
+ static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t count)
+ {
+ 	struct proxy_dev *proxy_dev = dev_get_drvdata(&chip->dev);
++	unsigned int ord = ((struct tpm_header *)buf)->ordinal;
+ 
+ 	if (count > sizeof(proxy_dev->buffer)) {
+ 		dev_err(&chip->dev,
+@@ -338,9 +322,11 @@ static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t count)
+ 		return -EIO;
+ 	}
+ 
+-	if (!(proxy_dev->state & STATE_DRIVER_COMMAND) &&
+-	    vtpm_proxy_is_driver_command(chip, buf, count))
+-		return -EFAULT;
++	if ((chip->flags & TPM_CHIP_FLAG_TPM2) && ord == TPM2_CC_SET_LOCALITY)
++		return -EINVAL;
++
++	if (ord == TPM_ORD_SET_LOCALITY)
++		return -EINVAL;
+ 
+ 	mutex_lock(&proxy_dev->buf_lock);
+ 
+@@ -409,12 +395,10 @@ static int vtpm_proxy_request_locality(struct tpm_chip *chip, int locality)
+ 		return rc;
+ 	tpm_buf_append_u8(&buf, locality);
+ 
+-	proxy_dev->state |= STATE_DRIVER_COMMAND;
+-
+-	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to set locality");
+-
+-	proxy_dev->state &= ~STATE_DRIVER_COMMAND;
+-
++	mutex_lock(&proxy_dev->buf_lock);
++	memcpy(proxy_dev->buffer, buf.data, tpm_buf_length(&buf));
++	rc = __vtpm_proxy_read_write_unlocked(proxy_dev, NULL, tpm_buf_length(&buf));
++	mutex_unlock(&proxy_dev->buf_lock);
+ 	if (rc < 0) {
+ 		locality = rc;
+ 		goto out;
 -- 
-With Best Regards,
-Baokun Li
-.
+2.39.2
+
