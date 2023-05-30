@@ -2,80 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 059C4715C1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD120715C22
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbjE3KpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
+        id S231669AbjE3Kpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbjE3Koy (ORCPT
+        with ESMTP id S231699AbjE3Kpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:44:54 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B9CE8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:44:49 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6af6df840ffso3320458a34.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:44:49 -0700 (PDT)
+        Tue, 30 May 2023 06:45:33 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7741AD
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:45:13 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-96f588bc322so628864766b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:45:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685443489; x=1688035489;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=V4+2rZKBXa1Z5xz6nnUi0KpnZt/DKwoqdE+m2GoQd6Q=;
-        b=pBjGYUIKmeYLLqsQEHtmYlz0AVujaq+DSHXwUcaM1VWrwrxU7mTEMD2RrbhPNNb/G8
-         jzy5c8dt+s6jl1O4NjxgQz6wFSRFac6iKtI53vZ5GtiA28ihEDDvXrdCaPdkjaVK2dPp
-         X9olFoDBDL3xlsa/42AoOLz2JtPXg4FwsCYgBWOFmulk0br06s66XQAhJpx5IfLqvhOw
-         qHPKhMCyN3T8YQoDsl5Z7CCa12NhGUyIeRQy+61s+w5bGIBkkiyXvF8BeRdnFrQl6hTI
-         eZ1Tzm2m6DRpAy5QYXqtlf5e0wJD9tYw6yykYB1+2lTYcMgw08+qphzEn/+pGGBz1hUW
-         Vkeg==
+        d=linaro.org; s=google; t=1685443512; x=1688035512;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZVwdZi18tOx4F5EpOQikJaJC+N1FG0YCZmCcPhomPHk=;
+        b=S73mFiWbxirjBnXaVpi44ZylcB1rk2ju47gQOmZCRxQN2+s/sqVV1D8hvtUrluFh6E
+         no9M/snhG8IGrnRjrp/0xLZxudsQlPuvOzuHvd6vBtx2b5F5l1Szqih9fBYKrBVG1v7U
+         lpyV9KLdT4b8zcRvAjcdbvA9YuzHeVxK0SSiTx2LfKVerRUEZBhuAIyQn9Wewc7oGq8v
+         qg6nkPqS67PIzeqbmPQU8BlGbbmOfLOx9xTCXFfNPCojYzzzenV/f+Yy1FlbU8C2V0ZS
+         uFqTcCVCsSf+3x+VWGzFUnCDVvsrIA9qbSooaz8Vi37COFaDiRwwXAljEV0iT5P/kk50
+         swJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685443489; x=1688035489;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V4+2rZKBXa1Z5xz6nnUi0KpnZt/DKwoqdE+m2GoQd6Q=;
-        b=THcSh6yMatYYtmR2gv4bneeVrgWDgSK34YhI1m5H5RbrtOzV4riekaFN8R+5b8nu3d
-         Z3cvLk6pVZnCVttZCBY2m+z8HUskBzk5ffs7+ZMZA0BUH6/2HbJxUb/bo9a+Fluuu3qV
-         7Pq+O78RJpNpVYtTg3lmOJmpUZ771WzlZoag40a7U61Fv7QRR3oHScctGqRI1wNUWiJO
-         1+/jSIovPUohYKwj51uUqZBMACDVHLTuBENnl3wLjyhV9KHdemnCBxLVviFMQsKIBnC9
-         lX4kJbDd526PeZU1QUPgQUwRCZn55J1T7HZZzGS7UCRkrlfC8mXGos0hY/CwaOR0mxM+
-         xKAA==
-X-Gm-Message-State: AC+VfDz1a5cveoPbi+njBfuxWk3v/E9jYvgkVa1K89nsUzG1XnE6VIhv
-        rxkLyEX8FxT8m4Fp8VS0PEeL+rLh0VVwI0UuXeE=
-X-Google-Smtp-Source: ACHHUZ6BWDhqZdI2z5TsbyjuJbWj/yg+VeoKAFTDZey/tI7l1OxG6/tzEF6sAG9cjEno/GS8zCsmI1ozD3SJw4fGRb0=
-X-Received: by 2002:a05:6808:14c5:b0:399:b8e:8532 with SMTP id
- f5-20020a05680814c500b003990b8e8532mr1114122oiw.11.1685443488675; Tue, 30 May
- 2023 03:44:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685443512; x=1688035512;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZVwdZi18tOx4F5EpOQikJaJC+N1FG0YCZmCcPhomPHk=;
+        b=YECsLGegAcMqqpFEHgaLkw0zFT5RdIwEsjSqERPj4KmBM9q5dxerJMsNeBunNpfi0T
+         gzSb5q6hiD9b4AbB5WHMO0mz3GP3JBHSUbBNzmYpGZWDanPxmkuPqVPxtgPuqaWdhKzW
+         SCa35ZDMi9UWvyMrFhdVddPysyD3nb1jBmMbBMJIrkMEJ8Sq8GyMisOSIIQnVEMeny2c
+         kJhuzN2amNXbYxIYjjS2tabaMO6hbIMcht/INXhf1tEhjarAqTiGtwoUpRxUnyjQ8KyA
+         3fROAcvcetDH2NAaNbdX9RHQEE95DGCNP1W/88jsiJ1G8IFoSY7f6B1IqcFoUjqaZsYZ
+         CQ/w==
+X-Gm-Message-State: AC+VfDwzN62AFPifYH+XKCb/NKx8pj390Wk2dGGjMb4oAINKd2TU4Z8+
+        IDlABNOg6nESklTh2n1esQYt3A==
+X-Google-Smtp-Source: ACHHUZ5uBamxXB8i6XT3BS/ZYvZ++f/DXv7dyXHtwOOk5zHSIIHgpWmLsU4LBbiyiCdthKlAqh1erw==
+X-Received: by 2002:a17:907:7d94:b0:973:e184:e0fd with SMTP id oz20-20020a1709077d9400b00973e184e0fdmr1899181ejc.70.1685443511792;
+        Tue, 30 May 2023 03:45:11 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id o2-20020a1709062e8200b0094f698073e0sm7040396eji.123.2023.05.30.03.45.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 03:45:11 -0700 (PDT)
+Message-ID: <30832bc4-c5b9-9131-2450-3522197ee05d@linaro.org>
+Date:   Tue, 30 May 2023 12:45:08 +0200
 MIME-Version: 1.0
-Received: by 2002:a05:6358:103:b0:127:67ec:694a with HTTP; Tue, 30 May 2023
- 03:44:48 -0700 (PDT)
-Reply-To: muhammedkhalid653@gmail.com
-From:   muhammed khalid <able6136@gmail.com>
-Date:   Tue, 30 May 2023 10:44:48 +0000
-Message-ID: <CABbgLSSv3NzTEwgxBrXLe8-QQc=3nZizE7EWvvgdnqNH3xTWvg@mail.gmail.com>
-Subject: re
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 01/11] dt-bindings: remoteproc: qcom: Add support for
+ multipd model
+Content-Language: en-US
+To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jassisinghbrar@gmail.com, mathieu.poirier@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_gurus@quicinc.com,
+        loic.poulain@linaro.org, quic_eberman@quicinc.com,
+        robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-clk@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
+ <1678164097-13247-2-git-send-email-quic_mmanikan@quicinc.com>
+ <38a5a268-7d8a-6e61-4272-8e9155df0034@linaro.org>
+ <790496d7-98dc-c92e-dedc-1c89395a1ad8@quicinc.com>
+ <4669eed6-b76c-8e68-74b1-36ea52a4bd5b@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4669eed6-b76c-8e68-74b1-36ea52a4bd5b@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LS0gDQpHb29kIGRheSENCnBsZWFzZSwgY29uZmlybSBpZiBJIGNhbiB3cml0ZSB0byB5b3UgaGVy
-ZS4NClRoZXJlIGlzIGEgdml0YWwgaXNzdWUgSSBuZWVkIHRvIGRpc2N1c3Mgd2l0aCB5b3UgdXJn
-ZW50bHkuIENvbmZpcm0NCnlvdXIgZW1haWwgaWYgdmFsaWQgZm9yIGNvbnNjaW91cyBzZWN1cml0
-eSByZWFzb25zLg0KDQpUaGFua3MNCk1yLiBNdWhhbW1lZCBLaGFsaWQNCg0KDQrZitmI2YUg2KzZ
-itivIQ0K2YXZhiDZgdi22YTZgyDYjCDYo9mD2K8g2YXYpyDYpdiw2Kcg2YPYp9mGINio2KXZhdmD
-2KfZhtmKINin2YTZg9iq2KfYqNipINil2YTZitmD2YUg2YfZhtinLg0K2YfZhtin2YMg2YLYttmK
-2Kkg2K3ZitmI2YrYqSDYo9ix2YrYryDZhdmG2KfZgti02KrZh9inINmF2LnZgyDYqNi02YPZhCDY
-udin2KzZhC4g2YrYqtij2YPYrw0K2KjYsdmK2K/ZgyDYp9mE2KXZhNmD2KrYsdmI2YbZiiDYpdiw
-2Kcg2YPYp9mGINi12KfZhNit2YvYpyDZhNij2LPYqNin2Kgg2KPZhdmG2YrYqSDZiNin2LnZitip
-Lg0KDQrYtNmD2LHZi9inDQrYp9mE2LPZitivINmF2K3ZhdivINiu2KfZhNivDQo=
+On 18/05/2023 19:22, Manikanta Mylavarapu wrote:
+>>>
+>> It's not required. I am going to remove it.
+>>>> +  reg:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  interrupts-extended:
+>>>
+>>> Instead interrupts
+>>>
+>> Sure. I will use 'interrupts'.
+>>
+> Please discard my previous reply. Here i couldn't able to use 
+> 'interrupts' because i am using interrupts from two different interrupt 
+> controllers. Sorry for previous wrong reply.
+
+The bindings still should have interrupts. I did not comment on DTS, but
+on bindings. interrupts imply (or allow) interrupts-extended.
+
+
+Best regards,
+Krzysztof
+
