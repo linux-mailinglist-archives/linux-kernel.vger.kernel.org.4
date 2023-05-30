@@ -2,131 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE477171E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E617171EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbjE3XoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 19:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
+        id S233526AbjE3Xsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 19:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233519AbjE3Xn6 (ORCPT
+        with ESMTP id S229590AbjE3Xsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 19:43:58 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F23C0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:43:56 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-773793070a4so124731339f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:43:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685490235; x=1688082235;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D3ypystYzBp0z6BGyUyrOubrVmHDSkpBeVSSYpzrgNU=;
-        b=y9u0NB4kWnHYwt549HNPXWJTG3IRqe8/i0EgPjGKGvZyD3aP2NoPLebMVxLbcZdGoI
-         B+1piYrPAfQVtfFMiqq4dy3hooHR5gQ2g1kves8qith5oI92YNMOzgnj/Q9RS/f7M9YH
-         typUsW4DaeYZdS011PpV+S5goYadVJHRJ4mmOdUmWKHHgxFr2ch2RTCVA5C/6OpAHbbP
-         zZSV8SaEUhvODRyfGj50W5/Pbe+d81pHxDxWupxNAcEFlKHLZ4IArqaV1NhbJ8aYjuB0
-         ICsS+U4VmwCuLpSyNSeNDLk4yaRC62eZ1VzHy0kFHfpSYmt2RsnWTRukVJ11lVyEKiqo
-         4dZw==
+        Tue, 30 May 2023 19:48:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D92AA
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685490473;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7FN5z/Bbo4F41FMSmQdaTAQtO0xV9HpjcxuBSMJEC24=;
+        b=WcJ99nWZ4CtqgvejMqKqstWQgM4MTTrkYybYi38ESBS/QJQODn5xibJmj5yEyVknFIDhT2
+        4ehdchbfBJsXAQTI/vjDES+6SHmRIWC9wHejxJ12//6FAfnHJ+BoGuEcogOSaViilMXUbV
+        cU9/GIf0vN8ANPSBjwWqAPo/d1s5O/g=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-215-NpH3Y845OZy_N6ytzrQcUg-1; Tue, 30 May 2023 19:47:52 -0400
+X-MC-Unique: NpH3Y845OZy_N6ytzrQcUg-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6261a0b2391so19512216d6.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:47:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685490235; x=1688082235;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D3ypystYzBp0z6BGyUyrOubrVmHDSkpBeVSSYpzrgNU=;
-        b=SN3qCqAffmk5kiBcsQ4sG6fj3PGxk8FjUyXoz16X+lgv/ne+O5tvORyeJIOdFGGyaQ
-         IX478pfyqBLqXtdnNDpHvvS6Iou8b/FBOGWYehm3l9DslF6mW8QwLGmlepnXv6Nf1FUf
-         I1eM/Tbb5YfcfXr48aElqaTHqgeLs7d+pTMU76aR4iSGHtFyE1klGqtjJh4U4c4oC3jQ
-         wxvC9KPE4VCGFctogJ+udoWno45P0VIFroYzphVEHsJZ4QYViGz310iTqwBOKjTrmrIb
-         oKe66C1nNmTCi8m1ZE5NLw2F/IPUquS0sWbzxaa8TB81rRqSfZdomzqg/NV5LBO4miNq
-         lRpA==
-X-Gm-Message-State: AC+VfDyji9Wx/SYQD3B2zWSRxze21tFadcxP+/4oLtIGxOB8xEdbF/QS
-        w1iVd3d0k54BsM2gaSkJEbwN/g==
-X-Google-Smtp-Source: ACHHUZ5eAUPfBfmQO0GDa5baK1HyIohLoaAUddvYA3t+pGk/ntaEhQaO5j0ioafC/00n6ndwS115vA==
-X-Received: by 2002:a5d:87c2:0:b0:76c:65df:a118 with SMTP id q2-20020a5d87c2000000b0076c65dfa118mr2397211ios.6.1685490235653;
-        Tue, 30 May 2023 16:43:55 -0700 (PDT)
-Received: from [10.211.55.3] ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id l5-20020a5e8805000000b0076c5c927acesm3522902ioj.13.2023.05.30.16.43.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 16:43:55 -0700 (PDT)
-Message-ID: <694f1e23-23bb-e184-6262-bfe3641a4f43@linaro.org>
-Date:   Tue, 30 May 2023 18:43:54 -0500
+        d=1e100.net; s=20221208; t=1685490471; x=1688082471;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7FN5z/Bbo4F41FMSmQdaTAQtO0xV9HpjcxuBSMJEC24=;
+        b=JlEVZhevZbndOOocqeAEgod+jJ6rH9bZp0ObC7cc9fZDQTch+1YPN2/wOC5VugTYRR
+         +oSLh1VO4lBeBlo34Y+9g/a7gX7ZdBYTDZzpimkY1VXPCMznrQGwlZm2Dn2qdfdYqK1d
+         l+1oFi92i27bKHymZA1eUXbsjMenKKjOz7fM2VtdeJCf0prbdujGz3doHyuOBoOScjof
+         rjfma6Iaofzk3rJ1BocJf0uy1YzH9bjqJyAsPnTyTrkVSN36+7Y2l3Mf36EY4Q8pmF14
+         +z8BXClL4utVxU9pj6ml/B7ZyEFEAdLVxCEia/+SAosrCTQvcZjEZMmf3TmQRlsg1W11
+         sl2Q==
+X-Gm-Message-State: AC+VfDxJrykkw9FhjGMz8KHOh9R5YZwDwv2kAJqnhIjWKrePSz8hN0AQ
+        D/b+h8p8E6weCgnnqyvHgyMe5UOEgKPbo1+r0g60DI+vpSamP44SeH5XQVdmNshtP5QkY4c0PUd
+        SX33V3ktk1H4Wy95E/q9vAbT0ILSAAIB6
+X-Received: by 2002:ad4:5ec7:0:b0:625:aa48:fb71 with SMTP id jm7-20020ad45ec7000000b00625aa48fb71mr5034835qvb.59.1685490471706;
+        Tue, 30 May 2023 16:47:51 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ60mXRe5Ihq4KWw1KK9rQ5jhVTVA8tPG2DdnzZJHcMocr84jJ8U/hMSce/y4Cl6rhAuwQUpNw==
+X-Received: by 2002:ad4:5ec7:0:b0:625:aa48:fb71 with SMTP id jm7-20020ad45ec7000000b00625aa48fb71mr5034822qvb.59.1685490471480;
+        Tue, 30 May 2023 16:47:51 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id e7-20020ad450c7000000b00626234be222sm2320369qvq.57.2023.05.30.16.47.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 16:47:51 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     pavel@ucw.cz, lee@kernel.org
+Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] leds: cht-wcove: set function cht_wc_leds_brightness_get storage-class-specifier to static
+Date:   Tue, 30 May 2023 19:47:48 -0400
+Message-Id: <20230530234748.3641630-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net v2] net: ipa: Use the correct value for
- IPA_STATUS_SIZE
-Content-Language: en-US
-To:     Bert Karwatzki <spasswolf@web.de>, Alex Elder <elder@linaro.org>,
-        Simon Horman <simon.horman@corigine.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <7ae8af63b1254ab51d45c870e7942f0e3dc15b1e.camel@web.de>
- <ZHWhEiWtEC9VKOS1@corigine.com>
- <2b91165f667d3896a0aded39830905f62f725815.camel@web.de>
- <3c4d235d-8e49-61a2-a445-5d363962d3e7@linaro.org>
- <8d0e0272c80a594e7425ffcdd7714df7117edde5.camel@web.de>
- <f9ccdc27-7b5f-5894-46ab-84c1e1650d9f@linaro.org>
- <dcfb1ccd722af0e9c215c518ec2cd7a8602d2127.camel@web.de>
-From:   Alex Elder <alex.elder@linaro.org>
-In-Reply-To: <dcfb1ccd722af0e9c215c518ec2cd7a8602d2127.camel@web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/23 6:25 PM, Bert Karwatzki wrote:
->  From 2e5e4c07606a100fd4af0f08e4cd158f88071a3a Mon Sep 17 00:00:00 2001
-> From: Bert Karwatzki <spasswolf@web.de>
-> To: davem@davemloft.net
-> To: edumazet@google.com
-> To: kuba@kernel.org
-> To: pabeni@redhat.com
-> Cc: elder@kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Date: Wed, 31 May 2023 00:16:33 +0200
-> Subject: [PATCH net v2] net: ipa: Use correct value for IPA_STATUS_SIZE
-> 
-> IPA_STATUS_SIZE was introduced in commit b8dc7d0eea5a as a replacement
-> for the size of the removed struct ipa_status which had size
-> sizeof(__le32[8]). Use this value as IPA_STATUS_SIZE.
+smatch reports
+drivers/leds/leds-cht-wcove.c:144:21: warning: symbol
+  'cht_wc_leds_brightness_get' was not declared. Should it be static?
 
-If the network maintainers can deal with your patch, I'm
-OK with it.  David et al if you want something else, please
-say so.
+This function is only used in its defining file, so it should be static.
 
-Reviewed-by: Alex Elder <elder@linaro.org>
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/leds/leds-cht-wcove.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Fixes: b8dc7d0eea5a ("net: ipa: stop using sizeof(status)")
-> Signed-off-by: Bert Karwatzki <spasswolf@web.de>
-> ---
->   drivers/net/ipa/ipa_endpoint.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
-> index 2ee80ed140b7..afa1d56d9095 100644
-> --- a/drivers/net/ipa/ipa_endpoint.c
-> +++ b/drivers/net/ipa/ipa_endpoint.c
-> @@ -119,7 +119,7 @@ enum ipa_status_field_id {
->   };
->   
->   /* Size in bytes of an IPA packet status structure */
-> -#define IPA_STATUS_SIZE			sizeof(__le32[4])
-> +#define IPA_STATUS_SIZE			sizeof(__le32[8])
->   
->   /* IPA status structure decoder; looks up field values for a structure */
->   static u32 ipa_status_extract(struct ipa *ipa, const void *data,
+diff --git a/drivers/leds/leds-cht-wcove.c b/drivers/leds/leds-cht-wcove.c
+index 0cfebee98910..0a5c30e5ed5d 100644
+--- a/drivers/leds/leds-cht-wcove.c
++++ b/drivers/leds/leds-cht-wcove.c
+@@ -141,7 +141,7 @@ static int cht_wc_leds_brightness_set(struct led_classdev *cdev,
+ 	return ret;
+ }
+ 
+-enum led_brightness cht_wc_leds_brightness_get(struct led_classdev *cdev)
++static enum led_brightness cht_wc_leds_brightness_get(struct led_classdev *cdev)
+ {
+ 	struct cht_wc_led *led = container_of(cdev, struct cht_wc_led, cdev);
+ 	unsigned int val;
+-- 
+2.27.0
 
