@@ -2,82 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCDF671599A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4125E715999
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjE3JM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
+        id S229748AbjE3JMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjE3JMz (ORCPT
+        with ESMTP id S229524AbjE3JMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:12:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542D8CD
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:12:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685437927;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JM53ssDZ1pW2l3meo+OiWTQQLf/RYKK5DG6HuMkac1g=;
-        b=d13+ZTRT3ESjdw2Yk1GTGQ0SViIdp0zg2ztRYEoUxEDgJPcQ4RruZnNy1pf2Rk0t79bKE8
-        gVNoo1y0spwDG6zx6GIhFJmDQxKHbh9aTL+HwsDgon3hc5klWTxjlJ9v7XGqCYPHplfMuq
-        tWaU+EwZpCjUCv5OCJvOwE9OA6KKKx0=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-639-dTG9WXmiNpm0dJjcMgA3_g-1; Tue, 30 May 2023 05:12:05 -0400
-X-MC-Unique: dTG9WXmiNpm0dJjcMgA3_g-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30ae8776c12so1051357f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:12:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685437925; x=1688029925;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JM53ssDZ1pW2l3meo+OiWTQQLf/RYKK5DG6HuMkac1g=;
-        b=MwPqGlLFcs/DnNWr+VeQvAmgFrGneZH4TEQISLEP10MRtZoZxjFMRuxPaYgmIRCcw+
-         WlZTOe7Eu4ybcOIIVTHudtntWO5Jm4DMJfFOa31avvyD41Mird6TLNIwZJAAdwqf+0s/
-         /leA8/u1KG0Txx2h4uEBBfiqVCMuSN2Oj6KzBQe9eUjnND4BZlvaRtOpWep39KQ/s9ex
-         b8LpgR1WsUJ1zEs4f/1xGpMUNZXQWBQQfg5lLPSDc5L3aWfDkdp8bmkgo6wcI6jXEgJt
-         5OKiaMrcdwFIVZsndBvABxSRPDIusbya4g70YLDUSUS/vQfBPUWWWr814mT8d37G6myZ
-         xwTQ==
-X-Gm-Message-State: AC+VfDy6purIy9cJudkIVE45YrQC50baSKJ1zsIbk5KBc6buq5jVELE4
-        +/yOuubl75ZiBnFDAVS4XRQ7HkLfi3uHG4SyX4WRJHg1lphlJ6R6i8Stavh2CNeRWUB9fLOMlNs
-        Q4rRWXgmE/qD+KnT8UVSeRkEl
-X-Received: by 2002:adf:f485:0:b0:30a:c681:fd2e with SMTP id l5-20020adff485000000b0030ac681fd2emr1411991wro.22.1685437924903;
-        Tue, 30 May 2023 02:12:04 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4tviPM4BUy2+k3VQs0hpNDgkwiGjdPWwIma/uLVioVsCHBmAS9J8CtBKSFYLJttd72o8dzHw==
-X-Received: by 2002:adf:f485:0:b0:30a:c681:fd2e with SMTP id l5-20020adff485000000b0030ac681fd2emr1411973wro.22.1685437924564;
-        Tue, 30 May 2023 02:12:04 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c73c:d500:78e5:f448:8bef:a30? (p200300cbc73cd50078e5f4488bef0a30.dip0.t-ipconnect.de. [2003:cb:c73c:d500:78e5:f448:8bef:a30])
-        by smtp.gmail.com with ESMTPSA id e1-20020a5d65c1000000b00301a351a8d6sm2558387wrw.84.2023.05.30.02.12.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 02:12:04 -0700 (PDT)
-Message-ID: <e41791a5-229d-ad3c-7d5d-cc174e909763@redhat.com>
-Date:   Tue, 30 May 2023 11:12:03 +0200
+        Tue, 30 May 2023 05:12:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31B36BE;
+        Tue, 30 May 2023 02:12:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2FE412F4;
+        Tue, 30 May 2023 02:13:32 -0700 (PDT)
+Received: from [192.168.1.3] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B1D73F663;
+        Tue, 30 May 2023 02:12:44 -0700 (PDT)
+Message-ID: <612885c1-b58f-5bce-59dc-bf84b057048d@arm.com>
+Date:   Tue, 30 May 2023 10:12:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v10 5/5] selftest: add a testcase of ksm zero pages
-To:     Yang Yang <yang.yang29@zte.com.cn>, akpm@linux-foundation.org
-Cc:     imbrenda@linux.ibm.com, jiang.xuexin@zte.com.cn,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com, xu.xin16@zte.com.cn
-References: <202305251341580149313@zte.com.cn>
- <20230525055410.27423-1-yang.yang29@zte.com.cn>
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 4/4] perf cs-etm: Add exception level consistency check
+To:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>
+Cc:     coresight@lists.linaro.org, denik@chromium.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230524131958.2139331-1-james.clark@arm.com>
+ <20230524131958.2139331-5-james.clark@arm.com>
+ <CAJ9a7VioqoCTLOKmPPbS9ogs9n+2sV3szn-ZSDE3+mZTEgP0UQ@mail.gmail.com>
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230525055410.27423-1-yang.yang29@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <CAJ9a7VioqoCTLOKmPPbS9ogs9n+2sV3szn-ZSDE3+mZTEgP0UQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,35 +61,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.05.23 07:54, Yang Yang wrote:
-> From: xu xin <xu.xin16@zte.com.cn>
+
+
+On 25/05/2023 12:39, Mike Leach wrote:
+> Hi James,
 > 
-> Add a function test_unmerge_zero_page() to test the functionality on
-> unsharing and counting ksm-placed zero pages and counting of this patch
-> series.
+> My concern here is that for etmv3 trace, OpenCSD will only provide
+> memory spaces as either secure or non-secure, The ETMv3 does not
+> trace, and hence OpenCSD cannot provide the different ELs.
+> The memory callback will be either OCSD_MEM_SPACE_S or OCSD_MEM_SPACE_N.
 > 
-> test_unmerge_zero_page() actually contains four subjct test objects:
-> (1) whether the count of ksm zero pages can update correctly after merging;
-> (2) whether the count of ksm zero pages can update correctly after
->      unmerging by madvise(...MADV_UNMERGEABLE);
-> (3) whether the count of ksm zero pages can update correctly after
-> 	unmerging by triggering write fault.
-> (4) whether ksm zero pages are really unmerged.
+
+As long as none of the bits are set for EL1-EL3 then no validation will
+be done so it should be fine. But I will try to test ETMv3.
+
+> Can this patch - and the set handle this. (assuming perf supports our
+> ETMv3 coresight kernel driver)
+
+For the whole set, the tracked EL will stay as ocsd_EL_unknown and
+cs_etm__get_machine() will return host so the behavior will be unchanged
+from before. This is assuming OpenCSD will set the EL to unknown in
+elem->context.exception_level in this case.
+
 > 
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
-> Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
-> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
-> ---
-
-Acked-by: David Hildenbrand <david@redhat.com>
-
-Thanks!
-
--- 
-Thanks,
-
-David / dhildenb
-
+> Regards
+> 
+> Mike
+> 
+> On Wed, 24 May 2023 at 14:20, James Clark <james.clark@arm.com> wrote:
+>>
+>> Assert that our own tracking of the exception level matches what
+>> OpenCSD provides. OpenCSD doesn't distinguish between EL0 and EL1 in the
+>> memory access callback so the extra tracking was required. But a rough
+>> assert can still be done.
+>>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>  .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  6 +--
+>>  .../perf/util/cs-etm-decoder/cs-etm-decoder.h |  4 +-
+>>  tools/perf/util/cs-etm.c                      | 37 +++++++++++++------
+>>  3 files changed, 32 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
+>> index ac227cd03eb0..50b3c248d1e5 100644
+>> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
+>> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
+>> @@ -52,15 +52,15 @@ struct cs_etm_decoder {
+>>  static u32
+>>  cs_etm_decoder__mem_access(const void *context,
+>>                            const ocsd_vaddr_t address,
+>> -                          const ocsd_mem_space_acc_t mem_space __maybe_unused,
+>> +                          const ocsd_mem_space_acc_t mem_space,
+>>                            const u8 trace_chan_id,
+>>                            const u32 req_size,
+>>                            u8 *buffer)
+>>  {
+>>         struct cs_etm_decoder *decoder = (struct cs_etm_decoder *) context;
+>>
+>> -       return decoder->mem_access(decoder->data, trace_chan_id,
+>> -                                  address, req_size, buffer);
+>> +       return decoder->mem_access(decoder->data, trace_chan_id, address,
+>> +                                  req_size, buffer, mem_space);
+>>  }
+>>
+>>  int cs_etm_decoder__add_mem_access_cb(struct cs_etm_decoder *decoder,
+>> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
+>> index 21d403f55d96..272c2efe78ee 100644
+>> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
+>> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
+>> @@ -11,6 +11,7 @@
+>>  #define INCLUDE__CS_ETM_DECODER_H__
+>>
+>>  #include <linux/types.h>
+>> +#include <opencsd/ocsd_if_types.h>
+>>  #include <stdio.h>
+>>
+>>  struct cs_etm_decoder;
+>> @@ -19,7 +20,8 @@ struct cs_etm_packet_queue;
+>>
+>>  struct cs_etm_queue;
+>>
+>> -typedef u32 (*cs_etm_mem_cb_type)(struct cs_etm_queue *, u8, u64, size_t, u8 *);
+>> +typedef u32 (*cs_etm_mem_cb_type)(struct cs_etm_queue *, u8, u64, size_t, u8 *,
+>> +                                 const ocsd_mem_space_acc_t);
+>>
+>>  struct cs_etmv3_trace_params {
+>>         u32 reg_ctrl;
+>> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+>> index b9ba19327f26..ccf34ed8ddf2 100644
+>> --- a/tools/perf/util/cs-etm.c
+>> +++ b/tools/perf/util/cs-etm.c
+>> @@ -931,7 +931,8 @@ static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address,
+>>  }
+>>
+>>  static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
+>> -                             u64 address, size_t size, u8 *buffer)
+>> +                             u64 address, size_t size, u8 *buffer,
+>> +                             const ocsd_mem_space_acc_t mem_space)
+>>  {
+>>         u8  cpumode;
+>>         u64 offset;
+>> @@ -947,6 +948,20 @@ static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
+>>         if (!tidq)
+>>                 return 0;
+>>
+>> +       /*
+>> +        * We've already tracked EL along side the PID in cs_etm__set_thread()
+>> +        * so double check that it matches what OpenCSD thinks as well. It
+>> +        * doesn't distinguish between EL0 and EL1 for this mem access callback
+>> +        * so we had to do the extra tracking.
+>> +        */
+>> +       if (mem_space & OCSD_MEM_SPACE_EL1N) {
+>> +               /* Includes both non secure EL1 and EL0 */
+>> +               assert(tidq->el == ocsd_EL1 || tidq->el == ocsd_EL0);
+>> +       } else if (mem_space & OCSD_MEM_SPACE_EL2)
+>> +               assert(tidq->el == ocsd_EL2);
+>> +       else if (mem_space & OCSD_MEM_SPACE_EL3)
+>> +               assert(tidq->el == ocsd_EL3);
+>> +
+>>         cpumode = cs_etm__cpu_mode(etmq, address, tidq->el);
+>>
+>>         if (!thread__find_map(tidq->thread, cpumode, address, &al))
+>> @@ -1195,8 +1210,8 @@ static inline int cs_etm__t32_instr_size(struct cs_etm_queue *etmq,
+>>  {
+>>         u8 instrBytes[2];
+>>
+>> -       cs_etm__mem_access(etmq, trace_chan_id, addr,
+>> -                          ARRAY_SIZE(instrBytes), instrBytes);
+>> +       cs_etm__mem_access(etmq, trace_chan_id, addr, ARRAY_SIZE(instrBytes),
+>> +                          instrBytes, 0);
+>>         /*
+>>          * T32 instruction size is indicated by bits[15:11] of the first
+>>          * 16-bit word of the instruction: 0b11101, 0b11110 and 0b11111
+>> @@ -1387,8 +1402,8 @@ static void cs_etm__copy_insn(struct cs_etm_queue *etmq,
+>>         else
+>>                 sample->insn_len = 4;
+>>
+>> -       cs_etm__mem_access(etmq, trace_chan_id, sample->ip,
+>> -                          sample->insn_len, (void *)sample->insn);
+>> +       cs_etm__mem_access(etmq, trace_chan_id, sample->ip, sample->insn_len,
+>> +                          (void *)sample->insn, 0);
+>>  }
+>>
+>>  u64 cs_etm__convert_sample_time(struct cs_etm_queue *etmq, u64 cs_timestamp)
+>> @@ -1940,8 +1955,8 @@ static bool cs_etm__is_svc_instr(struct cs_etm_queue *etmq, u8 trace_chan_id,
+>>                  * so below only read 2 bytes as instruction size for T32.
+>>                  */
+>>                 addr = end_addr - 2;
+>> -               cs_etm__mem_access(etmq, trace_chan_id, addr,
+>> -                                  sizeof(instr16), (u8 *)&instr16);
+>> +               cs_etm__mem_access(etmq, trace_chan_id, addr, sizeof(instr16),
+>> +                                  (u8 *)&instr16, 0);
+>>                 if ((instr16 & 0xFF00) == 0xDF00)
+>>                         return true;
+>>
+>> @@ -1956,8 +1971,8 @@ static bool cs_etm__is_svc_instr(struct cs_etm_queue *etmq, u8 trace_chan_id,
+>>                  * +---------+---------+-------------------------+
+>>                  */
+>>                 addr = end_addr - 4;
+>> -               cs_etm__mem_access(etmq, trace_chan_id, addr,
+>> -                                  sizeof(instr32), (u8 *)&instr32);
+>> +               cs_etm__mem_access(etmq, trace_chan_id, addr, sizeof(instr32),
+>> +                                  (u8 *)&instr32, 0);
+>>                 if ((instr32 & 0x0F000000) == 0x0F000000 &&
+>>                     (instr32 & 0xF0000000) != 0xF0000000)
+>>                         return true;
+>> @@ -1973,8 +1988,8 @@ static bool cs_etm__is_svc_instr(struct cs_etm_queue *etmq, u8 trace_chan_id,
+>>                  * +-----------------------+---------+-----------+
+>>                  */
+>>                 addr = end_addr - 4;
+>> -               cs_etm__mem_access(etmq, trace_chan_id, addr,
+>> -                                  sizeof(instr32), (u8 *)&instr32);
+>> +               cs_etm__mem_access(etmq, trace_chan_id, addr, sizeof(instr32),
+>> +                                  (u8 *)&instr32, 0);
+>>                 if ((instr32 & 0xFFE0001F) == 0xd4000001)
+>>                         return true;
+>>
+>> --
+>> 2.34.1
+>>
+> 
+> 
