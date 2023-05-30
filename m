@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5422D715FA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 497A9715FAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbjE3McA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
+        id S231963AbjE3McD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbjE3Mbb (ORCPT
+        with ESMTP id S231710AbjE3Mbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:31:31 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1481B7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:31:08 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f3b9c88af8so5026720e87.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:31:08 -0700 (PDT)
+        Tue, 30 May 2023 08:31:33 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277CA10A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:31:12 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f3b4ed6fdeso4616556e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:31:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685449847; x=1688041847;
+        d=linaro.org; s=google; t=1685449849; x=1688041849;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7X2YmPxQFhKCq03fcQ2JuiF4fVCtctwggowl35Zs1sw=;
-        b=ca7h0aksE6lqaLTt5whA5LVMO73Bk/YrNfB1jvw8kSNKoz1jpQdCuxhJYXLsrm7MeI
-         xUYIzUzUzmx+3YFLRFLgeufLPCXdFc5VtrVsoJ8hiPV7BJq1Bopei/WX3i6GfJH/ABrv
-         nrjuFMK7hjo4gi/z5deVlB+B0KtkUzKXmhreAYc/sCpv8W6gnyFh9GNXMtoZ+At61SU5
-         aW3oYNclpB9gr+YFXsctJ1O5dOGiPXC1vHiCJ54KSxbSVzLvGm7TaZnkyrQo++52Zw+s
-         F4mIRjw0uzpI4UibVzoq75I5tURDnwucGlu2Ezr0T36ZrXzEqnqj/wxxs7kJXko5rqnF
-         1dow==
+        bh=eyFXYw29tyYHnh7jUZGsXGdVkCfkSlUBmlV0J/bqh7E=;
+        b=l29c14kS+E/k9kDpvUSsaoSoMSoOGaa7uEtNOCc+pvtVMZilXyTwYxL5NTdY6zWZGD
+         a3++h1FVa8I4pmXyD5vJ/F70mJDQod7U1OafHsF3nDYxXUDEyQ4fTGUVhcsmc4VDti+p
+         kHi14Enek42nmcHLBjqtIB//pkcSBxOq6mxj+Z9z+xi+UxpPucYbZ7NndkqKhkuCvWUr
+         60u1xBd81TW/eaugYEDzz7Hb1lIWXCgaoSGzufyP0B9Bkol8NRq6hGzaWNCuHIo5u3p4
+         ct1QRaR6STzNw/IU2XwUghEQ/FWOI0rxrS1GGqNSGwpwLXnpcdTc8tkDenE5kk1KsMKx
+         xZxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685449847; x=1688041847;
+        d=1e100.net; s=20221208; t=1685449849; x=1688041849;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7X2YmPxQFhKCq03fcQ2JuiF4fVCtctwggowl35Zs1sw=;
-        b=ly9NDrR9iVdpZDllIJGY9hIMxk2bLZ+YpBE3aW0SVcpI8TkdydsvGSxbidvklxittQ
-         +4LCUPggdYJXfMdTokPhtlZhZ0ZzR6BeN68wl9Y6XG+HXpiuSbpdnDwHWTY53lvCVSHC
-         o3TDE6Yc0Xm9nAXHHqWFKfbE2e72hJCSyqOvoM5BNCUDVVpe1ZHxVo6QEZD0CvMZUAzz
-         cf2zf5sdV4z2c+iOqLvQwhWh4yw6yQMByGpXlwb+2Lzx/k1Dah72hxLhNgLfLRF3mP90
-         vAJeYfg/7oI4ouq6W5X0dPLvs7H5W6UcdZbgMMxYAPzvf0nylQKw++bleLrFUIkB7m1l
-         Hfng==
-X-Gm-Message-State: AC+VfDztNFlaeCEYzXxEmPRwivmU7lUElW3/LxbdIW6gLt95ftRw4Bi/
-        1AzlfphzsA/1KOBg4loSgMVQEw==
-X-Google-Smtp-Source: ACHHUZ6sug8Jb6T0DVsEM2OIlTBPSQWVfDfYgOBvujKQ2Sa9PpU+updIylMFCueoeDmfNp6e4m+ApA==
-X-Received: by 2002:a2e:b349:0:b0:2ad:dab5:fe8e with SMTP id q9-20020a2eb349000000b002addab5fe8emr696149lja.47.1685449847537;
-        Tue, 30 May 2023 05:30:47 -0700 (PDT)
+        bh=eyFXYw29tyYHnh7jUZGsXGdVkCfkSlUBmlV0J/bqh7E=;
+        b=MC3UkYspxTlIa7RmDhVCa9Y3Ca/Md2Cs8VOIuGi8oAeCBHTnXqV0cZK0wfyjX8g1iJ
+         dj8+yZncElIf6lqNkJ2UzWqL42oJ5NAD0YJb0AOr0P09uAKjD74PIayG0kcz7QhckR2e
+         /tecrTArRx5OZaWBX+wRCglpmfju4RPzpKmZe4HVDUeiEoXO59AaOu4n8A5NBNmyrrXp
+         a6yABaaBZRiD+CLt2yxGxJ0Y6l4zTBLLI10THHwhaaet1YxLr2Ejh5+MwSyKL+h4f3Wr
+         HbQhb/vTm0il6Jvy+nDX8upINxM+OBRzwprtOC7s6cn/xclhwaiJi31bcMQrifd/OQRD
+         rdfg==
+X-Gm-Message-State: AC+VfDzk7gApOMxEXaTwPGLex/2jYxGq5nuk+cq0fXsn/WDRqnAZWNcA
+        6JbDei5q5R2FTncwPtwvl5iYHQ==
+X-Google-Smtp-Source: ACHHUZ5H96w3r5Nr2GfN0aIY1qXkTny4w+kmfV2bIoO0UXxr+zVKEk9g699+0IR+//wfrCJPNLY7Qw==
+X-Received: by 2002:a2e:740e:0:b0:2ae:df5a:9637 with SMTP id p14-20020a2e740e000000b002aedf5a9637mr674229ljc.21.1685449848871;
+        Tue, 30 May 2023 05:30:48 -0700 (PDT)
 Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id u18-20020a2e91d2000000b002a8b8baf542sm2854814ljg.126.2023.05.30.05.30.46
+        by smtp.gmail.com with ESMTPSA id u18-20020a2e91d2000000b002a8b8baf542sm2854814ljg.126.2023.05.30.05.30.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 05:30:47 -0700 (PDT)
+        Tue, 30 May 2023 05:30:48 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 30 May 2023 14:30:40 +0200
-Subject: [PATCH v4 06/17] media: venus: hfi_venus: Sanitize
- venus_boot_core() per-VPU-version
+Date:   Tue, 30 May 2023 14:30:41 +0200
+Subject: [PATCH v4 07/17] media: venus: core: Assign registers based on VPU
+ version
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230228-topic-venus-v4-6-feebb2f6e9b8@linaro.org>
+Message-Id: <20230228-topic-venus-v4-7-feebb2f6e9b8@linaro.org>
 References: <20230228-topic-venus-v4-0-feebb2f6e9b8@linaro.org>
 In-Reply-To: <20230228-topic-venus-v4-0-feebb2f6e9b8@linaro.org>
 To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
@@ -79,11 +79,11 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Vikash Garodia <quic_vgarodia@quicinc.com>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1685449837; l=1704;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685449837; l=911;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=GIwAiWH9yip6A08qldobhtvjYZiRCRgkhQUH81kLo/0=;
- b=s4cSpf3PKrrmU9HsxpFz4ai3ElIyaSW/PvhbmUBdDBGfPGPk4wENmhxardXBtfi7UUOAfLG/E
- XAqhvTs6Pr0DBJz2jDcl7ivTQCp+eqfrQNCjVACGxBjeLc3F+289R//
+ bh=jLkMwNqqG57kt4LLfCZOGle80CsutpLNKoM94v0Cd64=;
+ b=ZadOsG66UgcLTo3X0cHb8UNZN5x0jCBfFaACQBzQpgsBcyGqvCeZtjHcxSxETIaI+Lhv5p3CH
+ vQu9zy0kwbxBgxO1KQD0iLji/JjndvQ/N3nj87i+3d3AMHD4I1T6NlN
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -101,45 +101,22 @@ to take the VPU hardware version into account.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/media/platform/qcom/venus/hfi_venus.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/media/platform/qcom/venus/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-index 5506a0d196ef..9e36ef9076a0 100644
---- a/drivers/media/platform/qcom/venus/hfi_venus.c
-+++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-@@ -447,19 +447,20 @@ static int venus_boot_core(struct venus_hfi_device *hdev)
+diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+index 01671dd23888..69c77b2137cc 100644
+--- a/drivers/media/platform/qcom/venus/core.c
++++ b/drivers/media/platform/qcom/venus/core.c
+@@ -246,7 +246,7 @@ static int venus_enumerate_codecs(struct venus_core *core, u32 type)
+ 
+ static void venus_assign_register_offsets(struct venus_core *core)
  {
- 	struct device *dev = hdev->core->dev;
- 	static const unsigned int max_tries = 100;
--	u32 ctrl_status = 0, mask_val;
-+	u32 ctrl_status = 0, mask_val = 0;
- 	unsigned int count = 0;
- 	void __iomem *cpu_cs_base = hdev->core->cpu_cs_base;
- 	void __iomem *wrapper_base = hdev->core->wrapper_base;
- 	int ret = 0;
- 
--	if (IS_V6(hdev->core)) {
-+	if (IS_IRIS2(hdev->core) || IS_IRIS2_1(hdev->core)) {
- 		mask_val = readl(wrapper_base + WRAPPER_INTR_MASK);
- 		mask_val &= ~(WRAPPER_INTR_MASK_A2HWD_BASK_V6 |
- 			      WRAPPER_INTR_MASK_A2HCPU_MASK);
- 	} else {
- 		mask_val = WRAPPER_INTR_MASK_A2HVCODEC_MASK;
- 	}
-+
- 	writel(mask_val, wrapper_base + WRAPPER_INTR_MASK);
- 	writel(1, cpu_cs_base + CPU_CS_SCIACMDARG3);
- 
-@@ -479,7 +480,7 @@ static int venus_boot_core(struct venus_hfi_device *hdev)
- 	if (count >= max_tries)
- 		ret = -ETIMEDOUT;
- 
--	if (IS_V6(hdev->core)) {
-+	if (IS_IRIS2(hdev->core) || IS_IRIS2_1(hdev->core)) {
- 		writel(0x1, cpu_cs_base + CPU_CS_H2XSOFTINTEN_V6);
- 		writel(0x0, cpu_cs_base + CPU_CS_X2RPMH_V6);
- 	}
+-	if (IS_V6(core)) {
++	if (IS_IRIS2(core) || IS_IRIS2_1(core)) {
+ 		core->vbif_base = core->base + VBIF_BASE;
+ 		core->cpu_base = core->base + CPU_BASE_V6;
+ 		core->cpu_cs_base = core->base + CPU_CS_BASE_V6;
 
 -- 
 2.40.1
