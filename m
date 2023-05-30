@@ -2,113 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B27F71681F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C92716823
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbjE3PyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
+        id S230074AbjE3PzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjE3Px6 (ORCPT
+        with ESMTP id S232366AbjE3Pyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:53:58 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDB5103
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:53:42 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so3015895a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:53:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685462022; x=1688054022;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WNArju2Q8+Sr5dwcNQgGMkuM+vdAY/tBFjavnfU7aAs=;
-        b=m6P4SpRmIhLWilK2bwoWEMQsEWk/K6yhndm14R57q2fmXCIxmQD0hmLtubyT0ltNsD
-         5mzb/C0TgKgAvGKJRMLkGevN9ywiUjPUBVA17GMkjuXksQd7uKuMPAsayxRi957MlXgz
-         VF+5Lk9yteg1zp99/PHovVO1luQYBqZR1begl5GE6xnlUaOH7P8fp/y6TJyqCQrhfJOz
-         GmSLlBKjWMEbPAFAhBZaduYCAy/a7mb7dItIGo7O38cxcSSHJ3fi4GVHm5aPyFiNx0y7
-         0Ylcwe2+d6CvCscSCSmWp1hLDgSsGszHIHhs0OZ+Ti2EwuimZiT8yf6j1niWNwR5h9Dm
-         4p7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685462022; x=1688054022;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WNArju2Q8+Sr5dwcNQgGMkuM+vdAY/tBFjavnfU7aAs=;
-        b=Qr7QjKG9MlpDaukorfkB7jkDIiNbFccqk3qffCs2SRU+KmHDtcaqX5q3kL75v7P2qa
-         EZztDs/vp0bDm8zJidXQJfsHjYonZFB+VXJaFjvt3d5xmDj5oAaWfBCFjSYUTHzh8Z5e
-         ku8bhp86NOuzC2B3MU+LaVko59UNovNvg1WXDgb2p/e0KT9YvKuQrjoOqy+KNx+B5HAI
-         k0wFG2t5BBTN4o+i6lmbTCN1R5KBp9Tui4B+dDT6WD7lP1vT0hMGB4smzfoHlYVjjN+f
-         usT1pqwZzqsOSMrOXUWjjro3swF3Quj349ZGZYKXR/s/+A4oMXy8clqWKWIFEFBEVyyn
-         F54g==
-X-Gm-Message-State: AC+VfDzkykwtRQBbQBlgpwBJ1AYmLllOw0WGnhBusJYvfkQeJO5yV9KS
-        /GQqe+aJGJcTTVcJPuqqM7ZzldG3hT4t7kHTy1E=
-X-Google-Smtp-Source: ACHHUZ7sn3ztVKnJjhBggbCbONyO+AsW8XNE2yHvSV08ahzB8uFM1wykgNjVYghRFNCNNXUNIoLTKjLnsrfc/pmUUYs=
-X-Received: by 2002:a17:90a:bf8c:b0:253:25c3:7a95 with SMTP id
- d12-20020a17090abf8c00b0025325c37a95mr11888507pjs.14.1685462021937; Tue, 30
- May 2023 08:53:41 -0700 (PDT)
+        Tue, 30 May 2023 11:54:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF6DE8;
+        Tue, 30 May 2023 08:54:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 098DB6151F;
+        Tue, 30 May 2023 15:54:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FDFEC433D2;
+        Tue, 30 May 2023 15:54:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685462091;
+        bh=W7HyuEs9eRSylX98QC0ucC92RskTVhlHWIeR+1802Ac=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MDQmc10MhvIBRvlB1emFAmsbvZWyfln5YhrmGnBcKKzRcVckXpESn25NXQ/6W+m8g
+         9ykJNvj/tPzCw8vfUwQAZQPsSvHscWocz6u3iYDO8VWRyP5QIBw3u1z8CUZCDhFLIy
+         mgFyU0CGUfYE3pHW2KFn6SRTkXXeJ8UvvckyqV8EGZ7xkmClm4qu57adEaaPC+J12C
+         ltBToZwZFmdnIG8U7sLQBuMc6xK+Px7L54oTiKfduaxobe5sixsLGE4wpNE736T4iC
+         BOu0Xeh8LbhL7Hklo9X2o5LEoVgEtUYb9IlF3ci/sstuzjvCzdFHRgj3VJm7XG1bUf
+         e21HdYsv55/Sg==
+Date:   Tue, 30 May 2023 17:54:46 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Prince Kumar Maurya <princekumarmaurya06@gmail.com>
+Cc:     skhan@linuxfoundation.org, viro@zeniv.linux.org.uk,
+        chenzhongjin@huawei.com, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzkaller-bugs@googlegroups.com, linux-fsdevel@vger.kernel.org,
+        syzbot+aad58150cbc64ba41bdc@syzkaller.appspotmail.com
+Subject: Re: [PATCH v3] fs/sysv: Null check to prevent null-ptr-deref bug
+Message-ID: <20230530-gefangen-ersonnen-d1f1b6eea903@brauner>
+References: <000000000000cafb9305fc4fe588@google.com>
+ <20230528184422.596947-1-princekumarmaurya06@gmail.com>
+ <20230530-zenit-radeln-06417ce5fe85@brauner>
+ <CAF0B0eKxMf7-uzgRJcWsWW6hgxP25bPG8U9nF0by7mSNvhZmbQ@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7022:ba3:b0:65:5d1b:9a16 with HTTP; Tue, 30 May 2023
- 08:53:41 -0700 (PDT)
-Reply-To: jkirinec101@gmail.com
-From:   marine <jessicakirinec1@gmail.com>
-Date:   Tue, 30 May 2023 16:53:41 +0100
-Message-ID: <CACrLz9RUfqd1XDcU1qQ-MXYbKcZCtOrXa35uzso1LTdRbsO_FQ@mail.gmail.com>
-Subject: Hallo
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:52a listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4999]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [jkirinec101[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [jessicakirinec1[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [jessicakirinec1[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAF0B0eKxMf7-uzgRJcWsWW6hgxP25bPG8U9nF0by7mSNvhZmbQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hallo, es tut mir so leid, Ihre Privatsph=C3=A4re zu verletzen. Es hei=C3=
-=9Ft:
-=E2=80=9EEin Bild sagt mehr als tausend Worte, aber als ich Ihres sah, war =
-es
-mehr, als Worte erkl=C3=A4ren k=C3=B6nnten.=E2=80=9C Das charmante Profil i=
-st
-unwiderstehlich, obwohl es eine kleine pers=C3=B6nliche Nachricht ist, aber
-Ihr Aussehen verr=C3=A4t viel =C3=BCber eine nette Person ... Also musste i=
-ch
-der charmanten Person mit diesem tollen Profil eine Nachricht
-hinterlassen. Ich glaube, es ist die Neugier, die mich in einer
-solchen Zeit zu Ihnen f=C3=BChrt. Ich muss noch einmal sagen, dass es mir
-leid tut, wenn das Schreiben an Sie Ihrer moralischen Ethik
-widerspricht. Ich m=C3=B6chte dich einfach besser kennenlernen und ein
-Freund sein oder mehr. Ich hoffe, irgendwann von Ihnen zu h=C3=B6ren.
+On Tue, May 30, 2023 at 07:59:16AM -0700, Prince Kumar Maurya wrote:
+> On Tue, May 30, 2023 at 1:26 AM Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > On Sun, May 28, 2023 at 11:44:22AM -0700, Prince Kumar Maurya wrote:
+> > > sb_getblk(inode->i_sb, parent) return a null ptr and taking lock on
+> > > that leads to the null-ptr-deref bug.
+> > >
+> > > Reported-by: syzbot+aad58150cbc64ba41bdc@syzkaller.appspotmail.com
+> > > Closes: https://syzkaller.appspot.com/bug?extid=aad58150cbc64ba41bdc
+> > > Signed-off-by: Prince Kumar Maurya <princekumarmaurya06@gmail.com>
+> > > ---
+> > > Change since v2: Updated subject and added Reported-by and closes tags.
+> > >
+> > >  fs/sysv/itree.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/fs/sysv/itree.c b/fs/sysv/itree.c
+> > > index b22764fe669c..3a6b66e719fd 100644
+> > > --- a/fs/sysv/itree.c
+> > > +++ b/fs/sysv/itree.c
+> > > @@ -145,6 +145,8 @@ static int alloc_branch(struct inode *inode,
+> > >                */
+> > >               parent = block_to_cpu(SYSV_SB(inode->i_sb), branch[n-1].key);
+> > >               bh = sb_getblk(inode->i_sb, parent);
+> > > +             if (!bh)
+> > > +                     break;
+> >
+> > When you break here you'll hit:
+> >
+> > /* Allocation failed, free what we already allocated */
+> > for (i = 1; i < n; i++)
+> >         bforget(branch[i].bh);
+> > for (i = 0; i < n; i++)
+> >         sysv_free_block(inode->i_sb, branch[i].key);
+> >
+> > below. The cleanup paths were coded in the assumption that sb_getblk()
+> > can't fail. So bforget() can assume that branch[i].bh has been allocated
+> > and set up. So that bforget(branch[i].bh) is your next pending NULL
+> > deref afaict.
+> 
+> 
+> I doubt that would happen. There is a break above as well, before we do
+> sb_getblk().
+> 
+> /* Allocate the next block */
+> branch[n].key = sysv_new_block(inode->i_sb);
+> if (!branch[n].key)
+>    break;
+> 
+> The clean up code path runs till i is less than n not equal to n which
+> would have caused the problem.
+
+But then aren't you leaking branch[n].key if you break after failed sb_getblk()
+after sysv_new_block() succeeded?
