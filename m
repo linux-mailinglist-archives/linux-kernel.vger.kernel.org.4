@@ -2,280 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD3B716D3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 161AE716D3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 21:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjE3TNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 15:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S229971AbjE3TNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 15:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232184AbjE3TNN (ORCPT
+        with ESMTP id S233333AbjE3TNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 15:13:13 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF9DF7;
-        Tue, 30 May 2023 12:13:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685473973; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=qU7DNAy+pcGWmhjuiAm9kRZRamd3CjaN4FZNo9xxupruZsjDBjvzGYUulmhex1Zlwp
-    DOiZ4qkHMR/aQpg2cu0cRw20HEyDKlNDudjwV+BGS/gjuN9rUd2pllHPAADyp9DAEgSY
-    htpHb/Va2PtU8Z5jl4OlABXcLf3Ii9niXp55rSKDaqyelj8Q+1ZlB3gjIt/0RGdKCY6Y
-    msD/Hql5puJ3ip7ltNIILq8P5PBiVq/L0zjFu3QoLgXMXbsjAvoPJb0w9/TxmAs0v2Bc
-    kfqzMJ1IYgz6CskDpEtINT8vQsL6LcawSHipczl9zx0gY8zdJLJqLRhZiJ280SfBRzfp
-    t0sg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685473973;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=SWANTZ5LEi/i+/1OmwNVpeU8Q7B6L98dYRwCag1X3IU=;
-    b=I/X0CW8WhEp2A4za5NpiYhBoom9IHdgSls/ubMEOPaT8J1rbLK3S1KeSPh9/cdkImH
-    Mc8Gtpp5K7lG02FNrycaMZHZZneNAaamPSrI3sLh3NStwALNiYBo6Ba6gzeVo48veVVv
-    N5jF3q9VoQqQkomhORZllXoV/2IWine2tS9h2wO8CB+tepaYN5KpXU+NufA+68ihYoGw
-    cujGTpWNvsslgYNFMWeB28bjgScQ4WGRPHD8ST6PW5hl9eYrF+7T46DPoFYNxtfZNSe4
-    7iMTZcmRrH7j8YkVp4sBWi4RRA4b9+tJtwumAF2NhFfz8kAZp4PuRDdb9TRFjh3WBYqE
-    GTrw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685473973;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=SWANTZ5LEi/i+/1OmwNVpeU8Q7B6L98dYRwCag1X3IU=;
-    b=FP15hFHt7bpGY5RHvuIydONPTqUWgn24aeD7J7cIsVVjJXLrUejy1YuCBUDpJevVXz
-    rPBRIk/7SgXG2EaWgrXi0HBJVyZ7muRUNHrCjJhuyeCCi31FNHu8r9kcSGXq+Uh2H+qE
-    CaYRYiiwjsGhO0zC4y5I2XPVjzAeRPWjr2MNaunRs9YQpWYliWqoYHmc5At14PMNm8Kx
-    Xphp8uejnz0yblvdUpE7iYSL45VJuH5lT/g2uZXqGKgIgVAgj3qFjZZxaVcMtQWp00CU
-    00mW+9EyixBVFTDmsODxP1yOZ5bsRMtTO+bofUgdoFf9drpApWxf5CShK7feZklkUKNl
-    YxIA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685473973;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=SWANTZ5LEi/i+/1OmwNVpeU8Q7B6L98dYRwCag1X3IU=;
-    b=0vKC/pbXCFw865TKgWIbeMWtQkGyD0pg9Z0RZOOHqaY3uiXaPDPu+L1OTpT1tORz68
-    RTtLOfqc4pWs5wpougBg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA95nh"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az4UJCqjnU
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 30 May 2023 21:12:52 +0200 (CEST)
-Date:   Tue, 30 May 2023 21:12:46 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 7/7] ARM: dts: qcom: msm8226: Add mdss nodes
-Message-ID: <ZHZKriRXoh9gHpWg@gerhold.net>
-References: <20230308-msm8226-mdp-v2-0-e005b769ee28@z3ntu.xyz>
- <20230308-msm8226-mdp-v2-7-e005b769ee28@z3ntu.xyz>
+        Tue, 30 May 2023 15:13:43 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FCB113
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:13:38 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-75affe9d7feso562933385a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 12:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1685474017; x=1688066017;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=B+LD9VU/Kdgo99Hgebbbih6KGEIqzpFiVw8bD+mVg98=;
+        b=VkX3oMD9acgbPVFWr0cZ5G4FNcWVjQipAK+mM0BYAA0r6w4yFjvmSKZ22PldQRnlmD
+         lRupbfSo5W/cWyMJTDjVl2OIKd2WDmcnZyE4v4NffJ4zee9RlGcf45gqVatcjXx8H4rL
+         O8oNja7BLu0gz/G1Fp/nxCseVANEloaxqKuwklcsJNUfrhzQmgKQ4+WbvxXhaGlK4wmG
+         ExtkR1Rl54+PLjc3z7wlAe79bFkXe43omBGiPbkNK10wwDRs3HG14vRX3t722rf5LNtU
+         +VP0G25Yt9mSi62hOPAaj28b4D81K0T+4hKZvZ6eVZhbYiqPYzS4zBMpB8vF5j03h1Qm
+         oz4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685474017; x=1688066017;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B+LD9VU/Kdgo99Hgebbbih6KGEIqzpFiVw8bD+mVg98=;
+        b=GWv7AsmqxSuB36UEE1LYbpsBqmWxuge5Lht5SmcSMDBWzgSbM6hgtP3kX3gj3CKbC4
+         pbmT10NutkruGykkOH26As07XmFnSvrJDxDgx9B1Q4Oitb+7mO2Xl1NbgsvSwkUkabS5
+         IQFouk3z77FVSVeFviE14iOnQUOBuppyEVMBMuW/nilwOxCNSQAcz6DpVYip9x3M6RWI
+         tcV7UwMmyztuEEiTZfrYIYzp9n5hMt5+7OEeOX5nv2GEcdVmxkiAjV4yfqwv0A082MBU
+         VV0Zng7S9yqIu11XiUJaD0UrND7KgbPH1hkSZNl4uU7Nr/KefHjP4+W5GlLdSZs1vsK3
+         66uQ==
+X-Gm-Message-State: AC+VfDwGNz9acb264YIuLsyBqafh1aAgqMviA9Q5VMWjpY5eiWRIqUAm
+        NePrVtYNdbtmEU3b26vkR4x0yQ==
+X-Google-Smtp-Source: ACHHUZ7QBWewirSrycEWEJVRsLQoMA2UgFNuEz1+78/1sfi2S+QZYNu+vq68hA6FvT+e4kGu8uOeuw==
+X-Received: by 2002:a05:620a:4895:b0:75b:23a0:de84 with SMTP id ea21-20020a05620a489500b0075b23a0de84mr3802410qkb.2.1685474017164;
+        Tue, 30 May 2023 12:13:37 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:8bb6])
+        by smtp.gmail.com with ESMTPSA id x12-20020a05620a14ac00b0075cc804ee88sm3032298qkj.30.2023.05.30.12.13.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 12:13:36 -0700 (PDT)
+Date:   Tue, 30 May 2023 15:13:36 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
+        cerasuolodomenico@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com, kernel-team@meta.com
+Subject: Re: [PATCH] zswap: do not shrink when memory.zswap.max is 0
+Message-ID: <20230530191336.GB101722@cmpxchg.org>
+References: <20230530162153.836565-1-nphamcs@gmail.com>
+ <CAJD7tkZJttvpYs4mgjL3pt8-jkX0fnWRJP7hVBZmm=i_Ef3Abg@mail.gmail.com>
+ <20230530180038.GC97194@cmpxchg.org>
+ <CAJD7tkYYQjumA6QPcrAv8c6YnqJfrDrMhPZzDSjAz2jv+uDvtg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230308-msm8226-mdp-v2-7-e005b769ee28@z3ntu.xyz>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJD7tkYYQjumA6QPcrAv8c6YnqJfrDrMhPZzDSjAz2jv+uDvtg@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 08:24:17PM +0200, Luca Weiss wrote:
-> Add the nodes that describe the mdss so that display can work on
-> MSM8226.
+On Tue, May 30, 2023 at 11:41:32AM -0700, Yosry Ahmed wrote:
+> On Tue, May 30, 2023 at 11:00 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> >
+> > On Tue, May 30, 2023 at 09:52:36AM -0700, Yosry Ahmed wrote:
+> > > On Tue, May 30, 2023 at 9:22 AM Nhat Pham <nphamcs@gmail.com> wrote:
+> > > >
+> > > > Before storing a page, zswap first checks if the number of stored pages
+> > > > exceeds the limit specified by memory.zswap.max, for each cgroup in the
+> > > > hierarchy. If this limit is reached or exceeded, then zswap shrinking is
+> > > > triggered and short-circuits the store attempt.
+> > > >
+> > > > However, if memory.zswap.max = 0 for a cgroup, no amount of writeback
+> > > > will allow future store attempts from processes in this cgroup to
+> > > > succeed. Furthermore, this create a pathological behavior in a system
+> > > > where some cgroups have memory.zswap.max = 0 and some do not: the
+> > > > processes in the former cgroups, under memory pressure, will evict pages
+> > > > stored by the latter continually, until the need for swap ceases or the
+> > > > pool becomes empty.
+> > > >
+> > > > As a result of this, we observe a disproportionate amount of zswap
+> > > > writeback and a perpetually small zswap pool in our experiments, even
+> > > > though the pool limit is never hit.
+> > > >
+> > > > This patch fixes the issue by rejecting zswap store attempt without
+> > > > shrinking the pool when memory.zswap.max is 0.
+> > > >
+> > > > Fixes: f4840ccfca25 ("zswap: memcg accounting")
+> > > > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> > > > ---
+> > > >  include/linux/memcontrol.h | 6 +++---
+> > > >  mm/memcontrol.c            | 8 ++++----
+> > > >  mm/zswap.c                 | 9 +++++++--
+> > > >  3 files changed, 14 insertions(+), 9 deletions(-)
+> > > >
+> > > > diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> > > > index 222d7370134c..507bed3a28b0 100644
+> > > > --- a/include/linux/memcontrol.h
+> > > > +++ b/include/linux/memcontrol.h
+> > > > @@ -1899,13 +1899,13 @@ static inline void count_objcg_event(struct obj_cgroup *objcg,
+> > > >  #endif /* CONFIG_MEMCG_KMEM */
+> > > >
+> > > >  #if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
+> > > > -bool obj_cgroup_may_zswap(struct obj_cgroup *objcg);
+> > > > +int obj_cgroup_may_zswap(struct obj_cgroup *objcg);
+> > > >  void obj_cgroup_charge_zswap(struct obj_cgroup *objcg, size_t size);
+> > > >  void obj_cgroup_uncharge_zswap(struct obj_cgroup *objcg, size_t size);
+> > > >  #else
+> > > > -static inline bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+> > > > +static inline int obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+> > > >  {
+> > > > -       return true;
+> > > > +       return 0;
+> > > >  }
+> > > >  static inline void obj_cgroup_charge_zswap(struct obj_cgroup *objcg,
+> > > >                                            size_t size)
+> > > > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > > > index 4b27e245a055..09aad0e6f2ea 100644
+> > > > --- a/mm/memcontrol.c
+> > > > +++ b/mm/memcontrol.c
+> > > > @@ -7783,10 +7783,10 @@ static struct cftype memsw_files[] = {
+> > > >   * spending cycles on compression when there is already no room left
+> > > >   * or zswap is disabled altogether somewhere in the hierarchy.
+> > > >   */
+> > > > -bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+> > > > +int obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+> > > >  {
+> > > >         struct mem_cgroup *memcg, *original_memcg;
+> > > > -       bool ret = true;
+> > > > +       int ret = 0;
+> > > >
+> > > >         if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
+> > > >                 return true;
+> > > > @@ -7800,7 +7800,7 @@ bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+> > > >                 if (max == PAGE_COUNTER_MAX)
+> > > >                         continue;
+> > > >                 if (max == 0) {
+> > > > -                       ret = false;
+> > > > +                       ret = -ENODEV;
+> > > >                         break;
+> > > >                 }
+> > > >
+> > > > @@ -7808,7 +7808,7 @@ bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
+> > > >                 pages = memcg_page_state(memcg, MEMCG_ZSWAP_B) / PAGE_SIZE;
+> > > >                 if (pages < max)
+> > > >                         continue;
+> > > > -               ret = false;
+> > > > +               ret = -ENOMEM;
+> > > >                 break;
+> > > >         }
+> > > >         mem_cgroup_put(original_memcg);
+> > > > diff --git a/mm/zswap.c b/mm/zswap.c
+> > > > index 59da2a415fbb..7b13dc865438 100644
+> > > > --- a/mm/zswap.c
+> > > > +++ b/mm/zswap.c
+> > > > @@ -1175,8 +1175,13 @@ static int zswap_frontswap_store(unsigned type, pgoff_t offset,
+> > > >         }
+> > > >
+> > > >         objcg = get_obj_cgroup_from_page(page);
+> > > > -       if (objcg && !obj_cgroup_may_zswap(objcg))
+> > > > -               goto shrink;
+> > > > +       if (objcg) {
+> > > > +               ret = obj_cgroup_may_zswap(objcg);
+> > > > +               if (ret == -ENODEV)
+> > > > +                       goto reject;
+> > > > +               if (ret == -ENOMEM)
+> > > > +                       goto shrink;
+> > > > +       }
+> > >
+> > > I wonder if we should just make this:
+> > >
+> > > if (objcg && !obj_cgroup_may_zswap(objcg))
+> > >         goto reject;
+> > >
+> > > Even if memory.zswap.max is > 0, if the limit is hit, shrinking the
+> > > zswap pool will only help if we happen to writeback a page from the
+> > > same memcg that hit its limit. Keep in mind that we will only
+> > > writeback one page every time we observe that the limit is hit (even
+> > > with Domenico's patch, because zswap_can_accept() should be true).
+> > >
+> > > On a system with a handful of memcgs,
+> > > it seems likely that we wrongfully writeback pages from other memcgs
+> > > because of this. Achieving nothing for this memcg, while hurting
+> > > others. OTOH, without invoking writeback when the limit is hit, the
+> > > memcg will just not be able to use zswap until some pages are
+> > > faulted back in or invalidated.
+> > >
+> > > I am not sure which is better, just thinking out loud.
+> >
+> > You're absolutely right.
+> >
+> > Currently the choice is writing back either everybody or nobody,
+> > meaning between writeback and cgroup containment. They're both so poor
+> > that I can't say I strongly prefer one over the other.
+> >
+> > However, I have a lame argument in favor of this patch:
+> >
+> > The last few fixes from Nhat and Domenico around writeback show that
+> > few people, if anybody, are actually using writeback. So it might not
+> > actually matter that much in practice which way we go with this patch.
+> > Per-memcg LRUs will be necessary for it to work right.
+> >
+> > However, what Nhat is proposing is how we want the behavior down the
+> > line. So between two equally poor choices, I figure we might as well
+> > go with the one that doesn't require another code change later on.
+> >
+> > Doesn't that fill you with radiant enthusiasm?
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-
-Can you update this to use labels like in [1]? See inline below.
-This will allow proper grouping of the labels in the board DT.
-
-Thanks,
-Stephan
-
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/commit/?h=for-next&id=835f939501769253eb7eb2dc5389b8592a63a3ed
-
-> ---
->  arch/arm/boot/dts/qcom-msm8226.dtsi | 127 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 127 insertions(+)
+> If we have per-memcg LRUs, and memory.zswap.max == 0, then we should
+> be in one of two situations:
 > 
-> diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
-> index 42acb9ddb8cc..c794f5ece1d1 100644
-> --- a/arch/arm/boot/dts/qcom-msm8226.dtsi
-> +++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
-> @@ -636,6 +636,133 @@ smd-edge {
->  				label = "lpass";
->  			};
->  		};
-> +
-> +		mdss: display-subsystem@fd900000 {
-> +			compatible = "qcom,mdss";
-> +			reg = <0xfd900000 0x100>, <0xfd924000 0x1000>;
-> +			reg-names = "mdss_phys", "vbif_phys";
-> +
-> +			power-domains = <&mmcc MDSS_GDSC>;
-> +
-> +			clocks = <&mmcc MDSS_AHB_CLK>,
-> +				 <&mmcc MDSS_AXI_CLK>,
-> +				 <&mmcc MDSS_VSYNC_CLK>;
-> +			clock-names = "iface",
-> +				      "bus",
-> +				      "vsync";
-> +
-> +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			interrupt-controller;
-> +			#interrupt-cells = <1>;
-> +
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
-> +
-> +			status = "disabled";
-> +
-> +			mdp: display-controller@fd900000 {
-
-			mdss_mdp:
-
-> +				compatible = "qcom,msm8226-mdp5", "qcom,mdp5";
-> +				reg = <0xfd900100 0x22000>;
-> +				reg-names = "mdp_phys";
-> +
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <0>;
-> +
-> +				clocks = <&mmcc MDSS_AHB_CLK>,
-> +					 <&mmcc MDSS_AXI_CLK>,
-> +					 <&mmcc MDSS_MDP_CLK>,
-> +					 <&mmcc MDSS_VSYNC_CLK>;
-> +				clock-names = "iface",
-> +					      "bus",
-> +					      "core",
-> +					      "vsync";
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +						mdp5_intf1_out: endpoint {
-
-						mdss_mdp_intf1_out:
-
-> +							remote-endpoint = <&dsi0_in>;
-> +						};
-> +					};
-> +				};
-> +			};
-> +
-> +			dsi0: dsi@fd922800 {
-
-			mdss_dsi0:
-
-> +				compatible = "qcom,msm8226-dsi-ctrl",
-> +					     "qcom,mdss-dsi-ctrl";
-> +				reg = <0xfd922800 0x1f8>;
-> +				reg-names = "dsi_ctrl";
-> +
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <4>;
-> +
-> +				assigned-clocks = <&mmcc BYTE0_CLK_SRC>,
-> +						  <&mmcc PCLK0_CLK_SRC>;
-> +				assigned-clock-parents = <&dsi_phy0 0>,
-> +							 <&dsi_phy0 1>;
-> +
-> +				clocks = <&mmcc MDSS_MDP_CLK>,
-> +					 <&mmcc MDSS_AHB_CLK>,
-> +					 <&mmcc MDSS_AXI_CLK>,
-> +					 <&mmcc MDSS_BYTE0_CLK>,
-> +					 <&mmcc MDSS_PCLK0_CLK>,
-> +					 <&mmcc MDSS_ESC0_CLK>,
-> +					 <&mmcc MMSS_MISC_AHB_CLK>;
-> +				clock-names = "mdp_core",
-> +					      "iface",
-> +					      "bus",
-> +					      "byte",
-> +					      "pixel",
-> +					      "core",
-> +					      "core_mmss";
-> +
-> +				phys = <&dsi_phy0>;
-> +
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +						dsi0_in: endpoint {
-
-						mdss_dsi0_in:
-
-> +							remote-endpoint = <&mdp5_intf1_out>;
-> +						};
-> +					};
-> +
-> +					port@1 {
-> +						reg = <1>;
-> +						dsi0_out: endpoint {
-
-						mdss_dsi0_out:
-
-> +						};
-> +					};
-> +				};
-> +			};
-> +
-> +			dsi_phy0: phy@fd922a00 {
-
-			mdss_dsi0_phy:
-
-> +				compatible = "qcom,dsi-phy-28nm-8226";
-> +				reg = <0xfd922a00 0xd4>,
-> +				      <0xfd922b00 0x280>,
-> +				      <0xfd922d80 0x30>;
-> +				reg-names = "dsi_pll",
-> +					    "dsi_phy",
-> +					    "dsi_phy_regulator";
-> +
-> +				#clock-cells = <1>;
-> +				#phy-cells = <0>;
-> +
-> +				clocks = <&mmcc MDSS_AHB_CLK>,
-> +					 <&rpmcc RPM_SMD_XO_CLK_SRC>;
-> +				clock-names = "iface",
-> +					      "ref";
-> +			};
-> +		};
->  	};
->  
->  	timer {
+> (a) memory.zswap.max has always been 0, so the LRU for this memcg is
+> empty, so we don't really need the special case for memory.zswap.max
+> == 0.
 > 
-> -- 
-> 2.40.1
+> (b) memory.zswap.max was reduced to 0 at some point, and some pages
+> are already in zswap. In this case, I don't think shrinking the memcg
+> is such a bad idea, we would be lazily enforcing the limit.
 > 
+> In that sense I am not sure that this change won't require another
+> code change. It feels like special casing memory.zswap.max == 0 is
+> only needed now due to the lack of per-memcg LRUs.
+
+Good point. And I agree down the line we should just always send the
+shrinker off optimistically on the cgroup's lru list.
+
+So I take back my lame argument. But that then still leaves us with
+the situation that both choices are equal here, right?
+
+If so, my vote would be to go with the patch as-is.
