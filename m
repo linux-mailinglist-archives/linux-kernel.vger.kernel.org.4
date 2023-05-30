@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF3671607D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6196C71629F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbjE3Mtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47984 "EHLO
+        id S232381AbjE3Nuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231983AbjE3Mtr (ORCPT
+        with ESMTP id S230183AbjE3Nuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:49:47 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64A5189;
-        Tue, 30 May 2023 05:49:23 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UCAgre017542;
-        Tue, 30 May 2023 14:48:20 +0200
+        Tue, 30 May 2023 09:50:50 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37785EA;
+        Tue, 30 May 2023 06:50:44 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UC4pcC018239;
+        Tue, 30 May 2023 14:49:21 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=selector1;
- bh=Do0DjikyeIDFZP9oGmyZJjVUwz6VAIDmWXDZg0ApHTI=;
- b=X17XIzBHPM4SWuko/RB6ogwCTzLbiqELLn7CU++i+dC2onOJVEAsR6KGzqhEXnJ/m9Wf
- HPWGoVPIDrNf/zN6ubzLMCvmpMYlTYCx0NDr0hfH8A+01C2WZ9zVk5VrF9pN1oHS0lqg
- g1GHwmnhRRxa0wEm5TzBcZC2f93g5QQx8Z/jMlaKjcTqGInuCdM0AZCCTEWGXGZLzLv/
- yz9/BhH6WOJ/boKliF2ubmBjk1pp4Y7g2zaqPrauqARlEougS5y4w61fh+GRXSAkjJmM
- pQsxPHGchpTLWrKMsmN1pQRXWAir0PErwEwlgi/+dXaaFnvC8X3KHbHRJZ5etM55DxmW vA== 
+ bh=8v+0p59Typ3U3+A0Vdhp+6kA+itNhaM4lGhf6lg8Pug=;
+ b=Q7cTmlKkkqwCgBvzhU5C/8I9Svhejus3dbXQlCIYD+iYNkc8EstyY4GdrF71Gg1gT2UG
+ J/2yKSPLzcQ6MfmFQ/jRkSgOOd9LTF86iSonWucCIEbmsTFGhHaTjsahfk1+/BhHjxd/
+ EM4jKQj0zrO3ZbSclkmPb/HhjYdTl3mS/Xp2v9hGvFN7w8m9iJiuddlaGrx3vKFnSn43
+ 1s9JSyFsl2vzWIB1Y8lVQO7JtoG6EkauEJ7O2zSJf81r6GgWSWSzp5z6ZaJRfSlZ8EH+
+ wS+k7WZ6Fubw01qWqm6FfVgojSgh3FCPOMv0Kim1aSF/5RHV1nWVnMxtmaQ5iFQjI7iw LA== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3quahy7yun-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qwdm5hsgn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 May 2023 14:48:20 +0200
+        Tue, 30 May 2023 14:49:21 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5BE5A100038;
-        Tue, 30 May 2023 14:48:20 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4172710002A;
+        Tue, 30 May 2023 14:49:21 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 54A852248DB;
-        Tue, 30 May 2023 14:48:20 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 390622248D6;
+        Tue, 30 May 2023 14:49:21 +0200 (CEST)
 Received: from localhost (10.201.20.178) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 30 May
- 2023 14:48:20 +0200
+ 2023 14:49:20 +0200
 From:   Olivier Moysan <olivier.moysan@foss.st.com>
 To:     Marek Vasut <marex@denx.de>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     Olivier Moysan <olivier.moysan@foss.st.com>,
-        <kernel@dh-electronics.com>, <devicetree@vger.kernel.org>,
+CC:     <kernel@dh-electronics.com>, <devicetree@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 8/9] ARM: dts: stm32: adopt generic iio bindings for adc channels on dhcor-testbench
-Date:   Tue, 30 May 2023 14:45:36 +0200
-Message-ID: <20230530124538.621760-9-olivier.moysan@foss.st.com>
+Subject: [PATCH v2 9/9] ARM: dts: stm32: Update to generic ADC channel binding on DHSOM systems
+Date:   Tue, 30 May 2023 14:45:37 +0200
+Message-ID: <20230530124538.621760-10-olivier.moysan@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230530124538.621760-1-olivier.moysan@foss.st.com>
 References: <20230530124538.621760-1-olivier.moysan@foss.st.com>
@@ -77,61 +76,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use STM32 ADC generic bindings instead of legacy bindings on
-DHCOR Testbench board.
+From: Marek Vasut <marex@denx.de>
 
-The STM32 ADC specific binding to declare channels has been deprecated,
-hence adopt the generic IIO channels bindings, instead.
-The STM32MP151 device tree now exposes internal channels using the
-generic binding. This makes the change mandatory here to avoid a mixed
-use of legacy and generic binding, which is not supported by the driver.
+The generic ADC channel binding is recommended over legacy one, update the
+DT to the modern binding. No functional change. For further details, see
+commit which adds the generic binding to STM32 ADC binding document:
+'664b9879f56e ("dt-bindings: iio: stm32-adc: add generic channel binding")'
 
-Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+Signed-off-by: Marek Vasut <marex@denx.de>
 ---
- .../boot/dts/stm32mp15xx-dhcor-testbench.dtsi | 28 ++++++++++++++++---
- 1 file changed, 24 insertions(+), 4 deletions(-)
+ arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi  | 18 +++++----
+ .../boot/dts/stm32mp15xx-dhcor-avenger96.dtsi | 38 +++++++++++++++----
+ 2 files changed, 40 insertions(+), 16 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcor-testbench.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcor-testbench.dtsi
-index faed31b6d84a..ab7f0ba49639 100644
---- a/arch/arm/boot/dts/stm32mp15xx-dhcor-testbench.dtsi
-+++ b/arch/arm/boot/dts/stm32mp15xx-dhcor-testbench.dtsi
-@@ -41,15 +41,35 @@ &adc {
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+index c06edd2eacb0..e61df23d361a 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+@@ -80,17 +80,19 @@ &adc {
+ 	vdda-supply = <&vdda>;
+ 	vref-supply = <&vdda>;
  	status = "okay";
++};
  
- 	adc1: adc@0 {
+-	adc1: adc@0 {
+-		st,min-sample-time-nsecs = <5000>;
+-		st,adc-channels = <0>;
+-		status = "okay";
++&adc1 {
++	channel@0 {
++		reg = <0>;
++		st,min-sample-time-ns = <5000>;
+ 	};
++};
+ 
+-	adc2: adc@100 {
+-		st,adc-channels = <1>;
+-		st,min-sample-time-nsecs = <5000>;
+-		status = "okay";
++&adc2 {
++	channel@1 {
++		reg = <1>;
++		st,min-sample-time-ns = <5000>;
+ 	};
+ };
+ 
+diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
+index cdd4902b59a9..0069ad75d55e 100644
+--- a/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
++++ b/arch/arm/boot/dts/stm32mp15xx-dhcor-avenger96.dtsi
+@@ -111,17 +111,39 @@ &adc {
+ 	vdda-supply = <&vdda>;
+ 	vref-supply = <&vdda>;
+ 	status = "okay";
++};
+ 
+-	adc1: adc@0 {
 -		st,adc-channels = <0 1 6>;
 -		st,min-sample-time-nsecs = <5000>;
- 		status = "okay";
-+		channel@0 {
-+			reg = <0>;
-+			st,min-sample-time-ns = <5000>;
-+		};
-+		channel@1 {
-+			reg = <1>;
-+			st,min-sample-time-ns = <5000>;
-+		};
-+		channel@6 {
-+			reg = <6>;
-+			st,min-sample-time-ns = <5000>;
-+		};
+-		status = "okay";
++&adc1 {
++	channel@0 {
++		reg = <0>;
++		st,min-sample-time-ns = <5000>;
  	};
  
- 	adc2: adc@100 {
+-	adc2: adc@100 {
 -		st,adc-channels = <0 1 2>;
 -		st,min-sample-time-nsecs = <5000>;
- 		status = "okay";
-+		channel@0 {
-+			reg = <0>;
-+			st,min-sample-time-ns = <5000>;
-+		};
-+		channel@1 {
-+			reg = <1>;
-+			st,min-sample-time-ns = <5000>;
-+		};
-+		channel@2 {
-+			reg = <2>;
-+			st,min-sample-time-ns = <5000>;
-+		};
+-		status = "okay";
++	channel@1 {
++		reg = <1>;
++		st,min-sample-time-ns = <5000>;
++	};
++
++	channel@6 {
++		reg = <6>;
++		st,min-sample-time-ns = <5000>;
++	};
++};
++
++&adc2 {
++	channel@0 {
++		reg = <0>;
++		st,min-sample-time-ns = <5000>;
++	};
++
++	channel@1 {
++		reg = <1>;
++		st,min-sample-time-ns = <5000>;
++	};
++
++	channel@2 {
++		reg = <2>;
++		st,min-sample-time-ns = <5000>;
  	};
  };
  
