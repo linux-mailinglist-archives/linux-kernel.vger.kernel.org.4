@@ -2,110 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC85716A9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E30716AAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232873AbjE3RRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 13:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48100 "EHLO
+        id S230507AbjE3RTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 13:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjE3RRV (ORCPT
+        with ESMTP id S232036AbjE3RTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 13:17:21 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4BD98;
-        Tue, 30 May 2023 10:17:20 -0700 (PDT)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id A3735207A3;
-        Tue, 30 May 2023 19:17:18 +0200 (CEST)
-Date:   Tue, 30 May 2023 19:17:17 +0200
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Nishanth Menon <nm@ti.com>
-Cc:     Francesco Dolcini <francesco@dolcini.it>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 3/5] arm64: dts: ti: add verdin am62
-Message-ID: <ZHYvnSMSnzoaYvWm@francesco-nb.int.toradex.com>
-References: <20230524143631.42471-1-francesco@dolcini.it>
- <20230524143631.42471-4-francesco@dolcini.it>
- <20230530121044.sjhv452b4hs4lyiy@flyer>
- <ZHYl8/8k4CTm/2LW@francesco-nb.int.toradex.com>
- <20230530165351.rqpu7go3kw6j3upc@storable>
+        Tue, 30 May 2023 13:19:19 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882F898;
+        Tue, 30 May 2023 10:19:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685467158; x=1717003158;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=tBS8QRmW7FiYudJqYJWqWxLyyCAH9w7Efz2ctqMQaCM=;
+  b=cMdEi0CikShWIoZL/6tXfuMaSbS9/vATA33iXN1QMWXk10xv8hPuXUUA
+   XRlgUtZ3H+gpdXqfIwTnx5VEB33ocKIq+OVdF5uODlewSQ7ucBczx91Bl
+   uGq5UEU2R/vMR8C9mvaQrBUqVO2+jD1IWrak9D+d1fszmhrHxF9g/A/9r
+   q8FI5DRtPeRT9a/j9+7AqE5jUHASzpd7TYrW6d/XdA/7GsAPAF1V48LSo
+   7aG1+SP3PvAzgN3Uz0xRslSnFPc8fKOCwxmyUNxU9hFH82D8VzC7x4lJh
+   fnJnwAcY7Xauib82ZY4wOrDtUgEh6cQ4P8xASgJ9tel/h1lwZY63cgRq1
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="441345315"
+X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
+   d="scan'208";a="441345315"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 10:19:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="684061909"
+X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
+   d="scan'208";a="684061909"
+Received: from jswalken-mobl.amr.corp.intel.com (HELO [10.212.134.46]) ([10.212.134.46])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 10:19:17 -0700
+Message-ID: <ce2badca-089d-34de-c929-075fe75fc0e9@intel.com>
+Date:   Tue, 30 May 2023 10:19:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530165351.rqpu7go3kw6j3upc@storable>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] x86/msr: Allow unprivileged read access to some MSRs
+Content-Language: en-US
+To:     Tim Wiederhake <twiederh@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20230523194949.96149-1-twiederh@redhat.com>
+ <20230530102358.16430-1-twiederh@redhat.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230530102358.16430-1-twiederh@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 11:53:51AM -0500, Nishanth Menon wrote:
-> On 18:36-20230530, Francesco Dolcini wrote:
-> > On Tue, May 30, 2023 at 07:10:44AM -0500, Nishanth Menon wrote:
-> > > On 16:36-20230524, Francesco Dolcini wrote:
-> > > > +/* Verdin I2C_2_DSI */
-> > > > +&main_i2c2 {
-> > > > +	status = "okay";
-> > > 
-> > > Here and few other dtsis:
-> > > you should set status along with pinmux.
-> > This is already done in the SoM dtsi, same applies to the other comment
-> > you have on this pinmux topic.
-> > 
-> > To rephrase what's hopefully is already written in the commit
-> > message/series description, or at least it was in my intention.
-> > 
-> > The system is modular, with multiple SoM variant and multiple carrier
-> > boards. Standard interfaces are defined at the family level, e.g.
-> > already in the SoM, in the carrier board DT file peripherals are just
-> > enabled, the pinmux is already defined in the common som.dtsi [1][2][3]
-> > files and the carrier board just use those unless there is some kind of
-> > non-standard deviation.
-> > 
-> > This prevents duplication and simplify writing device tree file for board
-> > that use standard Verdin family interfaces. This should be visible
-> > looking at this series in which 3 different boards (Dev, Yavia and
-> > Dahlia) are added.
-> 
-> It helps clarity if the node is marked "okay" when all the necessary
-> properties required for operation (in this case pinmux) is enabled. I
-> don't see a big change as a result. Just stops people from hunting for
-> where pinmux is actually done.
+On 5/30/23 03:23, Tim Wiederhake wrote:
+> Expose some non-security sensitive MSRs through sysfs to allow access
+> for unprivileged processes. This also helps other programs that are
+> interested in IA32_EFER for x86-64-v1 detection.
 
-I would disagree here, I would prefer to keep this as it is.
-Of course, doing the change you request here is trivial, just some copy
-paste.
+Did you mean "sysfs" or "sysctl"?
 
-The pinctrl is not all the necessary properties, you still need go
-hunting on the dtsi includes hierarchy to see that everything is there.
-And I think this is just fine, we do this just to avoid duplicating
-common stuff.
+I'm still on the fence about whether we should do this.  This seems
+_marginally_ better than the /dev approach.
 
-What you get for sure is information duplication, with all the
-interfaces that are enabled getting the same pinctrl on
-multiple files.
+But whatever we do we need some *VERY* explicit, tight rules about what
+can be exposed via this interface in the future.  We absolutely can't
+have folks adding to this in the future without following those rules.
 
-Just on this series you have 3 carrier boards, we have 1 more we should
-just send and they all share mostly the same pinmux.
-... And the Verdin AM62 is really a very brand new product.
+A lot of this is implicit in the implementation and even the ABI, but
+let's say them out loud, please:
 
-From my point of view I would also lose some clarity, since the current
-structure, at least to some extent, helps understanding when a carrier
-board is deviating from the family specification.
+  * The MSRs must be read-only.  If they are read-write, the snapshot
+    can get out of date. This can be guaranteed by either:
+   * Never being written at runtime after they are snapshotted, or
+     preferably:
+   * Being defined to be read-only (wrmsr just doesn't work)
+  * The MSRs must be have the same exact value on all CPUs (because
+    there is only one file per MSR)
+  * The value must be static.  Not only read-only from the software
+    point of view, but the hardware and hypervisor must also promise not
+    to change it.
 
-I hope this explanation gives some more context.
-
-Francesco
-
-
+The first two seem doable.  I'm not sure how we deal with the third,
+though, especially in the case of microcode updates or clever hypervisors.
