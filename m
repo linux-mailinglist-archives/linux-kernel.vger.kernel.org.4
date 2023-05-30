@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A872716AB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3101F716AB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 19:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbjE3RVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 13:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        id S230514AbjE3RVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 13:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232125AbjE3RVg (ORCPT
+        with ESMTP id S230087AbjE3RVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 13:21:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067B3E5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:21:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 849056311A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 17:21:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ABBDC433A0;
-        Tue, 30 May 2023 17:21:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685467293;
-        bh=4EtaJer+wkp3B2cXK/6nqiqx6D7o7NqYDACyTftapxU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ohx3VDW85auwWbl9PBVvR1ldBZaPahy/YA5rXd55Vg9UeN3oUAdm08MNzpR39xahI
-         IcHR+oC9wdZp7/2geEr6kOY385tMyj5Q8qZT5DVA8vqyuss4fsGBUFZ8Z7Q8LWdcob
-         a+aTO/9JHUbmAf/jafvtgBG+gMbmYHC3buwjKeU9vHqC5djOadYE8F28miqG78kvj/
-         NQSC2R22nZDBE0T906t0WfkZpw7xJ6pu177f3ruxkK1VGrcvhUCw5C1dloEc1UipHQ
-         djE3qeIBNTV00XoCI1iiK+3Tw4R4GQP9b5dD5f4paBgUM29grUSdfxWVXI6hp1ZRCN
-         24UTqOgNbj/BA==
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH 04/22] objtool: Consolidate rel/rela handling
-Date:   Tue, 30 May 2023 10:20:56 -0700
-Message-Id: <dcabf6df400ca500ea929f1e4284f5e5ec0b27c8.1685464332.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1685464332.git.jpoimboe@kernel.org>
-References: <cover.1685464332.git.jpoimboe@kernel.org>
+        Tue, 30 May 2023 13:21:01 -0400
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9BF98
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:20:57 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-763997ab8cdso660916839f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 10:20:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685467256; x=1688059256;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7RoI4PndI5mS+7NVQVinwhSwL+K74gYdL70viuIrUJM=;
+        b=kMPXqPjRThmQvfLvRjWoZz/8pufneZ8LsGh95Q7v/VFfPKqqZoEXM4naklJsNo5tqL
+         n9VZ3pCLudxUekwJ6lQbUduQJrqmeAcILKsUWJAXDxGrLmeDuJfzBiT8hezz9BmSkgh7
+         AnW5TyDt5DIbAooEbTgXSNXxhH4cKRrNgaNesbNHe59ipG2Dqijh2THDFmI/Fevb3LGa
+         Oq9fqdTMt7XXnldpvteO8kgAOeAmQPezFcQSlV9z7MH9PtShkG3LjS/XzcjiWOV0Fuha
+         er2saiVw1guBzpVbfNM12jAA+BQNottBEyOpLeQUwj3kQoe5XbMXlo6O5X7aLb/9Nshc
+         SKUA==
+X-Gm-Message-State: AC+VfDw9EQQC5IGvVoIR7auVKRb/OvnO4VVGL9ASSA1aKm/Rj42BoLPZ
+        eDAV6aww0mNZRbE0n3Qkh3F6vNV7Ro3HDwddUgBfQKg0Ik5D
+X-Google-Smtp-Source: ACHHUZ529Fqq1//KVvRKEvEF7TiTZVOgu3Obdoq/hF5y3eaObUyzzXHIQj041V5HO0PDjyYfPUWYJwtwuUJZ4QMsAVoHC4JdaBOc
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a5e:9816:0:b0:774:8f36:bb8e with SMTP id
+ s22-20020a5e9816000000b007748f36bb8emr1359890ioj.2.1685467256572; Tue, 30 May
+ 2023 10:20:56 -0700 (PDT)
+Date:   Tue, 30 May 2023 10:20:56 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001bd66b05fcec6d92@google.com>
+Subject: [syzbot] [reiserfs?] possible deadlock in vfs_setxattr (2)
+From:   syzbot <syzbot+c98692bac73aedb459c3@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,397 +54,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GElf_Rel[a] structs have more similarities than differences.  It's
-safe to hard-code the assumptions about their shared fields as they will
-never change.  Consolidate their handling where possible, getting rid of
-duplicated code.
+Hello,
 
-Also, at least for now we only ever create rela sections, so simplify
-the relocation creation code to be rela-only.
+syzbot found the following issue on:
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+HEAD commit:    eb0f1697d729 Merge branch 'for-next/core', remote-tracking..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1545e64d280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8860074b9a9d6c45
+dashboard link: https://syzkaller.appspot.com/bug?extid=c98692bac73aedb459c3
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/034232da7cff/disk-eb0f1697.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b11411bec33e/vmlinux-eb0f1697.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a53c52e170dd/Image-eb0f1697.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c98692bac73aedb459c3@syzkaller.appspotmail.com
+
+reiserfs: enabling write barrier flush mode
+REISERFS (device loop5): Created .reiserfs_priv - reserved for xattr storage.
+======================================================
+WARNING: possible circular locking dependency detected
+6.4.0-rc3-syzkaller-geb0f1697d729 #0 Not tainted
+------------------------------------------------------
+syz-executor.5/11246 is trying to acquire lock:
+ffff0000e040a400 (&type->i_mutex_dir_key#10){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
+ffff0000e040a400 (&type->i_mutex_dir_key#10){+.+.}-{3:3}, at: vfs_setxattr+0x17c/0x344 fs/xattr.c:321
+
+but task is already holding lock:
+ffff000113b8a460 (sb_writers#12){.+.+}-{0:0}, at: mnt_want_write_file+0x64/0x1e8 fs/namespace.c:438
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (sb_writers#12){.+.+}-{0:0}:
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1494 [inline]
+       sb_start_write+0x60/0x2ec include/linux/fs.h:1569
+       mnt_want_write_file+0x64/0x1e8 fs/namespace.c:438
+       reiserfs_ioctl+0x184/0x454 fs/reiserfs/ioctl.c:103
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __arm64_sys_ioctl+0x14c/0x1c8 fs/ioctl.c:856
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+       el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+       el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+
+-> #1 (&sbi->lock){+.+.}-{3:3}:
+       __mutex_lock_common+0x190/0x21a0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x2c/0x38 kernel/locking/mutex.c:799
+       reiserfs_write_lock+0x7c/0xe8 fs/reiserfs/lock.c:27
+       reiserfs_lookup+0x128/0x45c fs/reiserfs/namei.c:364
+       __lookup_slow+0x250/0x374 fs/namei.c:1690
+       lookup_one_len+0x178/0x28c fs/namei.c:2742
+       reiserfs_lookup_privroot+0x8c/0x184 fs/reiserfs/xattr.c:976
+       reiserfs_fill_super+0x15b4/0x2028 fs/reiserfs/super.c:2192
+       mount_bdev+0x26c/0x368 fs/super.c:1380
+       get_super_block+0x44/0x58 fs/reiserfs/super.c:2601
+       legacy_get_tree+0xd4/0x16c fs/fs_context.c:610
+       vfs_get_tree+0x90/0x274 fs/super.c:1510
+       do_new_mount+0x25c/0x8c8 fs/namespace.c:3039
+       path_mount+0x590/0xe04 fs/namespace.c:3369
+       do_mount fs/namespace.c:3382 [inline]
+       __do_sys_mount fs/namespace.c:3591 [inline]
+       __se_sys_mount fs/namespace.c:3568 [inline]
+       __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3568
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+       el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+       el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+
+-> #0 (&type->i_mutex_dir_key#10){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3108 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3227 [inline]
+       validate_chain kernel/locking/lockdep.c:3842 [inline]
+       __lock_acquire+0x3310/0x75f0 kernel/locking/lockdep.c:5074
+       lock_acquire+0x23c/0x71c kernel/locking/lockdep.c:5691
+       down_write+0x50/0xc0 kernel/locking/rwsem.c:1573
+       inode_lock include/linux/fs.h:775 [inline]
+       vfs_setxattr+0x17c/0x344 fs/xattr.c:321
+       do_setxattr fs/xattr.c:630 [inline]
+       setxattr+0x208/0x29c fs/xattr.c:653
+       __do_sys_fsetxattr fs/xattr.c:709 [inline]
+       __se_sys_fsetxattr fs/xattr.c:698 [inline]
+       __arm64_sys_fsetxattr+0x1a8/0x224 fs/xattr.c:698
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+       el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+       el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+
+other info that might help us debug this:
+
+Chain exists of:
+  &type->i_mutex_dir_key#10 --> &sbi->lock --> sb_writers#12
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  rlock(sb_writers#12);
+                               lock(&sbi->lock);
+                               lock(sb_writers#12);
+  lock(&type->i_mutex_dir_key#10);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor.5/11246:
+ #0: ffff000113b8a460 (sb_writers#12){.+.+}-{0:0}, at: mnt_want_write_file+0x64/0x1e8 fs/namespace.c:438
+
+stack backtrace:
+CPU: 0 PID: 11246 Comm: syz-executor.5 Not tainted 6.4.0-rc3-syzkaller-geb0f1697d729 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
+Call trace:
+ dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
+ show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
+ dump_stack+0x1c/0x28 lib/dump_stack.c:113
+ print_circular_bug+0x150/0x1b8 kernel/locking/lockdep.c:2066
+ check_noncircular+0x2cc/0x378 kernel/locking/lockdep.c:2188
+ check_prev_add kernel/locking/lockdep.c:3108 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3227 [inline]
+ validate_chain kernel/locking/lockdep.c:3842 [inline]
+ __lock_acquire+0x3310/0x75f0 kernel/locking/lockdep.c:5074
+ lock_acquire+0x23c/0x71c kernel/locking/lockdep.c:5691
+ down_write+0x50/0xc0 kernel/locking/rwsem.c:1573
+ inode_lock include/linux/fs.h:775 [inline]
+ vfs_setxattr+0x17c/0x344 fs/xattr.c:321
+ do_setxattr fs/xattr.c:630 [inline]
+ setxattr+0x208/0x29c fs/xattr.c:653
+ __do_sys_fsetxattr fs/xattr.c:709 [inline]
+ __se_sys_fsetxattr fs/xattr.c:698 [inline]
+ __arm64_sys_fsetxattr+0x1a8/0x224 fs/xattr.c:698
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+
+
 ---
- tools/objtool/check.c               |  12 +-
- tools/objtool/elf.c                 | 202 ++++++++--------------------
- tools/objtool/include/objtool/elf.h |  13 +-
- 3 files changed, 68 insertions(+), 159 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 189b4161e713..b6d0cb24085b 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -951,7 +951,7 @@ static int create_cfi_sections(struct objtool_file *file)
- 
- static int create_mcount_loc_sections(struct objtool_file *file)
- {
--	int addrsize = elf_class_addrsize(file->elf);
-+	size_t addr_size = elf_addr_size(file->elf);
- 	struct instruction *insn;
- 	struct section *sec;
- 	int idx;
-@@ -970,25 +970,25 @@ static int create_mcount_loc_sections(struct objtool_file *file)
- 	list_for_each_entry(insn, &file->mcount_loc_list, call_node)
- 		idx++;
- 
--	sec = elf_create_section(file->elf, "__mcount_loc", addrsize, idx);
-+	sec = elf_create_section(file->elf, "__mcount_loc", addr_size, idx);
- 	if (!sec)
- 		return -1;
- 
--	sec->sh.sh_addralign = addrsize;
-+	sec->sh.sh_addralign = addr_size;
- 
- 	idx = 0;
- 	list_for_each_entry(insn, &file->mcount_loc_list, call_node) {
- 		void *loc;
- 
- 		loc = sec->data->d_buf + idx;
--		memset(loc, 0, addrsize);
-+		memset(loc, 0, addr_size);
- 
- 		if (elf_add_reloc_to_insn(file->elf, sec, idx,
--					  addrsize == sizeof(u64) ? R_ABS64 : R_ABS32,
-+					  addr_size == sizeof(u64) ? R_ABS64 : R_ABS32,
- 					  insn->sec, insn->offset))
- 			return -1;
- 
--		idx += addrsize;
-+		idx += addr_size;
- 	}
- 
- 	return 0;
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 86ae62dfdba2..4bbdd8e6df2c 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -533,16 +533,15 @@ static int read_symbols(struct elf *elf)
- 	return -1;
- }
- 
--static struct section *elf_create_reloc_section(struct elf *elf,
--						struct section *sec,
--						int reltype);
-+static struct section *elf_create_rela_section(struct elf *elf,
-+					       struct section *sec);
- 
- int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
- 		  unsigned int type, struct symbol *sym, s64 addend)
- {
- 	struct reloc *reloc;
- 
--	if (!sec->rsec && !elf_create_reloc_section(elf, sec, SHT_RELA))
-+	if (!sec->rsec && !elf_create_rela_section(elf, sec))
- 		return -1;
- 
- 	reloc = malloc(sizeof(*reloc));
-@@ -865,29 +864,25 @@ int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
- 	return elf_add_reloc(elf, sec, offset, type, sym, addend);
- }
- 
--static int read_rel_reloc(struct section *rsec, int i, struct reloc *reloc, unsigned int *symndx)
-+static int read_reloc(struct section *rsec, int i, struct reloc *reloc)
- {
--	if (!gelf_getrel(rsec->data, i, &reloc->rel)) {
--		WARN_ELF("gelf_getrel");
--		return -1;
--	}
--	reloc->type = GELF_R_TYPE(reloc->rel.r_info);
--	reloc->addend = 0;
--	reloc->offset = reloc->rel.r_offset;
--	*symndx = GELF_R_SYM(reloc->rel.r_info);
--	return 0;
--}
-+	bool rela = rsec->sh.sh_type == SHT_RELA;
-+	void *retp;
- 
--static int read_rela_reloc(struct section *rsec, int i, struct reloc *reloc, unsigned int *symndx)
--{
--	if (!gelf_getrela(rsec->data, i, &reloc->rela)) {
-+	if (rela)
-+		retp = gelf_getrela(rsec->data, i, &reloc->rela);
-+	else
-+		retp = gelf_getrel(rsec->data, i, &reloc->rel);
-+
-+	if (!retp) {
- 		WARN_ELF("gelf_getrela");
- 		return -1;
- 	}
--	reloc->type = GELF_R_TYPE(reloc->rela.r_info);
--	reloc->addend = reloc->rela.r_addend;
--	reloc->offset = reloc->rela.r_offset;
--	*symndx = GELF_R_SYM(reloc->rela.r_info);
-+
-+	reloc->offset = reloc->rel.r_offset;
-+	reloc->type = GELF_R_TYPE(reloc->rel.r_info);
-+	reloc->addend = rela ? reloc->rela.r_addend : 0;
-+
- 	return 0;
- }
- 
-@@ -926,20 +921,13 @@ static int read_relocs(struct elf *elf)
- 		}
- 		for (i = 0; i < rsec->sh.sh_size / rsec->sh.sh_entsize; i++) {
- 			reloc = &rsec->reloc_data[i];
--			switch (rsec->sh.sh_type) {
--			case SHT_REL:
--				if (read_rel_reloc(rsec, i, reloc, &symndx))
--					return -1;
--				break;
--			case SHT_RELA:
--				if (read_rela_reloc(rsec, i, reloc, &symndx))
--					return -1;
--				break;
--			default: return -1;
--			}
-+
-+			if (read_reloc(rsec, i, reloc))
-+				return -1;
- 
- 			reloc->sec = rsec;
- 			reloc->idx = i;
-+			symndx = GELF_R_SYM(reloc->rel.r_info);
- 			reloc->sym = sym = find_symbol_by_index(elf, symndx);
- 			if (!reloc->sym) {
- 				WARN("can't find reloc entry symbol %d for %s",
-@@ -1141,30 +1129,30 @@ struct section *elf_create_section(struct elf *elf, const char *name,
- 	return sec;
- }
- 
--static struct section *elf_create_rel_reloc_section(struct elf *elf,
--						    struct section *sec)
-+static struct section *elf_create_rela_section(struct elf *elf,
-+					       struct section *sec)
- {
--	char *relocname;
- 	struct section *rsec;
-+	char *rsec_name;
- 
--	relocname = malloc(strlen(sec->name) + strlen(".rel") + 1);
--	if (!relocname) {
-+	rsec_name = malloc(strlen(sec->name) + strlen(".rela") + 1);
-+	if (!rsec_name) {
- 		perror("malloc");
- 		return NULL;
- 	}
--	strcpy(relocname, ".rel");
--	strcat(relocname, sec->name);
-+	strcpy(rsec_name, ".rela");
-+	strcat(rsec_name, sec->name);
- 
--	rsec = elf_create_section(elf, relocname, sizeof(GElf_Rel), 0);
--	free(relocname);
-+	rsec = elf_create_section(elf, rsec_name, elf_rela_size(elf), 0);
-+	free(rsec_name);
- 	if (!rsec)
- 		return NULL;
- 
- 	sec->rsec = rsec;
- 	rsec->base = sec;
- 
--	rsec->sh.sh_type = SHT_REL;
--	rsec->sh.sh_addralign = 8;
-+	rsec->sh.sh_type = SHT_RELA;
-+	rsec->sh.sh_addralign = elf_addr_size(elf);
- 	rsec->sh.sh_link = find_section_by_name(elf, ".symtab")->idx;
- 	rsec->sh.sh_info = sec->idx;
- 	rsec->sh.sh_flags = SHF_INFO_LINK;
-@@ -1172,55 +1160,11 @@ static struct section *elf_create_rel_reloc_section(struct elf *elf,
- 	return rsec;
- }
- 
--static struct section *elf_create_rela_reloc_section(struct elf *elf, struct section *base)
--{
--	char *relocname;
--	struct section *rsec;
--	int addrsize = elf_class_addrsize(elf);
--
--	relocname = malloc(strlen(base->name) + strlen(".rela") + 1);
--	if (!relocname) {
--		perror("malloc");
--		return NULL;
--	}
--	strcpy(relocname, ".rela");
--	strcat(relocname, base->name);
--
--	if (addrsize == sizeof(u32))
--		rsec = elf_create_section(elf, relocname, sizeof(Elf32_Rela), 0);
--	else
--		rsec = elf_create_section(elf, relocname, sizeof(GElf_Rela), 0);
--	free(relocname);
--	if (!rsec)
--		return NULL;
--
--	base->rsec = rsec;
--	rsec->base = base;
--
--	rsec->sh.sh_type = SHT_RELA;
--	rsec->sh.sh_addralign = addrsize;
--	rsec->sh.sh_link = find_section_by_name(elf, ".symtab")->idx;
--	rsec->sh.sh_info = base->idx;
--	rsec->sh.sh_flags = SHF_INFO_LINK;
--
--	return rsec;
--}
--
--static struct section *elf_create_reloc_section(struct elf *elf,
--					 struct section *base,
--					 int reltype)
--{
--	switch (reltype) {
--	case SHT_REL:  return elf_create_rel_reloc_section(elf, base);
--	case SHT_RELA: return elf_create_rela_reloc_section(elf, base);
--	default:       return NULL;
--	}
--}
--
--static int elf_rebuild_rel_reloc_section(struct section *rsec)
-+static int elf_rebuild_reloc_section(struct elf *elf, struct section *rsec)
- {
-+	bool rela = rsec->sh.sh_type == SHT_RELA;
- 	struct reloc *reloc;
--	int idx = 0;
-+	int idx = 0, ret;
- 	void *buf;
- 
- 	/* Allocate a buffer for relocations */
-@@ -1232,13 +1176,19 @@ static int elf_rebuild_rel_reloc_section(struct section *rsec)
- 
- 	rsec->data->d_buf = buf;
- 	rsec->data->d_size = rsec->sh.sh_size;
--	rsec->data->d_type = ELF_T_REL;
-+	rsec->data->d_type = rela ? ELF_T_RELA : ELF_T_REL;
- 
- 	idx = 0;
- 	list_for_each_entry(reloc, &rsec->reloc_list, list) {
- 		reloc->rel.r_offset = reloc->offset;
- 		reloc->rel.r_info = GELF_R_INFO(reloc->sym->idx, reloc->type);
--		if (!gelf_update_rel(rsec->data, idx, &reloc->rel)) {
-+		if (rela) {
-+			reloc->rela.r_addend = reloc->addend;
-+			ret = gelf_update_rela(rsec->data, idx, &reloc->rela);
-+		} else {
-+			ret = gelf_update_rel(rsec->data, idx, &reloc->rel);
-+		}
-+		if (!ret) {
- 			WARN_ELF("gelf_update_rel");
- 			return -1;
- 		}
-@@ -1248,47 +1198,6 @@ static int elf_rebuild_rel_reloc_section(struct section *rsec)
- 	return 0;
- }
- 
--static int elf_rebuild_rela_reloc_section(struct section *rsec)
--{
--	struct reloc *reloc;
--	int idx = 0;
--	void *buf;
--
--	/* Allocate a buffer for relocations with addends */
--	buf = malloc(rsec->sh.sh_size);
--	if (!buf) {
--		perror("malloc");
--		return -1;
--	}
--
--	rsec->data->d_buf = buf;
--	rsec->data->d_size = rsec->sh.sh_size;
--	rsec->data->d_type = ELF_T_RELA;
--
--	idx = 0;
--	list_for_each_entry(reloc, &rsec->reloc_list, list) {
--		reloc->rela.r_offset = reloc->offset;
--		reloc->rela.r_addend = reloc->addend;
--		reloc->rela.r_info = GELF_R_INFO(reloc->sym->idx, reloc->type);
--		if (!gelf_update_rela(rsec->data, idx, &reloc->rela)) {
--			WARN_ELF("gelf_update_rela");
--			return -1;
--		}
--		idx++;
--	}
--
--	return 0;
--}
--
--static int elf_rebuild_reloc_section(struct elf *elf, struct section *rsec)
--{
--	switch (rsec->sh.sh_type) {
--	case SHT_REL:  return elf_rebuild_rel_reloc_section(rsec);
--	case SHT_RELA: return elf_rebuild_rela_reloc_section(rsec);
--	default:       return -1;
--	}
--}
--
- int elf_write_insn(struct elf *elf, struct section *sec,
- 		   unsigned long offset, unsigned int len,
- 		   const char *insn)
-@@ -1311,24 +1220,21 @@ int elf_write_insn(struct elf *elf, struct section *sec,
- int elf_write_reloc(struct elf *elf, struct reloc *reloc)
- {
- 	struct section *rsec = reloc->sec;
-+	int ret;
- 
--	if (rsec->sh.sh_type == SHT_REL) {
--		reloc->rel.r_info = GELF_R_INFO(reloc->sym->idx, reloc->type);
--		reloc->rel.r_offset = reloc->offset;
-+	reloc->rel.r_offset = reloc->offset;
-+	reloc->rel.r_info = GELF_R_INFO(reloc->sym->idx, reloc->type);
- 
--		if (!gelf_update_rel(rsec->data, reloc->idx, &reloc->rel)) {
--			WARN_ELF("gelf_update_rel");
--			return -1;
--		}
--	} else {
--		reloc->rela.r_info = GELF_R_INFO(reloc->sym->idx, reloc->type);
-+	if (rsec->sh.sh_type == SHT_RELA) {
- 		reloc->rela.r_addend = reloc->addend;
--		reloc->rela.r_offset = reloc->offset;
-+		ret = gelf_update_rela(rsec->data, reloc->idx, &reloc->rela);
-+	} else {
-+		ret = gelf_update_rel(rsec->data, reloc->idx, &reloc->rel);
-+	}
- 
--		if (!gelf_update_rela(rsec->data, reloc->idx, &reloc->rela)) {
--			WARN_ELF("gelf_update_rela");
--			return -1;
--		}
-+	if (!ret) {
-+		WARN_ELF("gelf_update_rela");
-+		return -1;
- 	}
- 
- 	elf->changed = true;
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index a4e43a69f922..6f82f2515d6b 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -12,6 +12,7 @@
- #include <linux/hashtable.h>
- #include <linux/rbtree.h>
- #include <linux/jhash.h>
-+#include <arch/elf.h>
- 
- #ifdef LIBELF_USE_DEPRECATED
- # define elf_getshdrnum    elf_getshnum
-@@ -147,12 +148,14 @@ static inline bool has_multiple_files(struct elf *elf)
- 	return elf->num_files > 1;
- }
- 
--static inline int elf_class_addrsize(struct elf *elf)
-+static inline size_t elf_addr_size(struct elf *elf)
- {
--	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
--		return sizeof(u32);
--	else
--		return sizeof(u64);
-+	return elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32 ? 4 : 8;
-+}
-+
-+static inline size_t elf_rela_size(struct elf *elf)
-+{
-+	return elf_addr_size(elf) == 4 ? sizeof(Elf32_Rela) : sizeof(Elf64_Rela);
- }
- 
- #define for_each_sec(file, sec)						\
--- 
-2.40.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
