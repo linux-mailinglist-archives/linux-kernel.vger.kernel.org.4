@@ -2,56 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2246C715B28
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BBB3715B2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 12:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbjE3KMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 06:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
+        id S231332AbjE3KMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 06:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjE3KLq (ORCPT
+        with ESMTP id S231136AbjE3KMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 06:11:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB58FF3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 03:11:42 -0700 (PDT)
-Date:   Tue, 30 May 2023 10:11:39 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685441500;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=Kgox1DACm+wImb37rOPJ3ZxaCjPRS4PC+RXndEqMgYI=;
-        b=0yABhfWbjUr5GEpV4YxmFDoNSsXdV+/sj0sAUW+sEyxaxywok/pllZGcNbAUYX2NColHwa
-        AS/yS/DEAzQR8iz8SMMFRe4mddbqp5Qr3/+PIigctY/9/6YmFRng+BOXyJMHDDeVLn9c9j
-        /pu8N8ZAkjuOfBL3U2ftHtEGZVzwe5XC732bF7gk89mE83Ppwt22wmXapIcVlkhvKFuVYo
-        cdy2pUzldCGPKoPVbe4a+IeZVT0Vwpwo2MhhulbTVZpbdy5L/LSrl5xXK/tAOViNPFmCDQ
-        XhkGmeIAZVdnylsoqylkjHZ5KQTPSk3Sh7CenrioGm33glY/jDpl0qHuBw4D7A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685441500;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=Kgox1DACm+wImb37rOPJ3ZxaCjPRS4PC+RXndEqMgYI=;
-        b=di5ajOfwLx+9lu6pIZ8FeqhR9ovUes6m/1dXIdl13QM8QojyV3Y16mrdbHRZmbC2pJBFsd
-        Q+jcx1DjV+lttkDw==
-From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-fixes] irqchip/gic: Correctly validate OF quirk
- descriptors
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-MIME-Version: 1.0
-Message-ID: <168544149933.404.717399647227994720.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        Tue, 30 May 2023 06:12:03 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD89C9;
+        Tue, 30 May 2023 03:12:01 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 282333200936;
+        Tue, 30 May 2023 06:11:59 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 30 May 2023 06:11:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1685441518; x=1685527918; bh=mVNqPo87NfFEfgNxvaqd7ERnmadSPr41Xby
+        9dmRRviQ=; b=WahCs54HMDt401Ld0E16WracTP9F/x+baO6ofMS5tGaj+3Hywm4
+        cW0re7j5mxF5cP8YpQ/G/tCvNR4lgavlq3Xd2nyS+QbKsCY4Yir8vogIk7apYTBB
+        hh52Jrz6DTtLHqPqwATufKztPVmnNnAfYYg6pwrv9hZNJLvX/l/YLxvFs3psNqnZ
+        xPU06/JhOL9Z7mRqZB1LVfo9MADIVVz/J3DSnVSQ5CYjzbQpdxz/bpfJ0H9ChTUk
+        vZ5G2KeaHNr/N5jXxUSkFZHTE17nxOHc4LyHz3JJSW2pDO0yfhXB64mcUXlW1TSK
+        aMWZgcD31+noDdx2ihvCUCoKv1zQ0hJRr5g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1685441518; x=1685527918; bh=mVNqPo87NfFEfgNxvaqd7ERnmadSPr41Xby
+        9dmRRviQ=; b=cJj4QZ4QGbHzwaVmBkPFBbvq6vPVD6Sx7TidDy0hISxBZFcxyL9
+        5r6FYJCqwtFWqlntPXRuq6CEtbnpSvKPHddeWITzhvMEMghs+wdSS2yLpTo6DM70
+        dR3WNQmrpytSlz6WDtPqcRuum602y1OkImiA0BKViT02Lj5DeoRuw6p6SGb87pv+
+        W8U+S5M7VSFxmsLm8xR5VDFIwcjhUBpM8zl/1RJRuUy3r9I6H+MDKBC6Klm2v8r6
+        HhkvTFQTYtk0IxdXatKUeBaJecf0Rs1h7IlbuIOAeHwZ19PEK0TQLvd4odrrDuKX
+        cO6mwLg1MZEMCu6po9lN2qsq3MkGA2Ladag==
+X-ME-Sender: <xms:7st1ZECVGYbvZW1Hyfej2-hWMCe3WTxnj1Cs16e52SMjArOiAadOJQ>
+    <xme:7st1ZGgo8nNQQzWg4sa9RPvi39-xNPNRJL0aqrKfQR1fdKBo_NJeP3-Bqka4lUSGk
+    KHR7H91vGhGjJ1SZoU>
+X-ME-Received: <xmr:7st1ZHn8qFWsxoKOJF27FB7ymqptM4B4NVpPiwx6RbUFDjCqn2V0_f2o3mMztA4whQaZ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekjedgvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:7st1ZKyhNz6n57HCsH3NsjhO4YjN-uywK1lRAamyeGQN260yDK_kVQ>
+    <xmx:7st1ZJQixOe9kRo97a3rAj1j3gwnCzOByQ20BSBnwAIoVijixr_ZBw>
+    <xmx:7st1ZFZN6p5DxQYHD8E3uH0hpPzDoLeqfRpWVmpa8bkqQEKlue_NtQ>
+    <xmx:7st1ZLfHUn9cukjL_qt4_kSXtx4QUw6-3Mp78yp_E6nk6FenVvfU2Q>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 30 May 2023 06:11:57 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH 1/2] MIPS: Allow MIPS32R2 kernel to run on P5600 and M5150
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <alpine.DEB.2.21.2305300321520.25569@angie.orcam.me.uk>
+Date:   Tue, 30 May 2023 11:11:46 +0100
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <684C1A48-C743-4045-AF12-B0846FCE8EBE@flygoat.com>
+References: <20230529135245.4085-1-jiaxun.yang@flygoat.com>
+ <alpine.DEB.2.21.2305300321520.25569@angie.orcam.me.uk>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,42 +90,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
 
-Commit-ID:     91539341a3b6e9c868024a4292455dae36e6f58c
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/91539341a3b6e9c868024a4292455dae36e6f58c
-Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Tue, 30 May 2023 11:01:22 +01:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Tue, 30 May 2023 11:01:22 +01:00
 
-irqchip/gic: Correctly validate OF quirk descriptors
+> 2023=E5=B9=B45=E6=9C=8830=E6=97=A5 09:03=EF=BC=8CMaciej W. Rozycki =
+<macro@orcam.me.uk> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Mon, 29 May 2023, Jiaxun Yang wrote:
+>=20
+>> M5150 and P5600 are two MIPS32R5 kernels, however as MIPS32R5 is
+>> backward compatible with MIPS32R2 there is no reason to forbid
+>> M5150 and P5600 on MIPS32R2 kernel.
+>=20
+> What problem are you trying to solve?  The CONFIG_SYS_HAS_CPU_* =
+settings=20
+> denote overall platform's support for the given CPU and have nothing =
+to do=20
+> with what architecture level a given kernel has been configured for.  =
+You=20
+> do need to get the settings right for your platform, just as you do in=20=
 
-When checking for OF quirks, make sure either 'compatible' or 'property'
-is set, and give up otherwise.
+> 2/2, but this 1/2 part looks wrong to me.
 
-This avoids non-OF quirks being randomly applied as they don't have any
-of the OF data that need checking.
+Well the universal target is to allow R2 generic kernel to run on R5 =
+CPUs.
+As R5 is backward compatible we can just have one universal kernel =
+binary.
 
-Cc: Douglas Anderson <dianders@chromium.org>
-Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Fixes: 44bd78dd2b88 ("irqchip/gic-v3: Disable pseudo NMIs on Mediatek devices w/ firmware issues")
-Signed-off-by: Marc Zyngier <maz@kernel.org>
----
- drivers/irqchip/irq-gic-common.c | 2 ++
- 1 file changed, 2 insertions(+)
+Allowing P5600 and M5150 to run on R2 kernel does not bring much =
+overhead.
+In fact only several bytes are added to kernel binary.
 
-diff --git a/drivers/irqchip/irq-gic-common.c b/drivers/irqchip/irq-gic-common.c
-index de47b51..afd6a18 100644
---- a/drivers/irqchip/irq-gic-common.c
-+++ b/drivers/irqchip/irq-gic-common.c
-@@ -16,6 +16,8 @@ void gic_enable_of_quirks(const struct device_node *np,
- 			  const struct gic_quirk *quirks, void *data)
- {
- 	for (; quirks->desc; quirks++) {
-+		if (!quirks->compatible && !quirks->property)
-+			continue;
- 		if (quirks->compatible &&
- 		    !of_device_is_compatible(np, quirks->compatible))
- 			continue;
+(Actually although M5150 is advertising as R5 it=E2=80=99s technically =
+R2 because it does
+not implement some features mandatory for R5.)
+
+Thanks
+- Jiaxun
+
+>=20
+> NB CPU_4KEC is double-listed as R1 and R2 because early revisions of =
+the=20
+> 4KEc core were actually R1 before switching to R2, so this CPU can =
+report=20
+> either revision.
+>=20
+> I don't know why CPU_XBURST is also listed as both R1 and R2, the =
+history=20
+> looks convoluted with no explanation.  Paul, is the CPU also =
+dual-revision=20
+> or is it just a bug and it is supposed to be listed under one ISA =
+revision
+> only, presumably R2?
+>=20
+>  Maciej
+
