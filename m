@@ -2,339 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC65715301
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 03:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1512715304
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 03:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjE3Bjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 May 2023 21:39:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        id S229881AbjE3BoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 May 2023 21:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjE3Bjv (ORCPT
+        with ESMTP id S229597AbjE3BoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 May 2023 21:39:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F78D9;
-        Mon, 29 May 2023 18:39:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C4D2628E2;
-        Tue, 30 May 2023 01:39:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38849C433EF;
-        Tue, 30 May 2023 01:39:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685410788;
-        bh=Fc2RpQel+qFTuy8pAbXgl1N/NoGp11aHR8zxbS1/fzs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=axYUFodp8nl3/X+l5R/JV70OISdLXtY8c6vptkG0y1k5D1oySZWdSp7FrD7u3eYA9
-         a8jXDCciKA22Z+OaithlS/EDeqVeHZm+iEwUGvAxqaMPsUsIC9zLFU3zjvlJGRII52
-         bm04xsjs23C9qttFGTPgMXOEmCuw5wp/yPzXo12IBiZCsXOeU5tYX1RXFDJZxqKRQC
-         makGZ+wygan3Lb7nArHGPR/wQfLnH9fI+8wQUlS7mXuPLDIOXQSge9sFKgXJC/54U+
-         8bmn0GO1o9EASbVWa0rCoioTyxe3qi0zllBWof2HZK0T1fSs6UIQwhMmR/Nnt4qu6c
-         7FN4gf94kXiNQ==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     linux-integrity@vger.kernel.org
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>,
-        stable@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RFC] tpm: tpm_vtpm_proxy: fix a race condition in the locality change
-Date:   Tue, 30 May 2023 04:39:41 +0300
-Message-Id: <20230530013942.232590-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Mon, 29 May 2023 21:44:11 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18274D9
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 18:44:08 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QVZrK0p8wzsSYZ;
+        Tue, 30 May 2023 09:41:53 +0800 (CST)
+Received: from [10.67.110.108] (10.67.110.108) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 30 May 2023 09:44:05 +0800
+Message-ID: <5eea1d90-a903-d211-9dd7-38cd824c1573@huawei.com>
+Date:   Tue, 30 May 2023 09:44:05 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 1/3] genirq: Use hlist for managing resend handlers
+To:     Marc Zyngier <maz@kernel.org>
+CC:     Shanker Donthineni <sdonthineni@nvidia.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Michael Walle <michael@walle.cc>,
+        <linux-kernel@vger.kernel.org>, Vikram Sethi <vsethi@nvidia.com>,
+        Jason Sequeira <jsequeira@nvidia.com>
+References: <20230519134902.1495562-1-sdonthineni@nvidia.com>
+ <20230519134902.1495562-2-sdonthineni@nvidia.com>
+ <6dc6642a-1e7c-f111-1fa2-be54826ecef6@huawei.com>
+ <86cz2jcykv.wl-maz@kernel.org>
+From:   "Liao, Chang" <liaochang1@huawei.com>
+In-Reply-To: <86cz2jcykv.wl-maz@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.110.108]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
+Hi, Marc
 
-The driver has three issues (in priority order) in the locality change:
+在 2023/5/29 16:48, Marc Zyngier 写道:
+> On Mon, 29 May 2023 08:57:07 +0100,
+> "Liao, Chang" <liaochang1@huawei.com> wrote:
+>>
+>> Hi, Shanker
+>>
+>> 在 2023/5/19 21:49, Shanker Donthineni 写道:
+>>> The current implementation utilizes a bitmap for managing IRQ resend
+>>> handlers, which is allocated based on the SPARSE_IRQ/NR_IRQS macros.
+>>> However, this method may not efficiently utilize memory during runtime,
+>>> particularly when IRQ_BITMAP_BITS is large.
+>>>
+>>> Address this issue by using the hlist to manage IRQ resend handlers
+>>> instead of relying on a static bitmap memory allocation. Additionally,
+>>> a new function, clear_irq_resend(), is introduced and called from
+>>> irq_shutdown to ensure a graceful teardown of the interrupt.
+>>>
+>>> Signed-off-by: Shanker Donthineni <sdonthineni@nvidia.com>
+>>> ---
+>>>  include/linux/irqdesc.h |  3 +++
+>>>  kernel/irq/chip.c       |  1 +
+>>>  kernel/irq/internals.h  |  2 ++
+>>>  kernel/irq/irqdesc.c    |  2 ++
+>>>  kernel/irq/resend.c     | 47 ++++++++++++++++++++++++++---------------
+>>>  5 files changed, 38 insertions(+), 17 deletions(-)
+>>>
+>>> diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
+>>> index 844a8e30e6de..d9451d456a73 100644
+>>> --- a/include/linux/irqdesc.h
+>>> +++ b/include/linux/irqdesc.h
+>>> @@ -102,6 +102,9 @@ struct irq_desc {
+>>>  	int			parent_irq;
+>>>  	struct module		*owner;
+>>>  	const char		*name;
+>>> +#ifdef CONFIG_HARDIRQS_SW_RESEND
+>>> +	struct hlist_node	resend_node;
+>>> +#endif
+>>>  } ____cacheline_internodealigned_in_smp;
+>>
+>> Although there is no documented rule that limits the change of the KABI
+>> struct irq_desc, it is still better to keep the irq_desc definition stable.
+> 
+> On what grounds? There is no such thing as a stable in-kernel ABI,
+> specially for things as internal as irq_desc.
 
-1. Because of mutex_unlock(&proxy_dev->buf_lock) in-between write and read
-   operations in the locality change, another thread can send a TPM command
-   in-between.
-2. The driver uses __user pointer and copy_to_user() and
-   copy_from_user() with a kernel address during the locality change.
-3. For invalid locality change request from user space, the driver
-   sets errno to EFAULT, while for invalid input data EINVAL should
-   be used.
+Okay, helpful.
 
-Address this by:
+> 
+>>>  
+>>>  #ifdef CONFIG_SPARSE_IRQ
+>>> diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+>>> index 49e7bc871fec..2eac5532c3c8 100644
+>>> --- a/kernel/irq/chip.c
+>>> +++ b/kernel/irq/chip.c
+>>> @@ -306,6 +306,7 @@ static void __irq_disable(struct irq_desc *desc, bool mask);
+>>>  void irq_shutdown(struct irq_desc *desc)
+>>>  {
+>>>  	if (irqd_is_started(&desc->irq_data)) {
+>>> +		clear_irq_resend(desc);
+>>>  		desc->depth = 1;
+>>>  		if (desc->irq_data.chip->irq_shutdown) {
+>>>  			desc->irq_data.chip->irq_shutdown(&desc->irq_data);
+>>> diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
+>>> index 5fdc0b557579..51fc8c497c22 100644
+>>> --- a/kernel/irq/internals.h
+>>> +++ b/kernel/irq/internals.h
+>>> @@ -113,6 +113,8 @@ irqreturn_t handle_irq_event(struct irq_desc *desc);
+>>>  
+>>>  /* Resending of interrupts :*/
+>>>  int check_irq_resend(struct irq_desc *desc, bool inject);
+>>> +void clear_irq_resend(struct irq_desc *desc);
+>>> +void irq_resend_init(struct irq_desc *desc);
+>>>  bool irq_wait_for_poll(struct irq_desc *desc);
+>>>  void __irq_wake_thread(struct irq_desc *desc, struct irqaction *action);
+>>>  
+>>> diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+>>> index 240e145e969f..b401b89b226a 100644
+>>> --- a/kernel/irq/irqdesc.c
+>>> +++ b/kernel/irq/irqdesc.c
+>>> @@ -415,6 +415,7 @@ static struct irq_desc *alloc_desc(int irq, int node, unsigned int flags,
+>>>  	desc_set_defaults(irq, desc, node, affinity, owner);
+>>>  	irqd_set(&desc->irq_data, flags);
+>>>  	kobject_init(&desc->kobj, &irq_kobj_type);
+>>> +	irq_resend_init(desc);
+>>>  
+>>>  	return desc;
+>>>  
+>>> @@ -581,6 +582,7 @@ int __init early_irq_init(void)
+>>>  		mutex_init(&desc[i].request_mutex);
+>>>  		init_waitqueue_head(&desc[i].wait_for_threads);
+>>>  		desc_set_defaults(i, &desc[i], node, NULL, NULL);
+>>> +		irq_resend_init(desc);
+>>>  	}
+>>>  	return arch_early_irq_init();
+>>>  }
+>>> diff --git a/kernel/irq/resend.c b/kernel/irq/resend.c
+>>> index 0c46e9fe3a89..edec335c0a7a 100644
+>>> --- a/kernel/irq/resend.c
+>>> +++ b/kernel/irq/resend.c
+>>> @@ -21,8 +21,9 @@
+>>>  
+>>>  #ifdef CONFIG_HARDIRQS_SW_RESEND
+>>>  
+>>> -/* Bitmap to handle software resend of interrupts: */
+>>> -static DECLARE_BITMAP(irqs_resend, IRQ_BITMAP_BITS);
+>>> +/* hlist_head to handle software resend of interrupts: */
+>>> +static HLIST_HEAD(irq_resend_list);
+>>> +static DEFINE_RAW_SPINLOCK(irq_resend_lock);
+>>
+>> What is the benefit of using hlist here? If you want to enjoy the
+>> low latency of querying elements by key, you must define a hlist table
+>> with a reasonable number of buckets. Otherwise, I don't think the time
+>> complexity of hlist is better than a regular double-linked list, right?
+> 
+> You do realise that the list is processed in order, one element after
+> the other, without ever querying any arbitrary element? Have you read
+> the code?
 
-1. Introduce __vtpm_proxy_read_unlocked(),  __vtpm_proxy_write_unlocked()
-   and __vtpm_proxy_read_write_locked().
-2. Make locality change atomic by calling __vtpm_proxy_read_write_locked(),
-   instead of tpm_transmit_cmd().
+Yes, so i *wonder* why not use regular a linked-list here if no need to do
+arbitrary querying. I have no doubt the idea of these changes are sound,
+just curious about the data structure used to maintain resend IRQs.
 
-Cc: stable@vger.kernel.org
-Fixes: be4c9acfe297 ("tpm: vtpm_proxy: Implement request_locality function.")
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
----
-NOTE: I did not have test env available, when I wrote this. Thus, it has
-an RFC tag for the moment.
- drivers/char/tpm/tpm_vtpm_proxy.c | 162 ++++++++++++++----------------
- 1 file changed, 73 insertions(+), 89 deletions(-)
+> 
+>>
+>>>  
+>>>  /*
+>>>   * Run software resends of IRQ's
+>>> @@ -30,18 +31,17 @@ static DECLARE_BITMAP(irqs_resend, IRQ_BITMAP_BITS);
+>>>  static void resend_irqs(struct tasklet_struct *unused)
+>>>  {
+>>>  	struct irq_desc *desc;
+>>> -	int irq;
+>>> -
+>>> -	while (!bitmap_empty(irqs_resend, nr_irqs)) {
+>>> -		irq = find_first_bit(irqs_resend, nr_irqs);
+>>> -		clear_bit(irq, irqs_resend);
+>>> -		desc = irq_to_desc(irq);
+>>> -		if (!desc)
+>>> -			continue;
+>>> -		local_irq_disable();
+>>> +
+>>> +	raw_spin_lock_irq(&irq_resend_lock);
+>>> +	while (!hlist_empty(&irq_resend_list)) {
+>>> +		desc = hlist_entry(irq_resend_list.first, struct irq_desc,
+>>> +				   resend_node);
+>>> +		hlist_del_init(&desc->resend_node);
+>>> +		raw_spin_unlock(&irq_resend_lock);
+>>>  		desc->handle_irq(desc);
+>>> -		local_irq_enable();
+>>> +		raw_spin_lock(&irq_resend_lock);
+>>>  	}
+>>> +	raw_spin_unlock_irq(&irq_resend_lock);
+>>>  }
+>>>  
+>>>  /* Tasklet to handle resend: */
+>>> @@ -49,8 +49,6 @@ static DECLARE_TASKLET(resend_tasklet, resend_irqs);
+>>>  
+>>>  static int irq_sw_resend(struct irq_desc *desc)
+>>>  {
+>>> -	unsigned int irq = irq_desc_get_irq(desc);
+>>> -
+>>>  	/*
+>>>  	 * Validate whether this interrupt can be safely injected from
+>>>  	 * non interrupt context
+>>> @@ -70,16 +68,31 @@ static int irq_sw_resend(struct irq_desc *desc)
+>>>  		 */
+>>>  		if (!desc->parent_irq)
+>>>  			return -EINVAL;
+>>> -		irq = desc->parent_irq;
+>>
+>> Why delete this code?
+> 
+> OK, now I know you haven't read this code at all :-(.
 
-diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
-index 30e953988cab..8f43a82e5590 100644
---- a/drivers/char/tpm/tpm_vtpm_proxy.c
-+++ b/drivers/char/tpm/tpm_vtpm_proxy.c
-@@ -38,7 +38,6 @@ struct proxy_dev {
- #define STATE_OPENED_FLAG        BIT(0)
- #define STATE_WAIT_RESPONSE_FLAG BIT(1)  /* waiting for emulator response */
- #define STATE_REGISTERED_FLAG	 BIT(2)
--#define STATE_DRIVER_COMMAND     BIT(3)  /* sending a driver specific command */
- 
- 	size_t req_len;              /* length of queued TPM request */
- 	size_t resp_len;             /* length of queued TPM response */
-@@ -58,106 +57,112 @@ static void vtpm_proxy_delete_device(struct proxy_dev *proxy_dev);
-  * Functions related to 'server side'
-  */
- 
--/**
-- * vtpm_proxy_fops_read - Read TPM commands on 'server side'
-- *
-- * @filp: file pointer
-- * @buf: read buffer
-- * @count: number of bytes to read
-- * @off: offset
-- *
-- * Return:
-- *	Number of bytes read or negative error code
-- */
--static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
--				    size_t count, loff_t *off)
-+static ssize_t __vtpm_proxy_read_unlocked(struct proxy_dev *proxy_dev, char __user *buf,
-+					  size_t count)
- {
--	struct proxy_dev *proxy_dev = filp->private_data;
- 	size_t len;
--	int sig, rc;
--
--	sig = wait_event_interruptible(proxy_dev->wq,
--		proxy_dev->req_len != 0 ||
--		!(proxy_dev->state & STATE_OPENED_FLAG));
--	if (sig)
--		return -EINTR;
--
--	mutex_lock(&proxy_dev->buf_lock);
-+	int rc;
- 
--	if (!(proxy_dev->state & STATE_OPENED_FLAG)) {
--		mutex_unlock(&proxy_dev->buf_lock);
-+	if (!(proxy_dev->state & STATE_OPENED_FLAG))
- 		return -EPIPE;
--	}
- 
- 	len = proxy_dev->req_len;
- 
- 	if (count < len || len > sizeof(proxy_dev->buffer)) {
--		mutex_unlock(&proxy_dev->buf_lock);
- 		pr_debug("Invalid size in recv: count=%zd, req_len=%zd\n",
- 			 count, len);
- 		return -EIO;
- 	}
- 
--	rc = copy_to_user(buf, proxy_dev->buffer, len);
-+	if (buf)
-+		rc = copy_to_user(buf, proxy_dev->buffer, len);
-+
- 	memset(proxy_dev->buffer, 0, len);
- 	proxy_dev->req_len = 0;
- 
- 	if (!rc)
- 		proxy_dev->state |= STATE_WAIT_RESPONSE_FLAG;
- 
--	mutex_unlock(&proxy_dev->buf_lock);
--
- 	if (rc)
- 		return -EFAULT;
- 
- 	return len;
- }
- 
--/**
-- * vtpm_proxy_fops_write - Write TPM responses on 'server side'
-- *
-- * @filp: file pointer
-- * @buf: write buffer
-- * @count: number of bytes to write
-- * @off: offset
-- *
-- * Return:
-- *	Number of bytes read or negative error value
-- */
--static ssize_t vtpm_proxy_fops_write(struct file *filp, const char __user *buf,
--				     size_t count, loff_t *off)
-+static ssize_t __vtpm_proxy_write_unlocked(struct proxy_dev *proxy_dev, const char __user *buf,
-+					   size_t count)
- {
--	struct proxy_dev *proxy_dev = filp->private_data;
--
--	mutex_lock(&proxy_dev->buf_lock);
--
--	if (!(proxy_dev->state & STATE_OPENED_FLAG)) {
--		mutex_unlock(&proxy_dev->buf_lock);
-+	if (!(proxy_dev->state & STATE_OPENED_FLAG))
- 		return -EPIPE;
--	}
- 
- 	if (count > sizeof(proxy_dev->buffer) ||
--	    !(proxy_dev->state & STATE_WAIT_RESPONSE_FLAG)) {
--		mutex_unlock(&proxy_dev->buf_lock);
-+	    !(proxy_dev->state & STATE_WAIT_RESPONSE_FLAG))
- 		return -EIO;
--	}
- 
- 	proxy_dev->state &= ~STATE_WAIT_RESPONSE_FLAG;
- 
- 	proxy_dev->req_len = 0;
- 
--	if (copy_from_user(proxy_dev->buffer, buf, count)) {
--		mutex_unlock(&proxy_dev->buf_lock);
-+	if (buf && copy_from_user(proxy_dev->buffer, buf, count))
- 		return -EFAULT;
--	}
- 
- 	proxy_dev->resp_len = count;
-+	return count;
-+}
- 
-+static ssize_t __vtpm_proxy_read_write_unlocked(struct proxy_dev *proxy_dev, char __user *buf,
-+						size_t count)
-+{
-+	ssize_t rc;
-+
-+	do {
-+		rc = __vtpm_proxy_write_unlocked(proxy_dev, buf, count);
-+		if (rc < 0)
-+			break;
-+		rc = __vtpm_proxy_read_unlocked(proxy_dev, buf, rc);
-+	} while (0);
-+
-+	return rc;
-+}
-+
-+/*
-+ * See struct file_operations.
-+ */
-+static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
-+				    size_t count, loff_t *off)
-+{
-+	struct proxy_dev *proxy_dev = filp->private_data;
-+	ssize_t rc;
-+	int sig;
-+
-+	sig = wait_event_interruptible(proxy_dev->wq,
-+		proxy_dev->req_len != 0 ||
-+		!(proxy_dev->state & STATE_OPENED_FLAG));
-+	if (sig)
-+		return -EINTR;
-+
-+	mutex_lock(&proxy_dev->buf_lock);
-+	rc = __vtpm_proxy_read_unlocked(proxy_dev, buf, count);
- 	mutex_unlock(&proxy_dev->buf_lock);
- 
-+	return rc;
-+}
-+
-+/*
-+ * See struct file_operations.
-+ */
-+static ssize_t vtpm_proxy_fops_write(struct file *filp, const char __user *buf,
-+				     size_t count, loff_t *off)
-+{
-+	struct proxy_dev *proxy_dev = filp->private_data;
-+	int rc;
-+
-+	mutex_lock(&proxy_dev->buf_lock);
-+	rc = __vtpm_proxy_write_unlocked(proxy_dev, buf, count);
-+	mutex_unlock(&proxy_dev->buf_lock);
- 	wake_up_interruptible(&proxy_dev->wq);
- 
--	return count;
-+	return rc;
- }
- 
- /*
-@@ -295,28 +300,6 @@ static int vtpm_proxy_tpm_op_recv(struct tpm_chip *chip, u8 *buf, size_t count)
- 	return len;
- }
- 
--static int vtpm_proxy_is_driver_command(struct tpm_chip *chip,
--					u8 *buf, size_t count)
--{
--	struct tpm_header *hdr = (struct tpm_header *)buf;
--
--	if (count < sizeof(struct tpm_header))
--		return 0;
--
--	if (chip->flags & TPM_CHIP_FLAG_TPM2) {
--		switch (be32_to_cpu(hdr->ordinal)) {
--		case TPM2_CC_SET_LOCALITY:
--			return 1;
--		}
--	} else {
--		switch (be32_to_cpu(hdr->ordinal)) {
--		case TPM_ORD_SET_LOCALITY:
--			return 1;
--		}
--	}
--	return 0;
--}
--
- /*
-  * Called when core TPM driver forwards TPM requests to 'server side'.
-  *
-@@ -330,6 +313,7 @@ static int vtpm_proxy_is_driver_command(struct tpm_chip *chip,
- static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t count)
- {
- 	struct proxy_dev *proxy_dev = dev_get_drvdata(&chip->dev);
-+	unsigned int ord = ((struct tpm_header *)buf)->ordinal;
- 
- 	if (count > sizeof(proxy_dev->buffer)) {
- 		dev_err(&chip->dev,
-@@ -338,9 +322,11 @@ static int vtpm_proxy_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t count)
- 		return -EIO;
- 	}
- 
--	if (!(proxy_dev->state & STATE_DRIVER_COMMAND) &&
--	    vtpm_proxy_is_driver_command(chip, buf, count))
--		return -EFAULT;
-+	if ((chip->flags & TPM_CHIP_FLAG_TPM2) && ord == TPM2_CC_SET_LOCALITY)
-+		return -EINVAL;
-+
-+	if (ord == TPM_ORD_SET_LOCALITY)
-+		return -EINVAL;
- 
- 	mutex_lock(&proxy_dev->buf_lock);
- 
-@@ -409,12 +395,10 @@ static int vtpm_proxy_request_locality(struct tpm_chip *chip, int locality)
- 		return rc;
- 	tpm_buf_append_u8(&buf, locality);
- 
--	proxy_dev->state |= STATE_DRIVER_COMMAND;
--
--	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to set locality");
--
--	proxy_dev->state &= ~STATE_DRIVER_COMMAND;
--
-+	mutex_lock(&proxy_dev->buf_lock);
-+	memcpy(proxy_dev->buffer, buf.data, tpm_buf_length(&buf));
-+	rc = __vtpm_proxy_read_write_unlocked(proxy_dev, NULL, tpm_buf_length(&buf));
-+	mutex_unlock(&proxy_dev->buf_lock);
- 	if (rc < 0) {
- 		locality = rc;
- 		goto out;
+Sorry for the noise, I overlook some core changes.
+
+> 
+>>
+>>>  	}
+>>>  
+>>> -	/* Set it pending and activate the softirq: */
+>>> -	set_bit(irq, irqs_resend);
+>>> +	/* Add to resend_list and activate the softirq: */
+>>> +	raw_spin_lock(&irq_resend_lock);
+>>> +	hlist_add_head(&desc->resend_node, &irq_resend_list);
+>>> +	raw_spin_unlock(&irq_resend_lock);
+>>
+>> Do you conside a situation where irq_sw_resend() is running on two CPUs concurrently?
+>> If so, the same desc could be added into irq_resend_list twice by mistake.
+> 
+> Have you looked at the calling site (stress on singular), the locking
+> requirements, and the role IRQS_REPLAY plays when it comes to queuing
+> an interrupt for resend?
+
+I see, the IRQS_REPLAY and locking of irq_desc ensure that irq_sw_resend() is not called
+on the same interrupt concurrently, thanks for pointing that out.
+
+> 
+> 	M.
+> 
+
 -- 
-2.39.2
-
+BR
+Liao, Chang
