@@ -2,102 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777037170AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458447170BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 00:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbjE3W1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 18:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
+        id S232541AbjE3WaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 18:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbjE3W12 (ORCPT
+        with ESMTP id S229946AbjE3WaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 18:27:28 -0400
+        Tue, 30 May 2023 18:30:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AE497;
-        Tue, 30 May 2023 15:27:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A786D93
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 15:30:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E559F62CB1;
-        Tue, 30 May 2023 22:27:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECF59C4339B;
-        Tue, 30 May 2023 22:27:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685485646;
-        bh=cheXLQ8vzvhg3HHlEbp/nhH1v4qNXPvIuztE6YHAz8M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=LxJm7SB497PbN+6xSXHmc2pTJhHae0WzBcbxOtTgG3MRSh9p1dfYBRfUdQy7AyVRQ
-         1IezZSWPhIKD7XbfWiql8Plc+Ulv9e2XMV0Y9YzU+8zsQuv6SFrhqDkS6x4c+oZDWP
-         /L5OMnL+JMkyqRiQ4gYXhKTcO9jwWh5H7cLBy4aVIEnsrJ+3/NVsL0WDcE29kmRv45
-         38YRs0n+sv7VZwRllWBofAEQUQjc9UG0Jen3unekyfBRKw8j9GtCbYz+A/LwtVrVsM
-         vh/qbXD8fYjZaPnWr4d5573Wuyg+udrUB5D3tqXZmXDnOdKQv+rhIf4g6OnEvx+oIF
-         cwQuZSAvQLzsA==
-Date:   Tue, 30 May 2023 17:27:24 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     linux-pci@vger.kernel.org, netdev@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH pci] PCI: don't skip probing entire device if first fn OF
- node has status = "disabled"
-Message-ID: <ZHZ4TFjFLrKeHPGi@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530220436.fooxifm47irxqlrj@skbuf>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24EA9634AA
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 22:30:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31F46C433D2;
+        Tue, 30 May 2023 22:30:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1685485807;
+        bh=L4WaZnpCGMusMfNexWgFq61vWT+q2ikrfQ3r1nuz2S0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IwKTc81HJpslhXJQN5IEtsr3d+TJO57tr578zquodCfzAMkk/I/MoBv3tKbfaP/Gy
+         RyO20aVk5oH3P80fJUR9n7XZrnv8lhbsPMnhn4DiffPpoghMmu654t22hbH7BnSSKj
+         3q74qIvseKB9kf0ndga4hv//j0yIQBcO0VlEdmJA=
+Date:   Tue, 30 May 2023 15:30:06 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     hannes@cmpxchg.org, cerasuolodomenico@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
+        yosryahmed@google.com, kernel-team@meta.com
+Subject: Re: [PATCH] zswap: do not shrink if cgroup may not zswap
+Message-Id: <20230530153006.8b73c276b1aaf5c3275f0b3f@linux-foundation.org>
+In-Reply-To: <20230530222440.2777700-1-nphamcs@gmail.com>
+References: <CAKEwX=PrqV+cCGmdTcFPMqP-48Y=abQTkSOUzJnOWWpc4rR4cA@mail.gmail.com>
+        <20230530222440.2777700-1-nphamcs@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 01:04:36AM +0300, Vladimir Oltean wrote:
-> On Tue, May 30, 2023 at 04:58:55PM -0500, Bjorn Helgaas wrote:
-> > Can you write this description in terms of PCI topology?  The
-> > nitty-gritty SERDES details are not relevant at this level, except to
-> > say that Function 0 is present in some cases but not others, and when
-> > it is not present, *other* functions may be present.
+On Tue, 30 May 2023 15:24:40 -0700 Nhat Pham <nphamcs@gmail.com> wrote:
+
+> Before storing a page, zswap first checks if the number of stored pages
+> exceeds the limit specified by memory.zswap.max, for each cgroup in the
+> hierarchy. If this limit is reached or exceeded, then zswap shrinking is
+> triggered and short-circuits the store attempt.
 > 
-> No. It is to say that within the device, all PCIe functions (including 0)
-> are always available and have the same number, but depending on SERDES
-> configuration, their PCIe presence might be practically useful or not.
-> So that's how function 0 may end having status = "disabled" in the
-> device tree.
->
-> > Sigh.  Per spec (PCIe r6.0, sec 7.5.1.1.9), software is not permitted
-> > to probe for Functions other than 0 unless "explicitly indicated by
-> > another mechanism, such as an ARI or SR-IOV Capability."
-> > 
-> > Does it "work" to probe when the spec prohibits it?  Probably.  Does
-> > it lead to some breakage elsewhere eventually?  Quite possibly.  They
-> > didn't put "software must not probe" in the spec just to make
-> > enumeration faster.
-> > 
-> > So I'm a little grumpy about further complicating this already messy
-> > path just to accommodate a new non-compliant SoC.  Everybody pays the
-> > price of understanding all this stuff, and it doesn't seem in balance.
-> > 
-> > Can you take advantage of some existing mechanism like
-> > PCI_SCAN_ALL_PCIE_DEVS or hypervisor_isolated_pci_functions() (which
-> > could be renamed and made more general)?
+> However, since the zswap's LRU is not memcg-aware, this can create the
+> following pathological behavior: the cgroup whose zswap limit is
+> reached will evict pages from other cgroups continually, without
+> lowering its own zswap usage. This means the shrinking will continue
+> until the need for swap ceases or the pool becomes empty.
 > 
-> Not responding yet to the rest of the email since it's not clear to me
-> that you've understood function 0 is absolutely present and responds
-> to all config space accesses - it's just disabled in the device tree
-> because the user doesn't have something useful to do with it.
+> As a result of this, we observe a disproportionate amount of zswap
+> writeback and a perpetually small zswap pool in our experiments, even
+> though the pool limit is never hit.
 
-Ah, you're right, sorry I missed that.  Dispensing with the SERDES
-details would make this more obvious.
+That sounds unpleasant.  Do you think the patch should be backported
+into earlier (-stable) kernels?
 
-Not sure why this needs to change the pci_scan_slot() path, since
-Function 0 is present and enumerable even though it's not useful in
-some cases.  Seems like something in pci_set_of_node() or a quirk
-could do whatever you need to do.
+> This patch fixes the issue by rejecting zswap store attempt without
+> shrinking the pool when obj_cgroup_may_zswap() returns false.
 
-Bjorn
