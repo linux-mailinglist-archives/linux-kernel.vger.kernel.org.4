@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB93B7160AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 896557160C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbjE3M4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
+        id S232517AbjE3M5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbjE3M4F (ORCPT
+        with ESMTP id S232475AbjE3M5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:56:05 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B99127
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:55:36 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-96fe2a1db26so788135666b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:55:36 -0700 (PDT)
+        Tue, 30 May 2023 08:57:25 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E42AF7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:56:50 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5149c51fd5bso4146944a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:56:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685451331; x=1688043331;
+        d=linaro.org; s=google; t=1685451409; x=1688043409;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OBcNGihsby3nj+yLS8cmdJG0F3BB5BsBxPISYSYV4c0=;
-        b=vOUygGpSI91sliwnKNGkbKUjiWID0a6Zy9yngzauWwYH5G6b/J50mnaOcyaw8kBuAc
-         AKn3dLMHZlu62OOCNyWLLJ241P+sorNPfWYZUltKjsjh+4CUs7bBJRilCxQKLldsZaGN
-         1Dkk0NWUd/EcHeXwQohcL9AV/k6TCJk3308LTOAarrIOytJ9zSfZEqeEhfv2QX40mwt3
-         fQsfrOD0DfpbMqTgHpMdxt8qbTxm+TZsnbW4M2UaY/0LVFCI6ivoynRFqjpgwpTp+qkt
-         v4jrVT3SDpl7d54jUwpMe1OD5O8EjWmrFKvz2br86YgAkFEo8qJtajItbMt81YFBPTqH
-         Q76A==
+        bh=AhsY+hhRc4iSF6YgdclHWjJeSAbTG4rDYJhMMhzuUyQ=;
+        b=WBS0a8nQAh/I44LB/nupfxbOMVbFwBJ6OzEY/qATr6Bd41Xo5CsW1ld3/2zLPEhxd1
+         fCoViKdtSykZYB6hndDKWKMiPTQ7EU/DscqVOHXxfzTN329DQl1TuS+sh0u56G2VCvPj
+         cTDKAraus+XFa/kqGZLcoLg/81omH4qMDQjLJHqHMA+n1h1V+34HMaOPCY7H+zUK2FS7
+         sjEWB/WYyjxM6gLf+yVm0+KuLyXo2EFGUech4YORQF4vomi/9WL8840fcfcnm2ylhgox
+         sp1BFsm8ErK0Hus3+Ndc/SlywVUx5j2pT/On1Z+qzB0DjeDrMT70lChuFGKmUMlo7tm9
+         tgNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685451332; x=1688043332;
+        d=1e100.net; s=20221208; t=1685451409; x=1688043409;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OBcNGihsby3nj+yLS8cmdJG0F3BB5BsBxPISYSYV4c0=;
-        b=gZiuGmIpL3lvL6rcm+vflCyj/CfC268g1/rP+PDQT0JihfuHpVAWk7iKOkjcVBaVKJ
-         PyZO6ECTr4odg8/FV58NnOfW1RmOWDyPOa6OS8NUtG5Xmpub6grF2JJXAcgb9Nd7dF62
-         4P2lRRU4co2Rvp9JVpcs58acEP3LtbTNcHaftcyyvv1VPKfEduW4BkRy6Nhy45sF4lwa
-         iR6Mmd3T8epcWgmipI7psm8qOy6wpyD1Nd8j0chNq7PJwbPx2lj8hHQj2zyETYQtLBCd
-         MHyHe4dlvbwBih1C6t2yzA0h117KlaHKHbiAy7jEf7BvQVBbkXfsBLER/tuPHwZ2IJeL
-         S2mw==
-X-Gm-Message-State: AC+VfDwLDxWI/5T3UV8Ltk0Hc3uCfZX3rTlyFvorthZQ/9Rm2FNXHgDZ
-        iTXLmV4kSQBBkmiNKjUdQnBVWA==
-X-Google-Smtp-Source: ACHHUZ4IMgAZuXXdvozMz2uholz0ow06YVqNtFGTrdlJYmkd7L3nbEjn05xSWKVVBeKy+YB9FWdlaQ==
-X-Received: by 2002:a17:906:58d3:b0:96f:e7cf:5004 with SMTP id e19-20020a17090658d300b0096fe7cf5004mr2564087ejs.73.1685451331674;
-        Tue, 30 May 2023 05:55:31 -0700 (PDT)
+        bh=AhsY+hhRc4iSF6YgdclHWjJeSAbTG4rDYJhMMhzuUyQ=;
+        b=cDYahGdI1Lgmxbf91gnUjVel4JW5c2WfzJMILSDGn5x87Uq2xrYJbmvUnI+5GgMJik
+         QV4PuOs6LlEwnEEZqLr52736BqlkloTGN679Q5MkjKCRcq0Wn4sRsZ/8YfpcyePz7SUk
+         dE0yj/bXUZeXocit3nit+EvP6YIQvcKUvKcoEQs4osHk5YXI/Ua8Us3VYa0apEg30kBU
+         2TFtRju434K/VAlDc1U5UQsn1rUgknNyXEphsxsorHW424N2cFP/ugVpXBeGwFp2FDZn
+         N3XB3PVLMjxHnt4k027BER1APp9JQA1JEJs6SY/T6ufbAFOwTtW8VJp6dnH8/A50n+kR
+         lS+g==
+X-Gm-Message-State: AC+VfDzVHEEIsRa8aFRo8e/j/ntV1TDBEAWBfFZjKq1FoQ3iKfbOMOLF
+        MvmGEV/zfNxy45Vvgr9vL8+qeA==
+X-Google-Smtp-Source: ACHHUZ52CRi1rZ1Td3mZ3VL6pr2PyrkknEvQNA1Esi8BwxVXoSn0obftCgpFKZydkULmsPFFhT9EVg==
+X-Received: by 2002:a17:906:fe4d:b0:970:1a68:bacc with SMTP id wz13-20020a170906fe4d00b009701a68baccmr2314391ejb.67.1685451408768;
+        Tue, 30 May 2023 05:56:48 -0700 (PDT)
 Received: from krzk-bin ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id dv22-20020a170906b81600b0096f78953b77sm7363868ejb.147.2023.05.30.05.55.29
+        by smtp.gmail.com with ESMTPSA id w19-20020a17090652d300b0094f23480619sm7437454ejn.172.2023.05.30.05.56.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 05:55:31 -0700 (PDT)
-Date:   Tue, 30 May 2023 14:55:27 +0200
+        Tue, 30 May 2023 05:56:48 -0700 (PDT)
+Date:   Tue, 30 May 2023 14:56:45 +0200
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-riscv@lists.infradead.org, Icenowy Zheng <uwu@icenowy.me>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Guo Ren <guoren@kernel.org>, Yangtao Li <frank.li@vivo.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, Wei Fu <wefu@redhat.com>
-Subject: Re: [PATCH v2 4/9] dt-binding: riscv: add T-HEAD CPU reset
-Message-ID: <20230530125527.njppujzixnv3bbjd@krzk-bin>
-References: <20230518184541.2627-1-jszhang@kernel.org>
- <20230518184541.2627-5-jszhang@kernel.org>
+To:     Devi Priya <quic_devipriy@quicinc.com>
+Cc:     kishon@kernel.org, linux-arm-msm@vger.kernel.org,
+        agross@kernel.org, quic_arajkuma@quicinc.com, conor+dt@kernel.org,
+        linux-kernel@vger.kernel.org, quic_ipkumar@quicinc.com,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, quic_srichara@quicinc.com,
+        quic_kathirav@quicinc.com, vkoul@kernel.org, andersson@kernel.org,
+        quic_anusha@quicinc.com, quic_sjaganat@quicinc.com
+Subject: Re: [PATCH V2 1/2] dt-bindings: phy: qcom,qmp-pcie: Add ipq9574
+ bindings
+Message-ID: <20230530125645.ezd4qs5bmoyfhg33@krzk-bin>
+References: <20230519085723.15601-1-quic_devipriy@quicinc.com>
+ <20230519085723.15601-2-quic_devipriy@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230518184541.2627-5-jszhang@kernel.org>
+In-Reply-To: <20230519085723.15601-2-quic_devipriy@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 May 2023 02:45:36 +0800, Jisheng Zhang wrote:
-> The secondary CPUs in T-HEAD SMP capable platforms need some special
-> handling. The first one is to write the warm reset entry to entry
-> register. The second one is write a SoC specific control value to
-> a SoC specific control reg. The last one is to clone some CSRs for
-> secondary CPUs to ensure these CSRs' values are the same as the
-> main boot CPU. This DT node is mainly used by opensbi firmware.
+On Fri, 19 May 2023 14:27:22 +0530, Devi Priya wrote:
+> Add bindings for the PCIe QMP PHYs found on IPQ9574.
 > 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
 > ---
->  .../bindings/riscv/thead,cpu-reset.yaml       | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/riscv/thead,cpu-reset.yaml
+>  Changes in V2:
+> 	- Picked up the R-b tag
+> 	- Did not convert the clock IDs to numerical values as the clock
+> 	  header (dependent patch) is merged in latest rc1.
+> 
+>  .../phy/qcom,ipq9574-qmp-pcie-phy.yaml        | 90 +++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/qcom,ipq9574-qmp-pcie-phy.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -102,13 +101,15 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/riscv/thead,cpu-reset.example.dts:18.35-25.11: Warning (unit_address_vs_reg): /example-0/cpurst@ffff019050: node has a unit name, but no reg or ranges property
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/riscv/thead,cpu-reset.example.dtb: cpurst@ffff019050: control-reg:0: [255, 4278276100] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/riscv/thead,cpu-reset.yaml
+Error: Documentation/devicetree/bindings/phy/qcom,ipq9574-qmp-pcie-phy.example.dts:29.26-27 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/phy/qcom,ipq9574-qmp-pcie-phy.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1512: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1783487
+See https://patchwork.ozlabs.org/patch/1783652
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.
