@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE4A716967
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC10671696E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 18:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbjE3Q0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 12:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
+        id S233192AbjE3Q1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 12:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233029AbjE3Q0O (ORCPT
+        with ESMTP id S233194AbjE3Q0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 12:26:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2211BE;
-        Tue, 30 May 2023 09:25:42 -0700 (PDT)
+        Tue, 30 May 2023 12:26:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F29E52;
+        Tue, 30 May 2023 09:25:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8438062CC2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 903F862D4F;
+        Tue, 30 May 2023 16:25:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C428C433A1;
         Tue, 30 May 2023 16:25:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76F75C43323;
-        Tue, 30 May 2023 16:25:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685463940;
-        bh=UrnI2ovCkLMUGir6nEl9xb5A7zdP0flUTLe0/qoyl/M=;
+        s=k20201202; t=1685463944;
+        bh=FDkW4zNGMZwi/c89+nTAB6D8hXQY5K3rr93bqPpZoXg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lnY4CQwROOsmn7jqV9BYqCj6JFekyt/y4U20/bPKhPk1wQQeM4xPj8ZCbVuJEqf5B
-         qrRZMmUCL6iIhAVye2DQs4myXN3dljihx9O8GaT7cWrKv1ZpCNl0QvHFIqCm/ZSrjJ
-         bAHJn/fo7/+HfOKBskRp35GEx+DzlE16/z3aDFBWx9knCKplJdLdjW09Zay2mW7Zev
-         f+y3gobmGtWSx7DdSbKG5LEc3fkOCkp1O6dABtQ7YKq+0fgv1aQu7A3nGjQWe784cg
-         iJGtFZzy+RCEPHcwN5YhdtH8IDIGs8V1O6NmLWB6rf7BhLe7h86W2DYrY3yZ2aKaSB
-         0N1oFE7y1JLRg==
+        b=tdhYASDMLQxhGky0erhaR+9pTubo9yaRsv4tlci/YqEsWpBigm5uG4nOX3jyJF33P
+         HPb/tLSVWHQwnuTgMPbLDIHrdjIxMMBfUqUkWxZtw098+d3Rf47Grhp+XgfZdJiRbY
+         l07YWHelVGlAvaaKdJhP5kQmPSdL3uv9rcdqYep6hP78uB3SKgav3BVjjG6fV0RvLL
+         FAox7bKAt/iQHVK3Td9FfF3Kn76AYgKiIkU0MNIi4B11OEk6J/0IQ8/FHKkY3dXAgp
+         Ke+KpMEPik+thcY0v9Cf1XiJbJku7jKMBtnqjpAEAMUTKRr79EYxQAiOH2wVrt+AtL
+         wyUdhvWgFXz7A==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Bjorn Andersson <andersson@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org,
@@ -40,16 +40,16 @@ Cc:     linux-arm-msm@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH v3 11/15] arm64: dts: qcom: sc8180x: Add remoteprocs, wifi and usb nodes
-Date:   Tue, 30 May 2023 21:54:50 +0530
-Message-Id: <20230530162454.51708-12-vkoul@kernel.org>
+Subject: [PATCH v3 12/15] arm64: dts: qcom: sc8180x: Add display and gpu nodes
+Date:   Tue, 30 May 2023 21:54:51 +0530
+Message-Id: <20230530162454.51708-13-vkoul@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230530162454.51708-1-vkoul@kernel.org>
 References: <20230530162454.51708-1-vkoul@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,403 +58,700 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds remoteprocs, wifi and usb and usb phy nodes
-for this SoC
+This patch adds gpu, gmu, gpucc, dispcc and finally the mdss node with
+dsi0/1, dp0/1 and edp subnodes as found in this SoC
 
 Co-developed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sc8180x.dtsi | 355 ++++++++++++++++++++++++++
- 1 file changed, 355 insertions(+)
+ arch/arm64/boot/dts/qcom/sc8180x.dtsi | 658 ++++++++++++++++++++++++++
+ 1 file changed, 658 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-index 2639f5fb6e39..c73fb25f5af0 100644
+index c73fb25f5af0..e8613a00fcab 100644
 --- a/arch/arm64/boot/dts/qcom/sc8180x.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-@@ -2227,6 +2227,198 @@ tlmm: pinctrl@3100000 {
- 			wakeup-parent = <&pdc>;
+@@ -4,7 +4,9 @@
+  * Copyright (c) 2020-2023, Linaro Limited
+  */
+ 
++#include <dt-bindings/clock/qcom,dispcc-sm8250.h>
+ #include <dt-bindings/clock/qcom,gcc-sc8180x.h>
++#include <dt-bindings/clock/qcom,gpucc-sm8150.h>
+ #include <dt-bindings/clock/qcom,rpmh.h>
+ #include <dt-bindings/interconnect/qcom,osm-l3.h>
+ #include <dt-bindings/interconnect/qcom,sc8180x.h>
+@@ -2190,6 +2192,123 @@ tcsr_mutex: hwlock@1f40000 {
+ 			#hwlock-cells = <1>;
  		};
  
-+		remoteproc_mpss: remoteproc@4080000 {
-+			compatible = "qcom,sc8180x-mpss-pas";
-+			reg = <0x0 0x04080000 0x0 0x4040>;
++		gpu: gpu@2c00000 {
++			compatible = "qcom,adreno-680.1", "qcom,adreno";
++			#stream-id-cells = <16>;
 +
-+			interrupts-extended = <&intc GIC_SPI 266 IRQ_TYPE_EDGE_RISING>,
-+					      <&modem_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-+					      <&modem_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-+					      <&modem_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-+					      <&modem_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
-+					      <&modem_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "wdog", "fatal", "ready", "handover",
-+					  "stop-ack", "shutdown-ack";
++			reg = <0 0x02c00000 0 0x40000>;
++			reg-names = "kgsl_3d0_reg_memory";
 +
-+			clocks = <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "xo";
++			interrupts = <GIC_SPI 300 IRQ_TYPE_LEVEL_HIGH>;
 +
-+			power-domains = <&rpmhpd SC8180X_CX>,
-+					<&rpmhpd SC8180X_MSS>;
-+			power-domain-names = "cx", "mss";
++			iommus = <&adreno_smmu 0 0xc01>;
 +
-+			qcom,qmp = <&aoss_qmp>;
++			operating-points-v2 = <&gpu_opp_table>;
 +
-+			qcom,smem-states = <&modem_smp2p_out 0>;
-+			qcom,smem-state-names = "stop";
++			interconnects = <&gem_noc MASTER_GRAPHICS_3D 0 &mc_virt SLAVE_EBI_CH0 0>;
++			interconnect-names = "gfx-mem";
 +
-+			glink-edge {
-+				interrupts = <GIC_SPI 449 IRQ_TYPE_EDGE_RISING>;
-+				label = "modem";
-+				qcom,remote-pid = <1>;
-+				mboxes = <&apss_shared 12>;
++			qcom,gmu = <&gmu>;
++			status = "disabled";
++
++			gpu_opp_table: opp-table {
++				compatible = "operating-points-v2";
++
++				opp-514000000 {
++					opp-hz = /bits/ 64 <514000000>;
++					opp-level = <RPMH_REGULATOR_LEVEL_TURBO_L1>;
++				};
++
++				opp-500000000 {
++					opp-hz = /bits/ 64 <500000000>;
++					opp-level = <RPMH_REGULATOR_LEVEL_TURBO>;
++				};
++
++				opp-461000000 {
++					opp-hz = /bits/ 64 <461000000>;
++					opp-level = <RPMH_REGULATOR_LEVEL_NOM_L1>;
++				};
++
++				opp-405000000 {
++					opp-hz = /bits/ 64 <405000000>;
++					opp-level = <RPMH_REGULATOR_LEVEL_NOM>;
++				};
++
++				opp-315000000 {
++					opp-hz = /bits/ 64 <315000000>;
++					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
++				};
++
++				opp-256000000 {
++					opp-hz = /bits/ 64 <256000000>;
++					opp-level = <RPMH_REGULATOR_LEVEL_SVS>;
++				};
++
++				opp-177000000 {
++					opp-hz = /bits/ 64 <177000000>;
++					opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
++				};
 +			};
 +		};
 +
-+		remoteproc_cdsp: remoteproc@8300000 {
-+			compatible = "qcom,sc8180x-cdsp-pas";
-+			reg = <0x0 0x08300000 0x0 0x4040>;
++		gmu: gmu@2c6a000 {
++			compatible="qcom,adreno-gmu-680.1", "qcom,adreno-gmu";
 +
-+			interrupts-extended = <&intc GIC_SPI 578 IRQ_TYPE_EDGE_RISING>,
-+					      <&cdsp_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-+					      <&cdsp_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-+					      <&cdsp_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-+					      <&cdsp_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "wdog", "fatal", "ready",
-+					  "handover", "stop-ack";
++			reg = <0 0x02c6a000 0 0x30000>,
++			      <0 0x0b290000 0 0x10000>,
++			      <0 0x0b490000 0 0x10000>;
++			reg-names = "gmu",
++				    "gmu_pdc",
++				    "gmu_pdc_seq";
 +
-+			clocks = <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "xo";
++			interrupts = <GIC_SPI 304 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "hfi", "gmu";
 +
-+			power-domains = <&rpmhpd SC8180X_CX>;
-+			power-domain-names = "cx";
++			clocks = <&gpucc GPU_CC_AHB_CLK>,
++				 <&gpucc GPU_CC_CX_GMU_CLK>,
++				 <&gpucc GPU_CC_CXO_CLK>,
++				 <&gcc GCC_DDRSS_GPU_AXI_CLK>,
++				 <&gcc GCC_GPU_MEMNOC_GFX_CLK>;
++			clock-names = "ahb", "gmu", "cxo", "axi", "memnoc";
 +
-+			qcom,qmp = <&aoss_qmp>;
++			power-domains = <&gpucc GPU_CX_GDSC>,
++					<&gpucc GPU_GX_GDSC>;
++			power-domain-names = "cx", "gx";
 +
-+			qcom,smem-states = <&cdsp_smp2p_out 0>;
-+			qcom,smem-state-names = "stop";
++			iommus = <&adreno_smmu 5 0xc00>;
 +
-+			status = "disabled";
++			operating-points-v2 = <&gmu_opp_table>;
 +
-+			glink-edge {
-+				interrupts = <GIC_SPI 574 IRQ_TYPE_EDGE_RISING>;
-+				label = "cdsp";
-+				qcom,remote-pid = <5>;
-+				mboxes = <&apss_shared 4>;
++			gmu_opp_table: opp-table {
++				compatible = "operating-points-v2";
++
++				opp-200000000 {
++					opp-hz = /bits/ 64 <200000000>;
++					opp-level = <RPMH_REGULATOR_LEVEL_MIN_SVS>;
++				};
++
++				opp-500000000 {
++					opp-hz = /bits/ 64 <500000000>;
++					opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
++				};
 +			};
 +		};
 +
-+		usb_prim_hsphy: phy@88e2000 {
-+			compatible = "qcom,sc8180x-usb-hs-phy",
-+				     "qcom,usb-snps-hs-7nm-phy";
-+			reg = <0 0x088e2000 0 0x400>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "ref";
-+			resets = <&gcc GCC_QUSB2PHY_PRIM_BCR>;
-+
-+			#phy-cells = <0>;
-+
-+			status = "disabled";
-+		};
-+
-+		usb_sec_hsphy: phy@88e3000 {
-+			compatible = "qcom,sc8180x-usb-hs-phy",
-+				     "qcom,usb-snps-hs-7nm-phy";
-+			reg = <0 0x088e3000 0 0x400>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "ref";
-+			resets = <&gcc GCC_QUSB2PHY_SEC_BCR>;
-+
-+			#phy-cells = <0>;
-+
-+			status = "disabled";
-+		};
-+
-+		usb_prim_qmpphy: phy@88e9000 {
-+			compatible = "qcom,sc8180x-qmp-usb3-dp-phy";
-+			reg = <0 0x088e9000 0 0x18c>,
-+			      <0 0x088e8000 0 0x38>,
-+			      <0 0x088ea000 0 0x40>;
-+			reg-names = "reg-base", "dp_com";
-+			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&gcc GCC_USB3_PRIM_CLKREF_CLK>,
-+				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>;
-+			clock-names = "aux",
-+				      "ref_clk_src",
-+				      "ref",
-+				      "com_aux";
-+			resets = <&gcc GCC_USB3_DP_PHY_PRIM_SP0_BCR>,
-+				 <&gcc GCC_USB3_PHY_PRIM_SP0_BCR>;
-+			reset-names = "phy", "common";
-+
++		gpucc: clock-controller@2c90000 {
++			compatible = "qcom,sc8180x-gpucc";
++			reg = <0 0x02c90000 0 0x9000>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>,
++				 <&gcc GCC_GPU_GPLL0_CLK_SRC>,
++				 <&gcc GCC_GPU_GPLL0_DIV_CLK_SRC>;
++			clock-names = "bi_tcxo",
++				      "gcc_gpu_gpll0_clk_src",
++				      "gcc_gpu_gpll0_div_clk_src";
 +			#clock-cells = <1>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+
-+			status = "disabled";
-+
-+			usb_prim_ssphy: usb3-phy@88e9200 {
-+				reg = <0 0x088e9200 0 0x200>,
-+				      <0 0x088e9400 0 0x200>,
-+				      <0 0x088e9c00 0 0x218>,
-+				      <0 0x088e9600 0 0x200>,
-+				      <0 0x088e9800 0 0x200>,
-+				      <0 0x088e9a00 0 0x100>;
-+				#phy-cells = <0>;
-+				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
-+				clock-names = "pipe0";
-+				clock-output-names = "usb3_prim_phy_pipe_clk_src";
-+			};
-+
-+			usb_prim_dpphy: dp-phy@88ea200 {
-+				reg = <0 0x088ea200 0 0x200>,
-+				      <0 0x088ea400 0 0x200>,
-+				      <0 0x088eaa00 0 0x200>,
-+				      <0 0x088ea600 0 0x200>,
-+				      <0 0x088ea800 0 0x200>;
-+				#clock-cells = <1>;
-+				#phy-cells = <0>;
-+			};
++			#reset-cells = <1>;
++			#power-domain-cells = <1>;
 +		};
 +
-+		usb_sec_qmpphy: phy@88ee000 {
-+			compatible = "qcom,sc8180x-qmp-usb3-dp-phy";
-+			reg = <0 0x088ee000 0 0x18c>,
-+			      <0 0x088ed000 0 0x10>,
-+			      <0 0x088ef000 0 0x40>;
-+			reg-names = "reg-base", "dp_com";
-+			clocks = <&gcc GCC_USB3_SEC_PHY_AUX_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&gcc GCC_USB3_SEC_CLKREF_CLK>,
-+				 <&gcc GCC_USB3_SEC_PHY_COM_AUX_CLK>;
-+			clock-names = "aux",
-+				      "ref_clk_src",
-+				      "ref",
-+				      "com_aux";
-+			resets = <&gcc GCC_USB3_DP_PHY_SEC_BCR>,
-+				 <&gcc GCC_USB3_PHY_SEC_BCR>;
-+			reset-names = "phy", "common";
-+
-+			#clock-cells = <1>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+
-+			status = "disabled";
-+
-+			usb_sec_ssphy: usb3-phy@88e9200 {
-+				reg = <0 0x088ee200 0 0x200>,
-+				      <0 0x088ee400 0 0x200>,
-+				      <0 0x088eec00 0 0x218>,
-+				      <0 0x088ee600 0 0x200>,
-+				      <0 0x088ee800 0 0x200>,
-+				      <0 0x088eea00 0 0x100>;
-+				#phy-cells = <0>;
-+				clocks = <&gcc GCC_USB3_SEC_PHY_PIPE_CLK>;
-+				clock-names = "pipe0";
-+				clock-output-names = "usb3_sec_phy_pipe_clk_src";
-+			};
-+
-+			usb_sec_dpphy: dp-phy@88ef200 {
-+				reg = <0 0x088ef200 0 0x200>,
-+				      <0 0x088ef400 0 0x200>,
-+				      <0 0x088efa00 0 0x200>,
-+				      <0 0x088ef600 0 0x200>,
-+				      <0 0x088ef800 0 0x200>;
-+				#clock-cells = <1>;
-+				#phy-cells = <0>;
-+				clock-output-names = "qmp_dptx1_phy_pll_link_clk",
-+						     "qmp_dptx1_phy_pll_vco_div_clk";
-+			};
-+		};
-+
- 		system-cache-controller@9200000 {
- 			compatible = "qcom,sc8180x-llcc";
- 			reg = <0 0x09200000 0 0x50000>, <0 0x09600000 0 0x50000>;
-@@ -2241,6 +2433,112 @@ gem_noc: interconnect@9680000 {
- 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		adreno_smmu: iommu@2ca0000 {
+ 			compatible = "qcom,sc8180x-smmu-500", "arm,mmu-500";
+ 			reg = <0 0x02ca0000 0 0x10000>;
+@@ -2539,6 +2658,545 @@ usb_sec_dwc3: usb@a800000 {
+ 			};
  		};
  
-+		usb_prim: usb@a6f8800 {
-+			compatible = "qcom,sc8180x-dwc3", "qcom,dwc3";
-+			reg = <0 0x0a6f8800 0 0x400>;
-+			interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 486 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 488 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 489 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "hs_phy_irq",
-+					  "ss_phy_irq",
-+					  "dm_hs_phy_irq",
-+					  "dp_hs_phy_irq";
++		mdss: mdss@ae00000 {
++			compatible = "qcom,sc8180x-mdss";
++			reg = <0 0x0ae00000 0 0x1000>;
++			reg-names = "mdss";
 +
-+			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
-+				 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
-+				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
-+				 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-+				 <&gcc GCC_USB30_PRIM_SLEEP_CLK>,
-+				 <&gcc GCC_USB3_SEC_CLKREF_CLK>;
-+			clock-names = "cfg_noc",
-+				      "core",
-+				      "iface",
-+				      "mock_utmi",
-+				      "sleep",
-+				      "xo";
-+			resets = <&gcc GCC_USB30_PRIM_BCR>;
-+			power-domains = <&gcc USB30_PRIM_GDSC>;
++			power-domains = <&dispcc MDSS_GDSC>;
 +
-+			interconnects = <&aggre1_noc MASTER_USB3 0 &mc_virt SLAVE_EBI_CH0 0>,
-+					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_USB3 0>;
-+			interconnect-names = "usb-ddr", "apps-usb";
++			clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
++				 <&gcc GCC_DISP_HF_AXI_CLK>,
++				 <&gcc GCC_DISP_SF_AXI_CLK>,
++				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
++			clock-names = "iface",
++				      "bus",
++				      "nrt_bus",
++				      "core";
 +
-+			assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-+					  <&gcc GCC_USB30_PRIM_MASTER_CLK>;
-+			assigned-clock-rates = <19200000>, <200000000>;
++			resets = <&dispcc DISP_CC_MDSS_CORE_BCR>;
++
++			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-controller;
++			#interrupt-cells = <1>;
++
++			interconnects = <&mmss_noc MASTER_MDP_PORT0 0 &mc_virt SLAVE_EBI_CH0 0>,
++					<&mmss_noc MASTER_MDP_PORT1 0 &mc_virt SLAVE_EBI_CH0 0>;
++			interconnect-names = "mdp0-mem", "mdp1-mem";
++
++			iommus = <&apps_smmu 0x800 0x420>;
 +
 +			#address-cells = <2>;
 +			#size-cells = <2>;
 +			ranges;
-+			dma-ranges;
 +
 +			status = "disabled";
 +
-+			usb_prim_dwc3: usb@a600000 {
-+				compatible = "snps,dwc3";
-+				reg = <0 0x0a600000 0 0xcd00>;
-+				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-+				iommus = <&apps_smmu 0x140 0>;
-+				snps,dis_u2_susphy_quirk;
-+				snps,dis_enblslpm_quirk;
-+				phys = <&usb_prim_hsphy>, <&usb_prim_ssphy>;
-+				phy-names = "usb2-phy", "usb3-phy";
++			mdss_mdp: mdp@ae01000 {
++				compatible = "qcom,sc8180x-dpu";
++				reg = <0 0x0ae01000 0 0x8f000>,
++				      <0 0x0aeb0000 0 0x2008>;
++				reg-names = "mdp", "vbif";
++
++				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&gcc GCC_DISP_HF_AXI_CLK>,
++					 <&dispcc DISP_CC_MDSS_MDP_CLK>,
++					 <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
++				clock-names = "iface",
++					      "bus",
++					      "core",
++					      "vsync";
++
++				assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>,
++						  <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
++				assigned-clock-rates = <460000000>,
++						       <19200000>;
++
++				operating-points-v2 = <&mdp_opp_table>;
++				power-domains = <&rpmhpd SC8180X_MMCX>;
++
++				interrupt-parent = <&mdss>;
++				interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						dpu_intf0_out: endpoint {
++							remote-endpoint = <&dp0_in>;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++						dpu_intf1_out: endpoint {
++							remote-endpoint = <&dsi0_in>;
++						};
++					};
++
++					port@2 {
++						reg = <2>;
++						dpu_intf2_out: endpoint {
++							remote-endpoint = <&dsi1_in>;
++						};
++					};
++
++					port@4 {
++						reg = <4>;
++						dpu_intf4_out: endpoint {
++							remote-endpoint = <&dp1_in>;
++						};
++					};
++
++					port@5 {
++						reg = <5>;
++						dpu_intf5_out: endpoint {
++							remote-endpoint = <&edp_in>;
++						};
++					};
++				};
++
++				mdp_opp_table: opp-table {
++					compatible = "operating-points-v2";
++
++					opp-200000000 {
++						opp-hz = /bits/ 64 <200000000>;
++						required-opps = <&rpmhpd_opp_low_svs>;
++					};
++
++					opp-300000000 {
++						opp-hz = /bits/ 64 <300000000>;
++						required-opps = <&rpmhpd_opp_svs>;
++					};
++
++					opp-345000000 {
++						opp-hz = /bits/ 64 <345000000>;
++						required-opps = <&rpmhpd_opp_svs_l1>;
++					};
++
++					opp-460000000 {
++						opp-hz = /bits/ 64 <460000000>;
++						required-opps = <&rpmhpd_opp_nom>;
++					};
++				};
++			};
++
++			dsi0: dsi@ae94000 {
++				compatible = "qcom,mdss-dsi-ctrl";
++				reg = <0 0x0ae94000 0 0x400>;
++				reg-names = "dsi_ctrl";
++
++				interrupt-parent = <&mdss>;
++				interrupts = <4 IRQ_TYPE_LEVEL_HIGH>;
++
++				clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
++					 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
++					 <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
++					 <&dispcc DISP_CC_MDSS_ESC0_CLK>,
++					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&gcc GCC_DISP_HF_AXI_CLK>;
++				clock-names = "byte",
++					      "byte_intf",
++					      "pixel",
++					      "core",
++					      "iface",
++					      "bus";
++
++				operating-points-v2 = <&dsi_opp_table>;
++				power-domains = <&rpmhpd SC8180X_MMCX>;
++
++				phys = <&dsi0_phy>;
++				phy-names = "dsi";
++
++				status = "disabled";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						dsi0_in: endpoint {
++							remote-endpoint = <&dpu_intf1_out>;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++						dsi0_out: endpoint {
++						};
++					};
++				};
++
++				dsi_opp_table: opp-table {
++					compatible = "operating-points-v2";
++
++					opp-187500000 {
++						opp-hz = /bits/ 64 <187500000>;
++						required-opps = <&rpmhpd_opp_low_svs>;
++					};
++
++					opp-300000000 {
++						opp-hz = /bits/ 64 <300000000>;
++						required-opps = <&rpmhpd_opp_svs>;
++					};
++
++					opp-358000000 {
++						opp-hz = /bits/ 64 <358000000>;
++						required-opps = <&rpmhpd_opp_svs_l1>;
++					};
++				};
++			};
++
++			dsi0_phy: dsi-phy@ae94400 {
++				compatible = "qcom,dsi-phy-7nm";
++				reg = <0 0x0ae94400 0 0x200>,
++				      <0 0x0ae94600 0 0x280>,
++				      <0 0x0ae94900 0 0x260>;
++				reg-names = "dsi_phy",
++					    "dsi_phy_lane",
++					    "dsi_pll";
++
++				#clock-cells = <1>;
++				#phy-cells = <0>;
++
++				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&rpmhcc RPMH_CXO_CLK>;
++				clock-names = "iface", "ref";
++
++				status = "disabled";
++			};
++
++			dsi1: dsi@ae96000 {
++				compatible = "qcom,mdss-dsi-ctrl";
++				reg = <0 0x0ae96000 0 0x400>;
++				reg-names = "dsi_ctrl";
++
++				interrupt-parent = <&mdss>;
++				interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
++
++				clocks = <&dispcc DISP_CC_MDSS_BYTE1_CLK>,
++					 <&dispcc DISP_CC_MDSS_BYTE1_INTF_CLK>,
++					 <&dispcc DISP_CC_MDSS_PCLK1_CLK>,
++					 <&dispcc DISP_CC_MDSS_ESC1_CLK>,
++					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&gcc GCC_DISP_HF_AXI_CLK>;
++				clock-names = "byte",
++					      "byte_intf",
++					      "pixel",
++					      "core",
++					      "iface",
++					      "bus";
++
++				operating-points-v2 = <&dsi_opp_table>;
++				power-domains = <&rpmhpd SC8180X_MMCX>;
++
++				phys = <&dsi1_phy>;
++				phy-names = "dsi";
++
++				status = "disabled";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						dsi1_in: endpoint {
++							remote-endpoint = <&dpu_intf2_out>;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++						dsi1_out: endpoint {
++						};
++					};
++				};
++			};
++
++			dsi1_phy: dsi-phy@ae96400 {
++				compatible = "qcom,dsi-phy-7nm";
++				reg = <0 0x0ae96400 0 0x200>,
++				      <0 0x0ae96600 0 0x280>,
++				      <0 0x0ae96900 0 0x260>;
++				reg-names = "dsi_phy",
++					    "dsi_phy_lane",
++					    "dsi_pll";
++
++				#clock-cells = <1>;
++				#phy-cells = <0>;
++
++				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&rpmhcc RPMH_CXO_CLK>;
++				clock-names = "iface", "ref";
++
++				status = "disabled";
++			};
++
++			mdss_dp0: displayport-controller@ae90000 {
++				compatible = "qcom,sc8180x-dp";
++				reg = <0 0xae90000 0 0x200>,
++				      <0 0xae90200 0 0x200>,
++				      <0 0xae90400 0 0x600>,
++				      <0 0xae90a00 0 0x400>;
++				interrupt-parent = <&mdss>;
++				interrupts = <12>;
++				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&dispcc DISP_CC_MDSS_DP_AUX_CLK>,
++					 <&dispcc DISP_CC_MDSS_DP_LINK_CLK>,
++					 <&dispcc DISP_CC_MDSS_DP_LINK_INTF_CLK>,
++					 <&dispcc DISP_CC_MDSS_DP_PIXEL_CLK>;
++				clock-names = "core_iface",
++					      "core_aux",
++					      "ctrl_link",
++					      "ctrl_link_iface",
++					      "stream_pixel";
++
++				assigned-clocks = <&dispcc DISP_CC_MDSS_DP_LINK_CLK_SRC>,
++						  <&dispcc DISP_CC_MDSS_DP_PIXEL_CLK_SRC>;
++				assigned-clock-parents = <&usb_prim_dpphy 0>, <&usb_prim_dpphy 1>;
++
++				phys = <&usb_prim_dpphy>;
++				phy-names = "dp";
++
++				#sound-dai-cells = <0>;
++
++				operating-points-v2 = <&dp0_opp_table>;
++				power-domains = <&rpmhpd SC8180X_CX>;
++
++				status = "disabled";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						dp0_in: endpoint {
++							remote-endpoint = <&dpu_intf0_out>;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++					};
++				};
++
++				dp0_opp_table: opp-table {
++					compatible = "operating-points-v2";
++
++					opp-160000000 {
++						opp-hz = /bits/ 64 <160000000>;
++						required-opps = <&rpmhpd_opp_low_svs>;
++					};
++
++					opp-270000000 {
++						opp-hz = /bits/ 64 <270000000>;
++						required-opps = <&rpmhpd_opp_svs>;
++					};
++
++					opp-540000000 {
++						opp-hz = /bits/ 64 <540000000>;
++						required-opps = <&rpmhpd_opp_svs_l1>;
++					};
++
++					opp-810000000 {
++						opp-hz = /bits/ 64 <810000000>;
++						required-opps = <&rpmhpd_opp_nom>;
++					};
++				};
++			};
++
++			mdss_dp1: displayport-controller@ae98000 {
++				compatible = "qcom,sc8180x-dp";
++				reg = <0 0xae98000 0 0x200>,
++				      <0 0xae98200 0 0x200>,
++				      <0 0xae98400 0 0x600>,
++				      <0 0xae98a00 0 0x400>;
++				interrupt-parent = <&mdss>;
++				interrupts = <13>;
++				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&dispcc DISP_CC_MDSS_DP_AUX1_CLK>,
++					 <&dispcc DISP_CC_MDSS_DP_LINK1_CLK>,
++					 <&dispcc DISP_CC_MDSS_DP_LINK1_INTF_CLK>,
++					 <&dispcc DISP_CC_MDSS_DP_PIXEL2_CLK>;
++				clock-names = "core_iface",
++					      "core_aux",
++					      "ctrl_link",
++					      "ctrl_link_iface",
++					      "stream_pixel";
++
++				assigned-clocks = <&dispcc DISP_CC_MDSS_DP_LINK1_CLK_SRC>,
++						  <&dispcc DISP_CC_MDSS_DP_PIXEL2_CLK_SRC>;
++				assigned-clock-parents = <&usb_sec_dpphy 0>, <&usb_sec_dpphy 1>;
++
++				phys = <&usb_sec_dpphy>;
++				phy-names = "dp";
++
++				#sound-dai-cells = <0>;
++
++				operating-points-v2 = <&dp0_opp_table>;
++				power-domains = <&rpmhpd SC8180X_CX>;
++
++				status = "disabled";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						dp1_in: endpoint {
++							remote-endpoint = <&dpu_intf4_out>;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++					};
++				};
++
++				dp1_opp_table: opp-table {
++					compatible = "operating-points-v2";
++
++					opp-160000000 {
++						opp-hz = /bits/ 64 <160000000>;
++						required-opps = <&rpmhpd_opp_low_svs>;
++					};
++
++					opp-270000000 {
++						opp-hz = /bits/ 64 <270000000>;
++						required-opps = <&rpmhpd_opp_svs>;
++					};
++
++					opp-540000000 {
++						opp-hz = /bits/ 64 <540000000>;
++						required-opps = <&rpmhpd_opp_svs_l1>;
++					};
++
++					opp-810000000 {
++						opp-hz = /bits/ 64 <810000000>;
++						required-opps = <&rpmhpd_opp_nom>;
++					};
++				};
++			};
++
++			mdss_edp: displayport-controller@ae9a000 {
++				compatible = "qcom,sc8180x-edp";
++				reg = <0 0xae9a000 0 0x200>,
++				      <0 0xae9a200 0 0x200>,
++				      <0 0xae9a400 0 0x600>,
++				      <0 0xae9aa00 0 0x400>;
++				interrupt-parent = <&mdss>;
++				interrupts = <14>;
++				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
++					 <&dispcc DISP_CC_MDSS_EDP_AUX_CLK>,
++					 <&dispcc DISP_CC_MDSS_EDP_LINK_CLK>,
++					 <&dispcc DISP_CC_MDSS_EDP_LINK_INTF_CLK>,
++					 <&dispcc DISP_CC_MDSS_EDP_PIXEL_CLK>;
++				clock-names = "core_iface",
++					      "core_aux",
++					      "ctrl_link",
++					       "ctrl_link_iface",
++					      "stream_pixel";
++
++				assigned-clocks = <&dispcc DISP_CC_MDSS_EDP_LINK_CLK_SRC>,
++						  <&dispcc DISP_CC_MDSS_EDP_PIXEL_CLK_SRC>;
++				assigned-clock-parents = <&edp_phy 0>, <&edp_phy 1>;
++
++				phys = <&edp_phy>;
++				phy-names = "dp";
++
++				#sound-dai-cells = <0>;
++
++				operating-points-v2 = <&edp_opp_table>;
++				power-domains = <&rpmhpd SC8180X_CX>;
++
++				status = "disabled";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++						edp_in: endpoint {
++							remote-endpoint = <&dpu_intf5_out>;
++						};
++					};
++				};
++
++				edp_opp_table: opp-table {
++					compatible = "operating-points-v2";
++
++					opp-160000000 {
++						opp-hz = /bits/ 64 <160000000>;
++						required-opps = <&rpmhpd_opp_low_svs>;
++					};
++
++					opp-270000000 {
++						opp-hz = /bits/ 64 <270000000>;
++						required-opps = <&rpmhpd_opp_svs>;
++					};
++
++					opp-540000000 {
++						opp-hz = /bits/ 64 <540000000>;
++						required-opps = <&rpmhpd_opp_svs_l1>;
++					};
++
++					opp-810000000 {
++						opp-hz = /bits/ 64 <810000000>;
++						required-opps = <&rpmhpd_opp_nom>;
++					};
++				};
 +			};
 +		};
 +
-+		usb_sec: usb@a8f8800 {
-+			compatible = "qcom,sc8180x-dwc3", "qcom,dwc3";
-+			reg = <0 0x0a8f8800 0 0x400>;
++		edp_phy: phy@aec2a00 {
++			compatible = "qcom,sc8180x-edp-phy";
++			reg = <0 0x0aec2a00 0 0x1c0>,
++			      <0 0x0aec2200 0 0xa0>,
++			      <0 0x0aec2600 0 0xa0>,
++			      <0 0x0aec2000 0 0x19c>;
 +
-+			clocks = <&gcc GCC_CFG_NOC_USB3_SEC_AXI_CLK>,
-+				 <&gcc GCC_USB30_SEC_MASTER_CLK>,
-+				 <&gcc GCC_AGGRE_USB3_SEC_AXI_CLK>,
-+				 <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
-+				 <&gcc GCC_USB30_SEC_SLEEP_CLK>,
-+				 <&gcc GCC_USB3_SEC_CLKREF_CLK>;
-+			clock-names = "cfg_noc",
-+				      "core",
-+				      "iface",
-+				      "mock_utmi",
-+				      "sleep",
-+				      "xo";
-+			resets = <&gcc GCC_USB30_SEC_BCR>;
-+			power-domains = <&gcc USB30_SEC_GDSC>;
-+			interrupts = <GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 487 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 490 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 491 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "hs_phy_irq", "ss_phy_irq",
-+					  "dm_hs_phy_irq", "dp_hs_phy_irq";
++			clocks = <&dispcc DISP_CC_MDSS_EDP_AUX_CLK>,
++				 <&dispcc DISP_CC_MDSS_AHB_CLK>;
++			clock-names = "aux", "cfg_ahb";
 +
-+			assigned-clocks = <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
-+					  <&gcc GCC_USB30_SEC_MASTER_CLK>;
-+			assigned-clock-rates = <19200000>, <200000000>;
++			power-domains = <&dispcc MDSS_GDSC>;
 +
-+			interconnects = <&aggre1_noc MASTER_USB3_1 0 &mc_virt SLAVE_EBI_CH0 0>,
-+					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_USB3_1 0>;
-+			interconnect-names = "usb-ddr", "apps-usb";
++			#clock-cells = <1>;
++			#phy-cells = <0>;
++		};
 +
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+			dma-ranges;
-+
-+			status = "disabled";
-+
-+			usb_sec_dwc3: usb@a800000 {
-+				compatible = "snps,dwc3";
-+				reg = <0 0x0a800000 0 0xcd00>;
-+				interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
-+				iommus = <&apps_smmu 0x160 0>;
-+				snps,dis_u2_susphy_quirk;
-+				snps,dis_enblslpm_quirk;
-+				phys = <&usb_sec_hsphy>, <&usb_sec_ssphy>;
-+				phy-names = "usb2-phy", "usb3-phy";
-+			};
++		dispcc: clock-controller@af00000 {
++			compatible = "qcom,sc8180x-dispcc";
++			reg = <0 0x0af00000 0 0x20000>;
++			clocks = <&rpmhcc RPMH_CXO_CLK>,
++				 <&sleep_clk>,
++				 <&usb_prim_dpphy 0>,
++				 <&usb_prim_dpphy 1>,
++				 <&usb_sec_dpphy 0>,
++				 <&usb_sec_dpphy 1>,
++				 <&edp_phy 0>,
++				 <&edp_phy 1>;
++			clock-names = "bi_tcxo",
++				      "sleep_clk",
++				      "dp_phy_pll_link_clk",
++				      "dp_phy_pll_vco_div_clk",
++				      "dptx1_phy_pll_link_clk",
++				      "dptx1_phy_pll_vco_div_clk",
++				      "edp_phy_pll_link_clk",
++				      "edp_phy_pll_vco_div_clk";
++			power-domains = <&rpmhpd SC8180X_MMCX>;
++			#clock-cells = <1>;
++			#reset-cells = <1>;
++			#power-domain-cells = <1>;
 +		};
 +
  		pdc: interrupt-controller@b220000 {
  			compatible = "qcom,sc8180x-pdc", "qcom,pdc";
  			reg = <0 0x0b220000 0 0x30000>;
-@@ -2416,6 +2714,39 @@ apps_smmu: iommu@15000000 {
- 
- 		};
- 
-+		remoteproc_adsp: remoteproc@17300000 {
-+			compatible = "qcom,sc8180x-adsp-pas";
-+			reg = <0x0 0x17300000 0x0 0x4040>;
-+
-+			interrupts-extended = <&intc GIC_SPI 162 IRQ_TYPE_EDGE_RISING>,
-+					      <&adsp_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-+					      <&adsp_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-+					      <&adsp_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-+					      <&adsp_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "wdog", "fatal", "ready",
-+					  "handover", "stop-ack";
-+
-+			clocks = <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "xo";
-+
-+			power-domains = <&rpmhpd SC8180X_CX>;
-+			power-domain-names = "cx";
-+
-+			qcom,qmp = <&aoss_qmp>;
-+
-+			qcom,smem-states = <&adsp_smp2p_out 0>;
-+			qcom,smem-state-names = "stop";
-+
-+			status = "disabled";
-+
-+			remoteproc_adsp_glink: glink-edge {
-+				interrupts = <GIC_SPI 156 IRQ_TYPE_EDGE_RISING>;
-+				label = "lpass";
-+				qcom,remote-pid = <2>;
-+				mboxes = <&apss_shared 8>;
-+			};
-+		};
-+
- 		intc: interrupt-controller@17a00000 {
- 			compatible = "arm,gic-v3";
- 			interrupt-controller;
-@@ -2615,6 +2946,30 @@ cpufreq_hw: cpufreq@18323000 {
- 			#clock-cells = <1>;
- 		};
- 
-+		wifi: wifi@18800000 {
-+			compatible = "qcom,wcn3990-wifi";
-+			reg = <0 0x18800000 0 0x800000>;
-+			reg-names = "membase";
-+			clock-names = "cxo_ref_clk_pin";
-+			clocks = <&rpmhcc RPMH_RF_CLK2>;
-+			interrupts = <GIC_SPI 414 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 415 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 416 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 417 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 418 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 419 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 420 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 422 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>;
-+			iommus = <&apps_smmu 0x0640 0x1>;
-+			qcom,msa-fixed-perm;
-+			status = "disabled";
-+		};
-+	};
-+
- 	thermal-zones {
- 		cpu0-thermal {
- 			polling-delay-passive = <250>;
 -- 
 2.40.1
 
