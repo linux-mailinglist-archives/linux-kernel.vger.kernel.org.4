@@ -2,90 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C511715A23
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27455715A1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 11:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbjE3J27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 05:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
+        id S230451AbjE3J2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 05:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjE3J23 (ORCPT
+        with ESMTP id S230502AbjE3J1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 05:28:29 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E23E47
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:27:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685438870; x=1716974870;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bb/2NSh0FsupKWJ63NAi7JNkLNuSTtTj++ZJQlgFfKg=;
-  b=U+sUkeVR+24sL4egl41ZbcONBQu0u+siT6qx1MBBfsU0C3Y07AvKvxoE
-   mCNiQHz7FKxteHHonUFn5+M+th+UpBVGtMXY0grE/24lg2KN0ld/vnTFY
-   QUGGcuVCYOPOm0SdvW+RgOqm6Qvrj2fwHq8MHbflCEZSCWCAILkgtJKbS
-   OHR27AtdmkZUR4AWD+5Dh202q2caD8IZSzaOodPHkTKMCZa5kL/E2yipZ
-   ug/4+jowYivPnLrjhxSb9yxKJ0GzBEfmbwySpvSQEWhlFLomM2ujuwczG
-   n3tCHgdSmAGQ7XVl93+/jGuzAfJk5mmxZHGy/Zv/sUrfvr388j7zAE5LA
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="344365177"
-X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="344365177"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 02:27:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10725"; a="818720180"
-X-IronPort-AV: E=Sophos;i="6.00,203,1681196400"; 
-   d="scan'208";a="818720180"
-Received: from tower.bj.intel.com ([10.238.157.62])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 02:27:47 -0700
-From:   Yanfei Xu <yanfei.xu@intel.com>
-To:     dwmw2@infradead.org, baolu.lu@linux.intel.com, joro@8bytes.org,
-        will@kernel.org, robin.murphy@arm.com
-Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        yanfei.xu@intel.com
-Subject: [PATCH 2/2] iommu/vt-d: Use BUG_ON to check NULL value of 'table'
-Date:   Tue, 30 May 2023 17:25:03 +0800
-Message-Id: <20230530092503.152926-3-yanfei.xu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230530092503.152926-1-yanfei.xu@intel.com>
-References: <20230530092503.152926-1-yanfei.xu@intel.com>
+        Tue, 30 May 2023 05:27:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9BAD9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:25:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685438722;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iGFdC+Cr7aKjAl09TH5gAS+8YxPdVhcFSlEZ7wtzGTo=;
+        b=OZohiWF3dHisbx1uZQqPCD5/IXOBPtLNFiPA5WFSPG2OzAzr8YfpkMmSlUOaXaC2/6JhZ+
+        kJdccbosV9h6+74Sqp5m1x44qv6FyN8brvCYRE3VDrlVa2qcy4GBMB+fXJJBL0/ek42CM7
+        nJ2S3k/RSFOcPwwdmvFG4WzC6RiqTAA=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-31-0_gLDks5NVe_vrtYma0wAg-1; Tue, 30 May 2023 05:25:21 -0400
+X-MC-Unique: 0_gLDks5NVe_vrtYma0wAg-1
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-514777266a3so3283033a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 02:25:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685438720; x=1688030720;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iGFdC+Cr7aKjAl09TH5gAS+8YxPdVhcFSlEZ7wtzGTo=;
+        b=PQRrhWIKbo+00y3T9fxK2mqzla/u54pePfoy10Z80/hXjHfzDiFt2Ij9EWRbBZS5iw
+         dFGpJ29YiaqIbhS63LtbQoUdPlQBStq1jww71hxo7yHkDcXwyySNyxhrRfE/vasPeUjh
+         DvC7A6wPsST+05mqa5iVorFqPQQeB60om1cEKcwzxLE8tsUcXHvn/RmApp5eyKuvej+f
+         6UEg8CSgTfSvik7u4YrCYAsXG+cxlaqMe5tihx6LqQ9r9XrDh2a9YCguhNZgIrX+XkWf
+         3V2YlvgfVM1qaspSQfvgPcRPoLnGh2OGALaBz7lI+/L84dKDJglqJHhzblBbBJpYvQYQ
+         R3OQ==
+X-Gm-Message-State: AC+VfDyGiOHmcWnsmcLq4rOXwT2Jokp0bmVhg7i+4ERAxv2XRDMV5CT2
+        VkSNcTQoUGYfTvluC0p+qNUIc4pTrOIB2Haubsh2f0xmjI6+imfwvWUqlQMZk7jhVhPcKduFKj/
+        sPsxYjfn9tptgG3XjiM7zq58y
+X-Received: by 2002:aa7:d586:0:b0:508:3b1f:e6b5 with SMTP id r6-20020aa7d586000000b005083b1fe6b5mr1131319edq.15.1685438720208;
+        Tue, 30 May 2023 02:25:20 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ511i+IlMrjdQEJaICGOkr307RIVrnzNJvm1eJGPS5QvRTCkjJO0Vsv78u0FAcgUlNcYeeTIg==
+X-Received: by 2002:aa7:d586:0:b0:508:3b1f:e6b5 with SMTP id r6-20020aa7d586000000b005083b1fe6b5mr1131312edq.15.1685438720035;
+        Tue, 30 May 2023 02:25:20 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id ca28-20020aa7cd7c000000b0050bc6d0e880sm4100809edb.61.2023.05.30.02.25.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 02:25:19 -0700 (PDT)
+Message-ID: <1cd0a13e-1842-2e1c-524b-e9580ea48b52@redhat.com>
+Date:   Tue, 30 May 2023 11:25:19 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 0/2] platform/surface: aggregator_tabletsw: Add support
+ for book mode
+Content-Language: en-US, nl
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230525213218.2797480-1-luzmaximilian@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230525213218.2797480-1-luzmaximilian@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Checking NULL value of 'table' variable deserves a BUG_ON as the
-following code will trigger a crash by dereferencing the NULL
-'table' pointer. Crash in advance with BUG_ON to avoid WARN_ON
-plus NULL pointer dereferencing can simplify the crash log.
+Hi,
 
-Signed-off-by: Yanfei Xu <yanfei.xu@intel.com>
----
- drivers/iommu/intel/iommu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 5/25/23 23:32, Maximilian Luz wrote:
+> Surface devices with a type-cover have an additional "book" mode. This
+> mode is activated when the device is oriented in portrait mode and the
+> type-cover is in an open position (including completely folded back;
+> unlike in landscape orientation there are no special modes for any of
+> the intermediate positions).
+> 
+> Currently, this mode is unsupported by the tablet switch driver, leading
+> to an error message (see individual commits for the exact messages).
+> Since the keyboard and touchpad input gets deactivated in this mode, map
+> it to tablet-mode.
+> 
+> I've split this change into two patches, one for each of the subsystems
+> (KIP and POS). This a) allows proper attribution via the "Fixes" tag and
+> b) with that should allow them to be backported fairly easily.
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index e98f1b122b49..8aa3bfdb7f95 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -1944,7 +1944,7 @@ static int domain_context_mapping_one(struct dmar_domain *domain,
- 	if (sm_supported(iommu)) {
- 		unsigned long pds;
- 
--		WARN_ON(!table);
-+		BUG_ON(!table);
- 
- 		/* Setup the PASID DIR pointer: */
- 		pds = context_get_sm_pds(table);
--- 
-2.34.1
+Thank you for your patch series, I've applied this series
+to my fixes branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
+
+I will include this series in my next fixes pull-req to Linus
+for the current kernel development cycle.
+
+Regards,
+
+Hans
+
+
+
+
+
+
+> Maximilian Luz (2):
+>   platform/surface: aggregator_tabletsw: Add support for book mode in
+>     KIP subsystem
+>   platform/surface: aggregator_tabletsw: Add support for book mode in
+>     POS subsystem
+> 
+>  drivers/platform/surface/surface_aggregator_tabletsw.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
 
