@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C5A7160D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A82A7160E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 15:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjE3M65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
+        id S232464AbjE3NAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 09:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjE3M6y (ORCPT
+        with ESMTP id S232552AbjE3M7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:58:54 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D719CE4C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:58:26 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-510d6b939bfso8020188a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:58:26 -0700 (PDT)
+        Tue, 30 May 2023 08:59:55 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667D9EA;
+        Tue, 30 May 2023 05:59:32 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-568ba7abc11so15485737b3.3;
+        Tue, 30 May 2023 05:59:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685451502; x=1688043502;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1tZ/CWWRhzFv4AUx7PeAsUKQAthRRG7iX6LhluPhso8=;
-        b=fhMSzU0zIG+zrgA5AooIEwuldRbNN5bU/BcQz0bDjs49+J1JE8Ypo6iEi3Tk4DYoBp
-         Kt8RU4R/R3FR+WUMj4eTbdWQfQzBLavDDpeM0H2Foqv4aroWYAsDKW5SXNxOG3zebzFE
-         KcaVP05qsOp06RqqwPn79WiZmzIh0/isE2gKWsguNkqmEQd2wG2tDW7czRUT+tsLZR3H
-         0P4sXxLcAsk5iSqc4N4HMH/S7X/mwzyCsZy8qwdXsKjrAzuZ0An3TZ9Q3anQRI2VlaYe
-         U5F9yJDj3guqKIonPAVCbtPJgd13pxg+b5a89bfRl3qoZrMykehI8PCGQxtosmeOD7xk
-         bbdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685451502; x=1688043502;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1685451566; x=1688043566;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1tZ/CWWRhzFv4AUx7PeAsUKQAthRRG7iX6LhluPhso8=;
-        b=TxYzWK8xMXQXLTH1jZkf0RMoORX2WAOecwzJ+gKcGLL5dUa3qAE9tFGa3yGbsSha8O
-         S7Ze/qsl6Uw9iwOWtqhFGk4snuTYO+TIHVICz/b3chjYDxFa5SjLZZLrgIU+q78q75aW
-         ZGeZcvroDKB5xaNdJyO4XHCEXa3FwJotkoY78Xi7L+4gfo9QJtTtnd9Z9s8A3dnus7E5
-         PBZ0wBO2iyR+QrOAjUR9knAy0NQ6YBbF+SgIjrSWDSrmc56HwGX0yOU5+JhUWmrk7VdV
-         PNJmO1IOGwBBPQMZHGI9X9RJrRP1+EkLou4eRYQQWLcOOhrvzPnOVZweXBOD/PHYMP1i
-         jspA==
-X-Gm-Message-State: AC+VfDyAikvM2s07cj58rtPD5+HvMpos89h6hd7x2XnfE7BBqnPkYXIw
-        /saS6SF/CX9LkS1beg7AqfXvjQ==
-X-Google-Smtp-Source: ACHHUZ6tHhgbxxkwo5nLr9tb12tOL8m2CoGZFRqhgO6IbbrCp+3ZktaR4Oz2McNAxdmztZnG3KJ8CA==
-X-Received: by 2002:a17:907:60cd:b0:974:216f:dc36 with SMTP id hv13-20020a17090760cd00b00974216fdc36mr1963849ejc.17.1685451501958;
-        Tue, 30 May 2023 05:58:21 -0700 (PDT)
-Received: from krzk-bin ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id rv3-20020a17090710c300b0096f7b7b6f11sm7280614ejb.106.2023.05.30.05.58.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 05:58:21 -0700 (PDT)
-Date:   Tue, 30 May 2023 14:58:18 +0200
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-clk@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: clock: qcom,msm8996-cbf: Add
- compatible for MSM8996 Pro
-Message-ID: <20230530125818.yvzdycqt46n4dzo5@krzk-bin>
-References: <20230527093934.101335-1-y.oudjana@protonmail.com>
- <20230527093934.101335-2-y.oudjana@protonmail.com>
+        bh=pUns/AgpqXLAWkbT9nsAikv8VufNiDnQgvXLGdGlTyQ=;
+        b=OmrsvIF7hVLwpUuwLixBRJ6u4vsZnI03aBYhM18P6OCXa/SkjvHSiOjWX6yU2Q+gVi
+         hZSYPF3eITVKkYItFYr40i+B779YjeABUR1SkuuWHeOyReu71Ytc8ggaIRkhc0xEM/if
+         4VJTLo1GjdIk59fADOfd1uFtp0DXUobZ2kIb1rsy+zJyeHL48aoL2Dy+fG3jFt9R0ldN
+         gGySuiRHmb2P+Bx+5K/TX2xeZ4KYSiIdtYy3pIyxAJoOuZwR1vFnfswavB3CyexFxUMO
+         CyvNnOx/Od3r2WXffSaYZum9hThqDE6T/s2Pvq0DSbvGqtj9N+4juL1VKBfGT3Tq++hv
+         89oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685451566; x=1688043566;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pUns/AgpqXLAWkbT9nsAikv8VufNiDnQgvXLGdGlTyQ=;
+        b=APS3hnJ8xndDfz0PyMd5HmsniPcg6eyzZs5rkpWYZB+qsQtWf35w2NYiE+6jrS9B6R
+         TxPYgZNCZo3EMBWzaMctHuo3IxmqSozpba9E97VB3s8nTUNhhVxLvcgMzuhuRMibjG0/
+         PBjADiZeouBdAYBF3gGyw00D6Aj0Xo24fbiuxcu+2GpNTbDDphfphNaEtz2MZxyyFq4b
+         60xDWQ6I3sNnfwUVfNOVgaQuH8i307eBmHZL1e7L6KkY0vVJ4+D8p+ruidK3qU0JDyIB
+         9LUy1YLXwtbC2jNBnZi6/skJRqAAG+gfmaCl09BtGGaGFWsyqeh/0tbZ0CyCmeGYw7/D
+         XpXQ==
+X-Gm-Message-State: AC+VfDyqJTxgysAfQYgzukcw+R1/B957NPvsiUY1V0hh/v9lfzLWcMmL
+        vMTT9daNi1gRIdH2UVGrOO4OQdSDim2+g5Opf2I=
+X-Google-Smtp-Source: ACHHUZ6l4t9i22MSzrt5nsSF4hfAMZMoK5+1PsXBAafqc9KsjE9oyqW1VOx7h4r+3WcISyPpe5m4/tw+5ClF2mWU1os=
+X-Received: by 2002:a0d:d413:0:b0:565:97ee:dd78 with SMTP id
+ w19-20020a0dd413000000b0056597eedd78mr2289332ywd.28.1685451566435; Tue, 30
+ May 2023 05:59:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230527093934.101335-2-y.oudjana@protonmail.com>
+References: <CGME20230529111350epcas5p46a1fa16ffb2a39008c26d03c5c63f109@epcas5p4.samsung.com>
+ <20230529111337.352990-1-maninder1.s@samsung.com>
+In-Reply-To: <20230529111337.352990-1-maninder1.s@samsung.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 30 May 2023 14:59:15 +0200
+Message-ID: <CANiq72nTqbof=SThq-PRhz=ks2WRvdUXBzJoesyXUmB2KB5pmA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] hexagon/traps.c: use KSYM_NAME_LEN in array size
+To:     Maninder Singh <maninder1.s@samsung.com>
+Cc:     bcain@quicinc.com, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, keescook@chromium.org,
+        nathanl@linux.ibm.com, ustavoars@kernel.org, alex.gaynor@gmail.com,
+        gary@garyguo.net, ojeda@kernel.org, pmladek@suse.com,
+        wedsonaf@google.com, linux-hexagon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Onkarnath <onkarnath.1@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,39 +75,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 27 May 2023 12:39:32 +0300, Yassine Oudjana wrote:
-> From: Yassine Oudjana <y.oudjana@protonmail.com>
-> 
-> The CBF clock on MSM8996 Pro has a different divisor compared to MSM8996
-> and is therefore not fully compatible with it. Add a new compatible string
-> to differentiate between them.
-> 
-> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/clock/qcom,msm8996-cbf.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
+On Mon, May 29, 2023 at 1:14=E2=80=AFPM Maninder Singh <maninder1.s@samsung=
+.com> wrote:
+>
+> kallsyms_lookup which in turn calls for kallsyms_lookup_buildid()
+> writes on index "KSYM_NAME_LEN - 1".
+>
+> Thus array size should be KSYM_NAME_LEN.
+>
+> for hexagon it was defined as "128" directly.
+> and commit '61968dbc2d5d' changed define value to 512,
+> So both were missed to update with new size.
+>
+> Fixes: 61968dbc2d5d ("kallsyms: increase maximum kernel symbol length to =
+512")
+>
+> Co-developed-by: Onkarnath <onkarnath.1@samsung.com>
+> Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
+> Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+With the updated commit hash:
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
 
-Full log is available here: https://patchwork.ozlabs.org/patch/1786737
-
-
-clock-controller@9a11000: '#interconnect-cells' is a required property
-	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
-	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
-	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
-	arch/arm64/boot/dts/qcom/msm8996-oneplus3.dtb
-	arch/arm64/boot/dts/qcom/msm8996-oneplus3t.dtb
-	arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-natrium.dtb
-	arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-scorpio.dtb
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
-	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+Cheers,
+Miguel
