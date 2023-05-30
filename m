@@ -2,115 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F917166F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF63C716703
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 17:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbjE3P1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 11:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
+        id S232075AbjE3P2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 11:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbjE3P1q (ORCPT
+        with ESMTP id S231787AbjE3P2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 11:27:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE22BE
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:27:45 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q41Fd-0000cs-KF; Tue, 30 May 2023 17:27:09 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q41FZ-003uHM-R0; Tue, 30 May 2023 17:27:05 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q41FY-009Xf3-TU; Tue, 30 May 2023 17:27:04 +0200
-Date:   Tue, 30 May 2023 17:27:04 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dilip Kota <eswara.kota@linux.intel.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
-        linux-watchdog@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH 0/7] dt-bindings: restrict node name suffixes
-Message-ID: <20230530152704.tbflnepnioupnkmv@pengutronix.de>
-References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+        Tue, 30 May 2023 11:28:49 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6CFC7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:28:03 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6260a2522d9so21912436d6.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 08:28:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685460482; x=1688052482;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YR3Dr4CMzNNzM1c3LGHePU3pSGMOwf2n9BmkTIJqoZY=;
+        b=Bksr7tzVfz7oTDe6EMCP7C+802spM/VFbpMcTjsqGmT9lt9BSo1oFr8qwxqkY2IuOM
+         c0NlDnfniP3XSWEuciQQ14BHHS6dM8B+EhgCj+iimSD01ob9A8DU1NUg2dpSMjIy3Diz
+         jWWA3O9nw6lwrw2v58P46mEVQGSyDQ7MZARIoqbiq79Jl857HMj6LxbPoXqz/fPOFi0a
+         iKCTIcrRlFcZFvMizAnORVTtshYHQVlDOcnSWtFuMKyOjWctq0ZISQpsTkEjG1qsRNo+
+         onTbKmGx4iRjdRTQn9Hq1ouJbG9LtUAer8iU0rsvGLa0bIIFs6UaD9+4dv5NVH31DjGR
+         N98g==
+X-Gm-Message-State: AC+VfDzb58XJeR2QsQ2ax3X26xbj3qQjxLsqdgvhN7Am3o2yqLaYoCAm
+        bs6zYTnU1dJQMd7ozcmwqQmW
+X-Google-Smtp-Source: ACHHUZ55tRVn6w2eePAhc6/qm8CJME6WENqz9zraKI3ZQacG7/5mnhJynvxY+ok00f1xtu5eZcDZQA==
+X-Received: by 2002:ad4:5ae4:0:b0:625:aa1a:9384 with SMTP id c4-20020ad45ae4000000b00625aa1a9384mr2941055qvh.64.1685460482224;
+        Tue, 30 May 2023 08:28:02 -0700 (PDT)
+Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
+        by smtp.gmail.com with ESMTPSA id o12-20020a05620a15cc00b0074d489e517csm4106298qkm.24.2023.05.30.08.28.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 08:28:01 -0700 (PDT)
+Date:   Tue, 30 May 2023 11:28:00 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Joe Thornber <thornber@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Sarthak Kukreti <sarthakkukreti@chromium.org>,
+        dm-devel@redhat.com, "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        Dave Chinner <david@fromorbit.com>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Joe Thornber <ejt@redhat.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
+Message-ID: <ZHYWAGmKhwwmTjW/@redhat.com>
+References: <ZGzIJlCE2pcqQRFJ@bfoster>
+ <ZGzbGg35SqMrWfpr@redhat.com>
+ <ZG1dAtHmbQ53aOhA@dread.disaster.area>
+ <ZG+KoxDMeyogq4J0@bfoster>
+ <ZHB954zGG1ag0E/t@dread.disaster.area>
+ <CAJ0trDbspRaDKzTzTjFdPHdB9n0Q9unfu1cEk8giTWoNu3jP8g@mail.gmail.com>
+ <ZHFEfngPyUOqlthr@dread.disaster.area>
+ <CAJ0trDZJQwvAzngZLBJ1hB0XkQ1HRHQOdNQNTw9nK-U5i-0bLA@mail.gmail.com>
+ <ZHYB/6l5Wi+xwkbQ@redhat.com>
+ <CAJ0trDaUOevfiEpXasOESrLHTCcr=oz28ywJU+s+YOiuh7iWow@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qbppmt5ki4y3pwo5"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJ0trDaUOevfiEpXasOESrLHTCcr=oz28ywJU+s+YOiuh7iWow@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 30 2023 at 10:55P -0400,
+Joe Thornber <thornber@redhat.com> wrote:
 
---qbppmt5ki4y3pwo5
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Tue, May 30, 2023 at 3:02 PM Mike Snitzer <snitzer@kernel.org> wrote:
+> 
+> >
+> > Also Joe, for you proposed dm-thinp design where you distinquish
+> > between "provision" and "reserve": Would it make sense for REQ_META
+> > (e.g. all XFS metadata) with REQ_PROVISION to be treated as an
+> > LBA-specific hard request?  Whereas REQ_PROVISION on its own provides
+> > more freedom to just reserve the length of blocks? (e.g. for XFS
+> > delalloc where LBA range is unknown, but dm-thinp can be asked to
+> > reserve space to accomodate it).
+> >
+> 
+> My proposal only involves 'reserve'.  Provisioning will be done as part of
+> the usual io path.
 
-Hello,
+OK, I think we'd do well to pin down the top-level block interfaces in
+question. Because this patchset's block interface patch (2/5) header
+says:
 
-On Tue, May 30, 2023 at 04:48:44PM +0200, Krzysztof Kozlowski wrote:
-> Hi,
->=20
-> Tree-wide cleanup of DTS node name suffixes "-N", e.g. "pwm-5", so we all=
-ow
-> only decimal numbers.  In few cases narrow the pattern to also disallow
-> multiple suffixes, e.g. "pwm-5-5".
->=20
-> No dependencies, can be applied by individual subsystems.
+"This patch also adds the capability to call fallocate() in mode 0
+on block devices, which will send REQ_OP_PROVISION to the block
+device for the specified range,"
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+So it wires up blkdev_fallocate() to call blkdev_issue_provision(). A
+user of XFS could then use fallocate() for user data -- which would
+cause thinp's reserve to _not_ be used for critical metadata.
 
-Thanks
-Uwe
+The only way to distinquish the caller (between on-behalf of user data
+vs XFS metadata) would be REQ_META?
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+So should dm-thinp have a REQ_META-based distinction? Or just treat
+all REQ_OP_PROVISION the same?
 
---qbppmt5ki4y3pwo5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmR2FcgACgkQj4D7WH0S
-/k6mKggAlnEVcB4qInHpsUcVID/g9Si5ycFYWHV3Ur9fkw4/flTJsQ0+OPpooZXI
-dpvQ7Kl9QZycIs6FZtMyK5Pgi6npW15XG8hL7k+NZq1YUw0qNt6vxH8UqSSUjIdY
-to0v66ItQ5jvqJxskCqXG5nE4c39BB6kQmV0LmVqovwRxYEc3GvRqZgOF5RBVvfY
-/WGbC2DUwy+zYVyBuAEP9D57J/iJKGXd3Axujy4SwzEJfcdq38axsICip6LF2J3I
-goisJHcTFiyiw0ATcuvUafLQDXJUta6y3tmq/SKEjej6z5Iu1p2w3iH6SZ/FTeJx
-GHPzrrwL7MzOXnIV9L0w6WsAOJBKtg==
-=/tKH
------END PGP SIGNATURE-----
-
---qbppmt5ki4y3pwo5--
+Mike
