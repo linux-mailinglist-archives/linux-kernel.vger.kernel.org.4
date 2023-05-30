@@ -2,139 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A1171559B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5190071559D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 08:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjE3GjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 02:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
+        id S230137AbjE3GkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 02:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjE3GjA (ORCPT
+        with ESMTP id S229951AbjE3GkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 02:39:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C06CE5;
-        Mon, 29 May 2023 23:38:49 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7856C66058F8;
-        Tue, 30 May 2023 07:38:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685428728;
-        bh=KtqmldD7s3ro7nqM1YsEAzRtJDAnNiaXuCYtFORMGg8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kNACF24Vz7zJ2EWyJ0AiOpyRsD3xYzcvJOcSVrqe/Kgikz/7Nv1BhKuuxGp2ICKvy
-         jX2feCqQCer7AOJWZI+oEPp4J5HCFFyXBaJRqUY88UfHsuwb9Lj3ylRlfK3ErfnTPX
-         Uw4G8DWG0Tz+W8dRJnmZNDu7rO52w/yZaAPOl4cXwu05onowIrf4y+8gkaRXdETaA/
-         ks1FeOZTNBA/kOFKUsk/uUPJX9MUPyRkOy6KX0TURY4opfjpOXgpZAsEjc1QCCjXvW
-         bVAVsTV14GmeedX/+nsvKhc73rFDuQRe6b0kgkoPQFhwAqAmR8+jRHUOVHIP3PP5U6
-         WayJj+K+CZTog==
-Message-ID: <8d4d21d9-4f2c-8895-36e6-19de498d6e4a@collabora.com>
-Date:   Tue, 30 May 2023 08:38:45 +0200
+        Tue, 30 May 2023 02:40:18 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238EAB2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 May 2023 23:40:17 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QVjQ14Zy4zsSZP;
+        Tue, 30 May 2023 14:38:01 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 30 May 2023 14:40:14 +0800
+Message-ID: <0a4221cf-3703-27ff-fbdc-d7c419c5020c@huawei.com>
+Date:   Tue, 30 May 2023 14:40:14 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [PATCH v2 2/4] arm64: dts: mt7986: add thermal and efuse
+Subject: Re: [PATCH -next] mm: page_alloc: simplify has_managed_dma()
 Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        "Hui.Liu" <hui.liu@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Lala Lin <lala.lin@mediatek.com>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Daniel Golle <daniel@makrotopia.org>
-References: <20230529204258.65238-1-linux@fw-web.de>
- <20230529204258.65238-3-linux@fw-web.de>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230529204258.65238-3-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Baoquan He <bhe@redhat.com>
+CC:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@kernel.org>
+References: <20230529144022.42927-1-wangkefeng.wang@huawei.com>
+ <ZHS2AgVvrT3n/hlM@casper.infradead.org>
+ <38ea4ea3-cd7f-abf4-e992-2f748e3b1fcb@huawei.com>
+ <ZHV5JCINq6fc/SG9@MiWiFi-R3L-srv>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <ZHV5JCINq6fc/SG9@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 29/05/23 22:42, Frank Wunderlich ha scritto:
-> From: Daniel Golle <daniel@makrotopia.org>
+
+
+On 2023/5/30 12:18, Baoquan He wrote:
+> On 05/30/23 at 10:10am, Kefeng Wang wrote:
+>>
+>>
+>> On 2023/5/29 22:26, Matthew Wilcox wrote:
+>>> On Mon, May 29, 2023 at 10:40:22PM +0800, Kefeng Wang wrote:
+>>>> The ZONE_DMA should only exists on Node 0, only check NODE_DATA(0)
+>>>> is enough, so simplify has_managed_dma() and make it inline.
+>>>
+>>> That's true on x86, but is it true on all architectures?
+>>
+>> There is no document about numa node info for the DMA_ZONE, + Mike
+>>
+>> I used 'git grep -w ZONE_DMA arch/'
 > 
-> Add thermal related nodes to mt7986 devicetree.
+> willy is right. max_zone_pfn can only limit the range of zone, but
+> can't decide which zone is put on which node. The memory layout is
+> decided by firmware. I searched commit log to get below commit which
+> can give a good example.
 > 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
->   arch/arm64/boot/dts/mediatek/mt7986a.dtsi | 37 ++++++++++++++++++++++-
->   1 file changed, 36 insertions(+), 1 deletion(-)
+> commit c1d0da83358a2316d9be7f229f26126dbaa07468
+> Author: Laurent Dufour <ldufour@linux.ibm.com>
+> Date:   Fri Sep 25 21:19:28 2020 -0700
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> index aa9e679b78e2..a409d5e845c2 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> @@ -337,6 +337,15 @@ spi1: spi@1100b000 {
->   			status = "disabled";
->   		};
->   
-> +		auxadc: adc@1100d000 {
-> +			compatible = "mediatek,mt7986-auxadc";
-> +			reg = <0 0x1100d000 0 0x1000>;
-> +			clocks = <&infracfg CLK_INFRA_ADC_26M_CK>;
-> +			clock-names = "main";
-> +			#io-channel-cells = <1>;
-> +			status = "disabled";
-> +		};
-> +
->   		ssusb: usb@11200000 {
->   			compatible = "mediatek,mt7986-xhci",
->   				     "mediatek,mtk-xhci";
-> @@ -375,6 +384,21 @@ mmc0: mmc@11230000 {
->   			status = "disabled";
->   		};
->   
-> +		thermal: thermal@1100c800 {
-> +			#thermal-sensor-cells = <1>;
-> +			compatible = "mediatek,mt7986-thermal";
-> +			reg = <0 0x1100c800 0 0x800>;
-> +			interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&infracfg CLK_INFRA_THERM_CK>,
-> +				 <&infracfg CLK_INFRA_ADC_26M_CK>,
-> +				 <&infracfg CLK_INFRA_ADC_FRC_CK>;
-> +			clock-names = "therm", "auxadc", "adc_32k";
-> +			mediatek,auxadc = <&auxadc>;
-> +			mediatek,apmixedsys = <&apmixedsys>;
-> +			nvmem-cells = <&thermal_calibration>;
-> +			nvmem-cell-names = "calibration-data";
-> +		};
-> +
->   		pcie: pcie@11280000 {
->   			compatible = "mediatek,mt7986-pcie",
->   				     "mediatek,mt8192-pcie";
-> @@ -426,6 +450,18 @@ pcie_port: pcie-phy@11c00000 {
->   			};
->   		};
->   
-> +		efuse: efuse@11d00000 {
-> +			compatible = "mediatek,mt7986-efuse",
-> +				     "mediatek,efuse";
+>      mm: replace memmap_context by meminit_context
+>      
+>      Patch series "mm: fix memory to node bad links in sysfs", v3.
+>      
+>      Sometimes, firmware may expose interleaved memory layout like this:
+>      
+>       Early memory node ranges
+>         node   1: [mem 0x0000000000000000-0x000000011fffffff]
+>         node   2: [mem 0x0000000120000000-0x000000014fffffff]
+>         node   1: [mem 0x0000000150000000-0x00000001ffffffff]
+>         node   0: [mem 0x0000000200000000-0x000000048fffffff]
+>         node   2: [mem 0x0000000490000000-0x00000007ffffffff]
 
-Fits in one single line. After which:
+Oh, it looks strange, but it do occur if firmware report as this way.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-
+Thanks Willy and Baoquan, please ignore the patch.
