@@ -2,125 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF005715FD0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE8F715FD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 14:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbjE3MdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 08:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
+        id S232144AbjE3Mdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 08:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232001AbjE3Mcm (ORCPT
+        with ESMTP id S232135AbjE3MdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 08:32:42 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8028A10E7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:32:08 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2af2c7f2883so45882031fa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 05:32:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685449864; x=1688041864;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=473x+lqpzUfA2jtVVPxgqLYhChW/9qnAzMi0phiVfDU=;
-        b=SbDg3Cb800/J9YKHr/9xr/So94j1gdK2pCQq2DpZwtW0XYNJzdyj3g+EeFYCuKOswg
-         V5g0jjllzu2HJqYY0SRrnpBMVkKsess1Ix85hkjezHpB4EXgk5CuWhzYuDk5A9ovS+HQ
-         INCMunxkw/qkfq3euvf7XnrI3JgXorAG6UYdxl0p3pPqYl+io5+JoB24t0JJLX0W6wou
-         AEFX7VHeDctfIiLhMkzRYEmR4KlD9p4TAYpz8fKAQyiY6OvGqbNOS8djWboPNLJaukdA
-         mj1DcJVsvifEBc2p7JppBBDnL+xWOXUgmd9wqs1TwzdG+xo8+2IGcQzS+Hrckkmzl5t+
-         XWag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685449864; x=1688041864;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=473x+lqpzUfA2jtVVPxgqLYhChW/9qnAzMi0phiVfDU=;
-        b=ZjqG9VpXkXW7wan5xTnTD4OutddxJQ6i58boimH5zh3L3wd8FUi+vx1Hq814VYdwZS
-         DKhMsCmL+iCvqPzL627/D9y8e7BWjFAIWec6dunNxB19LvZN+edaSabgvGY/5gif4s4z
-         0XSUU3mt+OkadEbGvaqKShK71u/eaHLujIIteclW7Wwpwj0WXeeKdYYRsTfo1NRZcqYk
-         zavhiYujBxAPX7JELfY4hEkDY53GbepDL5z+w0SQMmxBUBMksKQ5cUJZENFkTbz4n0jh
-         W+F5HTdB4ibLuLhe0kzRXHF8lhKy2+WUS4SJRfoM1N5vfs/1q2SOr5j1CODTU61rrFnW
-         RIQQ==
-X-Gm-Message-State: AC+VfDyZM+HpC5BeeXq0D2iQzWFPWmoJgMqZF7VzDFnIS1/A63yw75nM
-        jCDjXd+k4NKdZadoYfYgwGweBA==
-X-Google-Smtp-Source: ACHHUZ7/QXbo3yHpNDSE14vxr/l3CfeUgwZfQCqZydr5pHp063/LWEiSvqmesyK56npYxU0ALEC2dw==
-X-Received: by 2002:a2e:93d5:0:b0:2ac:5905:eff9 with SMTP id p21-20020a2e93d5000000b002ac5905eff9mr690143ljh.6.1685449863993;
-        Tue, 30 May 2023 05:31:03 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id u18-20020a2e91d2000000b002a8b8baf542sm2854814ljg.126.2023.05.30.05.31.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 05:31:03 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 30 May 2023 14:30:51 +0200
-Subject: [PATCH v4 17/17] media: venus: hfi_venus: Restrict writing
- SCIACMDARG3 to Venus V1/V2
+        Tue, 30 May 2023 08:33:14 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88707E53;
+        Tue, 30 May 2023 05:32:42 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id C5B0121ADF;
+        Tue, 30 May 2023 12:31:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1685449893; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k4r2dKrL0esFEC4r6mNqOb67BdMVIEvOCW/VAhqjUWc=;
+        b=h5MmXUfhWOwZcrwe7NZWvEHK+/tpbD3lT5ESYjsR/fIPtu0KHvMknKC6cW3VNZ5Ptrf73A
+        RiUbbCXvcUxaLhr/974N3UlCeCE2fWfJkosgaAY6FY4bGoIG0EyQLRKSHjbyFGraUOfq4b
+        hYmHNi5oR+WcaQkUO0odCa4BhJs352E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1685449893;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k4r2dKrL0esFEC4r6mNqOb67BdMVIEvOCW/VAhqjUWc=;
+        b=ywPZow5zX5ejCdKMprk/QdgpbZJt1V+/FKo3w6H4WtoQU4el7u8hpvk/rQx1kFoRAHOfjY
+        YB+M+lY49OFM8bAg==
+Received: from hawking.suse.de (unknown [10.168.4.11])
+        by relay2.suse.de (Postfix) with ESMTP id 528F92C141;
+        Tue, 30 May 2023 12:31:33 +0000 (UTC)
+Received: by hawking.suse.de (Postfix, from userid 17005)
+        id 3F3164A037E; Tue, 30 May 2023 14:31:33 +0200 (CEST)
+From:   Andreas Schwab <schwab@suse.de>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
+        Zhangjin Wu <falcon@tinylab.org>, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 1/2] selftests/nolibc: add new gettimeofday test cases
+In-Reply-To: <ZHXmbNg4BdJNd4cO@1wt.eu> (Willy Tarreau's message of "Tue, 30
+        May 2023 14:05:00 +0200")
+References: <cover.1685428087.git.falcon@tinylab.org>
+        <bfc3dba52300dcce03ae1c7c41f2bb8984cf459b.1685428087.git.falcon@tinylab.org>
+        <96f1134d-ce6e-4d82-ae00-1cd4038809c4@t-8ch.de>
+        <ZHXmbNg4BdJNd4cO@1wt.eu>
+X-Yow:  I represent a sardine!!
+Date:   Tue, 30 May 2023 14:31:33 +0200
+Message-ID: <mvmedmyatlm.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230228-topic-venus-v4-17-feebb2f6e9b8@linaro.org>
-References: <20230228-topic-venus-v4-0-feebb2f6e9b8@linaro.org>
-In-Reply-To: <20230228-topic-venus-v4-0-feebb2f6e9b8@linaro.org>
-To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1685449837; l=1033;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=oNIm1Wj0FhsO3S/n6eYL1/VajszUoAmbnQl8ZF5tL0I=;
- b=EE9MNWA8F4kINCga1/UXPCIhBDawDBerb3GjKdXmHwemGRPPenW+uzKGjJDlutvnjbhxRuBrL
- n2qOIG5TDzJBQ2xwNRHxcaDBE2ggs1hhafCeMzDCs4pTESJoU7Dx3gQ
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This write was last present on msm-3.10, which means before HFI3XX
-platforms were introduced. Guard it with an appropriate if condition.
+On Mai 30 2023, Willy Tarreau wrote:
 
-Does not seem to have any adverse effects on at least SM8250.
+> On Tue, May 30, 2023 at 12:59:31PM +0200, Thomas Weißschuh wrote:
+>> On 2023-05-30 14:37:49+0800, Zhangjin Wu wrote:
+>> > These 3 test cases are added to cover the normal using scenes of
+>> > gettimeofday().
+>> > 
+>> > They have been used to trigger and fix up such issue:
+>> > 
+>> >     nolibc-test.c:(.text.gettimeofday+0x54): undefined reference to `__aeabi_ldivmod'
+>> > 
+>> > This issue happens while there is no "unsigned int" conversion in the
+>> > new clock_gettime / clock_gettime64 syscall path of gettimeofday():
+>> > 
+>> >     tv->tv_usec = ts.tv_nsec / 1000;
+>> > 
+>> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+>> > ---
+>> >  tools/testing/selftests/nolibc/nolibc-test.c | 5 +++++
+>> >  1 file changed, 5 insertions(+)
+>> > 
+>> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+>> > index 8ba8c2fc71a0..20d184da9a2b 100644
+>> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
+>> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+>> > @@ -533,6 +533,8 @@ static int test_stat_timestamps(void)
+>> >   */
+>> >  int run_syscall(int min, int max)
+>> >  {
+>> > +	struct timeval tv;
+>> > +	struct timezone tz;
+>> >  	struct stat stat_buf;
+>> >  	int euid0;
+>> >  	int proc;
+>> > @@ -588,6 +590,9 @@ int run_syscall(int min, int max)
+>> >  		CASE_TEST(getdents64_root);   EXPECT_SYSNE(1, test_getdents64("/"), -1); break;
+>> >  		CASE_TEST(getdents64_null);   EXPECT_SYSER(1, test_getdents64("/dev/null"), -1, ENOTDIR); break;
+>> >  		CASE_TEST(gettimeofday_null); EXPECT_SYSZR(1, gettimeofday(NULL, NULL)); break;
+>> > +		CASE_TEST(gettimeofday_tv);   EXPECT_SYSZR(1, gettimeofday(&tv, NULL)); break;
+>> > +		CASE_TEST(gettimeofday_tz);   EXPECT_SYSZR(1, gettimeofday(NULL, &tz)); break;
+>> 
+>> Calling gettimeofday(NULL, ...) will actually segfault on glibc.
+>> It works when calling through the VDSO, but not the logic in glibc
+>> itself, which is guess is allowed by POSIX.
+>
+> Then that's shocking, because the man page says:
+>
+>        If either tv or tz is NULL, the corresponding structure is not  set  or
+>        returned.   (However, compilation warnings will result if tv is NULL.)
+>
+> I'd expect glibc to at least support what'd documented in the man
+> page :-/
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/media/platform/qcom/venus/hfi_venus.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-index 82854553f99e..19fc6575a489 100644
---- a/drivers/media/platform/qcom/venus/hfi_venus.c
-+++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-@@ -462,7 +462,8 @@ static int venus_boot_core(struct venus_hfi_device *hdev)
- 	}
- 
- 	writel(mask_val, wrapper_base + WRAPPER_INTR_MASK);
--	writel(1, cpu_cs_base + CPU_CS_SCIACMDARG3);
-+	if (IS_V1(hdev->core))
-+		writel(1, cpu_cs_base + CPU_CS_SCIACMDARG3);
- 
- 	writel(BIT(VIDC_CTRL_INIT_CTRL_SHIFT), cpu_cs_base + VIDC_CTRL_INIT);
- 	while (!ctrl_status && count < max_tries) {
+The manual page is not part of glibc.  Neither the glibc documentation
+nor the POSIX spec has ever supported NULL for the first argument.  The
+generic POSIX implementation in glibc originally returned EINVAL for
+that case, though.
 
 -- 
-2.40.1
-
+Andreas Schwab, SUSE Labs, schwab@suse.de
+GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
+"And now for something completely different."
