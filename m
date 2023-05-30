@@ -2,129 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED6F71582B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5535271582D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 May 2023 10:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbjE3IRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 04:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
+        id S229660AbjE3IRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 04:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjE3IRH (ORCPT
+        with ESMTP id S229631AbjE3IRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 04:17:07 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDBA9D
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:17:04 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-776fdba68ecso120811739f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:17:04 -0700 (PDT)
+        Tue, 30 May 2023 04:17:33 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A52BE
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:17:30 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-514ab6cb529so1905965a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 01:17:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685434624; x=1688026624;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fy7SR/HzB92IkMAazWT76QIOXbthJ6EyN1HdPKvysFk=;
-        b=CJFljht/URfulrX/BQQogdLgAkSiPQ4armqx1rnpAnDA25GIL1uBk1DT6+MFFy7CFz
-         fHkftFqZFmrOM3xaCf724X834CCsBoi6QqnNS4npXZCuQho58RU6JSyM/c8aZrOUGxpu
-         DCVqYBUTeIi1qwFx3McTy7IiBkpiVVZ+F+/es=
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685434648; x=1688026648;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Dej/FFOhlE209KZmIstjtLDQxOMnp2DLbpIJPYah0A=;
+        b=rEufenXkmE+fxdBlKUC1YtyC9X07+Ci2rPmXRsV3WUV9jRjRbQuIrPDnNZvxSM2mxf
+         X3RNTWjoWWpRxl8BL/JW5dYXMmPsneBLDl1Dmc6BP2bPa1lDf2bE33qwb4Prv3FsTbML
+         /71z6JhU30309RGtVFkstiUwREa1kJ5ofNQ6vN5Dlh/dhVBM23xvaiD/ufCjCYPAjBF3
+         XI4+MVi9AXdyxrFKwYuvqgdQ96YEo1lXf5Xs7b+rTjAiHGiy8iOscayzY2bWxOH5iwrW
+         pLzGv8SgZ58jXBhoR0tSMtOHn3g+APVxq/t6A9dCV+PFv/YPhbCNsejnl+LzPM1udCKI
+         1dZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685434624; x=1688026624;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fy7SR/HzB92IkMAazWT76QIOXbthJ6EyN1HdPKvysFk=;
-        b=IpvWYtN75ujoFZDjLYn77wD+rb7VSbuUpeBIjsVM53JgXan0K7hU5aTdE5NuKe/l97
-         SCnk5USGRwV/cLaqWfi1BraRyWPifVnwOICH/A7YNsD64F/+cjxXC1hzozqRnoWa5vB0
-         GZWiN62LxVhU703bcvqk5gK0ntHnBSlDNYWPyGHL9SGkW7Mj83K2wK7U+EX3T4c5oz7T
-         Ij3kCenNXObdS3lmlYbDRGugKzvQ/QynYRQ5Qp6PkJesl9W9FuipCcz97bgVwAf9Pw1e
-         vMYIWeZVSRXHfPemG2t2gaXaemLlUD6UjpoI0B05PgKVF/1pZqoe82SvayGp9cywRE9p
-         /xow==
-X-Gm-Message-State: AC+VfDy0AAmwq5j9uE2LbY/GQ3D4hNlRUZAHTF5Ja+4u8x1HHVOZaP2+
-        MqWXiUXoIW80UkveDvKJxzjxWt7cn8l03xa2WEMWVA==
-X-Google-Smtp-Source: ACHHUZ7dX+6887Swu18EzqkpWeZMTbRgNzYYTJ2VvJG6BkRYa9Oe3UhPb4JyBuAIjw+rXVBucmBYHzH71y45f6iv+oE=
-X-Received: by 2002:a92:d203:0:b0:335:56cb:a3a with SMTP id
- y3-20020a92d203000000b0033556cb0a3amr1027018ily.16.1685434624188; Tue, 30 May
- 2023 01:17:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230526063149.1801196-1-treapking@chromium.org> <2bae7dea-afc5-96b5-c6d1-f4724bae155c@collabora.com>
-In-Reply-To: <2bae7dea-afc5-96b5-c6d1-f4724bae155c@collabora.com>
-From:   Pin-yen Lin <treapking@chromium.org>
-Date:   Tue, 30 May 2023 16:16:53 +0800
-Message-ID: <CAEXTbpcbuRawcqnTQeuSD9Qpym25bpH+2hjHSTA9A2EbxtixGA@mail.gmail.com>
-Subject: Re: [PATCH v6] media: mtk-vpu: Ensure alignment of 8 for DTCM buffer
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        d=1e100.net; s=20221208; t=1685434648; x=1688026648;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8Dej/FFOhlE209KZmIstjtLDQxOMnp2DLbpIJPYah0A=;
+        b=bUTeak0UqWL9x4EvdTrd1uWOff72zr3EPIMpgof71q+32O22XeJ0RYrHbTO4C/+P6d
+         dv81OJ9rdzoNg8ibLZXqFATv0bF3jhZbLBBPJ9MBPNN1W6J6DhvrHBALR3nt7oUbvYkb
+         ztFtyrCkARXmmhVrLraq5/gJZfSQSCD24LVf8xSwcANYitND0ea8eqjmiqzvpGpn+9/G
+         S12f6fQQYvlvbGgxy6tfTgLevaXkYYIlhYk+asNTlkZH8a3cq9p6sofbG1PG2e5/X0LT
+         egG5yns1ADjC2OQBKiRJj2m2Lo8JHyMWr5RCsVd4mMk1ZqIHTjEsLbfwtR+rtyITpVSa
+         3cEg==
+X-Gm-Message-State: AC+VfDy4BaNa1D1Vl0K9e25xHa+zLp/0ybPGva/5BZbvZ8eCcvvv44Hq
+        qbbRPHf5xlnwtZqZLnsj1TTu4Q==
+X-Google-Smtp-Source: ACHHUZ4yZU/IUfHWVCAaHSvVKWusYU73uAxcR1RUnuf/v1Ip6xt3HYUd1Y/9cpLkPOB1X4DLiH0K1A==
+X-Received: by 2002:a17:907:784:b0:96f:a412:8b03 with SMTP id xd4-20020a170907078400b0096fa4128b03mr1486035ejb.5.1685434648674;
+        Tue, 30 May 2023 01:17:28 -0700 (PDT)
+Received: from blmsp ([2001:4090:a245:802c:bc2b:8db8:9210:41eb])
+        by smtp.gmail.com with ESMTPSA id f7-20020a170906494700b0095807ab4b57sm7116229ejt.178.2023.05.30.01.17.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 01:17:28 -0700 (PDT)
+Date:   Tue, 30 May 2023 10:17:27 +0200
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        linux-media@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandre Courbot <acourbot@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3] clk: mediatek: mt8365: Fix index issue
+Message-ID: <20230530081727.br3fm6zombgipjer@blmsp>
+References: <20230517-fix-clk-index-v3-1-be4df46065c4@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230517-fix-clk-index-v3-1-be4df46065c4@baylibre.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Angelo,
+On Fri, May 26, 2023 at 03:10:43PM +0200, Alexandre Mergnat wrote:
+> Before the patch [1], the clock probe was done directly in the
+> clk-mt8365 driver. In this probe function, the array which stores the
+> data clocks is sized using the higher defined numbers (*_NR_CLOCK) in
+> the clock lists [2]. Currently, with the patch [1], the specific
+> clk-mt8365 probe function is replaced by the mtk generic one [3], which
+> size the clock data array by adding all the clock descriptor array size
+> provided by the clk-mt8365 driver.
+> 
+> Actually, all clock indexes come from the header file [2], that mean, if
+> there are more clock (then more index) in the header file [2] than the
+> number of clock declared in the clock descriptor arrays (which is the
+> case currently), the clock data array will be undersized and then the
+> generic probe function will overflow when it will try to write in
+> "clk_data[CLK_INDEX]". Actually, instead of crashing at boot, the probe
+> function returns an error in the log which looks like:
+> "of_clk_hw_onecell_get: invalid index 135", then this clock isn't
+> enabled.
+> 
+> Solve this issue by adding in the driver the missing clocks declared in
+> the header clock file [2].
+> 
+> [1]: Commit ffe91cb28f6a ("clk: mediatek: mt8365: Convert to
+>      mtk_clk_simple_{probe,remove}()")
+> [2]: include/dt-bindings/clock/mediatek,mt8365-clk.h
+> [3]: drivers/clk/mediatek/clk-mtk.c
+> 
+> Fixes: ffe91cb28f6a ("clk: mediatek: mt8365: Convert to mtk_clk_simple_{probe,remove}()")
+> 
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-Thanks for letting me know. Then, this patch is not needed.
+Reviewed-by: Markus Schneider-Pargmann <msp@baylibre.com>
+Tested-by: Markus Schneider-Pargmann <msp@baylibre.com>
 
-Regards,
-Pin-yen
-
-On Mon, May 29, 2023 at 4:31=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 26/05/23 08:31, Pin-yen Lin ha scritto:
-> > From: Alexandre Courbot <acourbot@chromium.org>
-> >
-> > When running memcpy_toio:
-> > memcpy_toio(send_obj->share_buf, buf, len);
-> > it was found that errors appear if len is not a multiple of 8:
-> >
-> > [58.350841] mtk-mdp 14001000.rdma: processing failed: -22
-> >
-> > This is because in ARM64, memcpy_toio does byte-size access
-> > when the length is not a multiple of 8 while access to the
-> > vpu iomem must be 4 aligned.
-> >
-> > This patch ensures the copy of a multiple of 8 size by calling
-> > round_up(len, 8) when copying.
-> >
-> > Fixes: e6599adfad30 ("media: mtk-vpu: avoid unaligned access to DTCM bu=
-ffer.")
-> > Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
-> > Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-> > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> > Reviewed-by: Houlong Wei <houlong.wei@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> >
-> > ---
-> > This is a re-send of v5 because it was marked obsolete, but this patch
-> > is required for MT8173 platforms.
-> >
->
-> Hello,
-> I have solved this issue in a different way and the commit was already pi=
-cked.
->
-> Please check:
-> ab14c99c035d ("media: platform: mtk-mdp: Fix mdp_ipi_comm structure align=
-ment")
->
-> Regards,
-> Angelo
->
+Best,
+Markus
