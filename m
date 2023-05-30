@@ -2,98 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 750907171BF
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1A87171BE
 	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 01:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233421AbjE3Xck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 19:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
+        id S233808AbjE3Xcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 19:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231828AbjE3Xci (ORCPT
+        with ESMTP id S233614AbjE3Xcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 19:32:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08FAEC
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:32:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C88D632EF
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 23:32:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B92AC433EF;
-        Tue, 30 May 2023 23:32:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685489556;
-        bh=JXz0xI70zuYpYZsltrSyZalooGB27OtEMdKKeiDcQNU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tXcGh5VxJseqUJCs/l1tb6YMnkYiaCyHEJTbJqUThtjcDapGkcJac485k3iwsuBrJ
-         SdqnqflN+cQvNFYN+X1ewgC1UEYScO3QvVLLxMZvRn/P+VzwJmuG3jsV5DcJnqPR9e
-         veyKyUJlQCnr5v3vsOg+e9djeOGIprE4lt9SJ3sF8g/IsnW/3PeQHDkL06aKLTG5ml
-         zjQwucwHtmy5cbW9CStYnaZd+lGyaZGsgaGWmEpKpAvISP+5LcTF2Q8QAHvuOqbQpu
-         J//q6QKPKLT4b9ZC0qupD41JPo8h6SBsGiv6sx4mL1auDdcJb6WAPzzwg6Md8zlXel
-         wVzjEwbX49w6g==
-Date:   Tue, 30 May 2023 16:32:34 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Wu Bo <bo.wu@vivo.com>
-Cc:     Chao Yu <chao@kernel.org>, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, wubo.oduw@gmail.com
-Subject: Re: [PATCH v2 1/1] f2fs: fix args passed to trace_f2fs_lookup_end
-Message-ID: <ZHaHknKmSQIdQzBC@google.com>
-References: <20230530012118.74228-1-bo.wu@vivo.com>
+        Tue, 30 May 2023 19:32:48 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC02AA
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 16:32:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=nDJNB5RsBNc/267tcoLdyXS5Pr7u3K4HW7e+y/CbLTI=; b=S3uWmXaNkVmx1wLRs+WbmhKzhJ
+        f1eOkqSZI4hppj8w4KQ9eGmbxaDeAtvXJqe+ZqXnM6iTM4oAkntGWVNzJ2zjzV91ucuuA5IqCeErn
+        Gz/vCc+XLzeROXBTY8YA4IZbEk/6xYtbubw1vmqheD3AdhnGQ1NJDTNrp58umiJyXgpr1O00imNhO
+        X0Xjs/4dooG4GwVSVeG40UOPQBmdOVrQNB5bI9nsPkQQUE07TD3blp8Pt5B5AvXXNqO5RvDBQhM+Q
+        UnRKnkNxNXnLMG4ofH+zyoRfF553bWfO3f9F8vAbm17TAeMmCF4/S75PdchNrDNMTbKcMOQRw79/r
+        4CEbJrCw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q48pX-00FUCe-25;
+        Tue, 30 May 2023 23:32:43 +0000
+Message-ID: <89452cc1-5322-58f1-0f4a-41c2ad201be7@infradead.org>
+Date:   Tue, 30 May 2023 16:32:39 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530012118.74228-1-bo.wu@vivo.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/2] genirq: fasteoi resends interrupt on concurrent
+ invoke
+Content-Language: en-US
+To:     James Gowans <jgowans@amazon.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Liao Chang <liaochang1@huawei.com>,
+        Marc Zyngier <maz@kernel.org>,
+        KarimAllah Raslan <karahmed@amazon.com>,
+        Yipeng Zou <zouyipeng@huawei.com>,
+        Zhang Jianhua <chris.zjh@huawei.com>
+References: <20230530213848.3273006-1-jgowans@amazon.com>
+ <20230530213848.3273006-2-jgowans@amazon.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230530213848.3273006-2-jgowans@amazon.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/30, Wu Bo wrote:
-> The NULL return of 'd_splice_alias' dosen't mean error. Thus the
-> successful case will also return NULL, which makes the tracepoint always
-> print 'err=-ENOENT'.
-> 
-> Signed-off-by: Wu Bo <bo.wu@vivo.com>
+Hi--
+
+On 5/30/23 14:38, James Gowans wrote:
+
 > ---
->  fs/f2fs/namei.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  kernel/irq/chip.c | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
 > 
-> diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
-> index 77a71276ecb1..0c5e4c424eab 100644
-> --- a/fs/f2fs/namei.c
-> +++ b/fs/f2fs/namei.c
-> @@ -576,8 +576,9 @@ static struct dentry *f2fs_lookup(struct inode *dir, struct dentry *dentry,
->  	}
->  #endif
->  	new = d_splice_alias(inode, dentry);
-> -	err = PTR_ERR_OR_ZERO(new);
-> -	trace_f2fs_lookup_end(dir, dentry, ino, !new ? -ENOENT : err);
-> +	if (IS_ERR(new))
-> +		err = PTR_ERR(new);
-> +	trace_f2fs_lookup_end(dir, new ? new : dentry, ino, err);
+> diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+> index 49e7bc871fec..42f33e77c16b 100644
+> --- a/kernel/irq/chip.c
+> +++ b/kernel/irq/chip.c
+> @@ -692,8 +692,15 @@ void handle_fasteoi_irq(struct irq_desc *desc)
+>  
+>  	raw_spin_lock(&desc->lock);
+>  
+> -	if (!irq_may_run(desc))
+> +	/*
+> +	 * When an affinity change races with IRQ delivery, the next interrupt
+> +	 * can arrive on the new CPU before the original CPU has completed
+> +	 * handling the previous one. Mark it as pending and return EOI.
+> +	 */
+> +	if (!irq_may_run(desc)) {
+> +		desc->istate |= IRQS_PENDING;
+>  		goto out;
+> +	}
+>  
+>  	desc->istate &= ~(IRQS_REPLAY | IRQS_WAITING);
+>  
+> @@ -715,6 +722,12 @@ void handle_fasteoi_irq(struct irq_desc *desc)
+>  
+>  	cond_unmask_eoi_irq(desc, chip);
+>  
+> +	/*
+> +	 * When the race descibed above happens, this will resend the interrupt.
 
-Again, new can be an error pointer, and the previous err was supposed to be
-zero or -ENOENT.
+	                 described
 
-case 1) dentry exists: err (0) with new (NULL) --> dentry, err=0
-case 2) dentry exists: err (0) with new (VALID) --> new, err=0
-case 3) dentry exists: err (0) with new (ERR) --> dentry, err=ERR
-case 4) no dentry exists: err (-ENOENT) with new (NULL) --> dentry, err=-ENOENT
-case 4) no dentry exists: err (-ENOENT) with new (VALID) --> new, err=-ENOENT
-case 5) no dentry exists: err (-ENOENT) with new (ERR) --> dentry, err=ERR
+> +	 */
+> +	if (unlikely(desc->istate & IRQS_PENDING))
+> +		check_irq_resend(desc, false);
+> +
+>  	raw_spin_unlock(&desc->lock);
+>  	return;
+>  out:
 
-	trace_f2fs_lookup_end(dir, !IS_ERR_OR_NULL(new) ? new : dentry,
-				ino, IS_ERR(new) ? PTR_ERR(new) : err);
-
-
->  	return new;
->  out_iput:
->  	iput(inode);
-> -- 
-> 2.35.3
+-- 
+~Randy
