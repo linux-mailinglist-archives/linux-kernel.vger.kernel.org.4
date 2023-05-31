@@ -2,107 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E5B7718F1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F230718F1F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbjEaXmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 19:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
+        id S229676AbjEaXsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 19:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjEaXmW (ORCPT
+        with ESMTP id S229491AbjEaXsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 19:42:22 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9950132
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:42:20 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f6c6320d4eso42591cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:42:20 -0700 (PDT)
+        Wed, 31 May 2023 19:48:13 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506A912C
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:48:12 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-33b3cfb9495so802195ab.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:48:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685576540; x=1688168540;
+        d=chromium.org; s=google; t=1685576890; x=1688168890;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rDpz4krIKrc5w7qSPtF5SBqUynCIQ+thylT8XbaHGrk=;
-        b=WNm7FPyfhTPx3ZGuMrBHq00CD2pUQeKGlcUX8mQgn+G5dCO9p4/NX7woMudP9DApXP
-         eMJLs5SBR4fdqa3yCschb/mCpUzrZdTzCQk17xPxaPcyNXmO0GRLdFy3gHbSHxXHPTIP
-         /ozEJCi5UQdQkb2Q3mM6Zqe3S8JqvimfuEEiV/OCiDq8WYg8q9tsb/A8n35UOySEMRSe
-         cP+xGSCeNhL+QPzuxby2Y4g4uZHxNXxQLSBGnHEXmI9NR/ErERIcrgGmxuzljhndSanB
-         WP4UQiQL4UinzVp+2JgQHC1IybU3nDhwSEzellmsm7CBhp4CdyqxMsCJACyJb3WM+PYH
-         0PFw==
+        bh=ssi9hji3ougqZcnJfZaYXLr+1zSSxDjh3rVcPrdEtNo=;
+        b=K9vtiLjauLAheH/706FVQchuFhyZnP5Lrpl3x/r/LZcYoWfDbldHhY6Pg0wiMMk34L
+         FiVrxU1jrZsvA7ha/w7YHVnx6HTokPSvdzsfrMud0L8sX1SK/5Hp03BJU/trjdNGhSop
+         PVg4MEQrq4sWRneZnpmf1yFpKHEHWQg7aCf8g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685576540; x=1688168540;
+        d=1e100.net; s=20221208; t=1685576890; x=1688168890;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rDpz4krIKrc5w7qSPtF5SBqUynCIQ+thylT8XbaHGrk=;
-        b=fLJzvWrqtO2eGV7bmePeX+qxfJdln8IuyrdOuW8NWbY93ZIlezyNAgze6BGJY0msQw
-         +VcbA1V2cvYYG5aK7UxmAvYTKkE4/8rzgCNEg9oDkHf2HM9sqF8prBYNK66vTlSZwhSG
-         hblANGt+zFnfNAwABfzCrQKsfstTnyOhPHSAvTop1aAjxXH/iilc6pe0YEAvBnEfDaj4
-         iwqU14gwgtcBg1aVORcBuX0fPZFeGV9ppXxiFAmlBOcjArOCP2wrBywobK7MsHBI3CfM
-         U+qFBpLZAhl4qa+CT2F6pbqrHtsaHN/Km6YkTHvxZANy43SW/5VGW36NS/5ffg6nBFMB
-         qwbQ==
-X-Gm-Message-State: AC+VfDwokrn5Qo+gQLgNMQsT6FfIAm+0XpzXwkKhipr76Q9mkcE0LMpe
-        ReeCQCHI9E5/2EsCEWJkmKdJNBD52tq65+rhB/BWCw==
-X-Google-Smtp-Source: ACHHUZ5sABagGYjruKN8zRy0nDodbSiJxufLAv2SN+7MEBixn3XZ6Uymw2VwUSkM1BtzAJXGzFSFspv6fmhfCqrF5xc=
-X-Received: by 2002:ac8:7f02:0:b0:3f6:97b4:1a53 with SMTP id
- f2-20020ac87f02000000b003f697b41a53mr30800qtk.29.1685576539790; Wed, 31 May
- 2023 16:42:19 -0700 (PDT)
+        bh=ssi9hji3ougqZcnJfZaYXLr+1zSSxDjh3rVcPrdEtNo=;
+        b=QmNkHOf7mJiQM1lEiea/AlOq6l8d5xvlivA2NatpfLo3qOZCjp4OZklLXzDTPMvf7m
+         enYpgnqy4Qrme1qAVgcSZk6Bbj5dmcqunhWUsnck1zdA2LwYLUHW7bb2l3671oo+/Z2m
+         3L0KB4rAhOd7g29zx5f8NUpEbA+TKU4oRlluxSjAmaSeIVhy2O8hAZTcL1bJtD3I512G
+         veZMXXqNgY+nUdBOI2MTkdT+a8wkWWxFmlVq26DPCFeUrv+qIw0dP+K+INV7ZE1bjSoC
+         31vHkPJWy//268RaHG1HEnW34ISeto5CDo62TacVGZzVyOZA2gghODLTJsSWLEd7CswX
+         fP3w==
+X-Gm-Message-State: AC+VfDyOo9HUCwhJIve1Wt608P9EnqgqHn+skmRJh6Ah0GfDNMXm287v
+        PWVwGdQ8z5KotaVpx11D4Q3MD+dc7Zz545DtYU4=
+X-Google-Smtp-Source: ACHHUZ5ePqtXYcspqbSvGQNMOcJNTEPjABZkNDCd5tPLZJo0RWc25Ne/VAH5yy60foBvTnyjKoKHkg==
+X-Received: by 2002:a92:c611:0:b0:33b:dcbf:e711 with SMTP id p17-20020a92c611000000b0033bdcbfe711mr4701967ilm.8.1685576889973;
+        Wed, 31 May 2023 16:48:09 -0700 (PDT)
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com. [209.85.166.179])
+        by smtp.gmail.com with ESMTPSA id m8-20020a924a08000000b00326bd11f5d1sm2040638ilf.11.2023.05.31.16.48.08
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 16:48:08 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-33b7f217dd0so61675ab.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:48:08 -0700 (PDT)
+X-Received: by 2002:a05:6e02:1786:b0:33b:3bf4:9f42 with SMTP id
+ y6-20020a056e02178600b0033b3bf49f42mr32601ilu.19.1685576888336; Wed, 31 May
+ 2023 16:48:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230526234435.662652-1-yuzhao@google.com> <20230526234435.662652-5-yuzhao@google.com>
- <ZHJHJPBF6euzOFdw@linux.dev> <CAOUHufa74CufHziHSquO5bZwbFXz2MNssBzW+AH7=Xo5RCnQ0A@mail.gmail.com>
- <ZHZQdQAApIrw6fBu@linux.dev> <CAOUHufZOkBmZJgCU2xW2B8S3P3TWERHezy0xKWY9_TeyV9K7Rg@mail.gmail.com>
- <ZHef0VsZvZ1Vnz0u@linux.dev> <CAOUHufZrfnfcbrqSzmHkejR5MA2gmGKZ3LMRhbLHV+1427z=Tw@mail.gmail.com>
- <ZHfWzX04GlcNngdU@linux.dev>
-In-Reply-To: <ZHfWzX04GlcNngdU@linux.dev>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Wed, 31 May 2023 17:41:43 -0600
-Message-ID: <CAOUHufa9X4eXkvG+=xgm4AxrtvUKSZhjSRDtnskhVrVA2w2BkQ@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v2 04/10] kvm/arm64: make stage2 page tables
- RCU safe
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Anup Patel <anup@brainfault.org>,
-        Ben Gardon <bgardon@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Gavin Shan <gshan@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Larabel <michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-        linux-mm@google.com
+References: <20230530072514.22001-1-trevor.wu@mediatek.com> <20230530072514.22001-2-trevor.wu@mediatek.com>
+In-Reply-To: <20230530072514.22001-2-trevor.wu@mediatek.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 31 May 2023 16:47:56 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=X1JURLwZHraNwSMT7vwLNRNw7h0MmpbeWnr1yht6-3VA@mail.gmail.com>
+Message-ID: <CAD=FV=X1JURLwZHraNwSMT7vwLNRNw7h0MmpbeWnr1yht6-3VA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] ASoC: mediatek: mt8188: fix use-after-free in driver
+ remove path
+To:     Trevor Wu <trevor.wu@mediatek.com>
+Cc:     broonie@kernel.org, lgirdwood@gmail.com, tiwai@suse.com,
+        perex@perex.cz, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,72 +80,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 5:23=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
-v> wrote:
->
-> On Wed, May 31, 2023 at 05:10:52PM -0600, Yu Zhao wrote:
-> > On Wed, May 31, 2023 at 1:28=E2=80=AFPM Oliver Upton <oliver.upton@linu=
-x.dev> wrote:
-> > > On Tue, May 30, 2023 at 02:06:55PM -0600, Yu Zhao wrote:
-> > > > On Tue, May 30, 2023 at 1:37=E2=80=AFPM Oliver Upton <oliver.upton@=
-linux.dev> wrote:
-> > > > > As it is currently implemented, yes. But, there's potential to fa=
-st-path
-> > > > > the implementation by checking page_count() before starting the w=
-alk.
-> > > >
-> > > > Do you mind posting another patch? I'd be happy to ack it, as well =
-as
-> > > > the one you suggested above.
-> > >
-> > > I'd rather not take such a patch independent of the test_clear_young
-> > > series if you're OK with that. Do you mind implementing something
-> > > similar to the above patch w/ the proposed optimization if you need i=
-t?
-> >
-> > No worries. I can take the above together with the following, which
-> > would form a new series with its own merits, since apparently you
-> > think the !AF case is important.
->
-> Sorry if my suggestion was unclear.
->
-> I thought we were talking about ->free_removed_table() being called from
-> the stage-2 unmap path
+Hi,
 
-Yes, we were, or in general, about how to make KVM PTs RCU safe for ARM.
-
-So I'm thinking about taking 1) your patch above, 2) what I just
-suggested and 3) what you suggested below to form a mini series, which
-could land indepently and would make my job here easier.
-
-> in which case we wind up unnecessarily visiting
-> PTEs on a table known to be empty. You could fast-path that by only
-> initiating a walk if  page_count() > 1:
-
-Yes, this is what I meant.
-
-> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-> index 95dae02ccc2e..766563dc465c 100644
-> --- a/arch/arm64/kvm/hyp/pgtable.c
-> +++ b/arch/arm64/kvm/hyp/pgtable.c
-> @@ -1331,7 +1331,8 @@ void kvm_pgtable_stage2_free_removed(struct kvm_pgt=
-able_mm_ops *mm_ops, void *pg
->                 .end    =3D kvm_granule_size(level),
->         };
+On Tue, May 30, 2023 at 12:25=E2=80=AFAM Trevor Wu <trevor.wu@mediatek.com>=
+ wrote:
 >
-> -       WARN_ON(__kvm_pgtable_walk(&data, mm_ops, ptep, level + 1));
-> +       if (mm_ops->page_count(pgtable) > 1)
-> +               WARN_ON(__kvm_pgtable_walk(&data, mm_ops, ptep, level + 1=
-));
+> diff --git a/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c b/sound/soc/me=
+diatek/mt8188/mt8188-audsys-clk.c
+> index be1c53bf4729..05d6f9d78e10 100644
+> --- a/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
+> +++ b/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
+> @@ -138,6 +138,29 @@ static const struct afe_gate aud_clks[CLK_AUD_NR_CLK=
+] =3D {
+>         GATE_AUD6(CLK_AUD_GASRC11, "aud_gasrc11", "top_asm_h", 11),
+>  };
 >
->         WARN_ON(mm_ops->page_count(pgtable) !=3D 1);
->         mm_ops->put_page(pgtable);
->
->
-> A lock-free access fault walker is interesting, but in my testing it hasn=
-'t
-> led to any significant improvements over acquiring the MMU lock for
-> read. Because of that I hadn't bothered with posting the series upstream.
+> +static void mt8188_audsys_clk_unregister(void *data)
+> +{
+> +       struct mtk_base_afe *afe =3D (struct mtk_base_afe *)data;
 
-It's hard to measure but we have perf benchmarks on ChromeOS which should h=
-elp.
+The above cast is unnecessary since the compiler lets you assign from
+a "void *" to another pointer without a cast. Unnecessary casts are
+considered harmful because they suspend the compiler's ability to do
+type checking. Other than that, this looks good. Sorry for not
+noticing that the same problem affected more than just the driver I
+fixed previously.
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
