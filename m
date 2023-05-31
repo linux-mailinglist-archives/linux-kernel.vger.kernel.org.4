@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C936718822
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5120718825
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjEaRKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
+        id S230172AbjEaRKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbjEaRKF (ORCPT
+        with ESMTP id S230246AbjEaRKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:10:05 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70112135;
-        Wed, 31 May 2023 10:10:04 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-ba8cd61ee2dso1815361276.1;
-        Wed, 31 May 2023 10:10:04 -0700 (PDT)
+        Wed, 31 May 2023 13:10:19 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E426619F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:10:16 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-96f5d651170so258469466b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:10:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685553003; x=1688145003;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j5hNAeMykYH6m+pjlK4ZKQGtK0LDuyxxmWVTG0iy4gk=;
-        b=RgBb769DkAHCjoOyku0LjFwuuuVlYaimpuChbm/e6uqQonNgWj6Wkw86cPMdU6eXz3
-         IKYl4uH6w2nuanrD3CiroKb7ap7n18bm2RMoeLg/lKSqp/8MdBmzkuXUOIldyx2OkRT3
-         ZzxCY3GKi2PQtdVqYrIBrp+fD4+xUvumOR+8v200q+Pmz6dY7YhinaEm8VmIbSzMeb3H
-         S0ZI1aUrGebHJfqc29jWbkXjDdoLXBgdVvnvhT1Hd/QL3kg3qRFs8A5YuV4dpOsgxydk
-         6tsP9dzvIlUb7JwM8sIneb6X4//FQJ755f8Khi6Ktc4kjIQAgt/l6LC7qbc8+/mXs584
-         Hgaw==
+        d=linaro.org; s=google; t=1685553015; x=1688145015;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zpBJqIwBo/Nu/C67n+mvjWj82gMrvBIQFujOHL40XB8=;
+        b=PaJB+Ng5ASA7xTgcSbUVpUXunxTc7VxQ2TefYHq5FUs6+2/Jl0hscxC9gtxPnYEh2P
+         ieebqg+vkJGB/GYKvuOHiaKUn1dZfUC6uwW/7V+R1MwdWPTwfNA2WHA/mtPTeO70hWiO
+         uoZO+E/i8aaWBLpoUe0UyhzzUuantqeVuoydLrPc5Z7un7aX/v/VPsjpU0pP+5BoXw9T
+         R8fcLH1Kh+uWC2RuO+vT3CdQnPNrwSiNKvUlMRmLFsNFQknRr4kgA28CZjvFv+lK8oLy
+         jDIjKreApep2oXmvDEA+kxYmf8g3WiMks3pQC4jnww8Kc+AJOkpK/qCnqAT/Xord0uEo
+         FU3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685553003; x=1688145003;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j5hNAeMykYH6m+pjlK4ZKQGtK0LDuyxxmWVTG0iy4gk=;
-        b=R36eYezjeLlKLMvrBQGZQEMD+y/cSHl/5Cnoot47kI5bpa3QIxxOYbJTvyschm2XZK
-         vtPZBlINl3dhMhkLbQvlVVVsZHLLsxzisLzliDtokBLRPyhnnlz9LMlPWLfQqzS+iaQx
-         /qciYJAaDQWV7SmaItmNtQKzs98+ShBW5s7AsVWypxf2pJy7PQkNAG4kOmAoat5EflE3
-         ixPhaZC+aUT6Urc8DfxFgxKxJcE1oEPO4Is1aplbqDhcSm6gE3dMAH3W01+RGkguQDIE
-         yJEk2TQYTBizLOz78vlkYRS7iEfXLG7SglTEK3wJZkN54UA/xPYtWcZF1ybDMOp7JlTJ
-         Ph8A==
-X-Gm-Message-State: AC+VfDyTPRttT8shWm6cun4nBbTz1JU3U3oc68Q+fVnAuwjaUPUr2zTs
-        d3E2RQajyB86rycF6RddSRsmJMcZlCF0RVWvXvA=
-X-Google-Smtp-Source: ACHHUZ6gziPlD75sFBIWzYJKukeguq7CTPeNtKJWb7F/xT/sDpz2WsRUhNOlU+011ytGs8Qg/NrtXYae3YXJc9tUeRs=
-X-Received: by 2002:a25:e64f:0:b0:bac:fd8d:94b5 with SMTP id
- d76-20020a25e64f000000b00bacfd8d94b5mr18876773ybh.13.1685553003652; Wed, 31
- May 2023 10:10:03 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685553015; x=1688145015;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zpBJqIwBo/Nu/C67n+mvjWj82gMrvBIQFujOHL40XB8=;
+        b=k/k1x6+Y5BMkgcpBGQHoynW0RoytpLqMwLf6tFQi3BSPkhEqXqYV/2UqHDhZe6F+3J
+         ISCiRkZqxU6flpGKvQUpYkZYbTo9s5+MVvSCNgzX11WNPbos9JRgY+dVOsQXxWy1jf5M
+         J6A/0kB74LjqRPwaf4qJPh3xoULiqKQLXsFyMoJnM9wA7gkzNtj/bEKErnXSNH97j4BY
+         i3hkC3q6drZyHRJK0teSwRth7ZBr4/Ek2u0scWGH7Xd4rlFPpfwU0jLeLJrPHLHSjb6i
+         WeFrHSJIWn/6uZtTvDHZflFvzKCEwXK4LYnE8suz49hXStdPHL7h+2PvrK5J9ozEmRQP
+         hGKA==
+X-Gm-Message-State: AC+VfDzO4Y/EsCClFWBWZs9252uNlYFY7t7gO32nL1R9xHAby5LDiIYY
+        VdeGQBTTZgKMFoKmREGH6epRJg==
+X-Google-Smtp-Source: ACHHUZ7TZwZNXK5uqe69QR9cTTnHMALGXf0usZ9T15HkEXXRZQbXWbmqk6khd6Ya+IxxETVZ9fpqhA==
+X-Received: by 2002:a17:907:9721:b0:94f:2916:7d7 with SMTP id jg33-20020a170907972100b0094f291607d7mr6059751ejc.19.1685553015225;
+        Wed, 31 May 2023 10:10:15 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id b8-20020a1709064d4800b00965f31ff894sm9200289ejv.137.2023.05.31.10.10.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 10:10:14 -0700 (PDT)
+Message-ID: <d403e841-7a86-1f07-c634-1990902826f1@linaro.org>
+Date:   Wed, 31 May 2023 19:10:12 +0200
 MIME-Version: 1.0
-References: <20230503141016.683634-1-aliceryhl@google.com>
-In-Reply-To: <20230503141016.683634-1-aliceryhl@google.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 31 May 2023 19:09:52 +0200
-Message-ID: <CANiq72k6kSHPNjQr+PEB3KGO05M0mGet5un7jVeNeS_02uEzZQ@mail.gmail.com>
-Subject: Re: [PATCH v2] rust: str: add conversion from `CStr` to `CString`
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] soc: qcom: icc-bwmon: Fix MSM8998 count unit
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230531-topic-msm8998-bwmon-v1-1-454f9d550ee5@linaro.org>
+ <693a36cf-e9d5-a6f1-3953-3a7c7567a754@linaro.org>
+ <89faee17-7858-194e-8af7-953a2631eb8d@linaro.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <89faee17-7858-194e-8af7-953a2631eb8d@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,21 +79,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 3, 2023 at 4:10=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> wr=
-ote:
->
-> These methods can be used to copy the data in a temporary c string into
-> a separate allocation, so that it can be accessed later even if the
-> original is deallocated.
->
-> The API in this change mirrors the standard library API for the `&str`
-> and `String` types. The `ToOwned` trait is not implemented because it
-> assumes that allocations are infallible.
->
-> Reviewed-by: Benno Lossin <benno.lossin@proton.me>
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+On 31/05/2023 19:05, Konrad Dybcio wrote:
+> 
+> 
+> On 31.05.2023 19:03, Krzysztof Kozlowski wrote:
+>> On 31/05/2023 18:33, Konrad Dybcio wrote:
+>>> MSM8998's BWMON counts in megabytes. Fix it.
+>>>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>>  drivers/soc/qcom/icc-bwmon.c | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> If this is
+>> https://lore.kernel.org/all/33c61f23-6442-6d9b-492f-dd6e9c64a8c1@quicinc.com/
+>> (and QLT 1872) then add reported-by tag.
+> It's not, I fired up 8998, added debug prints and ran mybw.
+> 
+>>
+>> Change seems logical, although not really documented (a bit
+>> contradictory information for sdm845), so assuming this was really tested:
+> It's not for sdm845, after the last cleanup both BWMONs on that
+> one got its own driver data struct.
 
-Applied to `rust-next` -- thanks everyone!
+Ah, ok, Acks stays :)
 
-Cheers,
-Miguel
+Best regards,
+Krzysztof
+
