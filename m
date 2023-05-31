@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823057179B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E4E7179B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235128AbjEaIMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41872 "EHLO
+        id S235138AbjEaINC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbjEaIMg (ORCPT
+        with ESMTP id S232547AbjEaIM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:12:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D39BE
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:12:35 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q4GwT-0006Bx-Ry; Wed, 31 May 2023 10:12:25 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q4GwS-0043cp-Ad; Wed, 31 May 2023 10:12:24 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q4GwR-00H83J-9T; Wed, 31 May 2023 10:12:23 +0200
-Date:   Wed, 31 May 2023 10:12:23 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Lukasz Majewski <lukma@denx.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC] net: dsa: slave: Advertise correct EEE capabilities at
- slave PHY setup
-Message-ID: <ZHcBZ5hGTu7aBCsJ@pengutronix.de>
-References: <20230530122621.2142192-1-lukma@denx.de>
- <32aa2c0f-e284-4c5e-ba13-a2ea7783c202@lunn.ch>
- <20230530154039.4552e08a@wsk>
+        Wed, 31 May 2023 04:12:58 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD9610E
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:12:57 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4207A6605840;
+        Wed, 31 May 2023 09:12:56 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685520776;
+        bh=3jHnkXoSBbZgKG/dl29z1pDf2aC+nSfccT04ENZNaf4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MuQDt+h+ax9A6pcSl/ydOzBb+HXKYiPc/OXQ1KeN2dXObfUeQUlm9nm3ALwdfE3AA
+         Yt5CdxHwF3NbhFRIo7bHVV6zpc3tGwdzm7GestajpZ2LhYhuda1Jwp+sI+lFzij1GV
+         v81O0/FeHE+YiNcWIb5/3Qf/82ls2dCvJ8EaDKSzqDxNKWoG5EbTXcVyEPWYXhmT5a
+         7CIop/PknOrP+9eT1WVVphEYKKdk+ozgXBByitLdteWWVIV43EHI91OzHn5upZpHrZ
+         VOGXS+Sq/oQ3Zr5oCXmBxbw7L3kVtwM6xCRM3S9CKbfWjk3epXo/gOp4Ba+qy6M18Q
+         6vnvI/z1b5P2w==
+Message-ID: <8cd77fb6-ed45-8f7a-93f4-e795c898168d@collabora.com>
+Date:   Wed, 31 May 2023 10:12:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230530154039.4552e08a@wsk>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] soc: mediatek: SVS: Fix MT8192 GPU node name
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230531063532.2240038-1-wenst@chromium.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230531063532.2240038-1-wenst@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,68 +60,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukasz,
+Il 31/05/23 08:35, Chen-Yu Tsai ha scritto:
+> Device tree node names should be generic. The planned device node name
+> for the GPU, according to the bindings and posted DT changes, is "gpu",
+> not "mali".
+> 
+> Fix the GPU node name in the SVS driver to follow.
+> 
+> Fixes: 0bbb09b2af9d ("soc: mediatek: SVS: add mt8192 SVS GPU driver")
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 
-On Tue, May 30, 2023 at 03:40:39PM +0200, Lukasz Majewski wrote:
-> Hi Andrew,
-> 
-> > On Tue, May 30, 2023 at 02:26:21PM +0200, Lukasz Majewski wrote:
-> > > One can disable in device tree advertising of EEE capabilities of
-> > > PHY when 'eee-broken-100tx' property is present in DTS.
-> > > 
-> > > With DSA switch it also may happen that one would need to disable
-> > > EEE due to some network issues.  
-> > 
-> > Is EEE actually broken in the MAC/PHY combination?
-> > 
-> 
-> Problem is that when I connect on this project some non-manageable
-> switches (which by default have EEE enabled), then I observe very rare
-> and sporadic link loss and reconnection.
+Hahaha, I was about to send the same patch! :D
 
-The interesting question is, do other link partner or local system is
-broken?
-In some cases, not proper tx-timer was triggering this kind of
-symptoms. And timer configuration may depend on the link speed. So,
-driver may be need to take care of this.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-> Disabling EEE solves the problem.
+> ---
+>   drivers/soc/mediatek/mtk-svs.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> > You should not be using this DT option for configuration. It is there
-> > because there is some hardware which is truly broken, and needs EEE
-> > turned off.
-> 
-> Yes, I do think that the above sentence sums up my use case.
+> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> index 81585733c8a9..3a2f97cd5272 100644
+> --- a/drivers/soc/mediatek/mtk-svs.c
+> +++ b/drivers/soc/mediatek/mtk-svs.c
+> @@ -2061,9 +2061,9 @@ static int svs_mt8192_platform_probe(struct svs_platform *svsp)
+>   		svsb = &svsp->banks[idx];
+>   
+>   		if (svsb->type == SVSB_HIGH)
+> -			svsb->opp_dev = svs_add_device_link(svsp, "mali");
+> +			svsb->opp_dev = svs_add_device_link(svsp, "gpu");
+>   		else if (svsb->type == SVSB_LOW)
+> -			svsb->opp_dev = svs_get_subsys_device(svsp, "mali");
+> +			svsb->opp_dev = svs_get_subsys_device(svsp, "gpu");
+>   
+>   		if (IS_ERR(svsb->opp_dev))
+>   			return dev_err_probe(svsp->dev, PTR_ERR(svsb->opp_dev),
 
-As Andrew already described, current linux kernel EEE support is not in
-the best shape, it is hard to see the difference between broken HW and
-SW.
-
-> > If EEE does work, but you need to turn it off because of latency etc,
-> > then please use ethtool.
-> > 
-> 
-> Yes, correct - it is possible to disable the EEE with 
-> 
-> ethtool --set-eee lan2 eee off
-> 
-> However, as I've stated in the mail, I cannot re-enable EEE once
-> disabled with:
-> 
-> ethtool --set-eee lan2 eee on
-> 
-> ethtool --show-eee lan2
-> EEE Settings for lan2:
->         EEE status: not supported
-> 
-> 
-> As the capability register shows value of 0.
-
-Some PHYs indeed have this issues:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/phy/micrel.c?h=v6.4-rc4#n1402
-
-In case of your older kernel version, you will need to fake access to
-the EEE caps register.
-
-Regards,
-Oleksij
