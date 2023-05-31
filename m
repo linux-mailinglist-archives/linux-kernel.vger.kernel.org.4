@@ -2,156 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81ED1718B33
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 907C5718B3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjEaUaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 16:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
+        id S229551AbjEaUcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 16:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjEaUaR (ORCPT
+        with ESMTP id S229498AbjEaUcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 16:30:17 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4763D101;
-        Wed, 31 May 2023 13:30:16 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6af6db17a27so116022a34.2;
-        Wed, 31 May 2023 13:30:16 -0700 (PDT)
+        Wed, 31 May 2023 16:32:39 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F56A121;
+        Wed, 31 May 2023 13:32:38 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-2563ca70f64so3506559a91.0;
+        Wed, 31 May 2023 13:32:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685565015; x=1688157015;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TkKYKkqHcR+9f2etlgEJShv7Ao181m9IUBoJvwooid4=;
-        b=q3UJCkngDungWbExd8FMG+IqZ3el7slhuQ5k459Pj7t1aQWnHBfrXnV/O2nlhHW4NA
-         yVmr2WMTtFmRTpvV5Lg6y5Dssam9eGm4yLiPNjhP4QreDp8iy4EjF111Tt0UBB1+4wrh
-         INzptlB6b80GLLZ42TVeQ38KGWHkgu3cyIUIjHHZiyu289/jaGgLfLnPSqhvMYXpViE7
-         IjpHh4iTut9MBSTtyMsh3RWoTrtHX2lIWNlEcD/EURrceCLf9XihEsMLPhrGt81yi0As
-         S6r0t1UWQEt4YMZM/oqWk0Ocks2p9RdTaXIcj5i8nMGVmdYLaiM+jhFjaGJcz+snLL7+
-         4/Mw==
+        d=gmail.com; s=20221208; t=1685565158; x=1688157158;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=BDeWfB4xjTkyjMadKYZ6fSoKNmRXb/Jhz3U7/1RbuHU=;
+        b=LxUuGyHqh6epH41m7zvafxG1By7DF4yth9KckI+v2cYmO6NIG7nCFopDVVmndfIUtg
+         +Q1bZWCbE/YVr4py3+irwKdC22FfWSO6EkUbpD6NidoTlXAehPU1GS64VrjNZCXzQb45
+         e1j0vqV+4WBu4SR1w0Rn9cpGzWgd6nGCLzLnYkngaD4n+7FVmQit+4xS3a8O1Z18Bneb
+         ubzJ0W4S//6EKMiej2DicpzVc7Rbub+1kYz3auvCds17220IJ0xENMD8kEL32ymgMz4j
+         2BGaUDj/ho8Dv2cuoFpMqXyrgHoUobe8yj9Zo6a6f8Oh/amnukcDZnyNVvljBuB9pd6r
+         ay3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685565015; x=1688157015;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1685565158; x=1688157158;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TkKYKkqHcR+9f2etlgEJShv7Ao181m9IUBoJvwooid4=;
-        b=W602xVON+ILY0s+Qf9xAT4fpNuwChW7WdhNP4XAy9wxn1aoazexR5iRrS/Dfe/VRv8
-         LMMloYVUESMq7sDNtSwAb8zN7AYKXgRZN1P4nY34bo/SU5IWCCHtXgrw4OXJ4XQy5EX+
-         OkDWSIfSyaqkyvROAcyeGjYqO5UDEGyu6QQO3C0ox7t/847EITtv+hdIvlh8ohthw2yD
-         z/08JRZHHzPfiwoXsmlNEg8dBrqt09fVoLEilVd6+BmKXtMeLxLen+0SlOxrn13I682d
-         Gbc1/vz5Sh/FDCT0eQlzWqG9hmXD34XbVko3etM6J71uPqvnvaXtCl5VThbERA5BgT+9
-         1XFA==
-X-Gm-Message-State: AC+VfDyUZbVQDEFDmWYTmUCaoE+3bavdBGWGTNH4B1BEYd1+hHfbmFqE
-        Mvf3GNQj/Swb4bQdKLf+f3E=
-X-Google-Smtp-Source: ACHHUZ7z/vRygPB0842T2OD1oupQlVa7qdWy1B3CYPo4fysVtlk5UiHXG9Chk43oIADEQNyUzGxDdA==
-X-Received: by 2002:a05:6358:714:b0:123:36a2:7936 with SMTP id e20-20020a056358071400b0012336a27936mr865081rwj.27.1685565015312;
-        Wed, 31 May 2023 13:30:15 -0700 (PDT)
-Received: from localhost ([192.55.54.50])
-        by smtp.gmail.com with ESMTPSA id i8-20020a654848000000b0050f85ef50d1sm1585890pgs.26.2023.05.31.13.30.13
+        bh=BDeWfB4xjTkyjMadKYZ6fSoKNmRXb/Jhz3U7/1RbuHU=;
+        b=SB37w6nJ8Pmdo6dWuy7Irw8oMUfDXabsrjjteKHaK2C2k/X65M5w3tiiXsFMBwerRK
+         i4YFxc1zrxp7FrYe9aAM8nMh/WF0fZ8e/VjE2NvOS+o40e6oe/nZGecbninAjeKfoQXr
+         qdCqjIsE0qTilcvyAPn4t6IFeVrEwqBwtORhp4QngqUquguNqAIFydMkJNHXeI+3IEhD
+         bt3gobSAuWxuOWxXCjedu5LsJrzhWUUJ4s4c6pTyLZ3xSFdkodJEKMivNUNzhU87hbQS
+         5lbNvvN77mCyNTmnd2H6+T/31ZhZQN+zLceGF6RxMdmovrtOOXrrEbQ8xKW/Q96j7ywL
+         7ssw==
+X-Gm-Message-State: AC+VfDzMwY3BbFHbuYz8rKRLnO647gAcvmW/7ZpdVxYUFNOajiDGZC86
+        p84TcBCVKS2TLpG7nC08BTQ=
+X-Google-Smtp-Source: ACHHUZ7LSH2pI8sroJzw926L/WGgPkgJbF8dfNbOJHH2X5WS+TvZDRTY5eJ6+2vb50wJCO1hRcblfw==
+X-Received: by 2002:a17:90a:5081:b0:256:82c0:8120 with SMTP id s1-20020a17090a508100b0025682c08120mr5351254pjh.13.1685565157857;
+        Wed, 31 May 2023 13:32:37 -0700 (PDT)
+Received: from bangji.hsd1.ca.comcast.net ([2601:647:6700:7f00:ba31:75fe:e7e6:ccf7])
+        by smtp.gmail.com with ESMTPSA id l9-20020a17090a49c900b002508d73f4e8sm1611472pjm.57.2023.05.31.13.32.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 13:30:14 -0700 (PDT)
-Date:   Wed, 31 May 2023 13:30:12 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>, chen.bo@intel.com
-Subject: Re: [PATCH v14 003/113] KVM: x86/vmx: Refactor KVM VMX module
- init/exit functions
-Message-ID: <20230531203012.GG1234772@ls.amr.corp.intel.com>
-References: <cover.1685333727.git.isaku.yamahata@intel.com>
- <4ef61085333e97e0ae48c3d7603042b9801e3608.1685333727.git.isaku.yamahata@intel.com>
- <20230531093950.00007e7d.zhi.wang.linux@gmail.com>
+        Wed, 31 May 2023 13:32:37 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH] perf script: Increase PID/TID width for output
+Date:   Wed, 31 May 2023 13:32:36 -0700
+Message-ID: <20230531203236.1602054-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230531093950.00007e7d.zhi.wang.linux@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 09:57:18AM +0800,
-Zhi Wang <zhi.wang.linux@gmail.com> wrote:
+On large systems, it's common that PID/TID is bigger than 5-digit and it
+makes the output unaligned.  Let's increase the width to 7.
 
-> > +static int __init vt_init(void)
-> > +{
-> > +	unsigned int vcpu_size, vcpu_align;
-> > +	int r;
-> > +
-> > +	if (!kvm_is_vmx_supported())
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	/*
-> > +	 * Note, hv_init_evmcs() touches only VMX knobs, i.e. there's nothing
-> > +	 * to unwind if a later step fails.
-> > +	 */
-> > +	hv_init_evmcs();
-> > +
-> > +	r = kvm_x86_vendor_init(&vt_init_ops);
-> > +	if (r)
-> > +		return r;
-> > +
-> > +	r = vmx_init();
-> > +	if (r)
-> > +		goto err_vmx_init;
-> > +
-> > +	/*
-> > +	 * Common KVM initialization _must_ come last, after this, /dev/kvm is
-> > +	 * exposed to userspace!
-> > +	 */
-> > +	vcpu_size = sizeof(struct vcpu_vmx);
-> > +	vcpu_align = __alignof__(struct vcpu_vmx);
-> > +	r = kvm_init(vcpu_size, vcpu_align, THIS_MODULE);
-> > +	if (r)
-> > +		goto err_kvm_init;
-> > +
-> > +	return 0;
-> > +
-> ---------------------------------
-> > +err_kvm_init:
-> > +	vmx_exit();
-> > +err_vmx_init:
-> > +	kvm_x86_vendor_exit();
-> > +	return r;
-> > +}
-> > +module_init(vt_init);
-> > +
-> ----------------------------------
-> > +static void vt_exit(void)
-> > +{
-> > +	kvm_exit();
-> > +	kvm_x86_vendor_exit();
-> > +	vmx_exit();
-> ----------------------------------
-> 
-> It seems the exiting sequences above are a little bit different with
-> each other (PS: It is not a prob introduced in this patch):
-> 
-> vmx_exit()
-> kvm_x86_vendor_exit()
-> ....
-> 
-> and
-> 
-> ...
-> kvm_x86_vnedor_exit()
-> vmx_exit()
-> 
-> I was wondering which one should be correct. Literally, the exiting
-> sequence would be in reversing order of the initialization sequence.
+Before:
 
-In theory, I think kvm_x86_vendor_exit() => vmx_exit() and
-vmx_init() => kvm_x86_vendor_exit() should be the right order.
-But in practice, it doesn't matter and I didn't want to touch the order with
-this patch series.
+  $ perf script
+  ...
+           swapper     0 [006] 1540823.803935:    1369324 cycles:P:  ffffffff9c755588 ktime_get+0x18 ([kernel.kallsyms])
+       gvfsd-dnssd 95114 [004] 1540823.804164:    1643871 cycles:P:  ffffffff9cfdca5c __get_user_8+0x1c ([kernel.kallsyms])
+         perf-exec 1558582 [000] 1540823.804209:    1018714 cycles:P:  ffffffff9c924ab9 __slab_free+0x9 ([kernel.kallsyms])
+             nmcli 1558589 [007] 1540823.804384:    1859212 cycles:P:      7f70537a8ad8 __strchrnul_evex+0x18 (/usr/lib/x86_64-linux-gnu/libc.so.6>
+             sleep 1558582 [000] 1540823.804456:     987425 cycles:P:      7fd35bb27b30 _dl_init+0x0 (/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2>
+       dbus-daemon  3043 [003] 1540823.804575:    1564465 cycles:P:  ffffffff9cb2bb70 llist_add_batch+0x0 ([kernel.kallsyms])
+             gdbus 1558592 [001] 1540823.804766:    1315219 cycles:P:  ffffffff9c797b2e audit_filter_syscall+0x9e ([kernel.kallsyms])
+    NetworkManager  3452 [005] 1540823.805301:    1558782 cycles:P:      7fa957737748 g_bit_lock+0x58 (/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.7400.5>
+
+After:
+
+  $ perf script
+  ...
+           swapper       0 [006] 1540823.803935:    1369324 cycles:P:  ffffffff9c755588 ktime_get+0x18 ([kernel.kallsyms])
+       gvfsd-dnssd   95114 [004] 1540823.804164:    1643871 cycles:P:  ffffffff9cfdca5c __get_user_8+0x1c ([kernel.kallsyms])
+         perf-exec 1558582 [000] 1540823.804209:    1018714 cycles:P:  ffffffff9c924ab9 __slab_free+0x9 ([kernel.kallsyms])
+             nmcli 1558589 [007] 1540823.804384:    1859212 cycles:P:      7f70537a8ad8 __strchrnul_evex+0x18 (/usr/lib/x86_64-linux-gnu/libc.so.6>
+             sleep 1558582 [000] 1540823.804456:     987425 cycles:P:      7fd35bb27b30 _dl_init+0x0 (/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2>
+       dbus-daemon    3043 [003] 1540823.804575:    1564465 cycles:P:  ffffffff9cb2bb70 llist_add_batch+0x0 ([kernel.kallsyms])
+             gdbus 1558592 [001] 1540823.804766:    1315219 cycles:P:  ffffffff9c797b2e audit_filter_syscall+0x9e ([kernel.kallsyms])
+    NetworkManager    3452 [005] 1540823.805301:    1558782 cycles:P:      7fa957737748 g_bit_lock+0x58 (/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.7400.5>
+
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/builtin-script.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+index 029d5a597233..70549fc93b12 100644
+--- a/tools/perf/builtin-script.c
++++ b/tools/perf/builtin-script.c
+@@ -801,11 +801,11 @@ static int perf_sample__fprintf_start(struct perf_script *script,
+ 	}
+ 
+ 	if (PRINT_FIELD(PID) && PRINT_FIELD(TID))
+-		printed += fprintf(fp, "%5d/%-5d ", sample->pid, sample->tid);
++		printed += fprintf(fp, "%7d/%-7d ", sample->pid, sample->tid);
+ 	else if (PRINT_FIELD(PID))
+-		printed += fprintf(fp, "%5d ", sample->pid);
++		printed += fprintf(fp, "%7d ", sample->pid);
+ 	else if (PRINT_FIELD(TID))
+-		printed += fprintf(fp, "%5d ", sample->tid);
++		printed += fprintf(fp, "%7d ", sample->tid);
+ 
+ 	if (PRINT_FIELD(CPU)) {
+ 		if (latency_format)
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+2.41.0.rc0.172.g3f132b7071-goog
+
