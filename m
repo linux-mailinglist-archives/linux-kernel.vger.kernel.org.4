@@ -2,85 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E212717866
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4344171786A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234634AbjEaHh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
+        id S234477AbjEaHiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232229AbjEaHh4 (ORCPT
+        with ESMTP id S234706AbjEaHiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:37:56 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432A4C0;
-        Wed, 31 May 2023 00:37:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1685518673; x=1717054673;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=A0CMn3ra+DbJMLgi7YsDqMe0dIiAqyIrPwvqTLxPn5s=;
-  b=SrrDp1E8xKLkWmHr/2MvOpcs9iO3W0LcRp23cG3Xr0qSKbjvTDWsTRjA
-   DftP3t2SsLnjiffWrODO/6FaluUqt73zPJjCchNOYTAwMJnK8G58cuJNz
-   4pd4WHVC1RHpJYHeqoMlmA6GDCv+euTz0DzItgfnulujkBEGJ24TPLIu9
-   vIqK/ufzQ50RBW9IES5YI+PAiXvVdBkfN+TJCOMEHGR+NoiFKnXRxVa0I
-   owWx66DrdjqGdxwtFQJo+N9kBEVCQeIEMG7yArYDzLMU3HuLo4LKbxa82
-   hINE5H/baXvJpTJvZO4FwU12BuC/RoBW6cEmHRpYo5rVRvtt+BuUgKjb1
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,205,1681164000"; 
-   d="scan'208";a="31185173"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 31 May 2023 09:37:51 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 31 May 2023 09:37:51 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 31 May 2023 09:37:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1685518671; x=1717054671;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=A0CMn3ra+DbJMLgi7YsDqMe0dIiAqyIrPwvqTLxPn5s=;
-  b=L47xWWOUZsHZBPC6ajue2Ic1e/3WGqo3/Sb2v4d/xJYrGXc/Sn7GG/F9
-   vX0GPfKdpQxC8A6VinKALtfxBWVGyORvsCJDBn5Lmapls7ircUtEDLuBu
-   iHXSuwAr6Zgl8pUHpRwianTkssx/PL71LC+i3myFStM/D3d3tf2zCnxWs
-   bc/bSQiDhuX9KWsonrQHxL5Px1LJO5aSqcUX4qNR7xg9OpMnDRT+OSM+H
-   hGY/PPkcVo8oOKO7II/PvcfyudGqKpOQj/4GSV+mPm9bMau7xcpMcwvWj
-   XC+Ca8Hrhk41fRPETFDa8OihDLg1we40DzXRzBM/7F2Kx7qSRqOhgSiOU
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,205,1681164000"; 
-   d="scan'208";a="31185172"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 31 May 2023 09:37:51 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 1CCF1280099;
-        Wed, 31 May 2023 09:37:51 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     NXP Linux Team <linux-imx@nxp.com>,
-        "A. Sverdlin" <alexander.sverdlin@siemens.com>
-Cc:     Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] i2c: lpi2c: cache peripheral clock rate
-Date:   Wed, 31 May 2023 09:37:50 +0200
-Message-ID: <8230613.T7Z3S40VBb@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20230515201844.215253-1-alexander.sverdlin@siemens.com>
-References: <20230515201844.215253-1-alexander.sverdlin@siemens.com>
+        Wed, 31 May 2023 03:38:16 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2131.outbound.protection.outlook.com [40.107.255.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2568C185
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:38:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jjqhyX6dn+EBbiYsmKMl4nj+Hp/GVpG2x+WtdLtxUMPJOvZ+Z3CHnm7t2Ez8v7mHLd8XLOKpaEz2LgHmMerVmUCRPGdAgMHSBfNLQhu4Vk2KWAsjkHc1GGnPOM87EJpp/y3eXpB8hVvORGk3FtExnvUhHthxSsIz9s05d3+1Xa4TMc/DvdAooPedxaEqn7IXu+L8/FtXNIS7fsEA/LNicp1EA0M1kAocHZkHP1vOcVzXcilIRfPl9AqNY+db9+gi5/Ihkim9sRSCsjuU33LjLkByUTY7TnK2ml6jhy+fM3n5KzHmqNh4IjDQOtOdm0I8wHOkpS0VvPU6o3PK9SvKJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bWcWb4kBK15aAmXyOXHcgMskBxsxfIStyeHH/5j6LSE=;
+ b=RUc6MgWLj+x15k2m58H6lpR1DsBXhtHiSEa12n755w6jAaHmp811JMl6T6ALTkSS6qf8LTUOnEsdmmYMXQ7cQh36+k73sSLnjYvDi8iQLnxbcbcC7qUJc7+nGuCQKCgRcn0TUvCBW0Sraar4yhnslcVaOkGHDgKm2fwDXGjbAkxkGxeWHue9Hhit2DJvq/8kgDicTdMy4XR0uD47aO9g1KqwY1P0RSo7kJ9bhvGHH3nylOsZx/KR7l6ibXltX13DBCOuuvsoj9zNcuRAfqyZiBeqPA2o79J0ymPR3noFACpnGF4G7cPukOE7tLvch8xrdwcuokQT+XmH2/70aq9LuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bWcWb4kBK15aAmXyOXHcgMskBxsxfIStyeHH/5j6LSE=;
+ b=l3cnqhWn/kmPtJ+4TgblP2373uJTumCMy/oOT2PxmHOVRczPEzolrHB9PjTNmusMtI6H+3qY8t31hyVnUNFcF0T2w++AKDdTnoQSffstS46oU2l/3KVOJ6gXiMn8TMozyzQsgOb5pZkVvJTw3UlOJXCEZ5VJ8RyLzhGVRifuYkDaImfRXZsQH8OsGvAR1P4SmwPnE4g/U12l4OVluqQJzXyFoc3Nzanh5tIKqUXhOsxUs04i+Aq3hf4LKi0SflU16pFzctQzdNS9PBvsqIU6USNrUKlXW0qG2Ec94xrVcCPArTkltOqSVYkwxSZV9C4G9n8+gdi3GceW/fnjP2Csqg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
+ by SEZPR06MB6457.apcprd06.prod.outlook.com (2603:1096:101:17e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 31 May
+ 2023 07:38:03 +0000
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e%5]) with mapi id 15.20.6433.018; Wed, 31 May 2023
+ 07:38:03 +0000
+From:   Lu Hongfei <luhongfei@vivo.com>
+To:     Artur Weber <aweber.kernel@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org (open list:DRM PANEL DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
+Subject: [PATCH] gpu: drm/panel: Change the return value of s6d7aa0_lock to void
+Date:   Wed, 31 May 2023 15:37:51 +0800
+Message-Id: <20230531073751.48451-1-luhongfei@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYCP286CA0129.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:2b6::17) To TYZPR06MB6697.apcprd06.prod.outlook.com
+ (2603:1096:400:451::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|SEZPR06MB6457:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3f0abbb8-8b0f-43f1-ed61-08db61a9f76c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LhZ02FFtlfNJQZ+wn9ONaFGJwv2JHF3fHfxp9/g5+sEcAmTBCFyPeJ+HOTP5C7/uVdJaJ4FnQ+vcI3a3Wstc4mlWm5YZN/Pw5M71cZSBvnkI3cYi9XjV567itcZqda5k8uXPdMswcpbK+5Ctz7gpA+5jAmvsxfzMf7Qe4hCrdupCsGWQU3WgsSIChPASZBp9OZvwA6KYPUbcWiA9ZxgsGY80tFQb/YbowiaVC+oOFavPPGM/bJl+nnETOA8xzz5TWOd36ed3CJrh/yb53odyOwdf5m3UJlMRDmRIEpUuhAeQjOx7XzUpxJFRifzxa1u/1LMJRnW5JR+MhyhQ3iPpFdPjQVxmdOgwGNNlPneuoCOMd0uwBugNvtzKkX+igVXyV6g6BmnyHl0tQZ+esUl9df/naDcoOu/kx5nRf5d2ZefMRYMduJZ+C+dqzmAtD9GYqfVADKBPtARFiRp0O/1N/Eb30yZxPz4KmORyB6uQJXZoFsZybRKuBGSesmVxX5B3ZsonFEDoSGIxyD4v/M36JkiQ/PchUBd60rF2RVQ0ANxS6VFQadkDL56r6rlZTyvacHPO0IPdmas5ueZKskWDb/UJfI6iAsrTEntpNg5j+qzJPGROdNOwsv0HiB6L7+CV
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(366004)(136003)(346002)(396003)(451199021)(66556008)(83380400001)(6666004)(478600001)(4326008)(66476007)(66946007)(110136005)(26005)(6506007)(107886003)(1076003)(6512007)(316002)(52116002)(6486002)(41300700001)(2906002)(186003)(38350700002)(38100700002)(86362001)(36756003)(5660300002)(2616005)(8936002)(8676002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cNasMst5luVph0lIZU4skspDMPcyzfKIRu5cIts7z39p4OrwBdmdhmih6Q/G?=
+ =?us-ascii?Q?1XRqtLhjpKwdI7ay53NaHXPRktWYN0HPytVFgQ9+XAMwfHIS2zXiqCdN7brD?=
+ =?us-ascii?Q?o2xmbbadktc2wBJ0LeKAtpDUxjHPZWWeg1w4pft76csxXR84Rs1dhHVWWh07?=
+ =?us-ascii?Q?e665Vg8umn+OFbW9+Fhz1C8hLSG2q31FwqhytODkPR9yDam09M/OfBCpsXTk?=
+ =?us-ascii?Q?teFN0eqtSG9Fo6TgYZhnA7jlLdMSyrEnWKLApD4jxufuahJlTwnr3rcTloDh?=
+ =?us-ascii?Q?HbTJYFM1grPSRbtpVAost3efPsCwgMsaTMWR8pyGWlSHWZs0570ivuaQQFJ8?=
+ =?us-ascii?Q?LizslrCFkj5f78HNIt4c+YUBzQMA+KVT5BpejCqPDuNC3KvH4wjiUD5Pbfhm?=
+ =?us-ascii?Q?BpedNBilLq2eChjXEsTZLTc1LmL+B1SNvSdHtGZZG9u+I1LlRasHqIYem1OU?=
+ =?us-ascii?Q?++gRRQJUHnGhNLolPS1PdunHaCCBN/tsevj3ArXfvbK/OBhsKDeDjagSNpZr?=
+ =?us-ascii?Q?zJ+Nv30t2Iyxw+2uXciEBLPmdNTOSbfr2mAD2XsrRJ4esgZqB22QBJiKtnw/?=
+ =?us-ascii?Q?whWTbeo/zsNdheHGmrizQaXvMWZui3v8sFQ7FBoQ9CE8nxga/1V8RG4AQ5CG?=
+ =?us-ascii?Q?Ytl4em8q11jawcZYU2+3bL2Ry0d2WmLyjp0x5VK2YmUXo5rTRYUSL5UWIJ+j?=
+ =?us-ascii?Q?NflbXSh6tShiwvjnIz+1Rj/v7JjUeoynMJ5HvPeijC6e/3s+W8ZdtWgQrlVD?=
+ =?us-ascii?Q?ydjXdWVR4y9whtM3D7BVHdDAm5NnThSsVOVRcOSYh1+SdsmX4axk6T+INCgn?=
+ =?us-ascii?Q?Y5XpzszZCZuSmxnQj6NsFPAGBVqfkist6t2DDpUeazwA7qhX1M2baZRx/fXF?=
+ =?us-ascii?Q?MqqAXZq+OirF379bL9BUulZzNI1u0I7mDM2gFhg7pmqdv1/EXQE6fOKgfFmO?=
+ =?us-ascii?Q?LtZH0aBKz3zs3smKpGRMM8ItMQ8huoZc5BZcfASJeEX92nnp7Is2evFmnsUL?=
+ =?us-ascii?Q?OunvLAGJkZ/zzUOs49VnHCYqALfwfLQwV51sttxQTcgA6UEJTI6n1ni02eMy?=
+ =?us-ascii?Q?92OhXS6WKYASMQbANkbwjIOMF8Ud0KEHfNOLJ9HzfvMfYI7c5y9OtZ6n37/O?=
+ =?us-ascii?Q?FkEbU9JQuWneoORyaSj3WiCytUqhJZPhD9m8dFaVnrauCwJujKROo5ILTkdY?=
+ =?us-ascii?Q?jnjLMkBXb8c104EspqtbuaAnLzsUzOkzNdcg7vNpcC6Elzv1Sns58pNbaqen?=
+ =?us-ascii?Q?Id+RRpRaguond1ajNSdJSK2D+EQ0DoXeNupBXPP7qrMv6VSM/zLRB680hBoh?=
+ =?us-ascii?Q?YCQJSL/dwpYGti0vzqMqXUQQYPU5Lk9ldN8h1YgTV8GYFGjmTAg+P4rU1y8e?=
+ =?us-ascii?Q?fvrRybXJV1gXNfeybVIPqHsc3CZxkwrmJ3qwsOvEWU2rwTBMdGU00VkmScgh?=
+ =?us-ascii?Q?ghJzmI0WB2pWeoo8v9EqENRx5BTjX2Ms767n1oINAKwkhJjQyNudnRtZ1C8v?=
+ =?us-ascii?Q?ZuEK/l152XPOzUMpcIWSZlrSFL1UCaUNnx3qAR2b8swqTN4fUSgKe9Gimm9R?=
+ =?us-ascii?Q?4FAcsaqFi+LPrzqA9d33O/ul42x8+kHURINsuUhh?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f0abbb8-8b0f-43f1-ed61-08db61a9f76c
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 07:38:03.3840
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aikAzb2lWHGB3WIbZubyxKbIYWxxmWxatNkMt0qxiy7TRJE2gn3zEk8bB8C+aHHpoQp1E/dBv01iZTXI+ZILTA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB6457
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,344 +116,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The return value of s6d7aa0_lock is meaningless,
+it is better to modify it to void.
+This patch fixes this issue and modifies the place
+where s6d7aa0_lock is called.
 
-Am Montag, 15. Mai 2023, 22:18:44 CEST schrieb A. Sverdlin:
-> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
->=20
-> One of the reasons to do it is to save some CPU cycles on cpu_freq_get()
-> under mutex. The second reason if the (false-positive) lockdep splat caus=
-ed
-> by the recursive feature of the "prepare_lock" (one clock instance is I2C
-> peripheral clock and another is pcf85063 RTC as clock provider):
+Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+---
+ drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c | 29 ++++---------------
+ 1 file changed, 5 insertions(+), 24 deletions(-)
 
-Looks good to me. Thanks.
-Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-> WARNING: possible circular locking dependency detected
-> 5.15.71+... #1 Tainted: G           O
-> ------------------------------------------------------
-> .../2332 is trying to acquire lock:
-> ffff8000096cae08 (prepare_lock){+.+.}-{3:3}, at: clk_prepare_lock+0x50/0x=
-b0
->=20
-> but task is already holding lock:
-> ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at:
-> i2c_adapter_lock_bus+0x2c/0x3c
->=20
-> which lock already depends on the new lock.
->=20
-> the existing dependency chain (in reverse order) is:
->=20
-> -> #2 (i2c_register_adapter){+.+.}-{3:3}:
->        lock_acquire+0x68/0x8c
->        rt_mutex_lock_nested+0x88/0xe0
->        i2c_adapter_lock_bus+0x2c/0x3c
->        i2c_transfer+0x58/0x130
->        regmap_i2c_read+0x64/0xb0
->        _regmap_raw_read+0x114/0x440
->        _regmap_bus_read+0x4c/0x84
->        _regmap_read+0x6c/0x270
->        regmap_read+0x54/0x80
->        pcf85063_probe+0xec/0x4cc
->        i2c_device_probe+0x10c/0x350
->        really_probe+0xc4/0x470
->        __driver_probe_device+0x11c/0x190
->        driver_probe_device+0x48/0x110
->        __device_attach_driver+0xc4/0x160
->        bus_for_each_drv+0x80/0xe0
->        __device_attach+0xb0/0x1f0
->        device_initial_probe+0x1c/0x2c
->        bus_probe_device+0xa4/0xb0
->        device_add+0x398/0x8ac
->        device_register+0x28/0x40
->        i2c_new_client_device+0x144/0x290
->        of_i2c_register_devices+0x18c/0x230
->        i2c_register_adapter+0x1dc/0x6b0
->        __i2c_add_numbered_adapter+0x68/0xbc
->        i2c_add_adapter+0xb0/0xe0
->        lpi2c_imx_probe+0x354/0x5e0
->        platform_probe+0x70/0xec
->        really_probe+0xc4/0x470
->        __driver_probe_device+0x11c/0x190
->        driver_probe_device+0x48/0x110
->        __device_attach_driver+0xc4/0x160
->        bus_for_each_drv+0x80/0xe0
->        __device_attach+0xb0/0x1f0
->        device_initial_probe+0x1c/0x2c
->        bus_probe_device+0xa4/0xb0
->        deferred_probe_work_func+0xa0/0xfc
->        process_one_work+0x2ac/0x6f4
->        worker_thread+0x7c/0x47c
->        kthread+0x150/0x16c
->        ret_from_fork+0x10/0x20
->=20
-> -> #1 (rtc_pcf85063:560:(&config->regmap)->lock){+.+.}-{3:3}:
->        lock_acquire+0x68/0x8c
->        __mutex_lock+0x9c/0x4d0
->        mutex_lock_nested+0x48/0x5c
->        regmap_lock_mutex+0x1c/0x30
->        regmap_read+0x44/0x80
->        pcf85063_clkout_recalc_rate+0x34/0x80
->        __clk_register+0x520/0x880
->        devm_clk_register+0x64/0xc4
->        pcf85063_probe+0x24c/0x4cc
->        i2c_device_probe+0x10c/0x350
->        really_probe+0xc4/0x470
->        __driver_probe_device+0x11c/0x190
->        driver_probe_device+0x48/0x110
->        __device_attach_driver+0xc4/0x160
->        bus_for_each_drv+0x80/0xe0
->        __device_attach+0xb0/0x1f0
->        device_initial_probe+0x1c/0x2c
->        bus_probe_device+0xa4/0xb0
->        device_add+0x398/0x8ac
->        device_register+0x28/0x40
->        i2c_new_client_device+0x144/0x290
->        of_i2c_register_devices+0x18c/0x230
->        i2c_register_adapter+0x1dc/0x6b0
->        __i2c_add_numbered_adapter+0x68/0xbc
->        i2c_add_adapter+0xb0/0xe0
->        lpi2c_imx_probe+0x354/0x5e0
->        platform_probe+0x70/0xec
->        really_probe+0xc4/0x470
->        __driver_probe_device+0x11c/0x190
->        driver_probe_device+0x48/0x110
->        __device_attach_driver+0xc4/0x160
->        bus_for_each_drv+0x80/0xe0
->        __device_attach+0xb0/0x1f0
->        device_initial_probe+0x1c/0x2c
->        bus_probe_device+0xa4/0xb0
->        deferred_probe_work_func+0xa0/0xfc
->        process_one_work+0x2ac/0x6f4
->        worker_thread+0x7c/0x47c
->        kthread+0x150/0x16c
->        ret_from_fork+0x10/0x20
->=20
-> -> #0 (prepare_lock){+.+.}-{3:3}:
->        __lock_acquire+0x1298/0x20d0
->        lock_acquire.part.0+0xf0/0x250
->        lock_acquire+0x68/0x8c
->        __mutex_lock+0x9c/0x4d0
->        mutex_lock_nested+0x48/0x5c
->        clk_prepare_lock+0x50/0xb0
->        clk_get_rate+0x28/0x80
->        lpi2c_imx_xfer+0xb0/0xa9c
->        __i2c_transfer+0x174/0xa80
->        i2c_transfer+0x68/0x130
->        regmap_i2c_read+0x64/0xb0
->        _regmap_raw_read+0x114/0x440
->        regmap_raw_read+0x19c/0x28c
->        regmap_bulk_read+0x1b8/0x244
->        at24_read+0x14c/0x2c4
->        nvmem_reg_read+0x2c/0x54
->        bin_attr_nvmem_read+0x8c/0xbc
->        sysfs_kf_bin_read+0x74/0x94
->        kernfs_fop_read_iter+0xb0/0x1d0
->        new_sync_read+0xf0/0x184
->        vfs_read+0x154/0x1f0
->        ksys_read+0x70/0x100
->        __arm64_sys_read+0x24/0x30
->        invoke_syscall+0x50/0x120
->        el0_svc_common.constprop.0+0x68/0x124
->        do_el0_svc+0x30/0x9c
->        el0_svc+0x54/0x110
->        el0t_64_sync_handler+0xa4/0x130
->        el0t_64_sync+0x1a0/0x1a4
->=20
-> other info that might help us debug this:
->=20
-> Chain exists of:
->   prepare_lock --> rtc_pcf85063:560:(&config->regmap)->lock -->
-> i2c_register_adapter
->=20
->  Possible unsafe locking scenario:
->=20
->        CPU0                    CPU1
->        ----                    ----
->   lock(i2c_register_adapter);
->                              =20
-> lock(rtc_pcf85063:560:(&config->regmap)->lock); lock(i2c_register_adapter=
-);
->   lock(prepare_lock);
->=20
->  *** DEADLOCK ***
->=20
-> 4 locks held by .../2332:
->  #0: ffff0000146eb288 (&of->mutex){+.+.}-{3:3}, at:
-> kernfs_fop_read_iter+0x74/0x1d0 #1: ffff000010fe4400
-> (kn->active#72){.+.+}-{0:0}, at: kernfs_fop_read_iter+0x7c/0x1d0 #2:
-> ffff0000110168e8 (&at24->lock){+.+.}-{3:3}, at: at24_read+0x8c/0x2c4 #3:
-> ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at:
-> i2c_adapter_lock_bus+0x2c/0x3c
->=20
-> stack backtrace:
-> CPU: 1 PID: 2332 Comm: ... Tainted: G           O      5.15.71+... #1
-> Hardware name: ... (DT)
-> Call trace:
->  dump_backtrace+0x0/0x1d4
->  show_stack+0x20/0x2c
->  dump_stack_lvl+0x8c/0xb8
->  dump_stack+0x18/0x34
->  print_circular_bug+0x1f8/0x200
->  check_noncircular+0x130/0x144
->  __lock_acquire+0x1298/0x20d0
->  lock_acquire.part.0+0xf0/0x250
->  lock_acquire+0x68/0x8c
->  __mutex_lock+0x9c/0x4d0
->  mutex_lock_nested+0x48/0x5c
->  clk_prepare_lock+0x50/0xb0
->  clk_get_rate+0x28/0x80
->  lpi2c_imx_xfer+0xb0/0xa9c
->  __i2c_transfer+0x174/0xa80
->  i2c_transfer+0x68/0x130
->  regmap_i2c_read+0x64/0xb0
->  _regmap_raw_read+0x114/0x440
->  regmap_raw_read+0x19c/0x28c
->  regmap_bulk_read+0x1b8/0x244
->  at24_read+0x14c/0x2c4
->  nvmem_reg_read+0x2c/0x54
->  bin_attr_nvmem_read+0x8c/0xbc
->  sysfs_kf_bin_read+0x74/0x94
->  kernfs_fop_read_iter+0xb0/0x1d0
->  new_sync_read+0xf0/0x184
->  vfs_read+0x154/0x1f0
->  ksys_read+0x70/0x100
->  __arm64_sys_read+0x24/0x30
->  invoke_syscall+0x50/0x120
->  el0_svc_common.constprop.0+0x68/0x124
->  do_el0_svc+0x30/0x9c
->  el0_svc+0x54/0x110
->  el0t_64_sync_handler+0xa4/0x130
->  el0t_64_sync+0x1a0/0x1a4
->=20
-> Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
-> ---
-> Changelog:
-> v4: switched to atomic_t
->     included clk_rate_exclusive_get()/clk_rate_exclusive_put()
-> v3: fixed build error reported by kernel test robot <lkp@intel.com>
->   =20
-> https://lore.kernel.org/oe-kbuild-all/202303102010.pAv56wKs-lkp@intel.com/
-> v2: added clk_notifier as Alexander suggested
->=20
->  drivers/i2c/busses/i2c-imx-lpi2c.c | 47 +++++++++++++++++++++++++++---
->  1 file changed, 43 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c
-> b/drivers/i2c/busses/i2c-imx-lpi2c.c index 1af0a637d7f1..b31d29d684fa
-> 100644
-> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
-> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
-> @@ -5,6 +5,7 @@
->   * Copyright 2016 Freescale Semiconductor, Inc.
->   */
->=20
-> +#include <linux/atomic.h>
->  #include <linux/clk.h>
->  #include <linux/completion.h>
->  #include <linux/delay.h>
-> @@ -100,6 +101,8 @@ struct lpi2c_imx_struct {
->  	__u8			*rx_buf;
->  	__u8			*tx_buf;
->  	struct completion	complete;
-> +	struct notifier_block	clk_change_nb;
-> +	atomic_t		rate_per;
->  	unsigned int		msglen;
->  	unsigned int		delivered;
->  	unsigned int		block_data;
-> @@ -198,25 +201,39 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct
-> *lpi2c_imx) } while (1);
->  }
->=20
-> +static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
-> +				   unsigned long action, void *data)
-> +{
-> +	struct clk_notifier_data *ndata =3D data;
-> +	struct lpi2c_imx_struct *lpi2c_imx =3D container_of(nb,
-> +							  struct=20
-lpi2c_imx_struct,
-> +							 =20
-clk_change_nb);
-> +
-> +	if (action & POST_RATE_CHANGE)
-> +		atomic_set(&lpi2c_imx->rate_per, ndata->new_rate);
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
->  /* CLKLO =3D I2C_CLK_RATIO * CLKHI, SETHOLD =3D CLKHI, DATAVD =3D CLKHI/=
-2 */
->  static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
->  {
->  	u8 prescale, filt, sethold, clkhi, clklo, datavd;
-> -	unsigned int clk_rate, clk_cycle;
-> +	unsigned int clk_cycle;
->  	enum lpi2c_imx_pincfg pincfg;
->  	unsigned int temp;
->=20
->  	lpi2c_imx_set_mode(lpi2c_imx);
->=20
-> -	clk_rate =3D clk_get_rate(lpi2c_imx->clks[0].clk);
->  	if (lpi2c_imx->mode =3D=3D HS || lpi2c_imx->mode =3D=3D ULTRA_FAST)
->  		filt =3D 0;
->  	else
->  		filt =3D 2;
->=20
->  	for (prescale =3D 0; prescale <=3D 7; prescale++) {
-> -		clk_cycle =3D clk_rate / ((1 << prescale) * lpi2c_imx-
->bitrate)
-> -			    - 3 - (filt >> 1);
-> +		clk_cycle =3D atomic_read(&lpi2c_imx->rate_per) /
-> +			    ((1 << prescale) * lpi2c_imx->bitrate) - 3 -
-> +			    (filt >> 1);
->  		clkhi =3D (clk_cycle + I2C_CLK_RATIO) / (I2C_CLK_RATIO + 1);
->  		clklo =3D clk_cycle - clkhi;
->  		if (clklo < 64)
-> @@ -594,6 +611,28 @@ static int lpi2c_imx_probe(struct platform_device
-> *pdev) if (ret)
->  		return ret;
->=20
-> +	lpi2c_imx->clk_change_nb.notifier_call =3D lpi2c_imx_clk_change_cb;
-> +	ret =3D devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
-> +					 &lpi2c_imx->clk_change_nb);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret,
-> +				     "can't register peripheral clock=20
-notifier\n");
-> +	/*
-> +	 * Lock the clock rate to avoid rate change between clk_get_rate()=20
-and
-> +	 * atomic_set()
-> +	 */
-> +	ret =3D clk_rate_exclusive_get(lpi2c_imx->clks[0].clk);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "can't lock I2C peripheral clock=20
-rate\n");
-> +		return ret;
-> +	}
-> +	atomic_set(&lpi2c_imx->rate_per, clk_get_rate(lpi2c_imx-
->clks[0].clk));
-> +	clk_rate_exclusive_put(lpi2c_imx->clks[0].clk);
-> +	if (!atomic_read(&lpi2c_imx->rate_per)) {
-> +		dev_err(&pdev->dev, "can't get I2C peripheral clock=20
-rate\n");
-> +		return -EINVAL;
-> +	}
-> +
->  	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
->  	pm_runtime_use_autosuspend(&pdev->dev);
->  	pm_runtime_get_noresume(&pdev->dev);
-
-
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
+diff --git a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
+index 102e1fc7ee38..c5924e7b9e36
+--- a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
++++ b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
+@@ -63,10 +63,9 @@ static void s6d7aa0_reset(struct s6d7aa0 *ctx)
+ 	msleep(50);
+ }
+ 
+-static int s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
++static void s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
+ {
+ 	struct mipi_dsi_device *dsi = ctx->dsi;
+-	int ret = 0;
+ 
+ 	if (lock) {
+ 		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0xa5, 0xa5);
+@@ -79,8 +78,6 @@ static int s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
+ 		if (ctx->desc->use_passwd3)
+ 			mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0xa5, 0xa5);
+ 	}
+-
+-	return ret;
+ }
+ 
+ static int s6d7aa0_on(struct s6d7aa0 *ctx)
+@@ -238,11 +235,7 @@ static int s6d7aa0_lsl080al02_init(struct s6d7aa0 *ctx)
+ 
+ 	usleep_range(20000, 25000);
+ 
+-	ret = s6d7aa0_lock(ctx, false);
+-	if (ret < 0) {
+-		dev_err(dev, "Failed to unlock registers: %d\n", ret);
+-		return ret;
+-	}
++	s6d7aa0_lock(ctx, false);
+ 
+ 	mipi_dsi_dcs_write_seq(dsi, MCS_OTP_RELOAD, 0x00, 0x10);
+ 	usleep_range(1000, 1500);
+@@ -266,11 +259,7 @@ static int s6d7aa0_lsl080al02_init(struct s6d7aa0 *ctx)
+ 	msleep(120);
+ 	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_ADDRESS_MODE, 0x00);
+ 
+-	ret = s6d7aa0_lock(ctx, true);
+-	if (ret < 0) {
+-		dev_err(dev, "Failed to lock registers: %d\n", ret);
+-		return ret;
+-	}
++	s6d7aa0_lock(ctx, true);
+ 
+ 	ret = mipi_dsi_dcs_set_display_on(dsi);
+ 	if (ret < 0) {
+@@ -327,11 +316,7 @@ static int s6d7aa0_lsl080al03_init(struct s6d7aa0 *ctx)
+ 
+ 	usleep_range(20000, 25000);
+ 
+-	ret = s6d7aa0_lock(ctx, false);
+-	if (ret < 0) {
+-		dev_err(dev, "Failed to unlock registers: %d\n", ret);
+-		return ret;
+-	}
++	s6d7aa0_lock(ctx, false);
+ 
+ 	if (ctx->desc->panel_type == S6D7AA0_PANEL_LSL080AL03) {
+ 		mipi_dsi_dcs_write_seq(dsi, MCS_BL_CTL, 0xc7, 0x00, 0x29);
+@@ -370,11 +355,7 @@ static int s6d7aa0_lsl080al03_init(struct s6d7aa0 *ctx)
+ 		return ret;
+ 	}
+ 
+-	ret = s6d7aa0_lock(ctx, true);
+-	if (ret < 0) {
+-		dev_err(dev, "Failed to lock registers: %d\n", ret);
+-		return ret;
+-	}
++	s6d7aa0_lock(ctx, true);
+ 
+ 	ret = mipi_dsi_dcs_set_display_on(dsi);
+ 	if (ret < 0) {
+-- 
+2.39.0
 
