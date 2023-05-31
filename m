@@ -2,117 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4EF717C11
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A95717C1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235565AbjEaJgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
+        id S235579AbjEaJit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbjEaJgf (ORCPT
+        with ESMTP id S235573AbjEaJio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:36:35 -0400
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBA83C0;
-        Wed, 31 May 2023 02:36:32 -0700 (PDT)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.46
-        by mg.richtek.com with MailGates ESMTP Server V5.0(761:0:AUTH_RELAY)
-        (envelope-from <cy_huang@richtek.com>); Wed, 31 May 2023 17:36:19 +0800 (CST)
-Received: from ex3.rt.l (192.168.10.46) by ex3.rt.l (192.168.10.46) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Wed, 31 May
- 2023 17:36:18 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex3.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
- Transport; Wed, 31 May 2023 17:36:18 +0800
-Date:   Wed, 31 May 2023 17:36:18 +0800
-From:   ChiYuan Huang <cy_huang@richtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <sre@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <chiaen_wu@richtek.com>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: power: supply: Fix rt9467 charger enable
- gpio active level
-Message-ID: <20230531093618.GA17005@linuxcarl2.richtek.com>
-References: <1685522813-14481-1-git-send-email-cy_huang@richtek.com>
- <1f966e93-50c3-142e-620c-8fbb16e9b1a7@linaro.org>
+        Wed, 31 May 2023 05:38:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C25310F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:38:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685525887;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bGxc4eRfK6pbwqqh2NtDpBVJvcM3fuyjggZTA4cPMnI=;
+        b=WG0mMi/DxzWJI2byMwwr7rqtQdX+WnE9CjnuqDVSlpo2Vhpz18rUps7c+b79cbyjqT+cuu
+        6bvYa6ZwprX21RGP3o2h9FKSSIBWddwuGLCHKg5PIP66Dq1VWUUA/s+iDzh73rXY+JGPHP
+        iCziwD+RRQvXgUXpn1jCZ9c7C9d45bc=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-199-pAF1QaxAOMaJBoZhdopU2g-1; Wed, 31 May 2023 05:38:05 -0400
+X-MC-Unique: pAF1QaxAOMaJBoZhdopU2g-1
+Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-4edc7ab63ccso3179111e87.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:38:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685525884; x=1688117884;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bGxc4eRfK6pbwqqh2NtDpBVJvcM3fuyjggZTA4cPMnI=;
+        b=kPTFBfWswFekHIdLfBvo3vi38XyTlPmfBemiOYBirakdoz3+bVvJsqEKR/vQW9A/Ic
+         ADeNLLLrgVvVBqj5GY1EG+kXtHRqwxAondF3PrRH10qYPOZ6juztKTWwWGu+TWJzKVES
+         vubNqrqVqU1dzM48Zk5qePsz97PGdTJTtPnZNbpZSTUKVcNN4QZPHGVWZtqL0ieVZvQo
+         KE9E9iWEFSEpLexltUUC0P5Wl88Vn5QMLv2nahknC8UWRh/Jn2YQ3s3Qdqy+Le+Kx64F
+         YGvrAp6dByr0Uiyv8R+5uiHKYMDUZ0Po3wtJOfYMOBKw/SihE8ZsRuf3ypDcMFIHVz0p
+         5LFg==
+X-Gm-Message-State: AC+VfDyQ0S7X5tvbF7huL+iply67s/i67Xhhbf9U2RkhQQEPfViLGKNT
+        3VKtzCBWwZBsiFVg9eTCK19K7nPKvaPUfNgdNQBWXCVyZY9ywS43TdhELPZFIoKCxqDi7w+Do40
+        jIrx9Sa1pZXhyIShRb9dLPi5M
+X-Received: by 2002:ac2:43dc:0:b0:4f1:3bd7:e53a with SMTP id u28-20020ac243dc000000b004f13bd7e53amr2255704lfl.49.1685525884432;
+        Wed, 31 May 2023 02:38:04 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7ZhKAnRMcKLkCdLj+6eqisJiHpOFurOIspfewhQhx3pSYMQ1GSECzcGpZqw6YxX6XDmQp2hQ==
+X-Received: by 2002:ac2:43dc:0:b0:4f1:3bd7:e53a with SMTP id u28-20020ac243dc000000b004f13bd7e53amr2255690lfl.49.1685525884068;
+        Wed, 31 May 2023 02:38:04 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:280:24f0:eb4a:c9d8:c8bb:c0b0? ([2a01:e0a:280:24f0:eb4a:c9d8:c8bb:c0b0])
+        by smtp.gmail.com with ESMTPSA id x13-20020a5d54cd000000b003063db8f45bsm6157419wrv.23.2023.05.31.02.38.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 02:38:03 -0700 (PDT)
+Message-ID: <cdd8953e-2187-32f7-bb3c-aaf54581775d@redhat.com>
+Date:   Wed, 31 May 2023 11:38:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1f966e93-50c3-142e-620c-8fbb16e9b1a7@linaro.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH net v2] net/mlx5: Fix setting of irq->map.index for static
+ IRQ case
+Content-Language: en-US
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Shay Drory <shayd@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Eli Cohen <elic@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Simon Horman <simon.horman@corigine.com>,
+        linux-rdma@vger.kernel.org
+References: <20230531084856.2091666-1-schnelle@linux.ibm.com>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clegoate@redhat.com>
+In-Reply-To: <20230531084856.2091666-1-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 11:17:37AM +0200, Krzysztof Kozlowski wrote:
-> On 31/05/2023 10:46, cy_huang@richtek.com wrote:
-> > From: ChiYuan Huang <cy_huang@richtek.com>
-> > 
-> > The RT9467 charger enable pin is an external signal that used to enable
-> > battery charging. From the datasheet, the active level is low. Although
-> > it's already configured to logic low at driver probe function, but the
+On 5/31/23 10:48, Niklas Schnelle wrote:
+> When dynamic IRQ allocation is not supported all IRQs are allocated up
+> front in mlx5_irq_table_create() instead of dynamically as part of
+> mlx5_irq_alloc(). In the latter dynamic case irq->map.index is set
+> via the mapping returned by pci_msix_alloc_irq_at(). In the static case
+> and prior to commit 1da438c0ae02 ("net/mlx5: Fix indexing of mlx5_irq")
+> irq->map.index was set in mlx5_irq_alloc() twice once initially to 0 and
+> then to the requested index before storing in the xarray. After this
+> commit it is only set to 0 which breaks all other IRQ mappings.
 > 
-> NAK.
+> Fix this by setting irq->map.index to the requested index together with
+> irq->map.virq and improve the related comment to make it clearer which
+> cases it deals with.
 > 
-> You mix two different things. Driver behavior and DTS. Driver can
-> operate either on real level - matching hardware - or on logical level
-> (high as enable, low as disable). First choice is usually wrong, because
-> it does not allow inverted signals.
-> 
-> 'Correcting' bindings to wrong approach is wrong. If the signal is
-> active low, then the flag is active low. Simple as that.
->
-If my understanding is right, so the correct way is to fix the driver code,
-not binding exmaple.
+> Tested-by: Mark Brown <broonie@kernel.org>
+> Reviewed-by: Mark Brown <broonie@kernel.org>
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> Reviewed-by: Eli Cohen <elic@nvidia.com>
+> Fixes: 1da438c0ae02 ("net/mlx5: Fix indexing of mlx5_irq")
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-> > current binding example declared it as 'GPIO_ACTIVE_LOW', this causes
-> > this pin be output high and disable battery charging.
-> > 
-> > Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > ---
-> > Hi,
-> > 
-> >   This patch is to fix the active level for charger enable gpio polarity.
-> 
-> This is just example - it does not fix anything...
-> 
-Sorry, this issue comes from the customer. They directly copy the example into their
-platform dts. That's why originally I think it may be a fix.
+I was seeing the issue on a zLPAR with a mlx5 VF device. The patch fixes it.
 
-Anyway, you're right. To maintain the maximum flexibility, the choice shouldn't be to fix
-the example. It has to correct the driver code for this pin behavior.
+Tested-by: Cédric Le Goater <clg@redhat.com>
 
-Thanks.
-> > Currently, the wrong active level makes the user confused and
-> > unexpectedly disable battery charging by default.
-> > ---
-> >  Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
-> > index 3723717..cdc7678 100644
-> > --- a/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
-> > +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
-> > @@ -69,7 +69,7 @@ examples:
-> >          reg = <0x5b>;
-> >          wakeup-source;
-> >          interrupts-extended = <&gpio_intc 32 IRQ_TYPE_LEVEL_LOW>;
-> > -        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_LOW>;
-> > +        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_HIGH>;
-> >  
-> >          rt9467_otg_vbus: usb-otg-vbus-regulator {
-> >            regulator-name = "rt9467-usb-otg-vbus";
+Thanks,
+
+C.
+
+
+
+> ---
+> v1 -> v2:
+> - Added R-bs/Acks
+> - Fixed typos in commit message
 > 
-> Best regards,
-> Krzysztof
+>   drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c | 9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
 > 
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
+> index db5687d9fec9..fd5b43e8f3bb 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/pci_irq.c
+> @@ -232,12 +232,13 @@ struct mlx5_irq *mlx5_irq_alloc(struct mlx5_irq_pool *pool, int i,
+>   	if (!irq)
+>   		return ERR_PTR(-ENOMEM);
+>   	if (!i || !pci_msix_can_alloc_dyn(dev->pdev)) {
+> -		/* The vector at index 0 was already allocated.
+> -		 * Just get the irq number. If dynamic irq is not supported
+> -		 * vectors have also been allocated.
+> +		/* The vector at index 0 is always statically allocated. If
+> +		 * dynamic irq is not supported all vectors are statically
+> +		 * allocated. In both cases just get the irq number and set
+> +		 * the index.
+>   		 */
+>   		irq->map.virq = pci_irq_vector(dev->pdev, i);
+> -		irq->map.index = 0;
+> +		irq->map.index = i;
+>   	} else {
+>   		irq->map = pci_msix_alloc_irq_at(dev->pdev, MSI_ANY_INDEX, af_desc);
+>   		if (!irq->map.virq) {
+
