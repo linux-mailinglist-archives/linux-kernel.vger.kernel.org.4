@@ -2,95 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1B8718611
+	by mail.lfdr.de (Postfix) with ESMTP id 13FB871860F
 	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234609AbjEaPVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
+        id S234535AbjEaPVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234420AbjEaPVR (ORCPT
+        with ESMTP id S234412AbjEaPVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:21:17 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7E07C0;
-        Wed, 31 May 2023 08:21:16 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D675B1756;
-        Wed, 31 May 2023 08:22:01 -0700 (PDT)
-Received: from e120937-lin.. (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8537A3F663;
-        Wed, 31 May 2023 08:21:14 -0700 (PDT)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
-        vincent.guittot@linaro.org, tarek.el-sherbiny@arm.com,
-        nicola.mazzucato@arm.com, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, wbartczak@marvell.com,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Subject: [PATCH v3 3/3] powercap: arm_scmi: Add support for disabling powercaps on a zone
-Date:   Wed, 31 May 2023 16:20:39 +0100
-Message-Id: <20230531152039.2363181-4-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230531152039.2363181-1-cristian.marussi@arm.com>
-References: <20230531152039.2363181-1-cristian.marussi@arm.com>
+        Wed, 31 May 2023 11:21:12 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6591107;
+        Wed, 31 May 2023 08:21:07 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64d5b4c3ffeso4107997b3a.2;
+        Wed, 31 May 2023 08:21:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685546467; x=1688138467;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=IqLBTLdww5a5qlwx/ErHlmc0YW7ggTL+TwrPcGnVcX4=;
+        b=bT1zvjsVW/ZrkiSShMdEqUra1jUkOaVgwIt/1jznhYZvXV6zCPFVA+l15MDE/OM0ZC
+         QxlZ7IqcX+fbVhGL5MstdnbRIUyjoIM7ngh2tgimMtkkZcCzskyYdPxn8x2ye/n7P5pV
+         j1NqLMYMliA95JkPluppdZ91Q19ncH7FWXLwLpG07jjn5BLRQFiMj5yhupdTZW+zE/2u
+         3VKnEgkRQ30dkn8OxTBDhdX67TzbQrPJpL3wgQE+7SWM30Ck9HrZj8OeCZwHJFzVZjcI
+         dA8ZtK3UEuGDAdo/JGD0tE0HnGC1SE2FkQUljcvAfzQwYhTKoQWTqamAY09SsK5PheSM
+         anlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685546467; x=1688138467;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IqLBTLdww5a5qlwx/ErHlmc0YW7ggTL+TwrPcGnVcX4=;
+        b=J9swOYcpxtKly318RKxJhRFvj4qHrO/v7vmJDY/M8DLS1lbBykKLXSYGvUlQaCflJO
+         B8Empso52gc3dM01FUJh0VuXjivtWM+cX0EFH0X1sYoVSVHynxepP6lYwFXjFwC8hxWS
+         A67jgBRjcRBEI7RAm4hEIYyI4PyKW/xIZbnGlqfJQvo3GRr/VmcXGt0hXTPBeFruKgjr
+         oWxXFfAgRwQGGpcZa8MV1wk77GhcWs/T2Y/vUmvBkIK0BJkbWanjd49gzzlHVbW+/oov
+         TdMKiZAwGOdiui3jC83ZcxlM2Ly76fycA6Q+t+sOZwp4SanQgBmn16AhFFbL7BGlCeiJ
+         u32A==
+X-Gm-Message-State: AC+VfDypECqjpvZ0cBprJgT+FsA697bs/ZoBpNy2AxVjtTe3AcRFxWaf
+        Qhzw/htOEWnmgTiBXsavLCM=
+X-Google-Smtp-Source: ACHHUZ7qWb5EJ1Vta3RUHbsEc0FnXIcF/1yY6AZHnCnRRKEUMs+5U3MNoBrgWvAyebdKfa9LW1rKcA==
+X-Received: by 2002:a05:6a20:3d89:b0:101:6a2f:2a0e with SMTP id s9-20020a056a203d8900b001016a2f2a0emr5629189pzi.18.1685546467120;
+        Wed, 31 May 2023 08:21:07 -0700 (PDT)
+Received: from ?IPv6:2605:59c8:448:b800:82ee:73ff:fe41:9a02? ([2605:59c8:448:b800:82ee:73ff:fe41:9a02])
+        by smtp.googlemail.com with ESMTPSA id k184-20020a6324c1000000b0052cbd854927sm1415909pgk.18.2023.05.31.08.21.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 08:21:05 -0700 (PDT)
+Message-ID: <81d8da838601a2029e97937a952652039285cb4e.camel@gmail.com>
+Subject: Re: [PATCH net-next v3 06/12] net: skbuff: don't include
+ <net/page_pool.h> into <linux/skbuff.h>
+From:   Alexander H Duyck <alexander.duyck@gmail.com>
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Paul Menzel <pmenzel@molgen.mpg.de>, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
+Date:   Wed, 31 May 2023 08:21:03 -0700
+In-Reply-To: <20230530150035.1943669-7-aleksander.lobakin@intel.com>
+References: <20230530150035.1943669-1-aleksander.lobakin@intel.com>
+         <20230530150035.1943669-7-aleksander.lobakin@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-3.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to disable/enable powercapping on a zone.
+On Tue, 2023-05-30 at 17:00 +0200, Alexander Lobakin wrote:
+> Currently, touching <net/page_pool.h> triggers a rebuild of more than
+> a half of the kernel. That's because it's included in <linux/skbuff.h>.
+>=20
+> In 6a5bcd84e886 ("page_pool: Allow drivers to hint on SKB recycling"),
+> Matteo included it to be able to call a couple functions defined there.
+> Then, in 57f05bc2ab24 ("page_pool: keep pp info as long as page pool
+> owns the page") one of the calls was removed, so only one left.
+> It's call to page_pool_return_skb_page() in napi_frag_unref(). The
+> function is external and doesn't have any dependencies. Having include
+> of very niche page_pool.h only for that looks like an overkill.
+> Instead, move the declaration of that function to skbuff.h itself, with
+> a small comment that it's a special guest and should not be touched.
+> Now, after a few include fixes in the drivers, touching page_pool.h
+> only triggers rebuilding of the drivers using it and a couple core
+> networking files.
+>=20
+> Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+> ---
+>  drivers/net/ethernet/engleder/tsnep_main.c               | 1 +
+>  drivers/net/ethernet/freescale/fec_main.c                | 1 +
+>  drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c | 1 +
+>  drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c     | 1 +
+>  drivers/net/ethernet/mellanox/mlx5/core/en/params.c      | 1 +
+>  drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c         | 1 +
+>  drivers/net/wireless/mediatek/mt76/mt76.h                | 1 +
+>  include/linux/skbuff.h                                   | 4 +++-
+>  include/net/page_pool.h                                  | 2 --
+>  9 files changed, 10 insertions(+), 3 deletions(-)
+>=20
+>=20
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
-v2 --> v3
-- rebased on v6.4-rc4
-- added Acked-by
----
- drivers/powercap/arm_scmi_powercap.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+<...>
 
-diff --git a/drivers/powercap/arm_scmi_powercap.c b/drivers/powercap/arm_scmi_powercap.c
-index 05d0e516176a..5231f6d52ae3 100644
---- a/drivers/powercap/arm_scmi_powercap.c
-+++ b/drivers/powercap/arm_scmi_powercap.c
-@@ -70,10 +70,26 @@ static int scmi_powercap_get_power_uw(struct powercap_zone *pz,
- 	return 0;
- }
- 
-+static int scmi_powercap_zone_enable_set(struct powercap_zone *pz, bool mode)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	return powercap_ops->cap_enable_set(spz->ph, spz->info->id, mode);
-+}
-+
-+static int scmi_powercap_zone_enable_get(struct powercap_zone *pz, bool *mode)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	return powercap_ops->cap_enable_get(spz->ph, spz->info->id, mode);
-+}
-+
- static const struct powercap_zone_ops zone_ops = {
- 	.get_max_power_range_uw = scmi_powercap_get_max_power_range_uw,
- 	.get_power_uw = scmi_powercap_get_power_uw,
- 	.release = scmi_powercap_zone_release,
-+	.set_enable = scmi_powercap_zone_enable_set,
-+	.get_enable = scmi_powercap_zone_enable_get,
- };
- 
- static void scmi_powercap_normalize_cap(const struct scmi_powercap_zone *spz,
--- 
-2.34.1
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 5951904413ab..6d5eee932b95 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -32,7 +32,6 @@
+>  #include <linux/if_packet.h>
+>  #include <linux/llist.h>
+>  #include <net/flow.h>
+> -#include <net/page_pool.h>
+>  #if IS_ENABLED(CONFIG_NF_CONNTRACK)
+>  #include <linux/netfilter/nf_conntrack_common.h>
+>  #endif
+> @@ -3422,6 +3421,9 @@ static inline void skb_frag_ref(struct sk_buff *skb=
+, int f)
+>  	__skb_frag_ref(&skb_shinfo(skb)->frags[f]);
+>  }
+> =20
+> +/* Internal from net/core/page_pool.c, do not use in drivers directly */
+> +bool page_pool_return_skb_page(struct page *page, bool napi_safe);
+> +
+>  static inline void
+>  napi_frag_unref(skb_frag_t *frag, bool recycle, bool napi_safe)
+>  {
+> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+> index 126f9e294389..2a9ce2aa6eb2 100644
+> --- a/include/net/page_pool.h
+> +++ b/include/net/page_pool.h
+> @@ -240,8 +240,6 @@ inline enum dma_data_direction page_pool_get_dma_dir(=
+struct page_pool *pool)
+>  	return pool->p.dma_dir;
+>  }
+> =20
+> -bool page_pool_return_skb_page(struct page *page, bool napi_safe);
+> -
+>  struct page_pool *page_pool_create(const struct page_pool_params *params=
+);
+> =20
+>  struct xdp_mem_info;
 
+So the code as-is works, so I am providing my "Reviewed-by".
+Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
+
+Consider the rest of this a suggestion or a "nice to have".
+
+I wonder if we shouldn't also look at restructuring the function and
+just moving it to net/core/skbuff.c somewhere next to skb_pp_recycle.
+
+I suspect we could look at pulling parts of it out as well. The
+pp_magic check should always be succeeding unless we have pages getting
+routed the wrong way somewhere. So maybe we should look at pulling it
+out and moving it to another part of the path such as
+__page_pool_put_page() and making it a bit more visible to catch those
+cases.
