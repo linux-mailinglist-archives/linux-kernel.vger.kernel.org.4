@@ -2,130 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA50718A1E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC56718A24
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbjEaT2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 15:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55226 "EHLO
+        id S229921AbjEaT3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 15:29:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjEaT2c (ORCPT
+        with ESMTP id S229961AbjEaT3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 15:28:32 -0400
-Received: from out-11.mta1.migadu.com (out-11.mta1.migadu.com [IPv6:2001:41d0:203:375::b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F210125
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:28:30 -0700 (PDT)
-Date:   Wed, 31 May 2023 19:28:17 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685561308;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fExwE02o2n9ir13h12C6sJUjb5CZIzSGV94ltztSeYU=;
-        b=j6oi+jpW4qEEAfeTqR1gVmlOIouoNE2cZuCQ9g4gmWt/4cyclojreEVXHu8btfeiGiVcDJ
-        x4P5UZRMb0dW2T4B2o8jFedTmwMjh8UL0366wjygZebZR43zxO9qUMsie4B5b5unRoLQTv
-        JJJh2wVtTtDIseRjA+dHi+WATyCzmmE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Anup Patel <anup@brainfault.org>,
-        Ben Gardon <bgardon@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Gavin Shan <gshan@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Larabel <michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-        linux-mm@google.com
-Subject: Re: [PATCH mm-unstable v2 04/10] kvm/arm64: make stage2 page tables
- RCU safe
-Message-ID: <ZHef0VsZvZ1Vnz0u@linux.dev>
-References: <20230526234435.662652-1-yuzhao@google.com>
- <20230526234435.662652-5-yuzhao@google.com>
- <ZHJHJPBF6euzOFdw@linux.dev>
- <CAOUHufa74CufHziHSquO5bZwbFXz2MNssBzW+AH7=Xo5RCnQ0A@mail.gmail.com>
- <ZHZQdQAApIrw6fBu@linux.dev>
- <CAOUHufZOkBmZJgCU2xW2B8S3P3TWERHezy0xKWY9_TeyV9K7Rg@mail.gmail.com>
+        Wed, 31 May 2023 15:29:44 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC7E126
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:29:43 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64d293746e0so130836b3a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:29:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1685561383; x=1688153383;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=9NgbkKiBQqIpEF91xVr+29LdXx7Z3U1JUu95ZOY6W68=;
+        b=GOtbf+HFBHytujguCBzpwbFB0BFAns/DKWmjjNtEfZ6LxD5sLwLS55Hs/xVjoAu6QB
+         5bX3RjgSKtX7S7W5WIzCPp4PiTp7HeS6ZNGr0/szMQfIRex7GH40+JeMBaQnIIqORQRF
+         964KphH6Cbeg9anI4YHp0rXynfUno2M2NgG+U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685561383; x=1688153383;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9NgbkKiBQqIpEF91xVr+29LdXx7Z3U1JUu95ZOY6W68=;
+        b=RIEKcUs3KEKfALSJ7Z9vCvqUINEHNzgXEBRkviB58Li2aoBQ1I8itD4yQZSSk5CvIb
+         3kjst5CqigwKIXnRDrHA65CVN6I0bM7nmmG2ziEE1HKh4NKwbq2Z2jfr7Y5hhf2cPVIv
+         pXCwiCTsOMnPQPVsZRgQ7apF6bkBxwkdBAT+VyZOvluBs4jvpQOytIfSnzTvl9FBGnwq
+         33mu1YRW0m9L8gV9E0kQTbg8jNigatzC9M+CKKrC811+zHa83/Y0FluWJExcaUhmf5hI
+         wnQd9B0tDMnQCBuJ3RJZ7Tt6aiNE0i1E18YYz9K9utYsvCEeJEPPa98QnYQ/HM4GMMW2
+         Ox1A==
+X-Gm-Message-State: AC+VfDyK+VSTxLBif4WBjgDh/8clNAn93XRebfJoA60ABPOHMjOqjKL1
+        vDGUkHV7HXJuTpenGhtPdhI1ww==
+X-Google-Smtp-Source: ACHHUZ6m/YjQhdsqdzos44z5v0scf3JVavpJTacmeXOVp/2UtD16TL5R3M8wpvJliQgU2XHYlh8k4A==
+X-Received: by 2002:a05:6a00:1502:b0:63e:6b8a:7975 with SMTP id q2-20020a056a00150200b0063e6b8a7975mr8411028pfu.9.1685561382686;
+        Wed, 31 May 2023 12:29:42 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id a11-20020aa7864b000000b0063d2989d5b4sm3714789pfo.45.2023.05.31.12.29.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 12:29:41 -0700 (PDT)
+Message-ID: <b21ca84f-a5a1-6dde-7efb-5d7ce0283263@broadcom.com>
+Date:   Wed, 31 May 2023 12:29:28 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOUHufZOkBmZJgCU2xW2B8S3P3TWERHezy0xKWY9_TeyV9K7Rg@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net-next v5 2/6] dt-bindings: net: Brcm ASP 2.0 Ethernet
+ controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Justin Chen <justin.chen@broadcom.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        opendmb@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, richardcochran@gmail.com,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        simon.horman@corigine.com
+References: <1684969313-35503-1-git-send-email-justin.chen@broadcom.com>
+ <1684969313-35503-3-git-send-email-justin.chen@broadcom.com>
+ <ce7366d0-616d-f5f4-56be-714e65a0a96e@linaro.org>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <ce7366d0-616d-f5f4-56be-714e65a0a96e@linaro.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000007ce0f405fd025760"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 02:06:55PM -0600, Yu Zhao wrote:
-> On Tue, May 30, 2023 at 1:37 PM Oliver Upton <oliver.upton@linux.dev> wrote:
-> >
-> > Hi Yu,
-> >
-> > On Sat, May 27, 2023 at 02:13:07PM -0600, Yu Zhao wrote:
-> > > On Sat, May 27, 2023 at 12:08 PM Oliver Upton <oliver.upton@linux.dev> wrote:
-> > > > diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-> > > > index 3d61bd3e591d..bfbebdcb4ef0 100644
-> > > > --- a/arch/arm64/kvm/hyp/pgtable.c
-> > > > +++ b/arch/arm64/kvm/hyp/pgtable.c
-> > > > @@ -1019,7 +1019,7 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
-> > > >                                                kvm_granule_size(ctx->level));
-> > > >
-> > > >         if (childp)
-> > > > -               mm_ops->put_page(childp);
-> > > > +               mm_ops->free_removed_table(childp, ctx->level);
-> > >
-> > > Thanks, Oliver.
-> > >
-> > > A couple of things I haven't had the chance to verify -- I'm hoping
-> > > you could help clarify:
-> > > 1. For unmapping, with free_removed_table(), wouldn't we have to look
-> > > into the table we know it's empty unnecessarily?
-> >
-> > As it is currently implemented, yes. But, there's potential to fast-path
-> > the implementation by checking page_count() before starting the walk.
+--0000000000007ce0f405fd025760
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+On 5/31/23 12:18, Krzysztof Kozlowski wrote:
+> On 25/05/2023 01:01, Justin Chen wrote:
+>> From: Florian Fainelli <florian.fainelli@broadcom.com>
+>>
+>> Add a binding document for the Broadcom ASP 2.0 Ethernet
+>> controller.
+>>
+>> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+>> Signed-off-by: Justin Chen <justin.chen@broadcom.com>
+>> ---
+>> v5
+>> 	- Fix compatible string yaml format to properly capture what we want
+>>
+>> v4
+>>          - Adjust compatible string example to reference SoC and HW ver
+>>
+>> v3
+>>          - Minor formatting issues
+>>          - Change channel prop to brcm,channel for vendor specific format
+>>          - Removed redundant v2.0 from compat string
+>>          - Fix ranges field
+>>
+>> v2
+>>          - Minor formatting issues
+>>
+>>   .../devicetree/bindings/net/brcm,asp-v2.0.yaml     | 149 +++++++++++++++++++++
+>>   1 file changed, 149 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+>> new file mode 100644
+>> index 000000000000..c4cd24492bfd
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+>> @@ -0,0 +1,149 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/net/brcm,asp-v2.0.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Broadcom ASP 2.0 Ethernet controller
+>> +
+>> +maintainers:
+>> +  - Justin Chen <justin.chen@broadcom.com>
+>> +  - Florian Fainelli <florian.fainelli@broadcom.com>
+>> +
+>> +description: Broadcom Ethernet controller first introduced with 72165
+>> +
+>> +properties:
+>> +  '#address-cells':
 > 
-> Do you mind posting another patch? I'd be happy to ack it, as well as
-> the one you suggested above.
+> Judging by more comments, there will be a v6, thus please also use
+> consistent quotes - either ' or ".
+> 
+>> +    const: 1
+>> +  '#size-cells':
+>> +    const: 1
+>> +
+>> +  compatible:
+> 
+> As Conor pointed out, compatible is always first.
+> 
+>> +    oneOf:
+>> +      - items:
+>> +          - enum:
+>> +              - brcm,bcm74165-asp
+>> +          - const: brcm,asp-v2.1
+>> +      - items:
+>> +          - enum:
+>> +              - brcm,bcm72165-asp
+>> +          - const: brcm,asp-v2.0
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  ranges: true
+>> +
+>> +  interrupts:
+>> +    minItems: 1
+>> +    items:
+>> +      - description: RX/TX interrupt
+>> +      - description: Port 0 Wake-on-LAN
+>> +      - description: Port 1 Wake-on-LAN
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  ethernet-ports:
+>> +    type: object
+>> +    properties:
+>> +      '#address-cells':
+>> +        const: 1
+>> +      '#size-cells':
+>> +        const: 0
+>> +
+>> +    patternProperties:
+>> +      "^port@[0-9]+$":
+>> +        type: object
+>> +
+>> +        $ref: ethernet-controller.yaml#
+>> +
+>> +        properties:
+>> +          reg:
+>> +            maxItems: 1
+>> +            description: Port number
+>> +
+>> +          brcm,channel:
+>> +            $ref: /schemas/types.yaml#/definitions/uint32
+>> +            description: ASP channel number
+> 
+> Why do you need it? reg defines it. Your description does not explain
+> here much, except copying property name. Can we please avoid
+> descriptions which just copy name?
+> 
+>> +
+>> +        required:
+>> +          - reg
+>> +          - brcm,channel
+>> +
+>> +    additionalProperties: false
+>> +
+>> +patternProperties:
+>> +  "^mdio@[0-9a-f]+$":
+> 
+> Isn't mdio a property of each ethernet port? Existing users
+> (e.g.bcmgenet, owl-emac, switches) do it that way...
 
-I'd rather not take such a patch independent of the test_clear_young
-series if you're OK with that. Do you mind implementing something
-similar to the above patch w/ the proposed optimization if you need it?
+They are sub-nodes of the larger Ethernet controller block, hence the 
+property here.
 
+> 
+> Otherwise how do you define relation-ship? Can one mdio fit multiple ports?
+
+The relationship is established between Ethernet ports and children 
+nodes of the MDIO controller, such as switches or Ethernet PHYs using 
+'phy-handle' for instance. And yes, a single/common MDIO controller 
+could be serving multiple Ethernet ports.
 -- 
-Thanks,
-Oliver
+Florian
+
+
+--0000000000007ce0f405fd025760
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDmQa7eVbhAdNpzb
++RxsdHEbshVITQPAvWnoXCPrITNmMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDUzMTE5Mjk0M1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCAqBrnkIFfEFg/sHZHrhvQnLOD11vkfVkS
+/f9WlwHfiB3HyBFgSPY/g4r5NCPzP/VmyJNCV+/Sy0J1R9gqsL/Ok6EpoznlL323AOaVW/cJT1ve
+OUfxtbJlLJLG2MTW+s+foDjSuvopJZkq70aOlX4bcnhH808P/tsBeMV89Yq6sw0cup0R38GNW9FT
+feaDWsV/P7TgzK/rLuUj3b0T6I2kYNyUAKt3JQoeyf2A1ylZ/TgDIuscnmjlSrhxFRJGJFaa91qH
+gV+lMUEjmm8BKHo2h5sJRu+LJaSnphSuPtPeG/o794tM/ie6VX0nq8M0bk8JhqORvw+TWuiP1FSP
+ErWu
+--0000000000007ce0f405fd025760--
