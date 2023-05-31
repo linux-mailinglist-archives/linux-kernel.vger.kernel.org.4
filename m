@@ -2,224 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E0C717511
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 06:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1470717557
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 06:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234232AbjEaEVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 00:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
+        id S234327AbjEaEZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 00:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbjEaEVH (ORCPT
+        with ESMTP id S229541AbjEaEZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 00:21:07 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1474123
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 21:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685506863; x=1717042863;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FJbhEGm99k655lvM8taUIyNjFHd4qScUk0SSAoJcvM0=;
-  b=CtnzN7XHy+3hNYBlkrTNwnqtootI8VG5TMiv1hFTfwbFl7ecCwUQKn9L
-   uDEXLYOI4ruvY4KY3tTvmKKgPlnJ+Ml24pK6yAXhef2Jrg4H7tNfZZmjN
-   sHm/fWZKjAc6laCAbjBO0r4QOHJULDzA/8h/aEE0hs5Gx5liHhI8qbmWH
-   5h/TlRL6TB8L4n63zJhCA+tHjD+PcdwE+GAgvsm6waRQAjaJIeMga7aRO
-   osdTPOxPGLbrlci3WliqO5CS1PBm0dp/Ux5yQEHhPaAKgQffXROdP/LHF
-   eGMV5BryTo9V9l/w6k8hxmHqMcn/tdlRI3JYnJrP8o7B/EeHlbrynebxg
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="383390910"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="383390910"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 21:21:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="1036870419"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="1036870419"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 30 May 2023 21:20:59 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q4DKU-00014z-1A;
-        Wed, 31 May 2023 04:20:58 +0000
-Date:   Wed, 31 May 2023 12:20:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     ~akihirosuda <akihirosuda@git.sr.ht>, linux-kernel@vger.kernel.org,
-        containers@lists.linux.dev, serge@hallyn.com, brauner@kernel.org,
-        paul@paul-moore.com, ebiederm@xmission.com
-Cc:     oe-kbuild-all@lists.linux.dev, suda.kyoto@gmail.com,
-        akihiro.suda.cz@hco.ntt.co.jp
-Subject: Re: [PATCH linux 3/3] userns: add sysctl "kernel.userns_group_range"
-Message-ID: <202305311221.0GtxUteW-lkp@intel.com>
-References: <168547265011.24337.4306067683997517082-3@git.sr.ht>
+        Wed, 31 May 2023 00:25:18 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9B6711B;
+        Tue, 30 May 2023 21:25:14 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8BxFvEpzHZkx9oCAA--.6413S3;
+        Wed, 31 May 2023 12:25:13 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxi7YmzHZkmsyBAA--.13862S3;
+        Wed, 31 May 2023 12:25:10 +0800 (CST)
+Message-ID: <3c88cab1-e175-ddcf-b323-437890cc2eec@loongson.cn>
+Date:   Wed, 31 May 2023 12:25:10 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <168547265011.24337.4306067683997517082-3@git.sr.ht>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] linux/pci.h: add a dummy implement for pci_clear_master()
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        kernel test robot <lkp@intel.com>
+References: <ZHZYVyqsJjiSNNsP@bhelgaas>
+Content-Language: en-US
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <ZHZYVyqsJjiSNNsP@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Bxi7YmzHZkmsyBAA--.13862S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWF17AF1xXw4xXw47KrW5Awb_yoWrGrWfpa
+        y5KFyjkr18GFWYkws2q343ZFy5uws5Z34Fk34UG34q9a90vFyktF4vyF13CF1fZrWvkFya
+        qr4Yga4UWF45AaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bs8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26F4j6r4U
+        JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8w
+        CF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j
+        6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64
+        vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_
+        Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42
+        IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1pVbDUUUUU=
+        =
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi ~akihirosuda,
+Hi,
 
-kernel test robot noticed the following build warnings:
+On 2023/5/31 04:11, Bjorn Helgaas wrote:
+> On Tue, May 30, 2023 at 06:16:55PM +0800, Sui Jingfeng wrote:
+>> As some arch(m68k for example) doesn't have config_pci enabled, drivers[1]
+>> call pci_clear_master() without config_pci guard can not built.
+>>
+>>     drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:
+>>     In function 'etnaviv_gpu_pci_fini':
+>>>> drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:32:9:
+>>     error: implicit declaration of function 'pci_clear_master';
+>>     did you mean 'pci_set_master'? [-Werror=implicit-function-declaration]
+>>        32 |         pci_clear_master(pdev);
+>>           |         ^~~~~~~~~~~~~~~~
+>>           |         pci_set_master
+>>     cc1: some warnings being treated as errors
+>>
+>> [1] https://patchwork.freedesktop.org/patch/539977/?series=118522&rev=1
+> I don't mind adding a stub if it's needed, but I don't understand why
+> it's needed here.
 
-[auto build test WARNING on linux/master]
+For a single driver that supports both platform devices and PCI devices,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/akihirosuda/group_range-allow-GID-from-2147483648-to-4294967294/20230531-030041
-base:   linux/master
-patch link:    https://lore.kernel.org/r/168547265011.24337.4306067683997517082-3%40git.sr.ht
-patch subject: [PATCH linux 3/3] userns: add sysctl "kernel.userns_group_range"
-config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20230531/202305311221.0GtxUteW-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/7d893a64ad74171c7ad9aa2296da7bc4214bdf37
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review akihirosuda/group_range-allow-GID-from-2147483648-to-4294967294/20230531-030041
-        git checkout 7d893a64ad74171c7ad9aa2296da7bc4214bdf37
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SUBARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=um SUBARCH=x86_64 SHELL=/bin/bash
+Sometimes there is no way to separate the PCI driver part and the 
+platform driver part cleanly and clearly.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305311221.0GtxUteW-lkp@intel.com/
+For example, the module_init() and module_exit() functions,
 
-All warnings (new ones prefixed by >>):
+where we have to register PCI drivers and platform drivers there.
 
->> kernel/user.c:31:38: warning: missing braces around initializer [-Wmissing-braces]
-      31 | struct user_namespace init_user_ns = {
-         |                                      ^
-   ......
-      40 |                 },
-         |                 }
-   ......
-      50 |                 },
-         |                 }
-   ......
-      60 |                 },
-         |                 }
-      61 |         },
-      62 |         .ns.count = REFCOUNT_INIT(3),
-         |                                     }
-   ......
-      65 |         .ns.inum = PROC_USER_INIT_INO,
-         |                                      }
-   ......
-      76 |                 .range = {0, ((gid_t)~0U) - 1},
-         |                           {} {               }
->> kernel/user.c:31:38: warning: missing braces around initializer [-Wmissing-braces]
-      31 | struct user_namespace init_user_ns = {
-         |                                      ^
-   ......
-      40 |                 },
-         |                 }
-   ......
-      50 |                 },
-         |                 }
-   ......
-      60 |                 },
-         |                 }
-      61 |         },
-      62 |         .ns.count = REFCOUNT_INIT(3),
-         |                                     }
-   ......
-      65 |         .ns.inum = PROC_USER_INIT_INO,
-         |                                      }
-   ......
-      76 |                 .range = {0, ((gid_t)~0U) - 1},
-         |                           {} {               }
->> kernel/user.c:31:38: warning: missing braces around initializer [-Wmissing-braces]
-      31 | struct user_namespace init_user_ns = {
-         |                                      ^
-   ......
-      40 |                 },
-         |                 }
-   ......
-      50 |                 },
-         |                 }
-   ......
-      60 |                 },
-         |                 }
-      61 |         },
-      62 |         .ns.count = REFCOUNT_INIT(3),
-         |                                     }
-   ......
-      65 |         .ns.inum = PROC_USER_INIT_INO,
-         |                                      }
-   ......
-      76 |                 .range = {0, ((gid_t)~0U) - 1},
-         |                           {} {               }
+We can't simply let the entire driver depend on PCI in Kconfig,
+
+This will make this driver unable to compile, which it's originally could.
+
+The PCI core could do such a thing for us, and
+
+There is no need to introduce a driver-specific guard then.
 
 
-vim +31 kernel/user.c
+There is already a dummy stub for pci_set_master().
 
-7d893a64ad7417 Akihiro Suda      2023-05-30  26  
-59607db367c57f Serge E. Hallyn   2011-03-23  27  /*
-59607db367c57f Serge E. Hallyn   2011-03-23  28   * userns count is 1 for root user, 1 for init_uts_ns,
-59607db367c57f Serge E. Hallyn   2011-03-23  29   * and 1 for... ?
-59607db367c57f Serge E. Hallyn   2011-03-23  30   */
-aee16ce73c71a2 Pavel Emelyanov   2008-02-08 @31  struct user_namespace init_user_ns = {
-22d917d80e8428 Eric W. Biederman 2011-11-17  32  	.uid_map = {
-22d917d80e8428 Eric W. Biederman 2011-11-17  33  		.nr_extents = 1,
-aa4bf44dc851c6 Christian Brauner 2017-10-25  34  		{
-22d917d80e8428 Eric W. Biederman 2011-11-17  35  			.extent[0] = {
-22d917d80e8428 Eric W. Biederman 2011-11-17  36  				.first = 0,
-22d917d80e8428 Eric W. Biederman 2011-11-17  37  				.lower_first = 0,
-4b06a81f1daee6 Eric W. Biederman 2012-05-19  38  				.count = 4294967295U,
-22d917d80e8428 Eric W. Biederman 2011-11-17  39  			},
-22d917d80e8428 Eric W. Biederman 2011-11-17  40  		},
-aa4bf44dc851c6 Christian Brauner 2017-10-25  41  	},
-22d917d80e8428 Eric W. Biederman 2011-11-17  42  	.gid_map = {
-22d917d80e8428 Eric W. Biederman 2011-11-17  43  		.nr_extents = 1,
-aa4bf44dc851c6 Christian Brauner 2017-10-25  44  		{
-22d917d80e8428 Eric W. Biederman 2011-11-17  45  			.extent[0] = {
-22d917d80e8428 Eric W. Biederman 2011-11-17  46  				.first = 0,
-22d917d80e8428 Eric W. Biederman 2011-11-17  47  				.lower_first = 0,
-4b06a81f1daee6 Eric W. Biederman 2012-05-19  48  				.count = 4294967295U,
-22d917d80e8428 Eric W. Biederman 2011-11-17  49  			},
-22d917d80e8428 Eric W. Biederman 2011-11-17  50  		},
-aa4bf44dc851c6 Christian Brauner 2017-10-25  51  	},
-f76d207a66c3a5 Eric W. Biederman 2012-08-30  52  	.projid_map = {
-f76d207a66c3a5 Eric W. Biederman 2012-08-30  53  		.nr_extents = 1,
-aa4bf44dc851c6 Christian Brauner 2017-10-25  54  		{
-f76d207a66c3a5 Eric W. Biederman 2012-08-30  55  			.extent[0] = {
-f76d207a66c3a5 Eric W. Biederman 2012-08-30  56  				.first = 0,
-f76d207a66c3a5 Eric W. Biederman 2012-08-30  57  				.lower_first = 0,
-f76d207a66c3a5 Eric W. Biederman 2012-08-30  58  				.count = 4294967295U,
-f76d207a66c3a5 Eric W. Biederman 2012-08-30  59  			},
-f76d207a66c3a5 Eric W. Biederman 2012-08-30  60  		},
-aa4bf44dc851c6 Christian Brauner 2017-10-25  61  	},
-265cbd62e034cb Kirill Tkhai      2020-08-03  62  	.ns.count = REFCOUNT_INIT(3),
-783291e6900292 Eric W. Biederman 2011-11-17  63  	.owner = GLOBAL_ROOT_UID,
-783291e6900292 Eric W. Biederman 2011-11-17  64  	.group = GLOBAL_ROOT_GID,
-435d5f4bb2ccba Al Viro           2014-10-31  65  	.ns.inum = PROC_USER_INIT_INO,
-33c429405a2c8d Al Viro           2014-11-01  66  #ifdef CONFIG_USER_NS
-33c429405a2c8d Al Viro           2014-11-01  67  	.ns.ops = &userns_operations,
-33c429405a2c8d Al Viro           2014-11-01  68  #endif
-9cc46516ddf497 Eric W. Biederman 2014-12-02  69  	.flags = USERNS_INIT_FLAGS,
-b206f281d0ee14 David Howells     2019-06-26  70  #ifdef CONFIG_KEYS
-b206f281d0ee14 David Howells     2019-06-26  71  	.keyring_name_list = LIST_HEAD_INIT(init_user_ns.keyring_name_list),
-0f44e4d976f96c David Howells     2019-06-26  72  	.keyring_sem = __RWSEM_INITIALIZER(init_user_ns.keyring_sem),
-f36f8c75ae2e7d David Howells     2013-09-24  73  #endif
-7d893a64ad7417 Akihiro Suda      2023-05-30  74  #ifdef CONFIG_SYSCTL
-7d893a64ad7417 Akihiro Suda      2023-05-30  75  	.group_range = {
-7d893a64ad7417 Akihiro Suda      2023-05-30  76  		.range = {0, ((gid_t)~0U) - 1},
-7d893a64ad7417 Akihiro Suda      2023-05-30  77  	},
-7d893a64ad7417 Akihiro Suda      2023-05-30  78  #endif
-aee16ce73c71a2 Pavel Emelyanov   2008-02-08  79  };
-aee16ce73c71a2 Pavel Emelyanov   2008-02-08  80  EXPORT_SYMBOL_GPL(init_user_ns);
-aee16ce73c71a2 Pavel Emelyanov   2008-02-08  81  
+Therefore, pci_clear_master() should also have a counterpart.
 
+They should emerge in pairs.
+
+This could probably eliminate pain for PCI driver writers,
+
+This patch is still useful.
+
+
+>   The caller is in etnaviv_pci_drv.c, and if I
+> understand the patch at [1], etnaviv_pci_drv.c is only compiled when
+> CONFIG_PCI=y.
+
+Yes, you are right. This is the right thing to do for the driver, though.
+
+Pure PCI device driver does not need to worry about this.
+
+Like drm/ast, drm/amdgpu, drm/radeon, etc.
+
+But drm/etnaviv is special; it's a platform driver that could pass the 
+compile test originally.
+
+
+When patching it (Etnaviv) with PCI device driver support,
+
+This forces the PCI driver writer to add another config option.
+
+(which depends on the PCI config option.) in the Kconfig.
+
+For my case, it's theDRM_ETNAVIV_PCI_DRIVER config option.
+
+
+This has side effects, but they are not severe.
+
+It boils down to the compilation time thing, while originally we want it 
+to be a runtime thing.
+
+Driver writers have to isolate PCI driver-related subroutines in a 
+separate source file.
+
+with the DRM_ETNAVIV_PCI_DRIVER option, guard callers of those subroutines,
+
+to let them not get compiled when CONFIG_PCIis disabled.
+
+
+> Bjorn
+>
+> [1] https://lore.kernel.org/all/20230530160643.2344551-6-suijingfeng@loongson.cn/
+>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Closes: https://lore.kernel.org/oe-kbuild-all/202305301659.4guSLavL-lkp@intel.com/
+>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>> ---
+>>   include/linux/pci.h | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/include/linux/pci.h b/include/linux/pci.h
+>> index d0c19ff0c958..71c85380676c 100644
+>> --- a/include/linux/pci.h
+>> +++ b/include/linux/pci.h
+>> @@ -1904,6 +1904,7 @@ static inline int pci_dev_present(const struct pci_device_id *ids)
+>>   #define pci_dev_put(dev)	do { } while (0)
+>>   
+>>   static inline void pci_set_master(struct pci_dev *dev) { }
+>> +static inline void pci_clear_master(struct pci_dev *dev) { }
+>>   static inline int pci_enable_device(struct pci_dev *dev) { return -EIO; }
+>>   static inline void pci_disable_device(struct pci_dev *dev) { }
+>>   static inline int pcim_enable_device(struct pci_dev *pdev) { return -EIO; }
+>> -- 
+>> 2.25.1
+>>
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jingfeng
+
