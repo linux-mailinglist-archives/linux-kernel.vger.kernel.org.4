@@ -2,115 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16EC4718B73
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB99718B72
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:54:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjEaUuQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 31 May 2023 16:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
+        id S229805AbjEaUyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 16:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjEaUuO (ORCPT
+        with ESMTP id S229476AbjEaUyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 16:50:14 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5874129
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:50:13 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-bacf7060678so327627276.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:50:13 -0700 (PDT)
+        Wed, 31 May 2023 16:54:00 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C63129
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:54:00 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d5b4c400fso224660b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:53:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1685566439; x=1688158439;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S/tIbjMOzrV0tes0SpPx2z1WCchqgtLOTCZJxfWjgkI=;
+        b=HLFIINplwvQnozoURe7fFqoDE3MPANX+abzHwYbUVEUViyUsjLpAed39ov4QamNmnI
+         BIEsIwrhTtAwlS5OrNGhh8yIX+6uCcaGeGvusV6Wg1cftiQXl03IwM/ViNTy0PnaUaPr
+         WECj5CBD5QvnYS0b6tk2MrVCQoXja+EEsE1cw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685566213; x=1688158213;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685566439; x=1688158439;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/BwXWH09IYFr3ygi1mlaoxaAhmcagOy3rZad8mYQIUk=;
-        b=MwYHMeEl/cMatyRjrf928zMI0GRfgTggzsafqN79+SfQ8xBsfE2vlW4emQet1p/sVZ
-         Qc6ByF/7/5wrASsVFzboLfYvM5KUmwf+A7fL/psTOVs3IcQxhy3A1urKH1VM+d7JreuI
-         Zyc25W9nGKait+BkNOwfCdKTG2F7D20Whf0Ardz/3VLHl5dna5Ujj4qqlxF0TB7vAb5O
-         gSSCOI68IhAw7dL3qz9x9ofR5NDjPWZEO7jTGAKbsD9HXVasWEqDaZXCKc/YCtLV4t1l
-         +iJdoFx2C0RHvEO4ufp3ROtUySbTlOQFYfw7IZkMbLJhy9zJRmFOcAOdUblGMof5lelj
-         beJg==
-X-Gm-Message-State: AC+VfDxnG6vuw8k0txs7zNgMwOMoN+PIutmfR7oE4GP0ZsRLmLHAcf9y
-        fnPTGM5PolYDAEGPD6VBtNsuyoEFqT4f1Em4k74=
-X-Google-Smtp-Source: ACHHUZ4eOIr1HA5GT4gb7klvCENEdhHmYbgoJXt0esyIruR/gsvmc0/aAqcjsrvyjb5vAju8NtjaRV8K3jRjQWiHFnk=
-X-Received: by 2002:a25:e7c6:0:b0:b8f:3990:636d with SMTP id
- e189-20020a25e7c6000000b00b8f3990636dmr7082791ybh.23.1685566212951; Wed, 31
- May 2023 13:50:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230531143533.196835-1-paniii94@gmail.com>
-In-Reply-To: <20230531143533.196835-1-paniii94@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 31 May 2023 13:50:01 -0700
-Message-ID: <CAM9d7cgsP9cBq_Ui9-53zO0nLzBUK67goO1UcnqZ93Z4E7QcFQ@mail.gmail.com>
-Subject: Re: [PATCH] Subject: perf jit: Fix incorrect file name in DWARF line table
-To:     elisabeth <paniii94@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        bh=S/tIbjMOzrV0tes0SpPx2z1WCchqgtLOTCZJxfWjgkI=;
+        b=cs2Aiqvh9b6bA0I4ludLkP2unwSFM0AAVu6jWpp7zcvF+f1mkq469tleHO+11Uizhb
+         mYc8ZVhIWuVK1miwrQMK+CBfo04C10jPkKSiqPNqN9RMUbqwM01DsCc0zlKqzM1+D1yV
+         rrPjBaFpFJv88UbOvL4BM+XfdQu8bjKhbdskaaFq2NwtWWLfTj7jeDjqUePkYW/f3RuW
+         vXJkyzDplV69qba7mW0Mj23ez+rYKMVgWshO8RJxNs5MFHmYtvVOfea8CLmBoYn4lLGM
+         jtDgbbzW72uVk8ANkW+jvGGhK8BjGaxoLpHjGJsGijRq81Rk1SR1P6o6nDBVPKIYXg9D
+         y2cA==
+X-Gm-Message-State: AC+VfDz0jOMzKwuqEYWYfZ1qScq6qurXEPlb/BngdBdxr+3P9M7EdUcd
+        ZISbm4HmFXpKhkO+trtYOvRENMFGIzjwFe5JaCU=
+X-Google-Smtp-Source: ACHHUZ435HMGZtkvWpKkQToZ0wFTxnJdVhDep9vOugI0fciQ9sfXq50qV6AeJGgB66wEdhvIvJ1o3A==
+X-Received: by 2002:a05:6a20:5494:b0:10c:8f0c:f81c with SMTP id i20-20020a056a20549400b0010c8f0cf81cmr8751822pzk.53.1685566439336;
+        Wed, 31 May 2023 13:53:59 -0700 (PDT)
+Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id j8-20020a62e908000000b0064f97ff4506sm3155556pfh.68.2023.05.31.13.53.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 31 May 2023 13:53:56 -0700 (PDT)
+From:   Justin Chen <justin.chen@broadcom.com>
+To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com,
+        Justin Chen <justin.chen@broadcom.com>
+Subject: [PATCH net-next] ethtool: ioctl: improve error checking for set_wol
+Date:   Wed, 31 May 2023 13:53:49 -0700
+Message-Id: <1685566429-2869-1-git-send-email-justin.chen@broadcom.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000e2e21905fd038498"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        MIME_HEADER_CTYPE_ONLY,MIME_NO_TEXT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+--000000000000e2e21905fd038498
 
-On Wed, May 31, 2023 at 7:35 AM elisabeth <paniii94@gmail.com> wrote:
->
-> Fix an issue where an incorrect file name was added in the DWARF line table
-> due to not checking the filename against the repeated name marker (/xff/0).
-> This can be seen with `objdump --dwarf=line` on the ELF file after perf inject.
+The netlink version of set_wol checks for not supported wolopts and avoids
+setting wol when the correct wolopt is already set. If we do the same with
+the ioctl version then we can remove these checks from the driver layer.
 
-I'm not aware of the marker.  Could you please provide a link or something?
+Signed-off-by: Justin Chen <justin.chen@broadcom.com>
+---
+ net/ethtool/ioctl.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-Thanks,
-Namhyung
+diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
+index 6bb778e10461..80f456f83db0 100644
+--- a/net/ethtool/ioctl.c
++++ b/net/ethtool/ioctl.c
+@@ -1436,15 +1436,25 @@ static int ethtool_get_wol(struct net_device *dev, char __user *useraddr)
+ 
+ static int ethtool_set_wol(struct net_device *dev, char __user *useraddr)
+ {
+-	struct ethtool_wolinfo wol;
++	struct ethtool_wolinfo wol, cur_wol;
+ 	int ret;
+ 
+-	if (!dev->ethtool_ops->set_wol)
++	if (!dev->ethtool_ops->get_wol || !dev->ethtool_ops->set_wol)
+ 		return -EOPNOTSUPP;
+ 
++	memset(&cur_wol, 0, sizeof(struct ethtool_wolinfo));
++	cur_wol.cmd = ETHTOOL_GWOL;
++	dev->ethtool_ops->get_wol(dev, &cur_wol);
++
+ 	if (copy_from_user(&wol, useraddr, sizeof(wol)))
+ 		return -EFAULT;
+ 
++	if (wol.wolopts & ~cur_wol.supported)
++		return -EOPNOTSUPP;
++
++	if (wol.wolopts == cur_wol.wolopts)
++		return 0;
++
+ 	ret = dev->ethtool_ops->set_wol(dev, &wol);
+ 	if (ret)
+ 		return ret;
+-- 
+2.7.4
 
 
->
-> Signed-off-by: elisabeth <paniii94@gmail.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/util/genelf_debug.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/perf/util/genelf_debug.c b/tools/perf/util/genelf_debug.c
-> index aa5dcc56b2ac..2928b59bb9a5 100644
-> --- a/tools/perf/util/genelf_debug.c
-> +++ b/tools/perf/util/genelf_debug.c
-> @@ -349,6 +349,7 @@ static void emit_lineno_info(struct buffer_ext *be,
->          */
->
->         /* start state of the state machine we take care of */
-> +       char const repeated_name_marker[] = {'\xff', '\0'};
->         unsigned long last_vma = 0;
->         char const  *cur_filename = NULL;
->         unsigned long cur_file_idx = 0;
-> @@ -363,7 +364,8 @@ static void emit_lineno_info(struct buffer_ext *be,
->                 /*
->                  * check if filename changed, if so add it
->                  */
-> -               if (!cur_filename || strcmp(cur_filename, ent->name)) {
-> +               if ((!cur_filename || strcmp(cur_filename, ent->name)) &&
-> +                       memcmp(repeated_name_marker, ent->name, sizeof(repeated_name_marker)) != 0) {
->                         emit_lne_define_filename(be, ent->name);
->                         cur_filename = ent->name;
->                         emit_set_file(be, ++cur_file_idx);
-> --
-> 2.34.1
->
+--000000000000e2e21905fd038498
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+NhTY3E+cXCB11wty89QStajwXdhGJTYEvUgvsq1h8CwJj9w/38ldAQf5WjhPmApYeJR2ewFrBMCM
+4lHkdRJ6TDc9nXoEkypUfjJkJHe7Eal06tosh6JpAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
+BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
+Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
+NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
+A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
+aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
+cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
+MBqBGGp1c3Rpbi5jaGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
+GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUIWGeYuaTsnIada5Xx8TR3cheUbgw
+DQYJKoZIhvcNAQELBQADggEBAHNQlMqQOFYPYFO71A+8t+qWMmtOdd2iGswSOvpSZ/pmGlfw8ZvY
+dRTkl27m37la84AxRkiVMes14JyOZJoMh/g7fbgPlU14eBc6WQWkIA6AmNkduFWTr1pRezkjpeo6
+xVmdBLM4VY1TFDYj7S8H2adPuypd62uHMY/MZi+BIUys4uAFA+N3NuUBNjcVZXYPplYxxKEuIFq6
+sDL+OV16G+F9CkNMN3txsym8Nnx5WAYZb6+rBUIhMGz70V05xsHQfzvo2s7f0J1tJ5BoRlPPhL0h
+VOnWA3h71u9TfSsv+PXVm3P21TfOS2uc1hbzEqyENCP4i5XQ0rv0TmPW42GZ0o4xggJtMIICaQIB
+ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
+bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwj8BKLXNpALfemdRAwDQYJ
+YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOkQ4MkuUJJyUMN4mr/GdmElZXpN+KYyHlKN
+lp6F+zW9MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDUzMTIw
+NTM1OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
+AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
+BgkqhkiG9w0BAQEFAASCAQAZ9dadLh4AaFqq1vfS4RgwafeK/GSypHTUYwIiQvasn1Tb4I0VSpoT
+1dm8HX3/o4lUszymS/qwqYisxJ8bK2Q8lvOORmDWf0hjh6nNg9fPOrywuSZy4JHs1x95t75JlaST
+Lsf9Zr7ROfQ91a1GUTeViUryNXzCyjZZsUGE9BymDqMM37EX1bzUrFAPlq5NXIb6GXY8gWK4GNXF
+EySk6HKqGOwvrOn2g/znO+c5I9070e+a+Hi4F3naBs237w+/tpVisEQfuCASIlsQtMyhbUcPrE9R
+/JSdDj0N0NHgjeJmZncPgghYvIlI2ptE8chTYOTFVy/der6NMjbSvGS19RG5
+--000000000000e2e21905fd038498--
