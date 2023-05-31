@@ -2,105 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38C0718664
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6285D71866B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbjEaPbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S234742AbjEaPcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbjEaPbb (ORCPT
+        with ESMTP id S234694AbjEaPce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:31:31 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B4310E
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:31:30 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b18474cbb6so2866515ad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:31:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685547090; x=1688139090;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gqlM3HicN8bZI8y/HXeLeK/HBncomDasUqIVXEA5Vzw=;
-        b=k5e9OshTFnP9OEHnNOE5n9RB8t1s+zscxlxRJpU/MtmoolYIDh1NROZRM71KSbCm/H
-         5YlAGxk40/pkYJSGp3dE5Y9vNnqKze/uVxokBgV7mDh3QeAuLvlw/LeKddNzxvB4F/gK
-         jdb8S8vv7TEfP1pPQcnVmEv7ZiSmmLeOWpulqA8uwz/lB6HvnDSBAg67D6x5c9qWu8qd
-         wWCnJmrC5FKB1J0M73GPF980rHJf1YAwyFcfdvaLoyy0K6Ou/N2yt3hR0pXIjIjcDdGb
-         jsBGyFHTWU3TMXB8NrJBo+aK894bs4YwhyZ2D1UwjZCyL7bVW++ZObfOCOXjI9Sc3eyx
-         Beyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685547090; x=1688139090;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gqlM3HicN8bZI8y/HXeLeK/HBncomDasUqIVXEA5Vzw=;
-        b=SDfHFApA513sW8FFH0bOp1czR+Z0SPEngetPTj8LUP6ueEZxqu/VZyc1QcVTUog7vV
-         m6uPPsSJ7zFLSHTo/iqkkkuY1uwbIOs4FIXuwzjH/65NvYpBblBxqab0+FPqobrdG0Ua
-         SBxHfyA7gNb3GLMjl8g5VbEy/l5iwfpBSbNaOKdOaSVcEnJH/ZqoBjJ03ZtP3KfTcX3A
-         B0lGCFuNNN12U8+zBKlgCI/z/0UXJSMkqwdkie4bOEjqDHFqre7cYT4xfXk3ABf51urA
-         7gwtYqXz952fJQLAy7AKjo+28MINM6poYqRzdiS48N3ootkIyTEVZslCVoyqvmt8n3Vd
-         NL4g==
-X-Gm-Message-State: AC+VfDyPSeN3kHGVQgp7u0dS9a//3KBqOQszIHBU4GghijvWbu3DNBsT
-        IiLU9UZQJJxqZy1qs2QRH7s=
-X-Google-Smtp-Source: ACHHUZ5kpn+rSpBaqf2DdtPSDT+Ob8m/0QzW03XU/Cr5OxnxFdbau+d4qf+4GBDimRUK26eC60iF1g==
-X-Received: by 2002:a17:902:a508:b0:1ae:8a22:d0dd with SMTP id s8-20020a170902a50800b001ae8a22d0ddmr3831219plq.58.1685547089676;
-        Wed, 31 May 2023 08:31:29 -0700 (PDT)
-Received: from [192.168.0.105] ([49.207.240.61])
-        by smtp.gmail.com with ESMTPSA id jk15-20020a170903330f00b001b024ee5f6esm1543653plb.81.2023.05.31.08.31.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 08:31:29 -0700 (PDT)
-Message-ID: <cefc1a42-725a-8afa-c222-f4df085ba6a2@gmail.com>
-Date:   Wed, 31 May 2023 21:01:24 +0530
+        Wed, 31 May 2023 11:32:34 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02751125
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:32:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685547152; x=1717083152;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=BYPMrPYIIbcl1XzJ9RKq09gP2kje2GE3CG61hxMkSeA=;
+  b=DbKmAFbPXa+9+FqB/mRkuGGDeX8lEbuIva/ll5UVWzQQ3vQUfHXjc2AG
+   NLVangy3gc3qJBp4sD6pgYjTstLRq7VIZHEGwB+4WZ1ffAogw85czxYfO
+   iC+eQbNip/gJhBI7wgjnMJNptoKRMXnoZ0V2uOcKd6hR61NE/YFOb4T/8
+   pvwab7hp3p2mA3b3Gp4mFQLrFzoXjUnRLWfI8Wy4juATDkdAbUA6XrfjP
+   K4bHpx03/pbUMssIsSJ3TZbNK7oZdfIDNiSKf7IlTI/5aHbqiUqXuDKCG
+   3dRFDGbdSlF8pNdy/hNWiVBvERnl8xv99D+hXrK2P/39soM5ntlb/GFWt
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="354116864"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="354116864"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 08:32:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="701140924"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="701140924"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 31 May 2023 08:32:29 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4NoL-0001Ql-0O;
+        Wed, 31 May 2023 15:32:29 +0000
+Date:   Wed, 31 May 2023 23:32:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>, airlied@gmail.com
+Cc:     oe-kbuild-all@lists.linux.dev, tvrtko.ursulin@linux.intel.com,
+        intel-gfx@lists.freedesktop.org,
+        Abaci Robot <abaci@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        dri-devel@lists.freedesktop.org, rodrigo.vivi@intel.com
+Subject: Re: [PATCH -next] drm/i915: remove unreachable code
+Message-ID: <202305312340.S0eChDKB-lkp@intel.com>
+References: <20230531021714.125078-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v6 0/7] refactor file signing program
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     dhowells@redhat.com, dwmw2@infradead.org,
-        linux-kernel@vger.kernel.org, sshedi@vmware.com
-References: <20230321193341.87997-1-sshedi@vmware.com>
- <0ae37bcc-4398-644b-a295-1245d73e5450@gmail.com>
- <2023053135-bubbling-commodore-3a7b@gregkh>
-Content-Language: en-US
-From:   Shreenidhi Shedi <yesshedi@gmail.com>
-In-Reply-To: <2023053135-bubbling-commodore-3a7b@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230531021714.125078-1-yang.lee@linux.alibaba.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31-May-2023 20:08, Greg KH wrote:
-> On Tue, Apr 25, 2023 at 04:14:49PM +0530, Shreenidhi Shedi wrote:
->> On Wed, 22-Mar-2023 01:03, Shreenidhi Shedi wrote:
->> Can you please review the latest patch series? I think I have addressed your
->> concerns. Thanks.
-> 
-> The big question is, "who is going to use these new features"?  This
-> tool is only used by the in-kernel build scripts, and if they do not
-> take advantage of these new options you have added, why are they needed?
-> 
-> thanks,
-> 
-> greg k-h
+Hi Yang,
 
-Hi Greg,
+kernel test robot noticed the following build errors:
 
-Thanks for the response.
+[auto build test ERROR on next-20230530]
 
-We use it in VMware Photon OS. Following is the link for the same.
-https://github.com/vmware/photon/blob/master/SPECS/linux/spec_install_post.inc#L4
+url:    https://github.com/intel-lab-lkp/linux/commits/Yang-Li/drm-i915-remove-unreachable-code/20230531-101832
+base:   next-20230530
+patch link:    https://lore.kernel.org/r/20230531021714.125078-1-yang.lee%40linux.alibaba.com
+patch subject: [PATCH -next] drm/i915: remove unreachable code
+config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20230531/202305312340.S0eChDKB-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/58232a66b9d21d80bc6b478e2a8fb1443da3adfc
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yang-Li/drm-i915-remove-unreachable-code/20230531-101832
+        git checkout 58232a66b9d21d80bc6b478e2a8fb1443da3adfc
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
 
-If this change goes in, it will give a slight push to our build 
-performance. Can you please take these changes?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305312340.S0eChDKB-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/gpu/drm/i915/display/intel_color.c: In function 'intel_color_prepare_commit':
+>> drivers/gpu/drm/i915/display/intel_color.c:1803:28: error: unused variable 'crtc' [-Werror=unused-variable]
+    1803 |         struct intel_crtc *crtc = to_intel_crtc(crtc_state->uapi.crtc);
+         |                            ^~~~
+   cc1: all warnings being treated as errors
+
+
+vim +/crtc +1803 drivers/gpu/drm/i915/display/intel_color.c
+
+3962ca4e080a52 Ville Syrjälä 2023-03-20  1800  
+efb2b57edf20c3 Ville Syrjälä 2022-11-23  1801  void intel_color_prepare_commit(struct intel_crtc_state *crtc_state)
+efb2b57edf20c3 Ville Syrjälä 2022-11-23  1802  {
+b358c3b98813b1 Ville Syrjälä 2022-11-23 @1803  	struct intel_crtc *crtc = to_intel_crtc(crtc_state->uapi.crtc);
+b358c3b98813b1 Ville Syrjälä 2022-11-23  1804  
+2487ae0bcb53a7 Ville Syrjälä 2022-11-23  1805  	/* FIXME DSB has issues loading LUTs, disable it for now */
+2487ae0bcb53a7 Ville Syrjälä 2022-11-23  1806  	return;
+efb2b57edf20c3 Ville Syrjälä 2022-11-23  1807  }
+efb2b57edf20c3 Ville Syrjälä 2022-11-23  1808  
 
 -- 
-Shedi
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
