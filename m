@@ -2,106 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C8E718060
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E38EB718067
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235788AbjEaMxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
+        id S235985AbjEaMyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235705AbjEaMxj (ORCPT
+        with ESMTP id S236026AbjEaMyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:53:39 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE53E45
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:53:14 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-6261a61b38cso22488546d6.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685537580; x=1688129580;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J0TxZzMFhUW6EK3EfijtxNMkn19A+hW/wHqn+hpRZCY=;
-        b=MtLNmt3no49LCTSM1LjBfXXPMvTqUfLggcb6S6zkt5c9bh8bNgEouxDIAwzkMTYBus
-         E8IGuQOwdYyMcV883jHgItdVnV9Qc3TFGPuA6x4xAphe27i8zm2IetqMxHP/cO2+Armt
-         +Md2RJI/z6IqxVemQrnXVhbb9/W/jWeL2a5PFE45FiThK0b68BlCEGi74MYs+0kCPpQ4
-         BOMxdon9j6c6OtpKfYGr+/gd+UhLWF/S98BXJqaQ4gwToGZbUlxAgN1BnfcpmoCzXXXd
-         gsOnJtY6NuesokhuY6ADovg99hhG2zLngIyALKsPsh7juyEqoUT5luN4ldItMlvrQ9Xf
-         gEfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685537580; x=1688129580;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J0TxZzMFhUW6EK3EfijtxNMkn19A+hW/wHqn+hpRZCY=;
-        b=YgWaAx8plKrcHD/2XfTZOSX34GDn07eWvBJ4cpVD3TfRxae33fOU5CCJKKMpzg/g3k
-         ThTNteUpKs3lvEjmY8+hmKkr0W1s0xZ9h5daRnwdz7G2ZmwWgC2JVxtk+aHVT+DsEdga
-         mZ8qRB1yaO8kStAmY3pMuCQrR9rQ2DOBgIyjWZcfkAWVW0eUdY+bZIJIRGza9ZS63Ob7
-         p+0PFiIYf/uk3S2LgQo4ZUwYlabM2NveLe5SxPj/C9B5CQ7eisYKbF5DSbWA/OQAgrqH
-         ESOhBAxecOPRwJ65FmHysdJDofYG1HY7iG/ip0Z0HBHOsBLi/PstW9V3IUaeu42P6Acy
-         C7zQ==
-X-Gm-Message-State: AC+VfDzvfaJLd5GHBuI8Hehqz2Q2gCV2PlUsg7l1UT5N7gZ7Eu1n/aVE
-        9Ehg1jF3w0TJo28bfvtjaYc7xmK6TBzRuQg1g+9nHA==
-X-Google-Smtp-Source: ACHHUZ7TdnGwln0PAM7flRk2Huqkg2MsIyo8dvBcVrZ9XC/m/aoYvlL6K+/0NaYwgC7HjKmJmgIiZJvp+iGqqZ61j60=
-X-Received: by 2002:a05:6214:21ac:b0:625:aa1a:9382 with SMTP id
- t12-20020a05621421ac00b00625aa1a9382mr5116731qvc.62.1685537579889; Wed, 31
- May 2023 05:52:59 -0700 (PDT)
+        Wed, 31 May 2023 08:54:17 -0400
+Received: from out-6.mta1.migadu.com (out-6.mta1.migadu.com [95.215.58.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE42136
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:53:55 -0700 (PDT)
+Message-ID: <a6449457-2dc6-e6db-2fe9-2a12edf934b3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685537575;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2ShbrEgfZy4By4UohTrcklSg54xQgs+3EWdpTAp00z8=;
+        b=dw0p9yEqwoJ68IFZtmHffnZ4wp5USwQvnVqn94n4syCGENhdaRtT6IT3dXPhuhB7GeFZby
+        EAm7yyWAoZ/WouPfjlyTwCg8ijHHlTofAXILbmW8dr+3eq6i1kiBqjx+Bf12QjXhBPbBb7
+        iUpHJKOu/PagvVxpglm0N+Kntq3mIHM=
+Date:   Wed, 31 May 2023 20:52:46 +0800
 MIME-Version: 1.0
-References: <20230324063357.1.Ifdf3625a3c5c9467bd87bfcdf726c884ad220a35@changeid>
- <CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com>
- <552345c5-b1e9-41f6-f275-b6eeeb51df25@linaro.org> <CAMi1Hd05z8uBotO4vs7Ropmt7W2gSA__tTu_=X1t0mze7bXrhg@mail.gmail.com>
- <CAD=FV=VSFDe445WEVTHXxU1WS_HGUV5jR5E8_Vgd4eyhn3rHyA@mail.gmail.com>
- <CAMi1Hd28FJUjB8A-9YF7xpKOzSyNWXX3qung4aDjpLBhOvw_eA@mail.gmail.com>
- <CAD=FV=W13L0H88G1gt8qRnXfpV-_7E9QfHufN_a23_B1bb=aww@mail.gmail.com> <04f5501a-03ff-4ac9-9355-ad17281350b1@sirena.org.uk>
-In-Reply-To: <04f5501a-03ff-4ac9-9355-ad17281350b1@sirena.org.uk>
-From:   Amit Pundir <amit.pundir@linaro.org>
-Date:   Wed, 31 May 2023 18:22:23 +0530
-Message-ID: <CAMi1Hd241j1_3d5eUjrnKFeV_h-KUWEJOj4byPnjaJufB2T1yQ@mail.gmail.com>
-Subject: Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/8] mm: vmscan: move shrinker_debugfs_remove() before
+ synchronize_srcu()
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     akpm@linux-foundation.org, tkhai@ya.ru, roman.gushchin@linux.dev,
+        vbabka@suse.cz, viro@zeniv.linux.org.uk, djwong@kernel.org,
+        hughd@google.com, paulmck@kernel.org, muchun.song@linux.dev,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Qi Zheng <zhengqi.arch@bytedance.com>
+References: <20230531095742.2480623-1-qi.zheng@linux.dev>
+ <20230531095742.2480623-2-qi.zheng@linux.dev>
+ <20230531-notlage-ankommen-93022623b74b@brauner>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Qi Zheng <qi.zheng@linux.dev>
+In-Reply-To: <20230531-notlage-ankommen-93022623b74b@brauner>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 May 2023 at 18:00, Mark Brown <broonie@kernel.org> wrote:
->
-> On Tue, May 16, 2023 at 02:24:06PM -0700, Doug Anderson wrote:
-> > On Tue, May 16, 2023 at 11:12=E2=80=AFAM Amit Pundir <amit.pundir@linar=
-o.org> wrote:
->
-> > > Tried out a few changes today but none of them worked or were
-> > > effective enough to debug this crash further, other than setting
-> > > fw_devlink=3Dpermissive.
->
-> > It still feels to me like _something_ is happening at the same time as
-> > the RPMH regulator driver is loading, though, I'm just not sure how to
-> > suggest debugging it. I guess other thoughts:
->
-> This discussion seems to have ground to a halt with no resolution so it
-> looks like the best option here is to apply the revert unless there's
-> some progress happened off list?
 
-Sorry about that. I got stuck at other things. I'll get back to it
-this week. I'll try to change the module loading order and test run it
-to check if that helps.
 
-Regards,
-Amit Pundir
+On 2023/5/31 18:49, Christian Brauner wrote:
+> On Wed, May 31, 2023 at 09:57:35AM +0000, Qi Zheng wrote:
+>> From: Qi Zheng <zhengqi.arch@bytedance.com>
+>>
+>> The debugfs_remove_recursive() will wait for debugfs_file_put()
+>> to return, so there is no need to put it after synchronize_srcu()
+>> to wait for the rcu read-side critical section to exit.
+>>
+>> Just move it before synchronize_srcu(), which is also convenient
+>> to put the heavy synchronize_srcu() in the delayed work later.
+>>
+>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>> ---
+> 
+> Afaict, should be a patch independent of this series.
+
+OK, will resend as an independent patch.
+
+Thanks,
+Qi
