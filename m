@@ -2,162 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38E4718A09
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F06C2718A0B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjEaTUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 15:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+        id S229824AbjEaTUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 15:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjEaTUN (ORCPT
+        with ESMTP id S229672AbjEaTUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 15:20:13 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512FD126
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:20:11 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d5f65a2f7so106616b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:20:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1685560811; x=1688152811;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=49Ctqz+Z6/EpgEVzBMBiySSOETw/gRZF7F8sKc0/gW4=;
-        b=SCXzv5NFJkdSd2DBch3tBur6rt87sHZadMvllcCYrBSlAnujqsn2w6NYfs8kRw7zEH
-         UUy5B5M3fdwqVh4cJAPUbO4ymzbGUQhjG0wsWvcB0rzXrJuUXqSQWExeBcxLh5dnJ4hW
-         JdIcMLBU2Wr5PTX+4Sgey8hL0W2zyc7yeXyBOoy9FNA13tz08zsvGn7+DUiMDrwaQkpg
-         hdZvFD7p3uuyL6jZGaitCwZEBXvEijJ+fMG39fXax6zGLA/zH3JFxhLgU8GjKTvmwn3U
-         cfKL4OTNs21hoPihFH4rxpZz8Ex23V4vNxSxIHe04E18MS+FM6lfIrpkz5m+NwO2u7KZ
-         /PHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685560811; x=1688152811;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=49Ctqz+Z6/EpgEVzBMBiySSOETw/gRZF7F8sKc0/gW4=;
-        b=kIiXlHsA0CqXk67zBsHLIcSh8Cal4ehb6y2cuD0qGFTCZ2HfAqR2H+jEZ2STWr+aXH
-         Rb8FBcSlFUJ/8T6LsUF723iHMLaxYfy37uacCfXp0aNgThQg7/UpWM9ySKV/B732H06a
-         EZMn1Q3whWfrhF1TZDjWpZBQIpXfucDMTZQcwF1MiptLtj83Ou7pVfPEsybBxNiy0cOf
-         eqjxQyr+E1VRNZz+Kh97KAeb50pV/aVsG5tRGrS7x2N24zgn4Odm4QuOVBkhYE/QBH9b
-         6EYeEU8TUVOvEgpxGzE92VgDlWNgVYNZZZPbAqE1pYgY/HIP45vfmD+FHhdgsSidCgIL
-         h3Pg==
-X-Gm-Message-State: AC+VfDz0fAShVm7sJ32IYTdri8qkdI0pq/Ik0JXMxpK9ndb/8Cvhd9X8
-        J3dmneULPYuNZoGo9bsjvgorsA==
-X-Google-Smtp-Source: ACHHUZ5vOhH+Z20smvih3PRoBzyu6112d4DjAZ/k2Hk8Q2510QpTt0jTRAeR3hLBF9CzQodd76AWQw==
-X-Received: by 2002:a05:6a00:1344:b0:647:e45f:1a4c with SMTP id k4-20020a056a00134400b00647e45f1a4cmr5931413pfu.11.1685560810753;
-        Wed, 31 May 2023 12:20:10 -0700 (PDT)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id 15-20020aa7920f000000b0065017055caasm918208pfo.210.2023.05.31.12.20.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 12:20:10 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1q4RMe-0017g6-KI;
-        Wed, 31 May 2023 16:20:08 -0300
-Date:   Wed, 31 May 2023 16:20:08 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Anup Patel <anup@brainfault.org>,
-        Ben Gardon <bgardon@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Gavin Shan <gshan@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Larabel <michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-        linux-mm@google.com
-Subject: Re: [PATCH mm-unstable v2 02/10] mm/kvm: use
- mmu_notifier_ops->test_clear_young()
-Message-ID: <ZHed6OuO/ALNfvaX@ziepe.ca>
-References: <20230526234435.662652-1-yuzhao@google.com>
- <20230526234435.662652-3-yuzhao@google.com>
+        Wed, 31 May 2023 15:20:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96F7125;
+        Wed, 31 May 2023 12:20:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 454D763EC0;
+        Wed, 31 May 2023 19:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36E97C433A0;
+        Wed, 31 May 2023 19:20:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685560817;
+        bh=jTk0m0B7gEiFeTTGawi6b2rAEXlbeTrHQEZbeN1MMqc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mqQj0TNbpB82QHQEayA6DVZWzEL3RPSNZVjtT6Cd6U6EDvY207Wa38AMiJpvxloiW
+         1jl5UkzMdOnNBQrzm/9FuL2/HQ6+uIZ8RFdm1UvhhSqJfQNneDk5P2DSGaakQ1pDiP
+         XVVGecNkO4heaJBkjW4Re0PVvpqCi2kBjigsjIWQ=
+Date:   Wed, 31 May 2023 20:20:13 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] drivers: base: Add tests showing devm handling
+ inconsistencies
+Message-ID: <2023053137-leggings-grumbly-a33a@gregkh>
+References: <20230329-kunit-devm-inconsistencies-test-v1-0-c33127048375@cerno.tech>
+ <wiej2vps6uhozcpxeye3xfgpnlvxcbaek73px36f4jsef3e77p@ewcsmzrxzhsi>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230526234435.662652-3-yuzhao@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <wiej2vps6uhozcpxeye3xfgpnlvxcbaek73px36f4jsef3e77p@ewcsmzrxzhsi>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 05:44:27PM -0600, Yu Zhao wrote:
-> Replace test_young() and clear_young() with test_clear_young().
+On Mon, Apr 17, 2023 at 06:12:26PM +0200, Maxime Ripard wrote:
+> Hi,
 > 
-> Signed-off-by: Yu Zhao <yuzhao@google.com>
-> ---
->  include/linux/mmu_notifier.h | 29 ++-----------------
->  include/trace/events/kvm.h   | 15 ----------
->  mm/mmu_notifier.c            | 42 ----------------------------
->  virt/kvm/kvm_main.c          | 54 ------------------------------------
->  4 files changed, 2 insertions(+), 138 deletions(-)
+> On Wed, Mar 29, 2023 at 08:38:30PM +0100, Maxime Ripard wrote:
+> > Hi,
+> > 
+> > This follows the discussion here:
+> > https://lore.kernel.org/linux-kselftest/20230324123157.bbwvfq4gsxnlnfwb@houat/
+> > 
+> > This shows a couple of inconsistencies with regard to how device-managed
+> > resources are cleaned up. Basically, devm resources will only be cleaned up
+> > if the device is attached to a bus and bound to a driver. Failing any of
+> > these cases, a call to device_unregister will not end up in the devm
+> > resources being released.
+> > 
+> > We had to work around it in DRM to provide helpers to create a device for
+> > kunit tests, but the current discussion around creating similar, generic,
+> > helpers for kunit resumed interest in fixing this.
+> > 
+> > This can be tested using the command:
+> > ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/base/test/
+> > 
+> > Let me know what you think,
+> > Maxime
+> > 
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 > 
-> diff --git a/include/linux/mmu_notifier.h b/include/linux/mmu_notifier.h
-> index dfdbb370682d..c8f35fc08703 100644
-> --- a/include/linux/mmu_notifier.h
-> +++ b/include/linux/mmu_notifier.h
-> @@ -104,26 +104,6 @@ struct mmu_notifier_ops {
->  				 unsigned long start,
->  				 unsigned long end);
->  
-> -	/*
-> -	 * clear_young is a lightweight version of clear_flush_young. Like the
-> -	 * latter, it is supposed to test-and-clear the young/accessed bitflag
-> -	 * in the secondary pte, but it may omit flushing the secondary tlb.
-> -	 */
-> -	int (*clear_young)(struct mmu_notifier *subscription,
-> -			   struct mm_struct *mm,
-> -			   unsigned long start,
-> -			   unsigned long end);
-> -
-> -	/*
-> -	 * test_young is called to check the young/accessed bitflag in
-> -	 * the secondary pte. This is used to know if the page is
-> -	 * frequently used without actually clearing the flag or tearing
-> -	 * down the secondary mapping on the page.
-> -	 */
-> -	int (*test_young)(struct mmu_notifier *subscription,
-> -			  struct mm_struct *mm,
-> -			  unsigned long address);
-> -
->  	int (*test_clear_young)(struct mmu_notifier *mn, struct mm_struct *mm,
->  				unsigned long start, unsigned long end,
->  				bool clear, unsigned long *bitmap);
+> Is there any news on this?
 
-Oh, you split the patch. This MMU notifier stuff seems OK for both
-patches then, and KVM is the only user:
+Can you resend, last I saw the kernel test robot had a problem, which
+causes any patch series like that to be ignored by me.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+thanks,
 
-Jason
+greg k-h
