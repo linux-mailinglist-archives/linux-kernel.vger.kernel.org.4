@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5D27188BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1CF718472
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjEaRqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
+        id S231202AbjEaOOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjEaRqu (ORCPT
+        with ESMTP id S236452AbjEaOOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:46:50 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5E3125
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685555208; x=1717091208;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hTqd3Pee3flh4HGEZ53S3n5CSuBCfvBltkaD8gL0ZSg=;
-  b=eXkYIwxRGAabB5n9oMABoK1lz0/JTSWxGfA9J49E1HNAzJ2UsoEw6pFY
-   G5O+FJkaGbjkNl6uSzaF06S3LKD2fzGQi2cpEY18aZKWABEkNFSsU6Jr4
-   FOOnGHryVcRM9A2L1wDgej22/HBzvQWJf3nNovSmBz56ZRo028wUrEhUo
-   kzV5f97z2tUhMMhSVNVPXjhi7h5KmfBp/rO0Ja4aVodCUgfXJWl17Ahal
-   AHSr2D3aaADfowrWHGSDyHs7laeYMaEZDNz3XxdobUtNCpsAaLF7afPbm
-   W93eT6y0IcQ3J2sLuX7I60ghZLfc2JnMs1o+4wEbLBrWTZPcPw6n18HxR
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="344832465"
-X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="344832465"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 10:46:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="707004433"
-X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="707004433"
-Received: from tkam-mobl1.amr.corp.intel.com (HELO [10.212.252.148]) ([10.212.252.148])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 10:46:45 -0700
-Message-ID: <5048a207-4ec4-e954-0fe8-88ed25320c1b@linux.intel.com>
-Date:   Wed, 31 May 2023 08:53:07 -0500
+        Wed, 31 May 2023 10:14:16 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A37B19BC
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:11:46 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f6e13940daso61772565e9.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:11:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685542234; x=1688134234;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y5rCFTJGWdcgITCagf0CQsma1inb7ImDXUHOuHQ7JIc=;
+        b=j94+zIoZ3KRYPPrHHHAUKLiwb5mV/UHm+29bpvart7YsvPd+UTbkA5n56ly+Szc0P9
+         0WFsT8iA6iENd7N/VlCsmyujT4p/Ld9+/cPfJQGrxfo8WBtjbolaS3oHnZ0rwA7806yC
+         KTlKdXOlxxqSFSeVWtPUUhsPxW62/ryB8TRpiXMsffZbYecQ5h3+eDNJaAR0q7kZwYBQ
+         roviRPdsT4hvqjzpsuKn1MTKsGws+dETl6FvJ07Utom0FDb07N3LapqPDX87TqaYuQHg
+         eO5UePzfZEO3z2aja5sXz8uRx5pXcM6sn9oK4ONk7dZkdK27h5N2A0C8GmgeORSUQpSu
+         FBDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685542234; x=1688134234;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y5rCFTJGWdcgITCagf0CQsma1inb7ImDXUHOuHQ7JIc=;
+        b=hY2JPPSb3KNkMROJ4dbtnk7bZwVIw3vOjrFLQW2+QwHTw0RrCpJbTaU1sOc0L34C7p
+         Fkyi99YpyjJQjkPCAJTwVNtoI6/MUn70tlkDTcIU1nesyKMb+rY3jkPIGBBC90DxpPDQ
+         WJJgKnWHG2KJHy+lp7TbMMYhju/X2f3BhG/ILy4vN2k8q8ATVNgBmPMFvwFMbA/tyjva
+         OT6yzuILiBuutzJKc5GANCoKgAG+HimdNrrqlOWkqfkglWvQpivpBFtPhH9W4Zd/J1ao
+         aRC6whNgEVUZ1L6Rwsq2JXU+6VnDEmd4mjMYtykXsmwQNt/qkQ/7z+T9T+Ot1qJYs6pJ
+         9Lvg==
+X-Gm-Message-State: AC+VfDzncQDCv6qsB54Wczyfxen3b4WNEgoIs/z8hpe7gYcAI43doyFs
+        OyQJkVWGJq/r5mirV5sf8JCtXdO0kVOWToZFy8k1ocQt8jW/ZA==
+X-Google-Smtp-Source: ACHHUZ7AOHP9g2Megr5QVPTq3LJeayM4t3rVmsZgJHwHD+Q/YbNiDgK6CvMQPQgHJCiZfTLZ8kV3EGXsMp9XQ44DsAQ=
+X-Received: by 2002:a17:907:a426:b0:96f:c988:93b with SMTP id
+ sg38-20020a170907a42600b0096fc988093bmr5344896ejc.35.1685541243317; Wed, 31
+ May 2023 06:54:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH V2 5/9] ASoC: amd: ps: add support for SoundWire DMA
- interrupts
-Content-Language: en-US
-To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>, broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, Mastan.Katragadda@amd.com,
-        Arungopal.kondaveeti@amd.com, mario.limonciello@amd.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230522133122.166841-1-Vijendar.Mukunda@amd.com>
- <20230522133122.166841-6-Vijendar.Mukunda@amd.com>
- <fea3c862-1470-7911-ff77-5d945b1d77cf@linux.intel.com>
- <2dfeee7c-32bd-c054-22ff-3a2266e62c90@amd.com>
- <f11f3370-0b72-cb1f-21cf-c574ef03fd72@linux.intel.com>
- <017abf89-a1aa-0c85-e244-a56c05b7c6e2@amd.com>
- <af5b0669-2621-7fce-358c-76dca7b521c5@amd.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <af5b0669-2621-7fce-358c-76dca7b521c5@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+References: <20230531125918.55609-1-frank.li@vivo.com>
+In-Reply-To: <20230531125918.55609-1-frank.li@vivo.com>
+From:   Juhyung Park <qkrwngud825@gmail.com>
+Date:   Wed, 31 May 2023 22:53:52 +0900
+Message-ID: <CAD14+f1YoiSVvq2M1v8u5bUdCNN_0nurY4ued6ZFu1gaBSHxDw@mail.gmail.com>
+Subject: Re: [f2fs-dev] [PATCH] f2fs: flag as supporting buffered async reads
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Lu Hongfei <luhongfei@vivo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,91 +71,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Yangtao,
 
+I remember hearing that f2fs can perform relatively poorly under io_uring,
+nice find.
 
-On 5/31/23 02:28, Mukunda,Vijendar wrote:
-> On 24/05/23 13:15, Mukunda,Vijendar wrote:
->> On 23/05/23 20:30, Pierre-Louis Bossart wrote:
->>> On 5/23/23 02:36, Mukunda,Vijendar wrote:
->>>> On 22/05/23 23:42, Pierre-Louis Bossart wrote:
->>>>> On 5/22/23 08:31, Vijendar Mukunda wrote:
->>>>>> Initialize workqueue for SoundWire DMA interrupts handling.
->>>>>> Whenever audio data equal to the SoundWire FIFO watermark level
->>>>>> are produced/consumed, interrupt is generated.
->>>>>> Acknowledge the interrupt and schedule the workqueue.
->>>>> It would help to explain why a work queue is needed is the first place,
->>>>> as opposed to handling periods in the interrupt thread.
->>>> For SoundWire DAI link, we are setting nonatomic flag to true.
->>>> If we return period elapsed from hard irq handler instead of workqueue,
->>>> soft lock up is observed during stream closure.
->>>>
->>>> We can use interrupt thread as well. To have a symmetry with
->>>> SoundWire manager work queues, we have used workqueue for
->>>> DMA interrupts.
->>> Oh, I completely missed the model here.
->>>
->>> If you are using the bottom half/hard irq handler to read status
->>> information, the natural thing to do would be to have an irq thread, no?
->>>
->>> Not sure I see the benefit of aligning with the manager work queues -
->>> unless it makes your life simpler to avoid race conditions with
->>> cancel_work_sync()?
->> We can implement request_threaded_irq() and move the handling of
->> DMA interrupts to thread function whereas we need to handle SoundWire
->> manager interrupts in top half only. Reason as follows.
->>
->> As per our design, we are not masking the interrupts in top half and
->> restoring mask after thread execution like Intel and
->> our IP supports line based interrupts. If we move SoundWire manager
->> interrupt handling to thread function, we have observed interrupts are
->> reported but not handled properly due to thread execution is in progress
->> sometimes.
->> we will add comments for this design constraint in the code if we have to
->> go with threaded_irq implementation.
->>
->> @Bossart: we are waiting for your reply.
+I suggest rewriting the commit message though. From the looks of it, it
+might suggest that FMODE_BUF_RASYNC is a magic flag that automatically
+improves performance that can be enabled willy nilly.
 
-I am not sure I get the point about using workqueues v. threads for the
-manager, which in turn makes it difficult to understand why the DMA
-interrupt handling should be aligned with that of the manager interrupt
-handling.
+How about something like:
 
-Using the combination of hard irq handler + workqueue feels odd. I may
-very well 'work' but others should chime in since I am far from the most
-knowledgeable reviewer in this area.
+f2fs uses generic_file_buffered_read(), which supports buffered async
+reads since commit 1a0a7853b901 ("mm: support async buffered reads in
+generic_file_buffered_read()").
 
->>>>>> +static void acp63_sdw_dma_workthread(struct work_struct *work)
->>>>>> +{
->>>>>> +	struct acp63_dev_data *adata = container_of(work, struct acp63_dev_data,
->>>>>> +						    acp_sdw_dma_work);
->>>>>> +	struct sdw_dma_dev_data *sdw_dma_data;
->>>>>> +	u32 stream_index;
->>>>>> +	u16 pdev_index;
->>>>>> +
->>>>>> +	pdev_index = adata->sdw_dma_dev_index;
->>>>>> +	sdw_dma_data = dev_get_drvdata(&adata->pdev[pdev_index]->dev);
->>>>>> +
->>>>>> +	for (stream_index = 0; stream_index < ACP63_SDW0_DMA_MAX_STREAMS; stream_index++) {
->>>>>> +		if (adata->sdw0_dma_intr_stat[stream_index]) {
->>>>>> +			if (sdw_dma_data->sdw0_dma_stream[stream_index])
->>>>>> +				snd_pcm_period_elapsed(sdw_dma_data->sdw0_dma_stream[stream_index]);
->>>>>> +			adata->sdw0_dma_intr_stat[stream_index] = 0;
->>>>>> +		}
->>>>>> +	}
->>>>>> +	for (stream_index = 0; stream_index < ACP63_SDW1_DMA_MAX_STREAMS; stream_index++) {
->>>>>> +		if (adata->sdw1_dma_intr_stat[stream_index]) {
->>>>>> +			if (sdw_dma_data->sdw1_dma_stream[stream_index])
->>>>>> +				snd_pcm_period_elapsed(sdw_dma_data->sdw1_dma_stream[stream_index]);
->>>>>> +			adata->sdw1_dma_intr_stat[stream_index] = 0;
->>>>>> +		}
->>>>>> +	}
->>>>> I am not clear on the benefits of the workqueue which only tests a flag
->>>>> that's set ...
->>>> In top half, we are checking all stream irq mask and setting
->>>> corresponding stream id index in interrupt status array when dma
->>>> irq is raised.
->>>>
->>>> Our intention is to handle snd_pcm_period_elapsed in process context.
->>>> if the flag is set, call the period elapsed for the substream based on stream
->>>> id in work queue.
-> 
+Match other file-systems and enable it. The read performance has been
+greatly improved under io_uring:
+
+    167M/s -> 234M/s, Increase ratio by 40%
+
+Test w/:
+    ./fio --name=3Donessd --filename=3D/data/test/local/io_uring_test
+    --size=3D256M --rw=3Drandread --bs=3D4k --direct=3D0 --overwrite=3D0
+    --numjobs=3D1 --iodepth=3D1 --time_based=3D0 --runtime=3D10
+    --ioengine=3Dio_uring --registerfiles --fixedbufs
+    --gtod_reduce=3D1 --group_reporting --sqthread_poll=3D1
+
+On Wed, May 31, 2023 at 10:01=E2=80=AFPM Yangtao Li via Linux-f2fs-devel
+<linux-f2fs-devel@lists.sourceforge.net> wrote:
+>
+> After enabling this feature, the read performance has been greatly
+> improved:
+>
+>     167M/s -> 234M/s, Increase ratio by 40%
+>
+> Test w/:
+>     ./fio --name=3Donessd --filename=3D/data/test/local/io_uring_test
+>     --size=3D256M --rw=3Drandread --bs=3D4k --direct=3D0 --overwrite=3D0
+>     --numjobs=3D1 --iodepth=3D1 --time_based=3D0 --runtime=3D10
+>     --ioengine=3Dio_uring --registerfiles --fixedbufs
+>     --gtod_reduce=3D1 --group_reporting --sqthread_poll=3D1
+>
+> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  fs/f2fs/file.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index 015ed274dc31..23c68ee946e5 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -546,7 +546,7 @@ static int f2fs_file_open(struct inode *inode, struct=
+ file *filp)
+>         if (err)
+>                 return err;
+>
+> -       filp->f_mode |=3D FMODE_NOWAIT;
+> +       filp->f_mode |=3D FMODE_NOWAIT | FMODE_BUF_RASYNC;
+>
+>         return dquot_file_open(inode, filp);
+>  }
+> --
+> 2.39.0
+>
+>
+>
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
