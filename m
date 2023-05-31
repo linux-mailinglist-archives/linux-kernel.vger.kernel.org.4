@@ -2,112 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C767186A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FA47186A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232676AbjEaPrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S233086AbjEaPrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232537AbjEaPrA (ORCPT
+        with ESMTP id S232537AbjEaPrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:47:00 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB9D9D
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:46:58 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-53fb4ee9ba1so1289902a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:46:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685548017; x=1688140017;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KKEHFoxOsCgLmI1DdeQCEy3HhPJ+1U7vLLVsHpPTjis=;
-        b=hiUzdZ1tyrEXaC0nct0J68xAxXlmIwvH5bCBbGQvn5IY1FnWsWmKlh6V7cr064tkWt
-         LYWh6Hp3LWnvKArJDVWEjPmyRKuNKYrE/ReZUviOEmAISXC0azSDFccB3QmaHB23pVkf
-         fqGGQUz7Ngh+MycaZTrDbomcarlrOHK7xklYtLg4+lO+UYgNFfCu9a3umi3gObWB5K5H
-         ijPceWtn9q9eKLbYndY6PVf0qRv7JO7wtfNxkl1dKAqXPAQutf554FgeS9nE3JQd/hyJ
-         XFeDxL+XLCm02Vq9mBhxJrCmHuRSWH65GF72tJCsVVVabMUd/iLx/wPut+wNM15nWk5k
-         kmQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685548017; x=1688140017;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KKEHFoxOsCgLmI1DdeQCEy3HhPJ+1U7vLLVsHpPTjis=;
-        b=BRpx+sbKlZHxEhKLl95MCau5O+Q+yzXibKNzA2MNIfgYCe5UfXugCuDk1r5jp0tgJF
-         Tx9oo9I9ekJ2BzuTOEfMNiC9Sd8sikSOODHGZ83LFRSVzmo2mipDco7SDWt9MvSfQ9VK
-         cr5OCuW2DgHC2TlOflGp0IVaCY7wLlvwSno8bM2J5sNdzv5TX97+3YGSeUGpN/a4M28s
-         lsZA21zI7/fxU5pZsKi2cGjomE9a8XMedxGv91dYV1KXZth/bHrebSZraKcoiCiitNQe
-         3//NeLM6oh4vCd0qgVkqLho5J7WqXOUb6ugiBbtxWoLaqUdyFgp1o0kEDEH5N5TNa3+F
-         f2GA==
-X-Gm-Message-State: AC+VfDyZUtKdtyneLKt/MVR55pmU7ewbxP2IujqeEYfyhgUEzRektl4z
-        ljGePYncX7BUG5CkiLo8CSk=
-X-Google-Smtp-Source: ACHHUZ6BSeCNJ75UsylpGcAlcsVksIZ2BPf+XfdUXmpI4qAqOnYjZITeupnVmD5pT9Qxo7I1/HYXyQ==
-X-Received: by 2002:a05:6a20:8e1f:b0:10b:e88f:597c with SMTP id y31-20020a056a208e1f00b0010be88f597cmr5099836pzj.44.1685548017222;
-        Wed, 31 May 2023 08:46:57 -0700 (PDT)
-Received: from yogi-Zephyrus ([103.251.210.211])
-        by smtp.gmail.com with ESMTPSA id o9-20020a63e349000000b0051afa49e07asm1455725pgj.50.2023.05.31.08.46.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 08:46:56 -0700 (PDT)
-Date:   Wed, 31 May 2023 21:16:53 +0530
-From:   Yogesh Hegde <yogi.kernel@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] staging: rtl8192e: Rename variable SetWirelessMode
-Message-ID: <20230531154653.GB87044@yogi-Zephyrus>
-References: <cover.1685284727.git.yogi.kernel@gmail.com>
- <5a1ee0e9ef53ebe6085c14dba08c438862ec992e.1685284727.git.yogi.kernel@gmail.com>
- <2023052837-half-pretended-e024@gregkh>
+        Wed, 31 May 2023 11:47:14 -0400
+Received: from w4.tutanota.de (w4.tutanota.de [81.3.6.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45243132;
+        Wed, 31 May 2023 08:47:12 -0700 (PDT)
+Received: from tutadb.w10.tutanota.de (unknown [192.168.1.10])
+        by w4.tutanota.de (Postfix) with ESMTP id DD6571060171;
+        Wed, 31 May 2023 15:47:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1685548030;
+        s=s1; d=bens.haus;
+        h=From:From:To:To:Subject:Subject:Content-Description:Content-ID:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Cc:Cc:Date:Date:In-Reply-To:In-Reply-To:MIME-Version:MIME-Version:Message-ID:Message-ID:Reply-To:References:References:Sender;
+        bh=RpT/H9rcQ7ixw4i3+3UZ5QOlHh7IMrLh2gHnDzou/nc=;
+        b=Me6rE/1/p2s7jLidZTF6on33LGbsf5vu4T2XXXT99O5cwCIwwntmCnGU1TmQ/AiH
+        6WEj3yNrqDDHsY6Rf2txhmIqfU3Dhooqk0h1gsrQxWmOGxObaZhJ02Q/SHAdGGnsFuE
+        LLFEdLT0ioKebrdQU5AQWPPBpZmzkWdQXSOZW3LurayLVuXom5nOK/TCT+TJO6yKcCx
+        SViJxWKQSRgxBi3bGdTYiV8OdmY3rm0K8jmzmduZiAVLsx/1gUlT1FOX2S+acn4dNVb
+        XduYg/Yni8lbuWskKEB41P6WcW905O0cACgReZjSpgDXhAqaMZ12Xdhs4fVL5ga7VAE
+        zk96/bnnWw==
+Date:   Wed, 31 May 2023 17:47:10 +0200 (CEST)
+From:   Ben Schneider <ben@bens.haus>
+To:     Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Linux Arm Kernel <linux-arm-kernel@lists.infradead.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Message-ID: <NWmRXzg--3-9@bens.haus>
+In-Reply-To: <877csouaaw.fsf@BL-laptop>
+References: <NWNpfIn--3-9@bens.haus> <f8393f75-ff32-4450-b8d6-b08d43240200@lunn.ch> <NWhH-xL--7-9@bens.haus> <877csouaaw.fsf@BL-laptop>
+Subject: Re: [PATCH] arm64: dts: marvell: Fix espressobin-ultra boot
+ failure
+ and wifi
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023052837-half-pretended-e024@gregkh>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 05:01:45PM +0100, Greg Kroah-Hartman wrote:
-> On Sun, May 28, 2023 at 08:21:33PM +0530, Yogesh Hegde wrote:
-> > Rename variable SetWirelessMode to set_wireless_mode to avoid
-> > CamelCase which is not accepted by checkpatch.
-> > 
-> > Signed-off-by: Yogesh Hegde <yogi.kernel@gmail.com>
-> > ---
-> >  drivers/staging/rtl8192e/rtl8192e/rtl_core.c |  2 +-
-> >  drivers/staging/rtl8192e/rtllib.h            |  2 +-
-> >  drivers/staging/rtl8192e/rtllib_softmac.c    | 12 ++++++------
-> >  3 files changed, 8 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-> > index 17b70dde7eeb..699c4accf2db 100644
-> > --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-> > +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-> > @@ -716,7 +716,7 @@ static void _rtl92e_init_priv_handler(struct net_device *dev)
-> >  	priv->rtllib->check_nic_enough_desc	= _rtl92e_check_nic_enough_desc;
-> >  	priv->rtllib->handle_assoc_response	= _rtl92e_handle_assoc_response;
-> >  	priv->rtllib->handle_beacon		= _rtl92e_handle_beacon;
-> > -	priv->rtllib->SetWirelessMode		= rtl92e_set_wireless_mode;
-> > +	priv->rtllib->set_wireless_mode		= rtl92e_set_wireless_mode;
-> 
-> As this is only set in one place, why is it needed at all?  Why not just
-> call the real function instead?
-You are right. I don't understand why the code was originally written this way.
+May 31, 2023, 09:20 by gregory.clement@bootlin.com:
 
-> Same for the other patches in this series, why not turn this into a set
-> of cleanup patches removing the unnecessary indirection and removing the
-> CamelCase variables entirely?
-Yes you are right. I will work on transforming this series into a set of 
-cleanup patches to eliminate the unnecessary indirection and remove the 
-CamelCase variables entirely.
+>
+> I don't see the patch so I can't apply it...
+>
+>
+Hi Gregory, sorry I wasn't sure if I should resend the patch.
 
-Thanks for your feedback. 
+Boot hangs on EspressoBIN Ultra (Armada 3720) after a message that device
+vcc_sd1 had been disabled. The device manufacturer patched this issue in
+their kernel fork noting that vcc_sd1 is used by the EspressoBIN model
+but not the EspressoBIN Ultra. Removing the device from the tree fixes
+the boot hang and wifi.
 
-Regards 
-Yogesh
+Link: https://github.com/globalscaletechnologies/linux/commit/b879d560eebf2=
+766781614a0169a9564f1e0fc06
 
+Signed-off-by: Ben Schneider <ben@bens.haus>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+---
+arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts | 3 +++
+1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts =
+b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
+index d29d2da95..f9abef8dc 100644
+--- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
++++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
+@@ -24,6 +24,8 @@
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 ethernet5 =3D &switch0port4;
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
+=C2=A0
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /delete-node/ regulator;
++
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg_usb3_vbus: usb3-vbus {
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 compatible =3D "regulator-fixed";
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 regulator-name =3D "usb3-vbus";
+@@ -66,6 +68,7 @@
+};
+=C2=A0
+&sdhci1 {
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /delete-property/ vqmmc-supply;
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 status =3D "disabled";
+};
