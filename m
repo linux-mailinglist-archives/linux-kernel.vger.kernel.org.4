@@ -2,96 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD477717677
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5048B717679
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234279AbjEaGAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 02:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
+        id S234288AbjEaGBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 02:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjEaGAS (ORCPT
+        with ESMTP id S229479AbjEaGBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 02:00:18 -0400
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C4F11D
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 23:00:17 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R821e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VjwLRao_1685512812;
-Received: from 30.221.128.130(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VjwLRao_1685512812)
-          by smtp.aliyun-inc.com;
-          Wed, 31 May 2023 14:00:13 +0800
-Message-ID: <810630b9-2021-01b3-1473-aa759174205e@linux.alibaba.com>
-Date:   Wed, 31 May 2023 14:00:12 +0800
+        Wed, 31 May 2023 02:01:07 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E238D11C
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 23:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zXFbghN5Oa6JE4b5vk2VR/hhTLQNTSqD9OkNgOn3LKA=; b=TuRIxgkOysvpuskkTTblNke1x2
+        8kQW9AYsK0NPuQbEbOOlw6j28RDvPbSLKVv6fgtoIhZqiYkI2Sp7+Y8ftXPOgADBxvXRhKzk80M/n
+        VLtY7uzaFNz4w+PVyQWNb21eB2qoKbU5/cWNoGRJeIaJDyNz2OpV1e3GD8pvAvWcvaoBQ1kMS/y6P
+        pnasDNYMf4NBE9pgIeHwNMz0kLd5hnRbG0x5EY8Jcaj1kZbCZPHiMNZL1dGstf8juU42KYY6ptoew
+        qM1JwRApgGprj1omrt876fMzRLZ9zEzOoVdY5W7mIOrSNAyn2PSDC7wZ3EEUb9GTKaKnJQcW05UfL
+        WVjPlK1g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q4EtA-00GEeU-2m;
+        Wed, 31 May 2023 06:00:52 +0000
+Date:   Tue, 30 May 2023 23:00:52 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Nhat Pham <nphamcs@gmail.com>,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
+        Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: zswap: support exclusive loads
+Message-ID: <ZHbilD8TbMF3+bWz@infradead.org>
+References: <20230530210251.493194-1-yosryahmed@google.com>
+ <20230530235447.GB102494@cmpxchg.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH] ocfs2: check new file size on fallocate call
-Content-Language: en-US
-To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
-        Mark Fasheh <mark@fasheh.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Heming Zhao <heming.zhao@suse.com>
-Cc:     ocfs2-devel@oss.oracle.com, linux-kernel@vger.kernel.org
-References: <20230529152645.32680-1-lhenriques@suse.de>
-From:   Joseph Qi <joseph.qi@linux.alibaba.com>
-In-Reply-To: <20230529152645.32680-1-lhenriques@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530235447.GB102494@cmpxchg.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 30, 2023 at 07:54:47PM -0400, Johannes Weiner wrote:
+> Somewhat tangential, but is there still a point to the frontswap
+> layer? It seems usecases other than zswap have never materialized, at
+> least not in tree. Life would be a lot easier if we were to just
+> hardcode the zswap callbacks in the swap functions.
 
+I've been wanting to remove it for a while, as it really is rather
+pointless.
 
-On 5/29/23 11:26 PM, Luís Henriques wrote:
-> When changing a file size with fallocate() the new size isn't being
-> checked.  In particular, the FSIZE ulimit isn't being checked, which makes
-> fstest generic/228 fail.  Simply adding a call to inode_newsize_ok() fixes
-> this issue.
-> 
-> Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> ---
->  fs/ocfs2/file.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/ocfs2/file.c b/fs/ocfs2/file.c
-> index efb09de4343d..b173c36bcab3 100644
-> --- a/fs/ocfs2/file.c
-> +++ b/fs/ocfs2/file.c
-> @@ -2100,14 +2100,20 @@ static long ocfs2_fallocate(struct file *file, int mode, loff_t offset,
->  	struct ocfs2_space_resv sr;
->  	int change_size = 1;
->  	int cmd = OCFS2_IOC_RESVSP64;
-> +	int ret = 0;
->  
->  	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE))
->  		return -EOPNOTSUPP;
-
-This means we only support keep-size and pouch_hole.
-And it seems pouch_hole will also imply keep-size.
-
->  	if (!ocfs2_writes_unwritten_extents(osb))
->  		return -EOPNOTSUPP;
->  
-> -	if (mode & FALLOC_FL_KEEP_SIZE)
-> +	if (mode & FALLOC_FL_KEEP_SIZE) {
->  		change_size = 0;
-> +	} else {
-
-Seems this will be a dead branch?
-
-Thanks,
-Joseph
-
-> +		ret = inode_newsize_ok(inode, offset + len);
-> +		if (ret)
-> +			return ret;
-> +	}
->  
->  	if (mode & FALLOC_FL_PUNCH_HOLE)
->  		cmd = OCFS2_IOC_UNRESVSP64;
