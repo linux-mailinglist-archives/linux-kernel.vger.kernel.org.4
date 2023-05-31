@@ -2,85 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784B17179AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 823057179B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbjEaILt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
+        id S235128AbjEaIMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234370AbjEaILr (ORCPT
+        with ESMTP id S232547AbjEaIMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:11:47 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3790BE
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:11:46 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f3b5881734so6330877e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:11:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685520705; x=1688112705;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=djQp6xXJB76HLCESd2F3vNeh5AutF5do3+uW6pj9IuA=;
-        b=dlgAi76fwrHBNV3xO0if+tVJBJVOd5Ea5U31Jkukoh83W3PISrWN1bUnmnrYhsjlis
-         FH52Rq0t1Yf5S6z3MgfwjegEa8GmmJfAYgp3DRrI7YdaRfEYX1L24oMO23MULlHTDMF7
-         TedjM96r1F766DN6A6LBpcriY/+oOsbVcggxZOmv/43Hu5dYZH8SISQZDXmghHJR/uKK
-         2wKPviZC6+tewJVn5yOEIde3DRmoAm2t5TPVL3OH1MygBSkyqfKiYBfBQ9V4kZvUYLlF
-         kMl6PxVe1fzTwb4n8qd/S1QPrbXaj9KCseS9yU3drnWqgfebEMpZww+Mri1uHYFAYiQz
-         PW4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685520705; x=1688112705;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=djQp6xXJB76HLCESd2F3vNeh5AutF5do3+uW6pj9IuA=;
-        b=Bvta8CvFsUxINU6HTDelQUw/gfofsTfbaCfQhMAaiVPb5yzNiI5JMGCgWMfzsIS9ez
-         QwK7EqSaD/qQAfCH6KQIK/qazu73Gl2CFQMAHTeWxGOiSdemNU/G1luMiSGw/17O6Lkr
-         rHKigT14dEz8qjO7PHyZ+7QHoDQ/ZbHHBG4RR8UZSRz20buRRQqvHQPR9m/YngFCSi7h
-         UA9gNnmwNxvFareJ4ta4gLEFnYt/UnRa4wAZa8kigtA5hewyUirHqMb22TfVagODbpDT
-         JBP9A01khTId6rnYEIxmNXjZYoagubk9/4Ro7jvkVb+YDh90mwS8DI/GFWyAJdiyIiEs
-         CACg==
-X-Gm-Message-State: AC+VfDwIqF1cKFrPfIpxl5cRzglGr5Lza3n5Glc9HLjGIC9K2H6fsYvl
-        IGpg85puai9N7b8KKcXw5F8W/BT1rrkxAbEG69w=
-X-Google-Smtp-Source: ACHHUZ5rYHDeeSg0XtC/27c5tpai1Ctc5llD+NlGEP/YA8e4frgKM7+jMqUn4iigN2Wk40R4dtfXAg==
-X-Received: by 2002:a19:f706:0:b0:4f3:afcc:e1bb with SMTP id z6-20020a19f706000000b004f3afcce1bbmr2012530lfe.1.1685520705131;
-        Wed, 31 May 2023 01:11:45 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id 13-20020a05600c24cd00b003f4dde07956sm23395334wmu.42.2023.05.31.01.11.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 01:11:43 -0700 (PDT)
-Date:   Wed, 31 May 2023 11:11:39 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Edward Cree <ecree.xilinx@gmail.com>
-Cc:     oe-kbuild@lists.linux.dev, lkp@intel.com,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: drivers/net/ethernet/sfc/tc.c:450 efx_tc_flower_replace() warn:
- missing unwind goto?
-Message-ID: <2fca6bb6-a964-4b77-b99e-fad244fde732@kili.mountain>
-References: <cbbbf576-6788-4049-b1e8-a05862f62cc2@kili.mountain>
- <4eabd7b1-66b3-7b3a-cabd-d1876767c49c@gmail.com>
+        Wed, 31 May 2023 04:12:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D39BE
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:12:35 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q4GwT-0006Bx-Ry; Wed, 31 May 2023 10:12:25 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q4GwS-0043cp-Ad; Wed, 31 May 2023 10:12:24 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q4GwR-00H83J-9T; Wed, 31 May 2023 10:12:23 +0200
+Date:   Wed, 31 May 2023 10:12:23 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] net: dsa: slave: Advertise correct EEE capabilities at
+ slave PHY setup
+Message-ID: <ZHcBZ5hGTu7aBCsJ@pengutronix.de>
+References: <20230530122621.2142192-1-lukma@denx.de>
+ <32aa2c0f-e284-4c5e-ba13-a2ea7783c202@lunn.ch>
+ <20230530154039.4552e08a@wsk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4eabd7b1-66b3-7b3a-cabd-d1876767c49c@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230530154039.4552e08a@wsk>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 07:26:46PM +0100, Edward Cree wrote:
-> Guess efx_tc_flower_replace_foreign() now has the latter problem
->  too?  (And it _does_ want to use the failure ladder, because we've
->  got to release the encap match.)
+Hi Lukasz,
 
-Oh, yeah.  Right.
+On Tue, May 30, 2023 at 03:40:39PM +0200, Lukasz Majewski wrote:
+> Hi Andrew,
+> 
+> > On Tue, May 30, 2023 at 02:26:21PM +0200, Lukasz Majewski wrote:
+> > > One can disable in device tree advertising of EEE capabilities of
+> > > PHY when 'eee-broken-100tx' property is present in DTS.
+> > > 
+> > > With DSA switch it also may happen that one would need to disable
+> > > EEE due to some network issues.  
+> > 
+> > Is EEE actually broken in the MAC/PHY combination?
+> > 
+> 
+> Problem is that when I connect on this project some non-manageable
+> switches (which by default have EEE enabled), then I observe very rare
+> and sporadic link loss and reconnection.
 
-regards,
-dan carpenter
+The interesting question is, do other link partner or local system is
+broken?
+In some cases, not proper tx-timer was triggering this kind of
+symptoms. And timer configuration may depend on the link speed. So,
+driver may be need to take care of this.
 
+> Disabling EEE solves the problem.
+> 
+> > You should not be using this DT option for configuration. It is there
+> > because there is some hardware which is truly broken, and needs EEE
+> > turned off.
+> 
+> Yes, I do think that the above sentence sums up my use case.
+
+As Andrew already described, current linux kernel EEE support is not in
+the best shape, it is hard to see the difference between broken HW and
+SW.
+
+> > If EEE does work, but you need to turn it off because of latency etc,
+> > then please use ethtool.
+> > 
+> 
+> Yes, correct - it is possible to disable the EEE with 
+> 
+> ethtool --set-eee lan2 eee off
+> 
+> However, as I've stated in the mail, I cannot re-enable EEE once
+> disabled with:
+> 
+> ethtool --set-eee lan2 eee on
+> 
+> ethtool --show-eee lan2
+> EEE Settings for lan2:
+>         EEE status: not supported
+> 
+> 
+> As the capability register shows value of 0.
+
+Some PHYs indeed have this issues:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/phy/micrel.c?h=v6.4-rc4#n1402
+
+In case of your older kernel version, you will need to fake access to
+the EEE caps register.
+
+Regards,
+Oleksij
