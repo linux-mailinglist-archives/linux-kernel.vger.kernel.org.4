@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6717B7182E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2807182EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236745AbjEaNqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
+        id S236788AbjEaNqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236671AbjEaNoU (ORCPT
+        with ESMTP id S236380AbjEaNoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:44:20 -0400
+        Wed, 31 May 2023 09:44:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3E319BA;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF5C19B7;
         Wed, 31 May 2023 06:42:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1131C637AA;
-        Wed, 31 May 2023 13:42:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70662C4339C;
-        Wed, 31 May 2023 13:42:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81DC763B47;
+        Wed, 31 May 2023 13:42:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 037BAC433D2;
+        Wed, 31 May 2023 13:42:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540550;
-        bh=Qvxj74D67uU3ptFtjNBZ01IkRpGiV41YlE4yyitA/3Y=;
+        s=k20201202; t=1685540552;
+        bh=3Xbn1EwYG9/PxX2YVlraKEV2YsIoSvlFZ4SYwZJrrFE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KsYcA6qM05nAe3ML/wXCb7rsUfwICydVCUMKG1O4A5CxUrdPIyP80v+n7GoxkhpjB
-         410mS3c6jktF8d2LaKCJE3Q+52VlxPCvpBxWw3UPZOeJBgdZ9pOQwlTglKAFukpn6j
-         Yo5QmFAn3XVcWWK+La1c2YWvDYT+jeFlGDKj2DcvgAf86V6RM7ohOl2rjwRvYiWdty
-         aKz4jPLRkq90dTn+9Yn6bfnlfWP5LYxlobGbb632AxSug5BRfXri9CdqMlhPw/CulJ
-         UXyiCmpvwtgKOzcVSmqlNnIqslPde2/6r88T7+xQvUlxyf0VgJ6KhffTCNcimgnQ6c
-         H0ri1lp95hn/g==
+        b=N5hfTX1PnILEvaqRidWkKB1qGkrZ/yCEeWDggBRa/UYg/diPTnlLawf1tHqUwds/4
+         RNVuiVz+4pmKOIsZ1PUgkgmaz7F1+TQ1Fksy1TN7xUFjsgedTNpBLyzZ+P6FvqlQrG
+         Y/dCb9bTCOUmctJtNzCHJ/Jh0iLuS03+t6Nv60bCBP9sUrv5W2fZ7qd0uK40J4VSpX
+         MQbKc7NZkh2FkeCLbMN+4FdH+retYE31P7XASvok+VmwHe3pMrdGQIfeZlzq0NljwV
+         yMAb5ayUGfndPmlLSfIGEkcxLVppW0Rf6COe6qFhTBXGanwmEA01EpQwRrmD8BWzjT
+         w1/hlaiO/Smsg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        syzbot+d8941552e21eac774778@syzkaller.appspotmail.com,
-        Christoph Hellwig <hch@lst.de>,
-        Anand Jain <anand.jain@oracle.com>,
-        David Sterba <dsterba@suse.com>,
-        Sasha Levin <sashal@kernel.org>, clm@fb.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 17/33] btrfs: handle memory allocation failure in btrfs_csum_one_bio
-Date:   Wed, 31 May 2023 09:41:43 -0400
-Message-Id: <20230531134159.3383703-17-sashal@kernel.org>
+Cc:     Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 6.1 18/33] ASoC: soc-pcm: test if a BE can be prepared
+Date:   Wed, 31 May 2023 09:41:44 -0400
+Message-Id: <20230531134159.3383703-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134159.3383703-1-sashal@kernel.org>
 References: <20230531134159.3383703-1-sashal@kernel.org>
@@ -61,46 +58,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+From: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 
-[ Upstream commit 806570c0bb7b4847828c22c4934fcf2dc8fc572f ]
+[ Upstream commit e123036be377ddf628226a7c6d4f9af5efd113d3 ]
 
-Since f8a53bb58ec7 ("btrfs: handle checksum generation in the storage
-layer") the failures of btrfs_csum_one_bio() are handled via
-bio_end_io().
+In the BE hw_params configuration, the existing code checks if any of the
+existing FEs are prepared, running, paused or suspended - and skips the
+configuration in those cases. This allows multiple calls of hw_params
+which the ALSA state machine supports.
 
-This means, we can return BLK_STS_RESOURCE from btrfs_csum_one_bio() in
-case the allocation of the ordered sums fails.
+This check is not handled for the prepare stage, which can lead to the
+same BE being prepared multiple times. This patch adds a check similar to
+that of the hw_params, with the main difference being that the suspended
+state is allowed: the ALSA state machine allows a transition from
+suspended to prepared with hw_params skipped.
 
-This also fixes a syzkaller report, where injecting a failure into the
-kvzalloc() call results in a BUG_ON().
+This problem was detected on Intel IPC4/SoundWire devices, where the BE
+dailink .prepare stage is used to configure the SoundWire stream with a
+bank switch. Multiple .prepare calls lead to conflicts with the .trigger
+operation with IPC4 configurations. This problem was not detected earlier
+on Intel devices, HDaudio BE dailinks detect that the link is already
+prepared and skip the configuration, and for IPC3 devices there is no BE
+trigger.
 
-Reported-by: syzbot+d8941552e21eac774778@syzkaller.appspotmail.com
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Anand Jain <anand.jain@oracle.com>
-Signed-off-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Link: https://github.com/thesofproject/sof/issues/7596
+Signed-off-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com
+Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com
+Link: https://lore.kernel.org/r/20230517185731.487124-1-pierre-louis.bossart@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/file-item.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ include/sound/soc-dpcm.h |  4 ++++
+ sound/soc/soc-pcm.c      | 20 ++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/fs/btrfs/file-item.c b/fs/btrfs/file-item.c
-index 4fab7da632594..b14d2da9b26d3 100644
---- a/fs/btrfs/file-item.c
-+++ b/fs/btrfs/file-item.c
-@@ -717,7 +717,9 @@ blk_status_t btrfs_csum_one_bio(struct btrfs_inode *inode, struct bio *bio,
- 				sums = kvzalloc(btrfs_ordered_sum_size(fs_info,
- 						      bytes_left), GFP_KERNEL);
- 				memalloc_nofs_restore(nofs_flag);
--				BUG_ON(!sums); /* -ENOMEM */
-+				if (!sums)
-+					return BLK_STS_RESOURCE;
+diff --git a/include/sound/soc-dpcm.h b/include/sound/soc-dpcm.h
+index 5b689c663290f..27a5642f07cda 100644
+--- a/include/sound/soc-dpcm.h
++++ b/include/sound/soc-dpcm.h
+@@ -125,6 +125,10 @@ int snd_soc_dpcm_can_be_free_stop(struct snd_soc_pcm_runtime *fe,
+ int snd_soc_dpcm_can_be_params(struct snd_soc_pcm_runtime *fe,
+ 		struct snd_soc_pcm_runtime *be, int stream);
+ 
++/* can this BE perform prepare */
++int snd_soc_dpcm_can_be_prepared(struct snd_soc_pcm_runtime *fe,
++				 struct snd_soc_pcm_runtime *be, int stream);
 +
- 				sums->len = bytes_left;
- 				ordered = btrfs_lookup_ordered_extent(inode,
- 								offset);
+ /* is the current PCM operation for this FE ? */
+ int snd_soc_dpcm_fe_can_update(struct snd_soc_pcm_runtime *fe, int stream);
+ 
+diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
+index 7a486ca9633c1..f3964060a0447 100644
+--- a/sound/soc/soc-pcm.c
++++ b/sound/soc/soc-pcm.c
+@@ -2403,6 +2403,9 @@ int dpcm_be_dai_prepare(struct snd_soc_pcm_runtime *fe, int stream)
+ 		if (!snd_soc_dpcm_be_can_update(fe, be, stream))
+ 			continue;
+ 
++		if (!snd_soc_dpcm_can_be_prepared(fe, be, stream))
++			continue;
++
+ 		if ((be->dpcm[stream].state != SND_SOC_DPCM_STATE_HW_PARAMS) &&
+ 		    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_STOP) &&
+ 		    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_SUSPEND) &&
+@@ -3043,3 +3046,20 @@ int snd_soc_dpcm_can_be_params(struct snd_soc_pcm_runtime *fe,
+ 	return snd_soc_dpcm_check_state(fe, be, stream, state, ARRAY_SIZE(state));
+ }
+ EXPORT_SYMBOL_GPL(snd_soc_dpcm_can_be_params);
++
++/*
++ * We can only prepare a BE DAI if any of it's FE are not prepared,
++ * running or paused for the specified stream direction.
++ */
++int snd_soc_dpcm_can_be_prepared(struct snd_soc_pcm_runtime *fe,
++				 struct snd_soc_pcm_runtime *be, int stream)
++{
++	const enum snd_soc_dpcm_state state[] = {
++		SND_SOC_DPCM_STATE_START,
++		SND_SOC_DPCM_STATE_PAUSED,
++		SND_SOC_DPCM_STATE_PREPARE,
++	};
++
++	return snd_soc_dpcm_check_state(fe, be, stream, state, ARRAY_SIZE(state));
++}
++EXPORT_SYMBOL_GPL(snd_soc_dpcm_can_be_prepared);
 -- 
 2.39.2
 
