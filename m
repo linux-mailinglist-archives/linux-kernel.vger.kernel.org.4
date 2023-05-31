@@ -2,117 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A4F717456
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 05:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6C9717459
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 05:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjEaDZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 23:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
+        id S234033AbjEaD12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 23:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234136AbjEaDZa (ORCPT
+        with ESMTP id S229558AbjEaD10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 23:25:30 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08149E5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 20:25:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685503530; x=1717039530;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QQrEqT8+bf3tGQW2J4Pg2sSRavsqwg+fUSfflAreoXI=;
-  b=gPemL4LeI5TtF9vS908/vnwCKY2Y1RqMFaH3vIAG0rAaBQTWVGU3VR+K
-   qNXiO9FRlIzr/BvI+mqMlqATJU2dtjLlSZkVs1S0OtfjuTXyNsrQ+2153
-   nIqwTxU+qeoGp1gSmP2u0hJBYDMhh8eF7cLmjdJScjYJahO29SuC+3N7W
-   KCbXc5BEykQ7YvJvIszB2EhLJrRNx+7HPj3dEUEOPC+2YMrz/RmIm1nFA
-   BS4P3pLkqYBG6j0RWZ8dzExQ/b7rXZ5CO68SjCGkDjD5kqS7C0vPgQ96j
-   9nVNcv6/S3WNVg0mvZ01PqeDQONokopsfCGF6C9G6lwM7Qg7rDIvzJ0ft
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="353967292"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="353967292"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 20:25:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="1036852593"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="1036852593"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by fmsmga005.fm.intel.com with ESMTP; 30 May 2023 20:25:27 -0700
-Message-ID: <3d7ce5c1-c248-a14a-2dc4-79449da9aa43@linux.intel.com>
-Date:   Wed, 31 May 2023 11:24:32 +0800
+        Tue, 30 May 2023 23:27:26 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1933A0;
+        Tue, 30 May 2023 20:27:24 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34V3KNE0028776;
+        Wed, 31 May 2023 03:27:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=NJWHqxC5VMCqTH6Nl2YKSjkcaF9QSLV0bWFnNEPVjTQ=;
+ b=TwFJK1y5Ey2bBHAE78zwCeEvSX6MQGh1k4ctmK+H3l/KUUaiMCHXeWBYG1HOP33pyyQS
+ 7J/ck86rsYcB9tA4422Rw5Em9n4AfC1teQgBw/Q57bqAQfNMuDfcAQjito049tE0b6Rl
+ ee4F4HKpC1bwLCLZ3iYqGugs7F2fdHOGa3/ZoEwINybiFom1DqxoPXI5ZN95SFlELzyM
+ vHQ4ltU/C9OvA8tG2po9ApRWicEgOPPDNwQtrKicJ4LXNMaOU/r4pEeAv4ScSX1FgVbi
+ xIqrnls462skM91FGKK7HMMQR73y2Zr4B0DrRRbS5rigSGtmoJAmj6QHtQQFrFhsPyYx Mg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qw7rttrnw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 03:27:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34V3RJ0V015091
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 03:27:19 GMT
+Received: from poovendh-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 30 May 2023 20:27:14 -0700
+From:   Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_devipriy@quicinc.com>
+Subject: [PATCH V2 0/2] Add initial support for RDP454 of IPQ9574 family
+Date:   Wed, 31 May 2023 08:56:46 +0530
+Message-ID: <20230531032648.23816-1-quic_poovendh@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] iommu/vt-d: Remove the dead code in init_iommu_hw()
-Content-Language: en-US
-To:     Yanfei Xu <yanfei.xu@intel.com>, dwmw2@infradead.org,
-        joro@8bytes.org, will@kernel.org, robin.murphy@arm.com
-References: <20230530092503.152926-1-yanfei.xu@intel.com>
- <20230530092503.152926-2-yanfei.xu@intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230530092503.152926-2-yanfei.xu@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MuEvKYW87GLSbaSIxsijQURk6NtfytAr
+X-Proofpoint-ORIG-GUID: MuEvKYW87GLSbaSIxsijQURk6NtfytAr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_18,2023-05-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ phishscore=0 mlxscore=0 mlxlogscore=734 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305310027
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/23 5:25 PM, Yanfei Xu wrote:
-> After 'commit 2a41ccee2fdc ("iommu/vt-d: Change
-> iommu_enable/disable_translation to return void")', init_iommu_hw() only
-> returns 0. If statement for return value of this function is meaningless.
-> Hence change init_iommu_hw() to return viod and remove the dead code of
-> if statement in init_iommu_hw()
-> 
-> Signed-off-by: Yanfei Xu<yanfei.xu@intel.com>
-> ---
->   drivers/iommu/intel/iommu.c | 12 ++----------
->   1 file changed, 2 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> index 8096273b034c..e98f1b122b49 100644
-> --- a/drivers/iommu/intel/iommu.c
-> +++ b/drivers/iommu/intel/iommu.c
-> @@ -2963,7 +2963,7 @@ static void __init init_no_remapping_devices(void)
->   }
->   
->   #ifdef CONFIG_SUSPEND
-> -static int init_iommu_hw(void)
-> +static void init_iommu_hw(void)
->   {
->   	struct dmar_drhd_unit *drhd;
->   	struct intel_iommu *iommu = NULL;
-> @@ -2988,8 +2988,6 @@ static int init_iommu_hw(void)
->   		iommu_enable_translation(iommu);
->   		iommu_disable_protect_mem_regions(iommu);
->   	}
-> -
-> -	return 0;
+Add the initial device tree support for the Reference Design
+Platform(RDP) 454 based on IPQ9574 family of SoCs. This patch series adds
+support for Console UART, SPI NOR and SMPA1 regulator node.
 
-2966 static int init_iommu_hw(void)
-2967 {
-2968         struct dmar_drhd_unit *drhd;
-2969         struct intel_iommu *iommu = NULL;
-2970
-2971         for_each_active_iommu(iommu, drhd)
-2972                 if (iommu->qi)
-2973                         dmar_reenable_qi(iommu);
+V2:
+	- Change logs are added to the respective patches.
 
-dmar_reenable_qi() still possibly returns an error number. It's better
-to pass this error number to the caller of init_iommu_hw()?
+V1 can be found at
+	https://lore.kernel.org/linux-arm-msm/20230519103128.30783-1-quic_poovendh@quicinc.com/
 
-2974
-2975         for_each_iommu(iommu, drhd) {
-2976                 if (drhd->ignored) {
+Poovendhan Selvaraj (2):
+  dt-bindings: arm: qcom: document AL02-C9 board based on IPQ9574 family
+  arm64: dts: qcom: ipq9574: add support for RDP454 variant
 
-Best regards,
-baolu
+ .../devicetree/bindings/arm/qcom.yaml         |  2 +
+ arch/arm64/boot/dts/qcom/Makefile             |  1 +
+ arch/arm64/boot/dts/qcom/ipq9574-rdp454.dts   | 80 +++++++++++++++++++
+ 3 files changed, 83 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-rdp454.dts
+
+
+base-commit: 8c33787278ca8db73ad7d23f932c8c39b9f6e543
+-- 
+2.17.1
+
