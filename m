@@ -2,116 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922967186AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E8A7186B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232226AbjEaPsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
+        id S233913AbjEaPtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbjEaPsg (ORCPT
+        with ESMTP id S233908AbjEaPtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:48:36 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6231C97
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:48:35 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-33bcc8f0d21so822905ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:48:35 -0700 (PDT)
+        Wed, 31 May 2023 11:49:23 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C46126
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:49:20 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id 41be03b00d2f7-517bdc9e81dso2912019a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:49:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685548115; x=1688140115;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xh+NM7DUxAEzTOJt7Ae/1UKGsTT1CaBWPKgHIK+Ua4s=;
-        b=TeV2nuosxCCQSaB5ZclhgFC3ci1TbhrLaLO7YeIa++CfuP3tLyp3XgFpxvgwElWYJB
-         tHOvz9UOWflYz0udLqW8SlXtramYgCn2tvTozp6JaEpMJEnUOIOc9htdjbFb9wvYSRcL
-         Q9sgHw0VEfQJl89cB8p6S3BmlVvQ51rl2tUtJAP0ZFYUgvBVXjltJCIrCS2NNtp+8Dxx
-         Ctg+EYHhUNQDa0WFaYpG+Dq1/lO8dS++A7XL0PkNnCt87heuEDDhP4nKE2bgY3mhTx8o
-         ejL2+csFEJTi2h+Flhy8H6ZBi8Zxqv3ks3EYKU54mH0IQkZju6Ym/N47UBAkeuuRGS/b
-         MQQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685548115; x=1688140115;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20221208; t=1685548160; x=1688140160;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xh+NM7DUxAEzTOJt7Ae/1UKGsTT1CaBWPKgHIK+Ua4s=;
-        b=Y/8TvhH8tf7ktguwxk6deG6p51alKWHDvU2kW7fdZP0IJhqNU4GEDPyLp6L6w1ak5/
-         kedySkOFygcDLz4zIkCJEr4iYXvcmkte+c6fY4UArArtIRZxK5YBX4mdjE7Be9ASfzV+
-         mDY/f4PfPaoujU4L0bip3cvyQjy02nQ7dnBzBQJ8uIouHi0XZeK4AXecrKEnp/+ox3ko
-         +fqf//XIx/n/YwTUwvOalPTt3mPfbs3FGKZCakPl/fz7yWTgmfcQL3Ratqs5TeWX+aZh
-         6r7f0cFEp+UgWacMo4F30HUbkXCgtNU37hhks6l8JvRgxUlLREwehvThrz+kO5dVD3gR
-         zhEw==
-X-Gm-Message-State: AC+VfDwGgQ0UNnJ3OUrt3id+RNeKQ96vss32dzcc1vynajsrYrOZbngf
-        aWbm2U9lIiIpZmomCnQtaqbbDA==
-X-Google-Smtp-Source: ACHHUZ7olLMdzgJo49hRI+Brw+8ZbYH7IxOyZnrYIxdhWvtRY4fllkEJYDoAKqWowWyMCg9AG6Kdvg==
-X-Received: by 2002:a6b:8d53:0:b0:774:80fc:11a9 with SMTP id p80-20020a6b8d53000000b0077480fc11a9mr1999696iod.1.1685548114657;
-        Wed, 31 May 2023 08:48:34 -0700 (PDT)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id f16-20020a02a110000000b004091d72f62dsm1552201jag.85.2023.05.31.08.48.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 08:48:33 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Christoph Hellwig <hch@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        David Howells <dhowells@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Jason Gunthorpe <jgg@ziepe.ca>
-In-Reply-To: <20230526214142.958751-1-dhowells@redhat.com>
-References: <20230526214142.958751-1-dhowells@redhat.com>
-Subject: Re: [PATCH v4 0/3] block: Make old dio use
- iov_iter_extract_pages() and page pinning
-Message-Id: <168554811322.183150.13490236053670818511.b4-ty@kernel.dk>
-Date:   Wed, 31 May 2023 09:48:33 -0600
+        bh=OGuPs2HAW5Kc9EAlBZmlCe2PoQii+LuASoE3r9n3wKk=;
+        b=gW95w+l6CuBmKxEZGzwSJSJ75u4xSmWtE+9eG+sOPythFhqhizzKZfZUWdDNtVu133
+         Vic6dc9A3lAr6Gym0NEx2W6cGJY5b/eG07RympiFcJ2VKC3rRTBGQdRNIgQz84BDj4nJ
+         5gahzZp1rB8b2rZO2Eu7dMlMo+AV0xNydu6jpyCRtUwqw/2sBi9yvyn2R3IGPR0ttV9M
+         OwlPNMN2Xd009J5KoLVHNR668r/ZYa6NVXp9jhPQfm9a0KpMRsevVMuYDJffw5idxpbm
+         0mXjjDPKQ+Xgf+NkEOqZd5Iqxqv9MiOyYUFt78fvrgrba/wzxSnZLsm40kua/riijl0T
+         IqFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685548160; x=1688140160;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OGuPs2HAW5Kc9EAlBZmlCe2PoQii+LuASoE3r9n3wKk=;
+        b=c2f3NG6+OqX6YKuhNC3xCAW4f6zRP63diSSfXcU/IDfNpFQSj2gkJcuaEvkbF3WQXn
+         zuqxdk57kJ2jZRiZt3K30fBR5AmGU5zB9D42I4CH5SwPBus6BQJ8jRjf+nixD+PZ6gCf
+         WP304RGAaS6/AYgwcR/zJL7dG+v8aNpIneUl4+ntPPjiufSO6P33uZQiEDEMFZjJokQa
+         AHHJbUK9Nj1k26Ztu8NcKZ28O/ztOg3hm6pdo1+0jbKXUCBuCw/S8GrF7z4OagVE89+7
+         OZ3i7GAvUQ/j/tEtsCzsKzDOVQrzg02aorfUEl1+eOv1Xkx147opp4xKaJaRpj0XkQzP
+         hwsg==
+X-Gm-Message-State: AC+VfDzduta8PHH3tQeiX5yQ0tm/hPcqpiUd638Gyl5wGRHslSlA0C68
+        BFHkCYv5kEn8r0HIj5AzKbe/W8K3nUB1GlaJbBI=
+X-Google-Smtp-Source: ACHHUZ7U3IpmciYFn2XUD0tH0OIzOLl4ra5iJXVK6fWz/P9G6WairTUjZ8Qpz9Ea+PuBP18St9+V1vMwbBNiOq+dlv8=
+X-Received: by 2002:a17:90a:5081:b0:256:82c0:8120 with SMTP id
+ s1-20020a17090a508100b0025682c08120mr4791045pjh.13.1685548159896; Wed, 31 May
+ 2023 08:49:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Sender: mrselisabeth.peter77@gmail.com
+Received: by 2002:a05:6a11:38e:b0:4a3:2ff8:7a09 with HTTP; Wed, 31 May 2023
+ 08:49:19 -0700 (PDT)
+From:   "Mrs. Lenny Tatiana" <mrslenytati44@gmail.com>
+Date:   Wed, 31 May 2023 16:49:19 +0100
+X-Google-Sender-Auth: bX9J7hlzwM1JBIXx6XJU4iMH074
+Message-ID: <CAErHXnkq4VYEHV_FOyXFmGj92g3Zf8jhd6jujyn2rhfA_SBTvQ@mail.gmail.com>
+Subject: Greetings dear friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.3 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,HK_SCAM,LOTS_OF_MONEY,
+        MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,RISK_FREE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:542 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mrselisabeth.peter77[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mrselisabeth.peter77[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.6 URG_BIZ Contains urgent matter
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 HK_SCAM No description available.
+        *  0.0 RISK_FREE No risk!
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Greetings dear friend,
 
-On Fri, 26 May 2023 22:41:39 +0100, David Howells wrote:
-> Here are three patches that go on top of the similar patches for bio
-> structs now in the block tree that make the old block direct-IO code use
-> iov_iter_extract_pages() and page pinning.
-> 
-> There are three patches:
-> 
->  (1) Make page pinning neither add nor remove a pin to/from a ZERO_PAGE,
->      thereby allowing the dio code to insert zero pages in the middle of
->      dealing with pinned pages.  This also mitigates a potential problem
->      whereby userspace could force the overrun the pin counter of a zero
->      page.
-> 
-> [...]
+Calvary Greetings in the name of the LORD Almighty and Our LORD JESUS
+CHRIST the giver of every good thing. Good day and compliments of the
+seasons, i know this letter will definitely come to you as a huge
+surprise, but I implore you to take the time to go through it
+carefully as the decision you make will go off a long way to determine
+my future and continued existence. I am Mrs. Lenny Tatiana aging widow
+of
+57 years old suffering from long time illness.I have some funds I
+inherited from my late husband, the sum of (19.2Million Dollars) and I
+needed a very honest and God fearing who can withdraw this money then
+use the funds for Charity works. I WISH TO GIVE THIS FUNDS TO YOU FOR
+CHARITY WORKS. I found your email address from the internet after
+honest prayers to the LORD to bring me a helper and i decided to
+contact you if you may be willing and interested to handle these trust
+funds in good faith before anything happens to me.
 
-Applied, thanks!
+I accept this decision because I do not have any child who will
+inherit this money after I die. I want your urgent reply to me so that
+I will give you the deposit receipt which the SECURITY COMPANY issued
+to me as next of kin for immediate transfer of the money to your
+account in your country, to start the good work of God, I want you to
+use the 25/percent of the total amount to help yourself in doing the
+project. I am desperately in keen need of assistance and I have
+summoned up courage to contact you for this task, you must not fail me
+and the millions of the poor people in our todays WORLD. This is no
+stolen money and there are no dangers involved,100% RISK FREE with
+full legal proof. Please if you would be able to use the funds for the
+Charity works kindly let me know immediately.I will appreciate your
+utmost confidentiality and trust in this matter to accomplish my heart
+desire, as I don't want anything that will jeopardize my last wish.
 
-[1/3] mm: Don't pin ZERO_PAGE in pin_user_pages()
-      commit: c8070b78751955e59b42457b974bea4a4fe00187
-[2/3] mm: Provide a function to get an additional pin on a page
-      commit: 1101fb8f89e5fc548c4d0ad66750e98980291815
-[3/3] block: Use iov_iter_extract_pages() and page pinning in direct-io.c
-      commit: 1ccf164ec866cb8575ab9b2e219fca875089c60e
+Please kindly respond quickly for further details.
 
-Best regards,
--- 
-Jens Axboe
-
-
-
+best Regards,
+Mrs. Lenny Tatiana
