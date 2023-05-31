@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D165A71826B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD8B718296
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235459AbjEaNml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
+        id S236658AbjEaNoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236601AbjEaNmC (ORCPT
+        with ESMTP id S236518AbjEaNnp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:42:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8077D10FB;
-        Wed, 31 May 2023 06:41:24 -0700 (PDT)
+        Wed, 31 May 2023 09:43:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE611994;
+        Wed, 31 May 2023 06:42:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C7A761527;
-        Wed, 31 May 2023 13:41:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD8F6C4339B;
-        Wed, 31 May 2023 13:41:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AD5E63B10;
+        Wed, 31 May 2023 13:41:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 138C2C433D2;
+        Wed, 31 May 2023 13:41:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540483;
-        bh=e6FiqSpPzrIqBr4ifo3Fy2T912kqqu+DYRXAE8MmA+A=;
+        s=k20201202; t=1685540484;
+        bh=YWUI4LhLQsaZku+adHmUfwJvksQC3BFmITBA1sBc9Dw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lM5Gf4c3fJiYTFcu/4MvT6RW4g62v9bgno8RmTgrW+4oLsyJBesv7aN3Bwphb1ykH
-         VpiRgMJFImfZJ4mhoLCHUDtLUk0fB2Juh+Tjp/sSvqK250B4yVHbm6k0lef8uOyolJ
-         CPVW8hFcGY6GdyCc11Sx8h1BARpBkuBmTOKqhaBdjPFuRJs6SaW2rsaceMeky8OJCN
-         xXqRS4W06nytudlUAqpyZ83x9b6GrLQMxPjUWC0qi0i2hwvZjRxODqk5Lh59cJ7q3i
-         vgXU2067PyJJrRBiSoxMCzSBWK6/9V9ClpfKuXS9Rm3wmrQi6N2IXIac3g2ExwwASI
-         9Fldel0C6+TtA==
+        b=M5L0UxC1FFlFePoEL9MYta9YonTFfcRWw9AkjJP+QDqawM6fi1tJaxhIBUpF6iiL/
+         MiZL3dTu4C0px3k5cnx/OUR6hMpH5LNSc+EB6Vm3d8Ew5SUNZJOVBzIUdTVIoMa8K8
+         3i63ASfXTBdm2ZHOUsmBz2EqMpcaQvWs/VYw0rQG241zYpPOE5nBv0N52x54jm8Omh
+         hhkh+ks7bJ/DaClyXfYeWdUMPN6n0ZDblqmc0ZKTYeUXpEoY5nhqffqHSDrCVjulGQ
+         XFFUYdcGcFRW78fECERBFM9SN1WXelAbOQcuNI92yWN3cF5BjE+3MakoWqig3QJb40
+         eOqBzeL2LOnmA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Yue Hu <huyue2@coolpad.com>,
-        Sandeep Dhavale <dhavale@google.com>,
-        Chao Yu <chao@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        xiang@kernel.org, linux-erofs@lists.ozlabs.org
-Subject: [PATCH AUTOSEL 6.3 27/37] erofs: use HIPRI by default if per-cpu kthreads are enabled
-Date:   Wed, 31 May 2023 09:40:09 -0400
-Message-Id: <20230531134020.3383253-27-sashal@kernel.org>
+Cc:     Manuel Lauss <manuel.lauss@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 28/37] MIPS: unhide PATA_PLATFORM
+Date:   Wed, 31 May 2023 09:40:10 -0400
+Message-Id: <20230531134020.3383253-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134020.3383253-1-sashal@kernel.org>
 References: <20230531134020.3383253-1-sashal@kernel.org>
@@ -49,8 +47,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,58 +57,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gao Xiang <hsiangkao@linux.alibaba.com>
+From: Manuel Lauss <manuel.lauss@gmail.com>
 
-[ Upstream commit cf7f2732b4b83026842832e7e4e04bf862108ac2 ]
+[ Upstream commit 75b18aac6fa39a1720677970cfcb52ecea1eb44c ]
 
-As Sandeep shown [1], high priority RT per-cpu kthreads are
-typically helpful for Android scenarios to minimize the scheduling
-latencies.
+Alchemy DB1200/DB1300 boards can use the pata_platform driver.
+Unhide the config entry in all of MIPS.
 
-Switch EROFS_FS_PCPU_KTHREAD_HIPRI on by default if
-EROFS_FS_PCPU_KTHREAD is on since it's the typical use cases for
-EROFS_FS_PCPU_KTHREAD.
-
-Also clean up unneeded sched_set_normal().
-
-[1] https://lore.kernel.org/r/CAB=BE-SBtO6vcoyLNA9F-9VaN5R0t3o_Zn+FW8GbO6wyUqFneQ@mail.gmail.com
-
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
-Reviewed-by: Sandeep Dhavale <dhavale@google.com>
-Reviewed-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-Link: https://lore.kernel.org/r/20230522092141.124290-1-hsiangkao@linux.alibaba.com
+Signed-off-by: Manuel Lauss <manuel.lauss@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/erofs/Kconfig | 1 +
- fs/erofs/zdata.c | 2 --
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ arch/mips/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/erofs/Kconfig b/fs/erofs/Kconfig
-index 704fb59577e09..f259d92c97207 100644
---- a/fs/erofs/Kconfig
-+++ b/fs/erofs/Kconfig
-@@ -121,6 +121,7 @@ config EROFS_FS_PCPU_KTHREAD
- config EROFS_FS_PCPU_KTHREAD_HIPRI
- 	bool "EROFS high priority per-CPU kthread workers"
- 	depends on EROFS_FS_ZIP && EROFS_FS_PCPU_KTHREAD
-+	default y
- 	help
- 	  This permits EROFS to configure per-CPU kthread workers to run
- 	  at higher priority.
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index f1708c77a9912..d7add72a09437 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -369,8 +369,6 @@ static struct kthread_worker *erofs_init_percpu_worker(int cpu)
- 		return worker;
- 	if (IS_ENABLED(CONFIG_EROFS_FS_PCPU_KTHREAD_HIPRI))
- 		sched_set_fifo_low(worker->task);
--	else
--		sched_set_normal(worker->task, 0);
- 	return worker;
- }
- 
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index e2f3ca73f40d6..5b3f1f1dfd164 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -82,6 +82,7 @@ config MIPS
+ 	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+ 	select HAVE_MOD_ARCH_SPECIFIC
+ 	select HAVE_NMI
++	select HAVE_PATA_PLATFORM
+ 	select HAVE_PERF_EVENTS
+ 	select HAVE_PERF_REGS
+ 	select HAVE_PERF_USER_STACK_DUMP
 -- 
 2.39.2
 
