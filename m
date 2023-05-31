@@ -2,146 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 481AD7179C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC0C7179C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235143AbjEaIQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
+        id S235155AbjEaIQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234714AbjEaIQp (ORCPT
+        with ESMTP id S235146AbjEaIQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:16:45 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47ED8C5;
-        Wed, 31 May 2023 01:16:44 -0700 (PDT)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id D03D78611C;
-        Wed, 31 May 2023 10:16:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1685521002;
-        bh=QIT5LdXsd38HnT1gObrlKAjLGwfJ/Ui3fx46NLLUQac=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VP3Jvfbn0rOgAcsX3fMnSgyQSUENXDYAJZf6G8CTfx23vjm6uxde16oYHDfltQ664
-         phmfrjyQlGyR/aq9xBFhtNe324WFfgVbHgjGAtRgBVr26dm6jl265cD3QLg5tJmDfR
-         Gt+JeDI6RdWHvgwVK0A0wKWevIfr3P6e73kVDBIPrNgwlYUE2wHDXEe4jXr9ERoDXw
-         UbtDXGFtHn4ZsHm6vrcZrDIO7lXgBvRegVyV3K3WcC/ShbEZVZsWKofiaJyRR+suqW
-         DpFosSbZF8pg3AeHIEA+gtFKaoWOTGI+V0h7KNVqRNILd8mqRi2bDW6KounbNkC5vf
-         +va52tIB45TGQ==
-Date:   Wed, 31 May 2023 10:16:40 +0200
-From:   Lukasz Majewski <lukma@denx.de>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC] net: dsa: slave: Advertise correct EEE capabilities at
- slave PHY setup
-Message-ID: <20230531101640.131fe934@wsk>
-In-Reply-To: <ZHYLNGkG26QP/QAS@shell.armlinux.org.uk>
-References: <20230530122621.2142192-1-lukma@denx.de>
-        <ZHXzTBOtlPKqNfLw@shell.armlinux.org.uk>
-        <20230530160743.2c93a388@wsk>
-        <ZHYGv7zcJd/Ad4hH@shell.armlinux.org.uk>
-        <35546c34-17a6-4295-b263-3f2a97d53b94@lunn.ch>
-        <ZHYLNGkG26QP/QAS@shell.armlinux.org.uk>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 31 May 2023 04:16:50 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ECC93
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:16:48 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R931e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vjwqwcr_1685521005;
+Received: from 30.221.149.27(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0Vjwqwcr_1685521005)
+          by smtp.aliyun-inc.com;
+          Wed, 31 May 2023 16:16:46 +0800
+Message-ID: <d86cdf32-bc4d-bbab-d756-baef2b12cace@linux.alibaba.com>
+Date:   Wed, 31 May 2023 16:16:43 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Kl0N1N7kWlpAgVWt2ktIom0";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH v4 4/5] erofs: unify inline/share xattr iterators for
+ listxattr/getxattr
+Content-Language: en-US
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>, xiang@kernel.org,
+        chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20230531031330.3504-1-jefflexu@linux.alibaba.com>
+ <20230531031330.3504-5-jefflexu@linux.alibaba.com>
+ <349a1523-6d1c-9e96-d948-78dd4f2a209d@linux.alibaba.com>
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <349a1523-6d1c-9e96-d948-78dd4f2a209d@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Kl0N1N7kWlpAgVWt2ktIom0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Russell,
-
-> On Tue, May 30, 2023 at 04:26:49PM +0200, Andrew Lunn wrote:
-> > > So, I'm wondering what's actually going on here... can you give
-> > > any more details about the hardware setup? =20
-> >=20
-> > And what switch it actually is. I've not looked in too much detail,
-> > but i think different switch families have different EEE
-> > capabilities. But in general, as Russell pointed out, there is no
-> > MAC support for EEE in the mv88e6xxx driver. =20
->=20
-> ... except for the built-in PHYs,
-
-This is my case.
-
-> which if they successfully negotiate
-> EEE, that status is communicated back to the MAC in that one sees
-> MV88E6352_PORT_STS_EEE
-
-I cannot find this register in my documentation.
-
-> set, which results in the MAC being able to
-> signal LPI to the PHY... and I've stuck a 'scope on the PHY media-side
-> signals in the past and have seen that activity does stop without
-> there needing to be any help from the driver for this.
->=20
-> At least reading the information I have for the 88E6352, there is no
-> configuration of LPI timers, nor any seperate LPI enable. If EEE is
-> enabled at the MAC, then LPI will be signalled according to whatever
-> Marvell decided would be appropriate.
-
-And this knowledge is not disclosed to public.
-
->=20
-> For an external PHY that the PPU is not polling, the only way that
-> we'd have EEE functional is if we forced EEE in port control register
-> 1 on switches that support those bits. In other words setting both the
-> EEE and FORCE_EEE bits...
->=20
-
-Are those bits available in c45 standard? Or are they SoC (IC) specific?
-
-In my case I do have only two c45 registers disclosed (i.e. described)
-for mv88e6071 SoC in the documentation.
 
 
-Best regards,
+On 5/31/23 2:57 PM, Gao Xiang wrote:
+> 
+> 
+> On 2023/5/31 11:13, Jingbo Xu wrote:
+>>   -static int inline_xattr_iter_begin(struct erofs_xattr_iter *it,
+>> -                   struct inode *inode)
+>> -{
+>> -    struct erofs_inode *const vi = EROFS_I(inode);
+>> -    unsigned int xattr_header_sz, inline_xattr_ofs;
+>> -
+>> -    xattr_header_sz = sizeof(struct erofs_xattr_ibody_header) +
+>> -              sizeof(u32) * vi->xattr_shared_count;
+>> -    if (xattr_header_sz >= vi->xattr_isize) {
+>> -        DBG_BUGON(xattr_header_sz > vi->xattr_isize);
+>> -        return -ENOATTR;
+>> -    }
 
-Lukasz Majewski
+In the original implementation, here when xattr_header_sz >=
+vi->xattr_isize, inline_xattr_iter_begin() will return -ENOATTR rather
+than a negative integer (i.e. vi->xattr_isize - xattr_header_sz).
 
---
 
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+>>   static int erofs_xattr_generic_get(const struct xattr_handler *handler,
+>>                      struct dentry *unused, struct inode *inode,
+>>                      const char *name, void *buffer, size_t size)
+>> @@ -542,45 +432,98 @@ static const struct xattr_iter_handlers
+>> list_xattr_handlers = {
+>>       .value = NULL
+>>   };
+>>   -static int inline_listxattr(struct erofs_xattr_iter *it)
+>> +static int erofs_iter_inline_xattr(struct erofs_xattr_iter *it,
+>> +                   struct inode *inode, bool getxattr)
+>>   {
+>> +    struct erofs_inode *const vi = EROFS_I(inode);
+>> +    const struct xattr_iter_handlers *op;
+>> +    unsigned int xattr_header_sz, remaining;
+>> +    erofs_off_t pos;
+>>       int ret;
+>> -    unsigned int remaining;
+>>   -    ret = inline_xattr_iter_begin(it, d_inode(it->dentry));
+> 
+> In the past, "ret" here is "an int", and
+>     vi->xattr_isize - xattr_header_sz < 0 will return
+> negative value (although I think that value is problematic).
+> 
+> see below.
 
---Sig_/Kl0N1N7kWlpAgVWt2ktIom0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+See comment above.
 
------BEGIN PGP SIGNATURE-----
+> 
+> 
+>> -    if (ret < 0)
+>> -        return ret;
+>> +    xattr_header_sz = sizeof(struct erofs_xattr_ibody_header) +
+>> +              sizeof(u32) * vi->xattr_shared_count;
+>> +    if (xattr_header_sz >= vi->xattr_isize) {
+>> +        DBG_BUGON(xattr_header_sz > vi->xattr_isize);
+>> +        return -ENOATTR;
+>> +    }
 
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmR3AmgACgkQAR8vZIA0
-zr2vgAf/TPyuqCpXqy8OzcsofOh15TCYmLibHnjTznVps7GTT0zuwuoH9wWaif7E
-bUgJEGjaKr3yNTonliDF1C7rfuP7n6YwGhwIFEf5oyU1uN+ELTWPy9EqUplbE3oM
-MIl9KnPc0vqV5MFweT6OLUZeacklzCsRGAyNmcchlLx2h+9jTXKosXevBroYmyIe
-FuV5nMr/yJkR6hXXwQi+YiuavL0LttUx/z2Q3co2FWfuZiYqv3dZHr7MgbTiQIOk
-P+JSwlPOOz0n97h5ktJCclxHuAU+SPf3GbYs4f4lHnLFVKGJQwf4HQW7Cp6qdBIJ
-r4FYxEmTNTygcOj2ntB3/YXUpgFscw==
-=TFoU
------END PGP SIGNATURE-----
+This checking for "xattr_header_sz >= vi->xattr_isize" is also included
+in this patch.
 
---Sig_/Kl0N1N7kWlpAgVWt2ktIom0--
+
+-- 
+Thanks,
+Jingbo
