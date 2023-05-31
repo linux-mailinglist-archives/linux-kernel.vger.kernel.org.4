@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1460B717D33
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45859717D36
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232570AbjEaK2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 06:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
+        id S234590AbjEaK2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 06:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjEaK2D (ORCPT
+        with ESMTP id S234430AbjEaK2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 06:28:03 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E949FB3;
-        Wed, 31 May 2023 03:28:01 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Dxd_EwIXdkE+8CAA--.6608S3;
-        Wed, 31 May 2023 18:28:00 +0800 (CST)
-Received: from openarena.loongson.cn (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx77MtIXdk+juCAA--.15700S2;
-        Wed, 31 May 2023 18:27:57 +0800 (CST)
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Ben Hutchings <bhutchings@solarflare.com>,
-        Jesse Barnes <jbarnes@virtuousgeek.org>
-Cc:     Li Yi <liyi@loongson.cn>, linux-pci@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kernel test robot <lkp@intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH v2] PCI: Add dummy implement for pci_clear_master() function
-Date:   Wed, 31 May 2023 18:27:44 +0800
-Message-Id: <20230531102744.2354313-1-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 31 May 2023 06:28:18 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B5B134;
+        Wed, 31 May 2023 03:28:16 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id d2e1a72fcca58-64d61fff78aso1263425b3a.1;
+        Wed, 31 May 2023 03:28:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685528896; x=1688120896;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+G6B2FYjYUAyd30KeFTxGI0vcvv6LmGoONehuHedteU=;
+        b=EgrxYW1I2j1cKcYj1ot/iR0l7Tnwf9k+Xj5djTC4TgWol557kZDc4c6mpA4gZxoc76
+         ikRiArahYxGiGdIqNN+Ck/HlMXLuGk0w5+nFV6JtJ4Ej1PByDwiryM5cXkrsScyE6VMC
+         ieirqTnrAcTx0ngOYG4MHdEVWnuqgr2/58EXSODyHBCw8Pd7olJfgMhaq0Q6jYiydAIj
+         tWHtRw5Gx0DLB+vb8zPFpZPG2h4vQ94xg6nQixqu6Eq0wl8xKjkRiBBM147MSEeWNMV7
+         +qMA+u5Xx5WsB/i0gIBhPLfSV2K7Dm5y4LBmOKwuSkHKRNI7knyMKJa5MDJaCvsrFP41
+         MxAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685528896; x=1688120896;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+G6B2FYjYUAyd30KeFTxGI0vcvv6LmGoONehuHedteU=;
+        b=DoWYaV1mkbbJ3bk6V0beaxGln+nBM+BzTZzy7qMqxRWex7JYj1VFeJ8TER0+GY+6Sc
+         30bkhHb/wDao1E+t5EFLLU+vk/QEntQp55jDqVuf1j1D0omxnFGPWKQEk9GG4yE32YiA
+         xFU2GtRE8JvN9OOvonEl/AgN7CFx1N0dZJvT3UYTiocjFQHbodH+EK3rhkdhY2PBUQXV
+         X3ww7u9n6/2sRm+jZPpXtsr0UOpLXXxYz1fgvXXbdQYiZYJvPetGzkaekvjA9U/XAnn3
+         Rio/eRSZ6KHJJkR2wyzq8IbdW3WPYIdckat3p2uvxpM3/1p073Q0gpJ5WCo6FgcRkD8N
+         Wlgg==
+X-Gm-Message-State: AC+VfDyrkZT7ln6KCEmI7BYhJUZanlJfndPVztZ7tigyAGw6xwS9zk5e
+        UIPmELFxG1RLTJk92aN6W3Q=
+X-Google-Smtp-Source: ACHHUZ6WlcL8E6mzLHjwtN+3nDSeMud1tIsLJBp5q0gWrT9gxDtG+0uymgPafGpM0KdI3Dy22J9KCg==
+X-Received: by 2002:a05:6a20:394c:b0:10f:955a:bc86 with SMTP id r12-20020a056a20394c00b0010f955abc86mr2011961pzg.0.1685528896154;
+        Wed, 31 May 2023 03:28:16 -0700 (PDT)
+Received: from hbh25y.mshome.net ([103.114.158.1])
+        by smtp.gmail.com with ESMTPSA id i28-20020a63541c000000b0053efb8fae02sm952238pgb.24.2023.05.31.03.28.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 03:28:15 -0700 (PDT)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, simon.horman@corigine.com,
+        pieter.jansen-van-vuuren@amd.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH net v2] net/sched: flower: fix possible OOB write in fl_set_geneve_opt()
+Date:   Wed, 31 May 2023 18:28:04 +0800
+Message-Id: <20230531102805.27090-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx77MtIXdk+juCAA--.15700S2
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7CryUGr15Xw4UKr1xurWxZwb_yoW8Aw4rpa
-        98AFyrCrW8GFy8Gw4UJFyIvF1ag39xZ34Sy3y7Kwn09a9Fya4rtFnYkF17Arn3JrWvkFy3
-        Ww17Ka1DWw4YyFJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bh8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
-        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
-        aVAFwI0_Gr1j6F4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
-        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
-        O2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-        JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
-        WUJVWUCwCI42IY6I8E87Iv67AKxVW8Jr0_Cr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j
-        6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU2gyCDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As some arch(m68k for example) doesn't have config_pci enabled, drivers[1]
-call pci_clear_master() without config_pci guard can not pass compile test.
+If we send two TCA_FLOWER_KEY_ENC_OPTS_GENEVE packets and their total
+size is 252 bytes(key->enc_opts.len = 252) then
+key->enc_opts.len = opt->length = data_len / 4 = 0 when the third
+TCA_FLOWER_KEY_ENC_OPTS_GENEVE packet enters fl_set_geneve_opt. This
+bypasses the next bounds check and results in an out-of-bounds.
 
-   drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:
-   In function 'etnaviv_gpu_pci_fini':
->> drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:32:9:
-   error: implicit declaration of function 'pci_clear_master';
-   did you mean 'pci_set_master'? [-Werror=implicit-function-declaration]
-      32 |         pci_clear_master(pdev);
-         |         ^~~~~~~~~~~~~~~~
-         |         pci_set_master
-   cc1: some warnings being treated as errors
-
-[1] https://patchwork.freedesktop.org/patch/539977/?series=118522&rev=1
-
-V2:
-	* Adjust commit log style to meet the convention and add Fixes tag
-
-Fixes: 6a479079c072 ("PCI: Add pci_clear_master() as opposite of pci_set_master()")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202305301659.4guSLavL-lkp@intel.com/
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+Fixes: 0a6e77784f49 ("net/sched: allow flower to match tunnel options")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
 ---
- include/linux/pci.h | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index d0c19ff0c958..71c85380676c 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -1904,6 +1904,7 @@ static inline int pci_dev_present(const struct pci_device_id *ids)
- #define pci_dev_put(dev)	do { } while (0)
+	v2: add "net" tag to title
+
+ net/sched/cls_flower.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/net/sched/cls_flower.c b/net/sched/cls_flower.c
+index 9dbc43388e57..815c3e416bc5 100644
+--- a/net/sched/cls_flower.c
++++ b/net/sched/cls_flower.c
+@@ -1153,6 +1153,9 @@ static int fl_set_geneve_opt(const struct nlattr *nla, struct fl_flow_key *key,
+ 	if (option_len > sizeof(struct geneve_opt))
+ 		data_len = option_len - sizeof(struct geneve_opt);
  
- static inline void pci_set_master(struct pci_dev *dev) { }
-+static inline void pci_clear_master(struct pci_dev *dev) { }
- static inline int pci_enable_device(struct pci_dev *dev) { return -EIO; }
- static inline void pci_disable_device(struct pci_dev *dev) { }
- static inline int pcim_enable_device(struct pci_dev *pdev) { return -EIO; }
++	if (key->enc_opts.len > FLOW_DIS_TUN_OPTS_MAX - 4)
++		return -ERANGE;
++
+ 	opt = (struct geneve_opt *)&key->enc_opts.data[key->enc_opts.len];
+ 	memset(opt, 0xff, option_len);
+ 	opt->length = data_len / 4;
 -- 
-2.25.1
+2.34.1
 
