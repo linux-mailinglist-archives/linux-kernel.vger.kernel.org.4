@@ -2,152 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D2B718422
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5D27188BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237424AbjEaOES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
+        id S229970AbjEaRqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237412AbjEaODq (ORCPT
+        with ESMTP id S229484AbjEaRqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:03:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131851BD4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:56:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685541348;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iKY4ohXdL6Kppb6cdBaAFMS5w8OYmdrqeHw64hwzbU8=;
-        b=Wxr8Q8YSh7Hn2Tob9qcbPgXHNb5FLvQ5qQ2G1pQzw9kgVLrDYEsSnXyLxLb2G+ePovG+3z
-        9anI/SQgbTccsDebTLyAoDWIZpauiBXb1gXgo2BXRQGwD4gp6v1Ycs7PVnHhKNfdLbaqeV
-        SitDW503T828TmAPmEVAKJ+WYzaWn38=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-223-4Xr0v8qFP_eteAbuVZuqYg-1; Wed, 31 May 2023 09:52:37 -0400
-X-MC-Unique: 4Xr0v8qFP_eteAbuVZuqYg-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-94a355cf318so597323766b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:52:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685541156; x=1688133156;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iKY4ohXdL6Kppb6cdBaAFMS5w8OYmdrqeHw64hwzbU8=;
-        b=b+LFOk+4bqDJpJ6TJh8NhI0q63xpNFEdg4cxDBPr2z/2EaDTaM9Rl0Vvt9EGUYUXrQ
-         wY/yXVYdxokc+l1tSefIREDeTv2SQ9MSN0oupwrZRQ/hRa6/hqBQN2mDwrsMG/NVulzc
-         ZpFWeNyJx/xCa02h0oK9p31SVn0W+bOXf8HKvfOK3dlL3tl5nCJQp9TUjntwkWo7ikhe
-         16J+rqjwclkw8YDXIcHqMhvfnjzoJLHu0SHn4HK81hSLyQvcfKbNm1NhZLzaPdJix9qv
-         MS8Epd3NesKTY4zqC9n7u7PZLf1DTriiOEmBd3Jf/4iMmt8RB75hlOxe7vqzFoWFLhpK
-         eIeg==
-X-Gm-Message-State: AC+VfDwhXlG3jUhHwMbaxiLyKwSoqsI2WoGt7KN4o4OL6hl912g9ST0m
-        mx4bFHLUPkh7fioMzNCOjAeygnuJ3+6hy7rcbyfICCWJTxb9w3Ea+1BcVW6TQDRSaTtyTQrB7Dg
-        SQbIAk8F7jwlgO//GVij9Bw1i
-X-Received: by 2002:a17:907:7e92:b0:96f:f809:1394 with SMTP id qb18-20020a1709077e9200b0096ff8091394mr4565995ejc.53.1685541156464;
-        Wed, 31 May 2023 06:52:36 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7hhjQJzrNRzyGM1wTqzVW8nH8LuS4AWEp9EAl1HWLRdpILKHy/8ekBdMh24NZdi98uCcyc/w==
-X-Received: by 2002:a17:907:7e92:b0:96f:f809:1394 with SMTP id qb18-20020a1709077e9200b0096ff8091394mr4565974ejc.53.1685541156144;
-        Wed, 31 May 2023 06:52:36 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id v15-20020a170906338f00b009663cf5dc3bsm8980369eja.53.2023.05.31.06.52.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 06:52:35 -0700 (PDT)
-Message-ID: <dba63a7b-6e5d-6145-5eea-0c2da3dc9445@redhat.com>
-Date:   Wed, 31 May 2023 15:52:35 +0200
+        Wed, 31 May 2023 13:46:50 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5E3125
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:46:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685555208; x=1717091208;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hTqd3Pee3flh4HGEZ53S3n5CSuBCfvBltkaD8gL0ZSg=;
+  b=eXkYIwxRGAabB5n9oMABoK1lz0/JTSWxGfA9J49E1HNAzJ2UsoEw6pFY
+   G5O+FJkaGbjkNl6uSzaF06S3LKD2fzGQi2cpEY18aZKWABEkNFSsU6Jr4
+   FOOnGHryVcRM9A2L1wDgej22/HBzvQWJf3nNovSmBz56ZRo028wUrEhUo
+   kzV5f97z2tUhMMhSVNVPXjhi7h5KmfBp/rO0Ja4aVodCUgfXJWl17Ahal
+   AHSr2D3aaADfowrWHGSDyHs7laeYMaEZDNz3XxdobUtNCpsAaLF7afPbm
+   W93eT6y0IcQ3J2sLuX7I60ghZLfc2JnMs1o+4wEbLBrWTZPcPw6n18HxR
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="344832465"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="344832465"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 10:46:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="707004433"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="707004433"
+Received: from tkam-mobl1.amr.corp.intel.com (HELO [10.212.252.148]) ([10.212.252.148])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 10:46:45 -0700
+Message-ID: <5048a207-4ec4-e954-0fe8-88ed25320c1b@linux.intel.com>
+Date:   Wed, 31 May 2023 08:53:07 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] input: Add new keyboard backlight control keys to match
- modern notebooks
-Content-Language: en-US, nl
-To:     Werner Sembach <wse@tuxedocomputers.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Bastien Nocera <hadess@hadess.net>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230530110550.18289-1-wse@tuxedocomputers.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230530110550.18289-1-wse@tuxedocomputers.com>
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH V2 5/9] ASoC: amd: ps: add support for SoundWire DMA
+ interrupts
+Content-Language: en-US
+To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>, broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, Mastan.Katragadda@amd.com,
+        Arungopal.kondaveeti@amd.com, mario.limonciello@amd.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230522133122.166841-1-Vijendar.Mukunda@amd.com>
+ <20230522133122.166841-6-Vijendar.Mukunda@amd.com>
+ <fea3c862-1470-7911-ff77-5d945b1d77cf@linux.intel.com>
+ <2dfeee7c-32bd-c054-22ff-3a2266e62c90@amd.com>
+ <f11f3370-0b72-cb1f-21cf-c574ef03fd72@linux.intel.com>
+ <017abf89-a1aa-0c85-e244-a56c05b7c6e2@amd.com>
+ <af5b0669-2621-7fce-358c-76dca7b521c5@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <af5b0669-2621-7fce-358c-76dca7b521c5@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Werner,
 
-Thank you for your patch.
 
-On 5/30/23 13:05, Werner Sembach wrote:
-> The old three KEY_KBDILLUM* keycodes don't reflect the current situation
-> modern notebooks anymore. Especially the ones with RGB keyboards.
+On 5/31/23 02:28, Mukunda,Vijendar wrote:
+> On 24/05/23 13:15, Mukunda,Vijendar wrote:
+>> On 23/05/23 20:30, Pierre-Louis Bossart wrote:
+>>> On 5/23/23 02:36, Mukunda,Vijendar wrote:
+>>>> On 22/05/23 23:42, Pierre-Louis Bossart wrote:
+>>>>> On 5/22/23 08:31, Vijendar Mukunda wrote:
+>>>>>> Initialize workqueue for SoundWire DMA interrupts handling.
+>>>>>> Whenever audio data equal to the SoundWire FIFO watermark level
+>>>>>> are produced/consumed, interrupt is generated.
+>>>>>> Acknowledge the interrupt and schedule the workqueue.
+>>>>> It would help to explain why a work queue is needed is the first place,
+>>>>> as opposed to handling periods in the interrupt thread.
+>>>> For SoundWire DAI link, we are setting nonatomic flag to true.
+>>>> If we return period elapsed from hard irq handler instead of workqueue,
+>>>> soft lock up is observed during stream closure.
+>>>>
+>>>> We can use interrupt thread as well. To have a symmetry with
+>>>> SoundWire manager work queues, we have used workqueue for
+>>>> DMA interrupts.
+>>> Oh, I completely missed the model here.
+>>>
+>>> If you are using the bottom half/hard irq handler to read status
+>>> information, the natural thing to do would be to have an irq thread, no?
+>>>
+>>> Not sure I see the benefit of aligning with the manager work queues -
+>>> unless it makes your life simpler to avoid race conditions with
+>>> cancel_work_sync()?
+>> We can implement request_threaded_irq() and move the handling of
+>> DMA interrupts to thread function whereas we need to handle SoundWire
+>> manager interrupts in top half only. Reason as follows.
+>>
+>> As per our design, we are not masking the interrupts in top half and
+>> restoring mask after thread execution like Intel and
+>> our IP supports line based interrupts. If we move SoundWire manager
+>> interrupt handling to thread function, we have observed interrupts are
+>> reported but not handled properly due to thread execution is in progress
+>> sometimes.
+>> we will add comments for this design constraint in the code if we have to
+>> go with threaded_irq implementation.
+>>
+>> @Bossart: we are waiting for your reply.
+
+I am not sure I get the point about using workqueues v. threads for the
+manager, which in turn makes it difficult to understand why the DMA
+interrupt handling should be aligned with that of the manager interrupt
+handling.
+
+Using the combination of hard irq handler + workqueue feels odd. I may
+very well 'work' but others should chime in since I am far from the most
+knowledgeable reviewer in this area.
+
+>>>>>> +static void acp63_sdw_dma_workthread(struct work_struct *work)
+>>>>>> +{
+>>>>>> +	struct acp63_dev_data *adata = container_of(work, struct acp63_dev_data,
+>>>>>> +						    acp_sdw_dma_work);
+>>>>>> +	struct sdw_dma_dev_data *sdw_dma_data;
+>>>>>> +	u32 stream_index;
+>>>>>> +	u16 pdev_index;
+>>>>>> +
+>>>>>> +	pdev_index = adata->sdw_dma_dev_index;
+>>>>>> +	sdw_dma_data = dev_get_drvdata(&adata->pdev[pdev_index]->dev);
+>>>>>> +
+>>>>>> +	for (stream_index = 0; stream_index < ACP63_SDW0_DMA_MAX_STREAMS; stream_index++) {
+>>>>>> +		if (adata->sdw0_dma_intr_stat[stream_index]) {
+>>>>>> +			if (sdw_dma_data->sdw0_dma_stream[stream_index])
+>>>>>> +				snd_pcm_period_elapsed(sdw_dma_data->sdw0_dma_stream[stream_index]);
+>>>>>> +			adata->sdw0_dma_intr_stat[stream_index] = 0;
+>>>>>> +		}
+>>>>>> +	}
+>>>>>> +	for (stream_index = 0; stream_index < ACP63_SDW1_DMA_MAX_STREAMS; stream_index++) {
+>>>>>> +		if (adata->sdw1_dma_intr_stat[stream_index]) {
+>>>>>> +			if (sdw_dma_data->sdw1_dma_stream[stream_index])
+>>>>>> +				snd_pcm_period_elapsed(sdw_dma_data->sdw1_dma_stream[stream_index]);
+>>>>>> +			adata->sdw1_dma_intr_stat[stream_index] = 0;
+>>>>>> +		}
+>>>>>> +	}
+>>>>> I am not clear on the benefits of the workqueue which only tests a flag
+>>>>> that's set ...
+>>>> In top half, we are checking all stream irq mask and setting
+>>>> corresponding stream id index in interrupt status array when dma
+>>>> irq is raised.
+>>>>
+>>>> Our intention is to handle snd_pcm_period_elapsed in process context.
+>>>> if the flag is set, call the period elapsed for the substream based on stream
+>>>> id in work queue.
 > 
-> e.g.
-> - Clevo NL50NU has a toggle, an up, a down and a color-cycle key
-> - TongFang PH4ARX1 doesn't have a toggle key, but one that cycles through
->   off, half-brightness, and full-brightness.
-> 
-> Also, on some devices these keys are already implemented in firmware. It
-> would still be nice if there is a way to let userspace know when one of
-> these keys is pressed to display the OSD, but don't advice it to actually
-> do anything. This is the intended purpose of the KEY_KBDILLUMCHANGE define.
-> 
-> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-> ---
->  include/uapi/linux/input-event-codes.h | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
-> index 022a520e31fc2..05287bf9a77f7 100644
-> --- a/include/uapi/linux/input-event-codes.h
-> +++ b/include/uapi/linux/input-event-codes.h
-> @@ -803,6 +803,10 @@
->  #define BTN_TRIGGER_HAPPY39		0x2e6
->  #define BTN_TRIGGER_HAPPY40		0x2e7
->  
-> +#define KEY_KBDILLUMCYCLE		0x2e8
-
-I do not really see what the difference is between this and the existing KEY_KBDILLUMTOGGLE, userspace can already choice whether it toggles to a number of states or just toggles on/off.
-
-So IMHO this one should be dropped.
-
-> +#define KEY_KBDILLUMCOLORCYCLE		0x2e9
-
-This one is fine.
-
-> +#define KEY_KBDILLUMCHANGE		0x2ea
-
-Keyboard backlight support should be exported to userspace as a LED class device, see e.g. :
-
-drivers/platform/x86/thinkpad_acpi.c    : tpacpi_led_kbdlight
-drivers/platform/x86/dell/dell-laptop.c : kbd_led
-
-And the LED class device sysfs API already has a mechanism for signalling kbd-brightness changes triggered by the hw itself (e.g. by the embedded controller) to userspace. See the use of the 
-LED_BRIGHT_HW_CHANGED flag and the calling of led_classdev_notify_brightness_hw_changed() in the 2 above drivers.
-
-So strong NACK for adding KEY_KBDILLUMCHANGE, this is duplicate with the led_classdev_notify_brightness_hw_changed() functionality which is already supported by userspace. E.g. GNOME will show an OSD notification similar to the sound volume change OSD when changing the keyboard brightness through EC handled hotkeys on ThinkPads and various Dell models.
-
-TL;DR: to me only KEY_KBDILLUMCOLORCYCLE makes sense, assuming that this needs to be handled by userspace, if this is handled in the EC then this too should simply call led_classdev_notify_brightness_hw_changed()
-
-Regards,
-
-Hans
-
-
-
-
-
-> +
->  /* We avoid low common keys in module aliases so they don't get huge. */
->  #define KEY_MIN_INTERESTING	KEY_MUTE
->  #define KEY_MAX			0x2ff
-
