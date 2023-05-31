@@ -2,216 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599EE718D99
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 23:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9FF718D9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 23:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbjEaVxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 17:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
+        id S230131AbjEaV4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 17:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbjEaVxn (ORCPT
+        with ESMTP id S229553AbjEaV4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 17:53:43 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2117.outbound.protection.outlook.com [40.107.104.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A5D11D;
-        Wed, 31 May 2023 14:53:42 -0700 (PDT)
+        Wed, 31 May 2023 17:56:42 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379FCA0;
+        Wed, 31 May 2023 14:56:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685570201; x=1717106201;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=GPs7XTNDi6z5v01pwWcFsKDXDybWD4ogjVl06y/ZBTU=;
+  b=kNwXV6/RP6ZNNEAw797IxV+QENLzFFEWXzg4HrstbAAqIeAUjxqfFtsF
+   Wc5izaX6NlsyoNNuMdmzEg/RZS4VxRFlbEGAHLmcOC2qpwnyiUIChIGCU
+   wwTf3hGCgIaAZUnK4bpzKf+UQJgA3rbZvnND4E7tysq/VJXqbg0VtQ9rH
+   SvLkyvH9uIgk7iIlul2OcnVSfcDH1Iyyt1LY0i5iVc31CV3k6TYuk8VhT
+   eaZwXglwPSRpazw4LVPv2P34HnaHAMtUS6lWgAimsztnor0IXxmrVrg16
+   BF7mmbJrM9aRxTTaW2xhTOsn2OgvrBTjy13Shb+eRwIlz3nt9U1nnn+h8
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="418872727"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="418872727"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 14:56:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="772149448"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="772149448"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga008.fm.intel.com with ESMTP; 31 May 2023 14:56:38 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 31 May 2023 14:56:37 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 31 May 2023 14:56:37 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.49) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 31 May 2023 14:56:37 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bgZv/JSP7Hou+aQBsRz6IFhVSqA3p445+Oq8IogSnMcBUy6qYIItAmDD62HltcLUCqxHvtyx4WZpYcWSfRjBL+WKHBZvobEtGhfGZj1HkbQ5z9FHtVynPnwszRK7casIvqGVmzaTk9QadVCr1ouUgUh5R7EdgVyFKE28rzB4Fl/VVg7OW+oSbMyNu5cEH3FMh5xqQ16cFyh/ADeVIEwoeqfWKtoKcnWdfEVETqcFeZOJIKu1Q9qKlvgyoS9IGgGtRBBfPsmWPP15uHBSn2CKp8aGXHZmis+jed3qpGGv8dmADW9Iyx4W5dhumipBv69e/2CKjWTyjRopLh4Xxbbn9Q==
+ b=d1S+ItezxKYBB+2Jar4fklC/G+BrHpgIMNg5VfejPpNQcFDRTWR0H15+RNBAGFcT057PG6u/G6XhK9ROn56uGJnhm9/GmFx9fBff5Ci8d50O5GSVJZEy6tpzz+p8VhtdHd9uVQACPnMrmFYAg0ciSag4ssJ8avcEpkR2sfQuzRqR1RMyhxl/8U54OH1Rq8x0RZZSuu3M2satiubImgNJCyFJbvISf3fSQ4aSN6kQSHSBh9apDNuXreiG6lP1y6XqpyREdBSG9Ar3ARKYLr7ic6vJgsCkQwyKwoVRglBXLqMca8jpbwy9EGNRvlU2RDx4itzwFIoQbWDZ2yD08eoGOg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=teAmGcFTytk4RS08rl1JVbL/T6XAMWOTB4v/mKbGBRM=;
- b=QKgA7Dszkg6ZI8loSWgJQ2/fUgGhO0ergCVMyeTaJP9arlDZQy9ARhWI2Uxqos9h8t3/PQb/YGjlP4bkgbmNZrVYL2F5Xu6KzZo8tDjYmUO9UqbfIv8PQ8GDbOfuGMdzAUl0K4/TZd38DtWg5cE89nusmzpwVJU6Jc5Avrc0StVUqktR/eSaruZbk9464DgP03UIWI9a5QYWbCF72LGAJ9ueVAubcgw1zofisMY3F1B/KgZSygO+15WHu5WXzr8lsS4unw3ZAILLDP6oLkDSPdRts+GZCTFscvDMCZwo5hIUDRI1qpYCBjrT3yIIaSmHFY4+CXTiDq1U1vrY+6VEdA==
+ bh=ec93z/zxw8jyAJWDCpgByHBRv8jML667otGL4DPZ+lY=;
+ b=jY+0LDnmUDbRRj4baIQ7ZxL1AmzunhYouZQDrb70lie1rpoPKdCMqhdkfd3QiA4rDio+C8cikfoK09Q1EKN5ElK+h4Dt+5apM/KSIWpmE7sNQRexz/SmfmCG13eEU+ROnfefh2pKb2elMoV71rvf8HaMsc+kpA6Oga0Vo9+izvSYct7LZJm46sZFadX39ltENK2So73RS7d1agGd3iCTVxz0X0bIRBEUQFTE5f2/Gn//v3ijBRObIsAqCCXLqJH3mS3CXrtvRkDeSb6nnULqYFEdDokLu3qfG61ERZAO5zI7ijL0BHvAijBXLJ1s06z20b/plQG7GeTZHASKmTRqsA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=teAmGcFTytk4RS08rl1JVbL/T6XAMWOTB4v/mKbGBRM=;
- b=aENhRvFzTLXwhofT7oJQw7fnhKJ72IowJPiKyA44Q6ggq9PP/0otAQH3SkJPxIdGMG6vAI9upJyjEeNnQVLw9yrjJGw+tK5BTACXVsyfnUJNWEphnEoNEU0a/4Mc2vk3mJnaYGtCiZFhimI0wM7PLsfPO2jh4upmqMQMQHo2xf8=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axentia.se;
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
- by PAWPR02MB9854.eurprd02.prod.outlook.com (2603:10a6:102:2e8::8) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by BL1PR11MB5287.namprd11.prod.outlook.com (2603:10b6:208:31b::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Wed, 31 May
- 2023 21:53:40 +0000
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::f54c:7d45:d4a3:841]) by AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::f54c:7d45:d4a3:841%4]) with mapi id 15.20.6433.024; Wed, 31 May 2023
- 21:53:40 +0000
-Message-ID: <755a14f1-92ad-ce4b-3fde-2a4b0650475c@axentia.se>
-Date:   Wed, 31 May 2023 23:53:38 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: sv-SE
-In-Reply-To: <1149c073-b761-8ad3-2930-3ef10ea7cf0b@axentia.se>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-From:   Peter Rosin <peda@axentia.se>
-Subject: [PATCH 2/2] dt-bindings: ti-serdes-mux: Add defines for J784S4 SoC
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MM0P280CA0095.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:190:9::13) To AM0PR02MB4436.eurprd02.prod.outlook.com
- (2603:10a6:208:ed::15)
+ 2023 21:56:36 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::95c6:c77e:733b:eee5]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::95c6:c77e:733b:eee5%3]) with mapi id 15.20.6455.020; Wed, 31 May 2023
+ 21:56:35 +0000
+Date:   Wed, 31 May 2023 14:56:33 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     "Verma, Vishal L" <vishal.l.verma@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Schofield, Alison" <alison.schofield@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
+        "Weiny, Ira" <ira.weiny@intel.com>
+CC:     "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Weight, Russell H" <russell.h.weight@intel.com>
+Subject: Re: [PATCH 3/4] cxl: add a firmware update mechanism using the sysfs
+ firmware loader
+Message-ID: <6477c29121ae3_168e29438@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230421-vv-fw_update-v1-0-22468747d72f@intel.com>
+ <20230421-vv-fw_update-v1-3-22468747d72f@intel.com>
+ <646c313f20907_33fb329412@dwillia2-xfh.jf.intel.com.notmuch>
+ <a7443a348b9c2b51cf141ad1131c9befbb09724e.camel@intel.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a7443a348b9c2b51cf141ad1131c9befbb09724e.camel@intel.com>
+X-ClientProxiedBy: BYAPR01CA0016.prod.exchangelabs.com (2603:10b6:a02:80::29)
+ To PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR02MB4436:EE_|PAWPR02MB9854:EE_
-X-MS-Office365-Filtering-Correlation-Id: 112ce558-7970-4361-67f6-08db62217e73
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|BL1PR11MB5287:EE_
+X-MS-Office365-Filtering-Correlation-Id: 719ec02d-2e42-4884-3fac-08db6221e735
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: obJknQRBGHXSU6Ador+fQIisDxLRElUmVcnD5fDlN2jQbdLarvukraXFWOqrasAy6hsIw+ulFHOFFU1k7iLfJXT/urJJRoSQ7a7p0oWoPJQTZRr9Fhtimqym1ErParnhn2AmHp13nmqIZ9g5URSHvy9inMpdve8nKq9Hp1VAqQSX2iZ1AsBrGYLwiBqdMYHOWTJXMFCZofyow14S2z+AJAhfd/vmpEH8sPnb0owxbpdMmIhcRM1mzYp9k43Byv/phyg1FQjaE1USAeLUxYJ2HmK3xxFTMMJXZQGYASwzwf+ESaM7J/vfLuLi2zBUNgWbvv7mGGu8IVdtprgAcnncydlSXb0QHYbrLqLBSG5iH9Nbg7aFZJKZx5Bg6JyUfU12ncYp4BpLIwdBdXvy9lPIn0AjxPPfLguGV2bFbmcUF35RWiHxENbTGoOb86KQVgD8iEwATc/+r2OXMt5Gp6cE3Q5bj3qAwWPPGPcPqe2U2/DpvrWuOmvKkygQpr8SrXpX4ixL8LoiRNIfcBQGpmPtICYFuiUiLS2TK/maXq3c3NXt+JP8xSyONDT57/jENOtUO3p1UctlMfsqZSRJSRIqcVoNGW35SuinUyf+aGILTV6hkfxNuND2rV6C9Gr1Wdgpj5FV1jd02+QH7QgMKpJ2uA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(39840400004)(346002)(376002)(366004)(451199021)(66946007)(316002)(5660300002)(36756003)(66476007)(4326008)(6916009)(66556008)(86362001)(31696002)(38100700002)(41300700001)(8936002)(8676002)(6486002)(2616005)(54906003)(2906002)(6506007)(186003)(31686004)(6512007)(478600001)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: TjXHobCoG73hcQJuuRg7Ynb52FT0fuKSHxy7Lob/dauOgezI5d2WEr3+pDKSw/rOt9a1W1gxRtA8WY7O5W501p31qOtrj12xpgIz/PVPxj/SBk8NsB4U1ns9KA1oFnlVFprkaKUI62XPSgwUPuZTrYnOOJftfE76MRUkSzxDkBFLj9t6VbBILDZp5+KVzkebsjqkLmilhgcCXFEX1sOo2bRYZwXhE79hIXJv45XXRJSw5YPYXURlp8ieI3k6kj0IP308VEY3O6t/AQ33CRGfGu02Am3SU8UIodFbFRTLoRVcH/RK5AW9yfF/BK9fz7UGJrprrducygq6NGkXUjBqhCR80u0AMJhJWzpLNUyZg6mLjL2PJTNKV4PqFWN68/R1ofbxMeixf/JDH1kSp5eun8MH7oHpMo/y60nJY9x3ziN8EqY6fl00x7ZdL9ffYppQu8OUWB6skvOvie5NBCPyz+/8sB75mJwcwzV2hIe6Cq1Z2PcouegouS/zqRAQpZHlE+cBaiqEFc1dl3XsKS5Y1y6JE03CjTYQhEK4etG99DfEvxPO/FP6y+t6YrhGNk3tGEa4leeh7CCNuVCBlHO4UlKXezhR0rBR77UR8YsFJnI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(376002)(39860400002)(346002)(136003)(451199021)(6506007)(6512007)(186003)(26005)(9686003)(38100700002)(41300700001)(83380400001)(107886003)(6486002)(478600001)(110136005)(54906003)(66946007)(82960400001)(66556008)(4326008)(66476007)(316002)(6636002)(8676002)(5660300002)(2906002)(921005)(15650500001)(8936002)(86362001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZGdWVUQ1V2FxdlAzZ2dWRC9pZzJqMk9GUDMxL2VFNUVHK2Y0MlljK0F6MWdU?=
- =?utf-8?B?NHgveFRhOVQwaEx0aGU1a1NNMUMrSlQ4V2xuY0tvVGIranYzYnljVjZtOStq?=
- =?utf-8?B?Ynk3Z3BCa0YzTWNxcGt4UHJKZkZkcHIxRkhSOWVCSkxmSGZucDQzZjBYeHN5?=
- =?utf-8?B?ZGdGZUoxdXBjcnFvbm5UWXhDT3Z2Z0FOWkphRXI3VzFraXFNcE1aT1ZIWXFw?=
- =?utf-8?B?QkdMMlRGemYwc3RoL09sZGpWVWtGQkxERkFyd3p0cnNPTEQrWkZ6Z2tTVjVl?=
- =?utf-8?B?eU9MMGw2bGNETVlkczh4Ni90ZUVoTmlYYjhwcWlndHlPcDdxM3JLb0NhMkkx?=
- =?utf-8?B?TUFkQTZaMFRLdERldURlYUhnVk5QelRDa1N0Q2JFYnBiY1ZXcUV3T1VHaHNk?=
- =?utf-8?B?L1NZd21tdFFraXMzWTU0VzVMTDFDeVc5U3k5WTlMWEZMc2ZOKzNVKzBXcDBy?=
- =?utf-8?B?TldNWEFYanlXSnhNVk5qT0I4Qkt2cm9tMnhtRDBTaEpHc213ZGVXNUVwMFpP?=
- =?utf-8?B?TlloMzVnRHI3bE9ib3ZPNE5VZFBSYXlhRklLc3A2a1FaWHc1UHRzL05JZjZY?=
- =?utf-8?B?M2FwSU83ekxiWE1WQUJFTXplZHp4RlphQnUzUFFmR3NROXpCVlA5eS9qUE8x?=
- =?utf-8?B?WG1XYy9aR0dpWVZ5NDZCbDBMQkp2c0V5U3A1K2d1STFJV2JzOWN2dlpQdHI2?=
- =?utf-8?B?WVNKWG9OLzhOMDNZZU9xYmdwRlUrbDRzUGZtYzdFNzkxOXZTdVh6L2VnS2Yx?=
- =?utf-8?B?S2hRVlFjam8zamhvcXpObHIrTHNGQ3hLdFBQeDlPa3cwQzNSWFpsN0hMN3gy?=
- =?utf-8?B?T2pqQm9NUHh2VFJJODJlZFZyNU8wWkcwM1M5ODU1ekZPQXpNT1RQY214WDZY?=
- =?utf-8?B?TEVmSFk2aFRlK0ZqQmpNUzhTZzBrQUVlYmZ2d1FmN2J1aW9hRzdad0FGMjZS?=
- =?utf-8?B?S0twVWxnYll5aTVCaFpsd3pBa3EyMm1OVFd1WXpVaHM3T0RncUxQL2RTNGVW?=
- =?utf-8?B?dFZ0RVRLVXR1RGxDVGVuNWlQWDNpeC9oRE4rdXltYnBXcWRRU3lSYlRQSXRL?=
- =?utf-8?B?c0ZRdVRSL09wY25CL2hoOGswUmgvUHVQbEZZdERKNVhJcCtqMkRIcDRUZUtY?=
- =?utf-8?B?WXlLTHJ3OE5vT3VOWktWTkhMVGRQYUNUd0JBZDlwRXJpNTVJQ3pqNUc3a0pL?=
- =?utf-8?B?bXRiWHVka1c1dkFzMVBGdmdleURtanB4UHpybGt2Y2J4M3VTZDc0YTMwdEFF?=
- =?utf-8?B?K2QrbVYzRGFSdVE0aWZRRjJ6RkY1R3dBaDJQb2pkK3BjM1JPOU5qWUU5SWtV?=
- =?utf-8?B?SkpYZEY2c2NwdE5aWkM1c1hhSW92TzlMN1JGQUdmbktPR3hzcnA0YW5acmth?=
- =?utf-8?B?VStRM1VHa1h4bm4zajRicmhVY1pxR0JnSW9kNjlyN1lIN3lOemhkMzg1eFJp?=
- =?utf-8?B?aEEyUVl2Y3hlaEFvbnhhUkF1L2JWQWpuRDVlb1VSNGZnaUpWdFQvTnRHMFBz?=
- =?utf-8?B?c3FoTnNhZlZaUmNBTU9CSjNIUEQ5TVhOeVhCSjhjTytKbk5yZFBSWHdrVXRU?=
- =?utf-8?B?MFJoUGxzQnI4Y2pmVEIrQU1LN0Ywa2lNWkRVTmhNekpRU2NlaHBqYnRnL0NX?=
- =?utf-8?B?Z3RKcjRPUXBtd1piUkxkTUJGSEpVMmw4OXdLaCtkVTdRQys0YVZGNWVrb0pU?=
- =?utf-8?B?L2ZtYVQ4Ylg5bjBoRkZ4bzVFOVkwWVpGQTgrcjFQY2hMbzdkTzFnUjg2V2s2?=
- =?utf-8?B?U25VRGhtYjNlanR5TXFRNitQc1MrOTQwa2kxVGRZVy83dW4vTXBocHEwWXNR?=
- =?utf-8?B?bENjVzZ4dXhSMkswZkFVZ2Z3SEkzMGV4T2FRN3Y4d0NOamlwdS80SWNiSE1U?=
- =?utf-8?B?aGl3WWh2T3ozSkhSRnptYlVzMnJrRjdLSTdTenBrZUZuc2dxSUhzWFVSQUto?=
- =?utf-8?B?ZmE2bzQyZmtHWXloS2RiMFBXdXg1TUFudXkxNjV4VUpiZll4YmxpWnhYWkxa?=
- =?utf-8?B?ejBCeVdPZ09mR0RqWEx6VHFXSWNBK2lQT3J0K0VpTmgrdG4yQUdWbzFBS2Ju?=
- =?utf-8?B?bHYzWW9qUE5TRFpDTkpabGk5TWpUSjc2MzU0cmhtWjlRbUtZcURtTGxwRjZz?=
- =?utf-8?Q?iCeT7ZEWSH1b6GjkHc3rZxVOc?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 112ce558-7970-4361-67f6-08db62217e73
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?cpzmBmotlP6d/+LfgchVc1/idiJjKNlobbMw76Jv/swKntg4ZWbqFuCqWd?=
+ =?iso-8859-1?Q?PRvWxPwOnPjbrcx142WGiY4RFjUb9K1PUpu0+4vH3CvHJf+6qdCo5M2Ksn?=
+ =?iso-8859-1?Q?aEvLiRtkyHOXTFs9NGmtU1pCNa8GWdFbGjgTNNioOV58MTcPsD3PtyM2X8?=
+ =?iso-8859-1?Q?5cEKGOlEDdUqogDEnjMZ84e5E2QecelDxZq0bPY8Sy4mVbNpzu/etlG9aq?=
+ =?iso-8859-1?Q?PQZ5gYqU6upRLPTN3u+WWzAKO2HyhHcqdxGE7/8ZfIZkA7GQsoqxtxNP2A?=
+ =?iso-8859-1?Q?YkfeuWlRdzrI/je1NgRHmQVTSD63ZTpAkigJKAYvOhYceTlDq1MyTVrsh+?=
+ =?iso-8859-1?Q?UlJradi9GzfONgf8k2GbVH7qRuqmKiJsrostOsQcOpGLQeHxQmtj7cBRsF?=
+ =?iso-8859-1?Q?JQHIMZouIGKrJ9gexhJ60yFwMz09QNg6dBm/08Ww/Tnmcb0FgtunQFIFvQ?=
+ =?iso-8859-1?Q?kZaPecZ7om8Nu4ie53CX+El37fgHNVbgzK7nmhHLi4SuDBLa29zFhZ3MQ8?=
+ =?iso-8859-1?Q?DtnchRHTJ5ZPvENN+xfD9D0IdfaZPpwsHX78Gc9PO/s4OybibHvNtC7miJ?=
+ =?iso-8859-1?Q?TEWNvHhpcif1SyewIZpiTgxIuFXV7zDXCVheXR8SQ2NSIm23x90gxBXdKD?=
+ =?iso-8859-1?Q?zQoNyLcowjq6qzSeeB6gp7c3U5eT3QxONAPjlRJUeJRiRuumOYoRxUvYVt?=
+ =?iso-8859-1?Q?vcH8WQyApw1EvGauNOgk/MgknjgYx9XlV7Kq+BKkIn5vKcB1gSaF2ax2bq?=
+ =?iso-8859-1?Q?NVdB179Q1XrlaDyC8yhSKrLttWLI3j+jNrGkHAW6wbKGM3VjGT+bkE8siu?=
+ =?iso-8859-1?Q?9EpF6tF2grJ/EeQuTFTu2uSD/MPtPVJ2xCLtbku89EUZgDaJQTb6g+4KYr?=
+ =?iso-8859-1?Q?wKoC8rrGv7Uq171NubR1OFjBYXyYSBNgP64TcJuaYP9atVZutwRL60f5qe?=
+ =?iso-8859-1?Q?DVCUlr2u4COxWU0rliR/NYHrZ8t36rTtseVHajrNmVnWjkM7WpqFAmCoG8?=
+ =?iso-8859-1?Q?mFEx8lC6Na9JxkdJ2V26soUID/HXT5/Qf+sVBZ0QfxMI2wP+UYgsSmBQuU?=
+ =?iso-8859-1?Q?9Sb+vJkDZgYTLI8bC9C66MnlU42s4gEtBZr0sstBkOxGGDfrkFgHB0d5Ap?=
+ =?iso-8859-1?Q?J/aor8A8FsHMSpGE4KikCtLCSGrXq02XctbMU6YZjGmzv2wmPexqW80PRp?=
+ =?iso-8859-1?Q?JvM6Fqoukgj1X1YHnITDBOMlc9h7imTzDXSskqa9geELKX/DT1D5Vd0Bnc?=
+ =?iso-8859-1?Q?rXt+wRzg1TtSyOEQP4vO8nNJ8mLcdooVw/LoNo/4qBmVCjNRNiHA52naNH?=
+ =?iso-8859-1?Q?6ZqHsqGNbjTGVRfUfMKRyj+PcdBYvVgQamtGF9rMOPbCsFoBUV6Upzt/qb?=
+ =?iso-8859-1?Q?AcGlTcwXKuTkkXYlOVNAVg4zqmCi7jPZVpxpJHOE0DTwTsy8wusIcU8JSu?=
+ =?iso-8859-1?Q?mJjcJFiN/ZozDXkAroPqUk4NUYjDwZ46APmJlzcBkBDVItG+V+GkmJlbVm?=
+ =?iso-8859-1?Q?bUeKbN0Fejr9OSFbWpb9YIMdAaneHgNznU+KpBP9mSJ6zRCL13qhM7J6w2?=
+ =?iso-8859-1?Q?sSwvRu1oZ2zdSCHmHvZh89GA/5NLmx3fIUTSSdGt5dJBxq2dFzUYHh5nn5?=
+ =?iso-8859-1?Q?G3bAV8T56iDj0UySb0nEuiWfwcL+kbV2mTkzO7sRsoHSbd0zcfsv4BoQ?=
+ =?iso-8859-1?Q?=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 719ec02d-2e42-4884-3fac-08db6221e735
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 21:53:39.9403
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 21:56:35.7424
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Iz1df+KVXY94+pA+gmmPWVGHDTnjHlUIiPLB38PsDtkv5VsXelfpj1GI+cgKSTxQ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR02MB9854
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: qcAdjFSPU5fFFVpTWYo5NJpp2ZesfCV5JJfidDHscuE1qbbmJmxvq3CIlCLQrQNrzD9Nz7IIv7698L6q7Xgb3kuVU9eOLFF2xNJWR6ORiYc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5287
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matt Ranostay <mranostay@ti.com>
+Verma, Vishal L wrote:
+> On Mon, 2023-05-22 at 20:21 -0700, Dan Williams wrote:
+> > Vishal Verma wrote:
+> 
+> <snip>
+> Everything else not addressed here sounds good and I've made those
+> changes.
+> 
+> > > 
+> > > +       remaining = size - cur_size;
+> > > +       size_in = cur_size + sizeof(*transfer);
+> > > +
+> > > +       mutex_lock(&cxlds->fw.fw_mutex);
+> > 
+> > What is this lock protecting? I.e. will the fw_loader really try to send
+> > multiple overlapping firmware update attempts?
+> 
+> The lock is just to provide predictable points at which a cancel
+> request may be intercepted. The loader won't try overlapping firmware
+> transfer requests, but the ->cancel request comes from user space, and
+> could happen while there is a transfer in progress. With the lock, the
+> cancel will only be 'processed' after the current chunk's transfer is
+> done. 
 
-There are 4 lanes in the single instance of J784S4 SERDES. Each SERDES
-lane mux can select up to 4 different IPs. Define all the possible
-functions.
+So right now cancel is only considered at certain points within either
+the ->write() or ->poll_complete() callbacks. The firmware upload core
+is guaranteeing that ->prepare(), ->write() and ->poll_complete() never
+overlap for a given session, and that if any of those return an error
+the upload session is terminated.
 
-Signed-off-by: Matt Ranostay <mranostay@ti.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-Signed-off-by: Peter Rosin <peda@axentia.se>
----
- include/dt-bindings/mux/ti-serdes.h | 62 +++++++++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
+While the lock does flush in flight ->write() and ->prepare() it does
+nothing to enforce when the cancellation is processed. It will still be
+the case that the next invocation of ->write() or ->poll_complete() will
+consider the cancel state before doing the next step.
 
-diff --git a/include/dt-bindings/mux/ti-serdes.h b/include/dt-bindings/mux/ti-serdes.h
-index d3116c52ab72..669ca2d6abce 100644
---- a/include/dt-bindings/mux/ti-serdes.h
-+++ b/include/dt-bindings/mux/ti-serdes.h
-@@ -117,4 +117,66 @@
- #define J721S2_SERDES0_LANE3_USB		0x2
- #define J721S2_SERDES0_LANE3_IP4_UNUSED		0x3
- 
-+/* J784S4 */
-+
-+#define J784S4_SERDES0_LANE0_IP1_UNUSED		0x0
-+#define J784S4_SERDES0_LANE0_PCIE1_LANE0	0x1
-+#define J784S4_SERDES0_LANE0_IP3_UNUSED		0x2
-+#define J784S4_SERDES0_LANE0_IP4_UNUSED		0x3
-+
-+#define J784S4_SERDES0_LANE1_IP1_UNUSED		0x0
-+#define J784S4_SERDES0_LANE1_PCIE1_LANE1	0x1
-+#define J784S4_SERDES0_LANE1_IP3_UNUSED		0x2
-+#define J784S4_SERDES0_LANE1_IP4_UNUSED		0x3
-+
-+#define J784S4_SERDES0_LANE2_PCIE3_LANE0	0x0
-+#define J784S4_SERDES0_LANE2_PCIE1_LANE2	0x1
-+#define J784S4_SERDES0_LANE2_IP3_UNUSED		0x2
-+#define J784S4_SERDES0_LANE2_IP4_UNUSED		0x3
-+
-+#define J784S4_SERDES0_LANE3_PCIE3_LANE1	0x0
-+#define J784S4_SERDES0_LANE3_PCIE1_LANE3	0x1
-+#define J784S4_SERDES0_LANE3_USB		0x2
-+#define J784S4_SERDES0_LANE3_IP4_UNUSED		0x3
-+
-+#define J784S4_SERDES1_LANE0_QSGMII_LANE3	0x0
-+#define J784S4_SERDES1_LANE0_PCIE0_LANE0	0x1
-+#define J784S4_SERDES1_LANE0_IP3_UNUSED		0x2
-+#define J784S4_SERDES1_LANE0_IP4_UNUSED		0x3
-+
-+#define J784S4_SERDES1_LANE1_QSGMII_LANE4	0x0
-+#define J784S4_SERDES1_LANE1_PCIE0_LANE1	0x1
-+#define J784S4_SERDES1_LANE1_IP3_UNUSED		0x2
-+#define J784S4_SERDES1_LANE1_IP4_UNUSED		0x3
-+
-+#define J784S4_SERDES1_LANE2_QSGMII_LANE1	0x0
-+#define J784S4_SERDES1_LANE2_PCIE0_LANE2	0x1
-+#define J784S4_SERDES1_LANE2_PCIE2_LANE0	0x2
-+#define J784S4_SERDES1_LANE2_IP4_UNUSED		0x3
-+
-+#define J784S4_SERDES1_LANE3_QSGMII_LANE2	0x0
-+#define J784S4_SERDES1_LANE3_PCIE0_LANE3	0x1
-+#define J784S4_SERDES1_LANE3_PCIE2_LANE1	0x2
-+#define J784S4_SERDES1_LANE3_IP4_UNUSED		0x3
-+
-+#define J784S4_SERDES2_LANE0_QSGMII_LANE5	0x0
-+#define J784S4_SERDES2_LANE0_IP2_UNUSED		0x1
-+#define J784S4_SERDES2_LANE0_IP3_UNUSED		0x2
-+#define J784S4_SERDES2_LANE0_IP4_UNUSED		0x3
-+
-+#define J784S4_SERDES2_LANE1_QSGMII_LANE6	0x0
-+#define J784S4_SERDES2_LANE1_IP2_UNUSED		0x1
-+#define J784S4_SERDES2_LANE1_IP3_UNUSED		0x2
-+#define J784S4_SERDES2_LANE1_IP4_UNUSED		0x3
-+
-+#define J784S4_SERDES2_LANE2_QSGMII_LANE7	0x0
-+#define J784S4_SERDES2_LANE2_QSGMII_LANE1	0x1
-+#define J784S4_SERDES2_LANE2_IP3_UNUSED		0x2
-+#define J784S4_SERDES2_LANE2_IP4_UNUSED		0x3
-+
-+#define J784S4_SERDES2_LANE3_QSGMII_LANE8	0x0
-+#define J784S4_SERDES2_LANE3_QSGMII_LANE2	0x1
-+#define J784S4_SERDES2_LANE3_IP3_UNUSED		0x2
-+#define J784S4_SERDES2_LANE3_IP4_UNUSED		0x3
-+
- #endif /* _DT_BINDINGS_MUX_TI_SERDES */
--- 
-2.20.1
+I am failing to see what the lock is protecting. The other usage is for
+checking that ->prepare() has completed before ->write() is invoked, but
+again that is enforced by the firmware uploader workqueue.
 
+I think the lock and the clear_to_send bit can be eliminated. Clear to
+send is implied by ->prepare() succeeding. Convert cancel to an atomic
+flag where cxl_fw_cancel() does:
+
+set_bit(CXL_FW_CANCEL, &cxlds->fw.state);
+
+...and cxl_fw_write() and cxl_fw_poll_complete() can just do:
+
+if (test_and_clear_bit(CXL_FW_CANCEL, &cxlds->fw.state))
+	do_cancel();
