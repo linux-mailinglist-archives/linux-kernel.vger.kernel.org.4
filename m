@@ -2,234 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AABD6718002
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 952FE71800E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235809AbjEaMfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S235569AbjEaMi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235403AbjEaMfQ (ORCPT
+        with ESMTP id S232620AbjEaMiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:35:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF3A8E;
-        Wed, 31 May 2023 05:35:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6050063030;
-        Wed, 31 May 2023 12:35:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1740C4339E;
-        Wed, 31 May 2023 12:35:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685536513;
-        bh=yuATc0ewpjoNkponZyfQ6nxQCdgMjgGjVPMha1ccK5o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BE5M3bXVySZN4XBI7InXHGgsRr+/vX8+uyevGhLaMHsvzFl0OP+np7347BMSm3/PW
-         U6nEdPtTyyg/nbk0loD54Fdg8LVFAvMY9TtowZFw0+XM1SmiCKGYtUk+JMK7ujL1Gl
-         Q1hbP80hFOr7B9LHX9X/Z6Y2W6Y/6Yl+Jzks1pdbAis+ZPSZkUn/7JhpgTwZZ7Kf25
-         K/IRhJvfPiU6+YWpirDBBizqxv4egoG8r36hBf88SxzDNklyYt9YvykBSZ62zkNmTG
-         xG+4Erdnrx+bYTxd9rt0r/o+vjyoImE2xhcWbwUATckXRC6wb2gxoSjGGInfYTUPaw
-         epLzsz/BJcT+g==
-Date:   Wed, 31 May 2023 13:35:08 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, enachman@marvell.com,
-        Vadym Kochan <vadym.kochan@plvision.eu>
-Subject: Re: [PATCH v7 3/4] dt-bindings: mtd: marvell-nand: Convert to YAML
- DT scheme
-Message-ID: <20230531-botanical-swoosh-05683af1d3f0@spud>
-References: <20230530235456.1009082-1-chris.packham@alliedtelesis.co.nz>
- <20230530235456.1009082-4-chris.packham@alliedtelesis.co.nz>
+        Wed, 31 May 2023 08:38:55 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50082123
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:38:54 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7749b49ce95so342015439f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:38:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685536733; x=1688128733;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M56dqXczIU6urpVTidNU/2Z71eUaU2aQUWl7WsKSTRA=;
+        b=FIstYQaIXqyqqQbBIZ0eRS6YiGT4OJ6pnI/v9lgtN2/DfvtpCQQqojuaKwGOUp8Fg3
+         G1AhuPjaqi+ARCp9aCITRDyrQ328gRZrsqKXk99VBfc1S6pKo8WTcyge+jO2oob/EDPy
+         hV3NOT7fenyoN5YmctNh1pwlpedCqDNU5+aCySpwgvgPgzdBenEeCHbA4EVSDG5tvKTc
+         yR6XZzUWDO6wzWpg6TobgcgkFMRigBgJ2WFaDQ21P++BaQRjoWKXft8UUYktCJFQ3RhU
+         paWYpfQWzPhuxu9zweePcrTZvoTLJnAV/Urh4KW37urZVrJO2CIA9RGpfBFPvGeM3BwD
+         olrQ==
+X-Gm-Message-State: AC+VfDyaiUzDvbJ+wIVqrX1iImYdxwo9LblTnSWVtJSQ0K17zZVEZ32p
+        RZsJp1V7XqabMTj07SzeAw8xC94xblxcPznvvMB47CFDbLwD0d4=
+X-Google-Smtp-Source: ACHHUZ74o2Cy7S+5TJut5f94vXmrF3Gr56M4P1NQwSf2gyDkdwYCHmqVaYYRYNCp366WKh4TDLkJKz8QZGSf4S6yOKYmyE3A1De+
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YdeHVyof/+8Ux7qZ"
-Content-Disposition: inline
-In-Reply-To: <20230530235456.1009082-4-chris.packham@alliedtelesis.co.nz>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5e:8a4d:0:b0:776:fd59:f980 with SMTP id
+ o13-20020a5e8a4d000000b00776fd59f980mr2056443iom.4.1685536733644; Wed, 31 May
+ 2023 05:38:53 -0700 (PDT)
+Date:   Wed, 31 May 2023 05:38:53 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000043ce4705fcfc9a3f@google.com>
+Subject: [syzbot] Monthly usb report (May 2023)
+From:   syzbot <syzbot+list5ddc103e11539454fe04@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello usb maintainers/developers,
 
---YdeHVyof/+8Ux7qZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is a 31-day syzbot report for the usb subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/usb
 
-Hey Chris,
+During the period, 4 new issues were detected and 4 were fixed.
+In total, 64 issues are still open and 319 have been fixed so far.
 
-On Wed, May 31, 2023 at 11:54:55AM +1200, Chris Packham wrote:
-> From: Vadym Kochan <vadym.kochan@plvision.eu>
->=20
-> Switch the DT binding to a YAML schema to enable the DT validation.
->=20
-> Dropped deprecated compatibles and properties described in txt file.
->=20
-> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->=20
-> Notes:
->     Changes in v7:
->     - Restore "label" and "partitions" properties (should be picked up via
->       nand-controller.yaml but aren't)
->     - Add/restore nand-on-flash-bbt and nand-ecc-mode which aren't covered
->       by nand-controller.yaml.
->     - Use "unevalautedProperties: false"
->     - Corrections for clock-names, dma-names, nand-rb and nand-ecc-streng=
-th
->     - Add pxa3xx-nand-controller example
->    =20
->     Changes in v6:
->     - remove properties covered by nand-controller.yaml
->     - add example using armada-8k compatible
->    =20
->     earlier changes:
->    =20
->     v5:
->        1) Get back "label" and "partitions" properties but without
->           ref to the "partition.yaml" which was wrongly used.
->    =20
->        2) Add "additionalProperties: false" for nand@ because all possible
->           properties are described.
->    =20
->     v4:
->        1) Remove "label" and "partitions" properties
->    =20
->        2) Use 2 clocks for A7K/8K platform which is a requirement
->    =20
->     v3:
->       1) Remove txt version from the MAINTAINERS list
->    =20
->       2) Use enum for some of compatible strings
->    =20
->       3) Drop:
->             #address-cells
->             #size-cells:
->    =20
->          as they are inherited from the nand-controller.yaml
->    =20
->       4) Add restriction to use 2 clocks for A8K SoC
->    =20
->       5) Dropped description for clock-names and extend it with
->          minItems: 1
->    =20
->       6) Drop description for "dmas"
->    =20
->       7) Use "unevalautedProperties: false"
->    =20
->       8) Drop quites from yaml refs.
->    =20
->       9) Use 4-space indentation for the example section
->    =20
->     v2:
->       1) Fixed warning by yamllint with incorrect indentation for compati=
-ble list
->=20
->  .../bindings/mtd/marvell,nand-controller.yaml | 221 ++++++++++++++++++
->  .../devicetree/bindings/mtd/marvell-nand.txt  | 126 ----------
->  MAINTAINERS                                   |   1 -
->  3 files changed, 221 insertions(+), 127 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mtd/marvell,nand-co=
-ntroller.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mtd/marvell-nand.txt
->=20
-> diff --git a/Documentation/devicetree/bindings/mtd/marvell,nand-controlle=
-r.yaml b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
-> new file mode 100644
-> index 000000000000..7cd4a2e99343
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
-> @@ -0,0 +1,221 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mtd/marvell,nand-controller.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Marvell NAND Flash Controller (NFC)
-> +
-> +maintainers:
-> +  - Miquel Raynal <miquel.raynal@bootlin.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: marvell,armada-8k-nand-controller
-> +          - const: marvell,armada370-nand-controller
+Some of the still happening issues:
 
-Apologies if I have missed this - but the commit message should probably
-explain where this fallback came from since it does not appear to be
-present in the original binding.
+Ref  Crashes Repro Title
+<1>  2373    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
+                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
+<2>  1818    Yes   WARNING in firmware_fallback_sysfs
+                   https://syzkaller.appspot.com/bug?extid=95f2e2439b97575ec3c0
+<3>  1751    Yes   KMSAN: uninit-value in mii_nway_restart
+                   https://syzkaller.appspot.com/bug?extid=1f53a30781af65d2c955
+<4>  778     Yes   INFO: task hung in usb_get_descriptor (2)
+                   https://syzkaller.appspot.com/bug?extid=e8db9d9e65feff8fa471
+<5>  653     Yes   WARNING in smsusb_term_device
+                   https://syzkaller.appspot.com/bug?extid=40ac6e73326e79ee8ecb
+<6>  293     Yes   INFO: task hung in r871xu_dev_remove
+                   https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
+<7>  273     Yes   INFO: task hung in usbdev_open (2)
+                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+<8>  237     Yes   INFO: task hung in netdev_run_todo (2)
+                   https://syzkaller.appspot.com/bug?extid=9d77543f47951a63d5c1
+<9>  180     No    INFO: task hung in hub_event (3)
+                   https://syzkaller.appspot.com/bug?extid=a7edecbf389d11a369d4
+<10> 174     No    INFO: task hung in hub_port_init (3)
+                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
 
-> +      - enum:
-> +          - marvell,armada370-nand-controller
-> +          - marvell,pxa3xx-nand-controller
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> +          - marvell,armada-8k-nand
-> +          - marvell,armada370-nand
-> +          - marvell,pxa3xx-nand
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
-Please mark these 3 as deprecated.
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description:
-> +      Shall reference the NAND controller clocks, the second one is
-> +      is only needed for the Armada 7K/8K SoCs
-
-As a nit, allOf below invalidates this second part of the sentence (in
-possibly a clearer way too).
-
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    items:
-> +      - const: core
-> +      - const: reg
-> +
-> +  dmas:
-> +    maxItems: 1
-> +
-> +  dma-names:
-> +    items:
-> +      - enum:
-
-I don't think the items: here is needed, enum on its own suffices, no?
-
-Cheers,
-Conor.
-
---YdeHVyof/+8Ux7qZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHc+6wAKCRB4tDGHoIJi
-0uyhAQDKKUynMOe4ocCMIjqXxFF5IJ80y0JmIzHnljlbls4TAgD9E0fd+PguTVQu
-cNOwu/6pc/nngrCtlryA4l55i5qpEQc=
-=fT3C
------END PGP SIGNATURE-----
-
---YdeHVyof/+8Ux7qZ--
+You may send multiple commands in a single email message.
