@@ -2,240 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36257717CD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE58717CEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235817AbjEaKHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 06:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
+        id S235843AbjEaKNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 06:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233058AbjEaKHr (ORCPT
+        with ESMTP id S235839AbjEaKNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 06:07:47 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB70E2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:07:45 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so6478775e87.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:07:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685527664; x=1688119664;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QKOqcdYffaPuAvsZ4cF6Kv8mBC9qOo1M+VBYAc7j870=;
-        b=J0kB0QX5UrjOVkn2cqMVcboC2TQmS8mF9Y2hgaWFKaWCqM7fNLTyukyelYvZe+7Kq7
-         nCTd6ar7bVwHZ5xHNdBrO9+vpp0FPt5NiNl7h8TPtLDNanVsxG32ZATJxIBcP1Z37lSJ
-         IZIzHxBft4QjY0SBONwVJiw7yOx3fP163he7u6lbZUWT42MJXAvDy/DPMyMO6qi7aU//
-         uXDUWaDX+XMH+8Z54SuQSijpM/ORXl7OhcKdNKU/xjL869/J4uooT45AkUr/Cn3suDsW
-         UFbIN7fv6Y67vCv12Ybf/FlRidDUnlvbA6fIPqU6NuGgQ70RJ4vtO/IUFXQgOCo/0qK4
-         ffVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685527664; x=1688119664;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QKOqcdYffaPuAvsZ4cF6Kv8mBC9qOo1M+VBYAc7j870=;
-        b=TSdXD5sbON1HLvY4rjqvoOFYYZNT7bOOLW08iiC6S72xVZkakuLJ4Tns+fApAAOlDq
-         ooptVunayUuEC+AVsMk1V1ZTgjmcF6wnVPmqx+fVI7ikiyEeMmkilxhMWcSHaTeLm+ZS
-         alXMiscfUB+lZ6p4CgRCs2tqBX652+c9+3++Qy7XdbwEvpl4ga2auxvKfYnGG5LOGxkA
-         lOxZfqRy176s+nyJ6Gz41zjWI5dn8d4FfAWOCyq/9v8zwHzaA7prElHUjhs9/bK1YrrS
-         16NwaXkW6TF9UdD4opu/B53/kIX+MVN6WEKLH98+RWrF8xZTnsCzRDd8X5woy+Lw/ZU1
-         3uHQ==
-X-Gm-Message-State: AC+VfDwuL7Q8lKXCmF2iZ5cuhB41J5TnAb1TbPf64IPj5KkkXy8rFDxq
-        qefiXYJbCX3AS8W5KTJr0KLETWuWGJzcxjkiaes=
-X-Google-Smtp-Source: ACHHUZ6g4CDeffFfXzftaZbZSf3SKkuRD2pIillen7CiBtHzJExUDY1BKN3JLXLga47sPT7rodnd+w==
-X-Received: by 2002:a2e:9457:0:b0:2ac:7d78:3465 with SMTP id o23-20020a2e9457000000b002ac7d783465mr2205896ljh.15.1685527663994;
-        Wed, 31 May 2023 03:07:43 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id s24-20020a2e9c18000000b002a8ae16ac8csm3236479lji.18.2023.05.31.03.07.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 03:07:43 -0700 (PDT)
-Message-ID: <98e4bda7-19e9-09b6-f008-383adada97cb@linaro.org>
-Date:   Wed, 31 May 2023 13:07:42 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: re-introduce dpu core revision
- to the catalog
-Content-Language: en-GB
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        quic_khsieh@quicinc.com, Rob Clark <robdclark@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, quic_jesszhan@quicinc.com,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>, Sean Paul <sean@poorly.run>
-References: <20230531005358.18090-1-quic_abhinavk@quicinc.com>
- <CAA8EJpryw0h8TgpJ+SFJ7s0=LCjkQ6oqAjCKsm60dk_Q5e+wWA@mail.gmail.com>
- <0af4df3d-8048-98cd-6c91-7cd553f4f65f@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <0af4df3d-8048-98cd-6c91-7cd553f4f65f@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 31 May 2023 06:13:01 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5A110B;
+        Wed, 31 May 2023 03:12:54 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id B76AA32009A1;
+        Wed, 31 May 2023 06:12:51 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 31 May 2023 06:12:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1685527971; x=1685614371; bh=gL
+        q2gHiJM+KP1+NdSFVehsgQGj4GYd9hBZy1RUFLs0Y=; b=DEcPru7BTgdHj70sAp
+        LGx4H6mvsBm+vApV8FhA2+5LYsNWA7mVHokhzH/l0mhX0NjpJKnxEXQuelTZqzs5
+        57qLlYMpiHW2gp7E7l7iekXWtCjz6RyWJo+9k7Av/va/c+3OQETPxekb+UDZTHaW
+        S226KvUwFti06hkzjW5rHLzxYwJVj1WGE08Zy6L3QA3BvhiP6/CV5kjUreQJisf8
+        HrXkrcrcmgsCfrRd2bYg6X3XCQMVuaOieWbNV9FgRlYUKfyVrKGDtLCN5oMixvmu
+        PD1qcCfFH5bopnUWA7yIc+0YBNocxDf2W9iU4VQXz3NCFQqw+zLZOZRjSONM/1de
+        KKnw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685527971; x=1685614371; bh=gLq2gHiJM+KP1
+        +NdSFVehsgQGj4GYd9hBZy1RUFLs0Y=; b=XpHnguzyG8jh82OblR0wPOi0HW7yq
+        guz08WJU38YmvDPHVurY+G2eCezGVN+im9dV4n3bFqWWQfDbhPASvEIj6aMCiwCN
+        GSWvS4XVdwCJsehHG/5rfhjtNApBS/n2LQQKc4EqvhwboYsFOiFpKy0iEgbcUyv0
+        jSTG2oETo6GQoez4hG5QXfeMxk65T1IXZSUh2miiUJYijI5aQSWmU8V4XtwJiaHE
+        LjAMdpx3jjPfjsu8tI7CXuplA+YzZ9mv0dqjZddEwuUlEqxNXneXk0q0qb0PQ8yv
+        ljMgUQKdSTdFy16029xzDC6wLHGFIUR+ck4vpDTCXKhAhp9TAQXQX6DNQ==
+X-ME-Sender: <xms:oh13ZLte04EM-c0kF10tTrSyzw54xFGD46A1Oi-hIC--KbC6RPcFNw>
+    <xme:oh13ZMdzdfSWFa4u-FxthIT5t-v_WhHbpiBYkp3Q8t1VqQrzKELic7MQQApv-JrVU
+    1iEP7ZQnrekEKBDY18>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekledgvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:oh13ZOxt2-ByGSiubGPgnUaXf8hx57qalEDB2nWzqWdVrauzDGyjSw>
+    <xmx:oh13ZKNBoyT6NknJNcfoLX4_24o-Jyu9ylpvPzgzKoVA9PGoIre9mw>
+    <xmx:oh13ZL8oA1_gswiqmbZKOBZ5eJ9bprlL9iKBdflJNHPZuZREnvTpBA>
+    <xmx:ox13ZGlx06UPoFHl0ZHzIJx3KLKPK0bWnoV8CUNPfHXjbcWtXWbfnw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id CA3DBB60086; Wed, 31 May 2023 06:12:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <33173e7b-0ec0-4a1e-9533-0d3b6eb4c8ce@app.fastmail.com>
+In-Reply-To: <41c61895-59f4-449c-9e2e-d127d7f95be5@app.fastmail.com>
+References: <b59d1bfe-15b1-4318-a12f-a38143ba35bd@kili.mountain>
+ <4716f9fd-0e09-4e69-a802-09ddecff2733@app.fastmail.com>
+ <6b1a0ee6-c78b-4873-bfd5-89798fce9899@kili.mountain>
+ <2fce7746-6d63-4853-9b20-8fa0b24d6f32@app.fastmail.com>
+ <41c61895-59f4-449c-9e2e-d127d7f95be5@app.fastmail.com>
+Date:   Wed, 31 May 2023 12:12:30 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Dan Carpenter" <dan.carpenter@linaro.org>
+Cc:     stable@vger.kernel.org,
+        "laurent.pinchart" <laurent.pinchart@ideasonboard.com>,
+        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
+        "Randy Dunlap" <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        "Nick Desaulniers" <ndesaulniers@google.com>
+Subject: Re: randconfig fixes for 5.10.y
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 06:05, Abhinav Kumar wrote:
-> 
-> 
-> On 5/30/2023 7:53 PM, Dmitry Baryshkov wrote:
->> On Wed, 31 May 2023 at 03:54, Abhinav Kumar 
->> <quic_abhinavk@quicinc.com> wrote:
->>>
->>> With [1] dpu core revision was dropped in favor of using the
->>> compatible string from the device tree to select the dpu catalog
->>> being used in the device.
->>>
->>> This approach works well however also necessitates adding catalog
->>> entries for small register level details as dpu capabilities and/or
->>> features bloating the catalog unnecessarily. Examples include but
->>> are not limited to data_compress, interrupt register set, widebus etc.
->>>
->>> Introduce the dpu core revision back as an entry to the catalog so that
->>> we can just use dpu revision checks and enable those bits which
->>> should be enabled unconditionally and not controlled by a catalog
->>> and also simplify the changes to do something like:
->>>
->>> if (dpu_core_revision > xxxxx && dpu_core_revision < xxxxx)
->>>          enable the bit;
->>>
->>> Also, add some of the useful macros back to be able to use dpu core
->>> revision effectively.
->>>
->>> [1]: https://patchwork.freedesktop.org/patch/530891/?series=113910&rev=4
->>>
->>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>> ---
->>>   .../msm/disp/dpu1/catalog/dpu_3_0_msm8998.h   |  1 +
->>>   .../msm/disp/dpu1/catalog/dpu_4_0_sdm845.h    |  1 +
->>>   .../msm/disp/dpu1/catalog/dpu_5_0_sm8150.h    |  1 +
->>>   .../msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h   |  1 +
->>>   .../msm/disp/dpu1/catalog/dpu_6_0_sm8250.h    |  1 +
->>>   .../msm/disp/dpu1/catalog/dpu_6_2_sc7180.h    |  1 +
->>>   .../msm/disp/dpu1/catalog/dpu_6_3_sm6115.h    |  1 +
->>>   .../msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h   |  1 +
->>>   .../msm/disp/dpu1/catalog/dpu_7_0_sm8350.h    |  1 +
->>>   .../msm/disp/dpu1/catalog/dpu_7_2_sc7280.h    |  1 +
->>>   .../msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h  |  1 +
->>>   .../msm/disp/dpu1/catalog/dpu_8_1_sm8450.h    |  1 +
->>>   .../msm/disp/dpu1/catalog/dpu_9_0_sm8550.h    |  1 +
->>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    | 31 ++++++++++++++++++-
->>>   14 files changed, 43 insertions(+), 1 deletion(-)
->>>
+On Tue, May 30, 2023, at 21:20, Arnd Bergmann wrote:
+> On Tue, May 30, 2023, at 21:02, Arnd Bergmann wrote:
 >>
->> [skipped catalog changes]
->>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> index 677048cc3b7d..cc4aa75a1219 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> @@ -19,6 +19,33 @@
->>>    */
->>>   #define MAX_BLOCKS    12
->>>
->>> +#define DPU_HW_VER(MAJOR, MINOR, STEP)\
->>> +                 ((((unsigned int)MAJOR & 0xF) << 28) |\
->>> +                 ((MINOR & 0xFFF) << 16) |\
->>> +                 (STEP & 0xFFFF))
->>> +
->>> +#define DPU_HW_MAJOR(rev)((rev) >> 28)
->>> +#define DPU_HW_MINOR(rev)(((rev) >> 16) & 0xFFF)
->>> +#define DPU_HW_STEP(rev)((rev) & 0xFFFF)
->>> +#define DPU_HW_MAJOR_MINOR(rev)((rev) >> 16)
->>> +
->>> +#define IS_DPU_MAJOR_MINOR_SAME(rev1, rev2)   \
->>> +(DPU_HW_MAJOR_MINOR((rev1)) == DPU_HW_MAJOR_MINOR((rev2)))
->>> +
->>> +#define DPU_HW_VER_300 DPU_HW_VER(3, 0, 0) /* 8998 v1.0 */
->>> +#define DPU_HW_VER_400 DPU_HW_VER(4, 0, 0) /* sdm845 v1.0 */
->>> +#define DPU_HW_VER_500 DPU_HW_VER(5, 0, 0) /* sm8150 v1.0 */
->>> +#define DPU_HW_VER_510 DPU_HW_VER(5, 1, 1) /* sc8180 */
->>> +#define DPU_HW_VER_600 DPU_HW_VER(6, 0, 0) /* sm8250 */
->>> +#define DPU_HW_VER_620 DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
->>> +#define DPU_HW_VER_630 DPU_HW_VER(6, 3, 0) /* sm6115|sm4250 */
->>> +#define DPU_HW_VER_650 DPU_HW_VER(6, 5, 0) /* qcm2290|sm4125 */
->>> +#define DPU_HW_VER_700 DPU_HW_VER(7, 0, 0) /* sm8350 */
->>> +#define DPU_HW_VER_720 DPU_HW_VER(7, 2, 0) /* sc7280 */
->>> +#define DPU_HW_VER_800 DPU_HW_VER(8, 0, 0) /* sc8280xp */
->>> +#define DPU_HW_VER_810 DPU_HW_VER(8, 1, 0) /* sm8450 */
->>> +#define DPU_HW_VER_900 DPU_HW_VER(9, 0, 0) /* sm8550 */
->>
->> Instead of having defines for all SoCs (which can quickly become
->> unmanageable) and can cause merge conflicts, I'd suggest inlining all
->> the defines into respective catalog files.
->>
-> 
-> Sure, that can be done.
-> 
->> Also, I'm not sure that the "step" should be a part of the catalog. I
->> know that this follows the hardware revision. However, please correct
->> me if I'm wrong, different step levels are used for revisions of the
->> same SoC. The original code that was reading the hw revision from the
->> hardware register, listed both 5.0.0 and 5.0.1 for sm8150.
->>
-> 
-> This is one of the things i noticed while making this change.
-> 
-> Before the catalog rework, we used to handle even steps as we used to 
-> read that from the register and match it with the mdss_cfg handler. But 
-> after the rework, we dont handle steps anymore. Yes, you are right that 
-> different step levels are used for the revisions of the same SOC and so 
-> with that, i dont expect or atleast am not aware of DPU differences 
-> between steps but I am not able to rule it out.
-> 
-> So are you suggesting we drop step altogether and DPU_HW_VER() macro 
-> shall only handle major and minor versions? With the current chipsets I 
-> see, it should not make a difference . Its just that I am not sure if 
-> that will never happen.
+>> CONFIG_COMPILE_TEST=y forces a number of options to be
+>> hidden from build tests, which is generally super useful.
+>> The one that ended up hiding the stack growth above is
+>> CONFIG_GCOV_PROFILE_ALL. I'll try enabling it for a few
+>> builds to see what else shows up with it.
+>
+> Update: you already pointed to UBSAN_SANITIZE_ALL causing
+> this, I can confirm that this is also the case. With your
+> config, the combination of CONFIG_GCOV_PROFILE_ALL and
+> CONFIG_UBSAN_SANITIZE_ALL causes the compiler to completely
+> mess up register allocation in this code, disabling either
+> of the two gets it below the boundary.
 
-Yes. The goal of this rework would be to drop generic features and to 
-replace those checks with DPU-revision lookups. Correct?
-I think that from this perspective having to handle toe step revision is 
-a sign of an overkill. Having to handle the step revision is a sign of 
-paltform feature (or mis-feature) rather than a generic DPU bit.
+After a night of randconfig builds with both UBSAN_SANITIZE_ALL
+and GCOV_PROFILE_ALL force-enabled, these are the ones I found,
+listing only the worst size for each function (using gcc-13.1).
+None of these show up without GCOV though:
 
-In fact I suppose that even handling a minor revision would be an 
-overkill. Why don't we start with .dpu_major instead of .core_rev? We 
-can add .dpu_minor if/when required.
+crypto/twofish_common.c:683:1: error: the frame size of 2040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+crypto/twofish_common.c:683:1: error: the frame size of 2336 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
+drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c:1589:1: error: the frame size of 1696 bytes is larger than 1400 bytes [-Werror=frame-larger-than=]
+drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c:754:1: error: the frame size of 1260 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+drivers/staging/media/ipu3/ipu3-css-params.c:1206:1: error: the frame size of 1080 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+drivers/staging/media/rkvdec/rkvdec-vp9.c:1042:1: error: the frame size of 1660 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+drivers/staging/media/rkvdec/rkvdec-vp9.c:1042:1: error: the frame size of 2176 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
+drivers/staging/media/rkvdec/rkvdec-vp9.c:995:1: error: the frame size of 1656 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
 
-> 
->>> +
->>>   #define DPU_HW_BLK_NAME_LEN    16
->>>
->>>   #define MAX_IMG_WIDTH 0x3fff
->>> @@ -769,7 +796,7 @@ struct dpu_perf_cfg {
->>>   /**
->>>    * struct dpu_mdss_cfg - information of MDSS HW
->>>    * This is the main catalog data structure representing
->>> - * this HW version. Contains number of instances,
->>> + * this HW version. Contains dpu core revision, number of instances,
->>>    * register offsets, capabilities of the all MDSS HW sub-blocks.
->>>    *
->>>    * @dma_formats        Supported formats for dma pipe
->>> @@ -778,6 +805,8 @@ struct dpu_perf_cfg {
->>>    * @mdss_irqs:         Bitmap with the irqs supported by the target
->>>    */
->>>   struct dpu_mdss_cfg {
->>> +       u32 core_rev;
->>> +
->>>          const struct dpu_caps *caps;
->>>
->>>          const struct dpu_ubwc_cfg *ubwc;
->>> -- 
->>> 2.40.1
->>>
->>
->>
-
--- 
-With best wishes
-Dmitry
-
+      Arnd
