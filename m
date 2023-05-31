@@ -2,118 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB8F718582
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7250B718570
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbjEaPDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
+        id S233509AbjEaPAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233817AbjEaPDM (ORCPT
+        with ESMTP id S233365AbjEaPAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:03:12 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F06E18F
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:03:00 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bacfa4eefcbso2289453276.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:03:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685545380; x=1688137380;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1lJ5Uf+EcwGNh0b/3i4Z2YdTIWfA6+IGf6dwAn0jzq8=;
-        b=5OgM51JSEe6PSOdk5CNCvcME9wVy09vhid7JxBNb7qJiDjF7E4J7ZYoqTcZXK7G/4Q
-         fBVGQRIPzqWJ4sY8Qc07prjIwDuUtokHF0Ed2I4HNciIkLqmXpEkND10y5X5aZpnha+V
-         JLsxaK5gm0+gDI/poxo2GLrXFxNVTsbSH75EjWelp+iT0fqpaAFlShM/OEEAy9Q/Z1oH
-         U4OocqQZEmuNGhc3RV03kZUW3fYLSdLdiSfHU6Vi4FDgN/sFLOHJKfa+8/E/hJkpUra5
-         Sjmd9/kBBv4MLQcWszMrplLIURaRI+p5FKBw8o4fAZ4CJcaOMFqdKw5U+Lr+aVFM4OvC
-         h9Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685545380; x=1688137380;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1lJ5Uf+EcwGNh0b/3i4Z2YdTIWfA6+IGf6dwAn0jzq8=;
-        b=TXQ5zhCBLl8D16BUdJpJ98fSGVeWI+efEzG9yZrNo6XDfCRw8aWDxkH1RgH7ghWVxD
-         hmewCQTYiWKil3oXoaCkIbR5LbwrGXQNeURVHR9Dtqu9MW6SvBzheO5p4HZyL0lZUlIV
-         Z1wwuIe4q6Zp9j+M2kKHDlRlHGPLELvzn24bTZ31MhKh9EpFGSvbOwPdsGWMN2amTK/q
-         t2HsxfqnAdYf0w1rfD7//4afzO7pGqfO2XhAOaFtSK+mPJNGeUMewb+dKGBKmfE+QZGR
-         zE7dwcOcaS2ZUTBdXAQyb6c2hqtnbyjS5hJ/qwxf0bti5eb51Tlpj/BgR1xZQuO4emfA
-         Q2VA==
-X-Gm-Message-State: AC+VfDyLrOdsIXDgbsXwiO3IYjfEa7tS9KWqGvFOF7cynFmm4pIBlKyb
-        OMR0Woo4TfcQrtf+DS1JoR++yM6iSNh2hsY=
-X-Google-Smtp-Source: ACHHUZ7jvbBEzbGMgkGfuh3So2mtf2RBfJvxuGuJkkzHzas325wMoQJCyO0TQgPDMkaiP/e7MDeDFu9c3SC1WFw=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a05:6902:100e:b0:bb1:569c:f381 with SMTP
- id w14-20020a056902100e00b00bb1569cf381mr1335253ybt.1.1685545379836; Wed, 31
- May 2023 08:02:59 -0700 (PDT)
-Date:   Wed, 31 May 2023 14:59:39 +0000
-In-Reply-To: <20230531145939.3714886-1-aliceryhl@google.com>
+        Wed, 31 May 2023 11:00:15 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74341C0;
+        Wed, 31 May 2023 08:00:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=t8QJwDf3mZID2T9DPgkl1+dJxRUwSZ5+A++Qcf/Rniw=; b=xX61yxXxpOjNlrMJw13F5RNmue
+        8irpmpzggpyfC9GePxX8T4/eRJUYTw80VsHb7r51qBMFINBS8cr24ZVuWpNYhAcDFZKuu2PqXETVy
+        Iy4oWFmbZq/1uvAnc4kn9gMrXsIS758jUs0XvnNpZXwWWh1PpzBLtsFNV8S0JR0dRKwQ=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:34748 helo=debian-acer)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q4NIy-0001AW-O7; Wed, 31 May 2023 11:00:05 -0400
+Date:   Wed, 31 May 2023 11:00:03 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Lech Perczak <lech.perczak@camlingroup.com>,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230531110003.86b96815986db3bef7b72635@hugovil.com>
+In-Reply-To: <20230531095608.e1b4358549562b8e1bdf5cb4@hugovil.com>
+References: <20230529140711.896830-1-hugo@hugovil.com>
+        <c15a90d6-b3c1-e432-9216-c4c1e2c44ce6@camlingroup.com>
+        <20230530090836.27b8d080d6b6c022b303ac9e@hugovil.com>
+        <c691858d-31af-2892-c0a3-89a37b19af86@camlingroup.com>
+        <20230531095608.e1b4358549562b8e1bdf5cb4@hugovil.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-References: <20230531145939.3714886-1-aliceryhl@google.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230531145939.3714886-5-aliceryhl@google.com>
-Subject: [PATCH v3 4/4] rust: task: add `Send` marker to `Task`
-From:   Alice Ryhl <aliceryhl@google.com>
-To:     rust-for-linux@vger.kernel.org
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        "=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4 0/9] serial: sc16is7xx: fix GPIO regression and rs485
+ improvements
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a type also implements `Sync`, the meaning of `Send` is just "this
-type may be accessed mutably from threads other than the one it is
-created on". That's ok for this type.
+On Wed, 31 May 2023 09:56:08 -0400
+Hugo Villeneuve <hugo@hugovil.com> wrote:
 
-Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
-Reviewed-by: Gary Guo <gary@garyguo.net>
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
----
- rust/kernel/task.rs | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+> On Wed, 31 May 2023 12:43:48 +0200
+> Lech Perczak <lech.perczak@camlingroup.com> wrote:
+>=20
+> > W dniu 30.05.2023 o=A015:08, Hugo Villeneuve pisze:
+> > > On Tue, 30 May 2023 11:30:07 +0200
+> > > Lech Perczak <lech.perczak@camlingroup.com> wrote:
+> > >
+> > > > W dniu 29.05.2023 o=A016:07, Hugo Villeneuve pisze:
+> > > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > >
+> > > > > Hello,
+> > > > > this patch series mainly fixes a GPIO regression and improve RS48=
+5 flags and
+> > > > > properties detection from DT.
+> > > > >
+> > > > > It now also includes various small fixes and improvements that we=
+re previously
+> > > > > sent as separate patches, but that made testing everything diffic=
+ult.
+> > > > >
+> > > > > Patch 1 fixes an issue when debugging IOcontrol register. After t=
+esting the GPIO
+> > > > > regression patches (patches 6 and 7, tests done by Lech Perczak),=
+ it appers that
+> > > > > this patch is also necessary for having the correct IOcontrol reg=
+ister values.
+> > > > >
+> > > > > Patch 2 introduces a delay after a reset operation to respect dat=
+asheet
+> > > > > timing recommandations.
+> > > > >
+> > > > > Patch 3 fixes an issue with init of first port during probing.
+> > > > >
+> > > > > Patch 4 fixes a bug with the output value when first setting the =
+GPIO direction.
+> > > > >
+> > > > > Patch 5 is a refactor of GPIO registration code.
+> > > > >
+> > > > > Patches 6 and 7 fix a GPIO regression by (re)allowing to choose G=
+PIO function
+> > > > > for GPIO pins shared with modem status lines.
+> > > > >
+> > > > > Patch 8 allows to read common rs485 device-tree flags and propert=
+ies.
+> > > > >
+> > > > > Patch 9 improves comments about chip variants.
+> > > > >
+> > > > > I have tested the changes on a custom board with two SC16IS752 DU=
+ART using a
+> > > > > Variscite IMX8MN NANO SOM.
+> > > > >
+> > > > > Thank you.
+> > > > >
+> > > > > Link: [v1] https://lkml.org/lkml/2023/5/17/967 <https://lkml.org/=
+lkml/2023/5/17/967> <https://lkml.org/lkml/2023/5/17/967 <https://lkml.org/=
+lkml/2023/5/17/967>>
+> > > > > [v1] https://lkml.org/lkml/2023/5/17/777 <https://lkml.org/lkml/2=
+023/5/17/777> <https://lkml.org/lkml/2023/5/17/777 <https://lkml.org/lkml/2=
+023/5/17/777>>
+> > > > > [v1] https://lkml.org/lkml/2023/5/17/780 <https://lkml.org/lkml/2=
+023/5/17/780> <https://lkml.org/lkml/2023/5/17/780 <https://lkml.org/lkml/2=
+023/5/17/780>>
+> > > > > [v1] https://lkml.org/lkml/2023/5/17/785 <https://lkml.org/lkml/2=
+023/5/17/785> <https://lkml.org/lkml/2023/5/17/785 <https://lkml.org/lkml/2=
+023/5/17/785>>
+> > > > > [v1] https://lkml.org/lkml/2023/5/17/1311 <https://lkml.org/lkml/=
+2023/5/17/1311> <https://lkml.org/lkml/2023/5/17/1311 <https://lkml.org/lkm=
+l/2023/5/17/1311>>
+> > > > > [v2] https://lkml.org/lkml/2023/5/18/516 <https://lkml.org/lkml/2=
+023/5/18/516> <https://lkml.org/lkml/2023/5/18/516 <https://lkml.org/lkml/2=
+023/5/18/516>>
+> > > > > [v3] https://lkml.org/lkml/2023/5/25/7 <https://lkml.org/lkml/202=
+3/5/25/7> <https://lkml.org/lkml/2023/5/25/7 <https://lkml.org/lkml/2023/5/=
+25/7>>
+> > > > >
+> > > > > Changes for V3:
+> > > > > - Integrated all patches into single serie to facilitate debuggin=
+g and tests.
+> > > > > - Reduce number of exported GPIOs depending on new property
+> > > > > nxp,modem-control-line-ports
+> > > > > - Added additional example in DT bindings
+> > > > >
+> > > > > Changes for V4:
+> > > > > - Increase reset post delay to relax scheduler.
+> > > > > - Put comments patches at the end.
+> > > > > - Remove Fixes tag for patch "mark IOCONTROL register as volatile=
+".
+> > > > > - Improve commit messages after reviews.
+> > > > > - Fix coding style issues after reviews.
+> > > > > - Change GPIO registration to always register the maximum number =
+of GPIOs
+> > > > > supported by the chip, but maks-out GPIOs declared as modem contr=
+ol lines.
+> > > > > - Add patch to refactor GPIO registration.
+> > > > > - Remove patch "serial: sc16is7xx: fix syntax error in comments".
+> > > > > - Remove patch "add dump registers function"
+> > > > >
+> > > > > Hugo Villeneuve (9):
+> > > > > serial: sc16is7xx: mark IOCONTROL register as volatile
+> > > > > serial: sc16is7xx: add post reset delay
+> > > > > serial: sc16is7xx: fix broken port 0 uart init
+> > > > > serial: sc16is7xx: fix bug when first setting GPIO direction
+> > > > > serial: sc16is7xx: refactor GPIO controller registration
+> > > > > dt-bindings: sc16is7xx: Add property to change GPIO function
+> > > > > serial: sc16is7xx: fix regression with GPIO configuration
+> > > > > serial: sc16is7xx: add call to get rs485 DT flags and properties
+> > > > > serial: sc16is7xx: improve comments about variants
+> > > > >
+> > > > > .../bindings/serial/nxp,sc16is7xx.txt | 46 ++++++
+> > > > > drivers/tty/serial/sc16is7xx.c | 150 +++++++++++++-----
+> > > > > 2 files changed, 156 insertions(+), 40 deletions(-)
+> > > > >
+> > > > >
+> > > > > base-commit: 8b817fded42d8fe3a0eb47b1149d907851a3c942
+> > > >
+> > > > It would be a lot of sending, to do that for every patch separately=
+, so for whole series:
+> > > > Reviewed-by: Lech Perczak <lech.perczak@camlingroup.com>
+> > > >
+> > > > And where applicable - for code patches:
+> > > > Tested-by: Lech Perczak <lech.perczak@camlingroup.com>
+> > > >
+> > > > I tested whole series at the same time.
+> > > > I did my tests on an i.MX6 board with SC16IS760 over SPI, which dif=
+fers a tiny bit from SC16IS752,
+> > > > and everything works as it should.
+> > > > Thank you for fixing this!
+> > >
+> > > Hi Lech,
+> > > thank for your feedback.
+> > >
+> > > You mentioned before that without the patch "mark IOCONTROL register =
+as volatile", things were not working properly for you. Could you retest by=
+ removing this patch and see if things are still working?
+> > >
+> > > Thank you, Hugo.
+> >=20
+> > Hello Hugo,
+> >=20
+> > Just checked - this patch is required, reverting it causes things to fa=
+il, so this patch should be marked as a pre-requisite for the actual fix an=
+d included in backports.
+> > Perhaps using direct write to this register made it work, but it was li=
+kely by accident.
+>=20
+> Hi Lech,
+> thank you for the test, I will mark it as such in upcoming series V5.
+>=20
+> Hugo.
 
-diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
-index 526d29a0ae27..7eda15e5f1b3 100644
---- a/rust/kernel/task.rs
-+++ b/rust/kernel/task.rs
-@@ -64,8 +64,14 @@ macro_rules! current {
- #[repr(transparent)]
- pub struct Task(pub(crate) Opaque<bindings::task_struct>);
- 
--// SAFETY: It's OK to access `Task` through references from other threads because we're either
--// accessing properties that don't change (e.g., `pid`, `group_leader`) or that are properly
-+// SAFETY: By design, the only way to access a `Task` is via the `current` function or via an
-+// `ARef<Task>` obtained through the `AlwaysRefCounted` impl. This means that the only situation in
-+// which a `Task` can be accessed mutably is when the refcount drops to zero and the destructor
-+// runs. It is safe for that to happen on any thread, so it is ok for this type to be `Send`.
-+unsafe impl Send for Task {}
-+
-+// SAFETY: It's OK to access `Task` through shared references from other threads because we're
-+// either accessing properties that don't change (e.g., `pid`, `group_leader`) or that are properly
- // synchronised by C code (e.g., `signal_pending`).
- unsafe impl Sync for Task {}
- 
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+Since I reworked a bit patch 5/9 in series 5, I removed your "Tested-by" an=
+d "Reviewed-by" tags only for this patch. Please reconfirm these tags when =
+you have tested series 5.
 
+Thank you,
+Hugo.
+
+--=20
+Hugo Villeneuve <hugo@hugovil.com>
