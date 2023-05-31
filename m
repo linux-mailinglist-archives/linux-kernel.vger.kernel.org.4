@@ -2,114 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5FE718D71
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 23:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B32FF718D76
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 23:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjEaVrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 17:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
+        id S229701AbjEaVsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 17:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjEaVrD (ORCPT
+        with ESMTP id S229476AbjEaVsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 17:47:03 -0400
-Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8980A0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 14:47:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1685569622; bh=68KwFwrXmYDr7xS3tClDq9Re31VX8jh6WpfE9mcC/8k=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=ILPAoS5KH77Iudma8l2bH3tf6KhrIJQIh0I9Ncu0hoKWCp9ggx5j5Tj44UA7TvdVEKJu0on1RXVJyTVLy09Hpn3ogTAVmUTTAhgJ+m4NyN3XgCsrafWcawrvTyFiYlqUxglEL54BfkMrDn49S5rpZMRfFi1xywCWE6WtNcW0b0JQzUAhgB3kFd3lsEXFkxSR2g6LUBnvoDeEGkfup979nhklJyskcraihL8IPnwiGNZx8TIXvdEjB9xjtREBZQEW7BPojCiIg5Q+OxUwY7fY9etCmO1o+9roLD6BFNGbuPQ61xaAmxRMeq4o4JgBbxgHUMvz4jOYCQkskmH+KGiwDQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1685569622; bh=B4SLWSH/kqKnPEpwjErKZyrAIpufG9J3EUhGpH+i00v=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=ufe2pfL1p+IaLAv/mYgwPzA2NWNl0liQNWp/ytmuTyAGCiM5TdU3LOPBDQKNFE8LO5F1BobfFfkZCRG/j4h9CJa3o7n/9C/niryPiHIYb0Id1naF5ICuxV0EdZj7543mU2HKkvL0j+beVy2dAx/D8nYAG7YpvxfKyLPLZHRxZwy6ZLP01BwXxYTdmkwzo9vJZcn+CDvtWly1MQ5CTJAfiaauC6C3zYJIeF+DmdBXBgo4Js+xlBbijLRrSp8EbkNU3lXzXNmsuOBaCtwwO4SzrdvpaTWbOGGM2mJC9+ymkk8ftJ4DSQHIx8cpTVHdLni2lrFJgMLRFVuH7P5am5FoHA==
-X-YMail-OSG: cVUoH.sVM1lJ6gvny0eX2qRVqtIQhPiljwfwLwelWM0bcwP5_z0SyYJREk_S8Nj
- rTDgWiYjDTq7iY6y_HkAKR5xy5wLxynA5L7SI0jyc3zjtIcl.7RJPycduBtUtdKt5pjuTrGSANPx
- QPP4ZC1X6cwU4JqvRvq3FRSRWxFeDQeuqtN4BbucM._2xcPeBEHLiPn.xwxqNVDu17e0yan3Omsl
- DrCuVZd3T3RHA_N8pPMYFJOaSY_bkRVi1xN_Lw6kVq1MkTd_GTWnK_IET63Su1XkgXE4gn.uATbW
- 8mrWtu.F1IKzOOOxHrr0tc3_V9eKGAafljoAFq2sWqnPuYxSiqX_0KsWiocc9uj9x7U_u0Pb2y0F
- OUFhQKSue3ly4gYelBoLecORnZPZkghNiS2HnCj9H_B.tBYMPXk3hQxrcGzfgC2wYCfFFaSRJIhj
- dvEOkVN8o7ZEcR9Uf7DRprwIKYEmdvXQBNwelvt_fC2JbJ02VErB3bLII35N1HImBTBEAteeHPIr
- XvtjmpKtv24CXCQTvMM5ohl7LMJWw7SqBOajnuOFEe0JR6cVUlSrA4v9kIzh9gthabKKYQQbUgyV
- yEOlUtjPuyzQoA1.gOaiBvT08Y0X8GHAwY9Y.iLLKTuPy_KoYlshMrtsJTZfhLEFl_HmNc0wSU6j
- Z1ecmZndkhmzGnLINaf4BGcgnXa4Ooo9YCsIfApcfXdxdOq6aYwQO7afMf5S4pRLg7Sk.6jUFOl.
- ObG6WQd9e9yk56YXxcWCyeF0wA.EFT3BA5z6aulbLgF9_AX_0J9H8sr7sLNEpBp2dLtTVrLaF2w0
- chbZr1muPtEfZ_RgTJzlLd67QtwH5lGYwGQ4RW5xSdbTfkOrQHEasXLah8vEANh83X35ep4gBZoM
- 6SL4aHSL5tVXW2efBOcY3Hs0egs6ihTevl2UsQcYZWbXo26guN8rnRHbiF50ZwG9sZjwNB.GiiZ6
- LDxcuVLRzp923tWWXYTp_.WMKYGqTp1x_M.H5EJOPM3eF.xrv4UFDFs.xWM6Tkc7PdK1gUTBH0FY
- JYEbRbOFkIivXV_sJk8R5ZPmpm7vvns6uONhrpDKS_OiufTGLOj3uCdZoiHBW6l7lyHwmqt7Lot4
- dlqCOzvhnTIF.CdkfVMZyHgZNuCOoy20rjzdwUaHzi4SNP_qEj3aCCcNmVnpbowKlDMmR2R7AzSV
- dbS9.PY2slrelUyhzvj9WwTvhDMnhMyx4pbnuRXrnCqg2sLcL75Ed.DmxUnXQfORneQRi8cuIfzk
- xIn2FlH3jnaVSjYdckbyqAAVWInNyd4vUAAFTBEXuGPaVcdxT5UsblQi3PmiU5dtaziuRbr.z8qx
- mpKS.SP5jmsYAcvDi5OY__lhHK.DL_1Xu1kZcWv1AkZ8qih47SJgkQt99waWGEFYdbpU9xFIxjrE
- Lfubv6b0.3tJ1slP6VkLjA8I4R9Puzk5IgvQeE4AS6zIeUDsQsix.jk.XsIWah2gJs4DbGJ2iDPl
- NzPCIU9uVr4yM7oFKl0U.7hTPWHJJwJTNFAbeJvWhzjF8fn1o2BeQmFCVbkqfS9x6b59vc5KCCZF
- YSmtm0GavDq1wXauAheyXUtR9DrCbnbmAX6FjW4QOREwecaJOmz5n8zAZjrR9MwBq4gvAXLGGq.G
- ZEBb18pAwmXSYx716w6rIKNXghwL1GgUsCX14Ppg8vtj4WVemItXr0ue7U309fvqOGUGE169DkcQ
- SbOb8NvbWwmqZvv0g98uTcjPJ4n.7ghv2z2YEG1h29xq4owFH9s1R1UZ20S9oLe7lhQi.Ug3Lilg
- R5ypGAd46XUs1tiqYSchk91yqs2k12tO6rdqY0shAHnu8G0aZYMqhOwhGHETQ5UhWhPjm_cQdWDG
- mOIcHFl58Osoc4LgaKGcolidHrSz375QXFbwyeftehgjLuQuX_N5jZxCzGpiBBltWSRFt5JZiI.p
- 6czYhrqwVIHpeSEfVw_rkHk4ya.irQzMzyPHIc3tHwfSkUenJ5ILjNHRoWqwvtAtDyZF0q9hRizG
- Y2H0q6dgnDlQYKu2pI77qdh8FoxJlS.qwEEnEyWQXAtCd9GBfjV6IMMI6yqqlAJWyPQNag.Ilq0Q
- fKeAfW3UBxsgeixIpcx1GF2zOTEJuNdaEMX.C4FF7GeirP_rf7hvHK0OjYpCFzAQqerVrNNQoKAZ
- RcuwY36E.APYBcn.0tkckelb8XzB054MSBYAmnvCqTsfsruZYZ1Ies20RMASvRyFfgjGZORQEhFA
- q0MP6G48xRbnGvArvLwo.X2LzsGmDOUktfBOo2M7cSp4vm0vEO5LRvGR_jF0Mrkmpov8XonACcaK
- 5_I7hQoqdXXrnQA--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 81acc560-f540-4bc4-acd9-a27d87988b0a
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 31 May 2023 21:47:02 +0000
-Received: by hermes--production-ne1-574d4b7954-wzfzc (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a5338ea7f44e42188ddd5cfdf4c4de45;
-          Wed, 31 May 2023 21:36:29 +0000 (UTC)
-Message-ID: <0a2b8372-11f6-56a3-7d8e-41e93d1bf691@schaufler-ca.com>
-Date:   Wed, 31 May 2023 14:36:27 -0700
+        Wed, 31 May 2023 17:48:12 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39BCA0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 14:48:11 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-75b0df81142so1380185a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 14:48:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685569691; x=1688161691;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vj/Ta9h3LbMEXE9/izhrXN7oaXSHc9Ihi+jFO4AkwA8=;
+        b=dm4r5KUcv/tNvXJ64j8Jc+FO9PMKDCVCZKbiVSmq5/VkjQfTK2mJ5F3FGWnCvCKaR/
+         mOrMQ8FynMGdz/QBZJA3mbScqYOsgt7nifRb++NbdnEyp3Frp5TnjW2IEwd7i/t+gJrz
+         +JohC9673EglNQJ5Zy4LLBkgsgrWw7dh3YSEznlqjE8m6NQacoN1rKlw2y+JxAOHWvvZ
+         w201NdlR3lLImG1hnXSPBq3RTBHCgZ4MQ04RhELsoJHaAFcWLwBWZQkpvER7NwJQl4Ue
+         cSy2r5aF7wwVtq7kqSLYuLE288tw0hRVct3q2iK30ICujsZ1odtSKF8tKxdLpvWAXzr4
+         DsXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685569691; x=1688161691;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vj/Ta9h3LbMEXE9/izhrXN7oaXSHc9Ihi+jFO4AkwA8=;
+        b=C9SymJNGDosF1f/WxD9TJeeNkUMHRsQFKrFPrEWiMvz+/qcN13qa0L0p7NbRAF+H6q
+         Gs+hSO+nYoDJ3YdTZlCHHfyzTyk6h/UqIm0awewE0r/F/R/quUdEZpRcosYJ5JHl6j5x
+         b4WsTlA3gpb2hNM9FkxwNUQNu/nGDIRV7izTfIXEunOB1A7t49Grd2emiSgO0tCJ8ZvL
+         YxfF/njBgvxd4OJs2ApMyDRbM6ZE1s/Y1j/L/th3/xW0eeNZ4nA+gd6gbMvVe4SlThh4
+         ERWkKY/i+jlTdalLVSg/fftEYVBlR+FvD1YQWD2Qa7Rkg8Cec/FpK0uw8w38sMDv/370
+         nt8A==
+X-Gm-Message-State: AC+VfDz8RsP4vpVSMBUmGGRRbhzpwDXkR8t3l7zMbVigeQXrJVuSjZf7
+        YXJPCHgi/adHnakbbevyEJZri606GT2s7pZf8knOJa+yueyCWQ==
+X-Google-Smtp-Source: ACHHUZ4JXI2hfV33+Dp9HioUf1ME061m88N+UiCB5TIcynpkt1MpU5kcjKVM9n3a4n3l5PRx9AsSTDxNk5dBh/jhOyo=
+X-Received: by 2002:a05:622a:1743:b0:3f4:ed2c:10a3 with SMTP id
+ l3-20020a05622a174300b003f4ed2c10a3mr7964709qtk.38.1685569370570; Wed, 31 May
+ 2023 14:42:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] LSM: Infrastructure management of the sock
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     "GONG, Ruiqi" <gongruiqi@huaweicloud.com>,
-        John Johansen <john.johansen@canonical.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        linux-kernel@vger.kernel.org, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>, gongruiqi1@huawei.com,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20230531110506.142951-1-gongruiqi@huaweicloud.com>
- <fe6a0f1e-6378-a4f2-f995-46799ed5248e@schaufler-ca.com>
- <CAHC9VhQHUKXLejiMvETYE_PJz3cyHPF5z+T1ifUCD9ezMztcSQ@mail.gmail.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <CAHC9VhQHUKXLejiMvETYE_PJz3cyHPF5z+T1ifUCD9ezMztcSQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.21495 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Sender: mrsester2008bf@gmail.com
+Received: by 2002:a05:6358:33a6:b0:122:db4b:7f96 with HTTP; Wed, 31 May 2023
+ 14:42:50 -0700 (PDT)
+From:   Gabriel Esther <gebrielesther2021@gmail.com>
+Date:   Wed, 31 May 2023 14:42:50 -0700
+X-Google-Sender-Auth: xsu2Lw83ZHD-8UUoRveMW0c3vis
+Message-ID: <CAAq1dN-ZvoTLQUuUcrLO85x79iLaYDrXABDFGuhdfTRmtrEm5w@mail.gmail.com>
+Subject: From Gabriel Esther
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,HK_SCAM,LOTS_OF_MONEY,MILLION_USD,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_MONEY_PERCENT,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:730 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [gebrielesther2021[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 MILLION_USD BODY: Talks about millions of dollars
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 HK_SCAM No description available.
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/2023 2:10 PM, Paul Moore wrote:
-> On Wed, May 31, 2023 at 10:00 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
->> On 5/31/2023 4:05 AM, GONG, Ruiqi wrote:
->>> As the security infrastructure has taken over the management of multiple
->>> *_security blobs that are accessed by multiple security modules, and
->>> sk->sk_security shares the same situation, move its management out of
->>> individual security modules and into the security infrastructure as
->>> well. The infrastructure does the memory allocation, and each relavant
->>> module uses its own share.
->> Do you have a reason to make this change? The LSM infrastructure
->> manages other security blobs to enable multiple concurrently active
->> LSMs to use the blob. If only one LSM on a system can use the
->> socket blob there's no reason to move the management.
-> I think an argument could be made for consistent handling of security
-> blobs, but with the LSM stacking work in development the argument for
-> merging this patch needs to be a lot stronger than just "consistency".
+Greeting to you my Dearest,
 
-I'm betting that someone has an out-of-tree LSM that uses a socket blob,
-and that the intended use case includes stacking with one of the "major"
-LSMs. I would encourage that someone to propose that LSM for upstream.
+Please I need your help and Assistance. Permit me to inform you of my
+desire of going into business relationship with you. I am Miss.Esther
+Gabriel, the only Daughter of late Mr. and Mrs. Gabriel Kadjo. My
+father was a very wealthy cocoa merchant in Abidjan; the economic
+capital of Ivory Coast, my father was poisoned to death by his
+business associates on one of their outings on a business trip.
 
+My mother died when I was a baby and since then my father took me so
+special. Before the death of my father in a private hospital here in
+Abidjan he secretly called me on his bed side and told me that he has
+the sum of TWENTY FIVE Million United State Dollars (USD. $25.000,000)
+deposited in one of the largest security company here in Abidjan, that
+he used my name as his only Daughter for the next of Kin in depositing
+of the fund to the security company.
+
+He also explained to me that it was because of this wealth that he was
+poisoned by his business associates. That I should seek for a look
+foreign partner in a country of my choice who will assist me for
+investment purpose. And the money is in six 6 trunk boxes there in the
+security company now.
+
+I am deeply here seeking your assistance in the following ways:
+
+(1) To stand as my late father's foreign partner before the security
+company for them to deliver the 6 six trunk boxes that contain the
+found to you in your country.
+
+(2) To serve as a guardian of this fund in the trunk box and invest
+them into a good business investments that can benefit you and me
+since I am only 24 years old girl, I do not have any idea of any
+business investment!
+
+(3) To make arrangement for me to come over to your country to further
+my education/study and to secure a resident permit and my travelling
+Visa to come over and stay in your country.
+
+Moreover, I am willing to offer you 20% percent of the total sum as
+compensation for your effort/input after the successful delivering of
+the trunk boxes from the security company While 80% percent will be
+for me and my Education in your country.
+
+Furthermore, please indicate your interest off helping me out for I
+believe that this transaction would be concluded within fourteen (14)
+days from the day you signify your interest to assist me.
+
+Anticipating to hearing from you soon,
+
+Thanks.
+Best regards,
+Miss.Esther.
