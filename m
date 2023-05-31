@@ -2,189 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C558F7187F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F337187EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjEaRD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
+        id S229897AbjEaRCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjEaRDX (ORCPT
+        with ESMTP id S229514AbjEaRCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:03:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3FE136
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:02:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685552554;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OT2ak97DrcQf51/tVihpvQaRSuLks2IFU+YAaT+zsqY=;
-        b=CCRMs5i7zNPee7xJYHuP/TOVl/0dy7ekxWr1gbMU7FX7MikySiYJkaQXeyMtDfLMZms2bW
-        Jr1hPxSGy0k44zRuM7dwwODqXatsDVnp1DmHejzjVOOKoExzoqI3BTj9dZhQ9bfaWjjZak
-        jRNUJ/ZOrRMT52rqmZmpcYXyIBekq20=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-65-veSlZ_RWPee6oPGV5mREtg-1; Wed, 31 May 2023 13:02:31 -0400
-X-MC-Unique: veSlZ_RWPee6oPGV5mREtg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C6AB63C14AB2;
-        Wed, 31 May 2023 17:02:29 +0000 (UTC)
-Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4549C40C6EC4;
-        Wed, 31 May 2023 17:02:29 +0000 (UTC)
-Message-ID: <9d37ab07-97c6-5245-6939-9c1090b4b3a9@redhat.com>
-Date:   Wed, 31 May 2023 13:02:29 -0400
+        Wed, 31 May 2023 13:02:32 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B40136
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:02:31 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id 3f1490d57ef6-ba82059ef0bso5233174276.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:02:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685552551; x=1688144551;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z2awcT+0JgCeSvbodyRK5wx8XefAu35aN26RnKecP3c=;
+        b=ru3LJWatw9eSDRsclue1WsWIAxDaumN43vY6opCFT1uTJnhV5qbyqlLmijzuovu8Nm
+         3SjSIPob1flROXiZ/+I9rX/Opy4E4ipaOua7v2rzbHaBsPAogoMmE6ndp0QkOs10XZEQ
+         MS2NSWPHSQbySLRlPnWkU66Cx5ulYCr/7PPcI4Rf8sxK0XHMg/EO//ovKXZbEA3umyD3
+         pwg/pWfc8W2NEqma2xhp/ec4GA5Qnt0NY72uixR6htP8skXxdb1XS5RIfYorr/tgpA1Z
+         9JC4XdO+zHxDuToUyN/HWNUGGeraNWl6hS+5ebk1AWXREaHRRLYi7wTWJZGkZwfrktMg
+         EwuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685552551; x=1688144551;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z2awcT+0JgCeSvbodyRK5wx8XefAu35aN26RnKecP3c=;
+        b=cDK5zcd1BIgcBkuMN+M7uHCydNO2AndFLZj367mte5SMidKpkZvR8IjwmmnFFqMK4f
+         j75i+GCVnAmOjARjRlmaQj2C9/694QnIyI413Nv0Pm7dx0tITkXJv4xDiU/2NGNJwdaV
+         k8lRXJ8Yky9CkhzYr83os9tO2TbQk3MNxYP4MMiEo0AazW56z+0fxltKvm95QAb3J6fD
+         dMzmcKBTOoS1XQKNuxWEIxOSvfoGeH1Ir73gQqey09zceetJy9e9r02qS//ycHcf1TMD
+         c6rDkBpdBQ2+t7lzlDJgMeskijUhttMiUaay8vSAIyXtDHYD/mrZfXsB8WHFDAeC+dWY
+         N3Tw==
+X-Gm-Message-State: AC+VfDwA/eJifuejTjjB+Y4C8m+Rt//X1qrWeuT4A1WeX7VVegYP4et+
+        MBostjdw5fCJ981QH9fdorAkWNMQGdpzkbNUmCc=
+X-Google-Smtp-Source: ACHHUZ4dQJlXj60cxvsTiSM0dtaKbN4LMCi1vwHfOB99S/bor3Dy8Gb2UJe3mTHf8rjZL55t2EEfWPILd3VShBm1Pnc=
+X-Received: by 2002:a05:6902:154c:b0:ba7:cb72:3588 with SMTP id
+ r12-20020a056902154c00b00ba7cb723588mr7649878ybu.9.1685552550720; Wed, 31 May
+ 2023 10:02:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4] KVM: VMX: do not disable interception for
- MSR_IA32_SPEC_CTRL on eIBRS
-Content-Language: en-US
-To:     Jon Kohler <jon@nutanix.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrea Arcangeli <aarcange@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>
-References: <20230531144128.73814-1-jon@nutanix.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230531144128.73814-1-jon@nutanix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:7010:582a:b0:35e:4011:9d19 with HTTP; Wed, 31 May 2023
+ 10:02:30 -0700 (PDT)
+Reply-To: drlisawilliams53@gmail.com
+From:   Dr Lisa Williams <williamsdrlisa@gmail.com>
+Date:   Wed, 31 May 2023 18:02:30 +0100
+Message-ID: <CAJbSCCRDPiDMKYJ4bXV9Y=vOcZe5CFqc8LrBctb_MFgTJfY9XA@mail.gmail.com>
+Subject: GOOD DAY DEAR
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b41 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [williamsdrlisa[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [drlisawilliams53[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/23 10:41, Jon Kohler wrote:
-> Avoid expensive rdmsr on every VM Exit for MSR_IA32_SPEC_CTRL on
-> eIBRS enabled systems iff the guest only sets IA32_SPEC_CTRL[0] (IBRS)
-> and not [1] (STIBP) or [2] (SSBD) by not disabling interception in
-> the MSR bitmap. Note: this logic is only for eIBRS, as Intel's guidance
-> has long been that eIBRS only needs to be set once, so most guests with
-> eIBRS awareness should behave nicely. We would not want to accidentally
-> regress misbehaving guests on pre-eIBRS systems, who might be spamming
-> IBRS MSR without the hypervisor being able to see it today.
->
-> eIBRS enabled guests using just IBRS will only write SPEC_CTRL MSR
-> once or twice per vCPU on boot, so it is far better to take those
-> VM exits on boot than having to read and save this msr on every
-> single VM exit forever. This outcome was suggested on Andrea's commit
-> 2f46993d83ff ("x86: change default to spec_store_bypass_disable=prctl spectre_v2_user=prctl")
-> however, since interception is still unilaterally disabled, the rdmsr
-> tax is still there even after that commit.
->
-> This is a significant win for eIBRS enabled systems as this rdmsr
-> accounts for roughly ~50% of time for vmx_vcpu_run() as observed
-> by perf top disassembly, and is in the critical path for all
-> VM-Exits, including fastpath exits.
->
-> Opportunistically update comments for both MSR_IA32_SPEC_CTRL and
-> MSR_IA32_PRED_CMD to make it clear how L1 vs L2 handling works.
->
-> Fixes: 2f46993d83ff ("x86: change default to spec_store_bypass_disable=prctl spectre_v2_user=prctl")
-> Signed-off-by: Jon Kohler <jon@nutanix.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-> Cc: Waiman Long <longman@redhat.com>
-> ---
-> v1
->   - https://lore.kernel.org/all/20220512174427.3608-1-jon@nutanix.com/
-> v1 -> v2:
->   - https://lore.kernel.org/all/20220520195303.58692-1-jon@nutanix.com/
->   - Addressed comments on approach from Sean.
-> v2 -> v3:
->   - https://lore.kernel.org/kvm/20220520204115.67580-1-jon@nutanix.com/
->   - Addressed comments on approach from Sean.
-> v3 -> v4:
->   - Fixed inline code comments from Sean.
->
->   arch/x86/kvm/vmx/vmx.c | 35 ++++++++++++++++++++++++-----------
->   1 file changed, 24 insertions(+), 11 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 44fb619803b8..5e643ac897bc 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -2260,20 +2260,33 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->   			return 1;
->
->   		vmx->spec_ctrl = data;
-> -		if (!data)
-> +
-> +		/*
-> +		 * Disable interception on the first non-zero write, except if
-> +		 * eIBRS is advertised to the guest and the guest is enabling
-> +		 * _only_ IBRS.  On eIBRS systems, kernels typically set IBRS
-> +		 * once at boot and never touch it post-boot.  All other bits,
-> +		 * and IBRS on non-eIBRS systems, are often set on a per-task
-> +		 * basis, i.e. change frequently, so the benefit of avoiding
-> +		 * VM-exits during guest context switches outweighs the cost of
-> +		 * RDMSR on every VM-Exit to save the guest's value.
-> +		 */
-> +		if (!data ||
-> +		    (data == SPEC_CTRL_IBRS &&
-> +		     (vcpu->arch.arch_capabilities & ARCH_CAP_IBRS_ALL)))
->   			break;
->
->   		/*
-> -		 * For non-nested:
-> -		 * When it's written (to non-zero) for the first time, pass
-> -		 * it through.
-> -		 *
-> -		 * For nested:
-> -		 * The handling of the MSR bitmap for L2 guests is done in
-> -		 * nested_vmx_prepare_msr_bitmap. We should not touch the
-> -		 * vmcs02.msr_bitmap here since it gets completely overwritten
-> -		 * in the merging. We update the vmcs01 here for L1 as well
-> -		 * since it will end up touching the MSR anyway now.
-> +		 * Update vmcs01.msr_bitmap even if L2 is active, i.e. disable
-> +		 * interception for the vCPU on the first write regardless of
-> +		 * whether the WRMSR came from L1 or L2.  vmcs02's bitmap is a
-> +		 * combination of vmcs01 and vmcs12 bitmaps, and will be
-> +		 * recomputed by nested_vmx_prepare_msr_bitmap() on the next
-> +		 * nested VM-Enter.  Note, this does mean that future WRMSRs
-> +		 * from L2 will be intercepted until the next nested VM-Exit if
-> +		 * L2 was the first to write, but L1 exposing the MSR to L2
-> +		 * without first writing it is unlikely and not worth the
-> +		 * extra bit of complexity.
->   		 */
->   		vmx_disable_intercept_for_msr(vcpu,
->   					      MSR_IA32_SPEC_CTRL,
+-- 
+Hi Dear,
 
-I have 2 comments.
+My name is Dr Lisa Williams from the United States.I am a French and
+American nationality (dual) living in the U.S and sometimes in France
+for Work Purpose.
 
-1) Besides the IBRS, STIBP & SSBD bits, the SPEC_CTRL MSR may have the 
-RRSBA_DIS_S bit set in the future. I am not aware of any current Intel 
-processors having this capability yet, but a future Intel processor may 
-have this and the above patch will have to be modified accordingly. It 
-looks like that the RRSBA_DIS_S bit will be set once.
+I hope you consider my friend request. I will share some of my pics
+and more details about myself when I get your response.
 
-2) AMD has their own AutoIBRS capability in Genoa which is similar to 
-eIBRS but is not identified by the ARCH_CAP_IBRS_ALL bit. Instead it is 
-identified by the AUTOIBRS bit in MSR_EFER. Are you planning to support 
-that?
+Thanks
 
-Cheers,
-Longman
-
+With love
+Lisa
