@@ -2,57 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1F2718547
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6855871854D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233843AbjEaOry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
+        id S232212AbjEaOsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234081AbjEaOru (ORCPT
+        with ESMTP id S230497AbjEaOsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:47:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCBC5C5;
-        Wed, 31 May 2023 07:47:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 76BE21042;
-        Wed, 31 May 2023 07:48:32 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.33.144])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8273A3F663;
-        Wed, 31 May 2023 07:47:41 -0700 (PDT)
-Date:   Wed, 31 May 2023 15:47:31 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
-        boqun.feng@gmail.com, catalin.marinas@arm.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-crypto@vger.kernel.org, sfr@canb.auug.org.au,
-        mpe@ellerman.id.au, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH 00/12] Introduce cmpxchg128() -- aka. the demise of
- cmpxchg_double()
-Message-ID: <ZHdeAwOM6ciFobkL@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230531130833.635651916@infradead.org>
+        Wed, 31 May 2023 10:48:31 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AEC98;
+        Wed, 31 May 2023 07:48:29 -0700 (PDT)
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VEhcBa019044;
+        Wed, 31 May 2023 14:48:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=Jf3ESBiV0WYmua8oMWSDBRYW5TNiZaTmcKkan9Ai01Q=;
+ b=jJB1OTV8exMXNfX0PfeZbLN1m+wVqLQji+T8a2tkEI6RmZJuIN3TNO8VzHqQAH+DE518
+ ttG0sRVOroXshGGXI8IltNTfEiv1qYr4dQWFWB/m/qcD8wrkg2mRth88SmqTeUmSMdDM
+ qiWOkuGZqugLsd/ulkg/N9t/49j0H944Oty2BuGxC5jIdqHStdhNlilLhYHtXesYhQ7Z
+ aMA5xdinz6V20sTJXoYWS9rWG7xda/N0ZAbFQZdkcQz7p1UJpcbWguFtd6CPTgvqK3m9
+ NTImCzWhNTwhZqr4/lKZwTV1whsxw6JMrUco7F/GSemQFDOPCKfyeLDBmm6LpU2NXE/S MA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qx88f05kx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 14:48:28 +0000
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34VEj5oL024343;
+        Wed, 31 May 2023 14:48:27 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qx88f05kc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 14:48:27 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34VBLtRY008119;
+        Wed, 31 May 2023 14:48:27 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3qu9g8c4u4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 14:48:27 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34VEmQCS61866290
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 31 May 2023 14:48:26 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 289AC58060;
+        Wed, 31 May 2023 14:48:26 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4DBAF5805F;
+        Wed, 31 May 2023 14:48:25 +0000 (GMT)
+Received: from [9.61.34.174] (unknown [9.61.34.174])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 31 May 2023 14:48:25 +0000 (GMT)
+Message-ID: <9837da27-e224-aded-fe3e-4f4db6b1599c@linux.ibm.com>
+Date:   Wed, 31 May 2023 10:48:24 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 0/3] s390/vfio-ap: fix hang when mdev attached to guest is
+ removed
+To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        alex.williamson@redhat.com
+Cc:     jjherne@linux.ibm.com, pasic@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>
+References: <20230530223538.279198-1-akrowiak@linux.ibm.com>
+Content-Language: en-US
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20230530223538.279198-1-akrowiak@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: d4jZX2YW3q2NdfP1uTw-0zf27mojLwKt
+X-Proofpoint-ORIG-GUID: yPzsWQv9FV8o2XPRUDbje4Hnsswno19e
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531130833.635651916@infradead.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999
+ spamscore=0 impostorscore=0 phishscore=0 adultscore=0 bulkscore=0
+ priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305310124
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,126 +100,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 03:08:33PM +0200, Peter Zijlstra wrote:
-> Hi!
+On 5/30/23 6:35 PM, Tony Krowiak wrote:
+> When a user attempts to remove a vfio-ap mediated device attached to a
+> guest, the operation hangs until the mdev's fd is closed by the guest
+> (i.e., the hostdev is detached or the guest is shut down). This patch 
+> series provides kernel-side code that allows userspace to set up a 
+> communication channel that will allow the vfio_ap device driver to notify 
+> userspace when a request to release the mdev is received, so that userspace
+> can close the mdev fd and avoid the hang. The patch series provides the 
+> following:  
 > 
-> After much breaking of things, find here the improved version.
+> 1. Introduces code to handle the VFIO_DEVICE_GET_IRQ_INFO and 
+>    VFIO_DEVICE_SET_IRQS ioctl calls to set the eventfd_ctx for signaling a
+>    device request to userspace. 
 > 
-> Since v3:
+> 2. Wires up the VFIO bus driver callback to request a release of the mdev.
+>    When invoked, the vfio_ap device driver will use the eventfd_ctx set up
+>    in #1 to signal a request to userspace to release the mdev.
 > 
->  - unbreak everything that does *NOT* have cmpxchg128()
 > 
->    Notably this_cpu_cmpxchg_double() is used unconditionally by SLUB
->    which means that this_cpu_try_cmpxchg128() needs to be unconditionally
->    available on all 64bit architectures.
+> Note:
+> ----
+> If a user subsequently attempts to restart the guest or re-attach the mdev,
+> the operation will fail with a message indicating the domain is already
+> active. This is a libvirt problem resolved with the following commit:
 > 
->  - fixed up x86/x86_64 cmpxchg{8,16}b emulation for this_cpu_cmpxchg{64,128}()
-> 
->  - introduce {raw,this}_cpu_try_cmpxchg*()
-> 
->  - add fallback for !__SIZEOF_INT128__ 64bit architectures
-> 
->    Sadly there are supported 64bit architecture/compiler combinations that do
->    not have __SIZEOF_INT128__, specifically it was found that HPPA64 only added
->    this with GCC-11.
-> 
->    this is yuck, and ideally we'd simply raise compiler requirements, but this
->    'works'.
+> commit ebd004a03dbd ("security: do not remember/recall labels for VFIO 
+> MDEVs") 
 
-The patches look good to me, and I used my local cross-build script to build
-test this with the kernel.org GCC 10.3.0 cross toolchain for all of the
-following arch/triplet/config combinations:
+For the series: 
 
-  alpha           alpha-linux             defconfig
-  arc             arc-linux               defconfig
-  arm             arm-linux-gnueabi       multi_v4t_defconfig
-  arm             arm-linux-gnueabi       multi_v5_defconfig
-  arm             arm-linux-gnueabi       multi_v7_defconfig
-  arm             arm-linux-gnueabi       omap1_defconfig
-  arm64           aarch64-linux           defconfig
-  csky            csky-linux              defconfig
-  i386            i386-linux              defconfig
-  ia64            ia64-linux              defconfig
-  m68k            m68k-linux              defconfig
-  microblaze      microblaze-linux        defconfig
-  mips            mips-linux              32r1_defconfig
-  mips            mips-linux              32r2_defconfig
-  mips            mips-linux              32r6_defconfig
-  mips            mips64-linux            64r1_defconfig
-  mips            mips64-linux            64r2_defconfig
-  mips            mips64-linux            64r6_defconfig
-  nios2           nios2-linux             defconfig
-  openrisc        or1k-linux              defconfig
-  parisc          hppa-linux              generic-32bit_defconfig
-  parisc          hppa64-linux            generic-64bit_defconfig
-  powerpc         powerpc-linux           ppc40x_defconfig
-  powerpc         powerpc64-linux         ppc64_defconfig
-  powerpc         powerpc64-linux         ppc64e_defconfig
-  riscv           riscv32-linux           rv32_defconfig
-  riscv           riscv64-linux           defconfig
-  s390            s390-linux              defconfig
-  sh              sh4-linux               defconfig
-  sparc           sparc-linux             sparc32_defconfig
-  sparc           sparc64-linux           sparc64_defconfig
-  x86_64          x86_64-linux            defconfig
-  xtensa          xtensa-linux            defconfig
+Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
 
-... and everything seemed happy.
 
-I've also boot-tested arm64 defconfig.
+I also did some testing using the companion qemu series at
+https://lore.kernel.org/qemu-devel/20230530225544.280031-1-akrowiak@linux.ibm.com
 
-So FWIW, for the series:
+Before kernel+qemu changes:
+1. mdevctl start -u <uuid>, where <uuid> references a vfio-ap mdev
+2. start a qemu guest with <uuid> attached
+3. mdvectl stop -u <uuid>
+4. -mdevctl will now hang indefinitely; the mdev remains in-use by the guest-
+Note: detaching the device or powering off the guest will allow the mdevctl command to complete.
 
-Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-Tested-by: Mark Rutland <mark.rutland@arm.com>
+After kernel+qemu changes:
+1. mdevctl start -u <uuid>, where <uuid> references a vfio-ap mdev
+2. start a qemu guest with <uuid> attached
+3. mdvectl stop -u <uuid>
+4. -device is detached from the guest and stopped-
+5. Using a libvirt that includes ebd004a03dbd I also verified that the mdev can be started again and re-attached to the running guest without error.
 
-> My plan is to re-add this to tip/locking/core and thus -next later this week.
-
-I'll need to rebase my kerneldoc series atop this, so getting this into a
-stable branch soon would be great!
-
-Thanks,
-Mark.
 
 > 
-> Also available at:
+> Tony Krowiak (3):
+>   vfio: ap: realize the VFIO_DEVICE_GET_IRQ_INFO ioctl
+>   vfio: ap: realize the VFIO_DEVICE_SET_IRQS ioctl
+>   s390/vfio-ap: Wire in the vfio_device_ops request callback
 > 
->   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+>  drivers/s390/crypto/vfio_ap_ops.c     | 134 +++++++++++++++++++++++++-
+>  drivers/s390/crypto/vfio_ap_private.h |   3 +
+>  include/uapi/linux/vfio.h             |   9 ++
+>  3 files changed, 145 insertions(+), 1 deletion(-)
 > 
-> ---
->  Documentation/core-api/this_cpu_ops.rst     |   2 -
->  arch/arm64/include/asm/atomic_ll_sc.h       |  56 +++---
->  arch/arm64/include/asm/atomic_lse.h         |  39 ++---
->  arch/arm64/include/asm/cmpxchg.h            |  48 ++----
->  arch/arm64/include/asm/percpu.h             |  30 ++--
->  arch/s390/include/asm/cmpxchg.h             |  32 +---
->  arch/s390/include/asm/cpu_mf.h              |   2 +-
->  arch/s390/include/asm/percpu.h              |  34 ++--
->  arch/s390/kernel/perf_cpum_sf.c             |  16 +-
->  arch/x86/include/asm/cmpxchg.h              |  25 ---
->  arch/x86/include/asm/cmpxchg_32.h           |   2 +-
->  arch/x86/include/asm/cmpxchg_64.h           |  63 ++++++-
->  arch/x86/include/asm/percpu.h               | 102 ++++++-----
->  arch/x86/lib/Makefile                       |   3 +-
->  arch/x86/lib/cmpxchg16b_emu.S               |  43 +++--
->  arch/x86/lib/cmpxchg8b_emu.S                |  67 ++++++--
->  drivers/iommu/amd/amd_iommu_types.h         |   9 +-
->  drivers/iommu/amd/iommu.c                   |  10 +-
->  drivers/iommu/intel/irq_remapping.c         |   8 +-
->  include/asm-generic/percpu.h                | 257 ++++++++++++++++++++++------
->  include/crypto/b128ops.h                    |  14 +-
->  include/linux/atomic/atomic-arch-fallback.h |  95 +++++++++-
->  include/linux/atomic/atomic-instrumented.h  |  93 ++++++++--
->  include/linux/dmar.h                        | 125 +++++++-------
->  include/linux/percpu-defs.h                 |  45 ++---
->  include/linux/slub_def.h                    |  12 +-
->  include/linux/types.h                       |  12 ++
->  include/uapi/linux/types.h                  |   4 +
->  lib/crypto/curve25519-hacl64.c              |   2 -
->  lib/crypto/poly1305-donna64.c               |   2 -
->  mm/slab.h                                   |  53 +++++-
->  mm/slub.c                                   | 139 +++++++++------
->  scripts/atomic/gen-atomic-fallback.sh       |   4 +-
->  scripts/atomic/gen-atomic-instrumented.sh   |  19 +-
->  34 files changed, 952 insertions(+), 515 deletions(-)
-> 
+
