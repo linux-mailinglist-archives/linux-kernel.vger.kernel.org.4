@@ -2,149 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D288D718882
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402A0718886
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjEaR3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
+        id S230146AbjEaReF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbjEaR3p (ORCPT
+        with ESMTP id S230040AbjEaReD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:29:45 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66082192;
-        Wed, 31 May 2023 10:29:38 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VHNxNT012000;
-        Wed, 31 May 2023 17:29:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=lfvBv3wC++XoBknk5+vIpz7EOIutZoIqAL7pPkjlFWo=;
- b=dtWqYBgQsN2zpjqP9ofahfU8jQrOKN8egidoUZhs7sbYAh5lXHeKasJBAe9Wy1Qg+MKJ
- o4nlw3EmO3gyRJp5GVjlYrcJJAfzM7GH/w9Dzq2l0PGA/BmAq01YiMmHV1iGKK9PBm6A
- TyaG51oBYVgG6YkWPR+FypEM4uJ81krgIb51o8x2s/AAnlEBjl0H9MFlxG9gCNh2qgQb
- 9XRUe0+iKFNNZIjdt/ztye2PEDBW8eLrjTWrXaZz5lmBgt/CAStIUxqMPZ/pImSS4FMd
- hQQRyIv6OO+9sH19C3rWITBLx9loJyo3o9WavIMVKUjnA1okclTgFxchys5lFdc1fQXi 9Q== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qx81x8fhd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 17:29:24 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34VHTNis001025
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 17:29:23 GMT
-Received: from [10.71.110.189] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 31 May
- 2023 10:29:22 -0700
-Message-ID: <e69f02b7-eba9-5f33-5ca1-eb0638928414@quicinc.com>
-Date:   Wed, 31 May 2023 10:29:22 -0700
+        Wed, 31 May 2023 13:34:03 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD31B3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:33:59 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f7024e66adso5655e9.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:33:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685554438; x=1688146438;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CvW+50pGnn5QOgfO3D3LncyxO2u5YNKyCZaYvFUjphk=;
+        b=MzykdRuGy7oouMHUpYT99CeXMTQwcjdjbMKnveR/WpiUZ8BT91SFVFhwnB5Tu9yEHR
+         byvqd+6EnQSr0I6/WuQQe2ykN85wAvnYMkUc9uT8KIm2iW9a4aMKpavUvg29l3YHw4iC
+         iRK2/gjiG+NGp9Pgn8O763j7A5f071V3Mx547F1iemsomiPeGqIdQykOMaqLjJIVkH0N
+         SwzUT54zgHep7K32DdSAoxoR4UJ5S3LWVakqh0q8yiPXAarQNPfjmUlqlU0HYxeaSWsQ
+         OEsNQXNfUyvvv08p4xGR5zR34CQ3fTauz3D06qirunAjEC8z/9+AuwcaXpgQm7JrYXIQ
+         sgIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685554438; x=1688146438;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CvW+50pGnn5QOgfO3D3LncyxO2u5YNKyCZaYvFUjphk=;
+        b=jRMMCyHEX5pqwjZf6NLidU28LhBMgmIUFx0WWfJU73egJjVL5pveqT2u+LsfsS0qwH
+         5kjP0SnLVEeRnryOGkniH5/9EdGxTdcHBZ26tWMJnkspYxWF1BzvDWPVTeJapmTePATm
+         BxJ3GKG0QmY2epWnShR/X9j+kJFohX1ryY0WP8fVUbW4DRqDemCbCJhG8QflM73L5k51
+         M0zvritHYzm7VniwKdyiQJD2IzOg6T9cguMuaL0dgHlRHOC45LL4hEUw6Cfghdm/Euh3
+         U2e+Vu1AZ2DxDELF0pwJIQYYUVInOQk4ekxN72NCVAgaqoqAl1a+Wa1Vo3sQbi2IaiCV
+         pzCA==
+X-Gm-Message-State: AC+VfDxJRtVFr1cg6aYge10Ww+mAt+c58ttCqE+K+FfQgd3x/BhGvM+m
+        Mt99feGHKrimKgm/a+j1enjGoEgat0Oz424clNnv4A==
+X-Google-Smtp-Source: ACHHUZ5NDb9GF5ZC+fL4OxsWYnV8ZY6mqPK8zGeLpJwTW1VNxqavQSnVvmXWb48MA94P7jf37vXgYTUlHUxjQog8ilo=
+X-Received: by 2002:a05:600c:35c3:b0:3f4:fb7:48d4 with SMTP id
+ r3-20020a05600c35c300b003f40fb748d4mr174755wmq.3.1685554437978; Wed, 31 May
+ 2023 10:33:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v1 2/3] drm/msm/dpu: retrieve DSI DSC struct at
- atomic_check()
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1685464318-25031-1-git-send-email-quic_khsieh@quicinc.com>
- <1685464318-25031-3-git-send-email-quic_khsieh@quicinc.com>
- <dfa12c8b-ccec-261c-9c83-54536e17c02d@linaro.org>
- <157e8219-7af2-c7ed-6d99-3caa6fbc11ba@quicinc.com>
- <CAA8EJponkEne2vVsNP=2Fxmv=Uc6i_LzAGBSEz9hPPotCEpGzg@mail.gmail.com>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <CAA8EJponkEne2vVsNP=2Fxmv=Uc6i_LzAGBSEz9hPPotCEpGzg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: L2NpBAR6-SXcCQwoJVAzmgNq9y_Lstt9
-X-Proofpoint-ORIG-GUID: L2NpBAR6-SXcCQwoJVAzmgNq9y_Lstt9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_12,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 phishscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
- adultscore=0 bulkscore=0 impostorscore=0 mlxscore=0 priorityscore=1501
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305310147
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230531172158.90406-1-jon@nutanix.com>
+In-Reply-To: <20230531172158.90406-1-jon@nutanix.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 31 May 2023 19:33:45 +0200
+Message-ID: <CANn89iLE1d=MuSMTisEbLh6Q_c4rjagd8xuRj0PC-4ua0pDRPA@mail.gmail.com>
+Subject: Re: [PATCH] flow_dissector: introduce skb_get_hash_symmetric()
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Richard Gobert <richardbgobert@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Wojciech Drewek <wojciech.drewek@intel.com>,
+        Guillaume Nault <gnault@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Shmulik Ladkani <shmulik.ladkani@gmail.com>,
+        Qingqing Yang <qingqing.yang@broadcom.com>,
+        Daniel Xu <dxu@dxuuu.xyz>, Felix Fietkau <nbd@nbd.name>,
+        Ludovic Cintrat <ludovic.cintrat@gatewatcher.com>,
+        Jason Wang <jasowang@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 5/31/2023 10:12 AM, Dmitry Baryshkov wrote:
-> On Wed, 31 May 2023 at 18:41, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->>
->>
->>>>    +    if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_DSI) {
->>> INTF_DSI
->>>
->>>> +        struct drm_bridge *bridge;
->>>> +
->>>> +        if (!dpu_enc->dsc) {
->>> This condition is not correct. We should be updating the DSC even if
->>> there is one.
->>>
->>>> +            bridge = drm_bridge_chain_get_first_bridge(drm_enc);
->>>> +            dpu_enc->dsc = msm_dsi_bridge_get_dsc_config(bridge);
->>> This approach will not work for the hot-pluggable outputs. The dpu_enc
->>> is not a part of the state. It should not be touched before
->>> atomic_commit actually commits changes.
->> where can drm_dsc_config be stored?
-> I'd say, get it during atomic_check (and don't store it anywhere).
-> Then get it during atomic_enable (and save in dpu_enc).
-got it.
+On Wed, May 31, 2023 at 7:22=E2=80=AFPM Jon Kohler <jon@nutanix.com> wrote:
 >
->>> Also, I don't think I like the API. It makes it impossible for the
->>> driver to check that the bridge is the actually our DSI bridge or not.
->>> Once you add DP here, the code will explode.
->>>
->>> I think instead we should extend the drm_bridge API to be able to get
->>> the DSC configuration from it directly. Additional care should be put
->>> to design an assymetrical API. Theoretically a drm_bridge can be both
->>> DSC source and DSC sink. Imagine a DSI-to-DP or DSI-to-HDMI bridge,
->>> supporting DSC on the DSI side too.
->> Form my understanding, a bridge contains two interfaces.
->>
->> Therefore I would think only one bridge for dsi-to-dp bridge? and this
->> bridge should represent the bridge chip?
->>
->> I am thinking adding an ops function, get_bridge_dsc() to struct
->> drm_bridge_funcs to retrieve drm_dsc_config.
-> So, for this DSI-to-DP bridge will get_bridge_dsc() return DSC
-> configuration for  the DSI or for the DP side of the bridge?
-
-I would think should be DP side. there is no reason to enable dsc on 
-both DSI and DP fro a bridge chip.
-
-drm_bridge_chain_get_first_bridge(drm_enc) should return the bridge of 
-the controller.
-
-In DSI-to-DP bridge chip case, this controller will be the bridge chip 
-who configured to perform protocol conversion between DSI and DP.
-
-If DSC enabled should be at DP size which connect to panel.
-
+> tun.c changed from skb_get_hash() to __skb_get_hash_symmetric() on
+> commit feec084a7cf4 ("tun: use symmetric hash"), which exposes an
+> overhead for OVS datapath, where ovs_dp_process_packet() has to
+> calculate the hash again because __skb_get_hash_symmetric() does not
+> retain the hash that it calculates.
 >
->> Do you have other suggestion?
-> Let me think about it for a few days.
+> Introduce skb_get_hash_symmetric(), which will get and save the hash
+> in one go, so that calcuation work does not go to waste, and plumb it
+> into tun.c.
 >
+> Fixes: feec084a7cf4 ("tun: use symmetric hash")
+
+
+> Signed-off-by: Jon Kohler <jon@nutanix.com>
+> CC: Jason Wang <jasowang@redhat.com>
+> CC: David S. Miller <davem@davemloft.net>
+> ---
+>
+
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 0b40417457cd..8112b1ab5735 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -1474,6 +1474,7 @@ __skb_set_sw_hash(struct sk_buff *skb, __u32 hash, =
+bool is_l4)
+>
+>  void __skb_get_hash(struct sk_buff *skb);
+>  u32 __skb_get_hash_symmetric(const struct sk_buff *skb);
+> +u32 skb_get_hash_symmetric(struct sk_buff *skb);
+>  u32 skb_get_poff(const struct sk_buff *skb);
+>  u32 __skb_get_poff(const struct sk_buff *skb, const void *data,
+>                    const struct flow_keys_basic *keys, int hlen);
+> diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
+> index 25fb0bbc310f..d8c0e804bbfe 100644
+> --- a/net/core/flow_dissector.c
+> +++ b/net/core/flow_dissector.c
+> @@ -1747,6 +1747,35 @@ u32 __skb_get_hash_symmetric(const struct sk_buff =
+*skb)
+>  }
+>  EXPORT_SYMBOL_GPL(__skb_get_hash_symmetric);
+>
+> +/**
+> + * skb_get_hash_symmetric: calculate and set a flow hash in @skb, using
+> + * flow_keys_dissector_symmetric.
+> + * @skb: sk_buff to calculate flow hash from
+> + *
+> + * This function is similar to __skb_get_hash_symmetric except that it
+> + * retains the hash within the skb, such that it can be reused without
+> + * being recalculated later.
+> + */
+> +u32 skb_get_hash_symmetric(struct sk_buff *skb)
+> +{
+> +       struct flow_keys keys;
+> +       u32 hash;
+> +
+> +       __flow_hash_secret_init();
+> +
+> +       memset(&keys, 0, sizeof(keys));
+> +       __skb_flow_dissect(NULL, skb, &flow_keys_dissector_symmetric,
+> +                          &keys, NULL, 0, 0, 0,
+> +                          FLOW_DISSECTOR_F_STOP_AT_FLOW_LABEL);
+> +
+> +       hash =3D __flow_hash_from_keys(&keys, &hashrnd);
+> +
+> +       __skb_set_sw_hash(skb, hash, flow_keys_have_l4(&keys));
+> +
+> +       return hash;
+> +}
+> +EXPORT_SYMBOL_GPL(skb_get_hash_symmetric);
+> +
+
+Why copy/pasting __skb_get_hash_symmetric() ?
+
+Can you reuse it ?
