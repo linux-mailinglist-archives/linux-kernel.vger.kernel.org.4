@@ -2,113 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88AEC718A6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D0D718A71
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjEaTsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 15:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
+        id S230083AbjEaTsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 15:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjEaTsB (ORCPT
+        with ESMTP id S230102AbjEaTsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 15:48:01 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F309128
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:47:36 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-75b08639930so75351785a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:47:36 -0700 (PDT)
+        Wed, 31 May 2023 15:48:33 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0409D;
+        Wed, 31 May 2023 12:48:32 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-19f68a583a7so973411fac.1;
+        Wed, 31 May 2023 12:48:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1685562455; x=1688154455;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5UHjssLfpQql1l3N+JsL18/1F1d999v0IG8ev+FPKU0=;
-        b=QBGy63ayVDOIEDr61JPl6x9JZIt2/yzTyij1oy+yiAf6AvimKdOcvilem3A3EkcZQI
-         EupN6mOO/PgxYIwOuGGgR84K5XibFhS4pcmWcw6V7zW1BC5pQX7KOGeh/GbTurcQsU4D
-         nLlk9fzSwX6IYXjISvS3a8pyN+wqVIrQGgrJF8kBqO7aBVs3BfVU+uSFdjeNxXGHeZy0
-         el00WiQ67dGV/JJ0/iVHod74DxIz6vHfbdDlEaCZLvQ1tvxRSsnhGSQrd4PLfWzkAg+1
-         Ie2Gjj3lwILw+d4IIbOsROJjhcyYK74hKiW6I4ac5g9ofmeN2XSMtxdgQEm38g4PXH18
-         4E9w==
+        d=gmail.com; s=20221208; t=1685562511; x=1688154511;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+4Wcgl0rHsjPEzn2Tf0MuvPr782eDL8Xj3y55NIs4UI=;
+        b=Y3gH3jzjra2jFRV8Sv0VyvPZUpq1haLVKBPrHLAJSu+lhIq8GupxcqLGx67HXO4941
+         bVXZ76fkQNBwiTc4cEDL2Jgd+70woAzpIk3IJVCSaBYvJWrMEmOONY2xG78CS2WYz3jL
+         yrgZsLTROQwslkJ9c5fHcHzIUx7cSCgpVdH0/RqRcgeePjwW9D9MdSEXXVkbz3IkXdHP
+         HEvBSPDsktsCh3Kaijj9kRu0DZBnTT8emJS0nfqDYW21Ixp6dvTR6tI24kIR7ZZbi1HZ
+         W7yuUWs3gpE5AN7ey47pXIYMVYZOOnlUET4Gp12tMkqSeYtsl26uYc0h2xyk4VfynvEi
+         xaYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685562455; x=1688154455;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5UHjssLfpQql1l3N+JsL18/1F1d999v0IG8ev+FPKU0=;
-        b=HrUqcBPE0Et5RaO1kXGr8S31NF3lvuNDSDSaz15bAZ+lxQgB0tk55M+rXY9QX+RsTV
-         9Z9KxO2fO22qk5eQOq26sydCkC9zcongxvzNjSi34KELSaXyrU4QvWGwnaQaqNvvoP5L
-         jnjF6QfiBf1/lRX/m5Ky3ZjmdvrbPAv23pZZ9vneO2Fg35YLgpP1xczMQ0uRypdhDTk0
-         64HIkURCCHkYvYqQn2svFs5sl0djhW7AhL2IIuQImn+pvdYpghahUr2m8nAv4vYmhfQg
-         Zma/RDbn5AlG71VB+RcA92SX+cBY0ts3PvXLjRMTpXBNGhn2rdrsyK6cQXdR4f6dbI7k
-         jLeA==
-X-Gm-Message-State: AC+VfDy117fucnWVYttgK9M3oXpnGKeZm+75L1Aq/i8YEw0u4d98Ah6J
-        9hYhe8Jrq+qmuCp0rNQYJVLQwg==
-X-Google-Smtp-Source: ACHHUZ4JNtGa83cjas7CRuFuK8jR5kEN4roSCtdDc/sHLbvPA8Mqb1DPmOPmfgxEAETPuEU4dT9f9A==
-X-Received: by 2002:a05:6214:27e9:b0:5e9:48da:9938 with SMTP id jt9-20020a05621427e900b005e948da9938mr12692252qvb.11.1685562455358;
-        Wed, 31 May 2023 12:47:35 -0700 (PDT)
-Received: from [172.17.0.2] ([147.160.184.87])
-        by smtp.gmail.com with ESMTPSA id a2-20020a0ce342000000b006238888dbffsm6287377qvm.139.2023.05.31.12.47.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 12:47:34 -0700 (PDT)
-From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
-Date:   Wed, 31 May 2023 19:47:32 +0000
-Subject: [PATCH net] virtio/vsock: fix sock refcnt bug on owner set failure
+        d=1e100.net; s=20221208; t=1685562511; x=1688154511;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+4Wcgl0rHsjPEzn2Tf0MuvPr782eDL8Xj3y55NIs4UI=;
+        b=C93kcRjicE+MCU9851f9DH5rB5ZBisL57SQqlVKhiWPT5bGCxvX1VKbvtxrKRY9ZOh
+         gDYryhlU5Ob4PoKasBWyl+vfCy+1siEO+2ER61GbP3jLwcuxIien1UFVDXmO068EGFUk
+         1NB8EgA4KM/QuiXW75fXjw7yxwBg+nmDcmkbD6FvT5vQd7/pvMSk0PaNhkZ5X5UyOk7u
+         c9lfgUTBhEuKkdMxPmMa9UDLYQGBNe9VOwQG2NqZxqr582uf0XFxmvGR0ZnEeP0PUVR+
+         j4GIy02RmN2a54OwokK5F64b8kYBSCP+H2zkcDHE0Ztlh69L1OXvSkHkhEebg1VVLYNW
+         QyAA==
+X-Gm-Message-State: AC+VfDyxBTs15JwQoOnKNz7x4AwVuBkn8eg7GmUnZVKq+08xbipIBnxn
+        /PUfOeP2nEqjVyE8L8whHfM=
+X-Google-Smtp-Source: ACHHUZ5YvVXylqQGY0foLp4Ey+r/irkQjeCZLrWViC4Aae+jMtqh3si45xqC9phUz+jjk16oL6F9lg==
+X-Received: by 2002:a05:6871:a78a:b0:19a:1324:5875 with SMTP id wj10-20020a056871a78a00b0019a13245875mr2605771oab.26.1685562511717;
+        Wed, 31 May 2023 12:48:31 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id e20-20020a05683013d400b006b0f58724d8sm785339otq.66.2023.05.31.12.48.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 12:48:31 -0700 (PDT)
+Message-ID: <22ac8a99-d243-c537-41c7-ff2c5e69d28f@gmail.com>
+Date:   Wed, 31 May 2023 16:48:27 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230531-b4-vsock-fix-refcnt-v1-1-0ed7b697cca5@bytedance.com>
-X-B4-Tracking: v=1; b=H4sIAFOkd2QC/x2NQQrDIBAAvxL23AU1lYR+pfTg2k2yFDZFJQghf
- 6/2OAzDnJA5CWd4DCckPiTLrg3sbYC4BV0Z5d0YnHGj8aNFuuOR9/jBRSomXqIWpIms93M0szP
- QSgqZkVLQuPVWuaByLV19WyL1P3x2Aa/r+gEx73aXhQAAAA==
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 3/3] rust: upgrade to Rust 1.68.2
+Content-Language: en-US
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     ojeda@kernel.org, alex.gaynor@gmail.com, benno.lossin@proton.me,
+        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+        gyakovlev@gentoo.org, jan.steffens@gmail.com, jistone@redhat.com,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com,
+        william.brown@suse.com
+References: <20230418214347.324156-4-ojeda@kernel.org>
+ <20230419030243.540348-1-yakoyoku@gmail.com>
+ <CANiq72knVpyaKdT2iwrBNYorAt3Y5M-r6pXHc9JAZRCVmBYusQ@mail.gmail.com>
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <CANiq72knVpyaKdT2iwrBNYorAt3Y5M-r6pXHc9JAZRCVmBYusQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previous to setting the owner the socket is found via
-vsock_find_connected_socket(), which returns sk after a call to
-sock_hold().
+On 5/31/23 14:02, Miguel Ojeda wrote:
+> On Wed, Apr 19, 2023 at 5:02 AM Martin Rodriguez Reboredo
+> <yakoyoku@gmail.com> wrote:
+>>
+>> Kinda bunch to review, although may I ask if each time the `alloc`
+>> crate is updated is worth to mention the changes upon it [1], can be
+>> skipped otherwise.
+>>
+>> Link: https://github.com/rust-lang/rust/commits/master/library/alloc [1]
+> 
+> That could be nice if we could give a link similar to, say, what:
+> 
+>      git log 1.62.0..1.68.2 -- library/alloc/src/
+> 
+> produces (or perhaps a list of PRs) -- is it possible to do so with a
+> GitHub URL? If so, please let me know!
+> 
+> Cheers,
+> Miguel
 
-If setting the owner fails, then sock_put() needs to be called.
 
-Fixes: f9d2b1e146e0 ("virtio/vsock: fix leaks due to missing skb owner")
-Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
----
- net/vmw_vsock/virtio_transport_common.c | 1 +
- 1 file changed, 1 insertion(+)
+It seems that kind of URL comparisons in GitHub aren't supported yet
+per the docs say [1]. Sad but maybe in the future they are going to be
+supported, or at least I hope GitLab or Gitea do it.
 
-diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-index b769fc258931..f01cd6adc5cb 100644
---- a/net/vmw_vsock/virtio_transport_common.c
-+++ b/net/vmw_vsock/virtio_transport_common.c
-@@ -1343,6 +1343,7 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
- 
- 	if (!skb_set_owner_sk_safe(skb, sk)) {
- 		WARN_ONCE(1, "receiving vsock socket has sk_refcnt == 0\n");
-+		sock_put(sk);
- 		goto free_pkt;
- 	}
- 
-
----
-base-commit: 60cbd38bb0ad9e4395fba9c6994f258f1d6cad51
-change-id: 20230531-b4-vsock-fix-refcnt-b7b1558c0820
-
-Best regards,
--- 
-Bobby Eshleman <bobby.eshleman@bytedance.com>
-
+Link: https://docs.github.com/en/pull-requests/committing-changes-to-your-project/viewing-and-comparing-commits/comparing-commits [1]
