@@ -2,198 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB99718B72
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE38718B80
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjEaUyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 16:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57322 "EHLO
+        id S230107AbjEaUz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 16:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjEaUyA (ORCPT
+        with ESMTP id S229729AbjEaUz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 16:54:00 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C63129
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:54:00 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d5b4c400fso224660b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:53:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1685566439; x=1688158439;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S/tIbjMOzrV0tes0SpPx2z1WCchqgtLOTCZJxfWjgkI=;
-        b=HLFIINplwvQnozoURe7fFqoDE3MPANX+abzHwYbUVEUViyUsjLpAed39ov4QamNmnI
-         BIEsIwrhTtAwlS5OrNGhh8yIX+6uCcaGeGvusV6Wg1cftiQXl03IwM/ViNTy0PnaUaPr
-         WECj5CBD5QvnYS0b6tk2MrVCQoXja+EEsE1cw=
+        Wed, 31 May 2023 16:55:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6336412E
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:54:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685566475;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Cwd4SgM5APPGh7VO0y71b+pefPbg5/lxjd5iAY5Yg7M=;
+        b=Yt3bZi8gAoq/nrWw+X1MY3hobw32g7ftUdKzN3+YvEzVA4puIh/pA+GFOLKXYTVWas2H/q
+        aEyfoDG915k4gOGildsdEC4ZJb2LTZeVDuoiKN34T4Njf5BcmRX/sy+I02sF170ckEVEvm
+        NUZH6kr6sT6Q511lv/1+hlYxxkk8QmM=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-584-K4ByYQ1GOeexo4AuEDEPcg-1; Wed, 31 May 2023 16:54:33 -0400
+X-MC-Unique: K4ByYQ1GOeexo4AuEDEPcg-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75c9b116dddso16952985a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:54:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685566439; x=1688158439;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S/tIbjMOzrV0tes0SpPx2z1WCchqgtLOTCZJxfWjgkI=;
-        b=cs2Aiqvh9b6bA0I4ludLkP2unwSFM0AAVu6jWpp7zcvF+f1mkq469tleHO+11Uizhb
-         mYc8ZVhIWuVK1miwrQMK+CBfo04C10jPkKSiqPNqN9RMUbqwM01DsCc0zlKqzM1+D1yV
-         rrPjBaFpFJv88UbOvL4BM+XfdQu8bjKhbdskaaFq2NwtWWLfTj7jeDjqUePkYW/f3RuW
-         vXJkyzDplV69qba7mW0Mj23ez+rYKMVgWshO8RJxNs5MFHmYtvVOfea8CLmBoYn4lLGM
-         jtDgbbzW72uVk8ANkW+jvGGhK8BjGaxoLpHjGJsGijRq81Rk1SR1P6o6nDBVPKIYXg9D
-         y2cA==
-X-Gm-Message-State: AC+VfDz0jOMzKwuqEYWYfZ1qScq6qurXEPlb/BngdBdxr+3P9M7EdUcd
-        ZISbm4HmFXpKhkO+trtYOvRENMFGIzjwFe5JaCU=
-X-Google-Smtp-Source: ACHHUZ435HMGZtkvWpKkQToZ0wFTxnJdVhDep9vOugI0fciQ9sfXq50qV6AeJGgB66wEdhvIvJ1o3A==
-X-Received: by 2002:a05:6a20:5494:b0:10c:8f0c:f81c with SMTP id i20-20020a056a20549400b0010c8f0cf81cmr8751822pzk.53.1685566439336;
-        Wed, 31 May 2023 13:53:59 -0700 (PDT)
-Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id j8-20020a62e908000000b0064f97ff4506sm3155556pfh.68.2023.05.31.13.53.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 31 May 2023 13:53:56 -0700 (PDT)
-From:   Justin Chen <justin.chen@broadcom.com>
-To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com,
-        Justin Chen <justin.chen@broadcom.com>
-Subject: [PATCH net-next] ethtool: ioctl: improve error checking for set_wol
-Date:   Wed, 31 May 2023 13:53:49 -0700
-Message-Id: <1685566429-2869-1-git-send-email-justin.chen@broadcom.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000e2e21905fd038498"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        MIME_HEADER_CTYPE_ONLY,MIME_NO_TEXT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1685566473; x=1688158473;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cwd4SgM5APPGh7VO0y71b+pefPbg5/lxjd5iAY5Yg7M=;
+        b=XE5CsxIFpLmRVTrJrL8wGG/etUwxWcN8J3xTgbZ1HUmSXPMvz3ChTlles8m2A3o7sW
+         RWPadXIyFp2SNq1X0hvvCWz21gGdiq/ilmtIvVKAbDQybHLKDA6XCQvpCyK+AB7Le22F
+         nyt26oojX7YGS6RFPqkeAFFjR6ONmSxPK7tbB0tajFxAO924bYdds2JGRdXB6BbKU6Ap
+         zwL34vJqehG+63dgghvIcdSQQ63dzLEYfpclDItjsen0ZiCDHv+/FRqn/esGAoyXv5BR
+         9ltwB7ZHaQHa1R8Hl8FCc/m3y3gTNQakJA3c7WJthquuVTosygDbxlwvuJ/63ds5r7hx
+         X/xw==
+X-Gm-Message-State: AC+VfDxtmFZRB2sJvoAcStGOy08p5MTfetRJbhEGxX0Gy8+QHc9s/mT+
+        TeoRYocE0GJR4vqJKZfBtzlPNyJTcXnbyubxAED01hBuTRoegOudpaWJnh4+0uWZ0AT6IqsBnTB
+        8VCEKCyszOUB6Mhy3hEbw0tgO
+X-Received: by 2002:a05:620a:890d:b0:75b:23a1:82a4 with SMTP id ql13-20020a05620a890d00b0075b23a182a4mr3313693qkn.5.1685566472700;
+        Wed, 31 May 2023 13:54:32 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7K8gisroUbkQdWW7zoLWfYHa+/7bJeNWQUDGgP3g/Ti4u2xb2+wWVE1kXodA9+OAH0aYYjBQ==
+X-Received: by 2002:a05:620a:890d:b0:75b:23a1:82a4 with SMTP id ql13-20020a05620a890d00b0075b23a182a4mr3313655qkn.5.1685566472234;
+        Wed, 31 May 2023 13:54:32 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
+        by smtp.gmail.com with ESMTPSA id b8-20020a05620a126800b0074df2ac52f8sm5684553qkl.21.2023.05.31.13.54.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 13:54:31 -0700 (PDT)
+Date:   Wed, 31 May 2023 16:54:27 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Jann Horn <jannh@google.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 09/12] mm/khugepaged: retract_page_tables() without mmap
+ or vma lock
+Message-ID: <ZHe0A079X9B8jWlH@x1n>
+References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
+ <2e9996fa-d238-e7c-1194-834a2bd1f60@google.com>
+ <CAG48ez0aF1Rf1apSjn9YcnfyFQ4YqSd4GqB6f2wfhF7jMdi5Hg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG48ez0aF1Rf1apSjn9YcnfyFQ4YqSd4GqB6f2wfhF7jMdi5Hg@mail.gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000e2e21905fd038498
+On Wed, May 31, 2023 at 05:34:58PM +0200, Jann Horn wrote:
+> On Mon, May 29, 2023 at 8:25 AM Hugh Dickins <hughd@google.com> wrote:
+> > -static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
+> > -                              struct mm_struct *target_mm,
+> > -                              unsigned long target_addr, struct page *hpage,
+> > -                              struct collapse_control *cc)
+> > +static void retract_page_tables(struct address_space *mapping, pgoff_t pgoff)
+> >  {
+> >         struct vm_area_struct *vma;
+> > -       int target_result = SCAN_FAIL;
+> >
+> > -       i_mmap_lock_write(mapping);
+> > +       i_mmap_lock_read(mapping);
+> >         vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff) {
+> > -               int result = SCAN_FAIL;
+> > -               struct mm_struct *mm = NULL;
+> > -               unsigned long addr = 0;
+> > -               pmd_t *pmd;
+> > -               bool is_target = false;
+> > +               struct mm_struct *mm;
+> > +               unsigned long addr;
+> > +               pmd_t *pmd, pgt_pmd;
+> > +               spinlock_t *pml;
+> > +               spinlock_t *ptl;
+> >
+> >                 /*
+> >                  * Check vma->anon_vma to exclude MAP_PRIVATE mappings that
+> > -                * got written to. These VMAs are likely not worth investing
+> > -                * mmap_write_lock(mm) as PMD-mapping is likely to be split
+> > -                * later.
+> > +                * got written to. These VMAs are likely not worth removing
+> > +                * page tables from, as PMD-mapping is likely to be split later.
+> >                  *
+> > -                * Note that vma->anon_vma check is racy: it can be set up after
+> > -                * the check but before we took mmap_lock by the fault path.
+> > -                * But page lock would prevent establishing any new ptes of the
+> > -                * page, so we are safe.
+> > -                *
+> > -                * An alternative would be drop the check, but check that page
+> > -                * table is clear before calling pmdp_collapse_flush() under
+> > -                * ptl. It has higher chance to recover THP for the VMA, but
+> > -                * has higher cost too. It would also probably require locking
+> > -                * the anon_vma.
+> > +                * Note that vma->anon_vma check is racy: it can be set after
+> > +                * the check, but page locks (with XA_RETRY_ENTRYs in holes)
+> > +                * prevented establishing new ptes of the page. So we are safe
+> > +                * to remove page table below, without even checking it's empty.
+> 
+> This "we are safe to remove page table below, without even checking
+> it's empty" assumes that the only way to create new anonymous PTEs is
+> to use existing file PTEs, right? What about private shmem VMAs that
+> are registered with userfaultfd as VM_UFFD_MISSING? I think for those,
+> the UFFDIO_COPY ioctl lets you directly insert anonymous PTEs without
+> looking at the mapping and its pages (except for checking that the
+> insertion point is before end-of-file), protected only by mmap_lock
+> (shared) and pte_offset_map_lock().
 
-The netlink version of set_wol checks for not supported wolopts and avoids
-setting wol when the correct wolopt is already set. If we do the same with
-the ioctl version then we can remove these checks from the driver layer.
+Hmm, yes.  We probably need to keep that though, and 5b51072e97 explained
+the reason (to still respect file permissions).
 
-Signed-off-by: Justin Chen <justin.chen@broadcom.com>
----
- net/ethtool/ioctl.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+Maybe the anon_vma check can also be moved into the pgtable lock section,
+with some comments explaining (but it's getting a bit ugly..)?
 
-diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
-index 6bb778e10461..80f456f83db0 100644
---- a/net/ethtool/ioctl.c
-+++ b/net/ethtool/ioctl.c
-@@ -1436,15 +1436,25 @@ static int ethtool_get_wol(struct net_device *dev, char __user *useraddr)
- 
- static int ethtool_set_wol(struct net_device *dev, char __user *useraddr)
- {
--	struct ethtool_wolinfo wol;
-+	struct ethtool_wolinfo wol, cur_wol;
- 	int ret;
- 
--	if (!dev->ethtool_ops->set_wol)
-+	if (!dev->ethtool_ops->get_wol || !dev->ethtool_ops->set_wol)
- 		return -EOPNOTSUPP;
- 
-+	memset(&cur_wol, 0, sizeof(struct ethtool_wolinfo));
-+	cur_wol.cmd = ETHTOOL_GWOL;
-+	dev->ethtool_ops->get_wol(dev, &cur_wol);
-+
- 	if (copy_from_user(&wol, useraddr, sizeof(wol)))
- 		return -EFAULT;
- 
-+	if (wol.wolopts & ~cur_wol.supported)
-+		return -EOPNOTSUPP;
-+
-+	if (wol.wolopts == cur_wol.wolopts)
-+		return 0;
-+
- 	ret = dev->ethtool_ops->set_wol(dev, &wol);
- 	if (ret)
- 		return ret;
+> 
+> 
+> >                  */
+> > -               if (READ_ONCE(vma->anon_vma)) {
+> > -                       result = SCAN_PAGE_ANON;
+> > -                       goto next;
+> > -               }
+> > +               if (READ_ONCE(vma->anon_vma))
+> > +                       continue;
+> > +
+> >                 addr = vma->vm_start + ((pgoff - vma->vm_pgoff) << PAGE_SHIFT);
+> >                 if (addr & ~HPAGE_PMD_MASK ||
+> > -                   vma->vm_end < addr + HPAGE_PMD_SIZE) {
+> > -                       result = SCAN_VMA_CHECK;
+> > -                       goto next;
+> > -               }
+> > -               mm = vma->vm_mm;
+> > -               is_target = mm == target_mm && addr == target_addr;
+> > -               result = find_pmd_or_thp_or_none(mm, addr, &pmd);
+> > -               if (result != SCAN_SUCCEED)
+> > -                       goto next;
+> > -               /*
+> > -                * We need exclusive mmap_lock to retract page table.
+> > -                *
+> > -                * We use trylock due to lock inversion: we need to acquire
+> > -                * mmap_lock while holding page lock. Fault path does it in
+> > -                * reverse order. Trylock is a way to avoid deadlock.
+> > -                *
+> > -                * Also, it's not MADV_COLLAPSE's job to collapse other
+> > -                * mappings - let khugepaged take care of them later.
+> > -                */
+> > -               result = SCAN_PTE_MAPPED_HUGEPAGE;
+> > -               if ((cc->is_khugepaged || is_target) &&
+> > -                   mmap_write_trylock(mm)) {
+> > -                       /* trylock for the same lock inversion as above */
+> > -                       if (!vma_try_start_write(vma))
+> > -                               goto unlock_next;
+> > -
+> > -                       /*
+> > -                        * Re-check whether we have an ->anon_vma, because
+> > -                        * collapse_and_free_pmd() requires that either no
+> > -                        * ->anon_vma exists or the anon_vma is locked.
+> > -                        * We already checked ->anon_vma above, but that check
+> > -                        * is racy because ->anon_vma can be populated under the
+> > -                        * mmap lock in read mode.
+> > -                        */
+> > -                       if (vma->anon_vma) {
+> > -                               result = SCAN_PAGE_ANON;
+> > -                               goto unlock_next;
+> > -                       }
+> > -                       /*
+> > -                        * When a vma is registered with uffd-wp, we can't
+> > -                        * recycle the pmd pgtable because there can be pte
+> > -                        * markers installed.  Skip it only, so the rest mm/vma
+> > -                        * can still have the same file mapped hugely, however
+> > -                        * it'll always mapped in small page size for uffd-wp
+> > -                        * registered ranges.
+> > -                        */
+> > -                       if (hpage_collapse_test_exit(mm)) {
+> > -                               result = SCAN_ANY_PROCESS;
+> > -                               goto unlock_next;
+> > -                       }
+> > -                       if (userfaultfd_wp(vma)) {
+> > -                               result = SCAN_PTE_UFFD_WP;
+> > -                               goto unlock_next;
+> > -                       }
+> > -                       collapse_and_free_pmd(mm, vma, addr, pmd);
+> 
+> The old code called collapse_and_free_pmd(), which involves MMU
+> notifier invocation...
+> 
+> > -                       if (!cc->is_khugepaged && is_target)
+> > -                               result = set_huge_pmd(vma, addr, pmd, hpage);
+> > -                       else
+> > -                               result = SCAN_SUCCEED;
+> > -
+> > -unlock_next:
+> > -                       mmap_write_unlock(mm);
+> > -                       goto next;
+> > -               }
+> > -               /*
+> > -                * Calling context will handle target mm/addr. Otherwise, let
+> > -                * khugepaged try again later.
+> > -                */
+> > -               if (!is_target) {
+> > -                       khugepaged_add_pte_mapped_thp(mm, addr);
+> > +                   vma->vm_end < addr + HPAGE_PMD_SIZE)
+> >                         continue;
+> > -               }
+> > -next:
+> > -               if (is_target)
+> > -                       target_result = result;
+> > +
+> > +               mm = vma->vm_mm;
+> > +               if (find_pmd_or_thp_or_none(mm, addr, &pmd) != SCAN_SUCCEED)
+> > +                       continue;
+> > +
+> > +               if (hpage_collapse_test_exit(mm))
+> > +                       continue;
+> > +               /*
+> > +                * When a vma is registered with uffd-wp, we cannot recycle
+> > +                * the page table because there may be pte markers installed.
+> > +                * Other vmas can still have the same file mapped hugely, but
+> > +                * skip this one: it will always be mapped in small page size
+> > +                * for uffd-wp registered ranges.
+> > +                *
+> > +                * What if VM_UFFD_WP is set a moment after this check?  No
+> > +                * problem, huge page lock is still held, stopping new mappings
+> > +                * of page which might then get replaced by pte markers: only
+> > +                * existing markers need to be protected here.  (We could check
+> > +                * after getting ptl below, but this comment distracting there!)
+> > +                */
+> > +               if (userfaultfd_wp(vma))
+> > +                       continue;
+> > +
+> > +               /* Huge page lock is still held, so page table must be empty */
+> > +               pml = pmd_lock(mm, pmd);
+> > +               ptl = pte_lockptr(mm, pmd);
+> > +               if (ptl != pml)
+> > +                       spin_lock_nested(ptl, SINGLE_DEPTH_NESTING);
+> > +               pgt_pmd = pmdp_collapse_flush(vma, addr, pmd);
+> 
+> ... while the new code only does pmdp_collapse_flush(), which clears
+> the pmd entry and does a TLB flush, but AFAICS doesn't use MMU
+> notifiers. My understanding is that that's problematic - maybe (?) it
+> is sort of okay with regards to classic MMU notifier users like KVM,
+> but it's probably wrong for IOMMUv2 users, where an IOMMU directly
+> consumes the normal page tables?
+
+The iommuv2 wasn't "consuming" the pgtables?  IIUC it relies on that to
+make sure no secondary (and illegal) tlb exists in the iommu tlbs.
+
+For this case if the pgtable _must_ be empty when reaching here (we'd
+better make sure of it..), maybe we're good?  Because we should have just
+invalidated once when unmap all the pages in the thp range, so no existing
+tlb should generate anyway for either cpu or iommu hardwares.
+
+However OTOH, maybe it'll also be safer to just have the mmu notifiers like
+before (e.g., no idea whether anything can cache invalidate tlb
+translations from the empty pgtable)? As that doesn't seems to beat the
+purpose of the patchset as notifiers shouldn't fail.
+
+> 
+> (FWIW, last I looked, there also seemed to be some other issues with
+> MMU notifier usage wrt IOMMUv2, see the thread
+> <https://lore.kernel.org/linux-mm/Yzbaf9HW1%2FreKqR8@nvidia.com/>.)
+> 
+> 
+> > +               if (ptl != pml)
+> > +                       spin_unlock(ptl);
+> > +               spin_unlock(pml);
+> > +
+> > +               mm_dec_nr_ptes(mm);
+> > +               page_table_check_pte_clear_range(mm, addr, pgt_pmd);
+> > +               pte_free_defer(mm, pmd_pgtable(pgt_pmd));
+> >         }
+> > -       i_mmap_unlock_write(mapping);
+> > -       return target_result;
+> > +       i_mmap_unlock_read(mapping);
+> >  }
+> >
+> >  /**
+> > @@ -2261,9 +2210,11 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+> >
+> >         /*
+> >          * Remove pte page tables, so we can re-fault the page as huge.
+> > +        * If MADV_COLLAPSE, adjust result to call collapse_pte_mapped_thp().
+> >          */
+> > -       result = retract_page_tables(mapping, start, mm, addr, hpage,
+> > -                                    cc);
+> > +       retract_page_tables(mapping, start);
+> > +       if (cc && !cc->is_khugepaged)
+> > +               result = SCAN_PTE_MAPPED_HUGEPAGE;
+> >         unlock_page(hpage);
+> >
+> >         /*
+> > --
+> > 2.35.3
+> >
+> 
+
 -- 
-2.7.4
+Peter Xu
 
-
---000000000000e2e21905fd038498
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-NhTY3E+cXCB11wty89QStajwXdhGJTYEvUgvsq1h8CwJj9w/38ldAQf5WjhPmApYeJR2ewFrBMCM
-4lHkdRJ6TDc9nXoEkypUfjJkJHe7Eal06tosh6JpAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
-BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
-Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
-NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
-A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
-aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
-cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
-MBqBGGp1c3Rpbi5jaGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
-GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUIWGeYuaTsnIada5Xx8TR3cheUbgw
-DQYJKoZIhvcNAQELBQADggEBAHNQlMqQOFYPYFO71A+8t+qWMmtOdd2iGswSOvpSZ/pmGlfw8ZvY
-dRTkl27m37la84AxRkiVMes14JyOZJoMh/g7fbgPlU14eBc6WQWkIA6AmNkduFWTr1pRezkjpeo6
-xVmdBLM4VY1TFDYj7S8H2adPuypd62uHMY/MZi+BIUys4uAFA+N3NuUBNjcVZXYPplYxxKEuIFq6
-sDL+OV16G+F9CkNMN3txsym8Nnx5WAYZb6+rBUIhMGz70V05xsHQfzvo2s7f0J1tJ5BoRlPPhL0h
-VOnWA3h71u9TfSsv+PXVm3P21TfOS2uc1hbzEqyENCP4i5XQ0rv0TmPW42GZ0o4xggJtMIICaQIB
-ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
-bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwj8BKLXNpALfemdRAwDQYJ
-YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOkQ4MkuUJJyUMN4mr/GdmElZXpN+KYyHlKN
-lp6F+zW9MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDUzMTIw
-NTM1OVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
-AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
-BgkqhkiG9w0BAQEFAASCAQAZ9dadLh4AaFqq1vfS4RgwafeK/GSypHTUYwIiQvasn1Tb4I0VSpoT
-1dm8HX3/o4lUszymS/qwqYisxJ8bK2Q8lvOORmDWf0hjh6nNg9fPOrywuSZy4JHs1x95t75JlaST
-Lsf9Zr7ROfQ91a1GUTeViUryNXzCyjZZsUGE9BymDqMM37EX1bzUrFAPlq5NXIb6GXY8gWK4GNXF
-EySk6HKqGOwvrOn2g/znO+c5I9070e+a+Hi4F3naBs237w+/tpVisEQfuCASIlsQtMyhbUcPrE9R
-/JSdDj0N0NHgjeJmZncPgghYvIlI2ptE8chTYOTFVy/der6NMjbSvGS19RG5
---000000000000e2e21905fd038498--
