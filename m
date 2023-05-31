@@ -2,82 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0E5718AF3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 833F4718AF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjEaURN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 16:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
+        id S229558AbjEaUSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 16:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjEaURK (ORCPT
+        with ESMTP id S229483AbjEaUSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 16:17:10 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0ACE52
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:16:49 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f3bb395e69so7592516e87.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:16:49 -0700 (PDT)
+        Wed, 31 May 2023 16:18:39 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBE8137
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:18:36 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-568fd72993cso19045317b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:18:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685564199; x=1688156199;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=x9eYJWg+Z+b1a+E6Hrzk3FNFSPRGj5LfNanix7jwz0I=;
-        b=Tgz3CX7lyJT1Z5ozBlXD/O6CZ4srDi1Cn356IL4wea7SeHNmPdblciCwObuf213y1N
-         RynUQHrmHpEcD05kxajiM853Ja6pkBG5tPvbBXXqOTnsPr8p51OymjqXdhJzDeacVTvv
-         3yHPaDfK2YXfBS+aga0O4GWXaoWDRfo4zUwe5M/1zUMVX1eKJmW2lqTwPAmfMsf43nio
-         fThkOFlIP0cp1IK168sYbsUiPMimXoLU+XtnYUt6DYW6e//8WiiKKh9+cEezjDLTzxJz
-         0HaZ0O1oAKk3VHnMVnZCaKE9ee43h4yysjjrV7P82DupzLN4kdHISxuJhtkafeFJTvpp
-         fyng==
+        d=google.com; s=20221208; t=1685564316; x=1688156316;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j5CyWTyXiTfBViz6Sxmw35acpjPcVQ4sSxA5nz2qzkI=;
+        b=SEXNJgwV5AiJNIWuh6lBiAmkE3bbsj5MxzsZAn+uYlfZWd+MhGl+kUnQj4F/tjnR+E
+         VbaQ0gNSGssZoTxaLJ/diKcpfpZAJzn/rlADk5OVxNwgcvQivpw4n19DrHl8uU9kBNMI
+         yifWIJFy4c05UPBT9oyREY0jbxBla+4I5u/v8RhpQAXNLvpuSBvEdAQmIrx55XsOxqOh
+         n1cdBZcNOEsdmxIDOafumO1brg7hIFGY6tYALMPs3ngJNYNHUbTAEy1R+dvK1kM7/+5H
+         wutxNj2EZx7+rErSdhYAzgo+Y/leNUgVYGNd+kSSI84XhFf2QeW/H0cQFpDzXgE/Pg4U
+         XP+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685564199; x=1688156199;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x9eYJWg+Z+b1a+E6Hrzk3FNFSPRGj5LfNanix7jwz0I=;
-        b=Nk6GdHXYfdyh+Xut+5zUqD1krV+A/aeQEPifGppwvx8dp6NewQ0tA/d+NhueSxlZRV
-         dp/XzaBgutzVfSH+GNyPbrTXDta46rqtOIqpKV1RqCQiQna/ZMe+gicptsxWZSQCj042
-         gGBxFXWJ7hI2xFS12NTLF/xk7wn4NUZUNVQt0NnUFzLIgUsaRZnBsagQqhLWXtS6YBU7
-         OYuin6kvydjxSWozKdHRcs2phqX9Xv97GdB9mGkNW+25nNtqinJQ7qWEf+HeSUX5B1sy
-         9JbTh4jbSmInxTiOBtoht7ozrt8JxQI1a6ylSIj0NZ9ze0w3+0AtAnvX3No0eyElBpeN
-         /lTw==
-X-Gm-Message-State: AC+VfDwDEH+OibttbMLk95xn6EYGPgC9M/x1b/rF7OXlQt0rpZkTQr5P
-        Cjt+Pj262RGEqeeOaMO5Jyq/EA==
-X-Google-Smtp-Source: ACHHUZ6slYgd32qk+SuNISb320+i+gCUnqXk7fC8kqm+4GvOddfx5n7VVVRj0ttuSGgsc6c9sGGgyA==
-X-Received: by 2002:ac2:5dd5:0:b0:4f2:7cb1:65fc with SMTP id x21-20020ac25dd5000000b004f27cb165fcmr71934lfq.64.1685564199513;
-        Wed, 31 May 2023 13:16:39 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id e2-20020ac25462000000b004f38e55ae79sm832743lfn.278.2023.05.31.13.16.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 13:16:39 -0700 (PDT)
-Message-ID: <991fe23f-a9af-8929-00bf-94e623ef38cb@linaro.org>
-Date:   Wed, 31 May 2023 22:16:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: sc8280xp: Enable GPU related
- nodes
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, johan@kernel.org, mani@kernel.org,
-        Steev Klimaszewski <steev@kali.org>
-References: <20230531030945.4109453-1-quic_bjorande@quicinc.com>
- <20230531030945.4109453-4-quic_bjorande@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230531030945.4109453-4-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        d=1e100.net; s=20221208; t=1685564316; x=1688156316;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=j5CyWTyXiTfBViz6Sxmw35acpjPcVQ4sSxA5nz2qzkI=;
+        b=Sh+X32A4HgQVnPlar5k5bM2Kh1nmJk5cvPgYAAoO8NcPWG7cobG91Q1yiS/8qp/mQd
+         KsGUhq79Ph1glLhBBYBoRG1ypXk3vLb2evdQKuLBw4SPsHm3Kw9jcPWrJ/wW3ppk3iv2
+         eiVpMvDu5qGs3KF3Zg5fV+HzyDHiFsQ8Fj7Tch+WTU3BmqF9e6oB+rWQTPEdLcxHK7VF
+         FY8Sj8HDyNjjSR5281WWhmVbalBin5nSwlEH06PAxlWAn2sZi1UuYU6iihCEhXgezBNl
+         299GlizWDlY37cyULh01foBuL+fb8R56uf+donXfqM8b+HS50rYIHJn75pOochmgpj3v
+         RmRw==
+X-Gm-Message-State: AC+VfDw3azz+s3TEENYtvB+MrYaPxm6aQHhyLFu2QL5XACWTylj+sIhm
+        Hxt2A/EmM7B5k3N4jZyNbKBbpXqMAY0=
+X-Google-Smtp-Source: ACHHUZ45I9uA8dYRlS7sdsD4AC1X9R0cpZ8hPCWp1InPW1kv/LWxrQezg2ZD1CsX0Jmb0fTO/coj8PfeXUM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:dc10:0:b0:bac:b91c:511b with SMTP id
+ y16-20020a25dc10000000b00bacb91c511bmr8792287ybe.2.1685564315865; Wed, 31 May
+ 2023 13:18:35 -0700 (PDT)
+Date:   Wed, 31 May 2023 20:18:34 +0000
+In-Reply-To: <E17EFDD7-C54A-4532-B1D3-D567557FC54B@nutanix.com>
+Mime-Version: 1.0
+References: <20230530200152.18961-1-jon@nutanix.com> <2a6502e3-ba87-0355-af09-825e8467b81f@intel.com>
+ <F4AFC5EE-9967-4117-BA85-ED82C106575C@nutanix.com> <ZHd2P6D142rCByrm@google.com>
+ <E17EFDD7-C54A-4532-B1D3-D567557FC54B@nutanix.com>
+Message-ID: <ZHermsSGQBcDD07R@google.com>
+Subject: Re: [PATCH] x86/fpu/xstate: clear XSAVE features if DISABLED_MASK set
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Kyle Huey <me@kylehuey.com>,
+        "neelnatu@google.com" <neelnatu@google.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,137 +83,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 31, 2023, Jon Kohler wrote:
+>=20
+> > On May 31, 2023, at 12:30 PM, Sean Christopherson <seanjc@google.com> w=
+rote:
+> > Caveat #1: cpu_feature_enabled() has a flaw that's relevant to this cod=
+e: in the
+> > unlikely scenario that the compiler doesn't resolve "cid" to a compile-=
+time
+> > constant value, cpu_feature_enabled() won't query DISABLED_MASK_BIT_SET=
+().  I don't
+> > see any other use of cpu_feature_enabled() without a hardcoded X86_FEAT=
+URE_*, and
+> > the below compiles with my config, so I think/hope we can just require =
+a compile-time
+> > constant when using cpu_feature_enabled().
+> >=20
+>=20
+> Yea I think that should work. I=E2=80=99ll club that into v2 of this patc=
+h.
 
+I recommend doing it as a separate patch, hardening cpu_feature_enabled() s=
+houldn't
+have a dependency on tweaking the xfeatures mask.  I tested this with an al=
+lyesconfig
+if you want to throw it in as a prep patch.
 
-On 31.05.2023 05:09, Bjorn Andersson wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> Add memory reservation for the zap-shader and enable the Adreno SMMU,
-> GPU clock controller, GMU and the GPU nodes for the SC8280XP CRD and the
-> Lenovo ThinkPad X13s.
-> 
-> Tested-by: Steev Klimaszewski <steev@kali.org>
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-> 
-> Changes since v2:
-> - None
-> 
-> Changes since v1:
-> - None
-> 
->  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts     | 26 +++++++++++++++++++
->  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 26 +++++++++++++++++++
->  2 files changed, 52 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> index cd7e0097d8bc..58b1d920ea9c 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> @@ -210,6 +210,11 @@ vreg_wwan: regulator-wwan {
->  	};
->  
->  	reserved-memory {
-> +		gpu_mem: gpu-mem@8bf00000 {
-> +			reg = <0 0x8bf00000 0 0x2000>;
-> +			no-map;
-> +		};
-> +
->  		linux,cma {
->  			compatible = "shared-dma-pool";
->  			size = <0x0 0x8000000>;
-> @@ -259,6 +264,10 @@ usb1_sbu_mux: endpoint {
->  	};
->  };
->  
-> +&adreno_smmu {
-> +	status = "okay";
-> +};
-> +
->  &apps_rsc {
->  	regulators-0 {
->  		compatible = "qcom,pm8350-rpmh-regulators";
-> @@ -390,6 +399,23 @@ &dispcc0 {
->  	status = "okay";
->  };
->  
-> +&gmu {
-> +	status = "okay";
-> +};
-As I pointed out in v2:
+---
+From: Sean Christopherson <seanjc@google.com>
+Date: Wed, 31 May 2023 09:41:12 -0700
+Subject: [PATCH] x86/cpufeature: Require compile-time constant in
+ cpu_feature_enabled()
 
-You can keep the GMU enabled by default as well, it won't "probe" on
-its own (the GPU's hw_init calls its registration)
+Assert that the to-be-checked bit passed to cpu_feature_enabled() is a
+compile-time constant instead of applying the DISABLED_MASK_BIT_SET()
+logic if and only if the bit is a constant.  Conditioning the check on
+the bit being constant instead of requiring the bit to be constant could
+result in compiler specific kernel behavior, e.g. running on hardware that
+supports a disabled feature would return %false if the compiler resolved
+the bit to a constant, but %true if not.
 
-same for the other dt
+All current usage of cpu_feature_enabled() specifies a hardcoded
+X86_FEATURE_* flag, so this *should* be a glorified nop.
 
-Konrad
-> +
-> +&gpu {
-> +	status = "okay";
-> +
-> +	zap-shader {
-> +		memory-region = <&gpu_mem>;
-> +		firmware-name = "qcom/sc8280xp/qcdxkmsuc8280.mbn";
-> +	};
-> +};
-> +
-> +&gpucc {
-> +	status = "okay";
-> +};
-> +
->  &mdss0 {
->  	status = "okay";
->  };
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> index 5ae057ad6438..382f27946468 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> @@ -264,6 +264,11 @@ vreg_wwan: regulator-wwan {
->  	};
->  
->  	reserved-memory {
-> +		gpu_mem: gpu-mem@8bf00000 {
-> +			reg = <0 0x8bf00000 0 0x2000>;
-> +			no-map;
-> +		};
-> +
->  		linux,cma {
->  			compatible = "shared-dma-pool";
->  			size = <0x0 0x8000000>;
-> @@ -359,6 +364,10 @@ usb1_sbu_mux: endpoint {
->  	};
->  };
->  
-> +&adreno_smmu {
-> +	status = "okay";
-> +};
-> +
->  &apps_rsc {
->  	regulators-0 {
->  		compatible = "qcom,pm8350-rpmh-regulators";
-> @@ -518,6 +527,23 @@ &dispcc0 {
->  	status = "okay";
->  };
->  
-> +&gmu {
-> +	status = "okay";
-> +};
-> +
-> +&gpu {
-> +	status = "okay";
-> +
-> +	zap-shader {
-> +		memory-region = <&gpu_mem>;
-> +		firmware-name = "qcom/sc8280xp/LENOVO/21BX/qcdxkmsuc8280.mbn";
-> +	};
-> +};
-> +
-> +&gpucc {
-> +	status = "okay";
-> +};
-> +
->  &mdss0 {
->  	status = "okay";
->  };
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/include/asm/cpufeature.h | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufe=
+ature.h
+index ce0c8f7d3218..886200fbf8d9 100644
+--- a/arch/x86/include/asm/cpufeature.h
++++ b/arch/x86/include/asm/cpufeature.h
+@@ -141,8 +141,11 @@ extern const char * const x86_bug_flags[NBUGINTS*32];
+  * supporting a possible guest feature where host support for it
+  * is not relevant.
+  */
+-#define cpu_feature_enabled(bit)	\
+-	(__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu=
+_has(bit))
++#define cpu_feature_enabled(bit) 				\
++({								\
++	BUILD_BUG_ON(!__builtin_constant_p(bit));		\
++	DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit);	\
++})
+=20
+ #define boot_cpu_has(bit)	cpu_has(&boot_cpu_data, bit)
+=20
+
+base-commit: 39428f6ea9eace95011681628717062ff7f5eb5f
+--=20
+
+> > I'm totally ok gating xfeature bits on cpu_feature_enabled(), but there=
+ should be
+> > a prep patch for KVM to clear features bits in kvm_cpu_caps if the corr=
+esponding
+> > XCR0/XSS bit is not set in the host.  If KVM ever wants to expose an xs=
+tate feature
+> > (other than MPX) that's disabled in the host, then we can revisit
+> > fpu__init_system_xstate().  But we need to ensure the "failure" mode is=
+ that
+> > KVM doesn't advertise the feature, as opposed to advertising a feature =
+without
+> > without context switching its data.
+>=20
+>=20
+> Looking into this, trying to understand the comment about a feature being=
+ used
+> without context switching its data.=20
+>=20
+> In __kvm_x86_vendor_init() we=E2=80=99re already populating host_xcr0 usi=
+ng the=20
+> XCR_XFEATURE_ENABLED_MASK, which should be populated on boot
+> by fpu__init_cpu_xstate(), which happens almost immediately after the cod=
+e that I
+> modified in this commit.=20
+>=20
+> That then flows into guest_supported_xcr0 (as well as user_xfeatures).=20
+> guest_supported_xcr0 is then plumbed into __kvm_set_xcr, which specifical=
+ly says
+> that we=E2=80=99re using that to prevent the guest from setting bits that=
+ we won=E2=80=99t save in the
+> first place.
+>=20
+>     /*
+>      * Do not allow the guest to set bits that we do not support
+>      * saving.  However, xcr0 bit 0 is always set, even if the
+>      * emulated CPU does not support XSAVE (see kvm_vcpu_reset()).
+>      */
+>     valid_bits =3D vcpu->arch.guest_supported_xcr0 | XFEATURE_MASK_FP;
+>=20
+> Wouldn=E2=80=99t this mean that the *guest* xstate initialization would n=
+ot see a given
+> feature too and take care of the problem naturally?
+>=20
+> Or are you saying you=E2=80=99d want an even more detailed clearing?
+
+The CPUID bits that enumerate support for a feature are independent from th=
+e CPUID
+bits that enumerate what XCR0 bits are supported, i.e. what features can be=
+ saved
+and restored via XSAVE/XRSTOR.
+
+KVM does mostly account for host XCR0, but in a very ad hoc way.  E.g. MPX =
+is
+handled by manually checking host XCR0.
+
+	if (kvm_mpx_supported())
+		kvm_cpu_cap_check_and_set(X86_FEATURE_MPX);
+
+PKU manually checks too, but indirectly by looking at whether or not the ke=
+rnel
+has enabled CR4.OSPKE.
+
+	if (!tdp_enabled || !boot_cpu_has(X86_FEATURE_OSPKE))
+		kvm_cpu_cap_clear(X86_FEATURE_PKU);
+
+But unless I'm missing something, the various AVX and AMX bits rely solely =
+on
+boot_cpu_data, i.e. would break if someone added CONFIG_X86_AVX or CONFIG_X=
+86_AMX.
