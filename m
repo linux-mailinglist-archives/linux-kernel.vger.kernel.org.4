@@ -2,183 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F49717C77
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E8D717C7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235652AbjEaJyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50524 "EHLO
+        id S235659AbjEaJzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbjEaJyf (ORCPT
+        with ESMTP id S232671AbjEaJzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:54:35 -0400
+        Wed, 31 May 2023 05:55:01 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71BFE8
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:53:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EA310F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:54:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685526829;
+        s=mimecast20190719; t=1685526853;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xn2QBqttB+dOYYBuMERj9tPY3tQCj+h6bHqi72Etugo=;
-        b=HL0Exjzd1A/K2FKRfX9G8gs4ikS2vnG4M4UyyM8aZcyJDeUHSlF4FeDRFaU9tdDDjX5obj
-        qz0ofHYtggjofP6VSMjgGYxb1QrDm5MSLu7oQrBz7zf9rtiMSmVXFzdcBaQfUD8n/3SG7g
-        MuEmyYoAeIfa+4qMb2E0GKiFA8tjnuU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-46-YoT3WvbRNtq9mfbC6sguhg-1; Wed, 31 May 2023 05:53:39 -0400
-X-MC-Unique: YoT3WvbRNtq9mfbC6sguhg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9C96101A53A;
-        Wed, 31 May 2023 09:53:38 +0000 (UTC)
-Received: from localhost (ovpn-12-54.pek2.redhat.com [10.72.12.54])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D80EB140E962;
-        Wed, 31 May 2023 09:53:37 +0000 (UTC)
-Date:   Wed, 31 May 2023 17:53:34 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Michael Holzheu <holzheu@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 6/6] kexec: enable kexec_crash_size to support two crash
- kernel regions
-Message-ID: <ZHcY/jsExa8t7hJW@MiWiFi-R3L-srv>
-References: <20230527123439.772-1-thunder.leizhen@huawei.com>
- <20230527123439.772-7-thunder.leizhen@huawei.com>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4FZ3pIxtK0+0afJMzjTGCDky4aLUv5zQ5hfVyGzhYL8=;
+        b=YwQRAJ3dpkxPtK8wWDcYT3CviAhZwe/VH51T/AZPXJqHiBpSx91W8AOOyscGD2jZ8XxTHB
+        Fm985OpjcBZqEO9KcArqt9z71PYCXiDBWcmG5e1EiICQHzS7ib0U6b/wp9NzIsNwdBo7/U
+        5SjMvfzzmnfyQMMG1PuR0vtPDvpZrgQ=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-518-YxHJRUcYOKeGEUiRyyiiGQ-1; Wed, 31 May 2023 05:54:12 -0400
+X-MC-Unique: YxHJRUcYOKeGEUiRyyiiGQ-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-75b06a31daaso870477085a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:54:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685526852; x=1688118852;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4FZ3pIxtK0+0afJMzjTGCDky4aLUv5zQ5hfVyGzhYL8=;
+        b=TS1NtNcbzPO2SgULB/SuMCqTQiXtCuVECCsuOrgeHf7ZeTwVszMPSnHDtnR0lcUqZa
+         NzpnBj1VDRHqBlYXy5CoB635aZ7UGFA+UyqCaDX2HLDmQMagaUmgmvTh9X9lrjp6DO/I
+         A0L7h6LJ8Eh0/3Tc4C7VdQw1zAngsfkHxW2VKFuM8wtIuRExhU1gc8ez+ljUCpFSaF5J
+         takO60HCfgqk0QBU2Pd2rcHR+JZjf7DeSKCZgIwdGz8vKkVcp/Ef+aJRkv6ZzVP/MWna
+         MPcPU8MXokWsWIu0csR/ugmggs1oG9QJEsDBPL7P1TsMduH87MAXnZZC8krkMMmUjAYw
+         RYow==
+X-Gm-Message-State: AC+VfDwRJyfjZ0SOuF0AUulYqGFSdhu1Tjl9T2b3VIGX2M9vlIDH2clw
+        Gk0GIlQohHdtPLHOWuopwJRYwwdGk7m4Lxys172zfbyF+OLYbCECIF0d1VL9ply3aVOpFBqqsh9
+        jiBZ9bhNB5Ep6rHkLFoicg20=
+X-Received: by 2002:a37:ad17:0:b0:75b:23a0:dec9 with SMTP id f23-20020a37ad17000000b0075b23a0dec9mr4287379qkm.71.1685526852231;
+        Wed, 31 May 2023 02:54:12 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5wQpBa+LPgHJQdgdmjdC5g6ia+cugRsaJGrbtx70LY/oqRkx8o3X2jc76h92f418EZytGrjA==
+X-Received: by 2002:a37:ad17:0:b0:75b:23a0:dec9 with SMTP id f23-20020a37ad17000000b0075b23a0dec9mr4287364qkm.71.1685526851983;
+        Wed, 31 May 2023 02:54:11 -0700 (PDT)
+Received: from klayman.redhat.com (net-2-34-28-169.cust.vodafonedsl.it. [2.34.28.169])
+        by smtp.gmail.com with ESMTPSA id k25-20020a05620a139900b0074def53eca5sm4902404qki.53.2023.05.31.02.54.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 02:54:11 -0700 (PDT)
+From:   Marco Pagani <marpagan@redhat.com>
+To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>
+Cc:     Marco Pagani <marpagan@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: [RFC PATCH v6 0/4] fpga: add initial KUnit tests for the subsystem
+Date:   Wed, 31 May 2023 11:54:01 +0200
+Message-Id: <20230531095405.342080-1-marpagan@redhat.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230527123439.772-7-thunder.leizhen@huawei.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/27/23 at 08:34pm, Zhen Lei wrote:
-> The crashk_low_res should be considered by /sys/kernel/kexec_crash_size
-> to support two crash kernel regions. Since crashk_res manages the memory
-> with high address and crashk_low_res manages the memory with low address,
-> crashk_low_res is shrunken only when all crashk_res is shrunken. And
-> because when there is only one crash kernel region, crashk_res is always
-> used. Therefore, if all crashk_res is shrunken and crashk_low_res still
-> exists, swap them.
+This patch set introduces initial KUnit test suites for the core components
+of the FPGA subsystem.
 
-This looks good, otherwise someone else won't stop attempting to add
-support of crashk_low_res shrinking. Not sure if this will bring corner
-case issue in testing, let's see. For the patch log, I tried to
-rephrase, feel free to refer to.
+Tests can be run using:
+[user@localhost linux]$ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/fpga/tests
 
-=====
-The crashk_low_res should be considered by /sys/kernel/kexec_crash_size
-to support two crash kernel regions shrinking if existing.
+v6:
+- Restructured the code into self-contained test modules
+- Added tests for the basic behaviors of the components
+- Improved programming tests for the FPGA Manager
+- Fixed code/comments mismatch in the list of Bridges test case
 
-While doing it, crashk_low_res will only be shrunk when the entire
-crashk_res is empty; and if the crashk_res is empty and crahk_low_res
-is not, change crashk_low_res to be crashk_res.
-=====
+v5:
+- Removed most of the exported functions using shared buffers for stats
+- Moved all KUnit expectations/assertions to the main test module
+- Removed standalone use case to simplify the code
+- Removed instances counters from fake components (using device.id instead)
+- Set header size in the .parse_header op
+- Improved bridge get_put_list test case
 
-With the log updated, you can add:
+v4:
+- Fix build error
 
-Acked-by: Baoquan He <bhe@redhat.com>
+v3:
+- Calling fpga_bridges_put() between reconfigurations
+- Functions for registering fake modules allocate and return context structs
 
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  kernel/kexec_core.c | 43 ++++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 38 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index e82bc6d6634136a..c1d50f6566300d9 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -1091,6 +1091,11 @@ __bpf_kfunc void crash_kexec(struct pt_regs *regs)
->  	}
->  }
->  
-> +static inline resource_size_t crash_resource_size(const struct resource *res)
-> +{
-> +	return !res->end ? 0 : resource_size(res);
-> +}
-> +
->  ssize_t crash_get_memory_size(void)
->  {
->  	ssize_t size = 0;
-> @@ -1098,8 +1103,8 @@ ssize_t crash_get_memory_size(void)
->  	if (!kexec_trylock())
->  		return -EBUSY;
->  
-> -	if (crashk_res.end != crashk_res.start)
-> -		size = resource_size(&crashk_res);
-> +	size += crash_resource_size(&crashk_res);
-> +	size += crash_resource_size(&crashk_low_res);
->  
->  	kexec_unlock();
->  	return size;
-> @@ -1135,7 +1140,7 @@ int __crash_shrink_memory(struct resource *old_res, unsigned long new_size)
->  int crash_shrink_memory(unsigned long new_size)
->  {
->  	int ret = 0;
-> -	unsigned long old_size;
-> +	unsigned long old_size, low_size;
->  
->  	if (!kexec_trylock())
->  		return -EBUSY;
-> @@ -1144,14 +1149,42 @@ int crash_shrink_memory(unsigned long new_size)
->  		ret = -ENOENT;
->  		goto unlock;
->  	}
-> -	old_size = !crashk_res.end ? 0 : resource_size(&crashk_res);
-> +
-> +	low_size = crash_resource_size(&crashk_low_res);
-> +	old_size = crash_resource_size(&crashk_res) + low_size;
->  	new_size = roundup(new_size, KEXEC_CRASH_MEM_ALIGN);
->  	if (new_size >= old_size) {
->  		ret = (new_size == old_size) ? 0 : -EINVAL;
->  		goto unlock;
->  	}
->  
-> -	ret = __crash_shrink_memory(&crashk_res, new_size);
-> +	/*
-> +	 * (low_size > new_size) implies that low_size is greater than zero.
-> +	 * This also means that if low_size is zero, the else branch is taken.
-> +	 *
-> +	 * If low_size is greater than 0, (low_size > new_size) indicates that
-> +	 * crashk_low_res also needs to be shrunken. Otherwise, only crashk_res
-> +	 * needs to be shrunken.
-> +	 */
-> +	if (low_size > new_size) {
-> +		ret = __crash_shrink_memory(&crashk_res, 0);
-> +		if (ret)
-> +			goto unlock;
-> +
-> +		ret = __crash_shrink_memory(&crashk_low_res, new_size);
-> +	} else {
-> +		ret = __crash_shrink_memory(&crashk_res, new_size - low_size);
-> +	}
-> +
-> +	/* Swap crashk_res and crashk_low_res if needed */
-> +	if (!crashk_res.end && crashk_low_res.end) {
-> +		crashk_res.start = crashk_low_res.start;
-> +		crashk_res.end   = crashk_low_res.end;
-> +		release_resource(&crashk_low_res);
-> +		crashk_low_res.start = 0;
-> +		crashk_low_res.end   = 0;
-> +		insert_resource(&iomem_resource, &crashk_res);
-> +	}
->  
->  unlock:
->  	kexec_unlock();
-> -- 
-> 2.25.1
-> 
+v2:
+- Restructured code into multiple suites to test components in isolation
+- Reduced code duplication using init and exit methods
+- Using a get_bridges() method to build the list of bridges just before programming
+- Regions and Bridges are organized topologically
+- Changed bitstream/bit to images
+- Allocate images dynamically
+- Renamed fpga-tests to fpga-test
+- Simplified Kconfig
+- Add license info to the fpga-test module
+
+Marco Pagani (4):
+  fpga: add an initial KUnit suite for the FPGA Manager
+  fpga: add an initial KUnit suite for the FPGA Bridge
+  fpga: add an initial KUnit suite for the FPGA Region
+  fpga: add configuration for the KUnit test suites.
+
+ drivers/fpga/Kconfig                  |   2 +
+ drivers/fpga/Makefile                 |   3 +
+ drivers/fpga/tests/.kunitconfig       |   5 +
+ drivers/fpga/tests/Kconfig            |  11 +
+ drivers/fpga/tests/Makefile           |   5 +
+ drivers/fpga/tests/fpga-bridge-test.c | 164 +++++++++++++++
+ drivers/fpga/tests/fpga-mgr-test.c    | 289 ++++++++++++++++++++++++++
+ drivers/fpga/tests/fpga-region-test.c | 186 +++++++++++++++++
+ 8 files changed, 665 insertions(+)
+ create mode 100644 drivers/fpga/tests/.kunitconfig
+ create mode 100644 drivers/fpga/tests/Kconfig
+ create mode 100644 drivers/fpga/tests/Makefile
+ create mode 100644 drivers/fpga/tests/fpga-bridge-test.c
+ create mode 100644 drivers/fpga/tests/fpga-mgr-test.c
+ create mode 100644 drivers/fpga/tests/fpga-region-test.c
+
+
+base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
+-- 
+2.40.1
 
