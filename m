@@ -2,86 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27865717B7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7AF717B8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234643AbjEaJMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
+        id S235292AbjEaJPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234905AbjEaJMs (ORCPT
+        with ESMTP id S235342AbjEaJPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:12:48 -0400
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C6F1AB;
-        Wed, 31 May 2023 02:12:29 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowACXnopeD3dk3y+cCA--.2088S2;
-        Wed, 31 May 2023 17:11:59 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     f.fainelli@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        bcm-kernel-feedback-list@broadcom.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] net: systemport: Add and correct check for platform_get_irq
-Date:   Wed, 31 May 2023 17:11:59 +0800
-Message-Id: <20230531091159.8933-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 31 May 2023 05:15:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33307E6
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685524500;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ir4H/Z1/r0sZbaFI9Fc11zZLFNyyd0qULW+BtXwpIUM=;
+        b=QVDqCTnuansOR9NJaxk8Z10XbP0Kt4b6hqtXNtgQBDlGEyT/rdjaJO2cTfmc0Fm5Ox3vAG
+        B87sPDCqH1My8ms1mmQ8FwZZkpIEgrBdLTHwklBJ0acaKuIHjLIODcY0eQFLAFcRiB3jbr
+        FLai8Qtc1kImxKsD2zakgLUXc5qRXfc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-657-vhu6RDiDO0Ckd4-MKb7pKA-1; Wed, 31 May 2023 05:14:57 -0400
+X-MC-Unique: vhu6RDiDO0Ckd4-MKb7pKA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 94D77811E86;
+        Wed, 31 May 2023 09:14:56 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.238])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 7F606492B0A;
+        Wed, 31 May 2023 09:14:53 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Wed, 31 May 2023 11:14:36 +0200 (CEST)
+Date:   Wed, 31 May 2023 11:14:33 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Mike Christie <michael.christie@oracle.com>, linux@leemhuis.info,
+        nicolas.dichtel@6wind.com, axboe@kernel.dk, ebiederm@xmission.com,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, stefanha@redhat.com, brauner@kernel.org
+Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
+ regression
+Message-ID: <20230531091432.GB25046@redhat.com>
+References: <20230522025124.5863-1-michael.christie@oracle.com>
+ <20230522025124.5863-4-michael.christie@oracle.com>
+ <20230522123029.GA22159@redhat.com>
+ <cfca7764-d210-6df9-e182-2c093101c6cf@oracle.com>
+ <20230522174757.GC22159@redhat.com>
+ <20230523121506.GA6562@redhat.com>
+ <26c87be0-8e19-d677-a51b-e6821e6f7ae4@redhat.com>
+ <20230531072449.GA25046@redhat.com>
+ <CACGkMEv2kB9J1qGYkGkywk1YHV2gU2fMr7qx4vEv9L5f6qL5mg@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowACXnopeD3dk3y+cCA--.2088S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jr4UAF43AFyfurW8XFy7Jrb_yoWkZFXEk3
-        W3Xw45XrW8Gr9FvwsFyr47C34a9rZ2kr1rZF17tFy3K3srJr1UX3ykZa4ftw1UWrWkGFy3
-        urnxtayxAw1akjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4f
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjwSdDUUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CACGkMEv2kB9J1qGYkGkywk1YHV2gU2fMr7qx4vEv9L5f6qL5mg@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing check for "priv->wol_irq".
-Use "<" instead of "<=" to check the irqs since the platform_get_irq
-returns non-zero IRQ number on success and negative error number on
-failure, shown in `driver/base/platform.c`.
+On 05/31, Jason Wang wrote:
+>
+> On Wed, May 31, 2023 at 3:25 PM Oleg Nesterov <oleg@redhat.com> wrote:
+> >
+> > On 05/31, Jason Wang wrote:
+> > >
+> > > 在 2023/5/23 20:15, Oleg Nesterov 写道:
+> > > >
+> > > >             /* make sure flag is seen after deletion */
+> > > >             smp_wmb();
+> > > >             llist_for_each_entry_safe(work, work_next, node, node) {
+> > > >                     clear_bit(VHOST_WORK_QUEUED, &work->flags);
+> > > >
+> > > >I am not sure about smp_wmb + clear_bit. Once we clear VHOST_WORK_QUEUED,
+> > > >vhost_work_queue() can add this work again and change work->node->next.
+> > > >
+> > > >That is why we use _safe, but we need to ensure that llist_for_each_safe()
+> > > >completes LOAD(work->node->next) before VHOST_WORK_QUEUED is cleared.
+> > >
+> > > This should be fine since store is not speculated, so work->node->next needs
+> > > to be loaded before VHOST_WORK_QUEUED is cleared to meet the loop condition.
+> >
+> > I don't understand you. OK, to simplify, suppose we have 2 global vars
+> >
+> >         void *PTR = something_non_null;
+> >         unsigned long FLAGS = -1ul;
+> >
+> > Now I think this code
+> >
+> >         CPU_0                           CPU_1
+> >
+> >         void *ptr = PTR;                if (!test_and_set_bit(0, FLAGS))
+> >         clear_bit(0, FLAGS);                    PTR = NULL;
+> >         BUG_ON(!ptr);
+> >
+> > is racy and can hit the BUG_ON(!ptr).
+>
+> This seems different to the above case?
 
-Fixes: 83e82f4c706b ("net: systemport: add Wake-on-LAN support")
-Fixes: 80105befdb4b ("net: systemport: add Broadcom SYSTEMPORT Ethernet MAC driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/net/ethernet/broadcom/bcmsysport.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+not sure,
 
-diff --git a/drivers/net/ethernet/broadcom/bcmsysport.c b/drivers/net/ethernet/broadcom/bcmsysport.c
-index 38d0cdaf22a5..16c9c0be1a33 100644
---- a/drivers/net/ethernet/broadcom/bcmsysport.c
-+++ b/drivers/net/ethernet/broadcom/bcmsysport.c
-@@ -2535,7 +2535,7 @@ static int bcm_sysport_probe(struct platform_device *pdev)
- 	} else {
- 		priv->wol_irq = platform_get_irq(pdev, 1);
- 	}
--	if (priv->irq0 <= 0 || (priv->irq1 <= 0 && !priv->is_lite)) {
-+	if (priv->irq0 < 0 || (priv->irq1 < 0 && !priv->is_lite) || priv->wol_irq < 0) {
- 		ret = -EINVAL;
- 		goto err_free_netdev;
- 	}
--- 
-2.25.1
+> And you can hit BUG_ON with
+> the following execution sequence:
+>
+> [cpu 0] clear_bit(0, FLAGS);
+> [cpu 1] if (!test_and_set_bit(0, FLAGS))
+> [cpu 1] PTR = NULL;
+> [cpu 0] BUG_ON(!ptr)
+
+I don't understand this part... yes, we can hit this BUG_ON() without mb in
+between, this is what I tried to say.
+
+> In vhost code, there's a condition before the clear_bit() which sits
+> inside llist_for_each_entry_safe():
+>
+> #define llist_for_each_entry_safe(pos, n, node, member)                        \
+>         for (pos = llist_entry((node), typeof(*pos), member);                  \
+>              member_address_is_nonnull(pos, member) &&                         \
+>                 (n = llist_entry(pos->member.next, typeof(*n), member), true); \
+>              pos = n)
+>
+> The clear_bit() is a store which is not speculated, so there's a
+> control dependency, the store can't be executed until the condition
+> expression is evaluated which requires pos->member.next
+> (work->node.next) to be loaded.
+
+But llist_for_each_entry_safe() doesn't check "n", I mean, it is not that we have
+something like
+
+	n = llist_entry(...);
+	if (n)
+		clear_bit(...);
+
+so I do not see how can we rely on the load-store control dependency.
+
+Oleg.
 
