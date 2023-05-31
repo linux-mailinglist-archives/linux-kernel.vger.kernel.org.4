@@ -2,60 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293F1718A97
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9044718A9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjEaTzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 15:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
+        id S229876AbjEaT4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 15:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjEaTzc (ORCPT
+        with ESMTP id S229987AbjEaT4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 15:55:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA92185
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:55:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32DBE617E7
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 19:55:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A45A3C433EF;
-        Wed, 31 May 2023 19:55:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685562926;
-        bh=K6BiB4d4pwh5l5fEvqg5HdsW+2/SZ5ha4oA58FNbVQ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JuSCt7/41WoHCLlFavs2RXRxmldBL7Ykn9PLKEI5mTlSq8J8r3pTx9GA6RlHeXPHs
-         Bs7j3d47LzA6lzpLmKw49dzEsf0GHytMnrsv6BBfUSM0ou+i6s3zAz7/bUEIKf+edU
-         9ETJeJF8nBvARAe8pp4O9agqKhDGNPCh3pBNUzDIkPWSWgKa8CdBsMHBH3BNV/fMWG
-         v8iuohJNe6KusvYI9dmcvVVyTq7z+fjUFHwk+26RGP41wNFB2J7hcZRPiokWcBTYS2
-         JHgziIzlZDrcsqgATpaEjbzvteIxpIDZ7bWbH8O+yYHtPFGuqU1Td4rWl8EfQHGRHy
-         vxeSinydRSACg==
-Date:   Wed, 31 May 2023 22:54:54 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        mcgrof@kernel.org, peterz@infradead.org, tglx@linutronix.de,
-        x86@kernel.org
-Subject: Re: [PATCH 0/3] Type aware module allocator
-Message-ID: <20230531195454.GB395338@kernel.org>
-References: <20230526051529.3387103-1-song@kernel.org>
- <ZHGrjJ8PqAGN9OZK@moria.home.lan>
- <CAPhsuW4DAwx=7Nta5HGiPTJ1LQJCGJGY3FrsdKi62f_zJbsRFQ@mail.gmail.com>
- <20230529104530.GL4967@kernel.org>
- <CAPhsuW6g98Wz9Oj1NiwwZ1OkSVNXX10USByY0b9tEfzOt8SVQg@mail.gmail.com>
- <20230531135120.GA395338@kernel.org>
- <CAPhsuW6r=0r0dKfKxwPp9KXqLSKWw4x6RrbNBnS=1M1Y1sh5Ag@mail.gmail.com>
+        Wed, 31 May 2023 15:56:16 -0400
+Received: from out-49.mta1.migadu.com (out-49.mta1.migadu.com [IPv6:2001:41d0:203:375::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC2C128
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:56:14 -0700 (PDT)
+Date:   Wed, 31 May 2023 19:56:01 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685562972;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aRNgNEUqm1SPBB6Tqx56M21rQPMX216mPdSexIMkYNE=;
+        b=wWn3rVwKrW7Hyl01464BDLIeiVKkARMgI8cIpNCWnDBQRJiWn1oks6cGv+JrGGWfp67baR
+        5exjC4xrR7EFkkZEm3pF0koPOiSqiH+yZY26vrG0hc6p3BjpnVNKiFrpA70KUIggolrzza
+        hmyoQpoAADBmV1w9KnDt4SrGzgWi+c0=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Anup Patel <anup@brainfault.org>,
+        Ben Gardon <bgardon@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Gavin Shan <gshan@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Larabel <michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+        linux-mm@google.com
+Subject: Re: [PATCH mm-unstable v2 05/10] kvm/arm64: add
+ kvm_arch_test_clear_young()
+Message-ID: <ZHemUc3DiSbxQbxJ@linux.dev>
+References: <20230526234435.662652-1-yuzhao@google.com>
+ <20230526234435.662652-6-yuzhao@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW6r=0r0dKfKxwPp9KXqLSKWw4x6RrbNBnS=1M1Y1sh5Ag@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230526234435.662652-6-yuzhao@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,64 +85,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 10:03:58AM -0700, Song Liu wrote:
-> On Wed, May 31, 2023 at 6:51 AM Mike Rapoport <rppt@kernel.org> wrote:
-> >
-> > On Tue, May 30, 2023 at 03:37:24PM -0700, Song Liu wrote:
-> > > On Mon, May 29, 2023 at 3:45 AM Mike Rapoport <rppt@kernel.org> wrote:
-> > > >
-> > > > On Sat, May 27, 2023 at 10:58:37PM -0700, Song Liu wrote:
-> > > > > On Sat, May 27, 2023 at 12:04 AM Kent Overstreet
-> > > > > <kent.overstreet@linux.dev> wrote:
-> > > > > >
-> > > > > > I think this needs to back to the drawing board and we need something
-> > > > > > simpler just targeted at executable memory; architecture specific
-> > > > > > options should definitely _not_ be part of the exposed interface.
-> > > > >
-> > > > > I don't think we are exposing architecture specific options to users.
-> > > > > Some layer need to handle arch specifics. If the new allocator is
-> > > > > built on top of module_alloc, module_alloc is handling that. If the new
-> > > > > allocator is to replace module_alloc, it needs to handle arch specifics.
-> > > >
-> > > > I'm for creating a new allocator that will replace module_alloc(). This
-> > > > will give us a clean abstraction that modules and all the rest will use and
-> > > > it will make easier to plug binpack or another allocator instead of
-> > > > vmalloc.
-> > > >
-> > > > Another point is with a new allocator we won't have weird dependencies on
-> > > > CONFIG_MODULE in e.g. bpf and kprobes.
-> > > >
-> > > > I'll have something ready to post as an RFC in a few days.
-> > >
-> > > I guess this RFC is similar to unmapped_alloc()? If it replaces
-> > > vmalloc, we can probably trim this set down a bit (remove
-> > > mod_alloc_params and vmalloc_params, etc.).
-> >
-> > No, it's not a new allocator. I'm trying to create an API for code
-> > allocations that can accommodate all the architectures and it won't be a
-> > part of modules code. The modules will use the new API just like every
-> > other subsystem that needs to allocate code.
-> >
-> > I've got a core part of it here:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=jitalloc/v1
+Hi Yu,
+
+On Fri, May 26, 2023 at 05:44:30PM -0600, Yu Zhao wrote:
+> Implement kvm_arch_test_clear_young() to support the fast path in
+> mmu_notifier_ops->test_clear_young().
 > 
-> This branch looks like the same scope as this set (but with different
-> implementation). So it will still use vmalloc, right?
+> It focuses on a simple case, i.e., hardware sets the accessed bit in
+> KVM PTEs and VMs are not protected, where it can rely on RCU and
+> cmpxchg to safely clear the accessed bit without taking
+> kvm->mmu_lock. Complex cases fall back to the existing slow path
+> where kvm->mmu_lock is then taken.
+> 
+> Signed-off-by: Yu Zhao <yuzhao@google.com>
+> ---
+>  arch/arm64/include/asm/kvm_host.h |  6 ++++++
+>  arch/arm64/kvm/mmu.c              | 36 +++++++++++++++++++++++++++++++
+>  2 files changed, 42 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index 7e7e19ef6993..da32b0890716 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -1113,4 +1113,10 @@ static inline void kvm_hyp_reserve(void) { }
+>  void kvm_arm_vcpu_power_off(struct kvm_vcpu *vcpu);
+>  bool kvm_arm_vcpu_stopped(struct kvm_vcpu *vcpu);
+>  
+> +#define kvm_arch_has_test_clear_young kvm_arch_has_test_clear_young
+> +static inline bool kvm_arch_has_test_clear_young(void)
+> +{
+> +	return cpu_has_hw_af() && !is_protected_kvm_enabled();
+> +}
 
-Yes, it still uses vmalloc. The idea is to decouple code allocations from
-modules from one side and make it handle all the variants expected by the
-architectures based on a set of parameters each architecture provides.
+I would *strongly* suggest you consider supporting test_clear_young on
+systems that do software Access Flag management. FEAT_HAFDBS is an
+*optional* extension to the architecture, so we're going to support
+software AF management for a very long time in KVM. It is also a valid
+fallback option in the case of hardware errata which render HAFDBS
+broken.
 
-The first few commits essentially shuffle the code around and replace
-arch::module_alloc() with arch::jit_alloc_params.
+So, we should expect (and support) systems of all shapes and sizes that
+do software AF. I'm sure we'll hear about more in the not-too-distant
+future...
 
-The commits on top enable some bits that are not available today, like ROX
-executable memory and DYNAMIC_FTRACE without modules for x86.
- 
-> Thanks,
-> Song
+For future reference (even though I'm suggesting you support software
+AF), decisions such of these need an extremely verbose comment
+describing the rationale behind the decision.
+
+> +
+>  #endif /* __ARM64_KVM_HOST_H__ */
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index c3b3e2afe26f..26a8d955b49c 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+
+Please do not implement page table walkers outside of hyp/pgtable.c
+
+> @@ -1678,6 +1678,42 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+>  					   range->start << PAGE_SHIFT);
+>  }
+>  
+> +static int stage2_test_clear_young(const struct kvm_pgtable_visit_ctx *ctx,
+> +				   enum kvm_pgtable_walk_flags flags)
+> +{
+> +	kvm_pte_t new = ctx->old & ~KVM_PTE_LEAF_ATTR_LO_S2_AF;
+> +
+> +	VM_WARN_ON_ONCE(!page_count(virt_to_page(ctx->ptep)));
+
+This sort of sanity checking is a bit excessive. Isn't there a risk of
+false negatives here too? IOW, if we tragically mess up RCU in the page
+table code, what's stopping a prematurely freed page from being
+allocated to another user?
+
+> +	if (!kvm_pte_valid(new))
+> +		return 0;
+> +
+> +	if (new == ctx->old)
+> +		return 0;
+> +
+> +	if (kvm_should_clear_young(ctx->arg, ctx->addr / PAGE_SIZE))
+> +		stage2_try_set_pte(ctx, new);
+> +
+> +	return 0;
+> +}
+> +
+> +bool kvm_arch_test_clear_young(struct kvm *kvm, struct kvm_gfn_range *range)
+> +{
+> +	u64 start = range->start * PAGE_SIZE;
+> +	u64 end = range->end * PAGE_SIZE;
+> +	struct kvm_pgtable_walker walker = {
+> +		.cb	= stage2_test_clear_young,
+> +		.arg	= range,
+> +		.flags	= KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_SHARED,
+> +	};
+> +
+> +	BUILD_BUG_ON(is_hyp_code());
+
+Delete this assertion.
+
+> +	kvm_pgtable_walk(kvm->arch.mmu.pgt, start, end - start, &walker);
+> +
+> +	return false;
+> +}
+> +
+>  phys_addr_t kvm_mmu_get_httbr(void)
+>  {
+>  	return __pa(hyp_pgtable->pgd);
+> -- 
+> 2.41.0.rc0.172.g3f132b7071-goog
+> 
 
 -- 
-Sincerely yours,
-Mike.
+Thanks,
+Oliver
