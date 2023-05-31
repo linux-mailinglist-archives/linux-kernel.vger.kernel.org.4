@@ -2,128 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C3A71846E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C73577184B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbjEaONa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
+        id S237586AbjEaOUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236455AbjEaONP (ORCPT
+        with ESMTP id S237582AbjEaOUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:13:15 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE7B10CE
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:10:26 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f6e72a1464so43916085e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1685542137; x=1688134137;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UleDEf3AixBo9U/UXpWY/ydRnuyv0U623659h0izsxQ=;
-        b=koil+svP7HdTb91zoSY+U+ZP8xZJE1eB+NXfryEFaeyXkJhVZJ5jnCn0NnY72fmXQD
-         MKlF87Nwe77i8K5FKqJdcirMETphmNe4JWYRC7wUuPu10oPYYJJitM/5KQ6Njbu5rA8o
-         wB+RQCrg7ThCLdsvibEzj3kWAP+tjJH1xFO2HwreCbwgq4oMojrAL96KkF91fDa9mjS8
-         SmudzHwc6WtW1RNza3sq4mCNAjbpTFsRe87CXvY3S1YsO/LVyWF1NIT2lSuQTkkfW3hh
-         zqtdt+SUlzVoVb1Kb/KjvJk3S/rbFuZZH7mVrRLp2uc/38QBtWwGYB55vWNtE/TpVEeH
-         +42A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685542137; x=1688134137;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UleDEf3AixBo9U/UXpWY/ydRnuyv0U623659h0izsxQ=;
-        b=kaGpZIX6uNmG37SjZSKtWoA5sioEMkzt8rjCr8zxEf8M+M/c2ORB/GifyYbktb/u6X
-         OWsO0W2UtmY9uuBhs5iS1TkkIkcijNRNsDyWelBokbsUMXdvyRLW664QWMX+FckYYA4V
-         YLlm3/0ZYyQohiVLyCuIRr452FtnashtZS+w3Z/URwn0OFzMlNrA4vCMVn81YkS0dweG
-         1l36/FS3X37M04VgzqDwx3w0GNWgl/J9uQ3woAODPpD/a0tvtKjrGWQHUfu2FgTI3ZtX
-         YmCucXrrelpR2ysvh3umz7kOz1987FwtMWGQ5rjj/DzMtuW83yntosiCLxcrtR8b/jVb
-         1Z5Q==
-X-Gm-Message-State: AC+VfDwi7eqbvMjzatXcyxSZAHQ4aE4qM0NDKZfvr1YIZT6qI6Exekm+
-        U+N6t2Ul+etc2EAalC6DPFQo0+s1h3q+LTbDkFg=
-X-Google-Smtp-Source: ACHHUZ73Q8q9IJwMsX7edY6y2EM+CFjk3itDAZXOWz2NI9uE9E+/V3YrQjB4Rf2f+g7r1cETzEjw8g==
-X-Received: by 2002:a17:907:1c14:b0:968:2bb1:f39d with SMTP id nc20-20020a1709071c1400b009682bb1f39dmr6314966ejc.36.1685541371576;
-        Wed, 31 May 2023 06:56:11 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id va15-20020a17090711cf00b0094ee99eeb01sm9041514ejb.150.2023.05.31.06.56.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 06:56:10 -0700 (PDT)
-Date:   Wed, 31 May 2023 15:56:10 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v2 02/10] include: riscv: Fix wrong include guard in
- riscv_pmu.h
-Message-ID: <20230531-707d254be1238272fb2c182d@orel>
-References: <20230512085321.13259-1-alexghiti@rivosinc.com>
- <20230512085321.13259-3-alexghiti@rivosinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230512085321.13259-3-alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 31 May 2023 10:20:33 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769CC1987;
+        Wed, 31 May 2023 07:19:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=WMBpRHwWtTgWaFnCUH7r3dh40eaL8Z8t/6W3Qgru8Bc=; b=BKAsBA9af9V7EjGyFevCIcvY1h
+        vKSLNRIBLYUFkrTZSIZSDm2q6sz7YMIJkpn7g0226maMn7fXNKYdLyZE8LETc/yrMd9kKSmrz/uhM
+        VovV2aa7Or04RVslfqZeQIBClbFzG2OFJGM2m7O+vM2heJrRJrr+Tki72/+zQN/RBSuk=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:46714 helo=debian-acer)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q4MKB-0000Ek-DT; Wed, 31 May 2023 09:57:15 -0400
+Date:   Wed, 31 May 2023 09:57:14 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230531095714.2428a41369cd7509bc321bf7@hugovil.com>
+In-Reply-To: <CAHp75Vf35rN93sXFBU0nRZQLpUgQHR2caGC8BmHkEgPZqF=dQg@mail.gmail.com>
+References: <20230529140711.896830-1-hugo@hugovil.com>
+        <20230529140711.896830-8-hugo@hugovil.com>
+        <ZHUpWQafRPHW1RJQ@surfacebook>
+        <20230530113649.73f28b9f6ba91f17ace1e12f@hugovil.com>
+        <CAHp75Vf35rN93sXFBU0nRZQLpUgQHR2caGC8BmHkEgPZqF=dQg@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4 7/9] serial: sc16is7xx: fix regression with GPIO
+ configuration
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 10:53:13AM +0200, Alexandre Ghiti wrote:
-> The current include guard prevents the inclusion of asm/perf_event.h
-> which uses the same include guard: fix the one in riscv_pmu.h so that it
-> matches the file name.
-> 
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  include/linux/perf/riscv_pmu.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pmu.h
-> index 43fc892aa7d9..9f70d94942e0 100644
-> --- a/include/linux/perf/riscv_pmu.h
-> +++ b/include/linux/perf/riscv_pmu.h
-> @@ -6,8 +6,8 @@
->   *
->   */
->  
-> -#ifndef _ASM_RISCV_PERF_EVENT_H
-> -#define _ASM_RISCV_PERF_EVENT_H
-> +#ifndef _RISCV_PMU_H
-> +#define _RISCV_PMU_H
->  
->  #include <linux/perf_event.h>
->  #include <linux/ptrace.h>
-> @@ -81,4 +81,4 @@ int riscv_pmu_get_hpm_info(u32 *hw_ctr_width, u32 *num_hw_ctr);
->  
->  #endif /* CONFIG_RISCV_PMU */
->  
-> -#endif /* _ASM_RISCV_PERF_EVENT_H */
-> +#endif /* _RISCV_PMU_H */
-> -- 
-> 2.37.2
->
+On Wed, 31 May 2023 00:56:57 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> On Tue, May 30, 2023 at 6:36 PM Hugo Villeneuve <hugo@hugovil.com> wrote:
+> > On Tue, 30 May 2023 01:38:17 +0300
+> > andy.shevchenko@gmail.com wrote:
+> > > Mon, May 29, 2023 at 10:07:09AM -0400, Hugo Villeneuve kirjoitti:
+> 
+> ...
+> 
+> > > GENMASK()
+> >
+> > Ok done, altough even if in general I like the bit manipulation macros because they make the code easier to read/understand, I find it less obvious by using GENMASK in this case IMMO.
+> 
+> GENMASK() was introduced to increase code robustness:
+> 1) to make sure the bits mentioned are correct
+> 2) to check the bit boundary.
+> 
+> ...
+> 
+> > > > +           of_property_for_each_u32(dev->of_node, "nxp,modem-control-line-ports",
+> > > > +                                    prop, p, u) {
+> > > > +                   if (u >= devtype->nr_uart)
+> > > > +                           continue;
+> > > > +
+> > > > +                   /* Use GPIO lines as modem control lines */
+> > > > +                   if (u == 0)
+> > > > +                           mctrl_mask |= SC16IS7XX_IOCONTROL_MODEM_A_BIT;
+> > > > +                   else if (u == 1)
+> > > > +                           mctrl_mask |= SC16IS7XX_IOCONTROL_MODEM_B_BIT;
+> > > > +           }
+> > >
+> > > Can we use device properties, please?
+> >
+> > I have converted this section to use device_property_count_u32() and device_property_read_u32_array(). Is that Ok?
+> 
+> Yes, thank you!
+> 
+> > > If you think about backporting to the earlier kernels (w/o properties in use in
+> > > this driver), perhaps an additional followup for that?
+> >
+> > I am not sure what you mean by this?
+> 
+> If the device property API was not yet available for this fix being
+> backported to the old enough kernel we have to use old OF stuff. In
+> that case the device property conversion needs to be done in a
+> separate change.
+
+Hi,.
+ok, now I see.
+
+Thank you,
+Hugo.
