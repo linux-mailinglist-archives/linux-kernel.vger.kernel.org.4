@@ -2,117 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEE6718890
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 487AB718893
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjEaRiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S230023AbjEaRjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjEaRiR (ORCPT
+        with ESMTP id S229473AbjEaRjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:38:17 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87252125
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:38:16 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685554694;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A857xLioc7wFyg93dl7T2qqOgf/640iThyj+3V7o+wA=;
-        b=bvFVrgaWD4+lw487AUcr4NNPBWFN+SQJjQNqtODltmv97QeyUIk67FkUJGGOk24+n6Q/zF
-        NhQMB8APQ/0+JasMdCyaodpkgf2s3Xul2tJmL03QNVUJaVkMKz6bb+eFkG5rVou9uRa+DE
-        yzmsnxry0dApgIsqWus8jEl8tcMDcTgWxJkit23RmolnKmWjJfn3j9v6yhOJN3sq1sfPdn
-        eo1BHnMooWny1Hwmae7nz/4xF/Y1kE8D5LUu4/LUCIjNxh4Jek2Flm5P8E+BmT50NAUlbU
-        lNd4WlhYAhI7jNC6MsL99oZ9ccxqHhAkop4LyB4LXsRox7cR7eUXa3E0InIguw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685554694;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A857xLioc7wFyg93dl7T2qqOgf/640iThyj+3V7o+wA=;
-        b=55LVieDR2fyNm6QK61sGsHZAn42vVfPxhqeSlfUHOlSjH6vIAWPOVXZfJF7/irRu9mmb6Q
-        vzJIvPRBWlsCAbDg==
-To:     Andrey Vagin <avagin@openvz.org>
-Cc:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Pavel Emelyanov <xemul@openvz.org>,
-        Mike Rapoport <mike.rapoport@gmail.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Adrian Reber <areber@redhat.com>
-Subject: Re: [RFD] posix-timers: CRIU woes
-In-Reply-To: <CANaxB-xFs2ZYnFBTtQsZxAGAJ6o9cgWM=k=d_EBXuOK5djLgkA@mail.gmail.com>
-References: <20230425181827.219128101@linutronix.de>
- <20230425183312.932345089@linutronix.de> <ZFUXrCZtWyNG3Esi@lothringen>
- <87zg6i2xn3.ffs@tglx> <87v8h62vwp.ffs@tglx> <878rdy32ri.ffs@tglx>
- <87v8h126p2.ffs@tglx> <875y911xeg.ffs@tglx> <87ednpyyeo.ffs@tglx>
- <CANaxB-wV9iUT6=Y9nZCWbJhiscMrnAQh4fUXs7Tb8pr=-HwSYQ@mail.gmail.com>
- <cc8aa6a4-a187-f3ad-fec9-05f037a3886d@virtuozzo.com> <87r0rnciqo.ffs@tglx>
- <CANaxB-xFs2ZYnFBTtQsZxAGAJ6o9cgWM=k=d_EBXuOK5djLgkA@mail.gmail.com>
-Date:   Wed, 31 May 2023 19:38:14 +0200
-Message-ID: <87edmwflkp.ffs@tglx>
+        Wed, 31 May 2023 13:39:23 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DEA5125;
+        Wed, 31 May 2023 10:39:19 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34VHd7m0076482;
+        Wed, 31 May 2023 12:39:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1685554747;
+        bh=9d56eqyItnj6VL8qnlJ6VaojapF+H2I0btd4J5JoXTo=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=IC8zZnhhIXRBOlf/rATPIMpixFQPzhLXQ9twQjcJBLRG6SaD7rV6GkBYE3wnBxWbK
+         n6+wWMGV0mKnO5a2A6OxDUqScW8bP2UKRKKhSthRGCL++KFRZ6u8p6aGWtx6uu2JVR
+         G6RU0uK3ZqaL4zCZ0A235Yrr2CV7P2SXxxjuPFKo=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34VHd6JV111900
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 31 May 2023 12:39:07 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 31
+ May 2023 12:39:06 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 31 May 2023 12:39:06 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34VHd6Er070862;
+        Wed, 31 May 2023 12:39:06 -0500
+Date:   Wed, 31 May 2023 12:39:06 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     "Kumar, Udit" <u-kumar1@ti.com>
+CC:     Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nitin Yadav <n-yadav@ti.com>, Andrew Davis <afd@ti.com>
+Subject: Re: [PATCH 4/7] arm64: dts: ti: k3-j7200-mcu: Add mcu_secproxy
+Message-ID: <20230531173906.zznrzuxfytk5feun@spied>
+References: <20230530165900.47502-1-nm@ti.com>
+ <20230530165900.47502-5-nm@ti.com>
+ <e25936b9-d85c-dfe8-0eb1-07b51fdfff1e@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e25936b9-d85c-dfe8-0eb1-07b51fdfff1e@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrey!
+On 22:37-20230531, Kumar, Udit wrote:
+[...]
+> > +	secure_proxy_mcu: mailbox@2a480000 {
+> I think, we should start name as  mailbox@2a380000
+> > +		compatible = "ti,am654-secure-proxy";
+> > +		#mbox-cells = <1>;
+> > +		reg-names = "target_data", "rt", "scfg";
+> > +		reg = <0x0 0x2a480000 0x0 0x80000>,
+> > +		      <0x0 0x2a380000 0x0 0x80000>,
+> > +		      <0x0 0x2a400000 0x0 0x80000>;
+> 
+> I think, we should have increasing order for reg. Unless there is some
+> strong reason to keep in this way.
 
-On Thu, May 11 2023 at 18:21, Andrey Vagin wrote:
-> On Thu, May 11, 2023 at 2:36=E2=80=AFAM Thomas Gleixner <tglx@linutronix.=
-de> wrote:
->>
->> You know the UABI regression rules of the kernel...
->
-> There is no rule without exceptions... With all pros and cons, we may
-> consider this case as an exception. From our side, we will try to make
-> everything to minimize the impact. Here are steps off the top of my
-> head:
-> * releasing the criu fix before the kernel release.
-> * update packages in Linux distros (Debian, Ubuntu, Fedora, and
->   others that we will find).
-> * send an announcement to the criu mailing list and to users that we know.
-> * add the error to FAQ.
-> * create a GitHub issue with a full description.
+Binding is defined this way - the items section in the binding
+enforces the order. As a result the first reg entry(target_data)
+address causes the node name.
 
-Thanks for this plan. After digging deeper I managed to resolve the
-actual problem I was chasing without changing that ID generator at
-all.
-
-The main pain point of having to do that lookup from the signal delivery
-path is gone, which made it trivial to do the fix for the SIG_IGN mess
-w/o these global lookups too.
-
-Addressing this global ID issues I pointed out becomes therefore an
-orthogonal issue which we can handle completely independent of the
-kernel internal problems I'm trying to address.
-
-I still think we should do that for sanity sake, but we can stage that
-properly without dependencies outside of this particular ABI
-problem. That makes me way more comfortable as that's something which
-can be in the worst case reverted without doing any other damage.
-
-Thanks,
-
-        tglx
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
