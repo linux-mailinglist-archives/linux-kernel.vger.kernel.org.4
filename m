@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB277184EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1907184EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236455AbjEaO1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
+        id S230451AbjEaO1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236413AbjEaO1D (ORCPT
+        with ESMTP id S236084AbjEaO12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:27:03 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEAE1B7
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:26:44 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f3a873476bso6648633e87.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:26:44 -0700 (PDT)
+        Wed, 31 May 2023 10:27:28 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2618194
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:27:18 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f4b0a0b557so6703478e87.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:27:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685543203; x=1688135203;
+        d=linaro.org; s=google; t=1685543237; x=1688135237;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zsb/Lkvit7E6o25rklytBN+4+1hIjsLT4kpV/+YNtPI=;
-        b=s5VJQSDMVf1ZO7LSn6Qz8ogWZMVgFKLHWGk5Ta/NYNJuEAmViSvBAw2cNM+FoqKHzu
-         rt2AsxhMJEHCEM1ycEb9dm5lSnn/F8cQNrgQysTAyKtaTNjANRmjDbcTxEBJTRSmcXo4
-         PY2D8Lw4YPtigFF4peLh5Ih2rK/SbYWEOodnDVCzSkbvlxARLxewCjXii/eapKmFyYRc
-         PjAmyypkxgf7retomJFTRxAU3KsNu8b+ijtrJqw5pHlecNoYn2hLI2+T5tj/GOFQlTTc
-         z7KiW4ud2tTmt/0iS4zIffQQHvy2lfKVHM0R0NMviBVb0V9dd9Qsc3N+vV0u+u/oYSk+
-         V/+A==
+        bh=ibRavn+wX5+msAj09M0EWRs8rIYs/zZ+2Fkj0xJZO7Q=;
+        b=gfvMrw2N9/F54FNlreQR4aLyfq3lme+iAa0Fg/vVuyJGYydqZQLuxT6lyzbWpRS5rH
+         3e8+g7eCqTtV5ZP9MWDjEACqLRT3qliPXb/dvIZtgNRvhKVgGta7QmuqkNXfaeTt7VCK
+         2DH3iOCLJlsS1j4r/so+wGxfrIXcmbzkKVFBtdwutBKO2Vdmzjw7dIrbnlnM8uM8wCXZ
+         +ciprs5IAY273Sxtz0gFGPkEx8HVlJaTjCPT8Db3OGXir3iir6X41Kk0FcWbbQxIYQ3h
+         F65CG8LCPnQV9ynbb2pM6NpF5eOYtIZlGKZ1tsSAO1mhs1y8w3NZFompB8EtjNUF8YqA
+         YLkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685543203; x=1688135203;
+        d=1e100.net; s=20221208; t=1685543237; x=1688135237;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zsb/Lkvit7E6o25rklytBN+4+1hIjsLT4kpV/+YNtPI=;
-        b=EbbWkeDyr6pNE4orsLxCpddWsmPiGo5HjRE/p56jcdijMHlJnotfDh7kO0QHF6BlJl
-         NcT7S1WOW0qaOdjR8jzoyeFPeQRypmSsJPvE10LI8SRguHw+y/qN0yAilSNJ7ToZOLcb
-         ozVE2OE1LRxrdsm0+r7YzWy/6N13kNntXB43cbArGcymLI6Pu1/DZ8SgTmhgkL0N7c7T
-         oUL8jGz8JC2k/pIX2G0JtT1wDm2HZUVDZDYgw0elGRxWKt3Sj+r46hoo4z4b362pcyNX
-         5qTY2uE8xCxKK3BPN3SXWl2KHgrxYKJQ1DGEDSPGR/8zog5UGFK4ES4fuLzlXFnjkpes
-         SlJA==
-X-Gm-Message-State: AC+VfDxFrd4Y7kv419Z7H2w6aRRckg9d7tGrTQo+wqnJLO0EZBuyiNWL
-        H7kJhTpNHa2bW6qXGu/nUOG/0ni7mWM6b7yw4/g=
-X-Google-Smtp-Source: ACHHUZ6oAHKtG4Gtml+ABdtf9CkPpqdfRliFW4OeYR4pkE2wnfjiDAC/126mi+a6wiyp1UEy4wYyIA==
-X-Received: by 2002:ac2:518c:0:b0:4f3:baf9:8f8e with SMTP id u12-20020ac2518c000000b004f3baf98f8emr2961540lfi.4.1685543202973;
-        Wed, 31 May 2023 07:26:42 -0700 (PDT)
+        bh=ibRavn+wX5+msAj09M0EWRs8rIYs/zZ+2Fkj0xJZO7Q=;
+        b=cRdg9+PBTqaSRrD8euY+vV1vwhN2aQD09aQN0oJenwAcN2/QLLa5xI8FQ+JHxHSeHT
+         MzpUojL7yhJCaGLq5lA5OZR+MWhG7N2J+wg3ldugI8HTKCM3DnQH1bD8EbM17zE7LAVR
+         cML+xx871dcttCneDJkDb543thoMurNhxJeE8kky0Gfr90NN57rUBOrCWTkmS/v57pEd
+         vLHUN0AJY4S0ipxt1GIaieqjp4dSG0yJExrTlGb+rffKqSYWij3AhilFBbYr5NBIzwuo
+         mixWx+PA5nDYAKRN0Ko2HFH10UfRVt94H+WCGCAU71zlu/d+04nDNNFQ6B45jnP7d4Qo
+         0dAg==
+X-Gm-Message-State: AC+VfDy5PLEbHyW7Knu50q4dvCXJtrhsZPnfGotmJDfeS/UPBPV/nvaO
+        JGH/OS5s3mJbWet0ADccrY8ebg==
+X-Google-Smtp-Source: ACHHUZ6cZDxVaGVsjHJLrjnMmpLueOfFSg6ct2+pvtMlJHc8y97TqJ7ym5DpeaMdiDXr2ZU2eHsbkQ==
+X-Received: by 2002:ac2:5edd:0:b0:4f1:30cc:3dae with SMTP id d29-20020ac25edd000000b004f130cc3daemr3083071lfq.10.1685543237015;
+        Wed, 31 May 2023 07:27:17 -0700 (PDT)
 Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id v2-20020a056512096200b004edc55d3900sm743380lft.0.2023.05.31.07.26.41
+        by smtp.gmail.com with ESMTPSA id c20-20020a197614000000b004f122a378d4sm736372lff.163.2023.05.31.07.27.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 07:26:42 -0700 (PDT)
-Message-ID: <b6015e94-47f1-aaa3-ad42-9ee8f78daeec@linaro.org>
-Date:   Wed, 31 May 2023 16:26:41 +0200
+        Wed, 31 May 2023 07:27:16 -0700 (PDT)
+Message-ID: <eef42615-ed5e-626b-f096-8c81e921e17a@linaro.org>
+Date:   Wed, 31 May 2023 16:27:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH v2 3/4] arm64: dts: qcom: pmk8550: always enable RTC PMIC
- device
+Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: sm8550-qrd: enable PMIC Volume
+ and Power buttons
 Content-Language: en-US
 To:     Neil Armstrong <neil.armstrong@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -67,15 +67,15 @@ To:     Neil Armstrong <neil.armstrong@linaro.org>,
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v2-0-a3b890604c49@linaro.org>
- <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v2-3-a3b890604c49@linaro.org>
+ <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v2-4-a3b890604c49@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v2-3-a3b890604c49@linaro.org>
+In-Reply-To: <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v2-4-a3b890604c49@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,27 +85,82 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 31.05.2023 14:22, Neil Armstrong wrote:
-> There's no reason to keep the RTC disabled, it has been tested
-> and is functional on the SM8550 QRD and MTP boards.
+> The Volume Down & Power buttons are controlled by the PMIC via
+> the PON hardware, and the Volume Up is connected to a PMIC gpio.
+> 
+> Enable the necessary hardware and setup the GPIO state for the
+> Volume Up gpio key.
 > 
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
+>  arch/arm64/boot/dts/qcom/sm8550-qrd.dts | 36 +++++++++++++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
+> index efff15225e67..24fc368de97b 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
+> @@ -54,6 +54,22 @@ chosen {
+>  		stdout-path = "serial0:115200n8";
+>  	};
+>  
+> +	gpio-keys {
+> +		compatible = "gpio-keys";
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&volume_up_n>;
+property-n
+property-names
+
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->  arch/arm64/boot/dts/qcom/pmk8550.dtsi | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/pmk8550.dtsi b/arch/arm64/boot/dts/qcom/pmk8550.dtsi
-> index 8c897d4fee29..c7ac9b2eaacf 100644
-> --- a/arch/arm64/boot/dts/qcom/pmk8550.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/pmk8550.dtsi
-> @@ -49,7 +49,6 @@ pmk8550_rtc: rtc@6100 {
->  			reg = <0x6100>, <0x6200>;
->  			reg-names = "rtc", "alarm";
->  			interrupts = <0x0 0x62 0x1 IRQ_TYPE_EDGE_RISING>;
-> -			status = "disabled";
->  		};
+> +
+> +		key-volume-up {
+> +			label = "Volume Up";
+> +			linux,code = <KEY_VOLUMEUP>;
+> +			gpios = <&pm8550_gpios 6 GPIO_ACTIVE_LOW>;
+> +			debounce-interval = <15>;
+> +			linux,can-disable;
+> +			wakeup-source;
+> +		};
+> +	};
+> +
+>  	pmic-glink {
+>  		compatible = "qcom,sm8550-pmic-glink", "qcom,pmic-glink";
+>  		#address-cells = <1>;
+> @@ -516,6 +532,16 @@ led-1 {
+>  	};
+>  };
 >  
->  		pmk8550_sdam_2: nvram@7100 {
+> +&pm8550_gpios {
+> +	volume_up_n: volume-up-n-state {
+> +		pins = "gpio6";
+> +		function = "normal";
+> +		power-source = <1>;
+> +		bias-pull-up;
+> +		input-enable;
+> +	};
+> +};
+> +
+>  &pm8550_pwm {
+>  	status = "okay";
+>  
+> @@ -548,6 +574,16 @@ &pm8550b_eusb2_repeater {
+>  	vdd3-supply = <&vreg_l5b_3p1>;
+>  };
+>  
+> +&pon_pwrkey {
+> +	status = "okay";
+> +};
+> +
+> +&pon_resin {
+> +	linux,code = <KEY_VOLUMEDOWN>;
+> +
+> +	status = "okay";
+> +};
+> +
+>  &pcie_1_phy_aux_clk {
+>  	clock-frequency = <1000>;
+>  };
 > 
