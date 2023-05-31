@@ -2,67 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 686E9717C6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB98717C6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235639AbjEaJuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
+        id S234524AbjEaJuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235678AbjEaJuI (ORCPT
+        with ESMTP id S235659AbjEaJuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:50:08 -0400
-Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F07E2;
-        Wed, 31 May 2023 02:50:06 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4QWPPD3w8fz9xqd6;
-        Wed, 31 May 2023 17:39:44 +0800 (CST)
-Received: from [10.206.134.65] (unknown [10.206.134.65])
-        by APP1 (Coremail) with SMTP id LxC2BwCHA_8tGHdkKS_5Ag--.3134S2;
-        Wed, 31 May 2023 10:49:44 +0100 (CET)
-Message-ID: <1020d006-c698-aacc-bcc3-92e5b237ef91@huaweicloud.com>
-Date:   Wed, 31 May 2023 11:49:30 +0200
+        Wed, 31 May 2023 05:50:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05D6E2;
+        Wed, 31 May 2023 02:50:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4469B62837;
+        Wed, 31 May 2023 09:50:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E13FC433EF;
+        Wed, 31 May 2023 09:49:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685526599;
+        bh=5vuxklbladyrpsMX6XXo7g2/x5WLHBaVnR3bJgCUi0M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WvqVlwFrvRz1LIXmnzMu/5/X9qYyUvqiWZtbBi5lBmQs4qu+1F1zNnJRutRRsoJup
+         l3i26105JGu4Ng4xC1AySVnz76KEdds4+Vo5Dr9P0O5ZX4OhmCIAXb6Vwjb6ZMpTdm
+         7/S07jRlyxf8PhEtanRjGF3+m2s114O6P1EQuGmwB8or7FDokZ/IA/mcPdUSQMzK/K
+         O3roHLdgaS1qvGOL6n7BDnZP7KuMLd4XtJvULFunG06GgcNKadn1kqeYtRkNrruWte
+         fkQzyPlfKqFjbVz5jtACNioPblnFYx3+R1P+yXECTobDo66dKNzEYXhLL1ZtHUbHzq
+         50qMWo38nNmVQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q4ISx-0001Ie-GQ; Wed, 31 May 2023 11:50:03 +0200
+Date:   Wed, 31 May 2023 11:50:03 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Tim Jiang <quic_tjiang@quicinc.com>
+Cc:     marcel@holtmann.org, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        quic_bgodavar@quicinc.com, quic_hemantg@quicinc.com
+Subject: Re: [PATCH v7] Bluetooth: hci_qca: Add support for Qualcomm
+ Bluetooth SoC QCA2066
+Message-ID: <ZHcYS1PXhhTmrpYa@hovoldconsulting.com>
+References: <20230531034338.23121-1-quic_tjiang@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-Subject: Re: [syzbot] [reiserfs?] possible deadlock in open_xa_dir
-To:     Paul Moore <paul@paul-moore.com>,
-        syzbot <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com>
-Cc:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        roberto.sassu@huawei.com, syzkaller-bugs@googlegroups.com,
-        peterz@infradead.org, mingo@redhat.com, will@kernel.org
-References: <0000000000007bedb605f119ed9f@google.com>
- <00000000000000964605faf87416@google.com>
- <CAHC9VhTZ=Esk+JxgAjch2J44WuLixe-SZMXW2iGHpLdrdMKQ=g@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CAHC9VhTZ=Esk+JxgAjch2J44WuLixe-SZMXW2iGHpLdrdMKQ=g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwCHA_8tGHdkKS_5Ag--.3134S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCFyftry8Kw17XryDGry3urg_yoWrAr4UpF
-        W8K3ZxKrnYyr1kKF4Iq3W5Ww10grZ3Cry7JryDKryq9anrZrnxtF4Iy34fCr4FkrZ7AFZx
-        Jw1jy3yrAwnYqwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
-        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj43p9gABsp
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531034338.23121-1-quic_tjiang@quicinc.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,118 +59,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/5/2023 11:36 PM, Paul Moore wrote:
-> On Fri, May 5, 2023 at 4:51 PM syzbot
-> <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com> wrote:
->>
->> syzbot has bisected this issue to:
->>
->> commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
->> Author: Roberto Sassu <roberto.sassu@huawei.com>
->> Date:   Fri Mar 31 12:32:18 2023 +0000
->>
->>      reiserfs: Add security prefix to xattr name in reiserfs_security_write()
->>
->> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14403182280000
->> start commit:   3c4aa4434377 Merge tag 'ceph-for-6.4-rc1' of https://githu..
->> git tree:       upstream
->> final oops:     https://syzkaller.appspot.com/x/report.txt?x=16403182280000
->> console output: https://syzkaller.appspot.com/x/log.txt?x=12403182280000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
->> dashboard link: https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12442414280000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=176a7318280000
->>
->> Reported-by: syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com
->> Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in reiserfs_security_write()")
->>
->> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+On Wed, May 31, 2023 at 11:43:38AM +0800, Tim Jiang wrote:
+> This patch adds support for QCA2066 firmware patch and nvm downloading.
+> as the RF performance of qca2066 soc chip from different foundries will
+> be difference, so we use different nvm to configure them by according
+> to board id.
 > 
-> I don't think Roberto's patch identified above is the actual root
-> cause of this problem as reiserfs_xattr_set_handle() is called in
-> reiserfs_security_write() both before and after the patch.  However,
-> due to some bad logic in reiserfs_security_write() which Roberto
-> corrected, I'm thinking that it is possible this code is being
-> exercised for the first time and syzbot is starting to trigger a
-> locking issue in the reiserfs code ... ?
+> Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
+> ---
+>  drivers/bluetooth/btqca.c   | 76 ++++++++++++++++++++++++++++++++++++-
+>  drivers/bluetooth/btqca.h   |  4 ++
+>  drivers/bluetooth/hci_qca.c |  8 +++-
+>  3 files changed, 86 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
+> index e7e58a956d15..960a409e16d6 100644
+> --- a/drivers/bluetooth/btqca.c
+> +++ b/drivers/bluetooth/btqca.c
+> @@ -205,6 +205,48 @@ static int qca_send_reset(struct hci_dev *hdev)
+>  	return 0;
+>  }
+>  
+> +static int qca_read_fw_board_id(struct hci_dev *hdev, u16 *bid)
+> +{
+> +	u8 cmd;
+> +	struct sk_buff *skb;
+> +	struct edl_event_hdr *edl;
+> +	int err = 0;
+> +	int bid_len;
+> +
+> +	bt_dev_dbg(hdev, "QCA read board ID");
 
-+ Jan, Jeff (which basically restructured the lock)
+Drop this.
 
-+ Petr, Ingo, Will
+> +
+> +	cmd = EDL_GET_BID_REQ_CMD;
+> +	skb = __hci_cmd_sync_ev(hdev, EDL_PATCH_CMD_OPCODE, EDL_PATCH_CMD_LEN,
+> +				&cmd, 0, HCI_INIT_TIMEOUT);
+> +	if (IS_ERR(skb)) {
+> +		err = PTR_ERR(skb);
+> +		bt_dev_err(hdev, "Reading QCA board ID failed (%d)", err);
+> +		return err;
+> +	}
+> +
+> +	edl = skb_pull_data(skb, sizeof(*edl));
+> +	if (!edl) {
+> +		bt_dev_err(hdev, "QCA read board ID with no header");
+> +		err = -EILSEQ;
+> +		goto out;
+> +	}
+> +
+> +	if (edl->cresp != EDL_CMD_REQ_RES_EVT ||
+> +	    edl->rtype != EDL_GET_BID_REQ_CMD) {
+> +		bt_dev_err(hdev, "QCA Wrong packet: %d %d", edl->cresp, edl->rtype);
+> +		err = -EIO;
+> +		goto out;
+> +	}
+> +
+> +	bid_len = edl->data[0];
+> +	*bid = (edl->data[1] << 8) + edl->data[2];
+> +	bt_dev_info(hdev, "%s: bid len = %x, bid = %x", __func__, bid_len, *bid);
 
-I involve the lockdep experts, to get a bit of help on this.
+This type of information should not be printed by default.
 
-First of all, the lockdep warning is trivial to reproduce:
+At most this should be dev_dbg() level, but it should probably just be
+dropped.
 
-# dd if=/dev/zero of=reiserfs.img bs=1M count=100
-# losetup -f --show reiserfs.img
-/dev/loop0
-# mkfs.reiserfs /dev/loop0
-# mount /dev/loop0 /mnt/
-# touch file0
+> +
+> +out:
+> +	kfree_skb(skb);
+> +	return err;
+> +}
+> +
+>  int qca_send_pre_shutdown_cmd(struct hci_dev *hdev)
+>  {
+>  	struct sk_buff *skb;
+> @@ -574,6 +616,29 @@ int qca_set_bdaddr_rome(struct hci_dev *hdev, const bdaddr_t *bdaddr)
+>  }
+>  EXPORT_SYMBOL_GPL(qca_set_bdaddr_rome);
+>  
+> +static void qca_generate_nvm_name(struct hci_dev *hdev, char *fwname,
+> +		   size_t max_size, struct qca_btsoc_version ver, u16 bid)
+> +{
+> +	u8 rom_ver = 0;
 
-In the testing system, Smack is the major LSM.
+Drop the redundant initialisation.
 
-Ok, so the warning here is clear:
+> +	u32 soc_ver;
+> +	const char *variant;
+> +
+> +	soc_ver = get_soc_ver(ver.soc_id, ver.rom_ver);
+> +	rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
+> +
+> +	if ((le32_to_cpu(ver.soc_id) & 0x0000ff00) == QCA_HSP_GF_SOC_ID)  /* hsp gf chip */
+> +		variant = "g";
+> +	else
+> +		variant = "";
+> +
+> +	if (bid == 0x0)
+> +		snprintf(fwname, max_size, "qca/hpnv%02x%s.bin", rom_ver, variant);
+> +	else
+> +		snprintf(fwname, max_size, "qca/hpnv%02x%s.%x", rom_ver, variant, bid);
+> +
+> +	bt_dev_info(hdev, "%s: nvm name is %s", __func__, fwname);
 
-https://syzkaller.appspot.com/x/log.txt?x=12403182280000
+dev_dbg(), if at all needed.
 
-However, I was looking if that can really happen. From this:
+> +}
+> +
+>  int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+>  		   enum qca_btsoc_type soc_type, struct qca_btsoc_version ver,
+>  		   const char *firmware_name)
 
-[   77.746561][ T5418] -> #1 (&sbi->lock){+.+.}-{3:3}:
-[   77.753772][ T5418]        lock_acquire+0x23e/0x630
-[   77.758792][ T5418]        __mutex_lock_common+0x1d8/0x2530
-[   77.764504][ T5418]        mutex_lock_nested+0x1b/0x20
-[   77.769868][ T5418]        reiserfs_write_lock+0x70/0xc0
-[   77.775321][ T5418]        reiserfs_mkdir+0x321/0x870
+> @@ -644,7 +716,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+>  			snprintf(config.fwname, sizeof(config.fwname),
+>  				 "qca/crnv%02x.bin", rom_ver);
+>  		}
+> -	}
+> +	} else if (soc_type == QCA_QCA2066)
+> +		qca_generate_nvm_name(hdev, config.fwname, sizeof(config.fwname),
+> +				ver, boardid);
 
-I see that the lock is taken in reiserfs_write_lock(), while lockdep says:
+Missing brackets (if one branch has them, all of them should even the
+current code may not be following this).
 
-[   77.710227][ T5418] but task is already holding lock:
-[   77.717587][ T5418] ffff88807568d090 (&sbi->lock){+.+.}-{3:3}, at: 
-reiserfs_write_lock_nested+0x4a/0xb0
+>  	else if (soc_type == QCA_QCA6390)
+>  		snprintf(config.fwname, sizeof(config.fwname),
+>  			 "qca/htnv%02x.bin", rom_ver);
 
-which is in a different place, I believe here:
+> diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+> index 1b064504b388..bf7683040ebd 100644
+> --- a/drivers/bluetooth/hci_qca.c
+> +++ b/drivers/bluetooth/hci_qca.c
+> @@ -1729,7 +1729,7 @@ static int qca_setup(struct hci_uart *hu)
+>  	bt_dev_info(hdev, "setting up %s",
+>  		qca_is_wcn399x(soc_type) ? "wcn399x" :
+>  		(soc_type == QCA_WCN6750) ? "wcn6750" :
+> -		(soc_type == QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390");
+> +		(soc_type == QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390/QCA2066");
 
-int reiserfs_paste_into_item(struct reiserfs_transaction_handle *th,
-                              /* Path to the pasted item. */
-[...]
+This just looks very lazy.
 
-         depth = reiserfs_write_unlock_nested(sb);
-         dquot_free_space_nodirty(inode, pasted_size);
-         reiserfs_write_lock_nested(sb, depth);
-         return retval;
-}
+How about cleaning up the current implementation if you don't want to
+make this expression worse than it already is?
 
-This is called by reiserfs_add_entry(), which is called by 
-reiserfs_create() (it is in the lockdep trace). After returning to 
-reiserfs_create(), d_instantiate_new() is called.
+>  
+>  	qca->memdump_state = QCA_MEMDUMP_IDLE;
+>  
 
-I don't know exactly, I take the part that the lock is held. But if it 
-is held, how d_instantiate_new() can be executed in another task?
-
-static int reiserfs_create(struct mnt_idmap *idmap, struct inode *dir,
-                         struct dentry *dentry, umode_t mode, bool excl)
-{
-
-[...]
-
-         reiserfs_write_lock(dir->i_sb);
-
-         retval = journal_begin(&th, dir->i_sb, jbegin_count);
-
-[...]
-
-         d_instantiate_new(dentry, inode);
-         retval = journal_end(&th);
-
-out_failed:
-         reiserfs_write_unlock(dir->i_sb);
-
-If the lock is held, the scenario lockdep describes cannot happen. Any 
-thoughts?
-
-Thanks
-
-Roberto
-
+Johan
