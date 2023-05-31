@@ -2,49 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58863718776
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C138571877D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjEaQeh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 31 May 2023 12:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
+        id S229786AbjEaQfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 12:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjEaQec (ORCPT
+        with ESMTP id S229520AbjEaQff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 12:34:32 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218FD1A7
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:34:00 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1q4Oll-0007Z0-9S; Wed, 31 May 2023 18:33:53 +0200
-Message-ID: <35c15c0912b4a9372b9c2194a46b518ce515ce3d.camel@pengutronix.de>
-Subject: Re: [PATCH v6 6/6] drm/etnaviv: allow usperspace create cached
- coherent bo
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-Date:   Wed, 31 May 2023 18:33:50 +0200
-In-Reply-To: <20230530160643.2344551-7-suijingfeng@loongson.cn>
-References: <20230530160643.2344551-1-suijingfeng@loongson.cn>
-         <20230530160643.2344551-7-suijingfeng@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 31 May 2023 12:35:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CE7E48
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:34:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685550855;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=W5Ntvs4Cwyl2QgvwcOBrVxRXkGHt94aU7j3HrNtgJ4Y=;
+        b=UehugPJUjC1l0PrJwrRm76U4Q3smSOgdhu6701Ldfzy+Rq3Oetuv0Kg+oYmo8mH6mnf8Re
+        nCE+of8a0rx+wjZVWDQVlHWjVjFwxpxewGT+e1nNQCi6zwtaSG+fwJIEALhnfNUdGAg8QL
+        MrUC6lB6m/Gxv14hriNHYV0NVVvTwi0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-418-pO9mQNz7PaS5ecqsEMv-Zw-1; Wed, 31 May 2023 12:34:12 -0400
+X-MC-Unique: pO9mQNz7PaS5ecqsEMv-Zw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 95BAA1C05AA2;
+        Wed, 31 May 2023 16:34:11 +0000 (UTC)
+Received: from llong.com (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8FCED2166B25;
+        Wed, 31 May 2023 16:34:10 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v2 0/6] cgroup/cpuset: Support remote isolated partitions
+Date:   Wed, 31 May 2023 12:33:59 -0400
+Message-Id: <20230531163405.2200292-1-longman@redhat.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,151 +67,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sui Jingfeng,
+ v2:
+  - [v1] https://lore.kernel.org/lkml/20230412153758.3088111-1-longman@redhat.com/
+  - Dropped the special "isolcpus" partition in v1
+  - Add the root only "cpuset.cpus.reserve" control file for reserving
+    CPUs used for remote isolated partitions.
+  - Update the test_cpuset_prs.sh test script and documentation
+    accordingly.
 
-Am Mittwoch, dem 31.05.2023 um 00:06 +0800 schrieb Sui Jingfeng:
-> cached system RAM is coherent on loongson CPUs, and the GPU and DC allways
-> snoop the CPU's cache. write-combine caching property is not suitiable for
-> us.
-> 
-As previously mentioned in the Mesa MR, I don't think this is the right
-approach.
+This patch series introduces a new category of cpuset partition called
+remote partitions. The existing partition category where the partition
+roots have to be clustered around the root cgroup in a hierarchical way
+is now referred to as adjacent partitions.
 
-ETNA_BO_CACHED already looks coherent to userspace, as all accesses are
-bracketed via the ETNAVIV_GEM_CPU_PREP and ETNAVIV_GEM_CPU_FINI ioctls,
-which will do the necessary cache maintenance on platforms where device
-coherence isn't enforced by the hardware, so there is no need for a
-separate ETNA_BO_CACHED_COHERENT.
+A remote partition can be formed far from the root cgroup with no
+partition root parent. The only commonality is that the CPUs that are
+used in the partition as specified in "cpuset.cpus" have to be present
+in the "cpuset.cpus" of all its ancestors.
 
-Instead we just need a new ETNAVIV_PARAM to inform userspace about
-hardware cache coherence being available for a specific GPU core, in
-which case the userspace driver should switch to preferring
-ETNA_BO_CACHED over ETNA_BO_WC.
+It is relatively rare to have applications that require creation of
+a separate scheduling domain (root). However, it is more common to
+have applications that require the use of isolated CPUs (isolated),
+e.g. DPDK. One can use the "isolcpus" or "nohz_full" boot command options
+to get that statically. Of course, the "isolated" partition is another
+way to achieve that dynamically.
 
-Regards,
-Lucas
+Modern container orchestration tools like Kubernetes use the cgroup
+hierarchy to manage different containers. And it is relying on other
+middleware like systemd to help managing it. If a container needs to
+use isolated CPUs, it is hard to get those with the adjacent partitions
+as it will require the administrative parent cgroup to be a partition
+root too which tool like systemd may not be ready to manage.
 
-> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> ---
->  drivers/gpu/drm/etnaviv/etnaviv_drv.c       |  2 +-
->  drivers/gpu/drm/etnaviv/etnaviv_gem.c       | 22 +++++++++++++++++++--
->  drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c |  9 ++++++++-
->  include/uapi/drm/etnaviv_drm.h              | 11 ++++++-----
->  4 files changed, 35 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-> index 052f745cecc0..2816c654c023 100644
-> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-> @@ -274,7 +274,7 @@ static int etnaviv_ioctl_gem_new(struct drm_device *dev, void *data,
->  	struct drm_etnaviv_gem_new *args = data;
->  
->  	if (args->flags & ~(ETNA_BO_CACHED | ETNA_BO_WC | ETNA_BO_UNCACHED |
-> -			    ETNA_BO_FORCE_MMU))
-> +			    ETNA_BO_CACHED_COHERENT | ETNA_BO_FORCE_MMU))
->  		return -EINVAL;
->  
->  	return etnaviv_gem_new_handle(dev, file, args->size,
-> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.c b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
-> index b5f73502e3dd..d8b559bd33d3 100644
-> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem.c
-> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
-> @@ -343,6 +343,7 @@ void *etnaviv_gem_vmap(struct drm_gem_object *obj)
->  static void *etnaviv_gem_vmap_impl(struct etnaviv_gem_object *obj)
->  {
->  	struct page **pages;
-> +	pgprot_t prot;
->  
->  	lockdep_assert_held(&obj->lock);
->  
-> @@ -350,8 +351,20 @@ static void *etnaviv_gem_vmap_impl(struct etnaviv_gem_object *obj)
->  	if (IS_ERR(pages))
->  		return NULL;
->  
-> -	return vmap(pages, obj->base.size >> PAGE_SHIFT,
-> -			VM_MAP, pgprot_writecombine(PAGE_KERNEL));
-> +	switch (obj->flags) {
-> +	case ETNA_BO_CACHED_COHERENT:
-> +	case ETNA_BO_CACHED:
-> +		prot = PAGE_KERNEL;
-> +		break;
-> +	case ETNA_BO_UNCACHED:
-> +		prot = pgprot_noncached(PAGE_KERNEL);
-> +		break;
-> +	case ETNA_BO_WC:
-> +	default:
-> +		prot = pgprot_writecombine(PAGE_KERNEL);
-> +	}
-> +
-> +	return vmap(pages, obj->base.size >> PAGE_SHIFT, VM_MAP, prot);
->  }
->  
->  static inline enum dma_data_direction etnaviv_op_to_dma_dir(u32 op)
-> @@ -545,6 +558,7 @@ static const struct drm_gem_object_funcs etnaviv_gem_object_funcs = {
->  static int etnaviv_gem_new_impl(struct drm_device *dev, u32 size, u32 flags,
->  	const struct etnaviv_gem_ops *ops, struct drm_gem_object **obj)
->  {
-> +	struct etnaviv_drm_private *priv = dev->dev_private;
->  	struct etnaviv_gem_object *etnaviv_obj;
->  	unsigned sz = sizeof(*etnaviv_obj);
->  	bool valid = true;
-> @@ -555,6 +569,10 @@ static int etnaviv_gem_new_impl(struct drm_device *dev, u32 size, u32 flags,
->  	case ETNA_BO_CACHED:
->  	case ETNA_BO_WC:
->  		break;
-> +	case ETNA_BO_CACHED_COHERENT:
-> +		if (priv->has_cached_coherent)
-> +			break;
-> +		fallthrough;
->  	default:
->  		valid = false;
->  	}
-> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-> index 3524b5811682..671d91d8f1c6 100644
-> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-> @@ -112,11 +112,18 @@ static const struct etnaviv_gem_ops etnaviv_gem_prime_ops = {
->  struct drm_gem_object *etnaviv_gem_prime_import_sg_table(struct drm_device *dev,
->  	struct dma_buf_attachment *attach, struct sg_table *sgt)
->  {
-> +	struct etnaviv_drm_private *priv = dev->dev_private;
->  	struct etnaviv_gem_object *etnaviv_obj;
->  	size_t size = PAGE_ALIGN(attach->dmabuf->size);
-> +	u32 cache_flags;
->  	int ret, npages;
->  
-> -	ret = etnaviv_gem_new_private(dev, size, ETNA_BO_WC,
-> +	if (priv->has_cached_coherent)
-> +		cache_flags = ETNA_BO_CACHED_COHERENT;
-> +	else
-> +		cache_flags = ETNA_BO_WC;
-> +
-> +	ret = etnaviv_gem_new_private(dev, size, cache_flags,
->  				      &etnaviv_gem_prime_ops, &etnaviv_obj);
->  	if (ret < 0)
->  		return ERR_PTR(ret);
-> diff --git a/include/uapi/drm/etnaviv_drm.h b/include/uapi/drm/etnaviv_drm.h
-> index af024d90453d..474b0db286de 100644
-> --- a/include/uapi/drm/etnaviv_drm.h
-> +++ b/include/uapi/drm/etnaviv_drm.h
-> @@ -90,13 +90,14 @@ struct drm_etnaviv_param {
->   * GEM buffers:
->   */
->  
-> -#define ETNA_BO_CACHE_MASK   0x000f0000
-> +#define ETNA_BO_CACHE_MASK              0x000f0000
->  /* cache modes */
-> -#define ETNA_BO_CACHED       0x00010000
-> -#define ETNA_BO_WC           0x00020000
-> -#define ETNA_BO_UNCACHED     0x00040000
-> +#define ETNA_BO_CACHED                  0x00010000
-> +#define ETNA_BO_WC                      0x00020000
-> +#define ETNA_BO_UNCACHED                0x00040000
-> +#define ETNA_BO_CACHED_COHERENT         0x00080000
->  /* map flags */
-> -#define ETNA_BO_FORCE_MMU    0x00100000
-> +#define ETNA_BO_FORCE_MMU               0x00100000
->  
->  struct drm_etnaviv_gem_new {
->  	__u64 size;           /* in */
+With this patch series, a new root cgroup only "cpuset.cpus.reserve"
+file is added to specify the set of CPUs that can be used in partitions
+(whether remote or adjacent). To create a remote partition, the set
+of CPUs to be used in that partition (the "cpuset.cpus" file of the
+partition root) has to be reserved by manually adding them to that
+control file first. Then that partition can be activated by writing
+"isolated" into its "cpuset.cpus.partition". CPU reservation of adjacent
+partitions is done automatically without touching "cpuset.cpus.reserve"
+at all.
+
+Currently only remote isolated partitions are supported, we could
+support a scheduling partition ("root") in the future if the need arises.
+Additional isolation attributes like those with the "isolcpus" or "nohz"
+boot command line options may be supported in the isolated partitions
+in the future.
+
+Waiman Long (6):
+  cgroup/cpuset: Extract out CS_CPU_EXCLUSIVE & CS_SCHED_LOAD_BALANCE
+    handling
+  cgroup/cpuset: Improve temporary cpumasks handling
+  cgroup/cpuset: Add cpuset.cpus.reserve for top cpuset
+  cgroup/cpuset: Introduce remote isolated partition
+  cgroup/cpuset: Documentation update for partition
+  cgroup/cpuset: Extend test_cpuset_prs.sh to test remote partition
+
+ Documentation/admin-guide/cgroup-v2.rst       |  92 ++-
+ kernel/cgroup/cpuset.c                        | 749 +++++++++++++++---
+ .../selftests/cgroup/test_cpuset_prs.sh       | 403 ++++++----
+ 3 files changed, 988 insertions(+), 256 deletions(-)
+
+-- 
+2.31.1
 
