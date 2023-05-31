@@ -2,121 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26EA717CA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB67717CA1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235794AbjEaJ70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
+        id S235710AbjEaJ7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235740AbjEaJ7Q (ORCPT
+        with ESMTP id S235713AbjEaJ6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:59:16 -0400
-Received: from out-54.mta0.migadu.com (out-54.mta0.migadu.com [IPv6:2001:41d0:1004:224b::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8568E10E
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:58:53 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685527129;
+        Wed, 31 May 2023 05:58:54 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D924E54;
+        Wed, 31 May 2023 02:58:30 -0700 (PDT)
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A190C1EC04CB;
+        Wed, 31 May 2023 11:58:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1685527105;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mjcsinqX7KwTJ40/JcL+JgGM2W0swatrtd18npIFtVk=;
-        b=baMB2GLVbbUmgLTp+CUXyhhVv/9x56bQV3iqZ8MjrGpSa7p5jatJsXPULpCV9EV8+jBrYl
-        PchelLFH6ZF8vYpgvhoNebbx99TRM79XB4NftLwSZ90r/JoVrRMdf+o3xlQ1brouvtCBtm
-        EjXCENjNIePsNVRgiPye7pdqlsEyPGs=
-From:   Qi Zheng <qi.zheng@linux.dev>
-To:     akpm@linux-foundation.org, tkhai@ya.ru, roman.gushchin@linux.dev,
-        vbabka@suse.cz, viro@zeniv.linux.org.uk, brauner@kernel.org,
-        djwong@kernel.org, hughd@google.com, paulmck@kernel.org,
-        muchun.song@linux.dev
-Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [PATCH 8/8] fs: use unregister_shrinker_delayed_{initiate, finalize} for super_block shrinker
-Date:   Wed, 31 May 2023 09:57:42 +0000
-Message-Id: <20230531095742.2480623-9-qi.zheng@linux.dev>
-In-Reply-To: <20230531095742.2480623-1-qi.zheng@linux.dev>
-References: <20230531095742.2480623-1-qi.zheng@linux.dev>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=hV5YBOIQSuwVXJ+8Bq//nWeBhs0OtlO6df6O2vn8m1U=;
+        b=Z5dl/Esl28XcJGYLQMWLB7mDNT4HnJmuKuH7Q7rBtdBM4dZsUgVpe+otHybYon2eveTgiP
+        AsTaFAFSoetQQLdUoW1I/5GajpeRc7w7d27DQ5wtBU0egue/Hk38/BctN3oEqzR61+V4pC
+        P8u8HorX55f1Ee47CpUpGwCZiVcGwmM=
+Date:   Wed, 31 May 2023 11:58:21 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hyperv@vger.kernel.org, linux-doc@vger.kernel.org,
+        mikelley@microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org, Jonathan Corbet <corbet@lwn.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v6 00/16] x86/mtrr: fix handling with PAT but without MTRR
+Message-ID: <20230531095821.GBZHcaPUvp8jo/IwV7@fat_crate.local>
+References: <20230509201437.GFZFqprc6otRejDPUt@fat_crate.local>
+ <20230509233641.GGZFrZCTDH7VwUMp5R@fat_crate.local>
+ <20230510133024.GBZFuccC1FxIZNKL+8@fat_crate.local>
+ <4c47a11c-0565-678d-3467-e01c5ec16600@suse.com>
+ <20230511163208.GDZF0YiOfxQhSo4RDm@fat_crate.local>
+ <0cd3899b-cf3b-61c1-14ae-60b6b49d14ab@suse.com>
+ <20230530152825.GAZHYWGXAp8PHgN/w0@fat_crate.local>
+ <888f860d-4307-54eb-01da-11f9adf65559@suse.com>
+ <20230531083508.GAZHcGvB68PUAH7f+a@fat_crate.local>
+ <7e824a95-6676-9553-4158-d434f617fcbb@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7e824a95-6676-9553-4158-d434f617fcbb@suse.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kirill Tkhai <tkhai@ya.ru>
+On Wed, May 31, 2023 at 11:31:37AM +0200, Juergen Gross wrote:
+> What it did would have been printed if pr_debug() would have been
+> active. :-(
 
-Previous patches made all the data, which is touched from
-super_cache_count(), destroyed from destroy_super_work():
-s_dentry_lru, s_inode_lru and super_block::s_fs_info.
+Lemme turn those into pr_info(). pr_debug() is nuts.
 
-super_cache_scan() can't be called after SB_ACTIVE is cleared
-in generic_shutdown_super().
+> Did you check whether CONFIG_MTRR_SANITIZER_ENABLE_DEFAULT was the same in both
+> kernels you've tested?
 
-So, it safe to move heavy unregister_shrinker_delayed_finalize()
-part to delayed work, i.e. it's safe for parallel do_shrink_slab()
-to be executed between unregister_shrinker_delayed_initiate() and
-destroy_super_work()->unregister_shrinker_delayed_finalize().
+Yes, it is enabled.
 
-This makes the heavy synchronize_srcu() to do not affect on user-visible
-unregistration speed (since now it's executed from workqueue).
-
-All further time-critical for unregistration places may be written
-in the same conception.
-
-Signed-off-by: Kirill Tkhai <tkhai@ya.ru>
-Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
----
- fs/super.c         | 4 +++-
- include/linux/fs.h | 5 +++++
- 2 files changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/fs/super.c b/fs/super.c
-index 4e9d08224f86..c61efb74fa7f 100644
---- a/fs/super.c
-+++ b/fs/super.c
-@@ -165,6 +165,8 @@ static void destroy_super_work(struct work_struct *work)
- 							destroy_work);
- 	int i;
- 
-+	unregister_shrinker_delayed_finalize(&s->s_shrink);
-+
- 	WARN_ON(list_lru_count(&s->s_dentry_lru));
- 	WARN_ON(list_lru_count(&s->s_inode_lru));
- 	list_lru_destroy(&s->s_dentry_lru);
-@@ -337,7 +339,7 @@ void deactivate_locked_super(struct super_block *s)
- {
- 	struct file_system_type *fs = s->s_type;
- 	if (atomic_dec_and_test(&s->s_active)) {
--		unregister_shrinker(&s->s_shrink);
-+		unregister_shrinker_delayed_initiate(&s->s_shrink);
- 		fs->kill_sb(s);
- 
- 		put_filesystem(fs);
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 30b46d0facfc..869dd8de91a5 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -1929,6 +1929,11 @@ struct super_operations {
- 	ssize_t (*quota_write)(struct super_block *, int, const char *, size_t, loff_t);
- 	struct dquot **(*get_dquots)(struct inode *);
- #endif
-+	/*
-+	 * Shrinker may call these two function on destructing super_block
-+	 * till unregister_shrinker_delayed_finalize() has completed
-+	 * in destroy_super_work(), and they must care about that.
-+	 */
- 	long (*nr_cached_objects)(struct super_block *,
- 				  struct shrink_control *);
- 	long (*free_cached_objects)(struct super_block *,
 -- 
-2.30.2
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
