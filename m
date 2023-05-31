@@ -2,172 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9552E718773
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58863718776
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjEaQds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 12:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56992 "EHLO
+        id S229658AbjEaQeh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 31 May 2023 12:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjEaQdj (ORCPT
+        with ESMTP id S229794AbjEaQec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 12:33:39 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2133.outbound.protection.outlook.com [40.107.94.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BD412B;
-        Wed, 31 May 2023 09:33:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gFyrG+8KaWQb1dD+iNSO7BO2/Tkfhm9u2LbbZQWrqE3AjtUAdZG/vhfgVKeVo/zzVSGTM5jKBnpQWT7V54zudibZtLWXdcDjiyqpjS+Lhd2ptT3TLVFEFAR1a3H88pMWo3fNbEVf0LLpzkif8j/8HSyRqpx9OtpbeAnKLNJCYIlt7DnZQW5QKZ0FEdgjkCPoHtvmjNcpwdlfnt830RZ6mlH1alCnZF0sVmK+15eF/WNBniFQlj8VSHS2PKWneokd8KhhCYytd/6ED+PayUqAYYDr+jMAn29vNKQw7Bqgi1B2EVDCQwYNBHUTVvHkOW0b1P+HbfYvAIChsdMJSfwLxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m7r1KMaVj0PA6k8wxBST9P7WOL/uTFPVYBPIWANDboY=;
- b=EOWA5AbkU4wCc3JUXFe+sDG4n9ejY2BZZnIzglbr3d166QLCoSePVubj66x7Yvo62o8n5pFaDnil8yoCcooL1iYhBIU81M6wk0dQuzgPGgccp06T90Pq5hZNoXrlI4bKadtmYD6k0OH/R8wG66aI+Oc5maAqpjt4yHB8bqzCatCXNSQ6aC7OUGpKdgT5VQPrd5ZLgfUHxXtrdhZOA5uZhExSKQ+y7n/kU95CO6gUhqGxEl1/LzJXCsFaASvO61eV/Tevz8fhHtCJxeqYMiu1z0vRBwrWTBA9zLbkJRsQAMeogE/VJgvb4+p7CdSD3DLU7lag5pU4oE4zTAlKcv0rWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m7r1KMaVj0PA6k8wxBST9P7WOL/uTFPVYBPIWANDboY=;
- b=V5SY3Ta30vBLIMHeVB/HSPvgxD7Y1uAJSMkQ7OBxMswkCn/sUM4HzvnAltE9T7IuqIGowFVKeRHnGPum6OmmMruV+57qNqmfRE4rsVOt8nGwzw37Wwot8zTTrkxLrBKTZjQMdMBI19et2ECO6Uik2Z7Xlp0iFJybHWlOY7EE0s8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DM6PR13MB4429.namprd13.prod.outlook.com (2603:10b6:5:1b7::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Wed, 31 May
- 2023 16:33:32 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.024; Wed, 31 May 2023
- 16:33:32 +0000
-Date:   Wed, 31 May 2023 18:33:26 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Shradha Gupta <shradhagupta@linux.microsoft.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Long Li <longli@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Steen Hegelund <steen.hegelund@microchip.com>
-Subject: Re: [PATCH v4] hv_netvsc: Allocate rx indirection table size
- dynamically
-Message-ID: <ZHd21sKJ+k/P0c9r@corigine.com>
-References: <1685502893-29311-1-git-send-email-shradhagupta@linux.microsoft.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1685502893-29311-1-git-send-email-shradhagupta@linux.microsoft.com>
-X-ClientProxiedBy: AM0PR07CA0021.eurprd07.prod.outlook.com
- (2603:10a6:208:ac::34) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Wed, 31 May 2023 12:34:32 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218FD1A7
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:34:00 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1q4Oll-0007Z0-9S; Wed, 31 May 2023 18:33:53 +0200
+Message-ID: <35c15c0912b4a9372b9c2194a46b518ce515ce3d.camel@pengutronix.de>
+Subject: Re: [PATCH v6 6/6] drm/etnaviv: allow usperspace create cached
+ coherent bo
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Sui Jingfeng <suijingfeng@loongson.cn>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+Date:   Wed, 31 May 2023 18:33:50 +0200
+In-Reply-To: <20230530160643.2344551-7-suijingfeng@loongson.cn>
+References: <20230530160643.2344551-1-suijingfeng@loongson.cn>
+         <20230530160643.2344551-7-suijingfeng@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB4429:EE_
-X-MS-Office365-Filtering-Correlation-Id: ac6068b4-3224-4511-7298-08db61f4c604
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Q0CfSZ2rwPI4pJkeolk0Aev/JLykLuI7tY+I4Sz/BjU4uJKNumtNI0iloxosvOfjs4w1BkwvE17lxXViX3YDZYduz8IfResoSNaP3mgMvt8YOVJtU5xsv5Hiem9TrShwNwwYL2fhgVPsmNOealJIhvxYvD5v0Vl3TVkUEE64vObs3e+hrzIgujuHjSYU2PUPpjxslsIdRM6EHrcCjlIw3mifpyRzma0qHvdrtHsRlZxydvG8ptShFZFVUxEPMotsk0WbtgjzcovT0qfMuxIRXtqCivDHAx4HLD38Rkndik4k9HjSTbIQsDWpLK77x543tovFux6mPCKlitpcZ/Rd9EFLiD0nwT/vxzR1ald9RuEJs2EUkcABa+sA5EXQdro2qyBskFA7eRwd5h0mZ1BQQV0uaxDvHvlfavSR1MbRBYYZENVcr2JojPQQjXZw/lgB4c6fy0fHcb9YogPbY/wuc3EreA/DGaZfSYgrE5t9Mvc21iJBk8L+V9+CtMGhTFRnAvBKDs3NpdDDGMb0J6Im3CdE1yUB1EICJhByRroh8L7bglqu3BThGMTfosyG/My1vuYitfUCsYpSExYZqZkwVDawEm871S4tl7+WEj3P20w=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39840400004)(136003)(376002)(396003)(366004)(451199021)(66556008)(66476007)(66946007)(4326008)(6486002)(6916009)(38100700002)(316002)(186003)(2616005)(6512007)(6506007)(86362001)(83380400001)(478600001)(54906003)(36756003)(45080400002)(6666004)(8676002)(8936002)(2906002)(44832011)(5660300002)(41300700001)(7416002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dsKvJLZg+jj91Wj/QkSKCncHH2qbjVxhG3mkZaTqqlsT1KzZ06DlKCbRComx?=
- =?us-ascii?Q?U/+34kswGoYdpv3AsXioaXt8ORyZwwJqRI82C+FV3pvPRIia9EdcbtrCBM+8?=
- =?us-ascii?Q?lsrDKJWj16abFdFRl9IhNxRtTyMQBs8DyiN9jZn8ucJxl/yD/LHZq62LBGew?=
- =?us-ascii?Q?vpO4fdpS3DhEQS/RKqbJvPTYkbJelHySkQGvxEkSxDtox9pfXPM6LABHIvy+?=
- =?us-ascii?Q?96fioFObZbB8hCXojODUXpNnemen/tO18GHynZl2IEjOx16gtgtb8XtnCVBC?=
- =?us-ascii?Q?Q9JNVUOjxlYIcbRrrUtG20lesT6L1eqiynMA7gxf/Vk9nCl97HxixhC6RiLm?=
- =?us-ascii?Q?yWu6OQJTR/DqMpfRbK/6HfQIdqMtHnwkduPcGA1J8XIC2Ix6bOKDe8pVUy7Y?=
- =?us-ascii?Q?aGm5KPqGwP2TGPAoSjffHrelYea565QGkHtduzvecLgimfloNmKaFunKmKFD?=
- =?us-ascii?Q?es7cD8z9r38V/u9Xg/lBxVjESQq680E1zrmO6zbcpkBr42W6dyCsi50YbZNk?=
- =?us-ascii?Q?xSzIIObxfsL/qU6W1hZtEstb5K9AD+nD8MnvSo1bUuSimSz+4RIr0L9K5aiW?=
- =?us-ascii?Q?W8tAE62YTWBG4IGy/9vZOC3kTuThXPeVJXELVsECFrgJDMF6RmKi5JCfKatq?=
- =?us-ascii?Q?24iRrW103DiKNfiiGnS+ILoESBa515hbZPMTr+Eg3EE7qTNFzviYmzP1zxPJ?=
- =?us-ascii?Q?/CXIL4Gg/3RPSkgXRMC6WrbjKB1eInrs409TibzcRCokRKyvapybOF9NHjhD?=
- =?us-ascii?Q?cHSH++kL+foVcGKeaqXvAu5Cbmy3ddOLnuItcWWKtxr+8h6phFa2NRMaGtxw?=
- =?us-ascii?Q?pCw4Wgb6Zh8FB/YEL5DCgKTPMoQ7BjMb31V2AjL0Ld+gjQRJ3EEnIrhPKteo?=
- =?us-ascii?Q?i7hyHOxXZOiiks0ajZyqRRLJf6pgP63A+WcmMHRguaaZXmqcO/uzbkFui4Lr?=
- =?us-ascii?Q?kn5b9JpQcYx8IWv47jdSYCi8qbTP55QqTjtmGSDfUDWna8IrsOh3vYI6/AbY?=
- =?us-ascii?Q?WpEDJPUuOhXbllzaDRv499pqpMqdcAhADI2EIOMxLhXk/a93fUBE0XfNwP4W?=
- =?us-ascii?Q?5fKeDw/PkM9V/5OjtpCYdkxBAi6KMnsxAPj2jwgsnEr4r1Kxu9KsNgdL8ilK?=
- =?us-ascii?Q?Y1oRxfWWmZjDWNjBws1X4+GdJfIs5pMmwQzxUssnipKax4u1x0+/jpm3jhtB?=
- =?us-ascii?Q?5vi1yXN0E8S34wvFezWXL+H3FCZnq6db02FSHllJzS7bbrKJ7fvrnwftrhVS?=
- =?us-ascii?Q?j9ObU21Xk5+M11Tjs9F2jdngJg/RwlcRV/98pk5qscVNPaXSb31dP+/I2gID?=
- =?us-ascii?Q?RsCNuwrVg/9mdLeC+o7WP97c+qINuK61UHeUtLDnFQoWJKqVwyy6rTB8Fb5D?=
- =?us-ascii?Q?523otYClkiSC4HnePPSLWOlNvQuc3vp83TMTm41zCVrYVjKWob5S+kRYed/x?=
- =?us-ascii?Q?Tz0lURGZ9ccGsPbVK+5yxrwYqhd2i11dO/us33LZq8X5Q2PZd/RST4CFUSmZ?=
- =?us-ascii?Q?6I06vMRn9im7SHUAW9ByaAa38pB628w0HwWh55nuF2vSsGLtcQxN99ad1P8w?=
- =?us-ascii?Q?N6mG9/MPSsjRFnGThrsXzqFRbQ4qd2UYffSTLp+ezYcZJshToyJ63vDhnERG?=
- =?us-ascii?Q?jNIzLSFWZAQ5gDPbtfGsGzhCCwhIK1QAutYTYvOMmao92Yo0MRRKYvYIDR6V?=
- =?us-ascii?Q?OtHliQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac6068b4-3224-4511-7298-08db61f4c604
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 16:33:32.6585
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1KWA3XT9lK2W8w8Mfy9PMxv+4qGsIoNr9ralbS86nhO8wWxkXiTJl+v8j5BC11EE21Tvc7r5BZXw7zsMbbUzbWDhd4+ZRW0beyVbkEnXJFg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB4429
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 08:14:53PM -0700, Shradha Gupta wrote:
-> Allocate the size of rx indirection table dynamically in netvsc
-> from the value of size provided by OID_GEN_RECEIVE_SCALE_CAPABILITIES
-> query instead of using a constant value of ITAB_NUM.
+Hi Sui Jingfeng,
+
+Am Mittwoch, dem 31.05.2023 um 00:06 +0800 schrieb Sui Jingfeng:
+> cached system RAM is coherent on loongson CPUs, and the GPU and DC allways
+> snoop the CPU's cache. write-combine caching property is not suitiable for
+> us.
 > 
-> Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
-> Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
-> Tested-on: Ubuntu22 (azure VM, SKU size: Standard_F72s_v2)
-> Testcases:
-> 1. ethtool -x eth0 output
-> 2. LISA testcase:PERF-NETWORK-TCP-THROUGHPUT-MULTICONNECTION-NTTTCP-Synthetic
+As previously mentioned in the Mesa MR, I don't think this is the right
+approach.
 
-...
+ETNA_BO_CACHED already looks coherent to userspace, as all accesses are
+bracketed via the ETNAVIV_GEM_CPU_PREP and ETNAVIV_GEM_CPU_FINI ioctls,
+which will do the necessary cache maintenance on platforms where device
+coherence isn't enforced by the hardware, so there is no need for a
+separate ETNA_BO_CACHED_COHERENT.
 
-> @@ -1596,11 +1609,17 @@ void rndis_filter_device_remove(struct hv_device *dev,
->  				struct netvsc_device *net_dev)
+Instead we just need a new ETNAVIV_PARAM to inform userspace about
+hardware cache coherence being available for a specific GPU core, in
+which case the userspace driver should switch to preferring
+ETNA_BO_CACHED over ETNA_BO_WC.
+
+Regards,
+Lucas
+
+> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> ---
+>  drivers/gpu/drm/etnaviv/etnaviv_drv.c       |  2 +-
+>  drivers/gpu/drm/etnaviv/etnaviv_gem.c       | 22 +++++++++++++++++++--
+>  drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c |  9 ++++++++-
+>  include/uapi/drm/etnaviv_drm.h              | 11 ++++++-----
+>  4 files changed, 35 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> index 052f745cecc0..2816c654c023 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> @@ -274,7 +274,7 @@ static int etnaviv_ioctl_gem_new(struct drm_device *dev, void *data,
+>  	struct drm_etnaviv_gem_new *args = data;
+>  
+>  	if (args->flags & ~(ETNA_BO_CACHED | ETNA_BO_WC | ETNA_BO_UNCACHED |
+> -			    ETNA_BO_FORCE_MMU))
+> +			    ETNA_BO_CACHED_COHERENT | ETNA_BO_FORCE_MMU))
+>  		return -EINVAL;
+>  
+>  	return etnaviv_gem_new_handle(dev, file, args->size,
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.c b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+> index b5f73502e3dd..d8b559bd33d3 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+> @@ -343,6 +343,7 @@ void *etnaviv_gem_vmap(struct drm_gem_object *obj)
+>  static void *etnaviv_gem_vmap_impl(struct etnaviv_gem_object *obj)
 >  {
->  	struct rndis_device *rndis_dev = net_dev->extension;
-> +	struct net_device *net = hv_get_drvdata(dev);
-> +	struct net_device_context *ndc = netdev_priv(net);
-
-nit: I know this file doesn't follow the scheme very closely,
-     but I'd preferred if it moved towards it.
-
-     Please use reverse xmas tree - longest line to shortest -
-     for local variable declarations in networking code.
-
-	struct rndis_device *rndis_dev = net_dev->extension;
-	struct net_device *net = hv_get_drvdata(dev);
-	struct net_device_context *ndc;
-
-	ndc = netdev_priv(net);
-
+>  	struct page **pages;
+> +	pgprot_t prot;
 >  
->  	/* Halt and release the rndis device */
->  	rndis_filter_halt_device(net_dev, rndis_dev);
+>  	lockdep_assert_held(&obj->lock);
 >  
->  	netvsc_device_remove(dev);
+> @@ -350,8 +351,20 @@ static void *etnaviv_gem_vmap_impl(struct etnaviv_gem_object *obj)
+>  	if (IS_ERR(pages))
+>  		return NULL;
+>  
+> -	return vmap(pages, obj->base.size >> PAGE_SHIFT,
+> -			VM_MAP, pgprot_writecombine(PAGE_KERNEL));
+> +	switch (obj->flags) {
+> +	case ETNA_BO_CACHED_COHERENT:
+> +	case ETNA_BO_CACHED:
+> +		prot = PAGE_KERNEL;
+> +		break;
+> +	case ETNA_BO_UNCACHED:
+> +		prot = pgprot_noncached(PAGE_KERNEL);
+> +		break;
+> +	case ETNA_BO_WC:
+> +	default:
+> +		prot = pgprot_writecombine(PAGE_KERNEL);
+> +	}
 > +
-> +	ndc->rx_table_sz = 0;
-> +	kfree(ndc->rx_table);
-> +	ndc->rx_table = NULL;
+> +	return vmap(pages, obj->base.size >> PAGE_SHIFT, VM_MAP, prot);
 >  }
-
--- 
-pw-bot: cr
+>  
+>  static inline enum dma_data_direction etnaviv_op_to_dma_dir(u32 op)
+> @@ -545,6 +558,7 @@ static const struct drm_gem_object_funcs etnaviv_gem_object_funcs = {
+>  static int etnaviv_gem_new_impl(struct drm_device *dev, u32 size, u32 flags,
+>  	const struct etnaviv_gem_ops *ops, struct drm_gem_object **obj)
+>  {
+> +	struct etnaviv_drm_private *priv = dev->dev_private;
+>  	struct etnaviv_gem_object *etnaviv_obj;
+>  	unsigned sz = sizeof(*etnaviv_obj);
+>  	bool valid = true;
+> @@ -555,6 +569,10 @@ static int etnaviv_gem_new_impl(struct drm_device *dev, u32 size, u32 flags,
+>  	case ETNA_BO_CACHED:
+>  	case ETNA_BO_WC:
+>  		break;
+> +	case ETNA_BO_CACHED_COHERENT:
+> +		if (priv->has_cached_coherent)
+> +			break;
+> +		fallthrough;
+>  	default:
+>  		valid = false;
+>  	}
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+> index 3524b5811682..671d91d8f1c6 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+> @@ -112,11 +112,18 @@ static const struct etnaviv_gem_ops etnaviv_gem_prime_ops = {
+>  struct drm_gem_object *etnaviv_gem_prime_import_sg_table(struct drm_device *dev,
+>  	struct dma_buf_attachment *attach, struct sg_table *sgt)
+>  {
+> +	struct etnaviv_drm_private *priv = dev->dev_private;
+>  	struct etnaviv_gem_object *etnaviv_obj;
+>  	size_t size = PAGE_ALIGN(attach->dmabuf->size);
+> +	u32 cache_flags;
+>  	int ret, npages;
+>  
+> -	ret = etnaviv_gem_new_private(dev, size, ETNA_BO_WC,
+> +	if (priv->has_cached_coherent)
+> +		cache_flags = ETNA_BO_CACHED_COHERENT;
+> +	else
+> +		cache_flags = ETNA_BO_WC;
+> +
+> +	ret = etnaviv_gem_new_private(dev, size, cache_flags,
+>  				      &etnaviv_gem_prime_ops, &etnaviv_obj);
+>  	if (ret < 0)
+>  		return ERR_PTR(ret);
+> diff --git a/include/uapi/drm/etnaviv_drm.h b/include/uapi/drm/etnaviv_drm.h
+> index af024d90453d..474b0db286de 100644
+> --- a/include/uapi/drm/etnaviv_drm.h
+> +++ b/include/uapi/drm/etnaviv_drm.h
+> @@ -90,13 +90,14 @@ struct drm_etnaviv_param {
+>   * GEM buffers:
+>   */
+>  
+> -#define ETNA_BO_CACHE_MASK   0x000f0000
+> +#define ETNA_BO_CACHE_MASK              0x000f0000
+>  /* cache modes */
+> -#define ETNA_BO_CACHED       0x00010000
+> -#define ETNA_BO_WC           0x00020000
+> -#define ETNA_BO_UNCACHED     0x00040000
+> +#define ETNA_BO_CACHED                  0x00010000
+> +#define ETNA_BO_WC                      0x00020000
+> +#define ETNA_BO_UNCACHED                0x00040000
+> +#define ETNA_BO_CACHED_COHERENT         0x00080000
+>  /* map flags */
+> -#define ETNA_BO_FORCE_MMU    0x00100000
+> +#define ETNA_BO_FORCE_MMU               0x00100000
+>  
+>  struct drm_etnaviv_gem_new {
+>  	__u64 size;           /* in */
 
