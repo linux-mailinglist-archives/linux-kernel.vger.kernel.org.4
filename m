@@ -2,290 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B2C717D68
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876C3717D6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234449AbjEaKvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 06:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48676 "EHLO
+        id S234500AbjEaKvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 06:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbjEaKvt (ORCPT
+        with ESMTP id S232198AbjEaKvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 06:51:49 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9D0123
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:51:47 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-33c1e7743b7so1331815ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:51:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20221208.gappssmtp.com; s=20221208; t=1685530306; x=1688122306;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OL+MUAGjHXCcVBhRxcCYXFGT+AfAFBLYOnPjKg/aVcI=;
-        b=Eh+I0hgvt7vbsksAnBxrKvE4+kAg82/jq/WqMTCfwpB6OOhlxkMjQmpKkQLwUDz0jj
-         VF8wShWQF/m5XJ+GeyDOCwaB8QRsPnjqRIjLXh/s5NqQk6uTUJ/6vYQkkC9CrUZX5jZ4
-         TJIBITvLjFM+I57GTztJJ58kFDtAUmnlG5+KQbgXDoX/CZ2+oDs8LUVi9O9aVsU8p0Zq
-         H/ZXbcAjkfyWpoOVydazKLtDVtY7wWbXmHyeG5rNo4wvfk8Ea5/Z/MTu9z6H30hYA/0N
-         4E8r9KZF+N/Jigi0LROJvNcqN8CXNZQWaPW1aoQEJbSR1I5djVOz94pyaOZ/mCDY4nDK
-         JWIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685530306; x=1688122306;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OL+MUAGjHXCcVBhRxcCYXFGT+AfAFBLYOnPjKg/aVcI=;
-        b=CfltvfBwvWXVAvV0Fe2buCwZc7MhiLrM2oBvkOox0Jq5C1I8vEHUOnU5FDD5uQ/Z/G
-         A/j7p9uxPagY3jxGtS0pvNZGxQRHU1E1zj4HJjZoLUVBIFhjQxsKCWiT2XU+25geK3P5
-         PS70ejFfzbC7yXV6AYL9wOth1fKyqnnDOkPJhb/YU3q++SwOQ/Lbd3VGeeY+xku+bs12
-         4joZW7dxlLYoGf3RirA0CiktUVRKCP9eZ9TTv9O6elm1hygJuqbCKZBxkziQiAMlJDAO
-         OXHQDLcEzIaw7UdztWZi9pv/8lmdbYzmYJqIwxK1FtwSvBO3HfEHoFkL/GE8yuvK4/EQ
-         D45Q==
-X-Gm-Message-State: AC+VfDxv/s7yHZPMdb3eVEZY8owLPl8qu6pEnD2QnWVxpfYpueuTcy9v
-        ChZVdPJd39RiWxrfZbla0vRKiA==
-X-Google-Smtp-Source: ACHHUZ5wTHf6brPVTM9Pu10tfLM6QoR8MR+RK/fU0uvSnUIafDy/ueDylPxOs/iblYKzccIBhVU3DA==
-X-Received: by 2002:a92:c144:0:b0:33a:f1b2:eb6c with SMTP id b4-20020a92c144000000b0033af1b2eb6cmr2344646ilh.3.1685530306356;
-        Wed, 31 May 2023 03:51:46 -0700 (PDT)
-Received: from [10.16.161.199] (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id jd21-20020a170903261500b001b045c9abd2sm1041969plb.143.2023.05.31.03.51.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 03:51:45 -0700 (PDT)
-Message-ID: <2422273d-5ac2-63ef-8a31-230ebfbe3b23@igel.co.jp>
-Date:   Wed, 31 May 2023 19:51:38 +0900
+        Wed, 31 May 2023 06:51:50 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3680612B
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:51:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C130B218E0;
+        Wed, 31 May 2023 10:51:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1685530307; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uGlrXdScy+uQ/dFYb1kgYb+EfH5nNgJO7w5uHyZerhE=;
+        b=YzHkaBjGoO/rgvm7EzcjG2lw97hJgSM6S51v5Mp8H+MjgGRcWnOd7w94tNCuRFsAT2m9tk
+        0zL+tsWdMfQ9q0bQjz5Po+vSCFQcrpDEM7MxOlJ8uazYANLN+zCQsIGZlwRKsfcEyT3fWT
+        8GwUDEVLKC6fhlUIoXvQbKVA5LtbQWA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1685530307;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uGlrXdScy+uQ/dFYb1kgYb+EfH5nNgJO7w5uHyZerhE=;
+        b=Ob2hTF7PIFB0LQ3Kw5JOwggaMKS4A5h/JjZWqF73aPF5mzsZNKxI24/YVLCUr8BUBwHaAe
+        rZJQ8puebMTQK2DA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8BF6D13488;
+        Wed, 31 May 2023 10:51:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id k+KvH8Mmd2SQLgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 31 May 2023 10:51:47 +0000
+Message-ID: <01973671-55e0-d701-ca38-a583d441a4fc@suse.de>
+Date:   Wed, 31 May 2023 12:51:45 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [RFC PATCH v2 3/3] PCI: endpoint: Add EP function driver to
- provide virtio-console functionality
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, Frank Li <Frank.Li@nxp.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-References: <20230427104428.862643-1-mie@igel.co.jp>
- <20230427104428.862643-4-mie@igel.co.jp>
- <CACGkMEsjH8fA2r=0CacK8WK_sUTAcTK7SQ_VwkJpa1rSgDP0dg@mail.gmail.com>
- <CANXvt5r7eha_xnExsdS_4yMW8xTJxVzYhMVrXyQkGQe-_ZURBg@mail.gmail.com>
- <ad3dd4ef-3489-683c-c9e1-2592621687f7@igel.co.jp>
- <CACGkMEvdVHQEcDD74TpeWgmHQ+J9aMpv5ui=iwT8E_SDZoY7EA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2] drm/ast: Fix modeset failed on DisplayPort
 Content-Language: en-US
-From:   Shunsuke Mie <mie@igel.co.jp>
-In-Reply-To: <CACGkMEvdVHQEcDD74TpeWgmHQ+J9aMpv5ui=iwT8E_SDZoY7EA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com,
+        airlied@gmail.com, daniel@ffwll.ch
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230525012918.11918-1-jammy_huang@aspeedtech.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230525012918.11918-1-jammy_huang@aspeedtech.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------bWGn0bHpltOcnfUMiQYxRtWn"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm sorry for late response.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------bWGn0bHpltOcnfUMiQYxRtWn
+Content-Type: multipart/mixed; boundary="------------g9zM0e2qrVQ4lm8aYK00AO00";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com,
+ airlied@gmail.com, daniel@ffwll.ch
+Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Message-ID: <01973671-55e0-d701-ca38-a583d441a4fc@suse.de>
+Subject: Re: [PATCH v2] drm/ast: Fix modeset failed on DisplayPort
+References: <20230525012918.11918-1-jammy_huang@aspeedtech.com>
+In-Reply-To: <20230525012918.11918-1-jammy_huang@aspeedtech.com>
 
-On 2023/05/19 11:01, Jason Wang wrote:
-> On Thu, May 18, 2023 at 5:54 PM Shunsuke Mie <mie@igel.co.jp> wrote:
->> Gentle ping ...
->>
->>
->> Thanks,
->>
->> Shunsuke.
->>
->> On 2023/05/10 12:17, Shunsuke Mie wrote:
->>> Hi Json,
->>> 2023年5月8日(月) 13:03 Jason Wang <jasowang@redhat.com>:
->>>> On Thu, Apr 27, 2023 at 6:44 PM Shunsuke Mie <mie@igel.co.jp> wrote:
->>>>> Add a new PCIe endpoint function driver that works as a pci virtio-console
->>>>> device. The console connect to endpoint side console. It enables to
->>>>> communicate PCIe host and endpoint.
->>>>>
->>>>> Architecture is following:
->>>>>
->>>>>    ┌────────────┐         ┌──────────────────────┬────────────┐
->>>>>    │virtioe     │         │                      │virtio      │
->>>>>    │console drv │         ├───────────────┐      │console drv │
->>>>>    ├────────────┤         │(virtio console│      ├────────────┤
->>>>>    │ virtio bus │         │ device)       │◄────►│ virtio bus │
->>>>>    ├────────────┤         ├---------------┤      └────────────┤
->>>>>    │            │         │ pci ep virtio │                   │
->>>>>    │  pci bus   │         │  console drv  │                   │
->>>>>    │            │  pcie   ├───────────────┤                   │
->>>>>    │            │ ◄─────► │  pci ep Bus   │                   │
->>>>>    └────────────┘         └───────────────┴───────────────────┘
->>>>>      PCIe Root              PCIe Endpoint
->>>>>
->>>> I think it might only works for peer devices like:
->>>>
->>>> net, console or vsock.
->>> Could you tell me what "peer devices" means?
-> I meant, for example we know in the case of virtio-net, TX can talk
-> with RX belonging to another device directly.
->
-> But this is not the case for other devices like virito-blk.
-Thank you. I comprehended it.
->>>> So there're many choices here, I'd like to know what's the reason for
->>>> you to implement a mediation.
->>>>
->>>> An alternative is to implement a dedicated net, console and vsock
->>>> driver for vringh (CAIF somehow works like this). This would have
->>>> better performance.
->>> Does it mean that the driver also functions as a network driver directly?
-> I meant, e.g in the case of networking, you can have a dedicated
-> driver with two vringh in the endpoint side.
->
-> The benefit is the performance, no need for the (datapath) mediation.
->
-> But if we don't care about the performance, this proposal seems to be fine.
->
-> Thanks
-I agree with you.  The design you suggested is better in terms of 
-performance.
-However, the proposed design is not bad for the following the reasons I 
-think.
+--------------g9zM0e2qrVQ4lm8aYK00AO00
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-The proposed design has one more operation in control plane because the data
-steps over the virtio-net driver, but the number of copies at the data plane
-remains the same. I think the operation added in control plane has small 
-effects
-for performance.
+SGkgSmFtbXkNCg0KQW0gMjUuMDUuMjMgdW0gMDM6Mjkgc2NocmllYiBKYW1teSBIdWFuZzoN
+Cj4gSWYgd2Ugc3dpdGNoIGRpc3BsYXkgYW5kIHVwZGF0ZSBjdXJzb3IgdG9nZXRoZXIsIGl0
+IGNvdWxkIGxlYWQgdG8NCj4gbW9kZXNldCBmYWlsZWQgYmVjYXVzZSBvZiBjb25jdXJyZW50
+IGFjY2VzcyB0byBJTyByZWdpc3RlcnMuDQo+IA0KPiBBZGQgbG9jayBwcm90ZWN0aW9uIGlu
+IERQJ3MgZWRpZCBhY2Nlc3MgdG8gYXZvaWQgdGhpcyBwcm9ibGVtLg0KPiANCj4gU2lnbmVk
+LW9mZi1ieTogSmFtbXkgSHVhbmcgPGphbW15X2h1YW5nQGFzcGVlZHRlY2guY29tPg0KPiAt
+LS0NCj4gICB2MiBjaGFuZ2VzOg0KPiAgICAtIEZpeCBidWlsZCBlcnJvciBzaW5jZSBuZXcg
+c3RydWN0IGFzdF9kZXZpY2UgaXMgdXNlZC4NCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJt
+L2FzdC9hc3RfbW9kZS5jIHwgMTEgKysrKysrKysrKysNCj4gICAxIGZpbGUgY2hhbmdlZCwg
+MTEgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9h
+c3QvYXN0X21vZGUuYyBiL2RyaXZlcnMvZ3B1L2RybS9hc3QvYXN0X21vZGUuYw0KPiBpbmRl
+eCAzNjM3NDgyOGY2YzguLjlmY2JmNTQwZDZmYyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9n
+cHUvZHJtL2FzdC9hc3RfbW9kZS5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9hc3QvYXN0
+X21vZGUuYw0KPiBAQCAtMTY0Nyw2ICsxNjQ3LDggQEAgc3RhdGljIGludCBhc3RfZHA1MDFf
+b3V0cHV0X2luaXQoc3RydWN0IGFzdF9kZXZpY2UgKmFzdCkNCj4gICBzdGF0aWMgaW50IGFz
+dF9hc3RkcF9jb25uZWN0b3JfaGVscGVyX2dldF9tb2RlcyhzdHJ1Y3QgZHJtX2Nvbm5lY3Rv
+ciAqY29ubmVjdG9yKQ0KPiAgIHsNCj4gICAJdm9pZCAqZWRpZDsNCj4gKwlzdHJ1Y3QgZHJt
+X2RldmljZSAqZGV2ID0gY29ubmVjdG9yLT5kZXY7DQo+ICsJc3RydWN0IGFzdF9kZXZpY2Ug
+KmFzdCA9IHRvX2FzdF9kZXZpY2UoZGV2KTsNCj4gICANCj4gICAJaW50IHN1Y2M7DQo+ICAg
+CWludCBjb3VudDsNCj4gQEAgLTE2NTUsMTAgKzE2NTcsMTggQEAgc3RhdGljIGludCBhc3Rf
+YXN0ZHBfY29ubmVjdG9yX2hlbHBlcl9nZXRfbW9kZXMoc3RydWN0IGRybV9jb25uZWN0b3Ig
+KmNvbm5lY3RvcikNCj4gICAJaWYgKCFlZGlkKQ0KPiAgIAkJZ290byBlcnJfZHJtX2Nvbm5l
+Y3Rvcl91cGRhdGVfZWRpZF9wcm9wZXJ0eTsNCj4gICANCj4gKwkvKg0KPiArCSAqIFByb3Rl
+Y3QgYWNjZXNzIHRvIEkvTyByZWdpc3RlcnMgZnJvbSBjb25jdXJyZW50IG1vZGVzZXR0aW5n
+DQo+ICsJICogYnkgYWNxdWlyaW5nIHRoZSBJL08tcmVnaXN0ZXIgbG9jay4NCj4gKwkgKi8N
+Cj4gKwltdXRleF9sb2NrKCZhc3QtPmlvcmVnc19sb2NrKTsNCj4gKw0KPiAgIAlzdWNjID0g
+YXN0X2FzdGRwX3JlYWRfZWRpZChjb25uZWN0b3ItPmRldiwgZWRpZCk7DQo+ICAgCWlmIChz
+dWNjIDwgMCkNCj4gICAJCWdvdG8gZXJyX2tmcmVlOw0KPiAgIA0KPiArCW11dGV4X3VubG9j
+aygmYXN0LT5pb3JlZ3NfbG9jayk7DQo+ICsNCj4gICAJZHJtX2Nvbm5lY3Rvcl91cGRhdGVf
+ZWRpZF9wcm9wZXJ0eShjb25uZWN0b3IsIGVkaWQpOw0KPiAgIAljb3VudCA9IGRybV9hZGRf
+ZWRpZF9tb2Rlcyhjb25uZWN0b3IsIGVkaWQpOw0KPiAgIAlrZnJlZShlZGlkKTsNCj4gQEAg
+LTE2NjYsNiArMTY3Niw3IEBAIHN0YXRpYyBpbnQgYXN0X2FzdGRwX2Nvbm5lY3Rvcl9oZWxw
+ZXJfZ2V0X21vZGVzKHN0cnVjdCBkcm1fY29ubmVjdG9yICpjb25uZWN0b3IpDQo+ICAgCXJl
+dHVybiBjb3VudDsNCj4gICANCj4gICBlcnJfa2ZyZWU6DQoNClRoaXMgbGFiZWwgbmVlZHMg
+dG8gYmUgbmFtZWQgJ2Vycl9tdXRleF91bmxvY2snIHBsZWFzZS4gV2l0aCB0aGF0IGZpeGVk
+LCANCnlvdSBjYW4gYWRkDQoNClJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHpp
+bW1lcm1hbm5Ac3VzZS5kZT4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiArCW11dGV4
+X3VubG9jaygmYXN0LT5pb3JlZ3NfbG9jayk7DQo+ICAgCWtmcmVlKGVkaWQpOw0KPiAgIGVy
+cl9kcm1fY29ubmVjdG9yX3VwZGF0ZV9lZGlkX3Byb3BlcnR5Og0KPiAgIAlkcm1fY29ubmVj
+dG9yX3VwZGF0ZV9lZGlkX3Byb3BlcnR5KGNvbm5lY3RvciwgTlVMTCk7DQo+IA0KPiBiYXNl
+LWNvbW1pdDogOTMzMTc0YWUyOGJhNzJhYjhkZTViMzVjYjdjOThmYzIxMTIzNTA5Ng0KDQot
+LSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNF
+IFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0Niwg
+OTA0NjEgTnVlcm5iZXJnLCBHZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMs
+IEFuZHJldyBNY0RvbmFsZCwgQm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJu
+YmVyZykNCg==
 
-Moreover, there are some advantages when the data step over the virtio-net
-driver. We can make use of the optimizations and some functions without
-modifications and implementations. e.g. ethtool and XDP(BPF) supports.
+--------------g9zM0e2qrVQ4lm8aYK00AO00--
 
-Any comments would be appreciated.
+--------------bWGn0bHpltOcnfUMiQYxRtWn
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
->>>>> This driver has two roles. The first is as a PCIe endpoint virtio console
->>>>> function, which is implemented using the PCIe endpoint framework and PCIe
->>>>> EP virtio helpers. The second is as a virtual virtio console device
->>>>> connected to the virtio bus on PCIe endpoint Linux.
->>>>>
->>>>> Communication between the two is achieved by copying the virtqueue data
->>>>> between PCIe root and endpoint, respectively.
->>>>>
->>>>> This is a simple implementation and does not include features of
->>>>> virtio-console such as MULTIPORT, EMERG_WRITE, etc. As a result, each
->>>>> virtio console driver only displays /dev/hvc0.
->>>>>
->>>>> As an example of usage, by setting getty to /dev/hvc0, it is possible to
->>>>> login to another host.
->>>>>
->>>>> Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
->>>>> ---
->>>>> Changes from v2:
->>>>> - Change to use copy functions between kiovs of pci-epf-virtio.
->>>>>
->>>>>    drivers/pci/endpoint/functions/Kconfig        |  12 +
->>>>>    drivers/pci/endpoint/functions/Makefile       |   1 +
->>>>>    drivers/pci/endpoint/functions/pci-epf-vcon.c | 596 ++++++++++++++++++
->>>>>    3 files changed, 609 insertions(+)
->>>>>    create mode 100644 drivers/pci/endpoint/functions/pci-epf-vcon.c
->>>>>
->>>>> diff --git a/drivers/pci/endpoint/functions/Kconfig b/drivers/pci/endpoint/functions/Kconfig
->>>>> index fa1a6a569a8f..9ce2698b67e1 100644
->>>>> --- a/drivers/pci/endpoint/functions/Kconfig
->>>>> +++ b/drivers/pci/endpoint/functions/Kconfig
->>>>> @@ -44,3 +44,15 @@ config PCI_EPF_VIRTIO
->>>>>           select VHOST_RING_IOMEM
->>>>>           help
->>>>>             Helpers to implement PCI virtio Endpoint function
->>>>> +
->>>>> +config PCI_EPF_VCON
->>>>> +       tristate "PCI Endpoint virito-console driver"
->>>>> +       depends on PCI_ENDPOINT
->>>>> +       select VHOST_RING
->>>>> +       select PCI_EPF_VIRTIO
->>>>> +       help
->>>>> +         PCIe Endpoint virtio-console function implementatino. This module
->>>>> +         enables to show the virtio-console as pci device to PCIe host side, and
->>>>> +         another virtual virtio-console device registers to endpoint system.
->>>>> +         Those devices are connected virtually and can communicate each other.
->>>>> +
->>>>> diff --git a/drivers/pci/endpoint/functions/Makefile b/drivers/pci/endpoint/functions/Makefile
->>>>> index a96f127ce900..b4056689ce33 100644
->>>>> --- a/drivers/pci/endpoint/functions/Makefile
->>>>> +++ b/drivers/pci/endpoint/functions/Makefile
->>>>> @@ -7,3 +7,4 @@ obj-$(CONFIG_PCI_EPF_TEST)              += pci-epf-test.o
->>>>>    obj-$(CONFIG_PCI_EPF_NTB)              += pci-epf-ntb.o
->>>>>    obj-$(CONFIG_PCI_EPF_VNTB)             += pci-epf-vntb.o
->>>>>    obj-$(CONFIG_PCI_EPF_VIRTIO)           += pci-epf-virtio.o
->>>>> +obj-$(CONFIG_PCI_EPF_VCON)             += pci-epf-vcon.o
->>>>> diff --git a/drivers/pci/endpoint/functions/pci-epf-vcon.c b/drivers/pci/endpoint/functions/pci-epf-vcon.c
->>>>> new file mode 100644
->>>>> index 000000000000..31f4247cd10f
->>>>> --- /dev/null
->>>>> +++ b/drivers/pci/endpoint/functions/pci-epf-vcon.c
->>>>> @@ -0,0 +1,596 @@
->>>>> +// SPDX-License-Identifier: GPL-2.0
->>>>> +/*
->>>>> + * PCI Endpoint function driver to impliment virtio-console device
->>>>> + * functionality.
->>>>> + */
->>>>> +#include <linux/pci-epf.h>
->>>>> +#include <linux/virtio_ids.h>
->>>>> +#include <linux/virtio_pci.h>
->>>>> +#include <linux/virtio_console.h>
->>>>> +#include <linux/virtio_ring.h>
->>>>> +
->>>>> +#include "pci-epf-virtio.h"
->>>>> +
->>>>> +static int virtio_queue_size = 0x100;
->>>>> +module_param(virtio_queue_size, int, 0444);
->>>>> +MODULE_PARM_DESC(virtio_queue_size, "A length of virtqueue");
->>>>> +
->>>>> +struct epf_vcon {
->>>>> +       /* To access virtqueues on remote host */
->>>>> +       struct epf_virtio evio;
->>>>> +       struct vringh_kiov *rdev_iovs;
->>>>> +
->>>>> +       /* To register a local virtio bus */
->>>>> +       struct virtio_device vdev;
->>>>> +
->>>>> +       /* To access virtqueus of local host driver */
->>>>> +       struct vringh *vdev_vrhs;
->>>>> +       struct vringh_kiov *vdev_iovs;
->>>>> +       struct virtqueue **vdev_vqs;
->>>>> +
->>>>> +       /* For transportation and notification */
->>>>> +       struct workqueue_struct *task_wq;
->>>>> +       struct work_struct raise_irq_work, rx_work, tx_work;
->>>>> +
->>>>> +       /* To retain virtio features. It is commonly used local and remote. */
->>>>> +       u64 features;
->>>>> +
->>>>> +       /* To show a status whether this driver is ready and the remote is connected */
->>>>> +       bool connected;
->>>>> +};
->>>>> +
->>>>> +enum {
->>>>> +       VCON_VIRTQUEUE_RX,
->>>>> +       VCON_VIRTQUEUE_TX,
->>>>> +       // Should be end of enum
->>>>> +       VCON_VIRTQUEUE_NUM
->>>>> +};
->>>> It would be better if we can split the console specific thing out,
->>>> then it allows us to do ethernet and vsock in the future.
->>> I'm planning to implement each virtio device in a separate file.
->>> https://lwn.net/Articles/922124/
->>>
->>>
->>>
->>>> Thanks
->>>>
->>> Best regards,
->>> Shunsuke
+-----BEGIN PGP SIGNATURE-----
 
-Best regards,
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmR3JsEFAwAAAAAACgkQlh/E3EQov+Az
+kw/+MD9iFo6IaQbmiQraMWv4C8bb0Ku2tpruYx9AiaFS4AM/UIw1G45JiApJoZsRp3K9itbyDrra
+VmYigZ/Znt2c/svJk2eUeeMz3PCM1ypWTHov7MVvN6Hs6nMOIrjDHHf9Y9klzY/1jvV90nsvTCu3
+6vcsU4BQDVArgmknwvEyw4pz8wiv9Drdll+zQIWCeUmYBVeaLma+GsXL0yRIPYbMOjVihNRqr0wr
+RCNuMVtGCk0GgZ3LjtxKZm7rwo5V82OOU13DufmIDxZqF6BOMMcSzph75RyEzu4Ko2XkTpnH3Poh
+koQKMn60ko0eU+27rlo6HcMjljkYbz3KMEfI4f3CcjDDCSGFVpCR00WPekwTUoyPAluMO7JwX7UD
++qUhNS6xlmOm42DTeDUHAe+h22TUBZVkkyFyYWbbsUaolQn12AHkC7tkfxlYWY9nQVZsZv2BUkcu
+MmEGBT13clckqlsTFgTMkavv9Iu73bIlM6Tl1a2JX6x/zwNt3n2MPa9JtzB4jBLqFsTIoZuNrkPJ
+Otd34WnapE76yo4LO7hsM0F0ku9JJgf2+qfQqPW2AIuqmOCm+I24oyQ8TuFs2wScVWK7MNxLtA/u
+oe+1Ofb0Ijka/PL+zut1hb8yVF2cf21xOq+JeNC3q5pYRGMtVinm5fB/FR50uLyhdR6vHzydc1OV
+2+4=
+=PHol
+-----END PGP SIGNATURE-----
 
-Shunsuke
-
+--------------bWGn0bHpltOcnfUMiQYxRtWn--
