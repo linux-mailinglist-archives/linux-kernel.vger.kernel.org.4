@@ -2,84 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69D9717D31
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1460B717D33
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbjEaKZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 06:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41288 "EHLO
+        id S232570AbjEaK2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 06:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjEaKZx (ORCPT
+        with ESMTP id S229949AbjEaK2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 06:25:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD6F132
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:25:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685528705;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DvwGCRQeWTvKp10bN1Sbh5bj4YnUv0Bqw0o1UOThBzY=;
-        b=cc/iCJdIaNZ57pKP2kkx4AA5/YFYk7t3pfKq//xGPibFeLKlyL3hwAHe8cQQhhnovYF0mf
-        lcvci7ZXpJ1+mnwY+IuHAv/CLFk2hvozGha+KmmVocpC17eRr1WykTs9vUQY0YFrkwFczQ
-        BWD2kfO9VBXADTMGDbr3B09LQp3ahW8=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-101-fGG67D_iP5aNY6hmKeJWEQ-1; Wed, 31 May 2023 06:25:04 -0400
-X-MC-Unique: fGG67D_iP5aNY6hmKeJWEQ-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-30ad0812151so3097965f8f.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:25:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685528703; x=1688120703;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DvwGCRQeWTvKp10bN1Sbh5bj4YnUv0Bqw0o1UOThBzY=;
-        b=BsGvWHEH3omHPRLHE4/jWqFUCcR7Olqp5/MaWEhjshgcokvPSB045cDRuG41qZGl8T
-         zG67lUZaGVQfTtRmC82m4j7blIdZ7dKAonYOC9kDv0Bazg3M5PZ/jtvAml8pheDHXwsb
-         z+71+eNGRZw6P7M54Ue8CCJfHsy3OBrak3mM9rBLssDTTiF2gQlS9NoVmn6/FRmtxqAq
-         fVu65Em0T6Q7tsdU0pnnQs1iwIXCwrlhUlusVGeQNvOHw3ZBfknIAbQFrRHheHKmYi1m
-         B6C7/qUuLD60+LdAC6Av/X8ruosudtB58GkkzOrGomqQLyRozsGwVhdD9goRVlIT7LBf
-         RSuw==
-X-Gm-Message-State: AC+VfDzF/xFUMzWuQRh25jQcxVxrHEfoTvAKEjq40iLnNm0ofma30hnV
-        VtGSLopiwaPJgKkGjC5m+tzonxjrs66/Jd2qOy0S+4eYLfE6/aH9roDnl34FPUK9R3bXWzSpz6S
-        jUwaXMmRrJT9H5mUxxMnhfmYqe5rRS5sz
-X-Received: by 2002:adf:f452:0:b0:307:8b3e:285a with SMTP id f18-20020adff452000000b003078b3e285amr4867795wrp.67.1685528702685;
-        Wed, 31 May 2023 03:25:02 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5rdqa0yP0CU0wQqaMcpUQBMYn4ha0O+FEx/Q20k8/Cui3MNm3+FsNtrElTCiHBdmXhEbnbSQ==
-X-Received: by 2002:adf:f452:0:b0:307:8b3e:285a with SMTP id f18-20020adff452000000b003078b3e285amr4867778wrp.67.1685528702252;
-        Wed, 31 May 2023 03:25:02 -0700 (PDT)
-Received: from redhat.com ([2.52.11.69])
-        by smtp.gmail.com with ESMTPSA id b9-20020adfe309000000b003079986fd71sm6404500wrj.88.2023.05.31.03.25.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 03:25:01 -0700 (PDT)
-Date:   Wed, 31 May 2023 06:24:58 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     xuanzhuo@linux.alibaba.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio_ring: validate used buffer length
-Message-ID: <20230531062108-mutt-send-email-mst@kernel.org>
-References: <20230526063041.18359-1-jasowang@redhat.com>
- <20230528033037-mutt-send-email-mst@kernel.org>
- <CACGkMEs9Ztavn2JyuUAb47Sk1fYHiXLLkQQPQR5Czhb2yu_R3w@mail.gmail.com>
- <20230529055729-mutt-send-email-mst@kernel.org>
- <CACGkMEsW1+BFtMoLg4c_FyxYTZJcSVh4BoEdJ-Q9_WGg_DcReA@mail.gmail.com>
- <20230531014326-mutt-send-email-mst@kernel.org>
- <CACGkMEvok6HjBK_ZMR4EYzWxpJQVeh++EMErnHjJ6cu9m3R-1A@mail.gmail.com>
- <CACGkMEuDWL30J7D8v+xLCvvspRBoz8X7q23FymBVRm9bT1pVUQ@mail.gmail.com>
+        Wed, 31 May 2023 06:28:03 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E949FB3;
+        Wed, 31 May 2023 03:28:01 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8Dxd_EwIXdkE+8CAA--.6608S3;
+        Wed, 31 May 2023 18:28:00 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx77MtIXdk+juCAA--.15700S2;
+        Wed, 31 May 2023 18:27:57 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Ben Hutchings <bhutchings@solarflare.com>,
+        Jesse Barnes <jbarnes@virtuousgeek.org>
+Cc:     Li Yi <liyi@loongson.cn>, linux-pci@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kernel test robot <lkp@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH v2] PCI: Add dummy implement for pci_clear_master() function
+Date:   Wed, 31 May 2023 18:27:44 +0800
+Message-Id: <20230531102744.2354313-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEuDWL30J7D8v+xLCvvspRBoz8X7q23FymBVRm9bT1pVUQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-CM-TRANSID: AQAAf8Cx77MtIXdk+juCAA--.15700S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7CryUGr15Xw4UKr1xurWxZwb_yoW8Aw4rpa
+        98AFyrCrW8GFy8Gw4UJFyIvF1ag39xZ34Sy3y7Kwn09a9Fya4rtFnYkF17Arn3JrWvkFy3
+        Ww17Ka1DWw4YyFJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bh8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Gr1j6F4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
+        Aaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVW8Jr0_Cr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j
+        6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU2gyCDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,416 +64,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 04:26:38PM +0800, Jason Wang wrote:
-> On Wed, May 31, 2023 at 3:36 PM Jason Wang <jasowang@redhat.com> wrote:
-> >
-> > On Wed, May 31, 2023 at 1:50 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > >
-> > > On Wed, May 31, 2023 at 09:05:00AM +0800, Jason Wang wrote:
-> > > > On Mon, May 29, 2023 at 6:03 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > >
-> > > > > On Mon, May 29, 2023 at 09:18:10AM +0800, Jason Wang wrote:
-> > > > > > On Sun, May 28, 2023 at 3:57 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > > >
-> > > > > > > On Fri, May 26, 2023 at 02:30:41PM +0800, Jason Wang wrote:
-> > > > > > > > This patch validate
-> > > > > > >
-> > > > > > > validates
-> > > > > > >
-> > > > > > > > the used buffer length provided by the device
-> > > > > > > > before trying to use it.
-> > > > > > >
-> > > > > > > before returning it to caller
-> > > > > > >
-> > > > > > > > This is done by remembering the in buffer
-> > > > > > > > length in a dedicated array during virtqueue_add(), then we can fail
-> > > > > > > > the virtqueue_get_buf() when we find the device is trying to give us a
-> > > > > > > > used buffer length which is greater than we stored before.
-> > > > > > >
-> > > > > > > than what we stored
-> > > > > > >
-> > > > > > > >
-> > > > > > > > This validation is disable
-> > > > > > >
-> > > > > > > disabled
-> > > > > > >
-> > > > > > > > by default via module parameter to unbreak
-> > > > > > > > some existing devices since some legacy devices are known to report
-> > > > > > > > buggy used length.
-> > > > > > > >
-> > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > > >
-> > > > > > > First I'm not merging this without more data about
-> > > > > > > what is known to be broken and what is known to work well
-> > > > > > > in the commit log. And how exactly do things work if used length
-> > > > > > > is wrong?
-> > > > > >
-> > > > > > Assuming the device is malicious, it would be very hard to answer.
-> > > > > > Auditing and fuzzing won't cover every case. Instead of trying to seek
-> > > > > > the answer, we can simply make sure the used in buffer length is
-> > > > > > validated then we know we're fine or not.
-> > > > >
-> > > > > To restate the question, you said above "some legacy devices are known
-> > > > > to report buggy used length". If they report buggy length then how
-> > > > > can things work?
-> > > >
-> > > > The validation is disabled for legacy device (as stated in the changelog):
-> > > >
-> > > > static bool vring_needs_used_validation(const struct virtio_device *vdev)
-> > > > {
-> > > >         /*
-> > > >          * Several legacy devices are known to produce buggy used
-> > > >          * length. In order to let driver work, we won't validate used
-> > > >          * buffer length in this case.
-> > > >          */
-> > > >         if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
-> > > >                 return false;
-> > > >         if (force_used_validation)
-> > > >                 return true;
-> > > >         return false;
-> > > > }
-> > > >
-> > > > This seems to be what we've agreed in last version:
-> > > >
-> > > > https://lore.kernel.org/all/CANLsYkxfhamUU0bb4j7y6N4_G9odKxLCjXxgXEx4SJ6_Kf+M2Q@mail.gmail.com/T/#m31f3b06f9032beec175c312dfa2532cb08b15c56
-> > > >
-> > > > Thanks
-> > > >
-> > >
-> > > I don't get it. You wrote:
-> > >
-> > >         This validation is disable
-> > >         by default via module parameter to unbreak
-> > >         some existing devices since some legacy devices are known to report
-> > >         buggy used length.
-> > >
-> > > which devices?
-> >
-> > legacy rpmsg and vsock device (before 49d8c5ffad07) at least.
-> >
-> > > why do you need a module parameter?
-> >
-> > If we enable it unconditionally for modern devices, it may break some
-> > buggy moden device (vsock without a fix as an example).
-> >
-> > >
-> > >
-> > > > >
-> > > > > > > Second what's wrong with dma_desc_extra that we already maintain?
-> > > > > > > Third motivation - it's part and parcel of the hardening effort yes?
-> > > > > >
-> > > > > > They are different. dma_desc_extra is for a descriptor ring, but this
-> > > > > > is for a used ring. Technically we can go back to iterate on the
-> > > > > > descriptor ring for a legal used in buffer length. But it will have
-> > > > > > worse performance.
-> > > > >
-> > > > > I don't really understand. We already iterate when we unmap -
-> > > > > all that is necessary is to subtract it from used length, if at
-> > > > > the end of the process it is >0 then we know used length is too
-> > > > > large.
-> > > >
-> > > > Yes, but it is the job that is done in the driver level not the virtio
-> > > > core.
-> > >
-> > > What job?
-> >
-> > I meant the driver can do the validation since it has the knowledge of
-> > the buffer length if it wants.
-> >
-> > > unmap is done in detach_buf_split and detach_buf_packed respectively.
-> > > vring_desc_extra isn't even visible outside drivers/virtio/virtio_ring.c
-> >
-> > desc_extra doesn't contain buffer length for the case of indirect
-> > descriptors. So we need to iterate in the descriptors when it looks
-> > expensive if we don't need unmap.
-> >
-> > Thanks
-> >
-> > >
-> > > For drivers that do unmap at driver level - I guess they can do
-> > > validation there too.
-> > >
-> > > > Validation in virtio core is still necessary since they're
-> > > > working at different levels and it's hard to force the validation in
-> > > > all drivers by codes. Last version introduces a
-> > > > suppress_driver_validation to allow the driver to suppress the core
-> > > > validation which seems not good, we need a way to force the
-> > > > virtio_ring code to do validation before.
-> > >
-> > > Why do we? If driver validates length virtio_ring does not need to
-> > > validate.
-> 
-> To be more safe, there's no guarantee that there's no bug in the driver.
+As some arch(m68k for example) doesn't have config_pci enabled, drivers[1]
+call pci_clear_master() without config_pci guard can not pass compile test.
 
-Extra options increase testing matrix size so - there be bugs.
-We need to make these decisions for (most) users.
+   drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:
+   In function 'etnaviv_gpu_pci_fini':
+>> drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:32:9:
+   error: implicit declaration of function 'pci_clear_master';
+   did you mean 'pci_set_master'? [-Werror=implicit-function-declaration]
+      32 |         pci_clear_master(pdev);
+         |         ^~~~~~~~~~~~~~~~
+         |         pci_set_master
+   cc1: some warnings being treated as errors
 
-> >  If driver does not use length virtio_ring does not need to
-> > > validate.
-> 
-> This could be done on top assuming the validation is disabled by
-> default. But if the administrator wants to have belt and braces we
-> need to leave an option for them.
-> 
-> Thanks
+[1] https://patchwork.freedesktop.org/patch/539977/?series=118522&rev=1
 
-No, we don't regress then fix on top.
-As for mod parameter I am not impressed -
-no one's going to have the time or inclination to do the requisite
-testing to know whether the module parameter is safe.
+V2:
+	* Adjust commit log style to meet the convention and add Fixes tag
 
-> > core can provide this service for the gazillion non
-> > > performance critical drivers that just want to keep things simple,
-> > > but the 4-5 critical ones can do their own validation if they want to.
-> > >
-> > > > Or such stuff could be added
-> > > > on top since the validation is by default anyway.
-> > > >
-> > > > Thanks
-> > >
-> > >
-> > >
-> > > > >
-> > > > >
-> > > > > > > I'd like to know the fate of VIRTIO_HARDEN_NOTIFICATION before
-> > > > > > > we do more hardening. If it's irrevocably broken let's rip it out?
-> > > > > >
-> > > > > > So the plan is
-> > > > > >
-> > > > > > 1) finish used ring validation (this had been proposed, merged and
-> > > > > > reverted before notification hardening)
-> > > > > > 2) do notification hardening on top.
-> > > > > >
-> > > > > > So let's leave it as is and I will do a rework after we finalize the
-> > > > > > used ring validation.
-> > > > > >
-> > > > > > Thanks
-> > > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > > > ---
-> > > > > > > > Changes since V4:
-> > > > > > > > - drop the flat for driver to suppress the check
-> > > > > > > > - validation is disabled by default
-> > > > > > > > - don't do validation for legacy device
-> > > > > > > > - rebase and support virtqueue resize
-> > > > > > > > ---
-> > > > > > > >  drivers/virtio/virtio_ring.c | 75 ++++++++++++++++++++++++++++++++++++
-> > > > > > > >  1 file changed, 75 insertions(+)
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > > > > > > > index 143f380baa1c..5b151605aaf8 100644
-> > > > > > > > --- a/drivers/virtio/virtio_ring.c
-> > > > > > > > +++ b/drivers/virtio/virtio_ring.c
-> > > > > > > > @@ -15,6 +15,9 @@
-> > > > > > > >  #include <linux/spinlock.h>
-> > > > > > > >  #include <xen/xen.h>
-> > > > > > > >
-> > > > > > > > +static bool force_used_validation = false;
-> > > > > > > > +module_param(force_used_validation, bool, 0444);
-> > > > > > > > +
-> > > > > > > >  #ifdef DEBUG
-> > > > > > > >  /* For development, we want to crash whenever the ring is screwed. */
-> > > > > > > >  #define BAD_RING(_vq, fmt, args...)                          \
-> > > > > > > > @@ -105,6 +108,9 @@ struct vring_virtqueue_split {
-> > > > > > > >       struct vring_desc_state_split *desc_state;
-> > > > > > > >       struct vring_desc_extra *desc_extra;
-> > > > > > > >
-> > > > > > > > +     /* Maximum in buffer length, NULL means no used validation */
-> > > > > > > > +     u32 *buflen;
-> > > > > > > > +
-> > > > > > > >       /* DMA address and size information */
-> > > > > > > >       dma_addr_t queue_dma_addr;
-> > > > > > > >       size_t queue_size_in_bytes;
-> > > > > > > > @@ -145,6 +151,9 @@ struct vring_virtqueue_packed {
-> > > > > > > >       struct vring_desc_state_packed *desc_state;
-> > > > > > > >       struct vring_desc_extra *desc_extra;
-> > > > > > > >
-> > > > > > > > +     /* Maximum in buffer length, NULL means no used validation */
-> > > > > > > > +     u32 *buflen;
-> > > > > > > > +
-> > > > > > > >       /* DMA address and size information */
-> > > > > > > >       dma_addr_t ring_dma_addr;
-> > > > > > > >       dma_addr_t driver_event_dma_addr;
-> > > > > > > > @@ -552,6 +561,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
-> > > > > > > >       unsigned int i, n, avail, descs_used, prev, err_idx;
-> > > > > > > >       int head;
-> > > > > > > >       bool indirect;
-> > > > > > > > +     u32 buflen = 0;
-> > > > > > > >
-> > > > > > > >       START_USE(vq);
-> > > > > > > >
-> > > > > > > > @@ -635,6 +645,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
-> > > > > > > >                                                    VRING_DESC_F_NEXT |
-> > > > > > > >                                                    VRING_DESC_F_WRITE,
-> > > > > > > >                                                    indirect);
-> > > > > > > > +                     buflen += sg->length;
-> > > > > > > >               }
-> > > > > > > >       }
-> > > > > > > >       /* Last one doesn't continue. */
-> > > > > > > > @@ -675,6 +686,10 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
-> > > > > > > >       else
-> > > > > > > >               vq->split.desc_state[head].indir_desc = ctx;
-> > > > > > > >
-> > > > > > > > +     /* Store in buffer length if necessary */
-> > > > > > > > +     if (vq->split.buflen)
-> > > > > > > > +             vq->split.buflen[head] = buflen;
-> > > > > > > > +
-> > > > > > > >       /* Put entry in available array (but don't update avail->idx until they
-> > > > > > > >        * do sync). */
-> > > > > > > >       avail = vq->split.avail_idx_shadow & (vq->split.vring.num - 1);
-> > > > > > > > @@ -861,6 +876,11 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
-> > > > > > > >               BAD_RING(vq, "id %u is not a head!\n", i);
-> > > > > > > >               return NULL;
-> > > > > > > >       }
-> > > > > > > > +     if (vq->split.buflen && unlikely(*len > vq->split.buflen[i])) {
-> > > > > > > > +             BAD_RING(vq, "used len %d is larger than max in buffer len %u\n",
-> > > > > > > > +                     *len, vq->split.buflen[i]);
-> > > > > > > > +             return NULL;
-> > > > > > > > +     }
-> > > > > > > >
-> > > > > > > >       /* detach_buf_split clears data, so grab it now. */
-> > > > > > > >       ret = vq->split.desc_state[i].data;
-> > > > > > > > @@ -1085,10 +1105,25 @@ static void vring_free_split(struct vring_virtqueue_split *vring_split,
-> > > > > > > >                        vring_split->queue_dma_addr,
-> > > > > > > >                        dma_dev);
-> > > > > > > >
-> > > > > > > > +     kfree(vring_split->buflen);
-> > > > > > > >       kfree(vring_split->desc_state);
-> > > > > > > >       kfree(vring_split->desc_extra);
-> > > > > > > >  }
-> > > > > > > >
-> > > > > > > > +static bool vring_needs_used_validation(const struct virtio_device *vdev)
-> > > > > > > > +{
-> > > > > > > > +     /*
-> > > > > > > > +      * Several legacy devices are known to produce buggy used
-> > > > > > > > +      * length. In order to let driver work, we won't validate used
-> > > > > > > > +      * buffer length in this case.
-> > > > > > > > +      */
-> > > > > > > > +     if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
-> > > > > > > > +             return false;
-> > > > > > > > +     if (force_used_validation)
-> > > > > > > > +             return true;
-> > > > > > > > +     return false;
-> > > > > > > > +}
-> > > > > > > > +
-> > > > > > > >  static int vring_alloc_queue_split(struct vring_virtqueue_split *vring_split,
-> > > > > > > >                                  struct virtio_device *vdev,
-> > > > > > > >                                  u32 num,
-> > > > > > > > @@ -1137,7 +1172,19 @@ static int vring_alloc_queue_split(struct vring_virtqueue_split *vring_split,
-> > > > > > > >       vring_split->vring_align = vring_align;
-> > > > > > > >       vring_split->may_reduce_num = may_reduce_num;
-> > > > > > > >
-> > > > > > > > +     if (vring_needs_used_validation(vdev)) {
-> > > > > > > > +             vring_split->buflen =
-> > > > > > > > +                     kmalloc_array(num, sizeof(*vring_split->buflen),
-> > > > > > > > +                                   GFP_KERNEL);
-> > > > > > > > +             if (!vring_split->buflen)
-> > > > > > > > +                     goto err_buflen;
-> > > > > > > > +     }
-> > > > > > > > +
-> > > > > > > >       return 0;
-> > > > > > > > +
-> > > > > > > > +err_buflen:
-> > > > > > > > +     vring_free_split(vring_split, vdev, dma_dev);
-> > > > > > > > +     return -ENOMEM;
-> > > > > > > >  }
-> > > > > > > >
-> > > > > > > >  static struct virtqueue *vring_create_virtqueue_split(
-> > > > > > > > @@ -1297,6 +1344,7 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
-> > > > > > > >       unsigned int i, n, err_idx;
-> > > > > > > >       u16 head, id;
-> > > > > > > >       dma_addr_t addr;
-> > > > > > > > +     u32 buflen = 0;
-> > > > > > > >
-> > > > > > > >       head = vq->packed.next_avail_idx;
-> > > > > > > >       desc = alloc_indirect_packed(total_sg, gfp);
-> > > > > > > > @@ -1325,6 +1373,8 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
-> > > > > > > >                       desc[i].addr = cpu_to_le64(addr);
-> > > > > > > >                       desc[i].len = cpu_to_le32(sg->length);
-> > > > > > > >                       i++;
-> > > > > > > > +                     if (n >= out_sgs)
-> > > > > > > > +                             buflen += sg->length;
-> > > > > > > >               }
-> > > > > > > >       }
-> > > > > > > >
-> > > > > > > > @@ -1379,6 +1429,10 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
-> > > > > > > >       vq->packed.desc_state[id].last = id;
-> > > > > > > >       vq->packed.desc_state[id].premapped = premapped;
-> > > > > > > >
-> > > > > > > > +     /* Store in buffer length if necessary */
-> > > > > > > > +     if (vq->packed.buflen)
-> > > > > > > > +             vq->packed.buflen[id] = buflen;
-> > > > > > > > +
-> > > > > > > >       vq->num_added += 1;
-> > > > > > > >
-> > > > > > > >       pr_debug("Added buffer head %i to %p\n", head, vq);
-> > > > > > > > @@ -1416,6 +1470,7 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
-> > > > > > > >       __le16 head_flags, flags;
-> > > > > > > >       u16 head, id, prev, curr, avail_used_flags;
-> > > > > > > >       int err;
-> > > > > > > > +     u32 buflen = 0;
-> > > > > > > >
-> > > > > > > >       START_USE(vq);
-> > > > > > > >
-> > > > > > > > @@ -1498,6 +1553,8 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
-> > > > > > > >                                       1 << VRING_PACKED_DESC_F_AVAIL |
-> > > > > > > >                                       1 << VRING_PACKED_DESC_F_USED;
-> > > > > > > >                       }
-> > > > > > > > +                     if (n >= out_sgs)
-> > > > > > > > +                             buflen += sg->length;
-> > > > > > > >               }
-> > > > > > > >       }
-> > > > > > > >
-> > > > > > > > @@ -1518,6 +1575,10 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
-> > > > > > > >       vq->packed.desc_state[id].last = prev;
-> > > > > > > >       vq->packed.desc_state[id].premapped = premapped;
-> > > > > > > >
-> > > > > > > > +     /* Store in buffer length if necessary */
-> > > > > > > > +     if (vq->packed.buflen)
-> > > > > > > > +             vq->packed.buflen[id] = buflen;
-> > > > > > > > +
-> > > > > > > >       /*
-> > > > > > > >        * A driver MUST NOT make the first descriptor in the list
-> > > > > > > >        * available before all subsequent descriptors comprising
-> > > > > > > > @@ -1718,6 +1779,11 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
-> > > > > > > >               BAD_RING(vq, "id %u is not a head!\n", id);
-> > > > > > > >               return NULL;
-> > > > > > > >       }
-> > > > > > > > +     if (vq->packed.buflen && unlikely(*len > vq->packed.buflen[id])) {
-> > > > > > > > +             BAD_RING(vq, "used len %d is larger than max in buffer len %u\n",
-> > > > > > > > +                     *len, vq->packed.buflen[id]);
-> > > > > > > > +             return NULL;
-> > > > > > > > +     }
-> > > > > > > >
-> > > > > > > >       /* detach_buf_packed clears data, so grab it now. */
-> > > > > > > >       ret = vq->packed.desc_state[id].data;
-> > > > > > > > @@ -1937,6 +2003,7 @@ static void vring_free_packed(struct vring_virtqueue_packed *vring_packed,
-> > > > > > > >                                vring_packed->device_event_dma_addr,
-> > > > > > > >                                dma_dev);
-> > > > > > > >
-> > > > > > > > +     kfree(vring_packed->buflen);
-> > > > > > > >       kfree(vring_packed->desc_state);
-> > > > > > > >       kfree(vring_packed->desc_extra);
-> > > > > > > >  }
-> > > > > > > > @@ -1988,6 +2055,14 @@ static int vring_alloc_queue_packed(struct vring_virtqueue_packed *vring_packed,
-> > > > > > > >
-> > > > > > > >       vring_packed->vring.num = num;
-> > > > > > > >
-> > > > > > > > +     if (vring_needs_used_validation(vdev)) {
-> > > > > > > > +             vring_packed->buflen =
-> > > > > > > > +                     kmalloc_array(num, sizeof(*vring_packed->buflen),
-> > > > > > > > +                                   GFP_KERNEL);
-> > > > > > > > +             if (!vring_packed->buflen)
-> > > > > > > > +                     goto err;
-> > > > > > > > +     }
-> > > > > > > > +
-> > > > > > > >       return 0;
-> > > > > > > >
-> > > > > > > >  err:
-> > > > > > > > --
-> > > > > > > > 2.25.1
-> > > > > > >
-> > > > >
-> > >
+Fixes: 6a479079c072 ("PCI: Add pci_clear_master() as opposite of pci_set_master()")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202305301659.4guSLavL-lkp@intel.com/
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+---
+ include/linux/pci.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index d0c19ff0c958..71c85380676c 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -1904,6 +1904,7 @@ static inline int pci_dev_present(const struct pci_device_id *ids)
+ #define pci_dev_put(dev)	do { } while (0)
+ 
+ static inline void pci_set_master(struct pci_dev *dev) { }
++static inline void pci_clear_master(struct pci_dev *dev) { }
+ static inline int pci_enable_device(struct pci_dev *dev) { return -EIO; }
+ static inline void pci_disable_device(struct pci_dev *dev) { }
+ static inline int pcim_enable_device(struct pci_dev *pdev) { return -EIO; }
+-- 
+2.25.1
 
