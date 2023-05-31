@@ -2,269 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5AF7187AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EFD7187AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjEaQm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 12:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33932 "EHLO
+        id S229816AbjEaQor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 12:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjEaQmy (ORCPT
+        with ESMTP id S229520AbjEaQop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 12:42:54 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041FA12C;
-        Wed, 31 May 2023 09:42:53 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64d44b198baso926101b3a.0;
-        Wed, 31 May 2023 09:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685551372; x=1688143372;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hp1iyYuSXGdZgXFgvFkqzrcL5409CMPQscypykwCUa0=;
-        b=qtpBDa4wfXFgH6cnSME8/dDLkC3F5WPDX7HhJ3E/ShmbLSFQJFmHm1Kak1DX3gwApi
-         AwELC0HkXlPQ59iLnDaV/e3JOjSCSdZyHrfAlHIHTdBaXhcgpASivcSzzL6uguzQvxXL
-         PSIwy3V7TMIQYlEQuZ9N9Fqrgm0vsX4RgVJ9QVlZ7wcGG9levJ1vJjAKaJbwsGiuFMRF
-         f+BoLkd2ng6ihAU+0Ig1w0LSXO2dhsLpoJbmLUuhaFymiReo9EdggLSZX6ECpWfj0GNp
-         jDyYklYxuYe6Hj0u+GQqlIhpgqYiFDdPLz1XFeR/LmiH9kfD+VJe7l1n095KNLlrrfUs
-         1VMg==
+        Wed, 31 May 2023 12:44:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA52512C
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:43:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685551438;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lgJIynadENNI5JgTITr0Ybs6dLu+mfBH2z5xrDQ5GuE=;
+        b=VP9M1XVA7o75uASbyp/rD+SxfhqSeQtUPFHTjCXtMHn8WiV83N6+unueuYq+YUoZMV4217
+        R2D94xU6FygmGLoeaa+mrSKFb6U2Z24xR6HVAHYA6YgFhgFt7t5rpYtoRNed9aSMa0Bh+h
+        UPa+NIONFP+8VSkoheCSG6ICursh6kA=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-644-g35xBTJyM4uG0YSLv_CZbA-1; Wed, 31 May 2023 12:43:57 -0400
+X-MC-Unique: g35xBTJyM4uG0YSLv_CZbA-1
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-53ba38cf091so699338a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:43:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685551372; x=1688143372;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hp1iyYuSXGdZgXFgvFkqzrcL5409CMPQscypykwCUa0=;
-        b=JhiL+hSIycd44NxobC2RBgCZH7+G/HrkIfsHUHxanwZSltQwM8Q0CwnGAuuvZr5SeG
-         yQsc4w+mQFayy/zZrGkKK0FPpezQtIJK4c7c1k7W5y/XD1e7jcszctGowqF49jKaVGmM
-         4+IqTDaapkbIBnkJPgF6425RTn96RhU/9puPo/dX9CL80HjZ1bbXQUNG9teonL7kIMrA
-         4PoTfx3/moLnhSGihuPxpVeOpofMBYqgMU2xgyPMITW2m8Wikj82xzCb74fRq5QE8uQF
-         kMqgb+ufpM4bpR1V8slU2Dk7yYBG4tvsHS4+4t3CL+locuUdtGxDNfW1lfTv5voEa5ua
-         dUcw==
-X-Gm-Message-State: AC+VfDy4L7r7BwhcgKEKG5AofxdOjuScX0DgMuVrs3xsEu1BV9KPQLZe
-        A3oA1kVE6liHBCNEvGHIzOU=
-X-Google-Smtp-Source: ACHHUZ42qUfIN6ffalR9gqA9UAUPucFU/LVgXATHaxj44L16PTCJII+lWPKCm+NCxM1ASwC5MshzTw==
-X-Received: by 2002:a05:6a00:1509:b0:5a8:9858:750a with SMTP id q9-20020a056a00150900b005a89858750amr6846557pfu.13.1685551372220;
-        Wed, 31 May 2023 09:42:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l6-20020a654486000000b0050927cb606asm1388351pgq.13.2023.05.31.09.42.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 09:42:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <07b2a2f7-5ddc-0f10-6b1f-184dc21fa580@roeck-us.net>
-Date:   Wed, 31 May 2023 09:42:48 -0700
+        d=1e100.net; s=20221208; t=1685551436; x=1688143436;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lgJIynadENNI5JgTITr0Ybs6dLu+mfBH2z5xrDQ5GuE=;
+        b=ihmUXwj1UYG8D1gL/KCSLVFKQfI35bnFAo5Jo97HwclV0iV65Yf8+eGunAVfQ3mT8B
+         2FifRVBA3lLKty0bRlqq1S39q4xXF52rYXKa2asCaqBi926cQTUy7GFYQyY7zEZxElJ3
+         zcfKOkMTBkcKPH+jWaD2AEnQP5rMsnvYR46cl3k+HjlrxOulKkPXCMQ5N0XNBcyt0KOO
+         ZX3tRdDQLXiQW7tgM5cRbg1OnsyAEGIY0TDzhaLwsxWBXanLeY2RB4JqE94IxGuI9sJp
+         nwQthPX0cP0GfclVUAds9Yji5aE1WpwKAHoAnQRm1UYZZ9yNmWMUoTqZVmnO9vVwhv+v
+         YmiA==
+X-Gm-Message-State: AC+VfDwTDJfOFMZwCZEv6+VRJy/76mQ2ymO4D+pp1/qqA6wtpuc8Wbng
+        qGSa7f6Ji8FzYXuBnKlw/U32g7nhQOULBfhShVJe/zvjb7SjPSJvVb8X+Ip7+Qr3nToDnqwPW25
+        dUmhrid9C6vdWiZYxlWAzz5TqRwmQsASr
+X-Received: by 2002:a17:903:1d0:b0:1ae:6947:e63b with SMTP id e16-20020a17090301d000b001ae6947e63bmr6467056plh.16.1685551436508;
+        Wed, 31 May 2023 09:43:56 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7E8PuLFTLBPGRmNCPh/iK1sSxImI98JXVOJn/SUh70PxBGeJVa7PyQkqWJAjeXQSFddH31tQ==
+X-Received: by 2002:a17:903:1d0:b0:1ae:6947:e63b with SMTP id e16-20020a17090301d000b001ae6947e63bmr6467038plh.16.1685551436129;
+        Wed, 31 May 2023 09:43:56 -0700 (PDT)
+Received: from localhost.localdomain ([240d:1a:c0d:9f00:ca6:1aff:fead:cef4])
+        by smtp.gmail.com with ESMTPSA id ik8-20020a170902ab0800b001ae0152d280sm1608192plb.193.2023.05.31.09.43.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 09:43:55 -0700 (PDT)
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shigeru Yoshida <syoshida@redhat.com>
+Subject: [PATCH] scsi: sr: Fix a potential uninit-value in sr_get_events()
+Date:   Thu,  1 Jun 2023 01:43:46 +0900
+Message-Id: <20230531164346.118438-1-syoshida@redhat.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     nick.hawkins@hpe.com, verdun@hpe.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jdelvare@suse.com,
-        andy.shevchenko@gmail.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-References: <20230531151918.105223-1-nick.hawkins@hpe.com>
- <20230531151918.105223-5-nick.hawkins@hpe.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 4/5] hwmon: (gxp_fan_ctrl) Provide fan info via gpio
-In-Reply-To: <20230531151918.105223-5-nick.hawkins@hpe.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/23 08:19, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> The fan driver now receives fan data from GPIO via a shared variable.
+KMSAN found the following issue:
 
-No, it is not necessary. The driver can and should get the GPIO data using
-the gpio API.
+ BUG: KMSAN: uninit-value in sr_check_events+0x365/0x1460
+  sr_check_events+0x365/0x1460
+  cdrom_check_events+0x66/0x170
+  sr_block_check_events+0xf2/0x130
+  disk_check_events+0xec/0x900
+  bdev_check_media_change+0x2a6/0x7d0
+  sr_block_open+0x154/0x320
+  blkdev_get_whole+0xa8/0x6c0
+  blkdev_get_by_dev+0x50f/0x1200
+  blkdev_open+0x215/0x430
+  do_dentry_open+0xfbd/0x19a0
+  vfs_open+0x7b/0xa0
+  path_openat+0x4a54/0x5b40
+  do_filp_open+0x24d/0x660
+  do_sys_openat2+0x1f0/0x910
+  __x64_sys_openat+0x2b4/0x330
+  do_syscall_64+0x41/0xc0
+  entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-> This is a necessity as the Host and the driver need access to the same
-> information. Part of the changes includes removing a system power check
-> as the GPIO driver needs it to report power state to host.
-> 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> ---
-> 
-> v2:
->   *Removed use of shared functions to GPIO in favor of a shared variable
->   *Added build dependency on GXP GPIO driver.
-> ---
->   drivers/hwmon/Kconfig        |  2 +-
->   drivers/hwmon/gxp-fan-ctrl.c | 61 +++++-------------------------------
->   drivers/hwmon/gxp-gpio.h     | 13 ++++++++
->   3 files changed, 21 insertions(+), 55 deletions(-)
->   create mode 100644 drivers/hwmon/gxp-gpio.h
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 5b3b76477b0e..5c606bea31f9 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -716,7 +716,7 @@ config SENSORS_GPIO_FAN
->   
->   config SENSORS_GXP_FAN_CTRL
->   	tristate "HPE GXP fan controller"
-> -	depends on ARCH_HPE_GXP || COMPILE_TEST
-> +	depends on (ARCH_HPE_GXP  && GPIO_GXP_PL) || COMPILE_TEST
+ Local variable sshdr.i created at:
+  sr_check_events+0x131/0x1460
+  cdrom_check_events+0x66/0x170
 
-Compile test will fail badly unless those external variables
-are declared.
+sr_get_events() can access uninitialized local variable sshdr when
+scsi_execute_cmd() returns error.  This patch fixes the issue by
+checking the result before accessing sshdr.
 
+Fixes: 93aae17af117 ("sr: implement sr_check_events()")
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+---
+ drivers/scsi/sr.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
->   	help
->   	  If you say yes here you get support for GXP fan control functionality.
->   
-> diff --git a/drivers/hwmon/gxp-fan-ctrl.c b/drivers/hwmon/gxp-fan-ctrl.c
-> index 0014b8b0fd41..8555231328d7 100644
-> --- a/drivers/hwmon/gxp-fan-ctrl.c
-> +++ b/drivers/hwmon/gxp-fan-ctrl.c
-> @@ -1,5 +1,5 @@
->   // SPDX-License-Identifier: GPL-2.0-only
-> -/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P. */
-> +/* Copyright (C) 2023 Hewlett-Packard Enterprise Development Company, L.P. */
->   
->   #include <linux/bits.h>
->   #include <linux/err.h>
-> @@ -8,51 +8,28 @@
->   #include <linux/module.h>
->   #include <linux/of_device.h>
->   #include <linux/platform_device.h>
-> +#include "gxp-gpio.h"
->   
->   #define OFS_FAN_INST	0 /* Is 0 because plreg base will be set at INST */
->   #define OFS_FAN_FAIL	2 /* Is 2 bytes after base */
-> -#define OFS_SEVSTAT	0 /* Is 0 because fn2 base will be set at SEVSTAT */
-> -#define POWER_BIT	24
->   
->   struct gxp_fan_ctrl_drvdata {
-> -	void __iomem	*base;
-> -	void __iomem	*plreg;
-> -	void __iomem	*fn2;
-> +	void __iomem *base;
->   };
->   
->   static bool fan_installed(struct device *dev, int fan)
->   {
-> -	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
-> -	u8 val;
-> -
-> -	val = readb(drvdata->plreg + OFS_FAN_INST);
-> -
-> -	return !!(val & BIT(fan));
-> +	return !!(fan_presence & BIT(fan));
->   }
->   
->   static long fan_failed(struct device *dev, int fan)
->   {
-> -	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
-> -	u8 val;
-> -
-> -	val = readb(drvdata->plreg + OFS_FAN_FAIL);
-> -
-> -	return !!(val & BIT(fan));
-> +	return !!(fan_fail & BIT(fan));
->   }
->   
->   static long fan_enabled(struct device *dev, int fan)
->   {
-> -	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
-> -	u32 val;
-> -
-> -	/*
-> -	 * Check the power status as if the platform is off the value
-> -	 * reported for the PWM will be incorrect. Report fan as
-> -	 * disabled.
-> -	 */
-> -	val = readl(drvdata->fn2 + OFS_SEVSTAT);
-> -
-> -	return !!((val & BIT(POWER_BIT)) && fan_installed(dev, fan));
-> +	return !!(fan_installed(dev, fan));
-
-Unnecessary () around function call.
-
->   }
->   
->   static int gxp_pwm_write(struct device *dev, u32 attr, int channel, long val)
-> @@ -98,20 +75,8 @@ static int gxp_fan_read(struct device *dev, u32 attr, int channel, long *val)
->   static int gxp_pwm_read(struct device *dev, u32 attr, int channel, long *val)
->   {
->   	struct gxp_fan_ctrl_drvdata *drvdata = dev_get_drvdata(dev);
-> -	u32 reg;
->   
-> -	/*
-> -	 * Check the power status of the platform. If the platform is off
-> -	 * the value reported for the PWM will be incorrect. In this case
-> -	 * report a PWM of zero.
-> -	 */
-> -
-> -	reg = readl(drvdata->fn2 + OFS_SEVSTAT);
-> -
-> -	if (reg & BIT(POWER_BIT))
-> -		*val = fan_installed(dev, channel) ? readb(drvdata->base + channel) : 0;
-> -	else
-> -		*val = 0;
-> +	*val = fan_installed(dev, channel) ? readb(drvdata->base + channel) : 0;
->   
->   	return 0;
->   }
-> @@ -212,18 +177,6 @@ static int gxp_fan_ctrl_probe(struct platform_device *pdev)
->   		return dev_err_probe(dev, PTR_ERR(drvdata->base),
->   				     "failed to map base\n");
->   
-> -	drvdata->plreg = devm_platform_ioremap_resource_byname(pdev,
-> -							       "pl");
-> -	if (IS_ERR(drvdata->plreg))
-> -		return dev_err_probe(dev, PTR_ERR(drvdata->plreg),
-> -				     "failed to map plreg\n");
-> -
-> -	drvdata->fn2 = devm_platform_ioremap_resource_byname(pdev,
-> -							     "fn2");
-> -	if (IS_ERR(drvdata->fn2))
-> -		return dev_err_probe(dev, PTR_ERR(drvdata->fn2),
-> -				     "failed to map fn2\n");
-> -
->   	hwmon_dev = devm_hwmon_device_register_with_info(&pdev->dev,
->   							 "hpe_gxp_fan_ctrl",
->   							 drvdata,
-> diff --git a/drivers/hwmon/gxp-gpio.h b/drivers/hwmon/gxp-gpio.h
-> new file mode 100644
-> index 000000000000..88abe60bbe83
-> --- /dev/null
-> +++ b/drivers/hwmon/gxp-gpio.h
-> @@ -0,0 +1,13 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/* Copyright (C) 2023 Hewlett-Packard Enterprise Development Company, L.P. */
-> +
-> +#ifndef __GPIO_GXP_H__
-> +#define __GPIO_GXP_H__
-> +
-> +#include <linux/err.h>
-> +
-> +/* Data provided by GPIO */
-> +extern u8 fan_presence;
-> +extern u8 fan_fail;
-> +
-
-This is not acceptable. It is way too generic for a global variable, and it
-does not use the gpio API. Besides, the variables would have to be declared
-in an include file associated with the code introducing them.
-
-If you want to use gpio pins in the hwmon driver, use the gpio API
-([devm_]gpiod_get() and associated functions). There are lots of examples
-in the kernel showing how to do that.
-
-Guenter
-
-> +#endif /* __GPIO_GXP_H__ */
+diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
+index 12869e6d4ebd..86b43c069a44 100644
+--- a/drivers/scsi/sr.c
++++ b/drivers/scsi/sr.c
+@@ -177,10 +177,13 @@ static unsigned int sr_get_events(struct scsi_device *sdev)
+ 
+ 	result = scsi_execute_cmd(sdev, cmd, REQ_OP_DRV_IN, buf, sizeof(buf),
+ 				  SR_TIMEOUT, MAX_RETRIES, &exec_args);
++	if (result)
++		return 0;
++
+ 	if (scsi_sense_valid(&sshdr) && sshdr.sense_key == UNIT_ATTENTION)
+ 		return DISK_EVENT_MEDIA_CHANGE;
+ 
+-	if (result || be16_to_cpu(eh->data_len) < sizeof(*med))
++	if (be16_to_cpu(eh->data_len) < sizeof(*med))
+ 		return 0;
+ 
+ 	if (eh->nea || eh->notification_class != 0x4)
+-- 
+2.39.0
 
