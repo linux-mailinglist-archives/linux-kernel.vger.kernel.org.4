@@ -2,130 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB0471898C
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 050F6718991
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjEaSrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 14:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
+        id S230024AbjEaSso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 14:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjEaSrr (ORCPT
+        with ESMTP id S230017AbjEaSsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 14:47:47 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B21E132
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:47:45 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51458187be1so124475a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:47:45 -0700 (PDT)
+        Wed, 31 May 2023 14:48:35 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EDF133
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:48:34 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51494659d49so112678a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:48:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685558864; x=1688150864;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=57q4TdWvHlrEcIXeoi1W6gK5/9KE0SGJz/XNivOKPnk=;
-        b=oilRIHPnW2cKnSn+LS9AcMaGyPgbofIVDMmLVDknuvY7DrITlUY34BXtCpgQgCYiIM
-         /J1nY4WezjqAjMPOwSeq9pSDIVCD80AhJL4dlDFKI5RNcnWIn24TDlN8K6LASJ4ntUba
-         YjprkdTZEpRW0STsJhGyBCIbRvIgHKOyuBP5wWhym2AH+s7KAQrJjxHQau+fywgxIvk0
-         XCI7em/WbhCSiqLL0ffAIn8Rw2GnCj3L3wjUsL1xbnxZrINd8bMcxDSDB6kImuHe3hon
-         +qbotEqVxhHKsc20Ey/mIt3hsAi1U6F4owY3hNPpoQEMRFLq701/C8+TvNepKEmWFTsx
-         oexg==
+        d=linux-foundation.org; s=google; t=1685558912; x=1688150912;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G4X30oNDcGuw9SVg09/maVlh6cvqQ6J+4aW32/Zd99o=;
+        b=JN5NwAwy6tGgJI9UABktNapr3ikCOFG8l39Yt9iJMRFeGTh9xfZHTa+SrVVUVGmtpe
+         qunDYxEB8PuYFguPDk2mmJm0oP3X1+REOBX1c4U1S4cRCGm+B9QrhPFofyPt35QFTQh5
+         SLvOUNXj+M7PZaAKVTXTZ9QrBrk1ZNUtIlO60=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685558864; x=1688150864;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=57q4TdWvHlrEcIXeoi1W6gK5/9KE0SGJz/XNivOKPnk=;
-        b=E5iSrdw+XXE0KLK5pMMfUjyrJBcSuX4IP4Ss2uIoGGA/jWiuSvz09vEwLAWhaflIQl
-         O50vDiPJgt6aWul0H4F4em3yHwnWKUTHc5PgulN/0+jUHbVMgvMYna6EbXJdpZ+tmblN
-         moscZoE13xAk6KKSxETQ8Fop9lU9RVgsA0T5TH3XCf+hJq6p3mFb50sLv5qd3NdULKIH
-         Fly9/1WX5YkmAFFod8mRBkpC7Au4sKd7RlGQg2l8oYPQtHG0k7ceQDV8aagAja6i3Nu0
-         0rnVJu+qUPNNKXJiSEgvA5QvAU2SQsMRhEmBQEb5VeGrznVihlkgrMpvdCEnl8crsM+n
-         lmBA==
-X-Gm-Message-State: AC+VfDz9lU0MLQBdhS72Bng4Im57v6Vw7R/7ylZUVE0x91fSZnqmc0A/
-        Ygoug2286zW9B5DL66pkFC88xQ==
-X-Google-Smtp-Source: ACHHUZ5OHEWC/l7SwXXG0Ex4UcYj5G95i7V5T07Yf+NXLS4ZzBYzSv6/qXcHJtcqP3+UJEQM/h4YDQ==
-X-Received: by 2002:a17:907:7dab:b0:970:1bc9:2eeb with SMTP id oz43-20020a1709077dab00b009701bc92eebmr6064275ejc.30.1685558863716;
-        Wed, 31 May 2023 11:47:43 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id lv17-20020a170906bc9100b0095707b7dd04sm9258501ejb.42.2023.05.31.11.47.42
+        d=1e100.net; s=20221208; t=1685558912; x=1688150912;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G4X30oNDcGuw9SVg09/maVlh6cvqQ6J+4aW32/Zd99o=;
+        b=GE7AKweNIrm3oqgjBGH5jkRGvWAseFub4MgSTf6JNH+UMN08tIAhS8x8RfUii48QL3
+         aTGtL8K4k2dmdO2fAbKSkOH2UwDghwzu1U9rwDbkmV3T2+w8dCmzLJ40f11d4utuCFYf
+         khRbwoQv4Uq9qiECI3JFwnK6h0NJmoHDM8O8ASBBf5zRaZtlY79EqK03SmvjNi555kEz
+         R3i6wlOGL+P2hMLdfTVcrslc3SWTCa/fBB96dHmIMEoHzXBSLYRQNiaguMNSgGl8LS0E
+         tcT80FApYurN2DFuxZkOJr1t1MJ168YSSYMdljpKJ2OOzApKGyggcBDWdDoj7FhDd+3l
+         jD1w==
+X-Gm-Message-State: AC+VfDwEY1QvYM0O/hcRExgtOYR0RDxLdG4ekTM5Sit3e8axHJisu82Z
+        BDzSFu69nKXpLBd2bMZoX17oQ6WtZo2K/uqSpP3ix650
+X-Google-Smtp-Source: ACHHUZ6okCRcGtbxECXFnWu6DS/TO2bkjTIqAWfac9vPsGy9f7lBVgiE3ezV1rjxQEVvs5ONI/FuXQ==
+X-Received: by 2002:a17:907:8a0b:b0:974:1c90:a520 with SMTP id sc11-20020a1709078a0b00b009741c90a520mr6407651ejc.1.1685558912375;
+        Wed, 31 May 2023 11:48:32 -0700 (PDT)
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
+        by smtp.gmail.com with ESMTPSA id h21-20020a170906829500b0096f92293e02sm9391625ejx.21.2023.05.31.11.48.31
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 11:47:43 -0700 (PDT)
-Message-ID: <25d61668-0b79-8565-0de8-dad7e80e3798@linaro.org>
-Date:   Wed, 31 May 2023 20:47:41 +0200
+        Wed, 31 May 2023 11:48:31 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-96fb45a5258so1067925666b.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:48:31 -0700 (PDT)
+X-Received: by 2002:a17:907:9609:b0:947:335f:5a0d with SMTP id
+ gb9-20020a170907960900b00947335f5a0dmr6616481ejc.62.1685558911012; Wed, 31
+ May 2023 11:48:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 04/11] dt-bindings: stm32: add st,stm32mp25 compatibles to
- the stm32 family
-Content-Language: en-US
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Conor Dooley <conor@kernel.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Conor Dooley <conor+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
- <20230529162034.20481-5-alexandre.torgue@foss.st.com>
- <20230529-backlit-dealing-b099e4eb5210@spud>
- <c805cd5f-92b1-eb56-d9bc-66814705e848@foss.st.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c805cd5f-92b1-eb56-d9bc-66814705e848@foss.st.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <000000000000030b7e05f7b9ac32@google.com> <00000000000040020d05fcf58ebf@google.com>
+In-Reply-To: <00000000000040020d05fcf58ebf@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 31 May 2023 14:48:14 -0400
+X-Gmail-Original-Message-ID: <CAHk-=wjqv_dAd55m31fJk=6FAy1+=556L9y8eAOB92RstWy6_Q@mail.gmail.com>
+Message-ID: <CAHk-=wjqv_dAd55m31fJk=6FAy1+=556L9y8eAOB92RstWy6_Q@mail.gmail.com>
+Subject: Re: [syzbot] [ntfs3?] WARNING in attr_data_get_block (2)
+To:     syzbot <syzbot+a98f21ebda0a437b04d7@syzkaller.appspotmail.com>
+Cc:     almaz.alexandrovich@paragon-software.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 10:39, Alexandre TORGUE wrote:
-> Hi Conor
-> 
-> On 5/29/23 20:05, Conor Dooley wrote:
->> On Mon, May 29, 2023 at 06:20:27PM +0200, Alexandre Torgue wrote:
->>> STM32 family is extended by the addition of the STM32MP25 SoCs. It is composed
->>> of 4 SoCs: STM32MP251, STM32MP253, STM32MP255 and STM32MP257.
->>>
->>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
->>>
->>> diff --git a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
->>> index 4af5b8f4f803..7d7ca33d2e61 100644
->>> --- a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
->>> +++ b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
->>> @@ -161,6 +161,15 @@ properties:
->>>             - const: phytec,phycore-stm32mp157c-som
->>>             - const: st,stm32mp157
->>>   
->>> +      - items:
->>> +          - const: st,stm32mp251
->>> +      - items:
->>> +          - const: st,stm32mp253
->>> +      - items:
->>> +          - const: st,stm32mp255
->>> +      - items:
->>> +          - const: st,stm32mp257
->>
->> I assume the slightly odd format is just to avoid churn when adding
->> the board compatibles.
-> 
-> Yes, exactly.
-> 
+On Wed, May 31, 2023 at 12:14=E2=80=AFAM syzbot
+<syzbot+a98f21ebda0a437b04d7@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+>
+> commit 68674f94ffc9dddc45e7733963ecc35c5eda9efd
+>     x86: don't use REP_GOOD or ERMS for small memory copies
 
-I don't get it. How are you going to extend it? Or rather - what are you
-documenting here? If these are SoCs, then this is not valid. We do not
-allow these alone.
+That sounds very unlikely.
 
-No, please drop it.
+While we had another similar issue where not using REP_GOOD or ERMS
+for user space clearing fixes a bug, that one failed by having
+clear_user() oops instead of handling the right exception.
 
-Best regards,
-Krzysztof
+In that case the commit really did fix things, even if it was just by
+pure luck, and removing buggy code.
 
+But this one seems to have a failure case that has nothing to do with
+exception handling, and I don't think that commit actually fixes any
+semantic bug. I suspect the bisection was not entirely repeatable,
+and/or might have been timing-dependent, and that the bisection thus
+ended up on a random unrelated commit.
+
+               Linus
