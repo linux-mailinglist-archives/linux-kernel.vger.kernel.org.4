@@ -2,127 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E69718A96
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 293F1718A97
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjEaTzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 15:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
+        id S230031AbjEaTzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 15:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjEaTzP (ORCPT
+        with ESMTP id S229913AbjEaTzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 15:55:15 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACA99D;
-        Wed, 31 May 2023 12:55:15 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VJgkmS017064;
-        Wed, 31 May 2023 19:55:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=2xUay5QeXTlatgGE6j8ek7NctWRMFPH65lsOBOP3k98=;
- b=l+DYKdd0IyRgowx7opNB4V9H8AGQ0dH2/OApbH19pToUlK1EBIkWLCmu9US/wFhd9Hba
- 67D5wpTlIwwjdQ3MMGIIjV2ziQI5Gzs1J4X/owR5+d79tXQm3nl1N9A0zFB2tYtME3iq
- +J3TggCRAuOM2zFIhSPq2THl5IzxJWhEDCqBTUfv5ZiCLOul0LfnnLo88mWy35flc9xa
- cS2CF32CRpjnLEbPVeHuFyNKbXOA0KMElw4+EnOTNkMG1d+Plh3+7CmMa7QekhV8sT/O
- TtmHurNwbwENs55dB4/DXN+sHqli1YpCBmJDHFzUeZJ/kc1TdSZnapBRqQQzbC5yeNDl wA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qx30f9h07-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 19:54:41 +0000
-Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34VJsei4026527;
-        Wed, 31 May 2023 19:54:40 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTP id 3quaxm8yaq-1;
-        Wed, 31 May 2023 19:54:40 +0000
-Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34VJseRn026522;
-        Wed, 31 May 2023 19:54:40 GMT
-Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTP id 34VJse6e026520;
-        Wed, 31 May 2023 19:54:40 +0000
-Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
-        id 0B96E20E4A; Wed, 31 May 2023 12:54:40 -0700 (PDT)
-From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
-To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>
-Subject: [PATCH] usb: dwc3: Skip TRBs while removing requests in disconnect path
-Date:   Wed, 31 May 2023 12:54:31 -0700
-Message-Id: <1685562871-17024-1-git-send-email-quic_eserrao@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: lgQEWHqD0ojYAbPBiN_I_3aHgm_xGYc1
-X-Proofpoint-ORIG-GUID: lgQEWHqD0ojYAbPBiN_I_3aHgm_xGYc1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_14,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 mlxscore=0 malwarescore=0 adultscore=0 bulkscore=0
- mlxlogscore=634 phishscore=0 suspectscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305310169
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 31 May 2023 15:55:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA92185
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:55:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32DBE617E7
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 19:55:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A45A3C433EF;
+        Wed, 31 May 2023 19:55:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685562926;
+        bh=K6BiB4d4pwh5l5fEvqg5HdsW+2/SZ5ha4oA58FNbVQ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JuSCt7/41WoHCLlFavs2RXRxmldBL7Ykn9PLKEI5mTlSq8J8r3pTx9GA6RlHeXPHs
+         Bs7j3d47LzA6lzpLmKw49dzEsf0GHytMnrsv6BBfUSM0ou+i6s3zAz7/bUEIKf+edU
+         9ETJeJF8nBvARAe8pp4O9agqKhDGNPCh3pBNUzDIkPWSWgKa8CdBsMHBH3BNV/fMWG
+         v8iuohJNe6KusvYI9dmcvVVyTq7z+fjUFHwk+26RGP41wNFB2J7hcZRPiokWcBTYS2
+         JHgziIzlZDrcsqgATpaEjbzvteIxpIDZ7bWbH8O+yYHtPFGuqU1Td4rWl8EfQHGRHy
+         vxeSinydRSACg==
+Date:   Wed, 31 May 2023 22:54:54 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Song Liu <song@kernel.org>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        mcgrof@kernel.org, peterz@infradead.org, tglx@linutronix.de,
+        x86@kernel.org
+Subject: Re: [PATCH 0/3] Type aware module allocator
+Message-ID: <20230531195454.GB395338@kernel.org>
+References: <20230526051529.3387103-1-song@kernel.org>
+ <ZHGrjJ8PqAGN9OZK@moria.home.lan>
+ <CAPhsuW4DAwx=7Nta5HGiPTJ1LQJCGJGY3FrsdKi62f_zJbsRFQ@mail.gmail.com>
+ <20230529104530.GL4967@kernel.org>
+ <CAPhsuW6g98Wz9Oj1NiwwZ1OkSVNXX10USByY0b9tEfzOt8SVQg@mail.gmail.com>
+ <20230531135120.GA395338@kernel.org>
+ <CAPhsuW6r=0r0dKfKxwPp9KXqLSKWw4x6RrbNBnS=1M1Y1sh5Ag@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW6r=0r0dKfKxwPp9KXqLSKWw4x6RrbNBnS=1M1Y1sh5Ag@mail.gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Consider a scenario where cable disconnect happens when there is an active
-usb reqest queued to the UDC. As part of the disconnect we would issue an
-end transfer with no interrupt-on-completion before giving back this
-request. Since we are giving back the request without skipping TRBs the
-num_trbs field of dwc3_request still holds the stale value previously used.
-Function drivers re-use same request for a given bind-unbind session and
-hence their dwc3_request context gets preserved across cable
-disconnect/connect. When such a request gets re-queued after cable connect,
-we would increase the num_trbs field on top of the previous stale value
-thus incorrectly representing the number of TRBs used. Fix this by invoking
-skip_trbs() in the ep disable path.
+On Wed, May 31, 2023 at 10:03:58AM -0700, Song Liu wrote:
+> On Wed, May 31, 2023 at 6:51 AM Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> > On Tue, May 30, 2023 at 03:37:24PM -0700, Song Liu wrote:
+> > > On Mon, May 29, 2023 at 3:45 AM Mike Rapoport <rppt@kernel.org> wrote:
+> > > >
+> > > > On Sat, May 27, 2023 at 10:58:37PM -0700, Song Liu wrote:
+> > > > > On Sat, May 27, 2023 at 12:04 AM Kent Overstreet
+> > > > > <kent.overstreet@linux.dev> wrote:
+> > > > > >
+> > > > > > I think this needs to back to the drawing board and we need something
+> > > > > > simpler just targeted at executable memory; architecture specific
+> > > > > > options should definitely _not_ be part of the exposed interface.
+> > > > >
+> > > > > I don't think we are exposing architecture specific options to users.
+> > > > > Some layer need to handle arch specifics. If the new allocator is
+> > > > > built on top of module_alloc, module_alloc is handling that. If the new
+> > > > > allocator is to replace module_alloc, it needs to handle arch specifics.
+> > > >
+> > > > I'm for creating a new allocator that will replace module_alloc(). This
+> > > > will give us a clean abstraction that modules and all the rest will use and
+> > > > it will make easier to plug binpack or another allocator instead of
+> > > > vmalloc.
+> > > >
+> > > > Another point is with a new allocator we won't have weird dependencies on
+> > > > CONFIG_MODULE in e.g. bpf and kprobes.
+> > > >
+> > > > I'll have something ready to post as an RFC in a few days.
+> > >
+> > > I guess this RFC is similar to unmapped_alloc()? If it replaces
+> > > vmalloc, we can probably trim this set down a bit (remove
+> > > mod_alloc_params and vmalloc_params, etc.).
+> >
+> > No, it's not a new allocator. I'm trying to create an API for code
+> > allocations that can accommodate all the architectures and it won't be a
+> > part of modules code. The modules will use the new API just like every
+> > other subsystem that needs to allocate code.
+> >
+> > I've got a core part of it here:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=jitalloc/v1
+> 
+> This branch looks like the same scope as this set (but with different
+> implementation). So it will still use vmalloc, right?
 
-Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
----
- drivers/usb/dwc3/gadget.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Yes, it still uses vmalloc. The idea is to decouple code allocations from
+modules from one side and make it handle all the variants expected by the
+architectures based on a set of parameters each architecture provides.
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 578804d..b45e917 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -986,6 +986,8 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
- 	return 0;
- }
+The first few commits essentially shuffle the code around and replace
+arch::module_alloc() with arch::jit_alloc_params.
+
+The commits on top enable some bits that are not available today, like ROX
+executable memory and DYNAMIC_FTRACE without modules for x86.
  
-+static void dwc3_gadget_ep_skip_trbs(struct dwc3_ep *dep, struct dwc3_request *req);
-+
- void dwc3_remove_requests(struct dwc3 *dwc, struct dwc3_ep *dep, int status)
- {
- 	struct dwc3_request		*req;
-@@ -1000,6 +1002,7 @@ void dwc3_remove_requests(struct dwc3 *dwc, struct dwc3_ep *dep, int status)
- 	while (!list_empty(&dep->started_list)) {
- 		req = next_request(&dep->started_list);
- 
-+		dwc3_gadget_ep_skip_trbs(dep, req);
- 		dwc3_gadget_giveback(dep, req, status);
- 	}
- 
-@@ -1012,6 +1015,7 @@ void dwc3_remove_requests(struct dwc3 *dwc, struct dwc3_ep *dep, int status)
- 	while (!list_empty(&dep->cancelled_list)) {
- 		req = next_request(&dep->cancelled_list);
- 
-+		dwc3_gadget_ep_skip_trbs(dep, req);
- 		dwc3_gadget_giveback(dep, req, status);
- 	}
- }
+> Thanks,
+> Song
+
 -- 
-2.7.4
-
+Sincerely yours,
+Mike.
