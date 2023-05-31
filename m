@@ -2,89 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81AE9718812
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B47C718814
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjEaRHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S229475AbjEaRIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjEaRHu (ORCPT
+        with ESMTP id S230025AbjEaRH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:07:50 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00C91AD;
-        Wed, 31 May 2023 10:07:46 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-bad97da58adso6736455276.1;
-        Wed, 31 May 2023 10:07:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685552866; x=1688144866;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=76vg60iW/EsEINmD+Bil9N8BO8s1pVlIY0spf2KHpnw=;
-        b=AqFFPdnWQgjfaEVYQJhTRCZLbnnoP1T/OuVLPkM82QjyaLFvqLZkQvnLuFiUKznvbg
-         5mnVnDzBYCxL/hKfAytTdiJQOLdEgoCvVB6AsWcKlQhmLeM+4GvfhyiTSKwYPOLeHCCr
-         tKsAHo6lumCftCJDl3h3MmoFksS2OV/aCzedbK+fKrjLdgkBktemgwYem72t/j5R6V2U
-         dXvny0xVl+mUZs5tJWBoYgmrvu6ydBZH+L8ohdlnNwHbsfpSkJkkjqZOpjXj7C1UA6It
-         YihUAZcK76QDC7mPDkjbTJd7R2xdv95bumAe3vbat6Ttu/5QCDTK70W5HCpqe9JAsNCm
-         BEUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685552866; x=1688144866;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=76vg60iW/EsEINmD+Bil9N8BO8s1pVlIY0spf2KHpnw=;
-        b=lDdTVvoOEbB5VpsQbrhgGsqG2Cvqfj5KUOiDMdy01TjIMHVWvsjmTPmcElblPsuryX
-         XYw+nZ1qaxRTk8LIP6fCbF4lZnlIUS6lJZfl9JqNCulnI7xrTVr/tPE0txPaW7l6QYJO
-         XxNIY+eN6ZKnvZIg3i1TiAHf9WdALN7SCc3IqyXHu5cTtbQyPoH4BNEiQrwC9H65NdLS
-         5XGSjdny0YmP6RADE4fxyZ2wKFkGdyOdTaLQrx7EVu85pRNCZbHh1ye4y+cpy+6br/2j
-         ZwHWyweJ2trWvA9Yr0nkBNPtArqXqgjMRu/AtpzHFrAAvj9js0VM7Wh1EqSjn7NkQ9HP
-         ns7g==
-X-Gm-Message-State: AC+VfDx2/0d4F6ZfpaZbnp1FLV8M0aXATzUqCQa9ybhr/3l6x+YfF+uw
-        /pqux/K/4XP+c4ylx5X7dO7bDtJ9GSGwtixXbc4=
-X-Google-Smtp-Source: ACHHUZ4uqNma9e3+EYkNu8p5+bzGEjXLgfIeVC5PLIfPRxyx/cw9q8ArFbk7Z8GRYiv9JC2uWP48jpw4dudhtW6vhuA=
-X-Received: by 2002:a25:5087:0:b0:ba2:ca56:7206 with SMTP id
- e129-20020a255087000000b00ba2ca567206mr7209029ybb.17.1685552865848; Wed, 31
- May 2023 10:07:45 -0700 (PDT)
+        Wed, 31 May 2023 13:07:59 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00ADA18B;
+        Wed, 31 May 2023 10:07:53 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34VH7hpT043694;
+        Wed, 31 May 2023 12:07:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1685552863;
+        bh=tQX/X9ADA125sR0RTWyJnMsQq2TMFr67uEYkSDqfkEg=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Q9vXISPZM7JqonSwGUVxvvZuiNWvt4FThlvk1gUyDmTnEb475DrBhfuL5xZKBNwwK
+         ZLBFagHrhtFZTmnXnoHiJ0WbYIcapWAb03dZUOdnpJ/kt7TOKVH3YY1zaXTs7Yj/hl
+         ONPLHYyWg6PyYj9XeRQN6dzwRgwKtCV0wZGIWuzI=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34VH7hhl091496
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 31 May 2023 12:07:43 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 31
+ May 2023 12:07:43 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 31 May 2023 12:07:43 -0500
+Received: from [10.249.141.75] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34VH7c7J009279;
+        Wed, 31 May 2023 12:07:39 -0500
+Message-ID: <e25936b9-d85c-dfe8-0eb1-07b51fdfff1e@ti.com>
+Date:   Wed, 31 May 2023 22:37:38 +0530
 MIME-Version: 1.0
-References: <20230424081112.99890-1-benno.lossin@proton.me>
-In-Reply-To: <20230424081112.99890-1-benno.lossin@proton.me>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 31 May 2023 19:07:34 +0200
-Message-ID: <CANiq72=OFioNTZiVR+vBkYs2Xum6Pv14x4kwNDqxJB0utB2dyA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] rust: macros: fix usage of `#[allow]` in `quote!`
-To:     Benno Lossin <benno.lossin@proton.me>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 4/7] arm64: dts: ti: k3-j7200-mcu: Add mcu_secproxy
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>, Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nitin Yadav <n-yadav@ti.com>, Andrew Davis <afd@ti.com>
+References: <20230530165900.47502-1-nm@ti.com>
+ <20230530165900.47502-5-nm@ti.com>
+From:   "Kumar, Udit" <u-kumar1@ti.com>
+In-Reply-To: <20230530165900.47502-5-nm@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 10:11=E2=80=AFAM Benno Lossin <benno.lossin@proton.=
-me> wrote:
->
-> When using `quote!` as part of an expression that was not the last one
-> in a function, the `#[allow(clippy::vec_init_then_push)]` attribute
-> would be present on an expression, which is not allowed.
-> This patch refactors that part of the macro to use a statement instead.
->
-> Signed-off-by: Benno Lossin <benno.lossin@proton.me>
+Hi Nishanth
 
-Series applied to `rust-next` (with the newline added) -- thanks everyone!
+On 5/30/2023 10:28 PM, Nishanth Menon wrote:
+> MCU domain has it's own secure proxy for communicating with ROM and
+> for R5 micro controller firmware operations. This is in addition to
+> the one in the main domain NAVSS subsystem that is used for general
+> purpose communication.
+>
+> Describe the node for use with bootloaders and firmware that require
+> this communication path which uses interrupts to corresponding micro
+> controller interrupt controller. Mark the node as disabled since this
+> instance does not have interrupts routed to the main processor by
+> default for a complete description of the node.
+>
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+> New patch
+>
+>   arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi | 15 +++++++++++++++
+>   1 file changed, 15 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> index 674e695ef844..dff23b258240 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+> @@ -209,6 +209,21 @@ mcu_udmap: dma-controller@285c0000 {
+>   		};
+>   	};
+>   
+> +	secure_proxy_mcu: mailbox@2a480000 {
+I think, we should start name as  mailbox@2a380000
+> +		compatible = "ti,am654-secure-proxy";
+> +		#mbox-cells = <1>;
+> +		reg-names = "target_data", "rt", "scfg";
+> +		reg = <0x0 0x2a480000 0x0 0x80000>,
+> +		      <0x0 0x2a380000 0x0 0x80000>,
+> +		      <0x0 0x2a400000 0x0 0x80000>;
 
-Cheers,
-Miguel
+I think, we should have increasing order for reg. Unless there is some 
+strong reason to keep in this way.
+
+> +		/*
+> +		 * Marked Disabled:
+> +		 * Node is incomplete as it is meant for bootloaders and
+> +		 * firmware on non-MPU processors
+> +		 */
+> +		status = "disabled";
+> +	};
+> +
+>   	mcu_cpsw: ethernet@46000000 {
+>   		compatible = "ti,j721e-cpsw-nuss";
+>   		#address-cells = <2>;
