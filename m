@@ -2,289 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8D7717945
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E148717954
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234897AbjEaH6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S235110AbjEaH7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232520AbjEaH6M (ORCPT
+        with ESMTP id S234858AbjEaH64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:58:12 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA81D1703
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:57:47 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-96fab30d1e1so141142066b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:57:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685519866; x=1688111866;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qX3wCILele8uoAh+Ad7WZ/vlKQvPjoQ0nfu/yoKu41g=;
-        b=flD6sSA/TdOv3sMP5SAlv3GyMkxQsWff4xhE6fu7Q3oeRFc1ee1khC3Gj05ODRrkeq
-         lgrVlfyVHQS0H+ZtcYMJnM4z/vyY0zMKNMNgLdBodXDoT79fZHzjyXtNsr2luO7/h8iL
-         yrj10/PHT15jcZGajsUGBsdSkGziH3/fXYzbQVNPLjkWGCdmgQoK2CwqvIJby9YXL5na
-         XrNINK+LXN+/SvNW3QtD6enGR03KHF3aP2SgOmj3Sb2QlR+KF/ptTKtGxIXfaLMgQRTP
-         I2kcfJztOF5CuG1zWM0NYwPraM58lKIunij8sNtDHGL6j5DI+Si5hIDoYrrU6x+a9lgD
-         dsZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685519866; x=1688111866;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qX3wCILele8uoAh+Ad7WZ/vlKQvPjoQ0nfu/yoKu41g=;
-        b=l3zoCdIuI0VKjkvgayf/0q97+lIlq5DkLjRkuIR1pV/hvKBpuRxh+iaMmDkplbiDKr
-         1s3FD/8D1yvPTditruKmRkzAEMhN5OjdY860Z1Ooqgq6fAvQplPXZM7oeXke0WEUmYUY
-         S99b2HrfkJEXu+6BSkXpg5SfwvphmiH2VDICPrZYd3Le7ddoMyiqBC1Rf+iErofWhGXb
-         yHnZEM0jcYcN9BbV8+akZWaiV1njRQjBi+mgwp8Y1ulsoTLXWp2laNosce1jnqQCK0g4
-         Fvza5BpWFpjDMi4mV4lux9TzcFy7GvQUfN/gttooOls+edUnnRGdS1F3M45dWrMmupR1
-         tAFg==
-X-Gm-Message-State: AC+VfDxDflYsEIyCcOBy0S/TXmBMs7+LZnW+64m8T5x+O00N+gDwIU7O
-        Jyn/KznXyiPhlc/VQ+UGCse2nA==
-X-Google-Smtp-Source: ACHHUZ5fQqJmewtqVZHAJCN32Csc6ijmMvPanRmYM/zvlBubU9p9InzqP/N0Rr0hEZYtC/nYwJ5xbA==
-X-Received: by 2002:a17:907:1ca2:b0:953:834d:899b with SMTP id nb34-20020a1709071ca200b00953834d899bmr13078693ejc.29.1685519866366;
-        Wed, 31 May 2023 00:57:46 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id c19-20020a170906341300b00965f98eefc1sm8550340ejb.116.2023.05.31.00.57.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 00:57:45 -0700 (PDT)
-Message-ID: <80108a00-4416-a419-e45a-e5e4c1f111a8@linaro.org>
-Date:   Wed, 31 May 2023 09:57:43 +0200
+        Wed, 31 May 2023 03:58:56 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBCE183;
+        Wed, 31 May 2023 00:58:37 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5ae86a.dynamic.kabel-deutschland.de [95.90.232.106])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 3010B61DFA908;
+        Wed, 31 May 2023 09:57:55 +0200 (CEST)
+Message-ID: <da8aacb2-ec52-ed7a-8857-1cf89e7de751@molgen.mpg.de>
+Date:   Wed, 31 May 2023 09:57:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: thermal: mediatek: Move auxdac binding
- to yaml
+Subject: Re: [PATCH -next v3 6/7] md/raid1-10: don't handle pluged bio by
+ daemon thread
 Content-Language: en-US
-To:     matthias.bgg@kernel.org, rafael@kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     devicetree@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-References: <20230530150413.12918-1-matthias.bgg@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230530150413.12918-1-matthias.bgg@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     song@kernel.org, neilb@suse.de, akpm@osdl.org, xni@redhat.com,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
+References: <20230529131106.2123367-1-yukuai1@huaweicloud.com>
+ <20230529131106.2123367-7-yukuai1@huaweicloud.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230529131106.2123367-7-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 17:04, matthias.bgg@kernel.org wrote:
-> From: Matthias Brugger <matthias.bgg@gmail.com>
+Dear Yu,
+
+
+Thank you for your patch. Some minor nits in case you should resend this.
+
+In the summary/title it should be plug*g*ed.
+
+Am 29.05.23 um 15:11 schrieb Yu Kuai:
+> From: Yu Kuai <yukuai3@huawei.com>
 > 
-> Convert the older binding to yaml syntax.
+> current->bio_list will be set under submit_bio() context, in this case
+> bitmap io will be added to the list and wait for current io submission to
+
+1.  I’d use present tense: s/will be set/is set/; s/will be added/is added/
+2.  wait*s*
+
+> finish, while current io submission must wait for bitmap io to be done.
+> commit 874807a83139 ("md/raid1{,0}: fix deadlock in bitmap_unplug.") fix
+> the deadlock by handling plugged bio by daemon thread.
 > 
-> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+> On the one hand, the deadlock won't exist after commit a214b949d8e3
+> ("blk-mq: only flush requests from the plug in blk_mq_submit_bio"). On
+> the other hand, current solution makes it impossible to flush plugged bio
+> in raid1/10_make_request(), because this will cause that all the writes
+> will goto daemon thread.
+
+s/goto/go to/
+
+
+Kind regards,
+
+Paul
+
+
+> In order to limit the number of plugged bio, commit 874807a83139
+> ("md/raid1{,0}: fix deadlock in bitmap_unplug.") is reverted, and the
+> deadlock is fixed by handling bitmap io asynchronously.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 > ---
-> 
->  .../bindings/thermal/mediatek,thermal.yaml    | 168 ++++++++++++++++++
->  .../bindings/thermal/mediatek-thermal.txt     |  52 ------
->  2 files changed, 168 insertions(+), 52 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
->  delete mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
-> new file mode 100644
-> index 000000000000..7aa2bdc43567
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
-> @@ -0,0 +1,168 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/mediatek,thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek Thermal Sensor
-> +
-> +maintainers:
-> +  - Matthias Brugger <matthias.bgg@gmail.com>
-> +
-> +description: |
-> +  The MediaTek thermal controller measures the on-SoC temperatures.
-> +  This device does not have its own ADC, instead it directly controls
-> +  the AUXADC via AHB bus accesses. For this reason this device needs
-> +  phandles to the AUXADC. Also it controls a mux in the apmixedsys
-> +  register space via AHB bus accesses, so a phandle to the APMIXEDSYS
-> +  is also needed.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-> +          - mediatek,mt2701-thermal
-> +          - mediatek,mt2712-thermal
-> +          - mediatek,mt7622-thermal
-> +          - mediatek,mt7986-thermal
-> +          - mediatek,mt8173-thermal
-> +          - mediatek,mt8183-thermal
-> +          - mediatek,mt8365-thermal
-> +      - items:
-> +          - const: mediatek,mt7981-thermal
-> +          - const: mediatek,mt7986-thermal
-> +      - items:
-> +          - const: mediatek,mt8516-thermal
-> +          - const: mediatek,mt2701-thermal
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 2
+>   drivers/md/raid1-10.c | 14 ++++++++++++++
+>   drivers/md/raid1.c    |  4 ++--
+>   drivers/md/raid10.c   |  8 +++-----
+>   3 files changed, 19 insertions(+), 7 deletions(-)
 
-maxItems instead
-
-> +
-> +  clock-names:
-> +    items:
-> +      - const: therm
-> +      - const: auxadc
-> +
-> +  resets:
-> +    maxItems: 1
-> +    description: Reference to the reset controller controlling the thermal controller.
-
-You can drop description, it's obvious.
-
-> +
-> +  reset-names:
-> +    items:
-> +      - const: therm
-> +
-> +  nvmem-cells:
-> +    items:
-> +      - description: Calibration eFuse data. If unspecified default values are used.
-> +
-> +  nvmem-cell-names:
-> +    items:
-> +      - const: calibration-data
-> +
-> +  mediatek,auxadc:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      A phandle to the AUXADC which the thermal controller uses.
-> +
-> +  mediatek,apmixedsys:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      A phandle to the APMIXEDSYS controller.
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +  bank0-supply:
-> +    description: Regulator node supplying voltage to the first bank
-> +
-> +  bank1-supply:
-> +    description: Regulator node supplying voltage to the second bank
-
-These were not present before. Mention this in commit msg. Also drop "node".
-
-> +
-> +
-
-Just one blank line.
-
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - mediatek,auxadc
-> +  - mediatek,apmixedsys
-> +  - "#thermal-sensor-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/mt8173-clk.h>
-> +    #include <dt-bindings/reset/mt8173-resets.h>
-> +
-> +    soc {
-> +      #address-cells = <2>;
-> +      #size-cells = <2>;
-> +
-> +      auxadc: auxadc@11001000 {
-> +        compatible = "mediatek,mt8173-auxadc";
-> +        reg = <0 0x11001000 0 0x1000>;
-> +        clocks = <&pericfg CLK_PERI_AUXADC>;
-> +        clock-names = "main";
-> +        #io-channel-cells = <1>;
-> +      };
-> +
-> +      apmixedsys: clock-controller@10209000 {
-> +        compatible = "mediatek,mt8173-apmixedsys";
-> +        reg = <0 0x10209000 0 0x1000>;
-> +        #clock-cells = <1>;
-> +      };
-
-Drop both examples, not really relevant to thermal. It grows the example
-with code already documented somewhere else.
-
-> +
-> +      thermal: thermal@1100b000 {
-> +        #thermal-sensor-cells = <1>;
-> +        compatible = "mediatek,mt8173-thermal";
-> +        reg = <0 0x1100b000 0 0x1000>;
-> +        interrupts = <0 70 IRQ_TYPE_LEVEL_LOW>;
-> +        clocks = <&pericfg CLK_PERI_THERM>, <&pericfg CLK_PERI_AUXADC>;
-> +        clock-names = "therm", "auxadc";
-> +        resets = <&pericfg MT8173_PERI_THERM_SW_RST>;
-> +        reset-names = "therm";
-> +        mediatek,auxadc = <&auxadc>;
-> +        mediatek,apmixedsys = <&apmixedsys>;
-> +        nvmem-cells = <&thermal_calibration_data>;
-> +        nvmem-cell-names = "calibration-data";
-> +      };
-> +
-> +      thermal-zones {
-> +        cpu_thermal: cpu-thermal {
-> +          polling-delay-passive = <1000>;
-> +          polling-delay = <1000>;
-> +
-> +          thermal-sensors = <&thermal 0>;
-> +          sustainable-power = <1500>;
-> +
-> +          trips {
-> +            threshold: trip-point0 {
-> +              temperature = <68000>;
-> +              hysteresis = <2000>;
-> +              type = "passive";
-> +            };
-> +
-> +            target: trip-point1 {
-> +              temperature = <85000>;
-> +              hysteresis = <2000>;
-> +              type = "passive";
-> +            };
-> +
-> +            cpu_crit: cpu_crit0 {
-
-No underscores in node names.
-
-
-Best regards,
-Krzysztof
-
+[…]
