@@ -2,117 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F06B271848E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 075F1718468
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236733AbjEaORC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
+        id S237605AbjEaOMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236880AbjEaOQf (ORCPT
+        with ESMTP id S237593AbjEaOMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:16:35 -0400
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B83E1703
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:14:25 -0700 (PDT)
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-514b8d2b21fso857847a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:14:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685542071; x=1688134071;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=C+3Et5cju5cYIbnO1iHgVsG4nORzzNf7kwjzGpF1D98=;
-        b=fSR/a0RIq2Cy5mzkIieekB3gKX1I5GrCdYGfRHVjcL4N9W/KM5z1Sp1MnfrCjE2oKe
-         N8FYnt1/jahwGDrdC+4F5EYePBRPewx4QoM0eLfI49srEYomVFEN8jnsu6wO5KuweTt8
-         ri3KhOk+zDaY8WvQu9kgGdtxkqUfIUJkbg2caGBB8i3WihtvvXL46IcyT8m9oBzoxdB0
-         VTj3sn6a0swNGVDJmpI6k7Cu89VMVv2/ET/shIr8PVepO489GnU3l1Nw5ghTOB8vTyoH
-         cWt49Ecc8rUUiEigBPNA7dm4fguCpl/C+VVjFmL+R9ZKC/wcrtyem2wiRfTZNBw5J7pq
-         yZpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685542071; x=1688134071;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C+3Et5cju5cYIbnO1iHgVsG4nORzzNf7kwjzGpF1D98=;
-        b=EQZGCecAFowJ7yZgCy472c9nE+75eKtWHMhoKrBICDTQVQHpIEa6PYkdun00BCDVyJ
-         HBIiFxew/UeIrVy/oz18meRbAeqWa3SsjWc82mkv3MyltAp0b6/nwcFeiZAyNLZ0bZJz
-         1/E2pvc1B0csjgoNZFvq5vIwQkUle5n5eJxTmgoWk6KTkesBoeYvRU7nlDwvTAdqTXYq
-         08Owg31nKbfJYN/abXYXROj5YYnpvDYMA8nAAHSUBGriDofKsb852Jm1UfpKd4fU9Uy+
-         YxJ/wNdQWxAI8l+eMAtRZAlkwQywIil7MeU6S1FtHiWZVOu9Tan2IvU1Awx6gcesEzH/
-         6+0A==
-X-Gm-Message-State: AC+VfDyjNs6oAzdAKQH1lzAJHySWMqvP7zrp4TNxJWksHIFOcm1m6TAo
-        IuaIKbooQex8rIXmuUuXWvYOqdlG9+gyk0I=
-X-Google-Smtp-Source: ACHHUZ4Uxtcd4Nb36kVy/ZZ9fTZ91issBPdsIRNi9Y3SHHpw4PLW1p5R6MOHEcA2pFIlzoxssI15H8ZkQTiW5bA=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a50:cdc1:0:b0:504:fcf5:63ee with SMTP id
- h1-20020a50cdc1000000b00504fcf563eemr1835699edj.0.1685542071584; Wed, 31 May
- 2023 07:07:51 -0700 (PDT)
-Date:   Wed, 31 May 2023 14:07:49 +0000
-In-Reply-To: <87bki29jsc.fsf@metaspace.dk>
-Mime-Version: 1.0
-References: <87bki29jsc.fsf@metaspace.dk>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230531140749.3708572-1-aliceryhl@google.com>
-Subject: Re: [PATCH v1 6/7] rust: workqueue: add safe API to workqueue
-From:   Alice Ryhl <aliceryhl@google.com>
-To:     nmi@metaspace.dk
-Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
-        benno.lossin@proton.me, bjorn3_gh@protonmail.com,
-        boqun.feng@gmail.com, gary@garyguo.net, jiangshanlai@gmail.com,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
-        tj@kernel.org, wedsonaf@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 31 May 2023 10:12:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25521734;
+        Wed, 31 May 2023 07:09:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A593F63C92;
+        Wed, 31 May 2023 14:07:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 599D1C433EF;
+        Wed, 31 May 2023 14:07:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685542078;
+        bh=SNA8PC9y1d+n9WF0UenW10ec6loxUWvYSsbXu5Xkf1o=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=YWlcFLb7CaKAD+0uGaeCYW8rBb5SJOhk99cAQRFcYi2djCn0n9uuTP3OtnuVq56h2
+         JAuYWwVlqIp2kFzO51ijELrgaIHuDTGV1g8CjuDZHH3SFKJc2TvHyZdjA6LRHuhAW2
+         M8D729bvxPRDfoQsirfczowHN9OxHDiSLoczUGh4N608VWazZXgFyGahHhA2vHo4iJ
+         pnEHjIMl2hIWeRCX2uXFpsHxBdfDAID8oXdJLGRnE7o9AQiISQ71Fnc2q8Vw07r6mA
+         ZmrY4+jNEEwKlm4/zaE7DJJtdL7O8sxZS0vYUA6NimsygWYQ6StBuMfP5z1mvRTBHe
+         CSPw2Iun56zZQ==
+Date:   Wed, 31 May 2023 16:07:54 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Bastien Nocera <hadess@hadess.net>
+cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        =?ISO-8859-15?Q?Filipe_La=EDns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>,
+        Mark Lord <mlord@pobox.com>
+Subject: Re: [PATCH] HID: logitech-hidpp: Handle timeout differently from
+ busy
+In-Reply-To: <20230531082428.21763-1-hadess@hadess.net>
+Message-ID: <nycvar.YFH.7.76.2305311606160.29760@cbobk.fhfr.pm>
+References: <20230531082428.21763-1-hadess@hadess.net>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andreas Hindborg <nmi@metaspace.dk> writes:
-> Alice Ryhl <aliceryhl@google.com> writes:
->> +unsafe impl<T> WorkItem for Arc<T>
->> +where
->> +    T: ArcWorkItem + HasWork<Self> + ?Sized,
->> +{
->> +    type EnqueueOutput = Result<(), Self>;
->> +
->> +    unsafe fn __enqueue<F>(self, queue_work_on: F) -> Self::EnqueueOutput
->> +    where
->> +        F: FnOnce(*mut bindings::work_struct) -> bool,
->> +    {
->> +        let ptr = Arc::into_raw(self);
->> +
->> +        // Using `get_work_offset` here for object-safety.
->> +        //
->> +        // SAFETY: The pointer is valid since we just got it from `into_raw`.
->> +        let off = unsafe { (&*ptr).get_work_offset() };
->> +
->> +        // SAFETY: The `HasWork` impl promises that this offset gives us a field of type
->> +        // `Work<Self>` in the same allocation.
->> +        let work_ptr = unsafe { (ptr as *const u8).add(off) as *const Work<Self> };
-> 
-> We have this functionality in the default impl of
-> `HasWork<T>::raw_get_work() where Self: Sized`. I am uncertain about the
-> `Sized` bound. If it is sound to do the offset calculation here where
-> `T: ?Sized`, it should also be sound in the default implementation of
-> `HasWork<T>`. Should we not be able to change the bound on
-> `HasWork<T>::raw_get_work()` to `Self: ?Sized` and call into that from
-> here?
-> 
->         let work_ptr = unsafe { <T as HasWork<Self>>::raw_get_work(ptr as _) };
-> 
-> Same for Box.
-> 
-> BR Andreas
+On Wed, 31 May 2023, Bastien Nocera wrote:
 
-I looked into this, and it seems like we can remove `Self: Sized` bound
-from `raw_get_work`, so I am able to simplify this code somewhat.
-However, it cannot be removed from `container_of`.
+> If an attempt at contacting a receiver or a device fails because the
+> receiver or device never responds, don't restart the communication, only
+> restart it if the receiver or device answers that it's busy, as originally
+> intended.
+> 
+> This was the behaviour on communication timeout before commit 586e8fede795
+> ("HID: logitech-hidpp: Retry commands when device is busy").
+> 
+> This fixes some overly long waits in a critical path on boot, when
+> checking whether the device is connected by getting its HID++ version.
+> 
+> Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> Suggested-by: Mark Lord <mlord@pobox.com>
+> Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when device is busy")
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217412
+> ---
+>  drivers/hid/hid-logitech-hidpp.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+> index 0fcfd85fea0f..2246044b1639 100644
+> --- a/drivers/hid/hid-logitech-hidpp.c
+> +++ b/drivers/hid/hid-logitech-hidpp.c
+> @@ -314,6 +314,7 @@ static int hidpp_send_message_sync(struct hidpp_device *hidpp,
+>  			dbg_hid("%s:timeout waiting for response\n", __func__);
+>  			memset(response, 0, sizeof(struct hidpp_report));
+>  			ret = -ETIMEDOUT;
+> +			goto exit;
+>  		}
+>  
+
+I have applied this even before getting confirmation from the reporters in 
+bugzilla, as it's the right thing to do anyway.
 
 Thanks,
-Alice
+
+-- 
+Jiri Kosina
+SUSE Labs
+
