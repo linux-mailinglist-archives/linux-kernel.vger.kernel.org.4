@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FF0718018
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EED718017
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235876AbjEaMkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40292 "EHLO
+        id S235848AbjEaMkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235779AbjEaMkF (ORCPT
+        with ESMTP id S235841AbjEaMkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:40:05 -0400
+        Wed, 31 May 2023 08:40:04 -0400
 Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA53511D
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E55112E
         for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:40:03 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-33b7c0bfa55so17742215ab.2
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-33b59d59193so36037485ab.0
         for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:40:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685536803; x=1688128803;
+        d=1e100.net; s=20221208; t=1685536802; x=1688128802;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=JcXXRDa7HfR4OTJ4VcKbwordOuqLsBZyeQKj/40K3jo=;
-        b=YBr8z6mETNN8ejKHiqZorgXsYTmd+a9VPN8SWPe+vxW2mtg+Od0dpsuRRcYmQlpcvM
-         Vi/LHJ2Cj38RJrPNU+HpY5k6A9Za1+FYtB8xY7i4a3L5QItP91UMVh0gFIQRsSljdkVo
-         Ra/Sumhp0U56KB09Y+b/pQm2bEcGRCh1C6mtvt01fKGwMF7qSVONW41hxE+4RQNtiqnA
-         sO57GBBP2CVLCGh0y7M5Qhdrw0x3ah64VmTISBlbE0eNNI3nCxjq7crK1lqT8Vjjy6RM
-         4wtLIS1/qFh5AGENGRZs71P+Kky2+y7IEJpdvBhnP3SLqQYlFpwpVoZALzEMQPQVZrhj
-         bLXw==
-X-Gm-Message-State: AC+VfDy2pRD0JeQ8Glmurkk131b6H8SWqrLY3bmY8GREBP+OUw+Sa+16
-        ol55C/bZEsZHSuuTgWo1rS11oaY6v7m5LzBR/+DOIsOGohIew/8=
-X-Google-Smtp-Source: ACHHUZ4zDweYkXEkoisfG/Mv1dKc0CvcMPmDkFpGfpVr0zj5SKCPNRoO/NF4rP76+lC7YaVluwfwK3e8hXVEOFGkPCHvUY+yPI0g
+        bh=O+nh8wAGvvwQBsKKm+hftixJhCePbzqLhsRE0ejzXE0=;
+        b=YLuwXOlSlW8H8o+qKe6WerVGKmjyotLKbT0PnQx9sZwmmnMToSQjFKOvZUHsQjdoeD
+         l4SUVPimFRZlHIb/nytY2aXQxmsRLVUivElRbB2WefBQRkEaA6Pu4ZAD70KBUl2MxddP
+         2nRRKwk8zTO/4yOOa+J535fRewL6KaicdFL4JobKV+aE23fTNvbPYK0kHMtddz4wqxeq
+         /h4DAafbQbmqyM2F3Q5W1XEFZLhhEKdd3KdmqC6XK+9OHH9wpruUnmmVKSppwpSjd850
+         nhjDcShR+j6ey55fAI7ux0WlafmRhPc4QFBwOwrPXvMCGdbf9vwlBA3oHqT4GAGUH6C+
+         ZFjQ==
+X-Gm-Message-State: AC+VfDwi87O+yTmLOKy6D+a+vvwRlVGEMPjQwKJnCmDI4vdhfJPZhEGM
+        fgyC29HjqIXQA/05QInlK8zi/wIibSsaRnPLBRqQwj+U7xke
+X-Google-Smtp-Source: ACHHUZ7dNn26ahXuxKl07turDUmbs70Bnasi5pLlYMvVRek31d7xXR05a2EZd7/jFx0AsbL23A4fkREjDfNpmvmDnxZIEks1WoY0
 MIME-Version: 1.0
-X-Received: by 2002:a92:d581:0:b0:33b:d728:fc6a with SMTP id
- a1-20020a92d581000000b0033bd728fc6amr1240560iln.6.1685536802940; Wed, 31 May
+X-Received: by 2002:a92:d405:0:b0:328:fb47:ede4 with SMTP id
+ q5-20020a92d405000000b00328fb47ede4mr1247887ilm.3.1685536802760; Wed, 31 May
  2023 05:40:02 -0700 (PDT)
 Date:   Wed, 31 May 2023 05:40:02 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000652f7405fcfc9e79@google.com>
-Subject: [syzbot] Monthly media report (May 2023)
-From:   syzbot <syzbot+list11d35df624b178fd7375@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+Message-ID: <000000000000626da605fcfc9eda@google.com>
+Subject: [syzbot] Monthly fat report (May 2023)
+From:   syzbot <syzbot+list69af309433d563763abf@syzkaller.appspotmail.com>
+To:     linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sj1557.seo@samsung.com,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
@@ -54,30 +55,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello media maintainers/developers,
+Hello fat maintainers/developers,
 
-This is a 31-day syzbot report for the media subsystem.
+This is a 31-day syzbot report for the fat subsystem.
 All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/media
+https://syzkaller.appspot.com/upstream/s/fat
 
 During the period, 0 new issues were detected and 0 were fixed.
-In total, 17 issues are still open and 83 have been fixed so far.
+In total, 8 issues are still open and 20 have been fixed so far.
 
 Some of the still happening issues:
 
 Ref Crashes Repro Title
-<1> 2373    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
-                  https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
-<2> 1161    Yes   WARNING in get_vaddr_frames
-                  https://syzkaller.appspot.com/bug?extid=59a71007ccac79e8bb69
-<3> 653     Yes   WARNING in smsusb_term_device
-                  https://syzkaller.appspot.com/bug?extid=40ac6e73326e79ee8ecb
-<4> 140     Yes   general protection fault in ir_raw_event_store_with_filter
-                  https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
-<5> 87      Yes   WARNING in media_create_pad_link
-                  https://syzkaller.appspot.com/bug?extid=dd320d114deb3f5bb79b
-<6> 1       Yes   KASAN: use-after-free Read in em28xx_init_extension (2)
-                  https://syzkaller.appspot.com/bug?extid=99d6c66dbbc484f50e1c
+<1> 282     Yes   possible deadlock in filemap_fault
+                  https://syzkaller.appspot.com/bug?extid=7736960b837908f3a81d
+<2> 221     Yes   possible deadlock in exfat_get_block
+                  https://syzkaller.appspot.com/bug?extid=247e66a2c3ea756332c7
+<3> 220     Yes   kernel BUG at fs/buffer.c:LINE!
+                  https://syzkaller.appspot.com/bug?extid=cfed5b56649bddf80d6e
+<4> 156     Yes   possible deadlock in exfat_iterate
+                  https://syzkaller.appspot.com/bug?extid=38655f1298fefc58a904
+<5> 83      Yes   possible deadlock in exc_page_fault
+                  https://syzkaller.appspot.com/bug?extid=6d274a5dc4fa0974d4ad
 
 ---
 This report is generated by a bot. It may contain errors.
