@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A648C718162
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3186718164
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236387AbjEaNW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43570 "EHLO
+        id S236395AbjEaNW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236374AbjEaNWv (ORCPT
+        with ESMTP id S234980AbjEaNWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 31 May 2023 09:22:51 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66C5A0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:22:48 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f3b39cea1eso6578855e87.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:22:48 -0700 (PDT)
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD82123
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:22:50 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f50a8f6dd7so3127225e87.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:22:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685539367; x=1688131367;
+        d=linaro.org; s=google; t=1685539368; x=1688131368;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nof0fcraUf7ziAMYvboreBBmHnbxyW58ozUlb23q/Is=;
-        b=QtNGn/b1WZTG6Icg8tsfvn5PP28xeApGsFniTvTRezvjFcp4V7tcg2dxND3KPbkbN6
-         Df76+qebEz6t4lD85BCjj8tfEqoZ2KrhYvoy4eQLRbwzsnV0BJk0JBg9D51DVMzPhXVs
-         +UHB63JWhLyfTWW+JioQ00lD8tDNACa3AR1d2NOph2mbIgcJ6rcGWyY0zezfcj3ToQXw
-         kE2ugUnqeb2QqfcbETQEdB34NHStmKJQSvsRe7hE5AaYfmsNVDD3ScBGkttjxc8hGUNs
-         41pSjULhhbaq/D848Ta11tlNaiWggd1B2VSPRMYu14ANfuGxQ16ysEYaDPqO6URfM+iD
-         s5DQ==
+        bh=gtyrqdTWQcpyKl/kqFYipYrPO4h9o2BturowbZwWg50=;
+        b=PnygFpmsP4XDLrc1sbNSX+SaH/yPGxZFhlYEKvnyO7HwfGYw4+b522olTeCAwlBjJm
+         WPNWVlO2DVoz6iA0qgVuvZHwMNSBi6+BGJjSB3DBmoet1m5SB6KJMtK0znvtKYR+22PT
+         r0Ynusu/TrZNREo+MYwOAidMSusPA8mf5pOTQDBgD9z+rDlzdQCjZNyouKR4X3AB7EDt
+         0nHWeoVA7Cz8HY43hjiq1MyJ7+yzQXWZaRDQIrVX+tEtJir5MCbC58yii/+d7KNnLiE+
+         fy2knePgF6PKgzvqSBwPqkaTeeMtGVXGs7m3fRUiG5w2RVoKjE0KBPh7uhvgqTElvU0j
+         ch2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685539367; x=1688131367;
+        d=1e100.net; s=20221208; t=1685539368; x=1688131368;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nof0fcraUf7ziAMYvboreBBmHnbxyW58ozUlb23q/Is=;
-        b=h0Sl+oXiiyqKzFBCMyDlukOeHB8Ng3N1ItMKGxQYLU0lCrDjobX07D1nYMhmN12ZiV
-         u/EBWiY7B88+Lf5WfeKeLOiJhvY7nuwY6V6BhhGz5ckwIMJsX1US9NKaFpvMztQkdX4v
-         UP0RhC+nGTar2kGcqoGgW9jgsSmt1j3WPw8iWLhOWGMddZGm2I5cshtN8X9GNZdHMDDi
-         oCGz6K/0sSsatZo/HPE99yVY+a/w63UGN9OwWPbts3Y0pN5MBbAL9tH8pd4kw7slWkYI
-         g7CiG3FjhBLHlqHB5eVRvBInmssBYFzste6pLKPkHlhU61iXVrv1EPlk5ZsitUzIEvG/
-         MhhQ==
-X-Gm-Message-State: AC+VfDya1bPXBsteSvmWekDBa8UMrO6sJybDrtSfRCzwA61PIhlLErnh
-        2JxQrQpPF5SXqTlhbKmT5HVHlg==
-X-Google-Smtp-Source: ACHHUZ4M0YRHPLHmVOuOjWHCRHyP3n9BhL+VVdS/h+4Fv13yJnP3jvo+l3OsdJmkNtqjW+AnwlvCeQ==
-X-Received: by 2002:ac2:5238:0:b0:4f2:4419:932c with SMTP id i24-20020ac25238000000b004f24419932cmr2539922lfl.23.1685539367031;
-        Wed, 31 May 2023 06:22:47 -0700 (PDT)
+        bh=gtyrqdTWQcpyKl/kqFYipYrPO4h9o2BturowbZwWg50=;
+        b=N1nvNlivx5n4WgRmzWa78iM5O7ZxHlPHj8Htse1EOEoC/RKO16SJdilfAnPBMobmG9
+         LfQs5sOxnAcgBb2armg5CeCwHvZtk+2KSFo5Z/GxaB32JIX96hdyFxOoyL74vEzjVuKY
+         jMbLwlsP/mrU+2CM8y2hxQKsTT6/0xor9OwseLxr3r/KT9aQvFEZqIwTkAMA/fCLI7Qe
+         QyVRjstdng8Mbl+Esp7t9igB80YYkBGpzs/R8psacuFtt7CVeg68/us+H0Jm5g8Ud5Ou
+         4HAycCIYCWIqcRK5WCwpu7bfR3uEmpk4Ho95weSjScyBNH+oxJlqbJvqr0tqMutAhLTe
+         LFDw==
+X-Gm-Message-State: AC+VfDzH0YwM2FLAiXfcpSLcIvd2ycyGgmVCWotELgeYKMkIptIpfdWB
+        q1HlL+tDZfDtF0pzHqzHufCx2w==
+X-Google-Smtp-Source: ACHHUZ4Mv2gd/xa2zr6hrKHRSrLA6yH4TWCYgO7H3a7ogK4GJ6qZeYKZYNQ3vVj0GKfot50DQtsO2Q==
+X-Received: by 2002:ac2:483a:0:b0:4f4:ca61:82bb with SMTP id 26-20020ac2483a000000b004f4ca6182bbmr2743707lft.45.1685539368528;
+        Wed, 31 May 2023 06:22:48 -0700 (PDT)
 Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id w8-20020ac24428000000b004eb0c51780bsm720138lfl.29.2023.05.31.06.22.45
+        by smtp.gmail.com with ESMTPSA id w8-20020ac24428000000b004eb0c51780bsm720138lfl.29.2023.05.31.06.22.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 06:22:46 -0700 (PDT)
+        Wed, 31 May 2023 06:22:48 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 31 May 2023 15:22:36 +0200
-Subject: [PATCH 2/8] arm64: dts: qcom: sm6350: Add PSCI idle states
+Date:   Wed, 31 May 2023 15:22:37 +0200
+Subject: [PATCH 3/8] arm64: dts: qcom: qdu1000: Flush RSC sleep & wake
+ votes
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230531-topic-rsc-v1-2-b4a985f57b8b@linaro.org>
+Message-Id: <20230531-topic-rsc-v1-3-b4a985f57b8b@linaro.org>
 References: <20230531-topic-rsc-v1-0-b4a985f57b8b@linaro.org>
 In-Reply-To: <20230531-topic-rsc-v1-0-b4a985f57b8b@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -80,246 +81,48 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1685539362; l=7351;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685539362; l=1027;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=qTMZv+oBuQzxfRAczHq2kgWkd1AVOwgX8ifCX4qtLiA=;
- b=9GbD5WdJT72ka28Wq714XVJZ4eaxAjvcCPTiOBSxW1SLvBUyVLxp7YDnaizIBfXzDA6v1dGfp
- XG8VGPt2E/KD/hFwq/TCGeo61bu/yRPK8o2ClNvaO8TUpj2RZhPTy9s
+ bh=TObQ9wJAJgJwWqQ5Ixf0yflCFVNt1QkEEHiCMIA7XQ8=;
+ b=sY2igrHYMkKIIn82pO1xm4mjQC+2D0hOpPwiNmbXxsM8LJiqZ3ofxrmnxykQRUEpkyRwZj/8O
+ Ae+3IBDD4o0ASUc/CzU1GpUnHc9r7ESy37zSi5u7kWSZgIZPm/3Qxau
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the PSCI idle states so that the CPU (among other things) can
-reach lower power states.
+The rpmh driver will cache sleep and wake votes until the cluster
+power-domain is about to enter idle, to avoid unnecessary writes. So
+associate the apps_rsc with the cluster pd, so that it can be notified
+about this event.
 
+Without this, only AMC votes are being commited.
+
+Fixes: 6bd20c54b589 ("arm64: dts: qcom: Add base QDU1000/QRU1000 DTSIs")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm6350.dtsi | 141 +++++++++++++++++++++++++++++++++++
- 1 file changed, 141 insertions(+)
+ arch/arm64/boot/dts/qcom/qdu1000.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-index 46c29a190f1d..9311bb6bddab 100644
---- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-@@ -56,6 +56,8 @@ CPU0: cpu@0 {
- 			interconnects = <&gem_noc MASTER_AMPSS_M0 QCOM_ICC_TAG_ACTIVE_ONLY
- 					 &clk_virt SLAVE_EBI_CH0 QCOM_ICC_TAG_ACTIVE_ONLY>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			power-domains = <&CPU_PD0>;
-+			power-domain-names = "psci";
- 			#cooling-cells = <2>;
- 			L2_0: l2-cache {
- 				compatible = "cache";
-@@ -84,6 +86,8 @@ CPU1: cpu@100 {
- 			interconnects = <&gem_noc MASTER_AMPSS_M0 QCOM_ICC_TAG_ACTIVE_ONLY
- 					 &clk_virt SLAVE_EBI_CH0 QCOM_ICC_TAG_ACTIVE_ONLY>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			power-domains = <&CPU_PD1>;
-+			power-domain-names = "psci";
- 			#cooling-cells = <2>;
- 			L2_100: l2-cache {
- 				compatible = "cache";
-@@ -107,6 +111,8 @@ CPU2: cpu@200 {
- 			interconnects = <&gem_noc MASTER_AMPSS_M0 QCOM_ICC_TAG_ACTIVE_ONLY
- 					 &clk_virt SLAVE_EBI_CH0 QCOM_ICC_TAG_ACTIVE_ONLY>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			power-domains = <&CPU_PD2>;
-+			power-domain-names = "psci";
- 			#cooling-cells = <2>;
- 			L2_200: l2-cache {
- 				compatible = "cache";
-@@ -130,6 +136,8 @@ CPU3: cpu@300 {
- 			interconnects = <&gem_noc MASTER_AMPSS_M0 QCOM_ICC_TAG_ACTIVE_ONLY
- 					 &clk_virt SLAVE_EBI_CH0 QCOM_ICC_TAG_ACTIVE_ONLY>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			power-domains = <&CPU_PD3>;
-+			power-domain-names = "psci";
- 			#cooling-cells = <2>;
- 			L2_300: l2-cache {
- 				compatible = "cache";
-@@ -153,6 +161,8 @@ CPU4: cpu@400 {
- 			interconnects = <&gem_noc MASTER_AMPSS_M0 QCOM_ICC_TAG_ACTIVE_ONLY
- 					 &clk_virt SLAVE_EBI_CH0 QCOM_ICC_TAG_ACTIVE_ONLY>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			power-domains = <&CPU_PD4>;
-+			power-domain-names = "psci";
- 			#cooling-cells = <2>;
- 			L2_400: l2-cache {
- 				compatible = "cache";
-@@ -176,6 +186,8 @@ CPU5: cpu@500 {
- 			interconnects = <&gem_noc MASTER_AMPSS_M0 QCOM_ICC_TAG_ACTIVE_ONLY
- 					 &clk_virt SLAVE_EBI_CH0 QCOM_ICC_TAG_ACTIVE_ONLY>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			power-domains = <&CPU_PD5>;
-+			power-domain-names = "psci";
- 			#cooling-cells = <2>;
- 			L2_500: l2-cache {
- 				compatible = "cache";
-@@ -199,6 +211,8 @@ CPU6: cpu@600 {
- 			interconnects = <&gem_noc MASTER_AMPSS_M0 QCOM_ICC_TAG_ACTIVE_ONLY
- 					 &clk_virt SLAVE_EBI_CH0 QCOM_ICC_TAG_ACTIVE_ONLY>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			power-domains = <&CPU_PD6>;
-+			power-domain-names = "psci";
- 			#cooling-cells = <2>;
- 			L2_600: l2-cache {
- 				compatible = "cache";
-@@ -222,6 +236,8 @@ CPU7: cpu@700 {
- 			interconnects = <&gem_noc MASTER_AMPSS_M0 QCOM_ICC_TAG_ACTIVE_ONLY
- 					 &clk_virt SLAVE_EBI_CH0 QCOM_ICC_TAG_ACTIVE_ONLY>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			power-domains = <&CPU_PD7>;
-+			power-domain-names = "psci";
- 			#cooling-cells = <2>;
- 			L2_700: l2-cache {
- 				compatible = "cache";
-@@ -266,6 +282,76 @@ core7 {
- 				};
- 			};
- 		};
-+
-+		domain-idle-states {
-+			CLUSTER_SLEEP_PC: cluster-sleep-0 {
-+				compatible = "domain-idle-state";
-+				arm,psci-suspend-param = <0x41000044>;
-+				entry-latency-us = <2752>;
-+				exit-latency-us = <3048>;
-+				min-residency-us = <6118>;
-+			};
-+
-+			CLUSTER_SLEEP_CX_RET: cluster-sleep-1 {
-+				compatible = "domain-idle-state";
-+				arm,psci-suspend-param = <0x41001244>;
-+				entry-latency-us = <3638>;
-+				exit-latency-us = <4562>;
-+				min-residency-us = <8467>;
-+			};
-+
-+			CLUSTER_AOSS_SLEEP: cluster-sleep-2 {
-+				compatible = "domain-idle-state";
-+				arm,psci-suspend-param = <0x4100b244>;
-+				entry-latency-us = <3263>;
-+				exit-latency-us = <6562>;
-+				min-residency-us = <9987>;
-+			};
-+		};
-+
-+		cpu_idle_states: idle-states {
-+			entry-method = "psci";
-+
-+			LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "little-power-collapse";
-+				arm,psci-suspend-param = <0x40000003>;
-+				entry-latency-us = <549>;
-+				exit-latency-us = <901>;
-+				min-residency-us = <1774>;
-+				local-timer-stop;
-+			};
-+
-+			LITTLE_CPU_SLEEP_1: cpu-sleep-0-1 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "little-rail-power-collapse";
-+				arm,psci-suspend-param = <0x40000004>;
-+				entry-latency-us = <702>;
-+				exit-latency-us = <915>;
-+				min-residency-us = <4001>;
-+				local-timer-stop;
-+			};
-+
-+			BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "big-power-collapse";
-+				arm,psci-suspend-param = <0x40000003>;
-+				entry-latency-us = <523>;
-+				exit-latency-us = <1244>;
-+				min-residency-us = <2207>;
-+				local-timer-stop;
-+			};
-+
-+			BIG_CPU_SLEEP_1: cpu-sleep-1-1 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "big-rail-power-collapse";
-+				arm,psci-suspend-param = <0x40000004>;
-+				entry-latency-us = <526>;
-+				exit-latency-us = <1854>;
-+				min-residency-us = <5555>;
-+				local-timer-stop;
-+			};
-+		};
- 	};
+diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+index ddc3239478ae..4bc8c77a3538 100644
+--- a/arch/arm64/boot/dts/qcom/qdu1000.dtsi
++++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+@@ -1252,6 +1252,7 @@ apps_rsc: rsc@17a00000 {
+ 			qcom,tcs-config = <ACTIVE_TCS    2>, <SLEEP_TCS     3>,
+ 					  <WAKE_TCS      3>, <CONTROL_TCS   0>;
+ 			label = "apps_rsc";
++			power-domains = <&CLUSTER_PD>;
  
- 	firmware {
-@@ -395,6 +481,61 @@ pmu {
- 	psci {
- 		compatible = "arm,psci-1.0";
- 		method = "smc";
-+
-+		CPU_PD0: power-domain-cpu0 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD1: power-domain-cpu1 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD2: power-domain-cpu2 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD3: power-domain-cpu3 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD4: power-domain-cpu4 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD5: power-domain-cpu5 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0 &LITTLE_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD6: power-domain-cpu6 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-+		};
-+
-+		CPU_PD7: power-domain-cpu7 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0 &BIG_CPU_SLEEP_1>;
-+		};
-+
-+		CLUSTER_PD: power-domain-cpu-cluster0 {
-+			#power-domain-cells = <0>;
-+			domain-idle-states = <&CLUSTER_SLEEP_PC
-+					      &CLUSTER_SLEEP_CX_RET
-+					      &CLUSTER_AOSS_SLEEP>;
-+		};
- 	};
- 
- 	reserved_memory: reserved-memory {
+ 			apps_bcm_voter: bcm-voter {
+ 				compatible = "qcom,bcm-voter";
 
 -- 
 2.40.1
