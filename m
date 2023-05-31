@@ -2,125 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0F8718287
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5EE271823E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236620AbjEaNnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
+        id S236207AbjEaNlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236261AbjEaNnR (ORCPT
+        with ESMTP id S235961AbjEaNks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:43:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE9610C3;
-        Wed, 31 May 2023 06:41:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA3B063B46;
-        Wed, 31 May 2023 13:41:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B859C433A0;
-        Wed, 31 May 2023 13:41:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540517;
-        bh=iqBWxnu70WDuEwIu6RTmWDRYvqErlfqDT4PW4rvcLf0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s1NPW9TIXBzk2am6NexPp5YJqKj4QfiDXqGE4oxktpHBz9mhfNhA41xsnmV1UxdQM
-         h+d9ReCZLLA48+yOrmZ494PfV/XjKOFrj3PRUCm46E0qm0LUYyltPDrWdJO6ddiTxF
-         gEnyre7N4E1zmLK3ZxjM8OZwmHTP+7gG/ssvJhRjyzAji3A98Zof+FU3DvL9aPhKSh
-         Fz6AG37yznKTpOUQMrtUXY9HX7ywwlQ85z224R1Zsu/YLz3e1oxzHO9r2UQTGnc9LM
-         /QlHaLiUzMe5lrWYesOH2bDH5jfYsikuGnVlA1f14WzKcD6vrsiNT5Sidh16rU++EU
-         W7CJE0Zje1/mw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tatsuki Sugiura <sugi@nemui.org>, Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, sagi@grimberg.me,
-        linux-nvme@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.3 37/37] NVMe: Add MAXIO 1602 to bogus nid list.
-Date:   Wed, 31 May 2023 09:40:19 -0400
-Message-Id: <20230531134020.3383253-37-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230531134020.3383253-1-sashal@kernel.org>
-References: <20230531134020.3383253-1-sashal@kernel.org>
+        Wed, 31 May 2023 09:40:48 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4C71B0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:40:39 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f6dfc4dffaso44611855e9.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685540437; x=1688132437;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qY81Z3rKpTC7Qcg8kQy02pyAPk5AkPwDZTxzOqMeqf4=;
+        b=kHtxkM35y5PLlVXSnadx0SO0Fodm31QHBQxiobbqiJTrMbucNm2lYc6Q8iifl8laIg
+         IaC2mSQ/m+2rsQpucJsmVUYq+8FmKFbX4srNnYkI49Eq/aqQDzU3WE/YBLqgzyiHbRw9
+         mt/bv71Lw55Eo84reKkXDlxLvk3iUFV+25dRHJ/iesezkDBjOqpRNniOGDL5kKoIYsNF
+         g4qwgpoCKJqQmRpLB8qvKKZpNarhjiWuURL/ixuWinXpDYfHUkoCsiFtak7Dcj02BrXG
+         n2NJEMS6liOF/kMUAb59Clb3tnm7bUm65vb5emfrAt6lfM3xBwhHRzRrNlHoSe7QJMUR
+         2fBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685540437; x=1688132437;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qY81Z3rKpTC7Qcg8kQy02pyAPk5AkPwDZTxzOqMeqf4=;
+        b=WJRnnLV7DGxmDMTuJkhnNzZanaqyvQO/7hsYWqtotpO4ehGEXc8fRtrPvA3MS4h1A6
+         rUjWv5c8Kf4SNX3Z7IaRXvIcqKVuOGzyrtFG+3lidSadA4fOKvR9GTDqIRlD/M7OWaPI
+         kEnqvUmFJQxj39cbA28i/dzSVp8FBsIcHFU3xXUIV9PYLiKpQSBMrOd8WkKQt0yo7aQ4
+         vuMq2vijpIMVp0HPF/IcZPlIKG5rW3ToYWexbVoNyzrHNb9pwEe1gN9u4KKqDFtGKqHo
+         ZIJTqgZG/fixmH3SSDijXKJOjtaUsCdBeE7FqRakmkZ17E83F/8MJDgHb/5GWJW7yj0O
+         3MfQ==
+X-Gm-Message-State: AC+VfDxy7wc173STxYl2geOD4IqJaAHIhPjBmzzBFR0oXOSGuFXcoAsn
+        EsJGGQEaLWNxRvbzvXhp+QHUpw==
+X-Google-Smtp-Source: ACHHUZ6zooShtZDr78/kVMf6gNlUoaFqzkstirZwHKSiTw/NJAqgj7RyfIqb1AhomdXwes49Xd6dNQ==
+X-Received: by 2002:adf:e44d:0:b0:306:3352:5ba3 with SMTP id t13-20020adfe44d000000b0030633525ba3mr4370045wrm.25.1685540437610;
+        Wed, 31 May 2023 06:40:37 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id n7-20020adfe347000000b00309382eb047sm6866358wrj.112.2023.05.31.06.40.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 06:40:36 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     nava.kishore.manne@amd.com, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, git@xilinx.com,
+        Michal Simek <michal.simek@amd.com>,
+        Michal Simek <michal.simek@amd.com>
+Cc:     linux-arm-kernel@lists.infradead.org
+In-Reply-To: <28f30fb7695d8719b45edebb9a01508f8d7e5e30.1684244701.git.michal.simek@amd.com>
+References: <28f30fb7695d8719b45edebb9a01508f8d7e5e30.1684244701.git.michal.simek@amd.com>
+Subject: Re: (subset) [PATCH] nvmem: zynqmp: Switch @xilinx.com emails to
+ @amd.com
+Message-Id: <168554043640.102669.561753469291697460.b4-ty@linaro.org>
+Date:   Wed, 31 May 2023 14:40:36 +0100
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tatsuki Sugiura <sugi@nemui.org>
 
-[ Upstream commit a3a9d63dcd15535e7fdf4c7c1b32bfaed762973a ]
+On Tue, 16 May 2023 15:45:03 +0200, Michal Simek wrote:
+> @xilinx.com is still working but better to switch to new amd.com after
+> AMD/Xilinx acquisition.
+> 
+> 
 
-HIKSEMI FUTURE M.2 SSD uses the same dummy nguid and eui64.
-I confirmed it with my two devices.
+Applied, thanks!
 
-This patch marks the controller as NVME_QUIRK_BOGUS_NID.
+[1/1] nvmem: zynqmp: Switch @xilinx.com emails to @amd.com
+      commit: fe0b59882c020abd6c305c0f508f64fafcbbbca3
 
----------------------------------------------------------
-sugi@tempest:~% sudo nvme id-ctrl /dev/nvme0
-NVME Identify Controller:
-vid       : 0x1e4b
-ssvid     : 0x1e4b
-sn        : 30096022612
-mn        : HS-SSD-FUTURE 2048G
-fr        : SN10542
-rab       : 0
-ieee      : 000000
-cmic      : 0
-mdts      : 7
-cntlid    : 0
-ver       : 0x10400
-rtd3r     : 0x7a120
-rtd3e     : 0x1e8480
-oaes      : 0x200
-ctratt    : 0x2
-rrls      : 0
-cntrltype : 1
-fguid     : 00000000-0000-0000-0000-000000000000
-<snip...>
----------------------------------------------------------
-
----------------------------------------------------------
-sugi@tempest:~% sudo nvme id-ns /dev/nvme0n1
-NVME Identify Namespace 1:
-<snip...>
-nguid   : 00000000000000000000000000000000
-eui64   : 0000000000000002
-lbaf  0 : ms:0   lbads:9  rp:0 (in use)
----------------------------------------------------------
-
-Signed-off-by: Tatsuki Sugiura <sugi@nemui.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Keith Busch <kbusch@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/nvme/host/pci.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index cd7873de31215..f66fe70fde5a9 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3426,6 +3426,8 @@ static const struct pci_device_id nvme_id_table[] = {
- 		.driver_data = NVME_QUIRK_BOGUS_NID, },
- 	{ PCI_DEVICE(0x1e4B, 0x1202),   /* MAXIO MAP1202 */
- 		.driver_data = NVME_QUIRK_BOGUS_NID, },
-+	{ PCI_DEVICE(0x1e4B, 0x1602),   /* MAXIO MAP1602 */
-+		.driver_data = NVME_QUIRK_BOGUS_NID, },
- 	{ PCI_DEVICE(0x1cc1, 0x5350),   /* ADATA XPG GAMMIX S50 */
- 		.driver_data = NVME_QUIRK_BOGUS_NID, },
- 	{ PCI_DEVICE(0x1dbe, 0x5236),   /* ADATA XPG GAMMIX S70 */
+Best regards,
 -- 
-2.39.2
+Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
