@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5B9717319
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF8371732D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233759AbjEaBXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 21:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
+        id S233790AbjEaB3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 21:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231558AbjEaBXC (ORCPT
+        with ESMTP id S229600AbjEaB33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 21:23:02 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53364C7;
-        Tue, 30 May 2023 18:23:00 -0700 (PDT)
+        Tue, 30 May 2023 21:29:29 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A4DD9;
+        Tue, 30 May 2023 18:29:27 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QWBMy2DQfz4f3nx2;
-        Wed, 31 May 2023 09:22:54 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QWBWR0SG3z4f3jLj;
+        Wed, 31 May 2023 09:29:23 +0800 (CST)
 Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAHcLNuoXZkBjdYKg--.29411S3;
-        Wed, 31 May 2023 09:22:56 +0800 (CST)
+        by APP4 (Coremail) with SMTP id gCh0CgBnHbHzonZk749YKg--.48279S3;
+        Wed, 31 May 2023 09:29:23 +0800 (CST)
 Subject: Re: [PATCH v2] md/raid5: don't allow concurrent reshape with recovery
-To:     Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org,
+To:     Yu Kuai <yukuai1@huaweicloud.com>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>, song@kernel.org,
         pmenzel@molgen.mpg.de
 Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
         yi.zhang@huawei.com, yangerkun@huawei.com,
         "yukuai (C)" <yukuai3@huawei.com>
 References: <20230529133410.2125914-1-yukuai1@huaweicloud.com>
  <b9fd7105-eadc-29cb-fa2e-24109f4a99b7@linux.dev>
+ <e26af7db-a283-47ca-fc61-89af99f52c17@huaweicloud.com>
 From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <e26af7db-a283-47ca-fc61-89af99f52c17@huaweicloud.com>
-Date:   Wed, 31 May 2023 09:22:54 +0800
+Message-ID: <829683eb-ecfa-62ff-af67-b86dfd6f95d3@huaweicloud.com>
+Date:   Wed, 31 May 2023 09:29:23 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <b9fd7105-eadc-29cb-fa2e-24109f4a99b7@linux.dev>
+In-Reply-To: <e26af7db-a283-47ca-fc61-89af99f52c17@huaweicloud.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHcLNuoXZkBjdYKg--.29411S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cw15Zryftr1kAF13Ww17ZFb_yoW5JFyfpa
-        yktan8WrWDuwnakF4Dtw1UAFyYkrWUG3y5Jr1rWa4UAw15tr109rWUWFn09r1UJr4Fqw4U
-        tr1rtr9rur17KFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+X-CM-TRANSID: gCh0CgBnHbHzonZk749YKg--.48279S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXF48ZF13XF1UCr47WFy5twb_yoW5XF13pa
+        yktFs8urWDurn3tF4Dtr1jyFyYkryUJ3y5Jr13Wa48Ars8tryI9rWUWFn09r1UXr4Fqw4j
+        qr1rtr9xur17KFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
         1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
         JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
         CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
         W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
         IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
         v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
         c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
-        UUU
+        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUZa9
+        -UUUUU=
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -69,70 +70,77 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-在 2023/05/31 9:06, Guoqing Jiang 写道:
+在 2023/05/31 9:22, Yu Kuai 写道:
+> Hi,
 > 
+> 在 2023/05/31 9:06, Guoqing Jiang 写道:
+>>
+>>
+>> On 5/29/23 21:34, Yu Kuai wrote:
+>>> From: Yu Kuai <yukuai3@huawei.com>
+>>>
+>>> Commit 0aecb06e2249 ("md/raid5: don't allow replacement while reshape
+>>> is in progress") fixes that replacement can be set if reshape is
+>>> interrupted, which will cause that array can't be assembled.
+>>>
+>>> There is a similar problem on the other side, if recovery is
+>>> interrupted, then reshape can start, which will cause the same problem.
+>>>
+>>> Fix the problem by not starting to reshape while recovery is still in
+>>> progress.
+>>>
+>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>>> ---
+>>> Changes in v2:
+>>>   - fix some typo in commit message.
+>>>
+>>>   drivers/md/raid5.c | 8 ++++++++
+>>>   1 file changed, 8 insertions(+)
+>>>
+>>> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+>>> index 8686d629e3f2..6615abf54d3f 100644
+>>> --- a/drivers/md/raid5.c
+>>> +++ b/drivers/md/raid5.c
+>>> @@ -8525,6 +8525,7 @@ static int raid5_start_reshape(struct mddev 
+>>> *mddev)
+>>>       struct r5conf *conf = mddev->private;
+>>>       struct md_rdev *rdev;
+>>>       int spares = 0;
+>>> +    int i;
+>>>       unsigned long flags;
+>>>       if (test_bit(MD_RECOVERY_RUNNING, &mddev->recovery))
+>>> @@ -8536,6 +8537,13 @@ static int raid5_start_reshape(struct mddev 
+>>> *mddev)
+>>>       if (has_failed(conf))
+>>>           return -EINVAL;
+>>> +    /* raid5 can't handle concurrent reshape and recovery */
+>>> +    if (mddev->recovery_cp < MaxSector)
+>>> +        return -EBUSY;
+>>> +    for (i = 0; i < conf->raid_disks; i++)
+>>> +        if (rdev_mdlock_deref(mddev, conf->disks[i].replacement))
+>>> +            return -EBUSY;
+>>> +
+>>
+>> Does it mean reshape and recovery  can happen in parallel without the 
+>> change?
+>> I really doubt about it given any kind of internal io (resync, reshape 
+>> and recovery)
+>> is handled by resync thread. And IIUC either md_do_sync or 
+>> md_check_recovery
+>> should avoid it, no need to do it in personality layer.
+>>
 > 
-> On 5/29/23 21:34, Yu Kuai wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Commit 0aecb06e2249 ("md/raid5: don't allow replacement while reshape
->> is in progress") fixes that replacement can be set if reshape is
->> interrupted, which will cause that array can't be assembled.
->>
->> There is a similar problem on the other side, if recovery is
->> interrupted, then reshape can start, which will cause the same problem.
->>
->> Fix the problem by not starting to reshape while recovery is still in
->> progress.
->>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->> Changes in v2:
->>   - fix some typo in commit message.
->>
->>   drivers/md/raid5.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
->> index 8686d629e3f2..6615abf54d3f 100644
->> --- a/drivers/md/raid5.c
->> +++ b/drivers/md/raid5.c
->> @@ -8525,6 +8525,7 @@ static int raid5_start_reshape(struct mddev *mddev)
->>       struct r5conf *conf = mddev->private;
->>       struct md_rdev *rdev;
->>       int spares = 0;
->> +    int i;
->>       unsigned long flags;
->>       if (test_bit(MD_RECOVERY_RUNNING, &mddev->recovery))
->> @@ -8536,6 +8537,13 @@ static int raid5_start_reshape(struct mddev 
->> *mddev)
->>       if (has_failed(conf))
->>           return -EINVAL;
->> +    /* raid5 can't handle concurrent reshape and recovery */
->> +    if (mddev->recovery_cp < MaxSector)
->> +        return -EBUSY;
->> +    for (i = 0; i < conf->raid_disks; i++)
->> +        if (rdev_mdlock_deref(mddev, conf->disks[i].replacement))
->> +            return -EBUSY;
->> +
+> They can't, in this case recovery is interrupted, then recovery can't
+> make progress, and md_check_recovery() will start reshape, and after
+> reshape is done, recovery will continue, and data will be corrupted
+> because raid456 reshape doesn't handle replacement.
 > 
-> Does it mean reshape and recovery  can happen in parallel without the 
-> change?
-> I really doubt about it given any kind of internal io (resync, reshape 
-> and recovery)
-> is handled by resync thread. And IIUC either md_do_sync or 
-> md_check_recovery
-> should avoid it, no need to do it in personality layer.
-> 
+> And by the way in raid456 is that if system reboot, this array can't be
+> assembled, raid5_run() will fail if reshape and replacement are both
+> set.
 
-They can't, in this case recovery is interrupted, then recovery can't
-make progress, and md_check_recovery() will start reshape, and after
-reshape is done, recovery will continue, and data will be corrupted
-because raid456 reshape doesn't handle replacement.
-
-And by the way in raid456 is that if system reboot, this array can't be
-assembled, raid5_run() will fail if reshape and replacement are both
-set.
+And someone reported this reboot case, I also add new test for this
+case, you can take a look.
 
 Thanks,
 Kuai
