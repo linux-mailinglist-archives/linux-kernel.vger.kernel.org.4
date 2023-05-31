@@ -2,142 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7947175CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 06:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96FC17175CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 06:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbjEaEmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 00:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S233782AbjEaElc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 00:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjEaEmK (ORCPT
+        with ESMTP id S229480AbjEaEla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 00:42:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A349B97
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 21:41:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685508083;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=UYEFrarq5y6NtgfnLcdtrjWHlHd0aEmEkiPetBxugj8=;
-        b=HKHj31+IKjdyF5ZIidia4M/JWH4LHXlz8WNSnicLju3IA5ijZOtqkuRg9raG1JW312s8na
-        ZNTwYDTFSxgQcr9kldbz0kuUk2viXhLro7nJuBwk7cEzKRxh731oDMq4ZxUrmYas8PsNRy
-        Bv6puo2NbVYVzmItpXaFvR+AmOc0294=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-482-Rk5dDANWNxq7gaccvLvaWA-1; Wed, 31 May 2023 00:41:20 -0400
-X-MC-Unique: Rk5dDANWNxq7gaccvLvaWA-1
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4f4c30edfadso292869e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 21:41:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685508078; x=1688100078;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UYEFrarq5y6NtgfnLcdtrjWHlHd0aEmEkiPetBxugj8=;
-        b=OzeEqyo01bphfKjfh7ODo4E7pDRR/7QBv/azD+NoCoVM8QCSSnG5288DIqOb//jDwS
-         3HcF5+WZurVE+takYwFcxxrrCS04FGdnpZysaoXfyPLbNek9dHMUwqy6xRTEs04SXOQk
-         D+KZG+boNa81E3bh68/yuaC9+A+981cHn7TrvvRkRcJItUqH2mrcQyh0iBIVCaWTOC+1
-         C/lXmNEU0T7pLP8ieB0Hefa58ZYPQN7Pu4fpueXnrXdahDCFbAvOtCGppCSK4MbDBA2C
-         WwnaLHwypx1L/sWFwjpjf4Fw7tq58M/MrmrvH0BZJeQAePLNAf3oLd1iPmI9dDBtuMhw
-         tggQ==
-X-Gm-Message-State: AC+VfDwNfn0yLM3FdV5fxw+AL6spA0MnD3AYqD2YmTxUKWyVlLUjt9Zq
-        AELtp8cCtcbk6FOV5ArRrp39OELlv7rA3FokMEqvS33QJJ4xzZnvtjOHogaFBlOmuO5RFva8ver
-        BIcuo328zNY347N3HPwlCXW0DG+IOcZt3DLsUVTmZAZhm3hMY/cvtNopqeN9VszbU9+zqo/ER0G
-        4sKcZ3v0o=
-X-Received: by 2002:a05:6512:31d6:b0:4f4:f38a:4423 with SMTP id j22-20020a05651231d600b004f4f38a4423mr4415701lfe.27.1685508078711;
-        Tue, 30 May 2023 21:41:18 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6V0NcpagTYTWBJxBDh7faQPnfd0NUxubPvmUPnnIZthRTkB0B6uC0Tku8OOzlnqMU/pj6SGA==
-X-Received: by 2002:a05:6512:31d6:b0:4f4:f38a:4423 with SMTP id j22-20020a05651231d600b004f4f38a4423mr4415690lfe.27.1685508078341;
-        Tue, 30 May 2023 21:41:18 -0700 (PDT)
-Received: from mjp-Z390-AORUS-MASTER.redhat.com (85-23-48-202.bb.dnainternet.fi. [85.23.48.202])
-        by smtp.gmail.com with ESMTPSA id p24-20020ac246d8000000b004ec84d24818sm555088lfo.282.2023.05.30.21.41.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 21:41:17 -0700 (PDT)
-From:   mpenttil@redhat.com
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     =?UTF-8?q?Mika=20Penttil=C3=A4?= <mpenttil@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Huang Ying <ying.huang@intel.com>
-Subject: [PATCH v2] mm/migrate_device: Try to handle swapcache pages
-Date:   Wed, 31 May 2023 07:40:18 +0300
-Message-Id: <20230531044018.17893-1-mpenttil@redhat.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 31 May 2023 00:41:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11A79D;
+        Tue, 30 May 2023 21:41:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4483960F08;
+        Wed, 31 May 2023 04:41:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D7EBC433EF;
+        Wed, 31 May 2023 04:41:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685508086;
+        bh=X8DzOtFm5APJJSt0+uSAaCUWMDRz0NNoyEHRZnPXbLg=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=sjFf/DrmDfOeiFUCGHnSSSEe7+oPXj6nFGtGpi+KZpxDPoRvcePXtlx3f2wo1Oj6q
+         jg9F/QJsRufCCiGIiPNSugaaBgGxQLUMUNnBCW33vuRySPsVugKnd9WULNGwLF18t2
+         lCRRv0iYflYSCyKT2uR71JNlTrRUrc7sIUxNiHum7CVprq0idDPmjeuuWafT9CzRvf
+         7wDU5aZzcR+gss5za+wvczpmOHLgYQvRGggIwgqIpMNBl89h/i36d9J2w63de/pwAh
+         YiIF+rJA5vtXEH80wyrWKIve83+JwHTGrkNvDK3bNZfNxddv9euIm1JlQBoBmNsb8d
+         9EOtKn3cHGlNg==
+Date:   Tue, 30 May 2023 21:41:25 -0700
+From:   Kees Cook <kees@kernel.org>
+To:     kernel test robot <lkp@intel.com>,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Maxim Krasnyansky <maxk@qti.qualcomm.com>
+CC:     oe-kbuild-all@lists.linux.dev, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org
+Subject: Re: [PATCH] uml: Replace all non-returning strlcpy with strscpy
+User-Agent: K-9 Mail for Android
+In-Reply-To: <202305311135.zGMT1gYR-lkp@intel.com>
+References: <20230530164004.986750-1-azeemshaikh38@gmail.com> <202305311135.zGMT1gYR-lkp@intel.com>
+Message-ID: <09A0C6FA-669F-4B73-9620-43AEA17E5D0C@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mika Penttilä <mpenttil@redhat.com>
+On May 30, 2023 8:18:42 PM PDT, kernel test robot <lkp@intel=2Ecom> wrote:
+>Hi Azeem,
+>
+>kernel test robot noticed the following build errors:
+>
+>[auto build test ERROR on uml/next]
+>[also build test ERROR on uml/fixes wireless-next/main wireless/main linu=
+s/master v6=2E4-rc4 next-20230530]
+>[If your patch is applied to the wrong git tree, kindly drop us a note=2E
+>And when submitting patch, we suggest to use '--base' as documented in
+>https://git-scm=2Ecom/docs/git-format-patch#_base_tree_information]
+>
+>url:    https://github=2Ecom/intel-lab-lkp/linux/commits/Azeem-Shaikh/uml=
+-Replace-all-non-returning-strlcpy-with-strscpy/20230531-004115
+>base:   git://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/uml/linux next
+>patch link:    https://lore=2Ekernel=2Eorg/r/20230530164004=2E986750-1-az=
+eemshaikh38%40gmail=2Ecom
+>patch subject: [PATCH] uml: Replace all non-returning strlcpy with strscp=
+y
+>config: um-i386_defconfig (https://download=2E01=2Eorg/0day-ci/archive/20=
+230531/202305311135=2EzGMT1gYR-lkp@intel=2Ecom/config)
+>compiler: gcc-12 (Debian 12=2E2=2E0-14) 12=2E2=2E0
+>reproduce (this is a W=3D1 build):
+>        # https://github=2Ecom/intel-lab-lkp/linux/commit/c51d7beb37cfbda=
+321feb3811bbe0e381f804899
+>        git remote add linux-review https://github=2Ecom/intel-lab-lkp/li=
+nux
+>        git fetch --no-tags linux-review Azeem-Shaikh/uml-Replace-all-non=
+-returning-strlcpy-with-strscpy/20230531-004115
+>        git checkout c51d7beb37cfbda321feb3811bbe0e381f804899
+>        # save the config file
+>        mkdir build_dir && cp config build_dir/=2Econfig
+>        make W=3D1 O=3Dbuild_dir ARCH=3Dum SUBARCH=3Di386 olddefconfig
+>        make W=3D1 O=3Dbuild_dir ARCH=3Dum SUBARCH=3Di386 SHELL=3D/bin/ba=
+sh
+>
+>If you fix the issue, kindly add following tag where applicable
+>| Reported-by: kernel test robot <lkp@intel=2Ecom>
+>| Closes: https://lore=2Ekernel=2Eorg/oe-kbuild-all/202305311135=2EzGMT1g=
+YR-lkp@intel=2Ecom/
+>
+>All errors (new ones prefixed by >>):
+>
+>   arch/um/os-Linux/drivers/tuntap_user=2Ec: In function 'tuntap_open':
+>>> arch/um/os-Linux/drivers/tuntap_user=2Ec:149:17: error: implicit decla=
+ration of function 'strscpy'; did you mean 'strncpy'? [-Werror=3Dimplicit-f=
+unction-declaration]
+>     149 |                 strscpy(ifr=2Eifr_name, pri->dev_name, sizeof(=
+ifr=2Eifr_name));
+>         |                 ^~~~~~~
+>         |                 strncpy
+>   cc1: some warnings being treated as errors
 
-Migrating file pages and swapcache pages into device memory is not supported.
-The decision is done based on page_mapping(). For now, swapcache pages are not migrated.
+Ah, yeah, this is another "not actually in the kernel" cases=2E Let's igno=
+re this strlcpy for now=2E
 
-Things can however be improved, for swapcache pages. Try to get rid of the swap cache,
-and if successful, go ahead as with other anonymous pages.
+-Keed
 
-Cc: Alistair Popple <apopple@nvidia.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Ralph Campbell <rcampbell@nvidia.com>
-Cc: Huang Ying <ying.huang@intel.com>
-Signed-off-by: Mika Penttilä <mpenttil@redhat.com>
----
 
-v2:
-  - use folio_test_anon() (Huang, Ying)
 
- 
- mm/migrate_device.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/mm/migrate_device.c b/mm/migrate_device.c
-index d30c9de60b0d..829bbc526758 100644
---- a/mm/migrate_device.c
-+++ b/mm/migrate_device.c
-@@ -747,13 +747,25 @@ static void __migrate_device_pages(unsigned long *src_pfns,
- 
- 		if (is_device_private_page(newpage) ||
- 		    is_device_coherent_page(newpage)) {
--			/*
--			 * For now only support anonymous memory migrating to
--			 * device private or coherent memory.
--			 */
-+
- 			if (mapping) {
--				src_pfns[i] &= ~MIGRATE_PFN_MIGRATE;
--				continue;
-+				struct folio *folio;
-+
-+				folio = page_folio(page);
-+
-+				/*
-+				 * For now only support anonymous memory migrating to
-+				 * device private or coherent memory.
-+				 *
-+				 * Try to get rid of swap cache if possible.
-+				 * page is here file or swapcache page, could be shmem also
-+				 * folio_test_anon() filters out file and shmem
-+				 *
-+				 */
-+				if (!folio_test_anon(folio) || !folio_free_swap(folio)) {
-+					src_pfns[i] &= ~MIGRATE_PFN_MIGRATE;
-+					continue;
-+				}
- 			}
- 		} else if (is_zone_device_page(newpage)) {
- 			/*
--- 
-2.17.1
-
+--=20
+Kees Cook
