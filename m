@@ -2,78 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C195B718640
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E7F718679
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbjEaPZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
+        id S232867AbjEaPfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234902AbjEaPYo (ORCPT
+        with ESMTP id S233917AbjEaPfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:24:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1441A2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:23:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685546636;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T7n2kTX8ab3RwNgUIAeH+MWr6FizMEgcp6aIosuEsmI=;
-        b=MlAkuG40YscmkDf8gMc+6SS86Tl8yTmrLSOuYKnblcdtgIR4/U399PzeLEjDeZAwdJWGFZ
-        2iKVrhtaIWY23fRPGvbAk+a96tuKuIgz/R3F2Jl/MmG2MzHk9+F28gcMtgFzqZIN5XWLp5
-        FjRpkXi5Fy9LoycnEKFadGo55MafM3s=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-33-7MoxGxOmNnSXNXIxBTCxpw-1; Wed, 31 May 2023 11:23:55 -0400
-X-MC-Unique: 7MoxGxOmNnSXNXIxBTCxpw-1
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-528ab71c95cso2961703a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:23:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685546634; x=1688138634;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T7n2kTX8ab3RwNgUIAeH+MWr6FizMEgcp6aIosuEsmI=;
-        b=DqdhK4zbEvY2l3nVG44GO8COJZKMtHe2jWydDVMkKoyuw7SxRPjrc46H+FnszpN+ud
-         QqxYml16FC47tl3mq5JgP08tbNbaKnhGV3vb4Ll9GnchWcbBII5ro7Oh+XDe58WQX6mt
-         eHKcSndi1um9fUp+oo+mkbhTmGyVf7LtqAXIDa9T+z6yzOUoQENdJoUDbHaBp8Cmv8/J
-         RWt+JuQthKTFH5XcEDwJV60kXJyd1oEwolA4t5rikWAhRccXh/FZqNj0uwQADMDtje+M
-         3/PcbSO/LPH/P5u/C49RwA6z6RkggWu0DHgANB/WCbyCE+Sk70lic8K+b5P1SVzrpCpO
-         C6qg==
-X-Gm-Message-State: AC+VfDxCMqbCxdxJJnlb/OD377usXNR9WRULUIMgVu1ZtwtubHLNuIKR
-        rBP3akLhi+k67Ji7D+hL+py/H8HA4mayZqY+HavCTJzizTSO78AJvQmWu/LeTaqWBd5H5N/wMyl
-        tCsPxuY9y5GMYdwdSpfi5pI3m3PIaHHZrSOKkiZd6
-X-Received: by 2002:a17:903:124a:b0:1ae:57d4:efbc with SMTP id u10-20020a170903124a00b001ae57d4efbcmr4941707plh.13.1685546633619;
-        Wed, 31 May 2023 08:23:53 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7KV5Id3KIg954ARS3D8v/eQQuEVgWEGC5d1V4/aTuKB24ZhoY6EbtKcSOAgxi+gnUr5Oxq/oxCiya+H16FMls=
-X-Received: by 2002:a17:903:124a:b0:1ae:57d4:efbc with SMTP id
- u10-20020a170903124a00b001ae57d4efbcmr4941694plh.13.1685546633258; Wed, 31
- May 2023 08:23:53 -0700 (PDT)
+        Wed, 31 May 2023 11:35:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF1C125
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:35:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DAEE63D74
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:35:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 401D3C433EF;
+        Wed, 31 May 2023 15:35:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685547329;
+        bh=42ueuOloMTrR83m/Gh8uGpcqRw+cPzbULNgMppbwAGw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YijHQ/gg4GqRMnuRtLZDvcke0aYPr8921yqDSiufV00WSIyrIkrxKbRS1klV/0pj+
+         SQe55XVBYAUmk2E4Hbr7GeSkslQhl1e3BXlvr3t3LRj1i64Zp0u0jRbGmhKstTWinZ
+         yGYIiCR4MrJqVxcknKyv4v9dBSbx+fMesbYCbS58RBHder1kH7DDE+2Asd5fUZZLWI
+         V7PXDWmyX9V7K0hOPF2ytry/pKHl9LHqkybK0CrixATMrl87lKvvk+dfYCjC2tn2WD
+         g8F0gpKyVFL36ZZYGYvgth41BjUrJ+B63g46q7KeLd4wCx7lwX63S3Q5JdN5BJDxhf
+         407HRFoMn4nSA==
+Date:   Wed, 31 May 2023 23:24:13 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH 4/6] riscv: mm: pass noncoherent or not to
+ riscv_noncoherent_supported()
+Message-ID: <ZHdmnfJvF1N5rgvx@xhacker>
+References: <20230526165958.908-1-jszhang@kernel.org>
+ <20230526165958.908-5-jszhang@kernel.org>
+ <20230529-gainfully-ribbon-48520d25ef6e@wendy>
 MIME-Version: 1.0
-References: <20230529131106.2123367-1-yukuai1@huaweicloud.com>
- <20230529131106.2123367-7-yukuai1@huaweicloud.com> <CALTww29ixKpcVknNe36D+x=2c1Aw-=z32SP-dJ_Hj8WxL2n4bg@mail.gmail.com>
- <830352e1-ecfa-f5dc-ce7c-349553bd3003@huaweicloud.com> <CALTww28_w3h1_viTp5L9SCytY7WmwmABqkXOmyvH_UD8T5odMg@mail.gmail.com>
- <f5cc14ed-e9d9-42ed-22e1-186973b991b1@huaweicloud.com>
-In-Reply-To: <f5cc14ed-e9d9-42ed-22e1-186973b991b1@huaweicloud.com>
-From:   Xiao Ni <xni@redhat.com>
-Date:   Wed, 31 May 2023 23:23:41 +0800
-Message-ID: <CALTww2_8vcszjZF5emGHjcm+XngHptGV+i11TVs00o8E0fPWGw@mail.gmail.com>
-Subject: Re: [PATCH -next v3 6/7] md/raid1-10: don't handle pluged bio by
- daemon thread
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     song@kernel.org, neilb@suse.de, akpm@osdl.org,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230529-gainfully-ribbon-48520d25ef6e@wendy>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,204 +60,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 4:06=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> w=
-rote:
->
-> Hi,
->
-> =E5=9C=A8 2023/05/31 16:00, Xiao Ni =E5=86=99=E9=81=93:
-> > On Wed, May 31, 2023 at 3:55=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.co=
-m> wrote:
-> >>
-> >> Hi,
-> >>
-> >> =E5=9C=A8 2023/05/31 15:50, Xiao Ni =E5=86=99=E9=81=93:
-> >>> On Mon, May 29, 2023 at 9:14=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.=
-com> wrote:
-> >>>>
-> >>>> From: Yu Kuai <yukuai3@huawei.com>
-> >>>>
-> >>>> current->bio_list will be set under submit_bio() context, in this ca=
-se
-> >>>> bitmap io will be added to the list and wait for current io submissi=
-on to
-> >>>> finish, while current io submission must wait for bitmap io to be do=
-ne.
-> >>>> commit 874807a83139 ("md/raid1{,0}: fix deadlock in bitmap_unplug.")=
- fix
-> >>>> the deadlock by handling plugged bio by daemon thread.
-> >>>
-> >>> Thanks for the historic introduction. I did a test and printed the
-> >>> logs in raid10_unplug. The tools I used are dd and mkfs. from_schedul=
-e
-> >>> is always true during I/O and it's 0 when io finishes. So I have a
-> >>> question here, how can I trigger the condition that from_schedule is =
-0
-> >>> and current->list is not NULL? In other words, is there really a
-> >>> deadlock here? Before your patch it looks like all bios are merged
-> >>> into conf->pending_bio_list and are handled by raid10d. It can't
-> >>> submit bio directly in the originating process which mentioned in
-> >>> 57c67df48866
-> >>>
-> >> As I mentioned below, after commit a214b949d8e3, this deadlock doesn't
-> >> exist anymore, and without this patch, patch 7 will introduce this
-> >> scenario again.
-> >>
-> >> Thanks,
-> >> Kuai
-> >>>>
-> >>>> On the one hand, the deadlock won't exist after commit a214b949d8e3
-> >>>> ("blk-mq: only flush requests from the plug in blk_mq_submit_bio"). =
-On
-> >>>> the other hand, current solution makes it impossible to flush plugge=
-d bio
-> >>>> in raid1/10_make_request(), because this will cause that all the wri=
-tes
-> >>>> will goto daemon thread.
-> >>>>
-> >>>> In order to limit the number of plugged bio, commit 874807a83139
-> >>>> ("md/raid1{,0}: fix deadlock in bitmap_unplug.") is reverted, and th=
-e
-> >>>> deadlock is fixed by handling bitmap io asynchronously.
-> >>>>
-> >>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> >>>> ---
-> >>>>    drivers/md/raid1-10.c | 14 ++++++++++++++
-> >>>>    drivers/md/raid1.c    |  4 ++--
-> >>>>    drivers/md/raid10.c   |  8 +++-----
-> >>>>    3 files changed, 19 insertions(+), 7 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/md/raid1-10.c b/drivers/md/raid1-10.c
-> >>>> index 73cc3cb9154d..17e55c1fd5a1 100644
-> >>>> --- a/drivers/md/raid1-10.c
-> >>>> +++ b/drivers/md/raid1-10.c
-> >>>> @@ -151,3 +151,17 @@ static inline bool raid1_add_bio_to_plug(struct=
- mddev *mddev, struct bio *bio,
-> >>>>
-> >>>>           return true;
-> >>>>    }
-> >>>> +
-> >>>> +/*
-> >>>> + * current->bio_list will be set under submit_bio() context, in thi=
-s case bitmap
-> >>>> + * io will be added to the list and wait for current io submission =
-to finish,
-> >>>> + * while current io submission must wait for bitmap io to be done. =
-In order to
-> >>>> + * avoid such deadlock, submit bitmap io asynchronously.
-> >>>> + */
-> >>>> +static inline void raid1_prepare_flush_writes(struct bitmap *bitmap=
-)
-> >>>> +{
-> >>>> +       if (current->bio_list)
-> >>>> +               md_bitmap_unplug_async(bitmap);
-> >>>> +       else
-> >>>> +               md_bitmap_unplug(bitmap);
-> >>>> +}
-> >>>> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
-> >>>> index 0778e398584c..006620fed595 100644
-> >>>> --- a/drivers/md/raid1.c
-> >>>> +++ b/drivers/md/raid1.c
-> >>>> @@ -794,7 +794,7 @@ static int read_balance(struct r1conf *conf, str=
-uct r1bio *r1_bio, int *max_sect
-> >>>>    static void flush_bio_list(struct r1conf *conf, struct bio *bio)
-> >>>>    {
-> >>>>           /* flush any pending bitmap writes to disk before proceedi=
-ng w/ I/O */
-> >>>> -       md_bitmap_unplug(conf->mddev->bitmap);
-> >>>> +       raid1_prepare_flush_writes(conf->mddev->bitmap);
-> >>>
-> >>> If we unplug bitmap asynchronously, can we make sure the bitmap are
-> >>> flushed before the corresponding data?
-> >
-> > Could you explain this question?
->
-> Sorry that I missed this... See the new helper in patch 5,
-> md_bitmap_unplug_async() will still wait for bitmap io to finish.
->
-> md_bitmap_unplug_async
->   DECLARE_COMPLETION_ONSTACK(done)
->   ...
->   wait_for_completion(&done)
+On Mon, May 29, 2023 at 12:13:10PM +0100, Conor Dooley wrote:
+> Hey Jisheng,
 
-Ah I c. You use this way to avoid putting the bitmap io to
-current->bio_list. Thanks for the explanation :)
+Hi Conor,
 
-Regards
-Xiao
->
-> Thanks,
-> Kuai
-> >
-> > Regards
-> > Xiao
-> >
-> >
-> >>>
-> >>> Regards
-> >>> Xiao
-> >>>
-> >>>>           wake_up(&conf->wait_barrier);
-> >>>>
-> >>>>           while (bio) { /* submit pending writes */
-> >>>> @@ -1166,7 +1166,7 @@ static void raid1_unplug(struct blk_plug_cb *c=
-b, bool from_schedule)
-> >>>>           struct r1conf *conf =3D mddev->private;
-> >>>>           struct bio *bio;
-> >>>>
-> >>>> -       if (from_schedule || current->bio_list) {
-> >>>> +       if (from_schedule) {
-> >>>>                   spin_lock_irq(&conf->device_lock);
-> >>>>                   bio_list_merge(&conf->pending_bio_list, &plug->pen=
-ding);
-> >>>>                   spin_unlock_irq(&conf->device_lock);
-> >>>> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> >>>> index 6640507ecb0d..fb22cfe94d32 100644
-> >>>> --- a/drivers/md/raid10.c
-> >>>> +++ b/drivers/md/raid10.c
-> >>>> @@ -902,9 +902,7 @@ static void flush_pending_writes(struct r10conf =
-*conf)
-> >>>>                   __set_current_state(TASK_RUNNING);
-> >>>>
-> >>>>                   blk_start_plug(&plug);
-> >>>> -               /* flush any pending bitmap writes to disk
-> >>>> -                * before proceeding w/ I/O */
-> >>>> -               md_bitmap_unplug(conf->mddev->bitmap);
-> >>>> +               raid1_prepare_flush_writes(conf->mddev->bitmap);
-> >>>>                   wake_up(&conf->wait_barrier);
-> >>>>
-> >>>>                   while (bio) { /* submit pending writes */
-> >>>> @@ -1108,7 +1106,7 @@ static void raid10_unplug(struct blk_plug_cb *=
-cb, bool from_schedule)
-> >>>>           struct r10conf *conf =3D mddev->private;
-> >>>>           struct bio *bio;
-> >>>>
-> >>>> -       if (from_schedule || current->bio_list) {
-> >>>> +       if (from_schedule) {
-> >>>>                   spin_lock_irq(&conf->device_lock);
-> >>>>                   bio_list_merge(&conf->pending_bio_list, &plug->pen=
-ding);
-> >>>>                   spin_unlock_irq(&conf->device_lock);
-> >>>> @@ -1120,7 +1118,7 @@ static void raid10_unplug(struct blk_plug_cb *=
-cb, bool from_schedule)
-> >>>>
-> >>>>           /* we aren't scheduling, so we can do the write-out direct=
-ly. */
-> >>>>           bio =3D bio_list_get(&plug->pending);
-> >>>> -       md_bitmap_unplug(mddev->bitmap);
-> >>>> +       raid1_prepare_flush_writes(mddev->bitmap);
-> >>>>           wake_up(&conf->wait_barrier);
-> >>>>
-> >>>>           while (bio) { /* submit pending writes */
-> >>>> --
-> >>>> 2.39.2
-> >>>>
-> >>>
-> >>> .
-> >>>
-> >>
-> >
-> > .
-> >
->
+> 
+> On Sat, May 27, 2023 at 12:59:56AM +0800, Jisheng Zhang wrote:
+> > We will soon take different actions by checking the HW is noncoherent
+> > or not, I.E ZICBOM/ERRATA_THEAD_CMO or not.
+> > 
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > ---
+> >  arch/riscv/errata/thead/errata.c    | 19 +++++++++++--------
+> >  arch/riscv/include/asm/cacheflush.h |  4 ++--
+> >  arch/riscv/kernel/setup.c           |  6 +++++-
+> >  arch/riscv/mm/dma-noncoherent.c     | 10 ++++++----
+> >  4 files changed, 24 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
+> > index be84b14f0118..c192b80a5166 100644
+> > --- a/arch/riscv/errata/thead/errata.c
+> > +++ b/arch/riscv/errata/thead/errata.c
+> > @@ -36,21 +36,24 @@ static bool errata_probe_pbmt(unsigned int stage,
+> >  static bool errata_probe_cmo(unsigned int stage,
+> >  			     unsigned long arch_id, unsigned long impid)
+> >  {
+> > -	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_CMO))
+> > -		return false;
+> > -
+> > -	if (arch_id != 0 || impid != 0)
+> > -		return false;
+> > +	bool cmo;
+> >  
+> >  	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+> >  		return false;
+> >  
+> > +	if (IS_ENABLED(CONFIG_ERRATA_THEAD_CMO) &&
+> > +	    (arch_id == 0 && impid == 0))
+> > +		cmo = true;
+> > +	else
+> > +		cmo = false;
+> > +
+> >  	if (stage == RISCV_ALTERNATIVES_BOOT) {
+> > -		riscv_cbom_block_size = L1_CACHE_BYTES;
+> > -		riscv_noncoherent_supported();
+> > +		if (cmo)
+> > +			riscv_cbom_block_size = L1_CACHE_BYTES;
+> > +		riscv_noncoherent_supported(cmo);
+> >  	}
+> >  
+> > -	return true;
+> > +	return cmo;
+> 
+> I don't really understand the changes that you are making to this
+> function, so that is tries really hard to call
+> riscv_noncoherent_supported(). Why do we need to always call the function
+> in the erratum's probe function, if the erratum is not detected, given
+
+In one unified kernel Image, to support both coherent and noncoherent
+platforms(currently, either T-HEAD CMO or ZICBOM), we need to let the
+kmalloc meet both cases, specifically, ARCH_DMA_MINALIGN aligned.
+Once we know the underlying HW is coherent, I.E neither T-HEAD CMO nor
+ZICBOM, we need to notice kmalloc we are safe to reduce the alignment
+to 1. The notice action is done in patch 5:
+
++       } else {
++               dma_cache_alignment = 1;
+
+
+> that riscv_noncoherent_supported() is called immediately after
+> apply_boot_alternatives() in setup_arch()?
+> 
+> >  }
+> >  
+> >  static bool errata_probe_pmu(unsigned int stage,
+> > diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
+> > index 8091b8bf4883..9d056c9b625a 100644
+> > --- a/arch/riscv/include/asm/cacheflush.h
+> > +++ b/arch/riscv/include/asm/cacheflush.h
+> > @@ -54,9 +54,9 @@ extern unsigned int riscv_cboz_block_size;
+> >  void riscv_init_cbo_blocksizes(void);
+> >  
+> >  #ifdef CONFIG_RISCV_DMA_NONCOHERENT
+> > -void riscv_noncoherent_supported(void);
+> > +void riscv_noncoherent_supported(bool cmo);
+> 
+> I think it would "read better" if you renamed this variable to
+> "have_cmo".
+> 
+> >  #else
+> > -static inline void riscv_noncoherent_supported(void) {}
+> > +static inline void riscv_noncoherent_supported(bool cmo) {}
+> >  #endif
+> >  
+> >  /*
+> > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> > index 36b026057503..565f3e20169b 100644
+> > --- a/arch/riscv/kernel/setup.c
+> > +++ b/arch/riscv/kernel/setup.c
+> > @@ -264,6 +264,7 @@ static void __init parse_dtb(void)
+> >  
+> >  void __init setup_arch(char **cmdline_p)
+> >  {
+> > +	bool cmo;
+> >  	parse_dtb();
+> >  	setup_initial_init_mm(_stext, _etext, _edata, _end);
+> >  
+> > @@ -298,7 +299,10 @@ void __init setup_arch(char **cmdline_p)
+> >  	apply_boot_alternatives();
+> >  	if (IS_ENABLED(CONFIG_RISCV_ISA_ZICBOM) &&
+> >  	    riscv_isa_extension_available(NULL, ZICBOM))
+> > -		riscv_noncoherent_supported();
+> > +		cmo = true;
+> > +	else
+> > +		cmo = false;
+> > +	riscv_noncoherent_supported(cmo);
+> 
+> As a nit, could you put a newline before the call to
+> riscv_noncoherent_supported()?
+> 
+> >  }
+> >  
+> >  static int __init topology_init(void)
+> > diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
+> > index d51a75864e53..0e172e2b4751 100644
+> > --- a/arch/riscv/mm/dma-noncoherent.c
+> > +++ b/arch/riscv/mm/dma-noncoherent.c
+> > @@ -72,9 +72,11 @@ void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
+> >  	dev->dma_coherent = coherent;
+> >  }
+> >  
+> > -void riscv_noncoherent_supported(void)
+> > +void riscv_noncoherent_supported(bool cmo)
+> >  {
+> > -	WARN(!riscv_cbom_block_size,
+> > -	     "Non-coherent DMA support enabled without a block size\n");
+> > -	noncoherent_supported = true;
+> > +	if (cmo) {
+> > +		WARN(!riscv_cbom_block_size,
+> > +		     "Non-coherent DMA support enabled without a block size\n");
+> > +		noncoherent_supported = true;
+> > +	}
+> 
+> The other places that we do a WARN() because of screwed up devicetrees
+> for CMO things, we do a WARN_TAINT(CPU_OUT_OF_SPEC). Should we do the
+> same here too?
+> 
+> Cheers,
+> Conor.
+
 
