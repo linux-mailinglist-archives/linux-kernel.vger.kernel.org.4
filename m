@@ -2,56 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B6E7182F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B397182F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236518AbjEaNqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
+        id S236636AbjEaNqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236623AbjEaNon (ORCPT
+        with ESMTP id S236711AbjEaNov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:44:43 -0400
+        Wed, 31 May 2023 09:44:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987D71703;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC431705;
         Wed, 31 May 2023 06:42:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A48463B4E;
-        Wed, 31 May 2023 13:42:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A81EC433D2;
-        Wed, 31 May 2023 13:42:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6599263B0F;
+        Wed, 31 May 2023 13:42:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C296C4339B;
+        Wed, 31 May 2023 13:42:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540564;
-        bh=Luun0qN3Hqo2+HrVtNije7hzgiJtuA0kucqBhrlDmSU=;
+        s=k20201202; t=1685540567;
+        bh=qCUmt/x8RV/lJojRSG7blHQYXDYqXLHH6XaAcs5g/YQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YTL6tGHoJKARf8VeqOOEqVCBEtTG08JHjcCub/pfYKBS+Nc+/9vuJzfsvSWK9dpbq
-         mZQ4txEnpBMjd4S8CFI8QFBUpUBts7a2TtWXNHzOG0gYHbxl7IRqFydCA81VENz7UT
-         wXbvghutBA7MH77K2JVOK7y6JVyhcCek/J2OJ4x430cebGwi/N5TGK0FbF1PGElaxx
-         4pUSk91YD4pZWfWbgCQGAMgSiHG8qsOEtSm9rmLv2mKP9sx2hCQlfbsOt/2Myh7GNF
-         30CNTLXrYASga5+yuFDb1ViEPzL5eLb4mhTc0w2fdDNGe1tZET2DJeCT+rh2pA1Eq1
-         5T709Qbvaf24A==
+        b=DwM7Pg30hMNLTz+BrFjTpI8S6rrZ2u+nk4gXRyuEBqGdm8J0xG+1rbOwtADiRCG9c
+         NuOsCj7WKDrHhjQnH0f2EdTLMAGzGdNS0LvRg0U/hVBk1hdR0CHYi2yFhhM9zjbrHu
+         jpcUr43FBTIYhv1isOX7HXodda+7mXUpyEiqX9LH+zgxgjFv9WWmAyqlZ1Y5D+PaAY
+         rlD8cFflIZgxwJFgNSXpaD+mgi/dSbnJdvPHZy+378a0+OntABOteEkCeepjIOu6tx
+         +DB0RTo8CDopzyBjioQt94uEERhzqkbGDgvpp92xQxR4JjSPoIhLGCzMgHdw/H3l+V
+         5Qll1cbzKWIjA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        pierre-louis.bossart@linux.intel.com,
-        liam.r.girdwood@linux.intel.com, peter.ujfalusi@linux.intel.com,
-        yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        kai.vehmanen@linux.intel.com, perex@perex.cz, tiwai@suse.com,
-        kuninori.morimoto.gx@renesas.com, alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 6.1 21/33] ASoC: Intel: avs: Add missing checks on FE startup
-Date:   Wed, 31 May 2023 09:41:47 -0400
-Message-Id: <20230531134159.3383703-21-sashal@kernel.org>
+Cc:     Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>,
+        James.Bottomley@HansenPartnership.com, gaoxin@cdjrlc.com,
+        linux-parisc@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 22/33] parisc: Improve cache flushing for PCXL in arch_sync_dma_for_cpu()
+Date:   Wed, 31 May 2023 09:41:48 -0400
+Message-Id: <20230531134159.3383703-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134159.3383703-1-sashal@kernel.org>
 References: <20230531134159.3383703-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -65,66 +57,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+From: Helge Deller <deller@gmx.de>
 
-[ Upstream commit 25148f57a2a6d157779bae494852e172952ba980 ]
+[ Upstream commit 59fa12646d9f56c842b4d5b6418ed77af625c588 ]
 
-Constraint functions have return values, they should be checked for
-potential errors.
+Add comment in arch_sync_dma_for_device() and handle the direction flag in
+arch_sync_dma_for_cpu().
 
-Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
-Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-Link: https://lore.kernel.org/r/20230519201711.4073845-8-amadeuszx.slawinski@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+When receiving data from the device (DMA_FROM_DEVICE) unconditionally
+purge the data cache in arch_sync_dma_for_cpu().
+
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/intel/avs/pcm.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+ arch/parisc/kernel/pci-dma.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/intel/avs/pcm.c b/sound/soc/intel/avs/pcm.c
-index 8fe5917b1e263..22f21f3f612d1 100644
---- a/sound/soc/intel/avs/pcm.c
-+++ b/sound/soc/intel/avs/pcm.c
-@@ -424,21 +424,34 @@ static int avs_dai_fe_startup(struct snd_pcm_substream *substream, struct snd_so
- 
- 	host_stream = snd_hdac_ext_stream_assign(bus, substream, HDAC_EXT_STREAM_TYPE_HOST);
- 	if (!host_stream) {
--		kfree(data);
--		return -EBUSY;
-+		ret = -EBUSY;
-+		goto err;
- 	}
- 
- 	data->host_stream = host_stream;
--	snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIODS);
-+	ret = snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIODS);
-+	if (ret < 0)
-+		goto err;
-+
- 	/* avoid wrap-around with wall-clock */
--	snd_pcm_hw_constraint_minmax(runtime, SNDRV_PCM_HW_PARAM_BUFFER_TIME, 20, 178000000);
--	snd_pcm_hw_constraint_list(runtime, 0, SNDRV_PCM_HW_PARAM_RATE, &hw_rates);
-+	ret = snd_pcm_hw_constraint_minmax(runtime, SNDRV_PCM_HW_PARAM_BUFFER_TIME, 20, 178000000);
-+	if (ret < 0)
-+		goto err;
-+
-+	ret = snd_pcm_hw_constraint_list(runtime, 0, SNDRV_PCM_HW_PARAM_RATE, &hw_rates);
-+	if (ret < 0)
-+		goto err;
-+
- 	snd_pcm_set_sync(substream);
- 
- 	dev_dbg(dai->dev, "%s fe STARTUP tag %d str %p",
- 		__func__, hdac_stream(host_stream)->stream_tag, substream);
- 
- 	return 0;
-+
-+err:
-+	kfree(data);
-+	return ret;
+diff --git a/arch/parisc/kernel/pci-dma.c b/arch/parisc/kernel/pci-dma.c
+index ba87f791323be..71ed5391f29d6 100644
+--- a/arch/parisc/kernel/pci-dma.c
++++ b/arch/parisc/kernel/pci-dma.c
+@@ -446,11 +446,27 @@ void arch_dma_free(struct device *dev, size_t size, void *vaddr,
+ void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
+ 		enum dma_data_direction dir)
+ {
++	/*
++	 * fdc: The data cache line is written back to memory, if and only if
++	 * it is dirty, and then invalidated from the data cache.
++	 */
+ 	flush_kernel_dcache_range((unsigned long)phys_to_virt(paddr), size);
  }
  
- static void avs_dai_fe_shutdown(struct snd_pcm_substream *substream, struct snd_soc_dai *dai)
+ void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
+ 		enum dma_data_direction dir)
+ {
+-	flush_kernel_dcache_range((unsigned long)phys_to_virt(paddr), size);
++	unsigned long addr = (unsigned long) phys_to_virt(paddr);
++
++	switch (dir) {
++	case DMA_TO_DEVICE:
++	case DMA_BIDIRECTIONAL:
++		flush_kernel_dcache_range(addr, size);
++		return;
++	case DMA_FROM_DEVICE:
++		purge_kernel_dcache_range_asm(addr, addr + size);
++		return;
++	default:
++		BUG();
++	}
+ }
 -- 
 2.39.2
 
