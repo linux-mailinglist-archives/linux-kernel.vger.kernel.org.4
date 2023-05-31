@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168D87180CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F567180D2
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236137AbjEaM7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
+        id S235489AbjEaM7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbjEaM6l (ORCPT
+        with ESMTP id S236175AbjEaM6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:58:41 -0400
+        Wed, 31 May 2023 08:58:44 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724EA10E3;
-        Wed, 31 May 2023 05:57:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F2B124;
+        Wed, 31 May 2023 05:58:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=0pt+DIUM7skHyOVxJn54kg489hpHIHXBxJn7U5ufVIU=; b=kUC4YE7Po/pjH2Q/Qcg8UL5MQ6
-        pCOBpPjwrVIpg3lgqFvt0QoUH6zy231OYy6ksV61zFpCWXRA4nUivc41QWmesaOQbeMhEz/J6hlJb
-        hxp4wRWlFTJ4q+a0uHGASZSfvu8HoeSrIlXiDvTBswYlsjzsnoiKp05FKuirzHEKMXKK0RZnwfk3n
-        VIPMZXYmv6j+rzLarrB6HSm28fT8S1cMlMXrfvz6Na5QGqjiPe96ijeLsaEU+Hl+QPNUj68LSf0xU
-        X7l0LoU3PzH4NY/I9aPfLlpxV7ylyiMlldi3Ig2BXrsUyHcab25flqJ9mnIvt8ZKpX0kHTEaJxU8V
-        sohkPdSA==;
+        bh=Eb3aGI6n4ytEG8s7b8hrZ+gUQ6cXP36Kx70RBR7HPKY=; b=c3P5AWBv0AGRi2WjLeefQt8p1U
+        61YRrFR7iCVpyfZWbW0h1CQKRy7sW+1IywAx74ihcFduGXy9i39NUCsLMrskEEeoaUexPOvgqpi0T
+        PFhbXRwrJJUJo9yVlxTarVQ5/Ov3CO2L5akUzC2OAh5uA5glLLLi/B7yIKzdkUyEs8KLFrOH3KYwu
+        M6pjiF+/Edr97OZxVkjVB3Mtq8SNTChhtw2QYbPitjZQrhKT70iOjn9w06qQYH7TB/ucjVxytCvvX
+        +tOR5D+eLh2tmE0RJNEv+E5v6OdHcl8MyHL606Wup8yyNV4Uv0VmxYojd/mMdWIeWR1d5miOvnH61
+        gmrjIpRA==;
 Received: from [2001:4bb8:182:6d06:2e49:a56:513a:92ee] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q4LO6-00HRx9-1J;
-        Wed, 31 May 2023 12:57:14 +0000
+        id 1q4LO9-00HRzk-0U;
+        Wed, 31 May 2023 12:57:17 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,9 +42,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Loic Poulain <loic.poulain@linaro.org>, dm-devel@redhat.com,
         linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
         linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: [PATCH 18/24] dm: open code dm_get_dev_t in dm_init_init
-Date:   Wed, 31 May 2023 14:55:29 +0200
-Message-Id: <20230531125535.676098-19-hch@lst.de>
+Subject: [PATCH 19/24] dm: remove dm_get_dev_t
+Date:   Wed, 31 May 2023 14:55:30 +0200
+Message-Id: <20230531125535.676098-20-hch@lst.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531125535.676098-1-hch@lst.de>
 References: <20230531125535.676098-1-hch@lst.de>
@@ -61,32 +61,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dm_init_init is called from early boot code, and thus lookup_bdev
-will never succeed.  Just open code that call to early_lookup_bdev
-instead.
+Open code dm_get_dev_t in the only remaining caller, and propagate the
+exact error code from lookup_bdev and early_lookup_bdev.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Mike Snitzer <snitzer@kernel.org>
 ---
- drivers/md/dm-init.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/md/dm-table.c         | 22 +++++-----------------
+ include/linux/device-mapper.h |  2 --
+ 2 files changed, 5 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/md/dm-init.c b/drivers/md/dm-init.c
-index d369457dbed0ed..2a71bcdba92d14 100644
---- a/drivers/md/dm-init.c
-+++ b/drivers/md/dm-init.c
-@@ -293,8 +293,10 @@ static int __init dm_init_init(void)
+diff --git a/drivers/md/dm-table.c b/drivers/md/dm-table.c
+index 05aa16da43b0d5..1576b408768d4b 100644
+--- a/drivers/md/dm-table.c
++++ b/drivers/md/dm-table.c
+@@ -323,20 +323,6 @@ static int upgrade_mode(struct dm_dev_internal *dd, fmode_t new_mode,
+ 	return 0;
+ }
  
- 	for (i = 0; i < ARRAY_SIZE(waitfor); i++) {
- 		if (waitfor[i]) {
-+			dev_t dev;
-+
- 			DMINFO("waiting for device %s ...", waitfor[i]);
--			while (!dm_get_dev_t(waitfor[i]))
-+			while (early_lookup_bdev(waitfor[i], &dev))
- 				fsleep(5000);
- 		}
+-/*
+- * Convert the path to a device
+- */
+-dev_t dm_get_dev_t(const char *path)
+-{
+-	dev_t dev;
+-
+-	if (lookup_bdev(path, &dev) &&
+-	    early_lookup_bdev(path, &dev))
+-		return 0;
+-	return dev;
+-}
+-EXPORT_SYMBOL_GPL(dm_get_dev_t);
+-
+ /*
+  * Add a device to the list, or just increment the usage count if
+  * it's already present.
+@@ -359,9 +345,11 @@ int dm_get_device(struct dm_target *ti, const char *path, fmode_t mode,
+ 		if (MAJOR(dev) != major || MINOR(dev) != minor)
+ 			return -EOVERFLOW;
+ 	} else {
+-		dev = dm_get_dev_t(path);
+-		if (!dev)
+-			return -ENODEV;
++		r = lookup_bdev(path, &dev);
++		if (r)
++			r = early_lookup_bdev(path, &dev);
++		if (r)
++			return r;
  	}
+ 	if (dev == disk_devt(t->md->disk))
+ 		return -EINVAL;
+diff --git a/include/linux/device-mapper.h b/include/linux/device-mapper.h
+index a52d2b9a68460a..c27b84002d8382 100644
+--- a/include/linux/device-mapper.h
++++ b/include/linux/device-mapper.h
+@@ -170,8 +170,6 @@ struct dm_dev {
+ 	char name[16];
+ };
+ 
+-dev_t dm_get_dev_t(const char *path);
+-
+ /*
+  * Constructors should call these functions to ensure destination devices
+  * are opened/closed correctly.
 -- 
 2.39.2
 
