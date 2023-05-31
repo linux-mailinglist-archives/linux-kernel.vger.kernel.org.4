@@ -2,204 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC77071875E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33162718760
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjEaQbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 12:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
+        id S229692AbjEaQbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 12:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjEaQa7 (ORCPT
+        with ESMTP id S229567AbjEaQb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 12:30:59 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07207E2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:30:58 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-556011695d1so105876807b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:30:57 -0700 (PDT)
+        Wed, 31 May 2023 12:31:29 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B928512B
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:31:20 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b041ccea75so24303645ad.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:31:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685550657; x=1688142657;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4oMPwuBewXzucRhAy2k91jt6FR1Q3W1PQo5GZNd6lqM=;
-        b=ryeCZ321lBNpiYoS40S71CMHh8oGv0krJKIZpmIGsRIe+xGkwcAHYnzd9/aT6BnPjG
-         gaiFm7JRSiNpBjcX+wc1xbIiR6Nv5swrk3nawefNF3b/5dbY6OGYqJ+F2BxfxTYUyd6v
-         D6mf8CgTUcPhO15w70n9pgY36xb5L2RSXnfymapJLr3enxB9Cwr7TCYP9QAM3Wx4enBT
-         cmDWCxlbMpEaj0zNJ5C992qVuWpncecoglFbvm+Hj4HDMi8KYlgoqpBM2QKVwxk6ui15
-         qATljkSrWZcTGytOWYTwM9y7jUIFK9JzCGI4og+UAoZP4VUJmQk25c/1HVxPYepTTTIR
-         FV/w==
+        d=chromium.org; s=google; t=1685550680; x=1688142680;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ByzmIR8bdGAXP2o41OwIixgXQi8QYuh3izNby61Iy4=;
+        b=hbrIeOvaeAKyyvxHsoe7u4SWuGGCrkUeYy9BIzH3pyZFfF87fzRN4hsBFOI/2I8AAX
+         c/uIbxHraDc7ffkJ/UgVcHCW2LDjOCDYPpUcVZ5sVfalNIU3me49YUi6YEKMRIT6CAB8
+         ZHYplMOe/l48NyiEudrdmRuN8OuSuhtSJp/1o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685550657; x=1688142657;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4oMPwuBewXzucRhAy2k91jt6FR1Q3W1PQo5GZNd6lqM=;
-        b=Lml7RvQhcCSSuEHq/D3b7pa+jFY1QsAuizmzKhIHMRQ61H88ip76BddZxn/dFwas8Q
-         OtpqGggMLyOMfRNDLMjP/2auHMJ5MUadKdjHRTWYJ/w4+7U6iCFeWR3QmfD9hfecUZf0
-         ix23dYgxyflI/OGmS2XIsD3CCiztf1sYKM5TdjvwtXqCDmedNk8H/Ar7HXU2gbU1dqO+
-         tGnE4/p7w+roubgAt8SMvhne/pTiPFFGV4elDzlo6rR+F30U0DWcLtvgEa8+UWGcZ9to
-         HROXIKbVYKfuOJdGvN7C7Rp6vg4JjYqtWjooXY8z+GOl8I+1hUoQvfH4n9MsvswZqXgr
-         WiGQ==
-X-Gm-Message-State: AC+VfDxYpD+bY/2TigtH3cDUVOXEzXz59A7eizZUsC9z7ijXPEKvCx50
-        r2ke3bdwvVWJW+YhJ4MFfdlOxMpMpl0=
-X-Google-Smtp-Source: ACHHUZ6X8s1Ux+vAT7l47i65NzVwjyLzkDLJAboaHZnpw10xH1dcOU12nASDui2gP5eCl+mciulXyOP22sY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:b70c:0:b0:561:8e86:9818 with SMTP id
- v12-20020a81b70c000000b005618e869818mr3513805ywh.7.1685550657211; Wed, 31 May
- 2023 09:30:57 -0700 (PDT)
-Date:   Wed, 31 May 2023 09:30:55 -0700
-In-Reply-To: <F4AFC5EE-9967-4117-BA85-ED82C106575C@nutanix.com>
-Mime-Version: 1.0
-References: <20230530200152.18961-1-jon@nutanix.com> <2a6502e3-ba87-0355-af09-825e8467b81f@intel.com>
- <F4AFC5EE-9967-4117-BA85-ED82C106575C@nutanix.com>
-Message-ID: <ZHd2P6D142rCByrm@google.com>
-Subject: Re: [PATCH] x86/fpu/xstate: clear XSAVE features if DISABLED_MASK set
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Kyle Huey <me@kylehuey.com>,
-        "neelnatu@google.com" <neelnatu@google.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        d=1e100.net; s=20221208; t=1685550680; x=1688142680;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2ByzmIR8bdGAXP2o41OwIixgXQi8QYuh3izNby61Iy4=;
+        b=NCIBguldRKLm0tIsPjEy2GNBuDfeAv/cDNsKeBvnGnWVhIpNVxRdqIhs2fA8llc+m9
+         qTe0iCmBZ4JIQhuANTS8cdUcvrS+6Oxi67Ai0/jx1tQLu6hzTW5uRhkWpE/kYLuH6F9F
+         h8wchipVJtEzRoRJ3+b9WqabzYDGNyP4HYXWaO8/zNIlN2vrJFW70Cijj0fKhpHf5QXr
+         KwX0H8ZVCKR6pWTr9vv02xEe+Ii4BOGZyUS8GrDsRWLkblBN1td15OXnlV40QnNkUAS6
+         PMxjnxHA7Rd6MrWoFFU731PbieYx/5fYtGLgAxYwCDMsMyJzJwD4yBkRBEZbchBwK3IZ
+         SCqQ==
+X-Gm-Message-State: AC+VfDxpxtOXy30Lk3pemcSLl4AlLQu1ALRlRBM1RXHtDl1+tkX+Rn5H
+        EC/0WAzmUDKMWPfJc+2S5mxwyA==
+X-Google-Smtp-Source: ACHHUZ7+YRicU2hUq7DYy5WQBOqTFZW3O0RNpTvYGxbuQd/k91gpcaBhaOTyIxRwClClVq5v5gXBbw==
+X-Received: by 2002:a17:902:c94e:b0:1b1:8aa1:3a2f with SMTP id i14-20020a170902c94e00b001b18aa13a2fmr930782pla.27.1685550680219;
+        Wed, 31 May 2023 09:31:20 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id z3-20020a170903018300b001aface7bdd8sm1608614plg.31.2023.05.31.09.31.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 09:31:19 -0700 (PDT)
+Date:   Wed, 31 May 2023 09:31:18 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     arno@natisbad.org, arnd@kernel.org, schalla@marvell.com,
+        bbrezillon@kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH] crypto: marvell/cesa - Fix type mismatch warning
+Message-ID: <202305310930.844EBEA21C@keescook>
+References: <20230523083313.899332-1-arnd@kernel.org>
+ <168548692863.1302890.6789778742527600870.b4-ty@chromium.org>
+ <ZHcoQvWnzO0c1Cp9@gondor.apana.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHcoQvWnzO0c1Cp9@gondor.apana.org.au>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023, Jon Kohler wrote:
->=20
-> > On May 30, 2023, at 6:22 PM, Dave Hansen <dave.hansen@intel.com> wrote:
-> >=20
-> > On 5/30/23 13:01, Jon Kohler wrote:
-> > Is that the only problem?  kvm_load_guest_xsave_state() seems to have
-> > some #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS code and I can't
-> > imagine that KVM guests can even use PKRU if this code is compiled out.
+On Wed, May 31, 2023 at 06:58:10PM +0800, Herbert Xu wrote:
+> On Tue, May 30, 2023 at 03:48:49PM -0700, Kees Cook wrote:
+> > On Tue, 23 May 2023 10:33:04 +0200, Arnd Bergmann wrote:
+> > > From: Arnd Bergmann <arnd@arndb.de>
+> > > 
+> > > Commit df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3") uncovered
+> > > a type mismatch in cesa 3des support that leads to a memcpy beyond the
+> > > end of a structure:
+> > > 
+> > > In function 'fortify_memcpy_chk',
+> > >     inlined from 'mv_cesa_des3_ede_setkey' at drivers/crypto/marvell/cesa/cipher.c:307:2:
+> > > include/linux/fortify-string.h:583:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
+> > >   583 |                         __write_overflow_field(p_size_field, size);
+> > >       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > 
+> > > [...]
+> > 
+> > Applied to for-next/hardening, thanks!
+> > 
+> > [1/1] crypto: marvell/cesa - Fix type mismatch warning
+> >       https://git.kernel.org/kees/c/37f3abddda8d
+> 
+> Why did you apply it to your tree? This patch makes sense on its
+> own regardless of the fortify changes.
 
-...
+I snagged it since a week had gone by with no additional discussion and
+it fixed an issue exposed by work in the hardening tree. Let me know if
+you'd prefer I drop it for you to carry instead.
 
-> >> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate=
-.c
-> >> index 0bab497c9436..211ef82b53e3 100644
-> >> --- a/arch/x86/kernel/fpu/xstate.c
-> >> +++ b/arch/x86/kernel/fpu/xstate.c
-> >> @@ -798,7 +798,8 @@ void __init fpu__init_system_xstate(unsigned int l=
-egacy_size)
-> >> 		unsigned short cid =3D xsave_cpuid_features[i];
-> >>=20
-> >> 		/* Careful: X86_FEATURE_FPU is 0! */
-> >> -		if ((i !=3D XFEATURE_FP && !cid) || !boot_cpu_has(cid))
-> >> +		if ((i !=3D XFEATURE_FP && !cid) || !boot_cpu_has(cid) ||
-> >> +		    DISABLED_MASK_BIT_SET(cid))
-> >> 			fpu_kernel_cfg.max_features &=3D ~BIT_ULL(i);
-> >> 	}
-> >=20
-> > I _think_ I'd rather this just be cpu_feature_enabled(cid) rather than
-> > using DISABLED_MASK_BIT_SET() directly.
+-Kees
 
-+1, xstate.c uses cpu_feature_enabled() all over the place, and IMO effecti=
-vely
-open coding cpu_feature_enabled() yields less intuitive code.
-
-And on the KVM side, we can and should replace the #ifdef with cpu_feature_=
-enabled()
-(I'll post a patch), as modern compilers are clever enough to completely op=
-timize
-out the code when CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS=3Dn.  At that poi=
-nt, using
-cpu_feature_enabled() in both KVM and xstate.c will provide a nice bit of s=
-ymmetry.
-
-Caveat #1: cpu_feature_enabled() has a flaw that's relevant to this code: i=
-n the
-unlikely scenario that the compiler doesn't resolve "cid" to a compile-time
-constant value, cpu_feature_enabled() won't query DISABLED_MASK_BIT_SET(). =
- I don't
-see any other use of cpu_feature_enabled() without a hardcoded X86_FEATURE_=
-*, and
-the below compiles with my config, so I think/hope we can just require a co=
-mpile-time
-constant when using cpu_feature_enabled().
-
-diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufe=
-ature.h
-index ce0c8f7d3218..886200fbf8d9 100644
---- a/arch/x86/include/asm/cpufeature.h
-+++ b/arch/x86/include/asm/cpufeature.h
-@@ -141,8 +141,11 @@ extern const char * const x86_bug_flags[NBUGINTS*32];
-  * supporting a possible guest feature where host support for it
-  * is not relevant.
-  */
--#define cpu_feature_enabled(bit)       \
--       (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : stat=
-ic_cpu_has(bit))
-+#define cpu_feature_enabled(bit)                               \
-+({                                                             \
-+       BUILD_BUG_ON(!__builtin_constant_p(bit));               \
-+       DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit);   \
-+})
-=20
- #define boot_cpu_has(bit)      cpu_has(&boot_cpu_data, bit)
-=20
-Caveat #2: Using cpu_feature_enabled() could subtly break KVM, as KVM adver=
-tises
-support for features based on boot_cpu_data.  E.g. if a feature were disabl=
-ed by
-Kconfig but present in hardware, KVM would allow the guest to use the featu=
-re
-without properly context switching the data.  PKU isn't problematic because=
- KVM
-explicitly gates PKU on boot_cpu_has(X86_FEATURE_OSPKE), but KVM learned th=
-at
-lesson the hard way (see commit c469268cd523, "KVM: x86: block guest protec=
-tion
-keys unless the host has them enabled").  Exposing a feature that's disable=
-d in
-the host isn't completely absurd, e.g. KVM already effectively does this fo=
-r MPX.
-The only reason using cpu_feature_enabled() wouldn't be problematic for MPX=
- is
-because there's no longer a Kconfig for MPX.
-
-I'm totally ok gating xfeature bits on cpu_feature_enabled(), but there sho=
-uld be
-a prep patch for KVM to clear features bits in kvm_cpu_caps if the correspo=
-nding
-XCR0/XSS bit is not set in the host.  If KVM ever wants to expose an xstate=
- feature
-(other than MPX) that's disabled in the host, then we can revisit
-fpu__init_system_xstate().  But we need to ensure the "failure" mode is tha=
-t
-KVM doesn't advertise the feature, as opposed to advertising a feature with=
-out
-without context switching its data.
-
-> > But, I guess this probably also isn't a big deal for _most_ people.  An=
-y
-> > sane distro kernel will just set CONFIG_X86_INTEL_MEMORY_PROTECTION_KEY=
-S
-> > since it's pretty widespread on modern CPUs and works across Intel and
-> > AMD now.
->=20
-> Ack, I=E2=80=99m using PKU as the key example here, but looking forward t=
-his is more of a
-> correctness thing than anything else. If for any reason, any xsave featur=
-e is disabled
-> In the way that PKU is disabled, it will slip thru the cracks.
-
-I'd be careful about billing this as a correctness thing.  See above.
+-- 
+Kees Cook
