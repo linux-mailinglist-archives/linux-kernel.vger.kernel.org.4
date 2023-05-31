@@ -2,92 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD977187F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:02:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F75E7187F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjEaRCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41068 "EHLO
+        id S229989AbjEaRDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjEaRCu (ORCPT
+        with ESMTP id S229978AbjEaRDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:02:50 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B005713E;
-        Wed, 31 May 2023 10:02:47 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bad010e1e50so8639739276.1;
-        Wed, 31 May 2023 10:02:47 -0700 (PDT)
+        Wed, 31 May 2023 13:03:15 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2120.outbound.protection.outlook.com [40.107.212.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81503139;
+        Wed, 31 May 2023 10:03:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Puu08xSwKHZGjixwCJavPsPe3PcbCHEwQVFiXO4X51H/xvHep6Zwlv8DdjnMUNoaY3h2rCYc1io9qbhzc2Y5FNYHpMg2ipTZSk2DNoNF12+Nvwxy1NWtZtr1TtYA/YKvBDqdKCvh5H52mSJcYd2ohqOXaQ0TrZnzEx+Qo3ergN46R7gOL7suRBTnnjODyzc+m9bMTr03aX8emvDBx/YNXYzeh24QAyIkVdOdqPVRI8Vb6Pa5pWbSJmu9B/FSJISc8n1ly6pvR65GPQghKclfSxufzr6xpwpVyDVzJlch6KLYrLhE+EjRdcQv1BDA/sBa2eNwQqsJZPt35PYMtDBhag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ISmg6vTKkuqnUPwvHsEl5XLHMcQyMZAZ5zRIBeuCsVk=;
+ b=cVvQ/3gYLnruQJQNE0CQ+3umLaJO/9bNWknFxsRaP7lk+qi44ahWCmV2x01Hw6bfCVzHoyDWUNF6QO1wp27DmBxxzz1n0nT1TLeVl48OlWbwDowN+kFZ6lopYuWk61Rtdv15tJE+qNVn88zmAaUyJxc7KsBIHv8c4kO9o0YiDKez43V7WyTWwPzSb5AdpoWHwZCSlefJczgdR8h3RvASLsIo6atGd+p4uDnDdyhYRcyp1ABveWzEq9J89xgtUSJkHaQAlOyseW4BDcffPpMoq9bNLrkJ5D+nTomIE6+Cdhz/1FDhL1XCbJnyWKq5+posQJ51V9uVWEUdCRtCr2BYFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685552567; x=1688144567;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FG1P2Nrcljeuk69DDeSeiYWvgO1FehBAcRPCmpA4UwQ=;
-        b=KlobxtPFR6Ysp6yLDDnsHdfCA0ZYPKNHo639LUMZ8h+NKMw0AsLGQl9DxnfOQw3e2t
-         TW2uqDVYIRr0NxB3TR0TLq4VHjzTZ0HR3uHJAGfjZExu4a5dorYiPmSUjUvuoFKU7z/J
-         t//fDhFcLuZPmABgOLGTQKaVsua0XCepxrlXFzi9hpozGaqft4xdSGZ6aNannGoClQAB
-         10vOsoWQAIYyMThwcBP4OrElZ1n05Ldic5W1Iih18/jNZlpIZAt0LTjSdhQyMZaapc4l
-         ceK3f8R6DEoIA0bK3GiIKjUikG7cJQPIsFdzVl6Ic8HEGO1DP6TatppQRwHS3uRnj7Qx
-         GLfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685552567; x=1688144567;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FG1P2Nrcljeuk69DDeSeiYWvgO1FehBAcRPCmpA4UwQ=;
-        b=fI6v2Uf8bCiXDU+oDXgmvUnoku31ny2VfjvA7cuUz0SqHatHPZoqJPq+5SGdwrdpEj
-         j1tEO+FOKVHJfd6fA9FDVARolWOVQjdEmzeC1iDm1qEcb5Hr4M084CGSgK/p6EvAmeYK
-         7WCD0+GFIdiDpaz6mylIQaRZvDsPfe08ffG0GuiGCxFjab38MnZydYuTSvwhZNO1VvBL
-         RRfJ2ytvGM/6zkgNdE8u18TuxTWhBTs4xe6E5Djb/tuzT+UXgz6Ed6qAA+XGR26iDhkx
-         R1kx4bSQtbg1NMyPiT9VVC55OZ4JPcO22KtqT4RTKQYnzvpCbNlPN9EFS7hMsuZj7khA
-         tcmg==
-X-Gm-Message-State: AC+VfDxduygTsdLtxjELsJgOCy7HBaFpBMdlgtFH1ZrlzNDwPRgQ+yet
-        wcHNQF2tF0k2pMrk4zYMprBpIdrjVtjFH3wJo4I=
-X-Google-Smtp-Source: ACHHUZ4wotzWkEI82wv2kvB1VEZ7nfcFE3vwSgsGw2wq4N9wemD12VZl2B9p3aWRiZZKlqFF5jUFl1vMDSV2L10Ic7Y=
-X-Received: by 2002:a25:1982:0:b0:ba8:313c:6bec with SMTP id
- 124-20020a251982000000b00ba8313c6becmr6517049ybz.0.1685552566699; Wed, 31 May
- 2023 10:02:46 -0700 (PDT)
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ISmg6vTKkuqnUPwvHsEl5XLHMcQyMZAZ5zRIBeuCsVk=;
+ b=IlI8K9MxxiWY3aeRJVpJKDepZ2BnqlUlPXX9ywRoe5uLz5ngJHbg8y+iqXVEB4AmkCaOTxBp5kqJQaZkQ0Qn24xIE41L9C23dwxgJsYQE0M+M+1sNVb5pVNTwPCkUFCtmK9KE1T99t8bXg6a8eYSNW+A1TAJfEGTAMYSc2LdBuk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CO1PR13MB4839.namprd13.prod.outlook.com (2603:10b6:303:f9::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Wed, 31 May
+ 2023 17:03:00 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.024; Wed, 31 May 2023
+ 17:03:00 +0000
+Date:   Wed, 31 May 2023 19:02:52 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/6] net: Block MSG_SENDPAGE_* from being
+ passed to sendmsg() by userspace
+Message-ID: <ZHd9vCcBNtjkqeqg@corigine.com>
+References: <20230531124528.699123-1-dhowells@redhat.com>
+ <20230531124528.699123-3-dhowells@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531124528.699123-3-dhowells@redhat.com>
+X-ClientProxiedBy: AS4P190CA0043.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d1::14) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-References: <20230418214347.324156-4-ojeda@kernel.org> <20230419030243.540348-1-yakoyoku@gmail.com>
-In-Reply-To: <20230419030243.540348-1-yakoyoku@gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 31 May 2023 19:02:35 +0200
-Message-ID: <CANiq72knVpyaKdT2iwrBNYorAt3Y5M-r6pXHc9JAZRCVmBYusQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] rust: upgrade to Rust 1.68.2
-To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Cc:     ojeda@kernel.org, alex.gaynor@gmail.com, benno.lossin@proton.me,
-        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, gary@garyguo.net,
-        gyakovlev@gentoo.org, jan.steffens@gmail.com, jistone@redhat.com,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com,
-        william.brown@suse.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CO1PR13MB4839:EE_
+X-MS-Office365-Filtering-Correlation-Id: a1fcdcbf-5a09-46f8-caec-08db61f8e399
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: M+oztPPB44I074oovH3o9XoOeiqXHeymXD0b8QxFnGcRe6GsNbrjNmgqSWMwmHOVd5dmcPg5HQ/7GiJrcwfVIxGseLpFTc5S7lprfv4U2MH9TVayOCAk4uKL7VugNHRFF8otG3tV+0SwKLmu3RK4SpTqanVyCxtAiPlTlcM9NxH2bdHQiOVQRVWnKjcZPBPf2CxXGgR3nbzMkaV3hkmrEQsBp3bvOQYH5OczTWlvMIgdH3tSfW/NOnWNXneSV+QW5xzOVvFxxwQaSs9MyWYRaV9+hpRVcD6y5kNU39IcRqBOUu+UBVn2YlofjCEel0nfqJJqh1tqPJUYhqPO57KFzRE2imPBOhK+QqzQo+FSer5YtkhRqCBifI3NR97A2W0C1zGF7G27uz6fv4mgNU2vi4YpWbYjkPtt3KRuJYVazx/Ld3F6kOAT/SM4kmxEHr9Ab4T/8i3gaZhFVU6z81clf1arZQycvEc9HGrDFRCSx+MfEfGq7WsWjlf48DAEvXp83fWZn/kcVbL0K+iGJ71gkxvfsRt8djSLi+bO1mcc8tB+KQNQ8nZ5nn/Fu7Yi6GWeriPhRhrQA4iKw5uTSs242Q4d2MCwdxUlPTB0h2ddEpA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(39840400004)(366004)(376002)(451199021)(6486002)(86362001)(41300700001)(478600001)(6916009)(6666004)(4326008)(44832011)(316002)(66946007)(36756003)(66556008)(66476007)(7416002)(5660300002)(2906002)(4744005)(186003)(6506007)(6512007)(83380400001)(8676002)(54906003)(38100700002)(8936002)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?61BJzjAl+CaFtLMdncEcfnq7xPWk9kFploZSkMglcPWwxib+b2mVTWQ7FydH?=
+ =?us-ascii?Q?mCv3lITNnHLoz15a8/nFKeFJzdTvu1kUtrqgeaMKDdMJj3s7sKcBdOTHnAUj?=
+ =?us-ascii?Q?TPEVXbIEKF45k4yD6IrF4FVt3RY6wC7jrkwxNPBhwDktR2XDR8mIPFyBEL8v?=
+ =?us-ascii?Q?gSN2c1plJFXt5rqYK6hAGsBb3FwZiJ99G59oWdPmh5uXTuLw9rTxNqgs54nl?=
+ =?us-ascii?Q?g1Jn84faz3/imQw9Vn2bvfBWsJaAMzz322RmeJoNUxtbfXJXiAnKM927QBRH?=
+ =?us-ascii?Q?kM/dMm2xE6bMBGJ7Rmij714EacVtHAW/kStzX8muJ4OooHzV5nbkei5cSukE?=
+ =?us-ascii?Q?G1amzo3uE7Tn6JICqk/QfHdrPJmFPNcuHDfMKlN+jQXfG1Y5GOeoqfmX8GNu?=
+ =?us-ascii?Q?QNU5ruvh4KfQnhuvkqkdoBgW2PpTXEyjYAaYu4qA1gvbYF6yVMEfNFlW5dEa?=
+ =?us-ascii?Q?dP9uhyqkg565qVVI1gjIC0VCcKdNjwTMuMpcn5XxJkrxINHHzNS1Ers+rHem?=
+ =?us-ascii?Q?IzNjZGdCACbz/ijz2snkCIFB3+7j400T4yc6oSdpEdks1JIvXgCSpC96e/jT?=
+ =?us-ascii?Q?ouhbX6hX/XvFktvWA2ON7vXWHwM9tfIpah9ZvOv7J07YYHoZ1Ra3Z+cVpLGj?=
+ =?us-ascii?Q?WAwZMmgwoP6oBPuyr70rQnkLCohuB1HT2iyKQGTDrWG32ywBfpHPypCnKXHH?=
+ =?us-ascii?Q?6EkyOHRO/PpLD4GSJeNbJ27AR4NUV0Xuslt4jM4irBEMnvl73lN16S+mniWu?=
+ =?us-ascii?Q?3qadZAnHUoX9uizcNdvfxZ2RdL/rvLEVhylP/d4CMMHVUriNlUIyha8aoHA9?=
+ =?us-ascii?Q?o6Kv7X0cHL3qZ6bWxkUhQXclCCmOpTf2k9SlLqfZo3xTdlTllM+3Ft58el0P?=
+ =?us-ascii?Q?xcNsJMFF+Q4x/3bT/i8X+4+mDU9bda6fC455xiQ84qTp0nVfVFt642Ugjgdo?=
+ =?us-ascii?Q?LWh05KWfZJZhmDE+xQzPQ8kaYeNaYNSmB7EQiqpO/zkw5HqnnHWib//IbSTz?=
+ =?us-ascii?Q?in57ci3Ur7UW3vnZNtMCauEeX7DsAqGNubrRG4Lao5o3PW85RAaBBoUC5Gbw?=
+ =?us-ascii?Q?XHEb860Irat2JwXnmnSE9qzEvP0BQ8v2da9RUcfug68u7YmgmnMSFNv2q5Wh?=
+ =?us-ascii?Q?YBMj+V5QahLAoPzSoTbvvn787/UNI9L+7ca0TV/AbSGlucghr8m+Usqxck1O?=
+ =?us-ascii?Q?ZIB/QoVjjhHpqlEOkE6o6gl8pDaJWH0CwCqCgotdXhELAKhih1qASKyDbHg+?=
+ =?us-ascii?Q?63g87DjCVzYZcOID6oJbwvwoIWzDGdYkqzeuNivlL1JKHFSB8M4OT4/Mj/nG?=
+ =?us-ascii?Q?evqcQznAlPcqlFvmqB2u/k9n4lXd9p+8HvdUZjEKPl8wrMlAeUJgsiJTljTq?=
+ =?us-ascii?Q?JcYfMItOBxOljsVQdNLSQk1lLYxr6iEZK9zDtnizhBZ/9xuerFtAimUVFDfU?=
+ =?us-ascii?Q?I/fLNfWc35S3l44DmKOBlqiKz4cbc14rtQ10n32w3E3bnLT8tt1QPXE979An?=
+ =?us-ascii?Q?2xUaRj0C8daKg4YvrhiJdIKsUzatnVIQdvMZ9wi974F5MbeQivJUlyUfBDcR?=
+ =?us-ascii?Q?e5yvhJ/9cc4vRvkg0tSV+VL0jLIQcXnlCpElN31qAeWSrOrMey9AlknIXWKs?=
+ =?us-ascii?Q?CinMzkUqmZ4GScsMF30P98Qj6SeXwC8H0DSOkwsbjhakp4F4tVuLIGo93RMH?=
+ =?us-ascii?Q?OhUkrA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a1fcdcbf-5a09-46f8-caec-08db61f8e399
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 17:03:00.2736
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 44HFhWcAyLr5fcV728HBXFWxkHsQGS5keuMgPfEiBaZQm5mcY12dEwFjRegkVcJ0kFQ9B2gkBoM0qfH4dz039m/ub3n25bjertEmEId58w4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR13MB4839
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 5:02=E2=80=AFAM Martin Rodriguez Reboredo
-<yakoyoku@gmail.com> wrote:
->
-> Kinda bunch to review, although may I ask if each time the `alloc`
-> crate is updated is worth to mention the changes upon it [1], can be
-> skipped otherwise.
->
-> Link: https://github.com/rust-lang/rust/commits/master/library/alloc [1]
+On Wed, May 31, 2023 at 01:45:24PM +0100, David Howells wrote:
+> It is necessary to allow MSG_SENDPAGE_* to be passed into ->sendmsg() to
+> allow sendmsg(MSG_SPLICE_PAGES) to replace ->sendpage().  Unblocking them
+> in the network protocol, however, allows these flags to be passed in by
+> userspace too[1].
+> 
+> Fix this by marking MSG_SENDPAGE_NOPOLICY, MSG_SENDPAGE_NOTLAST and
+> MSG_SENDPAGE_DECRYPTED as internal flags, which causes sendmsg() to object
+> if they are passed to sendmsg() by userspace.  Network protocol ->sendmsg()
+> implementations can then allow them through.
+> 
+> Note that it should be possible to remove MSG_SENDPAGE_NOTLAST once
+> sendpage is removed as a whole slew of pages will be passed in in one go by
 
-That could be nice if we could give a link similar to, say, what:
+Hi David,
 
-    git log 1.62.0..1.68.2 -- library/alloc/src/
+on the off-chance that you need to respin for some other reason:
 
-produces (or perhaps a list of PRs) -- is it possible to do so with a
-GitHub URL? If so, please let me know!
+	s/in in/in/
 
-Cheers,
-Miguel
+> splice through sendmsg, with MSG_MORE being set if it has more data waiting
+> in the pipe.
+
+...
