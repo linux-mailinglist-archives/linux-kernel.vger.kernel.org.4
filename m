@@ -2,114 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB577188D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9144C7188D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbjEaRvL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 31 May 2023 13:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
+        id S230264AbjEaRwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjEaRvJ (ORCPT
+        with ESMTP id S229547AbjEaRwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:51:09 -0400
-Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89E8128;
-        Wed, 31 May 2023 10:51:05 -0700 (PDT)
-Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id D8E28AE40D;
-        Wed, 31 May 2023 17:51:03 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf05.hostedemail.com (Postfix) with ESMTPA id 2627220016;
-        Wed, 31 May 2023 17:50:59 +0000 (UTC)
-Message-ID: <f8efee7cd9f6f685dcf8b90f9169029fec6481e3.camel@perches.com>
-Subject: Re: [PATCH v4] checkpatch: Check for 0-length and 1-element arrays
-From:   Joe Perches <joe@perches.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>
-Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Date:   Wed, 31 May 2023 10:50:58 -0700
-In-Reply-To: <20230531004929.you.436-kees@kernel.org>
-References: <20230531004929.you.436-kees@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.2 (3.48.2-1.fc38) 
+        Wed, 31 May 2023 13:52:37 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DEF125
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:52:36 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64d24136685so21163b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:52:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685555556; x=1688147556;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kfMuDdWL1b4kSqYmj4dPZPS2+HxbmlkGgksoSf7cEdM=;
+        b=GCbj2dgtrPxM81YowcETNQ7Tw7u17jOm8NgY0XIvDAhknW7UNNBsch0YtMcFekc361
+         6/Wad6Tz8fsQQg1eYGqg+85i9VG6EoFd6QO9uosS61SXofS450nU07/j9MSQ2VmiY2rn
+         wad7XwqFrzdKhFr0cxIPBYy2E4V+2OaCfGyxCT1DSVfC3AkjQrqBZY1ueOxk16GDKHTR
+         epPOhOIRe/Wua1Wzbeb4V1LkFHQT7UseSwek0eF6bjM2QuoopWANatm8LMmqsnlGCRdo
+         DOmoMPQwsefZBwyj1nD7ejisJfYydRbcVQ3AitRWyz4lihhFvRGrbiQcvveSjJtkItu9
+         8Vow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685555556; x=1688147556;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kfMuDdWL1b4kSqYmj4dPZPS2+HxbmlkGgksoSf7cEdM=;
+        b=DjwlCCHUg0gPMfqN1MjutLC04H0Cczx3w64BOqZk9Vf81r+C7JtyCtuIL2+NI2gJn3
+         Tw9v56EnIYkTS6eQJfjruC70MpqSuK2DBUm4mLxmNkit0rdDmFRPciwAim+gvvv2ApL/
+         wMIKWDEC1QSKpKS4kEfE5PG+aHt3K95CiO/pPIbDv0h6RZKs03rYmTCoTHOAoMCxng9E
+         pJbr4ltVLRT+etAgce7OzUfqtvk3Yfq2ydvc7MYAGtyKwsBgwDqYl84BwqFuEBgMv7g7
+         qGcb3BNx+9eLRt4zS3DYMBG8qgdklcxMf9p+UvawW6qlhfN0Umy4uPDZYJ9iazkaWUh0
+         FSbg==
+X-Gm-Message-State: AC+VfDxuuUrsgOGiBdjZ8UlHZW3XE7FJOz7+FKITyXQuDCmVw2/4LVfd
+        walK8V6YwYED1MKU9kIvVMwE8N1VirI=
+X-Google-Smtp-Source: ACHHUZ6Bxgyls2p2BGxa2nv5b66W/y3d+qKs1L7ZFG+mA6gitDf/KIJHgmM/Krzh/mokc5fmG+G+Ng==
+X-Received: by 2002:a05:6a00:2393:b0:64d:2a87:2596 with SMTP id f19-20020a056a00239300b0064d2a872596mr9221088pfc.10.1685555555629;
+        Wed, 31 May 2023 10:52:35 -0700 (PDT)
+Received: from daehojeong-desktop.mtv.corp.google.com ([2620:15c:211:201:3d32:dc28:3a98:9cdf])
+        by smtp.gmail.com with ESMTPSA id bm17-20020a056a00321100b0063f1a1e3003sm3587517pfb.166.2023.05.31.10.52.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 10:52:35 -0700 (PDT)
+From:   Daeho Jeong <daeho43@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
+Cc:     Daeho Jeong <daehojeong@google.com>
+Subject: [PATCH] f2fs-tools: remove power-of-two limitation of zoned device
+Date:   Wed, 31 May 2023 10:52:13 -0700
+Message-ID: <20230531175214.3561692-1-daeho43@gmail.com>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 2627220016
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
-X-Rspamd-Server: rspamout06
-X-Stat-Signature: 496175hzteijz6amhbb9zwp5k5ouzkxg
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/Jfx/imyxU+afF/ZXYFTbrkeypYQORHFk=
-X-HE-Tag: 1685555459-506856
-X-HE-Meta: U2FsdGVkX1+aNTuKxLN4EcbXc1zX6K25fsYiiCIKqnZSBShcyHIuzQnlt6oz3EFhzPcd7P3OnSsclk6GYxlreg==
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        TVD_SUBJ_WIPE_DEBT,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-05-30 at 17:49 -0700, Kees Cook wrote:
-> Fake flexible arrays have been deprecated since last millennium. Proper
-> C99 flexible arrays must be used throughout the kernel so
-> CONFIG_FORTIFY_SOURCE and CONFIG_UBSAN_BOUNDS can provide proper array
-> bounds checking.
-> 
-> Cc: Andy Whitcroft <apw@canonical.com>
-> Cc: Joe Perches <joe@perches.com>
-> Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>
-> Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> Link: https://lore.kernel.org/r/20230517204530.never.151-kees@kernel.org
-> ---
-> v4:
->  - combine errors (joe)
->  - switch to kerndoc url (joe)
->  - add __packed for struct matching (joe)
-> v3: https://lore.kernel.org/r/20230527020929.give.261-kees@kernel.org
-> v2: https://lore.kernel.org/lkml/20230526173921.gonna.349-kees@kernel.org
-> v1: https://lore.kernel.org/lkml/20230517204530.never.151-kees@kernel.org
-> ---
->  scripts/checkpatch.pl | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> index 30b0b4fdb3bf..64d21b6aa6df 100755
-> --- a/scripts/checkpatch.pl
-> +++ b/scripts/checkpatch.pl
-> @@ -7430,6 +7430,16 @@ sub process {
->  			}
->  		}
->  
-> +# check for array definition/declarations that should use flexible arrays instead
-> +		if ($sline =~ /^[\+ ]\s*}\s*;\s*$/ &&
-> +		    $prevline =~ /^\+\s*(?:\}(?:\s*__packed\s*)?|$Type)\s*$Ident\s*\[\s*(0|1)\s*\]\s*;\s*$/) {
+From: Daeho Jeong <daehojeong@google.com>
 
-__packed could be used when a struct is defined and so
-needs to also be added to $sline.
+Remove power-of-two limitation for zoned device, since zoned devices
+don't have it.
 
-		if ($sline =~ /^[\+ ]\s*}\s*(?:__packed\s*)?;\s*$/ &&
+Signed-off-by: Daeho Jeong <daehojeong@google.com>
+---
+ fsck/mount.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-e.g.:
-
-struct foo {
-	int a;
-	int b[0];
-} __packed;
-
-> +			if (ERROR("FLEXIBLE_ARRAY",
-> +				  "Use C99 flexible arrays - see https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays\n" . $hereprev) &&
-> +			    $1 == '0' && $fix) {
-> +				$fixed[$fixlinenr - 1] =~ s/\[\s*0\s*\]/[]/;
-> +			}
-> +		}
-> +
->  # nested likely/unlikely calls
->  		if ($line =~ /\b(?:(?:un)?likely)\s*\(\s*!?\s*(IS_ERR(?:_OR_NULL|_VALUE)?|WARN)/) {
->  			WARN("LIKELY_MISUSE",
+diff --git a/fsck/mount.c b/fsck/mount.c
+index 4c74888..851a62b 100644
+--- a/fsck/mount.c
++++ b/fsck/mount.c
+@@ -56,19 +56,17 @@ static int get_zone_idx_from_dev(struct f2fs_sb_info *sbi,
+ {
+ 	block_t seg_start_blkaddr = START_BLOCK(sbi, segno);
+ 
+-	return (seg_start_blkaddr - c.devices[dev_idx].start_blkaddr) >>
+-			log_base_2(sbi->segs_per_sec * sbi->blocks_per_seg);
++	return (seg_start_blkaddr - c.devices[dev_idx].start_blkaddr) /
++			(sbi->segs_per_sec * sbi->blocks_per_seg);
+ }
+ 
+ bool is_usable_seg(struct f2fs_sb_info *sbi, unsigned int segno)
+ {
+-	unsigned int secno = segno / sbi->segs_per_sec;
+ 	block_t seg_start = START_BLOCK(sbi, segno);
+-	block_t blocks_per_sec = sbi->blocks_per_seg * sbi->segs_per_sec;
+ 	unsigned int dev_idx = get_device_idx(sbi, segno);
+ 	unsigned int zone_idx = get_zone_idx_from_dev(sbi, segno, dev_idx);
+-	unsigned int sec_off = SM_I(sbi)->main_blkaddr >>
+-						log_base_2(blocks_per_sec);
++	unsigned int sec_start_blkaddr = START_BLOCK(sbi,
++			GET_SEG_FROM_SEC(sbi, segno / sbi->segs_per_sec));
+ 
+ 	if (zone_idx < c.devices[dev_idx].nr_rnd_zones)
+ 		return true;
+@@ -76,7 +74,7 @@ bool is_usable_seg(struct f2fs_sb_info *sbi, unsigned int segno)
+ 	if (c.devices[dev_idx].zoned_model != F2FS_ZONED_HM)
+ 		return true;
+ 
+-	return seg_start < ((sec_off + secno) * blocks_per_sec) +
++	return seg_start < sec_start_blkaddr +
+ 				c.devices[dev_idx].zone_cap_blocks[zone_idx];
+ }
+ 
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
 
