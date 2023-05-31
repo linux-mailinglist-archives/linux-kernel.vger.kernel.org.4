@@ -2,100 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE15717BD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F944717BF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235444AbjEaJZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
+        id S235545AbjEaJaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235562AbjEaJZD (ORCPT
+        with ESMTP id S235596AbjEaJ3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:25:03 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B62110E
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:25:02 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f611ccd06eso41353775e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:25:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685525100; x=1688117100;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Va+eWZi2uLo9F99GJo8IumrvbwwllLELRegYwCB2G7g=;
-        b=KrlIc+T4nwlhRheAQ20Rg63SC1LrUwcKrgsZv1zunGJIEUlK4Z61iaSFqUnBOMx/Qi
-         zSadPvooyvqtH2Z/r+8gnsRXJ8hRLIOYqeOVf6c8AmVOEtfCPccxoYhr26OXFIEvr9+r
-         glikUxlwr42/RSYppiz2kVp262udNlqGLfUKbg7th9gb4CwgbSEfhcMm9qmDn30UAakM
-         s18bRcjB46GZ5uYjyaQgZCb7K4d67h0eVC1wkSsF1wJeuJ4iOTWXDJnxKGpZxv0NRorI
-         RP/oPSjJOJGi97gpr0PMkenhWmnoMfU919VZyLB54qp5Dh7EAMd3iy0MaluBYTjHfrSy
-         /0ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685525100; x=1688117100;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Va+eWZi2uLo9F99GJo8IumrvbwwllLELRegYwCB2G7g=;
-        b=ZiT88AzuRzVXOah36GwOAPIaUQHPeJ3wOeoIs7BdnQlIOtqnD8OW+Xv73nTbPiBRC2
-         p62MXZVGsp7vxW4jM8rWd8Gt4S8RU94Tpib3dz+cjuYs6/d/+xrOKhdd8l0AaY8uEoE6
-         ucKLXm191GwypLeTMKFq1zBYGnR5pEN1YaHJATOo7bfcDDT6HPOmdFwRMrdN9MdBjtpf
-         oQpGk/Mlon1YqTWVHDAaTAk5AwqTThDYIBZtAX+0Io3Mb7nNed5pcHdZZGyJWuQquRWx
-         mIercmbF/bqMEOHpuWwNQ5iFfK0FWYuTqYts2i+4Ake9yJPNJKRj9UsuNIm1Y81DvUt0
-         Ljng==
-X-Gm-Message-State: AC+VfDxdGHPRsoWEhyl1XVMbplOBpkA7AP5YVnJwmCUoPJDF7XnKh/09
-        1sh5u1SCBaDIQf2gcvgHbSMXJA==
-X-Google-Smtp-Source: ACHHUZ4ofPLi7HPrByG9DJoBSCZNlWjijRrg8aTJMcUMR9JTA5Iy6UPz3xnS/1uS1TtgIaZXcvJgFg==
-X-Received: by 2002:a05:600c:2219:b0:3f6:8ca:ed52 with SMTP id z25-20020a05600c221900b003f608caed52mr3910358wml.34.1685525099874;
-        Wed, 31 May 2023 02:24:59 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:5c28:3ad5:fcda:7779? ([2a01:e0a:982:cbb0:5c28:3ad5:fcda:7779])
-        by smtp.gmail.com with ESMTPSA id 13-20020a05600c24cd00b003f4dde07956sm23645163wmu.42.2023.05.31.02.24.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 02:24:59 -0700 (PDT)
-Message-ID: <57af6b8f-63b9-8748-035b-ce26add07e99@linaro.org>
-Date:   Wed, 31 May 2023 11:24:58 +0200
+        Wed, 31 May 2023 05:29:55 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A458E6;
+        Wed, 31 May 2023 02:29:54 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QWP9n3D0fz4f3nBR;
+        Wed, 31 May 2023 17:29:49 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP4 (Coremail) with SMTP id gCh0CgCX_7KNE3dk69dxKg--.3757S4;
+        Wed, 31 May 2023 17:29:51 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     hch@lst.de, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
+        yangerkun@huawei.com
+Subject: [PATCH -next v2] block: fix blktrace debugfs entries leak
+Date:   Wed, 31 May 2023 17:26:05 +0800
+Message-Id: <20230531092606.3037560-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] arm64: dts: qcom: Drop undocumented "svid" property
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230531024944.4105769-1-quic_bjorande@quicinc.com>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230531024944.4105769-1-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCX_7KNE3dk69dxKg--.3757S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7uw4fWFyxGF1fury7Zr4DXFb_yoW8Cr13pa
+        9Ikw4YkrWjqr4avFyDuw17XF1xKa95Wr95JryfWFyYvrnrGrZ0qFZ2vr4IgrWrCrZa9FZ8
+        Wa4UWFsxCrW8XaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+        AvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
+        xVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 04:49, Bjorn Andersson wrote:
-> The Linux typec_mux implementation required that a property named "svid"
-> was present in the remote node of the of_graph for a match to be found.
-> 
-> With the introduction of commit '4aebc4f89f00 ("usb: typec: mux: Clean up
-> mux_fwnode_match()")', the implementation is aligned with the binding
-> and this property can be dropped - and the associated DeviceTree
-> validation warning resolved.
-> 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-> 
-> The referred to patch is present in usb-next.
-> 
+From: Yu Kuai <yukuai3@huawei.com>
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Commit 99d055b4fd4b ("block: remove per-disk debugfs files in
+blk_unregister_queue") moves blk_trace_shutdown() from
+blk_release_queue() to blk_unregister_queue(), this is safe if blktrace
+is created through sysfs, however, there is a regression in corner
+case.
+
+blktrace can still be enabled after del_gendisk() through ioctl if
+the disk is opened before del_gendisk(), and if blktrace is not shutdown
+through ioctl before closing the disk, debugfs entries will be leaked.
+
+Fix this problem by shutdown blktrace in disk_release(), this is safe
+because blk_trace_shutdown() is reentrant.
+
+Noted that scsi sg can support blktrace without gendisk and still need
+special handling to avoid this problem.
+
+Fixes: 99d055b4fd4b ("block: remove per-disk debugfs files in blk_unregister_queue")
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ block/genhd.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/block/genhd.c b/block/genhd.c
+index 1cb489b927d5..f5718367965c 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+@@ -25,8 +25,9 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/badblocks.h>
+ #include <linux/part_stat.h>
+-#include "blk-throttle.h"
++#include <linux/blktrace_api.h>
+ 
++#include "blk-throttle.h"
+ #include "blk.h"
+ #include "blk-mq-sched.h"
+ #include "blk-rq-qos.h"
+@@ -1171,6 +1172,10 @@ static void disk_release(struct device *dev)
+ 	might_sleep();
+ 	WARN_ON_ONCE(disk_live(disk));
+ 
++	mutex_lock(&disk->queue->debugfs_mutex);
++	blk_trace_shutdown(disk->queue);
++	mutex_unlock(&disk->queue->debugfs_mutex);
++
+ 	/*
+ 	 * To undo the all initialization from blk_mq_init_allocated_queue in
+ 	 * case of a probe failure where add_disk is never called we have to
+-- 
+2.39.2
+
