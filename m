@@ -2,193 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4B3717AC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2243717ACC
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235104AbjEaIza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
+        id S235092AbjEaI4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbjEaIz2 (ORCPT
+        with ESMTP id S235140AbjEaIz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:55:28 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B512710B;
-        Wed, 31 May 2023 01:55:25 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34V7dxRP019130;
-        Wed, 31 May 2023 08:55:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=CCRbxVCvWZHmdUO+bC1ghL3WEZsRnhWDr4vZXSg3/sM=;
- b=HwCK1VVISeKBYBa/02Dbi6/WYvDRjm+VTrH5ydR66WdH8CDVoKJs4uxYsGfjoNktej9S
- 9rsnhoYmExXwDDznDTrXvTEQ+jPVS5Xnr1hCbGDHep/HIWDMccyNuDhep54AeXmdfIet
- dyjBVx/1aHwMIQd7R5UNCPDRbjrbV8/VJNqKRLDj8PbQxo/el/2JBUsBLQKq+Ghklj/1
- Iv+gOLOkn5WK7teB9P6+F7+iuhmgTzyD2psSGiLCs0q14oatD1ciC1JOB/YH/C7OjNbe
- I+B8BYHGr8lbpLYga3lxoTki698EnIAIDgqa35/ncoW1xNKCCuDarhWoFVrTlJ7y3oUg Cg== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwmvphnyx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 08:55:19 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34V8tI8x032058
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 08:55:18 GMT
-Received: from [10.252.212.215] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 31 May
- 2023 01:55:15 -0700
-Message-ID: <384226b0-c952-95ac-fa77-8461b231dbbd@quicinc.com>
-Date:   Wed, 31 May 2023 14:25:12 +0530
+        Wed, 31 May 2023 04:55:59 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212AD11F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:55:57 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5149390b20aso6950009a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:55:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685523355; x=1688115355;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6am1AiEAOxoY0UZIv4ELH1CWM+kxqYxNYLZvqz76ssg=;
+        b=KJ9VJqUN4y/AWCB+TmVu/7+Wcfsbf2PMdAZ/EBxXIg0k7ZLBL47iPhc7dlWofUUUZt
+         gRMN8SVOUmjSZPxZDPU02r1Ycf9HDxx+eaJx7pvMQWpOm/hkRlBeB8bbpq+iXRQ17zP5
+         H7OVnccJr4h3PbPplpp9hO4Vi0y/dZ63HTgaaGcuLuOHK0hUoPjrYzLum0W57SmhO6KU
+         o/7luo/H/ErlXIBrnY8cHEpv6p1ueEZ+X+e0ykJufWac7Et3nSM5dwkFDwVUWLnPcFcJ
+         J6nADJ6tW5lw7NNaBRjxQmxqamOilRdkMZnOTYub2bQS+dFv+UMs32TKbgHY/3zcnHcj
+         txlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685523355; x=1688115355;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6am1AiEAOxoY0UZIv4ELH1CWM+kxqYxNYLZvqz76ssg=;
+        b=AfeFdrtuu35KLpKh4ArciscQMNNTP2OZwZeAaf7J5Qg/k9ROu3QANfvMCp02cU5L+w
+         RiID0Zp25ejU48qcIIZoI8xVpfK5wxa0IHmTFoWxjuyX9y5shyUIQNFA4CwMVL4KNGbR
+         +q/hJywtn9SzFlyNzumjM5f6fjbyLWqzSeFy7ZWsQNzroPdY315HUCdFmuH5QMV8WcQN
+         gr07WQU1Gr/YcYBwHqPMnTMDR4uwnxqkPtbxHHiBEKqW+2k4WEEQs2DvuXZuYewryDi/
+         z5lyksvXXDL4/GgLZvNz8S1BMYi+fKk+u/cZy9uYBoZJ2rZJW9djAuf9Yc0i1eoh76Ku
+         PODg==
+X-Gm-Message-State: AC+VfDw4tdMHSMzxNx+IvYBwBe415T6FxNUEDMr2ntG7CXgXjeVqg8hD
+        1K0vkYyTTqQ9dJ5szmMRtnmupA==
+X-Google-Smtp-Source: ACHHUZ7bt0BD77gr6LG3aEUlXExVX18Lo4MW6pqODLIuWHO4GmhfSjRNckCop3Gvd4nZktxjemKicQ==
+X-Received: by 2002:a17:907:97c3:b0:974:b15:fcda with SMTP id js3-20020a17090797c300b009740b15fcdamr5145556ejc.54.1685523353731;
+        Wed, 31 May 2023 01:55:53 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id b16-20020a170906151000b0096b15e4ffcesm8577273ejd.85.2023.05.31.01.55.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 01:55:53 -0700 (PDT)
+Message-ID: <46eced08-5bf6-3e4b-7a91-ff4d16c7dab9@linaro.org>
+Date:   Wed, 31 May 2023 10:55:50 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH] media: venus: firmware: Use of_reserved_mem_lookup()
+Subject: Re: [PATCH v3 1/3] dt-bindings: timer: atmel,at91sam9260-pit: convert
+ to yaml
 Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230529-venus-of-rmem-v1-1-dfcdc5047ffb@gerhold.net>
-From:   Vikash Garodia <quic_vgarodia@quicinc.com>
-In-Reply-To: <20230529-venus-of-rmem-v1-1-dfcdc5047ffb@gerhold.net>
-Content-Type: text/plain; charset="UTF-8"
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20230530090758.1652329-1-claudiu.beznea@microchip.com>
+ <20230530090758.1652329-2-claudiu.beznea@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230530090758.1652329-2-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YUvYiVTzjiyS2VMvlmYcNjgicBgBW5sl
-X-Proofpoint-ORIG-GUID: YUvYiVTzjiyS2VMvlmYcNjgicBgBW5sl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_04,2023-05-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- priorityscore=1501 mlxscore=0 phishscore=0 mlxlogscore=999 suspectscore=0
- spamscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305310077
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 5/29/2023 11:46 PM, Stephan Gerhold wrote:
-> Reserved memory can be either looked up using the generic function
-> of_address_to_resource() or using the special of_reserved_mem_lookup().
-> The latter has the advantage that it ensures that the referenced memory
-> region was really reserved and is not e.g. status = "disabled".
+On 30/05/2023 11:07, Claudiu Beznea wrote:
+> Convert Microchip AT91 PIT bindings to YAML. Along with it clocks and
+> clock-names bindings were added as the drivers needs it to ensure proper
+> hardware functionality.
 > 
-> of_reserved_mem also supports allocating reserved memory dynamically at
-> boot time. This works only when using of_reserved_mem_lookup() since
-> there won't be a fixed address in the device tree.
-> 
-> Switch the code to use of_reserved_mem_lookup(). There is no functional
-> difference for static reserved memory allocations.
-> 
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-
-Reviewed-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 > ---
-> See e.g. [1] for an example of dynamically allocated reserved memory.
-> (This patch does *not* depend on [1] and is useful without as well...)
+>  .../devicetree/bindings/arm/atmel-sysregs.txt | 12 ---
+>  .../bindings/timer/atmel,at91sam9260-pit.yaml | 99 +++++++++++++++++++
+>  2 files changed, 99 insertions(+), 12 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
 > 
-> [1]: https://lore.kernel.org/linux-arm-msm/20230510-dt-resv-bottom-up-v1-5-3bf68873dbed@gerhold.net/
-> ---
->  drivers/media/platform/qcom/venus/firmware.c | 24 +++++++++++++-----------
->  1 file changed, 13 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
-> index cfb11c551167..2e7ffdaff7b2 100644
-> --- a/drivers/media/platform/qcom/venus/firmware.c
-> +++ b/drivers/media/platform/qcom/venus/firmware.c
-> @@ -10,6 +10,7 @@
->  #include <linux/io.h>
->  #include <linux/of.h>
->  #include <linux/of_address.h>
-> +#include <linux/of_reserved_mem.h>
->  #include <linux/platform_device.h>
->  #include <linux/of_device.h>
->  #include <linux/firmware/qcom/qcom_scm.h>
-> @@ -82,9 +83,9 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
->  			 phys_addr_t *mem_phys, size_t *mem_size)
->  {
->  	const struct firmware *mdt;
-> +	struct reserved_mem *rmem;
->  	struct device_node *node;
->  	struct device *dev;
-> -	struct resource r;
->  	ssize_t fw_size;
->  	void *mem_va;
->  	int ret;
-> @@ -99,13 +100,16 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
->  		return -EINVAL;
->  	}
+> diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> index 67a66bf74895..54d3f586403e 100644
+> --- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> +++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> @@ -4,18 +4,6 @@ Chipid required properties:
+>  - compatible: Should be "atmel,sama5d2-chipid" or "microchip,sama7g5-chipid"
+>  - reg : Should contain registers location and length
 >  
-> -	ret = of_address_to_resource(node, 0, &r);
-> -	if (ret)
-> -		goto err_put_node;
-> +	rmem = of_reserved_mem_lookup(node);
-> +	of_node_put(node);
-> +	if (!rmem) {
-> +		dev_err(dev, "failed to lookup reserved memory-region\n");
-> +		return -EINVAL;
-> +	}
->  
->  	ret = request_firmware(&mdt, fwname, dev);
->  	if (ret < 0)
-> -		goto err_put_node;
-> +		return ret;
->  
->  	fw_size = qcom_mdt_get_size(mdt);
->  	if (fw_size < 0) {
-> @@ -113,17 +117,17 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
->  		goto err_release_fw;
->  	}
->  
-> -	*mem_phys = r.start;
-> -	*mem_size = resource_size(&r);
-> +	*mem_phys = rmem->base;
-> +	*mem_size = rmem->size;
->  
->  	if (*mem_size < fw_size || fw_size > VENUS_FW_MEM_SIZE) {
->  		ret = -EINVAL;
->  		goto err_release_fw;
->  	}
->  
-> -	mem_va = memremap(r.start, *mem_size, MEMREMAP_WC);
-> +	mem_va = memremap(*mem_phys, *mem_size, MEMREMAP_WC);
->  	if (!mem_va) {
-> -		dev_err(dev, "unable to map memory region: %pR\n", &r);
-> +		dev_err(dev, "unable to map memory region %pa size %#zx\n", mem_phys, *mem_size);
->  		ret = -ENOMEM;
->  		goto err_release_fw;
->  	}
-> @@ -138,8 +142,6 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
->  	memunmap(mem_va);
->  err_release_fw:
->  	release_firmware(mdt);
-> -err_put_node:
-> -	of_node_put(node);
->  	return ret;
->  }
->  
-> 
-> ---
-> base-commit: 9f9f8ca6f012d25428f8605cb36369a449db8508
-> change-id: 20230529-venus-of-rmem-f649885114fd
-> 
-> Best regards,
+> -PIT Timer required properties:
+> -- compatible: Should be "atmel,at91sam9260-pit"
+> -- reg: Should contain registers location and length
+> -- interrupts: Should contain interrupt for the PIT which is the IRQ line
+> -  shared across all System Controller members.
+> -
+> -PIT64B Timer required properties:
+> -- compatible: Should be "microchip,sam9x60-pit64b"
+> -- reg: Should contain registers location and length
+> -- interrupts: Should contain interrupt for PIT64B timer
+> -- clocks: Should contain the available clock sources for PIT64B timer.
+> -
+>  System Timer (ST) required properties:
+>  - compatible: Should be "atmel,at91rm9200-st", "syscon", "simple-mfd"
+>  - reg: Should contain registers location and length
+> diff --git a/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml b/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
+> new file mode 100644
+> index 000000000000..d0f3f80db4cb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
+> @@ -0,0 +1,99 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/timer/atmel,at91sam9260-pit.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip AT91 Periodic Interval Timer (PIT)
+> +
+> +maintainers:
+> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
+> +
+> +description:
+> +  Microchip AT91 periodic interval timer provides the operating system scheduler
+> +  interrupt. It is designed to offer maximum accuracy and efficient management,
+> +  even for systems with long response time.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: microchip,sama7g5-pit64b
+
+From where do you have this compatible? Wasn't in old binding and commit
+msg does not explain it.
+
+
+> +          - const: microchip,sam9x60-pit64b
+> +      - items:
+> +          enum:
+
+These are not items. Just enum.. Does it even work?
+
+> +            - atmel,at91sam9260-pit
+> +            - microchip,sam9x60-pit64b
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: atmel,at91sam9260-pit
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          description:
+> +            Shared interrupt between all system controller members (power management
+> +            controller, watchdog, PIT, reset controller, real-time timer, real-time
+> +            clock, memory controller, debug unit, system timer).
+> +        clocks:
+> +          maxItems: 1
+> +
+> +    else:
+> +      properties:
+> +        clocks:
+> +          minItems: 2
+> +        clock-names:
+> +          items:
+> +            - const: pclk
+> +            - const: gclk
+
+interrupts? They are still required, so why no description here?
+
+> +      required:
+> +        - clock-names
+> +
+> +unevaluatedProperties: false
+
+additionalProperties:false instead
+
+> +
+
+Best regards,
+Krzysztof
+
