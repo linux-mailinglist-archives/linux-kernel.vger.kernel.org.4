@@ -2,68 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBEB717D15
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9A1717D20
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235912AbjEaKUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 06:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
+        id S235637AbjEaKWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 06:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236019AbjEaKUI (ORCPT
+        with ESMTP id S232807AbjEaKVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 06:20:08 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9281981;
-        Wed, 31 May 2023 03:19:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685528354; x=1717064354;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fEV5T6z4nLEPLmhhH/gnfjRblE2+jMQYuIzqvlUDJ3Q=;
-  b=gz1mLLeoHYXC2Wf56D5DP/QV6wrb7KRirC9jxBpj3Ru0/N2hufPsGK/G
-   c+dOm8C9j/sK8jR3XFYbqkcOn4p+KarNO/oECQfwTjrlszs86A5SEv/fP
-   dgrEfyh8hrfUs+faTXUfbZcEHrjHT4CAx7q9AowL6z8+Iw1MXs8sAm5F7
-   h0opmK3bNlnSxuayDke/nX1SwTtU44iqT2mFraJZEEO9ho7fBFMVv4Lx1
-   gY5pKCvuOCSpbcSTFZs1c431/kYAZNBElq/TNg7rl4pPvQYvuiSluU8BZ
-   abPfi1QUHAH6atcmeR0IrL4P05MGzsryfjtcyGiAww8QyTQXC7tXDWTaA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="335541320"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="335541320"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 03:18:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="831166585"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="831166585"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.208.175])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 03:18:55 -0700
-Message-ID: <ec36ef7e-6d64-075f-1484-809b1884e457@intel.com>
-Date:   Wed, 31 May 2023 13:18:51 +0300
+        Wed, 31 May 2023 06:21:40 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E22170C;
+        Wed, 31 May 2023 03:20:52 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-96fe88cd2fcso949663166b.1;
+        Wed, 31 May 2023 03:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685528450; x=1688120450;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=i346g0tOe6vT/cLezhfvyt7e+xeEM6Fa4DiLjYERMPg=;
+        b=OBQ1mURlVEw81LGrI3oxLmfOjApy03eBH8TI/Fgivaf1IyBnHqd8a7L6+LJKJcDMtT
+         Pj5MxSmmBHMqQdKvBCHOC9TlnhDsBYFnJxlYfxxQUjn9S/S8Aj7O7wr1+ug0g84fs9tk
+         /NXzVSmelD3MVB+KGoZWHqQHHbZKlucHwj4/1MXnVEqmQwEy96Cz8A9xU2DGFQyDprob
+         QU+UXj6YYNrU5yFg3twou+BvSFVfpdV+NLVsVBdnhC+ItsVzdm450BQMMDWs6OMCOOhd
+         oJlvkBRU49zUk0zfeyly+wVybT4zLVySljJF2Z3umqdQ4BZqqmuH0DMD7MMNpUreA8Vk
+         19ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685528450; x=1688120450;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i346g0tOe6vT/cLezhfvyt7e+xeEM6Fa4DiLjYERMPg=;
+        b=e1dApAIlMYW4IzSUYGNl65XAtf8kik2eZ172hM2+8FebUJwz5bHbolLKgmcS29AZif
+         uZ8x4pHAv/kg3jk2YEO9to5FM4TVsH212tdd/86kHf+eCUPQ14Ae2R3UlsxQDOuX0GUe
+         7I+NSYSLf7FbeqpjnbwlBcRdouqqT4G+6vrRT4pcVCv1UpKGXltYkb10tWhfMgA0zdld
+         RHzI2Pvps/VXTNVRJvFqZCkM96sof/y84kuSInUx1a5yrL5gQVx1QRZZ2HOMa0Ac97mB
+         ZAKrAKQ8C4Oleag3kaDMZljjvM7udBqv+q4P+nsGRYPc1feVAnSCltqIUzfOia3eUk/C
+         4oXw==
+X-Gm-Message-State: AC+VfDxs8LUi2++iO9QJf55y18jsvbVmfXY98rj2z7rJjk2ZCES8jVkb
+        AaJHKgi22LjInGY5UpZSAEI=
+X-Google-Smtp-Source: ACHHUZ4UPVv8pFCaMVf2DwKLWo5JAqU0RpFvuFlHlxmmoSSaWjRUL9IRazlDJuAGikMeqiOnaBriGA==
+X-Received: by 2002:a17:907:7d9e:b0:973:ff8d:2a46 with SMTP id oz30-20020a1709077d9e00b00973ff8d2a46mr5438318ejc.3.1685528450197;
+        Wed, 31 May 2023 03:20:50 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-50-121.cust.vodafonedsl.it. [188.217.50.121])
+        by smtp.gmail.com with ESMTPSA id cb23-20020a170906a45700b00965ddf2e221sm8798394ejb.93.2023.05.31.03.20.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 03:20:49 -0700 (PDT)
+Date:   Wed, 31 May 2023 12:20:47 +0200
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
+        linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] media: dt-bindings: alvium: add document YAML
+ binding
+Message-ID: <ZHcff4Gpr9QSgpOs@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+References: <20230526173955.797226-1-tomm.merciai@gmail.com>
+ <20230526173955.797226-2-tomm.merciai@gmail.com>
+ <ZHPElYOeD2C1qo4R@kekkonen.localdomain>
+ <20230529063907.GB25984@pendragon.ideasonboard.com>
+ <20230529064326.GC25984@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH V3 2/3] mmc: sdhci-pci-gli: Set SDR104's clock to 205MHz
- and enable SSC for GL9767
-Content-Language: en-US
-To:     Victor Shih <victorshihgli@gmail.com>, ulf.hansson@linaro.org
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benchuanggli@gmail.com, HL.Liu@genesyslogic.com.tw,
-        Greg.tu@genesyslogic.com.tw,
-        Ben Chuang <ben.chuang@genesyslogic.com.tw>,
-        Victor Shih <victor.shih@genesyslogic.com.tw>
-References: <20230531095721.392664-1-victorshihgli@gmail.com>
- <20230531095721.392664-3-victorshihgli@gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20230531095721.392664-3-victorshihgli@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230529064326.GC25984@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,186 +94,221 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/23 12:57, Victor Shih wrote:
-> From: Victor Shih <victor.shih@genesyslogic.com.tw>
-> 
-> Set GL9767 SDR104's clock to 205MHz and enable SSC feature
-> depend on register 0x888 BIT(1).
-> 
-> Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
-> Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
+Hi Laurent,
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-
-> ---
->  drivers/mmc/host/sdhci-pci-gli.c | 135 ++++++++++++++++++++++++++++++-
->  1 file changed, 134 insertions(+), 1 deletion(-)
+On Mon, May 29, 2023 at 09:43:26AM +0300, Laurent Pinchart wrote:
+> On Mon, May 29, 2023 at 09:39:13AM +0300, Laurent Pinchart wrote:
+> > On Sun, May 28, 2023 at 09:16:05PM +0000, Sakari Ailus wrote:
+> > > On Fri, May 26, 2023 at 07:39:43PM +0200, Tommaso Merciai wrote:
+> > > > Add documentation of device tree in YAML schema for the ALVIUM
+> > > > Camera from Allied Vision Inc.
+> > > > 
+> > > > References:
+> > > >  - https://www.alliedvision.com/en/products/embedded-vision-solutions
+> > > > 
+> > > > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> > > > ---
+> > > > Changes since v1:
+> > > >  - Fixed build error as suggested by RHerring bot
+> > > > 
+> > > >  .../media/i2c/alliedvision,alvium.yaml        | 115 ++++++++++++++++++
+> > > >  1 file changed, 115 insertions(+)
+> > > >  create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..81e9e560c99d
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
+> > > > @@ -0,0 +1,115 @@
+> > > > +# SPDX-License-Identifier: GPL-2.0
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/media/i2c/alliedvision,alvium.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: Alliedvision Alvium Camera
+> > 
+> > s/Alliedvision/Allied Vision/
+> > 
+> > > > +
+> > > > +maintainers:
+> > > > +  - Tommaso Merciai <tomm.merciai@gmail.com>
+> > > > +  - Martin Hecht <martin.hecht@avnet.eu>
+> > > > +
+> > > > +allOf:
+> > > > +  - $ref: /schemas/media/video-interface-devices.yaml#
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    const: alliedvision,alvium
+> > 
+> > The name is very generic. There are Alvium camera modules that have a
+> > GMSL or FPD-Link interface, and I'm pretty sure those will require a
+> > different driver. I would add module-specific compatible strings (e.g.
+> > "alliedvision,alvium-1500c", ...) here, with a generic fallback.
+> > "alliedvision,alvium" isn't good as it won't cover GMSL or FPD-Link,
+> > maybe "alliedvision,alvium-csi2" would be an option.
 > 
-> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
-> index 3ed207b89d1a..392a106cea18 100644
-> --- a/drivers/mmc/host/sdhci-pci-gli.c
-> +++ b/drivers/mmc/host/sdhci-pci-gli.c
-> @@ -158,6 +158,12 @@
->  #define   GLI_9767_VHS_REV_M	  0x1
->  #define   GLI_9767_VHS_REV_W	  0x2
->  
-> +#define PCIE_GLI_9767_COM_MAILBOX		0x888
-> +#define   PCIE_GLI_9767_COM_MAILBOX_SSC_EN	  BIT(1)
-> +
-> +#define PCIE_GLI_9767_CFG		0x8A0
-> +#define   PCIE_GLI_9767_CFG_LOW_PWR_OFF	  BIT(12)
-> +
->  #define PCIE_GLI_9767_PWR_MACRO_CTL					0x8D0
->  #define   PCIE_GLI_9767_PWR_MACRO_CTL_LOW_VOLTAGE			  GENMASK(3, 0)
->  #define   PCIE_GLI_9767_PWR_MACRO_CTL_LD0_LOW_OUTPUT_VOLTAGE		  GENMASK(15, 12)
-> @@ -175,6 +181,16 @@
->  #define   PCIE_GLI_9767_SCR_CORE_PWR_D3_OFF		  BIT(21)
->  #define   PCIE_GLI_9767_SCR_CFG_RST_DATA_LINK_DOWN	  BIT(30)
->  
-> +#define PCIE_GLI_9767_SD_PLL_CTL			0x938
-> +#define   PCIE_GLI_9767_SD_PLL_CTL_PLL_LDIV		  GENMASK(9, 0)
-> +#define   PCIE_GLI_9767_SD_PLL_CTL_PLL_PDIV		  GENMASK(15, 12)
-> +#define   PCIE_GLI_9767_SD_PLL_CTL_PLL_DIR_EN		  BIT(16)
-> +#define   PCIE_GLI_9767_SD_PLL_CTL_SSC_EN		  BIT(19)
-> +#define   PCIE_GLI_9767_SD_PLL_CTL_SSC_STEP_SETTING	  GENMASK(28, 24)
-> +
-> +#define PCIE_GLI_9767_SD_PLL_CTL2		0x93C
-> +#define   PCIE_GLI_9767_SD_PLL_CTL2_PLLSSC_PPM	  GENMASK(31, 16)
-> +
->  #define GLI_MAX_TUNING_LOOP 40
->  
->  /* Genesys Logic chipset */
-> @@ -753,6 +769,123 @@ static inline void gl9767_vhs_write(struct pci_dev *pdev)
->  	pci_write_config_dword(pdev, PCIE_GLI_9767_VHS, vhs_value);
->  }
->  
-> +static bool gl9767_ssc_enable(struct pci_dev *pdev)
-> +{
-> +	u32 value;
-> +	u8 enable;
-> +
-> +	gl9767_vhs_write(pdev);
-> +
-> +	pci_read_config_dword(pdev, PCIE_GLI_9767_COM_MAILBOX, &value);
-> +	enable = FIELD_GET(PCIE_GLI_9767_COM_MAILBOX_SSC_EN, value);
-> +
-> +	gl9767_vhs_read(pdev);
-> +
-> +	return enable;
-> +}
-> +
-> +static void gl9767_set_ssc(struct pci_dev *pdev, u8 enable, u8 step, u16 ppm)
-> +{
-> +	u32 pll;
-> +	u32 ssc;
-> +
-> +	gl9767_vhs_write(pdev);
-> +
-> +	pci_read_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL, &pll);
-> +	pci_read_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL2, &ssc);
-> +	pll &= ~(PCIE_GLI_9767_SD_PLL_CTL_SSC_STEP_SETTING |
-> +		 PCIE_GLI_9767_SD_PLL_CTL_SSC_EN);
-> +	ssc &= ~PCIE_GLI_9767_SD_PLL_CTL2_PLLSSC_PPM;
-> +	pll |= FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL_SSC_STEP_SETTING, step) |
-> +	       FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL_SSC_EN, enable);
-> +	ssc |= FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL2_PLLSSC_PPM, ppm);
-> +	pci_write_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL2, ssc);
-> +	pci_write_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL, pll);
-> +
-> +	gl9767_vhs_read(pdev);
-> +}
-> +
-> +static void gl9767_set_pll(struct pci_dev *pdev, u8 dir, u16 ldiv, u8 pdiv)
-> +{
-> +	u32 pll;
-> +
-> +	gl9767_vhs_write(pdev);
-> +
-> +	pci_read_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL, &pll);
-> +	pll &= ~(PCIE_GLI_9767_SD_PLL_CTL_PLL_LDIV |
-> +		 PCIE_GLI_9767_SD_PLL_CTL_PLL_PDIV |
-> +		 PCIE_GLI_9767_SD_PLL_CTL_PLL_DIR_EN);
-> +	pll |= FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL_PLL_LDIV, ldiv) |
-> +	       FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL_PLL_PDIV, pdiv) |
-> +	       FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL_PLL_DIR_EN, dir);
-> +	pci_write_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL, pll);
-> +
-> +	gl9767_vhs_read(pdev);
-> +
-> +	/* wait for pll stable */
-> +	msleep(1);
-> +}
-> +
-> +static void gl9767_set_ssc_pll_205mhz(struct pci_dev *pdev)
-> +{
-> +	bool enable = gl9767_ssc_enable(pdev);
-> +
-> +	/* set pll to 205MHz and ssc */
-> +	gl9767_set_ssc(pdev, enable, 0x1F, 0xF5C3);
-> +	gl9767_set_pll(pdev, 0x1, 0x246, 0x0);
-> +}
-> +
-> +static void gl9767_disable_ssc_pll(struct pci_dev *pdev)
-> +{
-> +	u32 pll;
-> +
-> +	gl9767_vhs_write(pdev);
-> +
-> +	pci_read_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL, &pll);
-> +	pll &= ~(PCIE_GLI_9767_SD_PLL_CTL_PLL_DIR_EN | PCIE_GLI_9767_SD_PLL_CTL_SSC_EN);
-> +	pci_write_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL, pll);
-> +
-> +	gl9767_vhs_read(pdev);
-> +}
-> +
-> +static void sdhci_gl9767_set_clock(struct sdhci_host *host, unsigned int clock)
-> +{
-> +	struct sdhci_pci_slot *slot = sdhci_priv(host);
-> +	struct mmc_ios *ios = &host->mmc->ios;
-> +	struct pci_dev *pdev;
-> +	u32 value;
-> +	u16 clk;
-> +
-> +	pdev = slot->chip->pdev;
-> +	host->mmc->actual_clock = 0;
-> +
-> +	gl9767_vhs_write(pdev);
-> +
-> +	pci_read_config_dword(pdev, PCIE_GLI_9767_CFG, &value);
-> +	value |= PCIE_GLI_9767_CFG_LOW_PWR_OFF;
-> +	pci_write_config_dword(pdev, PCIE_GLI_9767_CFG, value);
-> +
-> +	gl9767_disable_ssc_pll(pdev);
-> +	sdhci_writew(host, 0, SDHCI_CLOCK_CONTROL);
-> +
-> +	if (clock == 0)
-> +		return;
-> +
-> +	clk = sdhci_calc_clk(host, clock, &host->mmc->actual_clock);
-> +	if (clock == 200000000 && ios->timing == MMC_TIMING_UHS_SDR104) {
-> +		host->mmc->actual_clock = 205000000;
-> +		gl9767_set_ssc_pll_205mhz(pdev);
-> +	}
-> +
-> +	sdhci_enable_clk(host, clk);
-> +
-> +	pci_read_config_dword(pdev, PCIE_GLI_9767_CFG, &value);
-> +	value &= ~PCIE_GLI_9767_CFG_LOW_PWR_OFF;
-> +	pci_write_config_dword(pdev, PCIE_GLI_9767_CFG, value);
-> +
-> +	gl9767_vhs_read(pdev);
-> +}
-> +
->  static void gli_set_9767(struct sdhci_host *host)
->  {
->  	u32 value;
-> @@ -1293,7 +1426,7 @@ const struct sdhci_pci_fixes sdhci_gl9763e = {
->  };
->  
->  static const struct sdhci_ops sdhci_gl9767_ops = {
-> -	.set_clock		 = sdhci_set_clock,
-> +	.set_clock		 = sdhci_gl9767_set_clock,
->  	.enable_dma		 = sdhci_pci_enable_dma,
->  	.set_bus_width		 = sdhci_set_bus_width,
->  	.reset			 = sdhci_gl9767_reset,
+> Actually, "alvium-1500c" as a specific compatible string won't do. You
+> need the exact model in the compatible string, otherwise it won't be
+> possible for the driver to handle device-specific configuration (for
+> instance accessing registers of the camera sensor for fine-grained
+> configuration). I would thus recommend using "alliedvision,alvium-1500c"
+> and "alliedvision,alvium-1800c" as generic fallbacks, along compatible
+> strings that include the exact device model.
 
+Agree with alliedvision,alvium-csi2 and thanks for your suggestion.
+In my opinion we don’t need names for 1500c and 
+others because the same driver can drive all the alvium models.
+Alvium is taking care of different sensor abstractions.
+
+I test with this driver with the following models:
+
+ - 1800 C-1240c
+ - 1800 C-040c
+ - 1500 C-500
+
+What do you think about?
+
+Thanks,
+Tommaso
+
+> 
+> > > > +
+> > > > +  reg:
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  clocks:
+> > > > +    description: XCLK Input Clock
+> > > > +
+> > > > +  clock-names:
+> > > > +    const: xclk
+> > > 
+> > > I'd also drop this as you have a single clock only: it's redundant.
+> > > 
+> > > > +
+> > > > +  powerdown-gpios:
+> > > > +    maxItems: 1
+> > > > +    description: >
+> > > > +      Reference to the GPIO connected to the powerdown pin, if any.
+> > > > +
+> > > > +  reset-gpios:
+> > > > +    maxItems: 1
+> > > > +    description: >
+> > > > +      Reference to the GPIO connected to the reset pin, if any.
+> > 
+> > Reading the Alvium CSI-2 Cameras User Guide, I don't see any powerdown
+> > or reset pin on the 22-pin connector. Am I missing something ? There are
+> > however two GPIOs (in addition to the I2C signals that are also
+> > documented as GPIOs), do you plan to support those ?
+> > 
+> > > > +
+> > > > +  streamon-delay:
+> > > > +    maxItems: 1
+> > > > +    description: >
+> > > > +      Delay before camera start capturing frames in us.
+> > 
+> > Add "-us" to the property name to indicate the unit.
+> > 
+> > This is a vendor-specific property, and should thus have a vendor
+> > prefix.
+> > 
+> > A longer description is needed, from that single line I have no idea
+> > what the property does exactly.
+> > 
+> > > > +
+> > > > +  rotation:
+> > > > +    enum:
+> > > > +      - 0
+> > > > +      - 180
+> > 
+> > Why is the rotation restricted to 0 or 180 ? Someone could mount the
+> > module with  90 degrees rotation, shouldn't the DT bindings allow
+> > describing that ?
+> > 
+> > You need a property for the vcc-ext-in supply.
+> > 
+> > > > +
+> > > > +  port:
+> > > > +    description: Digital Output Port
+> > > > +    $ref: /schemas/graph.yaml#/$defs/port-base
+> > > > +    additionalProperties: false
+> > > > +
+> > > > +    properties:
+> > > > +      endpoint:
+> > > > +        $ref: /schemas/media/video-interfaces.yaml#
+> > > > +        unevaluatedProperties: false
+> > > > +
+> > > > +        properties:
+> > > > +          clock-lanes:
+> > > > +            const: 0
+> > > 
+> > > The driver can know this, no need to have it in DT, i.e. please drop it.
+> > > 
+> > > > +          data-lanes:
+> > > > +            minItems: 1
+> > > > +            maxItems: 4
+> > > > +          link-frequencies: true
+> > > > +
+> > > > +        required:
+> > > > +          - data-lanes
+> > > > +          - link-frequencies
+> > > > +
+> > > > +required:
+> > > > +  - compatible
+> > > > +  - reg
+> > > > +  - clocks
+> > > > +  - clock-names
+> > > > +  - port
+> > > > +
+> > > > +additionalProperties: false
+> > > > +
+> > > > +examples:
+> > > > +  - |
+> > > > +      #include <dt-bindings/gpio/gpio.h>
+> > > > +      #include <dt-bindings/clock/imx8mp-clock.h>
+> > > > +
+> > > > +      i2c {
+> > > > +          #address-cells = <1>;
+> > > > +          #size-cells = <0>;
+> > > > +
+> > > > +          camera: alvium@3c {
+> > > > +              compatible = "alliedvision,alvium";
+> > 
+> > The "alliedvision" prefix is missing from
+> > Documentation/devicetree/bindings/vendor-prefixes.yaml.
+> > 
+> > > > +              pinctrl-names = "default";
+> > > > +              pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
+> > 
+> > I'd drop pinctrl, it makes the example longer without adding much value.
+> > 
+> > > > +              reg = <0x3c>;
+> > > > +              clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
+> > > > +              clock-names = "xclk";
+> > > > +              assigned-clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
+> > > > +              assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
+> > > > +              assigned-clock-rates = <24000000>;
+> > > > +              streamon-delay = <20>;
+> > > > +              powerdown-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+> > > > +              reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
+> > > > +              status = "okay";
+> > > > +
+> > > > +              port {
+> > > > +                  alvium_out: endpoint {
+> > > > +                      remote-endpoint = <&mipi_csi_0_in>;
+> > > > +                      data-lanes = <1 2 3 4>;
+> > > > +                      link-frequencies = /bits/ 64 <681250000>;
+> > > > +                      clock-lanes = <0>;
+> > > > +                  };
+> > > > +              };
+> > > > +          };
+> > > > +      };
+> > > > +
+> > > > +...
+> 
+> -- 
+> Regards,
+> 
+> Laurent Pinchart
