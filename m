@@ -2,313 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9A1717D20
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B42F717D26
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235637AbjEaKWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 06:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
+        id S234407AbjEaKWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 06:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232807AbjEaKVk (ORCPT
+        with ESMTP id S235344AbjEaKWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 06:21:40 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E22170C;
-        Wed, 31 May 2023 03:20:52 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-96fe88cd2fcso949663166b.1;
-        Wed, 31 May 2023 03:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685528450; x=1688120450;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=i346g0tOe6vT/cLezhfvyt7e+xeEM6Fa4DiLjYERMPg=;
-        b=OBQ1mURlVEw81LGrI3oxLmfOjApy03eBH8TI/Fgivaf1IyBnHqd8a7L6+LJKJcDMtT
-         Pj5MxSmmBHMqQdKvBCHOC9TlnhDsBYFnJxlYfxxQUjn9S/S8Aj7O7wr1+ug0g84fs9tk
-         /NXzVSmelD3MVB+KGoZWHqQHHbZKlucHwj4/1MXnVEqmQwEy96Cz8A9xU2DGFQyDprob
-         QU+UXj6YYNrU5yFg3twou+BvSFVfpdV+NLVsVBdnhC+ItsVzdm450BQMMDWs6OMCOOhd
-         oJlvkBRU49zUk0zfeyly+wVybT4zLVySljJF2Z3umqdQ4BZqqmuH0DMD7MMNpUreA8Vk
-         19ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685528450; x=1688120450;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i346g0tOe6vT/cLezhfvyt7e+xeEM6Fa4DiLjYERMPg=;
-        b=e1dApAIlMYW4IzSUYGNl65XAtf8kik2eZ172hM2+8FebUJwz5bHbolLKgmcS29AZif
-         uZ8x4pHAv/kg3jk2YEO9to5FM4TVsH212tdd/86kHf+eCUPQ14Ae2R3UlsxQDOuX0GUe
-         7I+NSYSLf7FbeqpjnbwlBcRdouqqT4G+6vrRT4pcVCv1UpKGXltYkb10tWhfMgA0zdld
-         RHzI2Pvps/VXTNVRJvFqZCkM96sof/y84kuSInUx1a5yrL5gQVx1QRZZ2HOMa0Ac97mB
-         ZAKrAKQ8C4Oleag3kaDMZljjvM7udBqv+q4P+nsGRYPc1feVAnSCltqIUzfOia3eUk/C
-         4oXw==
-X-Gm-Message-State: AC+VfDxs8LUi2++iO9QJf55y18jsvbVmfXY98rj2z7rJjk2ZCES8jVkb
-        AaJHKgi22LjInGY5UpZSAEI=
-X-Google-Smtp-Source: ACHHUZ4UPVv8pFCaMVf2DwKLWo5JAqU0RpFvuFlHlxmmoSSaWjRUL9IRazlDJuAGikMeqiOnaBriGA==
-X-Received: by 2002:a17:907:7d9e:b0:973:ff8d:2a46 with SMTP id oz30-20020a1709077d9e00b00973ff8d2a46mr5438318ejc.3.1685528450197;
-        Wed, 31 May 2023 03:20:50 -0700 (PDT)
-Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-50-121.cust.vodafonedsl.it. [188.217.50.121])
-        by smtp.gmail.com with ESMTPSA id cb23-20020a170906a45700b00965ddf2e221sm8798394ejb.93.2023.05.31.03.20.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 03:20:49 -0700 (PDT)
-Date:   Wed, 31 May 2023 12:20:47 +0200
-From:   Tommaso Merciai <tomm.merciai@gmail.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
-        linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wed, 31 May 2023 06:22:05 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855E310C0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:21:29 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q4IxA-0002GV-QI; Wed, 31 May 2023 12:21:16 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q4Ix9-0045I2-1E; Wed, 31 May 2023 12:21:15 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q4Ix8-00E4a0-E8; Wed, 31 May 2023 12:21:14 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] media: dt-bindings: alvium: add document YAML
- binding
-Message-ID: <ZHcff4Gpr9QSgpOs@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-References: <20230526173955.797226-1-tomm.merciai@gmail.com>
- <20230526173955.797226-2-tomm.merciai@gmail.com>
- <ZHPElYOeD2C1qo4R@kekkonen.localdomain>
- <20230529063907.GB25984@pendragon.ideasonboard.com>
- <20230529064326.GC25984@pendragon.ideasonboard.com>
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
+        <jerome.pouiller@silabs.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH v3 0/2] Extend dt-bindings for PSE-PD controllers and update prtt1c dts
+Date:   Wed, 31 May 2023 12:21:11 +0200
+Message-Id: <20230531102113.3353065-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230529064326.GC25984@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+changes v3:
+- reword commit message for the pse-controller.yaml patch
+- drop podl-pse-regulator.yaml patch
 
-On Mon, May 29, 2023 at 09:43:26AM +0300, Laurent Pinchart wrote:
-> On Mon, May 29, 2023 at 09:39:13AM +0300, Laurent Pinchart wrote:
-> > On Sun, May 28, 2023 at 09:16:05PM +0000, Sakari Ailus wrote:
-> > > On Fri, May 26, 2023 at 07:39:43PM +0200, Tommaso Merciai wrote:
-> > > > Add documentation of device tree in YAML schema for the ALVIUM
-> > > > Camera from Allied Vision Inc.
-> > > > 
-> > > > References:
-> > > >  - https://www.alliedvision.com/en/products/embedded-vision-solutions
-> > > > 
-> > > > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> > > > ---
-> > > > Changes since v1:
-> > > >  - Fixed build error as suggested by RHerring bot
-> > > > 
-> > > >  .../media/i2c/alliedvision,alvium.yaml        | 115 ++++++++++++++++++
-> > > >  1 file changed, 115 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..81e9e560c99d
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
-> > > > @@ -0,0 +1,115 @@
-> > > > +# SPDX-License-Identifier: GPL-2.0
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/media/i2c/alliedvision,alvium.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Alliedvision Alvium Camera
-> > 
-> > s/Alliedvision/Allied Vision/
-> > 
-> > > > +
-> > > > +maintainers:
-> > > > +  - Tommaso Merciai <tomm.merciai@gmail.com>
-> > > > +  - Martin Hecht <martin.hecht@avnet.eu>
-> > > > +
-> > > > +allOf:
-> > > > +  - $ref: /schemas/media/video-interface-devices.yaml#
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    const: alliedvision,alvium
-> > 
-> > The name is very generic. There are Alvium camera modules that have a
-> > GMSL or FPD-Link interface, and I'm pretty sure those will require a
-> > different driver. I would add module-specific compatible strings (e.g.
-> > "alliedvision,alvium-1500c", ...) here, with a generic fallback.
-> > "alliedvision,alvium" isn't good as it won't cover GMSL or FPD-Link,
-> > maybe "alliedvision,alvium-csi2" would be an option.
-> 
-> Actually, "alvium-1500c" as a specific compatible string won't do. You
-> need the exact model in the compatible string, otherwise it won't be
-> possible for the driver to handle device-specific configuration (for
-> instance accessing registers of the camera sensor for fine-grained
-> configuration). I would thus recommend using "alliedvision,alvium-1500c"
-> and "alliedvision,alvium-1800c" as generic fallbacks, along compatible
-> strings that include the exact device model.
+changes v2:
+- extend ethernet-pse regexp in the PoDL PSE dt-bindings
 
-Agree with alliedvision,alvium-csi2 and thanks for your suggestion.
-In my opinion we don’t need names for 1500c and 
-others because the same driver can drive all the alvium models.
-Alvium is taking care of different sensor abstractions.
+This patch set comes in response to issues identified while adding PoDL
+PSE support to the stm32 prtt1c device tree. The existing pse-pd device
+tree bindings did not allow node name patterns like "ethernet-pse-0" and
+"ethernet-pse-1", leading to validation failures.
 
-I test with this driver with the following models:
+To address these false positives in validation, the device tree bindings
+are extended to support these node name patterns. Alongside this, an
+example node is added to aid in the improved validation process.
+Following these changes, the updated PoDL PSE regulator nodes are then
+added to the stm32 prtt1c device tree.
 
- - 1800 C-1240c
- - 1800 C-040c
- - 1500 C-500
+Oleksij Rempel (2):
+  dt-bindings: net: pse-pd: Allow -N suffix for ethernet-pse node names
+  ARM: dts: stm32: prtt1c: Add PoDL PSE regulator nodes
 
-What do you think about?
+ .../bindings/net/pse-pd/pse-controller.yaml   |  2 +-
+ arch/arm/boot/dts/stm32mp151a-prtt1c.dts      | 32 +++++++++++++++++++
+ 2 files changed, 33 insertions(+), 1 deletion(-)
 
-Thanks,
-Tommaso
+-- 
+2.39.2
 
-> 
-> > > > +
-> > > > +  reg:
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  clocks:
-> > > > +    description: XCLK Input Clock
-> > > > +
-> > > > +  clock-names:
-> > > > +    const: xclk
-> > > 
-> > > I'd also drop this as you have a single clock only: it's redundant.
-> > > 
-> > > > +
-> > > > +  powerdown-gpios:
-> > > > +    maxItems: 1
-> > > > +    description: >
-> > > > +      Reference to the GPIO connected to the powerdown pin, if any.
-> > > > +
-> > > > +  reset-gpios:
-> > > > +    maxItems: 1
-> > > > +    description: >
-> > > > +      Reference to the GPIO connected to the reset pin, if any.
-> > 
-> > Reading the Alvium CSI-2 Cameras User Guide, I don't see any powerdown
-> > or reset pin on the 22-pin connector. Am I missing something ? There are
-> > however two GPIOs (in addition to the I2C signals that are also
-> > documented as GPIOs), do you plan to support those ?
-> > 
-> > > > +
-> > > > +  streamon-delay:
-> > > > +    maxItems: 1
-> > > > +    description: >
-> > > > +      Delay before camera start capturing frames in us.
-> > 
-> > Add "-us" to the property name to indicate the unit.
-> > 
-> > This is a vendor-specific property, and should thus have a vendor
-> > prefix.
-> > 
-> > A longer description is needed, from that single line I have no idea
-> > what the property does exactly.
-> > 
-> > > > +
-> > > > +  rotation:
-> > > > +    enum:
-> > > > +      - 0
-> > > > +      - 180
-> > 
-> > Why is the rotation restricted to 0 or 180 ? Someone could mount the
-> > module with  90 degrees rotation, shouldn't the DT bindings allow
-> > describing that ?
-> > 
-> > You need a property for the vcc-ext-in supply.
-> > 
-> > > > +
-> > > > +  port:
-> > > > +    description: Digital Output Port
-> > > > +    $ref: /schemas/graph.yaml#/$defs/port-base
-> > > > +    additionalProperties: false
-> > > > +
-> > > > +    properties:
-> > > > +      endpoint:
-> > > > +        $ref: /schemas/media/video-interfaces.yaml#
-> > > > +        unevaluatedProperties: false
-> > > > +
-> > > > +        properties:
-> > > > +          clock-lanes:
-> > > > +            const: 0
-> > > 
-> > > The driver can know this, no need to have it in DT, i.e. please drop it.
-> > > 
-> > > > +          data-lanes:
-> > > > +            minItems: 1
-> > > > +            maxItems: 4
-> > > > +          link-frequencies: true
-> > > > +
-> > > > +        required:
-> > > > +          - data-lanes
-> > > > +          - link-frequencies
-> > > > +
-> > > > +required:
-> > > > +  - compatible
-> > > > +  - reg
-> > > > +  - clocks
-> > > > +  - clock-names
-> > > > +  - port
-> > > > +
-> > > > +additionalProperties: false
-> > > > +
-> > > > +examples:
-> > > > +  - |
-> > > > +      #include <dt-bindings/gpio/gpio.h>
-> > > > +      #include <dt-bindings/clock/imx8mp-clock.h>
-> > > > +
-> > > > +      i2c {
-> > > > +          #address-cells = <1>;
-> > > > +          #size-cells = <0>;
-> > > > +
-> > > > +          camera: alvium@3c {
-> > > > +              compatible = "alliedvision,alvium";
-> > 
-> > The "alliedvision" prefix is missing from
-> > Documentation/devicetree/bindings/vendor-prefixes.yaml.
-> > 
-> > > > +              pinctrl-names = "default";
-> > > > +              pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
-> > 
-> > I'd drop pinctrl, it makes the example longer without adding much value.
-> > 
-> > > > +              reg = <0x3c>;
-> > > > +              clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
-> > > > +              clock-names = "xclk";
-> > > > +              assigned-clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
-> > > > +              assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
-> > > > +              assigned-clock-rates = <24000000>;
-> > > > +              streamon-delay = <20>;
-> > > > +              powerdown-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
-> > > > +              reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
-> > > > +              status = "okay";
-> > > > +
-> > > > +              port {
-> > > > +                  alvium_out: endpoint {
-> > > > +                      remote-endpoint = <&mipi_csi_0_in>;
-> > > > +                      data-lanes = <1 2 3 4>;
-> > > > +                      link-frequencies = /bits/ 64 <681250000>;
-> > > > +                      clock-lanes = <0>;
-> > > > +                  };
-> > > > +              };
-> > > > +          };
-> > > > +      };
-> > > > +
-> > > > +...
-> 
-> -- 
-> Regards,
-> 
-> Laurent Pinchart
