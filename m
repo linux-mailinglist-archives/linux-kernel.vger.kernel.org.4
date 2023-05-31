@@ -2,89 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56EE71736E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F584717374
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 04:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233933AbjEaB6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 21:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
+        id S233770AbjEaCCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 22:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233622AbjEaB55 (ORCPT
+        with ESMTP id S231219AbjEaCCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 21:57:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3688F137;
-        Tue, 30 May 2023 18:57:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8ACDB635F6;
-        Wed, 31 May 2023 01:57:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62353C433EF;
-        Wed, 31 May 2023 01:57:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685498270;
-        bh=dzF+yG3jjN1BucIulDWBDlfSuDTCMG7xQb67qJZLTDM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d7wFwU95uWOzsqIW+g8zVCScS0tL5zf39iZGpoU2AVeC9UT/dId/D8o9L/yGjE+io
-         l/d5qOXnmrwNcOCQPA4Qv58cKlzRWWiimerpmofl3kr3/8k/JqU/S1cGBCkVj4f19r
-         l+3XrKO1aReEwqqcr5PGuXXU/O6k6PrzKQCATkTeAY5Ncu2/j/5orXrzZ4oSTh1xw2
-         uesA7fhVAg+OgYVFxyEXjEXBcwpu7My3wc+r5NB48H4F6PACipyZXzXTHoxJeAZDq7
-         9UUEtSYA5TsONp18ynEIL7K9lf7WwWGAYHDas00CejgwPzuwEXvjZm0ued+Zep68ao
-         2pRomtWZ3FfwQ==
-Date:   Tue, 30 May 2023 18:57:48 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Benjamin Segall <bsegall@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH RESEND] epoll: ep_autoremove_wake_function should use
- list_del_init_careful
-Message-ID: <20230531015748.GB1648@quark.localdomain>
-References: <xm26pm6hvfer.fsf@google.com>
+        Tue, 30 May 2023 22:02:45 -0400
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7CEEC;
+        Tue, 30 May 2023 19:02:43 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VjvXqog_1685498559;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VjvXqog_1685498559)
+          by smtp.aliyun-inc.com;
+          Wed, 31 May 2023 10:02:40 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     pavel@ucw.cz
+Cc:     lee@kernel.org, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] leds: cht-wcove: Fix an unsigned comparison which can never be negative
+Date:   Wed, 31 May 2023 10:02:38 +0800
+Message-Id: <20230531020238.102684-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xm26pm6hvfer.fsf@google.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 11:32:28AM -0700, Benjamin Segall wrote:
-> autoremove_wake_function uses list_del_init_careful, so should epoll's
-> more aggressive variant. It only doesn't because it was copied from an
-> older wait.c rather than the most recent.
-> 
-> Fixes: a16ceb139610 ("epoll: autoremove wakers even more aggressively")
-> Signed-off-by: Ben Segall <bsegall@google.com>
-> Cc: stable@vger.kernel.org
-> ---
->  fs/eventpoll.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-> index 52954d4637b5..081df056398a 100644
-> --- a/fs/eventpoll.c
-> +++ b/fs/eventpoll.c
-> @@ -1756,11 +1756,11 @@ static struct timespec64 *ep_timeout_to_timespec(struct timespec64 *to, long ms)
->  static int ep_autoremove_wake_function(struct wait_queue_entry *wq_entry,
->  				       unsigned int mode, int sync, void *key)
->  {
->  	int ret = default_wake_function(wq_entry, mode, sync, key);
->  
-> -	list_del_init(&wq_entry->entry);
-> +	list_del_init_careful(&wq_entry->entry);
->  	return ret;
->  }
+The return value from the call to cht_wc_leds_find_freq() is int.
+However, the return value is being assigned to an unsigned
+int variable 'ctrl', so making it an int.
 
-Can you please provide a more detailed explanation about why
-list_del_init_careful() is needed here?
+Eliminate the following warning:
+drivers/leds/leds-cht-wcove.c:236 cht_wc_leds_set_effect() warn: unsigned 'ctrl' is never less than zero.
 
-- Eric
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5341
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/leds/leds-cht-wcove.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/leds/leds-cht-wcove.c b/drivers/leds/leds-cht-wcove.c
+index 0cfebee98910..10afd03164b4 100644
+--- a/drivers/leds/leds-cht-wcove.c
++++ b/drivers/leds/leds-cht-wcove.c
+@@ -223,8 +223,7 @@ static int cht_wc_leds_set_effect(struct led_classdev *cdev,
+ 				  u8 effect)
+ {
+ 	struct cht_wc_led *led = container_of(cdev, struct cht_wc_led, cdev);
+-	unsigned int ctrl;
+-	int ret;
++	int ctrl, ret;
+ 
+ 	mutex_lock(&led->mutex);
+ 
+-- 
+2.20.1.7.g153144c
+
