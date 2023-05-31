@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1FA717898
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45ACA7178A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234753AbjEaHsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
+        id S234796AbjEaHtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234626AbjEaHsM (ORCPT
+        with ESMTP id S234784AbjEaHtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:48:12 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743CE12E
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:48:08 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5147a478c38so8026709a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google; t=1685519287; x=1688111287;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XWWD4qbrDGR/HBs5xD9X3UlB8CGkHV7RogTz7x4M/JE=;
-        b=lT56eC8mwkDEWQDguBfL84f/lKDJ43KNHh1ld0+DfdyNcycS9Eu1K2SWmsy1X0wm8V
-         8zPIvgWM0TuIdPIkeJYvMMG1ipaxZje9PCI8i/0GE3el3UboDkwFUEYYFlm/0+NMugjh
-         l1nOk1PgdGLdD1475IyXC4313FQef5hlXMDyM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685519287; x=1688111287;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XWWD4qbrDGR/HBs5xD9X3UlB8CGkHV7RogTz7x4M/JE=;
-        b=S4gESArftOsA6mwRj+d7Qe0DqHWo7DUqvAEK5GcrFoOMym53cb8V3tU3SyjaPTd18/
-         JBoyQbQof+oZPKPEyOq90Sfp1C7mZllDxWS0rkiCWSX43UFdiGH5VJF8psk3sv+SO2QX
-         hPkDF6rRhPwlNK4XDcSphTQHTP200TQLI9v79cdS38YGUHswUFdqTlV+SRHbpOMIi4gD
-         bwbGHjMd/UVaTpvB3mEVbHx+8WFcphDOoOTgN7v6t03m70ZgBXgDTK5Hn4u+qPJO44Zz
-         ZBl84r0uK8g7Gy2SkDI5LyZ39FsYVX04zq/JYgRXDME171e9X1AVB2fAmjOVusXFLl9A
-         sovw==
-X-Gm-Message-State: AC+VfDy9DRgHCn+RwtY/0s8b38IIP/zXW8o6kPHrY2BnytLY3ZojScMe
-        bHQvc+cwRyqh2swlhIuW2qt7zHpk8qYjXBfqC3I=
-X-Google-Smtp-Source: ACHHUZ6pkBfDsqDexyslBugO5nUPJK/53IRAI5RdrndNQJTnap6QybNHFEorZ1hEzuPkAkVUPSm3Ab12n9uQCvr/WBc=
-X-Received: by 2002:a17:907:1694:b0:94a:74c9:3611 with SMTP id
- hc20-20020a170907169400b0094a74c93611mr4133845ejc.35.1685519287071; Wed, 31
- May 2023 00:48:07 -0700 (PDT)
+        Wed, 31 May 2023 03:49:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61AAA0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:48:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685519319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lN0vUYVvRFjvHRoECulLsT+QfP7ftEVA/sIPfwf8rQA=;
+        b=Z5iG+cl85+VEXCz4FJ1VwvqMoad6lgET/0Jz5Pk+klyHk/C465J/zN0RLM2+P6XvplXuHR
+        wArS+1wAQphEUeVyi4ilI9F+7xdJmLLyIz5nXKugncTMeYya8ie4H6317D5qf4zZ/YSqFb
+        vGcIbGhlTLqUzgjV/YHwgwdnHmtCPXY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-402-Q2H1UejbNMiemtkarHc2zQ-1; Wed, 31 May 2023 03:48:35 -0400
+X-MC-Unique: Q2H1UejbNMiemtkarHc2zQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1F9C3858F0F;
+        Wed, 31 May 2023 07:48:35 +0000 (UTC)
+Received: from localhost (ovpn-12-54.pek2.redhat.com [10.72.12.54])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4601B2166B25;
+        Wed, 31 May 2023 07:48:33 +0000 (UTC)
+Date:   Wed, 31 May 2023 15:48:30 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Michael Holzheu <holzheu@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 4/6] kexec: improve the readability of
+ crash_shrink_memory()
+Message-ID: <ZHb7ubJYO2lyNkud@MiWiFi-R3L-srv>
+References: <20230527123439.772-1-thunder.leizhen@huawei.com>
+ <20230527123439.772-5-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-References: <20230412185602.1592629-1-eajames@linux.ibm.com> <20230412185602.1592629-2-eajames@linux.ibm.com>
-In-Reply-To: <20230412185602.1592629-2-eajames@linux.ibm.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 31 May 2023 07:47:54 +0000
-Message-ID: <CACPK8XcK7s44VzkDyA6O3CKKGCfSsV=nmtwkf6YwV-9ZDAx63A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] fsi: core: Lock scan mutex for master index removal
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        jk@ozlabs.org, alistair@popple.id.au
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230527123439.772-5-thunder.leizhen@huawei.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,49 +64,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Apr 2023 at 18:56, Eddie James <eajames@linux.ibm.com> wrote:
->
-> If a master scan occurs while the master is being unregistered,
-> the devicecs may end up with incorrect and possibly duplicate names,
+On 05/27/23 at 08:34pm, Zhen Lei wrote:
+> The major adjustments are:
+> 1. end = start + new_size.
+>    The 'end' here is not an accurate representation, because it is not the
+>    new end of crashk_res, but the start of ram_res, difference 1. So
+>    eliminate it and replace it with ram_res->start.
+> 2. Use 'ram_res->start' and 'ram_res->end' as arguments to
+>    crash_free_reserved_phys_range() to indicate that the memory covered by
+>    'ram_res' is released from the crashk. And keep it close to
+>    insert_resource().
+> 3. Replace 'if (start == end)' with 'if (!new_size)', clear indication that
+>    all crashk memory will be shrunken.
+> 
+> No functional change.
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 
-typo: devices
+LGTM,
 
-> resulting in kernel warnings. Ensure the master index isn't changed
-> outside of the scan mutex.
->
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+Acked-by: Baoquan He <bhe@redhat.com>
+
 > ---
->  drivers/fsi/fsi-core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
-> index fcbf0469ce3f..18d4d68482d7 100644
-> --- a/drivers/fsi/fsi-core.c
-> +++ b/drivers/fsi/fsi-core.c
-> @@ -1354,12 +1354,12 @@ EXPORT_SYMBOL_GPL(fsi_master_register);
->
->  void fsi_master_unregister(struct fsi_master *master)
+>  kernel/kexec_core.c | 15 +++++----------
+>  1 file changed, 5 insertions(+), 10 deletions(-)
+> 
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index bcc86a250ab3bf9..69fe92141b0b62d 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -1108,7 +1108,6 @@ ssize_t crash_get_memory_size(void)
+>  int crash_shrink_memory(unsigned long new_size)
 >  {
-> +       mutex_lock(&master->scan_lock);
+>  	int ret = 0;
+> -	unsigned long start, end;
+>  	unsigned long old_size;
+>  	struct resource *ram_res;
+>  
+> @@ -1119,9 +1118,7 @@ int crash_shrink_memory(unsigned long new_size)
+>  		ret = -ENOENT;
+>  		goto unlock;
+>  	}
+> -	start = crashk_res.start;
+> -	end = crashk_res.end;
+> -	old_size = (end == 0) ? 0 : end - start + 1;
+> +	old_size = !crashk_res.end ? 0 : resource_size(&crashk_res);
+>  	new_size = roundup(new_size, KEXEC_CRASH_MEM_ALIGN);
+>  	if (new_size >= old_size) {
+>  		ret = (new_size == old_size) ? 0 : -EINVAL;
+> @@ -1134,22 +1131,20 @@ int crash_shrink_memory(unsigned long new_size)
+>  		goto unlock;
+>  	}
+>  
+> -	end = start + new_size;
+> -	crash_free_reserved_phys_range(end, crashk_res.end);
+> -
+> -	ram_res->start = end;
+> +	ram_res->start = crashk_res.start + new_size;
+>  	ram_res->end = crashk_res.end;
+>  	ram_res->flags = IORESOURCE_BUSY | IORESOURCE_SYSTEM_RAM;
+>  	ram_res->name = "System RAM";
+>  
+> -	if (start == end) {
+> +	if (!new_size) {
+>  		release_resource(&crashk_res);
+>  		crashk_res.start = 0;
+>  		crashk_res.end = 0;
+>  	} else {
+> -		crashk_res.end = end - 1;
+> +		crashk_res.end = ram_res->start - 1;
+>  	}
+>  
+> +	crash_free_reserved_phys_range(ram_res->start, ram_res->end);
+>  	insert_resource(&iomem_resource, ram_res);
+>  
+>  unlock:
+> -- 
+> 2.25.1
+> 
 
-The ida functions are supposed to not require locking, but protecting
-against the test and changing of ->idx makes sense.
-
-Do you want to add a Fixes: line?
-
->         if (master->idx >= 0) {
->                 ida_simple_remove(&master_ida, master->idx);
-
-the ida_simple functions are depreciated, at some point we should
-replace them with ida_alloc/ida_free.
-
->                 master->idx = -1;
->         }
->
-> -       mutex_lock(&master->scan_lock);
->         fsi_master_unscan(master);
->         mutex_unlock(&master->scan_lock);
->         device_unregister(&master->dev);
-> --
-> 2.31.1
->
