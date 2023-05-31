@@ -2,122 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B92F718434
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8422071843D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237517AbjEaOHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51220 "EHLO
+        id S236223AbjEaOIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237213AbjEaOHb (ORCPT
+        with ESMTP id S237529AbjEaOHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:07:31 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6921D10FF
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:03:02 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51494659d49so6946586a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:03:02 -0700 (PDT)
+        Wed, 31 May 2023 10:07:44 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC7B19BB;
+        Wed, 31 May 2023 07:03:16 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51458187be1so9835836a12.2;
+        Wed, 31 May 2023 07:03:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1685541687; x=1688133687;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xV0p1cILT3YTZiyLBW2gM8L29pLx3no3Au0rCN/fAsw=;
-        b=gUF0PwXYe8VCgDpxtcKPgbxsSJTGNkqXOtSRlywJlkOjfIJ4RSdfa2UVuR44ynbHFw
-         NKNlI0h8WPdCGNa+vUoV2SDzv0cNPY++y1O+tSLD8DyL+GNgS0+nkfGF0a6i3YJH+wNV
-         x4Bp+2sGbToPR2nr3y4lOVew5cRUUf0c0FY3u/GtWzluqFr8GLUv2Nk+8WCV1g20INdO
-         UOcEZhwWwmk9YeNFWiDVZ/Gl2IRFnDzPIDxnaFptnayBtNdH1D8DIsrPvDfelv48ixSU
-         FJeUMC0Jl9ubMq0XnS+bntiTO2K2CBvylp+N3GZIEWWPJ2nplN2VeXy5NQg1vGhN3qCH
-         j4pw==
+        d=gmail.com; s=20221208; t=1685541721; x=1688133721;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mwC8fnc33I/RvzYm1XgCQLmMqgI4DOojraHx1jQ/D/c=;
+        b=WH6LTPe/nEkW7HT5w0HNzuBSsKsTOhHQyI3MSAbV3OLw1+H9vjsv7CxCSu2QbV2qQi
+         g91EYhidlo2zmXxMKxhlFK0ngiZ1XorT0pqZlUpKmtW4fj8rJrq528wlB3mT2VTo/izV
+         R4clRt+bcKyvPDJr70ibt3tAuSLlqZfPJWtnSOuHf2jVqrVnqbiKI4hW4uiJX5WS4TvK
+         iODiB4knjcnSyAChGbyvowuXCHANeZZO3koj7JFakZiKFWYhCV2ynOP5vOsmdebVUfyI
+         jKriqnzbpcP1Nwq3337RhJSAa4pOYnZ/ymiAL6Fb3FC/Y4J+jCiaXPf95DttYfI65DSl
+         pISA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685541687; x=1688133687;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xV0p1cILT3YTZiyLBW2gM8L29pLx3no3Au0rCN/fAsw=;
-        b=kbNYjrxgVODehMnYQmfY6UjXfdSG912EtOwkA/VTd+Tw1VouFvc/4I/RENH8Br8iec
-         76khWssCr4JYCxVWRlTlMvsQM51ewva3qIm5ImJEzM2g2wnYuI8NRgpZlbGcwJNESb+P
-         pzmQU+HywJ99GTIc/m9ylNIHzwp0Dg69+lBybojdEWuGumAhSVvrP2oDwxzxoS2vG1ri
-         tERUler7nWZf3FBwJd8hnRWI2CFKXpM5C44XQI7R5csQ1G2RkdEhnnb9gRAYeIiuNWeY
-         GvJtYRQV2rP3R+6yxqp+u9x4vZwc2WNCgGT2+UjSQf47CmXrMOEouETmovTiNLHtT+Sb
-         ezyQ==
-X-Gm-Message-State: AC+VfDyhTKY3t8g2bKaJOCMhLFF9t9OsjgVQXUyAw2EuCJKbnwWJus9c
-        /uQ4Jjyk+BDuJVETaDSdHMtQPA==
-X-Google-Smtp-Source: ACHHUZ65P5pCqpKEk6KKg8Qqezxma5Yv53pnk0dfCkZMl5e4aOBfLb2ibQkhM3VpJR/whOzqfU8jYA==
-X-Received: by 2002:a17:907:72cb:b0:974:1d8b:ca5e with SMTP id du11-20020a17090772cb00b009741d8bca5emr5212006ejc.14.1685541686880;
-        Wed, 31 May 2023 07:01:26 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id e6-20020a170906504600b00965ac1510f8sm8966578ejk.185.2023.05.31.07.01.26
+        d=1e100.net; s=20221208; t=1685541721; x=1688133721;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mwC8fnc33I/RvzYm1XgCQLmMqgI4DOojraHx1jQ/D/c=;
+        b=BAJwFzRdkRClgCxHn3CdyMf34bjWo5YfCTXz3v74jnvqkrJdpiY3xLswluf93tHfHy
+         0zC8oWikcm27vqMjO2Wb1JooT5oo5wyl7iaRR3PTxsNOHSrd9Dwc+k2y3SlIfr2dMpjI
+         FGGPVqvM6ThlwSSu3TVwIjc2lwLMO/LzYTRVb+dINFZgC86SCELZoDTDkJrPHLVFWWfI
+         Rav4+VyAn/QBV8EVP8xCJW0sb8W5PXPRn/qJjAO9zpvf0LEjch6fYzH4qz2lHzVtqASy
+         RFho2Fx6acTG4lf8iBeyaTlfqlIyLsodVLe28Oa7hbG1Ita/VhQKCxJbm8kyFzdrgNwJ
+         lAHg==
+X-Gm-Message-State: AC+VfDyw+e3K76YPx6u90jwSoWvh3LGbFkhhU7eimAt/Zdx8memMG4Yt
+        rUyAC5FwUjlBwPQApyjxI1o=
+X-Google-Smtp-Source: ACHHUZ5CTVcuwjmBMdQifqOIoNJe3pKFD3OylO97uGlfelNbtNPIAe8Svz4YYhOVczBnynWk+QSpxQ==
+X-Received: by 2002:a17:906:db07:b0:96a:5bdd:7557 with SMTP id xj7-20020a170906db0700b0096a5bdd7557mr4691710ejb.70.1685541720547;
+        Wed, 31 May 2023 07:02:00 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-50-121.cust.vodafonedsl.it. [188.217.50.121])
+        by smtp.gmail.com with ESMTPSA id c7-20020a17090603c700b0096a68648329sm8985654eja.214.2023.05.31.07.01.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 07:01:26 -0700 (PDT)
-Date:   Wed, 31 May 2023 16:01:25 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 03/10] riscv: Make legacy counter enum match the HW
- numbering
-Message-ID: <20230531-ddb2d631e152526102f41d5e@orel>
-References: <20230512085321.13259-1-alexghiti@rivosinc.com>
- <20230512085321.13259-4-alexghiti@rivosinc.com>
+        Wed, 31 May 2023 07:02:00 -0700 (PDT)
+Date:   Wed, 31 May 2023 16:01:57 +0200
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
+        linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] media: dt-bindings: alvium: add document YAML
+ binding
+Message-ID: <ZHdTVT2Ylxlo5NL4@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+References: <20230526173955.797226-1-tomm.merciai@gmail.com>
+ <20230526173955.797226-2-tomm.merciai@gmail.com>
+ <ZHPElYOeD2C1qo4R@kekkonen.localdomain>
+ <20230529063907.GB25984@pendragon.ideasonboard.com>
+ <20230529064326.GC25984@pendragon.ideasonboard.com>
+ <ZHcff4Gpr9QSgpOs@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <20230531110600.GB27043@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230512085321.13259-4-alexghiti@rivosinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230531110600.GB27043@pendragon.ideasonboard.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 10:53:14AM +0200, Alexandre Ghiti wrote:
-> RISCV_PMU_LEGACY_INSTRET used to be set to 1 whereas the offset of this
-> hardware counter from CSR_CYCLE is actually 2: make this offset match the
-> real hw offset so that we can directly expose those values to userspace.
-> 
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> ---
->  drivers/perf/riscv_pmu_legacy.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/perf/riscv_pmu_legacy.c b/drivers/perf/riscv_pmu_legacy.c
-> index ca9e20bfc7ac..0d8c9d8849ee 100644
-> --- a/drivers/perf/riscv_pmu_legacy.c
-> +++ b/drivers/perf/riscv_pmu_legacy.c
-> @@ -12,8 +12,11 @@
->  #include <linux/perf/riscv_pmu.h>
->  #include <linux/platform_device.h>
->  
-> -#define RISCV_PMU_LEGACY_CYCLE		0
-> -#define RISCV_PMU_LEGACY_INSTRET	1
-> +enum {
-> +	RISCV_PMU_LEGACY_CYCLE,
-> +	RISCV_PMU_LEGACY_TIME,
-> +	RISCV_PMU_LEGACY_INSTRET
-> +};
+Hi Laurent,
 
-I guess this doesn't hurt, since these are just indices internal to this
-driver, but it's a bit odd to also have a RISCV_PMU_LEGACY_TIME, when
-the driver is only for cycle and instret, as its Kconfig help text says.
+On Wed, May 31, 2023 at 02:06:00PM +0300, Laurent Pinchart wrote:
+> Hi Tommaso,
+> 
+> On Wed, May 31, 2023 at 12:20:47PM +0200, Tommaso Merciai wrote:
+> > On Mon, May 29, 2023 at 09:43:26AM +0300, Laurent Pinchart wrote:
+> > > On Mon, May 29, 2023 at 09:39:13AM +0300, Laurent Pinchart wrote:
+> > > > On Sun, May 28, 2023 at 09:16:05PM +0000, Sakari Ailus wrote:
+> > > > > On Fri, May 26, 2023 at 07:39:43PM +0200, Tommaso Merciai wrote:
+> > > > > > Add documentation of device tree in YAML schema for the ALVIUM
+> > > > > > Camera from Allied Vision Inc.
+> > > > > > 
+> > > > > > References:
+> > > > > >  - https://www.alliedvision.com/en/products/embedded-vision-solutions
+> > > > > > 
+> > > > > > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> > > > > > ---
+> > > > > > Changes since v1:
+> > > > > >  - Fixed build error as suggested by RHerring bot
+> > > > > > 
+> > > > > >  .../media/i2c/alliedvision,alvium.yaml        | 115 ++++++++++++++++++
+> > > > > >  1 file changed, 115 insertions(+)
+> > > > > >  create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
+> > > > > > 
+> > > > > > diff --git a/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
+> > > > > > new file mode 100644
+> > > > > > index 000000000000..81e9e560c99d
+> > > > > > --- /dev/null
+> > > > > > +++ b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
+> > > > > > @@ -0,0 +1,115 @@
+> > > > > > +# SPDX-License-Identifier: GPL-2.0
+> > > > > > +%YAML 1.2
+> > > > > > +---
+> > > > > > +$id: http://devicetree.org/schemas/media/i2c/alliedvision,alvium.yaml#
+> > > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > > > +
+> > > > > > +title: Alliedvision Alvium Camera
+> > > > 
+> > > > s/Alliedvision/Allied Vision/
+> > > > 
+> > > > > > +
+> > > > > > +maintainers:
+> > > > > > +  - Tommaso Merciai <tomm.merciai@gmail.com>
+> > > > > > +  - Martin Hecht <martin.hecht@avnet.eu>
+> > > > > > +
+> > > > > > +allOf:
+> > > > > > +  - $ref: /schemas/media/video-interface-devices.yaml#
+> > > > > > +
+> > > > > > +properties:
+> > > > > > +  compatible:
+> > > > > > +    const: alliedvision,alvium
+> > > > 
+> > > > The name is very generic. There are Alvium camera modules that have a
+> > > > GMSL or FPD-Link interface, and I'm pretty sure those will require a
+> > > > different driver. I would add module-specific compatible strings (e.g.
+> > > > "alliedvision,alvium-1500c", ...) here, with a generic fallback.
+> > > > "alliedvision,alvium" isn't good as it won't cover GMSL or FPD-Link,
+> > > > maybe "alliedvision,alvium-csi2" would be an option.
+> > > 
+> > > Actually, "alvium-1500c" as a specific compatible string won't do. You
+> > > need the exact model in the compatible string, otherwise it won't be
+> > > possible for the driver to handle device-specific configuration (for
+> > > instance accessing registers of the camera sensor for fine-grained
+> > > configuration). I would thus recommend using "alliedvision,alvium-1500c"
+> > > and "alliedvision,alvium-1800c" as generic fallbacks, along compatible
+> > > strings that include the exact device model.
+> > 
+> > Agree with alliedvision,alvium-csi2 and thanks for your suggestion.
+> > In my opinion we don’t need names for 1500c and 
+> > others because the same driver can drive all the alvium models.
+> > Alvium is taking care of different sensor abstractions.
+> > 
+> > I test with this driver with the following models:
+> > 
+> >  - 1800 C-1240c
+> >  - 1800 C-040c
+> >  - 1500 C-500
+> > 
+> > What do you think about?
+> 
+> As far as I understand, the camera modules allow accessing sensors
+> registers from the host (through the ISP) for fine-grained
+> configuration. Even if that's not implemented in the driver at the
+> moment, I think it's an important feature to eventually support, and it
+> will require a way for the system to identify the camera module
+> precisely, to know which sensor the module uses. That's why I would like
+> that information to be available in DT, in the form of a compatible
+> string. For instance,
+> 
+> 	compatible = "alliedvision,alvium-1500c-1240c",
+> 		     "alliedvision,alvium-1500c";
+> 
+> The driver will only need DT match entries for
+> "alliedvision,alvium-1500c" and "alliedvision,alvium-1800c".
+
+Thanks for your feedback.
+
+Some clarification:
+
+The Alvium doesn't allow direct access on the sensor.
+Alvium hides the particular sensor totally.
+
+For this reason I would prefer to keep generic
+"alvium-csi2" name.
+
+What do you think?
 
 Thanks,
-drew
+Tommaso
+
+> 
+> > > > > > +
+> > > > > > +  reg:
+> > > > > > +    maxItems: 1
+> > > > > > +
+> > > > > > +  clocks:
+> > > > > > +    description: XCLK Input Clock
+> > > > > > +
+> > > > > > +  clock-names:
+> > > > > > +    const: xclk
+> > > > > 
+> > > > > I'd also drop this as you have a single clock only: it's redundant.
+> > > > > 
+> > > > > > +
+> > > > > > +  powerdown-gpios:
+> > > > > > +    maxItems: 1
+> > > > > > +    description: >
+> > > > > > +      Reference to the GPIO connected to the powerdown pin, if any.
+> > > > > > +
+> > > > > > +  reset-gpios:
+> > > > > > +    maxItems: 1
+> > > > > > +    description: >
+> > > > > > +      Reference to the GPIO connected to the reset pin, if any.
+> > > > 
+> > > > Reading the Alvium CSI-2 Cameras User Guide, I don't see any powerdown
+> > > > or reset pin on the 22-pin connector. Am I missing something ? There are
+> > > > however two GPIOs (in addition to the I2C signals that are also
+> > > > documented as GPIOs), do you plan to support those ?
+> > > > 
+> > > > > > +
+> > > > > > +  streamon-delay:
+> > > > > > +    maxItems: 1
+> > > > > > +    description: >
+> > > > > > +      Delay before camera start capturing frames in us.
+> > > > 
+> > > > Add "-us" to the property name to indicate the unit.
+> > > > 
+> > > > This is a vendor-specific property, and should thus have a vendor
+> > > > prefix.
+> > > > 
+> > > > A longer description is needed, from that single line I have no idea
+> > > > what the property does exactly.
+> > > > 
+> > > > > > +
+> > > > > > +  rotation:
+> > > > > > +    enum:
+> > > > > > +      - 0
+> > > > > > +      - 180
+> > > > 
+> > > > Why is the rotation restricted to 0 or 180 ? Someone could mount the
+> > > > module with  90 degrees rotation, shouldn't the DT bindings allow
+> > > > describing that ?
+> > > > 
+> > > > You need a property for the vcc-ext-in supply.
+> > > > 
+> > > > > > +
+> > > > > > +  port:
+> > > > > > +    description: Digital Output Port
+> > > > > > +    $ref: /schemas/graph.yaml#/$defs/port-base
+> > > > > > +    additionalProperties: false
+> > > > > > +
+> > > > > > +    properties:
+> > > > > > +      endpoint:
+> > > > > > +        $ref: /schemas/media/video-interfaces.yaml#
+> > > > > > +        unevaluatedProperties: false
+> > > > > > +
+> > > > > > +        properties:
+> > > > > > +          clock-lanes:
+> > > > > > +            const: 0
+> > > > > 
+> > > > > The driver can know this, no need to have it in DT, i.e. please drop it.
+> > > > > 
+> > > > > > +          data-lanes:
+> > > > > > +            minItems: 1
+> > > > > > +            maxItems: 4
+> > > > > > +          link-frequencies: true
+> > > > > > +
+> > > > > > +        required:
+> > > > > > +          - data-lanes
+> > > > > > +          - link-frequencies
+> > > > > > +
+> > > > > > +required:
+> > > > > > +  - compatible
+> > > > > > +  - reg
+> > > > > > +  - clocks
+> > > > > > +  - clock-names
+> > > > > > +  - port
+> > > > > > +
+> > > > > > +additionalProperties: false
+> > > > > > +
+> > > > > > +examples:
+> > > > > > +  - |
+> > > > > > +      #include <dt-bindings/gpio/gpio.h>
+> > > > > > +      #include <dt-bindings/clock/imx8mp-clock.h>
+> > > > > > +
+> > > > > > +      i2c {
+> > > > > > +          #address-cells = <1>;
+> > > > > > +          #size-cells = <0>;
+> > > > > > +
+> > > > > > +          camera: alvium@3c {
+> > > > > > +              compatible = "alliedvision,alvium";
+> > > > 
+> > > > The "alliedvision" prefix is missing from
+> > > > Documentation/devicetree/bindings/vendor-prefixes.yaml.
+> > > > 
+> > > > > > +              pinctrl-names = "default";
+> > > > > > +              pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
+> > > > 
+> > > > I'd drop pinctrl, it makes the example longer without adding much value.
+> > > > 
+> > > > > > +              reg = <0x3c>;
+> > > > > > +              clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
+> > > > > > +              clock-names = "xclk";
+> > > > > > +              assigned-clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
+> > > > > > +              assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
+> > > > > > +              assigned-clock-rates = <24000000>;
+> > > > > > +              streamon-delay = <20>;
+> > > > > > +              powerdown-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+> > > > > > +              reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
+> > > > > > +              status = "okay";
+> > > > > > +
+> > > > > > +              port {
+> > > > > > +                  alvium_out: endpoint {
+> > > > > > +                      remote-endpoint = <&mipi_csi_0_in>;
+> > > > > > +                      data-lanes = <1 2 3 4>;
+> > > > > > +                      link-frequencies = /bits/ 64 <681250000>;
+> > > > > > +                      clock-lanes = <0>;
+> > > > > > +                  };
+> > > > > > +              };
+> > > > > > +          };
+> > > > > > +      };
+> > > > > > +
+> > > > > > +...
+> 
+> -- 
+> Regards,
+> 
+> Laurent Pinchart
