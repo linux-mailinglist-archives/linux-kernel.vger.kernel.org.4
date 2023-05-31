@@ -2,92 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2163A717B2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEF9717B36
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235312AbjEaJFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46026 "EHLO
+        id S235333AbjEaJHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235286AbjEaJEw (ORCPT
+        with ESMTP id S235368AbjEaJGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:04:52 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEA9135;
-        Wed, 31 May 2023 02:04:50 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2af31dc49f9so60311361fa.0;
-        Wed, 31 May 2023 02:04:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685523889; x=1688115889;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jrtN/2a5JJTprBcYp9jvZ+UGojw4315OmIU8TzujPAw=;
-        b=aGDLNuG8w9aRbKs613i2qng0wy6XdphgsO9DC+Qy40A8rrPXO9353ZgHVIohfsrRW6
-         Y4ZtTXx+79iQm0YUYe89Vqp+5OVVe3+4Xqk2Jgb3dNc5kabutUgM4rsNjvbiuvMk63JL
-         QXAnWJByUDNBgRAXdXmQCPcHzH5Q2bEGNspZwLuEFmy+EFcixV895frB3qBUU/ah+BnC
-         CV1X5sG+lH4+m283ml9QcxW/0SU6vh1rQZTDqxGbuzfroAyrc33I/Zyg841loN91YQFG
-         JmCL4pwEkJfwG2BbIXHG1FbSgpi1tNSY+JAsLI5foOekv+9fsfTF1HndjVO0nfoSUtby
-         2JtQ==
+        Wed, 31 May 2023 05:06:53 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A329810CB
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:06:24 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-7775dd6c7e1so95634239f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:06:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685523889; x=1688115889;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jrtN/2a5JJTprBcYp9jvZ+UGojw4315OmIU8TzujPAw=;
-        b=hkRK9qBUPEyBlj/JYnQGFcIXrFWGYawxy54kIGdMmyDL8MskH5ICyRHUVBTTVN7ohD
-         cHwafAJqWJFt1iLj6SORx6yp69eoJLekecgptOBgdKmoXVeEv3VDOGhbe6fqHNhvDxXH
-         q+USx5h9U7NTbHSPw+fsasfTdtunBhNcl7zcntxL7JFVr2TpUCDuuN1ifcyaBCmYh+dW
-         1lJjS55ZUPYSKTLgc7F2S6D1Dickc4XaMrFQ2BcAOT3ES07t1VUmZweKlR0ovhMWxCSe
-         nrGdC3OJNKcq0CM9NvpJqGy7oLfGw8oeJ8+/QZYq5FR/S4a0TxjpfxwLgLtFWH704eXa
-         kOkQ==
-X-Gm-Message-State: AC+VfDxyLIo6zVCpXU8EVgebjUIj3FY+9Jb0l94d848cy//20YnIrISb
-        7XnJIuElQ+Z2eymtxo4PLYuJ3CBv4EUWI2H99tBn4/z74Q==
-X-Google-Smtp-Source: ACHHUZ6Q/b1Vd1sDwa9EpiwBHjkXj03DdqC6oi6LN/XlpOtPYWRjn5KHR1hRURuJRJou2lJKUENmn1RoQ1Y2NHNG4DY=
-X-Received: by 2002:a2e:9e15:0:b0:2ac:8c95:d42b with SMTP id
- e21-20020a2e9e15000000b002ac8c95d42bmr2183665ljk.4.1685523888771; Wed, 31 May
- 2023 02:04:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685523962; x=1688115962;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T45iOmfHCb/6zwzKz2XNzeL9kK7kDd8L12clG6idG8k=;
+        b=a07erABPSEGvIlvfpx3sT/kFxT4gHR1+dzht1KI8le38x2TV/Z6L2Ya4mTahp5yVD6
+         UgDPgwNfR0kXy6ushALGMXiwSXVuLLUgeGjSmtljEa2y0MTpUKp2T22n1lMmv0ZNY0an
+         vxz3FKL4yeWDKBvWsgxFcQ8x5SP5+wITXb/ynBIrXf9G4H6Pun7FI33Xqt8coJ/EDaPX
+         kSbMHB001weo4h2TapbY3TQZpTB1qRf8FPSWTHmsiKU7O/S6VQzFNoM1JSOyoDdU27wD
+         bnYSLsf6Wn57rD+ig2Ux1Ob3FrZPdLru3wHi+gTqyw/rQ1Q/FPEYN6+1+fdlwiN9r2UM
+         OnWw==
+X-Gm-Message-State: AC+VfDzJZsI9O18+05om0uRO1akCWlebcmZBWjSIyGQedQch8sug0ORp
+        VyJ46XCJr0kd2h1fTJO6XGasceOGdFXx+qOl2pVDD2MynW+V
+X-Google-Smtp-Source: ACHHUZ6WXd5dFW0aam0p1D4QQMkpELgQIiOkkaF2nPvXf8qnOrcWVYs41w2tGnB3oOrIXvg79B3kUZJdhE30tSdASdoL06/6gd+z
 MIME-Version: 1.0
-References: <20230531083828.8009-1-ed.tsai@mediatek.com>
-In-Reply-To: <20230531083828.8009-1-ed.tsai@mediatek.com>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Wed, 31 May 2023 17:04:36 +0800
-Message-ID: <CAGaU9a_Aoyka-tNvG-WGAEacGgcF38gyHLcTLrK+mL_qGfwRwg@mail.gmail.com>
-Subject: Re: blk-mq: check on cpu id when there is only one ctx mapping
-To:     Ed Tsai <ed.tsai@mediatek.com>
-Cc:     axboe@kernel.dk, kbusch@kernel.org, liusong@linux.alibaba.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, wsd_upstream@mediatek.com,
-        peter.wang@mediatek.com, stanley.chu@mediatek.com,
-        powen.kao@mediatek.com, alice.chao@mediatek.com,
-        naomi.chu@mediatek.com
+X-Received: by 2002:a02:a1c6:0:b0:41a:c5e3:6bf4 with SMTP id
+ o6-20020a02a1c6000000b0041ac5e36bf4mr2225787jah.6.1685523962002; Wed, 31 May
+ 2023 02:06:02 -0700 (PDT)
+Date:   Wed, 31 May 2023 02:06:01 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000424f205fcf9a132@google.com>
+Subject: [syzbot] [ntfs?] UBSAN: shift-out-of-bounds in ntfs_iget
+From:   syzbot <syzbot+4768a8f039aa677897d0@syzkaller.appspotmail.com>
+To:     anton@tuxera.com, linkinjeon@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 4:49=E2=80=AFPM Ed Tsai <ed.tsai@mediatek.com> wrot=
-e:
->
-> commit f168420 ("blk-mq: don't redirect completion for hctx withs only
-> one ctx mapping") When nvme applies a 1:1 mapping of hctx and ctx, there
-> will be no remote request.
->
-> But for ufs, the submission and completion queues could be asymmetric.
-> (e.g. Multiple SQs share one CQ) Therefore, 1:1 mapping of hctx and
-> ctx won't complete request on the submission cpu. In this situation,
-> this nr_ctx check could violate the QUEUE_FLAG_SAME_FORCE, as a result,
-> check on cpu id when there is only one ctx mapping.
->
-> Signed-off-by: Ed Tsai <ed.tsai@mediatek.com>
-> Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
+Hello,
 
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+syzbot found the following issue on:
+
+HEAD commit:    afead42fdfca Merge tag 'perf-tools-fixes-for-v6.4-2-2023-0..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15f72e49280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=162cf2103e4a7453
+dashboard link: https://syzkaller.appspot.com/bug?extid=4768a8f039aa677897d0
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12da9bbd280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=174e8115280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/376b8e00429d/disk-afead42f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ac81705ce028/vmlinux-afead42f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/70c52b82e56a/bzImage-afead42f.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/248748d7ce8e/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4768a8f039aa677897d0@syzkaller.appspotmail.com
+
+ntfs: (device loop0): ntfs_attr_find(): Inode is corrupt.  Run chkdsk.
+ntfs: (device loop0): ntfs_read_locked_inode(): Failed to lookup $DATA attribute.
+ntfs: (device loop0): ntfs_read_locked_inode(): Failed with error code -5.  Marking corrupt inode 0x1 as bad.  Run chkdsk.
+ntfs: (device loop0): load_system_files(): Failed to load $MFTMirr.  Mounting read-only.  Run ntfsfix and/or chkdsk.
+================================================================================
+UBSAN: shift-out-of-bounds in fs/ntfs/inode.c:1080:43
+shift exponent 44 is too large for 32-bit type 'unsigned int'
+CPU: 0 PID: 5000 Comm: syz-executor185 Not tainted 6.4.0-rc4-syzkaller-00047-gafead42fdfca #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:217 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x3c3/0x420 lib/ubsan.c:387
+ ntfs_read_locked_inode+0x4665/0x49c0 fs/ntfs/inode.c:1080
+ ntfs_iget+0x113/0x190 fs/ntfs/inode.c:177
+ load_and_init_upcase fs/ntfs/super.c:1663 [inline]
+ load_system_files+0x151c/0x4840 fs/ntfs/super.c:1818
+ ntfs_fill_super+0x19b3/0x2bd0 fs/ntfs/super.c:2900
+ mount_bdev+0x2d0/0x3f0 fs/super.c:1380
+ legacy_get_tree+0xef/0x190 fs/fs_context.c:610
+ vfs_get_tree+0x8c/0x270 fs/super.c:1510
+ do_new_mount+0x28f/0xae0 fs/namespace.c:3039
+ do_mount fs/namespace.c:3382 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d9/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f183b0f1afa
+Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd7f357638 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f183b0f1afa
+RDX: 0000000020000000 RSI: 000000002001ee80 RDI: 00007ffd7f357650
+RBP: 00007ffd7f357650 R08: 00007ffd7f357690 R09: 000000000001ee62
+R10: 0000000000000010 R11: 0000000000000286 R12: 0000000000000004
+R13: 0000555555d422c0 R14: 0000000000000010 R15: 00007ffd7f357690
+ </TASK>
+================================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
