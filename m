@@ -2,213 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226FF717652
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 07:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2BF71765C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 07:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbjEaFm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 01:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
+        id S234266AbjEaFra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 01:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjEaFm5 (ORCPT
+        with ESMTP id S230201AbjEaFr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 01:42:57 -0400
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED116EE;
-        Tue, 30 May 2023 22:42:55 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-561c1436c75so77285037b3.1;
-        Tue, 30 May 2023 22:42:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685511775; x=1688103775;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B8nSlFpiGtB0PAMzw+CyeuvzhVRn1mf84Kx+hMBXlDk=;
-        b=DL8i/IAv4hryCRmZS+j6OONwPRHkOFBXZxJLTBBT5OlkAwv98ggo5mMNePs8z57FrY
-         vy06g35uC/B7aWxro26Vhbv2ZvGkxHiETxnAeytNzgC1OZ5NyIiQjInTsmZRf1jaINBb
-         eBlq6vA6X4trESfbd78acAFRT20p4DFaT5tK3ayzdTft9jexeGzJq4SygI67tJqXWIE6
-         iw5zBajdTcCZ3wougA7C4ruujNa5f+2K4Jkq5s0oPeJCEBya/qK8JlTlvtDNbzfh/LAo
-         pd/1mJaTEl5cd7ondw7pwxg145uucyKAam9OVdAkrgryH/Uy+wPDHXO6kjJHn/p4W4mu
-         hnrg==
-X-Gm-Message-State: AC+VfDyLaKeLsXfGR7ps8Jvg5EypbOixSnuisZOgwgnLsbXjPoBELJ4n
-        DFAKMsJ4VMyGs4Py9nWQNJ8=
-X-Google-Smtp-Source: ACHHUZ7UrvSSOUFi7Ju1CKJLiFp6GcUZz+FgmYuGCdJKym/rphsaXQTOn80lPsEXO6HPACWqTMNw0w==
-X-Received: by 2002:a81:5357:0:b0:561:c5c3:9d79 with SMTP id h84-20020a815357000000b00561c5c39d79mr5185543ywb.45.1685511775020;
-        Tue, 30 May 2023 22:42:55 -0700 (PDT)
-Received: from tofu.cs.purdue.edu ([128.210.0.165])
-        by smtp.gmail.com with ESMTPSA id i126-20020a0ddf84000000b00568a207aaedsm1798736ywe.68.2023.05.30.22.42.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 22:42:54 -0700 (PDT)
-From:   Sungwoo Kim <iam@sung-woo.kim>
-Cc:     wuruoyu@me.com, benquike@gmail.com, daveti@purdue.edu,
-        Sungwoo Kim <iam@sung-woo.kim>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] Bluetooth: L2CAP: Fix use-after-free in l2cap_sock_ready_cb
-Date:   Wed, 31 May 2023 01:39:56 -0400
-Message-Id: <20230531053955.2467043-1-iam@sung-woo.kim>
-X-Mailer: git-send-email 2.34.1
+        Wed, 31 May 2023 01:47:28 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABD211C;
+        Tue, 30 May 2023 22:47:26 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34V5HHIr010866;
+        Wed, 31 May 2023 05:46:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=JVHD2w3X3KnAM1n+zKnQ6ZD6o3uYVXH4u8vCHT/VKl0=;
+ b=dFXQXlciXMPdxB0CEEzVecbcBdZejhJZ4VEafmgl3RKq0V9YHIOKl34K9ZAG5rCHfeIt
+ C0zQtbfs/dta6UH5oyGifodfgqwhpqL8dsZ20y6347FMSEJu+ryR0bqlzPHCAEb8iw4I
+ 2adclXPooXB+M67dIbKuo0P/JuNexxdy4x/pFgq9TScXQfgQS7KqtT007LEfDYh2UOfh
+ EUO7R4QOS9zgJeHxh0aEl0NZocSZ0Xv3a9GB4z+Ex36LwOWBRRrAfGnyL3NpUEfmQ+ph
+ /FlQ7UWwb4k4vrbtulOCH1tLTBTRABgozazz60RXplirx2Pq6KvO55O6Ez1WYUQ9QilN jQ== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwx8q888n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 05:46:43 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34V5kgAc016084
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 05:46:42 GMT
+Received: from [192.168.143.77] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 30 May
+ 2023 22:46:41 -0700
+Message-ID: <29df7084-374a-8ef5-202e-fa7512da0464@quicinc.com>
+Date:   Tue, 30 May 2023 22:46:41 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] scsi: ufs: core: Do not open code SZ_x
+Content-Language: en-US
+To:     Avri Altman <avri.altman@wdc.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Keoseong Park <keosung.park@samsung.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+References: <20230531051713.2080-1-avri.altman@wdc.com>
+From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+In-Reply-To: <20230531051713.2080-1-avri.altman@wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: YPDCIRBvRug5W-Qm4aJeFFWyoRaWkCZo
+X-Proofpoint-GUID: YPDCIRBvRug5W-Qm4aJeFFWyoRaWkCZo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_01,2023-05-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 impostorscore=0 malwarescore=0 clxscore=1011
+ spamscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305310050
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-l2cap_sock_release(sk) frees sk. However, sk's children are still alive
-and point to the already free'd sk's address.
-To fix this, l2cap_sock_release(sk) also cleans sk's children.
+On 5/30/2023 10:17 PM, Avri Altman wrote:
+> v1 -> v2: Attend UTMRD as well
+> 
+> A tad cleanup - No functional change.
+While you are at it, how about
+blk_queue_update_dma_alignment(q, 4096 - 1) in ufshcd_slave_configure()
 
-==================================================================
-BUG: KASAN: use-after-free in l2cap_sock_ready_cb+0xb7/0x100 net/bluetooth/l2cap_sock.c:1650
-Read of size 8 at addr ffff888104617aa8 by task kworker/u3:0/276
+and drivers/ufs/core/ufshpb.c
+pool_size = PAGE_ALIGN(ufshpb_host_map_kbytes * 1024) / PAGE_SIZE;
 
-CPU: 0 PID: 276 Comm: kworker/u3:0 Not tainted 6.2.0-00001-gef397bd4d5fb-dirty #59
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-Workqueue: hci2 hci_rx_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x72/0x95 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:306 [inline]
- print_report+0x175/0x478 mm/kasan/report.c:417
- kasan_report+0xb1/0x130 mm/kasan/report.c:517
- l2cap_sock_ready_cb+0xb7/0x100 net/bluetooth/l2cap_sock.c:1650
- l2cap_chan_ready+0x10e/0x1e0 net/bluetooth/l2cap_core.c:1386
- l2cap_config_req+0x753/0x9f0 net/bluetooth/l2cap_core.c:4480
- l2cap_bredr_sig_cmd net/bluetooth/l2cap_core.c:5739 [inline]
- l2cap_sig_channel net/bluetooth/l2cap_core.c:6509 [inline]
- l2cap_recv_frame+0xe2e/0x43c0 net/bluetooth/l2cap_core.c:7788
- l2cap_recv_acldata+0x6ed/0x7e0 net/bluetooth/l2cap_core.c:8506
- hci_acldata_packet net/bluetooth/hci_core.c:3813 [inline]
- hci_rx_work+0x66e/0xbc0 net/bluetooth/hci_core.c:4048
- process_one_work+0x4ea/0x8e0 kernel/workqueue.c:2289
- worker_thread+0x364/0x8e0 kernel/workqueue.c:2436
- kthread+0x1b9/0x200 kernel/kthread.c:376
- ret_from_fork+0x2c/0x50 arch/x86/entry/entry_64.S:308
- </TASK>
-
-Allocated by task 288:
- kasan_save_stack+0x22/0x50 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:374 [inline]
- __kasan_kmalloc+0x82/0x90 mm/kasan/common.c:383
- kasan_kmalloc include/linux/kasan.h:211 [inline]
- __do_kmalloc_node mm/slab_common.c:968 [inline]
- __kmalloc+0x5a/0x140 mm/slab_common.c:981
- kmalloc include/linux/slab.h:584 [inline]
- sk_prot_alloc+0x113/0x1f0 net/core/sock.c:2040
- sk_alloc+0x36/0x3c0 net/core/sock.c:2093
- l2cap_sock_alloc.constprop.0+0x39/0x1c0 net/bluetooth/l2cap_sock.c:1852
- l2cap_sock_create+0x10d/0x220 net/bluetooth/l2cap_sock.c:1898
- bt_sock_create+0x183/0x290 net/bluetooth/af_bluetooth.c:132
- __sock_create+0x226/0x380 net/socket.c:1518
- sock_create net/socket.c:1569 [inline]
- __sys_socket_create net/socket.c:1606 [inline]
- __sys_socket_create net/socket.c:1591 [inline]
- __sys_socket+0x112/0x200 net/socket.c:1639
- __do_sys_socket net/socket.c:1652 [inline]
- __se_sys_socket net/socket.c:1650 [inline]
- __x64_sys_socket+0x40/0x50 net/socket.c:1650
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3f/0x90 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x72/0xdc
-
-Freed by task 288:
- kasan_save_stack+0x22/0x50 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2e/0x50 mm/kasan/generic.c:523
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free mm/kasan/common.c:200 [inline]
- __kasan_slab_free+0x10a/0x190 mm/kasan/common.c:244
- kasan_slab_free include/linux/kasan.h:177 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook mm/slub.c:1807 [inline]
- slab_free mm/slub.c:3787 [inline]
- __kmem_cache_free+0x88/0x1f0 mm/slub.c:3800
- sk_prot_free net/core/sock.c:2076 [inline]
- __sk_destruct+0x347/0x430 net/core/sock.c:2168
- sk_destruct+0x9c/0xb0 net/core/sock.c:2183
- __sk_free+0x82/0x220 net/core/sock.c:2194
- sk_free+0x7c/0xa0 net/core/sock.c:2205
- sock_put include/net/sock.h:1991 [inline]
- l2cap_sock_kill+0x256/0x2b0 net/bluetooth/l2cap_sock.c:1257
- l2cap_sock_release+0x1a7/0x220 net/bluetooth/l2cap_sock.c:1428
- __sock_release+0x80/0x150 net/socket.c:650
- sock_close+0x19/0x30 net/socket.c:1368
- __fput+0x17a/0x5c0 fs/file_table.c:320
- task_work_run+0x132/0x1c0 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0x113/0x120 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x21/0x50 kernel/entry/common.c:296
- do_syscall_64+0x4c/0x90 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x72/0xdc
-
-The buggy address belongs to the object at ffff888104617800
- which belongs to the cache kmalloc-1k of size 1024
-The buggy address is located 680 bytes inside of
- 1024-byte region [ffff888104617800, ffff888104617c00)
-
-The buggy address belongs to the physical page:
-page:00000000dbca6a80 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888104614000 pfn:0x104614
-head:00000000dbca6a80 order:2 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
-flags: 0x200000000010200(slab|head|node=0|zone=2)
-raw: 0200000000010200 ffff888100041dc0 ffffea0004212c10 ffffea0004234b10
-raw: ffff888104614000 0000000000080002 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff888104617980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888104617a00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff888104617a80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                  ^
- ffff888104617b00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff888104617b80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-Ack: This bug is found by FuzzBT with a modified Syzkaller. Other
-contributors are Ruoyu Wu and Hui Peng.
-Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
----
-Changes in v2:
-- Fix a compile error: Add a forward declaration for l2cap_sock_cleanup_listen()
-- Lint'ed; Remove trailing tabs
-- Link to v1: https://lore.kernel.org/lkml/20230526084038.2199788-1-iam@sung-woo.kim/
----
- net/bluetooth/l2cap_sock.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
-index eebe25610..947ca580b 100644
---- a/net/bluetooth/l2cap_sock.c
-+++ b/net/bluetooth/l2cap_sock.c
-@@ -46,6 +46,7 @@ static const struct proto_ops l2cap_sock_ops;
- static void l2cap_sock_init(struct sock *sk, struct sock *parent);
- static struct sock *l2cap_sock_alloc(struct net *net, struct socket *sock,
- 				     int proto, gfp_t prio, int kern);
-+static void l2cap_sock_cleanup_listen(struct sock *parent);
- 
- bool l2cap_is_socket(struct socket *sock)
- {
-@@ -1415,6 +1416,7 @@ static int l2cap_sock_release(struct socket *sock)
- 	if (!sk)
- 		return 0;
- 
-+	l2cap_sock_cleanup_listen(sk);
- 	bt_sock_unlink(&l2cap_sk_list, sk);
- 
- 	err = l2cap_sock_shutdown(sock, SHUT_RDWR);
--- 
-2.34.1
+Thanks,
+Bao
+> 
+> Signed-off-by: Avri Altman <avri.altman@wdc.com>
+> Reviewed-by: Bean Huo <beanhuo@micron.com>
+> Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+> ---
+>   drivers/ufs/core/ufshcd.c | 10 +++++-----
+>   include/ufs/ufshci.h      |  2 +-
+>   2 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index fdf5073c7c6c..10a10f8f0bd1 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -2519,7 +2519,7 @@ static void ufshcd_sgl_to_prdt(struct ufs_hba *hba, struct ufshcd_lrb *lrbp, int
+>   			 * 11b to indicate Dword granularity. A value of '3'
+>   			 * indicates 4 bytes, '7' indicates 8 bytes, etc."
+>   			 */
+> -			WARN_ONCE(len > 256 * 1024, "len = %#x\n", len);
+> +			WARN_ONCE(len > SZ_256K, "len = %#x\n", len);
+>   			prd->size = cpu_to_le32(len - 1);
+>   			prd->addr = cpu_to_le64(sg->dma_address);
+>   			prd->reserved = 0;
+> @@ -3765,7 +3765,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+>   
+>   	/*
+>   	 * Allocate memory for UTP Transfer descriptors
+> -	 * UFSHCI requires 1024 byte alignment of UTRD
+> +	 * UFSHCI requires 1KB alignment of UTRD
+>   	 */
+>   	utrdl_size = (sizeof(struct utp_transfer_req_desc) * hba->nutrs);
+>   	hba->utrdl_base_addr = dmam_alloc_coherent(hba->dev,
+> @@ -3773,7 +3773,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+>   						   &hba->utrdl_dma_addr,
+>   						   GFP_KERNEL);
+>   	if (!hba->utrdl_base_addr ||
+> -	    WARN_ON(hba->utrdl_dma_addr & (1024 - 1))) {
+> +	    WARN_ON(hba->utrdl_dma_addr & (SZ_1K - 1))) {
+>   		dev_err(hba->dev,
+>   			"Transfer Descriptor Memory allocation failed\n");
+>   		goto out;
+> @@ -3797,7 +3797,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+>   						    &hba->utmrdl_dma_addr,
+>   						    GFP_KERNEL);
+>   	if (!hba->utmrdl_base_addr ||
+> -	    WARN_ON(hba->utmrdl_dma_addr & (1024 - 1))) {
+> +	    WARN_ON(hba->utmrdl_dma_addr & (SZ_1K - 1))) {
+>   		dev_err(hba->dev,
+>   		"Task Management Descriptor Memory allocation failed\n");
+>   		goto out;
+> @@ -8760,7 +8760,7 @@ static const struct scsi_host_template ufshcd_driver_template = {
+>   	.cmd_per_lun		= UFSHCD_CMD_PER_LUN,
+>   	.can_queue		= UFSHCD_CAN_QUEUE,
+>   	.max_segment_size	= PRDT_DATA_BYTE_COUNT_MAX,
+> -	.max_sectors		= (1 << 20) / SECTOR_SIZE, /* 1 MiB */
+> +	.max_sectors		= SZ_1M / SECTOR_SIZE,
+>   	.max_host_blocked	= 1,
+>   	.track_queue_depth	= 1,
+>   	.skip_settle_delay	= 1,
+> diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
+> index 11424bb03814..db2d5db5c88e 100644
+> --- a/include/ufs/ufshci.h
+> +++ b/include/ufs/ufshci.h
+> @@ -453,7 +453,7 @@ enum {
+>   };
+>   
+>   /* The maximum length of the data byte count field in the PRDT is 256KB */
+> -#define PRDT_DATA_BYTE_COUNT_MAX	(256 * 1024)
+> +#define PRDT_DATA_BYTE_COUNT_MAX	SZ_256K
+>   /* The granularity of the data byte count field in the PRDT is 32-bit */
+>   #define PRDT_DATA_BYTE_COUNT_PAD	4
+>   
 
