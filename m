@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7436B7183F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D417183C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237156AbjEaNyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
+        id S237375AbjEaNwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237165AbjEaNw3 (ORCPT
+        with ESMTP id S237141AbjEaNtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:52:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970EC420E;
-        Wed, 31 May 2023 06:47:05 -0700 (PDT)
+        Wed, 31 May 2023 09:49:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4942733;
+        Wed, 31 May 2023 06:45:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F8FC63B24;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA05163B8B;
+        Wed, 31 May 2023 13:45:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D75C433D2;
         Wed, 31 May 2023 13:45:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E57CDC4339E;
-        Wed, 31 May 2023 13:45:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540709;
-        bh=GeYiJEk5rv9+QjkRUqzIvrDomvXWpHGJuAv1UJMNoaY=;
+        s=k20201202; t=1685540710;
+        bh=6rJCrLQ0Ki9e+ieM67cun1HapIPKB5enjh301jmWabs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YI9Ac9fEHWdWZGwIuUe/B3Nf4U/nWwW82gR/Y6p4aomXgD45lpreqZNJVztWwxmy4
-         GaysCPQ5ASxUCTXPD3yS18TdK7LZ3qZpt2AiWlMAhYtp7NMxvzKOj7thcWq3HR46i/
-         6ZQlCguPPW+kTke6q6lBE2ZlLOznl6ik7nfn+F2B4TvX5RXGwRvnYjqIf6bqZM5+a7
-         8W9pXYCbhJfDZOpuxEpRdJTM1sUU9Zm23Kmnz+IiaMoukXeVTm7WZ/1WzX+A7f2m7U
-         mSOpnMODfzLaNVkkONx4JNK++gZmNeDIB95LwbDkltyOEfTRLg6+9i1qXCURc1ygTi
-         I9ApZeooTfdOA==
+        b=QRJIY/eGZ1h/qXnzaJEysuj3mbgYEQ2UfVA3G1ojAffyPKZiV8apmB/ZXv1NHPvnY
+         Dqv7HXh3xMkfSCsYq489t6mtEe34uKIAn2/ofsCYJ14vrxBXT0M5FVk1ZZgcNj8hqC
+         g8C+nMvXBkR5NoUiHwx2va5aUXxQIgvP2YBNe26zxfRSuiJ0R2tqQcQfi9W9w5xdWh
+         kp1LN3WjAxwgIxqKCIWzwbbKTfmHPJQVFvZB+w1z4bbh2wmA5VIXISpuMq0XZ4Nt4I
+         ghwSvOXjxp+3txb0QzcHeL9i2cbiQzYeT26hd1WbY/1jx0vHdcyKlImh6aU2vuCcNu
+         koUmukqB7keYg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Sasha Levin <sashal@kernel.org>, liviu.dudau@arm.com,
-        lpieralisi@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 04/17] ARM: dts: vexpress: add missing cache properties
-Date:   Wed, 31 May 2023 09:44:48 -0400
-Message-Id: <20230531134502.3384828-4-sashal@kernel.org>
+Cc:     Marek Vasut <marex@denx.de>, Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, sre@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 05/17] power: supply: Ratelimit no data debug output
+Date:   Wed, 31 May 2023 09:44:49 -0400
+Message-Id: <20230531134502.3384828-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134502.3384828-1-sashal@kernel.org>
 References: <20230531134502.3384828-1-sashal@kernel.org>
@@ -50,8 +48,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,35 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Marek Vasut <marex@denx.de>
 
-[ Upstream commit 328acc5657c6197753238d7ce0a6924ead829347 ]
+[ Upstream commit 155c45a25679f571c2ae57d10db843a9dfc63430 ]
 
-As all level 2 and level 3 caches are unified, add required
-cache-unified property to fix warnings like:
+Reduce the amount of output this dev_dbg() statement emits into logs,
+otherwise if system software polls the sysfs entry for data and keeps
+getting -ENODATA, it could end up filling the logs up.
 
-  vexpress-v2p-ca5s.dtb: cache-controller@2c0f0000: 'cache-unified' is a required property
+This does in fact make systemd journald choke, since during boot the
+sysfs power supply entries are polled and if journald starts at the
+same time, the journal is just being repeatedly filled up, and the
+system stops on trying to start journald without booting any further.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20230423150837.118466-1-krzysztof.kozlowski@linaro.org
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/vexpress-v2p-ca5s.dts | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/power/supply/power_supply_sysfs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/vexpress-v2p-ca5s.dts b/arch/arm/boot/dts/vexpress-v2p-ca5s.dts
-index d5b47d526f9ef..7f1edc3ba6a1e 100644
---- a/arch/arm/boot/dts/vexpress-v2p-ca5s.dts
-+++ b/arch/arm/boot/dts/vexpress-v2p-ca5s.dts
-@@ -132,6 +132,7 @@ L2: cache-controller@2c0f0000 {
- 		reg = <0x2c0f0000 0x1000>;
- 		interrupts = <0 84 4>;
- 		cache-level = <2>;
-+		cache-unified;
- 	};
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index f37ad4eae60b9..d6c47ea27010c 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -127,7 +127,8 @@ static ssize_t power_supply_show_property(struct device *dev,
  
- 	pmu {
+ 		if (ret < 0) {
+ 			if (ret == -ENODATA)
+-				dev_dbg(dev, "driver has no data for `%s' property\n",
++				dev_dbg_ratelimited(dev,
++					"driver has no data for `%s' property\n",
+ 					attr->attr.name);
+ 			else if (ret != -ENODEV && ret != -EAGAIN)
+ 				dev_err_ratelimited(dev,
 -- 
 2.39.2
 
