@@ -2,230 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4ED717A5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0147717A69
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234617AbjEaIla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
+        id S234963AbjEaIoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231938AbjEaIl0 (ORCPT
+        with ESMTP id S234934AbjEaIoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:41:26 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E5E193
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:41:01 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so6366988e87.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:41:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685522456; x=1688114456;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vc1IO9E9zjMZ2kN7szLFGbYb7R13NrbmFXuFho+WGu8=;
-        b=uep2XW4/cD4ta3yCwXLQs8KJQF/ieoJTx9Bz5EjeFReI/Wik3Vbmmbmez94A6Rg2bS
-         B8c1mcNmVm00GfxQEPmBoJrQAKATMpALARsEr3Jc7krUbIHqtC6rTOhEVf8OLwiqvXVo
-         EKbjbS7XztKHeeFbomyUyP/sr06JVvqRKKmz6LSOnHnZJIrhPO0Pfk1eC+ZkE5o0QlAo
-         Mv2CaJrwFYG87SsZC9KDjVq856Kc8N+ud+qmVSSd2Y8yNEuXw4T1zvklCvPmyTkg81KA
-         rxCQ3erSXoX9v67nTbLaaYLyOBp/oyLM46HPAiCfxCxNCbZDeMmLYnz6zQDD/krIoBnf
-         ZdyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685522456; x=1688114456;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vc1IO9E9zjMZ2kN7szLFGbYb7R13NrbmFXuFho+WGu8=;
-        b=ARTHyJkI/h1jJREooJdP2CzLpF6F5Cus8CD/bABfODNETE0i4naTkMOD7ziDnK9uW/
-         /4LTcFDX0HYgV3Kv/77ypO/9mMIA3udPQBos8uWwUXjyFc0fCAfWvVeWM4IDZbeFGT1u
-         ue6qGrLemWq3b9I9gp1s9HEmD/4N3ntgCzXVzeWEM3LLYloeEDyYolgJOcI799KZHwPo
-         2/QQZKuYqrcWJOfdRcpkvPoGzfvuJI08oGMkfAhfqNPsNq6A+ISTz/iuWbE5q+oYZBAP
-         pYoJgRDwOKRvabD/csN0VthZuSaDQtC8b8XHPxdUq7sHYgacewjthzkog8YGHF8V26no
-         FnyQ==
-X-Gm-Message-State: AC+VfDxdpbIFex/VFs0OiFlfqNE34M5zCEMpHVPda4njhGmx07Eu4uSP
-        ICC4FmQT836+veJSMzmS6tqgVQ==
-X-Google-Smtp-Source: ACHHUZ5nI0RP7ItVlidAWuFxojReYmq+IexNAs+IbR/o3ImyBt94GW/72PA17KfUCSG3bNJX7jbUCw==
-X-Received: by 2002:a05:6512:49c:b0:4f4:b92c:eef5 with SMTP id v28-20020a056512049c00b004f4b92ceef5mr2033159lfq.68.1685522456095;
-        Wed, 31 May 2023 01:40:56 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id f21-20020a19ae15000000b004f13ece6a4fsm628536lfc.101.2023.05.31.01.40.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 01:40:55 -0700 (PDT)
-Message-ID: <507831fd-326a-a5f7-cdc1-5584ad1aa11b@linaro.org>
-Date:   Wed, 31 May 2023 10:40:54 +0200
+        Wed, 31 May 2023 04:44:25 -0400
+Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2662139
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:44:02 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1685522565t2l3mhjk
+Received: from [10.7.13.54] ( [113.200.76.118])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 31 May 2023 16:42:43 +0800 (CST)
+X-QQ-SSF: 01400000000000C0G000000A0000000
+X-QQ-FEAT: q+EIYT+FhZpO2RFB20DsmFECDaJGO91x8w+wNl4XDHHAajtQ9f5E8NOLnnpy8
+        k+i7Z+2QMoNh2nL4KZUC63TwRvq6JjM5hs93tZuCF2LaUSmmK61Y1KZLfrKdgm2TAOSL+GY
+        M3ahetdg9PHC/IAE7uEvKMx9/GeLtxbxCdXj/WLJth5+J05O/0KGxaWZo3L5WsWqkjRImAW
+        uz6WVKPUlUjmuZFJTZgqwUC1pQSm/eil6vl5sBsrGglBBtDkq5ACjVzdD10VudVpBTogCL/
+        HomMQapV5Ae5dsyhU6Ap3d+ONnQ5/2kSEqBQrli1WQ2s9ZcnIHAUTp+7zN4Svsq/Qgt8L14
+        lsuRZZ5JjFC0xPwEZpZrBcKVyAHOlucSC2hN4nLqmYU7qTdekrRiJt4E6D7dg==
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 7957098482953656911
+Message-ID: <A31B3EA06AF77F13+c7278bd0-2695-4cc0-5a56-531a06ac2389@uniontech.com>
+Date:   Wed, 31 May 2023 16:42:43 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
+ Thunderbird/102.7.1
 Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, agross@kernel.org, andersson@kernel.org,
-        ilia.lin@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     ansuelsmth@gmail.com
-References: <20230530165807.642084-1-robimarko@gmail.com>
- <20230530165807.642084-2-robimarko@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [RESEND PATCH v2 2/2] cpufreq: qcom-nvmem: add support for
- IPQ8064
-In-Reply-To: <20230530165807.642084-2-robimarko@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Gou Hao <gouhao@uniontech.com>
+Subject: Question about oom-killer
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz7a-0
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+hello everyone,
 
+Recently, my kernel restarted while I was running ltp-oom02(It allocates 
+memory infinitely in a loop, testing whether the oom-killer works 
+properly ).
+log:
+```
+[480156.950100] Tasks state (memory values in pages):
+[480156.950101] [  pid  ]   uid  tgid total_vm      rss pgtables_bytes 
+swapents oom_score_adj name
+[480156.950302] [   2578]    81  2578      523        0 393216        
+6          -900 dbus-daemon
+[480156.950309] [   2648]   172  2596     2435        0 393216        
+5             0 rtkit-daemon
+[480156.950322] [   5256]     0  2826    25411        0 589824        
+0             0 DetectThread
+[480156.950328] [   5404]     0  5404      412        2 393216       
+64         -1000 sshd
+[480156.950357] [  10518]     0 10518     2586        0 393216       
+10             0 at-spi2-registr
+[480156.950361] [  10553]     0 10551    10543        0 458752        
+9             0 QXcbEventQueue
+[480156.950365] [  10867]     0 10567    17579        0 589824       
+16             0 QXcbEventQueue
+[480156.950370] [  10928]     0 10921     6999        0 458752       
+17             0 QXcbEventQueue
+[480156.950390] [  11882]     0 11811     7377        0 458752       
+10             0 QXcbEventQueue
+[480156.950394] [  12052]     0 12052     5823        0 458752       
+21             0 fcitx
+[480156.950404] [  12115]     0 12114    11678        0 524288       
+21             0 QXcbEventQueue
+[480156.950408] [ 101558]     0 101558     3549        0 393216        
+0             0 runltp
+[480156.950486] [1068864]     0 1068864      771        6 327680       
+85         -1000 systemd-udevd
+[480156.950552] [1035639]     0 1035639       52        0 393216       
+14         -1000 oom02
+[480156.950556] [1035640]     0 1035640       52        0 393216       
+23         -1000 oom02
+[480156.950561] [1036065]     0 1036065      493       60 393216        
+0          -250 systemd-journal
+[480156.950565] [1036087]     0 1036073  6258739  3543942 
+37814272        0             0 oom02
+[480156.950572] Out of memory and no killable processes...
+[480156.950575] Kernel panic - not syncing: System is deadlocked on memory
+```
 
-On 30.05.2023 18:58, Robert Marko wrote:
-> From: Christian Marangi <ansuelsmth@gmail.com>
-> 
-> IPQ8064 comes in 3 families:
-> * IPQ8062 up to 1.0GHz
-> * IPQ8064/IPQ8066/IPQ8068 up to 1.4GHz
-> * IPQ8065/IPQ8069 up to 1.7Ghz
-> 
-> So, in order to be able to share one OPP table, add support for
-> IPQ8064 family based of SMEM SoC ID-s as speedbin fuse is always 0 on
-> IPQ8064.
-> 
-> Bit are set with the following logic:
-> * IPQ8062 BIT 0
-> * IPQ8064/IPQ8066/IPQ8068 BIT 1
-> * IPQ8065/IPQ8069 BIT 2
-> 
-> speed is never fused, only psv values are fused.
-> Set speed to the versions to permit a unified opp table following
-> this named opp:
-> 
-> opp-microvolt-speed<SPEED_VALUE>-pvs<PSV_VALUE>-v0
-> 
-> Example:
-> - for ipq8062 psv2
->   opp-microvolt-speed0-pvs2-v0 = < 925000 878750 971250>
-> - for ipq8064 psv2
->   opp-microvolt-speed2-pvs2-v0 = <925000 878750 971250>;
-> - for ipq8065 psv2
->   opp-microvolt-speed4-pvs2-v0 = <950000 902500 997500>;
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
->  drivers/cpufreq/qcom-cpufreq-nvmem.c | 73 +++++++++++++++++++++++++++-
->  1 file changed, 72 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> index ce444b5962f2..c644138680ba 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> @@ -34,6 +34,10 @@
->  #define IPQ8074_HAWKEYE_VERSION		BIT(0)
->  #define IPQ8074_ACORN_VERSION		BIT(1)
->  
-> +#define IPQ8062_VERSION		BIT(0)
-> +#define IPQ8064_VERSION		BIT(1)
-> +#define IPQ8065_VERSION		BIT(2)
-> +
->  struct qcom_cpufreq_drv;
->  
->  struct qcom_cpufreq_match_data {
-> @@ -207,6 +211,69 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
->  	return ret;
->  }
->  
-> +static int qcom_cpufreq_ipq8064_name_version(struct device *cpu_dev,
-> +					     struct nvmem_cell *speedbin_nvmem,
-> +					     char **pvs_name,
-> +					     struct qcom_cpufreq_drv *drv)
-> +{
-> +	int speed = 0, pvs = 0, pvs_ver = 0;
-> +	int msm_id, ret = 0;
-> +	u8 *speedbin;
-> +	size_t len;
-> +
-> +	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
-> +
-> +	if (IS_ERR(speedbin))
-> +		return PTR_ERR(speedbin);
-> +
-> +	switch (len) {
-Do we expect more variety here? Otherwise a switch statement sounds a
-bit too heavy for the job, imo.
+oom02-1036073 has been already killed before crash.
+log:
+```
+[480152.242506] [1035177]     0 1035177     4773       20 393216      
+115             0 sssd_nss
+[480152.242510] [1035376]     0 1035376    25500      391 589824      
+602             0 tuned
+[480152.242514] [1035639]     0 1035639       52        0 393216       
+14         -1000 oom02
+[480152.242517] [1035640]     0 1035640       52        0 393216       
+19         -1000 oom02
+[480152.242522] [1036065]     0 1036065      493      114 393216       
+62          -250 systemd-journal
+[480152.242525] [1036073]     0 1036073  6258739  3540314 37814272      
+104             0 oom02
+[480152.242529] Out of memory: Kill process 1036073 (oom02) score 755 or 
+sacrifice child
+[480152.243869] Killed process 1036073 (oom02) total-vm:400559296kB, 
+anon-rss:226578368kB, file-rss:1728kB, shmem-rss:0kB
+[480152.365804] oom_reaper: reaped process 1036073 (oom02), now 
+anon-rss:226594048kB, file-rss:0kB, shmem-rss:0kB
+```
+but its memory can not be reclaimed.I add trace-log to oom_reaper code 
+in kernel,
+I found that there is a large range vma in the memory that cannot be 
+reclaimed, and the vma has the  `VM_LOCKED` flag, so cannot be reclaimed 
+immediately.
+```log
+       oom_reaper-57    [007] ....   126.063581: __oom_reap_task_mm: gh: 
+vma is anon:1048691, range=65536
+       oom_reaper-57    [007] ....   126.063581: __oom_reap_task_mm: gh: 
+vma is anon:1048691, range=196608
+       oom_reaper-57    [007] ....   126.063582: __oom_reap_task_mm: gh: 
+vma continue: 1056883, range:3221225472
+       oom_reaper-57    [007] ....   126.063583: __oom_reap_task_mm: gh: 
+vma is anon:112, range=65536
+       oom_reaper-57    [007] ....   126.063584: __oom_reap_task_mm: gh: 
+vma is anon:1048691, range=8388608
+```
+`vma continue: 1056883, range:3221225472` is the memory that can not 
+reclaims. 1057883(0x102073) is vma->vm_flags, it has VM_LOCKED` flag
 
-> +	case 4:
-> +		get_krait_bin_format_a(cpu_dev, &speed, &pvs, &pvs_ver,
-> +				       speedbin);
-> +		break;
-> +	default:
-> +		dev_err(cpu_dev, "Unable to read nvmem data. Defaulting to 0!\n");
-> +		ret = -ENODEV;
-> +		goto len_error;
-> +	}
-> +
-> +	ret = qcom_smem_get_soc_id(&msm_id);
-> +	if (ret)
-> +		return ret;
-> +
-> +	switch (msm_id) {
-> +	case QCOM_ID_IPQ8062:
-> +		drv->versions = IPQ8062_VERSION;
-> +		break;
-> +	case QCOM_ID_IPQ8064:
-> +	case QCOM_ID_IPQ8066:
-> +	case QCOM_ID_IPQ8068:
-> +		drv->versions = IPQ8064_VERSION;
-> +		break;
-> +	case QCOM_ID_IPQ8065:
-> +	case QCOM_ID_IPQ8069:
-> +		drv->versions = IPQ8065_VERSION;
-> +		break;
-> +	default:
-> +		dev_err(cpu_dev,
-> +			"SoC ID %u is not part of IPQ8064 family, limiting to 1.0GHz!\n",
-> +			msm_id);
-> +		drv->versions = IPQ8062_VERSION;
-> +		break;
-> +	}
-> +
-> +	/*
-> +	 * IPQ8064 speed is never fused. Only psv values are fused.
-> +	 * Set speed to the versions to permit a unified opp table.
-> +	 */
-> +	snprintf(*pvs_name, sizeof("speedXX-pvsXX-vXX"), "speed%d-pvs%d-v%d",
-> +		 drv->versions, pvs, pvs_ver);
-> +
-> +len_error:
-> +	kfree(speedbin);
-Perhaps we should switch to devres-managed nvmem soon..
+oom02 created `nr_cpu` threads and used mmap to allocate memory. mmap 
+will merge continuous vma into one,
+so as long as one thread is still running, the entire vma will not be 
+released.
 
-Konrad
-> +	return ret;
-> +}
-> +
->  static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
->  					     struct nvmem_cell *speedbin_nvmem,
->  					     char **pvs_name,
-> @@ -256,6 +323,10 @@ static const struct qcom_cpufreq_match_data match_data_qcs404 = {
->  	.genpd_names = qcs404_genpd_names,
->  };
->  
-> +static const struct qcom_cpufreq_match_data match_data_ipq8064 = {
-> +	.get_version = qcom_cpufreq_ipq8064_name_version,
-> +};
-> +
->  static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
->  	.get_version = qcom_cpufreq_ipq8074_name_version,
->  };
-> @@ -404,7 +475,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
->  	{ .compatible = "qcom,apq8096", .data = &match_data_kryo },
->  	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
->  	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
-> -	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
-> +	{ .compatible = "qcom,ipq8064", .data = &match_data_ipq8064 },
->  	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
->  	{ .compatible = "qcom,apq8064", .data = &match_data_krait },
->  	{ .compatible = "qcom,msm8974", .data = &match_data_krait },
+In extreme cases, crashes may occur due to the lack of memory reclamation.
+
+I'm not sure if this is a kernel's bug ?
+
+-- 
+thanks,
+Gou Hao <gouhao@uniontech.com>
+
