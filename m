@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFC6718E87
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 194AC718E88
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjEaW3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 18:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45992 "EHLO
+        id S230033AbjEaW3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 18:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjEaW2y (ORCPT
+        with ESMTP id S230359AbjEaW3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 18:28:54 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4DDCE40;
-        Wed, 31 May 2023 15:28:14 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f3edc05aa5so36467e87.3;
-        Wed, 31 May 2023 15:28:14 -0700 (PDT)
+        Wed, 31 May 2023 18:29:01 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3AEE48;
+        Wed, 31 May 2023 15:28:20 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f6a6b9c079so1683985e9.1;
+        Wed, 31 May 2023 15:28:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685572093; x=1688164093;
+        d=gmail.com; s=20221208; t=1685572098; x=1688164098;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=70rKVpOd5wJ3gBObsOuE50d5h49q/cRV9IOkJxvD4f0=;
-        b=FNurri+x8xi17/7oHhHUw3Kt6VJx87UgXVgwEmAcmGDK4p60HAeOYOqDrAWEaL0xhT
-         H1Iu+gTJLDA5y+JBsGkmewDxBux106wP2O+DWq1hdeS4ce+hs6iC74krSk/T3HEGuTPq
-         IjmOYj692HbBg1cjMQ9dkWKL/IyuwlJRQQiEXFPNp9xk8XwRaOjX3HDATLp6/rlYL4y4
-         bicp9Let1nXPSej584nXhu43wD3nFhn8a3XayLBLwiaqWn/5+GRzgVb8mJc4v27tOLe4
-         qAjHjdD+IN5LuMkhnhfJ3Mk3Tdj2O5xBmLx6xzR34uoJtr20q2xAzOQvwhWZVHRh7gxM
-         omGg==
+        bh=ZgptBC2X/QXw1nLX7yvk4IcpAgHDSjhB7sqr45n66Qs=;
+        b=eW4CSuJdS31Dj+YIUd6MeN2uDTcLQviCmXQ5qyPHr3SdpasASEXx5Ofjt5YLuFvXE6
+         4jLQz5KI2kgan6VStixPfJRZLLJAwNz+fnw4dco9XC/vpM94k3sCfdsU3SYOvUX2/1le
+         SSYhGBZl0FrGAjC2fBtRKVAoPRU6WpAmp/msDfJvjWNQ/3t5LOYOF0T3osCZZ/7EtOke
+         z7Y57Uj7tPx1oDrw2pARlKQ0s0zANpn8srYHwDYFNPtHL0X4tjdRbop75x6zekAPHeI3
+         Vfd4L8YJZeHUEvKl+Mr6VzwbpXdBY8DkmrWUfvYJFKQx5lBIAF4+OMBAVCwHntlnWbgj
+         jRAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685572093; x=1688164093;
+        d=1e100.net; s=20221208; t=1685572098; x=1688164098;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=70rKVpOd5wJ3gBObsOuE50d5h49q/cRV9IOkJxvD4f0=;
-        b=ehQdX1ifo3GkCL6zFvPXR0tmM+kyHoge85hIycsbusxZNdbQaOH1hMQS+fgT0XyEWN
-         +OZpDvd9vwVWPIW/+po8b3wYW2i2jL7Kx5+4BHx4tWegoA5Ebr1Z4ohHGYghDU395o+n
-         PAcbFeY+jBGai0+UZOVoJGjCQa5LPNWWZOXnTdflhJBUlQ7e7/USGDKb+yeTCneGYmoP
-         D2EJm97bnSSR8JrU/IMAP5I/0PIaY51NnNG/IsSSbOIGk9L2mQ3GYTMCNeUp/Wjs+HzM
-         y6jk50U2oI//hFW+tgZ5jf1ARgykBW9C12eQFu//pYTzITllqQMCy/rk8Lg2LhBuV8ho
-         fRSQ==
-X-Gm-Message-State: AC+VfDz0Fiqre+7Wjd7ddmf8iL1QCxqkNL5J+oZOV2bwbo4tiG3yCO94
-        vF1CSpCbQ/qIY7T6CpxSCrhGI6K1CdY=
-X-Google-Smtp-Source: ACHHUZ4C3xtfKqlv5GcUGqROnl6/se6nIKa97hzQo4+3AcfexBgCvpnYiHmOSq+IfHOF+fElmb3CHQ==
-X-Received: by 2002:ac2:430f:0:b0:4f4:b28d:73eb with SMTP id l15-20020ac2430f000000b004f4b28d73ebmr185558lfh.12.1685572092464;
-        Wed, 31 May 2023 15:28:12 -0700 (PDT)
+        bh=ZgptBC2X/QXw1nLX7yvk4IcpAgHDSjhB7sqr45n66Qs=;
+        b=Bek30WFeUTu6Ii5u4/8Eh0nbPU0Uy0s/rJI7OTRQwcLM9uTnlu5HuGBf24s9ZuGdTs
+         DRB+Erwp0IGVfjKYR1WuYghwNDKoqt9AFePCgxhxaFitx08ygm6bVqnH8glZS75e325x
+         iwIDKp3/PM8ui5XbV5PkhGTFUZgNz/l+IrlR1qlfusTnNKQwtuSDR+24NNTUX43NF9bz
+         gArVly1dcXI8l/6Ea3kjF8Wo9aZN00lo6dqtxTFUycJDmzV7KVjFi+iaiXDT+djK3pBK
+         Mdw/Oh9RHeEl7JPeK3blTWn2ScSrx4g96uAL5Op3Una9wNb981COjqGhrfee0ZxbwL+v
+         FLnw==
+X-Gm-Message-State: AC+VfDzQ/s/k1IOQysFtvU7NZuuyhvrB/bH2pdEnKxsmVv79SRL7Kuvr
+        tWk6cLt/BaVnDldwCVyRBGI=
+X-Google-Smtp-Source: ACHHUZ6NA/etTDk1IprlyzcOHk/Ib87qVDLOC/mUCW4i1gRGC03eBTAFpCa/XUp6EmPaWzVexcPu/Q==
+X-Received: by 2002:a1c:4b06:0:b0:3f6:26a1:1d58 with SMTP id y6-20020a1c4b06000000b003f626a11d58mr438144wma.37.1685572098379;
+        Wed, 31 May 2023 15:28:18 -0700 (PDT)
 Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.googlemail.com with ESMTPSA id 9-20020a05600c028900b003f6132f95e6sm70020wmk.35.2023.05.31.15.28.02
+        by smtp.googlemail.com with ESMTPSA id 9-20020a05600c028900b003f6132f95e6sm70020wmk.35.2023.05.31.15.28.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 15:28:03 -0700 (PDT)
+        Wed, 31 May 2023 15:28:13 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Bjorn Andersson <andersson@kernel.org>,
         Andy Gross <agross@kernel.org>,
@@ -58,9 +58,9 @@ To:     Bjorn Andersson <andersson@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH v5 2/3] clk: qcom: clk-rcg2: add support for rcg2 freq multi ops
-Date:   Thu,  1 Jun 2023 00:26:53 +0200
-Message-Id: <20230531222654.25475-3-ansuelsmth@gmail.com>
+Subject: [PATCH v5 3/3] clk: qcom: gcc-ipq8074: rework nss_port5/6 clock to multiple conf
+Date:   Thu,  1 Jun 2023 00:26:54 +0200
+Message-Id: <20230531222654.25475-4-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531222654.25475-1-ansuelsmth@gmail.com>
 References: <20230531222654.25475-1-ansuelsmth@gmail.com>
@@ -76,298 +76,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some RCG frequency can be reached by multiple configuration.
+Rework nss_port5/6 to use the new multiple configuration implementation
+and correctly fix the clocks for these port under some corner case.
 
-Add clk_rcg2_fm_ops ops to support these special RCG configurations.
-
-These alternative ops will select the frequency using a CEIL policy.
-
-When the correct frequency is found, the correct config is selected by
-calculating the final rate (by checking the defined parent and values
-in the config that is being checked) and deciding based on the one that
-is less different than the requested one.
-
-These check are skipped if there is just on config for the requested
-freq.
-
-qcom_find_freq_multi is added to search the freq with the new struct
-freq_multi_tbl.
-__clk_rcg2_select_conf is used to select the correct conf by simulating
-the final clock.
-If a conf can't be found due to parent not reachable, a WARN is printed
-and -EINVAL is returned.
+This is particularly relevant for device that have 2.5G or 10G port
+connected to port5 or port 6 on ipq8074. As the parent are shared
+across multiple port it may be required to select the correct
+configuration to accomplish the desired clock. Without this patch such
+port doesn't work in some specific ethernet speed as the clock will be
+set to the wrong frequency as we just select the first configuration for
+the related frequency instead of selecting the best one.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
- drivers/clk/qcom/clk-rcg.h  |   1 +
- drivers/clk/qcom/clk-rcg2.c | 163 ++++++++++++++++++++++++++++++++++++
- drivers/clk/qcom/common.c   |  18 ++++
- drivers/clk/qcom/common.h   |   2 +
- 4 files changed, 184 insertions(+)
+ drivers/clk/qcom/gcc-ipq8074.c | 120 +++++++++++++++++++++------------
+ 1 file changed, 76 insertions(+), 44 deletions(-)
 
-diff --git a/drivers/clk/qcom/clk-rcg.h b/drivers/clk/qcom/clk-rcg.h
-index dc85b46b0d79..f8ec989ed3d9 100644
---- a/drivers/clk/qcom/clk-rcg.h
-+++ b/drivers/clk/qcom/clk-rcg.h
-@@ -188,6 +188,7 @@ struct clk_rcg2_gfx3d {
- 
- extern const struct clk_ops clk_rcg2_ops;
- extern const struct clk_ops clk_rcg2_floor_ops;
-+extern const struct clk_ops clk_rcg2_fm_ops;
- extern const struct clk_ops clk_rcg2_mux_closest_ops;
- extern const struct clk_ops clk_edp_pixel_ops;
- extern const struct clk_ops clk_byte_ops;
-diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-index 76551534f10d..9a139fc8bbfa 100644
---- a/drivers/clk/qcom/clk-rcg2.c
-+++ b/drivers/clk/qcom/clk-rcg2.c
-@@ -266,6 +266,112 @@ static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
- 	return 0;
- }
- 
-+static const struct freq_conf *
-+__clk_rcg2_select_conf(struct clk_hw *hw, const struct freq_multi_tbl *f,
-+		       unsigned long req_rate)
-+{
-+	unsigned long rate_diff, best_rate_diff = ULONG_MAX;
-+	const struct freq_conf *conf, *best_conf;
-+	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-+	const char *name = clk_hw_get_name(hw);
-+	unsigned long parent_rate, rate;
-+	struct clk_hw *p;
-+	int index, i;
-+
-+	/* Exit early if only one config is defined */
-+	if (f->num_confs == 1)
-+		return f->confs;
-+
-+	/* Search in each provided config the one that is near the wanted rate */
-+	for (i = 0, conf = f->confs; i < f->num_confs; i++, conf++) {
-+		index = qcom_find_src_index(hw, rcg->parent_map, conf->src);
-+		if (index < 0)
-+			continue;
-+
-+		p = clk_hw_get_parent_by_index(hw, index);
-+		if (!p)
-+			continue;
-+
-+		parent_rate =  clk_hw_get_rate(p);
-+		rate = calc_rate(parent_rate, conf->n, conf->m, conf->n, conf->pre_div);
-+
-+		if (rate == req_rate) {
-+			best_conf = conf;
-+			break;
-+		}
-+
-+		rate_diff = abs(req_rate - rate);
-+		if (rate_diff < best_rate_diff) {
-+			best_rate_diff = rate_diff;
-+			best_conf = conf;
-+		}
-+	}
-+
-+	/*
-+	 * Very unlikely. Warn if we couldn't find a correct config
-+	 * due to parent not present.
-+	 */
-+	if (unlikely(i == f->num_confs)) {
-+		WARN(1, "%s: can't find a configuration for rate %lu.",
-+		     name, req_rate);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	return best_conf;
-+}
-+
-+static int _freq_tbl_fm_determine_rate(struct clk_hw *hw, const struct freq_multi_tbl *f,
-+				       struct clk_rate_request *req)
-+{
-+	unsigned long clk_flags, rate = req->rate;
-+	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-+	const struct freq_conf *conf;
-+	struct clk_hw *p;
-+	int index;
-+
-+	f = qcom_find_freq_multi(f, rate);
-+	if (!f || !f->confs)
-+		return -EINVAL;
-+
-+	conf = __clk_rcg2_select_conf(hw, f, rate);
-+	if (IS_ERR(conf))
-+		return PTR_ERR(conf);
-+	index = qcom_find_src_index(hw, rcg->parent_map, conf->src);
-+	if (index < 0)
-+		return index;
-+
-+	clk_flags = clk_hw_get_flags(hw);
-+	p = clk_hw_get_parent_by_index(hw, index);
-+	if (!p)
-+		return -EINVAL;
-+
-+	if (clk_flags & CLK_SET_RATE_PARENT) {
-+		rate = f->freq;
-+		if (conf->pre_div) {
-+			if (!rate)
-+				rate = req->rate;
-+			rate /= 2;
-+			rate *= conf->pre_div + 1;
-+		}
-+
-+		if (conf->n) {
-+			u64 tmp = rate;
-+
-+			tmp = tmp * conf->n;
-+			do_div(tmp, conf->m);
-+			rate = tmp;
-+		}
-+	} else {
-+		rate =  clk_hw_get_rate(p);
-+	}
-+
-+	req->best_parent_hw = p;
-+	req->best_parent_rate = rate;
-+	req->rate = f->freq;
-+
-+	return 0;
-+}
-+
- static int clk_rcg2_determine_rate(struct clk_hw *hw,
- 				   struct clk_rate_request *req)
- {
-@@ -282,6 +388,14 @@ static int clk_rcg2_determine_floor_rate(struct clk_hw *hw,
- 	return _freq_tbl_determine_rate(hw, rcg->freq_tbl, req, FLOOR);
- }
- 
-+static int clk_rcg2_fm_determine_rate(struct clk_hw *hw,
-+				      struct clk_rate_request *req)
-+{
-+	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-+
-+	return _freq_tbl_fm_determine_rate(hw, rcg->freq_multi_tbl, req);
-+}
-+
- static int __clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_tbl *f,
- 				u32 *_cfg)
- {
-@@ -375,6 +489,30 @@ static int __clk_rcg2_set_rate(struct clk_hw *hw, unsigned long rate,
- 	return clk_rcg2_configure(rcg, f);
- }
- 
-+static int __clk_rcg2_fm_set_rate(struct clk_hw *hw, unsigned long rate)
-+{
-+	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-+	const struct freq_multi_tbl *f;
-+	const struct freq_conf *conf;
-+	struct freq_tbl f_tbl;
-+
-+	f = qcom_find_freq_multi(rcg->freq_multi_tbl, rate);
-+	if (!f || !f->confs)
-+		return -EINVAL;
-+
-+	conf = __clk_rcg2_select_conf(hw, f, rate);
-+	if (IS_ERR(conf))
-+		return PTR_ERR(conf);
-+
-+	f_tbl.freq = f->freq;
-+	f_tbl.src = conf->src;
-+	f_tbl.pre_div = conf->pre_div;
-+	f_tbl.m = conf->m;
-+	f_tbl.n = conf->n;
-+
-+	return clk_rcg2_configure(rcg, &f_tbl);
-+}
-+
- static int clk_rcg2_set_rate(struct clk_hw *hw, unsigned long rate,
- 			    unsigned long parent_rate)
- {
-@@ -387,6 +525,12 @@ static int clk_rcg2_set_floor_rate(struct clk_hw *hw, unsigned long rate,
- 	return __clk_rcg2_set_rate(hw, rate, FLOOR);
- }
- 
-+static int clk_rcg2_fm_set_rate(struct clk_hw *hw, unsigned long rate,
-+				unsigned long parent_rate)
-+{
-+	return __clk_rcg2_fm_set_rate(hw, rate);
-+}
-+
- static int clk_rcg2_set_rate_and_parent(struct clk_hw *hw,
- 		unsigned long rate, unsigned long parent_rate, u8 index)
- {
-@@ -399,6 +543,12 @@ static int clk_rcg2_set_floor_rate_and_parent(struct clk_hw *hw,
- 	return __clk_rcg2_set_rate(hw, rate, FLOOR);
- }
- 
-+static int clk_rcg2_fm_set_rate_and_parent(struct clk_hw *hw,
-+		unsigned long rate, unsigned long parent_rate, u8 index)
-+{
-+	return __clk_rcg2_fm_set_rate(hw, rate);
-+}
-+
- static int clk_rcg2_get_duty_cycle(struct clk_hw *hw, struct clk_duty *duty)
- {
- 	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
-@@ -509,6 +659,19 @@ const struct clk_ops clk_rcg2_floor_ops = {
+diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
+index 6541d98c0348..bce459cecb2d 100644
+--- a/drivers/clk/qcom/gcc-ipq8074.c
++++ b/drivers/clk/qcom/gcc-ipq8074.c
+@@ -1682,15 +1682,23 @@ static struct clk_regmap_div nss_port4_tx_div_clk_src = {
+ 	},
  };
- EXPORT_SYMBOL_GPL(clk_rcg2_floor_ops);
  
-+const struct clk_ops clk_rcg2_fm_ops = {
-+	.is_enabled = clk_rcg2_is_enabled,
-+	.get_parent = clk_rcg2_get_parent,
-+	.set_parent = clk_rcg2_set_parent,
-+	.recalc_rate = clk_rcg2_recalc_rate,
-+	.determine_rate = clk_rcg2_fm_determine_rate,
-+	.set_rate = clk_rcg2_fm_set_rate,
-+	.set_rate_and_parent = clk_rcg2_fm_set_rate_and_parent,
-+	.get_duty_cycle = clk_rcg2_get_duty_cycle,
-+	.set_duty_cycle = clk_rcg2_set_duty_cycle,
+-static const struct freq_tbl ftbl_nss_port5_rx_clk_src[] = {
+-	F(19200000, P_XO, 1, 0, 0),
+-	F(25000000, P_UNIPHY1_RX, 12.5, 0, 0),
+-	F(25000000, P_UNIPHY0_RX, 5, 0, 0),
+-	F(78125000, P_UNIPHY1_RX, 4, 0, 0),
+-	F(125000000, P_UNIPHY1_RX, 2.5, 0, 0),
+-	F(125000000, P_UNIPHY0_RX, 1, 0, 0),
+-	F(156250000, P_UNIPHY1_RX, 2, 0, 0),
+-	F(312500000, P_UNIPHY1_RX, 1, 0, 0),
++static const struct freq_conf ftbl_nss_port5_rx_clk_src_25[] = {
++	C(P_UNIPHY1_RX, 12.5, 0, 0),
++	C(P_UNIPHY0_RX, 5, 0, 0),
 +};
-+EXPORT_SYMBOL_GPL(clk_rcg2_fm_ops);
 +
- const struct clk_ops clk_rcg2_mux_closest_ops = {
- 	.determine_rate = __clk_mux_determine_rate_closest,
- 	.get_parent = clk_rcg2_get_parent,
-diff --git a/drivers/clk/qcom/common.c b/drivers/clk/qcom/common.c
-index 75f09e6e057e..48f81e3a5e80 100644
---- a/drivers/clk/qcom/common.c
-+++ b/drivers/clk/qcom/common.c
-@@ -41,6 +41,24 @@ struct freq_tbl *qcom_find_freq(const struct freq_tbl *f, unsigned long rate)
- }
- EXPORT_SYMBOL_GPL(qcom_find_freq);
++static const struct freq_conf ftbl_nss_port5_rx_clk_src_125[] = {
++	C(P_UNIPHY1_RX, 2.5, 0, 0),
++	C(P_UNIPHY0_RX, 1, 0, 0),
++};
++
++static const struct freq_multi_tbl ftbl_nss_port5_rx_clk_src[] = {
++	FMS(19200000, P_XO, 1, 0, 0),
++	FM(25000000, ftbl_nss_port5_rx_clk_src_25),
++	FMS(78125000, P_UNIPHY1_RX, 4, 0, 0),
++	FM(125000000, ftbl_nss_port5_rx_clk_src_125),
++	FMS(156250000, P_UNIPHY1_RX, 2, 0, 0),
++	FMS(312500000, P_UNIPHY1_RX, 1, 0, 0),
+ 	{ }
+ };
  
-+const struct freq_multi_tbl *qcom_find_freq_multi(const struct freq_multi_tbl *f,
-+						  unsigned long rate)
-+{
-+	if (!f)
-+		return NULL;
+@@ -1717,14 +1725,14 @@ gcc_xo_uniphy0_rx_tx_uniphy1_rx_tx_ubi32_bias_map[] = {
+ 
+ static struct clk_rcg2 nss_port5_rx_clk_src = {
+ 	.cmd_rcgr = 0x68060,
+-	.freq_tbl = ftbl_nss_port5_rx_clk_src,
++	.freq_multi_tbl = ftbl_nss_port5_rx_clk_src,
+ 	.hid_width = 5,
+ 	.parent_map = gcc_xo_uniphy0_rx_tx_uniphy1_rx_tx_ubi32_bias_map,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "nss_port5_rx_clk_src",
+ 		.parent_data = gcc_xo_uniphy0_rx_tx_uniphy1_rx_tx_ubi32_bias,
+ 		.num_parents = ARRAY_SIZE(gcc_xo_uniphy0_rx_tx_uniphy1_rx_tx_ubi32_bias),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_fm_ops,
+ 	},
+ };
+ 
+@@ -1744,15 +1752,23 @@ static struct clk_regmap_div nss_port5_rx_div_clk_src = {
+ 	},
+ };
+ 
+-static const struct freq_tbl ftbl_nss_port5_tx_clk_src[] = {
+-	F(19200000, P_XO, 1, 0, 0),
+-	F(25000000, P_UNIPHY1_TX, 12.5, 0, 0),
+-	F(25000000, P_UNIPHY0_TX, 5, 0, 0),
+-	F(78125000, P_UNIPHY1_TX, 4, 0, 0),
+-	F(125000000, P_UNIPHY1_TX, 2.5, 0, 0),
+-	F(125000000, P_UNIPHY0_TX, 1, 0, 0),
+-	F(156250000, P_UNIPHY1_TX, 2, 0, 0),
+-	F(312500000, P_UNIPHY1_TX, 1, 0, 0),
++static const struct freq_conf ftbl_nss_port5_tx_clk_src_25[] = {
++	C(P_UNIPHY1_TX, 12.5, 0, 0),
++	C(P_UNIPHY0_TX, 5, 0, 0),
++};
 +
-+	if (!f->freq)
-+		return f;
++static const struct freq_conf ftbl_nss_port5_tx_clk_src_125[] = {
++	C(P_UNIPHY1_TX, 2.5, 0, 0),
++	C(P_UNIPHY0_TX, 1, 0, 0),
++};
 +
-+	for (; f->freq; f++)
-+		if (rate <= f->freq)
-+			return f;
++static const struct freq_multi_tbl ftbl_nss_port5_tx_clk_src[] = {
++	FMS(19200000, P_XO, 1, 0, 0),
++	FM(25000000, ftbl_nss_port5_tx_clk_src_25),
++	FMS(78125000, P_UNIPHY1_TX, 4, 0, 0),
++	FM(125000000, ftbl_nss_port5_tx_clk_src_125),
++	FMS(156250000, P_UNIPHY1_TX, 2, 0, 0),
++	FMS(312500000, P_UNIPHY1_TX, 1, 0, 0),
+ 	{ }
+ };
+ 
+@@ -1779,14 +1795,14 @@ gcc_xo_uniphy0_tx_rx_uniphy1_tx_rx_ubi32_bias_map[] = {
+ 
+ static struct clk_rcg2 nss_port5_tx_clk_src = {
+ 	.cmd_rcgr = 0x68068,
+-	.freq_tbl = ftbl_nss_port5_tx_clk_src,
++	.freq_multi_tbl = ftbl_nss_port5_tx_clk_src,
+ 	.hid_width = 5,
+ 	.parent_map = gcc_xo_uniphy0_tx_rx_uniphy1_tx_rx_ubi32_bias_map,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "nss_port5_tx_clk_src",
+ 		.parent_data = gcc_xo_uniphy0_tx_rx_uniphy1_tx_rx_ubi32_bias,
+ 		.num_parents = ARRAY_SIZE(gcc_xo_uniphy0_tx_rx_uniphy1_tx_rx_ubi32_bias),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_fm_ops,
+ 	},
+ };
+ 
+@@ -1806,15 +1822,23 @@ static struct clk_regmap_div nss_port5_tx_div_clk_src = {
+ 	},
+ };
+ 
+-static const struct freq_tbl ftbl_nss_port6_rx_clk_src[] = {
+-	F(19200000, P_XO, 1, 0, 0),
+-	F(25000000, P_UNIPHY2_RX, 5, 0, 0),
+-	F(25000000, P_UNIPHY2_RX, 12.5, 0, 0),
+-	F(78125000, P_UNIPHY2_RX, 4, 0, 0),
+-	F(125000000, P_UNIPHY2_RX, 1, 0, 0),
+-	F(125000000, P_UNIPHY2_RX, 2.5, 0, 0),
+-	F(156250000, P_UNIPHY2_RX, 2, 0, 0),
+-	F(312500000, P_UNIPHY2_RX, 1, 0, 0),
++static const struct freq_conf ftbl_nss_port6_rx_clk_src_25[] = {
++	C(P_UNIPHY2_RX, 5, 0, 0),
++	C(P_UNIPHY2_RX, 12.5, 0, 0),
++};
 +
-+	/* Default to our fastest rate */
-+	return f - 1;
-+}
-+EXPORT_SYMBOL_GPL(qcom_find_freq_multi);
++static const struct freq_conf ftbl_nss_port6_rx_clk_src_125[] = {
++	C(P_UNIPHY2_RX, 1, 0, 0),
++	C(P_UNIPHY2_RX, 2.5, 0, 0),
++};
 +
- const struct freq_tbl *qcom_find_freq_floor(const struct freq_tbl *f,
- 					    unsigned long rate)
- {
-diff --git a/drivers/clk/qcom/common.h b/drivers/clk/qcom/common.h
-index 9c8f7b798d9f..2d4a8a837e6c 100644
---- a/drivers/clk/qcom/common.h
-+++ b/drivers/clk/qcom/common.h
-@@ -45,6 +45,8 @@ extern const struct freq_tbl *qcom_find_freq(const struct freq_tbl *f,
- 					     unsigned long rate);
- extern const struct freq_tbl *qcom_find_freq_floor(const struct freq_tbl *f,
- 						   unsigned long rate);
-+extern const struct freq_multi_tbl *qcom_find_freq_multi(const struct freq_multi_tbl *f,
-+							 unsigned long rate);
- extern void
- qcom_pll_set_fsm_mode(struct regmap *m, u32 reg, u8 bias_count, u8 lock_count);
- extern int qcom_find_src_index(struct clk_hw *hw, const struct parent_map *map,
++static const struct freq_multi_tbl ftbl_nss_port6_rx_clk_src[] = {
++	FMS(19200000, P_XO, 1, 0, 0),
++	FM(25000000, ftbl_nss_port6_rx_clk_src_25),
++	FMS(78125000, P_UNIPHY2_RX, 4, 0, 0),
++	FM(125000000, ftbl_nss_port6_rx_clk_src_125),
++	FMS(156250000, P_UNIPHY2_RX, 2, 0, 0),
++	FMS(312500000, P_UNIPHY2_RX, 1, 0, 0),
+ 	{ }
+ };
+ 
+@@ -1836,14 +1860,14 @@ static const struct parent_map gcc_xo_uniphy2_rx_tx_ubi32_bias_map[] = {
+ 
+ static struct clk_rcg2 nss_port6_rx_clk_src = {
+ 	.cmd_rcgr = 0x68070,
+-	.freq_tbl = ftbl_nss_port6_rx_clk_src,
++	.freq_multi_tbl = ftbl_nss_port6_rx_clk_src,
+ 	.hid_width = 5,
+ 	.parent_map = gcc_xo_uniphy2_rx_tx_ubi32_bias_map,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "nss_port6_rx_clk_src",
+ 		.parent_data = gcc_xo_uniphy2_rx_tx_ubi32_bias,
+ 		.num_parents = ARRAY_SIZE(gcc_xo_uniphy2_rx_tx_ubi32_bias),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_fm_ops,
+ 	},
+ };
+ 
+@@ -1863,15 +1887,23 @@ static struct clk_regmap_div nss_port6_rx_div_clk_src = {
+ 	},
+ };
+ 
+-static const struct freq_tbl ftbl_nss_port6_tx_clk_src[] = {
+-	F(19200000, P_XO, 1, 0, 0),
+-	F(25000000, P_UNIPHY2_TX, 5, 0, 0),
+-	F(25000000, P_UNIPHY2_TX, 12.5, 0, 0),
+-	F(78125000, P_UNIPHY2_TX, 4, 0, 0),
+-	F(125000000, P_UNIPHY2_TX, 1, 0, 0),
+-	F(125000000, P_UNIPHY2_TX, 2.5, 0, 0),
+-	F(156250000, P_UNIPHY2_TX, 2, 0, 0),
+-	F(312500000, P_UNIPHY2_TX, 1, 0, 0),
++static const struct freq_conf ftbl_nss_port6_tx_clk_src_25[] = {
++	C(P_UNIPHY2_TX, 5, 0, 0),
++	C(P_UNIPHY2_TX, 12.5, 0, 0),
++};
++
++static const struct freq_conf ftbl_nss_port6_tx_clk_src_125[] = {
++	C(P_UNIPHY2_TX, 1, 0, 0),
++	C(P_UNIPHY2_TX, 2.5, 0, 0),
++};
++
++static const struct freq_multi_tbl ftbl_nss_port6_tx_clk_src[] = {
++	FMS(19200000, P_XO, 1, 0, 0),
++	FM(25000000, ftbl_nss_port6_tx_clk_src_25),
++	FMS(78125000, P_UNIPHY1_RX, 4, 0, 0),
++	FM(125000000, ftbl_nss_port6_tx_clk_src_125),
++	FMS(156250000, P_UNIPHY1_RX, 2, 0, 0),
++	FMS(312500000, P_UNIPHY1_RX, 1, 0, 0),
+ 	{ }
+ };
+ 
+@@ -1893,14 +1925,14 @@ static const struct parent_map gcc_xo_uniphy2_tx_rx_ubi32_bias_map[] = {
+ 
+ static struct clk_rcg2 nss_port6_tx_clk_src = {
+ 	.cmd_rcgr = 0x68078,
+-	.freq_tbl = ftbl_nss_port6_tx_clk_src,
++	.freq_multi_tbl = ftbl_nss_port6_tx_clk_src,
+ 	.hid_width = 5,
+ 	.parent_map = gcc_xo_uniphy2_tx_rx_ubi32_bias_map,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "nss_port6_tx_clk_src",
+ 		.parent_data = gcc_xo_uniphy2_tx_rx_ubi32_bias,
+ 		.num_parents = ARRAY_SIZE(gcc_xo_uniphy2_tx_rx_ubi32_bias),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_fm_ops,
+ 	},
+ };
+ 
 -- 
 2.39.2
 
