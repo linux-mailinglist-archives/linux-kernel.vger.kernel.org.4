@@ -2,136 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4C17179A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0AAB7179A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235123AbjEaIJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        id S235184AbjEaIKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235127AbjEaIIg (ORCPT
+        with ESMTP id S235187AbjEaIK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:08:36 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EC6135;
-        Wed, 31 May 2023 01:08:32 -0700 (PDT)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 7BE638603A;
-        Wed, 31 May 2023 10:08:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1685520510;
-        bh=c2dLKCbUbaFW+8QKah5Ba2UZhD+rn8WUlFyDcSy4UDM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qqfkikiO0dd8q3mDg6lz5btvKbsk7hv6/A2fTvTSSpnGEBxE5uIRnzfXN6wcDDFyB
-         wEYorBBEfOhRJvahWX7yN4gSR8yXtM8z+Yl4uL2hs08DoRXxgyWdq6801GoUir/P1E
-         HwCYeSnr1qZ96ivv16xbakV+qiUIa8h4decIxeJdHSDpqiV8h2a1XhnUOcpxP/hehl
-         Koq0HHGj+yCook0NyTHb7ZyjT7+Dh40SI5mwML9vivCXd0/4J0otHAsTY+3Olfjoaq
-         ddkayOkC2X1r9cQOrmLUfETF6OvP03mibN/Pt0H7RB9H17nGRy+7Hgcmq9n0ctXiIq
-         rrhAiHc5Km9hQ==
-Date:   Wed, 31 May 2023 10:08:28 +0200
-From:   Lukasz Majewski <lukma@denx.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: Re: [PATCH v8 2/3] net: dsa: mv88e6xxx: add support for MV88E6020
- switch
-Message-ID: <20230531100828.3f0a3200@wsk>
-In-Reply-To: <dd68b82b-7bb7-3f4f-7243-e3a4b745cd97@gmail.com>
-References: <20230530083916.2139667-1-lukma@denx.de>
-        <20230530083916.2139667-3-lukma@denx.de>
-        <dd68b82b-7bb7-3f4f-7243-e3a4b745cd97@gmail.com>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 31 May 2023 04:10:29 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9616393
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:10:28 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6af6df840ffso4220442a34.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:10:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685520628; x=1688112628;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ha8WXDq7F6ehlGZN4Wnm79SzuKrgIbv9GmD5p3/ciq4=;
+        b=DgBV7q1iFWBDxiVHk9JUFMK901wD1MP+icEW/zcNq51kchIW9/fmxP0NskfzKA04e9
+         kTop/smn/jjdxZnRzBEiyWP2WMy0SSyrLpcoG2hW8cO7XgbPfZ8aSYBZLEQ0Vodxjgvu
+         7bLrHj8W2DAz+pgxbvT9/QzRwEeDcvRgAIb2o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685520628; x=1688112628;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ha8WXDq7F6ehlGZN4Wnm79SzuKrgIbv9GmD5p3/ciq4=;
+        b=amsk6Xvichs0xJ4pMZVnzf9YEowH8+Qh+Pl+dWjOZwI/Yb9dCKex7UU4Bg8H4Nh5Rh
+         khAYuuT8lTt1z2kKhjO/8ub2PYfKFzKmHjCJl8kKFPYUr5iZw4QRbhK03BHaDHR+Umrh
+         c1FxJ+mKa/rcpmLjZjhpKAIpBAII9tumWZHvvORBsKqNMoXL7/RbFGHdBSF5WdPingTt
+         0k+xauq4BiXumAwlYI8/QbhOH4Vuohk79id7taTW7WkYsJ8rwvyS5EML05zjndX0ZYkj
+         rCq96sjOISDSOmdNOOL5lmQnLlaNGI4h4LIGZmX7PRSnf4GjePvwiUfvn8+oqPoSjVdD
+         zsuA==
+X-Gm-Message-State: AC+VfDwgrcA80MhL8mwet+hxgDpWsODijKtHzTv4wuPsVQ8Jn7XiR9OT
+        B2mg1YseGla93eaEN53MgS+YSLO/duBPnTjOtcIMMQ==
+X-Google-Smtp-Source: ACHHUZ7rqg56DAcPJ9jkQZEWk9382a7L5h4RC6wgNI04P1u6bH0gTq4NfXck/bmoQRGPPXVH2knI7dLMyJlEpKqSWtU=
+X-Received: by 2002:a05:6830:1d6f:b0:6b0:c54c:8247 with SMTP id
+ l15-20020a0568301d6f00b006b0c54c8247mr949912oti.24.1685520627954; Wed, 31 May
+ 2023 01:10:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KuUStryJVJf1l7OpeRAR0j6";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230220093343.3447381-1-hsinyi@chromium.org> <CAGXv+5E4_k1jKTnninYkuT6Tf=skB00AowHpM+hc8j_VFM-RfQ@mail.gmail.com>
+ <CAJMQK-hnK69iVJhqW_8UtKHHLQ3608Cb74Jk_b+xHH0BBu4yVw@mail.gmail.com>
+ <d39b0e77-e013-fe7e-9523-9bdbaacb5853@collabora.com> <90ad9b86-e03c-8e80-88d6-d514bbe9cacd@gmail.com>
+ <CAJMQK-jmT1YDf0y6FYUUFHkQ0b-ZHD9S4X2zpkrmNoz5Dz4ctQ@mail.gmail.com>
+In-Reply-To: <CAJMQK-jmT1YDf0y6FYUUFHkQ0b-ZHD9S4X2zpkrmNoz5Dz4ctQ@mail.gmail.com>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Wed, 31 May 2023 16:10:01 +0800
+Message-ID: <CAJMQK-gWQUgY7NRhkSuk7KMf8XZEBfJZEEXo0S+8ty7Ms7xZ9w@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: mediatek: mt8183: kukui: Add scp firmware-name
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/KuUStryJVJf1l7OpeRAR0j6
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Wed, May 31, 2023 at 3:47=E2=80=AFPM Hsin-Yi Wang <hsinyi@chromium.org> =
+wrote:
+>
+> On Wed, May 31, 2023 at 3:30=E2=80=AFPM Matthias Brugger <matthias.bgg@gm=
+ail.com> wrote:
+> >
+> >
+> >
+> > On 30/05/2023 09:12, AngeloGioacchino Del Regno wrote:
+> > > Il 30/05/23 07:12, Hsin-Yi Wang ha scritto:
+> > >> On Tue, Feb 21, 2023 at 11:25=E2=80=AFAM Chen-Yu Tsai <wenst@chromiu=
+m.org> wrote:
+> > >>>
+> > >>> On Mon, Feb 20, 2023 at 5:34 PM Hsin-Yi Wang <hsinyi@chromium.org> =
+wrote:
+> > >>>>
+> > >>>> The upstream SCP firmware path is /lib/firmware/mediatek/mt8183/sc=
+p.img
+> > >>>>
+> > >>>> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > >>>
+> > >>> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+> > >>
+> > >> hi Matthias,
+> > >>
+> > >> Kindly ping on the patch, thanks!
+> > >
+> > > Agreed. Matthias, please pick this one.
+> > >
+> > > Hsin-Yi, can you also please send a version of this patch for stable?
+>
+> I sent a patch based on stable:
+> https://patchwork.kernel.org/project/linux-mediatek/patch/20230531074421.=
+888652-1-hsinyi@chromium.org/
+>
 
-Hi Florian,
+Archived the above patch. I'll wait for the original patch landed then
+send it to stable.
 
-> On 5/30/23 01:39, Lukasz Majewski wrote:
-> > From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> >=20
-> > A mv88e6250 family switch with 2 PHY and RMII ports and
-> > no PTP support.
-> >=20
-> > Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> > Signed-off-by: Lukasz Majewski <lukma@denx.de>
-> > Reviewed-by: Andrew Lunn <andrew@lunn.ch> =20
->=20
-> > --- =20
-> [snip]
->=20
-> >   /* List of supported models */
-> >   enum mv88e6xxx_model {
-> > +	MV88E6020,
-> >   	MV88E6085,
-> >   	MV88E6095,
-> >   	MV88E6097,
-> > @@ -94,7 +95,7 @@ enum mv88e6xxx_family {
-> >   	MV88E6XXX_FAMILY_6097,	/* 6046 6085 6096 6097 */
-> >   	MV88E6XXX_FAMILY_6165,	/* 6123 6161 6165 */
-> >   	MV88E6XXX_FAMILY_6185,	/* 6108 6121 6122 6131 6152
-> > 6155 6182 6185 */
-> > -	MV88E6XXX_FAMILY_6250,	/* 6220 6250 */
-> > +	MV88E6XXX_FAMILY_6250,	/* 6220 6250 6020 */ =20
->=20
-> =C3=BCber nit: only if you have to resubmit, numbers in ascending order.
->=20
-
-I hope that v8 will be the last iteration :-)
-
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-
-
-Best regards,
-
-Lukasz Majewski
-
---
-
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/KuUStryJVJf1l7OpeRAR0j6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmR3AHwACgkQAR8vZIA0
-zr0ziwgAsgmaxJ2Kf6VzDlQZtAa1xjjVuuhFXpuqSMx3oF6IXJMsm8Wd3Au+Drt8
-We83e2pK0DTOKy+L5GaFwmW4rA6cAuK867XJeOPgQCABP8v2N1DVGxtFVJFAGiaZ
-+FFjGbst1D8DM1jLQra278VCYjUmnQQdD8ae8iqeSuJLRUoCBZUa5Y4+Q8amRybP
-qE+Nu8gSOUgVw+8nmkV+P/K+sVyRR7HGgifNQCLl2u5EeNjrWMAsFgZEqRI8NUUE
-CBmVj44mzLeWEyuxUos7osxQ86lImI5ZZNDAe4D8t9g6Dgls2TY8DFCakMu9EOxK
-rppGFFweVvo9SzNB78LbDTLcngw67Q==
-=jEBG
------END PGP SIGNATURE-----
-
---Sig_/KuUStryJVJf1l7OpeRAR0j6--
+> > >
+> >
+> > Applied thanks!
+>
+> Thanks!
