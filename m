@@ -2,151 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56DDC718EDD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF94718EE3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjEaW5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 18:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
+        id S230236AbjEaXAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 19:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjEaW5k (ORCPT
+        with ESMTP id S230124AbjEaXAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 18:57:40 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E965D11F
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:57:38 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-19eb96bffd4so341217fac.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:57:38 -0700 (PDT)
+        Wed, 31 May 2023 19:00:10 -0400
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC52D95;
+        Wed, 31 May 2023 16:00:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1685573858; x=1688165858;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hu0DKnynpdBIeYnyWz2HVJfbhb3koTdW7dRzhdCwkpE=;
-        b=C+vo8MF6j6b26zd/kzN7FloSBAwgpYOfsZzLbtMx0PS/lge+w0N9lHeWtQY7X36TYm
-         cF1mChKOnlQYeDMXZhoZVhC9hMmlz8Q26FJzvKc0cxBqc8YIVIziVwzJTHdEJoIKO7rm
-         1MIELHU0YEvn0Dz26LPsqCWVIBn9kif+HqJ8iEzx9/Xg0kNl3HBBoheSivZ5R0+rIoq4
-         TYsoDTwG3PsPYiwkS3pDVby4KnLVifMBamUTJQkOjcVerkyaElp8UdqIvs0M9b3mdtYH
-         h7BIkdD70b8bmxMd+aqnnDTW4VG9sj4r6ckkbI5SWgZBdY0rKk4aumSdAahQfoVXqntH
-         pG8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685573858; x=1688165858;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hu0DKnynpdBIeYnyWz2HVJfbhb3koTdW7dRzhdCwkpE=;
-        b=LSLOvXdyVXVaFLqNLyu8XySAoDzddgckoOICSmDQezUqHKkwoYNAndUi4wpvD/dr/M
-         GEurTzKXklONGOKcuIgZhYEU8rU7Vmsn/0aOemjpwK8D0g8Jbm4jwUWlHTKuxFZ5UuaN
-         PTYY+KoL19ulDcTXyjZycVECZjQs323fUlAVd/Ee+xPWt289nnnBDj4qsA4eJWtJxiLc
-         8KP9Y3fXkrG/h6RzzbIdMb9HO/T0Xl7AQT9z/DGDFmOrcZ3f1ZzkbkiARtATU61QJlu6
-         7kjd5w/24JPt1qfDp16XTDD/0IWCAqq3PcqGsAyjvW59LXhyTdUQ8E4LJd+6H7pUySmI
-         BPxA==
-X-Gm-Message-State: AC+VfDzavEio1+tXJV89tgAdWiJs4ZfsxXPYI1/gYP3yyas48sbJhjUG
-        nvyNQWwqkNEffJEpMtXhbRUsCiPcffv3Dzl1fGo=
-X-Google-Smtp-Source: ACHHUZ7+S8SpNNc9Gy8ZY/8ExdkaNqqUpWjOsfKLh/C3mvnAwfubkjJMA4xthDeXFgyOoB8qNU5WXA==
-X-Received: by 2002:a05:6870:3747:b0:19f:16fc:3c51 with SMTP id a7-20020a056870374700b0019f16fc3c51mr4522675oak.9.1685573858247;
-        Wed, 31 May 2023 15:57:38 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
-        by smtp.gmail.com with ESMTPSA id x38-20020a634866000000b0053fc6df5895sm1812332pgk.39.2023.05.31.15.57.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 15:57:37 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q4Ul4-006Hcf-0h;
-        Thu, 01 Jun 2023 08:57:34 +1000
-Date:   Thu, 1 Jun 2023 08:57:34 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Qi Zheng <qi.zheng@linux.dev>
-Cc:     akpm@linux-foundation.org, tkhai@ya.ru, roman.gushchin@linux.dev,
-        vbabka@suse.cz, viro@zeniv.linux.org.uk, brauner@kernel.org,
-        djwong@kernel.org, hughd@google.com, paulmck@kernel.org,
-        muchun.song@linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: Re: [PATCH 2/8] mm: vmscan: split unregister_shrinker()
-Message-ID: <ZHfQ3gzFToAfee/d@dread.disaster.area>
-References: <20230531095742.2480623-1-qi.zheng@linux.dev>
- <20230531095742.2480623-3-qi.zheng@linux.dev>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1685574009; x=1717110009;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Kv6oDM7pdpfWVnMiBJrhAcDvjz6rDRlBwOYN5Exzd1E=;
+  b=O+YFIlbAoRtRrPy14biOmFNsFZcWK7YLW2FAMj4AmDWX+pwsNq834tmu
+   UXwho7p74ox+35qYanlCvYiMVmj3iPVvDlqbRshMLRTxE0nKEW02N3/SD
+   WzkhnmahokeaDC11YW0XTOUCgXg1Qq9UtOdr92GUuvj6NiSB+rXCIQ+mY
+   Q=;
+X-IronPort-AV: E=Sophos;i="6.00,207,1681171200"; 
+   d="scan'208";a="330836147"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-3554bfcf.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 23:00:05 +0000
+Received: from EX19MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1e-m6i4x-3554bfcf.us-east-1.amazon.com (Postfix) with ESMTPS id 3B46C804D5;
+        Wed, 31 May 2023 23:00:01 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 31 May 2023 22:59:58 +0000
+Received: from 88665a182662.ant.amazon.com (10.95.246.21) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 31 May 2023 22:59:55 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <edumazet@google.com>
+CC:     <akihiro.suda.cz@hco.ntt.co.jp>, <akihirosuda@git.sr.ht>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <segoon@openwall.com>, <suda.kyoto@gmail.com>
+Subject: Re: [PATCH linux] net/ipv4: ping_group_range: allow GID from 2147483648 to 4294967294
+Date:   Wed, 31 May 2023 15:59:47 -0700
+Message-ID: <20230531225947.38239-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <CANn89iK13jkbKXv-rKiUbTqMrk3KjVPGYH_Vv7FtJJ5pTdUAYQ@mail.gmail.com>
+References: <CANn89iK13jkbKXv-rKiUbTqMrk3KjVPGYH_Vv7FtJJ5pTdUAYQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531095742.2480623-3-qi.zheng@linux.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.95.246.21]
+X-ClientProxiedBy: EX19D046UWA003.ant.amazon.com (10.13.139.18) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 09:57:36AM +0000, Qi Zheng wrote:
-> From: Kirill Tkhai <tkhai@ya.ru>
+From: Eric Dumazet <edumazet@google.com>
+Date: Wed, 31 May 2023 23:09:02 +0200
+> On Wed, May 31, 2023 at 9:19 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+> >
+> > From: ~akihirosuda <akihirosuda@git.sr.ht>
+> > Date: Wed, 31 May 2023 19:42:49 +0900
+> > > From: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+> > >
+> > > With this commit, all the GIDs ("0 4294967294") can be written to the
+> > > "net.ipv4.ping_group_range" sysctl.
+> > >
+> > > Note that 4294967295 (0xffffffff) is an invalid GID (see gid_valid() in
+> > > include/linux/uidgid.h), and an attempt to register this number will cause
+> > > -EINVAL.
+> > >
+> > > Prior to this commit, only up to GID 2147483647 could be covered.
+> > > Documentation/networking/ip-sysctl.rst had "0 4294967295" as an example
+> > > value, but this example was wrong and causing -EINVAL.
+> > >
+> > > In the implementation, proc_dointvec_minmax is no longer used because it
+> > > does not support numbers from 2147483648 to 4294967294.
+> >
+> > Good catch.
+> >
+> > I think we can use proc_doulongvec_minmax() instead of open coding.
+> >
+> > With the diff below:
+> >
+> > ---8<---
+> > # sysctl -a | grep ping
+> > net.ipv4.ping_group_range = 0   2147483647
+> > # sysctl -w net.ipv4.ping_group_range="0 4294967295"
+> > sysctl: setting key "net.ipv4.ping_group_range": Invalid argument
+> > # sysctl -w net.ipv4.ping_group_range="0 4294967294"
+> > net.ipv4.ping_group_range = 0 4294967294
+> > # sysctl -a | grep ping
+> > net.ipv4.ping_group_range = 0   4294967294
+> > ---8<---
+> >
+> > ---8<---
+> > diff --git a/include/net/ping.h b/include/net/ping.h
+> > index 9233ad3de0ad..9b401b9a9d35 100644
+> > --- a/include/net/ping.h
+> > +++ b/include/net/ping.h
+> > @@ -20,7 +20,7 @@
+> >   * gid_t is either uint or ushort.  We want to pass it to
+> >   * proc_dointvec_minmax(), so it must not be larger than MAX_INT
+> >   */
+> > -#define GID_T_MAX (((gid_t)~0U) >> 1)
+> > +#define GID_T_MAX ((gid_t)~0U)
+> >
+> >  /* Compatibility glue so we can support IPv6 when it's compiled as a module */
+> >  struct pingv6_ops {
+> > diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
+> > index 6ae3345a3bdf..11d401958673 100644
+> > --- a/net/ipv4/sysctl_net_ipv4.c
+> > +++ b/net/ipv4/sysctl_net_ipv4.c
+> > @@ -35,8 +35,8 @@ static int ip_ttl_max = 255;
+> >  static int tcp_syn_retries_min = 1;
+> >  static int tcp_syn_retries_max = MAX_TCP_SYNCNT;
+> >  static int tcp_syn_linear_timeouts_max = MAX_TCP_SYNCNT;
+> > -static int ip_ping_group_range_min[] = { 0, 0 };
+> > -static int ip_ping_group_range_max[] = { GID_T_MAX, GID_T_MAX };
+> > +static unsigned long ip_ping_group_range_min[] = { 0, 0 };
+> > +static unsigned long ip_ping_group_range_max[] = { GID_T_MAX, GID_T_MAX };
+> >  static u32 u32_max_div_HZ = UINT_MAX / HZ;
+> >  static int one_day_secs = 24 * 3600;
+> >  static u32 fib_multipath_hash_fields_all_mask __maybe_unused =
+> > @@ -165,8 +165,8 @@ static int ipv4_ping_group_range(struct ctl_table *table, int write,
+> >                                  void *buffer, size_t *lenp, loff_t *ppos)
+> >  {
+> >         struct user_namespace *user_ns = current_user_ns();
+> > +       unsigned long urange[2];
+> >         int ret;
+> > -       gid_t urange[2];
+> >         kgid_t low, high;
+> >         struct ctl_table tmp = {
+> >                 .data = &urange,
+> > @@ -179,7 +179,7 @@ static int ipv4_ping_group_range(struct ctl_table *table, int write,
+> >         inet_get_ping_group_range_table(table, &low, &high);
+> >         urange[0] = from_kgid_munged(user_ns, low);
+> >         urange[1] = from_kgid_munged(user_ns, high);
+> > -       ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
+> > +       ret = proc_doulongvec_minmax(&tmp, write, buffer, lenp, ppos);
+> >
+> >         if (write && ret == 0) {
+> >                 low = make_kgid(user_ns, urange[0]);
+> > ---8<---
 > 
-> This and the next patches in this series aim to make
-> time effect of synchronize_srcu() invisible for user.
-> The patch splits unregister_shrinker() in two functions:
 > 
-> 	unregister_shrinker_delayed_initiate()
-> 	unregister_shrinker_delayed_finalize()
-> 
-> and shrinker users may make the second of them to be called
-> asynchronous (e.g., from workqueue). Next patches make
-> superblock shrinker to follow this way, so user-visible
-> umount() time won't contain delays from synchronize_srcu().
-> 
-> Signed-off-by: Kirill Tkhai <tkhai@ya.ru>
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> ---
->  include/linux/shrinker.h |  2 ++
->  mm/vmscan.c              | 22 ++++++++++++++++++----
->  2 files changed, 20 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
-> index 224293b2dd06..e9d5a19d83fe 100644
-> --- a/include/linux/shrinker.h
-> +++ b/include/linux/shrinker.h
-> @@ -102,6 +102,8 @@ extern void register_shrinker_prepared(struct shrinker *shrinker);
->  extern int __printf(2, 3) register_shrinker(struct shrinker *shrinker,
->  					    const char *fmt, ...);
->  extern void unregister_shrinker(struct shrinker *shrinker);
-> +extern void unregister_shrinker_delayed_initiate(struct shrinker *shrinker);
-> +extern void unregister_shrinker_delayed_finalize(struct shrinker *shrinker);
->  extern void free_prealloced_shrinker(struct shrinker *shrinker);
->  extern void synchronize_shrinkers(void);
->  
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index a773e97e152e..baf8d2327d70 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -799,10 +799,7 @@ int register_shrinker(struct shrinker *shrinker, const char *fmt, ...)
->  #endif
->  EXPORT_SYMBOL(register_shrinker);
->  
-> -/*
-> - * Remove one
-> - */
-> -void unregister_shrinker(struct shrinker *shrinker)
-> +void unregister_shrinker_delayed_initiate(struct shrinker *shrinker)
->  {
->  	struct dentry *debugfs_entry;
->  	int debugfs_id;
-> @@ -819,6 +816,13 @@ void unregister_shrinker(struct shrinker *shrinker)
->  	mutex_unlock(&shrinker_mutex);
->  
->  	shrinker_debugfs_remove(debugfs_entry, debugfs_id);
-> +}
-> +EXPORT_SYMBOL(unregister_shrinker_delayed_initiate);
-> +
-> +void unregister_shrinker_delayed_finalize(struct shrinker *shrinker)
-> +{
-> +	if (!shrinker->nr_deferred)
-> +		return;
+> Will this work on 32bit build ?
 
-This is new logic and isn't explained anywhere: why do we want to
-avoid RCU cleanup if (shrinker->nr_deferred == 0)? Regardless,
-whatever this is avoiding, it needs a comment to explain it.
+It worked at least on my i686 build and qemu.
 
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+---8<---
+# uname -a
+Linux (none) 6.4.0-rc3-00648-g75455b906d82-dirty #76 SMP PREEMPT_DYNAMIC Wed May 31 21:30:31 UTC 2023 i686 GNU/Linux
+# sysctl -a | grep ping
+net.ipv4.ping_group_range = 1	0
+# sysctl -w net.ipv4.ping_group_range="0 4294967295"
+sysctl: setting key "net.ipv4.ping_group_range": Invalid argument
+# sysctl -w net.ipv4.ping_group_range="0 4294967294"
+net.ipv4.ping_group_range = 0 4294967294
+# sysctl -a | grep ping
+net.ipv4.ping_group_range = 0	4294967294
+---8<---
