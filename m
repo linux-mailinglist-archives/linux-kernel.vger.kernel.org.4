@@ -2,165 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAEBB718DF4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B84718DF9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjEaWBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 18:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
+        id S230296AbjEaWCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 18:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjEaWBV (ORCPT
+        with ESMTP id S229563AbjEaWCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 18:01:21 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2107.outbound.protection.outlook.com [40.107.93.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064BEA3;
-        Wed, 31 May 2023 15:01:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CqfpySo9wceC556s3JRSwBNJTY74lpH27qUVCC6bQ5IxwTSv1C+2F7Rd3yUPNnwzMtyId0P1xld9TYD6EJvaWgAg+oGLnpNH47Bin1eg3RBVXPZj9PwtVmKgeE4KFzy9mreM39v6FmoLBuPdqslX8LM1fUPiiY0wXXHwLwNpafHLXbiMqvDYyqhNUCX51EeqLTIXZIQYJpg1TVbZvy5gGXSqQWvqZxLSwpKcnk1LWG4abZNI1Ek7gJ2eDLPUgqQ5Cej+NpN+xGUXbiq0czka/JVwdBDuBCwse5QQXwpIFI4GljJHox/HvAd5X+1p5Kp6ZslUZ7MqDBIBm16P9KCR0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EAiNwAA6svvJiDLfKU1x5DD/KClJ2bHwYMPjbbGKD5w=;
- b=OyDeZyrR6xmAQ44Q7bOnpSD8TuB1VmB1pWtw4IGderrAoDJQEfI4ZPn0oo1FOyFU0G9BiwKr1Gqkp2CS10JAbmjbf3o8o/OwFkO3XVZvkJ6xA5CG0c9hq1v11kZJlP9CiGxmmKTzgU2/3eCWciOhpkwLSZVisLW/qpNUd8WFZyyTD1R3QVX6EJd2Mn1uou/Gkh49NQGM/ehjMpwo1VmTLbijlmhko+0MW0ZzpELJlbdzeGXP+d1pY/EL+l6VaJ2XYz2Aj0iSU688h9+qrNteWLmZLwuV0qK60Ra9ROWS6dHzgrPPYzZC+frZ3qtYD4hEpJ+WYil62yxb4YotJ0RH0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Wed, 31 May 2023 18:02:31 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81527121
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:02:29 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-2569298a074so15203a91.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:02:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EAiNwAA6svvJiDLfKU1x5DD/KClJ2bHwYMPjbbGKD5w=;
- b=X8wmicsFFju6ubwA0k52BvfsozN1Gil1sKP8tpIG5+u5rAAtwVy/b7bxFK3ZjrLm6luVSrdpmIS55fMjudNjz2eD9hjmle5cJpT9+aj071Ntfi9efGSNCEooZHfMCI2CYWmWzNAcf4kEnzy6LErAD3Cd3bWSrdo+wHRGmm+WVj4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BN0PR13MB5214.namprd13.prod.outlook.com (2603:10b6:408:156::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Wed, 31 May
- 2023 22:01:17 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.024; Wed, 31 May 2023
- 22:01:17 +0000
-Date:   Thu, 1 Jun 2023 00:01:11 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Yuezhen Luan <eggcar.luan@gmail.com>
-Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jacob.e.keller@intel.com
-Subject: Re: [PATCH] igb: Fix extts capture value format for 82580/i354/i350
-Message-ID: <ZHfDp21V3zy9kuE3@corigine.com>
-References: <20230531090805.3959-1-eggcar.luan@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531090805.3959-1-eggcar.luan@gmail.com>
-X-ClientProxiedBy: AM9P195CA0027.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:20b:21f::32) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BN0PR13MB5214:EE_
-X-MS-Office365-Filtering-Correlation-Id: 739b1169-852f-4cf4-4aa2-08db62228ef0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8nblcmxLaoAazcdRfMcZAN7lg1paHqmZDXAMVvwi992flRK4tvtYLXJtTepR8l3MtOFwzJd6TX2eRN9NKhtiYloc3PZG4pW6Qj4fiOA78PagPWh6D9ClBJahPMH/72uFS28vQQg8VFqFMGMsE09vqz5lPo+xsnD5mEAowKn0U3xrwqQRzRcfzsOv5/QEH/4KzyGfB24IHakWVvl4/PgwLv+DaiDZpXsRy1pua3JPZmyemds0idtK/zaOdwcF4KPhjW1I6riY7YxsV5eeUXaVksKbcvBwSmrzZ1VpYHtXIZ3LAmMTcgYfBNMkKM+KLpzTliz88EqXo0tSSZXDBMok4JO3TZGHwHrflcNv0TXEW5ny8uLkwCEs08/SmEFJmd7CW2W+xG1SrdvSh6w3Z+mv08bd+CguLbRwAit16iRLuzM0ifja+3htCMBq+FUlTGXhC9rCtInAjKwlUCjZdJ+O8aoaIXg8+MOwzoXXUwRIEjumPmwxO8+iBp6y5ys82cCT/WlKZTyKA6H9F8uh2hO2e4rzmX62eGY3NihMTR/vj8OtWxQ6uOIzrUGP/tKfSmr5
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(366004)(136003)(346002)(396003)(376002)(451199021)(38100700002)(4326008)(478600001)(66476007)(66556008)(66946007)(6916009)(6666004)(36756003)(41300700001)(316002)(86362001)(6506007)(6512007)(26005)(83380400001)(2616005)(186003)(6486002)(2906002)(7416002)(8936002)(8676002)(5660300002)(44832011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0/ljMDulfNIoFy5cXdK4e73fiUihiyqfHAuxVLdvbmN3p0EZNIEnqZqJkmgV?=
- =?us-ascii?Q?SWdpFPTXGWML+BWi37cxUp1BiIgDgD7E/J33PcgcKrUp4ZHmz5BOLSW+cNzs?=
- =?us-ascii?Q?Y7NzZEO+5nSvIMinMHgQkMvPs2QvUw1kfqXF/GqcSTjxT5BeF6SCbpMULGI0?=
- =?us-ascii?Q?4iDz7o/pswolVzm2n/Ib2wFDO4A/dxKtywnpZP83tGfUISQ1K1l7TAV+5f5N?=
- =?us-ascii?Q?FhPZdVnHJxMNqo5BIZiXbb2ymMVPAQNsiCiHTuzOOHQoU9siTqXoIOdRzjsL?=
- =?us-ascii?Q?Cj57YVTDIANmGtj4tlFRg7R/YamjkTs6un/cvfUdUNcABj4cOzTMlm8Ppau4?=
- =?us-ascii?Q?hx8JAE2hd7qOiThDFe1sQSXpdCGs9UPvfA5HjG40hkbpfcJQhuC23LbO+ZOV?=
- =?us-ascii?Q?cmgal5zRwETtIeANMFt9iEJTqQngJWrQOE6pIddfonwp63bAcNb54oVDrjAB?=
- =?us-ascii?Q?UJ/THbZH+L8SDB8ZAexS6pryBqiRCQjconvm/R7rZgWobX+eSuZ1A4AwP01C?=
- =?us-ascii?Q?SBzgi34QPXGftk4YD9V/ReVdvmTCQ31zFJcV6J/myXKWrlfhBCZYpJjy5qsw?=
- =?us-ascii?Q?B/PKfV8Lg0dc6QChkyorrdKzYd/+uDg+oDmiuQ+kblEmZES1M1X0QJpB9XOY?=
- =?us-ascii?Q?GXfiw1Ec+xrsU2Ssz6hvcanRq21hghWU5JxNQu++JxALiWWgW8CSh3FiqMfg?=
- =?us-ascii?Q?cYplSKvfKTuolQJ5pbGKqhqT1oABh4p+DUTyGNIfPo2/jlFrwaaNj44p3jKp?=
- =?us-ascii?Q?baYm3QF/qHBildi3UdTmLXKB/fSk9fQgWH1p5AAjFXfpMwKIqcUE8yQ3dNLY?=
- =?us-ascii?Q?56ATUm226Kg3CKimv/yxWFRgVfrr0U6bwoy2lGDEzAa0lDsgHCEt97bwUyra?=
- =?us-ascii?Q?aGEyBgOMgGo7m+scBRVeh0P1+aIhD7MpnKRSLMCbNhqeZg3C/1rM7JcdUdSt?=
- =?us-ascii?Q?G1dtN3cMcW8z+JmvHFGn98oweaI4DG4UINlKouRf003d4fR/yK55Cz0k/AaD?=
- =?us-ascii?Q?LULbK51TCZnJ2nEGS7YQZn01TxNlyW3IUzz70vPyD9L5w8UicD1QpoBr03B2?=
- =?us-ascii?Q?GgHZTC5PCekYPQwQUmEI6NkXaJ9PA7JcI8Jw55/QDjFFtHweeMWiTlNwbFe/?=
- =?us-ascii?Q?dmUvVAonpi3dZZeEJuvN1Rh3VB45kq3lZDsGLA+TkNhViS2lguD48zeq+AV+?=
- =?us-ascii?Q?4i9fYZ3jrkvsj3x19YLvIlOS3DefpgVg724NclIFWxNekygJX8MZgpvzK2J3?=
- =?us-ascii?Q?Utdo6EZfC1Qx/FSeczD3NSZDUU921mOhmKoE+UoEIwBPOKLGCWe326Cchxa8?=
- =?us-ascii?Q?mmRHKazLLzaTUd9mVNcs6RIyBBQUDBa6UzsJuEaWoyskaMsQ5Iz0afipzwBs?=
- =?us-ascii?Q?AmC3ZL9EI4mpVYsAV5Fj4kFSwkZOp/DdsnCs9EOvLVpmPEgAyHYC9qkpgY8Y?=
- =?us-ascii?Q?N2Ligxb3L4T6gffZ6Ci8uiG+pyd/Gq0pysumyL2coI9gBzDmUGE9Spds5P85?=
- =?us-ascii?Q?4sap2RBXVQ0TvpgT1DB7peWNi7IFr5PUoAFWJ8blhgrYAao32aO3hIPF5yaZ?=
- =?us-ascii?Q?vnEi6PMs6+/Vp1Tz9YaH+hixg3t+GSFGzsXU7jaCXo6Qo/np2cOwtF3aaQPJ?=
- =?us-ascii?Q?EQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 739b1169-852f-4cf4-4aa2-08db62228ef0
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 22:01:17.1070
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wPAF/GSl0z2z31qaaDcUIPJfEa6NUez69mi4WLhgIJd6EyxfW/+Pv5NfODyXEbq7WqvcfOYo7ioMUry5dj4sVMALOha0KjWCmT/wVRqY9I0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR13MB5214
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20221208; t=1685570549; x=1688162549;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KixHZBMA+6FI7Pfjf38bXK5H1vgh9ysGY6HKye84LxA=;
+        b=cKjCxybKIBlY6BvZhjgsMAJYJjgYSoSIDbguxswRODUBqYxXlbMS6zTlr3jKf2WWLO
+         a0iV7g8hPFwM/0DjIwrgyToe1Oy1xRVNqCNVKG86o9VWxLj6q/eTUzbwPINkD1J50LfQ
+         EUKiJxrXUqr5ZTX67Joo1YZleIP0mOgwAJ92X16sB0054X+V+llNUgvrezWbmKSmwBXL
+         z9FPpSEOtEuHpw5hhTjXww4kLrz/fYX7BCkJHueqgA2jlIaAer2rU/CYkg9HkAe3rUE3
+         Woqu7PjMGTA0e16oFwQtPeNmzYnY2QqY1SE9zzNOiFPaG5F0I3XQaEZWDcmwFPRw8ar4
+         BoBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685570549; x=1688162549;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KixHZBMA+6FI7Pfjf38bXK5H1vgh9ysGY6HKye84LxA=;
+        b=g0HBC2sMuXtTZgcpswgHlOmvnq4h2dMIFicO7734ODiwzwLTbrjcZRhpcHiihBTHdX
+         1XtukXKd0iF0D0INUL/s4e3+pTiFmtK7HrTQYXb6ikagkkkH7pHrXVTpGzMBB2QrSoAO
+         DSuOvaBrSoyIR6gewe4O5Vy5QCtF0ZE9wX9qXDDZMb+H4eSFad4BDnVCVCZY6MBRMejD
+         +pTor+UFFRlPfUE6Dz2dQTCYWXcch+u6BNBmEx2hehQ4kuFIe/oLi5Kb7s0LemgRiNEy
+         E5ozpywYcP4Bmu0K75Mtf8TYn2huWpyacT9Fkyc/0+HZnF07g6ntvmt1IZgUcnKmVpaA
+         4LIA==
+X-Gm-Message-State: AC+VfDwSLKS6dHJ0GzcLUdaCw0BvYZV46e8gX6cjevggFI6FDfMjBEun
+        IqidM6iIki5UTDZ/Ywk9oLGLJEsBcDQ=
+X-Google-Smtp-Source: ACHHUZ6cPlRqjV7aURtrMNwlQNXtnj/y5NeekyPOAoESHt3+Na81kZydArmpyXvAJRO2BfdmGDl6AlroJsM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:943:b0:253:38f0:eff0 with SMTP id
+ dw3-20020a17090b094300b0025338f0eff0mr1461277pjb.0.1685570548974; Wed, 31 May
+ 2023 15:02:28 -0700 (PDT)
+Date:   Wed, 31 May 2023 15:02:27 -0700
+In-Reply-To: <20230531212907.GHZHe8I/DZUyzIXI2Q@fat_crate.local>
+Mime-Version: 1.0
+References: <20230530200152.18961-1-jon@nutanix.com> <2a6502e3-ba87-0355-af09-825e8467b81f@intel.com>
+ <F4AFC5EE-9967-4117-BA85-ED82C106575C@nutanix.com> <ZHd2P6D142rCByrm@google.com>
+ <E17EFDD7-C54A-4532-B1D3-D567557FC54B@nutanix.com> <ZHermsSGQBcDD07R@google.com>
+ <20230531212907.GHZHe8I/DZUyzIXI2Q@fat_crate.local>
+Message-ID: <ZHfD88N3PhqReu2z@google.com>
+Subject: Re: [PATCH] x86/fpu/xstate: clear XSAVE features if DISABLED_MASK set
+From:   Sean Christopherson <seanjc@google.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Jon Kohler <jon@nutanix.com>, Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Kyle Huey <me@kylehuey.com>,
+        "neelnatu@google.com" <neelnatu@google.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 09:08:05AM +0000, Yuezhen Luan wrote:
-> 82580/i354/i350 features circle-counter-like timestamp registers
-> that are different with newer i210. The EXTTS capture value in
-> AUXTSMPx should be converted from raw circle counter value to
-> timestamp value in resolution of 1 nanosec by the driver.
+On Wed, May 31, 2023, Borislav Petkov wrote:
+> On Wed, May 31, 2023 at 08:18:34PM +0000, Sean Christopherson wrote:
+> > Assert that the to-be-checked bit passed to cpu_feature_enabled() is a
+> > compile-time constant instead of applying the DISABLED_MASK_BIT_SET()
+> > logic if and only if the bit is a constant.  Conditioning the check on
+> > the bit being constant instead of requiring the bit to be constant could
+> > result in compiler specific kernel behavior, e.g. running on hardware that
+> > supports a disabled feature would return %false if the compiler resolved
+> > the bit to a constant, but %true if not.
 > 
-> Signed-off-by: Yuezhen Luan <eggcar.luan@gmail.com>
-> ---
->  drivers/net/ethernet/intel/igb/igb_main.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+> Uff, more mirroring CPUID inconsistencies.
 > 
-> diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-> index 58872a4c2..187daa8ef 100644
-> --- a/drivers/net/ethernet/intel/igb/igb_main.c
-> +++ b/drivers/net/ethernet/intel/igb/igb_main.c
-> @@ -6947,6 +6947,7 @@ static void igb_extts(struct igb_adapter *adapter, int tsintr_tt)
->  	struct e1000_hw *hw = &adapter->hw;
->  	struct ptp_clock_event event;
->  	struct timespec64 ts;
-> +	unsigned long flags;
->  
->  	if (pin < 0 || pin >= IGB_N_SDP)
->  		return;
-> @@ -6954,9 +6955,12 @@ static void igb_extts(struct igb_adapter *adapter, int tsintr_tt)
->  	if (hw->mac.type == e1000_82580 ||
->  	    hw->mac.type == e1000_i354 ||
->  	    hw->mac.type == e1000_i350) {
-> -		s64 ns = rd32(auxstmpl);
-> +		u64 ns = rd32(auxstmpl);
->  
-> -		ns += ((s64)(rd32(auxstmph) & 0xFF)) << 32;
-> +		ns += ((u64)(rd32(auxstmph) & 0xFF)) << 32;
-> +		spin_lock_irqsave(&adapter->tc, ns);
-> +		ns = timecounter_cyc2time(&adapter->tc, ns);
-> +		spin_unlock_irqrestore(&adapter->tc, ns);
+> So *actually*, we should clear all those build-time disabled bits from
+> x86_capability so that this doesn't happen.
 
-Hi Yuezhen Luan,
+Heh, I almost suggested that, but there is a non-zero amount of code that wants
+to ignore the disabled bits and query the "raw" CPUID information.  In quotes
+because the kernel still massages x86_capability.  Changing that behavior will
+require auditing a lot of code, because in most cases any breakage will be mostly
+silent, e.g. loss of features/performance and not explosions.
 
-unfortunately this doesn't compile because the arguments to
-spin_lock_irqsave/spin_unlock_irqrestore are wrong.
+E.g. KVM emulates UMIP when it's not supported in hardware, and so advertises UMIP
+support irrespective of hardware/host support.  But emulating UMIP is imperfect
+and suboptimal (requires intercepting L*DT instructions), so KVM intercepts L*DT
+instructions iff UMIP is not supported in hardware, as detected by
+boot_cpu_has(X86_FEATURE_UMIP).
 
->  		ts = ns_to_timespec64(ns);
->  	} else {
->  		ts.tv_nsec = rd32(auxstmpl);
+The comment for cpu_feature_enabled() even calls out this type of use case:
 
--- 
-pw-bot: cr
+  Use the cpu_has() family if you want true runtime testing of CPU features, like
+  in hypervisor code where you are supporting a possible guest feature where host
+  support for it is not relevant.
 
+That said, the behavior of cpu_has() is wildly inconsistent, e.g. LA57 is
+indirectly cleared in x86_capability if it's a disabled bit because of this code
+in early_identify_cpu().
+
+	if (!pgtable_l5_enabled())
+		setup_clear_cpu_cap(X86_FEATURE_LA57);
+
+KVM works around that by manually doing CPUID to query hardware directly:
+
+	/* Set LA57 based on hardware capability. */
+	if (cpuid_ecx(7) & F(LA57))
+		kvm_cpu_cap_set(X86_FEATURE_LA57);
+
+So yeah, I 100% agree the current state is messy and would love to have
+cpu_feature_enabled() be a pure optimization with respect to boot_cpu_has(), but
+it's not as trivial at it looks.
