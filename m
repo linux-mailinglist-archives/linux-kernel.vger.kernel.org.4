@@ -2,208 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A52E717A55
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4ED717A5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234357AbjEaIk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
+        id S234617AbjEaIla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbjEaIkX (ORCPT
+        with ESMTP id S231938AbjEaIl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:40:23 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2122.outbound.protection.outlook.com [40.107.117.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B7210E;
-        Wed, 31 May 2023 01:39:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fmKkTNqBxCM1Cl6hfA9rhN+fMT+gu6lVTP6CPkep2PK90CGl4dYCcPpQ0RBwrnXbYUS0wXjtuMk+QPlfzfPdwV72y1XJ7b+FwcLpiFz4YlAO6Csg1X1Hwj5Iq5kTEJO9AlJF9CpidUW2G7Nwwl8e/JlpBOqMY+qw3SuCE0HzAMRl8/boSa9ZmtjjFfI0LriqxaK/k8EgmkvoIGf84znR8dH/Zd4uQLZBYgOq1GE6GGtU8t+OR9HrwMInOvi4kF9xi+0AyKbHRfUZkgS4Qs9l/kt/6xkNQWjeOjKi1kySuIMrCE0Tg6e0lY2IDH6LMEoEQPqtQjoxdsfEaOVCommZHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rOAnxc8uaZ68rhVQ7n4++WhrCeACj48VBHhcXVgh5R0=;
- b=baXSPGKTM3gglIIALpMXZSkrOoLjj1dIkYS6T6z74HuTnyMLamZHvszbVlfVcLiAdxIaE6jjG8FxYozva0sl8AygzRkEdZYhnUFIvL1wyHA3+zDwJcY4n7ugZr2YB6UMdZLNvpamMl/tx0qssxor5DyfCipcfnRHQZKn8/kI+AjdtSBemx8x10MAmkJlcInFh3P2w7Sznyzms1T77CvGY4kF+1r9T0r2hHzRgNzQApd9n0N1Lrlagknui+0yGUpQJInXdamSVLlVxvwStpwfciZiUqjPW1mUyf2cCcfMBsrTjB2yyf42babEGVjtScrX+ktNJrtSdtSIIpkEg7AzMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rOAnxc8uaZ68rhVQ7n4++WhrCeACj48VBHhcXVgh5R0=;
- b=Uy5rT0weitl1HQd75jd8ODtsOo8GU+faXU3Tdfv1iTDAyyWOGn4wYmnRe5/Im4GFyMqM1cvXHQQVfFoQIywCuYMG4s2Al+GaDrgI2/jULaLzWn9AIe+tEjTYelppDscI7Ec1Rbp6p8mNeyC7w14WK52zHe1LNUvL0S5465LoxqmHW8vWYp5dxgLyN/rRO4P56sR3dnODmlDdTQf4kEzE5RxX5TYPCuzUxGfaUi06v67taAF6MgiHpP96TNqIxgMmKQwaDmDEw6Kn2jhb2+lwTUtA+NypobJq/DLGsxG3IhjRa8YT06rkxcnZb+hsOYhv5Z2Gxf7v/HvhB1bUy40G2Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
- by SEYPR06MB5765.apcprd06.prod.outlook.com (2603:1096:101:ba::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Wed, 31 May
- 2023 08:39:26 +0000
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::f652:a96b:482:409e%5]) with mapi id 15.20.6433.018; Wed, 31 May 2023
- 08:39:26 +0000
-From:   Lu Hongfei <luhongfei@vivo.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
-Subject: [PATCH] soc: qcom: pmic: Fix resource leaks in device_for_each_child_node() loops
-Date:   Wed, 31 May 2023 16:39:15 +0800
-Message-Id: <20230531083915.513-1-luhongfei@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYCP286CA0162.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:383::17) To TYZPR06MB6697.apcprd06.prod.outlook.com
- (2603:1096:400:451::6)
+        Wed, 31 May 2023 04:41:26 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E5E193
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:41:01 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so6366988e87.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685522456; x=1688114456;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vc1IO9E9zjMZ2kN7szLFGbYb7R13NrbmFXuFho+WGu8=;
+        b=uep2XW4/cD4ta3yCwXLQs8KJQF/ieoJTx9Bz5EjeFReI/Wik3Vbmmbmez94A6Rg2bS
+         B8c1mcNmVm00GfxQEPmBoJrQAKATMpALARsEr3Jc7krUbIHqtC6rTOhEVf8OLwiqvXVo
+         EKbjbS7XztKHeeFbomyUyP/sr06JVvqRKKmz6LSOnHnZJIrhPO0Pfk1eC+ZkE5o0QlAo
+         Mv2CaJrwFYG87SsZC9KDjVq856Kc8N+ud+qmVSSd2Y8yNEuXw4T1zvklCvPmyTkg81KA
+         rxCQ3erSXoX9v67nTbLaaYLyOBp/oyLM46HPAiCfxCxNCbZDeMmLYnz6zQDD/krIoBnf
+         ZdyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685522456; x=1688114456;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vc1IO9E9zjMZ2kN7szLFGbYb7R13NrbmFXuFho+WGu8=;
+        b=ARTHyJkI/h1jJREooJdP2CzLpF6F5Cus8CD/bABfODNETE0i4naTkMOD7ziDnK9uW/
+         /4LTcFDX0HYgV3Kv/77ypO/9mMIA3udPQBos8uWwUXjyFc0fCAfWvVeWM4IDZbeFGT1u
+         ue6qGrLemWq3b9I9gp1s9HEmD/4N3ntgCzXVzeWEM3LLYloeEDyYolgJOcI799KZHwPo
+         2/QQZKuYqrcWJOfdRcpkvPoGzfvuJI08oGMkfAhfqNPsNq6A+ISTz/iuWbE5q+oYZBAP
+         pYoJgRDwOKRvabD/csN0VthZuSaDQtC8b8XHPxdUq7sHYgacewjthzkog8YGHF8V26no
+         FnyQ==
+X-Gm-Message-State: AC+VfDxdpbIFex/VFs0OiFlfqNE34M5zCEMpHVPda4njhGmx07Eu4uSP
+        ICC4FmQT836+veJSMzmS6tqgVQ==
+X-Google-Smtp-Source: ACHHUZ5nI0RP7ItVlidAWuFxojReYmq+IexNAs+IbR/o3ImyBt94GW/72PA17KfUCSG3bNJX7jbUCw==
+X-Received: by 2002:a05:6512:49c:b0:4f4:b92c:eef5 with SMTP id v28-20020a056512049c00b004f4b92ceef5mr2033159lfq.68.1685522456095;
+        Wed, 31 May 2023 01:40:56 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id f21-20020a19ae15000000b004f13ece6a4fsm628536lfc.101.2023.05.31.01.40.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 01:40:55 -0700 (PDT)
+Message-ID: <507831fd-326a-a5f7-cdc1-5584ad1aa11b@linaro.org>
+Date:   Wed, 31 May 2023 10:40:54 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|SEYPR06MB5765:EE_
-X-MS-Office365-Filtering-Correlation-Id: 529c0a89-e6c2-4beb-af6d-08db61b28a8c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: L1nUui7AqFrQAUSernJFXObVu0rm4pUsx81e8+2t/3y+54BmlX0lIt5q30oNDO6sjo7yqRpH249d7HKnNQL93hyLxlLs9ZjUV3UbB8cT2tzii0vsevOS4DoAnUErnc4kgMGTlswVzlDHxnZGSoPtONxW3jYLA8LXaDvFZKdkhYF5ox8jJHRqzKZqfR+HKLA5xWvR+LRpdGOlg/Z8yuD0GaW7BeI4lg1+O+XCsuFpn5vmDKs/jAE3tjbm+POeYEoR/4cwxkkEuQ3rpD/OUpLkmQ2RnoRHYvluGfajbgbO0ShWe4d/kAjf7LcIFPSYE+5hIeWig12N4Miu1gw6TiYKa43vyPWLtBZA1Bf0zR2JvFZzx2d1IiMxLrILjbCY65y4OxYEw4AirVOR9H7GhgLYXUl/2LM5HbsmiXex1dq0qVGuuCAA+O3iKYCRXBLf+SA+9jKbX0bFb4Cvr/OJMTwA78GjsAtFuhSYCB1awzONRV4CuahCQioigLsKi/5tkf+XgKJ1pX+yv3Y8ySqMuMUD9sqE2C4nLwe5YCOP2Qk3et1gC7g278H4GWsEzA5yiQswO/jlet4iOpvnJ4UGNLcaEY76EtITBHRDxZz51HuhTMcURd3VZ/W2ywOP8MkQqCi3
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(136003)(376002)(346002)(39860400002)(451199021)(110136005)(2906002)(2616005)(6512007)(186003)(52116002)(6486002)(6666004)(86362001)(107886003)(36756003)(1076003)(6506007)(26005)(478600001)(83380400001)(5660300002)(38100700002)(38350700002)(4326008)(41300700001)(66946007)(66476007)(8676002)(8936002)(66556008)(316002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ewl5+4mGBR4os13kHpcd+C2qUJxiHiZQb7YP0UH4FmIrTfJn6AiZuhCcDynb?=
- =?us-ascii?Q?2WAk1qitBR63+/QDscuo4mdy7XRRfpexC819EdFWg9BLgltDoXO0Y7qssIaz?=
- =?us-ascii?Q?MI6tIBt+0IVnMdf82ThJmeTypW7H/hocH46U2St1xlZftFL7/DJ+ED40sP+b?=
- =?us-ascii?Q?PGQH4ve2gzvOi4KY2CM2qX8QFH6FpXJhAAa62v24M40HrrjhIC9xSJc858YN?=
- =?us-ascii?Q?AWgOioJtar/y2VDwq0qr/v+hSrMPoUCxc8BACiOMDeVcpwOiTRKGbCQSOK2o?=
- =?us-ascii?Q?DOHfSJshNSJUYQVm8tPmapQeIU50fzI30CPf02VQSL83d0b8JEQYH3V3nJPH?=
- =?us-ascii?Q?DeAKuC24qhy4aIyDS7ECSc5mBx8trz3Y9aS7xMoUlf7qDVOL2ths4I6xIXYO?=
- =?us-ascii?Q?r4USVq3TmeUPcDjBz/0yMjsO1YiWpqIjFI3avdU8VWwlw+T1bC9xcFa9gB2v?=
- =?us-ascii?Q?Xv79uZ72SYtHer7bFg1h2AWeqQagsgKMNRhzzf4lp/L1T2hHbyH+ysiGLhYd?=
- =?us-ascii?Q?wBdmpk77JeWVe7m8dZMBui4FL1RSnYcDeeRP0i0elFc/7l/p6bpwwLEkIYUO?=
- =?us-ascii?Q?IxG+1JJiTg7V7eekqcoH9B/fXoZd5Pf3j2uqkZwS1G6NZGMJiAyXhzT0wwdS?=
- =?us-ascii?Q?sxcacLE7bUrtKaZUnVyHVqZJqz9VtXnb2io3k0itdNB2W+GMwAn5CyztwO6v?=
- =?us-ascii?Q?86Lb2RjvvRhDPMUMYE0UVMBp4AxK9zeWLetvZr135QM3WbEud0qMR2aqw+yZ?=
- =?us-ascii?Q?XfxGUAr//LDsYItdDoG/gJshY7LrQpKOkd+4DtvzUMID5XpN3WgZHPpO6GLH?=
- =?us-ascii?Q?54vwbFobUAr3BIyEwK4gdnHLZBVLBzZTph5Ui/i+42PKVEyM8ipMQmSUDIbZ?=
- =?us-ascii?Q?2LV2PQhz1vwNWl+v9hKZELIBBD5zCW4zqyYlXU3XF+uOiZ1MfqV8DAau2LDZ?=
- =?us-ascii?Q?Vc3P9Q4DV4EEXi7CGQwn3BT7ZLvmF1Y4RDWHaGwWECi2svhroRRVGmbrZCB9?=
- =?us-ascii?Q?d2lsqyy8Jp9bUpsurjI3MZLYjVV/209z4t9VbukzoFwpAKFkRB5A4r1i8Y+e?=
- =?us-ascii?Q?F9qPc+hZCUUzOooEWiLco9Wk2uKsni5f3vub3v/vilhkha/8fcQvyH7tsFv6?=
- =?us-ascii?Q?wu/jxaGmRQQUZcbg38SOPHcI8uv3iiBukGD7VbOoPM2iOuX8K4VmxvIR3hD1?=
- =?us-ascii?Q?dXjpn/2+t/eH02KzBJNl+ess19aSHO0UMRHZqy0GL3CWm4s8w0QHQ+zQOT+F?=
- =?us-ascii?Q?/5WsWlRuCmcsxrqVDaMpXBNa3pOedQ6nlzHCQ60TzUyTmyTJ00cBdwbiNPXq?=
- =?us-ascii?Q?PLj6Mft/DEbkjTWYLJo07ih9C1e4qMA492qHblpOWscqttr5LBPuJ+nRajka?=
- =?us-ascii?Q?rvYphiRt7jEbFi1lRUL6yLdfVl3EIp0ZrRF/FVULQ2WyFVDLV6cNJoYeeOK4?=
- =?us-ascii?Q?J2vEySjon0T+KdnHsV8kOzkZ8FEHDRUIl/HCaAkNBZFaN6sVcXWCx5RWIyC+?=
- =?us-ascii?Q?jve4Am6y/mYhRfMnuRuguazjVWfRlCz7tBoUPbmH8qM565xB4xyxGNg6AE7G?=
- =?us-ascii?Q?2v2O+t1uzMp6GxFKGM4JOndGJ+c1dbFyzT7qYEAJ?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 529c0a89-e6c2-4beb-af6d-08db61b28a8c
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 08:39:26.2304
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: q5LPaFGNxKAnWLnjB0c4qe/gKwncSTZVK+O6bDJULjX4eIDm/FMq1NmIG8FpL7AjKEXWZrpesyoOJh+4XIffLg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5765
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, agross@kernel.org, andersson@kernel.org,
+        ilia.lin@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     ansuelsmth@gmail.com
+References: <20230530165807.642084-1-robimarko@gmail.com>
+ <20230530165807.642084-2-robimarko@gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [RESEND PATCH v2 2/2] cpufreq: qcom-nvmem: add support for
+ IPQ8064
+In-Reply-To: <20230530165807.642084-2-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device_for_each_child_node loop in pmic_glink_altmode_probe should have
-fwnode_handle_put() before return which could avoid resource leaks.
-This patch could fix this bug.
 
-'Fixes: 080b4e24852b1 ("soc: qcom: pmic_glink: Introduce altmode support")'
 
-Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
----
- drivers/soc/qcom/pmic_glink_altmode.c | 27 ++++++++++++++++++---------
- 1 file changed, 18 insertions(+), 9 deletions(-)
+On 30.05.2023 18:58, Robert Marko wrote:
+> From: Christian Marangi <ansuelsmth@gmail.com>
+> 
+> IPQ8064 comes in 3 families:
+> * IPQ8062 up to 1.0GHz
+> * IPQ8064/IPQ8066/IPQ8068 up to 1.4GHz
+> * IPQ8065/IPQ8069 up to 1.7Ghz
+> 
+> So, in order to be able to share one OPP table, add support for
+> IPQ8064 family based of SMEM SoC ID-s as speedbin fuse is always 0 on
+> IPQ8064.
+> 
+> Bit are set with the following logic:
+> * IPQ8062 BIT 0
+> * IPQ8064/IPQ8066/IPQ8068 BIT 1
+> * IPQ8065/IPQ8069 BIT 2
+> 
+> speed is never fused, only psv values are fused.
+> Set speed to the versions to permit a unified opp table following
+> this named opp:
+> 
+> opp-microvolt-speed<SPEED_VALUE>-pvs<PSV_VALUE>-v0
+> 
+> Example:
+> - for ipq8062 psv2
+>   opp-microvolt-speed0-pvs2-v0 = < 925000 878750 971250>
+> - for ipq8064 psv2
+>   opp-microvolt-speed2-pvs2-v0 = <925000 878750 971250>;
+> - for ipq8065 psv2
+>   opp-microvolt-speed4-pvs2-v0 = <950000 902500 997500>;
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 73 +++++++++++++++++++++++++++-
+>  1 file changed, 72 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> index ce444b5962f2..c644138680ba 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> @@ -34,6 +34,10 @@
+>  #define IPQ8074_HAWKEYE_VERSION		BIT(0)
+>  #define IPQ8074_ACORN_VERSION		BIT(1)
+>  
+> +#define IPQ8062_VERSION		BIT(0)
+> +#define IPQ8064_VERSION		BIT(1)
+> +#define IPQ8065_VERSION		BIT(2)
+> +
+>  struct qcom_cpufreq_drv;
+>  
+>  struct qcom_cpufreq_match_data {
+> @@ -207,6 +211,69 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
+>  	return ret;
+>  }
+>  
+> +static int qcom_cpufreq_ipq8064_name_version(struct device *cpu_dev,
+> +					     struct nvmem_cell *speedbin_nvmem,
+> +					     char **pvs_name,
+> +					     struct qcom_cpufreq_drv *drv)
+> +{
+> +	int speed = 0, pvs = 0, pvs_ver = 0;
+> +	int msm_id, ret = 0;
+> +	u8 *speedbin;
+> +	size_t len;
+> +
+> +	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
+> +
+> +	if (IS_ERR(speedbin))
+> +		return PTR_ERR(speedbin);
+> +
+> +	switch (len) {
+Do we expect more variety here? Otherwise a switch statement sounds a
+bit too heavy for the job, imo.
 
-diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
-index df48fbea4b68..a7fc6570fa1e
---- a/drivers/soc/qcom/pmic_glink_altmode.c
-+++ b/drivers/soc/qcom/pmic_glink_altmode.c
-@@ -395,7 +395,7 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
- 		ret = fwnode_property_read_u32(fwnode, "reg", &port);
- 		if (ret < 0) {
- 			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
--			return ret;
-+			goto err_node_put;
- 		}
- 
- 		if (port >= ARRAY_SIZE(altmode->ports)) {
-@@ -405,7 +405,8 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
- 
- 		if (altmode->ports[port].altmode) {
- 			dev_err(dev, "multiple connector definition for port %u\n", port);
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto err_node_put;
- 		}
- 
- 		alt_port = &altmode->ports[port];
-@@ -420,33 +421,37 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
- 
- 		ret = devm_drm_bridge_add(dev, &alt_port->bridge);
- 		if (ret)
--			return ret;
-+			goto err_node_put;
- 
- 		alt_port->dp_alt.svid = USB_TYPEC_DP_SID;
- 		alt_port->dp_alt.mode = USB_TYPEC_DP_MODE;
- 		alt_port->dp_alt.active = 1;
- 
- 		alt_port->typec_mux = fwnode_typec_mux_get(fwnode);
--		if (IS_ERR(alt_port->typec_mux))
--			return dev_err_probe(dev, PTR_ERR(alt_port->typec_mux),
-+		if (IS_ERR(alt_port->typec_mux)) {
-+			ret = dev_err_probe(dev, PTR_ERR(alt_port->typec_mux),
- 					     "failed to acquire mode-switch for port: %d\n",
- 					     port);
-+			goto err_node_put;
-+		}
- 
- 		ret = devm_add_action_or_reset(dev, pmic_glink_altmode_put_mux,
- 					       alt_port->typec_mux);
- 		if (ret)
--			return ret;
-+			goto err_node_put;
- 
- 		alt_port->typec_switch = fwnode_typec_switch_get(fwnode);
--		if (IS_ERR(alt_port->typec_switch))
--			return dev_err_probe(dev, PTR_ERR(alt_port->typec_switch),
-+		if (IS_ERR(alt_port->typec_switch)) {
-+			ret = dev_err_probe(dev, PTR_ERR(alt_port->typec_switch),
- 					     "failed to acquire orientation-switch for port: %d\n",
- 					     port);
-+			goto err_node_put;
-+		}
- 
- 		ret = devm_add_action_or_reset(dev, pmic_glink_altmode_put_switch,
- 					       alt_port->typec_switch);
- 		if (ret)
--			return ret;
-+			goto err_node_put;
- 	}
- 
- 	altmode->client = devm_pmic_glink_register_client(dev,
-@@ -455,6 +460,10 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
- 							  pmic_glink_altmode_pdr_notify,
- 							  altmode);
- 	return PTR_ERR_OR_ZERO(altmode->client);
-+
-+err_node_put:
-+	fwnode_handle_put(fwnode);
-+	return ret;
- }
- 
- static const struct auxiliary_device_id pmic_glink_altmode_id_table[] = {
--- 
-2.39.0
+> +	case 4:
+> +		get_krait_bin_format_a(cpu_dev, &speed, &pvs, &pvs_ver,
+> +				       speedbin);
+> +		break;
+> +	default:
+> +		dev_err(cpu_dev, "Unable to read nvmem data. Defaulting to 0!\n");
+> +		ret = -ENODEV;
+> +		goto len_error;
+> +	}
+> +
+> +	ret = qcom_smem_get_soc_id(&msm_id);
+> +	if (ret)
+> +		return ret;
+> +
+> +	switch (msm_id) {
+> +	case QCOM_ID_IPQ8062:
+> +		drv->versions = IPQ8062_VERSION;
+> +		break;
+> +	case QCOM_ID_IPQ8064:
+> +	case QCOM_ID_IPQ8066:
+> +	case QCOM_ID_IPQ8068:
+> +		drv->versions = IPQ8064_VERSION;
+> +		break;
+> +	case QCOM_ID_IPQ8065:
+> +	case QCOM_ID_IPQ8069:
+> +		drv->versions = IPQ8065_VERSION;
+> +		break;
+> +	default:
+> +		dev_err(cpu_dev,
+> +			"SoC ID %u is not part of IPQ8064 family, limiting to 1.0GHz!\n",
+> +			msm_id);
+> +		drv->versions = IPQ8062_VERSION;
+> +		break;
+> +	}
+> +
+> +	/*
+> +	 * IPQ8064 speed is never fused. Only psv values are fused.
+> +	 * Set speed to the versions to permit a unified opp table.
+> +	 */
+> +	snprintf(*pvs_name, sizeof("speedXX-pvsXX-vXX"), "speed%d-pvs%d-v%d",
+> +		 drv->versions, pvs, pvs_ver);
+> +
+> +len_error:
+> +	kfree(speedbin);
+Perhaps we should switch to devres-managed nvmem soon..
 
+Konrad
+> +	return ret;
+> +}
+> +
+>  static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
+>  					     struct nvmem_cell *speedbin_nvmem,
+>  					     char **pvs_name,
+> @@ -256,6 +323,10 @@ static const struct qcom_cpufreq_match_data match_data_qcs404 = {
+>  	.genpd_names = qcs404_genpd_names,
+>  };
+>  
+> +static const struct qcom_cpufreq_match_data match_data_ipq8064 = {
+> +	.get_version = qcom_cpufreq_ipq8064_name_version,
+> +};
+> +
+>  static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
+>  	.get_version = qcom_cpufreq_ipq8074_name_version,
+>  };
+> @@ -404,7 +475,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
+>  	{ .compatible = "qcom,apq8096", .data = &match_data_kryo },
+>  	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
+>  	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
+> -	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
+> +	{ .compatible = "qcom,ipq8064", .data = &match_data_ipq8064 },
+>  	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
+>  	{ .compatible = "qcom,apq8064", .data = &match_data_krait },
+>  	{ .compatible = "qcom,msm8974", .data = &match_data_krait },
