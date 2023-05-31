@@ -2,241 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D7D718BA7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 23:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F19718BB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 23:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjEaVNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 17:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
+        id S230038AbjEaVUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 17:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjEaVNT (ORCPT
+        with ESMTP id S229537AbjEaVUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 17:13:19 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A36F129
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 14:13:17 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3f81ffc9065so19721cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 14:13:17 -0700 (PDT)
+        Wed, 31 May 2023 17:20:13 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1DC129;
+        Wed, 31 May 2023 14:20:12 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5147dce372eso370356a12.0;
+        Wed, 31 May 2023 14:20:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685567596; x=1688159596;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1685568010; x=1688160010;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7+2qoqODzznlrzJdzN64MjbCVNNnQuwRRtJuX4ggbCU=;
-        b=kHJHBx69u6844yWRg+bdMx0m0tvgPlagRdL9WAIhqNvPpu8LX6GMuzHUHixyWgd9Mf
-         qMY0qxpAkEmOxYZNrn0heIVjfGWpYgIwlgNcz8wlOeZnnk3GSZB4NDa6DPPoQDzEoBo0
-         lR6HimNkut+XEN2CfKEthgqEw9XODXPnFgApD2MocwWQg3P600hpjTCFdeQ/aa4jxYoA
-         id1X9co22nLUO5CFxyBWnUvevyXMChC/vrSNZ3kgUh9Qq84ljrXGo9BVv2lPuo5FhPmW
-         R5vkwByRhT5602h6iBd8eMi2T7L9oJexCh5hLLcf6GpQ/OcBRYje/jyno1z0YmKsVGx1
-         h3gg==
+        bh=DTefpjTnRZwzVlyTq29ijDBrPiJ0xnSJwo8bcfjK+r0=;
+        b=ZFTcDDCB+AImDsN60FrC9VBlEtsMZFDvVnEE5x4/2yTGBPIiWndvUFYAl6tHOi6WIy
+         YieUjYix44EqaB5hUp4ldMGNazarRLkck+YAQf8DViExoqjwYF4ZS+aReuMLn0SY2GtR
+         hdPVtp1IJOwkQ59+zx6g6KN4PzSVy8+4Nb85rJbAUfEtpk1ag+Q1KfFHcwieqYph9BJV
+         NhiflZjBIF9AfS/BsyhTCmjOs9ir4NwE75gyg28zu921bkgsb+KVnAazMybI11s8L+sp
+         2DFGmwd1oXlYdiWZUrxe7i1Lo3XdUiyQ5Fcaf61KhqxahCPiQKk/Q8655i9AHLyOSvV3
+         Qrvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685567596; x=1688159596;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685568010; x=1688160010;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7+2qoqODzznlrzJdzN64MjbCVNNnQuwRRtJuX4ggbCU=;
-        b=Sf299TP8I/+ozZKRCuZ9xEb6VBtyUmBGQ8OThsW76hMjhLJw8apwBsSHv3OaEam3x/
-         0GXh6f42cK0eLMgN2SmNjqe/eCyYmpqrZH2oGsEqggxEAbPc4Fu0qEya3xJb29U/1A7x
-         7f/o1MS//e0gTM35rSDP/FFwVMiqWegifiMw76cglNoFkwpBMg6plyQCx/By1O42gaT9
-         EgM1zAwEMjrL4uL97nkauMD28qz4nUZWuFAy0TCGt0m9h2+p37VdoYrxpDBo8ViX9Im2
-         x7gL5CYTdFqdE45rYqeRe9FhqdobUC+tMWLShqKUk7+X5M3QytgSnMtdpkzqjyYx8KGX
-         +Rgw==
-X-Gm-Message-State: AC+VfDzBBF11eCVjK/wEBVnMiSVq1ndDxXEPGoFVHJPGz+LlVsHFy4Lm
-        F0S7yQwikdk+YBYT88LPnSmZFSV+wnlk5c+InRDikg==
-X-Google-Smtp-Source: ACHHUZ5WfYJ6eA2+oGfutrPzowugKbbUX/q/GiLW+TIRlZfdD7OeKd4PuotxSoDS0rqsIQKlsK37axqyrYA0yyXPG+Q=
-X-Received: by 2002:a05:622a:1a11:b0:3f8:3065:7fc5 with SMTP id
- f17-20020a05622a1a1100b003f830657fc5mr7534qtb.1.1685567595969; Wed, 31 May
- 2023 14:13:15 -0700 (PDT)
+        bh=DTefpjTnRZwzVlyTq29ijDBrPiJ0xnSJwo8bcfjK+r0=;
+        b=P9xq3/tathTpEYDzQ9z+QQqLKyH5xOAanm9SScip++AMSEIwyFa0YiUDOwbzWfc/iW
+         Z9zQ67TobFVV40VllrHuc3g5aTZMeBX8qlGO4KvCK74u4uuZpgOjyoGmJ0P14ThLv67L
+         hARtEMhB1hqipjD7+x/MiYDy/XjZq7e9If2U0fav+MBaFqJ0XcFRpf0RGWlKuk/Yllgl
+         EVPbGUpesJoWx7VDuxm/m+GEd0vUGoCZhHd/wEtWXh+J8mpNP7sR5QCMqkx7N1KvBT9s
+         wcek/4QdPY9ueGPaRbx8pzvoxYCHpZYgKm8I6dfvBGbgaZ4Alr9AyNDZ1KoOX1zWrz58
+         hnJA==
+X-Gm-Message-State: AC+VfDw9iFYYZYFQjnKm9FZTQ2Jczjn4FD7Jx8bM6rqKadzZPK499PBl
+        C+3YCnoGKF5YtV2H/g+RAHw=
+X-Google-Smtp-Source: ACHHUZ5mr/4sMrKF5T8XZ8TsweV7bGMUcQcBrBBBVN+jEXwVJ5fiLfFcaaqr4tN2QnOP13QcHGC7qA==
+X-Received: by 2002:a17:907:6d23:b0:973:d9ad:273f with SMTP id sa35-20020a1709076d2300b00973d9ad273fmr6055603ejc.46.1685568010061;
+        Wed, 31 May 2023 14:20:10 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id b8-20020a1709064d4800b00965f31ff894sm9472629ejv.137.2023.05.31.14.20.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 14:20:09 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Conor Dooley <conor+dt@kernel.org>, andy.shevchenko@gmail.com,
+        Jonathan McDowell <noodles@earth.li>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v3 0/5] Minor device-tree additions for C.H.I.P
+Date:   Wed, 31 May 2023 23:20:06 +0200
+Message-ID: <4832198.31r3eYUQgx@jernej-laptop>
+In-Reply-To: <cover.1684258957.git.noodles@earth.li>
+References: <cover.1683719613.git.noodles@earth.li>
+ <cover.1684258957.git.noodles@earth.li>
 MIME-Version: 1.0
-References: <20230526234435.662652-1-yuzhao@google.com> <20230526234435.662652-6-yuzhao@google.com>
- <ZHemUc3DiSbxQbxJ@linux.dev>
-In-Reply-To: <ZHemUc3DiSbxQbxJ@linux.dev>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Wed, 31 May 2023 15:12:39 -0600
-Message-ID: <CAOUHufa8+NZcctoYXOZQXNdvKTUxAMDF3sC=X+3mv4juMUyrLA@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v2 05/10] kvm/arm64: add kvm_arch_test_clear_young()
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Anup Patel <anup@brainfault.org>,
-        Ben Gardon <bgardon@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Gavin Shan <gshan@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Larabel <michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-        linux-mm@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 1:56=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
-v> wrote:
->
-> Hi Yu,
->
-> On Fri, May 26, 2023 at 05:44:30PM -0600, Yu Zhao wrote:
-> > Implement kvm_arch_test_clear_young() to support the fast path in
-> > mmu_notifier_ops->test_clear_young().
-> >
-> > It focuses on a simple case, i.e., hardware sets the accessed bit in
-> > KVM PTEs and VMs are not protected, where it can rely on RCU and
-> > cmpxchg to safely clear the accessed bit without taking
-> > kvm->mmu_lock. Complex cases fall back to the existing slow path
-> > where kvm->mmu_lock is then taken.
-> >
-> > Signed-off-by: Yu Zhao <yuzhao@google.com>
-> > ---
-> >  arch/arm64/include/asm/kvm_host.h |  6 ++++++
-> >  arch/arm64/kvm/mmu.c              | 36 +++++++++++++++++++++++++++++++
-> >  2 files changed, 42 insertions(+)
-> >
-> > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm=
-/kvm_host.h
-> > index 7e7e19ef6993..da32b0890716 100644
-> > --- a/arch/arm64/include/asm/kvm_host.h
-> > +++ b/arch/arm64/include/asm/kvm_host.h
-> > @@ -1113,4 +1113,10 @@ static inline void kvm_hyp_reserve(void) { }
-> >  void kvm_arm_vcpu_power_off(struct kvm_vcpu *vcpu);
-> >  bool kvm_arm_vcpu_stopped(struct kvm_vcpu *vcpu);
-> >
-> > +#define kvm_arch_has_test_clear_young kvm_arch_has_test_clear_young
-> > +static inline bool kvm_arch_has_test_clear_young(void)
-> > +{
-> > +     return cpu_has_hw_af() && !is_protected_kvm_enabled();
-> > +}
->
-> I would *strongly* suggest you consider supporting test_clear_young on
-> systems that do software Access Flag management. FEAT_HAFDBS is an
-> *optional* extension to the architecture, so we're going to support
-> software AF management for a very long time in KVM. It is also a valid
-> fallback option in the case of hardware errata which render HAFDBS
-> broken.
+Dne torek, 16. maj 2023 ob 19:46:55 CEST je Jonathan McDowell napisal(a):
+> This small patch series adds some improvements for the C.H.I.P DTS,
+> enabling bluetooth, exporting the PMIC temperature details via iio-hwmon
+> and finally adding the appropriate base pinmux info for an external MMC
+> card. As a pre-requisite for the Bluetooth it also adds support to the
+> AXP209 driver for GPIO3, which is the Bluetooth device wakeup line.
+> 
+> v3:
+> - Add Reviewed-By/Acked-Bys
+> - Drop redundant else
+> - Switch to GENMASK/decimal values for GPIO3 function defs
+> v2:
+> - Fix missing ; on bluetooth stanza in DTS
+> - Add device/host wake GPIOs for Bluetooth device
+> - Add omit-if-no-ref on the port E pinmux stanza
+> - Rename axp20x_temp to pmic-temp
+> - Add AXP209 GPIO3 support
+> 
+> Jonathan McDowell (5):
+>   dt-bindings: gpio: Add GPIO3 for AXP209 GPIO binding schema
+>   pinctrl: axp209: Add support for GPIO3 on the AXP209
+>   ARM: dts: sun5i: chip: Enable bluetooth
+>   ARM: dts: sun5i: Add port E pinmux settings for mmc2
+>   ARM: dts: axp209: Add iio-hwmon node for internal temperature
 
-Hi Oliver,
+Patches 3-5 applied to sunxi tree. Thanks!
 
-It's not about willingness but resources. Ideally we want to make
-everything perfect, but in reality, we can only move forward one step
-a time.
+Best regards,
+Jernej
 
-If I looked at your request from ARM's POV, I would agree with you.
-But my goal is to lay the foundation for all architectures that could
-benefit, so I may not be able to cover a lot for each architecture.
-Specifically, I don't have the bandwidth to test the !FEAT_HAFDBS case
-for ARM.
+> 
+>  .../bindings/gpio/x-powers,axp209-gpio.yaml   |  1 +
+>  arch/arm/boot/dts/axp209.dtsi                 |  7 ++++
+>  arch/arm/boot/dts/sun5i-r8-chip.dts           |  6 +++
+>  arch/arm/boot/dts/sun5i.dtsi                  |  9 ++++
+>  drivers/pinctrl/pinctrl-axp209.c              | 42 +++++++++++++++++++
+>  5 files changed, 65 insertions(+)
+> 
+> 
 
-So here are some options I could offer, ordered by my preferences:
-1. We proceed as it is for now. I *will* find someone from my team (or
-yours) to follow up -- this way we can make sure !FEAT_HAFDBS is well
-tested.
-2. I drop the cpu_has_hw_af() check above. Not that I think there is
-much risk, I'm just trying to be cautious.
-3. I drop the entire ARM support (and include the RISC-V support which
-I previously deprioritized). We revisit after the test is done.
 
-Sounds reasonable?
 
-> So, we should expect (and support) systems of all shapes and sizes that
-> do software AF. I'm sure we'll hear about more in the not-too-distant
-> future...
->
-> For future reference (even though I'm suggesting you support software
-> AF), decisions such of these need an extremely verbose comment
-> describing the rationale behind the decision.
->
-> > +
-> >  #endif /* __ARM64_KVM_HOST_H__ */
-> > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> > index c3b3e2afe26f..26a8d955b49c 100644
-> > --- a/arch/arm64/kvm/mmu.c
-> > +++ b/arch/arm64/kvm/mmu.c
->
-> Please do not implement page table walkers outside of hyp/pgtable.c
->
-> > @@ -1678,6 +1678,42 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kv=
-m_gfn_range *range)
-> >                                          range->start << PAGE_SHIFT);
-> >  }
-> >
-> > +static int stage2_test_clear_young(const struct kvm_pgtable_visit_ctx =
-*ctx,
-> > +                                enum kvm_pgtable_walk_flags flags)
-> > +{
-> > +     kvm_pte_t new =3D ctx->old & ~KVM_PTE_LEAF_ATTR_LO_S2_AF;
-> > +
-> > +     VM_WARN_ON_ONCE(!page_count(virt_to_page(ctx->ptep)));
->
-> This sort of sanity checking is a bit excessive. Isn't there a risk of
-> false negatives here too? IOW, if we tragically mess up RCU in the page
-> table code, what's stopping a prematurely freed page from being
-> allocated to another user?
 
-Yes, but from my aforementioned POV (the breadth I'm focusing on),
-this is a good practice. I can live without this assertion if you feel
-strongly about it.
-
-> > +     if (!kvm_pte_valid(new))
-> > +             return 0;
-> > +
-> > +     if (new =3D=3D ctx->old)
-> > +             return 0;
-> > +
-> > +     if (kvm_should_clear_young(ctx->arg, ctx->addr / PAGE_SIZE))
-> > +             stage2_try_set_pte(ctx, new);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +bool kvm_arch_test_clear_young(struct kvm *kvm, struct kvm_gfn_range *=
-range)
-> > +{
-> > +     u64 start =3D range->start * PAGE_SIZE;
-> > +     u64 end =3D range->end * PAGE_SIZE;
-> > +     struct kvm_pgtable_walker walker =3D {
-> > +             .cb     =3D stage2_test_clear_young,
-> > +             .arg    =3D range,
-> > +             .flags  =3D KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_SHAR=
-ED,
-> > +     };
-> > +
-> > +     BUILD_BUG_ON(is_hyp_code());
->
-> Delete this assertion.
-
-Will do.
