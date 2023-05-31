@@ -2,88 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A5A7176EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CA07176EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234106AbjEaGeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 02:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
+        id S234173AbjEaGfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 02:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjEaGem (ORCPT
+        with ESMTP id S230001AbjEaGfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 02:34:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F7E99;
-        Tue, 30 May 2023 23:34:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 14A2363709;
-        Wed, 31 May 2023 06:34:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F03C4339B;
-        Wed, 31 May 2023 06:34:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685514880;
-        bh=VbJXJ5zz+WVpnyRQMyry3uFyArPowS0EQwKqrDggAFo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QijCDzcRmZbR2iHcYZtpEYpw6bAFdDHejD9UBEfPcsfUQaOT2Tt/9k/VxjOQbGdxA
-         QDJOoV3DxLF8Vt54AzGdX21lutd/xZParafTh73vV+oSfsHSBfYegP2u43MtzMdh7T
-         oecQFkldm7MpwUtQXBxIVMqWCTm8H6aKcfEFofaRrDbR/1Uw4TtdcONaphzmDXRyWo
-         RppPS1Z2PYrZsAbT/p225lgG8fwFiDplK5sUt3//lMWdXQ8SE4/4sM7D9Jp+t8x4OO
-         15wDxV6BJaKVjOV9VqVi/DHRoXdI0/deofPd9pw5Icn/svT+DQpujic4PwX6f/MJ3z
-         olvSJGHdp3NRw==
-Date:   Tue, 30 May 2023 23:34:38 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v7 0/9] fix fwnode_irq_get[_byname()] returnvalue
-Message-ID: <20230530233438.572db3fb@kernel.org>
-In-Reply-To: <cover.1685340157.git.mazziesaccount@gmail.com>
-References: <cover.1685340157.git.mazziesaccount@gmail.com>
+        Wed, 31 May 2023 02:35:34 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F48399;
+        Tue, 30 May 2023 23:35:32 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-96f53c06babso918497666b.3;
+        Tue, 30 May 2023 23:35:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685514931; x=1688106931;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MT/ursCZpYWc+U/ss5xdCpQN33pNzAamORszl4z68Ow=;
+        b=lNMtmamOO2e1wvzgrMy+UcK+VWeJeCrcl3wmYu6uAry5CZ1KJz7U6Ndg/QIjGdbK1A
+         tj/wfAIRPI/J4R2dQh4XqtrssizdRRQ4Ab2he1QAQ6UTq3xy20HiwvumCPJYTdHcrwPj
+         QzTOJ6izHzvkT0p+Z26cuh7XqRTPEKN50JWbzcaHwvIrQG4KckxKlRIqE1oIH6yqniRT
+         i8oK+UudyDh7A07FuNhIKjsbEh2kYKOEi/WHLpXGmPNMl/oQx7wvXzsKSaapzOTMqdYj
+         2I4cka+3HmgIUZqP66vK3ZvbW1EJXlg7tdrylvd9KIFyp9IC+NrfXIVqglgMUHPRTAo1
+         D2Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685514931; x=1688106931;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MT/ursCZpYWc+U/ss5xdCpQN33pNzAamORszl4z68Ow=;
+        b=AeRPOZPAwg4Q9RALsMA+OzaqiMFzo2cVxE0FijmKJWS8mTLil3sQQ3o/c+t1FsH8Hd
+         SmJPUfToJcC+R7II5lS5EnOr0py24rnNtTehBdVg30UCC488XKNKx2HWOz+ZuWvrER2c
+         C9WbOp17AGOsJAcrGJA5GKoLWJHUMRD0aQ8IAgErXO8ZQIm4aJtrx9Suj63iz7hifSZ+
+         B0lNA7LbG6/R5DQeyswaQmflZfl+8LDuHWvKOyduplGAWKghXTFeO1NRO+E/z2UOBiYu
+         qnn7uc3SgWWW3/QEsj9zltP0LCHWGRCybtn7/cr4yl0IbXO/cD5dDObSbHK8MTJtPOpM
+         y5CQ==
+X-Gm-Message-State: AC+VfDwBuEnYWUIYyONKy+loMzr6cWA3IkwdeD7lhYSjmnuKfYahyo0A
+        YLlhYlsWp+JRgDN2CSjKmRKZr3P/lO2+5p0L5OsmfS7eDl0=
+X-Google-Smtp-Source: ACHHUZ7TBEY/rdeuLDDeZUIfY2WE5Jm0aucrTE73JNXR6+PzOMvzNGpM8XQdSJdpkAgMbR2VHVDBcGzUMN7RYCZa8dU=
+X-Received: by 2002:a17:907:d16:b0:960:ddba:e5c3 with SMTP id
+ gn22-20020a1709070d1600b00960ddbae5c3mr4616805ejc.32.1685514930685; Tue, 30
+ May 2023 23:35:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230530154252.7895-1-osmtendev@gmail.com>
+In-Reply-To: <20230530154252.7895-1-osmtendev@gmail.com>
+From:   David Rheinsberg <david.rheinsberg@gmail.com>
+Date:   Wed, 31 May 2023 08:35:18 +0200
+Message-ID: <CADyDSO6nY2=UONuHk0PMszWJ_Hnpg6h-VYX40xGtU2CnhTcy+w@mail.gmail.com>
+Subject: Re: [PATCH v2] hid-wiimote-debug.c: Drop error checking for debugfs_create_file
+To:     Osama Muhammad <osmtendev@gmail.com>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 May 2023 09:22:15 +0300 Matti Vaittinen wrote:
-> The fwnode_irq_get() and the fwnode_irq_get_byname() may have returned
-> zero if mapping the IRQ fails. This contradicts the
-> fwnode_irq_get_byname() documentation. Furthermore, returning zero or
-> errno on error is unepected and can easily lead to problems
-> like.
+Hi
 
-What's the merging plan? Could patch 1 go to a stable branch 
-and then driver trees can pull it in and apply their respective 
-patches locally?
+On Tue, 30 May 2023 at 17:43, Osama Muhammad <osmtendev@gmail.com> wrote:
+>
+> This patch removes the error checking for debugfs_create_file
+> in hid-wiimote-debug.c.c. This is because the debugfs_create_file()
+> does not return NULL but an ERR_PTR after an error.
+> The DebugFS kernel API is developed in a way that the
+> caller can safely ignore the errors that occur during
+> the creation of DebugFS nodes.The debugfs Api handles
+> it gracefully. The check is unnecessary.
+>
+> Link to the comment above debugfs_create_file:
+> https://elixir.bootlin.com/linux/latest/source/fs/debugfs/inode.c#L451
+>
+> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+
+Looks good, thanks!
+
+Reviewed-by: David Rheinsberg <david@readahead.eu>
+
+Thanks
+David
+
+> ---
+> changes since v1
+>         -In v1 the IS_ERR was used for error checking which is dropped now.
+> ---
+>  drivers/hid/hid-wiimote-debug.c | 10 ----------
+>  1 file changed, 10 deletions(-)
+>
+> diff --git a/drivers/hid/hid-wiimote-debug.c b/drivers/hid/hid-wiimote-debug.c
+> index a99dcca2e099..00f9be55f148 100644
+> --- a/drivers/hid/hid-wiimote-debug.c
+> +++ b/drivers/hid/hid-wiimote-debug.c
+> @@ -173,7 +173,6 @@ int wiidebug_init(struct wiimote_data *wdata)
+>  {
+>         struct wiimote_debug *dbg;
+>         unsigned long flags;
+> -       int ret = -ENOMEM;
+>
+>         dbg = kzalloc(sizeof(*dbg), GFP_KERNEL);
+>         if (!dbg)
+> @@ -183,13 +182,9 @@ int wiidebug_init(struct wiimote_data *wdata)
+>
+>         dbg->eeprom = debugfs_create_file("eeprom", S_IRUSR,
+>                 dbg->wdata->hdev->debug_dir, dbg, &wiidebug_eeprom_fops);
+> -       if (!dbg->eeprom)
+> -               goto err;
+>
+>         dbg->drm = debugfs_create_file("drm", S_IRUSR,
+>                         dbg->wdata->hdev->debug_dir, dbg, &wiidebug_drm_fops);
+> -       if (!dbg->drm)
+> -               goto err_drm;
+>
+>         spin_lock_irqsave(&wdata->state.lock, flags);
+>         wdata->debug = dbg;
+> @@ -197,11 +192,6 @@ int wiidebug_init(struct wiimote_data *wdata)
+>
+>         return 0;
+>
+> -err_drm:
+> -       debugfs_remove(dbg->eeprom);
+> -err:
+> -       kfree(dbg);
+> -       return ret;
+>  }
+>
+>  void wiidebug_deinit(struct wiimote_data *wdata)
+> --
+> 2.34.1
+>
