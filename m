@@ -2,109 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCAD718406
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D2B718422
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237490AbjEaN61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
+        id S237424AbjEaOES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjEaN6F (ORCPT
+        with ESMTP id S237412AbjEaODq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:58:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3819C524F
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:51:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1797263C2C
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:51:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE6FC433D2;
-        Wed, 31 May 2023 13:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685541105;
-        bh=B3N6YHdsFd5bPXI4OFTcPK/kl2cL7GTlWbHn5XcxccU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sSrNQlbXLkP7OPfaP4f9CJjlzTtVupzjE3UkcNVidX1ShjoM37KTUOY0L1MO8u1tw
-         zUL9t+OvlyBZj8/SysBwAeub43D2MhJgPH6vgY4XXIWeg44cAlK6GmCsbTWcteJkv8
-         blRcIhsH4eDJCDKmLaGtEPZbfyNJp/qqZO5aXfBtDXB19eSQD5MukWCj3cVSNlKTR0
-         ClebjkweU55d+7QdLvPKg1/jWuk7P1a+Zsr/axepmsJgqDUTJZBvDTz4mYTZFadZks
-         reYootRezpaeWoHGqklnmo7eVJYPkhkWgbUStnfM0QeVcucNAI/iif0kZGFCkezXSw
-         tfilJlbRFXrLg==
-Date:   Wed, 31 May 2023 16:51:20 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        mcgrof@kernel.org, peterz@infradead.org, tglx@linutronix.de,
-        x86@kernel.org
-Subject: Re: [PATCH 0/3] Type aware module allocator
-Message-ID: <20230531135120.GA395338@kernel.org>
-References: <20230526051529.3387103-1-song@kernel.org>
- <ZHGrjJ8PqAGN9OZK@moria.home.lan>
- <CAPhsuW4DAwx=7Nta5HGiPTJ1LQJCGJGY3FrsdKi62f_zJbsRFQ@mail.gmail.com>
- <20230529104530.GL4967@kernel.org>
- <CAPhsuW6g98Wz9Oj1NiwwZ1OkSVNXX10USByY0b9tEfzOt8SVQg@mail.gmail.com>
+        Wed, 31 May 2023 10:03:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131851BD4
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685541348;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iKY4ohXdL6Kppb6cdBaAFMS5w8OYmdrqeHw64hwzbU8=;
+        b=Wxr8Q8YSh7Hn2Tob9qcbPgXHNb5FLvQ5qQ2G1pQzw9kgVLrDYEsSnXyLxLb2G+ePovG+3z
+        9anI/SQgbTccsDebTLyAoDWIZpauiBXb1gXgo2BXRQGwD4gp6v1Ycs7PVnHhKNfdLbaqeV
+        SitDW503T828TmAPmEVAKJ+WYzaWn38=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-223-4Xr0v8qFP_eteAbuVZuqYg-1; Wed, 31 May 2023 09:52:37 -0400
+X-MC-Unique: 4Xr0v8qFP_eteAbuVZuqYg-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-94a355cf318so597323766b.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:52:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685541156; x=1688133156;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iKY4ohXdL6Kppb6cdBaAFMS5w8OYmdrqeHw64hwzbU8=;
+        b=b+LFOk+4bqDJpJ6TJh8NhI0q63xpNFEdg4cxDBPr2z/2EaDTaM9Rl0Vvt9EGUYUXrQ
+         wY/yXVYdxokc+l1tSefIREDeTv2SQ9MSN0oupwrZRQ/hRa6/hqBQN2mDwrsMG/NVulzc
+         ZpFWeNyJx/xCa02h0oK9p31SVn0W+bOXf8HKvfOK3dlL3tl5nCJQp9TUjntwkWo7ikhe
+         16J+rqjwclkw8YDXIcHqMhvfnjzoJLHu0SHn4HK81hSLyQvcfKbNm1NhZLzaPdJix9qv
+         MS8Epd3NesKTY4zqC9n7u7PZLf1DTriiOEmBd3Jf/4iMmt8RB75hlOxe7vqzFoWFLhpK
+         eIeg==
+X-Gm-Message-State: AC+VfDwhXlG3jUhHwMbaxiLyKwSoqsI2WoGt7KN4o4OL6hl912g9ST0m
+        mx4bFHLUPkh7fioMzNCOjAeygnuJ3+6hy7rcbyfICCWJTxb9w3Ea+1BcVW6TQDRSaTtyTQrB7Dg
+        SQbIAk8F7jwlgO//GVij9Bw1i
+X-Received: by 2002:a17:907:7e92:b0:96f:f809:1394 with SMTP id qb18-20020a1709077e9200b0096ff8091394mr4565995ejc.53.1685541156464;
+        Wed, 31 May 2023 06:52:36 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7hhjQJzrNRzyGM1wTqzVW8nH8LuS4AWEp9EAl1HWLRdpILKHy/8ekBdMh24NZdi98uCcyc/w==
+X-Received: by 2002:a17:907:7e92:b0:96f:f809:1394 with SMTP id qb18-20020a1709077e9200b0096ff8091394mr4565974ejc.53.1685541156144;
+        Wed, 31 May 2023 06:52:36 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id v15-20020a170906338f00b009663cf5dc3bsm8980369eja.53.2023.05.31.06.52.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 06:52:35 -0700 (PDT)
+Message-ID: <dba63a7b-6e5d-6145-5eea-0c2da3dc9445@redhat.com>
+Date:   Wed, 31 May 2023 15:52:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW6g98Wz9Oj1NiwwZ1OkSVNXX10USByY0b9tEfzOt8SVQg@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] input: Add new keyboard backlight control keys to match
+ modern notebooks
+Content-Language: en-US, nl
+To:     Werner Sembach <wse@tuxedocomputers.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Bastien Nocera <hadess@hadess.net>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230530110550.18289-1-wse@tuxedocomputers.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230530110550.18289-1-wse@tuxedocomputers.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 03:37:24PM -0700, Song Liu wrote:
-> On Mon, May 29, 2023 at 3:45 AM Mike Rapoport <rppt@kernel.org> wrote:
-> >
-> > On Sat, May 27, 2023 at 10:58:37PM -0700, Song Liu wrote:
-> > > On Sat, May 27, 2023 at 12:04 AM Kent Overstreet
-> > > <kent.overstreet@linux.dev> wrote:
-> > > >
-> > > > I think this needs to back to the drawing board and we need something
-> > > > simpler just targeted at executable memory; architecture specific
-> > > > options should definitely _not_ be part of the exposed interface.
-> > >
-> > > I don't think we are exposing architecture specific options to users.
-> > > Some layer need to handle arch specifics. If the new allocator is
-> > > built on top of module_alloc, module_alloc is handling that. If the new
-> > > allocator is to replace module_alloc, it needs to handle arch specifics.
-> >
-> > I'm for creating a new allocator that will replace module_alloc(). This
-> > will give us a clean abstraction that modules and all the rest will use and
-> > it will make easier to plug binpack or another allocator instead of
-> > vmalloc.
-> >
-> > Another point is with a new allocator we won't have weird dependencies on
-> > CONFIG_MODULE in e.g. bpf and kprobes.
-> >
-> > I'll have something ready to post as an RFC in a few days.
+Hi Werner,
+
+Thank you for your patch.
+
+On 5/30/23 13:05, Werner Sembach wrote:
+> The old three KEY_KBDILLUM* keycodes don't reflect the current situation
+> modern notebooks anymore. Especially the ones with RGB keyboards.
 > 
-> I guess this RFC is similar to unmapped_alloc()? If it replaces
-> vmalloc, we can probably trim this set down a bit (remove
-> mod_alloc_params and vmalloc_params, etc.).
+> e.g.
+> - Clevo NL50NU has a toggle, an up, a down and a color-cycle key
+> - TongFang PH4ARX1 doesn't have a toggle key, but one that cycles through
+>   off, half-brightness, and full-brightness.
+> 
+> Also, on some devices these keys are already implemented in firmware. It
+> would still be nice if there is a way to let userspace know when one of
+> these keys is pressed to display the OSD, but don't advice it to actually
+> do anything. This is the intended purpose of the KEY_KBDILLUMCHANGE define.
+> 
+> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+> ---
+>  include/uapi/linux/input-event-codes.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
+> index 022a520e31fc2..05287bf9a77f7 100644
+> --- a/include/uapi/linux/input-event-codes.h
+> +++ b/include/uapi/linux/input-event-codes.h
+> @@ -803,6 +803,10 @@
+>  #define BTN_TRIGGER_HAPPY39		0x2e6
+>  #define BTN_TRIGGER_HAPPY40		0x2e7
+>  
+> +#define KEY_KBDILLUMCYCLE		0x2e8
 
-No, it's not a new allocator. I'm trying to create an API for code
-allocations that can accommodate all the architectures and it won't be a
-part of modules code. The modules will use the new API just like every
-other subsystem that needs to allocate code.
+I do not really see what the difference is between this and the existing KEY_KBDILLUMTOGGLE, userspace can already choice whether it toggles to a number of states or just toggles on/off.
 
-I've got a core part of it here:
+So IMHO this one should be dropped.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=jitalloc/v1
+> +#define KEY_KBDILLUMCOLORCYCLE		0x2e9
 
-and I hope I'll get it ready to post this week.
+This one is fine.
 
-> Thanks,
-> Song
+> +#define KEY_KBDILLUMCHANGE		0x2ea
 
--- 
-Sincerely yours,
-Mike.
+Keyboard backlight support should be exported to userspace as a LED class device, see e.g. :
+
+drivers/platform/x86/thinkpad_acpi.c    : tpacpi_led_kbdlight
+drivers/platform/x86/dell/dell-laptop.c : kbd_led
+
+And the LED class device sysfs API already has a mechanism for signalling kbd-brightness changes triggered by the hw itself (e.g. by the embedded controller) to userspace. See the use of the 
+LED_BRIGHT_HW_CHANGED flag and the calling of led_classdev_notify_brightness_hw_changed() in the 2 above drivers.
+
+So strong NACK for adding KEY_KBDILLUMCHANGE, this is duplicate with the led_classdev_notify_brightness_hw_changed() functionality which is already supported by userspace. E.g. GNOME will show an OSD notification similar to the sound volume change OSD when changing the keyboard brightness through EC handled hotkeys on ThinkPads and various Dell models.
+
+TL;DR: to me only KEY_KBDILLUMCOLORCYCLE makes sense, assuming that this needs to be handled by userspace, if this is handled in the EC then this too should simply call led_classdev_notify_brightness_hw_changed()
+
+Regards,
+
+Hans
+
+
+
+
+
+> +
+>  /* We avoid low common keys in module aliases so they don't get huge. */
+>  #define KEY_MIN_INTERESTING	KEY_MUTE
+>  #define KEY_MAX			0x2ff
+
