@@ -2,182 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1470717557
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 06:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05AD171756D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 06:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbjEaEZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 00:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
+        id S234423AbjEaE0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 00:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjEaEZS (ORCPT
+        with ESMTP id S234331AbjEaE0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 00:25:18 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9B6711B;
-        Tue, 30 May 2023 21:25:14 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8BxFvEpzHZkx9oCAA--.6413S3;
-        Wed, 31 May 2023 12:25:13 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxi7YmzHZkmsyBAA--.13862S3;
-        Wed, 31 May 2023 12:25:10 +0800 (CST)
-Message-ID: <3c88cab1-e175-ddcf-b323-437890cc2eec@loongson.cn>
-Date:   Wed, 31 May 2023 12:25:10 +0800
+        Wed, 31 May 2023 00:26:06 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2076.outbound.protection.outlook.com [40.107.94.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F0D139
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 21:26:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nhJ/2/dCvHrR40RxgxscDZKUfTc2fKkG/DlWTNpfKxvDxXmumb5LdxCg1cR/s6JOrhWPNwStbmgOMW+TEc/7BYbN+hGC5gmLHrH32R2KCDhxEZPYXTmCB4wi+VywvXUCnRXYIuGdXWudUQZVfiMHozTrI/6WFK1i2S0duUMJLiqhGL8QLKiexBkVtyVcrnfrWbPyniZIPuExIK95FLf8Z9DE1eFl/wq+S4p8DxXxOaUhecB3/4todlRRY03RvKoSUnHyihUTq6M+NOOuGGKmHAC5Fa2ePopp6/jsFb5ORueu1eUyTFsJdYeRzwpcPTf9txY26t2Ar4gW9FNNFfbNdg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=816920Rf2asBHNPAjMt6+r8ZmC3XEmTn/ze0cKJ+XEk=;
+ b=AXJuNHOomSY44yUVugYa0apo/053jn/10TsLuyKdKhzPKH/NDG/kLdP70VjD5TbLG2l5k6C4NItNtTKC6dK2Z/SWaiZd3nLU0TyxLOI6VODusdbbKkbuMEnNJkUDH1StlM+ef6jat49Gw2GFMSNBEl7BlO2aRh89hL3cEdqkdPHJkGTfHOQGOmo4Ah0eRxkNIy8aURejH8vre7wrwKDJ9ZP6HgmSO53nHrM5hpV4F1TYqVpG8AnVWQLnhuUzCAIonmDAiuzQWAjQVlMOPCLqeYUXTKrDwdiBlO2iggNkvzyqmUZvjlyGJax1JTTYWyiOAeNLubnKhjtSTye2TJXvhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=816920Rf2asBHNPAjMt6+r8ZmC3XEmTn/ze0cKJ+XEk=;
+ b=b64lo1+vuqngt2d5l6Bksdx9XfrhZ1VsJb/l7Zf8ziIg9N8lDhpKO5Q3Txt+gYl2RRgokjTYSmMfH2C0j0U5I+P4m6wjjElswdBsVLZYUv/szm9EQTMjWr1N1ntJnAIIgUpVG4sZzOsYwhRuz61wP+svZcl1n9KuIxvI3j1WSXs=
+Received: from DM6PR03CA0101.namprd03.prod.outlook.com (2603:10b6:5:333::34)
+ by MN2PR12MB4158.namprd12.prod.outlook.com (2603:10b6:208:15f::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Wed, 31 May
+ 2023 04:25:59 +0000
+Received: from DM6NAM11FT024.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:333:cafe::de) by DM6PR03CA0101.outlook.office365.com
+ (2603:10b6:5:333::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22 via Frontend
+ Transport; Wed, 31 May 2023 04:25:58 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT024.mail.protection.outlook.com (10.13.172.159) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6455.22 via Frontend Transport; Wed, 31 May 2023 04:25:58 +0000
+Received: from BLR-L-RKODSARA.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 30 May
+ 2023 23:25:53 -0500
+From:   Raghavendra K T <raghavendra.kt@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
+CC:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Mel Gorman" <mgorman@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David Hildenbrand" <david@redhat.com>, <rppt@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Bharata B Rao <bharata@amd.com>,
+        Aithal Srikanth <sraithal@amd.com>,
+        "kernel test robot" <oliver.sang@intel.com>,
+        Raghavendra K T <raghavendra.kt@amd.com>
+Subject: [RFC PATCH V3 0/1] sched/numa: Fix disjoint set vma scan regression
+Date:   Wed, 31 May 2023 09:55:25 +0530
+Message-ID: <cover.1685506205.git.raghavendra.kt@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] linux/pci.h: add a dummy implement for pci_clear_master()
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        kernel test robot <lkp@intel.com>
-References: <ZHZYVyqsJjiSNNsP@bhelgaas>
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <ZHZYVyqsJjiSNNsP@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Bxi7YmzHZkmsyBAA--.13862S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWF17AF1xXw4xXw47KrW5Awb_yoWrGrWfpa
-        y5KFyjkr18GFWYkws2q343ZFy5uws5Z34Fk34UG34q9a90vFyktF4vyF13CF1fZrWvkFya
-        qr4Yga4UWF45AaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bs8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26F4j6r4U
-        JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8w
-        CF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j
-        6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64
-        vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_
-        Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42
-        IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU1pVbDUUUUU=
-        =
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT024:EE_|MN2PR12MB4158:EE_
+X-MS-Office365-Filtering-Correlation-Id: 91de0582-5e30-4811-5ad1-08db618f220e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OTJJb9TlSSDuxcUtECf8siWDuPQddjfZjg394Q2uKAoeFfL9R38EJyGYFYRSFwL3DNpUzQEV0Nbd6y6L07ExnfajXbVWlj8kUtHyGR59BooJQuGIh3OFfrJs5RUNbJS7WuOzogbwPhcM+OarpXqT9uRhxEz6SPh48rvdHOo+C0toQ+qAvx5qcF32a7LV39sDzH2nqU1owNrkXqikcQqC5eX/wdA0NETK4tOMRXuXlc700PmUqYSji6nwZGJlwWBJvErt5N5lnKE83d2Dr1IICbPkH5tmbyHMAX3hdhOH8wjMHDDMsuVr1+ZpnxGRcM/Zqeugf2qcUgvS8e64Q6yjmD20LSlYh1rSH0kEhfID+reXPf2VXlVcIRnvMQ6LAfa/y9ua50Y1ylQ1qL5D0Musu6LSLZA6+L137JnlixRpwP+O/X3ZJCjud9zdzu129qlvTEtSBgrltwvSLmYZzOGKGS+zn83qP2jiNol1thLe+nSwjcAZaELcRTniFS+j1c6NwoQj7lzCSbpJSYGZA84dtzwErojkHE36L+my5yC7FchQBw+61FcXC46RXpS1ngy4mlaKyIIuzSHujckrsoGVr5XTt6asTRyZU7mrtZWkeSbhItpVGABfE8A5pRPtlWSqabPkSf5IuN+beAdl5+JHiUSn6UrUMPwkZDzrNYcnCvVK3tpqhB+mW0KCJzLxNsDBi7eR/7i6xJ5gGryRbH69K9qYxpdfgi46ZSS5toUfinkVDrMkS5Gf7/Ce3LbA4Kd7DpKg4VVaZ/SCX/ojNCm6d+5OD/YD6vjsvfiiPMMR9O85XborU4NVO9UV+gYhkjLn
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(396003)(136003)(451199021)(36840700001)(40470700004)(46966006)(316002)(186003)(2906002)(16526019)(36860700001)(83380400001)(36756003)(2616005)(40460700003)(47076005)(40480700001)(426003)(336012)(6666004)(4326008)(70206006)(70586007)(66899021)(966005)(478600001)(41300700001)(7696005)(356005)(54906003)(82740400003)(81166007)(110136005)(26005)(8676002)(82310400005)(5660300002)(8936002)(7416002)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 04:25:58.1859
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91de0582-5e30-4811-5ad1-08db618f220e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT024.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4158
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+With the numa scan enhancements [1], only the threads which had previously
+accessed vma are allowed to scan.
 
-On 2023/5/31 04:11, Bjorn Helgaas wrote:
-> On Tue, May 30, 2023 at 06:16:55PM +0800, Sui Jingfeng wrote:
->> As some arch(m68k for example) doesn't have config_pci enabled, drivers[1]
->> call pci_clear_master() without config_pci guard can not built.
->>
->>     drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:
->>     In function 'etnaviv_gpu_pci_fini':
->>>> drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:32:9:
->>     error: implicit declaration of function 'pci_clear_master';
->>     did you mean 'pci_set_master'? [-Werror=implicit-function-declaration]
->>        32 |         pci_clear_master(pdev);
->>           |         ^~~~~~~~~~~~~~~~
->>           |         pci_set_master
->>     cc1: some warnings being treated as errors
->>
->> [1] https://patchwork.freedesktop.org/patch/539977/?series=118522&rev=1
-> I don't mind adding a stub if it's needed, but I don't understand why
-> it's needed here.
+While this had improved significant system time overhead, there were corner
+cases, which genuinely need some relaxation for e.g., concern raised by
+PeterZ where unfairness amongst the thread belonging to disjoint set of vmas,
+that can potentially amplify the side effects, where vma regions belonging
+to some of the tasks being left unscanned.
 
-For a single driver that supports both platform devices and PCI devices,
+[1] had handled that issue by allowing first two scans at mm level
+(mm->numa_scan_seq) unconditionally. But that was not enough.
 
-Sometimes there is no way to separate the PCI driver part and the 
-platform driver part cleanly and clearly.
+One of the test that exercise similar side effect is numa01_THREAD_ALLOC where
+allocation happen by main thread and it is divided into memory chunks of 24MB
+to be continuously bzeroed (for 128 threads on my machine).
 
-For example, the module_init() and module_exit() functions,
+This was found in internal LKP run and also reported by [4].
 
-where we have to register PCI drivers and platform drivers there.
+While RFC V1 [2] tried to address this issue, the logic had more heuristics.
+RFC V2 [3] was rewritten based on vma_size.
 
-We can't simply let the entire driver depend on PCI in Kconfig,
+Current implementation drops some of additional logic for long running task
+and relooked some of the usage of READ_ONCE/WRITE_ONCE().
 
-This will make this driver unable to compile, which it's originally could.
+The current patch addresses the same issue in a more accurate way as
+follows:
 
-The PCI core could do such a thing for us, and
+(1) Any disjoint vma which is not associated with a task, that tries to
+scan is now allowed to induce prot_none faults. Total number of such
+unconditional scans allowed per vma is derived based on the exact vma size
+as follows:
 
-There is no need to introduce a driver-specific guard then.
+total scans allowed = 1/2 * vma_size / scan_size.
 
+(2) Total scans already done is maintained using a per vma scan counter.
 
-There is already a dummy stub for pci_set_master().
+With above patch, numa01_THREAD_ALLOC regression reported is resolved,
+but please note that with [1] there was a drastic decrease in system time
+for mmtest numa01, this patch adds back some of the system time.
 
-Therefore, pci_clear_master() should also have a counterpart.
+Summary: numa scan enhancement patch [1] togethor with the current patchset
+improves overall system time by filtering unnecessary numa scan
+while still retaining necessary scanning in some corner cases which
+involves disjoint set vmas.
 
-They should emerge in pairs.
+Your comments/Ideas are welcome.
 
-This could probably eliminate pain for PCI driver writers,
+Changes since:
+RFC V2:
+1) Drop reset of scan counter that tried to take care of long running workloads
+2) Correct usage of READ_ONCE/WRITE_ONCE (Bharata)
+3) Base is 6.4.0-rc2
 
-This patch is still useful.
+RFC V1:
+1) Rewrite entire logic based on actual vma size than heuristics
+2) Added Reported-by kernel test robot and internal LKP test
+3) Rebased to 6.4.-rc1 (ba0ad6ed89)
 
+Result:
+SUT: Milan w/ 2 numa nodes 256 cpus
 
->   The caller is in etnaviv_pci_drv.c, and if I
-> understand the patch at [1], etnaviv_pci_drv.c is only compiled when
-> CONFIG_PCI=y.
+Run of numa01_THREAD__ALLOC on 6.4.0-rc2 (that has w/ numascan enhancement)
+                	base-numascan	base		base+fix
+real    		1m1.507s	1m23.259s	1m2.632s
+user    		213m51.336s	251m46.363s	220m35.528s
+sys     		3m3.397s	0m12.492s	2m41.393s
 
-Yes, you are right. This is the right thing to do for the driver, though.
+numa_hit 		5615517		4560123		4963875
+numa_local 		5615505		4560024		4963700
+numa_other 		12		99		175
+numa_pte_updates 	1822797		493		1559111
+numa_hint_faults 	1307113		523		1469031
+numa_hint_faults_local 	612617		488		884829
+numa_pages_migrated 	694370		35		584202
 
-Pure PCI device driver does not need to worry about this.
+We can see regression in base real time recovered, but with some additional
+system time overhead.
 
-Like drm/ast, drm/amdgpu, drm/radeon, etc.
+Below is the mmtest autonuma performance
 
-But drm/etnaviv is special; it's a platform driver that could pass the 
-compile test originally.
+autonumabench
+===========
+(base 6.4.0-rc2 that has numascan enhancement)
+					base-numascan		base			base+fix
+Amean     syst-NUMA01                  300.46 (   0.00%)       23.97 *  92.02%*       67.18 *  77.64%*
+Amean     syst-NUMA01_THREADLOCAL        0.20 (   0.00%)        0.22 *  -9.15%*        0.22 *  -9.15%*
+Amean     syst-NUMA02                    0.70 (   0.00%)        0.71 *  -0.61%*        0.70 *   0.41%*
+Amean     syst-NUMA02_SMT                0.58 (   0.00%)        0.62 *  -5.38%*        0.61 *  -3.67%*
+Amean     elsp-NUMA01                  320.92 (   0.00%)      276.13 *  13.96%*      324.11 *  -0.99%*
+Amean     elsp-NUMA01_THREADLOCAL        1.02 (   0.00%)        1.03 *  -1.83%*        1.03 *  -1.83%*
+Amean     elsp-NUMA02                    3.16 (   0.00%)        3.93 * -24.20%*        3.14 *   0.81%*
+Amean     elsp-NUMA02_SMT                3.82 (   0.00%)        3.87 *  -1.27%*        3.44 *   9.90%*
 
+Duration User      403532.43   279173.53   359098.23
+Duration System      2114.31      179.20      481.54
+Duration Elapsed     2312.20     2004.48     2335.84
 
-When patching it (Etnaviv) with PCI device driver support,
+Ops NUMA alloc hit                  55795455.00    45452739.00    45500387.00
+Ops NUMA alloc local                55794177.00    45435858.00    45500070.00
+Ops NUMA base-page range updates   147858285.00       18601.00    42043107.00
+Ops NUMA PTE updates               147858285.00       18601.00    42043107.00
+Ops NUMA hint faults               150531983.00       18254.00    42450080.00
+Ops NUMA hint local faults %       125691825.00       11964.00    32993313.00
+Ops NUMA hint local percent               83.50          65.54          77.72
+Ops NUMA pages migrated             13535786.00        2207.00     4654628.00
+Ops AutoNUMA cost                     753952.10          91.44      212633.14
 
-This forces the PCI driver writer to add another config option.
+Please note there is a system time overhead added for numa01 but we still have very
+good improvement w.r.t base without numascan. 
 
-(which depends on the PCI config option.) in the Kconfig.
+[1] Link: https://lore.kernel.org/lkml/cover.1677672277.git.raghavendra.kt@amd.com/T/#t
+[2] Link: https://lore.kernel.org/lkml/cover.1683033105.git.raghavendra.kt@amd.com/
+[3] Link: https://lore.kernel.org/lkml/cover.1684228065.git.raghavendra.kt@amd.com/T/
+[4] Link: https://lore.kernel.org/lkml/db995c11-08ba-9abf-812f-01407f70a5d4@amd.com/T/
 
-For my case, it's theDRM_ETNAVIV_PCI_DRIVER config option.
+Raghavendra K T (1):
+  sched/numa: Fix disjoint set vma scan regression
 
+ include/linux/mm_types.h |  1 +
+ kernel/sched/fair.c      | 31 ++++++++++++++++++++++++-------
+ 2 files changed, 25 insertions(+), 7 deletions(-)
 
-This has side effects, but they are not severe.
-
-It boils down to the compilation time thing, while originally we want it 
-to be a runtime thing.
-
-Driver writers have to isolate PCI driver-related subroutines in a 
-separate source file.
-
-with the DRM_ETNAVIV_PCI_DRIVER option, guard callers of those subroutines,
-
-to let them not get compiled when CONFIG_PCIis disabled.
-
-
-> Bjorn
->
-> [1] https://lore.kernel.org/all/20230530160643.2344551-6-suijingfeng@loongson.cn/
->
->> Reported-by: kernel test robot <lkp@intel.com>
->> Closes: https://lore.kernel.org/oe-kbuild-all/202305301659.4guSLavL-lkp@intel.com/
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
->>   include/linux/pci.h | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/include/linux/pci.h b/include/linux/pci.h
->> index d0c19ff0c958..71c85380676c 100644
->> --- a/include/linux/pci.h
->> +++ b/include/linux/pci.h
->> @@ -1904,6 +1904,7 @@ static inline int pci_dev_present(const struct pci_device_id *ids)
->>   #define pci_dev_put(dev)	do { } while (0)
->>   
->>   static inline void pci_set_master(struct pci_dev *dev) { }
->> +static inline void pci_clear_master(struct pci_dev *dev) { }
->>   static inline int pci_enable_device(struct pci_dev *dev) { return -EIO; }
->>   static inline void pci_disable_device(struct pci_dev *dev) { }
->>   static inline int pcim_enable_device(struct pci_dev *pdev) { return -EIO; }
->> -- 
->> 2.25.1
->>
 -- 
-Jingfeng
+2.34.1
 
