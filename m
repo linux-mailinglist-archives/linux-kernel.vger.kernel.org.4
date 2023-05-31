@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE05D718349
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6346D7183EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237037AbjEaNtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:49:15 -0400
+        id S237426AbjEaNxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:53:45 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236949AbjEaNsc (ORCPT
+        with ESMTP id S237470AbjEaNum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:48:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D9426A9;
-        Wed, 31 May 2023 06:44:46 -0700 (PDT)
+        Wed, 31 May 2023 09:50:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE7B35A8;
+        Wed, 31 May 2023 06:46:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A88F63B60;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A70A363B65;
+        Wed, 31 May 2023 13:44:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AEA6C4339C;
         Wed, 31 May 2023 13:44:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8392C433D2;
-        Wed, 31 May 2023 13:44:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540664;
-        bh=+cMElBBJhY9KNkK/KmzLM6xQtVeUTAK2C+IsTD/53KM=;
+        s=k20201202; t=1685540666;
+        bh=Id+vE1fquZHnK+zxrlnqQUaAN4QawDkF3Bh7U92IQgM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aD62urD339QFX2YkdndVWnvBxB2kSuisZQfl1ClSGEKaDsfFi54ulObLsoSb52uge
-         QaefpdcZIYroARIKqh7t8icacAVz8Dt39HTcZt+ofC9a2Y2m+TFoDdH21Ydw7d/jBj
-         AxfmJofdINXZIclDZC3ZqILa4Eej/YwbFE2k7KVx3v8uMWs9Os2oYwLAatGC2ERere
-         qNeuBj+F7CAWHt6O3i2+VMFFGK+KM3VK7AUJRE1dKEETVxzXVhOu8oRsrIAV+ioqjO
-         lX7oXIY0/+idBvnfY8UGSL+sVd0Li6RU5EiskXfPN+Q6dXQku7QBdCDWcwWQ/CKiTS
-         f0epAWzhX/lMg==
+        b=bxIbUOwHf6Syt/EIXOunyX907YcarKdg9n7suZELfOMMBjivPrdimgMiymyFvxIEg
+         +X8QE0URvTfvX86sOvSx7CMiSEQc/khXdwlvBXJJgC4UkCSjeBmDF7LqCLM15Az64/
+         m925uM4Wc2aiXIWvlHHf7uZxssgyx9LyWGZ5Yz3Wg6UBxIS8dmEZwMU/fdynh2cg46
+         GF5KzOoqRWp+Hu+f+zGzqmfmb7E0FyzYO4rQW7tWlwiWKOp6F/U+L3gU190iHr1rdh
+         5ErfUGbDWHlDC8MsyqUgwOaG8Bl0SsMWu8kgUAOZqBfrbl/opZhnKkYsmFBPTMOlx7
+         b8WY3G0zAioPQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>, Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>, sre@kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 06/21] power: supply: Ratelimit no data debug output
-Date:   Wed, 31 May 2023 09:43:59 -0400
-Message-Id: <20230531134415.3384458-6-sashal@kernel.org>
+Cc:     Alexandru Sorodoc <ealex95@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, corentin.chary@gmail.com,
+        markgross@kernel.org, acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 07/21] platform/x86: asus-wmi: Ignore WMI events with codes 0x7B, 0xC0
+Date:   Wed, 31 May 2023 09:44:00 -0400
+Message-Id: <20230531134415.3384458-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134415.3384458-1-sashal@kernel.org>
 References: <20230531134415.3384458-1-sashal@kernel.org>
@@ -48,8 +49,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,41 +59,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+From: Alexandru Sorodoc <ealex95@gmail.com>
 
-[ Upstream commit 155c45a25679f571c2ae57d10db843a9dfc63430 ]
+[ Upstream commit 362c1f2ec82cb65940e1c73e15a395a7a891fc6f ]
 
-Reduce the amount of output this dev_dbg() statement emits into logs,
-otherwise if system software polls the sysfs entry for data and keeps
-getting -ENODATA, it could end up filling the logs up.
+On ASUS GU604V the key 0x7B is issued when the charger is connected or
+disconnected, and key 0xC0 is issued when an external display is
+connected or disconnected.
 
-This does in fact make systemd journald choke, since during boot the
-sysfs power supply entries are polled and if journald starts at the
-same time, the journal is just being repeatedly filled up, and the
-system stops on trying to start journald without booting any further.
+This commit maps them to KE_IGNORE to slience kernel messages about
+unknown keys, such as:
 
-Signed-off-by: Marek Vasut <marex@denx.de>
+    kernel: asus_wmi: Unknown key code 0x7b
+
+Signed-off-by: Alexandru Sorodoc <ealex95@gmail.com>
+Link: https://lore.kernel.org/r/20230512101517.47416-1-ealex95@gmail.com
 Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/power_supply_sysfs.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/platform/x86/asus-nb-wmi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index a616b9d8f43c5..2b1df9c339699 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -276,7 +276,8 @@ static ssize_t power_supply_show_property(struct device *dev,
- 
- 		if (ret < 0) {
- 			if (ret == -ENODATA)
--				dev_dbg(dev, "driver has no data for `%s' property\n",
-+				dev_dbg_ratelimited(dev,
-+					"driver has no data for `%s' property\n",
- 					attr->attr.name);
- 			else if (ret != -ENODEV && ret != -EAGAIN)
- 				dev_err_ratelimited(dev,
+diff --git a/drivers/platform/x86/asus-nb-wmi.c b/drivers/platform/x86/asus-nb-wmi.c
+index 74637bd0433e6..b4a5cbdae904e 100644
+--- a/drivers/platform/x86/asus-nb-wmi.c
++++ b/drivers/platform/x86/asus-nb-wmi.c
+@@ -507,6 +507,7 @@ static const struct key_entry asus_nb_wmi_keymap[] = {
+ 	{ KE_KEY, 0x71, { KEY_F13 } }, /* General-purpose button */
+ 	{ KE_IGNORE, 0x79, },  /* Charger type dectection notification */
+ 	{ KE_KEY, 0x7a, { KEY_ALS_TOGGLE } }, /* Ambient Light Sensor Toggle */
++	{ KE_IGNORE, 0x7B, }, /* Charger connect/disconnect notification */
+ 	{ KE_KEY, 0x7c, { KEY_MICMUTE } },
+ 	{ KE_KEY, 0x7D, { KEY_BLUETOOTH } }, /* Bluetooth Enable */
+ 	{ KE_KEY, 0x7E, { KEY_BLUETOOTH } }, /* Bluetooth Disable */
+@@ -532,6 +533,7 @@ static const struct key_entry asus_nb_wmi_keymap[] = {
+ 	{ KE_KEY, 0xA6, { KEY_SWITCHVIDEOMODE } }, /* SDSP CRT + TV + HDMI */
+ 	{ KE_KEY, 0xA7, { KEY_SWITCHVIDEOMODE } }, /* SDSP LCD + CRT + TV + HDMI */
+ 	{ KE_KEY, 0xB5, { KEY_CALC } },
++	{ KE_IGNORE, 0xC0, }, /* External display connect/disconnect notification */
+ 	{ KE_KEY, 0xC4, { KEY_KBDILLUMUP } },
+ 	{ KE_KEY, 0xC5, { KEY_KBDILLUMDOWN } },
+ 	{ KE_IGNORE, 0xC6, },  /* Ambient Light Sensor notification */
 -- 
 2.39.2
 
