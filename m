@@ -2,295 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0FB718742
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA4871873E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbjEaQWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 12:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50708 "EHLO
+        id S229613AbjEaQWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 12:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjEaQWp (ORCPT
+        with ESMTP id S229566AbjEaQWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 12:22:45 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B815132;
-        Wed, 31 May 2023 09:22:42 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2af2c35fb85so63884201fa.3;
-        Wed, 31 May 2023 09:22:42 -0700 (PDT)
+        Wed, 31 May 2023 12:22:32 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2107.outbound.protection.outlook.com [40.107.237.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37ED611F;
+        Wed, 31 May 2023 09:22:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MkJdLkPiEcOpZgc34EBWi4MWxnpxPaPfiJbZm0i4F0ly2+xXlf6g0b4mdLb2yuzn6zdzy4TyMFglfpNAac7zGfWSR8Te6W9MY7qGNa+AIFiHF5pj34FGXGzN33RLLXHuhQ6JM7B4bWN90ZkxxrOAfYv63jRqD8oPvlAGHgv5QaiNKsQTFa1GHWS5Xu4zGxwvcEfjRJYlmIbPoFCbI2UFbbDZr3toTrX0XIQ0nYtzB3RDc4/AXCBBdBRL8lvFxypCgpx0IW1O5nc1LjFoqtdHxJmggoj1KmEq/w1tZiPTHh8V/+rBzP/zHfGmWSKaMOBamsezDbdo8Ofr1rMSODMPSA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+jiX4gOd+HKCSgYdLy/OMll4IUn+PDUpdkkx3aLcpWw=;
+ b=QM5+kETjC6h1GyDlYZHucTcomMds2y7nFP0aoFfkGLpyneVH/2BzK62jaKph2IrO4edNZV/syYXEcGfpf8BFDKtJwUA5JJWpGry+GylUZCXhAE+V2yKvRXz+NcfgeYEOZ07Y9a7fO5m4n3aqzDrTWeKI5WX9SyBhsuzM6YihmVUDpVEmDGZ6U8QA5E8t2Jy9MhvfUe83Z7EBTWc2Pafl0IcDPrikEJKpIN3dNs9OIP1VhcURNcghEBZ21DK9Fb41JGS1YvaHzqYhgIkYAi2eahY9iKjkq+yThcdhRKESfdqzDOwecOVafGJwo/1LIHcAtSVNTPEHUM7CJOnI732j7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685550160; x=1688142160;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O44tdFoCQTVZoNLcx4Jw4lcBxJgV7e1izc2pQGeyMtU=;
-        b=hccPON+QR72ivDvazjP93XS1+i5Ru4KN8gNqIBSjluVihSYaEp5QhJJIJ/GPUrf/Ur
-         o3XPAPuHX9U8qUn3B0K5SEna1kNSfMTmAuVTnc/SL9Bh8n+xl9U/6QJi7hV/NLQ7Ku66
-         FE+EcNhrAwPNPasw6c+Q7RhH9A25kLGAtQvpOv0QIpXoxGY/9dUGEgiqFNEb6RBxKr1Y
-         TzVetaJfQMlNnA/cz1eVVDilGuVS+4IEDbnWnLmYRfNw6kh5LVGGxn98LvaTcU4RFFLg
-         qeRkeUlnRzQGPwq0qI/vIZ4Zp2Vu2a3PEjiiibjyctLYIT/Wv48/WiSqKvhoHoU4cpuu
-         hIVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685550160; x=1688142160;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O44tdFoCQTVZoNLcx4Jw4lcBxJgV7e1izc2pQGeyMtU=;
-        b=jEvXIMHkjB79I4BHZRvgtF+DoCRL7n83k9P85Q7jrEysERkVOhsAj3PwoCi7y0xvyj
-         HjcnHvDqBxgkzCIo9sc790yBGGBHZraBUvt2Aex9YisVKJW25PSQ+T8TZwAv2nPasK4g
-         7NtnYHyChC7GUQ+OPvMDO/I+D5ey4rYFoUpaPH7NAsVrzbq9mNLADmYIe0Qv31V/H2XF
-         UVvxB9l8znJqL7JhsWQkj7mPtjb+6E5ZX+dYyUOdH0L+fjUkbSsJt8ghTsWFoUMnpvh2
-         43Yw65UZ0zmqJygNhf2n/uG0jNg9Db8e3h80IVDi8TEjp6USgcKCxfVqERa7KvnPVZiP
-         XwnA==
-X-Gm-Message-State: AC+VfDzT2TCZ4fLkfKTcl/XWzX3XGinQqjrzaR+zDVbASEJtImZT1t2r
-        fYkfoOODXnTnXcd051mXdfEcvQIYwQ/Iq9fWxOJkgI/7qZA=
-X-Google-Smtp-Source: ACHHUZ65gHJuYKkAkZR3FktPreo0ps4YUOaxWXtqWmXF3hTtgMbi30hbfdX0TFUnX0Tm5aNwheyvS3vRqrCtjg9DSl8=
-X-Received: by 2002:a2e:868e:0:b0:2ac:70fa:fb7b with SMTP id
- l14-20020a2e868e000000b002ac70fafb7bmr3305255lji.18.1685550160150; Wed, 31
- May 2023 09:22:40 -0700 (PDT)
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+jiX4gOd+HKCSgYdLy/OMll4IUn+PDUpdkkx3aLcpWw=;
+ b=Z4tlrCcaaweNC0Ybchv+M+igDDbO+v52nIKlYp8FN998brgPDv3/H4JRm7/qiJiCa5sE0mWIi1aS56MZq8UhzY2PJQksz27fFPY4z+15K0/f0KhqPiuVqULMzuHhx8q83GIUeKLGEvJQ373gzTEJwdjjPOTJNwQsA8d0Y1+BuUk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CH2PR13MB3717.namprd13.prod.outlook.com (2603:10b6:610:9d::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 31 May
+ 2023 16:22:27 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.024; Wed, 31 May 2023
+ 16:22:27 +0000
+Date:   Wed, 31 May 2023 18:22:19 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org
+Subject: Re: [PATCH RFC net-next v3 7/8] vsock: Add lockless sendmsg() support
+Message-ID: <ZHd0O1L7FH2XJEnd@corigine.com>
+References: <20230413-b4-vsock-dgram-v3-0-c2414413ef6a@bytedance.com>
+ <20230413-b4-vsock-dgram-v3-7-c2414413ef6a@bytedance.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230413-b4-vsock-dgram-v3-7-c2414413ef6a@bytedance.com>
+X-ClientProxiedBy: AM9P193CA0022.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21e::27) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-References: <20230519201300.12964-1-jorge.lopez2@hp.com> <20230519201300.12964-3-jorge.lopez2@hp.com>
- <efd7d98f-c441-4098-9ace-93529989d51d@t-8ch.de>
-In-Reply-To: <efd7d98f-c441-4098-9ace-93529989d51d@t-8ch.de>
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-Date:   Wed, 31 May 2023 11:22:04 -0500
-Message-ID: <CAOOmCE-EmwivPN_LJWqWMNe5WufTdmOHMuzjbJ1nNZ3n+bmpFQ@mail.gmail.com>
-Subject: Re: [PATCH v15 02/13] hp-bioscfg: bioscfg-h
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ilpo.jarvinen@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB3717:EE_
+X-MS-Office365-Filtering-Correlation-Id: dafe0ad1-1ade-4b73-c472-08db61f33955
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qKmKnvy7fEaWPN7JatqObqxvLGdbf+x43AhsZUofHmTy9TSkNAvTiexF7lWOzJa70qMVPz5UYeeVQeu3An/bVLNZmM4oP5yViGgJfI2QqJMo1jNC69Pi+6Y1owZoyEJLkC5acQG6KajG1ceCZJB/HZhlgCqiX87odxq5+vL4JPLaLMhScyGMKtFD/j3AxydgI4fw7gD+xGb78gTYC4fpX4a0kTIvoLhqWozOo/CgCnNkLpNZrBH1Ur8uP2pBKQpYr3u4m25fBDn1Ulhv8JAq+ax5qGOiaO4ToVNdjh9iar3fKJgI1x1qf0qWB9FfgSn8cXqyOUjbxaQv1PFTov6J89CfzRZNxyiPnPvHeqIJbWaDk2bmaL5Par1NKmr0iozv+rED7lLLe2ZMlWcudqcPPo9wJnLTzrb4sHNACiQyHSmq8NdMzwYniilNjdYNDOCki2MMUX4u9VVsnATO2NZCssEa3ycIrjUdWtwpuQEzcYoT5zaR/z3Bi3t67JlwHAzCTvJ/KGvYB8Wsrnxx2rJEbfaeJApF2vFzRGlzyfnx4m289hObTUi87l86LCqC8OlF3Z1y0n2Fe0l0lmR/Nl4JktO+U9buTGmDsJxVtrkgh08=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(346002)(136003)(376002)(39840400004)(451199021)(36756003)(6666004)(38100700002)(41300700001)(6486002)(5660300002)(54906003)(478600001)(2616005)(6512007)(2906002)(44832011)(6506007)(86362001)(186003)(7416002)(83380400001)(4326008)(8936002)(66946007)(6916009)(66476007)(8676002)(316002)(66556008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vg8sEP3ZReXmc0eHMfNOXBsnhq1I3zHEzEEEVsauF9Kctai/NS9rsxSkf5KU?=
+ =?us-ascii?Q?mW9KA4uTVUudzPKcKbuVyzRTLCeeeOsTiQOM/57DeC1V9vyHs3WpXQEuAzlo?=
+ =?us-ascii?Q?bK8swoLHOhpI+szypXjReR0BkOriNCkfFj2yOZALrgiWOqrKvL3AdqGOpbQX?=
+ =?us-ascii?Q?+SQH/PDtgKaj9mTBpLItMRB6266Me7O8C7WyByl+PsIzf2woSAZ7C0zC/M1H?=
+ =?us-ascii?Q?Pky6c8ZkGeWY4pgEWwREunKGSzyieVZhIL1iFl5xfIICwwBPxburryPaf99o?=
+ =?us-ascii?Q?/qu9L/9X1QlYPGu1QOjQiOt2PCmiXByjY+AwbBOsL3uGpv6nG0NmGkQPXLhE?=
+ =?us-ascii?Q?b5ZKFvKYoM5JorgD6VRnn0LPnwP3c/e2E+ljeXzoINfARkivfd3/9DPvp8vj?=
+ =?us-ascii?Q?lgtluAJJ/6cd9VQ/rcH181eu6+BeJ57HIA+LGamQ6Y+y5TVJ0XiYn92VilmU?=
+ =?us-ascii?Q?4v7Y60XwwQ17aEPc6DN+dHsWq0OqWskejmbwHHehRO1+K83j4ZaHn/bT2c4U?=
+ =?us-ascii?Q?0LbAe7ORguXdrWIDF3i9ydCreZsHIV2yCkpFczJrYeA8CuoTKx1oR44MVij/?=
+ =?us-ascii?Q?Oyvz/iKKbEJ24GvCS5IoQqDY109RIP7dx9ngTCyxovwadfscPV0GIgfFCDxt?=
+ =?us-ascii?Q?j/UiKrxTGbvFeaNuDKmd921TooEPHCKFvJQ8bG+3CZ/po7pH5cW/iuU6Wa6b?=
+ =?us-ascii?Q?TpLE+J0/l4TN6YntSwlesYA39StQl13AIDZs5iWu0EroVN2HwgWoWqphUImV?=
+ =?us-ascii?Q?emttUDiXDHgUw2K//Qad1SRYyMovsaIXql/i0x8/HQByxqlRMXKcIHdwUFx1?=
+ =?us-ascii?Q?eJ9mqN66HSqCfROW2rc18Yr/6L+e1xKdhe2ADe5oLe4eF7ZMqqPDYHGWJ+u/?=
+ =?us-ascii?Q?Sa+WnLdK0PvsyXI0pFDa0Z1zYBfmlL4NGLvG+1VhyetVEpVfk6k5kdW76Wa6?=
+ =?us-ascii?Q?weXBhsPWolg8eFjgThSaSdwXO0RH57AY7WAIAfPjW12e+qrxTuWqRomYgcOE?=
+ =?us-ascii?Q?3hYVe9Abpjv5ddnu+2WTb903lePGhP0zWjftRiVHa4u+dPKFVjOhuWWP3l92?=
+ =?us-ascii?Q?9QRYI5CIxyrUFtqbCjgH4kKMpiGfsEqddK3pKV4TeD7j8ZMnJVu4oIz66IZ+?=
+ =?us-ascii?Q?UdLf+k47bU7DRI0zC04QqvQUrN/CDxmNrkcNKn395AGZbqA+u8qbIf+BCoFs?=
+ =?us-ascii?Q?GnVvBbpIERNiYIC7jAk3o0KKMchNB51IFN2kT15kC7iiBSwkFUoezbLvTWFw?=
+ =?us-ascii?Q?7jzdExu31ea3nG2jJJRWxSUqC21JtJm04zbcJRgRyuYrVQ/j9D/MLFHy5LOq?=
+ =?us-ascii?Q?c36WFAZbfMp8dngH2uOwQnizON0BvkJvBHnNAE1aSNzqEIxxMiuu4ByPM72z?=
+ =?us-ascii?Q?6AIcEgrFUhw4tInZilSfVSYar1N/h+IIu2yFy0RX4fXwSmb1a/QhzRIehV1s?=
+ =?us-ascii?Q?ykgWBjPqhjfRaASCP21+Fb/KQtv1NmBoYoYjXHJhmEtztM7DvI3rO63/fsmZ?=
+ =?us-ascii?Q?+Lyowq4N4fJL92M0JqOEQdHi81dkDS0nzihJ+O+grqAbfgOHXcOMUyMewqXd?=
+ =?us-ascii?Q?lcz/zHgDKCal+haTP0YLyCsgkPpYhf88lS81oEQ4Mg6cgjMDlJV9wGZw1JMR?=
+ =?us-ascii?Q?bybClH9iRpRWWnXw72JA3oXcpJCwffwiwX/S/aRjBg5BwnSI7r7n/8t9DUDm?=
+ =?us-ascii?Q?bQ//9Q=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dafe0ad1-1ade-4b73-c472-08db61f33955
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 16:22:27.2722
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: R1FzCkie19MjJwBjduRnvKipKA2NzRENuWeySDh1c+UDzJvWhyqMZP0HgtixiLhpaBdsrdTOVarFz7FMlj22wGYYB4CC5R3z6Dc0CUqc73I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB3717
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 10:14=E2=80=AFAM Thomas Wei=C3=9Fschuh <thomas@t-8c=
-h.de> wrote:
->
-> Hi Jorge,
->
-> sorry for the long delay.
+On Wed, May 31, 2023 at 12:35:11AM +0000, Bobby Eshleman wrote:
 
-No worries.  I got Covid while you were away so I am slowly coming back.
+...
 
-> Here we go again :-)
->
-> On 2023-05-19 15:12:49-0500, Jorge Lopez wrote:
->
-> <snip>
->
-> > ---
-> >  drivers/platform/x86/hp/hp-bioscfg/bioscfg.h | 486 +++++++++++++++++++
-> >  1 file changed, 486 insertions(+)
-> >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/bioscfg.h
-> >
-> > diff --git a/drivers/platform/x86/hp/hp-bioscfg/bioscfg.h b/drivers/pla=
-tform/x86/hp/hp-bioscfg/bioscfg.h
-> > new file mode 100644
-> > index 000000000000..3a3b24f766d2
-> > --- /dev/null
-> > +++ b/drivers/platform/x86/hp/hp-bioscfg/bioscfg.h
-> > @@ -0,0 +1,486 @@
-> > +/* SPDX-License-Identifier: GPL-2.0
-> > + *
-> > + * Definitions for kernel modules using hp_bioscfg driver
-> > + *
-> > + *  Copyright (c) 2022 HP Development Company, L.P.
-> > + */
-> > +
-> > +#ifndef _HP_BIOSCFG_H_
-> > +#define _HP_BIOSCFG_H_
-> > +
-> > +#include <linux/wmi.h>
-> > +#include <linux/types.h>
-> > +#include <linux/device.h>
-> > +#include <linux/module.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/capability.h>
->
-> Is this needed?
+Hi Bobby,
 
-+#include <linux/capability.h> is not needed.  It will be removed.
+some more feedback from my side.
 
->
-> > +#include <linux/nls.h>
-> > +
-> > +#define DRIVER_NAME          "hp-bioscfg"
-> > +
-> > +#define MAX_BUFF_SIZE                512
-> > +#define MAX_KEY_MOD_SIZE     256
-> > +#define MAX_PASSWD_SIZE              64
-> > +#define MAX_PREREQUISITES_SIZE       20
-> > +#define MAX_REQ_ELEM_SIZE    128
-> > +#define MAX_VALUES_SIZE              16
-> > +#define MAX_ENCODINGS_SIZE   16
-> > +#define MAX_ELEMENTS_SIZE    16
-> > +
-> > +#define SPM_STR_DESC         "Secure Platform Management"
-> > +#define SPM_STR                      "SPM"
-> > +#define SURE_START_DESC              "Sure Start"
-> > +#define SURE_START_STR               "Sure_Start"
-> > +#define SETUP_PASSWD         "Setup Password"
-> > +#define POWER_ON_PASSWD              "Power-On Password"
-> > +
-> > +#define LANG_CODE_STR                "en_US.UTF-8"
-> > +#define SCHEDULE_POWER_ON    "Scheduled Power-On"
-> > +
-> > +#define COMMA_SEP            ","
-> > +#define SEMICOLON_SEP                ";"
-> > +
-> > +/* Sure Admin Functions */
-> > +
-> > +#define UTF_PREFIX           "<utf-16/>"
-> > +#define BEAM_PREFIX          "<BEAM/>"
-> > +
-> > +enum mechanism_values {
-> > +     PASSWORD                =3D 0x00,
-> > +     SIGNING_KEY             =3D 0x01,
-> > +     ENDORSEMENT_KEY         =3D 0x02,
-> > +};
-> > +
-> > +#define BIOS_ADMIN           "bios-admin"
-> > +#define POWER_ON             "power-on"
-> > +#define BIOS_SPM             "enhanced-bios-auth"
-> > +
-> > +#define PASSWD_MECHANISM_TYPES "password"
-> > +
-> > +#define HP_WMI_BIOS_GUID             "5FB7F034-2C63-45e9-BE91-3D44E2C7=
-07E4"
-> > +
-> > +#define HP_WMI_BIOS_STRING_GUID              "988D08E3-68F4-4c35-AF3E-=
-6A1B8106F83C"
-> > +#define HP_WMI_BIOS_INTEGER_GUID     "8232DE3D-663D-4327-A8F4-E293ADB9=
-BF05"
-> > +#define HP_WMI_BIOS_ENUMERATION_GUID "2D114B49-2DFB-4130-B8FE-4A3C09E7=
-5133"
-> > +#define HP_WMI_BIOS_ORDERED_LIST_GUID        "14EA9746-CE1F-4098-A0E0-=
-7045CB4DA745"
-> > +#define HP_WMI_BIOS_PASSWORD_GUID    "322F2028-0F84-4901-988E-01517604=
-9E2D"
-> > +#define HP_WMI_SET_BIOS_SETTING_GUID "1F4C91EB-DC5C-460b-951D-C7CB9B4B=
-8D5E"
-> > +
-> > +enum hp_wmi_spm_commandtype {
-> > +     HPWMI_SECUREPLATFORM_GET_STATE  =3D 0x10,
-> > +     HPWMI_SECUREPLATFORM_SET_KEK    =3D 0x11,
-> > +     HPWMI_SECUREPLATFORM_SET_SK     =3D 0x12,
-> > +};
-> > +
-> > +enum hp_wmi_surestart_commandtype {
-> > +     HPWMI_SURESTART_GET_LOG_COUNT   =3D 0x01,
-> > +     HPWMI_SURESTART_GET_LOG         =3D 0x02,
-> > +};
-> > +
-> > +enum hp_wmi_command {
-> > +     HPWMI_READ              =3D 0x01,
-> > +     HPWMI_WRITE             =3D 0x02,
-> > +     HPWMI_ODM               =3D 0x03,
-> > +     HPWMI_SURESTART         =3D 0x20006,
-> > +     HPWMI_GM                =3D 0x20008,
-> > +     HPWMI_SECUREPLATFORM    =3D 0x20010,
-> > +};
-> > +
-> > +struct bios_return {
-> > +     u32 sigpass;
-> > +     u32 return_code;
-> > +};
-> > +
+> Throughput metrics for single-threaded SOCK_DGRAM and
+> single/multi-threaded SOCK_STREAM showed no statistically signficant
 
-<snip>
+nit: s/signficant/significant/
 
-> > +
-> > +struct secure_platform_data {
-> > +     struct kobject *attr_name_kobj;
-> > +     u8 attribute_name[MAX_BUFF_SIZE];
-> > +     u8 *endorsement_key;
-> > +     u8 *signing_key;
-> > +     u8 *auth_token;
-> > +     bool is_enabled;
-> > +     u32 mechanism;
-> > +};
-> > +
-> > +struct bioscfg_priv {
-> > +     struct wmi_device *bios_attr_wdev;
->
-> This wmi_device is never really used.
+> throughput changes (lowest p-value reaching 0.27), with the range of the
+> mean difference ranging between -5% to +1%.
+> 
+> Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
 
-bios_attr_wdev will be removed from this file and biosattr-interface.c
+...
 
->
-> > +     struct kset *authentication_dir_kset;
-> > +     struct kset *main_dir_kset;
-> > +     struct device *class_dev;
-> > +     struct string_data *string_data;
-> > +     u32 string_instances_count;
-> > +     struct integer_data *integer_data;
-> > +     u32 integer_instances_count;
-> > +     struct enumeration_data *enumeration_data;
-> > +     u32 enumeration_instances_count;
-> > +     struct ordered_list_data *ordered_list_data;
-> > +     u32 ordered_list_instances_count;
-> > +     struct password_data *password_data;
-> > +     u32 password_instances_count;
-> > +
-> > +     struct kobject *sure_start_attr_kobj;
-> > +     struct secure_platform_data spm_data;
-> > +     u8 display_name_language_code[MAX_BUFF_SIZE];
-> > +     bool pending_reboot;
-> > +     struct mutex mutex;
-> > +};
-> > +
-> > +/* global structure used by multiple WMI interfaces */
-> > +extern struct bioscfg_priv bioscfg_drv;
-> > +
-> > +enum hp_wmi_data_type {
-> > +     HPWMI_STRING_TYPE,
-> > +     HPWMI_INTEGER_TYPE,
-> > +     HPWMI_ENUMERATION_TYPE,
-> > +     HPWMI_ORDERED_LIST_TYPE,
-> > +     HPWMI_PASSWORD_TYPE,
-> > +     HPWMI_SECURE_PLATFORM_TYPE,
-> > +     HPWMI_SURE_START_TYPE,
-> > +};
-> > +
+> @@ -120,8 +125,8 @@ struct vsock_transport {
+>  
+>  	/* DGRAM. */
+>  	int (*dgram_bind)(struct vsock_sock *, struct sockaddr_vm *);
+> -	int (*dgram_enqueue)(struct vsock_sock *, struct sockaddr_vm *,
+> -			     struct msghdr *, size_t len);
+> +	int (*dgram_enqueue)(const struct vsock_transport *, struct vsock_sock *,
+> +			     struct sockaddr_vm *, struct msghdr *, size_t len);
 
-<snip>
+Perhaps just a personal preference, but the arguments for these callbacks
+could have names.
 
-> > +/* Bioscfg */
-> > +
-> > +void hp_exit_attr_set_interface(void);
-> > +int hp_init_attr_set_interface(void);
-> > +size_t hp_calculate_string_buffer(const char *str);
-> > +size_t hp_calculate_security_buffer(const char *authentication);
-> > +void *hp_ascii_to_utf16_unicode(u16 *p, const u8 *str);
-> > +int hp_get_integer_from_buffer(u8 **buffer, u32 *buffer_size, u32 *int=
-eger);
-> > +int hp_get_string_from_buffer(u8 **buffer, u32 *buffer_size, char *dst=
-, u32 dst_size);
-> > +int hp_convert_hexstr_to_str(const char *input, u32 input_len, char **=
-str, int *len);
-> > +int hp_encode_outsize_for_pvsz(int outsize);
-> > +int hp_enforce_single_line_input(char *buf, size_t count);
-> > +void hp_set_reboot_and_signal_event(void);
-> > +ssize_t display_name_language_code_show(struct kobject *kobj,
-> > +                                     struct kobj_attribute *attr,
-> > +                                     char *buf);
-> > +union acpi_object *hp_get_wmiobj_pointer(int instance_id, const char *=
-guid_string);
-> > +int hp_get_instance_count(const char *guid_string);
-> > +void hp_update_attribute_permissions(bool isreadonly, struct kobj_attr=
-ibute *current_val);
-> > +void hp_friendly_user_name_update(char *path, const char *attr_name,
-> > +                               char *attr_display, int attr_size);
-> > +int hp_wmi_error_and_message(int error_code);
-> > +
-> > +#endif
-> > --
-> > 2.34.1
-> >
+>  	bool (*dgram_allow)(u32 cid, u32 port);
+>  	int (*dgram_get_cid)(struct sk_buff *skb, unsigned int *cid);
+>  	int (*dgram_get_port)(struct sk_buff *skb, unsigned int *port);
+> @@ -196,6 +201,17 @@ void vsock_core_unregister(const struct vsock_transport *t);
+>  /* The transport may downcast this to access transport-specific functions */
+>  const struct vsock_transport *vsock_core_get_transport(struct vsock_sock *vsk);
+>  
+> +static inline struct vsock_remote_info *
+> +vsock_core_get_remote_info(struct vsock_sock *vsk)
+> +{
+> +
+
+nit: no blank line here
+
+> +	/* vsk->remote_info may be accessed if the rcu read lock is held OR the
+> +	 * socket lock is held
+> +	 */
+> +	return rcu_dereference_check(vsk->remote_info,
+> +				     lockdep_sock_is_held(sk_vsock(vsk)));
+> +}
+> +
+>  /**** UTILS ****/
+>  
+>  /* vsock_table_lock must be held */
+
+...
+
+> @@ -300,17 +449,36 @@ static void vsock_insert_unbound(struct vsock_sock *vsk)
+>  	spin_unlock_bh(&vsock_table_lock);
+>  }
+>  
+> -void vsock_insert_connected(struct vsock_sock *vsk)
+> +int vsock_insert_connected(struct vsock_sock *vsk)
+>  {
+> -	struct list_head *list = vsock_connected_sockets(
+> -		&vsk->remote_addr, &vsk->local_addr);
+> +	struct list_head *list;
+> +	struct vsock_remote_info *remote_info;
+
+nit: I know that this file doesn't follow the reverse xmas tree
+     scheme - longest line to shortest - for local variable declarations.
+     But as networking code I think it would be good towards towards
+     that scheme as code is changed.
+
+	struct vsock_remote_info *remote_info;
+	struct list_head *list;
+
+> +
+> +	rcu_read_lock();
+> +	remote_info = vsock_core_get_remote_info(vsk);
+> +	if (!remote_info) {
+> +		rcu_read_unlock();
+> +		return -EINVAL;
+> +	}
+> +	list = vsock_connected_sockets(&remote_info->addr, &vsk->local_addr);
+> +	rcu_read_unlock();
+>  
+>  	spin_lock_bh(&vsock_table_lock);
+>  	__vsock_insert_connected(list, vsk);
+>  	spin_unlock_bh(&vsock_table_lock);
+> +
+> +	return 0;
+>  }
+
+...
+
+> @@ -1120,7 +1122,9 @@ virtio_transport_recv_connecting(struct sock *sk,
+>  	case VIRTIO_VSOCK_OP_RESPONSE:
+>  		sk->sk_state = TCP_ESTABLISHED;
+>  		sk->sk_socket->state = SS_CONNECTED;
+> -		vsock_insert_connected(vsk);
+> +		err = vsock_insert_connected(vsk);
+> +		if (err)
+> +			goto destroy;
+
+The destroy label uses skerr, but it is uninitialised here.
+
+A W=1 or C=1 will probably tell you this.
+
+>  		sk->sk_state_change(sk);
+>  		break;
+>  	case VIRTIO_VSOCK_OP_INVALID:
+
+...
