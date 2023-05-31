@@ -2,214 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7496F7187E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6337187E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjEaQ5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 12:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39288 "EHLO
+        id S229733AbjEaQ60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 12:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjEaQ5l (ORCPT
+        with ESMTP id S229551AbjEaQ6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 12:57:41 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837F8134;
-        Wed, 31 May 2023 09:57:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=sQf6qkA4MEbn8EichAXNjYGf8MDrQBBNv2l2z1zQPA0=; b=tc2HCj6Cn1LdEc84oXW9SaHEtv
-        3siyUr4dMxMBLVDobevnbEEiCz21oQMPxV9VZh6Q9LNtEMcFBYS0/98cfaEVHv8thxxgjG1cmFn4t
-        AcjBb3Ci7Pgy5/CA0pGmkxdp0M6zIjPEWocIqCFxop9tJ1i9uOZAB9ZjTQk5fpLmBNM5NoLqG66ee
-        qQ8q8/a6Rfm3a/iqnYo9R71yfBAtth+4fOyhrcuBFOBpMTxkZC20xc2lkU7XBk0In0NvoBlgaJeRQ
-        8G8wiV1+qXn6rNrksuo1Zi5gsUGzMKxkcYxW2iYrtCLBf78sPNkwEC7a8wXP0dUfjh9zrHddk0v1y
-        UYFFygGg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q4P8O-000XDH-2D;
-        Wed, 31 May 2023 16:57:16 +0000
-Date:   Wed, 31 May 2023 09:57:16 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, song@kernel.org, lucas.de.marchi@gmail.com,
-        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com,
-        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
-        lennart@poettering.net
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-Message-ID: <ZHd8bLPY4OQCb/Z5@bombadil.infradead.org>
-References: <CAHk-=whu8Wh4JP1hrc80ZvGgVW4GV6hw1vwzSiwOo9-1=Y1dWw@mail.gmail.com>
- <ZG/a+nrt4/AAUi5z@bombadil.infradead.org>
- <CAHk-=whiXzqprmQNRui3LbKQwvM8fg4nyAzWcU5qZs+kxBVzrA@mail.gmail.com>
- <ZHRpH-JXAxA6DnzR@hovoldconsulting.com>
- <CAHk-=wh6sXSO63kka+EWEqq0tGwtOnXYFWMXPQ6T_wZa+Np3MQ@mail.gmail.com>
- <ZHSeOUpKtyc8VKx5@hovoldconsulting.com>
- <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
- <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
- <ZHYitt7P7W+8ZlSB@bombadil.infradead.org>
- <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Wed, 31 May 2023 12:58:25 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2068.outbound.protection.outlook.com [40.107.94.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E9011D;
+        Wed, 31 May 2023 09:58:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b9ShEV4UnWlQh6hYpZQwGFzxAlook+bG7Y2sgCV9AXHrrYETDWBF2D9cjkLqljZ4uKBeerFXcpuzx1bzwC2n3n555PwNcqcyr9WQM2XuG8ZbjtPgm1yxrHluIRnIGGLmiDJDajiC5nNQZ9K0mT5+yEcpw1Epfsf/y6zw4h/xdCT3NJ+vjBO1U7dyssLrjFraDc77ys/tlc8pEGJNk8ZY3eSzZaPraLmhzrCYrEV6P4dsaSCmQKQoEHx5IaNUhyrdPzRW/q3hpwhoQ2/kaEACg1OUzu56lRFE2YW6G/zxI1G56yGGlLtnfVZn4sP2/9KJwhi9UNTOZCM8jndtgSF8GA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Qrrsbz5WgxuDvv2uwCzNewpl/IdorxzBBISQ5RvSCww=;
+ b=AmpfiEzHhPeXITfArPKcqmPhtrgDmgVXhB0juk+cBJ9wO2DYe0U77dtksuh9fmLJ2rM76rpuI5J4tKAhW3ue3Uty/4g8Be3JlFcBGaQn7EN+K/24+vRffO2m87+mOJSOLhlSKe0VJS16IZI+Itm+F9dVAu7qaPap31yPMUwwZ7q/8Yk0VdndDOFf63Qoh7udE01H+341MINr4MkKWzXYRjn/8SO6cIt6xc6H/0GEK7NU0Qzkq5PI3ZsWYQcTsynW3vpxAbYl6aodV4RMKnfYJEqBs4oBVPQYJXwVz5ZEGHlp/VQRLbdP9YYrUIFWHTSwPuESTQ7UByUtvWEq2wSRkQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Qrrsbz5WgxuDvv2uwCzNewpl/IdorxzBBISQ5RvSCww=;
+ b=V0wTl3baCyGpBx0kjpQ816gToKCvb+HlPG6TIyTWaUI7hUkvOypsd9tlHoJAClyRhcIhtTWgwn+h3FrDXPhk/U1L13AMaj+I5fH2RUQU42aYUoE28PxcV3EO5UBGV+BXkYgsErCtZWoDxnckAgQha7ZbchzUe4AkuEa251GYwfUMtGo1jKEzVsTpQX9ag6Dt0EW4wPTKxGHxeRaApQe7pXkxANpSILv82TwgUPzr/o3PC3wOHDPhCDvZlgEdZ3I1fCO7b3j0FsfaO2j0P9fS+baeFDtlMAzxC5UyxDRjFAJ7jXP5QOLfkMpzvFQ7FemKLnlXgolXX6fQmtiB/DsIuA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM8PR12MB5478.namprd12.prod.outlook.com (2603:10b6:8:29::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Wed, 31 May
+ 2023 16:58:21 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6433.024; Wed, 31 May 2023
+ 16:58:21 +0000
+Date:   Wed, 31 May 2023 13:58:17 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Leon Romanovsky <leonro@nvidia.com>
+Subject: [GIT PULL] Please pull RDMA subsystem changes
+Message-ID: <ZHd8qRfFribp26D6@nvidia.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="M4JHMffLfuuv6yjD"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SJ0PR03CA0335.namprd03.prod.outlook.com
+ (2603:10b6:a03:39c::10) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM8PR12MB5478:EE_
+X-MS-Office365-Filtering-Correlation-Id: 549b7f15-6d69-4976-48cf-08db61f83d21
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PW+wd3fYtjz9N+uqCMxcTd8SRG9yanbdGS2xanVzEtyc/lWsoRwScnPyZGWFxjdWgPkwSF3wurdj35QV13/Cy91k+z5mxssBA2y6mUWj8Ne00Z6K6Vx8L8sdtkpoFEkbxhsStTw9rdUYnSVJ5VPKF+2YoyFHrs7EpM6zUYoB+3MgKd9vUGv64BgqppKxc9KbSbpAjhruuM6t5/2XATjPyVpKwZjOoFzLVd/5iTm2lNmxat1g3tpjpXvAlIVZhlM8VaBjLgifu22DhoQ2IvM+9DD+fjxp0roGsBSAzgnk/FIUbeycdbhvRnze3xtUHTWH3DdLZmTezVDkjVbx9NZfQHOc5gcUcpm6T6+F0hv/x/jZz1hj/mhlmpsX9fmzH6ebo6BLiUxax3S/1IQcQibXMPxG36mB2Vmy9fvNct7F6Qcsz+VQccqLF9Y9EeZFi0KZaXpie4chqkhN2gtGJ07LQNzGgJ8efsMl0LR3Fvr/V8phMI9vrL6YO8rxvBjCCBHB30+h4Pc4Anl+zcQkHORqf49OaxLBUmlr47BhSOHCzG/ENpQv2d2arPrdn66NGKNh0Gpjxa9r8bOerSwaWI91uzWlbqRWA1dwvc2VtjjrMSk7mxfKOI12bA1A8RZki/pC
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(366004)(39860400002)(346002)(451199021)(36756003)(38100700002)(86362001)(8676002)(41300700001)(8936002)(107886003)(26005)(6506007)(6512007)(5660300002)(21480400003)(2906002)(44144004)(186003)(2616005)(83380400001)(6666004)(316002)(66476007)(66946007)(6486002)(66556008)(478600001)(6916009)(4326008)(2700100001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HkBt8pqSxs3z5DNTiMT2m6uypj/uI8ug8j7qj4wxwp746pflWW8KVQVXzpyI?=
+ =?us-ascii?Q?sQE8e+3qmy+ZliAYn9A6BbiteHQq+/TZdvJXd08MwQr9BQWs1Lkc9K/ZOEGB?=
+ =?us-ascii?Q?a0Y54W1mA53gqP7rdUVrAiL1KM56mOg1gdaxod1fWc0l/y8QH6j2VCzqRh+o?=
+ =?us-ascii?Q?ObgdyAdxiwKKaZOm+BtZoX+YCZQm466SjQfD9H9cQ7j5Z0ORuGTkI7qUPOQ6?=
+ =?us-ascii?Q?cz1d/wSogN+vJk9uUhBmGTy5o/EX7ZgFudkxxl15IWlR49/Cmu/CLFCnP5CV?=
+ =?us-ascii?Q?tRDTsLSUlXE5BaB5zqEJ1RN3RuxPnFB4QvT5Zhj+Z58/4IkNt2ELv12dyRJ9?=
+ =?us-ascii?Q?NjtW6ixUswg5VGV1ou3e661q8erAmOuQn5I8G51YGLg0Q2AJMWuuKSPgVWqK?=
+ =?us-ascii?Q?OAPPvTm5PxOWRLtqf1zQ8Wagy/yX2H2gvRUJcZvDDh7uJFTh4h7YVjNM27Tj?=
+ =?us-ascii?Q?4zMWNJFA/JKZiEm+Or+SDPE2BKBTFVa6W2Ahfa3yZrQT1Va4FtX4jwJYXzJU?=
+ =?us-ascii?Q?6gZKvJbQOwCHHxqy0axyiK1kOp8TbSGr4p2OCJ4BDedE6mx1tfCFujdjJEtG?=
+ =?us-ascii?Q?1tes7MoQBoD3Q9c6yfduDT6UCRWVej4510KvO6BmTebJLygXOILQMXD3tDbD?=
+ =?us-ascii?Q?+57iIyl10qzB08Vww5cfRPEMYk/Mhjxm0vmdSBGu8/d7/w+UUQFFcuMMkDZ/?=
+ =?us-ascii?Q?53fn/UNTtZ2LCKj4DeDEqALjR9mbmhryrwK0jHat24A3HXFalObBcMIfGDsm?=
+ =?us-ascii?Q?6Nd0uC7WK04pGTjynNSn+DpMfD5nLT4jJBmLGhFUsUGhK0f67Yz0YpN64gwd?=
+ =?us-ascii?Q?ChxVHzN+S6SoJDqUEp96wvQGIIaj9hFHaG3iOeIoqSAarpHeO56YumVe2GNM?=
+ =?us-ascii?Q?eGWTSNpvYyaac/Wp+RlkzXxr+FwVePp9bNL/fge5LsayTWAqLXzedQbAc7ub?=
+ =?us-ascii?Q?BGRk6uilxmC611cgl0PZzPB/wjrca5XoDfGS6LyJOsHdRyaxSFby8+hC962f?=
+ =?us-ascii?Q?psR1pufeDbnnN44f0TAHig/py8KA9OkrRYJ/IzCT5cM5kMTSrV6xxxJeEhw2?=
+ =?us-ascii?Q?q7J9xkbTIkBTGHy5/fIp6JF6Ap1fdQtl6/GluKOcGEmVxDd87AoOpeiVUXLR?=
+ =?us-ascii?Q?8dF25MZ/702eIyX7k9uZmEUEk72YTXxKvvJJ8gPKYdQZ4KQESe6L3dUeZJJE?=
+ =?us-ascii?Q?QhP2R+mSCEI7kWzqu1w9EyP1bce6dRST1y32CttMHy7ltyQ4MrfH4tx277/M?=
+ =?us-ascii?Q?ySnasG8JJPccG9fgqop2FnODjHnHgjd69mbjTid8m2p3ywEUzryHLH+EeK0I?=
+ =?us-ascii?Q?GNnaPlsju2N+eirXT9nkB/TrCl04v/ddFPo6vpei0bICJcZsStRDsvcOyu9h?=
+ =?us-ascii?Q?vefVYcIxLtNEpwVHObflElFhoMkvGnZZAlTS1/PV49YzgsrmrBwm/jdulHR+?=
+ =?us-ascii?Q?NDQJ5GFpy6d9UpWJYqWaxV/W0Fvtw6F7odh8X+KGbB8d0BLVwaeciJnPOtVg?=
+ =?us-ascii?Q?2p4IA/msj8Z9cWQEu/mzpX2hXVVjxKqZEe7KhJwZzEOaEv9eO/XQGEjmnSjI?=
+ =?us-ascii?Q?tPkH6KUNNJPH8eS3FwoEcoKYEy+YhKupfxmD6tE1?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 549b7f15-6d69-4976-48cf-08db61f83d21
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 16:58:21.0671
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0rbh0RkRkASTn4B8imf5MuFmRXI+TsNt/9zGYp3++icpWGQl2CRRuv6z1CWgPwAm
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5478
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 09:51:41AM +0200, David Hildenbrand wrote:
-> On 30.05.23 18:22, Luis Chamberlain wrote:
-> > On Mon, May 29, 2023 at 09:55:15PM -0400, Linus Torvalds wrote:
-> > > On Mon, May 29, 2023 at 11:18 AM Johan Hovold <johan@kernel.org> wrote:
-> > > > 
-> > > > I took a closer look at some of the modules that failed to load and
-> > > > noticed a pattern in that they have dependencies that are needed by more
-> > > > than one device.
-> > > 
-> > > Ok, this is a "maybe something like this" RFC series of two patches -
-> > > one trivial one to re-organize things a bit so that we can then do the
-> > > real one which uses a filter based on the inode pointer to return an
-> > > "idempotent return value" for module loads that share the same inode.
-> > > 
-> > > It's entirely untested, and since I'm on the road I'm going to not
-> > > really be able to test it. It compiles for me, and the code looks
-> > > fairly straightforward, but it's probably buggy.
-> > > 
-> > > It's very loosely based on Luis' attempt,  but it
-> > >   (a) is internal to module loading
-> > >   (b) uses a reliable cookie
-> > >   (c) doesn't leave the cookie around randomly for later
-> > >   (d) has seen absolutely no testing
-> > > 
-> > > Put another way: if somebody wants to play with this, please treat it
-> > > as a starting point, not the final thing. You might need to debug
-> > > things, and fix silly mistakes.
-> > > 
-> > > The idea is to just have a simple hash list of currently executing
-> > > module loads, protected by a trivial spinlock. Every module loader
-> > > adds itself to the right hash list, and if they were the *first* one
-> > > (ie no other pending module loads for that inode), will actually do
-> > > the module load.
-> > > 
-> > > Everybody who *isn't* the first one will just wait for completion and
-> > > return the same error code that the first one returned.
-> > 
-> > That's also a hell much more snazzier MODULE_DEBUG_AUTOLOAD_DUPS if we
-> > ever wanted to do something similar there if we wanted to also
-> > join request_module() calls, instead of it hiding under debug.
-> > 
-> > > This is technically bogus. The first one might fail due to arguments.
-> > 
-> > For boot it's fine, as I can't think of boot wanting to support trying
-> > to load a module with different arguments but who knows. But I can't
-> > see it sensible to issue concurrent multiple requests for modules
-> > with different arguments without waiting in userspace for the first
-> > to fail.
-> > 
-> > Even post-boot, doing that sounds rather insane, but it would certainly
-> > be a compromise and should probably be clearly documented. I think just
-> > a comment acknolwedging that corner case seems sensible.
-> > 
-> > Because we won't be able to get the arguments until we process the
-> > module, so it would be too late for this optimization on kread. So it is
-> > why I had also stuck to the original feature being in kread, as then it
-> > provides a uniq kread call and the caller is aware of it. But indeed I
-> > had not considered the effects of arguments.
-> > 
-> > Lucas, any thoughts from modules kmod userspace perspective into
-> > supporting anyone likely issuing concurrent modules requests with
-> > differing arguments?
-> > 
-> > > So the cookie shouldn't be just the inode, it should be the inode and
-> > > a hash of the arguments or something like that.
-> > 
-> > Personally I think it's a fine optimization without the arguments.
-> > 
-> > > But it is what it is,
-> > > and apart from possible show-stopper bugs this is no worse than the
-> > > failed "exclusive write deny" attempt. IOW - maybe worth trying?
-> > 
-> > The only thing I can think of is allowing threads other than the
-> > first one to complete before the one that actually loaded the
-> > module. I thought about this race for module auto-loading, see
-> > the comment in kmod_dup_request_announce(), so that just
-> > further delays the completion to other thread with a stupid
-> > queue_work(). That seems more important for module auto-loading
-> > duplicates than for boot finit_module() duplicates. But not sure
-> > if odering matters in the end due to a preemtible kernel and maybe
-> > that concern is hysteria.
-> > 
-> > > And if *that* didn't sell people on this patch series, I don't know
-> > > what will. I should be in marketing! Two drink minimums, here I come!
-> > 
-> > Sold:
-> > 
-> > on 255 vcpus 0 duplicates found with this setup:
-> > 
-> > root@kmod ~ # cat /sys/kernel/debug/modules/stats
-> >           Mods ever loaded       66
-> >       Mods failed on kread       0
-> > Mods failed on decompress       0
-> >    Mods failed on becoming       0
-> >        Mods failed on load       0
-> >          Total module size       11268096
-> >        Total mod text size       4149248
-> >         Failed kread bytes       0
-> >    Failed decompress bytes       0
-> >      Failed becoming bytes       0
-> >          Failed kmod bytes       0
-> >   Virtual mem wasted bytes       0
-> >           Average mod size       170729
-> >      Average mod text size       62868
-> > 
-> > So:
-> > 
-> > Tested-by: Luis Chamberlain <mcgrof@kernel.org>
-> > 
-> > In terms of bootup timing:
-> > 
-> > Before:
-> > Startup finished in 41.653s (kernel) + 44.305s (userspace) = 1min 25.958s
-> > graphical.target reached after 44.178s in userspace.
-> > After:
-> > Startup finished in 23.995s (kernel) + 40.350s (userspace) = 1min 4.345s
-> > graphical.target reached after 40.226s in userspace.
-> 
-> I'll try grabbing the system where we saw the KASAN-related issues [1] and
-> give it a churn with and without the two patches. Might take a bit (~1 day),
-> unfortunately.
-> 
-> [1] https://lkml.kernel.org/r/20221013180518.217405-1-david@redhat.com
+--M4JHMffLfuuv6yjD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Great, don't forget:
+Hi Linus,
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 82b0dcc1fe77..222015093eeb 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3066,7 +3066,7 @@ struct idempotent {
- 
- #define IDEM_HASH_BITS 8
- static struct hlist_head idem_hash[1 << IDEM_HASH_BITS];
--static struct spinlock idem_lock;
-+static DEFINE_SPINLOCK(idem_lock);
- 
- static bool idempotent(struct idempotent *u, const void *cookie)
- {
+Usual collection of driver rc bug fixes, other than tha rxe stuff
+which is a regression this cycle nothing much stands out.
+
+Thanks,
+Jason
+
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+
+for you to fetch changes up to 5842d1d9c1b0d17e0c29eae65ae1f245f83682dd:
+
+  RDMA/irdma: Fix Local Invalidate fencing (2023-05-29 14:06:29 -0300)
+
+----------------------------------------------------------------
+v6.4 first rc RDMA pull request
+
+Small rc bug fixes:
+
+- Fix 64K ARM page size support in bnxt_re and efa
+
+- bnxt_re fixes for a memory leak, incorrect error handling and a remove a
+  bogus FW failure when running on a VF
+
+- Update MAINTAINERS for hns and efa
+
+- Fix two rxe regressions added this merge window in error unwind and
+  incorrect spinlock primitives
+
+- hns gets a better algorithm for allocating page tables to avoid running
+  out of resources, and a timeout adjustment
+
+- Fix a text case failure in hns
+
+- Use after free in irdma and fix incorrect construction of a WQE causing
+  mis-execution
+
+----------------------------------------------------------------
+Bob Pearson (1):
+      RDMA/rxe: Fix double unlock in rxe_qp.c
+
+Chengchang Tang (2):
+      RDMA/hns: Fix timeout attr in query qp for HIP08
+      RDMA/hns: Fix base address table allocation
+
+Guoqing Jiang (1):
+      RDMA/rxe: Convert spin_{lock_bh,unlock_bh} to spin_{lock_irqsave,unlock_irqrestore}
+
+Haoyue Xu (1):
+      MAINTAINERS: Update maintainers of HiSilicon RoCE
+
+Kalesh AP (3):
+      RDMA/bnxt_re: Fix a possible memory leak
+      RDMA/bnxt_re: Fix return value of bnxt_re_process_raw_qp_pkt_rx
+      RDMA/bnxt_re: Do not enable congestion control on VFs
+
+Michael Margolin (1):
+      MAINTAINERS: Update maintainer of Amazon EFA driver
+
+Mustafa Ismail (2):
+      RDMA/irdma: Prevent QP use after free
+      RDMA/irdma: Fix Local Invalidate fencing
+
+Selvin Xavier (1):
+      RDMA/bnxt_re: Fix the page_size used during the MR creation
+
+Yangyang Li (1):
+      RDMA/hns: Modify the value of long message loopback slice
+
+Yonatan Nachum (1):
+      RDMA/efa: Fix unsupported page sizes in device
+
+ MAINTAINERS                                |  5 ++--
+ drivers/infiniband/hw/bnxt_re/ib_verbs.c   |  4 +--
+ drivers/infiniband/hw/bnxt_re/main.c       |  4 +++
+ drivers/infiniband/hw/bnxt_re/qplib_fp.c   | 11 ++++----
+ drivers/infiniband/hw/bnxt_re/qplib_res.c  | 12 ++-------
+ drivers/infiniband/hw/bnxt_re/qplib_sp.c   |  7 +++--
+ drivers/infiniband/hw/efa/efa_verbs.c      |  2 +-
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.c | 25 +++++++++++------
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.h |  2 ++
+ drivers/infiniband/hw/hns/hns_roce_mr.c    | 43 ++++++++++++++++++++++++++++++
+ drivers/infiniband/hw/irdma/verbs.c        | 12 +++++----
+ drivers/infiniband/sw/rxe/rxe_comp.c       | 26 +++++++++++-------
+ drivers/infiniband/sw/rxe/rxe_net.c        |  7 ++---
+ drivers/infiniband/sw/rxe/rxe_qp.c         | 37 ++++++++++++++++---------
+ drivers/infiniband/sw/rxe/rxe_recv.c       |  9 ++++---
+ drivers/infiniband/sw/rxe/rxe_req.c        | 30 ++++++++++++---------
+ drivers/infiniband/sw/rxe/rxe_resp.c       | 14 +++++-----
+ drivers/infiniband/sw/rxe/rxe_verbs.c      | 25 ++++++++---------
+ 18 files changed, 176 insertions(+), 99 deletions(-)
+
+--M4JHMffLfuuv6yjD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRRRCHOFoQz/8F5bUaFwuHvBreFYQUCZHd8pwAKCRCFwuHvBreF
+YTK0AP9GAUDz9PwRd5aWE09p9C4MpwQlz0QV8QWrJb3QDo0H7AD/SMGreBditHLR
+ybD12RMMwJ+tb4b7Vvx3DzSugUelOQM=
+=S/zu
+-----END PGP SIGNATURE-----
+
+--M4JHMffLfuuv6yjD--
