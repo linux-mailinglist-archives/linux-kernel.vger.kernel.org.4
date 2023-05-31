@@ -2,68 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA3D717A00
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75119717A03
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234667AbjEaIZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S235026AbjEaIZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235235AbjEaIY6 (ORCPT
+        with ESMTP id S235246AbjEaIZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:24:58 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C5F125;
-        Wed, 31 May 2023 01:24:55 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f6042d610fso56023425e9.1;
-        Wed, 31 May 2023 01:24:54 -0700 (PDT)
+        Wed, 31 May 2023 04:25:01 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB697132
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:24:57 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-96f7bf29550so843732666b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:24:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685521493; x=1688113493;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=utJCKiNlXUA/gWjsI7HdQdSp3MeurH44qM3nLVX+hY0=;
-        b=PTlfQP7IUZsTEtaz0c4g9Detm2V9gbJYhJZ5z2ZLjvonIOD4NKdqwV0eFaKZTTpjoc
-         23irp+luD2uadA6RYWrq5c/5oiEYYjTOGrvxcn42XwKilBLJtWu1Jwzvu/5xgGfNT70b
-         GRrVFZB+JHbIEzvv8UcMDWBthQbdM6tM+jbATX+2l8MeelqYZ6kbbKVN48UdNjLo2tgL
-         Fxp7+nLezAI/1Z2GXD0TQSPTbFY1gdK8fj9l/D5IsiCvGCgbudCEOL5SUNP8hBTYSDVv
-         iFLS11D9bgkNq43ZGlr1pzu6j4UsmThsZxfqPHedLRVrNmdGlHv+/pyDKu02TFAxerbx
-         qMrw==
+        d=linaro.org; s=google; t=1685521496; x=1688113496;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v2k5vPCSYnWtSGTIXwcTXsVrzq1qAVk456v6qUvHjn4=;
+        b=evFEiVsObtTsguxnNCAgyFMiGaOcl5N3jPA/b1dfzzxdmr7Jy0JqbFOtG2iwISFbS5
+         UEScpDBWrQehDu+E77miJNaj7IJiJ/gHMPqivRaB/AVpYU/XdIE0zaZ+KdVno278w/EL
+         UoaqPfOwM0/W7ZT4h7OoNrQrUS5y9W2NvFTCOdAaewnMQr0FbXPNCZMxsJX6E+nPUciG
+         AA06h/GhdDjbP8r6eSLS3IQQ8aq3NIcnBuiKQDXl42pQzt04pKyROvbY+jGZ8wmYMQmw
+         eGVosKJhlHHYCwvon/4xQJdyJ4zQ0qz2tytSHxRpt/Wndqpeu/NIyr+MbP28zYqFzPsj
+         vSfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685521493; x=1688113493;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=utJCKiNlXUA/gWjsI7HdQdSp3MeurH44qM3nLVX+hY0=;
-        b=Hh91b6hEtPAi3Yq4Y7Ayqa3cj6Veu36ZdhsdsfDhDQNugBD1FbPTjhRatXDvx85+l6
-         iRu0ALfpEnj5ZkyAvn/3eqBl2hVgqtsdCsrnXiKcVhtY8JCJ+cj/Vxmjb3bxyTxLtFkP
-         kSLO1d1mRSFUU60ytWmGYKS1yowv00fnoOK/WsObT129J5UXBylnIi9RvmF6ShX8/K2L
-         kM1/XHacdmNUbE5cZgrZ/S1LxV0bEGySw/8ZhshOOSnqubwW3KNzZf/jsW65T1fs8Mdh
-         987qX7xCVIDa5+h/8hV6+ko6fdBjDUar6dNpwTmWnWoNTwbStCEKOEMzUz+nxAZ5+skv
-         042g==
-X-Gm-Message-State: AC+VfDy2hKhgIpz/fAq04JQxs/UawcJYyNvghfA5ZRN2V3PaqvJu7mXI
-        UCXtTbDYOcAY4mlugKIOGBw=
-X-Google-Smtp-Source: ACHHUZ7PUGs/Uxa9l4rdaQUYMezCcHdiXfd4HHyQE3BDwd2sPC8GwvnkmOIS6dLbMlTZ3BvhJ08UfQ==
-X-Received: by 2002:a05:6000:90d:b0:309:fcbe:748a with SMTP id cw13-20020a056000090d00b00309fcbe748amr3540491wrb.11.1685521493253;
-        Wed, 31 May 2023 01:24:53 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id y4-20020a056000108400b0030abe7c36b1sm5824554wrw.93.2023.05.31.01.24.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 01:24:52 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] usb: musb: tusb6010: Fix spelling mistake "respones" -> "response"
-Date:   Wed, 31 May 2023 09:24:51 +0100
-Message-Id: <20230531082451.1572058-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        d=1e100.net; s=20221208; t=1685521496; x=1688113496;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v2k5vPCSYnWtSGTIXwcTXsVrzq1qAVk456v6qUvHjn4=;
+        b=SkAUbIYdNxkYu6kTdbAd1yodY2W/aBoWVxq3V7o+YQxNV1+cyKqKl7NlQYW3TTffvx
+         NylEawWdEiqiV1hP+SKaOtQlR7olCkYx/p3Ud2TLXnjVd0g1PfXxsp9GlSKpWie7jLAa
+         e6+hU/0tpR/SqmBWEXOVWCONkKa+5G0wcJkSUhPYQ+4CxQSzOeFLMGXEJTzNS6ZDJsz3
+         P9uRr3tX13Qp0oA0RVsYhg1gKzcvupiTi6duEmkK0Zw9SiG1ln6w1m7OiPkniAkyuFqe
+         2PhdmnCiTXHRfC6ae97+MMJX53NHiAqtssGu4lDRZ/7GxKnYYANE5E6GRAY3hZjRaItD
+         6AeA==
+X-Gm-Message-State: AC+VfDwpCpp5Hcf+/D8xds0TBYOAzRxKW/mK5sX9YzHwMkUj1QL3K1QE
+        NKcE7iMTuiT3ykD0PKGXOLWsCQ==
+X-Google-Smtp-Source: ACHHUZ4jvJs4A1incMCwVveO7FKis59XsoCRL227C6H8yFSlGVdTx0axv0RDEFwrhmF1WeUbCpAmtg==
+X-Received: by 2002:a17:907:2d08:b0:96f:f807:6af5 with SMTP id gs8-20020a1709072d0800b0096ff8076af5mr4841959ejc.39.1685521496172;
+        Wed, 31 May 2023 01:24:56 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id si16-20020a170906ced000b0094f1b8901e1sm8531239ejb.68.2023.05.31.01.24.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 01:24:55 -0700 (PDT)
+Message-ID: <8f915d90-c67a-430a-7539-4887cde37345@linaro.org>
+Date:   Wed, 31 May 2023 10:24:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 05/15] dt-bindings: qcom,pdc: Add SC8180x compatible
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230530162454.51708-1-vkoul@kernel.org>
+ <20230530162454.51708-6-vkoul@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230530162454.51708-6-vkoul@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,26 +83,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a pr_err message. Fix it.
+On 30/05/2023 18:24, Vinod Koul wrote:
+> Document the compatible for pdc in SC8180X SoC
+> 
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/usb/musb/tusb6010.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/musb/tusb6010.c b/drivers/usb/musb/tusb6010.c
-index cbc707fe570f..6ab081c1b5eb 100644
---- a/drivers/usb/musb/tusb6010.c
-+++ b/drivers/usb/musb/tusb6010.c
-@@ -1046,7 +1046,7 @@ static int tusb_musb_start(struct musb *musb)
- 		i--;
- 	}
- 	if (!i) {
--		pr_err("tusb: Powerup respones failed\n");
-+		pr_err("tusb: Powerup response failed\n");
- 		return -ENODEV;
- 	}
- 
--- 
-2.30.2
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
