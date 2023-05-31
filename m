@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501A4718EC7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 518F8718D38
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 23:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjEaWs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 18:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
+        id S231256AbjEaVgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 17:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjEaWsy (ORCPT
+        with ESMTP id S230416AbjEaVfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 18:48:54 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A3B121;
-        Wed, 31 May 2023 15:48:46 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34VLWMfK068354;
+        Wed, 31 May 2023 17:35:46 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE06A1BCC;
+        Wed, 31 May 2023 14:33:45 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34VLWMxZ082977;
         Wed, 31 May 2023 16:32:22 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1685568742;
-        bh=mvrqv5sj2sxCtu4TaCGy4a9IkYJAZkzFsgPjVhpkiPo=;
-        h=From:To:CC:Subject:Date;
-        b=XUtZ5jWgodW2jRdyRREB8vjenpA3izi5GoYujqkmKtRF+5bvlIAxdEuNvJ0AQgL5Y
-         XQEPIKivVSvNo7EgtngJQGnKatdExlxJa8p40f7JoPh32oI6/4g93SJ4e2UhlyNqm/
-         HLcEOy7c62aBXc0hpMlzVyEHVmxS/eSw0DuP+qds=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34VLWMY4047060
+        bh=zh9zWtQecEo6yFid7OjDe3UYa1oZQXg5QFl+umKAJuE=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=QunqD70G53SYDLHkISP9PrFIrOX9ieJoruP737mXA+MSPKWAVQ+kTGYQOETZgdedQ
+         wEqGVVX2WcSpeeEWfjd1Fi2cQZDomfwfsEj1bJVyoyOIDi8cpN/rIgcWiiYnJIyo8s
+         LuD+r1lXD8OlfFLL7k/0nBDhSnpL4GFfCnt0lUGk=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34VLWM66101259
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Wed, 31 May 2023 16:32:22 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 31
  May 2023 16:32:21 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
  Frontend Transport; Wed, 31 May 2023 16:32:21 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34VLWLfV105102;
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34VLWLRb029058;
         Wed, 31 May 2023 16:32:21 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Conor Dooley <conor+dt@kernel.org>,
@@ -52,10 +52,12 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Nitin Yadav <n-yadav@ti.com>,
         Neha Malcom Francis <n-francis@ti.com>,
         Tony Lindgren <tony@atomide.com>
-Subject: [PATCH 0/6] arm64: dts: ti: k3-j7*: Add general purpose timers
-Date:   Wed, 31 May 2023 16:32:09 -0500
-Message-ID: <20230531213215.602395-1-nm@ti.com>
+Subject: [PATCH 1/6] arm64: dts: ti: k3-j721e: Add general purpose timers
+Date:   Wed, 31 May 2023 16:32:10 -0500
+Message-ID: <20230531213215.602395-2-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230531213215.602395-1-nm@ti.com>
+References: <20230531213215.602395-1-nm@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -70,34 +72,426 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pending general purpose timer support for various J7 family
+There are 20 general purpose timers on j721e that can be used for
+things like PWM using pwm-omap-dmtimer driver. There are also
+additional ten timers in the MCU domain which are meant for MCU
+firmware usage and hence marked reserved by default.
 
-Full list of K3 SoCs:
-* AM625: already merged
-* AM62A7: https://lore.kernel.org/all/20230418012717.1230882-2-nm@ti.com/
-* AM64: https://lore.kernel.org/all/20230414073328.381336-2-nm@ti.com/
-* AM65: already merged
-* J7200: https://lore.kernel.org/all/20230426103219.1565266-1-u-kumar1@ti.com/ (needs a respin)
+The odd numbered timers have the option of being cascaded to even
+timers to create a 64 bit non-atomic counter which is racy in simple
+usage, hence the clock muxes are explicitly setup to individual 32 bit
+counters driven off system crystal (HFOSC) as default.
 
-And the timers for remaining J7 platforms (J721e, J721s2, J784s4) are
-addressed in this series.
+These instantiation differs from J7200 and other SoCs with the device
+IDs and clocks involved for muxing.
 
-Nishanth Menon (6):
-  arm64: dts: ti: k3-j721e: Add general purpose timers
-  arm64: dts: ti: k3-j721e: Configure pinctrl for timer IO
-  arm64: dts: ti: k3-j721s2: Add general purpose timers
-  arm64: dts: ti: k3-j721s2: Configure pinctrl for timer IO
-  arm64: dts: ti: k3-j784s4: Add general purpose timers
-  arm64: dts: ti: k3-j784s4: Configure pinctrl for timer IO
+Signed-off-by: Nishanth Menon <nm@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 240 ++++++++++++++++++
+ .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      | 139 ++++++++++
+ 2 files changed, 379 insertions(+)
 
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 258 ++++++++++++++++++
- .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      | 161 +++++++++++
- arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    | 258 ++++++++++++++++++
- .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 162 +++++++++++
- arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi    | 258 ++++++++++++++++++
- .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     | 162 +++++++++++
- 6 files changed, 1259 insertions(+)
-
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+index 91f7e5d03440..57f888c9353e 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+@@ -1023,6 +1023,246 @@ serdes4: serdes@5050000 {
+ 		};
+ 	};
+ 
++	main_timer0: timer@2400000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x2400000 0x00 0x400>;
++		interrupts = <GIC_SPI 224 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 49 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 49 1>;
++		assigned-clock-parents = <&k3_clks 49 2>;
++		power-domains = <&k3_pds 49 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer1: timer@2410000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x2410000 0x00 0x400>;
++		interrupts = <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 50 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 50 1>, <&k3_clks 327 0>;
++		assigned-clock-parents = <&k3_clks 50 2>, <&k3_clks 327 1>;
++		power-domains = <&k3_pds 50 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer2: timer@2420000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x2420000 0x00 0x400>;
++		interrupts = <GIC_SPI 226 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 51 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 51 1>;
++		assigned-clock-parents = <&k3_clks 51 2>;
++		power-domains = <&k3_pds 51 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer3: timer@2430000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x2430000 0x00 0x400>;
++		interrupts = <GIC_SPI 227 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 52 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 52 1>, <&k3_clks 328 0>;
++		assigned-clock-parents = <&k3_clks 52 2>, <&k3_clks 328 1>;
++		power-domains = <&k3_pds 52 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer4: timer@2440000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x2440000 0x00 0x400>;
++		interrupts = <GIC_SPI 228 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 53 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 53 1>;
++		assigned-clock-parents = <&k3_clks 53 2>;
++		power-domains = <&k3_pds 53 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer5: timer@2450000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x2450000 0x00 0x400>;
++		interrupts = <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 54 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 54 1>, <&k3_clks 329 0>;
++		assigned-clock-parents = <&k3_clks 54 2>, <&k3_clks 329 1>;
++		power-domains = <&k3_pds 54 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer6: timer@2460000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x2460000 0x00 0x400>;
++		interrupts = <GIC_SPI 230 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 55 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 55 1>;
++		assigned-clock-parents = <&k3_clks 55 2>;
++		power-domains = <&k3_pds 55 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer7: timer@2470000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x2470000 0x00 0x400>;
++		interrupts = <GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 57 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 57 1>, <&k3_clks 330 0>;
++		assigned-clock-parents = <&k3_clks 57 2>, <&k3_clks 330 1>;
++		power-domains = <&k3_pds 57 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer8: timer@2480000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x2480000 0x00 0x400>;
++		interrupts = <GIC_SPI 232 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 58 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 58 1>;
++		assigned-clock-parents = <&k3_clks 58 2>;
++		power-domains = <&k3_pds 58 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer9: timer@2490000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x2490000 0x00 0x400>;
++		interrupts = <GIC_SPI 233 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 59 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 59 1>, <&k3_clks 331 0>;
++		assigned-clock-parents = <&k3_clks 59 2>, <&k3_clks 331 1>;
++		power-domains = <&k3_pds 59 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer10: timer@24a0000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x24a0000 0x00 0x400>;
++		interrupts = <GIC_SPI 234 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 60 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 60 1>;
++		assigned-clock-parents = <&k3_clks 60 2>;
++		power-domains = <&k3_pds 60 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer11: timer@24b0000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x24b0000 0x00 0x400>;
++		interrupts = <GIC_SPI 235 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 62 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 62 1>, <&k3_clks 332 0>;
++		assigned-clock-parents = <&k3_clks 62 2>, <&k3_clks 332 1>;
++		power-domains = <&k3_pds 62 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer12: timer@24c0000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x24c0000 0x00 0x400>;
++		interrupts = <GIC_SPI 236 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 63 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 63 1>;
++		assigned-clock-parents = <&k3_clks 63 2>;
++		power-domains = <&k3_pds 63 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer13: timer@24d0000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x24d0000 0x00 0x400>;
++		interrupts = <GIC_SPI 237 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 64 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 64 1>, <&k3_clks 333 0>;
++		assigned-clock-parents = <&k3_clks 64 2>, <&k3_clks 333 1>;
++		power-domains = <&k3_pds 64 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer14: timer@24e0000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x24e0000 0x00 0x400>;
++		interrupts = <GIC_SPI 238 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 65 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 65 1>;
++		assigned-clock-parents = <&k3_clks 65 2>;
++		power-domains = <&k3_pds 65 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer15: timer@24f0000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x24f0000 0x00 0x400>;
++		interrupts = <GIC_SPI 239 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 66 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 66 1>, <&k3_clks 334 0>;
++		assigned-clock-parents = <&k3_clks 66 2>, <&k3_clks 334 1>;
++		power-domains = <&k3_pds 66 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer16: timer@2500000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x2500000 0x00 0x400>;
++		interrupts = <GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 67 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 67 1>;
++		assigned-clock-parents = <&k3_clks 67 2>;
++		power-domains = <&k3_pds 67 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer17: timer@2510000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x2510000 0x00 0x400>;
++		interrupts = <GIC_SPI 241 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 68 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 68 1>, <&k3_clks 335 0>;
++		assigned-clock-parents = <&k3_clks 68 2>, <&k3_clks 335 1>;
++		power-domains = <&k3_pds 68 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer18: timer@2520000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x2520000 0x00 0x400>;
++		interrupts = <GIC_SPI 242 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 69 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 69 1>;
++		assigned-clock-parents = <&k3_clks 69 2>;
++		power-domains = <&k3_pds 69 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
++	main_timer19: timer@2530000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x2530000 0x00 0x400>;
++		interrupts = <GIC_SPI 243 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 70 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 70 1>, <&k3_clks 336 0>;
++		assigned-clock-parents = <&k3_clks 70 2>, <&k3_clks 336 1>;
++		power-domains = <&k3_pds 70 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++	};
++
+ 	main_uart0: serial@2800000 {
+ 		compatible = "ti,j721e-uart", "ti,am654-uart";
+ 		reg = <0x00 0x02800000 0x00 0x100>;
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
+index 4ea95ed5d12c..053c771129d6 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
+@@ -70,6 +70,145 @@ mcu_ram: sram@41c00000 {
+ 		#size-cells = <1>;
+ 	};
+ 
++	mcu_timer0: timer@40400000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x40400000 0x00 0x400>;
++		interrupts = <GIC_SPI 816 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 35 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 35 1>;
++		assigned-clock-parents = <&k3_clks 35 2>;
++		power-domains = <&k3_pds 35 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++		/* Non-MPU Firmware usage */
++		status = "reserved";
++	};
++
++	mcu_timer1: timer@40410000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x40410000 0x00 0x400>;
++		interrupts = <GIC_SPI 817 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 71 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 71 1>, <&k3_clks 322 0>;
++		assigned-clock-parents = <&k3_clks 71 2>, <&k3_clks 322 1>;
++		power-domains = <&k3_pds 71 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++		/* Non-MPU Firmware usage */
++		status = "reserved";
++	};
++
++	mcu_timer2: timer@40420000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x40420000 0x00 0x400>;
++		interrupts = <GIC_SPI 818 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 72 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 72 1>;
++		assigned-clock-parents = <&k3_clks 72 2>;
++		power-domains = <&k3_pds 72 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++		/* Non-MPU Firmware usage */
++		status = "reserved";
++	};
++
++	mcu_timer3: timer@40430000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x40430000 0x00 0x400>;
++		interrupts = <GIC_SPI 819 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 73 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 73 1>, <&k3_clks 323 0>;
++		assigned-clock-parents = <&k3_clks 73 2>, <&k3_clks 323 1>;
++		power-domains = <&k3_pds 73 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++		/* Non-MPU Firmware usage */
++		status = "reserved";
++	};
++
++	mcu_timer4: timer@40440000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x40440000 0x00 0x400>;
++		interrupts = <GIC_SPI 820 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 74 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 74 1>;
++		assigned-clock-parents = <&k3_clks 74 2>;
++		power-domains = <&k3_pds 74 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++		/* Non-MPU Firmware usage */
++		status = "reserved";
++	};
++
++	mcu_timer5: timer@40450000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x40450000 0x00 0x400>;
++		interrupts = <GIC_SPI 821 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 75 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 75 1>, <&k3_clks 324 0>;
++		assigned-clock-parents = <&k3_clks 75 2>, <&k3_clks 324 1>;
++		power-domains = <&k3_pds 75 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++		/* Non-MPU Firmware usage */
++		status = "reserved";
++	};
++
++	mcu_timer6: timer@40460000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x40460000 0x00 0x400>;
++		interrupts = <GIC_SPI 822 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 76 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 76 1>;
++		assigned-clock-parents = <&k3_clks 76 2>;
++		power-domains = <&k3_pds 76 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++		/* Non-MPU Firmware usage */
++		status = "reserved";
++	};
++
++	mcu_timer7: timer@40470000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x40470000 0x00 0x400>;
++		interrupts = <GIC_SPI 823 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 77 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 77 1>, <&k3_clks 325 0>;
++		assigned-clock-parents = <&k3_clks 77 2>, <&k3_clks 325 1>;
++		power-domains = <&k3_pds 77 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++		/* Non-MPU Firmware usage */
++		status = "reserved";
++	};
++
++	mcu_timer8: timer@40480000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x40480000 0x00 0x400>;
++		interrupts = <GIC_SPI 824 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 78 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 78 1>;
++		assigned-clock-parents = <&k3_clks 78 2>;
++		power-domains = <&k3_pds 78 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++		/* Non-MPU Firmware usage */
++		status = "reserved";
++	};
++
++	mcu_timer9: timer@40490000 {
++		compatible = "ti,am654-timer";
++		reg = <0x00 0x40490000 0x00 0x400>;
++		interrupts = <GIC_SPI 825 IRQ_TYPE_LEVEL_HIGH>;
++		clocks = <&k3_clks 79 1>;
++		clock-names = "fck";
++		assigned-clocks = <&k3_clks 79 1>, <&k3_clks 326 0>;
++		assigned-clock-parents = <&k3_clks 79 2>, <&k3_clks 326 1>;
++		power-domains = <&k3_pds 79 TI_SCI_PD_EXCLUSIVE>;
++		ti,timer-pwm;
++		/* Non-MPU Firmware usage */
++		status = "reserved";
++	};
+ 	wkup_uart0: serial@42300000 {
+ 		compatible = "ti,j721e-uart", "ti,am654-uart";
+ 		reg = <0x00 0x42300000 0x00 0x100>;
 -- 
 2.40.0
 
