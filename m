@@ -2,399 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D21718560
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE7B718565
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbjEaOzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
+        id S233058AbjEaO5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232215AbjEaOzJ (ORCPT
+        with ESMTP id S232329AbjEaO52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:55:09 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADA6107
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:55:05 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f50a8f6dd7so3315402e87.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:55:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685544904; x=1688136904;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6TqMXVRIcXDpIunz3BCRjGjg2eqs/x79rI3Yc7fWGng=;
-        b=tyqHCxP5DW6t2Lb5hpTE4WaI8+vME3wquslqXzoHRsZcu9MbC9TULuaTpvodSVQ59L
-         xtl1VSJUorLCcbCtcKRJV/Pi+8rmGD/8r/Y8m4jLyTllj0ehIiQDqcPaxh0T+8cswxvN
-         4zamQEi8pnAVZX9WUIecslGJEq2paljCHaWuIrBESv43HbwuG28tq6eRWSwzFSpp88sE
-         8d0+jg2z48g2zCqM+f4UOBh2JtlTEj2EmlqWCZz6wiVrYEZkTjpQiAEObvaFahheaau3
-         VIsm/HrRLJUKEBHiRkLF4MxZRDAvrf2S1U4ioYHIE2Y5H0DsIf+9vHiuk/TyDmAx2kZ9
-         +kcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685544904; x=1688136904;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6TqMXVRIcXDpIunz3BCRjGjg2eqs/x79rI3Yc7fWGng=;
-        b=d1H65Dwl9jZIjZr9Bfy81u2sEajSeJy3QqNKCDPdfcqR2N6ggiKHBo3fXmwvHWrMNO
-         F6cVcNPWkeTGAjCbQk2ZtRMpKfK+FAuOIDNYgcz2amaLH0x5C4Jz/VM1yIRKYcSmN8ge
-         5cUJXiwThJkzWu6uZGouS2ilivMd0/Rp5rDyww9iM6KZpHsCl1eHh5mRaogrG/sRX0cf
-         /tcIa9MqQkcxOT0rz3zWnYR2MAHv01HWTMMAPxRcOB+OAUyg40D9rNY9mpRRHmMRHnoA
-         B5loMjEiPB83SANTf8o9GYmoElgH73Xfx0tOV+K1y8Gdaj9HtIQLnadLQu1h+Vy6gjZG
-         Tj0A==
-X-Gm-Message-State: AC+VfDxRtE/4ppzJ+a8aM4/wzvzDD86GTc8VPGjthk9YVwBLHl51Tn00
-        RLslFm9WpFNgZYTEMAiq10b0Pw==
-X-Google-Smtp-Source: ACHHUZ5YCHMCLR1NSDQmBAizApylsR46k/qxtptQFran2p0NRiyqfvBh5HtMTGmouqHn5bjJfoKCQw==
-X-Received: by 2002:a2e:3203:0:b0:2ad:dd7e:6651 with SMTP id y3-20020a2e3203000000b002addd7e6651mr3179661ljy.43.1685544903832;
-        Wed, 31 May 2023 07:55:03 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id o7-20020a2e7307000000b002ad92c2ff54sm3325452ljc.15.2023.05.31.07.55.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 07:55:03 -0700 (PDT)
-Message-ID: <965bc277-b31b-e278-a793-90248615c9d6@linaro.org>
-Date:   Wed, 31 May 2023 16:55:02 +0200
+        Wed, 31 May 2023 10:57:28 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C0E11D;
+        Wed, 31 May 2023 07:57:25 -0700 (PDT)
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VEg85R030847;
+        Wed, 31 May 2023 14:56:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=OBYjAsiQnYeqsncNk244KPMIAGvoR7IKEXAV3+x3XmY=;
+ b=VK4s0Z0LU5Q0JFwRrBWPdUE/BmlwNhytMGNfJyO7BjpGyJ+zdvyQjfXKbUn1TOITDfTH
+ bjNTrNWoxSidiPbdO/teq2cNU8Qk8ADaDKTbai7AV+z8XLe/ZBQCM2YaVUPalIxEKYvW
+ xOLFBvHQ/FpgspQC+jXzaZp2WG2C08Po4Ld0Bfbm/SFrKCJs4Odtzu2yJplCzqTC/D+W
+ 2vy4jvGbtp385jyzAUmTgfgKkS43xFfBmJ0WhbA49qvViVzepsFheod9YgMRB9pkdiD7
+ Lns0jelZ7KLOh7kDWOmoKufI5P/48rcUaYjESkzGqoGzOQzaQPtY0cm5qiav0r/ljDRH lA== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qx87s0fnv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 14:56:56 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34VBZs0T008110;
+        Wed, 31 May 2023 14:56:54 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3qu9g8c5pf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 14:56:54 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34VEureu4784708
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 31 May 2023 14:56:53 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7584A58057;
+        Wed, 31 May 2023 14:56:52 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7298558059;
+        Wed, 31 May 2023 14:56:51 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.61.55.64])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 31 May 2023 14:56:51 +0000 (GMT)
+Message-ID: <25ef15e7601e1b4510cbbd40c6d1ab7c64213863.camel@linux.ibm.com>
+Subject: Re: [PATCH][next] scsi: lpfc: Avoid -Wstringop-overflow warning
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Date:   Wed, 31 May 2023 10:56:50 -0400
+In-Reply-To: <202305301529.1EEA11B@keescook>
+References: <ZHZq7AV9Q2WG1xRB@work>
+         <fe0739cbe279cf9db2ebff1146e7ae540cc1ad6c.camel@linux.ibm.com>
+         <202305301529.1EEA11B@keescook>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] arm64: dts: qcom: sm6115: Set up CPU cooling maps
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230418-topic-cool_bengal-v1-1-c5d53814dc74@linaro.org>
- <20230418130223.wvsu3bsm62i2gtpp@ripper>
- <139ea923-968b-cee2-15e0-3fb8112e15d9@linaro.org>
- <20230418155146.3qpin45woex5sbli@ripper>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230418155146.3qpin45woex5sbli@ripper>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: WBQatvEGQiKAHXw7oHidJWHURI-cBAD_
+X-Proofpoint-GUID: WBQatvEGQiKAHXw7oHidJWHURI-cBAD_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ bulkscore=0 lowpriorityscore=0 clxscore=1011 priorityscore=1501
+ suspectscore=0 spamscore=0 impostorscore=0 mlxlogscore=999 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305310124
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2023-05-30 at 15:44 -0700, Kees Cook wrote:
+> On Tue, May 30, 2023 at 05:36:06PM -0400, James Bottomley wrote:
+> > On Tue, 2023-05-30 at 15:30 -0600, Gustavo A. R. Silva wrote:
+> > > Avoid confusing the compiler about possible negative sizes.
+> > > Use size_t instead of int for variables size and copied.
+> > > 
+> > > Address the following warning found with GCC-13:
+> > > In function ‘lpfc_debugfs_ras_log_data’,
+> > >     inlined from ‘lpfc_debugfs_ras_log_open’ at
+> > > drivers/scsi/lpfc/lpfc_debugfs.c:2271:15:
+> > > drivers/scsi/lpfc/lpfc_debugfs.c:2210:25: warning: ‘memcpy’
+> > > specified
+> > > bound between 18446744071562067968 and 18446744073709551615
+> > > exceeds
+> > > maximum object size 9223372036854775807 [-Wstringop-overflow=]
+> > >  2210 |                         memcpy(buffer + copied, dmabuf-
+> > > >virt,
+> > >       |                        
+> > > ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >  2211 |                                size - copied - 1);
+> > >       |                                ~~~~~~~~~~~~~~~~~~
+> > > 
+> > 
+> > This looks like a compiler bug to me and your workaround would have
+> > us using unsigned types everywhere for sizes, which seems wrong. 
+> > There are calls which return size or error for which we have
+> > ssize_t and that type has to be usable in things like memcpy, so
+> > the compiler must be fixed or the warning disabled.
+> 
+> The compiler is (correctly) noticing that the calculation involving
+> "size" (from which "copied" is set) could go negative.
+
+It can?  But if it can, then changing size and copied to unsigned
+doesn't fix it, does it?
+
+> The "unsigned types everywhere" is a slippery slope argument that
+> doesn't apply: this is fixing a specific case of a helper taking a
+> size that is never expected to go negative in multiple places
+> (open-coded multiplication, vmalloc, lpfc_debugfs_ras_log_data, etc).
+> It should be bounds checked at the least...
+
+So your claim is the compiler only gets it wrong in this one case and
+if we just change this one case it will never get it wrong again?  I
+think I prefer the idea that there's a problem in the bounds checking
+code which should be susceptible to fixing if we file a compiler bug
+(either it should get it right or ignore the case if it can't decide).
+
+> struct lpfc_hba {
+>         ...
+>         uint32_t cfg_ras_fwlog_buffsize;
+>         ...
+> };
+> 
+> lpfc_debugfs_ras_log_open():
+>         ...
+>         struct lpfc_hba *phba = inode->i_private;
+>         int size;
+>         ...
+>         size = LPFC_RAS_MIN_BUFF_POST_SIZE * phba-
+> >cfg_ras_fwlog_buffsize;
+>         debug->buffer = vmalloc(size);
+>         ...
+>         debug->len = lpfc_debugfs_ras_log_data(phba, debug->buffer,
+> size);
+>         ...
+> 
+> lpfc_debugfs_ras_log_data():
+>         ...
+>                 if ((copied + LPFC_RAS_MAX_ENTRY_SIZE) >= (size - 1))
+> {
+>                         memcpy(buffer + copied, dmabuf->virt,
+>                                size - copied - 1);
+> 
+> Honestly, the "if" above is the weirdest part, and perhaps that
+> should
+> just be adjusted instead:
+> 
+>         if (size <= LPFC_RAS_MAX_ENTRY_SIZE)
+>                 return -ENOMEM;
+>         ...
+>                 if (size - copied <= LPFC_RAS_MAX_ENTRY_SIZE) {
+>                         memcpy(..., size - copied - 1);
+>                         copied += size - copied - 1;
+>                         break;
+>                 }
+>                 ...
+>         }
+>         return copied;
+
+No one said you couldn't improve the code.  It was claiming a fix by
+changing a signed variable to unsigned that got my attention because
+it's a classic indicator of compiler problems.  I didn't say anything
+about all the strlcpy replacements where the source is guaranteed to be
+zero terminated so the problem alluded to in the changelog doesn't
+exist.  But since it all becomes about the inefficiency of the ignored
+strlen it did strike me that the most common pattern in sysfs code is
+strlcpy followed by strim or strstrip, which could be done slightly
+more efficiently as a single operation, if someone wanted actually to
+improve our sysfs use cases ...
+
+James
 
 
-On 18.04.2023 17:51, Bjorn Andersson wrote:
-> On Tue, Apr 18, 2023 at 03:01:47PM +0200, Konrad Dybcio wrote:
->>
->>
->> On 18.04.2023 15:02, Bjorn Andersson wrote:
->>> On Tue, Apr 18, 2023 at 01:56:56PM +0200, Konrad Dybcio wrote:
->>>> Set up CPU cooling maps to ensure the thermal framework is aware of
->>>> the connection between the CPUs and the TSENS sensors.
->>>>
->>>> All of the maps refer to all 4 CPUs within a given cluster at a time,
->>>> as that's what can be considered the smallest DVFS target unit - they
->>>> all share the same voltage line and clock source.
->>>>
->>>
->>> Generally software based CPU cooling is considered too slow to cope with
->>> CPU core temperature changes, and the limits hardware working together
->>> with OSM/EPSS will do a better job maintaining appropriate core
->>> temperature levels.
->>>
->>> Is there a reason why this can't be used/relied upon on this platform?
->> I haven't set up LMH yet and the default limits, at least with my dubious
->> meta build, seem to let the board go to 75degC with just 4 cores working..
->>
->> Not sure if there's a voltage droop when I let it go full throttle or
->> something, but pushing it to the limit definitely causes the board to be
->> (even) less stable..
->>
->>>
->>>
->>> PS. Amending this mechanism with software based cooling to keep the
->>> system at a reasonable/lower temperature is a good idea.
->> We don't like burned chips around here!
->>
-> 
-> Limits hardware will help you with that, software based cooling will
-> help avoid burning the user.
-So, are there any reasons not to take this patch?
-
-Konrad
-> 
-> Regards,
-> Bjorn
-> 
->> Konrad
->>>
->>> Regards,
->>> Bjorn
->>>
->>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>> ---
->>>>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 137 +++++++++++++++++++++++++++++++++++
->>>>  1 file changed, 137 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>>> index 631ca327e064..36ff913c1a60 100644
->>>> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>>> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>>> @@ -12,6 +12,7 @@
->>>>  #include <dt-bindings/gpio/gpio.h>
->>>>  #include <dt-bindings/interrupt-controller/arm-gic.h>
->>>>  #include <dt-bindings/power/qcom-rpmpd.h>
->>>> +#include <dt-bindings/thermal/thermal.h>
->>>>  
->>>>  / {
->>>>  	interrupt-parent = <&intc>;
->>>> @@ -47,6 +48,8 @@ CPU0: cpu@0 {
->>>>  			enable-method = "psci";
->>>>  			next-level-cache = <&L2_0>;
->>>>  			qcom,freq-domain = <&cpufreq_hw 0>;
->>>> +			#cooling-cells = <2>;
->>>> +
->>>>  			L2_0: l2-cache {
->>>>  				compatible = "cache";
->>>>  				cache-level = <2>;
->>>> @@ -63,6 +66,7 @@ CPU1: cpu@1 {
->>>>  			enable-method = "psci";
->>>>  			next-level-cache = <&L2_0>;
->>>>  			qcom,freq-domain = <&cpufreq_hw 0>;
->>>> +			#cooling-cells = <2>;
->>>>  		};
->>>>  
->>>>  		CPU2: cpu@2 {
->>>> @@ -75,6 +79,7 @@ CPU2: cpu@2 {
->>>>  			enable-method = "psci";
->>>>  			next-level-cache = <&L2_0>;
->>>>  			qcom,freq-domain = <&cpufreq_hw 0>;
->>>> +			#cooling-cells = <2>;
->>>>  		};
->>>>  
->>>>  		CPU3: cpu@3 {
->>>> @@ -87,6 +92,7 @@ CPU3: cpu@3 {
->>>>  			enable-method = "psci";
->>>>  			next-level-cache = <&L2_0>;
->>>>  			qcom,freq-domain = <&cpufreq_hw 0>;
->>>> +			#cooling-cells = <2>;
->>>>  		};
->>>>  
->>>>  		CPU4: cpu@100 {
->>>> @@ -99,6 +105,8 @@ CPU4: cpu@100 {
->>>>  			dynamic-power-coefficient = <282>;
->>>>  			next-level-cache = <&L2_1>;
->>>>  			qcom,freq-domain = <&cpufreq_hw 1>;
->>>> +			#cooling-cells = <2>;
->>>> +
->>>>  			L2_1: l2-cache {
->>>>  				compatible = "cache";
->>>>  				cache-level = <2>;
->>>> @@ -115,6 +123,7 @@ CPU5: cpu@101 {
->>>>  			enable-method = "psci";
->>>>  			next-level-cache = <&L2_1>;
->>>>  			qcom,freq-domain = <&cpufreq_hw 1>;
->>>> +			#cooling-cells = <2>;
->>>>  		};
->>>>  
->>>>  		CPU6: cpu@102 {
->>>> @@ -127,6 +136,7 @@ CPU6: cpu@102 {
->>>>  			enable-method = "psci";
->>>>  			next-level-cache = <&L2_1>;
->>>>  			qcom,freq-domain = <&cpufreq_hw 1>;
->>>> +			#cooling-cells = <2>;
->>>>  		};
->>>>  
->>>>  		CPU7: cpu@103 {
->>>> @@ -139,6 +149,7 @@ CPU7: cpu@103 {
->>>>  			enable-method = "psci";
->>>>  			next-level-cache = <&L2_1>;
->>>>  			qcom,freq-domain = <&cpufreq_hw 1>;
->>>> +			#cooling-cells = <2>;
->>>>  		};
->>>>  
->>>>  		cpu-map {
->>>> @@ -2471,6 +2482,24 @@ cpu4-thermal {
->>>>  			polling-delay = <0>;
->>>>  			thermal-sensors = <&tsens0 6>;
->>>>  
->>>> +			cooling-maps {
->>>> +				map0 {
->>>> +					trip = <&cpu4_alert0>;
->>>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>>> +				};
->>>> +
->>>> +				map1 {
->>>> +					trip = <&cpu4_alert1>;
->>>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>>> +				};
->>>> +			};
->>>> +
->>>>  			trips {
->>>>  				cpu4_alert0: trip-point0 {
->>>>  					temperature = <90000>;
->>>> @@ -2497,6 +2526,24 @@ cpu5-thermal {
->>>>  			polling-delay = <0>;
->>>>  			thermal-sensors = <&tsens0 7>;
->>>>  
->>>> +			cooling-maps {
->>>> +				map0 {
->>>> +					trip = <&cpu5_alert0>;
->>>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>>> +				};
->>>> +
->>>> +				map1 {
->>>> +					trip = <&cpu5_alert1>;
->>>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>>> +				};
->>>> +			};
->>>> +
->>>>  			trips {
->>>>  				cpu5_alert0: trip-point0 {
->>>>  					temperature = <90000>;
->>>> @@ -2523,6 +2570,24 @@ cpu6-thermal {
->>>>  			polling-delay = <0>;
->>>>  			thermal-sensors = <&tsens0 8>;
->>>>  
->>>> +			cooling-maps {
->>>> +				map0 {
->>>> +					trip = <&cpu6_alert0>;
->>>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>>> +				};
->>>> +
->>>> +				map1 {
->>>> +					trip = <&cpu6_alert1>;
->>>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>>> +				};
->>>> +			};
->>>> +
->>>>  			trips {
->>>>  				cpu6_alert0: trip-point0 {
->>>>  					temperature = <90000>;
->>>> @@ -2549,6 +2614,24 @@ cpu7-thermal {
->>>>  			polling-delay = <0>;
->>>>  			thermal-sensors = <&tsens0 9>;
->>>>  
->>>> +			cooling-maps {
->>>> +				map0 {
->>>> +					trip = <&cpu7_alert0>;
->>>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>>> +				};
->>>> +
->>>> +				map1 {
->>>> +					trip = <&cpu7_alert1>;
->>>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>>> +				};
->>>> +			};
->>>> +
->>>>  			trips {
->>>>  				cpu7_alert0: trip-point0 {
->>>>  					temperature = <90000>;
->>>> @@ -2575,6 +2658,24 @@ cpu45-thermal {
->>>>  			polling-delay = <0>;
->>>>  			thermal-sensors = <&tsens0 10>;
->>>>  
->>>> +			cooling-maps {
->>>> +				map0 {
->>>> +					trip = <&cpu45_alert0>;
->>>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>>> +				};
->>>> +
->>>> +				map1 {
->>>> +					trip = <&cpu45_alert1>;
->>>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>>> +				};
->>>> +			};
->>>> +
->>>>  			trips {
->>>>  				cpu45_alert0: trip-point0 {
->>>>  					temperature = <90000>;
->>>> @@ -2601,6 +2702,24 @@ cpu67-thermal {
->>>>  			polling-delay = <0>;
->>>>  			thermal-sensors = <&tsens0 11>;
->>>>  
->>>> +			cooling-maps {
->>>> +				map0 {
->>>> +					trip = <&cpu67_alert0>;
->>>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>>> +				};
->>>> +
->>>> +				map1 {
->>>> +					trip = <&cpu67_alert1>;
->>>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>>> +				};
->>>> +			};
->>>> +
->>>>  			trips {
->>>>  				cpu67_alert0: trip-point0 {
->>>>  					temperature = <90000>;
->>>> @@ -2627,6 +2746,24 @@ cpu0123-thermal {
->>>>  			polling-delay = <0>;
->>>>  			thermal-sensors = <&tsens0 12>;
->>>>  
->>>> +			cooling-maps {
->>>> +				map0 {
->>>> +					trip = <&cpu0123_alert0>;
->>>> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>>> +				};
->>>> +
->>>> +				map1 {
->>>> +					trip = <&cpu0123_alert1>;
->>>> +					cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>>> +							 <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>>> +				};
->>>> +			};
->>>> +
->>>>  			trips {
->>>>  				cpu0123_alert0: trip-point0 {
->>>>  					temperature = <90000>;
->>>>
->>>> ---
->>>> base-commit: 4aa1da8d99724f6c0b762b58a71cee7c5e2e109b
->>>> change-id: 20230418-topic-cool_bengal-2f5f3f47269c
->>>>
->>>> Best regards,
->>>> -- 
->>>> Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>
