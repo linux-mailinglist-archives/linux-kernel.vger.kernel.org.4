@@ -2,283 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0377A7184C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 715B971848B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236222AbjEaOWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33216 "EHLO
+        id S235959AbjEaOQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237549AbjEaOWV (ORCPT
+        with ESMTP id S237599AbjEaOQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:22:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12E51A7;
-        Wed, 31 May 2023 07:21:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04FC063CBC;
-        Wed, 31 May 2023 14:21:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F042C433EF;
-        Wed, 31 May 2023 14:21:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685542873;
-        bh=GR201WusWaVuJRFRW4qMwM55zgR7q/8W7rYwmVCAMtY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UBFg9A8m3t6uFsCSmRXbWreOaSgtjWsXepKzuTAhVAT+aHKVotkzoNIQfAaGNxlmy
-         6E8PWCkW4dBEmlfU4bT/7ZoZOAxYLKx9puphCKefWMvrmqSwNQ9lnjY7FlGozeiik2
-         qzJKOmsQuUxIrimjGhbjqbNzszXvjTLEKIM54axc6cH125hLktin8SKEKJsbovWk5j
-         GzKboFmOmX6D4Ugufhz3kNWWLiMxW23UWsjyWTe1kfvwU5nzW/+WWz9ocxdjRU7ZCp
-         BQrXA+kPFi6Gu0ziXHxAzoZsiXkIzCWEGwG3K1FyBvxWuL5fL7mpLq8S88KmahwtOg
-         TfiSc8c8lmfIw==
-Date:   Wed, 31 May 2023 22:09:56 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v4 04/10] serial: bflb_uart: add Bouffalolab UART Driver
-Message-ID: <ZHdVNIQpgfCzimRg@xhacker>
-References: <20230518152244.2178-1-jszhang@kernel.org>
- <20230518152244.2178-5-jszhang@kernel.org>
- <2023053010-gondola-luminous-f5e7@gregkh>
+        Wed, 31 May 2023 10:16:23 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD2910EB;
+        Wed, 31 May 2023 07:14:02 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f60b3f32b4so43223525e9.1;
+        Wed, 31 May 2023 07:14:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685542385; x=1688134385;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NXtfwCo398mNssja20yM7iI6aJ4z57XXGeGmgzDUvNw=;
+        b=n83+i8eMwzD3kMQ/bOt8MUs50SBqqTJsdCejDBgqUeHkdZGxkr9lzs1RzZvqfh4VOg
+         41IbkrcZobs2SmPtO/ik1OGA1Bbf9m9omBPizRY1kqn+yP7GGOAVwlzGP73ep1WpzL9f
+         9FnRiwY6dRMBx3uLp0TGTtyQA4GGn6tc/6nOa/N4mO3aS0Sx70Hr9nD2dxXTd16Q19nw
+         qPEmd7A7mdZglKoQWfh6NcJXfSt0wK2oIsvyoly9xhJd9pigGJq4KdQHBsmeU7mrYbln
+         OPXrHY/tptYvQKh0ARk95ILnsfslZ7pT97oVhFibaFa2v3DqoItnNt80zLqgaqyDZdUj
+         wRmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685542385; x=1688134385;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NXtfwCo398mNssja20yM7iI6aJ4z57XXGeGmgzDUvNw=;
+        b=c8nngrsfZRsgIuS+qxKspumk5XACzPEyIGU+XmsElXJAurShuP5nG1Tmzj7HbtJBF1
+         DV8+qnQNHoYUjjLFFd9xEhqmvVNXpx9l2t3lCDFJd6NMOSM/6JmRbYjXxGBDEIKv0IFR
+         lt+Vi+zYc6McO3IlF5Aoc4dXd3/kKcY2m/BR7YhgYVCmCbuiEz9srOw2/auM0vssfHNs
+         oQEjRRZlliDOki9vQtHMzNhRrCjsPYVVYc6Ydp9TmFAMb0RQLoKyBIa2tnQXlO+UML9X
+         fneQeaV93GfKa+/Pkm87ocvu2Utw+nsT5z1etjCRC0hrZm5QSFtvjB13jTZMxaJkWnB8
+         tL0A==
+X-Gm-Message-State: AC+VfDz6GZK7bK1qSNrMt356iEoqS4CayumB5T20wdMHX6GbogwWloBI
+        dmvrhUw2yUoYzr/IC7nhdPU=
+X-Google-Smtp-Source: ACHHUZ5/jVczCOvTj0ujwU2RCL/cBkmLhK9+lxiAtMwXxjwFb/GUIB70AgI7OmEAsM0Ry99cY2cWUA==
+X-Received: by 2002:a05:600c:22d6:b0:3eb:42fc:fb30 with SMTP id 22-20020a05600c22d600b003eb42fcfb30mr4400956wmg.32.1685542384560;
+        Wed, 31 May 2023 07:13:04 -0700 (PDT)
+Received: from localhost (host81-154-179-160.range81-154.btcentralplus.com. [81.154.179.160])
+        by smtp.gmail.com with ESMTPSA id x11-20020a1c7c0b000000b003f50876905dsm20954539wmc.6.2023.05.31.07.13.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 07:13:03 -0700 (PDT)
+Date:   Wed, 31 May 2023 15:10:53 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v4 1/3] mm: Don't pin ZERO_PAGE in pin_user_pages()
+Message-ID: <0e307b3f-d367-4bb2-9506-93a3d70b3e97@lucifer.local>
+References: <492558dc-1377-fc4b-126f-c358bb000ff7@redhat.com>
+ <cbd39f94-407a-03b6-9c43-8144d0efc8bb@redhat.com>
+ <20230526214142.958751-1-dhowells@redhat.com>
+ <20230526214142.958751-2-dhowells@redhat.com>
+ <510965.1685522152@warthog.procyon.org.uk>
+ <703628.1685541335@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023053010-gondola-luminous-f5e7@gregkh>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <703628.1685541335@warthog.procyon.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 11:36:00AM +0100, Greg Kroah-Hartman wrote:
-> On Thu, May 18, 2023 at 11:22:38PM +0800, Jisheng Zhang wrote:
-> > Add the driver for Bouffalolab UART IP which is found in Bouffalolab
-> > SoCs such as bl808.
-> 
-> New uarts are being created that are NOT 8250-like?  Why????
+On Wed, May 31, 2023 at 02:55:35PM +0100, David Howells wrote:
+> David Hildenbrand <david@redhat.com> wrote:
+>
+> > Yes, it would be clearer if we would be using "pinned" now only for FOLL_PIN
+>
+> You're not likely to get that.  "To pin" is too useful a verb that gets used
+> in other contexts too.  For that reason, I think FOLL_PIN was a poor choice of
+> name:-/.  I guess the English language has got somewhat overloaded.  Maybe
+> FOLL_PEG? ;-)
+>
 
-Hi,
+Might I suggest FOLL_FOLL? As we are essentially 'following' the page once
+'pinned'. We could differentiate between what is currently FOLL_GET and
+FOLL_PIN by using FOLL_FOLL and FOLL_FOLL_FOLL.
 
-I'm not sure I understand your meaning. I guess you mean writing the new
-uart driver following 8250 style. And the latest example is
-sunplus-uart.c, it can be used as an example how to write a 8250 style
-driver for new non-8250 uart IP. 
+Patch series coming soon...
 
-If the above guesses are wrong, could you please provide more details?
-
-Thanks
-
-> 
-> 
-> > 
-> > UART driver probe will create path named "/dev/ttySx".
-> > 
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > ---
-> >  drivers/tty/serial/Kconfig       |  18 +
-> >  drivers/tty/serial/Makefile      |   1 +
-> >  drivers/tty/serial/bflb_uart.c   | 586 +++++++++++++++++++++++++++++++
-> >  include/uapi/linux/serial_core.h |   3 +
-> >  4 files changed, 608 insertions(+)
-> >  create mode 100644 drivers/tty/serial/bflb_uart.c
-> > 
-> > diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-> > index 398e5aac2e77..abc30a0713f5 100644
-> > --- a/drivers/tty/serial/Kconfig
-> > +++ b/drivers/tty/serial/Kconfig
-> > @@ -179,6 +179,24 @@ config SERIAL_ATMEL_TTYAT
-> >  
-> >  	  Say Y if you have an external 8250/16C550 UART.  If unsure, say N.
-> >  
-> > +config SERIAL_BFLB
-> > +	tristate "Bouffalolab serial port support"
-> > +	select SERIAL_CORE
-> > +	depends on COMMON_CLK
-> > +	help
-> > +	  This enables the driver for the Bouffalolab's serial.
-> > +
-> > +config SERIAL_BFLB_CONSOLE
-> > +	bool "Support for console on Bouffalolab serial port"
-> > +	depends on SERIAL_BFLB=y
-> > +	select SERIAL_CORE_CONSOLE
-> > +	select SERIAL_EARLYCON
-> > +	help
-> > +	  Say Y here if you wish to use a Bouffalolab UART as the
-> > +	  system console (the system console is the device which
-> > +	  receives all kernel messages and warnings and which allows
-> > +	  logins in single user mode) as /dev/ttySn.
-> > +
-> >  config SERIAL_KGDB_NMI
-> >  	bool "Serial console over KGDB NMI debugger port"
-> >  	depends on KGDB_SERIAL_CONSOLE
-> > diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
-> > index cd9afd9e3018..5788a708d327 100644
-> > --- a/drivers/tty/serial/Makefile
-> > +++ b/drivers/tty/serial/Makefile
-> > @@ -25,6 +25,7 @@ obj-$(CONFIG_SERIAL_8250) += 8250/
-> >  
-> >  obj-$(CONFIG_SERIAL_AMBA_PL010) += amba-pl010.o
-> >  obj-$(CONFIG_SERIAL_AMBA_PL011) += amba-pl011.o
-> > +obj-$(CONFIG_SERIAL_BFLB) += bflb_uart.o
-> >  obj-$(CONFIG_SERIAL_CLPS711X) += clps711x.o
-> >  obj-$(CONFIG_SERIAL_PXA_NON8250) += pxa.o
-> >  obj-$(CONFIG_SERIAL_SA1100) += sa1100.o
-> > diff --git a/drivers/tty/serial/bflb_uart.c b/drivers/tty/serial/bflb_uart.c
-> > new file mode 100644
-> > index 000000000000..3f80bba8599a
-> > --- /dev/null
-> > +++ b/drivers/tty/serial/bflb_uart.c
-> > @@ -0,0 +1,586 @@
-> > +// SPDX-License-Identifier: GPL-2.0+
-> > +/*
-> > + * Based on bflb_uart.c, by Bouffalolab team
-> > + *
-> > + * Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
-> 
-> It is 2023 :)
-> 
-> > + */
-> > +
-> > +#include <linux/bitfield.h>
-> > +#include <linux/clk.h>
-> > +#include <linux/console.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/init.h>
-> > +#include <linux/interrupt.h>
-> > +#include <linux/io.h>
-> > +#include <linux/module.h>
-> > +#include <linux/of.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/serial.h>
-> > +#include <linux/serial_core.h>
-> > +#include <linux/tty.h>
-> > +#include <linux/tty_flip.h>
-> > +
-> > +#define UART_UTX_CONFIG			0x00
-> > +#define  UART_CR_UTX_EN			BIT(0)
-> > +#define  UART_CR_UTX_CTS_EN		BIT(1)
-> > +#define  UART_CR_UTX_FRM_EN		BIT(2)
-> > +#define  UART_CR_UTX_PRT_EN		BIT(4)
-> > +#define  UART_CR_UTX_PRT_SEL		BIT(5)
-> > +#define  UART_CR_UTX_BIT_CNT_D_MSK	GENMASK(10, 8)
-> > +#define  UART_CR_UTX_BIT_CNT_P_MSK	GENMASK(12, 11)
-> > +#define UART_URX_CONFIG			0x04
-> > +#define  UART_CR_URX_EN			BIT(0)
-> > +#define  UART_CR_URX_PRT_EN		BIT(4)
-> > +#define  UART_CR_URX_PRT_SEL		BIT(5)
-> > +#define  UART_CR_URX_BIT_CNT_D_MSK	GENMASK(10, 8)
-> > +#define UART_BIT_PRD			0x08
-> > +#define  UART_CR_UTX_BIT_PRD_MSK	GENMASK(15, 0)
-> > +#define  UART_CR_URX_BIT_PRD_MSK	GENMASK(31, 16)
-> > +#define UART_DATA_CONFIG		0x0c
-> > +#define  UART_CR_UART_BIT_INV		BIT(0)
-> > +#define UART_URX_RTO_TIMER		0x18
-> > +#define  UART_CR_URX_RTO_VALUE_MSK	GENMASK(7, 0)
-> > +#define UART_SW_MODE			0x1c
-> > +#define UART_INT_STS			0x20
-> > +#define  UART_UTX_END_INT		BIT(0)
-> > +#define  UART_URX_END_INT		BIT(1)
-> > +#define  UART_UTX_FIFO_INT		BIT(2)
-> > +#define  UART_URX_FIFO_INT		BIT(3)
-> > +#define  UART_URX_RTO_INT		BIT(4)
-> > +#define  UART_URX_PCE_INT		BIT(5)
-> > +#define  UART_UTX_FER_INT		BIT(6)
-> > +#define  UART_URX_FER_INT		BIT(7)
-> > +#define  UART_URX_LSE_INT		BIT(8)
-> > +#define UART_INT_MASK			0x24
-> > +#define UART_INT_CLEAR			0x28
-> > +#define UART_INT_EN			0x2c
-> > +#define UART_STATUS			0x30
-> > +#define  UART_STS_UTX_BUS_BUSY		BIT(0)
-> > +#define UART_FIFO_CONFIG_0		0x80
-> > +#define  UART_DMA_TX_EN			BIT(0)
-> > +#define  UART_DMA_RX_EN			BIT(1)
-> > +#define  UART_TX_FIFO_CLR		BIT(2)
-> > +#define  UART_RX_FIFO_CLR		BIT(3)
-> > +#define  UART_TX_FIFO_OVERFLOW		BIT(4)
-> > +#define  UART_TX_FIFO_UNDERFLOW		BIT(5)
-> > +#define  UART_RX_FIFO_OVERFLOW		BIT(6)
-> > +#define  UART_RX_FIFO_UNDERFLOW		BIT(7)
-> > +#define UART_FIFO_CONFIG_1		0x84
-> > +#define  UART_TX_FIFO_CNT_MSK		GENMASK(5, 0)
-> > +#define  UART_RX_FIFO_CNT_MSK		GENMASK(13, 8)
-> > +#define  UART_TX_FIFO_TH_MSK		GENMASK(20, 16)
-> > +#define  UART_RX_FIFO_TH_MSK		GENMASK(28, 24)
-> > +#define UART_FIFO_WDATA			0x88
-> > +#define UART_FIFO_RDATA			0x8c
-> > +#define  UART_FIFO_RDATA_MSK		GENMASK(7, 0)
-> > +
-> > +#define BFLB_UART_MAXPORTS		8
-> > +#define BFLB_UART_BAUD			2000000
-> > +#define BFLB_UART_RX_FIFO_TH		7
-> > +#define BFLB_UART_TX_FIFO_TH		15
-> > +#define BFLB_UART_URX_RTO_TIME		0x4f
-> > +
-> > +struct bflb_uart_port {
-> > +	struct uart_port port;
-> > +	struct clk *clk;
-> > +};
-> > +
-> > +static struct bflb_uart_port *bflb_uart_ports[BFLB_UART_MAXPORTS];
-> > +
-> > +static inline u32 rdl(struct uart_port *port, u32 reg)
-> > +{
-> > +	return readl_relaxed(port->membase + reg);
-> > +}
-> > +
-> > +static inline void wrl(struct uart_port *port, u32 reg, u32 value)
-> > +{
-> > +	writel_relaxed(value, port->membase + reg);
-> > +}
-> > +
-> > +static inline void wrb(struct uart_port *port, u32 reg, u8 value)
-> > +{
-> > +	writeb_relaxed(value, port->membase + reg);
-> > +}
-> > +
-> > +static unsigned int bflb_uart_tx_empty(struct uart_port *port)
-> > +{
-> > +	return (rdl(port, UART_FIFO_CONFIG_1) & UART_TX_FIFO_CNT_MSK) ? TIOCSER_TEMT : 0;
-> > +}
-> > +
-> > +static unsigned int bflb_uart_get_mctrl(struct uart_port *port)
-> > +{
-> > +	return TIOCM_CAR | TIOCM_DSR | TIOCM_CTS;
-> > +}
-> > +
-> > +static void bflb_uart_set_mctrl(struct uart_port *port, unsigned int sigs)
-> > +{
-> > +}
-> 
-> Why is a blank function required here?
-> 
-> 
-> > --- a/include/uapi/linux/serial_core.h
-> > +++ b/include/uapi/linux/serial_core.h
-> > @@ -279,4 +279,7 @@
-> >  /* Sunplus UART */
-> >  #define PORT_SUNPLUS	123
-> >  
-> > +/* Bouffalolab UART */
-> > +#define PORT_BFLB	124
-> 
-> Why is this required?  What userspace code is going to need this?
-> 
-> thanks,
-> 
-> greg k-h
+> > and everything else is simply "taking a temporary reference on the page".
+>
+> Excluding refs taken with pins, many refs are more permanent than pins as, so
+> far as I'm aware, pins only last for the duration of an I/O operation.
+>
+> > >> "Note that the refcount of any zero_pages returned among the pinned pages will
+> > >> not be incremented, and unpin_user_page() will similarly not decrement it."
+> > > That's not really right (although it happens to be true), because we're
+> > > talking primarily about the pin counter, not the refcount - and they may be
+> > > separate.
+> >
+> > In any case (FOLL_PIN/FOLL_GET) you increment/decrement the refcount. If we
+> > have a separate pincount, we increment/decrement the refcount by 1 when
+> > (un)pinning.
+>
+> FOLL_GET isn't relevant here - only FOLL_PIN.  Yes, as it happens, we count a
+> ref if we count a pin, but that's kind of irrelevant; what matters is that the
+> effect must be undone with un-PUP.
+>
+> It would be nice not to get a ref on the zero page in FOLL_GET, but I don't
+> think we can do that yet.  Too many places assume that GUP will give them a
+> ref they can release later via ordinary methods.
+>
+> David
+>
