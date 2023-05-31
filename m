@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075A671755E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 06:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37504717569
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 06:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234213AbjEaEZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 00:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        id S234351AbjEaE0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 00:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234301AbjEaEZk (ORCPT
+        with ESMTP id S234345AbjEaEZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 00:25:40 -0400
+        Wed, 31 May 2023 00:25:53 -0400
 Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65382125;
-        Tue, 30 May 2023 21:25:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 485E3E8;
+        Tue, 30 May 2023 21:25:52 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id F19638164;
-        Wed, 31 May 2023 04:25:33 +0000 (UTC)
-Date:   Wed, 31 May 2023 07:25:32 +0300
+        by muru.com (Postfix) with ESMTPS id 974818167;
+        Wed, 31 May 2023 04:25:51 +0000 (UTC)
+Date:   Wed, 31 May 2023 07:25:50 +0300
 From:   Tony Lindgren <tony@atomide.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Vinod Koul <vkoul@kernel.org>,
@@ -43,14 +43,14 @@ Cc:     Vinod Koul <vkoul@kernel.org>,
         linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
         linux-watchdog@vger.kernel.org, Rob Herring <robh@kernel.org>,
         Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH 2/7] dt-bindings: pwm: restrict node name suffixes
-Message-ID: <20230531042532.GI14287@atomide.com>
+Subject: Re: [PATCH 3/7] dt-bindings: rtc: restrict node name suffixes
+Message-ID: <20230531042550.GJ14287@atomide.com>
 References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
- <20230530144851.92059-3-krzysztof.kozlowski@linaro.org>
+ <20230530144851.92059-4-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230530144851.92059-3-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230530144851.92059-4-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -65,8 +65,5 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 > consistency.  The pattern is restricted to:
 > 1. Only one unit address or one -N suffix,
 > 2. -N suffixes to decimal numbers.
-> 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Reviewed-by: Tony Lindgren <tony@atomide.com>
