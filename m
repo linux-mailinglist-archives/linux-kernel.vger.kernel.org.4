@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A859B717B64
+	by mail.lfdr.de (Postfix) with ESMTP id 5C914717B63
 	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234527AbjEaJK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52550 "EHLO
+        id S235441AbjEaJLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:11:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235400AbjEaJKo (ORCPT
+        with ESMTP id S235317AbjEaJKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 31 May 2023 05:10:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62789129;
-        Wed, 31 May 2023 02:10:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935FC10C0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:10:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F142562FF2;
-        Wed, 31 May 2023 09:10:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 56B50C4339B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 237DC638A4
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:10:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7042DC433D2;
         Wed, 31 May 2023 09:10:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1685524226;
-        bh=/HXE6Lv70q14EtRVGFTc+yxi8ujb9+Ft28H1V80Qm7s=;
+        bh=7iyKw3AI+/PbLpT0npiMTd07y3q6m4qEfTjMG2C5ARI=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=oPnTH7o+o0CmeOFhUFfJzD1ME+nfdJq8O9G6SLQDdQlckMyX7ei9XEljkJx5VKo81
-         WOgpgwTMO19TOSB62ofR0hkONv/Tcarv38i6Bz7E2ZQum90gwIRgkbcrC+VVbGhSev
-         Op1naBJPBV2rIZDJojfGKl52lc17MOT0b6/2etJm2oWhvFkjGrbOBFY89Mq1jJPdpH
-         kYQyHiUdZ6FcE+6Ytv33n3sit9r0QH8H5Hb2Q/+KwwpeTMKtIoyJhsE2OFqjWFcndk
-         Szl8Ucz/Q7SPJHyvRfTUGJe8+9yN44wGOenXcZVOeffuTEvra3HPUPGCX20BL28pqF
-         2YgYyvbUznJAA==
+        b=iE1bw8+GW9dTecVSBDFaNnMGAm4jRmSkWRgIN/2DiRzMrKzj//qAWjciwI74C4DLJ
+         TI8I8drbyqBh49homjqctBzd3mi+jMHGm6j1tSrrnpxTQ2z9x9xZHNzH01pixUHhT3
+         9sBKyxVAZTcPs6IXHkMZ324V4zxgvXOmG4CHwGNsR/kuNdk+f0i0Qs/BbfXK8oC0vp
+         CgQj/SyHMuE20p0fXKnz6MhFZXukXGa6grfImVdZhTwD0+eedPCyUIbW2O8m9r8Puo
+         4qCqLkuISz8g++tlHIqclJKXRny7juLK28R+Uc16uCOBcujbvt4iy0Odys0X3Fd56Q
+         L7SOaekuXvHcg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 36783E52BFB;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5162BE52C0F;
         Wed, 31 May 2023 09:10:26 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next PATCH v4 00/13] leds: introduce new LED hw control APIs
+Subject: Re: [PATCH v8 0/3] dsa: marvell: Add support for mv88e6071 and 6020
+  switches
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168552422621.12579.18364898651664418572.git-patchwork-notify@kernel.org>
+Message-Id: <168552422632.12579.17095488160210315198.git-patchwork-notify@kernel.org>
 Date:   Wed, 31 May 2023 09:10:26 +0000
-References: <20230529163243.9555-1-ansuelsmth@gmail.com>
-In-Reply-To: <20230529163243.9555-1-ansuelsmth@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     pavel@ucw.cz, lee@kernel.org, corbet@lwn.net, andrew@lunn.ch,
-        f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-leds@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <20230530083916.2139667-1-lukma@denx.de>
+In-Reply-To: <20230530083916.2139667-1-lukma@denx.de>
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     andrew@lunn.ch, olteanv@gmail.com, linux@armlinux.org.uk,
+        edumazet@google.com, f.fainelli@gmail.com, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, alexander.duyck@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,47 +65,23 @@ Hello:
 This series was applied to netdev/net-next.git (main)
 by David S. Miller <davem@davemloft.net>:
 
-On Mon, 29 May 2023 18:32:30 +0200 you wrote:
-> Since this series is cross subsystem between LED and netdev,
-> a stable branch was created to facilitate merging process.
+On Tue, 30 May 2023 10:39:13 +0200 you wrote:
+> After the commit (SHA1: 7e9517375a14f44ee830ca1c3278076dd65fcc8f);
+> "net: dsa: mv88e6xxx: fix max_mtu of 1492 on 6165, 6191, 6220, 6250, 6290" the
+> error when mv88e6020 or mv88e6071 is used is not present anymore.
 > 
-> This is based on top of branch ib-leds-netdev-v6.5 present here [1]
-> and rebased on top of net-next since the LED stable branch got merged.
-> 
-> This is a continue of [2]. It was decided to take a more gradual
-> approach to implement LEDs support for switch and phy starting with
-> basic support and then implementing the hw control part when we have all
-> the prereq done.
+> As a result patches for adding max frame size are not required to provide
+> working setup with aforementioned switches.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,v4,01/13] leds: add APIs for LEDs hw control
-    https://git.kernel.org/netdev/net-next/c/ed554d3f9451
-  - [net-next,v4,02/13] leds: add API to get attached device for LED hw control
-    https://git.kernel.org/netdev/net-next/c/052c38eb17e8
-  - [net-next,v4,03/13] Documentation: leds: leds-class: Document new Hardware driven LEDs APIs
-    https://git.kernel.org/netdev/net-next/c/8aa2fd7b6698
-  - [net-next,v4,04/13] leds: trigger: netdev: refactor code setting device name
-    https://git.kernel.org/netdev/net-next/c/28a6a2ef18ad
-  - [net-next,v4,05/13] leds: trigger: netdev: introduce check for possible hw control
-    https://git.kernel.org/netdev/net-next/c/4fd1b6d47a7a
-  - [net-next,v4,06/13] leds: trigger: netdev: add basic check for hw control support
-    https://git.kernel.org/netdev/net-next/c/6352f25f9fad
-  - [net-next,v4,07/13] leds: trigger: netdev: reject interval store for hw_control
-    https://git.kernel.org/netdev/net-next/c/c84c80c7388f
-  - [net-next,v4,08/13] leds: trigger: netdev: add support for LED hw control
-    https://git.kernel.org/netdev/net-next/c/7c145a34ba6e
-  - [net-next,v4,09/13] leds: trigger: netdev: validate configured netdev
-    https://git.kernel.org/netdev/net-next/c/33ec0b53beff
-  - [net-next,v4,10/13] leds: trigger: netdev: init mode if hw control already active
-    https://git.kernel.org/netdev/net-next/c/0316cc5629d1
-  - [net-next,v4,11/13] leds: trigger: netdev: expose netdev trigger modes in linux include
-    https://git.kernel.org/netdev/net-next/c/947acacab5ea
-  - [net-next,v4,12/13] net: dsa: qca8k: implement hw_control ops
-    https://git.kernel.org/netdev/net-next/c/e0256648c831
-  - [net-next,v4,13/13] net: dsa: qca8k: add op to get ports netdev
-    https://git.kernel.org/netdev/net-next/c/4f53c27f772e
+  - [v8,1/3] net: dsa: Define .set_max_frame_size() callback for mv88e6250 SoC family
+    https://git.kernel.org/netdev/net-next/c/dd4144e54e81
+  - [v8,2/3] net: dsa: mv88e6xxx: add support for MV88E6020 switch
+    https://git.kernel.org/netdev/net-next/c/71d94a432a15
+  - [v8,3/3] net: dsa: mv88e6xxx: add support for MV88E6071 switch
+    https://git.kernel.org/netdev/net-next/c/372188c86e4b
 
 You are awesome, thank you!
 -- 
