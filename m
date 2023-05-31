@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA3C718F14
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF73718F16
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbjEaXkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 19:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
+        id S230355AbjEaXlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 19:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjEaXkw (ORCPT
+        with ESMTP id S229491AbjEaXlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 19:40:52 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8392812C;
-        Wed, 31 May 2023 16:40:51 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-ba8374001abso190191276.2;
-        Wed, 31 May 2023 16:40:51 -0700 (PDT)
+        Wed, 31 May 2023 19:41:37 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BB312C;
+        Wed, 31 May 2023 16:41:35 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-75b015c0508so14996185a.1;
+        Wed, 31 May 2023 16:41:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685576450; x=1688168450;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l9Ip848C4+PX4sdvUZ6qA+ntR4dfPFEEj72E1ynrboE=;
-        b=pmbEWlVHe2mnM0kY4kuCc8OnetP493gSGJbXzI0xxIWrd9LL1PS2D18wAYrEiMStCL
-         kSECDoiKsGntGM8Qe/H2nkvREyJNry15290+xo6UUF35/UPatbv6uJYbVG75Wk1ONQIB
-         AhH3qjpWVy+4GBZzEN8xgxZQj/Tkd9S/nyJOfXlCLlVtdAyGu1P4o2u717AiWZHW+c19
-         D9CZ3d2bRgmD/JPI/4xt4fIi70g3/Nf8LyKL9Sezm1/8Wh3MZW0c52CUJ3wOBk5cjZHV
-         36lw14neIoDR3GRB63G/ON1Kt5h0Y3kUvJYPlfYKlmBByDCkTwVXClzuw4iAC0VK+B4k
-         MDhA==
+        d=gmail.com; s=20221208; t=1685576495; x=1688168495;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YqUEtiNzQPXNnkJHbjcbvl93ewqKl8vCNCXtX2f/UHQ=;
+        b=ZLaL5XjurHw1cP3P7ti1sffNrHCPnfESWQZx0KOpSQDptVtHfkjjBUDMrP4gg+8+TF
+         z5NMUxwcsLv4TLrFYHb2eMTiL/Mb7grVYdEPZNJCJtxY/a0s3YXtX+FnqZQM+xu77B7y
+         LtCLAdI7kRiqjgNkEpnSEtRticOpT0TRSsuGKjgIt8Xp+3tYK2TCzqia5H2/uFfC2TO0
+         79uQOMnMhoKXd03scxrb6w5Pj3xHwDkYWGhS036AnmpkBukIWG20aVo3ywtoDVUvLsai
+         s2D2FnAUV3JHL9ouOeSn774K57PdODyYfF/ElT7oHIbrAyJE+ChgubqWADRgU5EZACaE
+         dL1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685576450; x=1688168450;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l9Ip848C4+PX4sdvUZ6qA+ntR4dfPFEEj72E1ynrboE=;
-        b=Dqg/CBuRzZNuXM0AHkq6DrY+YB35Cz9c2FpxH1axsu4GSRcik6bwNVJaUH9JvdX3wW
-         if5cZ/5ApIbMehY4J1C6sNAcDVITHelMmLZky/f27f9Xs396/L4FCA/WMkMARVdC/L1t
-         LSqfuL2eXzS2cqI1uvwvjX4Mthi1j/fCh00YuX4HlBPpFkOeModRBo6gdxuyih1xTpwO
-         sM+svSWbi+gpii3ygoVq4vbhF2OEU+ybN7GZSBqUerMmTaL9xCTrUDvrKZNUinIYAD1W
-         viqyPsVEYieylUxb5vGyqCwvo+uvtOhDB3WUX+GmZT6ouaSMDWuyKd7ZgUInR1b/kE/5
-         BEgQ==
-X-Gm-Message-State: AC+VfDxOAOs3o10saDSOl4SlpKRG6g97O5m8XYOcJcx6pEbAJxvJ42TL
-        5AL1APjvi5rPxUqTcShk/Q8=
-X-Google-Smtp-Source: ACHHUZ6hg+BzE3S+Lb8Ii8mZm+C3Ly8o+bGGFHw0M9DuMbORKjj6D6SrCydAYiE87Dhw9g1FQVOWtA==
-X-Received: by 2002:a25:be04:0:b0:bab:f4bb:9402 with SMTP id h4-20020a25be04000000b00babf4bb9402mr7628265ybk.46.1685576450666;
-        Wed, 31 May 2023 16:40:50 -0700 (PDT)
-Received: from localhost ([2405:6581:d4e0:1600:c494:2aca:bc01:6f7b])
-        by smtp.gmail.com with ESMTPSA id ja10-20020a170902efca00b001b0358848b0sm1957355plb.161.2023.05.31.16.40.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 16:40:49 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 08:40:47 +0900
-From:   Nick Hastings <nicholaschastings@gmail.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Salvatore Bonaccorso <carnil@debian.org>, 1036530@bugs.debian.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, regressions@lists.linux.dev
-Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI
- string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of system)
-Message-ID: <ZHfa/wQlaVCeUC22@xps>
-References: <168471337231.1913606.15905047692536779158.reportbug@xps>
- <ZHKrC4/G6ZyvRReI@xps>
- <ZHL5cCNUzVdleiag@eldamar.lan>
- <ab12984e-be17-903d-ba0a-f9c85b8c544f@amd.com>
- <ZHP4IqxBUPuVRvRV@xps>
- <09e24386-de63-e9e9-9e7f-5d04bad62d83@amd.com>
- <ZHQhPcKUF76Kplwm@xps>
- <ZHUt9xQKCwCflvVC@xps>
- <8537d965-ddf4-7f45-6459-d5acf520376e@amd.com>
- <ZHWfMBeAONerAJmd@xps>
+        d=1e100.net; s=20221208; t=1685576495; x=1688168495;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YqUEtiNzQPXNnkJHbjcbvl93ewqKl8vCNCXtX2f/UHQ=;
+        b=K7rjONGBjOoApYBthuPVKH6GQ4Mf9xEq1GIqfH5ZsyQtP3jKxYF5of60qJAWD2zRsy
+         03NbKAfwsTC9hROy4tnzhLULCYtLHe/IU74S4E1+5GKyN63UYwkmVNn2ECTYuJLyr09f
+         JoGlfc+091ovrYbNVDM3PrkjAnZSBQHxEqOTRyihoAI3o2a9T0t5s8se9UAdZuwUls36
+         Tb3XZifQlBqNVbjU2hKlQfQXQxLFAXXXgwXyxf89F82PCb/aEaeXjUFjZBA62SA0ry2L
+         blZQ6nqjoaV6UVdFMtE0lqSkUb7IBp0P2YFdvkhW6t9H9MxnaLTVNX9Q42kxnUbtfBQr
+         UbcQ==
+X-Gm-Message-State: AC+VfDxdVkyODFZopZKPSZSGI4gcWKo4uwc97KwyOgTCpBfDYTUMJQqC
+        tiAFp7I0om6Lm7hrZvwot9jp9TVxV90=
+X-Google-Smtp-Source: ACHHUZ4lxos4CGogbmpqC3mvvEHI5DbKkQbCUcIpboNTgLki4Pm7TJVmF2SfIUB9pGAWmyik/X+wJQ==
+X-Received: by 2002:a05:620a:2489:b0:75b:23a1:3687 with SMTP id i9-20020a05620a248900b0075b23a13687mr9092920qkn.72.1685576494910;
+        Wed, 31 May 2023 16:41:34 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id f4-20020aa78b04000000b0063d2cd02d69sm3853710pfd.54.2023.05.31.16.41.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 16:41:33 -0700 (PDT)
+Message-ID: <fd7b559e-7694-ef92-529d-4663df9c1cbc@gmail.com>
+Date:   Thu, 1 Jun 2023 08:41:29 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHWfMBeAONerAJmd@xps>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 24/26] locking/atomic: scripts: generate kerneldoc
+ comments
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, linux-doc@vger.kernel.org, paulmck@kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <20230522122429.1915021-1-mark.rutland@arm.com>
+ <20230522122429.1915021-25-mark.rutland@arm.com>
+ <96d6930b-78b1-4b4c-63e3-c385a764d6e3@gmail.com>
+ <20230524141152.GL4253@hirez.programming.kicks-ass.net>
+ <e76c924a-762c-061d-02b8-13be884ab344@gmail.com>
+ <c9399722-b2df-52ee-cefe-338b118aeb1e@infradead.org>
+ <a5405368-d04c-f95c-ad18-95f429120dbe@gmail.com>
+ <ZHXvT86FN/7lx/fv@FVFF77S0Q05N>
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <ZHXvT86FN/7lx/fv@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,40 +84,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+[Keeping documentation folks in CC]
 
-* Nick Hastings <nicholaschastings@gmail.com> [230530 16:01]:
+On 2023/05/30 21:42, Mark Rutland wrote:
+> Hi Akira,
 > 
-> * Mario Limonciello <mario.limonciello@amd.com> [230530 13:00]:
-<snip>
-> > As you're actually loading nouveau, can you please try nouveau.runpm=0 on
-> > the kernel command line?
+> On Fri, May 26, 2023 at 07:27:56PM +0900, Akira Yokosawa wrote:
+>> I think adding "~" to the substitution pattern added in [1] as follows
+>> should do the trick (not well tested):
+>>
+>> diff --git a/scripts/kernel-doc b/scripts/kernel-doc
+>> index 2486689ffc7b..eb70c1fd4e86 100755
+>> --- a/scripts/kernel-doc
+>> +++ b/scripts/kernel-doc
+>> @@ -64,7 +64,7 @@ my $type_constant = '\b``([^\`]+)``\b';
+>>  my $type_constant2 = '\%([-_\w]+)';
+>>  my $type_func = '(\w+)\(\)';
+>>  my $type_param = '\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
+>> -my $type_param_ref = '([\!]?)\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
+>> +my $type_param_ref = '([\!~]?)\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
+>>  my $type_fp_param = '\@(\w+)\(\)';  # Special RST handling for func ptr params
+>>  my $type_fp_param2 = '\@(\w+->\S+)\(\)';  # Special RST handling for structs with func ptr params
+>>  my $type_env = '(\$\w+)';
 > 
-> I'm not intentionally loading it. This machine also has intel graphics
-> which is what I prefer. Checking my
-> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
-> I see:
+> Are you happy to send this as a patch?
+
+I'm afraid I am not at the moment.
+
+The reason being I have never made changes in that 2500 line perl
+script.  Please consider the change above as a random suggestion from
+someone who don't/can't understand the script fully ...
 > 
-> blacklist nvidia
-> blacklist nvidia-drm
-> blacklist nvidia-modeset
-> blacklist nvidia-uvm
-> blacklist ipmi_msghandler
-> blacklist ipmi_devintf
+> I'd like to pick it into this series, so if you're happy to provide your
+> Signed-off-by tag here, I'm happy to go write the commit message and so on.
+
+I you happen to know perl well and be confident the change won't have
+any side effect, I wouldn't mind if you go forward and make a patch
+on your own, maybe with my Suggested-by.  That patch should also have
+explicit Cc: tags to Jon and Mauro who are in the SOB chain of commit
+ee2aa7590398.
+
+        Thanks, Akira
+
 > 
-> So I thought I had blacklisted it but it seems I did not. Since I do not
-> want to use it maybe it is better to check if the lock up occurs with
-> nouveau blacklisted. I will try that now.
-
-I blacklisted nouveau and booted into a 6.1 kernel:
-% uname -a
-Linux xps 6.1.0-9-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.27-1 (2023-05-08) x86_64 GNU/Linux
-
-It has been running without problems for nearly two days now:
-% uptime
- 08:34:48 up 1 day, 16:22,  2 users,  load average: 1.33, 1.26, 1.27
-
-Regards,
-
-Nick.
-
+> Thanks,
+> Mark.
+> 
+>>
+>> Thoughts?
+>>
+>>         Thanks, Akira
+>>
+>>>
+>>>
+>>>> [1]: ee2aa7590398 ("scripts: kernel-doc: accept negation like !@var")
+>>>
+>>> thanks.
