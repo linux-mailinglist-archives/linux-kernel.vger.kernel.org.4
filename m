@@ -2,123 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0052A717310
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5B9717319
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233524AbjEaBT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 21:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
+        id S233759AbjEaBXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 21:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231558AbjEaBTw (ORCPT
+        with ESMTP id S231558AbjEaBXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 21:19:52 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B90C9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 18:19:51 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b025aaeddbso48425ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 18:19:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685495990; x=1688087990;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HAglrf8PCd1V6N2W8Uz36FXrK3c4ZLEoDhLUPZcuTSY=;
-        b=rD1tRmQ1Fck5LJpxqUAqcYBVbzyaUltLUrkhuX+3a11rRgFrGU6Q0UQJWw0q+4N5ZS
-         tlgb8H2pcD6SRCs9zfE4oAu4oA31A+1iqJgmN4Ex8Vuz8DMhl0p2EFxpCw7H5XzGccKb
-         aoL3I0eZHZ2W2DmAkp+bvsQ6c/wynAInNPFhwLWr8vNGW+b4apDjK9DhQCz5YSZQT4kd
-         RkyZZdS7HfnBKxRI994pW1J5M8NV/3cBg2LlWi68bubpFBzkCP4rsSqt6X1uW79Maah8
-         AlWaJUSiQEQG1AGyKiWyEYwa4LmsuJJXr18zxR0mY1MKg8LKgYQoOy/ocZuQuTSKL1qc
-         s8yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685495990; x=1688087990;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HAglrf8PCd1V6N2W8Uz36FXrK3c4ZLEoDhLUPZcuTSY=;
-        b=YowiIEQfz4TYIKsmg8nIixLgva+ABTO3UGBVpWLSxMmeN3YaghDcikfJNU13Hklsf6
-         x1xfF/iycgcTPF3FWLpylzBAvYpjb0pRBhN3pnMLP5NiH2HzjJyPKavha1Xo+wQx/Jfg
-         Z0LOHCHu/5spsAp1BgwJ0llcACGT5gaTfgtcDnUVUc1F++SX5egAquDT87rywBa0WEhP
-         45U3UEUvUFSq9+CE4Xl2bBCibkZKFEnUQhQsg3OwMntmsstIOS8OAo9RXQqTm0+i/uiD
-         u8gLqOkl8yjSLMcntst4evw3zWOc9slhQS7EQBt7PwXOCYFE4uSEhocgWvEdrONcg988
-         9MxA==
-X-Gm-Message-State: AC+VfDycPG9MiMH4ou5hO6FotRJCgr0AZpGK/59hmKqq3/69kzksPy6O
-        /55lQJZGW4Ft1Mz1SOJpsbKYweB7VwZAgKzUq6fpvg==
-X-Google-Smtp-Source: ACHHUZ7FuWl4H6Symmfi8dFQJKTmmnG59YHutkIhpHo/Nh7GAwlGpglbKMOYoXADLXEYkUP/NLRZqJ2znsogsOrQoGQ=
-X-Received: by 2002:a17:903:74f:b0:1b0:cea:2952 with SMTP id
- kl15-20020a170903074f00b001b00cea2952mr21011plb.25.1685495990418; Tue, 30 May
- 2023 18:19:50 -0700 (PDT)
+        Tue, 30 May 2023 21:23:02 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53364C7;
+        Tue, 30 May 2023 18:23:00 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QWBMy2DQfz4f3nx2;
+        Wed, 31 May 2023 09:22:54 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgAHcLNuoXZkBjdYKg--.29411S3;
+        Wed, 31 May 2023 09:22:56 +0800 (CST)
+Subject: Re: [PATCH v2] md/raid5: don't allow concurrent reshape with recovery
+To:     Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Yu Kuai <yukuai1@huaweicloud.com>, song@kernel.org,
+        pmenzel@molgen.mpg.de
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230529133410.2125914-1-yukuai1@huaweicloud.com>
+ <b9fd7105-eadc-29cb-fa2e-24109f4a99b7@linux.dev>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <e26af7db-a283-47ca-fc61-89af99f52c17@huaweicloud.com>
+Date:   Wed, 31 May 2023 09:22:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com> <1685438374-33287-8-git-send-email-renyu.zj@linux.alibaba.com>
-In-Reply-To: <1685438374-33287-8-git-send-email-renyu.zj@linux.alibaba.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 30 May 2023 18:19:39 -0700
-Message-ID: <CAP-5=fWadoqvUfEYKNEvfQ-5q4cdm8j0fXh7TJgPnA9u3Rz+-g@mail.gmail.com>
-Subject: Re: [PATCH v3 7/7] docs: perf: Update metric usage for Alibaba's
- T-Head PMU driver
-To:     Jing Zhang <renyu.zj@linux.alibaba.com>
-Cc:     John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b9fd7105-eadc-29cb-fa2e-24109f4a99b7@linux.dev>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgAHcLNuoXZkBjdYKg--.29411S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cw15Zryftr1kAF13Ww17ZFb_yoW5JFyfpa
+        yktan8WrWDuwnakF4Dtw1UAFyYkrWUG3y5Jr1rWa4UAw15tr109rWUWFn09r1UJr4Fqw4U
+        tr1rtr9rur17KFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
+        UUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 2:19=E2=80=AFAM Jing Zhang <renyu.zj@linux.alibaba.=
-com> wrote:
->
-> Alibaba's T-Head ali_drw PMU supports DDR bandwidth metrics. Update
-> its usage in the documentation.
->
-> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+Hi,
 
-Acked-by: Ian Rogers <irogers@google.com>
+在 2023/05/31 9:06, Guoqing Jiang 写道:
+> 
+> 
+> On 5/29/23 21:34, Yu Kuai wrote:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> Commit 0aecb06e2249 ("md/raid5: don't allow replacement while reshape
+>> is in progress") fixes that replacement can be set if reshape is
+>> interrupted, which will cause that array can't be assembled.
+>>
+>> There is a similar problem on the other side, if recovery is
+>> interrupted, then reshape can start, which will cause the same problem.
+>>
+>> Fix the problem by not starting to reshape while recovery is still in
+>> progress.
+>>
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>> ---
+>> Changes in v2:
+>>   - fix some typo in commit message.
+>>
+>>   drivers/md/raid5.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+>> index 8686d629e3f2..6615abf54d3f 100644
+>> --- a/drivers/md/raid5.c
+>> +++ b/drivers/md/raid5.c
+>> @@ -8525,6 +8525,7 @@ static int raid5_start_reshape(struct mddev *mddev)
+>>       struct r5conf *conf = mddev->private;
+>>       struct md_rdev *rdev;
+>>       int spares = 0;
+>> +    int i;
+>>       unsigned long flags;
+>>       if (test_bit(MD_RECOVERY_RUNNING, &mddev->recovery))
+>> @@ -8536,6 +8537,13 @@ static int raid5_start_reshape(struct mddev 
+>> *mddev)
+>>       if (has_failed(conf))
+>>           return -EINVAL;
+>> +    /* raid5 can't handle concurrent reshape and recovery */
+>> +    if (mddev->recovery_cp < MaxSector)
+>> +        return -EBUSY;
+>> +    for (i = 0; i < conf->raid_disks; i++)
+>> +        if (rdev_mdlock_deref(mddev, conf->disks[i].replacement))
+>> +            return -EBUSY;
+>> +
+> 
+> Does it mean reshape and recovery  can happen in parallel without the 
+> change?
+> I really doubt about it given any kind of internal io (resync, reshape 
+> and recovery)
+> is handled by resync thread. And IIUC either md_do_sync or 
+> md_check_recovery
+> should avoid it, no need to do it in personality layer.
+> 
+
+They can't, in this case recovery is interrupted, then recovery can't
+make progress, and md_check_recovery() will start reshape, and after
+reshape is done, recovery will continue, and data will be corrupted
+because raid456 reshape doesn't handle replacement.
+
+And by the way in raid456 is that if system reboot, this array can't be
+assembled, raid5_run() will fail if reshape and replacement are both
+set.
 
 Thanks,
-Ian
+Kuai
 
-> ---
->  Documentation/admin-guide/perf/alibaba_pmu.rst | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/Documentation/admin-guide/perf/alibaba_pmu.rst b/Documentati=
-on/admin-guide/perf/alibaba_pmu.rst
-> index 11de998..7d84002 100644
-> --- a/Documentation/admin-guide/perf/alibaba_pmu.rst
-> +++ b/Documentation/admin-guide/perf/alibaba_pmu.rst
-> @@ -88,6 +88,11 @@ data bandwidth::
->      -e ali_drw_27080/hif_rmw/ \
->      -e ali_drw_27080/cycle/ -- sleep 10
->
-> +Example usage of counting all memory read/write bandwidth by metric::
-> +
-> +  perf stat -M ddr_read_bandwidth.all -- sleep 10
-> +  perf stat -M ddr_write_bandwidth.all -- sleep 10
-> +
->  The average DRAM bandwidth can be calculated as follows:
->
->  - Read Bandwidth =3D  perf_hif_rd * DDRC_WIDTH * DDRC_Freq / DDRC_Cycle
-> --
-> 1.8.3.1
->
