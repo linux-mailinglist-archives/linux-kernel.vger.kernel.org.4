@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0D371730E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0052A717310
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbjEaBSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 21:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
+        id S233524AbjEaBT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 21:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbjEaBSp (ORCPT
+        with ESMTP id S231558AbjEaBTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 21:18:45 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB060C7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 18:18:43 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-3f804665702so122321cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 18:18:43 -0700 (PDT)
+        Tue, 30 May 2023 21:19:52 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B90C9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 18:19:51 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b025aaeddbso48425ad.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 18:19:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685495923; x=1688087923;
+        d=google.com; s=20221208; t=1685495990; x=1688087990;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t/440rAusAeUpV/6SFRM6ro/fzMxcj5z3RfTwHDSWIk=;
-        b=ofrap42uHY1kcIMWlIrRBnPBJdHCBp7PZx/eDdkQkEOLQeHsO5n2lwBxiNLQonzYQP
-         6csgdVPSG9iEk+1O8AiKraYon7klPTFEXHYUbJ8KdMImWsh8ij/rrp9Cjf67GhmgqrdW
-         2wD5rcxfIhDM+v0v5HIdS8DiB0cnasA1OnfLtbHS9b/U90m7m/MxsdH6AHU3JEO+p8No
-         UCQEYtJfQY2hRUd/VhLD2WuTq0qZprrIdEWla2Q+6BuvAJAAqht5LpzWmbJzBFzxymTj
-         7b2DfLkJM0UoavYv7e7pr3Bl6mv11jqfUpYqIqOA7IuZ4FWojxNpPa6Mlfje7BTmpARP
-         Pzbw==
+        bh=HAglrf8PCd1V6N2W8Uz36FXrK3c4ZLEoDhLUPZcuTSY=;
+        b=rD1tRmQ1Fck5LJpxqUAqcYBVbzyaUltLUrkhuX+3a11rRgFrGU6Q0UQJWw0q+4N5ZS
+         tlgb8H2pcD6SRCs9zfE4oAu4oA31A+1iqJgmN4Ex8Vuz8DMhl0p2EFxpCw7H5XzGccKb
+         aoL3I0eZHZ2W2DmAkp+bvsQ6c/wynAInNPFhwLWr8vNGW+b4apDjK9DhQCz5YSZQT4kd
+         RkyZZdS7HfnBKxRI994pW1J5M8NV/3cBg2LlWi68bubpFBzkCP4rsSqt6X1uW79Maah8
+         AlWaJUSiQEQG1AGyKiWyEYwa4LmsuJJXr18zxR0mY1MKg8LKgYQoOy/ocZuQuTSKL1qc
+         s8yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685495923; x=1688087923;
+        d=1e100.net; s=20221208; t=1685495990; x=1688087990;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=t/440rAusAeUpV/6SFRM6ro/fzMxcj5z3RfTwHDSWIk=;
-        b=VAKAbXm/y4A6YznqM+GX2JTki0v+j9fEm7q0xx0oDmamk1cYGAfTt2OgpNnsYWqvj3
-         AMgjynk1zmVfvFVN8zqw0qWdfXzOw1AqwwI3HJ8iQk3HDxPa8JsgUo4df+nSzOUYfR81
-         CTswsxH5cOiDJUS9Va7UN1NU1InpGj0RScDZ81xMLRtBkw+IwoM2breGVE95/x6rWEgk
-         0RIydjjBuS9PfkpzIduOtMaIw77j9KJnYRo368UWmyH2XTSjfU29bSKei7IG+hXj/bnP
-         PlgXwmgWzWZaMeKDU3XDo6eiNSJwWj4ufXRYcMUkNtzmbKGMh4Pzrmjx/jowUMCJjOGq
-         Ng8w==
-X-Gm-Message-State: AC+VfDwAqp0nimLfYb36MbeZzSviZXdNicHZyx89OD023vl+5sjmhyhU
-        3j8y70OhREB4BZXAGrxgv/lGlvZYr1RQuu+rGQUiCw==
-X-Google-Smtp-Source: ACHHUZ53qL0eHvGHpgCG+aZKWKYTUXk+YE/m0LwUSL1A/Zlfrt5pD0LE2isEVsMVEmxU0ti3hK0qe45PcAMW6tulPLo=
-X-Received: by 2002:a05:622a:1816:b0:3f5:49b6:f18d with SMTP id
- t22-20020a05622a181600b003f549b6f18dmr30982qtc.11.1685495922645; Tue, 30 May
- 2023 18:18:42 -0700 (PDT)
+        bh=HAglrf8PCd1V6N2W8Uz36FXrK3c4ZLEoDhLUPZcuTSY=;
+        b=YowiIEQfz4TYIKsmg8nIixLgva+ABTO3UGBVpWLSxMmeN3YaghDcikfJNU13Hklsf6
+         x1xfF/iycgcTPF3FWLpylzBAvYpjb0pRBhN3pnMLP5NiH2HzjJyPKavha1Xo+wQx/Jfg
+         Z0LOHCHu/5spsAp1BgwJ0llcACGT5gaTfgtcDnUVUc1F++SX5egAquDT87rywBa0WEhP
+         45U3UEUvUFSq9+CE4Xl2bBCibkZKFEnUQhQsg3OwMntmsstIOS8OAo9RXQqTm0+i/uiD
+         u8gLqOkl8yjSLMcntst4evw3zWOc9slhQS7EQBt7PwXOCYFE4uSEhocgWvEdrONcg988
+         9MxA==
+X-Gm-Message-State: AC+VfDycPG9MiMH4ou5hO6FotRJCgr0AZpGK/59hmKqq3/69kzksPy6O
+        /55lQJZGW4Ft1Mz1SOJpsbKYweB7VwZAgKzUq6fpvg==
+X-Google-Smtp-Source: ACHHUZ7FuWl4H6Symmfi8dFQJKTmmnG59YHutkIhpHo/Nh7GAwlGpglbKMOYoXADLXEYkUP/NLRZqJ2znsogsOrQoGQ=
+X-Received: by 2002:a17:903:74f:b0:1b0:cea:2952 with SMTP id
+ kl15-20020a170903074f00b001b00cea2952mr21011plb.25.1685495990418; Tue, 30 May
+ 2023 18:19:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com> <1685438374-33287-4-git-send-email-renyu.zj@linux.alibaba.com>
-In-Reply-To: <1685438374-33287-4-git-send-email-renyu.zj@linux.alibaba.com>
+References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com> <1685438374-33287-8-git-send-email-renyu.zj@linux.alibaba.com>
+In-Reply-To: <1685438374-33287-8-git-send-email-renyu.zj@linux.alibaba.com>
 From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 30 May 2023 18:18:31 -0700
-Message-ID: <CAP-5=fVF4wD0t5Sxa56-pPevv4_NqKOYEeqqRLFYPL7a3FSffA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/7] perf vendor events: Add JSON metrics for CMN
+Date:   Tue, 30 May 2023 18:19:39 -0700
+Message-ID: <CAP-5=fWadoqvUfEYKNEvfQ-5q4cdm8j0fXh7TJgPnA9u3Rz+-g@mail.gmail.com>
+Subject: Re: [PATCH v3 7/7] docs: perf: Update metric usage for Alibaba's
+ T-Head PMU driver
 To:     Jing Zhang <renyu.zj@linux.alibaba.com>
 Cc:     John Garry <john.g.garry@oracle.com>,
         Will Deacon <will@kernel.org>,
@@ -76,8 +77,8 @@ Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,142 +88,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Tue, May 30, 2023 at 2:19=E2=80=AFAM Jing Zhang <renyu.zj@linux.alibaba.=
 com> wrote:
 >
-> Add JSON metrics for arm CMN. Currently just add part of CMN PMU
-> metrics which are general and compatible for any SoC and CMN-ANY.
+> Alibaba's T-Head ali_drw PMU supports DDR bandwidth metrics. Update
+> its usage in the documentation.
 >
 > Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
-> ---
->  .../pmu-events/arch/arm64/arm/cmn/sys/metrics.json | 74 ++++++++++++++++=
-++++++
->  tools/perf/pmu-events/jevents.py                   |  1 +
->  2 files changed, 75 insertions(+)
->  create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.=
-json
->
-> diff --git a/tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json b/=
-tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json
-> new file mode 100644
-> index 0000000..e70ac1a
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json
-> @@ -0,0 +1,74 @@
-> +[
-> +       {
-> +               "MetricName": "slc_miss_rate",
-> +               "BriefDescription": "The system level cache miss rate inc=
-lude.",
 
-Nit, partial sentence?
-
-> +               "MetricGroup": "arm_cmn",
-> +               "MetricExpr": "hnf_cache_miss / hnf_slc_sf_cache_access",
-> +               "ScaleUnit": "100%",
-> +               "Unit": "arm_cmn",
-> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
-> +       },
-> +       {
-> +               "MetricName": "hnf_message_retry_rate",
-> +               "BriefDescription": "HN-F message retry rate indicates wh=
-ether a lack of credits is causing the bottlenecks.",
-> +               "MetricGroup": "arm_cmn",
-> +               "MetricExpr": "hnf_pocq_retry / hnf_pocq_reqs_recvd",
-> +               "ScaleUnit": "100%",
-> +               "Unit": "arm_cmn",
-> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
-> +       },
-> +       {
-> +               "MetricName": "sf_hit_rate",
-> +               "BriefDescription": "Snoop filter hit rate can be used to=
- measure the Snoop Filter efficiency.",
-
-Nit, inconsistent capitalization?
-
-> +               "MetricGroup": "arm_cmn",
-> +               "MetricExpr": "hnf_sf_hit / hnf_slc_sf_cache_access",
-> +               "ScaleUnit": "100%",
-> +               "Unit": "arm_cmn",
-> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
-> +       },
-> +       {
-> +               "MetricName": "mc_message_retry_rate",
-> +               "BriefDescription": "The memory controller request retrie=
-s rate indicates whether the memory controller is the bottleneck.",
-> +               "MetricGroup": "arm_cmn",
-> +               "MetricExpr": "hnf_mc_retries / hnf_mc_reqs",
-> +               "ScaleUnit": "100%",
-> +               "Unit": "arm_cmn",
-> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
-> +       },
-> +       {
-> +               "MetricName": "rni_actual_read_bandwidth.all",
-> +               "BriefDescription": "This event measure the actual bandwi=
-dth(MB/sec) that RN-I bridge sends to the interconnect.",
-
-Nit, the MB/sec is in the ScaleUnit so could be dropped here.
-
-> +               "MetricGroup": "arm_cmn",
-> +               "MetricExpr": "rnid_rxdat_flits * 32 / 1e6 / duration_tim=
-e",
-> +               "ScaleUnit": "1MB/s",
-> +               "Unit": "arm_cmn",
-> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
-> +       },
-> +       {
-> +               "MetricName": "rni_actual_write_bandwidth.all",
-> +               "BriefDescription": "This event measures the actual write=
- bandwidth(MB/sec) at RN-I bridges.",
-
-Nit, same thing.
-
-> +               "MetricGroup": "arm_cmn",
-> +               "MetricExpr": "rnid_txdat_flits * 32 / 1e6 / duration_tim=
-e",
-> +               "ScaleUnit": "1MB/s",
-> +               "Unit": "arm_cmn",
-> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
-> +       },
-> +       {
-> +               "MetricName": "rni_retry_rate",
-> +               "BriefDescription": "RN-I bridge retry rate indicates whe=
-ther the memory controller is the bottleneck.",
-> +               "MetricGroup": "arm_cmn",
-> +               "MetricExpr": "rnid_txreq_flits_retried / rnid_txreq_flit=
-s_total",
-> +               "ScaleUnit": "100%",
-> +               "Unit": "arm_cmn",
-> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
-> +       },
-> +       {
-> +               "MetricName": "sbsx_actual_write_bandwidth.all",
-> +               "BriefDescription": "sbsx actual write bandwidth(MB/sec).=
-",
-
-Nit, same thing.
+Acked-by: Ian Rogers <irogers@google.com>
 
 Thanks,
 Ian
 
-> +               "MetricGroup": "arm_cmn",
-> +               "MetricExpr": "sbsx_txdat_flitv * 32 / 1e6 / duration_tim=
-e",
-> +               "ScaleUnit": "1MB/s",
-> +               "Unit": "arm_cmn",
-> +               "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
-> +       }
-> +]
-> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jev=
-ents.py
-> index 2bcd07c..7cff2c6 100755
-> --- a/tools/perf/pmu-events/jevents.py
-> +++ b/tools/perf/pmu-events/jevents.py
-> @@ -256,6 +256,7 @@ class JsonEvent:
->            'DFPMC': 'amd_df',
->            'cpu_core': 'cpu_core',
->            'cpu_atom': 'cpu_atom',
-> +          'arm_cmn': 'arm_cmn',
->        }
->        return table[unit] if unit in table else f'uncore_{unit.lower()}'
+> ---
+>  Documentation/admin-guide/perf/alibaba_pmu.rst | 5 +++++
+>  1 file changed, 5 insertions(+)
 >
+> diff --git a/Documentation/admin-guide/perf/alibaba_pmu.rst b/Documentati=
+on/admin-guide/perf/alibaba_pmu.rst
+> index 11de998..7d84002 100644
+> --- a/Documentation/admin-guide/perf/alibaba_pmu.rst
+> +++ b/Documentation/admin-guide/perf/alibaba_pmu.rst
+> @@ -88,6 +88,11 @@ data bandwidth::
+>      -e ali_drw_27080/hif_rmw/ \
+>      -e ali_drw_27080/cycle/ -- sleep 10
+>
+> +Example usage of counting all memory read/write bandwidth by metric::
+> +
+> +  perf stat -M ddr_read_bandwidth.all -- sleep 10
+> +  perf stat -M ddr_write_bandwidth.all -- sleep 10
+> +
+>  The average DRAM bandwidth can be calculated as follows:
+>
+>  - Read Bandwidth =3D  perf_hif_rd * DDRC_WIDTH * DDRC_Freq / DDRC_Cycle
 > --
 > 1.8.3.1
 >
