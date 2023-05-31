@@ -2,718 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79A1718964
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2866A718963
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjEaSay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 14:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60366 "EHLO
+        id S229461AbjEaSah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 14:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjEaSaw (ORCPT
+        with ESMTP id S229681AbjEaSae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 14:30:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA3F98
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685557798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xktpxc4DRmMCrqdnWIRHkClJ3XbuVy/s0c4NHgtlRs8=;
-        b=Vy4qU0gz/XPZrR+8Ew6t6YPwnDCMm26mBbqeJBsR/mmVByl1YwViFBj6m7bUJCtecPJgEM
-        rXrq8IQNxIE7CQQ2I99mBybjKA/0VbJ6qYbyp6jOmV52xMfqPgwr42zGbQJmZaruJJoYj+
-        0DKEvxCKwR0GIBueDiJj6q9wEAoq+wg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-16-88yk48dPMyKOrBejdm6R6Q-1; Wed, 31 May 2023 14:29:55 -0400
-X-MC-Unique: 88yk48dPMyKOrBejdm6R6Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B8E1685A5AA;
-        Wed, 31 May 2023 18:29:54 +0000 (UTC)
-Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 743E0C154D7;
-        Wed, 31 May 2023 18:29:54 +0000 (UTC)
-Message-ID: <d5b65c4b-7232-e5a7-27ae-b8efab037396@redhat.com>
-Date:   Wed, 31 May 2023 14:29:54 -0400
+        Wed, 31 May 2023 14:30:34 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BD3126
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:30:23 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-33b398f2ab8so21255ab.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:30:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685557822; x=1688149822;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oxpshYnAXSG9FfvU/D+cJhwkZUUdHfoRxjeCwRDDwqI=;
+        b=H0U1KRvw1ivJh9iV3NKovxsHWtctrloknZl9b/bgbREjhP5JKLdWWoE9F2m1w12eWV
+         lJM7hulTG7RF6CspWPUSBCyc3Wp/HgbLL/bpuGBW4btrtoWYAaAtl5yHaz6u7pKFmx3T
+         f0WxXS97gRn6oxaYRIii4AohDKTz92PLZnVjIRoOjoPGw/OpGYulhDuHAQXo4pMXO7/d
+         eM55YPHmQf6T13HeZTRuh/0dYcYXlucS52tFDs+3NGxZcZMm3qTHOxak90bx6jVX4/iS
+         hbpZOUzaYL8IAQx1LR+rZndUOJF+8ZfaVDSCxJ36BaeWdRKSXCRuiDvaVprPikTeTPOG
+         PpQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685557822; x=1688149822;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oxpshYnAXSG9FfvU/D+cJhwkZUUdHfoRxjeCwRDDwqI=;
+        b=cYfl10zEaogO89Ybl3mP7T+HhmyCJN9efjuYvxVn70em8sBH4POIvAH9BV47Ugin19
+         HBKkZD1djle1Nv8wjgoXAw8ks7vUpvHbHl7jllRysmbVoTBKWLLm97ph2tJew7p7mU2j
+         8TPXlZ7p7wuewx6rpaj0RUegcKOWuJ0rNUB/rgqyXB+4qWb7RaF/2/nUKsCFB7/C2/Xq
+         6kjhAhPZWGI5T7O44wJfPnSniVhtpvRPV0MLMpifLHslr0yii1kEb4f1RJXvIGpyTBLl
+         ytVSgGyn7yVFhR7u43vGZPZN89X0kpcfre6LCRh5y4uV7pdYA109JkBoyVXEzvWMInn7
+         4fiQ==
+X-Gm-Message-State: AC+VfDwzd2euSe2AiSm/P30Cf80xeeb+NJpnXTE376fjsaECMhjM4mH2
+        jVhW5AFwbpiw5yHzLZqxAJVnkUp0vGz6fJXALUWzMA==
+X-Google-Smtp-Source: ACHHUZ4FEP59s+IpNFhVx1lLRIPbgdF0FN+vQtjw2eARBXqaX6Rpf3i0EI2lzIqMGkdP7ENjBx7yF07SKFj0G6zOcKc=
+X-Received: by 2002:a05:6e02:20e4:b0:330:af65:de3d with SMTP id
+ q4-20020a056e0220e400b00330af65de3dmr4012ilv.11.1685557822429; Wed, 31 May
+ 2023 11:30:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] locking/rwsem: Optionally re-enable reader optimistic
- spinning
-Content-Language: en-US
-To:     Bongkyu Kim <bongkyu7.kim@samsung.com>, peterz@infradead.org,
-        mingo@redhat.com, will@kernel.org, boqun.feng@gmail.com
-Cc:     linux-kernel@vger.kernel.org, jwook1.kim@samsung.com,
-        lakkyung.jung@samsung.com
-References: <CGME20230531003446epcas2p1fc55e0439a9c667685d495cd5f5b2e93@epcas2p1.samsung.com>
- <20230531003436.7082-1-bongkyu7.kim@samsung.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230531003436.7082-1-bongkyu7.kim@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230531144128.73814-1-jon@nutanix.com> <9d37ab07-97c6-5245-6939-9c1090b4b3a9@redhat.com>
+ <ECE9A3B4-2CF3-452A-838A-99BE075D5E68@nutanix.com> <3cb96907-0d58-ba60-ed0e-6c17c69bd0f8@redhat.com>
+ <CALMp9eQNNCwUbPQGBfHzWnTAEJeRO-fjQAFxb9101SChe9F5rg@mail.gmail.com> <623EC08D-A755-4520-B9BF-42B0E72570C1@nutanix.com>
+In-Reply-To: <623EC08D-A755-4520-B9BF-42B0E72570C1@nutanix.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 31 May 2023 11:30:11 -0700
+Message-ID: <CALMp9eQ17+XRpxJjMnmvPnKOC1VP1P=mU-KykoOzYZsgtGN8sQ@mail.gmail.com>
+Subject: Re: [PATCH v4] KVM: VMX: do not disable interception for
+ MSR_IA32_SPEC_CTRL on eIBRS
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Waiman Long <longman@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/23 20:34, Bongkyu Kim wrote:
-> Remove reader optimistic spinning has a great regression on application
-
-I won't consider this a great regression if it is just a few % point of 
-performance differences.
-
-BTW, this patch is mostly a revert of commit 617f3ef95177 
-("locking/rwsem: Remove reader optimistic spinning"). So it should be 
-mentioned here.
-
-> startup performance in android device. In mobile environment, reader
-> optimistic spinning is still useful because there're not many readers.
-> So re-enable reader optimistic spinning and disabled by default. And,
-> can turn on by cmdline.
+On Wed, May 31, 2023 at 11:17=E2=80=AFAM Jon Kohler <jon@nutanix.com> wrote=
+:
 >
-> Test result:
-> This is 15 application startup performance in our s5e8535 soc.
-> - Cortex A78*2 + Cortex A55*6
 >
-> Application             base  opt_rspin  Diff  Diff(%)
-> --------------------  ------  ---------  ----  -------
-> * Total(geomean)         343        330   -13    +3.8%
-> --------------------  ------  ---------  ----  -------
-> helloworld               110        108    -2    +1.8%
-> Amazon_Seller            397        388    -9    +2.3%
-> Whatsapp                 311        304    -7    +2.3%
-> Simple_PDF_Reader        500        463   -37    +7.4%
-> FaceApp                  330        317   -13    +3.9%
-> Timestamp_Camera_Free    451        443    -8    +1.8%
-> Kindle                   629        597   -32    +5.1%
-> Coinbase                 243        233   -10    +4.1%
-> Firefox                  425        399   -26    +6.1%
-> Candy_Crush_Soda         552        538   -14    +2.5%
-> Hill_Climb_Racing        245        230   -15    +6.1%
-> Call_Recorder            437        426   -11    +2.5%
-> Color_Fill_3D            190        180   -10    +5.3%
-> eToro                    512        505    -7    +1.4%
-> GroupMe                  281        266   -15    +5.3%
 >
-> Signed-off-by: Bongkyu Kim <bongkyu7.kim@samsung.com>
-> ---
->   .../admin-guide/kernel-parameters.txt         |   2 +
->   kernel/locking/lock_events_list.h             |   5 +-
->   kernel/locking/rwsem.c                        | 292 +++++++++++++++---
->   3 files changed, 255 insertions(+), 44 deletions(-)
+> > On May 31, 2023, at 2:08 PM, Jim Mattson <jmattson@google.com> wrote:
+> >
+> > On Wed, May 31, 2023 at 10:22=E2=80=AFAM Waiman Long <longman@redhat.co=
+m> wrote:
+> >>
+> >> On 5/31/23 13:13, Jon Kohler wrote:
+> >>>
+> >>>> On May 31, 2023, at 1:02 PM, Waiman Long <longman@redhat.com> wrote:
+> >>>>
+> >>>> On 5/31/23 10:41, Jon Kohler wrote:
+> >>>>> Avoid expensive rdmsr on every VM Exit for MSR_IA32_SPEC_CTRL on
+> >>>>> eIBRS enabled systems iff the guest only sets IA32_SPEC_CTRL[0] (IB=
+RS)
+> >>>>> and not [1] (STIBP) or [2] (SSBD) by not disabling interception in
+> >>>>> the MSR bitmap. Note: this logic is only for eIBRS, as Intel's guid=
+ance
+> >>>>> has long been that eIBRS only needs to be set once, so most guests =
+with
+> >>>>> eIBRS awareness should behave nicely. We would not want to accident=
+ally
+> >>>>> regress misbehaving guests on pre-eIBRS systems, who might be spamm=
+ing
+> >>>>> IBRS MSR without the hypervisor being able to see it today.
+> >>>>>
+> >>>>> eIBRS enabled guests using just IBRS will only write SPEC_CTRL MSR
+> >>>>> once or twice per vCPU on boot, so it is far better to take those
+> >>>>> VM exits on boot than having to read and save this msr on every
+> >>>>> single VM exit forever. This outcome was suggested on Andrea's comm=
+it
+> >>>>> 2f46993d83ff ("x86: change default to spec_store_bypass_disable=3Dp=
+rctl spectre_v2_user=3Dprctl")
+> >>>>> however, since interception is still unilaterally disabled, the rdm=
+sr
+> >>>>> tax is still there even after that commit.
+> >>>>>
+> >>>>> This is a significant win for eIBRS enabled systems as this rdmsr
+> >>>>> accounts for roughly ~50% of time for vmx_vcpu_run() as observed
+> >>>>> by perf top disassembly, and is in the critical path for all
+> >>>>> VM-Exits, including fastpath exits.
+> >>>>>
+> >>>>> Opportunistically update comments for both MSR_IA32_SPEC_CTRL and
+> >>>>> MSR_IA32_PRED_CMD to make it clear how L1 vs L2 handling works.
+> >>>>>
+> >>>>> Fixes: 2f46993d83ff ("x86: change default to spec_store_bypass_disa=
+ble=3Dprctl spectre_v2_user=3Dprctl")
+> >>>>> Signed-off-by: Jon Kohler <jon@nutanix.com>
+> >>>>> Cc: Sean Christopherson <seanjc@google.com>
+> >>>>> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> >>>>> Cc: Kees Cook <keescook@chromium.org>
+> >>>>> Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+> >>>>> Cc: Waiman Long <longman@redhat.com>
+> >>>>> ---
+> >>>>> v1
+> >>>>>  - https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__lore.kern=
+el.org_all_20220512174427.3608-2D1-2Djon-40nutanix.com_&d=3DDwICaQ&c=3Ds883=
+GpUCOChKOHiocYtGcg&r=3DNGPRGGo37mQiSXgHKm5rCQ&m=3DPT1QjB8Lk_a3baDOwHBfedQG6=
+7HsVDmOdmcWHlr5PrT8WyuS9e6PfHF5JxLxD0zw&s=3DjNnloZQgh0KG-n36uwVC0dJTmokvqsQ=
+dYQCWYI8hVvM&e=3D v1 -> v2:
+> >>>>>  - https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__lore.kern=
+el.org_all_20220520195303.58692-2D1-2Djon-40nutanix.com_&d=3DDwICaQ&c=3Ds88=
+3GpUCOChKOHiocYtGcg&r=3DNGPRGGo37mQiSXgHKm5rCQ&m=3DPT1QjB8Lk_a3baDOwHBfedQG=
+67HsVDmOdmcWHlr5PrT8WyuS9e6PfHF5JxLxD0zw&s=3DRwi5NoHwaezlmzzLiGGCuI6QHuGQZ1=
+BVK2hs6-SZvzU&e=3D   - Addressed comments on approach from Sean.
+> >>>>> v2 -> v3:
+> >>>>>  - https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__lore.kern=
+el.org_kvm_20220520204115.67580-2D1-2Djon-40nutanix.com_&d=3DDwICaQ&c=3Ds88=
+3GpUCOChKOHiocYtGcg&r=3DNGPRGGo37mQiSXgHKm5rCQ&m=3DPT1QjB8Lk_a3baDOwHBfedQG=
+67HsVDmOdmcWHlr5PrT8WyuS9e6PfHF5JxLxD0zw&s=3DR2Ykxdv-DyeVGLWd8_pLpu43zEsnWz=
+pyvvBPEZ9lz-Y&e=3D   - Addressed comments on approach from Sean.
+> >>>>> v3 -> v4:
+> >>>>>  - Fixed inline code comments from Sean.
+> >>>>>
+> >>>>>  arch/x86/kvm/vmx/vmx.c | 35 ++++++++++++++++++++++++-----------
+> >>>>>  1 file changed, 24 insertions(+), 11 deletions(-)
+> >>>>>
+> >>>>> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> >>>>> index 44fb619803b8..5e643ac897bc 100644
+> >>>>> --- a/arch/x86/kvm/vmx/vmx.c
+> >>>>> +++ b/arch/x86/kvm/vmx/vmx.c
+> >>>>> @@ -2260,20 +2260,33 @@ static int vmx_set_msr(struct kvm_vcpu *vcp=
+u, struct msr_data *msr_info)
+> >>>>>                    return 1;
+> >>>>>
+> >>>>>            vmx->spec_ctrl =3D data;
+> >>>>> -           if (!data)
+> >>>>> +
+> >>>>> +           /*
+> >>>>> +            * Disable interception on the first non-zero write, ex=
+cept if
+> >>>>> +            * eIBRS is advertised to the guest and the guest is en=
+abling
+> >>>>> +            * _only_ IBRS.  On eIBRS systems, kernels typically se=
+t IBRS
+> >>>>> +            * once at boot and never touch it post-boot.  All othe=
+r bits,
+> >>>>> +            * and IBRS on non-eIBRS systems, are often set on a pe=
+r-task
+> >>>>> +            * basis, i.e. change frequently, so the benefit of avo=
+iding
+> >>>>> +            * VM-exits during guest context switches outweighs the=
+ cost of
+> >>>>> +            * RDMSR on every VM-Exit to save the guest's value.
+> >>>>> +            */
+> >>>>> +           if (!data ||
+> >>>>> +               (data =3D=3D SPEC_CTRL_IBRS &&
+> >>>>> +                (vcpu->arch.arch_capabilities & ARCH_CAP_IBRS_ALL)=
+))
+> >>>>>                    break;
+> >>>>>
+> >>>>>            /*
+> >>>>> -            * For non-nested:
+> >>>>> -            * When it's written (to non-zero) for the first time, =
+pass
+> >>>>> -            * it through.
+> >>>>> -            *
+> >>>>> -            * For nested:
+> >>>>> -            * The handling of the MSR bitmap for L2 guests is done=
+ in
+> >>>>> -            * nested_vmx_prepare_msr_bitmap. We should not touch t=
+he
+> >>>>> -            * vmcs02.msr_bitmap here since it gets completely over=
+written
+> >>>>> -            * in the merging. We update the vmcs01 here for L1 as =
+well
+> >>>>> -            * since it will end up touching the MSR anyway now.
+> >>>>> +            * Update vmcs01.msr_bitmap even if L2 is active, i.e. =
+disable
+> >>>>> +            * interception for the vCPU on the first write regardl=
+ess of
+> >>>>> +            * whether the WRMSR came from L1 or L2.  vmcs02's bitm=
+ap is a
+> >>>>> +            * combination of vmcs01 and vmcs12 bitmaps, and will b=
+e
+> >>>>> +            * recomputed by nested_vmx_prepare_msr_bitmap() on the=
+ next
+> >>>>> +            * nested VM-Enter.  Note, this does mean that future W=
+RMSRs
+> >>>>> +            * from L2 will be intercepted until the next nested VM=
+-Exit if
+> >>>>> +            * L2 was the first to write, but L1 exposing the MSR t=
+o L2
+> >>>>> +            * without first writing it is unlikely and not worth t=
+he
+> >>>>> +            * extra bit of complexity.
+> >>>>>             */
+> >>>>>            vmx_disable_intercept_for_msr(vcpu,
+> >>>>>                                          MSR_IA32_SPEC_CTRL,
+> >>>> I have 2 comments.
+> >>>>
+> >>>> 1) Besides the IBRS, STIBP & SSBD bits, the SPEC_CTRL MSR may have t=
+he RRSBA_DIS_S bit set in the future. I am not aware of any current Intel p=
+rocessors having this capability yet, but a future Intel processor may have=
+ this and the above patch will have to be modified accordingly. It looks li=
+ke that the RRSBA_DIS_S bit will be set once.
+> >>> Agreed. Once that becomes pubic with future processors, this code can=
+ be fixed up in a fairly trivial manner. I don=E2=80=99t have any access to=
+ said future processors, so I=E2=80=99d like to keep it as-is today rather =
+than project it out too far. Is that ok?
+> >> That is certainly OK. I am just raising a question here.
+> >
+> > How difficult would it be to do a back of the envelope cost/benefit
+> > analysis, rather than relying on heuristics based on today's typical
+> > guest behavior?
+> >
+> > Say that it's a minimum of 1000 cycles to intercept this WRMSR. The
+> > tradeoff is the cost of a RDMSR on every VM-exit. How long does a
+> > RDMSR take these days? On the order of 50 cycles? So, if the guest
+> > consistently writes IA32_SPEC_CTRL more often than once every 20
+> > VM-exits, it's better not to intercept it.
+> >
+> > Most of the bookkeeping could be handled in the WRMSR(IA32_SPEC_CTRL)
+> > intercept. The only overhead we'd incur on every VM-exit would be the
+> > cost of incrementing a VM-exit counter.
+> >
+> > It's a bit more complicated, but it directly addresses the issue, and
+> > it's more future-proof.
 >
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index bb23a36a7ff7..b92a6b3f965f 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -5495,6 +5495,8 @@
->   
->   	rw		[KNL] Mount root device read-write on boot
->   
-> +	rwsem.opt_rspin= [KNL] Use rwsem reader optimistic spinning
-> +
->   	S		[KNL] Run init in single mode
->   
->   	s390_iommu=	[HW,S390]
-> diff --git a/kernel/locking/lock_events_list.h b/kernel/locking/lock_events_list.h
-> index 97fb6f3f840a..270a0d351932 100644
-> --- a/kernel/locking/lock_events_list.h
-> +++ b/kernel/locking/lock_events_list.h
-> @@ -56,9 +56,12 @@ LOCK_EVENT(rwsem_sleep_reader)	/* # of reader sleeps			*/
->   LOCK_EVENT(rwsem_sleep_writer)	/* # of writer sleeps			*/
->   LOCK_EVENT(rwsem_wake_reader)	/* # of reader wakeups			*/
->   LOCK_EVENT(rwsem_wake_writer)	/* # of writer wakeups			*/
-> -LOCK_EVENT(rwsem_opt_lock)	/* # of opt-acquired write locks	*/
-> +LOCK_EVENT(rwsem_opt_rlock)	/* # of opt-acquired read locks		*/
-> +LOCK_EVENT(rwsem_opt_wlock)	/* # of opt-acquired write locks	*/
->   LOCK_EVENT(rwsem_opt_fail)	/* # of failed optspins			*/
->   LOCK_EVENT(rwsem_opt_nospin)	/* # of disabled optspins		*/
-> +LOCK_EVENT(rwsem_opt_norspin)	/* # of disabled reader-only optspins	*/
-> +LOCK_EVENT(rwsem_opt_rlock2)	/* # of opt-acquired 2ndary read locks	*/
->   LOCK_EVENT(rwsem_rlock)		/* # of read locks acquired		*/
->   LOCK_EVENT(rwsem_rlock_steal)	/* # of read locks by lock stealing	*/
->   LOCK_EVENT(rwsem_rlock_fast)	/* # of fast read locks acquired	*/
-> diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-> index 9eabd585ce7a..016dbc4312e6 100644
-> --- a/kernel/locking/rwsem.c
-> +++ b/kernel/locking/rwsem.c
-> @@ -33,13 +33,19 @@
->   #include "lock_events.h"
->   
->   /*
-> - * The least significant 2 bits of the owner value has the following
-> + * The least significant 3 bits of the owner value has the following
->    * meanings when set.
->    *  - Bit 0: RWSEM_READER_OWNED - The rwsem is owned by readers
-> - *  - Bit 1: RWSEM_NONSPINNABLE - Cannot spin on a reader-owned lock
-> + *  - Bit 1: RWSEM_RD_NONSPINNABLE - Readers cannot spin on this lock.
-> + *  - Bit 2: RWSEM_WR_NONSPINNABLE - Writers cannot spin on this lock.
->    *
-> - * When the rwsem is reader-owned and a spinning writer has timed out,
-> - * the nonspinnable bit will be set to disable optimistic spinning.
-> + * When the rwsem is either owned by an anonymous writer, or it is
-> + * reader-owned, but a spinning writer has timed out, both nonspinnable
-> + * bits will be set to disable optimistic spinning by readers and writers.
-> + * In the later case, the last unlocking reader should then check the
-> + * writer nonspinnable bit and clear it only to give writers preference
-> + * to acquire the lock via optimistic spinning, but not readers. Similar
-> + * action is also done in the reader slowpath.
->   
->    * When a writer acquires a rwsem, it puts its task_struct pointer
->    * into the owner field. It is cleared after an unlock.
-> @@ -59,9 +65,47 @@
->    * is previously owned by a writer and the following conditions are met:
->    *  - rwsem is not currently writer owned
->    *  - the handoff isn't set.
-> + *
-> + * Reader optimistic spinning is helpful when the reader critical section
-> + * is short and there aren't that many readers around. It makes readers
-> + * relatively more preferred than writers. When a writer times out spinning
-> + * on a reader-owned lock and set the nospinnable bits, there are two main
-> + * reasons for that.
-> + *
-> + *  1) The reader critical section is long, perhaps the task sleeps after
-> + *     acquiring the read lock.
-> + *  2) There are just too many readers contending the lock causing it to
-> + *     take a while to service all of them.
-> + *
-> + * In the former case, long reader critical section will impede the progress
-> + * of writers which is usually more important for system performance. In
-> + * the later case, reader optimistic spinning tends to make the reader
-> + * groups that contain readers that acquire the lock together smaller
-> + * leading to more of them. That may hurt performance in some cases. In
-> + * other words, the setting of nonspinnable bits indicates that reader
-> + * optimistic spinning may not be helpful for those workloads that cause
-> + * it.
-> + *
-> + * Therefore, any writers that had observed the setting of the writer
-> + * nonspinnable bit for a given rwsem after they fail to acquire the lock
-> + * via optimistic spinning will set the reader nonspinnable bit once they
-> + * acquire the write lock. Similarly, readers that observe the setting
-> + * of reader nonspinnable bit at slowpath entry will set the reader
-> + * nonspinnable bits when they acquire the read lock via the wakeup path.
-> + *
-> + * Once the reader nonspinnable bit is on, it will only be reset when
-> + * a writer is able to acquire the rwsem in the fast path or somehow a
-> + * reader or writer in the slowpath doesn't observe the nonspinable bit.
-> + *
-> + * This is to discourage reader optmistic spinning on that particular
-> + * rwsem and make writers more preferred. This adaptive disabling of reader
-> + * optimistic spinning will alleviate the negative side effect of this
-> + * feature.
->    */
->   #define RWSEM_READER_OWNED	(1UL << 0)
-> -#define RWSEM_NONSPINNABLE	(1UL << 1)
-> +#define RWSEM_RD_NONSPINNABLE	(1UL << 1)
-> +#define RWSEM_WR_NONSPINNABLE	(1UL << 2)
-> +#define RWSEM_NONSPINNABLE	(RWSEM_RD_NONSPINNABLE | RWSEM_WR_NONSPINNABLE)
->   #define RWSEM_OWNER_FLAGS_MASK	(RWSEM_READER_OWNED | RWSEM_NONSPINNABLE)
->   
->   #ifdef CONFIG_DEBUG_RWSEMS
-> @@ -127,6 +171,12 @@
->   #define RWSEM_READ_FAILED_MASK	(RWSEM_WRITER_MASK|RWSEM_FLAG_WAITERS|\
->   				 RWSEM_FLAG_HANDOFF|RWSEM_FLAG_READFAIL)
->   
-> +#ifdef CONFIG_RWSEM_SPIN_ON_OWNER
-> +/* Reader optimistic spinning, default disabled */
-> +static bool rwsem_opt_rspin;
-> +module_param_named(opt_rspin, rwsem_opt_rspin, bool, 0644);
-> +#endif
+> Yea, I thought about it. One one hand, simplicity is king and on the othe=
+r
+> hand, not having to think about this again is nice too.
+>
+> The challenge in my mind is that on setups where this truly is static, we=
+=E2=80=99d
+> be taking some incremental amount of memory to keep the counter around,
+> just to have the same outcome each time. Doesn=E2=80=99t feel right (to m=
+e) unless that is
+> also used for =E2=80=9Cother=E2=80=9D stuff as some sort of general purpo=
+se/common counter.
 
-The rwsem code isn't really a kernel module. It is a bit odd to use 
-module parameter here.
+If you're feeling mean, there's plenty of wasted space where you could
+put the counter. For instance, we still allocate an entire page for
+every VMCS, don't we?
 
+> RE Cost: I can=E2=80=99t put my finger on it, but I swear that RDMSR for =
+*this*
+> specific MSR is more expensive than any other RDMSR I=E2=80=99ve come acr=
+oss
+> for run-of-the-mill random MSRs. I flipped thru the SDM and the mitigatio=
+ns
+> documentation, and it only ever mentions that there is a notable cost to
+> do WRMSR IA32_SPEC_CTRL, but nothing about the RDMSR side.
+>
+> If anyone happens to know from an Intel-internals perspective, I=E2=80=99=
+d be quite
+> interested to know why it just =E2=80=9Cfeels=E2=80=9D so darn costly. i.=
+e. is the proc also doing
+> special things under the covers, similar to what the processor does on
+> writes to this one?
 
-> +
->   /*
->    * All writes to owner are protected by WRITE_ONCE() to make sure that
->    * store tearing can't happen as optimistic spinners may read and use
-> @@ -171,7 +221,7 @@ static inline void __rwsem_set_reader_owned(struct rw_semaphore *sem,
->   					    struct task_struct *owner)
->   {
->   	unsigned long val = (unsigned long)owner | RWSEM_READER_OWNED |
-> -		(atomic_long_read(&sem->owner) & RWSEM_NONSPINNABLE);
-> +		(atomic_long_read(&sem->owner) & RWSEM_RD_NONSPINNABLE);
->   
->   	atomic_long_set(&sem->owner, val);
->   }
-> @@ -341,6 +391,7 @@ struct rwsem_waiter {
->   	enum rwsem_waiter_type type;
->   	unsigned long timeout;
->   	bool handoff_set;
-> +	unsigned long last_rowner;
->   };
->   #define rwsem_first_waiter(sem) \
->   	list_first_entry(&sem->wait_list, struct rwsem_waiter, list)
-> @@ -480,6 +531,10 @@ static void rwsem_mark_wake(struct rw_semaphore *sem,
->   		 * the reader is copied over.
->   		 */
->   		owner = waiter->task;
-> +		if (waiter->last_rowner & RWSEM_RD_NONSPINNABLE) {
-> +			owner = (void *)((unsigned long)owner | RWSEM_RD_NONSPINNABLE);
-> +			lockevent_inc(rwsem_opt_norspin);
-> +		}
->   		__rwsem_set_reader_owned(sem, owner);
->   	}
->   
-> @@ -684,6 +739,30 @@ enum owner_state {
->   };
->   
->   #ifdef CONFIG_RWSEM_SPIN_ON_OWNER
-> +/*
-> + * Try to acquire read lock before the reader is put on wait queue.
-> + * Lock acquisition isn't allowed if the rwsem is locked or a writer handoff
-> + * is ongoing.
-> + */
-> +static inline bool rwsem_try_read_lock_unqueued(struct rw_semaphore *sem)
-> +{
-> +	long count = atomic_long_read(&sem->count);
-> +
-> +	if (count & (RWSEM_WRITER_MASK | RWSEM_FLAG_HANDOFF))
-> +		return false;
-> +
-> +	count = atomic_long_fetch_add_acquire(RWSEM_READER_BIAS, &sem->count);
-> +	if (!(count & (RWSEM_WRITER_MASK | RWSEM_FLAG_HANDOFF))) {
-> +		rwsem_set_reader_owned(sem);
-> +		lockevent_inc(rwsem_opt_rlock);
-> +		return true;
-> +	}
-> +
-> +	/* Back out the change */
-> +	atomic_long_add(-RWSEM_READER_BIAS, &sem->count);
-> +	return false;
-> +}
-> +
->   /*
->    * Try to acquire write lock before the writer has been put on wait queue.
->    */
-> @@ -695,14 +774,15 @@ static inline bool rwsem_try_write_lock_unqueued(struct rw_semaphore *sem)
->   		if (atomic_long_try_cmpxchg_acquire(&sem->count, &count,
->   					count | RWSEM_WRITER_LOCKED)) {
->   			rwsem_set_owner(sem);
-> -			lockevent_inc(rwsem_opt_lock);
-> +			lockevent_inc(rwsem_opt_wlock);
->   			return true;
->   		}
->   	}
->   	return false;
->   }
->   
-> -static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem)
-> +static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem,
-> +					   unsigned long nonspinnable)
->   {
->   	struct task_struct *owner;
->   	unsigned long flags;
-> @@ -721,7 +801,7 @@ static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem)
->   	/*
->   	 * Don't check the read-owner as the entry may be stale.
->   	 */
-> -	if ((flags & RWSEM_NONSPINNABLE) ||
-> +	if ((flags & nonspinnable) ||
->   	    (owner && !(flags & RWSEM_READER_OWNED) && !owner_on_cpu(owner)))
->   		ret = false;
->   
-> @@ -732,9 +812,9 @@ static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem)
->   #define OWNER_SPINNABLE		(OWNER_NULL | OWNER_WRITER | OWNER_READER)
->   
->   static inline enum owner_state
-> -rwsem_owner_state(struct task_struct *owner, unsigned long flags)
-> +rwsem_owner_state(struct task_struct *owner, unsigned long flags, unsigned long nonspinnable)
->   {
-> -	if (flags & RWSEM_NONSPINNABLE)
-> +	if (flags & nonspinnable)
->   		return OWNER_NONSPINNABLE;
->   
->   	if (flags & RWSEM_READER_OWNED)
-> @@ -744,7 +824,7 @@ rwsem_owner_state(struct task_struct *owner, unsigned long flags)
->   }
->   
->   static noinline enum owner_state
-> -rwsem_spin_on_owner(struct rw_semaphore *sem)
-> +rwsem_spin_on_owner(struct rw_semaphore *sem, unsigned long nonspinnable)
->   {
->   	struct task_struct *new, *owner;
->   	unsigned long flags, new_flags;
-> @@ -753,7 +833,7 @@ rwsem_spin_on_owner(struct rw_semaphore *sem)
->   	lockdep_assert_preemption_disabled();
->   
->   	owner = rwsem_owner_flags(sem, &flags);
-> -	state = rwsem_owner_state(owner, flags);
-> +	state = rwsem_owner_state(owner, flags, nonspinnable);
->   	if (state != OWNER_WRITER)
->   		return state;
->   
-> @@ -766,7 +846,7 @@ rwsem_spin_on_owner(struct rw_semaphore *sem)
->   		 */
->   		new = rwsem_owner_flags(sem, &new_flags);
->   		if ((new != owner) || (new_flags != flags)) {
-> -			state = rwsem_owner_state(new, new_flags);
-> +			state = rwsem_owner_state(new, new_flags, nonspinnable);
->   			break;
->   		}
->   
-> @@ -816,12 +896,14 @@ static inline u64 rwsem_rspin_threshold(struct rw_semaphore *sem)
->   	return sched_clock() + delta;
->   }
->   
-> -static bool rwsem_optimistic_spin(struct rw_semaphore *sem)
-> +static bool rwsem_optimistic_spin(struct rw_semaphore *sem, bool wlock)
->   {
->   	bool taken = false;
->   	int prev_owner_state = OWNER_NULL;
->   	int loop = 0;
->   	u64 rspin_threshold = 0;
-> +	unsigned long nonspinnable = wlock ? RWSEM_WR_NONSPINNABLE
-> +					   : RWSEM_RD_NONSPINNABLE;
->   
->   	/* sem->wait_lock should not be held when doing optimistic spinning */
->   	if (!osq_lock(&sem->osq))
-> @@ -836,14 +918,15 @@ static bool rwsem_optimistic_spin(struct rw_semaphore *sem)
->   	for (;;) {
->   		enum owner_state owner_state;
->   
-> -		owner_state = rwsem_spin_on_owner(sem);
-> +		owner_state = rwsem_spin_on_owner(sem, nonspinnable);
->   		if (!(owner_state & OWNER_SPINNABLE))
->   			break;
->   
->   		/*
->   		 * Try to acquire the lock
->   		 */
-> -		taken = rwsem_try_write_lock_unqueued(sem);
-> +		taken = wlock ? rwsem_try_write_lock_unqueued(sem)
-> +			      : rwsem_try_read_lock_unqueued(sem);
->   
->   		if (taken)
->   			break;
-> @@ -851,7 +934,7 @@ static bool rwsem_optimistic_spin(struct rw_semaphore *sem)
->   		/*
->   		 * Time-based reader-owned rwsem optimistic spinning
->   		 */
-> -		if (owner_state == OWNER_READER) {
-> +		if (wlock && (owner_state == OWNER_READER)) {
->   			/*
->   			 * Re-initialize rspin_threshold every time when
->   			 * the owner state changes from non-reader to reader.
-> @@ -860,7 +943,7 @@ static bool rwsem_optimistic_spin(struct rw_semaphore *sem)
->   			 * the beginning of the 2nd reader phase.
->   			 */
->   			if (prev_owner_state != OWNER_READER) {
-> -				if (rwsem_test_oflags(sem, RWSEM_NONSPINNABLE))
-> +				if (rwsem_test_oflags(sem, nonspinnable))
->   					break;
->   				rspin_threshold = rwsem_rspin_threshold(sem);
->   				loop = 0;
-> @@ -935,30 +1018,89 @@ static bool rwsem_optimistic_spin(struct rw_semaphore *sem)
->   }
->   
->   /*
-> - * Clear the owner's RWSEM_NONSPINNABLE bit if it is set. This should
-> + * Clear the owner's RWSEM_WR_NONSPINNABLE bit if it is set. This should
->    * only be called when the reader count reaches 0.
-> + *
-> + * This give writers better chance to acquire the rwsem first before
-> + * readers when the rwsem was being held by readers for a relatively long
-> + * period of time. Race can happen that an optimistic spinner may have
-> + * just stolen the rwsem and set the owner, but just clearing the
-> + * RWSEM_WR_NONSPINNABLE bit will do no harm anyway.
->    */
-> -static inline void clear_nonspinnable(struct rw_semaphore *sem)
-> +static inline void clear_wr_nonspinnable(struct rw_semaphore *sem)
->   {
-> -	if (unlikely(rwsem_test_oflags(sem, RWSEM_NONSPINNABLE)))
-> -		atomic_long_andnot(RWSEM_NONSPINNABLE, &sem->owner);
-> +	if (unlikely(rwsem_test_oflags(sem, RWSEM_WR_NONSPINNABLE)))
-> +		atomic_long_andnot(RWSEM_WR_NONSPINNABLE, &sem->owner);
-> +}
-> +
-> +/*
-> + * This function is called when the reader fails to acquire the lock via
-> + * optimistic spinning. In this case we will still attempt to do a trylock
-> + * when comparing the rwsem state right now with the state when entering
-> + * the slowpath indicates that the reader is still in a valid reader phase.
-> + * This happens when the following conditions are true:
-> + *
-> + * 1) The lock is currently reader owned, and
-> + * 2) The lock is previously not reader-owned or the last read owner changes.
-> + *
-> + * In the former case, we have transitioned from a writer phase to a
-> + * reader-phase while spinning. In the latter case, it means the reader
-> + * phase hasn't ended when we entered the optimistic spinning loop. In
-> + * both cases, the reader is eligible to acquire the lock. This is the
-> + * secondary path where a read lock is acquired optimistically.
-> + *
-> + * The reader non-spinnable bit wasn't set at time of entry or it will
-> + * not be here at all.
-> + */
-> +static inline bool rwsem_reader_phase_trylock(struct rw_semaphore *sem,
-> +					      unsigned long last_rowner)
-> +{
-> +	unsigned long owner = atomic_long_read(&sem->owner);
-> +
-> +	if (!(owner & RWSEM_READER_OWNED))
-> +		return false;
-> +
-> +	if (((owner ^ last_rowner) & ~RWSEM_OWNER_FLAGS_MASK) &&
-> +	    rwsem_try_read_lock_unqueued(sem)) {
-> +		lockevent_inc(rwsem_opt_rlock2);
-> +		lockevent_add(rwsem_opt_fail, -1);
-> +		return true;
-> +	}
-> +	return false;
-> +}
-> +
-> +static inline bool rwsem_no_spinners(struct rw_semaphore *sem)
-> +{
-> +	return !osq_is_locked(&sem->osq);
->   }
->   
->   #else
-> -static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem)
-> +static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem,
-> +					   unsigned long nonspinnable)
->   {
->   	return false;
->   }
->   
-> -static inline bool rwsem_optimistic_spin(struct rw_semaphore *sem)
-> +static inline bool rwsem_optimistic_spin(struct rw_semaphore *sem, bool wlock)
->   {
->   	return false;
->   }
->   
-> -static inline void clear_nonspinnable(struct rw_semaphore *sem) { }
-> +static inline void clear_wr_nonspinnable(struct rw_semaphore *sem) { }
-> +
-> +static inline bool rwsem_reader_phase_trylock(struct rw_semaphore *sem,
-> +					      unsigned long last_rowner)
-> +{
-> +	return false;
-> +}
-> +
-> +static inline bool rwsem_no_spinners(sem)
-> +{
-> +	return false;
-> +}
->   
->   static inline enum owner_state
-> -rwsem_spin_on_owner(struct rw_semaphore *sem)
-> +rwsem_spin_on_owner(struct rw_semaphore *sem, unsigned long nonspinnable)
->   {
->   	return OWNER_NONSPINNABLE;
->   }
-> @@ -984,7 +1126,7 @@ static inline void rwsem_cond_wake_waiter(struct rw_semaphore *sem, long count,
->   		wake_type = RWSEM_WAKE_READERS;
->   	} else {
->   		wake_type = RWSEM_WAKE_ANY;
-> -		clear_nonspinnable(sem);
-> +		clear_wr_nonspinnable(sem);
->   	}
->   	rwsem_mark_wake(sem, wake_type, wake_q);
->   }
-> @@ -995,32 +1137,66 @@ static inline void rwsem_cond_wake_waiter(struct rw_semaphore *sem, long count,
->   static struct rw_semaphore __sched *
->   rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int state)
->   {
-> -	long adjustment = -RWSEM_READER_BIAS;
-> +	long owner, adjustment = -RWSEM_READER_BIAS;
->   	long rcnt = (count >> RWSEM_READER_SHIFT);
->   	struct rwsem_waiter waiter;
->   	DEFINE_WAKE_Q(wake_q);
->   
->   	/*
->   	 * To prevent a constant stream of readers from starving a sleeping
-> -	 * waiter, don't attempt optimistic lock stealing if the lock is
-> -	 * currently owned by readers.
-> +	 * waiter, don't attempt optimistic spinning if the lock is currently
-> +	 * owned by readers.
->   	 */
-> -	if ((atomic_long_read(&sem->owner) & RWSEM_READER_OWNED) &&
-> -	    (rcnt > 1) && !(count & RWSEM_WRITER_LOCKED))
-> +	owner = atomic_long_read(&sem->owner);
-> +	if ((owner & RWSEM_READER_OWNED) && (rcnt > 1) &&
-> +	   !(count & RWSEM_WRITER_LOCKED))
->   		goto queue;
->   
->   	/*
-> -	 * Reader optimistic lock stealing.
-> +	 * Reader optimistic lock stealing
-> +	 *
-> +	 * We can take the read lock directly without doing
-> +	 * rwsem_optimistic_spin() if the conditions are right.
-> +	 * Also wake up other readers if it is the first reader.
->   	 */
-> -	if (!(count & (RWSEM_WRITER_LOCKED | RWSEM_FLAG_HANDOFF))) {
-> +	if (!(count & (RWSEM_WRITER_LOCKED | RWSEM_FLAG_HANDOFF)) &&
-> +	    rwsem_no_spinners(sem)) {
->   		rwsem_set_reader_owned(sem);
->   		lockevent_inc(rwsem_rlock_steal);
-> +		if (rcnt == 1)
-> +			goto wake_readers;
-> +		return sem;
-> +	}
-> +
-> +#ifdef CONFIG_RWSEM_SPIN_ON_OWNER
-> +	if (!rwsem_opt_rspin)
-> +		goto queue;
-> +#endif
->   
-
-I would suggest changing that to
-
-if (!IS_ENABLED(CONFIG_RWSEM_SPIN_ON_OWNER) || !rwsem_opt_rspin)
-         goto queue;
-
-> +	/*
-> +	 * Save the current read-owner of rwsem, if available, and the
-> +	 * reader nonspinnable bit.
-> +	 */
-> +	waiter.last_rowner = owner;
-> +	if (!(waiter.last_rowner & RWSEM_READER_OWNED))
-> +		waiter.last_rowner &= RWSEM_RD_NONSPINNABLE;
-> +
-> +	if (!rwsem_can_spin_on_owner(sem, RWSEM_RD_NONSPINNABLE))
-> +		goto queue;
-> +
-> +	/*
-> +	 * Undo read bias from down_read() and do optimistic spinning.
-> +	 */
-> +	atomic_long_add(-RWSEM_READER_BIAS, &sem->count);
-> +	adjustment = 0;
-> +	if (rwsem_optimistic_spin(sem, false)) {
-> +		/* rwsem_optimistic_spin() implies ACQUIRE on success */
->   		/*
-> -		 * Wake up other readers in the wait queue if it is
-> -		 * the first reader.
-> +		 * Wake up other readers in the wait list if the front
-> +		 * waiter is a reader.
->   		 */
-> -		if ((rcnt == 1) && (count & RWSEM_FLAG_WAITERS)) {
-> +wake_readers:
-> +		if ((atomic_long_read(&sem->count) & RWSEM_FLAG_WAITERS)) {
->   			raw_spin_lock_irq(&sem->wait_lock);
->   			if (!list_empty(&sem->wait_list))
->   				rwsem_mark_wake(sem, RWSEM_WAKE_READ_OWNED,
-> @@ -1029,6 +1205,9 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
->   			wake_up_q(&wake_q);
->   		}
->   		return sem;
-> +	} else if (rwsem_reader_phase_trylock(sem, waiter.last_rowner)) {
-> +		/* rwsem_reader_phase_trylock() implies ACQUIRE on success */
-> +		return sem;
->   	}
->   
->   queue:
-> @@ -1045,7 +1224,8 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
->   		 * immediately as its RWSEM_READER_BIAS has already been set
->   		 * in the count.
->   		 */
-> -		if (!(atomic_long_read(&sem->count) & RWSEM_WRITER_MASK)) {
-> +		if (adjustment && !(atomic_long_read(&sem->count) &
-> +		     RWSEM_WRITER_MASK)) {
->   			/* Provide lock ACQUIRE */
->   			smp_acquire__after_ctrl_dep();
->   			raw_spin_unlock_irq(&sem->wait_lock);
-> @@ -1058,7 +1238,10 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
->   	rwsem_add_waiter(sem, &waiter);
->   
->   	/* we're now waiting on the lock, but no longer actively locking */
-> -	count = atomic_long_add_return(adjustment, &sem->count);
-> +	if (adjustment)
-> +		count = atomic_long_add_return(adjustment, &sem->count);
-> +	else
-> +		count = atomic_long_read(&sem->count);
->   
->   	rwsem_cond_wake_waiter(sem, count, &wake_q);
->   	raw_spin_unlock_irq(&sem->wait_lock);
-> @@ -1100,21 +1283,43 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
->   	return ERR_PTR(-EINTR);
->   }
->   
-> +/*
-> + * This function is called by the a write lock owner. So the owner value
-> + * won't get changed by others.
-> + */
-> +static inline void rwsem_disable_reader_optspin(struct rw_semaphore *sem,
-> +						bool disable)
-> +{
-> +	if (unlikely(disable)) {
-> +		atomic_long_or(RWSEM_RD_NONSPINNABLE, &sem->owner);
-> +		lockevent_inc(rwsem_opt_norspin);
-> +	}
-> +}
-> +
->   /*
->    * Wait until we successfully acquire the write lock
->    */
->   static struct rw_semaphore __sched *
->   rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
->   {
-> +	bool disable_rspin;
->   	struct rwsem_waiter waiter;
->   	DEFINE_WAKE_Q(wake_q);
->   
->   	/* do optimistic spinning and steal lock if possible */
-> -	if (rwsem_can_spin_on_owner(sem) && rwsem_optimistic_spin(sem)) {
-> +	if (rwsem_can_spin_on_owner(sem, RWSEM_WR_NONSPINNABLE) &&
-> +	    rwsem_optimistic_spin(sem, true)) {
->   		/* rwsem_optimistic_spin() implies ACQUIRE on success */
->   		return sem;
->   	}
->   
-> +	/*
-> +	 * Disable reader optimistic spinning for this rwsem after
-> +	 * acquiring the write lock when the setting of the nonspinnable
-> +	 * bits are observed.
-> +	 */
-> +	disable_rspin = atomic_long_read(&sem->owner) & RWSEM_NONSPINNABLE;
-> +
->   	/*
->   	 * Optimistic spinning failed, proceed to the slowpath
->   	 * and block until we can acquire the sem.
-> @@ -1170,7 +1375,7 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
->   		if (waiter.handoff_set) {
->   			enum owner_state owner_state;
->   
-> -			owner_state = rwsem_spin_on_owner(sem);
-> +			owner_state = rwsem_spin_on_owner(sem, RWSEM_NONSPINNABLE);
->   			if (owner_state == OWNER_NULL)
->   				goto trylock_again;
->   		}
-> @@ -1182,6 +1387,7 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
->   		raw_spin_lock_irq(&sem->wait_lock);
->   	}
->   	__set_current_state(TASK_RUNNING);
-> +	rwsem_disable_reader_optspin(sem, disable_rspin);
->   	raw_spin_unlock_irq(&sem->wait_lock);
->   	lockevent_inc(rwsem_wlock);
->   	trace_contention_end(sem, 0);
-> @@ -1348,7 +1554,7 @@ static inline void __up_read(struct rw_semaphore *sem)
->   	DEBUG_RWSEMS_WARN_ON(tmp < 0, sem);
->   	if (unlikely((tmp & (RWSEM_LOCK_MASK|RWSEM_FLAG_WAITERS)) ==
->   		      RWSEM_FLAG_WAITERS)) {
-> -		clear_nonspinnable(sem);
-> +		clear_wr_nonspinnable(sem);
->   		rwsem_wake(sem);
->   	}
->   	preempt_enable();
-
-I don't have a strong feeling pro or against it. It does provide a 
-modest improvement in some use cases, but it does make the code a bit 
-more complex and harder to understand.
-
-Cheers,
-Longman
-
+What do you mean by "feels"? Have you measured it?
