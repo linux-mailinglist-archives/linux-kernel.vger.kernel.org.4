@@ -2,218 +2,376 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D352F717D84
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED783717D85
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235306AbjEaLBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 07:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
+        id S235400AbjEaLCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 07:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235212AbjEaLBZ (ORCPT
+        with ESMTP id S235298AbjEaLCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 07:01:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6B8123
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 04:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685530831;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nBkFTCC6CO9wuSqa6TDRZsc4R0OnF4ofoS5g5iSEfa8=;
-        b=dmjuwmsojq7lfQIeNhHGPAKSj0VbaoR2AdtBb20CowDX1oC8XW7rmuYnnTIWkEElWxuS9U
-        goPAoRfCgDM2DHCwvEI+iva2hkOwmGGJmF4WG+VzM6v6m3IcOh5LU8jCRuSujhUW0WEIlb
-        k/jZ65+pH26upt0p6LJHT2dK/iwQzJM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-26-W82jFm1ZNtOC3nNUdxtyIw-1; Wed, 31 May 2023 07:00:27 -0400
-X-MC-Unique: W82jFm1ZNtOC3nNUdxtyIw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 90765811E78;
-        Wed, 31 May 2023 11:00:24 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 86FBF421C3;
-        Wed, 31 May 2023 11:00:21 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Simon Horman <simon.horman@corigine.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 2/2] chelsio: Convert chtls_sendpage() to use MSG_SPLICE_PAGES
-Date:   Wed, 31 May 2023 12:00:08 +0100
-Message-ID: <20230531110008.642903-3-dhowells@redhat.com>
-In-Reply-To: <20230531110008.642903-1-dhowells@redhat.com>
-References: <20230531110008.642903-1-dhowells@redhat.com>
+        Wed, 31 May 2023 07:02:08 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA07CE6C;
+        Wed, 31 May 2023 04:01:43 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QWR640QHZz6J7f1;
+        Wed, 31 May 2023 18:56:44 +0800 (CST)
+Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
+ lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 31 May 2023 12:01:41 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Namhyung Kim <namhyung@gmail.com>,
+        Liang Kan <kan.liang@linux.intel.com>,
+        <linux-cxl@vger.kernel.org>, <peterz@infradead.org>
+CC:     <mingo@reresetdhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
+        <will@kernel.org>, <dan.j.williams@intel.com>,
+        <linuxarm@huawei.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>
+Subject: [PATCH v8 3/5] cxl/pci: Find and register CXL PMU devices
+Date:   Wed, 31 May 2023 12:00:09 +0100
+Message-ID: <20230531110011.13963-4-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230531110011.13963-1-Jonathan.Cameron@huawei.com>
+References: <20230531110011.13963-1-Jonathan.Cameron@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.122.247.231]
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert chtls_sendpage() to use sendmsg() with MSG_SPLICE_PAGES rather than
-directly splicing in the pages itself.
+CXL PMU devices can be found from entries in the Register
+Locator DVSEC.
 
-This allows ->sendpage() to be replaced by something that can handle
-multiple multipage folios in a single transaction.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Ayush Sawal <ayush.sawal@chelsio.com>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: netdev@vger.kernel.org
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
+ drivers/cxl/core/Makefile |  1 +
+ drivers/cxl/core/core.h   |  1 +
+ drivers/cxl/core/pmu.c    | 68 +++++++++++++++++++++++++++++++++++++++
+ drivers/cxl/core/port.c   |  2 ++
+ drivers/cxl/core/regs.c   | 16 +++++++++
+ drivers/cxl/cxl.h         | 13 ++++++++
+ drivers/cxl/cxlpci.h      |  1 +
+ drivers/cxl/pci.c         | 26 ++++++++++++++-
+ drivers/cxl/pmu.h         | 28 ++++++++++++++++
+ 9 files changed, 155 insertions(+), 1 deletion(-)
 
-Notes:
-    ver #2)
-     - Do reverse-xmas tree variables.
-
- .../chelsio/inline_crypto/chtls/chtls_io.c    | 109 ++----------------
- 1 file changed, 7 insertions(+), 102 deletions(-)
-
-diff --git a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
-index 1d08386ac916..5724bbbb6ee0 100644
---- a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
-+++ b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
-@@ -1240,110 +1240,15 @@ int chtls_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
- int chtls_sendpage(struct sock *sk, struct page *page,
- 		   int offset, size_t size, int flags)
- {
--	struct chtls_sock *csk;
--	struct chtls_dev *cdev;
--	int mss, err, copied;
--	struct tcp_sock *tp;
--	long timeo;
--
--	tp = tcp_sk(sk);
--	copied = 0;
--	csk = rcu_dereference_sk_user_data(sk);
--	cdev = csk->cdev;
--	lock_sock(sk);
--	timeo = sock_sndtimeo(sk, flags & MSG_DONTWAIT);
-+	struct msghdr msg = { .msg_flags = flags | MSG_SPLICE_PAGES, };
-+	struct bio_vec bvec;
+diff --git a/drivers/cxl/core/Makefile b/drivers/cxl/core/Makefile
+index ca4ae31d8f57..1f66b5d4d935 100644
+--- a/drivers/cxl/core/Makefile
++++ b/drivers/cxl/core/Makefile
+@@ -12,5 +12,6 @@ cxl_core-y += memdev.o
+ cxl_core-y += mbox.o
+ cxl_core-y += pci.o
+ cxl_core-y += hdm.o
++cxl_core-y += pmu.o
+ cxl_core-$(CONFIG_TRACING) += trace.o
+ cxl_core-$(CONFIG_CXL_REGION) += region.o
+diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
+index 27f0968449de..99d4a967eca6 100644
+--- a/drivers/cxl/core/core.h
++++ b/drivers/cxl/core/core.h
+@@ -6,6 +6,7 @@
  
--	err = sk_stream_wait_connect(sk, &timeo);
--	if (!sk_in_state(sk, TCPF_ESTABLISHED | TCPF_CLOSE_WAIT) &&
--	    err != 0)
--		goto out_err;
--
--	mss = csk->mss;
--	csk_set_flag(csk, CSK_TX_MORE_DATA);
--
--	while (size > 0) {
--		struct sk_buff *skb = skb_peek_tail(&csk->txq);
--		int copy, i;
--
--		if (!skb || (ULP_SKB_CB(skb)->flags & ULPCB_FLAG_NO_APPEND) ||
--		    (copy = mss - skb->len) <= 0) {
--new_buf:
--			if (!csk_mem_free(cdev, sk))
--				goto wait_for_sndbuf;
-+	if (flags & MSG_SENDPAGE_NOTLAST)
-+		msg.msg_flags |= MSG_MORE;
+ extern const struct device_type cxl_nvdimm_bridge_type;
+ extern const struct device_type cxl_nvdimm_type;
++extern const struct device_type cxl_pmu_type;
  
--			if (is_tls_tx(csk)) {
--				skb = get_record_skb(sk,
--						     select_size(sk, size,
--								 flags,
--								 TX_TLSHDR_LEN),
--						     true);
--			} else {
--				skb = get_tx_skb(sk, 0);
--			}
--			if (!skb)
--				goto wait_for_memory;
--			copy = mss;
--		}
--		if (copy > size)
--			copy = size;
--
--		i = skb_shinfo(skb)->nr_frags;
--		if (skb_can_coalesce(skb, i, page, offset)) {
--			skb_frag_size_add(&skb_shinfo(skb)->frags[i - 1], copy);
--		} else if (i < MAX_SKB_FRAGS) {
--			get_page(page);
--			skb_fill_page_desc(skb, i, page, offset, copy);
--		} else {
--			tx_skb_finalize(skb);
--			push_frames_if_head(sk);
--			goto new_buf;
--		}
--
--		skb->len += copy;
--		if (skb->len == mss)
--			tx_skb_finalize(skb);
--		skb->data_len += copy;
--		skb->truesize += copy;
--		sk->sk_wmem_queued += copy;
--		tp->write_seq += copy;
--		copied += copy;
--		offset += copy;
--		size -= copy;
--
--		if (corked(tp, flags) &&
--		    (sk_stream_wspace(sk) < sk_stream_min_wspace(sk)))
--			ULP_SKB_CB(skb)->flags |= ULPCB_FLAG_NO_APPEND;
--
--		if (!size)
--			break;
--
--		if (unlikely(ULP_SKB_CB(skb)->flags & ULPCB_FLAG_NO_APPEND))
--			push_frames_if_head(sk);
--		continue;
--wait_for_sndbuf:
--		set_bit(SOCK_NOSPACE, &sk->sk_socket->flags);
--wait_for_memory:
--		err = csk_wait_memory(cdev, sk, &timeo);
--		if (err)
--			goto do_error;
--	}
--out:
--	csk_reset_flag(csk, CSK_TX_MORE_DATA);
--	if (copied)
--		chtls_tcp_push(sk, flags);
--done:
--	release_sock(sk);
--	return copied;
--
--do_error:
--	if (copied)
--		goto out;
--
--out_err:
--	if (csk_conn_inline(csk))
--		csk_reset_flag(csk, CSK_TX_MORE_DATA);
--	copied = sk_stream_error(sk, flags, err);
--	goto done;
-+	bvec_set_page(&bvec, page, size, offset);
-+	iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1, size);
-+	return chtls_sendmsg(sk, &msg, size);
+ extern struct attribute_group cxl_base_attribute_group;
+ 
+diff --git a/drivers/cxl/core/pmu.c b/drivers/cxl/core/pmu.c
+new file mode 100644
+index 000000000000..7684c843e5a5
+--- /dev/null
++++ b/drivers/cxl/core/pmu.c
+@@ -0,0 +1,68 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright(c) 2023 Huawei. All rights reserved. */
++
++#include <linux/device.h>
++#include <linux/slab.h>
++#include <linux/idr.h>
++#include <cxlmem.h>
++#include <pmu.h>
++#include <cxl.h>
++#include "core.h"
++
++static void cxl_pmu_release(struct device *dev)
++{
++	struct cxl_pmu *pmu = to_cxl_pmu(dev);
++
++	kfree(pmu);
++}
++
++const struct device_type cxl_pmu_type = {
++	.name = "cxl_pmu",
++	.release = cxl_pmu_release,
++};
++
++static void remove_dev(void *dev)
++{
++	device_del(dev);
++}
++
++int devm_cxl_pmu_add(struct device *parent, struct cxl_pmu_regs *regs,
++		     int assoc_id, int index, enum cxl_pmu_type type)
++{
++	struct cxl_pmu *pmu;
++	struct device *dev;
++	int rc;
++
++	pmu = kzalloc(sizeof(*pmu), GFP_KERNEL);
++	if (!pmu)
++		return -ENOMEM;
++
++	pmu->assoc_id = assoc_id;
++	pmu->index = index;
++	pmu->type = type;
++	pmu->base = regs->pmu;
++	dev = &pmu->dev;
++	device_initialize(dev);
++	device_set_pm_not_required(dev);
++	dev->parent = parent;
++	dev->bus = &cxl_bus_type;
++	dev->type = &cxl_pmu_type;
++	switch (pmu->type) {
++	case CXL_PMU_MEMDEV:
++		rc = dev_set_name(dev, "pmu_mem%d.%d", assoc_id, index);
++		break;
++	}
++	if (rc)
++		goto err;
++
++	rc = device_add(dev);
++	if (rc)
++		goto err;
++
++	return devm_add_action_or_reset(parent, remove_dev, dev);
++
++err:
++	put_device(&pmu->dev);
++	return rc;
++}
++EXPORT_SYMBOL_NS_GPL(devm_cxl_pmu_add, CXL);
+diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
+index da2068475fa2..eee1fcb9199b 100644
+--- a/drivers/cxl/core/port.c
++++ b/drivers/cxl/core/port.c
+@@ -56,6 +56,8 @@ static int cxl_device_id(const struct device *dev)
+ 		return CXL_DEVICE_MEMORY_EXPANDER;
+ 	if (dev->type == CXL_REGION_TYPE())
+ 		return CXL_DEVICE_REGION;
++	if (dev->type == &cxl_pmu_type)
++		return CXL_DEVICE_PMU;
+ 	return 0;
  }
  
- static void chtls_select_window(struct sock *sk)
+diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
+index 4b9672db867d..518bc2ad2c1e 100644
+--- a/drivers/cxl/core/regs.c
++++ b/drivers/cxl/core/regs.c
+@@ -6,6 +6,7 @@
+ #include <linux/pci.h>
+ #include <cxlmem.h>
+ #include <cxlpci.h>
++#include <pmu.h>
+ 
+ #include "core.h"
+ 
+@@ -379,6 +380,21 @@ int cxl_count_regblock(struct pci_dev *pdev, enum cxl_regloc_type type)
+ }
+ EXPORT_SYMBOL_NS_GPL(cxl_count_regblock, CXL);
+ 
++int cxl_map_pmu_regs(struct pci_dev *pdev, struct cxl_pmu_regs *regs,
++		     struct cxl_register_map *map)
++{
++	struct device *dev = &pdev->dev;
++	resource_size_t phys_addr;
++
++	phys_addr = map->resource;
++	regs->pmu = devm_cxl_iomap_block(dev, phys_addr, CXL_PMU_REGMAP_SIZE);
++	if (!regs->pmu)
++		return -ENOMEM;
++
++	return 0;
++}
++EXPORT_SYMBOL_NS_GPL(cxl_map_pmu_regs, CXL);
++
+ resource_size_t cxl_rcrb_to_component(struct device *dev,
+ 				      resource_size_t rcrb,
+ 				      enum cxl_rcrb which)
+diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+index f6e2a9ea5f41..610aa430276b 100644
+--- a/drivers/cxl/cxl.h
++++ b/drivers/cxl/cxl.h
+@@ -209,6 +209,10 @@ struct cxl_regs {
+ 	struct_group_tagged(cxl_device_regs, device_regs,
+ 		void __iomem *status, *mbox, *memdev;
+ 	);
++
++	struct_group_tagged(cxl_pmu_regs, pmu_regs,
++		void __iomem *pmu;
++	);
+ };
+ 
+ struct cxl_reg_map {
+@@ -229,6 +233,10 @@ struct cxl_device_reg_map {
+ 	struct cxl_reg_map memdev;
+ };
+ 
++struct cxl_pmu_reg_map {
++	struct cxl_reg_map pmu;
++};
++
+ /**
+  * struct cxl_register_map - DVSEC harvested register block mapping parameters
+  * @base: virtual base of the register-block-BAR + @block_offset
+@@ -237,6 +245,7 @@ struct cxl_device_reg_map {
+  * @reg_type: see enum cxl_regloc_type
+  * @component_map: cxl_reg_map for component registers
+  * @device_map: cxl_reg_maps for device registers
++ * @pmu_map: cxl_reg_maps for CXL Performance Monitoring Units
+  */
+ struct cxl_register_map {
+ 	void __iomem *base;
+@@ -246,6 +255,7 @@ struct cxl_register_map {
+ 	union {
+ 		struct cxl_component_reg_map component_map;
+ 		struct cxl_device_reg_map device_map;
++		struct cxl_pmu_reg_map pmu_map;
+ 	};
+ };
+ 
+@@ -258,6 +268,8 @@ int cxl_map_component_regs(struct device *dev, struct cxl_component_regs *regs,
+ 			   unsigned long map_mask);
+ int cxl_map_device_regs(struct device *dev, struct cxl_device_regs *regs,
+ 			struct cxl_register_map *map);
++int cxl_map_pmu_regs(struct pci_dev *pdev, struct cxl_pmu_regs *regs,
++		     struct cxl_register_map *map);
+ 
+ enum cxl_regloc_type;
+ int cxl_count_regblock(struct pci_dev *pdev, enum cxl_regloc_type type);
+@@ -752,6 +764,7 @@ void cxl_driver_unregister(struct cxl_driver *cxl_drv);
+ #define CXL_DEVICE_REGION		6
+ #define CXL_DEVICE_PMEM_REGION		7
+ #define CXL_DEVICE_DAX_REGION		8
++#define CXL_DEVICE_PMU			9
+ 
+ #define MODULE_ALIAS_CXL(type) MODULE_ALIAS("cxl:t" __stringify(type) "*")
+ #define CXL_MODALIAS_FMT "cxl:t%d"
+diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
+index 0465ef963cd6..b1bbf69b62c5 100644
+--- a/drivers/cxl/cxlpci.h
++++ b/drivers/cxl/cxlpci.h
+@@ -65,6 +65,7 @@ enum cxl_regloc_type {
+ 	CXL_REGLOC_RBI_COMPONENT,
+ 	CXL_REGLOC_RBI_VIRT,
+ 	CXL_REGLOC_RBI_MEMDEV,
++	CXL_REGLOC_RBI_PMU,
+ 	CXL_REGLOC_RBI_TYPES
+ };
+ 
+diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+index f7a5b8e9c102..2ad043d77975 100644
+--- a/drivers/cxl/pci.c
++++ b/drivers/cxl/pci.c
+@@ -13,6 +13,7 @@
+ #include "cxlmem.h"
+ #include "cxlpci.h"
+ #include "cxl.h"
++#include "pmu.h"
+ 
+ /**
+  * DOC: cxl pci
+@@ -657,7 +658,7 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	struct cxl_register_map map;
+ 	struct cxl_memdev *cxlmd;
+ 	struct cxl_dev_state *cxlds;
+-	int rc;
++	int i, rc, pmu_count;
+ 
+ 	/*
+ 	 * Double check the anonymous union trickery in struct cxl_regs
+@@ -740,6 +741,29 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	if (IS_ERR(cxlmd))
+ 		return PTR_ERR(cxlmd);
+ 
++	pmu_count = cxl_count_regblock(pdev, CXL_REGLOC_RBI_PMU);
++	for (i = 0; i < pmu_count; i++) {
++		struct cxl_pmu_regs pmu_regs;
++
++		rc = cxl_find_regblock_instance(pdev, CXL_REGLOC_RBI_PMU, &map, i);
++		if (rc) {
++			dev_dbg(&pdev->dev, "Could not find PMU regblock\n");
++			break;
++		}
++
++		rc = cxl_map_pmu_regs(pdev, &pmu_regs, &map);
++		if (rc) {
++			dev_dbg(&pdev->dev, "Could not map PMU regs\n");
++			break;
++		}
++
++		rc = devm_cxl_pmu_add(cxlds->dev, &pmu_regs, cxlmd->id, i, CXL_PMU_MEMDEV);
++		if (rc) {
++			dev_dbg(&pdev->dev, "Could not add PMU instance\n");
++			break;
++		}
++	}
++
+ 	rc = cxl_event_config(host_bridge, cxlds);
+ 	if (rc)
+ 		return rc;
+diff --git a/drivers/cxl/pmu.h b/drivers/cxl/pmu.h
+new file mode 100644
+index 000000000000..b1e9bcd9f28c
+--- /dev/null
++++ b/drivers/cxl/pmu.h
+@@ -0,0 +1,28 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright(c) 2023 Huawei
++ * CXL Specification rev 3.0 Setion 8.2.7 (CPMU Register Interface)
++ */
++#ifndef CXL_PMU_H
++#define CXL_PMU_H
++#include <linux/device.h>
++
++enum cxl_pmu_type {
++	CXL_PMU_MEMDEV,
++};
++
++#define CXL_PMU_REGMAP_SIZE 0xe00 /* Table 8-32 CXL 3.0 specification */
++struct cxl_pmu {
++	struct device dev;
++	void __iomem *base;
++	int assoc_id;
++	int index;
++	enum cxl_pmu_type type;
++};
++
++#define to_cxl_pmu(dev) container_of(dev, struct cxl_pmu, dev)
++struct cxl_pmu_regs;
++int devm_cxl_pmu_add(struct device *parent, struct cxl_pmu_regs *regs,
++		     int assoc_id, int idx, enum cxl_pmu_type type);
++
++#endif
+-- 
+2.39.2
 
