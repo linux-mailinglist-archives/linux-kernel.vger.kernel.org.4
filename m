@@ -2,164 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BCF7179D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2BFA7179D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235186AbjEaITZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
+        id S235190AbjEaIT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234439AbjEaITW (ORCPT
+        with ESMTP id S235145AbjEaITY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:19:22 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C0E93
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:19:20 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96f7377c86aso956593266b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:19:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685521159; x=1688113159;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=17G7fgccZw26IuKEnhcF6apgAkC9GALykdO8V5FR4Zc=;
-        b=jIe6mWyUFq7h8o883sjF4wSXtBDd+bizNgKp2DtJauDCvI5g4VWQcvYx3wxWVLtPmq
-         DwxwtXoa4Pog0Kchm7HKAqaML2QCVDfxTVIcZHUx9Q/nXjFeLO4p5BqWeMEiRSDRuBf3
-         +EiqsspEnZsz+874OwruO1KbzkrW3v4QC1KeQeCafNQfI7P6qZ9NN8ZfNXxz8LENrZi7
-         BQOTVODkD57MOtE1Jal69BticPl3JoW1oYtUQc0AFU7i65yvtcqSrP4CKXZubagVbX9V
-         Td+OXZhyQk78D6E96Up6MMmP+hEKuk/bOjpPYjVPN/bb4Zuc1GWL7283Mxxh0pQIGqkK
-         M3+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685521159; x=1688113159;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=17G7fgccZw26IuKEnhcF6apgAkC9GALykdO8V5FR4Zc=;
-        b=a7FJ0kfOHc13aZc0AymUtoqzv1gkB/XFYfdfQGEUwuIFy4iuzn/nXdMze0ceudkEtE
-         hpTv5L1hs+O0sDslYqdy/NTmnU+9LwVK1LwkIQIZvRt+MtpLGvfok1PXWcNo3q/kGoXV
-         6iK13iVu34i+ojIS6sY8eiI4GTcudr7NY7q43tLdU/hzsRTIzulbVXsG/pi/O+czZWzL
-         TxEewJjoH/MEFm5LUmfJa4KWa9PNkV1akIaEQGPNT3wljyJqn/eTrSm20YZwIaYRZ/Xw
-         W4KeQTzKJxFgq1rP6+bmdSdrKOkapLxW3JREc/9e6L3lrbhMI7ZbplofQu6obKAB3Qnb
-         nM8w==
-X-Gm-Message-State: AC+VfDylbUOBpWNDI3UBmFG+huEmyjt5Ic81+N00hSrrmjOtwKf5TczS
-        yCJzM9tpMdM3ziipZX8VZXfhCA==
-X-Google-Smtp-Source: ACHHUZ5ecctufjEICHVJOxqbmGFp4cMb86II1wutT7aAwcq/GT4AF70E5eF22KgMKCTBhO6z0IHKaA==
-X-Received: by 2002:a17:907:1c84:b0:974:32e:7de9 with SMTP id nb4-20020a1709071c8400b00974032e7de9mr5775337ejc.56.1685521159179;
-        Wed, 31 May 2023 01:19:19 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id a6-20020a170906244600b00965b416585bsm8528500ejb.118.2023.05.31.01.19.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 01:19:18 -0700 (PDT)
-Message-ID: <4fcbb3b7-ed44-d8e6-a601-e3e957c55ebf@linaro.org>
-Date:   Wed, 31 May 2023 10:19:16 +0200
+        Wed, 31 May 2023 04:19:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C17010E;
+        Wed, 31 May 2023 01:19:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D098B637F4;
+        Wed, 31 May 2023 08:19:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C410FC433D2;
+        Wed, 31 May 2023 08:19:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685521160;
+        bh=0HCQtl+r90qoo8vag/j4fmBsYtYN/bLTT76larf8Zh8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AXU+m6wUmO04i+P8FRRsQWmSDFaUGpTI8wLkyT496Wm6nPchKPS5Wa32z/mjLweic
+         LWBL1gR289uyb9YbVtDBEkogCpNM0xV+41uYlwQcUZml2zZjU7TNN2Q7j0SuMyU8wQ
+         Sd4SrG/Q/EiVAVthWxdfFO1WNbCwjVpFgJIatnMPfQ3eTnxALJvX2R4t2nQyqQgSW+
+         nNH8cpv+2hFu510vTfmm+eK2ZohnviIo2+A1Rpo36HH6G4Ar2zlBugpwHHT/FlONa4
+         vZvIG/2bebOosP2ljYuo+8dAk64rnFCLL7Ns5rU0blWMFDu9vwY4RXQGTDCCFoFKGc
+         S192en2LAOZEQ==
+Date:   Wed, 31 May 2023 10:19:17 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     lm0963 <lm0963hack@gmail.com>
+Cc:     inki.dae@samsung.com, sw0312.kim@samsung.com,
+        kyungmin.park@samsung.com, airlied@gmail.com, daniel@ffwll.ch,
+        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/exynos: fix race condition UAF in
+ exynos_g2d_exec_ioctl
+Message-ID: <20230531081917.grx3qqqm7usaqoa5@intel.intel>
+References: <20230526130131.16521-1-lm0963hack@gmail.com>
+ <20230530222150.24oogloda6wtvpvm@intel.intel>
+ <CAAgLYK7FNrAYFRp7C3LDtqevFENQLw8YYAFR2Pk9wdfQ5RKVeg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 01/15] dt-bindings: PCI: qcom: Fix sc8180x clocks and
- interrupts
-Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230530162454.51708-1-vkoul@kernel.org>
- <20230530162454.51708-2-vkoul@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230530162454.51708-2-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAgLYK7FNrAYFRp7C3LDtqevFENQLw8YYAFR2Pk9wdfQ5RKVeg@mail.gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 18:24, Vinod Koul wrote:
-> Commit 45a3ec891370 ("PCI: qcom: Add sc8180x compatible") added sc8180x
-> compatible and commit 075a9d55932e ("dt-bindings: PCI: qcom: Convert to
-> YAML") converted the description to yaml
+Hi Min,
+
+> > > If it is async, runqueue_node is freed in g2d_runqueue_worker on another
+> > > worker thread. So in extreme cases, if g2d_runqueue_worker runs first, and
+> > > then executes the following if statement, there will be use-after-free.
+> > >
+> > > Signed-off-by: Min Li <lm0963hack@gmail.com>
+> > > ---
+> > >  drivers/gpu/drm/exynos/exynos_drm_g2d.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/gpu/drm/exynos/exynos_drm_g2d.c b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
+> > > index ec784e58da5c..414e585ec7dd 100644
+> > > --- a/drivers/gpu/drm/exynos/exynos_drm_g2d.c
+> > > +++ b/drivers/gpu/drm/exynos/exynos_drm_g2d.c
+> > > @@ -1335,7 +1335,7 @@ int exynos_g2d_exec_ioctl(struct drm_device *drm_dev, void *data,
+> > >       /* Let the runqueue know that there is work to do. */
+> > >       queue_work(g2d->g2d_workq, &g2d->runqueue_work);
+> > >
+> > > -     if (runqueue_node->async)
+> > > +     if (req->async)
+> >
+> > did you actually hit this? If you did, then the fix is not OK.
 > 
-> But there are still some errors specific to sc8180x which this change
-> attempts to fix. The clocks and resets for sc8180 pcie controller are
-> different so need to be documented separately
+> No, I didn't actually hit this. I found it through code review. This
+> is only a theoretical issue that can only be triggered in extreme
+> cases.
 
-I don't get what's the error here to fix. The clocks you list are
-already there as part of oneOf.
+first of all runqueue is used again two lines below this, which
+means that if you don't hit the uaf here you will hit it
+immediately after.
 
-> 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  .../devicetree/bindings/pci/qcom,pcie.yaml    | 29 ++++++++++++++++++-
->  1 file changed, 28 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> index 81971be4e554..40a1f451a3d3 100644
-> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> @@ -476,6 +476,33 @@ allOf:
->            items:
->              - const: pci # PCIe core reset
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,pcie-sc8180x
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 8
-> +          maxItems: 8
-> +        clock-names:
-> +          items:
-> +            - const: pipe # PIPE clock
-> +            - const: aux # Auxiliary clock
-> +            - const: cfg # Configuration clock
-> +            - const: bus_master # Master AXI clock
-> +            - const: bus_slave # Slave AXI clock
-> +            - const: slave_q2a # Slave Q2A clock
-> +            - const: ref # REFERENCE clock
-> +            - const: tbu # PCIe TBU clock
-> +        resets:
-> +          maxItems: 1
-> +        reset-names:
-> +          items:
-> +            - const: pci # PCIe core reset
-> +
->    - if:
->        properties:
->          compatible:
-> @@ -524,7 +551,6 @@ allOf:
->          compatible:
->            contains:
->              enum:
-> -              - qcom,pcie-sc8180x
->                - qcom,pcie-sm8150
->                - qcom,pcie-sm8250
->      then:
-> @@ -749,6 +775,7 @@ allOf:
->            contains:
->              enum:
->                - qcom,pcie-sa8540p
-> +              - qcom,pcie-sc8180x
->                - qcom,pcie-sc8280xp
->      then:
->        required:
+Second, if runqueue is freed, than we need to remove the part
+where it's freed because it doesn't make sense to free runqueue
+at this stage.
 
-Best regards,
-Krzysztof
+Finally, can you elaborate on the code review that you did so
+that we all understand it?
 
+Andi
