@@ -2,195 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E44718F24
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FB9718F29
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjEaXs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 19:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
+        id S230074AbjEaXth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 19:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjEaXsz (ORCPT
+        with ESMTP id S229489AbjEaXtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 19:48:55 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928EA191
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:48:49 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b0236ee816so2437525ad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:48:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1685576929; x=1688168929;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bapLcT1rfgF5eXP0K5sMoe265ENn9lfWlaeN3allmSs=;
-        b=YV/VGUCm3cO8v9Pt3ZyWyo4W+JosjwST1qxgNAOzMZYt+nWwG+aISOYjKzh9jyWIaW
-         BcD/xwqOPxKHiNkxFU1lS3wknEP4nUn44Ok1VifFX+OGo/QpS7ATmW6Mi4SFAKzYkifd
-         uzSxA8QMG7kzAar91JCJgqCBJCW/+Lk1Q9c1qbOVISGbwLCrhtks4izUCzoxFACqk2VF
-         0fyMJMoxCq3i1grLOBC8Ly7IfHEoGJeZQDGmi8iJVE0tnv7hLPZbktXIOlYStIElrYtY
-         PQosmB1fQCIy/6BgntmRoakEzbTtpDaAXItwzVyqcjt28hFIFmhwznbAWuGGn7IPzAs6
-         JpuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685576929; x=1688168929;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bapLcT1rfgF5eXP0K5sMoe265ENn9lfWlaeN3allmSs=;
-        b=Wsx17k6rdqIMQbkuEbzb7nBbkZK89KscQ/1oWfuSFQalAU+r7DZ9B2GwweH8lsciRV
-         Nj/dSxflnhdl5Bglx6qhq62+4KxrYG8DoSRO3SwrlLv5VPXWjenF6xoCuaT1XnwQvpm7
-         JK+O4G5HNYcP9sAo4r+rC7h2TOwJhBGuD7VOPR45CsyAhXMm9itUfQk4u+YhSEy7dVkH
-         wfz5FAyAS9YdZNmI3HobAFPjxBuw2N8LwDTwOAhD/wK2okW16noNOfexNyFyhOCl7b7l
-         kRsXPXEkdjqLRUHZvzNx7CGWHr7m4EvZHQuSIiIU8zyCcYeW4DUGVLtiaqaiv2G54dak
-         s8Lg==
-X-Gm-Message-State: AC+VfDxyPyn6Bnyoi/+Ez0Ve586LUt2g3TOiUOQv8Ds0TiaOtp0QXfah
-        jPFLPAvHRGuTF5pa6gQ1WngbqA==
-X-Google-Smtp-Source: ACHHUZ75YAULNe67vWw2+IHca2+HfoohrGo37Wkj1DLaLuSiBLHhhOk9FEPeleT3/wn6oUQe7zel5g==
-X-Received: by 2002:a17:902:aa07:b0:1a0:76e8:a4d with SMTP id be7-20020a170902aa0700b001a076e80a4dmr142755plb.14.1685576929033;
-        Wed, 31 May 2023 16:48:49 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
-        by smtp.gmail.com with ESMTPSA id q4-20020a63e944000000b0053fb1fbd3f2sm1788299pgj.91.2023.05.31.16.48.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 16:48:48 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q4VYb-006IPu-0W;
-        Thu, 01 Jun 2023 09:48:45 +1000
-Date:   Thu, 1 Jun 2023 09:48:45 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Qi Zheng <qi.zheng@linux.dev>
-Cc:     akpm@linux-foundation.org, tkhai@ya.ru, roman.gushchin@linux.dev,
-        vbabka@suse.cz, viro@zeniv.linux.org.uk, brauner@kernel.org,
-        djwong@kernel.org, hughd@google.com, paulmck@kernel.org,
-        muchun.song@linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: Re: [PATCH 6/8] xfs: introduce xfs_fs_destroy_super()
-Message-ID: <ZHfc3V4KKmW8QTR2@dread.disaster.area>
-References: <20230531095742.2480623-1-qi.zheng@linux.dev>
- <20230531095742.2480623-7-qi.zheng@linux.dev>
+        Wed, 31 May 2023 19:49:35 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C8A137
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:49:33 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id E79532C00B8;
+        Thu,  1 Jun 2023 11:49:29 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1685576969;
+        bh=JIh3FKEV4AmqhnmtnVLTx9kvmjGqUSmH2UcfmnCgf5Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TEGwcpmjIiHaKlSngTD6pAfAxAPpnq3bj0DpgQgAF9wEXgGM9rrmzqMa+xwesJKj3
+         uwnwSbeU5oOVk4Ov7RCu2DugdW0yibkI031ijCU4Vs03tZSNOEk9pX9sTtFfuZx9zx
+         IxB3ne6RRYblOb2d4dqIfLYQN+BJ2aAZ9dX6SHb4TapH5qZkdeV3H5IJKSQzN+MnB5
+         9r+35DJJNNw8+gwY0/HQQbrx/+1YrX57IYjwhzyZr5WfgqF50gRjZf30OTEah0FPfZ
+         TW8QCdyRE0JuLaCMKV0t1yHN8WBwnnJOHbg+RP2wMlZMYq8kjWqHkLOeAcOQoSlIv9
+         qiuMO6tgAbTUg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6477dd090000>; Thu, 01 Jun 2023 11:49:29 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+        by pat.atlnz.lc (Postfix) with ESMTP id ABAA213ED2D;
+        Thu,  1 Jun 2023 11:49:29 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+        id AABE7285285; Thu,  1 Jun 2023 11:49:29 +1200 (NZST)
+From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
+To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, andrew@lunn.ch, gregory.clement@bootlin.com,
+        sebastian.hesselbarth@gmail.com, conor@kernel.org
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        enachman@marvell.com,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v8 0/3] dt-bindings: mtd: marvell-nand: Add YAML scheme
+Date:   Thu,  1 Jun 2023 11:49:20 +1200
+Message-Id: <20230531234923.2307013-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531095742.2480623-7-qi.zheng@linux.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Score: -1
+x-atlnz-ls: pat
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 09:57:40AM +0000, Qi Zheng wrote:
-> From: Kirill Tkhai <tkhai@ya.ru>
-> 
-> xfs_fs_nr_cached_objects() touches sb->s_fs_info,
-> and this patch makes it to be destructed later.
-> 
-> After this patch xfs_fs_nr_cached_objects() is safe
-> for splitting unregister_shrinker(): mp->m_perag_tree
-> is stable till destroy_super_work(), while iteration
-> over it is already RCU-protected by internal XFS
-> business.
-> 
-> Signed-off-by: Kirill Tkhai <tkhai@ya.ru>
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> ---
->  fs/xfs/xfs_super.c | 25 ++++++++++++++++++++++---
->  1 file changed, 22 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/xfs/xfs_super.c b/fs/xfs/xfs_super.c
-> index 7e706255f165..694616524c76 100644
-> --- a/fs/xfs/xfs_super.c
-> +++ b/fs/xfs/xfs_super.c
-> @@ -743,11 +743,18 @@ xfs_fs_drop_inode(
->  }
->  
->  static void
-> -xfs_mount_free(
-> +xfs_free_names(
->  	struct xfs_mount	*mp)
->  {
->  	kfree(mp->m_rtname);
->  	kfree(mp->m_logname);
-> +}
-> +
-> +static void
-> +xfs_mount_free(
-> +	struct xfs_mount	*mp)
-> +{
-> +	xfs_free_names(mp);
->  	kmem_free(mp);
->  }
->  
-> @@ -1136,8 +1143,19 @@ xfs_fs_put_super(
->  	xfs_destroy_mount_workqueues(mp);
->  	xfs_close_devices(mp);
->  
-> -	sb->s_fs_info = NULL;
-> -	xfs_mount_free(mp);
-> +	xfs_free_names(mp);
-> +}
-> +
-> +static void
-> +xfs_fs_destroy_super(
-> +	struct super_block	*sb)
-> +{
-> +	if (sb->s_fs_info) {
-> +		struct xfs_mount	*mp = XFS_M(sb);
-> +
-> +		kmem_free(mp);
-> +		sb->s_fs_info = NULL;
-> +	}
->  }
->  
->  static long
-> @@ -1165,6 +1183,7 @@ static const struct super_operations xfs_super_operations = {
->  	.dirty_inode		= xfs_fs_dirty_inode,
->  	.drop_inode		= xfs_fs_drop_inode,
->  	.put_super		= xfs_fs_put_super,
-> +	.destroy_super		= xfs_fs_destroy_super,
->  	.sync_fs		= xfs_fs_sync_fs,
->  	.freeze_fs		= xfs_fs_freeze,
->  	.unfreeze_fs		= xfs_fs_unfreeze,
+Add YAML scheme for the Marvell's NAND controller
+to validate it's DT bindings. Old txt file is deleted,
+not included the compatibles and properties which were marked as
+deprecated.
 
-I don't really like this ->destroy_super() callback, especially as
-it's completely undocumented as to why it exists. This is purely a
-work-around for handling extended filesystem superblock shrinker
-functionality, yet there's nothing that tells the reader this.
+Also fix node name in cp11x DTSI acording to nand-controller.yaml
 
-It also seems to imply that the superblock shrinker can continue to
-run after the existing unregister_shrinker() call before ->kill_sb()
-is called. This violates the assumption made in filesystems that the
-superblock shrinkers have been stopped and will never run again
-before ->kill_sb() is called. Hence ->kill_sb() implementations
-assume there is nothing else accessing filesystem owned structures
-and it can tear down internal structures safely.
+I've picked up this series to hopefully get it over the line. I think I'v=
+e
+addressed all the feedback from the last round of review.
 
-Realistically, the days of XFS using this superblock shrinker
-extension are numbered. We've got a lot of the infrastructure we
-need in place to get rid of the background inode reclaim
-infrastructure that requires this shrinker extension, and it's on my
-list of things that need to be addressed in the near future. 
+As of v7 I've re-ordered the patches so the fixups for the device trees c=
+ome
+before the schema so if the series is applied in order the various checke=
+rs
+should pass cleanly.
 
-In fact, now that I look at it, I think the shmem usage of this
-superblock shrinker interface is broken - it returns SHRINK_STOP to
-->free_cached_objects(), but the only valid return value is the
-number of objects freed (i.e. 0 is nothing freed). These special
-superblock extension interfaces do not work like a normal
-shrinker....
+Chris Packham (1):
+  ARM: dts: mvebu: align MTD partition nodes to dtschema
 
-Hence I think the shmem usage should be replaced with an separate
-internal shmem shrinker that is managed by the filesystem itself
-(similar to how XFS has multiple internal shrinkers).
+Vadym Kochan (2):
+  arm64: dts: marvell: cp11x: Fix nand_controller node name according to
+    YAML
+  dt-bindings: mtd: marvell-nand: Convert to YAML DT scheme
 
-At this point, then the only user of this interface is (again) XFS.
-Given this, adding new VFS methods for a single filesystem
-for functionality that is planned to be removed is probably not the
-best approach to solving the problem.
+ .../bindings/mtd/marvell,nand-controller.yaml | 223 ++++++++++++++++++
+ .../devicetree/bindings/mtd/marvell-nand.txt  | 126 ----------
+ MAINTAINERS                                   |   1 -
+ arch/arm/boot/dts/armada-385-atl-x530.dts     |  14 +-
+ arch/arm64/boot/dts/marvell/armada-cp11x.dtsi |   2 +-
+ 5 files changed, 231 insertions(+), 135 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mtd/marvell,nand-co=
+ntroller.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mtd/marvell-nand.tx=
+t
 
-Cheers,
+--=20
+2.40.1
 
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
