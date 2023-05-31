@@ -2,523 +2,430 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBED717868
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E212717866
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234670AbjEaHiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
+        id S234634AbjEaHh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbjEaHiA (ORCPT
+        with ESMTP id S232229AbjEaHh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:38:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F92185
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:37:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685518627;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0TCN+ZQ7qzb8FiYPRbTY9nlcIflGs+cYlFMpTICv2fg=;
-        b=UCeVcyoYUlYnkeBgxLtNh0+k1ZpZiWtWxFHiyDZzZ3LsrMiwH3LxmyvnDxbVCqqrmRHGIs
-        +Ojru/Ajr8EDoxKKMYByKX4xLpKt2rnjMaoGpILbclcqwNFXMH+dl8fcSiy8YAuuGTZG26
-        30DBngUUC36jWwaUDZD59NNIiqPvZYM=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-177-xn4tDdAYN46KkboCrHUwmA-1; Wed, 31 May 2023 03:37:05 -0400
-X-MC-Unique: xn4tDdAYN46KkboCrHUwmA-1
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4f4b64cd0daso3074097e87.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:37:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685518624; x=1688110624;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0TCN+ZQ7qzb8FiYPRbTY9nlcIflGs+cYlFMpTICv2fg=;
-        b=QnEDTlA/u7DOZpVHUByOlm7L5BhN3G1V7fdiX5oKzPMdUBGhbkTMKiMd+e3I8BvDe7
-         KE9KGllJhEpCLZsKZ5ExKNw2q+A6WbTIeKeess+tsE4HFifRNotLZNr4OFSRIkO+9uwT
-         8fZxQSKwgCcn4UnVjri5QexSD3XNeBMd+XkXT1B/KmasxB18qMHwBO2CnRBLvRh1p8cU
-         p6kOqFeKbAyEjsTGOToRlUku8G8i8EMxdhrwq0NQBZV1c3ShThtYYE0O7x4BsBjuGLdq
-         SlxaGjGoWwxIZQpiXGNIL6+DOcWgCAe6+X7UwUreLRTgRV/8REFGEaLmhliDXbh3iN+I
-         f12w==
-X-Gm-Message-State: AC+VfDx0TcTd8ZTTTgjoHmoGR/to79NWzGZ7JEPEjChBDBN6gR01X07p
-        ytW4MP7eqSGj/XwyJb6QTOl4zoYQrTavJM4IaqUDMKSK8OKBUbLNH7Vot7DD28FGFOgu/toInS7
-        ydq7X0iG0kOqA2hjjvPpdPAThPr2tZVg4k1XjWI0YD5zz+3FnyYNu0Q==
-X-Received: by 2002:a2e:8502:0:b0:2ab:4399:708b with SMTP id j2-20020a2e8502000000b002ab4399708bmr1905647lji.40.1685518623904;
-        Wed, 31 May 2023 00:37:03 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ76qMuCWdo7xq2RvLRM1TbR0tXRH2xVRvNsh44xuZMLJS+u53nRYfc0Pdgg57AJzIkWu3pPBPCAD+wtE+/iB64=
-X-Received: by 2002:a2e:8502:0:b0:2ab:4399:708b with SMTP id
- j2-20020a2e8502000000b002ab4399708bmr1905635lji.40.1685518623390; Wed, 31 May
- 2023 00:37:03 -0700 (PDT)
+        Wed, 31 May 2023 03:37:56 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432A4C0;
+        Wed, 31 May 2023 00:37:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1685518673; x=1717054673;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=A0CMn3ra+DbJMLgi7YsDqMe0dIiAqyIrPwvqTLxPn5s=;
+  b=SrrDp1E8xKLkWmHr/2MvOpcs9iO3W0LcRp23cG3Xr0qSKbjvTDWsTRjA
+   DftP3t2SsLnjiffWrODO/6FaluUqt73zPJjCchNOYTAwMJnK8G58cuJNz
+   4pd4WHVC1RHpJYHeqoMlmA6GDCv+euTz0DzItgfnulujkBEGJ24TPLIu9
+   vIqK/ufzQ50RBW9IES5YI+PAiXvVdBkfN+TJCOMEHGR+NoiFKnXRxVa0I
+   owWx66DrdjqGdxwtFQJo+N9kBEVCQeIEMG7yArYDzLMU3HuLo4LKbxa82
+   hINE5H/baXvJpTJvZO4FwU12BuC/RoBW6cEmHRpYo5rVRvtt+BuUgKjb1
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,205,1681164000"; 
+   d="scan'208";a="31185173"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 31 May 2023 09:37:51 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 31 May 2023 09:37:51 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 31 May 2023 09:37:51 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1685518671; x=1717054671;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=A0CMn3ra+DbJMLgi7YsDqMe0dIiAqyIrPwvqTLxPn5s=;
+  b=L47xWWOUZsHZBPC6ajue2Ic1e/3WGqo3/Sb2v4d/xJYrGXc/Sn7GG/F9
+   vX0GPfKdpQxC8A6VinKALtfxBWVGyORvsCJDBn5Lmapls7ircUtEDLuBu
+   iHXSuwAr6Zgl8pUHpRwianTkssx/PL71LC+i3myFStM/D3d3tf2zCnxWs
+   bc/bSQiDhuX9KWsonrQHxL5Px1LJO5aSqcUX4qNR7xg9OpMnDRT+OSM+H
+   hGY/PPkcVo8oOKO7II/PvcfyudGqKpOQj/4GSV+mPm9bMau7xcpMcwvWj
+   XC+Ca8Hrhk41fRPETFDa8OihDLg1we40DzXRzBM/7F2Kx7qSRqOhgSiOU
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,205,1681164000"; 
+   d="scan'208";a="31185172"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 31 May 2023 09:37:51 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 1CCF1280099;
+        Wed, 31 May 2023 09:37:51 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     NXP Linux Team <linux-imx@nxp.com>,
+        "A. Sverdlin" <alexander.sverdlin@siemens.com>
+Cc:     Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] i2c: lpi2c: cache peripheral clock rate
+Date:   Wed, 31 May 2023 09:37:50 +0200
+Message-ID: <8230613.T7Z3S40VBb@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230515201844.215253-1-alexander.sverdlin@siemens.com>
+References: <20230515201844.215253-1-alexander.sverdlin@siemens.com>
 MIME-Version: 1.0
-References: <20230526063041.18359-1-jasowang@redhat.com> <20230528033037-mutt-send-email-mst@kernel.org>
- <CACGkMEs9Ztavn2JyuUAb47Sk1fYHiXLLkQQPQR5Czhb2yu_R3w@mail.gmail.com>
- <20230529055729-mutt-send-email-mst@kernel.org> <CACGkMEsW1+BFtMoLg4c_FyxYTZJcSVh4BoEdJ-Q9_WGg_DcReA@mail.gmail.com>
- <20230531014326-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230531014326-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 31 May 2023 15:36:51 +0800
-Message-ID: <CACGkMEvok6HjBK_ZMR4EYzWxpJQVeh++EMErnHjJ6cu9m3R-1A@mail.gmail.com>
-Subject: Re: [PATCH] virtio_ring: validate used buffer length
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     xuanzhuo@linux.alibaba.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 1:50=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com>=
- wrote:
->
-> On Wed, May 31, 2023 at 09:05:00AM +0800, Jason Wang wrote:
-> > On Mon, May 29, 2023 at 6:03=E2=80=AFPM Michael S. Tsirkin <mst@redhat.=
-com> wrote:
-> > >
-> > > On Mon, May 29, 2023 at 09:18:10AM +0800, Jason Wang wrote:
-> > > > On Sun, May 28, 2023 at 3:57=E2=80=AFPM Michael S. Tsirkin <mst@red=
-hat.com> wrote:
-> > > > >
-> > > > > On Fri, May 26, 2023 at 02:30:41PM +0800, Jason Wang wrote:
-> > > > > > This patch validate
-> > > > >
-> > > > > validates
-> > > > >
-> > > > > > the used buffer length provided by the device
-> > > > > > before trying to use it.
-> > > > >
-> > > > > before returning it to caller
-> > > > >
-> > > > > > This is done by remembering the in buffer
-> > > > > > length in a dedicated array during virtqueue_add(), then we can=
- fail
-> > > > > > the virtqueue_get_buf() when we find the device is trying to gi=
-ve us a
-> > > > > > used buffer length which is greater than we stored before.
-> > > > >
-> > > > > than what we stored
-> > > > >
-> > > > > >
-> > > > > > This validation is disable
-> > > > >
-> > > > > disabled
-> > > > >
-> > > > > > by default via module parameter to unbreak
-> > > > > > some existing devices since some legacy devices are known to re=
-port
-> > > > > > buggy used length.
-> > > > > >
-> > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > >
-> > > > > First I'm not merging this without more data about
-> > > > > what is known to be broken and what is known to work well
-> > > > > in the commit log. And how exactly do things work if used length
-> > > > > is wrong?
-> > > >
-> > > > Assuming the device is malicious, it would be very hard to answer.
-> > > > Auditing and fuzzing won't cover every case. Instead of trying to s=
-eek
-> > > > the answer, we can simply make sure the used in buffer length is
-> > > > validated then we know we're fine or not.
-> > >
-> > > To restate the question, you said above "some legacy devices are know=
-n
-> > > to report buggy used length". If they report buggy length then how
-> > > can things work?
-> >
-> > The validation is disabled for legacy device (as stated in the changelo=
-g):
-> >
-> > static bool vring_needs_used_validation(const struct virtio_device *vde=
-v)
-> > {
-> >         /*
-> >          * Several legacy devices are known to produce buggy used
-> >          * length. In order to let driver work, we won't validate used
-> >          * buffer length in this case.
-> >          */
-> >         if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
-> >                 return false;
-> >         if (force_used_validation)
-> >                 return true;
-> >         return false;
-> > }
-> >
-> > This seems to be what we've agreed in last version:
-> >
-> > https://lore.kernel.org/all/CANLsYkxfhamUU0bb4j7y6N4_G9odKxLCjXxgXEx4SJ=
-6_Kf+M2Q@mail.gmail.com/T/#m31f3b06f9032beec175c312dfa2532cb08b15c56
-> >
-> > Thanks
-> >
->
-> I don't get it. You wrote:
->
->         This validation is disable
->         by default via module parameter to unbreak
->         some existing devices since some legacy devices are known to repo=
-rt
->         buggy used length.
->
-> which devices?
+Hi,
 
-legacy rpmsg and vsock device (before 49d8c5ffad07) at least.
+Am Montag, 15. Mai 2023, 22:18:44 CEST schrieb A. Sverdlin:
+> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+>=20
+> One of the reasons to do it is to save some CPU cycles on cpu_freq_get()
+> under mutex. The second reason if the (false-positive) lockdep splat caus=
+ed
+> by the recursive feature of the "prepare_lock" (one clock instance is I2C
+> peripheral clock and another is pcf85063 RTC as clock provider):
 
-> why do you need a module parameter?
+Looks good to me. Thanks.
+Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 
-If we enable it unconditionally for modern devices, it may break some
-buggy moden device (vsock without a fix as an example).
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> WARNING: possible circular locking dependency detected
+> 5.15.71+... #1 Tainted: G           O
+> ------------------------------------------------------
+> .../2332 is trying to acquire lock:
+> ffff8000096cae08 (prepare_lock){+.+.}-{3:3}, at: clk_prepare_lock+0x50/0x=
+b0
+>=20
+> but task is already holding lock:
+> ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at:
+> i2c_adapter_lock_bus+0x2c/0x3c
+>=20
+> which lock already depends on the new lock.
+>=20
+> the existing dependency chain (in reverse order) is:
+>=20
+> -> #2 (i2c_register_adapter){+.+.}-{3:3}:
+>        lock_acquire+0x68/0x8c
+>        rt_mutex_lock_nested+0x88/0xe0
+>        i2c_adapter_lock_bus+0x2c/0x3c
+>        i2c_transfer+0x58/0x130
+>        regmap_i2c_read+0x64/0xb0
+>        _regmap_raw_read+0x114/0x440
+>        _regmap_bus_read+0x4c/0x84
+>        _regmap_read+0x6c/0x270
+>        regmap_read+0x54/0x80
+>        pcf85063_probe+0xec/0x4cc
+>        i2c_device_probe+0x10c/0x350
+>        really_probe+0xc4/0x470
+>        __driver_probe_device+0x11c/0x190
+>        driver_probe_device+0x48/0x110
+>        __device_attach_driver+0xc4/0x160
+>        bus_for_each_drv+0x80/0xe0
+>        __device_attach+0xb0/0x1f0
+>        device_initial_probe+0x1c/0x2c
+>        bus_probe_device+0xa4/0xb0
+>        device_add+0x398/0x8ac
+>        device_register+0x28/0x40
+>        i2c_new_client_device+0x144/0x290
+>        of_i2c_register_devices+0x18c/0x230
+>        i2c_register_adapter+0x1dc/0x6b0
+>        __i2c_add_numbered_adapter+0x68/0xbc
+>        i2c_add_adapter+0xb0/0xe0
+>        lpi2c_imx_probe+0x354/0x5e0
+>        platform_probe+0x70/0xec
+>        really_probe+0xc4/0x470
+>        __driver_probe_device+0x11c/0x190
+>        driver_probe_device+0x48/0x110
+>        __device_attach_driver+0xc4/0x160
+>        bus_for_each_drv+0x80/0xe0
+>        __device_attach+0xb0/0x1f0
+>        device_initial_probe+0x1c/0x2c
+>        bus_probe_device+0xa4/0xb0
+>        deferred_probe_work_func+0xa0/0xfc
+>        process_one_work+0x2ac/0x6f4
+>        worker_thread+0x7c/0x47c
+>        kthread+0x150/0x16c
+>        ret_from_fork+0x10/0x20
+>=20
+> -> #1 (rtc_pcf85063:560:(&config->regmap)->lock){+.+.}-{3:3}:
+>        lock_acquire+0x68/0x8c
+>        __mutex_lock+0x9c/0x4d0
+>        mutex_lock_nested+0x48/0x5c
+>        regmap_lock_mutex+0x1c/0x30
+>        regmap_read+0x44/0x80
+>        pcf85063_clkout_recalc_rate+0x34/0x80
+>        __clk_register+0x520/0x880
+>        devm_clk_register+0x64/0xc4
+>        pcf85063_probe+0x24c/0x4cc
+>        i2c_device_probe+0x10c/0x350
+>        really_probe+0xc4/0x470
+>        __driver_probe_device+0x11c/0x190
+>        driver_probe_device+0x48/0x110
+>        __device_attach_driver+0xc4/0x160
+>        bus_for_each_drv+0x80/0xe0
+>        __device_attach+0xb0/0x1f0
+>        device_initial_probe+0x1c/0x2c
+>        bus_probe_device+0xa4/0xb0
+>        device_add+0x398/0x8ac
+>        device_register+0x28/0x40
+>        i2c_new_client_device+0x144/0x290
+>        of_i2c_register_devices+0x18c/0x230
+>        i2c_register_adapter+0x1dc/0x6b0
+>        __i2c_add_numbered_adapter+0x68/0xbc
+>        i2c_add_adapter+0xb0/0xe0
+>        lpi2c_imx_probe+0x354/0x5e0
+>        platform_probe+0x70/0xec
+>        really_probe+0xc4/0x470
+>        __driver_probe_device+0x11c/0x190
+>        driver_probe_device+0x48/0x110
+>        __device_attach_driver+0xc4/0x160
+>        bus_for_each_drv+0x80/0xe0
+>        __device_attach+0xb0/0x1f0
+>        device_initial_probe+0x1c/0x2c
+>        bus_probe_device+0xa4/0xb0
+>        deferred_probe_work_func+0xa0/0xfc
+>        process_one_work+0x2ac/0x6f4
+>        worker_thread+0x7c/0x47c
+>        kthread+0x150/0x16c
+>        ret_from_fork+0x10/0x20
+>=20
+> -> #0 (prepare_lock){+.+.}-{3:3}:
+>        __lock_acquire+0x1298/0x20d0
+>        lock_acquire.part.0+0xf0/0x250
+>        lock_acquire+0x68/0x8c
+>        __mutex_lock+0x9c/0x4d0
+>        mutex_lock_nested+0x48/0x5c
+>        clk_prepare_lock+0x50/0xb0
+>        clk_get_rate+0x28/0x80
+>        lpi2c_imx_xfer+0xb0/0xa9c
+>        __i2c_transfer+0x174/0xa80
+>        i2c_transfer+0x68/0x130
+>        regmap_i2c_read+0x64/0xb0
+>        _regmap_raw_read+0x114/0x440
+>        regmap_raw_read+0x19c/0x28c
+>        regmap_bulk_read+0x1b8/0x244
+>        at24_read+0x14c/0x2c4
+>        nvmem_reg_read+0x2c/0x54
+>        bin_attr_nvmem_read+0x8c/0xbc
+>        sysfs_kf_bin_read+0x74/0x94
+>        kernfs_fop_read_iter+0xb0/0x1d0
+>        new_sync_read+0xf0/0x184
+>        vfs_read+0x154/0x1f0
+>        ksys_read+0x70/0x100
+>        __arm64_sys_read+0x24/0x30
+>        invoke_syscall+0x50/0x120
+>        el0_svc_common.constprop.0+0x68/0x124
+>        do_el0_svc+0x30/0x9c
+>        el0_svc+0x54/0x110
+>        el0t_64_sync_handler+0xa4/0x130
+>        el0t_64_sync+0x1a0/0x1a4
+>=20
+> other info that might help us debug this:
+>=20
+> Chain exists of:
+>   prepare_lock --> rtc_pcf85063:560:(&config->regmap)->lock -->
+> i2c_register_adapter
+>=20
+>  Possible unsafe locking scenario:
+>=20
+>        CPU0                    CPU1
+>        ----                    ----
+>   lock(i2c_register_adapter);
+>                              =20
+> lock(rtc_pcf85063:560:(&config->regmap)->lock); lock(i2c_register_adapter=
+);
+>   lock(prepare_lock);
+>=20
+>  *** DEADLOCK ***
+>=20
+> 4 locks held by .../2332:
+>  #0: ffff0000146eb288 (&of->mutex){+.+.}-{3:3}, at:
+> kernfs_fop_read_iter+0x74/0x1d0 #1: ffff000010fe4400
+> (kn->active#72){.+.+}-{0:0}, at: kernfs_fop_read_iter+0x7c/0x1d0 #2:
+> ffff0000110168e8 (&at24->lock){+.+.}-{3:3}, at: at24_read+0x8c/0x2c4 #3:
+> ffff000011021100 (i2c_register_adapter){+.+.}-{3:3}, at:
+> i2c_adapter_lock_bus+0x2c/0x3c
+>=20
+> stack backtrace:
+> CPU: 1 PID: 2332 Comm: ... Tainted: G           O      5.15.71+... #1
+> Hardware name: ... (DT)
+> Call trace:
+>  dump_backtrace+0x0/0x1d4
+>  show_stack+0x20/0x2c
+>  dump_stack_lvl+0x8c/0xb8
+>  dump_stack+0x18/0x34
+>  print_circular_bug+0x1f8/0x200
+>  check_noncircular+0x130/0x144
+>  __lock_acquire+0x1298/0x20d0
+>  lock_acquire.part.0+0xf0/0x250
+>  lock_acquire+0x68/0x8c
+>  __mutex_lock+0x9c/0x4d0
+>  mutex_lock_nested+0x48/0x5c
+>  clk_prepare_lock+0x50/0xb0
+>  clk_get_rate+0x28/0x80
+>  lpi2c_imx_xfer+0xb0/0xa9c
+>  __i2c_transfer+0x174/0xa80
+>  i2c_transfer+0x68/0x130
+>  regmap_i2c_read+0x64/0xb0
+>  _regmap_raw_read+0x114/0x440
+>  regmap_raw_read+0x19c/0x28c
+>  regmap_bulk_read+0x1b8/0x244
+>  at24_read+0x14c/0x2c4
+>  nvmem_reg_read+0x2c/0x54
+>  bin_attr_nvmem_read+0x8c/0xbc
+>  sysfs_kf_bin_read+0x74/0x94
+>  kernfs_fop_read_iter+0xb0/0x1d0
+>  new_sync_read+0xf0/0x184
+>  vfs_read+0x154/0x1f0
+>  ksys_read+0x70/0x100
+>  __arm64_sys_read+0x24/0x30
+>  invoke_syscall+0x50/0x120
+>  el0_svc_common.constprop.0+0x68/0x124
+>  do_el0_svc+0x30/0x9c
+>  el0_svc+0x54/0x110
+>  el0t_64_sync_handler+0xa4/0x130
+>  el0t_64_sync+0x1a0/0x1a4
+>=20
+> Fixes: a55fa9d0e42e ("i2c: imx-lpi2c: add low power i2c bus driver")
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+> ---
+> Changelog:
+> v4: switched to atomic_t
+>     included clk_rate_exclusive_get()/clk_rate_exclusive_put()
+> v3: fixed build error reported by kernel test robot <lkp@intel.com>
+>   =20
+> https://lore.kernel.org/oe-kbuild-all/202303102010.pAv56wKs-lkp@intel.com/
+> v2: added clk_notifier as Alexander suggested
+>=20
+>  drivers/i2c/busses/i2c-imx-lpi2c.c | 47 +++++++++++++++++++++++++++---
+>  1 file changed, 43 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> b/drivers/i2c/busses/i2c-imx-lpi2c.c index 1af0a637d7f1..b31d29d684fa
+> 100644
+> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> @@ -5,6 +5,7 @@
+>   * Copyright 2016 Freescale Semiconductor, Inc.
+>   */
+>=20
+> +#include <linux/atomic.h>
+>  #include <linux/clk.h>
+>  #include <linux/completion.h>
+>  #include <linux/delay.h>
+> @@ -100,6 +101,8 @@ struct lpi2c_imx_struct {
+>  	__u8			*rx_buf;
+>  	__u8			*tx_buf;
+>  	struct completion	complete;
+> +	struct notifier_block	clk_change_nb;
+> +	atomic_t		rate_per;
+>  	unsigned int		msglen;
+>  	unsigned int		delivered;
+>  	unsigned int		block_data;
+> @@ -198,25 +201,39 @@ static void lpi2c_imx_stop(struct lpi2c_imx_struct
+> *lpi2c_imx) } while (1);
+>  }
+>=20
+> +static int lpi2c_imx_clk_change_cb(struct notifier_block *nb,
+> +				   unsigned long action, void *data)
+> +{
+> +	struct clk_notifier_data *ndata =3D data;
+> +	struct lpi2c_imx_struct *lpi2c_imx =3D container_of(nb,
+> +							  struct=20
+lpi2c_imx_struct,
+> +							 =20
+clk_change_nb);
+> +
+> +	if (action & POST_RATE_CHANGE)
+> +		atomic_set(&lpi2c_imx->rate_per, ndata->new_rate);
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+>  /* CLKLO =3D I2C_CLK_RATIO * CLKHI, SETHOLD =3D CLKHI, DATAVD =3D CLKHI/=
+2 */
+>  static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+>  {
+>  	u8 prescale, filt, sethold, clkhi, clklo, datavd;
+> -	unsigned int clk_rate, clk_cycle;
+> +	unsigned int clk_cycle;
+>  	enum lpi2c_imx_pincfg pincfg;
+>  	unsigned int temp;
+>=20
+>  	lpi2c_imx_set_mode(lpi2c_imx);
+>=20
+> -	clk_rate =3D clk_get_rate(lpi2c_imx->clks[0].clk);
+>  	if (lpi2c_imx->mode =3D=3D HS || lpi2c_imx->mode =3D=3D ULTRA_FAST)
+>  		filt =3D 0;
+>  	else
+>  		filt =3D 2;
+>=20
+>  	for (prescale =3D 0; prescale <=3D 7; prescale++) {
+> -		clk_cycle =3D clk_rate / ((1 << prescale) * lpi2c_imx-
+>bitrate)
+> -			    - 3 - (filt >> 1);
+> +		clk_cycle =3D atomic_read(&lpi2c_imx->rate_per) /
+> +			    ((1 << prescale) * lpi2c_imx->bitrate) - 3 -
+> +			    (filt >> 1);
+>  		clkhi =3D (clk_cycle + I2C_CLK_RATIO) / (I2C_CLK_RATIO + 1);
+>  		clklo =3D clk_cycle - clkhi;
+>  		if (clklo < 64)
+> @@ -594,6 +611,28 @@ static int lpi2c_imx_probe(struct platform_device
+> *pdev) if (ret)
+>  		return ret;
+>=20
+> +	lpi2c_imx->clk_change_nb.notifier_call =3D lpi2c_imx_clk_change_cb;
+> +	ret =3D devm_clk_notifier_register(&pdev->dev, lpi2c_imx->clks[0].clk,
+> +					 &lpi2c_imx->clk_change_nb);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret,
+> +				     "can't register peripheral clock=20
+notifier\n");
+> +	/*
+> +	 * Lock the clock rate to avoid rate change between clk_get_rate()=20
+and
+> +	 * atomic_set()
+> +	 */
+> +	ret =3D clk_rate_exclusive_get(lpi2c_imx->clks[0].clk);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "can't lock I2C peripheral clock=20
+rate\n");
+> +		return ret;
+> +	}
+> +	atomic_set(&lpi2c_imx->rate_per, clk_get_rate(lpi2c_imx-
+>clks[0].clk));
+> +	clk_rate_exclusive_put(lpi2c_imx->clks[0].clk);
+> +	if (!atomic_read(&lpi2c_imx->rate_per)) {
+> +		dev_err(&pdev->dev, "can't get I2C peripheral clock=20
+rate\n");
+> +		return -EINVAL;
+> +	}
+> +
+>  	pm_runtime_set_autosuspend_delay(&pdev->dev, I2C_PM_TIMEOUT);
+>  	pm_runtime_use_autosuspend(&pdev->dev);
+>  	pm_runtime_get_noresume(&pdev->dev);
 
->
->
-> > >
-> > > > > Second what's wrong with dma_desc_extra that we already maintain?
-> > > > > Third motivation - it's part and parcel of the hardening effort y=
-es?
-> > > >
-> > > > They are different. dma_desc_extra is for a descriptor ring, but th=
-is
-> > > > is for a used ring. Technically we can go back to iterate on the
-> > > > descriptor ring for a legal used in buffer length. But it will have
-> > > > worse performance.
-> > >
-> > > I don't really understand. We already iterate when we unmap -
-> > > all that is necessary is to subtract it from used length, if at
-> > > the end of the process it is >0 then we know used length is too
-> > > large.
-> >
-> > Yes, but it is the job that is done in the driver level not the virtio
-> > core.
->
-> What job?
 
-I meant the driver can do the validation since it has the knowledge of
-the buffer length if it wants.
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
-> unmap is done in detach_buf_split and detach_buf_packed respectively.
-> vring_desc_extra isn't even visible outside drivers/virtio/virtio_ring.c
-
-desc_extra doesn't contain buffer length for the case of indirect
-descriptors. So we need to iterate in the descriptors when it looks
-expensive if we don't need unmap.
-
-Thanks
-
->
-> For drivers that do unmap at driver level - I guess they can do
-> validation there too.
->
-> > Validation in virtio core is still necessary since they're
-> > working at different levels and it's hard to force the validation in
-> > all drivers by codes. Last version introduces a
-> > suppress_driver_validation to allow the driver to suppress the core
-> > validation which seems not good, we need a way to force the
-> > virtio_ring code to do validation before.
->
-> Why do we? If driver validates length virtio_ring does not need to
-> validate.  If driver does not use length virtio_ring does not need to
-> validate. core can provide this service for the gazillion non
-> performance critical drivers that just want to keep things simple,
-> but the 4-5 critical ones can do their own validation if they want to.
->
-> > Or such stuff could be added
-> > on top since the validation is by default anyway.
-> >
-> > Thanks
->
->
->
-> > >
-> > >
-> > > > > I'd like to know the fate of VIRTIO_HARDEN_NOTIFICATION before
-> > > > > we do more hardening. If it's irrevocably broken let's rip it out=
-?
-> > > >
-> > > > So the plan is
-> > > >
-> > > > 1) finish used ring validation (this had been proposed, merged and
-> > > > reverted before notification hardening)
-> > > > 2) do notification hardening on top.
-> > > >
-> > > > So let's leave it as is and I will do a rework after we finalize th=
-e
-> > > > used ring validation.
-> > > >
-> > > > Thanks
-> > > >
-> > > > >
-> > > > >
-> > > > > > ---
-> > > > > > Changes since V4:
-> > > > > > - drop the flat for driver to suppress the check
-> > > > > > - validation is disabled by default
-> > > > > > - don't do validation for legacy device
-> > > > > > - rebase and support virtqueue resize
-> > > > > > ---
-> > > > > >  drivers/virtio/virtio_ring.c | 75 ++++++++++++++++++++++++++++=
-++++++++
-> > > > > >  1 file changed, 75 insertions(+)
-> > > > > >
-> > > > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virt=
-io_ring.c
-> > > > > > index 143f380baa1c..5b151605aaf8 100644
-> > > > > > --- a/drivers/virtio/virtio_ring.c
-> > > > > > +++ b/drivers/virtio/virtio_ring.c
-> > > > > > @@ -15,6 +15,9 @@
-> > > > > >  #include <linux/spinlock.h>
-> > > > > >  #include <xen/xen.h>
-> > > > > >
-> > > > > > +static bool force_used_validation =3D false;
-> > > > > > +module_param(force_used_validation, bool, 0444);
-> > > > > > +
-> > > > > >  #ifdef DEBUG
-> > > > > >  /* For development, we want to crash whenever the ring is scre=
-wed. */
-> > > > > >  #define BAD_RING(_vq, fmt, args...)                          \
-> > > > > > @@ -105,6 +108,9 @@ struct vring_virtqueue_split {
-> > > > > >       struct vring_desc_state_split *desc_state;
-> > > > > >       struct vring_desc_extra *desc_extra;
-> > > > > >
-> > > > > > +     /* Maximum in buffer length, NULL means no used validatio=
-n */
-> > > > > > +     u32 *buflen;
-> > > > > > +
-> > > > > >       /* DMA address and size information */
-> > > > > >       dma_addr_t queue_dma_addr;
-> > > > > >       size_t queue_size_in_bytes;
-> > > > > > @@ -145,6 +151,9 @@ struct vring_virtqueue_packed {
-> > > > > >       struct vring_desc_state_packed *desc_state;
-> > > > > >       struct vring_desc_extra *desc_extra;
-> > > > > >
-> > > > > > +     /* Maximum in buffer length, NULL means no used validatio=
-n */
-> > > > > > +     u32 *buflen;
-> > > > > > +
-> > > > > >       /* DMA address and size information */
-> > > > > >       dma_addr_t ring_dma_addr;
-> > > > > >       dma_addr_t driver_event_dma_addr;
-> > > > > > @@ -552,6 +561,7 @@ static inline int virtqueue_add_split(struc=
-t virtqueue *_vq,
-> > > > > >       unsigned int i, n, avail, descs_used, prev, err_idx;
-> > > > > >       int head;
-> > > > > >       bool indirect;
-> > > > > > +     u32 buflen =3D 0;
-> > > > > >
-> > > > > >       START_USE(vq);
-> > > > > >
-> > > > > > @@ -635,6 +645,7 @@ static inline int virtqueue_add_split(struc=
-t virtqueue *_vq,
-> > > > > >                                                    VRING_DESC_F=
-_NEXT |
-> > > > > >                                                    VRING_DESC_F=
-_WRITE,
-> > > > > >                                                    indirect);
-> > > > > > +                     buflen +=3D sg->length;
-> > > > > >               }
-> > > > > >       }
-> > > > > >       /* Last one doesn't continue. */
-> > > > > > @@ -675,6 +686,10 @@ static inline int virtqueue_add_split(stru=
-ct virtqueue *_vq,
-> > > > > >       else
-> > > > > >               vq->split.desc_state[head].indir_desc =3D ctx;
-> > > > > >
-> > > > > > +     /* Store in buffer length if necessary */
-> > > > > > +     if (vq->split.buflen)
-> > > > > > +             vq->split.buflen[head] =3D buflen;
-> > > > > > +
-> > > > > >       /* Put entry in available array (but don't update avail->=
-idx until they
-> > > > > >        * do sync). */
-> > > > > >       avail =3D vq->split.avail_idx_shadow & (vq->split.vring.n=
-um - 1);
-> > > > > > @@ -861,6 +876,11 @@ static void *virtqueue_get_buf_ctx_split(s=
-truct virtqueue *_vq,
-> > > > > >               BAD_RING(vq, "id %u is not a head!\n", i);
-> > > > > >               return NULL;
-> > > > > >       }
-> > > > > > +     if (vq->split.buflen && unlikely(*len > vq->split.buflen[=
-i])) {
-> > > > > > +             BAD_RING(vq, "used len %d is larger than max in b=
-uffer len %u\n",
-> > > > > > +                     *len, vq->split.buflen[i]);
-> > > > > > +             return NULL;
-> > > > > > +     }
-> > > > > >
-> > > > > >       /* detach_buf_split clears data, so grab it now. */
-> > > > > >       ret =3D vq->split.desc_state[i].data;
-> > > > > > @@ -1085,10 +1105,25 @@ static void vring_free_split(struct vri=
-ng_virtqueue_split *vring_split,
-> > > > > >                        vring_split->queue_dma_addr,
-> > > > > >                        dma_dev);
-> > > > > >
-> > > > > > +     kfree(vring_split->buflen);
-> > > > > >       kfree(vring_split->desc_state);
-> > > > > >       kfree(vring_split->desc_extra);
-> > > > > >  }
-> > > > > >
-> > > > > > +static bool vring_needs_used_validation(const struct virtio_de=
-vice *vdev)
-> > > > > > +{
-> > > > > > +     /*
-> > > > > > +      * Several legacy devices are known to produce buggy used
-> > > > > > +      * length. In order to let driver work, we won't validate=
- used
-> > > > > > +      * buffer length in this case.
-> > > > > > +      */
-> > > > > > +     if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
-> > > > > > +             return false;
-> > > > > > +     if (force_used_validation)
-> > > > > > +             return true;
-> > > > > > +     return false;
-> > > > > > +}
-> > > > > > +
-> > > > > >  static int vring_alloc_queue_split(struct vring_virtqueue_spli=
-t *vring_split,
-> > > > > >                                  struct virtio_device *vdev,
-> > > > > >                                  u32 num,
-> > > > > > @@ -1137,7 +1172,19 @@ static int vring_alloc_queue_split(struc=
-t vring_virtqueue_split *vring_split,
-> > > > > >       vring_split->vring_align =3D vring_align;
-> > > > > >       vring_split->may_reduce_num =3D may_reduce_num;
-> > > > > >
-> > > > > > +     if (vring_needs_used_validation(vdev)) {
-> > > > > > +             vring_split->buflen =3D
-> > > > > > +                     kmalloc_array(num, sizeof(*vring_split->b=
-uflen),
-> > > > > > +                                   GFP_KERNEL);
-> > > > > > +             if (!vring_split->buflen)
-> > > > > > +                     goto err_buflen;
-> > > > > > +     }
-> > > > > > +
-> > > > > >       return 0;
-> > > > > > +
-> > > > > > +err_buflen:
-> > > > > > +     vring_free_split(vring_split, vdev, dma_dev);
-> > > > > > +     return -ENOMEM;
-> > > > > >  }
-> > > > > >
-> > > > > >  static struct virtqueue *vring_create_virtqueue_split(
-> > > > > > @@ -1297,6 +1344,7 @@ static int virtqueue_add_indirect_packed(=
-struct vring_virtqueue *vq,
-> > > > > >       unsigned int i, n, err_idx;
-> > > > > >       u16 head, id;
-> > > > > >       dma_addr_t addr;
-> > > > > > +     u32 buflen =3D 0;
-> > > > > >
-> > > > > >       head =3D vq->packed.next_avail_idx;
-> > > > > >       desc =3D alloc_indirect_packed(total_sg, gfp);
-> > > > > > @@ -1325,6 +1373,8 @@ static int virtqueue_add_indirect_packed(=
-struct vring_virtqueue *vq,
-> > > > > >                       desc[i].addr =3D cpu_to_le64(addr);
-> > > > > >                       desc[i].len =3D cpu_to_le32(sg->length);
-> > > > > >                       i++;
-> > > > > > +                     if (n >=3D out_sgs)
-> > > > > > +                             buflen +=3D sg->length;
-> > > > > >               }
-> > > > > >       }
-> > > > > >
-> > > > > > @@ -1379,6 +1429,10 @@ static int virtqueue_add_indirect_packed=
-(struct vring_virtqueue *vq,
-> > > > > >       vq->packed.desc_state[id].last =3D id;
-> > > > > >       vq->packed.desc_state[id].premapped =3D premapped;
-> > > > > >
-> > > > > > +     /* Store in buffer length if necessary */
-> > > > > > +     if (vq->packed.buflen)
-> > > > > > +             vq->packed.buflen[id] =3D buflen;
-> > > > > > +
-> > > > > >       vq->num_added +=3D 1;
-> > > > > >
-> > > > > >       pr_debug("Added buffer head %i to %p\n", head, vq);
-> > > > > > @@ -1416,6 +1470,7 @@ static inline int virtqueue_add_packed(st=
-ruct virtqueue *_vq,
-> > > > > >       __le16 head_flags, flags;
-> > > > > >       u16 head, id, prev, curr, avail_used_flags;
-> > > > > >       int err;
-> > > > > > +     u32 buflen =3D 0;
-> > > > > >
-> > > > > >       START_USE(vq);
-> > > > > >
-> > > > > > @@ -1498,6 +1553,8 @@ static inline int virtqueue_add_packed(st=
-ruct virtqueue *_vq,
-> > > > > >                                       1 << VRING_PACKED_DESC_F_=
-AVAIL |
-> > > > > >                                       1 << VRING_PACKED_DESC_F_=
-USED;
-> > > > > >                       }
-> > > > > > +                     if (n >=3D out_sgs)
-> > > > > > +                             buflen +=3D sg->length;
-> > > > > >               }
-> > > > > >       }
-> > > > > >
-> > > > > > @@ -1518,6 +1575,10 @@ static inline int virtqueue_add_packed(s=
-truct virtqueue *_vq,
-> > > > > >       vq->packed.desc_state[id].last =3D prev;
-> > > > > >       vq->packed.desc_state[id].premapped =3D premapped;
-> > > > > >
-> > > > > > +     /* Store in buffer length if necessary */
-> > > > > > +     if (vq->packed.buflen)
-> > > > > > +             vq->packed.buflen[id] =3D buflen;
-> > > > > > +
-> > > > > >       /*
-> > > > > >        * A driver MUST NOT make the first descriptor in the lis=
-t
-> > > > > >        * available before all subsequent descriptors comprising
-> > > > > > @@ -1718,6 +1779,11 @@ static void *virtqueue_get_buf_ctx_packe=
-d(struct virtqueue *_vq,
-> > > > > >               BAD_RING(vq, "id %u is not a head!\n", id);
-> > > > > >               return NULL;
-> > > > > >       }
-> > > > > > +     if (vq->packed.buflen && unlikely(*len > vq->packed.bufle=
-n[id])) {
-> > > > > > +             BAD_RING(vq, "used len %d is larger than max in b=
-uffer len %u\n",
-> > > > > > +                     *len, vq->packed.buflen[id]);
-> > > > > > +             return NULL;
-> > > > > > +     }
-> > > > > >
-> > > > > >       /* detach_buf_packed clears data, so grab it now. */
-> > > > > >       ret =3D vq->packed.desc_state[id].data;
-> > > > > > @@ -1937,6 +2003,7 @@ static void vring_free_packed(struct vrin=
-g_virtqueue_packed *vring_packed,
-> > > > > >                                vring_packed->device_event_dma_a=
-ddr,
-> > > > > >                                dma_dev);
-> > > > > >
-> > > > > > +     kfree(vring_packed->buflen);
-> > > > > >       kfree(vring_packed->desc_state);
-> > > > > >       kfree(vring_packed->desc_extra);
-> > > > > >  }
-> > > > > > @@ -1988,6 +2055,14 @@ static int vring_alloc_queue_packed(stru=
-ct vring_virtqueue_packed *vring_packed,
-> > > > > >
-> > > > > >       vring_packed->vring.num =3D num;
-> > > > > >
-> > > > > > +     if (vring_needs_used_validation(vdev)) {
-> > > > > > +             vring_packed->buflen =3D
-> > > > > > +                     kmalloc_array(num, sizeof(*vring_packed->=
-buflen),
-> > > > > > +                                   GFP_KERNEL);
-> > > > > > +             if (!vring_packed->buflen)
-> > > > > > +                     goto err;
-> > > > > > +     }
-> > > > > > +
-> > > > > >       return 0;
-> > > > > >
-> > > > > >  err:
-> > > > > > --
-> > > > > > 2.25.1
-> > > > >
-> > >
->
 
