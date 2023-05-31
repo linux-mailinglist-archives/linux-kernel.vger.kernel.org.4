@@ -2,293 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BB5717C56
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0894D717C59
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235628AbjEaJqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
+        id S235211AbjEaJrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235574AbjEaJqI (ORCPT
+        with ESMTP id S231981AbjEaJrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:46:08 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B231B1;
-        Wed, 31 May 2023 02:46:03 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-565cfe4ece7so54088227b3.2;
-        Wed, 31 May 2023 02:46:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685526362; x=1688118362;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CnLlnK5tgX6MTnacFdfiHp67y1VecyPAXn0kDrRDIuc=;
-        b=TSbIG42DfdBpxXzN2abaroMzQyCGTcJ2lYn79qHkNA9QMEaHsgr40sQVFNfgXm4i+0
-         7u9OUold0eSaeVC6HAloP9zGhdutmt0YFV1K2hOg5LE2YpZfUqydt80XBsaTwABhG9KW
-         F+xCjFAx22b7s/xCP7uqS+FD2DTHPIv8dn0+2i+WsRo5mFx0lt7AQBCIjEFYgXBHYUrY
-         7bL/iUhqtVnL8WeeLn1n3JiZs29RV5ox2qE68YzWkeuv3cSCwKpp/8XczEXlMBWcbm17
-         CdA30NmYmc0fwX2ijAq34Eo9yDb7sLIF9AYLdb3oECS9ZT1dnDGmvzx+TAT6lRtjrXO6
-         04hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685526362; x=1688118362;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CnLlnK5tgX6MTnacFdfiHp67y1VecyPAXn0kDrRDIuc=;
-        b=Pc3LKPo7qoX4ikfJeJg5OL9yte70p+OjpNGJvYcVlXcCSwGaU3v+WeQ02Qb1dyVvO/
-         r7Ax+yLJidm3tUFAG1+ERfA+dBHscfGas9aZSG1+zmvYgPTK5EJrIdWWRPFM88aShBhL
-         JV9wPrScWnQL4qK9/lLMSxr1+YGnOrhZLjXefCrNBRBJJY4KGDnyr+Y7v/VslVoKFsRY
-         Mk3Rwc6kqJUlPQswE/1gMxZm4oHtUqT5NRGAwTcCu2cUsyhym1cGJ5mZTjSGthw1ur/Q
-         Hk9crEmr9XzjfOqoBcpD1mtzm70xTeQDduFst139nDTdcZ6HnNYX9AEDISU9lZdg1EnZ
-         jeUg==
-X-Gm-Message-State: AC+VfDx2iGyH8GN2VNVGepfdCpy8PIQqrfOoxkFwhbkDHJFlBriPLJjo
-        GqpZHwDjhg/l/GWzsOvWmIvRew9wDb/lTqZAe7k=
-X-Google-Smtp-Source: ACHHUZ7c97D+V2tYbv6D98epiID37lbyVs2RqM7EDsb5f+aK9v8Yrt+O9Xie4QIMxchjeGihweWrIQwXyR6gNRRrfDk=
-X-Received: by 2002:a0d:ea52:0:b0:565:ead5:a126 with SMTP id
- t79-20020a0dea52000000b00565ead5a126mr5133145ywe.46.1685526362432; Wed, 31
- May 2023 02:46:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230530095308.8165-1-victorshihgli@gmail.com>
- <20230530095308.8165-4-victorshihgli@gmail.com> <c5601bbe-2ec9-1cd4-1e0f-1eca183e1b39@intel.com>
-In-Reply-To: <c5601bbe-2ec9-1cd4-1e0f-1eca183e1b39@intel.com>
-From:   Victor Shih <victorshihgli@gmail.com>
-Date:   Wed, 31 May 2023 17:45:51 +0800
-Message-ID: <CAK00qKA66Vg+MHu9199V4rPO0LgX6n1akNJsdWtsnkWgrnqpug@mail.gmail.com>
-Subject: Re: [PATCH V2 3/3] mmc: sdhci-pci-gli: Add support SD Express card
- for GL9767
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benchuanggli@gmail.com,
-        HL.Liu@genesyslogic.com.tw, Greg.tu@genesyslogic.com.tw,
-        Ben Chuang <ben.chuang@genesyslogic.com.tw>,
-        Victor Shih <victor.shih@genesyslogic.com.tw>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 31 May 2023 05:47:17 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11857D9
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:47:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685526436; x=1717062436;
+  h=date:from:to:cc:subject:message-id;
+  bh=k5dWzHm3JtGcVtvzGwiiffP2phvD2IawezXkFs4d5xA=;
+  b=maS56pFZlLYGgNH5dBcsdfXaD2Zelx49yueCdsQqlJbOotXlJ9azCynf
+   jQVa7ut/+QQJjt/+0BnUcN59D6UVD2jFRMVrSiPWxE35Hr0oAkblK5Dut
+   AJ2M2pfaw+YrindP5BHhQCX3jExgeqVv+cmAqHz0e8ahM2vs7N5YseGF0
+   5xEfCrAJiqV3NnS6S7vibIS8QtwK0eWi/R7Gc26MaUOUitMcpdfRM7c2g
+   7fl1lEIeib2ZCXCPrNrPYy8xZxFZv0T9IfopeSty5NeOFwZ5R70gliwoI
+   3lktGvsS47ZmSIMGbcue5Fc3k6wMMgy0/wFVK0xZxBjClO4OFu/bUhCXY
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="357580135"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="357580135"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 02:47:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="710005264"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="710005264"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 31 May 2023 02:47:14 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4IQD-0001F5-35;
+        Wed, 31 May 2023 09:47:13 +0000
+Date:   Wed, 31 May 2023 17:47:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/fam01-next20230530] BUILD SUCCESS WITH
+ WARNING a2e8533878017f1874b21d78b6bf08a6c4095365
+Message-ID: <20230531094710.KZUOA%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Adrian
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230530
+branch HEAD: a2e8533878017f1874b21d78b6bf08a6c4095365  Makefile: Globally enable -Wstringop-overflow
 
-On Wed, May 31, 2023 at 3:15=E2=80=AFPM Adrian Hunter <adrian.hunter@intel.=
-com> wrote:
->
-> On 30/05/23 12:53, Victor Shih wrote:
-> > From: Victor Shih <victor.shih@genesyslogic.com.tw>
-> >
-> > Add support SD Express card for GL9767. The workflow of the
-> > SD Express card in GL9767 is as below.
-> > 1. GL9767 operates in SD mode and set MMC_CAP2_SD_EXP flag.
-> > 2. If card is inserted, Host send CMD8 to ask the capabilities
-> >    of the card.
-> > 3. If the card has PCIe capability, then init_sd_express()
-> >    will be invoked.
-> > 4. If the card has been put in write protect state then the
-> >    SD features supported by SD mode but not supported by
-> >    PCIe mode, therefore GL9767 switch to SD mode.
-> > 5. If the card has not been put in write protect state then
-> >    GL9767 switch from SD mode to PCIe/NVMe mode and mmc driver
-> >    handover control to NVMe driver.
-> > 6. If card is removed, GL9767 will return to SD mode.
-> >
-> > Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
-> > Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
->
-> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
->
+Warning reports:
 
-Excuse me, I will adjust the order of definitions and modify the
-if-else condition
-and content in gl9767_init_sd_express() function, please help to review
-it once, thank you.
+https://lore.kernel.org/oe-kbuild-all/202305310834.1iGa1DB5-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202305310857.whO1DJq1-lkp@intel.com
 
-> > ---
-> >  drivers/mmc/host/sdhci-pci-gli.c | 105 +++++++++++++++++++++++++++++++
-> >  1 file changed, 105 insertions(+)
-> >
-> > diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-=
-pci-gli.c
-> > index 178253a7e86f..c7fa92fdadcd 100644
-> > --- a/drivers/mmc/host/sdhci-pci-gli.c
-> > +++ b/drivers/mmc/host/sdhci-pci-gli.c
-> > @@ -164,6 +164,10 @@
-> >  #define PCIE_GLI_9767_CFG            0x8A0
-> >  #define   PCIE_GLI_9767_CFG_LOW_PWR_OFF        BIT(12)
-> >
-> > +#define PCIE_GLI_9767_COMBO_MUX_CTL                  0x8C8
-> > +#define   PCIE_GLI_9767_COMBO_MUX_CTL_RST_EN           BIT(6)
-> > +#define   PCIE_GLI_9767_COMBO_MUX_CTL_WAIT_PERST_EN    BIT(10)
-> > +
-> >  #define PCIE_GLI_9767_PWR_MACRO_CTL                                  0=
-x8D0
-> >  #define   PCIE_GLI_9767_PWR_MACRO_CTL_LOW_VOLTAGE                     =
- GENMASK(3, 0)
-> >  #define   PCIE_GLI_9767_PWR_MACRO_CTL_LD0_LOW_OUTPUT_VOLTAGE          =
- GENMASK(15, 12)
-> > @@ -181,6 +185,26 @@
-> >  #define   PCIE_GLI_9767_SCR_CORE_PWR_D3_OFF            BIT(21)
-> >  #define   PCIE_GLI_9767_SCR_CFG_RST_DATA_LINK_DOWN     BIT(30)
-> >
-> > +#define PCIE_GLI_9767_SDHC_CAP                       0x91C
-> > +#define   PCIE_GLI_9767_SDHC_CAP_SDEI_RESULT   BIT(5)
-> > +
-> > +#define PCIE_GLI_9767_SD_EXPRESS_CTL                 0x940
-> > +#define   PCIE_GLI_9767_SD_EXPRESS_CTL_SDEI_EXE                BIT(0)
-> > +#define   PCIE_GLI_9767_SD_EXPRESS_CTL_SD_EXPRESS_MODE         BIT(1)
-> > +
-> > +#define PCIE_GLI_9767_SD_DATA_MULTI_CTL                              0=
-x944
-> > +#define   PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TIME      GENMASK=
-(23, 16)
-> > +#define   PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TIME_VALUE       =
- 0x64
-> > +
-> > +#define PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2                     0=
-x950
-> > +#define   PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2_SDEI_COMPLETE      =
- BIT(0)
-> > +
-> > +#define PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_EN_REG2                   =
-       0x954
-> > +#define   PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_EN_REG2_SDEI_COMPLETE_ST=
-ATUS_EN          BIT(0)
-> > +
-> > +#define PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_EN_REG2                   =
-       0x958
-> > +#define   PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_EN_REG2_SDEI_COMPLETE_SI=
-GNAL_EN          BIT(0)
-> > +
-> >  #define PCIE_GLI_9767_SD_PLL_CTL                     0x938
-> >  #define   PCIE_GLI_9767_SD_PLL_CTL_PLL_LDIV            GENMASK(9, 0)
-> >  #define   PCIE_GLI_9767_SD_PLL_CTL_PLL_PDIV            GENMASK(15, 12)
-> > @@ -935,6 +959,85 @@ static void sdhci_gl9767_reset(struct sdhci_host *=
-host, u8 mask)
-> >       gli_set_9767(host);
-> >  }
-> >
-> > +static int gl9767_init_sd_express(struct mmc_host *mmc, struct mmc_ios=
- *ios)
-> > +{
-> > +     struct sdhci_host *host =3D mmc_priv(mmc);
-> > +     struct sdhci_pci_slot *slot =3D sdhci_priv(host);
-> > +     struct pci_dev *pdev;
-> > +     u32 value;
-> > +     int i;
-> > +
-> > +     pdev =3D slot->chip->pdev;
-> > +
-> > +     if (mmc->ops->get_ro(mmc)) {
-> > +             mmc->ios.timing &=3D ~(MMC_TIMING_SD_EXP | MMC_TIMING_SD_=
-EXP_1_2V);
-> > +             return 0;
-> > +     }
-> > +
-> > +     gl9767_vhs_write(pdev);
-> > +
-> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_COMBO_MUX_CTL, &value);
-> > +     value &=3D ~(PCIE_GLI_9767_COMBO_MUX_CTL_RST_EN | PCIE_GLI_9767_C=
-OMBO_MUX_CTL_WAIT_PERST_EN);
-> > +     pci_write_config_dword(pdev, PCIE_GLI_9767_COMBO_MUX_CTL, value);
-> > +
-> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_SD_DATA_MULTI_CTL, &val=
-ue);
-> > +     value &=3D ~PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TIME;
-> > +     value |=3D FIELD_PREP(PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_=
-TIME,
-> > +                         PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TI=
-ME_VALUE);
-> > +     pci_write_config_dword(pdev, PCIE_GLI_9767_SD_DATA_MULTI_CTL, val=
-ue);
-> > +
-> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_R=
-EG2, &value);
-> > +     value |=3D PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2_SDEI_COMPLETE=
-;
-> > +     pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_=
-REG2, value);
-> > +
-> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_E=
-N_REG2, &value);
-> > +     value |=3D PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_EN_REG2_SDEI_COMPL=
-ETE_STATUS_EN;
-> > +     pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_=
-EN_REG2, value);
-> > +
-> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_E=
-N_REG2, &value);
-> > +     value |=3D PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_EN_REG2_SDEI_COMPL=
-ETE_SIGNAL_EN;
-> > +     pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_=
-EN_REG2, value);
-> > +
-> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_CFG, &value);
-> > +     value |=3D PCIE_GLI_9767_CFG_LOW_PWR_OFF;
-> > +     pci_write_config_dword(pdev, PCIE_GLI_9767_CFG, value);
-> > +
-> > +     value =3D sdhci_readw(host, SDHCI_CLOCK_CONTROL);
-> > +     value &=3D ~(SDHCI_CLOCK_CARD_EN | SDHCI_CLOCK_PLL_EN);
-> > +     sdhci_writew(host, value, SDHCI_CLOCK_CONTROL);
-> > +
-> > +     value =3D sdhci_readb(host, SDHCI_POWER_CONTROL);
-> > +     value |=3D ((SDHCI_POWER_180 | SDHCI_POWER_ON) << 4);
-> > +     sdhci_writeb(host, value, SDHCI_POWER_CONTROL);
-> > +
-> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL, &value)=
-;
-> > +     value |=3D PCIE_GLI_9767_SD_EXPRESS_CTL_SDEI_EXE;
-> > +     pci_write_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL, value)=
-;
-> > +
-> > +     for (i =3D 0; i < 2; i++) {
-> > +             msleep(10);
-> > +             pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_=
-STATUS_REG2, &value);
-> > +             if (value & PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2_SDEI=
-_COMPLETE) {
-> > +                     pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL=
-_ERR_INT_STATUS_REG2,
-> > +                                            value);
-> > +                     break;
-> > +             }
-> > +     }
-> > +
-> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_SDHC_CAP, &value);
-> > +     if ((value & PCIE_GLI_9767_SDHC_CAP_SDEI_RESULT) =3D=3D PCIE_GLI_=
-9767_SDHC_CAP_SDEI_RESULT) {
-> > +             pci_read_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL,=
- &value);
-> > +             value |=3D PCIE_GLI_9767_SD_EXPRESS_CTL_SD_EXPRESS_MODE;
-> > +             pci_write_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL=
-, value);
-> > +     } else {
-> > +             mmc->ios.timing &=3D ~(MMC_TIMING_SD_EXP | MMC_TIMING_SD_=
-EXP_1_2V);
-> > +     }
-> > +
-> > +     gl9767_vhs_read(pdev);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >  static int gli_probe_slot_gl9750(struct sdhci_pci_slot *slot)
-> >  {
-> >       struct sdhci_host *host =3D slot->host;
-> > @@ -967,6 +1070,8 @@ static int gli_probe_slot_gl9767(struct sdhci_pci_=
-slot *slot)
-> >       gl9767_hw_setting(slot);
-> >       gli_pcie_enable_msi(slot);
-> >       slot->host->mmc->caps2 |=3D MMC_CAP2_NO_SDIO;
-> > +     host->mmc->caps2 |=3D MMC_CAP2_SD_EXP;
-> > +     host->mmc_host_ops.init_sd_express =3D gl9767_init_sd_express;
-> >       sdhci_enable_v4_mode(host);
-> >
-> >       return 0;
->
+Warning: (recently discovered and may have been fixed)
 
-Thanks, Victor Shih
+fs/smb/client/cifssmb.c:2987:31: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+include/linux/fortify-string.h:57:33: warning: '__builtin_memcpy' specified bound between 2147483648 and 4294967295 exceeds maximum object size 2147483647 [-Wstringop-overflow=]
+include/linux/fortify-string.h:57:33: warning: writing 16 bytes into a region of size 0 [-Wstringop-overflow=]
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- arm64-allyesconfig
+|   `-- include-linux-fortify-string.h:warning:writing-bytes-into-a-region-of-size
+|-- i386-debian-10.3
+|   `-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-between-and-exceeds-maximum-object-size
+|-- i386-randconfig-i061-20230531
+|   `-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-between-and-exceeds-maximum-object-size
+|-- i386-randconfig-i063-20230531
+|   `-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-between-and-exceeds-maximum-object-size
+|-- i386-randconfig-i065-20230531
+|   `-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-between-and-exceeds-maximum-object-size
+|-- i386-randconfig-i066-20230531
+|   `-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-between-and-exceeds-maximum-object-size
+|-- mips-randconfig-r014-20230531
+|   `-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-between-and-exceeds-maximum-object-size
+`-- x86_64-rhel-8.3
+    `-- fs-smb-client-cifssmb.c:warning:writing-byte-into-a-region-of-size
+
+elapsed time: 723m
+
+configs tested: 82
+configs skipped: 6
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r015-20230531   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r013-20230531   gcc  
+arc                  randconfig-r043-20230531   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r034-20230531   clang
+arm                  randconfig-r046-20230531   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r011-20230531   clang
+arm64                randconfig-r031-20230531   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r006-20230531   gcc  
+hexagon              randconfig-r024-20230531   clang
+hexagon              randconfig-r041-20230531   clang
+hexagon              randconfig-r045-20230531   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i011-20230531   clang
+i386                 randconfig-i012-20230531   clang
+i386                 randconfig-i013-20230531   clang
+i386                 randconfig-i014-20230531   clang
+i386                 randconfig-i061-20230531   gcc  
+i386                 randconfig-i062-20230531   gcc  
+i386                 randconfig-i063-20230531   gcc  
+i386                 randconfig-i064-20230531   gcc  
+i386                 randconfig-i065-20230531   gcc  
+i386                 randconfig-i066-20230531   gcc  
+i386                 randconfig-r021-20230531   clang
+i386                 randconfig-r022-20230531   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r004-20230531   gcc  
+loongarch            randconfig-r012-20230531   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r005-20230531   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r016-20230531   gcc  
+m68k                 randconfig-r026-20230531   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips         buildonly-randconfig-r004-20230531   clang
+mips                 randconfig-r014-20230531   gcc  
+nios2        buildonly-randconfig-r002-20230531   gcc  
+nios2        buildonly-randconfig-r003-20230531   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r035-20230531   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r005-20230531   gcc  
+parisc               randconfig-r036-20230531   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230531   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230531   clang
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r001-20230531   gcc  
+sh                   randconfig-r001-20230531   gcc  
+sparc        buildonly-randconfig-r006-20230531   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r003-20230531   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r032-20230531   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
