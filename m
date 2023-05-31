@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907C5718B3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 371B9718B41
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjEaUcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 16:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
+        id S229913AbjEaUel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 16:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjEaUcj (ORCPT
+        with ESMTP id S229542AbjEaUei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 16:32:39 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F56A121;
-        Wed, 31 May 2023 13:32:38 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-2563ca70f64so3506559a91.0;
-        Wed, 31 May 2023 13:32:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685565158; x=1688157158;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=BDeWfB4xjTkyjMadKYZ6fSoKNmRXb/Jhz3U7/1RbuHU=;
-        b=LxUuGyHqh6epH41m7zvafxG1By7DF4yth9KckI+v2cYmO6NIG7nCFopDVVmndfIUtg
-         +Q1bZWCbE/YVr4py3+irwKdC22FfWSO6EkUbpD6NidoTlXAehPU1GS64VrjNZCXzQb45
-         e1j0vqV+4WBu4SR1w0Rn9cpGzWgd6nGCLzLnYkngaD4n+7FVmQit+4xS3a8O1Z18Bneb
-         ubzJ0W4S//6EKMiej2DicpzVc7Rbub+1kYz3auvCds17220IJ0xENMD8kEL32ymgMz4j
-         2BGaUDj/ho8Dv2cuoFpMqXyrgHoUobe8yj9Zo6a6f8Oh/amnukcDZnyNVvljBuB9pd6r
-         ay3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685565158; x=1688157158;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BDeWfB4xjTkyjMadKYZ6fSoKNmRXb/Jhz3U7/1RbuHU=;
-        b=SB37w6nJ8Pmdo6dWuy7Irw8oMUfDXabsrjjteKHaK2C2k/X65M5w3tiiXsFMBwerRK
-         i4YFxc1zrxp7FrYe9aAM8nMh/WF0fZ8e/VjE2NvOS+o40e6oe/nZGecbninAjeKfoQXr
-         qdCqjIsE0qTilcvyAPn4t6IFeVrEwqBwtORhp4QngqUquguNqAIFydMkJNHXeI+3IEhD
-         bt3gobSAuWxuOWxXCjedu5LsJrzhWUUJ4s4c6pTyLZ3xSFdkodJEKMivNUNzhU87hbQS
-         5lbNvvN77mCyNTmnd2H6+T/31ZhZQN+zLceGF6RxMdmovrtOOXrrEbQ8xKW/Q96j7ywL
-         7ssw==
-X-Gm-Message-State: AC+VfDzMwY3BbFHbuYz8rKRLnO647gAcvmW/7ZpdVxYUFNOajiDGZC86
-        p84TcBCVKS2TLpG7nC08BTQ=
-X-Google-Smtp-Source: ACHHUZ7LSH2pI8sroJzw926L/WGgPkgJbF8dfNbOJHH2X5WS+TvZDRTY5eJ6+2vb50wJCO1hRcblfw==
-X-Received: by 2002:a17:90a:5081:b0:256:82c0:8120 with SMTP id s1-20020a17090a508100b0025682c08120mr5351254pjh.13.1685565157857;
-        Wed, 31 May 2023 13:32:37 -0700 (PDT)
-Received: from bangji.hsd1.ca.comcast.net ([2601:647:6700:7f00:ba31:75fe:e7e6:ccf7])
-        by smtp.gmail.com with ESMTPSA id l9-20020a17090a49c900b002508d73f4e8sm1611472pjm.57.2023.05.31.13.32.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 13:32:37 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH] perf script: Increase PID/TID width for output
-Date:   Wed, 31 May 2023 13:32:36 -0700
-Message-ID: <20230531203236.1602054-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+        Wed, 31 May 2023 16:34:38 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125F9121;
+        Wed, 31 May 2023 13:34:36 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.87.218) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 31 May
+ 2023 23:34:26 +0300
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: [PATCH v5] sh: avoid using IRQ0 on SH3/4
+To:     Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        <linux-sh@vger.kernel.org>
+CC:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        <linux-kernel@vger.kernel.org>
+Organization: Open Mobile Platform
+Message-ID: <197b4ccb-2dc8-add6-02a5-2e241b15a5f9@omp.ru>
+Date:   Wed, 31 May 2023 23:34:26 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.87.218]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 05/31/2023 20:12:40
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 177762 [May 31 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 515 515 1b17fc6ab778ab3730d780f30d802773a7d822ac
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.87.218 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: 31.173.87.218:7.1.2;127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.87.218
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 05/31/2023 20:21:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 5/31/2023 2:11:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,59 +80,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On large systems, it's common that PID/TID is bigger than 5-digit and it
-makes the output unaligned.  Let's increase the width to 7.
+Now that IRQ0 is no longer returned by platform_get_irq() and its ilk (they
+now return -EINVAL instead).  However, the code supporting SH3/4 SoCs still
+maps the IRQ #s starting at 0 -- modify that code to start the IRQ #s from
+16 instead.
 
-Before:
+The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
+indeed use IRQ0 for the SMSC911x compatible Ethernet chip...
 
-  $ perf script
-  ...
-           swapper     0 [006] 1540823.803935:    1369324 cycles:P:  ffffffff9c755588 ktime_get+0x18 ([kernel.kallsyms])
-       gvfsd-dnssd 95114 [004] 1540823.804164:    1643871 cycles:P:  ffffffff9cfdca5c __get_user_8+0x1c ([kernel.kallsyms])
-         perf-exec 1558582 [000] 1540823.804209:    1018714 cycles:P:  ffffffff9c924ab9 __slab_free+0x9 ([kernel.kallsyms])
-             nmcli 1558589 [007] 1540823.804384:    1859212 cycles:P:      7f70537a8ad8 __strchrnul_evex+0x18 (/usr/lib/x86_64-linux-gnu/libc.so.6>
-             sleep 1558582 [000] 1540823.804456:     987425 cycles:P:      7fd35bb27b30 _dl_init+0x0 (/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2>
-       dbus-daemon  3043 [003] 1540823.804575:    1564465 cycles:P:  ffffffff9cb2bb70 llist_add_batch+0x0 ([kernel.kallsyms])
-             gdbus 1558592 [001] 1540823.804766:    1315219 cycles:P:  ffffffff9c797b2e audit_filter_syscall+0x9e ([kernel.kallsyms])
-    NetworkManager  3452 [005] 1540823.805301:    1558782 cycles:P:      7fa957737748 g_bit_lock+0x58 (/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.7400.5>
+Fixes: ce753ad1549c ("platform: finally disallow IRQ0 in platform_get_irq() and its ilk")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 
-After:
-
-  $ perf script
-  ...
-           swapper       0 [006] 1540823.803935:    1369324 cycles:P:  ffffffff9c755588 ktime_get+0x18 ([kernel.kallsyms])
-       gvfsd-dnssd   95114 [004] 1540823.804164:    1643871 cycles:P:  ffffffff9cfdca5c __get_user_8+0x1c ([kernel.kallsyms])
-         perf-exec 1558582 [000] 1540823.804209:    1018714 cycles:P:  ffffffff9c924ab9 __slab_free+0x9 ([kernel.kallsyms])
-             nmcli 1558589 [007] 1540823.804384:    1859212 cycles:P:      7f70537a8ad8 __strchrnul_evex+0x18 (/usr/lib/x86_64-linux-gnu/libc.so.6>
-             sleep 1558582 [000] 1540823.804456:     987425 cycles:P:      7fd35bb27b30 _dl_init+0x0 (/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2>
-       dbus-daemon    3043 [003] 1540823.804575:    1564465 cycles:P:  ffffffff9cb2bb70 llist_add_batch+0x0 ([kernel.kallsyms])
-             gdbus 1558592 [001] 1540823.804766:    1315219 cycles:P:  ffffffff9c797b2e audit_filter_syscall+0x9e ([kernel.kallsyms])
-    NetworkManager    3452 [005] 1540823.805301:    1558782 cycles:P:      7fa957737748 g_bit_lock+0x58 (/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.7400.5>
-
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/builtin-script.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+The patch is against Linus Torvalds' 'linux.git' repo.
 
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index 029d5a597233..70549fc93b12 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -801,11 +801,11 @@ static int perf_sample__fprintf_start(struct perf_script *script,
- 	}
- 
- 	if (PRINT_FIELD(PID) && PRINT_FIELD(TID))
--		printed += fprintf(fp, "%5d/%-5d ", sample->pid, sample->tid);
-+		printed += fprintf(fp, "%7d/%-7d ", sample->pid, sample->tid);
- 	else if (PRINT_FIELD(PID))
--		printed += fprintf(fp, "%5d ", sample->pid);
-+		printed += fprintf(fp, "%7d ", sample->pid);
- 	else if (PRINT_FIELD(TID))
--		printed += fprintf(fp, "%5d ", sample->tid);
-+		printed += fprintf(fp, "%7d ", sample->tid);
- 
- 	if (PRINT_FIELD(CPU)) {
- 		if (latency_format)
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+Changes in version 5:
+- updated the patch description and the "Fixes:" tag as the patch disallowing
+  the use of IRQ0 was merged meanwhile.
 
+Changes in version 4:
+- fixed up the off-chip base IRQ #s for the Dreamcast/Highlander/R2D/SE7724
+  boards.
+
+Changes in version 3:
+- added an appropriate Fixes: tag and added a passage about it to the patch
+  description;
+- added actual cases of the boards using IRQ0 to the patch description;
+- added Geert Uytterhoeven's and John Paul Adrian Glaubitz's tags;
+- updated the link to point to the version 2 of the patch.
+
+Changes in version 2:
+- changed cmp/ge to cmp/hs in the assembly code.
+
+ arch/sh/include/mach-common/mach/highlander.h |    2 +-
+ arch/sh/include/mach-common/mach/r2d.h        |    2 +-
+ arch/sh/include/mach-dreamcast/mach/sysasic.h |    2 +-
+ arch/sh/include/mach-se/mach/se7724.h         |    2 +-
+ arch/sh/kernel/cpu/sh3/entry.S                |    4 ++--
+ include/linux/sh_intc.h                       |    6 +++---
+ 6 files changed, 9 insertions(+), 9 deletions(-)
+
+Index: linux/arch/sh/include/mach-common/mach/highlander.h
+===================================================================
+--- linux.orig/arch/sh/include/mach-common/mach/highlander.h
++++ linux/arch/sh/include/mach-common/mach/highlander.h
+@@ -176,7 +176,7 @@
+ #define IVDR_CK_ON	4		/* iVDR Clock ON */
+ #endif
+ 
+-#define HL_FPGA_IRQ_BASE	200
++#define HL_FPGA_IRQ_BASE	(200 + 16)
+ #define HL_NR_IRL		15
+ 
+ #define IRQ_AX88796		(HL_FPGA_IRQ_BASE + 0)
+Index: linux/arch/sh/include/mach-common/mach/r2d.h
+===================================================================
+--- linux.orig/arch/sh/include/mach-common/mach/r2d.h
++++ linux/arch/sh/include/mach-common/mach/r2d.h
+@@ -47,7 +47,7 @@
+ 
+ #define IRLCNTR1	(PA_BCR + 0)	/* Interrupt Control Register1 */
+ 
+-#define R2D_FPGA_IRQ_BASE	100
++#define R2D_FPGA_IRQ_BASE	(100 + 16)
+ 
+ #define IRQ_VOYAGER		(R2D_FPGA_IRQ_BASE + 0)
+ #define IRQ_EXT			(R2D_FPGA_IRQ_BASE + 1)
+Index: linux/arch/sh/include/mach-dreamcast/mach/sysasic.h
+===================================================================
+--- linux.orig/arch/sh/include/mach-dreamcast/mach/sysasic.h
++++ linux/arch/sh/include/mach-dreamcast/mach/sysasic.h
+@@ -22,7 +22,7 @@
+    takes.
+ */
+ 
+-#define HW_EVENT_IRQ_BASE  48
++#define HW_EVENT_IRQ_BASE  (48 + 16)
+ 
+ /* IRQ 13 */
+ #define HW_EVENT_VSYNC     (HW_EVENT_IRQ_BASE +  5) /* VSync */
+Index: linux/arch/sh/include/mach-se/mach/se7724.h
+===================================================================
+--- linux.orig/arch/sh/include/mach-se/mach/se7724.h
++++ linux/arch/sh/include/mach-se/mach/se7724.h
+@@ -37,7 +37,7 @@
+ #define IRQ2_IRQ        evt2irq(0x640)
+ 
+ /* Bits in IRQ012 registers */
+-#define SE7724_FPGA_IRQ_BASE	220
++#define SE7724_FPGA_IRQ_BASE	(220 + 16)
+ 
+ /* IRQ0 */
+ #define IRQ0_BASE	SE7724_FPGA_IRQ_BASE
+Index: linux/arch/sh/kernel/cpu/sh3/entry.S
+===================================================================
+--- linux.orig/arch/sh/kernel/cpu/sh3/entry.S
++++ linux/arch/sh/kernel/cpu/sh3/entry.S
+@@ -470,9 +470,9 @@ ENTRY(handle_interrupt)
+ 	mov	r4, r0		! save vector->jmp table offset for later
+ 
+ 	shlr2	r4		! vector to IRQ# conversion
+-	add	#-0x10, r4
+ 
+-	cmp/pz	r4		! is it a valid IRQ?
++	mov	#0x10, r5
++	cmp/hs	r5, r4		! is it a valid IRQ?
+ 	bt	10f
+ 
+ 	/*
+Index: linux/include/linux/sh_intc.h
+===================================================================
+--- linux.orig/include/linux/sh_intc.h
++++ linux/include/linux/sh_intc.h
+@@ -13,9 +13,9 @@
+ /*
+  * Convert back and forth between INTEVT and IRQ values.
+  */
+-#ifdef CONFIG_CPU_HAS_INTEVT
+-#define evt2irq(evt)		(((evt) >> 5) - 16)
+-#define irq2evt(irq)		(((irq) + 16) << 5)
++#ifdef CONFIG_CPU_HAS_INTEVT	/* Avoid IRQ0 (invalid for platform devices) */
++#define evt2irq(evt)		((evt) >> 5)
++#define irq2evt(irq)		((irq) << 5)
+ #else
+ #define evt2irq(evt)		(evt)
+ #define irq2evt(irq)		(irq)
