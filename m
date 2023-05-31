@@ -2,110 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99DF3717B66
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E93D717B92
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235451AbjEaJLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
+        id S234826AbjEaJQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235443AbjEaJKp (ORCPT
+        with ESMTP id S230385AbjEaJQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:10:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9448610C1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:10:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25BD1638B4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6496EC4339C;
-        Wed, 31 May 2023 09:10:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685524226;
-        bh=i6lshncDJIeLa1kUlaumbpkddBNVHnpfwPUQihXnRJM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=IaXWdXOPAn96BdRBhQ4DPzAthy487kYS93n2uzsHOTA1oazIXh1PJLRJjhIMKmARd
-         Zoul+HBtrNLRcpCC2eHgZtX87lOcuHQ3x0ZPDqqbzcWIxV8XrvoFCGWkft9/5+scfE
-         qL6WQPDj9zqbTxH1fqntFPCdWp6px4wZuSYYwPABZ/Ls7K8G4Dc3JtMIzbw/dpzg6Z
-         ZAGWT/0NFGkjpNNgCcGPpQvitaUmaUpqSvWSwM0wSyRffTUG32FqqJAyiRiba9JD7B
-         E5tPgL/2SPQybKEvJ2jMwVPpJme582vDyDEQMZMj4rUKVq94P2u1XjjKvzVdP1jwZr
-         vEUPT+tsZiVoQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 41ADFE21EC7;
-        Wed, 31 May 2023 09:10:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 31 May 2023 05:16:40 -0400
+X-Greylist: delayed 334 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 May 2023 02:16:39 PDT
+Received: from forward205c.mail.yandex.net (forward205c.mail.yandex.net [178.154.239.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6344E6
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:16:39 -0700 (PDT)
+Received: from forward103c.mail.yandex.net (forward103c.mail.yandex.net [IPv6:2a02:6b8:c03:500:1:45:d181:d103])
+        by forward205c.mail.yandex.net (Yandex) with ESMTP id B3A004855C
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:11:07 +0300 (MSK)
+Received: from mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:6e01:0:640:627f:0])
+        by forward103c.mail.yandex.net (Yandex) with ESMTP id 6A18760154;
+        Wed, 31 May 2023 12:11:04 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id qAJGDoUWteA0-60oBuF1U;
+        Wed, 31 May 2023 12:11:03 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1685524263;
+        bh=Qz/zvm20YVew2wSgw5i22oMjX2ajjyiRSg99gIkAk5U=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=vyI+vSv0afDp9Y2BQdQpMBCvp96NnGv/IK4M+oAL86RQjUiJM4RFoOLQ/mb0Re2yN
+         1Fvunllgf9fInYnys//5n6h1+ekkelTaYqatfYfT5+68j/oQYC/R3vUdf4tCkdFnuP
+         BFTmiZudvrhkWJajUy/IfOV01qp0xp/P9jmtuDqQ=
+Authentication-Results: mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+From:   Dmitry Antipov <dmantipov@yandex.ru>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Dmitry Antipov <dmantipov@yandex.ru>,
+        Dmitriy Antipov <Dmitriy.Antipov@softline.com>
+Subject: [PATCH] x86/vdso: provide prototype of __vdso_getcpu()
+Date:   Wed, 31 May 2023 12:10:27 +0300
+Message-Id: <20230531091027.70434-1-dmantipov@yandex.ru>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/5] xstats for tc-taprio
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168552422626.12579.6601125654059435231.git-patchwork-notify@kernel.org>
-Date:   Wed, 31 May 2023 09:10:26 +0000
-References: <20230530091948.1408477-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20230530091948.1408477-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        vinicius.gomes@intel.com, kurt@linutronix.de,
-        gerhard@engleder-embedded.com, amritha.nambiar@intel.com,
-        ferenc.fejes@ericsson.com, xiaoliang.yang_1@nxp.com,
-        rogerq@kernel.org, pranavi.somisetty@amd.com,
-        harini.katakam@amd.com, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, michael.wei.hong.sit@intel.com,
-        mohammad.athari.ismail@intel.com, linux@rempel-privat.de,
-        jacob.e.keller@intel.com, linux-kernel@vger.kernel.org,
-        andrew@lunn.ch, f.fainelli@gmail.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        horatiu.vultur@microchip.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com, intel-wired-lan@lists.osuosl.org,
-        muhammad.husaini.zulkifli@intel.com
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Include asm/vdso/processor.h to fix the following 'make LLVM=1 W=1'
+warning:
 
-This series was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
+arch/x86/entry/vdso/vgetcpu.c:13:1: error: no previous prototype for
+function '__vdso_getcpu' [-Werror,-Wmissing-prototypes]
+__vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
+^
 
-On Tue, 30 May 2023 12:19:43 +0300 you wrote:
-> As a result of this discussion:
-> https://lore.kernel.org/intel-wired-lan/20230411055543.24177-1-muhammad.husaini.zulkifli@intel.com/
-> 
-> it became apparent that tc-taprio should make an effort to standardize
-> statistics counters related to the 802.1Qbv scheduling as implemented
-> by the NIC. I'm presenting here one counter suggested by the standard,
-> and one counter defined by the NXP ENETC controller from LS1028A. Both
-> counters are reported globally and per traffic class - drivers get
-> different callbacks for reporting both of these, and get to choose what
-> to report in both cases.
-> 
-> [...]
+Signed-off-by: Dmitriy Antipov <Dmitriy.Antipov@softline.com>
+---
+ arch/x86/entry/vdso/vgetcpu.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Here is the summary with links:
-  - [net-next,1/5] net/sched: taprio: don't overwrite "sch" variable in taprio_dump_class_stats()
-    https://git.kernel.org/netdev/net-next/c/dced11ef84fb
-  - [net-next,2/5] net/sched: taprio: replace tc_taprio_qopt_offload :: enable with a "cmd" enum
-    https://git.kernel.org/netdev/net-next/c/2d800bc500fb
-  - [net-next,3/5] net/sched: taprio: add netlink reporting for offload statistics counters
-    https://git.kernel.org/netdev/net-next/c/6c1adb650c8d
-  - [net-next,4/5] net: enetc: refactor enetc_setup_tc_taprio() to have a switch/case for cmd
-    https://git.kernel.org/netdev/net-next/c/5353599aa745
-  - [net-next,5/5] net: enetc: report statistics counters for taprio
-    https://git.kernel.org/netdev/net-next/c/4802fca8d1af
-
-You are awesome, thank you!
+diff --git a/arch/x86/entry/vdso/vgetcpu.c b/arch/x86/entry/vdso/vgetcpu.c
+index 0a9007c24056..66edca964a9a 100644
+--- a/arch/x86/entry/vdso/vgetcpu.c
++++ b/arch/x86/entry/vdso/vgetcpu.c
+@@ -8,6 +8,7 @@
+ #include <linux/kernel.h>
+ #include <linux/getcpu.h>
+ #include <asm/segment.h>
++#include <asm/vdso/processor.h>
+ 
+ notrace long
+ __vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.40.1
 
