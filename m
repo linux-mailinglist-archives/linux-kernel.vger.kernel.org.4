@@ -2,165 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A1A7185B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34977185B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234139AbjEaPH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
+        id S234060AbjEaPIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232421AbjEaPHt (ORCPT
+        with ESMTP id S234065AbjEaPII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:07:49 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D21E12F
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:07:33 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-ba8afcc82c0so10142265276.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:07:33 -0700 (PDT)
+        Wed, 31 May 2023 11:08:08 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D23D1BC
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:07:58 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f3b314b1d7so6539232e87.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:07:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1685545652; x=1688137652;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9aQg/XyLc0KoyLOMQC9nxzXd5jehGRavUIxUSIV2naQ=;
-        b=1EhPv/FGgUxPG7bhv9pWTsI9oglY2BT+2VHNgu6m+3vORlYefuXvCNDfSavIZlEXuq
-         dlSl8rh+SFNbx36nrP/0GkdsrzahtH/Nq7Yla5bLSyD++kFxWXXgEMAGinIjlHsKDOu9
-         lIj04xMLqI3xHIZJsMwBaLwOUnLn5vqMNtx5Pfapt8p49CozlpTrJDiYoEi+r5Iqb/rA
-         BENjtK3nWgXHC+SASym4IQJIjAU8AJkyJOjpFDsO4YLkcsZjj4rt5eBxxpuGVddFlDPa
-         U3Bg8+KJ0+loUmO5o+mnhqV7SEAEXnjFoPcA2kDDDCEk79J8XJ8anTbs1j+dtCtUGqYE
-         9jaw==
+        d=ventanamicro.com; s=google; t=1685545676; x=1688137676;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JUIbREcbx/7AYCYbP6hJBZ04/CWyd0xTzthWNvvFKW0=;
+        b=CpdRFrDGLIRJKki5RjwxylxPBIFamWlGob2MdmpKb4HBlVP/tRQ13doI2Q6aF2nWQt
+         CXk6kqO9Egk15pYIpSHmHy+QzOKB1W+xuz4hJf9LD8tmbKFjnyCbESeDgc+kw9Z+1jzj
+         JQE3+HWfdLsErL/zbVzmgs8uXKzNLV1fuxZjATvFFXL5M8p5iJKf7Uq5nHp2PxFGj6SH
+         lHUbchz2sVhxVTxsM77cueNtzFJshSst2SFewStnxOBaBsiBefJfqH8lrv1Rvdc3pIWA
+         aurGDEE+qIriegaiVBQ+1e2w7d3M99inUa0YPEoxy4Fumca0XI7NMJ9lB+tvXz0B8jbb
+         Pouw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685545652; x=1688137652;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9aQg/XyLc0KoyLOMQC9nxzXd5jehGRavUIxUSIV2naQ=;
-        b=BhZITN+R0Na4OwBOAyOQEl/RzN/pFOe5Ncr74qkrqIbPPqgSSK8vAr/cZE1oIgRoIL
-         80czdSrI4+5e0MTs1IVo+3xTDgpPqWEMJgDu3o46bwJ6O7vHgyh3qxvG/oteiZES/bkD
-         55RTCoIpw3CHXmaIan+oxg70cVMOqYaPzortfMpp6mPVU2B7Ep3ZqcdCeAL0MZF2Pmve
-         KhFC1LbO7Qs+YQJri23cxoefVTZUqFtbfd8nFls/OWK0IqnaD250oou0tmVTA6ck5l5B
-         I/GwgGtwdRQDqKWK5IWdn1n7eoK8Cf9J6roXLDAi1u0jRwD+dWygeqwPatFFDAedm6rG
-         MeZg==
-X-Gm-Message-State: AC+VfDzaP4G8f/Pm4zae9fw5MjTd5Z0BEGHIoVKuSN48E2FObiG0duMM
-        8AI1uWhKc1doDqFTl45lvWxcErjhcPafLSf7Qo5/JA==
-X-Google-Smtp-Source: ACHHUZ77LJrjRPlRCPaA1cCrFz7N3gR49T4+cjdOnPoFno78wVh8ZdLEgtBGtF1oXcnMf9/wyM5Ti7RrmCAKn4hRS+A=
-X-Received: by 2002:a81:6c84:0:b0:565:9fc7:9330 with SMTP id
- h126-20020a816c84000000b005659fc79330mr5984962ywc.17.1685545652645; Wed, 31
- May 2023 08:07:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685545676; x=1688137676;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JUIbREcbx/7AYCYbP6hJBZ04/CWyd0xTzthWNvvFKW0=;
+        b=Ko7Y1gkWFK+9YdnMwzVhi25dZGHznnTghTmXi0cPECb4T9hE82AQsGKiXNLXiWTA+n
+         QRlSiIO0rjmLLJovOqUPCiCDjf/4XDWDGKTFXpfneFKzM8MI5BJcDJnQ1ylFnI6kD1xg
+         CihQj+/yw+C9dphfY1Aw4gHwJfwOT96HHa86IhEwEGxXy/ECr9pof1/EnZmt5hxfuX4V
+         l1RKnWPFaSvAS2o5khCpE3sfxZF5M8OXZYI4AzznnjVyfqiPRybs27OnV0YJP1WHSOn1
+         OQusnYG+pIgxPLFFOkj+T2kq1GjBYr6dD2XbRmQ9EJODE7vU3Sdah028KdUjlawtS7g0
+         Krpw==
+X-Gm-Message-State: AC+VfDzT6TahzHYiuY1NcPq+OOekkn4pPIIZZ/sv2znWZp/7p9hpDvsW
+        8t4J9GUBAYjtl3iI0LUKzjE0Zw==
+X-Google-Smtp-Source: ACHHUZ7E6kbDp2hRRtt+qsXk2F0ex4UkDmy/j1U8lrPnGhR9xK8TtMFExzBERPqMYV57ESb28Lkr0g==
+X-Received: by 2002:a05:6512:4ce:b0:4f3:a69e:1d80 with SMTP id w14-20020a05651204ce00b004f3a69e1d80mr3069033lfq.0.1685545676307;
+        Wed, 31 May 2023 08:07:56 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id m6-20020a7bce06000000b003f6050d35c9sm20952739wmc.20.2023.05.31.08.07.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 08:07:55 -0700 (PDT)
+Date:   Wed, 31 May 2023 17:07:55 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 08/10] Documentation: admin-guide: Add riscv
+ sysctl_perf_user_access
+Message-ID: <20230531-0707dc46df8078cd92711314@orel>
+References: <20230512085321.13259-1-alexghiti@rivosinc.com>
+ <20230512085321.13259-9-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-References: <20230531141556.1637341-1-lee@kernel.org> <CANn89iJw2N9EbF+Fm8KCPMvo-25ONwba+3PUr8L2ktZC1Z3uLw@mail.gmail.com>
-In-Reply-To: <CANn89iJw2N9EbF+Fm8KCPMvo-25ONwba+3PUr8L2ktZC1Z3uLw@mail.gmail.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Wed, 31 May 2023 11:07:21 -0400
-Message-ID: <CAM0EoMnUgXsr4UBeZR57vPpc5WRJkbWUFsii90jXJ=stoXCGcg@mail.gmail.com>
-Subject: Re: [PATCH 1/1] net/sched: cls_u32: Fix reference counter leak
- leading to overflow
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Lee Jones <lee@kernel.org>, xiyou.wangcong@gmail.com,
-        jiri@resnulli.us, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, stable@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512085321.13259-9-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 11:03=E2=80=AFAM Eric Dumazet <edumazet@google.com>=
- wrote:
->
-> On Wed, May 31, 2023 at 4:16=E2=80=AFPM Lee Jones <lee@kernel.org> wrote:
-> >
-> > In the event of a failure in tcf_change_indev(), u32_set_parms() will
-> > immediately return without decrementing the recently incremented
-> > reference counter.  If this happens enough times, the counter will
-> > rollover and the reference freed, leading to a double free which can be
-> > used to do 'bad things'.
-> >
-> > Cc: stable@kernel.org # v4.14+
->
-> Please add a Fixes: tag.
->
-> > Signed-off-by: Lee Jones <lee@kernel.org>
-> > ---
-> >  net/sched/cls_u32.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
-> > index 4e2e269f121f8..fad61ca5e90bf 100644
-> > --- a/net/sched/cls_u32.c
-> > +++ b/net/sched/cls_u32.c
-> > @@ -762,8 +762,11 @@ static int u32_set_parms(struct net *net, struct t=
-cf_proto *tp,
-> >         if (tb[TCA_U32_INDEV]) {
-> >                 int ret;
-> >                 ret =3D tcf_change_indev(net, tb[TCA_U32_INDEV], extack=
-);
->
-> This call should probably be done earlier in the function, next to
-> tcf_exts_validate_ex()
->
-> Otherwise we might ask why the tcf_bind_filter() does not need to be undo=
-ne.
->
-> Something like:
->
-> diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
-> index 4e2e269f121f8a301368b9783753e055f5af6a4e..ac957ff2216ae18bcabdd3af3=
-b0e127447ef8f91
-> 100644
-> --- a/net/sched/cls_u32.c
-> +++ b/net/sched/cls_u32.c
-> @@ -718,13 +718,18 @@ static int u32_set_parms(struct net *net, struct
-> tcf_proto *tp,
->                          struct nlattr *est, u32 flags, u32 fl_flags,
->                          struct netlink_ext_ack *extack)
->  {
-> -       int err;
-> +       int err, ifindex =3D -1;
->
->         err =3D tcf_exts_validate_ex(net, tp, tb, est, &n->exts, flags,
->                                    fl_flags, extack);
->         if (err < 0)
->                 return err;
->
-> +       if (tb[TCA_U32_INDEV]) {
-> +               ifindex =3D tcf_change_indev(net, tb[TCA_U32_INDEV], exta=
-ck);
-> +               if (ifindex < 0)
-> +                       return -EINVAL;
-> +       }
->         if (tb[TCA_U32_LINK]) {
->                 u32 handle =3D nla_get_u32(tb[TCA_U32_LINK]);
->                 struct tc_u_hnode *ht_down =3D NULL, *ht_old;
-> @@ -759,13 +764,9 @@ static int u32_set_parms(struct net *net, struct
-> tcf_proto *tp,
->                 tcf_bind_filter(tp, &n->res, base);
->         }
->
-> -       if (tb[TCA_U32_INDEV]) {
-> -               int ret;
-> -               ret =3D tcf_change_indev(net, tb[TCA_U32_INDEV], extack);
-> -               if (ret < 0)
-> -                       return -EINVAL;
-> -               n->ifindex =3D ret;
-> -       }
-> +       if (ifindex >=3D 0)
-> +               n->ifindex =3D ifindex;
+On Fri, May 12, 2023 at 10:53:19AM +0200, Alexandre Ghiti wrote:
+> riscv now uses this sysctl so document its usage for this architecture.
+> 
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  Documentation/admin-guide/sysctl/kernel.rst | 24 +++++++++++++++++----
+>  1 file changed, 20 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+> index 4b7bfea28cd7..93cd518ca94b 100644
+> --- a/Documentation/admin-guide/sysctl/kernel.rst
+> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> @@ -941,16 +941,32 @@ enabled, otherwise writing to this file will return ``-EBUSY``.
+>  The default value is 8.
+>  
+>  
+> -perf_user_access (arm64 only)
+> -=================================
+> +perf_user_access (arm64 and riscv only)
+> +=======================================
 > +
+> +Controls user space access for reading perf event counters.
+>  
+> -Controls user space access for reading perf event counters. When set to 1,
+> -user space can read performance monitor counter registers directly.
+> +arm64
+> +=====
+>  
+>  The default value is 0 (access disabled).
+> +When set to 1, user space can read performance monitor counter registers
+> +directly.
+>  
+>  See Documentation/arm64/perf.rst for more information.
+>  
+> +riscv
+> +=====
+> +
+> +When set to 0, user access is disabled.
+> +
+> +When set to 1, user space can read performance monitor counter registers
+> +directly only through perf, any direct access without perf intervention will
+> +trigger an illegal instruction.
+> +
+> +The default value is 2, which enables legacy mode (user space has direct
+> +access to cycle, time and insret CSRs only). Note that this legacy value
+> +is deprecated and will be removed once all userspace applications are fixed.
 
-I guess we crossed paths ;->
+All modes can access the time CSR so I'm not sure if it should be pointed
+out here as if it's an exception. Maybe we shouldn't point it out at all
+or we should point it out for all three?
 
-Please, add a tdc test as well - it doesnt have to be in this patch,
-can be a followup.
-
-cheers,
-jamal
-
->         return 0;
->  }
+Thanks,
+drew
