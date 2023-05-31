@@ -2,167 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F90718950
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2BC718958
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbjEaSW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 14:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
+        id S230316AbjEaSZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 14:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjEaSWw (ORCPT
+        with ESMTP id S229581AbjEaSZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 14:22:52 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAC397
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:22:50 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f3b314b1d7so6856904e87.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:22:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1685557369; x=1688149369;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5GyEurHwEiX59cT21A0ZjtetqGR44jcas9hRcmVwdBA=;
-        b=tPeTHaxN+AJNPyxEidQ1n2XNcljImcYidxbm2MDI9ZgZsX/rpfaqXCd1iWFFtaXNTT
-         iwqe7jYDw6MCACE8w57q0+BNqjSphJggHgIJVtcIkWsaLsZnSEqzFh9x8BUmt6bMH4sy
-         F3Uwvv2QFTH1O58YpawDogc4XKcupH8M89/f3cEGl74Fqja/zkwVz8kWemO+utc0719L
-         FJcY+bI4nfHNn8UlSokshyUH8Ff4BoPNr92908/EegLmNqZRCr2APT6eOfkDk1K0VvIq
-         W/8WMJUA/liuqEW57cedpV4jx7pA8jU9wBmXQtpoKbe8SRhxTp9qUI1CWjWdOCW5azA8
-         JfFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685557369; x=1688149369;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5GyEurHwEiX59cT21A0ZjtetqGR44jcas9hRcmVwdBA=;
-        b=QxBz6CyeyjHsZNDS9X1kC8ar1OyJ9cX8Y82/9Qi69QcsLCNgoD28j3f+f9uS7pxij3
-         TYyWTaXThdg1inUWZj7hWv7T6nfjW++wJJN4QPGpzx0gEdOmkzj/nYwc8eTYfmeZNWdN
-         /zsIHHiu+Cc7OZqaplxvF5Uz/a5QDdHTQ5wswYMCiXjryVZU+WD17BcDnnv+SSc8A6q2
-         97Vpeb9by/gPTTKUeyCSsOo+pbBlqcD44AguRhduAgdEwIEJBh6IEtHnr/eWPuftf5XK
-         dGOtXSi6V806CDEiHxtAD/dcZfUQguaTXTfBXvPCKrpdu1rdN1bKQkAqIwROQ8euRzyY
-         ni/Q==
-X-Gm-Message-State: AC+VfDwE7jD++MBdYrNOeKsgVBTjM2yDeATwHxhyJxRzKnCOoUpfiWh9
-        LjLWZP2mosYyaeEUaocw6wEoIg==
-X-Google-Smtp-Source: ACHHUZ7Ld3y8iwMuw9iMhBZwkj8ipsa1begSEOnmuiURtYUpVt+tl8Af63xW/gf4gPhoyVSM7n37dg==
-X-Received: by 2002:ac2:5237:0:b0:4eb:42b7:8c18 with SMTP id i23-20020ac25237000000b004eb42b78c18mr3254561lfl.53.1685557368674;
-        Wed, 31 May 2023 11:22:48 -0700 (PDT)
-Received: from airbuntu (host109-154-46-114.range109-154.btcentralplus.com. [109.154.46.114])
-        by smtp.gmail.com with ESMTPSA id j28-20020a5d6e5c000000b0030aea925fbesm7712105wrz.50.2023.05.31.11.22.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 11:22:47 -0700 (PDT)
-Date:   Wed, 31 May 2023 19:22:43 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: Re: [PATCH v2 1/3] sched/uclamp: Set max_spare_cap_cpu even if
- max_spare_cap is 0
-Message-ID: <20230531182243.r4d5teuijiadwp2c@airbuntu>
-References: <20230205224318.2035646-1-qyousef@layalina.io>
- <20230205224318.2035646-2-qyousef@layalina.io>
- <CAKfTPtA9yOncmGuLfo-XaXDZ5F7+9iL-hdyGeaOQi1qrDa_RqQ@mail.gmail.com>
- <9e935645-9baf-af9f-73bd-3eaeaec044a8@arm.com>
- <20230211175052.b7a4hddhkjk4j6qf@airbuntu>
- <48db3f08-a066-c078-bfc9-bf20f66e067a@arm.com>
+        Wed, 31 May 2023 14:25:54 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A8A97;
+        Wed, 31 May 2023 11:25:53 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VGNCUv003007;
+        Wed, 31 May 2023 18:25:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=ok49jhaPjd+G0yNitqyT3jCqd7H8ut8cxORfilIuBIw=;
+ b=F7Ei5DyHj13yknMOmVi0jslmaLE89eTpdsfU/NAEip7kjY76zzfnXpAl5wZ5aq3nbgeZ
+ N3x393vQ7/PfVMaxvI8GRA6isrBLg2BH56hJJmDOarf4JhDRmqBVjNZ4pt3Ft/co6ALb
+ qgwtwUDHWR0rT/bJ+kd/QehaoqvqD7OVJn07rXiOri96ndLHtblOCqAkRZx9CwRrEkJQ
+ CY3kD6cNWjq0CDVdQL/+Qy+YhOXkPN7UpA1EIT0+gTu6Z/uU5gavSOd7saSHD3v+YM8G
+ +siT/uSZxkukwZpqj45oDVSvBa6Gz8bZoucOPbXPpWzKmjaYH0GPZyqU0C7daQ6cVWOV jw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qx1yk1g96-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 18:25:45 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34VIPiwk026670
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 18:25:44 GMT
+Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 31 May
+ 2023 11:25:42 -0700
+Message-ID: <a0b7a9fc-eb3c-3b26-b11d-fe1fb47b2c51@quicinc.com>
+Date:   Wed, 31 May 2023 11:25:40 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <48db3f08-a066-c078-bfc9-bf20f66e067a@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: re-introduce dpu core revision
+ to the catalog
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <quic_khsieh@quicinc.com>, Rob Clark <robdclark@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, <quic_jesszhan@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, Sean Paul <sean@poorly.run>
+References: <20230531005358.18090-1-quic_abhinavk@quicinc.com>
+ <CAA8EJpryw0h8TgpJ+SFJ7s0=LCjkQ6oqAjCKsm60dk_Q5e+wWA@mail.gmail.com>
+ <0af4df3d-8048-98cd-6c91-7cd553f4f65f@quicinc.com>
+ <98e4bda7-19e9-09b6-f008-383adada97cb@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <98e4bda7-19e9-09b6-f008-383adada97cb@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 9d1xuQM_Mt54bpD55u7xkN2KInV7jXbL
+X-Proofpoint-GUID: 9d1xuQM_Mt54bpD55u7xkN2KInV7jXbL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_13,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
+ mlxlogscore=999 phishscore=0 adultscore=0 bulkscore=0 spamscore=0
+ impostorscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305310156
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukasz!
 
-Sorry for late response..
 
-On 05/22/23 09:30, Lukasz Luba wrote:
-> Hi Qais,
+On 5/31/2023 3:07 AM, Dmitry Baryshkov wrote:
+> On 31/05/2023 06:05, Abhinav Kumar wrote:
+>>
+>>
+>> On 5/30/2023 7:53 PM, Dmitry Baryshkov wrote:
+>>> On Wed, 31 May 2023 at 03:54, Abhinav Kumar 
+>>> <quic_abhinavk@quicinc.com> wrote:
+>>>>
+>>>> With [1] dpu core revision was dropped in favor of using the
+>>>> compatible string from the device tree to select the dpu catalog
+>>>> being used in the device.
+>>>>
+>>>> This approach works well however also necessitates adding catalog
+>>>> entries for small register level details as dpu capabilities and/or
+>>>> features bloating the catalog unnecessarily. Examples include but
+>>>> are not limited to data_compress, interrupt register set, widebus etc.
+>>>>
+>>>> Introduce the dpu core revision back as an entry to the catalog so that
+>>>> we can just use dpu revision checks and enable those bits which
+>>>> should be enabled unconditionally and not controlled by a catalog
+>>>> and also simplify the changes to do something like:
+>>>>
+>>>> if (dpu_core_revision > xxxxx && dpu_core_revision < xxxxx)
+>>>>          enable the bit;
+>>>>
+>>>> Also, add some of the useful macros back to be able to use dpu core
+>>>> revision effectively.
+>>>>
+>>>> [1]: 
+>>>> https://patchwork.freedesktop.org/patch/530891/?series=113910&rev=4
+>>>>
+>>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>>>> ---
+>>>>   .../msm/disp/dpu1/catalog/dpu_3_0_msm8998.h   |  1 +
+>>>>   .../msm/disp/dpu1/catalog/dpu_4_0_sdm845.h    |  1 +
+>>>>   .../msm/disp/dpu1/catalog/dpu_5_0_sm8150.h    |  1 +
+>>>>   .../msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h   |  1 +
+>>>>   .../msm/disp/dpu1/catalog/dpu_6_0_sm8250.h    |  1 +
+>>>>   .../msm/disp/dpu1/catalog/dpu_6_2_sc7180.h    |  1 +
+>>>>   .../msm/disp/dpu1/catalog/dpu_6_3_sm6115.h    |  1 +
+>>>>   .../msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h   |  1 +
+>>>>   .../msm/disp/dpu1/catalog/dpu_7_0_sm8350.h    |  1 +
+>>>>   .../msm/disp/dpu1/catalog/dpu_7_2_sc7280.h    |  1 +
+>>>>   .../msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h  |  1 +
+>>>>   .../msm/disp/dpu1/catalog/dpu_8_1_sm8450.h    |  1 +
+>>>>   .../msm/disp/dpu1/catalog/dpu_9_0_sm8550.h    |  1 +
+>>>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    | 31 
+>>>> ++++++++++++++++++-
+>>>>   14 files changed, 43 insertions(+), 1 deletion(-)
+>>>>
+>>>
+>>> [skipped catalog changes]
+>>>
+>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h 
+>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>>> index 677048cc3b7d..cc4aa75a1219 100644
+>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>>> @@ -19,6 +19,33 @@
+>>>>    */
+>>>>   #define MAX_BLOCKS    12
+>>>>
+>>>> +#define DPU_HW_VER(MAJOR, MINOR, STEP)\
+>>>> +                 ((((unsigned int)MAJOR & 0xF) << 28) |\
+>>>> +                 ((MINOR & 0xFFF) << 16) |\
+>>>> +                 (STEP & 0xFFFF))
+>>>> +
+>>>> +#define DPU_HW_MAJOR(rev)((rev) >> 28)
+>>>> +#define DPU_HW_MINOR(rev)(((rev) >> 16) & 0xFFF)
+>>>> +#define DPU_HW_STEP(rev)((rev) & 0xFFFF)
+>>>> +#define DPU_HW_MAJOR_MINOR(rev)((rev) >> 16)
+>>>> +
+>>>> +#define IS_DPU_MAJOR_MINOR_SAME(rev1, rev2)   \
+>>>> +(DPU_HW_MAJOR_MINOR((rev1)) == DPU_HW_MAJOR_MINOR((rev2)))
+>>>> +
+>>>> +#define DPU_HW_VER_300 DPU_HW_VER(3, 0, 0) /* 8998 v1.0 */
+>>>> +#define DPU_HW_VER_400 DPU_HW_VER(4, 0, 0) /* sdm845 v1.0 */
+>>>> +#define DPU_HW_VER_500 DPU_HW_VER(5, 0, 0) /* sm8150 v1.0 */
+>>>> +#define DPU_HW_VER_510 DPU_HW_VER(5, 1, 1) /* sc8180 */
+>>>> +#define DPU_HW_VER_600 DPU_HW_VER(6, 0, 0) /* sm8250 */
+>>>> +#define DPU_HW_VER_620 DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
+>>>> +#define DPU_HW_VER_630 DPU_HW_VER(6, 3, 0) /* sm6115|sm4250 */
+>>>> +#define DPU_HW_VER_650 DPU_HW_VER(6, 5, 0) /* qcm2290|sm4125 */
+>>>> +#define DPU_HW_VER_700 DPU_HW_VER(7, 0, 0) /* sm8350 */
+>>>> +#define DPU_HW_VER_720 DPU_HW_VER(7, 2, 0) /* sc7280 */
+>>>> +#define DPU_HW_VER_800 DPU_HW_VER(8, 0, 0) /* sc8280xp */
+>>>> +#define DPU_HW_VER_810 DPU_HW_VER(8, 1, 0) /* sm8450 */
+>>>> +#define DPU_HW_VER_900 DPU_HW_VER(9, 0, 0) /* sm8550 */
+>>>
+>>> Instead of having defines for all SoCs (which can quickly become
+>>> unmanageable) and can cause merge conflicts, I'd suggest inlining all
+>>> the defines into respective catalog files.
+>>>
+>>
+>> Sure, that can be done.
+>>
+>>> Also, I'm not sure that the "step" should be a part of the catalog. I
+>>> know that this follows the hardware revision. However, please correct
+>>> me if I'm wrong, different step levels are used for revisions of the
+>>> same SoC. The original code that was reading the hw revision from the
+>>> hardware register, listed both 5.0.0 and 5.0.1 for sm8150.
+>>>
+>>
+>> This is one of the things i noticed while making this change.
+>>
+>> Before the catalog rework, we used to handle even steps as we used to 
+>> read that from the register and match it with the mdss_cfg handler. 
+>> But after the rework, we dont handle steps anymore. Yes, you are right 
+>> that different step levels are used for the revisions of the same SOC 
+>> and so with that, i dont expect or atleast am not aware of DPU 
+>> differences between steps but I am not able to rule it out.
+>>
+>> So are you suggesting we drop step altogether and DPU_HW_VER() macro 
+>> shall only handle major and minor versions? With the current chipsets 
+>> I see, it should not make a difference . Its just that I am not sure 
+>> if that will never happen.
 > 
-> I have a question regarding the 'soft cpu affinity'.
+> Yes. The goal of this rework would be to drop generic features and to 
+> replace those checks with DPU-revision lookups. Correct?
 
-[...]
+Yes thats right.
 
-> > IIUC I'm not seeing this being a problem. The goal of capping with uclamp_max
-> > is two folds:
-> > 
-> > 	1. Prevent tasks from consuming energy.
-> > 	2. Keep them away from expensive CPUs.
-> > 
-> > 2 is actually very important for 2 reasons:
-> > 
-> > 	a. Because of max aggregation - any uncapped tasks that wakes up will
-> > 	   cause a frequency spike on this 'expensive' cpu. We don't have
-> > 	   a mechanism to downmigrate it - which is another thing I'm working
-> > 	   on.
-> > 	b. It is desired to keep these bigger cpu idle ready for more important
-> > 	   work.
-> > 
-> > For 2, generally we don't want these tasks to steal bandwidth from these CPUs
-> > that we'd like to preserve for other type of work.
+> I think that from this perspective having to handle toe step revision is 
+> a sign of an overkill. Having to handle the step revision is a sign of 
+> paltform feature (or mis-feature) rather than a generic DPU bit.
 > 
-> I'm a bit afraid about such 'strong force'. That means the task would
-> not go via EAS if we set uclamp_max e.g. 90, while the little capacity
-> is 125. Or am I missing something?
 
-We should go via EAS, actually that's the whole point.
+Not entirely. Lets not forget that at the moment even dpu_perf_cfg is 
+part of the catalog. Even if in terms of major HW blocks steps shouldnt 
+change, there is absolutely no guarantee that perf data cannot.
 
-Why do you think we won't go via EAS? The logic should be is we give a hint to
-prefer the little core, but we still can pick something else if it's more
-energy efficient.
+This is what is the sticking point for me which is holding me back 
+against dropping step. Thoughts?
 
-What uclamp_max enables us is to still consider that little core even if it's
-utilization says it doesn't fit there. We need to merge these patches first
-though as it's broken at the moment. if little capacity is 125 and utilization
-of the task is 125, then even if uclamp_max is 0, EAS will skip the whole
-little cluster as apotential candidate because there's no spare_capacity there.
-Even if the whole little cluster is idle.
-
+> In fact I suppose that even handling a minor revision would be an 
+> overkill. Why don't we start with .dpu_major instead of .core_rev? We 
+> can add .dpu_minor if/when required.
 > 
-> This might effectively use more energy for those tasks which can run on
-> any CPU and EAS would figure a good energy placement. I'm worried
-> about this, since we have L3+littles in one DVFS domain and the L3
-> would be only bigger in future.
 
-It's a bias that will enable the search algorithm in EAS to still consider the
-little core for big tasks. This bias will depend on the uclamp_max value chosen
-by userspace (so they have some control on how hard to cap the task), and what
-else is happening in the system at the time it wakes up.
+No, unfortunately we cannot drop minor version for sure. I am seeing 
+examples in downstream code where some of the features are available 
+after a minor verion as well.
 
+>>
+>>>> +
+>>>>   #define DPU_HW_BLK_NAME_LEN    16
+>>>>
+>>>>   #define MAX_IMG_WIDTH 0x3fff
+>>>> @@ -769,7 +796,7 @@ struct dpu_perf_cfg {
+>>>>   /**
+>>>>    * struct dpu_mdss_cfg - information of MDSS HW
+>>>>    * This is the main catalog data structure representing
+>>>> - * this HW version. Contains number of instances,
+>>>> + * this HW version. Contains dpu core revision, number of instances,
+>>>>    * register offsets, capabilities of the all MDSS HW sub-blocks.
+>>>>    *
+>>>>    * @dma_formats        Supported formats for dma pipe
+>>>> @@ -778,6 +805,8 @@ struct dpu_perf_cfg {
+>>>>    * @mdss_irqs:         Bitmap with the irqs supported by the target
+>>>>    */
+>>>>   struct dpu_mdss_cfg {
+>>>> +       u32 core_rev;
+>>>> +
+>>>>          const struct dpu_caps *caps;
+>>>>
+>>>>          const struct dpu_ubwc_cfg *ubwc;
+>>>> -- 
+>>>> 2.40.1
+>>>>
+>>>
+>>>
 > 
-> IMO to keep the big cpus more in idle, we should give them big energy
-> wake up cost. That's my 3rd feature to the EM presented in OSPM2023.
-
-Considering the wake up cost in EAS would be a great addition to have :)
-
-> 
-> > 
-> > Of course userspace has control by selecting the right uclamp_max value. They
-> > can increase it to allow a spill to next pd - or keep it low to steer them more
-> > strongly on a specific pd.
-> 
-> This would we be interesting to see in practice. I think we need such
-> experiment, for such changes.
-
-I'm not sure what you mean by 'such changes'. I hope you don't mean these
-patches as they are not the key. They fix an obvious bug where task placement
-hint won't work at all. They don't modify any behavior that shouldn't have
-already been there. Nor introduce new limitation. I have to say I am
-disappointed that these patches aren't considered an important fix for an
-obvious breakage.
-
-
-Thanks
-
---
-Qais Yousef
