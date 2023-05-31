@@ -2,193 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB2A718536
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE2F718541
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237238AbjEaOnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
+        id S236694AbjEaOri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237272AbjEaOnG (ORCPT
+        with ESMTP id S236451AbjEaOrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:43:06 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0605ED9;
-        Wed, 31 May 2023 07:43:01 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126205251136.34.openmobile.ne.jp [126.205.251.136])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 98F3B7F5;
-        Wed, 31 May 2023 16:42:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1685544158;
-        bh=sYnvbp5YqSxneWSBkhI7BOpxc2bk2K6XTPgvmAUbjdw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DyjPGZMVK0x52B3SNYcfNMWEcy+wR1MEsCI556HH9fq4Vm5lRlDjiyX3X8KRTEvrH
-         DnQo8SxM/cTvqtq5013suNJwiMDfptxtLYVdTIaQ/iY6jpzYxOP45POBDG324pEmU+
-         Yk7rGBFudHyD/zKQA1x7irVIhEkVizye9kTjv2Sw=
-Date:   Wed, 31 May 2023 17:42:58 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
-        linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] media: i2c: Add support for alvium camera
-Message-ID: <20230531144258.GB24749@pendragon.ideasonboard.com>
-References: <20230526173955.797226-1-tomm.merciai@gmail.com>
- <20230526173955.797226-3-tomm.merciai@gmail.com>
- <20230529074018.GD25984@pendragon.ideasonboard.com>
- <ZHcd09f5wOKjQdHX@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
- <20230531113331.GC27043@pendragon.ideasonboard.com>
- <ZHdXV4SPOW0dxtcG@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+        Wed, 31 May 2023 10:47:35 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05D5107;
+        Wed, 31 May 2023 07:47:32 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VDwDbK001363;
+        Wed, 31 May 2023 14:47:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=GupFFUipno/RdhRM6hgOLwBA79D1V8GXFuS0Nmuzq2k=;
+ b=R9Fqb5qwz1DORBtXnWmRj9ogV0+CJG85BmDLzDm4xTAlFDvSKUbzc+Z10KZ8K8yUoHJQ
+ iDOe8okRWktmaEHG63ZhCUIJfcx8GTAgHUgIK2tXmKl6mGj79StXBgyrq5CDcLF3OuwP
+ 2QOMcXHbqejiOF7iw3MBkMbPRg383EhI9vrIKmhDQB3geV6lu6Wy4yTecVkdOLbjE+bT
+ Sk9th+yvR9p0bTNAqfAj+kB6w7XdGPTDFpabkt2xjxmeE4MVveD5gRmT+5jI5CYuOHLV
+ AwgTUAAmcvoMQLzzvrhHB1gRBl/bWL3Y5xAB3C9Rb7eg/U891bd8JIfO/VOySnLfCp/d Uw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwryesxr8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 14:47:28 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34VElRIA024397
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 14:47:27 GMT
+Received: from [10.217.219.52] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 31 May
+ 2023 07:47:26 -0700
+Message-ID: <665be8f7-0892-3446-72ca-4c45457c9153@quicinc.com>
+Date:   Wed, 31 May 2023 20:17:23 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZHdXV4SPOW0dxtcG@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
+ before initial detection
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
+From:   Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 47lg3rVRswuxgb32oWpKhIMpe0ukouQ2
+X-Proofpoint-ORIG-GUID: 47lg3rVRswuxgb32oWpKhIMpe0ukouQ2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_10,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ lowpriorityscore=0 clxscore=1015 spamscore=0 bulkscore=0 mlxscore=0
+ impostorscore=0 priorityscore=1501 phishscore=0 malwarescore=0
+ mlxlogscore=924 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305310126
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tommaso,
 
-On Wed, May 31, 2023 at 04:19:03PM +0200, Tommaso Merciai wrote:
-> On Wed, May 31, 2023 at 02:33:31PM +0300, Laurent Pinchart wrote:
-> > On Wed, May 31, 2023 at 12:13:39PM +0200, Tommaso Merciai wrote:
-> > > On Mon, May 29, 2023 at 10:40:18AM +0300, Laurent Pinchart wrote:
-> > > > On Fri, May 26, 2023 at 07:39:44PM +0200, Tommaso Merciai wrote:
-> > > > > The Alvium camera is shipped with sensor + isp in the same housing.
-> > > > 
-> > > > What ISP is that ?
-> > > 
-> > > The isp comes from Allied Vision, is called Alvium and is part of the camera.
-> > > In real is a vision processor, this offers more functionality then an isp can do.
-> > > It is not sold separately but is an integrated part of the camera itself
-> > > which also takes care of the sensor abstraction.
-> > > 
-> > > > > The camera can be equipped with one out of various sensor and abstract
-> > > > > the user from this. Camera is connected via MIPI CSI-2.
-> > > > > 
-> > > > > Most of the sensor's features are supported, with the main exception
-> > > > > being fw update.
-> > > > 
-> > > > I assume you mean "camera module features" here, as firmware update
-> > > > isn't a camera sensor feature.
-> > > 
-> > > Yep.
-> > > 
-> > > > > The driver provides all mandatory, optional and recommended V4L2 controls
-> > > > > for maximum compatibility with libcamera
-> > > > > 
-> > > > > References:
-> > > > >  - https://www.alliedvision.com/en/products/embedded-vision-solutions
-> > > > 
-> > > > I'll do a partial review only as the patch is large, and will try to
-> > > > review the rest in v2.
-> > > 
-> > > No problem.
-> > > 
-> > > > > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> > > > > ---
-> > > > >  drivers/media/i2c/Kconfig  |    9 +
-> > > > >  drivers/media/i2c/Makefile |    1 +
-> > > > >  drivers/media/i2c/alvium.c | 3547 ++++++++++++++++++++++++++++++++++++
-> > > > >  drivers/media/i2c/alvium.h |  500 +++++
-> > > > >  4 files changed, 4057 insertions(+)
-> > > > >  create mode 100644 drivers/media/i2c/alvium.c
-> > > > >  create mode 100644 drivers/media/i2c/alvium.h
 
-[snip]
+On 31-05-23 08:11 pm, Prashanth K wrote:
+>   
+> diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
+> index 5aabdd7..6d880c4 100644
+> --- a/drivers/usb/musb/jz4740.c
+> +++ b/drivers/usb/musb/jz4740.c
+> @@ -95,6 +95,8 @@ static int jz4740_musb_role_switch_set(struct usb_role_switch *sw,
+>   	case USB_ROLE_HOST:
+>   		atomic_notifier_call_chain(&phy->notifier, USB_EVENT_ID, phy);
+>   		break;
+> +	default:
+> +		break;
+>   	}
+>   
+>   	return 0;
+> diff --git a/drivers/usb/roles/intel-xhci-usb-role-switch.c b/drivers/usb/roles/intel-xhci-usb-role-switch.c
+> index 5c96e92..4d6a3dd 100644
+> --- a/drivers/usb/roles/intel-xhci-usb-role-switch.c
+> +++ b/drivers/usb/roles/intel-xhci-usb-role-switch.c
+> @@ -97,6 +97,8 @@ static int intel_xhci_usb_set_role(struct usb_role_switch *sw,
+>   		val |= SW_VBUS_VALID;
+>   		drd_config = DRD_CONFIG_STATIC_DEVICE;
+>   		break;
+> +	default:
+> +		break;
+>   	}
+>   	val |= SW_IDPIN_EN;
+>   	if (data->enable_sw_switch) {
+> diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
+> index b5deafd..65e790a 100644
+> --- a/include/linux/usb/role.h
+> +++ b/include/linux/usb/role.h
+> @@ -11,6 +11,7 @@ enum usb_role {
+>   	USB_ROLE_NONE,
+>   	USB_ROLE_HOST,
+>   	USB_ROLE_DEVICE,
+> +	USB_ROLE_UNKNOWN,
+>   };
+>   
+>   typedef int (*usb_role_switch_set_t)(struct usb_role_switch *sw,
 
-> > > > > diff --git a/drivers/media/i2c/alvium.c b/drivers/media/i2c/alvium.c
-> > > > > new file mode 100644
-> > > > > index 000000000000..e77fb6bda64b
-> > > > > --- /dev/null
-> > > > > +++ b/drivers/media/i2c/alvium.c
-> > > > > @@ -0,0 +1,3547 @@
+Hi Greg, I have fixed the drivers that doesn't have default case while 
+using usb_role enum. Added the same on intel-xhci-usb-role-switch.c & 
+musb/jz4740.c files. I was able to compile successfully. Please check 
+once if this fixed the build issue.
 
-[snip]
-
-> > > > > +static int alvium_set_streamon_delay(struct alvium_dev *alvium)
-> > > > > +{
-> > > > > +	struct device *dev = &alvium->i2c_client->dev;
-> > > > > +	int ret;
-> > > > > +	u64 streamon_delay;
-> > > > > +
-> > > > > +	if (!alvium->bcrm_addr)
-> > > > > +		return -EINVAL;
-> > > > > +
-> > > > > +	/*
-> > > > > +	 * CSI2 receivers sometimes need some delay before are ready to
-> > > > > +	 * get data. This register set delay before camera start
-> > > > > +	 * capturing frames in us.
-> > > > 
-> > > > If the CSI-2 receiver needs a delay, it should be handled by the CSI-2
-> > > > receiver driver, not here.
-> > > 
-> > > My bad, bad description/bad name.
-> > > 
-> > > This regs is an optional delay that alvium introduces between switching
-> > > from lp to hs mode.
-> > > Some mipi receivers require this delay on the sender side.
-> > > 
-> > > I plan to switch to the following name: alliedvision,lp2hs-delay-us
-> > > and fix the comment with the above comment^
-> > > 
-> > > This is more clear, what do you think about?
-> > 
-> > It's a bit clearer, but still not fully :-) Does this delay correspond
-> > to one of the MIPI D-PHY timing parameters ? If so, which one ?
-> 
-> Thanks to Martin Hecht I'm able to provide you a clearer description:
-> 
-> Alvium normally delivers a continous clock even when it is not streaming.
-
-That's an interesting design choice.
-
-> The purpose of this reg is force a DPhy reset for the period described by
-> the us on the reg before it starts streaming. To be clear, with that value
-> bigger than 0 the Alvium forces a dphy-reset on all lanes for that period.
-> That means all lanes go up into low power state.
-> This may help a csi2 rx ip to reset if that IP can't deal with a continous clock.
-
-No CSI-2 receiver can possibly handle this :-) If the camera power can't
-be turned on only after the CSI-2 receiver is started (as obviously the
-camera can't output a HS clock when it's not powered on), then the
-receiver wouldn't be able to synchronize.
-
-Thanks for the explanation. Could you record this in the DT bindings ?
-
-> > > > > +	 */
-> > > > > +	streamon_delay = (u64)alvium->streamon_delay;
-> > > > > +
-> > > > > +	ret = alvium_i2c_write_reg_hshake(alvium,
-> > > > > +				  alvium->bcrm_addr +
-> > > > > +				  REG_BCRM_STREAM_ON_DELAY_32RW,
-> > > > > +				  4, streamon_delay);
-> > > > > +	if (ret) {
-> > > > > +		dev_err(dev, "Fail to set streamon delay reg\n");
-> > > > > +		return ret;
-> > > > > +	}
-> > > > > +
-> > > > > +	return 0;
-> > > > > +}
-
-[snip]
-
--- 
-Regards,
-
-Laurent Pinchart
+Thanks in advance,
+Prashanth K
