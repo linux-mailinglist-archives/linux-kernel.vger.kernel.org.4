@@ -2,79 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE2F718541
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1F2718547
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236694AbjEaOri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
+        id S233843AbjEaOry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236451AbjEaOrf (ORCPT
+        with ESMTP id S234081AbjEaOru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:47:35 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05D5107;
-        Wed, 31 May 2023 07:47:32 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VDwDbK001363;
-        Wed, 31 May 2023 14:47:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=GupFFUipno/RdhRM6hgOLwBA79D1V8GXFuS0Nmuzq2k=;
- b=R9Fqb5qwz1DORBtXnWmRj9ogV0+CJG85BmDLzDm4xTAlFDvSKUbzc+Z10KZ8K8yUoHJQ
- iDOe8okRWktmaEHG63ZhCUIJfcx8GTAgHUgIK2tXmKl6mGj79StXBgyrq5CDcLF3OuwP
- 2QOMcXHbqejiOF7iw3MBkMbPRg383EhI9vrIKmhDQB3geV6lu6Wy4yTecVkdOLbjE+bT
- Sk9th+yvR9p0bTNAqfAj+kB6w7XdGPTDFpabkt2xjxmeE4MVveD5gRmT+5jI5CYuOHLV
- AwgTUAAmcvoMQLzzvrhHB1gRBl/bWL3Y5xAB3C9Rb7eg/U891bd8JIfO/VOySnLfCp/d Uw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwryesxr8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 14:47:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34VElRIA024397
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 14:47:27 GMT
-Received: from [10.217.219.52] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 31 May
- 2023 07:47:26 -0700
-Message-ID: <665be8f7-0892-3446-72ca-4c45457c9153@quicinc.com>
-Date:   Wed, 31 May 2023 20:17:23 +0530
+        Wed, 31 May 2023 10:47:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCBC5C5;
+        Wed, 31 May 2023 07:47:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 76BE21042;
+        Wed, 31 May 2023 07:48:32 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.33.144])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8273A3F663;
+        Wed, 31 May 2023 07:47:41 -0700 (PDT)
+Date:   Wed, 31 May 2023 15:47:31 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
+        boqun.feng@gmail.com, catalin.marinas@arm.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-crypto@vger.kernel.org, sfr@canb.auug.org.au,
+        mpe@ellerman.id.au, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH 00/12] Introduce cmpxchg128() -- aka. the demise of
+ cmpxchg_double()
+Message-ID: <ZHdeAwOM6ciFobkL@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230531130833.635651916@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown
- before initial detection
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
-From:   Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 47lg3rVRswuxgb32oWpKhIMpe0ukouQ2
-X-Proofpoint-ORIG-GUID: 47lg3rVRswuxgb32oWpKhIMpe0ukouQ2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_10,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 clxscore=1015 spamscore=0 bulkscore=0 mlxscore=0
- impostorscore=0 priorityscore=1501 phishscore=0 malwarescore=0
- mlxlogscore=924 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305310126
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531130833.635651916@infradead.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,53 +60,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 31, 2023 at 03:08:33PM +0200, Peter Zijlstra wrote:
+> Hi!
+> 
+> After much breaking of things, find here the improved version.
+> 
+> Since v3:
+> 
+>  - unbreak everything that does *NOT* have cmpxchg128()
+> 
+>    Notably this_cpu_cmpxchg_double() is used unconditionally by SLUB
+>    which means that this_cpu_try_cmpxchg128() needs to be unconditionally
+>    available on all 64bit architectures.
+> 
+>  - fixed up x86/x86_64 cmpxchg{8,16}b emulation for this_cpu_cmpxchg{64,128}()
+> 
+>  - introduce {raw,this}_cpu_try_cmpxchg*()
+> 
+>  - add fallback for !__SIZEOF_INT128__ 64bit architectures
+> 
+>    Sadly there are supported 64bit architecture/compiler combinations that do
+>    not have __SIZEOF_INT128__, specifically it was found that HPPA64 only added
+>    this with GCC-11.
+> 
+>    this is yuck, and ideally we'd simply raise compiler requirements, but this
+>    'works'.
 
+The patches look good to me, and I used my local cross-build script to build
+test this with the kernel.org GCC 10.3.0 cross toolchain for all of the
+following arch/triplet/config combinations:
 
-On 31-05-23 08:11 pm, Prashanth K wrote:
->   
-> diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
-> index 5aabdd7..6d880c4 100644
-> --- a/drivers/usb/musb/jz4740.c
-> +++ b/drivers/usb/musb/jz4740.c
-> @@ -95,6 +95,8 @@ static int jz4740_musb_role_switch_set(struct usb_role_switch *sw,
->   	case USB_ROLE_HOST:
->   		atomic_notifier_call_chain(&phy->notifier, USB_EVENT_ID, phy);
->   		break;
-> +	default:
-> +		break;
->   	}
->   
->   	return 0;
-> diff --git a/drivers/usb/roles/intel-xhci-usb-role-switch.c b/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> index 5c96e92..4d6a3dd 100644
-> --- a/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> +++ b/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> @@ -97,6 +97,8 @@ static int intel_xhci_usb_set_role(struct usb_role_switch *sw,
->   		val |= SW_VBUS_VALID;
->   		drd_config = DRD_CONFIG_STATIC_DEVICE;
->   		break;
-> +	default:
-> +		break;
->   	}
->   	val |= SW_IDPIN_EN;
->   	if (data->enable_sw_switch) {
-> diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
-> index b5deafd..65e790a 100644
-> --- a/include/linux/usb/role.h
-> +++ b/include/linux/usb/role.h
-> @@ -11,6 +11,7 @@ enum usb_role {
->   	USB_ROLE_NONE,
->   	USB_ROLE_HOST,
->   	USB_ROLE_DEVICE,
-> +	USB_ROLE_UNKNOWN,
->   };
->   
->   typedef int (*usb_role_switch_set_t)(struct usb_role_switch *sw,
+  alpha           alpha-linux             defconfig
+  arc             arc-linux               defconfig
+  arm             arm-linux-gnueabi       multi_v4t_defconfig
+  arm             arm-linux-gnueabi       multi_v5_defconfig
+  arm             arm-linux-gnueabi       multi_v7_defconfig
+  arm             arm-linux-gnueabi       omap1_defconfig
+  arm64           aarch64-linux           defconfig
+  csky            csky-linux              defconfig
+  i386            i386-linux              defconfig
+  ia64            ia64-linux              defconfig
+  m68k            m68k-linux              defconfig
+  microblaze      microblaze-linux        defconfig
+  mips            mips-linux              32r1_defconfig
+  mips            mips-linux              32r2_defconfig
+  mips            mips-linux              32r6_defconfig
+  mips            mips64-linux            64r1_defconfig
+  mips            mips64-linux            64r2_defconfig
+  mips            mips64-linux            64r6_defconfig
+  nios2           nios2-linux             defconfig
+  openrisc        or1k-linux              defconfig
+  parisc          hppa-linux              generic-32bit_defconfig
+  parisc          hppa64-linux            generic-64bit_defconfig
+  powerpc         powerpc-linux           ppc40x_defconfig
+  powerpc         powerpc64-linux         ppc64_defconfig
+  powerpc         powerpc64-linux         ppc64e_defconfig
+  riscv           riscv32-linux           rv32_defconfig
+  riscv           riscv64-linux           defconfig
+  s390            s390-linux              defconfig
+  sh              sh4-linux               defconfig
+  sparc           sparc-linux             sparc32_defconfig
+  sparc           sparc64-linux           sparc64_defconfig
+  x86_64          x86_64-linux            defconfig
+  xtensa          xtensa-linux            defconfig
 
-Hi Greg, I have fixed the drivers that doesn't have default case while 
-using usb_role enum. Added the same on intel-xhci-usb-role-switch.c & 
-musb/jz4740.c files. I was able to compile successfully. Please check 
-once if this fixed the build issue.
+... and everything seemed happy.
 
-Thanks in advance,
-Prashanth K
+I've also boot-tested arm64 defconfig.
+
+So FWIW, for the series:
+
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+Tested-by: Mark Rutland <mark.rutland@arm.com>
+
+> My plan is to re-add this to tip/locking/core and thus -next later this week.
+
+I'll need to rebase my kerneldoc series atop this, so getting this into a
+stable branch soon would be great!
+
+Thanks,
+Mark.
+
+> 
+> Also available at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+> 
+> ---
+>  Documentation/core-api/this_cpu_ops.rst     |   2 -
+>  arch/arm64/include/asm/atomic_ll_sc.h       |  56 +++---
+>  arch/arm64/include/asm/atomic_lse.h         |  39 ++---
+>  arch/arm64/include/asm/cmpxchg.h            |  48 ++----
+>  arch/arm64/include/asm/percpu.h             |  30 ++--
+>  arch/s390/include/asm/cmpxchg.h             |  32 +---
+>  arch/s390/include/asm/cpu_mf.h              |   2 +-
+>  arch/s390/include/asm/percpu.h              |  34 ++--
+>  arch/s390/kernel/perf_cpum_sf.c             |  16 +-
+>  arch/x86/include/asm/cmpxchg.h              |  25 ---
+>  arch/x86/include/asm/cmpxchg_32.h           |   2 +-
+>  arch/x86/include/asm/cmpxchg_64.h           |  63 ++++++-
+>  arch/x86/include/asm/percpu.h               | 102 ++++++-----
+>  arch/x86/lib/Makefile                       |   3 +-
+>  arch/x86/lib/cmpxchg16b_emu.S               |  43 +++--
+>  arch/x86/lib/cmpxchg8b_emu.S                |  67 ++++++--
+>  drivers/iommu/amd/amd_iommu_types.h         |   9 +-
+>  drivers/iommu/amd/iommu.c                   |  10 +-
+>  drivers/iommu/intel/irq_remapping.c         |   8 +-
+>  include/asm-generic/percpu.h                | 257 ++++++++++++++++++++++------
+>  include/crypto/b128ops.h                    |  14 +-
+>  include/linux/atomic/atomic-arch-fallback.h |  95 +++++++++-
+>  include/linux/atomic/atomic-instrumented.h  |  93 ++++++++--
+>  include/linux/dmar.h                        | 125 +++++++-------
+>  include/linux/percpu-defs.h                 |  45 ++---
+>  include/linux/slub_def.h                    |  12 +-
+>  include/linux/types.h                       |  12 ++
+>  include/uapi/linux/types.h                  |   4 +
+>  lib/crypto/curve25519-hacl64.c              |   2 -
+>  lib/crypto/poly1305-donna64.c               |   2 -
+>  mm/slab.h                                   |  53 +++++-
+>  mm/slub.c                                   | 139 +++++++++------
+>  scripts/atomic/gen-atomic-fallback.sh       |   4 +-
+>  scripts/atomic/gen-atomic-instrumented.sh   |  19 +-
+>  34 files changed, 952 insertions(+), 515 deletions(-)
+> 
