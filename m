@@ -2,262 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2BC718958
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D430B71895A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbjEaSZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 14:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
+        id S230333AbjEaS0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 14:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjEaSZy (ORCPT
+        with ESMTP id S229863AbjEaS0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 14:25:54 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A8A97;
-        Wed, 31 May 2023 11:25:53 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VGNCUv003007;
-        Wed, 31 May 2023 18:25:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ok49jhaPjd+G0yNitqyT3jCqd7H8ut8cxORfilIuBIw=;
- b=F7Ei5DyHj13yknMOmVi0jslmaLE89eTpdsfU/NAEip7kjY76zzfnXpAl5wZ5aq3nbgeZ
- N3x393vQ7/PfVMaxvI8GRA6isrBLg2BH56hJJmDOarf4JhDRmqBVjNZ4pt3Ft/co6ALb
- qgwtwUDHWR0rT/bJ+kd/QehaoqvqD7OVJn07rXiOri96ndLHtblOCqAkRZx9CwRrEkJQ
- CY3kD6cNWjq0CDVdQL/+Qy+YhOXkPN7UpA1EIT0+gTu6Z/uU5gavSOd7saSHD3v+YM8G
- +siT/uSZxkukwZpqj45oDVSvBa6Gz8bZoucOPbXPpWzKmjaYH0GPZyqU0C7daQ6cVWOV jw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qx1yk1g96-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 18:25:45 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34VIPiwk026670
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 18:25:44 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 31 May
- 2023 11:25:42 -0700
-Message-ID: <a0b7a9fc-eb3c-3b26-b11d-fe1fb47b2c51@quicinc.com>
-Date:   Wed, 31 May 2023 11:25:40 -0700
+        Wed, 31 May 2023 14:26:35 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6839F126
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:26:33 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f3b4ed6fdeso6861138e87.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:26:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1685557591; x=1688149591;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=suwwf3segF0JfVvw0RJx5BeLxnNIcxSxshqwjhCRkQY=;
+        b=jRoN6yyuDRGkMKkx2B0Xe1d9pbTb6HKkELObgRxT5OUCyfyknFvQdKC58MCJS5r/JH
+         5OGbz+/CKUmoOSXB6rAal7eb63DX1QZVVaD221FlZP2xkAdqG728/JGv3vEWhlki5dW5
+         Sy9L6uS//A3e5IEH2tmw1sh0+uh2K5WEypwtY6VE4whn5vhRQ2MZU0/OhRfR4YAJflpa
+         Ng5GgJK2MXut6oPEUuQPQEJfRD4x7Z3Gjd4U6T0BYxC+y9OkCQ7cUNzxxH8Bj9A49w3g
+         X+44G4YZwLSFf03RqjWtEspvB+DAYNkwK0lc2AFQPPfUs8YxZxB7DM7Clb1Uvlvv2ZbL
+         qk0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685557591; x=1688149591;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=suwwf3segF0JfVvw0RJx5BeLxnNIcxSxshqwjhCRkQY=;
+        b=IFJZlHiphwgp4pP2Iu3rrry/go0clCb5iIFfPQkxR6uVacNc3WbCM0eickqaEIfJlp
+         zx7knW6m7LPqJCvRZCsUF0Uzds8DFdDoqvl9vW2E9d6FpG5Qe6EIBW7hNvA90bgwWNvE
+         W8WtRGCwtavs6dPr3Bj2JLgiSNwqHoIU4idvoml745lPXHqTEUtBDeYFAGRGGW3B7RGI
+         KnPteOrioY9BBMRDbq0qAB05ixUD0euWt4XUQe0T6tMOtvUU44U5EefpwiN3+VhokDDq
+         BaxURzPiJcWSeHI0edxnC/sShKUy0o7GRGYJGirhhLibIvvHKQDFnhIBvmVAjTRlHrU3
+         7x+w==
+X-Gm-Message-State: AC+VfDxrjBw1wuB1N/yEkQESTrQ8JMIMFbexmszGgZL2FFH5aUUyC+du
+        HQwUkZn1o2Bfy5KQ468ID3C3aA==
+X-Google-Smtp-Source: ACHHUZ4ZGRRltCWJt4Gmd6jPcsg/hHzjXIvc8xDd9X7Zz8ZY24cy4NW87Ub0FC00KbmHHgQoG8XpoQ==
+X-Received: by 2002:ac2:5598:0:b0:4f3:824e:a94b with SMTP id v24-20020ac25598000000b004f3824ea94bmr3482327lfg.54.1685557591120;
+        Wed, 31 May 2023 11:26:31 -0700 (PDT)
+Received: from airbuntu (host109-154-46-114.range109-154.btcentralplus.com. [109.154.46.114])
+        by smtp.gmail.com with ESMTPSA id 10-20020a05600c228a00b003f42461ac75sm25172249wmf.12.2023.05.31.11.26.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 11:26:30 -0700 (PDT)
+Date:   Wed, 31 May 2023 19:26:29 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, delyank@fb.com,
+        qyousef@google.com
+Subject: Re: [RESEND][PATCH v2 1/3] sched/tp: Add new tracepoint to track
+ uclamp set from user-space
+Message-ID: <20230531182629.nztie5rwhjl53v3d@airbuntu>
+References: <20230522145702.2419654-1-lukasz.luba@arm.com>
+ <20230522145702.2419654-2-lukasz.luba@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: re-introduce dpu core revision
- to the catalog
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <quic_khsieh@quicinc.com>, Rob Clark <robdclark@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, <quic_jesszhan@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>, Sean Paul <sean@poorly.run>
-References: <20230531005358.18090-1-quic_abhinavk@quicinc.com>
- <CAA8EJpryw0h8TgpJ+SFJ7s0=LCjkQ6oqAjCKsm60dk_Q5e+wWA@mail.gmail.com>
- <0af4df3d-8048-98cd-6c91-7cd553f4f65f@quicinc.com>
- <98e4bda7-19e9-09b6-f008-383adada97cb@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <98e4bda7-19e9-09b6-f008-383adada97cb@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 9d1xuQM_Mt54bpD55u7xkN2KInV7jXbL
-X-Proofpoint-GUID: 9d1xuQM_Mt54bpD55u7xkN2KInV7jXbL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_13,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- mlxlogscore=999 phishscore=0 adultscore=0 bulkscore=0 spamscore=0
- impostorscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305310156
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230522145702.2419654-2-lukasz.luba@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 05/22/23 15:57, Lukasz Luba wrote:
+> The user-space can set uclamp value for a given task. It impacts task
+> placement decisions made by the scheduler. This is very useful information
+> and helps to understand the system behavior or track improvements in
+> middleware and applications which start using uclamp mechanisms and report
+> better performance in tests.
+
+Do you mind adding a generic one instead please? And explain why we can't just
+attach to the syscall via kprobes? I think you want to bypass the permission
+checks, so maybe a generic tracepoint after that might be justifiable?
+Then anyone can use it to track how userspace has changed any attributes for
+a task, not just uclamp.
 
 
-On 5/31/2023 3:07 AM, Dmitry Baryshkov wrote:
-> On 31/05/2023 06:05, Abhinav Kumar wrote:
->>
->>
->> On 5/30/2023 7:53 PM, Dmitry Baryshkov wrote:
->>> On Wed, 31 May 2023 at 03:54, Abhinav Kumar 
->>> <quic_abhinavk@quicinc.com> wrote:
->>>>
->>>> With [1] dpu core revision was dropped in favor of using the
->>>> compatible string from the device tree to select the dpu catalog
->>>> being used in the device.
->>>>
->>>> This approach works well however also necessitates adding catalog
->>>> entries for small register level details as dpu capabilities and/or
->>>> features bloating the catalog unnecessarily. Examples include but
->>>> are not limited to data_compress, interrupt register set, widebus etc.
->>>>
->>>> Introduce the dpu core revision back as an entry to the catalog so that
->>>> we can just use dpu revision checks and enable those bits which
->>>> should be enabled unconditionally and not controlled by a catalog
->>>> and also simplify the changes to do something like:
->>>>
->>>> if (dpu_core_revision > xxxxx && dpu_core_revision < xxxxx)
->>>>          enable the bit;
->>>>
->>>> Also, add some of the useful macros back to be able to use dpu core
->>>> revision effectively.
->>>>
->>>> [1]: 
->>>> https://patchwork.freedesktop.org/patch/530891/?series=113910&rev=4
->>>>
->>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>> ---
->>>>   .../msm/disp/dpu1/catalog/dpu_3_0_msm8998.h   |  1 +
->>>>   .../msm/disp/dpu1/catalog/dpu_4_0_sdm845.h    |  1 +
->>>>   .../msm/disp/dpu1/catalog/dpu_5_0_sm8150.h    |  1 +
->>>>   .../msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h   |  1 +
->>>>   .../msm/disp/dpu1/catalog/dpu_6_0_sm8250.h    |  1 +
->>>>   .../msm/disp/dpu1/catalog/dpu_6_2_sc7180.h    |  1 +
->>>>   .../msm/disp/dpu1/catalog/dpu_6_3_sm6115.h    |  1 +
->>>>   .../msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h   |  1 +
->>>>   .../msm/disp/dpu1/catalog/dpu_7_0_sm8350.h    |  1 +
->>>>   .../msm/disp/dpu1/catalog/dpu_7_2_sc7280.h    |  1 +
->>>>   .../msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h  |  1 +
->>>>   .../msm/disp/dpu1/catalog/dpu_8_1_sm8450.h    |  1 +
->>>>   .../msm/disp/dpu1/catalog/dpu_9_0_sm8550.h    |  1 +
->>>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    | 31 
->>>> ++++++++++++++++++-
->>>>   14 files changed, 43 insertions(+), 1 deletion(-)
->>>>
->>>
->>> [skipped catalog changes]
->>>
->>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h 
->>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>> index 677048cc3b7d..cc4aa75a1219 100644
->>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>> @@ -19,6 +19,33 @@
->>>>    */
->>>>   #define MAX_BLOCKS    12
->>>>
->>>> +#define DPU_HW_VER(MAJOR, MINOR, STEP)\
->>>> +                 ((((unsigned int)MAJOR & 0xF) << 28) |\
->>>> +                 ((MINOR & 0xFFF) << 16) |\
->>>> +                 (STEP & 0xFFFF))
->>>> +
->>>> +#define DPU_HW_MAJOR(rev)((rev) >> 28)
->>>> +#define DPU_HW_MINOR(rev)(((rev) >> 16) & 0xFFF)
->>>> +#define DPU_HW_STEP(rev)((rev) & 0xFFFF)
->>>> +#define DPU_HW_MAJOR_MINOR(rev)((rev) >> 16)
->>>> +
->>>> +#define IS_DPU_MAJOR_MINOR_SAME(rev1, rev2)   \
->>>> +(DPU_HW_MAJOR_MINOR((rev1)) == DPU_HW_MAJOR_MINOR((rev2)))
->>>> +
->>>> +#define DPU_HW_VER_300 DPU_HW_VER(3, 0, 0) /* 8998 v1.0 */
->>>> +#define DPU_HW_VER_400 DPU_HW_VER(4, 0, 0) /* sdm845 v1.0 */
->>>> +#define DPU_HW_VER_500 DPU_HW_VER(5, 0, 0) /* sm8150 v1.0 */
->>>> +#define DPU_HW_VER_510 DPU_HW_VER(5, 1, 1) /* sc8180 */
->>>> +#define DPU_HW_VER_600 DPU_HW_VER(6, 0, 0) /* sm8250 */
->>>> +#define DPU_HW_VER_620 DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
->>>> +#define DPU_HW_VER_630 DPU_HW_VER(6, 3, 0) /* sm6115|sm4250 */
->>>> +#define DPU_HW_VER_650 DPU_HW_VER(6, 5, 0) /* qcm2290|sm4125 */
->>>> +#define DPU_HW_VER_700 DPU_HW_VER(7, 0, 0) /* sm8350 */
->>>> +#define DPU_HW_VER_720 DPU_HW_VER(7, 2, 0) /* sc7280 */
->>>> +#define DPU_HW_VER_800 DPU_HW_VER(8, 0, 0) /* sc8280xp */
->>>> +#define DPU_HW_VER_810 DPU_HW_VER(8, 1, 0) /* sm8450 */
->>>> +#define DPU_HW_VER_900 DPU_HW_VER(9, 0, 0) /* sm8550 */
->>>
->>> Instead of having defines for all SoCs (which can quickly become
->>> unmanageable) and can cause merge conflicts, I'd suggest inlining all
->>> the defines into respective catalog files.
->>>
->>
->> Sure, that can be done.
->>
->>> Also, I'm not sure that the "step" should be a part of the catalog. I
->>> know that this follows the hardware revision. However, please correct
->>> me if I'm wrong, different step levels are used for revisions of the
->>> same SoC. The original code that was reading the hw revision from the
->>> hardware register, listed both 5.0.0 and 5.0.1 for sm8150.
->>>
->>
->> This is one of the things i noticed while making this change.
->>
->> Before the catalog rework, we used to handle even steps as we used to 
->> read that from the register and match it with the mdss_cfg handler. 
->> But after the rework, we dont handle steps anymore. Yes, you are right 
->> that different step levels are used for the revisions of the same SOC 
->> and so with that, i dont expect or atleast am not aware of DPU 
->> differences between steps but I am not able to rule it out.
->>
->> So are you suggesting we drop step altogether and DPU_HW_VER() macro 
->> shall only handle major and minor versions? With the current chipsets 
->> I see, it should not make a difference . Its just that I am not sure 
->> if that will never happen.
+Thanks
+
+--
+Qais Yousef
+
 > 
-> Yes. The goal of this rework would be to drop generic features and to 
-> replace those checks with DPU-revision lookups. Correct?
-
-Yes thats right.
-
-> I think that from this perspective having to handle toe step revision is 
-> a sign of an overkill. Having to handle the step revision is a sign of 
-> paltform feature (or mis-feature) rather than a generic DPU bit.
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  include/trace/events/sched.h | 4 ++++
+>  kernel/sched/core.c          | 5 +++++
+>  2 files changed, 9 insertions(+)
 > 
-
-Not entirely. Lets not forget that at the moment even dpu_perf_cfg is 
-part of the catalog. Even if in terms of major HW blocks steps shouldnt 
-change, there is absolutely no guarantee that perf data cannot.
-
-This is what is the sticking point for me which is holding me back 
-against dropping step. Thoughts?
-
-> In fact I suppose that even handling a minor revision would be an 
-> overkill. Why don't we start with .dpu_major instead of .core_rev? We 
-> can add .dpu_minor if/when required.
-> 
-
-No, unfortunately we cannot drop minor version for sure. I am seeing 
-examples in downstream code where some of the features are available 
-after a minor verion as well.
-
->>
->>>> +
->>>>   #define DPU_HW_BLK_NAME_LEN    16
->>>>
->>>>   #define MAX_IMG_WIDTH 0x3fff
->>>> @@ -769,7 +796,7 @@ struct dpu_perf_cfg {
->>>>   /**
->>>>    * struct dpu_mdss_cfg - information of MDSS HW
->>>>    * This is the main catalog data structure representing
->>>> - * this HW version. Contains number of instances,
->>>> + * this HW version. Contains dpu core revision, number of instances,
->>>>    * register offsets, capabilities of the all MDSS HW sub-blocks.
->>>>    *
->>>>    * @dma_formats        Supported formats for dma pipe
->>>> @@ -778,6 +805,8 @@ struct dpu_perf_cfg {
->>>>    * @mdss_irqs:         Bitmap with the irqs supported by the target
->>>>    */
->>>>   struct dpu_mdss_cfg {
->>>> +       u32 core_rev;
->>>> +
->>>>          const struct dpu_caps *caps;
->>>>
->>>>          const struct dpu_ubwc_cfg *ubwc;
->>>> -- 
->>>> 2.40.1
->>>>
->>>
->>>
+> diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
+> index fbb99a61f714..dbfb30809f15 100644
+> --- a/include/trace/events/sched.h
+> +++ b/include/trace/events/sched.h
+> @@ -735,6 +735,10 @@ DECLARE_TRACE(sched_update_nr_running_tp,
+>  	TP_PROTO(struct rq *rq, int change),
+>  	TP_ARGS(rq, change));
+>  
+> +DECLARE_TRACE(uclamp_update_tsk_tp,
+> +	TP_PROTO(struct task_struct *tsk, int uclamp_id,  unsigned int value),
+> +	TP_ARGS(tsk, uclamp_id, value));
+> +
+>  #endif /* _TRACE_SCHED_H */
+>  
+>  /* This part must be outside protection */
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 944c3ae39861..7b9b800ebb6c 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -114,6 +114,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(sched_overutilized_tp);
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_cfs_tp);
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_se_tp);
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(sched_update_nr_running_tp);
+> +EXPORT_TRACEPOINT_SYMBOL_GPL(uclamp_update_tsk_tp);
+>  
+>  DEFINE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
+>  
+> @@ -1956,12 +1957,16 @@ static void __setscheduler_uclamp(struct task_struct *p,
+>  	    attr->sched_util_min != -1) {
+>  		uclamp_se_set(&p->uclamp_req[UCLAMP_MIN],
+>  			      attr->sched_util_min, true);
+> +		trace_uclamp_update_tsk_tp(p, UCLAMP_MIN,
+> +					   attr->sched_util_min);
+>  	}
+>  
+>  	if (attr->sched_flags & SCHED_FLAG_UTIL_CLAMP_MAX &&
+>  	    attr->sched_util_max != -1) {
+>  		uclamp_se_set(&p->uclamp_req[UCLAMP_MAX],
+>  			      attr->sched_util_max, true);
+> +		trace_uclamp_update_tsk_tp(p, UCLAMP_MAX,
+> +					   attr->sched_util_max);
+>  	}
+>  }
+>  
+> -- 
+> 2.25.1
 > 
