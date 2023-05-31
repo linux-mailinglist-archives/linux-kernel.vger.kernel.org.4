@@ -2,99 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A49718F11
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA3C718F14
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjEaXdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 19:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40648 "EHLO
+        id S230321AbjEaXkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 19:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjEaXdp (ORCPT
+        with ESMTP id S229491AbjEaXkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 19:33:45 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEE8132
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:33:43 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-974265a1a40so328916766b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:33:43 -0700 (PDT)
+        Wed, 31 May 2023 19:40:52 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8392812C;
+        Wed, 31 May 2023 16:40:51 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-ba8374001abso190191276.2;
+        Wed, 31 May 2023 16:40:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685576021; x=1688168021;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oC5kQss/K4YNkiA3t8ssQaf48GcVeZPJDAECVwcI7aE=;
-        b=bHcrVWqLHuOGdNjqH4yHqFgc5fE5p3hGNrFpdHBIN9XpYxYCwLH5w4weJ4Jcp8uSQt
-         fwlMBEXymH6kjT9J/Hmbip/2+32v8K+ITR44/uHh/Dt1o3tTrca12Rf5gNwA+qoq1M+Q
-         aEuFDzU3ExSTfn3EqsvmRmgQL/Wnn+Kj858SQ=
+        d=gmail.com; s=20221208; t=1685576450; x=1688168450;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=l9Ip848C4+PX4sdvUZ6qA+ntR4dfPFEEj72E1ynrboE=;
+        b=pmbEWlVHe2mnM0kY4kuCc8OnetP493gSGJbXzI0xxIWrd9LL1PS2D18wAYrEiMStCL
+         kSECDoiKsGntGM8Qe/H2nkvREyJNry15290+xo6UUF35/UPatbv6uJYbVG75Wk1ONQIB
+         AhH3qjpWVy+4GBZzEN8xgxZQj/Tkd9S/nyJOfXlCLlVtdAyGu1P4o2u717AiWZHW+c19
+         D9CZ3d2bRgmD/JPI/4xt4fIi70g3/Nf8LyKL9Sezm1/8Wh3MZW0c52CUJ3wOBk5cjZHV
+         36lw14neIoDR3GRB63G/ON1Kt5h0Y3kUvJYPlfYKlmBByDCkTwVXClzuw4iAC0VK+B4k
+         MDhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685576021; x=1688168021;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oC5kQss/K4YNkiA3t8ssQaf48GcVeZPJDAECVwcI7aE=;
-        b=fWFs+VVUYys43+Sow0NI1niuvj4kS85PoCcQCG9V0tbZH8GmTRpTR9BCflj3dBC2Io
-         zZLQthg33vbmvH0ocQ2Mc2QlsdKAYthTqrQr9J0WAnsmZDOKH8NzwG2PSVwGxQ4KjVT1
-         ozUt4kt9aC0obrinX2ucwxmv5Ka4dBgS0l6nBLHpfddMqkGMTgHUuPO/outpiGeHumP4
-         4RNUNckWUD7Zkm6M6ppt9mrjVCfXG9r37djJjh/Dt+cBIsmLmMHHiKkilNr/PONE4lC2
-         EGmA7YNdYnxRht1a1Pm1oRGLajYbjpIsmb50rLm3P3HhlY9iG55/plTXTz06FTxX/9Kh
-         q1jw==
-X-Gm-Message-State: AC+VfDzPgmJA/qLuBmATP95x8BiSzeXXrsj8k+JUVu8pEOZidjAcCEFl
-        OAVWZL0TlLUSoK5DsmgbToSEFik0owI1rN9fd6minyfO
-X-Google-Smtp-Source: ACHHUZ6jHhsIXEyieDHr2kM823BxDvogUNKc/cFJ8+CzIzGhLl3ewX1m2+CyyV51f/IAauz3qMDl/w==
-X-Received: by 2002:a17:907:da9:b0:94e:4b26:233c with SMTP id go41-20020a1709070da900b0094e4b26233cmr108060ejc.16.1685576021658;
-        Wed, 31 May 2023 16:33:41 -0700 (PDT)
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com. [209.85.218.43])
-        by smtp.gmail.com with ESMTPSA id m22-20020a1709066d1600b0096f777fc1ccsm9537725ejr.200.2023.05.31.16.33.40
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 16:33:41 -0700 (PDT)
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-96f99222e80so63827366b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:33:40 -0700 (PDT)
-X-Received: by 2002:a17:907:7f9f:b0:96f:5511:8803 with SMTP id
- qk31-20020a1709077f9f00b0096f55118803mr91233ejc.22.1685576020461; Wed, 31 May
- 2023 16:33:40 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685576450; x=1688168450;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l9Ip848C4+PX4sdvUZ6qA+ntR4dfPFEEj72E1ynrboE=;
+        b=Dqg/CBuRzZNuXM0AHkq6DrY+YB35Cz9c2FpxH1axsu4GSRcik6bwNVJaUH9JvdX3wW
+         if5cZ/5ApIbMehY4J1C6sNAcDVITHelMmLZky/f27f9Xs396/L4FCA/WMkMARVdC/L1t
+         LSqfuL2eXzS2cqI1uvwvjX4Mthi1j/fCh00YuX4HlBPpFkOeModRBo6gdxuyih1xTpwO
+         sM+svSWbi+gpii3ygoVq4vbhF2OEU+ybN7GZSBqUerMmTaL9xCTrUDvrKZNUinIYAD1W
+         viqyPsVEYieylUxb5vGyqCwvo+uvtOhDB3WUX+GmZT6ouaSMDWuyKd7ZgUInR1b/kE/5
+         BEgQ==
+X-Gm-Message-State: AC+VfDxOAOs3o10saDSOl4SlpKRG6g97O5m8XYOcJcx6pEbAJxvJ42TL
+        5AL1APjvi5rPxUqTcShk/Q8=
+X-Google-Smtp-Source: ACHHUZ6hg+BzE3S+Lb8Ii8mZm+C3Ly8o+bGGFHw0M9DuMbORKjj6D6SrCydAYiE87Dhw9g1FQVOWtA==
+X-Received: by 2002:a25:be04:0:b0:bab:f4bb:9402 with SMTP id h4-20020a25be04000000b00babf4bb9402mr7628265ybk.46.1685576450666;
+        Wed, 31 May 2023 16:40:50 -0700 (PDT)
+Received: from localhost ([2405:6581:d4e0:1600:c494:2aca:bc01:6f7b])
+        by smtp.gmail.com with ESMTPSA id ja10-20020a170902efca00b001b0358848b0sm1957355plb.161.2023.05.31.16.40.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 16:40:49 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 08:40:47 +0900
+From:   Nick Hastings <nicholaschastings@gmail.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Salvatore Bonaccorso <carnil@debian.org>, 1036530@bugs.debian.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, regressions@lists.linux.dev
+Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI
+ string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of system)
+Message-ID: <ZHfa/wQlaVCeUC22@xps>
+References: <168471337231.1913606.15905047692536779158.reportbug@xps>
+ <ZHKrC4/G6ZyvRReI@xps>
+ <ZHL5cCNUzVdleiag@eldamar.lan>
+ <ab12984e-be17-903d-ba0a-f9c85b8c544f@amd.com>
+ <ZHP4IqxBUPuVRvRV@xps>
+ <09e24386-de63-e9e9-9e7f-5d04bad62d83@amd.com>
+ <ZHQhPcKUF76Kplwm@xps>
+ <ZHUt9xQKCwCflvVC@xps>
+ <8537d965-ddf4-7f45-6459-d5acf520376e@amd.com>
+ <ZHWfMBeAONerAJmd@xps>
 MIME-Version: 1.0
-References: <20230531220807.2048037-1-joel@joelfernandes.org>
-In-Reply-To: <20230531220807.2048037-1-joel@joelfernandes.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 31 May 2023 19:33:23 -0400
-X-Gmail-Original-Message-ID: <CAHk-=wgumv=8d=CqEeoYMRgqgJXePk7k5q-yi_+mO+AkdZv3hg@mail.gmail.com>
-Message-ID: <CAHk-=wgumv=8d=CqEeoYMRgqgJXePk7k5q-yi_+mO+AkdZv3hg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/7] Optimize mremap during mutual alignment within PMD
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHWfMBeAONerAJmd@xps>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 6:08=E2=80=AFPM Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
->
-> Here is v4 of the mremap start address optimization / fix for exec warnin=
-g.
+Hi,
 
-I don't see anything suspicious here.
+* Nick Hastings <nicholaschastings@gmail.com> [230530 16:01]:
+> 
+> * Mario Limonciello <mario.limonciello@amd.com> [230530 13:00]:
+<snip>
+> > As you're actually loading nouveau, can you please try nouveau.runpm=0 on
+> > the kernel command line?
+> 
+> I'm not intentionally loading it. This machine also has intel graphics
+> which is what I prefer. Checking my
+> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+> I see:
+> 
+> blacklist nvidia
+> blacklist nvidia-drm
+> blacklist nvidia-modeset
+> blacklist nvidia-uvm
+> blacklist ipmi_msghandler
+> blacklist ipmi_devintf
+> 
+> So I thought I had blacklisted it but it seems I did not. Since I do not
+> want to use it maybe it is better to check if the lock up occurs with
+> nouveau blacklisted. I will try that now.
 
-Not that that probably means much, but the test coverage looks reasonable t=
-oo.
+I blacklisted nouveau and booted into a 6.1 kernel:
+% uname -a
+Linux xps 6.1.0-9-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.27-1 (2023-05-08) x86_64 GNU/Linux
 
-            Linus
+It has been running without problems for nearly two days now:
+% uptime
+ 08:34:48 up 1 day, 16:22,  2 users,  load average: 1.33, 1.26, 1.27
+
+Regards,
+
+Nick.
+
