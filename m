@@ -2,100 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 952FE71800E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF45F718014
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235569AbjEaMi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
+        id S235833AbjEaMj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232620AbjEaMiz (ORCPT
+        with ESMTP id S235848AbjEaMju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:38:55 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50082123
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:38:54 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7749b49ce95so342015439f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:38:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685536733; x=1688128733;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M56dqXczIU6urpVTidNU/2Z71eUaU2aQUWl7WsKSTRA=;
-        b=FIstYQaIXqyqqQbBIZ0eRS6YiGT4OJ6pnI/v9lgtN2/DfvtpCQQqojuaKwGOUp8Fg3
-         G1AhuPjaqi+ARCp9aCITRDyrQ328gRZrsqKXk99VBfc1S6pKo8WTcyge+jO2oob/EDPy
-         hV3NOT7fenyoN5YmctNh1pwlpedCqDNU5+aCySpwgvgPgzdBenEeCHbA4EVSDG5tvKTc
-         yR6XZzUWDO6wzWpg6TobgcgkFMRigBgJ2WFaDQ21P++BaQRjoWKXft8UUYktCJFQ3RhU
-         paWYpfQWzPhuxu9zweePcrTZvoTLJnAV/Urh4KW37urZVrJO2CIA9RGpfBFPvGeM3BwD
-         olrQ==
-X-Gm-Message-State: AC+VfDyaiUzDvbJ+wIVqrX1iImYdxwo9LblTnSWVtJSQ0K17zZVEZ32p
-        RZsJp1V7XqabMTj07SzeAw8xC94xblxcPznvvMB47CFDbLwD0d4=
-X-Google-Smtp-Source: ACHHUZ74o2Cy7S+5TJut5f94vXmrF3Gr56M4P1NQwSf2gyDkdwYCHmqVaYYRYNCp366WKh4TDLkJKz8QZGSf4S6yOKYmyE3A1De+
+        Wed, 31 May 2023 08:39:50 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71BC11F;
+        Wed, 31 May 2023 05:39:48 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126205251136.34.openmobile.ne.jp [126.205.251.136])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 37C5D844;
+        Wed, 31 May 2023 14:39:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685536765;
+        bh=9FI5ddx12U5j33AEsAb/4FtfCwfmcg+v2kVwvbdIAMA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OH88JsHsX3ruTeSP27IWfbNRq3s+8jd3QTExCPeR9EZhe1G19meyJPQIKRJwcVCVX
+         B+5WzKe+RKEGgvTN9+mLeVOdgdD2P+OZMs/+BD8RQp5GDE1WYsFWkE3yba40wuwA9P
+         8WgxU+gPHnF4/aun5cVexTAhlz4MRxMXoIsn0DXg=
+Date:   Wed, 31 May 2023 15:39:45 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
+        bin.liu@mediatek.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        daniel.almeida@collabora.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v2 3/8] media: videobuf2: Add a module param to limit vb2
+ queue buffer storage
+Message-ID: <20230531123945.GF27043@pendragon.ideasonboard.com>
+References: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
+ <20230321102855.346732-4-benjamin.gaignard@collabora.com>
+ <6c4658fd-3a64-b3f8-67cd-17ed2d7d3567@xs4all.nl>
+ <20230531080331.GB6496@pendragon.ideasonboard.com>
+ <608ae7d6-3f3b-137d-08d2-d41a240be2c4@xs4all.nl>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:8a4d:0:b0:776:fd59:f980 with SMTP id
- o13-20020a5e8a4d000000b00776fd59f980mr2056443iom.4.1685536733644; Wed, 31 May
- 2023 05:38:53 -0700 (PDT)
-Date:   Wed, 31 May 2023 05:38:53 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000043ce4705fcfc9a3f@google.com>
-Subject: [syzbot] Monthly usb report (May 2023)
-From:   syzbot <syzbot+list5ddc103e11539454fe04@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <608ae7d6-3f3b-137d-08d2-d41a240be2c4@xs4all.nl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello usb maintainers/developers,
+On Wed, May 31, 2023 at 10:30:36AM +0200, Hans Verkuil wrote:
+> On 5/31/23 10:03, Laurent Pinchart wrote:
+> > On Wed, May 31, 2023 at 08:36:59AM +0200, Hans Verkuil wrote:
+> >> On 21/03/2023 11:28, Benjamin Gaignard wrote:
+> >>> Add module parameter "max_vb_buffer_per_queue" to be able to limit
+> >>> the number of vb2 buffers store in queue.
+> >>>
+> >>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> >>> ---
+> >>>  drivers/media/common/videobuf2/videobuf2-core.c | 15 +++------------
+> >>>  include/media/videobuf2-core.h                  | 11 +++++++++--
+> >>>  2 files changed, 12 insertions(+), 14 deletions(-)
+> >>>
+> >>> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+> >>> index ae9d72f4d181..f4da917ccf3f 100644
+> >>> --- a/drivers/media/common/videobuf2/videobuf2-core.c
+> >>> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
+> >>> @@ -34,6 +34,8 @@
+> >>>  static int debug;
+> >>>  module_param(debug, int, 0644);
+> >>>  
+> >>> +module_param(max_vb_buffer_per_queue, ulong, 0644);
+> >>
+> >> There is no MODULE_PARM_DESC here? Please add. I see it is not there for
+> >> the debug param either, it should be added for that as well.
+> > 
+> > Would this be the right time to consider resource accounting in V4L2 for
+> > buffers ? Having a module parameter doesn't sound very useful, an
+> > application could easily allocate more buffers by using buffer orphaning
+> > (allocating buffers, exporting them as dmabuf objects, and freeing them,
+> > which leaves the memory allocated). Repeating allocation cycles up to
+> > max_vb_buffer_per_queue will allow allocating an unbounded number of
+> > buffers, using all the available system memory. I'd rather not add a
+> > module argument that only gives the impression of some kind of safety
+> > without actually providing any value.
+> 
+> Does dmabuf itself provide some accounting mechanism? Just wondering.
+> 
+> More specific to V4L2: I'm not so sure about this module parameter either.
+> It makes sense to have a check somewhere against ridiculous values (i.e.
+> allocating MAXINT buffers), but that can be a define as well. But otherwise
+> I am fine with allowing applications to allocate buffers until the memory
+> is full.
+> 
+> The question is really: what is this parameter supposed to do? The only
+> thing it does is to sanitize unlikely inputs (e.g. allocating MAXINT buffers).
+> 
+> I prefer that as a define, to be honest.
+> 
+> I think it is perfectly fine for users to try to request more buffers than
+> memory allows. It will just fail in that case, not a problem.
+> 
+> And if an application is doing silly things like buffer orphaning, then so
+> what? Is that any different than allocating memory and not freeing it?
+> Eventually it will run out of memory and crash, which is normal.
 
-This is a 31-day syzbot report for the usb subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/usb
+Linux provides APIs to account for and limit usage of resources,
+including memory. A system administrator can prevent rogue processes
+from starving system resources. The memory consumed by vb2 buffer isn't
+taken into account, making V4L2 essentially unsafe for untrusted
+processes.
 
-During the period, 4 new issues were detected and 4 were fixed.
-In total, 64 issues are still open and 319 have been fixed so far.
+Now, to be fair, there are many reasons why allowing access to v4L2
+devices to untrusted applications is a bad idea, and memory consumption
+is likely not even the worst one. Still, is this something we want to
+fix, or do we want to consider V4L2 to be priviledged API only ? Right
+now we can't do so, but with many Linux systems moving towards pipewire,
+we could possibly have a system daemon isolating untrusted applications
+from the rest of the system. We may thus not need to fix this in the
+V4L2 API.
 
-Some of the still happening issues:
+-- 
+Regards,
 
-Ref  Crashes Repro Title
-<1>  2373    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
-                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
-<2>  1818    Yes   WARNING in firmware_fallback_sysfs
-                   https://syzkaller.appspot.com/bug?extid=95f2e2439b97575ec3c0
-<3>  1751    Yes   KMSAN: uninit-value in mii_nway_restart
-                   https://syzkaller.appspot.com/bug?extid=1f53a30781af65d2c955
-<4>  778     Yes   INFO: task hung in usb_get_descriptor (2)
-                   https://syzkaller.appspot.com/bug?extid=e8db9d9e65feff8fa471
-<5>  653     Yes   WARNING in smsusb_term_device
-                   https://syzkaller.appspot.com/bug?extid=40ac6e73326e79ee8ecb
-<6>  293     Yes   INFO: task hung in r871xu_dev_remove
-                   https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
-<7>  273     Yes   INFO: task hung in usbdev_open (2)
-                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-<8>  237     Yes   INFO: task hung in netdev_run_todo (2)
-                   https://syzkaller.appspot.com/bug?extid=9d77543f47951a63d5c1
-<9>  180     No    INFO: task hung in hub_event (3)
-                   https://syzkaller.appspot.com/bug?extid=a7edecbf389d11a369d4
-<10> 174     No    INFO: task hung in hub_port_init (3)
-                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+Laurent Pinchart
