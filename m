@@ -2,55 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F16F0717605
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 07:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F72D717609
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 07:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbjEaFMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 01:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
+        id S231745AbjEaFRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 01:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjEaFMF (ORCPT
+        with ESMTP id S229463AbjEaFRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 01:12:05 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 285B593;
-        Tue, 30 May 2023 22:12:04 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 704198164;
-        Wed, 31 May 2023 05:12:03 +0000 (UTC)
-Date:   Wed, 31 May 2023 08:12:02 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Bo Liu <liubo03@inspur.com>
-Cc:     linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] bus: ti-sysc: convert sysfs sprintf to sysfs_emit
-Message-ID: <20230531051202.GS14287@atomide.com>
-References: <20230504085522.2635-1-liubo03@inspur.com>
- <20230531050458.GR14287@atomide.com>
+        Wed, 31 May 2023 01:17:44 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A4BEE;
+        Tue, 30 May 2023 22:17:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1685510263; x=1717046263;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=94X5Z+UvPJK1zi7w2X/0f3fQtNDeUM/fnP+10RCVJro=;
+  b=kvn/giNfJNJxwLMUjJQlLuk3Yqw+eSsas78rMDw92txge3cBeHTGmqoj
+   VVDzBKqQJg7MFlThbd5WXBbs++d7IUkAa3Fkdqvr1u8ljRV5lUoeIsBPU
+   LC/+tcHOXDgPxWtYEwoiFMgoBu3uK1mkvyMcX7kRyXNdZ5Rs2U3Bu9aVw
+   /PU1rh/pzBYQsfMEuKbhcLL6r1dl5rY91AJKsYtUYjhSs85mvh5ST/7As
+   EphoRoPJlGwrjhSdMgzr3GuSzJfXwg/EUsL0aiBzuhiqzj7IlRbgpoxmj
+   /y4TvhcXPMlRd4NeyynUdzRBnicnufF6RU2+f7+Eq8bSwER+nxX+vZ0GL
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,205,1681142400"; 
+   d="scan'208";a="231960727"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 31 May 2023 13:17:43 +0800
+IronPort-SDR: ZYNbjkDNMDsZTou9fpQp32sqjT2FOZGNzpFWezEJTFhOrEd5T1I835zqgnWsfNs5l6+dAFvP1G
+ nQRjSw+OwZRcr9uvMQ8Roxw4F5mT622GYCasXltpg4xqTs2WWXavXZvdpQkIkeU0YH80RXfqUq
+ 3CLYR0nNmA02vnRwv+xAnWDRNt235BZ8WER8Ei38hCSEngmdgVQ6O1mEnE7U4YkRt7uyFTUw6J
+ SETvAi1evS6hoQ97+VOP8aOIKq1/KINr6V1MYHDuQw5C3m2kQh7mb+U7HexhuO2uiwwpg+v3ie
+ Zig=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 May 2023 21:26:52 -0700
+IronPort-SDR: OUobx68EAOXv7s/RHNxh1zp+W2kjrB1dIFEge/xKAIPIJcKTYtUBsf31xNLn8wfBsWU97OJJG2
+ pc9iLzUHlsY41RfBWBFZYMHsrOZQRZktnklKy0f1J1L8a1gUlkSaqjpOFGBZ2TgWDHBD5gmQVw
+ PFACZdlASZlrFirmz4B9AToVhcY7N1HwHG/KPvY+E8ufTTU5CL+pYtmekcTp823Qlx3Aq45hOc
+ Nd9wpXDBPpu+0L5Kjm1jT5zgFJdM2y8va17cgRVe8GpcH/MYFqcrtYSr32zk0hzA9E8X47g+vD
+ ZBg=
+WDCIronportException: Internal
+Received: from bxygm33.ad.shared ([10.45.31.229])
+  by uls-op-cesaip02.wdc.com with ESMTP; 30 May 2023 22:17:39 -0700
+From:   Avri Altman <avri.altman@wdc.com>
+To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Keoseong Park <keosung.park@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v2] scsi: ufs: core: Do not open code SZ_x
+Date:   Wed, 31 May 2023 08:17:13 +0300
+Message-Id: <20230531051713.2080-1-avri.altman@wdc.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531050458.GR14287@atomide.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Tony Lindgren <tony@atomide.com> [230531 05:05]:
-> * Bo Liu <liubo03@inspur.com> [230504 11:55]:
-> > Follow the advice of the Documentation/filesystems/sysfs.rst
-> > and show() should only use sysfs_emit() or sysfs_emit_at()
-> > when formatting the value to be returned to user space.
-> 
-> Thanks applying into omap-for-v6.5/ti-sysc.
+v1 -> v2: Attend UTMRD as well
 
-Oh but these are currently only used with dev_dbg() on init.
-There's no specific sysfs support needed so far. So dropping this
-patch.
+A tad cleanup - No functional change.
 
-Regards,
+Signed-off-by: Avri Altman <avri.altman@wdc.com>
+Reviewed-by: Bean Huo <beanhuo@micron.com>
+Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+---
+ drivers/ufs/core/ufshcd.c | 10 +++++-----
+ include/ufs/ufshci.h      |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Tony
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index fdf5073c7c6c..10a10f8f0bd1 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -2519,7 +2519,7 @@ static void ufshcd_sgl_to_prdt(struct ufs_hba *hba, struct ufshcd_lrb *lrbp, int
+ 			 * 11b to indicate Dword granularity. A value of '3'
+ 			 * indicates 4 bytes, '7' indicates 8 bytes, etc."
+ 			 */
+-			WARN_ONCE(len > 256 * 1024, "len = %#x\n", len);
++			WARN_ONCE(len > SZ_256K, "len = %#x\n", len);
+ 			prd->size = cpu_to_le32(len - 1);
+ 			prd->addr = cpu_to_le64(sg->dma_address);
+ 			prd->reserved = 0;
+@@ -3765,7 +3765,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+ 
+ 	/*
+ 	 * Allocate memory for UTP Transfer descriptors
+-	 * UFSHCI requires 1024 byte alignment of UTRD
++	 * UFSHCI requires 1KB alignment of UTRD
+ 	 */
+ 	utrdl_size = (sizeof(struct utp_transfer_req_desc) * hba->nutrs);
+ 	hba->utrdl_base_addr = dmam_alloc_coherent(hba->dev,
+@@ -3773,7 +3773,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+ 						   &hba->utrdl_dma_addr,
+ 						   GFP_KERNEL);
+ 	if (!hba->utrdl_base_addr ||
+-	    WARN_ON(hba->utrdl_dma_addr & (1024 - 1))) {
++	    WARN_ON(hba->utrdl_dma_addr & (SZ_1K - 1))) {
+ 		dev_err(hba->dev,
+ 			"Transfer Descriptor Memory allocation failed\n");
+ 		goto out;
+@@ -3797,7 +3797,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+ 						    &hba->utmrdl_dma_addr,
+ 						    GFP_KERNEL);
+ 	if (!hba->utmrdl_base_addr ||
+-	    WARN_ON(hba->utmrdl_dma_addr & (1024 - 1))) {
++	    WARN_ON(hba->utmrdl_dma_addr & (SZ_1K - 1))) {
+ 		dev_err(hba->dev,
+ 		"Task Management Descriptor Memory allocation failed\n");
+ 		goto out;
+@@ -8760,7 +8760,7 @@ static const struct scsi_host_template ufshcd_driver_template = {
+ 	.cmd_per_lun		= UFSHCD_CMD_PER_LUN,
+ 	.can_queue		= UFSHCD_CAN_QUEUE,
+ 	.max_segment_size	= PRDT_DATA_BYTE_COUNT_MAX,
+-	.max_sectors		= (1 << 20) / SECTOR_SIZE, /* 1 MiB */
++	.max_sectors		= SZ_1M / SECTOR_SIZE,
+ 	.max_host_blocked	= 1,
+ 	.track_queue_depth	= 1,
+ 	.skip_settle_delay	= 1,
+diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
+index 11424bb03814..db2d5db5c88e 100644
+--- a/include/ufs/ufshci.h
++++ b/include/ufs/ufshci.h
+@@ -453,7 +453,7 @@ enum {
+ };
+ 
+ /* The maximum length of the data byte count field in the PRDT is 256KB */
+-#define PRDT_DATA_BYTE_COUNT_MAX	(256 * 1024)
++#define PRDT_DATA_BYTE_COUNT_MAX	SZ_256K
+ /* The granularity of the data byte count field in the PRDT is 32-bit */
+ #define PRDT_DATA_BYTE_COUNT_PAD	4
+ 
+-- 
+2.40.0
+
