@@ -2,246 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40EFB7180A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5B27180C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236156AbjEaM5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
+        id S236208AbjEaM6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236191AbjEaM44 (ORCPT
+        with ESMTP id S236204AbjEaM5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:56:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F351B7;
-        Wed, 31 May 2023 05:56:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B774D63A78;
-        Wed, 31 May 2023 12:56:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA13FC433EF;
-        Wed, 31 May 2023 12:56:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685537783;
-        bh=WXX43CMo95lfddmy+CLKvQFqCbHXhy3Lbo5aNPHsISg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=biRRxafrqyx+rWwtFEsB7QNWTuxAqD+wRDF/OSfGLNP1Xg1WdTZh7FiYTwfHovOGL
-         aMc8VhChl0Ooc1ufcXF+i9f+w32UOmLKKtiLpgpWT7QheMEstvuqR4r/Ym6DcCqMRW
-         2EMtc4r/v3JEuctmwhBnvcqja5M1Xe4CzxumqqNavJYnLfAbZkUv0YtULrY8eorVDY
-         BGkP9jzQOavXtozqum5abIh0uM8ADOcyKbuh8TgLK3o5lzY1IaIJv8Q5/6ZOff8wmT
-         Tuh8hTPks39afTqC2NmJ4CdCaSTPJX2nhEPQfSfgO7/QKzMS7mFX6e07yybLm2/iw9
-         FDQSCupq3nAsg==
-Date:   Wed, 31 May 2023 13:56:18 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Fabrizio Lamarque <fl.scratchpad@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        jic23@kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] dt-bindings: iio: ad7192: Allow selection of
- clock modes
-Message-ID: <20230531-engraving-gave-9b0b8f818923@spud>
-References: <20230530075311.400686-1-fl.scratchpad@gmail.com>
- <20230530075311.400686-6-fl.scratchpad@gmail.com>
- <20230530-cannabis-headstone-883c5b891dd3@spud>
- <CAPJMGm4=sRQGPmVi8NjAVvOVrr8s2By6PO8kKRKZt3W0FR9j-Q@mail.gmail.com>
- <5d65b644-9b79-d232-d0d0-d2772325eef5@linaro.org>
- <CAPJMGm6T_x9Oocdmbrhi879QqZSd812LxJP=J554UbH9k9_LBw@mail.gmail.com>
+        Wed, 31 May 2023 08:57:37 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6A3E47;
+        Wed, 31 May 2023 05:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=9a9sWcV3B1HupudEIN770V6gR2bhvM4pEaGkOVzI7Dg=; b=6Qf3UDOaSEL6pVq3e6HbaJSGSo
+        eoeenu6PzU7F7oFw2BgTfA9SxiECFR+nEK5Aflf4i3R5rqyaJtjkmUD/qjQ2xQjblcsYqRVRSFOWG
+        ifxktaLOrzhVsYlGkyNaBt1eb8Y4x70wdvcYNNWDSnkDLtAM/+fYsm7uLB4r4s67Opms=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q4LNM-00ESZe-Ov; Wed, 31 May 2023 14:56:28 +0200
+Date:   Wed, 31 May 2023 14:56:28 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Lukasz Majewski <lukma@denx.de>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] net: dsa: slave: Advertise correct EEE capabilities at
+ slave PHY setup
+Message-ID: <1a3342eb-5a0f-486d-90af-4e052760cf7b@lunn.ch>
+References: <20230530122621.2142192-1-lukma@denx.de>
+ <ZHXzTBOtlPKqNfLw@shell.armlinux.org.uk>
+ <20230530160743.2c93a388@wsk>
+ <ZHYGv7zcJd/Ad4hH@shell.armlinux.org.uk>
+ <35546c34-17a6-4295-b263-3f2a97d53b94@lunn.ch>
+ <20230530164731.0b711649@wsk>
+ <ZHYRgIb6UCYq1n/Z@shell.armlinux.org.uk>
+ <20230531104346.2a131c42@wsk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="hUzqiqle6qW6Urme"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPJMGm6T_x9Oocdmbrhi879QqZSd812LxJP=J554UbH9k9_LBw@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230531104346.2a131c42@wsk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> Thanks for the detailed explanation.
+> 
+> With "switch" setup - where I do have MAC from imx8 (fec driver)
+> connected to e.g. mv88e6071 with "fixed-link", I do guess that the EEE
+> management is done solely in mv88e6071?
 
---hUzqiqle6qW6Urme
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+So you have the MAC-MAC connection? No back to back PHYs in the
+middle. If there is no PHY, linux will not do anything with EEE. What
+happens will depend on the reset defaults of the switch. For the FEC
+phy_eee_init() will return false, so i expect EEE is disabled.
 
-On Wed, May 31, 2023 at 11:40:08AM +0200, Fabrizio Lamarque wrote:
-> On Wed, May 31, 2023 at 9:14=E2=80=AFAM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> > On 31/05/2023 08:59, Fabrizio Lamarque wrote:
-> > > On Tue, May 30, 2023 at 7:22=E2=80=AFPM Conor Dooley <conor@kernel.or=
-g> wrote:
-> > >>
-> > >> On Tue, May 30, 2023 at 09:53:11AM +0200, fl.scratchpad@gmail.com wr=
-ote:
-> > >>> From: Fabrizio Lamarque <fl.scratchpad@gmail.com>
-> > >>>
-> > >>> AD7192 supports external clock sources, generated by a digital clock
-> > >>> source or a crystal oscillator, or internally generated clock option
-> > >>> without external components.
-> > >>>
-> > >>> Describe choice between internal and external clock, crystal or ext=
-ernal
-> > >>> oscillator, and internal clock output enable.
-> > >>>
-> > >>> Signed-off-by: Fabrizio Lamarque <fl.scratchpad@gmail.com>
-> > >>> ---
-> > >>>  .../bindings/iio/adc/adi,ad7192.yaml          | 27 +++++++++++++++=
-+---
-> > >>>  1 file changed, 24 insertions(+), 3 deletions(-)
-> > >>>
-> > >>> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7192.y=
-aml b/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
-> > >>> index 16def2985ab4..f7ecfd65ad80 100644
-> > >>> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
-> > >>> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
-> > >>> @@ -32,7 +32,8 @@ properties:
-> > >>>
-> > >>>    clocks:
-> > >>>      maxItems: 1
-> > >>> -    description: phandle to the master clock (mclk)
-> > >>> +    description: |
-> > >>> +      Master clock (mclk). If not set, internal clock is used.
-> > >>>
-> > >>>    clock-names:
-> > >>>      items:
-> > >>> @@ -50,6 +51,17 @@ properties:
-> > >>>    vref-supply:
-> > >>>      description: VRef voltage supply
-> > >>>
-> > >>> +  adi,clock-xtal:
-> > >>> +    description: |
-> > >>> +      Select whether an external crystal oscillator or an external
-> > >>> +      clock is applied as master (mclk) clock.
-> > >>> +    type: boolean
-> > >>
-> > >> Am I being daft, or are these the same thing? If they are not, and u=
-se
-> > >> different input pins, I think it should be explained as it not clear.
-> > >> Could you explain why we actually care that the source is a xtal ver=
-sus
-> > >> it being mclk, and why just having master clock is not sufficient?
-> > >
-> > > I may revise the description as follows. Feel free to add your sugges=
-tions
-> > > in case it is still not clear enough.
-> > >
-> > > "Select whether an external crystal oscillator between MCLK1 and MCLK=
-2 or
-> > > an external CMOS-compatible clock on MCLK2 is used as master clock".
-> > >
-> > > This is used to properly set CLK0 and CLK1 bits in the MODE register.
-> > > I guess most applications would use an external crystal or internal c=
-lock.
-> > > The external digital clock would allow synchronization of multiple AD=
-Cs,
-> >
-> > Description confuses me. Why would it matter what type of clock you have
-> > as input - external crystal oscillator or external CMOS-compatible
-> > clock? Later you refer to "internal", so maybe you meant here also
-> > internal for one of the options?
->=20
-> The AD7192 needs to be configured according to the type of external
-> clock that is
-> applied on MCLK1/MCLK2 pins in order to activate the correct circuitry.
->=20
-> Here are some citations from the datasheet:
->=20
-> MCLK2 pin description:
-> "The AD7192 has an internal 4.92 MHz clock. This internal clock can be
-> made available
-> on the MCLK2 pin. The clock for the AD7192 can be provided externally
-> also in the form
-> of a crystal or external clock. A crystal can be tied across the MCLK1
-> and MCLK2 pins.
-> Alternatively, the MCLK2 pin can be driven with a CMOS-compatible clock a=
-nd the
-> MCLK1 pin left unconnected."
->=20
-> Each of these clock modes have to be configured via AD7192 mode register.
-> (Clock source configuration bits, mode register, CLK0 and CLK1).
-> Here is their description from datasheet:
->=20
-> "Either the on-chip 4.92 MHz clock or an external clock can be used.
-> The ability to
-> use an external clock allows several AD7192 devices to be synchronized. A=
-lso,
-> 50 Hz/60 Hz rejection is improved when an accurate external clock
-> drives the AD7192."
->=20
-> The choice between internal clock, external crystal oscillator or
-> external CMOS digital
-> clock is a decision of the HW designer driven by noise rejection,
-> synchronization, and
-> cost requirements.
->=20
-> If possible, I kindly ask you suggestions on how to adjust the description
-> so that it would be cleaner.
+> In other words - the mv88e6071 solely decides if its internal PHY shall
+> signal EEE to the peer switch.
 
-For me at least, I partially wanted it explained so that intimate
-knowledge of the part was not required to review the binding! To me, the
-original description is perfectly clear about how the hardware is
-configured, but nothing says why software needs to actually know about
-it.
-I'd be happy if you worked
-> Each of these clock modes have to be configured via AD7192 mode register.
-into the description, but perhaps Krzysztof disagrees.
+Handling EEE in the mv88e6xxx driver is something on my todo list. But
+i don't expect it to happen soon. And before it will happen we
+actually need to decide how the user API should work.
 
-Cheers,
-Conor.
-
-> > >>> +  adi,int-clock-output-enable:
-> > >>> +    description: |
-> > >>> +      When internal clock is selected, this bit enables clock out =
-pin.
-> > >>> +    type: boolean
-> > >>
-> > >> And this one makes you a clock provider, so the devices advocate
-> > >> position would be that you know that this bit should be set if
-> > >> "clocks" is not present and a consumer requests a clock.
-> > >> I don't seem to have got the driver patches (at least not in this
-> > >> mailbox), so I have got no information on how you've actually implem=
-ented
-> > >> this.
-> > >
-> > > I see... When this bit is set, the AD7192 node should also be a clock=
- provider.
-> > > The clock is output on MCLK2 pin, hence it can be used with internally
-> > > generated clock only.
-> > > I tend to dislike the idea of a "conditional clock provider". Also, I=
-'d guess
-> >
-> > Either this is a clock provider via common clock framework or is not.
-> > Don't re-implement clock provider via other properties but just skip
-> > such feature.
->=20
-> Ok, I understand. I will remove the bit from the patch in V4. Thank you.
->=20
-> The bit was already existing upstream in the driver, but I would just drop
-> the change in documentation without any additional patch that removes it
-> from the driver.
->=20
-> Best regards,
-> Fabrizio Lamarque
-
---hUzqiqle6qW6Urme
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHdD8gAKCRB4tDGHoIJi
-0iX8AP4jM2LspkoDQqGr2uNev1zyUHQLv8qDCO+A6Tx+0avo3AEApiqAifZ/vWC1
-g0rKlc/qFvOBHV1esZl+tT7+cO3+LA4=
-=n88b
------END PGP SIGNATURE-----
-
---hUzqiqle6qW6Urme--
+	Andrew
