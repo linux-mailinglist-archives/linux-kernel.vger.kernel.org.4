@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE1A718316
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1CE7182A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236815AbjEaNrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
+        id S235693AbjEaNog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236782AbjEaNp6 (ORCPT
+        with ESMTP id S236111AbjEaNnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:45:58 -0400
+        Wed, 31 May 2023 09:43:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A3C1734;
-        Wed, 31 May 2023 06:43:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69411998;
+        Wed, 31 May 2023 06:42:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EBA663B55;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF2C163B1B;
+        Wed, 31 May 2023 13:42:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47D30C4339E;
         Wed, 31 May 2023 13:42:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D65FBC433A1;
-        Wed, 31 May 2023 13:42:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540533;
-        bh=e7tWL6wTRy34K2JWIZX6jDI78R1WuLGLxqA768ehrHA=;
+        s=k20201202; t=1685540535;
+        bh=ilWEH3BtlOrYY29wnpH97XrWy7zVq/O5HyDySM8Ml0M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DCf7vl6jd+OmMBYtGkkBK2Xmq8imiDB8gTlix4Te5cPrQG8DCO18uEevQcuLeg7Nq
-         9mQd+qQ/CtoO0zs8c1ZJnbbegT8ML15fXkRaVvgwiiqL0J+EAzAKdLlsyl007HEH/f
-         MlxtFOqpnscxx/A4L7ZNZKRk77HzYR95s73dGdJmN36Xi5cN3LH1qm8KZaB806TQEA
-         3f+rzPLYT0Khadewt8Uk2cyrSMWuGPzYsynZ7g3F0skbLyQBZUfX58uMYv8WeFD+gN
-         qFN3ODUfJODSjVnL+9Ha6A54rZfWtrjWWY2ucypI9FKavT6pw8Ce2q8f1rjpsCO3hI
-         STAY7qS+r4B/g==
+        b=U3g21z00aWNkk478eXaiGfmvXBVTQzgLnBgrb46K/rTn4kZbHlHAwRgWA9sP71LLz
+         1HOLci41sPFk97FuJjgHmn51QWGReVA6c8XjkZ8yHKOF3y875gBMTMJ8+wTNprfIR/
+         iiJ0ZTNXQrMuiPsvRG6O61+ieaWlwX8fg9CbJH9Qk96Kz27AsFv4B5BumZeHwW7jjE
+         B0U9cFPxZ4C23sMb5gZlIe6iyF8ayJqTcjLGq8HAuhaPTR4/6g3b/1ete+XuFmiBg5
+         +q9uStg8N4lPH6npd7Dm9JRaS4b7++K5q2JVjr/VpPgVMeRfjF5zGGBpwBcG32Toze
+         6ZOzwBVvxFCqg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Milo Spadacini <milo.spadacini@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
+Cc:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 05/33] tools: gpio: fix debounce_period_us output of lsgpio
-Date:   Wed, 31 May 2023 09:41:31 -0400
-Message-Id: <20230531134159.3383703-5-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, bamv2005@gmail.com,
+        shuah@kernel.org, linux-gpio@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 06/33] selftests: gpio: gpio-sim: Fix BUG: test FAILED due to recent change
+Date:   Wed, 31 May 2023 09:41:32 -0400
+Message-Id: <20230531134159.3383703-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134159.3383703-1-sashal@kernel.org>
 References: <20230531134159.3383703-1-sashal@kernel.org>
@@ -52,43 +52,61 @@ X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Milo Spadacini <milo.spadacini@gmail.com>
+From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
 
-[ Upstream commit eb4b8eca1bad98f4b8574558a74f041f9acb5a54 ]
+[ Upstream commit 976d3c6778e99390c6d854d140b746d12ea18a51 ]
 
-Fix incorrect output that could occur when more attributes are used and
-GPIO_V2_LINE_ATTR_ID_DEBOUNCE is not the first one.
+According to Mirsad the gpio-sim.sh test appears to FAIL in a wrong way
+due to missing initialisation of shell variables:
 
-Signed-off-by: Milo Spadacini <milo.spadacini@gmail.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+ 4.2. Bias settings work correctly
+ cat: /sys/devices/platform/gpio-sim.0/gpiochip18/sim_gpio0/value: No such file or directory
+ ./gpio-sim.sh: line 393: test: =: unary operator expected
+ bias setting does not work
+ GPIO gpio-sim test FAIL
+
+After this change the test passed:
+
+ 4.2. Bias settings work correctly
+ GPIO gpio-sim test PASS
+
+His testing environment is AlmaLinux 8.7 on Lenovo desktop box with
+the latest Linux kernel based on v6.2:
+
+  Linux 6.2.0-mglru-kmlk-andy-09238-gd2980d8d8265 x86_64
+
+Suggested-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Tested-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/gpio/lsgpio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/gpio/gpio-sim.sh | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/gpio/lsgpio.c b/tools/gpio/lsgpio.c
-index c61d061247e17..52a0be45410c9 100644
---- a/tools/gpio/lsgpio.c
-+++ b/tools/gpio/lsgpio.c
-@@ -94,7 +94,7 @@ static void print_attributes(struct gpio_v2_line_info *info)
- 	for (i = 0; i < info->num_attrs; i++) {
- 		if (info->attrs[i].id == GPIO_V2_LINE_ATTR_ID_DEBOUNCE)
- 			fprintf(stdout, ", debounce_period=%dusec",
--				info->attrs[0].debounce_period_us);
-+				info->attrs[i].debounce_period_us);
- 	}
- }
- 
+diff --git a/tools/testing/selftests/gpio/gpio-sim.sh b/tools/testing/selftests/gpio/gpio-sim.sh
+index 341e3de008968..bf67b23ed29ac 100755
+--- a/tools/testing/selftests/gpio/gpio-sim.sh
++++ b/tools/testing/selftests/gpio/gpio-sim.sh
+@@ -389,6 +389,9 @@ create_chip chip
+ create_bank chip bank
+ set_num_lines chip bank 8
+ enable_chip chip
++DEVNAME=`configfs_dev_name chip`
++CHIPNAME=`configfs_chip_name chip bank`
++SYSFS_PATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio0/value"
+ $BASE_DIR/gpio-mockup-cdev -b pull-up /dev/`configfs_chip_name chip bank` 0
+ test `cat $SYSFS_PATH` = "1" || fail "bias setting does not work"
+ remove_chip chip
 -- 
 2.39.2
 
