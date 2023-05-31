@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CC6717B29
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC98717B2E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235201AbjEaJFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S235322AbjEaJF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235332AbjEaJEe (ORCPT
+        with ESMTP id S235234AbjEaJEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:04:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE701E65;
-        Wed, 31 May 2023 02:03:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B11A636DF;
-        Wed, 31 May 2023 09:03:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A371C433D2;
-        Wed, 31 May 2023 09:03:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685523838;
-        bh=Fj4Up68ocllFYDr8AEcwK10DzhsFeDDh/2SD0hHn63I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=SuMJ068wtQnL/QcjqiW3ztlo0rLRZCoQIR2WRjqHSTRbzqtBz5YopiI9Au0h4xzVi
-         WZhfH1GlRTFk0UIwJ5FiRNS0jvmABuIff27p5jwXqvt8J/eu6Xc6L0Xmw5/g7hyy9B
-         LuiBVkul4k//epH7qS4JloR41rehji9ajwCtoeYKPiOgVp4g1nDGbXcSTce/TVB9kp
-         KaAeDXdkBXPpt3nO9vbFFrM4VcZcaZe2D7KToDCxe0CnBv8LcExy8REFGHb4FHjgKg
-         C/q4fSaaa8OAQMpStKhRD68yM02RdZCzuAZEoQBevhdUoRHXU3vdrTzo9CnIiK3PRH
-         r1FDKV4cYn2dQ==
-Message-ID: <78819e4d-6eb1-8a71-2da0-0d4711103648@kernel.org>
-Date:   Wed, 31 May 2023 11:03:54 +0200
+        Wed, 31 May 2023 05:04:37 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FD6E6D;
+        Wed, 31 May 2023 02:04:11 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id 3f1490d57ef6-ba86ea269e0so7828600276.1;
+        Wed, 31 May 2023 02:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685523850; x=1688115850;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wwBAn3OB0zI4GMIIC6jxeKIz0zwIBvc1fIs969RT6uc=;
+        b=N0X+JHbsSY/a7pW8cbNNswleHaara2N6I2XkKY2DNkt/StZejKQrtbNcuzM7UG0bKn
+         WF/rV8jiFDUtHggf8jqw9y5o5oVT34y6N9cxh+QL9sCKG/o13h6ONjkOtch5FfDipAO/
+         CrDVeVAUtB3Ccm4sfQiUTMpNyZCytDyZeUhDIhwmIlI1UaeZeO1ydZvmeM6Db/k7Etle
+         yCflQd7rCAynwW0J/o3XMCiXg5Z+K4jZWpnnlVsMSjjhAuzJIUFx/uwH4G5mlbxMDgUB
+         YG/ZJ8KUXN0vhS7i7VtDvmSIMe3KJkwM2aSExiKPAvhIiTVKUa7G4tPYlFk9S+Bb3lg4
+         RN0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685523850; x=1688115850;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wwBAn3OB0zI4GMIIC6jxeKIz0zwIBvc1fIs969RT6uc=;
+        b=OIcg9IlsvGHrJKtnBr6IoYACdNkzc6vBlwkqQGpZY/y2CSfYHTz9vDFdC8V4rlwx6D
+         lnht2c2yOBZTTS7dJltH/78DT+XrYjaI852VKQjS+SGntLlF3JSVmdEG7pHZEhc0uCFH
+         imwEjHBUGZoQnhWVRr4ilFn7axHiBWmOPHgEO3YlMcwYhAUhyWMfeS97ya1x8QBzkkdK
+         14SGoFoURKKU9Gmn3ueG3UcvU4xs53/pxj2qqfKFMV+C9I/5OOGKtK+GfGIgmj8nzX2h
+         XOiQBgFLHdDngFfcNH+Vsbsyuy2J34aDhRNK3ePTjex0EknSG/BNM60QSFGUR2JujaoW
+         Fv8g==
+X-Gm-Message-State: AC+VfDxyZETzFG5T+IwexgGRVu69MMBKsOKErrhwdpS5t3vBlqvpqQfc
+        Wg7Pn5U1lSBdRgrXoWzWSYz1lnEkNNP+RM4ySV4=
+X-Google-Smtp-Source: ACHHUZ5gi7XkoCJIniTiJ2MRu25GFLI4lNpQEtc8w6NzLJHDJNzjBbRos99IhzW6f9IyCrcpSgLs6An+wBFApTSETA4=
+X-Received: by 2002:a25:7e03:0:b0:bac:616b:aa91 with SMTP id
+ z3-20020a257e03000000b00bac616baa91mr5618631ybc.20.1685523850502; Wed, 31 May
+ 2023 02:04:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] soc: qcom: pmic: Fix resource leaks in
- device_for_each_child_node() loops
-Content-Language: en-US
-To:     Lu Hongfei <luhongfei@vivo.com>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     opensource.kernel@vivo.com
-References: <20230531085422.4963-1-luhongfei@vivo.com>
-From:   Konrad Dybcio <konradybcio@kernel.org>
-In-Reply-To: <20230531085422.4963-1-luhongfei@vivo.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230530044423.3897681-1-imagedong@tencent.com> <ZHb+ypjE4Ybg3O18@krava>
+In-Reply-To: <ZHb+ypjE4Ybg3O18@krava>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Wed, 31 May 2023 17:03:59 +0800
+Message-ID: <CADxym3biE8WcMxWf1wok+s4pBYEi6+fYQAbZJVxm7eBfzWLjLQ@mail.gmail.com>
+Subject: Re: [PATCH] bpf, x86: allow function arguments up to 12 for TRACING
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     dsahern@kernel.org, andrii@kernel.org, davem@davemloft.net,
+        ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,104 +75,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 31, 2023 at 4:01=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
+>
+> On Tue, May 30, 2023 at 12:44:23PM +0800, menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
+> > on the kernel functions whose arguments count less than 6. This is not
+> > friendly at all, as too many functions have arguments count more than 6=
+.
+> >
+> > Therefore, let's enhance it by increasing the function arguments count
+> > allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
+> >
+> > For the case that we don't need to call origin function, which means
+> > without BPF_TRAMP_F_CALL_ORIG, we need only copy the function arguments
+> > that stored in the frame of the caller to current frame. The arguments
+> > of arg6-argN are stored in "$rbp + 0x18", we need copy them to
+> > "$rbp - regs_off + (6 * 8)".
+> >
+> > For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the arguments
+> > in stack before call origin function, which means we need alloc extra
+> > "8 * (arg_count - 6)" memory in the top of the stack. Note, there shoul=
+d
+> > not be any data be pushed to the stack before call the origin function.
+> > Then, we have to store rbx with 'mov' instead of 'push'.
+> >
+> > It works well for the FENTRY and FEXIT, I'm not sure if there are other
+> > complicated cases.
+> >
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > ---
+> >  arch/x86/net/bpf_jit_comp.c | 88 ++++++++++++++++++++++++++++++++-----
+>
+> please add selftests for this.. I had to add one to be able to check
+> the generated trampoline
+>
 
+Okay!
 
-On 31.05.2023 10:54, Lu Hongfei wrote:
-> The device_for_each_child_node loop in pmic_glink_altmode_probe should have
-> fwnode_handle_put() before return which could avoid resource leaks.
-> This patch could fix this bug.
-> 
-> Fixes: 080b4e24852b ("soc: qcom: pmic_glink: Introduce altmode support")
-> 
-> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
-> ---
-This is the third revision of this patch, please version them accordingly.
+BTW, I failed to compile the latest selftests/bpf with
+the following errors:
 
-You can pass `-vN` to git format-patch and it'll do the job for you.
+progs/verifier_and.c:58:16: error: invalid operand for instruction
+        asm volatile ("                                 \
 
-Please also describe the changes since last revision below the --- line.
+The version of clang I used is:
 
-Konrad
+clang --version
+Debian clang version 14.0.6
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
 
->  drivers/soc/qcom/pmic_glink_altmode.c | 27 ++++++++++++++++++---------
->  1 file changed, 18 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
-> index df48fbea4b68..a7fc6570fa1e
-> --- a/drivers/soc/qcom/pmic_glink_altmode.c
-> +++ b/drivers/soc/qcom/pmic_glink_altmode.c
-> @@ -395,7 +395,7 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
->  		ret = fwnode_property_read_u32(fwnode, "reg", &port);
->  		if (ret < 0) {
->  			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
-> -			return ret;
-> +			goto err_node_put;
->  		}
->  
->  		if (port >= ARRAY_SIZE(altmode->ports)) {
-> @@ -405,7 +405,8 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
->  
->  		if (altmode->ports[port].altmode) {
->  			dev_err(dev, "multiple connector definition for port %u\n", port);
-> -			return -EINVAL;
-> +			ret = -EINVAL;
-> +			goto err_node_put;
->  		}
->  
->  		alt_port = &altmode->ports[port];
-> @@ -420,33 +421,37 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
->  
->  		ret = devm_drm_bridge_add(dev, &alt_port->bridge);
->  		if (ret)
-> -			return ret;
-> +			goto err_node_put;
->  
->  		alt_port->dp_alt.svid = USB_TYPEC_DP_SID;
->  		alt_port->dp_alt.mode = USB_TYPEC_DP_MODE;
->  		alt_port->dp_alt.active = 1;
->  
->  		alt_port->typec_mux = fwnode_typec_mux_get(fwnode);
-> -		if (IS_ERR(alt_port->typec_mux))
-> -			return dev_err_probe(dev, PTR_ERR(alt_port->typec_mux),
-> +		if (IS_ERR(alt_port->typec_mux)) {
-> +			ret = dev_err_probe(dev, PTR_ERR(alt_port->typec_mux),
->  					     "failed to acquire mode-switch for port: %d\n",
->  					     port);
-> +			goto err_node_put;
-> +		}
->  
->  		ret = devm_add_action_or_reset(dev, pmic_glink_altmode_put_mux,
->  					       alt_port->typec_mux);
->  		if (ret)
-> -			return ret;
-> +			goto err_node_put;
->  
->  		alt_port->typec_switch = fwnode_typec_switch_get(fwnode);
-> -		if (IS_ERR(alt_port->typec_switch))
-> -			return dev_err_probe(dev, PTR_ERR(alt_port->typec_switch),
-> +		if (IS_ERR(alt_port->typec_switch)) {
-> +			ret = dev_err_probe(dev, PTR_ERR(alt_port->typec_switch),
->  					     "failed to acquire orientation-switch for port: %d\n",
->  					     port);
-> +			goto err_node_put;
-> +		}
->  
->  		ret = devm_add_action_or_reset(dev, pmic_glink_altmode_put_switch,
->  					       alt_port->typec_switch);
->  		if (ret)
-> -			return ret;
-> +			goto err_node_put;
->  	}
->  
->  	altmode->client = devm_pmic_glink_register_client(dev,
-> @@ -455,6 +460,10 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
->  							  pmic_glink_altmode_pdr_notify,
->  							  altmode);
->  	return PTR_ERR_OR_ZERO(altmode->client);
-> +
-> +err_node_put:
-> +	fwnode_handle_put(fwnode);
-> +	return ret;
->  }
->  
->  static const struct auxiliary_device_id pmic_glink_altmode_id_table[] = {
+Does anyone know the reason?
+
+Thanks!
+Menglong Dong
+
+> jirka
+>
+>
