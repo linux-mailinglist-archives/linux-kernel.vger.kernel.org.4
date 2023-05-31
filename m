@@ -2,152 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D01718EE6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58118718EE9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjEaXAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 19:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        id S230365AbjEaXCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 19:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbjEaXAa (ORCPT
+        with ESMTP id S230213AbjEaXCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 19:00:30 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAC111F
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:00:29 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f6bb5e8ed2so609611cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:00:29 -0700 (PDT)
+        Wed, 31 May 2023 19:02:43 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E363E13E
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:02:38 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-bb167972cffso180910276.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:02:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1685574028; x=1688166028;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p0HZUJ9Xeqz50b7aBXXY0k1OB628If4tjQVlpNYXbrg=;
-        b=c8ZnTjaDbmcWq232e1fAz87Ax0uKnggDk315cWcJWO7m03O4hnSMc/qW+z614a/wp7
-         US4EIJHOEIj2moCfN3Sugp1Xc5F3Q7qNCigyjQAxHFG90WvN29ABQDJbFcZfFFKMYA7a
-         XEQfUrG5eOsmFFkkl4gbleMC3rT9/fPoVa6LcSkb27skfJCl7HABL68aXIqeGwrb0fws
-         X5wHH8VprVcsyfyT6ffZIfbEV88bobWh6E6Mko4F0gYRtVfo7plEO/KGNp/VxdkUIJ6m
-         VZUnFRR1vwZuFWgR3q9qY8jdjY3Wnurq6GL2d3OJ18IeV15E88JH+WJs4scrK8AlI/+c
-         k10Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685574028; x=1688166028;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1685574158; x=1688166158;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p0HZUJ9Xeqz50b7aBXXY0k1OB628If4tjQVlpNYXbrg=;
-        b=it3ySmmOXXbzjm6Go63RzAvLy/ArS/KGsVLX/U2O24IfOCTmorrk4PVhjLZg84fYzr
-         H3ZiNDNrYILfVXwKJlm4eIjgCXm4JhjxEddrgPQ5BF0nbBDpDgzU62SfeDd7l8TIY9b3
-         mOOb7CzAwIaod8an+jGCB/C+VorhHG6E7SfXICB+Cpl/PjSW67DZVQl7DPUX/qZ6MrDy
-         /kHuQreYnLNdTib/s8VE4H8j+qdLdHiaueJUsJvRD2ngpzv5LKl0FOIiIUeKDIuxTzFJ
-         DhzYORfU5GSITxODwoqjnsFdxjdOA38MI0BKOspUyaIJ8g9tO+dYoCICTntgS5Bvh8LA
-         91nw==
-X-Gm-Message-State: AC+VfDzil+7vlAfjTrtmJPZDDSgPp0SBA9ZV+cG+jcZ85cFuanZ/cdBi
-        4iqdBWKfeAGpp5MIUBftYammfg==
-X-Google-Smtp-Source: ACHHUZ6Z8dVuendKvwp2Tyj/JbX1Kz/VEmTb75NYE8IZtQGpnk80VhFF8Lu8uqvpxB+QQ3TF2qQczg==
-X-Received: by 2002:a05:622a:198f:b0:3f6:c52e:21bc with SMTP id u15-20020a05622a198f00b003f6c52e21bcmr7769143qtc.19.1685574028426;
-        Wed, 31 May 2023 16:00:28 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
-        by smtp.gmail.com with ESMTPSA id jh21-20020a170903329500b001ae6fe84244sm1912225plb.243.2023.05.31.16.00.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 16:00:27 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q4Unp-006Hhv-1I;
-        Thu, 01 Jun 2023 09:00:25 +1000
-Date:   Thu, 1 Jun 2023 09:00:25 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Qi Zheng <qi.zheng@linux.dev>
-Cc:     akpm@linux-foundation.org, tkhai@ya.ru, roman.gushchin@linux.dev,
-        vbabka@suse.cz, viro@zeniv.linux.org.uk, brauner@kernel.org,
-        djwong@kernel.org, hughd@google.com, paulmck@kernel.org,
-        muchun.song@linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: Re: [PATCH 3/8] fs: move list_lru_destroy() to destroy_super_work()
-Message-ID: <ZHfRiUjiK/Z0yuUX@dread.disaster.area>
-References: <20230531095742.2480623-1-qi.zheng@linux.dev>
- <20230531095742.2480623-4-qi.zheng@linux.dev>
+        bh=0nzIRRbGx22h7W4dzVmFren/95lkctbr3Uctdnt7nnU=;
+        b=WmPDmQ1h0qMnUeHvgUMsjpTh6VPEpTtOoNQ11MIJWu8Yqw0fd3oAGLpJdpSMotScGS
+         spn0YANEwG/lKK1g4Gi1omZBv815jXYv6S6kCYbkEuBs2j/MYKV3FUNEHcvO7f+QbHQM
+         Z8eo/LSR+Uy2F4fCrZWf5thKAUw2VrOtPnSl4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685574158; x=1688166158;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0nzIRRbGx22h7W4dzVmFren/95lkctbr3Uctdnt7nnU=;
+        b=CS78jpKWIfZyL91HVzKnSIlDIu1G3SJbk9xutJH+5NlRrhCplwJjUZ1hfAKQJwPrYX
+         pTXsniOf7ODSlxa5h8iUvWVRnPi69UqBcFeqEaioSSKhWbL6TAsqlkjfNYSwzN0rzVoH
+         7oJ6vv7XjOXBjjA5BSw7Rpxby0dqJlAyFH+yitOpz9kAAl4BksyxyO1zDCl/FsebUya+
+         whS39lCCOFRQcWbDXXYp84kUJHFjqZP1lWwAQMNFK97SgP2+8e4XdeVcpVVj+OdCbYf2
+         A9hkElyQnm4P9wf3feM4yoM4TY1r3VM0tbSKUHUt6/BGlMB1I2GOhZvRbORkAHUIPJyS
+         uSUw==
+X-Gm-Message-State: AC+VfDzDVyaTUBGMsFd+Vw0C1DWwVH5GUnxis2kkeXal0DMMiQkVLjI/
+        /+S5KEXZZr5NzvDxtlcpjbbMrGVtaKxuidnPYPKvZw==
+X-Google-Smtp-Source: ACHHUZ5hYf4p5U4e13Z1TleOH6isd0dp1HozTXSttchtojblNVlRPE54CQdz6YsI5G/k0FTvb1SR8akrNc+ZPON09N4=
+X-Received: by 2002:a25:7303:0:b0:bab:ab4a:83e0 with SMTP id
+ o3-20020a257303000000b00babab4a83e0mr7718310ybc.26.1685574158132; Wed, 31 May
+ 2023 16:02:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531095742.2480623-4-qi.zheng@linux.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230515130553.2311248-1-jeffxu@chromium.org> <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
+ <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
+ <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com> <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
+ <d8f2d5c2-6650-c2a6-3a20-25583eee579b@intel.com> <CALmYWFsnGjniVseJKuhKO6eet10Onyk_C0=KNe6ZzXoCiBKZOw@mail.gmail.com>
+ <b69f6809-b483-158f-8be9-4976fad918d8@intel.com> <CALmYWFs5Vgosz2JUYWkoc4YwDbiB0tT32MFpo-y6aX4kwuoz8Q@mail.gmail.com>
+ <2b14036e-aed8-4212-bc0f-51ec4fe5a5c1@intel.com>
+In-Reply-To: <2b14036e-aed8-4212-bc0f-51ec4fe5a5c1@intel.com>
+From:   Jeff Xu <jeffxu@chromium.org>
+Date:   Wed, 31 May 2023 16:02:00 -0700
+Message-ID: <CABi2SkU9iDqpcXfPpwphEgL0-rBionphfT3+Zscq_Htx=ps+2g@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Jeff Xu <jeffxu@google.com>,
+        =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>,
+        luto@kernel.org, jorgelo@chromium.org, keescook@chromium.org,
+        groeck@chromium.org, jannh@google.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 09:57:37AM +0000, Qi Zheng wrote:
-> From: Kirill Tkhai <tkhai@ya.ru>
-> 
-> The patch makes s_dentry_lru and s_inode_lru be destroyed
-> later from the workqueue. This is preparation to split
-> unregister_shrinker(super_block::s_shrink) in two stages,
-> and to call finalize stage from destroy_super_work().
-> 
-> Note, that generic filesystem shrinker unregistration
-> is safe to be split in two stages right after this
-> patch, since super_cache_count() and super_cache_scan()
-> have a deal with s_dentry_lru and s_inode_lru only.
-> 
-> But there are two exceptions: XFS and SHMEM, which
-> define .nr_cached_objects() and .free_cached_objects()
-> callbacks. These two do not allow us to do the splitting
-> right after this patch. They touch fs-specific data,
-> which is destroyed earlier, than destroy_super_work().
-> So, we can't call unregister_shrinker_delayed_finalize()
-> from destroy_super_work() because of them, and next
-> patches make preparations to make this possible.
-> 
-> Signed-off-by: Kirill Tkhai <tkhai@ya.ru>
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> ---
->  fs/super.c | 17 +++++------------
->  1 file changed, 5 insertions(+), 12 deletions(-)
-> 
-> diff --git a/fs/super.c b/fs/super.c
-> index 8d8d68799b34..2ce4c72720f3 100644
-> --- a/fs/super.c
-> +++ b/fs/super.c
-> @@ -159,6 +159,11 @@ static void destroy_super_work(struct work_struct *work)
->  							destroy_work);
->  	int i;
->  
-> +	WARN_ON(list_lru_count(&s->s_dentry_lru));
-> +	WARN_ON(list_lru_count(&s->s_inode_lru));
-> +	list_lru_destroy(&s->s_dentry_lru);
-> +	list_lru_destroy(&s->s_inode_lru);
-> +
->  	for (i = 0; i < SB_FREEZE_LEVELS; i++)
->  		percpu_free_rwsem(&s->s_writers.rw_sem[i]);
->  	kfree(s);
-> @@ -177,8 +182,6 @@ static void destroy_unused_super(struct super_block *s)
->  	if (!s)
->  		return;
->  	up_write(&s->s_umount);
-> -	list_lru_destroy(&s->s_dentry_lru);
-> -	list_lru_destroy(&s->s_inode_lru);
->  	security_sb_free(s);
->  	put_user_ns(s->s_user_ns);
->  	kfree(s->s_subtype);
-> @@ -287,8 +290,6 @@ static void __put_super(struct super_block *s)
->  {
->  	if (!--s->s_count) {
->  		list_del_init(&s->s_list);
-> -		WARN_ON(s->s_dentry_lru.node);
-> -		WARN_ON(s->s_inode_lru.node);
+Hi Dave,
 
-Why are you removing the wanrings from here? Regardless of where
-we tear down the lru lists, they *must* be empty here otherwise we
-have a memory leak. Hence I don't think these warnings should be
-moved at all.
+Regarding siglongjmp:
 
-Cheers,
+On Thu, May 18, 2023 at 8:37=E2=80=AFAM Dave Hansen <dave.hansen@intel.com>=
+ wrote:
+>
+> On 5/17/23 16:48, Jeff Xu wrote:
+> > However, there are a few challenges I have not yet worked through.
+> > First, the code needs to track when the first signaling entry occurs
+> > (saving the PKRU register to the thread struct) and when it is last
+> > returned (restoring the PKRU register from the thread struct).
+>
+> Would tracking signal "depth" work in the face of things like siglongjmp?
+>
+siglongjmp is interesting, thanks for bringing this up.
 
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+With siglongjmp, the thread doesn't go back to the place where signal is
+raised, indeed, this idea of tracking the first signaling entry
+doesn't work well with siglongjmp.
+
+Thanks for your insight!
+-Jeff
+
+
+-Jeff
