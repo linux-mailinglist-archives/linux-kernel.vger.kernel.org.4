@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A28E2717DD5
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C4C717DE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235461AbjEaLPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 07:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
+        id S235544AbjEaLSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 07:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232240AbjEaLPu (ORCPT
+        with ESMTP id S235550AbjEaLSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 07:15:50 -0400
+        Wed, 31 May 2023 07:18:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5161107;
-        Wed, 31 May 2023 04:15:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7248CE49;
+        Wed, 31 May 2023 04:18:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50662639C2;
-        Wed, 31 May 2023 11:15:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B355C433EF;
-        Wed, 31 May 2023 11:15:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FC4A639D3;
+        Wed, 31 May 2023 11:18:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62899C433D2;
+        Wed, 31 May 2023 11:18:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685531748;
-        bh=5Z/ncIIcZ7JrClaUclZ6ZS2IJVWcebebdWD3/h3CjS4=;
+        s=k20201202; t=1685531888;
+        bh=Ll1/Ug8UK9hxE2OKZEPPVr1xtMG9ijS+84aoC3Gnhto=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I9qOuMTW4BKRHf8TO2UJhIzgvmVQk3fWdTT4gt7FrY1jEf+fGA0aCWbzGOrx5F9Vq
-         GQc0PZ7A2sFlJMy+q9FH1xrWVPPqbiYUZrGSOJblwsjmCU+KtDotXNKH2udP8/mSq8
-         GchTRv5iUNFL551UfzLRXYP8ShbA/ZbiySlhqYFwzZShO6+CRdEeVM+YumIMt5aRMg
-         bsnHYDcnXgQaV46kNEV3OXKGn51Pqzk9L8DaSJTqCjAX6Z7rNsFWZRJncqs+HNsyR7
-         eRVMzWqCoTpx/KaAdHOCvShbFGEYGMnR52wnIZFiGUWBSofLzNRfn+ebJxNci3ZE/n
-         E/TuKQ9mpeD6w==
-Date:   Wed, 31 May 2023 13:15:43 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     chenzhiyin <zhiyin.chen@intel.com>, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        nanhai.zou@intel.com
-Subject: Re: [PATCH] fs.h: Optimize file struct to prevent false sharing
-Message-ID: <20230531-symmetrie-absender-8e9af6834753@brauner>
-References: <20230530020626.186192-1-zhiyin.chen@intel.com>
- <20230530-wortbruch-extra-88399a74392e@brauner>
- <CAOQ4uxhAn9JOGioLwqt0W6AvS532B5KOFzanWfPOBEuYHsDPTA@mail.gmail.com>
+        b=iS5tnMhg9dv/nEvtJavi2PI+hRGUJL9Jm8c6rWsTj+N64YAzyXvPqhli6NgFz5mpD
+         HWp0Cf+CXto4sg+Vsfcu1MKS9DkNoW/I/CQ6mGKlJYogW4uBmwSZBmWmgq1UbF2D8X
+         bY3xnM43ddParzMZBUCN5LjlskkrK8aFmp3vfBbMdyvUeE51VikfvwrSZivg032J5U
+         KIzxbWJwvJhNJOAvk5ISf4a4IjZkhrVsCwaJzlfyya3VzUBLBtB1lMeSdikebo5nwN
+         f5ST+F0aWPobLZ97Rx0a+AL+bupQWbNx+WdqDxUHefA8Ps230xp2cGFZtWo7PZABFk
+         VixdoO05gRI3g==
+Date:   Wed, 31 May 2023 12:18:01 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Joy Zou <joy.zou@nxp.com>
+Cc:     ping.bai@nxp.com, lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] arm64: dts: imx93-11x11-evk: add pca9451a support
+Message-ID: <d178be98-189c-44af-a55a-e0a46747fe61@sirena.org.uk>
+References: <20230531065724.3671795-1-joy.zou@nxp.com>
+ <20230531065724.3671795-4-joy.zou@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oZr5QrGIUF584tX7"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOQ4uxhAn9JOGioLwqt0W6AvS532B5KOFzanWfPOBEuYHsDPTA@mail.gmail.com>
+In-Reply-To: <20230531065724.3671795-4-joy.zou@nxp.com>
+X-Cookie: Will Rogers never met you.
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,63 +60,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 01:02:06PM +0300, Amir Goldstein wrote:
-> On Tue, May 30, 2023 at 12:31 PM Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > On Mon, May 29, 2023 at 10:06:26PM -0400, chenzhiyin wrote:
-> > > In the syscall test of UnixBench, performance regression occurred
-> > > due to false sharing.
-> > >
-> > > The lock and atomic members, including file::f_lock, file::f_count
-> > > and file::f_pos_lock are highly contended and frequently updated
-> > > in the high-concurrency test scenarios. perf c2c indentified one
-> > > affected read access, file::f_op.
-> > > To prevent false sharing, the layout of file struct is changed as
-> > > following
-> > > (A) f_lock, f_count and f_pos_lock are put together to share the
-> > > same cache line.
-> > > (B) The read mostly members, including f_path, f_inode, f_op are
-> > > put into a separate cache line.
-> > > (C) f_mode is put together with f_count, since they are used
-> > > frequently at the same time.
-> > >
-> > > The optimization has been validated in the syscall test of
-> > > UnixBench. performance gain is 30~50%, when the number of parallel
-> > > jobs is 16.
-> > >
-> > > Signed-off-by: chenzhiyin <zhiyin.chen@intel.com>
-> > > ---
-> >
-> > Sounds interesting, but can we see the actual numbers, please?
-> > So struct file is marked with __randomize_layout which seems to make
-> > this whole reordering pointless or at least only useful if the
-> > structure randomization Kconfig is turned off. Is there any precedence
-> > to optimizing structures that are marked as randomizable?
-> 
-> Good question!
-> 
-> Also does the impressive improvement is gained only with (A)+(B)+(C)?
-> 
-> (A) and (B) make sense, but something about the claim (C) does not sit right.
-> Can you explain this claim?
-> 
-> Putting the read mostly f_mode with frequently updated f_count seems
-> counter to the goal of your patch.
-> Aren't f_mode and f_flags just as frequently accessed as f_op?
-> Shouldn't f_mode belong with the read-mostly members?
-> 
-> What am I missing?
 
-I think that f_mode will be more heavily used because it's checked
-everytime you call fget variants. For example, f_mode is used to check
-whether the file you're about to get a reference to is an O_PATH file
-and, depending on the fget variant that the caller used, denies or
-allows the caller to get a reference on that file depending on whether
-FMODE_PATH is or isn't set. So you have 
+--oZr5QrGIUF584tX7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-        if (unlikely(file->f_mode & mask))
-        if (unlikely(!get_file_rcu(file))) // this is just try to bump f_count
+On Wed, May 31, 2023 at 02:57:24PM +0800, Joy Zou wrote:
 
-everytime you call an fget variant which should be substantial. Other
-places are fdget_pos() where f_mode is also checked right after an
-fdget()...
+> +		regulators {
+> +			buck1: BUCK1 {
+> +				regulator-name = "BUCK1";
+> +				regulator-min-microvolt = <650000>;
+> +				regulator-max-microvolt = <2237500>;
+
+These look a lot like the maximum ranges the regulator supports which
+probably isn't what's safe for the board.
+
+--oZr5QrGIUF584tX7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR3LOgACgkQJNaLcl1U
+h9CB7Qf/aTpLdKql8y+xSzuuW25MV67mA2HgI8OrwDkTTq1ECN6W7MKtVrakQ1vS
+oqZxXv2rLaBL1QCF5qjHNC1uKAdTLAKk7I+G/FEM8+p2h/P/GJM6IDnHDVCt9jwG
+gq9sHtMRHPdJTI0KyONe+DUga5MwNeK7hMseanMrvX9pHXAcLqPRpbIVmZb9Q9et
+7A+0nPZL9WiPprzGQYpLKHS0Yzd7BceadlyBLOWR42ey/V0u05C1tTJdv3kWuOTw
+PrMp28GUFRozCCIjIsLHiSyJ+L5LyaAPJmutMqvRMVmz1YvdXMqe7O1uPdJrNeCx
+jyaMspcttqI1MdE7cw7HxLLuZC7SYw==
+=qi+3
+-----END PGP SIGNATURE-----
+
+--oZr5QrGIUF584tX7--
