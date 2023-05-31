@@ -2,104 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3CE718476
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0469C7184A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237553AbjEaOOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
+        id S236588AbjEaOUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237612AbjEaOOc (ORCPT
+        with ESMTP id S237638AbjEaOTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:14:32 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5031FC7;
-        Wed, 31 May 2023 07:12:08 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VA9nBN011751;
-        Wed, 31 May 2023 16:10:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=eaZXo2Ir4ywHQK0UST31328ufRxgqsWM5FuBZ6aUZdM=;
- b=gCj6QzJsktMfK+REjRxhcW5Z5s9eTH17trgiKpEAkkxoWr2z2/cX6Qxpzqe2pfjf3WcL
- 0Eo9YBe2MxlAOUg0v4HMzVA62exxI4uTCbyu9WecRnHWNaml7VeHj7hMn1hrjRsDdcgn
- v0wzrCw22NuhIQPs7KmEy/cJ4DSr/6L/UUjO1eQptmR/Q7ppVp0N9U6SFC1FQ5+ebIAc
- 6jGH8vY3skVpgk5L6DNneBjAxIy0EULhDfAa8d81ftSOdXb2B/O28PQL6PFHGnQhoTmW
- d8K7kT0gUjL8LmxWhbxnhFF1jDfFHcekySmEMeVpBqpH4TCqVl8Ts4hO9F1zgGJ8pOjy tA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qvsnp00g5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 16:10:52 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4FFBD10002A;
-        Wed, 31 May 2023 16:10:51 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 486C724B8BC;
-        Wed, 31 May 2023 16:10:51 +0200 (CEST)
-Received: from localhost (10.252.16.99) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 31 May
- 2023 16:10:51 +0200
-From:   Olivier Moysan <olivier.moysan@foss.st.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     Olivier Moysan <olivier.moysan@foss.st.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 3/3] ARM: dts: stm32: fix i2s endpoint format property for stm32mp15xx-dkx
-Date:   Wed, 31 May 2023 16:09:12 +0200
-Message-ID: <20230531140912.819373-4-olivier.moysan@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230531140912.819373-1-olivier.moysan@foss.st.com>
-References: <20230531140912.819373-1-olivier.moysan@foss.st.com>
+        Wed, 31 May 2023 10:19:49 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7891BF
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:18:47 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f3a9ad31dbso7063333e87.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:18:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1685542725; x=1688134725;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pgpyzmnbNHAseyCM+s0XsB0KjofBbxw68PBCInlqrLM=;
+        b=DFr7UXRlc6yXh90+zCA+Jj1Yz/bSk70wHg+X/lA8QnCBFTzy7b0c/H/xIsRu2qzdT5
+         y+tYbNiTRp9sojjbDybOGgsrvqVKn0YCJYcwHHjJocjHzE1bPjHbqQC/CI9EVHXhkKKL
+         L6jpBB2p/JRhVFJX8PoEQIg8ATkzch/hKUsja5omZVNfvnP5jKyQ2fwnyBCQXF+rzvOt
+         qHNIglojzigq58kiCv9HvsmuaZkf2jSeThx0hMEte54JcQw8lKPI6XG+BCYbUBudPUTo
+         GayK9LMWT+3kL7gkYSWJOxSH/3jUEoVHHKUjS2fGfKpFd5pCfYB7rtKpYmL0hVEU3GgZ
+         AevA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685542725; x=1688134725;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pgpyzmnbNHAseyCM+s0XsB0KjofBbxw68PBCInlqrLM=;
+        b=Oqp+sKXjEiVt1OD1KSxVRS4heiPxksaT3wYDJ5E6en/XU9k7MADyojVF55fsMjdsXB
+         B7CLy17+pTdhZx/ULTZMyoHFE4vsqrmcABWTl/14ncaeOTcBC3ecFakToRYGPLww7WV4
+         7XIfL/ALl0eJM3xSTFZdjdc5JLZZSKdSXltpT2uRZPaJyRPP79jC+RgHWXTMvfVabgch
+         RB7kdrgpy/gLd8eQ0cFELTIZhszNZwpT3AbNUmJUJEJR7/Hp2Ch9LaONJokaiesn1c3y
+         pLr8QzDIhquNpQgRlCvi/J+NB5CGiOlJcUYV47DLeqJODXOmHw7EOPtprDJgcoBPpw5A
+         iNkg==
+X-Gm-Message-State: AC+VfDw9AoPgcKqZwmhDJxevCdl/g62WX+ZeQ+Z2713tGGBlbKy5GTvc
+        LkDiNFwJXPvwkiyfzI5ic+yOy1MLyeB6m8EyBcc=
+X-Google-Smtp-Source: ACHHUZ6/5u1aIeEPR87Cph6/LuYqwzkXH6Ggsh21iSthCsoK8ecfPiKMDhYwuo0sJqTdGafvLc34yA==
+X-Received: by 2002:a5d:526e:0:b0:309:50e7:7c3 with SMTP id l14-20020a5d526e000000b0030950e707c3mr4408962wrc.63.1685542170038;
+        Wed, 31 May 2023 07:09:30 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id d15-20020a056000114f00b0030af72bca98sm4800839wrx.103.2023.05.31.07.09.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 07:09:29 -0700 (PDT)
+Date:   Wed, 31 May 2023 16:09:28 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 04/10] drivers: perf: Rename riscv pmu driver
+Message-ID: <20230531-49ed4c2054db0abbacd03632@orel>
+References: <20230512085321.13259-1-alexghiti@rivosinc.com>
+ <20230512085321.13259-5-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.252.16.99]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_08,2023-05-31_03,2023-05-22_02
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512085321.13259-5-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use "dai-format" to configure DAI audio format as specified in
-audio-graph-port.yaml bindings.
+On Fri, May 12, 2023 at 10:53:15AM +0200, Alexandre Ghiti wrote:
+> In addition to being more pretty, it will be useful in upcoming commits
+> to distinguish those pmu drivers from the other pmu drivers.
+> 
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  drivers/perf/riscv_pmu_legacy.c | 2 +-
+>  drivers/perf/riscv_pmu_sbi.c    | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/perf/riscv_pmu_legacy.c b/drivers/perf/riscv_pmu_legacy.c
+> index 0d8c9d8849ee..ffe09d857366 100644
+> --- a/drivers/perf/riscv_pmu_legacy.c
+> +++ b/drivers/perf/riscv_pmu_legacy.c
+> @@ -95,7 +95,7 @@ static void pmu_legacy_init(struct riscv_pmu *pmu)
+>  	pmu->ctr_clear_idx = NULL;
+>  	pmu->ctr_read = pmu_legacy_read_ctr;
+>  
+> -	perf_pmu_register(&pmu->pmu, "cpu", PERF_TYPE_RAW);
+> +	perf_pmu_register(&pmu->pmu, RISCV_PMU_LEGACY_PDEV_NAME, PERF_TYPE_RAW);
+>  }
+>  
+>  static int pmu_legacy_device_probe(struct platform_device *pdev)
+> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+> index 70cb50fd41c2..3b0ee2148054 100644
+> --- a/drivers/perf/riscv_pmu_sbi.c
+> +++ b/drivers/perf/riscv_pmu_sbi.c
+> @@ -897,7 +897,7 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto out_unregister;
+>  
+> -	ret = perf_pmu_register(&pmu->pmu, "cpu", PERF_TYPE_RAW);
+> +	ret = perf_pmu_register(&pmu->pmu, RISCV_PMU_PDEV_NAME, PERF_TYPE_RAW);
 
-Fixes: 144d1ba70548 ("ARM: dts: stm32: Adapt STM32MP157 DK boards to stm32 DT diversity")
-Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
----
- arch/arm/boot/dts/stm32mp15xx-dkx.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Should we include "sbi" in this name?
 
-diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-index a6e2e20f12fa..d9ea9d7ac256 100644
---- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-+++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-@@ -435,7 +435,7 @@ &i2s2 {
- 	i2s2_port: port {
- 		i2s2_endpoint: endpoint {
- 			remote-endpoint = <&sii9022_tx_endpoint>;
--			format = "i2s";
-+			dai-format = "i2s";
- 			mclk-fs = <256>;
- 		};
- 	};
--- 
-2.25.1
+>  	if (ret)
+>  		goto out_unregister;
+>  
+> -- 
+> 2.37.2
+> 
 
+Otherwise,
+
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
