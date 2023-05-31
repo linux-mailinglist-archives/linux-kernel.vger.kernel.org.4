@@ -2,133 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BAF2718142
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44608718117
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235519AbjEaNSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
+        id S236323AbjEaNJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233121AbjEaNSt (ORCPT
+        with ESMTP id S236353AbjEaNJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:18:49 -0400
-X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 May 2023 06:18:45 PDT
-Received: from mailgate1.uni-hannover.de (mailgate1.uni-hannover.de [130.75.2.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C841D9;
-        Wed, 31 May 2023 06:18:45 -0700 (PDT)
-Received: from lab.sra.uni-hannover.de (lab.sra.uni-hannover.de [130.75.33.87])
-        by mailgate1.uni-hannover.de (Postfix) with SMTP id C9325C04E7;
-        Wed, 31 May 2023 15:05:42 +0200 (CEST)
-Received: (nullmailer pid 94466 invoked by uid 20417);
-        Wed, 31 May 2023 13:05:42 -0000
-From:   Illia Ostapyshyn <ostapyshyn@sra.uni-hannover.de>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Illia Ostapyshyn <ostapyshyn@sra.uni-hannover.de>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nils Fuhler <nils@nilsfuhler.de>
-Subject: [PATCH] HID: input: Support devices sending Eraser without Invert
-Date:   Wed, 31 May 2023 15:03:41 +0200
-Message-Id: <20230531130340.94083-1-ostapyshyn@sra.uni-hannover.de>
-X-Mailer: git-send-email 2.30.2
+        Wed, 31 May 2023 09:09:43 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDBD12B;
+        Wed, 31 May 2023 06:09:38 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VD9Lax002204;
+        Wed, 31 May 2023 13:09:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=sMz3fBV8dPYC33/rBXj9AWmlDxb8zVk1GGTa8nX1C2Q=;
+ b=BqbYo63Hc1u0zI/frttUAReKRXg0gk8GxnjvcEETvN5uEdDYkf9w7z8yOvp/qrtmwyfW
+ YpPqCEv57vn0p/W3/O3jMu8NL9etOcGGApSXZOFnI/EF81ndrykJLi50Co2Htww9flh/
+ qhhpasMstaEW7S4aEUh1HBjxJ+VPQRwEMJ6e4RYLGEQtPvF+/Huzm4CKADKf33gDEvZm
+ UR/5l/YsQupdYi5sp7RTtRI74bg4ZDsZ2HhM2XEvzATk9qp9mxBSVX3BMU2ebHRdtbng
+ TzQg/HgW5q5zGj4dFY8IEy5DwpRwURAEABTgZ9qBRhpA8vn/anuad7vPHkb+FUBDJsgF MQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qx4y3kxvu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 13:09:37 +0000
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34VD9a6T003770;
+        Wed, 31 May 2023 13:09:36 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qx4y3kxcs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 13:09:32 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34VC61s5012669;
+        Wed, 31 May 2023 13:05:28 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
+        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3qu9g5upb5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 13:05:28 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34VD5Qkw6554346
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 31 May 2023 13:05:26 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 62A9158043;
+        Wed, 31 May 2023 13:05:26 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A12C958059;
+        Wed, 31 May 2023 13:05:25 +0000 (GMT)
+Received: from [9.61.88.233] (unknown [9.61.88.233])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 31 May 2023 13:05:25 +0000 (GMT)
+Message-ID: <64d96082-8c05-0fb8-dfdd-96ad8efa6cd8@linux.ibm.com>
+Date:   Wed, 31 May 2023 09:05:25 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/3] vfio: ap: realize the VFIO_DEVICE_GET_IRQ_INFO ioctl
+Content-Language: en-US
+To:     =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clegoate@redhat.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     jjherne@linux.ibm.com, pasic@linux.ibm.com, farman@linux.ibm.com,
+        mjrosato@linux.ibm.com, alex.williamson@redhat.com,
+        borntraeger@linux.ibm.com
+References: <20230530223538.279198-1-akrowiak@linux.ibm.com>
+ <20230530223538.279198-2-akrowiak@linux.ibm.com>
+ <ee46966a-920a-37f6-9554-b2b10565cd58@redhat.com>
+From:   Anthony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <ee46966a-920a-37f6-9554-b2b10565cd58@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at mailgate1
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3RBfMaAZAUFoEmKC1LkL4tw7WHS7K3Gw
+X-Proofpoint-ORIG-GUID: QtVqwoq2wQHB85KJRhZSvUA9fXwzf9Lj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_08,2023-05-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ malwarescore=0 adultscore=0 phishscore=0 priorityscore=1501
+ mlxlogscore=850 clxscore=1015 spamscore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305310112
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some digitizers (notably XP-Pen Artist 24) do not report the Invert
-usage when erasing.  This causes the device to be permanently stuck with
-the BTN_TOOL_RUBBER tool after sending Eraser, as Invert is the only
-usage that can release the tool.  In this state, Touch and Inrange are
-no longer reported to userspace, rendering the pen unusable.
 
-Prior to commit 87562fcd1342 ("HID: input: remove the need for
-HID_QUIRK_INVERT"), BTN_TOOL_RUBBER was never set and Eraser events were
-simply translated into BTN_TOUCH without causing an inconsistent state.
 
-Introduce HID_QUIRK_NOINVERT for such digitizers and detect them during
-hidinput_configure_usage().  This quirk causes the tool to be released
-as soon as Eraser is reported as not set.  Set BTN_TOOL_RUBBER in
-input->keybit when mapping Eraser.
+On 5/31/23 8:54 AM, Cédric Le Goater wrote:
+> Reviewed-by: Cédric Le Goater <clg@redhat.com>
 
-Fixes: 87562fcd1342 ("HID: input: remove the need for HID_QUIRK_INVERT")
-Co-developed-by: Nils Fuhler <nils@nilsfuhler.de>
-Signed-off-by: Nils Fuhler <nils@nilsfuhler.de>
-Signed-off-by: Illia Ostapyshyn <ostapyshyn@sra.uni-hannover.de>
----
-We were wondering about the reason to keep quirk bits reserved for
-backward compatibility.  Is it because of dynamic quirks at module load
-time?  In that case, it could be reasonable to revive bit 0 for this
-purpose as it was overwritten in hidinput_hid_event() anyway.
----
- drivers/hid/hid-input.c | 18 ++++++++++++++++--
- include/linux/hid.h     |  1 +
- 2 files changed, 17 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-index a1d2690a1a0d..c443f78287df 100644
---- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -988,6 +988,7 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
- 			return;
- 
- 		case 0x3c: /* Invert */
-+			device->quirks &= ~HID_QUIRK_NOINVERT;
- 			map_key_clear(BTN_TOOL_RUBBER);
- 			break;
- 
-@@ -1013,9 +1014,13 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
- 		case 0x45: /* ERASER */
- 			/*
- 			 * This event is reported when eraser tip touches the surface.
--			 * Actual eraser (BTN_TOOL_RUBBER) is set by Invert usage when
--			 * tool gets in proximity.
-+			 * Actual eraser (BTN_TOOL_RUBBER) is set and released either
-+			 * by Invert if tool reports proximity or by Eraser directly.
- 			 */
-+			if (!test_bit(BTN_TOOL_RUBBER, input->keybit)) {
-+				device->quirks |= HID_QUIRK_NOINVERT;
-+				set_bit(BTN_TOOL_RUBBER, input->keybit);
-+			}
- 			map_key_clear(BTN_TOUCH);
- 			break;
- 
-@@ -1579,6 +1584,15 @@ void hidinput_hid_event(struct hid_device *hid, struct hid_field *field, struct
- 		else if (report->tool != BTN_TOOL_RUBBER)
- 			/* value is off, tool is not rubber, ignore */
- 			return;
-+		else if (*quirks & HID_QUIRK_NOINVERT &&
-+			 !test_bit(BTN_TOUCH, input->key)) {
-+			/*
-+			 * There is no invert to release the tool, let hid_input
-+			 * send BTN_TOUCH with scancode and release the tool after.
-+			 */
-+			hid_report_release_tool(report, input, BTN_TOOL_RUBBER);
-+			return;
-+		}
- 
- 		/* let hid-input set BTN_TOUCH */
- 		break;
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index 4e4c4fe36911..7cbc10073a1f 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -360,6 +360,7 @@ struct hid_item {
- #define HID_QUIRK_NO_OUTPUT_REPORTS_ON_INTR_EP	BIT(18)
- #define HID_QUIRK_HAVE_SPECIAL_DRIVER		BIT(19)
- #define HID_QUIRK_INCREMENT_USAGE_ON_DUPLICATE	BIT(20)
-+#define HID_QUIRK_NOINVERT			BIT(21)
- #define HID_QUIRK_FULLSPEED_INTERVAL		BIT(28)
- #define HID_QUIRK_NO_INIT_REPORTS		BIT(29)
- #define HID_QUIRK_NO_IGNORE			BIT(30)
--- 
-2.30.2
-
+Thank you for the review.
