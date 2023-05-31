@@ -2,119 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224D071850D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B03718512
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236897AbjEaOfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
+        id S237001AbjEaOfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbjEaOfN (ORCPT
+        with ESMTP id S235403AbjEaOfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:35:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D68C8F;
-        Wed, 31 May 2023 07:35:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C91663CD2;
-        Wed, 31 May 2023 14:35:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB03C433EF;
-        Wed, 31 May 2023 14:35:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685543710;
-        bh=qZT1WJZg48J+Oxx7bRc/+kOKz7mgCQMjiwzmueUHij4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=y0GbVh4aPLnfifMceY828srNPevGH4vGAyBD9gAP8xXIujPIBPtDEx/mkTkbcTFmB
-         aD146SaowPJjAhdqWZWSOy/kg8PWqfcstlKk854mMhAHhCwbsQ71sK1yJnBb/DwtEX
-         MamY/jFuTB5Yw7Z9J7E0/xGskdkUMiMmB7Uk7OIE=
-Date:   Wed, 31 May 2023 15:35:08 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Jeffrey Hugo <quic_jhugo@quicinc.com>, kuba@kernel.org,
-        andersson@kernel.org, daniel@ffwll.ch, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
-Subject: Re: [PATCH] bus: mhi: host: Add userspace character interface
-Message-ID: <2023053134-unpiloted-why-0f37@gregkh>
-References: <20230522190459.13790-1-quic_jhugo@quicinc.com>
- <20230531142803.GH7968@thinkpad>
+        Wed, 31 May 2023 10:35:50 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF67595
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:35:48 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-97392066d04so880125666b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:35:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685543747; x=1688135747;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5DNFX7Iv5BdsNcaX+SkOKz/qlMLAoGqACR2i1e7fx5Q=;
+        b=gpS8KUUz0KCpJvaH9uJFLnVW0vlccxYFSznitA09vGqUbk92xEIK66b6VikU9+Q8za
+         7pjMA7/nVUoJhFaLFsTyiDwNy4y6BsmovY9vVnjUbPOtQbM+OJmFWVdoRMOVoxsEsEUY
+         7OK/DBtzLXIUOVe+RrEKnFT21uljzfDiZCFAOWGsIXzCH64efKfGtg7UWFi5GMcxLIgw
+         x5U/QzZzZAQip+Qxki/lMkaMUO3wfJiplaCjArPWHtcIWpVCtORdFM2un2sic827D7L9
+         ccqEbnU5gY04NTnHAY69o7i31x7rr02/i4LYWgYpoBVwz0cpKTU6GcGJfsuoU0rIuFYo
+         iOqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685543747; x=1688135747;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5DNFX7Iv5BdsNcaX+SkOKz/qlMLAoGqACR2i1e7fx5Q=;
+        b=ddFJIdtrz1hYOBxVMCWyZ+D02NQRBceawNS3pvQfp6EnrMjU2xYzQnLvmg3HVQzDHY
+         JJ8faVgLEbZFxy6s49LzCm0U08U6luNvvQjcAY69m7BdFnNhzxvhv+8A1fAkI8f4b1UV
+         Jhn9E6lYoCKzf5Q9BU4+ZybYbqDff7UzvuFmL1oGFlUMHJ32VbYyMNAG0j2DVb3jGW2h
+         CPrTMZxBo9JZCG/lvt5C0wnCOSLU4PLfnmkwG3amTWpaw/sTblbtUZaqh38imV08d+ug
+         DK3s+dPgwBbxgcR/X6LokheeldbUeON3AhEklINi9fMIGoPhce9Ma0HoZ75t5PEvHTNb
+         mbcQ==
+X-Gm-Message-State: AC+VfDzQzaXspNlu8IPEmkMdVprBdOsVGMCu+9Tg3c/DPYLPGDc1HlLl
+        OmouEdC1rXLWJPLGbMfWQjPU2N0MDbiSTA==
+X-Google-Smtp-Source: ACHHUZ5IhGVkVWFPusoqOBy9oBpYyaM7EwCDaWRhiHCLR2pnVvasl7mrt3O7DzhyuAwb7kJ18/uWZQ==
+X-Received: by 2002:a17:907:3e1e:b0:94e:ed5d:c864 with SMTP id hp30-20020a1709073e1e00b0094eed5dc864mr6479045ejc.19.1685543746787;
+        Wed, 31 May 2023 07:35:46 -0700 (PDT)
+Received: from epleaning.kpn (2a02-a45b-7f00-1-8e29-3835-f9f4-1d36.fixed6.kpn.net. [2a02:a45b:7f00:1:8e29:3835:f9f4:1d36])
+        by smtp.gmail.com with ESMTPSA id lf4-20020a170907174400b0096f7500502csm9120650ejc.199.2023.05.31.07.35.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 07:35:46 -0700 (PDT)
+From:   elisabeth <paniii94@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     elisabeth <paniii94@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: [PATCH] Subject: perf jit: Fix incorrect file name in DWARF line table
+Date:   Wed, 31 May 2023 16:35:33 +0200
+Message-Id: <20230531143533.196835-1-paniii94@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531142803.GH7968@thinkpad>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 07:58:03PM +0530, Manivannan Sadhasivam wrote:
-> + Jakub (who NACKed the previous submission of UCI driver)
-> Link to previous submission: https://lore.kernel.org/all/1606533966-22821-1-git-send-email-hemantk@codeaurora.org/
-> 
-> On Mon, May 22, 2023 at 01:04:59PM -0600, Jeffrey Hugo wrote:
-> > From: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
-> > 
-> > I2C, USB, and PCIe are examples of buses which have a mechanism to give
-> > userspace direct access to a device on those buses. The MHI userspace
-> > character interface (uci) is the MHI bus analogue.
-> > 
-> > The MHI bus devices are MHI channels which ferry blocks of data from one
-> > end to the other. With this simple purpose, we can define a simple
-> > interface to userspace - a character device that supports open/close/read/
-> > write/poll operations. Since bus devices can only have a single consumer
-> > we encode a whitelist of MHI channels to be exported to userspace so as
-> > to avoid conflicts.
-> > 
-> > We also make this mechanism open to any device that implements MHI.
-> > Today this includes WLAN (Wi-Fi), WWAN (4G/5G cellular), and ML/AI
-> > devices. More devices are expected in the future.
-> > 
-> > In addition to implementing the framework for uci, we include an initial
-> > usecase - the QAIC Sahara device.
-> > 
-> > Sahara is a file transfer protocol that is commonly used for two purposes
-> > when interacting with a device - transferring firmware to the device and
-> > transferring crashdumps from the device. The Sahara protocol puts the
-> > receiver of the data in control of the transfer. A firmware transfer
-> > operation would have the device requesting the specific firmware images
-> > that the device wants, and the host satisfying those requests.
-> > 
-> > In most cases, including for AIC100, Sahara is used as part of a two stage
-> > loading process. The device will boot a very limited bootloader that does
-> > the base minimum initialization and jump to the next stage. A simple, one-
-> > shot protocol like BHI is used to send the next stage bootloader to the
-> > device. This second stage bootloader contains more functionality and
-> > implements the Sahara protocol. The second stage determines from various
-> > inputs what set of runtime firmware is required to boot the device into an
-> > operational status, and requests those pieces from the host.  With those
-> > images transferred over, the device can funnly initialize.
-> > 
-> > Each AIC100 instance (currently, up to 16) in a system will create a
-> > MHI device for QAIC_SAHARA. MHI_uci will consume each of these and create
-> > a unique chardev which will be found as
-> > /dev/<mhi instance>_QAIC_SAHARA
-> > For example - /dev/mhi0_QAIC_SAHARA
-> > 
-> > An open userspace application that can consume these devices for firmware
-> > transfers is located at https://github.com/andersson/qdl
-> > 
-> > Signed-off-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
-> > [jhugo: Rename to uci, plumb to mhi, rewrite commit text]
-> > Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> 
-> The previous attempt on adding UCI driver was NACKed by Jakub. For merging this
-> patch, I need an ACK from Jakub.
+Fix an issue where an incorrect file name was added in the DWARF line table
+due to not checking the filename against the repeated name marker (/xff/0).
+This can be seen with `objdump --dwarf=line` on the ELF file after perf inject.
 
-Given that this fails the kernel robot tests, why would anyone ack it
-as-is?
+Signed-off-by: elisabeth <paniii94@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/genelf_debug.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-confused,
+diff --git a/tools/perf/util/genelf_debug.c b/tools/perf/util/genelf_debug.c
+index aa5dcc56b2ac..2928b59bb9a5 100644
+--- a/tools/perf/util/genelf_debug.c
++++ b/tools/perf/util/genelf_debug.c
+@@ -349,6 +349,7 @@ static void emit_lineno_info(struct buffer_ext *be,
+ 	 */
+ 
+ 	/* start state of the state machine we take care of */
++	char const repeated_name_marker[] = {'\xff', '\0'};
+ 	unsigned long last_vma = 0;
+ 	char const  *cur_filename = NULL;
+ 	unsigned long cur_file_idx = 0;
+@@ -363,7 +364,8 @@ static void emit_lineno_info(struct buffer_ext *be,
+ 		/*
+ 		 * check if filename changed, if so add it
+ 		 */
+-		if (!cur_filename || strcmp(cur_filename, ent->name)) {
++		if ((!cur_filename || strcmp(cur_filename, ent->name)) &&
++			memcmp(repeated_name_marker, ent->name, sizeof(repeated_name_marker)) != 0) {
+ 			emit_lne_define_filename(be, ent->name);
+ 			cur_filename = ent->name;
+ 			emit_set_file(be, ++cur_file_idx);
+-- 
+2.34.1
 
-greg k-h
