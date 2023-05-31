@@ -2,118 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4667189FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133BB7189FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbjEaTSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 15:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
+        id S229579AbjEaTSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 15:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjEaTSA (ORCPT
+        with ESMTP id S229489AbjEaTSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 15:18:00 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF6B13E
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:17:52 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64d5f65a2f7so105095b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:17:52 -0700 (PDT)
+        Wed, 31 May 2023 15:18:12 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BC5126
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:18:10 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-96f53c06babso1034294266b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:18:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685560671; x=1688152671;
+        d=linaro.org; s=google; t=1685560689; x=1688152689;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hRXn+Cy0RvW1WV+5bzVi+rN/pdYikDqitAksVBeXVYc=;
-        b=EuO9WmuuKtJgo4lBRnyvIyxTOy9aVaVtH958FX5rYCAK9ebeGpuNWy4LCDCJ7tgtwE
-         v8KWz8C1BRfePhrrRgtWbGB/097dG/fm/w8lJUKxMFBI0FG/EeQYidzpE8r2odFV7Hm8
-         0w5CGfMRo2DeXeSG7DC2/jdfyrDpf4lNY13c4wSENrakuCSZqraYIPMnDs8SGyQI8DeS
-         4YUjE1eduWUpgvu9OgQZ5D7hzQfPt6n+0xgp/TakD7BBPTVK/3AdWNF/fkis0b1E0uyj
-         f5FUSFjESXltyW69Nt/q0vdDbC2e7qiO3CaUnCTtbyPD5hy/37AsaFH8WHmP36rL3luz
-         wrUg==
+        bh=n8yZnUSUyLkwq+12ZSohTFTCzqIRJUZ2nM3Mlv8CU5Y=;
+        b=jfD6XoFfiHEkI6WEaIYim/I1vasSk7JBwLyK4bqK4cFbR1EzpJgrKmMCfMG2T7+66I
+         eW9Llzy3mxw+298elWEbeXxW3aL9FHM2KkaiElY/aP0PwzJaOdpdzKzjKdCRWlFPPo79
+         1Ba993qLQcmyLM2pyDgBcXT05a27vA/WHrnCkXEvROkoSk4OCIZDZrfFvh+dq91xiBsw
+         54J8wYpJxdGkStZv3l1ftgxsmOABW8duZRt33/F/pky5TsBbkgODNRf4LNtlGg7O8DDj
+         8+N9LbG+N8V1lWuYI3pxgJsOi6uboOUv7nCQiIqsAn8b1axOFJe6mIxfXZmOPsiXSegQ
+         t0Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685560671; x=1688152671;
+        d=1e100.net; s=20221208; t=1685560689; x=1688152689;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hRXn+Cy0RvW1WV+5bzVi+rN/pdYikDqitAksVBeXVYc=;
-        b=OYi/D0YgB86HQc9HysSDgDuyzgDqu5jwFPPWFLtBR1TBiOssQewnPk6exZ7VNh1Dji
-         TwWxm0Fa5GBHCii7JSuEXQbixXbvtjcaKS093xt8NJHsW00JIgWVykW+Ku9+zz6olrae
-         4gz7M3zyQyII/Ey6uQRSDXkhGUzR/SH8Kr9r6AVGUKpjj5zdBjrACcpaumiXebCS79Ye
-         I/fBuvrHeKu3xBNs2U5hmlODmTeGZTfHBRL+B4v87OW8dPcf7kjgeEt0/fGNsCXpzV0B
-         kkEoj+bzT+EQYBUAQIxLxrp4DHex4FAofftHTEiIjBU36fUd8TMIyTo3VzwUXd69m/4f
-         ceLQ==
-X-Gm-Message-State: AC+VfDycRViJPerf4Rp6MSdSmMOF23ezhYFZLBTjTi8BID2KM7yEbfLE
-        uJgM23AJJf+dZrLS3KB2Uv8ZVJwZ69w=
-X-Google-Smtp-Source: ACHHUZ6JEfEzcQ63O6e6hUpl79Dub3S1WceBl5T0WyKTt8XrQMOJrY9Wd7ylaeB21wY4TWeCqdYChw==
-X-Received: by 2002:a05:6a00:1592:b0:64d:3fb3:9ed9 with SMTP id u18-20020a056a00159200b0064d3fb39ed9mr6519475pfk.23.1685560671394;
-        Wed, 31 May 2023 12:17:51 -0700 (PDT)
-Received: from ?IPV6:2001:df0:0:200c:e888:4048:539d:b33c? ([2001:df0:0:200c:e888:4048:539d:b33c])
-        by smtp.gmail.com with ESMTPSA id z16-20020aa785d0000000b0063b806b111csm3627068pfn.169.2023.05.31.12.17.48
+        bh=n8yZnUSUyLkwq+12ZSohTFTCzqIRJUZ2nM3Mlv8CU5Y=;
+        b=aYQeT+OuZ1VqFVcUyYHuWYxlFQb6KJgiRZFYDtPC5U3CWnfipt4uZ/2jOOkbW2uLxY
+         aoIXuPq4UPCGbJNLvMCpRnNGZtLhBLo9gx6mmUxQ8Cmsl3isUsTpGqfFtd50upol6iky
+         P84zNIUadIKagc0BLasUOQ+tNJn4QqkzYPE28im90WzbZGSs9/dSKkB5uJwZmdx4vSju
+         SP/n23L1+MejRO5JXEVQEyfwtYRvYlxcnMusZypW3EbyXZvpPEdIz0GzL5wQ4mmuIcJ0
+         OzT9UiaP11Th5UfAvCM7zn62QoNhzGmhsv+o9hqx4WQCdCk9URitXZerIU5wVyWXgHjF
+         yU2A==
+X-Gm-Message-State: AC+VfDxhSx3nQPqqxpIZseKFbKyftoU5eHs5EhX8XggI+qwG7TGnHcfm
+        f2idAbxLI32UTMKoqAVDsgvWKg==
+X-Google-Smtp-Source: ACHHUZ5gK/WE6u0PV2dcnqH5U9LEV1u5gmQFRpnBznnE0qZHTuxx3M0czajnS24w4LjSg6uOfAD9Uw==
+X-Received: by 2002:a17:906:5d10:b0:969:813c:9868 with SMTP id g16-20020a1709065d1000b00969813c9868mr5844763ejt.18.1685560689407;
+        Wed, 31 May 2023 12:18:09 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id qw23-20020a170906fcb700b0096f71ace804sm9491344ejb.99.2023.05.31.12.18.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 12:17:50 -0700 (PDT)
-Message-ID: <1806cc8f-f119-a1e6-230d-03b45e182efa@gmail.com>
-Date:   Thu, 1 Jun 2023 07:17:45 +1200
+        Wed, 31 May 2023 12:18:08 -0700 (PDT)
+Message-ID: <ce7366d0-616d-f5f4-56be-714e65a0a96e@linaro.org>
+Date:   Wed, 31 May 2023 21:18:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH] MAINTAINERS: Exclude m68k-only drivers from powerpc entry
+Subject: Re: [PATCH net-next v5 2/6] dt-bindings: net: Brcm ASP 2.0 Ethernet
+ controller
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-m68k@lists.linux-m68k.org,
-        linux-kernel@vger.kernel.org, Finn Thain <fthain@linux-m68k.org>
-References: <20230531125023.1121060-1-mpe@ellerman.id.au>
- <CAMuHMdUbVmjcYyXmparBm6pQwu3q7HpTKsKfi_aAHGOSX97MUw@mail.gmail.com>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-In-Reply-To: <CAMuHMdUbVmjcYyXmparBm6pQwu3q7HpTKsKfi_aAHGOSX97MUw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Justin Chen <justin.chen@broadcom.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     florian.fainelli@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, opendmb@gmail.com, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux@armlinux.org.uk,
+        richardcochran@gmail.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, simon.horman@corigine.com
+References: <1684969313-35503-1-git-send-email-justin.chen@broadcom.com>
+ <1684969313-35503-3-git-send-email-justin.chen@broadcom.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1684969313-35503-3-git-send-email-justin.chen@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On 25/05/2023 01:01, Justin Chen wrote:
+> From: Florian Fainelli <florian.fainelli@broadcom.com>
+> 
+> Add a binding document for the Broadcom ASP 2.0 Ethernet
+> controller.
+> 
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> Signed-off-by: Justin Chen <justin.chen@broadcom.com>
+> ---
+> v5
+> 	- Fix compatible string yaml format to properly capture what we want
+> 
+> v4
+>         - Adjust compatible string example to reference SoC and HW ver
+> 
+> v3
+>         - Minor formatting issues
+>         - Change channel prop to brcm,channel for vendor specific format
+>         - Removed redundant v2.0 from compat string
+>         - Fix ranges field
+> 
+> v2
+>         - Minor formatting issues
+> 
+>  .../devicetree/bindings/net/brcm,asp-v2.0.yaml     | 149 +++++++++++++++++++++
+>  1 file changed, 149 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+> new file mode 100644
+> index 000000000000..c4cd24492bfd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+> @@ -0,0 +1,149 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/brcm,asp-v2.0.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom ASP 2.0 Ethernet controller
+> +
+> +maintainers:
+> +  - Justin Chen <justin.chen@broadcom.com>
+> +  - Florian Fainelli <florian.fainelli@broadcom.com>
+> +
+> +description: Broadcom Ethernet controller first introduced with 72165
+> +
+> +properties:
+> +  '#address-cells':
 
-On 1/06/23 00:59, Geert Uytterhoeven wrote:
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -11916,6 +11916,8 @@ L:      linuxppc-dev@lists.ozlabs.org
->>   S:     Odd Fixes
->>   F:     arch/powerpc/platforms/powermac/
->>   F:     drivers/macintosh/
->> +X:     drivers/macintosh/adb-iop.c
->> +X:     drivers/macintosh/via-macii.c
->>
->>   LINUX FOR POWERPC (32-BIT AND 64-BIT)
->>   M:     Michael Ellerman <mpe@ellerman.id.au>
-> LGTM, as there are already entries for these two files under
-> "M68K ON APPLE MACINTOSH".
-> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
->
-> Which leads us to a related topic: Is Joshua still around?  Should Finn
-> be added or replace Joshua in the "M68K ON APPLE MACINTOSH" entry?
+Judging by more comments, there will be a v6, thus please also use
+consistent quotes - either ' or ".
 
-Add Finn, at the very least (if he's agreed). Haven't seen mail from 
-Joshua in the past 13 years myself.
+> +    const: 1
+> +  '#size-cells':
+> +    const: 1
+> +
+> +  compatible:
 
-Cheers,
+As Conor pointed out, compatible is always first.
 
-     Michael
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm74165-asp
+> +          - const: brcm,asp-v2.1
+> +      - items:
+> +          - enum:
+> +              - brcm,bcm72165-asp
+> +          - const: brcm,asp-v2.0
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  ranges: true
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    items:
+> +      - description: RX/TX interrupt
+> +      - description: Port 0 Wake-on-LAN
+> +      - description: Port 1 Wake-on-LAN
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  ethernet-ports:
+> +    type: object
+> +    properties:
+> +      '#address-cells':
+> +        const: 1
+> +      '#size-cells':
+> +        const: 0
+> +
+> +    patternProperties:
+> +      "^port@[0-9]+$":
+> +        type: object
+> +
+> +        $ref: ethernet-controller.yaml#
+> +
+> +        properties:
+> +          reg:
+> +            maxItems: 1
+> +            description: Port number
+> +
+> +          brcm,channel:
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            description: ASP channel number
 
->
-> Gr{oetje,eeting}s,
->
->                          Geert
->
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
+Why do you need it? reg defines it. Your description does not explain
+here much, except copying property name. Can we please avoid
+descriptions which just copy name?
+
+> +
+> +        required:
+> +          - reg
+> +          - brcm,channel
+> +
+> +    additionalProperties: false
+> +
+> +patternProperties:
+> +  "^mdio@[0-9a-f]+$":
+
+Isn't mdio a property of each ethernet port? Existing users
+(e.g.bcmgenet, owl-emac, switches) do it that way...
+
+Otherwise how do you define relation-ship? Can one mdio fit multiple ports?
+
+
+> +    type: object
+> +    $ref: brcm,unimac-mdio.yaml
+> +
+> +    description:
+> +      ASP internal UniMAC MDIO bus
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+
+
+Best regards,
+Krzysztof
+
