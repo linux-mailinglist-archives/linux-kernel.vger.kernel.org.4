@@ -2,99 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FF8717A27
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 390AE717A28
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235044AbjEaIey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
+        id S234687AbjEaIen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232570AbjEaIeh (ORCPT
+        with ESMTP id S234539AbjEaIeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:34:37 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BD0BE;
-        Wed, 31 May 2023 01:34:35 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34V5d1D5002650;
-        Wed, 31 May 2023 03:34:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=211+wVlWeP/3HAR+B+VJMtiN6UM45J+l2Sz2XbJV7oQ=;
- b=pX/EZtavXMLquh00TLBNnO/V4Ci3vEqHDeL4eB0RPzYD5FUcgLYo/sloYfULIcAQ1tBA
- F3PluRqU8ZeQ85A7OuA97pQ0ltStLpRuPgPqrk53V8mDcpv2eLIn12tinnRxNdVzX+iJ
- W4kC/59vnSL5xAm0mrWNUYa8MJLne+T061kHKP5tacYDyjqj0NAmr+UutZYM1u8RRZ6m
- 4wvwVEqO/y3hSWojX0KZlMliFDotTIgDFh6XsvYj0UXmLzZ2qF531amR597Hoouf2p3l
- tlVeOQRd5oJhLef9X/QCvgJbaL9WrlvVlsXpU1M2XEUAlxh60puusvaPSg1FJcVDDovv UA== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3que9mvft2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 03:34:04 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 31 May
- 2023 09:34:02 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 31 May 2023 09:34:02 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id AE23A11C6;
-        Wed, 31 May 2023 08:34:02 +0000 (UTC)
-Date:   Wed, 31 May 2023 08:34:02 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     <lee@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linus.walleij@linaro.org>, <vkoul@kernel.org>,
-        <robh+dt@kernel.org>, <conor+dt@kernel.org>, <lgirdwood@gmail.com>,
-        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
-        <pierre-louis.bossart@linux.intel.com>,
-        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 5/6] spi: cs42l43: Add SPI controller support
-Message-ID: <20230531083402.GF68926@ediswmail.ad.cirrus.com>
-References: <20230530122112.1314458-1-ckeepax@opensource.cirrus.com>
- <20230530122112.1314458-6-ckeepax@opensource.cirrus.com>
- <171e2054-e41c-46a5-b478-f699909c5bd7@sirena.org.uk>
+        Wed, 31 May 2023 04:34:11 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5347111F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:34:09 -0700 (PDT)
+Received: from loongson.cn (unknown [192.168.100.1])
+        by gateway (Coremail) with SMTP id _____8Bx7OqABndkd+cCAA--.2081S3;
+        Wed, 31 May 2023 16:34:08 +0800 (CST)
+Received: from [0.0.0.0] (unknown [192.168.100.1])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxGLZ+BndkMheCAA--.14780S3;
+        Wed, 31 May 2023 16:34:07 +0800 (CST)
+Subject: Re: [PATCH v3] LoongArch: Add support to clone a time namespace
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+References: <1685519761-20425-1-git-send-email-yangtiezhu@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Christian Brauner <brauner@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <526b7cdc-9d10-d213-4e98-10973483b4cd@loongson.cn>
+Date:   Wed, 31 May 2023 16:34:06 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <171e2054-e41c-46a5-b478-f699909c5bd7@sirena.org.uk>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: 5Yhc_ulsONjFQYDneXH2QsBaUlWrHPop
-X-Proofpoint-ORIG-GUID: 5Yhc_ulsONjFQYDneXH2QsBaUlWrHPop
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1685519761-20425-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8BxGLZ+BndkMheCAA--.14780S3
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7KF47CFWkAFyrJw4kGrWrAFb_yoW8CF4Dpr
+        s3Ars2kr4UGr1fWF1rJr13uwnrJan7Wr1YgF45trWxArnrAryUWr1DKrn5GFWUX3yUAry8
+        ur1kZw4vvw1kJrUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
+        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
+        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 10:30:46PM +0100, Mark Brown wrote:
-> On Tue, May 30, 2023 at 01:21:11PM +0100, Charles Keepax wrote:
-> 
-> A couple of small things:
-> 
-> > +static unsigned int cs42l43_clock_divs[16] = {
-> > +	2, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
-> > +};
-> 
-> Do we need to specify the size of the array?  I just had to count the
-> number of initialisers :(   Should probably also be const.
-> 
-> > +		for (; buf < block - (sizeof(u32) - 1); buf += sizeof(u32))
-> > +			regmap_write(regmap, CS42L43_TX_DATA, *(const u32 *)buf);
-> 
-> We're passing a byte stream through a u32 here - are you sure this is
-> endian safe?
+Hi, Tiezhu
 
-Ah shoot, yeah Andy made some comments on this that seem to have
-got lost in my mass of fixups. I will fixup for a v3.
+On 05/31/2023 03:56 PM, Tiezhu Yang wrote:
+/* snip */
+> diff --git a/arch/loongarch/include/asm/vdso/vdso.h b/arch/loongarch/include/asm/vdso/vdso.h
+> index 3b55d32..fa6049e 100644
+> --- a/arch/loongarch/include/asm/vdso/vdso.h
+> +++ b/arch/loongarch/include/asm/vdso/vdso.h
+> @@ -16,10 +16,31 @@ struct vdso_pcpu_data {
+>
+>  struct loongarch_vdso_data {
+>  	struct vdso_pcpu_data pdata[NR_CPUS];
+> -	struct vdso_data data[CS_BASES]; /* Arch-independent data */
+>  };
+>
+> -#define VDSO_DATA_SIZE PAGE_ALIGN(sizeof(struct loongarch_vdso_data))
+> +/*
+> + * The layout of vvar:
+> + *
+> + *                      high
+> + * +---------------------+--------------------------+
+> + * | loongarch vdso data | LOONGARCH_VDSO_DATA_SIZE |
+> + * +---------------------+--------------------------+
+> + * | timens vdso data    | PAGE_SIZE                |
+> + * +---------------------+--------------------------+
+> + * | generic vdso data   | PAGE_SIZE                |
+> + * +---------------------+--------------------------+
+> + *                      low
+> + */
+> +#define LOONGARCH_VDSO_DATA_SIZE PAGE_ALIGN(sizeof(struct loongarch_vdso_data))
+> +#define LOONGARCH_VDSO_DATA_PAGES (LOONGARCH_VDSO_DATA_SIZE >> PAGE_SHIFT)
 
-Thanks,
-Charles
+> +#define VVAR_SIZE (VVAR_LOONGARCH_PAGES_START * PAGE_SIZE + LOONGARCH_VDSO_DATA_SIZE)
+> +
+> +enum vvar_pages {
+> +	VVAR_GENERIC_PAGE_OFFSET,
+> +	VVAR_TIMENS_PAGE_OFFSET,
+> +	VVAR_LOONGARCH_PAGES_START,
+> +	VVAR_LOONGARCH_PAGES_END = VVAR_LOONGARCH_PAGES_START + LOONGARCH_VDSO_DATA_PAGES - 1,
+> +};
+It can also be changed as follows,
+
+enum vvar_pages {
+	VVAR_GENERIC_PAGE_OFFSET,
+	VVAR_TIMENS_PAGE_OFFSET,
+	VVAR_LOONGARCH_PAGES_START,
+	VVAR_LOONGARCH_PAGES_END = VVAR_LOONGARCH_PAGES_START + 
+LOONGARCH_VDSO_DATA_PAGES - 1,
+	VVAR_NR_PAGES,
+};
+
+#define VVAR_SIZE (VVAR_NR_PAGES << PAGE_SHIFT)
+
+Which do you think is better?
+
+Youling.
+
