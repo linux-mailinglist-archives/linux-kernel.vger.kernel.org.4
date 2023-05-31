@@ -2,152 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F51718527
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA82B71852B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237138AbjEaOka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:40:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
+        id S237166AbjEaOlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231603AbjEaOk1 (ORCPT
+        with ESMTP id S231603AbjEaOlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:40:27 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2112.outbound.protection.outlook.com [40.107.215.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D177FB2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:40:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TPtvZ3x0wZL4N61HW3mpxeP+aZiO5p7usofAwh/jl+GGlsSBPSInzBsWHCFIQPM21OhqSPdC2Bt23c/n6Zutc35NjRW0Bdc3hYNIQKb569H7eystpNZfG4Dzy3S1DOlXb1FSBUsCZvCUeCNhsrFN0RMOJcgfgTpABkM3Bi6PlrKzgzYAVbfCeiLOWZOhwlSa4j24WdEXpfGaTYzJd3JzuAcqM6znjm2wCaRL8pB7+jEiQfJwSz36ib6OX0fYMNKoJ6Dtp5GGFwypWU+U03eBPThw7HI5+DVSmEwt0wvwDfYIqbkLxxQOpRP8iP2TCy/HIWk77s4/v+46LvibUQ3sGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mjOCgHIG1448Buvp+x7QYy9EYRlMqziddbNIa/zVseo=;
- b=ccLDL5ni3SfP92+OOgPFLDRGfLVPSH9d4wIU4RDgQcc8iLDTV7bYnVY+fpdcx7yjVlBtyEF3NEsJHFW9qQzYUnhDsFBkufosWZUVWsR0wjBbHDA/4FWt4X0GhFU/bavXQeZHCYXHEGeMn7FaJx91S4mqBBwpuZIoVEz/1FpJDqmqMOOB0VCM4kebUPd3c4YglBnt2CHmFZ+tkvUyV24OU/cMh3RQKH9JiwXsr30nmEm4jcPPOmRB1sU0lFChkC5CZMGON3nGl9HjV7ewB5zv4b/qUAvMLCVCN92RFLDTwdF/HquCqHlYkYXiIpuJ6oRX+ooRfllr9umkuI33cUok0w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mjOCgHIG1448Buvp+x7QYy9EYRlMqziddbNIa/zVseo=;
- b=WwDzSIkr2nXE0vwIOer4eZ8EcEs11NzObI+/jzWzcuiLh5XqGrK3O4nHTkq5ak+6tfRYqDqslDgDYinQ4EUhYpJpuE5D09puhreCDuWhLE4ihdjQe5Z3hje+SYeWUtf2jYKmisvmzISf9BiL9ds1It13k7MtQ5ZSoCq8m0d5QWHUCfS3L7wXpIhjwHaB7NV/QjO524MbAR+04/B7I+jHHNcMlSmGMjHZc5DMJ/vxRWTeyVQNKZT9/9GVKcXjjxGdNapUE01dG3Aab3iNYocxmA76XFGI8qj1WOXis1u/10ygRp28ruIZihT/Nh4EC2kqIgW3a06ZpVl8ZQtxl1AXVQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SI2PR06MB4380.apcprd06.prod.outlook.com (2603:1096:4:13a::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Wed, 31 May
- 2023 14:40:20 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::76d6:4828:7e80:2965%3]) with mapi id 15.20.6455.020; Wed, 31 May 2023
- 14:40:19 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>, Lu Hongfei <luhongfei@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] f2fs: enable nowait async buffered writes
-Date:   Wed, 31 May 2023 22:40:06 +0800
-Message-Id: <20230531144006.7307-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2P153CA0021.APCP153.PROD.OUTLOOK.COM
- (2603:1096:4:190::20) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Wed, 31 May 2023 10:41:45 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4574198;
+        Wed, 31 May 2023 07:41:44 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VCqEki004029;
+        Wed, 31 May 2023 14:41:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=VNEJ7nV1z3BxKPdVWitfzNaoCAssTf5Gen+kqEgfdao=;
+ b=T+nOIO1MpYxyXJnwUByVC0okxb3s4dZDBfh9TpMPNRWEgZuJ4cqTzDeQwzPqeGMXmWE2
+ 7tQ294UR/NJNYOdiQXTOgsglE5N3TgLYMjJbiXlOO20ackQb4zRf9h0WDgalXDzE39kd
+ /uhn+/1UuKfWqAyqrqBhYvWQA8LSJzHzp+UXn3vzKJPJE2X/Xo3kXQeAj1epZXxrNz3a
+ hBHIXDA/n0D5qivcnbR6QutZBKsAAVKOAK33WqW4wiW5rtZKHTx8/pvex1q2rXvxQ61P
+ p1ZuUR8KsckxnOyVRMac3uy+CSkMUXJSRw5gGuBU4lyBpNMpuA5N08Iu5RWJztcpOzyz 4w== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qx1ybrwva-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 14:41:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34VEfdBg005556
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 14:41:39 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 31 May 2023 07:41:37 -0700
+From:   Prashanth K <quic_prashk@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@collabora.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Prashanth K <quic_prashk@quicinc.com>
+Subject: [PATCH v7] usb: common: usb-conn-gpio: Set last role to unknown before initial detection
+Date:   Wed, 31 May 2023 20:11:14 +0530
+Message-ID: <1685544074-17337-1-git-send-email-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB4380:EE_
-X-MS-Office365-Filtering-Correlation-Id: 55a01ab8-806f-486b-379f-08db61e4f4a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bm1aAe2amkRR8TGOzDLbcbq/Rlm8Iqg9TcedMUU7Gs41JgGXT6CZLmLyxjrsDwF3+xVlEjE8pj/pYHou8xQio7DWXxyercYrZp+7gf//nHQX7sGThhl1wsxjJF/JVp6hbujGpKnR9NnutD6mX/Y5flC9oQdcc2ORQ60z+N6LADp+ZRAaE5mJn816o6kv81rJC5BYBfT6E/QJIesia3mgPQJE/j+qkusurURf7XBRCpdBB7JTnnvXrrgo5KNSCZPGQnIBOeu4p0561kQtZ5v8Evy55DUj5sHcfsd/BrEqogVul/6TH+qKVo/4fdynkgMCMLDdIJtITD3c2YucNphzyOWIoj1DHN4sSCElqZ0UxeqhQSRQGsmB/190PtHI9NREann/odrSWxy3ZfDPPnpJztzR9zFfHqOt22em60cqUovlaMC2OZvJhFgOFLy/eC5BdwxwEoJoED3Y/wB2mQQuIFHfhlFp5Mduda/SBKG4tmsbTGOmW5GtEsgtDI6YRng3liDL8lSWRLfiJITsOHgD+TyKH43ElF8YfLDeJgujgMbpod4kwUpJ5GLODJiUyh6kYmno8+vii7H9nQKw1PJUUl7R+WGmt882w5UbadS4nGn80LSbiXFdFNGY/1fX4aiI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(376002)(396003)(346002)(136003)(451199021)(2906002)(54906003)(5660300002)(8676002)(8936002)(110136005)(316002)(26005)(41300700001)(6666004)(4326008)(66476007)(66946007)(478600001)(6486002)(36756003)(52116002)(66556008)(38350700002)(86362001)(6512007)(38100700002)(6506007)(186003)(1076003)(83380400001)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qzh6XUA2B8T2if74+PDHqI4Z+oXcJsB07xOhxS+5I/6SVmcRVMy5rcRXIg1o?=
- =?us-ascii?Q?by/NWW+At0nAgSjyTADTPGRWsdGQQpfx0fhzqIT98B/ZZy8oY3ibNQExTrYt?=
- =?us-ascii?Q?nOlHIEE4Ih/OSaoiQemCSa78ziG5ldIqTLDUbKeKMftVStiHLDW/HF3OxMGL?=
- =?us-ascii?Q?cOhDuVVsjYeX05x9LvLAVFO0YPUmQglA3Pa8iy+dORReQh5lLOuBfvQ2qC8a?=
- =?us-ascii?Q?hyFBySBoEPQ+4cyNR7EvMpJZfnOZr5vC/Pu4CRszPknRMvVyOKjGAoit7e1x?=
- =?us-ascii?Q?p2lUX1O3n1bUmYXSek8byrw1IxvqIfQBJzx7+0L1dxDPwARUANkWLvFiiHwM?=
- =?us-ascii?Q?6YEeeyaVOHfzbjiPrJuBbbLQjcwo73nzVE+KflZyCLto9RgfX60BkPdYvZNA?=
- =?us-ascii?Q?P/n/3kZAiBrGCacNhEiOoCIRg/b1/3Jyo9bMgJ95MHqhcCo5+mTmrf3sB3vt?=
- =?us-ascii?Q?9MCQwo6bzgyYhtj/WP+B5KU1UIBMmgwQNeZ2jYu58uGlR/xkgnlKLH+vm10y?=
- =?us-ascii?Q?TIqeiQ7lHxLPcbrBodvLx/lVk9Stmmd3oEStOoOm7AFusv1rx+fapb5dpDuB?=
- =?us-ascii?Q?f9FuTiWbCFab22ZPlPsUYZvKuyxtFKIocCzE9CGgxV/NGF5sMkbFCexrb9pY?=
- =?us-ascii?Q?9//8Ty+lSJC1tyABJSgg+39QochUpx1OJYfuJgK/ns1Xg+RbUVJfffBU4rBG?=
- =?us-ascii?Q?gbKOnhJVi01fj0YKHLF/CeRWRgTXuo0zsk425Ht4lan2miUsQhKGmXARPV/8?=
- =?us-ascii?Q?UiUEDGlpN1P5jaz1fDvfzeR838H9J3MKGPE4Yvu9EMgFL429guh0qQwBMs8F?=
- =?us-ascii?Q?dsWul/FvRPjeawaKFlzjHElU/s0qf5orPSngsUnRjYxPVxsbjZXkKFt54tsU?=
- =?us-ascii?Q?FgDrafDF09l/IErLwOJxoSpJUILanJgYyaJiAKE1alN+g0yDQguW5q7aFQyf?=
- =?us-ascii?Q?JPZu5K88gEvMsmN2SJakvjVSFv7jV9xpYvdqIsHXz/Fn6KKifFmCv5B4AZei?=
- =?us-ascii?Q?P+90cLeyiRHInG4Usu7kg4CR40Yo3Y/PkNL3w7qBrVyOR7jZl9iMjqdP9Id0?=
- =?us-ascii?Q?e++RPjSDQf5fOBwn49MWfrECmuh6KNWP2X0DRLCAcS90fQjzRxIZGN0gAy9t?=
- =?us-ascii?Q?hv4HOFoANsVbpPcxEk1z2B5MtkahRUKmDyd9LmPPhwZ1YFB4SVQNRcQkDDSt?=
- =?us-ascii?Q?I6q8tIAkPdNQxDulSYBhM3iGvKCRodzcpG/E4nHd0W7g0U2vUBV9nFCUGLRm?=
- =?us-ascii?Q?AEVWRu/hFLZNq2tu8RTdSOfWuLV+9TJYLJ6p34NnDRcKHJD9WEWQXCs6llYk?=
- =?us-ascii?Q?dVeW9Se/GIUFdKfsy9NTwtuK0OOmICx1ChYWhSBIvzhXTmCZXuF83XYu+Dsx?=
- =?us-ascii?Q?OJcGOBcm96zx9h3xvjeSuiOcM1qgDoKzhv+Hxk59Q0srciovDkmaj7Cm93dB?=
- =?us-ascii?Q?ebfhzxzxNdoekNzRnxM2dGG1O8T/qltF9FyE0kEVhzx6cDXNUwonmAsx5Sjd?=
- =?us-ascii?Q?idJoXdkyI25Js3wwnSYUDbceVsSWqIcZ+2KMw0WpTlKAKPGCPNMkCsIYjHOP?=
- =?us-ascii?Q?iglxd6+O2HjVnUhu60dz406kVbrFrjm+G1UH4GeM?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55a01ab8-806f-486b-379f-08db61e4f4a1
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 14:40:19.3317
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jjjXIXs4IsgMXEL+Ni2l7jE1pSQoak5KIv14gERHNGaL8S6OoMwS6GP1EGkC8xSMGV8zcZuAK5YvGI8K01H5nQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4380
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: TKJhHBHmOaiH_df4S9K-nO-1hab8p-c2
+X-Proofpoint-ORIG-GUID: TKJhHBHmOaiH_df4S9K-nO-1hab8p-c2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_10,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
+ mlxscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0 phishscore=0
+ impostorscore=0 spamscore=0 bulkscore=0 malwarescore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305310125
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds the async buffered write support to f2fs,
-the following is the relevant test data.
+Currently if we bootup a device without cable connected, then
+usb-conn-gpio won't call set_role() since last_role is same as
+current role. This happens because during probe last_role gets
+initialised to zero.
 
-iodepth      | 1    | 2    | 4    | 8    | 16   |
-before(M/s)  | 1012 | 1133 | 894  | 981  | 866  |
-after(M/s)   | 1488 | 1896 | 2081 | 2188 | 2207 |
+To avoid this, added a new constant in enum usb_role, last_role
+is set to USB_ROLE_UNKNOWN before performing initial detection.
 
-Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
+While at it, also handle default case for the usb_role switch
+in cdns3, intel-xhci-usb-role-switch & musb/jz4740 to avoid
+build warnings.
+
+Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- fs/f2fs/file.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+v7: Added default case in musb/jz4740.c & intel-xhci-usb-role-switch.c to
+    avoid build warnings.
+v6: Moved USB_ROLE_UNKNOWN towards the end of enum usb_role.
+v5: Update commit text to mention the changes made in cdns3 driver.
+v4: Added Reviewed-by tag.
+v3: Added a default case in drivers/usb/cdns3/core.c as pointed out by
+    the test robot.
+v2: Added USB_ROLE_UNKNWON to enum usb_role.
 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 23c68ee946e5..4faf2c04e325 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -546,7 +546,7 @@ static int f2fs_file_open(struct inode *inode, struct file *filp)
- 	if (err)
- 		return err;
+ drivers/usb/cdns3/core.c                       | 2 ++
+ drivers/usb/common/usb-conn-gpio.c             | 3 +++
+ drivers/usb/musb/jz4740.c                      | 2 ++
+ drivers/usb/roles/intel-xhci-usb-role-switch.c | 2 ++
+ include/linux/usb/role.h                       | 1 +
+ 5 files changed, 10 insertions(+)
+
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+index dbcdf3b..69d2921 100644
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -252,6 +252,8 @@ static enum usb_role cdns_hw_role_state_machine(struct cdns *cdns)
+ 		if (!vbus)
+ 			role = USB_ROLE_NONE;
+ 		break;
++	default:
++		break;
+ 	}
  
--	filp->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC;
-+	filp->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC | FMODE_BUF_WASYNC;
+ 	dev_dbg(cdns->dev, "role %d -> %d\n", cdns->role, role);
+diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
+index e20874c..30bdb81 100644
+--- a/drivers/usb/common/usb-conn-gpio.c
++++ b/drivers/usb/common/usb-conn-gpio.c
+@@ -257,6 +257,9 @@ static int usb_conn_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, info);
+ 	device_set_wakeup_capable(&pdev->dev, true);
  
- 	return dquot_file_open(inode, filp);
- }
-@@ -4515,9 +4515,6 @@ static ssize_t f2fs_buffered_write_iter(struct kiocb *iocb,
- 	struct inode *inode = file_inode(file);
- 	ssize_t ret;
++	/* Set last role to unknown before performing the initial detection */
++	info->last_role = USB_ROLE_UNKNOWN;
++
+ 	/* Perform initial detection */
+ 	usb_conn_queue_dwork(info, 0);
  
--	if (iocb->ki_flags & IOCB_NOWAIT)
--		return -EOPNOTSUPP;
--
- 	current->backing_dev_info = inode_to_bdi(inode);
- 	ret = generic_perform_write(iocb, from);
- 	current->backing_dev_info = NULL;
+diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
+index 5aabdd7..6d880c4 100644
+--- a/drivers/usb/musb/jz4740.c
++++ b/drivers/usb/musb/jz4740.c
+@@ -95,6 +95,8 @@ static int jz4740_musb_role_switch_set(struct usb_role_switch *sw,
+ 	case USB_ROLE_HOST:
+ 		atomic_notifier_call_chain(&phy->notifier, USB_EVENT_ID, phy);
+ 		break;
++	default:
++		break;
+ 	}
+ 
+ 	return 0;
+diff --git a/drivers/usb/roles/intel-xhci-usb-role-switch.c b/drivers/usb/roles/intel-xhci-usb-role-switch.c
+index 5c96e92..4d6a3dd 100644
+--- a/drivers/usb/roles/intel-xhci-usb-role-switch.c
++++ b/drivers/usb/roles/intel-xhci-usb-role-switch.c
+@@ -97,6 +97,8 @@ static int intel_xhci_usb_set_role(struct usb_role_switch *sw,
+ 		val |= SW_VBUS_VALID;
+ 		drd_config = DRD_CONFIG_STATIC_DEVICE;
+ 		break;
++	default:
++		break;
+ 	}
+ 	val |= SW_IDPIN_EN;
+ 	if (data->enable_sw_switch) {
+diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
+index b5deafd..65e790a 100644
+--- a/include/linux/usb/role.h
++++ b/include/linux/usb/role.h
+@@ -11,6 +11,7 @@ enum usb_role {
+ 	USB_ROLE_NONE,
+ 	USB_ROLE_HOST,
+ 	USB_ROLE_DEVICE,
++	USB_ROLE_UNKNOWN,
+ };
+ 
+ typedef int (*usb_role_switch_set_t)(struct usb_role_switch *sw,
 -- 
-2.39.0
+2.7.4
 
