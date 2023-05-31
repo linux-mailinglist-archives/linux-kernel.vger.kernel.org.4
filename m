@@ -2,156 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98488717A99
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F5C717AA1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235042AbjEaIsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34822 "EHLO
+        id S235227AbjEaItU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235002AbjEaIr7 (ORCPT
+        with ESMTP id S235235AbjEaIsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:47:59 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726B0E4D
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685522865; x=1717058865;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=/t/IRQycrRsaywMENmlH357EbeiJB8Tfnj+9vXHLpmg=;
-  b=nZ6daK5+7n5taDo2qv7G1f4qSDUdsGWspor92J188P3jEk1lFId4kc3v
-   TXDtwgmWmmyxL1Xbii20jOZfseopIxFdJhTUgKbfBKIvMDGo4KCznQXty
-   decgXQyVLezlSVIEv25/UnK8zn0jUvR6gElcsyjL3SeAJpiit9WH31rZd
-   N4olxYJ5rTb5Rm9r2mQ2BoMbi2pqhUZtd2LRZZRK7OoLMgrISrec8HGRG
-   gzZsPFuggBIkbmkObgk6rnvEpmQAyTvfdKrnpqiev4buEwjIIDguQI18d
-   IY+SEs3WpC3BeKyifPJSXyBF6ARwYlpqCyCInMk/gOzaF2+w9A8BwfYu1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="354023354"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="354023354"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 01:47:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="701025604"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="701025604"
-Received: from unknown (HELO ideak-desk) ([10.237.72.78])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 01:47:41 -0700
-Date:   Wed, 31 May 2023 11:47:40 +0300
-From:   Imre Deak <imre.deak@intel.com>
-To:     Rudi Heitbaum <rudi@heitbaum.com>
-Cc:     Dave Airlie <airlied@redhat.com>, Dave Airlie <airlied@gmail.com>,
-        intel-gfx@lists.freedesktop.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [v4,01/14] drm/i915: Fix PIPEDMC disabling for a bigjoiner
- configuration
-Message-ID: <ZHcJhs4ySOGojBvZ@ideak-desk>
-Reply-To: imre.deak@intel.com
-References: <20230510103131.1618266-2-imre.deak@intel.com>
- <20230530134907.GA8@5e905162a5a7>
+        Wed, 31 May 2023 04:48:54 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1BE125
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:48:25 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230531084821epoutp03a1cdaf3986606a1782a0bffad1c982c3~kLiXu8suZ3239232392epoutp03S
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:48:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230531084821epoutp03a1cdaf3986606a1782a0bffad1c982c3~kLiXu8suZ3239232392epoutp03S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1685522901;
+        bh=baxG0r+ENYpq+lI/FYBiiMgnvFDrHXtZq7+5iYd8pQA=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=dQiR9FnQ6W+elEKOya0d4D5rWQ8y2UVrjrskw9f36r/PkSkjB2EQWnfbilQkP7ykG
+         BY5NtLuYjAVb522SDZFQg/wbLO/6GbCsPyrTtRO1lPP8aPTNI4+g+J715GISjfdbSA
+         qmYsp2IM4NtpQLPAPEIaZHfQasx0a9WjcBeHwSuI=
+Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20230531084820epcas5p1d2dece3895cef198664d199ceef27cb2~kLiW_u3dk0967909679epcas5p1_;
+        Wed, 31 May 2023 08:48:20 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A3.E4.44881.4D907746; Wed, 31 May 2023 17:48:20 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230531084800epcas5p1c02d5a7ffcef2bb7cf626bf52beb0eee~kLiFCk88D0492504925epcas5p16;
+        Wed, 31 May 2023 08:48:00 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230531084800epsmtrp1fdad5e72796891bef08c9f54f5f6e3cd~kLiFAGqYa1155311553epsmtrp1y;
+        Wed, 31 May 2023 08:48:00 +0000 (GMT)
+X-AuditID: b6c32a4a-c47ff7000001af51-33-647709d4ec87
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7A.37.28392.0C907746; Wed, 31 May 2023 17:48:00 +0900 (KST)
+Received: from localhost.localdomain (unknown [107.109.224.44]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230531084755epsmtip1167910a1f8408e3d75b735c30e9abd8b~kLiAQ9o2Z2274722747epsmtip1J;
+        Wed, 31 May 2023 08:47:55 +0000 (GMT)
+From:   Maninder Singh <maninder1.s@samsung.com>
+To:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, thunder.leizhen@huawei.com, mcgrof@kernel.org,
+        boqun.feng@gmail.com, vincenzopalazzodev@gmail.com,
+        ojeda@kernel.org, jgross@suse.com, brauner@kernel.org,
+        michael.christie@oracle.com, samitolvanen@google.com,
+        glider@google.com, peterz@infradead.org, keescook@chromium.org,
+        stephen.s.brennan@oracle.com, alan.maguire@oracle.com,
+        pmladek@suse.com
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Maninder Singh <maninder1.s@samsung.com>,
+        Onkarnath <onkarnath.1@samsung.com>
+Subject: [PATCH v2 1/2] bpf: make defination of bpf_dump_raw_ok based on
+ CONFIG_KALLSYMS
+Date:   Wed, 31 May 2023 14:17:44 +0530
+Message-Id: <20230531084745.877337-1-maninder1.s@samsung.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230530134907.GA8@5e905162a5a7>
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sf1CTdRzH+z7Ps2c/avGI3vUVC7x1HOeKIVr2vSvCuwgfuSs6u6uL8Grn
+        Hn5cbK5NROmqDdaGGAQemtsItogYxIlOyDnZcGM1QQxleAJdSjE1JD1hCJgisT3j8r/X5/N5
+        v7/v7+d7Xx4e20jG8QoVexiVQlokIgXEz70bkpKH+SWyjZMaEo14tQSaf2DG0ez937movVOL
+        oZDPT6Kp3hmAmqxzODJMu3Dk9fdwUf3oJlTmsGHIV2fC0cBBObrprsJQwFlPot5GPYHaD7Ry
+        0EjNdYAWD41wUGtjC0C2r+9ykL/qLIaWJu5xULPtNgcNLUwRyN+ySKJFnwdDwX9nSFR9YQf6
+        +4ejYGs8bdZcIuja8jtc+rTpDy5tsRfTOt9tDn3SJqYrR4Zw2t52gKStmsM4PX19jKCrO9sA
+        3dF5maBD9vh3hDmC12RMUeFeRpXy+seCAl3TAlC6hPsqzn5LaoD1yUrA50HqJWgpm8XDHEud
+        AbDVH18JBMs8A+D4mJZgixCA7l+0nBVHm3+awzqcABpO7GdFswAeM96PDEhKAtuc3RH3GspB
+        wIsnxrFwgVN6AM0NHiKsWk3lwIkefSScoBKh9585bpiFVBq8OujB2bgEaByaj/ZXwT5jMOLF
+        l/vlXWY8fCikWvjwpv3HqCED6hvqCJZXw1v+Ti7LcXDyG/0y85a5BHbVfMl6dQD21NeRrCYd
+        Bi9ZOWENTm2AHc4Utv0cPNx/DGNzn4ZVD4IY2xdCR8MKJ0Ld6PHoE62Doenp6BVoGGpqjz7X
+        Thh0zZM1IMH02Dqmx9Yx/Z9sAXgbWMso1fJ8Rv2ycpOCKZGopXJ1sSJfsmu33A4if1ic5QB/
+        jt+VeAHGA14AebhojTBNqpbFCmXS/aWMavdHquIiRu0F63iE6BlhUlrfrlgqX7qH+YRhlIxq
+        ZYrx+HEabGtfxYvKmEGl9Yg45dzAaFeCR61dJX54Uued1KQ3b48prt5i1IjWfyXfXPpFxatl
+        eZ+mpzyPXHU3lizn+8nBM/JsFe+UZVt2bukbOecyZ56If7dBkOluRoKDR9uXFIfeHk4cuzcV
+        s+XqI4v7lcvvy7O6a2+FFNmytaK5oItfZbgBU6843H/9+jBoaCjo23fx2b0B4WbznQHPepf1
+        Pa9ampNRP9pa6LLNncJ/+1AWeKouQ1PrPHLlO3DB6rtWnjz8VhzXss3mGcoOCLoCx2cncnMz
+        C2Mebax9Ifk8NJUYcz/3ZSyd7i4wmL9P1e0syzLnSZLy3rw2UP1Zx46FD/prHYk/iQh1gTRV
+        jKvU0v8A+j2A0jIEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Rf0yMcRzH+z7Pc889xdnTYR5lF2c22jpFs6+RheEhomxW+iPHPUp153ZP
+        KfmxSkqlk0R1l+mUXXdrk+uy63eucgyli+2S/JhC5Uc/FKU7VGz+e31e7/dnnz8+BMpvxdyI
+        Y7JYRiETxwhxF+xus1Dg1eQcL/FuLRJBmzkZg99/qlH4baKbC8uNyQgcbbHgcLB5BMASzTgK
+        04frUWi2NHJhUdcamGIqQ2BLngqFj7Ok8ENDNgI7a4pw2HwjDYPlGToOtOX0AWjPtXGg7oYW
+        wLKLQxxoyW5C4K93Yxx4q+wzB1p/DGLQorXj0N5yD4G9kyM4VD4Jhh9LC4C/gFYndWD05XNf
+        uHS1qodLFxvi6NSWzxy6ssyTzrRZUdqgz8BpTdJVlB7ue4HRSqMe0LeNzzF61CDYxzvoslHC
+        xBw7wShWbzrkEpla8gPI63kJF5ry8SSgmZMJnAmK9KX0lmHONPNJE6AmO+JnvTs14fiKzfJ8
+        Suf4wJ3tjACqTrd0mnFSROlr6v50XIgF5EuMaui/w50eUDITUG/fl89szCdDqIvaTmSaMXIF
+        Zf40PuN5pB/1qv0eOnvBgyq0fv/rXamHhb0zl9E//lyVGs0B81T/Rar/omKA6MFiRs5KI6Ss
+        j3yNjIkXsWIpGyeLEB05LjWAmU97eppAnX5IZAYIAcyAIlDhAp6fmJXweRLxyURGcTxcERfD
+        sGbgTmDCRbynmQ/D+WSEOJaJZhg5o/iXIoSzWxKyJHpl7fbEDbU30yLD5hkdzGHNMutQ2ph3
+        4OaxTbkSrTK/o21Kd7+G7CvtDmUPXN9zaqf7fkNQ/9quPl82Vxmu13VPqrPPxvJrU+xR96nY
+        Z4LTb9AKXJaFVa7yf1tKPKutruh1ei+fzKvIja9+cPdl1Y7qttNng323pXVZg6SvjY9Kh3ne
+        oYd7dqqrtr56wwycd/IIPnW0EzfkuJoaFaMBX5vzEjKm0gPc0B4jwSkaX1eQHrY88gzbfk2n
+        8obi3dn8vZ09UfYOv8aKAqVbnMChidi3cL2tLiOs5op/oFdjg8BJckl2qX5uiCPQuD7kXf+o
+        tnKs5Kg9IHXLwGuT6y4hxkaKfTxRBSv+DblvRytYAwAA
+X-CMS-MailID: 20230531084800epcas5p1c02d5a7ffcef2bb7cf626bf52beb0eee
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20230531084800epcas5p1c02d5a7ffcef2bb7cf626bf52beb0eee
+References: <CGME20230531084800epcas5p1c02d5a7ffcef2bb7cf626bf52beb0eee@epcas5p1.samsung.com>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 01:49:07PM +0000, Rudi Heitbaum wrote:
-Hi Rudi,
+No functional change with this commit.
 
-Could you open a ticket at
-https://gitlab.freedesktop.org/drm/intel/-/issues/new
+As of now bpf_dump_raw_ok() is dependent on kallsyms_show_value().
+Rearranging the code to return false directly in defination of
+bpf_dump_raw_ok() based on CONFIG_KALLSYMS.
 
-attaching a dmesg log after booting with drm.debug=0xe, with the
-messages from boot-up until the issue happens?
+@reason: next patch will make kallsyms_show_value() defination
+generic and bpf_dump_raw_ok() will return true otherwise.
 
-Thanks,
-Imre
+Thus make decision based on CONFIG rather than kallsyms_show_value(),
+as bpf functionality is heavily dependent on KALLSYMS.
 
-> Hi Imre/Dave,
-> 
-> Ref: [v4,01/14] drm/i915: Fix PIPEDMC disabling for a bigjoiner configuration
->      [git pull] drm fixes for 6.4-rc4
->      drm-fixes-2023-05-26:
->      drm fixes for 6.4-rc4
-> 
-> This patch has caused a regression between 6.4-rc3 and 6.4-rc4. Other
-> tested kernels include 6.3.4 work fine. Dropping the patch allows the decode
-> playback of media via Kodi. Without dropping the patch - the media
-> starts and stutters then ceases to play.
-> 
-> There is an additional issue that 6.4-rc4 audio playback is also failing
-> (where 6.4-rc3 was fine), I have not yet tracked this down.
-> 
-> This is all on:
-> DMI: Intel(R) Client Systems NUC12WSKi7/NUC12WSBi7, BIOS WSADL357.0087.2023.0306.1931 03/06/2023
-> 12th Gen Intel(R) Core(TM) i7-1260P (family: 0x6, model: 0x9a, stepping: 0x3)
-> microcode: updated early: 0x429 -> 0x42a, date = 2023-02-14
-> 
-> Regards
-> 
-> Rudi
-> 
-> On Wed, May 10, 2023 at 01:31:18PM +0300, Imre Deak wrote:
-> > For a bigjoiner configuration display->crtc_disable() will be called
-> > first for the slave CRTCs and then for the master CRTC. However slave
-> > CRTCs will be actually disabled only after the master CRTC is disabled
-> > (from the encoder disable hooks called with the master CRTC state).
-> > Hence the slave PIPEDMCs can be disabled only after the master CRTC is
-> > disabled, make this so.
-> > 
-> > intel_encoders_post_pll_disable() must be called only for the master
-> > CRTC, as for the other two encoder disable hooks. While at it fix this
-> > up as well. This didn't cause a problem, since
-> > intel_encoders_post_pll_disable() will call the corresponding hook only
-> > for an encoder/connector connected to the given CRTC, however slave
-> > CRTCs will have no associated encoder/connector.
-> > 
-> > Fixes: 3af2ff0840be ("drm/i915: Enable a PIPEDMC whenever its corresponding pipe is enabled")
-> > Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> > Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
-> > Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-> > Signed-off-by: Imre Deak <imre.deak@intel.com>
-> > ---
-> >  drivers/gpu/drm/i915/display/intel_display.c | 12 ++++++++++--
-> >  1 file changed, 10 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu/drm/i915/display/intel_display.c
-> > index 1d5d42a408035..116fa52290b84 100644
-> > --- a/drivers/gpu/drm/i915/display/intel_display.c
-> > +++ b/drivers/gpu/drm/i915/display/intel_display.c
-> > @@ -1702,9 +1702,17 @@ static void hsw_crtc_disable(struct intel_atomic_state *state,
-> >  
-> >  	intel_disable_shared_dpll(old_crtc_state);
-> >  
-> > -	intel_encoders_post_pll_disable(state, crtc);
-> > +	if (!intel_crtc_is_bigjoiner_slave(old_crtc_state)) {
-> > +		struct intel_crtc *slave_crtc;
-> > +
-> > +		intel_encoders_post_pll_disable(state, crtc);
-> >  
-> > -	intel_dmc_disable_pipe(i915, crtc->pipe);
-> > +		intel_dmc_disable_pipe(i915, crtc->pipe);
-> > +
-> > +		for_each_intel_crtc_in_pipe_mask(&i915->drm, slave_crtc,
-> > +						 intel_crtc_bigjoiner_slave_pipes(old_crtc_state))
-> > +			intel_dmc_disable_pipe(i915, slave_crtc->pipe);
-> > +	}
-> >  }
-> >  
-> >  static void i9xx_pfit_enable(const struct intel_crtc_state *crtc_state)
+Co-developed-by: Onkarnath <onkarnath.1@samsung.com>
+Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
+Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
+---
+v1 -> v2 : made separate patches for kallsyms and bpf
+
+ include/linux/filter.h | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index bbce89937fde..1f237a3bb11a 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -923,13 +923,21 @@ bool bpf_jit_supports_kfunc_call(void);
+ bool bpf_jit_supports_far_kfunc_call(void);
+ bool bpf_helper_changes_pkt_data(void *func);
+ 
++/*
++ * Reconstruction of call-sites is dependent on kallsyms,
++ * thus make dump the same restriction.
++ */
++#ifdef CONFIG_KALLSYMS
+ static inline bool bpf_dump_raw_ok(const struct cred *cred)
+ {
+-	/* Reconstruction of call-sites is dependent on kallsyms,
+-	 * thus make dump the same restriction.
+-	 */
+ 	return kallsyms_show_value(cred);
+ }
++#else
++static inline bool bpf_dump_raw_ok(const struct cred *cred)
++{
++	return false;
++}
++#endif
+ 
+ struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
+ 				       const struct bpf_insn *patch, u32 len);
+-- 
+2.17.1
+
