@@ -2,120 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C73577184B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 214E471846B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237586AbjEaOUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        id S237597AbjEaOMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237582AbjEaOUd (ORCPT
+        with ESMTP id S237592AbjEaOM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:20:33 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769CC1987;
-        Wed, 31 May 2023 07:19:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=WMBpRHwWtTgWaFnCUH7r3dh40eaL8Z8t/6W3Qgru8Bc=; b=BKAsBA9af9V7EjGyFevCIcvY1h
-        vKSLNRIBLYUFkrTZSIZSDm2q6sz7YMIJkpn7g0226maMn7fXNKYdLyZE8LETc/yrMd9kKSmrz/uhM
-        VovV2aa7Or04RVslfqZeQIBClbFzG2OFJGM2m7O+vM2heJrRJrr+Tki72/+zQN/RBSuk=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:46714 helo=debian-acer)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q4MKB-0000Ek-DT; Wed, 31 May 2023 09:57:15 -0400
-Date:   Wed, 31 May 2023 09:57:14 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230531095714.2428a41369cd7509bc321bf7@hugovil.com>
-In-Reply-To: <CAHp75Vf35rN93sXFBU0nRZQLpUgQHR2caGC8BmHkEgPZqF=dQg@mail.gmail.com>
-References: <20230529140711.896830-1-hugo@hugovil.com>
-        <20230529140711.896830-8-hugo@hugovil.com>
-        <ZHUpWQafRPHW1RJQ@surfacebook>
-        <20230530113649.73f28b9f6ba91f17ace1e12f@hugovil.com>
-        <CAHp75Vf35rN93sXFBU0nRZQLpUgQHR2caGC8BmHkEgPZqF=dQg@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Wed, 31 May 2023 10:12:28 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD70630E0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:09:41 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-53404873a19so3492474a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685542115; x=1688134115;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0vEqY/E4kBl9Nf1zMfIIL6jodud4pGK1JF+jErJgfEs=;
+        b=k6TqpBWFY3kgumCchnSoLKDuzJoNIjmOgiWSI2Uq5X1d2ePEt1noJu/tbgvPDWj3RY
+         yJbrgTeZxf9Su+S1w/JyDansZkghP/8xEt5vkez9NA1q8J3BFQicz0pCjD+KFmAgkY6K
+         i9ny6ABrmrN2ti11Ejv6wNKbZ+EKi2w7BzMF8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685542115; x=1688134115;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0vEqY/E4kBl9Nf1zMfIIL6jodud4pGK1JF+jErJgfEs=;
+        b=SBjv/+FVAKMAtPPPAf6GUmVHPTRe4MWJDyf2a+29bMB0XAZ1M70WHUahOH28/p2oxK
+         BugWwlnYoscH0NJS+Y/6IVGwJ/vn23/TGR3Q4i4C/KKy7+xwZ6ixjrGDfUlPjBbqNZkr
+         Pu0fkLi1DW5m8W0aos6oeQ1apxLk/UYgbnONXB2VR0vVb0bpu/9ltrJo5L8VCIG5j2lk
+         xiicDN67naOVlcdDd4Oou9/9/TgZC63p3raQgChgxYHBhmpMSPJOwEnmfjQFxTNvBtet
+         gJlqvMihOMz1qPcLCfYQeVD68+0rK03DVa1Qo3Oi5cgisX/YmAM0e4LLfQ4Nsexstsr1
+         TDHg==
+X-Gm-Message-State: AC+VfDxs/UjnOpbYM4xexQ4a+ZZmC5NswGQRlO8ChicGNqQZYLzOmgl0
+        //W+D9+fW7By2deFrFZS1yb5h3xVoFO1GbQSba8=
+X-Google-Smtp-Source: ACHHUZ7xNTZj9Q0JRzEeLAGmfgjH6A93IymZV7GAS0ccrm6sU1+Hb0ksiRYge5FnnV5o/dhwqndKWw==
+X-Received: by 2002:a17:90a:7d15:b0:24d:ee34:57b6 with SMTP id g21-20020a17090a7d1500b0024dee3457b6mr4416306pjl.41.1685541528781;
+        Wed, 31 May 2023 06:58:48 -0700 (PDT)
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com. [209.85.214.172])
+        by smtp.gmail.com with ESMTPSA id j8-20020a654d48000000b0050f93a3586fsm1227541pgt.37.2023.05.31.06.58.47
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 06:58:48 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1ac65ab7432so162955ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:58:47 -0700 (PDT)
+X-Received: by 2002:a17:903:7cb:b0:1ab:2763:e003 with SMTP id
+ ko11-20020a17090307cb00b001ab2763e003mr110372plb.17.1685541527389; Wed, 31
+ May 2023 06:58:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230531134020.3383253-1-sashal@kernel.org> <20230531134020.3383253-12-sashal@kernel.org>
+In-Reply-To: <20230531134020.3383253-12-sashal@kernel.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 31 May 2023 06:58:35 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WpsV8hZBkHVbVCSkatnkGN=oMebEGykGDvaOr+2yyikQ@mail.gmail.com>
+Message-ID: <CAD=FV=WpsV8hZBkHVbVCSkatnkGN=oMebEGykGDvaOr+2yyikQ@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 6.3 12/37] irqchip/gic-v3: Disable pseudo NMIs on
+ Mediatek devices w/ firmware issues
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Julius Werner <jwerner@chromium.org>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de,
+        matthias.bgg@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v4 7/9] serial: sc16is7xx: fix regression with GPIO
- configuration
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 May 2023 00:56:57 +0300
-Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+Hi,
 
-> On Tue, May 30, 2023 at 6:36 PM Hugo Villeneuve <hugo@hugovil.com> wrote:
-> > On Tue, 30 May 2023 01:38:17 +0300
-> > andy.shevchenko@gmail.com wrote:
-> > > Mon, May 29, 2023 at 10:07:09AM -0400, Hugo Villeneuve kirjoitti:
-> 
-> ...
-> 
-> > > GENMASK()
-> >
-> > Ok done, altough even if in general I like the bit manipulation macros because they make the code easier to read/understand, I find it less obvious by using GENMASK in this case IMMO.
-> 
-> GENMASK() was introduced to increase code robustness:
-> 1) to make sure the bits mentioned are correct
-> 2) to check the bit boundary.
-> 
-> ...
-> 
-> > > > +           of_property_for_each_u32(dev->of_node, "nxp,modem-control-line-ports",
-> > > > +                                    prop, p, u) {
-> > > > +                   if (u >= devtype->nr_uart)
-> > > > +                           continue;
-> > > > +
-> > > > +                   /* Use GPIO lines as modem control lines */
-> > > > +                   if (u == 0)
-> > > > +                           mctrl_mask |= SC16IS7XX_IOCONTROL_MODEM_A_BIT;
-> > > > +                   else if (u == 1)
-> > > > +                           mctrl_mask |= SC16IS7XX_IOCONTROL_MODEM_B_BIT;
-> > > > +           }
-> > >
-> > > Can we use device properties, please?
-> >
-> > I have converted this section to use device_property_count_u32() and device_property_read_u32_array(). Is that Ok?
-> 
-> Yes, thank you!
-> 
-> > > If you think about backporting to the earlier kernels (w/o properties in use in
-> > > this driver), perhaps an additional followup for that?
-> >
-> > I am not sure what you mean by this?
-> 
-> If the device property API was not yet available for this fix being
-> backported to the old enough kernel we have to use old OF stuff. In
-> that case the device property conversion needs to be done in a
-> separate change.
+On Wed, May 31, 2023 at 6:40=E2=80=AFAM Sasha Levin <sashal@kernel.org> wro=
+te:
+>
+> From: Douglas Anderson <dianders@chromium.org>
+>
+> [ Upstream commit 44bd78dd2b8897f59b7e3963f088caadb7e4f047 ]
+>
+> Some Chromebooks with Mediatek SoCs have a problem where the firmware
+> doesn't properly save/restore certain GICR registers. Newer
+> Chromebooks should fix this issue and we may be able to do firmware
+> updates for old Chromebooks. At the moment, the only known issue with
+> these Chromebooks is that we can't enable "pseudo NMIs" since the
+> priority register can be lost. Enabling "pseudo NMIs" on Chromebooks
+> with the problematic firmware causes crashes and freezes.
+>
+> Let's detect devices with this problem and then disable "pseudo NMIs"
+> on them. We'll detect the problem by looking for the presence of the
+> "mediatek,broken-save-restore-fw" property in the GIC device tree
+> node. Any devices with fixed firmware will not have this property.
+>
+> Our detection plan works because we never bake a Chromebook's device
+> tree into firmware. Instead, device trees are always bundled with the
+> kernel. We'll update the device trees of all affected Chromebooks and
+> then we'll never enable "pseudo NMI" on a kernel that is bundled with
+> old device trees. When a firmware update is shipped that fixes this
+> issue it will know to patch the device tree to remove the property.
+>
+> In order to make this work, the quick detection mechanism of the GICv3
+> code is extended to be able to look for properties in addition to
+> looking at "compatible".
+>
+> Reviewed-by: Julius Werner <jwerner@chromium.org>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Link: https://lore.kernel.org/r/20230515131353.v2.2.I88dc0a0eb1d9d537de61=
+604cd8994ecc55c0cac1@changeid
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  drivers/irqchip/irq-gic-common.c |  8 ++++++--
+>  drivers/irqchip/irq-gic-common.h |  1 +
+>  drivers/irqchip/irq-gic-v3.c     | 20 ++++++++++++++++++++
+>  3 files changed, 27 insertions(+), 2 deletions(-)
 
-Hi,.
-ok, now I see.
+Please delay picking this across all stable versions unless until you
+can also get Marc's fix:
 
-Thank you,
-Hugo.
+https://lore.kernel.org/r/168544149933.404.717399647227994720.tip-bot2@tip-=
+bot2
+
+-Doug
