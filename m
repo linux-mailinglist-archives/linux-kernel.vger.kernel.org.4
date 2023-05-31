@@ -2,128 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23C571807B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800F7718088
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236064AbjEaM4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        id S236091AbjEaM4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbjEaM4N (ORCPT
+        with ESMTP id S236061AbjEaM4a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:56:13 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83ACAE43;
-        Wed, 31 May 2023 05:55:37 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 095FD3200344;
-        Wed, 31 May 2023 08:55:13 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 31 May 2023 08:55:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1685537713; x=1685624113; bh=TN
-        miHdZhWOkezbPkUch2xBo3I6cLpUI+xAR+spYzjUU=; b=P3ZVR313xaZq1L9ex6
-        1/B8heApIn8lIi3m/LT92rCZ7zSV0ipqrTHOSO/LPVKNif4jRuhYw5P33PVP3I7f
-        aGIQ5QtAy45a7v1j0jIWvGLrss/SKEmARHG0BD4vhOmdTY4jgDp9YYABJpkl/VsK
-        8A542RsnJZBrbWiIOxnmFOu1IiK7BbS2cMGniKUIh+Y+KU4xVUBw4THAn2Blzb8v
-        8GgKFjJezXe0f7xD1w7A2H9IrwXBrcpjp17L1jBAYnxoAGeLRKNgBxUvfzHQeTT3
-        eqYYdqA0MyBVTUqGME7INEzU9tsUindb8RzJyQHH8zbxX03j3vs5YT2S6yPg0w1J
-        kL1Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685537713; x=1685624113; bh=TNmiHdZhWOkez
-        bPkUch2xBo3I6cLpUI+xAR+spYzjUU=; b=V9+odI0IaCSY/FDVJcpaFyaxW5VJ3
-        99AB4sDFI6CFyo8AM0pvmHJYXerBcTtB8HERBvSofZ1FgZn0SzDYwf9u2t3njj76
-        sF789RmZ7o+HHVJOETxarS/J5pOvCGtvVuB8c4G609a6H4nyIZYHInIGeZ4mcl1H
-        f0UXH7UK0iXUrAvrYyKCrH4fHqU1f9CqYxni881rXKKUVscQuiK25IuxHqgFoJZz
-        hGuN+3wOhie8nr6sPNUhtyCvdAq0CY5c9D31qiZQpMYKhudKmTCyerMA4C7/0E8p
-        /CKjqeScN19zMvw0ywoAoiT2roOy9s96VCGoWWDOGcko07baKTvZ6sdMg==
-X-ME-Sender: <xms:sUN3ZH5mlIOARJn5ScOXCAiO-hGrzE5Izsq5fJZ1UZ5nXdAKLKNuuA>
-    <xme:sUN3ZM7zYmL1Q4j_x8TlV2B_WZyPDKZbnCXAkx0DKqQY6GogzArdinzPTwuJbZeHB
-    26ngIZ0f3MdF8nRbDY>
-X-ME-Received: <xmr:sUN3ZOc6dSisFmh9o142Aqo_OAxU97Z9ZVQG2RK21OMrqC_SYHEQ0vVyWJmMnG8fga-7Z81FtqzITJGMAouVwQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekledgheeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedtgfdukeeigeeuhfelheeftdfhgfegfefgudeuiefhueeuleekveetvdei
-    tddvieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:sUN3ZIIKrXCnFCu0HkDm8PbHXzBAO3FvhwV-CQcGjGArrx5tt4v3yA>
-    <xmx:sUN3ZLIJOhmSIVi2nx-SPHZv75wPrLYlGWW2PP8ky9gKQVEPN2O5DA>
-    <xmx:sUN3ZBypaq-brivOa1VpJGCp4HewVR_R1WFGqMpzh3Fm4p35JypmTQ>
-    <xmx:sUN3ZD9nAO5G58EsfdNgsV-sSZTaJj26Y3QRogr56gWwLGvn9CpHNQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 31 May 2023 08:55:12 -0400 (EDT)
-Date:   Wed, 31 May 2023 14:55:10 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Benjamin Berg <benjamin.berg@intel.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH] kunit: Fix obsolete name in documentation headers
- (func->action)
-Message-ID: <3fv3ev3nuxzr7bej7beglrm6qoptyvzngbzdmwpjpobdhmc45v@4utejosaezjk>
-References: <20230530075557.1558422-2-davidgow@google.com>
+        Wed, 31 May 2023 08:56:30 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED841BD;
+        Wed, 31 May 2023 05:56:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=vvrMwE8BjC38RZj2WyqFyAbLSvr7o9QLGri8y3hsVWs=; b=LsMvMjodlrdIcQmqStvcRmEg6a
+        p73uxa7uiSXgEqFhriiibCgnB2FhMDBVH4F2qp9/qRc6mLk+JyM9MYIWiIlxZ2DHT6qWm5atTLfMa
+        OpHvyzf9lvD6g/hEdnuHMYAEmiyKQv+bsfJgYbLtvSXhFxarfCZfT1PX2QA+FFcehUhxw0W+GeQVN
+        NffZr8VRBrS0QaOyFJ5XBR/nAoMFXL4+YlFyQJFt994UVHC1i9Y0g0P9eAmgLbTpU3RmOQq2Ym4T7
+        wdFYC75VgJy0nGYxtTNHpqZ8CPmOZWDdNL1ZsMTtTGI7eHwh40D1mxHOHRxxzeUxn8pqODLBK0yHT
+        1GqWLJxw==;
+Received: from [2001:4bb8:182:6d06:2e49:a56:513a:92ee] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q4LMZ-00HQu7-1g;
+        Wed, 31 May 2023 12:55:40 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Joern Engel <joern@lazybastard.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Loic Poulain <loic.poulain@linaro.org>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: fix the name_to_dev_t mess v2
+Date:   Wed, 31 May 2023 14:55:11 +0200
+Message-Id: <20230531125535.676098-1-hch@lst.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ssq2ktuf4cygn225"
-Content-Disposition: inline
-In-Reply-To: <20230530075557.1558422-2-davidgow@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all,
 
---ssq2ktuf4cygn225
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this series tries to sort out accumulated mess around the name_to_dev_t
+function.  This function is intended to allow looking up the dev_t of a
+block device based on a name string before the root file systems is
+mounted and thus the normal path based lookup is available.
 
-On Tue, May 30, 2023 at 03:55:57PM +0800, David Gow wrote:
-> The kunit_add_action() and related functions named the kunit_action_t
-> parameter 'func' in early drafts, which was later renamed to 'action'
-> However, the doc comments were not properly updated.
->=20
-> Fix these to avoid confusion and 'make htmldocs' warnings.
->=20
-> Fixes: b9dce8a1ed3e ("kunit: Add kunit_add_action() to defer a call until=
- test exit")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Closes: https://lore.kernel.org/lkml/20230530151840.16a56460@canb.auug.or=
-g.au/
-> Signed-off-by: David Gow <davidgow@google.com>
+Unfortunately a few years ago it managed to get exported and used in
+non-init contexts, leading to the something looking like a path name
+also beeing lookuped up by a different and potential dangerous
+algorithm.
 
-Reviewed-by: Maxime Ripard <mripard@kernel.org>
+This series does a fair amount of refactoring and finally ends up with
+the renamed and improved name_to_dev_t only beeing available for the
+early init code again.
 
-Maxime
+The series is against Jens' for-6.5/block tree but probably applies
+against current mainline just fine as well.
 
---ssq2ktuf4cygn225
-Content-Type: application/pgp-signature; name="signature.asc"
+A git tree is also available here:
 
------BEGIN PGP SIGNATURE-----
+    git://git.infradead.org/users/hch/block.git blk-init-cleanup
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZHdDrgAKCRDj7w1vZxhR
-xRahAP9tI8OwmLz3baTjIvsQJ7UwE6w3c/Ei+8UNZpftVn1mEgD9GTT+1unOzR5k
-zLgUGlh52rfTHKqhPj7y8I/0pcjECAQ=
-=4uQN
------END PGP SIGNATURE-----
+Gitweb:
 
---ssq2ktuf4cygn225--
+    http://git.infradead.org/users/hch/block.git/shortlog/refs/heads/blk-init-cleanup
+
+Changes since v1:
+ - really propagate the actual error in dm_get_device
+ - improve the documentation in kernel-parameters.txt
+ - spelling fixes
+
+Diffstat:
