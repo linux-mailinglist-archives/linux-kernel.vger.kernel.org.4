@@ -2,192 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94672717477
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 05:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FDF717479
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 05:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234151AbjEaDpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 23:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
+        id S233820AbjEaDrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 23:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjEaDpa (ORCPT
+        with ESMTP id S229904AbjEaDrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 23:45:30 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232B7FC
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 20:45:29 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b011cffef2so46382595ad.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 20:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685504728; x=1688096728;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mWRStRzhjvxvXtPIyOg18FX2uAjXK3LmODKkFrfOfw0=;
-        b=fPPupQpDJe/KmEnc2WnZF8g5GpmYFL7szIinLEYV32rvUtsaCDyhhmM6HS+5Vg8tAq
-         Ju7LCyeMJgyyKq5XB/Rn13NFszVCnQwEFVEur0eXcG+4sUhRHce3QetMa3fyv7P1lv7z
-         N+u1plwb+KEfc8mRjeNx98MhNSHTGvoxu2f/w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685504728; x=1688096728;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mWRStRzhjvxvXtPIyOg18FX2uAjXK3LmODKkFrfOfw0=;
-        b=a+2ed9rS+jCO+DFCKof4UP4LxKh8/TdM0d1mjpv/riPpmPUkc+EakjNdWltF4NuDsd
-         SqPu1LhfDKwV78AafmDYyLz3LUAuG7YkffQyyw6m7gHyCpd4NahgGOoRptn/24+Zk75C
-         uX96mLB+5esXIejRxS/linw9aaDBZfr78DBOrWgsmhpG0wltOq86rfDc33RYRieHd3+1
-         PUj9VmpZIJhOkQOBdwj3DNOKTwS43vxWcIAJy15hma516tyVHSq4aMP993LY0P8aLsiP
-         twJ3WDMnHFOZexj7A08VFK6rGoYAYFQW/BdDwj+FaZmjD7azliWl5i/BZtwt8WjwcMiV
-         edQA==
-X-Gm-Message-State: AC+VfDywh18lOZ2ItRSL6rH8rROIl6M6J9Ws15abOGak5emQPBx7e28E
-        T/IYV0ALO3qUkfm50XOuclEVTg==
-X-Google-Smtp-Source: ACHHUZ43/DN6lEy8Zrzn0r3E1bhpKKnF7A8bfa3e3OXdy+1nCr5lMGZ3vkOrHeG/LMfIYwjX5e1AQw==
-X-Received: by 2002:a17:902:a508:b0:1b0:31a8:2f74 with SMTP id s8-20020a170902a50800b001b031a82f74mr3379208plq.68.1685504728555;
-        Tue, 30 May 2023 20:45:28 -0700 (PDT)
-Received: from localhost (21.160.199.104.bc.googleusercontent.com. [104.199.160.21])
-        by smtp.gmail.com with UTF8SMTPSA id e7-20020a17090301c700b001b042e8ed77sm72787plh.281.2023.05.30.20.45.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 20:45:28 -0700 (PDT)
-From:   Ying Hsu <yinghsu@chromium.org>
-To:     linux-bluetooth@vger.kernel.org
-Cc:     chromeos-bluetooth-upstreaming@chromium.org,
-        Ying Hsu <yinghsu@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH v5] Bluetooth: Fix l2cap_disconnect_req deadlock
-Date:   Wed, 31 May 2023 03:44:56 +0000
-Message-ID: <20230531034522.375889-1-yinghsu@chromium.org>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Tue, 30 May 2023 23:47:00 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340AAEC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 20:46:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685504819; x=1717040819;
+  h=date:from:to:cc:subject:message-id;
+  bh=m8z8OxuJvu51YoN7GiS7m1Tho+HsLXuIo0wrFlMH8pY=;
+  b=QKOv4UdjnRDNYQ8UOKRtu3HcoeEZk45aQuy9vXK892oY8KUmodz4HJGA
+   FFkpB3pQYslvywAuogg0rEPcQoZnhWUnC8OppYhSWRgTtXGBPCdMdtJ1Y
+   dpkD7c7cLAh/ivtpwxf9uvqC/X5Zbl8Xak+GDPwTTsZBKBXuGu8V5E5R6
+   OkljWXuYE1HTVSau2RmyEpHnrjBQtccF1MSRcNBlye9JU35pEv5mkg0Uq
+   erP8Xv7M03I8ScySDQkJH/m86ia6LZDNeNI52D3pvjXGKIutf0iwXj/Up
+   h119AzTTW8jocG1ln1t//ta3IfRHkpiifdvUtxLXDM2GlTQc93keUbnbl
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="339718465"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="339718465"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 20:46:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="831056022"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="831056022"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 30 May 2023 20:46:57 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4CnY-00013f-2o;
+        Wed, 31 May 2023 03:46:56 +0000
+Date:   Wed, 31 May 2023 11:46:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:smp/core] BUILD SUCCESS
+ 33e20b07bec4991c169e3c6ff28c2126583724fc
+Message-ID: <20230531034620.emDIi%lkp@intel.com>
+User-Agent: s-nail v14.9.24
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-L2CAP assumes that the locks conn->chan_lock and chan->lock are
-acquired in the order conn->chan_lock, chan->lock to avoid
-potential deadlock.
-For example, l2sock_shutdown acquires these locks in the order:
-  mutex_lock(&conn->chan_lock)
-  l2cap_chan_lock(chan)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git smp/core
+branch HEAD: 33e20b07bec4991c169e3c6ff28c2126583724fc  x86/realmode: Make stack lock work in trampoline_compat()
 
-However, l2cap_disconnect_req acquires chan->lock in
-l2cap_get_chan_by_scid first and then acquires conn->chan_lock
-before calling l2cap_chan_del. This means that these locks are
-acquired in unexpected order, which leads to potential deadlock:
-  l2cap_chan_lock(c)
-  mutex_lock(&conn->chan_lock)
+elapsed time: 926m
 
-This patch releases chan->lock before acquiring the conn_chan_lock
-to avoid the potential deadlock.
+configs tested: 40
+configs skipped: 2
 
-Fixes: ("a2a9339e1c9d Bluetooth: L2CAP: Fix use-after-free in l2cap_disconnect_{req,rsp}")
-Signed-off-by: Ying Hsu <yinghsu@chromium.org>
----
-This commit has been tested on a Chromebook device.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Changes in v5:
-- Fixing the merge conflict by removing l2cap_del_chan_by_scid.
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                               rhel-8.3   gcc  
 
-Changes in v4:
-- Using l2cap_get_chan_by_scid to avoid repeated code.
-- Releasing chan->lock before acquiring conn->chan_lock.
-
-Changes in v3:
-- Adding the fixes tag.
-
-Changes in v2:
-- Adding the prefix "Bluetooth:" to subject line.
-
- net/bluetooth/l2cap_core.c | 37 +++++++++++++++----------------------
- 1 file changed, 15 insertions(+), 22 deletions(-)
-
-diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-index 036bc147f4de..16ac4aac0638 100644
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -4634,26 +4634,6 @@ static inline int l2cap_config_rsp(struct l2cap_conn *conn,
- 	return err;
- }
- 
--static struct l2cap_chan *l2cap_del_chan_by_scid(struct l2cap_conn *conn,
--						 u16 cid, int err)
--{
--	struct l2cap_chan *c;
--
--	mutex_lock(&conn->chan_lock);
--	c = __l2cap_get_chan_by_scid(conn, cid);
--	if (c) {
--		/* Only lock if chan reference is not 0 */
--		c = l2cap_chan_hold_unless_zero(c);
--		if (c) {
--			l2cap_chan_lock(c);
--			l2cap_chan_del(c, err);
--		}
--	}
--	mutex_unlock(&conn->chan_lock);
--
--	return c;
--}
--
- static inline int l2cap_disconnect_req(struct l2cap_conn *conn,
- 				       struct l2cap_cmd_hdr *cmd, u16 cmd_len,
- 				       u8 *data)
-@@ -4671,7 +4651,7 @@ static inline int l2cap_disconnect_req(struct l2cap_conn *conn,
- 
- 	BT_DBG("scid 0x%4.4x dcid 0x%4.4x", scid, dcid);
- 
--	chan = l2cap_del_chan_by_scid(conn, dcid, ECONNRESET);
-+	chan = l2cap_get_chan_by_scid(conn, dcid);
- 	if (!chan) {
- 		cmd_reject_invalid_cid(conn, cmd->ident, dcid, scid);
- 		return 0;
-@@ -4682,6 +4662,13 @@ static inline int l2cap_disconnect_req(struct l2cap_conn *conn,
- 	l2cap_send_cmd(conn, cmd->ident, L2CAP_DISCONN_RSP, sizeof(rsp), &rsp);
- 
- 	chan->ops->set_shutdown(chan);
-+
-+	l2cap_chan_unlock(chan);
-+	mutex_lock(&conn->chan_lock);
-+	l2cap_chan_lock(chan);
-+	l2cap_chan_del(chan, ECONNRESET);
-+	mutex_unlock(&conn->chan_lock);
-+
- 	chan->ops->close(chan);
- 
- 	l2cap_chan_unlock(chan);
-@@ -4706,7 +4693,7 @@ static inline int l2cap_disconnect_rsp(struct l2cap_conn *conn,
- 
- 	BT_DBG("dcid 0x%4.4x scid 0x%4.4x", dcid, scid);
- 
--	chan = l2cap_del_chan_by_scid(conn, scid, 0);
-+	chan = l2cap_get_chan_by_scid(conn, scid);
- 	if (!chan)
- 		return 0;
- 
-@@ -4716,6 +4703,12 @@ static inline int l2cap_disconnect_rsp(struct l2cap_conn *conn,
- 		return 0;
- 	}
- 
-+	l2cap_chan_unlock(chan);
-+	mutex_lock(&conn->chan_lock);
-+	l2cap_chan_lock(chan);
-+	l2cap_chan_del(chan, 0);
-+	mutex_unlock(&conn->chan_lock);
-+
- 	chan->ops->close(chan);
- 
- 	l2cap_chan_unlock(chan);
 -- 
-2.41.0.rc0.172.g3f132b7071-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
