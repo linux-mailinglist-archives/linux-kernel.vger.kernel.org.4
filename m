@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046C77185C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9707185C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234012AbjEaPK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
+        id S233645AbjEaPK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbjEaPKY (ORCPT
+        with ESMTP id S231366AbjEaPKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 31 May 2023 11:10:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F37C0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:10:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB11698
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:10:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9154763D19
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FC8763D18
         for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E8D5EC433D2;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D9527C433EF;
         Wed, 31 May 2023 15:10:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685545822;
-        bh=pL4sre/8I+lAJhI65dVhLrNVbXbcple+qv/qIynQKwk=;
+        s=k20201202; t=1685545821;
+        bh=ZWD2zkUqIfn7LVLDVSME3AoFlWVrJDLG/awdINUug6s=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=IaeeWc9hF4u/krb4rVlynNldh5n74wLIBCm7e57SCXt9rvaIZPoGOIqX+07gBi5gW
-         +Loemm5FJflzXLSe03XSsKn439lbLMH82yykl6EcLfY79+oST7hD+HiQtlGpQPeeGQ
-         aVOHgPVxbjv4w+PTXwSV7Z/n8jms0yZ37a0pWVsOxr3DgWMajZpPNvBmirOTWcvnkb
-         RrXG22AR7/1RBH8f6rdPaFkWZ8qAKWPh020qY2QmoDVEH4OKR+FpkC9Q2KsmwKpXJb
-         5T9f9dXfNb1/9vVE46eZgNaWhTem4oNGgDIDRdNhY+avb7pfSUqHuZ7XhW0GT85nKX
-         UhDsy6b9THQbg==
+        b=AkbS2cuGbFB2C3gWF8PvQhTWG1afWkfQafSs+uoCH9LBJonNloSyQ6Qz8XT0CBquP
+         XLRkw3/R42Bd6QHHUkosQxG0WwGggVPKaFCygeCpb/ew6G0GdVW9dfbceOSmXm74wX
+         IqhP2xG6JsOuCdISRmlusxFL0nH+G+ocTlA5pWnuGUrNQ1p00duwHb1FgcAg3n4FF5
+         IXm5itCrhltNNA67Tew/cf9uZkZ3gcd+QOx2OhXKKoUVXRUsdLyXmFgveqeEceLRr5
+         Txpix/zFFubRHiul7SVdRp+8+6vEcIf7C/0/8qEZ/gZojCwfFPKIFN2Y0Pih0Moiqe
+         vlYewTAxCAnNA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CA578E21EC7;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C00A5E52BF3;
         Wed, 31 May 2023 15:10:21 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v1] RISC-V: mark hibernation as nonportable
+Subject: Re: [PATCH -fixes] riscv: Fix relocatable kernels with early alternatives
+ using -fno-pie
 From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <168554582182.8247.5723560098196678790.git-patchwork-notify@kernel.org>
+Message-Id: <168554582178.8247.10623595249995347296.git-patchwork-notify@kernel.org>
 Date:   Wed, 31 May 2023 15:10:21 +0000
-References: <20230526-astride-detonator-9ae120051159@wendy>
-In-Reply-To: <20230526-astride-detonator-9ae120051159@wendy>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        conor@kernel.org, atishp@atishpatra.org, anup@brainfault.org,
-        alex@ghiti.fr, linux-kernel@vger.kernel.org,
-        paul.walmsley@sifive.com, suagrfillet@gmail.com,
-        jeeheng.sia@starfivetech.com
+References: <20230526154630.289374-1-alexghiti@rivosinc.com>
+In-Reply-To: <20230526154630.289374-1-alexghiti@rivosinc.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, schwab@linux-m68k.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,25 +64,19 @@ Hello:
 This patch was applied to riscv/linux.git (fixes)
 by Palmer Dabbelt <palmer@rivosinc.com>:
 
-On Fri, 26 May 2023 11:59:08 +0100 you wrote:
-> Hibernation support depends on firmware marking its reserved/PMP
-> protected regions as not accessible from Linux.
-> The latest versions of the de-facto SBI implementation (OpenSBI) do
-> not do this, having dropped the no-map property to enable 1 GiB huge
-> page mappings by the kernel.
-> This was exposed by commit 3335068f8721 ("riscv: Use PUD/P4D/PGD pages
-> for the linear mapping"), which made the first 2 MiB of DRAM (where SBI
-> typically resides) accessible by the kernel.
-> Attempting to hibernate with either OpenSBI, or other implementations
-> following its lead, will lead to a kernel panic ([1], [2]) as the
-> hibernation process will attempt to save/restore any mapped regions,
-> including the PMP protected regions in use by the SBI implementation.
+On Fri, 26 May 2023 17:46:30 +0200 you wrote:
+> Early alternatives are called with the mmu disabled, and then should not
+> access any global symbols through the GOT since it requires relocations,
+> relocations that we do before but *virtually*. So only use medany code
+> model for this early code.
+> 
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [v1] RISC-V: mark hibernation as nonportable
-    https://git.kernel.org/riscv/c/ed309ce52218
+  - [-fixes] riscv: Fix relocatable kernels with early alternatives using -fno-pie
+    https://git.kernel.org/riscv/c/8dc2a7e8027f
 
 You are awesome, thank you!
 -- 
