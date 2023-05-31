@@ -2,123 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5205A71810C
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F617181DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236296AbjEaNIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S236544AbjEaN27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236179AbjEaNIo (ORCPT
+        with ESMTP id S234345AbjEaN2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:08:44 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0958E5E
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:08:15 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-96f5d651170so195861366b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:08:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685538485; x=1688130485;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1R1Sj0tDi2ehLT48w+P4ulNbR96KWPz5ISY1Z775GFo=;
-        b=SV4Uab3DVC7zDV7JKPV9GphVtB2lFxktAO5OYzfZKvEKlE3tscwKtT1w9JmOVhBvbC
-         jVg447Fofo02GPQFR9WMCpuKzkHrCpBFNunhtg1BwcLmPn/tTD/dldikvQMQN1GssXCU
-         hjbcVbsjii1QLWL4GOcpXxjOKaU42BcMFHXH3u4xkK9VQqSQRoqBlaKExuhPe+RAZkOC
-         AlNCh2nHqwUCQV1Mz7CTXyrYY4eVx3MoZAt1/A0rhFdn6QrgLCK0YoH/cJuzZQ+0DVJp
-         mt+fvgNgOxhqbybJ2eZLSm5TEPnxc1oORhtD2y1xRRgFEpF889Unba21uPF5JD31hn/x
-         3w4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685538485; x=1688130485;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1R1Sj0tDi2ehLT48w+P4ulNbR96KWPz5ISY1Z775GFo=;
-        b=PqLfa/osbgXK/G877WKKgC3IgclQY9Lvdx6eFUjh3f1/q7O26PSyBHK5QOIJJ2lBsk
-         P1BlvIGF8cQ7bcniWZa2J48ooRL4SPaqgPVp2ncBckoaMQxeu4f+yjCX4f3YXzGvtLnB
-         WvtXwJ1cIPCCy/aHXDT1qY/inE5+rqkTFUNTmRw04IzI7SHSrSazYSu5YbT30i7hJkYV
-         eWv58vqDep2PLBsbV17z5zO5lg/aRCmVNzQBm+ndcoKrZhZO0WUy2bwnlNM9gvVwsK6m
-         4fN9T0r5AbtPMPNXNH+PKIeMPlr619ht5UlI9n/vqUj+YJwtzMU+LcllurDOYAaEMEZu
-         W6qQ==
-X-Gm-Message-State: AC+VfDwor3JtEezpR4cTa3ptYQGLmS2+GwuwmcAQFu620GdPTJJSRLUZ
-        QlS8q7Hj6xXyIdIro8CIFmSY/C3/wdGv/CA1Zhp9Gw==
-X-Google-Smtp-Source: ACHHUZ7yi4O3Lr8N0xM2vV/dr4K11JP8UYtS7bQW8y7fQzKozQ/6LPXB7bmNsjtNT1vTVtAOoC2oEw==
-X-Received: by 2002:a17:906:da86:b0:965:6a32:451f with SMTP id xh6-20020a170906da8600b009656a32451fmr5505298ejb.6.1685538484994;
-        Wed, 31 May 2023 06:08:04 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id e10-20020a1709061e8a00b0094ebc041e20sm8821224ejj.46.2023.05.31.06.08.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 06:08:04 -0700 (PDT)
-Message-ID: <b93b6804-64f9-f9eb-418e-dd4d03d61240@linaro.org>
-Date:   Wed, 31 May 2023 15:08:01 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: thermal: mediatek: Move auxdac binding
- to yaml
-Content-Language: en-US
-To:     Matthias Brugger <mbrugger@suse.com>, matthias.bgg@kernel.org,
-        rafael@kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     devicetree@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-References: <20230530150413.12918-1-matthias.bgg@kernel.org>
- <80108a00-4416-a419-e45a-e5e4c1f111a8@linaro.org>
- <31f25021-aaf5-a6ca-049d-bb47f62936b4@suse.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <31f25021-aaf5-a6ca-049d-bb47f62936b4@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 31 May 2023 09:28:20 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DFC126;
+        Wed, 31 May 2023 06:28:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=wcJJV24VbYlY1PWzzae048ORvkrTfGMOvTB+4LRdIko=; b=ZCaN9EKWJgEkcuGgxM/ADbx94M
+        G03dV6vMZ01SeuX4XeUD/ST9pnnkWJlhFyUn36PeSTx4HwZLOaV1Un1/UIQdwmGQcFJy5ke1y1ph0
+        4gI+sbIacF5Qi2XhKT65K6WXemSMLSlsiRy1sMyJNOgV1Tn8vRmRMUZmDLnUwZq+cghRKjKS3YSq2
+        nov0q53CxHjOQ380s4gPZqDiXzc10/7e5vnGZl2HdRLxV+I+eL6nN6JB7wWpO5iWlxdh7Qc4sUzGU
+        t/I0z4d02H+1QiGZjucBz1TMMe0a61V9LL4YUcCfUju21PcwS5g76pVkW0OKG7aSE+R6CkRgnDmL/
+        hrab2zKA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q4LrG-007IIj-33; Wed, 31 May 2023 13:27:22 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 03CEF30074B;
+        Wed, 31 May 2023 15:27:16 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 7798E243B69E6; Wed, 31 May 2023 15:27:16 +0200 (CEST)
+Message-ID: <20230531130833.635651916@infradead.org>
+User-Agent: quilt/0.66
+Date:   Wed, 31 May 2023 15:08:33 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     torvalds@linux-foundation.org
+Cc:     corbet@lwn.net, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-crypto@vger.kernel.org, sfr@canb.auug.org.au,
+        mpe@ellerman.id.au, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, linux-parisc@vger.kernel.org
+Subject: [PATCH 00/12] Introduce cmpxchg128() -- aka. the demise of cmpxchg_double()
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 14:42, Matthias Brugger wrote:
->>> +    soc {
->>> +      #address-cells = <2>;
->>> +      #size-cells = <2>;
->>> +
->>> +      auxadc: auxadc@11001000 {
->>> +        compatible = "mediatek,mt8173-auxadc";
->>> +        reg = <0 0x11001000 0 0x1000>;
->>> +        clocks = <&pericfg CLK_PERI_AUXADC>;
->>> +        clock-names = "main";
->>> +        #io-channel-cells = <1>;
->>> +      };
->>> +
->>> +      apmixedsys: clock-controller@10209000 {
->>> +        compatible = "mediatek,mt8173-apmixedsys";
->>> +        reg = <0 0x10209000 0 0x1000>;
->>> +        #clock-cells = <1>;
->>> +      };
->>
->> Drop both examples, not really relevant to thermal. It grows the example
->> with code already documented somewhere else.
->>
-> 
-> auxadc and apmixedsys are no examples. They are referenced by the thermal node 
-> as described in the binding. Without them the example won't be complete.
-> 
+Hi!
 
-The example is complete, because you have phandles and that's enough.
-the auxadc and apmixedsys have their own examples in their own bindings
-- no need to duplicate them here.
+After much breaking of things, find here the improved version.
 
-Best regards,
-Krzysztof
+Since v3:
+
+ - unbreak everything that does *NOT* have cmpxchg128()
+
+   Notably this_cpu_cmpxchg_double() is used unconditionally by SLUB
+   which means that this_cpu_try_cmpxchg128() needs to be unconditionally
+   available on all 64bit architectures.
+
+ - fixed up x86/x86_64 cmpxchg{8,16}b emulation for this_cpu_cmpxchg{64,128}()
+
+ - introduce {raw,this}_cpu_try_cmpxchg*()
+
+ - add fallback for !__SIZEOF_INT128__ 64bit architectures
+
+   Sadly there are supported 64bit architecture/compiler combinations that do
+   not have __SIZEOF_INT128__, specifically it was found that HPPA64 only added
+   this with GCC-11.
+
+   this is yuck, and ideally we'd simply raise compiler requirements, but this
+   'works'.
+
+My plan is to re-add this to tip/locking/core and thus -next later this week.
+
+Also available at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
+
+---
+ Documentation/core-api/this_cpu_ops.rst     |   2 -
+ arch/arm64/include/asm/atomic_ll_sc.h       |  56 +++---
+ arch/arm64/include/asm/atomic_lse.h         |  39 ++---
+ arch/arm64/include/asm/cmpxchg.h            |  48 ++----
+ arch/arm64/include/asm/percpu.h             |  30 ++--
+ arch/s390/include/asm/cmpxchg.h             |  32 +---
+ arch/s390/include/asm/cpu_mf.h              |   2 +-
+ arch/s390/include/asm/percpu.h              |  34 ++--
+ arch/s390/kernel/perf_cpum_sf.c             |  16 +-
+ arch/x86/include/asm/cmpxchg.h              |  25 ---
+ arch/x86/include/asm/cmpxchg_32.h           |   2 +-
+ arch/x86/include/asm/cmpxchg_64.h           |  63 ++++++-
+ arch/x86/include/asm/percpu.h               | 102 ++++++-----
+ arch/x86/lib/Makefile                       |   3 +-
+ arch/x86/lib/cmpxchg16b_emu.S               |  43 +++--
+ arch/x86/lib/cmpxchg8b_emu.S                |  67 ++++++--
+ drivers/iommu/amd/amd_iommu_types.h         |   9 +-
+ drivers/iommu/amd/iommu.c                   |  10 +-
+ drivers/iommu/intel/irq_remapping.c         |   8 +-
+ include/asm-generic/percpu.h                | 257 ++++++++++++++++++++++------
+ include/crypto/b128ops.h                    |  14 +-
+ include/linux/atomic/atomic-arch-fallback.h |  95 +++++++++-
+ include/linux/atomic/atomic-instrumented.h  |  93 ++++++++--
+ include/linux/dmar.h                        | 125 +++++++-------
+ include/linux/percpu-defs.h                 |  45 ++---
+ include/linux/slub_def.h                    |  12 +-
+ include/linux/types.h                       |  12 ++
+ include/uapi/linux/types.h                  |   4 +
+ lib/crypto/curve25519-hacl64.c              |   2 -
+ lib/crypto/poly1305-donna64.c               |   2 -
+ mm/slab.h                                   |  53 +++++-
+ mm/slub.c                                   | 139 +++++++++------
+ scripts/atomic/gen-atomic-fallback.sh       |   4 +-
+ scripts/atomic/gen-atomic-instrumented.sh   |  19 +-
+ 34 files changed, 952 insertions(+), 515 deletions(-)
 
