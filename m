@@ -2,156 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB390717761
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7178717764
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbjEaG7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 02:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
+        id S234235AbjEaHAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234363AbjEaG7v (ORCPT
+        with ESMTP id S232373AbjEaHAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 02:59:51 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2043.outbound.protection.outlook.com [40.107.220.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A416A8F;
-        Tue, 30 May 2023 23:59:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FUsP/2KDZQLtgmc8EhvAWL3cT5NTEce0sldC31PwARE2By5NuZPvwQ1s4ijuXA567YaXXgHee5CIJzlbQ/Agb4s6C8iLtgrT4k6HlF8dlM3fYE7yFpM4RbAL981PKIqgPsd7PXSq+XAOaqblo0oKhCzlmAxcTXbqZCJ0wiZ60UmHgdXwFSDC3UHfWWToDVcEP6u/jLpAefo86cvi/dhOIzom6KZ0KaN9fJb+NUAeberlRou0CpkSk4opCJizKVR4s9Yv0yNKkQBUCB+gXxG/UbvX2WewH8hFbH6hHYsYVBOgqGawVCkf44GKQY6YA25g74JYY1qET7IuaoTH+0LyKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NNbFtgaER4SXBNVmEtjF+mOJXxR4mFLrD+KZYETKCZw=;
- b=ldRdHmeZ5TvB2fSY77hSo/qIJB0tE0SmbTRXGaEDCMHIrV3PJZj+viQiaUWMeMwukvDzErFHz4FGMSkN+CBJH3fVPYKwuRJhhtXQLrfbZ9kzJnzQgBI5GhOx6ZvGXDIEyjiv7Um/gk63k5na4z7NbFK7e2N90TwYN5xWxgi76R85fSQlTZzwg/1L9TbA0hZOp5nqgma7mg/K6ych4Iyrt46YbOJ8hF1kos3A6GHADt8MIWWjlMaOsma45NDi7B6GizPkUGqTyv8VVlIl4LBdl2/jRxyzwb5fFQl1Epf431bwN+zbS6KLW5czI4i1wXwmpESwcEPxBZ7GqxM5iPOF2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NNbFtgaER4SXBNVmEtjF+mOJXxR4mFLrD+KZYETKCZw=;
- b=zD9HwtQNhJxRs6As7Ray49Ler8CRF8OOboghswHwUVNWagU+X+qlpuEbqaosCnBjrCty64CKaxW3uc/14Hpw0+SfdNFGsB9xAy1yzYn7y2E99HugOd9CCJHuhO/dsB32dpwPjOswJItuoY1069mrWSjLfurzDM/yNIV1TP3bN9E=
-Received: from SN7PR12MB7201.namprd12.prod.outlook.com (2603:10b6:806:2a8::22)
- by PH7PR12MB7282.namprd12.prod.outlook.com (2603:10b6:510:209::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Wed, 31 May
- 2023 06:59:48 +0000
-Received: from SN7PR12MB7201.namprd12.prod.outlook.com
- ([fe80::d31e:12f8:bbac:31b1]) by SN7PR12MB7201.namprd12.prod.outlook.com
- ([fe80::d31e:12f8:bbac:31b1%7]) with mapi id 15.20.6433.024; Wed, 31 May 2023
- 06:59:47 +0000
-From:   "Havalige, Thippeswamy" <thippeswamy.havalige@amd.com>
-To:     Conor Dooley <conor@kernel.org>
-CC:     "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "Gogada, Bharat Kumar" <bharat.kumar.gogada@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "Yeleswarapu, Nagaradhesh" <nagaradhesh.yeleswarapu@amd.com>
-Subject: RE: [PATCH v3 2/3] dt-bindings: PCI: xilinx-xdma: Add YAML schemas
- for Xilinx XDMA PCIe Root Port Bridge
-Thread-Topic: [PATCH v3 2/3] dt-bindings: PCI: xilinx-xdma: Add YAML schemas
- for Xilinx XDMA PCIe Root Port Bridge
-Thread-Index: AQHZikESjhxtvc15p0SvfrT286EYT69h94wAgBIOahA=
-Date:   Wed, 31 May 2023 06:59:47 +0000
-Message-ID: <SN7PR12MB720180769155197B862CB1098B489@SN7PR12MB7201.namprd12.prod.outlook.com>
-References: <20230519105901.2399452-1-thippeswamy.havalige@amd.com>
- <20230519105901.2399452-3-thippeswamy.havalige@amd.com>
- <20230519-decidable-prelude-2f0d58041f02@spud>
-In-Reply-To: <20230519-decidable-prelude-2f0d58041f02@spud>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SN7PR12MB7201:EE_|PH7PR12MB7282:EE_
-x-ms-office365-filtering-correlation-id: a18ec69a-fba6-4654-d2c9-08db61a49f48
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jEnueUWbTYqf+RzyHzrsxabyBm1aL25msHdZ0fWLRbwTK/Wdk9y72Kt2e2R+rYvnYIeeIYBoy7EWSnLF8xga7dH6fCDlXTqV5f5UXFIWCwXmfZzeRnwIqIIdfBSgcEOFvgCYOZmFCemfLYZVLHOLytFfLUkq70v5IhIit5FnL5pcZ9FrXh7VdNMQ0rktuFwXZs9eMf8Q51AaFBjerEWtyFqpXQBfVWvTvMFOryH+pfAVo2POMVk8tWRzLYKWkw+5AXGWOc2zcaerhXrlaulq/9dvVFEdFgJhFXlyHzKInESsgZ+i1fxkNTX9uaz7JbsgmipKOr4vrJBB4nS4B8EFf22tNwnI8NvfB+JrK82qIVogw7JMDmss8PyCtM7O31nWgLfFPD8hOCKS4J8lGF1kYCEwrwq6N5d/n9y88r0/7x0NGP7ltMtOGx1IDN+7Gm1sFu/nsP+mzx+H6ShfMnNFXPZ6EwDMUuB72ep6hQNeTXCFsVA8OLh5Ja8SbnmffpXqkH7sdCDSXM6GtQEC+ZLe05IPygTHj2yOLezd9+7ECRYtMFAOO7kHO5RYcKmXpNNpo8wednYIwEXwZ1oM2Q7PB7GlAOWIXBj3qaEQu2QkkNq/JvjvFs/gavB7pSOfZhmh
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB7201.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39860400002)(366004)(396003)(346002)(451199021)(38070700005)(33656002)(41300700001)(7696005)(186003)(316002)(9686003)(6506007)(26005)(86362001)(55016003)(5660300002)(8936002)(8676002)(52536014)(4744005)(2906002)(122000001)(38100700002)(54906003)(478600001)(6916009)(4326008)(71200400001)(66946007)(76116006)(64756008)(66446008)(66556008)(66476007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?280Uhq0x0ZRopXwaBeokKYFCI3unbs4zyQYDfKMO2jmbfGngXzODY35fG3sl?=
- =?us-ascii?Q?l26EalAkkGDMM0ca7s2XqlnYJrO54qJwimczIbhExGnR4ieiYLEnFnMrTON8?=
- =?us-ascii?Q?ZNnXrvVXwGU1zCT8fwQ/h3hdne8t1Sw6eBjXt0nizeHBjFa0PuITojRkU0qH?=
- =?us-ascii?Q?N5mpqU8cNFGyzdvMIzNl97D61hfOTq/H1gWQXyejG4ODaRKx1dojp8PdHUkI?=
- =?us-ascii?Q?pW0urYoFR98wmhghu2SUnOyoisdBoV5KL/hYxO0ebbdixABc9wIf4lRs5j3j?=
- =?us-ascii?Q?3p8TaxPHPiEI+95l+SbOr7P+dwYRn8RZwaxDG1wStJ1MwXPEtY0LxgDyVHWv?=
- =?us-ascii?Q?bmVo2EUUMZTF89M014MNCGNAXzgs1j1MwQKahEhdVM7EhjneGCBejz9MMzvE?=
- =?us-ascii?Q?8NzZdIBlGb56hxlYba5eO+vjFCJz8xz9vtUyF3cerwOLG78DUdTRyH131iEg?=
- =?us-ascii?Q?KM+QtRI4Bh9bicI0y1gWvaKCux5mjbuoJAAkdM++lL6jOqp/FEih7sSym7Fx?=
- =?us-ascii?Q?yj3L/OX8uiQS/9eoy/335IhXlT+ICFePLtPm5flnv7JIN90aj++ZJbnFxLax?=
- =?us-ascii?Q?Eml189Efh2B3afYNOfHxAFSfJKu5waKzo0EAP6yGJxF5VzuUkBUmShDXMHYS?=
- =?us-ascii?Q?96Vj77vXTLttASwJG/F8h0BYxU8P0Tfl7sVN8GJTfH+vu2sEPfh68ML8eFB0?=
- =?us-ascii?Q?FHkFO8GFk+DvbZAfbpdjVc9PxOR/j3GjgEIWaIQyyDrGwFnn3rz3E5IJCC7i?=
- =?us-ascii?Q?ZLEvxN1hP4+zvOCW7wMjO0k09b336OhcIjxLg9Qts/XFKb9TNhdDK+hAlx7r?=
- =?us-ascii?Q?berfXmqnHuVMbo5ICkQ3QJmfhhpc6R6ewwLDtBk3kMVz9nBMr5vmfk7Y1P2R?=
- =?us-ascii?Q?cRi8Trpcx38zHp4zQ8MEnli6VLPnD3sXyW2P0uQFQtY0UOfx6R5HlbLkNF2w?=
- =?us-ascii?Q?RAEgKntAUqMpsMLASLRrZH6WvUYgGAFAdxITIYNJuhPkJCTRQh7Ui+5MnQKP?=
- =?us-ascii?Q?nBQ+hPCOgkPEWMeur3emHaxCIIRaHc3JVYPjq5sAWyfH5hkpPpUAxTnCWKD9?=
- =?us-ascii?Q?+Cl0UC1BZRgDMcZowfqbOjyRMwvUQp6I+BknKPUOiRQfS+n+c4QaPa0bq4fA?=
- =?us-ascii?Q?50hWsR6RfDKPGQim1kzhQWq1ilTgu1mi4O1Om/4XvWo3rh5R10KqBquE83Z3?=
- =?us-ascii?Q?o/3xn1HykmwqKIOk0Yj2Cz5u4HrgTfczBPJj5Sw++saaaJIOvm0uNHHsT5g3?=
- =?us-ascii?Q?XrKNI1PKX1m5dd5/NQBXrb+aTBywo7NdHmXVyzSjlzURZTHckNunbWQ9vNtK?=
- =?us-ascii?Q?P946V519E9OCUPD//1peVHsU1RFcbkhGLdn4syldWl4YQPArBNeo1KG5m7az?=
- =?us-ascii?Q?chmkFgiySTSKGOsCpzSVEX3a/XfXyzd7Px+ustlrJ8i7kdZoM6C4EWf7c0sn?=
- =?us-ascii?Q?vwScNgpl+Zv8IiTPl5MRU6FdPY9exOs/p1ab4iPp7RBupcnp9SIjprLgf1Zf?=
- =?us-ascii?Q?EqjyE+Yf1ZXDHV8kMPAGg2HOQSe2EXdXtJGCmAKbJfKN2gtkXIk6Bt7caGOG?=
- =?us-ascii?Q?yq4s8BjO9kMS1A08QdE=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 31 May 2023 03:00:14 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E3018B;
+        Wed, 31 May 2023 00:00:05 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6af6ec6d73bso2006483a34.3;
+        Wed, 31 May 2023 00:00:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685516405; x=1688108405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uSW2PnFIqnxjHbhpdzsjGcpZqsHNCS8CfUjd/XLbYNc=;
+        b=cZTV4a1cXkeM22BGXe2aogFTeSVqHuc2NVjxiitTuvpT3uSyYFdg6baqDZ/iIt0o+l
+         LIfONdVzVhGToxON/QYad3gbFrRAev08rq4kBIqhLNSN8PGhPLd5g4zbXIGqlFFYbsCo
+         FU6Fp0Cl/kqsQYpVTGAMWFvRU2sO3/xEZOOFFAS+w2gFuwU91lGn86OyrqVBYTGf3Tzn
+         upZ53y3Jr74eDNT1H0OKpYeQUSSsHhJQ1m2L1XSVUn6WpEYnryTw86XozbDNz0Z4Y4Er
+         t8IodxGm/dzburm21S06tar0zvchV4UpmY8GCveeBFR/Rv/RBKrtQjvlXjCWsd0MlgXT
+         bYPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685516405; x=1688108405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uSW2PnFIqnxjHbhpdzsjGcpZqsHNCS8CfUjd/XLbYNc=;
+        b=aLm6HumBih88E97KkP1sIXR+7eZfhKxBS17a6z2bv3EIT7gZj/+IVn6xQLProFLpyQ
+         qz0n3s7M2QqFHpV9R/Vpq6t1BpXeOQVlQ8lsOkWqEjNJMCmP/JQ48knf2zGdDQbEaxZa
+         99JHFu7Ct/71ZZ/xK7K+WvE4La1XcaU5AYCfWaDQvKwSH0pTiFJYeR7GvHNlnq7zO6L3
+         Q7v08yGDEh02y17clwSSo8Uf/uYUTzRZWs1gFcJDo6nOmwLkWLFa8VNXO5oC5VDpJ40P
+         Spt1GurZXLaq/3iV/uw7Wfu+n9l5Tp802Xy6Y2FiCxewS/yABafJ30fGBPPmEGRtvBJv
+         0FEw==
+X-Gm-Message-State: AC+VfDzAUEG0teZnsiWwRl0DVyhv0hLLd8eFf9AkfBXnzatMalkH1DQ5
+        zRL1gW6c7cTrbFg96UXK7zNA1fVKAJT33bEBTt0=
+X-Google-Smtp-Source: ACHHUZ5tjoXhJMRD/4/q+m8dRPDB/gHSc7bwO99rM6CTBVP8FOJ/w2egvpKLc82l9etG9iWTVjOLkjjtX/k7AuLL+Ec=
+X-Received: by 2002:a05:6808:3d9:b0:398:29bb:dd49 with SMTP id
+ o25-20020a05680803d900b0039829bbdd49mr2380629oie.34.1685516404602; Wed, 31
+ May 2023 00:00:04 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN7PR12MB7201.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a18ec69a-fba6-4654-d2c9-08db61a49f48
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 May 2023 06:59:47.7418
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: u459AGrF8zoUGBJgWJrZhYbZv/vv5kfcS5bpyL6xUkjUeq62yGk5TyfrBqxYqn/wSjIWF2E4Srj/Bpl77RJK4Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7282
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230530075311.400686-1-fl.scratchpad@gmail.com>
+ <20230530075311.400686-6-fl.scratchpad@gmail.com> <20230530-cannabis-headstone-883c5b891dd3@spud>
+In-Reply-To: <20230530-cannabis-headstone-883c5b891dd3@spud>
+From:   Fabrizio Lamarque <fl.scratchpad@gmail.com>
+Date:   Wed, 31 May 2023 08:59:53 +0200
+Message-ID: <CAPJMGm4=sRQGPmVi8NjAVvOVrr8s2By6PO8kKRKZt3W0FR9j-Q@mail.gmail.com>
+Subject: Re: [PATCH v3 5/5] dt-bindings: iio: ad7192: Allow selection of clock modes
+To:     Conor Dooley <conor@kernel.org>
+Cc:     jic23@kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, May 30, 2023 at 7:22=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> On Tue, May 30, 2023 at 09:53:11AM +0200, fl.scratchpad@gmail.com wrote:
+> > From: Fabrizio Lamarque <fl.scratchpad@gmail.com>
+> >
+> > AD7192 supports external clock sources, generated by a digital clock
+> > source or a crystal oscillator, or internally generated clock option
+> > without external components.
+> >
+> > Describe choice between internal and external clock, crystal or externa=
+l
+> > oscillator, and internal clock output enable.
+> >
+> > Signed-off-by: Fabrizio Lamarque <fl.scratchpad@gmail.com>
+> > ---
+> >  .../bindings/iio/adc/adi,ad7192.yaml          | 27 ++++++++++++++++---
+> >  1 file changed, 24 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml =
+b/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
+> > index 16def2985ab4..f7ecfd65ad80 100644
+> > --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
+> > +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
+> > @@ -32,7 +32,8 @@ properties:
+> >
+> >    clocks:
+> >      maxItems: 1
+> > -    description: phandle to the master clock (mclk)
+> > +    description: |
+> > +      Master clock (mclk). If not set, internal clock is used.
+> >
+> >    clock-names:
+> >      items:
+> > @@ -50,6 +51,17 @@ properties:
+> >    vref-supply:
+> >      description: VRef voltage supply
+> >
+> > +  adi,clock-xtal:
+> > +    description: |
+> > +      Select whether an external crystal oscillator or an external
+> > +      clock is applied as master (mclk) clock.
+> > +    type: boolean
+>
+> Am I being daft, or are these the same thing? If they are not, and use
+> different input pins, I think it should be explained as it not clear.
+> Could you explain why we actually care that the source is a xtal versus
+> it being mclk, and why just having master clock is not sufficient?
 
-Hi Conor Dooley,
+I may revise the description as follows. Feel free to add your suggestions
+in case it is still not clear enough.
 
-Please find inline response.
+"Select whether an external crystal oscillator between MCLK1 and MCLK2 or
+an external CMOS-compatible clock on MCLK2 is used as master clock".
 
-Regards,
-Thippeswamy H
->=20
-> > +properties:
-> > +  compatible:
-> > +    const: xlnx,xdma-host-3.00
->=20
-> Perhaps not a question for you Thippeswamy, but is there a reason for PCI
-> root ports not having any soc-specific compatibles? Rob (if you see this =
-when
-> you're back)?
->=20
-> > +                interrupt-controller ;
->=20
-> Looks like you didn't see Michal's comment about the extra space.
-> If you resubmit for some other reason, you should fix that in the process=
- :)
-- Agreed, Will fix it in next patch.
+This is used to properly set CLK0 and CLK1 bits in the MODE register.
+I guess most applications would use an external crystal or internal clock.
+The external digital clock would allow synchronization of multiple ADCs,
+
+>
+> > +  adi,int-clock-output-enable:
+> > +    description: |
+> > +      When internal clock is selected, this bit enables clock out pin.
+> > +    type: boolean
+>
+> And this one makes you a clock provider, so the devices advocate
+> position would be that you know that this bit should be set if
+> "clocks" is not present and a consumer requests a clock.
+> I don't seem to have got the driver patches (at least not in this
+> mailbox), so I have got no information on how you've actually implemented
+> this.
+
+I see... When this bit is set, the AD7192 node should also be a clock provi=
+der.
+The clock is output on MCLK2 pin, hence it can be used with internally
+generated clock only.
+I tend to dislike the idea of a "conditional clock provider". Also, I'd gue=
+ss
+there is a very limited usage of a low precision clock output for
+synchronization purposes between multiple ADCs. In the remote case,
+I would rather use a precise, dedicated external digital clock.
+Would you agree if I remove the related lines from the change set?
+If not, I kindly ask for your suggestions.
+
+The existing implementation from AD already includes all these
+configurations (there are no driver patches, the proposed changes are
+just related to documentation).
+
+Thank you!
+Fabrizio
+
+>
 > Cheers,
 > Conor.
+>
+> > +
+> >    adi,rejection-60-Hz-enable:
+> >      description: |
+> >        This bit enables a notch at 60 Hz when the first notch of the si=
+nc
+> > @@ -84,11 +96,12 @@ properties:
+> >      description: see Documentation/devicetree/bindings/iio/adc/adc.yam=
+l
+> >      type: boolean
+> >
+> > +dependencies:
+> > +  adi,clock-xtal: ['clocks', 'clock-names']
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> > -  - clocks
+> > -  - clock-names
+> >    - interrupts
+> >    - dvdd-supply
+> >    - avdd-supply
+> > @@ -98,6 +111,13 @@ required:
+> >
+> >  allOf:
+> >    - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> > +  - if:
+> > +      required:
+> > +        - clocks
+> > +        - clock-names
+> > +    then:
+> > +      properties:
+> > +        adi,int-clock-output-enable: false
+> >
+> >  unevaluatedProperties: false
+> >
+> > @@ -115,6 +135,7 @@ examples:
+> >              spi-cpha;
+> >              clocks =3D <&ad7192_mclk>;
+> >              clock-names =3D "mclk";
+> > +            adi,clock-xtal;
+> >              interrupts =3D <25 0x2>;
+> >              interrupt-parent =3D <&gpio>;
+> >              dvdd-supply =3D <&dvdd>;
+> > --
+> > 2.34.1
+> >
