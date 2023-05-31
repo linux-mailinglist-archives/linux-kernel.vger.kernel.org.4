@@ -2,276 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD3D718660
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6570971865D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234459AbjEaPau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54864 "EHLO
+        id S234709AbjEaPaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbjEaPar (ORCPT
+        with ESMTP id S234584AbjEaPaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:30:47 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E869611D;
-        Wed, 31 May 2023 08:30:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685547042; x=1717083042;
-  h=message-id:date:subject:from:to:cc:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=NyKkc1yf/WAjVdLXMvFBs2vmV9cJEgzsa9lPvU017fk=;
-  b=kop5S3lg9wFVBFUqL137N3drAtRIzEpRpUNE8q6AZSLwLwSDLZaM69mZ
-   IKSCVcUBDAF7Qs8j3KVQdcN9ZXEy0Jqey1o8yJfdZRcXBXbeODqN+Dfqu
-   ujNOY4K5wMmqbMuJX80ILxw8V/n0TyNay650i3JIci3pvGDNCMfiBwxm2
-   zh7AOzJuVENhe37JfMJVOMEkR6Sug1AnSyhsbJ7CK87ZKH3i/UGi6MSO6
-   RopYAIKcpjLq7hUsqCWrUmw93+/R7XzWx1mOl2I0+3AzQJzbbin54aWHl
-   jV3RRQjTDKbJtO8UC09rMCELb/PMVX51e+6A6D0ZzX6HnHNsDN6zZnW2H
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="421043331"
-X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="421043331"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 08:30:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="819362796"
-X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="819362796"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga002.fm.intel.com with ESMTP; 31 May 2023 08:30:41 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 31 May 2023 08:30:40 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 31 May 2023 08:30:40 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 31 May 2023 08:30:40 -0700
+        Wed, 31 May 2023 11:30:06 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2082.outbound.protection.outlook.com [40.107.92.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054F9124;
+        Wed, 31 May 2023 08:30:05 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RaOLXIXBMvSCO/IMxbmx4XEBSarjbOsqXlQVglXZtAzrR6z8vtNpumHuBhfxIbNsAcuj8KnAhHyfIjTmzt+X0GIjqzCS0GB+FCFx8otumHciAiDZPKuIZad1XRVvlIePq0FtyIlc8Rj9z3IRZ/bFhBAJuTbhtCEiJfMNzkElwb5QdqPYb5D3z3ZYPIGxu0AL2U7w2HEkJuv7fZbzWfGIckAGH+7AQeUEJCk6uOYG/gjgxxsp0pqjHwaJaU5k7bKayaf2qo5QFYcDzKlR2fz/02xmFxBFb5LWzHmgbVc4GmCCwXNmrwTqXgTNXGbD3GLkQ3F1T6u9fSL2gq94nn3WMA==
+ b=T2m+FThx8c9UB3m9mgwf30ny3NZbwwe9+g+cDc3Lk40rEAhhvThLvj0YLmmcU9IJrkYzAwryiG3UAaBi0A61FpceSoo+yGFCf2QwcPAgMNilFvYFvSdriwX9aNYbrtszW41je23Pa9SKq/kiFEWBCmJX41uu2sO3NvEbSZyR7FpXpsMV+5zEkY1zmvL1aMl3zR1OI0yyhGuMP+EgzZwmOXCeLCWE1/QDw+/eyVTK3iR2egnGzdSFgQ9Iqo2IK5+9wdYzYhyGikdEm/fbIEFG9k67ZhPMWzAgkFUlpaUDywOPCAxTrxu7Cp9ndb2JQ83XMaVZiPKH2q+9PYKAkg8y1A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ueya3HYWuDg8pZ5t0rv4V8P3FlBl4DJZG8x6fIsXIsU=;
- b=YvNxMLrF1bmqoHD+Uy+Cy93thUaML88V7f6A2qH873psr178A4eeBj9NjSzbe7Cm6wZMtt0/ATaLlgKtY8nnpa9Ij/1GEES6/fubr4CH+TeVK53uHClDjLQ10YUMjQzFOeTZGm72iJYUvW69QE0EMdZFdHQi52cqHSbCgtLM12jkSFZQ1Z1iMxLriO0rcoz23YFAXBkjxWEdLRhbteHLXww79cOR3M2vteUCJbtgCHmMFvCRfsER//d9bZq76NThewi7WsSlYlNiiuukBnofgsX/PepZtU7IYSj41/Eci0B8jEnA6axIbbaR8/Hc9ag4aW6tFEQ4kxEyF30+ZG4L0g==
+ bh=isLmgFvPfV7+8493UMURfK456zJcxiY+pt55Rrh7DWE=;
+ b=ODQafFiP4G/1ZiXoNZhUEfTcwIft71h9wOVvMCe5x+6EBpxyWr9GfJW0IP6xTGKo4b3MwzHTIYGdQ4cZJeJ+4Emaipzgoxt53fAp1m5kZ6RlHvRSS8Jxq/qC72y6z6P4ellyjnUy10CBbPcZWmSrwS2y15R6hioqVeUgrgSspm/LuQMYuJl26Ab3t563ibioFwmUlndRzH226a0x1hK+U35UjxoNMkP0g5piSTbvN1Q7S6mG12ThBNN55KqFz+W7WSVTWDydYV7FAzYHS7jbbDulvZYdrLxoF3rFu6FHa/w7gqvz5rJkS8XM6JlRokktw22pR6NHlypbImMG311eGQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=isLmgFvPfV7+8493UMURfK456zJcxiY+pt55Rrh7DWE=;
+ b=Z0RyLdfVvBShncPfHVwa1BJYdbAOONAHJWIUrV31DgHq6OcscrfXiSKdQoyPL5zSde4jl7gkCbu4e8U2Ku3GORe4a3dyJ4vROuCSUS/a6drdNgqDxKKiNyGLdsJTGkQGonC/GCoW6gcu3zt6+ku1OSHwec/Tp6UkLg3Ckidj88vvVLhht+9ROwpEdpQ9/M5wqTb3tfY9zyPxHgMsvs5ZwUHp/w2clcsOyjspxqJixY3YVSB3gIunVaxybMtrUBLhMxav3uF6ZPSeN719GbHwUlm/XVVXMQg3C4uA8IwTfdzmDDMO1Hf1AUIBuPBNaCXYoA7wQZK4vFwLlm5FXgsi8g==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by MW4PR11MB6691.namprd11.prod.outlook.com (2603:10b6:303:20f::18) with
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by PH0PR12MB7488.namprd12.prod.outlook.com (2603:10b6:510:1e9::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Wed, 31 May
- 2023 15:30:38 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::64d9:76b5:5b43:1590]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::64d9:76b5:5b43:1590%2]) with mapi id 15.20.6433.022; Wed, 31 May 2023
- 15:30:37 +0000
-Message-ID: <ca5098cc-6c02-d825-4365-4daca3b4f63f@intel.com>
-Date:   Wed, 31 May 2023 17:29:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net-next v3 06/12] net: skbuff: don't include
- <net/page_pool.h> into <linux/skbuff.h>
-Content-Language: en-US
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-To:     Alexander H Duyck <alexander.duyck@gmail.com>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        "Jesper Dangaard Brouer" <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Paul Menzel <pmenzel@molgen.mpg.de>, <netdev@vger.kernel.org>,
-        <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
-References: <20230530150035.1943669-1-aleksander.lobakin@intel.com>
- <20230530150035.1943669-7-aleksander.lobakin@intel.com>
- <81d8da838601a2029e97937a952652039285cb4e.camel@gmail.com>
- <a6a29f13-68ae-c7f3-e4c2-30e23eabc888@intel.com>
-In-Reply-To: <a6a29f13-68ae-c7f3-e4c2-30e23eabc888@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0169.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:b4::11) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Wed, 31 May
+ 2023 15:30:02 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6433.024; Wed, 31 May 2023
+ 15:30:02 +0000
+Date:   Wed, 31 May 2023 12:30:00 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>, will@kernel.org,
+        catalin.marinas@arm.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, nicolinc@nvidia.com,
+        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+        John Hubbard <jhubbard@nvidia.com>, zhi.wang.linux@gmail.com
+Subject: Re: [PATCH 2/2] arm64: Notify on pte permission upgrades
+Message-ID: <ZHdn+FsH6BWcK7C4@nvidia.com>
+References: <ZHXj/6Bjraxqk4YR@nvidia.com>
+ <d2e591c1-eb43-377b-d396-8335f77acef6@arm.com>
+ <ZHXxkUe4IZXUc1PV@nvidia.com>
+ <89dba89c-cb49-f917-31e4-3eafd484f4b2@arm.com>
+ <ZHYCygONW53/Byp3@nvidia.com>
+ <ZHZuSDp6ioPqI272@google.com>
+ <ZHaCAJI+OgIfDWSx@nvidia.com>
+ <87v8g9qr2z.fsf@nvidia.com>
+ <ZHaVsa3oXfXqE1Pu@nvidia.com>
+ <87ilc9qkuc.fsf@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ilc9qkuc.fsf@nvidia.com>
+X-ClientProxiedBy: CH2PR19CA0029.namprd19.prod.outlook.com
+ (2603:10b6:610:4d::39) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|MW4PR11MB6691:EE_
-X-MS-Office365-Filtering-Correlation-Id: 621da703-893b-49d3-3652-08db61ebfbdf
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH0PR12MB7488:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8b52fea3-5f01-455e-568c-08db61ebe703
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CUOwFnVFWUihgfLyQ6Yk9fuq5cgDGisDBq1WAW4OjiO5QDGvWhJuTfIoF07bt9vf1RSfR8slZVhGdtX4UMijQ9t9yiA8hk65V93ScjHxtEFq88V3rKzNwF+AjuOJilex5/ywakSCAbQEQulVjs2jZcOtFqKLBi5H4+1LPK9Or4jBes2IzwnYhcpRrfwmjA7dVEhwq1Yy8XoRNDnAHGxKwSzpETVMsDM7Ns4IAnhOAVGadqZy29wX4ca3tliXnMT3ecownWfwByG0wG+YNFbr40jgqW6HBrY8wQ4kbDvGcoNkW/EqjzYyc91/7a/UCWgCj3yZa8WmOBiN47U5vIWHAoKnMILGUf6pvKxEeDGU78B/IvtO5lLiRZYcym+4/LwLsxM6F5K2qmSErxPCd0b09CcGTSRcmjpo6aKstJAGKbe6IMi6mQBMbFOqbF1JSN2hqNNZyFAVEWgk+/N0BYogrt8vREBcDJeYM6jIyPiNUtJdYQrgluwRfYbyBPNJSx+ltxFF8N79H5aK9iJE//yEhrGbukPx8AUPHBpOukN2+hJWJGtv81EPl8GIW37E0/d1nViZI9AfsXICo1ta+R3/2zf6pX2WpOX5b/vZF/ULPOepR+Y4yFKc7/izMxO6teOq65LmVr6nduXhNhubIiUJnA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(376002)(346002)(366004)(136003)(451199021)(31686004)(6486002)(66946007)(6916009)(66476007)(66556008)(54906003)(4326008)(316002)(478600001)(86362001)(31696002)(36756003)(186003)(6506007)(6512007)(26005)(83380400001)(41300700001)(8936002)(8676002)(7416002)(2906002)(5660300002)(2616005)(82960400001)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: piMNs0f1oTMUUKGIAG7/1LoMyi2CyaV13ZI32jG74f4Y3odqQcCBx4R47nvSA+wsKgYxZYXbS+QBps8+VwlBUc2duUBt/3m/DAGLRYHsZ0Vo3ivCUDcL0a9axeLx2XKpsJqQxaSeB03lsl99V13DXjKI8x17b26Um3cujVAM/PQBnkYxlXjKW92C4eU2xY47TcNdE/EyHnObW1Mg3vke0hdHvdinlKprIq8KgNa909Lyl1fSjNoVP19ycqaVLL3nCCcF95V6LHnRTYAyo/og0/KLcV+qajP6O6S9+zK6HyiKAq10sfvYp8VcWcLh7ehDBKiI66Mry3PeacVZCgQn8yoLvaM+QdIkoTpxH/fsFWkAMWS+9hS5Hpur1mx2jbuT8AEutknAOHGd+TZJihsc6LSOFTCg8SP6+mrBtXCE3l522T0jGmzJJgp1EPOGMk5V/sl33bIz1nN/kIr5Mk+PVLuNHum4i9su6ff6klqlkQFi1ybaZaafl33EF3oSD64PhxF1vaLsK/L09l/PLPI2f2SLP/f0NO4VOduUsVrODuSy9AqDhCVOY09icXtZpivVEOSth55715SjyNqOhKVoH9BwQjkuFskrRGZZ55P7XPw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(366004)(136003)(346002)(451199021)(2616005)(83380400001)(186003)(2906002)(6636002)(4326008)(66476007)(66946007)(6486002)(66556008)(316002)(37006003)(478600001)(54906003)(7416002)(26005)(6506007)(6512007)(5660300002)(41300700001)(8936002)(8676002)(6862004)(38100700002)(36756003)(86362001)(67856001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NzVlQ0xKWFJqb1hHcFBUUDl2VzM2M0lPRUp2dE9QTU54TTJ3U0JWc0lLZkVH?=
- =?utf-8?B?ejF5bUExVml3Mi8xUWZmRmpCUG9ZZWcvMlBTM3orL2wrSEJmejJGaFpTYnJ2?=
- =?utf-8?B?L3JNaWhsVkJLUmRNYmV5OVBWdk5DS1M3Mk1uLzl2bWRGeEVCa2NUNUFYSC8y?=
- =?utf-8?B?TVczbU81YzFRbnI4cE1RbXkyOGJuMkdCMTNGV2Y4VGEzbmV6T3FuZU4ydzJm?=
- =?utf-8?B?V3hOSGtjTXByMFV5K3ZQdGdKN2ZSRFI1bW9FSzFQaHBFNHU1enE0UTFEdnNi?=
- =?utf-8?B?RThTVWRLRWhZUVhxWTM4MG5aejNKbFFwT04yOFZlOWtUTFMrblZvVUhTUVZG?=
- =?utf-8?B?NGlhcG5jbExZU01YMzN3c1VHMDI5NjhHb3Q0T25BaEIzQm1XUFJYWVN6UEk0?=
- =?utf-8?B?ODFFRWd4VzNvQjlISVgxSTZkbjE4QmtTcWsvRmhxNkliaWlNMURyQ2xoSTZ6?=
- =?utf-8?B?c2d1Zzk2ZUVHdkV6Mnl0dGJvMFMxRzdFcjB4U2UwMFl0UFJGdmhlLzhXakRz?=
- =?utf-8?B?eFFnUStoVVY0MVJBazRZbFVqMm1mamVZOUFKZWpJMzEvbXQzMHBJTkpodUFX?=
- =?utf-8?B?VW1xVGRqLy8zQVJvdmlnM0YzVVFZekxqUHNTMStQTS8yT3VINExlb0dNMkp4?=
- =?utf-8?B?eXBIVzFHZUVFUWRsWXlaK0VHWlZWMUhVNDVURzQvanBqWXVIQmo4RGE4NzZi?=
- =?utf-8?B?bFBFS3dwUEwwWEpEVzc4eGx3bnkzdHhla1FURDZ4NFNIVFVEcmh2Vm0xUDJs?=
- =?utf-8?B?bjgvYjZ5K1pkTFNodVRqV3duU0M0K0RlU2RNamJyTnVYaGVHQTlJMjVDZUxr?=
- =?utf-8?B?UHlXRUFORnpMa05RMVFVdDV0QmR2R3dGRjdBbWhOOGRxb1FaS1pmZ0RuV1FH?=
- =?utf-8?B?SFZVYzV3SHM2cVMxZ3JheXJrSnBQTHJnOVRsT21lck1ReE0zZWh1UEJON1Zh?=
- =?utf-8?B?N2lyZ2FFa1Mzam1KNWdaTDkzQ0tRZzZwbEVCTTRLOWtFaWZLWkpSWWdUVXpu?=
- =?utf-8?B?d2ZtOXJuVFJKWTlZWHY1RkpBcWx0VzhEOTR0bmE3cE1OcUxHVjk0cjJrbWFr?=
- =?utf-8?B?TEpTWVVjUVd4cTJCVFNhYWJQWk9LR3BRenZFeERSQ2RGTHQrNHVGUjVGYkFj?=
- =?utf-8?B?eG43VHdqdXRHN2dkSlp3cEdXQkpGV2JzMWRvL1Y2UzhjQWFrRHNSYVdraUt6?=
- =?utf-8?B?T2hLcFBXbEdtZWNCbHFEMTdPZzVWK3FSOGdkQ1JaaU9GdWRjenRtQmVvY1o1?=
- =?utf-8?B?U1I1c2FnV3VYQjVORDBZSFpkUCttcVE1TEJIMml1VXExdUl0dDJYZURFRjha?=
- =?utf-8?B?QmhqWHl1bXRaSW9FczhYYnk0QktzU1l1M2ZRMDB0L0M0TUVFaFQ5bFJJdmU2?=
- =?utf-8?B?VHV1SmVCYUMxWGFHdW1lUnFjYkxQNWhZSkhXd2ZqSWg5MFlmQzFHVjVta0d2?=
- =?utf-8?B?VHpud3RYNVgxSnZEbGYvUy9ZSm9JNEowUnVycitzNWlNQllJeW5XR242U1pP?=
- =?utf-8?B?WU5ONnRGSDV4VkJBalhQdWIrT0M4cFM3UHZnRTduVThOUHR2b2l5dU1rRk9i?=
- =?utf-8?B?MGlyTlZxUGd5bVVHYkpOSFNRZXByblJEeE1VYzhWN0o1b05PSWtQc01HQytK?=
- =?utf-8?B?QjZFVTlCNWZuYjFFV1UwYlhzdkRSR21ibFoxMnU1cVdnM1Y5d0ltK1JTbXYz?=
- =?utf-8?B?ZXV2YXFuWEJGZzRHVG9UWmc3NkJNdVhvZEJWYnBIVGVpR1RYVm1lNHRZRk05?=
- =?utf-8?B?Zk9DcFVZcVdSNk5TdnJLNldEbGNtdkV2YmMvQ0xGSE1LSmc2TVhQbU5DRnV2?=
- =?utf-8?B?OWZObkN1Z3RvbEF5cUQwdTdHWEkxQjE0KzJ6Y0VoNnR3Qm1YY1VrRjVpUEJw?=
- =?utf-8?B?R2s2bm1Yc2d2RFNXejV3cVJteTNYYU55NEdjRmRKdGRmbVcwK2IyaSt1N3o1?=
- =?utf-8?B?MzV2Z3JjODRWV0VTVkh4cU9vZU5sWXJ0WDU4VjU5YkxaR3ZvT2pFNVJCZkpj?=
- =?utf-8?B?dGhoYTgvakFvbHFGcUFydGJpZzJvN3JNWUlCNjN6UXc1cTNaajhaYlJGQVNp?=
- =?utf-8?B?bjE3WE42M2k2QkRwWTBOSW9obklUcTUrTEZOSmVwZzNnaTViL2MvbWVWWXV6?=
- =?utf-8?B?a2piQm1CcEtvbEFWS3l2MEFKY3g1UlY2MWxITnFmeWpocXJRL0V6SnNPYUx0?=
- =?utf-8?B?M0E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 621da703-893b-49d3-3652-08db61ebfbdf
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?w+50XuAFlDY02Cp56ER3pnFOr8paMUfiWvyTB8cQAzyeL1iHu3baUbplIHqU?=
+ =?us-ascii?Q?FnZuhXjp/uCp1R3vtdjp1knUsfxJp89wLQCQdEFGBU1dnvqGDBgxEIh0DXR6?=
+ =?us-ascii?Q?z3Yg0Yu7X6e6W23XxWWUB7ezsQcX5GmHlansLjwLwLogzVGqmbE/20ClcmON?=
+ =?us-ascii?Q?HdMDFTjKbGCmNSv7IOmDpwSDjMBdapJgOxJW6KIOVj56ZnAgRq0Mk+1uaB7o?=
+ =?us-ascii?Q?xf8qNLhC0ZFr+HWxLhVVSvmHnP3jcsxtmRAkxi/kIVXmKwCEt1jjG5U5XtC5?=
+ =?us-ascii?Q?OJzjMsDXqDq0qI1nh72OKjzwnDgt0m2/UrGaYGerXD9K0BJegij/Tm6T4cKT?=
+ =?us-ascii?Q?diVZE0ChMU75VfFcjhU8/c2cuwM7XIKwKCZAqxmA8jxU6V1I4x+V+M3oRxwI?=
+ =?us-ascii?Q?J92qLv/SEnib2HLV9tIwnQGDH9Vx51SSfSVdFIkHk+oUmVgNbs/IUncw7TuC?=
+ =?us-ascii?Q?6fab2NaxTcM0U12ffSchxrBttUY9Nf5p0JjtF91YUIp73gjmJ88Quze6/TSL?=
+ =?us-ascii?Q?SFyqXUpQCfQYX0Jm4TzeXXdvRvvcq9YDAZ4/MAjfJvdpRvunIAr25llNgMCE?=
+ =?us-ascii?Q?f4yCYtkmv5UF0CN9CuIz8Kt78BomhDp3RIteMPx/ny55g/C9E8ulhP9bUg6q?=
+ =?us-ascii?Q?LnrMTTTMtqzA+QQux2Neyoi4tfTdQQXcS1EAch3Baa4RdzKcNR1dmCLvqhGK?=
+ =?us-ascii?Q?IDCicFBHn+XWNUGJc3qGu5nlahx8Yt/2NAWlnGMogKjO+twYjwxBjLQYRz2g?=
+ =?us-ascii?Q?eI4MmyOSTZ9UB0xrl2kv+TWPM7XIZOMo6+shIKxJYHwaSL5axSZjc84GXVA2?=
+ =?us-ascii?Q?+acFx01wV4CU5vtmO+2DRpa4yamhs4tAOTJsW3c0z4kG3xfFFe+t/ZiB30u2?=
+ =?us-ascii?Q?9IkECE26qKCpqMctk9dCwM9dquPGuo5IFauQmHRFkURHRZL3dN+Wqwjp2d2k?=
+ =?us-ascii?Q?vACEoXe8eGiVdC7X63YxjU2iKiRx8XN8c1NggmMjtV80CUzaCNinxPSIK+0o?=
+ =?us-ascii?Q?ixrltu2hab1CyXBCfTqyHcLWlCBczw6Be2m8YTZ5sRlQLmvvSQ9QKbN3Hc9l?=
+ =?us-ascii?Q?vu+A3IJxiulMOku6qR4AtBfXG4b1AIRHS53o8DG8sfnj0Ukpm6Lfts3LqVP0?=
+ =?us-ascii?Q?MHrbdXD0lFKbXlpSExEri8wGMuK3s64G4tECRdYPG17u0AJsMwlW0uS/OMfh?=
+ =?us-ascii?Q?Jxp+vL7kdD5Cf2cNbUSm/YGqr+QethpIlE2ZqPc7etMbGIO1yqYXs5as/D/J?=
+ =?us-ascii?Q?JivAE6Spv0alGSQypft492+Gfe4wvkezWbD2ehJtl53MY5fn1ThQC8f/GAg5?=
+ =?us-ascii?Q?06Ieru71b1qmcXjRttWNO1vnw8SdpQLxop2UYf14wHzTlxRWrMh42VqHoX68?=
+ =?us-ascii?Q?bcuRfIrclXmJoz1aqvhHKeL2PSJsUhbkYqyfFjejT/j42QN6Bmx11ifvSVUm?=
+ =?us-ascii?Q?SwuLJ2VzyLg56VXzGKvTJeewE1f9icRmNXgH8jYOPcDie1wE2vwFpFF8WF4s?=
+ =?us-ascii?Q?9DmTrOwSAlDCyk9vDpAz4Fj3KiI7Vwu6jK7nFBsVSIpOs71TJV3VM5Mhg67i?=
+ =?us-ascii?Q?rUGFbffkqRNyO4hqnhITR5CueWx9RztKdsvdMzsM?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b52fea3-5f01-455e-568c-08db61ebe703
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 15:30:37.6598
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 15:30:02.5623
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZWUBwnGayQLcCaj2DCDK8ZbgQybw4OgQZfnOR0bshqrJPoE8ug9Z9Db+obabsv6BNZJAht4tX2GPrkQedfm5Umq8ya88uYh/9xZpHUzbHB4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6691
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: twz4hvVHZA4zj9cgZvKZXzHI4i4tCIenswQlnglcE9H6uDzkBo84l85UCeCu6Phl
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7488
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <aleksander.lobakin@intel.com>
-Date: Wed, 31 May 2023 17:28:30 +0200
-
-> From: Alexander H Duyck <alexander.duyck@gmail.com>
-> Date: Wed, 31 May 2023 08:21:03 -0700
+On Wed, May 31, 2023 at 12:46:06PM +1000, Alistair Popple wrote:
 > 
->> On Tue, 2023-05-30 at 17:00 +0200, Alexander Lobakin wrote:
->>> Currently, touching <net/page_pool.h> triggers a rebuild of more than
->>> a half of the kernel. That's because it's included in <linux/skbuff.h>.
->>>
->>> In 6a5bcd84e886 ("page_pool: Allow drivers to hint on SKB recycling"),
->>> Matteo included it to be able to call a couple functions defined there.
->>> Then, in 57f05bc2ab24 ("page_pool: keep pp info as long as page pool
->>> owns the page") one of the calls was removed, so only one left.
->>> It's call to page_pool_return_skb_page() in napi_frag_unref(). The
->>> function is external and doesn't have any dependencies. Having include
->>> of very niche page_pool.h only for that looks like an overkill.
->>> Instead, move the declaration of that function to skbuff.h itself, with
->>> a small comment that it's a special guest and should not be touched.
->>> Now, after a few include fixes in the drivers, touching page_pool.h
->>> only triggers rebuilding of the drivers using it and a couple core
->>> networking files.
->>>
->>> Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
->>> ---
->>>  drivers/net/ethernet/engleder/tsnep_main.c               | 1 +
->>>  drivers/net/ethernet/freescale/fec_main.c                | 1 +
->>>  drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c | 1 +
->>>  drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c     | 1 +
->>>  drivers/net/ethernet/mellanox/mlx5/core/en/params.c      | 1 +
->>>  drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c         | 1 +
->>>  drivers/net/wireless/mediatek/mt76/mt76.h                | 1 +
->>>  include/linux/skbuff.h                                   | 4 +++-
->>>  include/net/page_pool.h                                  | 2 --
->>>  9 files changed, 10 insertions(+), 3 deletions(-)
->>>
->>>
->>
->> <...>
->>
->>> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
->>> index 5951904413ab..6d5eee932b95 100644
->>> --- a/include/linux/skbuff.h
->>> +++ b/include/linux/skbuff.h
->>> @@ -32,7 +32,6 @@
->>>  #include <linux/if_packet.h>
->>>  #include <linux/llist.h>
->>>  #include <net/flow.h>
->>> -#include <net/page_pool.h>
->>>  #if IS_ENABLED(CONFIG_NF_CONNTRACK)
->>>  #include <linux/netfilter/nf_conntrack_common.h>
->>>  #endif
->>> @@ -3422,6 +3421,9 @@ static inline void skb_frag_ref(struct sk_buff *skb, int f)
->>>  	__skb_frag_ref(&skb_shinfo(skb)->frags[f]);
->>>  }
->>>  
->>> +/* Internal from net/core/page_pool.c, do not use in drivers directly */
->>> +bool page_pool_return_skb_page(struct page *page, bool napi_safe);
->>> +
->>>  static inline void
->>>  napi_frag_unref(skb_frag_t *frag, bool recycle, bool napi_safe)
->>>  {
->>> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
->>> index 126f9e294389..2a9ce2aa6eb2 100644
->>> --- a/include/net/page_pool.h
->>> +++ b/include/net/page_pool.h
->>> @@ -240,8 +240,6 @@ inline enum dma_data_direction page_pool_get_dma_dir(struct page_pool *pool)
->>>  	return pool->p.dma_dir;
->>>  }
->>>  
->>> -bool page_pool_return_skb_page(struct page *page, bool napi_safe);
->>> -
->>>  struct page_pool *page_pool_create(const struct page_pool_params *params);
->>>  
->>>  struct xdp_mem_info;
->>
->> So the code as-is works, so I am providing my "Reviewed-by".
->> Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
->>
->> Consider the rest of this a suggestion or a "nice to have".
->>
->> I wonder if we shouldn't also look at restructuring the function and
->> just moving it to net/core/skbuff.c somewhere next to skb_pp_recycle.
->>
->> I suspect we could look at pulling parts of it out as well. The
->> pp_magic check should always be succeeding unless we have pages getting
->> routed the wrong way somewhere. So maybe we should look at pulling it
->> out and moving it to another part of the path such as
->> __page_pool_put_page() and making it a bit more visible to catch those
->> cases.
+> Jason Gunthorpe <jgg@nvidia.com> writes:
 > 
-> I've just noticed that this function is exported with no modular users ._.
-
-^^^ pls ignore this nonsense lol
-
-> Anyway, I feel like it's a good way to go. The entire function, apart
-> from the magic check, can be moved and made static. And the magic can be
-> moved one level up, right...
-> v4 will happen either way I guess, so maybe I'll replace this patch with
-> that kinda change.
+> > On Wed, May 31, 2023 at 10:30:48AM +1000, Alistair Popple wrote:
+> >
+> >> So I'd rather keep the invalidate in ptep_set_access_flags(). Would
+> >> renaming invalidate_range() to invalidate_arch_secondary_tlb() along
+> >> with clearing up the documentation make that more acceptable, at least
+> >> in the short term?
+> >
+> > Then we need to go through removing kvm first I think.
 > 
-> Thanks,
-> Olek 
+> Why? I don't think we need to hold up a fix for something that is an
+> issue today so we can rework a fix for an unrelated problem. 
+
+I'm nervous about affecting KVM's weird usage if we go in and start
+making changes. Getting rid of it first is much safer
+
+> > Yeah, I think I would call it invalidate_arch_secondary_tlb() and
+> > document it as being an arch specific set of invalidations that match
+> > the architected TLB maintenance requrements. And maybe we can check it
+> > more carefully to make it be called in less places. Like I'm not sure
+> > it is right to call it from invalidate_range_end under this new
+> > definition..
+> 
+> I will look at this in more depth, but this comment reminded me there is
+> already an issue with calling .invalidate_range() from
+> invalidate_range_end(). We have seen slow downs when unmapping unused
+> ranges because unmap_vmas() will call .invalidate_range() via
+> .invalidate_range_end() flooding the SMMU with invalidates even though
+> zap_pte_range() skipped it because the PTEs were pte_none.
+
+Yes, if the new API is specifically about synchronizing an architected
+TLB then really the call to the op should be done near the
+architectures TLB flush points, and not higher in the MM.
+
+ie any flush of the CPU tlb should mirror 1:1 to a flush of the IOMMU
+TLB, no broadinging or narrowing.
+
+It is a very clean defintion and we can leap directly to it once we
+get kvm out of the way.
+
+Jason
