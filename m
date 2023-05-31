@@ -2,205 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73D471875B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC77071875E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjEaQ33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 12:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
+        id S229677AbjEaQbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 12:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjEaQ31 (ORCPT
+        with ESMTP id S229573AbjEaQa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 12:29:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843DF1AD
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:29:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C85F63DCE
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:29:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0B26C433D2;
-        Wed, 31 May 2023 16:28:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685550540;
-        bh=2DPmqH41nj7TTQeLCW2cj8dAxqMnQAvSWlrm0fLb+0s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IuhjRqmqy+q7X4w8AXgprvr+XbiiHE8U7fo3RFN/LJJSzFlUEnehvi1OZCkHpJ6v7
-         OUUjGEfmu7tjvnkEuojRNtIytQBpZp/S90wMZmiY4aSLLiigcvEhs8BcqHYmG7k3HO
-         aZpnbYLGP8/WRogGHBP5gJBn9/XTXh7CkdiIDMk+Miuq5WHiEXfNkLK+nEp82W3OFg
-         QEQtbwTlLjr6YhzD53zGcKUVjtw6gLviaYvSy/QMBMhqcGAIS6vfUhFRtRIPOi3Vn+
-         e/D7eU70svoa85j/BRVTWXlavd7B6/AAbpUjCGT9By1HzSXIzhZ3ZXYzSCybCVGmjW
-         QzGngXOVRITJw==
-Date:   Wed, 31 May 2023 17:28:56 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: [PATCH 4/6] riscv: mm: pass noncoherent or not to
- riscv_noncoherent_supported()
-Message-ID: <20230531-applied-antacid-77abfb5b2e55@spud>
-References: <20230526165958.908-1-jszhang@kernel.org>
- <20230526165958.908-5-jszhang@kernel.org>
- <20230529-gainfully-ribbon-48520d25ef6e@wendy>
- <ZHdmnfJvF1N5rgvx@xhacker>
- <ZHdnliDU7ikKaFoX@xhacker>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="BjOrWNtSKlv6yyL3"
-Content-Disposition: inline
-In-Reply-To: <ZHdnliDU7ikKaFoX@xhacker>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 31 May 2023 12:30:59 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07207E2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:30:58 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-556011695d1so105876807b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:30:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685550657; x=1688142657;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4oMPwuBewXzucRhAy2k91jt6FR1Q3W1PQo5GZNd6lqM=;
+        b=ryeCZ321lBNpiYoS40S71CMHh8oGv0krJKIZpmIGsRIe+xGkwcAHYnzd9/aT6BnPjG
+         gaiFm7JRSiNpBjcX+wc1xbIiR6Nv5swrk3nawefNF3b/5dbY6OGYqJ+F2BxfxTYUyd6v
+         D6mf8CgTUcPhO15w70n9pgY36xb5L2RSXnfymapJLr3enxB9Cwr7TCYP9QAM3Wx4enBT
+         cmDWCxlbMpEaj0zNJ5C992qVuWpncecoglFbvm+Hj4HDMi8KYlgoqpBM2QKVwxk6ui15
+         qATljkSrWZcTGytOWYTwM9y7jUIFK9JzCGI4og+UAoZP4VUJmQk25c/1HVxPYepTTTIR
+         FV/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685550657; x=1688142657;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4oMPwuBewXzucRhAy2k91jt6FR1Q3W1PQo5GZNd6lqM=;
+        b=Lml7RvQhcCSSuEHq/D3b7pa+jFY1QsAuizmzKhIHMRQ61H88ip76BddZxn/dFwas8Q
+         OtpqGggMLyOMfRNDLMjP/2auHMJ5MUadKdjHRTWYJ/w4+7U6iCFeWR3QmfD9hfecUZf0
+         ix23dYgxyflI/OGmS2XIsD3CCiztf1sYKM5TdjvwtXqCDmedNk8H/Ar7HXU2gbU1dqO+
+         tGnE4/p7w+roubgAt8SMvhne/pTiPFFGV4elDzlo6rR+F30U0DWcLtvgEa8+UWGcZ9to
+         HROXIKbVYKfuOJdGvN7C7Rp6vg4JjYqtWjooXY8z+GOl8I+1hUoQvfH4n9MsvswZqXgr
+         WiGQ==
+X-Gm-Message-State: AC+VfDxYpD+bY/2TigtH3cDUVOXEzXz59A7eizZUsC9z7ijXPEKvCx50
+        r2ke3bdwvVWJW+YhJ4MFfdlOxMpMpl0=
+X-Google-Smtp-Source: ACHHUZ6X8s1Ux+vAT7l47i65NzVwjyLzkDLJAboaHZnpw10xH1dcOU12nASDui2gP5eCl+mciulXyOP22sY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:b70c:0:b0:561:8e86:9818 with SMTP id
+ v12-20020a81b70c000000b005618e869818mr3513805ywh.7.1685550657211; Wed, 31 May
+ 2023 09:30:57 -0700 (PDT)
+Date:   Wed, 31 May 2023 09:30:55 -0700
+In-Reply-To: <F4AFC5EE-9967-4117-BA85-ED82C106575C@nutanix.com>
+Mime-Version: 1.0
+References: <20230530200152.18961-1-jon@nutanix.com> <2a6502e3-ba87-0355-af09-825e8467b81f@intel.com>
+ <F4AFC5EE-9967-4117-BA85-ED82C106575C@nutanix.com>
+Message-ID: <ZHd2P6D142rCByrm@google.com>
+Subject: Re: [PATCH] x86/fpu/xstate: clear XSAVE features if DISABLED_MASK set
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Kyle Huey <me@kylehuey.com>,
+        "neelnatu@google.com" <neelnatu@google.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 31, 2023, Jon Kohler wrote:
+>=20
+> > On May 30, 2023, at 6:22 PM, Dave Hansen <dave.hansen@intel.com> wrote:
+> >=20
+> > On 5/30/23 13:01, Jon Kohler wrote:
+> > Is that the only problem?  kvm_load_guest_xsave_state() seems to have
+> > some #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS code and I can't
+> > imagine that KVM guests can even use PKRU if this code is compiled out.
 
---BjOrWNtSKlv6yyL3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Wed, May 31, 2023 at 11:28:22PM +0800, Jisheng Zhang wrote:
-> On Wed, May 31, 2023 at 11:24:19PM +0800, Jisheng Zhang wrote:
-> > On Mon, May 29, 2023 at 12:13:10PM +0100, Conor Dooley wrote:
-> > > On Sat, May 27, 2023 at 12:59:56AM +0800, Jisheng Zhang wrote:
-> > > > We will soon take different actions by checking the HW is noncohere=
-nt
-> > > > or not, I.E ZICBOM/ERRATA_THEAD_CMO or not.
-> > > >=20
-> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > > ---
-> > > >  arch/riscv/errata/thead/errata.c    | 19 +++++++++++--------
-> > > >  arch/riscv/include/asm/cacheflush.h |  4 ++--
-> > > >  arch/riscv/kernel/setup.c           |  6 +++++-
-> > > >  arch/riscv/mm/dma-noncoherent.c     | 10 ++++++----
-> > > >  4 files changed, 24 insertions(+), 15 deletions(-)
-> > > >=20
-> > > > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/t=
-head/errata.c
-> > > > index be84b14f0118..c192b80a5166 100644
-> > > > --- a/arch/riscv/errata/thead/errata.c
-> > > > +++ b/arch/riscv/errata/thead/errata.c
-> > > > @@ -36,21 +36,24 @@ static bool errata_probe_pbmt(unsigned int stag=
-e,
-> > > >  static bool errata_probe_cmo(unsigned int stage,
-> > > >  			     unsigned long arch_id, unsigned long impid)
-> > > >  {
-> > > > -	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_CMO))
-> > > > -		return false;
-> > > > -
-> > > > -	if (arch_id !=3D 0 || impid !=3D 0)
-> > > > -		return false;
-> > > > +	bool cmo;
-> > > > =20
-> > > >  	if (stage =3D=3D RISCV_ALTERNATIVES_EARLY_BOOT)
-> > > >  		return false;
-> > > > =20
-> > > > +	if (IS_ENABLED(CONFIG_ERRATA_THEAD_CMO) &&
-> > > > +	    (arch_id =3D=3D 0 && impid =3D=3D 0))
-> > > > +		cmo =3D true;
-> > > > +	else
-> > > > +		cmo =3D false;
-> > > > +
-> > > >  	if (stage =3D=3D RISCV_ALTERNATIVES_BOOT) {
-> > > > -		riscv_cbom_block_size =3D L1_CACHE_BYTES;
-> > > > -		riscv_noncoherent_supported();
-> > > > +		if (cmo)
-> > > > +			riscv_cbom_block_size =3D L1_CACHE_BYTES;
-> > > > +		riscv_noncoherent_supported(cmo);
-> > > >  	}
-> > > > =20
-> > > > -	return true;
-> > > > +	return cmo;
-> > >=20
-> > > I don't really understand the changes that you are making to this
-> > > function, so that is tries really hard to call
-> > > riscv_noncoherent_supported(). Why do we need to always call the func=
+> >> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate=
+.c
+> >> index 0bab497c9436..211ef82b53e3 100644
+> >> --- a/arch/x86/kernel/fpu/xstate.c
+> >> +++ b/arch/x86/kernel/fpu/xstate.c
+> >> @@ -798,7 +798,8 @@ void __init fpu__init_system_xstate(unsigned int l=
+egacy_size)
+> >> 		unsigned short cid =3D xsave_cpuid_features[i];
+> >>=20
+> >> 		/* Careful: X86_FEATURE_FPU is 0! */
+> >> -		if ((i !=3D XFEATURE_FP && !cid) || !boot_cpu_has(cid))
+> >> +		if ((i !=3D XFEATURE_FP && !cid) || !boot_cpu_has(cid) ||
+> >> +		    DISABLED_MASK_BIT_SET(cid))
+> >> 			fpu_kernel_cfg.max_features &=3D ~BIT_ULL(i);
+> >> 	}
+> >=20
+> > I _think_ I'd rather this just be cpu_feature_enabled(cid) rather than
+> > using DISABLED_MASK_BIT_SET() directly.
+
++1, xstate.c uses cpu_feature_enabled() all over the place, and IMO effecti=
+vely
+open coding cpu_feature_enabled() yields less intuitive code.
+
+And on the KVM side, we can and should replace the #ifdef with cpu_feature_=
+enabled()
+(I'll post a patch), as modern compilers are clever enough to completely op=
+timize
+out the code when CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS=3Dn.  At that poi=
+nt, using
+cpu_feature_enabled() in both KVM and xstate.c will provide a nice bit of s=
+ymmetry.
+
+Caveat #1: cpu_feature_enabled() has a flaw that's relevant to this code: i=
+n the
+unlikely scenario that the compiler doesn't resolve "cid" to a compile-time
+constant value, cpu_feature_enabled() won't query DISABLED_MASK_BIT_SET(). =
+ I don't
+see any other use of cpu_feature_enabled() without a hardcoded X86_FEATURE_=
+*, and
+the below compiles with my config, so I think/hope we can just require a co=
+mpile-time
+constant when using cpu_feature_enabled().
+
+diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufe=
+ature.h
+index ce0c8f7d3218..886200fbf8d9 100644
+--- a/arch/x86/include/asm/cpufeature.h
++++ b/arch/x86/include/asm/cpufeature.h
+@@ -141,8 +141,11 @@ extern const char * const x86_bug_flags[NBUGINTS*32];
+  * supporting a possible guest feature where host support for it
+  * is not relevant.
+  */
+-#define cpu_feature_enabled(bit)       \
+-       (__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : stat=
+ic_cpu_has(bit))
++#define cpu_feature_enabled(bit)                               \
++({                                                             \
++       BUILD_BUG_ON(!__builtin_constant_p(bit));               \
++       DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit);   \
++})
+=20
+ #define boot_cpu_has(bit)      cpu_has(&boot_cpu_data, bit)
+=20
+Caveat #2: Using cpu_feature_enabled() could subtly break KVM, as KVM adver=
+tises
+support for features based on boot_cpu_data.  E.g. if a feature were disabl=
+ed by
+Kconfig but present in hardware, KVM would allow the guest to use the featu=
+re
+without properly context switching the data.  PKU isn't problematic because=
+ KVM
+explicitly gates PKU on boot_cpu_has(X86_FEATURE_OSPKE), but KVM learned th=
+at
+lesson the hard way (see commit c469268cd523, "KVM: x86: block guest protec=
 tion
-> > > in the erratum's probe function, if the erratum is not detected, given
-> >=20
-> > In one unified kernel Image, to support both coherent and noncoherent
-> > platforms(currently, either T-HEAD CMO or ZICBOM), we need to let the
-> > kmalloc meet both cases, specifically, ARCH_DMA_MINALIGN aligned.
+keys unless the host has them enabled").  Exposing a feature that's disable=
+d in
+the host isn't completely absurd, e.g. KVM already effectively does this fo=
+r MPX.
+The only reason using cpu_feature_enabled() wouldn't be problematic for MPX=
+ is
+because there's no longer a Kconfig for MPX.
+
+I'm totally ok gating xfeature bits on cpu_feature_enabled(), but there sho=
+uld be
+a prep patch for KVM to clear features bits in kvm_cpu_caps if the correspo=
+nding
+XCR0/XSS bit is not set in the host.  If KVM ever wants to expose an xstate=
+ feature
+(other than MPX) that's disabled in the host, then we can revisit
+fpu__init_system_xstate().  But we need to ensure the "failure" mode is tha=
+t
+KVM doesn't advertise the feature, as opposed to advertising a feature with=
+out
+without context switching its data.
+
+> > But, I guess this probably also isn't a big deal for _most_ people.  An=
+y
+> > sane distro kernel will just set CONFIG_X86_INTEL_MEMORY_PROTECTION_KEY=
+S
+> > since it's pretty widespread on modern CPUs and works across Intel and
+> > AMD now.
 >=20
-> seems adding three words can make it better:
->=20
-> kmalloc meet both cases at the beginning, specifically ...
->=20
-> > Once we know the underlying HW is coherent, I.E neither T-HEAD CMO nor
-> > ZICBOM, we need to notice kmalloc we are safe to reduce the alignment
-> > to 1. The notice action is done in patch 5:
-> >=20
-> > +       } else {
-> > +               dma_cache_alignment =3D 1;
-> >=20
-> >=20
-> > > that riscv_noncoherent_supported() is called immediately after
-> > > apply_boot_alternatives() in setup_arch()?
+> Ack, I=E2=80=99m using PKU as the key example here, but looking forward t=
+his is more of a
+> correctness thing than anything else. If for any reason, any xsave featur=
+e is disabled
+> In the way that PKU is disabled, it will slip thru the cracks.
 
-This bit here is the key part of my confusion. You try really hard in
-the errata stuff to call riscv_noncoherent_supported(), which I do
-understand is because of the other branch that you add to the function
-later in the series.
-
-What I do not understand is why we are not able to rely on the call to
-it in setup_arch() to trigger it when we do not have T-HEAD CMOs or
-Zicbom.
-You've explained why you want to make sure it always gets called during
-boot, but my question is about why it looks like it is being called more
-than once.
-
-Actually, now that I think of it, what happens on a T-HEAD system where
-there is no T-HEAD CMOs, but there is Zicbom. In theory, this could
-exist.
-Bear with me here a moment in case I am completely wrong, snippet is
-=66rom setup_arch()
-	apply_boot_alternatives();
-On my example system, this will trigger, eventually sending us into
-errata_probe_cmo(), where we will call riscv_noncoherent_supported()
-with false, setting dma_cache_alignment to 1.
-
-	if (IS_ENABLED(CONFIG_RISCV_ISA_ZICBOM) &&
-	    riscv_isa_extension_available(NULL, ZICBOM))
-		cmo =3D true;
-
-On this system, this will be true.
-
-	else
-		cmo =3D false;
-	riscv_noncoherent_supported(cmo);
-
-now riscv_noncoherent_supported() is called with true, and we have
-dma_cache_alignment =3D 1 still. Is that not problematic? Or the inverse,
-where the T-HEAD system has its custom CMOs and there is no Zicbom, it
-gets called twice with different args too.
-
-There's clearly something fundamental that I am missing here, this seems
-like it should be immediately obvious why this either cannot happen or
-is not a problem, but I can't see it.
-
-Sorry,
-Conor.
-
---BjOrWNtSKlv6yyL3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHd1tQAKCRB4tDGHoIJi
-0pGNAPwLSwfmm5OuyEL8BRsFeMVHyDtHAo2DcjggAIKEVSHDngEA0jAajERdcZXM
-dZ5aJkHDIEmfSvibu/CfaGJlDgFknQY=
-=AxKn
------END PGP SIGNATURE-----
-
---BjOrWNtSKlv6yyL3--
+I'd be careful about billing this as a correctness thing.  See above.
