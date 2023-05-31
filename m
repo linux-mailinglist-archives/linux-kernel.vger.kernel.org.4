@@ -2,117 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A61A717AD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E67B2717AD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235243AbjEaI4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
+        id S234591AbjEaI6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235208AbjEaI4r (ORCPT
+        with ESMTP id S231397AbjEaI6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:56:47 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23348BE
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:56:46 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30b023b0068so570811f8f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:56:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685523404; x=1688115404;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=exzz6pAeE8UvoElYgU8je4n0hY+uXNzHEMLEFlVL23o=;
-        b=fGhNTIeXBBRs2kumWzyzJepFEZ4JgIPKU7lkqJTxf4R5QFfcKfhMI/ujsekrCiPVWx
-         D9Pc9aD/Coo3KK4G0R1OK8phLndB7GD0B0zajNlxQBoFarKb2MYyu7jA4I0X462DtXGu
-         92Mg5Ig12pPOGY9u0NOF8l7A68EwfHxnxOra5j2/GRIAxXj15c2LzuGnQLqF9NAw9qaY
-         Y2KYmMHjV/KM8jMjeIE5sztS6ZObz+xJ6e9qBd4Wun9Johcg3rxOeEcKQiClAUCDWBe2
-         qzCTX/2on0n2AY/Pp8xyt5NKkLJ5na+ieaV2FJva8z/ygN6+s4WCn4e7vUL/CGJOuNT3
-         cRXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685523404; x=1688115404;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=exzz6pAeE8UvoElYgU8je4n0hY+uXNzHEMLEFlVL23o=;
-        b=IGmeynN1JtX/gdDw+9G2EBQEt0KN8jN0oPBUiMlvh87pym7IzLPzKiWvzygzo1A+yG
-         qwI1LBk6bEkyQvE3C+/4l5/wLJ68dSY0pvT7nJYQXgRl7WWNTcp710NP/dcnBmpp1vWy
-         PFPmRKr5yo7Fuug6Vs1YX98TnOxFLlrBTh4aOB0/1JeTnddzD9GDOmEznJLkbufEPwaR
-         R/X2zJW8rwO9Ar7F3P6o+4/4EzgHwgchBMoidSqakJN9vQ33lm8+vUNM4x8foi9y945j
-         bgdZwoeFvzEmqW4n3LxNgmzljZSmKUck+Te0RzzHpdq6n/OrGJsISCt2Yzz42gk+iuan
-         ke7A==
-X-Gm-Message-State: AC+VfDzx15atXlIWyRCnqnAdCUhpwWPr3UwcGTqlfRQgBnAQkgTpI04U
-        9PrliMB8NW1PXM/oAvcxB5R43w==
-X-Google-Smtp-Source: ACHHUZ6UuXtxDIm/fOFuqamiq5/YRQFeSq1dyqtPf0kIc9s9Of0DFxwhdnZ+zYh3NZx626Dfyp1H/A==
-X-Received: by 2002:a5d:6ac3:0:b0:30a:ebdb:908c with SMTP id u3-20020a5d6ac3000000b0030aebdb908cmr3755201wrw.16.1685523404537;
-        Wed, 31 May 2023 01:56:44 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id x2-20020adff0c2000000b0030af20aaa3fsm6050551wro.71.2023.05.31.01.56.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 01:56:44 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     linux-amlogic@lists.infradead.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Hans-Frieder Vogt <hfdevel@gmx.net>
-In-Reply-To: <20230516203029.1031174-1-martin.blumenstingl@googlemail.com>
-References: <20230516203029.1031174-1-martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH v3] ARM: dts: meson8: correct uart_B and uart_C clock
- references
-Message-Id: <168552340376.1980576.16108743746787991413.b4-ty@linaro.org>
-Date:   Wed, 31 May 2023 10:56:43 +0200
+        Wed, 31 May 2023 04:58:06 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7257C0;
+        Wed, 31 May 2023 01:58:03 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34V8a5W4018378;
+        Wed, 31 May 2023 08:57:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pp1;
+ bh=DCijIo14IUSsxzXzY9h3WyI/6hJYnKjXFiCCeIxmllw=;
+ b=VFZFGvSDUmzEdeJ7iPQn0JiNqtlQDiseu52b/KMO0Jj0m5NgOvh7nbYEflxGVXj0We28
+ zvCFhGlnlTZ4wI0XfOuuAuTMB0jO3uvU3OFVmFBjqLgFBkSpgDXMHAHuL3tHMG9OXkyf
+ ZypQu3rSLM9PXyD1y3dxxM3NLVDVE0xUMvftHgszXRFIxFbsgXReBDwlWHpXgft/pTg/
+ aMKhn19i4G2lvzjELYxDI7rKvIZkOOBl2gENwAh30d9GfiXySG1y3nDl3h24bQLyvpBo
+ Ur7IoSNYFOeTsLYkIXy+eJqqoS61/voyP+H62NY+ldwHZH4A8AvmUuxYxqyVF2vce23T 0Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwygvdamc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 08:57:54 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34V8tnb2025274;
+        Wed, 31 May 2023 08:57:54 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qwygvdakn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 08:57:53 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34V4XbYc003811;
+        Wed, 31 May 2023 08:57:51 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qu9g51w2x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 08:57:51 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34V8vmZl16646764
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 31 May 2023 08:57:49 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E03BD2004B;
+        Wed, 31 May 2023 08:57:48 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BFD0620040;
+        Wed, 31 May 2023 08:57:46 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.79.149])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 31 May 2023 08:57:46 +0000 (GMT)
+Date:   Wed, 31 May 2023 14:27:44 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>,
+        Kemeng Shi <shikemeng@huaweicloud.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Subject: Re: [PATCH v2 01/12] Revert "ext4: remove ac->ac_found >
+ sbi->s_mb_min_to_scan dead check in ext4_mb_check_limits"
+Message-ID: <ZHcMCGO5zW/P8LHh@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <cover.1685449706.git.ojaswin@linux.ibm.com>
+ <ddcae9658e46880dfec2fb0aa61d01fb3353d202.1685449706.git.ojaswin@linux.ibm.com>
+ <CA+icZUXDFbxRvx8-pvEwsZAu+-28bX4VDTj6ZTPtvn4gWqGnCg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+icZUXDFbxRvx8-pvEwsZAu+-28bX4VDTj6ZTPtvn4gWqGnCg@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: tq1pskt3MKwfPjNSmqkQTGhC4glPTm7c
+X-Proofpoint-GUID: e0FgBzwwsD7oRx9WBcyChwPsMs0b4CVF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_04,2023-05-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 mlxlogscore=979 adultscore=0 bulkscore=0 mlxscore=0
+ clxscore=1015 priorityscore=1501 suspectscore=0 impostorscore=0
+ spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305310074
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, 16 May 2023 22:30:29 +0200, Martin Blumenstingl wrote:
-> On Meson8 uart_B and uart_C do not work, because they are relying on
-> incorrect clocks. Change the references of pclk to the correct CLKID
-> (UART1 for uart_B and UART2 for uart_C), to allow use of the two uarts.
+On Tue, May 30, 2023 at 06:28:22PM +0200, Sedat Dilek wrote:
+> On Tue, May 30, 2023 at 3:25 PM Ojaswin Mujoo <ojaswin@linux.ibm.com> wrote:
+> >
+> > This reverts commit 32c0869370194ae5ac9f9f501953ef693040f6a1.
+> >
+> > The reverted commit was intended to remove a dead check however it was observed
+> > that this check was actually being used to exit early instead of looping
+> > sbi->s_mb_max_to_scan times when we are able to find a free extent bigger than
+> > the goal extent. Due to this, a my performance tests (fsmark, parallel file
+> > writes in a highly fragmented FS) were seeing a 2x-3x regression.
+> >
+> > Example, the default value of the following variables is:
+> >
+> > sbi->s_mb_max_to_scan = 200
+> > sbi->s_mb_min_to_scan = 10
+> >
+> > In ext4_mb_check_limits() if we find an extent smaller than goal, then we return
+> > early and try again. This loop will go on until we have processed
+> > sbi->s_mb_max_to_scan(=200) number of free extents at which point we exit and
+> > just use whatever we have even if it is smaller than goal extent.
+> >
+> > Now, the regression comes when we find an extent bigger than goal. Earlier, in
+> > this case we would loop only sbi->s_mb_min_to_scan(=10) times and then just use
+> > the bigger extent. However with commit 32c08693 that check was removed and hence
+> > we would loop sbi->s_mb_max_to_scan(=200) times even though we have a big enough
+> > free extent to satisfy the request. The only time we would exit early would be
+> > when the free extent is *exactly* the size of our goal, which is pretty uncommon
+> > occurrence and so we would almost always end up looping 200 times.
+> >
+> > Hence, revert the commit by adding the check back to fix the regression. Also
+> > add a comment to outline this policy.
+> >
 > 
-> This was originally reported by Hans-Frieder Vogt for Meson8b [0], but
-> the same bug is also present in meson8.dtsi
+> Hi,
 > 
-> [...]
+> I applied this single patch of your series v2 on top of Linux v6.4-rc4.
+> 
+> So, if this is a regression I ask myself if this is material for Linux 6.4?
+> 
+> Can you comment on this, please?
+> 
+> Thanks.
+> 
+> Regards,
+> -Sedat-
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.5/arm-dt)
+Hi Sedat,
 
-[1/1] ARM: dts: meson8: correct uart_B and uart_C clock references
-      https://git.kernel.org/amlogic/c/98b503c7fb13a17a47d8ebf15fa8f7c10118e75c
+Since this patch fixes a regression I think it should ideally go in
+Linux 6.4
 
-These changes has been applied on the intermediate git tree [1].
-
-The v6.5/arm-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
-
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
-
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
-
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-
--- 
-Neil
-
+Regards,
+ojaswin
+> 
+> 
+> > Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> > Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+> > Reviewed-by: Kemeng Shi <shikemeng@huaweicloud.com>
+> > ---
+> >  fs/ext4/mballoc.c | 16 +++++++++++++++-
+> >  1 file changed, 15 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> > index d4b6a2c1881d..7ac6d3524f29 100644
+> > --- a/fs/ext4/mballoc.c
+> > +++ b/fs/ext4/mballoc.c
+> > @@ -2063,7 +2063,7 @@ static void ext4_mb_check_limits(struct ext4_allocation_context *ac,
+> >         if (bex->fe_len < gex->fe_len)
+> >                 return;
+> >
+> > -       if (finish_group)
+> > +       if (finish_group || ac->ac_found > sbi->s_mb_min_to_scan)
+> >                 ext4_mb_use_best_found(ac, e4b);
+> >  }
+> >
+> > @@ -2075,6 +2075,20 @@ static void ext4_mb_check_limits(struct ext4_allocation_context *ac,
+> >   * in the context. Later, the best found extent will be used, if
+> >   * mballoc can't find good enough extent.
+> >   *
+> > + * The algorithm used is roughly as follows:
+> > + *
+> > + * * If free extent found is exactly as big as goal, then
+> > + *   stop the scan and use it immediately
+> > + *
+> > + * * If free extent found is smaller than goal, then keep retrying
+> > + *   upto a max of sbi->s_mb_max_to_scan times (default 200). After
+> > + *   that stop scanning and use whatever we have.
+> > + *
+> > + * * If free extent found is bigger than goal, then keep retrying
+> > + *   upto a max of sbi->s_mb_min_to_scan times (default 10) before
+> > + *   stopping the scan and using the extent.
+> > + *
+> > + *
+> >   * FIXME: real allocation policy is to be designed yet!
+> >   */
+> >  static void ext4_mb_measure_extent(struct ext4_allocation_context *ac,
+> > --
+> > 2.31.1
+> >
