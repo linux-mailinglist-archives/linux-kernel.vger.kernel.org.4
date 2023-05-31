@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED2B718237
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E9771823A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236161AbjEaNks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
+        id S236502AbjEaNkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236199AbjEaNke (ORCPT
+        with ESMTP id S236302AbjEaNkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:40:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8194710E;
-        Wed, 31 May 2023 06:40:32 -0700 (PDT)
+        Wed, 31 May 2023 09:40:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B6C128;
+        Wed, 31 May 2023 06:40:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16E6763AE8;
-        Wed, 31 May 2023 13:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E7DCC4339B;
-        Wed, 31 May 2023 13:40:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57BEA63B06;
+        Wed, 31 May 2023 13:40:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFA59C433EF;
+        Wed, 31 May 2023 13:40:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540431;
-        bh=7E2zN5wOxQMVNkWEJ3ZmsKlKUOT5ZHnKm+Nl0rmX0JY=;
+        s=k20201202; t=1685540432;
+        bh=6gpORcAxPIswk5rt3904T6pVzx2l7Ca1K3vmcaIsjyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CKXmcAZS4m6ynbFR28IS81YZAvDwKVuw7Z3YEF++z+GeTjl8ujLjTeg0lt3C7iH/w
-         /yp0DS7dVfx6smTsTLt04ryvBWADn+qra2J7j7qab+tFoLb+xRbmw7jG2Dq5+ZGHNz
-         wTDkoPiqlfkyvwbMxBeQHSIhm0i4lwTYrX9NlJp1/66lJ7ZDy7al4pXxqpaAambzeM
-         R9GEyezhRonEhiQx2wM3CYb77pH8tTj1fTSYFN0jEWR3hhpZa4y242wCkowJum5Cbf
-         DbYX0UBCZYc3kA1GSH+WBuybx9ABGCACWaWff/A/5xjtHZPvhTl3IJIwytyAFqzwNr
-         owghxtMeRERJQ==
+        b=mib0L5oRdsPpaz33Lto4kToqQ7LVtUuivCpnc6H0Luiw6AjOAZjHdSG4AnLnwdWNJ
+         t+Wkg2hUNNywJhBwT9TzY1yWKwE7xE4DZX/iYSj1u52l5khIC21lmexDb/3dv2qZGk
+         x2Wg9zKb3NRb1VSUW8olII/cPTF6DxLDgXGyRkOlRCRvne2QVM/iSYImdkyUHieAcG
+         YXqcDwSI9TV9HPQh8pzcWgCipfSlM9xUsUeVC3TrP9C0WpiyixGhQ4vkyOvQqvtap4
+         oTUvVvrlb5lSHyJzUICAh58SkwUnmtExV+9chK1CPdZ0Q/2sqbnoi97s6fshP2ZQEL
+         Qi212fzUiLtRA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, bamv2005@gmail.com,
-        shuah@kernel.org, linux-gpio@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 07/37] selftests: gpio: gpio-sim: Fix BUG: test FAILED due to recent change
-Date:   Wed, 31 May 2023 09:39:49 -0400
-Message-Id: <20230531134020.3383253-7-sashal@kernel.org>
+Cc:     Marek Vasut <marex@denx.de>, Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, sre@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 08/37] power: supply: Ratelimit no data debug output
+Date:   Wed, 31 May 2023 09:39:50 -0400
+Message-Id: <20230531134020.3383253-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134020.3383253-1-sashal@kernel.org>
 References: <20230531134020.3383253-1-sashal@kernel.org>
@@ -50,63 +48,51 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+From: Marek Vasut <marex@denx.de>
 
-[ Upstream commit 976d3c6778e99390c6d854d140b746d12ea18a51 ]
+[ Upstream commit 155c45a25679f571c2ae57d10db843a9dfc63430 ]
 
-According to Mirsad the gpio-sim.sh test appears to FAIL in a wrong way
-due to missing initialisation of shell variables:
+Reduce the amount of output this dev_dbg() statement emits into logs,
+otherwise if system software polls the sysfs entry for data and keeps
+getting -ENODATA, it could end up filling the logs up.
 
- 4.2. Bias settings work correctly
- cat: /sys/devices/platform/gpio-sim.0/gpiochip18/sim_gpio0/value: No such file or directory
- ./gpio-sim.sh: line 393: test: =: unary operator expected
- bias setting does not work
- GPIO gpio-sim test FAIL
+This does in fact make systemd journald choke, since during boot the
+sysfs power supply entries are polled and if journald starts at the
+same time, the journal is just being repeatedly filled up, and the
+system stops on trying to start journald without booting any further.
 
-After this change the test passed:
-
- 4.2. Bias settings work correctly
- GPIO gpio-sim test PASS
-
-His testing environment is AlmaLinux 8.7 on Lenovo desktop box with
-the latest Linux kernel based on v6.2:
-
-  Linux 6.2.0-mglru-kmlk-andy-09238-gd2980d8d8265 x86_64
-
-Suggested-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Tested-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/gpio/gpio-sim.sh | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/power/supply/power_supply_sysfs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/gpio/gpio-sim.sh b/tools/testing/selftests/gpio/gpio-sim.sh
-index 9f539d454ee4d..fa2ce2b9dd5fc 100755
---- a/tools/testing/selftests/gpio/gpio-sim.sh
-+++ b/tools/testing/selftests/gpio/gpio-sim.sh
-@@ -389,6 +389,9 @@ create_chip chip
- create_bank chip bank
- set_num_lines chip bank 8
- enable_chip chip
-+DEVNAME=`configfs_dev_name chip`
-+CHIPNAME=`configfs_chip_name chip bank`
-+SYSFS_PATH="/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio0/value"
- $BASE_DIR/gpio-mockup-cdev -b pull-up /dev/`configfs_chip_name chip bank` 0
- test `cat $SYSFS_PATH` = "1" || fail "bias setting does not work"
- remove_chip chip
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index c228205e09538..4bbb3053eef44 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -285,7 +285,8 @@ static ssize_t power_supply_show_property(struct device *dev,
+ 
+ 		if (ret < 0) {
+ 			if (ret == -ENODATA)
+-				dev_dbg(dev, "driver has no data for `%s' property\n",
++				dev_dbg_ratelimited(dev,
++					"driver has no data for `%s' property\n",
+ 					attr->attr.name);
+ 			else if (ret != -ENODEV && ret != -EAGAIN)
+ 				dev_err_ratelimited(dev,
 -- 
 2.39.2
 
