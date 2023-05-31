@@ -2,98 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF827189D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 758907189DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjEaTIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 15:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
+        id S229501AbjEaTJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 15:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjEaTIi (ORCPT
+        with ESMTP id S229648AbjEaTJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 15:08:38 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8A9180;
-        Wed, 31 May 2023 12:08:34 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-19eb96bffd4so128685fac.3;
-        Wed, 31 May 2023 12:08:34 -0700 (PDT)
+        Wed, 31 May 2023 15:09:26 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20DB125;
+        Wed, 31 May 2023 12:08:56 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5147e441c33so240614a12.0;
+        Wed, 31 May 2023 12:08:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685560114; x=1688152114;
+        d=gmail.com; s=20221208; t=1685560135; x=1688152135;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VQpBRBiUI2V7LS3F3uEGBbOSqBEboVJ5Y6bOHcSXqj0=;
-        b=l7G5U07jd0Hq+nLti5+Q4XkcQ8oPuzIpAHMGCUoor0JOwvKwLXW57cg6gG+v2aHRPI
-         sCe3onbbXZ3fm1M4PyfuFRumw8guMMcrTAPqVn8OxwBpM/DsZBF4IG75onMUyU6858Gv
-         p7ETmWFvMIu5dpFWabOIqyJXjULkUxexwzKv58HB22GKTJQEpxqocMQottkUV9pf0CnV
-         AExF9wQFoeA6RB+UEigPqoX9RNELF40E0yek2WJ/GZsd5kksON1A5W11U0WuyxJ2u67R
-         7UVfwiSEjpeJwUUtB9a9LTgxXbUXuR4vq6ydZCNnlh7jYXvfkhOUvV4v22V9R5exBC66
-         /C0g==
+        bh=zyxR30g2bKMnEjOEuROEiWjiUjocH3rGbPWdVsGv92s=;
+        b=Ye2IWrnhoxGCqV8CGZvUTZnGQFK30FN7eFPb3mkua59MXfEURFTToTqMIc9p4HZwMP
+         wFzjlVy9+QNsDn11n5oBQPUWKVZnTri5EvZYXX1lbvupKK/+7zMxPcBPoMJN839ELKW9
+         a1pgRCPWS7GNpT+c1HzgV+ns6eEcXkOses3w16nXfaSiXwV1vQJr86mZsPBcDWh3byPy
+         lPMencn3DjE+it5T1fGr1w6nHJ67qk4Bc8giOLvY+PenGdUi6wMJS29BtBXJdbiVu/+6
+         gZaLhB2bkTvf02Mdre9GTMnAcN8mLKnnjMiRp55fte9LFOqZf4BXk3L4hm5yihFbKZDz
+         XFMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685560114; x=1688152114;
+        d=1e100.net; s=20221208; t=1685560135; x=1688152135;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VQpBRBiUI2V7LS3F3uEGBbOSqBEboVJ5Y6bOHcSXqj0=;
-        b=QO6Ilj2KDdZW1zrjpk7mBOVbeafyjy/x8KX6ssHTtXTs3v0tiDxodhQqbJu8mAdITT
-         BbZsl/lRbX9IWvUQyLlONY0FF2Y4cT35UiV9dwMrr0wgZaBm3irCC86EHVjJ7yOwdD8M
-         bMeTuMzvWb9rvB4QpGLAqifhz0DpUq/brzE2yS/7lC5UR4Iidd3XpK4vRRA7Hkqdcidy
-         avBqcL5W3a2YUtdV1mK7Kj5lZKjxQOt4v2ZQvAOFsOb3mkcmVIgInZ6PP2DsRTfL5ILS
-         kSYImmD2pIINJx+Dsa+JAFUfD8/4FsPxkW7h6OXun7HaWSOSeeLBvkssw+ggAuNS5R99
-         3yDw==
-X-Gm-Message-State: AC+VfDyKToCQRzlCqvdHiIJWrBVuHUj6Eqn3R9XUz1nulaLgn3McUog0
-        lIcGj9QA7aIUtM01mo08qpk=
-X-Google-Smtp-Source: ACHHUZ4N/tUMZbG0loQlfqUR/SHUVvNft1dc/NpUkWdBisWgrIM65SU8M0mb3uNClrGMVLOSZp3Xuw==
-X-Received: by 2002:a05:6870:9894:b0:18b:1936:30ee with SMTP id eg20-20020a056870989400b0018b193630eemr4883265oab.56.1685560113987;
-        Wed, 31 May 2023 12:08:33 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id d7-20020a4a5207000000b0055554a51353sm7114205oob.1.2023.05.31.12.08.30
+        bh=zyxR30g2bKMnEjOEuROEiWjiUjocH3rGbPWdVsGv92s=;
+        b=IWpyQphcW6Z5uhCXJTtrPBNMDEutfQlECtR3IN/QE/b4R3cT9BPhuYOyEirPRM8sqr
+         prMKBpA5fruEx8XnGNuqIkkrLU2o8Z61/EGfjYF9l45ShbuJYN6N7H4DxfnVqRP3DNZz
+         eIuSacu7WvxvdPU5Ht//0wBRExNS/RNbFrb8yGE+1mQqJU4OAhHtyH34WE/c/9P/hV8+
+         DHVfP7nc+PcClFZ6xqS/dveeIT8qEa+L2U8KeUZgy8fFvAgB37vpP1fLazQpavNjOehV
+         TY6UD6GzYPw+M761+S01IyIVDcETHD3J7+4C9plBWsuCEzJzcCY1kXHS0MRyYA4WfczR
+         GklQ==
+X-Gm-Message-State: AC+VfDzCd127y1refm3+AEVDP9wKa3tFGDwK63Owm7rgfkazVeZGWiC3
+        iFJj+OIbKi5/RveJ/wd/G6c=
+X-Google-Smtp-Source: ACHHUZ7fgGkI5VqrGVbz2CLufCaK0JikIDl9Hwd+z7uJFtvba3mR751C8zmx9S8daTsL5HhTRk9D+w==
+X-Received: by 2002:a05:6402:5107:b0:514:9311:e83a with SMTP id m7-20020a056402510700b005149311e83amr7142584edd.8.1685560134877;
+        Wed, 31 May 2023 12:08:54 -0700 (PDT)
+Received: from ?IPV6:2a01:c23:c18f:4600:8999:532:b66e:c213? (dynamic-2a01-0c23-c18f-4600-8999-0532-b66e-c213.c23.pool.telefonica.de. [2a01:c23:c18f:4600:8999:532:b66e:c213])
+        by smtp.googlemail.com with ESMTPSA id d25-20020a50fb19000000b0050cc4461fc5sm6101880edq.92.2023.05.31.12.08.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 12:08:33 -0700 (PDT)
-Message-ID: <de3a8297-19dd-4854-3311-492ac0875e40@gmail.com>
-Date:   Wed, 31 May 2023 16:08:29 -0300
+        Wed, 31 May 2023 12:08:54 -0700 (PDT)
+Message-ID: <4a6c413c-8791-fd00-a73e-7a12413693e3@gmail.com>
+Date:   Wed, 31 May 2023 21:08:53 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH v1] rust: error: integrate Rust error type with `errname`
-To:     Alice Ryhl <aliceryhl@google.com>, rust-for-linux@vger.kernel.org
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>
-References: <20230531174450.3733220-1-aliceryhl@google.com>
+Subject: Re: [PATCH 2/2] net: phy: realtek: Add optional external PHY clock
+To:     Detlev Casanova <detlev.casanova@collabora.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230531150340.522994-1-detlev.casanova@collabora.com>
+ <20230531150340.522994-2-detlev.casanova@collabora.com>
 Content-Language: en-US
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230531174450.3733220-1-aliceryhl@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <20230531150340.522994-2-detlev.casanova@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/23 14:44, Alice Ryhl wrote:
-> From: Gary Guo <gary@garyguo.net>
+On 31.05.2023 17:03, Detlev Casanova wrote:
+> In some cases, the PHY can use an external clock source instead of a
+> crystal.
 > 
-> This integrates the `Error` type with the `errname` by making it
-> accessible via the `name` method or via the `Debug` trait.
+> Add an optional clock in the phy node to make sure that the clock source
+> is enabled, if specified, before probing.
 > 
-> Co-Developed-by: Wedson Almeida Filho <walmeida@microsoft.com>
-> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
-> Co-Developed-by: Sven Van Asbroeck <thesven73@gmail.com>
-> Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 > ---
-> [...]
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+>  drivers/net/phy/realtek.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
+> index 3d99fd6664d7..70c75dbbf799 100644
+> --- a/drivers/net/phy/realtek.c
+> +++ b/drivers/net/phy/realtek.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/phy.h>
+>  #include <linux/module.h>
+>  #include <linux/delay.h>
+> +#include <linux/clk.h>
+>  
+>  #define RTL821x_PHYSR				0x11
+>  #define RTL821x_PHYSR_DUPLEX			BIT(13)
+> @@ -80,6 +81,7 @@ struct rtl821x_priv {
+>  	u16 phycr1;
+>  	u16 phycr2;
+>  	bool has_phycr2;
+> +	struct clk *clk;
+>  };
+>  
+>  static int rtl821x_read_page(struct phy_device *phydev)
+> @@ -103,6 +105,11 @@ static int rtl821x_probe(struct phy_device *phydev)
+>  	if (!priv)
+>  		return -ENOMEM;
+>  
+> +	priv->clk = devm_clk_get_optional_enabled(dev, "xtal");
+
+Why add priv->clk if it isn't used outside probe()?
+
+How about suspend/resume? Would it make sense to stop the clock
+whilst PHY is suspended?
+
+> +	if (IS_ERR(priv->clk))
+> +		return dev_err_probe(dev, PTR_ERR(priv->clk),
+> +				     "failed to get phy xtal clock\n");
+> +
+>  	ret = phy_read_paged(phydev, 0xa43, RTL8211F_PHYCR1);
+>  	if (ret < 0)
+>  		return ret;
+
