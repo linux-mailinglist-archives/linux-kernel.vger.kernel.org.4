@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A4471804D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265B9718048
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236104AbjEaMtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
+        id S236074AbjEaMt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235992AbjEaMtA (ORCPT
+        with ESMTP id S235989AbjEaMs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:49:00 -0400
+        Wed, 31 May 2023 08:48:59 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5396BE4D
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:48:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A156E45
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:48:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=PBSWmj9vFVjjLqcL4+nxKoAvy2PS0YCtwS6oEGVZY9I=; b=HK+Caj9r6h1z6KIgMujfd8PAKB
-        ZyhYVnYFBeMYPB7WX57TqP32+u0yeT7U7Nhea18FLdt0lWvyIVCWR10Ieg0LEd6hAA+uWLqLRw8Yx
-        zozyJIqLEgDwspR4NESvHqogFaIjwHmgSDuvnmgxYI84l6stgVybvmcgQfr9L5fNtFiRobXeI0Pax
-        hZ08j6NEAkXdCYkYP6RpYrs7oqJi31Kf1knppewryVJd9c2hRTS7k685Fpke3uQJUcNAMq9naeJnz
-        ZCQoFempJQHna20ZC4wyKBSRyL2SrypVYUc2VlkgmGIRFYDU8gasck+Z7Pj9WnGMuT2yl86Giyrff
-        YeBji3fA==;
+        bh=cgla+rvT0nVnQI4wEDomn+b4ABDX9Oku+7rZVELb/vE=; b=T0EdiQhHcgLKDjJpGdLZIb7wfg
+        d0msWmAZJDo20YEDR09tl6xcly2DUMDSLNV06g2klNG8mzGPIf5AVkCCsBpuJIS/bdzQ2gD1ie14L
+        R041esemRi5hK/uYgGYivHDQ93XzW4RQ5POReVj9JfhGYdUCFLHdGpkbuXRQEZ7MlxmjfxiZvGZ8G
+        iTa7pAxSpYtkLWRgHkOCh7ldlCfhfOpzj8QC+mkIyPXRbxPgCfCwUI4djfQ3//Yr803OnRRWd28LS
+        GfItLfMz2CNb5ndU/Ntwz7vEcfLb0vLzAiyAUylxaBPCxpk5KMAlnauYc/6sClx7xIOyqK6llHuV5
+        OszLAf6g==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q4LEq-007GRd-0U; Wed, 31 May 2023 12:47:40 +0000
+        id 1q4LEq-007GRg-41; Wed, 31 May 2023 12:47:40 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 956C9300F2D;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9A2B33012A7;
         Wed, 31 May 2023 14:47:37 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 1F0CD22BA6460; Wed, 31 May 2023 14:47:34 +0200 (CEST)
-Message-ID: <20230531124604.477939524@infradead.org>
+        id 2486F22BA6461; Wed, 31 May 2023 14:47:34 +0200 (CEST)
+Message-ID: <20230531124604.546980086@infradead.org>
 User-Agent: quilt/0.66
-Date:   Wed, 31 May 2023 13:58:52 +0200
+Date:   Wed, 31 May 2023 13:58:53 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     mingo@kernel.org, vincent.guittot@linaro.org
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
@@ -50,7 +50,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
         yu.c.chen@intel.com, youssefesmat@chromium.org,
         joel@joelfernandes.org, efault@gmx.de, tglx@linutronix.de
-Subject: [RFC][PATCH 13/15] sched/fair: Implement latency-nice
+Subject: [RFC][PATCH 14/15] sched/fair: Add sched group latency support
 References: <20230531115839.089944915@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -64,119 +64,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement latency-nice as a modulation of the EEVDF r_i parameter,
-specifically apply the inverse sched_prio_to_weight[] relation on
-base_slice.
+From: Vincent Guittot <vincent.guittot@linaro.org>
 
-Given a base slice of 3 [ms], this gives a range of:
+Task can set its latency priority with sched_setattr(), which is then used
+to set the latency offset of its sched_enity, but sched group entities
+still have the default latency offset value.
 
-  latency-nice  19: 3*1024 / 15    ~= 204.8 [ms]
-  latency-nice -20: 3*1024 / 88761 ~= 0.034 [ms]
+Add a latency.nice field in cpu cgroup controller to set the latency
+priority of the group similarly to sched_setattr(). The latency priority
+is then used to set the offset of the sched_entities of the group.
 
-(which might not make sense)
-
+Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
+Link: https://lkml.kernel.org/r/20230224093454.956298-7-vincent.guittot@linaro.org
 ---
- kernel/sched/core.c  |   14 ++++++++++----
- kernel/sched/fair.c  |   22 +++++++++++++++-------
- kernel/sched/sched.h |    2 ++
- 3 files changed, 27 insertions(+), 11 deletions(-)
+ Documentation/admin-guide/cgroup-v2.rst |   10 ++++++++++
+ kernel/sched/core.c                     |   30 ++++++++++++++++++++++++++++++
+ kernel/sched/fair.c                     |   27 +++++++++++++++++++++++++++
+ kernel/sched/sched.h                    |    4 ++++
+ 4 files changed, 71 insertions(+)
 
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -1121,6 +1121,16 @@ All time durations are in microseconds.
+         values similar to the sched_setattr(2). This maximum utilization
+         value is used to clamp the task specific maximum utilization clamp.
+ 
++  cpu.latency.nice
++	A read-write single value file which exists on non-root
++	cgroups.  The default is "0".
++
++	The nice value is in the range [-20, 19].
++
++	This interface file allows reading and setting latency using the
++	same values used by sched_setattr(2). The latency_nice of a group is
++	used to limit the impact of the latency_nice of a task outside the
++	group.
+ 
+ 
+ Memory
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -1305,6 +1305,12 @@ static void set_load_weight(struct task_
- 	}
+@@ -11177,6 +11177,25 @@ static int cpu_idle_write_s64(struct cgr
+ {
+ 	return sched_group_set_idle(css_tg(css), idle);
  }
- 
-+static inline void set_latency_prio(struct task_struct *p, int prio)
++
++static s64 cpu_latency_nice_read_s64(struct cgroup_subsys_state *css,
++				    struct cftype *cft)
 +{
-+	p->latency_prio = prio;
-+	set_latency_fair(&p->se, prio - MAX_RT_PRIO);
++	return PRIO_TO_NICE(css_tg(css)->latency_prio);
 +}
 +
- #ifdef CONFIG_UCLAMP_TASK
- /*
-  * Serializes updates of utilization clamp values
-@@ -4464,9 +4470,10 @@ static void __sched_fork(unsigned long c
- 	p->se.nr_migrations		= 0;
- 	p->se.vruntime			= 0;
- 	p->se.vlag			= 0;
--	p->se.slice			= sysctl_sched_base_slice;
- 	INIT_LIST_HEAD(&p->se.group_node);
- 
-+	set_latency_prio(p, p->latency_prio);
++static int cpu_latency_nice_write_s64(struct cgroup_subsys_state *css,
++				     struct cftype *cft, s64 nice)
++{
++	int prio;
 +
- #ifdef CONFIG_FAIR_GROUP_SCHED
- 	p->se.cfs_rq			= NULL;
++	if (nice < MIN_NICE || nice > MAX_NICE)
++		return -ERANGE;
++
++	prio = NICE_TO_PRIO(nice);
++
++	return sched_group_set_latency(css_tg(css), prio);
++}
  #endif
-@@ -4718,8 +4725,7 @@ int sched_fork(unsigned long clone_flags
  
- 		p->prio = p->normal_prio = p->static_prio;
- 		set_load_weight(p, false);
--
--		p->latency_prio = NICE_TO_PRIO(0);
-+		set_latency_prio(p, NICE_TO_PRIO(0));
- 
- 		/*
- 		 * We don't need the reset flag anymore after the fork. It has
-@@ -7507,7 +7513,7 @@ static void __setscheduler_latency(struc
- 				   const struct sched_attr *attr)
- {
- 	if (attr->sched_flags & SCHED_FLAG_LATENCY_NICE)
--		p->latency_prio = NICE_TO_PRIO(attr->sched_latency_nice);
-+		set_latency_prio(p, NICE_TO_PRIO(attr->sched_latency_nice));
- }
- 
- /*
+ static struct cftype cpu_legacy_files[] = {
+@@ -11191,6 +11210,11 @@ static struct cftype cpu_legacy_files[]
+ 		.read_s64 = cpu_idle_read_s64,
+ 		.write_s64 = cpu_idle_write_s64,
+ 	},
++	{
++		.name = "latency.nice",
++		.read_s64 = cpu_latency_nice_read_s64,
++		.write_s64 = cpu_latency_nice_write_s64,
++	},
+ #endif
+ #ifdef CONFIG_CFS_BANDWIDTH
+ 	{
+@@ -11408,6 +11432,12 @@ static struct cftype cpu_files[] = {
+ 		.read_s64 = cpu_idle_read_s64,
+ 		.write_s64 = cpu_idle_write_s64,
+ 	},
++	{
++		.name = "latency.nice",
++		.flags = CFTYPE_NOT_ON_ROOT,
++		.read_s64 = cpu_latency_nice_read_s64,
++		.write_s64 = cpu_latency_nice_write_s64,
++	},
+ #endif
+ #ifdef CONFIG_CFS_BANDWIDTH
+ 	{
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -952,6 +952,21 @@ int sched_update_scaling(void)
- }
- #endif
+@@ -12293,6 +12293,7 @@ int alloc_fair_sched_group(struct task_g
+ 		goto err;
  
-+void set_latency_fair(struct sched_entity *se, int prio)
-+{
-+	u32 weight = sched_prio_to_weight[prio];
-+	u64 base = sysctl_sched_base_slice;
+ 	tg->shares = NICE_0_LOAD;
++	tg->latency_prio = DEFAULT_PRIO;
+ 
+ 	init_cfs_bandwidth(tg_cfs_bandwidth(tg));
+ 
+@@ -12391,6 +12392,9 @@ void init_tg_cfs_entry(struct task_group
+ 	}
+ 
+ 	se->my_q = cfs_rq;
 +
-+	/*
-+	 * For EEVDF the virtual time slope is determined by w_i (iow.
-+	 * nice) while the request time r_i is determined by
-+	 * latency-nice.
-+	 *
-+	 * Smaller request gets better latency.
-+	 */
-+	se->slice = div_u64(base << SCHED_FIXEDPOINT_SHIFT, weight);
++	set_latency_fair(se, tg->latency_prio - MAX_RT_PRIO);
++
+ 	/* guarantee group entities always have weight */
+ 	update_load_set(&se->load, NICE_0_LOAD);
+ 	se->parent = parent;
+@@ -12519,6 +12523,29 @@ int sched_group_set_idle(struct task_gro
+ 
+ 	mutex_unlock(&shares_mutex);
+ 	return 0;
 +}
 +
- static void clear_buddies(struct cfs_rq *cfs_rq, struct sched_entity *se);
++int sched_group_set_latency(struct task_group *tg, int prio)
++{
++	int i;
++
++	if (tg == &root_task_group)
++		return -EINVAL;
++
++	mutex_lock(&shares_mutex);
++
++	if (tg->latency_prio == prio) {
++		mutex_unlock(&shares_mutex);
++		return 0;
++	}
++
++	tg->latency_prio = prio;
++
++	for_each_possible_cpu(i)
++		set_latency_fair(tg->se[i], prio - MAX_RT_PRIO);
++
++	mutex_unlock(&shares_mutex);
++	return 0;
+ }
  
- /*
-@@ -964,13 +979,6 @@ static void update_deadline(struct cfs_r
- 		return;
- 
- 	/*
--	 * For EEVDF the virtual time slope is determined by w_i (iow.
--	 * nice) while the request time r_i is determined by
--	 * sysctl_sched_base_slice.
--	 */
--	se->slice = sysctl_sched_base_slice;
--
--	/*
- 	 * EEVDF: vd_i = ve_i + r_i / w_i
- 	 */
- 	se->deadline = se->vruntime + calc_delta_fair(se->slice, se);
+ #else /* CONFIG_FAIR_GROUP_SCHED */
 --- a/kernel/sched/sched.h
 +++ b/kernel/sched/sched.h
-@@ -2495,6 +2495,8 @@ extern unsigned int sysctl_numa_balancin
- extern unsigned int sysctl_numa_balancing_hot_threshold;
- #endif
+@@ -378,6 +378,8 @@ struct task_group {
  
-+extern void set_latency_fair(struct sched_entity *se, int prio);
+ 	/* A positive value indicates that this is a SCHED_IDLE group. */
+ 	int			idle;
++	/* latency priority of the group. */
++	int			latency_prio;
+ 
+ #ifdef	CONFIG_SMP
+ 	/*
+@@ -488,6 +490,8 @@ extern int sched_group_set_shares(struct
+ 
+ extern int sched_group_set_idle(struct task_group *tg, long idle);
+ 
++extern int sched_group_set_latency(struct task_group *tg, int prio);
 +
- #ifdef CONFIG_SCHED_HRTICK
- 
- /*
+ #ifdef CONFIG_SMP
+ extern void set_task_rq_fair(struct sched_entity *se,
+ 			     struct cfs_rq *prev, struct cfs_rq *next);
 
 
