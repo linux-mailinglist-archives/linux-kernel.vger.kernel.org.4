@@ -2,103 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5E6718F20
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E44718F24
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjEaXsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 19:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
+        id S229955AbjEaXs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 19:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjEaXsR (ORCPT
+        with ESMTP id S229603AbjEaXsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 19:48:17 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC9212F
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:48:15 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-33bbf34b497so683655ab.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:48:15 -0700 (PDT)
+        Wed, 31 May 2023 19:48:55 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928EA191
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:48:49 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b0236ee816so2437525ad.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:48:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685576894; x=1688168894;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/xl/rPfybuWWRREKP0y1CQScxSYr/byrO3VlKqP/h1s=;
-        b=WdWPXGLfqJN3uJzhpy5lBQ1NXyB7nJIH8g3pN2eddplananhwguaQuSE10Z3hC+2HR
-         6N9+5FU5552q9H0U6tSDgzyst+KdDy10Jsp3UkHVcFxCU3pa2UbhrX1PdGFgUUYupjaS
-         NPyOY3JJIX/hp4TKuQhlP9pBzBLJSy2Ep38uY=
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1685576929; x=1688168929;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bapLcT1rfgF5eXP0K5sMoe265ENn9lfWlaeN3allmSs=;
+        b=YV/VGUCm3cO8v9Pt3ZyWyo4W+JosjwST1qxgNAOzMZYt+nWwG+aISOYjKzh9jyWIaW
+         BcD/xwqOPxKHiNkxFU1lS3wknEP4nUn44Ok1VifFX+OGo/QpS7ATmW6Mi4SFAKzYkifd
+         uzSxA8QMG7kzAar91JCJgqCBJCW/+Lk1Q9c1qbOVISGbwLCrhtks4izUCzoxFACqk2VF
+         0fyMJMoxCq3i1grLOBC8Ly7IfHEoGJeZQDGmi8iJVE0tnv7hLPZbktXIOlYStIElrYtY
+         PQosmB1fQCIy/6BgntmRoakEzbTtpDaAXItwzVyqcjt28hFIFmhwznbAWuGGn7IPzAs6
+         JpuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685576894; x=1688168894;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/xl/rPfybuWWRREKP0y1CQScxSYr/byrO3VlKqP/h1s=;
-        b=Okq7NwDCU8F52IUR5Fwd8QY7VD2lVv2HSWPHRNTUFmejfCdHpftp0e/L0zSe2r1CIw
-         tca3qW35AriYM/DxD5c2VgxlYB0RwY2SH3OUPxRZaOwWVF3iKOmni7Dz18P6rQ++7AUY
-         fn4yw2SjaCtLCGB+QtnTs6kh6di/xyoFpLyj2Zrut51phCYCYnRbjrp6DHuajleIfGks
-         nh0j1c5Biex86GiAgF/aiOEd0WQ3jhlRt5mFdFH1XseN6In/daBegBS/Vqb+BvgRJsCs
-         Y/qmERPujvWTa103tfPLWGaetkAg2woX4dTfgwx48J2abc7Uc0BWyQ45zNzV+5/YPPCl
-         zIRw==
-X-Gm-Message-State: AC+VfDzexeqonhFMzURoKy13bTibOOSvKrZDOrcSMEjdsHOG3FixJcHv
-        RfvSzi+OqZx5EjPGgGhovYTQSnxblhNDDHMIYys=
-X-Google-Smtp-Source: ACHHUZ5h9F+3eaumnDzhyx99+WynQzZHtNpdCep075qPxcq8ULuOQfz+ydvDyoN+kHVFxotExkf3yA==
-X-Received: by 2002:a92:d683:0:b0:335:5b3b:72 with SMTP id p3-20020a92d683000000b003355b3b0072mr2889577iln.23.1685576893942;
-        Wed, 31 May 2023 16:48:13 -0700 (PDT)
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com. [209.85.166.172])
-        by smtp.gmail.com with ESMTPSA id j15-20020a926e0f000000b0032b56a80e1csm3343371ilc.58.2023.05.31.16.48.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 16:48:13 -0700 (PDT)
-Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-33bf12b5fb5so30435ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:48:11 -0700 (PDT)
-X-Received: by 2002:a05:6e02:1ca4:b0:33b:7a45:a950 with SMTP id
- x4-20020a056e021ca400b0033b7a45a950mr93109ill.18.1685576890947; Wed, 31 May
- 2023 16:48:10 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685576929; x=1688168929;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bapLcT1rfgF5eXP0K5sMoe265ENn9lfWlaeN3allmSs=;
+        b=Wsx17k6rdqIMQbkuEbzb7nBbkZK89KscQ/1oWfuSFQalAU+r7DZ9B2GwweH8lsciRV
+         Nj/dSxflnhdl5Bglx6qhq62+4KxrYG8DoSRO3SwrlLv5VPXWjenF6xoCuaT1XnwQvpm7
+         JK+O4G5HNYcP9sAo4r+rC7h2TOwJhBGuD7VOPR45CsyAhXMm9itUfQk4u+YhSEy7dVkH
+         wfz5FAyAS9YdZNmI3HobAFPjxBuw2N8LwDTwOAhD/wK2okW16noNOfexNyFyhOCl7b7l
+         kRsXPXEkdjqLRUHZvzNx7CGWHr7m4EvZHQuSIiIU8zyCcYeW4DUGVLtiaqaiv2G54dak
+         s8Lg==
+X-Gm-Message-State: AC+VfDxyPyn6Bnyoi/+Ez0Ve586LUt2g3TOiUOQv8Ds0TiaOtp0QXfah
+        jPFLPAvHRGuTF5pa6gQ1WngbqA==
+X-Google-Smtp-Source: ACHHUZ75YAULNe67vWw2+IHca2+HfoohrGo37Wkj1DLaLuSiBLHhhOk9FEPeleT3/wn6oUQe7zel5g==
+X-Received: by 2002:a17:902:aa07:b0:1a0:76e8:a4d with SMTP id be7-20020a170902aa0700b001a076e80a4dmr142755plb.14.1685576929033;
+        Wed, 31 May 2023 16:48:49 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
+        by smtp.gmail.com with ESMTPSA id q4-20020a63e944000000b0053fb1fbd3f2sm1788299pgj.91.2023.05.31.16.48.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 16:48:48 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1q4VYb-006IPu-0W;
+        Thu, 01 Jun 2023 09:48:45 +1000
+Date:   Thu, 1 Jun 2023 09:48:45 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Qi Zheng <qi.zheng@linux.dev>
+Cc:     akpm@linux-foundation.org, tkhai@ya.ru, roman.gushchin@linux.dev,
+        vbabka@suse.cz, viro@zeniv.linux.org.uk, brauner@kernel.org,
+        djwong@kernel.org, hughd@google.com, paulmck@kernel.org,
+        muchun.song@linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: Re: [PATCH 6/8] xfs: introduce xfs_fs_destroy_super()
+Message-ID: <ZHfc3V4KKmW8QTR2@dread.disaster.area>
+References: <20230531095742.2480623-1-qi.zheng@linux.dev>
+ <20230531095742.2480623-7-qi.zheng@linux.dev>
 MIME-Version: 1.0
-References: <20230530072514.22001-1-trevor.wu@mediatek.com> <20230530072514.22001-3-trevor.wu@mediatek.com>
-In-Reply-To: <20230530072514.22001-3-trevor.wu@mediatek.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 31 May 2023 16:47:59 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XUKuDVb+B9i31TfyNwGY11MM-q6eJJVkrasj=GGboRcg@mail.gmail.com>
-Message-ID: <CAD=FV=XUKuDVb+B9i31TfyNwGY11MM-q6eJJVkrasj=GGboRcg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] ASoC: mediatek: mt8195: fix use-after-free in driver
- remove path
-To:     Trevor Wu <trevor.wu@mediatek.com>
-Cc:     broonie@kernel.org, lgirdwood@gmail.com, tiwai@suse.com,
-        perex@perex.cz, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531095742.2480623-7-qi.zheng@linux.dev>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, May 30, 2023 at 12:25=E2=80=AFAM Trevor Wu <trevor.wu@mediatek.com>=
- wrote:
->
-> diff --git a/sound/soc/mediatek/mt8195/mt8195-audsys-clk.c b/sound/soc/me=
-diatek/mt8195/mt8195-audsys-clk.c
-> index e0670e0dbd5b..09bd1a020421 100644
-> --- a/sound/soc/mediatek/mt8195/mt8195-audsys-clk.c
-> +++ b/sound/soc/mediatek/mt8195/mt8195-audsys-clk.c
-> @@ -148,6 +148,29 @@ static const struct afe_gate aud_clks[CLK_AUD_NR_CLK=
-] =3D {
->         GATE_AUD6(CLK_AUD_GASRC19, "aud_gasrc19", "top_asm_h", 19),
->  };
->
-> +static void mt8195_audsys_clk_unregister(void *data)
+On Wed, May 31, 2023 at 09:57:40AM +0000, Qi Zheng wrote:
+> From: Kirill Tkhai <tkhai@ya.ru>
+> 
+> xfs_fs_nr_cached_objects() touches sb->s_fs_info,
+> and this patch makes it to be destructed later.
+> 
+> After this patch xfs_fs_nr_cached_objects() is safe
+> for splitting unregister_shrinker(): mp->m_perag_tree
+> is stable till destroy_super_work(), while iteration
+> over it is already RCU-protected by internal XFS
+> business.
+> 
+> Signed-off-by: Kirill Tkhai <tkhai@ya.ru>
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> ---
+>  fs/xfs/xfs_super.c | 25 ++++++++++++++++++++++---
+>  1 file changed, 22 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/xfs/xfs_super.c b/fs/xfs/xfs_super.c
+> index 7e706255f165..694616524c76 100644
+> --- a/fs/xfs/xfs_super.c
+> +++ b/fs/xfs/xfs_super.c
+> @@ -743,11 +743,18 @@ xfs_fs_drop_inode(
+>  }
+>  
+>  static void
+> -xfs_mount_free(
+> +xfs_free_names(
+>  	struct xfs_mount	*mp)
+>  {
+>  	kfree(mp->m_rtname);
+>  	kfree(mp->m_logname);
+> +}
+> +
+> +static void
+> +xfs_mount_free(
+> +	struct xfs_mount	*mp)
 > +{
-> +       struct mtk_base_afe *afe =3D (struct mtk_base_afe *)data;
+> +	xfs_free_names(mp);
+>  	kmem_free(mp);
+>  }
+>  
+> @@ -1136,8 +1143,19 @@ xfs_fs_put_super(
+>  	xfs_destroy_mount_workqueues(mp);
+>  	xfs_close_devices(mp);
+>  
+> -	sb->s_fs_info = NULL;
+> -	xfs_mount_free(mp);
+> +	xfs_free_names(mp);
+> +}
+> +
+> +static void
+> +xfs_fs_destroy_super(
+> +	struct super_block	*sb)
+> +{
+> +	if (sb->s_fs_info) {
+> +		struct xfs_mount	*mp = XFS_M(sb);
+> +
+> +		kmem_free(mp);
+> +		sb->s_fs_info = NULL;
+> +	}
+>  }
+>  
+>  static long
+> @@ -1165,6 +1183,7 @@ static const struct super_operations xfs_super_operations = {
+>  	.dirty_inode		= xfs_fs_dirty_inode,
+>  	.drop_inode		= xfs_fs_drop_inode,
+>  	.put_super		= xfs_fs_put_super,
+> +	.destroy_super		= xfs_fs_destroy_super,
+>  	.sync_fs		= xfs_fs_sync_fs,
+>  	.freeze_fs		= xfs_fs_freeze,
+>  	.unfreeze_fs		= xfs_fs_unfreeze,
 
-Same as in patch #1, the above cast isn't necessary. Other than that:
+I don't really like this ->destroy_super() callback, especially as
+it's completely undocumented as to why it exists. This is purely a
+work-around for handling extended filesystem superblock shrinker
+functionality, yet there's nothing that tells the reader this.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+It also seems to imply that the superblock shrinker can continue to
+run after the existing unregister_shrinker() call before ->kill_sb()
+is called. This violates the assumption made in filesystems that the
+superblock shrinkers have been stopped and will never run again
+before ->kill_sb() is called. Hence ->kill_sb() implementations
+assume there is nothing else accessing filesystem owned structures
+and it can tear down internal structures safely.
+
+Realistically, the days of XFS using this superblock shrinker
+extension are numbered. We've got a lot of the infrastructure we
+need in place to get rid of the background inode reclaim
+infrastructure that requires this shrinker extension, and it's on my
+list of things that need to be addressed in the near future. 
+
+In fact, now that I look at it, I think the shmem usage of this
+superblock shrinker interface is broken - it returns SHRINK_STOP to
+->free_cached_objects(), but the only valid return value is the
+number of objects freed (i.e. 0 is nothing freed). These special
+superblock extension interfaces do not work like a normal
+shrinker....
+
+Hence I think the shmem usage should be replaced with an separate
+internal shmem shrinker that is managed by the filesystem itself
+(similar to how XFS has multiple internal shrinkers).
+
+At this point, then the only user of this interface is (again) XFS.
+Given this, adding new VFS methods for a single filesystem
+for functionality that is planned to be removed is probably not the
+best approach to solving the problem.
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
