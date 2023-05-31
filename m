@@ -2,223 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5881718EF7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247B5718EFB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbjEaXLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 19:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
+        id S230408AbjEaXMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 19:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjEaXLn (ORCPT
+        with ESMTP id S230414AbjEaXMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 19:11:43 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FEC12C;
-        Wed, 31 May 2023 16:11:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=nmte9E9sXVloF6HUJV4QBiAwzkNA1xzyrniH4jntggs=; b=a/Su64r/VzsuH3nHvF5cXQ/zgX
-        mnKbP/aBaq+ZKi1XzrsK5gORPxNLqYyEbzM/22/x3NWQBBvc2x40ocTn6gG995iRZqKuiP8SjxXxj
-        qLVIkE3AiIGnpz3HntG6+qWplO3b1BaoYoWEKEVozzHNKgZ5TAVm7jab3w5HLtNGRwY08V+jgmAU/
-        k0hbkbFKP9kq3T5KpJy1RGUHwunKj6Dv7TC50cVxWnnpJN/nhMuSb5swDMrYOCFfTZYnaZImZAHiP
-        QhVxkXXjmuFY/4cOkVVCQu1y+RQ7Z0GRaPI9305VKIbvEkg9ugWQtn2c1yKEYPVCyB5S7xBUdjQD9
-        +3vYiCvw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q4Uyb-001RVl-2n;
-        Wed, 31 May 2023 23:11:33 +0000
-Message-ID: <c26c2a9e-13af-2b7c-d3dd-8455a10d84c6@infradead.org>
-Date:   Wed, 31 May 2023 16:11:30 -0700
+        Wed, 31 May 2023 19:12:40 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F869A0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:12:37 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d247a023aso198944b3a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:12:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1685574756; x=1688166756;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NdrJ9MIJBRF6SJ1238zAPHjVfaouK03YhdkmBFLWYHU=;
+        b=ID8921t0pn2fvFZSPX1ZCn10WYK0inJi+Xd18q6u9I2qj9Ua8QL/IeltWfVKU1549H
+         6t+FxjDrPHAhQhSB9JUjWETqcJHxAf+v7YLxwCZGsAuIUxonZkkFq7XdK1EhZEmH5lAp
+         qYAaH4CiK8x4svKHXlCp+v2jNkN4mWFjTzogGYkohIubyyxVVOxf3JLsLl9kzOJPg/7J
+         xxINvt2pxEnRtAX/ARJyUgMTJORyZOEFcNCRW7fuDHrc0oUvVcU2wtsStCp4UpkvLpMr
+         DSNeoqv+/XYJerWdG5jeUU5678yDxAHf9x68P+rXEC/Q/fIjVLu3koKY+XmRzyE7za4f
+         4q6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685574756; x=1688166756;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NdrJ9MIJBRF6SJ1238zAPHjVfaouK03YhdkmBFLWYHU=;
+        b=frH0V7MMMhOD/JlNfoszb/zuyMlfcLi+nXKerqrh5Ym8z260ErhH66UvGC4RLWo+1x
+         KipEdpAQjBWKUR0Ja4+zwLEnN3XWg9+UZiz6diZ3QWXpcWyhYkyqXUWgGMcOeUvR5BsT
+         SbATkmYTHFaC7+2B/rPkmxrMK8Uegzfl3mXg7OAthQUp3bkKIBtHxCkC6CLVPZTO3Ex6
+         J/VR6SMdgLDE6BcnGGS3H0Yg4bQd+3laoMireICa/AzJsZtS4CEzvy+Phbi4jvJa+Jdg
+         ISc2GuohdGbRDGwKt73+gM9JaJVlVhIbsDbWL59qv3t7A8e3JNSJso7K7NCh84Cv6AYV
+         hdzg==
+X-Gm-Message-State: AC+VfDyT8HG5jkCLarxNSCnz7sRRBCxQb/wgZiBxh1sSiYWFm0xOs+dx
+        NoyOtGxllZvJsy2A4k9sG4CoFQ==
+X-Google-Smtp-Source: ACHHUZ6t82xplazJPqCDO0qJl0sdq89xmVCN5MjD9hEMlaWGG60n1KteElROnWc1nPytTu2S5dCmtw==
+X-Received: by 2002:a05:6a20:914e:b0:10f:500b:18a2 with SMTP id x14-20020a056a20914e00b0010f500b18a2mr5804009pzc.48.1685574756329;
+        Wed, 31 May 2023 16:12:36 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
+        by smtp.gmail.com with ESMTPSA id s17-20020a170902ea1100b001b077301a58sm1965299plg.79.2023.05.31.16.12.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 16:12:35 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1q4UzZ-006HqL-0r;
+        Thu, 01 Jun 2023 09:12:33 +1000
+Date:   Thu, 1 Jun 2023 09:12:33 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Qi Zheng <qi.zheng@linux.dev>
+Cc:     akpm@linux-foundation.org, tkhai@ya.ru, roman.gushchin@linux.dev,
+        vbabka@suse.cz, viro@zeniv.linux.org.uk, brauner@kernel.org,
+        djwong@kernel.org, hughd@google.com, paulmck@kernel.org,
+        muchun.song@linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: Re: [PATCH 4/8] fs: shrink only (SB_ACTIVE|SB_BORN) superblocks in
+ super_cache_scan()
+Message-ID: <ZHfUYVgjihp/Hxfz@dread.disaster.area>
+References: <20230531095742.2480623-1-qi.zheng@linux.dev>
+ <20230531095742.2480623-5-qi.zheng@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 5/6] cgroup/cpuset: Documentation update for partition
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
-References: <20230531163405.2200292-6-longman@redhat.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230531163405.2200292-6-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531095742.2480623-5-qi.zheng@linux.dev>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Just a few small nits below:
-
-On 5/31/23 09:34, Waiman Long wrote:
-> This patch updates the cgroup-v2.rst file to include information about
-> the new "cpuset.cpus.reserve" control file as well as the new remote
-> partition.
+On Wed, May 31, 2023 at 09:57:38AM +0000, Qi Zheng wrote:
+> From: Kirill Tkhai <tkhai@ya.ru>
 > 
-> Signed-off-by: Waiman Long <longman@redhat.com>
+> This patch prepares superblock shrinker for delayed unregistering.
+> It makes super_cache_scan() avoid shrinking of not active superblocks.
+> SB_ACTIVE is used as such the indicator. In case of superblock is not
+> active, super_cache_scan() just exits with SHRINK_STOP as result.
+> 
+> Note, that SB_ACTIVE is cleared in generic_shutdown_super() and this
+> is made under the write lock of s_umount. Function super_cache_scan()
+> also takes the read lock of s_umount, so it can't skip this flag cleared.
+> 
+> SB_BORN check is added to super_cache_scan() just for uniformity
+> with super_cache_count(), while super_cache_count() received SB_ACTIVE
+> check just for uniformity with super_cache_scan().
+> 
+> After this patch super_cache_scan() becomes to ignore unregistering
+> superblocks, so this function is OK with splitting unregister_shrinker().
+> Next patches prepare super_cache_count() to follow this way.
+> 
+> Signed-off-by: Kirill Tkhai <tkhai@ya.ru>
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 > ---
->  Documentation/admin-guide/cgroup-v2.rst | 92 +++++++++++++++++++++----
->  1 file changed, 79 insertions(+), 13 deletions(-)
+>  fs/super.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index f67c0829350b..3e9351c2cd27 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -2215,6 +2215,38 @@ Cpuset Interface Files
+> diff --git a/fs/super.c b/fs/super.c
+> index 2ce4c72720f3..2ce54561e82e 100644
+> --- a/fs/super.c
+> +++ b/fs/super.c
+> @@ -79,6 +79,11 @@ static unsigned long super_cache_scan(struct shrinker *shrink,
+>  	if (!trylock_super(sb))
+>  		return SHRINK_STOP;
 >  
->  	Its value will be affected by memory nodes hotplug events.
->  
-> +  cpuset.cpus.reserve
-> +	A read-write multiple values file which exists only on root
-> +	cgroup.
-> +
-> +	It lists all the CPUs that are reserved for adjacent and remote
-> +	partitions created in the system.  See the next section for
-> +	more information on what an adjacent or remote partitions is.
-> +
-> +	Creation of adjacent partition does not require touching this
-> +	control file as CPU reservation will be done automatically.
-> +	In order to create a remote partition, the CPUs needed by the
-> +	remote partition has to be written to this file first.
-> +
-> +	Due to the fact that "cpuset.cpus.reserve" holds reserve CPUs
-> +	that can be used by multiple partitions and automatic reservation
-> +	may also race with manual reservation, an extension prefixes of
-> +	"+" and "-" are allowed for this file to reduce race.
-> +
-> +	A "+" prefix can be used to indicate a list of additional
-> +	CPUs that are to be added without disturbing the CPUs that are
-> +	originally there.  For example, if its current value is "3-4",
-> +	echoing ""+5" to it will change it to "3-5".
+> +	if ((sb->s_flags & (SB_BORN|SB_ACTIVE)) != (SB_BORN|SB_ACTIVE)) {
+> +		freed = SHRINK_STOP;
+> +		goto unlock;
+> +	}
 
-	        "+5"
+This should not be here - the check to determine if the shrinker
+should run is done in the ->count method. If we removed the SB_ACTIVE
+flag between ->count and ->scan, then the superblock should be
+locked and the trylock_super() call above should fail....
 
-> +
-> +	Once a remote partition is destroyed, its CPUs have to be
-> +	removed from this file or no other process can use them.  A "-"
-> +	prefix can be used to remove a list of CPUs from it.  However,
-> +	removing CPUs that are currently used in existing partitions
-> +	may cause those partitions to become invalid.  A single "-"
-> +	character without any number can be used to indicate removal
-> +	of all the free CPUs not yet allocated to any partitions to
-> +	avoid accidental partition invalidation.
-> +
->    cpuset.cpus.partition
->  	A read-write single value file which exists on non-root
->  	cpuset-enabled cgroups.  This flag is owned by the parent cgroup
-> @@ -2228,25 +2260,49 @@ Cpuset Interface Files
->  	  "isolated"	Partition root without load balancing
->  	  ==========	=====================================
->  
-> -	The root cgroup is always a partition root and its state
-> -	cannot be changed.  All other non-root cgroups start out as
-> -	"member".
-> +	A cpuset partition is a collection of cgroups with a partition
-> +	root at the top of the hierarchy and its descendants except
-> +	those that are separate partition roots themselves and their
-> +	descendants.  A partition has exclusive access to the set of
-> +	CPUs allocated to it.  Other cgroups outside of that partition
-> +	cannot use any CPUs in that set.
-> +
-> +	There are two types of partitions - adjacent and remote.  The
-> +	parent of an adjacent partition must be a valid partition root.
-> +	Partition roots of adjacent partitions are all clustered around
-> +	the root cgroup.  Creation of adjacent partition is done by
-> +	writing the desired partition type into "cpuset.cpus.partition".
-> +
-> +	A remote partition does not require a partition root parent.
-> +	So a remote partition can be formed far from the root cgroup.
-> +	However, its creation is a 2-step process.  The CPUs needed
-> +	by a remote partition ("cpuset.cpus" of the partition root)
-> +	has to be written into "cpuset.cpus.reserve" of the root
-> +	cgroup first.  After that, "isolated" can be written into
-> +	"cpuset.cpus.partition" of the partition root to form a remote
-> +	isolated partition which is the only supported remote partition
-> +	type for now.
-> +
-> +	All remote partitions are terminal as adjacent partition cannot
-> +	be created underneath it.  With the way remote partition is
-> +	formed, it is not possible to create another valid remote
-> +	partition underneath it.
-> +
-> +	The root cgroup is always a partition root and its state cannot
-> +	be changed.  All other non-root cgroups start out as "member".
->  
->  	When set to "root", the current cgroup is the root of a new
-> -	partition or scheduling domain that comprises itself and all
-> -	its descendants except those that are separate partition roots
-> -	themselves and their descendants.
-> +	partition or scheduling domain.
->  
-> -	When set to "isolated", the CPUs in that partition root will
-> +	When set to "isolated", the CPUs in that partition will
->  	be in an isolated state without any load balancing from the
->  	scheduler.  Tasks placed in such a partition with multiple
->  	CPUs should be carefully distributed and bound to each of the
->  	individual CPUs for optimal performance.
->  
-> -	The value shown in "cpuset.cpus.effective" of a partition root
-> -	is the CPUs that the partition root can dedicate to a potential
-> -	new child partition root. The new child subtracts available
-> -	CPUs from its parent "cpuset.cpus.effective".
-> +	The value shown in "cpuset.cpus.effective" of a partition root is
-> +	the CPUs that are dedicated to that partition and not available
-> +	to cgroups outside of that partittion.
+Indeed, the unregister_shrinker() call in deactivate_locked_super()
+is done with the sb->s_umount held exclusively, and this happens
+before we clear SB_ACTIVE in the ->kill_sb() -> kill_block_super()
+-> generic_shutdown_super() path after the shrinker is unregistered.
 
-	                           partition.
+Hence we can't get to this check without SB_ACTIVE being set - the
+trylock will fail and then the shrinker_unregister() call will do
+it's thing to ensure the shrinker is never called again.
 
->  
->  	A partition root ("root" or "isolated") can be in one of the
->  	two possible states - valid or invalid.  An invalid partition
-> @@ -2270,8 +2326,8 @@ Cpuset Interface Files
->  	In the case of an invalid partition root, a descriptive string on
->  	why the partition is invalid is included within parentheses.
->  
-> -	For a partition root to become valid, the following conditions
-> -	must be met.
-> +	For an adjacent partition root to be valid, the following
-> +	conditions must be met.
->  
->  	1) The "cpuset.cpus" is exclusive with its siblings , i.e. they
->  	   are not shared by any of its siblings (exclusivity rule).
-> @@ -2281,6 +2337,16 @@ Cpuset Interface Files
->  	4) The "cpuset.cpus.effective" cannot be empty unless there is
->  	   no task associated with this partition.
->  
-> +	For a remote partition root to be valid, the following conditions
-> +	must be met.
-> +
-> +	1) The same exclusivity rule as adjacent partition root.
-> +	2) The "cpuset.cpus" is not empty and all the CPUs must be
-> +	   present in "cpuset.cpus.reserve" of the root cgroup and none
-> +	   of them are allocated to another partition.
-> +	3) The "cpuset.cpus" value must be present in all its ancestors
-> +	   to ensure proper hierarchical cpu distribution.
+If the change to the shrinker code allows the shrinker to still be
+actively running when we call ->kill_sb(), then that needs to be
+fixed. THe superblock shrinker must be stopped completely and never
+run again before we call ->kill_sb().
 
-	                                 CPU
+>  	if (sb->s_op->nr_cached_objects)
+>  		fs_objects = sb->s_op->nr_cached_objects(sb, sc);
+>  
+> @@ -110,6 +115,7 @@ static unsigned long super_cache_scan(struct shrinker *shrink,
+>  		freed += sb->s_op->free_cached_objects(sb, sc);
+>  	}
+>  
+> +unlock:
+>  	up_read(&sb->s_umount);
+>  	return freed;
+>  }
+> @@ -136,7 +142,7 @@ static unsigned long super_cache_count(struct shrinker *shrink,
+>  	 * avoid this situation, so do the same here. The memory barrier is
+>  	 * matched with the one in mount_fs() as we don't hold locks here.
+>  	 */
+> -	if (!(sb->s_flags & SB_BORN))
+> +	if ((sb->s_flags & (SB_BORN|SB_ACTIVE)) != (SB_BORN|SB_ACTIVE))
+>  		return 0;
 
-> +
->  	External events like hotplug or changes to "cpuset.cpus" can
->  	cause a valid partition root to become invalid and vice versa.
->  	Note that a task cannot be moved to a cgroup with empty
+This is fine because it's an unlocked check, but I don't think it's
+actually necessary given the above. Indeed, if you are adding this,
+you need to expand the comment above on why SB_ACTIVE needs
+checking, and why the memory barrier doesn't actually apply to that
+part of the check....
 
+-Dave.
 -- 
-~Randy
+Dave Chinner
+david@fromorbit.com
