@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C41C7183EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CAD7183ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237402AbjEaNxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        id S237420AbjEaNxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237450AbjEaNui (ORCPT
+        with ESMTP id S237473AbjEaNun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:50:38 -0400
+        Wed, 31 May 2023 09:50:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3526F359A;
-        Wed, 31 May 2023 06:46:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C559035A6;
+        Wed, 31 May 2023 06:46:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C29D963B1F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AF48636E2;
+        Wed, 31 May 2023 13:46:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6DCFC4331E;
         Wed, 31 May 2023 13:46:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7740AC433D2;
-        Wed, 31 May 2023 13:46:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540770;
-        bh=SM3Nevq5DvLP1zlH19ftRQb5shdQEmMmQZCivmPXyvg=;
+        s=k20201202; t=1685540772;
+        bh=1th7K4benKDf8xLe4i3xE+g776zmGvOg2YGEAoAVoxQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MUeT3uTBBx0W26MLqyygjdbMwzTjvoYAKJAe+QN0OpZusSvG3C2MnwAC7FUemlMVN
-         G0kKwoatat00VKdWtlYOmGUMmfCvVhg8QKPik3H24t/A1Eb6kauX3HEv12EEQ2uZNK
-         TpNwDoCnpR9MPSJlIihndARU8JjFrykK6oT4wBiTLFWXbFntSv6ZfIhGOUNeOh1acX
-         ULCfVJrzfdXZr90v35A3zcFl+aqos5pYDZTGV0bgOR+zZ1BV8r/Q29arpJRG4f6RoM
-         0KS/KsR6r2Jc2BbtLqQOxcIGZSrc/nIuquckwSuki+czAjbPXU676ZJ1AfHWh85qY/
-         /vCaB4jiRTFYQ==
+        b=vN1H8wscmUCaXYqp2+POBM+2RxE2PrGK78Ljz8tEStVqkyBYIb+aHQQl/cK6YSKpF
+         uz4gGIW3EWKrszL62mC3QRKT0EC56MdRusENXehdsZTtemetQw7fBj/Y4VXZgGAM4v
+         /1kaHBsFHFBSHtO8mVA0aWq6xOjfRL2vQ6quTjlfXyS7GHvc3H42eU6N4GJl9KapoB
+         vH+NsMCX1la+JELcp7ail1xrZs2wORF6jPPLNSb99G4m4NE2TPOfdc5R4IB6K9z0vp
+         qeEPQJ4ENt22SXzX0NkeqojmoCxRLnQsmnhcjge3Y9RY7zxCSDxRDZ5+hifh8INe+p
+         SdrzB2P0frNwQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>, sre@kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 02/10] power: supply: bq27xxx: Use mod_delayed_work() instead of cancel() + schedule()
-Date:   Wed, 31 May 2023 09:45:58 -0400
-Message-Id: <20230531134606.3385210-2-sashal@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Sasha Levin <sashal@kernel.org>, liviu.dudau@arm.com,
+        lpieralisi@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 03/10] ARM: dts: vexpress: add missing cache properties
+Date:   Wed, 31 May 2023 09:45:59 -0400
+Message-Id: <20230531134606.3385210-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134606.3385210-1-sashal@kernel.org>
 References: <20230531134606.3385210-1-sashal@kernel.org>
@@ -58,37 +60,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit 59dddea9879713423c7b2ade43c423bb71e0d216 ]
+[ Upstream commit 328acc5657c6197753238d7ce0a6924ead829347 ]
 
-Use mod_delayed_work() instead of separate cancel_delayed_work_sync() +
-schedule_delayed_work() calls.
+As all level 2 and level 3 caches are unified, add required
+cache-unified property to fix warnings like:
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+  vexpress-v2p-ca5s.dtb: cache-controller@2c0f0000: 'cache-unified' is a required property
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20230423150837.118466-1-krzysztof.kozlowski@linaro.org
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/bq27xxx_battery.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ arch/arm/boot/dts/vexpress-v2p-ca5s.dts | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index 3e8466064bb2c..a4c21eeb780b8 100644
---- a/drivers/power/supply/bq27xxx_battery.c
-+++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -832,10 +832,8 @@ static int poll_interval_param_set(const char *val, const struct kernel_param *k
- 		return ret;
+diff --git a/arch/arm/boot/dts/vexpress-v2p-ca5s.dts b/arch/arm/boot/dts/vexpress-v2p-ca5s.dts
+index 32f1906ffecfe..994edbc615cb0 100644
+--- a/arch/arm/boot/dts/vexpress-v2p-ca5s.dts
++++ b/arch/arm/boot/dts/vexpress-v2p-ca5s.dts
+@@ -117,6 +117,7 @@ L2: cache-controller@2c0f0000 {
+ 		reg = <0x2c0f0000 0x1000>;
+ 		interrupts = <0 84 4>;
+ 		cache-level = <2>;
++		cache-unified;
+ 	};
  
- 	mutex_lock(&bq27xxx_list_lock);
--	list_for_each_entry(di, &bq27xxx_battery_devices, list) {
--		cancel_delayed_work_sync(&di->work);
--		schedule_delayed_work(&di->work, 0);
--	}
-+	list_for_each_entry(di, &bq27xxx_battery_devices, list)
-+		mod_delayed_work(system_wq, &di->work, 0);
- 	mutex_unlock(&bq27xxx_list_lock);
- 
- 	return ret;
+ 	pmu {
 -- 
 2.39.2
 
