@@ -2,128 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5833A718444
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F333A718426
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237165AbjEaOIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
+        id S237527AbjEaOEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235420AbjEaOI1 (ORCPT
+        with ESMTP id S231312AbjEaOEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:08:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA3110F8
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:03:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685541721;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ziEVWybyK4gf6HAMK2OABfQt5DxF+29cSopVoad9/Oc=;
-        b=MmKVjiQhuSASBSMtKq48N5dSt9moWK5rcI66Qzj2mVKQ5q+9nCSCpCqsGVaZW/g0c4syr9
-        TTLwNX2sPXF/jxHoMn3KGkje36eaMQdqp9BOyosarjlsU7/8Uv6dspoTfav0p9hGkRVydn
-        ulEYvlyZ7QTDPupWPynB30RxhpWoZ/M=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-205-8xAnoC19Ms-okkMyrsc2Qw-1; Wed, 31 May 2023 09:55:41 -0400
-X-MC-Unique: 8xAnoC19Ms-okkMyrsc2Qw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5F228032E4;
-        Wed, 31 May 2023 13:55:40 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E03D6C154D7;
-        Wed, 31 May 2023 13:55:37 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <492558dc-1377-fc4b-126f-c358bb000ff7@redhat.com>
-References: <492558dc-1377-fc4b-126f-c358bb000ff7@redhat.com> <cbd39f94-407a-03b6-9c43-8144d0efc8bb@redhat.com> <20230526214142.958751-1-dhowells@redhat.com> <20230526214142.958751-2-dhowells@redhat.com> <510965.1685522152@warthog.procyon.org.uk>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v4 1/3] mm: Don't pin ZERO_PAGE in pin_user_pages()
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <703627.1685541335.1@warthog.procyon.org.uk>
+        Wed, 31 May 2023 10:04:02 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99223591;
+        Wed, 31 May 2023 06:58:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=bwuQspTy1mOtqYbpi42BSg/6JZzLF3aBnMaOThn2Z10=; b=JU6+bvZQs8ZNTYjsgd45XMwojo
+        583AIIgedzDd2EmJ3C4tHo3hE9GPl6DRZ2BhC2stWbCPB6mjHPZYiNks6C1UtHbJyBLSOrHXSBtzs
+        cLGXckJcQmmhMsyrNuwJ+9fAS3rZ5KgRIz8DnGL47lR9uwW+/D59jtmCwIBrkGg/dVgY=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:49292 helo=debian-acer)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q4MJ6-0000Dn-Uf; Wed, 31 May 2023 09:56:11 -0400
+Date:   Wed, 31 May 2023 09:56:08 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Lech Perczak <lech.perczak@camlingroup.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230531095608.e1b4358549562b8e1bdf5cb4@hugovil.com>
+In-Reply-To: <c691858d-31af-2892-c0a3-89a37b19af86@camlingroup.com>
+References: <20230529140711.896830-1-hugo@hugovil.com>
+        <c15a90d6-b3c1-e432-9216-c4c1e2c44ce6@camlingroup.com>
+        <20230530090836.27b8d080d6b6c022b303ac9e@hugovil.com>
+        <c691858d-31af-2892-c0a3-89a37b19af86@camlingroup.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 31 May 2023 14:55:35 +0100
-Message-ID: <703628.1685541335@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4 0/9] serial: sc16is7xx: fix GPIO regression and rs485
+ improvements
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Hildenbrand <david@redhat.com> wrote:
+On Wed, 31 May 2023 12:43:48 +0200
+Lech Perczak <lech.perczak@camlingroup.com> wrote:
 
-> Yes, it would be clearer if we would be using "pinned" now only for FOLL=
-_PIN
+> W dniu 30.05.2023 o=A015:08, Hugo Villeneuve pisze:
+> > On Tue, 30 May 2023 11:30:07 +0200
+> > Lech Perczak <lech.perczak@camlingroup.com> wrote:
+> >
+> > > W dniu 29.05.2023 o=A016:07, Hugo Villeneuve pisze:
+> > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > >
+> > > > Hello,
+> > > > this patch series mainly fixes a GPIO regression and improve RS485 =
+flags and
+> > > > properties detection from DT.
+> > > >
+> > > > It now also includes various small fixes and improvements that were=
+ previously
+> > > > sent as separate patches, but that made testing everything difficul=
+t.
+> > > >
+> > > > Patch 1 fixes an issue when debugging IOcontrol register. After tes=
+ting the GPIO
+> > > > regression patches (patches 6 and 7, tests done by Lech Perczak), i=
+t appers that
+> > > > this patch is also necessary for having the correct IOcontrol regis=
+ter values.
+> > > >
+> > > > Patch 2 introduces a delay after a reset operation to respect datas=
+heet
+> > > > timing recommandations.
+> > > >
+> > > > Patch 3 fixes an issue with init of first port during probing.
+> > > >
+> > > > Patch 4 fixes a bug with the output value when first setting the GP=
+IO direction.
+> > > >
+> > > > Patch 5 is a refactor of GPIO registration code.
+> > > >
+> > > > Patches 6 and 7 fix a GPIO regression by (re)allowing to choose GPI=
+O function
+> > > > for GPIO pins shared with modem status lines.
+> > > >
+> > > > Patch 8 allows to read common rs485 device-tree flags and propertie=
+s.
+> > > >
+> > > > Patch 9 improves comments about chip variants.
+> > > >
+> > > > I have tested the changes on a custom board with two SC16IS752 DUAR=
+T using a
+> > > > Variscite IMX8MN NANO SOM.
+> > > >
+> > > > Thank you.
+> > > >
+> > > > Link: [v1] https://lkml.org/lkml/2023/5/17/967 <https://lkml.org/lk=
+ml/2023/5/17/967> <https://lkml.org/lkml/2023/5/17/967 <https://lkml.org/lk=
+ml/2023/5/17/967>>
+> > > > [v1] https://lkml.org/lkml/2023/5/17/777 <https://lkml.org/lkml/202=
+3/5/17/777> <https://lkml.org/lkml/2023/5/17/777 <https://lkml.org/lkml/202=
+3/5/17/777>>
+> > > > [v1] https://lkml.org/lkml/2023/5/17/780 <https://lkml.org/lkml/202=
+3/5/17/780> <https://lkml.org/lkml/2023/5/17/780 <https://lkml.org/lkml/202=
+3/5/17/780>>
+> > > > [v1] https://lkml.org/lkml/2023/5/17/785 <https://lkml.org/lkml/202=
+3/5/17/785> <https://lkml.org/lkml/2023/5/17/785 <https://lkml.org/lkml/202=
+3/5/17/785>>
+> > > > [v1] https://lkml.org/lkml/2023/5/17/1311 <https://lkml.org/lkml/20=
+23/5/17/1311> <https://lkml.org/lkml/2023/5/17/1311 <https://lkml.org/lkml/=
+2023/5/17/1311>>
+> > > > [v2] https://lkml.org/lkml/2023/5/18/516 <https://lkml.org/lkml/202=
+3/5/18/516> <https://lkml.org/lkml/2023/5/18/516 <https://lkml.org/lkml/202=
+3/5/18/516>>
+> > > > [v3] https://lkml.org/lkml/2023/5/25/7 <https://lkml.org/lkml/2023/=
+5/25/7> <https://lkml.org/lkml/2023/5/25/7 <https://lkml.org/lkml/2023/5/25=
+/7>>
+> > > >
+> > > > Changes for V3:
+> > > > - Integrated all patches into single serie to facilitate debugging =
+and tests.
+> > > > - Reduce number of exported GPIOs depending on new property
+> > > > nxp,modem-control-line-ports
+> > > > - Added additional example in DT bindings
+> > > >
+> > > > Changes for V4:
+> > > > - Increase reset post delay to relax scheduler.
+> > > > - Put comments patches at the end.
+> > > > - Remove Fixes tag for patch "mark IOCONTROL register as volatile".
+> > > > - Improve commit messages after reviews.
+> > > > - Fix coding style issues after reviews.
+> > > > - Change GPIO registration to always register the maximum number of=
+ GPIOs
+> > > > supported by the chip, but maks-out GPIOs declared as modem control=
+ lines.
+> > > > - Add patch to refactor GPIO registration.
+> > > > - Remove patch "serial: sc16is7xx: fix syntax error in comments".
+> > > > - Remove patch "add dump registers function"
+> > > >
+> > > > Hugo Villeneuve (9):
+> > > > serial: sc16is7xx: mark IOCONTROL register as volatile
+> > > > serial: sc16is7xx: add post reset delay
+> > > > serial: sc16is7xx: fix broken port 0 uart init
+> > > > serial: sc16is7xx: fix bug when first setting GPIO direction
+> > > > serial: sc16is7xx: refactor GPIO controller registration
+> > > > dt-bindings: sc16is7xx: Add property to change GPIO function
+> > > > serial: sc16is7xx: fix regression with GPIO configuration
+> > > > serial: sc16is7xx: add call to get rs485 DT flags and properties
+> > > > serial: sc16is7xx: improve comments about variants
+> > > >
+> > > > .../bindings/serial/nxp,sc16is7xx.txt | 46 ++++++
+> > > > drivers/tty/serial/sc16is7xx.c | 150 +++++++++++++-----
+> > > > 2 files changed, 156 insertions(+), 40 deletions(-)
+> > > >
+> > > >
+> > > > base-commit: 8b817fded42d8fe3a0eb47b1149d907851a3c942
+> > >
+> > > It would be a lot of sending, to do that for every patch separately, =
+so for whole series:
+> > > Reviewed-by: Lech Perczak <lech.perczak@camlingroup.com>
+> > >
+> > > And where applicable - for code patches:
+> > > Tested-by: Lech Perczak <lech.perczak@camlingroup.com>
+> > >
+> > > I tested whole series at the same time.
+> > > I did my tests on an i.MX6 board with SC16IS760 over SPI, which diffe=
+rs a tiny bit from SC16IS752,
+> > > and everything works as it should.
+> > > Thank you for fixing this!
+> >
+> > Hi Lech,
+> > thank for your feedback.
+> >
+> > You mentioned before that without the patch "mark IOCONTROL register as=
+ volatile", things were not working properly for you. Could you retest by r=
+emoving this patch and see if things are still working?
+> >
+> > Thank you, Hugo.
+>=20
+> Hello Hugo,
+>=20
+> Just checked - this patch is required, reverting it causes things to fail=
+, so this patch should be marked as a pre-requisite for the actual fix and =
+included in backports.
+> Perhaps using direct write to this register made it work, but it was like=
+ly by accident.
 
-You're not likely to get that.  "To pin" is too useful a verb that gets us=
-ed
-in other contexts too.  For that reason, I think FOLL_PIN was a poor choic=
-e of
-name:-/.  I guess the English language has got somewhat overloaded.  Maybe
-FOLL_PEG? ;-)
+Hi Lech,
+thank you for the test, I will mark it as such in upcoming series V5.
 
-> and everything else is simply "taking a temporary reference on the page"=
-.
-
-Excluding refs taken with pins, many refs are more permanent than pins as,=
- so
-far as I'm aware, pins only last for the duration of an I/O operation.
-
-> >> "Note that the refcount of any zero_pages returned among the pinned p=
-ages will
-> >> not be incremented, and unpin_user_page() will similarly not decremen=
-t it."
-> > That's not really right (although it happens to be true), because we'r=
-e
-> > talking primarily about the pin counter, not the refcount - and they m=
-ay be
-> > separate.
-> =
-
-> In any case (FOLL_PIN/FOLL_GET) you increment/decrement the refcount. If=
- we
-> have a separate pincount, we increment/decrement the refcount by 1 when
-> (un)pinning.
-
-FOLL_GET isn't relevant here - only FOLL_PIN.  Yes, as it happens, we coun=
-t a
-ref if we count a pin, but that's kind of irrelevant; what matters is that=
- the
-effect must be undone with un-PUP.
-
-It would be nice not to get a ref on the zero page in FOLL_GET, but I don'=
-t
-think we can do that yet.  Too many places assume that GUP will give them =
-a
-ref they can release later via ordinary methods.
-
-David
-
+Hugo.
