@@ -2,110 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADF2717841
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2CF71784A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234594AbjEaHad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
+        id S234615AbjEaHb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234615AbjEaHa0 (ORCPT
+        with ESMTP id S234616AbjEaHby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:30:26 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE6C123;
-        Wed, 31 May 2023 00:30:09 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f3b5881734so6279890e87.0;
-        Wed, 31 May 2023 00:30:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685518208; x=1688110208;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Decr5ToKuusJ1vsOCi3GGboMucraQ2C0wQliP84kDVc=;
-        b=LtrOdGC7HJo1sApDCqRePuNWVdNNXV63xK9ISycJWamft6qwOtumOnVXflAwX6lFnm
-         JFjZAFJAXNyROl4nqsslRIpjXzpR4QP+WimLl/3zJqsOleavMjoI7ckDRqwQ8+EaidzQ
-         irPA70S61W0kkp8IawqhJKVGV0sJRPFbwZ7Pxsp/zAriJj4rMGl9nEUTaI+vK7wH6X6g
-         D6VYR9U5CYk8QAjKGMceTvX3RgPBQJKOgQF/iFYkfRRGc3Lc1waidQhPwyyFwk3uP1jo
-         Mlg7RgIeSYLwcbwdFs1mJJpCsWAngGw0iP9P2MWyxEDMIyfj6yie+FUMM9cu8US0pu6J
-         LtBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685518208; x=1688110208;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Decr5ToKuusJ1vsOCi3GGboMucraQ2C0wQliP84kDVc=;
-        b=TyW/Z74oVSr/zQq4V/M2KXLc2L12j+dn6Fr/Qjd0CN2CHFTnXCu7MuCCubxRjjrAEc
-         i0Zd8Xu65qy2FsTAruvmZglGnca/I1Tjdw70cmjB96oBvZEFHPFdvaDaJgqjx3Z5DhYk
-         fLZdYPo8x3F2CxSNIbmKznqKIAryjrjnlOyg17Yn83Dz81oYj2s0xKR4EXR4AFqO95fj
-         M7KUg0r0pd5NTssiAR0Sk9X0Ub4I4hZNKcFTMI2TL+48wgjlGzz/GwvXeu3+TgnZmzEX
-         0aQMJ3Pp68SBSISsV38BAl6+NDiYN58QGKciLF+rORC89Rl/b9VCRj9Cykbjj/L1wJ5j
-         GBQg==
-X-Gm-Message-State: AC+VfDxa+silfXMX30tFu4kbGARoAQRBluqM3O7EDvXNEL8eqlRfDc1o
-        brEMx9Q9/DT4nNu42Bmj+AffO3XZrLxg+g==
-X-Google-Smtp-Source: ACHHUZ6bUGgErD5qHlh8IDTMiiRSsiMsY0Sy2BjrFL/lJ52tDTu6aM/tYw+aZ3otauLHaaEkq7Ju9A==
-X-Received: by 2002:ac2:5237:0:b0:4f3:982a:8be1 with SMTP id i23-20020ac25237000000b004f3982a8be1mr1891949lfl.69.1685518207312;
-        Wed, 31 May 2023 00:30:07 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id q1-20020a1ce901000000b003f423dfc686sm19446289wmc.45.2023.05.31.00.30.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 00:30:06 -0700 (PDT)
-Message-ID: <90ad9b86-e03c-8e80-88d6-d514bbe9cacd@gmail.com>
-Date:   Wed, 31 May 2023 09:30:05 +0200
+        Wed, 31 May 2023 03:31:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8CE113
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:31:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685518270;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xgdLJ8iH5oaqpzGT2VDUPLqR1HXU87CsPuv2JR9kJ1k=;
+        b=VmjdWosse65P/mOn3a96FTLFTuPkLeUwB4hQGxZ9j+HLL+sJU745YbgUJzPHyRxd/roZ4p
+        o21yauvIeyivaUUxn7yIvbCQOMf5icE23d0tEPrz6OL7i8eeU3T9EZtAHEm/TfGfzN0iRi
+        PFKoPvYO+AgFXKY63jG1egFl55X23L4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-379-gbwutGR5OXqtxdF2C-E10A-1; Wed, 31 May 2023 03:31:07 -0400
+X-MC-Unique: gbwutGR5OXqtxdF2C-E10A-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B6A101C068CF;
+        Wed, 31 May 2023 07:31:06 +0000 (UTC)
+Received: from localhost (ovpn-12-54.pek2.redhat.com [10.72.12.54])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DE373492B00;
+        Wed, 31 May 2023 07:31:05 +0000 (UTC)
+Date:   Wed, 31 May 2023 15:31:01 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Michael Holzheu <holzheu@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 1/6] kexec: fix a memory leak in crash_shrink_memory()
+Message-ID: <ZHb3tVHVV2l1BJBl@MiWiFi-R3L-srv>
+References: <20230527123439.772-1-thunder.leizhen@huawei.com>
+ <20230527123439.772-2-thunder.leizhen@huawei.com>
+ <ZHaQ7qRYWX9FETu6@MiWiFi-R3L-srv>
+ <5232350c-7529-eece-c9cb-8a8bbc83a81a@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8183: kukui: Add scp
- firmware-name
-Content-Language: en-US, ca-ES, es-ES
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230220093343.3447381-1-hsinyi@chromium.org>
- <CAGXv+5E4_k1jKTnninYkuT6Tf=skB00AowHpM+hc8j_VFM-RfQ@mail.gmail.com>
- <CAJMQK-hnK69iVJhqW_8UtKHHLQ3608Cb74Jk_b+xHH0BBu4yVw@mail.gmail.com>
- <d39b0e77-e013-fe7e-9523-9bdbaacb5853@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <d39b0e77-e013-fe7e-9523-9bdbaacb5853@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5232350c-7529-eece-c9cb-8a8bbc83a81a@huawei.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 30/05/2023 09:12, AngeloGioacchino Del Regno wrote:
-> Il 30/05/23 07:12, Hsin-Yi Wang ha scritto:
->> On Tue, Feb 21, 2023 at 11:25 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
->>>
->>> On Mon, Feb 20, 2023 at 5:34 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->>>>
->>>> The upstream SCP firmware path is /lib/firmware/mediatek/mt8183/scp.img
->>>>
->>>> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
->>>
->>> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
->>
->> hi Matthias,
->>
->> Kindly ping on the patch, thanks!
+On 05/31/23 at 09:16am, Leizhen (ThunderTown) wrote:
 > 
-> Agreed. Matthias, please pick this one.
 > 
-> Hsin-Yi, can you also please send a version of this patch for stable?
+> On 2023/5/31 8:13, Baoquan He wrote:
+> > On 05/27/23 at 08:34pm, Zhen Lei wrote:
+> >> If the value of parameter 'new_size' is in the semi-open and semi-closed
+> >> interval (crashk_res.end - KEXEC_CRASH_MEM_ALIGN + 1, crashk_res.end], the
+> >> calculation result of ram_res is:
+> >> 	ram_res->start = crashk_res.end + 1
+> >> 	ram_res->end   = crashk_res.end
+> > 
+> > If the new_size is smaller than KEXEC_CRASH_MEM_ALIGN, does it make
+> > any sense except of testing purpose? Do we need to fail this kind of
+> > shrinking, or just shrink all the left crash memory?
+
+OK, I misread your log. You are saying the new_size is close to
+crashk_res.end but has a tiny difference in your example, I
+thought the new_size is smaller than KEXEC_CRASH_MEM_ALIGN which is just
+in the opposite direction.
+
+Yea, it does have the possibility to waste a ram_res but does nothing
+even though the chance is very small.
+
+Acked-by: Baoquan He <bhe@redhat.com>
+
+> 
+> We can't give a fixed value, that is, how much crash memory is reserved to
+> ensure that the capture kernel runs. The size of KEXEC_CRASH_MEM_ALIGN is
+> only one page on non-s390 platforms. So, it's better to keep the code simple,
+> and let the user(administrator) shrink the crash memory reasonably.
+> 
+> include/linux/kexec.h
+> #define KEXEC_CRASH_MEM_ALIGN	PAGE_SIZE
+
+> 
+> > 
+> >> The operation of function insert_resource() fails, and ram_res is not
+> >> added to iomem_resource. As a result, the memory of the control block
+> >> ram_res is leaked.
+> >>
+> >> In fact, on all architectures, the start address and size of crashk_res
+> >> are already aligned by KEXEC_CRASH_MEM_ALIGN. Therefore, we do not need to
+> >> round up crashk_res.start again. Instead, we should round up 'new_size'
+> >> in advance.
+> >>
+> >> Fixes: 6480e5a09237 ("kdump: add missing RAM resource in crash_shrink_memory()")
+> >> Fixes: 06a7f711246b ("kexec: premit reduction of the reserved memory size")
+> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> >> ---
+> >>  kernel/kexec_core.c | 5 ++---
+> >>  1 file changed, 2 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> >> index 3d578c6fefee385..22acee18195a591 100644
+> >> --- a/kernel/kexec_core.c
+> >> +++ b/kernel/kexec_core.c
+> >> @@ -1122,6 +1122,7 @@ int crash_shrink_memory(unsigned long new_size)
+> >>  	start = crashk_res.start;
+> >>  	end = crashk_res.end;
+> >>  	old_size = (end == 0) ? 0 : end - start + 1;
+> >> +	new_size = roundup(new_size, KEXEC_CRASH_MEM_ALIGN);
+> >>  	if (new_size >= old_size) {
+> >>  		ret = (new_size == old_size) ? 0 : -EINVAL;
+> >>  		goto unlock;
+> >> @@ -1133,9 +1134,7 @@ int crash_shrink_memory(unsigned long new_size)
+> >>  		goto unlock;
+> >>  	}
+> >>  
+> >> -	start = roundup(start, KEXEC_CRASH_MEM_ALIGN);
+> >> -	end = roundup(start + new_size, KEXEC_CRASH_MEM_ALIGN);
+> >> -
+> >> +	end = start + new_size;
+> >>  	crash_free_reserved_phys_range(end, crashk_res.end);
+> >>  
+> >>  	if ((start == end) && (crashk_res.parent != NULL))
+> >> -- 
+> >> 2.25.1
+> >>
+> > 
+> > .
+> > 
+> 
+> -- 
+> Regards,
+>   Zhen Lei
 > 
 
-Applied thanks!
