@@ -2,80 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 719FC71863D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A499C71863C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234895AbjEaPYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        id S234701AbjEaPYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234673AbjEaPX4 (ORCPT
+        with ESMTP id S234671AbjEaPX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 31 May 2023 11:23:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4CC1B5
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:22:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685546557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vim2Ps+SLhIjHN6Pns9HoI/IKeD0F9kbBagSaUaU/oo=;
-        b=bETAxaEComALFkckZ1XQN/bctxKRvWJn8k0+qOR+/ZAWZVTsxR3jcXKtafaZ1DA0Y3Qnw+
-        yyNSYasodFTivRUkaQsTa1ezJGs8tDdSH3raUcamZHonz/gmQwMH8SY4Uc6Y9l5nA585nT
-        7JlVonuPQUQlusW+6byoj0o2wio62Go=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-592-DuIoDeNCPvODpYdiRTbKEw-1; Wed, 31 May 2023 11:22:35 -0400
-X-MC-Unique: DuIoDeNCPvODpYdiRTbKEw-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-973c42bfc38so494559266b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:22:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685546554; x=1688138554;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vim2Ps+SLhIjHN6Pns9HoI/IKeD0F9kbBagSaUaU/oo=;
-        b=TK7NLPacL7pPVCO97eErECtKeQAx+FvRXMxmEOgIKqGKDkkJd5IcmC/LjCy78+9/pW
-         agDUi4hhieIUTvEyNlR+l4EYuHTBlV7mDxP+U9h5JgIFgc1cnuAGHzfmRS5FVPcSLaw2
-         omsM0HwwSgMuWHhiZgyisHQ+y5vCYbYBhH1UJQvRRz0Ozoqs8vGS0+dQ8Lld+Ovle+E/
-         Ry+GpGSyFvuzJ3OsdUa2mAmtaE3uGQ5QiXU20rWWaok6VRo1shT2WyO0kAKoQ14EO7Zb
-         6HkHe1pU3ZNgk1NpprnYNZYXI8dq41iWLRcggzxSZCgK/4ttFc6FRYk1K/PMipqf31lm
-         sykg==
-X-Gm-Message-State: AC+VfDzD03gNveBVRlJRBktMi46oHt3D3NptVPr85g8gU3SyFRQscKPq
-        Y6iPt40LoKDVCetwNc+/KepZL6GCoBNE4Pqre4XL5NwidnCaUbdh/fh84Wp5hy1aa0ZCOUDeNJg
-        mWy0E8TtO9eSNI1YUYv2yrSEY
-X-Received: by 2002:a17:907:eaa:b0:94f:7edf:8fa1 with SMTP id ho42-20020a1709070eaa00b0094f7edf8fa1mr6008756ejc.32.1685546554647;
-        Wed, 31 May 2023 08:22:34 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4TfEMtyNeDIvoDZLtn9WZ6Ma5SEXbIKcUctEw0dFKuBxjkH16CQD3dCFTlwdMhGDeLM5IZ0g==
-X-Received: by 2002:a17:907:eaa:b0:94f:7edf:8fa1 with SMTP id ho42-20020a1709070eaa00b0094f7edf8fa1mr6008739ejc.32.1685546554329;
-        Wed, 31 May 2023 08:22:34 -0700 (PDT)
-Received: from imammedo.users.ipa.redhat.com (nat-pool-brq-t.redhat.com. [213.175.37.10])
-        by smtp.gmail.com with ESMTPSA id n21-20020a170906089500b00966265be7adsm9112590eje.22.2023.05.31.08.22.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 08:22:33 -0700 (PDT)
-Date:   Wed, 31 May 2023 17:22:32 +0200
-From:   Igor Mammedov <imammedo@redhat.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
-        bhelgaas@google.com, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, mika.westerberg@linux.intel.com
-Subject: Re: [PATCH v2] PCI: acpiphp: Reassign resources on bridge if
- necessary
-Message-ID: <20230531172232.28cef6a3@imammedo.users.ipa.redhat.com>
-In-Reply-To: <ZHZGkAg34ltZLV9J@bhelgaas>
-References: <20230530141321-mutt-send-email-mst@kernel.org>
-        <ZHZGkAg34ltZLV9J@bhelgaas>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A00184;
+        Wed, 31 May 2023 08:23:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685546633; x=1717082633;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=pYHXvlG8HHyQGBkaUzEtLZRDPIOeb8zQqR9vYo+ndyA=;
+  b=nK10PozJ74KGj7Kx7fWU5ymVQF9ZCp3XaSXzTTttG3FHaf2Ms8XaM0wK
+   ZL71BkMerj46xIabYw+uwzvqMVxbWP4XAOPSDMCUTd+dO1A6HoXy0yYrO
+   y+eYVkYqUsBy9sbnK1apnYeNQQZxXqgb0IcN3qNM5RJOaEsOF9qiCV1ZR
+   SFZeyJjr1sscWBm30N+0O9fxOS1CbvLCMhdZtnYWb5tAMZ4+hTUBPij8y
+   ogmKhxwFsuCQjeJ0zYQXkThY735L0MqDhN3kDOfVP7jUapurUW2QHxVQ1
+   BT5tcGTpZRqfCr9ndvZ2hPyMLLMpvvBJyIShFfE8tqYouo+y1MgO43FiI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="344785391"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="344785391"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 08:23:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="831259956"
+X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
+   d="scan'208";a="831259956"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga004.jf.intel.com with ESMTP; 31 May 2023 08:23:43 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 31 May 2023 08:23:43 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 31 May 2023 08:23:42 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 31 May 2023 08:23:42 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 31 May 2023 08:23:42 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GKqfYlzFpQPZU+pQsw66/zTlvmyVZk65XfDBdx+0nmWxo+EvF1Y86oTPOwTS4cjeM+UVVYTUoFAYMxh3mWXTgadZ2F9wjnlKswpPy2zKabJot2+sUQU5SZQtjCtgcb7Aisb9sr9O5ZWJVKax6HSMbfz3SpGwiy24JqvOzELct/JZ3SMxJKkUmh5IEEdXoT0u3q5BJfJ4nU9AwubbPwZhymF2HMlKHpmKNqWehKTTmcAJvJvCl4OLfHl1yBLe18ryJdxO4xhfSGf//G5jaZs8ovPby3scwoaddodJR8fSfdi7t67EsQMDbNxVfWbocBva4b+EpU30OEAXytlO5hoagA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+6zypXEvRFtXlznSfMUYCIr7G6/Wr1nUu47WIwgktUM=;
+ b=WdO604IHpxLt9qVdduGJv9Iu30RIN+Bk3pr51JzUBtNVWEvfAJAnXJTDFuvYKNL/cRYSkBEWKIxFtJj3AyPxhwyQGQojs/nZjzUd0FGzEmOw8ht+pJRLl5eo3ZRpFcnCRcR4gYF0wvztbnbGc2Bpa6Fgkof/4LOAGw8jXhqZipmXVS93arbcHoHhGW40smv8UXjDY4o6Ye9BlNVucPiMBueO3dY0NlNBttBnfI446kdd9/Qx/hRjz8U9psAVvI4Pbvkc0L8SnjnOb5zMPFPw6Iex1avr4tsW9MBVIca7cdXXiFc922ku3ao+SCCbFZ6jeP4pTwXIABs382pDJMA2Ng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by MN2PR11MB4677.namprd11.prod.outlook.com (2603:10b6:208:24e::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Wed, 31 May
+ 2023 15:23:40 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::64d9:76b5:5b43:1590]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::64d9:76b5:5b43:1590%2]) with mapi id 15.20.6433.022; Wed, 31 May 2023
+ 15:23:40 +0000
+Message-ID: <7ddd93fd-437d-8d67-c693-1bbcf36b552a@intel.com>
+Date:   Wed, 31 May 2023 17:22:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net-next v2 03/12] iavf: optimize Rx buffer allocation a
+ bunch
+Content-Language: en-US
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+CC:     Alexander H Duyck <alexander.duyck@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        "Larysa Zaremba" <larysa.zaremba@intel.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        "Christoph Hellwig" <hch@lst.de>,
+        Paul Menzel <pmenzel@molgen.mpg.de>, <netdev@vger.kernel.org>,
+        <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
+References: <20230525125746.553874-1-aleksander.lobakin@intel.com>
+ <20230525125746.553874-4-aleksander.lobakin@intel.com>
+ <8828262f1c238ab28be9ec87a7701acd791af926.camel@gmail.com>
+ <ZHcsBPr0EXx6hkkd@boxer>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <ZHcsBPr0EXx6hkkd@boxer>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-ClientProxiedBy: FR2P281CA0071.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9a::6) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|MN2PR11MB4677:EE_
+X-MS-Office365-Filtering-Correlation-Id: ad4be76c-b0d9-4612-5422-08db61eb02f7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PZ/ADPmrHmmWddUdNJ49KXTuq8MeUxbPFMFZRg7jUJfKpBNaf25y+FkTvDBJvxKGRwsYkSwNdkjhlTxx8vO3vV5cc7QuVWJtZ27aDhmY6/nNTjpFHfGtEkLtczoUbV6qNG7nOlkwzR7T0x11O6uSd0ubGiYHFT5dPMVvpYYumjz7DQHsf9/QGflCHIfhUEFd3MOONEU4gEfXGoHPRbv50JBLkv0XdyRr4QNngjoYh18qnc+bXVraUjJ4Zis39uoptSN1+lc1X3uWSuSv2noHW1Iq/1xvMSImiRyTmLTdnJoDquWQHAjoV4Aqh20CglpjxKPd/Lz6mkXX7b4fB+6JPnmjb9Ja9fmvJIbJ+J6LQa7/S53c3Memelk7KkzJUeJCrr0F/LIhp5itvq+tp8ph3wrKrP1AlPgDR8f3B+HKcI8dALmTzhbHHfoFVzEkHqNLlVStChJDJmh5iHMWhzZ9T3ChBpgSW9lmH2FDn/R/FC7RHwDSmzBskUaTdwwy4Yj64ayGj93hosZH1juDFKtBXAFUvrXVnRDEmXlv5sXXaGgdJQlml2r9y5PPoePURHsoDkI5Ku95QkOpJ3iZUmyfjmxVAOBdXrhFUIc9l9xuT8SJNQlgmi4iBkIuYMUCnMK5WPvCXHa+my8x2+NTMkY4T4IqhS4xOZKEkULj2ka83B+hVnl0B5iE4aEtLw+8gcUk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39860400002)(136003)(396003)(346002)(366004)(451199021)(6486002)(6666004)(478600001)(186003)(36756003)(26005)(6506007)(6512007)(83380400001)(2616005)(38100700002)(86362001)(31696002)(82960400001)(316002)(41300700001)(66476007)(66556008)(66946007)(4326008)(6636002)(7416002)(31686004)(8676002)(8936002)(5660300002)(2906002)(6862004)(37006003)(66899021)(54906003)(34814002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Wit2dm1wbkpzVDk4Nk52REk2M2NNQnFGbW9IZlFrN1RTdjArM3NNVC81V1pP?=
+ =?utf-8?B?NGcrTEZ2MmRxdWF6dDFVOTN3VHFSSzQrU0hQMHNESENweVdqcFRNdTFtdnRU?=
+ =?utf-8?B?TVpydHZyVll5T2gwUC9kdTluSWREZWdIVkplckhlY0J2cm9kSXV5NTFmd3ZT?=
+ =?utf-8?B?WmE0RXZOaFdva3BPQ0lWR2xHdkJ6NnMxdSsvU21jcEM1YjQ1Q3hvbEx5cmhM?=
+ =?utf-8?B?UVRHc0p2djB2ZjdBYUliNEZlUUZxb0dXcFh4TFFqdFpxNUJjbzhZOE9JNzc0?=
+ =?utf-8?B?cXJ3aFJ2azdEYWVlN2kzcDNqYlFaOVdYT01lT3NaV0JhTGZrbmhXZ1VLQkFG?=
+ =?utf-8?B?SWRQdXFTSVFNaFdRTXNBWHMxeGJlOUNEajJ4c2pWMzdxYzU1YmhDRTB2YlF5?=
+ =?utf-8?B?OENEWHhUUFlqc2VTcnRTNU5WbnNGb2N1ajFUQ3RIckk4eTYrVEc3MEF1SlV2?=
+ =?utf-8?B?R0RKemNQaWYwOGNjQmtlZEtsTmIwNEN3NGdwRXZKYml2Y1Nuems1WGRMZitN?=
+ =?utf-8?B?TFk1Y1pWQjBDSlNjWmhyQ3RvUlp1WElwaHNzL2JreEJpcC9EUW9pb3gwaHFV?=
+ =?utf-8?B?MTFoaXl1M0lJWUlCdHpVSDFSYndyTFN2OHc2aGs3QnFlUVMwQlpXWTBNNlo4?=
+ =?utf-8?B?OFdBYXNqWDV2WU5ueUJ0WEttZHRlSHNoVHc0d3oxMnhiZzlIYytpNmxQM2E2?=
+ =?utf-8?B?ckZIQ0lZc0lzMkZVOXBaQW5IWUlzZFA3TkZ6bEdrSTI1OUZocjNQb0RXTThl?=
+ =?utf-8?B?WDVqK212R3JUNVBMRDlsZzU2N0lCOUlHMFRVdWJZTW10dEdOaURVRk5STUJK?=
+ =?utf-8?B?TDJXNGVIS1l4MXNMN0Z4enB5VkZnREZkek8zTWpzRkF1WHVnQ04vVW5OT3pi?=
+ =?utf-8?B?d3E0TktPQ3dGQ3dRbWZHeEpEUGpQRFdRSGV5cUJUbEFSNlZSMm1EZXpDcTlw?=
+ =?utf-8?B?UG9KbHlMYUUxS005M0NVQUVmRE9zNEhYcENsRi9ZeTNMQWlYNkFpRDBWVkl1?=
+ =?utf-8?B?akYxNjR4NnhlU1BYd1c0MHpBb3FyZnp0MytncEp0SldySUd4Vk1IRWpRbWtk?=
+ =?utf-8?B?NjBUL1FtOW5mV0VQSjNJUFVPMWpFaFlEZGRsVmhkN0V2eFFTTHJWNG5hS0Rk?=
+ =?utf-8?B?TDVac3NvU0NzaGhkVlhzcUF1endpbjRMQjBPYkdLbGd0U0ZoUHNWbk5GSXMz?=
+ =?utf-8?B?L0lma0JKM3g1WjdOTjZOd2gwUXZxaFgyU2RkZlk4Wit3ZnFYMWY4eFhCMkZB?=
+ =?utf-8?B?cE01blNDYkUwNitZaU1ZY25oSmJnM21YaWl3LzFnemxGb3FuRU1GTENTU24y?=
+ =?utf-8?B?cTRwV1RaY3o3ZUgvOFVKKzlIZEVIcmEya25qVGlLbTQvWHJmdUg4cElKNEtR?=
+ =?utf-8?B?bGRtQ09heEdCOFhxTVlVRE8zSXcxU2tmQ2tSTDhseUhYM05qQkE1eDdJWE04?=
+ =?utf-8?B?ZXRiU3NBSjZZd2I1VGVwemxXRCtyUnBuNW1uSEpyS3FPRDI0VjlHRG4vUjZx?=
+ =?utf-8?B?Nkx5Mk9sRm1sRkZKaUw5YmpMcW1lSHJJdTNxNDZBZ2ZSVWQxM2FLU0x3a2tK?=
+ =?utf-8?B?K21Na0tMdEgweVBqcWdyay9VOFAzNjVPT2tTRVBKNkdINW84b1B5OE9pc3Na?=
+ =?utf-8?B?THBuU201MmxpT2kxYkdDT3lpY1Y5MGhxSlBFejZvSW1jbTFvQzRnd0pQVldr?=
+ =?utf-8?B?ZnNpdnJma1psd0RyN3BaeEljdGNCUU9uS25mWnlQOEFtWlpsNTAxcW9ETVhh?=
+ =?utf-8?B?MjZUcDhHRXhPNlFMZW95cTQrQ0xNSCtOTnBmWjZSbDFKQisxZ1BudjVLdkdx?=
+ =?utf-8?B?OGFhdDNYRHZkZjB3bTBxeFl4dldwbVdsSCtPdzZWU09GelR5UGdFTTZib2Rl?=
+ =?utf-8?B?SnA5TUIvSGpyVVg3QWtvY0FXeW42Y0c5SHRTMTU1MzNxT1Z5YlBKeXVIY2pa?=
+ =?utf-8?B?V2QwSzc5VHJqdm5tMWdWck53bW9qRUE4WUpLQ2tJOXRweTBEL0VLVFo3L3dn?=
+ =?utf-8?B?d0hzM0JZa1dIL3hJdFBzRGFzT1JBbGJ3dTQwSjExM0RzaXlEa1ZzUm1UMGht?=
+ =?utf-8?B?dHE4ZDRKNVVQNmxBWFNHREFtMmpDeU9sSDk4bE1lbkphMUM1VnVxRi8xeElz?=
+ =?utf-8?B?Y1lXMGRiMDE1aktGSy9tNXB0ajVSTWVGWXN2VTVST3Qwd3hoaFlzT3RlMmw0?=
+ =?utf-8?B?Znc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad4be76c-b0d9-4612-5422-08db61eb02f7
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 15:23:40.1331
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GJQpfhsNGniQqRWQipfJncluAKuZkayvel0V8KqrjLREu1KPzGaReOz25Z3obV/Ywaqq2kwRECabHzcRHwE36mbYlFJO06HvLuk9FiMdwFM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4677
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,151 +177,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 May 2023 13:55:12 -0500
-Bjorn Helgaas <helgaas@kernel.org> wrote:
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Date: Wed, 31 May 2023 13:14:12 +0200
 
-> On Tue, May 30, 2023 at 02:16:36PM -0400, Michael S. Tsirkin wrote:
-> > On Tue, May 30, 2023 at 12:12:44PM -0500, Bjorn Helgaas wrote:  
-> > > On Mon, Apr 24, 2023 at 09:15:57PM +0200, Igor Mammedov wrote:  
-> > > > When using ACPI PCI hotplug, hotplugging a device with
-> > > > large BARs may fail if bridge windows programmed by
-> > > > firmware are not large enough.
-> > > > 
-> > > > Reproducer:
-> > > >   $ qemu-kvm -monitor stdio -M q35  -m 4G \
-> > > >       -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=on \
-> > > >       -device id=rp1,pcie-root-port,bus=pcie.0,chassis=4 \
-> > > >       disk_image
-> > > > 
-> > > >  wait till linux guest boots, then hotplug device
-> > > >    (qemu) device_add qxl,bus=rp1
-> > > > 
-> > > >  hotplug on guest side fails with:
-> > > >    pci 0000:01:00.0: [1b36:0100] type 00 class 0x038000
-> > > >    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x03ffffff]
-> > > >    pci 0000:01:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
-> > > >    pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x00001fff]
-> > > >    pci 0000:01:00.0: reg 0x1c: [io  0x0000-0x001f]
-> > > >    pci 0000:01:00.0: BAR 0: no space for [mem size 0x04000000]
-> > > >    pci 0000:01:00.0: BAR 0: failed to assign [mem size 0x04000000]
-> > > >    pci 0000:01:00.0: BAR 1: no space for [mem size 0x04000000]
-> > > >    pci 0000:01:00.0: BAR 1: failed to assign [mem size 0x04000000]
-> > > >    pci 0000:01:00.0: BAR 2: assigned [mem 0xfe800000-0xfe801fff]
-> > > >    pci 0000:01:00.0: BAR 3: assigned [io  0x1000-0x101f]
-> > > >    qxl 0000:01:00.0: enabling device (0000 -> 0003)  
-> > > 
-> > > Ugh, I just noticed that we turned on PCI_COMMAND_MEMORY even though
-> > > BARs 0 and 1 haven't been assigned.  How did that happen?  It looks
-> > > like pci_enable_resources() checks for that, but there must be a hole
-> > > somewhere.  
-> > 
-> > Maybe because BAR2 was assigned? I think pci_enable_resources just
-> > does
-> >                 if (r->flags & IORESOURCE_MEM)
-> >                         cmd |= PCI_COMMAND_MEMORY;
-> > in a loop so if any memory BARs are assigned then PCI_COMMAND_MEMORY
-> > is set.  
+> On Tue, May 30, 2023 at 09:18:40AM -0700, Alexander H Duyck wrote:
 > 
-> It does, but it also bails out if it finds IORESOURCE_UNSET:
+> FWIW I agree with what Alex is saying over here.
+
+There are 2 Alexes, "choose wisely" :P
+
 > 
->   pci_enable_resources()
->   {
->     ...
->     pci_dev_for_each_resource(dev, r, i) {
->       ...
->       if (r->flags & IORESOURCE_UNSET) {
->         pci_err(dev, "can't enable device: BAR %d %pR not assigned\n");
->         return -EINVAL;
->       }
->       ...
->       if (r->flags & IORESOURCE_MEM)
->         cmd |= PCI_COMMAND_MEMORY;
->     }
->     ...
->   }
+>> On Thu, 2023-05-25 at 14:57 +0200, Alexander Lobakin wrote:
+>>> The Rx hotpath code of IAVF is not well-optimized TBH. Before doing any
+>>> further buffer model changes, shake it up a bit. Notably:
+>>>
+>>> 1. Cache more variables on the stack.
+>>>    DMA device, Rx page size, NTC -- these are the most common things
+>>>    used all throughout the hotpath, often in loops on each iteration.
+>>>    Instead of fetching (or even calculating, as with the page size) them
+>>>    from the ring all the time, cache them on the stack at the beginning
+>>>    of the NAPI polling callback. NTC will be written back at the end,
+>>>    the rest are used read-only, so no sync needed.
+>>
+>> The advantage of this is going to vary based on the attribute. One of
+>> the reasons why I left most of this on the ring is because the section
+>> of the ring most of these variables were meant to be read-mostly and
+>> shouldn't have resulted in any additional overhead versus accessing
+>> them from the stack.
 > 
-> I expected that IORESOURCE_UNSET would still be there from
-> pci_assign_resource(), since we saw the "failed to assign" messages,
-> but there must be more going on.
+> I believe it depends on ring struct layout which vary across our drivers,
+> no? On ice using making more usage of stack as described above improved
+> perf.
 
-with current acpiphp code pci_assign_resource() isn't called,
-instead it goes __pci_bus_assign_resources() route.
+It's +/- the same, most layout changes usually come with us moving stuff
+around to optimize paddings and cachelines lol. Here's the same as with
+ice, I don't think it's driver specific to get some positive results
+from shortcutting more hotties. The sole time I was surprised is when
+you were getting worse results storing xdp_buff on the stack vs on the
+ring :D
 
-However I an reproduce similar issue with SHPC when using
-hierarchy deeper than 1 bridge (for which relocation has never worked)
+> 
+>>
+>>> 2. Don't move the recycled buffers around the ring.
+>>>    The idea of passing the page of the right-now-recycled-buffer to a
+>>>    different buffer, in this case, the first one that needs to be
+>>>    allocated, moreover, on each new frame, is fundamentally wrong. It
+>>>    involves a few o' fetches, branches and then writes (and one Rx
+>>>    buffer struct is at least 32 bytes) where they're completely unneeded,
+>>>    but gives no good -- the result is the same as if we'd recycle it
+>>>    inplace, at the same position where it was used. So drop this and let
+>>>    the main refilling function take care of all the buffers, which were
+>>>    processed and now need to be recycled/refilled.
+>>
+>> The next_to_alloc logic was put in place to deal with systems that are
+>> experiencing memory issues. Specifically what can end up happening is
+>> that the ring can stall due to failing memory allocations and the
+>> memory can get stuck on the ring. For that reason we were essentially
+>> defragmenting the buffers when we started suffering memory pressure so
+>> that they could be reusued and/or freed following immediate use.
+>>
+>> Basically what you are trading off is some exception handling for
+>> performance by removing it.
+> 
+> With all of the mix of the changes this patch carries, I find it hard to
+> follow from description which parts of diff I should be looking at.
 
-qemu-kvm -monitor stdio -M q35 -cpu host -enable-kvm  -m 4G \
-   -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off \
-   -device pcie-root-port,id=pr1,bus=pcie.0,chassis=4 \
-   -device pcie-pci-bridge,id=br1,bus=pr1
+Huge piece removed before add_rx_frag_blah.
 
-hotplug device
-  (qemu) device_add qxl,addr=1,bus=br1
+> 
+>>
+>>> 3. Don't allocate with %GPF_ATOMIC on ifup.
+>>>    This involved introducing the @gfp parameter to a couple functions.
+>>>    Doesn't change anything for Rx -> softirq.
 
-shpchp 0000:01:00.0: Latch close on Slot(1)
-shpchp 0000:01:00.0: Button pressed on Slot(1)
-shpchp 0000:01:00.0: Card present on Slot(1)
-shpchp 0000:01:00.0: PCI slot #1 - powering on due to button press
-pci 0000:02:01.0: [1b36:0100] type 00 class 0x038000
-pci 0000:02:01.0: reg 0x10: [mem 0x00000000-0x03ffffff]
-pci 0000:02:01.0: reg 0x14: [mem 0x00000000-0x03ffffff]
-pci 0000:02:01.0: reg 0x18: [mem 0x00000000-0x00001fff]
-pci 0000:02:01.0: reg 0x1c: [io  0x0000-0x001f]
-pci 0000:02:01.0: BAR 0: no space for [mem size 0x04000000]
-pci 0000:02:01.0: BAR 0: failed to assign [mem size 0x04000000]
-pci 0000:02:01.0: BAR 1: no space for [mem size 0x04000000]
-pci 0000:02:01.0: BAR 1: failed to assign [mem size 0x04000000]
-pci 0000:02:01.0: BAR 2: assigned [mem 0xfe600000-0xfe601fff]
-pci 0000:02:01.0: BAR 3: assigned [io  0xc000-0xc01f]
-                  ^^^^^^^^^^^
-shpchp 0000:01:00.0: PCI bridge to [bus 02]
-shpchp 0000:01:00.0:   bridge window [io  0xc000-0xcfff]
-shpchp 0000:01:00.0:   bridge window [mem 0xfe600000-0xfe7fffff]
-shpchp 0000:01:00.0:   bridge window [mem 0xfe000000-0xfe1fffff 64bit pref]
-PCI: No. 2 try to assign unassigned res
-release child resource [mem 0xfe600000-0xfe601fff]
-shpchp 0000:01:00.0: resource 8 [mem 0xfe600000-0xfe7fffff] released
-shpchp 0000:01:00.0: PCI bridge to [bus 02]
-shpchp 0000:01:00.0: BAR 8: no space for [mem size 0x0a000000]
-shpchp 0000:01:00.0: BAR 8: failed to assign [mem size 0x0a000000]
-pci 0000:02:01.0: BAR 0: no space for [mem size 0x04000000]
-pci 0000:02:01.0: BAR 0: failed to assign [mem size 0x04000000]
-pci 0000:02:01.0: BAR 1: no space for [mem size 0x04000000]
-pci 0000:02:01.0: BAR 1: failed to assign [mem size 0x04000000]
-pci 0000:02:01.0: BAR 2: no space for [mem size 0x00002000]
-pci 0000:02:01.0: BAR 2: failed to assign [mem size 0x00002000]
-shpchp 0000:01:00.0: PCI bridge to [bus 02]
-shpchp 0000:01:00.0:   bridge window [io  0xc000-0xcfff]
-shpchp 0000:01:00.0:   bridge window [mem 0xfe000000-0xfe1fffff 64bit pref]
-qxl 0000:02:01.0: enabling device (0000 -> 0001)
-                                           ^^^ IO res only
-where:
-  assign_requested_resources_sorted()
-     ...
-     if (pci_assign_resource())
-        reset_resource(res);
-reset wipes everything pci_assign_resource() has done for failing resources
-leaving only assigned IO (on the 1st pass).
-Then later pci_enable_device_flags() will build mask for available bars
+[...]
 
-        for (i = 0; i <= PCI_ROM_RESOURCE; i++)                                  
-                if (dev->resource[i].flags & flags)                              
-                        bars |= (1 << i);                                        
-        for (i = PCI_BRIDGE_RESOURCES; i < DEVICE_COUNT_RESOURCE; i++)           
-                if (dev->resource[i].flags & flags)                              
-                        bars |= (1 << i);
+>>> + up to 2% performance.
+>>>
+>>
+>> What is the test you saw the 2% performance improvement in? Is it
+>> something XDP related or a full stack test?
+> 
+> +1, can you say more about that measurement?
 
-however since for failed MEM resources reset cleared flags along with everything else, 
-above snippet will ignore MEM bars, leaving only assigned IO resource.
-Then
-   do_pci_enable_device() -> pcibios_enable_device() -> pci_enable_resources(,bars)
-will happily succeed since mask tells it only to look into IO.
+My prev reply to Alex.
 
-And well even if mask weren't excluding MEM ones, it won't help since
-the resource was cleared out in assign_requested_resources_sorted().
+> 
+>>
+>>> Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+>>
+>> Also one thing I am not a huge fan of is a patch that is really a
+>> patchset onto itself. With all 6 items called out here I would have
+>> preferred to see this as 6 patches as it would have been easier to
+>> review.
+> 
+> +1
 
-Perhaps instead of playing with flags, we should somehow mark device
-with unusable resources as disabled, and fail pci_enable_device() early.
-(and also make sure its resources aren't accounted anymore on follow
-up hotplug events to the bridge)
++1 :D
 
+[...]
+
+>>>  	/* if we are the last buffer then there is nothing else to do */
+>>>  #define IAVF_RXD_EOF BIT(IAVF_RX_DESC_STATUS_EOF_SHIFT)
+>>>  	if (likely(iavf_test_staterr(rx_desc, IAVF_RXD_EOF)))
+>>
+>> You may want to see if you can get rid of this function entirely,
+>> perhaps you do in a later patch. This function was added for ixgbe back
+>> in the day to allow us to place the skb back in the ring for the RSC
+>> based workloads where we had to deal with interleaved frames in the Rx
+>> path.
+>>
+>> For example, one question here would be why are we passing skb? It
+>> isn't used as far as I can tell.
+>>
+> this was used back when skb was stored within the Rx buffer and now we
+> just store skb on Rx ring struct, so good catch, this arg is redundant.
+
+Also prev reply. I'm removing it later in the series hehe.
+
+> 
+> I'll go and take a look at code on v3.
+
+No changes apart fixing OcteonTX2 compilation =\
+
+Thanks,
+Olek
