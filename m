@@ -2,56 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E4E7179B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481AD7179C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235138AbjEaINC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
+        id S235143AbjEaIQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbjEaIM6 (ORCPT
+        with ESMTP id S234714AbjEaIQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:12:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD9610E
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:12:57 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 31 May 2023 04:16:45 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47ED8C5;
+        Wed, 31 May 2023 01:16:44 -0700 (PDT)
+Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4207A6605840;
-        Wed, 31 May 2023 09:12:56 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685520776;
-        bh=3jHnkXoSBbZgKG/dl29z1pDf2aC+nSfccT04ENZNaf4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MuQDt+h+ax9A6pcSl/ydOzBb+HXKYiPc/OXQ1KeN2dXObfUeQUlm9nm3ALwdfE3AA
-         Yt5CdxHwF3NbhFRIo7bHVV6zpc3tGwdzm7GestajpZ2LhYhuda1Jwp+sI+lFzij1GV
-         v81O0/FeHE+YiNcWIb5/3Qf/82ls2dCvJ8EaDKSzqDxNKWoG5EbTXcVyEPWYXhmT5a
-         7CIop/PknOrP+9eT1WVVphEYKKdk+ozgXBByitLdteWWVIV43EHI91OzHn5upZpHrZ
-         VOGXS+Sq/oQ3Zr5oCXmBxbw7L3kVtwM6xCRM3S9CKbfWjk3epXo/gOp4Ba+qy6M18Q
-         6vnvI/z1b5P2w==
-Message-ID: <8cd77fb6-ed45-8f7a-93f4-e795c898168d@collabora.com>
-Date:   Wed, 31 May 2023 10:12:53 +0200
+        (Authenticated sender: lukma@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id D03D78611C;
+        Wed, 31 May 2023 10:16:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1685521002;
+        bh=QIT5LdXsd38HnT1gObrlKAjLGwfJ/Ui3fx46NLLUQac=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VP3Jvfbn0rOgAcsX3fMnSgyQSUENXDYAJZf6G8CTfx23vjm6uxde16oYHDfltQ664
+         phmfrjyQlGyR/aq9xBFhtNe324WFfgVbHgjGAtRgBVr26dm6jl265cD3QLg5tJmDfR
+         Gt+JeDI6RdWHvgwVK0A0wKWevIfr3P6e73kVDBIPrNgwlYUE2wHDXEe4jXr9ERoDXw
+         UbtDXGFtHn4ZsHm6vrcZrDIO7lXgBvRegVyV3K3WcC/ShbEZVZsWKofiaJyRR+suqW
+         DpFosSbZF8pg3AeHIEA+gtFKaoWOTGI+V0h7KNVqRNILd8mqRi2bDW6KounbNkC5vf
+         +va52tIB45TGQ==
+Date:   Wed, 31 May 2023 10:16:40 +0200
+From:   Lukasz Majewski <lukma@denx.de>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC] net: dsa: slave: Advertise correct EEE capabilities at
+ slave PHY setup
+Message-ID: <20230531101640.131fe934@wsk>
+In-Reply-To: <ZHYLNGkG26QP/QAS@shell.armlinux.org.uk>
+References: <20230530122621.2142192-1-lukma@denx.de>
+        <ZHXzTBOtlPKqNfLw@shell.armlinux.org.uk>
+        <20230530160743.2c93a388@wsk>
+        <ZHYGv7zcJd/Ad4hH@shell.armlinux.org.uk>
+        <35546c34-17a6-4295-b263-3f2a97d53b94@lunn.ch>
+        <ZHYLNGkG26QP/QAS@shell.armlinux.org.uk>
+Organization: denx.de
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] soc: mediatek: SVS: Fix MT8192 GPU node name
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230531063532.2240038-1-wenst@chromium.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230531063532.2240038-1-wenst@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: multipart/signed; boundary="Sig_/Kl0N1N7kWlpAgVWt2ktIom0";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,38 +68,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 31/05/23 08:35, Chen-Yu Tsai ha scritto:
-> Device tree node names should be generic. The planned device node name
-> for the GPU, according to the bindings and posted DT changes, is "gpu",
-> not "mali".
-> 
-> Fix the GPU node name in the SVS driver to follow.
-> 
-> Fixes: 0bbb09b2af9d ("soc: mediatek: SVS: add mt8192 SVS GPU driver")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+--Sig_/Kl0N1N7kWlpAgVWt2ktIom0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hahaha, I was about to send the same patch! :D
+Hi Russell,
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> On Tue, May 30, 2023 at 04:26:49PM +0200, Andrew Lunn wrote:
+> > > So, I'm wondering what's actually going on here... can you give
+> > > any more details about the hardware setup? =20
+> >=20
+> > And what switch it actually is. I've not looked in too much detail,
+> > but i think different switch families have different EEE
+> > capabilities. But in general, as Russell pointed out, there is no
+> > MAC support for EEE in the mv88e6xxx driver. =20
+>=20
+> ... except for the built-in PHYs,
 
-> ---
->   drivers/soc/mediatek/mtk-svs.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-> index 81585733c8a9..3a2f97cd5272 100644
-> --- a/drivers/soc/mediatek/mtk-svs.c
-> +++ b/drivers/soc/mediatek/mtk-svs.c
-> @@ -2061,9 +2061,9 @@ static int svs_mt8192_platform_probe(struct svs_platform *svsp)
->   		svsb = &svsp->banks[idx];
->   
->   		if (svsb->type == SVSB_HIGH)
-> -			svsb->opp_dev = svs_add_device_link(svsp, "mali");
-> +			svsb->opp_dev = svs_add_device_link(svsp, "gpu");
->   		else if (svsb->type == SVSB_LOW)
-> -			svsb->opp_dev = svs_get_subsys_device(svsp, "mali");
-> +			svsb->opp_dev = svs_get_subsys_device(svsp, "gpu");
->   
->   		if (IS_ERR(svsb->opp_dev))
->   			return dev_err_probe(svsp->dev, PTR_ERR(svsb->opp_dev),
+This is my case.
 
+> which if they successfully negotiate
+> EEE, that status is communicated back to the MAC in that one sees
+> MV88E6352_PORT_STS_EEE
+
+I cannot find this register in my documentation.
+
+> set, which results in the MAC being able to
+> signal LPI to the PHY... and I've stuck a 'scope on the PHY media-side
+> signals in the past and have seen that activity does stop without
+> there needing to be any help from the driver for this.
+>=20
+> At least reading the information I have for the 88E6352, there is no
+> configuration of LPI timers, nor any seperate LPI enable. If EEE is
+> enabled at the MAC, then LPI will be signalled according to whatever
+> Marvell decided would be appropriate.
+
+And this knowledge is not disclosed to public.
+
+>=20
+> For an external PHY that the PPU is not polling, the only way that
+> we'd have EEE functional is if we forced EEE in port control register
+> 1 on switches that support those bits. In other words setting both the
+> EEE and FORCE_EEE bits...
+>=20
+
+Are those bits available in c45 standard? Or are they SoC (IC) specific?
+
+In my case I do have only two c45 registers disclosed (i.e. described)
+for mv88e6071 SoC in the documentation.
+
+
+Best regards,
+
+Lukasz Majewski
+
+--
+
+DENX Software Engineering GmbH,      Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+
+--Sig_/Kl0N1N7kWlpAgVWt2ktIom0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmR3AmgACgkQAR8vZIA0
+zr2vgAf/TPyuqCpXqy8OzcsofOh15TCYmLibHnjTznVps7GTT0zuwuoH9wWaif7E
+bUgJEGjaKr3yNTonliDF1C7rfuP7n6YwGhwIFEf5oyU1uN+ELTWPy9EqUplbE3oM
+MIl9KnPc0vqV5MFweT6OLUZeacklzCsRGAyNmcchlLx2h+9jTXKosXevBroYmyIe
+FuV5nMr/yJkR6hXXwQi+YiuavL0LttUx/z2Q3co2FWfuZiYqv3dZHr7MgbTiQIOk
+P+JSwlPOOz0n97h5ktJCclxHuAU+SPf3GbYs4f4lHnLFVKGJQwf4HQW7Cp6qdBIJ
+r4FYxEmTNTygcOj2ntB3/YXUpgFscw==
+=TFoU
+-----END PGP SIGNATURE-----
+
+--Sig_/Kl0N1N7kWlpAgVWt2ktIom0--
