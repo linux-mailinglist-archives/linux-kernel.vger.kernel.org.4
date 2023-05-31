@@ -2,56 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC05C71826E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD9A71825E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236467AbjEaNms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
+        id S236423AbjEaNmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236379AbjEaNmF (ORCPT
+        with ESMTP id S236419AbjEaNlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:42:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23173E54;
-        Wed, 31 May 2023 06:41:28 -0700 (PDT)
+        Wed, 31 May 2023 09:41:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9750A10F4;
+        Wed, 31 May 2023 06:41:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26EC163B0C;
-        Wed, 31 May 2023 13:40:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61DACC433A0;
-        Wed, 31 May 2023 13:40:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42A3263B05;
+        Wed, 31 May 2023 13:41:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB2EAC433D2;
+        Wed, 31 May 2023 13:41:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540458;
-        bh=Ys+J8zyZScPPe4uXqKJZpQIViFuX+QXqtdsc0LeVe9U=;
+        s=k20201202; t=1685540462;
+        bh=8m1du6GOah3NQgk52bCpmZ/0Uo6WzwgfjlrA6FrWeeI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F3mHPc/lv0Y6qrqJELoDiozPEwRf04mTrpX1us/ZhNgDb6NRaPBPE+qEcOqUWk0YY
-         yEM49wM4Lb8zfKnFtdVTPlxBe7lHTt9LLTd2DavfogEG8B3HAKckO3dt5vIy7s5xM4
-         0MtN126TkEBuvXTSei2WcIuHC9GypzuiiSFyRSRo2/RxkAeDwiZCs9DUw91RqW3yfB
-         AV5EvrzrpclVHNevN8aoabPo7+4M1Y758Hblituivb5tMQhdPK7yjw157bfuuXBAn2
-         CHyMXOpO2kmyKT160AD9fylN8xdP6qT3Cag3vlaynOjGXp8BrwzuS1UrOfgQWSZ430
-         eUuT0OD3hq90w==
+        b=ujzuBoCkJPxSrue4PN0Nl1tgqHeys6+GFg9Bsp3yv1qRWg7DMoMXH9vwsNXYypdyl
+         oZRC7b90M7UxWFVTr4PG/9B1K5MsvvK39CoFtt03b4tBAgz/tfUAK2Jqg7fFNxslHy
+         r5PDDZGLoyj7v5evPjodYCsHMpToC8P4dRqBlhvNrpuKBa//FZ/sTQ2582rpT2L8e7
+         46c0bTrSWvR+FjicdbrBPzVqQQiBbVmCq3n20BqZJpft+NLPs//f+DlgkDUf3rXX2z
+         +MSvhAypGlKfff4C8oc4Re5KN16zXqNRRvh1krFwBgbRUeEHhuGzC9HpjQOd7SfvD4
+         gKnadNtdonsXg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alejandro Lucero <alejandro.lucero-palau@amd.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, ecree.xilinx@gmail.com,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-net-drivers@amd.com
-Subject: [PATCH AUTOSEL 6.3 21/37] sfc: fix devlink info error handling
-Date:   Wed, 31 May 2023 09:40:03 -0400
-Message-Id: <20230531134020.3383253-21-sashal@kernel.org>
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com,
+        pierre-louis.bossart@linux.intel.com,
+        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        ahplka19@gmail.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 6.3 22/37] ASoC: Intel: avs: Account for UID of ACPI device
+Date:   Wed, 31 May 2023 09:40:04 -0400
+Message-Id: <20230531134020.3383253-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134020.3383253-1-sashal@kernel.org>
 References: <20230531134020.3383253-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,152 +65,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alejandro Lucero <alejandro.lucero-palau@amd.com>
+From: Cezary Rojewski <cezary.rojewski@intel.com>
 
-[ Upstream commit cfcb942863f6fce9266e1957a021e6c7295dee42 ]
+[ Upstream commit 836855100b87b4dd7a82546131779dc255c18b67 ]
 
-Avoid early devlink info return if errors arise with MCDI commands
-executed for getting the required info from the device. The rationale
-is some commands can fail but later ones could still give useful data.
-Moreover, some nvram partitions could not be present which needs to be
-handled as a non error.
+Configurations with multiple codecs attached to the platform are
+supported but only if each from the set is different. Add new field
+representing the 'Unique ID' so that codecs that share Vendor and Part
+IDs can be differentiated and thus enabling support for such
+configurations.
 
-The specific errors are reported through system messages and if any
-error appears, it will be reported generically through extack.
-
-Fixes 14743ddd2495 ("sfc: add devlink info support for ef100")
-Signed-off-by: Alejandro Lucero <alejandro.lucero-palau@amd.com>
-Acked-by: Martin Habets <habetsm.xilinx@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Cezary Rojewski <cezary.rojewski@intel.com>
+Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+Link: https://lore.kernel.org/r/20230519201711.4073845-6-amadeuszx.slawinski@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/sfc/efx_devlink.c | 95 ++++++++++++--------------
- 1 file changed, 45 insertions(+), 50 deletions(-)
+ include/sound/soc-acpi.h              | 1 +
+ sound/soc/intel/avs/board_selection.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/sfc/efx_devlink.c b/drivers/net/ethernet/sfc/efx_devlink.c
-index 381b805659d39..ef9971cbb695d 100644
---- a/drivers/net/ethernet/sfc/efx_devlink.c
-+++ b/drivers/net/ethernet/sfc/efx_devlink.c
-@@ -171,9 +171,14 @@ static int efx_devlink_info_nvram_partition(struct efx_nic *efx,
- 
- 	rc = efx_mcdi_nvram_metadata(efx, partition_type, NULL, version, NULL,
- 				     0);
-+
-+	/* If the partition does not exist, that is not an error. */
-+	if (rc == -ENOENT)
-+		return 0;
-+
- 	if (rc) {
--		netif_err(efx, drv, efx->net_dev, "mcdi nvram %s: failed\n",
--			  version_name);
-+		netif_err(efx, drv, efx->net_dev, "mcdi nvram %s: failed (rc=%d)\n",
-+			  version_name, rc);
- 		return rc;
+diff --git a/include/sound/soc-acpi.h b/include/sound/soc-acpi.h
+index b38fd25c57295..528279056b3ab 100644
+--- a/include/sound/soc-acpi.h
++++ b/include/sound/soc-acpi.h
+@@ -170,6 +170,7 @@ struct snd_soc_acpi_link_adr {
+ /* Descriptor for SST ASoC machine driver */
+ struct snd_soc_acpi_mach {
+ 	u8 id[ACPI_ID_LEN];
++	const char *uid;
+ 	const struct snd_soc_acpi_codecs *comp_ids;
+ 	const u32 link_mask;
+ 	const struct snd_soc_acpi_link_adr *links;
+diff --git a/sound/soc/intel/avs/board_selection.c b/sound/soc/intel/avs/board_selection.c
+index b2823c2107f77..60f8fb0bff95b 100644
+--- a/sound/soc/intel/avs/board_selection.c
++++ b/sound/soc/intel/avs/board_selection.c
+@@ -443,7 +443,7 @@ static int avs_register_i2s_boards(struct avs_dev *adev)
  	}
  
-@@ -187,36 +192,33 @@ static int efx_devlink_info_nvram_partition(struct efx_nic *efx,
- static int efx_devlink_info_stored_versions(struct efx_nic *efx,
- 					    struct devlink_info_req *req)
- {
--	int rc;
--
--	rc = efx_devlink_info_nvram_partition(efx, req,
--					      NVRAM_PARTITION_TYPE_BUNDLE,
--					      DEVLINK_INFO_VERSION_GENERIC_FW_BUNDLE_ID);
--	if (rc)
--		return rc;
--
--	rc = efx_devlink_info_nvram_partition(efx, req,
--					      NVRAM_PARTITION_TYPE_MC_FIRMWARE,
--					      DEVLINK_INFO_VERSION_GENERIC_FW_MGMT);
--	if (rc)
--		return rc;
--
--	rc = efx_devlink_info_nvram_partition(efx, req,
--					      NVRAM_PARTITION_TYPE_SUC_FIRMWARE,
--					      EFX_DEVLINK_INFO_VERSION_FW_MGMT_SUC);
--	if (rc)
--		return rc;
--
--	rc = efx_devlink_info_nvram_partition(efx, req,
--					      NVRAM_PARTITION_TYPE_EXPANSION_ROM,
--					      EFX_DEVLINK_INFO_VERSION_FW_EXPROM);
--	if (rc)
--		return rc;
-+	int err;
+ 	for (mach = boards->machs; mach->id[0]; mach++) {
+-		if (!acpi_dev_present(mach->id, NULL, -1))
++		if (!acpi_dev_present(mach->id, mach->uid, -1))
+ 			continue;
  
--	rc = efx_devlink_info_nvram_partition(efx, req,
--					      NVRAM_PARTITION_TYPE_EXPANSION_UEFI,
--					      EFX_DEVLINK_INFO_VERSION_FW_UEFI);
--	return rc;
-+	/* We do not care here about the specific error but just if an error
-+	 * happened. The specific error will be reported inside the call
-+	 * through system messages, and if any error happened in any call
-+	 * below, we report it through extack.
-+	 */
-+	err = efx_devlink_info_nvram_partition(efx, req,
-+					       NVRAM_PARTITION_TYPE_BUNDLE,
-+					       DEVLINK_INFO_VERSION_GENERIC_FW_BUNDLE_ID);
-+
-+	err |= efx_devlink_info_nvram_partition(efx, req,
-+						NVRAM_PARTITION_TYPE_MC_FIRMWARE,
-+						DEVLINK_INFO_VERSION_GENERIC_FW_MGMT);
-+
-+	err |= efx_devlink_info_nvram_partition(efx, req,
-+						NVRAM_PARTITION_TYPE_SUC_FIRMWARE,
-+						EFX_DEVLINK_INFO_VERSION_FW_MGMT_SUC);
-+
-+	err |= efx_devlink_info_nvram_partition(efx, req,
-+						NVRAM_PARTITION_TYPE_EXPANSION_ROM,
-+						EFX_DEVLINK_INFO_VERSION_FW_EXPROM);
-+
-+	err |= efx_devlink_info_nvram_partition(efx, req,
-+						NVRAM_PARTITION_TYPE_EXPANSION_UEFI,
-+						EFX_DEVLINK_INFO_VERSION_FW_UEFI);
-+	return err;
- }
- 
- #define EFX_VER_FLAG(_f)	\
-@@ -587,27 +589,20 @@ static int efx_devlink_info_get(struct devlink *devlink,
- {
- 	struct efx_devlink *devlink_private = devlink_priv(devlink);
- 	struct efx_nic *efx = devlink_private->efx;
--	int rc;
-+	int err;
- 
--	/* Several different MCDI commands are used. We report first error
--	 * through extack returning at that point. Specific error
--	 * information via system messages.
-+	/* Several different MCDI commands are used. We report if errors
-+	 * happened through extack. Specific error information via system
-+	 * messages inside the calls.
- 	 */
--	rc = efx_devlink_info_board_cfg(efx, req);
--	if (rc) {
--		NL_SET_ERR_MSG_MOD(extack, "Getting board info failed");
--		return rc;
--	}
--	rc = efx_devlink_info_stored_versions(efx, req);
--	if (rc) {
--		NL_SET_ERR_MSG_MOD(extack, "Getting stored versions failed");
--		return rc;
--	}
--	rc = efx_devlink_info_running_versions(efx, req);
--	if (rc) {
--		NL_SET_ERR_MSG_MOD(extack, "Getting running versions failed");
--		return rc;
--	}
-+	err = efx_devlink_info_board_cfg(efx, req);
-+
-+	err |= efx_devlink_info_stored_versions(efx, req);
-+
-+	err |= efx_devlink_info_running_versions(efx, req);
-+
-+	if (err)
-+		NL_SET_ERR_MSG_MOD(extack, "Errors when getting device info. Check system messages");
- 
- 	return 0;
- }
+ 		if (mach->machine_quirk)
 -- 
 2.39.2
 
