@@ -2,147 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAEB717AB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93A4717ABE
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234849AbjEaIvM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 31 May 2023 04:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
+        id S234970AbjEaIxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235149AbjEaIuq (ORCPT
+        with ESMTP id S234938AbjEaIw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:50:46 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A14121;
-        Wed, 31 May 2023 01:50:41 -0700 (PDT)
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C31C3FF803;
-        Wed, 31 May 2023 08:50:38 +0000 (UTC)
-Message-ID: <8308180826ba9a5478bf568396034b8dc7fb6e72.camel@hadess.net>
-Subject: Re: [BUG: 6.3 kernel] Logitech Trackball M575 misidentified
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Xose Vazquez Perez <xose.vazquez@gmail.com>,
-        linux-input@vger.kernel.org
-Cc:     Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Wed, 31 May 2023 10:50:38 +0200
-In-Reply-To: <8941c5f2-3861-da68-06ca-adc68a37e53b@leemhuis.info>
-References: <eeb19342-3499-a1fb-388f-d4670472b16c@gmail.com>
-         <8941c5f2-3861-da68-06ca-adc68a37e53b@leemhuis.info>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.2 (3.48.2-1.fc38) 
+        Wed, 31 May 2023 04:52:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81E9124
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685523120;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WGo4qtRQ4pkJVWaEUVypZ+1I1vSFSgJTj8gN/jNbr24=;
+        b=gdIAnc/w2P6UWFdUZ+zqkF6egz/AAl0gKEF2kl0Q4TIoCpbkLGtzxhvTDz7XQJUI6ebrqR
+        gPnLIrDEj+7UZhnFLys+3qYwmlFHsp5XGAm/cQDGO1HmP2DlHp5XmAAkbfhY9F+4aH1aA5
+        Uam+Cno+V7OV02Nb36rswnCI0AIsW7s=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-297-6A7MVqTQNyGeS8sO5Uaxog-1; Wed, 31 May 2023 04:51:57 -0400
+X-MC-Unique: 6A7MVqTQNyGeS8sO5Uaxog-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD993280BC41;
+        Wed, 31 May 2023 08:51:56 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9FE4B40E6A43;
+        Wed, 31 May 2023 08:51:54 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230526201202.1cd35fe9@kernel.org>
+References: <20230526201202.1cd35fe9@kernel.org> <20230524144923.3623536-1-dhowells@redhat.com> <20230524144923.3623536-4-dhowells@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Tom Herbert <tom@herbertland.com>,
+        Tom Herbert <tom@quantonium.net>
+Subject: Re: [PATCH net-next 3/4] kcm: Support MSG_SPLICE_PAGES
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <574369.1685523113.1@warthog.procyon.org.uk>
+Date:   Wed, 31 May 2023 09:51:53 +0100
+Message-ID: <574370.1685523113@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-05-16 at 14:33 +0200, Linux regression tracking (Thorsten
-Leemhuis) wrote:
-> [CCing a few people and the the regression list, as it should be in
-> the
-> loop for regressions:
-> https://docs.kernel.org/admin-guide/reporting-regressions.html]
-> 
-> On 11.05.23 23:22, Xose Vazquez Perez wrote:
-> > 
-> > 6.3.2 kernel identifies "Logitech" "ERGO M575" as "Logitech"
-> > "(\xc9_O\x04)",
-> > 6.2.15 works fine.
-> > 
-> > 
-> > 6.2.15 boot log:
-> > input: Logitech ERGO M575 as
-> > /devices/pci0000:00/0000:00:1a.0/usb3/3-1/3-1.3/3-
-> > 1.3:1.2/0003:046D:C52B.0003/0003:046D:4096.0005/input/input15
-> > logitech-hidpp-device 0003:046D:4096.0005: input,hidraw1: USB HID
-> > v1.11
-> > Mouse [Logitech ERGO M575] on usb-0000:00:1a.0-1.3/input2:1
-> > 
-> > 6.3.2 boot log:
-> > input: Logitech \xc9_O\x04 as
-> > /devices/pci0000:00/0000:00:1a.0/usb3/3-1/3-1.3/3-
-> > 1.3:1.2/0003:046D:C52B.0003/0003:046D:4096.0005/input/input15
-> > logitech-hidpp-device 0003:046D:4096.0005: input,hidraw2: USB HID
-> > v1.11
-> > Mouse [Logitech \xc9_O\x04] on usb-0000:00:1a.0-1.3/input2:1
-> 
-> I wonder if this if this is some related to this issue:
-> https://bugzilla.kernel.org/show_bug.cgi?id=217412
-> ("Since kernel 6.3.1 logitech unify receiver not working properly")
-> 
-> That one so far seems to be ignored by the developers. Your report
-> one
-> also didn't get any reply yet.
-> 
-> Could you maybe perform a bisection to get down to this?
-> 
-> Side note: there is also
-> https://bugzilla.kernel.org/show_bug.cgi?id=217330
-> ("Broken Logitech unifying battery names in hid-next tree")
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-The device name problem is tracked in 217330, which I filed.
+> On Wed, 24 May 2023 15:49:22 +0100 David Howells wrote:
+> > +			err = skb_splice_from_iter(skb, &msg->msg_iter, copy,
+> > +						   sk->sk_allocation);
+> > +			if (err < 0) {
+> > +				if (err == -EMSGSIZE)
+> > +					goto wait_for_memory;
+> > +				goto out_error;
+> > +			}
+> >  
+> 
+> should there be a:
+> 
+> 		copy = err;
+> or:
+> 		copy -= msg_data_left(msg);
+> 
+> or some such here? Can we safely assume that skb_splice_from_iter() will
+> copy all or nothing? 
 
-A bisection would definitely help me if you have time, otherwise I'll
-get to it, but it's probably not going to be before a couple of weeks.
+Yeah.  Good point.  I didn't add one because the normal operation code doesn't
+do that - but I guess that's all-or-nothing.
 
-You can also test this patch on top of the latest kernel tree:
-https://patchwork.kernel.org/project/linux-input/patch/20230531082428.21763-1-hadess@hadess.net/
-although I don't expect it to make a difference.
-
-Cheers
-
-> 
-> 
-> Anyway, for the rest of this mail:
-> 
-> [TLDR: I'm adding this report to the list of tracked Linux kernel
-> regressions; the text you find below is based on a few templates
-> paragraphs you might have encountered already in similar form.
-> See link in footer if these mails annoy you.]
-> 
-> Thanks for the report. To be sure the issue doesn't fall through the
-> cracks unnoticed, I'm adding it to regzbot, the Linux kernel
-> regression
-> tracking bot:
-> 
-> #regzbot ^introduced v6.2..v6.3
-> #regzbot title input: Logitech Trackball M575 misidentified
-> #regzbot ignore-activity
-> 
-> This isn't a regression? This issue or a fix for it are already
-> discussed somewhere else? It was fixed already? You want to clarify
-> when
-> the regression started to happen? Or point out I got the title or
-> something else totally wrong? Then just reply and tell me -- ideally
-> while also telling regzbot about it, as explained by the page listed
-> in
-> the footer of this mail.
-> 
-> Developers: When fixing the issue, remember to add 'Link:' tags
-> pointing
-> to the report (the parent of this mail). See page linked in footer
-> for
-> details.
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker'
-> hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> That page also explains what to do if mails like this annoy you.
+David
 
