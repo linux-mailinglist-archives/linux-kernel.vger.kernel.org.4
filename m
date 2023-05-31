@@ -2,174 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B81771882A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69AF871882F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjEaRKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
+        id S229875AbjEaRLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjEaRKp (ORCPT
+        with ESMTP id S229686AbjEaRLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:10:45 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2048.outbound.protection.outlook.com [40.107.22.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4247FE53;
-        Wed, 31 May 2023 10:10:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dvUylGGBTJizAIwrVUXEo6PFeICFu9XOTm5pJLavorw+sYXPrRGehgkJBpHCrjkM4MyHxWaqwyNXkQuqRrMXG64h0+qfJIR60/S5bvthaxLoRnP+vELsNsh2TO8d8mQwZUD0mAZ5IcXz4KYOdhB9L6H/dSC+EhEuzRR53v2WuqHU34VttThXzGUv9GjqKGbYfsdCj7HGakv/m1LZ4Q1lJ3WMdpmS+vIHZ/Yi11QMOmqfRmHi9OAJEgRlgvO+KhTYAR3lt3auNA5SsUzhY/o8A2wPAWhc1zUyqGcRZLfw9Ne8G6YGEfEUgAPaxzrkhhvyOlTNcOKSrOdO7YYzS9EQ5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q+TOmyqzygUUeZ2RtGadNzmdyCeYOkCP3ss3LdNkM0M=;
- b=A47DbGNitd3CmsySmDhnFIs5fYtn0xrIx9DM+rO/1eEagxRTbTCqr7B9A49sXo4IidjxbvVHhDStKUP0VxzYuuWfj0Oegdfizzmyi6yfybtVtFTvaV4Vk0229XjF7YG29USs6n/BGogRdviR9CWfp45K9wbiPTQWJvzdGpigplyAzszxS9mSBbv4qU9Bzlr7Iv0qKpGry/Ck533KRf2qJFqgdhlqnySZfNReQXi+63QOO10xZb0Nxr2kjne+iQHVZ0+vdff53bviCzVIgSUOa9m1A/3zKAVDKqDR9aeBjmHiOq6lkFgidCjL4nrlF3OFNAKWg/ZDZ1PTA2fXD3qAag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q+TOmyqzygUUeZ2RtGadNzmdyCeYOkCP3ss3LdNkM0M=;
- b=YlMKgi/VD6KENC0Wqvme5aC4qfGngQlyRA+XrjCJeJOUdjLuP0PokakwWh7rjBg3alxyCV+7svdDASETMOGm0B20EivmTb5QzFSzG4iiH1npLytDAOEbW6UbRjpZh1itXNwqzVLQbTHskyofs81z5Qr1as/6kaOQ1OGGrhVC4C4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
- by DB9PR04MB8395.eurprd04.prod.outlook.com (2603:10a6:10:247::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Wed, 31 May
- 2023 17:10:34 +0000
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::47e4:eb1:e83c:fa4a]) by AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::47e4:eb1:e83c:fa4a%4]) with mapi id 15.20.6455.020; Wed, 31 May 2023
- 17:10:34 +0000
-Date:   Wed, 31 May 2023 20:10:29 +0300
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Amritha Nambiar <amritha.nambiar@intel.com>,
-        Ferenc Fejes <ferenc.fejes@ericsson.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Pranavi Somisetty <pranavi.somisetty@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        intel-wired-lan@lists.osuosl.org,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>
-Subject: Re: [PATCH net-next 2/5] net/sched: taprio: replace
- tc_taprio_qopt_offload :: enable with a "cmd" enum
-Message-ID: <20230531171029.gxi3um3bvmjjhvqk@skbuf>
-References: <20230530091948.1408477-1-vladimir.oltean@nxp.com>
- <20230530091948.1408477-3-vladimir.oltean@nxp.com>
- <ZHd++lqP8EQocWQC@corigine.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHd++lqP8EQocWQC@corigine.com>
-X-ClientProxiedBy: VI1PR07CA0229.eurprd07.prod.outlook.com
- (2603:10a6:802:58::32) To AM0PR04MB6452.eurprd04.prod.outlook.com
- (2603:10a6:208:16d::21)
+        Wed, 31 May 2023 13:11:43 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCA3133;
+        Wed, 31 May 2023 10:11:40 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VETEqH032254;
+        Wed, 31 May 2023 17:11:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=/Kj6AS/TnqEEItEU3nofU6kwgoDlOE903p9vfMYKykI=;
+ b=ZWD3sSt7BgcyzgAFK8JZnIylD2R+K78r4EMNlQ9BCQvMSXC1PPLjvCpgw35d/fWgoJxf
+ eKdRZSb6clwfO8Zv/YPKXppu0GB0KIFVoHO3aptjQ5So8TlEUjljf61iD7/2Tzk3NHLI
+ IMP9G5h9GUCvg1c0irgUNRTpE40RFiBaSvTeOg4fBz2b/81J/Um7YV/yOz0gbPWPggiJ
+ G3GvLKv0xPs9Rqq8V3k1Ba4TbBInNlFN8bIftHa33XfzmtxdY16G2PUwECZ9PNdIgX4d
+ Dvk4G7zC3iRB4bNvbI4Nuqknsahk9lyrn4vW3WJT13Em28Hh4oRDirS7e/R/PNO/Xops Kg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qx81x8ehk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 17:11:31 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34VHBUnr001235
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 17:11:30 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 31 May 2023 10:11:30 -0700
+Date:   Wed, 31 May 2023 10:11:29 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Johan Hovold <johan@kernel.org>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <mani@kernel.org>,
+        Steev Klimaszewski <steev@kali.org>
+Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: sc8280xp: Add GPU related nodes
+Message-ID: <20230531171129.GA112802@hu-bjorande-lv.qualcomm.com>
+References: <20230531030945.4109453-1-quic_bjorande@quicinc.com>
+ <20230531030945.4109453-3-quic_bjorande@quicinc.com>
+ <ZHb3I6NUcjHZ64wD@hovoldconsulting.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|DB9PR04MB8395:EE_
-X-MS-Office365-Filtering-Correlation-Id: 702e482d-a478-49ca-cb43-08db61f9f26d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7QopltgeaiDWlkymjxDQxyrqSaI8nqOhM5O3c3xGc9yAZ1dZK8PqnC/I7THidMpUEmWuD95Pe2kjwG+QbYRTis1PMLVAnfa975oU1YGwec5fbnVNQAOFzzLgY2fHwXuozlCXxH2nHxkraGYUrayd2HFoa8yRPAuUwvh2ErMBuX9GbATVYqSGYTsJ0WLPD84vtGJMQFglycHMQe2UH3gGq2NLX19bcBGSyybxCWA7009CxOe7pidQHTNK22a/n9QL/UC9lOnexrr/OMyHR7BBLoWVusaH4U4U6x+7Mw+Waru8uxlRqCK3gxxCA4PnJUJ8NiCB0gTGrwoIQUYUnbkXPmCiZbfH7W+KUFFe/ilcLMPXJ8L8VISMvfOqgVmRlMEVKMbM88jdOt2RcX6NMVOl+QjVgbm6KMcovFN7xCqxZ86NbNK8SAWPBhpweYtvgeTLcTmbvOtT5toG/CkcgbfYDaeejPsDOM/CVt49oNsIxV4VUQA4llAgR4nBOutBFg0lvLhefU64KZ9b6LzswsKMc+lqAnr+6F1Cn8uEJv9fB4ddRopOdN/rZRz3FZuwJf1Z
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(136003)(376002)(39860400002)(346002)(366004)(396003)(451199021)(186003)(38100700002)(41300700001)(83380400001)(9686003)(6506007)(26005)(6512007)(1076003)(6486002)(6666004)(478600001)(54906003)(66556008)(66476007)(66946007)(6916009)(4326008)(316002)(8936002)(44832011)(7406005)(7416002)(8676002)(33716001)(86362001)(5660300002)(2906002)(4744005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6VUgJzcbJTrvCBd/J4iEAX+3AFXQQVUfi9+fxPhUkwIABQnuhQKzjk0gEUft?=
- =?us-ascii?Q?P48xB1tFIhw513CjF61fW/5xhtd3YoxDBPuiCo4QbJd4i3LNNQNotWSZVOLE?=
- =?us-ascii?Q?WC0T+6ZIYQI79FIF3eyi7kFTu3zLjJgsyiq3k1/BprcXz6XT7vu/39unklRT?=
- =?us-ascii?Q?LDEDIJFTbg9FqFNfot3BiRmK3etKxDB232TOMWxw/1/jFq5oWr32UE/xxmmr?=
- =?us-ascii?Q?GQJl4q8uhX/kkwSap2P56NaTW+ghoU3Byl7wyMVjV46E9+zZpqjOgNKpSS1K?=
- =?us-ascii?Q?m3MigZzh4v0RnSOkIXHsdOnGHnApuo9H90rtMi1i9C8Q0Wx9I/kWGFoFvNSb?=
- =?us-ascii?Q?dTr3mXbe82ABZdIAJUKDIkHtEbyPkVNbW57Zu9zY4QaDBeNeBr8jflHwP7BJ?=
- =?us-ascii?Q?mIc58P7u6cgQ+YGlGGoJntifsAzukUQ398E2c/lgrEv721FPsme6QN/GSsL0?=
- =?us-ascii?Q?eBWJ0t7YUNhODS21d/hm7u/9PLnSccWWZKDono+VfRIRAr/BQiNV1WZHirHy?=
- =?us-ascii?Q?FfJASKbSzZapBKlnT7oCGZXUjl/xuCTXDF4iwWfx84jd14x3qhEcsDQL0NnW?=
- =?us-ascii?Q?1rQ6Arj/23eTwpeWDuW4ydsPGMKXMinZIdY0sMoUZkZrYTcVOevmD1GxswCU?=
- =?us-ascii?Q?phEEdAg4eTw56CzhFh3V2jFqc7oXYhA1U87qJLPhmwgJdwFRonIBzFp3Grx0?=
- =?us-ascii?Q?L/xoJGrOGd4j/j0w5Bn5zCDntiq/egMW863maBSDM1iZdcelInR5Q6COFGUR?=
- =?us-ascii?Q?0ewv1dDJvoz9NnW063ejHMex5YZqaY7sOJeXOUGyOSfDOo3LnQkmBujh/2pJ?=
- =?us-ascii?Q?5gBSmN33Cmtk+vV3XVAe7mNTHzp8ooSI816/dibDiNT+7siODinWxjoWgMEh?=
- =?us-ascii?Q?3rH99CfCBYFBLP5CrSm2AuQDIVT6CaB7Y0U38xWYS9aGPNS37I6n2FqRL9Wm?=
- =?us-ascii?Q?c4D9oPWFu8MtlzJD8c8qQ/br2yap7Pv+Enhtb8Nc81hdICH4a4ybfdPRKJ3x?=
- =?us-ascii?Q?odfQStx5li3HX5+0F2A88Rp7+gfJHRY3hUI5+uAU1rgBH/nYKMO+IYoVubHj?=
- =?us-ascii?Q?eDq5GB3tX49valHqOwqw7FXeffxEijvOhljF5nRgSt/rKExvbpQMdAqjixni?=
- =?us-ascii?Q?5QPVqaAWwIx2jA5WsU3hcKcgIKXkAdAhkTj5+xXqO3nWFVxZz0bycPTVFlQo?=
- =?us-ascii?Q?qr4EQRyXXMAhXZcM+c12m/XijoLk/n7yl/8bcw0d3u+yRqqxHXqv4xs7VmK/?=
- =?us-ascii?Q?8eED2EUrkDycZG3dvqPhb7zuvWewOa4TpPVWYXcIbRZ+nGwGh3tJygp8jpYd?=
- =?us-ascii?Q?+P7qKAjTfFu7LXO5v/HGLcbxoFFq0Sm3XoT7ZVwWx1tG85btuPVt1RHzOhUr?=
- =?us-ascii?Q?DZhFgrYg6wZFGpUa6zShteHCeeWSWb3i3ro13SszILKKDfSxR4pITKEczvGg?=
- =?us-ascii?Q?CPeQrTFxtShQ5bkCQMWUE13juOjrZPDcjELjbizYAnt+cJGkCJZ52PnWXrEV?=
- =?us-ascii?Q?4iZfoLn8soMJ4D4Oz9ndiip26Y/mj8fMZLv2Qwkg+QtyljIDVbpQNEHYETYJ?=
- =?us-ascii?Q?9BwkafTSWkPdOzzMMaw0UIxv9ni0qYQ6g2Up2hh8Lf9ZhoteFVwCYxuhsfpp?=
- =?us-ascii?Q?Fw=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 702e482d-a478-49ca-cb43-08db61f9f26d
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 17:10:34.6490
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RW3CrJTgBCu2cvRKuR+3ck72V0ncHUGx3ccLDEzjSn6iJi+KrGo//vp2f10kYOZaysTMGSzDNj3tAqU31sql6w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8395
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZHb3I6NUcjHZ64wD@hovoldconsulting.com>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ziteT-qECaU_xNzTvlVnNvSsdwLrK-P3
+X-Proofpoint-ORIG-GUID: ziteT-qECaU_xNzTvlVnNvSsdwLrK-P3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_12,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 phishscore=0 spamscore=0 mlxlogscore=720 malwarescore=0
+ adultscore=0 bulkscore=0 impostorscore=0 mlxscore=0 priorityscore=1501
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305310145
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 07:08:10PM +0200, Simon Horman wrote:
-> > --- a/drivers/net/dsa/ocelot/felix_vsc9959.c
-> > +++ b/drivers/net/dsa/ocelot/felix_vsc9959.c
+On Wed, May 31, 2023 at 09:28:35AM +0200, Johan Hovold wrote:
+> On Tue, May 30, 2023 at 08:09:44PM -0700, Bjorn Andersson wrote:
+> > From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > 
+> > Add Adreno SMMU, GPU clock controller, GMU and GPU nodes for the
+> > SC8280XP.
+> > 
+> > Tested-by: Steev Klimaszewski <steev@kali.org>
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> > ---
+> > 
+> > Changes since v2:
+> > - Added missing opp level (both gpu and gmu)
+> > - Corrected opp-level for highest gpu opp
+> > - Added dma-coherent to gpu smmu
+> > 
+> > Note that in order for the GPU driver to probe, the last change
+> > requires:
+> > https://lore.kernel.org/linux-arm-msm/20230410185226.3240336-1-dmitry.baryshkov@linaro.org/
 > 
-> ...
+> That's a pretty well-hidden notice about a critical dependency. I just
+> spent the morning debugging why this series broke the probe of the GPU
+> and only saw this when I was going to report my findings.
 > 
-> > @@ -1423,6 +1423,8 @@ static int vsc9959_qos_port_tas_set(struct ocelot *ocelot, int port,
-> >  
-> >  		mutex_unlock(&ocelot->tas_lock);
-> >  		return 0;
-> > +	} else if (taprio->cmd != TAPRIO_CMD_REPLACE) {
+> Please consider putting information like this in the cover letter in the
+> future.
 > 
-> Hi Vladimir,
+> > Changes since v1:
+> > - Dropped gmu_pdc_seq region from &gmu, as it shouldn't have been used.
+> > - Added missing compatible to &adreno_smmu.
+> > - Dropped aoss_qmp clock in &gmu and &adreno_smmu.
 > 
-> Do you need to 'mutex_unlock(&ocelot->tas_lock)' here?
+> Changelogs are also preferably placed in the cover letter so that you
+> don't have to read through N patches to determine what changed from one
+> revision of a series to the next.
+> 
 
-Yup. Nice catch, thanks. I reviewed this a couple of times myself but I
-missed it. I'll send a fixup patch later today, hopefully.
+I've always put the changelog in the patches. But I can see the value of
+using the cover-letter for that purpose. I will consider doing so...
 
-> > +		return -EOPNOTSUPP;
-> >  	}
-> >  
-> >  	ret = ocelot_port_mqprio(ocelot, port, &taprio->mqprio);
-> 
-> ...
+Regards,
+Bjorn
