@@ -2,57 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC75718764
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA45718767
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbjEaQcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 12:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
+        id S229712AbjEaQdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 12:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjEaQcV (ORCPT
+        with ESMTP id S229567AbjEaQdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 12:32:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A070798;
-        Wed, 31 May 2023 09:32:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3747B62EB8;
-        Wed, 31 May 2023 16:32:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE3EAC433D2;
-        Wed, 31 May 2023 16:32:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685550739;
-        bh=96xh+pvt4FZ9RhX8I2cOmSjN4jqPa3fgUfHTq9AIyb8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=b6d++uiC4FkX4fn9HjVahUZGbWLbXNGIKTw1siZgHLu2Fv2ar+hsKPLoSAmL9y2AF
-         ScvOM0e0scjJrCaPjuO9N+e0NnUnAhb9JblxdJnsxMOKpvaDUCvEK4tNE5ZtAgBTvA
-         OduuPTy9n7F4d/QWrXfZwOiLPrm+KG1nTXCE30jpIEJNZXXHv25x3l9J6RsytZ4OkF
-         pDjjbde2WOB6OFnpBBKrc/PWi64F+0be2fpDsx22a4OITLffOSRee4he5tt+6hKM1H
-         pW3hObKDCs0NBYM4gvu/QjAHTU4YjjWE1oeJbYrimoNz7o4jeMXbndt7ogxpdYAH0q
-         +iBWHtMJ3aTdA==
-Message-ID: <324df0fa5ad1f0508c5f62c25dd1f8d297d78813.camel@kernel.org>
-Subject: Re: [PATCH] tpm: factor out the user space mm from
- tpm_vtpm_set_locality()
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Alejandro Cabrera <alejandro.cabreraaldaya@tuni.fi>,
-        Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>,
-        stable@vger.kernel.org, Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 31 May 2023 19:32:16 +0300
-In-Reply-To: <8f15feb5-7c6e-5a16-d9b4-008b7b45b01a@linux.ibm.com>
-References: <20230530205001.1302975-1-jarkko@kernel.org>
-         <8f15feb5-7c6e-5a16-d9b4-008b7b45b01a@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1-0ubuntu1 
+        Wed, 31 May 2023 12:33:00 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4869B123
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:32:57 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8AxBvG4dndkcwQDAA--.6821S3;
+        Thu, 01 Jun 2023 00:32:56 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxddG3dndkiaOCAA--.14887S3;
+        Thu, 01 Jun 2023 00:32:55 +0800 (CST)
+Message-ID: <6668b162-5de1-8b2e-06d3-577f098e6ed4@loongson.cn>
+Date:   Thu, 1 Jun 2023 00:32:55 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 5/6] drm/etnaviv: add driver support for the PCI
+ devices
+Content-Language: en-US
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        loongson-kernel@lists.loongnix.cn, Li Yi <liyi@loongson.cn>
+References: <ZHZIXZPuCkFSMF4H@bhelgaas>
+ <950fdaaa-b62c-7f36-a499-9eca71c8bc47@loongson.cn>
+ <5e0b34054ca6fa540e481d93f3c1d9fbdd2defcd.camel@pengutronix.de>
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <5e0b34054ca6fa540e481d93f3c1d9fbdd2defcd.camel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8DxddG3dndkiaOCAA--.14887S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxJFyxtw13WF4DGr1UJFy5urg_yoW5GF18pF
+        Wa9a1SyF4vgr1Fyw17tw45XF1ay3yftFy5Jrn8tF1kCr90v343Gr1rtr4Y9F9xur1xGa12
+        vay2kFW29Fn8CaDanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
+        14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv
+        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+        AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jzE_NUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,52 +73,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-05-31 at 11:20 -0400, Stefan Berger wrote:
->=20
-> On 5/30/23 16:50, Jarkko Sakkinen wrote:
-> > From: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
-> >=20
-> > vtpm_proxy_fops_set_locality() causes kernel buffers to be passed to
-> > copy_from_user() and copy_to_user().
->=20
-> And what is the problem with that? Is it not working?
+Hi,
 
-It is API contract and also clearly documented in the kernel documentation.
+On 2023/6/1 00:23, Lucas Stach wrote:
+> Hi Sui Jingfeng,
+>
+> Am Donnerstag, dem 01.06.2023 um 00:08 +0800 schrieb Sui Jingfeng:
+>> Hi,
+>>
+>> On 2023/5/31 03:02, Bjorn Helgaas wrote:
+>>> On Wed, May 31, 2023 at 12:06:42AM +0800, Sui Jingfeng wrote:
+>>>> This patch adds PCI driver support on top of what already have. Take the
+>>>> GC1000 in LS7A1000/LS2K1000 as the first instance of the PCI device driver.
+>>>> There is only one GPU core for the GC1000 in the LS7A1000 and LS2K1000.
+>>>> Therefore, component frameworks can be avoided. Because we want to bind the
+>>>> DRM driver service to the PCI driver manually.
+>>>> +	 * Loongson Mips and LoongArch CPU(ls3a5000, ls3a4000, ls2k1000la)
+>>>> +	 * maintain cache coherency by hardware
+>>>> +	 */
+>>>> +	if (IS_ENABLED(CONFIG_CPU_LOONGSON64) || IS_ENABLED(CONFIG_LOONGARCH))
+>>>> +		priv->has_cached_coherent = true;
+>>> This looks like something that should be a runtime check, not a
+>>> compile-time check.
+>>>
+>>> If it's possible to build a single kernel image that runs on Loongson
+>>> MIPS or LoongArch CPU and, in addition, runs on other platforms, you
+>>> cannot assume that all the others maintain this cache coherency.
+>> Nice catch! I don't even realize this!
+>>
+>>
+>> LS3A4000 is mips64r2 with MSA SIMD, while LS3A5000 is LoongArch,
+>>
+>> instruction set, compiler, and binary interface are totally changed.
+>>
+>> Therefore, it's impossible to build a single kernel image that runs on
+>> all Loongson CPUs.
+>>
+>> Currently, I can guarantee that this works on the Loongson platform.
+>>
+>> My initial intent here is to let priv->has_cached_coherent be *true* on
+>> the Loongson platform (both mips and loongarch).
+>>
+>> I do know there are some other vendors who bought GPU IP from Vivante.
+>>
+>> say GC7000, and integrate it into their discrete GPU product.
+>>
+>> But it is also a PCI device, but this is another story; it deserves
+>> another patch.
+>>
+>> I don't know if Etnaviv folk find some similar hardware on Arm Arch,
+>>
+>> Some Arm CPUs do not maintain cached coherency on hardware.
+>>
+>> The has_cached_coherent member can be set to false on such hardware.
+>>
+>> For us, it seems that there is no need to do runtime checking,
+>>
+>> because they are all cached coherent by default.
+>>
+>>
+>> Can I improve this in the future, currently I don't have a good idea.
+> I think I mentioned before that this needs to be a runtime check. What
+> does dev_is_dma_coherent() return for the Vivante GPU device on your
+> platform?
 
-This should be obvious even if you have've consulted that documentation bec=
-ause
-both functions have 'user' suffix, and also the pointer is __user tagged.
+Yes, you have told me so.
 
-To make things worse it is architecture specific. I'm worried that it will
-break in one of the 23 microarchitectures. Have you actually ever checked i=
-t
-does not?
+I will try it, and I will answer your question tomorrow.
 
-I'm not also an expert of how all the possible CPUs in the world empower
-Linux to further restrict the move between different memory spaces. I'm
-quite sure that this does conflict neither with SMAP or SMEP on x86
-(because I know x86 pretty well), but who knows what they add in the
-future to the microarchitecture.
+> Regards,
+> Lucas
 
-> > Factor out the crippled code away with help of an internal API for
-> > managing struct proxy_dev instances.
->=20
-> What is crippled code?
+-- 
+Jingfeng
 
-Code that behaves badly, i.e. does not meat the expectations. Illegit use o=
-f
-in-kernel functions easily fits to the definition of crippled code.
-
-Bad API behavior put aside, it is very inefficient implementation because i=
-t
-unnecessarily recurses tpm_transmit(), which makes extending the driver to
-any direction so much involved process, but we don't really need this as a
-rationale.
-
-This needs to be fixed in a way or another. That is dictated by the API
-cotract so for that I do not really even need feedback because it is
-force majeure. I'm cool with alternatives or suggestions to the current
-fact, so please focus on that instead of asking question that kernel
-documentation provides you already all the answers.
-
-BR, Jarkko
