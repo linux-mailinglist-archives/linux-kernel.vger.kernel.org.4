@@ -2,136 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9C8717D8D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E60717DA3
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:06:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234965AbjEaLED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 07:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
+        id S235244AbjEaLGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 07:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235358AbjEaLDq (ORCPT
+        with ESMTP id S232671AbjEaLGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 07:03:46 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27A5E4B
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 04:03:30 -0700 (PDT)
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9E54DC0006;
-        Wed, 31 May 2023 11:03:26 +0000 (UTC)
-Message-ID: <9a94446d-bc6c-6272-8101-d1adeec3d672@ghiti.fr>
-Date:   Wed, 31 May 2023 13:03:26 +0200
+        Wed, 31 May 2023 07:06:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A2AE4F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 04:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685531072;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Bz65D2xx0gb4qdpRkIQI3YTwLtyS701r/8WE2ftqUAI=;
+        b=PaneWmNamdT3Pqo9G6nuY6ysQTT8pZhnOCoIC/DIJlVOow/WqY9a/g2c3qhi6IZ5sPi0/E
+        IQQdzsPIM8CRvtXHF82O7HHVQj3YxH2aLHzHGerlGfcFZig7I86L6AB8EWm2QpJ5TB/r4o
+        yMgQVPmJ3VjQ/+aMLlDfj8m3sF95y54=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-572-YLiSyU6kP3mOCadzX03i4g-1; Wed, 31 May 2023 07:04:29 -0400
+X-MC-Unique: YLiSyU6kP3mOCadzX03i4g-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 640EB1019C87;
+        Wed, 31 May 2023 11:04:28 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0A90CC154D7;
+        Wed, 31 May 2023 11:04:25 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     David Howells <dhowells@redhat.com>,
+        Tom Herbert <tom@herbertland.com>,
+        Tom Herbert <tom@quantonium.net>,
+        Cong Wang <cong.wang@bytedance.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 0/2] splice, net: Handle MSG_SPLICE_PAGES in AF_KCM
+Date:   Wed, 31 May 2023 12:04:20 +0100
+Message-ID: <20230531110423.643196-1-dhowells@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH -fixes] riscv: Fix relocatable kernels with early
- alternatives using -fno-pie
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andreas Schwab <schwab@linux-m68k.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230528-uneatable-earpiece-3f8673548863@spud>
- <b71dc2f5-fdc0-2a8d-e1f9-696cd9a1529e@ghiti.fr>
- <20230529-skillet-quarters-3fbc3b6edb3a@spud>
- <41e57bb9-ce0c-7772-abeb-5c01d5ec19bb@ghiti.fr>
- <20230530-polka-trifle-7ccd7a093099@wendy>
- <92d4aaa8-a1ed-74e1-3a22-df9be1ca1e4a@ghiti.fr>
- <20230530-hatchery-unifier-64d7a2ffe0d0@spud>
- <CAHVXubgG31moSNOe3fRqFzUSJK9tRWKH1KPP_BO7wRNC4WzxTQ@mail.gmail.com>
- <20230530-atrocious-control-bcb37de558fc@spud>
- <0068add0-8949-11b7-a864-2ef8bed00809@ghiti.fr>
- <20230531-staff-pampers-0250f7f6026a@spud>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20230531-staff-pampers-0250f7f6026a@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Here are patches to make AF_KCM handle the MSG_SPLICE_PAGES internal
+sendmsg flag.  MSG_SPLICE_PAGES is an internal hint that tells the protocol
+that it should splice the pages supplied if it can.  Its sendpage
+implementation is then turned into a wrapper around that.
 
-On 31/05/2023 11:32, Conor Dooley wrote:
-> On Wed, May 31, 2023 at 09:26:27AM +0200, Alexandre Ghiti wrote:
->> On 30/05/2023 22:22, Conor Dooley wrote:
->>> On Tue, May 30, 2023 at 08:04:17PM +0200, Alexandre Ghiti wrote:
->>>> Ahah, I think we found the culprit!
->>>>
->>>> With CONFIG_RELOCATABLE, vmlinux is actually stripped from all the
->>>> relocations (so that it can be shipped) and vmlinux.relocs is what you
->>>> should use instead, since it is just a copy of vmlinux before the
->>>> removal of the relocations!
->>> That probably makes us both eejits for not realising sooner...
->> Ahah, TIL a new word, thanks :)
->>
->>> Tested-by: Conor Dooley <conor.dooley@microchip.com> # booted on nezha & unmatched
->>>
->>> Thanks for your patience here Alex.
->> So I checked again if the -fno-pie should be applied to mm/dma-noncoherent.c
->> as I suggested, but actually no: errata/thead/errata.c never reaches
->> riscv_noncoherent_supported() in early boot (you can see how 'fragile' it is
->> though and why something needs to be done...).
-> I did make sure to check this patch itself, without the additional bit,
-> to see if it was needed.
-> But yeah, it is going to be super fragile - do you have any ideas about
-> how to circumvent that?
+Does anyone actually use AF_KCM?  Upstream it has some issues.  It doesn't
+seem able to handle a "message" longer than 113920 bytes without jamming
+and doesn't handle the client termination once it is jammed.
 
+I've pushed the patches here also:
 
-Yes, I was thinking about multiple solutions:
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=sendpage-2-kcm
 
-- All the early code could go into kernel/pi: all the dependencies of 
-the early code is built in its own way (the symbols are actually 
-'duplicated'). I see that a bit like the EFI stub. My first try failed 
-with !CONFIG_RELOCATABLE, I have to dig further.
+David
 
-- Simply do a physical relocation before any early code, execute the 
-early code, and then do the virtual relocation. But that does not solve 
-the issue fixed by kernel/pi which allows to recompile standard 
-functions (like the string ones) without any instrumentation and have 
-the versions with the instrumentation for normal execution.
+ver #2)
+ - In kcm_sendpage(), only account the amount actually copied.
+ - Wrap at 80 chars.
 
-- Compile relocatable kernels without -fPIE (why can't we just use 
-medany actually?). That won't fix certain types of situations where we 
-need relocations, but that will limit the number of outliers that need 
-to be compiled with -fno-pie and it will be easier to spot (we'll still 
-have to be very careful though)
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=51c78a4d532efe9543a4df019ff405f05c6157f6 # part 1
+Link: https://lore.kernel.org/r/20230524144923.3623536-1-dhowells@redhat.com/ # v1
 
-- Be very strict about what can/cannot be done in this pre-mmu stage, 
-and document that...
+David Howells (2):
+  kcm: Support MSG_SPLICE_PAGES
+  kcm: Convert kcm_sendpage() to use MSG_SPLICE_PAGES
 
-The best solution would be the first I guess. Any other ideas welcome :)
+ net/kcm/kcmsock.c | 218 ++++++++++++----------------------------------
+ 1 file changed, 58 insertions(+), 160 deletions(-)
 
-
->
->> Oh and I realized that I forgot the Reported-by from Andreas and the Fixes
->> tags, so here they are:
->>
->> Fixes: 39b33072941f ("riscv: Introduce CONFIG_RELOCATABLE")
->> Reported-by: Andreas Schwab <schwab@linux-m68k.org>
->>
->>
->> Thank you too for your patience and your quick answers!
->>
->> Alex
->>
->>
->>> _______________________________________________
->>> linux-riscv mailing list
->>> linux-riscv@lists.infradead.org
->>> http://lists.infradead.org/mailman/listinfo/linux-riscv
