@@ -2,427 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64288717C19
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193C9717C0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235570AbjEaJiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
+        id S235268AbjEaJfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234834AbjEaJiP (ORCPT
+        with ESMTP id S232214AbjEaJfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:38:15 -0400
-X-Greylist: delayed 176 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 May 2023 02:38:13 PDT
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DDC3A0;
-        Wed, 31 May 2023 02:38:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685525704; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=LfFJAHA9jn/4VujsURIdyriv2IXX8zYIfMYI4WCCktq3UgZxD0eMRoixIAajgW+Wge
-    C85EwVSJO4x79ckM9aRETeXJyzPrAFektxK1Q15zZ4eDdQUfWlGqZM8DviTFS3TbOgvR
-    T8p0MxnI4LlrC4I9mz+SKYKhDZhgcaQB9wQ3Uv7tfgUwYYZ8Gk8l6B+gR+U07IMqExOe
-    0VniY8smoSHOq8IU7U4TejqNMgueYDodV03kM+jR9GpGv+r1fqtXLFRfDatOBS7r99GG
-    U4YyHEEmGwMn7JRxl4haqFsW3nmjZskiN3w+FKpBzkDolYiC8oHZ7qIk9fZbDml4PoaS
-    H+0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685525704;
-    s=strato-dkim-0002; d=strato.com;
-    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
-    bh=vNvnCnYJbsNHMwaqcK7ojGETmhD0ewutX/72aDr+oxw=;
-    b=avcv0obcpwAycFez00nFJZdlXdQKLqsZdayRvwtQAW9k3z11M0xlzLyJ4Kro2YAufA
-    dMMJoxiUqmOJesbLf8oLJpwXS7l5Dj/fve1NQgsIOgNaHvrim5HtOHWFBVLrGMndMvzv
-    6HiUA2sk71EEs9HetWE5r/UWs7a3Ym7TZ1StIfWSqxmfViTViOKG4+67cBiu/a0faz4B
-    WuWZLWC3IRe/2ADyifAg3z8VGJ2hOy1gbdWqY+IZQaLNUWYf5NuQk3Y5OtWE/Ld0J3Wp
-    TsnLr2UytWSV9H5eMrwItynNXIJ3MZEh5nSkEpAFhYm2svqmlzxZGwUClMk7Wx9O6mA7
-    dFyA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685525704;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
-    bh=vNvnCnYJbsNHMwaqcK7ojGETmhD0ewutX/72aDr+oxw=;
-    b=HnVoT8HzCQTiAXLb/fpjtzOVLp1QJA0daKxscngYdsus9a4SVN4LogWihqUAsimGXl
-    LQY1WkqUe1LLSPTIgS9lbjmgHfbggSEycdEu16HX2ZuiJmQsA6/rUmLxa/G8IQA7X5w3
-    lDFkJ3wGRuAIAsVXeEFEZdan/poK08MibIuWv2YqzDmhEmJ5z3rY8b9iz3c0HRM2oIRH
-    S0+nH/rtZwt4HGEx6vBtRbDpCLNM3XvvlQV8BXAR2slgQHSZgivrF4SQX1yDHCEfeLXg
-    gDQfMXviTUQPYJwVfYr3FYDI2lE0UBnaSDnRDrRvQILFPZ88nVx5XmSWJe6jw7fjdVQu
-    R98g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685525704;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
-    bh=vNvnCnYJbsNHMwaqcK7ojGETmhD0ewutX/72aDr+oxw=;
-    b=Z2Z0JBC24Gh3Ibe5B8Roo//q5LGX6KRRHBPz+W0bgjaboYT0EeE1wt35XSJu1ATj16
-    KrGvK98tPinJ5iexZCBg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn8u493mw=="
-Received: from [192.168.244.3]
-    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az4V9Z4lnF
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 31 May 2023 11:35:04 +0200 (CEST)
-From:   Stephan Gerhold <stephan@gerhold.net>
-Date:   Wed, 31 May 2023 11:34:54 +0200
-Subject: [PATCH] remoteproc: qcom: Use of_reserved_mem_lookup()
+        Wed, 31 May 2023 05:35:19 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7869C0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685525717; x=1717061717;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=CeZyBNS3QF9KouIlDctPJ7e1JklhDZZucpDEsQfhwZw=;
+  b=X+9HK8whvrRnmy6y8psLLaUAWRay+D70MXRYksfpPzM11LkApwc957Aq
+   AXndg+Ox9Hj1czw9J6iXGwPWtYX0VTDv7w2OEq15UuzG/E27q3UGe1vPI
+   FwJ2+LECcQYowsCg502CfkDvmkAmbGHP5vQhSn0vFWdSQnN7gGbE/7J81
+   gtgrnOKcemaqqR6UJGZOpralNUrkYZBClNVcAKn5rCupYtYbxdRULPoPv
+   VipYS99w2rLNjcrpaCQmD5ybGlPyeFYvuor7i/6xvZokQZe8Y+4zB5Orv
+   X7MSSGl0ygI93RqaItyK+Iyz81D1yDhPQhgE6NeQzRPFHJyYpPDpqj/Dh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="357578000"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="357578000"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 02:35:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="710002451"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="710002451"
+Received: from itaraban-mobl.ger.corp.intel.com (HELO intel.com) ([10.252.47.19])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 02:35:10 -0700
+Date:   Wed, 31 May 2023 11:35:05 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
+        linux-kernel@vger.kernel.org,
+        Marek =?iso-8859-15?Q?Marczykowski-G=F3recki?= 
+        <marmarek@invisiblethingslab.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        drm-intel@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        intel-linux@eclists.intel.com
+Subject: Re: [RESUBMIT][PATCH] x86/mm: Fix PAT bit missing from page
+ protection modify mask
+Message-ID: <ZHcUyVdnJSr/kQ2K@ashyti-mobl2.lan>
+References: <20230519183634.190364-1-janusz.krzysztofik@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230529-rproc-of-rmem-v1-1-5b1e38880aba@gerhold.net>
-X-B4-Tracking: v=1; b=H4sIAL0Ud2QC/x2NQQqEMAxFryJZG9DqKHoVcVFrqgFtJcVhoHh3w
- 8DfvA+PlyGRMCUYiwxCX04cg0JdFuB2GzZCXpXBVKapPmZAuSQ6jB7lpBP7dWhq3+laAnUWmwg
- XscHtaoX7OPS8hDz//pFpfp4XNCgZ8HQAAAA=
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230519183634.190364-1-janusz.krzysztofik@linux.intel.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reserved memory can be either looked up using the generic function
-of_address_to_resource() or using the special of_reserved_mem_lookup().
-The latter has the advantage that it ensures that the referenced memory
-region was really reserved and is not e.g. status = "disabled".
+Hi,
 
-of_reserved_mem also supports allocating reserved memory dynamically at
-boot time. This works only when using of_reserved_mem_lookup() since
-there won't be a fixed address in the device tree.
+a kind reminder about this fix.
 
-Switch the code to use of_reserved_mem_lookup(), similar to
-qcom_q6v5_wcss.c which is using it already. There is no functional
-difference for static reserved memory allocations.
+Andi
 
-While at it this also adds two missing of_node_put() calls in
-qcom_q6v5_pas.c.
-
-Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
----
-See e.g. [1] for an example of dynamically allocated reserved memory.
-(This patch does *not* depend on [1] and is useful without as well...)
-
-NOTE: Changes in qcom_q6v5_adsp.c and qcom_q6v5_pas.c are untested,
-I only checked qcom_q6v5_mss.c and qcom_wcnss.c on MSM8916/DB410c.
-The code changes are pretty similar for all of those though.
-
-[1]: https://lore.kernel.org/linux-arm-msm/20230510-dt-resv-bottom-up-v1-5-3bf68873dbed@gerhold.net/
----
- drivers/remoteproc/qcom_q6v5_adsp.c | 22 ++++++++--------
- drivers/remoteproc/qcom_q6v5_mss.c  | 35 +++++++++++++++----------
- drivers/remoteproc/qcom_q6v5_pas.c  | 51 ++++++++++++++++++++-----------------
- drivers/remoteproc/qcom_wcnss.c     | 24 ++++++++---------
- 4 files changed, 69 insertions(+), 63 deletions(-)
-
-diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
-index 6777a3bd6226..948b3d00a564 100644
---- a/drivers/remoteproc/qcom_q6v5_adsp.c
-+++ b/drivers/remoteproc/qcom_q6v5_adsp.c
-@@ -14,8 +14,8 @@
- #include <linux/kernel.h>
- #include <linux/mfd/syscon.h>
- #include <linux/module.h>
--#include <linux/of_address.h>
- #include <linux/of_device.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
-@@ -637,28 +637,26 @@ static int adsp_init_mmio(struct qcom_adsp *adsp,
- 
- static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
- {
-+	struct reserved_mem *rmem = NULL;
- 	struct device_node *node;
--	struct resource r;
--	int ret;
- 
- 	node = of_parse_phandle(adsp->dev->of_node, "memory-region", 0);
-+	if (node)
-+		rmem = of_reserved_mem_lookup(node);
-+	of_node_put(node);
-+
- 	if (!node) {
--		dev_err(adsp->dev, "no memory-region specified\n");
-+		dev_err(adsp->dev, "unable to resolve memory-region\n");
- 		return -EINVAL;
- 	}
- 
--	ret = of_address_to_resource(node, 0, &r);
--	of_node_put(node);
--	if (ret)
--		return ret;
--
--	adsp->mem_phys = adsp->mem_reloc = r.start;
--	adsp->mem_size = resource_size(&r);
-+	adsp->mem_phys = adsp->mem_reloc = rmem->base;
-+	adsp->mem_size = rmem->size;
- 	adsp->mem_region = devm_ioremap_wc(adsp->dev,
- 				adsp->mem_phys, adsp->mem_size);
- 	if (!adsp->mem_region) {
- 		dev_err(adsp->dev, "unable to map memory region: %pa+%zx\n",
--			&r.start, adsp->mem_size);
-+			&rmem->base, adsp->mem_size);
- 		return -EBUSY;
- 	}
- 
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index 70bffc9f33f6..af815f3cb2d1 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -15,7 +15,6 @@
- #include <linux/kernel.h>
- #include <linux/mfd/syscon.h>
- #include <linux/module.h>
--#include <linux/of_address.h>
- #include <linux/of_device.h>
- #include <linux/of_reserved_mem.h>
- #include <linux/platform_device.h>
-@@ -1872,11 +1871,9 @@ static int q6v5_init_reset(struct q6v5 *qproc)
- 
- static int q6v5_alloc_memory_region(struct q6v5 *qproc)
- {
--	struct device_node *child;
- 	struct reserved_mem *rmem;
-+	struct device_node *child;
- 	struct device_node *node;
--	struct resource r;
--	int ret;
- 
- 	/*
- 	 * In the absence of mba/mpss sub-child, extract the mba and mpss
-@@ -1891,15 +1888,20 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
- 		of_node_put(child);
- 	}
- 
--	ret = of_address_to_resource(node, 0, &r);
-+	if (!node) {
-+		dev_err(qproc->dev, "no mba memory-region specified\n");
-+		return -EINVAL;
-+	}
-+
-+	rmem = of_reserved_mem_lookup(node);
- 	of_node_put(node);
--	if (ret) {
-+	if (!rmem) {
- 		dev_err(qproc->dev, "unable to resolve mba region\n");
--		return ret;
-+		return -EINVAL;
- 	}
- 
--	qproc->mba_phys = r.start;
--	qproc->mba_size = resource_size(&r);
-+	qproc->mba_phys = rmem->base;
-+	qproc->mba_size = rmem->size;
- 
- 	if (!child) {
- 		node = of_parse_phandle(qproc->dev->of_node,
-@@ -1910,15 +1912,20 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
- 		of_node_put(child);
- 	}
- 
--	ret = of_address_to_resource(node, 0, &r);
-+	if (!node) {
-+		dev_err(qproc->dev, "no mpss memory-region specified\n");
-+		return -EINVAL;
-+	}
-+
-+	rmem = of_reserved_mem_lookup(node);
- 	of_node_put(node);
--	if (ret) {
-+	if (!rmem) {
- 		dev_err(qproc->dev, "unable to resolve mpss region\n");
--		return ret;
-+		return -EINVAL;
- 	}
- 
--	qproc->mpss_phys = qproc->mpss_reloc = r.start;
--	qproc->mpss_size = resource_size(&r);
-+	qproc->mpss_phys = qproc->mpss_reloc = rmem->base;
-+	qproc->mpss_size = rmem->size;
- 
- 	if (!child) {
- 		node = of_parse_phandle(qproc->dev->of_node, "memory-region", 2);
-diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index ca0155f41dac..82f498fa9237 100644
---- a/drivers/remoteproc/qcom_q6v5_pas.c
-+++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -13,8 +13,8 @@
- #include <linux/interrupt.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
--#include <linux/of_address.h>
- #include <linux/of_device.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
-@@ -533,9 +533,8 @@ static void adsp_pds_detach(struct qcom_adsp *adsp, struct device **pds,
- 
- static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
- {
-+	struct reserved_mem *rmem;
- 	struct device_node *node;
--	struct resource r;
--	int ret;
- 
- 	node = of_parse_phandle(adsp->dev->of_node, "memory-region", 0);
- 	if (!node) {
-@@ -543,17 +542,19 @@ static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
- 		return -EINVAL;
- 	}
- 
--	ret = of_address_to_resource(node, 0, &r);
-+	rmem = of_reserved_mem_lookup(node);
- 	of_node_put(node);
--	if (ret)
--		return ret;
-+	if (!rmem) {
-+		dev_err(adsp->dev, "unable to resolve memory-region\n");
-+		return -EINVAL;
-+	}
- 
--	adsp->mem_phys = adsp->mem_reloc = r.start;
--	adsp->mem_size = resource_size(&r);
-+	adsp->mem_phys = adsp->mem_reloc = rmem->base;
-+	adsp->mem_size = rmem->size;
- 	adsp->mem_region = devm_ioremap_wc(adsp->dev, adsp->mem_phys, adsp->mem_size);
- 	if (!adsp->mem_region) {
- 		dev_err(adsp->dev, "unable to map memory region: %pa+%zx\n",
--			&r.start, adsp->mem_size);
-+			&rmem->base, adsp->mem_size);
- 		return -EBUSY;
- 	}
- 
-@@ -566,16 +567,19 @@ static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
- 		return -EINVAL;
- 	}
- 
--	ret = of_address_to_resource(node, 0, &r);
--	if (ret)
--		return ret;
-+	rmem = of_reserved_mem_lookup(node);
-+	of_node_put(node);
-+	if (!rmem) {
-+		dev_err(adsp->dev, "unable to resolve dtb memory-region\n");
-+		return -EINVAL;
-+	}
- 
--	adsp->dtb_mem_phys = adsp->dtb_mem_reloc = r.start;
--	adsp->dtb_mem_size = resource_size(&r);
-+	adsp->dtb_mem_phys = adsp->dtb_mem_reloc = rmem->base;
-+	adsp->dtb_mem_size = rmem->size;
- 	adsp->dtb_mem_region = devm_ioremap_wc(adsp->dev, adsp->dtb_mem_phys, adsp->dtb_mem_size);
- 	if (!adsp->dtb_mem_region) {
- 		dev_err(adsp->dev, "unable to map dtb memory region: %pa+%zx\n",
--			&r.start, adsp->dtb_mem_size);
-+			&rmem->base, adsp->dtb_mem_size);
- 		return -EBUSY;
- 	}
- 
-@@ -584,29 +588,28 @@ static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
- 
- static int adsp_assign_memory_region(struct qcom_adsp *adsp)
- {
-+	struct reserved_mem *rmem = NULL;
- 	struct qcom_scm_vmperm perm;
- 	struct device_node *node;
--	struct resource r;
- 	int ret;
- 
- 	if (!adsp->region_assign_idx)
- 		return 0;
- 
- 	node = of_parse_phandle(adsp->dev->of_node, "memory-region", adsp->region_assign_idx);
--	if (!node) {
--		dev_err(adsp->dev, "missing shareable memory-region\n");
-+	if (node)
-+		rmem = of_reserved_mem_lookup(node);
-+	of_node_put(node);
-+	if (!rmem) {
-+		dev_err(adsp->dev, "unable to resolve shareable memory-region\n");
- 		return -EINVAL;
- 	}
- 
--	ret = of_address_to_resource(node, 0, &r);
--	if (ret)
--		return ret;
--
- 	perm.vmid = QCOM_SCM_VMID_MSS_MSA;
- 	perm.perm = QCOM_SCM_PERM_RW;
- 
--	adsp->region_assign_phys = r.start;
--	adsp->region_assign_size = resource_size(&r);
-+	adsp->region_assign_phys = rmem->base;
-+	adsp->region_assign_size = rmem->size;
- 	adsp->region_assign_perms = BIT(QCOM_SCM_VMID_HLOS);
- 
- 	ret = qcom_scm_assign_mem(adsp->region_assign_phys,
-diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
-index 1ed0647bc962..334a9c75dad6 100644
---- a/drivers/remoteproc/qcom_wcnss.c
-+++ b/drivers/remoteproc/qcom_wcnss.c
-@@ -14,8 +14,8 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/io.h>
--#include <linux/of_address.h>
- #include <linux/of_device.h>
-+#include <linux/of_reserved_mem.h>
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
-@@ -506,27 +506,25 @@ static int wcnss_request_irq(struct qcom_wcnss *wcnss,
- 
- static int wcnss_alloc_memory_region(struct qcom_wcnss *wcnss)
- {
-+	struct reserved_mem *rmem = NULL;
- 	struct device_node *node;
--	struct resource r;
--	int ret;
- 
- 	node = of_parse_phandle(wcnss->dev->of_node, "memory-region", 0);
--	if (!node) {
--		dev_err(wcnss->dev, "no memory-region specified\n");
-+	if (node)
-+		rmem = of_reserved_mem_lookup(node);
-+	of_node_put(node);
-+
-+	if (!rmem) {
-+		dev_err(wcnss->dev, "unable to resolve memory-region\n");
- 		return -EINVAL;
- 	}
- 
--	ret = of_address_to_resource(node, 0, &r);
--	of_node_put(node);
--	if (ret)
--		return ret;
--
--	wcnss->mem_phys = wcnss->mem_reloc = r.start;
--	wcnss->mem_size = resource_size(&r);
-+	wcnss->mem_phys = wcnss->mem_reloc = rmem->base;
-+	wcnss->mem_size = rmem->size;
- 	wcnss->mem_region = devm_ioremap_wc(wcnss->dev, wcnss->mem_phys, wcnss->mem_size);
- 	if (!wcnss->mem_region) {
- 		dev_err(wcnss->dev, "unable to map memory region: %pa+%zx\n",
--			&r.start, wcnss->mem_size);
-+			&rmem->base, wcnss->mem_size);
- 		return -EBUSY;
- 	}
- 
-
----
-base-commit: 1ca04f21b204e99dd704146231adfb79ea2fb366
-change-id: 20230529-rproc-of-rmem-7d931f61f64e
-
-Best regards,
--- 
-Stephan Gerhold <stephan@gerhold.net>
-
+On Fri, May 19, 2023 at 08:36:34PM +0200, Janusz Krzysztofik wrote:
+> Visible glitches have been observed when running graphics applications on
+> Linux under Xen hypervisor.  Those observations have been confirmed with
+> failures from kms_pwrite_crc Intel GPU test that verifies data coherency
+> of DRM frame buffer objects using hardware CRC checksums calculated by
+> display controllers, exposed to userspace via debugfs.  Affected
+> processing paths have then been identified with new IGT test variants that
+> mmap the objects using different methods and caching modes [1].
+> 
+> When running as a Xen PV guest, Linux uses Xen provided PAT configuration
+> which is different from its native one.  In particular, Xen specific PTE
+> encoding of write-combining caching, likely used by graphics applications,
+> differs from the Linux default one found among statically defined minimal
+> set of supported modes.  Since Xen defines PTE encoding of the WC mode as
+> _PAGE_PAT, it no longer belongs to the minimal set, depends on correct
+> handling of _PAGE_PAT bit, and can be mismatched with write-back caching.
+> 
+> When a user calls mmap() for a DRM buffer object, DRM device specific
+> .mmap file operation, called from mmap_region(), takes care of setting PTE
+> encoding bits in a vm_page_prot field of an associated virtual memory area
+> structure.  Unfortunately, _PAGE_PAT bit is not preserved when the vma's
+> .vm_flags are then applied to .vm_page_prot via vm_set_page_prot().  Bits
+> to be preserved are determined with _PAGE_CHG_MASK symbol that doesn't
+> cover _PAGE_PAT.  As a consequence, WB caching is requested instead of WC
+> when running under Xen (also, WP is silently changed to WT, and UC
+> downgraded to UC_MINUS).  When running on bare metal, WC is not affected,
+> but WP and WT extra modes are unintentionally replaced with WC and UC,
+> respectively.
+> 
+> WP and WT modes, encoded with _PAGE_PAT bit set, were introduced by commit
+> 281d4078bec3 ("x86: Make page cache mode a real type").  Care was taken
+> to extend _PAGE_CACHE_MASK symbol with that additional bit, but that
+> symbol has never been used for identification of bits preserved when
+> applying page protection flags.  Support for all cache modes under Xen,
+> including the problematic WC mode, was then introduced by commit
+> 47591df50512 ("xen: Support Xen pv-domains using PAT").
+> 
+> Extend bitmask used by pgprot_modify() for selecting bits to be preserved
+> with _PAGE_PAT bit.  However, since that bit can be reused as _PAGE_PSE,
+> and the _PAGE_CHG_MASK symbol, primarly used by pte_modify(), is likely
+> intentionally defined with that bit not set, keep that symbol unchanged.
+> 
+> [1] https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/commit/0f0754413f14
+> 
+> Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/7648
+> Fixes: 281d4078bec3 ("x86: Make page cache mode a real type")
+> Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+> Tested-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+> Cc: stable@vger.kernel.org # v3.19+
+> ---
+>  arch/x86/include/asm/pgtable.h | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+> index 15ae4d6ba4768..56466afd04307 100644
+> --- a/arch/x86/include/asm/pgtable.h
+> +++ b/arch/x86/include/asm/pgtable.h
+> @@ -654,8 +654,10 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
+>  #define pgprot_modify pgprot_modify
+>  static inline pgprot_t pgprot_modify(pgprot_t oldprot, pgprot_t newprot)
+>  {
+> -	pgprotval_t preservebits = pgprot_val(oldprot) & _PAGE_CHG_MASK;
+> -	pgprotval_t addbits = pgprot_val(newprot) & ~_PAGE_CHG_MASK;
+> +	unsigned long mask = _PAGE_CHG_MASK | _PAGE_CACHE_MASK;
+> +
+> +	pgprotval_t preservebits = pgprot_val(oldprot) & mask;
+> +	pgprotval_t addbits = pgprot_val(newprot) & ~mask;
+>  	return __pgprot(preservebits | addbits);
+>  }
+>  
+> -- 
+> 2.40.1
