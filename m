@@ -2,123 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC62718ECC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E57718ECF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjEaWvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 18:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
+        id S229715AbjEaWwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 18:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjEaWvC (ORCPT
+        with ESMTP id S229476AbjEaWwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 18:51:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D759F
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685573415;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=zpHJAAZtdS1eGDoBPdNCfJy7V4CHGDGY+NY0zDJG5HY=;
-        b=XxN7dlzJepmhs2+dOo1erZYTkHUU6dnVAh+N5dqjZpRK4ZWNA1YJKp5qd1dM2aNTN/S/sw
-        uyG566EOsgWmMolGMimrBFCt+XmbpE+bHz7KTU9fwIVTa+ef2lOrxo30T1qeIVgbOKupVz
-        AAh0IJuhy1Q90eQcxW+mQI0IpMirZ9A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-7f37sz9DMzaFOEFZovZXsQ-1; Wed, 31 May 2023 18:50:14 -0400
-X-MC-Unique: 7f37sz9DMzaFOEFZovZXsQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 948E6800159;
-        Wed, 31 May 2023 22:50:13 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EE2932166B25;
-        Wed, 31 May 2023 22:50:12 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Marc Dionne <marc.dionne@auristor.com>
-cc:     dhowells@redhat.com, linux-afs@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] afs: Fix setting of mtime when creating a file/dir/symlink
+        Wed, 31 May 2023 18:52:16 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391D8107
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:52:14 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 66C0E2C0274;
+        Thu,  1 Jun 2023 10:52:12 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1685573532;
+        bh=G5su1+wWyrff/Xtt9JuT0Z3YnzFXV2Q2j+hANN/fN4o=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=UJlrp8+PKYdYFWpyzu//CXtCwKvn0LOldK/bUtXtyoi1tvECDDmZ/yt1YBITUw9Hx
+         XsKqFQR6un5n4Jn0jkENL91JNWys84C0c1SYPd5DiShuFJ1+VWHxcmrVMZ+/as3z3R
+         ld6en2LukvtYB7NPT5SwK+SEXxiMjJoGjs/OETD4G8cQS/PLhBmtCHCZ9Xu1UWIhQl
+         R+o6i3fDstLfHXLqL4SxRoVPWa0qcPpfGE8BslDc8D+xdcZAiWc/x0IUvAEdpwDGPU
+         qRtKoTxRBihezxJ7EgKo+BkyWa7yX6lLOcB5whZ6ayd6uA9PxBb54lcspcjaM76yx3
+         Xi9Mh8lIbaPHw==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B6477cf9c0001>; Thu, 01 Jun 2023 10:52:12 +1200
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 1 Jun 2023 10:52:12 +1200
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1118.026; Thu, 1 Jun 2023 10:52:12 +1200
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Conor Dooley <conor@kernel.org>
+CC:     "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "enachman@marvell.com" <enachman@marvell.com>,
+        Vadym Kochan <vadym.kochan@plvision.eu>
+Subject: Re: [PATCH v7 3/4] dt-bindings: mtd: marvell-nand: Convert to YAML DT
+ scheme
+Thread-Topic: [PATCH v7 3/4] dt-bindings: mtd: marvell-nand: Convert to YAML
+ DT scheme
+Thread-Index: AQHZk1IoMAbW60jvr0qoP82+zj4DOK9ziNwAgACsZoA=
+Date:   Wed, 31 May 2023 22:52:11 +0000
+Message-ID: <4143ad74-db36-e800-df11-19b8c191480f@alliedtelesis.co.nz>
+References: <20230530235456.1009082-1-chris.packham@alliedtelesis.co.nz>
+ <20230530235456.1009082-4-chris.packham@alliedtelesis.co.nz>
+ <20230531-botanical-swoosh-05683af1d3f0@spud>
+In-Reply-To: <20230531-botanical-swoosh-05683af1d3f0@spud>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.33.22.30]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <CA2D0A4F5F5B0E4F895E3C0888A65839@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <808139.1685573412.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 31 May 2023 23:50:12 +0100
-Message-ID: <808140.1685573412@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SEG-SpamProfiler-Score: -1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-    =
-
-kafs incorrectly passes a zero mtime (ie. 1st Jan 1970) to the server when
-creating a file, dir or symlink because commit 52af7105eceb caused the
-mtime recorded in the afs_operation struct to be passed to the server, but
-didn't modify the afs_mkdir(), afs_create() and afs_symlink() functions to
-set it first.
-
-Those functions were written with the assumption that the mtime would be
-obtained from the server - but that fell foul of malsynchronised clocks, s=
-o
-it was decided that the mtime should be set from the client instead.
-
-Fix this by filling in op->mtime before calling the create op.
-
-Fixes: 52af7105eceb ("afs: Set mtime from the client for yfs create operat=
-ions")
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
-cc: linux-fsdevel@vger.kernel.org
----
- fs/afs/dir.c |    3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/fs/afs/dir.c b/fs/afs/dir.c
-index 4dd97afa536c..5219182e52e1 100644
---- a/fs/afs/dir.c
-+++ b/fs/afs/dir.c
-@@ -1358,6 +1358,7 @@ static int afs_mkdir(struct mnt_idmap *idmap, struct=
- inode *dir,
- 	op->dentry	=3D dentry;
- 	op->create.mode	=3D S_IFDIR | mode;
- 	op->create.reason =3D afs_edit_dir_for_mkdir;
-+	op->mtime	=3D current_time(dir);
- 	op->ops		=3D &afs_mkdir_operation;
- 	return afs_do_sync_operation(op);
- }
-@@ -1661,6 +1662,7 @@ static int afs_create(struct mnt_idmap *idmap, struc=
-t inode *dir,
- 	op->dentry	=3D dentry;
- 	op->create.mode	=3D S_IFREG | mode;
- 	op->create.reason =3D afs_edit_dir_for_create;
-+	op->mtime	=3D current_time(dir);
- 	op->ops		=3D &afs_create_operation;
- 	return afs_do_sync_operation(op);
- =
-
-@@ -1796,6 +1798,7 @@ static int afs_symlink(struct mnt_idmap *idmap, stru=
-ct inode *dir,
- 	op->ops			=3D &afs_symlink_operation;
- 	op->create.reason	=3D afs_edit_dir_for_symlink;
- 	op->create.symlink	=3D content;
-+	op->mtime		=3D current_time(dir);
- 	return afs_do_sync_operation(op);
- =
-
- error:
-
+DQpPbiAxLzA2LzIzIDAwOjM1LCBDb25vciBEb29sZXkgd3JvdGU6DQo+IEhleSBDaHJpcywNCj4N
+Cj4gT24gV2VkLCBNYXkgMzEsIDIwMjMgYXQgMTE6NTQ6NTVBTSArMTIwMCwgQ2hyaXMgUGFja2hh
+bSB3cm90ZToNCj4+IEZyb206IFZhZHltIEtvY2hhbiA8dmFkeW0ua29jaGFuQHBsdmlzaW9uLmV1
+Pg0KPj4NCj4+IFN3aXRjaCB0aGUgRFQgYmluZGluZyB0byBhIFlBTUwgc2NoZW1hIHRvIGVuYWJs
+ZSB0aGUgRFQgdmFsaWRhdGlvbi4NCj4+DQo+PiBEcm9wcGVkIGRlcHJlY2F0ZWQgY29tcGF0aWJs
+ZXMgYW5kIHByb3BlcnRpZXMgZGVzY3JpYmVkIGluIHR4dCBmaWxlLg0KPj4NCj4+IFNpZ25lZC1v
+ZmYtYnk6IFZhZHltIEtvY2hhbiA8dmFkeW0ua29jaGFuQHBsdmlzaW9uLmV1Pg0KPj4gU2lnbmVk
+LW9mZi1ieTogQ2hyaXMgUGFja2hhbSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56
+Pg0KPj4gLS0tDQo+Pg0KPj4gTm90ZXM6DQo+PiAgICAgIENoYW5nZXMgaW4gdjc6DQo+PiAgICAg
+IC0gUmVzdG9yZSAibGFiZWwiIGFuZCAicGFydGl0aW9ucyIgcHJvcGVydGllcyAoc2hvdWxkIGJl
+IHBpY2tlZCB1cCB2aWENCj4+ICAgICAgICBuYW5kLWNvbnRyb2xsZXIueWFtbCBidXQgYXJlbid0
+KQ0KPj4gICAgICAtIEFkZC9yZXN0b3JlIG5hbmQtb24tZmxhc2gtYmJ0IGFuZCBuYW5kLWVjYy1t
+b2RlIHdoaWNoIGFyZW4ndCBjb3ZlcmVkDQo+PiAgICAgICAgYnkgbmFuZC1jb250cm9sbGVyLnlh
+bWwuDQo+PiAgICAgIC0gVXNlICJ1bmV2YWxhdXRlZFByb3BlcnRpZXM6IGZhbHNlIg0KPj4gICAg
+ICAtIENvcnJlY3Rpb25zIGZvciBjbG9jay1uYW1lcywgZG1hLW5hbWVzLCBuYW5kLXJiIGFuZCBu
+YW5kLWVjYy1zdHJlbmd0aA0KPj4gICAgICAtIEFkZCBweGEzeHgtbmFuZC1jb250cm9sbGVyIGV4
+YW1wbGUNCj4+ICAgICAgDQo+PiAgICAgIENoYW5nZXMgaW4gdjY6DQo+PiAgICAgIC0gcmVtb3Zl
+IHByb3BlcnRpZXMgY292ZXJlZCBieSBuYW5kLWNvbnRyb2xsZXIueWFtbA0KPj4gICAgICAtIGFk
+ZCBleGFtcGxlIHVzaW5nIGFybWFkYS04ayBjb21wYXRpYmxlDQo+PiAgICAgIA0KPj4gICAgICBl
+YXJsaWVyIGNoYW5nZXM6DQo+PiAgICAgIA0KPj4gICAgICB2NToNCj4+ICAgICAgICAgMSkgR2V0
+IGJhY2sgImxhYmVsIiBhbmQgInBhcnRpdGlvbnMiIHByb3BlcnRpZXMgYnV0IHdpdGhvdXQNCj4+
+ICAgICAgICAgICAgcmVmIHRvIHRoZSAicGFydGl0aW9uLnlhbWwiIHdoaWNoIHdhcyB3cm9uZ2x5
+IHVzZWQuDQo+PiAgICAgIA0KPj4gICAgICAgICAyKSBBZGQgImFkZGl0aW9uYWxQcm9wZXJ0aWVz
+OiBmYWxzZSIgZm9yIG5hbmRAIGJlY2F1c2UgYWxsIHBvc3NpYmxlDQo+PiAgICAgICAgICAgIHBy
+b3BlcnRpZXMgYXJlIGRlc2NyaWJlZC4NCj4+ICAgICAgDQo+PiAgICAgIHY0Og0KPj4gICAgICAg
+ICAxKSBSZW1vdmUgImxhYmVsIiBhbmQgInBhcnRpdGlvbnMiIHByb3BlcnRpZXMNCj4+ICAgICAg
+DQo+PiAgICAgICAgIDIpIFVzZSAyIGNsb2NrcyBmb3IgQTdLLzhLIHBsYXRmb3JtIHdoaWNoIGlz
+IGEgcmVxdWlyZW1lbnQNCj4+ICAgICAgDQo+PiAgICAgIHYzOg0KPj4gICAgICAgIDEpIFJlbW92
+ZSB0eHQgdmVyc2lvbiBmcm9tIHRoZSBNQUlOVEFJTkVSUyBsaXN0DQo+PiAgICAgIA0KPj4gICAg
+ICAgIDIpIFVzZSBlbnVtIGZvciBzb21lIG9mIGNvbXBhdGlibGUgc3RyaW5ncw0KPj4gICAgICAN
+Cj4+ICAgICAgICAzKSBEcm9wOg0KPj4gICAgICAgICAgICAgICNhZGRyZXNzLWNlbGxzDQo+PiAg
+ICAgICAgICAgICAgI3NpemUtY2VsbHM6DQo+PiAgICAgIA0KPj4gICAgICAgICAgIGFzIHRoZXkg
+YXJlIGluaGVyaXRlZCBmcm9tIHRoZSBuYW5kLWNvbnRyb2xsZXIueWFtbA0KPj4gICAgICANCj4+
+ICAgICAgICA0KSBBZGQgcmVzdHJpY3Rpb24gdG8gdXNlIDIgY2xvY2tzIGZvciBBOEsgU29DDQo+
+PiAgICAgIA0KPj4gICAgICAgIDUpIERyb3BwZWQgZGVzY3JpcHRpb24gZm9yIGNsb2NrLW5hbWVz
+IGFuZCBleHRlbmQgaXQgd2l0aA0KPj4gICAgICAgICAgIG1pbkl0ZW1zOiAxDQo+PiAgICAgIA0K
+Pj4gICAgICAgIDYpIERyb3AgZGVzY3JpcHRpb24gZm9yICJkbWFzIg0KPj4gICAgICANCj4+ICAg
+ICAgICA3KSBVc2UgInVuZXZhbGF1dGVkUHJvcGVydGllczogZmFsc2UiDQo+PiAgICAgIA0KPj4g
+ICAgICAgIDgpIERyb3AgcXVpdGVzIGZyb20geWFtbCByZWZzLg0KPj4gICAgICANCj4+ICAgICAg
+ICA5KSBVc2UgNC1zcGFjZSBpbmRlbnRhdGlvbiBmb3IgdGhlIGV4YW1wbGUgc2VjdGlvbg0KPj4g
+ICAgICANCj4+ICAgICAgdjI6DQo+PiAgICAgICAgMSkgRml4ZWQgd2FybmluZyBieSB5YW1sbGlu
+dCB3aXRoIGluY29ycmVjdCBpbmRlbnRhdGlvbiBmb3IgY29tcGF0aWJsZSBsaXN0DQo+Pg0KPj4g
+ICAuLi4vYmluZGluZ3MvbXRkL21hcnZlbGwsbmFuZC1jb250cm9sbGVyLnlhbWwgfCAyMjEgKysr
+KysrKysrKysrKysrKysrDQo+PiAgIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL210ZC9tYXJ2ZWxs
+LW5hbmQudHh0ICB8IDEyNiAtLS0tLS0tLS0tDQo+PiAgIE1BSU5UQUlORVJTICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICB8ICAgMSAtDQo+PiAgIDMgZmlsZXMgY2hhbmdlZCwgMjIx
+IGluc2VydGlvbnMoKyksIDEyNyBkZWxldGlvbnMoLSkNCj4+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0
+IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tdGQvbWFydmVsbCxuYW5kLWNvbnRy
+b2xsZXIueWFtbA0KPj4gICBkZWxldGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0
+cmVlL2JpbmRpbmdzL210ZC9tYXJ2ZWxsLW5hbmQudHh0DQo+Pg0KPj4gZGlmZiAtLWdpdCBhL0Rv
+Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tdGQvbWFydmVsbCxuYW5kLWNvbnRyb2xs
+ZXIueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tdGQvbWFydmVsbCxu
+YW5kLWNvbnRyb2xsZXIueWFtbA0KPj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4+IGluZGV4IDAw
+MDAwMDAwMDAwMC4uN2NkNGEyZTk5MzQzDQo+PiAtLS0gL2Rldi9udWxsDQo+PiArKysgYi9Eb2N1
+bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbXRkL21hcnZlbGwsbmFuZC1jb250cm9sbGVy
+LnlhbWwNCj4+IEBAIC0wLDAgKzEsMjIxIEBADQo+PiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmll
+cjogKEdQTC0yLjAtb25seSBPUiBCU0QtMi1DbGF1c2UpDQo+PiArJVlBTUwgMS4yDQo+PiArLS0t
+DQo+PiArJGlkOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9tdGQvbWFydmVsbCxuYW5k
+LWNvbnRyb2xsZXIueWFtbCMNCj4+ICskc2NoZW1hOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvbWV0
+YS1zY2hlbWFzL2NvcmUueWFtbCMNCj4+ICsNCj4+ICt0aXRsZTogTWFydmVsbCBOQU5EIEZsYXNo
+IENvbnRyb2xsZXIgKE5GQykNCj4+ICsNCj4+ICttYWludGFpbmVyczoNCj4+ICsgIC0gTWlxdWVs
+IFJheW5hbCA8bWlxdWVsLnJheW5hbEBib290bGluLmNvbT4NCj4+ICsNCj4+ICtwcm9wZXJ0aWVz
+Og0KPj4gKyAgY29tcGF0aWJsZToNCj4+ICsgICAgb25lT2Y6DQo+PiArICAgICAgLSBpdGVtczoN
+Cj4+ICsgICAgICAgICAgLSBjb25zdDogbWFydmVsbCxhcm1hZGEtOGstbmFuZC1jb250cm9sbGVy
+DQo+PiArICAgICAgICAgIC0gY29uc3Q6IG1hcnZlbGwsYXJtYWRhMzcwLW5hbmQtY29udHJvbGxl
+cg0KPiBBcG9sb2dpZXMgaWYgSSBoYXZlIG1pc3NlZCB0aGlzIC0gYnV0IHRoZSBjb21taXQgbWVz
+c2FnZSBzaG91bGQgcHJvYmFibHkNCj4gZXhwbGFpbiB3aGVyZSB0aGlzIGZhbGxiYWNrIGNhbWUg
+ZnJvbSBzaW5jZSBpdCBkb2VzIG5vdCBhcHBlYXIgdG8gYmUNCj4gcHJlc2VudCBpbiB0aGUgb3Jp
+Z2luYWwgYmluZGluZy4NClllcyBJJ2xsIG1lbnRpb24gaXQuDQo+PiArICAgICAgLSBlbnVtOg0K
+Pj4gKyAgICAgICAgICAtIG1hcnZlbGwsYXJtYWRhMzcwLW5hbmQtY29udHJvbGxlcg0KPj4gKyAg
+ICAgICAgICAtIG1hcnZlbGwscHhhM3h4LW5hbmQtY29udHJvbGxlcg0KPj4gKyAgICAgICAgICAt
+IG1hcnZlbGwsYXJtYWRhLThrLW5hbmQNCj4+ICsgICAgICAgICAgLSBtYXJ2ZWxsLGFybWFkYTM3
+MC1uYW5kDQo+PiArICAgICAgICAgIC0gbWFydmVsbCxweGEzeHgtbmFuZA0KPiBQbGVhc2UgbWFy
+ayB0aGVzZSAzIGFzIGRlcHJlY2F0ZWQuDQpXaWxsIGRvDQo+PiArDQo+PiArICByZWc6DQo+PiAr
+ICAgIG1heEl0ZW1zOiAxDQo+PiArDQo+PiArICBpbnRlcnJ1cHRzOg0KPj4gKyAgICBtYXhJdGVt
+czogMQ0KPj4gKw0KPj4gKyAgY2xvY2tzOg0KPj4gKyAgICBkZXNjcmlwdGlvbjoNCj4+ICsgICAg
+ICBTaGFsbCByZWZlcmVuY2UgdGhlIE5BTkQgY29udHJvbGxlciBjbG9ja3MsIHRoZSBzZWNvbmQg
+b25lIGlzDQo+PiArICAgICAgaXMgb25seSBuZWVkZWQgZm9yIHRoZSBBcm1hZGEgN0svOEsgU29D
+cw0KPiBBcyBhIG5pdCwgYWxsT2YgYmVsb3cgaW52YWxpZGF0ZXMgdGhpcyBzZWNvbmQgcGFydCBv
+ZiB0aGUgc2VudGVuY2UgKGluDQo+IHBvc3NpYmx5IGEgY2xlYXJlciB3YXkgdG9vKS4NCkknbSBu
+b3QgcXVpdGUgc3VyZSB3aGF0IHlvdSBtZWFuLiBJcyBpdCBqdXN0IHRoYXQgdGhlIGRlc2NyaXB0
+aW9uIGlzIA0KcmVkdW5kYW50IG5vdyB0aGF0IHRoZSBzY2hlbWEgZW5mb3JjZXMgdGhlIHJlcXVp
+cmVtZW50IG9yIGFtIEkgYWN0dWFsbHkgDQpub3QgZW5mb3JjaW5nIHRoaW5ncyB0aGUgd2F5IEkg
+dGhpbmsuDQo+PiArICAgIG1pbkl0ZW1zOiAxDQo+PiArICAgIG1heEl0ZW1zOiAyDQo+PiArDQo+
+PiArICBjbG9jay1uYW1lczoNCj4+ICsgICAgbWluSXRlbXM6IDENCj4+ICsgICAgaXRlbXM6DQo+
+PiArICAgICAgLSBjb25zdDogY29yZQ0KPj4gKyAgICAgIC0gY29uc3Q6IHJlZw0KPj4gKw0KPj4g
+KyAgZG1hczoNCj4+ICsgICAgbWF4SXRlbXM6IDENCj4+ICsNCj4+ICsgIGRtYS1uYW1lczoNCj4+
+ICsgICAgaXRlbXM6DQo+PiArICAgICAgLSBlbnVtOg0KPiBJIGRvbid0IHRoaW5rIHRoZSBpdGVt
+czogaGVyZSBpcyBuZWVkZWQsIGVudW0gb24gaXRzIG93biBzdWZmaWNlcywgbm8/DQoNClRoZSB0
+cmVuZCBpbiBvdGhlciBiaW5kaW5ncyBzZWVtcyB0byBiZQ0KDQogwqAgaXRlbXM6DQogwqAgwqDC
+oCAtIGNvbnN0OiB2YWx1ZTENCiDCoMKgwqDCoCAtIGNvbnN0OiB2YWx1ZTINCg0Kc28gSSdsbCBn
+byB3aXRoIHRoYXQuDQoNCj4NCj4gQ2hlZXJzLA0KPiBDb25vci4=
