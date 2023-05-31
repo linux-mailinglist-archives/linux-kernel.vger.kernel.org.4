@@ -2,80 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833F4718AF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149D5718AF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjEaUSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 16:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
+        id S229671AbjEaUT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 16:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjEaUSj (ORCPT
+        with ESMTP id S229611AbjEaUTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 16:18:39 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBE8137
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:18:36 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-568fd72993cso19045317b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685564316; x=1688156316;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j5CyWTyXiTfBViz6Sxmw35acpjPcVQ4sSxA5nz2qzkI=;
-        b=SEXNJgwV5AiJNIWuh6lBiAmkE3bbsj5MxzsZAn+uYlfZWd+MhGl+kUnQj4F/tjnR+E
-         VbaQ0gNSGssZoTxaLJ/diKcpfpZAJzn/rlADk5OVxNwgcvQivpw4n19DrHl8uU9kBNMI
-         yifWIJFy4c05UPBT9oyREY0jbxBla+4I5u/v8RhpQAXNLvpuSBvEdAQmIrx55XsOxqOh
-         n1cdBZcNOEsdmxIDOafumO1brg7hIFGY6tYALMPs3ngJNYNHUbTAEy1R+dvK1kM7/+5H
-         wutxNj2EZx7+rErSdhYAzgo+Y/leNUgVYGNd+kSSI84XhFf2QeW/H0cQFpDzXgE/Pg4U
-         XP+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685564316; x=1688156316;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=j5CyWTyXiTfBViz6Sxmw35acpjPcVQ4sSxA5nz2qzkI=;
-        b=Sh+X32A4HgQVnPlar5k5bM2Kh1nmJk5cvPgYAAoO8NcPWG7cobG91Q1yiS/8qp/mQd
-         KsGUhq79Ph1glLhBBYBoRG1ypXk3vLb2evdQKuLBw4SPsHm3Kw9jcPWrJ/wW3ppk3iv2
-         eiVpMvDu5qGs3KF3Zg5fV+HzyDHiFsQ8Fj7Tch+WTU3BmqF9e6oB+rWQTPEdLcxHK7VF
-         FY8Sj8HDyNjjSR5281WWhmVbalBin5nSwlEH06PAxlWAn2sZi1UuYU6iihCEhXgezBNl
-         299GlizWDlY37cyULh01foBuL+fb8R56uf+donXfqM8b+HS50rYIHJn75pOochmgpj3v
-         RmRw==
-X-Gm-Message-State: AC+VfDw3azz+s3TEENYtvB+MrYaPxm6aQHhyLFu2QL5XACWTylj+sIhm
-        Hxt2A/EmM7B5k3N4jZyNbKBbpXqMAY0=
-X-Google-Smtp-Source: ACHHUZ45I9uA8dYRlS7sdsD4AC1X9R0cpZ8hPCWp1InPW1kv/LWxrQezg2ZD1CsX0Jmb0fTO/coj8PfeXUM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:dc10:0:b0:bac:b91c:511b with SMTP id
- y16-20020a25dc10000000b00bacb91c511bmr8792287ybe.2.1685564315865; Wed, 31 May
- 2023 13:18:35 -0700 (PDT)
-Date:   Wed, 31 May 2023 20:18:34 +0000
-In-Reply-To: <E17EFDD7-C54A-4532-B1D3-D567557FC54B@nutanix.com>
-Mime-Version: 1.0
-References: <20230530200152.18961-1-jon@nutanix.com> <2a6502e3-ba87-0355-af09-825e8467b81f@intel.com>
- <F4AFC5EE-9967-4117-BA85-ED82C106575C@nutanix.com> <ZHd2P6D142rCByrm@google.com>
- <E17EFDD7-C54A-4532-B1D3-D567557FC54B@nutanix.com>
-Message-ID: <ZHermsSGQBcDD07R@google.com>
-Subject: Re: [PATCH] x86/fpu/xstate: clear XSAVE features if DISABLED_MASK set
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Kyle Huey <me@kylehuey.com>,
-        "neelnatu@google.com" <neelnatu@google.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Wed, 31 May 2023 16:19:25 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F67126;
+        Wed, 31 May 2023 13:19:23 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VKCVx9001351;
+        Wed, 31 May 2023 20:19:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=sTJCWWUwzwvNr/MkB+nxK/PvXW1ND48ywSdnL9r2G/I=;
+ b=sxQoG0kvVkhnyhB9eb+OI9pqNiToozu3AIl6pgp559MfzyrrQgnrLMZ2Qha+NApe/kHM
+ ITHVeeqpErVZ4oK7jbAQrWQnwDJr2ODcg1xW0gj5tTTw6+6i7w61JXOFAMrJYqysL3Rp
+ JQtsmxKTAZr/NBgQ8RbYP+pnfEqpHyrvmeRXs7czCxz7cRAdBptaSOd5RKTzOCPRY3rW
+ M2H4NCPv0sVDDn1lFqYkGYqSi/BqIjmiN5H4DQtW4RD1ZFaf3z3SJmWICDAA6DTDnXfU
+ uBJS/kQHLEmoIVBbl/QzsL6Gv4jVDu49lZZL+ox5yp4xbHar51S52ooa4hrZOE7oG/3v 2g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxd2c05je-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 20:19:05 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34VKFpvl013315;
+        Wed, 31 May 2023 20:19:04 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxd2c05ha-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 20:19:04 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34VJAC4Y008154;
+        Wed, 31 May 2023 20:19:03 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3qu9g8ddxs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 20:19:03 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34VKJ1GC48431430
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 31 May 2023 20:19:02 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DA9A358050;
+        Wed, 31 May 2023 20:19:01 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 20C6558054;
+        Wed, 31 May 2023 20:19:00 +0000 (GMT)
+Received: from [9.61.47.250] (unknown [9.61.47.250])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed, 31 May 2023 20:19:00 +0000 (GMT)
+Message-ID: <002e833e-33b0-54d4-8584-9366850a7956@linux.vnet.ibm.com>
+Date:   Wed, 31 May 2023 13:18:59 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH net-next 08/11] iavf: switch to Page Pool
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Christoph Hellwig <hch@lst.de>, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
+References: <20230516161841.37138-1-aleksander.lobakin@intel.com>
+ <20230516161841.37138-9-aleksander.lobakin@intel.com>
+ <4c6723df-5d40-2504-fcdc-dfdc2047f92c@linux.vnet.ibm.com>
+ <8302be1b-416a-de32-c43b-73bd378f8122@intel.com>
+Content-Language: en-US
+From:   David Christensen <drc@linux.vnet.ibm.com>
+In-Reply-To: <8302be1b-416a-de32-c43b-73bd378f8122@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: g88aeaZRpnfP0PdxA02G1n1w3BlzCyqp
+X-Proofpoint-GUID: st-v3kKNhM2pBCFgda0-Zy5gNWLuGVPD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_14,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ mlxscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 lowpriorityscore=0
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305310170
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,144 +106,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023, Jon Kohler wrote:
->=20
-> > On May 31, 2023, at 12:30 PM, Sean Christopherson <seanjc@google.com> w=
-rote:
-> > Caveat #1: cpu_feature_enabled() has a flaw that's relevant to this cod=
-e: in the
-> > unlikely scenario that the compiler doesn't resolve "cid" to a compile-=
-time
-> > constant value, cpu_feature_enabled() won't query DISABLED_MASK_BIT_SET=
-().  I don't
-> > see any other use of cpu_feature_enabled() without a hardcoded X86_FEAT=
-URE_*, and
-> > the below compiles with my config, so I think/hope we can just require =
-a compile-time
-> > constant when using cpu_feature_enabled().
-> >=20
->=20
-> Yea I think that should work. I=E2=80=99ll club that into v2 of this patc=
-h.
 
-I recommend doing it as a separate patch, hardening cpu_feature_enabled() s=
-houldn't
-have a dependency on tweaking the xfeatures mask.  I tested this with an al=
-lyesconfig
-if you want to throw it in as a prep patch.
 
----
-From: Sean Christopherson <seanjc@google.com>
-Date: Wed, 31 May 2023 09:41:12 -0700
-Subject: [PATCH] x86/cpufeature: Require compile-time constant in
- cpu_feature_enabled()
+On 5/25/23 4:08 AM, Alexander Lobakin wrote:
+>> Any plans to add page pool fragmentation support (i.e.
+>> PP_FLAG_PAGE_FRAG) in the future to better support architectures with
+>> larger page sizes such as 64KB on ppc64le?
+> 
+> Currently no, we resigned from page fragmentation due to the complexity
+> and restrictions it provides for no benefits on x86_64. But I remember
+> that pages > 4 Kb exist (I have a couple MIPS boards where I have fun
+> sometimes and page size is set to 16 Kb there. But still always use 1
+> page per frame).
+> By "better support" you mean reducing memory usage or something else?
 
-Assert that the to-be-checked bit passed to cpu_feature_enabled() is a
-compile-time constant instead of applying the DISABLED_MASK_BIT_SET()
-logic if and only if the bit is a constant.  Conditioning the check on
-the bit being constant instead of requiring the bit to be constant could
-result in compiler specific kernel behavior, e.g. running on hardware that
-supports a disabled feature would return %false if the compiler resolved
-the bit to a constant, but %true if not.
+Yes, reducing memory waste.  Current generation P10 systems default to 
+quad-port, 10Gb copper i40e NICs.  When you combine a large number of 
+CPUs, and therefore a large number of RX queues, with a 64KB page 
+allocation per packet, memory usage can balloon very quickly as you add 
+additional ports.
 
-All current usage of cpu_feature_enabled() specifies a hardcoded
-X86_FEATURE_* flag, so this *should* be a glorified nop.
+Would you be open to patches to address this further down the road as 
+your refactoring effort gets closer to completion?
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/include/asm/cpufeature.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufe=
-ature.h
-index ce0c8f7d3218..886200fbf8d9 100644
---- a/arch/x86/include/asm/cpufeature.h
-+++ b/arch/x86/include/asm/cpufeature.h
-@@ -141,8 +141,11 @@ extern const char * const x86_bug_flags[NBUGINTS*32];
-  * supporting a possible guest feature where host support for it
-  * is not relevant.
-  */
--#define cpu_feature_enabled(bit)	\
--	(__builtin_constant_p(bit) && DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu=
-_has(bit))
-+#define cpu_feature_enabled(bit) 				\
-+({								\
-+	BUILD_BUG_ON(!__builtin_constant_p(bit));		\
-+	DISABLED_MASK_BIT_SET(bit) ? 0 : static_cpu_has(bit);	\
-+})
-=20
- #define boot_cpu_has(bit)	cpu_has(&boot_cpu_data, bit)
-=20
-
-base-commit: 39428f6ea9eace95011681628717062ff7f5eb5f
---=20
-
-> > I'm totally ok gating xfeature bits on cpu_feature_enabled(), but there=
- should be
-> > a prep patch for KVM to clear features bits in kvm_cpu_caps if the corr=
-esponding
-> > XCR0/XSS bit is not set in the host.  If KVM ever wants to expose an xs=
-tate feature
-> > (other than MPX) that's disabled in the host, then we can revisit
-> > fpu__init_system_xstate().  But we need to ensure the "failure" mode is=
- that
-> > KVM doesn't advertise the feature, as opposed to advertising a feature =
-without
-> > without context switching its data.
->=20
->=20
-> Looking into this, trying to understand the comment about a feature being=
- used
-> without context switching its data.=20
->=20
-> In __kvm_x86_vendor_init() we=E2=80=99re already populating host_xcr0 usi=
-ng the=20
-> XCR_XFEATURE_ENABLED_MASK, which should be populated on boot
-> by fpu__init_cpu_xstate(), which happens almost immediately after the cod=
-e that I
-> modified in this commit.=20
->=20
-> That then flows into guest_supported_xcr0 (as well as user_xfeatures).=20
-> guest_supported_xcr0 is then plumbed into __kvm_set_xcr, which specifical=
-ly says
-> that we=E2=80=99re using that to prevent the guest from setting bits that=
- we won=E2=80=99t save in the
-> first place.
->=20
->     /*
->      * Do not allow the guest to set bits that we do not support
->      * saving.  However, xcr0 bit 0 is always set, even if the
->      * emulated CPU does not support XSAVE (see kvm_vcpu_reset()).
->      */
->     valid_bits =3D vcpu->arch.guest_supported_xcr0 | XFEATURE_MASK_FP;
->=20
-> Wouldn=E2=80=99t this mean that the *guest* xstate initialization would n=
-ot see a given
-> feature too and take care of the problem naturally?
->=20
-> Or are you saying you=E2=80=99d want an even more detailed clearing?
-
-The CPUID bits that enumerate support for a feature are independent from th=
-e CPUID
-bits that enumerate what XCR0 bits are supported, i.e. what features can be=
- saved
-and restored via XSAVE/XRSTOR.
-
-KVM does mostly account for host XCR0, but in a very ad hoc way.  E.g. MPX =
-is
-handled by manually checking host XCR0.
-
-	if (kvm_mpx_supported())
-		kvm_cpu_cap_check_and_set(X86_FEATURE_MPX);
-
-PKU manually checks too, but indirectly by looking at whether or not the ke=
-rnel
-has enabled CR4.OSPKE.
-
-	if (!tdp_enabled || !boot_cpu_has(X86_FEATURE_OSPKE))
-		kvm_cpu_cap_clear(X86_FEATURE_PKU);
-
-But unless I'm missing something, the various AVX and AMX bits rely solely =
-on
-boot_cpu_data, i.e. would break if someone added CONFIG_X86_AVX or CONFIG_X=
-86_AMX.
+Dave
