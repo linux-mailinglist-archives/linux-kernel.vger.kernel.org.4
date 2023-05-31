@@ -2,103 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334A27185EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7467185F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234297AbjEaPQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
+        id S234325AbjEaPRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbjEaPQ0 (ORCPT
+        with ESMTP id S234271AbjEaPRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:16:26 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1413107;
-        Wed, 31 May 2023 08:16:24 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f6da07feb2so60790665e9.0;
-        Wed, 31 May 2023 08:16:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685546183; x=1688138183;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SuL4u8NzTzbnlOrPBhBiIT/DZ/NXRnMhr+o5QeIpT0o=;
-        b=aKr5dn2uRnABDYMBhkNLWSP4IaVFEeBUlJG0YdoJ15Qi5Q7YgV02NAJMJt+EE57M7R
-         0+bPKa/R8dVdByRt3URoplMccb0IqfB/8uDb7Hu5XwvSpG9oSj5D+mov4wq5pTU57kZW
-         lxXnBgbcCU7ykp6HREmXIo/Q3aH2nSMc33GH2RWgggJvNPaOVghUxCK3MzPii6nCDPq+
-         zToAzyFfa2KMVPCGstkY/djAISeIMrhnsUwlgy3nFy0FnwqXsb+VOfCofpwPmpfvPP5v
-         TJFWCo3Y88syuHPOf4jpz6RYn+327gZr/S9psN5pDbswstqv+RxGo4wKMUchtowpeWWk
-         rqDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685546183; x=1688138183;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SuL4u8NzTzbnlOrPBhBiIT/DZ/NXRnMhr+o5QeIpT0o=;
-        b=Xgn00WSOuLrQ78nkm7/jxD7/5T6zaPCGUABU8rYkCgOe3CYB3OlBhILo5OMSnlZpm0
-         rkGk4DlS7oYpIP4febNeqvcirhgLqtVisNtATgs8Qn8gBUgWmXqgeigdj4jQNZ2/vSLX
-         SEivzWr0iGJt99GUz9CjQQNT5hxhWcblqzjGusTU/8OJwPd8aXI4if8xHr2VSa+PQfiD
-         QWw8DSiF+nxrgisjPM61XIIBePAv9oRQDjAibEMB2x7WKmk+RsKmZ6zro2UL13zUOYqt
-         MEX2tF7yS3SxSz3KdTQnr0IsfC3tvOcxULERibS4a4/dCKAyjCJ8T6d5trarFhSGeqqO
-         czew==
-X-Gm-Message-State: AC+VfDxHsrVwp8nK7NXkYrhhjPADU+6tCKOdjYsWMfaZQGfuWhGdcRfU
-        dUG7iw/jh1T7D8Qs0GSCDxTSGjxbMsSJpA==
-X-Google-Smtp-Source: ACHHUZ7RQnmGF+ZZ+I9iWTtL6nVCnFLckZgRaav6zMIPHFFuiQJgj0ALtYiCT69UWnUbaYERevDwUw==
-X-Received: by 2002:a7b:cd8a:0:b0:3f4:2255:8608 with SMTP id y10-20020a7bcd8a000000b003f422558608mr4403587wmj.31.1685546183139;
-        Wed, 31 May 2023 08:16:23 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id m23-20020a7bca57000000b003f5ffba9ae1sm21225612wml.24.2023.05.31.08.16.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 08:16:22 -0700 (PDT)
-Date:   Wed, 31 May 2023 18:16:20 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     "A. Sverdlin" <alexander.sverdlin@siemens.com>
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Wed, 31 May 2023 11:17:05 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838E211D;
+        Wed, 31 May 2023 08:17:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=zulFnBIOvpdXzsXSodPwLCmaalOVRPPAxIcwsGbXZrU=; b=ttG6x4A+90V0zw0Y8l/vgIMO/G
+        uRCnVZduiOSABPA65Vx4Jw8llwlvtzFL6+wWbf6g/DqKHHAiNB1QESkW88rQAccgX7Hra/ONdweIG
+        z148paC7S7agHEWsUK332nBTWYQFgXXpmdhHw7QxAbljfg6wxg3BWvLUCVGBCsIvW1So=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q4NZ8-00ETKT-FD; Wed, 31 May 2023 17:16:46 +0200
+Date:   Wed, 31 May 2023 17:16:46 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Detlev Casanova <detlev.casanova@collabora.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Egil Hjelmeland <privat@egil-hjelmeland.no>
-Subject: Re: [PATCH] net: dsa: lan9303: allow vid != 0 in port_fdb_{add|del}
- methods
-Message-ID: <20230531151620.rqdaf2dlp5jsn6mk@skbuf>
-References: <20230531143826.477267-1-alexander.sverdlin@siemens.com>
+        netdev@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: net: phy: Support external PHY xtal
+Message-ID: <ade45bcf-c174-429a-96ca-d0ffb41748d4@lunn.ch>
+References: <20230531150340.522994-1-detlev.casanova@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230531143826.477267-1-alexander.sverdlin@siemens.com>
+In-Reply-To: <20230531150340.522994-1-detlev.casanova@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 04:38:26PM +0200, A. Sverdlin wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+On Wed, May 31, 2023 at 11:03:39AM -0400, Detlev Casanova wrote:
+> Ethernet PHYs can have external an clock that needs to be activated before
+> probing the PHY.
 > 
-> LAN9303 doesn't associate FDB (ALR) entries with VLANs, it has just one
-> global Address Logic Resolution table [1].
-> 
-> Ignore VID in port_fdb_{add|del} methods, go on with the global table. This
-> is the same semantics as hellcreek or RZ/N1 implement.
-> 
-> Visible symptoms:
-> LAN9303_MDIO 5b050000.ethernet-1:00: port 2 failed to delete 00:xx:xx:xx:xx:cf vid 1 from fdb: -2
-> LAN9303_MDIO 5b050000.ethernet-1:00: port 2 failed to add 00:xx:xx:xx:xx:cf vid 1 to fdb: -95
-> 
-> [1] https://ww1.microchip.com/downloads/en/DeviceDoc/00002308A.pdf
-> 
-> Fixes: 0620427ea0d6 ("net: dsa: lan9303: Add fdb/mdb manipulation")
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
 > ---
+>  .../devicetree/bindings/net/ethernet-phy.yaml          | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-phy.yaml b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> index 4f574532ee13..e83a33c2aa59 100644
+> --- a/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> +++ b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> @@ -93,6 +93,16 @@ properties:
+>        the turn around line low at end of the control phase of the
+>        MDIO transaction.
+>  
+> +  clock-names:
+> +    items:
+> +      - const: xtal
 
-Thanks for taking a look. Although it would probably be safer to add:
+I don't think xtal is the best of names here. It generally is used as
+an abbreviation for crystal. And the commit message is about there not
+being a crystal, but an actual clock.
 
-Fixes: 2fd186501b1c ("net: dsa: be louder when a non-legacy FDB operation fails")
+How is this clock named on the datasheet?
 
-since I'm not sure it has a reason to be backported beyond that. Anyway:
-
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-
-Yuck.
+    Andrew
