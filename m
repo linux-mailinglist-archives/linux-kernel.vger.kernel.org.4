@@ -2,743 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECB771878E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6870071879D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjEaQge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 12:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
+        id S229654AbjEaQiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 12:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjEaQgV (ORCPT
+        with ESMTP id S229636AbjEaQiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 12:36:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E4DE59
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:34:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685550859;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fWC+xMKYUWhcyHC+CrTtBR7WmXg0XqK4TynuYciSr5g=;
-        b=cB+IBRawpxuL372gKmjCaNxFkznmV2wvbFKkURBxH0HYV58X4knnyHa7dMw/cGOUxixDuH
-        2RrCWpjg4YPIblCZ9pNA1KEd3gKmm/TkS/xzyhSonA2JDMKHsihWOw9GFDbdt2bWwjRgZA
-        83axlsYUydLEvSqPYdzVeKq02HDRt5g=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-314-Gel4AudCPDytNW5EcgPFvg-1; Wed, 31 May 2023 12:34:15 -0400
-X-MC-Unique: Gel4AudCPDytNW5EcgPFvg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CFCA5858280;
-        Wed, 31 May 2023 16:34:14 +0000 (UTC)
-Received: from llong.com (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 51CCF2166B28;
-        Wed, 31 May 2023 16:34:14 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 6/6] cgroup/cpuset: Extend test_cpuset_prs.sh to test remote partition
-Date:   Wed, 31 May 2023 12:34:05 -0400
-Message-Id: <20230531163405.2200292-7-longman@redhat.com>
+        Wed, 31 May 2023 12:38:11 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13567E4C
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:37:39 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-62603efd2e3so32811896d6.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:37:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685551058; x=1688143058;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tjg7ATpl7VoZqUHF1Mhzj4Gq7ctPuYHs7vKRTJDLnJg=;
+        b=evZ3sCt2GuNl8d4ckGo4cB+AFEOqA53JM74vQUFyBUkY91nHpch3Sf+0slxb9s456T
+         g+wA9AHPb8kXFzgvTmKZEkkTSeWEm5zxzg+MBjXCRDXSaKNn12Bm3pAkOrPbpAJ393zn
+         oM/m1gsXGl1sVIGgJUsOR8J0FaACoUjz3KPR2WNyt00DNn3EJZKt1JtLDCBWCeVZcacc
+         g43Otdiv0636E0hkUzfTh8q30a7SH9STtK8SOqjGjpCxZ8vkCq518RN3sS3w2u2rvr9g
+         4AXSRfdy+6I2gFZKpctTvdn8iHGorGTMlBxaCJquAkwMpoVlUG5fuXgk3csBYg8bjYjW
+         hN1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685551058; x=1688143058;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tjg7ATpl7VoZqUHF1Mhzj4Gq7ctPuYHs7vKRTJDLnJg=;
+        b=Rvg0tl0N7leAImuC2/1lVPdPEpDUGTImLV1CnpfeKaoTcOzZL9wGJb0sfW50BWqpo8
+         8WVK8a+999F3KPWiWIQ5rJbDBelkKCzHQ2rY93FyGf97tQcjY7+4850ZEiTwhaVZpIC8
+         11L7iQIILfMjCfdYHQsi0Hy5CfKjde5P3jgqqGXmVtEQMmaKCiZEf5kMaw2QgYHxEJN0
+         ot35o2MozK9kED+avjyEu1KN5zRUd/UyYD2mA0CbzEVJdpeYUi8YK8cMRakMEnN0SSlI
+         D6HPWcV4tVxVLGTkI4X7SHOGytPZk3clDDCYEyIVQ5rCywGC+FrRZOQvOOM/HUaZq/7g
+         gcbA==
+X-Gm-Message-State: AC+VfDzfPGVLuYHZwxcW83+k1XGzXgMcfYtS0CoLn+HELHPTx5BIQzsk
+        SFKuy00eqIhdqowFfkWEPfxPyAUVJ34iuDoKe2sR+Q==
+X-Google-Smtp-Source: ACHHUZ7OQYcBLESi3+AWNMJzseVA3TTXzpYCG2G1qkVeeINEY3MFtLGW9X+2Vp06MV/k/5fL/w0a+jBSxDeRAUIQxqk=
+X-Received: by 2002:ad4:4eae:0:b0:625:aa49:19f3 with SMTP id
+ ed14-20020ad44eae000000b00625aa4919f3mr7178487qvb.64.1685551057971; Wed, 31
+ May 2023 09:37:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <b59d1bfe-15b1-4318-a12f-a38143ba35bd@kili.mountain>
+ <4716f9fd-0e09-4e69-a802-09ddecff2733@app.fastmail.com> <6b1a0ee6-c78b-4873-bfd5-89798fce9899@kili.mountain>
+ <2fce7746-6d63-4853-9b20-8fa0b24d6f32@app.fastmail.com> <41c61895-59f4-449c-9e2e-d127d7f95be5@app.fastmail.com>
+ <33173e7b-0ec0-4a1e-9533-0d3b6eb4c8ce@app.fastmail.com>
+In-Reply-To: <33173e7b-0ec0-4a1e-9533-0d3b6eb4c8ce@app.fastmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 31 May 2023 09:37:26 -0700
+Message-ID: <CAKwvOd=ATzs8JruqK=LbszDamasmyaYQJ=4feMB_ZJJ3if=GaA@mail.gmail.com>
+Subject: Re: randconfig fixes for 5.10.y
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Dan Carpenter <dan.carpenter@linaro.org>, stable@vger.kernel.org,
+        "laurent.pinchart" <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch extends the test_cpuset_prs.sh test script to support testing
-the new remote partition and use the new "cpuset.cpus.reserve" file of
-the root cgroup by adding new tests for them. In addition, the following
-changes are also made:
+On Wed, May 31, 2023 at 3:12=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> On Tue, May 30, 2023, at 21:20, Arnd Bergmann wrote:
+> > On Tue, May 30, 2023, at 21:02, Arnd Bergmann wrote:
+> >>
+> >> CONFIG_COMPILE_TEST=3Dy forces a number of options to be
+> >> hidden from build tests, which is generally super useful.
+> >> The one that ended up hiding the stack growth above is
+> >> CONFIG_GCOV_PROFILE_ALL. I'll try enabling it for a few
+> >> builds to see what else shows up with it.
+> >
+> > Update: you already pointed to UBSAN_SANITIZE_ALL causing
+> > this, I can confirm that this is also the case. With your
+> > config, the combination of CONFIG_GCOV_PROFILE_ALL and
+> > CONFIG_UBSAN_SANITIZE_ALL causes the compiler to completely
+> > mess up register allocation in this code, disabling either
+> > of the two gets it below the boundary.
+>
+> After a night of randconfig builds with both UBSAN_SANITIZE_ALL
+> and GCOV_PROFILE_ALL force-enabled, these are the ones I found,
+> listing only the worst size for each function (using gcc-13.1).
 
- 1) Run the state transition tests directly under root to ease testing
-    of remote partition and remove the unneeded test column.
- 2) Add support for the .__DEBUG__.cpuset.cpus.subpartitions file if
-    "cgroup_debug" kernel boot option is specified and a new column
-    into TEST_MATRIX for testing against this cgroup control file.
- 3) Add another column to for the list of expected isolated CPUs and
-    compare it with the actual value by looking at the state of
-    /sys/kernel/debug/sched/domains which will be available if the
-    verbose flag is set.
+In LLVM, a recent change we made was when the sanitizers are enabled,
+the GCOV instrumentation is not checked by the sanitizers as that
+results in excessive code growth.
+https://reviews.llvm.org/D150460
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- .../selftests/cgroup/test_cpuset_prs.sh       | 403 ++++++++++++------
- 1 file changed, 267 insertions(+), 136 deletions(-)
+> None of these show up without GCOV though:
+>
+> crypto/twofish_common.c:683:1: error: the frame size of 2040 bytes is lar=
+ger than 1024 bytes [-Werror=3Dframe-larger-than=3D]
+> crypto/twofish_common.c:683:1: error: the frame size of 2336 bytes is lar=
+ger than 2048 bytes [-Werror=3Dframe-larger-than=3D]
+> drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c:1589:1:=
+ error: the frame size of 1696 bytes is larger than 1400 bytes [-Werror=3Df=
+rame-larger-than=3D]
+> drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c:754:1: error: the =
+frame size of 1260 bytes is larger than 1024 bytes [-Werror=3Dframe-larger-=
+than=3D]
+> drivers/staging/media/ipu3/ipu3-css-params.c:1206:1: error: the frame siz=
+e of 1080 bytes is larger than 1024 bytes [-Werror=3Dframe-larger-than=3D]
+> drivers/staging/media/rkvdec/rkvdec-vp9.c:1042:1: error: the frame size o=
+f 1660 bytes is larger than 1024 bytes [-Werror=3Dframe-larger-than=3D]
+> drivers/staging/media/rkvdec/rkvdec-vp9.c:1042:1: error: the frame size o=
+f 2176 bytes is larger than 2048 bytes [-Werror=3Dframe-larger-than=3D]
+> drivers/staging/media/rkvdec/rkvdec-vp9.c:995:1: error: the frame size of=
+ 1656 bytes is larger than 1024 bytes [-Werror=3Dframe-larger-than=3D]
+>
+>       Arnd
 
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index 2b5215cc599f..8054b2f16a4f 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -3,9 +3,13 @@
- #
- # Test for cpuset v2 partition root state (PRS)
- #
--# The sched verbose flag is set, if available, so that the console log
-+# The sched verbose flag can be optionally set so that the console log
- # can be examined for the correct setting of scheduling domain.
- #
-+# Due to RCU freeing of dying cpusets, this test may report effective cpus
-+# reset failure if the system is not able to clean up those cpusets in time.
-+# Repeat the test with the -d option to increase the delay factor may help.
-+#
- 
- skip_test() {
- 	echo "$1"
-@@ -22,27 +26,27 @@ WAIT_INOTIFY=$(cd $(dirname $0); pwd)/wait_inotify
- # Find cgroup v2 mount point
- CGROUP2=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
- [[ -n "$CGROUP2" ]] || skip_test "Cgroup v2 mount point not found!"
-+RESERVE_CPUS=$CGROUP2/cpuset.cpus.reserve
-+CPULIST=$(cat $CGROUP2/cpuset.cpus.effective)
- 
--CPUS=$(lscpu | grep "^CPU(s):" | sed -e "s/.*:[[:space:]]*//")
--[[ $CPUS -lt 8 ]] && skip_test "Test needs at least 8 cpus available!"
-+NR_CPUS=$(lscpu | grep "^CPU(s):" | sed -e "s/.*:[[:space:]]*//")
-+[[ $NR_CPUS -lt 8 ]] && skip_test "Test needs at least 8 cpus available!"
- 
- # Set verbose flag and delay factor
- PROG=$1
--VERBOSE=
-+VERBOSE=0
- DELAY_FACTOR=1
- SCHED_DEBUG=
- while [[ "$1" = -* ]]
- do
- 	case "$1" in
--		-v) VERBOSE=1
-+		-v) ((VERBOSE++))
- 		    # Enable sched/verbose can slow thing down
- 		    [[ $DELAY_FACTOR -eq 1 ]] &&
- 			DELAY_FACTOR=2
--		    break
- 		    ;;
- 		-d) DELAY_FACTOR=$2
- 		    shift
--		    break
- 		    ;;
- 		*)  echo "Usage: $PROG [-v] [-d <delay-factor>"
- 		    exit
-@@ -52,7 +56,7 @@ do
- done
- 
- # Set sched verbose flag if available when "-v" option is specified
--if [[ -n "$VERBOSE" && -d /sys/kernel/debug/sched ]]
-+if [[ $VERBOSE -gt 0 && -d /sys/kernel/debug/sched ]]
- then
- 	# Used to restore the original setting during cleanup
- 	SCHED_DEBUG=$(cat /sys/kernel/debug/sched/verbose)
-@@ -61,15 +65,28 @@ fi
- 
- cd $CGROUP2
- echo +cpuset > cgroup.subtree_control
-+
-+#
-+# If cpuset has been set up and used in child cgroups, we may not be able to
-+# create partition under root cgroup because of the CPU exclusivity rule.
-+# So we are going to skip the test if this is the case.
-+#
- [[ -d test ]] || mkdir test
--cd test
-+echo 0-6 > test/cpuset.cpus
-+echo root > test/cpuset.cpus.partition
-+cat test/cpuset.cpus.partition | grep -q invalid
-+RESULT=$?
-+echo member > test/cpuset.cpus.partition
-+echo "" > test/cpuset.cpus
-+[[ $RESULT -eq 0 ]] && skip_test "Child cgroups are using cpuset!"
- 
- cleanup()
- {
- 	online_cpus
-+	cd $CGROUP2
- 	rmdir A1/A2/A3 A1/A2 A1 B1 > /dev/null 2>&1
--	cd ..
- 	rmdir test > /dev/null 2>&1
-+	echo "" > cpuset.cpus.reserve
- 	[[ -n "$SCHED_DEBUG" ]] &&
- 		echo "$SCHED_DEBUG" > /sys/kernel/debug/sched/verbose
- }
-@@ -103,7 +120,7 @@ test_partition()
- 	[[ $? -eq 0 ]] || exit 1
- 	ACTUAL_VAL=$(cat cpuset.cpus.partition)
- 	[[ $ACTUAL_VAL != $EXPECTED_VAL ]] && {
--		echo "cpuset.cpus.partition: expect $EXPECTED_VAL, found $EXPECTED_VAL"
-+		echo "cpuset.cpus.partition: expect $EXPECTED_VAL, found $ACTUAL_VAL"
- 		echo "Test FAILED"
- 		exit 1
- 	}
-@@ -114,7 +131,7 @@ test_effective_cpus()
- 	EXPECTED_VAL=$1
- 	ACTUAL_VAL=$(cat cpuset.cpus.effective)
- 	[[ "$ACTUAL_VAL" != "$EXPECTED_VAL" ]] && {
--		echo "cpuset.cpus.effective: expect '$EXPECTED_VAL', found '$EXPECTED_VAL'"
-+		echo "cpuset.cpus.effective: expect '$EXPECTED_VAL', found '$ACTUAL_VAL'"
- 		echo "Test FAILED"
- 		exit 1
- 	}
-@@ -139,6 +156,7 @@ test_add_proc()
- #
- test_isolated()
- {
-+	cd $CGROUP2/test
- 	echo 2-3 > cpuset.cpus
- 	TYPE=$(cat cpuset.cpus.partition)
- 	[[ $TYPE = member ]] || echo member > cpuset.cpus.partition
-@@ -203,125 +221,152 @@ test_isolated()
- #
- # Cgroup test hierarchy
- #
--# test -- A1 -- A2 -- A3
--#      \- B1
-+# root -- A1 -- A2 -- A3
-+#      +- B1
- #
--#  P<v> = set cpus.partition (0:member, 1:root, 2:isolated, -1:root invalid)
-+#  P<v> = set cpus.partition (0:member, 1:root, 2:isolated)
- #  C<l> = add cpu-list
- #  S<p> = use prefix in subtree_control
- #  T    = put a task into cgroup
--#  O<c>-<v> = Write <v> to CPU online file of <c>
-+#  O<c>=<v> = Write <v> to CPU online file of <c>
- #
- SETUP_A123_PARTITIONS="C1-3:P1:S+ C2-3:P1:S+ C3:P1"
- TEST_MATRIX=(
--	# test  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate
--	# ----  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------
--	"  S+    C0-1     .      .    C2-3    S+    C4-5     .      .     0 A2:0-1"
--	"  S+    C0-1     .      .    C2-3    P1      .      .      .     0 "
--	"  S+    C0-1     .      .    C2-3   P1:S+ C0-1:P1   .      .     0 "
--	"  S+    C0-1     .      .    C2-3   P1:S+  C1:P1    .      .     0 "
--	"  S+   C0-1:S+   .      .    C2-3     .      .      .     P1     0 "
--	"  S+   C0-1:P1   .      .    C2-3    S+     C1      .      .     0 "
--	"  S+   C0-1:P1   .      .    C2-3    S+    C1:P1    .      .     0 "
--	"  S+   C0-1:P1   .      .    C2-3    S+    C1:P1    .     P1     0 "
--	"  S+   C0-1:P1   .      .    C2-3   C4-5     .      .      .     0 A1:4-5"
--	"  S+   C0-1:P1   .      .    C2-3  S+:C4-5   .      .      .     0 A1:4-5"
--	"  S+    C0-1     .      .   C2-3:P1   .      .      .     C2     0 "
--	"  S+    C0-1     .      .   C2-3:P1   .      .      .    C4-5    0 B1:4-5"
--	"  S+ C0-3:P1:S+ C2-3:P1 .      .      .      .      .      .     0 A1:0-1,A2:2-3"
--	"  S+ C0-3:P1:S+ C2-3:P1 .      .     C1-3    .      .      .     0 A1:1,A2:2-3"
--	"  S+ C2-3:P1:S+  C3:P1  .      .     C3      .      .      .     0 A1:,A2:3 A1:P1,A2:P1"
--	"  S+ C2-3:P1:S+  C3:P1  .      .     C3      P0     .      .     0 A1:3,A2:3 A1:P1,A2:P0"
--	"  S+ C2-3:P1:S+  C2:P1  .      .     C2-4    .      .      .     0 A1:3-4,A2:2"
--	"  S+ C2-3:P1:S+  C3:P1  .      .     C3      .      .     C0-2   0 A1:,B1:0-2 A1:P1,A2:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .     C2-3    .      .      .     0 A1:,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate PCPUS ISOLCPUS
-+	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ ----- --------
-+	"   C0-1     .      .    C2-3    S+    C4-5     .      .     0 A2:0-1"
-+	"   C0-1     .      .    C2-3    P1      .      .      .     0 "
-+	"   C0-1     .      .    C2-3   P1:S+ C0-1:P1   .      .     0 "
-+	"   C0-1     .      .    C2-3   P1:S+  C1:P1    .      .     0 "
-+	"  C0-1:S+   .      .    C2-3     .      .      .     P1     0 "
-+	"  C0-1:P1   .      .    C2-3    S+     C1      .      .     0 "
-+	"  C0-1:P1   .      .    C2-3    S+    C1:P1    .      .     0 "
-+	"  C0-1:P1   .      .    C2-3    S+    C1:P1    .     P1     0 "
-+	"  C0-1:P1   .      .    C2-3   C4-5     .      .      .     0 A1:4-5"
-+	"  C0-1:P1   .      .    C2-3  S+:C4-5   .      .      .     0 A1:4-5"
-+	"   C0-1     .      .   C2-3:P1   .      .      .     C2     0 "
-+	"   C0-1     .      .   C2-3:P1   .      .      .    C4-5    0 B1:4-5"
-+	"C0-3:P1:S+ C2-3:P1 .      .      .      .      .      .     0 A1:0-1,A2:2-3"
-+	"C0-3:P1:S+ C2-3:P1 .      .     C1-3    .      .      .     0 A1:1,A2:2-3"
-+	"C2-3:P1:S+  C3:P1  .      .     C3      .      .      .     0 A1:,A2:3 A1:P1,A2:P1"
-+	"C2-3:P1:S+  C3:P1  .      .     C3      P0     .      .     0 A1:3,A2:3 A1:P1,A2:P0"
-+	"C2-3:P1:S+  C2:P1  .      .     C2-4    .      .      .     0 A1:3-4,A2:2"
-+	"C2-3:P1:S+  C3:P1  .      .     C3      .      .     C0-2   0 A1:,B1:0-2 A1:P1,A2:P1"
-+	"$SETUP_A123_PARTITIONS    .     C2-3    .      .      .     0 A1:,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
- 
- 	# CPU offlining cases:
--	"  S+    C0-1     .      .    C2-3    S+    C4-5     .     O2-0   0 A1:0-1,B1:3"
--	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O2-0    .      .      .     0 A1:0-1,A2:3"
--	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O2-0   O2-1    .      .     0 A1:0-1,A2:2-3"
--	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O1-0    .      .      .     0 A1:0,A2:2-3"
--	"  S+ C0-3:P1:S+ C2-3:P1 .      .     O1-0   O1-1    .      .     0 A1:0-1,A2:2-3"
--	"  S+ C2-3:P1:S+  C3:P1  .      .     O3-0   O3-1    .      .     0 A1:2,A2:3 A1:P1,A2:P1"
--	"  S+ C2-3:P1:S+  C3:P2  .      .     O3-0   O3-1    .      .     0 A1:2,A2:3 A1:P1,A2:P2"
--	"  S+ C2-3:P1:S+  C3:P1  .      .     O2-0   O2-1    .      .     0 A1:2,A2:3 A1:P1,A2:P1"
--	"  S+ C2-3:P1:S+  C3:P2  .      .     O2-0   O2-1    .      .     0 A1:2,A2:3 A1:P1,A2:P2"
--	"  S+ C2-3:P1:S+  C3:P1  .      .     O2-0    .      .      .     0 A1:,A2:3 A1:P1,A2:P1"
--	"  S+ C2-3:P1:S+  C3:P1  .      .     O3-0    .      .      .     0 A1:2,A2: A1:P1,A2:P1"
--	"  S+ C2-3:P1:S+  C3:P1  .      .    T:O2-0   .      .      .     0 A1:3,A2:3 A1:P1,A2:P-1"
--	"  S+ C2-3:P1:S+  C3:P1  .      .      .    T:O3-0   .      .     0 A1:2,A2:2 A1:P1,A2:P-1"
--	"  S+ $SETUP_A123_PARTITIONS    .     O1-0    .      .      .     0 A1:,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .     O2-0    .      .      .     0 A1:1,A2:,A3:3 A1:P1,A2:P1,A3:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .     O3-0    .      .      .     0 A1:1,A2:2,A3: A1:P1,A2:P1,A3:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0   .      .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
--	"  S+ $SETUP_A123_PARTITIONS    .      .    T:O2-0   .      .     0 A1:1,A2:3,A3:3 A1:P1,A2:P1,A3:P-1"
--	"  S+ $SETUP_A123_PARTITIONS    .      .      .    T:O3-0   .     0 A1:1,A2:2,A3:2 A1:P1,A2:P1,A3:P-1"
--	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0  O1-1    .      .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .      .    T:O2-0  O2-1    .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .      .      .    T:O3-0  O3-1   0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0  O2-0   O1-1    .     0 A1:1,A2:,A3:3 A1:P1,A2:P1,A3:P1"
--	"  S+ $SETUP_A123_PARTITIONS    .    T:O1-0  O2-0   O2-1    .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
--
--	# test  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate
--	# ----  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------
-+	"   C0-1     .      .    C2-3    S+    C4-5     .     O2=0   0 A1:0-1,B1:3"
-+	"C0-3:P1:S+ C2-3:P1 .      .     O2=0    .      .      .     0 A1:0-1,A2:3"
-+	"C0-3:P1:S+ C2-3:P1 .      .     O2=0   O2=1    .      .     0 A1:0-1,A2:2-3"
-+	"C0-3:P1:S+ C2-3:P1 .      .     O1=0    .      .      .     0 A1:0,A2:2-3"
-+	"C0-3:P1:S+ C2-3:P1 .      .     O1=0   O1=1    .      .     0 A1:0-1,A2:2-3"
-+	"C2-3:P1:S+  C3:P1  .      .     O3=0   O3=1    .      .     0 A1:2,A2:3 A1:P1,A2:P1"
-+	"C2-3:P1:S+  C3:P2  .      .     O3=0   O3=1    .      .     0 A1:2,A2:3 A1:P1,A2:P2"
-+	"C2-3:P1:S+  C3:P1  .      .     O2=0   O2=1    .      .     0 A1:2,A2:3 A1:P1,A2:P1"
-+	"C2-3:P1:S+  C3:P2  .      .     O2=0   O2=1    .      .     0 A1:2,A2:3 A1:P1,A2:P2"
-+	"C2-3:P1:S+  C3:P1  .      .     O2=0    .      .      .     0 A1:,A2:3 A1:P1,A2:P1"
-+	"C2-3:P1:S+  C3:P1  .      .     O3=0    .      .      .     0 A1:2,A2: A1:P1,A2:P1"
-+	"C2-3:P1:S+  C3:P1  .      .    T:O2=0   .      .      .     0 A1:3,A2:3 A1:P1,A2:P-1"
-+	"C2-3:P1:S+  C3:P1  .      .      .    T:O3=0   .      .     0 A1:2,A2:2 A1:P1,A2:P-1"
-+	"$SETUP_A123_PARTITIONS    .     O1=0    .      .      .     0 A1:,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	"$SETUP_A123_PARTITIONS    .     O2=0    .      .      .     0 A1:1,A2:,A3:3 A1:P1,A2:P1,A3:P1"
-+	"$SETUP_A123_PARTITIONS    .     O3=0    .      .      .     0 A1:1,A2:2,A3: A1:P1,A2:P1,A3:P1"
-+	"$SETUP_A123_PARTITIONS    .    T:O1=0   .      .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
-+	"$SETUP_A123_PARTITIONS    .      .    T:O2=0   .      .     0 A1:1,A2:3,A3:3 A1:P1,A2:P1,A3:P-1"
-+	"$SETUP_A123_PARTITIONS    .      .      .    T:O3=0   .     0 A1:1,A2:2,A3:2 A1:P1,A2:P1,A3:P-1"
-+	"$SETUP_A123_PARTITIONS    .    T:O1=0  O1=1    .      .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	"$SETUP_A123_PARTITIONS    .      .    T:O2=0  O2=1    .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	"$SETUP_A123_PARTITIONS    .      .      .    T:O3=0  O3=1   0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	"$SETUP_A123_PARTITIONS    .    T:O1=0  O2=0   O1=1    .     0 A1:1,A2:,A3:3 A1:P1,A2:P1,A3:P1"
-+	"$SETUP_A123_PARTITIONS    .    T:O1=0  O2=0   O2=1    .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
-+
-+	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate PCPUS ISOLCPUS
-+	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ ----- --------
-+	#
-+	# Remote partition and cpuset.cpus.reserve tests
-+	#
-+	" C0-3:S+ C1-3:S+ C2-3     .    R2-3     .      .      .     0 A1:0-1,A2:1,A3:1 . . 2-3"
-+	" C0-3:S+ C1-3:S+ C2-3     .    R2-3     P2     .      .     0 A1:0-1,A2:1,A3:1 A1:P0,A2:P-2 . 2-3"
-+	" C0-3:S+ C1-3:S+ C2-3     .    R2-3     .      P2     .     0 A1:0-1,A2:1,A3:2-3 A1:P0,A3:P2 . 2-3"
-+	" C0-3:S+ C1-3:S+ C2-3     .    R2-3     .    P2:C3    .     0 A1:0-1,A2:1,A3:3 A1:P0,A3:P2 . 2-3"
-+	" C0-3:S+ C1-3:S+ C2-3   C2-3   R2-3     .      .      P2    0 A1:0-1,A2:1,A3:1 A1:P0,A3:P0,B1:P-2 . 2-3"
-+	" C0-3:S+ C1-3:S+ C2-3   C4-5   R4-5     .      .      P2    0 B1:4-5 B1:P2 . 4-5"
-+	" C0-3:S+ C1-3:S+ C2-3    C4    R2-4     .      P2     P2    0 A3:2-3,B1:4 A3:P2,B1:P2 . 2-4"
-+	" C0-3:S+ C1-3:S+ C2-3    C4    R2-4     .    P2:C1-3  P2    0 A3:1,B1:4 A3:P-2,B1:P2 . 2-4"
-+	" C0-3:S+ C1-3:S+ C2-3    C4    R2-3     .      P2     P2    0 A3:2-3,B1:4 A3:P2,B1:P2 . 2-4"
-+	" C0-3:S+ C1-3:S+ C2-3    C4    R1-3     P2     P2     .     0 A2:1-3,A3:2-3 A2:P2,A3:P-2 . 1-3"
-+	" C0-3:S+ C1-3:S+ C2-3    C4    R2-3     .      P2   P2:C4-5 0 A3:2-3,B1:4-5 A3:P2,B1:P2 . 2-5"
-+	" C0-3:S+ C1-3:S+ C2-3    C4    R2-4     .      P2   P2:R-4  0 A3:2-3 A3:P2,B1:P-2 . 2-3"
-+	" C0-3:S+ C1-3:S+ C2-3    C4    R2-4     .    P2:R-2   P2    0 A3:2,B1:4 A3:P-2,B1:P2 . 3-4"
-+
-+	# Remote partition offline test
-+	" C0-3:S+ C1-3:S+ C2-3     .    R2-3     .    P2:O2=0  .     0 A1:0-1,A2:1,A3:3 A1:P0,A3:P2 . 2-3"
-+	" C0-3:S+ C1-3:S+ C2-3     .    R2-3     .    P2:O2=0 O2=1   0 A1:0-1,A2:1,A3:2-3 A1:P0,A3:P2 . 2-3"
-+	" C0-3:S+ C1-3:S+  C2      .    R2-3     .    P2:O2=0  .     0 A1:0-1,A2:1,A3:1 A1:P0,A3:P-2 . 2-3"
-+
-+	# An invalidated remote partition cannot self-recover from hotplug
-+	" C0-3:S+ C1-3:S+  C2      .    R2-3     .    P2:O2=0 O2=1   0 A1:0-1,A2:1,A3:1 A1:P0,A3:P-2 . 2-3"
-+
-+	# base  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate PCPUS ISOLCPUS
-+	# ----  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ ----- --------
- 	#
- 	# Incorrect change to cpuset.cpus invalidates partition root
- 	#
- 	# Adding CPUs to partition root that are not in parent's
- 	# cpuset.cpus is allowed, but those extra CPUs are ignored.
--	"  S+ C2-3:P1:S+ C3:P1   .      .      .     C2-4    .      .     0 A1:,A2:2-3 A1:P1,A2:P1"
-+	"C2-3:P1:S+ C3:P1   .      .      .     C2-4    .      .     0 A1:,A2:2-3 A1:P1,A2:P1"
- 
- 	# Taking away all CPUs from parent or itself if there are tasks
- 	# will make the partition invalid.
--	"  S+ C2-3:P1:S+  C3:P1  .      .      T     C2-3    .      .     0 A1:2-3,A2:2-3 A1:P1,A2:P-1"
--	"  S+  C3:P1:S+    C3    .      .      T      P1     .      .     0 A1:3,A2:3 A1:P1,A2:P-1"
--	"  S+ $SETUP_A123_PARTITIONS    .    T:C2-3   .      .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
--	"  S+ $SETUP_A123_PARTITIONS    . T:C2-3:C1-3 .      .      .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
-+	"C2-3:P1:S+  C3:P1  .      .      T     C2-3    .      .     0 A1:2-3,A2:2-3 A1:P1,A2:P-1"
-+	" C3:P1:S+    C3    .      .      T      P1     .      .     0 A1:3,A2:3 A1:P1,A2:P-1"
-+	"$SETUP_A123_PARTITIONS    .    T:C2-3   .      .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P-1,A3:P-1"
-+	"$SETUP_A123_PARTITIONS    . T:C2-3:C1-3 .      .      .     0 A1:1,A2:2,A3:3 A1:P1,A2:P1,A3:P1"
- 
- 	# Changing a partition root to member makes child partitions invalid
--	"  S+ C2-3:P1:S+  C3:P1  .      .      P0     .      .      .     0 A1:2-3,A2:3 A1:P0,A2:P-1"
--	"  S+ $SETUP_A123_PARTITIONS    .     C2-3    P0     .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P0,A3:P-1"
-+	"C2-3:P1:S+  C3:P1  .      .      P0     .      .      .     0 A1:2-3,A2:3 A1:P0,A2:P-1"
-+	"$SETUP_A123_PARTITIONS    .     C2-3    P0     .      .     0 A1:2-3,A2:2-3,A3:3 A1:P1,A2:P0,A3:P-1"
- 
- 	# cpuset.cpus can contains cpus not in parent's cpuset.cpus as long
- 	# as they overlap.
--	"  S+ C2-3:P1:S+  .      .      .      .   C3-4:P1   .      .     0 A1:2,A2:3 A1:P1,A2:P1"
-+	"C2-3:P1:S+  .      .      .      .   C3-4:P1   .      .     0 A1:2,A2:3 A1:P1,A2:P1"
- 
- 	# Deletion of CPUs distributed to child cgroup is allowed.
--	"  S+ C0-1:P1:S+ C1      .    C2-3   C4-5     .      .      .     0 A1:4-5,A2:4-5"
-+	"C0-1:P1:S+ C1      .    C2-3   C4-5     .      .      .     0 A1:4-5,A2:4-5"
- 
- 	# To become a valid partition root, cpuset.cpus must overlap parent's
- 	# cpuset.cpus.
--	"  S+   C0-1:P1   .      .    C2-3    S+   C4-5:P1   .      .     0 A1:0-1,A2:0-1 A1:P1,A2:P-1"
-+	"  C0-1:P1   .      .    C2-3    S+   C4-5:P1   .      .     0 A1:0-1,A2:0-1 A1:P1,A2:P-1"
- 
- 	# Enabling partition with child cpusets is allowed
--	"  S+   C0-1:S+  C1      .    C2-3    P1      .      .      .     0 A1:0-1,A2:1 A1:P1"
-+	"  C0-1:S+  C1      .    C2-3    P1      .      .      .     0 A1:0-1,A2:1 A1:P1"
- 
- 	# A partition root with non-partition root parent is invalid, but it
- 	# can be made valid if its parent becomes a partition root too.
--	"  S+   C0-1:S+  C1      .    C2-3     .      P2     .      .     0 A1:0-1,A2:1 A1:P0,A2:P-2"
--	"  S+   C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0,A2:1 A1:P1,A2:P2"
-+	"  C0-1:S+  C1      .    C2-3     .      P2     .      .     0 A1:0-1,A2:1 A1:P0,A2:P-2"
-+	"  C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0,A2:1 A1:P1,A2:P2"
- 
- 	# A non-exclusive cpuset.cpus change will invalidate partition and its siblings
--	"  S+   C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2,B1:2-3 A1:P-1,B1:P0"
--	"  S+   C0-1:P1   .      .  P1:C2-3  C0-2   .      .      .     0 A1:0-2,B1:2-3 A1:P-1,B1:P-1"
--	"  S+    C0-1     .      .  P1:C2-3  C0-2   .      .      .     0 A1:0-2,B1:2-3 A1:P0,B1:P-1"
-+	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2,B1:2-3 A1:P-1,B1:P0"
-+	"  C0-1:P1   .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2,B1:2-3 A1:P-1,B1:P-1"
-+	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2,B1:2-3 A1:P0,B1:P-1"
- 
--	# test  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate
--	# ----  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------
-+	# base  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate PCPUS ISOLCPUS
-+	# ----  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ ----- --------
- 	# Failure cases:
- 
- 	# A task cannot be added to a partition with no cpu
--	"  S+ C2-3:P1:S+  C3:P1  .      .    O2-0:T   .      .      .     1 A1:,A2:3 A1:P1,A2:P1"
-+	"C2-3:P1:S+  C3:P1  .      .    O2=0:T   .      .      .     1 A1:,A2:3 A1:P1,A2:P1"
- )
- 
- #
- # Write to the cpu online file
--#  $1 - <c>-<v> where <c> = cpu number, <v> value to be written
-+#  $1 - <c>=<v> where <c> = cpu number, <v> value to be written
- #
- write_cpu_online()
- {
--	CPU=${1%-*}
--	VAL=${1#*-}
-+	CPU=${1%=*}
-+	VAL=${1#*=}
- 	CPUFILE=//sys/devices/system/cpu/cpu${CPU}/online
- 	if [[ $VAL -eq 0 ]]
- 	then
-@@ -349,11 +394,12 @@ set_ctrl_state()
- 	TMPMSG=/tmp/.msg_$$
- 	CGRP=$1
- 	STATE=$2
--	SHOWERR=${3}${VERBOSE}
-+	SHOWERR=${3}
- 	CTRL=${CTRL:=$CONTROLLER}
- 	HASERR=0
- 	REDIRECT="2> $TMPMSG"
- 	[[ -z "$STATE" || "$STATE" = '.' ]] && return 0
-+	[[ $VERBOSE -gt 0 ]] && SHOWERR=1
- 
- 	rm -f $TMPMSG
- 	for CMD in $(echo $STATE | sed -e "s/:/ /g")
-@@ -368,6 +414,11 @@ set_ctrl_state()
- 			PREFIX=${CMD#?}
- 			COMM="echo ${PREFIX}${CTRL} > $SFILE"
- 			eval $COMM $REDIRECT
-+		elif [[ $S = R ]]
-+		then
-+			CPUS=${CMD#?}
-+			COMM="echo $CPUS > $RESERVE_CPUS"
-+			eval $COMM $REDIRECT
- 		elif [[ $S = C ]]
- 		then
- 			CPUS=${CMD#?}
-@@ -430,7 +481,7 @@ online_cpus()
- 	[[ -n "OFFLINE_CPUS" ]] && {
- 		for C in $OFFLINE_CPUS
- 		do
--			write_cpu_online ${C}-1
-+			write_cpu_online ${C}=1
- 		done
- 	}
- }
-@@ -443,18 +494,25 @@ reset_cgroup_states()
- 	echo 0 > $CGROUP2/cgroup.procs
- 	online_cpus
- 	rmdir A1/A2/A3 A1/A2 A1 B1 > /dev/null 2>&1
--	set_ctrl_state . S-
-+	pause 0.02
-+	set_ctrl_state . R-
- 	pause 0.01
- }
- 
- dump_states()
- {
--	for DIR in A1 A1/A2 A1/A2/A3 B1
-+	for DIR in . A1 A1/A2 A1/A2/A3 B1
- 	do
- 		ECPUS=$DIR/cpuset.cpus.effective
-+		RCPUS=$DIR/cpuset.cpus.reserve
-+		CPUS=$DIR/cpuset.cpus
- 		PRS=$DIR/cpuset.cpus.partition
-+		PCPUS=$DIR/.__DEBUG__.cpuset.cpus.subpartitions
-+		[[ -e $CPUS  ]] && echo "$CPUS: $(cat $CPUS)"
-+		[[ -e $RCPUS ]] && echo "$RCPUS: $(cat $RCPUS)"
- 		[[ -e $ECPUS ]] && echo "$ECPUS: $(cat $ECPUS)"
- 		[[ -e $PRS   ]] && echo "$PRS: $(cat $PRS)"
-+		[[ -e $PCPUS ]] && echo "$PCPUS: $(cat $PCPUS)"
- 	done
- }
- 
-@@ -478,6 +536,26 @@ check_effective_cpus()
- 	done
- }
- 
-+#
-+# Check subparts cpus
-+# $1 - check string, format: <cgroup>:<cpu-list>[,<cgroup>:<cpu-list>]*
-+#
-+check_subparts_cpus()
-+{
-+	CHK_STR=$1
-+	for CHK in $(echo $CHK_STR | sed -e "s/,/ /g")
-+	do
-+		set -- $(echo $CHK | sed -e "s/:/ /g")
-+		CGRP=$1
-+		CPUS=$2
-+		[[ $CGRP = A2 ]] && CGRP=A1/A2
-+		[[ $CGRP = A3 ]] && CGRP=A1/A2/A3
-+		FILE=$CGRP/.__DEBUG__.cpuset.cpus.subpartitions
-+		[[ -e $FILE ]] || return 0	# Skip test
-+		[[ $CPUS = $(cat $FILE) ]] || return 1
-+	done
-+}
-+
- #
- # Check cgroup states
- #  $1 - check string, format: <cgroup>:<state>[,<cgroup>:<state>]*
-@@ -524,6 +602,67 @@ check_cgroup_states()
- 	return 0
- }
- 
-+#
-+# Get isolated (including offline) CPUs by looking at
-+# /sys/kernel/debug/sched/domains and compare that with the expected value.
-+#
-+# $1 - expected isolated cpu list
-+#
-+check_isolcpus()
-+{
-+	EXPECT_VAL=$1
-+	ISOLCPUS=
-+	LASTISOLCPU=
-+	SCHED_DOMAINS=/sys/kernel/debug/sched/domains
-+	[[ -d $SCHED_DOMAINS ]] || {
-+		# Check reserve cpus instead
-+		ISOLCPUS=$(cat $RESERVE_CPUS)
-+		[[ $EXPECT_VAL = $ISOLCPUS ]]
-+		return $?
-+	}
-+
-+	for ((CPU=0; CPU < $NR_CPUS; CPU++))
-+	do
-+		[[ -n "$(ls ${SCHED_DOMAINS}/cpu$CPU)" ]] && continue
-+
-+		if [[ -z "$LASTISOLCPU" ]]
-+		then
-+			ISOLCPUS=$CPU
-+			LASTISOLCPU=$CPU
-+		elif [[ "$LASTISOLCPU" -eq $((CPU - 1)) ]]
-+		then
-+			echo $ISOLCPUS | grep -q "\<$LASTISOLCPU\$"
-+			if [[ $? -eq 0 ]]
-+			then
-+				ISOLCPUS=${ISOLCPUS}-
-+			fi
-+			LASTISOLCPU=$CPU
-+		else
-+			if [[ $ISOLCPUS = *- ]]
-+			then
-+				ISOLCPUS=${ISOLCPUS}$LASTISOLCPU
-+			fi
-+			ISOLCPUS=${ISOLCPUS},$CPU
-+			LASTISOLCPU=$CPU
-+		fi
-+	done
-+	[[ "$ISOLCPUS" = *- ]] && ISOLCPUS=${ISOLCPUS}$LASTISOLCPU
-+	[[ $EXPECT_VAL = $ISOLCPUS ]]
-+}
-+
-+test_fail()
-+{
-+	TESTNUM=$1
-+	TESTTYPE=$2
-+	ADDINFO=$3
-+	echo "Test $TEST[$TESTNUM] failed $TESTTYPE check!"
-+	[[ -n "$ADDINFO" ]] && echo "*** $ADDINFO ***"
-+	eval echo \"\${$TEST[$I]}\"
-+	echo
-+	dump_states
-+	exit 1
-+}
-+
- #
- # Run cpuset state transition test
- #  $1 - test matrix name
-@@ -536,88 +675,81 @@ run_state_test()
- {
- 	TEST=$1
- 	CONTROLLER=cpuset
--	CPULIST=0-6
- 	I=0
- 	eval CNT="\${#$TEST[@]}"
- 
- 	reset_cgroup_states
--	echo $CPULIST > cpuset.cpus
--	echo root > cpuset.cpus.partition
- 	console_msg "Running state transition test ..."
- 
- 	while [[ $I -lt $CNT ]]
- 	do
- 		echo "Running test $I ..." > /dev/console
-+		[[ $VERBOSE -gt 1 ]] && {
-+			echo ""
-+			eval echo \"\${$TEST[$I]}\"
-+		}
- 		eval set -- "\${$TEST[$I]}"
--		ROOT=$1
--		OLD_A1=$2
--		OLD_A2=$3
--		OLD_A3=$4
--		OLD_B1=$5
--		NEW_A1=$6
--		NEW_A2=$7
--		NEW_A3=$8
--		NEW_B1=$9
--		RESULT=${10}
--		ECPUS=${11}
--		STATES=${12}
--
--		set_ctrl_state_noerr .        $ROOT
-+		OLD_A1=$1
-+		OLD_A2=$2
-+		OLD_A3=$3
-+		OLD_B1=$4
-+		NEW_A1=$5
-+		NEW_A2=$6
-+		NEW_A3=$7
-+		NEW_B1=$8
-+		RESULT=$9
-+		ECPUS=${10}
-+		STATES=${11}
-+		PCPUS=${12}
-+		ICPUS=${13}
-+
-+		set_ctrl_state_noerr B1       $OLD_B1
- 		set_ctrl_state_noerr A1       $OLD_A1
- 		set_ctrl_state_noerr A1/A2    $OLD_A2
- 		set_ctrl_state_noerr A1/A2/A3 $OLD_A3
--		set_ctrl_state_noerr B1       $OLD_B1
- 		RETVAL=0
- 		set_ctrl_state A1       $NEW_A1; ((RETVAL += $?))
- 		set_ctrl_state A1/A2    $NEW_A2; ((RETVAL += $?))
- 		set_ctrl_state A1/A2/A3 $NEW_A3; ((RETVAL += $?))
- 		set_ctrl_state B1       $NEW_B1; ((RETVAL += $?))
- 
--		[[ $RETVAL -ne $RESULT ]] && {
--			echo "Test $TEST[$I] failed result check!"
--			eval echo \"\${$TEST[$I]}\"
--			dump_states
--			exit 1
--		}
-+		[[ $RETVAL -ne $RESULT ]] && test_fail $I result
- 
- 		[[ -n "$ECPUS" && "$ECPUS" != . ]] && {
- 			check_effective_cpus $ECPUS
--			[[ $? -ne 0 ]] && {
--				echo "Test $TEST[$I] failed effective CPU check!"
--				eval echo \"\${$TEST[$I]}\"
--				echo
--				dump_states
--				exit 1
--			}
-+			[[ $? -ne 0 ]] && test_fail $I "effective CPU"
- 		}
- 
--		[[ -n "$STATES" ]] && {
-+		[[ -n "$STATES" && "$STATES" != . ]] && {
- 			check_cgroup_states $STATES
--			[[ $? -ne 0 ]] && {
--				echo "FAILED: Test $TEST[$I] failed states check!"
--				eval echo \"\${$TEST[$I]}\"
--				echo
--				dump_states
--				exit 1
--			}
-+			[[ $? -ne 0 ]] && test_fail $I states
-+		}
-+
-+		[[ -n "$PCPUS" && "$PCPUS" != . ]] && {
-+			check_subparts_cpus $PCPUS
-+			[[ $? -ne 0 ]] && test_fail $I "subpartitions CPU"
- 		}
- 
-+		# Compare the expected isolated CPUs with the actual ones,
-+		# if available
-+		[[ -n "$ICPUS" ]] && {
-+			check_isolcpus $ICPUS
-+			[[ $? -ne 0 ]] && test_fail $I "isolated CPU" \
-+				"Expect $ICPUS, get $ISOLCPUS instead"
-+		}
- 		reset_cgroup_states
- 		#
- 		# Check to see if effective cpu list changes
- 		#
--		pause 0.05
- 		NEWLIST=$(cat cpuset.cpus.effective)
- 		[[ $NEWLIST != $CPULIST ]] && {
- 			echo "Effective cpus changed to $NEWLIST after test $I!"
- 			exit 1
- 		}
--		[[ -n "$VERBOSE" ]] && echo "Test $I done."
-+		[[ $VERBOSE -gt 0 ]] && echo "Test $I done."
- 		((I++))
- 	done
- 	echo "All $I tests of $TEST PASSED."
--
--	echo member > cpuset.cpus.partition
- }
- 
- #
-@@ -642,6 +774,7 @@ test_inotify()
- {
- 	ERR=0
- 	PRS=/tmp/.prs_$$
-+	cd $CGROUP2/test
- 	[[ -f $WAIT_INOTIFY ]] || {
- 		echo "wait_inotify not found, inotify test SKIPPED."
- 		return
-@@ -655,7 +788,7 @@ test_inotify()
- 	rm -f $PRS
- 	wait_inotify $PWD/cpuset.cpus.partition $PRS &
- 	pause 0.01
--	set_ctrl_state . "O1-0"
-+	set_ctrl_state . "O1=0"
- 	pause 0.01
- 	check_cgroup_states ".:P-1"
- 	if [[ $? -ne 0 ]]
-@@ -689,5 +822,3 @@ run_state_test TEST_MATRIX
- test_isolated
- test_inotify
- echo "All tests PASSED."
--cd ..
--rmdir test
--- 
-2.31.1
 
+
+--=20
+Thanks,
+~Nick Desaulniers
