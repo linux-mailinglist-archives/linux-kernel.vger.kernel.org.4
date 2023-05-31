@@ -2,174 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F586717798
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8799A71779A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231963AbjEaHO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58184 "EHLO
+        id S234533AbjEaHPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231922AbjEaHOX (ORCPT
+        with ESMTP id S229835AbjEaHPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:14:23 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB86AEE
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:14:21 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-974265a1a40so133519066b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:14:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685517260; x=1688109260;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=he+S+tKhJeczrt//An5I955xU1SlUZf1wS7TasfMwBs=;
-        b=YdLeUgcGdnHHmTltj4+rt4eQvOOQRHAuskx3Baeo+K9kUwrVTcNq9dUYlnbcrvidg/
-         uWnxGPGw8tAstMDZec8IbDmAFufgHMc4viEYk3n5/uFSwjPU03FWyxgC1ofepIolhVd7
-         0dw+NSkiPgMSl7g+h5VDSRBiGm9nT849CufqJCOD6XYJhsysrogNqA6mgjdccnrZ2wOO
-         ckyJcuzwz8OKBWPfW2uM457P2JnaQsqo5i99mA+J6tDcvW6793psVbZiaYtjHJIxZOoN
-         UF9x5d2Bu1/3s4lJG39a8CzwWSkvR6GHfLFQecn1AbiETPbAy++loMD26Mo3qlJ5jeMn
-         JPqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685517260; x=1688109260;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=he+S+tKhJeczrt//An5I955xU1SlUZf1wS7TasfMwBs=;
-        b=mChtV4u3idBGtJ0MgMtq9dkcltbkqFfAZ7nMsUV1laKuUZ5nCJTT83k8e1B6PT2P3k
-         mzA9ocgtJN66TByPH8ruII+FgbN/z2ziuiXEeU8LznclhkcjyCPiQvmt+3OMEzEXLK6j
-         Zwf96PWwbsuQvbDdYl1aSpF8mkXfLfJ98RjdvKRDLLYwLMgYU5cQEda3A77tTy9ouXr6
-         AJOS/zL424xvIhBjaOnjVuJ7u2iXIoFy4TOC+6XwlZ/vE6iVK3n5RKNxPfUAMukXoWrk
-         OwuJ5mb4CybnLCAZeu4XV1wWPagQJKT3/dxZp+M20CR88N99T2vXvvvZDXHVML3TBtvH
-         VsZQ==
-X-Gm-Message-State: AC+VfDyHhbQuIdCqDXM12Nt/IRYxkrzVSSy3TCdjBNEm0P0JyEXbXetN
-        b2PK+l8r62YGvevInaBIMfB4o6tZoSnw7HTFc4e5kg==
-X-Google-Smtp-Source: ACHHUZ6MfUHxABvlX2Nt5wt1hTFu/V5ZBA/LWOr8iq4JaIzDK15YsEkF3nDdVctHxf3efDAu9whw9w==
-X-Received: by 2002:a17:907:9721:b0:94f:2916:7d7 with SMTP id jg33-20020a170907972100b0094f291607d7mr4348816ejc.19.1685517260433;
-        Wed, 31 May 2023 00:14:20 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id c7-20020a17090603c700b0096a68648329sm8425064eja.214.2023.05.31.00.14.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 00:14:19 -0700 (PDT)
-Message-ID: <5d65b644-9b79-d232-d0d0-d2772325eef5@linaro.org>
-Date:   Wed, 31 May 2023 09:14:18 +0200
+        Wed, 31 May 2023 03:15:01 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8958F;
+        Wed, 31 May 2023 00:14:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685517299; x=1717053299;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XvCORxSW8vtcSerVh+/DSoGsZ0h8y9TW8xJKrkDjgNs=;
+  b=krU3sfLBmjiRDd5+8cdNb8sTOzN8msusKX6xaw8DW8Qbr+cAgtf5dGCw
+   jmzrx+D8h+6Fs2yeNT19VHl9jjNSOhOApiZWPTAcUDE9z9StH5+1GnSsz
+   rvq5bx2jb3LVVw/60Do5V5JFq3Y+DiNND9ai6+CofbKLDnI3x7lnt49lA
+   Hwn05Y0KS2O+uMegOMUspdAYhC32agTsyHCifAXna8cIulwl9EN2xzSPn
+   UgYsi/IHjlVywms4ULLF3eNVFpiESYFywELMm5WbHDYXKPZ87eOYtSRE7
+   ELkyExTynbqQ+YYjpwjDNplbAODnIafaDpse1VS6JwTNyEXCuc+7DlPav
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="355168575"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="355168575"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 00:14:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="776659050"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="776659050"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.208.175])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 00:14:46 -0700
+Message-ID: <c5601bbe-2ec9-1cd4-1e0f-1eca183e1b39@intel.com>
+Date:   Wed, 31 May 2023 10:14:42 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 5/5] dt-bindings: iio: ad7192: Allow selection of clock
- modes
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH V2 3/3] mmc: sdhci-pci-gli: Add support SD Express card
+ for GL9767
 Content-Language: en-US
-To:     Fabrizio Lamarque <fl.scratchpad@gmail.com>,
-        Conor Dooley <conor@kernel.org>
-Cc:     jic23@kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230530075311.400686-1-fl.scratchpad@gmail.com>
- <20230530075311.400686-6-fl.scratchpad@gmail.com>
- <20230530-cannabis-headstone-883c5b891dd3@spud>
- <CAPJMGm4=sRQGPmVi8NjAVvOVrr8s2By6PO8kKRKZt3W0FR9j-Q@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAPJMGm4=sRQGPmVi8NjAVvOVrr8s2By6PO8kKRKZt3W0FR9j-Q@mail.gmail.com>
+To:     Victor Shih <victorshihgli@gmail.com>, ulf.hansson@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benchuanggli@gmail.com, HL.Liu@genesyslogic.com.tw,
+        Greg.tu@genesyslogic.com.tw,
+        Ben Chuang <ben.chuang@genesyslogic.com.tw>,
+        Victor Shih <victor.shih@genesyslogic.com.tw>
+References: <20230530095308.8165-1-victorshihgli@gmail.com>
+ <20230530095308.8165-4-victorshihgli@gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230530095308.8165-4-victorshihgli@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 08:59, Fabrizio Lamarque wrote:
-> On Tue, May 30, 2023 at 7:22 PM Conor Dooley <conor@kernel.org> wrote:
->>
->> On Tue, May 30, 2023 at 09:53:11AM +0200, fl.scratchpad@gmail.com wrote:
->>> From: Fabrizio Lamarque <fl.scratchpad@gmail.com>
->>>
->>> AD7192 supports external clock sources, generated by a digital clock
->>> source or a crystal oscillator, or internally generated clock option
->>> without external components.
->>>
->>> Describe choice between internal and external clock, crystal or external
->>> oscillator, and internal clock output enable.
->>>
->>> Signed-off-by: Fabrizio Lamarque <fl.scratchpad@gmail.com>
->>> ---
->>>  .../bindings/iio/adc/adi,ad7192.yaml          | 27 ++++++++++++++++---
->>>  1 file changed, 24 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
->>> index 16def2985ab4..f7ecfd65ad80 100644
->>> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
->>> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7192.yaml
->>> @@ -32,7 +32,8 @@ properties:
->>>
->>>    clocks:
->>>      maxItems: 1
->>> -    description: phandle to the master clock (mclk)
->>> +    description: |
->>> +      Master clock (mclk). If not set, internal clock is used.
->>>
->>>    clock-names:
->>>      items:
->>> @@ -50,6 +51,17 @@ properties:
->>>    vref-supply:
->>>      description: VRef voltage supply
->>>
->>> +  adi,clock-xtal:
->>> +    description: |
->>> +      Select whether an external crystal oscillator or an external
->>> +      clock is applied as master (mclk) clock.
->>> +    type: boolean
->>
->> Am I being daft, or are these the same thing? If they are not, and use
->> different input pins, I think it should be explained as it not clear.
->> Could you explain why we actually care that the source is a xtal versus
->> it being mclk, and why just having master clock is not sufficient?
+On 30/05/23 12:53, Victor Shih wrote:
+> From: Victor Shih <victor.shih@genesyslogic.com.tw>
 > 
-> I may revise the description as follows. Feel free to add your suggestions
-> in case it is still not clear enough.
+> Add support SD Express card for GL9767. The workflow of the
+> SD Express card in GL9767 is as below.
+> 1. GL9767 operates in SD mode and set MMC_CAP2_SD_EXP flag.
+> 2. If card is inserted, Host send CMD8 to ask the capabilities
+>    of the card.
+> 3. If the card has PCIe capability, then init_sd_express()
+>    will be invoked.
+> 4. If the card has been put in write protect state then the
+>    SD features supported by SD mode but not supported by
+>    PCIe mode, therefore GL9767 switch to SD mode.
+> 5. If the card has not been put in write protect state then
+>    GL9767 switch from SD mode to PCIe/NVMe mode and mmc driver
+>    handover control to NVMe driver.
+> 6. If card is removed, GL9767 will return to SD mode.
 > 
-> "Select whether an external crystal oscillator between MCLK1 and MCLK2 or
-> an external CMOS-compatible clock on MCLK2 is used as master clock".
-> 
-> This is used to properly set CLK0 and CLK1 bits in the MODE register.
-> I guess most applications would use an external crystal or internal clock.
-> The external digital clock would allow synchronization of multiple ADCs,
+> Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
 
-Description confuses me. Why would it matter what type of clock you have
-as input - external crystal oscillator or external CMOS-compatible
-clock? Later you refer to "internal", so maybe you meant here also
-internal for one of the options?
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
+> ---
+>  drivers/mmc/host/sdhci-pci-gli.c | 105 +++++++++++++++++++++++++++++++
+>  1 file changed, 105 insertions(+)
 > 
->>
->>> +  adi,int-clock-output-enable:
->>> +    description: |
->>> +      When internal clock is selected, this bit enables clock out pin.
->>> +    type: boolean
->>
->> And this one makes you a clock provider, so the devices advocate
->> position would be that you know that this bit should be set if
->> "clocks" is not present and a consumer requests a clock.
->> I don't seem to have got the driver patches (at least not in this
->> mailbox), so I have got no information on how you've actually implemented
->> this.
-> 
-> I see... When this bit is set, the AD7192 node should also be a clock provider.
-> The clock is output on MCLK2 pin, hence it can be used with internally
-> generated clock only.
-> I tend to dislike the idea of a "conditional clock provider". Also, I'd guess
-
-Either this is a clock provider via common clock framework or is not.
-Don't re-implement clock provider via other properties but just skip
-such feature.
-
-Best regards,
-Krzysztof
+> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+> index 178253a7e86f..c7fa92fdadcd 100644
+> --- a/drivers/mmc/host/sdhci-pci-gli.c
+> +++ b/drivers/mmc/host/sdhci-pci-gli.c
+> @@ -164,6 +164,10 @@
+>  #define PCIE_GLI_9767_CFG		0x8A0
+>  #define   PCIE_GLI_9767_CFG_LOW_PWR_OFF	  BIT(12)
+>  
+> +#define PCIE_GLI_9767_COMBO_MUX_CTL			0x8C8
+> +#define   PCIE_GLI_9767_COMBO_MUX_CTL_RST_EN		  BIT(6)
+> +#define   PCIE_GLI_9767_COMBO_MUX_CTL_WAIT_PERST_EN	  BIT(10)
+> +
+>  #define PCIE_GLI_9767_PWR_MACRO_CTL					0x8D0
+>  #define   PCIE_GLI_9767_PWR_MACRO_CTL_LOW_VOLTAGE			  GENMASK(3, 0)
+>  #define   PCIE_GLI_9767_PWR_MACRO_CTL_LD0_LOW_OUTPUT_VOLTAGE		  GENMASK(15, 12)
+> @@ -181,6 +185,26 @@
+>  #define   PCIE_GLI_9767_SCR_CORE_PWR_D3_OFF		  BIT(21)
+>  #define   PCIE_GLI_9767_SCR_CFG_RST_DATA_LINK_DOWN	  BIT(30)
+>  
+> +#define PCIE_GLI_9767_SDHC_CAP			0x91C
+> +#define   PCIE_GLI_9767_SDHC_CAP_SDEI_RESULT	  BIT(5)
+> +
+> +#define PCIE_GLI_9767_SD_EXPRESS_CTL			0x940
+> +#define   PCIE_GLI_9767_SD_EXPRESS_CTL_SDEI_EXE		  BIT(0)
+> +#define   PCIE_GLI_9767_SD_EXPRESS_CTL_SD_EXPRESS_MODE	  BIT(1)
+> +
+> +#define PCIE_GLI_9767_SD_DATA_MULTI_CTL				0x944
+> +#define   PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TIME	  GENMASK(23, 16)
+> +#define   PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TIME_VALUE	  0x64
+> +
+> +#define PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2			0x950
+> +#define   PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2_SDEI_COMPLETE	  BIT(0)
+> +
+> +#define PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_EN_REG2				0x954
+> +#define   PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_EN_REG2_SDEI_COMPLETE_STATUS_EN	  BIT(0)
+> +
+> +#define PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_EN_REG2				0x958
+> +#define   PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_EN_REG2_SDEI_COMPLETE_SIGNAL_EN	  BIT(0)
+> +
+>  #define PCIE_GLI_9767_SD_PLL_CTL			0x938
+>  #define   PCIE_GLI_9767_SD_PLL_CTL_PLL_LDIV		  GENMASK(9, 0)
+>  #define   PCIE_GLI_9767_SD_PLL_CTL_PLL_PDIV		  GENMASK(15, 12)
+> @@ -935,6 +959,85 @@ static void sdhci_gl9767_reset(struct sdhci_host *host, u8 mask)
+>  	gli_set_9767(host);
+>  }
+>  
+> +static int gl9767_init_sd_express(struct mmc_host *mmc, struct mmc_ios *ios)
+> +{
+> +	struct sdhci_host *host = mmc_priv(mmc);
+> +	struct sdhci_pci_slot *slot = sdhci_priv(host);
+> +	struct pci_dev *pdev;
+> +	u32 value;
+> +	int i;
+> +
+> +	pdev = slot->chip->pdev;
+> +
+> +	if (mmc->ops->get_ro(mmc)) {
+> +		mmc->ios.timing &= ~(MMC_TIMING_SD_EXP | MMC_TIMING_SD_EXP_1_2V);
+> +		return 0;
+> +	}
+> +
+> +	gl9767_vhs_write(pdev);
+> +
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_COMBO_MUX_CTL, &value);
+> +	value &= ~(PCIE_GLI_9767_COMBO_MUX_CTL_RST_EN | PCIE_GLI_9767_COMBO_MUX_CTL_WAIT_PERST_EN);
+> +	pci_write_config_dword(pdev, PCIE_GLI_9767_COMBO_MUX_CTL, value);
+> +
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_SD_DATA_MULTI_CTL, &value);
+> +	value &= ~PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TIME;
+> +	value |= FIELD_PREP(PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TIME,
+> +			    PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TIME_VALUE);
+> +	pci_write_config_dword(pdev, PCIE_GLI_9767_SD_DATA_MULTI_CTL, value);
+> +
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2, &value);
+> +	value |= PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2_SDEI_COMPLETE;
+> +	pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2, value);
+> +
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_EN_REG2, &value);
+> +	value |= PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_EN_REG2_SDEI_COMPLETE_STATUS_EN;
+> +	pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_EN_REG2, value);
+> +
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_EN_REG2, &value);
+> +	value |= PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_EN_REG2_SDEI_COMPLETE_SIGNAL_EN;
+> +	pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_EN_REG2, value);
+> +
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_CFG, &value);
+> +	value |= PCIE_GLI_9767_CFG_LOW_PWR_OFF;
+> +	pci_write_config_dword(pdev, PCIE_GLI_9767_CFG, value);
+> +
+> +	value = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+> +	value &= ~(SDHCI_CLOCK_CARD_EN | SDHCI_CLOCK_PLL_EN);
+> +	sdhci_writew(host, value, SDHCI_CLOCK_CONTROL);
+> +
+> +	value = sdhci_readb(host, SDHCI_POWER_CONTROL);
+> +	value |= ((SDHCI_POWER_180 | SDHCI_POWER_ON) << 4);
+> +	sdhci_writeb(host, value, SDHCI_POWER_CONTROL);
+> +
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL, &value);
+> +	value |= PCIE_GLI_9767_SD_EXPRESS_CTL_SDEI_EXE;
+> +	pci_write_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL, value);
+> +
+> +	for (i = 0; i < 2; i++) {
+> +		msleep(10);
+> +		pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2, &value);
+> +		if (value & PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2_SDEI_COMPLETE) {
+> +			pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2,
+> +					       value);
+> +			break;
+> +		}
+> +	}
+> +
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_SDHC_CAP, &value);
+> +	if ((value & PCIE_GLI_9767_SDHC_CAP_SDEI_RESULT) == PCIE_GLI_9767_SDHC_CAP_SDEI_RESULT) {
+> +		pci_read_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL, &value);
+> +		value |= PCIE_GLI_9767_SD_EXPRESS_CTL_SD_EXPRESS_MODE;
+> +		pci_write_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL, value);
+> +	} else {
+> +		mmc->ios.timing &= ~(MMC_TIMING_SD_EXP | MMC_TIMING_SD_EXP_1_2V);
+> +	}
+> +
+> +	gl9767_vhs_read(pdev);
+> +
+> +	return 0;
+> +}
+> +
+>  static int gli_probe_slot_gl9750(struct sdhci_pci_slot *slot)
+>  {
+>  	struct sdhci_host *host = slot->host;
+> @@ -967,6 +1070,8 @@ static int gli_probe_slot_gl9767(struct sdhci_pci_slot *slot)
+>  	gl9767_hw_setting(slot);
+>  	gli_pcie_enable_msi(slot);
+>  	slot->host->mmc->caps2 |= MMC_CAP2_NO_SDIO;
+> +	host->mmc->caps2 |= MMC_CAP2_SD_EXP;
+> +	host->mmc_host_ops.init_sd_express = gl9767_init_sd_express;
+>  	sdhci_enable_v4_mode(host);
+>  
+>  	return 0;
 
