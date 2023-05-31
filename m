@@ -2,81 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF73718F16
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5B7718F1A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 01:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjEaXlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 19:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41724 "EHLO
+        id S230382AbjEaXmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 19:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjEaXlh (ORCPT
+        with ESMTP id S229491AbjEaXmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 19:41:37 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BB312C;
-        Wed, 31 May 2023 16:41:35 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-75b015c0508so14996185a.1;
-        Wed, 31 May 2023 16:41:35 -0700 (PDT)
+        Wed, 31 May 2023 19:42:22 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9950132
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:42:20 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f6c6320d4eso42591cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:42:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685576495; x=1688168495;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YqUEtiNzQPXNnkJHbjcbvl93ewqKl8vCNCXtX2f/UHQ=;
-        b=ZLaL5XjurHw1cP3P7ti1sffNrHCPnfESWQZx0KOpSQDptVtHfkjjBUDMrP4gg+8+TF
-         z5NMUxwcsLv4TLrFYHb2eMTiL/Mb7grVYdEPZNJCJtxY/a0s3YXtX+FnqZQM+xu77B7y
-         LtCLAdI7kRiqjgNkEpnSEtRticOpT0TRSsuGKjgIt8Xp+3tYK2TCzqia5H2/uFfC2TO0
-         79uQOMnMhoKXd03scxrb6w5Pj3xHwDkYWGhS036AnmpkBukIWG20aVo3ywtoDVUvLsai
-         s2D2FnAUV3JHL9ouOeSn774K57PdODyYfF/ElT7oHIbrAyJE+ChgubqWADRgU5EZACaE
-         dL1w==
+        d=google.com; s=20221208; t=1685576540; x=1688168540;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rDpz4krIKrc5w7qSPtF5SBqUynCIQ+thylT8XbaHGrk=;
+        b=WNm7FPyfhTPx3ZGuMrBHq00CD2pUQeKGlcUX8mQgn+G5dCO9p4/NX7woMudP9DApXP
+         eMJLs5SBR4fdqa3yCschb/mCpUzrZdTzCQk17xPxaPcyNXmO0GRLdFy3gHbSHxXHPTIP
+         /ozEJCi5UQdQkb2Q3mM6Zqe3S8JqvimfuEEiV/OCiDq8WYg8q9tsb/A8n35UOySEMRSe
+         cP+xGSCeNhL+QPzuxby2Y4g4uZHxNXxQLSBGnHEXmI9NR/ErERIcrgGmxuzljhndSanB
+         WP4UQiQL4UinzVp+2JgQHC1IybU3nDhwSEzellmsm7CBhp4CdyqxMsCJACyJb3WM+PYH
+         0PFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685576495; x=1688168495;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YqUEtiNzQPXNnkJHbjcbvl93ewqKl8vCNCXtX2f/UHQ=;
-        b=K7rjONGBjOoApYBthuPVKH6GQ4Mf9xEq1GIqfH5ZsyQtP3jKxYF5of60qJAWD2zRsy
-         03NbKAfwsTC9hROy4tnzhLULCYtLHe/IU74S4E1+5GKyN63UYwkmVNn2ECTYuJLyr09f
-         JoGlfc+091ovrYbNVDM3PrkjAnZSBQHxEqOTRyihoAI3o2a9T0t5s8se9UAdZuwUls36
-         Tb3XZifQlBqNVbjU2hKlQfQXQxLFAXXXgwXyxf89F82PCb/aEaeXjUFjZBA62SA0ry2L
-         blZQ6nqjoaV6UVdFMtE0lqSkUb7IBp0P2YFdvkhW6t9H9MxnaLTVNX9Q42kxnUbtfBQr
-         UbcQ==
-X-Gm-Message-State: AC+VfDxdVkyODFZopZKPSZSGI4gcWKo4uwc97KwyOgTCpBfDYTUMJQqC
-        tiAFp7I0om6Lm7hrZvwot9jp9TVxV90=
-X-Google-Smtp-Source: ACHHUZ4lxos4CGogbmpqC3mvvEHI5DbKkQbCUcIpboNTgLki4Pm7TJVmF2SfIUB9pGAWmyik/X+wJQ==
-X-Received: by 2002:a05:620a:2489:b0:75b:23a1:3687 with SMTP id i9-20020a05620a248900b0075b23a13687mr9092920qkn.72.1685576494910;
-        Wed, 31 May 2023 16:41:34 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id f4-20020aa78b04000000b0063d2cd02d69sm3853710pfd.54.2023.05.31.16.41.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 16:41:33 -0700 (PDT)
-Message-ID: <fd7b559e-7694-ef92-529d-4663df9c1cbc@gmail.com>
-Date:   Thu, 1 Jun 2023 08:41:29 +0900
+        d=1e100.net; s=20221208; t=1685576540; x=1688168540;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rDpz4krIKrc5w7qSPtF5SBqUynCIQ+thylT8XbaHGrk=;
+        b=fLJzvWrqtO2eGV7bmePeX+qxfJdln8IuyrdOuW8NWbY93ZIlezyNAgze6BGJY0msQw
+         +VcbA1V2cvYYG5aK7UxmAvYTKkE4/8rzgCNEg9oDkHf2HM9sqF8prBYNK66vTlSZwhSG
+         hblANGt+zFnfNAwABfzCrQKsfstTnyOhPHSAvTop1aAjxXH/iilc6pe0YEAvBnEfDaj4
+         iwqU14gwgtcBg1aVORcBuX0fPZFeGV9ppXxiFAmlBOcjArOCP2wrBywobK7MsHBI3CfM
+         U+qFBpLZAhl4qa+CT2F6pbqrHtsaHN/Km6YkTHvxZANy43SW/5VGW36NS/5ffg6nBFMB
+         qwbQ==
+X-Gm-Message-State: AC+VfDwokrn5Qo+gQLgNMQsT6FfIAm+0XpzXwkKhipr76Q9mkcE0LMpe
+        ReeCQCHI9E5/2EsCEWJkmKdJNBD52tq65+rhB/BWCw==
+X-Google-Smtp-Source: ACHHUZ5sABagGYjruKN8zRy0nDodbSiJxufLAv2SN+7MEBixn3XZ6Uymw2VwUSkM1BtzAJXGzFSFspv6fmhfCqrF5xc=
+X-Received: by 2002:ac8:7f02:0:b0:3f6:97b4:1a53 with SMTP id
+ f2-20020ac87f02000000b003f697b41a53mr30800qtk.29.1685576539790; Wed, 31 May
+ 2023 16:42:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 24/26] locking/atomic: scripts: generate kerneldoc
- comments
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, linux-doc@vger.kernel.org, paulmck@kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <20230522122429.1915021-1-mark.rutland@arm.com>
- <20230522122429.1915021-25-mark.rutland@arm.com>
- <96d6930b-78b1-4b4c-63e3-c385a764d6e3@gmail.com>
- <20230524141152.GL4253@hirez.programming.kicks-ass.net>
- <e76c924a-762c-061d-02b8-13be884ab344@gmail.com>
- <c9399722-b2df-52ee-cefe-338b118aeb1e@infradead.org>
- <a5405368-d04c-f95c-ad18-95f429120dbe@gmail.com>
- <ZHXvT86FN/7lx/fv@FVFF77S0Q05N>
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <ZHXvT86FN/7lx/fv@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230526234435.662652-1-yuzhao@google.com> <20230526234435.662652-5-yuzhao@google.com>
+ <ZHJHJPBF6euzOFdw@linux.dev> <CAOUHufa74CufHziHSquO5bZwbFXz2MNssBzW+AH7=Xo5RCnQ0A@mail.gmail.com>
+ <ZHZQdQAApIrw6fBu@linux.dev> <CAOUHufZOkBmZJgCU2xW2B8S3P3TWERHezy0xKWY9_TeyV9K7Rg@mail.gmail.com>
+ <ZHef0VsZvZ1Vnz0u@linux.dev> <CAOUHufZrfnfcbrqSzmHkejR5MA2gmGKZ3LMRhbLHV+1427z=Tw@mail.gmail.com>
+ <ZHfWzX04GlcNngdU@linux.dev>
+In-Reply-To: <ZHfWzX04GlcNngdU@linux.dev>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Wed, 31 May 2023 17:41:43 -0600
+Message-ID: <CAOUHufa9X4eXkvG+=xgm4AxrtvUKSZhjSRDtnskhVrVA2w2BkQ@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v2 04/10] kvm/arm64: make stage2 page tables
+ RCU safe
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Anup Patel <anup@brainfault.org>,
+        Ben Gardon <bgardon@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Gavin Shan <gshan@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Larabel <michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,59 +110,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Keeping documentation folks in CC]
+On Wed, May 31, 2023 at 5:23=E2=80=AFPM Oliver Upton <oliver.upton@linux.de=
+v> wrote:
+>
+> On Wed, May 31, 2023 at 05:10:52PM -0600, Yu Zhao wrote:
+> > On Wed, May 31, 2023 at 1:28=E2=80=AFPM Oliver Upton <oliver.upton@linu=
+x.dev> wrote:
+> > > On Tue, May 30, 2023 at 02:06:55PM -0600, Yu Zhao wrote:
+> > > > On Tue, May 30, 2023 at 1:37=E2=80=AFPM Oliver Upton <oliver.upton@=
+linux.dev> wrote:
+> > > > > As it is currently implemented, yes. But, there's potential to fa=
+st-path
+> > > > > the implementation by checking page_count() before starting the w=
+alk.
+> > > >
+> > > > Do you mind posting another patch? I'd be happy to ack it, as well =
+as
+> > > > the one you suggested above.
+> > >
+> > > I'd rather not take such a patch independent of the test_clear_young
+> > > series if you're OK with that. Do you mind implementing something
+> > > similar to the above patch w/ the proposed optimization if you need i=
+t?
+> >
+> > No worries. I can take the above together with the following, which
+> > would form a new series with its own merits, since apparently you
+> > think the !AF case is important.
+>
+> Sorry if my suggestion was unclear.
+>
+> I thought we were talking about ->free_removed_table() being called from
+> the stage-2 unmap path
 
-On 2023/05/30 21:42, Mark Rutland wrote:
-> Hi Akira,
-> 
-> On Fri, May 26, 2023 at 07:27:56PM +0900, Akira Yokosawa wrote:
->> I think adding "~" to the substitution pattern added in [1] as follows
->> should do the trick (not well tested):
->>
->> diff --git a/scripts/kernel-doc b/scripts/kernel-doc
->> index 2486689ffc7b..eb70c1fd4e86 100755
->> --- a/scripts/kernel-doc
->> +++ b/scripts/kernel-doc
->> @@ -64,7 +64,7 @@ my $type_constant = '\b``([^\`]+)``\b';
->>  my $type_constant2 = '\%([-_\w]+)';
->>  my $type_func = '(\w+)\(\)';
->>  my $type_param = '\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
->> -my $type_param_ref = '([\!]?)\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
->> +my $type_param_ref = '([\!~]?)\@(\w*((\.\w+)|(->\w+))*(\.\.\.)?)';
->>  my $type_fp_param = '\@(\w+)\(\)';  # Special RST handling for func ptr params
->>  my $type_fp_param2 = '\@(\w+->\S+)\(\)';  # Special RST handling for structs with func ptr params
->>  my $type_env = '(\$\w+)';
-> 
-> Are you happy to send this as a patch?
+Yes, we were, or in general, about how to make KVM PTs RCU safe for ARM.
 
-I'm afraid I am not at the moment.
+So I'm thinking about taking 1) your patch above, 2) what I just
+suggested and 3) what you suggested below to form a mini series, which
+could land indepently and would make my job here easier.
 
-The reason being I have never made changes in that 2500 line perl
-script.  Please consider the change above as a random suggestion from
-someone who don't/can't understand the script fully ...
-> 
-> I'd like to pick it into this series, so if you're happy to provide your
-> Signed-off-by tag here, I'm happy to go write the commit message and so on.
+> in which case we wind up unnecessarily visiting
+> PTEs on a table known to be empty. You could fast-path that by only
+> initiating a walk if  page_count() > 1:
 
-I you happen to know perl well and be confident the change won't have
-any side effect, I wouldn't mind if you go forward and make a patch
-on your own, maybe with my Suggested-by.  That patch should also have
-explicit Cc: tags to Jon and Mauro who are in the SOB chain of commit
-ee2aa7590398.
+Yes, this is what I meant.
 
-        Thanks, Akira
+> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> index 95dae02ccc2e..766563dc465c 100644
+> --- a/arch/arm64/kvm/hyp/pgtable.c
+> +++ b/arch/arm64/kvm/hyp/pgtable.c
+> @@ -1331,7 +1331,8 @@ void kvm_pgtable_stage2_free_removed(struct kvm_pgt=
+able_mm_ops *mm_ops, void *pg
+>                 .end    =3D kvm_granule_size(level),
+>         };
+>
+> -       WARN_ON(__kvm_pgtable_walk(&data, mm_ops, ptep, level + 1));
+> +       if (mm_ops->page_count(pgtable) > 1)
+> +               WARN_ON(__kvm_pgtable_walk(&data, mm_ops, ptep, level + 1=
+));
+>
+>         WARN_ON(mm_ops->page_count(pgtable) !=3D 1);
+>         mm_ops->put_page(pgtable);
+>
+>
+> A lock-free access fault walker is interesting, but in my testing it hasn=
+'t
+> led to any significant improvements over acquiring the MMU lock for
+> read. Because of that I hadn't bothered with posting the series upstream.
 
-> 
-> Thanks,
-> Mark.
-> 
->>
->> Thoughts?
->>
->>         Thanks, Akira
->>
->>>
->>>
->>>> [1]: ee2aa7590398 ("scripts: kernel-doc: accept negation like !@var")
->>>
->>> thanks.
+It's hard to measure but we have perf benchmarks on ChromeOS which should h=
+elp.
