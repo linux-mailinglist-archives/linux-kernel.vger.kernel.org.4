@@ -2,141 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523FD71805C
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97138718061
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235385AbjEaMxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S235972AbjEaMxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232718AbjEaMxP (ORCPT
+        with ESMTP id S235567AbjEaMxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:53:15 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on20619.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1b::619])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8A6137;
-        Wed, 31 May 2023 05:52:51 -0700 (PDT)
+        Wed, 31 May 2023 08:53:40 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2075.outbound.protection.outlook.com [40.107.212.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C4618F;
+        Wed, 31 May 2023 05:53:15 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DOWS/cwbvEixiQyZ/RByqx3zvJkghXi4ld8OyXRRX1GqkNWy8SmcMYxzAekXnuwCCvsns+6SQ3TJjgPbEEAAaFItNgfU7momyDCoAq2JBP+aaCJ6SGl3/lJgZnQvlcS7V5HwLqCpWU8w8WX/uM26ogCZu/+1pGR388CdUXZmMHDnMBkeBmn/HIKHNwg8EDz3IMPDaFHw0T1oMWPT7+NaNHJ0+wgKbqzIj6we5aDtk15ij21BCbI8CIu5o9EDPPiuhZg/0dABdcFaupInbQJeO9PLu47qwuALH8RgxwX7o86jqIfXXjCzZMI38WzZTHdObD6fC9aa6Q3leD3HNbthuw==
+ b=R0ciAkZD/R7mLSnU1UgrMIvgTXDnECbZGKe20iMEuQXFAEY5juNgfdkLWd/u8LxhKDSaYv5FqxDbPBf8pyEzFt0nvS7kX5qvZ+G7cMLbBu261vwLXjfLGBgv7nJ03LlDCiwzZu9RtaxqwvvciAxmq/B6OMC0Jb64+k8TMX01YDA0FBF3+XoAs4YsjqNW1DLECvTJ7MVRBt99uaf0mjSFVlE0e1kXI8ee8jTIWF2ib7N6l9v1stb20yljOvN7aCQtx/NSfm//gc7+S3CxwAAvxeJMLNfAlRGeTVm8cPqHqJjfwalHoPiNx1A+ypYJz7FOP2kslLJXWWauyVWMdRanMw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/IstQzwLbEbkvZXXWsy2ex8JCtKFNPlVMhEPiU260No=;
- b=m/0Ns/fokVFSG7osRjS5KqzY70yPQuszdHkx4ED2TV3PsFo7I7oXF7ZoVYXtbw1uwk3Qu35MTZBD3JPFLALWEvxMWjwcHiTWJVJIixrkWeHsu6HR74AuDGSpgdj8saVEsPhqt6niekL9Q+eDK3OsJRYavMth7k7FeDX5HDdb/wdixEBQeT2lH4EVfwI1/2PwHB/T1uEhwB3zClq9gDVYAooDjWWp1UqVml0ZcYBSZEtVc/FudCNpktEstooi3X/B57C1bIJmmFIjGrVV5850X27YisUBSLCPcTi+cUpN2ZRXyv3c2/2CcPmGhFj3az8Q912jZdoZELNXysuAmBxUVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ bh=koU6nLiaAfJbBM43sH2p12iYxZrKONWFIjtcx17l61c=;
+ b=QacLD8OvkfNXd20xf4fUQC9cmGCg1YVf2XF2Kw2sy8GrhvZiYAoJ1kIP+0GMtq/4Ps+0TfH6dkY5EjMxWNayVEUrJiy3jEzzukaL11qQVsFu1MMGpGwObl0tVy8t1xMdscLwyo2THEeZQD8QemMy7x+3w1Cevm2bZPdosrJLT9XBk2KTZNPOVZVM4ajEyjYgNXz9xZozYfCtVfMGVYlt94E3vBxi2btsEA4U/khNyAUWIeBX4qLQ881rfh+iI0x2ybbbxx75D5Q5EnZguVR/2zVWOA8Xd0LOEUiRGw6DJYKqkuiFbUHZB4d83gUZBD4C5PyEU5ht1HjLxSf64zDgnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 8.4.225.30) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=infinera.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=infinera.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/IstQzwLbEbkvZXXWsy2ex8JCtKFNPlVMhEPiU260No=;
- b=sCbB19Z/lOTWObqvgzy8imJDG5JiC6pP+AoQOdebC6675HCaSQrkLCaiB1srkxjkvYMg5l67Zro/mei0/Rp6TYzJJQPTAhC3r+yBer0anUmHOfXxPSsFeqBOG6EBfJvWLQiEjG6rLdppmjrZNro++sGpKLUSdxlZJWqgYBgiltY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by VI1PR04MB6911.eurprd04.prod.outlook.com (2603:10a6:803:12e::8) with
+ bh=koU6nLiaAfJbBM43sH2p12iYxZrKONWFIjtcx17l61c=;
+ b=cfTreNKz6+4n3icnWLxbu7/5ZTOT4yBKTs2NgFrN2+tcVDn0Wzbq/Fo9PTk73p2gpyhvzhCXqwRGUYau6fRdJtKwb3hkTSv/U6LwTNYTnE8pqySV01HIL67olmGai+qL5ZLFHas8ArJZK5fXEdItCLPUZK9YMUkVBBsD8V0bmaBQ9ECjOJ4GoTFIcmEPe0DQD9oizCboZHaqzneNgqHUF24S/qslNoGX/CVypsWk5qoEfAH8n92rvhQL7lZDeOyqia44CLZYy2fQiQlaZHesmha8JblYUgsBzUW/1VqUu6GbqH3a/iXvxCoQblCDpFPzsjgxvEmMkACgUfvaxPJL+A==
+Received: from MW4PR03CA0111.namprd03.prod.outlook.com (2603:10b6:303:b7::26)
+ by IA1PR10MB7537.namprd10.prod.outlook.com (2603:10b6:208:457::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Wed, 31 May
- 2023 12:51:09 +0000
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::4a2a:262e:415f:e41c]) by AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::4a2a:262e:415f:e41c%7]) with mapi id 15.20.6433.024; Wed, 31 May 2023
- 12:51:09 +0000
-Date:   Wed, 31 May 2023 08:50:55 -0400
-From:   Frank Li <Frank.li@nxp.com>
-To:     Peng Fan <peng.fan@oss.nxp.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, peng.fan@nxp.com,
-        vkoul@kernel.org, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, imx@lists.linux.dev, joy.zou@nxp.com,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        shenwei.wang@nxp.com
-Subject: Re: [PATCH v2 04/12] dmaengine: fsl-edma: remove v3 from enum
- edma_version
-Message-ID: <ZHdCrzKavdjQtfiQ@lizhi-Precision-Tower-5810>
-References: <20230529200453.1423796-1-Frank.Li@nxp.com>
- <20230529200453.1423796-5-Frank.Li@nxp.com>
- <79803451-3af0-26b5-2407-ec47172dcecc@oss.nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <79803451-3af0-26b5-2407-ec47172dcecc@oss.nxp.com>
-X-ClientProxiedBy: BY3PR10CA0019.namprd10.prod.outlook.com
- (2603:10b6:a03:255::24) To AM6PR04MB4838.eurprd04.prod.outlook.com
- (2603:10a6:20b:4::16)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.22; Wed, 31 May
+ 2023 12:51:54 +0000
+Received: from CO1NAM11FT080.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b7:cafe::4d) by MW4PR03CA0111.outlook.office365.com
+ (2603:10b6:303:b7::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23 via Frontend
+ Transport; Wed, 31 May 2023 12:51:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 8.4.225.30)
+ smtp.mailfrom=infinera.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=infinera.com;
+Received-SPF: Pass (protection.outlook.com: domain of infinera.com designates
+ 8.4.225.30 as permitted sender) receiver=protection.outlook.com;
+ client-ip=8.4.225.30; helo=owa.infinera.com; pr=C
+Received: from owa.infinera.com (8.4.225.30) by
+ CO1NAM11FT080.mail.protection.outlook.com (10.13.174.99) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6455.22 via Frontend Transport; Wed, 31 May 2023 12:51:54 +0000
+Received: from sv-ex16-prd.infinera.com (10.100.96.229) by
+ sv-ex16-prd.infinera.com (10.100.96.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Wed, 31 May 2023 05:51:53 -0700
+Received: from sv-smtp-prod3.infinera.com (10.100.98.58) by
+ sv-ex16-prd.infinera.com (10.100.96.229) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Wed, 31 May 2023 05:51:53 -0700
+Received: from se-metroit-prd1.infinera.com ([10.210.32.58]) by sv-smtp-prod3.infinera.com with Microsoft SMTPSVC(8.5.9600.16384);
+         Wed, 31 May 2023 05:51:53 -0700
+Received: from gentoo-jocke.infinera.com (gentoo-jocke.infinera.com [10.210.71.73])
+        by se-metroit-prd1.infinera.com (Postfix) with ESMTP id 66D7B2C06D80;
+        Wed, 31 May 2023 14:51:52 +0200 (CEST)
+Received: by gentoo-jocke.infinera.com (Postfix, from userid 1001)
+        id 606F120062E8; Wed, 31 May 2023 14:51:52 +0200 (CEST)
+From:   Joakim Tjernlund <joakim.tjernlund@infinera.com>
+To:     <linux-kernel@vger.kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>
+CC:     Joakim Tjernlund <joakim.tjernlund@infinera.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH] ALSA: usb-audio: Logitech P710e: Add quirk to fix setting sample rate.
+Date:   Wed, 31 May 2023 14:51:48 +0200
+Message-ID: <20230531125148.892100-1-joakim.tjernlund@infinera.com>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-OriginalArrivalTime: 31 May 2023 12:51:53.0524 (UTC) FILETIME=[ACBC6F40:01D993BE]
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|VI1PR04MB6911:EE_
-X-MS-Office365-Filtering-Correlation-Id: 071f6d88-a9bf-4e40-1c1f-08db61d5b487
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT080:EE_|IA1PR10MB7537:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1e173674-6799-4914-5be5-08db61d5cf98
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: udKYUfy47u531ilmq4R9x6+QG2SUu4X84Huu8/lpyw1d20tgVwBIKHZzqjDYYIoZNPWpRWq3gjXneaOZYrEkhmbeTjI9SMQe1no48w1y/KS2WkWu2bsOrLtIp3QefBSWk6rNNWfAdZZ7tppgNjCXanew07dGuBEn8tdP12VgJEraev8dU1vjqFs3Qy6IJbKwbd3YhBjY1jRjA7yS5jd4/M1/OJRTeUaQ5C75fzlzjupgJm6hcYj3nIilT8na2qqvWITnFBjGVTs1quRuOmUW9kg6TbgMOxMj4vEi1ZN5zOm3kWfdbZ2J045+YRSoHBzBI8A27TW95ihj9gpQWza8yb8IdARTEPakA9atIWbbEpgJmdEhWzG2OzbwUpefw9Xd+MYv4S4LhZlKUtgaQeuUfXmOpnGx7BoQHTNjcKS1cO+sBDcpTfKKURjA70BB9k6ARHGCpQcT5iTfa15xVvciARCckEEExFSdp6EydDzPoTgQxN/0DLx3Li5gAHO/72ayleuSAjyKgp8uaGu46y3483NDFeoOEfOaITCJfc0cm+4y/vJqww+srOlX3b1CQaPun1/Hh08sqdoSyW+8+ggD6Ji88EezgNb4aEJhb+LqJTQm6yb+AhUItTBrEl9nnXLw
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(366004)(396003)(376002)(346002)(39860400002)(136003)(451199021)(4744005)(2906002)(8936002)(8676002)(6862004)(41300700001)(4326008)(316002)(66556008)(66476007)(66946007)(478600001)(6486002)(6666004)(5660300002)(52116002)(9686003)(53546011)(6512007)(6506007)(26005)(186003)(33716001)(38100700002)(38350700002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bhAzED7cKeHeTdKZdSNdn2GXCEuVpBXZMEopB6h9fN8aY6PFnfJhuJIbr0+J?=
- =?us-ascii?Q?l3mDZaHK+vdVlKHA2t9doBD3p7g/ZuUZ0bYypOpk+fzt6JPo3HHV8eNVlfbJ?=
- =?us-ascii?Q?Zaa13ZxeV7ZzsGHRi/msKrhVNkKhAzURx5lapjVDtNnV6ScRTGqJEIrSz/rp?=
- =?us-ascii?Q?Sc2evl5k3JRzdOI/BPvGy/18gma1rh9Zm1nju0OcVVp8AC7vSbBGqb3G5j0T?=
- =?us-ascii?Q?VoZN7r1E+iKnA6hxMrWAnGdn/lHwEX0knciSg31QX0CgB4KKUrkl8rdeghRo?=
- =?us-ascii?Q?6EgXjGRqmY2TsKRKXy4NzXAI8wc3fpuBqsXs+FHKCCQmIhZFmroAlEsPsLLC?=
- =?us-ascii?Q?24qDsKaRkTMiuuPBfoVZawK/nVsso4qaqTZo58FjCZO0FrxetYJOQYo4uwJm?=
- =?us-ascii?Q?p0oGpBLrq9+mrba1FpGas9Oigm8equ+tbDQOw/ZGzgsXnq3ugMpd9O88yYOC?=
- =?us-ascii?Q?CBE/00Cd4dx+Xj9oOByjtEy0dZEZ/sOsfygwSOreYJDN6QZEyCsoQ3318VPV?=
- =?us-ascii?Q?EKT7+A3AED8kjDyApoIyQ0O38fU1s8EUQoK1kKMOAoqI7cOnZNizDrdC6HvN?=
- =?us-ascii?Q?NidMcGoR7FJ5f7Uzp8cHme06Jvco19z3jGsm0xom4JZw3jxgtzQIy2OwEHPa?=
- =?us-ascii?Q?3vhrDrzL312vssTlvEqomx7lL4CFayJjpcdINa0t6Sg30Fi5K26hYgMw44/4?=
- =?us-ascii?Q?VeT5uuKSmzFx54pzYzk1Co09Q/K+61Y6Ur9tJLBE5Exh0pQ3Qjw8ezvvqsVf?=
- =?us-ascii?Q?8FSdl26nP9PFZn1MQwDKjMpRPNlT9/w+8MExyzEceVGoRmGNH6DxD6Ybdc66?=
- =?us-ascii?Q?wo2A9UEW7UmOYTogB81/mQWQSz05nSWsycbMxcDDh5OI1emZ0FS+SoX6Ic4n?=
- =?us-ascii?Q?GQxKQ5XQEJDznkzar9sahNZNb9h9cBd8HcBN5pisez8B9zejatsvUwAkSNSX?=
- =?us-ascii?Q?YEs2slbRLTu9ybWhHzQnJW0pq1g0UdfuTd8Ee9k9KgepQMMn/arO94DhReFm?=
- =?us-ascii?Q?DlUC02d7QXqr+3AlYyJZ0o8UfHU+bxxf6bp2r89PViP5KzVgAqinFg1nu8DI?=
- =?us-ascii?Q?i+OsonKbPWAxxCKflIQEiUIpzL0Xmsc1XvcEeouvpK4lWoN10Qo7ocK8qk1T?=
- =?us-ascii?Q?0ou7Q1acn/LCQJ27Iow+M5Gz1EZ7oMOM8iJKhGuSbVvfqYkgQlo9A/QSW3Qa?=
- =?us-ascii?Q?JzSTn6ZruqfkUql1/W3eI0f0+xOYth+PL4bD28pMOWuaCFYuJpHRSkc6p093?=
- =?us-ascii?Q?JSnW+b7kUYmiaXoJAqkKkntRd9pJEktnsokpLD43hSMdpQUlS8L0KNssazIQ?=
- =?us-ascii?Q?oZEyIV9/0F1RNI9TJAZRo10Nk7UxYZEV8mmP75lcH2Co7xIcwaceQ25kBJxR?=
- =?us-ascii?Q?pVq5FBKSvqMCe2Ooya4hq+CXxAs6KCdmEUeoATHZN6e0adimVfsoefVQ3kP4?=
- =?us-ascii?Q?0IvPAZYL8IEbSR1NyVwrPhpDkTTynm2zsQR4KhjnGbqwI75B94BzfcoY396e?=
- =?us-ascii?Q?vUNufekzIQHUog35t8tE/9YJgfPBrmV9pKSLdsEEm8GUkFq7sQHvTaikj+37?=
- =?us-ascii?Q?Bwa9DRctFJK1R9YLJhhpfN2x/2zZL+FAtwgD7fCD?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 071f6d88-a9bf-4e40-1c1f-08db61d5b487
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 12:51:08.9296
+X-Microsoft-Antispam-Message-Info: 00VQuRD5EGI0H97oSUkK9bslqWMs3nkmTWtkbcGMSSH2IBrwy6BJLtSv7Mc6XpmqDWAFn9CXzFCszWpSRZfnaUURKHJ4QBeIQ6R072F90PCQHP7l3uWRtKOYUdUoupLbLm2zj7uS/Mly3JWMLtkMf2qQDEkXvRAg+P65LV0kZxKyZZqs6o5c6VjL6BA90RN2UO3X5FO1tahoVFL7Lk9Sr2rwmOO++YeW2Erznjgy4/2zG6PX9XPNB01lw/mtq6AFPAXOD5/Kp2EtIycble6c8IHSI36jBYPi+PTGwc+Y2ZEwaV4PYB9GKJWXXJaTsuTxTi69cG4nEDNjT3x6jRUrs4FH6HQReB5b9a6Dz1jDLR/Pz3PzBQ/ZmRxYJAHYo3xv5W5I3c2OEo85q3hUjzoUD2PiRhP4aGJFxTXimOa9C2cYjk4oSr4cNnf8L7kU7RJ3ulB0ZIWRhKU2t37AwpKC59ZSgKq2/aU/HOtVTYSraKgvbj0jk6fuXZOGEsqUobrFZrz5d7AHSLyMtZNE6c35SzesLU8rpuGBxtbKRssHC8mKHGtZBZpJeubkMY+wsXdGtBmQ7X6MWBZdZCAcCjCco95ym8BhYCOZKEa4866JexN65kKh/+wT/dYyYoRtWp06LJ8AACYbHH2NyLpRjW/6DHkO3FtMTQ5MI1ysFYaNbwYNlrJ7ceV5VhV5DutVYO3naOHhLwOcksN0ZLJVFyr6+Igyi26t7r3UaLbpKWh880Y=
+X-Forefront-Antispam-Report: CIP:8.4.225.30;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:owa.infinera.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199021)(46966006)(36840700001)(356005)(82310400005)(81166007)(82740400003)(36860700001)(47076005)(2616005)(83380400001)(450100002)(70206006)(336012)(426003)(54906003)(70586007)(4326008)(86362001)(110136005)(42186006)(478600001)(2906002)(4744005)(316002)(186003)(6266002)(26005)(1076003)(36756003)(41300700001)(44832011)(5660300002)(6666004)(8676002)(8936002)(40480700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: infinera.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 12:51:54.1229
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lEFJKnwIg6P3al4tsSQlTkTQBtjtmAbLBCrXZvPlXh4tLxZeBRYdmDWu+Wb1xuLz4Q4W51ZazNaSQKBwJAcFHA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6911
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e173674-6799-4914-5be5-08db61d5cf98
+X-MS-Exchange-CrossTenant-Id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=285643de-5f5b-4b03-a153-0ae2dc8aaf77;Ip=[8.4.225.30];Helo=[owa.infinera.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT080.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB7537
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 02:50:57PM +0800, Peng Fan wrote:
-> 
-> 
-> On 5/30/2023 4:04 AM, Frank Li wrote:
-> >   static struct fsl_edma_drvdata imx7ulp_data = {
-> > -       .version = v3,
-> > +       .version = v1,
-> 
-> This may confuse people.How about for hardware
-> version >= v3, use new flag as yours?
+P710e, will throw an "cannot set freq 48000 to ep 0x3" error, no
+matter adding mdelays around setting sample rate.
 
-I can use drvflags to distinguish. I checked spec, 7ULP called eDMA2.
-Okay, let me change to check drvflags.
+Only way to avoid it I can find is to avoid setting it at all.
 
-Anyways, we should align version with hardware IP version, or not
-use it at all.
+Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
+Cc: stable@vger.kernel.org
+---
 
-Frank
+ I also tried QUIRK_FLAG_FIXED_RATE quirk but that didnt have any effect.
+ sound/usb/quirks.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> 
-> Regards,
-> Peng.
+diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
+index 3ecd1ba7fd4b..8277bfd3deec 100644
+--- a/sound/usb/quirks.c
++++ b/sound/usb/quirks.c
+@@ -1952,7 +1952,8 @@ void snd_usb_audioformat_attributes_quirk(struct snd_usb_audio *chip,
+ {
+ 	switch (chip->usb_id) {
+ 	case USB_ID(0x0a92, 0x0053): /* AudioTrak Optoplay */
+-		/* Optoplay sets the sample rate attribute although
++	case USB_ID(0x046d, 0x0a4e): /* Logitech P710e */
++		/* Optoplay/P710e sets the sample rate attribute although
+ 		 * it seems not supporting it in fact.
+ 		 */
+ 		fp->attributes &= ~UAC_EP_CS_ATTR_SAMPLE_RATE;
+-- 
+2.39.3
+
