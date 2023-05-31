@@ -2,120 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E142718211
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DAA718221
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235251AbjEaNho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
+        id S236073AbjEaNk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235992AbjEaNhc (ORCPT
+        with ESMTP id S233075AbjEaNkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:37:32 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6761F13D;
-        Wed, 31 May 2023 06:37:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685540251; x=1717076251;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4j+SR6j6Y91MTRtLsgAmtEiec0cpzY168prO2t2ffXI=;
-  b=QwiOrhxXqu8xzIkBlfyR1A4WYFd0Zlhe2q+F1oe/KDJVD4A1Js4SnhGp
-   0sneh+JEp/EW7Py/XTnxmneL3TLE3lJjknty80kmnLqYxIWc7/BPav+GX
-   yPxKCxDdCMtdxNLjNMJQF6ZmgUUxTxys7imWPJ51zVOwGcVsvWcIdbR8f
-   VDFORMg90Oh2y74i8vVuwQ3G8cIQyrVc8C9ZOaLaZYFSKpu8qAuF+OkkX
-   0hmn4dMk4x7ZnlMkZUA9H55tIXeSnAbCU/ZnMaX1GO1Nz2HxfczxHbYMN
-   +BUivC13agqRZmlw/e9aO6dzqC30ZPpf+DojIB8DD3zMD8+LHx+RHipsi
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="421005390"
-X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="421005390"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 06:37:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="736673988"
-X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="736673988"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 31 May 2023 06:37:25 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q4M0y-0001Mx-1R;
-        Wed, 31 May 2023 13:37:24 +0000
-Date:   Wed, 31 May 2023 21:36:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Breno Leitao <leitao@debian.org>, dsahern@kernel.org,
-        willemdebruijn.kernel@gmail.com,
-        Remi Denis-Courmont <courmisch@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org, leit@fb.com,
-        axboe@kernel.dk, asml.silence@gmail.com,
-        linux-kernel@vger.kernel.org, dccp@vger.kernel.org,
-        linux-wpan@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-sctp@vger.kernel.org
-Subject: Re: [PATCH net-next v4] net: ioctl: Use kernel memory on protocol
- ioctl callbacks
-Message-ID: <202305312111.1m4i6rKU-lkp@intel.com>
-References: <20230530175403.2434218-1-leitao@debian.org>
+        Wed, 31 May 2023 09:40:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D058EC5;
+        Wed, 31 May 2023 06:40:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C9D463AF6;
+        Wed, 31 May 2023 13:40:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 019C0C433EF;
+        Wed, 31 May 2023 13:40:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685540422;
+        bh=8qjRqN0gKdO2Kze4Y40EjpeRbQoGwjmMEnwxWgVYtLE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uWrR6Pp8chyhbuuaC9R88q2GJXBblct2uzVCB3OSdoFccx6fdWb6lLZpfzOo13uJs
+         w5NZlvFsDhrjsQCG9YRUdL1S8PddFYwEldXlgq6oSTYx79ZdQ0p8GOTbGiNyDrMQWj
+         4DKB4sFwHG7BG9VYfHf5AYmilq1sIPckSZcMLJ2uIwO9VZ3p6UwkXXten7K8MQnUsQ
+         dD/g0g6y4922CAjYVAh45k2HeNsa8OUzIcf9smifqIGPdwgP+Obqp9EgJkFIEBd9Co
+         fFsRGYvUd4ag6L5O7XSsi65HTweTkU5KM+hqlelaxMIBRQPLK+ojmoxGtLDmO2c7c/
+         PDpIztrAWNcxw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, sre@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 01/37] power: supply: ab8500: Fix external_power_changed race
+Date:   Wed, 31 May 2023 09:39:43 -0400
+Message-Id: <20230531134020.3383253-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530175403.2434218-1-leitao@debian.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Breno,
+From: Hans de Goede <hdegoede@redhat.com>
 
-kernel test robot noticed the following build errors:
+[ Upstream commit a5299ce4e96f3e8930e9c051b28d8093ada87b08 ]
 
-[auto build test ERROR on net-next/main]
+ab8500_btemp_external_power_changed() dereferences di->btemp_psy,
+which gets sets in ab8500_btemp_probe() like this:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Breno-Leitao/net-ioctl-Use-kernel-memory-on-protocol-ioctl-callbacks/20230531-015554
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20230530175403.2434218-1-leitao%40debian.org
-patch subject: [PATCH net-next v4] net: ioctl: Use kernel memory on protocol ioctl callbacks
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230531/202305312111.1m4i6rKU-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f97a3206f5ae59ecb0c7105225c5230b343c6c54
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Breno-Leitao/net-ioctl-Use-kernel-memory-on-protocol-ioctl-callbacks/20230531-015554
-        git checkout f97a3206f5ae59ecb0c7105225c5230b343c6c54
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+        di->btemp_psy = devm_power_supply_register(dev, &ab8500_btemp_desc,
+                                                   &psy_cfg);
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305312111.1m4i6rKU-lkp@intel.com/
+As soon as devm_power_supply_register() has called device_add()
+the external_power_changed callback can get called. So there is a window
+where ab8500_btemp_external_power_changed() may get called while
+di->btemp_psy has not been set yet leading to a NULL pointer dereference.
 
-All errors (new ones prefixed by >>):
+Fixing this is easy. The external_power_changed callback gets passed
+the power_supply which will eventually get stored in di->btemp_psy,
+so ab8500_btemp_external_power_changed() can simply directly use
+the passed in psy argument which is always valid.
 
-   m68k-linux-ld: net/core/sock.o: in function `sk_ioctl':
->> sock.c:(.text+0xc7e): undefined reference to `ip6mr_sk_ioctl'
+And the same applies to ab8500_fg_external_power_changed().
 
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/power/supply/ab8500_btemp.c | 6 ++----
+ drivers/power/supply/ab8500_fg.c    | 6 ++----
+ 2 files changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
+index 307ee6f71042e..6f83e99d2eb72 100644
+--- a/drivers/power/supply/ab8500_btemp.c
++++ b/drivers/power/supply/ab8500_btemp.c
+@@ -624,10 +624,8 @@ static int ab8500_btemp_get_ext_psy_data(struct device *dev, void *data)
+  */
+ static void ab8500_btemp_external_power_changed(struct power_supply *psy)
+ {
+-	struct ab8500_btemp *di = power_supply_get_drvdata(psy);
+-
+-	class_for_each_device(power_supply_class, NULL,
+-		di->btemp_psy, ab8500_btemp_get_ext_psy_data);
++	class_for_each_device(power_supply_class, NULL, psy,
++			      ab8500_btemp_get_ext_psy_data);
+ }
+ 
+ /* ab8500 btemp driver interrupts and their respective isr */
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index 41a7bff9ac376..53560fbb6dcd3 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -2407,10 +2407,8 @@ static int ab8500_fg_init_hw_registers(struct ab8500_fg *di)
+  */
+ static void ab8500_fg_external_power_changed(struct power_supply *psy)
+ {
+-	struct ab8500_fg *di = power_supply_get_drvdata(psy);
+-
+-	class_for_each_device(power_supply_class, NULL,
+-		di->fg_psy, ab8500_fg_get_ext_psy_data);
++	class_for_each_device(power_supply_class, NULL, psy,
++			      ab8500_fg_get_ext_psy_data);
+ }
+ 
+ /**
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
