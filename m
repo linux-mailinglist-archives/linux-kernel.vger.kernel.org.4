@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38549718277
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9538D71827B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236586AbjEaNnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
+        id S236199AbjEaNnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235773AbjEaNmd (ORCPT
+        with ESMTP id S236343AbjEaNme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:42:33 -0400
+        Wed, 31 May 2023 09:42:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E85E62;
-        Wed, 31 May 2023 06:41:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4D8E6B;
+        Wed, 31 May 2023 06:41:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 813F863B05;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AB3B63B28;
+        Wed, 31 May 2023 13:41:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B6A1C433EF;
         Wed, 31 May 2023 13:41:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16E54C433EF;
-        Wed, 31 May 2023 13:41:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540497;
-        bh=apa5LjQUCPwHfND7dLxHBsRZpGi5SwgtmBlh59yV+Bw=;
+        s=k20201202; t=1685540498;
+        bh=3oHX6kZ+MMX2KYiMsfklMP9Awa185FLNHSRbAuPbN4A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lVslzGxFXpIMGi6lRIq2C630HyxPTEAaiDLs0kAUmGJBYdo9fKyLRb/iaHfTikthF
-         Ao2SLjqmuQUJdnRzT1Gy40PPEfXEsKiDrNzOlbRrzbM2VK97otkaeo/j8fuGq1Rd7V
-         wshbOLqMY5gyYrEgNhkgx76DTQgb6A6LLhQPyk4sEiUiGCDUO4TpC7em2lKH39Gd38
-         eALeoGocPl9gWeg4Sn7IQilMoz33fTftN79hbwua8IG/LZsMgdJae6rSxGllYNdBMM
-         nUxajsVTcQ6Lq8WGXZg367CF1rIm8MO4VRYOQJHWqxNTVV2zvy4i1nDWjqqNlPi0ZT
-         nAp0rCdnTPgmA==
+        b=Yc9J/Jt9nvqAboXxbzZVyLgeZ0G6Xo1gNLOXQ7H02GoWHg/eoOHqNgUS5kfVmyr23
+         9sfOVfkMAtXjX2QxIPptNO5EEwr9tPq6jdlVEwd5CnOgEc9jymAPqf7FZw4QAtkbZv
+         GK2bsD7pPozc6IY5tbUMsFiK6OKpR5XC8PHtNH/mTorIbnyIKIQ2NPgYf+R0PJ1cG9
+         3U3ya9nFFLRo0UyHH8m+51C2WqaIxEdaZR19xvMB5UEQlidapNt7nnwjujg8atJOaJ
+         n27Wo3ow0ltmfHq/gum/Emakt+CsSP856/lIkAz2Yb+wLU/0/83JWs7dwx8t28GZeT
+         3D+ce45pb7K7A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Liviu Dudau <liviu@dudau.co.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, yury.norov@gmail.com,
-        nathan@kernel.org, Jason@zx2c4.com, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 31/37] mips: Move initrd_start check after initrd address sanitisation.
-Date:   Wed, 31 May 2023 09:40:13 -0400
-Message-Id: <20230531134020.3383253-31-sashal@kernel.org>
+Cc:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, james.schulman@cirrus.com,
+        david.rhodes@cirrus.com, rf@opensource.cirrus.com,
+        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com
+Subject: [PATCH AUTOSEL 6.3 32/37] ASoC: cs35l41: Fix default regmap values for some registers
+Date:   Wed, 31 May 2023 09:40:14 -0400
+Message-Id: <20230531134020.3383253-32-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134020.3383253-1-sashal@kernel.org>
 References: <20230531134020.3383253-1-sashal@kernel.org>
@@ -58,50 +60,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liviu Dudau <liviu@dudau.co.uk>
+From: Stefan Binding <sbinding@opensource.cirrus.com>
 
-[ Upstream commit 4897a898a216058dec55e5e5902534e6e224fcdf ]
+[ Upstream commit e2d035f5a7d597bbabc268e236ec6c0408c4af0e ]
 
-PAGE_OFFSET is technically a virtual address so when checking the value of
-initrd_start against it we should make sure that it has been sanitised from
-the values passed by the bootloader. Without this change, even with a bootloader
-that passes correct addresses for an initrd, we are failing to load it on MT7621
-boards, for example.
+Several values do not match the defaults of CS35L41, fix them.
 
-Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+Acked-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20230414152552.574502-4-sbinding@opensource.cirrus.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/kernel/setup.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ sound/soc/codecs/cs35l41-lib.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index f1c88f8a1dc51..81dbb4ef52317 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -158,10 +158,6 @@ static unsigned long __init init_initrd(void)
- 		pr_err("initrd start must be page aligned\n");
- 		goto disable;
- 	}
--	if (initrd_start < PAGE_OFFSET) {
--		pr_err("initrd start < PAGE_OFFSET\n");
--		goto disable;
--	}
- 
- 	/*
- 	 * Sanitize initrd addresses. For example firmware
-@@ -174,6 +170,11 @@ static unsigned long __init init_initrd(void)
- 	initrd_end = (unsigned long)__va(end);
- 	initrd_start = (unsigned long)__va(__pa(initrd_start));
- 
-+	if (initrd_start < PAGE_OFFSET) {
-+		pr_err("initrd start < PAGE_OFFSET\n");
-+		goto disable;
-+	}
-+
- 	ROOT_DEV = Root_RAM0;
- 	return PFN_UP(end);
- disable:
+diff --git a/sound/soc/codecs/cs35l41-lib.c b/sound/soc/codecs/cs35l41-lib.c
+index 04be71435491e..c2c56e5608094 100644
+--- a/sound/soc/codecs/cs35l41-lib.c
++++ b/sound/soc/codecs/cs35l41-lib.c
+@@ -46,7 +46,7 @@ static const struct reg_default cs35l41_reg[] = {
+ 	{ CS35L41_DSP1_RX5_SRC,			0x00000020 },
+ 	{ CS35L41_DSP1_RX6_SRC,			0x00000021 },
+ 	{ CS35L41_DSP1_RX7_SRC,			0x0000003A },
+-	{ CS35L41_DSP1_RX8_SRC,			0x00000001 },
++	{ CS35L41_DSP1_RX8_SRC,			0x0000003B },
+ 	{ CS35L41_NGATE1_SRC,			0x00000008 },
+ 	{ CS35L41_NGATE2_SRC,			0x00000009 },
+ 	{ CS35L41_AMP_DIG_VOL_CTRL,		0x00008000 },
+@@ -58,8 +58,8 @@ static const struct reg_default cs35l41_reg[] = {
+ 	{ CS35L41_IRQ1_MASK2,			0xFFFFFFFF },
+ 	{ CS35L41_IRQ1_MASK3,			0xFFFF87FF },
+ 	{ CS35L41_IRQ1_MASK4,			0xFEFFFFFF },
+-	{ CS35L41_GPIO1_CTRL1,			0xE1000001 },
+-	{ CS35L41_GPIO2_CTRL1,			0xE1000001 },
++	{ CS35L41_GPIO1_CTRL1,			0x81000001 },
++	{ CS35L41_GPIO2_CTRL1,			0x81000001 },
+ 	{ CS35L41_MIXER_NGATE_CFG,		0x00000000 },
+ 	{ CS35L41_MIXER_NGATE_CH1_CFG,		0x00000303 },
+ 	{ CS35L41_MIXER_NGATE_CH2_CFG,		0x00000303 },
 -- 
 2.39.2
 
