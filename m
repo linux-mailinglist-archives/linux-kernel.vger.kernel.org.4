@@ -2,131 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CC9718800
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 733FC7187FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjEaRFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
+        id S229848AbjEaRE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjEaREu (ORCPT
+        with ESMTP id S230015AbjEaREY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:04:50 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15ACFE53
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:04:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685552673; x=1717088673;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=clCi0GqbbqJuiE1UGmODAynJdSHJgnX6hsB7eRepfGM=;
-  b=anVTB1HGw4OZx3Q+4zkkwB8uSQLYOkhKUIFhpD54kXLvK/MPpwQ1TNWt
-   8sgI9T7TyMwg6k/n5ydTaMPisis4HrU0WisxTfNPedyM0lr5Qe4LTjn+3
-   xyoaI4CJ2rbCR9gKPlGvQY5+An2KTeUZFVjReViLjVn10Pfn1iOFIaiRr
-   G1GQU6NKCJUDOt6+wzL0LrzHMw87QIgNzGnJ8aT96nopRChBd+X1boq2B
-   K5OUECFCmEAkzk84CRJVe+58UVnP5euFBdF+teMicrNLCcpWgW/QeCapE
-   NdxDBwA5u7tsci/KiVzl3Xh/1RdCRW3FmuGrWfcuM1t7n1XXndRdvOmhO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="339896636"
-X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="339896636"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 10:00:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="657418722"
-X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="657418722"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga003.jf.intel.com with ESMTP; 31 May 2023 10:00:42 -0700
-Date:   Wed, 31 May 2023 10:03:36 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Radu Rendec <rrendec@redhat.com>, linux-kernel@vger.kernel.org,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 1/3] cacheinfo: Add arch specific early level
- initializer
-Message-ID: <20230531170336.GA22753@ranerica-svr.sc.intel.com>
-References: <20230412185759.755408-1-rrendec@redhat.com>
- <20230412185759.755408-2-rrendec@redhat.com>
- <20230510191207.GA18514@ranerica-svr.sc.intel.com>
- <20230515093608.etfprpqn3lmgybe6@bogus>
- <20230518012703.GA19967@ranerica-svr.sc.intel.com>
- <20230518093414.qhwyogcig4wv3r5s@bogus>
- <20230531122201.3n3ak5n3cjisbmtm@bogus>
+        Wed, 31 May 2023 13:04:24 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3BB1A1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:03:53 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-96f5d651170so256919166b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:03:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685552629; x=1688144629;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YxmvDpJYUdffmb0V6uJ0fpJ/hgXHjpSHqBRoztQ0WkQ=;
+        b=JklNbWZazijUV2L6RdTj/7zJadOK4lrHnorxbkMSWOpJ/jWr7DtE/6kPj/npo7mHsc
+         3Z4OvWNmO2jtLr0HsLGPfdtEy6faAUdyqlMMwhvf6l/y/s63iJkFAVybKHc7iTm0QB7d
+         daMgu1BJIWo6L0m8VLRGXw34RdAMXSvetpgE/6qkd27U4YsxXoVD0q/jN2IUrdbsHgLw
+         1mhQLR82gKVpF7LFhboSriCgYfaLTgA+UI/Z6m4olA6XztAREvCJZZIvERzmC78XA3DL
+         6Bs6mxm1NA8NYfWB4U6zy1SwDEBYlwerxqpq8e/ZRS5/tjh9SmPPKZBsKfJ+iamBLfNv
+         zs6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685552629; x=1688144629;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YxmvDpJYUdffmb0V6uJ0fpJ/hgXHjpSHqBRoztQ0WkQ=;
+        b=BNlGAJ+ZCj9M9ljTCrfA39Ccb/gzHcptDrVZBPehmxwntjpKfcPIOKc0OWAa+bf6mf
+         HOTYVUbsOoQ+zEcqcuYEzDbvPgxODrufyaENzSW09Pu1Xgv3jyCNpBifeFNvkv7CiidC
+         I9yqS0OZCD6bAVY9n8jBmrI0clEEW7iWW8NdhKFwS15lYUNDdlRyyt/1ofUIsqPw8/w6
+         h6UtGA8Er/hc2bLBk39HPU2bm/i6TFSbBeVZiW+m+6ouvO4EQXeCtX4yZTcfxm/oGvGe
+         Hy82/lBRPh4ebNJaTl3et5wfsDl/tMbmMuoa39+VNU8N5V8dJ9uhBUz2IdKlnvbNwSu/
+         P0Kw==
+X-Gm-Message-State: AC+VfDxC9tOOOQzOzih4K12+YVpHmHNhBrQ6wttFjY3vUQLrtc3PFoUC
+        VAsXnDg72W8R6rvqCxIE3I7bgA==
+X-Google-Smtp-Source: ACHHUZ49Q5wyYj15P1zTnwIqi/rsMY9O0HM3ANiPSR/k08b0Ml3MfHXIqro31/IYBCXEv3UrYOk7gg==
+X-Received: by 2002:a17:907:720c:b0:965:ae3a:52c8 with SMTP id dr12-20020a170907720c00b00965ae3a52c8mr13688894ejc.32.1685552629017;
+        Wed, 31 May 2023 10:03:49 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id sa24-20020a170906edb800b0096595cc0810sm9256921ejb.72.2023.05.31.10.03.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 10:03:48 -0700 (PDT)
+Message-ID: <693a36cf-e9d5-a6f1-3953-3a7c7567a754@linaro.org>
+Date:   Wed, 31 May 2023 19:03:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531122201.3n3ak5n3cjisbmtm@bogus>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] soc: qcom: icc-bwmon: Fix MSM8998 count unit
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230531-topic-msm8998-bwmon-v1-1-454f9d550ee5@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230531-topic-msm8998-bwmon-v1-1-454f9d550ee5@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 01:22:01PM +0100, Sudeep Holla wrote:
-> On Thu, May 18, 2023 at 10:34:14AM +0100, Sudeep Holla wrote:
-> > On Wed, May 17, 2023 at 06:27:03PM -0700, Ricardo Neri wrote:
-> > > On Mon, May 15, 2023 at 10:36:08AM +0100, Sudeep Holla wrote:
-> > > > On Wed, May 10, 2023 at 12:12:07PM -0700, Ricardo Neri wrote:
-> > > > > Hi,
-> > > > > 
-> > > > > I had posted a patchset[1] for x86 that initializes
-> > > > > ci_cacheinfo(cpu)->num_leaves during SMP boot.
-> > > > >
-> > > > 
-> > > > It is entirely clear to me if this is just a clean up or a fix to some
-> > > > issue you faced ? Just wanted to let you know Prateek from AMD has couple
-> > > > of fixes [2]
-> > > 
-> > > My first patch is a bug fix. The second patch is clean up that results
-> > > from fixing the bug in patch 1.
-> > > 
-> > > > 
-> > > > > This means that early_leaves and a late cache_leaves() are equal but
-> > > > > per_cpu_cacheinfo(cpu) is never allocated. Currently, x86 does not use
-> > > > > fetch_cache_info().
-> > > > > 
-> > > > > I think that we should check here that per_cpu_cacheinfo() has been allocated to
-> > > > > take care of the case in which early and late cache leaves remain the same:
-> > > > > 
-> > > > > -       if (cache_leaves(cpu) <= early_leaves)
-> > > > > +       if (cache_leaves(cpu) <= early_leaves && per_cpu_cacheinfo(cpu))
-> > > > > 
-> > > > > Otherwise, in v6.4-rc1 + [1] I observe a NULL pointer dereference from
-> > > > > last_level_cache_is_valid().
-> > > > >
-> > > > 
-> > > > I think this is different issue as Prateek was just observing wrong info
-> > > > after cpuhotplug operations. But the patches manage the cpumap_populated
-> > > > state better with the patches. Can you please look at that as weel ?
-> > > 
-> > > I verified that the patches from Prateek fix a different issue. I was able
-> > > to reproduce his issue. His patches fixes it.
-> > > 
-> > > I still see my issue after applying Prateek's patches.
-> > 
-> > Thanks, I thought it is different issue and good that you were able to test
-> > them as well. Please post a proper patch for the NULL ptr dereference you
-> > are hitting on x86.
+On 31/05/2023 18:33, Konrad Dybcio wrote:
+> MSM8998's BWMON counts in megabytes. Fix it.
 > 
-> Gentle ping! Are you still observing NULL ptr dereference with v6.4-rcx ?
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/soc/qcom/icc-bwmon.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, I still observe it on v6.4-rc4.
+If this is
+https://lore.kernel.org/all/33c61f23-6442-6d9b-492f-dd6e9c64a8c1@quicinc.com/
+(and QLT 1872) then add reported-by tag.
 
-> If so, can you please post the fix as a proper patch ? Some of the patches
-> in v6.4-rc1 are being backported, so I prefer to have all the known issues
-> fixed before that happens. Sorry for the nag, but backport is the reason
-> I am pushing for this.
+Change seems logical, although not really documented (a bit
+contradictory information for sdm845), so assuming this was really tested:
 
-Sure. Sorry for the delay. I have the patch ready and post this week. I
-will post it as part my previous patches in [1].
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks and BR,
-Ricardo
+Best regards,
+Krzysztof
+
