@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE9F717D09
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1D6717D0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235862AbjEaKR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 06:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
+        id S235867AbjEaKSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 06:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234902AbjEaKRt (ORCPT
+        with ESMTP id S235400AbjEaKRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 06:17:49 -0400
+        Wed, 31 May 2023 06:17:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D41C133;
-        Wed, 31 May 2023 03:17:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12699134;
+        Wed, 31 May 2023 03:17:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0471663082;
-        Wed, 31 May 2023 10:17:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED6E6C433EF;
-        Wed, 31 May 2023 10:17:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94FB860EFE;
+        Wed, 31 May 2023 10:17:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB99EC4339C;
+        Wed, 31 May 2023 10:17:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685528267;
-        bh=yBShwf/AEIa+ihCN/zarM26dpN1QSrCJRHUQ1f0zrYU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DfNaJc8W80U58OjbozBk4AMlUzn2RvKVDIrscpCwEAxW5MexdUq35mZw6gwOlN/bG
-         HVSMi8nvuTYt0pTi2oGUSGyX/4WibuR+83y8ewsIACOTDKSa94lZeTBhTaFr0LCbvR
-         6RmTiqy2sfQlaQh2N7EThyFibRcaZN0zvR5gzxpLwhn5JXq6xEJsh9q8jY2ghYe/FF
-         t9zk3rTAV0RbMlJZwKovvPVvn2Jqgi3DZTJSzXt0i+VqniH1RzaXs8CS2ftXz+kQzZ
-         nSucFQXVGQ1e4RXx7yNO34EpctwLjY0dUb6rs/uCmGOMILQMpNwhhTYdBiCKfeQztE
-         RdhLZCY5yJidA==
+        s=k20201202; t=1685528270;
+        bh=DNw6SN2JUww7kf2Xz6WH9RgMFZWQt8aiAF4n3naxZ8k=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=K++9WA8Zkr7l786Wuf62fwfUApIVGQi01biW6e8wGwQHBKgrpQAKkzLRVNJ9FJFEb
+         6q65BxMPjwToVuIYiLjc0tsamZrX2LVeun2tYJtaXb1oIs4VZ8f5zNynUVKIFo9Wzf
+         7Jp3q2wWzb5lwsh8j8K1CD0ggFseQ83QSaFCPehYErbXWv0Yt9ZbL3UfGolFiebYxL
+         vwQS/eSA+ngbVol48R179tOYHhEdlXk0rd5tGNlytVY1fbLl6TGPabqkXjSJASlMwr
+         +nWW1+WF/4o4WreAbpmiay1sUBGK2cZsdmmmneQyDHfkZLVJYvUejCepARivd4PRwJ
+         52LgxlEAwMn/w==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -40,10 +40,12 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Neeraj Upadhyay <quic_neeraju@quicinc.com>,
         Joel Fernandes <joel@joelfernandes.org>,
         Giovanni Gherdovich <ggherdovich@suse.cz>
-Subject: [PATCH 0/9] rcu: Support for lazy callbacks on !CONFIG_RCU_NOCB_CPU
-Date:   Wed, 31 May 2023 12:17:27 +0200
-Message-Id: <20230531101736.12981-1-frederic@kernel.org>
+Subject: [PATCH 1/9] rcu: Assume IRQS disabled from rcu_report_dead()
+Date:   Wed, 31 May 2023 12:17:28 +0200
+Message-Id: <20230531101736.12981-2-frederic@kernel.org>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230531101736.12981-1-frederic@kernel.org>
+References: <20230531101736.12981-1-frederic@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -56,45 +58,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+rcu_report_dead() is the last RCU word from the CPU down through the
+hotplug path. It is called in the idle loop right before the CPU shuts
+down for good. Because it removes the CPU from the grace period state
+machine and reports an ultimate quiescent state if necessary, no further
+use of RCU is allowed. Therefore it is expected that IRQs are disabled
+upon calling this function and are not to be re-enabled again until the
+CPU shuts down.
 
-Here is a first attempt at providing support for lazy callbacks on
-non-offloaded CPUs. I have measured interesting results on my machine
-when it is mostly idle (just an idle ssh connection kept alive) with
-a gain of +10% idle time. This needs more serious testing though,
-especially to make sure that no performance regression is introduced.
+Remove the IRQs disablement from that function and verify instead that
+it is actually called with IRQs disabled as it is expected at that
+special point in the idle path.
 
-Also I have only mildly tested on NOCB (eg: no rcutorture yet), so I
-might have broken something.
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+---
+ kernel/rcu/tree.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Finally it's also possible that the idle time improvement is due to me
-introducing a bug :)
-
-The patches 1-5 can be considered independently from the rest.
-
-Frederic Weisbecker (9):
-  rcu: Assume IRQS disabled from rcu_report_dead()
-  rcu: Use rcu_segcblist_segempty() instead of open coding it
-  rcu: Rename jiffies_till_flush to jiffies_lazy_flush
-  rcu: Introduce lazy queue's own qhimark
-  rcu: Add rcutree.lazy_enabled boot parameter
-  rcu/nocb: Rename was_alldone to was_pending
-  rcu: Implement lazyness on the main segcblist level
-  rcu: Make segcblist flags test strict
-  rcu: Support lazy callbacks with CONFIG_RCU_NOCB=n
-
- .../admin-guide/kernel-parameters.txt         |   5 +
- include/linux/rcu_segcblist.h                 |  13 +-
- kernel/rcu/Kconfig                            |   2 +-
- kernel/rcu/rcu.h                              |   8 +-
- kernel/rcu/rcu_segcblist.c                    |  44 ++-
- kernel/rcu/rcu_segcblist.h                    |  32 +-
- kernel/rcu/rcuscale.c                         |   6 +-
- kernel/rcu/tree.c                             | 272 +++++++++++++++--
- kernel/rcu/tree.h                             |   9 +-
- kernel/rcu/tree_nocb.h                        | 285 +++++-------------
- 10 files changed, 425 insertions(+), 251 deletions(-)
-
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index fae9b4e29c93..bc4e7c9b51cb 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -4476,11 +4476,16 @@ void rcu_cpu_starting(unsigned int cpu)
+  */
+ void rcu_report_dead(unsigned int cpu)
+ {
+-	unsigned long flags, seq_flags;
++	unsigned long flags;
+ 	unsigned long mask;
+ 	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
+ 	struct rcu_node *rnp = rdp->mynode;  /* Outgoing CPU's rdp & rnp. */
+ 
++	/*
++	 * IRQS must be disabled from now on and until the CPU dies, or an interrupt
++	 * may introduce a new READ-side while it is actually off the QS masks.
++	 */
++	lockdep_assert_irqs_disabled();
+ 	// Do any dangling deferred wakeups.
+ 	do_nocb_deferred_wakeup(rdp);
+ 
+@@ -4488,7 +4493,6 @@ void rcu_report_dead(unsigned int cpu)
+ 
+ 	/* Remove outgoing CPU from mask in the leaf rcu_node structure. */
+ 	mask = rdp->grpmask;
+-	local_irq_save(seq_flags);
+ 	arch_spin_lock(&rcu_state.ofl_lock);
+ 	raw_spin_lock_irqsave_rcu_node(rnp, flags); /* Enforce GP memory-order guarantee. */
+ 	rdp->rcu_ofl_gp_seq = READ_ONCE(rcu_state.gp_seq);
+@@ -4502,8 +4506,6 @@ void rcu_report_dead(unsigned int cpu)
+ 	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext & ~mask);
+ 	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+ 	arch_spin_unlock(&rcu_state.ofl_lock);
+-	local_irq_restore(seq_flags);
+-
+ 	rdp->cpu_started = false;
+ }
+ 
 -- 
 2.40.1
 
