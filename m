@@ -2,528 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CB97188BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDA27188C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjEaRqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
+        id S230101AbjEaRso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjEaRqV (ORCPT
+        with ESMTP id S229484AbjEaRsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:46:21 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D8211D;
-        Wed, 31 May 2023 10:46:19 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VEn1Wt009755;
-        Wed, 31 May 2023 17:46:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=GfS47MlQhdnYLMdpeAhkwO0njbnAka46cKgfupwXxys=;
- b=mDrpxBvmDY3BWCM5sn6YSyPiaqTmYQEPyv9oVEomwZUYM0hMwaajC1ki8I4sjEjomBWl
- pkcO9UaV1Mw9IIu31OFW2KB6mIZ6XDZcQH5M+L5zzmhfAgQy1tbUP+YsmYfc3WaOb2en
- mvSRL3eH4r1XsRIAHY6/tYZjEf3j0lqo2gGQWg8+dZwDo17/UeaiOd6ivKYyEuGlw3vW
- FYrrWDjga+1ZZZ1Ca5bZzFzeRwPUjCW43D5k/ghxxrjCxqjs4dkMCPT/yL4/lzHdTuVq
- HJ0RSeUCGkacXdq8e5ZALMonWFleSfEyZoyaX1C0IBUrgWK3pxtJCU8sDT2R5ldgh/8/ sA== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qx39d17vb-1
+        Wed, 31 May 2023 13:48:38 -0400
+Received: from mx0b-002c1b01.pphosted.com (mx0b-002c1b01.pphosted.com [148.163.155.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42389125;
+        Wed, 31 May 2023 10:48:37 -0700 (PDT)
+Received: from pps.filterd (m0127843.ppops.net [127.0.0.1])
+        by mx0b-002c1b01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VGsG4Z023669;
+        Wed, 31 May 2023 10:47:29 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version;
+ s=proofpoint20171006; bh=oEZz0qZYR9f4j/geFm0+Cdw9p6IOyJfzmSROsBD/Vsc=;
+ b=EHGU/yxutJCMGeDUL6HizSpF5nGXRJ0IgNQpg8tNbnAOlH3H+QCW76/nDdCe2Cj48+db
+ RGCOFruXpAWPfudrsme1nW4jQYSsehJwF0d5rnSMa4rcHZ4tGYaY8Q4ibDtn4a02V1BS
+ VeZox5nbVtbigezIagKWi67c6hU52ZFSl0Nyb2+onssnH3q8jiHQZJ9uzVCJ3TSHaMNw
+ Byvo90rDdl232W74Z+p/ZsNol18ces00qAS77GGg9jzw8cIrK1WxtTvsV6cK4heo6aSt
+ P/UVW6KYYX+QXf1y7VSnG1653x7rksSyfkPy0fSBjvuB3lXr/erKBrqmhj7d+wRqxoIG Hw== 
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2175.outbound.protection.outlook.com [104.47.57.175])
+        by mx0b-002c1b01.pphosted.com (PPS) with ESMTPS id 3qufyfaj8w-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 17:45:57 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34VHjuCG011521
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 17:45:56 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 31 May
- 2023 10:45:55 -0700
-Message-ID: <a8448fbc-ff62-0eca-66cc-a10a5e833926@quicinc.com>
-Date:   Wed, 31 May 2023 10:45:55 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] drm/panel: Add driver for Visionox r66451 panel
+        Wed, 31 May 2023 10:47:29 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PwGULf29ADT+6lCF8PNVMQzNCb5w8uKemivHFiT7nNkHUcVD3sI8Bdk/iTYLF8FsF3lK4YEJS26N9As96fC4ad8fBs8vSJwTK8+hwpK8eahsFHWZNDXbw+xbftetNbDvMWTR31sCDDR6zPjrTQ9NrDSr/gUfX7uIRbjEbg/xUKL7nolLF3yEM2sRxqCkqfkCj/XJasHtVuRUWn3n0lu5j3RGTd4/7iK75+bv72vYEK5dx0z1zCQy/iOi6TitfttEGmKFUQhGp8o5rbdS6utl+ktuMtb2r+SR9RAf6f9P5/g27iS4629iD8KuP8dBFX1T7QWBv1mPfxhOa15zIO6YMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oEZz0qZYR9f4j/geFm0+Cdw9p6IOyJfzmSROsBD/Vsc=;
+ b=QuqsbU+/ZTT2hBmWhDXFdLbXOAKwgTggS8Lc4QBKg5oGOQpQ2Pm69jz7YsCjc0XlOc/5u8vK6hjmTJtqVtNHKfTHn2J2HZjEt14Xqbla6e7hFy8ymxpGkKuRlFLXqMQy0+cO5Ulimxxc2+8Uy2RbolXToHpueMfa90H5tEtL7pTFV1lUK7lWZxT4wf3fPcNDvhPqDTBmtGDXP1cr6m7kK2LUl+r2MlRicgbJ3dmszjwk6fUN8hjMShVJBnUG/XbCmp5hmYsILEQ7ZtTaAj2rM96OKlBgmZDGvu92YbbucbVX/WrHk0M6Wnd0Aj3+ivycKDpxCBTKvFKdMMQ297wf7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
+ dkim=pass header.d=nutanix.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oEZz0qZYR9f4j/geFm0+Cdw9p6IOyJfzmSROsBD/Vsc=;
+ b=w5//hxrWj7N5Qj4SSoPGFTj/UDYLvvOIU48yChT4Wl434twGMCEYg1LYk1Cj9cyU1u+llz2a49yAfJ89sMrZfMYIOGp4UWJNS2pZRnDBqvrgf1aA+ycwUXYGecJnZWyYZ6AYUMYT3bKTOmxGm0F68sCBwSxvVIIqhy40kYaQNw9dhF71A7m+/RX9feYqDhCjbIWYEUfudupB4vGFVv2duiHU7xhBkzo/ioGQYltYmOMMKSH8B5WRqxac2GugSiRPPUkmJpU2nOZOLmZCk64JaxP6G4d+IJm9x/q3YtoRRK/RRd2n6NZcwl/cx9RDMM++oXGHttly4wl9OAMVbRo3lg==
+Received: from BL0PR02MB4579.namprd02.prod.outlook.com (2603:10b6:208:4b::10)
+ by CH2PR02MB6630.namprd02.prod.outlook.com (2603:10b6:610:7d::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Wed, 31 May
+ 2023 17:47:26 +0000
+Received: from BL0PR02MB4579.namprd02.prod.outlook.com
+ ([fe80::b138:ab35:d489:67f]) by BL0PR02MB4579.namprd02.prod.outlook.com
+ ([fe80::b138:ab35:d489:67f%4]) with mapi id 15.20.6433.024; Wed, 31 May 2023
+ 17:47:25 +0000
+From:   Jon Kohler <jon@nutanix.com>
+To:     Eric Dumazet <edumazet@google.com>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Richard Gobert <richardbgobert@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Wojciech Drewek <wojciech.drewek@intel.com>,
+        Guillaume Nault <gnault@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Shmulik Ladkani <shmulik.ladkani@gmail.com>,
+        Qingqing Yang <qingqing.yang@broadcom.com>,
+        Daniel Xu <dxu@dxuuu.xyz>, Felix Fietkau <nbd@nbd.name>,
+        Ludovic Cintrat <ludovic.cintrat@gatewatcher.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] flow_dissector: introduce skb_get_hash_symmetric()
+Thread-Topic: [PATCH] flow_dissector: introduce skb_get_hash_symmetric()
+Thread-Index: AQHZk+RxmdTXxpqVM0m0KZDS1nnqo690pFCAgAAD0oA=
+Date:   Wed, 31 May 2023 17:47:25 +0000
+Message-ID: <30861EDF-D063-43C7-94A7-9C3C5ED13E54@nutanix.com>
+References: <20230531172158.90406-1-jon@nutanix.com>
+ <CANn89iLE1d=MuSMTisEbLh6Q_c4rjagd8xuRj0PC-4ua0pDRPA@mail.gmail.com>
+In-Reply-To: <CANn89iLE1d=MuSMTisEbLh6Q_c4rjagd8xuRj0PC-4ua0pDRPA@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230516-b4-r66451-panel-driver-v1-0-4210bcbb1649@quicinc.com>
- <20230516-b4-r66451-panel-driver-v1-2-4210bcbb1649@quicinc.com>
- <3cca2809-fa26-f0cf-2ccc-6737d150b43d@linaro.org>
- <aeef04c4-7952-2b7c-d673-5c75dda19154@quicinc.com>
- <196a43da-1f59-6213-7c4f-2cfcb8d39b32@quicinc.com>
- <f3908927-e9b7-c61e-d5e6-8223dfe45bf8@linaro.org>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <f3908927-e9b7-c61e-d5e6-8223dfe45bf8@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 1mWDBebI_cJIctGiH_cB116TF9dR3UR3
-X-Proofpoint-ORIG-GUID: 1mWDBebI_cJIctGiH_cB116TF9dR3UR3
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.120.41.1.1)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL0PR02MB4579:EE_|CH2PR02MB6630:EE_
+x-ms-office365-filtering-correlation-id: 85db4e99-f620-4fb3-8f75-08db61ff1888
+x-proofpoint-crosstenant: true
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /HprFA5Z6jFLHmZIUJXgDavx8FPxskasoFfYBSCgtTmB0l4ZRduT+mUvLNUkKoRdQ4kbeTCpTvR/bilfKTkdWa2j2J0DL7TqWkaH8Quq3jsInteb7NwgPk+rXNK5IZOEMuUOaPGn2ae5zKJPNrqHTKsmhECHKxnnk/cJmJ9Y9y4xfFmIZ87vHEUlB/4GO/7ezkDmE+p+6TENdDGNqkXR8cVecVktBIR2vaCYAyoD/t0UIhgADQnCu2g1UxE6QuAuVC4knZmhMmzUFrMLt+zGoqP5ktkv4jw0ZuIL3/Go9zVXlqLOaJ7IbFmJUxW5VCBX5XSbL+GZSh4PW869CPrXyjffddM3eWKIxtaaN09H8guX9bLfV/PfDslMhDoV98C8SJXLEx6JbE+M/L0DlwYv4OZoozzEBVRCoZJEwEM4G4bLXDDRKzgmVn80Snx90eeNKUVp9Knkss6wWmsongAWiwUlS8tUvjdVVPNwIuign17gD+ida+6kmn4YQqKOyM94+NuskLd4KyC7Vz0n+h7EoNO68UxNjKtxYFbkODHo5+jN5GvfGmcErvYc/wyiGaAwIkFTC25YdRIcvXzA39291v8OCsSSG2cO418OhfaBuia68sTLJvrkSB0BWGaeYNbATDkyqGwwi1/cabfzSOYkNg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR02MB4579.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(346002)(39860400002)(136003)(396003)(451199021)(41300700001)(6486002)(316002)(38070700005)(86362001)(6512007)(2906002)(186003)(36756003)(53546011)(6506007)(8936002)(8676002)(33656002)(7416002)(5660300002)(2616005)(478600001)(122000001)(38100700002)(54906003)(6916009)(4326008)(66946007)(91956017)(76116006)(71200400001)(66556008)(66476007)(66446008)(64756008)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?T0xEYW9NMklwSlRVUURzMlZjTHc5ZVA0SEw3NW1JSERpQXNvZm1aL2txTmIx?=
+ =?utf-8?B?WXdRdmpmN0R1K0JuZmF2TEZGZTEyOXpnaVRkSXo0YmRzb00xQTVrK0lDUEpj?=
+ =?utf-8?B?MC9PakhDRk9QNUpZK1lRTTdrVkgzQlVwT3U5NTQ4dkZIZjRhV3pqdEs5U0E0?=
+ =?utf-8?B?R1ZpaWZRMjAzNmlUTlRQWURIRytYQWRWTGJHL3BtS1Q0aVRpNmR5L2xmRXZp?=
+ =?utf-8?B?WC9kY3o0eUs2SU45OE1LYzJwaGwzcVQwT3dVWjYwL09GdnVHaDRxZnZxajZz?=
+ =?utf-8?B?cm8vdm52K3hBdi80ckZsVG10SS84L3hWd3IrM2ZJYm44YThSOTRYeFdjaXVZ?=
+ =?utf-8?B?NXdDRVJwckJaOU90d2FudHhaRjBJOFlvM3JSY1hvWUlIZlNpVUx4N016eUFN?=
+ =?utf-8?B?Y0R6dDg1bC9XS0JQcmQwWlZtZml6SXMweHB2R0ZEQzF6aGNhb2JVa1hmVjNa?=
+ =?utf-8?B?RXZWdml0V2dnVzk5dktxUGludzNPRFcxYTQ2VjY3MUk3amJBcGo5NmkxRUV4?=
+ =?utf-8?B?QjFHRlVBdzlCZW1IQllZQW04dHpldXovQWZzekVuT0NwWE0raUF6clVGWkp1?=
+ =?utf-8?B?SlUzdzdrQ2VxTUlGWWF4RVppR2toV0kxM2Z4NTFRMmlET2c3aU9hVkMxTmRn?=
+ =?utf-8?B?QzI2SHNIWkNYWUR1anFwVFFXWkpJb1AyakcwY29lOEdRaDlYMFNpSzBDczdI?=
+ =?utf-8?B?M1Rib2VHWS9UTlIwQWRJZkoyZjVDdTFIV1NQaGJ2d1Jna2UxeEdYYkpCeXFr?=
+ =?utf-8?B?dU1OOTcyRTZ4Z0krTXp0QXRNTVZuZENCZ09GRHRoazdYSGxycmRLOS9aVk1L?=
+ =?utf-8?B?Z0llTmltdytONkpKV1JNenl0dERXV2MzRGVXN3JnSXBjUGdmckQ0c2ZtaEl6?=
+ =?utf-8?B?aVZiMDFGZkxobC9XMWNleEh5OGF4RzVGbTdGbUVJMkVjeWpRd1QzMXhLaWk1?=
+ =?utf-8?B?SDJod1FueHZuZE9WU21SbjFTQW1NcXJMMGgyTVArK2VmOE9NVUM5QlBVMEZz?=
+ =?utf-8?B?SmdXM1ViWXloT3hQTHhUcjFpUmFlSU8wL0R2T085SStSeklodEtLQUNjZDRM?=
+ =?utf-8?B?RUF1Z0JCOU1TbUdLWE1ydHZYeDYzQlZVVko1MVFMTlZoYk0ySEdtbHcrUCtT?=
+ =?utf-8?B?QmI3TldLUHdwNEdHTmZSck92aUZxVmNYc1dtbm1aQ1lURXNaaWc3N2tLdTI3?=
+ =?utf-8?B?cTJvTHNqajlnMlEySWk4SjB1dEloYmpCSElGN2x5NURIMTR3M3VleHhuZkQy?=
+ =?utf-8?B?emkzYjlSUk03NG9RSjcvUnJtQ29kSjJBMFVaZGpjcnZOWG1UZU1xYlR5dHlv?=
+ =?utf-8?B?Yjh2dHI2b0l2TUhKV3V6UThyOXhWdkRhZ1BqejBhOHR6cTVKZjdnV21YV3gw?=
+ =?utf-8?B?NE94dWgrVitwbTBzSy9sQlJtc1dyb0F3R0RBRThlVzdhSXBMc2VkTzNTRnh1?=
+ =?utf-8?B?RSszZDdzYVBRL3NTb3lUdlIrOFl4YmVQd3ordlEzM294V1BUVFF3SytKZU9G?=
+ =?utf-8?B?QzB6NGtZT2NJeDl1ejV5TExHRnZRTk81dUk2dThPVGxuNDVLMldoRDlSZUYv?=
+ =?utf-8?B?clVhL0lMdDlLM3lORUh3aXd6N1B3UG5EZ2lhcmZUbncrWWpsSy9MRmp1QnNG?=
+ =?utf-8?B?cVFNOUlXNlIwU29DT2xUM3J2alZOd0hSMFlETUgwQUxtZzVTZ3N0dHA0UGN4?=
+ =?utf-8?B?QmVTdG1RL2pTTnZHKytvTkhhUXd6bURvOVVuRTRYZFM5c1VyNnhQK0xiRnRN?=
+ =?utf-8?B?VFNIQlpyY0taQXAvOWhsUnN6SG81MW1GQkgyYWw0STNZNFBxNit0R1lpckI3?=
+ =?utf-8?B?Z2dBY0tvdThDUWxScUpZalZlOFY0VUNCQWRRQVNzdmlZTjE0S1ZmOUNFaloz?=
+ =?utf-8?B?dGtaV3dLeVlISmpvbDZQS2VpQ3dJZm92TGtpSjBvUm1uTkJnemZ5eG4wRlN4?=
+ =?utf-8?B?enZiQndsVFJRQW54U2Z2d1pMaExjMHI5RHluVkdINEdVNTMzWjJCbzIreWlI?=
+ =?utf-8?B?UUdjaUNnMlgraVdHeWV2aUFsUjQrcUQrWVgyWlEzSUFYemllakVHdHlIcnBP?=
+ =?utf-8?B?VVJkODdKYmpxUU5XM2ZGSTBBU0VEVFpUVWxRVmJjRWM5encrWHhieXB3aU85?=
+ =?utf-8?B?NnFITzA5K2grYU9mQmJBVm9TZUZkcnYrR0hmQm8waldXRjBuMGluMWswcnVy?=
+ =?utf-8?B?MThXUXRsbTJiZWVBV0cxcDVkR1M0Yytkb3lZTm9wMmFEZGZaYlBXRGlKckZH?=
+ =?utf-8?B?ZUhmTXd3b3I1NjFDZzFLYm55YnhnPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <378C8E3DEB1B674DA4F288CA1F556DA2@namprd02.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nutanix.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR02MB4579.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85db4e99-f620-4fb3-8f75-08db61ff1888
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 May 2023 17:47:25.9038
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: bb047546-786f-4de1-bd75-24e5b6f79043
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /sZY5SFo7eR5i1dq3wvBzU6/zU+9NajywkQqUYQuZuX+S+MOQADyhFr83ApGSFNeNjeCVXKXRbwBv46T/y4Vlbs/bLRX7+jEkqHUu3SWQAo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6630
+X-Proofpoint-GUID: DNj_pxSHeE8IOF1jBPAPNcCqGH-4Ea40
+X-Proofpoint-ORIG-GUID: DNj_pxSHeE8IOF1jBPAPNcCqGH-4Ea40
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-05-31_12,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- spamscore=0 priorityscore=1501 mlxlogscore=999 adultscore=0 mlxscore=0
- impostorscore=0 phishscore=0 lowpriorityscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305310150
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/30/2023 4:12 PM, Dmitry Baryshkov wrote:
-> On 30/05/2023 23:09, Jessica Zhang wrote:
->>
->>
->> On 5/18/2023 3:17 PM, Jessica Zhang wrote:
->>>
->>>
->>> On 5/17/2023 5:19 PM, Dmitry Baryshkov wrote:
->>>> On 16/05/2023 23:20, Jessica Zhang wrote:
->>>>> Add support for the 1080x2340 Visionox R66451 AMOLED DSI panel that
->>>>> comes with the Qualcomm HDK8350 display expansion pack.
->>>>>
->>>>> The panel enables display compression (DSC v1.2) by default.
->>>>>
->>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>>>> ---
->>>>>   drivers/gpu/drm/panel/Kconfig                 |   8 +
->>>>>   drivers/gpu/drm/panel/Makefile                |   1 +
->>>>>   drivers/gpu/drm/panel/panel-visionox-r66451.c | 395 
->>>>> ++++++++++++++++++++++++++
->>>>>   3 files changed, 404 insertions(+)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/panel/Kconfig 
->>>>> b/drivers/gpu/drm/panel/Kconfig
->>>>> index 29cf5fa39ff2..9c2c36dbddf3 100644
->>>>> --- a/drivers/gpu/drm/panel/Kconfig
->>>>> +++ b/drivers/gpu/drm/panel/Kconfig
->>>>> @@ -766,6 +766,14 @@ config DRM_PANEL_VISIONOX_VTDR6130
->>>>>         Say Y here if you want to enable support for Visionox
->>>>>         VTDR6130 1080x2400 AMOLED DSI panel.
->>>>> +config DRM_PANEL_VISIONOX_R66451
->>>>> +    tristate "Visionox R66451"
->>>>> +    depends on OF
->>>>> +    depends on DRM_MIPI_DSI
->>>>> +    help
->>>>> +      Say Y here if you want to enable support for Visionox
->>>>> +      R66451 1080x2340 AMOLED DSI panel.
->>>>> +
->>>>>   config DRM_PANEL_WIDECHIPS_WS2401
->>>>>       tristate "Widechips WS2401 DPI panel driver"
->>>>>       depends on SPI && GPIOLIB
->>>>> diff --git a/drivers/gpu/drm/panel/Makefile 
->>>>> b/drivers/gpu/drm/panel/Makefile
->>>>> index b3e8ba29edd3..e043a92ee676 100644
->>>>> --- a/drivers/gpu/drm/panel/Makefile
->>>>> +++ b/drivers/gpu/drm/panel/Makefile
->>>>> @@ -78,5 +78,6 @@ obj-$(CONFIG_DRM_PANEL_TPO_TPG110) += 
->>>>> panel-tpo-tpg110.o
->>>>>   obj-$(CONFIG_DRM_PANEL_TRULY_NT35597_WQXGA) += panel-truly-nt35597.o
->>>>>   obj-$(CONFIG_DRM_PANEL_VISIONOX_RM69299) += panel-visionox-rm69299.o
->>>>>   obj-$(CONFIG_DRM_PANEL_VISIONOX_VTDR6130) += 
->>>>> panel-visionox-vtdr6130.o
->>>>> +obj-$(CONFIG_DRM_PANEL_VISIONOX_R66451) += panel-visionox-r66451.o
->>>>>   obj-$(CONFIG_DRM_PANEL_WIDECHIPS_WS2401) += panel-widechips-ws2401.o
->>>>>   obj-$(CONFIG_DRM_PANEL_XINPENG_XPP055C272) += 
->>>>> panel-xinpeng-xpp055c272.o
->>>>> diff --git a/drivers/gpu/drm/panel/panel-visionox-r66451.c 
->>>>> b/drivers/gpu/drm/panel/panel-visionox-r66451.c
->>>>> new file mode 100644
->>>>> index 000000000000..e3648ead3e84
->>>>> --- /dev/null
->>>>> +++ b/drivers/gpu/drm/panel/panel-visionox-r66451.c
->>>>> @@ -0,0 +1,395 @@
->>>>> +//SPDX-License-Identifier: GPL-2.0-only
->>>>> +//Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights 
->>>>> reserved.
->>>>> +
->>>>> +#include <linux/backlight.h>
->>>>> +#include <linux/delay.h>
->>>>> +#include <linux/gpio/consumer.h>
->>>>> +#include <linux/module.h>
->>>>> +#include <linux/of.h>
->>>>> +#include <linux/regulator/consumer.h>
->>>>> +
->>>>> +#include <drm/drm_mipi_dsi.h>
->>>>> +#include <drm/drm_modes.h>
->>>>> +#include <drm/drm_panel.h>
->>>>> +#include <drm/display/drm_dsc.h>
->>>>> +#include <drm/display/drm_dsc_helper.h>
->>>>> +
->>>>> +#include <video/mipi_display.h>
->>>>> +
->>>>> +struct visionox_r66451 {
->>>>> +    struct drm_panel panel;
->>>>> +    struct mipi_dsi_device *dsi;
->>>>> +    struct gpio_desc *reset_gpio;
->>>>> +    struct regulator_bulk_data supplies[2];
->>>>> +    bool prepared, enabled;
->>>>> +};
->>>>> +
->>>>> +static inline struct visionox_r66451 *to_visionox_r66451(struct 
->>>>> drm_panel *panel)
->>>>> +{
->>>>> +    return container_of(panel, struct visionox_r66451, panel);
->>>>> +}
->>>>> +
->>>>> +static void visionox_r66451_reset(struct visionox_r66451 *ctx)
->>>>> +{
->>>>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 0);
->>>>> +    usleep_range(10000, 10100);
->>>>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 1);
->>>>> +    usleep_range(10000, 10100);
->>>>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 0);
->>>>> +    usleep_range(10000, 10100);
->>>>> +}
->>>>> +
->>>>> +static int visionox_r66451_on(struct visionox_r66451 *ctx)
->>>>> +{
->>>>> +    struct mipi_dsi_device *dsi = ctx->dsi;
->>>>> +    struct device *dev = &dsi->dev;
->>>>> +    int ret;
->>>>> +
->>>>> +    dsi->mode_flags |= MIPI_DSI_MODE_LPM;
->>>>> +
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x00);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xc2,
->>>>> +                   0x09, 0x24, 0x0c, 0x00, 0x00, 0x0c, 0x00, 0x00, 
->>>>> 0x00,
->>>>> +                   0x09, 0x3c);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xd7,
->>>>> +                   0x00, 0xb9, 0x3c, 0x00, 0x40, 0x04, 0x00, 0xa0, 
->>>>> 0x0a,
->>>>> +                   0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>>> 0x19,
->>>>> +                   0x3c, 0x00, 0x40, 0x04, 0x00, 0xa0, 0x0a);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x80);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xde,
->>>>> +                   0x40, 0x00, 0x18, 0x00, 0x18, 0x00, 0x18, 0x00, 
->>>>> 0x18,
->>>>> +                   0x10, 0x00, 0x18, 0x00, 0x18, 0x00, 0x18, 0x02, 
->>>>> 0x00, 0x00);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x04);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xe8, 0x00, 0x02);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xe4, 0x00, 0x08);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x00);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xc4,
->>>>> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>>> 0x00,
->>>>> +                   0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x32);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xcf,
->>>>> +                   0x64, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>>> 0x08,
->>>>> +                   0x00, 0x0b, 0x77, 0x01, 0x01, 0x01, 0x01, 0x01, 
->>>>> 0x01,
->>>>> +                   0x02, 0x02, 0x02, 0x02, 0x02, 0x03);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xd3,
->>>>> +                   0x45, 0x00, 0x00, 0x01, 0x13, 0x15, 0x00, 0x15, 
->>>>> 0x07,
->>>>> +                   0x0f, 0x77, 0x77, 0x77, 0x37, 0xb2, 0x11, 0x00, 
->>>>> 0xa0,
->>>>> +                   0x3c, 0x9c);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xd7,
->>>>> +                   0x00, 0xb9, 0x34, 0x00, 0x40, 0x04, 0x00, 0xa0, 
->>>>> 0x0a,
->>>>> +                   0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>>> 0x19,
->>>>> +                   0x34, 0x00, 0x40, 0x04, 0x00, 0xa0, 0x0a);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xd8,
->>>>> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>>> 0x00,
->>>>> +                   0x3a, 0x00, 0x3a, 0x00, 0x3a, 0x00, 0x3a, 0x00, 
->>>>> 0x3a,
->>>>> +                   0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>>> 0x00,
->>>>> +                   0x00, 0x0a, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x00, 
->>>>> 0x00,
->>>>> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>>> 0x0a,
->>>>> +                   0x00, 0x32, 0x00, 0x0a, 0x00, 0x22);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xdf,
->>>>> +                   0x50, 0x42, 0x58, 0x81, 0x2d, 0x00, 0x00, 0x00, 
->>>>> 0x00,
->>>>> +                   0x00, 0x00, 0x6b, 0x00, 0x00, 0x00, 0x00, 0x00, 
->>>>> 0x00,
->>>>> +                   0x00, 0x00, 0x01, 0x0f, 0xff, 0xd4, 0x0e, 0x00, 
->>>>> 0x00,
->>>>> +                   0x00, 0x00, 0x00, 0x00, 0x0f, 0x53, 0xf1, 0x00, 
->>>>> 0x00,
->>>>> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf7, 0x01);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x80);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xe4, 0x34, 0xb4, 0x00, 0x00, 
->>>>> 0x00, 0x39, 0x04, 0x09, 0x34);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xe6, 0x00);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x04);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xdf, 0x50, 0x40);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf3, 0x50, 0x00, 0x00, 0x00, 0x00);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x11);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf3, 0x01, 0x00, 0x00, 0x00, 0x01);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf4, 0x00, 0x02);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x19);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, 0xdf, 0x50, 0x42);
->>>>> +    mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
->>>>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_COLUMN_ADDRESS, 0x00, 
->>>>> 0x00, 0x04, 0x37);
->>>>
->>>> Please use mipi_dsi_dcs_set_column_address(dsi, 0, 1080 - 1);
->>>
->>> Hi Dmitry,
->>>
->>> Acked.
->>>
->>>>
->>>>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PAGE_ADDRESS, 0x00, 
->>>>> 0x00, 0x09, 0x23);
->>>>
->>>> mipi_dsi_dcs_set_page_address(dsi, 0, 2340 - 1);
->>>
->>> Acked.
->>>
->>>>
->>>>> +
->>>>> +    ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
->>>>> +    if (ret < 0) {
->>>>> +        dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
->>>>> +        return ret;
->>>>> +    }
->>>>> +    msleep(120);
->>>>> +
->>>>> +    ret = mipi_dsi_dcs_set_display_on(dsi);
->>>>
->>>> Should the mipi_dsi_dcs_set_display_on() (and maybe exit sleep mode) 
->>>> be a a part of _enable()? Correspondingly _off should IMO be a part 
->>>> of _disable callback().
->>>
->>> Acked. Looking at the downstream code, it seems that all the dcs on 
->>> commands can be sent within _enable() (and similarly for the off 
->>> commands with _disable()).
->>>
->>>>
->>>>> +    if (ret < 0) {
->>>>> +        dev_err(dev, "Failed on set display on: %d\n", ret);
->>>>> +        return ret;
->>>>> +    }
->>>>> +    msleep(20);
->>>>
->>>>
->>>> Do we need to add here the following line?
->>>>
->>>> dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
->>>
->>> Do you mean within the return on error block?
->>>
->>>  From my understanding, we should be setting the MIPI_DSI_MODE_LPM 
->>> for panel_on() then unsetting MODE_LPM in panel_off().
->>>
->>>>
->>>>
->>>>> +
->>>>> +    return 0;
->>>>> +}
->>>>> +
->>>>> +static int visionox_r66451_off(struct visionox_r66451 *ctx)
->>>>> +{
->>>>> +    struct mipi_dsi_device *dsi = ctx->dsi;
->>>>> +    struct device *dev = &dsi->dev;
->>>>> +    int ret;
->>>>> +
->>>>> +    dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
->>>>> +
->>>>> +    ret = mipi_dsi_dcs_set_display_off(dsi);
->>>>> +    if (ret < 0) {
->>>>> +        dev_err(dev, "Failed to set display off: %d\n", ret);
->>>>> +        return ret;
->>>>> +    }
->>>>> +    msleep(20);
->>>>> +
->>>>> +    ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
->>>>> +    if (ret < 0) {
->>>>> +        dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
->>>>> +        return ret;
->>>>> +    }
->>>>> +    msleep(120);
->>>>> +
->>>>> +    return 0;
->>>>> +}
->>>>> +
->>>>> +static int visionox_r66451_prepare(struct drm_panel *panel)
->>>>> +{
->>>>> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->>>>> +    struct device *dev = &ctx->dsi->dev;
->>>>> +    int ret;
->>>>> +
->>>>> +    if (ctx->prepared)
->>>>> +        return 0;
->>>>> +
->>>>> +    ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies),
->>>>> +                    ctx->supplies);
->>>>> +    if (ret < 0)
->>>>> +        return ret;
->>>>> +
->>>>> +    visionox_r66451_reset(ctx);
->>>>> +
->>>>> +    ret = visionox_r66451_on(ctx);
->>>>> +    if (ret < 0) {
->>>>> +        dev_err(dev, "Failed to initialize panel: %d\n", ret);
->>>>> +        gpiod_set_value_cansleep(ctx->reset_gpio, 1);
->>>>> +        regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), 
->>>>> ctx->supplies);
->>>>> +        return ret;
->>>>> +    }
->>>>> +
->>>>> +    ctx->prepared = true;
->>>>> +    return 0;
->>>>> +}
->>>>> +
->>>>> +static int visionox_r66451_unprepare(struct drm_panel *panel)
->>>>> +{
->>>>> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->>>>> +    struct device *dev = &ctx->dsi->dev;
->>>>> +    int ret;
->>>>> +
->>>>> +    if (!ctx->prepared)
->>>>> +        return 0;
->>>>> +
->>>>> +    ret = visionox_r66451_off(ctx);
->>>>> +    if (ret < 0)
->>>>> +        dev_err(dev, "Failed to un-initialize panel: %d\n", ret);
->>>>> +
->>>>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 1);
->>>>> +    regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
->>>>> +
->>>>> +    ctx->prepared = false;
->>>>> +    return 0;
->>>>> +}
->>>>> +
->>>>> +static const struct drm_display_mode visionox_r66451_mode = {
->>>>> +    .clock = (1080 + 95 + 1 + 40) * (2340 + 25 + 1 + 4) * 120 / 1000,
->>>>> +    .hdisplay = 1080,
->>>>> +    .hsync_start = 1080 + 95,
->>>>> +    .hsync_end = 1080 + 95 + 1,
->>>>> +    .htotal = 1080 + 95 + 1 + 40,
->>>>> +    .vdisplay = 2340,
->>>>> +    .vsync_start = 2340 + 25,
->>>>> +    .vsync_end = 2340 + 25 + 1,
->>>>> +    .vtotal = 2340 + 25 + 1 + 4,
->>>>> +    .width_mm = 0,
->>>>> +    .height_mm = 0,
->>>>
->>>> Please provide real values here.
->>>
->>> Acked.
->>>
->>>>
->>>>> +};
->>>>> +
->>>>> +static int visionox_r66451_enable(struct drm_panel *panel)
->>>>> +{
->>>>> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->>>>> +    struct mipi_dsi_device *dsi = ctx->dsi;
->>>>> +    struct drm_dsc_picture_parameter_set pps;
->>>>> +    int ret;
->>>>> +
->>>>> +    if (ctx->enabled)
->>>>> +        return 0;
->>>>> +
->>>>> +    if (!dsi->dsc) {
->>>>> +        dev_err(&dsi->dev, "DSC not attached to DSI\n");
->>>>> +        return -ENODEV;
->>>>> +    }
->>>>> +
->>>>> +    drm_dsc_pps_payload_pack(&pps, dsi->dsc);
->>>>> +    ret = mipi_dsi_picture_parameter_set(dsi, &pps);
->>>>> +
->>>>> +    ctx->enabled = true;
->>>>> +
->>>>> +    return 0;
->>>>> +}
->>>>> +
->>>>> +static int visionox_r66451_disable(struct drm_panel *panel)
->>>>> +{
->>>>> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->>>>> +
->>>>> +    ctx->enabled = false;
->>>>> +
->>>>> +    return 0;
->>>>> +}
->>>>> +
->>>>> +static int visionox_r66451_get_modes(struct drm_panel *panel,
->>>>> +                    struct drm_connector *connector)
->>>>> +{
->>>>> +    struct drm_display_mode *mode;
->>>>> +
->>>>> +    mode = drm_mode_duplicate(connector->dev, &visionox_r66451_mode);
->>>>> +    if (!mode)
->>>>> +        return -ENOMEM;
->>>>> +
->>>>> +    drm_mode_set_name(mode);
->>>>> +
->>>>> +    mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
->>>>> +    connector->display_info.width_mm = mode->width_mm;
->>>>> +    connector->display_info.height_mm = mode->height_mm;
->>>>> +    drm_mode_probed_add(connector, mode);
->>>>
->>>> Can we use drm_connector_helper_get_modes_fixed() instead?
->>>
->>> Acked.
->>
->> Hi Dmitry,
->>
->> Just wanted to follow up on this -- As Marijn mentioned in a separated 
->> thread, DRM_MODE_TYPE_DRIVER is not set within 
->> drm_connector_helper_get_modes_fixed(), and looking at the kernel 
->> docs, that's a required flag for this mode.
-> 
-> You can set this flag in the visionox_r66451_mode, can you not?
-
-Sure, I can set it during initialization then; just didn't see a 
-precedent for it in existing drivers.
-
-> 
->> Since I'm not able to set the *_TYPE_DRIVER flag before 
->> *_get_modes_fixed() is called, I'll stick to using the previous method 
->> of calling drm_mode_probed_add() directly in 
->> visionox_r66451_get_modes(). (FWIW, other drivers such as 
->> panel-visionox-vtdr6130, panel-truly-nt35597, and 
->> panel-visionox-rm69299 also don't use *_get_modes_fixed() and call 
->> drm_mode_probed_add() directly in their get_mode() implementations.)
-> 
-> That doesn't mean that we should increase the amount of the c&p code.
-> 
-> If I have time, I'try doing a rework of existing panel drivers.
-
-Sounds good -- I think that would help get rid of a lot of duplicate code.
-
-Thanks,
-
-Jessica Zhang
-
-> 
-> -- 
-> With best wishes
-> Dmitry
-> 
+DQoNCj4gT24gTWF5IDMxLCAyMDIzLCBhdCAxOjMzIFBNLCBFcmljIER1bWF6ZXQgPGVkdW1hemV0
+QGdvb2dsZS5jb20+IHdyb3RlOg0KPiANCj4gT24gV2VkLCBNYXkgMzEsIDIwMjMgYXQgNzoyMuKA
+r1BNIEpvbiBLb2hsZXIgPGpvbkBudXRhbml4LmNvbT4gd3JvdGU6DQo+PiANCj4+IHR1bi5jIGNo
+YW5nZWQgZnJvbSBza2JfZ2V0X2hhc2goKSB0byBfX3NrYl9nZXRfaGFzaF9zeW1tZXRyaWMoKSBv
+bg0KPj4gY29tbWl0IGZlZWMwODRhN2NmNCAoInR1bjogdXNlIHN5bW1ldHJpYyBoYXNoIiksIHdo
+aWNoIGV4cG9zZXMgYW4NCj4+IG92ZXJoZWFkIGZvciBPVlMgZGF0YXBhdGgsIHdoZXJlIG92c19k
+cF9wcm9jZXNzX3BhY2tldCgpIGhhcyB0bw0KPj4gY2FsY3VsYXRlIHRoZSBoYXNoIGFnYWluIGJl
+Y2F1c2UgX19za2JfZ2V0X2hhc2hfc3ltbWV0cmljKCkgZG9lcyBub3QNCj4+IHJldGFpbiB0aGUg
+aGFzaCB0aGF0IGl0IGNhbGN1bGF0ZXMuDQo+PiANCj4+IEludHJvZHVjZSBza2JfZ2V0X2hhc2hf
+c3ltbWV0cmljKCksIHdoaWNoIHdpbGwgZ2V0IGFuZCBzYXZlIHRoZSBoYXNoDQo+PiBpbiBvbmUg
+Z28sIHNvIHRoYXQgY2FsY3VhdGlvbiB3b3JrIGRvZXMgbm90IGdvIHRvIHdhc3RlLCBhbmQgcGx1
+bWIgaXQNCj4+IGludG8gdHVuLmMuDQo+PiANCj4+IEZpeGVzOiBmZWVjMDg0YTdjZjQgKCJ0dW46
+IHVzZSBzeW1tZXRyaWMgaGFzaCIpDQo+IA0KPiANCj4+IFNpZ25lZC1vZmYtYnk6IEpvbiBLb2hs
+ZXIgPGpvbkBudXRhbml4LmNvbT4NCj4+IENDOiBKYXNvbiBXYW5nIDxqYXNvd2FuZ0ByZWRoYXQu
+Y29tPg0KPj4gQ0M6IERhdmlkIFMuIE1pbGxlciA8ZGF2ZW1AZGF2ZW1sb2Z0Lm5ldD4NCj4+IC0t
+LQ0KPj4gDQo+IA0KPj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvc2tidWZmLmggYi9pbmNs
+dWRlL2xpbnV4L3NrYnVmZi5oDQo+PiBpbmRleCAwYjQwNDE3NDU3Y2QuLjgxMTJiMWFiNTczNSAx
+MDA2NDQNCj4+IC0tLSBhL2luY2x1ZGUvbGludXgvc2tidWZmLmgNCj4+ICsrKyBiL2luY2x1ZGUv
+bGludXgvc2tidWZmLmgNCj4+IEBAIC0xNDc0LDYgKzE0NzQsNyBAQCBfX3NrYl9zZXRfc3dfaGFz
+aChzdHJ1Y3Qgc2tfYnVmZiAqc2tiLCBfX3UzMiBoYXNoLCBib29sIGlzX2w0KQ0KPj4gDQo+PiB2
+b2lkIF9fc2tiX2dldF9oYXNoKHN0cnVjdCBza19idWZmICpza2IpOw0KPj4gdTMyIF9fc2tiX2dl
+dF9oYXNoX3N5bW1ldHJpYyhjb25zdCBzdHJ1Y3Qgc2tfYnVmZiAqc2tiKTsNCj4+ICt1MzIgc2ti
+X2dldF9oYXNoX3N5bW1ldHJpYyhzdHJ1Y3Qgc2tfYnVmZiAqc2tiKTsNCj4+IHUzMiBza2JfZ2V0
+X3BvZmYoY29uc3Qgc3RydWN0IHNrX2J1ZmYgKnNrYik7DQo+PiB1MzIgX19za2JfZ2V0X3BvZmYo
+Y29uc3Qgc3RydWN0IHNrX2J1ZmYgKnNrYiwgY29uc3Qgdm9pZCAqZGF0YSwNCj4+ICAgICAgICAg
+ICAgICAgICAgIGNvbnN0IHN0cnVjdCBmbG93X2tleXNfYmFzaWMgKmtleXMsIGludCBobGVuKTsN
+Cj4+IGRpZmYgLS1naXQgYS9uZXQvY29yZS9mbG93X2Rpc3NlY3Rvci5jIGIvbmV0L2NvcmUvZmxv
+d19kaXNzZWN0b3IuYw0KPj4gaW5kZXggMjVmYjBiYmMzMTBmLi5kOGMwZTgwNGJiZmUgMTAwNjQ0
+DQo+PiAtLS0gYS9uZXQvY29yZS9mbG93X2Rpc3NlY3Rvci5jDQo+PiArKysgYi9uZXQvY29yZS9m
+bG93X2Rpc3NlY3Rvci5jDQo+PiBAQCAtMTc0Nyw2ICsxNzQ3LDM1IEBAIHUzMiBfX3NrYl9nZXRf
+aGFzaF9zeW1tZXRyaWMoY29uc3Qgc3RydWN0IHNrX2J1ZmYgKnNrYikNCj4+IH0NCj4+IEVYUE9S
+VF9TWU1CT0xfR1BMKF9fc2tiX2dldF9oYXNoX3N5bW1ldHJpYyk7DQo+PiANCj4+ICsvKioNCj4+
+ICsgKiBza2JfZ2V0X2hhc2hfc3ltbWV0cmljOiBjYWxjdWxhdGUgYW5kIHNldCBhIGZsb3cgaGFz
+aCBpbiBAc2tiLCB1c2luZw0KPj4gKyAqIGZsb3dfa2V5c19kaXNzZWN0b3Jfc3ltbWV0cmljLg0K
+Pj4gKyAqIEBza2I6IHNrX2J1ZmYgdG8gY2FsY3VsYXRlIGZsb3cgaGFzaCBmcm9tDQo+PiArICoN
+Cj4+ICsgKiBUaGlzIGZ1bmN0aW9uIGlzIHNpbWlsYXIgdG8gX19za2JfZ2V0X2hhc2hfc3ltbWV0
+cmljIGV4Y2VwdCB0aGF0IGl0DQo+PiArICogcmV0YWlucyB0aGUgaGFzaCB3aXRoaW4gdGhlIHNr
+Yiwgc3VjaCB0aGF0IGl0IGNhbiBiZSByZXVzZWQgd2l0aG91dA0KPj4gKyAqIGJlaW5nIHJlY2Fs
+Y3VsYXRlZCBsYXRlci4NCj4+ICsgKi8NCj4+ICt1MzIgc2tiX2dldF9oYXNoX3N5bW1ldHJpYyhz
+dHJ1Y3Qgc2tfYnVmZiAqc2tiKQ0KPj4gK3sNCj4+ICsgICAgICAgc3RydWN0IGZsb3dfa2V5cyBr
+ZXlzOw0KPj4gKyAgICAgICB1MzIgaGFzaDsNCj4+ICsNCj4+ICsgICAgICAgX19mbG93X2hhc2hf
+c2VjcmV0X2luaXQoKTsNCj4+ICsNCj4+ICsgICAgICAgbWVtc2V0KCZrZXlzLCAwLCBzaXplb2Yo
+a2V5cykpOw0KPj4gKyAgICAgICBfX3NrYl9mbG93X2Rpc3NlY3QoTlVMTCwgc2tiLCAmZmxvd19r
+ZXlzX2Rpc3NlY3Rvcl9zeW1tZXRyaWMsDQo+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAm
+a2V5cywgTlVMTCwgMCwgMCwgMCwNCj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgIEZMT1df
+RElTU0VDVE9SX0ZfU1RPUF9BVF9GTE9XX0xBQkVMKTsNCj4+ICsNCj4+ICsgICAgICAgaGFzaCA9
+IF9fZmxvd19oYXNoX2Zyb21fa2V5cygma2V5cywgJmhhc2hybmQpOw0KPj4gKw0KPj4gKyAgICAg
+ICBfX3NrYl9zZXRfc3dfaGFzaChza2IsIGhhc2gsIGZsb3dfa2V5c19oYXZlX2w0KCZrZXlzKSk7
+DQo+PiArDQo+PiArICAgICAgIHJldHVybiBoYXNoOw0KPj4gK30NCj4+ICtFWFBPUlRfU1lNQk9M
+X0dQTChza2JfZ2V0X2hhc2hfc3ltbWV0cmljKTsNCj4+ICsNCj4gDQo+IFdoeSBjb3B5L3Bhc3Rp
+bmcgX19za2JfZ2V0X2hhc2hfc3ltbWV0cmljKCkgPw0KPiANCj4gQ2FuIHlvdSByZXVzZSBpdCA/
+DQoNCk5vdCBkaXJlY3RseSwgYmVjYXVzZSB0byB1c2UgX19za2Jfc2V0X3N3X2hhc2ggcmVxdWly
+ZXMgc3RydWN0IGZsb3dfa2V5cw0Kd2hlbiB1c2luZyBmbG93X2tleXNfaGF2ZV9sNCgpLiBfX3Nr
+Yl9nZXRfaGFzaF9zeW1tZXRyaWMoKSBkb2VzIG5vdCANCnRha2Ugb3IgcmV0dXJuIHRoYXQgc3Ry
+dWN0LCBzbyB3ZeKAmWQgZWl0aGVyIGhhdmUgdG8gcmVmYWN0b3IgdGhhdCAoYW5kIGl0cyBjYWxs
+ZXJzKQ0Kb3IgaW50cm9kdWNlIHlldCBhbm90aGVyIGZ1bmN0aW9uIGFuZCBjb25zb2xpZGF0ZSBk
+b3duIHRvIHRoYXQg4oCcbmV3IG9uZeKAnS4NCg0KSSBwbGF5ZWQgYXJvdW5kIHdpdGggdGhhdCBl
+eGFjdCB0aG91Z2h0IGJ5IHRha2luZyB0aGUgZnVuY3Rpb25hbCBndXRzIG91dCBvZg0KX19za2Jf
+Z2V0X2hhc2hfc3ltbWV0cmljLCBtYWtpbmcgaXQgYSBuZXcgc3RhdGljIGZ1bmN0aW9uLCBwbHVt
+YmluZyB0aGF0DQppbnRvIF9fc2tiX2dldF9oYXNoX3N5bW1ldHJpYyBhbmQgdGhpcyBuZXcgc2ti
+X2dldF9oYXNoX3N5bW1ldHJpYywgYnV0DQp0aGUgTE9DIGNodXJuIHdhcyBiYXNpY2FsbHkgdGhl
+IHNhbWUgYW5kIGl0IGZlbHQgYSBiaXQgd29yc2UgdGhhbiBqdXN0IGEgDQpjb3B5L3Bhc3RlLg0K
+DQpBbHRlcm5hdGl2ZWx5LCBpZiBpdCB0dXJuZWQgb3V0IHRoYXQgZmxvd19rZXlzX2hhdmVfbDQo
+KSB3YXNu4oCZdCBpbXBvcnRhbnQsIHdlDQpDb3VsZCBzaW1wbHkgc2V0IHRoYXQgdG8gZmFsc2Ug
+YW5kIHRoZW4gcmV1c2UgX19za2JfZ2V0X2hhc2hfc3ltbWV0cmljDQppbiBhIHRyaXZpYWwgbWFu
+bmVyLiBJIGNvdWxkbuKAmXQgcXVpdGUgZmlndXJlIG91dCBpZiBMNCBmbGFnIHdhcyBuZWNlc3Nh
+cnksIHNvIEkNCndlbnQgdGhlIHNhZmUobWF5YmU/KSByb3V0ZSBhbmQgY29weS9wYXN0ZSBpbnN0
+ZWFkLg0KDQpIYXBweSB0byB0YWtlIHN1Z2dlc3Rpb25zIGVpdGhlciB3YXkh
