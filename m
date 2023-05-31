@@ -2,137 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 758907189DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 858247189E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjEaTJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 15:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46166 "EHLO
+        id S229668AbjEaTKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 15:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjEaTJ0 (ORCPT
+        with ESMTP id S229601AbjEaTKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 15:09:26 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20DB125;
-        Wed, 31 May 2023 12:08:56 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5147e441c33so240614a12.0;
-        Wed, 31 May 2023 12:08:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685560135; x=1688152135;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zyxR30g2bKMnEjOEuROEiWjiUjocH3rGbPWdVsGv92s=;
-        b=Ye2IWrnhoxGCqV8CGZvUTZnGQFK30FN7eFPb3mkua59MXfEURFTToTqMIc9p4HZwMP
-         wFzjlVy9+QNsDn11n5oBQPUWKVZnTri5EvZYXX1lbvupKK/+7zMxPcBPoMJN839ELKW9
-         a1pgRCPWS7GNpT+c1HzgV+ns6eEcXkOses3w16nXfaSiXwV1vQJr86mZsPBcDWh3byPy
-         lPMencn3DjE+it5T1fGr1w6nHJ67qk4Bc8giOLvY+PenGdUi6wMJS29BtBXJdbiVu/+6
-         gZaLhB2bkTvf02Mdre9GTMnAcN8mLKnnjMiRp55fte9LFOqZf4BXk3L4hm5yihFbKZDz
-         XFMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685560135; x=1688152135;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zyxR30g2bKMnEjOEuROEiWjiUjocH3rGbPWdVsGv92s=;
-        b=IWpyQphcW6Z5uhCXJTtrPBNMDEutfQlECtR3IN/QE/b4R3cT9BPhuYOyEirPRM8sqr
-         prMKBpA5fruEx8XnGNuqIkkrLU2o8Z61/EGfjYF9l45ShbuJYN6N7H4DxfnVqRP3DNZz
-         eIuSacu7WvxvdPU5Ht//0wBRExNS/RNbFrb8yGE+1mQqJU4OAhHtyH34WE/c/9P/hV8+
-         DHVfP7nc+PcClFZ6xqS/dveeIT8qEa+L2U8KeUZgy8fFvAgB37vpP1fLazQpavNjOehV
-         TY6UD6GzYPw+M761+S01IyIVDcETHD3J7+4C9plBWsuCEzJzcCY1kXHS0MRyYA4WfczR
-         GklQ==
-X-Gm-Message-State: AC+VfDzCd127y1refm3+AEVDP9wKa3tFGDwK63Owm7rgfkazVeZGWiC3
-        iFJj+OIbKi5/RveJ/wd/G6c=
-X-Google-Smtp-Source: ACHHUZ7fgGkI5VqrGVbz2CLufCaK0JikIDl9Hwd+z7uJFtvba3mR751C8zmx9S8daTsL5HhTRk9D+w==
-X-Received: by 2002:a05:6402:5107:b0:514:9311:e83a with SMTP id m7-20020a056402510700b005149311e83amr7142584edd.8.1685560134877;
-        Wed, 31 May 2023 12:08:54 -0700 (PDT)
-Received: from ?IPV6:2a01:c23:c18f:4600:8999:532:b66e:c213? (dynamic-2a01-0c23-c18f-4600-8999-0532-b66e-c213.c23.pool.telefonica.de. [2a01:c23:c18f:4600:8999:532:b66e:c213])
-        by smtp.googlemail.com with ESMTPSA id d25-20020a50fb19000000b0050cc4461fc5sm6101880edq.92.2023.05.31.12.08.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 12:08:54 -0700 (PDT)
-Message-ID: <4a6c413c-8791-fd00-a73e-7a12413693e3@gmail.com>
-Date:   Wed, 31 May 2023 21:08:53 +0200
+        Wed, 31 May 2023 15:10:30 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C01F135;
+        Wed, 31 May 2023 12:10:17 -0700 (PDT)
+Received: from thinkpad-p16sg1.corp.microsoft.com (unknown [167.220.83.99])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 69D6C20FC460;
+        Wed, 31 May 2023 12:10:16 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 69D6C20FC460
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1685560216;
+        bh=9rE+SRTAB7sC3g3Xr1k+PcNR3GwWZig7+s8JNU7XI3Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Fh3aU97ZtLl3PvKiFD9yWeRQQQOiG5RXMOq9r1TDHFc3KdhBh+vWqhIRBW2UZ0Oo3
+         26z1yMRdq/L6jlE6v08iZ4HaVdcy8VmbNqSb8d0DoJylWTO2bmGXwDFxEODsbuuoO7
+         7rQ9wWuH8I00/AeQiO+TQaKPHibhShpFNwzPMVfk=
+From:   Shyam Saini <shyamsaini@linux.microsoft.com>
+To:     alex.bennee@linaro.org
+Cc:     code@tyhicks.com, Matti.Moell@opensynergy.com, arnd@linaro.org,
+        bing.zhu@intel.com, hmo@opensynergy.com,
+        ilias.apalodimas@linaro.org, joakim.bech@linaro.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, maxim.uvarov@linaro.org,
+        ruchika.gupta@linaro.org, tomas.winkler@intel.com,
+        ulf.hansson@linaro.org, yang.huang@intel.com,
+        sumit.garg@linaro.org, jens.wiklander@linaro.org,
+        op-tee@lists.trustedfirmware.org
+Subject: [PATCH  v2 0/4] rpmb subsystem, uapi and virtio-rpmb driver
+Date:   Wed, 31 May 2023 12:10:07 -0700
+Message-Id: <20230531191007.13460-1-shyamsaini@linux.microsoft.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220405093759.1126835-1-alex.bennee@linaro.org>
+References: <20220405093759.1126835-1-alex.bennee@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 2/2] net: phy: realtek: Add optional external PHY clock
-To:     Detlev Casanova <detlev.casanova@collabora.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230531150340.522994-1-detlev.casanova@collabora.com>
- <20230531150340.522994-2-detlev.casanova@collabora.com>
-Content-Language: en-US
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <20230531150340.522994-2-detlev.casanova@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.05.2023 17:03, Detlev Casanova wrote:
-> In some cases, the PHY can use an external clock source instead of a
-> crystal.
-> 
-> Add an optional clock in the phy node to make sure that the clock source
-> is enabled, if specified, before probing.
-> 
-> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> ---
->  drivers/net/phy/realtek.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
-> index 3d99fd6664d7..70c75dbbf799 100644
-> --- a/drivers/net/phy/realtek.c
-> +++ b/drivers/net/phy/realtek.c
-> @@ -12,6 +12,7 @@
->  #include <linux/phy.h>
->  #include <linux/module.h>
->  #include <linux/delay.h>
-> +#include <linux/clk.h>
->  
->  #define RTL821x_PHYSR				0x11
->  #define RTL821x_PHYSR_DUPLEX			BIT(13)
-> @@ -80,6 +81,7 @@ struct rtl821x_priv {
->  	u16 phycr1;
->  	u16 phycr2;
->  	bool has_phycr2;
-> +	struct clk *clk;
->  };
->  
->  static int rtl821x_read_page(struct phy_device *phydev)
-> @@ -103,6 +105,11 @@ static int rtl821x_probe(struct phy_device *phydev)
->  	if (!priv)
->  		return -ENOMEM;
->  
-> +	priv->clk = devm_clk_get_optional_enabled(dev, "xtal");
+Hi Alex,
 
-Why add priv->clk if it isn't used outside probe()?
+[ Resending, Sorry for the noise ]
+ 
+Are you still working on it or planning to resubmit it ?
 
-How about suspend/resume? Would it make sense to stop the clock
-whilst PHY is suspended?
+[1] The current optee tee kernel driver implementation doesn't work when IMA is used with optee implemented ftpm.
 
-> +	if (IS_ERR(priv->clk))
-> +		return dev_err_probe(dev, PTR_ERR(priv->clk),
-> +				     "failed to get phy xtal clock\n");
-> +
->  	ret = phy_read_paged(phydev, 0xa43, RTL8211F_PHYCR1);
->  	if (ret < 0)
->  		return ret;
+The ftpm has dependency on tee-supplicant which comes once the user space is up and running and IMA attestation happens at boot time and it requires to extend ftpm PCRs. 
 
+But IMA can't use PCRs if ftpm use secure emmc RPMB partition. As optee can only access RPMB via tee-supplicant(user space). So, there should be a fast path to allow optee os to access the RPMB parititon without waiting for user-space tee supplicant.
+
+To achieve this fast path linux optee driver and mmc driver needs some work and finally it will need RPMB driver which you posted.
+ 
+Please let me know what's your plan on this.
+ 
+[1] https://optee.readthedocs.io/en/latest/architecture/secure_storage.html
+
+Best Regards,
+Shyam
