@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00D7718429
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CAF7183F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237339AbjEaOFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
+        id S237448AbjEaNxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237561AbjEaOEw (ORCPT
+        with ESMTP id S237512AbjEaNus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:04:52 -0400
+        Wed, 31 May 2023 09:50:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2874E1734;
-        Wed, 31 May 2023 06:59:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BE41FC8;
+        Wed, 31 May 2023 06:46:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96B6862C18;
-        Wed, 31 May 2023 13:46:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09340C433D2;
-        Wed, 31 May 2023 13:46:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8254463B10;
+        Wed, 31 May 2023 13:46:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41869C433D2;
+        Wed, 31 May 2023 13:46:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540776;
-        bh=IMSxW+BwXyy3mU+PMSOaQL+UkXZIvUYyfiSk3WvHIoA=;
+        s=k20201202; t=1685540778;
+        bh=m+GOwXUa0kziIQ5hoJSwAPnamzkvs1sMWWSnsC3soOM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=brq9J2sc/aaVIyFiprFg8FeL+2ZAXsvc7OQytQZ1U7/N5xSQ6rsXuPMtXFUWj6srP
-         IwDZeSSEdk+ucro1dBSn2kOmH/W9lM7XCvDrym7fOK//JfYvJQ+8y4ejOsLsw/9uFr
-         LCs0bNTurXBgYJpDGm0yCsMTjDZUX7Cvz5Q2LLsYBdMjD5BkEKZEEBzIIWSlroLYIw
-         145bBORk3LHevaBi2+SVOrEl6FDbQcm74TveR321qvuJYYTlA/QHr1KV0jfZNJRDwR
-         uPIHzeLVgfAviwGh4f5CJHmpEe8qNBoPtSle2SerUSv4YsGEo+oU+zXnGq3OxGWtoy
-         ZNwghDcUGy2OQ==
+        b=s+B8omqRSlj0ZSs2G8ZH5D7hAz1GP2GnDjgt793A0hCIGom06RUMlqtbtKkwoYTLb
+         Gn2Fcz3RIfrlBMTdPPyoiFG8uyPZri4c19YqcAP0r9gPhmYn99mEddiagWL9HZAbXi
+         YTTsCF1FOWr70vFZaZ0GvatN6rmvbzhGWg2LJtlK8uWkHm0g8t49WG9zyZATChW2IC
+         psTH8PK9+0crAfsipreQkCxNBahjPrVhr9pdozMdoeJqgJqVRBdFgHrjfbqITAzyfH
+         YZx2qAWC94BVKcWik3V0PRQNxN6Ejvdt/gbRnmBJrh1uI2s3VTRdIAuhQ4Vx2IGmsH
+         A5v3jwMBxbCDg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Evan Quan <Evan.Quan@amd.com>, Lijo Lazar <Lijo.Lazar@amd.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>, sre@kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 06/10] power: supply: Fix logic checking if system is running from battery
-Date:   Wed, 31 May 2023 09:46:02 -0400
-Message-Id: <20230531134606.3385210-6-sashal@kernel.org>
+Cc:     Manuel Lauss <manuel.lauss@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>, jiaxun.yang@flygoat.com,
+        linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 07/10] MIPS: Restore Au1300 support
+Date:   Wed, 31 May 2023 09:46:03 -0400
+Message-Id: <20230531134606.3385210-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134606.3385210-1-sashal@kernel.org>
 References: <20230531134606.3385210-1-sashal@kernel.org>
@@ -59,64 +58,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Manuel Lauss <manuel.lauss@gmail.com>
 
-[ Upstream commit 95339f40a8b652b5b1773def31e63fc53c26378a ]
+[ Upstream commit f2041708dee30a3425f680265c337acd28293782 ]
 
-The logic used for power_supply_is_system_supplied() counts all power
-supplies and assumes that the system is running from AC if there is
-either a non-battery power-supply reporting to be online or if no
-power-supplies exist at all.
+The Au1300, at least the one I have to test, uses the NetLogic vendor
+ID, but commit 95b8a5e0111a ("MIPS: Remove NETLOGIC support") also
+dropped Au1300 detection.  Restore Au1300 detection.
 
-The second rule is for desktop systems, that don't have any
-battery/charger devices. These systems will incorrectly report to be
-powered from battery once a device scope power-supply is registered
-(e.g. a HID device), since these power-supplies increase the counter.
+Tested on DB1300 with Au1380 chip.
 
-Apart from HID devices, recent dGPUs provide UCSI power supplies on a
-desktop systems. The dGPU by default doesn't have anything plugged in so
-it's 'offline'. This makes power_supply_is_system_supplied() return 0
-with a count of 1 meaning all drivers that use this get a wrong judgement.
-
-To fix this case adjust the logic to also examine the scope of the power
-supply. If the power supply is deemed a device power supply, then don't
-count it.
-
-Cc: Evan Quan <Evan.Quan@amd.com>
-Suggested-by: Lijo Lazar <Lijo.Lazar@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Manuel Lauss <manuel.lauss@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/power_supply_core.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ arch/mips/kernel/cpu-probe.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 409ecff1a51a7..67766b500325f 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -349,6 +349,10 @@ static int __power_supply_is_system_supplied(struct device *dev, void *data)
- 	struct power_supply *psy = dev_get_drvdata(dev);
- 	unsigned int *count = data;
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index cf3fd549e16d0..f9368071a6bd9 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -1686,6 +1686,10 @@ static inline void cpu_probe_alchemy(struct cpuinfo_mips *c, unsigned int cpu)
+ 			break;
+ 		}
+ 		break;
++	case PRID_IMP_NETLOGIC_AU13XX:
++		c->cputype = CPU_ALCHEMY;
++		__cpu_name[cpu] = "Au1300";
++		break;
+ 	}
+ }
  
-+	if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_SCOPE, &ret))
-+		if (ret.intval == POWER_SUPPLY_SCOPE_DEVICE)
-+			return 0;
-+
- 	(*count)++;
- 	if (psy->desc->type != POWER_SUPPLY_TYPE_BATTERY)
- 		if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_ONLINE,
-@@ -367,8 +371,8 @@ int power_supply_is_system_supplied(void)
- 				      __power_supply_is_system_supplied);
- 
- 	/*
--	 * If no power class device was found at all, most probably we are
--	 * running on a desktop system, so assume we are on mains power.
-+	 * If no system scope power class device was found at all, most probably we
-+	 * are running on a desktop system, so assume we are on mains power.
- 	 */
- 	if (count == 0)
- 		return 1;
+@@ -1988,6 +1992,7 @@ void cpu_probe(void)
+ 		cpu_probe_mips(c, cpu);
+ 		break;
+ 	case PRID_COMP_ALCHEMY:
++	case PRID_COMP_NETLOGIC:
+ 		cpu_probe_alchemy(c, cpu);
+ 		break;
+ 	case PRID_COMP_SIBYTE:
 -- 
 2.39.2
 
