@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94FF8717D0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B798717D0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235878AbjEaKSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 06:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S235908AbjEaKSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 06:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235869AbjEaKSC (ORCPT
+        with ESMTP id S235400AbjEaKSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 06:18:02 -0400
+        Wed, 31 May 2023 06:18:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2A7189;
-        Wed, 31 May 2023 03:17:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D2A192;
+        Wed, 31 May 2023 03:18:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01B8862F14;
-        Wed, 31 May 2023 10:17:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5814DC433D2;
-        Wed, 31 May 2023 10:17:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9198263082;
+        Wed, 31 May 2023 10:18:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E23F9C4339E;
+        Wed, 31 May 2023 10:17:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685528278;
-        bh=vs1shr8Oz5T6vzLyfco2GglAWiji2BVDH39dzR8TnMU=;
+        s=k20201202; t=1685528281;
+        bh=6T9PufNrI67qOiSAF/52EuU4TI9tRCG4o5fvW1OJc0o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i0C481BdTj94a+sJDkbJnVZXFJpcRPBz4x11sA9d0i3dm5oa6FyjBGPgjE4bePMDP
-         U181pKEUpURPiFzXSFroP2wF3u8a4L/qt3481sWrb42NxDK1KH3B7SmQfZ/VbkZ6Bv
-         UFGoHOnO67lbjAoTmyy2otF6qeMvoZp4D0JDJquNvZiviXt/EnCVccn5c42TPZSyod
-         AAhtydlMiCQEGRhlKBdb4OuUFaUZOJyXLPk79uGq+W+vT0X6yN+1Zm+Dy0yq5qHp1k
-         IW5J7fAsVWeQt+id9NicMd86nBIuQ4hjARMj67WHqPmdK0+vA7oDhPfGTJLO7m5qTh
-         QGKYTBrSItg2A==
+        b=fkVWQNRtlxpcY2As9Q6qfsRTeQjdEIWbYSQED2VojPxVw3Go3BxDgEygTzHVsXAPY
+         vXAHatJvEKVf3WwQP/uVflw/CEm1YR8Y44zPhSDTF1YCHNs9AEBVv9INEEGPFJ6jvL
+         0lSvKiNs/LQu9yizqC2Ds7ofvQKu3LuR9qJtjjOZW+FfcXTdaCank7nF/KbcpxDpyC
+         0FmT8Yxn4/SHANswoBqJt6X5uJkikVf5sS4p95CtRygTzKqwrguM55LImEEUtlDyZN
+         6pSbSuzgNYerqlI9BeJNsnEik5g0ADjWEzopCq6tqJF9GaOtukav31+Fi2lmh5pfe0
+         YQSpi/Aq0ayPw==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     "Paul E . McKenney" <paulmck@kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -40,9 +40,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Neeraj Upadhyay <quic_neeraju@quicinc.com>,
         Joel Fernandes <joel@joelfernandes.org>,
         Giovanni Gherdovich <ggherdovich@suse.cz>
-Subject: [PATCH 4/9] rcu: Introduce lazy queue's own qhimark
-Date:   Wed, 31 May 2023 12:17:31 +0200
-Message-Id: <20230531101736.12981-5-frederic@kernel.org>
+Subject: [PATCH 5/9] rcu: Add rcutree.lazy_enabled boot parameter
+Date:   Wed, 31 May 2023 12:17:32 +0200
+Message-Id: <20230531101736.12981-6-frederic@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230531101736.12981-1-frederic@kernel.org>
 References: <20230531101736.12981-1-frederic@kernel.org>
@@ -58,73 +58,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The lazy and the regular bypass queues share the same thresholds in
-terms of number of callbacks after which a flush to the main list is
-performed: 10 000 callbacks.
-
-However lazy and regular bypass don't have the same purposes and neither
-should their respective thresholds:
-
-* The bypass queue stands for relieving the main queue in case of a
-  callback storm. It makes sense to allow a high number of callbacks to
-  pile up before flushing to the main queue, especially as the life
-  cycle for this queue is very short (1 jiffy).
-
-* The lazy queue aims to spare wake ups and reduce the number of grace
-  periods. There it doesn't make sense to allow a huge number of
-  callbacks before flushing so as not to introduce memory pressure,
-  especially as the life cycle for this queue is very long (10
-  seconds)
-
-For those reasons, set the default threshold for the lazy queue to
-100.
+Allow to overwrite the arbitrary default number of lazy callbacks
+threshold that is currently set to 100. This allows for tuning between
+powersaving, throughtput and memory consumption expectations. As a
+bonus, setting this value to 0 disables lazy callbacks.
 
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- kernel/rcu/tree.c      | 2 ++
- kernel/rcu/tree_nocb.h | 9 ++++-----
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt | 5 +++++
+ kernel/rcu/tree.c                               | 3 ++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 505978cfb548..dd2be4249061 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4798,6 +4798,11 @@
+ 			Set threshold of queued RCU callbacks beyond which
+ 			batch limiting is disabled.
+ 
++	rcutree.qhimark_lazy = [KNL]
++			Set threshold of queued lazy RCU callbacks beyond which
++			batch must be flushed to the main queue. If set to 0,
++			disable lazy queue.
++
+ 	rcutree.qlowmark= [KNL]
+ 			Set threshold of queued RCU callbacks below which
+ 			batch limiting is re-enabled.
 diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index bc4e7c9b51cb..9b98d87fa22e 100644
+index 9b98d87fa22e..e33c0d889216 100644
 --- a/kernel/rcu/tree.c
 +++ b/kernel/rcu/tree.c
-@@ -379,6 +379,8 @@ static int rcu_is_cpu_rrupt_from_idle(void)
- static long blimit = DEFAULT_RCU_BLIMIT;
- #define DEFAULT_RCU_QHIMARK 10000 // If this many pending, ignore blimit.
- static long qhimark = DEFAULT_RCU_QHIMARK;
-+#define DEFAULT_RCU_QHIMARK_LAZY 100 // If this many pending, flush.
-+static long qhimark_lazy = DEFAULT_RCU_QHIMARK_LAZY;
- #define DEFAULT_RCU_QLOMARK 100   // Once only this many pending, use blimit.
- static long qlowmark = DEFAULT_RCU_QLOMARK;
- #define DEFAULT_RCU_QOVLD_MULT 2
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index 8320eb77b58b..c08447db5a2e 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -480,10 +480,9 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+@@ -390,6 +390,7 @@ static long qovld_calc = -1;	  // No pre-initialization lock acquisitions!
  
- 	// If ->nocb_bypass has been used too long or is too full,
- 	// flush ->nocb_bypass to ->cblist.
--	if ((ncbs && !bypass_is_lazy && j != READ_ONCE(rdp->nocb_bypass_first)) ||
--	    (ncbs &&  bypass_is_lazy &&
--	     (time_after(j, READ_ONCE(rdp->nocb_bypass_first) + jiffies_lazy_flush))) ||
--	    ncbs >= qhimark) {
-+	if (ncbs &&
-+	    ((!bypass_is_lazy && ((j != READ_ONCE(rdp->nocb_bypass_first)) || ncbs >= qhimark)) ||
-+	     (bypass_is_lazy && (time_after(j, READ_ONCE(rdp->nocb_bypass_first) + jiffies_lazy_flush) || ncbs >= qhimark_lazy)))) {
- 		rcu_nocb_lock(rdp);
- 		*was_alldone = !rcu_segcblist_pend_cbs(&rdp->cblist);
+ module_param(blimit, long, 0444);
+ module_param(qhimark, long, 0444);
++module_param(qhimark_lazy, long, 0444);
+ module_param(qlowmark, long, 0444);
+ module_param(qovld, long, 0444);
  
-@@ -724,7 +723,7 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+@@ -2655,7 +2656,7 @@ __call_rcu_common(struct rcu_head *head, rcu_callback_t func, bool lazy_in)
+ 	kasan_record_aux_stack_noalloc(head);
+ 	local_irq_save(flags);
+ 	rdp = this_cpu_ptr(&rcu_data);
+-	lazy = lazy_in && !rcu_async_should_hurry();
++	lazy = lazy_in && qhimark_lazy && !rcu_async_should_hurry();
  
- 		if (bypass_ncbs && (lazy_ncbs == bypass_ncbs) &&
- 		    (time_after(j, READ_ONCE(rdp->nocb_bypass_first) + jiffies_lazy_flush) ||
--		     bypass_ncbs > 2 * qhimark)) {
-+		     bypass_ncbs > 2 * qhimark_lazy)) {
- 			flush_bypass = true;
- 		} else if (bypass_ncbs && (lazy_ncbs != bypass_ncbs) &&
- 		    (time_after(j, READ_ONCE(rdp->nocb_bypass_first) + 1) ||
+ 	/* Add the callback to our list. */
+ 	if (unlikely(!rcu_segcblist_is_enabled(&rdp->cblist))) {
 -- 
 2.40.1
 
