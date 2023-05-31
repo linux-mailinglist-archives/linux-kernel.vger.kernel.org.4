@@ -2,123 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF46B718414
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5833A718444
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236392AbjEaOB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
+        id S237165AbjEaOIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237289AbjEaOB0 (ORCPT
+        with ESMTP id S235420AbjEaOI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:01:26 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B09D198B
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:55:35 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30ad752f433so4075321f8f.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1685541249; x=1688133249;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zbb0XlzY1V6un7ssRQbevCYzvMDnOinL05UrfKmM4xc=;
-        b=C6P+PAcESg9pjJuC1kShZkAMK9uNCuZZC59NjruVdLAT+QbK5Fb7OyTaHMvt9uPzWB
-         XC6YjFkU+s1LzKNcLemCA5UvlagHiacGzTfiM/R2e6hfVvlyHtQgvcdf+G/89fBAyaFn
-         al95wHlokLtDX33yAGCyGXGWNp+6upvH+JRfhP/MfAomjpj7ykZGP6APMEFunMG6Um4A
-         Q0GkFyAbz3+Gec81W0jn0DXHKIAfGHWPlMPSF60xf9udnMyIdlRQDSu26bSGscPRElke
-         Ee9HUot213bm0c1us5iqLgmtj9PemzfMxCRv29nNkaPrcub3t3g85duWFbefmqdgiqmB
-         Q95Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685541249; x=1688133249;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zbb0XlzY1V6un7ssRQbevCYzvMDnOinL05UrfKmM4xc=;
-        b=iqfGu1x3QeC9QI/q7NnqV5/7aAuRRjeWkhagUUfb3N1k7V76bXXgj8fngpj+ZWYcf7
-         gy1eTdxR/jncjXLgoCHAL+XcTB7AkdUHYbobP1BkYX4VMQPutmV4mKGcaeLBIGesZQyX
-         +SDsAodP/09cb/NOt8K/m/Pk7htsBrwjxKIK0S6uPgzR57/Y0pDVETCVJW29jaHhiNox
-         BhPD3gNoMNUPStbxkPmDPlPD2Mp4ZZrBLWs2YZjjW05ZVaAymCjT6Iu8gOjKp92lkIiN
-         youXaEMcFmpg2f3Ex6w2ZoWiE0ufTkarcLRtJdtFR8R9+/I57EldAcZS9d9MitZK8VNq
-         y8kA==
-X-Gm-Message-State: AC+VfDwC6Ey1EGp4tFX4w6rJGhaQlO7uOk4YMs42RDPFbBeQfuJyXzoy
-        +LVTsrmP8Kxnws8LrXOchhn2JA==
-X-Google-Smtp-Source: ACHHUZ65HnfYl06bZQf8YF6kP/w87wKf4hufmXMk6i3aLTcwxJQjR5kyaJJ5JQgRjhi7bOY5IOdgjg==
-X-Received: by 2002:adf:e848:0:b0:2f0:2d92:9c81 with SMTP id d8-20020adfe848000000b002f02d929c81mr4030977wrn.19.1685541248998;
-        Wed, 31 May 2023 06:54:08 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id i16-20020a05600011d000b0030aefa3a957sm7021247wrx.28.2023.05.31.06.54.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 06:54:08 -0700 (PDT)
-Date:   Wed, 31 May 2023 15:54:07 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 01/10] perf: Fix wrong comment about default event_idx
-Message-ID: <20230531-5678beb107af4b9805cbb611@orel>
-References: <20230512085321.13259-1-alexghiti@rivosinc.com>
- <20230512085321.13259-2-alexghiti@rivosinc.com>
+        Wed, 31 May 2023 10:08:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA3110F8
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:03:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685541721;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ziEVWybyK4gf6HAMK2OABfQt5DxF+29cSopVoad9/Oc=;
+        b=MmKVjiQhuSASBSMtKq48N5dSt9moWK5rcI66Qzj2mVKQ5q+9nCSCpCqsGVaZW/g0c4syr9
+        TTLwNX2sPXF/jxHoMn3KGkje36eaMQdqp9BOyosarjlsU7/8Uv6dspoTfav0p9hGkRVydn
+        ulEYvlyZ7QTDPupWPynB30RxhpWoZ/M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-205-8xAnoC19Ms-okkMyrsc2Qw-1; Wed, 31 May 2023 09:55:41 -0400
+X-MC-Unique: 8xAnoC19Ms-okkMyrsc2Qw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5F228032E4;
+        Wed, 31 May 2023 13:55:40 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E03D6C154D7;
+        Wed, 31 May 2023 13:55:37 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <492558dc-1377-fc4b-126f-c358bb000ff7@redhat.com>
+References: <492558dc-1377-fc4b-126f-c358bb000ff7@redhat.com> <cbd39f94-407a-03b6-9c43-8144d0efc8bb@redhat.com> <20230526214142.958751-1-dhowells@redhat.com> <20230526214142.958751-2-dhowells@redhat.com> <510965.1685522152@warthog.procyon.org.uk>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v4 1/3] mm: Don't pin ZERO_PAGE in pin_user_pages()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230512085321.13259-2-alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <703627.1685541335.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 31 May 2023 14:55:35 +0100
+Message-ID: <703628.1685541335@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 10:53:12AM +0200, Alexandre Ghiti wrote:
-> event_idx default implementation returns 0, not idx + 1.
+David Hildenbrand <david@redhat.com> wrote:
 
-The comment was correct until commit c719f56092ad ("perf: Fix and clean
-up initialization of pmu::event_idx"). I'm not sure that warrants a fixes
-tag, but maybe a reference in the commit message.
+> Yes, it would be clearer if we would be using "pinned" now only for FOLL=
+_PIN
 
-> 
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> ---
->  include/linux/perf_event.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index d5628a7b5eaa..56fe43b20966 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -442,7 +442,8 @@ struct pmu {
->  
->  	/*
->  	 * Will return the value for perf_event_mmap_page::index for this event,
-> -	 * if no implementation is provided it will default to: event->hw.idx + 1.
-> +	 * if no implementation is provided it will default to 0 (see
-> +	 * perf_event_idx_default).
->  	 */
->  	int (*event_idx)		(struct perf_event *event); /*optional */
->  
-> -- 
-> 2.37.2
->
+You're not likely to get that.  "To pin" is too useful a verb that gets us=
+ed
+in other contexts too.  For that reason, I think FOLL_PIN was a poor choic=
+e of
+name:-/.  I guess the English language has got somewhat overloaded.  Maybe
+FOLL_PEG? ;-)
 
-Otherwise,
+> and everything else is simply "taking a temporary reference on the page"=
+.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Excluding refs taken with pins, many refs are more permanent than pins as,=
+ so
+far as I'm aware, pins only last for the duration of an I/O operation.
+
+> >> "Note that the refcount of any zero_pages returned among the pinned p=
+ages will
+> >> not be incremented, and unpin_user_page() will similarly not decremen=
+t it."
+> > That's not really right (although it happens to be true), because we'r=
+e
+> > talking primarily about the pin counter, not the refcount - and they m=
+ay be
+> > separate.
+> =
+
+> In any case (FOLL_PIN/FOLL_GET) you increment/decrement the refcount. If=
+ we
+> have a separate pincount, we increment/decrement the refcount by 1 when
+> (un)pinning.
+
+FOLL_GET isn't relevant here - only FOLL_PIN.  Yes, as it happens, we coun=
+t a
+ref if we count a pin, but that's kind of irrelevant; what matters is that=
+ the
+effect must be undone with un-PUP.
+
+It would be nice not to get a ref on the zero page in FOLL_GET, but I don'=
+t
+think we can do that yet.  Too many places assume that GUP will give them =
+a
+ref they can release later via ordinary methods.
+
+David
+
