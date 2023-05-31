@@ -2,183 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BE9717867
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED61717871
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbjEaHiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
+        id S234440AbjEaHkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234477AbjEaHh6 (ORCPT
+        with ESMTP id S232464AbjEaHkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:37:58 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7A3C5;
-        Wed, 31 May 2023 00:37:56 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1685518675;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=crOpwvqDjgCv5Iq8u/sJqrtyV1k8VhIgkmZfw96TObI=;
-        b=MHE4kD9uYhdo+tdxmqhAEUgebBeDxykmVLMZMpMzMKAU+RSHEtHsdEpyv8WH2nOfRbROJr
-        Y4D0LRK6hgoph8i/s6COIQiPi9BJZnBikCP7W5/Z3YzLxkZ72N6SEo89gJ5UoVke215o4F
-        X10/u/gr7XzzpzAMUaurHTFaYs+9d7guyErtIcig2Yw56lh42sZmsveZQbELzfbN4JtwUT
-        GxK7Y6gzs+OsXhKLTjd5MhkXA1REa3dPnxNk9Oio55QARHSrAFJ+VGJrLIHuSsr1CaXsqT
-        pv5qPw2364H8JKMvP07nzgesCjsZwf+KpmwQubOnFaWmr+e2LIifmQmTpQ48kA==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 88D6DFF808;
-        Wed, 31 May 2023 07:37:52 +0000 (UTC)
-Date:   Wed, 31 May 2023 09:37:52 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     richard@nod.at, vigneshr@ti.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        arnd@arndb.de, daniel.lezcano@linaro.org,
-        neil.armstrong@linaro.org, f.fainelli@gmail.com,
-        christophe.kerello@foss.st.com, liang.yang@amlogic.com,
-        jdelvare@suse.de, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] mtd: rawnand: marvell: add support for AC5 SoC
-Message-ID: <20230531093752.17fbeb1b@xps-13>
-In-Reply-To: <20230531025847.1284862-3-chris.packham@alliedtelesis.co.nz>
-References: <20230531025847.1284862-1-chris.packham@alliedtelesis.co.nz>
-        <20230531025847.1284862-3-chris.packham@alliedtelesis.co.nz>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 31 May 2023 03:40:09 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67125E5;
+        Wed, 31 May 2023 00:40:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685518807; x=1717054807;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=VA6PLEl6XdXdwvvyXjGG+l70IBfaxvdpG2t3qnCADZg=;
+  b=S9KKY9XZvNV1hi7mWjg2E9LQb/UFY2CMGI789O6G6pNCw4cQxp5Pw3wB
+   gXs/sXpTZNK9OGEe9dOWn0yNzFv3eR3JWG6C/BwKqweb8IYAyI0lffLGg
+   XLjVhUUXvbdkau1S30OXo/UDDlmYIINKR+2RciTsy9MKSKXC8YYFX03YB
+   SPZuWtkI8aJ4Pfidtb6IzSwWdNF83lOSXcwVN3Wv7/2938kJ+y8gphqT4
+   Zz4gCIr+0qH5GE/lB5qbyc5I87MNZN8nmwNEfYLndQ53MR1GcQEo8XxW9
+   IC224FeD8bIrtJXlmoz3eQsyxIXCltW7bcfVcW543/JdfxVP0Z46El90k
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="216163366"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 May 2023 00:40:06 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 31 May 2023 00:40:05 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Wed, 31 May 2023 00:40:00 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <jckuo@nvidia.com>, <vkoul@kernel.org>, <kishon@kernel.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <nkristam@nvidia.com>
+CC:     <linux-phy@lists.infradead.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH] phy: tegra: xusb: check return value of devm_kzalloc()
+Date:   Wed, 31 May 2023 10:39:50 +0300
+Message-ID: <20230531073950.145339-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chris,
+devm_kzalloc() returns a pointer to dynamically allocated memory.
+Pointer could be NULL in case allocation fails. Check pointer validity.
+Identified with coccinelle (kmerr.cocci script).
 
-chris.packham@alliedtelesis.co.nz wrote on Wed, 31 May 2023 14:58:47
-+1200:
+Fixes: f67213cee2b3 ("phy: tegra: xusb: Add usb-role-switch support")
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+---
 
-> Add support for the AC5/AC5X SoC from Marvell. The NFC on this SoC only
-> supports SDR modes up to 3.
+Hi,
 
-Strange!
+This has been addressed using kmerr.cocci script proposed for update
+at [1].
 
-But alright, I'm okay with the series.
+Thank you,
+Claudiu Beznea
 
-I'll put it aside waiting for all binding changes to be acked (yaml
-conversion series + this one) and then I'll apply everything.
+[1] https://lore.kernel.org/all/20230530074044.1603426-1-claudiu.beznea@microchip.com/
 
-> Marvell's SDK includes some predefined values for the ndtr registers.
-> These haven't been incorporated as the existing code seems to get good
-> values based on measurements taken with an oscilloscope.
+ drivers/phy/tegra/xusb.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Good :)
+diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+index ec335668563d..fe72bc74e7bc 100644
+--- a/drivers/phy/tegra/xusb.c
++++ b/drivers/phy/tegra/xusb.c
+@@ -675,6 +675,9 @@ static int tegra_xusb_setup_usb_role_switch(struct tegra_xusb_port *port)
+ 	port->dev.driver = devm_kzalloc(&port->dev,
+ 					sizeof(struct device_driver),
+ 					GFP_KERNEL);
++	if (!port->dev.driver)
++		return -ENOMEM;
++
+ 	port->dev.driver->owner	 = THIS_MODULE;
+ 
+ 	port->usb_role_sw = usb_role_switch_register(&port->dev,
+-- 
+2.34.1
 
-By the way did you sort the timings question on 8k?
-
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->  drivers/mtd/nand/raw/Kconfig        |  2 +-
->  drivers/mtd/nand/raw/marvell_nand.c | 16 ++++++++++++++++
->  2 files changed, 17 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-> index b523354dfb00..0f4cbb497010 100644
-> --- a/drivers/mtd/nand/raw/Kconfig
-> +++ b/drivers/mtd/nand/raw/Kconfig
-> @@ -160,7 +160,7 @@ config MTD_NAND_MARVELL
->  	  including:
->  	  - PXA3xx processors (NFCv1)
->  	  - 32-bit Armada platforms (XP, 37x, 38x, 39x) (NFCv2)
-> -	  - 64-bit Aramda platforms (7k, 8k) (NFCv2)
-> +	  - 64-bit Aramda platforms (7k, 8k, ac5) (NFCv2)
-> =20
->  config MTD_NAND_SLC_LPC32XX
->  	tristate "NXP LPC32xx SLC NAND controller"
-> diff --git a/drivers/mtd/nand/raw/marvell_nand.c b/drivers/mtd/nand/raw/m=
-arvell_nand.c
-> index 30c15e4e1cc0..b9a8dd324211 100644
-> --- a/drivers/mtd/nand/raw/marvell_nand.c
-> +++ b/drivers/mtd/nand/raw/marvell_nand.c
-> @@ -375,6 +375,7 @@ static inline struct marvell_nand_chip_sel *to_nand_s=
-el(struct marvell_nand_chip
->   *			BCH error detection and correction algorithm,
->   *			NDCB3 register has been added
->   * @use_dma:		Use dma for data transfers
-> + * @max_mode_number:	Maximum timing mode supported by the controller
->   */
->  struct marvell_nfc_caps {
->  	unsigned int max_cs_nb;
-> @@ -383,6 +384,7 @@ struct marvell_nfc_caps {
->  	bool legacy_of_bindings;
->  	bool is_nfcv2;
->  	bool use_dma;
-> +	unsigned int max_mode_number;
->  };
-> =20
->  /**
-> @@ -2376,6 +2378,9 @@ static int marvell_nfc_setup_interface(struct nand_=
-chip *chip, int chipnr,
->  	if (IS_ERR(sdr))
->  		return PTR_ERR(sdr);
-> =20
-> +	if (nfc->caps->max_mode_number && nfc->caps->max_mode_number < conf->ti=
-mings.mode)
-> +		return -EOPNOTSUPP;
-> +
->  	/*
->  	 * SDR timings are given in pico-seconds while NFC timings must be
->  	 * expressed in NAND controller clock cycles, which is half of the
-> @@ -3073,6 +3078,13 @@ static const struct marvell_nfc_caps marvell_armad=
-a_8k_nfc_caps =3D {
->  	.is_nfcv2 =3D true,
->  };
-> =20
-> +static const struct marvell_nfc_caps marvell_ac5_caps =3D {
-> +	.max_cs_nb =3D 2,
-> +	.max_rb_nb =3D 1,
-> +	.is_nfcv2 =3D true,
-> +	.max_mode_number =3D 3,
-> +};
-> +
->  static const struct marvell_nfc_caps marvell_armada370_nfc_caps =3D {
->  	.max_cs_nb =3D 4,
->  	.max_rb_nb =3D 2,
-> @@ -3121,6 +3133,10 @@ static const struct of_device_id marvell_nfc_of_id=
-s[] =3D {
->  		.compatible =3D "marvell,armada-8k-nand-controller",
->  		.data =3D &marvell_armada_8k_nfc_caps,
->  	},
-> +	{
-> +		.compatible =3D "marvell,ac5-nand-controller",
-> +		.data =3D &marvell_ac5_caps,
-> +	},
->  	{
->  		.compatible =3D "marvell,armada370-nand-controller",
->  		.data =3D &marvell_armada370_nfc_caps,
-
-
-Thanks,
-Miqu=C3=A8l
