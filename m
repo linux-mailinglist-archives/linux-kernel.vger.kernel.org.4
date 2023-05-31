@@ -2,96 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A3C7187EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A700B7187EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjEaRBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40490 "EHLO
+        id S229953AbjEaRCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjEaRB3 (ORCPT
+        with ESMTP id S229514AbjEaRCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:01:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7896135;
-        Wed, 31 May 2023 10:01:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B6B16347E;
-        Wed, 31 May 2023 17:01:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84E64C433EF;
-        Wed, 31 May 2023 17:01:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685552487;
-        bh=R7oOfdc1inXuLFb7cvDfmpI9BDI+dIPISRXuyEXNPvI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nzXesSLuaVO21WqMnqz6lZZkzoywNGhofB7+9w1885IbEkRQVdEWM4KHKSlR5VeUh
-         M1oBkZNiQGdN1h8nckTf1NxFC3vEjGc6N32U6OdnysH2ezKUhvfU9dHAiWYQUxAxex
-         WVTatdhX+KX4UwjwD/vqK4+X7h5HBPNS1RIxDrpnYQ/VJCIj3F/ohGcmWgMCB8Z0ap
-         C/rkGpAIcR+Z2RmiacrR6Gpe6lS8JClUDWzQqMfOPfJoTnNVyZ5O6uWArZkmi3n+7K
-         qHOB95TfohHPO3YPOggEcTQSlih2+d9rrUypXZhA2qeQ1Bpo+XPuXADSYesRboGN6O
-         xrtRBlkZ4pY7Q==
-Date:   Wed, 31 May 2023 10:01:25 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-        Pawel Chmielewski <pawel.chmielewski@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Barry Song <baohua@kernel.org>
-Subject: Re: [PATCH v2 0/8] sched/topology: add for_each_numa_cpu() macro
-Message-ID: <20230531100125.39d73e1d@kernel.org>
-In-Reply-To: <ZHdrMiVSrPdM3xGn@yury-ThinkPad>
-References: <20230430171809.124686-1-yury.norov@gmail.com>
-        <ZHdrMiVSrPdM3xGn@yury-ThinkPad>
+        Wed, 31 May 2023 13:02:46 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E774D13E
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:02:44 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VGt5lG014447;
+        Wed, 31 May 2023 12:02:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=Q+bH1la1wWK9pGjCcwcHQ8LiJYhGaZp0HJpX1acTJyE=;
+ b=UP0ZGQZ9fbFajE9OwZD4yhv2nHQUyRYunLvdXtjhUxQDzIfyY8ZAF+2hq6mT8XPrTNH/
+ HWNi7xIEEPVK26/Dk/fKgVKTvluBe3Vz/n1sjFnfp4BfZespNfp+3qXnTfLXv+lCYtTv
+ M3V8zaIAKcpiP/pdsgnb7aVDnm5KekrqLlwKqVBH1wdoemsfcTo3OmJDsLBvH3vhzlLP
+ XWku8Jsxs9gGC+nfOPWceXZvAvJtL3ZVQWu9S46vK3eaDtfyRxo6elzWwNgh1+Q+l55+
+ 7t7l4y1mHgxk2DZWJvt0z8libeG0NyoIY+63tWg6QDf6ZGGlnj/JDew8YCSEwzB6KpJs jA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3quf90vquq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 12:02:00 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 31 May
+ 2023 18:01:58 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 31 May 2023 18:01:58 +0100
+Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A9EEB45;
+        Wed, 31 May 2023 17:01:58 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH] firmware: cs_dsp: Log that a bin file was loaded
+Date:   Wed, 31 May 2023 18:01:58 +0100
+Message-ID: <20230531170158.2744700-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: 0qvnEfe6ssnlN3bUqX0tHfH3rHOW3NDt
+X-Proofpoint-ORIG-GUID: 0qvnEfe6ssnlN3bUqX0tHfH3rHOW3NDt
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 May 2023 08:43:46 -0700 Yury Norov wrote:
-> On Sun, Apr 30, 2023 at 10:18:01AM -0700, Yury Norov wrote:
-> > for_each_cpu() is widely used in kernel, and it's beneficial to create
-> > a NUMA-aware version of the macro.
-> > 
-> > Recently added for_each_numa_hop_mask() works, but switching existing
-> > codebase to it is not an easy process.
-> > 
-> > This series adds for_each_numa_cpu(), which is designed to be similar to
-> > the for_each_cpu(). It allows to convert existing code to NUMA-aware as
-> > simple as adding a hop iterator variable and passing it inside new macro.
-> > for_each_numa_cpu() takes care of the rest.  
-> 
-> Hi Jakub,
-> 
-> Now that the series reviewed, can you consider taking it in sched
-> tree?
+Change the message at the start of bin file loading from
+cs_dsp_dbg() to cs_dsp_info() so that there is confirmation
+in the kernel log that a bin file was loaded, and the name
+of the file.
 
-Do you mean someone else or did you mean the net-next tree?
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+---
+ drivers/firmware/cirrus/cs_dsp.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/firmware/cirrus/cs_dsp.c b/drivers/firmware/cirrus/cs_dsp.c
+index e4ccfb6a8fa5..d7e46a57ecf9 100644
+--- a/drivers/firmware/cirrus/cs_dsp.c
++++ b/drivers/firmware/cirrus/cs_dsp.c
+@@ -2059,10 +2059,10 @@ static int cs_dsp_load_coeff(struct cs_dsp *dsp, const struct firmware *firmware
+ 		goto out_fw;
+ 	}
+ 
+-	cs_dsp_dbg(dsp, "%s: v%d.%d.%d\n", file,
+-		   (le32_to_cpu(hdr->ver) >> 16) & 0xff,
+-		   (le32_to_cpu(hdr->ver) >>  8) & 0xff,
+-		   le32_to_cpu(hdr->ver) & 0xff);
++	cs_dsp_info(dsp, "%s: v%d.%d.%d\n", file,
++		    (le32_to_cpu(hdr->ver) >> 16) & 0xff,
++		    (le32_to_cpu(hdr->ver) >>  8) & 0xff,
++		    le32_to_cpu(hdr->ver) & 0xff);
+ 
+ 	pos = le32_to_cpu(hdr->len);
+ 
+-- 
+2.30.2
+
