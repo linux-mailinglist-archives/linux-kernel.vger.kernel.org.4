@@ -2,120 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DAFC718420
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C60718537
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236238AbjEaOEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
+        id S237251AbjEaOnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237270AbjEaODk (ORCPT
+        with ESMTP id S237261AbjEaOnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:03:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A99930CF;
-        Wed, 31 May 2023 06:58:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B454D63BDA;
-        Wed, 31 May 2023 13:48:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 984E3C433EF;
-        Wed, 31 May 2023 13:48:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540926;
-        bh=5oiWn6L9rJqvMfCt+T7VTPNle9Rnvsv/ziJ/f7AOOsc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iQu9QtR0wBqSrRiiuepq4IExLg5r6UtNI9pderJLGcaJDMrkAbtMSLA/ccZClJHlh
-         ceLh1hziCxKv3Uv4cJ2ZP8FWOR8+cVonqIKTAOEnqtTxActK3j0LsiJDmDbd9JjgDn
-         l0uXBQLscmnWHb2ZfLooP0bsfPZLlJIQWifDetum5djG3yL3gtX4RRgiXxIPPei1ff
-         LbYkQf7aai9Yehjq/YOXfYVL+QQFnXKCc7d8bdZAyP8v1kIElycciWBQALnBmtu+MT
-         2eMI1Rm9LuqM2fio1ElVVnu3mCxr3iTgaZ7V0HqVcHPKoPDaCZcKUOmVmfyuan2W50
-         0fPO5tgMYxNTg==
-Date:   Wed, 31 May 2023 15:48:43 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Frank Oltmanns <frank@oltmanns.dev>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        Andre Przywara <andre.przywara@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>, Icenowy Zheng <icenowy@aosc.io>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC PATCH 0/3] clk: sunxi-ng: Optimize rate selection for NKM
- clocks
-Message-ID: <flngzi4henkzcpzwdexencdkw77h52g3nduup7pwctpwfiuznk@eewnnut5mvsq>
-References: <20230527132747.83196-1-frank@oltmanns.dev>
+        Wed, 31 May 2023 10:43:06 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDC512B;
+        Wed, 31 May 2023 07:43:02 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VDJ7vi009623;
+        Wed, 31 May 2023 13:51:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=WfM3iho0VKIpMsbrE1pewuCoFGipoJC1WCGZmRmUc/U=;
+ b=JncmoOmM9aWOv7L6Fyqerg3CW4CVeDp7D6hAK81Afskv/gcEn4liOAtbkSsDDojCUDqf
+ 2/7Hlb4o6mk1t/HncmsUyUYeiv7F8sQQUFmDKBCUK/R6phRkfWMjqlwyn2CtqOKC4TyC
+ ZjakJFdXJHshfoYTo1Q54xuI29Iqytv+L8gExeqUT+osBcIrzpuDqrImQ3HKjGC5UWgY
+ cYKFp6qc8gapXt5Pg2ANall7WC8hV7d7l25B4VogC8opPa+Q+co2l7cmpUI1FW3n11Ni
+ gQLbEOkkqAc6eugTS93nhEJMCV/n3//wEtsTvr78hrGqfLeC5c/VDarjMY4eH3jLa8gY yQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwnhf293y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 13:51:10 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34VDp9ch023804
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 13:51:09 GMT
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 31 May 2023 06:51:06 -0700
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH 0/4] Add initial support for RDP442 of IPQ5332 family
+Date:   Wed, 31 May 2023 19:20:44 +0530
+Message-ID: <20230531135048.19164-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4ll2i5xo7tjkazzo"
-Content-Disposition: inline
-In-Reply-To: <20230527132747.83196-1-frank@oltmanns.dev>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 7AagGILLHkN_Mh6TehZeWmZ8aAvzihAy
+X-Proofpoint-GUID: 7AagGILLHkN_Mh6TehZeWmZ8aAvzihAy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_08,2023-05-31_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 malwarescore=0 mlxlogscore=911 mlxscore=0
+ priorityscore=1501 bulkscore=0 adultscore=0 spamscore=0 clxscore=1015
+ phishscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305310119
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add the initial device tree support for the Reference Design
+Platform(RDP) 474 based on IPQ5332 family of SoC. This patch carries
+the support for Console UART, eMMC, I2C and GPIO based buttons.
 
---4ll2i5xo7tjkazzo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Most of the features of RDP474 is similar to RDP441, except that the
+QDSP will not be used in RDP474, whereas it will be used in the RDP441.
 
-Hi Frank,
+RDP474 comes with the SoC IPQ5300, so add the SoC info support for the
+same.
 
-On Sat, May 27, 2023 at 03:27:44PM +0200, Frank Oltmanns wrote:
-> I would like to bring your attention to the current process of setting
-> the rate of an NKM clock. As it stands, when setting the rate of an
-> NKM clock, the rate nearest but less than or equal to the requested
-> rate is found, instead of the nearest rate.
+Kathiravan T (4):
+  dt-bindings: arm: qcom,ids: add SoC ID for IPQ5300
+  soc: qcom: socinfo: Add Soc ID for IPQ5300
+  dt-bindings: arm: qcom: document MI01.9 board based on IPQ5332 family
+  arm64: dts: qcom: ipq5332: add support for the RDP474 variant
 
-Yeah, it's actually pretty common, see clk_mux_determine_rate_flags()
-for example. Some devices require that we don't overshoot, while some
-prefer to have the closest rate.
+ .../devicetree/bindings/arm/qcom.yaml         |   2 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts   | 112 ++++++++++++++++++
+ drivers/soc/qcom/socinfo.c                    |   1 +
+ include/dt-bindings/arm/qcom,ids.h            |   1 +
+ 5 files changed, 117 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts
 
-Both are fine, and it's a bit context specific which one we should
-favour. If we were to do anything, it would be to support both and let
-the clock driver select which behaviour it wants.
+-- 
+2.17.1
 
-> Moreover, ccu_nkm_find_best() is called multiple times (footnote [1])
-> when setting a rate, each time iterating over all combinations of n,
-> k, and m.
-
-Yeah, that's expected as well.
-
-> In response to this, I propose the following refinements to optimize the NKM
-> clock setting:
->  a. when finding the best rate use the nearest rate, even if it is greater than
->     the requested rate (PATCH 1)
->  b. utilize binary search to find the best rate by going through a
->     precalculated, ordered list of all meaningful combinations of n, k, and m
->     (PATCH 2)
-
-One thing you haven't really addressed is why we would be doing this? Is
-there some clocks that require a more precise clock and don't? Is the
-factor calculation a bottleneck for some workloads?
-
-Clocks in general are very regression-prone, so I'd rather be a bit
-conservative there, and "if it ain't broke, don't fix it".
-
-Maxime
-
---4ll2i5xo7tjkazzo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZHdQOwAKCRDj7w1vZxhR
-xY7YAQCRMdM5sXe5+PRdsFQ42wN/ON/BTZv5VyjJjPNXDSV+fwEAxbyTFNxkGl7t
-ATFXYYJKY2m8tEcRbPXGriRr5AMQKQ0=
-=vNhW
------END PGP SIGNATURE-----
-
---4ll2i5xo7tjkazzo--
