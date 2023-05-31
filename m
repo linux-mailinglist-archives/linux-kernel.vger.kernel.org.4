@@ -2,121 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9144C7188D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6707F7188DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbjEaRwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
+        id S229659AbjEaRx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjEaRwh (ORCPT
+        with ESMTP id S229662AbjEaRxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:52:37 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DEF125
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:52:36 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64d24136685so21163b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:52:36 -0700 (PDT)
+        Wed, 31 May 2023 13:53:25 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCFB125
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:53:24 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-565ba2c7554so49401987b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:53:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685555556; x=1688147556;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kfMuDdWL1b4kSqYmj4dPZPS2+HxbmlkGgksoSf7cEdM=;
-        b=GCbj2dgtrPxM81YowcETNQ7Tw7u17jOm8NgY0XIvDAhknW7UNNBsch0YtMcFekc361
-         6/Wad6Tz8fsQQg1eYGqg+85i9VG6EoFd6QO9uosS61SXofS450nU07/j9MSQ2VmiY2rn
-         wad7XwqFrzdKhFr0cxIPBYy2E4V+2OaCfGyxCT1DSVfC3AkjQrqBZY1ueOxk16GDKHTR
-         epPOhOIRe/Wua1Wzbeb4V1LkFHQT7UseSwek0eF6bjM2QuoopWANatm8LMmqsnlGCRdo
-         DOmoMPQwsefZBwyj1nD7ejisJfYydRbcVQ3AitRWyz4lihhFvRGrbiQcvveSjJtkItu9
-         8Vow==
+        d=linaro.org; s=google; t=1685555604; x=1688147604;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dqEFokutPlWHp6iUC83Xjciu2KQ+BavT6TGVpdRnlGk=;
+        b=EwfgnWll56GCjBcN1cIZ2Apaci26NiYl7FrcVAXCG7aRlFZmfBTA2ZErk5/YRUt3+L
+         6oGWzV6JxeRNo1LeDkRzouJkskwx0giwJpnQmYG23W6gKXnPVe0UFb9l4w03zQUvdtVj
+         aRGmsoNtALgyFf9mrc3/VoNlBy5nawN8xPLyPGfNQLbbOsge1XxyFAEXeAsU6MaPOwc8
+         /guGT1UXBcxA/QmM2kGRwEGEUIku46WsFp89FXBwXb0uVqP3sRGjPB13g/HdR1Sr2Ylw
+         80xexz0qm27he4N4vO0vohadJzPgDpVFW4S81i+oz9lgrIU7y1nWkOTkR7csYMv9ma1o
+         udBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685555556; x=1688147556;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1685555604; x=1688147604;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kfMuDdWL1b4kSqYmj4dPZPS2+HxbmlkGgksoSf7cEdM=;
-        b=DjwlCCHUg0gPMfqN1MjutLC04H0Cczx3w64BOqZk9Vf81r+C7JtyCtuIL2+NI2gJn3
-         Tw9v56EnIYkTS6eQJfjruC70MpqSuK2DBUm4mLxmNkit0rdDmFRPciwAim+gvvv2ApL/
-         wMIKWDEC1QSKpKS4kEfE5PG+aHt3K95CiO/pPIbDv0h6RZKs03rYmTCoTHOAoMCxng9E
-         pJbr4ltVLRT+etAgce7OzUfqtvk3Yfq2ydvc7MYAGtyKwsBgwDqYl84BwqFuEBgMv7g7
-         qGcb3BNx+9eLRt4zS3DYMBG8qgdklcxMf9p+UvawW6qlhfN0Umy4uPDZYJ9iazkaWUh0
-         FSbg==
-X-Gm-Message-State: AC+VfDxuuUrsgOGiBdjZ8UlHZW3XE7FJOz7+FKITyXQuDCmVw2/4LVfd
-        walK8V6YwYED1MKU9kIvVMwE8N1VirI=
-X-Google-Smtp-Source: ACHHUZ6Bxgyls2p2BGxa2nv5b66W/y3d+qKs1L7ZFG+mA6gitDf/KIJHgmM/Krzh/mokc5fmG+G+Ng==
-X-Received: by 2002:a05:6a00:2393:b0:64d:2a87:2596 with SMTP id f19-20020a056a00239300b0064d2a872596mr9221088pfc.10.1685555555629;
-        Wed, 31 May 2023 10:52:35 -0700 (PDT)
-Received: from daehojeong-desktop.mtv.corp.google.com ([2620:15c:211:201:3d32:dc28:3a98:9cdf])
-        by smtp.gmail.com with ESMTPSA id bm17-20020a056a00321100b0063f1a1e3003sm3587517pfb.166.2023.05.31.10.52.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 10:52:35 -0700 (PDT)
-From:   Daeho Jeong <daeho43@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
-Cc:     Daeho Jeong <daehojeong@google.com>
-Subject: [PATCH] f2fs-tools: remove power-of-two limitation of zoned device
-Date:   Wed, 31 May 2023 10:52:13 -0700
-Message-ID: <20230531175214.3561692-1-daeho43@gmail.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+        bh=dqEFokutPlWHp6iUC83Xjciu2KQ+BavT6TGVpdRnlGk=;
+        b=XZs/jr7KjKhhlaZUZVfT5XVcdiu12Hzl5gfLMRmgLwi44WLIVUIExlf5tOwgTO4xlt
+         RayH7OjWGtQQ9CLBYyJYJ0E8QtvUW04cGQRgOwXjpt464vKXhgw1iO2f1fPmGcFZ9vuZ
+         ytlsoUTbLZcpYNEdZsqOboNaYNxukw4XxrNXL45D/mvAUzlk7B7AMxDBlMwYGCWX0QMo
+         RW2AVLgwfwXC3f7CM+887ZGjY0YOaIWoeknP0srVi6C9NOgbLzgjvRJcTuR/8WxYEAo5
+         IY4oDgeXcaiI3vKvUsFHNKOULaY8dgX+w6Xxb6XetSXdea1hnWLjEfyU5b3o8/LWbdIt
+         TKCw==
+X-Gm-Message-State: AC+VfDzsVVeMyb0Hph/mOj9E3U63Z/3JI81qZ8aJIy/O1ZmDEAj+XUvI
+        4zf12QffHCoqvAvahUvHOZLKAOz7u/46GJRgRuqEnw==
+X-Google-Smtp-Source: ACHHUZ53vNWX+g9NG7x1PjohENCM9c217qPR01yiSb6haDYnSF3yL9PFSNFfSq1sZz8ugsuL++LHR2Rn0O/zdrb2HPo=
+X-Received: by 2002:a81:92c2:0:b0:564:e527:4d7 with SMTP id
+ j185-20020a8192c2000000b00564e52704d7mr5979020ywg.25.1685555603892; Wed, 31
+ May 2023 10:53:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        TVD_SUBJ_WIPE_DEBT,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <1685464318-25031-1-git-send-email-quic_khsieh@quicinc.com>
+ <1685464318-25031-3-git-send-email-quic_khsieh@quicinc.com>
+ <dfa12c8b-ccec-261c-9c83-54536e17c02d@linaro.org> <157e8219-7af2-c7ed-6d99-3caa6fbc11ba@quicinc.com>
+ <CAA8EJponkEne2vVsNP=2Fxmv=Uc6i_LzAGBSEz9hPPotCEpGzg@mail.gmail.com> <e69f02b7-eba9-5f33-5ca1-eb0638928414@quicinc.com>
+In-Reply-To: <e69f02b7-eba9-5f33-5ca1-eb0638928414@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 31 May 2023 20:53:13 +0300
+Message-ID: <CAA8EJpr9dfrrEsFf8heOvG3BWRTVCY-q1QYNH_3OBeMAWEwotA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] drm/msm/dpu: retrieve DSI DSC struct at atomic_check()
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org, quic_abhinavk@quicinc.com,
+        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        marijn.suijten@somainline.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daeho Jeong <daehojeong@google.com>
+On Wed, 31 May 2023 at 20:29, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>
+>
+> On 5/31/2023 10:12 AM, Dmitry Baryshkov wrote:
+> > On Wed, 31 May 2023 at 18:41, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+> >>
+> >>
+> >>>>    +    if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_DSI) {
+> >>> INTF_DSI
+> >>>
+> >>>> +        struct drm_bridge *bridge;
+> >>>> +
+> >>>> +        if (!dpu_enc->dsc) {
+> >>> This condition is not correct. We should be updating the DSC even if
+> >>> there is one.
+> >>>
+> >>>> +            bridge = drm_bridge_chain_get_first_bridge(drm_enc);
+> >>>> +            dpu_enc->dsc = msm_dsi_bridge_get_dsc_config(bridge);
+> >>> This approach will not work for the hot-pluggable outputs. The dpu_enc
+> >>> is not a part of the state. It should not be touched before
+> >>> atomic_commit actually commits changes.
+> >> where can drm_dsc_config be stored?
+> > I'd say, get it during atomic_check (and don't store it anywhere).
+> > Then get it during atomic_enable (and save in dpu_enc).
+> got it.
+> >
+> >>> Also, I don't think I like the API. It makes it impossible for the
+> >>> driver to check that the bridge is the actually our DSI bridge or not.
+> >>> Once you add DP here, the code will explode.
+> >>>
+> >>> I think instead we should extend the drm_bridge API to be able to get
+> >>> the DSC configuration from it directly. Additional care should be put
+> >>> to design an assymetrical API. Theoretically a drm_bridge can be both
+> >>> DSC source and DSC sink. Imagine a DSI-to-DP or DSI-to-HDMI bridge,
+> >>> supporting DSC on the DSI side too.
+> >> Form my understanding, a bridge contains two interfaces.
+> >>
+> >> Therefore I would think only one bridge for dsi-to-dp bridge? and this
+> >> bridge should represent the bridge chip?
+> >>
+> >> I am thinking adding an ops function, get_bridge_dsc() to struct
+> >> drm_bridge_funcs to retrieve drm_dsc_config.
+> > So, for this DSI-to-DP bridge will get_bridge_dsc() return DSC
+> > configuration for  the DSI or for the DP side of the bridge?
+>
+> I would think should be DP side. there is no reason to enable dsc on
+> both DSI and DP fro a bridge chip.
 
-Remove power-of-two limitation for zoned device, since zoned devices
-don't have it.
+Well, there can be. E.g. to lower the clock rates of the DSI link.
 
-Signed-off-by: Daeho Jeong <daehojeong@google.com>
----
- fsck/mount.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+>
+> drm_bridge_chain_get_first_bridge(drm_enc) should return the bridge of
+> the controller.
+>
+> In DSI-to-DP bridge chip case, this controller will be the bridge chip
+> who configured to perform protocol conversion between DSI and DP.
+>
+> If DSC enabled should be at DP size which connect to panel.
 
-diff --git a/fsck/mount.c b/fsck/mount.c
-index 4c74888..851a62b 100644
---- a/fsck/mount.c
-+++ b/fsck/mount.c
-@@ -56,19 +56,17 @@ static int get_zone_idx_from_dev(struct f2fs_sb_info *sbi,
- {
- 	block_t seg_start_blkaddr = START_BLOCK(sbi, segno);
- 
--	return (seg_start_blkaddr - c.devices[dev_idx].start_blkaddr) >>
--			log_base_2(sbi->segs_per_sec * sbi->blocks_per_seg);
-+	return (seg_start_blkaddr - c.devices[dev_idx].start_blkaddr) /
-+			(sbi->segs_per_sec * sbi->blocks_per_seg);
- }
- 
- bool is_usable_seg(struct f2fs_sb_info *sbi, unsigned int segno)
- {
--	unsigned int secno = segno / sbi->segs_per_sec;
- 	block_t seg_start = START_BLOCK(sbi, segno);
--	block_t blocks_per_sec = sbi->blocks_per_seg * sbi->segs_per_sec;
- 	unsigned int dev_idx = get_device_idx(sbi, segno);
- 	unsigned int zone_idx = get_zone_idx_from_dev(sbi, segno, dev_idx);
--	unsigned int sec_off = SM_I(sbi)->main_blkaddr >>
--						log_base_2(blocks_per_sec);
-+	unsigned int sec_start_blkaddr = START_BLOCK(sbi,
-+			GET_SEG_FROM_SEC(sbi, segno / sbi->segs_per_sec));
- 
- 	if (zone_idx < c.devices[dev_idx].nr_rnd_zones)
- 		return true;
-@@ -76,7 +74,7 @@ bool is_usable_seg(struct f2fs_sb_info *sbi, unsigned int segno)
- 	if (c.devices[dev_idx].zoned_model != F2FS_ZONED_HM)
- 		return true;
- 
--	return seg_start < ((sec_off + secno) * blocks_per_sec) +
-+	return seg_start < sec_start_blkaddr +
- 				c.devices[dev_idx].zone_cap_blocks[zone_idx];
- }
- 
+Ok, so it returns the DSC configuration of the bridge's source side.
+Now let's consider a panel bridge for the DSC-enabled DSI panel.
+Should get_bridge_dsc() return a DSC config in this case?
+
+> >> Do you have other suggestion?
+> > Let me think about it for a few days.
 -- 
-2.41.0.rc0.172.g3f132b7071-goog
-
+With best wishes
+Dmitry
