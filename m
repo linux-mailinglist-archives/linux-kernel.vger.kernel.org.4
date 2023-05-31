@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA20971758E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 06:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC57A71759A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 06:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234458AbjEaE2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 00:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35308 "EHLO
+        id S234030AbjEaE20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 00:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234394AbjEaE1d (ORCPT
+        with ESMTP id S234405AbjEaE1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 00:27:33 -0400
+        Wed, 31 May 2023 00:27:45 -0400
 Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 082B4193;
-        Tue, 30 May 2023 21:26:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98A05123;
+        Tue, 30 May 2023 21:27:03 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 2A1808167;
-        Wed, 31 May 2023 04:26:51 +0000 (UTC)
-Date:   Wed, 31 May 2023 07:26:49 +0300
+        by muru.com (Postfix) with ESMTPS id E585681A7;
+        Wed, 31 May 2023 04:27:02 +0000 (UTC)
+Date:   Wed, 31 May 2023 07:27:01 +0300
 From:   Tony Lindgren <tony@atomide.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Vinod Koul <vkoul@kernel.org>,
@@ -43,14 +43,15 @@ Cc:     Vinod Koul <vkoul@kernel.org>,
         linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
         linux-watchdog@vger.kernel.org, Rob Herring <robh@kernel.org>,
         Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH 7/7] dt-bindings: watchdog: restrict node name suffixes
-Message-ID: <20230531042649.GN14287@atomide.com>
+Subject: Re: [PATCH 1/7] dt-bindings: phy: intel,combo-phy: restrict node
+ name suffixes
+Message-ID: <20230531042701.GO14287@atomide.com>
 References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
- <20230530144851.92059-8-krzysztof.kozlowski@linaro.org>
+ <20230530144851.92059-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230530144851.92059-8-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230530144851.92059-2-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -62,7 +63,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 * Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> [230530 14:49]:
 > Make the pattern matching node names a bit stricter to improve DTS
-> consistency.  The pattern is restricted to -N suffixes to decimal
-> numbers.
+> consistency.  The pattern is restricted to:
+> 1. Only one unit address or one -N suffix,
+> 2. -N suffixes to decimal numbers.
 
 Reviewed-by: Tony Lindgren <tony@atomide.com>
