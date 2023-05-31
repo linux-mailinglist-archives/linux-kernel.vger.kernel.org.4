@@ -2,291 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1915718A05
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A38E4718A09
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbjEaTTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 15:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
+        id S229695AbjEaTUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 15:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjEaTTc (ORCPT
+        with ESMTP id S229543AbjEaTUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 15:19:32 -0400
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFAA125;
-        Wed, 31 May 2023 12:19:30 -0700 (PDT)
+        Wed, 31 May 2023 15:20:13 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512FD126
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:20:11 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d5f65a2f7so106616b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:20:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1685560771; x=1717096771;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MkW+ntQWorEvMmMdAVskhl+rccZzzXdLQWjU4/cXKyo=;
-  b=QJWHiEGajFPQIGJuOQfk4k6TgyqgyL5xvK6Mmqw24OUQIMTGDLojucLv
-   hldSXJGxTvx7p8X6uQfloTuEguHZb0o63WpoZ8RSSoANxidRJIRBctn4b
-   V4kQdv/ES7I4v/9D71QoA9wq/7TK1ma3PFPlrqmgGDOfGtE4nwKNI+gJv
-   o=;
-X-IronPort-AV: E=Sophos;i="6.00,207,1681171200"; 
-   d="scan'208";a="335480403"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-0aba4706.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 19:19:25 +0000
-Received: from EX19MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1e-m6i4x-0aba4706.us-east-1.amazon.com (Postfix) with ESMTPS id 679D6A6726;
-        Wed, 31 May 2023 19:19:22 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 31 May 2023 19:19:21 +0000
-Received: from 88665a182662.ant.amazon.com (10.95.246.21) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 31 May 2023 19:19:18 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <akihirosuda@git.sr.ht>
-CC:     <akihiro.suda.cz@hco.ntt.co.jp>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <segoon@openwall.com>, <suda.kyoto@gmail.com>,
-        <kuniyu@amazon.com>
-Subject: Re: [PATCH linux] net/ipv4: ping_group_range: allow GID from 2147483648 to 4294967294
-Date:   Wed, 31 May 2023 12:19:09 -0700
-Message-ID: <20230531191909.95136-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <168553315664.20663.13753087625689463092-0@git.sr.ht>
-References: <168553315664.20663.13753087625689463092-0@git.sr.ht>
+        d=ziepe.ca; s=google; t=1685560811; x=1688152811;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=49Ctqz+Z6/EpgEVzBMBiySSOETw/gRZF7F8sKc0/gW4=;
+        b=SCXzv5NFJkdSd2DBch3tBur6rt87sHZadMvllcCYrBSlAnujqsn2w6NYfs8kRw7zEH
+         UUy5B5M3fdwqVh4cJAPUbO4ymzbGUQhjG0wsWvcB0rzXrJuUXqSQWExeBcxLh5dnJ4hW
+         JdIcMLBU2Wr5PTX+4Sgey8hL0W2zyc7yeXyBOoy9FNA13tz08zsvGn7+DUiMDrwaQkpg
+         hdZvFD7p3uuyL6jZGaitCwZEBXvEijJ+fMG39fXax6zGLA/zH3JFxhLgU8GjKTvmwn3U
+         cfKL4OTNs21hoPihFH4rxpZz8Ex23V4vNxSxIHe04E18MS+FM6lfIrpkz5m+NwO2u7KZ
+         /PHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685560811; x=1688152811;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=49Ctqz+Z6/EpgEVzBMBiySSOETw/gRZF7F8sKc0/gW4=;
+        b=kIiXlHsA0CqXk67zBsHLIcSh8Cal4ehb6y2cuD0qGFTCZ2HfAqR2H+jEZ2STWr+aXH
+         Rb8FBcSlFUJ/8T6LsUF723iHMLaxYfy37uacCfXp0aNgThQg7/UpWM9ySKV/B732H06a
+         EZMn1Q3whWfrhF1TZDjWpZBQIpXfucDMTZQcwF1MiptLtj83Ou7pVfPEsybBxNiy0cOf
+         eqjxQyr+E1VRNZz+Kh97KAeb50pV/aVsG5tRGrS7x2N24zgn4Odm4QuOVBkhYE/QBH9b
+         6EYeEU8TUVOvEgpxGzE92VgDlWNgVYNZZZPbAqE1pYgY/HIP45vfmD+FHhdgsSidCgIL
+         h3Pg==
+X-Gm-Message-State: AC+VfDz0fAShVm7sJ32IYTdri8qkdI0pq/Ik0JXMxpK9ndb/8Cvhd9X8
+        J3dmneULPYuNZoGo9bsjvgorsA==
+X-Google-Smtp-Source: ACHHUZ5vOhH+Z20smvih3PRoBzyu6112d4DjAZ/k2Hk8Q2510QpTt0jTRAeR3hLBF9CzQodd76AWQw==
+X-Received: by 2002:a05:6a00:1344:b0:647:e45f:1a4c with SMTP id k4-20020a056a00134400b00647e45f1a4cmr5931413pfu.11.1685560810753;
+        Wed, 31 May 2023 12:20:10 -0700 (PDT)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id 15-20020aa7920f000000b0065017055caasm918208pfo.210.2023.05.31.12.20.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 12:20:10 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1q4RMe-0017g6-KI;
+        Wed, 31 May 2023 16:20:08 -0300
+Date:   Wed, 31 May 2023 16:20:08 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Anup Patel <anup@brainfault.org>,
+        Ben Gardon <bgardon@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Gavin Shan <gshan@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Larabel <michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+        linux-mm@google.com
+Subject: Re: [PATCH mm-unstable v2 02/10] mm/kvm: use
+ mmu_notifier_ops->test_clear_young()
+Message-ID: <ZHed6OuO/ALNfvaX@ziepe.ca>
+References: <20230526234435.662652-1-yuzhao@google.com>
+ <20230526234435.662652-3-yuzhao@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.95.246.21]
-X-ClientProxiedBy: EX19D046UWA003.ant.amazon.com (10.13.139.18) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526234435.662652-3-yuzhao@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ~akihirosuda <akihirosuda@git.sr.ht>
-Date: Wed, 31 May 2023 19:42:49 +0900
-> From: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+On Fri, May 26, 2023 at 05:44:27PM -0600, Yu Zhao wrote:
+> Replace test_young() and clear_young() with test_clear_young().
 > 
-> With this commit, all the GIDs ("0 4294967294") can be written to the
-> "net.ipv4.ping_group_range" sysctl.
-> 
-> Note that 4294967295 (0xffffffff) is an invalid GID (see gid_valid() in
-> include/linux/uidgid.h), and an attempt to register this number will cause
-> -EINVAL.
-> 
-> Prior to this commit, only up to GID 2147483647 could be covered.
-> Documentation/networking/ip-sysctl.rst had "0 4294967295" as an example
-> value, but this example was wrong and causing -EINVAL.
-> 
-> In the implementation, proc_dointvec_minmax is no longer used because it
-> does not support numbers from 2147483648 to 4294967294.
-
-Good catch.
-
-I think we can use proc_doulongvec_minmax() instead of open coding.
-
-With the diff below:
-
----8<---
-# sysctl -a | grep ping
-net.ipv4.ping_group_range = 0	2147483647
-# sysctl -w net.ipv4.ping_group_range="0 4294967295"
-sysctl: setting key "net.ipv4.ping_group_range": Invalid argument
-# sysctl -w net.ipv4.ping_group_range="0 4294967294"
-net.ipv4.ping_group_range = 0 4294967294
-# sysctl -a | grep ping
-net.ipv4.ping_group_range = 0	4294967294
----8<---
-
----8<---
-diff --git a/include/net/ping.h b/include/net/ping.h
-index 9233ad3de0ad..9b401b9a9d35 100644
---- a/include/net/ping.h
-+++ b/include/net/ping.h
-@@ -20,7 +20,7 @@
-  * gid_t is either uint or ushort.  We want to pass it to
-  * proc_dointvec_minmax(), so it must not be larger than MAX_INT
-  */
--#define GID_T_MAX (((gid_t)~0U) >> 1)
-+#define GID_T_MAX ((gid_t)~0U)
- 
- /* Compatibility glue so we can support IPv6 when it's compiled as a module */
- struct pingv6_ops {
-diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index 6ae3345a3bdf..11d401958673 100644
---- a/net/ipv4/sysctl_net_ipv4.c
-+++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -35,8 +35,8 @@ static int ip_ttl_max = 255;
- static int tcp_syn_retries_min = 1;
- static int tcp_syn_retries_max = MAX_TCP_SYNCNT;
- static int tcp_syn_linear_timeouts_max = MAX_TCP_SYNCNT;
--static int ip_ping_group_range_min[] = { 0, 0 };
--static int ip_ping_group_range_max[] = { GID_T_MAX, GID_T_MAX };
-+static unsigned long ip_ping_group_range_min[] = { 0, 0 };
-+static unsigned long ip_ping_group_range_max[] = { GID_T_MAX, GID_T_MAX };
- static u32 u32_max_div_HZ = UINT_MAX / HZ;
- static int one_day_secs = 24 * 3600;
- static u32 fib_multipath_hash_fields_all_mask __maybe_unused =
-@@ -165,8 +165,8 @@ static int ipv4_ping_group_range(struct ctl_table *table, int write,
- 				 void *buffer, size_t *lenp, loff_t *ppos)
- {
- 	struct user_namespace *user_ns = current_user_ns();
-+	unsigned long urange[2];
- 	int ret;
--	gid_t urange[2];
- 	kgid_t low, high;
- 	struct ctl_table tmp = {
- 		.data = &urange,
-@@ -179,7 +179,7 @@ static int ipv4_ping_group_range(struct ctl_table *table, int write,
- 	inet_get_ping_group_range_table(table, &low, &high);
- 	urange[0] = from_kgid_munged(user_ns, low);
- 	urange[1] = from_kgid_munged(user_ns, high);
--	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
-+	ret = proc_doulongvec_minmax(&tmp, write, buffer, lenp, ppos);
- 
- 	if (write && ret == 0) {
- 		low = make_kgid(user_ns, urange[0]);
----8<---
-
-
-> 
-> proc_douintvec is not used either, because it does not support
-> multi-element vectors, despite its function name.
-> Commit 4f2fec00afa6 ("sysctl: simplify unsigned int support") says
-> "*Do not* add support for them".
-> 
-> Fixes: c319b4d76b9e ("net: ipv4: add IPPROTO_ICMP socket kind")
-> Signed-off-by: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+> Signed-off-by: Yu Zhao <yuzhao@google.com>
 > ---
->  Documentation/networking/ip-sysctl.rst |  4 +-
->  include/net/ping.h                     |  6 ---
->  net/ipv4/sysctl_net_ipv4.c             | 52 +++++++++++++++++++++-----
->  3 files changed, 44 insertions(+), 18 deletions(-)
+>  include/linux/mmu_notifier.h | 29 ++-----------------
+>  include/trace/events/kvm.h   | 15 ----------
+>  mm/mmu_notifier.c            | 42 ----------------------------
+>  virt/kvm/kvm_main.c          | 54 ------------------------------------
+>  4 files changed, 2 insertions(+), 138 deletions(-)
 > 
-> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-> index 6ec06a33688a..80b8f73a0244 100644
-> --- a/Documentation/networking/ip-sysctl.rst
-> +++ b/Documentation/networking/ip-sysctl.rst
-> @@ -1352,8 +1352,8 @@ ping_group_range - 2 INTEGERS
->  	Restrict ICMP_PROTO datagram sockets to users in the group range.
->  	The default is "1 0", meaning, that nobody (not even root) may
->  	create ping sockets.  Setting it to "100 100" would grant permissions
-> -	to the single group. "0 4294967295" would enable it for the world, "100
-> -	4294967295" would enable it for the users, but not daemons.
-> +	to the single group. "0 4294967294" would enable it for the world, "100
-> +	4294967294" would enable it for the users, but not daemons.
+> diff --git a/include/linux/mmu_notifier.h b/include/linux/mmu_notifier.h
+> index dfdbb370682d..c8f35fc08703 100644
+> --- a/include/linux/mmu_notifier.h
+> +++ b/include/linux/mmu_notifier.h
+> @@ -104,26 +104,6 @@ struct mmu_notifier_ops {
+>  				 unsigned long start,
+>  				 unsigned long end);
 >  
->  tcp_early_demux - BOOLEAN
->  	Enable early demux for established TCP sockets.
-> diff --git a/include/net/ping.h b/include/net/ping.h
-> index 9233ad3de0ad..37b1d7baeb7b 100644
-> --- a/include/net/ping.h
-> +++ b/include/net/ping.h
-> @@ -16,12 +16,6 @@
->  #define PING_HTABLE_SIZE 	64
->  #define PING_HTABLE_MASK 	(PING_HTABLE_SIZE-1)
->  
-> -/*
-> - * gid_t is either uint or ushort.  We want to pass it to
-> - * proc_dointvec_minmax(), so it must not be larger than MAX_INT
-> - */
-> -#define GID_T_MAX (((gid_t)~0U) >> 1)
+> -	/*
+> -	 * clear_young is a lightweight version of clear_flush_young. Like the
+> -	 * latter, it is supposed to test-and-clear the young/accessed bitflag
+> -	 * in the secondary pte, but it may omit flushing the secondary tlb.
+> -	 */
+> -	int (*clear_young)(struct mmu_notifier *subscription,
+> -			   struct mm_struct *mm,
+> -			   unsigned long start,
+> -			   unsigned long end);
 > -
->  /* Compatibility glue so we can support IPv6 when it's compiled as a module */
->  struct pingv6_ops {
->  	int (*ipv6_recv_error)(struct sock *sk, struct msghdr *msg, int len,
-> diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-> index 40fe70fc2015..5f077156ec50 100644
-> --- a/net/ipv4/sysctl_net_ipv4.c
-> +++ b/net/ipv4/sysctl_net_ipv4.c
-> @@ -34,8 +34,6 @@ static int ip_ttl_min = 1;
->  static int ip_ttl_max = 255;
->  static int tcp_syn_retries_min = 1;
->  static int tcp_syn_retries_max = MAX_TCP_SYNCNT;
-> -static int ip_ping_group_range_min[] = { 0, 0 };
-> -static int ip_ping_group_range_max[] = { GID_T_MAX, GID_T_MAX };
->  static u32 u32_max_div_HZ = UINT_MAX / HZ;
->  static int one_day_secs = 24 * 3600;
->  static u32 fib_multipath_hash_fields_all_mask __maybe_unused =
-> @@ -167,24 +165,56 @@ static int ipv4_ping_group_range(struct ctl_table *table, int write,
->  	int ret;
->  	gid_t urange[2];
->  	kgid_t low, high;
-> +	size_t slen = 256; /* total bytes including '\0' */
-> +	char *s = kmalloc(slen, GFP_KERNEL); /* clobbered by strsep */
->  	struct ctl_table tmp = {
-> -		.data = &urange,
-> -		.maxlen = sizeof(urange),
-> +		.data = s,
-> +		.maxlen = slen,
->  		.mode = table->mode,
-> -		.extra1 = &ip_ping_group_range_min,
-> -		.extra2 = &ip_ping_group_range_max,
->  	};
->  
-> +	if (unlikely(!s))
-> +		return -ENOMEM;
-> +
->  	inet_get_ping_group_range_table(table, &low, &high);
->  	urange[0] = from_kgid_munged(user_ns, low);
->  	urange[1] = from_kgid_munged(user_ns, high);
-> -	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
+> -	/*
+> -	 * test_young is called to check the young/accessed bitflag in
+> -	 * the secondary pte. This is used to know if the page is
+> -	 * frequently used without actually clearing the flag or tearing
+> -	 * down the secondary mapping on the page.
+> -	 */
+> -	int (*test_young)(struct mmu_notifier *subscription,
+> -			  struct mm_struct *mm,
+> -			  unsigned long address);
 > -
-> +	/* proc_dointvec_minmax is no longer used because it does not support
-> +	 * numbers from 2147483648 to 4294967294.
-> +	 *
-> +	 * proc_douintvec is not used either, because it does not support
-> +	 * multi-element vectors, despite its function name.
-> +	 * Commit 4f2fec00afa6 ("sysctl: simplify unsigned int support") says
-> +	 * "*Do not* add support for them".
-> +	 */
-> +	ret = snprintf(tmp.data, slen, "%u\t%u", urange[0], urange[1]);
-> +	if (ret < 0)
-> +		goto done;
-> +	ret = proc_dostring(&tmp, write, buffer, lenp, ppos);
-> +	if (*lenp >= slen - 1) /* truncated */
-> +		ret = -EINVAL;
->  	if (write && ret == 0) {
-> +		char *tok[2];
-> +		int i;
-> +
-> +		s = strim(s);
-> +		tok[0] = strsep(&s, " \t");
-> +		tok[1] = s;
-> +		for (i = 0; i < 2; i++) {
-> +			if (!tok[i]) {
-> +				ret = -EINVAL;
-> +				goto done;
-> +			}
-> +			ret = kstrtouint(tok[i], 0, &urange[i]);
-> +			if (ret < 0)
-> +				goto done;
-> +		}
->  		low = make_kgid(user_ns, urange[0]);
->  		high = make_kgid(user_ns, urange[1]);
-> -		if (!gid_valid(low) || !gid_valid(high))
-> -			return -EINVAL;
-> +		if (!gid_valid(low) || !gid_valid(high)) {
-> +			ret = -EINVAL;
-> +			goto done;
-> +		}
->  		if (urange[1] < urange[0] || gid_lt(high, low)) {
->  			low = make_kgid(&init_user_ns, 1);
->  			high = make_kgid(&init_user_ns, 0);
-> @@ -192,6 +222,8 @@ static int ipv4_ping_group_range(struct ctl_table *table, int write,
->  		set_ping_group_range(table, low, high);
->  	}
->  
-> +done:
-> +	kfree(tmp.data);
->  	return ret;
->  }
->  
-> -- 
-> 2.38.4
+>  	int (*test_clear_young)(struct mmu_notifier *mn, struct mm_struct *mm,
+>  				unsigned long start, unsigned long end,
+>  				bool clear, unsigned long *bitmap);
+
+Oh, you split the patch. This MMU notifier stuff seems OK for both
+patches then, and KVM is the only user:
+
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+
+Jason
