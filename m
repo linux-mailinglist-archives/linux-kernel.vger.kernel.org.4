@@ -2,140 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CA07176EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 981A57176ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234173AbjEaGfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 02:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
+        id S230001AbjEaGfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 02:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjEaGfe (ORCPT
+        with ESMTP id S234200AbjEaGfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 02:35:34 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F48399;
-        Tue, 30 May 2023 23:35:32 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-96f53c06babso918497666b.3;
-        Tue, 30 May 2023 23:35:32 -0700 (PDT)
+        Wed, 31 May 2023 02:35:41 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3449125
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 23:35:40 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id 46e09a7af769-6af713338ccso2267211a34.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 23:35:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685514931; x=1688106931;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MT/ursCZpYWc+U/ss5xdCpQN33pNzAamORszl4z68Ow=;
-        b=lNMtmamOO2e1wvzgrMy+UcK+VWeJeCrcl3wmYu6uAry5CZ1KJz7U6Ndg/QIjGdbK1A
-         tj/wfAIRPI/J4R2dQh4XqtrssizdRRQ4Ab2he1QAQ6UTq3xy20HiwvumCPJYTdHcrwPj
-         QzTOJ6izHzvkT0p+Z26cuh7XqRTPEKN50JWbzcaHwvIrQG4KckxKlRIqE1oIH6yqniRT
-         i8oK+UudyDh7A07FuNhIKjsbEh2kYKOEi/WHLpXGmPNMl/oQx7wvXzsKSaapzOTMqdYj
-         2I4cka+3HmgIUZqP66vK3ZvbW1EJXlg7tdrylvd9KIFyp9IC+NrfXIVqglgMUHPRTAo1
-         D2Ug==
+        d=chromium.org; s=google; t=1685514940; x=1688106940;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PEwCfTaICvYvCwQRPGK1g4zyztT+iiOIX15/8C0y2cc=;
+        b=PuIbwlKaUGt9MSo2eWXDmtINbwnWoPk+SXdAsF5fKni3qVC7byx8t036vE/O7cKTOo
+         Rys+j9bafeFY3XdNeAnNbXXOICeOd7OOBoCryHJzpL5RcJSd1i4MJ8aY4e22e3eA2r1v
+         UjJZXafKix/LQs2iuVCFBB5xIjflONwWQorT4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685514931; x=1688106931;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1685514940; x=1688106940;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MT/ursCZpYWc+U/ss5xdCpQN33pNzAamORszl4z68Ow=;
-        b=AeRPOZPAwg4Q9RALsMA+OzaqiMFzo2cVxE0FijmKJWS8mTLil3sQQ3o/c+t1FsH8Hd
-         SmJPUfToJcC+R7II5lS5EnOr0py24rnNtTehBdVg30UCC488XKNKx2HWOz+ZuWvrER2c
-         C9WbOp17AGOsJAcrGJA5GKoLWJHUMRD0aQ8IAgErXO8ZQIm4aJtrx9Suj63iz7hifSZ+
-         B0lNA7LbG6/R5DQeyswaQmflZfl+8LDuHWvKOyduplGAWKghXTFeO1NRO+E/z2UOBiYu
-         qnn7uc3SgWWW3/QEsj9zltP0LCHWGRCybtn7/cr4yl0IbXO/cD5dDObSbHK8MTJtPOpM
-         y5CQ==
-X-Gm-Message-State: AC+VfDwBuEnYWUIYyONKy+loMzr6cWA3IkwdeD7lhYSjmnuKfYahyo0A
-        YLlhYlsWp+JRgDN2CSjKmRKZr3P/lO2+5p0L5OsmfS7eDl0=
-X-Google-Smtp-Source: ACHHUZ7TBEY/rdeuLDDeZUIfY2WE5Jm0aucrTE73JNXR6+PzOMvzNGpM8XQdSJdpkAgMbR2VHVDBcGzUMN7RYCZa8dU=
-X-Received: by 2002:a17:907:d16:b0:960:ddba:e5c3 with SMTP id
- gn22-20020a1709070d1600b00960ddbae5c3mr4616805ejc.32.1685514930685; Tue, 30
- May 2023 23:35:30 -0700 (PDT)
+        bh=PEwCfTaICvYvCwQRPGK1g4zyztT+iiOIX15/8C0y2cc=;
+        b=Hp5QU0ZKEq7GsehChmi0x8XN/GHTUKwQClehI/EU4UnT19W5NEbjBHzt1eQQGmTOpI
+         zUOq1pDjNL+xmjR4/L5TReZXVs9OEdmvPJLg3e1NNuMVJSIOiuKAFsO2IoH7iYhD1nYg
+         8QiYNrvVVOUiWNZ4D0fE8bb3XPVzgL2riSxr0O5MrsXvlnoyvQdWd/5I9NJZ8AzQHTbP
+         476UOvv48c+dt9hOgHiyCesnIR2PIMQjoLxjxNjkejAxAdMVkln41Dw3CMFLnBmtKKvH
+         xpcPZ4xikH2NA61d1NpM+P4kg/5l8uCSz3lSthbw+msqxWEJc6iAP4XtnNg/ea40R85b
+         EVoA==
+X-Gm-Message-State: AC+VfDwtwXhe/kgCD1DPVbXnZfQ5tagHTxh4G4GFtvUPQUw3jNLzwEfB
+        5hd5nCLv3ThxHI3zQnxhVGaQC1uodWLKhZTAjrQ=
+X-Google-Smtp-Source: ACHHUZ4quZpuYe7FI5h99AuDIMN0SwFckVXd0u92B8fxRkbiGlGOHNgDRF5LdN1wZA7gprk0Iz5naw==
+X-Received: by 2002:a9d:7546:0:b0:6af:9738:3483 with SMTP id b6-20020a9d7546000000b006af97383483mr1195796otl.29.1685514940024;
+        Tue, 30 May 2023 23:35:40 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:3052:fa:c737:8f43])
+        by smtp.gmail.com with ESMTPSA id j12-20020a62b60c000000b0064cb0845c77sm2581010pff.122.2023.05.30.23.35.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 23:35:39 -0700 (PDT)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] soc: mediatek: SVS: Fix MT8192 GPU node name
+Date:   Wed, 31 May 2023 14:35:30 +0800
+Message-ID: <20230531063532.2240038-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-References: <20230530154252.7895-1-osmtendev@gmail.com>
-In-Reply-To: <20230530154252.7895-1-osmtendev@gmail.com>
-From:   David Rheinsberg <david.rheinsberg@gmail.com>
-Date:   Wed, 31 May 2023 08:35:18 +0200
-Message-ID: <CADyDSO6nY2=UONuHk0PMszWJ_Hnpg6h-VYX40xGtU2CnhTcy+w@mail.gmail.com>
-Subject: Re: [PATCH v2] hid-wiimote-debug.c: Drop error checking for debugfs_create_file
-To:     Osama Muhammad <osmtendev@gmail.com>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Device tree node names should be generic. The planned device node name
+for the GPU, according to the bindings and posted DT changes, is "gpu",
+not "mali".
 
-On Tue, 30 May 2023 at 17:43, Osama Muhammad <osmtendev@gmail.com> wrote:
->
-> This patch removes the error checking for debugfs_create_file
-> in hid-wiimote-debug.c.c. This is because the debugfs_create_file()
-> does not return NULL but an ERR_PTR after an error.
-> The DebugFS kernel API is developed in a way that the
-> caller can safely ignore the errors that occur during
-> the creation of DebugFS nodes.The debugfs Api handles
-> it gracefully. The check is unnecessary.
->
-> Link to the comment above debugfs_create_file:
-> https://elixir.bootlin.com/linux/latest/source/fs/debugfs/inode.c#L451
->
-> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+Fix the GPU node name in the SVS driver to follow.
 
-Looks good, thanks!
+Fixes: 0bbb09b2af9d ("soc: mediatek: SVS: add mt8192 SVS GPU driver")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+ drivers/soc/mediatek/mtk-svs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: David Rheinsberg <david@readahead.eu>
+diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+index 81585733c8a9..3a2f97cd5272 100644
+--- a/drivers/soc/mediatek/mtk-svs.c
++++ b/drivers/soc/mediatek/mtk-svs.c
+@@ -2061,9 +2061,9 @@ static int svs_mt8192_platform_probe(struct svs_platform *svsp)
+ 		svsb = &svsp->banks[idx];
+ 
+ 		if (svsb->type == SVSB_HIGH)
+-			svsb->opp_dev = svs_add_device_link(svsp, "mali");
++			svsb->opp_dev = svs_add_device_link(svsp, "gpu");
+ 		else if (svsb->type == SVSB_LOW)
+-			svsb->opp_dev = svs_get_subsys_device(svsp, "mali");
++			svsb->opp_dev = svs_get_subsys_device(svsp, "gpu");
+ 
+ 		if (IS_ERR(svsb->opp_dev))
+ 			return dev_err_probe(svsp->dev, PTR_ERR(svsb->opp_dev),
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
 
-Thanks
-David
-
-> ---
-> changes since v1
->         -In v1 the IS_ERR was used for error checking which is dropped now.
-> ---
->  drivers/hid/hid-wiimote-debug.c | 10 ----------
->  1 file changed, 10 deletions(-)
->
-> diff --git a/drivers/hid/hid-wiimote-debug.c b/drivers/hid/hid-wiimote-debug.c
-> index a99dcca2e099..00f9be55f148 100644
-> --- a/drivers/hid/hid-wiimote-debug.c
-> +++ b/drivers/hid/hid-wiimote-debug.c
-> @@ -173,7 +173,6 @@ int wiidebug_init(struct wiimote_data *wdata)
->  {
->         struct wiimote_debug *dbg;
->         unsigned long flags;
-> -       int ret = -ENOMEM;
->
->         dbg = kzalloc(sizeof(*dbg), GFP_KERNEL);
->         if (!dbg)
-> @@ -183,13 +182,9 @@ int wiidebug_init(struct wiimote_data *wdata)
->
->         dbg->eeprom = debugfs_create_file("eeprom", S_IRUSR,
->                 dbg->wdata->hdev->debug_dir, dbg, &wiidebug_eeprom_fops);
-> -       if (!dbg->eeprom)
-> -               goto err;
->
->         dbg->drm = debugfs_create_file("drm", S_IRUSR,
->                         dbg->wdata->hdev->debug_dir, dbg, &wiidebug_drm_fops);
-> -       if (!dbg->drm)
-> -               goto err_drm;
->
->         spin_lock_irqsave(&wdata->state.lock, flags);
->         wdata->debug = dbg;
-> @@ -197,11 +192,6 @@ int wiidebug_init(struct wiimote_data *wdata)
->
->         return 0;
->
-> -err_drm:
-> -       debugfs_remove(dbg->eeprom);
-> -err:
-> -       kfree(dbg);
-> -       return ret;
->  }
->
->  void wiidebug_deinit(struct wiimote_data *wdata)
-> --
-> 2.34.1
->
