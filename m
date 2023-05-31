@@ -2,130 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C83718D68
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 23:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D32718D6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 23:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjEaVoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 17:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S229744AbjEaVpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 17:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjEaVot (ORCPT
+        with ESMTP id S229521AbjEaVp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 17:44:49 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE90A3;
-        Wed, 31 May 2023 14:44:48 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-53f832298acso101952a12.0;
-        Wed, 31 May 2023 14:44:48 -0700 (PDT)
+        Wed, 31 May 2023 17:45:28 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F38A3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 14:45:27 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-76c64da0e46so13500539f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 14:45:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685569488; x=1688161488;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=D8caNu+Z//IMCGkxo6v7uAZBbgdxL0hMk+H8KUvHR80=;
-        b=iU4kkVSVjaTrW3zNUeVLWJPzb8/Z9pybDQJewnbN+R4uod9eTpqVQgijkF1M0EZRPk
-         RGTNi7GoFQTeUslvEqxaZuR1c0wHJhwAI2P68wRALdiTT293sc6agZMF3QRRk7ebLdy5
-         G6y7cVxzaFqNDVNXpA59n72piybf55ATLvbkM5XEaSs4p80REBB5kptyhntKHVwye6p0
-         uadU/ZDAE2fZKjYHIche8YpnVPkf0Cpo9od1t5MqaOYWheRq8UCs4r1TVwB7YGFvYKfe
-         hYjYpI8dQCRKYE1KwmmZQfcW4m/z+o/u8TnabqjaVRy9CHhm1coBcSbsuBfO70FjW+yW
-         hTdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685569488; x=1688161488;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1685569527; x=1688161527;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=D8caNu+Z//IMCGkxo6v7uAZBbgdxL0hMk+H8KUvHR80=;
-        b=MpuaOKMTNPlxRXZOp13WG3Ob0F+b4G2I2zjt6WObom8FoGeCLKd6Q+W8EFw0Hqoq/d
-         TfNPgYlCZhnUYV30HFLT6VdCNaoYUPyuS9OKeKRkBnDusiWcGbJgSMIZQqtpWUe+lE8e
-         8FvFPSW7wniZXreYHJkw3EWvZ7Y4LyT9TQz/KFumHeEY1BFS6t/ncfIcXck5n+7xSdJU
-         vqhPc2CFJmA26QTjUynysml7I/RIX+h2/Rd8UUePJlgWWEaEXmMNB4hMUq0JlAl8kujO
-         UQhzzl4EeQC36VidfGfCCaHO+Vniu8wkKc1UpUZipYLVeLsjTkOKaXQIN6Kwn7r4NvIv
-         CmXw==
-X-Gm-Message-State: AC+VfDyO9whR69wOydmmerjiW2zQUCERb0qzlbIV6qvXbcqCIqvT8PpT
-        RA+rc5iuzRfR9k10R+bTitM81fapX3M=
-X-Google-Smtp-Source: ACHHUZ6ThzdhIZv/6FdYXGy/LpZxDceL+PruuH9RmuAhEouspIXPJQD2w3dd9IPutJN4Z0eHqB7F6A==
-X-Received: by 2002:a17:902:d485:b0:1ae:7421:82b5 with SMTP id c5-20020a170902d48500b001ae742182b5mr5693992plg.45.1685569488053;
-        Wed, 31 May 2023 14:44:48 -0700 (PDT)
-Received: from MacBook-Pro-8.local ([2620:10d:c090:400::5:a01a])
-        by smtp.gmail.com with ESMTPSA id a3-20020a1709027d8300b001a525705aa8sm1872797plm.136.2023.05.31.14.44.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 14:44:47 -0700 (PDT)
-Date:   Wed, 31 May 2023 14:44:44 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        ast@kernel.org, dcook@linux.microsoft.com, brauner@kernel.org,
-        dthaler@microsoft.com, bpf@vger.kernel.org
-Subject: Re: [PATCH 0/5] tracing/user_events: Add auto-del flag for events
-Message-ID: <20230531214444.5dqcbclgycfk3q77@MacBook-Pro-8.local>
-References: <20230530235304.2726-1-beaub@linux.microsoft.com>
+        bh=T92knqTOJA3pNeL2xlDEkRB2bYKP1xzPES6uIiXRZts=;
+        b=UYXuRfY6rtazLlTP14+hDXhNsSIyKSoa9k1F/8LKz9ezojRBq4OxYzCeCsibZ3ue8q
+         mVcg1PjgKy/I28xHjOw/OladVNrV0PCinDuokoEzE4cmECfqP+N5PchWjh+5QCrrOtR7
+         iSXD2axu1/aE8+qn9qygFU7x/TrN3OrtFMEes=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685569527; x=1688161527;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T92knqTOJA3pNeL2xlDEkRB2bYKP1xzPES6uIiXRZts=;
+        b=JO1SEk3DgjbR6hv+QD7wClF9biuQDMEPOdlgYQ+OinJ1odKkFYN2byneaD4tlAw8M6
+         2sZQLQggKLQ8f7LWGCkA7giSYQuVY5FnDIkazON8bIxVkr5EqNIQMiDJhoIGYtP2yqsi
+         zimvLq/ZZAfFXe+jWJ9TCM9fqb8GI/a1nz6ka/hAy5ZNjcTRhEmp0vHLJtgb6gJM3mrh
+         x3XZjZWmbDtP0CZQkU/Rlz/1dZZTQD6PgO/T9WpfWnV0UwLGrx9Dg59A9GJBzLWeLRNx
+         z+zStf/hk1yY8HgQ0TKK+lMd6lrWEdh044fmye3G7UfVTLF65WY5Gmi4qogXYli5Tm+0
+         LoTQ==
+X-Gm-Message-State: AC+VfDyH3I43dLBN7INs7b48CwOtMzxOjNuMSdQtbe3OgGVaPzLqGGzd
+        LrxV5mcI0ouU/xB72pk4MMlioO0u5zEaP6jL2Nc=
+X-Google-Smtp-Source: ACHHUZ4D9dsAKQbbBsOaBv9sVdxJng8lqwirOBjsMilP14S8+FUXV33RwIBxEcBtIAkoET+uP7zlEA==
+X-Received: by 2002:a5e:9416:0:b0:772:af3a:76b1 with SMTP id q22-20020a5e9416000000b00772af3a76b1mr4905832ioj.21.1685569526790;
+        Wed, 31 May 2023 14:45:26 -0700 (PDT)
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com. [209.85.166.169])
+        by smtp.gmail.com with ESMTPSA id el26-20020a0566384d9a00b0040fa075e5e6sm1774967jab.102.2023.05.31.14.45.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 14:45:23 -0700 (PDT)
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-33baee0235cso18265ab.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 14:45:21 -0700 (PDT)
+X-Received: by 2002:a05:6e02:188f:b0:33b:cea:ce70 with SMTP id
+ o15-20020a056e02188f00b0033b0ceace70mr8358ilu.25.1685569520353; Wed, 31 May
+ 2023 14:45:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530235304.2726-1-beaub@linux.microsoft.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230531-topic-rsc-v1-0-b4a985f57b8b@linaro.org> <f5875c10-21c1-43b6-4ce6-25b968588412@linaro.org>
+In-Reply-To: <f5875c10-21c1-43b6-4ce6-25b968588412@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 31 May 2023 14:45:08 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Um8U2MQsrv+ngQg_h-aQMi5_yy6Lrj3ovr7eV1PC+Wnw@mail.gmail.com>
+Message-ID: <CAD=FV=Um8U2MQsrv+ngQg_h-aQMi5_yy6Lrj3ovr7eV1PC+Wnw@mail.gmail.com>
+Subject: Re: [PATCH 0/8] Flush RSC votes properly on more RPMh platforms
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Gross <andy.gross@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 04:52:59PM -0700, Beau Belgrave wrote:
-> As part of the discussions for user_events aligning to be used with eBPF
-> it became clear [1] we needed a way to delete events without having to rely
-> upon the delete IOCTL. Steven suggested that we simply have an owner
+Hi,
 
-This patch set is not addressing the issues I pointed out earlier.
-It adds a new flag and new api. It's not a fix.
-
-> for the event, however, the event can be held by more than just the
-> first register FD, such as perf/ftrace or additional registers. In order
-> to handle all those cases, we must only delete after all references are
-> gone from both user and kernel space.
-> 
-> This series adds a new register flag, USER_EVENT_REG_AUTO_DEL, which
-> causes the event to delete itself upon the last put reference. We cannot
-
-Do not introduce a new flag. Make this default.
-
-> fully drop the delete IOCTL, since we still want to enable events to be
-> registered early via dynamic_events and persist. If the auto delete flag
-> was used during dynamic_events, the event would delete immediately.
-
-You have to delete this broken "delete via ioctl" api.
-For persistent events you need a different api in its own name scope,
-so it doesn't conflict with per-fd events.
-
-> We have a few key events that we enable immediately after boot and are
-> monitored in our environments. Today this is done via dynamic events,
-> however, it could also be done directly via the ABI by not passing the
-> auto delete flag.
+On Wed, May 31, 2023 at 7:26=E2=80=AFAM Konrad Dybcio <konrad.dybcio@linaro=
+.org> wrote:
 >
-> NOTE: I'll need to merge this work once we take these [2] [3] patches
-> into for-next. I'm happy to do so once they land there.
-> 
-> 1: https://lore.kernel.org/linux-trace-kernel/20230518093600.3f119d68@rorschach.local.home/
-> 2: https://lore.kernel.org/linux-trace-kernel/20230529032100.286534-1-sunliming@kylinos.cn/
-> 3: https://lore.kernel.org/linux-trace-kernel/20230519230741.669-1-beaub@linux.microsoft.com/
-> 
-> Beau Belgrave (5):
->   tracing/user_events: Store register flags on events
->   tracing/user_events: Track refcount consistently via put/get
->   tracing/user_events: Add flag to auto-delete events
->   tracing/user_events: Add self-test for auto-del flag
->   tracing/user_events: Add auto-del flag documentation
-> 
->  Documentation/trace/user_events.rst           |  21 +-
->  include/uapi/linux/user_events.h              |  10 +-
->  kernel/trace/trace_events_user.c              | 183 ++++++++++++++----
->  .../testing/selftests/user_events/abi_test.c  | 115 ++++++++++-
->  4 files changed, 278 insertions(+), 51 deletions(-)
-> 
-> 
-> base-commit: 3862f86c1529fa0016de6344eb974877b4cd3838
-> -- 
-> 2.25.1
-> 
+> On 31.05.2023 15:22, Konrad Dybcio wrote:
+> > As pointed out in [1], the Linux implementation of RSC basically requir=
+es
+> > (even if not explicitly) that we point it to a power domain which
+> > represents the power state of the CPUs. In an effort to fulfill that
+> > requirement, make it required in bindings and hook it up on all platfor=
+ms
+> > where I was able to do. This means all RPMh platforms, except
+> >
+> > - SC7180
+> > - SC7280
+> > - SA8775
+> >
+> > As there wasn't an idle-states setup (which may be on purpose for CrOS
+> > devices, certainly not for Windows SC7[12]80s) that I could validate.
+> > (Doug, Bartosz, could you guys look into your respective platforms of
+> > interest here?)
+> >
+> > This series also adds support for idle states on SM6350, as I was able
+> > to add and test that.
+> I noticed that 7280 is WIP:
+>
+> https://lore.kernel.org/lkml/20230424110933.3908-4-quic_mkshah@quicinc.co=
+m/
+
+Right. For sc7180 Chromebooks we don't use OSI (OS Initiated) mode but
+instead use PC (Platform Coordinated) mode. As I understand it, that
+means we take a different path through all this stuff.
+
+That being said, in the sc7280 thread you pointed at, Bjorn and Ulf
+said that we could use the new device tree snippets for sc7280 even
+before the ATF update. If I'm reading the thread correctly and the
+same applies to sc7180:
+
+1. New DT plus firmware that doesn't support OSI - OK
+2. New DT plus firmware that supports OSI - OK after code changes
+3. Old DT plus firmware that doesn't support OSI - OK
+4. Old DT plus firmware that supports OSI - Not OK
+
+For sc7180 Chromebooks we'll never have firmware that supports OSI.
+That means that, assuming I'm understanding correctly, we actually
+could move the DT to represent things the new way. Presumably this
+would be important for sc7180 devices that originally shipped with
+Windows (I think support for one of these is underway).
+
+-Doug
