@@ -2,75 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2ED71739B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 04:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8581D71739E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 04:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbjEaCRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 22:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
+        id S234005AbjEaCSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 22:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjEaCRV (ORCPT
+        with ESMTP id S230494AbjEaCSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 22:17:21 -0400
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E70EC
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 19:17:19 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VjvXEdn_1685499435;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VjvXEdn_1685499435)
-          by smtp.aliyun-inc.com;
-          Wed, 31 May 2023 10:17:16 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     airlied@gmail.com
-Cc:     daniel@ffwll.ch, jani.nikula@linux.intel.com,
-        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
-        tvrtko.ursulin@linux.intel.com, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] drm/i915: remove unreachable code
-Date:   Wed, 31 May 2023 10:17:14 +0800
-Message-Id: <20230531021714.125078-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 30 May 2023 22:18:44 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B5B10E;
+        Tue, 30 May 2023 19:18:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=AHO4M8sGie0OSLO/d8Ur4iCaRbtViVC/sruAnPnDQl8=; b=WFqPI8lzgzeJCE5VBFZricroLX
+        VFVwpGjv7oZfxVGuYabP5XSgYrcC99JBwmMBYwEpRi+4MJEEbTG56BDO9yUIfE/qrADTFZeCslMRu
+        dmHDK8HvHqzd6jptf2Qgnmu/t6fjtnCbxR3U+mS1QqAeiyWIkDumPeLkHT1DpFGU9UqLiJhFrFY4J
+        WBRjWzRJhXxIw+K+QX4dy+m0GYlzLwHfTPwOTjWnjlHDMoCBLYaoFCrndkR3NhfSew0gAc8HGkSrO
+        f9NTyXgLW8vAcPNrycVkq0TGk003xokLYfWfkWkFgyk36xuCMPBFI+OHX4qVbSPIaqIajw98yJJW2
+        3ILdNcZw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q4BPr-00FmRc-04;
+        Wed, 31 May 2023 02:18:23 +0000
+Date:   Tue, 30 May 2023 19:18:22 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Davidlohr Bueso <dave@stgolabs.net>, LiuLele <liu.lele@qq.com>,
+        dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
+        alison.schofield@intel.com, bhelgaas@google.com,
+        bwidawsk@kernel.org, dan.j.williams@intel.com, helgaas@kernel.org,
+        linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        rostedt@goodmis.org, vishal.l.verma@intel.com
+Subject: Re: CXL memory device not created correctly
+Message-ID: <ZHaubgQOFU0+r1MD@bombadil.infradead.org>
+References: <cec6a8f5-a284-4f46-1ada-4edd625a9a2e@intel.com>
+ <tencent_D9D9D358330CA573E23D490C6EE13E0DC105@qq.com>
+ <gbsxrcjtnf67jxpqmbn57nqoslpmjtuk2ycatmau3vfsmpvbrd@c2umpofn2hti>
+ <646793cc665bf_1231462943c@iweiny-mobl.notmuch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <646793cc665bf_1231462943c@iweiny-mobl.notmuch>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code after the return will not be executed, so remove them.
+On Fri, May 19, 2023 at 08:20:44AM -0700, Ira Weiny wrote:
+> Davidlohr Bueso wrote:
+> > On Fri, 19 May 2023, LiuLele wrote:
+> > 
+> > >In my testing CXL device /sys/bus/cxl/devices/mem0  not created, and the get error messages :
+> > >
+> > >```
+> > >cxl_pci 0000:0d:00.0: Failed to get interrupt for event Info log
+> > >```
+> > >
+> > >My test environment is a qemu CXL emulator with qemu v8.0.0, Linux kernel v6.3.0.
+> > >While with kernel 5.9.13,  /sys/bus/cxl/devices/mem0  can be created.
+> > 
+> > Yes, this can be annoying and would argue the probe should not error out.
+> 
+> I had to double check.  Events are mandatory on devices.  On checking
+> again interrupt support is mandatory as well.  So that is why I errored
+> out here.
 
-Eliminate the following warning:
-drivers/gpu/drm/i915/display/intel_color.c:1808 intel_color_prepare_commit() warn: ignoring unreachable code.
+The failure essentially creates a user visible regression whereas
+booting an older kernel fixes it. It is not a friendly error message
+when testing kernels / upgrading / test environments. The only thing
+I can think of is if a new kconfig symbol is introduced so to make
+such cases a bit more clearer for now as things get settled.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5342
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/gpu/drm/i915/display/intel_color.c | 5 -----
- 1 file changed, 5 deletions(-)
+Otherwise for testing this creates a few cycles of just noise. And I'd
+imagine even a few developer hours.
 
-diff --git a/drivers/gpu/drm/i915/display/intel_color.c b/drivers/gpu/drm/i915/display/intel_color.c
-index 8966e6560516..0bfebac1e3e2 100644
---- a/drivers/gpu/drm/i915/display/intel_color.c
-+++ b/drivers/gpu/drm/i915/display/intel_color.c
-@@ -1804,11 +1804,6 @@ void intel_color_prepare_commit(struct intel_crtc_state *crtc_state)
- 
- 	/* FIXME DSB has issues loading LUTs, disable it for now */
- 	return;
--
--	if (!crtc_state->pre_csc_lut && !crtc_state->post_csc_lut)
--		return;
--
--	crtc_state->dsb = intel_dsb_prepare(crtc, 1024);
- }
- 
- void intel_color_cleanup_commit(struct intel_crtc_state *crtc_state)
--- 
-2.20.1.7.g153144c
-
+  Luis
