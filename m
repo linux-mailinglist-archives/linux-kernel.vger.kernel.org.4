@@ -2,301 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B58717DA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0F4717DAE
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235320AbjEaLGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 07:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
+        id S235321AbjEaLHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 07:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235251AbjEaLGI (ORCPT
+        with ESMTP id S235271AbjEaLHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 07:06:08 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7204123;
-        Wed, 31 May 2023 04:06:04 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126205251136.34.openmobile.ne.jp [126.205.251.136])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 536ECFB;
-        Wed, 31 May 2023 13:05:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1685531141;
-        bh=A2MT1vn8oEZlF6p3y4uc+WXSr29FpAEoj0ChK13k+vg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vl56H3oepqUKXHSwZXpoledhSZqLASBD/7iIX6flDb4LE8Qta2z+79pen+Z+8+lQd
-         PtVDELFpzA+euHua6beZ6UMzRy/IXl3KnrN4c/0lZLePT4CBy7FC7XaGoZaAzGCoC2
-         FTRh7PGRHT8QZ3zt1XaNDyOOV0yGrgOARvGz//dk=
-Date:   Wed, 31 May 2023 14:06:00 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
-        linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] media: dt-bindings: alvium: add document YAML
- binding
-Message-ID: <20230531110600.GB27043@pendragon.ideasonboard.com>
-References: <20230526173955.797226-1-tomm.merciai@gmail.com>
- <20230526173955.797226-2-tomm.merciai@gmail.com>
- <ZHPElYOeD2C1qo4R@kekkonen.localdomain>
- <20230529063907.GB25984@pendragon.ideasonboard.com>
- <20230529064326.GC25984@pendragon.ideasonboard.com>
- <ZHcff4Gpr9QSgpOs@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Wed, 31 May 2023 07:07:36 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2127.outbound.protection.outlook.com [40.107.255.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC74A8E
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 04:07:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Zca6WHh8+x7eDDEnRIFLlbafGf/EaHJDdIRojOzRyk1OSf9cndv9SIFENQk0iIyRlc9Djft1vX8i5ZYJhGTHb4UIIUmGbxqll8L+8qLAOtNepL6gKTXIs5q+29KEaJyRcUGLGXa8vyZQf5toFHkCbcceudGC+QoZWpgASVvOV/P/+9nZLG0bPYi609lPEzHDQyMWU68ZDGUvo6QcCXdubmJA6MYq8KloH1mMYfwIz+gkV2AyF9+AF3+RfcEqkz4lwNRuJH48lG1r3N3DiBmukcObHlxFMowmHsoLcQuFiDuA7DgCV495Q2DpfAlHBoIwLGq9N5AV+JRR/S1qhkwSDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L5ulo8xH+IL2ybb8ZLIc6SEoHZL6IqKA6/fga5EvJyI=;
+ b=ImvQ1pqNUahxDRwzVOAQyRL/ksemo+vmtWL9l9kKgGn50tQNfdAGanzcxUYGYFJJlLiPyhyJnvExUXV6uUoyHZvbzBwEIuM/TN3GOxO0NOM7lAxSJG12i5vZIZpp1DJrwGheN14RxzpughCONw2iz0FrhskR8bR2tvwsroQKjBNEWX0TKXlxKaBoD07XhkjpJgwSIHOhKV7kxZ7c8UlFA1seRK9hq+JW8bQCm9NN+QY7bp2VEWc4RvmpybjARywEHWyaSZKIVKnjJBjgVbBD6DTEc9yIiXyefLwym5T3evkpg4SVQZOY5PhmSe5ZG0ePKRiRoj9A9kvOViJPCWFGMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L5ulo8xH+IL2ybb8ZLIc6SEoHZL6IqKA6/fga5EvJyI=;
+ b=T6fObKUZsimtbxUatnRvlfnSqBdEqA3HmT89dt2WLiGTp0HcU1+wUFjhNmSFpsRiRCE94q5tDPgZvatBL+Aokv1Aqo0C4M2o4n7unFXnFedA95N5/CYNgWF9xHUec5xWc1NQKBYVeYfTc5XPRCQK7Y9fOrg3IdCmTfvAjn3tr4CBoJhWwSUyAgm4ZZF4/O+zg/djhMmWm9wE+8c0b37S0X6CC0cWd11gpzHeZIP/mlodWIyNh4AufDUYdSZFeFLTo75ES10/nmjqdm6kyzbef76khB3EoGXqAZO92R6WGT7epQqzM+XeoaZF6EVU2GMFntWYLcCKMR8xFo7+s7xz+A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
+ by TYZPR06MB5075.apcprd06.prod.outlook.com (2603:1096:400:1c5::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Wed, 31 May
+ 2023 11:07:26 +0000
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e%5]) with mapi id 15.20.6433.018; Wed, 31 May 2023
+ 11:07:26 +0000
+From:   Lu Hongfei <luhongfei@vivo.com>
+To:     Artur Weber <aweber.kernel@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org (open list:DRM PANEL DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
+Subject: [PATCH] gpu: drm/panel: Optimize the workflow of s6d7aa0_lock
+Date:   Wed, 31 May 2023 19:07:17 +0800
+Message-Id: <20230531110717.36896-1-luhongfei@vivo.com>
+X-Mailer: git-send-email 2.39.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZHcff4Gpr9QSgpOs@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+Content-Type: text/plain
+X-ClientProxiedBy: TYAPR01CA0001.jpnprd01.prod.outlook.com (2603:1096:404::13)
+ To TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|TYZPR06MB5075:EE_
+X-MS-Office365-Filtering-Correlation-Id: 571ba621-1a20-4a75-9797-08db61c73797
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BVepBBS9U2fJNjItGkDPOo5BAF+1PUEx6lQpcR79MnstIS4/diJx1nqa5wrOosJhhCA6uG2VwPgi2ILpo7Q5kRyzinZLMFh4A3n3+YI3WA63ka3u5MuIyyyo752d+8kvVix4F89r6FdjZFegVWjuSE4j8H2FScO44SEPjfnMy/4rM69lVHjq7+azhAHDQRrG3rttLGMp7eud/hDxiucgxIoLc/yug/wASxS1WP2yAvNmpCmuy+ZNanDwk4f8r3YHFvf+F0FQJvurTQLVXCKgpqHNvi7SrIO4EhoxEyGa0/KObEMpgZy6/Xz0G6sEksbf/frVGYJwPHRx5pX/hN0ikkC5sceLEB0oVy4MUiYQw5DsB/kHnWGtwJJ8foJ2epZ6lhJM2uOAbYkFmonkac+cTMMeZErqmgPWqKXI2i5f3MKPI69nkMJL0yxHajq2Z1JLbEEUbanlWlZmKTqZaHnIwiBe5XgKfZbMByCxjRzBK6ydCu6aYi2qxMEVkes8YjkX6J8O+ZDgF4aVlziyM2i13CcOFBADoLuoKlW38eH9m4y3DE+AhugFDHkbeFYpbfYx8C+zMHTOOkJi7p1Z3xVRpOOJEBetE8s34/Wy0oQCB+a8oQPBtgerNB0bq0WhWmYn
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(136003)(376002)(346002)(39850400004)(451199021)(110136005)(8936002)(5660300002)(8676002)(2906002)(66556008)(4326008)(66476007)(66946007)(316002)(41300700001)(478600001)(52116002)(107886003)(6486002)(6666004)(6506007)(6512007)(1076003)(186003)(26005)(83380400001)(36756003)(86362001)(2616005)(38100700002)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aUysZ0NyWFg82v0qiNMhBGL4QoY8lVMa8b+2fd8W+HUZIT9c/ZDp0F1jEYAi?=
+ =?us-ascii?Q?Iz333F11wfSsWUXIvBiJPYG68Xn2eb1tN1SCy7MmMouyLzKohz2oZrjHDuht?=
+ =?us-ascii?Q?XqPinNMxLZWmnyD4r0Lgpt/nm7vijySNEG0tDtYXYONBG2xBWzdwdMeXucXS?=
+ =?us-ascii?Q?vDJz9vUMwPdBiTmBQqE6xKj+69ivmmCDkCojExRyoab0Uf91czQ+LUPMEk19?=
+ =?us-ascii?Q?KzKm2+4egLloYDhwVCmUQ9k2bAhSdenTavoYtxgy6K8DSmdfIm5404eOwaoM?=
+ =?us-ascii?Q?+1zQxUB1cKO5xF1dTcRw0Omo+ns4Bondpeb9Lh4O0czEMm6a1tGlcO0j+Ur9?=
+ =?us-ascii?Q?t1Oji2LpkX9QOv6k+q03Al0EnFT0XyttuPMOjRFDrLbAO4KIZdzXfXlzSpbK?=
+ =?us-ascii?Q?2Pxg8k3C2X9DC6X3FzHn55ujZ4dR2LDmrENylX4NuGT8lYin0l1ximlNFxRG?=
+ =?us-ascii?Q?v939B3fCyRwN1M5U7ibBRNW4ha7eQi/BPioqLZWPP3xuAy2kS0yLt4n/i22f?=
+ =?us-ascii?Q?j7T2LpfK4iIbreYR+styoPjPTSb5wdMDwR7gUen9ivCL6xOdwz8zVrgSXjuS?=
+ =?us-ascii?Q?MC2vTcvTatzdhzXfqUoRrXZ5uT784t/bK2V/06UhnZEHIZ+aNkvSfjfB/bZu?=
+ =?us-ascii?Q?CWVtvzrw0fZ/ClH+T+MYUwKr3Uz+3KLUdVWgFLgQNXXnKZ7CZI/4TJa05biF?=
+ =?us-ascii?Q?xhGyNmteY15jc0xvvbwYJDEXxxDt6UPubtvDwhzszv98UhWYXJiBu+vYHB49?=
+ =?us-ascii?Q?TVjA3N7i27Gk6DFQLpW7I5zCTyyjzCUcntTl6t4CV+pFvaf7IPvcWsB8znw3?=
+ =?us-ascii?Q?ulmHIfIEgofXYrsVkZGD46WrasKP+Xm0QQA4amEW8DQZkzSeEO3LWJXlpZbR?=
+ =?us-ascii?Q?nmrHHSCc1QREGSGpdQweVIphDoFJjtGPTFW+d7mxuRqUr1X2nK3LjIOc6wzy?=
+ =?us-ascii?Q?6w+M/1qaDXPY8CKMjsDImHyIbzmIEz9KCXEHB69WDNuczLHeKzoxp/ul0wrM?=
+ =?us-ascii?Q?zemKpLb8/g3R8CfxQx5nzA/FCSlk9x1xDCoR4NDtc5EbsHrT3w4iaV70Wx+G?=
+ =?us-ascii?Q?hli0h3iFGyQ6Ci8BzPH3oNDPfdeeKkuA4xM5E7hIctt76ZmlMwYsXt1q32nG?=
+ =?us-ascii?Q?iV3aQ56P+JDU2IeSnc1PrQfYH0+9LgGYziBOEngsHE4SxZn2cVQzUSeDGSdD?=
+ =?us-ascii?Q?3+/twML4iCOd0dCkv2Rn/TjGSCbqsmMZ5DAFm0njxfLxsSz25PB1UhZb80CG?=
+ =?us-ascii?Q?uoLtd36CN1J08QtqrhoV9zB0hrWnSPKAQ55N7YONrMAEskCxXexfET+IfssW?=
+ =?us-ascii?Q?q9eCYQZUIQzZKVfhcUlpFfW5YPcaqTRm/GahxgDCWQoxn6EuBLQxj3fc3Qxn?=
+ =?us-ascii?Q?xQiF26+GXfUakaWoVpZtxijHeGXLt9tiMOE3rIrFJwKUQ4X1QuxDqUeMkSD8?=
+ =?us-ascii?Q?L64YOZKr/WVDjKCXxVyCWPYSdJl5aUJnkGygDKEZoXK/PU0gtlaZ3GKgdvUX?=
+ =?us-ascii?Q?cYuxab6P6scZ3gWD/oRJXr0eoXQ6lGGuqoArj64FgR/mohLJR3mxxL/MA/Dy?=
+ =?us-ascii?Q?XQGK08Xg0UJQegRW4NmMXpOP4xCs2qfLA88eJ/MW?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 571ba621-1a20-4a75-9797-08db61c73797
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 11:07:26.4203
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WxZfCDty5HzlxVU2Zn+Z9l1ARgf6DmkpazMQUmnjH8aBo62rvqD/L/CDadcxrgkWNP5eMBk9X6PFB+cT2S1EuA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB5075
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tommaso,
+This patch optimized s6d7aa0_lock's workflow.
+Once mipi_dsi_dcs_write_seq failed, s6d7aa0_lock return immediately
+and no further actions will be taken.
 
-On Wed, May 31, 2023 at 12:20:47PM +0200, Tommaso Merciai wrote:
-> On Mon, May 29, 2023 at 09:43:26AM +0300, Laurent Pinchart wrote:
-> > On Mon, May 29, 2023 at 09:39:13AM +0300, Laurent Pinchart wrote:
-> > > On Sun, May 28, 2023 at 09:16:05PM +0000, Sakari Ailus wrote:
-> > > > On Fri, May 26, 2023 at 07:39:43PM +0200, Tommaso Merciai wrote:
-> > > > > Add documentation of device tree in YAML schema for the ALVIUM
-> > > > > Camera from Allied Vision Inc.
-> > > > > 
-> > > > > References:
-> > > > >  - https://www.alliedvision.com/en/products/embedded-vision-solutions
-> > > > > 
-> > > > > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> > > > > ---
-> > > > > Changes since v1:
-> > > > >  - Fixed build error as suggested by RHerring bot
-> > > > > 
-> > > > >  .../media/i2c/alliedvision,alvium.yaml        | 115 ++++++++++++++++++
-> > > > >  1 file changed, 115 insertions(+)
-> > > > >  create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
-> > > > > 
-> > > > > diff --git a/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
-> > > > > new file mode 100644
-> > > > > index 000000000000..81e9e560c99d
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium.yaml
-> > > > > @@ -0,0 +1,115 @@
-> > > > > +# SPDX-License-Identifier: GPL-2.0
-> > > > > +%YAML 1.2
-> > > > > +---
-> > > > > +$id: http://devicetree.org/schemas/media/i2c/alliedvision,alvium.yaml#
-> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > > +
-> > > > > +title: Alliedvision Alvium Camera
-> > > 
-> > > s/Alliedvision/Allied Vision/
-> > > 
-> > > > > +
-> > > > > +maintainers:
-> > > > > +  - Tommaso Merciai <tomm.merciai@gmail.com>
-> > > > > +  - Martin Hecht <martin.hecht@avnet.eu>
-> > > > > +
-> > > > > +allOf:
-> > > > > +  - $ref: /schemas/media/video-interface-devices.yaml#
-> > > > > +
-> > > > > +properties:
-> > > > > +  compatible:
-> > > > > +    const: alliedvision,alvium
-> > > 
-> > > The name is very generic. There are Alvium camera modules that have a
-> > > GMSL or FPD-Link interface, and I'm pretty sure those will require a
-> > > different driver. I would add module-specific compatible strings (e.g.
-> > > "alliedvision,alvium-1500c", ...) here, with a generic fallback.
-> > > "alliedvision,alvium" isn't good as it won't cover GMSL or FPD-Link,
-> > > maybe "alliedvision,alvium-csi2" would be an option.
-> > 
-> > Actually, "alvium-1500c" as a specific compatible string won't do. You
-> > need the exact model in the compatible string, otherwise it won't be
-> > possible for the driver to handle device-specific configuration (for
-> > instance accessing registers of the camera sensor for fine-grained
-> > configuration). I would thus recommend using "alliedvision,alvium-1500c"
-> > and "alliedvision,alvium-1800c" as generic fallbacks, along compatible
-> > strings that include the exact device model.
-> 
-> Agree with alliedvision,alvium-csi2 and thanks for your suggestion.
-> In my opinion we don’t need names for 1500c and 
-> others because the same driver can drive all the alvium models.
-> Alvium is taking care of different sensor abstractions.
-> 
-> I test with this driver with the following models:
-> 
->  - 1800 C-1240c
->  - 1800 C-040c
->  - 1500 C-500
-> 
-> What do you think about?
+Fixes: 6810bb390282 ("drm/panel: Add Samsung S6D7AA0 panel controller driver")
 
-As far as I understand, the camera modules allow accessing sensors
-registers from the host (through the ISP) for fine-grained
-configuration. Even if that's not implemented in the driver at the
-moment, I think it's an important feature to eventually support, and it
-will require a way for the system to identify the camera module
-precisely, to know which sensor the module uses. That's why I would like
-that information to be available in DT, in the form of a compatible
-string. For instance,
+Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+---
+ drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c | 30 ++++++++++++++-----
+ 1 file changed, 22 insertions(+), 8 deletions(-)
 
-	compatible = "alliedvision,alvium-1500c-1240c",
-		     "alliedvision,alvium-1500c";
-
-The driver will only need DT match entries for
-"alliedvision,alvium-1500c" and "alliedvision,alvium-1800c".
-
-> > > > > +
-> > > > > +  reg:
-> > > > > +    maxItems: 1
-> > > > > +
-> > > > > +  clocks:
-> > > > > +    description: XCLK Input Clock
-> > > > > +
-> > > > > +  clock-names:
-> > > > > +    const: xclk
-> > > > 
-> > > > I'd also drop this as you have a single clock only: it's redundant.
-> > > > 
-> > > > > +
-> > > > > +  powerdown-gpios:
-> > > > > +    maxItems: 1
-> > > > > +    description: >
-> > > > > +      Reference to the GPIO connected to the powerdown pin, if any.
-> > > > > +
-> > > > > +  reset-gpios:
-> > > > > +    maxItems: 1
-> > > > > +    description: >
-> > > > > +      Reference to the GPIO connected to the reset pin, if any.
-> > > 
-> > > Reading the Alvium CSI-2 Cameras User Guide, I don't see any powerdown
-> > > or reset pin on the 22-pin connector. Am I missing something ? There are
-> > > however two GPIOs (in addition to the I2C signals that are also
-> > > documented as GPIOs), do you plan to support those ?
-> > > 
-> > > > > +
-> > > > > +  streamon-delay:
-> > > > > +    maxItems: 1
-> > > > > +    description: >
-> > > > > +      Delay before camera start capturing frames in us.
-> > > 
-> > > Add "-us" to the property name to indicate the unit.
-> > > 
-> > > This is a vendor-specific property, and should thus have a vendor
-> > > prefix.
-> > > 
-> > > A longer description is needed, from that single line I have no idea
-> > > what the property does exactly.
-> > > 
-> > > > > +
-> > > > > +  rotation:
-> > > > > +    enum:
-> > > > > +      - 0
-> > > > > +      - 180
-> > > 
-> > > Why is the rotation restricted to 0 or 180 ? Someone could mount the
-> > > module with  90 degrees rotation, shouldn't the DT bindings allow
-> > > describing that ?
-> > > 
-> > > You need a property for the vcc-ext-in supply.
-> > > 
-> > > > > +
-> > > > > +  port:
-> > > > > +    description: Digital Output Port
-> > > > > +    $ref: /schemas/graph.yaml#/$defs/port-base
-> > > > > +    additionalProperties: false
-> > > > > +
-> > > > > +    properties:
-> > > > > +      endpoint:
-> > > > > +        $ref: /schemas/media/video-interfaces.yaml#
-> > > > > +        unevaluatedProperties: false
-> > > > > +
-> > > > > +        properties:
-> > > > > +          clock-lanes:
-> > > > > +            const: 0
-> > > > 
-> > > > The driver can know this, no need to have it in DT, i.e. please drop it.
-> > > > 
-> > > > > +          data-lanes:
-> > > > > +            minItems: 1
-> > > > > +            maxItems: 4
-> > > > > +          link-frequencies: true
-> > > > > +
-> > > > > +        required:
-> > > > > +          - data-lanes
-> > > > > +          - link-frequencies
-> > > > > +
-> > > > > +required:
-> > > > > +  - compatible
-> > > > > +  - reg
-> > > > > +  - clocks
-> > > > > +  - clock-names
-> > > > > +  - port
-> > > > > +
-> > > > > +additionalProperties: false
-> > > > > +
-> > > > > +examples:
-> > > > > +  - |
-> > > > > +      #include <dt-bindings/gpio/gpio.h>
-> > > > > +      #include <dt-bindings/clock/imx8mp-clock.h>
-> > > > > +
-> > > > > +      i2c {
-> > > > > +          #address-cells = <1>;
-> > > > > +          #size-cells = <0>;
-> > > > > +
-> > > > > +          camera: alvium@3c {
-> > > > > +              compatible = "alliedvision,alvium";
-> > > 
-> > > The "alliedvision" prefix is missing from
-> > > Documentation/devicetree/bindings/vendor-prefixes.yaml.
-> > > 
-> > > > > +              pinctrl-names = "default";
-> > > > > +              pinctrl-0 = <&pinctrl_csi0_pwn>, <&pinctrl_csi0_rst>, <&pinctrl_csi_mclk>;
-> > > 
-> > > I'd drop pinctrl, it makes the example longer without adding much value.
-> > > 
-> > > > > +              reg = <0x3c>;
-> > > > > +              clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
-> > > > > +              clock-names = "xclk";
-> > > > > +              assigned-clocks = <&clk IMX8MP_CLK_IPP_DO_CLKO2>;
-> > > > > +              assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
-> > > > > +              assigned-clock-rates = <24000000>;
-> > > > > +              streamon-delay = <20>;
-> > > > > +              powerdown-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
-> > > > > +              reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
-> > > > > +              status = "okay";
-> > > > > +
-> > > > > +              port {
-> > > > > +                  alvium_out: endpoint {
-> > > > > +                      remote-endpoint = <&mipi_csi_0_in>;
-> > > > > +                      data-lanes = <1 2 3 4>;
-> > > > > +                      link-frequencies = /bits/ 64 <681250000>;
-> > > > > +                      clock-lanes = <0>;
-> > > > > +                  };
-> > > > > +              };
-> > > > > +          };
-> > > > > +      };
-> > > > > +
-> > > > > +...
-
+diff --git a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
+index 102e1fc7ee38..f98df32d1c55
+--- a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
++++ b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
+@@ -69,15 +69,29 @@ static int s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
+ 	int ret = 0;
+ 
+ 	if (lock) {
+-		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0xa5, 0xa5);
+-		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0xa5, 0xa5);
+-		if (ctx->desc->use_passwd3)
+-			mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0x5a, 0x5a);
++		ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0xa5, 0xa5);
++		if (ret < 0)
++			return ret;
++		ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0xa5, 0xa5);
++		if (ret < 0)
++			return ret;
++		if (ctx->desc->use_passwd3) {
++			ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0x5a, 0x5a);
++			if (ret < 0)
++				return ret;
++		}
+ 	} else {
+-		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0x5a, 0x5a);
+-		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0x5a, 0x5a);
+-		if (ctx->desc->use_passwd3)
+-			mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0xa5, 0xa5);
++		ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0x5a, 0x5a);
++		if (ret < 0)
++			return ret;
++		ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0x5a, 0x5a);
++		if (ret < 0)
++			return ret;
++		if (ctx->desc->use_passwd3) {
++			ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0xa5, 0xa5);
++			if (ret < 0)
++				return ret;
++		}
+ 	}
+ 
+ 	return ret;
 -- 
-Regards,
+2.39.0
 
-Laurent Pinchart
