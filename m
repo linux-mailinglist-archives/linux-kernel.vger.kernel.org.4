@@ -2,148 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AF2718758
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73D471875B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjEaQ2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 12:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
+        id S229678AbjEaQ33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 12:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjEaQ2U (ORCPT
+        with ESMTP id S229668AbjEaQ31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 12:28:20 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2109.outbound.protection.outlook.com [40.107.220.109])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F7698;
-        Wed, 31 May 2023 09:28:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k1ZHNjbM/nj05073Gngu3l/LItwB0Wsxeft1aY6dobxI8efW154+By6s9ooxM435XffexBRrZd7/YCZYCQkDd/j3XEUun0tkIJdmlJGVRnTldAaxxXkHPgvYcUiIwreCzSxYZWE2fChOyqYopyh3aNx5BF3DEKOiueocvs8kwvD9XyB9M27I4TmdNIvjpzCZpmx0LrPNFWjt/4audXLZc1OE6RmPXnwreYlWhY1JPz/QzQaqH+4OfaZCas+LWA98U7+QGPXmF8ek6Q/TcTJs4Iznom6hB87OS9XjQex1fC8dwgj/SJeX/nOwklAj4co8lfgW7+tQOxKcQkj16a48zQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YBULw9AxaSt5ZrTaYDcS8nypVA9XadtdNWjNolZQRac=;
- b=kxkrqbZMw3JpXligeS29qTLreS5o2AdN5TjkTkZBj/gX/OHccBm4dN9LdCvjhsN/xHF+z/PtIfl510EPQ+gELY9LZ4wSkqmzTrBrfFG0OCF4NJ8Lx1+u4Z8IvUdwafU+iM7yoPv5EFOMyf7VxF0YsTwYUlnFiOF3U4kEi7gVBm4T66oNY9ze+2r2fAoI3mCT7cO+GzIFEVuAW3TtAfbFA0v5GdckO6laKmbYU8ykeZfmGf/4mcdfS9dZFIf4ggnfSDOZhHsmladUdeN3EhVLNN27hhRkUd0bTbXY5jJQ0CikMC68UlGI9HB+9e3/9lWW0SAqyAiavHLco/Gdf/WT9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YBULw9AxaSt5ZrTaYDcS8nypVA9XadtdNWjNolZQRac=;
- b=CPSZ2O93z+3a/U1+EHDsECqUmTcQY7XA5qu7YFjWVohnG7ot8SUaqLK0RuXN3HlJCZWMPcrHH6PlCy7PhQJsmTfcV/R6xzNJQOEyrFl1QTwuSTdvVWTooIV/d+T1vHVKR96EAQ4BxL6WDDIGHBjsl/SJnfD+ibQ024dk8qJSF4w=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by MW4PR13MB5990.namprd13.prod.outlook.com (2603:10b6:303:1ba::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Wed, 31 May
- 2023 16:28:15 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.024; Wed, 31 May 2023
- 16:28:15 +0000
-Date:   Wed, 31 May 2023 18:28:08 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Ying Hsu <yinghsu@chromium.org>
-Cc:     linux-bluetooth@vger.kernel.org,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v5] Bluetooth: Fix l2cap_disconnect_req deadlock
-Message-ID: <ZHd1mPanIsBORpLE@corigine.com>
-References: <20230531034522.375889-1-yinghsu@chromium.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531034522.375889-1-yinghsu@chromium.org>
-X-ClientProxiedBy: AM0PR08CA0032.eurprd08.prod.outlook.com
- (2603:10a6:208:d2::45) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Wed, 31 May 2023 12:29:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843DF1AD
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:29:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C85F63DCE
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 16:29:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0B26C433D2;
+        Wed, 31 May 2023 16:28:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685550540;
+        bh=2DPmqH41nj7TTQeLCW2cj8dAxqMnQAvSWlrm0fLb+0s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IuhjRqmqy+q7X4w8AXgprvr+XbiiHE8U7fo3RFN/LJJSzFlUEnehvi1OZCkHpJ6v7
+         OUUjGEfmu7tjvnkEuojRNtIytQBpZp/S90wMZmiY4aSLLiigcvEhs8BcqHYmG7k3HO
+         aZpnbYLGP8/WRogGHBP5gJBn9/XTXh7CkdiIDMk+Miuq5WHiEXfNkLK+nEp82W3OFg
+         QEQtbwTlLjr6YhzD53zGcKUVjtw6gLviaYvSy/QMBMhqcGAIS6vfUhFRtRIPOi3Vn+
+         e/D7eU70svoa85j/BRVTWXlavd7B6/AAbpUjCGT9By1HzSXIzhZ3ZXYzSCybCVGmjW
+         QzGngXOVRITJw==
+Date:   Wed, 31 May 2023 17:28:56 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH 4/6] riscv: mm: pass noncoherent or not to
+ riscv_noncoherent_supported()
+Message-ID: <20230531-applied-antacid-77abfb5b2e55@spud>
+References: <20230526165958.908-1-jszhang@kernel.org>
+ <20230526165958.908-5-jszhang@kernel.org>
+ <20230529-gainfully-ribbon-48520d25ef6e@wendy>
+ <ZHdmnfJvF1N5rgvx@xhacker>
+ <ZHdnliDU7ikKaFoX@xhacker>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MW4PR13MB5990:EE_
-X-MS-Office365-Filtering-Correlation-Id: bcf58abf-066b-41d9-af91-08db61f408e1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4zXVrpl6YItj9jUzJZ1ijf81T6K4XOeVWp71uAsdKUAE43TAsmPX+iu0LKJ8Qe8gbmvEGEuwpz3EkPuJljRHMnkoJAkhhj78nVwj6fF/SZL0UPYE1XbmFGYhQ5/Gys3G+7GPpZcCtfGb9WZSG4qxqSum+yNmGFLfdEtO4X7mbo0JWAxAqkjldfkml83hn/ZOKJevxCPbnUPkWY0Wl51KejfZVlL4lPv5nceHr1VytthVFqVErgLWsg845Piuyp+gpMHYXVOGUtea9Q5FZxXMhTQysgu6dv2iBJPmRYjbwbJYTEkBwbYOtze1/EqxWF8OtjQyYy3Iu7PwAJTGr9P9RBQFOo52+m8EIVXKLh32jIyytjzNVx9aEe51fIfDKkthjG7R3LeRj+SqzVRWXMYCM49dleTxHllTmhVtfgosGNpPQXCFyJ94E5YAwTDnB6y0zx9yIHUsLWZuxYr+JHMqtatyXO+gq+q6488L/JzNQELKzUexcwG78Ot978IFNI9zuDRK8pbxY3toJpLl1tZ9zFdiyWuhmMV/hokQFdanMUvNoI788W46iR8Q/cG6wrro
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(396003)(366004)(376002)(346002)(136003)(451199021)(6486002)(316002)(6666004)(5660300002)(2616005)(8936002)(86362001)(83380400001)(41300700001)(8676002)(44832011)(7416002)(478600001)(38100700002)(186003)(6506007)(6512007)(54906003)(4326008)(6916009)(2906002)(4744005)(66946007)(36756003)(66476007)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ivoAPdv0fp3Q4ULOHX4sbGsEVWh6nOhRnHlusM+hT6vTcuu7AxJLn6MSHmXw?=
- =?us-ascii?Q?NdvYhpAoOvCGdXWek5A2drOI3isetve+rqaINUmSWbpXm1Y19SLssqIl/VwI?=
- =?us-ascii?Q?6N+XGxz/8yR8fLZyztkCv1quJIUdmXa7bxTvXGYkj04N+HvNnZe/j+8ct1vD?=
- =?us-ascii?Q?D7i+S6n56Qt1/g/uMQjuTX3BmLZa0w7aWyv6jYVQ9CE53KSrhKAwTHhfeIng?=
- =?us-ascii?Q?4vCb6fbAUkG7kEzJ80UNuPHulhpkw/nHqRSM+QP0gxBnroEOCeGP7OJSFD2r?=
- =?us-ascii?Q?oHX/TKIaSwpa/fpn2R6QK3XJyD7feQc4YxVb/iMA4TVYnhFEE68nOtn1a0iV?=
- =?us-ascii?Q?NRcfqKuaiQi81+q4nlTVU7aoiZBIHYvFP0AWf2isQKl3DN+MI2eIjpROHP9f?=
- =?us-ascii?Q?+lefYWpuGCLG2xjt8Ii2ZM9cMlaJBpm7OJpmf9qwZaQ+kYwfJasGon/8h3NT?=
- =?us-ascii?Q?Jn/gnvZ91qg6Ks918fVttqegkCxqo7lhmH4fuArzI0qXAJ5rmWE8iSXlEK+A?=
- =?us-ascii?Q?HnQ3Qy+OmVnrwAOF7Ju7FIgBu3BcQGLq9OiMVTVKgtyiMgvqK4TH1dJmKabB?=
- =?us-ascii?Q?st0vhZnT8MROocQp7aKOxGgzRFEG+J3eiH3MkPs3ZxOW7IzwJZZ7fLb1LpcW?=
- =?us-ascii?Q?eQEzbz8wfLraQbRy2QcqNwqaa5M3nFjSG0d9aVJaXaH9H+RpeIW2HxM6Qbfd?=
- =?us-ascii?Q?qlJywjALHhGYRyvTKMmHUQ+CgP7+7gOyzvDzZDpabMoqMJkWwGHD5Rbtcf9n?=
- =?us-ascii?Q?0g/51H1OiCgn7II85mBVR+ZJClAiDJYZgmYuISrwwLJE1Cf/BC0Ug66POsmz?=
- =?us-ascii?Q?/BHAADWsLY9IRbGpbPKT6f5bpYdrv0ND6J+m51oBVdc9/m8u70DeeHje178V?=
- =?us-ascii?Q?IdsJ1Xihii7RIXQ0U3LloEshcYXLCJ7zO426jxnYk+uu0R/XNolObDHIEAgD?=
- =?us-ascii?Q?lg1FCNrI5myNoaTF/k8I8vS6kcJ2SRZpvoLYjm4mcgYREvJ/IHaQy6X9Gl8B?=
- =?us-ascii?Q?Yo0Hgg42j7QTAvT13Y8/XfxwBEq7nHou8e9G6baMUwsSubmtYBrPzvivyCea?=
- =?us-ascii?Q?Xeds+SL1xQ4hdkW+rSGvuyLK661QiFccBtDH9aVBhzMJ5YZ9eTHOHlBagYO8?=
- =?us-ascii?Q?hR00dmXUvhel8y6v6+f24IINJBrdoHi9Yu1T9yNyz+v4XJIgBqatXTqSZYDa?=
- =?us-ascii?Q?aim2R1gp5i4fBDnhltkIjorXEMMkUuIHxT3RxJZmyvicGPMENVM/U2GWywgT?=
- =?us-ascii?Q?xwm70FeWGOzUqPa1biDeT9lIamLRl6sL3bawstVgYd/EHYPlSgEQ4M5iToTG?=
- =?us-ascii?Q?t7C15Uai3wWgOXWGukegzlQ1Mq/sVp5XtuzqNS1ww5Vexurmpjor4eR/HSOi?=
- =?us-ascii?Q?hZnRx9XRjzVNsqsApCHTg8L20giV2s9sJx86XG3j1DRXfRZz7ES6zLvrliNf?=
- =?us-ascii?Q?DKCCQosxDVyW8nIDNc6b8iweIhpbNB6AEYOyLoPrHnNm4ytCb8lfHARKhIV5?=
- =?us-ascii?Q?06oW0YIHEHluMdJ/7DR+KeoBP8OeIie1Ch1eysea/5B6nRwh1Hb+UkyU1twU?=
- =?us-ascii?Q?BbMnCOd13TbzJ1BOrMKz07Q0MGcvyQWE2BqKrsbx+6gozRv8KpLO6aJroI+S?=
- =?us-ascii?Q?armvlUQlB/KHRmbo5F21VNWZweU6sGD7/J92gMn/chPm48PveHunoc5UsaZh?=
- =?us-ascii?Q?qjHIkw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bcf58abf-066b-41d9-af91-08db61f408e1
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 16:28:15.4669
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5j+f4a3ht2ak211MSx41eyrMsTKms8zImT1JtyUdJ4iOLkvhxIHasIYhKdxkfkcqhLI202q43v7LV2Y/o1hY0D77gnO1njZhY34ij0W9LfA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR13MB5990
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="BjOrWNtSKlv6yyL3"
+Content-Disposition: inline
+In-Reply-To: <ZHdnliDU7ikKaFoX@xhacker>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 03:44:56AM +0000, Ying Hsu wrote:
-> L2CAP assumes that the locks conn->chan_lock and chan->lock are
-> acquired in the order conn->chan_lock, chan->lock to avoid
-> potential deadlock.
-> For example, l2sock_shutdown acquires these locks in the order:
->   mutex_lock(&conn->chan_lock)
->   l2cap_chan_lock(chan)
-> 
-> However, l2cap_disconnect_req acquires chan->lock in
-> l2cap_get_chan_by_scid first and then acquires conn->chan_lock
-> before calling l2cap_chan_del. This means that these locks are
-> acquired in unexpected order, which leads to potential deadlock:
->   l2cap_chan_lock(c)
->   mutex_lock(&conn->chan_lock)
-> 
-> This patch releases chan->lock before acquiring the conn_chan_lock
-> to avoid the potential deadlock.
-> 
-> Fixes: ("a2a9339e1c9d Bluetooth: L2CAP: Fix use-after-free in l2cap_disconnect_{req,rsp}")
 
-nit: this should be
+--BjOrWNtSKlv6yyL3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: a2a9339e1c9d ("Bluetooth: L2CAP: Fix use-after-free in l2cap_disconnect_{req,rsp}")
+On Wed, May 31, 2023 at 11:28:22PM +0800, Jisheng Zhang wrote:
+> On Wed, May 31, 2023 at 11:24:19PM +0800, Jisheng Zhang wrote:
+> > On Mon, May 29, 2023 at 12:13:10PM +0100, Conor Dooley wrote:
+> > > On Sat, May 27, 2023 at 12:59:56AM +0800, Jisheng Zhang wrote:
+> > > > We will soon take different actions by checking the HW is noncohere=
+nt
+> > > > or not, I.E ZICBOM/ERRATA_THEAD_CMO or not.
+> > > >=20
+> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > > ---
+> > > >  arch/riscv/errata/thead/errata.c    | 19 +++++++++++--------
+> > > >  arch/riscv/include/asm/cacheflush.h |  4 ++--
+> > > >  arch/riscv/kernel/setup.c           |  6 +++++-
+> > > >  arch/riscv/mm/dma-noncoherent.c     | 10 ++++++----
+> > > >  4 files changed, 24 insertions(+), 15 deletions(-)
+> > > >=20
+> > > > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/t=
+head/errata.c
+> > > > index be84b14f0118..c192b80a5166 100644
+> > > > --- a/arch/riscv/errata/thead/errata.c
+> > > > +++ b/arch/riscv/errata/thead/errata.c
+> > > > @@ -36,21 +36,24 @@ static bool errata_probe_pbmt(unsigned int stag=
+e,
+> > > >  static bool errata_probe_cmo(unsigned int stage,
+> > > >  			     unsigned long arch_id, unsigned long impid)
+> > > >  {
+> > > > -	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_CMO))
+> > > > -		return false;
+> > > > -
+> > > > -	if (arch_id !=3D 0 || impid !=3D 0)
+> > > > -		return false;
+> > > > +	bool cmo;
+> > > > =20
+> > > >  	if (stage =3D=3D RISCV_ALTERNATIVES_EARLY_BOOT)
+> > > >  		return false;
+> > > > =20
+> > > > +	if (IS_ENABLED(CONFIG_ERRATA_THEAD_CMO) &&
+> > > > +	    (arch_id =3D=3D 0 && impid =3D=3D 0))
+> > > > +		cmo =3D true;
+> > > > +	else
+> > > > +		cmo =3D false;
+> > > > +
+> > > >  	if (stage =3D=3D RISCV_ALTERNATIVES_BOOT) {
+> > > > -		riscv_cbom_block_size =3D L1_CACHE_BYTES;
+> > > > -		riscv_noncoherent_supported();
+> > > > +		if (cmo)
+> > > > +			riscv_cbom_block_size =3D L1_CACHE_BYTES;
+> > > > +		riscv_noncoherent_supported(cmo);
+> > > >  	}
+> > > > =20
+> > > > -	return true;
+> > > > +	return cmo;
+> > >=20
+> > > I don't really understand the changes that you are making to this
+> > > function, so that is tries really hard to call
+> > > riscv_noncoherent_supported(). Why do we need to always call the func=
+tion
+> > > in the erratum's probe function, if the erratum is not detected, given
+> >=20
+> > In one unified kernel Image, to support both coherent and noncoherent
+> > platforms(currently, either T-HEAD CMO or ZICBOM), we need to let the
+> > kmalloc meet both cases, specifically, ARCH_DMA_MINALIGN aligned.
+>=20
+> seems adding three words can make it better:
+>=20
+> kmalloc meet both cases at the beginning, specifically ...
+>=20
+> > Once we know the underlying HW is coherent, I.E neither T-HEAD CMO nor
+> > ZICBOM, we need to notice kmalloc we are safe to reduce the alignment
+> > to 1. The notice action is done in patch 5:
+> >=20
+> > +       } else {
+> > +               dma_cache_alignment =3D 1;
+> >=20
+> >=20
+> > > that riscv_noncoherent_supported() is called immediately after
+> > > apply_boot_alternatives() in setup_arch()?
 
-...
+This bit here is the key part of my confusion. You try really hard in
+the errata stuff to call riscv_noncoherent_supported(), which I do
+understand is because of the other branch that you add to the function
+later in the series.
+
+What I do not understand is why we are not able to rely on the call to
+it in setup_arch() to trigger it when we do not have T-HEAD CMOs or
+Zicbom.
+You've explained why you want to make sure it always gets called during
+boot, but my question is about why it looks like it is being called more
+than once.
+
+Actually, now that I think of it, what happens on a T-HEAD system where
+there is no T-HEAD CMOs, but there is Zicbom. In theory, this could
+exist.
+Bear with me here a moment in case I am completely wrong, snippet is
+=66rom setup_arch()
+	apply_boot_alternatives();
+On my example system, this will trigger, eventually sending us into
+errata_probe_cmo(), where we will call riscv_noncoherent_supported()
+with false, setting dma_cache_alignment to 1.
+
+	if (IS_ENABLED(CONFIG_RISCV_ISA_ZICBOM) &&
+	    riscv_isa_extension_available(NULL, ZICBOM))
+		cmo =3D true;
+
+On this system, this will be true.
+
+	else
+		cmo =3D false;
+	riscv_noncoherent_supported(cmo);
+
+now riscv_noncoherent_supported() is called with true, and we have
+dma_cache_alignment =3D 1 still. Is that not problematic? Or the inverse,
+where the T-HEAD system has its custom CMOs and there is no Zicbom, it
+gets called twice with different args too.
+
+There's clearly something fundamental that I am missing here, this seems
+like it should be immediately obvious why this either cannot happen or
+is not a problem, but I can't see it.
+
+Sorry,
+Conor.
+
+--BjOrWNtSKlv6yyL3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHd1tQAKCRB4tDGHoIJi
+0pGNAPwLSwfmm5OuyEL8BRsFeMVHyDtHAo2DcjggAIKEVSHDngEA0jAajERdcZXM
+dZ5aJkHDIEmfSvibu/CfaGJlDgFknQY=
+=AxKn
+-----END PGP SIGNATURE-----
+
+--BjOrWNtSKlv6yyL3--
