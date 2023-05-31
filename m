@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE82717F7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3A9717F84
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235825AbjEaMFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55062 "EHLO
+        id S235956AbjEaMFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:05:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235811AbjEaMEy (ORCPT
+        with ESMTP id S235828AbjEaMFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:04:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1517B10E;
-        Wed, 31 May 2023 05:04:53 -0700 (PDT)
-Date:   Wed, 31 May 2023 12:04:50 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685534691;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jAHu/ZeCNq2zA/+Hvbn6tZi8UxHRbFPIWy674Hkm38E=;
-        b=VMC5CcQ3Jvl9m9h1W58szK4kJXB2WowZ1bghSlopHsV5Hs6WF/MOsmQODgsmg1JNTXdv+u
-        mUG09EoZ9Yl91d5yZPnId1F4AY59sThwc0OyOqwSdvahVbHEOM7boBJi1GERCOmlElM7Ix
-        YQuygTMB0fzsCe75wge6xdNDnEnYb6OzDWG41COlOg7KtpNFWLQXZIwWhpbkNrvOZgLchP
-        OcMd5Edzl4viEBWgjoeSPiS8yG1uCMDkEADEQcCESxNDs97KE1Mg2DgCxzWw6hgLSfeu/2
-        8AO0hSqxENCYhl4yXXpiInliexz/se8GlUhxfBnZQJ3RkMiE7yxNjsmye+N5Dw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685534691;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jAHu/ZeCNq2zA/+Hvbn6tZi8UxHRbFPIWy674Hkm38E=;
-        b=7itMFfwrSUbIfyZdPqDaFOSYyOpvi73hTyuDwDIRcqj/aAYEQRjwqOnibtro1tP/jgDt5a
-        9ZCQ2y1iL+qOBUAg==
-From:   "tip-bot2 for Arnd Bergmann" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched: Hide unused sched_update_scaling()
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230522195021.3456768-2-arnd@kernel.org>
-References: <20230522195021.3456768-2-arnd@kernel.org>
+        Wed, 31 May 2023 08:05:19 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA081AD;
+        Wed, 31 May 2023 05:05:03 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-bad0c4f6f50so1313007276.1;
+        Wed, 31 May 2023 05:05:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685534702; x=1688126702;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=90EYsaaut8Hp0lsfigX/jDM1gZJQqV5otkFZlFhJNrc=;
+        b=LO9z7akObMs+flCvgEiN7Ww9vOe4EGy6hwFM09vjWA4Fm3RRZFO/eKxe+kO5RB2Cfc
+         c69aVw0P8hWiaP+AssKqJNpPQiiEnV6jcycCQT3yZ84uzKjwzzuzKPU7qnKUZAZTn4f8
+         87S6yF9S+G3bRJZj8RopHm2zeyA4MINRoOt2QfGRtVlawGI9j4MzLzBUk0jiej4xP9x4
+         Jc7fqqv7IJeQIyedpIhCRagSNEYZfGOfGBHefkOIIwbdOMOlvH+6/Pv1zUAWh/nRyv6/
+         GLW7KGexR1gyMIso4d1+WPd+QLmHrp0Eo6uCOwnBOhKvuMh0uiyNsCgH/NyVCpFsFLMO
+         7Raw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685534702; x=1688126702;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=90EYsaaut8Hp0lsfigX/jDM1gZJQqV5otkFZlFhJNrc=;
+        b=KSWVLIiomQXCujN+Wua6/MbUoT4BoP6Uboe+KmWSOvY/o8DaDMl3EmT0sNDy13M9fz
+         JUQ6iQa6IZSz5gJ7oH5oRMh9M5Y2o3chtxbtLIhzGEW5t2w1ZhGFE17MPQ8AVQgK279V
+         T7mliHoiEkpQCK64UJvwibH/5IvNjdBpYm70kqV8RqqKU/jRIACmvrOQLFgPFKR4KOYr
+         74mTcj7TRekzzu5vNwuftOvfwfbZACKmVsDllHpVrb4eWThFjl9dOsDa4srKmGa0Gz0h
+         KlryIZ17D8OYbv6GJVme8LlMkpYArDL+OB77s4sHjo3skYOpdAp2vykFrKIU6CZNP4le
+         QB/A==
+X-Gm-Message-State: AC+VfDwHQJJ/L3ZQUg3ewYWNrmq+H3PWHJ7qVs3hTwDIahPUkgcdq+Za
+        evme/cNzj/g6tArqBNBYd6zJCf8u96qpV6Fl3ue3RwN/
+X-Google-Smtp-Source: ACHHUZ55R8CtsEj+7X29bkdOuuVetNFI1MoEEvPsUsgG3RjGiPmflERC1G9L+kWBQa8t/0i3JO+qJsnUQH4MlCQdlfM=
+X-Received: by 2002:a25:508c:0:b0:b94:bbf2:19a3 with SMTP id
+ e134-20020a25508c000000b00b94bbf219a3mr6284726ybb.18.1685534702013; Wed, 31
+ May 2023 05:05:02 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <168553469099.404.5063205940562431875.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230527012206.133464-1-samsagax@gmail.com> <8ae3e2ad-27ff-4339-88d4-504c2f59e501@roeck-us.net>
+In-Reply-To: <8ae3e2ad-27ff-4339-88d4-504c2f59e501@roeck-us.net>
+From:   Joaquin Aramendia <samsagax@gmail.com>
+Date:   Wed, 31 May 2023 09:04:51 -0300
+Message-ID: <CABgtM3h8DXs0swGQth=dcE3J_W8k8iejvfFgjVSm9nKbRmxHDQ@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (oxp-sensors) Add tt_toggle attribute on supported boards
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+> This attribute is a no-go. It is not even remotely related to hardware
+> monitoring, and thus must not be attached to the hwmon device.
+>
+> I don't know exactly where it belongs, but it appears to be related
+> to the keyboard. Its natural place therefore seems to be a keyboard drive=
+r.
+> We could possibly also attach it to the platform device, but there would
+> have to be some precedence of other drivers doing the same. Question
+> in that case though would be if this is just the first of many attributes
+> to come. If so, we would need to find a different solution.
+>
+> Guenter
 
-Commit-ID:     d55ebae3f3122b07689cc4c34043114e09ce904c
-Gitweb:        https://git.kernel.org/tip/d55ebae3f3122b07689cc4c34043114e09ce904c
-Author:        Arnd Bergmann <arnd@arndb.de>
-AuthorDate:    Mon, 22 May 2023 21:50:17 +02:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 30 May 2023 22:46:24 +02:00
+Sure! Should this driver with those changes go into a platform driver?
+Seems a better fit to me. The case against keyboard driver is the
+switch changes behaviour of the key but both the behaviour with the
+switch on and off is device defined. Some use the key as part of an AT
+Translated Keyboard and others just operate on the EC itself to grab
+the fan and set a special TDP for "Silent mode".
+For now this is the first such attribute found by the community and
+some talks with the manufacturer but it doesn't mean there wouldn't be
+others. Specially with such new form factors adding some "control
+panels" on Windows to set some hardware behaviour via EC writes. My
+goal is to allow those same functions to be available to linux users
+in a way some other userspace tools can serve as front ends.
 
-sched: Hide unused sched_update_scaling()
-
-This function is only used when CONFIG_SMP is enabled, without that there
-is no caller and no prototype:
-
-kernel/sched/fair.c:688:5: error: no previous prototype for 'sched_update_scaling' [-Werror=missing-prototypes
-
-Hide the definition in the same #ifdef check as the declaration.
-
-Fixes: 8a99b6833c88 ("sched: Move SCHED_DEBUG sysctl to debugfs")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-Link: https://lore.kernel.org/r/20230522195021.3456768-2-arnd@kernel.org
----
- kernel/sched/fair.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 48b6f0c..2c1b345 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -684,7 +684,7 @@ struct sched_entity *__pick_last_entity(struct cfs_rq *cfs_rq)
- /**************************************************************
-  * Scheduling class statistics methods:
-  */
--
-+#ifdef CONFIG_SMP
- int sched_update_scaling(void)
- {
- 	unsigned int factor = get_update_sysctl_factor();
-@@ -702,6 +702,7 @@ int sched_update_scaling(void)
- 	return 0;
- }
- #endif
-+#endif
- 
- /*
-  * delta /= w
+Would taking this same driver to the platform side be a solution to
+that going forward? It would be a combination of hwmon monitoring
+attributes and some other special functions with custom attributes.
+Seems a better fit to me.
+--=20
+Joaqu=C3=ADn I. Aramend=C3=ADa
