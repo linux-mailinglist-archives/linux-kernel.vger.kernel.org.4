@@ -2,46 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA01071827F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34200718281
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235870AbjEaNna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
+        id S235636AbjEaNnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236490AbjEaNmi (ORCPT
+        with ESMTP id S236218AbjEaNnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:42:38 -0400
+        Wed, 31 May 2023 09:43:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC541725;
-        Wed, 31 May 2023 06:41:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B763186;
+        Wed, 31 May 2023 06:41:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C7E363B2A;
-        Wed, 31 May 2023 13:41:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12D34C4339E;
-        Wed, 31 May 2023 13:41:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BCCA61346;
+        Wed, 31 May 2023 13:41:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CF14C433EF;
+        Wed, 31 May 2023 13:41:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540505;
-        bh=HlwpPDD095eWKjo4oiJTfkTblpFKG89ZfJEGh62GyPQ=;
+        s=k20201202; t=1685540514;
+        bh=RHN82nlIf0gFRkjGhPfjOWXEwlnizfm7LN/kBQv8b3I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I/AHXEi4gffcFw4H66NjLeAgQNUYA65+rfeyDw9g9EI9otB/vWnYXMywDCAPJM6mC
-         5tZlSW4po/mbyAXem2lAlTLjPpUODxdi1rvb2HIJ9ceHBoIQMao9wimysTy4If9eQO
-         O4JS4pa+Upf8wMKAibsOJiitfK++uSS6s6ZbcS8l9+6CdnKx2r0o3+6/c9/s8XR+1r
-         /WxTGS0PKR3e3Q5uJ57QQpWrStjhjeXT41+URM/KxRmAmg8QGbGJajaTF6O93pT4EQ
-         jSHyodjTI48Rr2cR1Z6pBOtecZf13LElNc5IsWyF7Rdne/II5CXCweCYO3cC0dlsIC
-         GBAamB3O5GgPA==
+        b=XGNk0qBPhob3s/fu/8zKOwjaNwB3+adkXXEp2WmvIgxv9deYt6gDNdclxlUS5+NAR
+         S69bEl7fp1tLUnvy30DGiSVxmCfhsBoa+B16UpYSF2Ylq8wdnrrAR5de3GGGBihpB3
+         6KHYH5D/U9fzLupiOXAvRhDNac4Y7p1VDuAF+LLZ/Wu84qZc6hi+2lW/lbYfJjzsca
+         mLTo4tvQwkq17GLb2r2p7s6hGWTzKte0hG/9675bsW8FBOrvgAYZmt+CeNQJzs1bJt
+         soCYYRtaaKEvi7++eVOLQJRq8xzyKX89yGJ6GVdXisD/8mNHgH0nbleLql6E8QDtnU
+         BAdB8MyBG03+A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ross Lagerwall <ross.lagerwall@citrix.com>,
-        Juergen Gross <jgross@suse.com>,
-        Sasha Levin <sashal@kernel.org>, sstabellini@kernel.org,
-        roger.pau@citrix.com, axboe@kernel.dk,
-        xen-devel@lists.xenproject.org, linux-block@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 34/37] xen/blkfront: Only check REQ_FUA for writes
-Date:   Wed, 31 May 2023 09:40:16 -0400
-Message-Id: <20230531134020.3383253-34-sashal@kernel.org>
+Cc:     Sukrut Bellary <sukrut.bellary@linux.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        Hawking.Zhang@amd.com, Jack.Gui@amd.com, Victor.Zhao@amd.com,
+        mario.limonciello@amd.com, le.ma@amd.com,
+        Arunpravin.PaneerSelvam@amd.com, Likun.Gao@amd.com,
+        Jiadong.Zhu@amd.com, jesse.zhang@amd.com, candice.li@amd.com,
+        YiPeng.Chai@amd.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 6.3 35/37] drm:amd:amdgpu: Fix missing buffer object unlock in failure path
+Date:   Wed, 31 May 2023 09:40:17 -0400
+Message-Id: <20230531134020.3383253-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134020.3383253-1-sashal@kernel.org>
 References: <20230531134020.3383253-1-sashal@kernel.org>
@@ -59,43 +64,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ross Lagerwall <ross.lagerwall@citrix.com>
+From: Sukrut Bellary <sukrut.bellary@linux.com>
 
-[ Upstream commit b6ebaa8100090092aa602530d7e8316816d0c98d ]
+[ Upstream commit 60ecaaf54886b0642d5c4744f7fbf1ff0d6b3e42 ]
 
-The existing code silently converts read operations with the
-REQ_FUA bit set into write-barrier operations. This results in data
-loss as the backend scribbles zeroes over the data instead of returning
-it.
+smatch warning -
+1) drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c:3615 gfx_v9_0_kiq_resume()
+warn: inconsistent returns 'ring->mqd_obj->tbo.base.resv'.
 
-While the REQ_FUA bit doesn't make sense on a read operation, at least
-one well-known out-of-tree kernel module does set it and since it
-results in data loss, let's be safe here and only look at REQ_FUA for
-writes.
+2) drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c:6901 gfx_v10_0_kiq_resume()
+warn: inconsistent returns 'ring->mqd_obj->tbo.base.resv'.
 
-Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
-Acked-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/20230426164005.2213139-1-ross.lagerwall@citrix.com
-Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Sukrut Bellary <sukrut.bellary@linux.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/xen-blkfront.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c | 4 +++-
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c  | 4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
-index 23ed258b57f0e..c1890c8a9f6e7 100644
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -780,7 +780,8 @@ static int blkif_queue_rw_req(struct request *req, struct blkfront_ring_info *ri
- 		ring_req->u.rw.handle = info->handle;
- 		ring_req->operation = rq_data_dir(req) ?
- 			BLKIF_OP_WRITE : BLKIF_OP_READ;
--		if (req_op(req) == REQ_OP_FLUSH || req->cmd_flags & REQ_FUA) {
-+		if (req_op(req) == REQ_OP_FLUSH ||
-+		    (req_op(req) == REQ_OP_WRITE && (req->cmd_flags & REQ_FUA))) {
- 			/*
- 			 * Ideally we can do an unordered flush-to-disk.
- 			 * In case the backend onlysupports barriers, use that.
+diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c
+index b1428068fef7f..8144d6693541e 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c
+@@ -6890,8 +6890,10 @@ static int gfx_v10_0_kiq_resume(struct amdgpu_device *adev)
+ 		return r;
+ 
+ 	r = amdgpu_bo_kmap(ring->mqd_obj, (void **)&ring->mqd_ptr);
+-	if (unlikely(r != 0))
++	if (unlikely(r != 0)) {
++		amdgpu_bo_unreserve(ring->mqd_obj);
+ 		return r;
++	}
+ 
+ 	gfx_v10_0_kiq_init_queue(ring);
+ 	amdgpu_bo_kunmap(ring->mqd_obj);
+diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+index c54d05bdc2d8c..7b1a359ab0849 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+@@ -3604,8 +3604,10 @@ static int gfx_v9_0_kiq_resume(struct amdgpu_device *adev)
+ 		return r;
+ 
+ 	r = amdgpu_bo_kmap(ring->mqd_obj, (void **)&ring->mqd_ptr);
+-	if (unlikely(r != 0))
++	if (unlikely(r != 0)) {
++		amdgpu_bo_unreserve(ring->mqd_obj);
+ 		return r;
++	}
+ 
+ 	gfx_v9_0_kiq_init_queue(ring);
+ 	amdgpu_bo_kunmap(ring->mqd_obj);
 -- 
 2.39.2
 
