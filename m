@@ -2,198 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC6E7185A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A1A7185B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234112AbjEaPGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
+        id S234139AbjEaPH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234113AbjEaPG2 (ORCPT
+        with ESMTP id S232421AbjEaPHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:06:28 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD471B8;
-        Wed, 31 May 2023 08:06:09 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VDwe4u021261;
-        Wed, 31 May 2023 15:05:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=6ZeIzcgdCKjPmYnmTibQ8otwR7XccmkeAlMKuXz6bDk=;
- b=J0bQnkCiwj3KXeuibyvJfwrhE6B/4e0FUQSRdds2Wa1Vsa1UAJtebIDSPTYhLR4VgX6R
- jyQwOr1heOrhwbc/bK7p4EYKP8hTIn7KIKZZfDoYAPKWrTCDfhUSyP2pz+a6i8mx+yT3
- vpbwoDHSr4I90dpCD626Gsmnjq3gVtNso0cvI31I96NDSi6SI0zCXojanMtMWP/YG5RG
- 4OdlszObCaVQ7MS9dgP2LnnBa7+eYx2iOnhI8/t027ZwWLmX+6/PutLe9uTbHRSAPHBW
- siDyY9PykhDycvKCKIp99cQMJ2w4J03z6y2iK3xqP9Qz/l4vPTLuJI+VCJfMpy0hKM7u KA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qx5pxggus-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 15:05:56 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34VF5t60006469
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 15:05:55 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 31 May
- 2023 08:05:54 -0700
-Message-ID: <eae9bd65-8d79-39af-0288-59af061a33ab@quicinc.com>
-Date:   Wed, 31 May 2023 09:05:53 -0600
+        Wed, 31 May 2023 11:07:49 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D21E12F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:07:33 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-ba8afcc82c0so10142265276.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:07:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1685545652; x=1688137652;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9aQg/XyLc0KoyLOMQC9nxzXd5jehGRavUIxUSIV2naQ=;
+        b=1EhPv/FGgUxPG7bhv9pWTsI9oglY2BT+2VHNgu6m+3vORlYefuXvCNDfSavIZlEXuq
+         dlSl8rh+SFNbx36nrP/0GkdsrzahtH/Nq7Yla5bLSyD++kFxWXXgEMAGinIjlHsKDOu9
+         lIj04xMLqI3xHIZJsMwBaLwOUnLn5vqMNtx5Pfapt8p49CozlpTrJDiYoEi+r5Iqb/rA
+         BENjtK3nWgXHC+SASym4IQJIjAU8AJkyJOjpFDsO4YLkcsZjj4rt5eBxxpuGVddFlDPa
+         U3Bg8+KJ0+loUmO5o+mnhqV7SEAEXnjFoPcA2kDDDCEk79J8XJ8anTbs1j+dtCtUGqYE
+         9jaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685545652; x=1688137652;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9aQg/XyLc0KoyLOMQC9nxzXd5jehGRavUIxUSIV2naQ=;
+        b=BhZITN+R0Na4OwBOAyOQEl/RzN/pFOe5Ncr74qkrqIbPPqgSSK8vAr/cZE1oIgRoIL
+         80czdSrI4+5e0MTs1IVo+3xTDgpPqWEMJgDu3o46bwJ6O7vHgyh3qxvG/oteiZES/bkD
+         55RTCoIpw3CHXmaIan+oxg70cVMOqYaPzortfMpp6mPVU2B7Ep3ZqcdCeAL0MZF2Pmve
+         KhFC1LbO7Qs+YQJri23cxoefVTZUqFtbfd8nFls/OWK0IqnaD250oou0tmVTA6ck5l5B
+         I/GwgGtwdRQDqKWK5IWdn1n7eoK8Cf9J6roXLDAi1u0jRwD+dWygeqwPatFFDAedm6rG
+         MeZg==
+X-Gm-Message-State: AC+VfDzaP4G8f/Pm4zae9fw5MjTd5Z0BEGHIoVKuSN48E2FObiG0duMM
+        8AI1uWhKc1doDqFTl45lvWxcErjhcPafLSf7Qo5/JA==
+X-Google-Smtp-Source: ACHHUZ77LJrjRPlRCPaA1cCrFz7N3gR49T4+cjdOnPoFno78wVh8ZdLEgtBGtF1oXcnMf9/wyM5Ti7RrmCAKn4hRS+A=
+X-Received: by 2002:a81:6c84:0:b0:565:9fc7:9330 with SMTP id
+ h126-20020a816c84000000b005659fc79330mr5984962ywc.17.1685545652645; Wed, 31
+ May 2023 08:07:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] bus: mhi: host: Add userspace character interface
-Content-Language: en-US
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Manivannan Sadhasivam <mani@kernel.org>
-CC:     <kuba@kernel.org>, <andersson@kernel.org>, <daniel@ffwll.ch>,
-        <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
-References: <20230522190459.13790-1-quic_jhugo@quicinc.com>
- <20230531142803.GH7968@thinkpad> <2023053134-unpiloted-why-0f37@gregkh>
- <31c8a9ef-bc48-138d-836b-61efd9f4128f@quicinc.com>
-In-Reply-To: <31c8a9ef-bc48-138d-836b-61efd9f4128f@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: GyJxNAXiOsEKRzdWoCXXXCNWf2BANqh3
-X-Proofpoint-ORIG-GUID: GyJxNAXiOsEKRzdWoCXXXCNWf2BANqh3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_10,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 mlxscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
- lowpriorityscore=0 impostorscore=0 clxscore=1015 spamscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305310128
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230531141556.1637341-1-lee@kernel.org> <CANn89iJw2N9EbF+Fm8KCPMvo-25ONwba+3PUr8L2ktZC1Z3uLw@mail.gmail.com>
+In-Reply-To: <CANn89iJw2N9EbF+Fm8KCPMvo-25ONwba+3PUr8L2ktZC1Z3uLw@mail.gmail.com>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Date:   Wed, 31 May 2023 11:07:21 -0400
+Message-ID: <CAM0EoMnUgXsr4UBeZR57vPpc5WRJkbWUFsii90jXJ=stoXCGcg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] net/sched: cls_u32: Fix reference counter leak
+ leading to overflow
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Lee Jones <lee@kernel.org>, xiyou.wangcong@gmail.com,
+        jiri@resnulli.us, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, stable@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/2023 9:04 AM, Jeffrey Hugo wrote:
-> On 5/31/2023 8:35 AM, Greg KH wrote:
->> On Wed, May 31, 2023 at 07:58:03PM +0530, Manivannan Sadhasivam wrote:
->>> + Jakub (who NACKed the previous submission of UCI driver)
->>> Link to previous submission: 
->>> https://lore.kernel.org/all/1606533966-22821-1-git-send-email-hemantk@codeaurora.org/ 
->>>
->>>
->>> On Mon, May 22, 2023 at 01:04:59PM -0600, Jeffrey Hugo wrote:
->>>> From: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
->>>>
->>>> I2C, USB, and PCIe are examples of buses which have a mechanism to give
->>>> userspace direct access to a device on those buses. The MHI userspace
->>>> character interface (uci) is the MHI bus analogue.
->>>>
->>>> The MHI bus devices are MHI channels which ferry blocks of data from 
->>>> one
->>>> end to the other. With this simple purpose, we can define a simple
->>>> interface to userspace - a character device that supports 
->>>> open/close/read/
->>>> write/poll operations. Since bus devices can only have a single 
->>>> consumer
->>>> we encode a whitelist of MHI channels to be exported to userspace so as
->>>> to avoid conflicts.
->>>>
->>>> We also make this mechanism open to any device that implements MHI.
->>>> Today this includes WLAN (Wi-Fi), WWAN (4G/5G cellular), and ML/AI
->>>> devices. More devices are expected in the future.
->>>>
->>>> In addition to implementing the framework for uci, we include an 
->>>> initial
->>>> usecase - the QAIC Sahara device.
->>>>
->>>> Sahara is a file transfer protocol that is commonly used for two 
->>>> purposes
->>>> when interacting with a device - transferring firmware to the device 
->>>> and
->>>> transferring crashdumps from the device. The Sahara protocol puts the
->>>> receiver of the data in control of the transfer. A firmware transfer
->>>> operation would have the device requesting the specific firmware images
->>>> that the device wants, and the host satisfying those requests.
->>>>
->>>> In most cases, including for AIC100, Sahara is used as part of a two 
->>>> stage
->>>> loading process. The device will boot a very limited bootloader that 
->>>> does
->>>> the base minimum initialization and jump to the next stage. A 
->>>> simple, one-
->>>> shot protocol like BHI is used to send the next stage bootloader to the
->>>> device. This second stage bootloader contains more functionality and
->>>> implements the Sahara protocol. The second stage determines from 
->>>> various
->>>> inputs what set of runtime firmware is required to boot the device 
->>>> into an
->>>> operational status, and requests those pieces from the host.  With 
->>>> those
->>>> images transferred over, the device can funnly initialize.
->>>>
->>>> Each AIC100 instance (currently, up to 16) in a system will create a
->>>> MHI device for QAIC_SAHARA. MHI_uci will consume each of these and 
->>>> create
->>>> a unique chardev which will be found as
->>>> /dev/<mhi instance>_QAIC_SAHARA
->>>> For example - /dev/mhi0_QAIC_SAHARA
->>>>
->>>> An open userspace application that can consume these devices for 
->>>> firmware
->>>> transfers is located at https://github.com/andersson/qdl
->>>>
->>>> Signed-off-by: Pranjal Ramajor Asha Kanojiya 
->>>> <quic_pkanojiy@quicinc.com>
->>>> [jhugo: Rename to uci, plumb to mhi, rewrite commit text]
->>>> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
->>>
->>> The previous attempt on adding UCI driver was NACKed by Jakub. For 
->>> merging this
->>> patch, I need an ACK from Jakub.
->>
->> Given that this fails the kernel robot tests, why would anyone ack it
->> as-is?
-> 
-> I think Mani I looking for some "guidance" on the "architecture", and 
-> frankly so am I.  An official Ack from Jakub might not be quite the 
-> right thing at this stage, but at-least Jakub could come in and say he 
-> isn't planning on NACKing this right off the bat, in particular because 
-> this functionality can be used by WWAN devices which seems to be what 
-> caused the mess the last time around.
-> 
-> We've gone full circle here.  This functionality was proposed as part of 
-> the bus.  Jakub came in an NACKed that, which resulted in the WWAN 
-> subsystem and the guidance that this functionally belongs with the 
-> devices.  I tried to put it with the AIC100/QAIC device based on that, 
-> and that got NACKed by Daniel (GPU) saying that this belongs with the 
-> bus.  You (Greg) seemed to agree with Daniel on that.
-> 
-> Fixing kernel robot tests is one thing (I haven't seen any reports on 
-> this iteration), but if there is no agreement on where this lives, isn't 
-> it DOA?
+On Wed, May 31, 2023 at 11:03=E2=80=AFAM Eric Dumazet <edumazet@google.com>=
+ wrote:
+>
+> On Wed, May 31, 2023 at 4:16=E2=80=AFPM Lee Jones <lee@kernel.org> wrote:
+> >
+> > In the event of a failure in tcf_change_indev(), u32_set_parms() will
+> > immediately return without decrementing the recently incremented
+> > reference counter.  If this happens enough times, the counter will
+> > rollover and the reference freed, leading to a double free which can be
+> > used to do 'bad things'.
+> >
+> > Cc: stable@kernel.org # v4.14+
+>
+> Please add a Fixes: tag.
+>
+> > Signed-off-by: Lee Jones <lee@kernel.org>
+> > ---
+> >  net/sched/cls_u32.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
+> > index 4e2e269f121f8..fad61ca5e90bf 100644
+> > --- a/net/sched/cls_u32.c
+> > +++ b/net/sched/cls_u32.c
+> > @@ -762,8 +762,11 @@ static int u32_set_parms(struct net *net, struct t=
+cf_proto *tp,
+> >         if (tb[TCA_U32_INDEV]) {
+> >                 int ret;
+> >                 ret =3D tcf_change_indev(net, tb[TCA_U32_INDEV], extack=
+);
+>
+> This call should probably be done earlier in the function, next to
+> tcf_exts_validate_ex()
+>
+> Otherwise we might ask why the tcf_bind_filter() does not need to be undo=
+ne.
+>
+> Something like:
+>
+> diff --git a/net/sched/cls_u32.c b/net/sched/cls_u32.c
+> index 4e2e269f121f8a301368b9783753e055f5af6a4e..ac957ff2216ae18bcabdd3af3=
+b0e127447ef8f91
+> 100644
+> --- a/net/sched/cls_u32.c
+> +++ b/net/sched/cls_u32.c
+> @@ -718,13 +718,18 @@ static int u32_set_parms(struct net *net, struct
+> tcf_proto *tp,
+>                          struct nlattr *est, u32 flags, u32 fl_flags,
+>                          struct netlink_ext_ack *extack)
+>  {
+> -       int err;
+> +       int err, ifindex =3D -1;
+>
+>         err =3D tcf_exts_validate_ex(net, tp, tb, est, &n->exts, flags,
+>                                    fl_flags, extack);
+>         if (err < 0)
+>                 return err;
+>
+> +       if (tb[TCA_U32_INDEV]) {
+> +               ifindex =3D tcf_change_indev(net, tb[TCA_U32_INDEV], exta=
+ck);
+> +               if (ifindex < 0)
+> +                       return -EINVAL;
+> +       }
+>         if (tb[TCA_U32_LINK]) {
+>                 u32 handle =3D nla_get_u32(tb[TCA_U32_LINK]);
+>                 struct tc_u_hnode *ht_down =3D NULL, *ht_old;
+> @@ -759,13 +764,9 @@ static int u32_set_parms(struct net *net, struct
+> tcf_proto *tp,
+>                 tcf_bind_filter(tp, &n->res, base);
+>         }
+>
+> -       if (tb[TCA_U32_INDEV]) {
+> -               int ret;
+> -               ret =3D tcf_change_indev(net, tb[TCA_U32_INDEV], extack);
+> -               if (ret < 0)
+> -                       return -EINVAL;
+> -               n->ifindex =3D ret;
+> -       }
+> +       if (ifindex >=3D 0)
+> +               n->ifindex =3D ifindex;
+> +
 
-I went hunting for a report and found it.  Not sure why it hasn't hit my 
-inbox.  The issue looks trivial and really doesn't seem to prevent 
-discussions on this IMO.
+I guess we crossed paths ;->
 
-> 
-> In summary, if you don't like this, please give some clear guidance. 
-> Greg, you've told me in the past that you don't discuss "architecture" 
-> without seeing the code.  Here is some code.  I don't claim it is 
-> perfect (you mentioned the QAIC version had some issues you were going 
-> to help with), but I would like to see some input.
-> 
-> -Jeff
-> 
+Please, add a tdc test as well - it doesnt have to be in this patch,
+can be a followup.
 
+cheers,
+jamal
+
+>         return 0;
+>  }
