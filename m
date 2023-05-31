@@ -2,94 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B962F71892A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F56718931
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjEaSOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 14:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
+        id S229999AbjEaSQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 14:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjEaSOa (ORCPT
+        with ESMTP id S230045AbjEaSQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 14:14:30 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CAE9132
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:14:19 -0700 (PDT)
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        Wed, 31 May 2023 14:16:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FD6126
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:16:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9779C1EC042D;
-        Wed, 31 May 2023 20:14:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1685556857;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ShXFZDFEDmPlX5Y3XBvXdK5GQ9yQ1nqotnDFM/A0v50=;
-        b=pSEmarCJ7ae6RE2dRKTy4kIE02HMibao+y7kGU9agAA2DuF8wAfoL5qq1I+OlPHwsjAX8h
-        c43XOwoKhOSLLUUBEzqTdf3i49wT0Excdpw2bFcleHfp+yxHzMJqYSc8wNl6UpluFmcUYq
-        WO9QuqV6jYjwZkzRbDAZ7cGF6gVIWU8=
-Date:   Wed, 31 May 2023 20:14:12 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
-        Juergen Gross <jgross@suse.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Yu Zhao <yuzhao@google.com>, linux-kernel@vger.kernel.org,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        drm-intel@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [RESUBMIT][PATCH] x86/mm: Fix PAT bit missing from page
- protection modify mask
-Message-ID: <20230531181412.GFZHeOdMHIGOXB2hwL@fat_crate.local>
-References: <20230519183634.190364-1-janusz.krzysztofik@linux.intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EED4D63E69
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 18:16:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E31C8C433D2;
+        Wed, 31 May 2023 18:16:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685556964;
+        bh=0iS4QEZtR9R14+8r9lidPyx64MxNgwHzBGnd4gRrIV8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Vs8CeFQRe9fRbvMmR0S/zocnCs7QJhJ7gyu+urrAAFLV3XXO9la5SApk3p7INC+5e
+         ZjDbjo7nu3ytwZc0o6BUyCmNN9L9kpK5x3RlR8af5fZC5PcJ1S/QQ/PzZHcZuYaga6
+         rLeN27HZDXmD5PwG5XhLy4cJkqZRXQ64/5CO0mmWOFe0ZzJg+qPKzrDHZz9TJ4mN9y
+         85qUD9KFKyDcWp0H5Ebthgt1H0nqbYlG3JonroemeI6mePWXtBeyzZyd13G3w8GQh/
+         EGTrn+8gGsLnWmnmHzA2IoT47IwTqUbkWweY2dPh1w6ynNiaxW1K58VByuzCKtu0Cz
+         2mTGTq806G1tw==
+Date:   Wed, 31 May 2023 11:16:02 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Qingfang DENG <dqfext@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>,
+        Ville Nuorvala <vnuorval@tcs.hut.fi>,
+        Masahide NAKAMURA <nakam@linux-ipv6.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Qingfang DENG <qingfang.deng@siflower.com.cn>
+Subject: Re: [PATCH net] neighbour: fix unaligned access to pneigh_entry
+Message-ID: <20230531111602.7ecf401b@kernel.org>
+In-Reply-To: <20230531104233.50645-1-dqfext@gmail.com>
+References: <20230531104233.50645-1-dqfext@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230519183634.190364-1-janusz.krzysztofik@linux.intel.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 08:36:34PM +0200, Janusz Krzysztofik wrote:
-> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-> index 15ae4d6ba4768..56466afd04307 100644
-> --- a/arch/x86/include/asm/pgtable.h
-> +++ b/arch/x86/include/asm/pgtable.h
-> @@ -654,8 +654,10 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
->  #define pgprot_modify pgprot_modify
->  static inline pgprot_t pgprot_modify(pgprot_t oldprot, pgprot_t newprot)
->  {
-> -	pgprotval_t preservebits = pgprot_val(oldprot) & _PAGE_CHG_MASK;
-> -	pgprotval_t addbits = pgprot_val(newprot) & ~_PAGE_CHG_MASK;
-> +	unsigned long mask = _PAGE_CHG_MASK | _PAGE_CACHE_MASK;
-> +
-> +	pgprotval_t preservebits = pgprot_val(oldprot) & mask;
-> +	pgprotval_t addbits = pgprot_val(newprot) & ~mask;
->  	return __pgprot(preservebits | addbits);
->  }
->  
-> -- 
+On Wed, 31 May 2023 18:42:33 +0800 Qingfang DENG wrote:
+> +#ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+>  	u8			key[];
+> +#else
+> +	u8			key[] __aligned(4);
+> +#endif
 
-This certainly needs Jürgen and he's on CC already, moving him to To:.
-
-Also, why isn't this a Xen-specific fix but you're keeping _PAGE_PAT for
-baremetal too, i.e., modifying the generic function?
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+I'd appreciate a second opinion, but to me it's very unlikely we'd save
+any memory even with efficient aligned access here. No reasonably key
+will fit into 3 bytes, right? So we can as well avoid the ifdef and
+make the key[] always aligned. Or preferably, if it doesn't cause
+compilation issues, make the type of the key u32?
