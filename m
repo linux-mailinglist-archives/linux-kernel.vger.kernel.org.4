@@ -2,140 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22E67174A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 06:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D18C97174AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 06:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234177AbjEaEC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 00:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
+        id S234201AbjEaEEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 00:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234064AbjEaECN (ORCPT
+        with ESMTP id S234188AbjEaEEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 00:02:13 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEB8107
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 21:02:11 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-568c8fa027fso23385457b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 21:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685505730; x=1688097730;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pTATTkgvxztq9cna9gYn1cQG7KZBsx+3nMydlu+2mlE=;
-        b=al+sJCyOmkaF/6ULIYjfy2VcVPz2C1bJQqcCbgFH/qdd7Y3x3ihhhi+6+rzdnEiUv8
-         lWpn7yW5seO+rgx/NlgTtfMTIYxkGcVq+TSRBWky9mfQUVCpRWY93+2uS5MuaL75iEDA
-         JQ10HgpgPVDpe+CX3mqaEzbLU4+OSdpKbgU8DULnbEDbNMZ98Xg5KZYbWZrFG/RMGaGR
-         jTnl1guy/5DX8hhiygVrhV049zJ1vcM2cd3XqRd4+0afw78MpemU5/cde1on4KzSuR9e
-         ipRGINz/G0pNg9bKudvd2xs9iSVvrJ7sMHbVynO6oRjOrqbl9maLQHug6QJH1nM5+8b2
-         OqGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685505730; x=1688097730;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pTATTkgvxztq9cna9gYn1cQG7KZBsx+3nMydlu+2mlE=;
-        b=gpNjUX79sOxuzC8xgQYUb7hCBmjFlM0GKLJc5wV3MH/WEmOvA84QdDdECjbaBP9wQy
-         kRbEoq7ksNWz1kO4FBXQi4j5yrZ+l5fc2NXTMbwcRlHEiBzDCqvvN2WYYz7y0mvY+ElU
-         So8A12DimtVLZ2Zn3qkens0BGwUvqWON1SHwT78Xkuul4oMMG6OGPU3iiKebePGVbfsf
-         SKR8RUXF+JSz2CZq3S62yIVBL1YNoBOPtrSjIcqhIsuS4cS3PdsHRqO01tE34lfinkGE
-         iS6wfCDA3zd32IqGykAy4oSpq2JDZs9FVvyuLjij1+6qUDJKOK5OHcElomFB8qyTsLhf
-         MfRw==
-X-Gm-Message-State: AC+VfDy8HubpjWYNqfZZ65EiyXspj//PkfmorTglIpexRFqj1FMT7Jpw
-        XNuPTiTGX5zE91Icisssf3ZOu+U4JIU=
-X-Google-Smtp-Source: ACHHUZ4p0nM25uD1L98TaYBOU36BLpBLGMgEtVGS7cVeo7z12dgaiYwxkeFtmy9TSgo24jh7ThbNKIabBSM=
-X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
- (user=badhri job=sendgmr) by 2002:a81:b661:0:b0:565:ce25:2693 with SMTP id
- h33-20020a81b661000000b00565ce252693mr2529499ywk.3.1685505730774; Tue, 30 May
- 2023 21:02:10 -0700 (PDT)
-Date:   Wed, 31 May 2023 04:02:03 +0000
-In-Reply-To: <20230531040203.19295-1-badhri@google.com>
-Mime-Version: 1.0
-References: <20230531040203.19295-1-badhri@google.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230531040203.19295-3-badhri@google.com>
-Subject: [PATCH v5 3/3] usb: gadget: udc: core: Prevent UDC from starting when unbound
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        colin.i.king@gmail.com, xuetao09@huawei.com,
-        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
-        peter.chen@freescale.com, balbi@ti.com, francesco@dolcini.it,
-        alistair@alistair23.me, stephan@gerhold.net, bagasdotme@gmail.com,
-        luca@z3ntu.xyz
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>,
-        stable <stable@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 31 May 2023 00:04:11 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5675010E;
+        Tue, 30 May 2023 21:04:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685505850; x=1717041850;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WHj2RuuzQ5MIhm5hULZNZ/8NBi6foHkjop6klLlJc2w=;
+  b=lavY90dn6lWjEzDmQP5i9X8vqe312UywDRr6TPB+5inYb5c+ML+dZxv6
+   5GaBCPs7CLfu1/DSMDtjkaWWZZK49BZ4VOL7hmYFzhOE6mFhB5AV+p097
+   qUAKJIAmAM5JuYroL/1cxAYorI6OPyALlEh0ltG2dlYF5tHRyMoGwngwb
+   76Et+7f2W0Muill5AtYJyX+MrLbzgkdd1a9IxJnbavEAfdy8DtDa7DQwZ
+   LUoRDP7OGavTnGYerbn1XwPUMTq1THpTbNmMj7XGw0/vFkA54f0tGWMBD
+   EHMFEnnTTk17cL0UJlclPEX3O98aJQFwv6oGpn8I3/jJLZz8aSNlA3/Ib
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="335477389"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="335477389"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 21:03:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="881013685"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="881013685"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by orsmga005.jf.intel.com with ESMTP; 30 May 2023 21:03:03 -0700
+Message-ID: <325046c8-cfc3-c42a-0b39-bafc1acae800@linux.intel.com>
+Date:   Wed, 31 May 2023 12:02:08 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     baolu.lu@linux.intel.com,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        narayan.ranganathan@intel.com
+Subject: Re: [PATCH v6 3/4] iommu/vt-d: Add set_dev_pasid callback for dma
+ domain
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20230519203223.2777255-1-jacob.jun.pan@linux.intel.com>
+ <20230519203223.2777255-4-jacob.jun.pan@linux.intel.com>
+ <ZHUBoBev2Vzp8nGF@nvidia.com>
+ <ba26db48-4102-d6bc-add8-5449423158ca@linux.intel.com>
+ <ZHYqebpMC12ck6gQ@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <ZHYqebpMC12ck6gQ@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UDC should neither be started nor pulled up unless the gadget driver is
-bound. The new flag "allow_start" is now set by gadget_bind_driver()
-and cleared by gadget_unbind_driver(). usb_gadget_udc_start_locked()
-now checks whether allow_start is set before starting the UDC by
-invoking the ->udc_start() callback.
+On 5/31/23 12:55 AM, Jason Gunthorpe wrote:
+> On Tue, May 30, 2023 at 10:19:05AM +0800, Baolu Lu wrote:
+>> On 5/30/23 3:48 AM, Jason Gunthorpe wrote:
+>>> On Fri, May 19, 2023 at 01:32:22PM -0700, Jacob Pan wrote:
+>>>
+>>>> @@ -4720,25 +4762,99 @@ static void intel_iommu_iotlb_sync_map(struct iommu_domain *domain,
+>>>>    static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
+>>>>    {
+>>>>    	struct intel_iommu *iommu = device_to_iommu(dev, NULL, NULL);
+>>>> +	struct dev_pasid_info *curr, *dev_pasid = NULL;
+>>>> +	struct dmar_domain *dmar_domain;
+>>>>    	struct iommu_domain *domain;
+>>>> +	unsigned long flags;
+>>>> -	/* Domain type specific cleanup: */
+>>>>    	domain = iommu_get_domain_for_dev_pasid(dev, pasid, 0);
+>>>> -	if (domain) {
+>>>> -		switch (domain->type) {
+>>>> -		case IOMMU_DOMAIN_SVA:
+>>>> -			intel_svm_remove_dev_pasid(dev, pasid);
+>>>> -			break;
+>>>> -		default:
+>>>> -			/* should never reach here */
+>>>> -			WARN_ON(1);
+>>>> +	if (!domain)
+>>>> +		goto out_tear_down;
+>>>> +
+>>>> +	/*
+>>>> +	 * The SVA implementation needs to stop mm notification, drain the
+>>>> +	 * pending page fault requests before tearing down the pasid entry.
+>>>> +	 * The VT-d spec (section 6.2.3.1) also recommends that software
+>>>> +	 * could use a reserved domain id for all first-only and pass-through
+>>>> +	 * translations. Hence there's no need to call domain_detach_iommu()
+>>>> +	 * in the sva domain case.
+>>>> +	 */
+>>>> +	if (domain->type == IOMMU_DOMAIN_SVA) {
+>>>> +		intel_svm_remove_dev_pasid(dev, pasid);
+>>>> +		goto out_tear_down;
+>>>> +	}
+>>>
+>>> But why don't you need to do all the other
+>>> intel_pasid_tear_down_entry(), intel_svm_drain_prq() (which is
+>>> misnamed) and other stuff from intel_svm_remove_dev_pasid() ?
+>>
+>> Perhaps,
+>>
+>> 	if (domain->type == IOMMU_DOMAIN_SVA) {
+>> 		intel_svm_remove_dev_pasid(dev, pasid);
+>> 		return;
+>> 	}
+>>
+>> ?
+> 
+> I would expect only stuff directly connected to SVM be in the SVM
+> function.
+> 
+> De-initalizing PRI and any other pasid destruction should be in this
+> function.
+> 
+>>> There still seems to be waaay too much "SVM" in the PASID code.
+>>
+>> This segment of code is destined to be temporary. From a long-term
+>> perspective, I hope to move SVA specific staffs such as mm notification,
+>> prq draining, etc. to the iommu core. They are generic rather than Intel
+>> iommu specific.
+> 
+> Yes, sort of, but.. That is just the mmu notifier bits
+> 
+> All the PRI/PASID teardown needs to be unlinked from SVM
 
-Fixes: fc274c1e9973 ("USB: gadget: Add a new bus for gadgets")
-Cc: stable <stable@kernel.org>
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
-v5 is the first version in this series.
----
- drivers/usb/gadget/udc/core.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Get your point now. Yes. PRI and PASID teardown are not SVA-specific.
+Sorry that we should rename SVM to SVA to unify the Linux terminology.
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 6ffe5fda8bb7..ac9d6186815d 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -37,6 +37,8 @@ static const struct bus_type gadget_bus_type;
-  * @vbus: for udcs who care about vbus status, this value is real vbus status;
-  * for udcs who do not care about vbus status, this value is always true
-  * @started: the UDC's started state. True if the UDC had started.
-+ * @allow_start: Indicates whether UDC is allowed to start. Set/cleared by gadget_(un)bind_driver()
-+ * after gadget driver is bound or unbound.
-  * @connect_lock: protects udc->vbus, udc->started, gadget->connect, gadget->deactivate related
-  * functions. usb_gadget_connect_locked, usb_gadget_disconnect_locked,
-  * usb_udc_connect_control_locked, usb_gadget_udc_start_locked, usb_gadget_udc_stop_locked are
-@@ -52,6 +54,7 @@ struct usb_udc {
- 	struct list_head		list;
- 	bool				vbus;
- 	bool				started;
-+	bool				allow_start;
- 	struct work_struct		vbus_work;
- 	struct mutex			connect_lock;
- };
-@@ -1204,6 +1207,9 @@ static inline int usb_gadget_udc_start_locked(struct usb_udc *udc)
- 	if (udc->started) {
- 		dev_err(&udc->dev, "UDC had already started\n");
- 		return -EBUSY;
-+	} else if (!udc->allow_start) {
-+		dev_err(&udc->dev, "UDC not allowed to start. Is gadget driver bound ?\n");
-+		return -EIO;
- 	}
- 
- 	ret = udc->gadget->ops->udc_start(udc->gadget, udc->driver);
-@@ -1590,6 +1596,7 @@ static int gadget_bind_driver(struct device *dev)
- 		goto err_bind;
- 
- 	mutex_lock(&udc->connect_lock);
-+	udc->allow_start = true;
- 	ret = usb_gadget_udc_start_locked(udc);
- 	if (ret) {
- 		mutex_unlock(&udc->connect_lock);
-@@ -1630,6 +1637,7 @@ static void gadget_unbind_driver(struct device *dev)
- 
- 	cancel_work_sync(&udc->vbus_work);
- 	mutex_lock(&udc->connect_lock);
-+	udc->allow_start = false;
- 	usb_gadget_disconnect_locked(gadget);
- 	usb_gadget_disable_async_callbacks(udc);
- 	if (gadget->irq)
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+> 
+>>> It would be nice if the different domain types had their own ops..
+>>
+>> Good suggestion!
+>>
+>> We can add a domain ops in the Intel domain structure which is
+>> responsible for how to install an Intel iommu domain onto the VT-d
+>> hardware.
+> 
+> We should have seperate iommu_domain_ops at least, I think that would
+> cover alot of it?
 
+Are you suggesting adding this ops in common iommu_domain or intel's
+dmar_domain? My understanding is the latter. To do so, probably we need
+to define various callbacks for different type of domains: identity,
+blocking, dma remapping, sva and possibly nested. Also need to care
+about legacy vs. scalable mode.
+
+That's the reason why I hoped to do all these in separated series with
+carefully reviewing and testing.
+
+Best regards,
+baolu
