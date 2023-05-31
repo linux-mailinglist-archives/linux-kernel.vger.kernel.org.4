@@ -2,126 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 568B8717B9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93EE717B96
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235435AbjEaJR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
+        id S235309AbjEaJRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235391AbjEaJRy (ORCPT
+        with ESMTP id S230385AbjEaJRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:17:54 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B668124;
-        Wed, 31 May 2023 02:17:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685524672; x=1717060672;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=bmNwWz+Sl3NGLRCdcR2hGpS3AQE5LBSVmGQYcIBJFS4=;
-  b=X1ONqH5Xc1B2PqUZTLRLimF4Yb4beDk7PEuqGUFBh9G6cig+CvkzQKU+
-   RtCpbkNjZLDSek8R85SA8jGWIRejvMOki2h2yuauZN9Rdw0oroC5kRUkt
-   NYg9eexrKD5dTQVXltf4LElhlW5BAIjOCvKAvqiVJdje+JvlTRRRr6dDX
-   Bs8ysUhRUBOLaQxaidGzSPI1umggzrZGmIj+uX8gODTEiPl/2CV5Z89Zz
-   kpbiITBEbrpBasltPiSbIqhKxX62k2ZEgjp2xLMU9K23xBc9J0wYCqMqR
-   WWP1bVEkSicTu0PYxPPzq3Cne6T8EjnXeEXG662u4Jgmqc8s49A/7mCrD
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="352680551"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="352680551"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 02:17:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="851139174"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="851139174"
-Received: from lmmelle-mobl1.ger.corp.intel.com ([10.252.47.216])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 02:17:44 -0700
-Date:   Wed, 31 May 2023 12:17:23 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>
-cc:     "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 21/24] selftests/resctrl: Read in less obvious order
- to defeat prefetch optimizations
-In-Reply-To: <OSZPR01MB6328F2713E40CC7D383035A48B489@OSZPR01MB6328.jpnprd01.prod.outlook.com>
-Message-ID: <c21fb16d-d3ad-bbcb-daed-28f153b64525@linux.intel.com>
-References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-22-ilpo.jarvinen@linux.intel.com> <OSZPR01MB6328F2713E40CC7D383035A48B489@OSZPR01MB6328.jpnprd01.prod.outlook.com>
+        Wed, 31 May 2023 05:17:41 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEBCC0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:17:40 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-96fbe7fbdd4so973811966b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685524659; x=1688116659;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OADC3RfZz8aGJuKXNoOKeJUa9cEawhPV5nN0Ge23Nzo=;
+        b=Ff5Z9vs7m6+MWJxaKpqar6M9LALIChP6jBiwVtVzc3n81B4S6RoiYfhqOP9ZQc9L7O
+         rZ5u0Q584Ng+8r4dGqx6ZmwULpo/ZwLqmQwRIXxmMpCZk62etI4oJ6VFEIgKKPKJlutf
+         w0hZ55SSQ05ac0O3gXNybzXJVMaNAm/CgG9+KAONDSZDvxPdwo//S1wW29I/iLlatzkI
+         SsF+EUEvnnGaeyzAKP8wfRFHMUQUNkXlfbFzCj8xM9SM8fbwUL4jP8YiRzzX1Gu1sDVu
+         352fRp8qaqO5ANlDAbN1Lyxvm65fWCNG8Di7lWIuaTR3w8dmciNewyu1zGuLUvFq74Ye
+         kccg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685524659; x=1688116659;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OADC3RfZz8aGJuKXNoOKeJUa9cEawhPV5nN0Ge23Nzo=;
+        b=E9Qa3gbT6hPbfWi3scps7dxQnoQP+kfSzEylbGl6nWmMSrIQ/osvpW3VxR4bHPC3Ur
+         IhvggksQsjQzgyXgrqXqmLqecAhg322aZu+jMDOiUNwsD6NEyPChqnsTIi2V8+wMl901
+         vYfA4l5p/VJt+IZXSUQfVZe2oJfqRgQOneZdwB0EY62dNMd7TtGqXOPdXzNgbZxttvwM
+         LamdTxHt058rAJm5F9+DKfu5mvQ3ldo+mLToxGp40+4SP8IAoT2WMX7ppN/vjbVZfP9+
+         v31lJsEeE+ENtDNdXOlwMf2b6HNWj6IKNU4rBk2ZM32NrZmP5me4r1h9Qf8dhi3zktR2
+         peSA==
+X-Gm-Message-State: AC+VfDwjlTIFL1draFQRBDBdiJ70q+TiToC0PeACidChCmknUEmLUDu3
+        4q1YICAfBQmAYoueZxzjYnWFXw==
+X-Google-Smtp-Source: ACHHUZ6Mwh1uhjbIvXzEqr7u6gpp/I8WIdGTzFCAjeE3E4N0lM8OSIEEpXCjuHkrdJ3YTuCvJFnGrg==
+X-Received: by 2002:a17:906:6a0c:b0:973:daa0:2f6 with SMTP id qw12-20020a1709066a0c00b00973daa002f6mr4796212ejc.3.1685524659193;
+        Wed, 31 May 2023 02:17:39 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id q10-20020a170906b28a00b00965d294e633sm8682465ejz.58.2023.05.31.02.17.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 02:17:38 -0700 (PDT)
+Message-ID: <1f966e93-50c3-142e-620c-8fbb16e9b1a7@linaro.org>
+Date:   Wed, 31 May 2023 11:17:37 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-566315524-1685524665=:5379"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] dt-bindings: power: supply: Fix rt9467 charger enable
+ gpio active level
+Content-Language: en-US
+To:     cy_huang@richtek.com, sre@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     chiaen_wu@richtek.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1685522813-14481-1-git-send-email-cy_huang@richtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1685522813-14481-1-git-send-email-cy_huang@richtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-566315524-1685524665=:5379
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-
-On Wed, 31 May 2023, Shaopeng Tan (Fujitsu) wrote:
-
-> Hi Ilpo,
+On 31/05/2023 10:46, cy_huang@richtek.com wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> > When reading memory in order, HW prefetching optimizations will interfere
-> > with measuring how caches and memory are being accessed. This adds noise
-> > into the results.
-> > 
-> > Change the fill_buf reading loop to not use an obvious in-order access using
-> > multiply by a prime and modulo.
-> > 
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  tools/testing/selftests/resctrl/fill_buf.c | 17 ++++++++++-------
-> >  1 file changed, 10 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/resctrl/fill_buf.c
-> > b/tools/testing/selftests/resctrl/fill_buf.c
-> > index 7e0d3a1ea555..049a520498a9 100644
-> > --- a/tools/testing/selftests/resctrl/fill_buf.c
-> > +++ b/tools/testing/selftests/resctrl/fill_buf.c
-> > @@ -88,14 +88,17 @@ static void *malloc_and_init_memory(size_t s)
-> > 
-> >  static int fill_one_span_read(unsigned char *start_ptr, unsigned char
-> > *end_ptr)  {
-> > -	unsigned char sum, *p;
-> > -
-> > +	unsigned int size = (end_ptr - start_ptr) / (CL_SIZE / 2);
-> > +	unsigned int count = size;
-> > +	unsigned char sum;
-> > +
-> > +	/*
-> > +	 * Read the buffer in an order that is unexpected by HW prefetching
-> > +	 * optimizations to prevent them interfering with the caching pattern.
-> > +	 */
-> >  	sum = 0;
-> > -	p = start_ptr;
-> > -	while (p < end_ptr) {
-> > -		sum += *p;
-> > -		p += (CL_SIZE / 2);
-> > -	}
-> > +	while (count--)
-> > +		sum += start_ptr[((count * 59) % size) * CL_SIZE / 2];
->
-> Could you please elaborate why 59 is used?
+> The RT9467 charger enable pin is an external signal that used to enable
+> battery charging. From the datasheet, the active level is low. Although
+> it's already configured to logic low at driver probe function, but the
 
-The main reason is that it's a prime number ensuring the whole buffer 
-gets read. I picked something that doesn't make it to wrap on almost 
-every iteration.
+NAK.
 
--- 
- i.
+You mix two different things. Driver behavior and DTS. Driver can
+operate either on real level - matching hardware - or on logical level
+(high as enable, low as disable). First choice is usually wrong, because
+it does not allow inverted signals.
 
---8323329-566315524-1685524665=:5379--
+'Correcting' bindings to wrong approach is wrong. If the signal is
+active low, then the flag is active low. Simple as that.
+
+> current binding example declared it as 'GPIO_ACTIVE_LOW', this causes
+> this pin be output high and disable battery charging.
+> 
+> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+> Hi,
+> 
+>   This patch is to fix the active level for charger enable gpio polarity.
+
+This is just example - it does not fix anything...
+
+> Currently, the wrong active level makes the user confused and
+> unexpectedly disable battery charging by default.
+> ---
+>  Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
+> index 3723717..cdc7678 100644
+> --- a/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
+> @@ -69,7 +69,7 @@ examples:
+>          reg = <0x5b>;
+>          wakeup-source;
+>          interrupts-extended = <&gpio_intc 32 IRQ_TYPE_LEVEL_LOW>;
+> -        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_LOW>;
+> +        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_HIGH>;
+>  
+>          rt9467_otg_vbus: usb-otg-vbus-regulator {
+>            regulator-name = "rt9467-usb-otg-vbus";
+
+Best regards,
+Krzysztof
+
