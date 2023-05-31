@@ -2,205 +2,425 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA38717934
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1DC71793D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235053AbjEaH5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
+        id S234827AbjEaH5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234909AbjEaH4o (ORCPT
+        with ESMTP id S234984AbjEaH5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:56:44 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2119.outbound.protection.outlook.com [40.107.255.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3A4E45;
-        Wed, 31 May 2023 00:55:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L7fL5tu89idcloRtpJkjXVIFcAnSoqnnPivdHSP14UVY568wV+y9dv2Fynzn/A24Smli/kUCejNaqWcDyVZb7CS8cDn03QoQU8xd4/ApDAL4/mCB9cTQ9g0en2Hs514JWH2xg02wzj0kQsbC3iE3flCjRTEYsFVsh4vIZ7hFfrPSkWoKXojKnzyX8UGofTjP21WlVrZh5cXt00C6fJ+vkySloRy3JBPZN+T4JIV4vVaHeTGxYKeJzXxEdG7biEvZDhacbW313ioNxLXSALdLnI3eS+7JnJy8HunVVXG5DI9S5dlS2EO3P2Zsjmp0tGHP933jE3vveMREmZtaUPBm9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zhzVdXyhqzuGvimP9ysBJkCuVgSTWlCBkxk0aAYFj58=;
- b=Qp83gskFoSRfRfnB7VSc84F/vRmQvviGjMn/K23ATEX/x4knsmseHcnrMsZUcK69STT1MXDjj/Rz3fPzIYyl41QpsufsDF76SmElG3V3m6HAHn1lIo21VIqDdPO9mfTPZNSPiiXuet9kWrHfVPPz6RLx35DILxqx0BxXaXwpaufxQDkf27aSmHmiMVu+Fy5YbwWPe49htVs5nHluGolc3HJ3g+rmGw264oUXQfrHGQyMaMV1ekNcXG/WHTK7yh5LfzPb36doH0oq07TwRdmkzlGv9zO4UhKeO8l9G7PGGgq6JBQUs8fUipmyuxqHzJ+ctGJvBgRhMbl38fyunbW8Ug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zhzVdXyhqzuGvimP9ysBJkCuVgSTWlCBkxk0aAYFj58=;
- b=QrH0GYr0BsVw2OmXxA+6JGyBk6Qkq91XUM3xMpWUPsEkjG3wzO8Yf/Yn0tnUWWoYweZNtbPewjLXJF4LBsbavKRiG6oFEPAJoiwb3kQd8ew896iZxFNDOXqLb0d8dxdyODdFB3bwBl6z5B1jiF6KrHDx+jvCFh9gxvJTk2MmVxE4QasuHma3SHg/6yCLy6fVuIo3qDlqiQUzPN74AnQNRD4jFeiQlYGE8YHZEblBMvFta8ekOPYzyfv8KbDivirZgz+yNCIxZAxrqThczFmWf8xN8YLD2oU1z3jvTZGXpJfwMRZgBcvLGeKmAM2OVLx065cMDCHXZfh+dWlBCTiecA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
- by KL1PR0601MB5551.apcprd06.prod.outlook.com (2603:1096:820:c2::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Wed, 31 May
- 2023 07:55:23 +0000
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::f652:a96b:482:409e%5]) with mapi id 15.20.6433.018; Wed, 31 May 2023
- 07:55:23 +0000
-From:   Lu Hongfei <luhongfei@vivo.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
-Subject: [PATCH] soc: qcom: pmic: Fix resource leaks in device_for_each_child_node() loops
-Date:   Wed, 31 May 2023 15:55:13 +0800
-Message-Id: <20230531075513.55182-1-luhongfei@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYCPR01CA0015.jpnprd01.prod.outlook.com (2603:1096:405::27)
- To TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|KL1PR0601MB5551:EE_
-X-MS-Office365-Filtering-Correlation-Id: e06a9905-e936-4c99-f0a6-08db61ac6314
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G96DibOagTX0lr1cUNNDpWMDvQcsf337jHl1vCshbnygp7vYIE1VUsI8kHQ0fmFDQMMYeWeDnAkwRtLdtnPoekvIzNUftIZJdWC6VC1ZdDdJkA+G2cq7tgJm9+8n0mvpqK6V9HcfMkLFZKp9cQkQwvrRiuR5hbYpLVQ0sQJ+cVqjrU7c121Dh/GSFRfiHvg9zaIuuiQTsJljh9LdCfoFqQsk8XNkDeT0+IxTRcqTQ0lyUuyinjlUnMGJw8Vb/KGoxycZ/2zi2YDlZ5BzutXYl5/H7OjUnyGlCtJsIAAYB76cNjBtuhH/qcXT0YYIZUloQNGdRwRuXzka6hiusG3chxwXCKxBPlNTaFtY3Sn4Ory5sx+74AmCV5KRu9YDNxr6aIGF+kB4qqLu8QFgEMcRYiC3C4eiCfX2cjb4FF+307TQ92O3IQ9Y4qU5HGwzGbNZz3oPqZHmr1Bd5wNqvQcNJThoVM8f8GCDiEpBWF0a7+xffBhnoN+RgouQrCD9pSou6g1lpEQSez2Qwe4Vj7nfWnLn1Fzej9KGbSZqQDymMXP1ELwPVba+N73Vq1nS3bx4zLtKCVVcO/4gaDfE76ztKnlyvgHvO2luWrh1ayL4IqETPAdyvOX5eMmanmHBLzjf
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(366004)(346002)(376002)(451199021)(66946007)(316002)(107886003)(110136005)(4326008)(66476007)(66556008)(478600001)(36756003)(86362001)(6506007)(1076003)(26005)(6512007)(186003)(41300700001)(5660300002)(8936002)(8676002)(2906002)(6486002)(52116002)(6666004)(38100700002)(38350700002)(2616005)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ATwFXqEzy0YPO7KoABkuDd9+GAetoGXMBwmo15fqH83uJevbeMGqVQb3uW15?=
- =?us-ascii?Q?d+SiGwD6p3/UpaONbCKWbpBKATq9qqcNdIiUHsm0TtgJ49TmjQL0QVz86Mtr?=
- =?us-ascii?Q?hUo+T3QX5wVmvCu12uCNn4q4OljlC4j8U6bAqLuBI250uMDgB3Tc6I93VtLl?=
- =?us-ascii?Q?24/3G2SvUsyo1xM8zmhAK3XjlyXeN0rYMn7fmeZtTe7YollG9KS3W8OqZQge?=
- =?us-ascii?Q?urAxsJPx4CnuiJSYUhhuhuC4iC8d18kbZTDhsZeU7EFH2AuXYjK2vagelXxL?=
- =?us-ascii?Q?OSvozOjtpP38curCsRgQDCOnVugaR20AiuZJWmhwpxphFM8TX2oNYkTX5KhP?=
- =?us-ascii?Q?9GSUUSX9I3S1HabUExzyUNC4UG1IaiGTsxTueM1+mS/lfEt7Yx8S/7jglhAO?=
- =?us-ascii?Q?xWG+kmkEwFexBJ/hZBkUvPDV/8b7MaxA9VH9AAYf3arrr1Us2YWa7YgBF6p5?=
- =?us-ascii?Q?ZMZrCWPqKXb6YjATd58XqdSLcZGQVT4evv1Nq8Q0eGrdmYID7ZuOoVO3h8dq?=
- =?us-ascii?Q?+YX+QoapjEz5+UXcQDFOdRKaL92n3cuTwt2CeTp4prdMbEei3vqJVsd4o//S?=
- =?us-ascii?Q?VsLXdG9ZA/7gtfhfIAxxARGRQW3PpAoem3PdQ2MPlykj/VeI3oKi9QnKZ1UZ?=
- =?us-ascii?Q?GkoyzfPbyBxKrvI05qsYO6XlfFTawkWBkb500JUbHNNDXns1WTkcpPPWK+rT?=
- =?us-ascii?Q?St/S7N2oKf+ROATGPEQpX785Wjuiycxw1enhicFauvws913oYIzahj30NGpH?=
- =?us-ascii?Q?U6xC9xOZALwwXfcC5pgNGXkjmaZuVT9YapbUObqfLKewNmT4rNO1Askj0bwv?=
- =?us-ascii?Q?AXyArIl+vLXT2CL7Hre1HdJSicOJA8W8IpDmJOk11TFCFI7f2TZUhlljWSYM?=
- =?us-ascii?Q?OyEF5G+7UFesNZn23CJLCvvSE75mi7ZVI6xoobW7NIXDJDknYT1qdNcxkUtL?=
- =?us-ascii?Q?ajmDyERSpLYPq/LcE5HlhdaXQoihtg976BYwf52UNA855u3HWq8kT+ZaNovG?=
- =?us-ascii?Q?7CDFEfr3JLE5C2tPCsLaeriOBva5FwtTdt+SFrHsSCcHHHdzWhOmP5tvOC7Z?=
- =?us-ascii?Q?WQBAa//37RdRq+VsnkdlbpQU+ZsPlqnfkifZE5ERKOpohrT71Gt8jaeDLFy8?=
- =?us-ascii?Q?7XrghFr7wooSWVdcXy7xg9UW4c4CQU6MQjFNDSs9MLfhUksv5IYyqfseEVwr?=
- =?us-ascii?Q?N75pFpI6dZ7+/lj4YPPtbZ+pmlVjMqNXD3t9quRLc+g+Ijkozba0dUpFWmPh?=
- =?us-ascii?Q?iVok52VLrYrvSTG+APbDkMnKEt0kw1BaWf4CHuXlW6eecy0NUGZ7ZRM5H3cQ?=
- =?us-ascii?Q?qBnD0KEMZGKHfNHBGT9V7DyW6j6s9rRseafMfV5W+mDdz+snCpolwoYmyUxN?=
- =?us-ascii?Q?lk2bGNB89lvNQmQKcDeE0NE6AAaPAe3A8xbJcnwiwn/fFQDxJq3y1kUfF4G3?=
- =?us-ascii?Q?Bm5C0w/fNs4lc4HdNJ1zVfX88NbMygOmyUS93rapcyRI3SUa4vRj4jacRKk8?=
- =?us-ascii?Q?9iibAwtA222ysbVKyuO4+SIVra+7XQMurl3CcZ3+pwPPch75M76wIOLIgqvO?=
- =?us-ascii?Q?6ycCruVgVc8H5sQg/4aI9uew+EHeel0/H2zEGy5m?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e06a9905-e936-4c99-f0a6-08db61ac6314
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 07:55:23.0164
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +SOWLCXGby+H9+0Bx7X+XlFD0q05cgAN5P3YyuQs6hHaeCBNUcVmIU7pZt9gE+k16hiIctgPSIEyNIyZDdOCjg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB5551
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 31 May 2023 03:57:19 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D262E199D
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:56:15 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8DxNvGT_XZkvuQCAA--.6409S3;
+        Wed, 31 May 2023 15:56:03 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxMuWR_XZk4QuCAA--.13618S2;
+        Wed, 31 May 2023 15:56:02 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Christian Brauner <brauner@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v3] LoongArch: Add support to clone a time namespace
+Date:   Wed, 31 May 2023 15:56:01 +0800
+Message-Id: <1685519761-20425-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8CxMuWR_XZk4QuCAA--.13618S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWfGFy8Cry8Zw18AryUKrWrGrg_yoWkuFWUpF
+        Zakrs2qw4UKryfKryxJwn8uw15Jrn7uw4YgF4ag3ySyF1IvryUZF10yr95AFWYy3y8JryI
+        grW8Zw4Yva1qqwUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
+        kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
+        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
+        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
+        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
+        1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUv
+        cSsGvfC2KfnxnUUI43ZEXa7IU8HKZJUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device_for_each_child_node loop in pmic_glink_altmode_probe should have
-fwnode_handle_put() before return which could avoid resource leaks.
-This patch could fix this bug.
+When execute the following command to test clone3 on LoongArch:
 
-Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+  # cd tools/testing/selftests/clone3 && make && ./clone3
+
+we can see the following error info:
+
+  # [5719] Trying clone3() with flags 0x80 (size 0)
+  # Invalid argument - Failed to create new process
+  # [5719] clone3() with flags says: -22 expected 0
+  not ok 18 [5719] Result (-22) is different than expected (0)
+
+This is because if CONFIG_TIME_NS is not set, but the flag
+CLONE_NEWTIME (0x80) is used to clone a time namespace, it
+will return -EINVAL in copy_time_ns().
+
+Here is the related code in include/linux/time_namespace.h:
+
+  #ifdef CONFIG_TIME_NS
+  ...
+  struct time_namespace *copy_time_ns(unsigned long flags,
+				      struct user_namespace *user_ns,
+				      struct time_namespace *old_ns);
+  ...
+  #else
+  ...
+  static inline
+  struct time_namespace *copy_time_ns(unsigned long flags,
+				      struct user_namespace *user_ns,
+				      struct time_namespace *old_ns)
+  {
+	  if (flags & CLONE_NEWTIME)
+		  return ERR_PTR(-EINVAL);
+
+	  return old_ns;
+  }
+  ...
+  #endif
+
+Here is the complete call stack:
+
+  clone3()
+    kernel_clone()
+      copy_process()
+        copy_namespaces()
+          create_new_namespaces()
+            copy_time_ns()
+              clone_time_ns()
+
+Because CONFIG_TIME_NS depends on GENERIC_VDSO_TIME_NS, select
+GENERIC_VDSO_TIME_NS to enable CONFIG_TIME_NS to build the real
+implementation of copy_time_ns() in kernel/time/namespace.c.
+
+Additionally, it needs to define some arch dependent functions
+such as __arch_get_timens_vdso_data(), arch_get_vdso_data() and
+vdso_join_timens(), then the above failed test can be fixed.
+
+At the same time, modify the layout of vvar to use a page size
+for generic vdso data, expand a page size for timens vdso data
+and assign LOONGARCH_VDSO_DATA_SIZE (maybe over a page size if
+expand in the future) for loongarch vdso data, at last add the
+callback function vvar_fault().
+
+With this patch, the following failed test can be fixed too:
+
+  # cd tools/testing/selftests/timens && make && ./timens
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- drivers/soc/qcom/pmic_glink_altmode.c | 27 ++++++++++++++++++---------
- 1 file changed, 18 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
-index df48fbea4b68..a7fc6570fa1e
---- a/drivers/soc/qcom/pmic_glink_altmode.c
-+++ b/drivers/soc/qcom/pmic_glink_altmode.c
-@@ -395,7 +395,7 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
- 		ret = fwnode_property_read_u32(fwnode, "reg", &port);
- 		if (ret < 0) {
- 			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
--			return ret;
-+			goto err_node_put;
- 		}
+Special thanks Wang Rui and Youling for your suggestions offline.
+
+ arch/loongarch/Kconfig                         |  1 +
+ arch/loongarch/include/asm/page.h              |  1 +
+ arch/loongarch/include/asm/vdso/gettimeofday.h | 10 ++-
+ arch/loongarch/include/asm/vdso/vdso.h         | 30 ++++++--
+ arch/loongarch/kernel/vdso.c                   | 98 +++++++++++++++++++++-----
+ arch/loongarch/vdso/vgetcpu.c                  |  3 +-
+ 6 files changed, 120 insertions(+), 23 deletions(-)
+
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index d38b066..93b167f 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -80,6 +80,7 @@ config LOONGARCH
+ 	select GENERIC_SCHED_CLOCK
+ 	select GENERIC_SMP_IDLE_THREAD
+ 	select GENERIC_TIME_VSYSCALL
++	select GENERIC_VDSO_TIME_NS
+ 	select GPIOLIB
+ 	select HAS_IOPORT
+ 	select HAVE_ARCH_AUDITSYSCALL
+diff --git a/arch/loongarch/include/asm/page.h b/arch/loongarch/include/asm/page.h
+index fb5338b..26e8dcc 100644
+--- a/arch/loongarch/include/asm/page.h
++++ b/arch/loongarch/include/asm/page.h
+@@ -81,6 +81,7 @@ typedef struct { unsigned long pgprot; } pgprot_t;
+ #define __va(x)		((void *)((unsigned long)(x) + PAGE_OFFSET - PHYS_OFFSET))
  
- 		if (port >= ARRAY_SIZE(altmode->ports)) {
-@@ -405,7 +405,8 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
+ #define pfn_to_kaddr(pfn)	__va((pfn) << PAGE_SHIFT)
++#define sym_to_pfn(x)		__phys_to_pfn(__pa_symbol(x))
  
- 		if (altmode->ports[port].altmode) {
- 			dev_err(dev, "multiple connector definition for port %u\n", port);
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto err_node_put;
- 		}
+ #define virt_to_pfn(kaddr)	PFN_DOWN(PHYSADDR(kaddr))
+ #define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
+diff --git a/arch/loongarch/include/asm/vdso/gettimeofday.h b/arch/loongarch/include/asm/vdso/gettimeofday.h
+index 7b2cd37..3c3043b 100644
+--- a/arch/loongarch/include/asm/vdso/gettimeofday.h
++++ b/arch/loongarch/include/asm/vdso/gettimeofday.h
+@@ -91,9 +91,17 @@ static inline bool loongarch_vdso_hres_capable(void)
  
- 		alt_port = &altmode->ports[port];
-@@ -420,33 +421,37 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
- 
- 		ret = devm_drm_bridge_add(dev, &alt_port->bridge);
- 		if (ret)
--			return ret;
-+			goto err_node_put;
- 
- 		alt_port->dp_alt.svid = USB_TYPEC_DP_SID;
- 		alt_port->dp_alt.mode = USB_TYPEC_DP_MODE;
- 		alt_port->dp_alt.active = 1;
- 
- 		alt_port->typec_mux = fwnode_typec_mux_get(fwnode);
--		if (IS_ERR(alt_port->typec_mux))
--			return dev_err_probe(dev, PTR_ERR(alt_port->typec_mux),
-+		if (IS_ERR(alt_port->typec_mux)) {
-+			ret = dev_err_probe(dev, PTR_ERR(alt_port->typec_mux),
- 					     "failed to acquire mode-switch for port: %d\n",
- 					     port);
-+			goto err_node_put;
-+		}
- 
- 		ret = devm_add_action_or_reset(dev, pmic_glink_altmode_put_mux,
- 					       alt_port->typec_mux);
- 		if (ret)
--			return ret;
-+			goto err_node_put;
- 
- 		alt_port->typec_switch = fwnode_typec_switch_get(fwnode);
--		if (IS_ERR(alt_port->typec_switch))
--			return dev_err_probe(dev, PTR_ERR(alt_port->typec_switch),
-+		if (IS_ERR(alt_port->typec_switch)) {
-+			ret = dev_err_probe(dev, PTR_ERR(alt_port->typec_switch),
- 					     "failed to acquire orientation-switch for port: %d\n",
- 					     port);
-+			goto err_node_put;
-+		}
- 
- 		ret = devm_add_action_or_reset(dev, pmic_glink_altmode_put_switch,
- 					       alt_port->typec_switch);
- 		if (ret)
--			return ret;
-+			goto err_node_put;
- 	}
- 
- 	altmode->client = devm_pmic_glink_register_client(dev,
-@@ -455,6 +460,10 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
- 							  pmic_glink_altmode_pdr_notify,
- 							  altmode);
- 	return PTR_ERR_OR_ZERO(altmode->client);
-+
-+err_node_put:
-+	fwnode_handle_put(fwnode);
-+	return ret;
+ static __always_inline const struct vdso_data *__arch_get_vdso_data(void)
+ {
+-	return get_vdso_data();
++	return (const struct vdso_data *)get_vdso_data();
  }
  
- static const struct auxiliary_device_id pmic_glink_altmode_id_table[] = {
++#ifdef CONFIG_TIME_NS
++static __always_inline
++const struct vdso_data *__arch_get_timens_vdso_data(const struct vdso_data *vd)
++{
++	return (const struct vdso_data *)(get_vdso_data() +
++		VVAR_TIMENS_PAGE_OFFSET * PAGE_SIZE);
++}
++#endif
+ #endif /* !__ASSEMBLY__ */
+ 
+ #endif /* __ASM_VDSO_GETTIMEOFDAY_H */
+diff --git a/arch/loongarch/include/asm/vdso/vdso.h b/arch/loongarch/include/asm/vdso/vdso.h
+index 3b55d32..fa6049e 100644
+--- a/arch/loongarch/include/asm/vdso/vdso.h
++++ b/arch/loongarch/include/asm/vdso/vdso.h
+@@ -16,10 +16,31 @@ struct vdso_pcpu_data {
+ 
+ struct loongarch_vdso_data {
+ 	struct vdso_pcpu_data pdata[NR_CPUS];
+-	struct vdso_data data[CS_BASES]; /* Arch-independent data */
+ };
+ 
+-#define VDSO_DATA_SIZE PAGE_ALIGN(sizeof(struct loongarch_vdso_data))
++/*
++ * The layout of vvar:
++ *
++ *                      high
++ * +---------------------+--------------------------+
++ * | loongarch vdso data | LOONGARCH_VDSO_DATA_SIZE |
++ * +---------------------+--------------------------+
++ * | timens vdso data    | PAGE_SIZE                |
++ * +---------------------+--------------------------+
++ * | generic vdso data   | PAGE_SIZE                |
++ * +---------------------+--------------------------+
++ *                      low
++ */
++#define LOONGARCH_VDSO_DATA_SIZE PAGE_ALIGN(sizeof(struct loongarch_vdso_data))
++#define LOONGARCH_VDSO_DATA_PAGES (LOONGARCH_VDSO_DATA_SIZE >> PAGE_SHIFT)
++#define VVAR_SIZE (VVAR_LOONGARCH_PAGES_START * PAGE_SIZE + LOONGARCH_VDSO_DATA_SIZE)
++
++enum vvar_pages {
++	VVAR_GENERIC_PAGE_OFFSET,
++	VVAR_TIMENS_PAGE_OFFSET,
++	VVAR_LOONGARCH_PAGES_START,
++	VVAR_LOONGARCH_PAGES_END = VVAR_LOONGARCH_PAGES_START + LOONGARCH_VDSO_DATA_PAGES - 1,
++};
+ 
+ static inline unsigned long get_vdso_base(void)
+ {
+@@ -34,10 +55,9 @@ static inline unsigned long get_vdso_base(void)
+ 	return addr;
+ }
+ 
+-static inline const struct vdso_data *get_vdso_data(void)
++static inline unsigned long get_vdso_data(void)
+ {
+-	return (const struct vdso_data *)(get_vdso_base()
+-			- VDSO_DATA_SIZE + SMP_CACHE_BYTES * NR_CPUS);
++	return get_vdso_base() - VVAR_SIZE;
+ }
+ 
+ #endif /* __ASSEMBLY__ */
+diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
+index eaebd2e..cb75863 100644
+--- a/arch/loongarch/kernel/vdso.c
++++ b/arch/loongarch/kernel/vdso.c
+@@ -14,6 +14,7 @@
+ #include <linux/random.h>
+ #include <linux/sched.h>
+ #include <linux/slab.h>
++#include <linux/time_namespace.h>
+ #include <linux/timekeeper_internal.h>
+ 
+ #include <asm/page.h>
+@@ -26,12 +27,17 @@ extern char vdso_start[], vdso_end[];
+ 
+ /* Kernel-provided data used by the VDSO. */
+ static union {
+-	u8 page[VDSO_DATA_SIZE];
++	u8 page[PAGE_SIZE];
++	struct vdso_data data[CS_BASES];
++} generic_vdso_data __page_aligned_data;
++
++static union {
++	u8 page[LOONGARCH_VDSO_DATA_SIZE];
+ 	struct loongarch_vdso_data vdata;
+ } loongarch_vdso_data __page_aligned_data;
+ 
+ static struct page *vdso_pages[] = { NULL };
+-struct vdso_data *vdso_data = loongarch_vdso_data.vdata.data;
++struct vdso_data *vdso_data = generic_vdso_data.data;
+ struct vdso_pcpu_data *vdso_pdata = loongarch_vdso_data.vdata.pdata;
+ 
+ static int vdso_mremap(const struct vm_special_mapping *sm, struct vm_area_struct *new_vma)
+@@ -41,6 +47,43 @@ static int vdso_mremap(const struct vm_special_mapping *sm, struct vm_area_struc
+ 	return 0;
+ }
+ 
++static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
++			     struct vm_area_struct *vma, struct vm_fault *vmf)
++{
++	struct page *timens_page = find_timens_vvar_page(vma);
++	unsigned long pfn;
++
++	switch (vmf->pgoff) {
++	case VVAR_GENERIC_PAGE_OFFSET:
++		if (timens_page)
++			pfn = page_to_pfn(timens_page);
++		else
++			pfn = sym_to_pfn(vdso_data);
++		break;
++#ifdef CONFIG_TIME_NS
++	case VVAR_TIMENS_PAGE_OFFSET:
++		/*
++		 * If a task belongs to a time namespace then a namespace specific
++		 * VVAR is mapped with the VVAR_GENERIC_PAGE_OFFSET and the real
++		 * VVAR page is mapped with the VVAR_TIMENS_PAGE_OFFSET offset.
++		 * See also the comment near timens_setup_vdso_data().
++		 */
++		if (!timens_page)
++			return VM_FAULT_SIGBUS;
++		pfn = sym_to_pfn(vdso_data);
++		break;
++#endif /* CONFIG_TIME_NS */
++	case VVAR_LOONGARCH_PAGES_START ... VVAR_LOONGARCH_PAGES_END:
++		pfn = sym_to_pfn(&loongarch_vdso_data) +
++		      vmf->pgoff - VVAR_LOONGARCH_PAGES_START;
++		break;
++	default:
++		return VM_FAULT_SIGBUS;
++	}
++
++	return vmf_insert_pfn(vma, vmf->address, pfn);
++}
++
+ struct loongarch_vdso_info vdso_info = {
+ 	.vdso = vdso_start,
+ 	.size = PAGE_SIZE,
+@@ -51,6 +94,7 @@ struct loongarch_vdso_info vdso_info = {
+ 	},
+ 	.data_mapping = {
+ 		.name = "[vvar]",
++		.fault = vvar_fault,
+ 	},
+ 	.offset_sigreturn = vdso_offset_sigreturn,
+ };
+@@ -73,6 +117,37 @@ static int __init init_vdso(void)
+ }
+ subsys_initcall(init_vdso);
+ 
++#ifdef CONFIG_TIME_NS
++struct vdso_data *arch_get_vdso_data(void *vvar_page)
++{
++	return (struct vdso_data *)(vvar_page);
++}
++
++/*
++ * The vvar mapping contains data for a specific time namespace, so when a
++ * task changes namespace we must unmap its vvar data for the old namespace.
++ * Subsequent faults will map in data for the new namespace.
++ *
++ * For more details see timens_setup_vdso_data().
++ */
++int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
++{
++	struct mm_struct *mm = task->mm;
++	struct vm_area_struct *vma;
++
++	VMA_ITERATOR(vmi, mm, 0);
++
++	mmap_read_lock(mm);
++	for_each_vma(vmi, vma) {
++		if (vma_is_special_mapping(vma, &vdso_info.data_mapping))
++			zap_vma_pages(vma);
++	}
++	mmap_read_unlock(mm);
++
++	return 0;
++}
++#endif
++
+ static unsigned long vdso_base(void)
+ {
+ 	unsigned long base = STACK_TOP;
+@@ -88,7 +163,7 @@ static unsigned long vdso_base(void)
+ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+ {
+ 	int ret;
+-	unsigned long vvar_size, size, data_addr, vdso_addr;
++	unsigned long size, data_addr, vdso_addr;
+ 	struct mm_struct *mm = current->mm;
+ 	struct vm_area_struct *vma;
+ 	struct loongarch_vdso_info *info = current->thread.vdso;
+@@ -100,32 +175,23 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+ 	 * Determine total area size. This includes the VDSO data itself
+ 	 * and the data pages.
+ 	 */
+-	vvar_size = VDSO_DATA_SIZE;
+-	size = vvar_size + info->size;
++	size = VVAR_SIZE + info->size;
+ 
+ 	data_addr = get_unmapped_area(NULL, vdso_base(), size, 0, 0);
+ 	if (IS_ERR_VALUE(data_addr)) {
+ 		ret = data_addr;
+ 		goto out;
+ 	}
+-	vdso_addr = data_addr + VDSO_DATA_SIZE;
+ 
+-	vma = _install_special_mapping(mm, data_addr, vvar_size,
+-				       VM_READ | VM_MAYREAD,
++	vma = _install_special_mapping(mm, data_addr, VVAR_SIZE,
++				       VM_READ | VM_MAYREAD | VM_PFNMAP,
+ 				       &info->data_mapping);
+ 	if (IS_ERR(vma)) {
+ 		ret = PTR_ERR(vma);
+ 		goto out;
+ 	}
+ 
+-	/* Map VDSO data page. */
+-	ret = remap_pfn_range(vma, data_addr,
+-			      virt_to_phys(&loongarch_vdso_data) >> PAGE_SHIFT,
+-			      vvar_size, PAGE_READONLY);
+-	if (ret)
+-		goto out;
+-
+-	/* Map VDSO code page. */
++	vdso_addr = data_addr + VVAR_SIZE;
+ 	vma = _install_special_mapping(mm, vdso_addr, info->size,
+ 				       VM_READ | VM_EXEC | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC,
+ 				       &info->code_mapping);
+diff --git a/arch/loongarch/vdso/vgetcpu.c b/arch/loongarch/vdso/vgetcpu.c
+index e02e775..e7884f88 100644
+--- a/arch/loongarch/vdso/vgetcpu.c
++++ b/arch/loongarch/vdso/vgetcpu.c
+@@ -21,7 +21,8 @@ static __always_inline int read_cpu_id(void)
+ 
+ static __always_inline const struct vdso_pcpu_data *get_pcpu_data(void)
+ {
+-	return (struct vdso_pcpu_data *)(get_vdso_base() - VDSO_DATA_SIZE);
++	return (struct vdso_pcpu_data *)(get_vdso_data() +
++		VVAR_LOONGARCH_PAGES_START * PAGE_SIZE);
+ }
+ 
+ extern
 -- 
-2.39.0
+2.1.0
 
