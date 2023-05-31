@@ -2,118 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3A0717819
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4917071781F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232000AbjEaHZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
+        id S234200AbjEaH0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234566AbjEaHZB (ORCPT
+        with ESMTP id S234502AbjEaH01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:25:01 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4C9124;
-        Wed, 31 May 2023 00:24:57 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f6da07ff00so57155435e9.3;
-        Wed, 31 May 2023 00:24:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685517896; x=1688109896;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BGm8dSFUe8oYl2TNz6+RJ2OzDhK9zNEqrtF6bUETRPg=;
-        b=pbS5jnd0KtWx1kVXDxSAjb45cGnnDxpRKZ+eRHPO5z2Gf1O8pmA0hnJnj0896zCXDa
-         9mzThdBCbFgu19k81bCjxUqei1uwzml3BqcXaKgngGOeiN7dxwiNujCVZ00DoPPyBPwM
-         W158p4ui/sGpYve7pXvZMMUwiq4pX3rlCbIsgvDOjHNMJWje/pS9jvZxEMSRTlTh2MKq
-         UrGa7S9T1Ea6mrVYf4+5cfpZ8xvl6eGRuK/RngjKsyFTLQ6K9XmndxbG0yLc0X8o1DUz
-         Rpz6CTQXVjqzAD7FKh9YofXrqtusQg5HtSrP1ZjS7nEC0XUlNesylMeuBoWFum0wiBo+
-         xkHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685517896; x=1688109896;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BGm8dSFUe8oYl2TNz6+RJ2OzDhK9zNEqrtF6bUETRPg=;
-        b=KO+lC1MAnesHYjaxrN+t6Teqs2ts4Fsf8QWBPJGdIy4cAJd1ChQ0P1tD+txFozvRHO
-         bdVVX2meSRhYsb9p5+tew4tdUQTmydvOnmhQxT2/Nx8PR6JiE21a1VBuEjtdpy8DeG8p
-         rYWGuubQ7TTwcECn1Zr7blhcrQi+hEYh08Dq6X2K6ax/TkffkHTktQvJ1JokPIJZ9b23
-         xIzAE2ON/j8qxrZS4zMNtz+7rYsjWWTgYNvmHNe1ZJub6fek6JKvkutHdUHLLoTjyTQe
-         jsedr4n3vNv3WG2OJwwiQF10IDr03e5n7XH5z2AJFSv2XiTlXOpGr1BZBAeu41N9CHYu
-         XM+w==
-X-Gm-Message-State: AC+VfDxjK1L2sMkiHio3m4piUOLvzQIzYtNYbD+rQ5T4dbNohK/jnOEE
-        gwuDKXE2X7agrAXSjv0I/hk=
-X-Google-Smtp-Source: ACHHUZ6FAhHU+Za7H9g0Boog+saCu9YGFod3wjMwsWnawn+ag9re32rbUxQSPPglCDOpfLNweXodOg==
-X-Received: by 2002:a7b:c8ce:0:b0:3f4:2267:10c0 with SMTP id f14-20020a7bc8ce000000b003f4226710c0mr3464732wml.28.1685517895689;
-        Wed, 31 May 2023 00:24:55 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id q13-20020a7bce8d000000b003f43f82001asm23321548wmj.31.2023.05.31.00.24.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 00:24:54 -0700 (PDT)
-Message-ID: <bc8f0ee3-1131-3f63-a982-913f8165aa7b@gmail.com>
-Date:   Wed, 31 May 2023 09:24:52 +0200
+        Wed, 31 May 2023 03:26:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CEF113
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:25:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685517940;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=N34/mNWQwnGZ07cT22bXzRfAdms5vf9xTB7hi2yghbc=;
+        b=TdREAGaRv2Rq1xJgnvLkrYMCxdbnSf7sY+SYEmiJU2uRmiMlQamRNbNaNtzUxqvIru9qsH
+        +a9v9+rIoo1CmW4wKqVxUrhApreVctr3gQoJk62ObWVto7r7Df9QS1NsjVS/Wdw9cIngbU
+        DOAUwY35ARh+AELOs5ZbfRTsHxS1+8w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-621-RzkGs-_iNSSyNN3HlogBmw-1; Wed, 31 May 2023 03:25:34 -0400
+X-MC-Unique: RzkGs-_iNSSyNN3HlogBmw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3FEB7185A7A5;
+        Wed, 31 May 2023 07:25:34 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.238])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 6B5E5492B0A;
+        Wed, 31 May 2023 07:25:31 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Wed, 31 May 2023 09:25:14 +0200 (CEST)
+Date:   Wed, 31 May 2023 09:25:11 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Mike Christie <michael.christie@oracle.com>, linux@leemhuis.info,
+        nicolas.dichtel@6wind.com, axboe@kernel.dk, ebiederm@xmission.com,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, stefanha@redhat.com, brauner@kernel.org
+Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
+ regression
+Message-ID: <20230531072449.GA25046@redhat.com>
+References: <20230522025124.5863-1-michael.christie@oracle.com>
+ <20230522025124.5863-4-michael.christie@oracle.com>
+ <20230522123029.GA22159@redhat.com>
+ <cfca7764-d210-6df9-e182-2c093101c6cf@oracle.com>
+ <20230522174757.GC22159@redhat.com>
+ <20230523121506.GA6562@redhat.com>
+ <26c87be0-8e19-d677-a51b-e6821e6f7ae4@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3] arm64: dts: mediatek: Add cpufreq nodes for MT8192
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230317061944.15434-1-allen-kh.cheng@mediatek.com>
- <20230317195453.lpymxjk7oqvbxkq5@notapiano>
- <CAGXv+5GyLeVBAk_DXJoTxoG400mnq4y6pa1JXRD7Svc4rtMQBg@mail.gmail.com>
-Content-Language: en-US, ca-ES, es-ES
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <CAGXv+5GyLeVBAk_DXJoTxoG400mnq4y6pa1JXRD7Svc4rtMQBg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <26c87be0-8e19-d677-a51b-e6821e6f7ae4@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 05/31, Jason Wang wrote:
+>
+> 在 2023/5/23 20:15, Oleg Nesterov 写道:
+> >
+> >		/* make sure flag is seen after deletion */
+> >		smp_wmb();
+> >		llist_for_each_entry_safe(work, work_next, node, node) {
+> >			clear_bit(VHOST_WORK_QUEUED, &work->flags);
+> >
+> >I am not sure about smp_wmb + clear_bit. Once we clear VHOST_WORK_QUEUED,
+> >vhost_work_queue() can add this work again and change work->node->next.
+> >
+> >That is why we use _safe, but we need to ensure that llist_for_each_safe()
+> >completes LOAD(work->node->next) before VHOST_WORK_QUEUED is cleared.
+>
+> This should be fine since store is not speculated, so work->node->next needs
+> to be loaded before VHOST_WORK_QUEUED is cleared to meet the loop condition.
 
+I don't understand you. OK, to simplify, suppose we have 2 global vars
 
-On 30/05/2023 09:29, Chen-Yu Tsai wrote:
-> On Sat, Mar 18, 2023 at 3:55 AM Nícolas F. R. A. Prado
-> <nfraprado@collabora.com> wrote:
->>
->> On Fri, Mar 17, 2023 at 02:19:44PM +0800, Allen-KH Cheng wrote:
->>> Add the cpufreq nodes for MT8192 SoC.
->>>
->>> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
->>
->> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->>
->> Tested on Asurada Spherion Chromebook as well. In particular, verified that
->> applying this commit makes suspend/resume work. Before, it would hang during
->> resume:
->>
->>          Enabling non-boot CPUs ...
->>          Detected VIPT I-cache on CPU1
->>          GICv3: CPU1: found redistributor 100 region 0:0x000000000c060000
->>          CPU1: Booted secondary processor 0x0000000100 [0x412fd050]
->>
->> But with this commit applied the machine is able to proceed bringing up the
->> secondary processors and complete resume.
-> 
-> Ping on this patch.
-> 
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+	void *PTR = something_non_null;
+	unsigned long FLAGS = -1ul;
 
-Applied now, thanks for the ping.
+Now I think this code
 
-Regards,
-Matthias
+	CPU_0				CPU_1
+
+	void *ptr = PTR;		if (!test_and_set_bit(0, FLAGS))
+	clear_bit(0, FLAGS);			PTR = NULL;
+	BUG_ON(!ptr);
+
+is racy and can hit the BUG_ON(!ptr).
+
+I guess it is fine on x86, but in general you need smp_mb__before_atomic()
+before clear_bit(), or clear_bit_unlock().
+
+> >			__set_current_state(TASK_RUNNING);
+> >
+> >Why do we set TASK_RUNNING inside the loop? Does this mean that work->fn()
+> >can return with current->state != RUNNING ?
+>
+> It is because the state were set to TASK_INTERRUPTIBLE in the beginning of
+> the loop otherwise it might be side effect while executing work->fn().
+
+Again, I don't understand you. So let me repeat: can work->fn() return with
+current->_state != TASK_RUNNING ? If not (and I'd say it should not), you can
+do __set_current_state(TASK_RUNNING) once, before llist_for_each_entry_safe().
+
+> >Now the main question. Whatever we do, SIGKILL/SIGSTOP/etc can come right
+> >before we call work->fn(). Is it "safe" to run this callback with
+> >signal_pending() or fatal_signal_pending() ?
+>
+> It looks safe since:
+>
+> 1) vhost hold refcnt of the mm
+> 2) release will sync with the worker
+
+Well, that's not what I asked... nevermind, please forget.
+
+Thanks.
+
+Oleg.
+
