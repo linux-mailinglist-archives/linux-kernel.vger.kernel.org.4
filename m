@@ -2,124 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07FBF718EB1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8087D718EB3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbjEaWnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 18:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
+        id S231295AbjEaWoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 18:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbjEaWnu (ORCPT
+        with ESMTP id S231287AbjEaWoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 18:43:50 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D4D9F
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:43:48 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 25BD12C0274;
-        Thu,  1 Jun 2023 10:43:47 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1685573027;
-        bh=ODkHDBMzn3prvfeednZ/XfpWu2daBvR6MQnbPOCcr9Y=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=m2pTps4d+e2qfepLh2vl/T6OZJpinYryQEo/owcll1jTrz95zdySPydmgyeWzIBF0
-         dZlPkQLx2B+k6q1JV2HE9wP3MtyebYyCSmnk+YQwQhPBwXAD+YJtPjoBsPApxIcaaO
-         isociIMkS01q+mpdxR0GBvf4tsKFnIJUfOBwbk2HA75NvG8s2oO5NHt63Xk+SE8YbQ
-         263qyk6KjhCY/TnGjxWMRX90L6QPvz7TOVsCTIrIKA7QuLfrsQw1qkd2DPtm/PS+rG
-         uMUTgOANVUMBuwBFVqQQkM3XKFG1VzvdPeQNf4r5PcbQ+dVQowfpyH/USpRg10G3CV
-         G+uz3E0dWqbHw==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B6477cda30000>; Thu, 01 Jun 2023 10:43:47 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 1 Jun 2023 10:43:46 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.026; Thu, 1 Jun 2023 10:43:46 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>
-CC:     "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "enachman@marvell.com" <enachman@marvell.com>,
-        Vadym Kochan <vadym.kochan@plvision.eu>
-Subject: Re: [PATCH v7 3/4] dt-bindings: mtd: marvell-nand: Convert to YAML DT
- scheme
-Thread-Topic: [PATCH v7 3/4] dt-bindings: mtd: marvell-nand: Convert to YAML
- DT scheme
-Thread-Index: AQHZk1IoMAbW60jvr0qoP82+zj4DOK90MugA
-Date:   Wed, 31 May 2023 22:43:46 +0000
-Message-ID: <40bb4ad8-2bec-4eae-d0c8-c9aa31e03f32@alliedtelesis.co.nz>
-References: <20230530235456.1009082-1-chris.packham@alliedtelesis.co.nz>
- <20230530235456.1009082-4-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20230530235456.1009082-4-chris.packham@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6D81B5783BFD2D41A00284EF5D509ECE@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Wed, 31 May 2023 18:44:21 -0400
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B807D124;
+        Wed, 31 May 2023 15:44:19 -0700 (PDT)
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-53f8da65701so90836a12.1;
+        Wed, 31 May 2023 15:44:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685573059; x=1688165059;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6fD5ZjqjlJEEXtx5aeEmfqHuq48o9Pc6kZflyXmV36Y=;
+        b=KEGrD/Txx7uOy4TM9zWXUP9WfPwkWpPVHWKNuyFCWdBlwoGkEKBHp0W4sSOppK5jP8
+         WARfdM6aT/B9gwXfIYGum17+eREUXJ1IWQpMlXeHcAekQ501qcGQ2Z7L4I61rogQwplz
+         Tn1zkzIDUNo6BxyNS3kN5ljxeaUAdcT0Ib9NZv1SZYQvC8oQYY7e09yG6tNBRR874ERZ
+         ue26WBerNJOD3Nv2/DZUesEF9r+AMCJQF1j9A1/+4vjzUuuRyndSLe5ss1VPYhvaLtY7
+         PrD9JB2V9NqVnTGHFszjKrEDm/YyJ2GBJ4Vy2LGCiSwYIvHTFExoKqJQ8O0u78d19QT8
+         204w==
+X-Gm-Message-State: AC+VfDzv1EM89pgZhta4GPZRcI/nVljAG9lrW8f6MyjAWqxFRF4bimg0
+        1POvgruzOwP1XAPELI4nDLU=
+X-Google-Smtp-Source: ACHHUZ4NOSPHLriHOdbjF/Sun/uDiSMPm6jC57mtKE8I8lZweS7myyzH0En9h+2JLmolCYaqASYBDA==
+X-Received: by 2002:a05:6a20:e615:b0:10e:cde2:b524 with SMTP id my21-20020a056a20e61500b0010ecde2b524mr5561726pzb.41.1685573059071;
+        Wed, 31 May 2023 15:44:19 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id h6-20020a170902748600b001b04b1bd774sm1903311pll.208.2023.05.31.15.44.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 15:44:18 -0700 (PDT)
+Message-ID: <c459dd2c-a281-7fc4-90cf-36a71e9548bc@acm.org>
+Date:   Wed, 31 May 2023 15:44:17 -0700
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Score: -1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] scsi: sr: Fix a potential uninit-value in sr_get_events()
+Content-Language: en-US
+To:     Shigeru Yoshida <syoshida@redhat.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230531164346.118438-1-syoshida@redhat.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230531164346.118438-1-syoshida@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTWlxdWVsLA0KDQpPbiAzMS8wNS8yMyAxMTo1NCwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4g
-RnJvbTogVmFkeW0gS29jaGFuIDx2YWR5bS5rb2NoYW5AcGx2aXNpb24uZXU+DQo+DQo+IFN3aXRj
-aCB0aGUgRFQgYmluZGluZyB0byBhIFlBTUwgc2NoZW1hIHRvIGVuYWJsZSB0aGUgRFQgdmFsaWRh
-dGlvbi4NCj4NCj4gRHJvcHBlZCBkZXByZWNhdGVkIGNvbXBhdGlibGVzIGFuZCBwcm9wZXJ0aWVz
-IGRlc2NyaWJlZCBpbiB0eHQgZmlsZS4NCj4NCj4gU2lnbmVkLW9mZi1ieTogVmFkeW0gS29jaGFu
-IDx2YWR5bS5rb2NoYW5AcGx2aXNpb24uZXU+DQo+IFNpZ25lZC1vZmYtYnk6IENocmlzIFBhY2to
-YW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4gLS0tDQo8c25pcD4NCj4g
-ZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tdGQvbWFydmVs
-bCxuYW5kLWNvbnRyb2xsZXIueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
-cy9tdGQvbWFydmVsbCxuYW5kLWNvbnRyb2xsZXIueWFtbA0KPiBuZXcgZmlsZSBtb2RlIDEwMDY0
-NA0KPiBpbmRleCAwMDAwMDAwMDAwMDAuLjdjZDRhMmU5OTM0Mw0KPiAtLS0gL2Rldi9udWxsDQo+
-ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tdGQvbWFydmVsbCxuYW5k
-LWNvbnRyb2xsZXIueWFtbA0KPiBAQCAtMCwwICsxLDIyMSBAQA0KPiArIyBTUERYLUxpY2Vuc2Ut
-SWRlbnRpZmllcjogKEdQTC0yLjAtb25seSBPUiBCU0QtMi1DbGF1c2UpDQo+ICslWUFNTCAxLjIN
-Cj4gKy0tLQ0KPiArJGlkOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1hcy9tdGQvbWFydmVs
-bCxuYW5kLWNvbnRyb2xsZXIueWFtbCMNCj4gKyRzY2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVlLm9y
-Zy9tZXRhLXNjaGVtYXMvY29yZS55YW1sIw0KPiArDQo+ICt0aXRsZTogTWFydmVsbCBOQU5EIEZs
-YXNoIENvbnRyb2xsZXIgKE5GQykNCj4gKw0KPiArbWFpbnRhaW5lcnM6DQo+ICsgIC0gTWlxdWVs
-IFJheW5hbCA8bWlxdWVsLnJheW5hbEBib290bGluLmNvbT4NCj4gKw0KPiArcHJvcGVydGllczoN
-Cj4gKyAgY29tcGF0aWJsZToNCj4gKyAgICBvbmVPZjoNCj4gKyAgICAgIC0gaXRlbXM6DQo+ICsg
-ICAgICAgICAgLSBjb25zdDogbWFydmVsbCxhcm1hZGEtOGstbmFuZC1jb250cm9sbGVyDQo+ICsg
-ICAgICAgICAgLSBjb25zdDogbWFydmVsbCxhcm1hZGEzNzAtbmFuZC1jb250cm9sbGVyDQoNCk9u
-IHRoaXMgc3BlY2lmaWMgcG9pbnQuIFdhcyB5b3VyIGludGVudGlvbiB0byBhbGxvdyBqdXN0IHRo
-ZSANCiJtYXJ2ZWxsLGFybWFkYS04ay1uYW5kLWNvbnRyb2xsZXIiIGNvbXBhdGlibGU/DQoNCkkg
-bWFkZSBpdCBhIGxpc3QgYXMgdGhlIGV4aXN0aW5nIHVzYWdlIGlzIGBjb21wYXRpYmxlID0gDQoi
-bWFydmVsbCxhcm1hZGEtOGstbmFuZC1jb250cm9sbGVyIiwgDQoibWFydmVsbCxhcm1hZGEzNzAt
-bmFuZC1jb250cm9sbGVyIjtgIGJ1dCBhbiBlYXJsaWVyIGNvbW1lbnQgeW91IG1hZGUgDQpzdWdn
-ZXN0ZWQgdGhhdCB5b3VyIGludGVudGlvbiB3YXMgdG8gYWxsb3cganVzdCB0aGUgOGsgY29tcGF0
-aWJsZSBvbiANCml0J3Mgb3duLiBMb29raW5nIGF0IHRoZSBkcml2ZXIgaXQgZG9lc24ndCBkbyBh
-bnkgaXNfY29tcGF0aWJsZSgpIGNoZWNrcyANCnNvIEkgZG9uJ3QgdGhpbmsgaXQgY2FyZXMgKGN1
-cnJlbnRseSkuDQoNCj4gKyAgICAgIC0gZW51bToNCj4gKyAgICAgICAgICAtIG1hcnZlbGwsYXJt
-YWRhMzcwLW5hbmQtY29udHJvbGxlcg0KPiArICAgICAgICAgIC0gbWFydmVsbCxweGEzeHgtbmFu
-ZC1jb250cm9sbGVyDQo+ICsgICAgICAgICAgLSBtYXJ2ZWxsLGFybWFkYS04ay1uYW5kDQo+ICsg
-ICAgICAgICAgLSBtYXJ2ZWxsLGFybWFkYTM3MC1uYW5kDQo+ICsgICAgICAgICAgLSBtYXJ2ZWxs
-LHB4YTN4eC1uYW5kDQo+ICs=
+On 5/31/23 09:43, Shigeru Yoshida wrote:
+> diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
+> index 12869e6d4ebd..86b43c069a44 100644
+> --- a/drivers/scsi/sr.c
+> +++ b/drivers/scsi/sr.c
+> @@ -177,10 +177,13 @@ static unsigned int sr_get_events(struct scsi_device *sdev)
+>   
+>   	result = scsi_execute_cmd(sdev, cmd, REQ_OP_DRV_IN, buf, sizeof(buf),
+>   				  SR_TIMEOUT, MAX_RETRIES, &exec_args);
+> +	if (result)
+> +		return 0;
+> +
+>   	if (scsi_sense_valid(&sshdr) && sshdr.sense_key == UNIT_ATTENTION)
+>   		return DISK_EVENT_MEDIA_CHANGE;
+>   
+> -	if (result || be16_to_cpu(eh->data_len) < sizeof(*med))
+> +	if (be16_to_cpu(eh->data_len) < sizeof(*med))
+>   		return 0;
+
+I think this change is wrong because it introduces an unintended behavior
+change. A better solution is probably to zero-initialize sshdr before
+scsi_execute_cmd() is called.
+
+Thanks,
+
+Bart.
+
