@@ -2,89 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6AC717A20
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FF8717A27
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234887AbjEaIci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
+        id S235044AbjEaIey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235189AbjEaIcQ (ORCPT
+        with ESMTP id S232570AbjEaIeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:32:16 -0400
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5066107
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:32:15 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VjwzqAQ_1685521932;
-Received: from 30.221.128.130(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0VjwzqAQ_1685521932)
-          by smtp.aliyun-inc.com;
-          Wed, 31 May 2023 16:32:13 +0800
-Message-ID: <a111bd89-df32-c88c-62c9-59b90b5fda9a@linux.alibaba.com>
-Date:   Wed, 31 May 2023 16:32:12 +0800
+        Wed, 31 May 2023 04:34:37 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BD0BE;
+        Wed, 31 May 2023 01:34:35 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34V5d1D5002650;
+        Wed, 31 May 2023 03:34:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=211+wVlWeP/3HAR+B+VJMtiN6UM45J+l2Sz2XbJV7oQ=;
+ b=pX/EZtavXMLquh00TLBNnO/V4Ci3vEqHDeL4eB0RPzYD5FUcgLYo/sloYfULIcAQ1tBA
+ F3PluRqU8ZeQ85A7OuA97pQ0ltStLpRuPgPqrk53V8mDcpv2eLIn12tinnRxNdVzX+iJ
+ W4kC/59vnSL5xAm0mrWNUYa8MJLne+T061kHKP5tacYDyjqj0NAmr+UutZYM1u8RRZ6m
+ 4wvwVEqO/y3hSWojX0KZlMliFDotTIgDFh6XsvYj0UXmLzZ2qF531amR597Hoouf2p3l
+ tlVeOQRd5oJhLef9X/QCvgJbaL9WrlvVlsXpU1M2XEUAlxh60puusvaPSg1FJcVDDovv UA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3que9mvft2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 03:34:04 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 31 May
+ 2023 09:34:02 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 31 May 2023 09:34:02 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id AE23A11C6;
+        Wed, 31 May 2023 08:34:02 +0000 (UTC)
+Date:   Wed, 31 May 2023 08:34:02 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     <lee@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linus.walleij@linaro.org>, <vkoul@kernel.org>,
+        <robh+dt@kernel.org>, <conor+dt@kernel.org>, <lgirdwood@gmail.com>,
+        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 5/6] spi: cs42l43: Add SPI controller support
+Message-ID: <20230531083402.GF68926@ediswmail.ad.cirrus.com>
+References: <20230530122112.1314458-1-ckeepax@opensource.cirrus.com>
+ <20230530122112.1314458-6-ckeepax@opensource.cirrus.com>
+ <171e2054-e41c-46a5-b478-f699909c5bd7@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH] ocfs2: check new file size on fallocate call
-Content-Language: en-US
-To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
-        Mark Fasheh <mark@fasheh.com>,
-        Joel Becker <jlbec@evilplan.org>,
-        Heming Zhao <heming.zhao@suse.com>,
-        akpm <akpm@linux-foundation.org>
-Cc:     ocfs2-devel@oss.oracle.com, linux-kernel@vger.kernel.org
-References: <20230529152645.32680-1-lhenriques@suse.de>
-From:   Joseph Qi <joseph.qi@linux.alibaba.com>
-In-Reply-To: <20230529152645.32680-1-lhenriques@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <171e2054-e41c-46a5-b478-f699909c5bd7@sirena.org.uk>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: 5Yhc_ulsONjFQYDneXH2QsBaUlWrHPop
+X-Proofpoint-ORIG-GUID: 5Yhc_ulsONjFQYDneXH2QsBaUlWrHPop
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/29/23 11:26 PM, Luís Henriques wrote:
-> When changing a file size with fallocate() the new size isn't being
-> checked.  In particular, the FSIZE ulimit isn't being checked, which makes
-> fstest generic/228 fail.  Simply adding a call to inode_newsize_ok() fixes
-> this issue.
+On Tue, May 30, 2023 at 10:30:46PM +0100, Mark Brown wrote:
+> On Tue, May 30, 2023 at 01:21:11PM +0100, Charles Keepax wrote:
 > 
-> Signed-off-by: Luís Henriques <lhenriques@suse.de>
-
-Reviewed-by: Joseph Qi <joseph.qi@linux.alibaba.com>
-> ---
->  fs/ocfs2/file.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+> A couple of small things:
 > 
-> diff --git a/fs/ocfs2/file.c b/fs/ocfs2/file.c
-> index efb09de4343d..b173c36bcab3 100644
-> --- a/fs/ocfs2/file.c
-> +++ b/fs/ocfs2/file.c
-> @@ -2100,14 +2100,20 @@ static long ocfs2_fallocate(struct file *file, int mode, loff_t offset,
->  	struct ocfs2_space_resv sr;
->  	int change_size = 1;
->  	int cmd = OCFS2_IOC_RESVSP64;
-> +	int ret = 0;
->  
->  	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE))
->  		return -EOPNOTSUPP;
->  	if (!ocfs2_writes_unwritten_extents(osb))
->  		return -EOPNOTSUPP;
->  
-> -	if (mode & FALLOC_FL_KEEP_SIZE)
-> +	if (mode & FALLOC_FL_KEEP_SIZE) {
->  		change_size = 0;
-> +	} else {
-> +		ret = inode_newsize_ok(inode, offset + len);
-> +		if (ret)
-> +			return ret;
-> +	}
->  
->  	if (mode & FALLOC_FL_PUNCH_HOLE)
->  		cmd = OCFS2_IOC_UNRESVSP64;
+> > +static unsigned int cs42l43_clock_divs[16] = {
+> > +	2, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30
+> > +};
+> 
+> Do we need to specify the size of the array?  I just had to count the
+> number of initialisers :(   Should probably also be const.
+> 
+> > +		for (; buf < block - (sizeof(u32) - 1); buf += sizeof(u32))
+> > +			regmap_write(regmap, CS42L43_TX_DATA, *(const u32 *)buf);
+> 
+> We're passing a byte stream through a u32 here - are you sure this is
+> endian safe?
+
+Ah shoot, yeah Andy made some comments on this that seem to have
+got lost in my mass of fixups. I will fixup for a v3.
+
+Thanks,
+Charles
