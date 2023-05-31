@@ -2,172 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8FA718879
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C5771887D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjEaR3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
+        id S230204AbjEaR3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjEaR3N (ORCPT
+        with ESMTP id S229521AbjEaR3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:29:13 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6EB67101
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:29:11 -0700 (PDT)
-Received: (qmail 444662 invoked by uid 1000); 31 May 2023 13:29:10 -0400
-Date:   Wed, 31 May 2023 13:29:10 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, francesco@dolcini.it,
-        alistair@alistair23.me, stephan@gerhold.net, bagasdotme@gmail.com,
-        luca@z3ntu.xyz, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] usb: gadget: udc: core: Offload
- usb_udc_vbus_handler processing
-Message-ID: <65dd300b-b967-41ab-b174-a7dc13ec2e19@rowland.harvard.edu>
-References: <20230531040203.19295-1-badhri@google.com>
+        Wed, 31 May 2023 13:29:21 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3DAF133
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:29:18 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8AxHevtg3dkfgcDAA--.2322S3;
+        Thu, 01 Jun 2023 01:29:17 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxMuXsg3dk3rWCAA--.14526S3;
+        Thu, 01 Jun 2023 01:29:17 +0800 (CST)
+Message-ID: <5c2faf7e-002c-dad0-c4fe-63aab04f7e87@loongson.cn>
+Date:   Thu, 1 Jun 2023 01:29:16 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531040203.19295-1-badhri@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 6/6] drm/etnaviv: allow usperspace create cached
+ coherent bo
+Content-Language: en-US
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230530160643.2344551-1-suijingfeng@loongson.cn>
+ <20230530160643.2344551-7-suijingfeng@loongson.cn>
+ <35c15c0912b4a9372b9c2194a46b518ce515ce3d.camel@pengutronix.de>
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <35c15c0912b4a9372b9c2194a46b518ce515ce3d.camel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxMuXsg3dk3rWCAA--.14526S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3JF4kAr13Gr4fGw4kWw4DArb_yoWxArW3pF
+        Z7AFyYkrW0vrWqkw1xZFn8Aa43Gw12gFWvk3srtas093y5tFs2gr1rKFZ8Crn8CryfGr1a
+        qr1jyry5KF10yrJanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
+        14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv
+        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+        AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j7BMNUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 04:02:01AM +0000, Badhri Jagan Sridharan wrote:
-> usb_udc_vbus_handler() can be invoked from interrupt context by irq
-> handlers of the gadget drivers, however, usb_udc_connect_control() has
-> to run in non-atomic context due to the following:
-> a. Some of the gadget driver implementations expect the ->pullup
->    callback to be invoked in non-atomic context.
-> b. usb_gadget_disconnect() acquires udc_lock which is a mutex.
-> 
-> Hence offload invocation of usb_udc_connect_control()
-> to workqueue.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 1016fc0c096c ("USB: gadget: Fix obscure lockdep violation for udc_mutex")
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
-> Changes since v1:
-> - Address Alan Stern's comment on usb_udc_vbus_handler invocation from
->   atomic context:
-> * vbus_events_lock is now a spinlock and allocations in
-> * usb_udc_vbus_handler are atomic now.
-> 
-> Changes since v2:
-> - Addressing Alan Stern's comments:
-> ** connect_lock is now held by callers of
-> * usb_gadget_pullup_update_locked() and gadget_(un)bind_driver() does
-> * notdirectly hold the lock.
-> 
-> ** Both usb_gadget_(dis)connect() and usb_udc_vbus_handler() would
-> * set/clear udc->vbus and invoke usb_gadget_pullup_update_locked.
-> 
-> ** Add "unbinding" to prevent new connections after the gadget is being
-> * unbound.
-> 
-> Changes since v3:
-> ** Made a minor cleanup which I missed to do in v3 in
-> * usb_udc_vbus_handler().
-> 
-> Changes since v4:
-> - Addressing Alan Stern's comments:
-> ** usb_udc_vbus_handler() now offloads invocation of usb_udc_connect_control()
-> * from workqueue.
-> 
-> ** Dropped vbus_events list as this was redundant. Updating to the
-> * latest value is suffice
-> ---
->  drivers/usb/gadget/udc/core.c | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index 52e6d2e84e35..44a9f32679b5 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -48,6 +48,7 @@ struct usb_udc {
->  	struct list_head		list;
->  	bool				vbus;
->  	bool				started;
-> +	struct work_struct		vbus_work;
->  };
->  
->  static struct class *udc_class;
-> @@ -1086,6 +1087,13 @@ static void usb_udc_connect_control(struct usb_udc *udc)
->  		usb_gadget_disconnect(udc->gadget);
->  }
->  
-> +static void vbus_event_work(struct work_struct *work)
-> +{
-> +	struct usb_udc *udc = container_of(work, struct usb_udc, vbus_work);
-> +
-> +	usb_udc_connect_control(udc);
-> +}
-> +
->  /**
->   * usb_udc_vbus_handler - updates the udc core vbus status, and try to
->   * connect or disconnect gadget
-> @@ -1094,6 +1102,13 @@ static void usb_udc_connect_control(struct usb_udc *udc)
->   *
->   * The udc driver calls it when it wants to connect or disconnect gadget
->   * according to vbus status.
-> + *
-> + * This function can be invoked from interrupt context by irq handlers of the gadget drivers,
-> + * however, usb_udc_connect_control() has to run in non-atomic context due to the following:
-> + * a. Some of the gadget driver implementations expect the ->pullup callback to be invoked in
-> + * non-atomic context.
-> + * b. usb_gadget_disconnect() acquires udc_lock which is a mutex.
-> + * Hence offload invocation of usb_udc_connect_control() to workqueue.
+Hi,
 
-Comments should be wrapped after about 76 columns (unless there is some 
-very good reason not to).
+On 2023/6/1 00:33, Lucas Stach wrote:
+> Hi Sui Jingfeng,
+>
+> Am Mittwoch, dem 31.05.2023 um 00:06 +0800 schrieb Sui Jingfeng:
+>> cached system RAM is coherent on loongson CPUs, and the GPU and DC allways
+>> snoop the CPU's cache. write-combine caching property is not suitiable for
+>> us.
+>>
+> As previously mentioned in the Mesa MR, I don't think this is the right
+> approach.
+>
+> ETNA_BO_CACHED already looks coherent to userspace, as all accesses are
+> bracketed via the ETNAVIV_GEM_CPU_PREP and ETNAVIV_GEM_CPU_FINI ioctls,
+> which will do the necessary cache maintenance on platforms where device
+> coherence isn't enforced by the hardware, so there is no need for a
+> separate ETNA_BO_CACHED_COHERENT.
 
->   */
->  void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
->  {
-> @@ -1101,7 +1116,7 @@ void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
->  
->  	if (udc) {
->  		udc->vbus = status;
-> -		usb_udc_connect_control(udc);
-> +		schedule_work(&udc->vbus_work);
->  	}
->  }
->  EXPORT_SYMBOL_GPL(usb_udc_vbus_handler);
-> @@ -1328,6 +1343,7 @@ int usb_add_gadget(struct usb_gadget *gadget)
->  	mutex_lock(&udc_lock);
->  	list_add_tail(&udc->list, &udc_list);
->  	mutex_unlock(&udc_lock);
-> +	INIT_WORK(&udc->vbus_work, vbus_event_work);
->  
->  	ret = device_add(&udc->dev);
->  	if (ret)
-> @@ -1558,6 +1574,7 @@ static void gadget_unbind_driver(struct device *dev)
->  
->  	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
->  
-> +	cancel_work_sync(&udc->vbus_work);
->  	usb_gadget_disconnect(gadget);
->  	usb_gadget_disable_async_callbacks(udc);
->  	if (gadget->irq)
+As far as I can see,  ETNA_BO_CACHED_COHERENT could probably help to 
+bypass the overhead of
 
-I'm not in love with this, because there's nothing here to prevent the 
-work item from being queued again right after it is cancelled.  Patch 
-3/3 in the series will fix this, but in the meantime this window will 
-exist.
+dma_sync_sgtable_for_cpu() and dma_sync_sgtable_for_device() brings to us.
 
-Maybe it would be better to merge the 3/3 patch with this one.  They are 
-very closely related, after all, since the other patch addresses the 
-matter of not allowing the work item to do anything bad at the wrong 
-time.
 
-Alan Stern
+I have tested long time ago, there no need call this function on our 
+platform.
+
+The glmark2 works as before if I comment out thoes two function.
+
+Are you serious, sir?
+
+> Instead we just need a new ETNAVIV_PARAM to inform userspace about
+> hardware cache coherence being available for a specific GPU core,
+
+Ok, let me think about for a while how to implement this.
+
+But How about we merge this first, I create another patch to improve it
+
+with a roughly working base first? I'm just asking if the answer is No :-)
+
+>   in
+> which case the userspace driver should switch to preferring
+> ETNA_BO_CACHED over ETNA_BO_WC.
+
+Yeah,  ETNA_BO_CACHED is enough.
+
+ETNA_BO_CACHED_COHERENT is actually a special case of ETNA_BO_CACHED.
+
+> Regards,
+> Lucas
+>
+>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>> ---
+>>   drivers/gpu/drm/etnaviv/etnaviv_drv.c       |  2 +-
+>>   drivers/gpu/drm/etnaviv/etnaviv_gem.c       | 22 +++++++++++++++++++--
+>>   drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c |  9 ++++++++-
+>>   include/uapi/drm/etnaviv_drm.h              | 11 ++++++-----
+>>   4 files changed, 35 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+>> index 052f745cecc0..2816c654c023 100644
+>> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+>> @@ -274,7 +274,7 @@ static int etnaviv_ioctl_gem_new(struct drm_device *dev, void *data,
+>>   	struct drm_etnaviv_gem_new *args = data;
+>>   
+>>   	if (args->flags & ~(ETNA_BO_CACHED | ETNA_BO_WC | ETNA_BO_UNCACHED |
+>> -			    ETNA_BO_FORCE_MMU))
+>> +			    ETNA_BO_CACHED_COHERENT | ETNA_BO_FORCE_MMU))
+>>   		return -EINVAL;
+>>   
+>>   	return etnaviv_gem_new_handle(dev, file, args->size,
+>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.c b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+>> index b5f73502e3dd..d8b559bd33d3 100644
+>> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+>> @@ -343,6 +343,7 @@ void *etnaviv_gem_vmap(struct drm_gem_object *obj)
+>>   static void *etnaviv_gem_vmap_impl(struct etnaviv_gem_object *obj)
+>>   {
+>>   	struct page **pages;
+>> +	pgprot_t prot;
+>>   
+>>   	lockdep_assert_held(&obj->lock);
+>>   
+>> @@ -350,8 +351,20 @@ static void *etnaviv_gem_vmap_impl(struct etnaviv_gem_object *obj)
+>>   	if (IS_ERR(pages))
+>>   		return NULL;
+>>   
+>> -	return vmap(pages, obj->base.size >> PAGE_SHIFT,
+>> -			VM_MAP, pgprot_writecombine(PAGE_KERNEL));
+>> +	switch (obj->flags) {
+>> +	case ETNA_BO_CACHED_COHERENT:
+>> +	case ETNA_BO_CACHED:
+>> +		prot = PAGE_KERNEL;
+>> +		break;
+>> +	case ETNA_BO_UNCACHED:
+>> +		prot = pgprot_noncached(PAGE_KERNEL);
+>> +		break;
+>> +	case ETNA_BO_WC:
+>> +	default:
+>> +		prot = pgprot_writecombine(PAGE_KERNEL);
+>> +	}
+>> +
+>> +	return vmap(pages, obj->base.size >> PAGE_SHIFT, VM_MAP, prot);
+>>   }
+>>   
+>>   static inline enum dma_data_direction etnaviv_op_to_dma_dir(u32 op)
+>> @@ -545,6 +558,7 @@ static const struct drm_gem_object_funcs etnaviv_gem_object_funcs = {
+>>   static int etnaviv_gem_new_impl(struct drm_device *dev, u32 size, u32 flags,
+>>   	const struct etnaviv_gem_ops *ops, struct drm_gem_object **obj)
+>>   {
+>> +	struct etnaviv_drm_private *priv = dev->dev_private;
+>>   	struct etnaviv_gem_object *etnaviv_obj;
+>>   	unsigned sz = sizeof(*etnaviv_obj);
+>>   	bool valid = true;
+>> @@ -555,6 +569,10 @@ static int etnaviv_gem_new_impl(struct drm_device *dev, u32 size, u32 flags,
+>>   	case ETNA_BO_CACHED:
+>>   	case ETNA_BO_WC:
+>>   		break;
+>> +	case ETNA_BO_CACHED_COHERENT:
+>> +		if (priv->has_cached_coherent)
+>> +			break;
+>> +		fallthrough;
+>>   	default:
+>>   		valid = false;
+>>   	}
+>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+>> index 3524b5811682..671d91d8f1c6 100644
+>> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+>> @@ -112,11 +112,18 @@ static const struct etnaviv_gem_ops etnaviv_gem_prime_ops = {
+>>   struct drm_gem_object *etnaviv_gem_prime_import_sg_table(struct drm_device *dev,
+>>   	struct dma_buf_attachment *attach, struct sg_table *sgt)
+>>   {
+>> +	struct etnaviv_drm_private *priv = dev->dev_private;
+>>   	struct etnaviv_gem_object *etnaviv_obj;
+>>   	size_t size = PAGE_ALIGN(attach->dmabuf->size);
+>> +	u32 cache_flags;
+>>   	int ret, npages;
+>>   
+>> -	ret = etnaviv_gem_new_private(dev, size, ETNA_BO_WC,
+>> +	if (priv->has_cached_coherent)
+>> +		cache_flags = ETNA_BO_CACHED_COHERENT;
+>> +	else
+>> +		cache_flags = ETNA_BO_WC;
+>> +
+>> +	ret = etnaviv_gem_new_private(dev, size, cache_flags,
+>>   				      &etnaviv_gem_prime_ops, &etnaviv_obj);
+>>   	if (ret < 0)
+>>   		return ERR_PTR(ret);
+>> diff --git a/include/uapi/drm/etnaviv_drm.h b/include/uapi/drm/etnaviv_drm.h
+>> index af024d90453d..474b0db286de 100644
+>> --- a/include/uapi/drm/etnaviv_drm.h
+>> +++ b/include/uapi/drm/etnaviv_drm.h
+>> @@ -90,13 +90,14 @@ struct drm_etnaviv_param {
+>>    * GEM buffers:
+>>    */
+>>   
+>> -#define ETNA_BO_CACHE_MASK   0x000f0000
+>> +#define ETNA_BO_CACHE_MASK              0x000f0000
+>>   /* cache modes */
+>> -#define ETNA_BO_CACHED       0x00010000
+>> -#define ETNA_BO_WC           0x00020000
+>> -#define ETNA_BO_UNCACHED     0x00040000
+>> +#define ETNA_BO_CACHED                  0x00010000
+>> +#define ETNA_BO_WC                      0x00020000
+>> +#define ETNA_BO_UNCACHED                0x00040000
+>> +#define ETNA_BO_CACHED_COHERENT         0x00080000
+>>   /* map flags */
+>> -#define ETNA_BO_FORCE_MMU    0x00100000
+>> +#define ETNA_BO_FORCE_MMU               0x00100000
+>>   
+>>   struct drm_etnaviv_gem_new {
+>>   	__u64 size;           /* in */
+
+-- 
+Jingfeng
+
