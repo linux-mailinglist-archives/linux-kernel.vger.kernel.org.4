@@ -2,60 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398F37183DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4303A7183DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237089AbjEaNwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
+        id S237215AbjEaNw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237302AbjEaNuU (ORCPT
+        with ESMTP id S237307AbjEaNuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:50:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85611BF1;
-        Wed, 31 May 2023 06:45:49 -0700 (PDT)
+        Wed, 31 May 2023 09:50:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE9E1BF2;
+        Wed, 31 May 2023 06:45:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DB6263B10;
-        Wed, 31 May 2023 13:45:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 547B9C4339B;
-        Wed, 31 May 2023 13:45:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86B3863B94;
+        Wed, 31 May 2023 13:45:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30360C433D2;
+        Wed, 31 May 2023 13:45:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540740;
-        bh=m06ceMhyO4JVZ0PtHa9pKKlIIQ9blBSeo6TuX2MCOKY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=anxG4KpBmfpSHZlkC0chAWTXF8/25kfEuwADEGmaWCuk9Q0/qvTWA+D1FB3T0+IS4
-         4gE9XQ6LAa5R0aPzKVx/HcT+xlkAavbL9ON1c7QD57WchHnG8JdN9au51WAzg+T8Do
-         13QotMQcZaCcCySWd1xNeItkunXY6vUgzXCeX/0iyFvcPGM7g9t0fmFux+3IpOO3eA
-         PIKYY1q08Za7oyCzxpNcJlq1/KvgzzqtUFQ6g/7xZxCxY1KZDx7KXkwoTZCg99ObYV
-         xL7lPh1hsleGxKO0xocGEvTu2CxOZp7tZ1UipS7aVEXuaUUe5aFtbNuvXLLvHZr/xG
-         QBa0P/8ROoceg==
+        s=k20201202; t=1685540744;
+        bh=2JLfz6tfQEPJb7CnVemWAmMS6q+Kz6PN2Zzsfl1N9Jc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cxX1S7ygL+wsnSq/yTRLwqmhyUhGKis9lse7fFE4zj4BB2PoNFJfmB1fGKRSAub8C
+         PwtOA/ae/cIMwhINjyCyccGNlBpWxOqI3NxLaZYaUROrTlBE9g236rSomj7I8343vS
+         2I143XLzWq9sDrHVGj1OSGeC/FTHQntb/6jBbRQUwG3q8QpnS+p5jAvMQIvBsKKsV7
+         QzOsGfXkMt3CNU6+OnGF/mwHHkkuGtiid2tPYlodaDABoGZhapR/MwSa4fFSzpIw8L
+         4iNOTul502VUaDvlmyHrbPftEnO2RHoG6r4qDaVzUqmj0PZZ7/X+Zge8Ljan5yveaf
+         IX3pfqb8wmAsw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sukrut Bellary <sukrut.bellary@linux.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        Hawking.Zhang@amd.com, Jack.Gui@amd.com, zhenguo.yin@amd.com,
-        Victor.Zhao@amd.com, mario.limonciello@amd.com,
-        Arunpravin.PaneerSelvam@amd.com, le.ma@amd.com, Likun.Gao@amd.com,
-        Jiadong.Zhu@amd.com, jesse.zhang@amd.com, candice.li@amd.com,
-        YiPeng.Chai@amd.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 5.4 17/17] drm:amd:amdgpu: Fix missing buffer object unlock in failure path
-Date:   Wed, 31 May 2023 09:45:01 -0400
-Message-Id: <20230531134502.3384828-17-sashal@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, sre@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 01/13] power: supply: ab8500: Fix external_power_changed race
+Date:   Wed, 31 May 2023 09:45:29 -0400
+Message-Id: <20230531134541.3385043-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230531134502.3384828-1-sashal@kernel.org>
-References: <20230531134502.3384828-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,57 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sukrut Bellary <sukrut.bellary@linux.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 60ecaaf54886b0642d5c4744f7fbf1ff0d6b3e42 ]
+[ Upstream commit a5299ce4e96f3e8930e9c051b28d8093ada87b08 ]
 
-smatch warning -
-1) drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c:3615 gfx_v9_0_kiq_resume()
-warn: inconsistent returns 'ring->mqd_obj->tbo.base.resv'.
+ab8500_btemp_external_power_changed() dereferences di->btemp_psy,
+which gets sets in ab8500_btemp_probe() like this:
 
-2) drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c:6901 gfx_v10_0_kiq_resume()
-warn: inconsistent returns 'ring->mqd_obj->tbo.base.resv'.
+        di->btemp_psy = devm_power_supply_register(dev, &ab8500_btemp_desc,
+                                                   &psy_cfg);
 
-Signed-off-by: Sukrut Bellary <sukrut.bellary@linux.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+As soon as devm_power_supply_register() has called device_add()
+the external_power_changed callback can get called. So there is a window
+where ab8500_btemp_external_power_changed() may get called while
+di->btemp_psy has not been set yet leading to a NULL pointer dereference.
+
+Fixing this is easy. The external_power_changed callback gets passed
+the power_supply which will eventually get stored in di->btemp_psy,
+so ab8500_btemp_external_power_changed() can simply directly use
+the passed in psy argument which is always valid.
+
+And the same applies to ab8500_fg_external_power_changed().
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c | 4 +++-
- drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c  | 4 +++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ drivers/power/supply/ab8500_btemp.c | 6 ++----
+ drivers/power/supply/ab8500_fg.c    | 6 ++----
+ 2 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c
-index 1d8739a4fbcad..a84deb3c79a30 100644
---- a/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c
-@@ -3527,8 +3527,10 @@ static int gfx_v10_0_kiq_resume(struct amdgpu_device *adev)
- 		return r;
+diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
+index 0fd24577112eb..0bec8b90667c8 100644
+--- a/drivers/power/supply/ab8500_btemp.c
++++ b/drivers/power/supply/ab8500_btemp.c
+@@ -919,10 +919,8 @@ static int ab8500_btemp_get_ext_psy_data(struct device *dev, void *data)
+  */
+ static void ab8500_btemp_external_power_changed(struct power_supply *psy)
+ {
+-	struct ab8500_btemp *di = power_supply_get_drvdata(psy);
+-
+-	class_for_each_device(power_supply_class, NULL,
+-		di->btemp_psy, ab8500_btemp_get_ext_psy_data);
++	class_for_each_device(power_supply_class, NULL, psy,
++			      ab8500_btemp_get_ext_psy_data);
+ }
  
- 	r = amdgpu_bo_kmap(ring->mqd_obj, (void **)&ring->mqd_ptr);
--	if (unlikely(r != 0))
-+	if (unlikely(r != 0)) {
-+		amdgpu_bo_unreserve(ring->mqd_obj);
- 		return r;
-+	}
+ /* ab8500 btemp driver interrupts and their respective isr */
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index 675f9d0e8471e..d0cbd7189a622 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -2380,10 +2380,8 @@ static int ab8500_fg_init_hw_registers(struct ab8500_fg *di)
+  */
+ static void ab8500_fg_external_power_changed(struct power_supply *psy)
+ {
+-	struct ab8500_fg *di = power_supply_get_drvdata(psy);
+-
+-	class_for_each_device(power_supply_class, NULL,
+-		di->fg_psy, ab8500_fg_get_ext_psy_data);
++	class_for_each_device(power_supply_class, NULL, psy,
++			      ab8500_fg_get_ext_psy_data);
+ }
  
- 	gfx_v10_0_kiq_init_queue(ring);
- 	amdgpu_bo_kunmap(ring->mqd_obj);
-diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-index 762a407a4997a..4eba6b2d9cdec 100644
---- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-@@ -3748,8 +3748,10 @@ static int gfx_v9_0_kiq_resume(struct amdgpu_device *adev)
- 		return r;
- 
- 	r = amdgpu_bo_kmap(ring->mqd_obj, (void **)&ring->mqd_ptr);
--	if (unlikely(r != 0))
-+	if (unlikely(r != 0)) {
-+		amdgpu_bo_unreserve(ring->mqd_obj);
- 		return r;
-+	}
- 
- 	gfx_v9_0_kiq_init_queue(ring);
- 	amdgpu_bo_kunmap(ring->mqd_obj);
+ /**
 -- 
 2.39.2
 
