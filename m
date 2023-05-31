@@ -2,117 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3033B71791D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2611D7179B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234840AbjEaHzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
+        id S235139AbjEaINr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235265AbjEaHz2 (ORCPT
+        with ESMTP id S232547AbjEaINo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:55:28 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B953A19B
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:54:05 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5149e65c244so4483068a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685519640; x=1688111640;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=suMN4n1BQ2Z7VU4EicsbwuyOBR1pEV+6Sounu4iuM0U=;
-        b=A+dncCJbXSV6kSVPSolkbyxdvYQgh78/2P6Mxm5SwqhtgIwtPGJcWPOCn2HHPS8CZU
-         5Wm6uBWJvU48wgmG5ogwKoX1rNY5Z4RvNjhYSfdKVup3NWmYut1ny6EzBC/0KBEdFYZG
-         xojVvnM2ROqLlEAcS9yaN4/6x6eWoBszGXQOpJIHAvRGhkMWrxnPPLFGhWYVSsSGeEN9
-         2H039xpBhxvO9MhPMs3niA9LdSl3yS9GN3cvnO02PehmLZyf7Z3iF22kZ2fJ0LQ6a+6r
-         o7q7EgJVKnuR6VScDRFC0YASfU8S/WZdZZm5f5DystD06dKFWoX6h19/bkbktB7qdXFQ
-         NluA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685519640; x=1688111640;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=suMN4n1BQ2Z7VU4EicsbwuyOBR1pEV+6Sounu4iuM0U=;
-        b=LV342/0l01ZlisjoGFagfEloqvv4HPIIPbq2werYQ0oj4AtlQYKIL4m6HIksRR2PaF
-         3ih5vExZ8c9fZa/nPVnW09BXw44hBDr0jvYhYGkSwEIgyP7+LfsA0kH9ugLRiYxAUtRx
-         DCST+E95j1wxRGcUTmM1iqx+Rjactg0Usb10Jv21gBSPBaaQDg+dMwK2096KCwuC5hH/
-         6ZE4Pp/kL9S9X40npFu4bJGFcUObElffKAPv2wxVb554zqsYzrRsH+0MKRwhCdylpDbX
-         RT+tMHqVh/ivD1+UZo/seZTnwT+mPxNsONkRVEyFejUVtGf5NZi3wD3ylMOxR2WQJ/6U
-         VVgA==
-X-Gm-Message-State: AC+VfDwyjuHvEheKG6UMTSYSEkT/etBN/jF8LpnqTnooYM1H1RSD7fFR
-        Jo0YGo4/eveOqG72mRSgYJGqyQ==
-X-Google-Smtp-Source: ACHHUZ7i7M8zh8gh6sQ1ZK5S6VAQvpJeaDVE/ihPO9ya44BVZ1jGFqvdF+9ycji5LoT7N7p0i74PDw==
-X-Received: by 2002:a17:907:d8a:b0:973:d1ce:dbe8 with SMTP id go10-20020a1709070d8a00b00973d1cedbe8mr5163876ejc.46.1685519640052;
-        Wed, 31 May 2023 00:54:00 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id ce23-20020a170906b25700b0096f8bb60c96sm8511314ejb.100.2023.05.31.00.53.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 00:53:59 -0700 (PDT)
-Message-ID: <ecb3728a-575c-942e-ffcb-659f218e0b01@linaro.org>
-Date:   Wed, 31 May 2023 09:53:56 +0200
+        Wed, 31 May 2023 04:13:44 -0400
+X-Greylist: delayed 732 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 May 2023 01:13:42 PDT
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3373293;
+        Wed, 31 May 2023 01:13:41 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowAC3vzNK_XZkbgFTCA--.54869S2;
+        Wed, 31 May 2023 15:54:51 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, davthompson@nvidia.com, asmaa@nvidia.com,
+        mkl@pengutronix.de
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] mlxbf_gige: Add missing check for platform_get_irq
+Date:   Wed, 31 May 2023 15:54:51 +0800
+Message-Id: <20230531075451.47524-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: thermal: mediatek: Move auxdac binding
- to yaml
-To:     Conor Dooley <conor@kernel.org>, matthias.bgg@kernel.org
-Cc:     rafael@kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-References: <20230530150413.12918-1-matthias.bgg@kernel.org>
- <20230530-thaw-unpaved-a1708d46eb5a@spud>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230530-thaw-unpaved-a1708d46eb5a@spud>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowAC3vzNK_XZkbgFTCA--.54869S2
+X-Coremail-Antispam: 1UD129KBjvJXoWrZF4UGr1xJr43AF1ruF1ftFb_yoW8Jry7pr
+        y8JryvqrZ5J3Wjg3Z7J395Zr1fuw4qvF1a9FWfKa1furn8Za1qkr98tFWxuFn7Gr9xG3y3
+        Ary3ZFs5ZFn8A3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVAFwVW8CwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
+        IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7VUbhiSPUUUUU==
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 00:02, Conor Dooley wrote:
-> Hey Matthias,
-> 
-> On Tue, May 30, 2023 at 05:04:12PM +0200, matthias.bgg@kernel.org wrote:
-> 
->> +  The MediaTek thermal controller measures the on-SoC temperatures.
->> +  This device does not have its own ADC, instead it directly controls
->> +  the AUXADC via AHB bus accesses. For this reason this device needs
->> +  phandles to the AUXADC. Also it controls a mux in the apmixedsys
->> +  register space via AHB bus accesses, so a phandle to the APMIXEDSYS
->> +  is also needed.
-> 
-> That double "also" bothers my OCD greatly, but it is a faithful
-> conversion.
-> 
->> +  "#thermal-sensor-cells":
->> +    const: 1
-> 
->> -- #thermal-sensor-cells : Should be 0. See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml for a description.
-> 
-> How come this has changed? I didn't see an explanation for it in either
-> of the patches.
+Add the check for the return value of the platform_get_irq and
+return error if it fails.
 
-Yep. Please mention the deviations from pure conversion and if not
-obvious - justify them.
+Fixes: f92e1869d74e ("Add Mellanox BlueField Gigabit Ethernet driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c b/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c
+index 694de9513b9f..a38e1c68874f 100644
+--- a/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c
++++ b/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_main.c
+@@ -427,6 +427,10 @@ static int mlxbf_gige_probe(struct platform_device *pdev)
+ 	priv->error_irq = platform_get_irq(pdev, MLXBF_GIGE_ERROR_INTR_IDX);
+ 	priv->rx_irq = platform_get_irq(pdev, MLXBF_GIGE_RECEIVE_PKT_INTR_IDX);
+ 	priv->llu_plu_irq = platform_get_irq(pdev, MLXBF_GIGE_LLU_PLU_INTR_IDX);
++	if (priv->error_irq < 0 || priv->rx_irq < 0 || priv->llu_plu_irq < 0) {
++		err = -ENODEV;
++		goto out;
++	}
+ 
+ 	phy_irq = acpi_dev_gpio_irq_get_by(ACPI_COMPANION(&pdev->dev), "phy-gpios", 0);
+ 	if (phy_irq < 0) {
+-- 
+2.25.1
 
