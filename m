@@ -2,139 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E83771724B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 02:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E063717250
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 02:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233943AbjEaAJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 20:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S233083AbjEaAN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 20:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbjEaAJ1 (ORCPT
+        with ESMTP id S229725AbjEaAN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 20:09:27 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8184EEC
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 17:09:23 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f6042d605dso37414275e9.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 17:09:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685491762; x=1688083762;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fILf0lGXqk7D6D5W4KRap636H/3RZiZfs7odQjNofUU=;
-        b=hBukDZtDDgaJLsu3ZNud0gxPwQ8iKpR9rZcpqIPIzyWonhTvmuJtTtaHPF9HzqTuuY
-         SG/XIcA1ksAG0h73RNXOil/QOH0VGA5gsk2YtYm5ixgEeQxIpIvEEDxD7Rud+hnS7diD
-         eUKm0mer2J3QpWIDsrR7F7WXOFRR29noMdQPncQ1gvU9aeByGxenhGYhCdDyKIqEQCH7
-         CYGswI11lGdwM+3lbaaHd1CUMvVyscCjAavgpwkRFpOA7lYQ19pGApLnZ/on2Pep8lqt
-         Uu/GsEAXuZEUprs93XIvYXuEyxthU5bH6WCzHJf8Rzbf3rIiRTIzsI1rZJxEMUKba/qV
-         Tsww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685491762; x=1688083762;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fILf0lGXqk7D6D5W4KRap636H/3RZiZfs7odQjNofUU=;
-        b=NJQcqYpy+JSVBtp8LCdAb+LYo8RCWw6geIjoHsh9X5Fa4vpUfWdk+8GtZuTJZSbN0d
-         mYl6sgKhGogXd9mb2V8XjWh+25O4+D8Lln1yoWkAAGXkUMaOA858BkPShtFEa/RRtkI1
-         TKgHwIMiW4QWjXL1EcWtgWZJnqG+HBNpqQNsY7DvCNCZTI8wXYYuwkFZ4RHt56uTS4+F
-         ESjJgBp5mz+EFl6Qr64h9V7daBIWBIYrxFGXdL9ZrgDdGGGqdrXB4F9KlZy+6oqlnwLK
-         PL7ECe4NTvUXxwuECjhULsGAWPHhaSeF7NhAOS+bD7D+7tXL/i/J6HdIeD+O/cDBpFVS
-         A94Q==
-X-Gm-Message-State: AC+VfDxYrlZi8FOGK17a17CkLncb6yiJL+ciFdYL2CxEXTLIoo2F5sCc
-        eRJWvsX5BVNVq4wsR7SdbBZhEw==
-X-Google-Smtp-Source: ACHHUZ4w3XWTybqmRAYAel02Kl7cbbFvSfGlbpCi/XUTLGp96hOX/8AGDwbRLHr5qcGuB3m8owxX2g==
-X-Received: by 2002:a1c:c902:0:b0:3f6:787:4a70 with SMTP id f2-20020a1cc902000000b003f607874a70mr2586124wmb.15.1685491762114;
-        Tue, 30 May 2023 17:09:22 -0700 (PDT)
-Received: from [192.168.0.84] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
-        by smtp.gmail.com with ESMTPSA id k10-20020a7bc40a000000b003f606869603sm22283888wmi.6.2023.05.30.17.09.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 17:09:21 -0700 (PDT)
-Message-ID: <ba3e6235-3976-6a86-ec4c-62a8786a1707@linaro.org>
-Date:   Wed, 31 May 2023 01:09:21 +0100
+        Tue, 30 May 2023 20:13:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA482B2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 17:13:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685491988;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XMlftAvKzPLGRcgmcHupK2Ab5W7s4ldFaTzuXWoZEBE=;
+        b=heQyNnPuQ3MWNFk7qYcBpSVDSIMcKuwAXn3/FVzXisudI5TOZnHzz5Gr979SWnMOH5iA+K
+        4+/kDhlouJUqWR5ki4zojzupAVmtWnHtDxkCN59pVSX3fD/ab6plk31HXR8/R7SuLyX1iL
+        TvxmnZsEStlLhS0XNsbCfHDaSbq1yZg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-14-MM0jDMqZNVSJUlu95RohfA-1; Tue, 30 May 2023 20:13:05 -0400
+X-MC-Unique: MM0jDMqZNVSJUlu95RohfA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DA084101A52C;
+        Wed, 31 May 2023 00:13:04 +0000 (UTC)
+Received: from localhost (ovpn-12-54.pek2.redhat.com [10.72.12.54])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0F6F3202696C;
+        Wed, 31 May 2023 00:13:03 +0000 (UTC)
+Date:   Wed, 31 May 2023 08:13:00 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Michael Holzheu <holzheu@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 1/6] kexec: fix a memory leak in crash_shrink_memory()
+Message-ID: <ZHaQ7qRYWX9FETu6@MiWiFi-R3L-srv>
+References: <20230527123439.772-1-thunder.leizhen@huawei.com>
+ <20230527123439.772-2-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/3] soc: qcom: rmtfs: Support discarding guard pages
-Content-Language: en-US
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230530233643.4044823-1-quic_bjorande@quicinc.com>
- <20230530233643.4044823-3-quic_bjorande@quicinc.com>
- <e0d7021c-d6af-25df-5c90-3caec4bb83b7@linaro.org>
-In-Reply-To: <e0d7021c-d6af-25df-5c90-3caec4bb83b7@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230527123439.772-2-thunder.leizhen@huawei.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 05/27/23 at 08:34pm, Zhen Lei wrote:
+> If the value of parameter 'new_size' is in the semi-open and semi-closed
+> interval (crashk_res.end - KEXEC_CRASH_MEM_ALIGN + 1, crashk_res.end], the
+> calculation result of ram_res is:
+> 	ram_res->start = crashk_res.end + 1
+> 	ram_res->end   = crashk_res.end
 
+If the new_size is smaller than KEXEC_CRASH_MEM_ALIGN, does it make
+any sense except of testing purpose? Do we need to fail this kind of
+shrinking, or just shrink all the left crash memory?
 
-On 31/05/2023 01:08, Caleb Connolly wrote:
+> The operation of function insert_resource() fails, and ram_res is not
+> added to iomem_resource. As a result, the memory of the control block
+> ram_res is leaked.
 > 
+> In fact, on all architectures, the start address and size of crashk_res
+> are already aligned by KEXEC_CRASH_MEM_ALIGN. Therefore, we do not need to
+> round up crashk_res.start again. Instead, we should round up 'new_size'
+> in advance.
 > 
-> On 31/05/2023 00:36, Bjorn Andersson wrote:
->> In some configurations, the exact placement of the rmtfs shared memory
->> region isn't so strict. The DeviceTree author can then choose to use the
->> "size" property and rely on the OS for placement (in combination with
->> "alloc-ranges", if desired).
->>
->> But on some platforms the rmtfs memory region may not be allocated
->> adjacent to regions allocated by other clients. Add support for
->> discarding the first and last 4k block in the region, if
->> qcom,use-guard-pages is specified in DeviceTree.
+> Fixes: 6480e5a09237 ("kdump: add missing RAM resource in crash_shrink_memory()")
+> Fixes: 06a7f711246b ("kexec: premit reduction of the reserved memory size")
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  kernel/kexec_core.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> Oh nice!
-... Bit eager on the enter key there
->>
->> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-
-Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
->> ---
->>
->> Changes since v1:
->> - Drop the dma_alloc_coherent() based approach and just add support for
->>   the guard pages.
->>
->>  drivers/soc/qcom/rmtfs_mem.c | 10 ++++++++++
->>  1 file changed, 10 insertions(+)
->>
->> diff --git a/drivers/soc/qcom/rmtfs_mem.c b/drivers/soc/qcom/rmtfs_mem.c
->> index f83811f51175..28238974d913 100644
->> --- a/drivers/soc/qcom/rmtfs_mem.c
->> +++ b/drivers/soc/qcom/rmtfs_mem.c
->> @@ -213,6 +213,16 @@ static int qcom_rmtfs_mem_probe(struct platform_device *pdev)
->>  		goto put_device;
->>  	}
->>  
->> +	/*
->> +	 * If requested, discard the first and last 4k block in order to ensure
->> +	 * that the rmtfs region isn't adjacent to other protected regions.
->> +	 */
->> +	if (of_property_present(node, "qcom,use-guard-pages")) {
->> +		rmtfs_mem->addr += SZ_4K;
->> +		rmtfs_mem->base += SZ_4K;
->> +		rmtfs_mem->size -= 2 * SZ_4K;
->> +	}
->> +
->>  	cdev_init(&rmtfs_mem->cdev, &qcom_rmtfs_mem_fops);
->>  	rmtfs_mem->cdev.owner = THIS_MODULE;
->>  
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index 3d578c6fefee385..22acee18195a591 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -1122,6 +1122,7 @@ int crash_shrink_memory(unsigned long new_size)
+>  	start = crashk_res.start;
+>  	end = crashk_res.end;
+>  	old_size = (end == 0) ? 0 : end - start + 1;
+> +	new_size = roundup(new_size, KEXEC_CRASH_MEM_ALIGN);
+>  	if (new_size >= old_size) {
+>  		ret = (new_size == old_size) ? 0 : -EINVAL;
+>  		goto unlock;
+> @@ -1133,9 +1134,7 @@ int crash_shrink_memory(unsigned long new_size)
+>  		goto unlock;
+>  	}
+>  
+> -	start = roundup(start, KEXEC_CRASH_MEM_ALIGN);
+> -	end = roundup(start + new_size, KEXEC_CRASH_MEM_ALIGN);
+> -
+> +	end = start + new_size;
+>  	crash_free_reserved_phys_range(end, crashk_res.end);
+>  
+>  	if ((start == end) && (crashk_res.parent != NULL))
+> -- 
+> 2.25.1
 > 
 
--- 
-// Caleb (they/them)
