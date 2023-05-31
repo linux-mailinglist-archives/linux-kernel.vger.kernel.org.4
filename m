@@ -2,186 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766F071769F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4D87176A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234265AbjEaGGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 02:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
+        id S232216AbjEaGH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 02:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbjEaGGk (ORCPT
+        with ESMTP id S234360AbjEaGHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 02:06:40 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2056.outbound.protection.outlook.com [40.107.220.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4753E11D;
-        Tue, 30 May 2023 23:06:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C6V+dnlsO7Fb45xuRjdRg8pPIfup/XdeGXYjv6EeOBYAVWqJw7e8riaGzOl00MdZ1jgIcee+lcYLyxzQckt0GCmay1IOS4w2IEwcIioCXugzCy/z4FMOaZk/SNPAFNZf2GW4dGjcEOOkumgBBUxB986s9G7MCTY2UOczJCbArPD2oEgcXt+WhR2EMNfyLy9X7i8hGPoM5XtaLQxy4WskqtX7+v2hUEFQsUW4Ss2UJ3zov1BGohUA5q3DwZmZrq04gCux+8uiSGKdL5LLY5ga04mtfB4MVwuao77mSO+3ffqEqJwADvJrwsw+9iaCqCLYBhula4/UIhr7JFrdFt5EJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ds7yLsyKuhtDq476rWdAEl5Cj69AXQlNjwfComFuK1o=;
- b=ZK5XYRrbgPn9j5Zkuagfx2Gw1SgkPRqhDMBXPuUovT4deLynCIvwnACja8UoNUES1YxnDNJiBj6ADPBVWdVWBOh85aFZnpgr8aCzCMAgnowLJY5xgN2vKb58eZUb47HjDG/g8olq/qx8ZoMRJj4BLXBH8WkTrwA0lEn1V7B3PZFJV+I9bllSiPQ3aH0gspqQH3fgMZtWm4rOPKlnVWq8obp1tYZmTmndo8iXWKmF9DWuqHB8F/hoOErIkzs5mA31sMTe7Z5vOn4NFoKrLBiPHerJr9FO1hW3z9yWD1PtKO/mPvGDwp/81SBRbX0lMnVW2notqSPMbaySSpuJaYEw1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ds7yLsyKuhtDq476rWdAEl5Cj69AXQlNjwfComFuK1o=;
- b=ksvw3UpxfWlH5fAINIPgguQr7SFcNEWXv/2/wPbQSEJGWjjshIXy6N7tC4+QrjZ6HnsY+IZsWWJywpdIhOkB0aZYBD/uPph6T/DcPHnHHXCecTcFU2NYlk2Jnf1k0nqcejUB+VQgM7766tbe84jEIk29OKIfSfLcXjK1aXKkELKwgN4vdimeyPuhJGXoPyvMsIplM9dId40OKu94nKUOE0rrvEGrgEMXdR3YxKYROB+fBy4KNQ0E2ULqDi0jWJlndfVkw0oC0s9vl8Y7YLi1w/N3l5nbSC8SmDfQuI44ZvNswDl+yFEtpbH3ERzRkq9oU/r+IsSU9JHM3AjJVstJNw==
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com (2603:10b6:8:3b::12) by
- CY5PR12MB6347.namprd12.prod.outlook.com (2603:10b6:930:20::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6433.22; Wed, 31 May 2023 06:06:36 +0000
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::20d3:3ec7:5609:da29]) by DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::20d3:3ec7:5609:da29%7]) with mapi id 15.20.6433.022; Wed, 31 May 2023
- 06:06:36 +0000
-From:   Eli Cohen <elic@nvidia.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Shay Drory <shayd@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: RE: [PATCH net] net/mlx5: Fix setting of irq->map.index for static
- IRQ case
-Thread-Topic: [PATCH net] net/mlx5: Fix setting of irq->map.index for static
- IRQ case
-Thread-Index: AQHZkwDhjyJj7/M2mkCYVLE8ZxJkNa9z5Xlw
-Date:   Wed, 31 May 2023 06:06:36 +0000
-Message-ID: <DM8PR12MB540061C3FF83D1E77108F2BBAB489@DM8PR12MB5400.namprd12.prod.outlook.com>
-References: <20230530141304.1850195-1-schnelle@linux.ibm.com>
-In-Reply-To: <20230530141304.1850195-1-schnelle@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM8PR12MB5400:EE_|CY5PR12MB6347:EE_
-x-ms-office365-filtering-correlation-id: 63d7455f-dc98-461d-0452-08db619d3158
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Yeab52j4KUUBx7RSz47J82k21YxoYYI1nJQmhBfl9MSBYmcOsyFH9AUE6XrIy0lENLhrIoxIrxjNHgpEQTKV3eTXDN9/nrZm3X+dlfPxkorJWwAMwJZdvtFlXvGmRVcfvK/3rm36rW5y3o0nkVqbfODvLlknhRC2xQobs50/X4NYFB073hujECrEQPI5GXS31T56KJ0sSqmeLVl0ATBkus7p84XnaJbxAZ9alHoJ7q4fFdEKPGBgL3JaJPcV459XQ6z2uFYUNhhdE+5uyM3RFq6qzZf3R8EP/f2JIasE1tDiKm+dm65HYhvU8N0uQbAFPgXEEyq+gD/z7z8C5ZNF/ILsmq6FmAuoW3gIjYnn98FJ3v4mi0Wc37AXtf2Juw4mv+A4+udQWtB9aY/yMuWZxfQ9i08aJz1yG4DGt2Fzy18hUvvBQq8TX7UGtbnC9ywK6t4w8vzyCi/VmCIBdGNUJ1QBtbgTJEMYqqrmKLaAsmMvMhon+5XQ1nDFly/5+gxW8t5GBxCxZhL5a0vvsoNr2ZAEVqoM8pzI3ziNYpLJt70KwcUN79SCnGmmW5VH6ONY7dqkgAVRsjcXIKe3O/kT+WXWFUMKNVLTgq3qc2qtI3SFTt6okaIbV2Y7rsrNd7VI
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5400.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(396003)(376002)(366004)(451199021)(186003)(26005)(7696005)(33656002)(53546011)(9686003)(6506007)(316002)(71200400001)(2906002)(55016003)(5660300002)(52536014)(41300700001)(8936002)(7416002)(8676002)(122000001)(38100700002)(86362001)(110136005)(66899021)(4326008)(478600001)(54906003)(38070700005)(64756008)(66446008)(76116006)(66556008)(66946007)(83380400001)(66476007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c2FFMEJGdFFMdlN6TU9FTTJLMU5PWW1lbS9RcjYyNU5YZ0kvWmNBWGwvbEtx?=
- =?utf-8?B?SHhtNWE5dzBzQU5qdG83eVYwQXladGJIUXVIOCthalBnVEpkN0dkd1daSkEv?=
- =?utf-8?B?aFo1alRKV3RlbE5hWlFnNWplL0ZhWTVDeUcvSERmcWQrOEN5M1gwbHlxc2FB?=
- =?utf-8?B?aEgvbGJLNFlBU2kwb0hGbzdGTnJOd0JPOFNoditFMjBvM2VxNUZDT2N4OG55?=
- =?utf-8?B?ZlI4ckNRcy9XN1RkOE5VM0tzZmtOV0hOSERxbjdzS1lUOFErVTMxZTJRZWw1?=
- =?utf-8?B?MmRnWDZaRG9kVE8zRlBTWFBHM1dObG9iY1FRc0wxa1FHRUlpUGlmWmtDZG9j?=
- =?utf-8?B?c001V0prcU92STJiUTJyVlFobjNGcWl4T0hDK29PK1ZTRWVEa3VIL1hEYjVV?=
- =?utf-8?B?RWRTbXhUZ0dVVlE3UnBORmg0WWE5M3B3UE5KQWJDL1RPM0NoMkFFampMZWJu?=
- =?utf-8?B?L1FwdkMydjVkVXVmRDBVNGw0WVhzdzlzOVBtaFUwZEpPaHFORUh4a0ZJYzUy?=
- =?utf-8?B?WFNJTzNiS3RPNXFCMDBDTkllV2dCUFBXc1dSWHp2SmU5bXNSVkl5T0M3NkVo?=
- =?utf-8?B?bjczV3RvRHd4bnNLYUpMUXFmS1FjQ0hiZUxtRjI0dUp1SnFna0szOVJIN3hx?=
- =?utf-8?B?T0VTSXMra3I3QUIrWnJnSWRBcXpMb2V3Ti9yRnU2M0V2RFVXWlNXS2UyejIr?=
- =?utf-8?B?bktjUnRCUlltUXA2bythZjh5RjJQaVR0cWw5eUUydUFDU1FWaU5jS01UbUxB?=
- =?utf-8?B?Y3BpWitQdDI1d0cwZ2JGU1RWTnBnU2I4dmYxQy9nS3BQL3ptS1E4b1c2WWs5?=
- =?utf-8?B?bWxoVmpxVmI4dnRsNnR6bGNMdGdOWlRhQndpMDhEbitHUnE5czRkd2hlMTl4?=
- =?utf-8?B?TWlCbXlnRVFlYW9uTHVON0NDV3RXVjNyV1p0NHNwR1hycVRSQzlVaS9XV2JZ?=
- =?utf-8?B?V0c0TWo5YmFwbkhaMXdSVlo5dmZOTlFoa0dwY1hOa0NJWkdFZytTZERMdGpH?=
- =?utf-8?B?c1l1MnFiQjZnV0thWFlJenQ0aGdXV3hsNWtZc2lYRWJScjlRblkveGxyelB6?=
- =?utf-8?B?eDYyeE1oZlZ2U20zOGJEMGN0bXhZUWsrbGhWbXVCWHdtZmplK1pwUEQvdzJi?=
- =?utf-8?B?UDUzLzE2a3ZtdGZPblZnZ1VYckpLMDZZZWRVYjZLMkFmSm40N0U3NW00RmtD?=
- =?utf-8?B?bVlqcUlMMWJ0UXp5c0VSby9HeTRzL3FqNlFzMllVeWN4K2lTZW5iWDlVdlVW?=
- =?utf-8?B?MzlXYVRlMWNoNGszMWpocytGOE5UeVcxbVA1aGw1MzZ0dFVKVkltVDBCUlRp?=
- =?utf-8?B?V2ZNWkx2NXRnY1pGVmdjbzlFV1l5NDNsRGJESEJ4a2RBS080K0dqa25yUExT?=
- =?utf-8?B?dkUwR1JBMGZuZ2FoQWluMDUzTk1ndlZLbmkrbW56R0JTWDNOTHJ4YlhNTC9D?=
- =?utf-8?B?K0tMaWsvQnBVeFhvcFByMlNJMDI1VGw5dCtaT2pOdHFJS1VqOUpUbDhoWFhk?=
- =?utf-8?B?MWdZQmFPdDhHRTg0anpxRlZCM09aQ1BoSWUyN2gzQ3FkRm9YaGxORGtGbGln?=
- =?utf-8?B?M1lYclQ3S01ReGttMk9vRnhyOUxQK1BLakcrdTNWb0NMeUxIY1VZWXRvbnZi?=
- =?utf-8?B?MzRJN0daTUxkdlZST1g0bGlIV3pnaEUvVWhRU1lKUEN6ZGp3MzN0clF0R0V4?=
- =?utf-8?B?SmZxOXA3aHE2SUJIaGttZHF4TTBMUnRjdWIyUnNvbUdOU0IvTmNtUHJ1c2pG?=
- =?utf-8?B?Q3MzdzFvak5PY3NoaHpqZU12Z0tXb2d3Vm5TMG9oSUhKSkRINkxFbnFpaUtM?=
- =?utf-8?B?NjFUVERwa0xZTHRycnd1NlRQQ2s3WXJVSnBsUVBsYnBVRkh3eExJdlEwU0k0?=
- =?utf-8?B?Zmxwd2NjWGdHYU9wNkNSbDI5Y0k3Z0JlVzhzOTB0Q1dGc2VGUk9SZzRXOFFR?=
- =?utf-8?B?MVFuVTZNK2dmVWw5bVVzRWIxWjgrUWtGTmFRV2NxdnZ2b3B0UDdFV0RLRFBZ?=
- =?utf-8?B?YlhDSWIwTTVNSXBnSDI3R2pvM200L2hiQ3E3bmJWY0l5ZkFhQWFXRWtDVzdr?=
- =?utf-8?B?Zm1SQ25NZjNmRGxIdTByY3FxVUlmZXUzak85OUNDOTZFQklYN3hKTVRjaVFH?=
- =?utf-8?Q?LE54=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 31 May 2023 02:07:19 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CF1129;
+        Tue, 30 May 2023 23:07:09 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34V5P01p023033;
+        Wed, 31 May 2023 06:06:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=FTiZdaopfJdGzY07inwqLy1ZZKpb6Zy7sXOJXUmOmHs=;
+ b=l9ntD0s6nbLi7rq0rvQ5xnf3nlw3EPreiMI6VLWg181Kml40k/cEleVpfRQckKuobWUQ
+ kilav6+1dYcDccoB0FF3iKeGIDWno7bfy2FEQm60loE2RjVFtJ0JOm1fwFMEVGy1NQxy
+ mTEwnoMiI4tS8UV7XoK2Pl5ACbX3K0WcPtNbKsTsjqL5GxzScZO1G+MjgH0+lAqF0djI
+ 7WS8GB3U1Ot6y0+3gD5a4+gzudVLy+7MsdL4KSJZCzO5z/r3p/fDeq18pSkqBSmVzeNN
+ DffEJteoWzKf2bpNSW7qji+rg/pgsWX67+tFFPRUML+7y9a1UAs/cDgH1ghuFrH4h6Bc 2A== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qw8v4txv4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 06:06:58 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34V66wBJ022203
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 06:06:58 GMT
+Received: from [10.252.212.215] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 30 May
+ 2023 23:06:55 -0700
+Message-ID: <38a627a2-040d-23e2-5637-32f199d0fc31@quicinc.com>
+Date:   Wed, 31 May 2023 11:36:52 +0530
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5400.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63d7455f-dc98-461d-0452-08db619d3158
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 May 2023 06:06:36.8588
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 53y6JLbVg4lfuFQ0A6I2ZsMySVTWkkcryyn7OYzru1h+7DzRVUYPJUFAUOwm5xv2
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6347
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] media: venus: firmware: Use of_reserved_mem_lookup()
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230529-venus-of-rmem-v1-1-dfcdc5047ffb@gerhold.net>
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+In-Reply-To: <20230529-venus-of-rmem-v1-1-dfcdc5047ffb@gerhold.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: zQnBR6ZOqs64iW8B-HLx_LuVdaI35n8H
+X-Proofpoint-GUID: zQnBR6ZOqs64iW8B-HLx_LuVdaI35n8H
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_02,2023-05-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 spamscore=0 phishscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305310053
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBOaWtsYXMgU2NobmVsbGUgPHNjaG5lbGxlQGxpbnV4LmlibS5jb20+DQo+IFNlbnQ6
-IFR1ZXNkYXksIDMwIE1heSAyMDIzIDE3OjEzDQo+IFRvOiBTaGF5IERyb3J5IDxzaGF5ZEBudmlk
-aWEuY29tPjsgU2FlZWQgTWFoYW1lZWQNCj4gPHNhZWVkbUBudmlkaWEuY29tPjsgRWxpIENvaGVu
-IDxlbGljQG52aWRpYS5jb20+OyBMZW9uIFJvbWFub3Zza3kNCj4gPGxlb25Aa2VybmVsLm9yZz47
-IERhdmlkIFMuIE1pbGxlciA8ZGF2ZW1AZGF2ZW1sb2Z0Lm5ldD47IEVyaWMgRHVtYXpldA0KPiA8
-ZWR1bWF6ZXRAZ29vZ2xlLmNvbT47IEpha3ViIEtpY2luc2tpIDxrdWJhQGtlcm5lbC5vcmc+OyBQ
-YW9sbyBBYmVuaQ0KPiA8cGFiZW5pQHJlZGhhdC5jb20+DQo+IENjOiBuZXRkZXZAdmdlci5rZXJu
-ZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4gczM5MEB2Z2Vy
-Lmtlcm5lbC5vcmc7IGxpbnV4LXJkbWFAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFtQQVRD
-SCBuZXRdIG5ldC9tbHg1OiBGaXggc2V0dGluZyBvZiBpcnEtPm1hcC5pbmRleCBmb3Igc3RhdGlj
-IElSUSBjYXNlDQo+IA0KPiBXaGVuIGR5bmFtaWMgSVJRIGFsbG9jYXRpb24gaXMgbm90IHN1cHBv
-cnRlZCBhbGwgSVJRcyBhcmUgYWxsb2NhdGVkIHVwDQo+IGZyb250IGluIG1seDVfaXJxX3RhYmxl
-X2NyZWF0ZSgpIGluc3RlYWQgb2YgZHluYW1pY2FsbHkgYXMgcGFydCBvZg0KPiBtbHg1X2lycV9h
-bGxvYygpLiBJbiB0aGUgbGF0dGVyIGR5bmFtaWMgY2FzZSBpcnEtPm1hcC5pbmRleCBpcyBzZXQN
-Cj4gdmlhIHRoZSBtYXBwaW5nIHJldHVybmVkIGJ5IHBjaV9tc2l4X2FsbG9jX2lycV9hdCgpLiBJ
-biB0aGUgc3RhdGljIGNhc2UNCj4gYW5kIHByaW9yIHRvIGNvbW1pdCAxZGE0MzhjMGFlMDIgKCJu
-ZXQvbWx4NTogRml4IGluZGV4aW5nIG9mIG1seDVfaXJxIikNCj4gaXJxLT5tYXAuaW5kZXggd2Fz
-IHNldCBpbiBtbHg0X2lycV9hbGxvYygpIHR3aWNlIG9uY2UgaW5pdGlhbGx5IHRvIDAgYW5kDQo+
-IHRoZW4gdG8gdGhlIHJlcXVlc3RlZCBpbmRleCBiZWZvcmUgc3RvcmluZyBpbiB0aGUgeGFycmF5
-LiBBZnRlciB0aGlzDQo+IGNvbW1pdCBpdCBpcyBvbmx5IHNldCB0byAwIHdoaWNoIGJyZWFrcyBh
-bGwgb3RoZXIgSVJRIG1hcHBpbnMuDQo+IA0KDQpzL21seDRfaXJxX2FsbG9jL21seDVfaXJxX2Fs
-bG9jLw0KUmV2aWV3ZWQtYnk6IEVsaSBDb2hlbiA8ZWxpY0BudmlkaWEuY29tPg0KDQo+IEZpeCB0
-aGlzIGJ5IHNldHRpbmcgaXJxLT5tYXAuaW5kZXggdG8gdGhlIHJlcXVlc3RlZCBpbmRleCB0b2dl
-dGhlciB3aXRoDQo+IGlycS0+bWFwLnZpcnEgYW5kIGltcHJvdmUgdGhlIHJlbGF0ZWQgY29tbWVu
-dCB0byBtYWtlIGl0IGNsZWFyZXIgd2hpY2gNCj4gY2FzZXMgaXQgZGVhbHMgd2l0aC4NCj4gDQo+
-IEZpeGVzOiAxZGE0MzhjMGFlMDIgKCJuZXQvbWx4NTogRml4IGluZGV4aW5nIG9mIG1seDVfaXJx
-IikNCj4gU2lnbmVkLW9mZi1ieTogTmlrbGFzIFNjaG5lbGxlIDxzY2huZWxsZUBsaW51eC5pYm0u
-Y29tPg0KPiAtLS0NCj4gIGRyaXZlcnMvbmV0L2V0aGVybmV0L21lbGxhbm94L21seDUvY29yZS9w
-Y2lfaXJxLmMgfCA5ICsrKysrLS0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygr
-KSwgNCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC9ldGhlcm5l
-dC9tZWxsYW5veC9tbHg1L2NvcmUvcGNpX2lycS5jDQo+IGIvZHJpdmVycy9uZXQvZXRoZXJuZXQv
-bWVsbGFub3gvbWx4NS9jb3JlL3BjaV9pcnEuYw0KPiBpbmRleCBkYjU2ODdkOWZlYzkuLmZkNWI0
-M2U4ZjNiYiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9uZXQvZXRoZXJuZXQvbWVsbGFub3gvbWx4
-NS9jb3JlL3BjaV9pcnEuYw0KPiArKysgYi9kcml2ZXJzL25ldC9ldGhlcm5ldC9tZWxsYW5veC9t
-bHg1L2NvcmUvcGNpX2lycS5jDQo+IEBAIC0yMzIsMTIgKzIzMiwxMyBAQCBzdHJ1Y3QgbWx4NV9p
-cnEgKm1seDVfaXJxX2FsbG9jKHN0cnVjdA0KPiBtbHg1X2lycV9wb29sICpwb29sLCBpbnQgaSwN
-Cj4gIAlpZiAoIWlycSkNCj4gIAkJcmV0dXJuIEVSUl9QVFIoLUVOT01FTSk7DQo+ICAJaWYgKCFp
-IHx8ICFwY2lfbXNpeF9jYW5fYWxsb2NfZHluKGRldi0+cGRldikpIHsNCj4gLQkJLyogVGhlIHZl
-Y3RvciBhdCBpbmRleCAwIHdhcyBhbHJlYWR5IGFsbG9jYXRlZC4NCj4gLQkJICogSnVzdCBnZXQg
-dGhlIGlycSBudW1iZXIuIElmIGR5bmFtaWMgaXJxIGlzIG5vdCBzdXBwb3J0ZWQNCj4gLQkJICog
-dmVjdG9ycyBoYXZlIGFsc28gYmVlbiBhbGxvY2F0ZWQuDQo+ICsJCS8qIFRoZSB2ZWN0b3IgYXQg
-aW5kZXggMCBpcyBhbHdheXMgc3RhdGljYWxseSBhbGxvY2F0ZWQuIElmDQo+ICsJCSAqIGR5bmFt
-aWMgaXJxIGlzIG5vdCBzdXBwb3J0ZWQgYWxsIHZlY3RvcnMgYXJlIHN0YXRpY2FsbHkNCj4gKwkJ
-ICogYWxsb2NhdGVkLiBJbiBib3RoIGNhc2VzIGp1c3QgZ2V0IHRoZSBpcnEgbnVtYmVyIGFuZCBz
-ZXQNCj4gKwkJICogdGhlIGluZGV4Lg0KPiAgCQkgKi8NCj4gIAkJaXJxLT5tYXAudmlycSA9IHBj
-aV9pcnFfdmVjdG9yKGRldi0+cGRldiwgaSk7DQo+IC0JCWlycS0+bWFwLmluZGV4ID0gMDsNCj4g
-KwkJaXJxLT5tYXAuaW5kZXggPSBpOw0KPiAgCX0gZWxzZSB7DQo+ICAJCWlycS0+bWFwID0gcGNp
-X21zaXhfYWxsb2NfaXJxX2F0KGRldi0+cGRldiwNCj4gTVNJX0FOWV9JTkRFWCwgYWZfZGVzYyk7
-DQo+ICAJCWlmICghaXJxLT5tYXAudmlycSkgew0KPiAtLQ0KPiAyLjM5LjINCg0K
+Hi Stephan,
+
+On 5/29/2023 11:46 PM, Stephan Gerhold wrote:
+> Reserved memory can be either looked up using the generic function
+> of_address_to_resource() or using the special of_reserved_mem_lookup().
+> The latter has the advantage that it ensures that the referenced memory
+> region was really reserved and is not e.g. status = "disabled".
+> 
+> of_reserved_mem also supports allocating reserved memory dynamically at
+> boot time. This works only when using of_reserved_mem_lookup() since
+> there won't be a fixed address in the device tree.
+IIUC, this would avoid precomputing the hard range for different firmware
+regions and also make it more flexible to adjust the sizes, if anyone wants a
+bigger size later.
+Incase a specific firmware needs a dedicate start address, do we have an option
+to specify the same ?
+
+Thanks,
+Vikash
+> Switch the code to use of_reserved_mem_lookup(). There is no functional
+> difference for static reserved memory allocations.
+> 
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> ---
+> See e.g. [1] for an example of dynamically allocated reserved memory.
+> (This patch does *not* depend on [1] and is useful without as well...)
+> 
+> [1]: https://lore.kernel.org/linux-arm-msm/20230510-dt-resv-bottom-up-v1-5-3bf68873dbed@gerhold.net/
+> ---
+>  drivers/media/platform/qcom/venus/firmware.c | 24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
+> index cfb11c551167..2e7ffdaff7b2 100644
+> --- a/drivers/media/platform/qcom/venus/firmware.c
+> +++ b/drivers/media/platform/qcom/venus/firmware.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/io.h>
+>  #include <linux/of.h>
+>  #include <linux/of_address.h>
+> +#include <linux/of_reserved_mem.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/of_device.h>
+>  #include <linux/firmware/qcom/qcom_scm.h>
+> @@ -82,9 +83,9 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
+>  			 phys_addr_t *mem_phys, size_t *mem_size)
+>  {
+>  	const struct firmware *mdt;
+> +	struct reserved_mem *rmem;
+>  	struct device_node *node;
+>  	struct device *dev;
+> -	struct resource r;
+>  	ssize_t fw_size;
+>  	void *mem_va;
+>  	int ret;
+> @@ -99,13 +100,16 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
+>  		return -EINVAL;
+>  	}
+>  
+> -	ret = of_address_to_resource(node, 0, &r);
+> -	if (ret)
+> -		goto err_put_node;
+> +	rmem = of_reserved_mem_lookup(node);
+> +	of_node_put(node);
+> +	if (!rmem) {
+> +		dev_err(dev, "failed to lookup reserved memory-region\n");
+> +		return -EINVAL;
+> +	}
+>  
+>  	ret = request_firmware(&mdt, fwname, dev);
+>  	if (ret < 0)
+> -		goto err_put_node;
+> +		return ret;
+>  
+>  	fw_size = qcom_mdt_get_size(mdt);
+>  	if (fw_size < 0) {
+> @@ -113,17 +117,17 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
+>  		goto err_release_fw;
+>  	}
+>  
+> -	*mem_phys = r.start;
+> -	*mem_size = resource_size(&r);
+> +	*mem_phys = rmem->base;
+> +	*mem_size = rmem->size;
+>  
+>  	if (*mem_size < fw_size || fw_size > VENUS_FW_MEM_SIZE) {
+>  		ret = -EINVAL;
+>  		goto err_release_fw;
+>  	}
+>  
+> -	mem_va = memremap(r.start, *mem_size, MEMREMAP_WC);
+> +	mem_va = memremap(*mem_phys, *mem_size, MEMREMAP_WC);
+>  	if (!mem_va) {
+> -		dev_err(dev, "unable to map memory region: %pR\n", &r);
+> +		dev_err(dev, "unable to map memory region %pa size %#zx\n", mem_phys, *mem_size);
+>  		ret = -ENOMEM;
+>  		goto err_release_fw;
+>  	}
+> @@ -138,8 +142,6 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
+>  	memunmap(mem_va);
+>  err_release_fw:
+>  	release_firmware(mdt);
+> -err_put_node:
+> -	of_node_put(node);
+>  	return ret;
+>  }
+>  
+> 
+> ---
+> base-commit: 9f9f8ca6f012d25428f8605cb36369a449db8508
+> change-id: 20230529-venus-of-rmem-f649885114fd
+> 
+> Best regards,
