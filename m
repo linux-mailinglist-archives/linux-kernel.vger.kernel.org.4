@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D8A718411
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F6671845F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjEaOBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
+        id S237575AbjEaOLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237545AbjEaN7x (ORCPT
+        with ESMTP id S237556AbjEaOLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:59:53 -0400
+        Wed, 31 May 2023 10:11:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD21618B;
-        Wed, 31 May 2023 06:54:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D39E5E;
+        Wed, 31 May 2023 07:08:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D83F616B5;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B847263B28;
+        Wed, 31 May 2023 13:43:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CB1DC433A0;
         Wed, 31 May 2023 13:43:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97C3FC433D2;
-        Wed, 31 May 2023 13:43:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540616;
-        bh=cCf3tJQ4w5561OUSdVs1qUeV/NIHF1MMYZMFvn77Q/0=;
+        s=k20201202; t=1685540618;
+        bh=MJ9SqAkxj+Uz/O9NmUpcMuzKZlxZQhNVDtS3Pv/kHuI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XDuXJxYUxiJVq3MwnzNt44U908xX/LsfHZr7szh/XaajJC9DkQA6GxfKhg6xUN9ht
-         MGjbik/Hy0ImeRj8B26dxXaIjL/+4xzcwk8rNL/iKFKL9SR83Tc2tQ0KUDyGav+Eq6
-         VQwYUm6gK8GqDWemrnLJOhc7YAmbnpCcp+sQIOJiXHrGcfogjrPYzJeT+rhYJJNz8F
-         Fj2cD2rWS4NYw08bQNVwrf3+zhJ3qfew6C719n0noq/xkpVLKRvHQ4yRxEehzcFYQa
-         WBF2+y5QQrlgX155Eq8sUiHyJ/MGmkXA4yed1hdvIuYcEh+iSiBpY57fxqMoK7EMmf
-         aJDukehYs1aUQ==
+        b=WKtQA312m6JgUmDgKqEcpVdAA2a/Qw5iMAPGboch+r2qC1HnS5o123sFcQ8sGSJ09
+         7B/thpYfLYKxXySW3MQRcp+fj49fFZWh6tkEXZK3OwSDYYPWXBAcbgKYBYnjX+s1k+
+         HWgPH4ldkgTQl3EseOB7CthxZgWrBTPB7WLynWYGW9LgkrwGdQI5zc+oWHBBvBmkGc
+         T5Wrk5L8exzj2idWKgdbBacfHRhe0bV5rPPRwserukC070tPTzsuMzY47uecazNB1Q
+         +kaZ6cpT9uOcbgO6MDi7KwLNvxi97IcfABUqr6K+yE9DU2tBQiWlAY+CNkZ+T1aPhX
+         OFQwQKpwtMDWQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>,
-        Sasha Levin <sashal@kernel.org>,
-        srinivas.kandagatla@linaro.org, bgoswami@quicinc.com,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 5.15 11/24] ASoC: lpass: Fix for KASAN use_after_free out of bounds
-Date:   Wed, 31 May 2023 09:43:07 -0400
-Message-Id: <20230531134320.3384102-11-sashal@kernel.org>
+Cc:     Qu Wenruo <wqu@suse.com>, David Sterba <dsterba@suse.com>,
+        Sasha Levin <sashal@kernel.org>, clm@fb.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 12/24] btrfs: scrub: try harder to mark RAID56 block groups read-only
+Date:   Wed, 31 May 2023 09:43:08 -0400
+Message-Id: <20230531134320.3384102-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134320.3384102-1-sashal@kernel.org>
 References: <20230531134320.3384102-1-sashal@kernel.org>
@@ -59,70 +57,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>
+From: Qu Wenruo <wqu@suse.com>
 
-[ Upstream commit 75e5fab7db0cecb6e16b22c34608f0b40a4c7cd1 ]
+[ Upstream commit 7561551e7ba870b9659083b95feb520fb2dacce3 ]
 
-When we run syzkaller we get below Out of Bounds error.
+Currently we allow a block group not to be marked read-only for scrub.
 
-"KASAN: slab-out-of-bounds Read in regcache_flat_read"
+But for RAID56 block groups if we require the block group to be
+read-only, then we're allowed to use cached content from scrub stripe to
+reduce unnecessary RAID56 reads.
 
-Below is the backtrace of the issue:
+So this patch would:
 
-BUG: KASAN: slab-out-of-bounds in regcache_flat_read+0x10c/0x110
-Read of size 4 at addr ffffff8088fbf714 by task syz-executor.4/14144
-CPU: 6 PID: 14144 Comm: syz-executor.4 Tainted: G        W
-Hardware name: Qualcomm Technologies, Inc. sc7280 CRD platform (rev5+) (DT)
-Call trace:
-dump_backtrace+0x0/0x4ec
-show_stack+0x34/0x50
-dump_stack_lvl+0xdc/0x11c
-print_address_description+0x30/0x2d8
-kasan_report+0x178/0x1e4
-__asan_report_load4_noabort+0x44/0x50
-regcache_flat_read+0x10c/0x110
-regcache_read+0xf8/0x5a0
-_regmap_read+0x45c/0x86c
-_regmap_update_bits+0x128/0x290
-regmap_update_bits_base+0xc0/0x15c
-snd_soc_component_update_bits+0xa8/0x22c
-snd_soc_component_write_field+0x68/0xd4
-tx_macro_put_dec_enum+0x1d0/0x268
-snd_ctl_elem_write+0x288/0x474
+- Make btrfs_inc_block_group_ro() try harder
+  During my tests, for cases like btrfs/061 and btrfs/064, we can hit
+  ENOSPC from btrfs_inc_block_group_ro() calls during scrub.
 
-By Error checking and checking valid values issue gets rectifies.
+  The reason is if we only have one single data chunk, and trying to
+  scrub it, we won't have any space left for any newer data writes.
 
-Signed-off-by: Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com
-Link: https://lore.kernel.org/r/20230511112532.16106-1-quic_visr@quicinc.com
-Signed-off-by: Mark Brown <broonie@kernel.org
+  But this check should be done by the caller, especially for scrub
+  cases we only temporarily mark the chunk read-only.
+  And newer data writes would always try to allocate a new data chunk
+  when needed.
+
+- Return error for scrub if we failed to mark a RAID56 chunk read-only
+
+Signed-off-by: Qu Wenruo <wqu@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/lpass-tx-macro.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ fs/btrfs/block-group.c | 14 ++++++++++++--
+ fs/btrfs/scrub.c       |  9 ++++++++-
+ 2 files changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-tx-macro.c
-index 35d148e60c334..4377e91733b87 100644
---- a/sound/soc/codecs/lpass-tx-macro.c
-+++ b/sound/soc/codecs/lpass-tx-macro.c
-@@ -743,6 +743,8 @@ static int tx_macro_put_dec_enum(struct snd_kcontrol *kcontrol,
- 	struct tx_macro *tx = snd_soc_component_get_drvdata(component);
- 
- 	val = ucontrol->value.enumerated.item[0];
-+	if (val >= e->items)
-+		return -EINVAL;
- 
- 	switch (e->reg) {
- 	case CDC_TX_INP_MUX_ADC_MUX0_CFG0:
-@@ -769,6 +771,9 @@ static int tx_macro_put_dec_enum(struct snd_kcontrol *kcontrol,
- 	case CDC_TX_INP_MUX_ADC_MUX7_CFG0:
- 		mic_sel_reg = CDC_TX7_TX_PATH_CFG0;
- 		break;
-+	default:
-+		dev_err(component->dev, "Error in configuration!!\n");
-+		return -EINVAL;
+diff --git a/fs/btrfs/block-group.c b/fs/btrfs/block-group.c
+index 19f71c305b988..a76796f153d5f 100644
+--- a/fs/btrfs/block-group.c
++++ b/fs/btrfs/block-group.c
+@@ -2576,10 +2576,20 @@ int btrfs_inc_block_group_ro(struct btrfs_block_group *cache,
  	}
  
- 	if (val != 0) {
+ 	ret = inc_block_group_ro(cache, 0);
+-	if (!do_chunk_alloc || ret == -ETXTBSY)
+-		goto unlock_out;
+ 	if (!ret)
+ 		goto out;
++	if (ret == -ETXTBSY)
++		goto unlock_out;
++
++	/*
++	 * Skip chunk alloction if the bg is SYSTEM, this is to avoid system
++	 * chunk allocation storm to exhaust the system chunk array.  Otherwise
++	 * we still want to try our best to mark the block group read-only.
++	 */
++	if (!do_chunk_alloc && ret == -ENOSPC &&
++	    (cache->flags & BTRFS_BLOCK_GROUP_SYSTEM))
++		goto unlock_out;
++
+ 	alloc_flags = btrfs_get_alloc_profile(fs_info, cache->space_info->flags);
+ 	ret = btrfs_chunk_alloc(trans, alloc_flags, CHUNK_ALLOC_FORCE);
+ 	if (ret < 0)
+diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
+index ca8d6979c7887..0d1715ebdef9c 100644
+--- a/fs/btrfs/scrub.c
++++ b/fs/btrfs/scrub.c
+@@ -3812,13 +3812,20 @@ int scrub_enumerate_chunks(struct scrub_ctx *sctx,
+ 
+ 		if (ret == 0) {
+ 			ro_set = 1;
+-		} else if (ret == -ENOSPC && !sctx->is_dev_replace) {
++		} else if (ret == -ENOSPC && !sctx->is_dev_replace &&
++			   !(cache->flags & BTRFS_BLOCK_GROUP_RAID56_MASK)) {
+ 			/*
+ 			 * btrfs_inc_block_group_ro return -ENOSPC when it
+ 			 * failed in creating new chunk for metadata.
+ 			 * It is not a problem for scrub, because
+ 			 * metadata are always cowed, and our scrub paused
+ 			 * commit_transactions.
++			 *
++			 * For RAID56 chunks, we have to mark them read-only
++			 * for scrub, as later we would use our own cache
++			 * out of RAID56 realm.
++			 * Thus we want the RAID56 bg to be marked RO to
++			 * prevent RMW from screwing up out cache.
+ 			 */
+ 			ro_set = 0;
+ 		} else if (ret == -ETXTBSY) {
 -- 
 2.39.2
 
