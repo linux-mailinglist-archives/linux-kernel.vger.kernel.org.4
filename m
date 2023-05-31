@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C227183E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E63F57183E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237271AbjEaNxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60724 "EHLO
+        id S237164AbjEaNxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237341AbjEaNu0 (ORCPT
+        with ESMTP id S237342AbjEaNu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 31 May 2023 09:50:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFB41BFA;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017D530D7;
         Wed, 31 May 2023 06:45:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9C8F63BA9;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2749F63B85;
+        Wed, 31 May 2023 13:45:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83AD7C4339E;
         Wed, 31 May 2023 13:45:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C6CBC4339B;
-        Wed, 31 May 2023 13:45:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540749;
-        bh=pXuGXvLx6xbjWM3oEF84YMrCgQeTs9pbJ5iGIc8NyfQ=;
+        s=k20201202; t=1685540750;
+        bh=ZSnVp4a4e+iHgVyv368Tui9Sw5ExoFu7ZROVjxxXJS4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HOqzCavL3FLKSw4jZg/W3+HTkFl4VHnXzbQYFSKMzagjdgfyVcx/k8sr6DuU7jHdR
-         zWQ9I45BogemNMQNEIK8bSpXj7hvVep5G9SxQN9Glfl4N5W+8Cnm0NikeIFR+4rhBr
-         3iL8nwi3pJbZdmDMlZUSAir7rkyi6dE87dBgtSv1K6RR4AwFueINfEtRPeaCb7CNwH
-         nJL4hl/TOu66xF0E3FmhN/yqC+izuDz4n4zvXdXJoMTbwMchCEsxfcXC9xQr7lZ/TX
-         cOd/9ezrTkBbOE1SbolRAJ+Qx20guePiRhOHTAPWtIwM7mxlb3ROIQ+wFkEdmDSphd
-         oSzXIaMUN/Slw==
+        b=A2qDa1TH+/j5oJ1YM+8CEnRvwjn7KfZjmXECxEUfY3CaNDExS11GePQGWICBx6I9Q
+         bs8cx94k3VQ+HT7/cE87ya1hCALkgEBhsdg7AYejC7JHl894U6uX6ohFiK8lwJ+kEP
+         VVMWuJlJgCP7oWpz/hwakJskQ2r/IamlfhrAu6uUQliXrw4vpA53DovENFOLs4eTIW
+         qGrHh+0gXYqMWiKvnQIEOzGyKmfDNxCJWC4tsXJ60DVifBd/pI+346B378Cpai4klF
+         znNJq2TioPOGGJm7u1BIdWm+oNC2iFAc1x+7ZnIrYIKrjdQoe21GrQifRTCX6iuGSy
+         gYLi7s/300KuA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Osama Muhammad <osmtendev@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
-        broonie@kernel.org
-Subject: [PATCH AUTOSEL 4.19 05/13] regulator: Fix error checking for debugfs_create_dir
-Date:   Wed, 31 May 2023 09:45:33 -0400
-Message-Id: <20230531134541.3385043-5-sashal@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        tglx@linutronix.de, neil.armstrong@linaro.org,
+        khilman@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.19 06/13] irqchip/meson-gpio: Mark OF related data as maybe unused
+Date:   Wed, 31 May 2023 09:45:34 -0400
+Message-Id: <20230531134541.3385043-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134541.3385043-1-sashal@kernel.org>
 References: <20230531134541.3385043-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,44 +61,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Osama Muhammad <osmtendev@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit 2bf1c45be3b8f3a3f898d0756c1282f09719debd ]
+[ Upstream commit 14130211be5366a91ec07c3284c183b75d8fba17 ]
 
-This patch fixes the error checking in core.c in debugfs_create_dir.
-The correct way to check if an error occurred is 'IS_ERR' inline function.
+The driver can be compile tested with !CONFIG_OF making certain data
+unused:
 
-Signed-off-by: Osama Muhammad <osmtendev@gmail.com
-Suggested-by: Ivan Orlov <ivan.orlov0322@gmail.com
-Link: https://lore.kernel.org/r/20230515172938.13338-1-osmtendev@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org
+  drivers/irqchip/irq-meson-gpio.c:153:34: error: ‘meson_irq_gpio_matches’ defined but not used [-Werror=unused-const-variable=]
+
+Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20230512164506.212267-1-krzysztof.kozlowski@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/regulator/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/irqchip/irq-meson-gpio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 11656b3836748..14f9977f1ec08 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -4181,7 +4181,7 @@ static void rdev_init_debugfs(struct regulator_dev *rdev)
- 	}
+diff --git a/drivers/irqchip/irq-meson-gpio.c b/drivers/irqchip/irq-meson-gpio.c
+index 7599b10ecf09d..dcb22f2539eff 100644
+--- a/drivers/irqchip/irq-meson-gpio.c
++++ b/drivers/irqchip/irq-meson-gpio.c
+@@ -67,7 +67,7 @@ static const struct meson_gpio_irq_params axg_params = {
+ 	.nr_hwirq = 100,
+ };
  
- 	rdev->debugfs = debugfs_create_dir(rname, debugfs_root);
--	if (!rdev->debugfs) {
-+	if (IS_ERR(rdev->debugfs)) {
- 		rdev_warn(rdev, "Failed to create debugfs directory\n");
- 		return;
- 	}
-@@ -4843,7 +4843,7 @@ static int __init regulator_init(void)
- 	ret = class_register(&regulator_class);
- 
- 	debugfs_root = debugfs_create_dir("regulator", NULL);
--	if (!debugfs_root)
-+	if (IS_ERR(debugfs_root))
- 		pr_warn("regulator: Failed to create debugfs directory\n");
- 
- 	debugfs_create_file("supply_map", 0444, debugfs_root, NULL,
+-static const struct of_device_id meson_irq_gpio_matches[] = {
++static const struct of_device_id meson_irq_gpio_matches[] __maybe_unused = {
+ 	{ .compatible = "amlogic,meson8-gpio-intc", .data = &meson8_params },
+ 	{ .compatible = "amlogic,meson8b-gpio-intc", .data = &meson8b_params },
+ 	{ .compatible = "amlogic,meson-gxbb-gpio-intc", .data = &gxbb_params },
 -- 
 2.39.2
 
