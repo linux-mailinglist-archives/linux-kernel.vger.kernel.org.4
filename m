@@ -2,209 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF187187F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C558F7187F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjEaRDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40986 "EHLO
+        id S229993AbjEaRD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjEaRC5 (ORCPT
+        with ESMTP id S229991AbjEaRDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:02:57 -0400
+        Wed, 31 May 2023 13:03:23 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E450BE
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:02:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3FE136
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:02:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685552531;
+        s=mimecast20190719; t=1685552554;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=nA468CPms0dwjrbNccXgZQd/+AP0rCkmXR+Xx2SRtqE=;
-        b=Rs6ZElUCAiplIY/+nVrdAryriEfInnmdaqsbpbijAK/kEOD62zJQoTRC8YGMWVXgdRhQd9
-        O1nYjjlTRmw08A/yOgsammgRD9b4fp+u5ku9+kuw6VpMeoyDYVift1hgbIVnAvGwzsZwFr
-        tLgIj5GSWQEsPXHYOpFrkg7N13JC4MU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OT2ak97DrcQf51/tVihpvQaRSuLks2IFU+YAaT+zsqY=;
+        b=CCRMs5i7zNPee7xJYHuP/TOVl/0dy7ekxWr1gbMU7FX7MikySiYJkaQXeyMtDfLMZms2bW
+        Jr1hPxSGy0k44zRuM7dwwODqXatsDVnp1DmHejzjVOOKoExzoqI3BTj9dZhQ9bfaWjjZak
+        jRNUJ/ZOrRMT52rqmZmpcYXyIBekq20=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-295-cycqWSbcNNOBUdVOr9AGhg-1; Wed, 31 May 2023 13:02:07 -0400
-X-MC-Unique: cycqWSbcNNOBUdVOr9AGhg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+ us-mta-65-veSlZ_RWPee6oPGV5mREtg-1; Wed, 31 May 2023 13:02:31 -0400
+X-MC-Unique: veSlZ_RWPee6oPGV5mREtg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A306185A78B;
-        Wed, 31 May 2023 17:02:07 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0C0C8C154D7;
-        Wed, 31 May 2023 17:02:05 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Chuck Lever <chuck.lever@oracle.com>
-cc:     dhowells@redhat.com, linux-afs@lists.infradead.org,
-        linux-nfs@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: How to get my krb5 crypto lib upstream?
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C6AB63C14AB2;
+        Wed, 31 May 2023 17:02:29 +0000 (UTC)
+Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4549C40C6EC4;
+        Wed, 31 May 2023 17:02:29 +0000 (UTC)
+Message-ID: <9d37ab07-97c6-5245-6939-9c1090b4b3a9@redhat.com>
+Date:   Wed, 31 May 2023 13:02:29 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <723505.1685552525.1@warthog.procyon.org.uk>
-Date:   Wed, 31 May 2023 18:02:05 +0100
-Message-ID: <723506.1685552525@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4] KVM: VMX: do not disable interception for
+ MSR_IA32_SPEC_CTRL on eIBRS
+Content-Language: en-US
+To:     Jon Kohler <jon@nutanix.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrea Arcangeli <aarcange@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>
+References: <20230531144128.73814-1-jon@nutanix.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230531144128.73814-1-jon@nutanix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert, Chuck,
+On 5/31/23 10:41, Jon Kohler wrote:
+> Avoid expensive rdmsr on every VM Exit for MSR_IA32_SPEC_CTRL on
+> eIBRS enabled systems iff the guest only sets IA32_SPEC_CTRL[0] (IBRS)
+> and not [1] (STIBP) or [2] (SSBD) by not disabling interception in
+> the MSR bitmap. Note: this logic is only for eIBRS, as Intel's guidance
+> has long been that eIBRS only needs to be set once, so most guests with
+> eIBRS awareness should behave nicely. We would not want to accidentally
+> regress misbehaving guests on pre-eIBRS systems, who might be spamming
+> IBRS MSR without the hypervisor being able to see it today.
+>
+> eIBRS enabled guests using just IBRS will only write SPEC_CTRL MSR
+> once or twice per vCPU on boot, so it is far better to take those
+> VM exits on boot than having to read and save this msr on every
+> single VM exit forever. This outcome was suggested on Andrea's commit
+> 2f46993d83ff ("x86: change default to spec_store_bypass_disable=prctl spectre_v2_user=prctl")
+> however, since interception is still unilaterally disabled, the rdmsr
+> tax is still there even after that commit.
+>
+> This is a significant win for eIBRS enabled systems as this rdmsr
+> accounts for roughly ~50% of time for vmx_vcpu_run() as observed
+> by perf top disassembly, and is in the critical path for all
+> VM-Exits, including fastpath exits.
+>
+> Opportunistically update comments for both MSR_IA32_SPEC_CTRL and
+> MSR_IA32_PRED_CMD to make it clear how L1 vs L2 handling works.
+>
+> Fixes: 2f46993d83ff ("x86: change default to spec_store_bypass_disable=prctl spectre_v2_user=prctl")
+> Signed-off-by: Jon Kohler <jon@nutanix.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+> Cc: Waiman Long <longman@redhat.com>
+> ---
+> v1
+>   - https://lore.kernel.org/all/20220512174427.3608-1-jon@nutanix.com/
+> v1 -> v2:
+>   - https://lore.kernel.org/all/20220520195303.58692-1-jon@nutanix.com/
+>   - Addressed comments on approach from Sean.
+> v2 -> v3:
+>   - https://lore.kernel.org/kvm/20220520204115.67580-1-jon@nutanix.com/
+>   - Addressed comments on approach from Sean.
+> v3 -> v4:
+>   - Fixed inline code comments from Sean.
+>
+>   arch/x86/kvm/vmx/vmx.c | 35 ++++++++++++++++++++++++-----------
+>   1 file changed, 24 insertions(+), 11 deletions(-)
+>
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 44fb619803b8..5e643ac897bc 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2260,20 +2260,33 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>   			return 1;
+>
+>   		vmx->spec_ctrl = data;
+> -		if (!data)
+> +
+> +		/*
+> +		 * Disable interception on the first non-zero write, except if
+> +		 * eIBRS is advertised to the guest and the guest is enabling
+> +		 * _only_ IBRS.  On eIBRS systems, kernels typically set IBRS
+> +		 * once at boot and never touch it post-boot.  All other bits,
+> +		 * and IBRS on non-eIBRS systems, are often set on a per-task
+> +		 * basis, i.e. change frequently, so the benefit of avoiding
+> +		 * VM-exits during guest context switches outweighs the cost of
+> +		 * RDMSR on every VM-Exit to save the guest's value.
+> +		 */
+> +		if (!data ||
+> +		    (data == SPEC_CTRL_IBRS &&
+> +		     (vcpu->arch.arch_capabilities & ARCH_CAP_IBRS_ALL)))
+>   			break;
+>
+>   		/*
+> -		 * For non-nested:
+> -		 * When it's written (to non-zero) for the first time, pass
+> -		 * it through.
+> -		 *
+> -		 * For nested:
+> -		 * The handling of the MSR bitmap for L2 guests is done in
+> -		 * nested_vmx_prepare_msr_bitmap. We should not touch the
+> -		 * vmcs02.msr_bitmap here since it gets completely overwritten
+> -		 * in the merging. We update the vmcs01 here for L1 as well
+> -		 * since it will end up touching the MSR anyway now.
+> +		 * Update vmcs01.msr_bitmap even if L2 is active, i.e. disable
+> +		 * interception for the vCPU on the first write regardless of
+> +		 * whether the WRMSR came from L1 or L2.  vmcs02's bitmap is a
+> +		 * combination of vmcs01 and vmcs12 bitmaps, and will be
+> +		 * recomputed by nested_vmx_prepare_msr_bitmap() on the next
+> +		 * nested VM-Enter.  Note, this does mean that future WRMSRs
+> +		 * from L2 will be intercepted until the next nested VM-Exit if
+> +		 * L2 was the first to write, but L1 exposing the MSR to L2
+> +		 * without first writing it is unlikely and not worth the
+> +		 * extra bit of complexity.
+>   		 */
+>   		vmx_disable_intercept_for_msr(vcpu,
+>   					      MSR_IA32_SPEC_CTRL,
 
-I'm wondering how to make progress on getting my krb5 crypto lib upstream.
+I have 2 comments.
 
-Can I push it as it stands and then we try and build it into the crypto API
-for it later?  That would allow me to push my rxgk implementation for AF_RXRPC
-and at least allow userspace to use that.
+1) Besides the IBRS, STIBP & SSBD bits, the SPEC_CTRL MSR may have the 
+RRSBA_DIS_S bit set in the future. I am not aware of any current Intel 
+processors having this capability yet, but a future Intel processor may 
+have this and the above patch will have to be modified accordingly. It 
+looks like that the RRSBA_DIS_S bit will be set once.
 
-As far as building a crypto API around it goes, we need four interfaces:
+2) AMD has their own AutoIBRS capability in Genoa which is similar to 
+eIBRS but is not identified by the ARCH_CAP_IBRS_ALL bit. Instead it is 
+identified by the AUTOIBRS bit in MSR_EFER. Are you planning to support 
+that?
 
- (1) Key generation.  We may need to generate a {cipher,hash} key pair {Ke,Ki}
-     or just a hash key Kc.  We might conceivably want both.
-
-     At the moment, I return a prepared cipher or a prepared hash.  I don't
-     deal with the key pairing here as it makes testing a bit more awkward.
-
-	int crypto_krb5_get_Kc(const struct krb5_enctype *krb5,
-			       const struct krb5_buffer *TK,
-			       u32 usage,
-			       struct krb5_buffer *key,
-			       struct crypto_shash **_shash,
-			       gfp_t gfp);
-	int crypto_krb5_get_Ke(const struct krb5_enctype *krb5,
-			       const struct krb5_buffer *TK,
-			       u32 usage,
-			       struct krb5_buffer *key,
-			       struct crypto_sync_skcipher **_ci,
-			       gfp_t gfp);
-	int crypto_krb5_get_Ki(const struct krb5_enctype *krb5,
-			       const struct krb5_buffer *TK,
-			       u32 usage,
-			       struct krb5_buffer *key,
-			       struct crypto_shash **_shash,
-			       gfp_t gfp);
-
- (2) PRF+ generation.  This takes some a key and a metadata blob and generates
-     a new blob that then gets used as a key.
-
-	int crypto_krb5_calc_PRFplus(const struct krb5_enctype *krb5,
-				     const struct krb5_buffer *K,
-				     unsigned int L,
-				     const struct krb5_buffer *S,
-				     struct krb5_buffer *result,
-				     gfp_t gfp);
-
- (3) Encrypt and Decrypt.
-
-     Encrypt has to be parameterised to take a specific confounder for testing
-     and generate a random one for normal operation.  The IV is fixed all
-     zeroes in the cases I've implemented.  When testing, decrypt should
-     perhaps be passed the confounder to check it.
-
-     When encrypting, the output buffer will be larger than the input buffer
-     (or, at least, room must be set aside) so that a confounder, padding and
-     a checksum can be inserted.
-
-     When decrypting, we either want to provide a separate output buffer so
-     that the confounder and checksum can be stripped off, or we need to be
-     able to find out where the decrypted payload plus the padding will be (we
-     can't work out how much padding there is - that's left to the caller).
-
-     At the moment, I pass a single buffer descriptor, providing encrypt with
-     extra space front and back and providing decrypt with somewhere to save
-     offset and length:
-
-	ssize_t crypto_krb5_encrypt(const struct krb5_enctype *krb5,
-				    struct krb5_enc_keys *keys,
-				    struct scatterlist *sg, unsigned int nr_sg,
-				    size_t sg_len,
-				    size_t data_offset, size_t data_len,
-				    bool preconfounded);
-	int crypto_krb5_decrypt(const struct krb5_enctype *krb5,
-				struct krb5_enc_keys *keys,
-				struct scatterlist *sg, unsigned int nr_sg,
-				size_t *_offset, size_t *_len,
-				int *_error_code);
-
-     I also allow a krb5/gssapi error code to be returned so that it can be
-     used in the generation of abort messages.  This needs sorting out
-     better.  It may be that only one code is actually relevant to this and
-     that the caller generates all the rest as it checks the metadata.
-
-     The AEAD interface might suffice as it stands if we pass in the keys
-     already generated and passed in as a single key blob.  We don't want an
-     IV generator as the protocol defines the IV to use.
-
- (4) GetMIC and VerifyMIC.
-
-     Both of these need parameterising with extra metadata that will get
-     inserted into the hash before the data is hashed.  GetMIC will insert the
-     checksum into the buffer and VerifyMIC will check it and strip it off.
-
-     I'm not sure that the hash API is suitable for this.  AEAD might suit for
-     GetMIC at least, but using AEAD for VerifyMIC would lead to an extraneous
-     copy I'd prefer to avoid.
-
-
-	ssize_t crypto_krb5_get_mic(const struct krb5_enctype *krb5,
-				    struct crypto_shash *shash,
-				    const struct krb5_buffer *metadata,
-				    struct scatterlist *sg, unsigned int nr_sg,
-				    size_t sg_len,
-				    size_t data_offset, size_t data_len);
-	int crypto_krb5_verify_mic(const struct krb5_enctype *krb5,
-				   struct crypto_shash *shash,
-				   const struct krb5_buffer *metadata,
-				   struct scatterlist *sg, unsigned int nr_sg,
-				   size_t *_offset, size_t *_len,
-				   int *_error_code);
-
-There's a lot to be said in using an asynchronous overrideable interface for
-encrypt and decrypt.  The problem is that we want to do simultaneous hash and
-crypt if we can.  I think the Intel AES/SHA instructions permit this to be
-done and there is sufficient register space to do it - and I *think* that it
-may be possible to offload this to the Intel QAT or the Intel IAA on the
-latest 4th Gen Xeons - and maybe NICs that can handle NFS/SMB offload.
-
-I think we'll perhaps need a "krb5 encoding type" API that can provide key
-derivation, PRF+ and information - something along the following lines:
-
-	struct krb5_enctype {
-		int		etype;		// Encryption (key) type
-		int		ctype;		// Checksum type
-		const char	*name;		// "Friendly" name
-		const char	*encrypt_name;	// Crypto encrypt name
-		const char	*cksum_name;	// Crypto checksum name
-		const char	*hash_name;	// Crypto hash name
-		u16		block_len;	// Length of encryption block
-		u16		conf_len;	// Length of confounder
-		u16		cksum_len;	// Length of checksum
-		u16		key_bytes;	// Length of raw key
-		u16		key_len;	// Length of final key
-		u16		hash_len;	// Length of hash
-		u16		prf_len;	// Length of PRF() result
-		u16		Kc_len;		// Length of Kc
-		u16		Ke_len;		// Length of Ke
-		u16		Ki_len;		// Length of Ki
-		bool		keyed_cksum;	// T if a keyed cksum
-		bool		pad;		// T if should pad
-	};
-
-We need to be able to look the encoding up by ID, not by name.
-
-David
+Cheers,
+Longman
 
