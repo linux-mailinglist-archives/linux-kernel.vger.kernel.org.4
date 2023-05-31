@@ -2,135 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519AC717258
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 02:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6ED7172B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 02:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233783AbjEaASM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 20:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        id S233763AbjEaAoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 20:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbjEaASK (ORCPT
+        with ESMTP id S233713AbjEaAoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 20:18:10 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66458100
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 17:18:02 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-51b33c72686so3256582a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 17:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685492282; x=1688084282;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=MiX5kKBgyHn7Q2uueehDrf1adzHRm5bDWm/e4F6Anxg=;
-        b=F0S0BOKGLFqXikNeyUoqjigXLViNvD0x3BGX6c3oA6Jv13keqly43YCI3oi8/N1IyE
-         G5hxcXETvy5iQwDC9scKKXtObF+mxkE0Fo/3h3ORwU3DmuZ5F6vJzMMU1NIkSOTRDsps
-         FgyyKY33oFnU/okha3b4dWQBtFZzMhzX0/U4g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685492282; x=1688084282;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MiX5kKBgyHn7Q2uueehDrf1adzHRm5bDWm/e4F6Anxg=;
-        b=TY/24ctRIsUbNp20Yi4CElsGYq8jAxBafKBMK9LBo5ol/5XuFAh54n4YNNExqFR99X
-         wV76OlnMbSG/jPHcCpBVgyHEW3bA0/3Rkg+qoRoE76MkQ/WjSdxQs/WRQjcviVJSAxIa
-         KBTRdkQD/D9oTpPduSNkAnlq0LacLAGAAdgPppH9IlD4tfFvc96tedBiagfOSPhhVxxd
-         Q1spzsFo/glQeMHXZ5soZ+9cJW9NKMegKBUtIl16nfeTK8tA1D0wlBO7WWZiBbqhA8aN
-         1+PYMwSDFnWrlEf4pyydRZSVqNuKJgOxX7SIgK9AUCYts5cWY/80s49/4I33dlHv8EoN
-         q/lQ==
-X-Gm-Message-State: AC+VfDyt+SG4o8iyZuGzxbKZzP7ay9CwGOyS4GJIR8Kqy+V02Zsq+N78
-        jklVg0WF9GKKHdri2nVSlaR0mw==
-X-Google-Smtp-Source: ACHHUZ61jT+R5XlE0zI6sSl36bwS+gpPkJUCYi8bMvkEGyWkyNKU9KHZ8+PzdgGwByE8HptulMa9Sg==
-X-Received: by 2002:a17:903:32d2:b0:1b0:3841:bcda with SMTP id i18-20020a17090332d200b001b03841bcdamr4612548plr.0.1685492281828;
-        Tue, 30 May 2023 17:18:01 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170903120600b001b016313b1esm8794203plh.82.2023.05.30.17.18.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 17:18:01 -0700 (PDT)
-Date:   Tue, 30 May 2023 17:18:00 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Joan Bruguera =?iso-8859-1?Q?Mic=F3?= <joanbrugueram@gmail.com>
-Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: build error while building arch/x86/purgatory/sha256.o: invalid
- 'asm': operand is not a condition code [...]
-Message-ID: <202305301658.BF6ECF65C@keescook>
-References: <175578ec-9dec-7a9c-8d3a-43f24ff86b92@leemhuis.info>
- <20230528164031.266590-1-joanbrugueram@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        Tue, 30 May 2023 20:44:03 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05714E8;
+        Tue, 30 May 2023 17:44:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685493842; x=1717029842;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=bZGPU5KhSTx3InTDEBeCoGgpCxaa13/K+/jASOAyvvg=;
+  b=PKX7ptGIIL+tGq83KOZxbsmS7de1o7OMmfL+G1DIGeF+EUJ4UBdsdAoZ
+   0XJifLydmStpLbAcbbi1srwPDnS45ibBR0+BKBDdnB9r30DsO0/i8IN0W
+   iFmmeFfQtRbzJGhG1tuvqeBm/s2JAJPHe9Jn/WclXM++HzG1gxBMlYKk0
+   T9uKmEwkF5li1EX4x09/JWskFZwbkE203WU29MGKcotByIZ0oFPbVi0HU
+   asqe6jINYYSl5B2NRIuxN8CQCwPp4SPyx4kGY4M5U2Z/uWdNAIM3JHaDs
+   KThtpRFj0m09wlVfyqgjaJOR+xSMDTtunFcfXGcOgRdsy16N2cT1BvTYb
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="358347818"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="358347818"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 17:44:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="851006906"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="851006906"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga001.fm.intel.com with ESMTP; 30 May 2023 17:44:01 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 30 May 2023 17:44:00 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 30 May 2023 17:44:00 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 30 May 2023 17:44:00 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.172)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 30 May 2023 17:43:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A6pWqRl4YWvEO/bL+DANuYrcUZl7EcO2N906eyY6fiiBc/4BDUDxjcOT1uwnHBvQik1qbi+Z5HKgx6CVbHo4KG70MjWmesxQSo3GNWlZAoTXEyc0Ddn/QX3UHGmGYzXqvXW82nwEVgl5I0tRsxJh/lvBV6o0gAVoApSIyxZAVcmbIZEITmw8RkO1Ev3S6rZegngdW7vlONuinVwpaCYVfJ4IwDWNWHtLGTd+XGIhdL+5TEV2URHU1MVUZ5+P0ggvtHunsZeXaeSDocN4s0BKVD+NsRrLI+z7Q7DiHlEaVu+J7DttBT5iZTbcJzY8W2pN7axvcxmVtfdZX5oBD8wKcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5GdCyJYHTWXB7cnqt04dAO++o99zT2HvTxxH06+9/5U=;
+ b=Sx0NLYQxf1POilJeAnGv5jRMqlpf7rMyqdOrexlOpdJfpDM08tru6kcIjDNKuwZz1EqJnGwkXTn2gKG8wbe2ff6fUYFwIIDy29uy9QrWDXeCDJGM4w8EJ091+UTh1FbOTBPDcNpz6uScI6YE6TiVeMI/iRmIyqXlvmVmsOSdSErFPEc0vxWfhgMP5f+MbRjjPDqFmxuk+DuY5xjnCYxCfijCHT69xjU87J6neu0zfHDEqmQh1gYsM7ZsqyR3MrD/Cyf4+EUWEW9YgrK5BQvQ56s/W0ICqGsVPf2TmhVgM7wLo2w7hHoqCA0JBw9OjX5+ECN1xnTPebC3nUqPElurTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
+ CY8PR11MB7266.namprd11.prod.outlook.com (2603:10b6:930:99::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6433.24; Wed, 31 May 2023 00:43:53 +0000
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::af48:a141:6dd6:25e]) by DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::af48:a141:6dd6:25e%7]) with mapi id 15.20.6433.022; Wed, 31 May 2023
+ 00:43:52 +0000
+Date:   Wed, 31 May 2023 08:18:42 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     Chao Gao <chao.gao@intel.com>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <pbonzini@redhat.com>
+Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: add a new mmu zap helper to
+ indicate memtype changes
+Message-ID: <ZHaSYqOWDluRmIAd@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20230509135006.1604-1-yan.y.zhao@intel.com>
+ <ZFsr9TynkA/CyPgg@chao-email>
+ <ZFtQeLNuXP6tDMne@yzhao56-desk.sh.intel.com>
+ <ZG1DhSdhpTkxrfCq@google.com>
+ <ZG10zi6YtqGeik7u@yzhao56-desk.sh.intel.com>
+ <ZG4kMKXKnQuQOTa7@google.com>
+ <ZG807ECX4TeBcE61@yzhao56-desk.sh.intel.com>
+ <ZG+Epwp75nJ7tpXM@google.com>
+ <ZHXGWsw3ARk2OOjX@yzhao56-desk.sh.intel.com>
+ <ZHaL/d0XhoCmoo3q@google.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230528164031.266590-1-joanbrugueram@gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZHaL/d0XhoCmoo3q@google.com>
+X-ClientProxiedBy: SG2P153CA0017.APCP153.PROD.OUTLOOK.COM (2603:1096::27) To
+ DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|CY8PR11MB7266:EE_
+X-MS-Office365-Filtering-Correlation-Id: 104e1b4b-0a96-4aa4-c52f-08db61701af8
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jDu1LFWxz4MHLx2qoyXEzta7oNYUOkL0Q8LT5g9kpSqCa8UdB5UvkNJ4byYTcWFDYLl1L2F6+ckUWvr/IyCkB1SceZEGkEl6nuOGPi3De6XCz3xGEg/rFCL4Cq88W99SRXX7ct5zWwDtg9iROOr4GfGzHpPkr+q6cRyIi1eKSjwqzDZ+WzlGKJ+QVp39oaPLJFYO4WJVdoKSo4dKpOhmR+JOrnTEVA25L0AfXYsW+06O4BzhEuSDSrIVVKOvcZzphrwpIBz1V8mywhJu7oeFHzDx3PMQEyihw76vfF2jbe//7V7jSbPD0Ruxxxo2CrmWX1OnoE8Ki68HqrQzdVFCROrZPwIUP1ZotKP2By9VA4P8engLSljO9xaeLiMyDBLZwXMfIsVFb2r3VvZOBTDMNdAumQrjARMuLS0h3iQ/DVgRM/LL6Ty875hLsBzZIQ8uGs/BTpefdFRIwTiP4mxc0IVOHDS75df+XN9rH3XIKwf06BtC+PlHxcW0Gnta0J96bVUUe9eKkNJPC/KDuT2BkC01Skq0tng3C/BQnTfJpw7C4wIKJVdpA2CPctgvOXPk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(376002)(136003)(346002)(396003)(366004)(451199021)(2906002)(3450700001)(8936002)(8676002)(478600001)(38100700002)(82960400001)(316002)(66946007)(66476007)(4326008)(6916009)(41300700001)(66556008)(6666004)(6486002)(5660300002)(186003)(86362001)(6506007)(26005)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mzGA21Qrbldz6hV5ABRquSdaGMf6ycB/piM4ChBcAzTLxMLv9vS78O/7CDNG?=
+ =?us-ascii?Q?/yChjKaFxN2KfJyHVGuzOW34zHRUyk/1ROmrb65bOHgDCxbkI379dlt32Dpl?=
+ =?us-ascii?Q?9bFQcoOc4Ij+mD8zGikSI6eRdV88LDSil08HN2yoT4KzOE6OrI2bM1qEdOjo?=
+ =?us-ascii?Q?zoJqpJSdUWRNfeyIQMTWCGsqmlraz5cXsFjeYqj+t64fyB/4Krpl0EZtZx3I?=
+ =?us-ascii?Q?MSAUlHsIOlHsxhp1DF4l2DpjK1NckEL8oIT3vvGkvhrKSbah0MlrBvI4y9gC?=
+ =?us-ascii?Q?hIk1spPbuZhYifCfUyOrQl6aImLsR72VX+1OCIhHexL7AIkrTH2aduc1GA3V?=
+ =?us-ascii?Q?VlWshGN0mvEr6vbL3LbvIVpJ0U04T6G7uZcth0WhsPv3/muQXsLGfCQqg5ej?=
+ =?us-ascii?Q?FWgbAKAOb9h+le4Woz4nwTZQWuTj7HIQS8YqQwLe/zgutlwSvY3nefz0mqDK?=
+ =?us-ascii?Q?fATX3zbd6l+Mai5LQHdABBMLNHRJtmnPsgcJugACCOglhGzVZiSoj1B0KE+M?=
+ =?us-ascii?Q?UKHCOfaUh8JOCORI2trWDzCUPEXXd2Hkj0KzCbjFz3HRS4ZFG2egkayvNkTH?=
+ =?us-ascii?Q?/lJjdkU0V4nRGLI0fNYnSecQetRnVtjmp9i+W99mcHDRDwX6xHin/1SBXFFa?=
+ =?us-ascii?Q?cCAARMpRMwi3cGDrxWKxKV0x2+dlhTtT4GMdH1RuY54vmyXU09R/hdTfDXb7?=
+ =?us-ascii?Q?iii808PUQvi12/E8z4AnbNQ9ZjESPLJ1qXG4EPPLekcY6cvUTKQLpK9zSIxT?=
+ =?us-ascii?Q?JQ1G/n6cDBjgkkQ8rzjisYkbc+MmmmTKn7C7aiWpZJzPruTuDcCDWBXJS6Zq?=
+ =?us-ascii?Q?lvG61slYnAuf34u23im9uZScKGBRoz68yaHS/66EwKicW4A/Igys/XCdP7oB?=
+ =?us-ascii?Q?CJNelylzjarVf0h65aNuzRGPkG8ARhAMij1ux1tY9BUSNYWC1/BzLEF/qIa2?=
+ =?us-ascii?Q?4/Zw+w0+AUR1E9bOrHOW4DsYni86FTVBXq31AtoKJyUerK1tLeInJ+JvPkAL?=
+ =?us-ascii?Q?3rIgHnLXrJnTClVZTXirDArMXeK0cjBTHiDf21nmAxn6bvMsw5wnanG5xe2U?=
+ =?us-ascii?Q?kjjqo6X0YA6PyRiIjtfKdVEUXV25gFgVhjofRTibhu+m2HdgytnYRiUXRjim?=
+ =?us-ascii?Q?EfXN8I2+Y9gsHIQYZ/obQplInuCbFWEbeNks95Xt0dwzn70B01Ji/3vM7O2M?=
+ =?us-ascii?Q?Uw9QYd+K8PbJXu6Y5pkG5NIS/EmWfJcJAfdCy5GmCHzJ56zZfPnHAG3HIRWx?=
+ =?us-ascii?Q?xovBfH5OI7FmeMicEDkCva0osBxyj6WZ4/Zm1b+NBRQJsDA48MxVV1p7XG6L?=
+ =?us-ascii?Q?XvRbVUVPF3G/hDfseWdbQYwEaRJB/NXJXs2MmiUMFCJbZN1xW5R0qK/MEeR6?=
+ =?us-ascii?Q?DhF6qfD9yqRB5CYLo7obiMjnEaHS5gx94VzQMreoRbTyx3cDuywbBUK1DnRr?=
+ =?us-ascii?Q?Qdi9uJn9gHh0XrnSMGvE+Xp6a27dJakJiPNeHrMMv++wr/vnbWHpOwMNAkNb?=
+ =?us-ascii?Q?0QwpcgRskV45h+RgB2vqjFG9AIlBSs4xk6NUm0V9M9LgGBMnOR1peBOv0szR?=
+ =?us-ascii?Q?fUT5IqUP5MmI1VI+zLyR8/PLShyT9FhRJDqUJ8Rh?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 104e1b4b-0a96-4aa4-c52f-08db61701af8
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 00:43:52.2566
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2/x5vgysY3uB7NGhaNe5gwg2linLybgwUywdovnucOJsDEgzUouZsME6WJ/gvvye7CsSb/Xy/hC+PXVDM5UqAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7266
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 04:40:31PM +0000, Joan Bruguera Micó wrote:
-> I can also reproduce the problem with Arch's linux-next-git, see config:
-> https://aur.archlinux.org/cgit/aur.git/tree/config?h=linux-next-git&id=f9a384e1c582321651fb613782ebc5a581146af0
+On Tue, May 30, 2023 at 04:51:25PM -0700, Sean Christopherson wrote:
+> On Tue, May 30, 2023, Yan Zhao wrote:
+> > On Thu, May 25, 2023 at 08:54:15AM -0700, Sean Christopherson wrote:
+> > And I combined the __kvm_mmu_honors_guest_mtrrs() into
+> > kvm_mmu_honors_guest_mtrrs(). Not sure if you like it :)
 > 
-> I've bisected it to df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3"),
-> which explains why it only happens on GCC13.
+> I would prefer to provide a separater inner helper, mainly so that the common
+> case callers don't need to pass %false.  I don't love passing bools, but it's
+> tolerable for a one-off use of an inner helper.
 
-Okay, this was a wild ride. Bottom line, -fstrict-flex-arrays=3 means
-that CONFIG_FORTIFY_SOURCE wrappers will be included in new places now
-that trailing arrays aren't ignored any more. The trailing array in
-question was for struct sha256_state:
+Ok. Will follow this way.
+It's reasonable :)
 
-struct sha256_state {
-        u32 state[SHA256_DIGEST_SIZE / 4];
-        u64 count;
-        u8 buf[SHA256_BLOCK_SIZE];
-};
-
-And this "buf" is a memcpy() destination, it was being runtime bounds
-checked, which means FORTIFY might emit wrappers, which will call the
-WARN wrappers, which will hit this asm, which isn't supported in
-purgatory.
-
+> > +/*
+> > + * Returns if KVM honors guest MTRRs
+> > + * @override_vm_has_noncoherent_dma: Allow caller to override non-coherent DMA
+> > + *                                   status returned from
+> > + *                                   kvm_arch_has_noncoherent_dma()
+> > + */
+> > +bool kvm_mmu_honors_guest_mtrrs(struct kvm *kvm,
+> > +                               bool override_vm_has_noncoherent_dma)
+> > +{
+> > +       bool noncoherent_dma = override_vm_has_noncoherent_dma ? true :
+> > +                              kvm_arch_has_noncoherent_dma(kvm);
 > 
-> The problematic expansion that causes the error seems to be this fragment
-> from `_BUG_FLAGS` in `arch/x86/include/asm/bug.h`:
->     asm(".long %c0 - .\n": : "i" (__FILE__));
+> The "override" name is confusing, e.g. it won't be clear when it's safe/correct
+> for a new caller to override kvm_arch_has_noncoherent_dma().  If we go with a
+> single helper, I could live with:
 > 
-> Along with the fact that this file is built with `-mcmodel=large`
-> (see `PURGATORY_CFLAGS` in `arch/x86/purgatory/Makefile`).
-
-So, we can either disable fortify (which seems a big hammer) or disable
-the warning. Disabling the warning kind of hides the problem, though
-that seems to be the intention of purgatory.c's empty warn()
-implementation. :P
-
-I think it's best to disable fortify, though, as we're in a
-DISABLE_EXPORTS state, and probably others are going to need it too, as
-most other have already done so:
-
-arch/arm64/kernel/pi/Makefile:             -D__DISABLE_EXPORTS -ffreestanding -D__NO_FORTIFY \
-arch/riscv/kernel/pi/Makefile:CFLAGS_cmdline_early.o += -D__NO_FORTIFY
-arch/riscv/kernel/pi/Makefile:CFLAGS_lib-fdt_ro.o += -D__NO_FORTIFY
-drivers/firmware/efi/libstub/Makefile: -D__NO_FORTIFY \
-
-These should probably gain -D__NO_FORTIFY:
-
-arch/riscv/purgatory/Makefile:CFLAGS_sha256.o := -D__DISABLE_EXPORTS
-arch/riscv/purgatory/Makefile:CFLAGS_string.o := -D__DISABLE_EXPORTS
-arch/riscv/purgatory/Makefile:CFLAGS_ctype.o := -D__DISABLE_EXPORTS
-arch/s390/purgatory/Makefile:CFLAGS_sha256.o := -D__DISABLE_EXPORTS
-arch/x86/purgatory/Makefile:CFLAGS_sha256.o := -D__DISABLE_EXPORTS
-
-I'll send patches.
-
--Kees
-
--- 
-Kees Cook
+> bool kvm_mmu_honors_guest_mtrrs(struct kvm *kvm, bool stopping_noncoherent_dma)
+> {
+> 	bool noncoherent_dma = stopping_noncoherent_dma ||
+> 			       kvm_arch_has_noncoherent_dma(kvm);
+> 
+> 	...
+> }
+> 
+> but that makes it awkward to use common code for start+stop assignment, and as
+> above there are three "normal" callers that would have to pass magic %false
+> values regardless of the name.
