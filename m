@@ -2,143 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1CF718472
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF46B718414
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjEaOOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
+        id S236392AbjEaOB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236452AbjEaOOQ (ORCPT
+        with ESMTP id S237289AbjEaOB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:14:16 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A37B19BC
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:11:46 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f6e13940daso61772565e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:11:46 -0700 (PDT)
+        Wed, 31 May 2023 10:01:26 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B09D198B
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:55:35 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30ad752f433so4075321f8f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:55:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685542234; x=1688134234;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y5rCFTJGWdcgITCagf0CQsma1inb7ImDXUHOuHQ7JIc=;
-        b=j94+zIoZ3KRYPPrHHHAUKLiwb5mV/UHm+29bpvart7YsvPd+UTbkA5n56ly+Szc0P9
-         0WFsT8iA6iENd7N/VlCsmyujT4p/Ld9+/cPfJQGrxfo8WBtjbolaS3oHnZ0rwA7806yC
-         KTlKdXOlxxqSFSeVWtPUUhsPxW62/ryB8TRpiXMsffZbYecQ5h3+eDNJaAR0q7kZwYBQ
-         roviRPdsT4hvqjzpsuKn1MTKsGws+dETl6FvJ07Utom0FDb07N3LapqPDX87TqaYuQHg
-         eO5UePzfZEO3z2aja5sXz8uRx5pXcM6sn9oK4ONk7dZkdK27h5N2A0C8GmgeORSUQpSu
-         FBDA==
+        d=ventanamicro.com; s=google; t=1685541249; x=1688133249;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zbb0XlzY1V6un7ssRQbevCYzvMDnOinL05UrfKmM4xc=;
+        b=C6P+PAcESg9pjJuC1kShZkAMK9uNCuZZC59NjruVdLAT+QbK5Fb7OyTaHMvt9uPzWB
+         XC6YjFkU+s1LzKNcLemCA5UvlagHiacGzTfiM/R2e6hfVvlyHtQgvcdf+G/89fBAyaFn
+         al95wHlokLtDX33yAGCyGXGWNp+6upvH+JRfhP/MfAomjpj7ykZGP6APMEFunMG6Um4A
+         Q0GkFyAbz3+Gec81W0jn0DXHKIAfGHWPlMPSF60xf9udnMyIdlRQDSu26bSGscPRElke
+         Ee9HUot213bm0c1us5iqLgmtj9PemzfMxCRv29nNkaPrcub3t3g85duWFbefmqdgiqmB
+         Q95Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685542234; x=1688134234;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y5rCFTJGWdcgITCagf0CQsma1inb7ImDXUHOuHQ7JIc=;
-        b=hY2JPPSb3KNkMROJ4dbtnk7bZwVIw3vOjrFLQW2+QwHTw0RrCpJbTaU1sOc0L34C7p
-         Fkyi99YpyjJQjkPCAJTwVNtoI6/MUn70tlkDTcIU1nesyKMb+rY3jkPIGBBC90DxpPDQ
-         WJJgKnWHG2KJHy+lp7TbMMYhju/X2f3BhG/ILy4vN2k8q8ATVNgBmPMFvwFMbA/tyjva
-         OT6yzuILiBuutzJKc5GANCoKgAG+HimdNrrqlOWkqfkglWvQpivpBFtPhH9W4Zd/J1ao
-         aRC6whNgEVUZ1L6Rwsq2JXU+6VnDEmd4mjMYtykXsmwQNt/qkQ/7z+T9T+Ot1qJYs6pJ
-         9Lvg==
-X-Gm-Message-State: AC+VfDzncQDCv6qsB54Wczyfxen3b4WNEgoIs/z8hpe7gYcAI43doyFs
-        OyQJkVWGJq/r5mirV5sf8JCtXdO0kVOWToZFy8k1ocQt8jW/ZA==
-X-Google-Smtp-Source: ACHHUZ7AOHP9g2Megr5QVPTq3LJeayM4t3rVmsZgJHwHD+Q/YbNiDgK6CvMQPQgHJCiZfTLZ8kV3EGXsMp9XQ44DsAQ=
-X-Received: by 2002:a17:907:a426:b0:96f:c988:93b with SMTP id
- sg38-20020a170907a42600b0096fc988093bmr5344896ejc.35.1685541243317; Wed, 31
- May 2023 06:54:03 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685541249; x=1688133249;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zbb0XlzY1V6un7ssRQbevCYzvMDnOinL05UrfKmM4xc=;
+        b=iqfGu1x3QeC9QI/q7NnqV5/7aAuRRjeWkhagUUfb3N1k7V76bXXgj8fngpj+ZWYcf7
+         gy1eTdxR/jncjXLgoCHAL+XcTB7AkdUHYbobP1BkYX4VMQPutmV4mKGcaeLBIGesZQyX
+         +SDsAodP/09cb/NOt8K/m/Pk7htsBrwjxKIK0S6uPgzR57/Y0pDVETCVJW29jaHhiNox
+         BhPD3gNoMNUPStbxkPmDPlPD2Mp4ZZrBLWs2YZjjW05ZVaAymCjT6Iu8gOjKp92lkIiN
+         youXaEMcFmpg2f3Ex6w2ZoWiE0ufTkarcLRtJdtFR8R9+/I57EldAcZS9d9MitZK8VNq
+         y8kA==
+X-Gm-Message-State: AC+VfDwC6Ey1EGp4tFX4w6rJGhaQlO7uOk4YMs42RDPFbBeQfuJyXzoy
+        +LVTsrmP8Kxnws8LrXOchhn2JA==
+X-Google-Smtp-Source: ACHHUZ65HnfYl06bZQf8YF6kP/w87wKf4hufmXMk6i3aLTcwxJQjR5kyaJJ5JQgRjhi7bOY5IOdgjg==
+X-Received: by 2002:adf:e848:0:b0:2f0:2d92:9c81 with SMTP id d8-20020adfe848000000b002f02d929c81mr4030977wrn.19.1685541248998;
+        Wed, 31 May 2023 06:54:08 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id i16-20020a05600011d000b0030aefa3a957sm7021247wrx.28.2023.05.31.06.54.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 06:54:08 -0700 (PDT)
+Date:   Wed, 31 May 2023 15:54:07 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 01/10] perf: Fix wrong comment about default event_idx
+Message-ID: <20230531-5678beb107af4b9805cbb611@orel>
+References: <20230512085321.13259-1-alexghiti@rivosinc.com>
+ <20230512085321.13259-2-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-References: <20230531125918.55609-1-frank.li@vivo.com>
-In-Reply-To: <20230531125918.55609-1-frank.li@vivo.com>
-From:   Juhyung Park <qkrwngud825@gmail.com>
-Date:   Wed, 31 May 2023 22:53:52 +0900
-Message-ID: <CAD14+f1YoiSVvq2M1v8u5bUdCNN_0nurY4ued6ZFu1gaBSHxDw@mail.gmail.com>
-Subject: Re: [f2fs-dev] [PATCH] f2fs: flag as supporting buffered async reads
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Lu Hongfei <luhongfei@vivo.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512085321.13259-2-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yangtao,
+On Fri, May 12, 2023 at 10:53:12AM +0200, Alexandre Ghiti wrote:
+> event_idx default implementation returns 0, not idx + 1.
 
-I remember hearing that f2fs can perform relatively poorly under io_uring,
-nice find.
+The comment was correct until commit c719f56092ad ("perf: Fix and clean
+up initialization of pmu::event_idx"). I'm not sure that warrants a fixes
+tag, but maybe a reference in the commit message.
 
-I suggest rewriting the commit message though. From the looks of it, it
-might suggest that FMODE_BUF_RASYNC is a magic flag that automatically
-improves performance that can be enabled willy nilly.
-
-How about something like:
-
-f2fs uses generic_file_buffered_read(), which supports buffered async
-reads since commit 1a0a7853b901 ("mm: support async buffered reads in
-generic_file_buffered_read()").
-
-Match other file-systems and enable it. The read performance has been
-greatly improved under io_uring:
-
-    167M/s -> 234M/s, Increase ratio by 40%
-
-Test w/:
-    ./fio --name=3Donessd --filename=3D/data/test/local/io_uring_test
-    --size=3D256M --rw=3Drandread --bs=3D4k --direct=3D0 --overwrite=3D0
-    --numjobs=3D1 --iodepth=3D1 --time_based=3D0 --runtime=3D10
-    --ioengine=3Dio_uring --registerfiles --fixedbufs
-    --gtod_reduce=3D1 --group_reporting --sqthread_poll=3D1
-
-On Wed, May 31, 2023 at 10:01=E2=80=AFPM Yangtao Li via Linux-f2fs-devel
-<linux-f2fs-devel@lists.sourceforge.net> wrote:
->
-> After enabling this feature, the read performance has been greatly
-> improved:
->
->     167M/s -> 234M/s, Increase ratio by 40%
->
-> Test w/:
->     ./fio --name=3Donessd --filename=3D/data/test/local/io_uring_test
->     --size=3D256M --rw=3Drandread --bs=3D4k --direct=3D0 --overwrite=3D0
->     --numjobs=3D1 --iodepth=3D1 --time_based=3D0 --runtime=3D10
->     --ioengine=3Dio_uring --registerfiles --fixedbufs
->     --gtod_reduce=3D1 --group_reporting --sqthread_poll=3D1
->
-> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> 
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 > ---
->  fs/f2fs/file.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  include/linux/perf_event.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+> index d5628a7b5eaa..56fe43b20966 100644
+> --- a/include/linux/perf_event.h
+> +++ b/include/linux/perf_event.h
+> @@ -442,7 +442,8 @@ struct pmu {
+>  
+>  	/*
+>  	 * Will return the value for perf_event_mmap_page::index for this event,
+> -	 * if no implementation is provided it will default to: event->hw.idx + 1.
+> +	 * if no implementation is provided it will default to 0 (see
+> +	 * perf_event_idx_default).
+>  	 */
+>  	int (*event_idx)		(struct perf_event *event); /*optional */
+>  
+> -- 
+> 2.37.2
 >
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index 015ed274dc31..23c68ee946e5 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -546,7 +546,7 @@ static int f2fs_file_open(struct inode *inode, struct=
- file *filp)
->         if (err)
->                 return err;
->
-> -       filp->f_mode |=3D FMODE_NOWAIT;
-> +       filp->f_mode |=3D FMODE_NOWAIT | FMODE_BUF_RASYNC;
->
->         return dquot_file_open(inode, filp);
->  }
-> --
-> 2.39.0
->
->
->
-> _______________________________________________
-> Linux-f2fs-devel mailing list
-> Linux-f2fs-devel@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+
+Otherwise,
+
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
