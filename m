@@ -2,500 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78B3717C8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1967D717C87
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235587AbjEaJ5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
+        id S235802AbjEaJ4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235537AbjEaJ5K (ORCPT
+        with ESMTP id S235587AbjEaJ4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:57:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8E7E2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:56:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685526957;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ihlNxIXsutSDvXqdiT+VeO6UCrKuuli8OOxEkvO+vVg=;
-        b=VoeM7aV0EJB7xnGUfrHChKuUREDci5yDVQ5hzhvOzopsbK0TfWTD4n6Fso/tF6yc5i6e2+
-        ULsGQZUT8h0xfTyEfOAlyNpu3AxTbbvN2qrjDpQV9SSFq35g3mCKFYVLCKbw3K3GcE+pIs
-        FzlIvpnGW+VpELTLY0DqXmlRYXHn0TQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-548-gWCb1JR8O_mRjeGQsg68fw-1; Wed, 31 May 2023 05:55:56 -0400
-X-MC-Unique: gWCb1JR8O_mRjeGQsg68fw-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f518f2900eso34825415e9.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:55:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685526955; x=1688118955;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ihlNxIXsutSDvXqdiT+VeO6UCrKuuli8OOxEkvO+vVg=;
-        b=hlYN7ta++8mwdIVjIf3tnn8Ulva8fmrkX3mlElPwEnkK7JGpkSGftA/nXXVRpmgNX2
-         oaFjD2/MaraAbOkItMnOeg0ekqDl0dcj2Zz3RpBDR7ZrIkGaWZqCPUYyb3YXeGJI+vTg
-         0z8bNe6l78StdkjhLWC3yu3Cx+m2jsSYotcnXtThFc7evrt8H045K25F/C1d3oIiIR6g
-         RFDaaEHcmx60gqj5ezNgWHJIi0NYKuTf+4OAgeqFWMZ4jmp17RCoRUBSMOIVdwfaAHL7
-         eENDRjtkD9gHv6USpcvydNKs4bw+kl+Z1etODf7WGX2Jng6BuZXVK/+dF3ilxxtEXPUJ
-         T3yQ==
-X-Gm-Message-State: AC+VfDzo0od4hAtH3o2pvausbOnWhseulwgFP5XJPnNLmFZ0dy4jfY7f
-        4mvw+NlPamUII4nfWlho/1aDellT3vav8/z4C7EDqWxYHdQKs2x4EuBOa6518NS1rHF1UDAmI26
-        IUWUVrlAtChImGT6Gbhhqp2nSMDrfCvPL
-X-Received: by 2002:a7b:cd15:0:b0:3f4:e7c2:607d with SMTP id f21-20020a7bcd15000000b003f4e7c2607dmr3663673wmj.13.1685526954857;
-        Wed, 31 May 2023 02:55:54 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5t5NUwVUwofwmhFK5NTHSXwEbBjPq6b6d2xBqZ5iOPrRrh3a3hHL1DsGouzxbHx143cmMoOA==
-X-Received: by 2002:a7b:cd15:0:b0:3f4:e7c2:607d with SMTP id f21-20020a7bcd15000000b003f4e7c2607dmr3663660wmj.13.1685526954445;
-        Wed, 31 May 2023 02:55:54 -0700 (PDT)
-Received: from redhat.com ([2.52.11.69])
-        by smtp.gmail.com with ESMTPSA id e21-20020a05600c219500b003f604ca479esm23817619wme.3.2023.05.31.02.55.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 02:55:53 -0700 (PDT)
-Date:   Wed, 31 May 2023 05:55:50 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     xuanzhuo@linux.alibaba.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio_ring: validate used buffer length
-Message-ID: <20230531053001-mutt-send-email-mst@kernel.org>
-References: <20230526063041.18359-1-jasowang@redhat.com>
- <20230528033037-mutt-send-email-mst@kernel.org>
- <CACGkMEs9Ztavn2JyuUAb47Sk1fYHiXLLkQQPQR5Czhb2yu_R3w@mail.gmail.com>
- <20230529055729-mutt-send-email-mst@kernel.org>
- <CACGkMEsW1+BFtMoLg4c_FyxYTZJcSVh4BoEdJ-Q9_WGg_DcReA@mail.gmail.com>
- <20230531014326-mutt-send-email-mst@kernel.org>
- <CACGkMEvok6HjBK_ZMR4EYzWxpJQVeh++EMErnHjJ6cu9m3R-1A@mail.gmail.com>
+        Wed, 31 May 2023 05:56:38 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2084.outbound.protection.outlook.com [40.107.102.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A48C132;
+        Wed, 31 May 2023 02:56:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rho5cfQ978DD3NBwuH5F8kVzo0mnLuA5zVb1bb93r/bWgmNzqdz6plbOS/m15k5Ugd3Jf2Txv7H21D7kYHyz7w6jfYOqK3URYh7vBkDGiwyfTW4CRU6sa22Va/OvfV5zaWQjhSLuCp4wk/jt05IUFHxubKjCNxYXK7TTWQHwYn5bqg1Jp1TMa83COpjf7Lfl4Al60boxclWs4SqlHr2z6/E5+q/872TH/i1S3RsHNJ1fuZ9GAbtIywu0SsttW9Ny4d2bknMi9z3LCDiOm6/5hLZ/pKmpRwhjJuZ86bg/pEenvvWricy1X5VLDH3iwSLM8MWr7UDaQFOJ21xee2Y9hQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UBDSnOwHD/6z1qxcjGDdNCgWTAo23doghi/f3sNJJLo=;
+ b=LV+31/Q1WdOtJvSpyVGs65oTs6SZAhS1Hjv58o8hGX9wQwqd7PNse6N27+kJgKR74rB/ha/Sgxy6tQQWZIJkSdZ9lb3pz1QQ2Z4+CQswF8DuS28O7Of71qVf6emwbao7/tzZF28eZK+hETZsa1LgEFP+bi/j28ALu/v7yoYttRpTbffdcACXYrmf/+ZVZMfSvnAchQenyZlpsDEVCv0dmaydIjP3lkfxzwFbn88UFr5mrszfZ1Z8e7CmiM8riAkoC65goJOxKbeDm100bWdGcYh+1FjjD3KOGc6R/0JJG89LsuIcGu+h3FqyYZjCoW4Y5Lpfh7xrxTcI4ehxmr/Z7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UBDSnOwHD/6z1qxcjGDdNCgWTAo23doghi/f3sNJJLo=;
+ b=PJacP/PokDKH1YVy9HmBgg4rvxwBMDlEHvT8iWK00iNJJz0Q64QRN7miVnEOXkKgexVABJ+GZXIdNUP1zJjycKb5ujSSxbDMMS9NWQ9M2ujmP6gCnpq15qSsC2lg+C2VLcCvknB/Z/KfAsWtFB4yvrmxZomxvTY0HkgKq5vMjdM=
+Received: from BN0PR10CA0009.namprd10.prod.outlook.com (2603:10b6:408:143::6)
+ by CY5PR12MB6527.namprd12.prod.outlook.com (2603:10b6:930:30::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Wed, 31 May
+ 2023 09:56:29 +0000
+Received: from BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:143:cafe::69) by BN0PR10CA0009.outlook.office365.com
+ (2603:10b6:408:143::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22 via Frontend
+ Transport; Wed, 31 May 2023 09:56:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT059.mail.protection.outlook.com (10.13.177.120) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6455.22 via Frontend Transport; Wed, 31 May 2023 09:56:29 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 31 May
+ 2023 04:56:27 -0500
+From:   Nava kishore Manne <nava.kishore.manne@amd.com>
+To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
+        <trix@redhat.com>, <michal.simek@amd.com>,
+        <linux-fpga@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
+Subject: [PATCH v2] fpga: zynq-fpga: Ensure proper xCAP interface switch
+Date:   Wed, 31 May 2023 15:26:24 +0530
+Message-ID: <20230531095624.1802757-1-nava.kishore.manne@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEvok6HjBK_ZMR4EYzWxpJQVeh++EMErnHjJ6cu9m3R-1A@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT059:EE_|CY5PR12MB6527:EE_
+X-MS-Office365-Filtering-Correlation-Id: 70c81b88-430b-47ac-c9ce-08db61bd4e6b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: psmqx7XL4WKQNmoq3KNol+qXDuJvJTLLiO/O9IonS3C6c2R2mVel5H70J7641V+gEb1nHf9CNZGvCxIppUY3IgPrGIBpB714kLWE+e9JGy6Huy3sS62uv7jSjqIawOZMSBGUMADkzQssCz1ufSCIvPhR2gHZt65UwsU5HqETm1eAqPrRxNlJa3jNhGua6vIairLpUIUvLXlgQ6mNIB459RnloN4e4dWOQi/TCRP7z6//iK2ZgD0Hz7C1XRRmykHWs5nzz441unEdvDO6+ztjfsIZpQ/9Tahoj227MArbPPLo9CRFU/JtpGgrzz+/ZqCGaW1hTxrUWDBakFjw9CirvGjCTRVFyBdBDr/wswvBSEkgt5gS6JH5ZQtL49PJi0gxM9Y5lweg7P2Y9QwW8YXtdrj2SY+mHnz1AHFFuJMIckw08qe9Jh7IAUQwCW1SdxAM4ttc6kLxtemN7EQ/BOcx0+8Kp+B5hlYbhynszPFxNk5md5LCqDjtdVh6Qh9bGsD8kxtA+JUxtoUIG8pgPwKbsrhifpy/dPh6RVZOKXrJuy0amwVrrj8zzRWXI5/58aay6DvTFy8C84pBVG3zS8fBTDkmyZA5YWcXqoI0tt/NYtT6HtXlSOmas3sTru8HdtxmcfGMlt7vDphhO4TmQ9VySyP/uoeVf3ID6E3ezzWX+ZU5fCtw0vsswMpGxnWmF+L6RC0tMA/qJmm2ANc4381P4Z3D/7NOfHIt2237BjKlmq1HKhvOz1sALZnejM/BzV00//Ks6OwKjZKFkxPfisXrVAoeYlRtwL4Oqvzx2bueXGM=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199021)(46966006)(40470700004)(36840700001)(8936002)(8676002)(5660300002)(110136005)(478600001)(966005)(41300700001)(316002)(6666004)(1076003)(26005)(16526019)(186003)(70206006)(70586007)(4326008)(2616005)(426003)(2906002)(40460700003)(336012)(47076005)(83380400001)(81166007)(356005)(82740400003)(40480700001)(36860700001)(82310400005)(86362001)(103116003)(36756003)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 09:56:29.4988
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70c81b88-430b-47ac-c9ce-08db61bd4e6b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6527
+X-Spam-Status: No, score=-0.6 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 03:36:51PM +0800, Jason Wang wrote:
-> On Wed, May 31, 2023 at 1:50 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Wed, May 31, 2023 at 09:05:00AM +0800, Jason Wang wrote:
-> > > On Mon, May 29, 2023 at 6:03 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> > > > On Mon, May 29, 2023 at 09:18:10AM +0800, Jason Wang wrote:
-> > > > > On Sun, May 28, 2023 at 3:57 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > >
-> > > > > > On Fri, May 26, 2023 at 02:30:41PM +0800, Jason Wang wrote:
-> > > > > > > This patch validate
-> > > > > >
-> > > > > > validates
-> > > > > >
-> > > > > > > the used buffer length provided by the device
-> > > > > > > before trying to use it.
-> > > > > >
-> > > > > > before returning it to caller
-> > > > > >
-> > > > > > > This is done by remembering the in buffer
-> > > > > > > length in a dedicated array during virtqueue_add(), then we can fail
-> > > > > > > the virtqueue_get_buf() when we find the device is trying to give us a
-> > > > > > > used buffer length which is greater than we stored before.
-> > > > > >
-> > > > > > than what we stored
-> > > > > >
-> > > > > > >
-> > > > > > > This validation is disable
-> > > > > >
-> > > > > > disabled
-> > > > > >
-> > > > > > > by default via module parameter to unbreak
-> > > > > > > some existing devices since some legacy devices are known to report
-> > > > > > > buggy used length.
-> > > > > > >
-> > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > >
-> > > > > > First I'm not merging this without more data about
-> > > > > > what is known to be broken and what is known to work well
-> > > > > > in the commit log. And how exactly do things work if used length
-> > > > > > is wrong?
-> > > > >
-> > > > > Assuming the device is malicious, it would be very hard to answer.
-> > > > > Auditing and fuzzing won't cover every case. Instead of trying to seek
-> > > > > the answer, we can simply make sure the used in buffer length is
-> > > > > validated then we know we're fine or not.
-> > > >
-> > > > To restate the question, you said above "some legacy devices are known
-> > > > to report buggy used length". If they report buggy length then how
-> > > > can things work?
-> > >
-> > > The validation is disabled for legacy device (as stated in the changelog):
-> > >
-> > > static bool vring_needs_used_validation(const struct virtio_device *vdev)
-> > > {
-> > >         /*
-> > >          * Several legacy devices are known to produce buggy used
-> > >          * length. In order to let driver work, we won't validate used
-> > >          * buffer length in this case.
-> > >          */
-> > >         if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
-> > >                 return false;
-> > >         if (force_used_validation)
-> > >                 return true;
-> > >         return false;
-> > > }
-> > >
-> > > This seems to be what we've agreed in last version:
-> > >
-> > > https://lore.kernel.org/all/CANLsYkxfhamUU0bb4j7y6N4_G9odKxLCjXxgXEx4SJ6_Kf+M2Q@mail.gmail.com/T/#m31f3b06f9032beec175c312dfa2532cb08b15c56
-> > >
-> > > Thanks
-> > >
-> >
-> > I don't get it. You wrote:
-> >
-> >         This validation is disable
-> >         by default via module parameter to unbreak
-> >         some existing devices since some legacy devices are known to report
-> >         buggy used length.
-> >
-> > which devices?
-> 
-> legacy rpmsg and vsock device (before 49d8c5ffad07) at least.
-> 
-> > why do you need a module parameter?
-> 
-> If we enable it unconditionally for modern devices, it may break some
-> buggy moden device (vsock without a fix as an example).
+From: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
 
-Presumably this happens because vsock does not have any inbuf at all
-so it ignores the length.
-We had the same with virtio net tx a long time ago.
+The Zynq platform has PCAP, ICAP and JTAG interfaces for configuring
+programmable logic (PL). The existing driver implementation uses the
+PCAP interface to configure the PL. Before switching the PL configuration
+interface from PCAP to ICAP make sure that all outstanding Transactions
+relevant to the PL configuration should be completed by the PCAP interface
+otherwise it may lead to PL configuration issues.
 
-My suggestion is then not to fail - just cap length at the dma length
-set by driver. Another idea is that if dma len is 0 then don't validate
-at all - driver that did not add any inbufs is not going to look
-at length.
+This patch provides a required fix to ensure that all existing PL
+transactions are completed before switching from PCAP to ICAP.
 
-Allowing passing NULL as length and skipping validation
-if len = 0 might also be a good idea.
+For detailed information relevant to PL configuration interfaces refer
+Zynq 7000 TRM (section 6.5.1).
+Link: https://docs.xilinx.com/v/u/en-US/ug585-Zynq-7000-TRM
 
+Signed-off-by: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
+Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+---
+Changes for v2:
+              - Updated commit message and added Doc link as suggested by Yilun.
 
-> >
-> >
-> > > >
-> > > > > > Second what's wrong with dma_desc_extra that we already maintain?
-> > > > > > Third motivation - it's part and parcel of the hardening effort yes?
-> > > > >
-> > > > > They are different. dma_desc_extra is for a descriptor ring, but this
-> > > > > is for a used ring. Technically we can go back to iterate on the
-> > > > > descriptor ring for a legal used in buffer length. But it will have
-> > > > > worse performance.
-> > > >
-> > > > I don't really understand. We already iterate when we unmap -
-> > > > all that is necessary is to subtract it from used length, if at
-> > > > the end of the process it is >0 then we know used length is too
-> > > > large.
-> > >
-> > > Yes, but it is the job that is done in the driver level not the virtio
-> > > core.
-> >
-> > What job?
-> 
-> I meant the driver can do the validation since it has the knowledge of
-> the buffer length if it wants.
+ drivers/fpga/zynq-fpga.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-It does not necessarily have it - not if virtio is doing DMA
-mapping.
-
-
-> > unmap is done in detach_buf_split and detach_buf_packed respectively.
-> > vring_desc_extra isn't even visible outside drivers/virtio/virtio_ring.c
-> 
-> desc_extra doesn't contain buffer length for the case of indirect
-> descriptors. So we need to iterate in the descriptors when it looks
-> expensive if we don't need unmap.
-> 
-> Thanks
-
-Well at the moment we only don't unmap if DMA API is bypassed.  And then
-we don't need to validate length either. Fundamentally, without
-ACCESS_PLATFORM device is trusted.
-
-
-> >
-> > For drivers that do unmap at driver level - I guess they can do
-> > validation there too.
-> >
-> > > Validation in virtio core is still necessary since they're
-> > > working at different levels and it's hard to force the validation in
-> > > all drivers by codes. Last version introduces a
-> > > suppress_driver_validation to allow the driver to suppress the core
-> > > validation which seems not good, we need a way to force the
-> > > virtio_ring code to do validation before.
-> >
-> > Why do we? If driver validates length virtio_ring does not need to
-> > validate.  If driver does not use length virtio_ring does not need to
-> > validate. core can provide this service for the gazillion non
-> > performance critical drivers that just want to keep things simple,
-> > but the 4-5 critical ones can do their own validation if they want to.
-> >
-> > > Or such stuff could be added
-> > > on top since the validation is by default anyway.
-> > >
-> > > Thanks
-> >
-> >
-> >
-> > > >
-> > > >
-> > > > > > I'd like to know the fate of VIRTIO_HARDEN_NOTIFICATION before
-> > > > > > we do more hardening. If it's irrevocably broken let's rip it out?
-> > > > >
-> > > > > So the plan is
-> > > > >
-> > > > > 1) finish used ring validation (this had been proposed, merged and
-> > > > > reverted before notification hardening)
-> > > > > 2) do notification hardening on top.
-> > > > >
-> > > > > So let's leave it as is and I will do a rework after we finalize the
-> > > > > used ring validation.
-> > > > >
-> > > > > Thanks
-> > > > >
-> > > > > >
-> > > > > >
-> > > > > > > ---
-> > > > > > > Changes since V4:
-> > > > > > > - drop the flat for driver to suppress the check
-> > > > > > > - validation is disabled by default
-> > > > > > > - don't do validation for legacy device
-> > > > > > > - rebase and support virtqueue resize
-> > > > > > > ---
-> > > > > > >  drivers/virtio/virtio_ring.c | 75 ++++++++++++++++++++++++++++++++++++
-> > > > > > >  1 file changed, 75 insertions(+)
-> > > > > > >
-> > > > > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > > > > > > index 143f380baa1c..5b151605aaf8 100644
-> > > > > > > --- a/drivers/virtio/virtio_ring.c
-> > > > > > > +++ b/drivers/virtio/virtio_ring.c
-> > > > > > > @@ -15,6 +15,9 @@
-> > > > > > >  #include <linux/spinlock.h>
-> > > > > > >  #include <xen/xen.h>
-> > > > > > >
-> > > > > > > +static bool force_used_validation = false;
-> > > > > > > +module_param(force_used_validation, bool, 0444);
-> > > > > > > +
-> > > > > > >  #ifdef DEBUG
-> > > > > > >  /* For development, we want to crash whenever the ring is screwed. */
-> > > > > > >  #define BAD_RING(_vq, fmt, args...)                          \
-> > > > > > > @@ -105,6 +108,9 @@ struct vring_virtqueue_split {
-> > > > > > >       struct vring_desc_state_split *desc_state;
-> > > > > > >       struct vring_desc_extra *desc_extra;
-> > > > > > >
-> > > > > > > +     /* Maximum in buffer length, NULL means no used validation */
-> > > > > > > +     u32 *buflen;
-> > > > > > > +
-> > > > > > >       /* DMA address and size information */
-> > > > > > >       dma_addr_t queue_dma_addr;
-> > > > > > >       size_t queue_size_in_bytes;
-> > > > > > > @@ -145,6 +151,9 @@ struct vring_virtqueue_packed {
-> > > > > > >       struct vring_desc_state_packed *desc_state;
-> > > > > > >       struct vring_desc_extra *desc_extra;
-> > > > > > >
-> > > > > > > +     /* Maximum in buffer length, NULL means no used validation */
-> > > > > > > +     u32 *buflen;
-> > > > > > > +
-> > > > > > >       /* DMA address and size information */
-> > > > > > >       dma_addr_t ring_dma_addr;
-> > > > > > >       dma_addr_t driver_event_dma_addr;
-> > > > > > > @@ -552,6 +561,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
-> > > > > > >       unsigned int i, n, avail, descs_used, prev, err_idx;
-> > > > > > >       int head;
-> > > > > > >       bool indirect;
-> > > > > > > +     u32 buflen = 0;
-> > > > > > >
-> > > > > > >       START_USE(vq);
-> > > > > > >
-> > > > > > > @@ -635,6 +645,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
-> > > > > > >                                                    VRING_DESC_F_NEXT |
-> > > > > > >                                                    VRING_DESC_F_WRITE,
-> > > > > > >                                                    indirect);
-> > > > > > > +                     buflen += sg->length;
-> > > > > > >               }
-> > > > > > >       }
-> > > > > > >       /* Last one doesn't continue. */
-> > > > > > > @@ -675,6 +686,10 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
-> > > > > > >       else
-> > > > > > >               vq->split.desc_state[head].indir_desc = ctx;
-> > > > > > >
-> > > > > > > +     /* Store in buffer length if necessary */
-> > > > > > > +     if (vq->split.buflen)
-> > > > > > > +             vq->split.buflen[head] = buflen;
-> > > > > > > +
-> > > > > > >       /* Put entry in available array (but don't update avail->idx until they
-> > > > > > >        * do sync). */
-> > > > > > >       avail = vq->split.avail_idx_shadow & (vq->split.vring.num - 1);
-> > > > > > > @@ -861,6 +876,11 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
-> > > > > > >               BAD_RING(vq, "id %u is not a head!\n", i);
-> > > > > > >               return NULL;
-> > > > > > >       }
-> > > > > > > +     if (vq->split.buflen && unlikely(*len > vq->split.buflen[i])) {
-> > > > > > > +             BAD_RING(vq, "used len %d is larger than max in buffer len %u\n",
-> > > > > > > +                     *len, vq->split.buflen[i]);
-> > > > > > > +             return NULL;
-> > > > > > > +     }
-> > > > > > >
-> > > > > > >       /* detach_buf_split clears data, so grab it now. */
-> > > > > > >       ret = vq->split.desc_state[i].data;
-> > > > > > > @@ -1085,10 +1105,25 @@ static void vring_free_split(struct vring_virtqueue_split *vring_split,
-> > > > > > >                        vring_split->queue_dma_addr,
-> > > > > > >                        dma_dev);
-> > > > > > >
-> > > > > > > +     kfree(vring_split->buflen);
-> > > > > > >       kfree(vring_split->desc_state);
-> > > > > > >       kfree(vring_split->desc_extra);
-> > > > > > >  }
-> > > > > > >
-> > > > > > > +static bool vring_needs_used_validation(const struct virtio_device *vdev)
-> > > > > > > +{
-> > > > > > > +     /*
-> > > > > > > +      * Several legacy devices are known to produce buggy used
-> > > > > > > +      * length. In order to let driver work, we won't validate used
-> > > > > > > +      * buffer length in this case.
-> > > > > > > +      */
-> > > > > > > +     if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
-> > > > > > > +             return false;
-> > > > > > > +     if (force_used_validation)
-> > > > > > > +             return true;
-> > > > > > > +     return false;
-> > > > > > > +}
-> > > > > > > +
-> > > > > > >  static int vring_alloc_queue_split(struct vring_virtqueue_split *vring_split,
-> > > > > > >                                  struct virtio_device *vdev,
-> > > > > > >                                  u32 num,
-> > > > > > > @@ -1137,7 +1172,19 @@ static int vring_alloc_queue_split(struct vring_virtqueue_split *vring_split,
-> > > > > > >       vring_split->vring_align = vring_align;
-> > > > > > >       vring_split->may_reduce_num = may_reduce_num;
-> > > > > > >
-> > > > > > > +     if (vring_needs_used_validation(vdev)) {
-> > > > > > > +             vring_split->buflen =
-> > > > > > > +                     kmalloc_array(num, sizeof(*vring_split->buflen),
-> > > > > > > +                                   GFP_KERNEL);
-> > > > > > > +             if (!vring_split->buflen)
-> > > > > > > +                     goto err_buflen;
-> > > > > > > +     }
-> > > > > > > +
-> > > > > > >       return 0;
-> > > > > > > +
-> > > > > > > +err_buflen:
-> > > > > > > +     vring_free_split(vring_split, vdev, dma_dev);
-> > > > > > > +     return -ENOMEM;
-> > > > > > >  }
-> > > > > > >
-> > > > > > >  static struct virtqueue *vring_create_virtqueue_split(
-> > > > > > > @@ -1297,6 +1344,7 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
-> > > > > > >       unsigned int i, n, err_idx;
-> > > > > > >       u16 head, id;
-> > > > > > >       dma_addr_t addr;
-> > > > > > > +     u32 buflen = 0;
-> > > > > > >
-> > > > > > >       head = vq->packed.next_avail_idx;
-> > > > > > >       desc = alloc_indirect_packed(total_sg, gfp);
-> > > > > > > @@ -1325,6 +1373,8 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
-> > > > > > >                       desc[i].addr = cpu_to_le64(addr);
-> > > > > > >                       desc[i].len = cpu_to_le32(sg->length);
-> > > > > > >                       i++;
-> > > > > > > +                     if (n >= out_sgs)
-> > > > > > > +                             buflen += sg->length;
-> > > > > > >               }
-> > > > > > >       }
-> > > > > > >
-> > > > > > > @@ -1379,6 +1429,10 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
-> > > > > > >       vq->packed.desc_state[id].last = id;
-> > > > > > >       vq->packed.desc_state[id].premapped = premapped;
-> > > > > > >
-> > > > > > > +     /* Store in buffer length if necessary */
-> > > > > > > +     if (vq->packed.buflen)
-> > > > > > > +             vq->packed.buflen[id] = buflen;
-> > > > > > > +
-> > > > > > >       vq->num_added += 1;
-> > > > > > >
-> > > > > > >       pr_debug("Added buffer head %i to %p\n", head, vq);
-> > > > > > > @@ -1416,6 +1470,7 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
-> > > > > > >       __le16 head_flags, flags;
-> > > > > > >       u16 head, id, prev, curr, avail_used_flags;
-> > > > > > >       int err;
-> > > > > > > +     u32 buflen = 0;
-> > > > > > >
-> > > > > > >       START_USE(vq);
-> > > > > > >
-> > > > > > > @@ -1498,6 +1553,8 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
-> > > > > > >                                       1 << VRING_PACKED_DESC_F_AVAIL |
-> > > > > > >                                       1 << VRING_PACKED_DESC_F_USED;
-> > > > > > >                       }
-> > > > > > > +                     if (n >= out_sgs)
-> > > > > > > +                             buflen += sg->length;
-> > > > > > >               }
-> > > > > > >       }
-> > > > > > >
-> > > > > > > @@ -1518,6 +1575,10 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
-> > > > > > >       vq->packed.desc_state[id].last = prev;
-> > > > > > >       vq->packed.desc_state[id].premapped = premapped;
-> > > > > > >
-> > > > > > > +     /* Store in buffer length if necessary */
-> > > > > > > +     if (vq->packed.buflen)
-> > > > > > > +             vq->packed.buflen[id] = buflen;
-> > > > > > > +
-> > > > > > >       /*
-> > > > > > >        * A driver MUST NOT make the first descriptor in the list
-> > > > > > >        * available before all subsequent descriptors comprising
-> > > > > > > @@ -1718,6 +1779,11 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
-> > > > > > >               BAD_RING(vq, "id %u is not a head!\n", id);
-> > > > > > >               return NULL;
-> > > > > > >       }
-> > > > > > > +     if (vq->packed.buflen && unlikely(*len > vq->packed.buflen[id])) {
-> > > > > > > +             BAD_RING(vq, "used len %d is larger than max in buffer len %u\n",
-> > > > > > > +                     *len, vq->packed.buflen[id]);
-> > > > > > > +             return NULL;
-> > > > > > > +     }
-> > > > > > >
-> > > > > > >       /* detach_buf_packed clears data, so grab it now. */
-> > > > > > >       ret = vq->packed.desc_state[id].data;
-> > > > > > > @@ -1937,6 +2003,7 @@ static void vring_free_packed(struct vring_virtqueue_packed *vring_packed,
-> > > > > > >                                vring_packed->device_event_dma_addr,
-> > > > > > >                                dma_dev);
-> > > > > > >
-> > > > > > > +     kfree(vring_packed->buflen);
-> > > > > > >       kfree(vring_packed->desc_state);
-> > > > > > >       kfree(vring_packed->desc_extra);
-> > > > > > >  }
-> > > > > > > @@ -1988,6 +2055,14 @@ static int vring_alloc_queue_packed(struct vring_virtqueue_packed *vring_packed,
-> > > > > > >
-> > > > > > >       vring_packed->vring.num = num;
-> > > > > > >
-> > > > > > > +     if (vring_needs_used_validation(vdev)) {
-> > > > > > > +             vring_packed->buflen =
-> > > > > > > +                     kmalloc_array(num, sizeof(*vring_packed->buflen),
-> > > > > > > +                                   GFP_KERNEL);
-> > > > > > > +             if (!vring_packed->buflen)
-> > > > > > > +                     goto err;
-> > > > > > > +     }
-> > > > > > > +
-> > > > > > >       return 0;
-> > > > > > >
-> > > > > > >  err:
-> > > > > > > --
-> > > > > > > 2.25.1
-> > > > > >
-> > > >
-> >
+diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+index ae0da361e6c6..88db9ac36887 100644
+--- a/drivers/fpga/zynq-fpga.c
++++ b/drivers/fpga/zynq-fpga.c
+@@ -493,15 +493,16 @@ static int zynq_fpga_ops_write_complete(struct fpga_manager *mgr,
+ 	if (err)
+ 		return err;
+ 
+-	/* Release 'PR' control back to the ICAP */
+-	zynq_fpga_write(priv, CTRL_OFFSET,
+-		zynq_fpga_read(priv, CTRL_OFFSET) & ~CTRL_PCAP_PR_MASK);
+-
+ 	err = zynq_fpga_poll_timeout(priv, INT_STS_OFFSET, intr_status,
+ 				     intr_status & IXR_PCFG_DONE_MASK,
+ 				     INIT_POLL_DELAY,
+ 				     INIT_POLL_TIMEOUT);
+ 
++	/* Release 'PR' control back to the ICAP */
++	zynq_fpga_write(priv, CTRL_OFFSET,
++			zynq_fpga_read(priv, CTRL_OFFSET)
++			& ~CTRL_PCAP_PR_MASK);
++
+ 	clk_disable(priv->clk);
+ 
+ 	if (err)
+-- 
+2.25.1
 
