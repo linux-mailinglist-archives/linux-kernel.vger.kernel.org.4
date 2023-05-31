@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD27717F7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365CD717F7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235620AbjEaMFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:05:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
+        id S235281AbjEaMFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235574AbjEaMEv (ORCPT
+        with ESMTP id S235750AbjEaMEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:04:51 -0400
+        Wed, 31 May 2023 08:04:52 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C0EE5;
-        Wed, 31 May 2023 05:04:50 -0700 (PDT)
-Date:   Wed, 31 May 2023 12:04:48 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C22910E;
+        Wed, 31 May 2023 05:04:51 -0700 (PDT)
+Date:   Wed, 31 May 2023 12:04:49 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1685534689;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EnXceI711UzJSpm9Tc/LUW38R3dqqmQbiyu3XHe+824=;
-        b=UZHQhSJbYkB7uyPgdESiTQ4qHJrR7+m/n67D4HEMYCVOFxZZe3aNOPK4m6aHr/q9SkL0Vt
-        rlPLjST1ZGR4sorLSsC2OGPx+6LDIrBBQ6HJVee0GG/eWgAgIw2UvU4zl1lAeXBsWYKPJG
-        sx2KshNrSxJ2NlynKPr4HgECCXi6f5N14Z4cLaGglUV9DzpRVpKiCBFZUDZ2lH1BZSjfRY
-        g4uMTaz25XBw9je7gileZ6N6Ag3wbDepqEl5rKKGyOR3EVP50j2DdhZ1xjqi/q7eMz1O6z
-        f0O9xToRXeGfNGVj/2MR7/jrFKMuj1jXDGWSza8bAO/68jW+qmmV0sxGHigE/w==
+        bh=rNwUXukSEl/JgYnsL6fJJ1J4br3SvY99FMxfaCaZ3Cc=;
+        b=ak8GNogfuNVQNKbMkypBkrAkC7i2N5ysg6AERNmOG1xL9bMdPZITw8/jD4uSFZc//0XUDu
+        +nLSrLsx5FCIuxiIh8vt7aAKT13ep21jAsZreTviMSxXRXpHg75T6VhT260Fe+CaWElPjY
+        hrqb8yvJXqgNXpwlNNXl+ZtlUCltNP1Nl1VRYa9+1uuqmAtc8fEBpOuxEhKq9EBFOQR2wD
+        6AA7yU7CS9h0X830qGzwe/bvXc9T684+VxaRupbNPxSWbGsy1muJ6k5TCF9nQIVoZ9yj4V
+        Us9EQYXCaXTvyzpIhQBQ+yGOLxu21n9i/BTPTEG3HhsgwT8FdKwRepSK/Z3X6A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1685534689;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EnXceI711UzJSpm9Tc/LUW38R3dqqmQbiyu3XHe+824=;
-        b=nmQRFUKe+/Ed7WwHBQQ6GgyOxr87CkfCWXEG0OaGFOr1cQkLAeunAlFkD+420y5jNW9QSS
-        SpLRIByHu7qLmwBA==
+        bh=rNwUXukSEl/JgYnsL6fJJ1J4br3SvY99FMxfaCaZ3Cc=;
+        b=2my4tOoarOyW6hz1DKRhNqMOuWC1U6c1qnlS5U59nXT36rJEqEB+OV/JGQySN0xR6/Ow0C
+        K7kkkJpY0m6d2dDQ==
 From:   "tip-bot2 for Arnd Bergmann" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Move unused stub functions to header
+Subject: [tip: sched/core] sched: Make task_vruntime_update() prototype visible
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Vincent Guittot <vincent.guittot@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230522195021.3456768-6-arnd@kernel.org>
-References: <20230522195021.3456768-6-arnd@kernel.org>
+In-Reply-To: <20230522195021.3456768-5-arnd@kernel.org>
+References: <20230522195021.3456768-5-arnd@kernel.org>
 MIME-Version: 1.0
-Message-ID: <168553468874.404.6309078676435197068.tip-bot2@tip-bot2>
+Message-ID: <168553468933.404.13669678273109677886.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,87 +68,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     7aa55f2a5902646a19db89dab9961867724b27b8
-Gitweb:        https://git.kernel.org/tip/7aa55f2a5902646a19db89dab9961867724b27b8
+Commit-ID:     f7df852ad6dbb84644e75df7402d9a34f39f31bd
+Gitweb:        https://git.kernel.org/tip/f7df852ad6dbb84644e75df7402d9a34f39f31bd
 Author:        Arnd Bergmann <arnd@arndb.de>
-AuthorDate:    Mon, 22 May 2023 21:50:21 +02:00
+AuthorDate:    Mon, 22 May 2023 21:50:20 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 30 May 2023 22:46:26 +02:00
 
-sched/fair: Move unused stub functions to header
+sched: Make task_vruntime_update() prototype visible
 
-These four functions have a normal definition for CONFIG_FAIR_GROUP_SCHED,
-and empty one that is only referenced when FAIR_GROUP_SCHED is disabled
-but CGROUP_SCHED is still enabled. If both are turned off, the functions
-are still defined but the misisng prototype causes a W=1 warning:
+Having the prototype next to the caller but not visible to the callee causes
+a W=1 warning:
 
-kernel/sched/fair.c:12544:6: error: no previous prototype for 'free_fair_sched_group'
-kernel/sched/fair.c:12546:5: error: no previous prototype for 'alloc_fair_sched_group'
-kernel/sched/fair.c:12553:6: error: no previous prototype for 'online_fair_sched_group'
-kernel/sched/fair.c:12555:6: error: no previous prototype for 'unregister_fair_sched_group'
+kernel/sched/fair.c:11985:6: error: no previous prototype for 'task_vruntime_update' [-Werror=missing-prototypes]
 
-Move the alternatives into the header as static inline functions with
-the correct combination of #ifdef checks to avoid the warning without
-adding even more complexity.
+Move this to a header, as we do for all other function declarations.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-Link: https://lore.kernel.org/r/20230522195021.3456768-6-arnd@kernel.org
+Link: https://lore.kernel.org/r/20230522195021.3456768-5-arnd@kernel.org
 ---
- kernel/sched/fair.c  | 6 +++---
- kernel/sched/sched.h | 2 --
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ kernel/sched/sched.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index a7a8ccd..48b6f0c 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -684,7 +684,7 @@ struct sched_entity *__pick_last_entity(struct cfs_rq *cfs_rq)
- /**************************************************************
-  * Scheduling class statistics methods:
-  */
--#ifdef CONFIG_SMP
-+
- int sched_update_scaling(void)
- {
- 	unsigned int factor = get_update_sysctl_factor();
-@@ -702,7 +702,6 @@ int sched_update_scaling(void)
- 	return 0;
- }
- #endif
--#endif
- 
- /*
-  * delta /= w
-@@ -6169,8 +6168,9 @@ static inline int throttled_lb_pair(struct task_group *tg,
- 	return 0;
- }
- 
--#ifdef CONFIG_FAIR_GROUP_SCHED
- void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-+
-+#ifdef CONFIG_FAIR_GROUP_SCHED
- static void init_cfs_rq_runtime(struct cfs_rq *cfs_rq) {}
- #endif
- 
 diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index ce07782..6784462 100644
+index 192e781..ce07782 100644
 --- a/kernel/sched/sched.h
 +++ b/kernel/sched/sched.h
-@@ -1245,7 +1245,6 @@ static inline raw_spinlock_t *__rq_lockp(struct rq *rq)
+@@ -1245,6 +1245,7 @@ static inline raw_spinlock_t *__rq_lockp(struct rq *rq)
  
  bool cfs_prio_less(const struct task_struct *a, const struct task_struct *b,
  			bool fi);
--void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
++void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi);
  
  /*
   * Helpers to check if the CPU's core cookie matches with the task's cookie
-@@ -2377,7 +2376,6 @@ static inline struct cpuidle_state *idle_get_state(struct rq *rq)
- #endif
- 
- extern void schedule_idle(void);
--asmlinkage void schedule_user(void);
- 
- extern void sysrq_sched_debug_show(void);
- extern void sched_init_granularity(void);
