@@ -2,52 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4CD7184D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121CF7184DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232788AbjEaOZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
+        id S235673AbjEaO0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237761AbjEaOZk (ORCPT
+        with ESMTP id S236063AbjEaOZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:25:40 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16A7E2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:25:38 -0700 (PDT)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QWWgd4jvFzLq8l;
-        Wed, 31 May 2023 22:22:37 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 31 May 2023 22:25:36 +0800
-Subject: Re: [PATCH 6/6] kexec: enable kexec_crash_size to support two crash
- kernel regions
-To:     Baoquan He <bhe@redhat.com>
-CC:     Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Michael Holzheu <holzheu@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230527123439.772-1-thunder.leizhen@huawei.com>
- <20230527123439.772-7-thunder.leizhen@huawei.com>
- <ZHcY/jsExa8t7hJW@MiWiFi-R3L-srv>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <955d2ba6-2cb8-7ee1-031f-e9033b32a3c8@huawei.com>
-Date:   Wed, 31 May 2023 22:25:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Wed, 31 May 2023 10:25:57 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A90A13D
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:25:53 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so6681207e87.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:25:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685543151; x=1688135151;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+Eb0OXLJcEfhgIFwTQmDQjV6ffwQwHbOIk4I821xSAg=;
+        b=nBCwUiRZj+UDmpg5sKSTyvh84doNB1kMWEgzprxmXJfURZ3iToEWz81O8ZCKgSMHoS
+         vXj5YQIhsXWE2WSH+trwcgST72DFJFHTyKfbEMlVYxm/lKRQbpn9jtkOkJfoMDHCHgMJ
+         hgMRQrN16y1+0C9pJbUUBtUnZUB1jaWmzXRe7nC3gnGCU7kujbhCqAdDQ+n5dtbUxEeU
+         cSwiSL1Z72IMl5820A1n0RFA44RsYRusBSTqFaShWZY4I6u8HRVcRjtgqGjNKV93ktFw
+         KuSCfIoQHJ3iYb0vVgcj/vy2b2Yks+DqbuIdIz+C6CaiQ+pxhHRoOv7KtkFFlQCf+6SW
+         DKbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685543151; x=1688135151;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Eb0OXLJcEfhgIFwTQmDQjV6ffwQwHbOIk4I821xSAg=;
+        b=QkNshjVFTGo6kLcTNM+wTgXVHWuIYnW2wQj62JEyKnBeSc9tsHCPyBPL++AZS30xp1
+         Y5KD3UFrkNP0wp/JfejCfeSNBEaJ/Kh5mtn7SNVBK0sFubZS2N+wVGdiJeUrbc4scUvP
+         yItroZnU7kJJ4KAc/vDhDGrS//Npt+tLfya9++/MUanjhTJyQK1rx5AgjF5u6sPdEv68
+         5NA9ZKe4RUKFsLONN8rtj0xwb94ibqj0k1r0CSJbloRN/J5Mqch7/gZ6qe1cwjUk4Nd6
+         wA73pn74VZf43LQA4EsAvLFYwtMpy9nWytituTQJFfziS4J1zfQyGLmhTMH0M+Ptruwa
+         IDHQ==
+X-Gm-Message-State: AC+VfDy+I7V55MaOmKFP59bYYT4Gyubfv7wnoiJRtbSvXRQ2YeML9Ozz
+        6LLttnCG9KBHwy0TKBFyBP48ug==
+X-Google-Smtp-Source: ACHHUZ4s+6gL6MluIupp7PlORfJ5WRqj6KBjxlG3wSOvCJYuLhh+0DhjJOXOeF+pai8Ryshvz6vPcw==
+X-Received: by 2002:ac2:5598:0:b0:4eb:1361:895c with SMTP id v24-20020ac25598000000b004eb1361895cmr3010335lfg.55.1685543151556;
+        Wed, 31 May 2023 07:25:51 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id c21-20020ac244b5000000b004f51418f78fsm560626lfm.38.2023.05.31.07.25.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 07:25:50 -0700 (PDT)
+Message-ID: <fec8f422-e00b-4ca2-ae8b-28034e16eb36@linaro.org>
+Date:   Wed, 31 May 2023 16:25:49 +0200
 MIME-Version: 1.0
-In-Reply-To: <ZHcY/jsExa8t7hJW@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 0/8] Flush RSC votes properly on more RPMh platforms
 Content-Language: en-US
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Gross <andy.gross@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+References: <20230531-topic-rsc-v1-0-b4a985f57b8b@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230531-topic-rsc-v1-0-b4a985f57b8b@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,131 +93,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/5/31 17:53, Baoquan He wrote:
-> On 05/27/23 at 08:34pm, Zhen Lei wrote:
->> The crashk_low_res should be considered by /sys/kernel/kexec_crash_size
->> to support two crash kernel regions. Since crashk_res manages the memory
->> with high address and crashk_low_res manages the memory with low address,
->> crashk_low_res is shrunken only when all crashk_res is shrunken. And
->> because when there is only one crash kernel region, crashk_res is always
->> used. Therefore, if all crashk_res is shrunken and crashk_low_res still
->> exists, swap them.
+On 31.05.2023 15:22, Konrad Dybcio wrote:
+> As pointed out in [1], the Linux implementation of RSC basically requires
+> (even if not explicitly) that we point it to a power domain which
+> represents the power state of the CPUs. In an effort to fulfill that
+> requirement, make it required in bindings and hook it up on all platforms
+> where I was able to do. This means all RPMh platforms, except
 > 
-> This looks good, otherwise someone else won't stop attempting to add
-> support of crashk_low_res shrinking. Not sure if this will bring corner
-> case issue in testing, let's see. For the patch log, I tried to
-> rephrase, feel free to refer to.
+> - SC7180
+> - SC7280
+> - SA8775
 > 
-> =====
-> The crashk_low_res should be considered by /sys/kernel/kexec_crash_size
-> to support two crash kernel regions shrinking if existing.
+> As there wasn't an idle-states setup (which may be on purpose for CrOS
+> devices, certainly not for Windows SC7[12]80s) that I could validate.
+> (Doug, Bartosz, could you guys look into your respective platforms of
+> interest here?)
 > 
-> While doing it, crashk_low_res will only be shrunk when the entire
-> crashk_res is empty; and if the crashk_res is empty and crahk_low_res
-> is not, change crashk_low_res to be crashk_res.
-> =====
-> 
-> With the log updated, you can add:
-> 
-> Acked-by: Baoquan He <bhe@redhat.com>
-
-OK, I will update the log and add Acked-by in v2.
+> This series also adds support for idle states on SM6350, as I was able
+> to add and test that.
+I noticed that 7280 is WIP:
 
 > 
->>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  kernel/kexec_core.c | 43 ++++++++++++++++++++++++++++++++++++++-----
->>  1 file changed, 38 insertions(+), 5 deletions(-)
->>
->> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
->> index e82bc6d6634136a..c1d50f6566300d9 100644
->> --- a/kernel/kexec_core.c
->> +++ b/kernel/kexec_core.c
->> @@ -1091,6 +1091,11 @@ __bpf_kfunc void crash_kexec(struct pt_regs *regs)
->>  	}
->>  }
->>  
->> +static inline resource_size_t crash_resource_size(const struct resource *res)
->> +{
->> +	return !res->end ? 0 : resource_size(res);
->> +}
->> +
->>  ssize_t crash_get_memory_size(void)
->>  {
->>  	ssize_t size = 0;
->> @@ -1098,8 +1103,8 @@ ssize_t crash_get_memory_size(void)
->>  	if (!kexec_trylock())
->>  		return -EBUSY;
->>  
->> -	if (crashk_res.end != crashk_res.start)
->> -		size = resource_size(&crashk_res);
->> +	size += crash_resource_size(&crashk_res);
->> +	size += crash_resource_size(&crashk_low_res);
->>  
->>  	kexec_unlock();
->>  	return size;
->> @@ -1135,7 +1140,7 @@ int __crash_shrink_memory(struct resource *old_res, unsigned long new_size)
->>  int crash_shrink_memory(unsigned long new_size)
->>  {
->>  	int ret = 0;
->> -	unsigned long old_size;
->> +	unsigned long old_size, low_size;
->>  
->>  	if (!kexec_trylock())
->>  		return -EBUSY;
->> @@ -1144,14 +1149,42 @@ int crash_shrink_memory(unsigned long new_size)
->>  		ret = -ENOENT;
->>  		goto unlock;
->>  	}
->> -	old_size = !crashk_res.end ? 0 : resource_size(&crashk_res);
->> +
->> +	low_size = crash_resource_size(&crashk_low_res);
->> +	old_size = crash_resource_size(&crashk_res) + low_size;
->>  	new_size = roundup(new_size, KEXEC_CRASH_MEM_ALIGN);
->>  	if (new_size >= old_size) {
->>  		ret = (new_size == old_size) ? 0 : -EINVAL;
->>  		goto unlock;
->>  	}
->>  
->> -	ret = __crash_shrink_memory(&crashk_res, new_size);
->> +	/*
->> +	 * (low_size > new_size) implies that low_size is greater than zero.
->> +	 * This also means that if low_size is zero, the else branch is taken.
->> +	 *
->> +	 * If low_size is greater than 0, (low_size > new_size) indicates that
->> +	 * crashk_low_res also needs to be shrunken. Otherwise, only crashk_res
->> +	 * needs to be shrunken.
->> +	 */
->> +	if (low_size > new_size) {
->> +		ret = __crash_shrink_memory(&crashk_res, 0);
->> +		if (ret)
->> +			goto unlock;
->> +
->> +		ret = __crash_shrink_memory(&crashk_low_res, new_size);
->> +	} else {
->> +		ret = __crash_shrink_memory(&crashk_res, new_size - low_size);
->> +	}
->> +
->> +	/* Swap crashk_res and crashk_low_res if needed */
->> +	if (!crashk_res.end && crashk_low_res.end) {
->> +		crashk_res.start = crashk_low_res.start;
->> +		crashk_res.end   = crashk_low_res.end;
->> +		release_resource(&crashk_low_res);
->> +		crashk_low_res.start = 0;
->> +		crashk_low_res.end   = 0;
->> +		insert_resource(&iomem_resource, &crashk_res);
->> +	}
->>  
->>  unlock:
->>  	kexec_unlock();
->> -- 
->> 2.25.1
->>
+> [1] https://lore.kernel.org/linux-arm-msm/20230512150425.3171122-1-quic_bjorande@quicinc.com/
 > 
-> .
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+> Konrad Dybcio (8):
+>       dt-bindings: soc: qcom,rpmh-rsc: Require power-domains
+>       arm64: dts: qcom: sm6350: Add PSCI idle states
+>       arm64: dts: qcom: qdu1000: Flush RSC sleep & wake votes
+>       arm64: dts: qcom: sc8180x: Flush RSC sleep & wake votes
+>       arm64: dts: qcom: sdm670: Flush RSC sleep & wake votes
+>       arm64: dts: qcom: sdm845: Flush RSC sleep & wake votes
+>       arm64: dts: qcom: sm6350: Flush RSC sleep & wake votes
+>       arm64: dts: qcom: sm8550: Flush RSC sleep & wake votes
 > 
-
--- 
-Regards,
-  Zhen Lei
+>  .../bindings/soc/qcom/qcom,rpmh-rsc.yaml           |   2 +
+>  arch/arm64/boot/dts/qcom/qdu1000.dtsi              |   1 +
+>  arch/arm64/boot/dts/qcom/sc8180x.dtsi              |   1 +
+>  arch/arm64/boot/dts/qcom/sdm670.dtsi               |   1 +
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi               |   1 +
+>  arch/arm64/boot/dts/qcom/sm6350.dtsi               | 142 +++++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sm8550.dtsi               |   1 +
+>  7 files changed, 149 insertions(+)
+> ---
+> base-commit: d4cee89031c80066ec461bb77b5e13a4f37d5fd2
+> change-id: 20230531-topic-rsc-35e838da9afb
+> 
+> Best regards,
