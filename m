@@ -2,121 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D45071891D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B962F71892A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjEaSNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 14:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
+        id S230096AbjEaSOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 14:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjEaSNN (ORCPT
+        with ESMTP id S230124AbjEaSOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 14:13:13 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C44B126
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:13:12 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f6d38a140bso306665e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:13:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685556790; x=1688148790;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gbuh9jdiV+SPVWIJmpiEUgjoMR54fGjNPi8rWBf5EoY=;
-        b=dId7HG7QFPc3OpUbsFzimDWDHcW2Q4Q+Gb33kAMtXSGDHzJzC45ACiZWgkR9aS5rhf
-         bKd1RbmB3Hf79uysmWi1uHvpfZZ2L9YBl/PuUmBJFcyo4kMk17UGUF7x2Ed+JhYV81B4
-         6w3WEBgI/EuHrMCMf/2l76z9T7z314uHEC6JuZcy9KTTpra0364OYdOAxBVDj46yE3bc
-         JVRQio3u9Hymr71Qa7RnCOXN6Qw9gIGDteZUKv/dPvHl+69pmkLArhypoRL2lGp0SsQb
-         r1EBZWJzaCwkYaNw+1amjK3aigY82xSl53ivn4aNiC/ObcS+bHRH2Pl50INxNxrLU0MK
-         RosQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685556790; x=1688148790;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gbuh9jdiV+SPVWIJmpiEUgjoMR54fGjNPi8rWBf5EoY=;
-        b=Xb3DzdkwEG9yh+RstHLPRZGtd50Tz5t1031bNmnj84uStOfKEAFbA6D2qjjdVXbmwt
-         6DJ/QW6EXBpeLpLBHTyoZXv1U7/4tVNGBFlFAry00jj7DSixMCZrCula3BlDEUvDgASM
-         P9ufQM77fnDogiTYiOjsuEU01HvKzK2BztYoYawzDlOvRKZSlWq++ygV9h8bo99tWpjz
-         S+72qZAGtOUwKCSKU+NAqwMO9aavLniv0nLk85MAS0E7YnCM4HXgq/D4UdvrO90FmLO5
-         CBIl3DOUjIF06QoTHotgl6xz0hwZaOeYgZfCRuPsup2FYvR6w5OzlDlDYEef0PT+QHiu
-         e8UA==
-X-Gm-Message-State: AC+VfDwGEkd1QXC1P0S6W4PMuKeWsTxQEkMXT/+hPThqbWlGAYOME7EA
-        ltl/1qiK27qXrhdCySG2z/Fm8A==
-X-Google-Smtp-Source: ACHHUZ6GsLlBE9uPQs84Ft2bnZom9VhLmhaLnSp+7xhLdvFbXoTBFf8tQjBp6N6V3V78LsLe+KSnFw==
-X-Received: by 2002:a7b:c846:0:b0:3f5:fa76:8dd0 with SMTP id c6-20020a7bc846000000b003f5fa768dd0mr108435wml.0.1685556790677;
-        Wed, 31 May 2023 11:13:10 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id bg22-20020a05600c3c9600b003f4283f5c1bsm5268621wmb.2.2023.05.31.11.13.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 11:13:08 -0700 (PDT)
-Date:   Wed, 31 May 2023 21:13:04 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH RFC net-next v3 6/8] virtio/vsock: support dgrams
-Message-ID: <d2e9c45f-bcbd-4e6a-98c1-c98283450626@kadam.mountain>
-References: <20230413-b4-vsock-dgram-v3-0-c2414413ef6a@bytedance.com>
- <20230413-b4-vsock-dgram-v3-6-c2414413ef6a@bytedance.com>
- <ZHdxJxjXDkkO03L4@corigine.com>
+        Wed, 31 May 2023 14:14:30 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CAE9132
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:14:19 -0700 (PDT)
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9779C1EC042D;
+        Wed, 31 May 2023 20:14:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1685556857;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ShXFZDFEDmPlX5Y3XBvXdK5GQ9yQ1nqotnDFM/A0v50=;
+        b=pSEmarCJ7ae6RE2dRKTy4kIE02HMibao+y7kGU9agAA2DuF8wAfoL5qq1I+OlPHwsjAX8h
+        c43XOwoKhOSLLUUBEzqTdf3i49wT0Excdpw2bFcleHfp+yxHzMJqYSc8wNl6UpluFmcUYq
+        WO9QuqV6jYjwZkzRbDAZ7cGF6gVIWU8=
+Date:   Wed, 31 May 2023 20:14:12 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>,
+        Juergen Gross <jgross@suse.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Yu Zhao <yuzhao@google.com>, linux-kernel@vger.kernel.org,
+        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        drm-intel@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [RESUBMIT][PATCH] x86/mm: Fix PAT bit missing from page
+ protection modify mask
+Message-ID: <20230531181412.GFZHeOdMHIGOXB2hwL@fat_crate.local>
+References: <20230519183634.190364-1-janusz.krzysztofik@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZHdxJxjXDkkO03L4@corigine.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230519183634.190364-1-janusz.krzysztofik@linux.intel.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 06:09:11PM +0200, Simon Horman wrote:
-> > @@ -102,6 +144,7 @@ virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
-> 
-> Smatch that err may not be initialised in the out label below.
-> 
-> Just above this context the following appears:
-> 
-> 	if (info->vsk && !skb_set_owner_sk_safe(skb, sk_vsock(info->vsk))) {
-> 		WARN_ONCE(1, "failed to allocate skb on vsock socket with sk_refcnt == 0\n");
-> 		goto out;
-> 	}
-> 
-> So I wonder if in that case err may not be initialised.
-> 
+On Fri, May 19, 2023 at 08:36:34PM +0200, Janusz Krzysztofik wrote:
+> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+> index 15ae4d6ba4768..56466afd04307 100644
+> --- a/arch/x86/include/asm/pgtable.h
+> +++ b/arch/x86/include/asm/pgtable.h
+> @@ -654,8 +654,10 @@ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
+>  #define pgprot_modify pgprot_modify
+>  static inline pgprot_t pgprot_modify(pgprot_t oldprot, pgprot_t newprot)
+>  {
+> -	pgprotval_t preservebits = pgprot_val(oldprot) & _PAGE_CHG_MASK;
+> -	pgprotval_t addbits = pgprot_val(newprot) & ~_PAGE_CHG_MASK;
+> +	unsigned long mask = _PAGE_CHG_MASK | _PAGE_CACHE_MASK;
+> +
+> +	pgprotval_t preservebits = pgprot_val(oldprot) & mask;
+> +	pgprotval_t addbits = pgprot_val(newprot) & ~mask;
+>  	return __pgprot(preservebits | addbits);
+>  }
+>  
+> -- 
 
-Yep, exactly right.  I commented out the goto and it silenced the
-warning.  I also initialized err to zero at the start hoping that it
-would trigger a different warning but it didn't.  :(
+This certainly needs Jürgen and he's on CC already, moving him to To:.
 
-regards,
-dan carpenter
+Also, why isn't this a Xen-specific fix but you're keeping _PAGE_PAT for
+baremetal too, i.e., modifying the generic function?
 
+-- 
+Regards/Gruss,
+    Boris.
 
-> >  	return skb;
-> >  
-> >  out:
-> > +	*errp = err;
-> >  	kfree_skb(skb);
-> >  	return NULL;
-> >  }
-
+https://people.kernel.org/tglx/notes-about-netiquette
