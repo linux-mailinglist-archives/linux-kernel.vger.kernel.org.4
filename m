@@ -2,118 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274F071776E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD6B71776D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234372AbjEaHAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
+        id S234520AbjEaHA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234418AbjEaHAq (ORCPT
+        with ESMTP id S234308AbjEaHAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:00:46 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9418122
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:00:37 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5147f5efeb5so8793088a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:00:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685516436; x=1688108436;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Hg0EUtzmiBB3xghUWgjyE0VeSwIKbDYvDD8loEwycbU=;
-        b=xmNDQX5s+SO9QvIEjz7wvotCwDjE1/DWqSM0urOY8Jp6F4rit0SSDrGeXssANQQNd1
-         ZXqw8ZNeIcCT3Lxe3+XYTWyVpG9YSRUZFmF8/vjve6PFXaMA/uuouoI2rf92gRZoRpYB
-         Rxs29PpDYdoLvtkFXBCUgqxwXVr1bbjXCBr4OfER8lETDdRTGzg6or82BYs0hmgsndj1
-         mEoPbYvIg34WTRa6lzkoFJzTPjVWiTjJM9240eBfe89UiHt7i1JaE1jnQeotgBtTNCTS
-         ZmebRn88ZkYWj0vWAOssDvhbH8yJ+Slpn32t5ZG0ZaLtzOGGchuTq9NJZt/3DkKyj15C
-         Wb8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685516436; x=1688108436;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hg0EUtzmiBB3xghUWgjyE0VeSwIKbDYvDD8loEwycbU=;
-        b=dgR4YTNR2Z7rjUs8s/bwbaUct7kfKtDnZgfNRgmeiqmRxHOGakPETwYBVGeLn/lL3m
-         7oCBfzm51bF36QcbbxMrC4lk7joFVvpYCYWOgJBuc1EvZIVPOHIhxUNIE3bLQ+4QYeQ1
-         GyynkXi70dYWLjh6MKPsMWjRCpLuOhqExu5BKxoBkk1D6fMS8uAYeH1c1PD3x+u5DV0J
-         todS8jE/L8eBlKICyKZ9g4llXRzWLS8XVY0z+Ml4wqG3O3lrfitAHAygvvQtEWex2G6q
-         N4hSB+neyx3xAG8sFWFfOgKlCF7L3Tsd2JROgANT/hh5fnB6EAlRaUVyM2MOtk5390O6
-         /BLg==
-X-Gm-Message-State: AC+VfDz0TQ0xY9s+j5jySQORpN8XC9yAm4xLuv4eWfe0CK9VVhTelVmd
-        JejwtG9FV/vboBau4rUbTcyJPQ==
-X-Google-Smtp-Source: ACHHUZ6pOdpCN4WUvtvY0dlMQfZ7EoNYd7R0TNUotYT8Qi0DGSq9fNojwn2+H9QyjEJ2gKlV6YxheQ==
-X-Received: by 2002:a17:907:72d4:b0:973:fe33:3622 with SMTP id du20-20020a17090772d400b00973fe333622mr5027241ejc.29.1685516436227;
-        Wed, 31 May 2023 00:00:36 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id k3-20020a17090627c300b0096a1ba4e0d1sm8434832ejc.32.2023.05.31.00.00.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 00:00:35 -0700 (PDT)
-Message-ID: <579dc9ff-e0a7-e3de-bb2c-a268bfa7fdeb@linaro.org>
-Date:   Wed, 31 May 2023 09:00:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v6 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML DT
- scheme
-Content-Language: en-US
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "vadym.kochan@plvision.eu" <vadym.kochan@plvision.eu>
-Cc:     "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "enachman@marvell.com" <enachman@marvell.com>
-References: <20230530005337.3687938-1-chris.packham@alliedtelesis.co.nz>
- <20230530005337.3687938-2-chris.packham@alliedtelesis.co.nz>
- <a1b2caed-b314-59db-ee00-92fc983150f6@linaro.org>
- <bc538264-20f5-03e1-a4a6-6f9f076f15eb@alliedtelesis.co.nz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <bc538264-20f5-03e1-a4a6-6f9f076f15eb@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 31 May 2023 03:00:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F39F186
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:00:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C96F61290
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:00:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 858ACC433D2;
+        Wed, 31 May 2023 07:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685516440;
+        bh=ZiKHj++BwH3B7HG2lnoOWuj+ZH79sYmATg6sHn5lT9A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ip037B3Pa7i51xmV2/KgC4EKvtZj5TvdZXpNqNa5882jeEUQsGAPGaZOVjHT6ltY3
+         L4qilchlXCvV5PxXza3JZdkuvH+/6CCJgCxiZhmMaIk8afGh2nWi1xiHgiTKEi2f81
+         y4/j18LcgskrE4d5HaU74LAX0eQGvv44wQnUc0owOj3EKxVmqdZ4hcf9BvPyDTuK8A
+         Pfw8fYxOcK62l/Lj7e9JEH3eXsAcA+1fEYq9GzmDI/9gjES8G9VuoYbmX+VKyOPtax
+         FG3bSDH283vPav8V7g6xC5UEFFsK+XMm1qTjjF4eAZEp/QlyrJ0c8QNCUJBJePIebo
+         pnnnTLLiz+7FA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q4Foz-001XQs-MM;
+        Wed, 31 May 2023 08:00:37 +0100
+Date:   Wed, 31 May 2023 08:00:37 +0100
+Message-ID: <867cspc7e2.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     James Gowans <jgowans@amazon.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>, Liao Chang <liaochang1@huawei.com>,
+        KarimAllah Raslan <karahmed@amazon.com>,
+        Yipeng Zou <zouyipeng@huawei.com>,
+        Zhang Jianhua <chris.zjh@huawei.com>
+Subject: Re: [PATCH 2/2] genirq: fasteoi resends interrupt on concurrent invoke
+In-Reply-To: <20230530213848.3273006-2-jgowans@amazon.com>
+References: <20230530213848.3273006-1-jgowans@amazon.com>
+        <20230530213848.3273006-2-jgowans@amazon.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jgowans@amazon.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, liaochang1@huawei.com, karahmed@amazon.com, zouyipeng@huawei.com, chris.zjh@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 01:20, Chris Packham wrote:
-> On 31/05/23 00:24, Krzysztof Kozlowski wrote:
->>> +
->>> +properties:
->>> +  compatible:
->>> +    oneOf:
->>> +      - items:
->>> +          - const: marvell,armada-8k-nand-controller
->>> +          - const: marvell,armada370-nand-controller
->>> +      - enum:
->>> +          - marvell,armada370-nand-controller
->>> +          - marvell,pxa3xx-nand-controller
->> You miss here deprecated compatibles, which are BTW still used. Don't
->> drop properties and compatibles during conversion.
-> Is there any way to indicate that a compatible value is deprecated? I 
-> know how to mark a property as deprecated but how do I indicate this for 
-> specific compatible values?
+On Tue, 30 May 2023 22:38:48 +0100,
+James Gowans <jgowans@amazon.com> wrote:
+> 
+> Update the generic handle_fasteoi_irq to cater for the case when the
+> next interrupt comes in while the previous handler is still running.
+> Currently when that happens the irq_may_run() early out causes the next
+> IRQ to be lost. Change the behaviour to mark the interrupt as pending
+> and re-send the interrupt when handle_fasteoi_irq sees that the pending
+> flag has been set. This is largely inspired by handle_edge_irq.
+> 
+> Generally it should not be possible for the next interrupt to arrive
+> while the previous handler is still running: the next interrupt should
+> only arrive after the EOI message has been sent and the previous handler
+> has returned.
 
-The same way. git grep -C 5 compatible. First result in the DT bindings...
+There is no such message with LPIs. I pointed that out previously.
 
-Best regards,
-Krzysztof
+> However, there is a race where if the interrupt affinity
+> is changed while the previous handler is running, then the next
+> interrupt can arrive at a different CPU while the previous handler is
+> still running. In that case there will be a concurrent invoke and the
+> early out will be taken.
+> 
+> For example:
+> 
+>            CPU 0             |          CPU 1
+> -----------------------------|-----------------------------
+> interrupt start              |
+>   handle_fasteoi_irq         | set_affinity(CPU 1)
+>     handler                  |
+>     ...                      | interrupt start
+>     ...                      |   handle_fasteoi_irq -> early out
+>   handle_fasteoi_irq return  | interrupt end
+> interrupt end                |
+> 
+> This issue was observed specifically on an arm64 system with a GIC-v3
+> handling MSIs; GIC-v3 uses the handle_fasteoi_irq handler. The issue is
+> that the global ITS is responsible for affinity but does not know
+> whether interrupts are pending/running, only the CPU-local redistributor
+> handles the EOI. Hence when the affinity is changed in the ITS, the new
+> CPU's redistributor does not know that the original CPU is still running
+> the handler.
 
+Similar to your previous patch, you don't explain *why* the interrupt
+gets delivered when it is an LPI, and not for any of the other GICv3
+interrupt types. That's an important point.
+
+> 
+> Implementation notes:
+> 
+> It is believed that it's NOT necessary to mask the interrupt in
+> handle_fasteoi_irq() the way that handle_edge_irq() does. This is
+> because handle_edge_irq() caters for controllers which are too simple to
+> gate interrupts from the same source, so the kernel explicitly masks the
+> interrupt if it re-occurs [0].
+> 
+> [0] https://lore.kernel.org/all/bf94a380-fadd-8c38-cc51-4b54711d84b3@huawei.com/
+> 
+> Suggested-by: Liao Chang <liaochang1@huawei.com>
+> Signed-off-by: James Gowans <jgowans@amazon.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: KarimAllah Raslan <karahmed@amazon.com>
+> Cc: Yipeng Zou <zouyipeng@huawei.com>
+> Cc: Zhang Jianhua <chris.zjh@huawei.com>
+> ---
+>  kernel/irq/chip.c | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+> index 49e7bc871fec..42f33e77c16b 100644
+> --- a/kernel/irq/chip.c
+> +++ b/kernel/irq/chip.c
+> @@ -692,8 +692,15 @@ void handle_fasteoi_irq(struct irq_desc *desc)
+>  
+>  	raw_spin_lock(&desc->lock);
+>  
+> -	if (!irq_may_run(desc))
+> +	/*
+> +	 * When an affinity change races with IRQ delivery, the next interrupt
+> +	 * can arrive on the new CPU before the original CPU has completed
+> +	 * handling the previous one. Mark it as pending and return EOI.
+> +	 */
+> +	if (!irq_may_run(desc)) {
+> +		desc->istate |= IRQS_PENDING;
+>  		goto out;
+> +	}
+>  
+>  	desc->istate &= ~(IRQS_REPLAY | IRQS_WAITING);
+>  
+> @@ -715,6 +722,12 @@ void handle_fasteoi_irq(struct irq_desc *desc)
+>  
+>  	cond_unmask_eoi_irq(desc, chip);
+>  
+> +	/*
+> +	 * When the race descibed above happens, this will resend the interrupt.
+> +	 */
+> +	if (unlikely(desc->istate & IRQS_PENDING))
+> +		check_irq_resend(desc, false);
+> +
+>  	raw_spin_unlock(&desc->lock);
+>  	return;
+>  out:
+
+While I'm glad that you eventually decided to use the resend mechanism
+instead of spinning on the "old" CPU, I still think imposing this
+behaviour on all users without any discrimination is wrong.
+
+Look at what it does if an interrupt is a wake-up source. You'd
+pointlessly requeue the interrupt (bonus points if the irqchip doesn't
+provide a HW-based retrigger mechanism).
+
+I still maintain that this change should only be applied for the
+particular interrupts that *require* it, and not as a blanket change
+affecting everything under the sun. I have proposed such a change in
+the past, feel free to use it or roll your own.
+
+In the meantime, I strongly oppose this change as proposed.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
