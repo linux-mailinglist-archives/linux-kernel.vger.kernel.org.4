@@ -2,172 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD6D717D2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69D9717D31
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235370AbjEaKXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 06:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
+        id S231495AbjEaKZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 06:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbjEaKWl (ORCPT
+        with ESMTP id S229949AbjEaKZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 06:22:41 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE90110E;
-        Wed, 31 May 2023 03:22:38 -0700 (PDT)
-X-UUID: 0d135620ff9d11edb20a276fd37b9834-20230531
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=OspJCl4NgQIN1ecl3VRn6sDztnlmS41ZiWOiFXVMKZU=;
-        b=QQvTHrVa86nCJhs0+f9aDm4YpoXzyYrBU//I7jneQhYsf0bL+AIdtTk42ZZoTCqf2BMu1UxEUFWKho4y4bjijsZMVpmgHDEXsiAm8mybJWyAQmz0i73KMwkrKPGyN3v+ojLxSVXizR6kUGK2zLchm8XOovoMPTfA45LR4QF93sc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:c8a046be-a339-4750-9485-8a894674b809,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:ee1ff03c-de1e-4348-bc35-c96f92f1dcbb,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 0d135620ff9d11edb20a276fd37b9834-20230531
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 278863586; Wed, 31 May 2023 18:22:31 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 31 May 2023 18:22:30 +0800
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.237)
- by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 31 May 2023 18:22:29 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T3oZ8YxSH8gFhGCWjnoydGUh8xARODmpqOaVCK8n31lbvR3xWTS9cO0YIs5+Lg4b2puai0EEf0kegfvLknNQdphppWDxqLxs35V/OUpW7cvK5dQLsTUvrareZmmtDrLBgE9W54Sa5SKVNwUBrPHCrG3bGUxqQ59n/2O9tusfbGny0MXYsCnvhRMgjS4O5Q+wjp0KnbZc43eklJg7wM5lsMo1QxC3WCIiN+IH6eKrCxulqQx9iKZlZosNnfZbGvazqDVI/I0FNXM2zTHtwRGshZ9DN9ZCyNwuw3Q7fD3dszzYBdSftci40TRsdyjTMmlpGmGO7SQnQp3Dg0o0FHJHfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OspJCl4NgQIN1ecl3VRn6sDztnlmS41ZiWOiFXVMKZU=;
- b=j27DL5oVtYoZ8AxGKqDKA+KcibKVQepeRx+1jXPGIQI0mDKySw43HVGmHZqCwBgg+JZBCrAwT/eCooyv9MT5uKQAQNSzZwEl9df5sGUIrg6N4hBzUMl9LHAyeZ/0vBfCklyHop0OpnznBAceH3gECiydQLUIcwYygkIT35wVNP0Aetb3X7dwcHjkM941EFPSSsWM/4YCw6hVu1t4aeZcWOsmlf70l5+2gKpa9ExD1w6aPcThn1KmpgJT5xZVbWnTJ7W5BWeJlmI5MqKRNf37CL3V8iRRmX/yhYX8hvQGDkJ9RK0124c/Zo6KVDKymyk5Z+LEZCLwJNwDrsLC0QWSCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OspJCl4NgQIN1ecl3VRn6sDztnlmS41ZiWOiFXVMKZU=;
- b=GrQHLNUJk5K6AKXZjBKkhpxDitK0TVUXQ7WtGug7Dbzuy9ccrLI+/2reXO6rQRKa7BC/EEp8z/60LvCvkW24GvYJ2Stf1B+1SW1/Jg8LEsZYa8uNN9nf86q9dlrR3Sz+bTgGa2UKwN3OC9WSIqihfXrVltkPfe4ST2iNreomRf4=
-Received: from SL2PR03MB4153.apcprd03.prod.outlook.com (2603:1096:100:4e::10)
- by JH0PR03MB7835.apcprd03.prod.outlook.com (2603:1096:990:2d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.21; Wed, 31 May
- 2023 10:22:27 +0000
-Received: from SL2PR03MB4153.apcprd03.prod.outlook.com
- ([fe80::506f:2b56:e564:ba5a]) by SL2PR03MB4153.apcprd03.prod.outlook.com
- ([fe80::506f:2b56:e564:ba5a%3]) with mapi id 15.20.6433.022; Wed, 31 May 2023
- 10:22:27 +0000
-From:   =?utf-8?B?WXVuZmVpIERvbmcgKOiRo+S6kemjnik=?= 
-        <Yunfei.Dong@mediatek.com>
-To:     "nhebert@chromium.org" <nhebert@chromium.org>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        "nfraprado@collabora.com" <nfraprado@collabora.com>,
-        "benjamin.gaignard@collabora.com" <benjamin.gaignard@collabora.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "nicolas.dufresne@collabora.com" <nicolas.dufresne@collabora.com>,
-        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "frkoenig@chromium.org" <frkoenig@chromium.org>,
-        "stevecho@chromium.org" <stevecho@chromium.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "hsinyi@chromium.org" <hsinyi@chromium.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v5,8/8] media: mediatek: vcodec: Add dbgfs help function
-Thread-Topic: [PATCH v5,8/8] media: mediatek: vcodec: Add dbgfs help function
-Thread-Index: AQHZkt6Pmc3I6xwlJkmIZtnuTxG/0q9ynoaAgAGPVAA=
-Date:   Wed, 31 May 2023 10:22:27 +0000
-Message-ID: <7820b5c393b1a0cb3bfca571d557bdf9dc5bf97b.camel@mediatek.com>
-References: <20230525021219.23638-1-yunfei.dong@mediatek.com>
-         <20230525021219.23638-9-yunfei.dong@mediatek.com>
-         <f3322e41-1891-a33b-daaa-731ec548ec4e@collabora.com>
-         <da165529-ae9a-8461-c582-9c85e6f2fa4c@xs4all.nl>
-In-Reply-To: <da165529-ae9a-8461-c582-9c85e6f2fa4c@xs4all.nl>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SL2PR03MB4153:EE_|JH0PR03MB7835:EE_
-x-ms-office365-filtering-correlation-id: 05355923-f276-4b7e-7c18-08db61c0eefc
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MVa6ep49Ie+3T5lnXrJS2GIOPypIg3NKYdhYZku3pcMiD9fUBDQ7ZVGAvgKJf8bqfQS70vLa1R3nB6eJmvWlzdyAuc8DefhCHoEi7+p+zo+cj18l2hHT+O9GhLv3mCqXrmhZmp+aTZIuKlh6YShdLmShQ+ewGvx1fCsqdj1K60lwD4wbTCWs4gB+ayVSF2f7rmZEdm49cor79bdm2gbzBAitbxYkQnOwFRdmN9We2kpeDTmj1gXc9ole8K9ShwxLGVufB4pmgMMrsr2bHGTqD0RODAIpLzDWljMJDvqeqC400JjGbCjVubVSKeoZJeXChSiL/Ger6YzugeYb09ZKzcSuBR2TzMJ+lDLeJ+uiu26hE3raqmcE7haax644T2hUGm64CRJcnS0fca3BXfhDSCcNmH75D+mAW1nLTMxXKafJYKwHyolc6yFIqmTUGVCKJewmD7UDe/ymU37Yo+K2lZ3KOowy2GifMqSUBJ+6RAIhRWLmSE2TKePY61z5Lvu256TINiyGbeEacoE8cGYi1xBBo81OCI9GoWYjEgmfu0X1KQ/6tzYR9/yT6PxymaE7idS+/eQNv1yAlC9fGOnAi//arQM2p8TjcgAVRfl1zmhBVh60iMf0TFRu9eRcdpj9FgL96cyFq7xlxfxeta1F1Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR03MB4153.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(136003)(396003)(366004)(346002)(451199021)(2616005)(66556008)(186003)(83380400001)(110136005)(4326008)(26005)(5660300002)(6512007)(54906003)(6506007)(53546011)(36756003)(85182001)(86362001)(2906002)(7416002)(478600001)(91956017)(8936002)(8676002)(66476007)(66446008)(66946007)(76116006)(64756008)(71200400001)(316002)(38100700002)(6486002)(122000001)(38070700005)(41300700001)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WldBMUtHZlVYd092bWlIZFhlTVE4R3dhOU0wNWtvM08rWlVkQlRUaGFiV0xR?=
- =?utf-8?B?RmZ3YTV2cXNFbVBVcU5VVjRxOVc2QmU4M0ZqOGYzanhPZjdYNlVQWk8xZHJG?=
- =?utf-8?B?Tm4wOHRMT2xDb0hyYzUvTTBYZHBod0NMb1UxWXMwa3VhWU1mTW40amwrb2Ni?=
- =?utf-8?B?KzdTVFN5Mmdpb213NStlM2FuUjJuMTR5TDVqdVZRWU9CTVZmRVFGQVNTY2JY?=
- =?utf-8?B?YWVDSGJQU1J6Z3Q5enlSNlh1SzBmOGhHbFdvSFZPcktxRml2cmtEOGRsdmJ2?=
- =?utf-8?B?UjN0MWgzaSs3U0tEaUwvczVxSUxrTER0MGdsU1ZWYWc1K1BHajl2akJRZ3hF?=
- =?utf-8?B?RFlmbDBzVjBxQXVmV2UyNm4xOFVpazJpZU1pWmFsQ3c4Qk1TZUpFQy9iZS93?=
- =?utf-8?B?RDlnMFdwUHJ2RXI4YURDOFNreU5UUENMTEQ2QnZQTEJERGZrOEhUWUM0cFZP?=
- =?utf-8?B?RURUMjkyQSsvMGZEYnRPN01RUlFXbmExWGxHb2JxdWVtY3RMS3U3VU1lQ3hn?=
- =?utf-8?B?VFh5VHpsR0JtV0ZTL3RBR1kzV1JySFB2RkcyWVk1aUlRZ05RNTlRaSthYzFi?=
- =?utf-8?B?Zk5RUEFKUllqQzNiQnVzVk1yMFExNDJ2N1N0eUh0WGpWbmdlaHZwT1I3SFdG?=
- =?utf-8?B?TE5oRVV3VS9xb2RodzJUM3hUU21WQ0Frd0dqdUIrT2JJWUl1cVdVbFhEcWZ1?=
- =?utf-8?B?a3JsK0FXSlh4NVJ3U1ZUMGJXdUpsTkdaa3JHa0pjdzJ3OGcwQ0cvT1dveGQr?=
- =?utf-8?B?Z1Z1UVpteUpmT05qVWtaK0dKMFNTVlkvUDR4NHZqY2pIS0cyMUZwd2FEajdZ?=
- =?utf-8?B?eDdEUFBWNElmM3BjVnZqcnhETGdORVRaM213MEJXeExOdWdJSnBoclVSYnkr?=
- =?utf-8?B?RFk3d0JvZldDV3IrU2lSNkVFVkc0SzRNMkpXVnpzMTNUYy96MTRFR3lTMGpw?=
- =?utf-8?B?ZzhIcWhjbURSRFRBRUZSWDgwRFFPWndBVjNJQ1RFclZlUHB5US93NnkxZmhu?=
- =?utf-8?B?MFJ6b0JwR0s5RFk0Smlidnp6dEtmdUhkcFNCU3dBUGs3WnB1RExQeG52NG1X?=
- =?utf-8?B?Ymp3OEtBS21HZWYwMm5TWWYwVHlhL2YvUmxkSE1idUVuN3VVaVZodGE4VWtO?=
- =?utf-8?B?bEFZZG1TV0pWT0haeExPR1lhWFBWQkdZRjVMbEJEdUZwUW9DRVd2dzJrR2t5?=
- =?utf-8?B?TTFlN3VGdVF4SnlIUk5zSXJPM0FLbDIwUmJJTUg1RDhQcm5nK3IrOUpyQ293?=
- =?utf-8?B?SXZOcFV6UHRLNG0wbXliVHpkOElrSWFncjR2ZzJtS2ZMZys0dDFNd2NMOWc4?=
- =?utf-8?B?UkJTTjhKa3pzbEoxbXJQMFVJZTZQc3lXODQ3TDNqZlkzcjkvMCtpaldmSEd3?=
- =?utf-8?B?SmY1Y2VwSXAxYzduUzJXaGZuMlQ1YmhYcFNNL3V3SjBBemFHazkrcFo4ZVBm?=
- =?utf-8?B?L3g3ZmpIVG5nT1EyKzJYMGtQcnhTWHY1aWhKYkFJaXh0OVpmN0ZmZEJtbzhK?=
- =?utf-8?B?TFE3cjRBSzBZK05NdlZFcnBkbVRXWmE4ZUYrU1JTUDF5TGhEaENPZVM3QUxK?=
- =?utf-8?B?YnVPZjluNE4rdXBBQXU1aGwzL1QwNElYVHlsWXZMTCszdi9MRXVDaFQ0RjNW?=
- =?utf-8?B?amlYS2V6ZGdhcWZLVTU1dnpEWFpoNnJnclAxU0gvenhicjREWktlZXRJbzRt?=
- =?utf-8?B?UExodE1XWlNWeDRLc2wwenpIR3UyRExVSVVWQXVMbFkwWWhiWTNqWGd0cXhi?=
- =?utf-8?B?WXNlM1NvUExjb1JHWGlTL2hSZ1FoRnJtbGY1WkFnMWJXS05kenhFK0NRQ3JW?=
- =?utf-8?B?b0JUeHpyd2pqNUJ5bDFzRzRYcjZPeUIwTFNDSVBXNngxdE1DVWoyZzN5cmFn?=
- =?utf-8?B?bFAyR0VWSDhVTkFkRHY3eFJGcTY2bHI4aVJibzZaL3YzeUlTV1R6YUdkYWV1?=
- =?utf-8?B?MlZKOXphYytjMVdwMmVLVGdsZW53VTZVbTlkcmhFcFJtSHhpdHA1TjdmMUVS?=
- =?utf-8?B?VUNsdGZPN1FyaDR4aDRIYnBJa1MvRUNCWXU1Z2FlYk5uK3hCUVVJTnZNRmtT?=
- =?utf-8?B?MUM0cWdCWklzQVZRQVJiZHh1VEZFNENjRnZIWEhMbDVWQWo5L0ZnczFnY0k4?=
- =?utf-8?B?VmZlN0QrQW1ENGtFODFkN2hTOFYwSTJSa2RJNmQ4T0ZTVHA4cVhNckZ2cmcv?=
- =?utf-8?B?U0E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C8014A11643B314A83FE2338A8518AF0@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 31 May 2023 06:25:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD6F132
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685528705;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DvwGCRQeWTvKp10bN1Sbh5bj4YnUv0Bqw0o1UOThBzY=;
+        b=cc/iCJdIaNZ57pKP2kkx4AA5/YFYk7t3pfKq//xGPibFeLKlyL3hwAHe8cQQhhnovYF0mf
+        lcvci7ZXpJ1+mnwY+IuHAv/CLFk2hvozGha+KmmVocpC17eRr1WykTs9vUQY0YFrkwFczQ
+        BWD2kfO9VBXADTMGDbr3B09LQp3ahW8=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-101-fGG67D_iP5aNY6hmKeJWEQ-1; Wed, 31 May 2023 06:25:04 -0400
+X-MC-Unique: fGG67D_iP5aNY6hmKeJWEQ-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-30ad0812151so3097965f8f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:25:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685528703; x=1688120703;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DvwGCRQeWTvKp10bN1Sbh5bj4YnUv0Bqw0o1UOThBzY=;
+        b=BsGvWHEH3omHPRLHE4/jWqFUCcR7Olqp5/MaWEhjshgcokvPSB045cDRuG41qZGl8T
+         zG67lUZaGVQfTtRmC82m4j7blIdZ7dKAonYOC9kDv0Bazg3M5PZ/jtvAml8pheDHXwsb
+         z+71+eNGRZw6P7M54Ue8CCJfHsy3OBrak3mM9rBLssDTTiF2gQlS9NoVmn6/FRmtxqAq
+         fVu65Em0T6Q7tsdU0pnnQs1iwIXCwrlhUlusVGeQNvOHw3ZBfknIAbQFrRHheHKmYi1m
+         B6C7/qUuLD60+LdAC6Av/X8ruosudtB58GkkzOrGomqQLyRozsGwVhdD9goRVlIT7LBf
+         RSuw==
+X-Gm-Message-State: AC+VfDzF/xFUMzWuQRh25jQcxVxrHEfoTvAKEjq40iLnNm0ofma30hnV
+        VtGSLopiwaPJgKkGjC5m+tzonxjrs66/Jd2qOy0S+4eYLfE6/aH9roDnl34FPUK9R3bXWzSpz6S
+        jUwaXMmRrJT9H5mUxxMnhfmYqe5rRS5sz
+X-Received: by 2002:adf:f452:0:b0:307:8b3e:285a with SMTP id f18-20020adff452000000b003078b3e285amr4867795wrp.67.1685528702685;
+        Wed, 31 May 2023 03:25:02 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5rdqa0yP0CU0wQqaMcpUQBMYn4ha0O+FEx/Q20k8/Cui3MNm3+FsNtrElTCiHBdmXhEbnbSQ==
+X-Received: by 2002:adf:f452:0:b0:307:8b3e:285a with SMTP id f18-20020adff452000000b003078b3e285amr4867778wrp.67.1685528702252;
+        Wed, 31 May 2023 03:25:02 -0700 (PDT)
+Received: from redhat.com ([2.52.11.69])
+        by smtp.gmail.com with ESMTPSA id b9-20020adfe309000000b003079986fd71sm6404500wrj.88.2023.05.31.03.25.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 03:25:01 -0700 (PDT)
+Date:   Wed, 31 May 2023 06:24:58 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     xuanzhuo@linux.alibaba.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virtio_ring: validate used buffer length
+Message-ID: <20230531062108-mutt-send-email-mst@kernel.org>
+References: <20230526063041.18359-1-jasowang@redhat.com>
+ <20230528033037-mutt-send-email-mst@kernel.org>
+ <CACGkMEs9Ztavn2JyuUAb47Sk1fYHiXLLkQQPQR5Czhb2yu_R3w@mail.gmail.com>
+ <20230529055729-mutt-send-email-mst@kernel.org>
+ <CACGkMEsW1+BFtMoLg4c_FyxYTZJcSVh4BoEdJ-Q9_WGg_DcReA@mail.gmail.com>
+ <20230531014326-mutt-send-email-mst@kernel.org>
+ <CACGkMEvok6HjBK_ZMR4EYzWxpJQVeh++EMErnHjJ6cu9m3R-1A@mail.gmail.com>
+ <CACGkMEuDWL30J7D8v+xLCvvspRBoz8X7q23FymBVRm9bT1pVUQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR03MB4153.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05355923-f276-4b7e-7c18-08db61c0eefc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 May 2023 10:22:27.3892
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9l/9ws+T5yi8TzVN2aGCTTSbnPvsdL1QnwwiuXGhzjD86mmEDKDzF4SJLzLUeTrLzFGS4mrXhKA3UeSOyeoRfjb5NpdYrS/U1sckSJQcCPo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: JH0PR03MB7835
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACGkMEuDWL30J7D8v+xLCvvspRBoz8X7q23FymBVRm9bT1pVUQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -175,56 +87,416 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSGFucywNCg0KT24gVHVlLCAyMDIzLTA1LTMwIGF0IDEyOjMzICswMjAwLCBIYW5zIFZlcmt1
-aWwgd3JvdGU6DQo+ICAJIA0KPiBFeHRlcm5hbCBlbWFpbCA6IFBsZWFzZSBkbyBub3QgY2xpY2sg
-bGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bnRpbA0KPiB5b3UgaGF2ZSB2ZXJpZmllZCB0aGUg
-c2VuZGVyIG9yIHRoZSBjb250ZW50Lg0KPiAgT24gNS8zMC8yMyAxMjowNiwgQW5nZWxvR2lvYWNj
-aGlubyBEZWwgUmVnbm8gd3JvdGU6DQo+ID4gSWwgMjUvMDUvMjMgMDQ6MTIsIFl1bmZlaSBEb25n
-IGhhIHNjcml0dG86DQo+ID4+IEdldHRpbmcgZGJnZnMgaGVscCBpbmZvcm1hdGlvbiB3aXRoIGNv
-bW1hbmQgImVjaG8gLWhlbHAgPiB2ZGVjIi4NCj4gPj4NCj4gPj4gU2lnbmVkLW9mZi1ieTogWXVu
-ZmVpIERvbmcgPHl1bmZlaS5kb25nQG1lZGlhdGVrLmNvbT4NCj4gPj4gLS0tDQo+ID4+ICAgLi4u
-L21lZGlhdGVrL3Zjb2RlYy9tdGtfdmNvZGVjX2RiZ2ZzLmMgICAgICAgIHwgMjQNCj4gKysrKysr
-KysrKysrKysrKysrLQ0KPiA+PiAgIDEgZmlsZSBjaGFuZ2VkLCAyMyBpbnNlcnRpb25zKCspLCAx
-IGRlbGV0aW9uKC0pDQo+ID4+DQo+ID4+IGRpZmYgLS1naXQNCj4gYS9kcml2ZXJzL21lZGlhL3Bs
-YXRmb3JtL21lZGlhdGVrL3Zjb2RlYy9tdGtfdmNvZGVjX2RiZ2ZzLmMNCj4gYi9kcml2ZXJzL21l
-ZGlhL3BsYXRmb3JtL21lZGlhdGVrL3Zjb2RlYy9tdGtfdmNvZGVjX2RiZ2ZzLmMNCj4gPj4gaW5k
-ZXggMjM3ZDBkYzhhMWZjLi4yMzcyZmM0NDliNDUgMTAwNjQ0DQo+ID4+IC0tLSBhL2RyaXZlcnMv
-bWVkaWEvcGxhdGZvcm0vbWVkaWF0ZWsvdmNvZGVjL210a192Y29kZWNfZGJnZnMuYw0KPiA+PiAr
-KysgYi9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL21lZGlhdGVrL3Zjb2RlYy9tdGtfdmNvZGVjX2Ri
-Z2ZzLmMNCj4gPj4gQEAgLTUyLDYgKzUyLDIzIEBAIHN0YXRpYyB2b2lkDQo+IG10a192ZGVjX2Ri
-Z2ZzX2dldF9mb3JtYXRfdHlwZShzdHJ1Y3QgbXRrX3Zjb2RlY19jdHggKmN0eCwgY2hhciAqYnVm
-DQo+ID4+ICAgKnVzZWQgKz0gY3Vycl9sZW47DQo+ID4+ICAgfQ0KPiA+PiAgIA0KPiA+PiArc3Rh
-dGljIHZvaWQgbXRrX3ZkZWNfZGJnZnNfZ2V0X2hlbHAoY2hhciAqYnVmLCBpbnQgKnVzZWQsIGlu
-dA0KPiB0b3RhbCkNCj4gPj4gK3sNCj4gPj4gK2ludCBjdXJyX2xlbjsNCj4gPj4gKw0KPiA+PiAr
-Y3Vycl9sZW4gPSBzbnByaW50ZihidWYgKyAqdXNlZCwgdG90YWwgLSAqdXNlZCwNCj4gPj4gKyAg
-ICAiaGVscDogKDE6IGVjaG8gLSdpbmZvJyA+IHZkZWMgMjogY2F0IHZkZWMpXG4iKTsNCj4gPj4g
-Kyp1c2VkICs9IGN1cnJfbGVuOw0KPiA+PiArDQo+ID4+ICtjdXJyX2xlbiA9IHNucHJpbnRmKGJ1
-ZiArICp1c2VkLCB0b3RhbCAtICp1c2VkLA0KPiA+PiArICAgICJcdC1waWNpbmZvOiBnZXQgcmVz
-b2x1dGlvblxuIik7DQo+ID4+ICsqdXNlZCArPSBjdXJyX2xlbjsNCj4gPj4gKw0KPiA+PiArY3Vy
-cl9sZW4gPSBzbnByaW50ZihidWYgKyAqdXNlZCwgdG90YWwgLSAqdXNlZCwNCj4gPj4gKyAgICAi
-XHQtZm9ybWF0OiBnZXQgb3V0cHV0ICYgY2FwdHVyZSBxdWV1ZSBmb3JtYXRcbiIpOw0KPiA+PiAr
-KnVzZWQgKz0gY3Vycl9sZW47DQo+ID4+ICt9DQo+ID4+ICsNCj4gPj4gICBzdGF0aWMgc3NpemVf
-dCBtdGtfdmRlY19kYmdmc193cml0ZShzdHJ1Y3QgZmlsZSAqZmlscCwgY29uc3QNCj4gY2hhciBf
-X3VzZXIgKnVidWYsDQo+ID4+ICAgICAgIHNpemVfdCBjb3VudCwgbG9mZl90ICpwcG9zKQ0KPiA+
-PiAgIHsNCj4gPj4gQEAgLTg0LDYgKzEwMSwxMSBAQCBzdGF0aWMgc3NpemVfdCBtdGtfdmRlY19k
-Ymdmc19yZWFkKHN0cnVjdCBmaWxlDQo+ICpmaWxwLCBjaGFyIF9fdXNlciAqdWJ1ZiwNCj4gPj4g
-ICBpZiAoIWJ1ZikNCj4gPj4gICByZXR1cm4gLUVOT01FTTsNCj4gPj4gICANCj4gPj4gK2lmIChz
-dHJzdHIoZGJnZnMtPmRiZ2ZzX2J1ZiwgIi1oZWxwIikpIHsNCj4gPiANCj4gPiBJIHdvdWxkIHBy
-aW50IHRoZSBoZWxwIHN0cmluZ3MgaW4gdHdvIGNvbmRpdGlvbnM6DQo+ID4gMS4gLWhlbHANCj4g
-PiAyLiAobm90aGluZykNCj4gPiANCj4gPiAuLi5zbyB0aGF0IGlmIHlvdSBkb24ndCBlY2hvIGFu
-eXRoaW5nIHRvIHZkZWMgKG5vIHBhcmFtcyksIHlvdSBnZXQNCj4gdGhlIGhlbHAgdGV4dC4NCj4g
-PiBPdGhlcndpc2UsIHlvdSB3b3VsZCBoYXZlIHRvIGtub3cgdGhhdCAiLWhlbHAiIGlzIGEgcGFy
-YW1ldGVyIHRoYXQNCj4gZ2l2ZXMgeW91IGhlbHANCj4gPiB0ZXh0IGluIHRoZSBmaXJzdCBwbGFj
-ZS4NCj4gPiANCj4gPiBBcyBmb3IgdGhpcyBjb21taXQgImFzIGlzIiwgaXQgd29ya3MgYXMgaW50
-ZW5kZWQgYW5kIGl0IGlzIHVzZWZ1bA0KPiB0byByZXRyaWV2ZQ0KPiA+IHRoZSBoZWxwIHRleHQ7
-IHlvdSBjYW4gZWl0aGVyIHNlbmQgYSBmb2xsb3d1cCBjb21taXQgdGhhdCBleHRlbmRzDQo+IHRo
-ZSBoZWxwIHRvDQo+ID4gdGhlIGNvcm5lciBjYXNlIHRoYXQgSSd2ZSBleHBsYWluZWQsIG9yIHNl
-bmQgYSB2NiBhZGRpbmcgdGhhdCB0bw0KPiB0aGlzIHNhbWUgY29tbWl0Lg0KPiA+IA0KPiA+IEkg
-d291bGQgcHJlZmVyIHRvIHNlZSBhIHY2IC0tIEJVVCAtLSBzaW5jZSB0aGlzIHNlcmllcyB3YXMg
-c2VudCBhDQo+IGxvbmcgdGltZSBhZ28sDQo+ID4geW91IHdpbGwgZ2V0IG15IFItYiBhbmQgSSB3
-aWxsIGxlYXZlIHRoZSBmaW5hbCBjaG9pY2UgdG8gSGFucy4NCj4gPiANCj4gPiBSZXZpZXdlZC1i
-eTogQW5nZWxvR2lvYWNjaGlubyBEZWwgUmVnbm8gPA0KPiBhbmdlbG9naW9hY2NoaW5vLmRlbHJl
-Z25vQGNvbGxhYm9yYS5jb20+DQo+ID4gDQo+ID4gDQo+IA0KPiBJIHByZWZlciBhIHY2LCByZWJh
-c2VkIG9uIHRvcCBvZiB0aGUgbWVkaWFfc3RhZ2UgdHJlZS4NCj4gDQo+IFJlZ2FyZHMsDQo+IA0K
-PiBIYW5zDQoNCkkgYWxyZWFkeSBoYXZlIHNlbnQgcGF0Y2ggdjYgdG8gcmV2aWV3Lg0KDQpCZXN0
-IFJlZ2FyZHMsDQpZdW5mZWkgRG9uZw0K
+On Wed, May 31, 2023 at 04:26:38PM +0800, Jason Wang wrote:
+> On Wed, May 31, 2023 at 3:36 PM Jason Wang <jasowang@redhat.com> wrote:
+> >
+> > On Wed, May 31, 2023 at 1:50 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > >
+> > > On Wed, May 31, 2023 at 09:05:00AM +0800, Jason Wang wrote:
+> > > > On Mon, May 29, 2023 at 6:03 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > >
+> > > > > On Mon, May 29, 2023 at 09:18:10AM +0800, Jason Wang wrote:
+> > > > > > On Sun, May 28, 2023 at 3:57 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > >
+> > > > > > > On Fri, May 26, 2023 at 02:30:41PM +0800, Jason Wang wrote:
+> > > > > > > > This patch validate
+> > > > > > >
+> > > > > > > validates
+> > > > > > >
+> > > > > > > > the used buffer length provided by the device
+> > > > > > > > before trying to use it.
+> > > > > > >
+> > > > > > > before returning it to caller
+> > > > > > >
+> > > > > > > > This is done by remembering the in buffer
+> > > > > > > > length in a dedicated array during virtqueue_add(), then we can fail
+> > > > > > > > the virtqueue_get_buf() when we find the device is trying to give us a
+> > > > > > > > used buffer length which is greater than we stored before.
+> > > > > > >
+> > > > > > > than what we stored
+> > > > > > >
+> > > > > > > >
+> > > > > > > > This validation is disable
+> > > > > > >
+> > > > > > > disabled
+> > > > > > >
+> > > > > > > > by default via module parameter to unbreak
+> > > > > > > > some existing devices since some legacy devices are known to report
+> > > > > > > > buggy used length.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > > > > >
+> > > > > > > First I'm not merging this without more data about
+> > > > > > > what is known to be broken and what is known to work well
+> > > > > > > in the commit log. And how exactly do things work if used length
+> > > > > > > is wrong?
+> > > > > >
+> > > > > > Assuming the device is malicious, it would be very hard to answer.
+> > > > > > Auditing and fuzzing won't cover every case. Instead of trying to seek
+> > > > > > the answer, we can simply make sure the used in buffer length is
+> > > > > > validated then we know we're fine or not.
+> > > > >
+> > > > > To restate the question, you said above "some legacy devices are known
+> > > > > to report buggy used length". If they report buggy length then how
+> > > > > can things work?
+> > > >
+> > > > The validation is disabled for legacy device (as stated in the changelog):
+> > > >
+> > > > static bool vring_needs_used_validation(const struct virtio_device *vdev)
+> > > > {
+> > > >         /*
+> > > >          * Several legacy devices are known to produce buggy used
+> > > >          * length. In order to let driver work, we won't validate used
+> > > >          * buffer length in this case.
+> > > >          */
+> > > >         if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
+> > > >                 return false;
+> > > >         if (force_used_validation)
+> > > >                 return true;
+> > > >         return false;
+> > > > }
+> > > >
+> > > > This seems to be what we've agreed in last version:
+> > > >
+> > > > https://lore.kernel.org/all/CANLsYkxfhamUU0bb4j7y6N4_G9odKxLCjXxgXEx4SJ6_Kf+M2Q@mail.gmail.com/T/#m31f3b06f9032beec175c312dfa2532cb08b15c56
+> > > >
+> > > > Thanks
+> > > >
+> > >
+> > > I don't get it. You wrote:
+> > >
+> > >         This validation is disable
+> > >         by default via module parameter to unbreak
+> > >         some existing devices since some legacy devices are known to report
+> > >         buggy used length.
+> > >
+> > > which devices?
+> >
+> > legacy rpmsg and vsock device (before 49d8c5ffad07) at least.
+> >
+> > > why do you need a module parameter?
+> >
+> > If we enable it unconditionally for modern devices, it may break some
+> > buggy moden device (vsock without a fix as an example).
+> >
+> > >
+> > >
+> > > > >
+> > > > > > > Second what's wrong with dma_desc_extra that we already maintain?
+> > > > > > > Third motivation - it's part and parcel of the hardening effort yes?
+> > > > > >
+> > > > > > They are different. dma_desc_extra is for a descriptor ring, but this
+> > > > > > is for a used ring. Technically we can go back to iterate on the
+> > > > > > descriptor ring for a legal used in buffer length. But it will have
+> > > > > > worse performance.
+> > > > >
+> > > > > I don't really understand. We already iterate when we unmap -
+> > > > > all that is necessary is to subtract it from used length, if at
+> > > > > the end of the process it is >0 then we know used length is too
+> > > > > large.
+> > > >
+> > > > Yes, but it is the job that is done in the driver level not the virtio
+> > > > core.
+> > >
+> > > What job?
+> >
+> > I meant the driver can do the validation since it has the knowledge of
+> > the buffer length if it wants.
+> >
+> > > unmap is done in detach_buf_split and detach_buf_packed respectively.
+> > > vring_desc_extra isn't even visible outside drivers/virtio/virtio_ring.c
+> >
+> > desc_extra doesn't contain buffer length for the case of indirect
+> > descriptors. So we need to iterate in the descriptors when it looks
+> > expensive if we don't need unmap.
+> >
+> > Thanks
+> >
+> > >
+> > > For drivers that do unmap at driver level - I guess they can do
+> > > validation there too.
+> > >
+> > > > Validation in virtio core is still necessary since they're
+> > > > working at different levels and it's hard to force the validation in
+> > > > all drivers by codes. Last version introduces a
+> > > > suppress_driver_validation to allow the driver to suppress the core
+> > > > validation which seems not good, we need a way to force the
+> > > > virtio_ring code to do validation before.
+> > >
+> > > Why do we? If driver validates length virtio_ring does not need to
+> > > validate.
+> 
+> To be more safe, there's no guarantee that there's no bug in the driver.
+
+Extra options increase testing matrix size so - there be bugs.
+We need to make these decisions for (most) users.
+
+> >  If driver does not use length virtio_ring does not need to
+> > > validate.
+> 
+> This could be done on top assuming the validation is disabled by
+> default. But if the administrator wants to have belt and braces we
+> need to leave an option for them.
+> 
+> Thanks
+
+No, we don't regress then fix on top.
+As for mod parameter I am not impressed -
+no one's going to have the time or inclination to do the requisite
+testing to know whether the module parameter is safe.
+
+> > core can provide this service for the gazillion non
+> > > performance critical drivers that just want to keep things simple,
+> > > but the 4-5 critical ones can do their own validation if they want to.
+> > >
+> > > > Or such stuff could be added
+> > > > on top since the validation is by default anyway.
+> > > >
+> > > > Thanks
+> > >
+> > >
+> > >
+> > > > >
+> > > > >
+> > > > > > > I'd like to know the fate of VIRTIO_HARDEN_NOTIFICATION before
+> > > > > > > we do more hardening. If it's irrevocably broken let's rip it out?
+> > > > > >
+> > > > > > So the plan is
+> > > > > >
+> > > > > > 1) finish used ring validation (this had been proposed, merged and
+> > > > > > reverted before notification hardening)
+> > > > > > 2) do notification hardening on top.
+> > > > > >
+> > > > > > So let's leave it as is and I will do a rework after we finalize the
+> > > > > > used ring validation.
+> > > > > >
+> > > > > > Thanks
+> > > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > > ---
+> > > > > > > > Changes since V4:
+> > > > > > > > - drop the flat for driver to suppress the check
+> > > > > > > > - validation is disabled by default
+> > > > > > > > - don't do validation for legacy device
+> > > > > > > > - rebase and support virtqueue resize
+> > > > > > > > ---
+> > > > > > > >  drivers/virtio/virtio_ring.c | 75 ++++++++++++++++++++++++++++++++++++
+> > > > > > > >  1 file changed, 75 insertions(+)
+> > > > > > > >
+> > > > > > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > > > > > > > index 143f380baa1c..5b151605aaf8 100644
+> > > > > > > > --- a/drivers/virtio/virtio_ring.c
+> > > > > > > > +++ b/drivers/virtio/virtio_ring.c
+> > > > > > > > @@ -15,6 +15,9 @@
+> > > > > > > >  #include <linux/spinlock.h>
+> > > > > > > >  #include <xen/xen.h>
+> > > > > > > >
+> > > > > > > > +static bool force_used_validation = false;
+> > > > > > > > +module_param(force_used_validation, bool, 0444);
+> > > > > > > > +
+> > > > > > > >  #ifdef DEBUG
+> > > > > > > >  /* For development, we want to crash whenever the ring is screwed. */
+> > > > > > > >  #define BAD_RING(_vq, fmt, args...)                          \
+> > > > > > > > @@ -105,6 +108,9 @@ struct vring_virtqueue_split {
+> > > > > > > >       struct vring_desc_state_split *desc_state;
+> > > > > > > >       struct vring_desc_extra *desc_extra;
+> > > > > > > >
+> > > > > > > > +     /* Maximum in buffer length, NULL means no used validation */
+> > > > > > > > +     u32 *buflen;
+> > > > > > > > +
+> > > > > > > >       /* DMA address and size information */
+> > > > > > > >       dma_addr_t queue_dma_addr;
+> > > > > > > >       size_t queue_size_in_bytes;
+> > > > > > > > @@ -145,6 +151,9 @@ struct vring_virtqueue_packed {
+> > > > > > > >       struct vring_desc_state_packed *desc_state;
+> > > > > > > >       struct vring_desc_extra *desc_extra;
+> > > > > > > >
+> > > > > > > > +     /* Maximum in buffer length, NULL means no used validation */
+> > > > > > > > +     u32 *buflen;
+> > > > > > > > +
+> > > > > > > >       /* DMA address and size information */
+> > > > > > > >       dma_addr_t ring_dma_addr;
+> > > > > > > >       dma_addr_t driver_event_dma_addr;
+> > > > > > > > @@ -552,6 +561,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
+> > > > > > > >       unsigned int i, n, avail, descs_used, prev, err_idx;
+> > > > > > > >       int head;
+> > > > > > > >       bool indirect;
+> > > > > > > > +     u32 buflen = 0;
+> > > > > > > >
+> > > > > > > >       START_USE(vq);
+> > > > > > > >
+> > > > > > > > @@ -635,6 +645,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
+> > > > > > > >                                                    VRING_DESC_F_NEXT |
+> > > > > > > >                                                    VRING_DESC_F_WRITE,
+> > > > > > > >                                                    indirect);
+> > > > > > > > +                     buflen += sg->length;
+> > > > > > > >               }
+> > > > > > > >       }
+> > > > > > > >       /* Last one doesn't continue. */
+> > > > > > > > @@ -675,6 +686,10 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
+> > > > > > > >       else
+> > > > > > > >               vq->split.desc_state[head].indir_desc = ctx;
+> > > > > > > >
+> > > > > > > > +     /* Store in buffer length if necessary */
+> > > > > > > > +     if (vq->split.buflen)
+> > > > > > > > +             vq->split.buflen[head] = buflen;
+> > > > > > > > +
+> > > > > > > >       /* Put entry in available array (but don't update avail->idx until they
+> > > > > > > >        * do sync). */
+> > > > > > > >       avail = vq->split.avail_idx_shadow & (vq->split.vring.num - 1);
+> > > > > > > > @@ -861,6 +876,11 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
+> > > > > > > >               BAD_RING(vq, "id %u is not a head!\n", i);
+> > > > > > > >               return NULL;
+> > > > > > > >       }
+> > > > > > > > +     if (vq->split.buflen && unlikely(*len > vq->split.buflen[i])) {
+> > > > > > > > +             BAD_RING(vq, "used len %d is larger than max in buffer len %u\n",
+> > > > > > > > +                     *len, vq->split.buflen[i]);
+> > > > > > > > +             return NULL;
+> > > > > > > > +     }
+> > > > > > > >
+> > > > > > > >       /* detach_buf_split clears data, so grab it now. */
+> > > > > > > >       ret = vq->split.desc_state[i].data;
+> > > > > > > > @@ -1085,10 +1105,25 @@ static void vring_free_split(struct vring_virtqueue_split *vring_split,
+> > > > > > > >                        vring_split->queue_dma_addr,
+> > > > > > > >                        dma_dev);
+> > > > > > > >
+> > > > > > > > +     kfree(vring_split->buflen);
+> > > > > > > >       kfree(vring_split->desc_state);
+> > > > > > > >       kfree(vring_split->desc_extra);
+> > > > > > > >  }
+> > > > > > > >
+> > > > > > > > +static bool vring_needs_used_validation(const struct virtio_device *vdev)
+> > > > > > > > +{
+> > > > > > > > +     /*
+> > > > > > > > +      * Several legacy devices are known to produce buggy used
+> > > > > > > > +      * length. In order to let driver work, we won't validate used
+> > > > > > > > +      * buffer length in this case.
+> > > > > > > > +      */
+> > > > > > > > +     if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
+> > > > > > > > +             return false;
+> > > > > > > > +     if (force_used_validation)
+> > > > > > > > +             return true;
+> > > > > > > > +     return false;
+> > > > > > > > +}
+> > > > > > > > +
+> > > > > > > >  static int vring_alloc_queue_split(struct vring_virtqueue_split *vring_split,
+> > > > > > > >                                  struct virtio_device *vdev,
+> > > > > > > >                                  u32 num,
+> > > > > > > > @@ -1137,7 +1172,19 @@ static int vring_alloc_queue_split(struct vring_virtqueue_split *vring_split,
+> > > > > > > >       vring_split->vring_align = vring_align;
+> > > > > > > >       vring_split->may_reduce_num = may_reduce_num;
+> > > > > > > >
+> > > > > > > > +     if (vring_needs_used_validation(vdev)) {
+> > > > > > > > +             vring_split->buflen =
+> > > > > > > > +                     kmalloc_array(num, sizeof(*vring_split->buflen),
+> > > > > > > > +                                   GFP_KERNEL);
+> > > > > > > > +             if (!vring_split->buflen)
+> > > > > > > > +                     goto err_buflen;
+> > > > > > > > +     }
+> > > > > > > > +
+> > > > > > > >       return 0;
+> > > > > > > > +
+> > > > > > > > +err_buflen:
+> > > > > > > > +     vring_free_split(vring_split, vdev, dma_dev);
+> > > > > > > > +     return -ENOMEM;
+> > > > > > > >  }
+> > > > > > > >
+> > > > > > > >  static struct virtqueue *vring_create_virtqueue_split(
+> > > > > > > > @@ -1297,6 +1344,7 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+> > > > > > > >       unsigned int i, n, err_idx;
+> > > > > > > >       u16 head, id;
+> > > > > > > >       dma_addr_t addr;
+> > > > > > > > +     u32 buflen = 0;
+> > > > > > > >
+> > > > > > > >       head = vq->packed.next_avail_idx;
+> > > > > > > >       desc = alloc_indirect_packed(total_sg, gfp);
+> > > > > > > > @@ -1325,6 +1373,8 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+> > > > > > > >                       desc[i].addr = cpu_to_le64(addr);
+> > > > > > > >                       desc[i].len = cpu_to_le32(sg->length);
+> > > > > > > >                       i++;
+> > > > > > > > +                     if (n >= out_sgs)
+> > > > > > > > +                             buflen += sg->length;
+> > > > > > > >               }
+> > > > > > > >       }
+> > > > > > > >
+> > > > > > > > @@ -1379,6 +1429,10 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+> > > > > > > >       vq->packed.desc_state[id].last = id;
+> > > > > > > >       vq->packed.desc_state[id].premapped = premapped;
+> > > > > > > >
+> > > > > > > > +     /* Store in buffer length if necessary */
+> > > > > > > > +     if (vq->packed.buflen)
+> > > > > > > > +             vq->packed.buflen[id] = buflen;
+> > > > > > > > +
+> > > > > > > >       vq->num_added += 1;
+> > > > > > > >
+> > > > > > > >       pr_debug("Added buffer head %i to %p\n", head, vq);
+> > > > > > > > @@ -1416,6 +1470,7 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
+> > > > > > > >       __le16 head_flags, flags;
+> > > > > > > >       u16 head, id, prev, curr, avail_used_flags;
+> > > > > > > >       int err;
+> > > > > > > > +     u32 buflen = 0;
+> > > > > > > >
+> > > > > > > >       START_USE(vq);
+> > > > > > > >
+> > > > > > > > @@ -1498,6 +1553,8 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
+> > > > > > > >                                       1 << VRING_PACKED_DESC_F_AVAIL |
+> > > > > > > >                                       1 << VRING_PACKED_DESC_F_USED;
+> > > > > > > >                       }
+> > > > > > > > +                     if (n >= out_sgs)
+> > > > > > > > +                             buflen += sg->length;
+> > > > > > > >               }
+> > > > > > > >       }
+> > > > > > > >
+> > > > > > > > @@ -1518,6 +1575,10 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
+> > > > > > > >       vq->packed.desc_state[id].last = prev;
+> > > > > > > >       vq->packed.desc_state[id].premapped = premapped;
+> > > > > > > >
+> > > > > > > > +     /* Store in buffer length if necessary */
+> > > > > > > > +     if (vq->packed.buflen)
+> > > > > > > > +             vq->packed.buflen[id] = buflen;
+> > > > > > > > +
+> > > > > > > >       /*
+> > > > > > > >        * A driver MUST NOT make the first descriptor in the list
+> > > > > > > >        * available before all subsequent descriptors comprising
+> > > > > > > > @@ -1718,6 +1779,11 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+> > > > > > > >               BAD_RING(vq, "id %u is not a head!\n", id);
+> > > > > > > >               return NULL;
+> > > > > > > >       }
+> > > > > > > > +     if (vq->packed.buflen && unlikely(*len > vq->packed.buflen[id])) {
+> > > > > > > > +             BAD_RING(vq, "used len %d is larger than max in buffer len %u\n",
+> > > > > > > > +                     *len, vq->packed.buflen[id]);
+> > > > > > > > +             return NULL;
+> > > > > > > > +     }
+> > > > > > > >
+> > > > > > > >       /* detach_buf_packed clears data, so grab it now. */
+> > > > > > > >       ret = vq->packed.desc_state[id].data;
+> > > > > > > > @@ -1937,6 +2003,7 @@ static void vring_free_packed(struct vring_virtqueue_packed *vring_packed,
+> > > > > > > >                                vring_packed->device_event_dma_addr,
+> > > > > > > >                                dma_dev);
+> > > > > > > >
+> > > > > > > > +     kfree(vring_packed->buflen);
+> > > > > > > >       kfree(vring_packed->desc_state);
+> > > > > > > >       kfree(vring_packed->desc_extra);
+> > > > > > > >  }
+> > > > > > > > @@ -1988,6 +2055,14 @@ static int vring_alloc_queue_packed(struct vring_virtqueue_packed *vring_packed,
+> > > > > > > >
+> > > > > > > >       vring_packed->vring.num = num;
+> > > > > > > >
+> > > > > > > > +     if (vring_needs_used_validation(vdev)) {
+> > > > > > > > +             vring_packed->buflen =
+> > > > > > > > +                     kmalloc_array(num, sizeof(*vring_packed->buflen),
+> > > > > > > > +                                   GFP_KERNEL);
+> > > > > > > > +             if (!vring_packed->buflen)
+> > > > > > > > +                     goto err;
+> > > > > > > > +     }
+> > > > > > > > +
+> > > > > > > >       return 0;
+> > > > > > > >
+> > > > > > > >  err:
+> > > > > > > > --
+> > > > > > > > 2.25.1
+> > > > > > >
+> > > > >
+> > >
+
