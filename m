@@ -2,87 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC61717FFF
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AABD6718002
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235747AbjEaMfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
+        id S235809AbjEaMfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:35:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjEaMfL (ORCPT
+        with ESMTP id S235403AbjEaMfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:35:11 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F77123
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:35:09 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f61530506aso60228025e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:35:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685536508; x=1688128508;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y/p7ECP6vbOUSRpDQ4zGbI0opvEIKsa5wfjANKgfREI=;
-        b=c6Nv9dZX4P6RZw491nYo5S8MFkFF6PZ8XS6B2MdLMYDgbDpYXn37Sg7NMhddYI099J
-         /sJagQS+Tm3aSCGZgETp2AaWJpBvPdM/UVEJD5SIzU6Ge4kjmLq2MeiiGxwn0QesILOE
-         oO5NrzIYaMjECx+Tdd+WjWUAfeXqR7LNkyokWSakdShpUNgcHIPlqda96PrtoNrHsupa
-         8M8nYEncrcCnHLgTi0JhKjnaWq9xXXO222tdi29ibwHNBAoTP4YUiPKJEMbrLxvkCsi+
-         dmd/Xf7Kpwq1d2JwgXTQ6vHR2/03IpDg4zjQPTFxSC/+hezTj31WAWeZDoe8Q40s9+Hk
-         /QiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685536508; x=1688128508;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y/p7ECP6vbOUSRpDQ4zGbI0opvEIKsa5wfjANKgfREI=;
-        b=MAVFyp4v4krRbnbp3o/F3y5u2gkgAR/LS8G+mmw6iQToNrhSJ0OL8BL8gB5FY7rYXX
-         HwDVdq7ZzCejnV5ydXNlRALrOieaT3nlc1vl64YL5CZOK76K4sujOPNwS9/S0DVmqdIF
-         RD5BF5Cn2H5uAxdg2+SvbzMppNFOPs/zHC3anqK7ygG9naVKG9tRausSWvnxo0Txa/tF
-         cX17F02LtOQsOfFtIqjK5s47/na6i7rGHDHor29CFCC7BnLKiyf5eVl7DBtirnFQ//oW
-         f+aecxx54p6+G6WKeTN16oDcnCnOq3kPBg87/rUkZagliR/g2G/9pYq+Qs8Nc/67Yzrw
-         yn+Q==
-X-Gm-Message-State: AC+VfDyvIz+GgQ7vB1EgwtN04JiJGWTSPhDxvxfnGxIcRTfnlxfMNPZA
-        fUnD+gm8CFhzwPi4Ij/RvKb2LA==
-X-Google-Smtp-Source: ACHHUZ4Y/hsGX+eAM7uTya8Hltas36c2LDSH9jAHp6Wh9Vog4GauPL7E0LTHt1HW4XYoYm9XOgq9WQ==
-X-Received: by 2002:a05:600c:210e:b0:3f6:906:b659 with SMTP id u14-20020a05600c210e00b003f60906b659mr4174220wml.33.1685536508111;
-        Wed, 31 May 2023 05:35:08 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:7a1b:d710:7226:da18? ([2a05:6e02:1041:c10:7a1b:d710:7226:da18])
-        by smtp.googlemail.com with ESMTPSA id o5-20020a1c7505000000b003f6f6a6e769sm14324599wmc.17.2023.05.31.05.35.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 05:35:07 -0700 (PDT)
-Message-ID: <01197bb8-da0d-f726-79bc-d8ab7d3ea992@linaro.org>
-Date:   Wed, 31 May 2023 14:35:06 +0200
+        Wed, 31 May 2023 08:35:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF3A8E;
+        Wed, 31 May 2023 05:35:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6050063030;
+        Wed, 31 May 2023 12:35:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1740C4339E;
+        Wed, 31 May 2023 12:35:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685536513;
+        bh=yuATc0ewpjoNkponZyfQ6nxQCdgMjgGjVPMha1ccK5o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BE5M3bXVySZN4XBI7InXHGgsRr+/vX8+uyevGhLaMHsvzFl0OP+np7347BMSm3/PW
+         U6nEdPtTyyg/nbk0loD54Fdg8LVFAvMY9TtowZFw0+XM1SmiCKGYtUk+JMK7ujL1Gl
+         Q1hbP80hFOr7B9LHX9X/Z6Y2W6Y/6Yl+Jzks1pdbAis+ZPSZkUn/7JhpgTwZZ7Kf25
+         K/IRhJvfPiU6+YWpirDBBizqxv4egoG8r36hBf88SxzDNklyYt9YvykBSZ62zkNmTG
+         xG+4Erdnrx+bYTxd9rt0r/o+vjyoImE2xhcWbwUATckXRC6wb2gxoSjGGInfYTUPaw
+         epLzsz/BJcT+g==
+Date:   Wed, 31 May 2023 13:35:08 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, andrew@lunn.ch, gregory.clement@bootlin.com,
+        sebastian.hesselbarth@gmail.com, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, enachman@marvell.com,
+        Vadym Kochan <vadym.kochan@plvision.eu>
+Subject: Re: [PATCH v7 3/4] dt-bindings: mtd: marvell-nand: Convert to YAML
+ DT scheme
+Message-ID: <20230531-botanical-swoosh-05683af1d3f0@spud>
+References: <20230530235456.1009082-1-chris.packham@alliedtelesis.co.nz>
+ <20230530235456.1009082-4-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported sensors
-Content-Language: en-US
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-Cc:     "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "andrew.smirnov@gmail.com" <andrew.smirnov@gmail.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Alice Guo <alice.guo@nxp.com>
-References: <20230516083746.63436-1-peng.fan@oss.nxp.com>
- <20230516083746.63436-3-peng.fan@oss.nxp.com>
- <3c59c4e0-68eb-b778-6b12-9f9e331f81dd@linaro.org>
- <PA4PR04MB94165217C8C0D9E8E0087AF988489@PA4PR04MB9416.eurprd04.prod.outlook.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <PA4PR04MB94165217C8C0D9E8E0087AF988489@PA4PR04MB9416.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="YdeHVyof/+8Ux7qZ"
+Content-Disposition: inline
+In-Reply-To: <20230530235456.1009082-4-chris.packham@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,64 +62,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 14:05, Peng Fan wrote:
->> Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported
->> sensors
->>
->> On 16/05/2023 10:37, Peng Fan (OSS) wrote:
->>> From: Peng Fan <peng.fan@nxp.com>
->>>
->>> There are MAX 16 sensors, but not all of them supported. Such as
->>> i.MX8MQ, there are only 3 sensors. Enabling all 16 sensors will touch
->>> reserved bits from i.MX8MQ reference mannual, and TMU will stuck,
->>> temperature will not update anymore.
->>>
->>> Fixes: 45038e03d633 ("thermal: qoriq: Enable all sensors before
->>> registering them")
->>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
->>> ---
->>>    drivers/thermal/qoriq_thermal.c | 30 +++++++++++++++++++-----------
->>>    1 file changed, 19 insertions(+), 11 deletions(-)
->>>
->>> diff --git a/drivers/thermal/qoriq_thermal.c
->>> b/drivers/thermal/qoriq_thermal.c index b806a0929459..53748c4a5be1
->>> 100644
->>> --- a/drivers/thermal/qoriq_thermal.c
->>> +++ b/drivers/thermal/qoriq_thermal.c
->>> @@ -31,7 +31,6 @@
->>>    #define TMR_DISABLE	0x0
->>>    #define TMR_ME		0x80000000
->>>    #define TMR_ALPF	0x0c000000
->>> -#define TMR_MSITE_ALL	GENMASK(15, 0)
->>>
->>>    #define REGS_TMTMIR	0x008	/* Temperature measurement
->> interval Register */
->>>    #define TMTMIR_DEFAULT	0x0000000f
->>> @@ -105,6 +104,11 @@ static int tmu_get_temp(struct
->> thermal_zone_device *tz, int *temp)
->>>    	 * within sensor range. TEMP is an 9 bit value representing
->>>    	 * temperature in KelVin.
->>>    	 */
->>> +
->>> +	regmap_read(qdata->regmap, REGS_TMR, &val);
->>> +	if (!(val & TMR_ME))
->>> +		return -EAGAIN;
->>
->> How is this change related to what is described in the changelog?
-> 
-> devm_thermal_zone_of_sensor_register will invoke get temp,
-> since we reverted the 45038e03d633 did, we need to check TMR_ME
-> to avoid return invalid temperature.
 
+--YdeHVyof/+8Ux7qZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- From a higher perspective if the sensor won't be enabled, then the 
-thermal zone should not be registered, the get_temp won't happen on a 
-disabled sensor and this test won't be necessary, no ?
+Hey Chris,
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+On Wed, May 31, 2023 at 11:54:55AM +1200, Chris Packham wrote:
+> From: Vadym Kochan <vadym.kochan@plvision.eu>
+>=20
+> Switch the DT binding to a YAML schema to enable the DT validation.
+>=20
+> Dropped deprecated compatibles and properties described in txt file.
+>=20
+> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+>=20
+> Notes:
+>     Changes in v7:
+>     - Restore "label" and "partitions" properties (should be picked up via
+>       nand-controller.yaml but aren't)
+>     - Add/restore nand-on-flash-bbt and nand-ecc-mode which aren't covered
+>       by nand-controller.yaml.
+>     - Use "unevalautedProperties: false"
+>     - Corrections for clock-names, dma-names, nand-rb and nand-ecc-streng=
+th
+>     - Add pxa3xx-nand-controller example
+>    =20
+>     Changes in v6:
+>     - remove properties covered by nand-controller.yaml
+>     - add example using armada-8k compatible
+>    =20
+>     earlier changes:
+>    =20
+>     v5:
+>        1) Get back "label" and "partitions" properties but without
+>           ref to the "partition.yaml" which was wrongly used.
+>    =20
+>        2) Add "additionalProperties: false" for nand@ because all possible
+>           properties are described.
+>    =20
+>     v4:
+>        1) Remove "label" and "partitions" properties
+>    =20
+>        2) Use 2 clocks for A7K/8K platform which is a requirement
+>    =20
+>     v3:
+>       1) Remove txt version from the MAINTAINERS list
+>    =20
+>       2) Use enum for some of compatible strings
+>    =20
+>       3) Drop:
+>             #address-cells
+>             #size-cells:
+>    =20
+>          as they are inherited from the nand-controller.yaml
+>    =20
+>       4) Add restriction to use 2 clocks for A8K SoC
+>    =20
+>       5) Dropped description for clock-names and extend it with
+>          minItems: 1
+>    =20
+>       6) Drop description for "dmas"
+>    =20
+>       7) Use "unevalautedProperties: false"
+>    =20
+>       8) Drop quites from yaml refs.
+>    =20
+>       9) Use 4-space indentation for the example section
+>    =20
+>     v2:
+>       1) Fixed warning by yamllint with incorrect indentation for compati=
+ble list
+>=20
+>  .../bindings/mtd/marvell,nand-controller.yaml | 221 ++++++++++++++++++
+>  .../devicetree/bindings/mtd/marvell-nand.txt  | 126 ----------
+>  MAINTAINERS                                   |   1 -
+>  3 files changed, 221 insertions(+), 127 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mtd/marvell,nand-co=
+ntroller.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/marvell-nand.txt
+>=20
+> diff --git a/Documentation/devicetree/bindings/mtd/marvell,nand-controlle=
+r.yaml b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
+> new file mode 100644
+> index 000000000000..7cd4a2e99343
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
+> @@ -0,0 +1,221 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/marvell,nand-controller.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell NAND Flash Controller (NFC)
+> +
+> +maintainers:
+> +  - Miquel Raynal <miquel.raynal@bootlin.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: marvell,armada-8k-nand-controller
+> +          - const: marvell,armada370-nand-controller
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Apologies if I have missed this - but the commit message should probably
+explain where this fallback came from since it does not appear to be
+present in the original binding.
 
+> +      - enum:
+> +          - marvell,armada370-nand-controller
+> +          - marvell,pxa3xx-nand-controller
+
+> +          - marvell,armada-8k-nand
+> +          - marvell,armada370-nand
+> +          - marvell,pxa3xx-nand
+
+Please mark these 3 as deprecated.
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description:
+> +      Shall reference the NAND controller clocks, the second one is
+> +      is only needed for the Armada 7K/8K SoCs
+
+As a nit, allOf below invalidates this second part of the sentence (in
+possibly a clearer way too).
+
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    items:
+> +      - const: core
+> +      - const: reg
+> +
+> +  dmas:
+> +    maxItems: 1
+> +
+> +  dma-names:
+> +    items:
+> +      - enum:
+
+I don't think the items: here is needed, enum on its own suffices, no?
+
+Cheers,
+Conor.
+
+--YdeHVyof/+8Ux7qZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHc+6wAKCRB4tDGHoIJi
+0uyhAQDKKUynMOe4ocCMIjqXxFF5IJ80y0JmIzHnljlbls4TAgD9E0fd+PguTVQu
+cNOwu/6pc/nngrCtlryA4l55i5qpEQc=
+=fT3C
+-----END PGP SIGNATURE-----
+
+--YdeHVyof/+8Ux7qZ--
