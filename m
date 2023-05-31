@@ -2,207 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4344171786A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6BE9717867
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234477AbjEaHiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
+        id S232026AbjEaHiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234706AbjEaHiQ (ORCPT
+        with ESMTP id S234477AbjEaHh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:38:16 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2131.outbound.protection.outlook.com [40.107.255.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2568C185
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:38:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jjqhyX6dn+EBbiYsmKMl4nj+Hp/GVpG2x+WtdLtxUMPJOvZ+Z3CHnm7t2Ez8v7mHLd8XLOKpaEz2LgHmMerVmUCRPGdAgMHSBfNLQhu4Vk2KWAsjkHc1GGnPOM87EJpp/y3eXpB8hVvORGk3FtExnvUhHthxSsIz9s05d3+1Xa4TMc/DvdAooPedxaEqn7IXu+L8/FtXNIS7fsEA/LNicp1EA0M1kAocHZkHP1vOcVzXcilIRfPl9AqNY+db9+gi5/Ihkim9sRSCsjuU33LjLkByUTY7TnK2ml6jhy+fM3n5KzHmqNh4IjDQOtOdm0I8wHOkpS0VvPU6o3PK9SvKJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bWcWb4kBK15aAmXyOXHcgMskBxsxfIStyeHH/5j6LSE=;
- b=RUc6MgWLj+x15k2m58H6lpR1DsBXhtHiSEa12n755w6jAaHmp811JMl6T6ALTkSS6qf8LTUOnEsdmmYMXQ7cQh36+k73sSLnjYvDi8iQLnxbcbcC7qUJc7+nGuCQKCgRcn0TUvCBW0Sraar4yhnslcVaOkGHDgKm2fwDXGjbAkxkGxeWHue9Hhit2DJvq/8kgDicTdMy4XR0uD47aO9g1KqwY1P0RSo7kJ9bhvGHH3nylOsZx/KR7l6ibXltX13DBCOuuvsoj9zNcuRAfqyZiBeqPA2o79J0ymPR3noFACpnGF4G7cPukOE7tLvch8xrdwcuokQT+XmH2/70aq9LuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bWcWb4kBK15aAmXyOXHcgMskBxsxfIStyeHH/5j6LSE=;
- b=l3cnqhWn/kmPtJ+4TgblP2373uJTumCMy/oOT2PxmHOVRczPEzolrHB9PjTNmusMtI6H+3qY8t31hyVnUNFcF0T2w++AKDdTnoQSffstS46oU2l/3KVOJ6gXiMn8TMozyzQsgOb5pZkVvJTw3UlOJXCEZ5VJ8RyLzhGVRifuYkDaImfRXZsQH8OsGvAR1P4SmwPnE4g/U12l4OVluqQJzXyFoc3Nzanh5tIKqUXhOsxUs04i+Aq3hf4LKi0SflU16pFzctQzdNS9PBvsqIU6USNrUKlXW0qG2Ec94xrVcCPArTkltOqSVYkwxSZV9C4G9n8+gdi3GceW/fnjP2Csqg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
- by SEZPR06MB6457.apcprd06.prod.outlook.com (2603:1096:101:17e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Wed, 31 May
- 2023 07:38:03 +0000
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::f652:a96b:482:409e%5]) with mapi id 15.20.6433.018; Wed, 31 May 2023
- 07:38:03 +0000
-From:   Lu Hongfei <luhongfei@vivo.com>
-To:     Artur Weber <aweber.kernel@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org (open list:DRM PANEL DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
-Subject: [PATCH] gpu: drm/panel: Change the return value of s6d7aa0_lock to void
-Date:   Wed, 31 May 2023 15:37:51 +0800
-Message-Id: <20230531073751.48451-1-luhongfei@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYCP286CA0129.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:2b6::17) To TYZPR06MB6697.apcprd06.prod.outlook.com
- (2603:1096:400:451::6)
+        Wed, 31 May 2023 03:37:58 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7A3C5;
+        Wed, 31 May 2023 00:37:56 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685518675;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=crOpwvqDjgCv5Iq8u/sJqrtyV1k8VhIgkmZfw96TObI=;
+        b=MHE4kD9uYhdo+tdxmqhAEUgebBeDxykmVLMZMpMzMKAU+RSHEtHsdEpyv8WH2nOfRbROJr
+        Y4D0LRK6hgoph8i/s6COIQiPi9BJZnBikCP7W5/Z3YzLxkZ72N6SEo89gJ5UoVke215o4F
+        X10/u/gr7XzzpzAMUaurHTFaYs+9d7guyErtIcig2Yw56lh42sZmsveZQbELzfbN4JtwUT
+        GxK7Y6gzs+OsXhKLTjd5MhkXA1REa3dPnxNk9Oio55QARHSrAFJ+VGJrLIHuSsr1CaXsqT
+        pv5qPw2364H8JKMvP07nzgesCjsZwf+KpmwQubOnFaWmr+e2LIifmQmTpQ48kA==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 88D6DFF808;
+        Wed, 31 May 2023 07:37:52 +0000 (UTC)
+Date:   Wed, 31 May 2023 09:37:52 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     richard@nod.at, vigneshr@ti.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        arnd@arndb.de, daniel.lezcano@linaro.org,
+        neil.armstrong@linaro.org, f.fainelli@gmail.com,
+        christophe.kerello@foss.st.com, liang.yang@amlogic.com,
+        jdelvare@suse.de, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] mtd: rawnand: marvell: add support for AC5 SoC
+Message-ID: <20230531093752.17fbeb1b@xps-13>
+In-Reply-To: <20230531025847.1284862-3-chris.packham@alliedtelesis.co.nz>
+References: <20230531025847.1284862-1-chris.packham@alliedtelesis.co.nz>
+        <20230531025847.1284862-3-chris.packham@alliedtelesis.co.nz>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|SEZPR06MB6457:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3f0abbb8-8b0f-43f1-ed61-08db61a9f76c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LhZ02FFtlfNJQZ+wn9ONaFGJwv2JHF3fHfxp9/g5+sEcAmTBCFyPeJ+HOTP5C7/uVdJaJ4FnQ+vcI3a3Wstc4mlWm5YZN/Pw5M71cZSBvnkI3cYi9XjV567itcZqda5k8uXPdMswcpbK+5Ctz7gpA+5jAmvsxfzMf7Qe4hCrdupCsGWQU3WgsSIChPASZBp9OZvwA6KYPUbcWiA9ZxgsGY80tFQb/YbowiaVC+oOFavPPGM/bJl+nnETOA8xzz5TWOd36ed3CJrh/yb53odyOwdf5m3UJlMRDmRIEpUuhAeQjOx7XzUpxJFRifzxa1u/1LMJRnW5JR+MhyhQ3iPpFdPjQVxmdOgwGNNlPneuoCOMd0uwBugNvtzKkX+igVXyV6g6BmnyHl0tQZ+esUl9df/naDcoOu/kx5nRf5d2ZefMRYMduJZ+C+dqzmAtD9GYqfVADKBPtARFiRp0O/1N/Eb30yZxPz4KmORyB6uQJXZoFsZybRKuBGSesmVxX5B3ZsonFEDoSGIxyD4v/M36JkiQ/PchUBd60rF2RVQ0ANxS6VFQadkDL56r6rlZTyvacHPO0IPdmas5ueZKskWDb/UJfI6iAsrTEntpNg5j+qzJPGROdNOwsv0HiB6L7+CV
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(366004)(136003)(346002)(396003)(451199021)(66556008)(83380400001)(6666004)(478600001)(4326008)(66476007)(66946007)(110136005)(26005)(6506007)(107886003)(1076003)(6512007)(316002)(52116002)(6486002)(41300700001)(2906002)(186003)(38350700002)(38100700002)(86362001)(36756003)(5660300002)(2616005)(8936002)(8676002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cNasMst5luVph0lIZU4skspDMPcyzfKIRu5cIts7z39p4OrwBdmdhmih6Q/G?=
- =?us-ascii?Q?1XRqtLhjpKwdI7ay53NaHXPRktWYN0HPytVFgQ9+XAMwfHIS2zXiqCdN7brD?=
- =?us-ascii?Q?o2xmbbadktc2wBJ0LeKAtpDUxjHPZWWeg1w4pft76csxXR84Rs1dhHVWWh07?=
- =?us-ascii?Q?e665Vg8umn+OFbW9+Fhz1C8hLSG2q31FwqhytODkPR9yDam09M/OfBCpsXTk?=
- =?us-ascii?Q?teFN0eqtSG9Fo6TgYZhnA7jlLdMSyrEnWKLApD4jxufuahJlTwnr3rcTloDh?=
- =?us-ascii?Q?HbTJYFM1grPSRbtpVAost3efPsCwgMsaTMWR8pyGWlSHWZs0570ivuaQQFJ8?=
- =?us-ascii?Q?LizslrCFkj5f78HNIt4c+YUBzQMA+KVT5BpejCqPDuNC3KvH4wjiUD5Pbfhm?=
- =?us-ascii?Q?BpedNBilLq2eChjXEsTZLTc1LmL+B1SNvSdHtGZZG9u+I1LlRasHqIYem1OU?=
- =?us-ascii?Q?++gRRQJUHnGhNLolPS1PdunHaCCBN/tsevj3ArXfvbK/OBhsKDeDjagSNpZr?=
- =?us-ascii?Q?zJ+Nv30t2Iyxw+2uXciEBLPmdNTOSbfr2mAD2XsrRJ4esgZqB22QBJiKtnw/?=
- =?us-ascii?Q?whWTbeo/zsNdheHGmrizQaXvMWZui3v8sFQ7FBoQ9CE8nxga/1V8RG4AQ5CG?=
- =?us-ascii?Q?Ytl4em8q11jawcZYU2+3bL2Ry0d2WmLyjp0x5VK2YmUXo5rTRYUSL5UWIJ+j?=
- =?us-ascii?Q?NflbXSh6tShiwvjnIz+1Rj/v7JjUeoynMJ5HvPeijC6e/3s+W8ZdtWgQrlVD?=
- =?us-ascii?Q?ydjXdWVR4y9whtM3D7BVHdDAm5NnThSsVOVRcOSYh1+SdsmX4axk6T+INCgn?=
- =?us-ascii?Q?Y5XpzszZCZuSmxnQj6NsFPAGBVqfkist6t2DDpUeazwA7qhX1M2baZRx/fXF?=
- =?us-ascii?Q?MqqAXZq+OirF379bL9BUulZzNI1u0I7mDM2gFhg7pmqdv1/EXQE6fOKgfFmO?=
- =?us-ascii?Q?LtZH0aBKz3zs3smKpGRMM8ItMQ8huoZc5BZcfASJeEX92nnp7Is2evFmnsUL?=
- =?us-ascii?Q?OunvLAGJkZ/zzUOs49VnHCYqALfwfLQwV51sttxQTcgA6UEJTI6n1ni02eMy?=
- =?us-ascii?Q?92OhXS6WKYASMQbANkbwjIOMF8Ud0KEHfNOLJ9HzfvMfYI7c5y9OtZ6n37/O?=
- =?us-ascii?Q?FkEbU9JQuWneoORyaSj3WiCytUqhJZPhD9m8dFaVnrauCwJujKROo5ILTkdY?=
- =?us-ascii?Q?jnjLMkBXb8c104EspqtbuaAnLzsUzOkzNdcg7vNpcC6Elzv1Sns58pNbaqen?=
- =?us-ascii?Q?Id+RRpRaguond1ajNSdJSK2D+EQ0DoXeNupBXPP7qrMv6VSM/zLRB680hBoh?=
- =?us-ascii?Q?YCQJSL/dwpYGti0vzqMqXUQQYPU5Lk9ldN8h1YgTV8GYFGjmTAg+P4rU1y8e?=
- =?us-ascii?Q?fvrRybXJV1gXNfeybVIPqHsc3CZxkwrmJ3qwsOvEWU2rwTBMdGU00VkmScgh?=
- =?us-ascii?Q?ghJzmI0WB2pWeoo8v9EqENRx5BTjX2Ms767n1oINAKwkhJjQyNudnRtZ1C8v?=
- =?us-ascii?Q?ZuEK/l152XPOzUMpcIWSZlrSFL1UCaUNnx3qAR2b8swqTN4fUSgKe9Gimm9R?=
- =?us-ascii?Q?4FAcsaqFi+LPrzqA9d33O/ul42x8+kHURINsuUhh?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f0abbb8-8b0f-43f1-ed61-08db61a9f76c
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 07:38:03.3840
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aikAzb2lWHGB3WIbZubyxKbIYWxxmWxatNkMt0qxiy7TRJE2gn3zEk8bB8C+aHHpoQp1E/dBv01iZTXI+ZILTA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB6457
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of s6d7aa0_lock is meaningless,
-it is better to modify it to void.
-This patch fixes this issue and modifies the place
-where s6d7aa0_lock is called.
+Hi Chris,
 
-Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
----
- drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c | 29 ++++---------------
- 1 file changed, 5 insertions(+), 24 deletions(-)
+chris.packham@alliedtelesis.co.nz wrote on Wed, 31 May 2023 14:58:47
++1200:
 
-diff --git a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-index 102e1fc7ee38..c5924e7b9e36
---- a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-+++ b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-@@ -63,10 +63,9 @@ static void s6d7aa0_reset(struct s6d7aa0 *ctx)
- 	msleep(50);
- }
- 
--static int s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
-+static void s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
- {
- 	struct mipi_dsi_device *dsi = ctx->dsi;
--	int ret = 0;
- 
- 	if (lock) {
- 		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0xa5, 0xa5);
-@@ -79,8 +78,6 @@ static int s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
- 		if (ctx->desc->use_passwd3)
- 			mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0xa5, 0xa5);
- 	}
--
--	return ret;
- }
- 
- static int s6d7aa0_on(struct s6d7aa0 *ctx)
-@@ -238,11 +235,7 @@ static int s6d7aa0_lsl080al02_init(struct s6d7aa0 *ctx)
- 
- 	usleep_range(20000, 25000);
- 
--	ret = s6d7aa0_lock(ctx, false);
--	if (ret < 0) {
--		dev_err(dev, "Failed to unlock registers: %d\n", ret);
--		return ret;
--	}
-+	s6d7aa0_lock(ctx, false);
- 
- 	mipi_dsi_dcs_write_seq(dsi, MCS_OTP_RELOAD, 0x00, 0x10);
- 	usleep_range(1000, 1500);
-@@ -266,11 +259,7 @@ static int s6d7aa0_lsl080al02_init(struct s6d7aa0 *ctx)
- 	msleep(120);
- 	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_ADDRESS_MODE, 0x00);
- 
--	ret = s6d7aa0_lock(ctx, true);
--	if (ret < 0) {
--		dev_err(dev, "Failed to lock registers: %d\n", ret);
--		return ret;
--	}
-+	s6d7aa0_lock(ctx, true);
- 
- 	ret = mipi_dsi_dcs_set_display_on(dsi);
- 	if (ret < 0) {
-@@ -327,11 +316,7 @@ static int s6d7aa0_lsl080al03_init(struct s6d7aa0 *ctx)
- 
- 	usleep_range(20000, 25000);
- 
--	ret = s6d7aa0_lock(ctx, false);
--	if (ret < 0) {
--		dev_err(dev, "Failed to unlock registers: %d\n", ret);
--		return ret;
--	}
-+	s6d7aa0_lock(ctx, false);
- 
- 	if (ctx->desc->panel_type == S6D7AA0_PANEL_LSL080AL03) {
- 		mipi_dsi_dcs_write_seq(dsi, MCS_BL_CTL, 0xc7, 0x00, 0x29);
-@@ -370,11 +355,7 @@ static int s6d7aa0_lsl080al03_init(struct s6d7aa0 *ctx)
- 		return ret;
- 	}
- 
--	ret = s6d7aa0_lock(ctx, true);
--	if (ret < 0) {
--		dev_err(dev, "Failed to lock registers: %d\n", ret);
--		return ret;
--	}
-+	s6d7aa0_lock(ctx, true);
- 
- 	ret = mipi_dsi_dcs_set_display_on(dsi);
- 	if (ret < 0) {
--- 
-2.39.0
+> Add support for the AC5/AC5X SoC from Marvell. The NFC on this SoC only
+> supports SDR modes up to 3.
 
+Strange!
+
+But alright, I'm okay with the series.
+
+I'll put it aside waiting for all binding changes to be acked (yaml
+conversion series + this one) and then I'll apply everything.
+
+> Marvell's SDK includes some predefined values for the ndtr registers.
+> These haven't been incorporated as the existing code seems to get good
+> values based on measurements taken with an oscilloscope.
+
+Good :)
+
+By the way did you sort the timings question on 8k?
+
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+>  drivers/mtd/nand/raw/Kconfig        |  2 +-
+>  drivers/mtd/nand/raw/marvell_nand.c | 16 ++++++++++++++++
+>  2 files changed, 17 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
+> index b523354dfb00..0f4cbb497010 100644
+> --- a/drivers/mtd/nand/raw/Kconfig
+> +++ b/drivers/mtd/nand/raw/Kconfig
+> @@ -160,7 +160,7 @@ config MTD_NAND_MARVELL
+>  	  including:
+>  	  - PXA3xx processors (NFCv1)
+>  	  - 32-bit Armada platforms (XP, 37x, 38x, 39x) (NFCv2)
+> -	  - 64-bit Aramda platforms (7k, 8k) (NFCv2)
+> +	  - 64-bit Aramda platforms (7k, 8k, ac5) (NFCv2)
+> =20
+>  config MTD_NAND_SLC_LPC32XX
+>  	tristate "NXP LPC32xx SLC NAND controller"
+> diff --git a/drivers/mtd/nand/raw/marvell_nand.c b/drivers/mtd/nand/raw/m=
+arvell_nand.c
+> index 30c15e4e1cc0..b9a8dd324211 100644
+> --- a/drivers/mtd/nand/raw/marvell_nand.c
+> +++ b/drivers/mtd/nand/raw/marvell_nand.c
+> @@ -375,6 +375,7 @@ static inline struct marvell_nand_chip_sel *to_nand_s=
+el(struct marvell_nand_chip
+>   *			BCH error detection and correction algorithm,
+>   *			NDCB3 register has been added
+>   * @use_dma:		Use dma for data transfers
+> + * @max_mode_number:	Maximum timing mode supported by the controller
+>   */
+>  struct marvell_nfc_caps {
+>  	unsigned int max_cs_nb;
+> @@ -383,6 +384,7 @@ struct marvell_nfc_caps {
+>  	bool legacy_of_bindings;
+>  	bool is_nfcv2;
+>  	bool use_dma;
+> +	unsigned int max_mode_number;
+>  };
+> =20
+>  /**
+> @@ -2376,6 +2378,9 @@ static int marvell_nfc_setup_interface(struct nand_=
+chip *chip, int chipnr,
+>  	if (IS_ERR(sdr))
+>  		return PTR_ERR(sdr);
+> =20
+> +	if (nfc->caps->max_mode_number && nfc->caps->max_mode_number < conf->ti=
+mings.mode)
+> +		return -EOPNOTSUPP;
+> +
+>  	/*
+>  	 * SDR timings are given in pico-seconds while NFC timings must be
+>  	 * expressed in NAND controller clock cycles, which is half of the
+> @@ -3073,6 +3078,13 @@ static const struct marvell_nfc_caps marvell_armad=
+a_8k_nfc_caps =3D {
+>  	.is_nfcv2 =3D true,
+>  };
+> =20
+> +static const struct marvell_nfc_caps marvell_ac5_caps =3D {
+> +	.max_cs_nb =3D 2,
+> +	.max_rb_nb =3D 1,
+> +	.is_nfcv2 =3D true,
+> +	.max_mode_number =3D 3,
+> +};
+> +
+>  static const struct marvell_nfc_caps marvell_armada370_nfc_caps =3D {
+>  	.max_cs_nb =3D 4,
+>  	.max_rb_nb =3D 2,
+> @@ -3121,6 +3133,10 @@ static const struct of_device_id marvell_nfc_of_id=
+s[] =3D {
+>  		.compatible =3D "marvell,armada-8k-nand-controller",
+>  		.data =3D &marvell_armada_8k_nfc_caps,
+>  	},
+> +	{
+> +		.compatible =3D "marvell,ac5-nand-controller",
+> +		.data =3D &marvell_ac5_caps,
+> +	},
+>  	{
+>  		.compatible =3D "marvell,armada370-nand-controller",
+>  		.data =3D &marvell_armada370_nfc_caps,
+
+
+Thanks,
+Miqu=C3=A8l
