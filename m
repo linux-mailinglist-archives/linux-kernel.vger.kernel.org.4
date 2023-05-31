@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997137182A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5EE7182A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236690AbjEaNoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
+        id S236685AbjEaNo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236446AbjEaNoB (ORCPT
+        with ESMTP id S236110AbjEaNoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:44:01 -0400
+        Wed, 31 May 2023 09:44:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D508D10C0;
-        Wed, 31 May 2023 06:42:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9079B19A1;
+        Wed, 31 May 2023 06:42:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6122A63B28;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B69BB63B5D;
+        Wed, 31 May 2023 13:42:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5268FC433A0;
         Wed, 31 May 2023 13:42:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23CA8C433D2;
-        Wed, 31 May 2023 13:42:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540537;
-        bh=fdVj8BXjOEAs5TW0LSt3vogjdTYde6j0fNINNh2ZRzM=;
+        s=k20201202; t=1685540539;
+        bh=e8KBPGafc4lWioyFKqhihelU5VkPeA2MRjnvL3ZBZZs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KEmfH/KgS146P7MiVcA9cJqmJnFOVRkgvCBOa8kPfKhMfJU6JMYNl/kqTEsNQ19Yh
-         gxUM6Ap+PCvohN/bTaKA6e9t1hLuRvAjo5B5BfqnkDINfP+L+emmLRzVlkeV5wPum9
-         aw4ZDb6aMhaE/iAupSR6IVy9fEcpxw2GXqxTKF5SGinUbxbhdyjq8vghpKUBqEc531
-         S/eHu9fv+v5SOm8qxY2saQqtYIQRCFsLI8G9DzgIHCFXGZbWC2rAyftW1mH1kl+Hyb
-         21kZU8rarLaRhSsEgO5I8zAR4yJfbloEx5s5sYWf6Oyh5k12gCv6RjwGFBJJ8d+W60
-         uJUZE7PP8GkSg==
+        b=JJr5Lq2iwWuZRAkDVSO3tqdKSow41cHZMueTMqll/ChdfjxmkPuGP20YdnBGyOqOQ
+         EMh8XsiELrp9wf0wwOb6PGxrzOX4QO5x+5JfUDwQu1tSwLwBFnhbwiqVAYqq9Gpi7s
+         WM/GfhAQAD/rzKYXJrtZyvg1uv0gLbUR4XsZ5p9mnd7H6sxHdz1KH/CBA1ON5cclpQ
+         8AVs8cwfSwKY2i4j7iQmhv9SJvBBWqVFcSu1ER81zbOgVBRMPc5pU5KoaOrr9JjIjD
+         1mT6DIwgXGPhAyKB7vYfoXCDYp7Y2ccVma4IIjdJuyF6pUr/fRSCHvrUQbuRqbviDB
+         QaJZFpuTUvcHg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mark Blakeney <mark.blakeney@bullet-systems.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pci@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 08/33] PCI/DPC: Quirk PIO log size for Intel Ice Lake Root Ports
-Date:   Wed, 31 May 2023 09:41:34 -0400
-Message-Id: <20230531134159.3383703-8-sashal@kernel.org>
+Cc:     Alexandru Sorodoc <ealex95@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, corentin.chary@gmail.com,
+        markgross@kernel.org, acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 09/33] platform/x86: asus-wmi: Ignore WMI events with codes 0x7B, 0xC0
+Date:   Wed, 31 May 2023 09:41:35 -0400
+Message-Id: <20230531134159.3383703-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134159.3383703-1-sashal@kernel.org>
 References: <20230531134159.3383703-1-sashal@kernel.org>
@@ -58,60 +59,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
+From: Alexandru Sorodoc <ealex95@gmail.com>
 
-[ Upstream commit 3b8803494a0612acdeee714cb72aa142b1e05ce5 ]
+[ Upstream commit 362c1f2ec82cb65940e1c73e15a395a7a891fc6f ]
 
-Commit 5459c0b70467 ("PCI/DPC: Quirk PIO log size for certain Intel Root
-Ports") added quirks for Tiger and Alder Lake Root Ports but missed that
-the same issue exists also in the previous generation, Ice Lake.
+On ASUS GU604V the key 0x7B is issued when the charger is connected or
+disconnected, and key 0xC0 is issued when an external display is
+connected or disconnected.
 
-Apply the quirk for Ice Lake Root Ports as well.  This prevents kernel
-complaints like:
+This commit maps them to KE_IGNORE to slience kernel messages about
+unknown keys, such as:
 
-  DPC: RP PIO log size 0 is invalid
+    kernel: asus_wmi: Unknown key code 0x7b
 
-and also enables the DPC driver to dump the RP PIO Log registers when DPC
-is triggered.
-
-[bhelgaas: add dmesg warning and RP PIO Log dump info]
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=209943
-Link: https://lore.kernel.org/r/20230511121905.73949-1-mika.westerberg@linux.intel.com
-Reported-by: Mark Blakeney <mark.blakeney@bullet-systems.net>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Signed-off-by: Alexandru Sorodoc <ealex95@gmail.com>
+Link: https://lore.kernel.org/r/20230512101517.47416-1-ealex95@gmail.com
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/quirks.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/platform/x86/asus-nb-wmi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 8d32a3834688f..ccc90656130a0 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -5995,8 +5995,9 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c1, aspm_l1_acceptable_latency
- 
- #ifdef CONFIG_PCIE_DPC
- /*
-- * Intel Tiger Lake and Alder Lake BIOS has a bug that clears the DPC
-- * RP PIO Log Size of the integrated Thunderbolt PCIe Root Ports.
-+ * Intel Ice Lake, Tiger Lake and Alder Lake BIOS has a bug that clears
-+ * the DPC RP PIO Log Size of the integrated Thunderbolt PCIe Root
-+ * Ports.
-  */
- static void dpc_log_size(struct pci_dev *dev)
- {
-@@ -6019,6 +6020,10 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x461f, dpc_log_size);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x462f, dpc_log_size);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x463f, dpc_log_size);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x466e, dpc_log_size);
-+DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x8a1d, dpc_log_size);
-+DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x8a1f, dpc_log_size);
-+DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x8a21, dpc_log_size);
-+DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x8a23, dpc_log_size);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a23, dpc_log_size);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a25, dpc_log_size);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a27, dpc_log_size);
+diff --git a/drivers/platform/x86/asus-nb-wmi.c b/drivers/platform/x86/asus-nb-wmi.c
+index e2c9a68d12df9..fdf7da06af306 100644
+--- a/drivers/platform/x86/asus-nb-wmi.c
++++ b/drivers/platform/x86/asus-nb-wmi.c
+@@ -555,6 +555,7 @@ static const struct key_entry asus_nb_wmi_keymap[] = {
+ 	{ KE_KEY, 0x71, { KEY_F13 } }, /* General-purpose button */
+ 	{ KE_IGNORE, 0x79, },  /* Charger type dectection notification */
+ 	{ KE_KEY, 0x7a, { KEY_ALS_TOGGLE } }, /* Ambient Light Sensor Toggle */
++	{ KE_IGNORE, 0x7B, }, /* Charger connect/disconnect notification */
+ 	{ KE_KEY, 0x7c, { KEY_MICMUTE } },
+ 	{ KE_KEY, 0x7D, { KEY_BLUETOOTH } }, /* Bluetooth Enable */
+ 	{ KE_KEY, 0x7E, { KEY_BLUETOOTH } }, /* Bluetooth Disable */
+@@ -584,6 +585,7 @@ static const struct key_entry asus_nb_wmi_keymap[] = {
+ 	{ KE_KEY, 0xAE, { KEY_FN_F5 } }, /* Fn+F5 fan mode on 2020+ */
+ 	{ KE_KEY, 0xB3, { KEY_PROG4 } }, /* AURA */
+ 	{ KE_KEY, 0xB5, { KEY_CALC } },
++	{ KE_IGNORE, 0xC0, }, /* External display connect/disconnect notification */
+ 	{ KE_KEY, 0xC4, { KEY_KBDILLUMUP } },
+ 	{ KE_KEY, 0xC5, { KEY_KBDILLUMDOWN } },
+ 	{ KE_IGNORE, 0xC6, },  /* Ambient Light Sensor notification */
 -- 
 2.39.2
 
