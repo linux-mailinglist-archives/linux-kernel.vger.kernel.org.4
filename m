@@ -2,148 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14B8717D47
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBEB717D15
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233858AbjEaKlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 06:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
+        id S235912AbjEaKUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 06:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbjEaKk7 (ORCPT
+        with ESMTP id S236019AbjEaKUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 06:40:59 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39164121
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:40:57 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-5147dce372eso8178685a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:40:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1685529655; x=1688121655;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D9wK23t2sGNzjDkReOB3GT1QVBAdm3GmQJMkozq40P0=;
-        b=AIu+b8G09ha8tBpJpcXJQCPeq0ed4+ggJKcW4dwZrO08fXZdQ2tw23V6SU1enf/pLe
-         xz7/xU4WnxBkRiTFOQY9UCLBHxkOl1HE1FQp14w8Cb7OqtWtkqHxU47p2MWZTfI2rljF
-         +mWsRulFmiOLUXs3IAEPomaoUPhs2XbihXDKeq1AlPIa3OBboQjHMM190lvIxiLU+Mur
-         8q0igSTFZcpB+JYr1Jbrn+mKnOrrESw+GQZI21hx5lIF3gAFAk3QitJ81ceVFc+szrCF
-         iR6Sqn5FZHQDvrZJEEMh4BDAEHMTi3Sen5rp4moPXJwgg0MXry5YG4eBhHEnI2SFicW7
-         yCqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685529655; x=1688121655;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=D9wK23t2sGNzjDkReOB3GT1QVBAdm3GmQJMkozq40P0=;
-        b=ZbeWcKsGfhpPK7MmB+TfaktxE2eDrVGhTQjymzck2942SmKGE/RMq7xrW7Z9bbKe5i
-         TCiRxPD7YShV8u8Tib6xz2Nr4sGX+5tXxu4v2IMuci6pg0DgiN6lomUEUH6ENVJ416WD
-         FZIKptGJDtXeATkzjA+MLg2x6GKZNI5zk21aJ3P3zcZmsvUG6nDjGcMCMg/xwXgUmEEq
-         AdKenf7enKJoSvVBpEZi5BJ+rCwEonxEtZ4W6/L23x9JT1J7nTmPKiYEdKRoTImjuE0J
-         vGa/ZiOTQHbB3kloC3y1Aqv8Pae7ZfclX8iB2mHvzdveWl7mjt7vlIVqwDbE7n4pWgmN
-         Kjfg==
-X-Gm-Message-State: AC+VfDzqjpvw0bLME+24KlO48wcBUhlKJa3K09VdkyldDCble8EG7qo2
-        FNN70z7IJpSeiD9jvKnkyavssg==
-X-Google-Smtp-Source: ACHHUZ7gkn3xn/E4i2JfCKzoMtUX7uPofz9OD1IYCOir3fHI3gRcIYfxWM4KiKVknbBOQRkWmqzCmA==
-X-Received: by 2002:a17:907:ea1:b0:957:48c8:b081 with SMTP id ho33-20020a1709070ea100b0095748c8b081mr4688011ejc.24.1685529655648;
-        Wed, 31 May 2023 03:40:55 -0700 (PDT)
-Received: from localhost ([79.142.230.34])
-        by smtp.gmail.com with ESMTPSA id lh27-20020a170906f8db00b0096f03770be2sm8697953ejb.52.2023.05.31.03.40.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 03:40:55 -0700 (PDT)
-References: <87leh69par.fsf@metaspace.dk>
- <20230531090032.3667467-1-aliceryhl@google.com>
-User-agent: mu4e 1.10.3; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     alex.gaynor@gmail.com, benno.lossin@proton.me,
-        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, gary@garyguo.net,
-        jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, patches@lists.linux.dev,
-        rust-for-linux@vger.kernel.org, tj@kernel.org, wedsonaf@gmail.com
-Subject: Re: [PATCH v1 5/7] rust: workqueue: add helper for defining
- work_struct fields
-Date:   Wed, 31 May 2023 12:18:47 +0200
-In-reply-to: <20230531090032.3667467-1-aliceryhl@google.com>
-Message-ID: <87zg5k3hs9.fsf@metaspace.dk>
+        Wed, 31 May 2023 06:20:08 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9281981;
+        Wed, 31 May 2023 03:19:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685528354; x=1717064354;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fEV5T6z4nLEPLmhhH/gnfjRblE2+jMQYuIzqvlUDJ3Q=;
+  b=gz1mLLeoHYXC2Wf56D5DP/QV6wrb7KRirC9jxBpj3Ru0/N2hufPsGK/G
+   c+dOm8C9j/sK8jR3XFYbqkcOn4p+KarNO/oECQfwTjrlszs86A5SEv/fP
+   dgrEfyh8hrfUs+faTXUfbZcEHrjHT4CAx7q9AowL6z8+Iw1MXs8sAm5F7
+   h0opmK3bNlnSxuayDke/nX1SwTtU44iqT2mFraJZEEO9ho7fBFMVv4Lx1
+   gY5pKCvuOCSpbcSTFZs1c431/kYAZNBElq/TNg7rl4pPvQYvuiSluU8BZ
+   abPfi1QUHAH6atcmeR0IrL4P05MGzsryfjtcyGiAww8QyTQXC7tXDWTaA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="335541320"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="335541320"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 03:18:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="831166585"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="831166585"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.208.175])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 03:18:55 -0700
+Message-ID: <ec36ef7e-6d64-075f-1484-809b1884e457@intel.com>
+Date:   Wed, 31 May 2023 13:18:51 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH V3 2/3] mmc: sdhci-pci-gli: Set SDR104's clock to 205MHz
+ and enable SSC for GL9767
+Content-Language: en-US
+To:     Victor Shih <victorshihgli@gmail.com>, ulf.hansson@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benchuanggli@gmail.com, HL.Liu@genesyslogic.com.tw,
+        Greg.tu@genesyslogic.com.tw,
+        Ben Chuang <ben.chuang@genesyslogic.com.tw>,
+        Victor Shih <victor.shih@genesyslogic.com.tw>
+References: <20230531095721.392664-1-victorshihgli@gmail.com>
+ <20230531095721.392664-3-victorshihgli@gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230531095721.392664-3-victorshihgli@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 31/05/23 12:57, Victor Shih wrote:
+> From: Victor Shih <victor.shih@genesyslogic.com.tw>
+> 
+> Set GL9767 SDR104's clock to 205MHz and enable SSC feature
+> depend on register 0x888 BIT(1).
+> 
+> Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
 
-Alice Ryhl <aliceryhl@google.com> writes:
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-> Andreas Hindborg <nmi@metaspace.dk> writes:
->> Alice Ryhl <aliceryhl@google.com> writes:
->>> +/// Used to safely implement the [`HasWork<T>`] trait.
->>> +///
->>> +/// # Examples
->>> +///
->>> +/// ```
->>> +/// use kernel::sync::Arc;
->>> +///
->>> +/// struct MyStruct {
->>> +///     work_field: Work<Arc<MyStruct>>,
->>> +/// }
->>> +///
->>> +/// impl_has_work! {
->>> +///     impl HasWork<Arc<MyStruct>> for MyStruct { self.work_field }
->>> +/// }
->>> +/// ```
->>> +///
->>> +/// [`HasWork<T>`]: HasWork
->>> +#[macro_export]
->>> +macro_rules! impl_has_work {
->>> +    ($(impl$(<$($implarg:ident),*>)?
->>> +       HasWork<$work_type:ty>
->>> +       for $self:ident $(<$($selfarg:ident),*>)?
->>> +       { self.$field:ident }
->>> +    )*) =3D> {$(
->>> +        // SAFETY: The implementation of `raw_get_work` only compiles =
-if the field has the right
->>> +        // type.
->>> +        unsafe impl$(<$($implarg),*>)? $crate::workqueue::HasWork<$wor=
-k_type> for $self $(<$($selfarg),*>)? {
->>> +            const OFFSET: usize =3D $crate::offset_of!(Self, $field) a=
-s usize;
->>> +
->>> +            #[inline]
->>> +            unsafe fn raw_get_work(ptr: *mut Self) -> *mut $crate::wor=
-kqueue::Work<$work_type> {
->>> +                // SAFETY: The caller promises that the pointer is not=
- dangling.
->>> +                unsafe {
->>> +                    ::core::ptr::addr_of_mut!((*ptr).$field)
->>> +                }
->>> +            }
->>=20
->> What is the reason for overriding the default implementation of `raw_get=
-_work()`?
->>=20
->> BR Andreas
->
-> That's how the macro checks that the field actually has the type you
-> claim it has. If you lie about the type, then `raw_get_work` will not
-> compile. (See the safety comment on the impl block.)
+> ---
+>  drivers/mmc/host/sdhci-pci-gli.c | 135 ++++++++++++++++++++++++++++++-
+>  1 file changed, 134 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+> index 3ed207b89d1a..392a106cea18 100644
+> --- a/drivers/mmc/host/sdhci-pci-gli.c
+> +++ b/drivers/mmc/host/sdhci-pci-gli.c
+> @@ -158,6 +158,12 @@
+>  #define   GLI_9767_VHS_REV_M	  0x1
+>  #define   GLI_9767_VHS_REV_W	  0x2
+>  
+> +#define PCIE_GLI_9767_COM_MAILBOX		0x888
+> +#define   PCIE_GLI_9767_COM_MAILBOX_SSC_EN	  BIT(1)
+> +
+> +#define PCIE_GLI_9767_CFG		0x8A0
+> +#define   PCIE_GLI_9767_CFG_LOW_PWR_OFF	  BIT(12)
+> +
+>  #define PCIE_GLI_9767_PWR_MACRO_CTL					0x8D0
+>  #define   PCIE_GLI_9767_PWR_MACRO_CTL_LOW_VOLTAGE			  GENMASK(3, 0)
+>  #define   PCIE_GLI_9767_PWR_MACRO_CTL_LD0_LOW_OUTPUT_VOLTAGE		  GENMASK(15, 12)
+> @@ -175,6 +181,16 @@
+>  #define   PCIE_GLI_9767_SCR_CORE_PWR_D3_OFF		  BIT(21)
+>  #define   PCIE_GLI_9767_SCR_CFG_RST_DATA_LINK_DOWN	  BIT(30)
+>  
+> +#define PCIE_GLI_9767_SD_PLL_CTL			0x938
+> +#define   PCIE_GLI_9767_SD_PLL_CTL_PLL_LDIV		  GENMASK(9, 0)
+> +#define   PCIE_GLI_9767_SD_PLL_CTL_PLL_PDIV		  GENMASK(15, 12)
+> +#define   PCIE_GLI_9767_SD_PLL_CTL_PLL_DIR_EN		  BIT(16)
+> +#define   PCIE_GLI_9767_SD_PLL_CTL_SSC_EN		  BIT(19)
+> +#define   PCIE_GLI_9767_SD_PLL_CTL_SSC_STEP_SETTING	  GENMASK(28, 24)
+> +
+> +#define PCIE_GLI_9767_SD_PLL_CTL2		0x93C
+> +#define   PCIE_GLI_9767_SD_PLL_CTL2_PLLSSC_PPM	  GENMASK(31, 16)
+> +
+>  #define GLI_MAX_TUNING_LOOP 40
+>  
+>  /* Genesys Logic chipset */
+> @@ -753,6 +769,123 @@ static inline void gl9767_vhs_write(struct pci_dev *pdev)
+>  	pci_write_config_dword(pdev, PCIE_GLI_9767_VHS, vhs_value);
+>  }
+>  
+> +static bool gl9767_ssc_enable(struct pci_dev *pdev)
+> +{
+> +	u32 value;
+> +	u8 enable;
+> +
+> +	gl9767_vhs_write(pdev);
+> +
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_COM_MAILBOX, &value);
+> +	enable = FIELD_GET(PCIE_GLI_9767_COM_MAILBOX_SSC_EN, value);
+> +
+> +	gl9767_vhs_read(pdev);
+> +
+> +	return enable;
+> +}
+> +
+> +static void gl9767_set_ssc(struct pci_dev *pdev, u8 enable, u8 step, u16 ppm)
+> +{
+> +	u32 pll;
+> +	u32 ssc;
+> +
+> +	gl9767_vhs_write(pdev);
+> +
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL, &pll);
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL2, &ssc);
+> +	pll &= ~(PCIE_GLI_9767_SD_PLL_CTL_SSC_STEP_SETTING |
+> +		 PCIE_GLI_9767_SD_PLL_CTL_SSC_EN);
+> +	ssc &= ~PCIE_GLI_9767_SD_PLL_CTL2_PLLSSC_PPM;
+> +	pll |= FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL_SSC_STEP_SETTING, step) |
+> +	       FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL_SSC_EN, enable);
+> +	ssc |= FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL2_PLLSSC_PPM, ppm);
+> +	pci_write_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL2, ssc);
+> +	pci_write_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL, pll);
+> +
+> +	gl9767_vhs_read(pdev);
+> +}
+> +
+> +static void gl9767_set_pll(struct pci_dev *pdev, u8 dir, u16 ldiv, u8 pdiv)
+> +{
+> +	u32 pll;
+> +
+> +	gl9767_vhs_write(pdev);
+> +
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL, &pll);
+> +	pll &= ~(PCIE_GLI_9767_SD_PLL_CTL_PLL_LDIV |
+> +		 PCIE_GLI_9767_SD_PLL_CTL_PLL_PDIV |
+> +		 PCIE_GLI_9767_SD_PLL_CTL_PLL_DIR_EN);
+> +	pll |= FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL_PLL_LDIV, ldiv) |
+> +	       FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL_PLL_PDIV, pdiv) |
+> +	       FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL_PLL_DIR_EN, dir);
+> +	pci_write_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL, pll);
+> +
+> +	gl9767_vhs_read(pdev);
+> +
+> +	/* wait for pll stable */
+> +	msleep(1);
+> +}
+> +
+> +static void gl9767_set_ssc_pll_205mhz(struct pci_dev *pdev)
+> +{
+> +	bool enable = gl9767_ssc_enable(pdev);
+> +
+> +	/* set pll to 205MHz and ssc */
+> +	gl9767_set_ssc(pdev, enable, 0x1F, 0xF5C3);
+> +	gl9767_set_pll(pdev, 0x1, 0x246, 0x0);
+> +}
+> +
+> +static void gl9767_disable_ssc_pll(struct pci_dev *pdev)
+> +{
+> +	u32 pll;
+> +
+> +	gl9767_vhs_write(pdev);
+> +
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL, &pll);
+> +	pll &= ~(PCIE_GLI_9767_SD_PLL_CTL_PLL_DIR_EN | PCIE_GLI_9767_SD_PLL_CTL_SSC_EN);
+> +	pci_write_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL, pll);
+> +
+> +	gl9767_vhs_read(pdev);
+> +}
+> +
+> +static void sdhci_gl9767_set_clock(struct sdhci_host *host, unsigned int clock)
+> +{
+> +	struct sdhci_pci_slot *slot = sdhci_priv(host);
+> +	struct mmc_ios *ios = &host->mmc->ios;
+> +	struct pci_dev *pdev;
+> +	u32 value;
+> +	u16 clk;
+> +
+> +	pdev = slot->chip->pdev;
+> +	host->mmc->actual_clock = 0;
+> +
+> +	gl9767_vhs_write(pdev);
+> +
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_CFG, &value);
+> +	value |= PCIE_GLI_9767_CFG_LOW_PWR_OFF;
+> +	pci_write_config_dword(pdev, PCIE_GLI_9767_CFG, value);
+> +
+> +	gl9767_disable_ssc_pll(pdev);
+> +	sdhci_writew(host, 0, SDHCI_CLOCK_CONTROL);
+> +
+> +	if (clock == 0)
+> +		return;
+> +
+> +	clk = sdhci_calc_clk(host, clock, &host->mmc->actual_clock);
+> +	if (clock == 200000000 && ios->timing == MMC_TIMING_UHS_SDR104) {
+> +		host->mmc->actual_clock = 205000000;
+> +		gl9767_set_ssc_pll_205mhz(pdev);
+> +	}
+> +
+> +	sdhci_enable_clk(host, clk);
+> +
+> +	pci_read_config_dword(pdev, PCIE_GLI_9767_CFG, &value);
+> +	value &= ~PCIE_GLI_9767_CFG_LOW_PWR_OFF;
+> +	pci_write_config_dword(pdev, PCIE_GLI_9767_CFG, value);
+> +
+> +	gl9767_vhs_read(pdev);
+> +}
+> +
+>  static void gli_set_9767(struct sdhci_host *host)
+>  {
+>  	u32 value;
+> @@ -1293,7 +1426,7 @@ const struct sdhci_pci_fixes sdhci_gl9763e = {
+>  };
+>  
+>  static const struct sdhci_ops sdhci_gl9767_ops = {
+> -	.set_clock		 = sdhci_set_clock,
+> +	.set_clock		 = sdhci_gl9767_set_clock,
+>  	.enable_dma		 = sdhci_pci_enable_dma,
+>  	.set_bus_width		 = sdhci_set_bus_width,
+>  	.reset			 = sdhci_gl9767_reset,
 
-Got it =F0=9F=91=8D
-
-I was thinking we could do the type check without redefining the method,
-but that blows up complexity wise fast, since we need a trait to do it
-to support `Self` in `$work_type`. It strikes me as a bit of a hack to
-overwrite an otherwise fine implementation, but I guess it is the least
-complex way.
-
-Also I am a bit annoyed that we need to state the `$work_type` type at
-all, since it is available in `work_field`. But I can see no way around
-that.
-
-BR Andreas
