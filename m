@@ -2,112 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD83717367
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1BC71736A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233519AbjEaB45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 21:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
+        id S233829AbjEaB5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 21:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjEaB44 (ORCPT
+        with ESMTP id S230296AbjEaB5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 21:56:56 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F220EEC
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 18:56:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685498215; x=1717034215;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tOkw6m2VVzV2BZPxty9ha1KSowUGEYzrh7agDrhOgUY=;
-  b=n8hc9NKTwE4KWoroqKcFuf+fDmzv/kLdzWwD9OVK9prTNcuD5N75I8Vg
-   eYvbDuz4RUMasP+2fwRPm9zjgreesjHrbThjgXJ+lLqq0+fYStv6Bd/lq
-   YKkA5ayPfPLwjnzTuANtzjuHW3ybPNQ4eTJ7FyolqtQ0iRMMX5IbSrX6Q
-   4oVEvAsqeGjEzm5MuaqfsMPzNsCWuchQ2eDj1A0fwp4RFadK7/i3dPgM7
-   F5y4x5MvlIhRcqZGojUSHDmXews791zDCEdSbO1mJhdXC0ZFnakAwsY39
-   mWfm2WlvnGbE3aIwUuDYFPmfF/AkuLsK+QJ/zOpG6p+gKmCatKUHnYhwN
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="344609141"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="344609141"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 18:56:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="796495005"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="796495005"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 May 2023 18:56:53 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q4B52-0000yi-1I;
-        Wed, 31 May 2023 01:56:52 +0000
-Date:   Wed, 31 May 2023 09:56:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>
-Subject: cistpl.c:undefined reference to `ioremap'
-Message-ID: <202305310948.KgKox74N-lkp@intel.com>
+        Tue, 30 May 2023 21:57:21 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E065111D
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 18:57:19 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-77703f20aa9so121639039f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 18:57:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685498239; x=1688090239;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YGBe+JwfrEM1Bt4Dz4KNFsVqieTeS2ww100iu61WbqY=;
+        b=PArDOZmrvL1rwO8A1H33sgpcO8KwthjTR/baWua09z1DG30HL4+GuRXI7ynRJSgkJ0
+         /tx5K5jOsu4XU3+N8YiVSh6zhFumlRGAlZoQpVDJtHta+LXAecwmchM4tio7Y69B25Gq
+         P/Y/4UmtKzpJ7j7GyF/0raZPRhLDPfii5nECpV8scDHc4PRGqUBrLtgyE2ME6QF3oON9
+         ond5Mpvd2khWIc2EYmB9yeXN0DV1ILrM7EULOtFC5OMzIVrWlPPuYNS9Q2yxdMDgmHdA
+         yWm1upsCZl9iM9s3y/W01Zkk/hae/a9j4ZSHBIyppam/NXfw3B3R6Ce/J4pN52CmLtLa
+         FyPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685498239; x=1688090239;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YGBe+JwfrEM1Bt4Dz4KNFsVqieTeS2ww100iu61WbqY=;
+        b=G9A8F/0KvwLYrBKwWelPrFKH7q2xQslT5LgK+pafXgqTWSu9gNm8n0Mlx/DLE4On7i
+         fP7uilN1k9dvORyaZWJQ0ParAlLkjmFl+ylnQiOp5p4KW595M3Bov0IzssCwf5J/z2XQ
+         7MrPABnmLpx1j93vyhQ6vpZ7khxvuI9FXObG9UJBMM5mwfk9HuYt6WO0dj6fqQ1HmSEf
+         gsf6X8ObZp8od4FsBebumhkoYWrTGZ8zPz6KjYfVr8R/BTfT0lSPLZwUKW4N1R/W6U5Q
+         oKgt3TuMxJfuETrfWz0g0H4vRbZwfaaLB8ayHdLB+EDYQ7lkLcPuZvp++lIUzE3gNJgw
+         Cv0g==
+X-Gm-Message-State: AC+VfDxe8havwcDArvTtp82hjFt1igI55eRIec3f2AtCL3uGL1hBgMdN
+        DIJ/+mE9Q6gD0tWxQHoK4jbpXg==
+X-Google-Smtp-Source: ACHHUZ56ZTu3zznsi6iJymiKNF371TpCtjQJRolcjerH79lKBzRrD2/xT87oscVG7rXXde/jssc6Gg==
+X-Received: by 2002:a05:6602:19:b0:769:a626:6e13 with SMTP id b25-20020a056602001900b00769a6266e13mr2884020ioa.19.1685498239040;
+        Tue, 30 May 2023 18:57:19 -0700 (PDT)
+Received: from [172.22.22.28] ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id u22-20020a056638135600b0039deb26853csm1161716jad.10.2023.05.30.18.57.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 18:57:18 -0700 (PDT)
+Message-ID: <e144386d-e62a-a470-fcf9-0dab6f7ab837@linaro.org>
+Date:   Tue, 30 May 2023 20:57:17 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net v2] net: ipa: Use the correct value for
+ IPA_STATUS_SIZE
+Content-Language: en-US
+To:     Alex Elder <alex.elder@linaro.org>,
+        Bert Karwatzki <spasswolf@web.de>,
+        Simon Horman <simon.horman@corigine.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <7ae8af63b1254ab51d45c870e7942f0e3dc15b1e.camel@web.de>
+ <ZHWhEiWtEC9VKOS1@corigine.com>
+ <2b91165f667d3896a0aded39830905f62f725815.camel@web.de>
+ <3c4d235d-8e49-61a2-a445-5d363962d3e7@linaro.org>
+ <8d0e0272c80a594e7425ffcdd7714df7117edde5.camel@web.de>
+ <f9ccdc27-7b5f-5894-46ab-84c1e1650d9f@linaro.org>
+ <dcfb1ccd722af0e9c215c518ec2cd7a8602d2127.camel@web.de>
+ <694f1e23-23bb-e184-6262-bfe3641a4f43@linaro.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <694f1e23-23bb-e184-6262-bfe3641a4f43@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   48b1320a674e1ff5de2fad8606bee38f724594dc
-commit: 04b38d012556199ba4c31195940160e0c44c64f0 seccomp: Add missing return in non-void function
-date:   2 years, 5 months ago
-config: s390-randconfig-c041-20230530 (https://download.01.org/0day-ci/archive/20230531/202305310948.KgKox74N-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=04b38d012556199ba4c31195940160e0c44c64f0
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 04b38d012556199ba4c31195940160e0c44c64f0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+On 5/30/23 6:43 PM, Alex Elder wrote:
+> On 5/30/23 6:25 PM, Bert Karwatzki wrote:
+>>  From 2e5e4c07606a100fd4af0f08e4cd158f88071a3a Mon Sep 17 00:00:00 2001
+>> From: Bert Karwatzki <spasswolf@web.de>
+>> To: davem@davemloft.net
+>> To: edumazet@google.com
+>> To: kuba@kernel.org
+>> To: pabeni@redhat.com
+>> Cc: elder@kernel.org
+>> Cc: netdev@vger.kernel.org
+>> Cc: linux-arm-msm@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Date: Wed, 31 May 2023 00:16:33 +0200
+>> Subject: [PATCH net v2] net: ipa: Use correct value for IPA_STATUS_SIZE
+>>
+>> IPA_STATUS_SIZE was introduced in commit b8dc7d0eea5a as a replacement
+>> for the size of the removed struct ipa_status which had size
+>> sizeof(__le32[8]). Use this value as IPA_STATUS_SIZE.
+> 
+> If the network maintainers can deal with your patch, I'm
+> OK with it.  David et al if you want something else, please
+> say so.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305310948.KgKox74N-lkp@intel.com/
+OK, Jakub has spoken...
 
-All error/warnings (new ones prefixed by >>):
+Bert, I tried before to explain what you needed to do, but it's
+still not quite right.  Please contact me privately and we'll
+work out how to get this submitted in the proper format.
 
->> s390-linux-ld: warning: drivers/of/unittest-data/testcases.dtb.o: missing .note.GNU-stack section implies executable stack
-   s390-linux-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
->> s390-linux-ld: warning: drivers/of/unittest-data/testcases.dtb.o: missing .note.GNU-stack section implies executable stack
-   s390-linux-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-   s390-linux-ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
-   s390-linux-ld: kernel/dma/coherent.o: in function `dma_init_coherent_memory':
-   coherent.c:(.text+0x55c): undefined reference to `memremap'
-   s390-linux-ld: coherent.c:(.text+0x6ca): undefined reference to `memunmap'
-   s390-linux-ld: kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
-   coherent.c:(.text+0xfb4): undefined reference to `memunmap'
-   s390-linux-ld: drivers/phy/ingenic/phy-ingenic-usb.o: in function `ingenic_usb_phy_probe':
-   phy-ingenic-usb.c:(.text+0x7f0): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
->> cistpl.c:(.text+0x1360): undefined reference to `ioremap'
->> s390-linux-ld: cistpl.c:(.text+0x13fe): undefined reference to `iounmap'
-   s390-linux-ld: cistpl.c:(.text+0x1476): undefined reference to `iounmap'
->> s390-linux-ld: cistpl.c:(.text+0x14b0): undefined reference to `ioremap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
->> cistpl.c:(.text+0x20aa): undefined reference to `iounmap'
+					-Alex
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+> Reviewed-by: Alex Elder <elder@linaro.org>
+> 
+>> Fixes: b8dc7d0eea5a ("net: ipa: stop using sizeof(status)")
+>> Signed-off-by: Bert Karwatzki <spasswolf@web.de>
+>> ---
+>>   drivers/net/ipa/ipa_endpoint.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/ipa/ipa_endpoint.c 
+>> b/drivers/net/ipa/ipa_endpoint.c
+>> index 2ee80ed140b7..afa1d56d9095 100644
+>> --- a/drivers/net/ipa/ipa_endpoint.c
+>> +++ b/drivers/net/ipa/ipa_endpoint.c
+>> @@ -119,7 +119,7 @@ enum ipa_status_field_id {
+>>   };
+>>   /* Size in bytes of an IPA packet status structure */
+>> -#define IPA_STATUS_SIZE            sizeof(__le32[4])
+>> +#define IPA_STATUS_SIZE            sizeof(__le32[8])
+>>   /* IPA status structure decoder; looks up field values for a 
+>> structure */
+>>   static u32 ipa_status_extract(struct ipa *ipa, const void *data,
+> 
+
