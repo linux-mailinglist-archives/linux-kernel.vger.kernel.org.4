@@ -2,197 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B020718A74
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30015718A76
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjEaTtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 15:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        id S229570AbjEaTta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 15:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjEaTtE (ORCPT
+        with ESMTP id S229603AbjEaTt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 15:49:04 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9D71BD
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:48:54 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d2e8a842cso109145b3a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:48:54 -0700 (PDT)
+        Wed, 31 May 2023 15:49:27 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D9219F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:49:04 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f3b314b1d7so6961847e87.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:49:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1685562534; x=1688154534;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1685562542; x=1688154542;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g7hK4Ihr/VoqnHJzO2kR1sxTTtgLAwvIitCKGJz96Cs=;
-        b=m1HfrX1d0iJrg+rPFbOc0G/EwLDsJOG4WmFnWZUC/hngBLshCk/dSjpllXkf6w5Mie
-         7a+hGH7hDYlUiTFWNkP20zXoGtcdP7dBe6wS57RHTvOOxwgoyUZPfcl93kds42O3WmVp
-         nosyhRzPvsymvj2A+C8B5+cUwBvyd0CG9/ZCxraPDb0KMEMwy5jEUPxu0z9L3FkU8yC9
-         UBNCmi3MSdp3iKteRZowGajvH0SWJyKV5QT90Qg+h21zFe3lXODmDUuF8+ZA2FzkFH8O
-         fTnASsBqcMv1hbeFKEuaheXLYbinSOf/EX1HXc5s3ZZJv/376WWovjrPsnii4owhdByS
-         ROEg==
+        bh=OWftgnL1JUEVgu5g1KaXUWRYMdL6RWwjpZ6YOc+opWY=;
+        b=gYZOPnXo+wFQQniQ3IoxdhE0b2qzKm15sYIPu4gClZMBNfQiY5d4zP9bKPk9SJw6Xb
+         Kj91DTsDIK63uYGJKLhtC1VwEgeFM0JKqNe6ijkNp8kTwKpK5FIuNI80RT+psY/x8CkC
+         Qr1s2gixCG6OKgm8/ADdxJ2Rd6dF9GgWWDWZRb5ygvBu5RTMkFLQQREoPVxpt9jy+Sl5
+         OapeADpk3OyQEFkQHbIXdTQ+bPPPRk5j8tDru8xcF55FfLCGM47Nyd2LGwCEnFVSK1xk
+         Q+vAwkmbSGJ3BlFIgzJMXJGal2zLlNqSQSq21B06FyXbE84g9MbGCT7wUa1Y/vEmvHN1
+         nMHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685562534; x=1688154534;
+        d=1e100.net; s=20221208; t=1685562542; x=1688154542;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=g7hK4Ihr/VoqnHJzO2kR1sxTTtgLAwvIitCKGJz96Cs=;
-        b=RfaGeu81kVa7xWdiDEBmJVdGr97Zps6xy4dz/Wunb4Di5RecqEvJuGrVQ118aaZCs8
-         +3/yOjbWGYyVlMotK+Mf7Skn5ep/AtLQN+pQ0QhmyGI7zq7YdkEv4uEfvLlBGXeiX8zq
-         M3JUACNfma/hkla7yZOtY8N8C4OH0vCSYob0uhEJJ4vfPmJRjOaReNyhz1UrtIDEuZRh
-         jL8MVQaVZ3ZZYtmEPeXI8DgyHa7/GsKrvLEkQh1I0Nc7voFkKnzbM9nV08Loo2W2oL5g
-         bPYNXORbaUDpI59RqlIBVneuNHSEdTczPrXgqA/U5bs0zTfNjiPY+2EdBs+dWX0ilLDd
-         cCIg==
-X-Gm-Message-State: AC+VfDxZysPXGQBXf3yjJhY64VN6tGFkICuEqDdY/qtEBxaIcE28klC7
-        cHBjtD/agb9BAPKQ+epGvXaUgg==
-X-Google-Smtp-Source: ACHHUZ6IHdLCo36F3u4uaEk/Y7Ym7GEOFEfVy22jQHGr8ZjdNvbxqGcqQPgiW3ENI9gy4GtmlFgXnA==
-X-Received: by 2002:a05:6a20:a109:b0:10b:6698:769d with SMTP id q9-20020a056a20a10900b0010b6698769dmr6344322pzk.11.1685562534252;
-        Wed, 31 May 2023 12:48:54 -0700 (PDT)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170902e54300b001ac55a5e5eesm1782100plf.121.2023.05.31.12.48.53
+        bh=OWftgnL1JUEVgu5g1KaXUWRYMdL6RWwjpZ6YOc+opWY=;
+        b=c1fNJ5LntsVGu9GxMygkx9HFqAN7l9nMK76rksemDRERjT3Mu7Tddv0P2sQS0po8vx
+         dz6HUM2h6mlxaQ2AiemiisqVirpHlXRevKpbdu6kSFwjSQwsbEeo8IKLCTEPb84nc3Z+
+         ojJpGjwM3F1NgCnhwhzcWzaopr3ECmYd4U8Rt9NBG9uN9QgY/dI8GRyzgsbLHZF/7MQ/
+         0rqaM4YUaSOmZxw/pyLIiSyEsohncdDqmJeefmfy+MIQjNUSUUiq6U4kL6ESxdLEE2Sn
+         FtsyPvXXxbgaDggkpYhnIHVX+PQrWIetMR9ftNbJJprkPHC6oQ/RbbejQ/OkDrhvzaps
+         qe5Q==
+X-Gm-Message-State: AC+VfDxVRh70shEAIZoTJdpSwtxjxvdEkTfJpdflmt3GEOYCsdJn352W
+        gdioZsQqW4jpK1FhakWi2Mg+cw==
+X-Google-Smtp-Source: ACHHUZ4dNwRSa+JsmzKh4/DsXq/kyKIlyodU63aJ/svIeLOm2gOHEuq56fUU15KtmuSUwvx6ZW4o3A==
+X-Received: by 2002:a05:6512:3906:b0:4cb:280b:33c9 with SMTP id a6-20020a056512390600b004cb280b33c9mr52965lfu.24.1685562542322;
+        Wed, 31 May 2023 12:49:02 -0700 (PDT)
+Received: from airbuntu (host109-154-46-114.range109-154.btcentralplus.com. [109.154.46.114])
+        by smtp.gmail.com with ESMTPSA id q13-20020a7bce8d000000b003f43f82001asm25490426wmj.31.2023.05.31.12.49.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 12:48:53 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1q4RoS-001854-Ch;
-        Wed, 31 May 2023 16:48:52 -0300
-Date:   Wed, 31 May 2023 16:48:52 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 08/12] mm/pgtable: add pte_free_defer() for pgtable as
- page
-Message-ID: <ZHekpAKJ05cr/GLl@ziepe.ca>
-References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
- <739964d-c535-4db4-90ec-2166285b4d47@google.com>
+        Wed, 31 May 2023 12:49:01 -0700 (PDT)
+Date:   Wed, 31 May 2023 20:48:57 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@kernel.org, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        chris.hyser@oracle.com, patrick.bellasi@matbug.net, pjt@google.com,
+        pavel@ucw.cz, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
+        yu.c.chen@intel.com, youssefesmat@chromium.org,
+        joel@joelfernandes.org, efault@gmx.de, tglx@linutronix.de
+Subject: Re: [PATCH 00/15] sched: EEVDF and latency-nice and/or slice-attr
+Message-ID: <20230531194857.t45rolkntpej3u3c@airbuntu>
+References: <20230531115839.089944915@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <739964d-c535-4db4-90ec-2166285b4d47@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230531115839.089944915@infradead.org>
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URI_DOTEDU autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 11:23:47PM -0700, Hugh Dickins wrote:
-> Add the generic pte_free_defer(), to call pte_free() via call_rcu().
-> pte_free_defer() will be called inside khugepaged's retract_page_tables()
-> loop, where allocating extra memory cannot be relied upon.  This version
-> suits all those architectures which use an unfragmented page for one page
-> table (none of whose pte_free()s use the mm arg which was passed to it).
+On 05/31/23 13:58, Peter Zijlstra wrote:
+> Hi!
 > 
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-> ---
->  include/linux/pgtable.h |  2 ++
->  mm/pgtable-generic.c    | 20 ++++++++++++++++++++
->  2 files changed, 22 insertions(+)
+> Latest version of the EEVDF [1] patches.
 > 
-> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> index 8b0fc7fdc46f..62a8732d92f0 100644
-> --- a/include/linux/pgtable.h
-> +++ b/include/linux/pgtable.h
-> @@ -112,6 +112,8 @@ static inline void pte_unmap(pte_t *pte)
->  }
->  #endif
->  
-> +void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable);
-> +
->  /* Find an entry in the second-level page table.. */
->  #ifndef pmd_offset
->  static inline pmd_t *pmd_offset(pud_t *pud, unsigned long address)
-> diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
-> index d28b63386cef..471697dcb244 100644
-> --- a/mm/pgtable-generic.c
-> +++ b/mm/pgtable-generic.c
-> @@ -13,6 +13,7 @@
->  #include <linux/swap.h>
->  #include <linux/swapops.h>
->  #include <linux/mm_inline.h>
-> +#include <asm/pgalloc.h>
->  #include <asm/tlb.h>
->  
->  /*
-> @@ -230,6 +231,25 @@ pmd_t pmdp_collapse_flush(struct vm_area_struct *vma, unsigned long address,
->  	return pmd;
->  }
->  #endif
-> +
-> +/* arch define pte_free_defer in asm/pgalloc.h for its own implementation */
-> +#ifndef pte_free_defer
-> +static void pte_free_now(struct rcu_head *head)
-> +{
-> +	struct page *page;
-> +
-> +	page = container_of(head, struct page, rcu_head);
-> +	pte_free(NULL /* mm not passed and not used */, (pgtable_t)page);
-> +}
-> +
-> +void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
-> +{
-> +	struct page *page;
-> +
-> +	page = pgtable;
-> +	call_rcu(&page->rcu_head, pte_free_now);
+> The only real change since last time is the fix for tick-preemption [2], and a 
+> simple safe-guard for the mixed slice heuristic.
+> 
+> Other than that, I've re-arranged the patches to make EEVDF come first and have
+> the latency-nice or slice-attribute patches on top.
+> 
+> Results should not be different from last time around, lots of people ran them
+> and found no major performance issues; what was found was better latency and
+> smaller variance (probably due to the more stable latency).
+> 
+> I'm hoping we can start queueing this part.
+> 
+> The big question is what additional interface to expose; some people have
+> voiced objections to the latency-nice interface, the 'obvious' alternative
+> is to directly expose the slice length as a request/hint.
 
-People have told me that we can't use the rcu_head on the struct page
-backing page table blocks. I understood it was because PPC was using
-that memory for something else.
+I haven't thought much about this, but..
 
-I was hoping Mathew's folio conversion would help clarify this..
+There are two desired properties form user space that I hope we can achieve
+with this new hint:
 
-On the flip side, if we are able to use rcu_head here then we should
-use it everywhere and also use it mmu_gather.c instead of allocating
-memory and having the smp_call_function() fallback. This would fix it
-to be actual RCU.
+1. The obvious improve the wake up latencies of some tasks.
+2. Hint that there are some tasks that are happy to suffer high latencies.
 
-There have been a few talks that it sure would be nice if the page
-tables were always freed via RCU and every arch just turns on
-CONFIG_MMU_GATHER_RCU_TABLE_FREE. It seems to me that patch 10 is kind
-of half doing that by making this one path always use RCU on all
-arches.
+2 is important because one thing that user space wants to do but we lack
+mechanisms to do so is give a hint some tasks are background tasks and can be
+shuffled around and preempted more often at the expense of keeping other
+tasks more happy.
 
-AFAIK the main reason it hasn't been done was the lack of a rcu_head..
+I'm hoping this + uclamp_max there would be reasonable way to tag these
+tasks now so that they consume less power and can be kept 'out of the way' when
+necessary.
 
-Jason
+Slice length seems a bit counter intuitive for these use cases. Maybe expose
+the lag? Not sure if this neutral though to allow moving away from EEVDF in the
+future if we ever need to. deadline can sound too promising probably.
+
+Also, we had in mind to use these in EAS to avoid packing (though this has to
+be re-evaluated if still needed) which is another source of latency. I think
+Oracle wanted to use that to control the search depth at load balance IIRC
+- not sure if they still want that.
+
+Not sure where we stand from multiple users of this hint now. Should they be
+new hints? If so, are we okay with continue to extend sched_setattr() or better
+create a proper QoS framework?
+
+As a side note - I started working on some patches to generalize the load
+balancer misfit path. Issues we see:
+
+1. latency sensitive tasks ending up on the same CPU can end up suffering. We
+   need both wake up and load balancer to be aware of this and help spreading.
+2. Busy uclamp_max tasks can end up stuck on a wrong core with no ability to
+   move it around. I still have to see this in practice but it's a concern for
+   wider deployment (which hasn't happened yet).
+
+I think the misfit path the right way to handle these cases. But I could be
+wrong. (or maybe you already take care of this and I just need to better read
+the patches). For the wake up side of things I think we need to be careful of
+cramming latency sensitive tasks on the same rq if we can avoid it. I didn't
+spot that in Vincent patches, neither in yours (which I yet to look better at).
+
+If I may piggy-back a bit more. We seem to reserve a policy for SCHED_ISO,
+which AFAICT had an old proposal to better tag interactive tasks. Is this
+something waiting for someone to come forward with a proposal for again? I have
+to say, the choice of interactive policy looks attractive. I wonder sometimes
+if we need to go vertical (new policy/sched_class) instead of horizental - or
+maybe both.
+
+Sorry a bit of a brain dump here. HTH.
+
+
+Cheers
+
+--
+Qais Yousef
+
+> 
+> The very last patch implements this alternative using sched_attr::sched_runtime
+> but is untested.
+> 
+> Diffstat for the base patches [1-11]:
+> 
+>  include/linux/rbtree_augmented.h |   26 +
+>  include/linux/sched.h            |    7 +-
+>  kernel/sched/core.c              |    2 +
+>  kernel/sched/debug.c             |   48 +-
+>  kernel/sched/fair.c              | 1105 ++++++++++++++++++--------------------
+>  kernel/sched/features.h          |   24 +-
+>  kernel/sched/sched.h             |   16 +-
+>  7 files changed, 587 insertions(+), 641 deletions(-)
+> 
+> 
+> [1] https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=805acf7726282721504c8f00575d91ebfd750564
+> 
+> [2] https://lkml.kernel.org/r/20230420150537.GC4253%40hirez.programming.kicks-ass.net
+> 
