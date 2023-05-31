@@ -2,92 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F56718856
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB7071885C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjEaRVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
+        id S230120AbjEaRWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjEaRVG (ORCPT
+        with ESMTP id S229721AbjEaRWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:21:06 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEE810F;
-        Wed, 31 May 2023 10:21:02 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VHEpim009732;
-        Wed, 31 May 2023 17:20:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=qs5UfhqUCmTD15CNNvZrfi8v6jrQfD2MUato+MQ/xYg=;
- b=rsL4E2NlVIMZ9KkrL1w7pI62GuPFznyushx+OBn32U3Q/Y0KMuO4ckSCtC+rKruugy/M
- Qn4nz1aB7e+vJaxnURm9zMrRKc1E9TGsRn50aml4nHiD+YSQfZtGxoF4x+fjUdVumRvv
- P5fCpkzDFnKAoCFXAphc3IPKZJwB6TUuKNDQGFM8Wrvk2UXtGaXXfwEDNKRPZGtmLllD
- NhVofsHMRsFpdIecXu7Q7uePrJTJrN2XOK3IlAIbG4uBz03IswLbDYyyTeWy5s6+hSeQ
- 71F3U97CNLptbr4b07a/No03VP8YWihqDK8TVPAMC+4T9LiTPjLZCksfUeXwV++IDPVJ 2A== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxa6hrghe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 17:20:51 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34VFOaeT008110;
-        Wed, 31 May 2023 17:20:50 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3qu9g8cr58-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 17:20:50 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34VHKnrV62521778
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 31 May 2023 17:20:49 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5CBC358053;
-        Wed, 31 May 2023 17:20:49 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 664C358043;
-        Wed, 31 May 2023 17:20:48 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 31 May 2023 17:20:48 +0000 (GMT)
-Message-ID: <edca8d02-01d9-c328-3d3e-015d0ed61a0b@linux.ibm.com>
-Date:   Wed, 31 May 2023 13:20:47 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH RFC v2] tpm: tpm_vtpm_proxy: do not reference kernel
- memory as user memory
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Alejandro Cabrera <alejandro.cabreraaldaya@tuni.fi>,
-        Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>,
-        stable@vger.kernel.org, Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org
-References: <20230530020133.235765-1-jarkko@kernel.org>
- <b2657b55-355d-80cb-23cc-d11825f64ad1@linux.ibm.com>
- <83c010a7b8821309a023e41efbabb7e96f156eec.camel@kernel.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <83c010a7b8821309a023e41efbabb7e96f156eec.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: LuTckC3YOCvj5e4Bzxy2z-eWJl6DaMIC
-X-Proofpoint-GUID: LuTckC3YOCvj5e4Bzxy2z-eWJl6DaMIC
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 31 May 2023 13:22:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8C2BE
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:21:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685553704;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Aqycy5XGd/Zg3D6nCw9dbFWiEKfPLLpIUb43lPV1w3E=;
+        b=SHRk5BzDYh5ludMwGQZ/KyvoKXpjdCDYJrXAMD6kkCTcS4Z8S1PNsa/cxKVQCvI+4OkuZO
+        Kr1s1xVaTvSfBZ8repbUoFqwmW2zyFvdJ1FsYBdZPkpfXlBLKrLkRbRg7ZarTXyNtXMJhi
+        9L2CbjhqIj68FPAgFQIq/9uEP6LInac=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-558-dIMpOH62PFGugHt06ZNGqw-1; Wed, 31 May 2023 13:21:41 -0400
+X-MC-Unique: dIMpOH62PFGugHt06ZNGqw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C44B43802140;
+        Wed, 31 May 2023 17:21:40 +0000 (UTC)
+Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4E08AC154D7;
+        Wed, 31 May 2023 17:21:40 +0000 (UTC)
+Message-ID: <3cb96907-0d58-ba60-ed0e-6c17c69bd0f8@redhat.com>
+Date:   Wed, 31 May 2023 13:21:40 -0400
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_12,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 suspectscore=0 lowpriorityscore=0 mlxscore=0
- spamscore=0 adultscore=0 mlxlogscore=604 impostorscore=0 malwarescore=0
- bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305310144
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4] KVM: VMX: do not disable interception for
+ MSR_IA32_SPEC_CTRL on eIBRS
+Content-Language: en-US
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+References: <20230531144128.73814-1-jon@nutanix.com>
+ <9d37ab07-97c6-5245-6939-9c1090b4b3a9@redhat.com>
+ <ECE9A3B4-2CF3-452A-838A-99BE075D5E68@nutanix.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <ECE9A3B4-2CF3-452A-838A-99BE075D5E68@nutanix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,32 +78,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/31/23 13:17, Jarkko Sakkinen wrote:
-> On Tue, 2023-05-30 at 13:45 -0400, Stefan Berger wrote:
+On 5/31/23 13:13, Jon Kohler wrote:
+>
+>> On May 31, 2023, at 1:02 PM, Waiman Long <longman@redhat.com> wrote:
 >>
->> On 5/29/23 22:01, Jarkko Sakkinen wrote:
->>> From: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
+>> On 5/31/23 10:41, Jon Kohler wrote:
+>>> Avoid expensive rdmsr on every VM Exit for MSR_IA32_SPEC_CTRL on
+>>> eIBRS enabled systems iff the guest only sets IA32_SPEC_CTRL[0] (IBRS)
+>>> and not [1] (STIBP) or [2] (SSBD) by not disabling interception in
+>>> the MSR bitmap. Note: this logic is only for eIBRS, as Intel's guidance
+>>> has long been that eIBRS only needs to be set once, so most guests with
+>>> eIBRS awareness should behave nicely. We would not want to accidentally
+>>> regress misbehaving guests on pre-eIBRS systems, who might be spamming
+>>> IBRS MSR without the hypervisor being able to see it today.
 >>>
->>
->>> -	rc = copy_to_user(buf, proxy_dev->buffer, len);
->>> +	if (buf)
->>> +		rc = copy_to_user(buf, proxy_dev->buffer, len);
+>>> eIBRS enabled guests using just IBRS will only write SPEC_CTRL MSR
+>>> once or twice per vCPU on boot, so it is far better to take those
+>>> VM exits on boot than having to read and save this msr on every
+>>> single VM exit forever. This outcome was suggested on Andrea's commit
+>>> 2f46993d83ff ("x86: change default to spec_store_bypass_disable=prctl spectre_v2_user=prctl")
+>>> however, since interception is still unilaterally disabled, the rdmsr
+>>> tax is still there even after that commit.
+>>>
+>>> This is a significant win for eIBRS enabled systems as this rdmsr
+>>> accounts for roughly ~50% of time for vmx_vcpu_run() as observed
+>>> by perf top disassembly, and is in the critical path for all
+>>> VM-Exits, including fastpath exits.
+>>>
+>>> Opportunistically update comments for both MSR_IA32_SPEC_CTRL and
+>>> MSR_IA32_PRED_CMD to make it clear how L1 vs L2 handling works.
+>>>
+>>> Fixes: 2f46993d83ff ("x86: change default to spec_store_bypass_disable=prctl spectre_v2_user=prctl")
+>>> Signed-off-by: Jon Kohler <jon@nutanix.com>
+>>> Cc: Sean Christopherson <seanjc@google.com>
+>>> Cc: Andrea Arcangeli <aarcange@redhat.com>
+>>> Cc: Kees Cook <keescook@chromium.org>
+>>> Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+>>> Cc: Waiman Long <longman@redhat.com>
+>>> ---
+>>> v1
+>>>   - https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_all_20220512174427.3608-2D1-2Djon-40nutanix.com_&d=DwICaQ&c=s883GpUCOChKOHiocYtGcg&r=NGPRGGo37mQiSXgHKm5rCQ&m=PT1QjB8Lk_a3baDOwHBfedQG67HsVDmOdmcWHlr5PrT8WyuS9e6PfHF5JxLxD0zw&s=jNnloZQgh0KG-n36uwVC0dJTmokvqsQdYQCWYI8hVvM&e= v1 -> v2:
+>>>   - https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_all_20220520195303.58692-2D1-2Djon-40nutanix.com_&d=DwICaQ&c=s883GpUCOChKOHiocYtGcg&r=NGPRGGo37mQiSXgHKm5rCQ&m=PT1QjB8Lk_a3baDOwHBfedQG67HsVDmOdmcWHlr5PrT8WyuS9e6PfHF5JxLxD0zw&s=Rwi5NoHwaezlmzzLiGGCuI6QHuGQZ1BVK2hs6-SZvzU&e=   - Addressed comments on approach from Sean.
+>>> v2 -> v3:
+>>>   - https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_kvm_20220520204115.67580-2D1-2Djon-40nutanix.com_&d=DwICaQ&c=s883GpUCOChKOHiocYtGcg&r=NGPRGGo37mQiSXgHKm5rCQ&m=PT1QjB8Lk_a3baDOwHBfedQG67HsVDmOdmcWHlr5PrT8WyuS9e6PfHF5JxLxD0zw&s=R2Ykxdv-DyeVGLWd8_pLpu43zEsnWzpyvvBPEZ9lz-Y&e=   - Addressed comments on approach from Sean.
+>>> v3 -> v4:
+>>>   - Fixed inline code comments from Sean.
+>>>
+>>>   arch/x86/kvm/vmx/vmx.c | 35 ++++++++++++++++++++++++-----------
+>>>   1 file changed, 24 insertions(+), 11 deletions(-)
+>>>
+>>> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+>>> index 44fb619803b8..5e643ac897bc 100644
+>>> --- a/arch/x86/kvm/vmx/vmx.c
+>>> +++ b/arch/x86/kvm/vmx/vmx.c
+>>> @@ -2260,20 +2260,33 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>>>   			return 1;
+>>>
+>>>   		vmx->spec_ctrl = data;
+>>> -		if (!data)
 >>> +
+>>> +		/*
+>>> +		 * Disable interception on the first non-zero write, except if
+>>> +		 * eIBRS is advertised to the guest and the guest is enabling
+>>> +		 * _only_ IBRS.  On eIBRS systems, kernels typically set IBRS
+>>> +		 * once at boot and never touch it post-boot.  All other bits,
+>>> +		 * and IBRS on non-eIBRS systems, are often set on a per-task
+>>> +		 * basis, i.e. change frequently, so the benefit of avoiding
+>>> +		 * VM-exits during guest context switches outweighs the cost of
+>>> +		 * RDMSR on every VM-Exit to save the guest's value.
+>>> +		 */
+>>> +		if (!data ||
+>>> +		    (data == SPEC_CTRL_IBRS &&
+>>> +		     (vcpu->arch.arch_capabilities & ARCH_CAP_IBRS_ALL)))
+>>>   			break;
+>>>
+>>>   		/*
+>>> -		 * For non-nested:
+>>> -		 * When it's written (to non-zero) for the first time, pass
+>>> -		 * it through.
+>>> -		 *
+>>> -		 * For nested:
+>>> -		 * The handling of the MSR bitmap for L2 guests is done in
+>>> -		 * nested_vmx_prepare_msr_bitmap. We should not touch the
+>>> -		 * vmcs02.msr_bitmap here since it gets completely overwritten
+>>> -		 * in the merging. We update the vmcs01 here for L1 as well
+>>> -		 * since it will end up touching the MSR anyway now.
+>>> +		 * Update vmcs01.msr_bitmap even if L2 is active, i.e. disable
+>>> +		 * interception for the vCPU on the first write regardless of
+>>> +		 * whether the WRMSR came from L1 or L2.  vmcs02's bitmap is a
+>>> +		 * combination of vmcs01 and vmcs12 bitmaps, and will be
+>>> +		 * recomputed by nested_vmx_prepare_msr_bitmap() on the next
+>>> +		 * nested VM-Enter.  Note, this does mean that future WRMSRs
+>>> +		 * from L2 will be intercepted until the next nested VM-Exit if
+>>> +		 * L2 was the first to write, but L1 exposing the MSR to L2
+>>> +		 * without first writing it is unlikely and not worth the
+>>> +		 * extra bit of complexity.
+>>>   		 */
+>>>   		vmx_disable_intercept_for_msr(vcpu,
+>>>   					      MSR_IA32_SPEC_CTRL,
+>> I have 2 comments.
 >>
->> Looking through other drivers it seems buf is always expected to be a valid non-NULL pointer on file_operations.read().
->>
->>
->> https://elixir.bootlin.com/linux/latest/source/arch/x86/mm/tlb.c#L1279   simple_read_from_buffer will pass the pointer to the user buffer along and it ('to') ends up in copy_to_user(to, ...);
->>
->>
->> Same here: https://elixir.bootlin.com/linux/latest/source/security/integrity/ima/ima_fs.c#L41
-> 
-> It is good to mention here that IMA uses __user tagged pointers
-> correctly, and it does not really compare to the vtpm driver code
-> by any possible means. So let's not add illegit comparison points.
+>> 1) Besides the IBRS, STIBP & SSBD bits, the SPEC_CTRL MSR may have the RRSBA_DIS_S bit set in the future. I am not aware of any current Intel processors having this capability yet, but a future Intel processor may have this and the above patch will have to be modified accordingly. It looks like that the RRSBA_DIS_S bit will be set once.
+> Agreed. Once that becomes pubic with future processors, this code can be fixed up in a fairly trivial manner. I don’t have any access to said future processors, so I’d like to keep it as-is today rather than project it out too far. Is that ok?
+That is certainly OK. I am just raising a question here.
+>> 2) AMD has their own AutoIBRS capability in Genoa which is similar to eIBRS but is not identified by the ARCH_CAP_IBRS_ALL bit. Instead it is identified by the AUTOIBRS bit in MSR_EFER. Are you planning to support that?
+> This is a vmx-only optimization. AMD optimizations can certainly be picked up separately if they suffer from same interception type issue that is called out here, but that isn’t something I’m looking at this time.
 
-Yes, sir. Did you read David' response?
-> 
-> BR, Jarkko
+Right, I forgot kvm has a different set of code for AMD CPUs. Since this 
+is Intel only, the patch looks sane to me.
+
+Thanks,
+Longman
+
