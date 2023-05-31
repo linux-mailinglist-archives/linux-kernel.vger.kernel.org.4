@@ -2,78 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C839717CC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36257717CD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234624AbjEaKFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 06:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
+        id S235817AbjEaKHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 06:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234291AbjEaKFi (ORCPT
+        with ESMTP id S233058AbjEaKHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 06:05:38 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF829F;
-        Wed, 31 May 2023 03:05:36 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id d9443c01a7336-1b02750ca0dso6277055ad.0;
-        Wed, 31 May 2023 03:05:36 -0700 (PDT)
+        Wed, 31 May 2023 06:07:47 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB70E2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:07:45 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so6478775e87.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:07:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685527536; x=1688119536;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1685527664; x=1688119664;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=HeKTOYgsOHmbs8G4uF5AubnU8n6wTCs2dizwLG2Gqpc=;
-        b=WQQ5ksPHTMS2XAS93kRWeN7Mmemr0cTNE6GQ4QcJ8s4G9RK3V6UPpl4VtAabLWMvUi
-         5uqy3DltMJr0UYN+AUZHX0/2m465WdkWc/FMykMWuRHxevSWV38g8mwMDxEMXrz2ukxB
-         dGJFKtEUItBKBP9i7L2MWIqm6TE/T2hXs4CobpkKe4Fl1kYH4SM4d0KM8GqBvOeACOPP
-         SCibaW34oc3WJiBQzArUoshAPTu8OzJ6LLmV3Efgi8CnZxvN6z+5i1hji78ucyFHhdTv
-         VI5DC+QdcQNzp7CNtqpWfEXD4Pl1KstC18FsD68t0lTV2sE/NV5L+4nsVSSbv5QbD3bd
-         q7oQ==
+        bh=QKOqcdYffaPuAvsZ4cF6Kv8mBC9qOo1M+VBYAc7j870=;
+        b=J0kB0QX5UrjOVkn2cqMVcboC2TQmS8mF9Y2hgaWFKaWCqM7fNLTyukyelYvZe+7Kq7
+         nCTd6ar7bVwHZ5xHNdBrO9+vpp0FPt5NiNl7h8TPtLDNanVsxG32ZATJxIBcP1Z37lSJ
+         IZIzHxBft4QjY0SBONwVJiw7yOx3fP163he7u6lbZUWT42MJXAvDy/DPMyMO6qi7aU//
+         uXDUWaDX+XMH+8Z54SuQSijpM/ORXl7OhcKdNKU/xjL869/J4uooT45AkUr/Cn3suDsW
+         UFbIN7fv6Y67vCv12Ybf/FlRidDUnlvbA6fIPqU6NuGgQ70RJ4vtO/IUFXQgOCo/0qK4
+         ffVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685527536; x=1688119536;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1685527664; x=1688119664;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HeKTOYgsOHmbs8G4uF5AubnU8n6wTCs2dizwLG2Gqpc=;
-        b=EddL4OC2D4IfV4N9FAViGSFQeDWyBOhqakSEhL8aFGByfVUoBj7G/e0NqNOJOBqkBh
-         5kgYh26HdkGGGmvBzMzMFrhN+wNy91wIPzn53yqfFeYor9/tT1w2IoihduJMU8cmQNCU
-         evAC7O1u27gFGQzNHK148E7mFhtaY1ILDqjcX8v5y4fmcIt+wLgGaRUijJXm19l/rURz
-         ykWKMoM8soMl1YtBS8wwspOjhmx6JF+Xv+ypSjZRhBGMELx7nG3YsHeM21YXwO9zOe3l
-         uuN5nacA1I+YF5fRgD9p7LrTELZKt9vIQHwtjV43OyWnP9qJSY9nHi6HGxDK9XJUH4jQ
-         y0gg==
-X-Gm-Message-State: AC+VfDzjWjQlmSQiyErpTg/fqlZ22rgjoo4AHb2CASpQpMAtLNltoxoh
-        kf7NBBmanKD4lF4OYHT6yC8=
-X-Google-Smtp-Source: ACHHUZ7lfarClMDji6Z2FjENK1gvREcg+iERVgXDzG/A4xsurL7EgPnXGNSw2nThy8ItrF8pfyqABw==
-X-Received: by 2002:a17:902:e54e:b0:1a9:6467:aa8d with SMTP id n14-20020a170902e54e00b001a96467aa8dmr2214163plf.1.1685527536203;
-        Wed, 31 May 2023 03:05:36 -0700 (PDT)
-Received: from [127.0.0.1] ([2404:c140:1f03::caf2])
-        by smtp.gmail.com with ESMTPSA id o7-20020a170902bcc700b001aaed55aff3sm940994pls.137.2023.05.31.03.05.31
+        bh=QKOqcdYffaPuAvsZ4cF6Kv8mBC9qOo1M+VBYAc7j870=;
+        b=TSdXD5sbON1HLvY4rjqvoOFYYZNT7bOOLW08iiC6S72xVZkakuLJ4Tns+fApAAOlDq
+         ooptVunayUuEC+AVsMk1V1ZTgjmcF6wnVPmqx+fVI7ikiyEeMmkilxhMWcSHaTeLm+ZS
+         alXMiscfUB+lZ6p4CgRCs2tqBX652+c9+3++Qy7XdbwEvpl4ga2auxvKfYnGG5LOGxkA
+         lOxZfqRy176s+nyJ6Gz41zjWI5dn8d4FfAWOCyq/9v8zwHzaA7prElHUjhs9/bK1YrrS
+         16NwaXkW6TF9UdD4opu/B53/kIX+MVN6WEKLH98+RWrF8xZTnsCzRDd8X5woy+Lw/ZU1
+         3uHQ==
+X-Gm-Message-State: AC+VfDwuL7Q8lKXCmF2iZ5cuhB41J5TnAb1TbPf64IPj5KkkXy8rFDxq
+        qefiXYJbCX3AS8W5KTJr0KLETWuWGJzcxjkiaes=
+X-Google-Smtp-Source: ACHHUZ6g4CDeffFfXzftaZbZSf3SKkuRD2pIillen7CiBtHzJExUDY1BKN3JLXLga47sPT7rodnd+w==
+X-Received: by 2002:a2e:9457:0:b0:2ac:7d78:3465 with SMTP id o23-20020a2e9457000000b002ac7d783465mr2205896ljh.15.1685527663994;
+        Wed, 31 May 2023 03:07:43 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id s24-20020a2e9c18000000b002a8ae16ac8csm3236479lji.18.2023.05.31.03.07.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 03:05:35 -0700 (PDT)
-Message-ID: <ebdc1731-3647-8b58-c66c-db5bb09f5bfa@gmail.com>
-Date:   Wed, 31 May 2023 18:05:29 +0800
+        Wed, 31 May 2023 03:07:43 -0700 (PDT)
+Message-ID: <98e4bda7-19e9-09b6-f008-383adada97cb@linaro.org>
+Date:   Wed, 31 May 2023 13:07:42 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH] net: sched: fix possible OOB write in fl_set_geneve_opt()
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, simon.horman@netronome.com,
-        pieter.jansen-van-vuuren@amd.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230529043615.4761-1-hbh25y@gmail.com>
- <ZHXf29es/yh3r6jq@corigine.com>
- <e9925aef-fefc-24b9-dea3-bd3bcca01b35@gmail.com>
- <ZHb/nPuTMja3giSP@corigine.com>
-Content-Language: en-US
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <ZHb/nPuTMja3giSP@corigine.com>
+Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: re-introduce dpu core revision
+ to the catalog
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        quic_khsieh@quicinc.com, Rob Clark <robdclark@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, quic_jesszhan@quicinc.com,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, Sean Paul <sean@poorly.run>
+References: <20230531005358.18090-1-quic_abhinavk@quicinc.com>
+ <CAA8EJpryw0h8TgpJ+SFJ7s0=LCjkQ6oqAjCKsm60dk_Q5e+wWA@mail.gmail.com>
+ <0af4df3d-8048-98cd-6c91-7cd553f4f65f@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <0af4df3d-8048-98cd-6c91-7cd553f4f65f@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,82 +82,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/5/2023 16:04, Simon Horman wrote:
-> On Wed, May 31, 2023 at 01:38:49PM +0800, Hangyu Hua wrote:
->> On 30/5/2023 19:36, Simon Horman wrote:
->>> [Updated Pieter's email address, dropped old email address of mine]
+On 31/05/2023 06:05, Abhinav Kumar wrote:
+> 
+> 
+> On 5/30/2023 7:53 PM, Dmitry Baryshkov wrote:
+>> On Wed, 31 May 2023 at 03:54, Abhinav Kumar 
+>> <quic_abhinavk@quicinc.com> wrote:
 >>>
->>> On Mon, May 29, 2023 at 12:36:15PM +0800, Hangyu Hua wrote:
->>>> If we send two TCA_FLOWER_KEY_ENC_OPTS_GENEVE packets and their total
->>>> size is 252 bytes(key->enc_opts.len = 252) then
->>>> key->enc_opts.len = opt->length = data_len / 4 = 0 when the third
->>>> TCA_FLOWER_KEY_ENC_OPTS_GENEVE packet enters fl_set_geneve_opt. This
->>>> bypasses the next bounds check and results in an out-of-bounds.
->>>>
->>>> Fixes: 0a6e77784f49 ("net/sched: allow flower to match tunnel options")
->>>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+>>> With [1] dpu core revision was dropped in favor of using the
+>>> compatible string from the device tree to select the dpu catalog
+>>> being used in the device.
 >>>
->>> Hi Hangyu Hua,
+>>> This approach works well however also necessitates adding catalog
+>>> entries for small register level details as dpu capabilities and/or
+>>> features bloating the catalog unnecessarily. Examples include but
+>>> are not limited to data_compress, interrupt register set, widebus etc.
 >>>
->>> Thanks. I think I see the problem too.
->>> But I do wonder, is this more general than Geneve options?
->>> That is, can this occur with any sequence of options, that
->>> consume space in enc_opts (configured in fl_set_key()) that
->>> in total are more than 256 bytes?
+>>> Introduce the dpu core revision back as an entry to the catalog so that
+>>> we can just use dpu revision checks and enable those bits which
+>>> should be enabled unconditionally and not controlled by a catalog
+>>> and also simplify the changes to do something like:
+>>>
+>>> if (dpu_core_revision > xxxxx && dpu_core_revision < xxxxx)
+>>>          enable the bit;
+>>>
+>>> Also, add some of the useful macros back to be able to use dpu core
+>>> revision effectively.
+>>>
+>>> [1]: https://patchwork.freedesktop.org/patch/530891/?series=113910&rev=4
+>>>
+>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>>> ---
+>>>   .../msm/disp/dpu1/catalog/dpu_3_0_msm8998.h   |  1 +
+>>>   .../msm/disp/dpu1/catalog/dpu_4_0_sdm845.h    |  1 +
+>>>   .../msm/disp/dpu1/catalog/dpu_5_0_sm8150.h    |  1 +
+>>>   .../msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h   |  1 +
+>>>   .../msm/disp/dpu1/catalog/dpu_6_0_sm8250.h    |  1 +
+>>>   .../msm/disp/dpu1/catalog/dpu_6_2_sc7180.h    |  1 +
+>>>   .../msm/disp/dpu1/catalog/dpu_6_3_sm6115.h    |  1 +
+>>>   .../msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h   |  1 +
+>>>   .../msm/disp/dpu1/catalog/dpu_7_0_sm8350.h    |  1 +
+>>>   .../msm/disp/dpu1/catalog/dpu_7_2_sc7280.h    |  1 +
+>>>   .../msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h  |  1 +
+>>>   .../msm/disp/dpu1/catalog/dpu_8_1_sm8450.h    |  1 +
+>>>   .../msm/disp/dpu1/catalog/dpu_9_0_sm8550.h    |  1 +
+>>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    | 31 ++++++++++++++++++-
+>>>   14 files changed, 43 insertions(+), 1 deletion(-)
 >>>
 >>
->> I think you are right. It is a good idea to add check in fl_set_vxlan_opt
->> and fl_set_erspan_opt and fl_set_gtp_opt too.
->> But they should be submitted as other patches. fl_set_geneve_opt has already
->> check this with the following code:
+>> [skipped catalog changes]
 >>
->> static int fl_set_geneve_opt(const struct nlattr *nla, struct fl_flow_key
->> *key,
->> 			     int depth, int option_len,
->> 			     struct netlink_ext_ack *extack)
->> {
->> ...
->> 		if (new_len > FLOW_DIS_TUN_OPTS_MAX) {
->> 			NL_SET_ERR_MSG(extack, "Tunnel options exceeds max size");
->> 			return -ERANGE;
->> 		}
->> ...
->> }
+>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h 
+>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>> index 677048cc3b7d..cc4aa75a1219 100644
+>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>> @@ -19,6 +19,33 @@
+>>>    */
+>>>   #define MAX_BLOCKS    12
+>>>
+>>> +#define DPU_HW_VER(MAJOR, MINOR, STEP)\
+>>> +                 ((((unsigned int)MAJOR & 0xF) << 28) |\
+>>> +                 ((MINOR & 0xFFF) << 16) |\
+>>> +                 (STEP & 0xFFFF))
+>>> +
+>>> +#define DPU_HW_MAJOR(rev)((rev) >> 28)
+>>> +#define DPU_HW_MINOR(rev)(((rev) >> 16) & 0xFFF)
+>>> +#define DPU_HW_STEP(rev)((rev) & 0xFFFF)
+>>> +#define DPU_HW_MAJOR_MINOR(rev)((rev) >> 16)
+>>> +
+>>> +#define IS_DPU_MAJOR_MINOR_SAME(rev1, rev2)   \
+>>> +(DPU_HW_MAJOR_MINOR((rev1)) == DPU_HW_MAJOR_MINOR((rev2)))
+>>> +
+>>> +#define DPU_HW_VER_300 DPU_HW_VER(3, 0, 0) /* 8998 v1.0 */
+>>> +#define DPU_HW_VER_400 DPU_HW_VER(4, 0, 0) /* sdm845 v1.0 */
+>>> +#define DPU_HW_VER_500 DPU_HW_VER(5, 0, 0) /* sm8150 v1.0 */
+>>> +#define DPU_HW_VER_510 DPU_HW_VER(5, 1, 1) /* sc8180 */
+>>> +#define DPU_HW_VER_600 DPU_HW_VER(6, 0, 0) /* sm8250 */
+>>> +#define DPU_HW_VER_620 DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
+>>> +#define DPU_HW_VER_630 DPU_HW_VER(6, 3, 0) /* sm6115|sm4250 */
+>>> +#define DPU_HW_VER_650 DPU_HW_VER(6, 5, 0) /* qcm2290|sm4125 */
+>>> +#define DPU_HW_VER_700 DPU_HW_VER(7, 0, 0) /* sm8350 */
+>>> +#define DPU_HW_VER_720 DPU_HW_VER(7, 2, 0) /* sc7280 */
+>>> +#define DPU_HW_VER_800 DPU_HW_VER(8, 0, 0) /* sc8280xp */
+>>> +#define DPU_HW_VER_810 DPU_HW_VER(8, 1, 0) /* sm8450 */
+>>> +#define DPU_HW_VER_900 DPU_HW_VER(9, 0, 0) /* sm8550 */
 >>
->> This bug will only be triggered under this special
->> condition(key->enc_opts.len = 252). So I think it will be better understood
->> by submitting this patch independently.
+>> Instead of having defines for all SoCs (which can quickly become
+>> unmanageable) and can cause merge conflicts, I'd suggest inlining all
+>> the defines into respective catalog files.
+>>
 > 
-> A considered approach sounds good to me.
+> Sure, that can be done.
 > 
-> I do wonder, could the bounds checks be centralised in the caller?
-> Maybe not if it doesn't know the length that will be consumed.
+>> Also, I'm not sure that the "step" should be a part of the catalog. I
+>> know that this follows the hardware revision. However, please correct
+>> me if I'm wrong, different step levels are used for revisions of the
+>> same SoC. The original code that was reading the hw revision from the
+>> hardware register, listed both 5.0.0 and 5.0.1 for sm8150.
+>>
 > 
+> This is one of the things i noticed while making this change.
+> 
+> Before the catalog rework, we used to handle even steps as we used to 
+> read that from the register and match it with the mdss_cfg handler. But 
+> after the rework, we dont handle steps anymore. Yes, you are right that 
+> different step levels are used for the revisions of the same SOC and so 
+> with that, i dont expect or atleast am not aware of DPU differences 
+> between steps but I am not able to rule it out.
+> 
+> So are you suggesting we drop step altogether and DPU_HW_VER() macro 
+> shall only handle major and minor versions? With the current chipsets I 
+> see, it should not make a difference . Its just that I am not sure if 
+> that will never happen.
 
-This may make code more complex. I am not sure if it is necessary to do 
-this.
+Yes. The goal of this rework would be to drop generic features and to 
+replace those checks with DPU-revision lookups. Correct?
+I think that from this perspective having to handle toe step revision is 
+a sign of an overkill. Having to handle the step revision is a sign of 
+paltform feature (or mis-feature) rather than a generic DPU bit.
 
->> By the way, I think memset's third param should be option_len in
->> fl_set_vxlan_opt and fl_set_erspan_opt. Do I need to submit another patch to
->> fix all these issues?
-> 
-> I think that in general one fix per patch is best.
-
-I see. I will try to handle these issues.
+In fact I suppose that even handling a minor revision would be an 
+overkill. Why don't we start with .dpu_major instead of .core_rev? We 
+can add .dpu_minor if/when required.
 
 > 
-> Some minor nits.
-> 
-> 1. As this is a fix for networking code it is probably targeted
->     at the net, as opposed to net-next, tree. This should be indicated
->     in the patch subject.
-> 
-> 	 Subject: [PATCH net v2] ...
-> 
-> 2. I think the usual patch prefix for this file, of late,
->     has been 'net/sched: flower: '
-> 
-> 	 Subject: [PATCH net v2]  net/sched: flower: ...
-> 
+>>> +
+>>>   #define DPU_HW_BLK_NAME_LEN    16
+>>>
+>>>   #define MAX_IMG_WIDTH 0x3fff
+>>> @@ -769,7 +796,7 @@ struct dpu_perf_cfg {
+>>>   /**
+>>>    * struct dpu_mdss_cfg - information of MDSS HW
+>>>    * This is the main catalog data structure representing
+>>> - * this HW version. Contains number of instances,
+>>> + * this HW version. Contains dpu core revision, number of instances,
+>>>    * register offsets, capabilities of the all MDSS HW sub-blocks.
+>>>    *
+>>>    * @dma_formats        Supported formats for dma pipe
+>>> @@ -778,6 +805,8 @@ struct dpu_perf_cfg {
+>>>    * @mdss_irqs:         Bitmap with the irqs supported by the target
+>>>    */
+>>>   struct dpu_mdss_cfg {
+>>> +       u32 core_rev;
+>>> +
+>>>          const struct dpu_caps *caps;
+>>>
+>>>          const struct dpu_ubwc_cfg *ubwc;
+>>> -- 
+>>> 2.40.1
+>>>
+>>
+>>
 
-Get it. I will send a v2 later.
+-- 
+With best wishes
+Dmitry
+
