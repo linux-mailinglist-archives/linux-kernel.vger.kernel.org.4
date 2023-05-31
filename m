@@ -2,159 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9C8717DD0
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD92C717DCC
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235448AbjEaLOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 07:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
+        id S235422AbjEaLOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 07:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235459AbjEaLOq (ORCPT
+        with ESMTP id S232299AbjEaLO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 07:14:46 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770C8185;
-        Wed, 31 May 2023 04:14:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685531680; x=1717067680;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=xp6rPElvGDI9Tw84+MAQTMi2fYjjkcQe+ZyCsWHd7D8=;
-  b=FtuWHhwqESSqIgqGTpwjeO7R8lPkmR/W3XkEHW8hB/YhFh0fKh9PMnGp
-   MS4hCYEcNuRxhmYom6dNYIG12bnqfcYwzSMFGlGz9gnyT8zZlMlYhTm7J
-   VcHppMjEOO2u0pgJ0dMZVQ3AsBjcXH306FmR+0hHUZv601uHZKpl8Rzp0
-   y3eNU33LsWU21ryHUOSR+VUD0ZhukZ4emVg8t0RahmZKFEumwzjlk1SYY
-   rflUCXbeR8g8OJ4ZVrHnrfwC7yjyIJbETJZCBd9AMm31m8AzYL3ldLK9V
-   MmrH0F/DEVVwIeUjh9BwhRvFCWrGu/k/irmSELDfVWuZR65ijEghm7FPX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="441562613"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="441562613"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 04:14:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="706844918"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="706844918"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga002.jf.intel.com with ESMTP; 31 May 2023 04:14:38 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 31 May 2023 04:14:38 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 31 May 2023 04:14:38 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 31 May 2023 04:14:38 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 31 May 2023 04:14:37 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KUbQJ0rCJoScm1R8/yfMiI5gx/5hHIUWFVi2GpzgbmEDc46BXfrOtx2/2LxhuC/isc182qWvqJzG2mpb+A5UO4n2zu1RJqIenJrWdLI2fhcUTTDZZlBcxTRq6T/H+xFUCCQruUwXt4fLAzlzpNoyfEV0E7yxOhj+4AB7USIZjVwtVZ/LSflwPDCQ++0Qju6u127HwG6MAMCY7s4K7R1ZUpPhkjcj9q+wqtdl8Z1qsF+rkUMtgzMm4EpjBQB/+etYp6zE9AUqblrHcoG43DxApWSRAcLsgtDum+PhhTAuDJvOXg/vrAjwmIPrDu+9mjzSFdeq9QDfywJZtDSJCx8i2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i0h5VNxyYjRTd2K3R3dwCKnSsh5yzwHB23zXBfFyxXY=;
- b=bKx0H1yA6TWlwEZpr3DMAje1Hg4UbAOTKia2JfAR/oSyTOGnwds0zSjXRzwwZki0phfbuNSenjHBt31gkXt/CanPV0XpAikyBmIi32MAmFZxX/YcAF/0BbSk1iFHbnbNTf+fdDFIoTrJorP8/snopdiH0W8NjiVJkSXi7Q/X04FeppkOIQX5tQMpTdZu1uyXLGWH1nBPDMzKMBLPtnH3oig/iCQ6qRy9EFOEAWeq7REGcTSsT6vRi/tUehZTcwe7Uy3RA3jXIYLtJemFfx0cl443xAQPFyVYs1AiswcX3Rm3u3jK9l9ccO/qJ8dKw1o2ThrJqXgNpRXZr5+evtMMCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- SA1PR11MB6847.namprd11.prod.outlook.com (2603:10b6:806:29e::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6433.22; Wed, 31 May 2023 11:14:35 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::9e4f:80cc:e0aa:6809]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::9e4f:80cc:e0aa:6809%2]) with mapi id 15.20.6433.024; Wed, 31 May 2023
- 11:14:34 +0000
-Date:   Wed, 31 May 2023 13:14:12 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Alexander H Duyck <alexander.duyck@gmail.com>
-CC:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        "Larysa Zaremba" <larysa.zaremba@intel.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        "Christoph Hellwig" <hch@lst.de>,
-        Paul Menzel <pmenzel@molgen.mpg.de>, <netdev@vger.kernel.org>,
-        <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 03/12] iavf: optimize Rx buffer allocation a
- bunch
-Message-ID: <ZHcsBPr0EXx6hkkd@boxer>
-References: <20230525125746.553874-1-aleksander.lobakin@intel.com>
- <20230525125746.553874-4-aleksander.lobakin@intel.com>
- <8828262f1c238ab28be9ec87a7701acd791af926.camel@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <8828262f1c238ab28be9ec87a7701acd791af926.camel@gmail.com>
-X-ClientProxiedBy: FR2P281CA0058.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:93::9) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+        Wed, 31 May 2023 07:14:28 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90D3D9;
+        Wed, 31 May 2023 04:14:26 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-bad1ae90c2eso7405354276.2;
+        Wed, 31 May 2023 04:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685531666; x=1688123666;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a1j/nCV967fKglGLKqCgHuZux7JfdkGM8J/PSPEDGQY=;
+        b=Ol4fqSBgxqm3S3jIgquzVmVHVli0wTWk1uLEkk5VvssClmH9V4s6+U8PToTtAEPMn1
+         iYDF53rTMv8A/ggweFBASGmgb/XnjhJYOd8a743HaM++O5svVSehujsubnaDgct+bhTf
+         IKNFRTN5lKpnQ+Fa6NUvmakvsMjrJ4ewr5eGAfTf1MDANMDc7+ITWhJeae7YfXlUXFrv
+         P7J46FqTxHNJD+e98dVNmh8hCo7GdxumfiRAcw/e1dyq0DJz0LfzpUoxJkzYOTxFQ6yY
+         cTWVttAFMWW7Yw/w7Evq90aqKElzJ+ILWCZAtp0r4IR8RIZclT5/5KGBK7uKdCiWocxL
+         a13w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685531666; x=1688123666;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a1j/nCV967fKglGLKqCgHuZux7JfdkGM8J/PSPEDGQY=;
+        b=Vs7CzCHucwQjh9i+F+swfPycqu2ZAeJgNU7Wy74Nubexhx5MIgtm6E+1Dj23kRl3kT
+         6VIVxlZ+nJyC4GDq5yFqpFfBmxf7j8RVACCzmZwrNbfJiSL8cmo777d9/2BOZXFY1EXt
+         iG4LNbjNZHp5ugi3W+SAZNQaKtwHAmdYvhd29rHlVijTjhVmqmVhi0mzOz72dV/9y9qR
+         wLtfaWnkWb3r+csXv3KHoPyOW7OWMICGKL2tr7I3V78CuHiY4Eeum97pPVd+KDsm8Q1e
+         Cat4T1suukDmmMYufofhccQSpe9Gde1lCo1y8vJ8Dd4BgTuLgiQ4sqak9T+6+gWoSQS+
+         gvEQ==
+X-Gm-Message-State: AC+VfDw5u7n2CurS2EloyTwS7kRrAVEWItPPFMl1yQbq47vUA3FQuLSs
+        cXfpYMkOfzftrFmIzPj8p3Gf3ghhBF4JjH2Hm9wSt7YzDXs=
+X-Google-Smtp-Source: ACHHUZ4+KFHlnxIaMAa4wDxlgQFs80sM3w/LR91q9OPvO7pbGrP/uSMQbhfRjNveQBXZUEJAzIEAOc3U7UeX2ZO/GeQ=
+X-Received: by 2002:a81:4e11:0:b0:561:81b:734b with SMTP id
+ c17-20020a814e11000000b00561081b734bmr5735866ywb.39.1685531665806; Wed, 31
+ May 2023 04:14:25 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|SA1PR11MB6847:EE_
-X-MS-Office365-Filtering-Correlation-Id: fea9e2e7-4c77-4a61-dc54-08db61c83699
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lbGHXF3Z/9qxA8YEMI08y4WIMmsjTiPsTHpeK5txlcCwlEMA+HayKD6GTsAG8mm3ri3RS5uAdXqCqO3Cmr66vqf6aGSwRCW7VAfvzWtpjAPEA51g92iiR0DQsw+JP/lfEzq95JaH/bZIv2LUf/6jTxMRz3c4wFvCuDb+FRWemiO5jWsHsWwAjrU9ZkTIRzQVM6AtqpE7T/H6ZS7rt9jvwThHLP04QOxTUUht4GpX5RwlGSkezmcrsegEF7b/9IABM5AG4IFV72iXmyQVE3G49WNgdZ0TH3j56qlsLBML0EYuIR5lOeVdrDkiB/RzGQb1A4vLTEM1VEWHLllQiSmXYL5j3r1Ej5rdUBIwyJaBkRAO/uvtGqSIJaZUPAkz77VbsBHJ6EH+hGWHLdZipC7D7AXy2t8/fgjiXHZvWtmM5/hP93wQd/szhM7lmaDnMpdmDN7lfe7m4Vtmb6Z9blHRchohHciZ7pZgcDCojacJ7RAT1JPkIJANnJIqzzPkhirnNofVcRRSG4CHOT+9LiZ1H1lkK2sPhVCucxPiLulMeLuhnkGvhHzoHf4tJihPjWWy
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(366004)(136003)(346002)(376002)(396003)(39860400002)(451199021)(6486002)(26005)(6512007)(9686003)(6506007)(2906002)(186003)(316002)(5660300002)(41300700001)(7416002)(44832011)(8936002)(8676002)(6666004)(478600001)(38100700002)(82960400001)(66899021)(4326008)(6916009)(86362001)(66946007)(33716001)(54906003)(66476007)(83380400001)(66556008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8thI2iCDlGQ/dPYIu3gc5+wtn5a8z6SbqkQmWW/lGCJVtWJst4kQkH7uuiCT?=
- =?us-ascii?Q?IFgpKw0WvHx7rreud2UN+NpHCUQO2i384lgwMS8vQqfxPRdQYofAneQwONU0?=
- =?us-ascii?Q?SDJuLN6EjyRhZzHby8bncuyKquN+5F0G66Nlt5BrQe1ML64BCDBiHW7OmT19?=
- =?us-ascii?Q?9gIjjJA1p4usJoYgP0zd5ZCdC2ZqxTfGpTeej7CnV/9cZgdlRFaKXx1wsmI0?=
- =?us-ascii?Q?/ZwOYp4vE1PUZrzaDqVFFAI1eF7D48Wv2fh8EX6nQGPTry0LUxMxxgm7/40V?=
- =?us-ascii?Q?gN5XDgCGNlqpHE1mM+m+C6Z2DIsoADYRU+A8W1ZBWd8dzVUnMMzneXwvJ2Op?=
- =?us-ascii?Q?MHI3P8R3nozygtnsmwb6u9mVdDl3e0on/OvIuTrJ2o8gpv8Uq3Q8LtO945Hh?=
- =?us-ascii?Q?/gezwlAflpGi+6f4ABg9egRUJ/bCXV7gPF4LyWq9+tyW7sS3wAsPPrFIDflK?=
- =?us-ascii?Q?GOktA5iUk+4ryazWNrLYratfFyhxaIVRq+PE+c2Y4vGQGimyC5Z1zsdWtSji?=
- =?us-ascii?Q?C/0tH6iGqgtQzTeWt67NjHe9sXun29eWkZCsrMpZ/9jQ6DzXSwjRLMEuTIjG?=
- =?us-ascii?Q?vBmGoQXGzvSMSu/E/bZEc+WmLK+3XqGy23MPySRjhWE6TR6X/U2wKdP6WlFl?=
- =?us-ascii?Q?wSduNpGviQK8J31yGl3as52/d/xFi2akxyvHwfH35dyxfhjL4MBi5RKXJQrA?=
- =?us-ascii?Q?Tt28GfEXgTPYgy7/wjLHr76tEnGH6SexN7Dc5fuctpapAgSQ9LJTNSJn2h4B?=
- =?us-ascii?Q?+tjpUJfqUQaO8tp7xNP7T1DgqDz76JwaTrFOPbD0UkGDuZg/CcyOMpGTMCM3?=
- =?us-ascii?Q?hFpmDQySYRw0LTiPMZWkptumcIKN/WXH3EU/2SibJCOnmlBFA79ZED7I6pnY?=
- =?us-ascii?Q?znhBG29oFhKdF8T4uT7oCXuROyO/j+BcH3f3B/BvWzIm3ystgeHu0iV642tv?=
- =?us-ascii?Q?5lMwYfPI9Xr4HzVL4msOq59cZ2fkNDI6e9eJ1Eyxdk/h5KQEc4eVPNJ3mXqO?=
- =?us-ascii?Q?hlg997VZirUDRrkpudO6iw6oDOnRF0JfrpQMUUtOrhsHe+NH+SUYgk5QfKOB?=
- =?us-ascii?Q?QuDw6CUkFYjVJaMMsMVIhlm4KJLmKRkNjY1XYh60f9yeiEKrtk0/O50mpgt6?=
- =?us-ascii?Q?IHo2Cbvvhq1+dkTw2nYdggVwR2axa/cXruCqfVhH2oVC3B532sglHGUSm8Cj?=
- =?us-ascii?Q?Ksd0osPhmbLot3tCZ8KDFadbUkdPtrM8sT4gXzIYZ+0KOQD6Y00moaoMTprB?=
- =?us-ascii?Q?sNIlUf/EEXWO6n6DWsTxX8eFQI/il+Ap1jwIBQRhDzy9y3VZds5vdfaqUyvt?=
- =?us-ascii?Q?BOZE+ZkePadWayCnOE+ZY+woAfgcm+xZ0+OYqg8oUsVsVvJm2jzOaqLH4v6o?=
- =?us-ascii?Q?ndCEvIsUIHVCaM0UvN6Q69Ws4Rj5AbgYmAsmpryvGDWFBbg+I6qdoavJK+Mu?=
- =?us-ascii?Q?Z/AFUF+eequSYIzTUKVrUJzpF9jAUCGAgCZ6WkFscTKxdQwFnSKLhQ0N8ip2?=
- =?us-ascii?Q?YB98xIlHF3Ci54TmMrGUjWboetMMPWsg6FfVY4xzsV20wK8z18Vdmmmji4Nw?=
- =?us-ascii?Q?1WklAJUEmBZFu+zR4tjZ6KLOF+g354izhUCtUCKW699Dw85PN23pSXfFHiI+?=
- =?us-ascii?Q?8g=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: fea9e2e7-4c77-4a61-dc54-08db61c83699
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 11:14:34.4525
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2S7GpB+JUFI8T0OUvbpFyTjVkCbKR2Zhm3moUBAGl6+AEjdhe6IRh+0QUy7/dbgajJh4putaLdtekJ2TNu1hjQF0es0IQXL1pyWzBxAGmuk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6847
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230531095721.392664-1-victorshihgli@gmail.com>
+ <20230531095721.392664-4-victorshihgli@gmail.com> <387a2f61-a732-fc6e-d221-97eed4624929@intel.com>
+In-Reply-To: <387a2f61-a732-fc6e-d221-97eed4624929@intel.com>
+From:   Victor Shih <victorshihgli@gmail.com>
+Date:   Wed, 31 May 2023 19:14:14 +0800
+Message-ID: <CAK00qKCGHbJR3BYjuuZ7Uf9-Ad1M5J7HFXd7+e8w9C=gCLo+Cw@mail.gmail.com>
+Subject: Re: [PATCH V3 3/3] mmc: sdhci-pci-gli: Add support SD Express card
+ for GL9767
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benchuanggli@gmail.com,
+        HL.Liu@genesyslogic.com.tw, Greg.tu@genesyslogic.com.tw,
+        Ben Chuang <ben.chuang@genesyslogic.com.tw>,
+        Victor Shih <victor.shih@genesyslogic.com.tw>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -162,152 +74,260 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 09:18:40AM -0700, Alexander H Duyck wrote:
+Hi, Adrian
 
-FWIW I agree with what Alex is saying over here.
-
-> On Thu, 2023-05-25 at 14:57 +0200, Alexander Lobakin wrote:
-> > The Rx hotpath code of IAVF is not well-optimized TBH. Before doing any
-> > further buffer model changes, shake it up a bit. Notably:
-> > 
-> > 1. Cache more variables on the stack.
-> >    DMA device, Rx page size, NTC -- these are the most common things
-> >    used all throughout the hotpath, often in loops on each iteration.
-> >    Instead of fetching (or even calculating, as with the page size) them
-> >    from the ring all the time, cache them on the stack at the beginning
-> >    of the NAPI polling callback. NTC will be written back at the end,
-> >    the rest are used read-only, so no sync needed.
-> 
-> The advantage of this is going to vary based on the attribute. One of
-> the reasons why I left most of this on the ring is because the section
-> of the ring most of these variables were meant to be read-mostly and
-> shouldn't have resulted in any additional overhead versus accessing
-> them from the stack.
-
-I believe it depends on ring struct layout which vary across our drivers,
-no? On ice using making more usage of stack as described above improved
-perf.
-
-> 
-> > 2. Don't move the recycled buffers around the ring.
-> >    The idea of passing the page of the right-now-recycled-buffer to a
-> >    different buffer, in this case, the first one that needs to be
-> >    allocated, moreover, on each new frame, is fundamentally wrong. It
-> >    involves a few o' fetches, branches and then writes (and one Rx
-> >    buffer struct is at least 32 bytes) where they're completely unneeded,
-> >    but gives no good -- the result is the same as if we'd recycle it
-> >    inplace, at the same position where it was used. So drop this and let
-> >    the main refilling function take care of all the buffers, which were
-> >    processed and now need to be recycled/refilled.
-> 
-> The next_to_alloc logic was put in place to deal with systems that are
-> experiencing memory issues. Specifically what can end up happening is
-> that the ring can stall due to failing memory allocations and the
-> memory can get stuck on the ring. For that reason we were essentially
-> defragmenting the buffers when we started suffering memory pressure so
-> that they could be reusued and/or freed following immediate use.
-> 
-> Basically what you are trading off is some exception handling for
-> performance by removing it.
-
-With all of the mix of the changes this patch carries, I find it hard to
-follow from description which parts of diff I should be looking at.
-
-> 
-> > 3. Don't allocate with %GPF_ATOMIC on ifup.
-> >    This involved introducing the @gfp parameter to a couple functions.
-> >    Doesn't change anything for Rx -> softirq.
-> 
-> Any specific reason for this? Just wondering if this is meant to
-> address some sort of memory pressure issue since it basically just
-> means the allocation can go out and try to free other memory.
-> 
-> > 4. 1 budget unit == 1 descriptor, not skb.
-> >    There could be underflow when receiving a lot of fragmented frames.
-> >    If each of them would consist of 2 frags, it means that we'd process
-> >    64 descriptors at the point where we pass the 32th skb to the stack.
-> >    But the driver would count that only as a half, which could make NAPI
-> >    re-enable interrupts prematurely and create unnecessary CPU load.
-> 
-> Not sure I agree with this. The problem is the overhead for an skb
-> going up the stack versus a fragment are pretty signficant. Keep in
-> mind that most of the overhead for a single buffer occurs w/
-> napi_gro_receive and is not actually at the driver itself. The whole
-> point of the budget is to meter out units of work, not to keep you in
-> the busy loop. This starts looking like the old code where the Intel
-> drivers were returning either budget or 0 instead of supporting the
-> middle ground.
-> 
-> > 5. Shortcut !size case.
-> >    It's super rare, but possible -- for example, if the last buffer of
-> >    the fragmented frame contained only FCS, which was then stripped by
-> >    the HW. Instead of checking for size several times when processing,
-> >    quickly reuse the buffer and jump to the skb fields part.
-> > 6. Refill the ring after finishing the polling loop.
-> >    Previously, the loop wasn't starting a new iteration after the 64th
-> >    desc, meaning that we were always leaving 16 buffers non-refilled
-> >    until the next NAPI poll. It's better to refill them while they're
-> >    still hot, so do that right after exiting the loop as well.
-> >    For a full cycle of 64 descs, there will be 4 refills of 16 descs
-> >    from now on.
-> > 
-> > Function: add/remove: 4/2 grow/shrink: 0/5 up/down: 473/-647 (-174)
-> > 
-> > + up to 2% performance.
-> > 
-> 
-> What is the test you saw the 2% performance improvement in? Is it
-> something XDP related or a full stack test?
-
-+1, can you say more about that measurement?
-
-> 
-> > Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-> 
-> Also one thing I am not a huge fan of is a patch that is really a
-> patchset onto itself. With all 6 items called out here I would have
-> preferred to see this as 6 patches as it would have been easier to
-> review.
-
-+1
-
-> 
+On Wed, May 31, 2023 at 6:17=E2=80=AFPM Adrian Hunter <adrian.hunter@intel.=
+com> wrote:
+>
+> On 31/05/23 12:57, Victor Shih wrote:
+> > From: Victor Shih <victor.shih@genesyslogic.com.tw>
+> >
+> > Add support SD Express card for GL9767. The workflow of the
+> > SD Express card in GL9767 is as below.
+> > 1. GL9767 operates in SD mode and set MMC_CAP2_SD_EXP flag.
+> > 2. If card is inserted, Host send CMD8 to ask the capabilities
+> >    of the card.
+> > 3. If the card has PCIe capability, then init_sd_express()
+> >    will be invoked.
+> > 4. If the card has been put in write protect state then the
+> >    SD features supported by SD mode but not supported by
+> >    PCIe mode, therefore GL9767 switch to SD mode.
+> > 5. If the card has not been put in write protect state then
+> >    GL9767 switch from SD mode to PCIe/NVMe mode and mmc driver
+> >    handover control to NVMe driver.
+> > 6. If card is removed, GL9767 will return to SD mode.
+> >
+> > Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> > Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
 > > ---
-> >  drivers/net/ethernet/intel/iavf/iavf_main.c |   2 +-
-> >  drivers/net/ethernet/intel/iavf/iavf_txrx.c | 259 +++++++++-----------
-> >  drivers/net/ethernet/intel/iavf/iavf_txrx.h |   3 +-
-> >  3 files changed, 114 insertions(+), 150 deletions(-)
-> > 
-
-(...)
-
+> >  drivers/mmc/host/sdhci-pci-gli.c | 113 +++++++++++++++++++++++++++++++
+> >  1 file changed, 113 insertions(+)
+> >
+> > diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-=
+pci-gli.c
+> > index 392a106cea18..bd5185476d0f 100644
+> > --- a/drivers/mmc/host/sdhci-pci-gli.c
+> > +++ b/drivers/mmc/host/sdhci-pci-gli.c
+> > @@ -164,6 +164,10 @@
+> >  #define PCIE_GLI_9767_CFG            0x8A0
+> >  #define   PCIE_GLI_9767_CFG_LOW_PWR_OFF        BIT(12)
+> >
+> > +#define PCIE_GLI_9767_COMBO_MUX_CTL                  0x8C8
+> > +#define   PCIE_GLI_9767_COMBO_MUX_CTL_RST_EN           BIT(6)
+> > +#define   PCIE_GLI_9767_COMBO_MUX_CTL_WAIT_PERST_EN    BIT(10)
+> > +
+> >  #define PCIE_GLI_9767_PWR_MACRO_CTL                                  0=
+x8D0
+> >  #define   PCIE_GLI_9767_PWR_MACRO_CTL_LOW_VOLTAGE                     =
+ GENMASK(3, 0)
+> >  #define   PCIE_GLI_9767_PWR_MACRO_CTL_LD0_LOW_OUTPUT_VOLTAGE          =
+ GENMASK(15, 12)
+> > @@ -181,6 +185,9 @@
+> >  #define   PCIE_GLI_9767_SCR_CORE_PWR_D3_OFF            BIT(21)
+> >  #define   PCIE_GLI_9767_SCR_CFG_RST_DATA_LINK_DOWN     BIT(30)
+> >
+> > +#define PCIE_GLI_9767_SDHC_CAP                       0x91C
+> > +#define   PCIE_GLI_9767_SDHC_CAP_SDEI_RESULT   BIT(5)
+> > +
+> >  #define PCIE_GLI_9767_SD_PLL_CTL                     0x938
+> >  #define   PCIE_GLI_9767_SD_PLL_CTL_PLL_LDIV            GENMASK(9, 0)
+> >  #define   PCIE_GLI_9767_SD_PLL_CTL_PLL_PDIV            GENMASK(15, 12)
+> > @@ -191,6 +198,23 @@
+> >  #define PCIE_GLI_9767_SD_PLL_CTL2            0x93C
+> >  #define   PCIE_GLI_9767_SD_PLL_CTL2_PLLSSC_PPM         GENMASK(31, 16)
+> >
+> > +#define PCIE_GLI_9767_SD_EXPRESS_CTL                 0x940
+> > +#define   PCIE_GLI_9767_SD_EXPRESS_CTL_SDEI_EXE                BIT(0)
+> > +#define   PCIE_GLI_9767_SD_EXPRESS_CTL_SD_EXPRESS_MODE         BIT(1)
+> > +
+> > +#define PCIE_GLI_9767_SD_DATA_MULTI_CTL                              0=
+x944
+> > +#define   PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TIME      GENMASK=
+(23, 16)
+> > +#define   PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TIME_VALUE       =
+ 0x64
+> > +
+> > +#define PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2                     0=
+x950
+> > +#define   PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2_SDEI_COMPLETE      =
+ BIT(0)
+> > +
+> > +#define PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_EN_REG2                   =
+       0x954
+> > +#define   PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_EN_REG2_SDEI_COMPLETE_ST=
+ATUS_EN          BIT(0)
+> > +
+> > +#define PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_EN_REG2                   =
+       0x958
+> > +#define   PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_EN_REG2_SDEI_COMPLETE_SI=
+GNAL_EN          BIT(0)
+> > +
+> >  #define GLI_MAX_TUNING_LOOP 40
+> >
+> >  /* Genesys Logic chipset */
+> > @@ -935,6 +959,93 @@ static void sdhci_gl9767_reset(struct sdhci_host *=
+host, u8 mask)
+> >       gli_set_9767(host);
 > >  }
-> > @@ -1350,14 +1297,6 @@ static bool iavf_is_non_eop(struct iavf_ring *rx_ring,
-> >  			    union iavf_rx_desc *rx_desc,
-> >  			    struct sk_buff *skb)
-> >  {
-> > -	u32 ntc = rx_ring->next_to_clean + 1;
-> > -
-> > -	/* fetch, update, and store next to clean */
-> > -	ntc = (ntc < rx_ring->count) ? ntc : 0;
-> > -	rx_ring->next_to_clean = ntc;
-> > -
-> > -	prefetch(IAVF_RX_DESC(rx_ring, ntc));
-> > -
-> >  	/* if we are the last buffer then there is nothing else to do */
-> >  #define IAVF_RXD_EOF BIT(IAVF_RX_DESC_STATUS_EOF_SHIFT)
-> >  	if (likely(iavf_test_staterr(rx_desc, IAVF_RXD_EOF)))
-> 
-> You may want to see if you can get rid of this function entirely,
-> perhaps you do in a later patch. This function was added for ixgbe back
-> in the day to allow us to place the skb back in the ring for the RSC
-> based workloads where we had to deal with interleaved frames in the Rx
-> path.
-> 
-> For example, one question here would be why are we passing skb? It
-> isn't used as far as I can tell.
-> 
-this was used back when skb was stored within the Rx buffer and now we
-just store skb on Rx ring struct, so good catch, this arg is redundant.
+> >
+> > +static int gl9767_init_sd_express(struct mmc_host *mmc, struct mmc_ios=
+ *ios)
+> > +{
+> > +     struct sdhci_host *host =3D mmc_priv(mmc);
+> > +     struct sdhci_pci_slot *slot =3D sdhci_priv(host);
+> > +     struct pci_dev *pdev;
+> > +     u32 value;
+> > +     int i;
+> > +
+> > +     pdev =3D slot->chip->pdev;
+> > +
+> > +     if (mmc->ops->get_ro(mmc)) {
+> > +             mmc->ios.timing &=3D ~(MMC_TIMING_SD_EXP | MMC_TIMING_SD_=
+EXP_1_2V);
+> > +             return 0;
+> > +     }
+> > +
+> > +     gl9767_vhs_write(pdev);
+> > +
+> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_COMBO_MUX_CTL, &value);
+> > +     value &=3D ~(PCIE_GLI_9767_COMBO_MUX_CTL_RST_EN | PCIE_GLI_9767_C=
+OMBO_MUX_CTL_WAIT_PERST_EN);
+> > +     pci_write_config_dword(pdev, PCIE_GLI_9767_COMBO_MUX_CTL, value);
+> > +
+> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_SD_DATA_MULTI_CTL, &val=
+ue);
+> > +     value &=3D ~PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TIME;
+> > +     value |=3D FIELD_PREP(PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_=
+TIME,
+> > +                         PCIE_GLI_9767_SD_DATA_MULTI_CTL_DISCONNECT_TI=
+ME_VALUE);
+> > +     pci_write_config_dword(pdev, PCIE_GLI_9767_SD_DATA_MULTI_CTL, val=
+ue);
+> > +
+> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_R=
+EG2, &value);
+> > +     value |=3D PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2_SDEI_COMPLETE=
+;
+> > +     pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_=
+REG2, value);
+> > +
+> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_E=
+N_REG2, &value);
+> > +     value |=3D PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_EN_REG2_SDEI_COMPL=
+ETE_STATUS_EN;
+> > +     pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_=
+EN_REG2, value);
+> > +
+> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_E=
+N_REG2, &value);
+> > +     value |=3D PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_EN_REG2_SDEI_COMPL=
+ETE_SIGNAL_EN;
+> > +     pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_SIGNAL_=
+EN_REG2, value);
+> > +
+> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_CFG, &value);
+> > +     value |=3D PCIE_GLI_9767_CFG_LOW_PWR_OFF;
+> > +     pci_write_config_dword(pdev, PCIE_GLI_9767_CFG, value);
+> > +
+> > +     value =3D sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+> > +     value &=3D ~(SDHCI_CLOCK_CARD_EN | SDHCI_CLOCK_PLL_EN);
+> > +     sdhci_writew(host, value, SDHCI_CLOCK_CONTROL);
+> > +
+> > +     value =3D sdhci_readb(host, SDHCI_POWER_CONTROL);
+> > +     value |=3D ((SDHCI_POWER_180 | SDHCI_POWER_ON) << 4);
+>
+> Sorry I didn't notice this before but these VDD2 bits should be
+> defined:
+>
+>
+> diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
+> index f4f2085c274c..f219bdea8f28 100644
+> --- a/drivers/mmc/host/sdhci.h
+> +++ b/drivers/mmc/host/sdhci.h
+> @@ -99,6 +99,13 @@
+>  #define  SDHCI_POWER_180       0x0A
+>  #define  SDHCI_POWER_300       0x0C
+>  #define  SDHCI_POWER_330       0x0E
+> +/*
+> + * VDD2 - UHS2 or PCIe/NVMe
+> + * VDD2 power on/off and voltage select
+> + */
+> +#define  SDHCI_VDD2_POWER_ON   0x10
+> +#define  SDHCI_VDD2_POWER_120  0x80
+> +#define  SDHCI_VDD2_POWER_180  0xA0
+>
+>  #define SDHCI_BLOCK_GAP_CONTROL        0x2A
+>
+>
+>
 
-I'll go and take a look at code on v3.
+I will update it in patch v4.
+
+> > +     sdhci_writeb(host, value, SDHCI_POWER_CONTROL);
+> > +
+> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL, &value)=
+;
+> > +     value |=3D PCIE_GLI_9767_SD_EXPRESS_CTL_SDEI_EXE;
+> > +     pci_write_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL, value)=
+;
+> > +
+> > +     for (i =3D 0; i < 2; i++) {
+> > +             msleep(10);
+> > +             pci_read_config_dword(pdev, PCIE_GLI_9767_NORMAL_ERR_INT_=
+STATUS_REG2, &value);
+> > +             if (value & PCIE_GLI_9767_NORMAL_ERR_INT_STATUS_REG2_SDEI=
+_COMPLETE) {
+> > +                     pci_write_config_dword(pdev, PCIE_GLI_9767_NORMAL=
+_ERR_INT_STATUS_REG2,
+> > +                                            value);
+> > +                     break;
+> > +             }
+> > +     }
+> > +
+> > +     pci_read_config_dword(pdev, PCIE_GLI_9767_SDHC_CAP, &value);
+> > +     if (value & PCIE_GLI_9767_SDHC_CAP_SDEI_RESULT) {
+> > +             pci_read_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL,=
+ &value);
+> > +             value |=3D PCIE_GLI_9767_SD_EXPRESS_CTL_SD_EXPRESS_MODE;
+> > +             pci_write_config_dword(pdev, PCIE_GLI_9767_SD_EXPRESS_CTL=
+, value);
+> > +     } else {
+> > +             mmc->ios.timing &=3D ~(MMC_TIMING_SD_EXP | MMC_TIMING_SD_=
+EXP_1_2V);
+> > +
+> > +             value =3D sdhci_readb(host, SDHCI_POWER_CONTROL);
+> > +             value &=3D ~((SDHCI_POWER_180 | SDHCI_POWER_ON) << 4);
+>
+> See above
+>
+
+I will update it in patch v4.
+
+> > +             sdhci_writeb(host, value, SDHCI_POWER_CONTROL);
+> > +
+> > +             value =3D sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+> > +             value |=3D (SDHCI_CLOCK_CARD_EN | SDHCI_CLOCK_PLL_EN);
+> > +             sdhci_writew(host, value, SDHCI_CLOCK_CONTROL);
+> > +     }
+> > +
+> > +     gl9767_vhs_read(pdev);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  static int gli_probe_slot_gl9750(struct sdhci_pci_slot *slot)
+> >  {
+> >       struct sdhci_host *host =3D slot->host;
+> > @@ -967,6 +1078,8 @@ static int gli_probe_slot_gl9767(struct sdhci_pci_=
+slot *slot)
+> >       gl9767_hw_setting(slot);
+> >       gli_pcie_enable_msi(slot);
+> >       slot->host->mmc->caps2 |=3D MMC_CAP2_NO_SDIO;
+> > +     host->mmc->caps2 |=3D MMC_CAP2_SD_EXP;
+> > +     host->mmc_host_ops.init_sd_express =3D gl9767_init_sd_express;
+> >       sdhci_enable_v4_mode(host);
+> >
+> >       return 0;
+>
+
+Thanks, Victor Shih
