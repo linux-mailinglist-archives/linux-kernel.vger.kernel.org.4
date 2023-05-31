@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBB5718E16
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C79F718E18
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbjEaWIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 18:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
+        id S230421AbjEaWIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 18:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbjEaWIg (ORCPT
+        with ESMTP id S230323AbjEaWIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 18:08:36 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D601B7
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:08:18 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f7fd59bb13so57674841cf.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:08:18 -0700 (PDT)
+        Wed, 31 May 2023 18:08:37 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628BB139
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:08:19 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-6260bb94363so1687256d6.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:08:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1685570897; x=1688162897;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=a9UmohLXWQfSsyaexxE0Gnc7j5lYDh6s2uLniOqWFR8=;
-        b=maER3qwKrfySMzpZBIGNPSz0QucIMJOWJ/8tXglPc9i7Eku9bOpQiPUJnfXjKF78uU
-         CQpfI7d5My1BnbVmZo1nSUnkPn4GtVqJG9hnLkY7GlpqDc8M5bx5nWL4TJAiebzPUX09
-         otCg7pZYzL0vgu0/5rXeR00m+NAgieXxUZy+Y=
+        d=joelfernandes.org; s=google; t=1685570898; x=1688162898;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xcpMDk08TnAKM11DZYaTQHoJHdMHYlx0PmCfJSmuqxQ=;
+        b=wEwknpWuACfVk2BLZAAwhK1P+A8Agyg2LkaiMrZv/vk+Jqv3PjEA3zHf+KOHmK4Pxx
+         sYYbfV/UmdJ7qbsavZh91UeTFvV/aLbtLtNOxKYXZP0bQ+FrDbx/ezrzjN+6DuOM96+6
+         CyyRczA9px0WqR6nr3eZ09ZYqir15Ii3x7h8o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685570897; x=1688162897;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a9UmohLXWQfSsyaexxE0Gnc7j5lYDh6s2uLniOqWFR8=;
-        b=kpiGYQ1cqLMvzRQtSyE6qF/xJqe/jUcG0Tco3dXw7Ui025BrhIucRFEHl6xSDwHdCk
-         QbAj7r4AeTIpzZF+D+1PPPPwziVtfF3S3+/f5UYWVdJ3k6qMe2TdSc0SqPB8544Fi4SC
-         /soWJ8WScfFt/M5eqMtGI5oexJNPr6BUqG4dv518ugYbQiW1QuOGo9s6nL9X4wmuidTc
-         ZvN10hcu13LRX/lBy/2hRYjzdXuWZL9yogmLPXL1GN7OvvajcQY3kuRM8tpbL6rpbWXF
-         wWqWl1OP6Ub/YCgvnNqMms61DQi8Ckbj+h8B2SjRYM5qwdqZaIv5xgTIyXjoMp/0i51q
-         QidA==
-X-Gm-Message-State: AC+VfDwjRi8oSLPGYnXk9rQ7DtlkN7BBrzFXFanZ89TwQjsGfuleM46u
-        s4GTYe+XYj03ZiPdqxRZ3/DXmEstU1HVJ+9AD5g=
-X-Google-Smtp-Source: ACHHUZ4KJUIxH9kd325Fiaf0aLOebkiLTME5jx55cOnJ2WGeirOZcbDBH1RpvtjvBg3BOaOH0jDlUQ==
-X-Received: by 2002:ac8:594d:0:b0:3f3:9240:3265 with SMTP id 13-20020ac8594d000000b003f392403265mr8248942qtz.49.1685570896987;
-        Wed, 31 May 2023 15:08:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685570898; x=1688162898;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xcpMDk08TnAKM11DZYaTQHoJHdMHYlx0PmCfJSmuqxQ=;
+        b=dxRU9l108q8FcG0R4PU8QybbwoRVEfjf/ynTnu5cJ6z5nQf+GRTBO8K5LBOBk41SKj
+         7ftxc7vub07Iazd/SX5n8Ip/U8DQcxpmNaUpJNskbfJETcEiPKdI0LqBY5BadfX0JKpj
+         HmkJrj/RW6IWsu1a1w7VhSxQO0oVv0i5UVP8+NY88NxQMUP4xBeoQ3ezf3sykR+Nk4i0
+         hmQkCoz/JRNaqL4R8xvIhMm/vFybpHIcm9lzoDLheNbLHgS6iA5gXhc2osHhj7D73ZQo
+         nSL4y8yIbdAQhyH3hQ2LfNlLfuSKWADwd5lldVtZZ8lcZcbwU77DFApV3Y4kbRNBF+Rj
+         CofQ==
+X-Gm-Message-State: AC+VfDz1zS0LoMVNUNXOz7Xh3c8Z4n2pEbuGEaXpPL8TgFEkunipmdYH
+        g4zDE5xtM7PkRKxJl09xBIDASZnZas9luMvJ604=
+X-Google-Smtp-Source: ACHHUZ6VD/g4jSj2d9B84SOdyc6mJVRalNKUWWpk2+9CxmTsHgUmiKwb5GcyFfj7v6tYE/kvvmPfuQ==
+X-Received: by 2002:a05:6214:509d:b0:570:5389:2216 with SMTP id kk29-20020a056214509d00b0057053892216mr16116075qvb.22.1685570898020;
+        Wed, 31 May 2023 15:08:18 -0700 (PDT)
 Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id f2-20020ac87f02000000b003f6b0f4126fsm6666172qtk.8.2023.05.31.15.08.15
+        by smtp.gmail.com with ESMTPSA id f2-20020ac87f02000000b003f6b0f4126fsm6666172qtk.8.2023.05.31.15.08.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 15:08:16 -0700 (PDT)
+        Wed, 31 May 2023 15:08:17 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         Shuah Khan <shuah@kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         Michal Hocko <mhocko@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
         Lorenzo Stoakes <lstoakes@gmail.com>,
         Kirill A Shutemov <kirill@shutemov.name>,
         "Liam R. Howlett" <liam.howlett@oracle.com>,
@@ -62,10 +63,12 @@ Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
         Kalesh Singh <kaleshsingh@google.com>,
         Lokesh Gidra <lokeshgidra@google.com>,
         Vineeth Pillai <vineeth@bitbyteword.org>
-Subject: [PATCH v4 0/7] Optimize mremap during mutual alignment within PMD
-Date:   Wed, 31 May 2023 22:08:00 +0000
-Message-ID: <20230531220807.2048037-1-joel@joelfernandes.org>
+Subject: [PATCH v4 1/7] mm/mremap: Optimize the start addresses in move_page_tables()
+Date:   Wed, 31 May 2023 22:08:01 +0000
+Message-ID: <20230531220807.2048037-2-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
+In-Reply-To: <20230531220807.2048037-1-joel@joelfernandes.org>
+References: <20230531220807.2048037-1-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,86 +81,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+Recently, we see reports [1] of a warning that triggers due to
+move_page_tables() doing a downward and overlapping move on a
+mutually-aligned offset within a PMD. By mutual alignment, I
+mean the source and destination addresses of the mremap are at
+the same offset within a PMD.
 
-Here is v4 of the mremap start address optimization / fix for exec warning.  It
-took me a while to write a test that catches the issue me/Linus discussed in
-the last version. And I verified kernel crashes without the check. See below.
+This mutual alignment along with the fact that the move is downward is
+sufficient to cause a warning related to having an allocated PMD that
+does not have PTEs in it.
 
-The main changes in this series is:
-Care to be taken to move purely within a VMA, in other words this check
-   in call_align_down():
-    if (vma->vm_start != addr_masked)
-            return false;
+This warning will only trigger when there is mutual alignment in the
+move operation. A solution, as suggested by Linus Torvalds [2], is to
+initiate the copy process at the PMD level whenever such alignment is
+present. Implementing this approach will not only prevent the warning
+from being triggered, but it will also optimize the operation as this
+method should enhance the speed of the copy process whenever there's a
+possibility to start copying at the PMD level.
 
-    As an example of why this is needed:
-    Consider the following range which is 2MB aligned and is
-    a part of a larger 10MB range which is not shown. Each
-    character is 256KB below making the source and destination
-    2MB each. The lower case letters are moved (s to d) and the
-    upper case letters are not moved.
+Some more points:
+a. The optimization can be done only when both the source and
+destination of the mremap do not have anything mapped below it up to a
+PMD boundary. I add support to detect that.
 
-    |DDDDddddSSSSssss|
+b. #a is not a problem for the call to move_page_tables() from exec.c as
+nothing is expected to be mapped below the source. However, for
+non-overlapping mutually aligned moves as triggered by mremap(2), I
+added support for checking such cases.
 
-    If we align down 'ssss' to start from the 'SSSS', we will end up destroying
-    SSSS. The above if statement prevents that and I verified it.
+c. I currently only optimize for PMD moves, in the future I/we can build
+on this work and do PUD moves as well if there is a need for this. But I
+want to take it one step at a time.
 
-    I also added a test for this in the last patch.
-
-History of patches
-==================
-v3->v4:
-1. Make sure to check address to align is beginning of VMA
-2. Add test to check this (test fails with a kernel crash if we don't do this).
-
-v2->v3:
-1. Masked address was stored in int, fixed it to unsigned long to avoid truncation.
-2. We now handle moves happening purely within a VMA, a new test is added to handle this.
-3. More code comments.
-
-v1->v2:
-1. Trigger the optimization for mremaps smaller than a PMD. I tested by tracing
-that it works correctly.
-
-2. Fix issue with bogus return value found by Linus if we broke out of the
-above loop for the first PMD itself.
-
-v1: Initial RFC.
-
-Description of patches
-======================
-These patches optimizes the start addresses in move_page_tables() and tests the
-changes. It addresses a warning [1] that occurs due to a downward, overlapping
-move on a mutually-aligned offset within a PMD during exec. By initiating the
-copy process at the PMD level when such alignment is present, we can prevent
-this warning and speed up the copying process at the same time. Linus Torvalds
-suggested this idea.
-
-Please check the individual patches for more details.
-
-thanks,
-
- - Joel
+d. We need to be careful about mremap of ranges within the VMA itself.
+For this purpose, I added checks to determine if the address to align
+is not the beginning of the VMA which that address corresponds to.
 
 [1] https://lore.kernel.org/all/ZB2GTBD%2FLWTrkOiO@dhcp22.suse.cz/
+[2] https://lore.kernel.org/all/CAHk-=whd7msp8reJPfeGNyt0LiySMT0egExx3TVZSX3Ok6X=9g@mail.gmail.com/
 
-Joel Fernandes (Google) (7):
-mm/mremap: Optimize the start addresses in move_page_tables()
-mm/mremap: Allow moves within the same VMA for stack
-selftests: mm: Fix failure case when new remap region was not found
-selftests: mm: Add a test for mutually aligned moves > PMD size
-selftests: mm: Add a test for remapping to area immediately after
-existing mapping
-selftests: mm: Add a test for remapping within a range
-selftests: mm: Add a test for moving from an offset from start of
-mapping
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+ mm/mremap.c | 61 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-fs/exec.c                                |   2 +-
-include/linux/mm.h                       |   2 +-
-mm/mremap.c                              |  63 ++++-
-tools/testing/selftests/mm/mremap_test.c | 301 +++++++++++++++++++----
-4 files changed, 319 insertions(+), 49 deletions(-)
-
---
+diff --git a/mm/mremap.c b/mm/mremap.c
+index 411a85682b58..bf355e4d6bd4 100644
+--- a/mm/mremap.c
++++ b/mm/mremap.c
+@@ -478,6 +478,51 @@ static bool move_pgt_entry(enum pgt_entry entry, struct vm_area_struct *vma,
+ 	return moved;
+ }
+ 
++/*
++ * A helper to check if a previous mapping exists. Required for
++ * move_page_tables() and realign_addr() to determine if a previous mapping
++ * exists before we can do realignment optimizations.
++ */
++static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_align,
++			       unsigned long mask)
++{
++	unsigned long addr_masked = addr_to_align & mask;
++	struct vm_area_struct *prev = NULL, *cur = NULL;
++
++	/*
++	 * If @addr_to_align of either source or destination is not the beginning
++	 * of the corresponding VMA, we can't align down or we will destroy part
++	 * of the current mapping.
++	 */
++	if (vma->vm_start != addr_to_align)
++		return false;
++
++	/*
++	 * Find the VMA before @vma to see if it subsumes the masked address.
++	 * The mmap write lock is held here so the lookup is safe.
++	 */
++	cur = find_vma_prev(vma->vm_mm, vma->vm_start, &prev);
++	if (WARN_ON_ONCE(cur != vma))
++		return false;
++
++	return !prev || prev->vm_end <= addr_masked;
++}
++
++/* Opportunistically realign to specified boundary for faster copy. */
++static void realign_addr(unsigned long *old_addr, struct vm_area_struct *old_vma,
++			 unsigned long *new_addr, struct vm_area_struct *new_vma,
++			 unsigned long mask)
++{
++	bool mutually_aligned = (*old_addr & ~mask) == (*new_addr & ~mask);
++
++	if ((*old_addr & ~mask) && mutually_aligned
++	    && can_align_down(old_vma, *old_addr, mask)
++	    && can_align_down(new_vma, *new_addr, mask)) {
++		*old_addr = *old_addr & mask;
++		*new_addr = *new_addr & mask;
++	}
++}
++
+ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 		unsigned long old_addr, struct vm_area_struct *new_vma,
+ 		unsigned long new_addr, unsigned long len,
+@@ -493,6 +538,15 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 
+ 	old_end = old_addr + len;
+ 
++	/*
++	 * If possible, realign addresses to PMD boundary for faster copy.
++	 * Don't align for intra-VMA moves as we may destroy existing mappings.
++	 */
++	if ((vma != new_vma)
++		&& (len >= PMD_SIZE - (old_addr & ~PMD_MASK))) {
++		realign_addr(&old_addr, vma, &new_addr, new_vma, PMD_MASK);
++	}
++
+ 	if (is_vm_hugetlb_page(vma))
+ 		return move_hugetlb_page_tables(vma, new_vma, old_addr,
+ 						new_addr, len);
+@@ -565,6 +619,13 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 
+ 	mmu_notifier_invalidate_range_end(&range);
+ 
++	/*
++	 * Prevent negative return values when {old,new}_addr was realigned
++	 * but we broke out of the above loop for the first PMD itself.
++	 */
++	if (len + old_addr < old_end)
++		return 0;
++
+ 	return len + old_addr - old_end;	/* how much done */
+ }
+ 
+-- 
 2.41.0.rc2.161.g9c6817b8e7-goog
 
