@@ -2,117 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81B3A718E9B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CAD0718EA1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjEaWgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 18:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49252 "EHLO
+        id S230416AbjEaWh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 18:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjEaWgd (ORCPT
+        with ESMTP id S230267AbjEaWh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 18:36:33 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA189F
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:36:31 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id F134C2C0274;
-        Thu,  1 Jun 2023 10:36:27 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1685572587;
-        bh=K6Qn8QeOKSoZHZZ0pj4vqr+48A5yvnzbjMWWua+foqI=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=JNSd5zz7GjQWD6N8teZuZB0wWvPzDRoabXUWRQe7nUTyXgUR/nwSTl7dpBY+hdsRi
-         IWrzERyZ5M/OAhTD/Fav1RvCIbH3Df6smoQGexvYDVzxnM0vJoaG4z0hHmnKy6TYcn
-         O2tXpTO0HxbDEGmF9FA6PxdDuKAn34gd9SlyAxc9Vph78sGKJFCyRAniOrmH6OfcPt
-         S/vmmXUjeS0A+VlXg91YeNzLfHQ6rKFilXiVxyT1izglrw2eq+QoTkzFMBdj2xroIi
-         IGgnwW3rq5sjf4S+F25loBb3CS7ogMylCjnLgXLTFvnsWRmz/VLD5NwaVj7UZ3EQsf
-         2TOenYHyhMb0g==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B6477cbeb0001>; Thu, 01 Jun 2023 10:36:27 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 1 Jun 2023 10:36:27 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.026; Thu, 1 Jun 2023 10:36:27 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "enachman@marvell.com" <enachman@marvell.com>
-Subject: Re: [PATCH v7 4/4] dt-bindings: mtd: marvell-nand: Remove deprecated
- compatibles
-Thread-Topic: [PATCH v7 4/4] dt-bindings: mtd: marvell-nand: Remove deprecated
- compatibles
-Thread-Index: AQHZk1Io0TYCpzAakEW/VeOAcipdYq9zNJAAgAD8TYA=
-Date:   Wed, 31 May 2023 22:36:27 +0000
-Message-ID: <a84403a0-334e-c0e8-4a1b-bedac69e816d@alliedtelesis.co.nz>
-References: <20230530235456.1009082-1-chris.packham@alliedtelesis.co.nz>
- <20230530235456.1009082-5-chris.packham@alliedtelesis.co.nz>
- <20230531093326.26b6ced7@xps-13>
-In-Reply-To: <20230531093326.26b6ced7@xps-13>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0E40439F4111574EB437CE288F8410B1@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Wed, 31 May 2023 18:37:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6108E9F;
+        Wed, 31 May 2023 15:37:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB7EA62B7A;
+        Wed, 31 May 2023 22:37:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67BCAC433D2;
+        Wed, 31 May 2023 22:37:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685572646;
+        bh=EjcnHeLPSFskAfrECWzs0sBFgzC+oBoE4wsOMlpomy0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=edK7cDRjdx4uas4edYdeXU/b0jIuH8g7/WAZNO5DSDCcS0YaLilbgVUxIipuqn5Sp
+         lCrLS+s9ffLTuvceyREmandUiBzww2Vm0FYVd7oH4zVCgA7VgWyC4/aQm8/ZjNTSUf
+         b8dbYVPA/tpNUEHbYxINyxen0NE2uVgFjLwJopgxn2aGeJWfo+BwbqMuk5GklRaie4
+         BgZ3XO7jaS1yOCF3xtfHmqCN16wqOGz3/Y6/nx8TG/JM4IQehwiYUwDsrRH1KQ19w1
+         kYhSF0XubTIbUD/FtSIs0J51Ts29QRj156kFbUdfPrTl9s1jRsrnK2pZBGThy4VlGW
+         BHubXoEh2en9g==
+Date:   Wed, 31 May 2023 23:37:20 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Joan Bruguera =?iso-8859-1?Q?Mic=F3?= <joanbrugueram@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Alyssa Ross <hi@alyssa.is>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] riscv/purgatory: Do not use fortified string functions
+Message-ID: <20230531-abruptly-settling-f9852f408dcd@spud>
+References: <20230531003404.never.167-kees@kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Score: -1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ZFT5h/br0IBkD5vu"
+Content-Disposition: inline
+In-Reply-To: <20230531003404.never.167-kees@kernel.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAzMS8wNS8yMyAxOTozMywgTWlxdWVsIFJheW5hbCB3cm90ZToNCj4gSGkgQ2hyaXMsDQo+
-DQo+IGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5ueiB3cm90ZSBvbiBXZWQsIDMxIE1h
-eSAyMDIzIDExOjU0OjU2DQo+ICsxMjAwOg0KPg0KPj4gUmVtb3ZlIGNvbXBhdGlibGUgdmFsdWVz
-IHRoYXQgd2VyZSBtYXJrZWQgYXMgZGVwcmVjYXRlZCBpbiB0aGUgb2xkIHRleHQNCj4+IGJpbmRp
-bmcuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogQ2hyaXMgUGFja2hhbSA8Y2hyaXMucGFja2hhbUBh
-bGxpZWR0ZWxlc2lzLmNvLm56Pg0KPj4gLS0tDQo+PiAgIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdz
-L210ZC9tYXJ2ZWxsLG5hbmQtY29udHJvbGxlci55YW1sICAgICAgIHwgMyAtLS0NCj4+ICAgMSBm
-aWxlIGNoYW5nZWQsIDMgZGVsZXRpb25zKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50
-YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tdGQvbWFydmVsbCxuYW5kLWNvbnRyb2xsZXIueWFt
-bCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9tdGQvbWFydmVsbCxuYW5kLWNv
-bnRyb2xsZXIueWFtbA0KPj4gaW5kZXggN2NkNGEyZTk5MzQzLi44MGNlODU0MjkxY2IgMTAwNjQ0
-DQo+PiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbXRkL21hcnZlbGws
-bmFuZC1jb250cm9sbGVyLnlhbWwNCj4+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
-aW5kaW5ncy9tdGQvbWFydmVsbCxuYW5kLWNvbnRyb2xsZXIueWFtbA0KPj4gQEAgLTE4LDkgKzE4
-LDYgQEAgcHJvcGVydGllczoNCj4+ICAgICAgICAgLSBlbnVtOg0KPj4gICAgICAgICAgICAgLSBt
-YXJ2ZWxsLGFybWFkYTM3MC1uYW5kLWNvbnRyb2xsZXINCj4+ICAgICAgICAgICAgIC0gbWFydmVs
-bCxweGEzeHgtbmFuZC1jb250cm9sbGVyDQo+PiAtICAgICAgICAgIC0gbWFydmVsbCxhcm1hZGEt
-OGstbmFuZA0KPj4gLSAgICAgICAgICAtIG1hcnZlbGwsYXJtYWRhMzcwLW5hbmQNCj4+IC0gICAg
-ICAgICAgLSBtYXJ2ZWxsLHB4YTN4eC1uYW5kDQo+IE5vdCBzdXJlIHdoYXQgeW91J3JlIGRvaW5n
-IGhlcmU/DQpUaGF0J3MgbWUgYmVpbmcgaW4gYW4gYXdrd2FyZCB0aW1lem9uZSBhbmQgZ3Vlc3Np
-bmcgKGJhZGx5KS4gSSB0aGluayANCkkndmUgZ290IHRoZSBkZXByZWNhdGVkIGNvbXBhdGlibGVz
-IHNvcnRlZCBub3cgc28gSSdsbCBkcm9wIHRoaXMgZnJvbSB2OC4NCj4gICBJIHdvdWxkIGFjdHVh
-bGx5IGV4cGVjdCB0aGVzZSB0aHJlZQ0KPiBsaW5lcyB0byBoYXZlIHNvbWV0aGluZyBhbG9uZzoN
-Cj4NCj4gICAgICAgICAgICAgICAgICAgZGVwcmVjYXRlZDogdHJ1ZQ0KPg0KPiBhbmQgdGhpcyBz
-aG91bGQgYmUgcGFydCBvZiB0aGUgY29udmVyc2lvbiB0byB5YW1sLiBPciBwZXJoYXBzIEkgYW0N
-Cj4gbWlzc2luZyBzb21ldGhpbmc/DQo+DQo+IFRoZSByZXN0IG9mIHRoZSBzZXJpZXMgbG9va3Mg
-Z29vZCB0byBtZS4NCj4NCj4+ICAgDQo+PiAgICAgcmVnOg0KPj4gICAgICAgbWF4SXRlbXM6IDEN
-Cj4NCj4gVGhhbmtzLA0KPiBNaXF1w6hs
+
+--ZFT5h/br0IBkD5vu
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hey Kees,
+
+On Tue, May 30, 2023 at 05:34:04PM -0700, Kees Cook wrote:
+> With the addition of -fstrict-flex-arrays=3D3, struct sha256_state's
+> trailing array is no longer ignored by CONFIG_FORTIFY_SOURCE:
+>=20
+> struct sha256_state {
+>         u32 state[SHA256_DIGEST_SIZE / 4];
+>         u64 count;
+>         u8 buf[SHA256_BLOCK_SIZE];
+> };
+>=20
+> This means that the memcpy() calls with "buf" as a destination in
+> sha256.c's code will attempt to perform run-time bounds checking, which
+> could lead to calling missing functions, specifically a potential
+> WARN_ONCE, which isn't callable from purgatory.
+>=20
+> Reported-by: Thorsten Leemhuis <linux@leemhuis.info>
+> Closes: https://lore.kernel.org/lkml/175578ec-9dec-7a9c-8d3a-43f24ff86b92=
+@leemhuis.info/
+> Bisected-by: "Joan Bruguera Mic=F3" <joanbrugueram@gmail.com>
+> Fixes: df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3D3")
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Conor Dooley <conor.dooley@microchip.com>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Alyssa Ross <hi@alyssa.is>
+> Cc: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: linux-riscv@lists.infradead.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+
+Perhaps this is indicative of other issues in RISC-V land, but
+allmodconfig complains about this patch:
+
+=2E./lib/string.c:17: warning: "__NO_FORTIFY" redefined
+=2E./lib/string.c:17:9: warning: preprocessor token __NO_FORTIFY redefined
+
+> ---
+>  arch/riscv/purgatory/Makefile | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
+> index 5730797a6b40..11f4c275f141 100644
+> --- a/arch/riscv/purgatory/Makefile
+> +++ b/arch/riscv/purgatory/Makefile
+> @@ -31,9 +31,9 @@ $(obj)/strncmp.o: $(srctree)/arch/riscv/lib/strncmp.S F=
+ORCE
+>  $(obj)/sha256.o: $(srctree)/lib/crypto/sha256.c FORCE
+>  	$(call if_changed_rule,cc_o_c)
+> =20
+> -CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS
+> -CFLAGS_string.o :=3D -D__DISABLE_EXPORTS
+> -CFLAGS_ctype.o :=3D -D__DISABLE_EXPORTS
+> +CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS -D__NO_FORTIFY
+> +CFLAGS_string.o :=3D -D__DISABLE_EXPORTS -D__NO_FORTIFY
+> +CFLAGS_ctype.o :=3D -D__DISABLE_EXPORTS -D__NO_FORTIFY
+> =20
+>  # When linking purgatory.ro with -r unresolved symbols are not checked,
+>  # also link a purgatory.chk binary without -r to check for unresolved sy=
+mbols.
+> --=20
+> 2.34.1
+>=20
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+--ZFT5h/br0IBkD5vu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHfMIAAKCRB4tDGHoIJi
+0skGAP0RP0L15KqUDxAa/Z7n2whLtyvwOJmOwsbDDBUC+eTiWAD/cULCWm/j6GXO
+GcD+DaRrgW5urSzwpXiAq1ng8PzMFwg=
+=q9r1
+-----END PGP SIGNATURE-----
+
+--ZFT5h/br0IBkD5vu--
