@@ -2,98 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135DD7181EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE2B7181F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232992AbjEaNcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
+        id S236374AbjEaNdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236585AbjEaNbm (ORCPT
+        with ESMTP id S236547AbjEaNc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:31:42 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA851FC6
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:30:16 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-bab8f66d3a2so8047454276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:30:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685539797; x=1688131797;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=itMAWlEVGbKwEk4rvkPhIkKoGJ+D+wP/v3giQWPxtxE=;
-        b=TKCUTBNhaMHi5eEwlnd8h2q+kD82oaJbKs2k83VnkFN/LAlkS5QIqyaEEiuaw+aq6u
-         LixoStQwyq04QLXTSmPDys2uR2TCA3/U4ubZVeqo0+ffYdGszIF/JuiUF8pvgOVMF504
-         bucgsWzvisZPfQVRXgJJ/DepOGZ6EOyDovqUQumwdIltz0mDRkPY6TgbikvaFwRc9IC/
-         xCRJ2taW6FATuHjTWctppSmYAU9kftlV3iq07JDkueaa5A1JhNnNBQe+iPBqWZakSHB1
-         Ph7q8ACJfKXxN/XM0vHaWmI1DM0bldtPVV09gEvgJYJzcWe2ZHKnKqm53Qg+5kuWdYqU
-         2xFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685539797; x=1688131797;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=itMAWlEVGbKwEk4rvkPhIkKoGJ+D+wP/v3giQWPxtxE=;
-        b=AI05ThiRPnKI+muV7STGMJPLr9Fc39Iww9MqA19YG3hhOt6+TCq3drxSDczD0vs7hi
-         ZSS3OGgZFf5oYm3dNyaQBSvilJMv16GFVOtM5AvHvZIEOfCU1XPp7ynXY/u9Bg0KOYbi
-         rQSdZl2J22n2gFE8zuWN883hzsn7IQPM9yx7hvNCbcvOZnU/IK+M3WFk/VTPyPsW1In4
-         NRMcRh4BzVlZ+dhhH0CFY73H2MbUHBC/pcISxNVMZhWlhY0Z7OETDLUKExw6smM4qOeW
-         ZpId87j91W1cYuF6/uWcrAu9DM2RzESfzPLd+rtc1prp0GFLacAmuvstwWvOBfkmqFIb
-         sHsA==
-X-Gm-Message-State: AC+VfDyftEknPSSSCB6dxai/7pF1lPJmUbcZoB9NlEMThT6HKtT+GffQ
-        mx1ChPXGG2/SlHvwUasJzh8QOp+Pv7ffQpk16zI7Ow==
-X-Google-Smtp-Source: ACHHUZ4Py4Uo3YiGtvPZ/kUjXKdiyOhcEX0VVb0BTsQkmbteSEWWazQWYqFQhh8JSeV3efIYepXV/ugoOYAZMdYFtLI=
-X-Received: by 2002:a25:addc:0:b0:ba8:4bc6:7918 with SMTP id
- d28-20020a25addc000000b00ba84bc67918mr6555542ybe.32.1685539796988; Wed, 31
- May 2023 06:29:56 -0700 (PDT)
+        Wed, 31 May 2023 09:32:59 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843C71B3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:31:46 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q4LvU-0006pr-Nu; Wed, 31 May 2023 15:31:44 +0200
+Message-ID: <2826129b-0887-322b-c848-88517294645a@leemhuis.info>
+Date:   Wed, 31 May 2023 15:31:44 +0200
 MIME-Version: 1.0
-References: <20230530155501.222213-1-azeemshaikh38@gmail.com>
-In-Reply-To: <20230530155501.222213-1-azeemshaikh38@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 31 May 2023 15:29:46 +0200
-Message-ID: <CACRpkdbf_biFPFC62uF1byXrMnK=0XbbBiZpJwT=GVnx5ZpP=g@mail.gmail.com>
-Subject: Re: [PATCH] ARM: Replace all non-returning strlcpy with strscpy
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: Sometimes DVB broken with commit 6769a0b7ee0c3b
+Content-Language: en-US, de-DE
+To:     Thomas Voegtle <tv@lio96.de>, linux-kernel@vger.kernel.org,
+        Hyunwoo Kim <imv4bel@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <da5382ad-09d6-20ac-0d53-611594b30861@lio96.de>
+From:   "Linux regression tracking #adding (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Cc:     Linux kernel regressions list <regressions@lists.linux.dev>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <da5382ad-09d6-20ac-0d53-611594b30861@lio96.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1685539906;c0ce0a17;
+X-HE-SMSGID: 1q4LvU-0006pr-Nu
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 5:55=E2=80=AFPM Azeem Shaikh <azeemshaikh38@gmail.c=
-om> wrote:
+[CCing the regression list, as it should be in the loop for regressions:
+https://docs.kernel.org/admin-guide/reporting-regressions.html]
 
-> strlcpy() reads the entire source buffer first.
-> This read may exceed the destination size limit.
-> This is both inefficient and can lead to linear read
-> overflows if a source string is not NUL-terminated [1].
-> In an effort to remove strlcpy() completely [2], replace
-> strlcpy() here with strscpy().
-> No return values were used, so direct replacement is safe.
->
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcp=
-y
-> [2] https://github.com/KSPP/linux/issues/89
->
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+On 30.05.23 13:12, Thomas Voegtle wrote:
+> 
+> 
+> I have the problem that sometimes my DVB card does not initialize
+> properly booting Linux 6.4-rc4.
+> This is not always, maybe in 3 out of 4 attempts.
+> When this happens somehow you don't see anything special in dmesg, but
+> the card just doesn't work.
+> 
+> Reverting this helps:
+> commit 6769a0b7ee0c3b31e1b22c3fadff2bfb642de23f
+> [...]
 
-Please put this into Russell's patch tracker:
-https://www.arm.linux.org.uk/developer/patches/
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
 
-Yours,
-Linus Walleij
+#regzbot ^introduced 6769a0b7ee0c3b31e1b22c3fadff2bfb642d
+#regzbot title media: dvb-core: DVB card sometimes does not initialize
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
