@@ -2,95 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E48718EB6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A0A718EBB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbjEaWpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 18:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53480 "EHLO
+        id S229984AbjEaWq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 18:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbjEaWo7 (ORCPT
+        with ESMTP id S231183AbjEaWqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 18:44:59 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE01811F
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:44:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B588E1063;
-        Wed, 31 May 2023 15:45:42 -0700 (PDT)
-Received: from [10.57.22.124] (unknown [10.57.22.124])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 91E973F7D8;
-        Wed, 31 May 2023 15:44:56 -0700 (PDT)
-Message-ID: <46bb773c-31a8-c57a-0cde-39c27d0a6e36@arm.com>
-Date:   Wed, 31 May 2023 23:44:55 +0100
+        Wed, 31 May 2023 18:46:24 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D323107;
+        Wed, 31 May 2023 15:46:24 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685573181;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XIzF93UFC/GVQtUvE2kmelWoKlJPXu6KUTtN32GYwuQ=;
+        b=V4DPu0J+97KAWG7BljWcm9M0WHGm0oFGKQ9g9wUUxSN/LO+zWjV49iPI6Hjj/IGOqwKOzL
+        OKMHt/kgS2Fj9wNQS6JZayL1xRB9qL9ZZldaosbz1V1k9FxIHU6k2qLJavO1ixGoKcogJs
+        dfZ7awEDuxELHzHUTjUKYb9MF7auj7T+0Arlp4+wGURQesGYcA+i/Gav86bIj4ZeY7uZ65
+        eyAMN4aSzumzjtyV2OwLrGFWz++MQrew4U7nnl19oUAf7FzSFj19Bm5tsCKpriSHbOQuyL
+        a1u0FiRhzzXZbPsuEmwrEl4gDw/ygdWkCBFUo9xjAi5Hec85szOvFlw1OczFiA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685573181;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XIzF93UFC/GVQtUvE2kmelWoKlJPXu6KUTtN32GYwuQ=;
+        b=F+YyJiH1yOM9XIjwob6LO4nIlHL224W6az+hPOCyNCD6y/jiPsX75Y75sIr2xcGCLe3HlM
+        BEwcjfldmbxSEWDg==
+To:     Peter Zijlstra <peterz@infradead.org>, bigeasy@linutronix.de
+Cc:     mark.rutland@arm.com, maz@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        pbonzini@redhat.com, wanpengli@tencent.com, vkuznets@redhat.com,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, jgross@suse.com,
+        boris.ostrovsky@oracle.com, daniel.lezcano@linaro.org,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, rafael@kernel.org, peterz@infradead.org,
+        longman@redhat.com, boqun.feng@gmail.com, pmladek@suse.com,
+        senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, jstultz@google.com, sboyd@kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 08/13] x86/vdso: Fix gettimeofday masking
+In-Reply-To: <87r0qwfrm0.ffs@tglx>
+References: <20230519102058.581557770@infradead.org>
+ <20230519102715.704767397@infradead.org> <87r0qwfrm0.ffs@tglx>
+Date:   Thu, 01 Jun 2023 00:46:20 +0200
+Message-ID: <87y1l4dsqr.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.1
-Subject: Re: [PATCH v4 1/4] devres: Provide krealloc_array
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        James Clark <james.clark@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Coresight ML <coresight@lists.linaro.org>
-References: <20230509094942.396150-1-james.clark@arm.com>
- <20230509094942.396150-2-james.clark@arm.com>
- <2023051340-sinuous-darkroom-2497@gregkh>
- <89ad5070-db72-7bf1-5d86-a89fea54e789@arm.com>
- <2023051530-immunize-pony-49ef@gregkh>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <2023051530-immunize-pony-49ef@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Removed irrelevant recipients), +Cc: coresight ml
+On Wed, May 31 2023 at 17:27, Thomas Gleixner wrote:
+> On Fri, May 19 2023 at 12:21, Peter Zijlstra wrote:
+>> to take wrapping into account, but per all the above, we don't
+>> actually wrap on u64 anymore.
+>
+> Indeed. The rationale was that you need ~146 years uptime with a 4GHz
+> TSC or ~584 years with 1GHz to actually reach the wrap around point.
+>
+> Though I can see your point to make sure that silly BIOSes or VMMs
+> cannot cause havoc by accident or malice.
+>
+> Did anyone ever validate that wrap around on TSC including TSC deadline
+> timer works correctly?
+>
+> I have faint memories of TSC_ADJUST, which I prefer not to bring back to
+> main memory :)
 
-Hi Greg,
+It seems my fears have been unjustified.
 
-On 15/05/2023 12:55, Greg KH wrote:
-> On Mon, May 15, 2023 at 08:55:33AM +0100, James Clark wrote:
->>
->>
->> On 13/05/2023 12:04, Greg KH wrote:
->>> On Tue, May 09, 2023 at 10:49:38AM +0100, James Clark wrote:
->>>> There is no krealloc_array equivalent in devres. Users would have to
->>>> do their own multiplication overflow check so provide one.
->>>>
->>>> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
->>>> Signed-off-by: James Clark <james.clark@arm.com>
->>>> ---
->>>>   Documentation/driver-api/driver-model/devres.rst |  1 +
->>>>   include/linux/device.h                           | 11 +++++++++++
->>>>   2 files changed, 12 insertions(+)
+At least a quick test which sets the TSC to ~ -8min @2.1Ghz the machine
+seems to survive without the colourful explosions I expected due to my
+early exposure to TSC_ADJUST and TSC_DEADLINE_TIMER :)
 
-...
+Thanks,
 
->> Maybe something could be done with some macro magic, but it would
->> probably end up being worse than just copying them and would affect the
->> real ones as well. So yeah I can't think of any easy gains either.
-> 
-> Ok, that's good.  Given a lack of objections from others, I'll just take
-> this through my driver core tree in a few days.
-
-Apologies for hijacking the thread. We have a series for CoreSight[1]
-that depends on this series, which I see that, is queued in your
-driver-core-next.
-
-I would like to queue [1] for the next version (as there are other
-work that depend on this, e.g., [2]). Do you have any 
-recommendations/comments on the proposal ? Are you able to share a
-stable branch which can be merged to coresight/next and queue the
-series ontop ? (PS: I haven't queued anything for coresight/next yet).
-
-Kind regards
-Suzuki
-
-
-
-
+        tglx
