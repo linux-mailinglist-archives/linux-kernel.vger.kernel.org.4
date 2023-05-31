@@ -2,104 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611BA717363
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F98717366
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233868AbjEaBym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 21:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
+        id S231936AbjEaBzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 21:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjEaByk (ORCPT
+        with ESMTP id S230296AbjEaBzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 21:54:40 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CC3EC;
-        Tue, 30 May 2023 18:54:39 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f50a8f6dd7so2369427e87.2;
-        Tue, 30 May 2023 18:54:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685498077; x=1688090077;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OGutzaRGzCaS2IM7OoVOY7Gnf34EmeNV+333thh2Qbg=;
-        b=NFqrWeEEc2eZZmUflJd+XWmb4goNWaTDxLT8R8qzTtzgaacUQIpO3ugKO+/WPmENNy
-         gNZfwCg2IJpDyyh5jI6m4wbvcz9xe4FJc9w0/FxRadzJ4XQtIW0m8lCt4Kjj6iEM50f+
-         +Kb7KIOdBP5gGSrSGQpm1NotQnElhrAQr73D6o90Ru9WZ0r2KDS3hqh42ezCHy7fabtv
-         Eb55zR5xTF81rSxvhMYhAsBgrme6aWduz2FUjZgn4MjfAYP+dSx7fG1z1W1uFtY7iRuV
-         FF741ixTr7TPL6kjIxUXQpF2OdrYBwaSuAXkwlDcBeddaC6IKEn86w3gJb2z2g9O0Fz5
-         bIIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685498077; x=1688090077;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OGutzaRGzCaS2IM7OoVOY7Gnf34EmeNV+333thh2Qbg=;
-        b=gNku2c5+hdKo3Rc0cuDAI7t8yYf5l9Qef/et8xT04fy0ZczSNNMRvxlhEx3OmBUiBV
-         7oMGaVIpV1Rgi8WotGbNZgFJVqntBtb9DjGPoSnCDIA75porKsbkIyEesTNdPuvtNIXU
-         fM0ovU69Sucua7Rdc/tb40RMLYAm8Ko7NObRT1cGrSd8W4/s82Z8nxOTd9ZNpmk1hCx1
-         hmhZLBenlrWpcG0kRRN7b5NKAamxtil/6LHuHrLO/lHitdpjF2DN52KpuH+I823Ox8fh
-         uvetKwdfv3sJ2kf5Lzn/6MB1BlmS8W66d8JSRWNVrNnWfqngovlM2bbEDmfgvPuInKna
-         o8Yw==
-X-Gm-Message-State: AC+VfDyyaEWmZn/LgMrhU4GPMb5DePvnVl2zgsRMxW+yApmDIS/J8EoA
-        R5QhgwKVcclYDMbzpyNvhpk4TqJH9EBZQfPnBoXCje9HPHiw
-X-Google-Smtp-Source: ACHHUZ7aKybrqHQ2474lH0CxEJFIx5R1bltFR82B11NwwmzHHxdLa4pFC4VpurmwGhKT2emsk/xaHeRHUY0u7+Ota1g=
-X-Received: by 2002:ac2:53b3:0:b0:4f4:d324:8b14 with SMTP id
- j19-20020ac253b3000000b004f4d3248b14mr1396549lfh.14.1685498077225; Tue, 30
- May 2023 18:54:37 -0700 (PDT)
+        Tue, 30 May 2023 21:55:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AD210E;
+        Tue, 30 May 2023 18:55:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AF12635F4;
+        Wed, 31 May 2023 01:55:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8612EC4339B;
+        Wed, 31 May 2023 01:55:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685498152;
+        bh=RcqSU/tA4lflBhjbDWVwd0gV2CfAcsPxKWidByFH84s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VFTghQDEvafp/6c6zVXHhv+Z/9dj4kVGNg+Ogrr9Yi7WAytu16J57yw6G9bk1gdYP
+         7knONXSYvO/57jQI1m2rD+JhrjAq8iV5AuCAqe8NZ1vL+P/n2hQPLxxer+QzPqmHpG
+         9bnkfsYh4lKYnjmO7WJlAsNYZ/MZ7J6kggwUBIUAtfMnkZBnGkVEo9sWfaHQFnZBnH
+         3ZFIV1HuzsXku6eN6+Dq5Sis86xz7E6kBHcUqpGkOHmGZlfpz6fgUCBqM2Qb7sdJ6u
+         BGke6/2GjGozCk6jhQcCjzczcC4+FblghnMCKQeotFKiiaGvbpnzoj887k54HUpBcf
+         AdUIX4GnQZN0w==
+Date:   Tue, 30 May 2023 18:55:49 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     chenzhiyin <zhiyin.chen@intel.com>, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        nanhai.zou@intel.com
+Subject: Re: [PATCH] fs.h: Optimize file struct to prevent false sharing
+Message-ID: <20230531015549.GA1648@quark.localdomain>
+References: <20230530020626.186192-1-zhiyin.chen@intel.com>
+ <20230530-wortbruch-extra-88399a74392e@brauner>
 MIME-Version: 1.0
-References: <20230530023227.16653-1-powen.kao@mediatek.com>
- <20230530023227.16653-2-powen.kao@mediatek.com> <1c182151-6e8c-5068-b38c-f8e842e6e13b@acm.org>
-In-Reply-To: <1c182151-6e8c-5068-b38c-f8e842e6e13b@acm.org>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Wed, 31 May 2023 09:54:25 +0800
-Message-ID: <CAGaU9a9TsoaUtoMX8cNmAhfBnCddRtWYEG8ACdRNJfri+sdasg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] scsi: ufs: core: Introduce mcq ops to config cqid
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Po-Wen Kao <powen.kao@mediatek.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        wsd_upstream@mediatek.com, peter.wang@mediatek.com,
-        stanley.chu@mediatek.com, alice.chao@mediatek.com,
-        naomi.chu@mediatek.com, chun-hung.wu@mediatek.com,
-        cc.chou@mediatek.com, eddie.huang@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530-wortbruch-extra-88399a74392e@brauner>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 7:54=E2=80=AFAM Bart Van Assche <bvanassche@acm.org=
-> wrote:
->
-> On 5/29/23 19:32, Po-Wen Kao wrote:
-> > MCQ sq/cq mapping is not just one for one, could many for one.
-> > This patch allow host driver to change the mapping, assign cqid
-> > for each hw queue.
->
-> What use case do you have in mind for associating multiple submission
-> queues with a single completion queue?
->
+On Tue, May 30, 2023 at 10:50:42AM +0200, Christian Brauner wrote:
+> On Mon, May 29, 2023 at 10:06:26PM -0400, chenzhiyin wrote:
+> > In the syscall test of UnixBench, performance regression occurred
+> > due to false sharing.
+> > 
+> > The lock and atomic members, including file::f_lock, file::f_count
+> > and file::f_pos_lock are highly contended and frequently updated
+> > in the high-concurrency test scenarios. perf c2c indentified one
+> > affected read access, file::f_op.
+> > To prevent false sharing, the layout of file struct is changed as
+> > following
+> > (A) f_lock, f_count and f_pos_lock are put together to share the
+> > same cache line.
+> > (B) The read mostly members, including f_path, f_inode, f_op are
+> > put into a separate cache line.
+> > (C) f_mode is put together with f_count, since they are used
+> > frequently at the same time.
+> > 
+> > The optimization has been validated in the syscall test of
+> > UnixBench. performance gain is 30~50%, when the number of parallel
+> > jobs is 16.
+> > 
+> > Signed-off-by: chenzhiyin <zhiyin.chen@intel.com>
+> > ---
+> 
+> Sounds interesting, but can we see the actual numbers, please? 
+> So struct file is marked with __randomize_layout which seems to make
+> this whole reordering pointless or at least only useful if the
+> structure randomization Kconfig is turned off. Is there any precedence
+> to optimizing structures that are marked as randomizable?
 
-According to the specification or the original concept of MCQ, the
-bindings between SQ and CQ can not be fixed to a single style.
-In addition, some benchmark data shows that the performance can be
-improved by using fewer CQs to aggregate the interrupt handling of
-completion requests.
-Therefore, we would like to introduce a vop to allow the host to
-configure it accordingly.
+Most people don't use CONFIG_RANDSTRUCT.  So it's still worth optimizing struct
+layouts for everyone else.
 
-Stanley
+- Eric
