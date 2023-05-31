@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE7E7183F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00D7718429
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237441AbjEaNxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
+        id S237339AbjEaOFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237488AbjEaNuo (ORCPT
+        with ESMTP id S237561AbjEaOEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:50:44 -0400
+        Wed, 31 May 2023 10:04:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDFC35AF;
-        Wed, 31 May 2023 06:46:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2874E1734;
+        Wed, 31 May 2023 06:59:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CFF663B94;
-        Wed, 31 May 2023 13:46:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8406C4339B;
-        Wed, 31 May 2023 13:46:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96B6862C18;
+        Wed, 31 May 2023 13:46:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09340C433D2;
+        Wed, 31 May 2023 13:46:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540774;
-        bh=amL2Nhm8cwIr7U0FiUt7GFoC1TGrk53k6QFJTZXMgDk=;
+        s=k20201202; t=1685540776;
+        bh=IMSxW+BwXyy3mU+PMSOaQL+UkXZIvUYyfiSk3WvHIoA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zf6OQ/pQnnQe8n5HGsRZ3Obp9iCFEwHc3eeWw/1a7UsZUAEAZf0hAB3XU5TqE7ryc
-         U3PTqVRvLbkgKYdGbBMNf91tHsBM/kiFx+Lq+WSVtZG15i+D4/jok2wCvGH4ypp5el
-         rrh+JL9dXXY5zab9wh5POgulAB0n3B/6ax7XPFxDACoJc2mD5jOyMI25sspPa/RTrw
-         WOap2Rnz1j0d+BXnjtv/K4iDCM2/C64ymtM9TEDXNB7OQbgL9V7+nwoYlwpu7RccU8
-         VT3PjCpvAEEI9MXte0Hxz9ZZGWR9w0qNdTdNmoTnvJt1/HKYhOIoQbOP1Tgw2ZxfWt
-         6ncYm+tWcF/RQ==
+        b=brq9J2sc/aaVIyFiprFg8FeL+2ZAXsvc7OQytQZ1U7/N5xSQ6rsXuPMtXFUWj6srP
+         IwDZeSSEdk+ucro1dBSn2kOmH/W9lM7XCvDrym7fOK//JfYvJQ+8y4ejOsLsw/9uFr
+         LCs0bNTurXBgYJpDGm0yCsMTjDZUX7Cvz5Q2LLsYBdMjD5BkEKZEEBzIIWSlroLYIw
+         145bBORk3LHevaBi2+SVOrEl6FDbQcm74TveR321qvuJYYTlA/QHr1KV0jfZNJRDwR
+         uPIHzeLVgfAviwGh4f5CJHmpEe8qNBoPtSle2SerUSv4YsGEo+oU+zXnGq3OxGWtoy
+         ZNwghDcUGy2OQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Osama Muhammad <osmtendev@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
-        broonie@kernel.org
-Subject: [PATCH AUTOSEL 4.14 05/10] regulator: Fix error checking for debugfs_create_dir
-Date:   Wed, 31 May 2023 09:46:01 -0400
-Message-Id: <20230531134606.3385210-5-sashal@kernel.org>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Evan Quan <Evan.Quan@amd.com>, Lijo Lazar <Lijo.Lazar@amd.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, sre@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 06/10] power: supply: Fix logic checking if system is running from battery
+Date:   Wed, 31 May 2023 09:46:02 -0400
+Message-Id: <20230531134606.3385210-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134606.3385210-1-sashal@kernel.org>
 References: <20230531134606.3385210-1-sashal@kernel.org>
@@ -57,44 +59,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Osama Muhammad <osmtendev@gmail.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit 2bf1c45be3b8f3a3f898d0756c1282f09719debd ]
+[ Upstream commit 95339f40a8b652b5b1773def31e63fc53c26378a ]
 
-This patch fixes the error checking in core.c in debugfs_create_dir.
-The correct way to check if an error occurred is 'IS_ERR' inline function.
+The logic used for power_supply_is_system_supplied() counts all power
+supplies and assumes that the system is running from AC if there is
+either a non-battery power-supply reporting to be online or if no
+power-supplies exist at all.
 
-Signed-off-by: Osama Muhammad <osmtendev@gmail.com
-Suggested-by: Ivan Orlov <ivan.orlov0322@gmail.com
-Link: https://lore.kernel.org/r/20230515172938.13338-1-osmtendev@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org
+The second rule is for desktop systems, that don't have any
+battery/charger devices. These systems will incorrectly report to be
+powered from battery once a device scope power-supply is registered
+(e.g. a HID device), since these power-supplies increase the counter.
+
+Apart from HID devices, recent dGPUs provide UCSI power supplies on a
+desktop systems. The dGPU by default doesn't have anything plugged in so
+it's 'offline'. This makes power_supply_is_system_supplied() return 0
+with a count of 1 meaning all drivers that use this get a wrong judgement.
+
+To fix this case adjust the logic to also examine the scope of the power
+supply. If the power supply is deemed a device power supply, then don't
+count it.
+
+Cc: Evan Quan <Evan.Quan@amd.com>
+Suggested-by: Lijo Lazar <Lijo.Lazar@amd.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/regulator/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/power/supply/power_supply_core.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index 871d657a161f0..7898a54a324c4 100644
---- a/drivers/regulator/core.c
-+++ b/drivers/regulator/core.c
-@@ -3955,7 +3955,7 @@ static void rdev_init_debugfs(struct regulator_dev *rdev)
- 	}
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 409ecff1a51a7..67766b500325f 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -349,6 +349,10 @@ static int __power_supply_is_system_supplied(struct device *dev, void *data)
+ 	struct power_supply *psy = dev_get_drvdata(dev);
+ 	unsigned int *count = data;
  
- 	rdev->debugfs = debugfs_create_dir(rname, debugfs_root);
--	if (!rdev->debugfs) {
-+	if (IS_ERR(rdev->debugfs)) {
- 		rdev_warn(rdev, "Failed to create debugfs directory\n");
- 		return;
- 	}
-@@ -4513,7 +4513,7 @@ static int __init regulator_init(void)
- 	ret = class_register(&regulator_class);
++	if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_SCOPE, &ret))
++		if (ret.intval == POWER_SUPPLY_SCOPE_DEVICE)
++			return 0;
++
+ 	(*count)++;
+ 	if (psy->desc->type != POWER_SUPPLY_TYPE_BATTERY)
+ 		if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_ONLINE,
+@@ -367,8 +371,8 @@ int power_supply_is_system_supplied(void)
+ 				      __power_supply_is_system_supplied);
  
- 	debugfs_root = debugfs_create_dir("regulator", NULL);
--	if (!debugfs_root)
-+	if (IS_ERR(debugfs_root))
- 		pr_warn("regulator: Failed to create debugfs directory\n");
- 
- 	debugfs_create_file("supply_map", 0444, debugfs_root, NULL,
+ 	/*
+-	 * If no power class device was found at all, most probably we are
+-	 * running on a desktop system, so assume we are on mains power.
++	 * If no system scope power class device was found at all, most probably we
++	 * are running on a desktop system, so assume we are on mains power.
+ 	 */
+ 	if (count == 0)
+ 		return 1;
 -- 
 2.39.2
 
