@@ -2,94 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4782871828B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AB571830F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236629AbjEaNoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55200 "EHLO
+        id S236911AbjEaNrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236626AbjEaNnY (ORCPT
+        with ESMTP id S236640AbjEaNpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:43:24 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AC11986
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:42:08 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f60e536250so7577875e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:42:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685540518; x=1688132518;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cUu2HYss4MotQjEaEN5+g7Y/p+npUsHe7h5zD8Ch35k=;
-        b=iyOXH6r5ex7cD9blTkQTqC+7tIdJ1KIbjobM6fkJiaErKMw3w6hGc0FnsbjYfzxdFP
-         nLsi0UwbqkkGSWfyU7CIEMp+fl6lLF3IeXIltHVIwS6nMLQigcxhs/fVy5o44j2nVDqR
-         V1JY5fCMMwGsjlUSHevAWVGJ3EgpSm9rdauHN5Z6i62PaJqV9qP/G4lfURwFW37hLlql
-         NQ7K3epxd/y0BOutQPz9IZAk23UH1cWmg61VFlWlvDQmzCIhHLkWTgbGLorlNrdwDDeN
-         m16raT1Km1CS1sVoYGe6/q5IQccab6v8qf9axMMGedEwJrb8fFsgwiT+GOc9fP4hVOFa
-         D0pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685540518; x=1688132518;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cUu2HYss4MotQjEaEN5+g7Y/p+npUsHe7h5zD8Ch35k=;
-        b=d/spH6W/HHUvbkj/p+FMIsUiNU4hP3i8tzaDpOYKAxRX0N63QHgkhs9DRMQWErG1EZ
-         cbl3NYyK2K3ZzJf+Ihq7qjhFnHh/uD9lcRRBVl4P9m95ZM6qEDLLL5wdMwIbOL9tXLdG
-         b5cgSqU/SP0OYQflsVUNAOgLr/3dSWjcVNU8/eFyzTlWfdqAUw/YEV4M/fS7bJJnt2Zf
-         O2AQd+HKnuCmTK0KH+GyuhQYhcgdtCPlGWqMasRFLG6anlqCvUJd5mUqFupF1rlT+TLF
-         fExx0IwWHc+didIvBnqXfjvRqxxPvURPT1RMGWcPCw3+Li+GPmmYC3l6Bl9k1htsXW3x
-         r+tg==
-X-Gm-Message-State: AC+VfDwC7DRJIV6m73riUjGEZY0tL8srDMNJqNflNRK7aBLlUKmGyJWk
-        at2CC0EJB2cqAKH4KAa6xJHjKmCmsTm9I4a4Wrc=
-X-Google-Smtp-Source: ACHHUZ7WUgCkaiRdSc/62TIDOvvi7CqZ17+MyfatuGpFtn4k7/XuFS7rtWqf3IQfAttKb2reVrKOPw==
-X-Received: by 2002:a05:600c:82c5:b0:3f5:a54:9f97 with SMTP id eo5-20020a05600c82c500b003f50a549f97mr13001896wmb.0.1685540518310;
-        Wed, 31 May 2023 06:41:58 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id c3-20020a05600c0ac300b003f50e88ffc1sm24679614wmr.0.2023.05.31.06.41.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 06:41:57 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-In-Reply-To: <20230508114639.1525521-1-peng.fan@oss.nxp.com>
-References: <20230508114639.1525521-1-peng.fan@oss.nxp.com>
-Subject: Re: [PATCH V2 1/2] dt-bindings: nvmem: imx-ocotp: support i.MX93
-Message-Id: <168554051714.102767.16636791437513970284.b4-ty@linaro.org>
-Date:   Wed, 31 May 2023 14:41:57 +0100
+        Wed, 31 May 2023 09:45:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77814E65;
+        Wed, 31 May 2023 06:43:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5062563B22;
+        Wed, 31 May 2023 13:43:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD9AC433D2;
+        Wed, 31 May 2023 13:43:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685540596;
+        bh=g5Mcy1Hoazu8j6kQL47nV2n6axlctLe1SX0rEi+qut0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LiBGOCEGKk1O0uzDJ8IadYbR4fSz26b4sQbiJ+v3ZOqW1qg3RJBNlE27+OO9iJeMn
+         ef6e8v8zRSsLrgFr3+azFg1xTF+LDUgG2XxHrgHo1fdgJ69YTcBvMuUmt7ojtg2YHZ
+         qr7lJMdlT6OsoYM/E3pP/P6DCQLDciJUsFX13Bf2f+GlVpPCrs27VwokkMUzyVyByC
+         IbwRO/URlJUEVHG7wKg1tJA5k0/LawFwT4MiA6uRqfYCCV6nVbDyCcSA5s+DFEhrzZ
+         Zzb8D4ZgNkNHR60acJ8OuGSqMiVfFivCPYbKynkN4nGNbn8SRimo9/fIICZ3Mc534j
+         tkq3bTjMvlHUw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Wenwen Chen <wenwen.chen@samsung.com>,
+        Kanchan Joshi <joshi.k@samsung.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
+        io-uring@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 32/33] io_uring: unlock sqd->lock before sq thread release CPU
+Date:   Wed, 31 May 2023 09:41:58 -0400
+Message-Id: <20230531134159.3383703-32-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230531134159.3383703-1-sashal@kernel.org>
+References: <20230531134159.3383703-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Wenwen Chen <wenwen.chen@samsung.com>
 
-On Mon, 08 May 2023 19:46:38 +0800, Peng Fan (OSS) wrote:
-> Add i.MX93 OCOTP support
-> 
-> 
+[ Upstream commit 533ab73f5b5c95dcb4152b52d5482abcc824c690 ]
 
-Applied, thanks!
+The sq thread actively releases CPU resources by calling the
+cond_resched() and schedule() interfaces when it is idle. Therefore,
+more resources are available for other threads to run.
 
-[1/2] dt-bindings: nvmem: imx-ocotp: support i.MX93
-      commit: 42d033c4e47b9490cd9351c0eacb0b7dedb179e4
-[2/2] nvmem: imx: support i.MX93 OCOTP
-      commit: 4d47e9a76d5fd3008e69c91dccfb52ca02624c5a
+There exists a problem in sq thread: it does not unlock sqd->lock before
+releasing CPU resources every time. This makes other threads pending on
+sqd->lock for a long time. For example, the following interfaces all
+require sqd->lock: io_sq_offload_create(), io_register_iowq_max_workers()
+and io_ring_exit_work().
 
-Best regards,
+Before the sq thread releases CPU resources, unlocking sqd->lock will
+provide the user a better experience because it can respond quickly to
+user requests.
+
+Signed-off-by: Kanchan Joshi<joshi.k@samsung.com>
+Signed-off-by: Wenwen Chen<wenwen.chen@samsung.com>
+Link: https://lore.kernel.org/r/20230525082626.577862-1-wenwen.chen@samsung.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ io_uring/sqpoll.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/io_uring/sqpoll.c b/io_uring/sqpoll.c
+index 559652380672c..6ffa5cf1bbb86 100644
+--- a/io_uring/sqpoll.c
++++ b/io_uring/sqpoll.c
+@@ -256,9 +256,13 @@ static int io_sq_thread(void *data)
+ 			sqt_spin = true;
+ 
+ 		if (sqt_spin || !time_after(jiffies, timeout)) {
+-			cond_resched();
+ 			if (sqt_spin)
+ 				timeout = jiffies + sqd->sq_thread_idle;
++			if (unlikely(need_resched())) {
++				mutex_unlock(&sqd->lock);
++				cond_resched();
++				mutex_lock(&sqd->lock);
++			}
+ 			continue;
+ 		}
+ 
 -- 
-Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+2.39.2
 
