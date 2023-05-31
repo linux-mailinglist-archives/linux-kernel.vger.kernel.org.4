@@ -2,115 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573B2717D83
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD52717D82
 	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235135AbjEaLBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 07:01:17 -0400
+        id S235160AbjEaLBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 07:01:21 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbjEaLBK (ORCPT
+        with ESMTP id S235057AbjEaLBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 07:01:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845F8129
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 04:00:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685530827;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=97CTgaKk+HjxMsHB1NZqYRmtg/935y1khOuMG78saNk=;
-        b=MYCEmZplyZkTpDhH0b5lZtPIWa2nW+xa3zhd+YFwINowjFWw1mpQu7vCBxneQbj9IQZK2b
-        QvirN5ttp/FkT+SR9xA9xaJ+UR5uQkcmrEeQEDZqsiN9Vugoz8fne6aSYrxKaO0/WP64KC
-        9Voajwis2cR8m4u41UVDfzJHvoXzueE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-513-3tfZ-SxcM6qaXos3TuNsaQ-1; Wed, 31 May 2023 07:00:21 -0400
-X-MC-Unique: 3tfZ-SxcM6qaXos3TuNsaQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA646101AA42;
-        Wed, 31 May 2023 11:00:20 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E15D72166B25;
-        Wed, 31 May 2023 11:00:18 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Simon Horman <simon.horman@corigine.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 1/2] chelsio: Support MSG_SPLICE_PAGES
-Date:   Wed, 31 May 2023 12:00:07 +0100
-Message-ID: <20230531110008.642903-2-dhowells@redhat.com>
-In-Reply-To: <20230531110008.642903-1-dhowells@redhat.com>
-References: <20230531110008.642903-1-dhowells@redhat.com>
+        Wed, 31 May 2023 07:01:14 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2A2126;
+        Wed, 31 May 2023 04:01:13 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QWR8k5sszz67yc8;
+        Wed, 31 May 2023 18:59:02 +0800 (CST)
+Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
+ lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 31 May 2023 12:01:10 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Namhyung Kim <namhyung@gmail.com>,
+        Liang Kan <kan.liang@linux.intel.com>,
+        <linux-cxl@vger.kernel.org>, <peterz@infradead.org>
+CC:     <mingo@reresetdhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
+        <will@kernel.org>, <dan.j.williams@intel.com>,
+        <linuxarm@huawei.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>
+Subject: [PATCH v8 2/5] cxl: Add functions to get an instance of / count regblocks of a given type
+Date:   Wed, 31 May 2023 12:00:08 +0100
+Message-ID: <20230531110011.13963-3-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230531110011.13963-1-Jonathan.Cameron@huawei.com>
+References: <20230531110011.13963-1-Jonathan.Cameron@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.122.247.231]
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make Chelsio's TLS offload sendmsg() support MSG_SPLICE_PAGES, splicing in
-pages from the source iterator if possible and copying the data in
-otherwise.
+Until the recently release CXL 3.0 specification, there
+was only ever one instance of any given register block pointed
+to by the Register Block Locator DVSEC. Now, the specification allows
+for multiple CXL PMU instances, each with their own register block.
 
-This allows ->sendpage() to be replaced by something that can handle
-multiple multipage folios in a single transaction.
+To enable this add cxl_find_regblock_instance() that takes an index
+parameter and use that to implement cxl_count_regblock() and
+cxl_find_regblock().
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Ayush Sawal <ayush.sawal@chelsio.com>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: netdev@vger.kernel.org
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- .../ethernet/chelsio/inline_crypto/chtls/chtls_io.c  | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/cxl/core/regs.c | 59 ++++++++++++++++++++++++++++++++++++-----
+ drivers/cxl/cxl.h       |  3 +++
+ 2 files changed, 56 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
-index ae6b17b96bf1..1d08386ac916 100644
---- a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
-+++ b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
-@@ -1092,7 +1092,17 @@ int chtls_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
- 		if (copy > size)
- 			copy = size;
+diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
+index 1476a0299c9b..4b9672db867d 100644
+--- a/drivers/cxl/core/regs.c
++++ b/drivers/cxl/core/regs.c
+@@ -286,20 +286,23 @@ static bool cxl_decode_regblock(struct pci_dev *pdev, u32 reg_lo, u32 reg_hi,
+ }
  
--		if (skb_tailroom(skb) > 0) {
-+		if (msg->msg_flags & MSG_SPLICE_PAGES) {
-+			err = skb_splice_from_iter(skb, &msg->msg_iter, copy,
-+						   sk->sk_allocation);
-+			if (err < 0) {
-+				if (err == -EMSGSIZE)
-+					goto new_buf;
-+				goto do_fault;
-+			}
-+			copy = err;
-+			sk_wmem_queued_add(sk, copy);
-+		} else if (skb_tailroom(skb) > 0) {
- 			copy = min(copy, skb_tailroom(skb));
- 			if (is_tls_tx(csk))
- 				copy = min_t(int, copy, csk->tlshws.txleft);
+ /**
+- * cxl_find_regblock() - Locate register blocks by type
++ * cxl_find_regblock_instance() - Locate a register block by type / index
+  * @pdev: The CXL PCI device to enumerate.
+  * @type: Register Block Indicator id
+  * @map: Enumeration output, clobbered on error
++ * @index: Index into which particular instance of a regblock wanted in the
++ *	   order found in register locator DVSEC.
+  *
+  * Return: 0 if register block enumerated, negative error code otherwise
+  *
+  * A CXL DVSEC may point to one or more register blocks, search for them
+- * by @type.
++ * by @type and @index.
+  */
+-int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+-		      struct cxl_register_map *map)
++int cxl_find_regblock_instance(struct pci_dev *pdev, enum cxl_regloc_type type,
++			       struct cxl_register_map *map, int index)
+ {
+ 	u32 regloc_size, regblocks;
++	int instance = 0;
+ 	int regloc, i;
+ 
+ 	map->resource = CXL_RESOURCE_NONE;
+@@ -323,15 +326,59 @@ int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+ 		if (!cxl_decode_regblock(pdev, reg_lo, reg_hi, map))
+ 			continue;
+ 
+-		if (map->reg_type == type)
+-			return 0;
++		if (map->reg_type == type) {
++			if (index == instance)
++				return 0;
++			instance++;
++		}
+ 	}
+ 
+ 	map->resource = CXL_RESOURCE_NONE;
+ 	return -ENODEV;
+ }
++EXPORT_SYMBOL_NS_GPL(cxl_find_regblock_instance, CXL);
++
++/**
++ * cxl_find_regblock() - Locate register blocks by type
++ * @pdev: The CXL PCI device to enumerate.
++ * @type: Register Block Indicator id
++ * @map: Enumeration output, clobbered on error
++ *
++ * Return: 0 if register block enumerated, negative error code otherwise
++ *
++ * A CXL DVSEC may point to one or more register blocks, search for them
++ * by @type.
++ */
++int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
++		      struct cxl_register_map *map)
++{
++	return cxl_find_regblock_instance(pdev, type, map, 0);
++}
+ EXPORT_SYMBOL_NS_GPL(cxl_find_regblock, CXL);
+ 
++/**
++ * cxl_count_regblock() - Count instances of a given regblock type.
++ * @pdev: The CXL PCI device to enumerate.
++ * @type: Register Block Indicator id
++ *
++ * Some regblocks may be repeated. Count how many instances.
++ *
++ * Return: count of matching regblocks.
++ */
++int cxl_count_regblock(struct pci_dev *pdev, enum cxl_regloc_type type)
++{
++	struct cxl_register_map map;
++	int rc, count = 0;
++
++	while (1) {
++		rc = cxl_find_regblock_instance(pdev, type, &map, count);
++		if (rc)
++			return count;
++		count++;
++	}
++}
++EXPORT_SYMBOL_NS_GPL(cxl_count_regblock, CXL);
++
+ resource_size_t cxl_rcrb_to_component(struct device *dev,
+ 				      resource_size_t rcrb,
+ 				      enum cxl_rcrb which)
+diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+index 044a92d9813e..f6e2a9ea5f41 100644
+--- a/drivers/cxl/cxl.h
++++ b/drivers/cxl/cxl.h
+@@ -260,6 +260,9 @@ int cxl_map_device_regs(struct device *dev, struct cxl_device_regs *regs,
+ 			struct cxl_register_map *map);
+ 
+ enum cxl_regloc_type;
++int cxl_count_regblock(struct pci_dev *pdev, enum cxl_regloc_type type);
++int cxl_find_regblock_instance(struct pci_dev *pdev, enum cxl_regloc_type type,
++			       struct cxl_register_map *map, int index);
+ int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+ 		      struct cxl_register_map *map);
+ 
+-- 
+2.39.2
 
