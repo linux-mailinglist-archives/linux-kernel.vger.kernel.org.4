@@ -2,323 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4712717B2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CC6717B29
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235293AbjEaJFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
+        id S235201AbjEaJFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:05:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235270AbjEaJEh (ORCPT
+        with ESMTP id S235332AbjEaJEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:04:37 -0400
-Received: from emcscan.emc.com.tw (emcscan.emc.com.tw [192.72.220.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 958CB194
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:04:12 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="6.00,205,1681142400"; 
-   d="scan'208";a="3082971"
-Received: from unknown (HELO webmail.emc.com.tw) ([192.168.10.1])
-  by emcscan.emc.com.tw with ESMTP; 31 May 2023 17:04:05 +0800
-Received: from 192.168.10.23
-        by webmail.emc.com.tw with MailAudit ESMTP Server V5.0(80156:0:AUTH_RELAY)
-        (envelope-from <jingle.wu@emc.com.tw>); Wed, 31 May 2023 17:04:03 +0800 (CST)
-Received: from 106.64.72.99
-        by webmail.emc.com.tw with Mail2000 ESMTPA Server V7.00(19172:0:AUTH_LOGIN)
-        (envelope-from <jingle.wu@emc.com.tw>); Wed, 31 May 2023 17:04:03 +0800 (CST)
-From:   "jingle.wu" <jingle.wu@emc.com.tw>
-To:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        dmitry.torokhov@gmail.com
-Cc:     phoenix@emc.com.tw, josh.chen@emc.com.tw, dave.wang@emc.com.tw,
-        "jingle.wu" <jingle.wu@emc.com.tw>
-Subject: [PATCH]  Input: elan_i2c - Implement inhibit/uninhibit functions.
-Date:   Wed, 31 May 2023 17:03:40 +0800
-Message-Id: <20230531090340.1035499-1-jingle.wu@emc.com.tw>
-X-Mailer: git-send-email 2.34.1
+        Wed, 31 May 2023 05:04:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE701E65;
+        Wed, 31 May 2023 02:03:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B11A636DF;
+        Wed, 31 May 2023 09:03:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A371C433D2;
+        Wed, 31 May 2023 09:03:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685523838;
+        bh=Fj4Up68ocllFYDr8AEcwK10DzhsFeDDh/2SD0hHn63I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SuMJ068wtQnL/QcjqiW3ztlo0rLRZCoQIR2WRjqHSTRbzqtBz5YopiI9Au0h4xzVi
+         WZhfH1GlRTFk0UIwJ5FiRNS0jvmABuIff27p5jwXqvt8J/eu6Xc6L0Xmw5/g7hyy9B
+         LuiBVkul4k//epH7qS4JloR41rehji9ajwCtoeYKPiOgVp4g1nDGbXcSTce/TVB9kp
+         KaAeDXdkBXPpt3nO9vbFFrM4VcZcaZe2D7KToDCxe0CnBv8LcExy8REFGHb4FHjgKg
+         C/q4fSaaa8OAQMpStKhRD68yM02RdZCzuAZEoQBevhdUoRHXU3vdrTzo9CnIiK3PRH
+         r1FDKV4cYn2dQ==
+Message-ID: <78819e4d-6eb1-8a71-2da0-0d4711103648@kernel.org>
+Date:   Wed, 31 May 2023 11:03:54 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] soc: qcom: pmic: Fix resource leaks in
+ device_for_each_child_node() loops
+Content-Language: en-US
+To:     Lu Hongfei <luhongfei@vivo.com>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     opensource.kernel@vivo.com
+References: <20230531085422.4963-1-luhongfei@vivo.com>
+From:   Konrad Dybcio <konradybcio@kernel.org>
+In-Reply-To: <20230531085422.4963-1-luhongfei@vivo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Add inhibit/uninhibit functions.
 
- Signed-off-by: Jingle.wu <jingle.wu@emc.com.tw>
----
- drivers/input/mouse/elan_i2c_core.c | 207 ++++++++++++++++++++++++++++
- 1 file changed, 207 insertions(+)
 
-diff --git a/drivers/input/mouse/elan_i2c_core.c b/drivers/input/mouse/elan_i2c_core.c
-index 5f0d75a45c80..4ea57f4c7bd4 100644
---- a/drivers/input/mouse/elan_i2c_core.c
-+++ b/drivers/input/mouse/elan_i2c_core.c
-@@ -56,6 +56,7 @@ struct elan_tp_data {
- 	struct input_dev	*input;
- 	struct input_dev	*tp_input; /* trackpoint input node */
- 	struct regulator	*vcc;
-+	struct list_head list;	/* for list of devices needing input handler */
- 
- 	const struct elan_transport_ops *ops;
- 
-@@ -63,6 +64,11 @@ struct elan_tp_data {
- 	struct completion	fw_completion;
- 	bool			in_fw_update;
- 
-+	struct work_struct	lid_work;
-+	bool			lid_switch;
-+	int			lid_value;
-+	bool			in_inhibit;
-+
- 	struct mutex		sysfs_mutex;
- 
- 	unsigned int		max_x;
-@@ -96,6 +102,9 @@ struct elan_tp_data {
- 	u32			quirks;		/* Various quirks */
- };
- 
-+static struct workqueue_struct *elan_mode_wq;
-+static LIST_HEAD(elan_devices_with_lid_handler);
-+
- static u32 elan_i2c_lookup_quirks(u16 ic_type, u16 product_id)
- {
- 	static const struct {
-@@ -329,6 +338,74 @@ static int elan_initialize(struct elan_tp_data *data, bool skip_reset)
- 	return error;
- }
- 
-+static int elan_reactivate(struct elan_tp_data *data)
-+{
-+	struct device *dev = &data->client->dev;
-+	int error;
-+
-+	error = elan_set_power(data, true);
-+	if (error)
-+		dev_err(dev, "failed to restore power: %d\n", error);
-+
-+	error = data->ops->sleep_control(data->client, false);
-+	if (error) {
-+		dev_err(dev,
-+			"failed to wake device up: %d\n", error);
-+		return error;
-+	}
-+
-+	return error;
-+}
-+
-+static int elan_inhibit(struct input_dev *input_dev)
-+{
-+	struct elan_tp_data *data = input_get_drvdata(input_dev);
-+	struct i2c_client *client = data->client;
-+	int error;
-+
-+	dev_dbg(&client->dev, "inhibiting\n");
-+	/*
-+	 * We are taking the mutex to make sure sysfs operations are
-+	 * complete before we attempt to bring the device into low[er]
-+	 * power mode.
-+	 */
-+	error = mutex_lock_interruptible(&data->sysfs_mutex);
-+	if (error)
-+		return error;
-+
-+	disable_irq(client->irq);
-+
-+	error = elan_set_power(data, false);
-+	if (error)
-+		enable_irq(client->irq);
-+
-+	data->in_inhibit = true;
-+	mutex_unlock(&data->sysfs_mutex);
-+
-+	return error;
-+}
-+
-+static int elan_uninhibit(struct input_dev *input_dev)
-+{
-+	struct elan_tp_data *data = input_get_drvdata(input_dev);
-+	struct i2c_client *client = data->client;
-+	int error;
-+
-+	dev_dbg(&client->dev, "uninhibiting\n");
-+	error = mutex_lock_interruptible(&data->sysfs_mutex);
-+	if (error)
-+		return error;
-+
-+	error = elan_reactivate(data);
-+	if (error == 0)
-+		enable_irq(client->irq);
-+
-+	data->in_inhibit = false;
-+	mutex_unlock(&data->sysfs_mutex);
-+
-+	return error;
-+}
-+
- static int elan_query_device_info(struct elan_tp_data *data)
- {
- 	int error;
-@@ -1187,6 +1264,124 @@ static void elan_disable_regulator(void *_data)
- 	regulator_disable(data->vcc);
- }
- 
-+static void lid_work_handler(struct work_struct *work)
-+{
-+	struct elan_tp_data *data = container_of(work, struct elan_tp_data,
-+					    lid_work);
-+
-+	if (data->lid_value)
-+		elan_inhibit(data->input);
-+	else
-+		elan_uninhibit(data->input);
-+
-+}
-+
-+static void elan_input_lid_event(struct input_handle *handle, unsigned int type,
-+			     unsigned int code, int value)
-+{
-+	struct elan_tp_data *data, *n;
-+
-+	if (type == EV_SW && code == SW_LID) {
-+		list_for_each_entry_safe(data, n, &elan_devices_with_lid_handler, list) {
-+			data->lid_value = value;
-+			queue_work(elan_mode_wq, &data->lid_work);
-+		}
-+	}
-+
-+}
-+
-+struct elan_input_lid {
-+	struct input_handle handle;
-+};
-+
-+static int elan_input_lid_connect(struct input_handler *handler,
-+				struct input_dev *dev,
-+				const struct input_device_id *id)
-+{
-+	struct elan_input_lid *lid;
-+	char *name;
-+	int error;
-+
-+	lid = kzalloc(sizeof(*lid), GFP_KERNEL);
-+	if (!lid)
-+		return -ENOMEM;
-+	name = kasprintf(GFP_KERNEL, "elan-i2c-lid-%s", dev_name(&dev->dev));
-+	if (!name) {
-+		error = -ENOMEM;
-+		goto err_free_lid;
-+	}
-+	lid->handle.dev = dev;
-+	lid->handle.handler = handler;
-+	lid->handle.name = name;
-+	lid->handle.private = lid;
-+	error = input_register_handle(&lid->handle);
-+	if (error)
-+		goto err_free_name;
-+	error = input_open_device(&lid->handle);
-+	if (error)
-+		goto err_unregister_handle;
-+	return 0;
-+err_unregister_handle:
-+	input_unregister_handle(&lid->handle);
-+err_free_name:
-+	kfree(name);
-+err_free_lid:
-+	kfree(lid);
-+	return error;
-+}
-+
-+static void elan_input_lid_disconnect(struct input_handle *handle)
-+{
-+	struct elan_input_lid *lid = handle->private;
-+
-+	input_close_device(handle);
-+	input_unregister_handle(handle);
-+	kfree(handle->name);
-+	kfree(lid);
-+}
-+
-+static const struct input_device_id elan_input_lid_ids[] = {
-+	{
-+		.flags = INPUT_DEVICE_ID_MATCH_EVBIT | INPUT_DEVICE_ID_MATCH_SWBIT,
-+		.evbit = { BIT_MASK(EV_SW) },
-+		.swbit = { [BIT_WORD(SW_LID)] = BIT_MASK(SW_LID) },
-+	},
-+	{ },
-+};
-+
-+static struct input_handler elan_input_lid_handler = {
-+	.event =	elan_input_lid_event,
-+	.connect =	elan_input_lid_connect,
-+	.disconnect =	elan_input_lid_disconnect,
-+	.name =		"elan-i2c-lid",
-+	.id_table =	elan_input_lid_ids,
-+};
-+
-+static int elan_create_lid_handler(struct elan_tp_data *data)
-+{
-+	int error = 0;
-+
-+	elan_mode_wq = create_singlethread_workqueue("elan-i2c-lid");
-+	if (elan_mode_wq == NULL)
-+		return -ENOMEM;
-+	error = input_register_handler(&elan_input_lid_handler);
-+	if (error)
-+		goto remove_wq;
-+
-+	data->lid_switch = true;
-+	INIT_LIST_HEAD(&data->list);
-+	INIT_WORK(&data->lid_work, lid_work_handler);
-+	list_add_tail(&data->list, &elan_devices_with_lid_handler);
-+
-+	return 0;
-+
-+remove_wq:
-+	data->lid_switch = false;
-+	destroy_workqueue(elan_mode_wq);
-+	elan_mode_wq = NULL;
-+	return error;
-+}
-+
- static int elan_probe(struct i2c_client *client)
- {
- 	const struct elan_transport_ops *transport_ops;
-@@ -1325,6 +1520,10 @@ static int elan_probe(struct i2c_client *client)
- 		}
- 	}
- 
-+	error = elan_create_lid_handler(data);
-+	if (error)
-+		dev_err(dev, "failed to create lid handler: %d\n", error);
-+
- 	return 0;
- }
- 
-@@ -1334,6 +1533,10 @@ static int elan_suspend(struct device *dev)
- 	struct elan_tp_data *data = i2c_get_clientdata(client);
- 	int ret;
- 
-+	/* Wait for switch on completion */
-+	if (data->lid_switch)
-+		flush_workqueue(elan_mode_wq);
-+
- 	/*
- 	 * We are taking the mutex to make sure sysfs operations are
- 	 * complete before we attempt to bring the device into low[er]
-@@ -1371,6 +1574,10 @@ static int elan_resume(struct device *dev)
- 	struct elan_tp_data *data = i2c_get_clientdata(client);
- 	int error;
- 
-+	/* Wait for switch on completion */
-+	if (data->lid_switch)
-+		flush_workqueue(elan_mode_wq);
-+
- 	if (!device_may_wakeup(dev)) {
- 		error = regulator_enable(data->vcc);
- 		if (error) {
--- 
-2.34.1
+On 31.05.2023 10:54, Lu Hongfei wrote:
+> The device_for_each_child_node loop in pmic_glink_altmode_probe should have
+> fwnode_handle_put() before return which could avoid resource leaks.
+> This patch could fix this bug.
+> 
+> Fixes: 080b4e24852b ("soc: qcom: pmic_glink: Introduce altmode support")
+> 
+> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+> ---
+This is the third revision of this patch, please version them accordingly.
 
+You can pass `-vN` to git format-patch and it'll do the job for you.
+
+Please also describe the changes since last revision below the --- line.
+
+Konrad
+
+>  drivers/soc/qcom/pmic_glink_altmode.c | 27 ++++++++++++++++++---------
+>  1 file changed, 18 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
+> index df48fbea4b68..a7fc6570fa1e
+> --- a/drivers/soc/qcom/pmic_glink_altmode.c
+> +++ b/drivers/soc/qcom/pmic_glink_altmode.c
+> @@ -395,7 +395,7 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
+>  		ret = fwnode_property_read_u32(fwnode, "reg", &port);
+>  		if (ret < 0) {
+>  			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
+> -			return ret;
+> +			goto err_node_put;
+>  		}
+>  
+>  		if (port >= ARRAY_SIZE(altmode->ports)) {
+> @@ -405,7 +405,8 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
+>  
+>  		if (altmode->ports[port].altmode) {
+>  			dev_err(dev, "multiple connector definition for port %u\n", port);
+> -			return -EINVAL;
+> +			ret = -EINVAL;
+> +			goto err_node_put;
+>  		}
+>  
+>  		alt_port = &altmode->ports[port];
+> @@ -420,33 +421,37 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
+>  
+>  		ret = devm_drm_bridge_add(dev, &alt_port->bridge);
+>  		if (ret)
+> -			return ret;
+> +			goto err_node_put;
+>  
+>  		alt_port->dp_alt.svid = USB_TYPEC_DP_SID;
+>  		alt_port->dp_alt.mode = USB_TYPEC_DP_MODE;
+>  		alt_port->dp_alt.active = 1;
+>  
+>  		alt_port->typec_mux = fwnode_typec_mux_get(fwnode);
+> -		if (IS_ERR(alt_port->typec_mux))
+> -			return dev_err_probe(dev, PTR_ERR(alt_port->typec_mux),
+> +		if (IS_ERR(alt_port->typec_mux)) {
+> +			ret = dev_err_probe(dev, PTR_ERR(alt_port->typec_mux),
+>  					     "failed to acquire mode-switch for port: %d\n",
+>  					     port);
+> +			goto err_node_put;
+> +		}
+>  
+>  		ret = devm_add_action_or_reset(dev, pmic_glink_altmode_put_mux,
+>  					       alt_port->typec_mux);
+>  		if (ret)
+> -			return ret;
+> +			goto err_node_put;
+>  
+>  		alt_port->typec_switch = fwnode_typec_switch_get(fwnode);
+> -		if (IS_ERR(alt_port->typec_switch))
+> -			return dev_err_probe(dev, PTR_ERR(alt_port->typec_switch),
+> +		if (IS_ERR(alt_port->typec_switch)) {
+> +			ret = dev_err_probe(dev, PTR_ERR(alt_port->typec_switch),
+>  					     "failed to acquire orientation-switch for port: %d\n",
+>  					     port);
+> +			goto err_node_put;
+> +		}
+>  
+>  		ret = devm_add_action_or_reset(dev, pmic_glink_altmode_put_switch,
+>  					       alt_port->typec_switch);
+>  		if (ret)
+> -			return ret;
+> +			goto err_node_put;
+>  	}
+>  
+>  	altmode->client = devm_pmic_glink_register_client(dev,
+> @@ -455,6 +460,10 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
+>  							  pmic_glink_altmode_pdr_notify,
+>  							  altmode);
+>  	return PTR_ERR_OR_ZERO(altmode->client);
+> +
+> +err_node_put:
+> +	fwnode_handle_put(fwnode);
+> +	return ret;
+>  }
+>  
+>  static const struct auxiliary_device_id pmic_glink_altmode_id_table[] = {
