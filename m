@@ -2,152 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE705718E13
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBB5718E16
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjEaWIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 18:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
+        id S230400AbjEaWIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 18:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjEaWIC (ORCPT
+        with ESMTP id S230321AbjEaWIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 18:08:02 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2136.outbound.protection.outlook.com [40.107.94.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB7713D;
-        Wed, 31 May 2023 15:07:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=azAxcQ1ntLuL7H0fBvMvdLboy3/jiL7TLYjo3SzHhUna4I3RO8hcb0krnXPMZOagZ1uphCSF1s2qEKnrRIN8tpoYw0QQ2qMxJvwnVEmC9VnUFNTEKaAq6RxLRxObJplvMBJ5Z6MgQH3tMclSI0gyxjtMk9AddK8Tw0UItB9jPJ/5rxMUouFJg4lttxnhAf1B9H+sb48ueBZ+QjHdosYsMOsvPfqKaMpf6FkCdWaODXE1HKla7JmkM/5ia4u2OtW+XQWrdG6wtdJ7RFNksHLspH+iN1GQ2OfWgYmmKXGinORYWMP2gYGu/uZRJhF4dv7+OMvNLnJGRtTGcqLoFsOgww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wrenAkhCiiCTq7TASwo5WBotvHiqkQ7Ogs4rwyqGDm4=;
- b=ghr1SLsNPi1IAhzhaq/XAjJRv7+72YMqapo3xBGuGo9isoVKtshHAWbfSiaxe5C8UYT3cEvdeAiFXK1A7xruJDVNtFdA+V3T3zROjRKUbj38yVucwSHiLRkoyBmVQrXXCONfZ9ggX3zCYZ6u96kJiA5G78dSeOvZwmhBRUEfVgDIx3BQ2HKvUtqWBbQhB4fe6QZQDrKcYpIPbL1pRDXz9PafOq2wmTp0PNeFDrBrrn1zKaHR9m8dk4QOva808PyOloc/xnj6yjnSOfZdxS/aoVbSK/GgRrumf2P3lSMQ8wIj+QBOx2vcPS+uDcvIuR2efyy9Wg6H+inxTa0Thf5XUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Wed, 31 May 2023 18:08:36 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D601B7
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:08:18 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f7fd59bb13so57674841cf.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:08:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wrenAkhCiiCTq7TASwo5WBotvHiqkQ7Ogs4rwyqGDm4=;
- b=uTGioQGMA4e8zfDSP325fVN/d3p3WUXShEp9ztIDc1gGUG9TuLiGczxRvF6gNCLhHxbrX/AWhhthOfWcsJxYtavO4VjYlQ91a/LHFT0EMvmt3xeHb7h6DL0LEpvhgHnFxpaeEv8/5XOPylaQaCLinPtcKtquuXDUylrJnCgbvIM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CO1PR13MB4950.namprd13.prod.outlook.com (2603:10b6:303:f5::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Wed, 31 May
- 2023 22:07:46 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.024; Wed, 31 May 2023
- 22:07:46 +0000
-Date:   Thu, 1 Jun 2023 00:07:39 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Bert Karwatzki <spasswolf@web.de>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v3] net: ipa: Use correct value for IPA_STATUS_SIZE
-Message-ID: <ZHfFK0+lgv2pSkFb@corigine.com>
-References: <e144386d-e62a-a470-fcf9-0dab6f7ab837@linaro.org>
- <20230531103618.102608-1-spasswolf@web.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531103618.102608-1-spasswolf@web.de>
-X-ClientProxiedBy: AM0PR01CA0178.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:aa::47) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=joelfernandes.org; s=google; t=1685570897; x=1688162897;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a9UmohLXWQfSsyaexxE0Gnc7j5lYDh6s2uLniOqWFR8=;
+        b=maER3qwKrfySMzpZBIGNPSz0QucIMJOWJ/8tXglPc9i7Eku9bOpQiPUJnfXjKF78uU
+         CQpfI7d5My1BnbVmZo1nSUnkPn4GtVqJG9hnLkY7GlpqDc8M5bx5nWL4TJAiebzPUX09
+         otCg7pZYzL0vgu0/5rXeR00m+NAgieXxUZy+Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685570897; x=1688162897;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a9UmohLXWQfSsyaexxE0Gnc7j5lYDh6s2uLniOqWFR8=;
+        b=kpiGYQ1cqLMvzRQtSyE6qF/xJqe/jUcG0Tco3dXw7Ui025BrhIucRFEHl6xSDwHdCk
+         QbAj7r4AeTIpzZF+D+1PPPPwziVtfF3S3+/f5UYWVdJ3k6qMe2TdSc0SqPB8544Fi4SC
+         /soWJ8WScfFt/M5eqMtGI5oexJNPr6BUqG4dv518ugYbQiW1QuOGo9s6nL9X4wmuidTc
+         ZvN10hcu13LRX/lBy/2hRYjzdXuWZL9yogmLPXL1GN7OvvajcQY3kuRM8tpbL6rpbWXF
+         wWqWl1OP6Ub/YCgvnNqMms61DQi8Ckbj+h8B2SjRYM5qwdqZaIv5xgTIyXjoMp/0i51q
+         QidA==
+X-Gm-Message-State: AC+VfDwjRi8oSLPGYnXk9rQ7DtlkN7BBrzFXFanZ89TwQjsGfuleM46u
+        s4GTYe+XYj03ZiPdqxRZ3/DXmEstU1HVJ+9AD5g=
+X-Google-Smtp-Source: ACHHUZ4KJUIxH9kd325Fiaf0aLOebkiLTME5jx55cOnJ2WGeirOZcbDBH1RpvtjvBg3BOaOH0jDlUQ==
+X-Received: by 2002:ac8:594d:0:b0:3f3:9240:3265 with SMTP id 13-20020ac8594d000000b003f392403265mr8248942qtz.49.1685570896987;
+        Wed, 31 May 2023 15:08:16 -0700 (PDT)
+Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id f2-20020ac87f02000000b003f6b0f4126fsm6666172qtk.8.2023.05.31.15.08.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 15:08:16 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Vineeth Pillai <vineeth@bitbyteword.org>
+Subject: [PATCH v4 0/7] Optimize mremap during mutual alignment within PMD
+Date:   Wed, 31 May 2023 22:08:00 +0000
+Message-ID: <20230531220807.2048037-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CO1PR13MB4950:EE_
-X-MS-Office365-Filtering-Correlation-Id: ca1e0f1f-698c-49f6-ba64-08db622376e8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ycOT9MjtxAsRZ0thUPEAVEh81JJ4DX1YgSAIaJ2eWe413FVZAcwA5CLIrN/L3ul2LLX911Nne/2SIxFPoqnsdVJ/eiLIbiOBqRxRK8k1sAOMCFvY+hmy1bXGF/Ea0Zm5i0BqKDFoVkiw2qiGqE8VtGx1zwfpfje+SCkY7rMzrT6RjQhu9LhgKJLRZThfFSGUS9El3KsGE7Qu5pN58x7sMRCuTr3cxKhb13bPrqrQekhMB+iBvO2wq5HoHYqTZPRTP4zwsSpGx+7NsPVxMfz4ItJPJG0YjtpmmRSzG9B8m/glAliceXnzU4XnPPFGgnRX6ypvxtKbtA2DEYsRBAxi3mUdbdXtE/kHZm9NR7GY5i5UvOB5gmBCCQ08XZUeIDc1haxwIdQ/80d4cTOtIse+D1l0j//m22uVLAt2sD3yRWo8tFWU6L6bqO9qW3uCNFBphtG4NDp4ihtialbkLMmsY+OPQoq5kmARm9FS/0NMiuDT111ds1sMEamOYLVfccEgPAgmcpGlSs+94WtGQWjWxvVil4pLTG/sonEdru6qvCF/HofMhzP1Lrw0CFnbCYyBROEgcBjD5hNOoTX9JTZzMEKLu32X0/Q+Owb4HjqHJbU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(39840400004)(366004)(396003)(451199021)(44832011)(66556008)(66946007)(66476007)(6916009)(8936002)(4326008)(316002)(41300700001)(8676002)(5660300002)(2906002)(6486002)(6666004)(478600001)(6512007)(6506007)(83380400001)(36756003)(186003)(26005)(86362001)(2616005)(38100700002)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?g57HYgTO5Qd+e3TN54s8FOYZViWEbDhhVOVC0N2WDA4WmN03kGLGFyxko5ex?=
- =?us-ascii?Q?zh+w4WZiQGjvc/Wi+3rPIHgz4+CTl1pYC1VOL4UHY/S2WPYjeT9/IR2gtNM2?=
- =?us-ascii?Q?i+L4iFQZyUqCdJ4wp+3cw8I4qXK8znA1Em1yLLHP0lbzBGa4sIoC+vOT3uPw?=
- =?us-ascii?Q?8Ueki4sf5zYAf/4IoSqFIjCee7Q5rGGrWeTe22EXNJ7bt78ewnUMxuYc2PlH?=
- =?us-ascii?Q?uU32QX5hQQ1ZJyfzcnuB/eRaow/fjIZItwAOQLCUI0yChZhz8Sgd8lFnMXJa?=
- =?us-ascii?Q?ApXATtAAOzq6RLcyEJ1H+5fI6a9Vwpf5m7vhSv8dV0aMzX2cntOJbyPmj+Z7?=
- =?us-ascii?Q?FoWy9oA1xp7UlH46jcUCJ4MspuY3xIH6vZmbFcFHY4KAQfOPj6PxgtNavBzf?=
- =?us-ascii?Q?ywOT/CMU+O2JuISddS8Qq5Z57qGgnSun3VmZO7Zzzc3EsuxCflQMWudSm5tu?=
- =?us-ascii?Q?KuLM54ygsAAFs2kwsR5gCPeBPOdoDEzwpgk3EBRSUwOCZFpQPYIOelMX7iL5?=
- =?us-ascii?Q?qZCRBlmp81LA/qG0YLSVqc30t1oHagsxB2XBaorwP/V9DtKrQANnyBiZohIE?=
- =?us-ascii?Q?QC6kTB47rzKL7YvUiMLVm5yhlKBpmfljmS/MzH3awoFfffLte7k9yd5NWoS3?=
- =?us-ascii?Q?LypdYHvoAihCDt/CwQ+gyVoXGRerVkA0Zwsprn2stK4ddDKF6koPjv/Kl6D+?=
- =?us-ascii?Q?NHvTEWwcawyrkPClXIcCyheApiHUfXc17vMZ7eQwYca4hfPYM9Tfjr/0xfHM?=
- =?us-ascii?Q?Ou+NsAzdU75VapIlx9890Wg9gMxAfxGb9SsoQbiDLyZp4jFh+azfkQxMQDAr?=
- =?us-ascii?Q?9xJKyuqYyJintXsSOJC40JsnkoR1HJbkLeEO4Y1+BM9jJtpG2Vk3aaLlkBT7?=
- =?us-ascii?Q?OrNtmuvSvSjwWYHrH3nJzh/nTM6pV8vPOn7mPUg5hFPx28Q+wwB8cvirEbtz?=
- =?us-ascii?Q?du5HsSjN8pyzAfO0+Zkd75ahnMbyEnNypmCW10Coyz1gg3t00RHM8OWd3LaW?=
- =?us-ascii?Q?piIKZqQsrvENvnKekCfIlTdrPgRFvoMinwVvAlIJxTkc+coBh2QehTeFWzwE?=
- =?us-ascii?Q?QW08vckLcLdMxbNwP1nYTG6Cj00r2V4HJ8WOG+9sqo2FhC2iOQF3YkPBNQzE?=
- =?us-ascii?Q?kusY/rLGWo4E0U9DA7kWQKRyjCWd2p3VMWCSzyiy2rXjOxfe5jLmhpv+O2Xh?=
- =?us-ascii?Q?AzHoLulxUQuzQ/Te3uU1ns015EXYhn8em63Rc68GQ7GV1N2yhyeHAun5QQ6K?=
- =?us-ascii?Q?jjc8L0EJZNFvlg0zfcfk1dL8Txn2gKAhXObmkcN7R6CAO84bUfv6I2UX3Es+?=
- =?us-ascii?Q?UuW45rk7ZX1vHgQtHNH+yvItn/2WUC/3xE9eMN9sdiINzBGxMJ9NsTQnmFhN?=
- =?us-ascii?Q?Iwjvf2Ja1MVvnxYLnCsLSHfuGsQU0BPX2VDOlnwBaAOK5KOGI7q5Du0GSe71?=
- =?us-ascii?Q?NE3d+X1CPp3erMHZoR6UdtiJkt2HMmcpCGeQsur/OiwZbDwb7k4w/VpbvRwg?=
- =?us-ascii?Q?Nm2oPF3ad42tg9irOe+V32eIDiCW2vdl0KoxiWexPtIg1oOviwQnC3OcFRjR?=
- =?us-ascii?Q?0rGIcXWpm9nTwsSTOAgdNvJrbD+8sR6ST7HK/isSNGT7c4ELKq1+vkKZzvGN?=
- =?us-ascii?Q?0w=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca1e0f1f-698c-49f6-ba64-08db622376e8
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 22:07:46.2643
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JJ86k4bQlvPho0dAXB/WGqIDGHf0RNNRc5W7O/ANrF8MLSp+YbZbvLlUhWNTUj10hd/Cd7SHsylqeE6k0Pzd9N7iC59j4tRXDlCtHPNp2uo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR13MB4950
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 12:36:19PM +0200, Bert Karwatzki wrote:
-> IPA_STATUS_SIZE was introduced in commit b8dc7d0eea5a as a replacement
-> for the size of the removed struct ipa_status which had size
-> sizeof(__le32[8]). Use this value as IPA_STATUS_SIZE.
-> 
-> Fixes: b8dc7d0eea5a ("net: ipa: stop using sizeof(status)")
-> Signed-off-by: Bert Karwatzki <spasswolf@web.de>
-> ---
->  drivers/net/ipa/ipa_endpoint.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
-> index 2ee80ed140b7..afa1d56d9095 100644
-> --- a/drivers/net/ipa/ipa_endpoint.c
-> +++ b/drivers/net/ipa/ipa_endpoint.c
-> @@ -119,7 +119,7 @@ enum ipa_status_field_id {
->  };
-> 
->  /* Size in bytes of an IPA packet status structure */
-> -#define IPA_STATUS_SIZE			sizeof(__le32[4])
-> +#define IPA_STATUS_SIZE			sizeof(__le32[8])
-> 
->  /* IPA status structure decoder; looks up field values for a structure */
->  static u32 ipa_status_extract(struct ipa *ipa, const void *data,
-> --
-> 2.40.1
-> 
-> As none of you seem to be in Europe, I'll do another attempt, this time
-> with git send-email.
+Hello!
 
-This looks good to me.
+Here is v4 of the mremap start address optimization / fix for exec warning.  It
+took me a while to write a test that catches the issue me/Linus discussed in
+the last version. And I verified kernel crashes without the check. See below.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+The main changes in this series is:
+Care to be taken to move purely within a VMA, in other words this check
+   in call_align_down():
+    if (vma->vm_start != addr_masked)
+            return false;
 
-(somewhere in Europe)
+    As an example of why this is needed:
+    Consider the following range which is 2MB aligned and is
+    a part of a larger 10MB range which is not shown. Each
+    character is 256KB below making the source and destination
+    2MB each. The lower case letters are moved (s to d) and the
+    upper case letters are not moved.
+
+    |DDDDddddSSSSssss|
+
+    If we align down 'ssss' to start from the 'SSSS', we will end up destroying
+    SSSS. The above if statement prevents that and I verified it.
+
+    I also added a test for this in the last patch.
+
+History of patches
+==================
+v3->v4:
+1. Make sure to check address to align is beginning of VMA
+2. Add test to check this (test fails with a kernel crash if we don't do this).
+
+v2->v3:
+1. Masked address was stored in int, fixed it to unsigned long to avoid truncation.
+2. We now handle moves happening purely within a VMA, a new test is added to handle this.
+3. More code comments.
+
+v1->v2:
+1. Trigger the optimization for mremaps smaller than a PMD. I tested by tracing
+that it works correctly.
+
+2. Fix issue with bogus return value found by Linus if we broke out of the
+above loop for the first PMD itself.
+
+v1: Initial RFC.
+
+Description of patches
+======================
+These patches optimizes the start addresses in move_page_tables() and tests the
+changes. It addresses a warning [1] that occurs due to a downward, overlapping
+move on a mutually-aligned offset within a PMD during exec. By initiating the
+copy process at the PMD level when such alignment is present, we can prevent
+this warning and speed up the copying process at the same time. Linus Torvalds
+suggested this idea.
+
+Please check the individual patches for more details.
+
+thanks,
+
+ - Joel
+
+[1] https://lore.kernel.org/all/ZB2GTBD%2FLWTrkOiO@dhcp22.suse.cz/
+
+Joel Fernandes (Google) (7):
+mm/mremap: Optimize the start addresses in move_page_tables()
+mm/mremap: Allow moves within the same VMA for stack
+selftests: mm: Fix failure case when new remap region was not found
+selftests: mm: Add a test for mutually aligned moves > PMD size
+selftests: mm: Add a test for remapping to area immediately after
+existing mapping
+selftests: mm: Add a test for remapping within a range
+selftests: mm: Add a test for moving from an offset from start of
+mapping
+
+fs/exec.c                                |   2 +-
+include/linux/mm.h                       |   2 +-
+mm/mremap.c                              |  63 ++++-
+tools/testing/selftests/mm/mremap_test.c | 301 +++++++++++++++++++----
+4 files changed, 319 insertions(+), 49 deletions(-)
+
+--
+2.41.0.rc2.161.g9c6817b8e7-goog
 
