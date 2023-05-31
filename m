@@ -2,152 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E477172B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 02:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BB57172BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 02:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233626AbjEaAm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 20:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56672 "EHLO
+        id S233558AbjEaAtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 20:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbjEaAmz (ORCPT
+        with ESMTP id S231962AbjEaAth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 20:42:55 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265359C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 17:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685493773; x=1717029773;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=d4GXZlBoYDVbcqgz3R1ywl5RVrrhSIL0nJ1zmsfc+fw=;
-  b=bmJXY/AlhOcxocUqcZEX/Awmtc41uyg3WsAE0bIHjx5o73qdu8bNj8Vh
-   sNC/iZeMa8i/isxexE18QJ/CJTJtkeYdTC0w27ToRvPC8ES6uvxEmGlDJ
-   5N3c36jM3IshYS7wxwBGE/+1c7JWHCU2bXgKpYZIE1Fb5WZz0wKb/2MgW
-   5Wq72EAk2cKecmAbREd5OLW0RMESYPG6d0lolMAP/5GCjb0Nxxaqt6OZl
-   Tg1sN5PwnI3gjMQCHdAv37RerkjFW2hLm/LQbEXqmsKT71Y3drMk4Fih3
-   wfMH1GF01jRgoNSG39ul5XZmwYg4xf+Zdj+Iuztsy+r/ejkVeDhfvAJ74
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="344593761"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="344593761"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 17:42:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="706656930"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="706656930"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 30 May 2023 17:42:51 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q49vO-0000w7-11;
-        Wed, 31 May 2023 00:42:50 +0000
-Date:   Wed, 31 May 2023 08:42:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/fam01-next20230530 9/9]
- include/linux/fortify-string.h:57:33: warning: writing 16 bytes into a
- region of size 0
-Message-ID: <202305310834.1iGa1DB5-lkp@intel.com>
+        Tue, 30 May 2023 20:49:37 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AF1A0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 17:49:36 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64d1a0d640cso3894692b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 17:49:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685494176; x=1688086176;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BPd2wyhAkJ3YpAxbQZ8ec8dh+1Dyphp7NWb1XFVf7wI=;
+        b=WTADF+8ozE5wQEi8qcNO0PrWAPOAPAuNFYF0z/kGb3DV6REuux6tsP26CjIqmR6TTo
+         QElBuAOLQD2AxZa/enpBVgup4LGMFXEe4RN3JUSxG/7YPADZ3ZvYemVWq6A1QduR5mJW
+         wKi+00F/Dnzxv0tmwGb4JV3luyBNbU5TneTpY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685494176; x=1688086176;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BPd2wyhAkJ3YpAxbQZ8ec8dh+1Dyphp7NWb1XFVf7wI=;
+        b=TWkCdw8isecmZuSL6REv0dSmA1dww2r6iRpCj+wiCqK3PdmpqQfQvD95DiBEQ3xyMb
+         T6pLlKYBECP8witvFqD7lGTFiVmmrtxO4TnhAEtVb5zF9R2AOA08mAGRAGmC1rR7B4fr
+         PHRC3iPomHPlSY4XY518c7duh5regF8C+nnLPax0hkW1It6Y1icG468hQ3XfW2jfg/7i
+         d7qaK8+GQqZExrVsZFBXaliqzybxYtVBxR6XlAPOIH8fzy7W3q/lD2N/b2wU7im1l9zy
+         21I2ZkvV9wXJTqeM/qvYCxiAsrZsjIBtq+edtiFT6g2liIO3y9xynD5RE0QznzERWVCX
+         gmAQ==
+X-Gm-Message-State: AC+VfDzlMYWmHvOfnGgqb893qvAwkXDA24OuPB8+8DPSLDGxtyYrLMn0
+        aboTHXqpl8XMh5lo3JadDMKFiw0Q0IZglhPkRkA=
+X-Google-Smtp-Source: ACHHUZ49GdfBCckWeF+aIJZlU6nfDm5RqPdtw15ZUoPOaiLu9XfgLdDKJvGH0ie0FlxYU9qSUpn+sQ==
+X-Received: by 2002:a05:6a20:6a25:b0:106:4197:b7ff with SMTP id p37-20020a056a206a2500b001064197b7ffmr4699373pzk.30.1685494175985;
+        Tue, 30 May 2023 17:49:35 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id z5-20020aa791c5000000b0064fabbc047dsm2225131pfa.55.2023.05.30.17.49.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 17:49:35 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Andy Whitcroft <apw@canonical.com>
+Cc:     Kees Cook <keescook@chromium.org>, Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v4] checkpatch: Check for 0-length and 1-element arrays
+Date:   Tue, 30 May 2023 17:49:32 -0700
+Message-Id: <20230531004929.you.436-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1845; h=from:subject:message-id; bh=GEL21VHX48Hc+3Yj+QiYsS2aI6hXB6UbODJ0k2u5hZU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBkdpmcAHbDJqm8gmIbZ6eiJbOuoOVyek8OiALo7epp v8CgkPiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZHaZnAAKCRCJcvTf3G3AJsz/D/ 9UfeZNwPnNevZIHxAWOgNFu4kL49PAOf+nK0hZ2LpSWUM2mQQwbPwRGVz8PnWRRuzoN1lnwg7Zvhli DA+iwi8jdhznEBiOk5MWeQsWDuUOCKrBRfsy5JMbAx/8+7m6nGF6GosRv2974fVJ37rDSiWB/vSFm7 YwIaRUjSqXWMiGHovT0yrFbZlSwvvWIGYHtrdw1yQQ8s7Fisp1q7qKJm/LTAuZs8KMO1NLqhvZkNck o3pgcN/94V6g5p13xW99fABw44AlXSZ/mJD+gyQuxzdqO6QNZxT9t2vLLBSOP32IPWdRl+fWxWuycG aW4d5tGX3wGCQIsKcF5pRTq2vakex5WyTZx7/4XwKcNiWB7dGwR3nQ/TbyAMV7+nGcOLYSADMYY3Ti lU899gVrqYiRCki4W/HEzs2magklp8/hzFIEjlycXo0gL5p4Js0kZPAXUvfg9dKZwAWcu6+kxpi5eM 3hQkrl2I3+kzFv8lKvpESHebqYVRULZNUCRfa/VQ2rUeWhcAuj/gtprlSrCZHToWIfNxI8AGWz6ulV L1vNk8tSBFa+ES3UmTtpvu2kuZKjvbO8GmJG+jg8/slxuM3YZzAyML6QTb9zRHgrL6X1hrJeIPOxoZ v9O9MUvSq1pwmkXL3GaczkgNd+D5rEM9TENWvwU5HTF7QG6troisOg3bDf/Q==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230530
-head:   a2e8533878017f1874b21d78b6bf08a6c4095365
-commit: a2e8533878017f1874b21d78b6bf08a6c4095365 [9/9] Makefile: Globally enable -Wstringop-overflow
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230531/202305310834.1iGa1DB5-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=a2e8533878017f1874b21d78b6bf08a6c4095365
-        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
-        git fetch --no-tags gustavoars testing/fam01-next20230530
-        git checkout a2e8533878017f1874b21d78b6bf08a6c4095365
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash fs/omfs/
+Fake flexible arrays have been deprecated since last millennium. Proper
+C99 flexible arrays must be used throughout the kernel so
+CONFIG_FORTIFY_SOURCE and CONFIG_UBSAN_BOUNDS can provide proper array
+bounds checking.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305310834.1iGa1DB5-lkp@intel.com/
+Cc: Andy Whitcroft <apw@canonical.com>
+Cc: Joe Perches <joe@perches.com>
+Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>
+Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20230517204530.never.151-kees@kernel.org
+---
+v4:
+ - combine errors (joe)
+ - switch to kerndoc url (joe)
+ - add __packed for struct matching (joe)
+v3: https://lore.kernel.org/r/20230527020929.give.261-kees@kernel.org
+v2: https://lore.kernel.org/lkml/20230526173921.gonna.349-kees@kernel.org
+v1: https://lore.kernel.org/lkml/20230517204530.never.151-kees@kernel.org
+---
+ scripts/checkpatch.pl | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/string.h:254,
-                    from include/linux/bitmap.h:11,
-                    from include/linux/cpumask.h:12,
-                    from include/linux/smp.h:13,
-                    from arch/arm64/include/asm/arch_timer.h:18,
-                    from arch/arm64/include/asm/timex.h:8,
-                    from include/linux/timex.h:67,
-                    from include/linux/time32.h:13,
-                    from include/linux/time.h:60,
-                    from arch/arm64/include/asm/stat.h:12,
-                    from include/linux/stat.h:6,
-                    from include/linux/module.h:13,
-                    from fs/omfs/file.c:7:
-   fs/omfs/file.c: In function 'omfs_grow_extent':
->> include/linux/fortify-string.h:57:33: warning: writing 16 bytes into a region of size 0 [-Wstringop-overflow=]
-      57 | #define __underlying_memcpy     __builtin_memcpy
-         |                                 ^
-   include/linux/fortify-string.h:648:9: note: in expansion of macro '__underlying_memcpy'
-     648 |         __underlying_##op(p, q, __fortify_size);                        \
-         |         ^~~~~~~~~~~~~
-   include/linux/fortify-string.h:693:26: note: in expansion of macro '__fortify_memcpy_chk'
-     693 | #define memcpy(p, q, s)  __fortify_memcpy_chk(p, q, s,                  \
-         |                          ^~~~~~~~~~~~~~~~~~~~
-   fs/omfs/file.c:170:9: note: in expansion of macro 'memcpy'
-     170 |         memcpy(terminator, entry, sizeof(struct omfs_extent_entry));
-         |         ^~~~~~
-   In file included from fs/omfs/omfs.h:8,
-                    from fs/omfs/file.c:11:
-   fs/omfs/omfs_fs.h:80:34: note: at offset 16 into destination object 'e_entry' of size 16
-      80 |         struct omfs_extent_entry e_entry;       /* start of extent entries */
-         |                                  ^~~~~~~
-
-
-vim +57 include/linux/fortify-string.h
-
-78a498c3a227f2 Alexander Potapenko 2022-10-24  46  
-78a498c3a227f2 Alexander Potapenko 2022-10-24  47  #if defined(__SANITIZE_MEMORY__)
-78a498c3a227f2 Alexander Potapenko 2022-10-24  48  /*
-78a498c3a227f2 Alexander Potapenko 2022-10-24  49   * For KMSAN builds all memcpy/memset/memmove calls should be replaced by the
-78a498c3a227f2 Alexander Potapenko 2022-10-24  50   * corresponding __msan_XXX functions.
-78a498c3a227f2 Alexander Potapenko 2022-10-24  51   */
-78a498c3a227f2 Alexander Potapenko 2022-10-24  52  #include <linux/kmsan_string.h>
-78a498c3a227f2 Alexander Potapenko 2022-10-24  53  #define __underlying_memcpy	__msan_memcpy
-78a498c3a227f2 Alexander Potapenko 2022-10-24  54  #define __underlying_memmove	__msan_memmove
-78a498c3a227f2 Alexander Potapenko 2022-10-24  55  #define __underlying_memset	__msan_memset
-78a498c3a227f2 Alexander Potapenko 2022-10-24  56  #else
-a28a6e860c6cf2 Francis Laniel      2021-02-25 @57  #define __underlying_memcpy	__builtin_memcpy
-a28a6e860c6cf2 Francis Laniel      2021-02-25  58  #define __underlying_memmove	__builtin_memmove
-a28a6e860c6cf2 Francis Laniel      2021-02-25  59  #define __underlying_memset	__builtin_memset
-78a498c3a227f2 Alexander Potapenko 2022-10-24  60  #endif
-78a498c3a227f2 Alexander Potapenko 2022-10-24  61  
-
-:::::: The code at line 57 was first introduced by commit
-:::::: a28a6e860c6cf231cf3c5171c75c342adcd00406 string.h: move fortified functions definitions in a dedicated header.
-
-:::::: TO: Francis Laniel <laniel_francis@privacyrequired.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 30b0b4fdb3bf..64d21b6aa6df 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -7430,6 +7430,16 @@ sub process {
+ 			}
+ 		}
+ 
++# check for array definition/declarations that should use flexible arrays instead
++		if ($sline =~ /^[\+ ]\s*}\s*;\s*$/ &&
++		    $prevline =~ /^\+\s*(?:\}(?:\s*__packed\s*)?|$Type)\s*$Ident\s*\[\s*(0|1)\s*\]\s*;\s*$/) {
++			if (ERROR("FLEXIBLE_ARRAY",
++				  "Use C99 flexible arrays - see https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays\n" . $hereprev) &&
++			    $1 == '0' && $fix) {
++				$fixed[$fixlinenr - 1] =~ s/\[\s*0\s*\]/[]/;
++			}
++		}
++
+ # nested likely/unlikely calls
+ 		if ($line =~ /\b(?:(?:un)?likely)\s*\(\s*!?\s*(IS_ERR(?:_OR_NULL|_VALUE)?|WARN)/) {
+ 			WARN("LIKELY_MISUSE",
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
