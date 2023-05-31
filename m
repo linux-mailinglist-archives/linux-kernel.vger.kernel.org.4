@@ -2,187 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8AA2717FBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3661717FC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbjEaMTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
+        id S234881AbjEaMVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjEaMTr (ORCPT
+        with ESMTP id S229765AbjEaMVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:19:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EDC10F;
-        Wed, 31 May 2023 05:19:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 31 May 2023 08:21:48 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF7A10F;
+        Wed, 31 May 2023 05:21:46 -0700 (PDT)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69CD763889;
-        Wed, 31 May 2023 12:19:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9880C433D2;
-        Wed, 31 May 2023 12:19:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685535584;
-        bh=MOaDbL+NiO4OhRTPz+e/kwwin5a8AKAbdpTTLVge0Yo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AHeTiweYFXX2P52j7l6i6MADs9RfXctsbgXrUNXzzXe/FKKVpRY7rB1lIx5Vt/S26
-         ikZYC6v6fSKWlTpS/8cIdBqORXNwLP3Mqd2TDF7SOjX93x3qtDNvwCe8h/B8EZuAOO
-         lBI7Ycu/DIcutr2uBZirHiStlzt1x+6LY/0qYt2IjdWQLPXh+dC8WIA8qVvpdjfJAs
-         4pzzBiYqRUcauM9SNwCykBOSC2YwtoxqPr6gTBens6KnVmEYoie6kcvlvIT/9y7ddd
-         +QQgNTEfWR86l/OAvcdq+PRpf2n3OU/qvSfjv35Y8//vA/km+M2tTUMjFyAyRVfxAh
-         5U0QsHi7EqegA==
-Message-ID: <90e94292-4300-e7f0-1a37-72a5c3bd77dc@kernel.org>
-Date:   Wed, 31 May 2023 14:19:40 +0200
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 568DC41E12;
+        Wed, 31 May 2023 12:21:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1685535704;
+        bh=2RCEej4K5XPwpOdjmGnUsEFbXkDnSBYDQGM0QVWDj1s=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=L5DSDLE/du/kQdCq1yNvvc3K4Gx6NmH+18ZvXkQ7sjp9P4es8/Q++47hs8diF+nVm
+         wjk7Y8VH3VTf/gbt8XDwXbkyfKiJpZvL26u6vQWVIIzmdg9z96gCw+MxolgGQIVJVo
+         Xw7O7DSXWwDF5W/wgNgxF0CfPBGk2UzvZnhooZukpTuPwuKBGqfDb9TWxbdUXkxjNq
+         jTYMMDOmPyooRTUgQtnpZore5X+A0hgQyLi64VrUEv491y107FUwtZ4KduESsupr75
+         ibLCUDtoTx3Sm41No/ec9i+cR2WuQMr41nsjlpTlOS/DdaCy6MHRfb7fMm/i/4jxYq
+         01Tu6BfbuVfrg==
+Message-ID: <1f35dbba-9344-75c5-e870-31bc3198dbe0@canonical.com>
+Date:   Wed, 31 May 2023 05:21:40 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] soc: qcom: pmic: Fix resource leaks in
- device_for_each_child_node() loops
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] apparmor: aa_buffer: Convert 1-element array to flexible
+ array
 Content-Language: en-US
-To:     =?UTF-8?B?6Lev57qi6aOe?= <luhongfei@vivo.com>,
-        "konradybcio@kernel.org" <konradybcio@kernel.org>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "andersson@kernel.org" <andersson@kernel.org>,
-        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "opensource.kernel" <opensource.kernel@vivo.com>
-References: <TYZPR06MB66976D6A4FC1674574531D45CE489@TYZPR06MB6697.apcprd06.prod.outlook.com>
-From:   Konrad Dybcio <konradybcio@kernel.org>
-In-Reply-To: <TYZPR06MB66976D6A4FC1674574531D45CE489@TYZPR06MB6697.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20230511213441.never.401-kees@kernel.org>
+ <7085879d-4d21-b90a-c08d-60450d1c7d38@canonical.com>
+ <202305301555.102E1890@keescook>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <202305301555.102E1890@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 31.05.2023 12:40, 路红飞 wrote:
-> 
-> On 2023/5/31 17:03, Konrad Dybcio wrote:>
->> On 31.05.2023 10:54, Lu Hongfei wrote:
->>> The device_for_each_child_node loop in pmic_glink_altmode_probe should have
->>> fwnode_handle_put() before return which could avoid resource leaks.
->>> This patch could fix this bug.
+On 5/30/23 15:55, Kees Cook wrote:
+> On Thu, May 11, 2023 at 02:48:29PM -0700, John Johansen wrote:
+>> On 5/11/23 14:34, Kees Cook wrote:
+>>> In the ongoing effort to convert all fake flexible arrays to proper
+>>> flexible arrays, replace aa_buffer's 1-element "buffer" member with a
+>>> flexible array.
 >>>
->>> Fixes: 080b4e24852b ("soc: qcom: pmic_glink: Introduce altmode support")
->>>
->>> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
->>> ---
->> This is the third revision of this patch, please version them accordingly.
+>>> Cc: John Johansen <john.johansen@canonical.com>
+>>> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+>>> Cc: Paul Moore <paul@paul-moore.com>
+>>> Cc: James Morris <jmorris@namei.org>
+>>> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+>>> Cc: apparmor@lists.ubuntu.com
+>>> Cc: linux-security-module@vger.kernel.org
+>>> Signed-off-by: Kees Cook <keescook@chromium.org>
 >>
->> You can pass `-vN` to git format-patch and it'll do the job for you.
+>> Acked-by: John Johansen <john.johansen@canonical.com>
 >>
->> Please also describe the changes since last revision below the --- line.
->>
->> Konrad
-> The latter two versions have added Fixes: tag, without any changes to the
+>> I have pulled this into my tree.
 > 
-> specific content of this patch.
-The commit message is an integral part of the patch, it's not only the 
-diff that matters. Any change deserves a new revision number, unless you
-made a mistake when sending the emails (e.g. you didn't fill out the To:
-and Cc: fields properly), in which case you should use the [RESEND PATCH] tag.
+> Just a quick ping: I haven't seen this show up in -next yet...
+> 
 
-> 
-> Just use the third version of this patch.
-Which I have to dig up by hand from the tens of patches I've received
-since, because you did not specify which one is the third version
-in the title. This also messes with patch workflow tools like b4.
+oop, sorry looks like I didn't push, it should be fixed now
 
-Konrad
-> 
-> Thanks.
-> 
-> Lu Hongfei
-> 
->>>   drivers/soc/qcom/pmic_glink_altmode.c | 27 ++++++++++++++++++---------
->>>   1 file changed, 18 insertions(+), 9 deletions(-)
->>>
->>> diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
->>> index df48fbea4b68..a7fc6570fa1e
->>> --- a/drivers/soc/qcom/pmic_glink_altmode.c
->>> +++ b/drivers/soc/qcom/pmic_glink_altmode.c
->>> @@ -395,7 +395,7 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
->>>   		ret = fwnode_property_read_u32(fwnode, "reg", &port);
->>>   		if (ret < 0) {
->>>   			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
->>> -			return ret;
->>> +			goto err_node_put;
->>>   		}
->>>   
->>>   		if (port >= ARRAY_SIZE(altmode->ports)) {
->>> @@ -405,7 +405,8 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
->>>   
->>>   		if (altmode->ports[port].altmode) {
->>>   			dev_err(dev, "multiple connector definition for port %u\n", port);
->>> -			return -EINVAL;
->>> +			ret = -EINVAL;
->>> +			goto err_node_put;
->>>   		}
->>>   
->>>   		alt_port = &altmode->ports[port];
->>> @@ -420,33 +421,37 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
->>>   
->>>   		ret = devm_drm_bridge_add(dev, &alt_port->bridge);
->>>   		if (ret)
->>> -			return ret;
->>> +			goto err_node_put;
->>>   
->>>   		alt_port->dp_alt.svid = USB_TYPEC_DP_SID;
->>>   		alt_port->dp_alt.mode = USB_TYPEC_DP_MODE;
->>>   		alt_port->dp_alt.active = 1;
->>>   
->>>   		alt_port->typec_mux = fwnode_typec_mux_get(fwnode);
->>> -		if (IS_ERR(alt_port->typec_mux))
->>> -			return dev_err_probe(dev, PTR_ERR(alt_port->typec_mux),
->>> +		if (IS_ERR(alt_port->typec_mux)) {
->>> +			ret = dev_err_probe(dev, PTR_ERR(alt_port->typec_mux),
->>>   					     "failed to acquire mode-switch for port: %d\n",
->>>   					     port);
->>> +			goto err_node_put;
->>> +		}
->>>   
->>>   		ret = devm_add_action_or_reset(dev, pmic_glink_altmode_put_mux,
->>>   					       alt_port->typec_mux);
->>>   		if (ret)
->>> -			return ret;
->>> +			goto err_node_put;
->>>   
->>>   		alt_port->typec_switch = fwnode_typec_switch_get(fwnode);
->>> -		if (IS_ERR(alt_port->typec_switch))
->>> -			return dev_err_probe(dev, PTR_ERR(alt_port->typec_switch),
->>> +		if (IS_ERR(alt_port->typec_switch)) {
->>> +			ret = dev_err_probe(dev, PTR_ERR(alt_port->typec_switch),
->>>   					     "failed to acquire orientation-switch for port: %d\n",
->>>   					     port);
->>> +			goto err_node_put;
->>> +		}
->>>   
->>>   		ret = devm_add_action_or_reset(dev, pmic_glink_altmode_put_switch,
->>>   					       alt_port->typec_switch);
->>>   		if (ret)
->>> -			return ret;
->>> +			goto err_node_put;
->>>   	}
->>>   
->>>   	altmode->client = devm_pmic_glink_register_client(dev,
->>> @@ -455,6 +460,10 @@ static int pmic_glink_altmode_probe(struct auxiliary_device *adev,
->>>   							  pmic_glink_altmode_pdr_notify,
->>>   							  altmode);
->>>   	return PTR_ERR_OR_ZERO(altmode->client);
->>> +
->>> +err_node_put:
->>> +	fwnode_handle_put(fwnode);
->>> +	return ret;
->>>   }
->>>   
->>>   static const struct auxiliary_device_id pmic_glink_altmode_id_table[] = {
