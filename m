@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B26C7183D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E4E7183DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237098AbjEaNwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
+        id S237284AbjEaNws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237244AbjEaNuD (ORCPT
+        with ESMTP id S237290AbjEaNuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:50:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB032D58;
-        Wed, 31 May 2023 06:45:41 -0700 (PDT)
+        Wed, 31 May 2023 09:50:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99C12D7B;
+        Wed, 31 May 2023 06:45:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63ABB63B47;
-        Wed, 31 May 2023 13:45:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23CD7C433EF;
-        Wed, 31 May 2023 13:45:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4410636E2;
+        Wed, 31 May 2023 13:45:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 633A5C433D2;
+        Wed, 31 May 2023 13:45:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540726;
-        bh=qEUsjwhhl3BEEVwSGFW2pv6M333EyUzh6VO+NOAFXjg=;
+        s=k20201202; t=1685540730;
+        bh=wCDJTuhEOznNXw5xC8FsaE2KX5sRtS9zL7OApwbxwMI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aNvIPJ9kJYyglVSddTW9OTn+zIamu05ODw1GNomyLTnZUcFVj/GbaOsGL7uzILuMe
-         m6D19gBpOegdzRU8J0ecWHK1gLAWNAWYLYlLRifw46cGZI/NK9MBR/7sMavW3T8XXL
-         qBKLip9jjlN56DgXLzS/feY/D2qXKm2l+Ksk01qCo1WT1GECbur5Hvkk0aZAttaDnB
-         KQiUsq1nVRhA7HSDHI7nqysQIETkIpSbWZPGYoaeVSkIJ4W1ZfrtLiO1riw46YXV8v
-         U2fLiGOH1x49MdDzUzBKS1j16NabICLJzoSm+Qo16pwVfOxb6EKnqpiUxccNFV+PgL
-         xTzPoEIioRXuw==
+        b=rGtISeRVQA8sMQ3gc1y8revb2ZcrSa0qHs/08eXUkFwCDAmLv96byapZBhAS6ohbV
+         u6gS+x8N6gOkv7Sqes7fxcN3uh2dR9ftzCV1C/2JRmK8lAnTgdrIaGYLq8UQPAAiND
+         EQnlO0i3E9eAMunCdu8enoERveHRsNFlQH+ot8RZkiDCxiM19m9KbRx8eqbHnaW7Ui
+         5jW4BqWMa69Ds1P+Ey12GtkO2anksSChYvIAmtAoBp+pATpOVm6DL3jop5lqn5oRtW
+         2Cnu8fFdcy8wxD7yWkOZqkczxzHZDYrKQ9yVFeCvCZeii7D4Dh42tGFnvNrCeh9622
+         q4GucQr0zreZg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Manuel Lauss <manuel.lauss@gmail.com>,
+Cc:     Liviu Dudau <liviu@dudau.co.uk>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>, linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 14/17] MIPS: Alchemy: fix dbdma2
-Date:   Wed, 31 May 2023 09:44:58 -0400
-Message-Id: <20230531134502.3384828-14-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, yury.norov@gmail.com,
+        Jason@zx2c4.com, nathan@kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 15/17] mips: Move initrd_start check after initrd address sanitisation.
+Date:   Wed, 31 May 2023 09:44:59 -0400
+Message-Id: <20230531134502.3384828-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134502.3384828-1-sashal@kernel.org>
 References: <20230531134502.3384828-1-sashal@kernel.org>
@@ -47,8 +48,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,85 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manuel Lauss <manuel.lauss@gmail.com>
+From: Liviu Dudau <liviu@dudau.co.uk>
 
-[ Upstream commit 2d645604f69f3a772d58ead702f9a8e84ab2b342 ]
+[ Upstream commit 4897a898a216058dec55e5e5902534e6e224fcdf ]
 
-Various fixes for the Au1200/Au1550/Au1300 DBDMA2 code:
+PAGE_OFFSET is technically a virtual address so when checking the value of
+initrd_start against it we should make sure that it has been sanitised from
+the values passed by the bootloader. Without this change, even with a bootloader
+that passes correct addresses for an initrd, we are failing to load it on MT7621
+boards, for example.
 
-- skip cache invalidation if chip has working coherency circuitry.
-- invalidate KSEG0-portion of the (physical) data address.
-- force the dma channel doorbell write out to bus immediately with
-  a sync.
-
+Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/alchemy/common/dbdma.c | 27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
+ arch/mips/kernel/setup.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/arch/mips/alchemy/common/dbdma.c b/arch/mips/alchemy/common/dbdma.c
-index 4ca2c28878e0f..e9ee9ab90a0c6 100644
---- a/arch/mips/alchemy/common/dbdma.c
-+++ b/arch/mips/alchemy/common/dbdma.c
-@@ -30,6 +30,7 @@
-  *
-  */
- 
-+#include <linux/dma-map-ops.h> /* for dma_default_coherent */
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/slab.h>
-@@ -623,17 +624,18 @@ u32 au1xxx_dbdma_put_source(u32 chanid, dma_addr_t buf, int nbytes, u32 flags)
- 		dp->dscr_cmd0 &= ~DSCR_CMD0_IE;
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index 82e44b31aad59..d91b772214b5d 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -190,10 +190,6 @@ static unsigned long __init init_initrd(void)
+ 		pr_err("initrd start must be page aligned\n");
+ 		goto disable;
+ 	}
+-	if (initrd_start < PAGE_OFFSET) {
+-		pr_err("initrd start < PAGE_OFFSET\n");
+-		goto disable;
+-	}
  
  	/*
--	 * There is an errata on the Au1200/Au1550 parts that could result
--	 * in "stale" data being DMA'ed. It has to do with the snoop logic on
--	 * the cache eviction buffer.  DMA_NONCOHERENT is on by default for
--	 * these parts. If it is fixed in the future, these dma_cache_inv will
--	 * just be nothing more than empty macros. See io.h.
-+	 * There is an erratum on certain Au1200/Au1550 revisions that could
-+	 * result in "stale" data being DMA'ed. It has to do with the snoop
-+	 * logic on the cache eviction buffer.  dma_default_coherent is set
-+	 * to false on these parts.
- 	 */
--	dma_cache_wback_inv((unsigned long)buf, nbytes);
-+	if (!dma_default_coherent)
-+		dma_cache_wback_inv(KSEG0ADDR(buf), nbytes);
- 	dp->dscr_cmd0 |= DSCR_CMD0_V;	/* Let it rip */
- 	wmb(); /* drain writebuffer */
- 	dma_cache_wback_inv((unsigned long)dp, sizeof(*dp));
- 	ctp->chan_ptr->ddma_dbell = 0;
-+	wmb(); /* force doorbell write out to dma engine */
+ 	 * Sanitize initrd addresses. For example firmware
+@@ -206,6 +202,11 @@ static unsigned long __init init_initrd(void)
+ 	initrd_end = (unsigned long)__va(end);
+ 	initrd_start = (unsigned long)__va(__pa(initrd_start));
  
- 	/* Get next descriptor pointer. */
- 	ctp->put_ptr = phys_to_virt(DSCR_GET_NXTPTR(dp->dscr_nxtptr));
-@@ -685,17 +687,18 @@ u32 au1xxx_dbdma_put_dest(u32 chanid, dma_addr_t buf, int nbytes, u32 flags)
- 			  dp->dscr_source1, dp->dscr_dest0, dp->dscr_dest1);
- #endif
- 	/*
--	 * There is an errata on the Au1200/Au1550 parts that could result in
--	 * "stale" data being DMA'ed. It has to do with the snoop logic on the
--	 * cache eviction buffer.  DMA_NONCOHERENT is on by default for these
--	 * parts. If it is fixed in the future, these dma_cache_inv will just
--	 * be nothing more than empty macros. See io.h.
-+	 * There is an erratum on certain Au1200/Au1550 revisions that could
-+	 * result in "stale" data being DMA'ed. It has to do with the snoop
-+	 * logic on the cache eviction buffer.  dma_default_coherent is set
-+	 * to false on these parts.
- 	 */
--	dma_cache_inv((unsigned long)buf, nbytes);
-+	if (!dma_default_coherent)
-+		dma_cache_inv(KSEG0ADDR(buf), nbytes);
- 	dp->dscr_cmd0 |= DSCR_CMD0_V;	/* Let it rip */
- 	wmb(); /* drain writebuffer */
- 	dma_cache_wback_inv((unsigned long)dp, sizeof(*dp));
- 	ctp->chan_ptr->ddma_dbell = 0;
-+	wmb(); /* force doorbell write out to dma engine */
- 
- 	/* Get next descriptor pointer. */
- 	ctp->put_ptr = phys_to_virt(DSCR_GET_NXTPTR(dp->dscr_nxtptr));
++	if (initrd_start < PAGE_OFFSET) {
++		pr_err("initrd start < PAGE_OFFSET\n");
++		goto disable;
++	}
++
+ 	ROOT_DEV = Root_RAM0;
+ 	return PFN_UP(end);
+ disable:
 -- 
 2.39.2
 
