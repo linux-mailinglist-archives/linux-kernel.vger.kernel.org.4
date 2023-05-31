@@ -2,85 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8C171788F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83165717891
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234737AbjEaHpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50792 "EHLO
+        id S234497AbjEaHrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234747AbjEaHpr (ORCPT
+        with ESMTP id S233477AbjEaHq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:45:47 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C53C5;
-        Wed, 31 May 2023 00:45:43 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34V7Zxrk024622;
-        Wed, 31 May 2023 07:45:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=5/KPGixHQEe4ArgFn9xQuro6/NX1I/JhlNlISJP6N/g=;
- b=ASaEdO4SJ5kx6FZbMMy+W5H1TOJXkWzsnRlNFDJvZKWwA0oUmkI/sWPpxWCc9vsegBNX
- Mmo7StmKZ/6kAIHwNp5/d2kqR7JE78np/NsGZ895zQMPSxAVtFW1GszMNQHbwMZ2O/gf
- boo4hK3mZmrXPBQQ6okLKaUajg8LbErT8KJ0YxFjk0wrIvVLIIudW0QYCvlk/TafA7/A
- mhKZqieqBW3UIxCP9AMr8ruwh2vTR9llS/2o4Uvr3qR4UNUJAMOJstlajFtf6ozmTcV5
- RxR7WoPHOjoc7rREDSm9/tw/4zuV8dP+LIT53WEynvwZBUSbdII8darzCTamNgi2u32j 0g== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qx1yk00ku-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 07:45:37 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34V7jaIQ024487
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 07:45:36 GMT
-Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 31 May
- 2023 00:45:33 -0700
-Message-ID: <eefd371e-9c9c-2e29-8d6e-d657ee0db237@quicinc.com>
-Date:   Wed, 31 May 2023 13:15:26 +0530
+        Wed, 31 May 2023 03:46:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE17113
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:46:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685519164;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KADJzQt78DjOkhXJxElYzWhBohOxFMyWxYB3IAT5tK8=;
+        b=HrJ3+fDGRF6jqQYJMJVGd14Al3lgfahg2/ShUvLyIPadTg6/AXbntVTm9ThbA4Zni/4rv1
+        AI/sEs2RrHdZ+1b+hK7zBW3tD1NCnyxA+9tjNJUJvGFTHhVQR3DnsOE3b39X5B5CBtdzzE
+        EFdr+825XnDIXUudlcuM1rxF7AaF9p8=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-272-BYHoI8llMCWSITXbVhg6bA-1; Wed, 31 May 2023 03:46:02 -0400
+X-MC-Unique: BYHoI8llMCWSITXbVhg6bA-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f6ffc45209so3054075e9.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:46:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685519161; x=1688111161;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KADJzQt78DjOkhXJxElYzWhBohOxFMyWxYB3IAT5tK8=;
+        b=BXonbafMXtnqueZZkdEq5+u/t70P1L21RqFDMcIdrgAd6MbK1dosjLcG3RG+X5NcFL
+         j2BuNn1wZ22nkOomRodYxKtRpcew/K2AqXWHks8XRlQZb6EhNmnpJd3r+ONbeE4uQaq7
+         FJconZEbaDzLfPxCiLIDtIVVR64mxyD8fkxom5FJ2O3ot9WYIqBZnq8/fUt0jHlea0Xs
+         aLQzUwkwLZfmyk9+XPQbJAlcedNN1ughF7XM1iepg9fmpapItQ+12nJFi3LWJIaAwbtX
+         PJIy5+5acQdi1YBwOg6vnO4xgxNJNZyEwoRjWjFDDQ6aSJ7OiWLaZue5FQG7xm3dauXn
+         liFA==
+X-Gm-Message-State: AC+VfDwYtHX0MhUQFKwpfst73iF5DX1J9NONZbehKT+mi69qClgMpyeU
+        ocQ8PzCQQs6A3erm1f578S8PQ+vDYvjKDibcG94j+XXWX71WqrmVUdBfd9QV9+xO6tFXdpbugcA
+        V+yvI6GWml8boBkAkzpvoUMFI
+X-Received: by 2002:a1c:f706:0:b0:3f7:5e1:f3fd with SMTP id v6-20020a1cf706000000b003f705e1f3fdmr3625240wmh.5.1685519161760;
+        Wed, 31 May 2023 00:46:01 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ436UU61NczDYH9UaXW/YOC3HPN9Gmy77aR6LZ58EoWnnluA/iJOcFIqaN4LScHpULaPFgovQ==
+X-Received: by 2002:a1c:f706:0:b0:3f7:5e1:f3fd with SMTP id v6-20020a1cf706000000b003f705e1f3fdmr3625231wmh.5.1685519161408;
+        Wed, 31 May 2023 00:46:01 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c749:cb00:fc9f:d303:d4cc:9f26? (p200300cbc749cb00fc9fd303d4cc9f26.dip0.t-ipconnect.de. [2003:cb:c749:cb00:fc9f:d303:d4cc:9f26])
+        by smtp.gmail.com with ESMTPSA id u20-20020a05600c211400b003f4ebeaa970sm19755583wml.25.2023.05.31.00.46.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 00:46:01 -0700 (PDT)
+Message-ID: <465c83f4-10c1-b025-cae7-04e5ff5f7561@redhat.com>
+Date:   Wed, 31 May 2023 09:45:59 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH] media: venus: firmware: Use of_reserved_mem_lookup()
-To:     Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Stephan Gerhold <stephan@gerhold.net>
-CC:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230529-venus-of-rmem-v1-1-dfcdc5047ffb@gerhold.net>
- <38a627a2-040d-23e2-5637-32f199d0fc31@quicinc.com>
- <ZHbvkDkkS_pZltMG@gerhold.net>
- <31b850f0-7ee4-67e0-8cdb-39b9651a9d57@quicinc.com>
+Subject: Re: [PATCH -V3 3/5] swap: remove __swp_swapcount()
 Content-Language: en-US
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <31b850f0-7ee4-67e0-8cdb-39b9651a9d57@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Huang Ying <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        Chris Li <chrisl@kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>
+References: <20230529061355.125791-1-ying.huang@intel.com>
+ <20230529061355.125791-4-ying.huang@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230529061355.125791-4-ying.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ooZxzd3ln4sMwMn7h4836vpohOYGx0Ov
-X-Proofpoint-GUID: ooZxzd3ln4sMwMn7h4836vpohOYGx0Ov
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_04,2023-05-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- mlxlogscore=999 phishscore=0 adultscore=0 bulkscore=0 spamscore=0
- impostorscore=0 clxscore=1011 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305310068
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,69 +93,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/31/2023 1:04 PM, Vikash Garodia wrote:
+On 29.05.23 08:13, Huang Ying wrote:
+> __swp_swapcount() just encloses the calling to swap_swapcount() with
+> get/put_swap_device().  It is called in __read_swap_cache_async()
+> only, which encloses the calling with get/put_swap_device() already.
+> So, __read_swap_cache_async() can call swap_swapcount() directly.
 > 
-> On 5/31/2023 12:26 PM, Stephan Gerhold wrote:
->> On Wed, May 31, 2023 at 11:36:52AM +0530, Vikash Garodia wrote:
->>> On 5/29/2023 11:46 PM, Stephan Gerhold wrote:
->>>> Reserved memory can be either looked up using the generic function
->>>> of_address_to_resource() or using the special of_reserved_mem_lookup().
->>>> The latter has the advantage that it ensures that the referenced memory
->>>> region was really reserved and is not e.g. status = "disabled".
->>>>
->>>> of_reserved_mem also supports allocating reserved memory dynamically at
->>>> boot time. This works only when using of_reserved_mem_lookup() since
->>>> there won't be a fixed address in the device tree.
->>> IIUC, this would avoid precomputing the hard range for different firmware
->>> regions and also make it more flexible to adjust the sizes, if anyone wants a
->>> bigger size later.
->>> Incase a specific firmware needs a dedicate start address, do we have an option
->>> to specify the same ?
->>>
->>
->> If you want a specific start address (or in other words: a fixed base
->> address) then you should continue using static reservation for that
->> component. You can mix static and dynamic reservations. The static ones
->> (with fixed addresses) will be reserved first, then the dynamic ones
->> will be allocated from the free space.
->>
->> I have this example for one device in my proposal at [1]:
->>
->> 	/* Firmware must be loaded at address 0x8b600000 */
->> 	wcnss_mem: wcnss@8b600000 {
->> 		reg = <0x8b600000 0x600000>;
->> 		no-map;
->> 	};
->> 	/* Firmware can be loaded anywhere with 1 MiB alignment */
->> 	venus_mem: venus {
->> 		size = <0x500000>;
->> 		alignment = <0x100000>;
->> 		no-map;
->> 	};
->>
->> The wcnss_mem will be always at 0x8b600000, but the venus_mem can be
->> loaded somewhere around that. If only certain regions need a fixed
->> address this still provides the flexibility to change sizes more easily.
->>
->> Does that answer your question? I wasn't sure what exactly you mean with
->> a "dedicated start address". :)
-> Yes, it clarified the need if any subsystem wants a specific start address.
-> 
-> One more thing, lets say, we keep it dynamic allocation and at the same time we
-> need to pass the start address to TZ call in [1]. How do we get that allocated
-> address so as to pass in [1] ?
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Hugh Dickins <hughd@google.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Tim Chen <tim.c.chen@linux.intel.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Yu Zhao <yuzhao@google.com>
+> Cc: Chris Li <chrisl@kernel.org>
+> Cc: Yosry Ahmed <yosryahmed@google.com>
+> ---
 
-+	*mem_phys = rmem->base;
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-It will provide the start, is not it ?
+-- 
+Thanks,
 
--- Mukesh
+David / dhildenb
 
-> 
-> Thanks,
-> Vikash
-> 
-> [1]:
-> https://elixir.bootlin.com/linux/v6.4-rc4/source/drivers/soc/qcom/mdt_loader.c#L249
