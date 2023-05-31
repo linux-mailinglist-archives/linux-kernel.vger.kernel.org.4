@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2807182EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0AB7182EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236788AbjEaNqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
+        id S236799AbjEaNqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236380AbjEaNoV (ORCPT
+        with ESMTP id S236683AbjEaNoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:44:21 -0400
+        Wed, 31 May 2023 09:44:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF5C19B7;
-        Wed, 31 May 2023 06:42:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD8E1BC7;
+        Wed, 31 May 2023 06:42:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81DC763B47;
-        Wed, 31 May 2023 13:42:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 037BAC433D2;
-        Wed, 31 May 2023 13:42:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8178A636C2;
+        Wed, 31 May 2023 13:42:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B9CFC433EF;
+        Wed, 31 May 2023 13:42:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540552;
-        bh=3Xbn1EwYG9/PxX2YVlraKEV2YsIoSvlFZ4SYwZJrrFE=;
+        s=k20201202; t=1685540555;
+        bh=GtDbHWdKmdUUwhylbaW4bc50LtsQ1B8f++9Cuk8Vkqc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N5hfTX1PnILEvaqRidWkKB1qGkrZ/yCEeWDggBRa/UYg/diPTnlLawf1tHqUwds/4
-         RNVuiVz+4pmKOIsZ1PUgkgmaz7F1+TQ1Fksy1TN7xUFjsgedTNpBLyzZ+P6FvqlQrG
-         Y/dCb9bTCOUmctJtNzCHJ/Jh0iLuS03+t6Nv60bCBP9sUrv5W2fZ7qd0uK40J4VSpX
-         MQbKc7NZkh2FkeCLbMN+4FdH+retYE31P7XASvok+VmwHe3pMrdGQIfeZlzq0NljwV
-         yMAb5ayUGfndPmlLSfIGEkcxLVppW0Rf6COe6qFhTBXGanwmEA01EpQwRrmD8BWzjT
-         w1/hlaiO/Smsg==
+        b=FKSu5EBqCazpKHZppRTRF3BVAOphs3J20OmQ4vR692VKVRnpBDLNcdoYavUoiRhtU
+         BjxRBFA+TLk4etop01t+RlXbp3jl/THYWAAwLfron7xysIKNmhqirbxf3mJKfPVtIy
+         egz35J/evRhng1o6BWzDKnItChSmuiqQrcTfDYL/kMDimje0KssmxXSshAC1kr15li
+         2feijqHzgF9XtHp0qWalUgEyN4jY1GuchyeYsu/PXhQX2VHoDp/RHSLOzx7uinfawj
+         eWhOSNrYtHd9MBppnwiPPl9LcnBplDaSKU5KJFxlvkxqQu39aHlwq9UcE3V2Y2smdu
+         Vt10l7/rZjyFA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
-        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
-        alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 6.1 18/33] ASoC: soc-pcm: test if a BE can be prepared
-Date:   Wed, 31 May 2023 09:41:44 -0400
-Message-Id: <20230531134159.3383703-18-sashal@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Shai Amiram <samiram@nvidia.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, borisp@nvidia.com,
+        john.fastabend@gmail.com, edumazet@google.com, pabeni@redhat.com,
+        asml.silence@gmail.com, richardbgobert@gmail.com,
+        imagedong@tencent.com, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 19/33] tls: rx: strp: force mixed decrypted records into copy mode
+Date:   Wed, 31 May 2023 09:41:45 -0400
+Message-Id: <20230531134159.3383703-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134159.3383703-1-sashal@kernel.org>
 References: <20230531134159.3383703-1-sashal@kernel.org>
@@ -58,91 +61,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit e123036be377ddf628226a7c6d4f9af5efd113d3 ]
+[ Upstream commit 14c4be92ebb3e36e392aa9dd8f314038a9f96f3c ]
 
-In the BE hw_params configuration, the existing code checks if any of the
-existing FEs are prepared, running, paused or suspended - and skips the
-configuration in those cases. This allows multiple calls of hw_params
-which the ALSA state machine supports.
+If a record is partially decrypted we'll have to CoW it, anyway,
+so go into copy mode and allocate a writable skb right away.
 
-This check is not handled for the prepare stage, which can lead to the
-same BE being prepared multiple times. This patch adds a check similar to
-that of the hw_params, with the main difference being that the suspended
-state is allowed: the ALSA state machine allows a transition from
-suspended to prepared with hw_params skipped.
+This will make subsequent fix simpler because we won't have to
+teach tls_strp_msg_make_copy() how to copy skbs while preserving
+decrypt status.
 
-This problem was detected on Intel IPC4/SoundWire devices, where the BE
-dailink .prepare stage is used to configure the SoundWire stream with a
-bank switch. Multiple .prepare calls lead to conflicts with the .trigger
-operation with IPC4 configurations. This problem was not detected earlier
-on Intel devices, HDaudio BE dailinks detect that the link is already
-prepared and skip the configuration, and for IPC3 devices there is no BE
-trigger.
-
-Link: https://github.com/thesofproject/sof/issues/7596
-Signed-off-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com
-Link: https://lore.kernel.org/r/20230517185731.487124-1-pierre-louis.bossart@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org
+Tested-by: Shai Amiram <samiram@nvidia.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/sound/soc-dpcm.h |  4 ++++
- sound/soc/soc-pcm.c      | 20 ++++++++++++++++++++
- 2 files changed, 24 insertions(+)
+ include/linux/skbuff.h | 10 ++++++++++
+ net/tls/tls_strp.c     | 16 +++++++++++-----
+ 2 files changed, 21 insertions(+), 5 deletions(-)
 
-diff --git a/include/sound/soc-dpcm.h b/include/sound/soc-dpcm.h
-index 5b689c663290f..27a5642f07cda 100644
---- a/include/sound/soc-dpcm.h
-+++ b/include/sound/soc-dpcm.h
-@@ -125,6 +125,10 @@ int snd_soc_dpcm_can_be_free_stop(struct snd_soc_pcm_runtime *fe,
- int snd_soc_dpcm_can_be_params(struct snd_soc_pcm_runtime *fe,
- 		struct snd_soc_pcm_runtime *be, int stream);
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 20ca1613f2e3e..cc5ed2cf25f65 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -1567,6 +1567,16 @@ static inline void skb_copy_hash(struct sk_buff *to, const struct sk_buff *from)
+ 	to->l4_hash = from->l4_hash;
+ };
  
-+/* can this BE perform prepare */
-+int snd_soc_dpcm_can_be_prepared(struct snd_soc_pcm_runtime *fe,
-+				 struct snd_soc_pcm_runtime *be, int stream);
-+
- /* is the current PCM operation for this FE ? */
- int snd_soc_dpcm_fe_can_update(struct snd_soc_pcm_runtime *fe, int stream);
- 
-diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
-index 7a486ca9633c1..f3964060a0447 100644
---- a/sound/soc/soc-pcm.c
-+++ b/sound/soc/soc-pcm.c
-@@ -2403,6 +2403,9 @@ int dpcm_be_dai_prepare(struct snd_soc_pcm_runtime *fe, int stream)
- 		if (!snd_soc_dpcm_be_can_update(fe, be, stream))
- 			continue;
- 
-+		if (!snd_soc_dpcm_can_be_prepared(fe, be, stream))
-+			continue;
-+
- 		if ((be->dpcm[stream].state != SND_SOC_DPCM_STATE_HW_PARAMS) &&
- 		    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_STOP) &&
- 		    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_SUSPEND) &&
-@@ -3043,3 +3046,20 @@ int snd_soc_dpcm_can_be_params(struct snd_soc_pcm_runtime *fe,
- 	return snd_soc_dpcm_check_state(fe, be, stream, state, ARRAY_SIZE(state));
- }
- EXPORT_SYMBOL_GPL(snd_soc_dpcm_can_be_params);
-+
-+/*
-+ * We can only prepare a BE DAI if any of it's FE are not prepared,
-+ * running or paused for the specified stream direction.
-+ */
-+int snd_soc_dpcm_can_be_prepared(struct snd_soc_pcm_runtime *fe,
-+				 struct snd_soc_pcm_runtime *be, int stream)
++static inline int skb_cmp_decrypted(const struct sk_buff *skb1,
++				    const struct sk_buff *skb2)
 +{
-+	const enum snd_soc_dpcm_state state[] = {
-+		SND_SOC_DPCM_STATE_START,
-+		SND_SOC_DPCM_STATE_PAUSED,
-+		SND_SOC_DPCM_STATE_PREPARE,
-+	};
-+
-+	return snd_soc_dpcm_check_state(fe, be, stream, state, ARRAY_SIZE(state));
++#ifdef CONFIG_TLS_DEVICE
++	return skb2->decrypted - skb1->decrypted;
++#else
++	return 0;
++#endif
 +}
-+EXPORT_SYMBOL_GPL(snd_soc_dpcm_can_be_prepared);
++
+ static inline void skb_copy_decrypted(struct sk_buff *to,
+ 				      const struct sk_buff *from)
+ {
+diff --git a/net/tls/tls_strp.c b/net/tls/tls_strp.c
+index 955ac3e0bf4d3..445543d92ac5c 100644
+--- a/net/tls/tls_strp.c
++++ b/net/tls/tls_strp.c
+@@ -315,15 +315,19 @@ static int tls_strp_read_copy(struct tls_strparser *strp, bool qshort)
+ 	return 0;
+ }
+ 
+-static bool tls_strp_check_no_dup(struct tls_strparser *strp)
++static bool tls_strp_check_queue_ok(struct tls_strparser *strp)
+ {
+ 	unsigned int len = strp->stm.offset + strp->stm.full_len;
+-	struct sk_buff *skb;
++	struct sk_buff *first, *skb;
+ 	u32 seq;
+ 
+-	skb = skb_shinfo(strp->anchor)->frag_list;
+-	seq = TCP_SKB_CB(skb)->seq;
++	first = skb_shinfo(strp->anchor)->frag_list;
++	skb = first;
++	seq = TCP_SKB_CB(first)->seq;
+ 
++	/* Make sure there's no duplicate data in the queue,
++	 * and the decrypted status matches.
++	 */
+ 	while (skb->len < len) {
+ 		seq += skb->len;
+ 		len -= skb->len;
+@@ -331,6 +335,8 @@ static bool tls_strp_check_no_dup(struct tls_strparser *strp)
+ 
+ 		if (TCP_SKB_CB(skb)->seq != seq)
+ 			return false;
++		if (skb_cmp_decrypted(first, skb))
++			return false;
+ 	}
+ 
+ 	return true;
+@@ -411,7 +417,7 @@ static int tls_strp_read_sock(struct tls_strparser *strp)
+ 			return tls_strp_read_copy(strp, true);
+ 	}
+ 
+-	if (!tls_strp_check_no_dup(strp))
++	if (!tls_strp_check_queue_ok(strp))
+ 		return tls_strp_read_copy(strp, false);
+ 
+ 	strp->msg_ready = 1;
 -- 
 2.39.2
 
