@@ -2,112 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAF17180EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D66197180E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbjEaNCZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 31 May 2023 09:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
+        id S235274AbjEaNBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbjEaNCX (ORCPT
+        with ESMTP id S236058AbjEaNBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:02:23 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608F6E49
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:01:50 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-bad102ce9eeso7606448276.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:01:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685537966; x=1688129966;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gk0pPTGREGNtqqDFsY8KHF8G7JlW3Q+zzUWS3RUpyQU=;
-        b=O3WezxWL3hbfzi78/aboVecEEXo0aZOclRIl2R6yOjvKGBL+nijrSNNEWMJ106F7ma
-         uEkNFDvnoT+uihJVSe0Q5aKcN0/bjmvAjB7vXfrAY1FVS46qyN36kfA1Mr6HagElkvf6
-         bHZimTV2ygT975Wb/MrOb+opr/XQS9Ro0eYa/8QFzBJIq3zRxXi71TkUWl0++c5JWuBE
-         /XKpA0w6kXQjmt+4wWZsGOJXtcSYZe754Ntvn1p56PjDU24Ze2w9YHm2E4ngIZ0eaNsb
-         BM4Z+aEfYEFuFK2BznyKgSLHau2gWk/F9ZwV1YIEyY9CiT+rgZjOMfuTUkuCHbtDiaaN
-         g5Vg==
-X-Gm-Message-State: AC+VfDzO+uPqeXGN2i1ebPzjQqUPF+qzWnK01Do5cYUkGmpbGZTEsdZp
-        aZCTSEbP5+TgxbecFVCiJCYEqVxOMUjE/g==
-X-Google-Smtp-Source: ACHHUZ7mthertCrQYPZZzohNy2bKARmSTDYnsWCbMYH6g3ri2Oe+1rNRYpugQt8qi4Co4SbI863wTA==
-X-Received: by 2002:a25:1654:0:b0:ba8:74f1:503d with SMTP id 81-20020a251654000000b00ba874f1503dmr5486540ybw.31.1685537965955;
-        Wed, 31 May 2023 05:59:25 -0700 (PDT)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id ch30-20020a0569020b1e00b00bad1cf6eb8csm3392326ybb.0.2023.05.31.05.59.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 05:59:25 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-566586b180fso44909457b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:59:25 -0700 (PDT)
-X-Received: by 2002:a81:48cc:0:b0:55a:c51:9a15 with SMTP id
- v195-20020a8148cc000000b0055a0c519a15mr6087006ywa.22.1685537965151; Wed, 31
- May 2023 05:59:25 -0700 (PDT)
+        Wed, 31 May 2023 09:01:49 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on20725.outbound.protection.outlook.com [IPv6:2a01:111:f403:704b::725])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BD1E6F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:01:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q60DqQZjlb1yGOEoDvbmlEWpkE+fvpw0KytrO4heqLSCcGe7ynGhs2cUttyOyJ+27ZTcpdBecWIksRRmM+xu0fCEheHev4riNB1VQwrWTSVxeyVmi/VqEzB0mAjq7TLo9AKOuPmfHemsfwS+dTxTr+breP3UBXzPz2nJO+PNY6auUa12Q+Vvj2m+NIGhDqLkYFd4TFnG0zWQ9dzw3V7Gc1wWnVSLt8oGTzeHJWtkTPOsRKGKOW1OYTe4Ku6471//VVYOEyCq28gam8MiwMB4UsZg8Oogp1MNDrKXmiTJZnCm85wRhB2OAm5lrVyJrB68eyGiqUxKz6VsaC63jPriTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=j7q57klvHFJRDrzTnNGmdwk7vQue9EwP2A/Vk/4n4dA=;
+ b=kKPuGr1OD8sPjGHap9CV5uj07v6SZtWb3UkjQ5YJoT64W0t5J4OLZNAx2KIpyKUZnV14Us+xM0JeFl7zxBXBRoA1pvxEmdRpYRrZp657MYYVbq2vRkCxdXtUTboaUyLGYn3UpbVi6lIwx4Wf5SvFS2szuh4PgbXwUFE96kuI+upD2u/f5OybgniLqvuEp6+utvMfDvS6Yk0hY/U3t16lpcaLFEhAr7nvEvCS2UajrJEQLNSDcEWfAWT2LUyOyoYLXmg7aCQB7jvez/NXGeERGaXxFy6q5JFDzT6RhinLcQzJLxbIV4u7qxHbTikvX7CWFaPALtD+2lpMSTgHkOoQZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=j7q57klvHFJRDrzTnNGmdwk7vQue9EwP2A/Vk/4n4dA=;
+ b=YMYoW4n7ZDX+ad6HPJcmOmY+4wt8oiXQNgKHxLpHjMiymZ0LRZe1+ijghGGT/Ftzfg65Z8Jtvy+FBUPJUh+ya3TsKarjvqCyKVwfv2CG1r7ohGoq+pQ/Qo3F7y6/Xwp4LEKOi3UwwwSSmaPcbZ9lPCPPhnEJYr1gMEql4le/LtVVLVFATDw+tZcsxK+e48YL7abZa8eoUnsx7WbqLVG/4doNUR2qNpanQP+S881B83ydQ5Wd81hOmRHBNb+PpM4OJUZzAPnx3ORh5vF8rYchaj2TizFUIBDdpy435mZ35tgOg7GVApDzhnolOMfwoSKm5cgj5g/nHIunR5bajwvySw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by PSAPR06MB4344.apcprd06.prod.outlook.com (2603:1096:301:79::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Wed, 31 May
+ 2023 12:59:37 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965%3]) with mapi id 15.20.6455.020; Wed, 31 May 2023
+ 12:59:36 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>, Lu Hongfei <luhongfei@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] f2fs: flag as supporting buffered async reads
+Date:   Wed, 31 May 2023 20:59:18 +0800
+Message-Id: <20230531125918.55609-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SGBP274CA0008.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::20)
+ To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
 MIME-Version: 1.0
-References: <20230531125023.1121060-1-mpe@ellerman.id.au>
-In-Reply-To: <20230531125023.1121060-1-mpe@ellerman.id.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 31 May 2023 14:59:12 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUbVmjcYyXmparBm6pQwu3q7HpTKsKfi_aAHGOSX97MUw@mail.gmail.com>
-Message-ID: <CAMuHMdUbVmjcYyXmparBm6pQwu3q7HpTKsKfi_aAHGOSX97MUw@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Exclude m68k-only drivers from powerpc entry
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-m68k@lists.linux-m68k.org,
-        linux-kernel@vger.kernel.org, Finn Thain <fthain@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|PSAPR06MB4344:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0c4e5929-f951-4cff-473e-08db61d6e2d2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: G7mCZ/VWH0REZh9DMT4xLkYOEEQBNmQDEeBYb3sXqADIQil3wSpuLiF/2iWVxZDy9SPRBBgU0zr4442SfYk+FQzyxXidATd3ofVfqHeZlHB2Gg/Llr/8feY47tjGcETPiGc1Y/N7xLOhzQZHP/4d62TLOeik7zcsJ9Z+hkUtwei+8aNhdS6lmV6Jgpuebw1JFS8JIEjsPk89a41KhHbAIm4vnG2keNKfoAL+bTqOazvI9o+KJa6m/+bTDl7oWSSTsu5FMsaxATAhFcc6Ba+WXVOgGycKpU4mczlLRxufjN5+EPW/HkxglKMSAzscQvwtX9gt/HnlFDJHagejphpobIqcFwt7vMO3iX2XL/1jzUxkB1XuXnNxdjTxDpG1Pdy0i0pgyo8lMxYjN3XKafSmQ/yR2BQxi7ltAwBw+xp/6sV4f/+ZhFxaBIuuNvpV46+UfnQooRQpjLHCCgiJbHPsq4ZYPe7wPdCZRebzD4rBl7LvMWIuWayL/D3w9zvmOn2g47Nzh/3KXXuGiO+qlxjcS8J3dsgeQZ0cbff28v1qJ9YJHX/7Z5s4vzK3ddvPJsG4MEercZD8Z9LPlKdoWPnLuMMrI3303lH9WFooXjVen75u4r9hIfSAEx2/2sfHot6x
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(346002)(366004)(136003)(396003)(451199021)(66946007)(38100700002)(316002)(5660300002)(6512007)(1076003)(26005)(6506007)(41300700001)(8676002)(8936002)(186003)(6666004)(38350700002)(478600001)(36756003)(4326008)(66476007)(52116002)(54906003)(110136005)(2906002)(4744005)(83380400001)(6486002)(86362001)(66556008)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8ylf+aBw1Qeko2LC8Dz2AbJh9dKZ2QpWxgvOXdm6vaVa97o9uX8nRzVEfX2v?=
+ =?us-ascii?Q?BQpC8N9JwX2Qgs3+58F5B6sLRZRMA4jVKUX+AI7vcu015lguQGseJBaK7S19?=
+ =?us-ascii?Q?ZAdjL4G6fqIi6QBLBR3lgf2n+1gzIOLobQXAMEqisIILHZCQyf5iUINRHOBj?=
+ =?us-ascii?Q?mc/dDvk6fbInxVceAQ50+ZYMAM+i7bdV+AJ5z2q39jCAN51vVewAEpWjmmHT?=
+ =?us-ascii?Q?ZMcWHBA8+EABsLv8kxNS3R5q1T8ej3V5mMSz/ZFTnds/DY3l+uN1FCLghq6R?=
+ =?us-ascii?Q?U57wFwkZ9tyTe+2NSTv9OCniHVHIqXjdogdd26tySU4Imw5kR0+URQEZFfat?=
+ =?us-ascii?Q?6LPv9dP7cUdLRkbiFoKmrGYx7kZZ7TZZ+09JcX+521CqpYL135E1lX9lWLCq?=
+ =?us-ascii?Q?n8nfJv+7r5Zgoyt72VZiwR2c/gQoVqIbGwjD+FW6HUqw4f+VZp9Pb5x9sgVz?=
+ =?us-ascii?Q?LR9yWDK+luIstFCLR+4+2YtcpODDAcERWo7njqvkuqGz87I/XOdW0tXbEkSj?=
+ =?us-ascii?Q?qnLA98DiCYSMTD1v/XvfTyqp99hTtnyitzne+eKv31Rg6UyTg+640c8Lvw2W?=
+ =?us-ascii?Q?9yHDr0lolKCXHb6fQFh+/qTfbMxRbaF7ZWMksC/V6XgFhJam72uCyRloBkOx?=
+ =?us-ascii?Q?5CejwOYvSlb460Q0zekEdxIlx6U6/BrdKV5fRmx0buWcxHKWFOBDFSOeWWXb?=
+ =?us-ascii?Q?q/Qcco7Qim5iaiSJ1w3VBU2864etXf1ZvIg2QLMpoWU0ghujF38Fve7eVRKw?=
+ =?us-ascii?Q?9px9KFC0kSrBgAF7aJDDG8KKgC+8nWNXa/SZb8XXBSC+Q/YopUqgwnUwrmm/?=
+ =?us-ascii?Q?1dq8k5MPibHa7yZiZFD14KEeOjd6Rfz8gBu/Q1I+wmRrEecizte1QM3KfKoE?=
+ =?us-ascii?Q?NOLPupeFRk5Xnot1lIxUbjTtu8/1xzbU9iajSDwUGGtqV2sFIszU3iCmect1?=
+ =?us-ascii?Q?LBREKaQYcBYzKHR0G6vlkgm5wq23FY3zFHTq/VEeW0JcnQaWS7BmwG7s1kfV?=
+ =?us-ascii?Q?Q3zb59UkoilRHGaJNeddJ2JvnwW4ZKslAaAM04Mfqt05TIa192ofDcry7gux?=
+ =?us-ascii?Q?sMo7txC8nvKM7szlNdONFTtHsmMWp1BPS81uEzRCFsB+gGGFS5VlWDDU6gJX?=
+ =?us-ascii?Q?Jgw06R4Xrh0potnF5wPXitteEPh9gGOJWHV8LaVB4y9lBhVtYxOpTeo+A9C7?=
+ =?us-ascii?Q?/wtP9hUYZANAI7JGCyj+UiEldrQJTpMRMi1HCEMVPHjrHSQZrUgGkkUG3MEw?=
+ =?us-ascii?Q?USIRTqTmW8U+V5+BXXcN0EYQMJgLr8OEMsJgz97XNghU1wGMaC8CUoiIv+Q2?=
+ =?us-ascii?Q?Cbw19byqUSDEUotBvQtHyVa6mAUG73l0wlp7M62EZ1gECbOlATDZ7/Mn9JB4?=
+ =?us-ascii?Q?n0pe3bO19MvhqQloJR3Oq5qO7zqBvDxAH+M8YEreDuIgvT4OeowsJh6WngwU?=
+ =?us-ascii?Q?bWlFwommxPhQLk/kTnEYBP3YCfuvrgK9rWRKTgz+VH3DHTZtgbR6kzWYRFxe?=
+ =?us-ascii?Q?VLYcP5DL88KlTmTW3KSXakdgyWLSuY38VuMSwnmwK3niOv2GyKfa1yNvpIzx?=
+ =?us-ascii?Q?VhofB/KXjCj72rtF59libcGBb4LjeT2Up+zPGV7m?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c4e5929-f951-4cff-473e-08db61d6e2d2
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 12:59:36.2129
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: laIUUAUxyzepBxhQgCElptKy62w4T7L6okzbpZUkdxDQ6SVVHeNXji0rZbk+FgHZkkQKH0HlZSco2pEn0q92KA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4344
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+After enabling this feature, the read performance has been greatly
+improved:
 
-CC Finn
+    167M/s -> 234M/s, Increase ratio by 40%
 
-On Wed, May 31, 2023 at 2:50 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
-> The powerpc section has a "F:" entry for drivers/macintosh, matching all
-> files in or below drivers/macintosh. That is correct for the most part,
-> but there are a couple of m68k-only drivers in the directory, so exclude
-> those.
->
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Test w/:
+    ./fio --name=onessd --filename=/data/test/local/io_uring_test
+    --size=256M --rw=randread --bs=4k --direct=0 --overwrite=0
+    --numjobs=1 --iodepth=1 --time_based=0 --runtime=10
+    --ioengine=io_uring --registerfiles --fixedbufs
+    --gtod_reduce=1 --group_reporting --sqthread_poll=1
 
-Thanks for your patch!
+Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/file.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11916,6 +11916,8 @@ L:      linuxppc-dev@lists.ozlabs.org
->  S:     Odd Fixes
->  F:     arch/powerpc/platforms/powermac/
->  F:     drivers/macintosh/
-> +X:     drivers/macintosh/adb-iop.c
-> +X:     drivers/macintosh/via-macii.c
->
->  LINUX FOR POWERPC (32-BIT AND 64-BIT)
->  M:     Michael Ellerman <mpe@ellerman.id.au>
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 015ed274dc31..23c68ee946e5 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -546,7 +546,7 @@ static int f2fs_file_open(struct inode *inode, struct file *filp)
+ 	if (err)
+ 		return err;
+ 
+-	filp->f_mode |= FMODE_NOWAIT;
++	filp->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC;
+ 
+ 	return dquot_file_open(inode, filp);
+ }
+-- 
+2.39.0
 
-LGTM, as there are already entries for these two files under
-"M68K ON APPLE MACINTOSH".
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-Which leads us to a related topic: Is Joshua still around?  Should Finn
-be added or replace Joshua in the "M68K ON APPLE MACINTOSH" entry?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
