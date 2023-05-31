@@ -2,69 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75682718668
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719FC71863D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233760AbjEaPc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
+        id S234895AbjEaPYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbjEaPc1 (ORCPT
+        with ESMTP id S234673AbjEaPX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:32:27 -0400
-Received: from smtp-190c.mail.infomaniak.ch (smtp-190c.mail.infomaniak.ch [185.125.25.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7681911D
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:32:26 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4QWY0Q2wK1zMqBkH;
-        Wed, 31 May 2023 17:22:14 +0200 (CEST)
-Received: from unknown by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4QWY0G4Z6QzMqFfF;
-        Wed, 31 May 2023 17:22:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1685546534;
-        bh=8echtExvY903wL+VZOZ6yhBJAcvuAYpaWxyyr0rVy8w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UCoFqVu9Y/RRO0Tl+8GYdhg+QL2jsnrLmJVc95PGsjviUz1MFlPNr9Ls9etbgky2f
-         +NJTVdzCzpayOxC7AXXulIEL5iaLoblXaS+YwfxQZuO5HILy95zRI7Soj1IzfZ1+CL
-         pp3TTVVWN5YMTh+pZ03O1kvnD/qtJwnRtDiHcV8s=
-Message-ID: <4b3fff12-f696-3d02-5873-645fef2117e1@digikod.net>
-Date:   Wed, 31 May 2023 17:22:05 +0200
+        Wed, 31 May 2023 11:23:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4CC1B5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:22:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685546557;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vim2Ps+SLhIjHN6Pns9HoI/IKeD0F9kbBagSaUaU/oo=;
+        b=bETAxaEComALFkckZ1XQN/bctxKRvWJn8k0+qOR+/ZAWZVTsxR3jcXKtafaZ1DA0Y3Qnw+
+        yyNSYasodFTivRUkaQsTa1ezJGs8tDdSH3raUcamZHonz/gmQwMH8SY4Uc6Y9l5nA585nT
+        7JlVonuPQUQlusW+6byoj0o2wio62Go=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-592-DuIoDeNCPvODpYdiRTbKEw-1; Wed, 31 May 2023 11:22:35 -0400
+X-MC-Unique: DuIoDeNCPvODpYdiRTbKEw-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-973c42bfc38so494559266b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:22:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685546554; x=1688138554;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vim2Ps+SLhIjHN6Pns9HoI/IKeD0F9kbBagSaUaU/oo=;
+        b=TK7NLPacL7pPVCO97eErECtKeQAx+FvRXMxmEOgIKqGKDkkJd5IcmC/LjCy78+9/pW
+         agDUi4hhieIUTvEyNlR+l4EYuHTBlV7mDxP+U9h5JgIFgc1cnuAGHzfmRS5FVPcSLaw2
+         omsM0HwwSgMuWHhiZgyisHQ+y5vCYbYBhH1UJQvRRz0Ozoqs8vGS0+dQ8Lld+Ovle+E/
+         Ry+GpGSyFvuzJ3OsdUa2mAmtaE3uGQ5QiXU20rWWaok6VRo1shT2WyO0kAKoQ14EO7Zb
+         6HkHe1pU3ZNgk1NpprnYNZYXI8dq41iWLRcggzxSZCgK/4ttFc6FRYk1K/PMipqf31lm
+         sykg==
+X-Gm-Message-State: AC+VfDzD03gNveBVRlJRBktMi46oHt3D3NptVPr85g8gU3SyFRQscKPq
+        Y6iPt40LoKDVCetwNc+/KepZL6GCoBNE4Pqre4XL5NwidnCaUbdh/fh84Wp5hy1aa0ZCOUDeNJg
+        mWy0E8TtO9eSNI1YUYv2yrSEY
+X-Received: by 2002:a17:907:eaa:b0:94f:7edf:8fa1 with SMTP id ho42-20020a1709070eaa00b0094f7edf8fa1mr6008756ejc.32.1685546554647;
+        Wed, 31 May 2023 08:22:34 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4TfEMtyNeDIvoDZLtn9WZ6Ma5SEXbIKcUctEw0dFKuBxjkH16CQD3dCFTlwdMhGDeLM5IZ0g==
+X-Received: by 2002:a17:907:eaa:b0:94f:7edf:8fa1 with SMTP id ho42-20020a1709070eaa00b0094f7edf8fa1mr6008739ejc.32.1685546554329;
+        Wed, 31 May 2023 08:22:34 -0700 (PDT)
+Received: from imammedo.users.ipa.redhat.com (nat-pool-brq-t.redhat.com. [213.175.37.10])
+        by smtp.gmail.com with ESMTPSA id n21-20020a170906089500b00966265be7adsm9112590eje.22.2023.05.31.08.22.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 08:22:33 -0700 (PDT)
+Date:   Wed, 31 May 2023 17:22:32 +0200
+From:   Igor Mammedov <imammedo@redhat.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        linux-kernel@vger.kernel.org, rafael@kernel.org, lenb@kernel.org,
+        bhelgaas@google.com, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, mika.westerberg@linux.intel.com
+Subject: Re: [PATCH v2] PCI: acpiphp: Reassign resources on bridge if
+ necessary
+Message-ID: <20230531172232.28cef6a3@imammedo.users.ipa.redhat.com>
+In-Reply-To: <ZHZGkAg34ltZLV9J@bhelgaas>
+References: <20230530141321-mutt-send-email-mst@kernel.org>
+        <ZHZGkAg34ltZLV9J@bhelgaas>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH -next 0/2] lsm: Change inode_setattr() to take struct
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     Xiu Jianfeng <xiujianfeng@huawei.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, viro@zeniv.linux.org.uk, dhowells@redhat.com,
-        code@tyhicks.com, hirofumi@mail.parknet.co.jp,
-        linkinjeon@kernel.org, sfrench@samba.org, senozhatsky@chromium.org,
-        tom@talpey.com, chuck.lever@oracle.com, jlayton@kernel.org,
-        miklos@szeredi.hu, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com, dchinner@redhat.com,
-        john.johansen@canonical.com, mcgrof@kernel.org,
-        mortonm@chromium.org, fred@cloudflare.com, mpe@ellerman.id.au,
-        nathanl@linux.ibm.com, gnoack3000@gmail.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-cachefs@redhat.com,
-        ecryptfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        wangweiyang2@huawei.com
-References: <20230505081200.254449-1-xiujianfeng@huawei.com>
- <20230515-nutzen-umgekehrt-eee629a0101e@brauner>
- <75b4746d-d41e-7c9f-4bb0-42a46bda7f17@digikod.net>
- <20230530-mietfrei-zynisch-8b63a8566f66@brauner>
- <20230530142826.GA9376@lst.de>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <20230530142826.GA9376@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,44 +83,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 30 May 2023 13:55:12 -0500
+Bjorn Helgaas <helgaas@kernel.org> wrote:
 
-On 30/05/2023 16:28, Christoph Hellwig wrote:
-> On Tue, May 30, 2023 at 03:58:35PM +0200, Christian Brauner wrote:
->> The main concern which was expressed on other patchsets before is that
->> modifying inode operations to take struct path is not the way to go.
->> Passing struct path into individual filesystems is a clear layering
->> violation for most inode operations, sometimes downright not feasible,
->> and in general exposing struct vfsmount to filesystems is a hard no. At
->> least as far as I'm concerned.
+> On Tue, May 30, 2023 at 02:16:36PM -0400, Michael S. Tsirkin wrote:
+> > On Tue, May 30, 2023 at 12:12:44PM -0500, Bjorn Helgaas wrote:  
+> > > On Mon, Apr 24, 2023 at 09:15:57PM +0200, Igor Mammedov wrote:  
+> > > > When using ACPI PCI hotplug, hotplugging a device with
+> > > > large BARs may fail if bridge windows programmed by
+> > > > firmware are not large enough.
+> > > > 
+> > > > Reproducer:
+> > > >   $ qemu-kvm -monitor stdio -M q35  -m 4G \
+> > > >       -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=on \
+> > > >       -device id=rp1,pcie-root-port,bus=pcie.0,chassis=4 \
+> > > >       disk_image
+> > > > 
+> > > >  wait till linux guest boots, then hotplug device
+> > > >    (qemu) device_add qxl,bus=rp1
+> > > > 
+> > > >  hotplug on guest side fails with:
+> > > >    pci 0000:01:00.0: [1b36:0100] type 00 class 0x038000
+> > > >    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x03ffffff]
+> > > >    pci 0000:01:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
+> > > >    pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x00001fff]
+> > > >    pci 0000:01:00.0: reg 0x1c: [io  0x0000-0x001f]
+> > > >    pci 0000:01:00.0: BAR 0: no space for [mem size 0x04000000]
+> > > >    pci 0000:01:00.0: BAR 0: failed to assign [mem size 0x04000000]
+> > > >    pci 0000:01:00.0: BAR 1: no space for [mem size 0x04000000]
+> > > >    pci 0000:01:00.0: BAR 1: failed to assign [mem size 0x04000000]
+> > > >    pci 0000:01:00.0: BAR 2: assigned [mem 0xfe800000-0xfe801fff]
+> > > >    pci 0000:01:00.0: BAR 3: assigned [io  0x1000-0x101f]
+> > > >    qxl 0000:01:00.0: enabling device (0000 -> 0003)  
+> > > 
+> > > Ugh, I just noticed that we turned on PCI_COMMAND_MEMORY even though
+> > > BARs 0 and 1 haven't been assigned.  How did that happen?  It looks
+> > > like pci_enable_resources() checks for that, but there must be a hole
+> > > somewhere.  
+> > 
+> > Maybe because BAR2 was assigned? I think pci_enable_resources just
+> > does
+> >                 if (r->flags & IORESOURCE_MEM)
+> >                         cmd |= PCI_COMMAND_MEMORY;
+> > in a loop so if any memory BARs are assigned then PCI_COMMAND_MEMORY
+> > is set.  
 > 
-> Agreed.  Passing struct path into random places is not how the VFS works.
-
-I understand, it makes sense for the FS layer to not get access to 
-things not required. IIUC, the main issue is the layering, with LSM 
-calls being sometime at the last layer.
-
-
+> It does, but it also bails out if it finds IORESOURCE_UNSET:
 > 
->> So the best way to achieve the landlock goal might be to add new hooks
+>   pci_enable_resources()
+>   {
+>     ...
+>     pci_dev_for_each_resource(dev, r, i) {
+>       ...
+>       if (r->flags & IORESOURCE_UNSET) {
+>         pci_err(dev, "can't enable device: BAR %d %pR not assigned\n");
+>         return -EINVAL;
+>       }
+>       ...
+>       if (r->flags & IORESOURCE_MEM)
+>         cmd |= PCI_COMMAND_MEMORY;
+>     }
+>     ...
+>   }
 > 
-> What is "the landlock goal", and why does it matter?
+> I expected that IORESOURCE_UNSET would still be there from
+> pci_assign_resource(), since we saw the "failed to assign" messages,
+> but there must be more going on.
 
-Landlock's goal is to enable (unprivileged) users to set their own 
-access rights for their (ephemeral) processes (on top of the existing 
-access-controls of course) i.e., to sandbox applications. Landlock rules 
-are defined by users, and then according to the FS topology they see. 
-This means that Landlock relies on inodes and mount points to define and 
-enforce a policy.
+with current acpiphp code pci_assign_resource() isn't called,
+instead it goes __pci_bus_assign_resources() route.
 
+However I an reproduce similar issue with SHPC when using
+hierarchy deeper than 1 bridge (for which relocation has never worked)
 
-> 
->> or not. And we keep adding new LSMs without deprecating older ones (A
->> problem we also face in the fs layer.) and then they sit around but
->> still need to be taken into account when doing changes.
-> 
-> Yes, I'm really worried about th amount of LSMs we have, and the weird
-> things they do.
+qemu-kvm -monitor stdio -M q35 -cpu host -enable-kvm  -m 4G \
+   -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off \
+   -device pcie-root-port,id=pr1,bus=pcie.0,chassis=4 \
+   -device pcie-pci-bridge,id=br1,bus=pr1
 
-About Landlock, it's a new LSM that fit an actual need. I'd be glad to 
-hear about not recommended things and how to improve the situation. I 
-don't know all the history between VFS and LSM.
+hotplug device
+  (qemu) device_add qxl,addr=1,bus=br1
+
+shpchp 0000:01:00.0: Latch close on Slot(1)
+shpchp 0000:01:00.0: Button pressed on Slot(1)
+shpchp 0000:01:00.0: Card present on Slot(1)
+shpchp 0000:01:00.0: PCI slot #1 - powering on due to button press
+pci 0000:02:01.0: [1b36:0100] type 00 class 0x038000
+pci 0000:02:01.0: reg 0x10: [mem 0x00000000-0x03ffffff]
+pci 0000:02:01.0: reg 0x14: [mem 0x00000000-0x03ffffff]
+pci 0000:02:01.0: reg 0x18: [mem 0x00000000-0x00001fff]
+pci 0000:02:01.0: reg 0x1c: [io  0x0000-0x001f]
+pci 0000:02:01.0: BAR 0: no space for [mem size 0x04000000]
+pci 0000:02:01.0: BAR 0: failed to assign [mem size 0x04000000]
+pci 0000:02:01.0: BAR 1: no space for [mem size 0x04000000]
+pci 0000:02:01.0: BAR 1: failed to assign [mem size 0x04000000]
+pci 0000:02:01.0: BAR 2: assigned [mem 0xfe600000-0xfe601fff]
+pci 0000:02:01.0: BAR 3: assigned [io  0xc000-0xc01f]
+                  ^^^^^^^^^^^
+shpchp 0000:01:00.0: PCI bridge to [bus 02]
+shpchp 0000:01:00.0:   bridge window [io  0xc000-0xcfff]
+shpchp 0000:01:00.0:   bridge window [mem 0xfe600000-0xfe7fffff]
+shpchp 0000:01:00.0:   bridge window [mem 0xfe000000-0xfe1fffff 64bit pref]
+PCI: No. 2 try to assign unassigned res
+release child resource [mem 0xfe600000-0xfe601fff]
+shpchp 0000:01:00.0: resource 8 [mem 0xfe600000-0xfe7fffff] released
+shpchp 0000:01:00.0: PCI bridge to [bus 02]
+shpchp 0000:01:00.0: BAR 8: no space for [mem size 0x0a000000]
+shpchp 0000:01:00.0: BAR 8: failed to assign [mem size 0x0a000000]
+pci 0000:02:01.0: BAR 0: no space for [mem size 0x04000000]
+pci 0000:02:01.0: BAR 0: failed to assign [mem size 0x04000000]
+pci 0000:02:01.0: BAR 1: no space for [mem size 0x04000000]
+pci 0000:02:01.0: BAR 1: failed to assign [mem size 0x04000000]
+pci 0000:02:01.0: BAR 2: no space for [mem size 0x00002000]
+pci 0000:02:01.0: BAR 2: failed to assign [mem size 0x00002000]
+shpchp 0000:01:00.0: PCI bridge to [bus 02]
+shpchp 0000:01:00.0:   bridge window [io  0xc000-0xcfff]
+shpchp 0000:01:00.0:   bridge window [mem 0xfe000000-0xfe1fffff 64bit pref]
+qxl 0000:02:01.0: enabling device (0000 -> 0001)
+                                           ^^^ IO res only
+where:
+  assign_requested_resources_sorted()
+     ...
+     if (pci_assign_resource())
+        reset_resource(res);
+reset wipes everything pci_assign_resource() has done for failing resources
+leaving only assigned IO (on the 1st pass).
+Then later pci_enable_device_flags() will build mask for available bars
+
+        for (i = 0; i <= PCI_ROM_RESOURCE; i++)                                  
+                if (dev->resource[i].flags & flags)                              
+                        bars |= (1 << i);                                        
+        for (i = PCI_BRIDGE_RESOURCES; i < DEVICE_COUNT_RESOURCE; i++)           
+                if (dev->resource[i].flags & flags)                              
+                        bars |= (1 << i);
+
+however since for failed MEM resources reset cleared flags along with everything else, 
+above snippet will ignore MEM bars, leaving only assigned IO resource.
+Then
+   do_pci_enable_device() -> pcibios_enable_device() -> pci_enable_resources(,bars)
+will happily succeed since mask tells it only to look into IO.
+
+And well even if mask weren't excluding MEM ones, it won't help since
+the resource was cleared out in assign_requested_resources_sorted().
+
+Perhaps instead of playing with flags, we should somehow mark device
+with unusable resources as disabled, and fail pci_enable_device() early.
+(and also make sure its resources aren't accounted anymore on follow
+up hotplug events to the bridge)
+
