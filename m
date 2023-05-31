@@ -2,62 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D1D717F52
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C51FA71804B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235634AbjEaL5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 07:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
+        id S235994AbjEaMtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235636AbjEaL5V (ORCPT
+        with ESMTP id S235973AbjEaMtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 07:57:21 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF12B121;
-        Wed, 31 May 2023 04:57:18 -0700 (PDT)
-Date:   Wed, 31 May 2023 11:57:16 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685534237;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oz+q/aRG7iEvO/yg/BT9Is3z4SPuuUOoyopbHSj7v40=;
-        b=r69tS5M3dRnEzzj5khaZM5nU/GPpIPnGVZvekOCLZRB0xN1pnrO9LVeTcO9Hhh/i6uDfo7
-        0nOKzAg6dCXz+xHTAzBIO1QpScX0xQMMpmmha52wp6n1kUFDg83wV0dAZare02KowzmeaF
-        Xbuy3s1qmdW7/V6/5IP7tQENhoakyS9+o0WiSWclA13UfrYhp0wR/2QFlojQ8fbh/WZsTv
-        598u859C/sjSI2Ml+WjvaCbLUj52zXBDWcQrLDI6Iw9HV0keGxjSXZ0DdBvI3a40y7Ivc5
-        lGRCDAaemcPoDY2eHXfG0yaf+3O1CDNCCi87AL4WxE4Ev+e07CkMn7dzLaQxMw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685534237;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oz+q/aRG7iEvO/yg/BT9Is3z4SPuuUOoyopbHSj7v40=;
-        b=tzmekfbdcGwDJLWjY6IBJjVNeFQEDJe0vqDe9QigR+1DQ6Gsf3Oxt9ZUQOYiE0bNI9S3Y2
-        HfMpaCtM2wXeYtCQ==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/alternatives] x86/alternatives: Add longer 64-bit NOPs
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230515093020.661756940@infradead.org>
-References: <20230515093020.661756940@infradead.org>
-MIME-Version: 1.0
-Message-ID: <168553423659.404.5660759235465936351.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        Wed, 31 May 2023 08:49:00 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD75E46
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:48:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=43PZ7APiLSZw4p8V3oESMbNYg24McF+5B7Oexe48Sr0=; b=YzzuCGuuyWwEyLi5LKjKjEuwBk
+        vWljkFJM0uR0sKmb9XcV78lQSS2/v5GNjiNEqJLpAMoOeCL7ksS2EqldWz0S8HPm2TI2Owc9NFF3h
+        rqpr8FzYhu4mUeS6gy3gRUBmYu+ZhLw9rJFdw1TiYhF6WIKCfnhk/Ty9poWp/nmPWf9TnCtDridc7
+        hUQAMTMsXj0JfIc8d7J8wODqN5MTY85B9JdPdvteeYXSjHU+Fa7W9YRWGPZ28y2oXOsLbaNGYBOQW
+        ARTnYRrcZR9j8FcDA0ptyaAvu0scqsMuAKimy1t7Ewxlr9E9bTWFUlGGsqVr2GViuDMD5XqzhpEkM
+        Zlw6WA5w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q4LEp-007GRX-0i; Wed, 31 May 2023 12:47:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 058CD3002A9;
+        Wed, 31 May 2023 14:47:34 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id D3FEE20FF5F85; Wed, 31 May 2023 14:47:33 +0200 (CEST)
+Message-ID: <20230531115839.089944915@infradead.org>
+User-Agent: quilt/0.66
+Date:   Wed, 31 May 2023 13:58:39 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     mingo@kernel.org, vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, corbet@lwn.net, qyousef@layalina.io,
+        chris.hyser@oracle.com, patrick.bellasi@matbug.net, pjt@google.com,
+        pavel@ucw.cz, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
+        yu.c.chen@intel.com, youssefesmat@chromium.org,
+        joel@joelfernandes.org, efault@gmx.de, tglx@linutronix.de
+Subject: [PATCH 00/15] sched: EEVDF and latency-nice and/or slice-attr
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,URI_DOTEDU autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,156 +61,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/alternatives branch of tip:
+Hi!
 
-Commit-ID:     df25edbac31ea87b488789d44a362063542b5967
-Gitweb:        https://git.kernel.org/tip/df25edbac31ea87b488789d44a362063542b5967
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Mon, 15 May 2023 11:28:05 +02:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Wed, 31 May 2023 10:21:21 +02:00
+Latest version of the EEVDF [1] patches.
 
-x86/alternatives: Add longer 64-bit NOPs
+The only real change since last time is the fix for tick-preemption [2], and a 
+simple safe-guard for the mixed slice heuristic.
 
-By adding support for longer NOPs there are a few more alternatives
-that can turn into a single instruction.
+Other than that, I've re-arranged the patches to make EEVDF come first and have
+the latency-nice or slice-attribute patches on top.
 
-Add up to NOP11, the same limit where GNU as .nops also stops
-generating longer nops. This is because a number of uarchs have severe
-decode penalties for more than 3 prefixes.
+Results should not be different from last time around, lots of people ran them
+and found no major performance issues; what was found was better latency and
+smaller variance (probably due to the more stable latency).
 
-  [ bp: Sync up with the version in tools/ while at it. ]
+I'm hoping we can start queueing this part.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230515093020.661756940@infradead.org
----
- arch/x86/include/asm/nops.h       | 16 ++++++++++++++--
- arch/x86/kernel/alternative.c     | 10 ++++++++++
- tools/arch/x86/include/asm/nops.h | 16 ++++++++++++++--
- 3 files changed, 38 insertions(+), 4 deletions(-)
+The big question is what additional interface to expose; some people have
+voiced objections to the latency-nice interface, the 'obvious' alternative
+is to directly expose the slice length as a request/hint.
 
-diff --git a/arch/x86/include/asm/nops.h b/arch/x86/include/asm/nops.h
-index c5573ea..1c1b755 100644
---- a/arch/x86/include/asm/nops.h
-+++ b/arch/x86/include/asm/nops.h
-@@ -34,6 +34,8 @@
- #define BYTES_NOP7	0x8d,0xb4,0x26,0x00,0x00,0x00,0x00
- #define BYTES_NOP8	0x3e,BYTES_NOP7
- 
-+#define ASM_NOP_MAX 8
-+
- #else
- 
- /*
-@@ -47,6 +49,9 @@
-  * 6: osp nopl 0x00(%eax,%eax,1)
-  * 7: nopl 0x00000000(%eax)
-  * 8: nopl 0x00000000(%eax,%eax,1)
-+ * 9: cs nopl 0x00000000(%eax,%eax,1)
-+ * 10: osp cs nopl 0x00000000(%eax,%eax,1)
-+ * 11: osp osp cs nopl 0x00000000(%eax,%eax,1)
-  */
- #define BYTES_NOP1	0x90
- #define BYTES_NOP2	0x66,BYTES_NOP1
-@@ -56,6 +61,15 @@
- #define BYTES_NOP6	0x66,BYTES_NOP5
- #define BYTES_NOP7	0x0f,0x1f,0x80,0x00,0x00,0x00,0x00
- #define BYTES_NOP8	0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00
-+#define BYTES_NOP9	0x2e,BYTES_NOP8
-+#define BYTES_NOP10	0x66,BYTES_NOP9
-+#define BYTES_NOP11	0x66,BYTES_NOP10
-+
-+#define ASM_NOP9  _ASM_BYTES(BYTES_NOP9)
-+#define ASM_NOP10 _ASM_BYTES(BYTES_NOP10)
-+#define ASM_NOP11 _ASM_BYTES(BYTES_NOP11)
-+
-+#define ASM_NOP_MAX 11
- 
- #endif /* CONFIG_64BIT */
- 
-@@ -68,8 +82,6 @@
- #define ASM_NOP7 _ASM_BYTES(BYTES_NOP7)
- #define ASM_NOP8 _ASM_BYTES(BYTES_NOP8)
- 
--#define ASM_NOP_MAX 8
--
- #ifndef __ASSEMBLY__
- extern const unsigned char * const x86_nops[];
- #endif
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 93aa95a..0747d29 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -98,6 +98,11 @@ static const unsigned char x86nops[] =
- 	BYTES_NOP6,
- 	BYTES_NOP7,
- 	BYTES_NOP8,
-+#ifdef CONFIG_64BIT
-+	BYTES_NOP9,
-+	BYTES_NOP10,
-+	BYTES_NOP11,
-+#endif
- };
- 
- const unsigned char * const x86_nops[ASM_NOP_MAX+1] =
-@@ -111,6 +116,11 @@ const unsigned char * const x86_nops[ASM_NOP_MAX+1] =
- 	x86nops + 1 + 2 + 3 + 4 + 5,
- 	x86nops + 1 + 2 + 3 + 4 + 5 + 6,
- 	x86nops + 1 + 2 + 3 + 4 + 5 + 6 + 7,
-+#ifdef CONFIG_64BIT
-+	x86nops + 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8,
-+	x86nops + 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9,
-+	x86nops + 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10,
-+#endif
- };
- 
- /*
-diff --git a/tools/arch/x86/include/asm/nops.h b/tools/arch/x86/include/asm/nops.h
-index c5573ea..1c1b755 100644
---- a/tools/arch/x86/include/asm/nops.h
-+++ b/tools/arch/x86/include/asm/nops.h
-@@ -34,6 +34,8 @@
- #define BYTES_NOP7	0x8d,0xb4,0x26,0x00,0x00,0x00,0x00
- #define BYTES_NOP8	0x3e,BYTES_NOP7
- 
-+#define ASM_NOP_MAX 8
-+
- #else
- 
- /*
-@@ -47,6 +49,9 @@
-  * 6: osp nopl 0x00(%eax,%eax,1)
-  * 7: nopl 0x00000000(%eax)
-  * 8: nopl 0x00000000(%eax,%eax,1)
-+ * 9: cs nopl 0x00000000(%eax,%eax,1)
-+ * 10: osp cs nopl 0x00000000(%eax,%eax,1)
-+ * 11: osp osp cs nopl 0x00000000(%eax,%eax,1)
-  */
- #define BYTES_NOP1	0x90
- #define BYTES_NOP2	0x66,BYTES_NOP1
-@@ -56,6 +61,15 @@
- #define BYTES_NOP6	0x66,BYTES_NOP5
- #define BYTES_NOP7	0x0f,0x1f,0x80,0x00,0x00,0x00,0x00
- #define BYTES_NOP8	0x0f,0x1f,0x84,0x00,0x00,0x00,0x00,0x00
-+#define BYTES_NOP9	0x2e,BYTES_NOP8
-+#define BYTES_NOP10	0x66,BYTES_NOP9
-+#define BYTES_NOP11	0x66,BYTES_NOP10
-+
-+#define ASM_NOP9  _ASM_BYTES(BYTES_NOP9)
-+#define ASM_NOP10 _ASM_BYTES(BYTES_NOP10)
-+#define ASM_NOP11 _ASM_BYTES(BYTES_NOP11)
-+
-+#define ASM_NOP_MAX 11
- 
- #endif /* CONFIG_64BIT */
- 
-@@ -68,8 +82,6 @@
- #define ASM_NOP7 _ASM_BYTES(BYTES_NOP7)
- #define ASM_NOP8 _ASM_BYTES(BYTES_NOP8)
- 
--#define ASM_NOP_MAX 8
--
- #ifndef __ASSEMBLY__
- extern const unsigned char * const x86_nops[];
- #endif
+The very last patch implements this alternative using sched_attr::sched_runtime
+but is untested.
+
+Diffstat for the base patches [1-11]:
+
+ include/linux/rbtree_augmented.h |   26 +
+ include/linux/sched.h            |    7 +-
+ kernel/sched/core.c              |    2 +
+ kernel/sched/debug.c             |   48 +-
+ kernel/sched/fair.c              | 1105 ++++++++++++++++++--------------------
+ kernel/sched/features.h          |   24 +-
+ kernel/sched/sched.h             |   16 +-
+ 7 files changed, 587 insertions(+), 641 deletions(-)
+
+
+[1] https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=805acf7726282721504c8f00575d91ebfd750564
+
+[2] https://lkml.kernel.org/r/20230420150537.GC4253%40hirez.programming.kicks-ass.net
+
