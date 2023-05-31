@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB1071832D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C267183D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236973AbjEaNsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        id S237417AbjEaNwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236937AbjEaNry (ORCPT
+        with ESMTP id S237177AbjEaNt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:47:54 -0400
+        Wed, 31 May 2023 09:49:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C9A1987;
-        Wed, 31 May 2023 06:44:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4811BD8;
+        Wed, 31 May 2023 06:45:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC65E61476;
-        Wed, 31 May 2023 13:44:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA71C433EF;
-        Wed, 31 May 2023 13:44:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DEF763B22;
+        Wed, 31 May 2023 13:44:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9E20C4339B;
+        Wed, 31 May 2023 13:44:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540653;
-        bh=/JOOxuMTlDCRlc++y4DfjkT+ifoXix3oLh6NG6iiCjg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cD/t5nJqD59evdK0BOgVNUpM9nE9KArUlbMPeWGjOs07iDU5UCzl45oWHn3wKXhsZ
-         uaCCjvr3ANs+mSyd7v+CbkolLAfIh/rCX0HUpnSwDgWqWIXWIYfw25Z0aNEiSwKJao
-         GCLLI7/SzTo6S3qJI8uHsdoCckagO7VAcc63YzWdDGcbP5CBqDMSYsEGfXixRdPew0
-         poAcOnxRdgaisLXGI6gb6XfhL/V4CQxf6jd4KM368wxgkmbEzRkJg4qHinyUZslvhB
-         WNPDneG8c8jVBaaIX4rQCCC6S+eYrqN6b5Yntq8PFJo6kDlWWbMwqsvBfu6kC5JJfd
-         6Wz66Xh49T1zA==
+        s=k20201202; t=1685540657;
+        bh=a4agFHeHv3LUURie+04g3677uYkw0LGl6UHrB/kX5I4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CboGZTnMlxYo5dwFzgS7yNxnX1u3amN9wVEnmzJ1SCHMaKVe23kN45kACHVzdcTmd
+         w5FNZUhAmaUjqH37Qht34yqvXDHUp+ZCKEuqhSRv9vwRBmKuvtoifID4K+Y0Uj9PWV
+         KKvP46avRhulSRfB9l4/2b8aRV9imUFkBitxX2ixO7qt0FjXjtfnqIpgT/Q4NmJ5KJ
+         L6DM7lmSj0766ORid2rZk+2Y6FpdvWYE+/y6UDoVRjTjyATYxCRO3Ohj1aiI0Rvn2d
+         gdwVqwbdb2y5JputFdymtDye0QiTlEkhS98H5Diobe7SA2WNljIGSVSqs3naLqPh8r
+         26YiQspEr0YGg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tatsuki Sugiura <sugi@nemui.org>, Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, sagi@grimberg.me,
-        linux-nvme@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.15 24/24] NVMe: Add MAXIO 1602 to bogus nid list.
-Date:   Wed, 31 May 2023 09:43:20 -0400
-Message-Id: <20230531134320.3384102-24-sashal@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, sre@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 01/21] power: supply: ab8500: Fix external_power_changed race
+Date:   Wed, 31 May 2023 09:43:54 -0400
+Message-Id: <20230531134415.3384458-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230531134320.3384102-1-sashal@kernel.org>
-References: <20230531134320.3384102-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,69 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tatsuki Sugiura <sugi@nemui.org>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit a3a9d63dcd15535e7fdf4c7c1b32bfaed762973a ]
+[ Upstream commit a5299ce4e96f3e8930e9c051b28d8093ada87b08 ]
 
-HIKSEMI FUTURE M.2 SSD uses the same dummy nguid and eui64.
-I confirmed it with my two devices.
+ab8500_btemp_external_power_changed() dereferences di->btemp_psy,
+which gets sets in ab8500_btemp_probe() like this:
 
-This patch marks the controller as NVME_QUIRK_BOGUS_NID.
+        di->btemp_psy = devm_power_supply_register(dev, &ab8500_btemp_desc,
+                                                   &psy_cfg);
 
----------------------------------------------------------
-sugi@tempest:~% sudo nvme id-ctrl /dev/nvme0
-NVME Identify Controller:
-vid       : 0x1e4b
-ssvid     : 0x1e4b
-sn        : 30096022612
-mn        : HS-SSD-FUTURE 2048G
-fr        : SN10542
-rab       : 0
-ieee      : 000000
-cmic      : 0
-mdts      : 7
-cntlid    : 0
-ver       : 0x10400
-rtd3r     : 0x7a120
-rtd3e     : 0x1e8480
-oaes      : 0x200
-ctratt    : 0x2
-rrls      : 0
-cntrltype : 1
-fguid     : 00000000-0000-0000-0000-000000000000
-<snip...>
----------------------------------------------------------
+As soon as devm_power_supply_register() has called device_add()
+the external_power_changed callback can get called. So there is a window
+where ab8500_btemp_external_power_changed() may get called while
+di->btemp_psy has not been set yet leading to a NULL pointer dereference.
 
----------------------------------------------------------
-sugi@tempest:~% sudo nvme id-ns /dev/nvme0n1
-NVME Identify Namespace 1:
-<snip...>
-nguid   : 00000000000000000000000000000000
-eui64   : 0000000000000002
-lbaf  0 : ms:0   lbads:9  rp:0 (in use)
----------------------------------------------------------
+Fixing this is easy. The external_power_changed callback gets passed
+the power_supply which will eventually get stored in di->btemp_psy,
+so ab8500_btemp_external_power_changed() can simply directly use
+the passed in psy argument which is always valid.
 
-Signed-off-by: Tatsuki Sugiura <sugi@nemui.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Keith Busch <kbusch@kernel.org>
+And the same applies to ab8500_fg_external_power_changed().
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/host/pci.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/power/supply/ab8500_btemp.c | 6 ++----
+ drivers/power/supply/ab8500_fg.c    | 6 ++----
+ 2 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index c3acef6c32917..3b59c897fdcfa 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3388,6 +3388,8 @@ static const struct pci_device_id nvme_id_table[] = {
- 		.driver_data = NVME_QUIRK_BOGUS_NID, },
- 	{ PCI_DEVICE(0x1e4B, 0x1202),   /* MAXIO MAP1202 */
- 		.driver_data = NVME_QUIRK_BOGUS_NID, },
-+	{ PCI_DEVICE(0x1e4B, 0x1602),   /* MAXIO MAP1602 */
-+		.driver_data = NVME_QUIRK_BOGUS_NID, },
- 	{ PCI_DEVICE(0x1cc1, 0x5350),   /* ADATA XPG GAMMIX S50 */
- 		.driver_data = NVME_QUIRK_BOGUS_NID, },
- 	{ PCI_DEVICE(0x1e49, 0x0021),   /* ZHITAI TiPro5000 NVMe SSD */
+diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
+index 4417d64c31f97..5a1adceb6974d 100644
+--- a/drivers/power/supply/ab8500_btemp.c
++++ b/drivers/power/supply/ab8500_btemp.c
+@@ -921,10 +921,8 @@ static int ab8500_btemp_get_ext_psy_data(struct device *dev, void *data)
+  */
+ static void ab8500_btemp_external_power_changed(struct power_supply *psy)
+ {
+-	struct ab8500_btemp *di = power_supply_get_drvdata(psy);
+-
+-	class_for_each_device(power_supply_class, NULL,
+-		di->btemp_psy, ab8500_btemp_get_ext_psy_data);
++	class_for_each_device(power_supply_class, NULL, psy,
++			      ab8500_btemp_get_ext_psy_data);
+ }
+ 
+ /* ab8500 btemp driver interrupts and their respective isr */
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index a6b4a94c27662..a88590563647e 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -2380,10 +2380,8 @@ static int ab8500_fg_init_hw_registers(struct ab8500_fg *di)
+  */
+ static void ab8500_fg_external_power_changed(struct power_supply *psy)
+ {
+-	struct ab8500_fg *di = power_supply_get_drvdata(psy);
+-
+-	class_for_each_device(power_supply_class, NULL,
+-		di->fg_psy, ab8500_fg_get_ext_psy_data);
++	class_for_each_device(power_supply_class, NULL, psy,
++			      ab8500_fg_get_ext_psy_data);
+ }
+ 
+ /**
 -- 
 2.39.2
 
