@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16DF2718257
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6679718254
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236166AbjEaNmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
+        id S236621AbjEaNlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236601AbjEaNlV (ORCPT
+        with ESMTP id S236346AbjEaNlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:41:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1E410C0;
-        Wed, 31 May 2023 06:40:51 -0700 (PDT)
+        Wed, 31 May 2023 09:41:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06027E77;
+        Wed, 31 May 2023 06:40:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 797F163B22;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D468863B24;
+        Wed, 31 May 2023 13:40:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD2AC433EF;
         Wed, 31 May 2023 13:40:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEF2DC4339C;
-        Wed, 31 May 2023 13:40:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540446;
-        bh=UL1wfdsUQBKlzGq2PJgrxBOWBUnxUBn/pysu3p7J4s0=;
+        s=k20201202; t=1685540448;
+        bh=C6k38unQQX3+QWan7eqCiqQn8GBnj16eTEB/Ozj63Gk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JkLd76iuCpwFLlyERXVfJ4B/1CveFSTYyubA7XcRz6wa8vZDvH00tRuEyuCRameje
-         Hbqq/yBsUy1rJS9FIwx2DYY0hm1eW8I+Fm52Q2uZyvTRne1ce7k47TaJNwL7a5sAsG
-         08RQgxXfUns1m3VOlzpdhTgoLmQBKlMawUB0s14ea4IMTN9baOZfF3aJ6EJqeHbSo/
-         W+qPeOxXRr/lKNJH0S/2lBJj/Bmp7BtmNBuWFINzXiQzd2Rn6yaP+e5ieKA79+/szz
-         tZHu8NJCvt2quTt02wjTzxyouEjrFonciY+JzfIeGhhjgrvUf7q5xvJhK81SdycmSG
-         ymY12kv7DhLAQ==
+        b=ZCpUKy/bnNgbVffs4AYVGZcpx1DVgzn919hzimQW1wR23YqndySRLPZRcmpQjUZOc
+         VKjCae4wfbXokBUdjoqSqlbft8ePSzMkV6QLDobapq74i0H3AZ+K8d+Lt3LBDeOQS/
+         1lcQkJZ11WA46/wiq+E+IbZcFEpicMCN2m76N7/2GJ/erg+Mh2lcKSohjH4laSHDlI
+         yaUR3rc6RcMs9EYyz49jz0E8vphJOI4OJ/Cz0JlTFNihDyrO4541I5z3lhXLHsbtGt
+         oQ5et04o5ZnUhS/c8HWH3Z95DQgUCsxtSmSQe1E/68fI6SC3ZN5wxnkGyo0ilvlpss
+         wwNLUemQtlQXQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 6.3 16/37] drm: panel-orientation-quirks: Change Air's quirk to support Air Plus
-Date:   Wed, 31 May 2023 09:39:58 -0400
-Message-Id: <20230531134020.3383253-16-sashal@kernel.org>
+Cc:     Qu Wenruo <wqu@suse.com>, David Sterba <dsterba@suse.com>,
+        Sasha Levin <sashal@kernel.org>, clm@fb.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 17/37] btrfs: scrub: try harder to mark RAID56 block groups read-only
+Date:   Wed, 31 May 2023 09:39:59 -0400
+Message-Id: <20230531134020.3383253-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134020.3383253-1-sashal@kernel.org>
 References: <20230531134020.3383253-1-sashal@kernel.org>
@@ -50,49 +47,103 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maya Matuszczyk <maccraft123mc@gmail.com>
+From: Qu Wenruo <wqu@suse.com>
 
-[ Upstream commit 1aa7f416175619e0286fddc5fc44e968b06bf2aa ]
+[ Upstream commit 7561551e7ba870b9659083b95feb520fb2dacce3 ]
 
-It turned out that Aya Neo Air Plus had a different board name than
-expected.
-This patch changes Aya Neo Air's quirk to account for that, as both
-devices share "Air" in DMI product name.
+Currently we allow a block group not to be marked read-only for scrub.
 
-Tested on Air claiming to be an Air Pro, and on Air Plus.
+But for RAID56 block groups if we require the block group to be
+read-only, then we're allowed to use cached content from scrub stripe to
+reduce unnecessary RAID56 reads.
 
-Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20230515184843.1552612-1-maccraft123mc@gmail.com
+So this patch would:
+
+- Make btrfs_inc_block_group_ro() try harder
+  During my tests, for cases like btrfs/061 and btrfs/064, we can hit
+  ENOSPC from btrfs_inc_block_group_ro() calls during scrub.
+
+  The reason is if we only have one single data chunk, and trying to
+  scrub it, we won't have any space left for any newer data writes.
+
+  But this check should be done by the caller, especially for scrub
+  cases we only temporarily mark the chunk read-only.
+  And newer data writes would always try to allocate a new data chunk
+  when needed.
+
+- Return error for scrub if we failed to mark a RAID56 chunk read-only
+
+Signed-off-by: Qu Wenruo <wqu@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_panel_orientation_quirks.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/btrfs/block-group.c | 14 ++++++++++++--
+ fs/btrfs/scrub.c       |  9 ++++++++-
+ 2 files changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
-index b1a38e6ce2f8f..0cb646cb04ee1 100644
---- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
-+++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
-@@ -179,7 +179,7 @@ static const struct dmi_system_id orientation_data[] = {
- 	}, {	/* AYA NEO AIR */
- 		.matches = {
- 		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AYANEO"),
--		  DMI_MATCH(DMI_BOARD_NAME, "AIR"),
-+		  DMI_MATCH(DMI_PRODUCT_NAME, "AIR"),
- 		},
- 		.driver_data = (void *)&lcd1080x1920_leftside_up,
- 	}, {	/* AYA NEO NEXT */
+diff --git a/fs/btrfs/block-group.c b/fs/btrfs/block-group.c
+index 5fc670c27f864..58ce5d44ce4d5 100644
+--- a/fs/btrfs/block-group.c
++++ b/fs/btrfs/block-group.c
+@@ -2832,10 +2832,20 @@ int btrfs_inc_block_group_ro(struct btrfs_block_group *cache,
+ 	}
+ 
+ 	ret = inc_block_group_ro(cache, 0);
+-	if (!do_chunk_alloc || ret == -ETXTBSY)
+-		goto unlock_out;
+ 	if (!ret)
+ 		goto out;
++	if (ret == -ETXTBSY)
++		goto unlock_out;
++
++	/*
++	 * Skip chunk alloction if the bg is SYSTEM, this is to avoid system
++	 * chunk allocation storm to exhaust the system chunk array.  Otherwise
++	 * we still want to try our best to mark the block group read-only.
++	 */
++	if (!do_chunk_alloc && ret == -ENOSPC &&
++	    (cache->flags & BTRFS_BLOCK_GROUP_SYSTEM))
++		goto unlock_out;
++
+ 	alloc_flags = btrfs_get_alloc_profile(fs_info, cache->space_info->flags);
+ 	ret = btrfs_chunk_alloc(trans, alloc_flags, CHUNK_ALLOC_FORCE);
+ 	if (ret < 0)
+diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
+index 69c93ae333f63..3720fd1f593d2 100644
+--- a/fs/btrfs/scrub.c
++++ b/fs/btrfs/scrub.c
+@@ -4034,13 +4034,20 @@ int scrub_enumerate_chunks(struct scrub_ctx *sctx,
+ 
+ 		if (ret == 0) {
+ 			ro_set = 1;
+-		} else if (ret == -ENOSPC && !sctx->is_dev_replace) {
++		} else if (ret == -ENOSPC && !sctx->is_dev_replace &&
++			   !(cache->flags & BTRFS_BLOCK_GROUP_RAID56_MASK)) {
+ 			/*
+ 			 * btrfs_inc_block_group_ro return -ENOSPC when it
+ 			 * failed in creating new chunk for metadata.
+ 			 * It is not a problem for scrub, because
+ 			 * metadata are always cowed, and our scrub paused
+ 			 * commit_transactions.
++			 *
++			 * For RAID56 chunks, we have to mark them read-only
++			 * for scrub, as later we would use our own cache
++			 * out of RAID56 realm.
++			 * Thus we want the RAID56 bg to be marked RO to
++			 * prevent RMW from screwing up out cache.
+ 			 */
+ 			ro_set = 0;
+ 		} else if (ret == -ETXTBSY) {
 -- 
 2.39.2
 
