@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 814DB71881D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C936718822
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjEaRJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
+        id S229520AbjEaRKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbjEaRJ2 (ORCPT
+        with ESMTP id S230291AbjEaRKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:09:28 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54AB213D;
-        Wed, 31 May 2023 10:09:25 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-565aa2cc428so51898337b3.1;
-        Wed, 31 May 2023 10:09:25 -0700 (PDT)
+        Wed, 31 May 2023 13:10:05 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70112135;
+        Wed, 31 May 2023 10:10:04 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-ba8cd61ee2dso1815361276.1;
+        Wed, 31 May 2023 10:10:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685552964; x=1688144964;
+        d=gmail.com; s=20221208; t=1685553003; x=1688145003;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UqDH4yuf9riVSA5V9W66V8AzL16NatN+7DvngwJVYHQ=;
-        b=caLGCJsLWoGXEsdVIpGLUQt+zeJNOVI+LboWHPMIqBJWAnIgJ+242auCr4nUiBn5Mk
-         hBnHQEitvKnQqFL7tBD57Xzc92LoREi2W2dR4C9s13QGZFqO520W4FweLarNlIDsUoTM
-         p2zOOCZowyHijyUm0/VLa6QGp6JAMH8wfdoEKVdVVNMj42qxckZh/zr1oNhzYTXBn5cd
-         67OcyM5lpazmLs8sZawR0AQvVA2c+LPakLZ3RlpDosOT9Y1dNwB2rm4dI/2sxnRirlSX
-         MY5FdLAsdIEzXF38+2el4+6sXBSAQtN4Ojvd6vUtxr54YVSybND6VdspTprwDnNqvIqq
-         wZ3A==
+        bh=j5hNAeMykYH6m+pjlK4ZKQGtK0LDuyxxmWVTG0iy4gk=;
+        b=RgBb769DkAHCjoOyku0LjFwuuuVlYaimpuChbm/e6uqQonNgWj6Wkw86cPMdU6eXz3
+         IKYl4uH6w2nuanrD3CiroKb7ap7n18bm2RMoeLg/lKSqp/8MdBmzkuXUOIldyx2OkRT3
+         ZzxCY3GKi2PQtdVqYrIBrp+fD4+xUvumOR+8v200q+Pmz6dY7YhinaEm8VmIbSzMeb3H
+         S0ZI1aUrGebHJfqc29jWbkXjDdoLXBgdVvnvhT1Hd/QL3kg3qRFs8A5YuV4dpOsgxydk
+         6tsP9dzvIlUb7JwM8sIneb6X4//FQJ755f8Khi6Ktc4kjIQAgt/l6LC7qbc8+/mXs584
+         Hgaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685552964; x=1688144964;
+        d=1e100.net; s=20221208; t=1685553003; x=1688145003;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UqDH4yuf9riVSA5V9W66V8AzL16NatN+7DvngwJVYHQ=;
-        b=ChtSxDu5hq48t9ruSB2/EgbNFGMteoHoiweVO1QRvtMybNvoc1Dy2l5Gwl1B8GE+QN
-         STvGYP6ebMKWOw+r+GUvo0NR5WgqTWSefY80LNBBpkDcMmj+sHq+Qnjg/lF2BdaSSkb4
-         xlEkZYWgrsSSRYAeiL3gY7QGRiW05ikSYKzARnV36IwwF2Mukl+cGt9ngXzQfG4ZNqGT
-         NwjM2Y8nK9GePNI0v6g6DSi5OOGl6RbDzoJ3rNS4hWB/4lSLfNfm8HE2MwnPJIiw75jr
-         Uu1OikCr44j8Vba+OLnNNCJu1M1FilyfiGqV0ibv7if69m1E7rKr3UyZIc0LEdUYivjw
-         DbfQ==
-X-Gm-Message-State: AC+VfDxG0kF9Rdq6Bok8eyLHKC0LlkqhkT3RuvlMf4SoAlASqa2p9ora
-        N9in12MIcS8/Rvl6PV8CihT8j6R24j/oyCnARtQ=
-X-Google-Smtp-Source: ACHHUZ6YRP+7GOjalS/xwoylUY0eFkX8MPFV32qCf9SvGRbSl26p2DWv6GCFWqaC5hFnT6ZojaI6Kh3uKPqGow4WfEI=
-X-Received: by 2002:a25:f80e:0:b0:bac:f582:eefd with SMTP id
- u14-20020a25f80e000000b00bacf582eefdmr6912007ybd.35.1685552964512; Wed, 31
- May 2023 10:09:24 -0700 (PDT)
+        bh=j5hNAeMykYH6m+pjlK4ZKQGtK0LDuyxxmWVTG0iy4gk=;
+        b=R36eYezjeLlKLMvrBQGZQEMD+y/cSHl/5Cnoot47kI5bpa3QIxxOYbJTvyschm2XZK
+         vtPZBlINl3dhMhkLbQvlVVVsZHLLsxzisLzliDtokBLRPyhnnlz9LMlPWLfQqzS+iaQx
+         /qciYJAaDQWV7SmaItmNtQKzs98+ShBW5s7AsVWypxf2pJy7PQkNAG4kOmAoat5EflE3
+         ixPhaZC+aUT6Urc8DfxFgxKxJcE1oEPO4Is1aplbqDhcSm6gE3dMAH3W01+RGkguQDIE
+         yJEk2TQYTBizLOz78vlkYRS7iEfXLG7SglTEK3wJZkN54UA/xPYtWcZF1ybDMOp7JlTJ
+         Ph8A==
+X-Gm-Message-State: AC+VfDyTPRttT8shWm6cun4nBbTz1JU3U3oc68Q+fVnAuwjaUPUr2zTs
+        d3E2RQajyB86rycF6RddSRsmJMcZlCF0RVWvXvA=
+X-Google-Smtp-Source: ACHHUZ6gziPlD75sFBIWzYJKukeguq7CTPeNtKJWb7F/xT/sDpz2WsRUhNOlU+011ytGs8Qg/NrtXYae3YXJc9tUeRs=
+X-Received: by 2002:a25:e64f:0:b0:bac:fd8d:94b5 with SMTP id
+ d76-20020a25e64f000000b00bacfd8d94b5mr18876773ybh.13.1685553003652; Wed, 31
+ May 2023 10:10:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230502124015.356001-1-aliceryhl@google.com>
-In-Reply-To: <20230502124015.356001-1-aliceryhl@google.com>
+References: <20230503141016.683634-1-aliceryhl@google.com>
+In-Reply-To: <20230503141016.683634-1-aliceryhl@google.com>
 From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 31 May 2023 19:09:13 +0200
-Message-ID: <CANiq72=zXOqvdttGjxGrbGoNvyz=QNb5sCE1FKROgKo5yEkfBQ@mail.gmail.com>
-Subject: Re: [PATCH] rust: error: allow specifying error type on `Result`
+Date:   Wed, 31 May 2023 19:09:52 +0200
+Message-ID: <CANiq72k6kSHPNjQr+PEB3KGO05M0mGet5un7jVeNeS_02uEzZQ@mail.gmail.com>
+Subject: Re: [PATCH v2] rust: str: add conversion from `CStr` to `CString`
 To:     Alice Ryhl <aliceryhl@google.com>
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -61,6 +61,7 @@ Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
         Benno Lossin <benno.lossin@proton.me>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
         rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
@@ -75,19 +76,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 2, 2023 at 2:40=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> wr=
+On Wed, May 3, 2023 at 4:10=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> wr=
 ote:
 >
-> Currently, if the `kernel::error::Result` type is in scope (which is
-> often is, since it's in the kernel's prelude), you cannot write
-> `Result<T, SomeOtherErrorType>` when you want to use a different error
-> type than `kernel::error::Error`.
+> These methods can be used to copy the data in a temporary c string into
+> a separate allocation, so that it can be accessed later even if the
+> original is deallocated.
 >
-> To solve this we change the error type from being hard-coded to just
-> being a default generic parameter. This still lets you write `Result<T>`
-> when you just want to use the `Error` error type, but also lets you
-> write `Result<T, SomeOtherErrorType>` when necessary.
+> The API in this change mirrors the standard library API for the `&str`
+> and `String` types. The `ToOwned` trait is not implemented because it
+> assumes that allocations are infallible.
 >
+> Reviewed-by: Benno Lossin <benno.lossin@proton.me>
 > Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 
 Applied to `rust-next` -- thanks everyone!
