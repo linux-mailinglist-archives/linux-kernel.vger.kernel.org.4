@@ -2,101 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A58AB7173E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 04:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A078C7173E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 04:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbjEaCtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 22:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
+        id S233907AbjEaCt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 22:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbjEaCtM (ORCPT
+        with ESMTP id S231417AbjEaCt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 22:49:12 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73008E;
-        Tue, 30 May 2023 19:49:09 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-6260b578097so24649216d6.3;
-        Tue, 30 May 2023 19:49:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685501349; x=1688093349;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6e2j8yrS747eKvqEmOM0dcXUIRaD3dt4RVORVnxHAYs=;
-        b=qqoBPw/WY+2FSw0nXRa+1jy91yIpTrEAKJn/AOAlD4lvNgY41wlUGC1SkH33Dr2KYk
-         KB7VP94bPoNbN5qG3iVHTh5itAUJ1sVKSajgrsV3iHinQbx20UGDrK4siNz69pSbHY8O
-         UmpV9E68jVUyZS2NErYZeeyyN5gz2SYBb5yNReN2Rzt7u6eOp7P7saURYQxdRMN1mFjl
-         oadzzPD2eJlK9BS+Wb/VMSQmx3NpgrMhNsYfPRPPny3ZUbmYT2n/5qy0YdcWP/i7B0My
-         5LzvvzD2GEfVfpahepLUzKG1+OCrZZR5NzqlrXAxQqSGAEwSNDdzHdLmX+9oVMrGroYQ
-         gBIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685501349; x=1688093349;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6e2j8yrS747eKvqEmOM0dcXUIRaD3dt4RVORVnxHAYs=;
-        b=P2sklf2J8quSsHiyojSPqB1XE9OyvR9Wywj7P6LfsMPmEkkBfWP1wZ3eHdU6GbiZiO
-         1BkjGfgk+7PhxNxsNrJ/DOwmlBQTxLI6L+rRNe+DrQ+cboOpQSkqoltTwQXU//bWFuRC
-         GouVmc6UAoNg/Dnm4dLFpE3izbZ5xJSdkEzwsgOq98aZk9Ym8L48xfBCymonqrK5G5BX
-         YCaNLOfVQyBqAuhZC/jbYneTeCafI4AgArgHO9lA+OLvhXvSCfggvmAnenlpgC5PVZOp
-         XUShfLYKjSgwsvoip2lojG34UjNOdjUQXM2GVYqv86VJO31B8tMV0nqVfBEVw6OpS7pT
-         LhoA==
-X-Gm-Message-State: AC+VfDxyTunxj3AFdZin+v+nN+DHr/aZwjHRmUKRyWjanzf7dxdxBmb8
-        ZIdEpovLYYOcvP9tNd3f+Ck4sJ4hszinQA==
-X-Google-Smtp-Source: ACHHUZ52Yw/1OjG4IhoiE6fZ7eKnLRhYKO0DIKGAauUkEl9PmXjiQG87Tlv0PJ/4VoneEdbKSvFcUA==
-X-Received: by 2002:a05:6214:412:b0:625:9562:f04 with SMTP id z18-20020a056214041200b0062595620f04mr4884729qvx.51.1685501348941;
-        Tue, 30 May 2023 19:49:08 -0700 (PDT)
-Received: from localhost ([2600:4040:2007:9800:dcb4:7fef:9d6a:e79f])
-        by smtp.gmail.com with ESMTPSA id er5-20020a056214190500b006262956aa0dsm1952230qvb.99.2023.05.30.19.49.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 19:49:08 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 30 May 2023 22:49:07 -0400
-Message-Id: <CT04D1K5GOBT.29Y5DO5HHS57V@Latitude-E6420>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        "Vinod Koul" <vkoul@kernel.org>,
-        "Kishon Vijay Abraham I" <kishon@kernel.org>,
-        "Arnd Bergmann" <arnd@arndb.de>, "Olof Johansson" <olof@lixom.net>,
-        <soc@kernel.org>
-Cc:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 2/4] dt-bindings: Add qcom,usb-hs-phy-msm8960
-From:   "Rudraksha Gupta" <guptarud@gmail.com>
-X-Mailer: aerc 0.8.2
-References: <20230527040905.stmnoshkdqgiaex6@ripper>
- <20230528001010.47868-3-guptarud@gmail.com>
- <fb65244e-ab3b-c473-57b9-2da80e67be4a@linaro.org>
-In-Reply-To: <fb65244e-ab3b-c473-57b9-2da80e67be4a@linaro.org>
+        Tue, 30 May 2023 22:49:56 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9498E;
+        Tue, 30 May 2023 19:49:55 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34V2PcGS013603;
+        Wed, 31 May 2023 02:49:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=DrIz8g9inIqB+//ujGYX739blh73k61Xr2sN/fXVZVY=;
+ b=GE8dzKX60xY0A9OBhibUScixE1D8EV47mF25Tptw0rfh0syvTCOhjSqPTLmXSKxaXTXh
+ qSXIp+juCiSdpQrtz/71C3438QS5mvQI6ebwI+DxbzBBvMcqOSrGwZXAU4mVKWGNMk4X
+ i1b3oS2M39Cru0SCjN5gkRPiuibO1lco4+Jh9lr2wucnHUAP92GXVgW5Bv/b32leCPbD
+ FraF7vNXq3EYChvCaj9aCV5dIjGzo3lLOtB7/iKeq8BjrjRe6npT4iFkx9XWGkQeLnDu
+ NsVYaERjq/jSM/sWnSowm36zAT8B2S3b08ko/UKYyPj4LRVyssflMG/4eWiYU7fm7iXT lQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwnhf0wc8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 02:49:51 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34V2no6p032194
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 02:49:50 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 30 May 2023 19:49:49 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] arm64: dts: qcom: Drop undocumented "svid" property
+Date:   Tue, 30 May 2023 19:49:44 -0700
+Message-ID: <20230531024944.4105769-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 8Y4ayMeJuLNo7Aj92VP70A9badBj2Uky
+X-Proofpoint-GUID: 8Y4ayMeJuLNo7Aj92VP70A9badBj2Uky
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_18,2023-05-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 malwarescore=0 mlxlogscore=650 mlxscore=0
+ priorityscore=1501 bulkscore=0 adultscore=0 spamscore=0 clxscore=1015
+ phishscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305310021
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue May 30, 2023 at 9:22 AM EDT, Krzysztof Kozlowski wrote:
-> On 28/05/2023 02:10, Rudraksha Gupta wrote:
-> > Adds qcom,usb-hs-phy-msm8960 compatible
-> >=20
->
-> Please use subject prefixes matching the subsystem. You can get them for
-> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-> your patch is touching.
->
-> Best regards,
-> Krzysztof
+The Linux typec_mux implementation required that a property named "svid"
+was present in the remote node of the of_graph for a match to be found.
 
-It seems like "dt-bindings:" is the subject prefix for this file. Would
-you like me to use another prefix instead?
+With the introduction of commit '4aebc4f89f00 ("usb: typec: mux: Clean up
+mux_fwnode_match()")', the implementation is aligned with the binding
+and this property can be dropped - and the associated DeviceTree
+validation warning resolved.
+
+Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+---
+
+The referred to patch is present in usb-next.
+
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts                  | 2 --
+ arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts | 2 --
+ arch/arm64/boot/dts/qcom/sm8350-hdk.dts                    | 1 -
+ arch/arm64/boot/dts/qcom/sm8450-hdk.dts                    | 1 -
+ 4 files changed, 6 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+index cd7e0097d8bc..4594ef4c1f38 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+@@ -229,7 +229,6 @@ usb0-sbu-mux {
+ 
+ 		mode-switch;
+ 		orientation-switch;
+-		svid = /bits/ 16 <0xff01>;
+ 
+ 		port {
+ 			usb0_sbu_mux: endpoint {
+@@ -249,7 +248,6 @@ usb1-sbu-mux {
+ 
+ 		mode-switch;
+ 		orientation-switch;
+-		svid = /bits/ 16 <0xff01>;
+ 
+ 		port {
+ 			usb1_sbu_mux: endpoint {
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+index 5ae057ad6438..a93170e57229 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+@@ -329,7 +329,6 @@ usb0-sbu-mux {
+ 
+ 		mode-switch;
+ 		orientation-switch;
+-		svid = /bits/ 16 <0xff01>;
+ 
+ 		port {
+ 			usb0_sbu_mux: endpoint {
+@@ -349,7 +348,6 @@ usb1-sbu-mux {
+ 
+ 		mode-switch;
+ 		orientation-switch;
+-		svid = /bits/ 16 <0xff01>;
+ 
+ 		port {
+ 			usb1_sbu_mux: endpoint {
+diff --git a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+index d3788bd72ac3..0c4829e876f3 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
++++ b/arch/arm64/boot/dts/qcom/sm8350-hdk.dts
+@@ -348,7 +348,6 @@ typec-mux@42 {
+ 		vcc-supply = <&vreg_bob>;
+ 		mode-switch;
+ 		orientation-switch;
+-		svid = /bits/ 16 <0xff01>;
+ 
+ 		ports {
+ 			#address-cells = <1>;
+diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+index d5aeb7319776..c9676e7f2c69 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
++++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+@@ -517,7 +517,6 @@ typec-mux@42 {
+ 		vcc-supply = <&vreg_bob>;
+ 		mode-switch;
+ 		orientation-switch;
+-		svid = /bits/ 16 <0xff01>;
+ 
+ 		ports {
+ 			#address-cells = <1>;
+-- 
+2.25.1
+
