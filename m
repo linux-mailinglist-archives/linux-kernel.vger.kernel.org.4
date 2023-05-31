@@ -2,125 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A18718801
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EE9718806
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjEaRFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
+        id S230114AbjEaRFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbjEaREw (ORCPT
+        with ESMTP id S230082AbjEaRFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:04:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD131BC
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:04:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05BB663E12
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 17:04:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69F0CC4339B;
-        Wed, 31 May 2023 17:04:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685552653;
-        bh=OvzFB8mGwFVt0GUfLdMmDb+IsQo2DWmmZgQEazFHV5s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RJdgFk8MLxkEfoIvMv4ajzYoMPa0Qdv2sEe7KAAVwLzg6LgoduIYrPIKqX8vxoOh/
-         1zFIVmQi2TnzxTCoRufvv9dW/NWmkjU+JOepq9+ZUknWwyJRgP4e18Zdyv/eZWG2a3
-         qOnznV0w93/ItBtgxmBvjEcyvzGn05GIWZE68pqv6MwdQPV+SPWdz06ExBMC2YuGCu
-         6J0XO7Dsv7Jt6uHG/CZNLZ92AeEOBVGvmhTQyqk9Ct+W12iwRRfW1YinnO162UJ4fQ
-         5hur64yyGuthFDt1G5zqY9cmLSMvVek7xJH9uYVp2zmWpKBpKJ4gnCcB3jt4Jdou8a
-         X1j8bCEONsGpQ==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-4f4b384c09fso7312673e87.3;
-        Wed, 31 May 2023 10:04:13 -0700 (PDT)
-X-Gm-Message-State: AC+VfDy+1Lc1t8uNldDrVWwRZlhNxZxeauFVMa4IuAzaqGHTeFQ5KgkY
-        i8mcgGgvUPu/iB3cZTWXsYVyDQZ4toPEVQn47fo=
-X-Google-Smtp-Source: ACHHUZ5U0qhBdMIyrvOoX8zbY4lWBrfnPt4KiXT68q6MQ4+Mf9/YSdl1QJgo+JFQFWTi/5uq0X5gTARxNS9Rdn62m8g=
-X-Received: by 2002:ac2:4c37:0:b0:4f3:a1fe:5b1c with SMTP id
- u23-20020ac24c37000000b004f3a1fe5b1cmr3050090lfq.44.1685552651403; Wed, 31
- May 2023 10:04:11 -0700 (PDT)
+        Wed, 31 May 2023 13:05:15 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2F2194;
+        Wed, 31 May 2023 10:04:55 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51493ec65d8so7831071a12.2;
+        Wed, 31 May 2023 10:04:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1685552693; x=1688144693;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ItgjmlwgaPjP4wHyJ733O7/dyXG5xBnA6V2QKEkRMU0=;
+        b=Kd4anC3X23dnlVDhbx8F1bdolSDzOlmYUDiJPONeS3X5n7Wfwnbk1VysYxbvvoyZCE
+         RvePrIGlZbuBEWYomBAgnAZ1JMkMEfLC+PORMTum8dDfwNvDmPESqAgC3A/n2zFBIvrv
+         oIHEjLEI3ANbKTN7WPlcv430Li72dMlgFHqCIHRVgRJW+ExWc+nagMqQzQcJocizr7tw
+         4T/POxszZKhuFZTf+KE0zKpRK8xT6paGvHMUIuEumxwAsJ0vOaNFWr70nxxsT/ybcYoA
+         RRddtjY/eDHptJX4zwvqh108lFXGvFEJwv2xThpcD0UlmEdlu8QJt+MiOYh7SwPB8Gau
+         Y8Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685552693; x=1688144693;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ItgjmlwgaPjP4wHyJ733O7/dyXG5xBnA6V2QKEkRMU0=;
+        b=MZyytg16Kkkr+EtAwYMJZnZ5W6xDKWRTd+/GOxuJ66sGc6lzaMDPpIVXeKTdwWPWYr
+         4UP5bWFicWsgF//TYOR1ipQsDEt5VvkC5Qlv9rulj0Q/s9TszyPPfj+iEul1NdkXqgwe
+         X5/HKt+WHv84mMcTGG3GmiY3FmTn5/aSY+gQPGpg+zlqX8MH1Izv/coF6AzuYtwRRmm2
+         L22rKf77HxtYkD7Y06IivpErXF8FLVAB/ibznggdyH4mmUu8HoCugpmfN2mUEIDDQ2sH
+         8oku7+VmZEqmI45aZYEaOpjR3i6X340IfSbFl9gHc5+bDpSJ0TMdORFFL552KdEPlxB9
+         s81g==
+X-Gm-Message-State: AC+VfDz8gsAGdVl20zhz6dSXv0J7uGliopn85y+N8jnL2b231kgoXFUC
+        KvUzA4M0Lnr3VJD2Wont4KKyMZwbiz8A5Q==
+X-Google-Smtp-Source: ACHHUZ6vWDWfy0zkZs76a944F2SHpEHsRKFsfrMiY89pZFOnWVB8OsAHKSW+F+SBvUpZOdQfL73mqQ==
+X-Received: by 2002:a17:907:9722:b0:95e:d448:477 with SMTP id jg34-20020a170907972200b0095ed4480477mr6198434ejc.33.1685552693337;
+        Wed, 31 May 2023 10:04:53 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:810a:9640:26a8:d56e:8fdf:f926:4676])
+        by smtp.gmail.com with ESMTPSA id n6-20020a170906118600b0094f282fc29asm9189406eja.207.2023.05.31.10.04.51
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 31 May 2023 10:04:52 -0700 (PDT)
+From:   Franziska Naepelt <franziska.naepelt@googlemail.com>
+X-Google-Original-From: Franziska Naepelt <franziska.naepelt@gmail.com>
+To:     linux-omap@vger.kernel.org
+Cc:     tony@atomide.com, paul@pwsan.com, linux@armlinux.org.uk,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Franziska Naepelt <franziska.naepelt@gmail.com>
+Subject: [PATCH] ARM: omap2: Fix checkpatch issues
+Date:   Wed, 31 May 2023 19:04:27 +0200
+Message-Id: <20230531170427.42199-1-franziska.naepelt@gmail.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-References: <20230526051529.3387103-1-song@kernel.org> <ZHGrjJ8PqAGN9OZK@moria.home.lan>
- <CAPhsuW4DAwx=7Nta5HGiPTJ1LQJCGJGY3FrsdKi62f_zJbsRFQ@mail.gmail.com>
- <20230529104530.GL4967@kernel.org> <CAPhsuW6g98Wz9Oj1NiwwZ1OkSVNXX10USByY0b9tEfzOt8SVQg@mail.gmail.com>
- <20230531135120.GA395338@kernel.org>
-In-Reply-To: <20230531135120.GA395338@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 31 May 2023 10:03:58 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6r=0r0dKfKxwPp9KXqLSKWw4x6RrbNBnS=1M1Y1sh5Ag@mail.gmail.com>
-Message-ID: <CAPhsuW6r=0r0dKfKxwPp9KXqLSKWw4x6RrbNBnS=1M1Y1sh5Ag@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Type aware module allocator
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        mcgrof@kernel.org, peterz@infradead.org, tglx@linutronix.de,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 6:51=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
-te:
->
-> On Tue, May 30, 2023 at 03:37:24PM -0700, Song Liu wrote:
-> > On Mon, May 29, 2023 at 3:45=E2=80=AFAM Mike Rapoport <rppt@kernel.org>=
- wrote:
-> > >
-> > > On Sat, May 27, 2023 at 10:58:37PM -0700, Song Liu wrote:
-> > > > On Sat, May 27, 2023 at 12:04=E2=80=AFAM Kent Overstreet
-> > > > <kent.overstreet@linux.dev> wrote:
-> > > > >
-> > > > > I think this needs to back to the drawing board and we need somet=
-hing
-> > > > > simpler just targeted at executable memory; architecture specific
-> > > > > options should definitely _not_ be part of the exposed interface.
-> > > >
-> > > > I don't think we are exposing architecture specific options to user=
-s.
-> > > > Some layer need to handle arch specifics. If the new allocator is
-> > > > built on top of module_alloc, module_alloc is handling that. If the=
- new
-> > > > allocator is to replace module_alloc, it needs to handle arch speci=
-fics.
-> > >
-> > > I'm for creating a new allocator that will replace module_alloc(). Th=
-is
-> > > will give us a clean abstraction that modules and all the rest will u=
-se and
-> > > it will make easier to plug binpack or another allocator instead of
-> > > vmalloc.
-> > >
-> > > Another point is with a new allocator we won't have weird dependencie=
-s on
-> > > CONFIG_MODULE in e.g. bpf and kprobes.
-> > >
-> > > I'll have something ready to post as an RFC in a few days.
-> >
-> > I guess this RFC is similar to unmapped_alloc()? If it replaces
-> > vmalloc, we can probably trim this set down a bit (remove
-> > mod_alloc_params and vmalloc_params, etc.).
->
-> No, it's not a new allocator. I'm trying to create an API for code
-> allocations that can accommodate all the architectures and it won't be a
-> part of modules code. The modules will use the new API just like every
-> other subsystem that needs to allocate code.
->
-> I've got a core part of it here:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=3Dj=
-italloc/v1
+The following checkpatch issues have been resolved:
 
-This branch looks like the same scope as this set (but with different
-implementation). So it will still use vmalloc, right?
+arch/arm/mach-omap2/omap-wakeupgen.c
+WARNING: Missing a blank line after declarations
 
-Thanks,
-Song
+arch/arm/mach-omap2/omap_hwmod_3xxx_data.c
+ERROR: space prohibited before that ',' (ctx:WxE)
+WARNING: Use lore.kernel.org archive links when possible
+
+arch/arm/mach-omap2/omap_phy_internal.c
+WARNING: Block comments should align the * on each line
+
+arch/arm/mach-omap2/sdrc2xxx.c
+WARNING: It's generally not useful to have the filename in the file
+
+arch/arm/mach-omap2/ti81xx-restart.c
+ERROR: trailing statements should be on next line
+
+Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
+---
+ arch/arm/mach-omap2/omap-wakeupgen.c       |  1 +
+ arch/arm/mach-omap2/omap_hwmod_3xxx_data.c | 11 +++++------
+ arch/arm/mach-omap2/omap_phy_internal.c    | 12 ++++++------
+ arch/arm/mach-omap2/sdrc2xxx.c             |  2 --
+ arch/arm/mach-omap2/ti81xx-restart.c       |  3 ++-
+ 5 files changed, 14 insertions(+), 15 deletions(-)
+
+diff --git a/arch/arm/mach-omap2/omap-wakeupgen.c b/arch/arm/mach-omap2/omap-wakeupgen.c
+index 8d21e3a3c05f..6f0d6120c174 100644
+--- a/arch/arm/mach-omap2/omap-wakeupgen.c
++++ b/arch/arm/mach-omap2/omap-wakeupgen.c
+@@ -374,6 +374,7 @@ static void irq_restore_context(void)
+ static void irq_save_secure_context(void)
+ {
+ 	u32 ret;
++
+ 	ret = omap_secure_dispatcher(OMAP4_HAL_SAVEGIC_INDEX,
+ 				FLAG_START_CRITICAL,
+ 				0, 0, 0, 0, 0);
+diff --git a/arch/arm/mach-omap2/omap_hwmod_3xxx_data.c b/arch/arm/mach-omap2/omap_hwmod_3xxx_data.c
+index cb33f0382a90..5cbdf58ad59f 100644
+--- a/arch/arm/mach-omap2/omap_hwmod_3xxx_data.c
++++ b/arch/arm/mach-omap2/omap_hwmod_3xxx_data.c
+@@ -1851,7 +1851,7 @@ static struct omap_hwmod_ocp_if omap3xxx_l4_core__dss_rfbi = {
+ 	.fw = {
+ 		.omap2 = {
+ 			.l4_fw_region  = OMAP3_L4_CORE_FW_DSS_RFBI_REGION,
+-			.l4_prot_group = OMAP3_L4_CORE_FW_DSS_PROT_GROUP ,
++			.l4_prot_group = OMAP3_L4_CORE_FW_DSS_PROT_GROUP,
+ 			.flags	= OMAP_FIREWALL_L4,
+ 		},
+ 	},
+@@ -2172,7 +2172,7 @@ static struct omap_hwmod am35xx_emac_hwmod = {
+ 	/*
+ 	 * According to Mark Greer, the MPU will not return from WFI
+ 	 * when the EMAC signals an interrupt.
+-	 * http://www.spinics.net/lists/arm-kernel/msg174734.html
++	 * https://lore.kernel.org/all/1336770778-23044-3-git-send-email-mgreer@animalcreek.com/
+ 	 */
+ 	.flags		= (HWMOD_NO_IDLEST | HWMOD_BLOCK_WFI),
+ };
+@@ -2346,13 +2346,12 @@ static struct omap_hwmod_ocp_if *omap36xx_sham_hwmod_ocp_ifs[] __initdata = {
+ 	NULL
+ };
+ 
+-
+ /*
+  * Apparently the SHA/MD5 and AES accelerator IP blocks are
+  * only present on some AM35xx chips, and no one knows which
+- * ones.  See
+- * http://www.spinics.net/lists/arm-kernel/msg215466.html So
+- * if you need these IP blocks on an AM35xx, try uncommenting
++ * ones.
++ * See https://lore.kernel.org/all/20130108203853.GB1876@animalcreek.com/
++ * So if you need these IP blocks on an AM35xx, try uncommenting
+  * the following lines.
+  */
+ static struct omap_hwmod_ocp_if *am35xx_sham_hwmod_ocp_ifs[] __initdata = {
+diff --git a/arch/arm/mach-omap2/omap_phy_internal.c b/arch/arm/mach-omap2/omap_phy_internal.c
+index 21c6e7929d37..a1d001170a68 100644
+--- a/arch/arm/mach-omap2/omap_phy_internal.c
++++ b/arch/arm/mach-omap2/omap_phy_internal.c
+@@ -1,11 +1,11 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /*
+-  * This file configures the internal USB PHY in OMAP4430. Used
+-  * with TWL6030 transceiver and MUSB on OMAP4430.
+-  *
+-  * Copyright (C) 2010 Texas Instruments Incorporated - https://www.ti.com
+-  * Author: Hema HK <hemahk@ti.com>
+-  */
++ * This file configures the internal USB PHY in OMAP4430. Used
++ * with TWL6030 transceiver and MUSB on OMAP4430.
++ *
++ * Copyright (C) 2010 Texas Instruments Incorporated - https://www.ti.com
++ * Author: Hema HK <hemahk@ti.com>
++ */
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+diff --git a/arch/arm/mach-omap2/sdrc2xxx.c b/arch/arm/mach-omap2/sdrc2xxx.c
+index 529d46cfdea2..5a275b4fd404 100644
+--- a/arch/arm/mach-omap2/sdrc2xxx.c
++++ b/arch/arm/mach-omap2/sdrc2xxx.c
+@@ -1,7 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * linux/arch/arm/mach-omap2/sdrc2xxx.c
+- *
+  * SDRAM timing related functions for OMAP2xxx
+  *
+  * Copyright (C) 2005, 2008 Texas Instruments Inc.
+diff --git a/arch/arm/mach-omap2/ti81xx-restart.c b/arch/arm/mach-omap2/ti81xx-restart.c
+index d6dc518b1dde..5b5fb37caa50 100644
+--- a/arch/arm/mach-omap2/ti81xx-restart.c
++++ b/arch/arm/mach-omap2/ti81xx-restart.c
+@@ -26,5 +26,6 @@ void ti81xx_restart(enum reboot_mode mode, const char *cmd)
+ {
+ 	omap2_prm_set_mod_reg_bits(TI81XX_GLOBAL_RST_COLD, 0,
+ 				   TI81XX_PRM_DEVICE_RSTCTRL);
+-	while (1);
++	while (1)
++		;
+ }
+
+base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
+-- 
+2.39.2 (Apple Git-143)
+
