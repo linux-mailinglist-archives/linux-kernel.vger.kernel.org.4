@@ -2,273 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A8871775A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CCE2717752
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjEaG5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 02:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
+        id S234465AbjEaG5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 02:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234485AbjEaG5l (ORCPT
+        with ESMTP id S234463AbjEaG53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 02:57:41 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB481A1;
-        Tue, 30 May 2023 23:57:24 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34V6RmCb016831;
-        Wed, 31 May 2023 06:57:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=BPjb0LI9fh4FV0dxy/9TjkgNGSW8xbWittOmItYPovc=;
- b=Wx/HFIz+un6WRSSRxzH/QGWYWXe7Qe9DrK2RbmeyLnRSrEXia2eDawgum0EnIv2N82aR
- VRE6IpsFl3DIs/7qSAScwZK8/cj8eLYsPqNVx5oJgcVdnhZarKdT3Z9NZ0/jXv752CZW
- 0oS4IFakKnnN/GKLPLw2xj8MhZRaT6watcqXvE+UQ9yXiNxTdUbgQJj+hs/AMhXHMGQE
- a8aV80RYScNWzWX9ysZevWfZF7gNUmcOPPmnEC0rVUxR1QwDQduEMULqwAitLa/KcimL
- lnZfxbeqZwszLgMKvim9//k6OebgxGq7h4zDmcnvMDYbLYASyNotdcHKcCfLO6vBgw4L eQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwp69h7qa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 06:57:21 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34V6vKE3031151
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 06:57:20 GMT
-Received: from sridsn-linux.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 30 May 2023 23:57:16 -0700
-From:   Sridharan S N <quic_sridsn@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Sridharan S N <quic_sridsn@quicinc.com>
-Subject: [PATCH 2/2] arm64: dts: qcom: ipq9574: enable GPIO based LEDs
-Date:   Wed, 31 May 2023 12:26:19 +0530
-Message-ID: <20230531065619.9181-3-quic_sridsn@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230531065619.9181-1-quic_sridsn@quicinc.com>
-References: <20230531065619.9181-1-quic_sridsn@quicinc.com>
+        Wed, 31 May 2023 02:57:29 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318EF184
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 23:57:14 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5149429c944so6698400a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 23:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685516232; x=1688108232;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zT4hWvO+05+c9BNBT9jLKJhOVWpxKJ0fJ2bZlxyHp3w=;
+        b=fMFgfFRH2oKpRqT2ngwoG7OVNjzftGze+7bCsyKX8BPD9bFqofDMAUVPCoEnQHK7YZ
+         P9GIyQhfD38i4+ZCGDARXcEYm6X5cRIC4tL5T+qbNbkgeShDMzkTLWzr9oYDt0+f+JWl
+         lHzDF1iYCMCPrdpof6K5qUxlFGUwcFYF/GLZO65/NMu6OKwhNzWz1cd/d8wdE+j3pUOz
+         lMePApuIuf6d/zdItcp1XEsmzrxB6T6pgzjGopOR1xlFS+ZkuKGA7bsqaJpY4Q6LL23f
+         uvstk79rsZFVpgFpPX5fCbzRB2qe6jaDE4E+ZywGX9/CsaInpvUDHcLgwfmb322vcwZg
+         ruCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685516232; x=1688108232;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zT4hWvO+05+c9BNBT9jLKJhOVWpxKJ0fJ2bZlxyHp3w=;
+        b=ECm85Lh0bL+cwXC/WGYMYxJNLmPE9m5G6hET92VOuSwQ2iMvrNElbNEsmqHv2MDdVt
+         T64541eXuIvnrLTdXnWpe17vU68MWgTCGvExS2rNl5+9EeAez/l2Cjyr+eSDn1LAtbAl
+         07OZpcRcS3d5aH7DdL8z43m/5QpL2QhgyOLzpCUnlxGVZMI6/mh6iL2yCFhhm7/2juZl
+         FtHvzLeS44joKabZ+QFJObmbDHYpmo4yn2XXBmlC34tzMe7TQK+UX0JcCHXeZkHwhZRo
+         pWszP1HW9kBM6DUjgtNx0vy/D6IZ/r8mfk/7DKH/1WHnikB/3sb2Mx7QfxNsDRF7+Pe4
+         GANw==
+X-Gm-Message-State: AC+VfDxmy+V8hi4TqG63CGp/0StCeqF+g8USPuCUI+ogYEBQBow6cd8u
+        r8DcByATJf0wdd9MtgeOGzBwRg==
+X-Google-Smtp-Source: ACHHUZ5x5SACtt0xW0b6cmpAiNLg6lb938Dymx8uZU0YcrSBw25hfhVk5P/RfqzyOE7B6a2bNngPfw==
+X-Received: by 2002:aa7:d591:0:b0:514:c43e:3881 with SMTP id r17-20020aa7d591000000b00514c43e3881mr277960edq.35.1685516232672;
+        Tue, 30 May 2023 23:57:12 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id h23-20020aa7c617000000b005147503a238sm5308899edq.17.2023.05.30.23.57.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 23:57:12 -0700 (PDT)
+Message-ID: <367c3d26-b406-9ddc-e0ca-717994ed1c4a@linaro.org>
+Date:   Wed, 31 May 2023 08:57:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: c5HUXbJ-YgbcJrN3cAERqswQ2ml0gPnr
-X-Proofpoint-GUID: c5HUXbJ-YgbcJrN3cAERqswQ2ml0gPnr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_03,2023-05-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 malwarescore=0
- suspectscore=0 spamscore=0 mlxlogscore=836 phishscore=0 adultscore=0
- bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305310061
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 0/7] dt-bindings: restrict node name suffixes
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dilip Kota <eswara.kota@linux.intel.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
+        linux-watchdog@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+ <20230530-banister-luxurious-d33a5d289749@spud>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230530-banister-luxurious-d33a5d289749@spud>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for wlan-2g LED on GPIO 64.
+On 30/05/2023 19:11, Conor Dooley wrote:
+> On Tue, May 30, 2023 at 04:48:44PM +0200, Krzysztof Kozlowski wrote:
+>> Hi,
+>>
+>> Tree-wide cleanup of DTS node name suffixes "-N", e.g. "pwm-5", so we allow
+>> only decimal numbers.  In few cases narrow the pattern to also disallow
+>> multiple suffixes, e.g. "pwm-5-5".
+> 
+> I figure there'll be quite a bit of stuff to fix up afterwards?
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Signed-off-by: Sridharan S N <quic_sridsn@quicinc.com>
----
- arch/arm64/boot/dts/qcom/ipq9574-rdp418.dts | 20 ++++++++++++++++++++
- arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 20 ++++++++++++++++++++
- arch/arm64/boot/dts/qcom/ipq9574-rdp449.dts | 20 ++++++++++++++++++++
- arch/arm64/boot/dts/qcom/ipq9574-rdp453.dts | 20 ++++++++++++++++++++
- 4 files changed, 80 insertions(+)
+Quick grep shown zero fixes needed.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp418.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp418.dts
-index 2b093e02637b..77b450cbdea6 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-rdp418.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp418.dts
-@@ -8,6 +8,7 @@
- 
- /dts-v1/;
- 
-+#include <dt-bindings/gpio/gpio.h>
- #include "ipq9574.dtsi"
- 
- / {
-@@ -21,6 +22,18 @@
- 	chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-0 = <&gpio_leds_default>;
-+		pinctrl-names = "default";
-+
-+		led-0 {
-+			gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "phy0tx";
-+			default-state = "off";
-+		};
-+	};
- };
- 
- &blsp1_spi0 {
-@@ -79,6 +92,13 @@
- };
- 
- &tlmm {
-+	gpio_leds_default: gpio-leds-default-state {
-+		pins = "gpio64";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-pull-up;
-+	};
-+
- 	sdc_default_state: sdc-default-state {
- 		clk-pins {
- 			pins = "gpio5";
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-index 2b3ed8d351f7..b47971b54ccc 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-@@ -8,6 +8,7 @@
- 
- /dts-v1/;
- 
-+#include <dt-bindings/gpio/gpio.h>
- #include "ipq9574.dtsi"
- 
- / {
-@@ -21,6 +22,18 @@
- 	chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-0 = <&gpio_leds_default>;
-+		pinctrl-names = "default";
-+
-+		led-0 {
-+			gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "phy0tx";
-+			default-state = "off";
-+		};
-+	};
- };
- 
- &blsp1_uart2 {
-@@ -65,6 +78,13 @@
- };
- 
- &tlmm {
-+	gpio_leds_default: gpio-leds-default-state {
-+		pins = "gpio64";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-pull-up;
-+	};
-+
- 	sdc_default_state: sdc-default-state {
- 		clk-pins {
- 			pins = "gpio5";
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp449.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp449.dts
-index c8fa54e1a62c..50be898cef92 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-rdp449.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp449.dts
-@@ -8,6 +8,7 @@
- 
- /dts-v1/;
- 
-+#include <dt-bindings/gpio/gpio.h>
- #include "ipq9574.dtsi"
- 
- / {
-@@ -21,6 +22,18 @@
- 	chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-0 = <&gpio_leds_default>;
-+		pinctrl-names = "default";
-+
-+		led-0 {
-+			gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "phy0tx";
-+			default-state = "off";
-+		};
-+	};
- };
- 
- &blsp1_spi0 {
-@@ -67,6 +80,13 @@
- };
- 
- &tlmm {
-+	gpio_leds_default: gpio-leds-default-state {
-+		pins = "gpio64";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-pull-up;
-+	};
-+
- 	spi_0_pins: spi-0-state {
- 		pins = "gpio11", "gpio12", "gpio13", "gpio14";
- 		function = "blsp0_spi";
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp453.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp453.dts
-index f01de6628c3b..f45b5d5353f8 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-rdp453.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp453.dts
-@@ -8,6 +8,7 @@
- 
- /dts-v1/;
- 
-+#include <dt-bindings/gpio/gpio.h>
- #include "ipq9574.dtsi"
- 
- / {
-@@ -21,6 +22,18 @@
- 	chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-0 = <&gpio_leds_default>;
-+		pinctrl-names = "default";
-+
-+		led-0 {
-+			gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "phy0tx";
-+			default-state = "off";
-+		};
-+	};
- };
- 
- &blsp1_spi0 {
-@@ -67,6 +80,13 @@
- };
- 
- &tlmm {
-+	gpio_leds_default: gpio-leds-default-state {
-+		pins = "gpio64";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-pull-up;
-+	};
-+
- 	spi_0_pins: spi-0-state {
- 		pins = "gpio11", "gpio12", "gpio13", "gpio14";
- 		function = "blsp0_spi";
--- 
-2.17.1
+Best regards,
+Krzysztof
 
