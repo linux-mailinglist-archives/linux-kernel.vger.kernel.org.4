@@ -2,147 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD60717F47
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F738717F4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235533AbjEaLzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 07:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52308 "EHLO
+        id S235720AbjEaL5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 07:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232702AbjEaLzx (ORCPT
+        with ESMTP id S235627AbjEaL5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 07:55:53 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9556E9D
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 04:55:51 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-309382efe13so4207221f8f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 04:55:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685534150; x=1688126150;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :references:cc:to:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=WEd36hy3ThKcCMH7ZROUO7i+4T8Tnu5cbXYxxpHoTZ4=;
-        b=HjcxddE0x6MCnxfyBMOC8XOYj6XdEjqr/ESEz9M5yOwpl4YJnPdYHvvV1iqIf3v21E
-         O9ewxMjGP7NGtBImWjcISEUrHrio3Df39lB+Cqnmtp5B79ddpZXtXaD5GlsqmArbUBlD
-         cCRJk8hnW+Le5/VATO8eqvi8km/jw3x43GUGivLxu8ziY5DzV3pJBce7bZnv4+U9U/7/
-         JrB56aFQdMRyP18ac2OjG/VKp1d6mGkc9dA3KW7fRBDyxRQIiMv4M7Mlt8tN5YJqWlFE
-         Cgnd7NG5SIlBkYR23/fdurP7Y+irjhmM9aDCnSNeP6JSEef+q4nLMap55fEYOeeTsbGM
-         6QCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685534150; x=1688126150;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :references:cc:to:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WEd36hy3ThKcCMH7ZROUO7i+4T8Tnu5cbXYxxpHoTZ4=;
-        b=gg2ZN5RgyXWhX6cRwkzpqOCk0SGV/xtJmgjzfzaStMH9doGMAW4lDcCDp9sOl9zNPy
-         NdIDeWAEZEsbBa6qiYaXJXB11VyVFIWw5HGI16zPpgQgzSmKgM79duV365itSpp+Uu2E
-         wul2vgsFwyjCDnqee2n6tNUhUAf9ms37Y09gHG/ONMQAMjLCteZ6R4tAYG6JAqz6HRZd
-         KNtf/XbIrPFO98vgj/ot+OnJQq/kOTPQqc0cvBeUVq9I3pgvrSI+/IWUQWmrFHYoGpbP
-         OEBaUVHVp9lLLQ75wB5oK/qyzB035Qumg3Y08xd16Hy0tu1DvRkpdWbfPl0uXYevLhFX
-         mzFA==
-X-Gm-Message-State: AC+VfDyxDhQv5cCQkNX/Im9c1xvR0WFMwYeGGj8wBqmydRKn5EaZcefx
-        VlMDM5GKSIKwvBXrzhCp7vqWyQ==
-X-Google-Smtp-Source: ACHHUZ6kI8X8NP8AILCSybWYqTSH9EIv2i0NCD4qX88A8syY5ugQq66sKeWBuq74lTYGATWVWvPxRA==
-X-Received: by 2002:a5d:448b:0:b0:306:3e96:6c5f with SMTP id j11-20020a5d448b000000b003063e966c5fmr4104805wrq.15.1685534149989;
-        Wed, 31 May 2023 04:55:49 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:5c28:3ad5:fcda:7779? ([2a01:e0a:982:cbb0:5c28:3ad5:fcda:7779])
-        by smtp.gmail.com with ESMTPSA id i14-20020a5d558e000000b0030903371ef9sm6562204wrv.22.2023.05.31.04.55.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 04:55:49 -0700 (PDT)
-Message-ID: <f7ef5cda-9372-17ed-89db-2f857b4d5971@linaro.org>
-Date:   Wed, 31 May 2023 13:55:48 +0200
+        Wed, 31 May 2023 07:57:21 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DD89D;
+        Wed, 31 May 2023 04:57:18 -0700 (PDT)
+Date:   Wed, 31 May 2023 11:57:16 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685534237;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+o20mS6w1wkNNtk/4F00y/i6GrVObsqbUJdcIo3p1Wc=;
+        b=rJxJ8gWtmgwo00Z04we4DXBABrrXrWNX272iBBGdOPgPw/krjP1JAM5zSDyGb/5auz07pt
+        AdoFaXvzWiq4deZk7JE2stXDzNAPV9ZKgurx29pywHVG0N/ova4SpCcvelteG9oyxzzLyG
+        XyFZDnnJ4PMT8imu+fI0AhwAQmSdfMmfITkTO79kAXby836tcuPxIe0JPs4fg2kZTOOT4b
+        Bxh6+WpJDbcN1npuXtL9YQgog7V5UZssvS2CErVxik2iym4dT1kk9lZrkzfltSf+cBlKeP
+        eWXM2V6EAmmWYuEGPutxr/Id5RVDwxnrR+ga1uwQROI8zZtuGlvDM95wNjop2Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685534237;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+o20mS6w1wkNNtk/4F00y/i6GrVObsqbUJdcIo3p1Wc=;
+        b=D/vCJajLdIgjNPyXgFqinD6JPLh3CIQl+au2mD5T4jymAHxEZ++35VDbmHaSncgKJS4jjY
+        NeHLXiaNuam/5JCw==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/alternatives] x86/nospec: Shorten RESET_CALL_DEPTH
+Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230515093020.729622326@infradead.org>
+References: <20230515093020.729622326@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] gpu: drm/panel: Optimize the workflow of s6d7aa0_lock
-To:     Lu Hongfei <luhongfei@vivo.com>,
-        Artur Weber <aweber.kernel@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     opensource.kernel@vivo.com
-References: <20230531110717.36896-1-luhongfei@vivo.com>
-Content-Language: en-US
-Organization: Linaro Developer Services
-In-Reply-To: <20230531110717.36896-1-luhongfei@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <168553423619.404.1623011385278155776.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The following commit has been merged into the x86/alternatives branch of tip:
 
-On 31/05/2023 13:07, Lu Hongfei wrote:
-> This patch optimized s6d7aa0_lock's workflow.
-> Once mipi_dsi_dcs_write_seq failed, s6d7aa0_lock return immediately
-> and no further actions will be taken.
-> 
-> Fixes: 6810bb390282 ("drm/panel: Add Samsung S6D7AA0 panel controller driver")
-> 
-> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
-> ---
->   drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c | 30 ++++++++++++++-----
->   1 file changed, 22 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-> index 102e1fc7ee38..f98df32d1c55
-> --- a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-> +++ b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-> @@ -69,15 +69,29 @@ static int s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
->   	int ret = 0;
->   
->   	if (lock) {
-> -		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0xa5, 0xa5);
-> -		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0xa5, 0xa5);
-> -		if (ctx->desc->use_passwd3)
-> -			mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0x5a, 0x5a);
-> +		ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0xa5, 0xa5);
-> +		if (ret < 0)
-> +			return ret;
+Commit-ID:     3496d1c64a0fcc9bae3ed40decc3ecd7f8ac072f
+Gitweb:        https://git.kernel.org/tip/3496d1c64a0fcc9bae3ed40decc3ecd7f8ac072f
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Fri, 10 Feb 2023 10:10:57 
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Wed, 31 May 2023 13:40:57 +02:00
 
-mipi_dsi_dcs_write_seq() is a macro that already calls "return ret" on error,
-so this is wrong, and there's nothing wrong with the currently upstream driver.
+x86/nospec: Shorten RESET_CALL_DEPTH
 
-Neil
+RESET_CALL_DEPTH is a pretty fat monster and blows up UNTRAIN_RET to
+20 bytes:
 
-> +		ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0xa5, 0xa5);
-> +		if (ret < 0)
-> +			return ret;
-> +		if (ctx->desc->use_passwd3) {
-> +			ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0x5a, 0x5a);
-> +			if (ret < 0)
-> +				return ret;
-> +		}
->   	} else {
-> -		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0x5a, 0x5a);
-> -		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0x5a, 0x5a);
-> -		if (ctx->desc->use_passwd3)
-> -			mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0xa5, 0xa5);
-> +		ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0x5a, 0x5a);
-> +		if (ret < 0)
-> +			return ret;
-> +		ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0x5a, 0x5a);
-> +		if (ret < 0)
-> +			return ret;
-> +		if (ctx->desc->use_passwd3) {
-> +			ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0xa5, 0xa5);
-> +			if (ret < 0)
-> +				return ret;
-> +		}
->   	}
->   
->   	return ret;
+  19:       48 c7 c0 80 00 00 00    mov    $0x80,%rax
+  20:       48 c1 e0 38             shl    $0x38,%rax
+  24:       65 48 89 04 25 00 00 00 00      mov    %rax,%gs:0x0     29: R_X86_64_32S        pcpu_hot+0x10
 
+Shrink it by 4 bytes:
+
+  0:   31 c0				xor %eax,%eax
+  2:   48 0f ba e8 3f			bts $0x3f,%rax
+  7:   65 48 89 04 25 00 00 00 00	mov %rax,%gs:0x0
+
+Shrink RESET_CALL_DEPTH_FROM_CALL by 5 bytes by only setting %al, the
+other bits are shifted out (the same could be done for RESET_CALL_DEPTH,
+but the XOR+BTS sequence has less dependencies due to the zeroing).
+
+Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/r/20230515093020.729622326@infradead.org
+---
+ arch/x86/include/asm/nospec-branch.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index edb2b0c..55388c9 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -84,12 +84,12 @@
+ 	movq	$-1, PER_CPU_VAR(pcpu_hot + X86_call_depth);
+ 
+ #define RESET_CALL_DEPTH					\
+-	mov	$0x80, %rax;					\
+-	shl	$56, %rax;					\
++	xor	%eax, %eax;					\
++	bts	$63, %rax;					\
+ 	movq	%rax, PER_CPU_VAR(pcpu_hot + X86_call_depth);
+ 
+ #define RESET_CALL_DEPTH_FROM_CALL				\
+-	mov	$0xfc, %rax;					\
++	movb	$0xfc, %al;					\
+ 	shl	$56, %rax;					\
+ 	movq	%rax, PER_CPU_VAR(pcpu_hot + X86_call_depth);	\
+ 	CALL_THUNKS_DEBUG_INC_CALLS
