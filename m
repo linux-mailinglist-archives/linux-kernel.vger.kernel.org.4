@@ -2,192 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B917E717645
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 07:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A39717640
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 07:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234234AbjEaFgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 01:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
+        id S234224AbjEaFfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 01:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234235AbjEaFgi (ORCPT
+        with ESMTP id S231609AbjEaFfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 01:36:38 -0400
-X-Greylist: delayed 123 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 May 2023 22:36:37 PDT
-Received: from esa7.fujitsucc.c3s2.iphmx.com (esa7.fujitsucc.c3s2.iphmx.com [68.232.159.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE34113
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 22:36:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1685511398; x=1717047398;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version;
-  bh=ZtDgTgKLXYYsTYSJJ70N4gzGGQ2SgZM71XMdidd02Ak=;
-  b=gvMxbZqbrvQRiWDZpS2ELaVIHbkjvpFznOkC0IWbKhsdPHJlyYI+bGSC
-   TkD3RxUIxPw+y2Vx2XFn2+23HDAtojDJiEvZ2lhlc85Pzvtih9x2jEgBC
-   h5BSmnJb88uRWshol1TLyL+fwn9L1//Jc5AhTWfnOJBmy+dIlIKL80H9k
-   TjJqY4ERPw/EaAd4BTsv1X9jdf8rZKbMYQO7Ro89bbgUQYbi2jKLWVzOp
-   u+Q88l1WMvrXEHJfqKeG1HqIbXP+kfi5sD/oTkixcNUDAjbOysCNHANzX
-   y7vGBIrVvHTJ2q7L92kO87HoTs1sihtU7cRQr2xflxSM4JXgC8CDjfsIq
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="85961481"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681138800"; 
-   d="scan'208";a="85961481"
-Received: from mail-os0jpn01lp2104.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.104])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 14:33:22 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OhIAsD6J39ljHBHeqTb8e/pjhsEQ+p25MekWHTzNI2XxZQJt1B9gT2/ttUjnb3r1kSt9+nLT3oViyFNl+G5pBnYQkDBAC8LAgp5+SMsXLgo86w7a9dcMgfys5qoNdj9XGTT5ArAkOS3b02zavtJIeyBb1ASJcGIbV10LIdSII4wQ6RnJv4SO5gSiKfnWJT5YppUwIineHppt0uMwRkOMQsGXRfhLZ8s/7NGr+7hi1gcUUY3ZYU9dG1Mvcqhz/2CGiOj0h3S7wgFJdzIUGpI7TGV52A4RqC25BmWLNCgZJtmO+oLfxbZ8tbwyuKmh7NFg6x1OuwEaNJXz1vgFD/d0xQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZtDgTgKLXYYsTYSJJ70N4gzGGQ2SgZM71XMdidd02Ak=;
- b=PJBKLigrZ1IiD3aQGOhdEVSAlxpScn2akXDmU/A5cEm9SqBZlkXjcQbi8bzBDNjr4PVBLasZNdmUneMukRNxdaRmydHIpVPGaKnVzvKYBbU2ol9jb7wkrpErghPfWjs6mXV079ax2Ae0facZLyZpijVII47fNmNCEMQozgswJFVAF/xuLcAzC/8e+dmC/a9WGH9jMRYti3E7dmqqR8yxV0r/POcyl7Lp+sqRSBmGdP24kigRH5nOCZtxeFCiuO5XcT8Eyww8GZYNJaH2UcA+zytn+vZHI5li5I/LMgvAQdq7IfnLIhd3Xy5rAz6ArU8cYyPQE7vyftyH3azIZje0aw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
-Received: from OSZPR01MB6328.jpnprd01.prod.outlook.com (2603:1096:604:e8::8)
- by TYCPR01MB8376.jpnprd01.prod.outlook.com (2603:1096:400:150::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Wed, 31 May
- 2023 05:33:19 +0000
-Received: from OSZPR01MB6328.jpnprd01.prod.outlook.com
- ([fe80::cc8b:a287:185b:3ea9]) by OSZPR01MB6328.jpnprd01.prod.outlook.com
- ([fe80::cc8b:a287:185b:3ea9%4]) with mapi id 15.20.6433.022; Wed, 31 May 2023
- 05:33:19 +0000
-From:   "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>
-To:     =?utf-8?B?J0lscG8gSsOkcnZpbmVuJw==?= 
-        <ilpo.jarvinen@linux.intel.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 21/24] selftests/resctrl: Read in less obvious order to
- defeat prefetch optimizations
-Thread-Topic: [PATCH v2 21/24] selftests/resctrl: Read in less obvious order
- to defeat prefetch optimizations
-Thread-Index: AQHZcet39cAuWUDzBE6QdI939640H690HFtg
-Date:   Wed, 31 May 2023 05:33:18 +0000
-Message-ID: <OSZPR01MB6328F2713E40CC7D383035A48B489@OSZPR01MB6328.jpnprd01.prod.outlook.com>
-References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com>
- <20230418114506.46788-22-ilpo.jarvinen@linux.intel.com>
-In-Reply-To: <20230418114506.46788-22-ilpo.jarvinen@linux.intel.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: =?utf-8?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2Uw?=
- =?utf-8?B?NTBfRW5hYmxlZD10cnVlOyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJh?=
- =?utf-8?B?Yy1hYjRkLTNiMGY0ZmVjZTA1MF9TZXREYXRlPTIwMjMtMDUtMzFUMDU6MjM6?=
- =?utf-8?B?NTdaOyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0?=
- =?utf-8?B?ZmVjZTA1MF9NZXRob2Q9U3RhbmRhcmQ7IE1TSVBfTGFiZWxfYTcyOTVjYzEt?=
- =?utf-8?B?ZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX05hbWU9RlVKSVRTVS1SRVNU?=
- =?utf-8?B?UklDVEVE4oCLOyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1hYjRk?=
- =?utf-8?B?LTNiMGY0ZmVjZTA1MF9TaXRlSWQ9YTE5ZjEyMWQtODFlMS00ODU4LWE5ZDgt?=
- =?utf-8?B?NzM2ZTI2N2ZkNGM3OyBNU0lQX0xhYmVsX2E3Mjk1Y2MxLWQyNzktNDJhYy1h?=
- =?utf-8?B?YjRkLTNiMGY0ZmVjZTA1MF9BY3Rpb25JZD1mNzYzNzg2Yy1lZTc3LTQ3NDQt?=
- =?utf-8?B?OGQxZS01MDg2ZjEzODMzNGI7IE1TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00?=
- =?utf-8?B?MmFjLWFiNGQtM2IwZjRmZWNlMDUwX0NvbnRlbnRCaXRzPTA=?=
-x-shieldmailcheckerpolicyversion: FJ-ISEC-20181130-VDI-enc
-x-shieldmailcheckermailid: b56ecb4cdfab46dc9903af2c7e59663f
-x-securitypolicycheck: OK by SHieldMailChecker v2.6.2
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OSZPR01MB6328:EE_|TYCPR01MB8376:EE_
-x-ms-office365-filtering-correlation-id: 5b4d596b-41e9-48be-0639-08db61988a6d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uEW6REHloBh8D3PSSxvNWMQHsZPKZ0rXm10WWmlB4oaRrm5AWzF6u87NsrEXhtbxN2ebjiDfbqrE/qlJwtbmQyB3MfoYqRFuAM9vSt5Y5ypEJNWScwpDhTCj4TqAKexxnG3ShXEJgJMIvFPbFBwo1YpUoHEZjWyiPkz6pDbAst4j7IsxLa1OU5DV2/2Yee4hfiWF/V3Zc0tgEpuqR4XN8x+eX0Xk4LgA2TfXBngqFw84JnEvA/Vyl/qzCz14m14HiWPhn0dfvW6K/jvZKHymiwgwpiUSLwGo57p3zRWN5Xp2gsyVn/Z9P2SY7QchdSXhWJP7ZdOUNEeDPmkbguRooRNsP1c6I246qqMRJdtJDT0S7QLSq+748RVd5J4aS3ExM/haT9acr0U3zBbucElA4JPBfDmtgVM4WFoC1SvH6Se+Oj7pCKbMm39XvIZp13TIlEaoy7Ug8oHoHzvOwjeneGRX8Q0EXP0dO3z1EWkP+Qzh0Q4eAuYEU5ymuDHIx2diPQJM4ZlR/r13yzUmXGjK6EEdmr7DaylxUanffQlA72x4q80MABDTsbGaO4dpiffXkY1EAeK+p3PO171N8RqEHXcghoilnMb04GtWfLalFNMnepzpR1cQrw8P6OaimeRB5dgM762vdu7JhnT6QEI6hw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSZPR01MB6328.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(376002)(346002)(39860400002)(396003)(1590799018)(451199021)(1580799015)(71200400001)(478600001)(110136005)(8936002)(52536014)(8676002)(5660300002)(85182001)(33656002)(38070700005)(2906002)(86362001)(66556008)(64756008)(76116006)(66946007)(122000001)(66476007)(66446008)(82960400001)(316002)(55016003)(38100700002)(41300700001)(186003)(6506007)(9686003)(26005)(66574015)(7696005)(83380400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QWxYanNCYytvMTN5aGd4RUMvTXp6TmFtcFlWT2FyV08zRlB3RlVYdllaOEdi?=
- =?utf-8?B?RWVnQjRDUjZUOUlGUElNUTZVVElmMllyNEl4V1ZzN3dSaXY0anE3aFBUZ1lO?=
- =?utf-8?B?VEpGa3ZIbmp5b2Y0d2tIVTNaZ2tkVFBQaERMaXZ4TDR4QkF1L2Z5bmQ4cjZY?=
- =?utf-8?B?dmx6d090RlN1WjB1S1I4RVZkc21XRFdXa1ExdWFhTkRmV01PTStjTm9YUW05?=
- =?utf-8?B?M29CZE5HbXljTUhhd2xWZTh3L1NWRWoyVU1WVitJakhWQTZtNXpwOGY2STlC?=
- =?utf-8?B?ODZGcy9UTzBSNEphUThySG5WLzhEVXNaZ3dMUzNBb2dTN0FMYXRlR0xaMFpF?=
- =?utf-8?B?RE8wVXZJSm1UcFZwdjNpNzZpaDdxdVd3TnlMbE9nOHh6eVY4aDhTelZFaVJ2?=
- =?utf-8?B?S1pQd1N1VUdhZHpLV2hKOVNld3p5QWU4bTArc2ZxejR5QXZyYnF3YmhJNUdo?=
- =?utf-8?B?bVEwVC9HbjVzYjJiZUlQRHNGOUs3MUlSbUd1VDBPOVlMK2RqcG1nZmNaQ0Fm?=
- =?utf-8?B?TFZqSU0xY0RweTl1aEF0aUYwT2wvOWdkbjQ2YmFqUGQySytneW0rL2RhcTRu?=
- =?utf-8?B?Z2FJWkp2a05hOGtOZU5BZ3BWRnh3ZGdXRGFiSFg2dHROaHQxbGFmZEg3Yyth?=
- =?utf-8?B?UlZ4cWlOY2tiekN0eFZPa0JLYjhCVlFYM3NRbWMxdnNFYzFuNzRhcFZJUXkx?=
- =?utf-8?B?bWM0Y3p2eDN5T09EdVJLUEFJazcxU3l6QnM5aGxZVC9jWFFyYkhYeHJRaWVT?=
- =?utf-8?B?QUhpZm5EMHdKZHlHQzV2ZHBqMGZ3emEvY3RmQUhSV0RYVFV1QlNQRk5UZ0RY?=
- =?utf-8?B?Qnl6b3VTcUVpMUtaS0E4Tm5iREVtZ2F2U0tRSXlxU3NWSm11NHYzN3NFby9i?=
- =?utf-8?B?ZEhjc2hqazBSNDZLdTZkdXpuSXRHTlZXOTI5a01XU1MrWWhlREs3OEFXbEhU?=
- =?utf-8?B?UzU0YzhDTXBLKzRpNVRQbHVsVjNlVFpFTFVrYkltS3hwVk42UStORnR6S3A4?=
- =?utf-8?B?UWVhWmw3S3hUd2N5Q3VIWVo1WGNXY1ZFM2VqYS9CcGpjTFg5MTBHTTc4WnBM?=
- =?utf-8?B?K01Rc1hyZzRHL3JER3ZUY1ZMWGhFcjFNY0FFNGc4QTRpMmFvNEpHY1krZEVx?=
- =?utf-8?B?TkU4OTVLZHhnWFQxd2hJQ3V5cXBIMzRVZytSeHZTbFAwQ2Z6Z3JmcTN6VUJD?=
- =?utf-8?B?U1JveW1rWFIreEh1ZEptRXVNdnN2YlFtMU1xRVlYcEMzZ3FyVUc0TE50QVhE?=
- =?utf-8?B?Y3VHQ1UzMks4QVNBQ3IxakhpT2Jsek5PZksxVWtvTzh3MHdKcTd0NEZhWWE2?=
- =?utf-8?B?YnZMZlZBbVlrZ2xnVWdWSCtWbFk1M0wrc0I4NVRSRTAwMUhjQlNRc2R6YmtR?=
- =?utf-8?B?YlVTUkYvYUFzMnlkMXErUFR4NjI4elk2anRSUWFpQ1lqQUJlUU1zU2xRVGVK?=
- =?utf-8?B?TVIxeWMvRmlFTlJoYjR4ZHMvQTVVWHFqL3BObGpaOGprSGY1TkJkaFpDR21S?=
- =?utf-8?B?SHBVMWQ3akpsazhVckJjNzZRTUJVcXRYQmtIeHArZTF2Y3VEQUhRQVFidDFE?=
- =?utf-8?B?N2NMZUFobDZHcW1SR3RyWkxwUldsMjFLNTlIS0thSHNhT0xBQnBKT2RuUDNH?=
- =?utf-8?B?NlAxL1dJZ2ZBdmNINkRnV0o4WVZ5RzV1RjFPZXJrZm5rSWFUYkd1SXQ2TnYz?=
- =?utf-8?B?cnlraHBHWVo0YXBBU2Rpck9WcTJCc3hGUGFZbEI1K2FId245R2pDREJuN3VI?=
- =?utf-8?B?WW9ITmZUWDk4eXNHZlFWbk1CME45N3I2bkF4YmxSa0UwR1V4YlRtSm9vUG5h?=
- =?utf-8?B?ejR3N1VOQThHdnFJVUF1NlJ0TE5Iek1MSzRyRUJOUTNoUnZrcS94R3M2ZDJp?=
- =?utf-8?B?TE5wMFVscXM4cE9XeE5qR1l3dzhqSmxCQlNXTmRRbVJEeFdPR29rVmdJbnFw?=
- =?utf-8?B?L0V2aGVMTDZaWTdpeFp3Zm9uR2RYVU0wN0MwZlNodlFKdHJRY2hqNDNEM2pI?=
- =?utf-8?B?TTBRMWM5aSt3WFk2Wmt4ZFZVaWJ4Z2RJYUU4QTl0NW5hcWllVStjZ1ErYnFh?=
- =?utf-8?B?SW1Qb2JXRHkwaldjVE9taFhZSFdYMy84RURkdGRuYk43ZWk4WkFRYkw5QmRu?=
- =?utf-8?B?UGZhRGNlN1BIZjNQc0g4dGJRNUh2Q2lYdTV5Zm9WUC81S1VVUnZFNUcxL3gz?=
- =?utf-8?B?b2c9PQ==?=
+        Wed, 31 May 2023 01:35:03 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AC8D9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 22:34:59 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230531053456epoutp03d815c8d33b765eb034fb1833a94f3af2~kI5f-rAYu2723327233epoutp03g
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 05:34:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230531053456epoutp03d815c8d33b765eb034fb1833a94f3af2~kI5f-rAYu2723327233epoutp03g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1685511296;
+        bh=+16vfJ5Bn8xEGxuXks11ltd3vz3tHtDb38SE44PJeBY=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=sSVh/ztd42YqrpKTnNZqZAMLL8pc+aMAyzRm6P6smJB0a3Z8KiV0zdEiJEzRTCLj4
+         bVJbvcjKr1wk238SMX/qHLWwLty99xG760dNW+CtqlIRkxk1ZUDW/B3KSLBhbMWXux
+         jsLn2/chp9nYP5UJoDJ0HmZfkTtGjNij+4BTFoMs=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230531053455epcas2p1e66a20c7aefd62da1db7c3aafb6bc474~kI5fu9Syo2585125851epcas2p1X;
+        Wed, 31 May 2023 05:34:55 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.100]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4QWHyl1VcPz4x9QG; Wed, 31 May
+        2023 05:34:55 +0000 (GMT)
+X-AuditID: b6c32a47-157fd70000001ce0-e5-6476dc7fb544
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        C0.B0.07392.F7CD6746; Wed, 31 May 2023 14:34:55 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE: [PATCH v2] scsi: ufs: core: Do not open code SZ_x
+Reply-To: keosung.park@samsung.com
+Sender: Keoseong Park <keosung.park@samsung.com>
+From:   Keoseong Park <keosung.park@samsung.com>
+To:     Avri Altman <avri.altman@wdc.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Bean Huo <beanhuo@micron.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20230531051713.2080-1-avri.altman@wdc.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230531053454epcms2p3f1905b079d3b624cf4e8d7c536690ed8@epcms2p3>
+Date:   Wed, 31 May 2023 14:34:54 +0900
+X-CMS-MailID: 20230531053454epcms2p3f1905b079d3b624cf4e8d7c536690ed8
+Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: xi9RohkTqgVmGbux2MPPlhIenkaimBYDXYWCyzoCwLhhYu83zcaKcb7uEbo0htoxCV6gNuZMOg9KrknN5I/jLwMd5nlLY5Cyr0mEGaaGZfACLRCcK5UGQEM8g6uCcc8Pjzy7beW2UFb749p22WXut2Cc0WsMUSJ/zWzu4EmeXDhVUnuQD/JqNTzr/4NPvYe4g3f67LBonEEqTnp/ugH2h/hxZeYB3wDJRM0mWp3odXdH5fYJYyMaNCZ2QnZlRsRWt6R8ml4uhwvlJbNbHHsBFCaPU/eT723uXNe0LgmAD+K3nTOvEf/hWeLlZ9+Ti1fLIXDfCVckChkMAIsbywR0bpI4lBjqwhuCmG9AGfyD3B1NxeQGXPV7/dydH76M5Q9XQbnZqwKXW+SLZFfHqVsZ9AX/xG5jTyqVphsLym0asFUa/8GqpXUr1VeKWgLMkmj2RbprZQxkFpima0u9wCVvn37E0v9VOtUGfkwNcICiqKhABfZ80upgH1yLytlDXmJ70OPstoydjkg3KKTEjOVuhAYM/b8Jz0N5dYjNiXVUT3n/xliCE5fpVcBhSufHnNEPoyJTMpIupFgyVjXtZGd//hA5bSrr598l+4EK/BZGfC1fQ7OlddbDJQpxc4RugcambOR+/70MurqaE4nqEWFKsxTyWiQRjaw2ErJJ/I2W23ubpe9A0Qdkd2+kMw05fKmPO9NeQwv7x8lbfLolApjHz4hE7exKUi8W5x89l3SGNs19PxvPlDEesWdlh/hIpt6oqwKwp6Fj8B8YsrmdlCuzKp0Z1k7jgNZELIyShvIogyVHsIl3+EKiGJ3+nrKtmEvvH1FzypMO7Qu5MoFgLPZmn7MuIn4ncfSxdBdJRfzFpD7nWBcywXxktP4tKNFoybOn
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSZPR01MB6328.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5b4d596b-41e9-48be-0639-08db61988a6d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 May 2023 05:33:18.8180
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jyO45INtDoqhcAoxGn+bINEqd7xaz5ioZyyZjPte2GpBFoBpeaQH4mDBWp1ben/EGo6/cNCffIU5rxYGBc7WpQ8lKkr1rIqKAG+MSxAwA9I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8376
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOJsWRmVeSWpSXmKPExsWy7bCmhW79nbIUg12XOSxe/rzKZnHwYSeL
+        xctDmhaPbj9jtFg1Mc/i8q45bBbd13ewWSw//o/JYunWm4wOnB4PDm1m8Wg5uZ/F4/v6DjaP
+        j09vsXj0bVnF6PF5k5xH+4FupgD2qGybjNTElNQihdS85PyUzLx0WyXv4HjneFMzA0NdQ0sL
+        cyWFvMTcVFslF58AXbfMHKDDlBTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkFKTkF5gV6
+        xYm5xaV56Xp5qSVWhgYGRqZAhQnZGf93tDIXLJWoeN88ma2B8bxwFyMnh4SAicTl7c/ZQWwh
+        gR2MEl87NLoYOTh4BQQl/u4AKxEWsJPoebGKBaJESaJr4VZmiLiBxLrpe8BsNgE9iSm/7zB2
+        MXJxiAhMYpTYuHQaG4jDLHCcUeJ40zVGiGW8EjPan7JA2NIS25dvBYtzClhI/Hm6mg0iriHx
+        Y1kvM4QtKnFz9Vt2GPv9sflQc0QkWu+dhaoRlHjwczdUXFKi9cxWqDn1Eq3vT7GDHCEhMIFR
+        ovHYH6hB+hLXOjayQHzpK9G3yRMkzCKgKvFm/h12kLCEgIvEhGciIGFmAXmJ7W/nMIOEmQU0
+        Jdbv0oeoUJY4cosFooJPouPwX3aYBxs2/sbK3jHvCROErSbxaMEW1gmMyrMQAT0Lya5ZCLsW
+        MDKvYhRLLSjOTU8tNiowhkdtcn7uJkZwCtVy38E44+0HvUOMTByMhxglOJiVRHhtE4tThHhT
+        EiurUovy44tKc1KLDzGaAj05kVlKNDkfmMTzSuINTSwNTMzMDM2NTA3MlcR5pW1PJgsJpCeW
+        pGanphakFsH0MXFwSjUwbVrKOX3f5BmWtXtOpzM3v92ZmTk/Jajkjvoz7rtyLp9+ps1Zznrn
+        sf2j1H/zreZ9naL+3n7NtD83FtcL+fw86LBhBftO90WJn8LmNHDF5rpIC8XwvtRcMcl8hu/f
+        rIi04tbdq46UzM6YbxWz2Z75te6XEsG2ozu/+jsc+1d6ViR4WZyBfDNHhfL3G//Zl7P82vhf
+        bFfjB4WILRLuem1sl98e6z83oUfu0d/6VY+dD6WviLKub3XfNivm+Ykd0770zhB4Y+vmsOlm
+        8q759dIrdJbwiYo9eLCcy6Ku18iy2nWDIVf1imPntOf22/nU83P1XzO1//H9YQhrT+fmxK4b
+        D43+PFwb+2DfjClnHJ8K/1RiKc5INNRiLipOBACXsrIEKgQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230531051800epcas2p4479389ea7e7da9a60180cbac0e865450
+References: <20230531051713.2080-1-avri.altman@wdc.com>
+        <CGME20230531051800epcas2p4479389ea7e7da9a60180cbac0e865450@epcms2p3>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSWxwbywNCg0KPiBXaGVuIHJlYWRpbmcgbWVtb3J5IGluIG9yZGVyLCBIVyBwcmVmZXRjaGlu
-ZyBvcHRpbWl6YXRpb25zIHdpbGwgaW50ZXJmZXJlDQo+IHdpdGggbWVhc3VyaW5nIGhvdyBjYWNo
-ZXMgYW5kIG1lbW9yeSBhcmUgYmVpbmcgYWNjZXNzZWQuIFRoaXMgYWRkcyBub2lzZQ0KPiBpbnRv
-IHRoZSByZXN1bHRzLg0KPiANCj4gQ2hhbmdlIHRoZSBmaWxsX2J1ZiByZWFkaW5nIGxvb3AgdG8g
-bm90IHVzZSBhbiBvYnZpb3VzIGluLW9yZGVyIGFjY2VzcyB1c2luZw0KPiBtdWx0aXBseSBieSBh
-IHByaW1lIGFuZCBtb2R1bG8uDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBJbHBvIErDpHJ2aW5lbiA8
-aWxwby5qYXJ2aW5lbkBsaW51eC5pbnRlbC5jb20+DQo+IC0tLQ0KPiAgdG9vbHMvdGVzdGluZy9z
-ZWxmdGVzdHMvcmVzY3RybC9maWxsX2J1Zi5jIHwgMTcgKysrKysrKysrKy0tLS0tLS0NCj4gIDEg
-ZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlm
-ZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Jlc2N0cmwvZmlsbF9idWYuYw0KPiBi
-L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Jlc2N0cmwvZmlsbF9idWYuYw0KPiBpbmRleCA3ZTBk
-M2ExZWE1NTUuLjA0OWE1MjA0OThhOSAxMDA2NDQNCj4gLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxm
-dGVzdHMvcmVzY3RybC9maWxsX2J1Zi5jDQo+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
-L3Jlc2N0cmwvZmlsbF9idWYuYw0KPiBAQCAtODgsMTQgKzg4LDE3IEBAIHN0YXRpYyB2b2lkICpt
-YWxsb2NfYW5kX2luaXRfbWVtb3J5KHNpemVfdCBzKQ0KPiANCj4gIHN0YXRpYyBpbnQgZmlsbF9v
-bmVfc3Bhbl9yZWFkKHVuc2lnbmVkIGNoYXIgKnN0YXJ0X3B0ciwgdW5zaWduZWQgY2hhcg0KPiAq
-ZW5kX3B0cikgIHsNCj4gLQl1bnNpZ25lZCBjaGFyIHN1bSwgKnA7DQo+IC0NCj4gKwl1bnNpZ25l
-ZCBpbnQgc2l6ZSA9IChlbmRfcHRyIC0gc3RhcnRfcHRyKSAvIChDTF9TSVpFIC8gMik7DQo+ICsJ
-dW5zaWduZWQgaW50IGNvdW50ID0gc2l6ZTsNCj4gKwl1bnNpZ25lZCBjaGFyIHN1bTsNCj4gKw0K
-PiArCS8qDQo+ICsJICogUmVhZCB0aGUgYnVmZmVyIGluIGFuIG9yZGVyIHRoYXQgaXMgdW5leHBl
-Y3RlZCBieSBIVyBwcmVmZXRjaGluZw0KPiArCSAqIG9wdGltaXphdGlvbnMgdG8gcHJldmVudCB0
-aGVtIGludGVyZmVyaW5nIHdpdGggdGhlIGNhY2hpbmcgcGF0dGVybi4NCj4gKwkgKi8NCj4gIAlz
-dW0gPSAwOw0KPiAtCXAgPSBzdGFydF9wdHI7DQo+IC0Jd2hpbGUgKHAgPCBlbmRfcHRyKSB7DQo+
-IC0JCXN1bSArPSAqcDsNCj4gLQkJcCArPSAoQ0xfU0laRSAvIDIpOw0KPiAtCX0NCj4gKwl3aGls
-ZSAoY291bnQtLSkNCj4gKwkJc3VtICs9IHN0YXJ0X3B0clsoKGNvdW50ICogNTkpICUgc2l6ZSkg
-KiBDTF9TSVpFIC8gMl07DQpDb3VsZCB5b3UgcGxlYXNlIGVsYWJvcmF0ZSB3aHkgNTkgaXMgdXNl
-ZD8NCg0KQmVzdCByZWdhcmRzLA0KU2hhb3BlbmcgVEFODQo=
+>v1 -> v2: Attend UTMRD as well
+>
+>A tad cleanup - No functional change.
+>
+>Signed-off-by: Avri Altman <avri.altman@wdc.com>
+>Reviewed-by: Bean Huo <beanhuo@micron.com>
+>Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+
+Reviewed-by: Keoseong Park <keosung.park@samsung.com>
+
+Best Regards,
+Keoseong
+
+>---
+> drivers/ufs/core/ufshcd.c | 10 +++++-----
+> include/ufs/ufshci.h      |  2 +-
+> 2 files changed, 6 insertions(+), 6 deletions(-)
+>
+>diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+>index fdf5073c7c6c..10a10f8f0bd1 100644
+>--- a/drivers/ufs/core/ufshcd.c
+>+++ b/drivers/ufs/core/ufshcd.c
+>@@ -2519,7 +2519,7 @@ static void ufshcd_sgl_to_prdt(struct ufs_hba *hba, struct ufshcd_lrb *lrbp, int
+> 			 * 11b to indicate Dword granularity. A value of '3'
+> 			 * indicates 4 bytes, '7' indicates 8 bytes, etc."
+> 			 */
+>-			WARN_ONCE(len > 256 * 1024, "len = %#x\n", len);
+>+			WARN_ONCE(len > SZ_256K, "len = %#x\n", len);
+> 			prd->size = cpu_to_le32(len - 1);
+> 			prd->addr = cpu_to_le64(sg->dma_address);
+> 			prd->reserved = 0;
+>@@ -3765,7 +3765,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+> 
+> 	/*
+> 	 * Allocate memory for UTP Transfer descriptors
+>-	 * UFSHCI requires 1024 byte alignment of UTRD
+>+	 * UFSHCI requires 1KB alignment of UTRD
+> 	 */
+> 	utrdl_size = (sizeof(struct utp_transfer_req_desc) * hba->nutrs);
+> 	hba->utrdl_base_addr = dmam_alloc_coherent(hba->dev,
+>@@ -3773,7 +3773,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+> 						   &hba->utrdl_dma_addr,
+> 						   GFP_KERNEL);
+> 	if (!hba->utrdl_base_addr ||
+>-	    WARN_ON(hba->utrdl_dma_addr & (1024 - 1))) {
+>+	    WARN_ON(hba->utrdl_dma_addr & (SZ_1K - 1))) {
+> 		dev_err(hba->dev,
+> 			"Transfer Descriptor Memory allocation failed\n");
+> 		goto out;
+>@@ -3797,7 +3797,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
+> 						    &hba->utmrdl_dma_addr,
+> 						    GFP_KERNEL);
+> 	if (!hba->utmrdl_base_addr ||
+>-	    WARN_ON(hba->utmrdl_dma_addr & (1024 - 1))) {
+>+	    WARN_ON(hba->utmrdl_dma_addr & (SZ_1K - 1))) {
+> 		dev_err(hba->dev,
+> 		"Task Management Descriptor Memory allocation failed\n");
+> 		goto out;
+>@@ -8760,7 +8760,7 @@ static const struct scsi_host_template ufshcd_driver_template = {
+> 	.cmd_per_lun		= UFSHCD_CMD_PER_LUN,
+> 	.can_queue		= UFSHCD_CAN_QUEUE,
+> 	.max_segment_size	= PRDT_DATA_BYTE_COUNT_MAX,
+>-	.max_sectors		= (1 << 20) / SECTOR_SIZE, /* 1 MiB */
+>+	.max_sectors		= SZ_1M / SECTOR_SIZE,
+> 	.max_host_blocked	= 1,
+> 	.track_queue_depth	= 1,
+> 	.skip_settle_delay	= 1,
+>diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
+>index 11424bb03814..db2d5db5c88e 100644
+>--- a/include/ufs/ufshci.h
+>+++ b/include/ufs/ufshci.h
+>@@ -453,7 +453,7 @@ enum {
+> };
+> 
+> /* The maximum length of the data byte count field in the PRDT is 256KB */
+>-#define PRDT_DATA_BYTE_COUNT_MAX	(256 * 1024)
+>+#define PRDT_DATA_BYTE_COUNT_MAX	SZ_256K
+> /* The granularity of the data byte count field in the PRDT is 32-bit */
+> #define PRDT_DATA_BYTE_COUNT_PAD	4
+> 
+>-- 
+>2.40.0
