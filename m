@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252247180D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3817180DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236155AbjEaM7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
+        id S236318AbjEaM7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236248AbjEaM6q (ORCPT
+        with ESMTP id S236263AbjEaM6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:58:46 -0400
+        Wed, 31 May 2023 08:58:48 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236DC1BE;
-        Wed, 31 May 2023 05:58:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C17E47;
+        Wed, 31 May 2023 05:58:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=LFSs21ZyPovCIm+gI2ZuzefJZm22A6ZE+VVgdwCs8vc=; b=xFOzU0L1htroO1OMfJ8gBvYVUj
-        33s4T4AGul2gTCY/trZokBsydhV7ExkjG3uHp6qmZvA4rEVx+ABanSUl0AYJ6fUGn4PYIbmn26eTy
-        UET68mfEstIJ0sRfnZRnHchEz9zbQfF3w0E6RKe2/JNjaDqxBHEFnfB3S/w35FC4ZRfhOJvr0kAtU
-        qWlnro113IEJNlYtlOj/5lGLBUpLfqJatKm4bSZ5hEyFzRYFS8sBbMr8fOEcscmEEhu/LNAOSJxph
-        kuuEPid8OJuSxdNV7XOjCKBPe1N1AEE9T0jiQ696XJ7Ao1CX2RGhqGo6HvdPAhKgXbNcU5Zyi1IXG
-        6ORYBouQ==;
+        bh=KHl92zkNVfdNHhlnKg6mvCa7i8PxAKjKJMOEl5EMWfo=; b=zXlbDoNSylqL4+rXHY59rvAEzn
+        Psl/83vgjcjxeiijFDRueZw4ZP9le8jp/jttNlMDkxj8IDlYOW9esWEYrIhI3DBEvOCaQosxnQwiC
+        3iktIQuAIhFWLW+JW3Ni4cqfvgfaB2xIIzS/rmgyNOUk8mAiHJeHGWzbrtXwxJi+JevIs7Wkd0pbd
+        MEm69n1jz/6nsgkRqtdGlTq/2z31G3mOe7C0owkV4F0r76f85j/wTDnGJPppUudlT34uj90Qf9t1i
+        4+mzMJhW4bZK0RmsgHOGGOIiH650kf2cSttm+Y2UPmkMMcYdu2k/SEqZMtYwg3WRM9h71LjEA9j3e
+        mNzlbfmA==;
 Received: from [2001:4bb8:182:6d06:2e49:a56:513a:92ee] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q4LOC-00HS1f-0T;
-        Wed, 31 May 2023 12:57:20 +0000
+        id 1q4LOF-00HS45-0A;
+        Wed, 31 May 2023 12:57:23 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,9 +42,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Loic Poulain <loic.poulain@linaro.org>, dm-devel@redhat.com,
         linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
         linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: [PATCH 20/24] dm: only call early_lookup_bdev from early boot context
-Date:   Wed, 31 May 2023 14:55:31 +0200
-Message-Id: <20230531125535.676098-21-hch@lst.de>
+Subject: [PATCH 21/24] PM: hibernate: don't use early_lookup_bdev in resume_store
+Date:   Wed, 31 May 2023 14:55:32 +0200
+Message-Id: <20230531125535.676098-22-hch@lst.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531125535.676098-1-hch@lst.de>
 References: <20230531125535.676098-1-hch@lst.de>
@@ -61,16 +61,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-early_lookup_bdev is supposed to only be called from the early boot
-code, but dm_get_device calls it as a general fallback when lookup_bdev
-fails, which is problematic because early_lookup_bdev bypasses all normal
+resume_store is a sysfs attribute written during normal kernel runtime,
+and it should not use the early_lookup_bdev API that bypasses all normal
 path based permission checking, and might cause problems with certain
 container environments renaming devices.
 
-Switch to only call early_lookup_bdev when dm is built-in and the system
-state in not running yet.  This means it is still available when tables
-are constructed by dm-init.c from the kernel command line, but not
-otherwise.
+Switch to lookup_bdev, which does a normal path lookup instead, and fall
+back to trying to parse a numeric dev_t just like early_lookup_bdev did.
 
 Note that this strictly speaking changes the kernel ABI as the PARTUUID=
 and PARTLABEL= style syntax is now not available during a running
@@ -78,41 +75,42 @@ systems.  They never were intended for that, but this breaks things
 we'll have to figure out a way to make them available again.  But if
 avoidable in any way I'd rather avoid that.
 
+Fixes: 421a5fa1a6cf ("PM / hibernate: use name_to_dev_t to parse resume")
 Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Mike Snitzer <snitzer@kernel.org>
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 ---
- drivers/md/dm-table.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ kernel/power/hibernate.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/md/dm-table.c b/drivers/md/dm-table.c
-index 1576b408768d4b..2fd5826bfce175 100644
---- a/drivers/md/dm-table.c
-+++ b/drivers/md/dm-table.c
-@@ -326,8 +326,11 @@ static int upgrade_mode(struct dm_dev_internal *dd, fmode_t new_mode,
- /*
-  * Add a device to the list, or just increment the usage count if
-  * it's already present.
-+ *
-+ * Note: the __ref annotation is because this function can call the __init
-+ * marked early_lookup_bdev when called during early boot code from dm-init.c.
-  */
--int dm_get_device(struct dm_target *ti, const char *path, fmode_t mode,
-+int __ref dm_get_device(struct dm_target *ti, const char *path, fmode_t mode,
- 		  struct dm_dev **result)
- {
- 	int r;
-@@ -346,8 +349,10 @@ int dm_get_device(struct dm_target *ti, const char *path, fmode_t mode,
- 			return -EOVERFLOW;
- 	} else {
- 		r = lookup_bdev(path, &dev);
--		if (r)
-+#ifndef MODULE
-+		if (r && system_state < SYSTEM_RUNNING)
- 			r = early_lookup_bdev(path, &dev);
-+#endif
- 		if (r)
- 			return r;
- 	}
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index c52dedb9f7c8e8..7ae95ec72f9902 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -1178,7 +1178,23 @@ static ssize_t resume_store(struct kobject *kobj, struct kobj_attribute *attr,
+ 	if (!name)
+ 		return -ENOMEM;
+ 
+-	error = early_lookup_bdev(name, &dev);
++	error = lookup_bdev(name, &dev);
++	if (error) {
++		unsigned maj, min, offset;
++		char *p, dummy;
++
++		if (sscanf(name, "%u:%u%c", &maj, &min, &dummy) == 2 ||
++		    sscanf(name, "%u:%u:%u:%c", &maj, &min, &offset,
++				&dummy) == 3) {
++			dev = MKDEV(maj, min);
++			if (maj != MAJOR(dev) || min != MINOR(dev))
++				error = -EINVAL;
++		} else {
++			dev = new_decode_dev(simple_strtoul(name, &p, 16));
++			if (*p)
++				error = -EINVAL;
++		}
++	}
+ 	kfree(name);
+ 	if (error)
+ 		return error;
 -- 
 2.39.2
 
