@@ -2,165 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1907184EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B421C7184F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjEaO1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
+        id S236691AbjEaO1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236084AbjEaO12 (ORCPT
+        with ESMTP id S236786AbjEaO1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:27:28 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2618194
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:27:18 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f4b0a0b557so6703478e87.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:27:18 -0700 (PDT)
+        Wed, 31 May 2023 10:27:48 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56523125
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:27:41 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-30ae61354fbso3257522f8f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:27:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685543237; x=1688135237;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ibRavn+wX5+msAj09M0EWRs8rIYs/zZ+2Fkj0xJZO7Q=;
-        b=gfvMrw2N9/F54FNlreQR4aLyfq3lme+iAa0Fg/vVuyJGYydqZQLuxT6lyzbWpRS5rH
-         3e8+g7eCqTtV5ZP9MWDjEACqLRT3qliPXb/dvIZtgNRvhKVgGta7QmuqkNXfaeTt7VCK
-         2DH3iOCLJlsS1j4r/so+wGxfrIXcmbzkKVFBtdwutBKO2Vdmzjw7dIrbnlnM8uM8wCXZ
-         +ciprs5IAY273Sxtz0gFGPkEx8HVlJaTjCPT8Db3OGXir3iir6X41Kk0FcWbbQxIYQ3h
-         F65CG8LCPnQV9ynbb2pM6NpF5eOYtIZlGKZ1tsSAO1mhs1y8w3NZFompB8EtjNUF8YqA
-         YLkQ==
+        d=ventanamicro.com; s=google; t=1685543259; x=1688135259;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RZQfdwTjxzu5eTOjhFaQdoWnR4tOyHUVZ5eFRh/PK/c=;
+        b=i9po3clbzEzJ5aZJXp7NVJtbYUD67qaN17suS1XLMBFHgOJIzR9JhzXZI9ZJYqcXzB
+         kq/YSfSHb/X2mueCDVBd/l5QWcvxxlsWUUy88nrWZhX1ilWRtOOHcfJJ/0RS0jGhkCzU
+         6X+sfKFKK8FPnIqVwRUZZgmv8K9q2bbO9TfEFrndYZKJKeK3GOqAsVNNVqmSiDNc0YfN
+         XGf26cv2lKDNNG9JBv3HmW19c1DlT4oYqocIY9T/iywirimClxbKK+MiFqEKFT4zgJI+
+         Fxa3nzHXP1JUOKnsWrX1F7xw2VqyGsPWm1LrAxNcnujbuy78IrhQ6p5qAn14yj5SvUqb
+         wjmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685543237; x=1688135237;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ibRavn+wX5+msAj09M0EWRs8rIYs/zZ+2Fkj0xJZO7Q=;
-        b=cRdg9+PBTqaSRrD8euY+vV1vwhN2aQD09aQN0oJenwAcN2/QLLa5xI8FQ+JHxHSeHT
-         MzpUojL7yhJCaGLq5lA5OZR+MWhG7N2J+wg3ldugI8HTKCM3DnQH1bD8EbM17zE7LAVR
-         cML+xx871dcttCneDJkDb543thoMurNhxJeE8kky0Gfr90NN57rUBOrCWTkmS/v57pEd
-         vLHUN0AJY4S0ipxt1GIaieqjp4dSG0yJExrTlGb+rffKqSYWij3AhilFBbYr5NBIzwuo
-         mixWx+PA5nDYAKRN0Ko2HFH10UfRVt94H+WCGCAU71zlu/d+04nDNNFQ6B45jnP7d4Qo
-         0dAg==
-X-Gm-Message-State: AC+VfDy5PLEbHyW7Knu50q4dvCXJtrhsZPnfGotmJDfeS/UPBPV/nvaO
-        JGH/OS5s3mJbWet0ADccrY8ebg==
-X-Google-Smtp-Source: ACHHUZ6cZDxVaGVsjHJLrjnMmpLueOfFSg6ct2+pvtMlJHc8y97TqJ7ym5DpeaMdiDXr2ZU2eHsbkQ==
-X-Received: by 2002:ac2:5edd:0:b0:4f1:30cc:3dae with SMTP id d29-20020ac25edd000000b004f130cc3daemr3083071lfq.10.1685543237015;
-        Wed, 31 May 2023 07:27:17 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id c20-20020a197614000000b004f122a378d4sm736372lff.163.2023.05.31.07.27.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 07:27:16 -0700 (PDT)
-Message-ID: <eef42615-ed5e-626b-f096-8c81e921e17a@linaro.org>
-Date:   Wed, 31 May 2023 16:27:15 +0200
+        d=1e100.net; s=20221208; t=1685543259; x=1688135259;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RZQfdwTjxzu5eTOjhFaQdoWnR4tOyHUVZ5eFRh/PK/c=;
+        b=AOIk1sT8+mUFM6KE0/6ILlgOyFYQco9gNj7Z8mD4aLisSu2sl510QbaM651XTHwtLO
+         M/ZArCY/KRKZY++0TfKzak9gGozJylzjrwargWn4OlpYf9x1YltvuYRIsNwR7uZ3j0W1
+         7oj2mas+v1NPItxxJMJlxqhOl8/31R6W+bkuV1uLhR2kZHBEYBk+1SsgnoxEEIm4pYPH
+         uGFKs7g4anlPG9MadcMcwERKK8DD4qDe4ZT7F8oCymrXXaGxTmLYLB+Vtcb7PVqx1Vu4
+         /Tfht5xdDcZLPNQbH2wtgPWjDYKjPSMuQ6hPE3LukoiHWmgg5ekzEklFcqgyV5hJOv3w
+         B1vQ==
+X-Gm-Message-State: AC+VfDwmSwXnJ4E4PRic84AOPmXII79+woPSgyqdu/+b7DHqOTqX/gUA
+        qcVdvuP39kM5rYqrwww5T9UQ/g==
+X-Google-Smtp-Source: ACHHUZ7faXqorHCT28+gR8386YvZ5DrWoH2MDLT9ZyAvgjAEryPUGFAdHDgZlqhXBtiXlNhK+JXJbg==
+X-Received: by 2002:adf:cd07:0:b0:30a:bf2b:e03c with SMTP id w7-20020adfcd07000000b0030abf2be03cmr4218382wrm.23.1685543259663;
+        Wed, 31 May 2023 07:27:39 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id l4-20020a05600012c400b003047dc162f7sm7057593wrx.67.2023.05.31.07.27.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 07:27:39 -0700 (PDT)
+Date:   Wed, 31 May 2023 16:27:38 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 06/10] drivers: perf: Implement perf event mmap
+ support in the legacy backend
+Message-ID: <20230531-705f2911e8d66938ece04905@orel>
+References: <20230512085321.13259-1-alexghiti@rivosinc.com>
+ <20230512085321.13259-7-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: sm8550-qrd: enable PMIC Volume
- and Power buttons
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v2-0-a3b890604c49@linaro.org>
- <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v2-4-a3b890604c49@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230525-topic-sm8550-upstream-pm8550-lpg-dt-v2-4-a3b890604c49@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512085321.13259-7-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 31.05.2023 14:22, Neil Armstrong wrote:
-> The Volume Down & Power buttons are controlled by the PMIC via
-> the PON hardware, and the Volume Up is connected to a PMIC gpio.
+On Fri, May 12, 2023 at 10:53:17AM +0200, Alexandre Ghiti wrote:
+> Implement the needed callbacks in the legacy driver so that we can
+> directly access the counters through perf in userspace.
 > 
-> Enable the necessary hardware and setup the GPIO state for the
-> Volume Up gpio key.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 > ---
->  arch/arm64/boot/dts/qcom/sm8550-qrd.dts | 36 +++++++++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
+>  drivers/perf/riscv_pmu_legacy.c | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
-> index efff15225e67..24fc368de97b 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
-> @@ -54,6 +54,22 @@ chosen {
->  		stdout-path = "serial0:115200n8";
->  	};
+> diff --git a/drivers/perf/riscv_pmu_legacy.c b/drivers/perf/riscv_pmu_legacy.c
+> index ffe09d857366..f0f5bd856f66 100644
+> --- a/drivers/perf/riscv_pmu_legacy.c
+> +++ b/drivers/perf/riscv_pmu_legacy.c
+> @@ -74,6 +74,31 @@ static void pmu_legacy_ctr_start(struct perf_event *event, u64 ival)
+>  	local64_set(&hwc->prev_count, initial_val);
+>  }
 >  
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
+> +static uint8_t pmu_legacy_csr_index(struct perf_event *event)
+> +{
+> +	return event->hw.idx;
+> +}
 > +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&volume_up_n>;
-property-n
-property-names
+> +static void pmu_legacy_event_mapped(struct perf_event *event, struct mm_struct *mm)
+> +{
+> +	/* In legacy mode, the first 3 CSRs are available. */
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Shouldn't this be
 
-Konrad
+ /* In legacy mode, the first and third CSR are available. */
+
+?
+
+> +	if (event->attr.config != PERF_COUNT_HW_CPU_CYCLES &&
+> +	    event->attr.config != PERF_COUNT_HW_INSTRUCTIONS)
+> +		return;
 > +
-> +		key-volume-up {
-> +			label = "Volume Up";
-> +			linux,code = <KEY_VOLUMEUP>;
-> +			gpios = <&pm8550_gpios 6 GPIO_ACTIVE_LOW>;
-> +			debounce-interval = <15>;
-> +			linux,can-disable;
-> +			wakeup-source;
-> +		};
-> +	};
+> +	event->hw.flags |= PERF_EVENT_FLAG_USER_READ_CNT;
+> +}
 > +
->  	pmic-glink {
->  		compatible = "qcom,sm8550-pmic-glink", "qcom,pmic-glink";
->  		#address-cells = <1>;
-> @@ -516,6 +532,16 @@ led-1 {
->  	};
->  };
+> +static void pmu_legacy_event_unmapped(struct perf_event *event, struct mm_struct *mm)
+> +{
+> +	/* In legacy mode, the first 3 CSRs are available. */
+
+same comment
+
+> +	if (event->attr.config != PERF_COUNT_HW_CPU_CYCLES &&
+> +	    event->attr.config != PERF_COUNT_HW_INSTRUCTIONS)
+> +		return;
+> +
+> +	event->hw.flags &= ~PERF_EVENT_FLAG_USER_READ_CNT;
+> +}
+> +
+>  /*
+>   * This is just a simple implementation to allow legacy implementations
+>   * compatible with new RISC-V PMU driver framework.
+> @@ -94,6 +119,9 @@ static void pmu_legacy_init(struct riscv_pmu *pmu)
+>  	pmu->ctr_get_width = NULL;
+>  	pmu->ctr_clear_idx = NULL;
+>  	pmu->ctr_read = pmu_legacy_read_ctr;
+> +	pmu->event_mapped = pmu_legacy_event_mapped;
+> +	pmu->event_unmapped = pmu_legacy_event_unmapped;
+> +	pmu->csr_index = pmu_legacy_csr_index;
 >  
-> +&pm8550_gpios {
-> +	volume_up_n: volume-up-n-state {
-> +		pins = "gpio6";
-> +		function = "normal";
-> +		power-source = <1>;
-> +		bias-pull-up;
-> +		input-enable;
-> +	};
-> +};
-> +
->  &pm8550_pwm {
->  	status = "okay";
->  
-> @@ -548,6 +574,16 @@ &pm8550b_eusb2_repeater {
->  	vdd3-supply = <&vreg_l5b_3p1>;
->  };
->  
-> +&pon_pwrkey {
-> +	status = "okay";
-> +};
-> +
-> +&pon_resin {
-> +	linux,code = <KEY_VOLUMEDOWN>;
-> +
-> +	status = "okay";
-> +};
-> +
->  &pcie_1_phy_aux_clk {
->  	clock-frequency = <1000>;
->  };
-> 
+>  	perf_pmu_register(&pmu->pmu, RISCV_PMU_LEGACY_PDEV_NAME, PERF_TYPE_RAW);
+>  }
+> -- 
+> 2.37.2
+>
+
+Otherwise,
+
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
