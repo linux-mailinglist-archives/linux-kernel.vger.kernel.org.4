@@ -2,141 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B89D718A36
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90200718A38
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjEaTcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 15:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
+        id S230118AbjEaTdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 15:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjEaTcv (ORCPT
+        with ESMTP id S230090AbjEaTdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 15:32:51 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC27F13E
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:32:48 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-53f158ecfe1so40227a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:32:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1685561568; x=1688153568;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K1b4BZmA9xJj4k+yX9G1OpwN8zaCq1YL9w8UMx2HW8U=;
-        b=DqMU+tzEkEG/KBm/Eq8c50aBcNpCYLCDfIfu2qjwwcPg0L4B3pyIohHBAzyR1rV0BP
-         V/m/A6VPjh2V/gAf1InQamkLfVKnTZy+tS4G8D7G9FxBmlJSwxxYbjh8ZmupHNl0eevX
-         lPbMy/Tw/ElEj/9T2zLclMOTikXMCoO4zi4Jz/K3dXTMzCQPf+al0bdolspqKcUBZ42g
-         y7dXf745BGesGzWYp54442rTbaeMerKhc5X4qohTsEn7zGpNGB/zvD6xbsbfEfu2Zlu+
-         WM86IzoR72al1oCugiwWriFtaYbSkEqg9fqkAfaWIDuLcOZimNJeIf/7vhUEyBMi3En6
-         l4lw==
+        Wed, 31 May 2023 15:33:02 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B104137
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:32:56 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-7603d830533so22418039f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:32:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685561568; x=1688153568;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K1b4BZmA9xJj4k+yX9G1OpwN8zaCq1YL9w8UMx2HW8U=;
-        b=SpibDXl2tLheIHK+xdaenzn7gBZdh/YkjgxwhQVZ1aaP6dUvvW2Ok3Yzel0JPaUF6N
-         DCk5qJQxLQ5vPBD3rDCBcKw+DiX5w3bZ0m/XgxM9IND/r3B1Os5P1bS4PKaQhe+/VMQy
-         q7TxhEHN2KE7aKSImCarMDBkgalgb+m1MvSTuvbg9lTX1UXWRbQhdYy7yD5M9dUvPZx6
-         UKhFygbaX+8PxbzMVqVkt7hkXL7YMGmJDfI0BPtscYQ8Z6ljqGTKzrJg0OhVRHEzjSur
-         NhwKylK5BNqsyPwQxhxxaHuvOoCWKgzb0YhNasWF2S/VGwPf37HXtn47RMGjQyGZuQiK
-         yQQA==
-X-Gm-Message-State: AC+VfDza8KFX4eDN1wvmRW35Iwq/rHO7LK706PJdzM9RGjl1KQiTZptw
-        KuvRPk3SSzcEv4BhidMoB8TLCQ==
-X-Google-Smtp-Source: ACHHUZ7lcXE9sadSW9Rrzl5BAk50j1XTwgJx3egzhx6uSXmvo9XJdNso/P+uf7WiDgNFtlx4kiddiQ==
-X-Received: by 2002:a17:902:c3ca:b0:1b1:714a:335b with SMTP id j10-20020a170902c3ca00b001b1714a335bmr1984367plj.6.1685561568342;
-        Wed, 31 May 2023 12:32:48 -0700 (PDT)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id i12-20020a170902c94c00b001b034faf49csm1733132pla.285.2023.05.31.12.32.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 12:32:47 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1q4RYs-0017pL-AV;
-        Wed, 31 May 2023 16:32:46 -0300
-Date:   Wed, 31 May 2023 16:32:46 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 02/12] mm/pgtable: add PAE safety to __pte_offset_map()
-Message-ID: <ZHeg3oRljRn6wlLX@ziepe.ca>
-References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
- <923480d5-35ab-7cac-79d0-343d16e29318@google.com>
+        d=1e100.net; s=20221208; t=1685561576; x=1688153576;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5LyvodTfh7mDgMBZGR3/haPvA2HxKEHZOZ0+VgxD6Y4=;
+        b=UJsiwYPzI4bVA5jhj6Sg061imYGS78t7fvsGLtkxQqmyQgZD2kt+Raqf48JebECwMV
+         rrZVwzulWpgDuEKLmrXtrtiMw6qNBTNJI9LEQpjSoEvOMqiCjOsagh+0SKVZO1x8y+QS
+         Y0lxAJHKr8xQ+LUJkJZltkYEtlFu4Lw51las2ksOVAFe0ASER8qmQeFOkiqZnQ9inOeA
+         prE9nRYHOqNDnYs4v8s9dmjcJxRnfJrOTy17ow/842FoOO68rOHF5hGXQGribcm2J/gQ
+         JeMLBtFfIyjzmSKq/BdlK76TgPi20fPNOe5G8aJjGm/oUG4XLzQdm5SANsTvYqTrq1HM
+         m9hg==
+X-Gm-Message-State: AC+VfDxGRje25z9CFWOvsAq5zOanrsVlzp6RlvAgi1I9Zh/SqocxcNIV
+        UstpPOxgews5TTZJn068txt+iHuq05148JbdiCM24vEIhv0Z
+X-Google-Smtp-Source: ACHHUZ5jv021XOgfOmq2aWrpQjH44Z2mlMPVF3tsbqSe9rSHM0VGb8lHM0mbMioaRhKeGdvtvtiOAGCEyC7PcAbh+r+qAtks5PTd
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <923480d5-35ab-7cac-79d0-343d16e29318@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:3713:b0:774:8680:b95b with SMTP id
+ bh19-20020a056602371300b007748680b95bmr8079663iob.1.1685561575975; Wed, 31
+ May 2023 12:32:55 -0700 (PDT)
+Date:   Wed, 31 May 2023 12:32:55 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fbaee205fd026244@google.com>
+Subject: [syzbot] [ntfs3?] possible deadlock in mark_as_free_ex
+From:   syzbot <syzbot+e94d98936a0ed08bde43@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
+        trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 11:16:16PM -0700, Hugh Dickins wrote:
-> There is a faint risk that __pte_offset_map(), on a 32-bit architecture
-> with a 64-bit pmd_t e.g. x86-32 with CONFIG_X86_PAE=y, would succeed on
-> a pmdval assembled from a pmd_low and a pmd_high which never belonged
-> together: their combination not pointing to a page table at all, perhaps
-> not even a valid pfn.  pmdp_get_lockless() is not enough to prevent that.
-> 
-> Guard against that (on such configs) by local_irq_save() blocking TLB
-> flush between present updates, as linux/pgtable.h suggests.  It's only
-> needed around the pmdp_get_lockless() in __pte_offset_map(): a race when
-> __pte_offset_map_lock() repeats the pmdp_get_lockless() after getting the
-> lock, would just send it back to __pte_offset_map() again.
+Hello,
 
-What about the other places calling pmdp_get_lockless ? It seems like
-this is quietly making it part of the API that the caller must hold
-the IPIs off.
+syzbot found the following issue on:
 
-And Jann had a note that this approach used by the lockless functions
-doesn't work anyhow:
+HEAD commit:    48b1320a674e Merge tag 'for-6.4-rc4-tag' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10ccb25d280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=162cf2103e4a7453
+dashboard link: https://syzkaller.appspot.com/bug?extid=e94d98936a0ed08bde43
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-https://lore.kernel.org/linux-mm/CAG48ez3h-mnp9ZFC10v+-BW_8NQvxbwBsMYJFP8JX31o0B17Pg@mail.gmail.com/
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Though we never fixed it, AFAIK..
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1bdd53056bc4/disk-48b1320a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/82950e95464f/vmlinux-48b1320a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8a58eb21a7a7/bzImage-48b1320a.xz
 
-Jason
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e94d98936a0ed08bde43@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.4.0-rc4-syzkaller-00051-g48b1320a674e #0 Not tainted
+------------------------------------------------------
+kworker/u4:0/15666 is trying to acquire lock:
+ffff88802d146268 (&wnd->rw_lock){++++}-{3:3}, at: mark_as_free_ex+0x3d/0x330 fs/ntfs3/fsntfs.c:2464
+
+but task is already holding lock:
+ffff88804bad60e0 (&ni->ni_lock){+.+.}-{3:3}, at: ni_trylock fs/ntfs3/ntfs_fs.h:1141 [inline]
+ffff88804bad60e0 (&ni->ni_lock){+.+.}-{3:3}, at: ni_write_inode+0x167/0x10c0 fs/ntfs3/frecord.c:3252
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&ni->ni_lock){+.+.}-{3:3}:
+       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5705
+       __mutex_lock_common+0x1d8/0x2530 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x1b/0x20 kernel/locking/mutex.c:799
+       ntfs_set_state+0x212/0x730 fs/ntfs3/fsntfs.c:945
+       mark_as_free_ex+0x6e/0x330 fs/ntfs3/fsntfs.c:2466
+       run_deallocate_ex+0x244/0x5f0 fs/ntfs3/attrib.c:122
+       attr_set_size+0x1684/0x4290 fs/ntfs3/attrib.c:750
+       ntfs_truncate fs/ntfs3/file.c:393 [inline]
+       ntfs3_setattr+0x556/0xb00 fs/ntfs3/file.c:682
+       notify_change+0xc8b/0xf40 fs/attr.c:483
+       do_truncate+0x220/0x300 fs/open.c:66
+       handle_truncate fs/namei.c:3295 [inline]
+       do_open fs/namei.c:3640 [inline]
+       path_openat+0x294e/0x3170 fs/namei.c:3791
+       do_filp_open+0x234/0x490 fs/namei.c:3818
+       do_sys_openat2+0x13f/0x500 fs/open.c:1356
+       do_sys_open fs/open.c:1372 [inline]
+       __do_sys_creat fs/open.c:1448 [inline]
+       __se_sys_creat fs/open.c:1442 [inline]
+       __x64_sys_creat+0x123/0x160 fs/open.c:1442
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&wnd->rw_lock){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3113 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3232 [inline]
+       validate_chain+0x166b/0x58f0 kernel/locking/lockdep.c:3847
+       __lock_acquire+0x1316/0x2070 kernel/locking/lockdep.c:5088
+       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5705
+       down_write_nested+0x3d/0x50 kernel/locking/rwsem.c:1689
+       mark_as_free_ex+0x3d/0x330 fs/ntfs3/fsntfs.c:2464
+       run_deallocate+0x13b/0x230 fs/ntfs3/fsntfs.c:2534
+       ni_try_remove_attr_list+0x1558/0x1930 fs/ntfs3/frecord.c:773
+       ni_write_inode+0xd14/0x10c0 fs/ntfs3/frecord.c:3318
+       write_inode fs/fs-writeback.c:1456 [inline]
+       __writeback_single_inode+0x69b/0xfa0 fs/fs-writeback.c:1668
+       writeback_sb_inodes+0x8e3/0x11d0 fs/fs-writeback.c:1894
+       wb_writeback+0x458/0xc70 fs/fs-writeback.c:2068
+       wb_do_writeback fs/fs-writeback.c:2211 [inline]
+       wb_workfn+0x400/0xff0 fs/fs-writeback.c:2251
+       process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2405
+       worker_thread+0xa63/0x1210 kernel/workqueue.c:2552
+       kthread+0x2b8/0x350 kernel/kthread.c:379
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&ni->ni_lock);
+                               lock(&wnd->rw_lock);
+                               lock(&ni->ni_lock);
+  lock(&wnd->rw_lock);
+
+ *** DEADLOCK ***
+
+3 locks held by kworker/u4:0/15666:
+ #0: ffff888019e63938 ((wq_completion)writeback){+.+.}-{0:0}, at: process_one_work+0x77e/0x10e0 kernel/workqueue.c:2378
+ #1: ffffc9000ae5fd20 ((work_completion)(&(&wb->dwork)->work)){+.+.}-{0:0}, at: process_one_work+0x7c8/0x10e0 kernel/workqueue.c:2380
+ #2: ffff88804bad60e0 (&ni->ni_lock){+.+.}-{3:3}, at: ni_trylock fs/ntfs3/ntfs_fs.h:1141 [inline]
+ #2: ffff88804bad60e0 (&ni->ni_lock){+.+.}-{3:3}, at: ni_write_inode+0x167/0x10c0 fs/ntfs3/frecord.c:3252
+
+stack backtrace:
+CPU: 1 PID: 15666 Comm: kworker/u4:0 Not tainted 6.4.0-rc4-syzkaller-00051-g48b1320a674e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+Workqueue: writeback wb_workfn (flush-7:2)
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ check_noncircular+0x2fe/0x3b0 kernel/locking/lockdep.c:2188
+ check_prev_add kernel/locking/lockdep.c:3113 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3232 [inline]
+ validate_chain+0x166b/0x58f0 kernel/locking/lockdep.c:3847
+ __lock_acquire+0x1316/0x2070 kernel/locking/lockdep.c:5088
+ lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5705
+ down_write_nested+0x3d/0x50 kernel/locking/rwsem.c:1689
+ mark_as_free_ex+0x3d/0x330 fs/ntfs3/fsntfs.c:2464
+ run_deallocate+0x13b/0x230 fs/ntfs3/fsntfs.c:2534
+ ni_try_remove_attr_list+0x1558/0x1930 fs/ntfs3/frecord.c:773
+ ni_write_inode+0xd14/0x10c0 fs/ntfs3/frecord.c:3318
+ write_inode fs/fs-writeback.c:1456 [inline]
+ __writeback_single_inode+0x69b/0xfa0 fs/fs-writeback.c:1668
+ writeback_sb_inodes+0x8e3/0x11d0 fs/fs-writeback.c:1894
+ wb_writeback+0x458/0xc70 fs/fs-writeback.c:2068
+ wb_do_writeback fs/fs-writeback.c:2211 [inline]
+ wb_workfn+0x400/0xff0 fs/fs-writeback.c:2251
+ process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2405
+ worker_thread+0xa63/0x1210 kernel/workqueue.c:2552
+ kthread+0x2b8/0x350 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+BTRFS info (device loop3): qgroup scan completed (inconsistency flag cleared)
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
