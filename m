@@ -2,274 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEAE717474
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 05:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94672717477
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 05:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234098AbjEaDoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 23:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
+        id S234151AbjEaDpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 23:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbjEaDoa (ORCPT
+        with ESMTP id S229781AbjEaDpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 23:44:30 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22A6EC;
-        Tue, 30 May 2023 20:44:28 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34V3HFKG002227;
-        Wed, 31 May 2023 03:44:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=YKXPEWaLk9R278pcW3YmzLu1vDiV7SMryq8547Fy69Y=;
- b=cKEtmiqWl77rkk/t4nAVV4/WF+ORPCo0IWmgmSt/NmsUWXhMtMkP7SV8FcJ1LgJbMJbn
- Jk22iBFe62tGkP8J0PdWe4Se7J7LsX1N7Zys42TCo+dQkce5gl37OyooJcunOnKEumhq
- XmHxypC4vp+rgcJqRACgqmTxZvCMaLny0mkaKEpY5ORGymON+0VjP7taf2O9oLH6AfgA
- 54A6EA5OOhFRn/MDrcoj1yTogvnOWB6FyOf0INSisIbo7ra/2UqtVECkkR/5eFZiwvj1
- s6G9PHis8rPdXOmbyzeg/GLxgZV6XaswVqqtNFC9rvjlqLXuJVhw4GYQilJzrhXZLLnw Gg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwp69gvhh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 03:44:25 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34V3hoVQ024661
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 03:43:50 GMT
-Received: from tjiang-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 30 May 2023 20:43:48 -0700
-From:   Tim Jiang <quic_tjiang@quicinc.com>
-To:     <marcel@holtmann.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <quic_tjiang@quicinc.com>,
-        <quic_bgodavar@quicinc.com>, <quic_hemantg@quicinc.com>
-Subject: [PATCH v7] Bluetooth: hci_qca: Add support for Qualcomm Bluetooth SoC QCA2066
-Date:   Wed, 31 May 2023 11:43:38 +0800
-Message-ID: <20230531034338.23121-1-quic_tjiang@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 30 May 2023 23:45:30 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232B7FC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 20:45:29 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b011cffef2so46382595ad.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 20:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685504728; x=1688096728;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mWRStRzhjvxvXtPIyOg18FX2uAjXK3LmODKkFrfOfw0=;
+        b=fPPupQpDJe/KmEnc2WnZF8g5GpmYFL7szIinLEYV32rvUtsaCDyhhmM6HS+5Vg8tAq
+         Ju7LCyeMJgyyKq5XB/Rn13NFszVCnQwEFVEur0eXcG+4sUhRHce3QetMa3fyv7P1lv7z
+         N+u1plwb+KEfc8mRjeNx98MhNSHTGvoxu2f/w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685504728; x=1688096728;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mWRStRzhjvxvXtPIyOg18FX2uAjXK3LmODKkFrfOfw0=;
+        b=a+2ed9rS+jCO+DFCKof4UP4LxKh8/TdM0d1mjpv/riPpmPUkc+EakjNdWltF4NuDsd
+         SqPu1LhfDKwV78AafmDYyLz3LUAuG7YkffQyyw6m7gHyCpd4NahgGOoRptn/24+Zk75C
+         uX96mLB+5esXIejRxS/linw9aaDBZfr78DBOrWgsmhpG0wltOq86rfDc33RYRieHd3+1
+         PUj9VmpZIJhOkQOBdwj3DNOKTwS43vxWcIAJy15hma516tyVHSq4aMP993LY0P8aLsiP
+         twJ3WDMnHFOZexj7A08VFK6rGoYAYFQW/BdDwj+FaZmjD7azliWl5i/BZtwt8WjwcMiV
+         edQA==
+X-Gm-Message-State: AC+VfDywh18lOZ2ItRSL6rH8rROIl6M6J9Ws15abOGak5emQPBx7e28E
+        T/IYV0ALO3qUkfm50XOuclEVTg==
+X-Google-Smtp-Source: ACHHUZ43/DN6lEy8Zrzn0r3E1bhpKKnF7A8bfa3e3OXdy+1nCr5lMGZ3vkOrHeG/LMfIYwjX5e1AQw==
+X-Received: by 2002:a17:902:a508:b0:1b0:31a8:2f74 with SMTP id s8-20020a170902a50800b001b031a82f74mr3379208plq.68.1685504728555;
+        Tue, 30 May 2023 20:45:28 -0700 (PDT)
+Received: from localhost (21.160.199.104.bc.googleusercontent.com. [104.199.160.21])
+        by smtp.gmail.com with UTF8SMTPSA id e7-20020a17090301c700b001b042e8ed77sm72787plh.281.2023.05.30.20.45.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 20:45:28 -0700 (PDT)
+From:   Ying Hsu <yinghsu@chromium.org>
+To:     linux-bluetooth@vger.kernel.org
+Cc:     chromeos-bluetooth-upstreaming@chromium.org,
+        Ying Hsu <yinghsu@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH v5] Bluetooth: Fix l2cap_disconnect_req deadlock
+Date:   Wed, 31 May 2023 03:44:56 +0000
+Message-ID: <20230531034522.375889-1-yinghsu@chromium.org>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: m8tv7-01i6xRAAeL1HnXJgiXuhym78sX
-X-Proofpoint-GUID: m8tv7-01i6xRAAeL1HnXJgiXuhym78sX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-30_18,2023-05-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 malwarescore=0
- suspectscore=0 spamscore=0 mlxlogscore=999 phishscore=0 adultscore=0
- bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305310030
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for QCA2066 firmware patch and nvm downloading.
-as the RF performance of qca2066 soc chip from different foundries will
-be difference, so we use different nvm to configure them by according
-to board id.
+L2CAP assumes that the locks conn->chan_lock and chan->lock are
+acquired in the order conn->chan_lock, chan->lock to avoid
+potential deadlock.
+For example, l2sock_shutdown acquires these locks in the order:
+  mutex_lock(&conn->chan_lock)
+  l2cap_chan_lock(chan)
 
-Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
+However, l2cap_disconnect_req acquires chan->lock in
+l2cap_get_chan_by_scid first and then acquires conn->chan_lock
+before calling l2cap_chan_del. This means that these locks are
+acquired in unexpected order, which leads to potential deadlock:
+  l2cap_chan_lock(c)
+  mutex_lock(&conn->chan_lock)
+
+This patch releases chan->lock before acquiring the conn_chan_lock
+to avoid the potential deadlock.
+
+Fixes: ("a2a9339e1c9d Bluetooth: L2CAP: Fix use-after-free in l2cap_disconnect_{req,rsp}")
+Signed-off-by: Ying Hsu <yinghsu@chromium.org>
 ---
- drivers/bluetooth/btqca.c   | 76 ++++++++++++++++++++++++++++++++++++-
- drivers/bluetooth/btqca.h   |  4 ++
- drivers/bluetooth/hci_qca.c |  8 +++-
- 3 files changed, 86 insertions(+), 2 deletions(-)
+This commit has been tested on a Chromebook device.
 
-diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
-index e7e58a956d15..960a409e16d6 100644
---- a/drivers/bluetooth/btqca.c
-+++ b/drivers/bluetooth/btqca.c
-@@ -205,6 +205,48 @@ static int qca_send_reset(struct hci_dev *hdev)
- 	return 0;
+Changes in v5:
+- Fixing the merge conflict by removing l2cap_del_chan_by_scid.
+
+Changes in v4:
+- Using l2cap_get_chan_by_scid to avoid repeated code.
+- Releasing chan->lock before acquiring conn->chan_lock.
+
+Changes in v3:
+- Adding the fixes tag.
+
+Changes in v2:
+- Adding the prefix "Bluetooth:" to subject line.
+
+ net/bluetooth/l2cap_core.c | 37 +++++++++++++++----------------------
+ 1 file changed, 15 insertions(+), 22 deletions(-)
+
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index 036bc147f4de..16ac4aac0638 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -4634,26 +4634,6 @@ static inline int l2cap_config_rsp(struct l2cap_conn *conn,
+ 	return err;
  }
  
-+static int qca_read_fw_board_id(struct hci_dev *hdev, u16 *bid)
-+{
-+	u8 cmd;
-+	struct sk_buff *skb;
-+	struct edl_event_hdr *edl;
-+	int err = 0;
-+	int bid_len;
-+
-+	bt_dev_dbg(hdev, "QCA read board ID");
-+
-+	cmd = EDL_GET_BID_REQ_CMD;
-+	skb = __hci_cmd_sync_ev(hdev, EDL_PATCH_CMD_OPCODE, EDL_PATCH_CMD_LEN,
-+				&cmd, 0, HCI_INIT_TIMEOUT);
-+	if (IS_ERR(skb)) {
-+		err = PTR_ERR(skb);
-+		bt_dev_err(hdev, "Reading QCA board ID failed (%d)", err);
-+		return err;
-+	}
-+
-+	edl = skb_pull_data(skb, sizeof(*edl));
-+	if (!edl) {
-+		bt_dev_err(hdev, "QCA read board ID with no header");
-+		err = -EILSEQ;
-+		goto out;
-+	}
-+
-+	if (edl->cresp != EDL_CMD_REQ_RES_EVT ||
-+	    edl->rtype != EDL_GET_BID_REQ_CMD) {
-+		bt_dev_err(hdev, "QCA Wrong packet: %d %d", edl->cresp, edl->rtype);
-+		err = -EIO;
-+		goto out;
-+	}
-+
-+	bid_len = edl->data[0];
-+	*bid = (edl->data[1] << 8) + edl->data[2];
-+	bt_dev_info(hdev, "%s: bid len = %x, bid = %x", __func__, bid_len, *bid);
-+
-+out:
-+	kfree_skb(skb);
-+	return err;
-+}
-+
- int qca_send_pre_shutdown_cmd(struct hci_dev *hdev)
- {
- 	struct sk_buff *skb;
-@@ -574,6 +616,29 @@ int qca_set_bdaddr_rome(struct hci_dev *hdev, const bdaddr_t *bdaddr)
- }
- EXPORT_SYMBOL_GPL(qca_set_bdaddr_rome);
- 
-+static void qca_generate_nvm_name(struct hci_dev *hdev, char *fwname,
-+		   size_t max_size, struct qca_btsoc_version ver, u16 bid)
-+{
-+	u8 rom_ver = 0;
-+	u32 soc_ver;
-+	const char *variant;
-+
-+	soc_ver = get_soc_ver(ver.soc_id, ver.rom_ver);
-+	rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
-+
-+	if ((le32_to_cpu(ver.soc_id) & 0x0000ff00) == QCA_HSP_GF_SOC_ID)  /* hsp gf chip */
-+		variant = "g";
-+	else
-+		variant = "";
-+
-+	if (bid == 0x0)
-+		snprintf(fwname, max_size, "qca/hpnv%02x%s.bin", rom_ver, variant);
-+	else
-+		snprintf(fwname, max_size, "qca/hpnv%02x%s.%x", rom_ver, variant, bid);
-+
-+	bt_dev_info(hdev, "%s: nvm name is %s", __func__, fwname);
-+}
-+
- int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 		   enum qca_btsoc_type soc_type, struct qca_btsoc_version ver,
- 		   const char *firmware_name)
-@@ -582,6 +647,7 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	int err;
- 	u8 rom_ver = 0;
- 	u32 soc_ver;
-+	u16 boardid = 0;
- 
- 	bt_dev_dbg(hdev, "QCA setup on UART");
- 
-@@ -604,6 +670,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	if (qca_is_wcn399x(soc_type)) {
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/crbtfw%02x.tlv", rom_ver);
-+	} else if (soc_type == QCA_QCA2066) {
-+		snprintf(config.fwname, sizeof(config.fwname),
-+			 "qca/hpbtfw%02x.tlv", rom_ver);
- 	} else if (soc_type == QCA_QCA6390) {
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/htbtfw%02x.tlv", rom_ver);
-@@ -631,6 +700,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	/* Give the controller some time to get ready to receive the NVM */
- 	msleep(10);
- 
-+	if (soc_type == QCA_QCA2066)
-+		qca_read_fw_board_id(hdev, &boardid);
-+
- 	/* Download NVM configuration */
- 	config.type = TLV_TYPE_NVM;
- 	if (firmware_name)
-@@ -644,7 +716,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 			snprintf(config.fwname, sizeof(config.fwname),
- 				 "qca/crnv%02x.bin", rom_ver);
- 		}
+-static struct l2cap_chan *l2cap_del_chan_by_scid(struct l2cap_conn *conn,
+-						 u16 cid, int err)
+-{
+-	struct l2cap_chan *c;
+-
+-	mutex_lock(&conn->chan_lock);
+-	c = __l2cap_get_chan_by_scid(conn, cid);
+-	if (c) {
+-		/* Only lock if chan reference is not 0 */
+-		c = l2cap_chan_hold_unless_zero(c);
+-		if (c) {
+-			l2cap_chan_lock(c);
+-			l2cap_chan_del(c, err);
+-		}
 -	}
-+	} else if (soc_type == QCA_QCA2066)
-+		qca_generate_nvm_name(hdev, config.fwname, sizeof(config.fwname),
-+				ver, boardid);
- 	else if (soc_type == QCA_QCA6390)
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/htnv%02x.bin", rom_ver);
-diff --git a/drivers/bluetooth/btqca.h b/drivers/bluetooth/btqca.h
-index b884095bcd9d..234a97a49bb9 100644
---- a/drivers/bluetooth/btqca.h
-+++ b/drivers/bluetooth/btqca.h
-@@ -13,6 +13,7 @@
- #define EDL_PATCH_TLV_REQ_CMD		(0x1E)
- #define EDL_GET_BUILD_INFO_CMD		(0x20)
- #define EDL_NVM_ACCESS_SET_REQ_CMD	(0x01)
-+#define EDL_GET_BID_REQ_CMD		(0x23)
- #define EDL_PATCH_CONFIG_CMD		(0x28)
- #define MAX_SIZE_PER_TLV_SEGMENT	(243)
- #define QCA_PRE_SHUTDOWN_CMD		(0xFC08)
-@@ -48,6 +49,8 @@
+-	mutex_unlock(&conn->chan_lock);
+-
+-	return c;
+-}
+-
+ static inline int l2cap_disconnect_req(struct l2cap_conn *conn,
+ 				       struct l2cap_cmd_hdr *cmd, u16 cmd_len,
+ 				       u8 *data)
+@@ -4671,7 +4651,7 @@ static inline int l2cap_disconnect_req(struct l2cap_conn *conn,
  
- #define QCA_FW_BUILD_VER_LEN		255
+ 	BT_DBG("scid 0x%4.4x dcid 0x%4.4x", scid, dcid);
  
-+#define QCA_HSP_GF_SOC_ID		0x1200
+-	chan = l2cap_del_chan_by_scid(conn, dcid, ECONNRESET);
++	chan = l2cap_get_chan_by_scid(conn, dcid);
+ 	if (!chan) {
+ 		cmd_reject_invalid_cid(conn, cmd->ident, dcid, scid);
+ 		return 0;
+@@ -4682,6 +4662,13 @@ static inline int l2cap_disconnect_req(struct l2cap_conn *conn,
+ 	l2cap_send_cmd(conn, cmd->ident, L2CAP_DISCONN_RSP, sizeof(rsp), &rsp);
+ 
+ 	chan->ops->set_shutdown(chan);
 +
- 
- enum qca_baudrate {
- 	QCA_BAUDRATE_115200 	= 0,
-@@ -148,6 +151,7 @@ enum qca_btsoc_type {
- 	QCA_QCA6390,
- 	QCA_WCN6750,
- 	QCA_WCN6855,
-+	QCA_QCA2066,
- };
- 
- #if IS_ENABLED(CONFIG_BT_QCA)
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 1b064504b388..bf7683040ebd 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -1729,7 +1729,7 @@ static int qca_setup(struct hci_uart *hu)
- 	bt_dev_info(hdev, "setting up %s",
- 		qca_is_wcn399x(soc_type) ? "wcn399x" :
- 		(soc_type == QCA_WCN6750) ? "wcn6750" :
--		(soc_type == QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390");
-+		(soc_type == QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390/QCA2066");
- 
- 	qca->memdump_state = QCA_MEMDUMP_IDLE;
- 
-@@ -1874,6 +1874,11 @@ static const struct qca_device_data qca_soc_data_qca6390 __maybe_unused = {
- 	.num_vregs = 0,
- };
- 
-+static const struct qca_device_data qca_soc_data_qca2066 __maybe_unused = {
-+	.soc_type = QCA_QCA2066,
-+	.num_vregs = 0,
-+};
++	l2cap_chan_unlock(chan);
++	mutex_lock(&conn->chan_lock);
++	l2cap_chan_lock(chan);
++	l2cap_chan_del(chan, ECONNRESET);
++	mutex_unlock(&conn->chan_lock);
 +
- static const struct qca_device_data qca_soc_data_wcn6750 __maybe_unused = {
- 	.soc_type = QCA_WCN6750,
- 	.vregs = (struct qca_vreg []) {
-@@ -2371,6 +2376,7 @@ MODULE_DEVICE_TABLE(of, qca_bluetooth_of_match);
+ 	chan->ops->close(chan);
  
- #ifdef CONFIG_ACPI
- static const struct acpi_device_id qca_bluetooth_acpi_match[] = {
-+	{ "QCOM2066", (kernel_ulong_t)&qca_soc_data_qca2066 },
- 	{ "QCOM6390", (kernel_ulong_t)&qca_soc_data_qca6390 },
- 	{ "DLA16390", (kernel_ulong_t)&qca_soc_data_qca6390 },
- 	{ "DLB16390", (kernel_ulong_t)&qca_soc_data_qca6390 },
+ 	l2cap_chan_unlock(chan);
+@@ -4706,7 +4693,7 @@ static inline int l2cap_disconnect_rsp(struct l2cap_conn *conn,
+ 
+ 	BT_DBG("dcid 0x%4.4x scid 0x%4.4x", dcid, scid);
+ 
+-	chan = l2cap_del_chan_by_scid(conn, scid, 0);
++	chan = l2cap_get_chan_by_scid(conn, scid);
+ 	if (!chan)
+ 		return 0;
+ 
+@@ -4716,6 +4703,12 @@ static inline int l2cap_disconnect_rsp(struct l2cap_conn *conn,
+ 		return 0;
+ 	}
+ 
++	l2cap_chan_unlock(chan);
++	mutex_lock(&conn->chan_lock);
++	l2cap_chan_lock(chan);
++	l2cap_chan_del(chan, 0);
++	mutex_unlock(&conn->chan_lock);
++
+ 	chan->ops->close(chan);
+ 
+ 	l2cap_chan_unlock(chan);
 -- 
-2.17.1
+2.41.0.rc0.172.g3f132b7071-goog
 
