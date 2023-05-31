@@ -2,124 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1B7717439
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 05:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE5671743B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 05:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbjEaDPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 23:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
+        id S234092AbjEaDPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 23:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234088AbjEaDPZ (ORCPT
+        with ESMTP id S234110AbjEaDP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 23:15:25 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D34DE5;
-        Tue, 30 May 2023 20:14:59 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id 5614622812f47-39a50fcc719so56365b6e.2;
-        Tue, 30 May 2023 20:14:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685502898; x=1688094898;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GeKYPmPRckVNs2LGFnOl81Sx5GSbaj0lxU0+PhchNX0=;
-        b=RrVsT6N8Z8QHaViGcDQczLcUMM0ZDVuStvy7rPLIGXV+vz++jG6nmhjxRjPA8ZYIvz
-         roD2D10dmapfNbZc3mPb7E9KXLW3yYHakxJUi7aL9HL9pGHyS6oaYFlUaQ1uxq2GZZZe
-         Y5gKE2g5DnJcEUBPTSK77ITeLbztdW2J/Fzz+5ZDNXltV2V320cYqEGge/Zrix0h/7ov
-         leEfdR6xXFCDrmqyc6sE4Bfa01Z24kp0jQaPAIVcuh+VZ5zwpddgR0Z6q/jHsyXLecRL
-         hvd0rglGCAaTDJtuYjuGTt189X9OmC60tsFR2baoLHDg+MMqNnZDh++pxjApGn8DJtgD
-         1bNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685502898; x=1688094898;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GeKYPmPRckVNs2LGFnOl81Sx5GSbaj0lxU0+PhchNX0=;
-        b=AW7VhzhX9dGIfo6vtZdxzs0ez8BmBDbbhEug6QxEz0x1DIkABLb1uw62c9gt7IVe3U
-         1bm8IMCDXU5IL6hv2hYMJPHgsQ3A/bs1Iw7D/YmFwFKAIEC/K/UoOIOsuMM0P5z2GXGT
-         sbgbivNBILV2ZuM7ylDT7iJFOOzrWHnNjG+MA8ybhhonYu/8T//6nXdM8K5EP6mSo7qE
-         b1+H5ide8hwl3eWS1Na1PQZhvRLXdxrbMmeqmgtpOVcxGhK+VDBFHjYLo6Z9KHtgfuWm
-         3Ehs9OR5xVODGqIkzZFh43Xp1dB2ky/2lIAAR4GlZ0czhWu1Q21ZNN6maP9MWp7RD4jM
-         mvxw==
-X-Gm-Message-State: AC+VfDyPbj+ljn3TuJjNwC1+Ib5o52bPw9poiPPUkfiZE7SSgvxmvCJe
-        8/BiXNEc0TW1IuA7+a7uVV1LvVwjpJzgjm0TLyJX/XpqmJI9jJBh
-X-Google-Smtp-Source: ACHHUZ4YQOCTq61HZ8noO58uFxPtFVTfuuQPy0/szydANu9+frvjhvHvM3Bz46r2IV5i3a7twdxqSJd0KHRU2FS5Mkk=
-X-Received: by 2002:a05:6808:306:b0:398:4601:4d06 with SMTP id
- i6-20020a056808030600b0039846014d06mr2204035oie.59.1685502898604; Tue, 30 May
- 2023 20:14:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAABZP2wiPdij+q_Nms08e8KbT9+CgXuoU+MO3dyoujG_1PPHAQ@mail.gmail.com>
- <073cf884-e191-e323-1445-b79c86759557@linux.dev>
-In-Reply-To: <073cf884-e191-e323-1445-b79c86759557@linux.dev>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Wed, 31 May 2023 11:14:47 +0800
-Message-ID: <CAABZP2zvK8_AxuZB0Smsa+L8eJf-_pnNkYF9mAsoHpSO2JZk-A@mail.gmail.com>
-Subject: Re: a small question about bpftool struct_ops
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     bpf@vger.kernel.org, linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 30 May 2023 23:15:26 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9660A13D;
+        Tue, 30 May 2023 20:15:01 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1134)
+        id 0C7BE20FC46E; Tue, 30 May 2023 20:15:01 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0C7BE20FC46E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1685502901;
+        bh=oyJ2pTdOAakrYlWAIq8Y+ssATRIqasj98hZvzvFAP8A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WUe3dlCLzOdeNzWjWelYiJleB5YHHsIXVvLJnf6k/a+zIAy30GTvIHZNR0hdwOgII
+         x6UTdQFwXSXQKl0V6fXsqnRZaVsPABwzPpB1Ft0F5143cwoH7crhQXKdcYW2JDYPsL
+         99Cd/MjihYZoEioiLI4kz/TF49JU+i5eTpHdLo6U=
+From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH v4] hv_netvsc: Allocate rx indirection table size dynamically
+Date:   Tue, 30 May 2023 20:14:53 -0700
+Message-Id: <1685502893-29311-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Allocate the size of rx indirection table dynamically in netvsc
+from the value of size provided by OID_GEN_RECEIVE_SCALE_CAPABILITIES
+query instead of using a constant value of ITAB_NUM.
 
-On Sat, May 20, 2023 at 3:01=E2=80=AFAM Martin KaFai Lau <martin.lau@linux.=
-dev> wrote:
->
-> On 5/19/23 5:07 AM, Zhouyi Zhou wrote:
-> > Dear developers:
-> > I compiled bpftool and bpf tests in mainline (2d1bcbc6cd70),
-> > but when I invoke:
-> > bpftool struct_ops register bpf_cubic.bpf.o
-> >
-> > the command line fail with:
-> > libbpf: struct_ops init_kern: struct tcp_congestion_ops data is not
-> > found in struct bpf_struct_ops_tcp_congestion_ops
->
-> At the machine trying to register the bpf_cubic, please dump the vmlinux =
-btf and
-> search for bpf_struct_ops_tcp_congestion_ops and paste it here:
->
-> For example:
-> #> bpftool btf dump file /sys/kernel/btf/vmlinux
->
-> ...
->
-> [74578] STRUCT 'bpf_struct_ops_tcp_congestion_ops' size=3D256 vlen=3D3
->          'refcnt' type_id=3D145 bits_offset=3D0
->          'state' type_id=3D74569 bits_offset=3D32
->          'data' type_id=3D6241 bits_offset=3D512
->
-Exciting news:
-when I construct the kernel package, I found lots of following warnings:
-WARN: multiple IDs found for 'task_struct': 241, 21719 - using 241
-WARN: multiple IDs found for 'vm_area_struct': 360, 21750 - using 360
-WARN: multiple IDs found for 'file': 805, 21789 - using 805
-WARN: multiple IDs found for 'cgroup': 666, 21819 - using 666
-WARN: multiple IDs found for 'inode': 928, 21936 - using 928
-WARN: multiple IDs found for 'path': 960, 21965 - using 960
+Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
+Tested-on: Ubuntu22 (azure VM, SKU size: Standard_F72s_v2)
+Testcases:
+1. ethtool -x eth0 output
+2. LISA testcase:PERF-NETWORK-TCP-THROUGHPUT-MULTICONNECTION-NTTTCP-Synthetic
+3. LISA testcase:PERF-NETWORK-TCP-THROUGHPUT-MULTICONNECTION-NTTTCP-SRIOV
 
-These warnings lead me to:
-Link: https://lore.kernel.org/lkml/ZBovCrMXJk7NPISp@aurel32.net/T/
+---
+Changes in v4:
+ * set the right error code if rx table allocation fails
+ * fixed unnecessary line break
+ * removed extra newline
+---
+ drivers/net/hyperv/hyperv_net.h   |  5 ++++-
+ drivers/net/hyperv/netvsc_drv.c   | 10 ++++++----
+ drivers/net/hyperv/rndis_filter.c | 27 +++++++++++++++++++++++----
+ 3 files changed, 33 insertions(+), 9 deletions(-)
 
-So, I upgraded my pahole from [1], and construct the kernel package
-again, now I can successfully invoke
-bpftool struct_ops register bpf_cubic.bpf.o
+diff --git a/drivers/net/hyperv/hyperv_net.h b/drivers/net/hyperv/hyperv_net.h
+index dd5919ec408b..c40868f287a9 100644
+--- a/drivers/net/hyperv/hyperv_net.h
++++ b/drivers/net/hyperv/hyperv_net.h
+@@ -74,6 +74,7 @@ struct ndis_recv_scale_cap { /* NDIS_RECEIVE_SCALE_CAPABILITIES */
+ #define NDIS_RSS_HASH_SECRET_KEY_MAX_SIZE_REVISION_2   40
+ 
+ #define ITAB_NUM 128
++#define ITAB_NUM_MAX 256
+ 
+ struct ndis_recv_scale_param { /* NDIS_RECEIVE_SCALE_PARAMETERS */
+ 	struct ndis_obj_header hdr;
+@@ -1034,7 +1035,9 @@ struct net_device_context {
+ 
+ 	u32 tx_table[VRSS_SEND_TAB_SIZE];
+ 
+-	u16 rx_table[ITAB_NUM];
++	u16 *rx_table;
++
++	u32 rx_table_sz;
+ 
+ 	/* Ethtool settings */
+ 	u8 duplex;
+diff --git a/drivers/net/hyperv/netvsc_drv.c b/drivers/net/hyperv/netvsc_drv.c
+index 0103ff914024..3ba3c8fb28a5 100644
+--- a/drivers/net/hyperv/netvsc_drv.c
++++ b/drivers/net/hyperv/netvsc_drv.c
+@@ -1747,7 +1747,9 @@ static u32 netvsc_get_rxfh_key_size(struct net_device *dev)
+ 
+ static u32 netvsc_rss_indir_size(struct net_device *dev)
+ {
+-	return ITAB_NUM;
++	struct net_device_context *ndc = netdev_priv(dev);
++
++	return ndc->rx_table_sz;
+ }
+ 
+ static int netvsc_get_rxfh(struct net_device *dev, u32 *indir, u8 *key,
+@@ -1766,7 +1768,7 @@ static int netvsc_get_rxfh(struct net_device *dev, u32 *indir, u8 *key,
+ 
+ 	rndis_dev = ndev->extension;
+ 	if (indir) {
+-		for (i = 0; i < ITAB_NUM; i++)
++		for (i = 0; i < ndc->rx_table_sz; i++)
+ 			indir[i] = ndc->rx_table[i];
+ 	}
+ 
+@@ -1792,11 +1794,11 @@ static int netvsc_set_rxfh(struct net_device *dev, const u32 *indir,
+ 
+ 	rndis_dev = ndev->extension;
+ 	if (indir) {
+-		for (i = 0; i < ITAB_NUM; i++)
++		for (i = 0; i < ndc->rx_table_sz; i++)
+ 			if (indir[i] >= ndev->num_chn)
+ 				return -EINVAL;
+ 
+-		for (i = 0; i < ITAB_NUM; i++)
++		for (i = 0; i < ndc->rx_table_sz; i++)
+ 			ndc->rx_table[i] = indir[i];
+ 	}
+ 
+diff --git a/drivers/net/hyperv/rndis_filter.c b/drivers/net/hyperv/rndis_filter.c
+index eea777ec2541..95869a3c3d6e 100644
+--- a/drivers/net/hyperv/rndis_filter.c
++++ b/drivers/net/hyperv/rndis_filter.c
+@@ -21,6 +21,7 @@
+ #include <linux/rtnetlink.h>
+ #include <linux/ucs2_string.h>
+ #include <linux/string.h>
++#include <linux/slab.h>
+ 
+ #include "hyperv_net.h"
+ #include "netvsc_trace.h"
+@@ -927,7 +928,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
+ 	struct rndis_set_request *set;
+ 	struct rndis_set_complete *set_complete;
+ 	u32 extlen = sizeof(struct ndis_recv_scale_param) +
+-		     4 * ITAB_NUM + NETVSC_HASH_KEYLEN;
++		     4 * ndc->rx_table_sz + NETVSC_HASH_KEYLEN;
+ 	struct ndis_recv_scale_param *rssp;
+ 	u32 *itab;
+ 	u8 *keyp;
+@@ -953,7 +954,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
+ 	rssp->hashinfo = NDIS_HASH_FUNC_TOEPLITZ | NDIS_HASH_IPV4 |
+ 			 NDIS_HASH_TCP_IPV4 | NDIS_HASH_IPV6 |
+ 			 NDIS_HASH_TCP_IPV6;
+-	rssp->indirect_tabsize = 4*ITAB_NUM;
++	rssp->indirect_tabsize = 4 * ndc->rx_table_sz;
+ 	rssp->indirect_taboffset = sizeof(struct ndis_recv_scale_param);
+ 	rssp->hashkey_size = NETVSC_HASH_KEYLEN;
+ 	rssp->hashkey_offset = rssp->indirect_taboffset +
+@@ -961,7 +962,7 @@ static int rndis_set_rss_param_msg(struct rndis_device *rdev,
+ 
+ 	/* Set indirection table entries */
+ 	itab = (u32 *)(rssp + 1);
+-	for (i = 0; i < ITAB_NUM; i++)
++	for (i = 0; i < ndc->rx_table_sz; i++)
+ 		itab[i] = ndc->rx_table[i];
+ 
+ 	/* Set hask key values */
+@@ -1548,6 +1549,18 @@ struct netvsc_device *rndis_filter_device_add(struct hv_device *dev,
+ 	if (ret || rsscap.num_recv_que < 2)
+ 		goto out;
+ 
++	if (rsscap.num_indirect_tabent &&
++	    rsscap.num_indirect_tabent <= ITAB_NUM_MAX)
++		ndc->rx_table_sz = rsscap.num_indirect_tabent;
++	else
++		ndc->rx_table_sz = ITAB_NUM;
++
++	ndc->rx_table = kcalloc(ndc->rx_table_sz, sizeof(u16), GFP_KERNEL);
++	if (!ndc->rx_table) {
++		ret = -ENOMEM;
++		goto err_dev_remv;
++	}
++
+ 	/* This guarantees that num_possible_rss_qs <= num_online_cpus */
+ 	num_possible_rss_qs = min_t(u32, num_online_cpus(),
+ 				    rsscap.num_recv_que);
+@@ -1558,7 +1571,7 @@ struct netvsc_device *rndis_filter_device_add(struct hv_device *dev,
+ 	net_device->num_chn = min(net_device->max_chn, device_info->num_chn);
+ 
+ 	if (!netif_is_rxfh_configured(net)) {
+-		for (i = 0; i < ITAB_NUM; i++)
++		for (i = 0; i < ndc->rx_table_sz; i++)
+ 			ndc->rx_table[i] = ethtool_rxfh_indir_default(
+ 						i, net_device->num_chn);
+ 	}
+@@ -1596,11 +1609,17 @@ void rndis_filter_device_remove(struct hv_device *dev,
+ 				struct netvsc_device *net_dev)
+ {
+ 	struct rndis_device *rndis_dev = net_dev->extension;
++	struct net_device *net = hv_get_drvdata(dev);
++	struct net_device_context *ndc = netdev_priv(net);
+ 
+ 	/* Halt and release the rndis device */
+ 	rndis_filter_halt_device(net_dev, rndis_dev);
+ 
+ 	netvsc_device_remove(dev);
++
++	ndc->rx_table_sz = 0;
++	kfree(ndc->rx_table);
++	ndc->rx_table = NULL;
+ }
+ 
+ int rndis_filter_open(struct netvsc_device *nvdev)
+-- 
+2.34.1
 
-[1] https://github.com/acmel/dwarves.git
-
-Sorry for the previous noise
-
-and
-
-Thanks again
-Best Regards
-Zhouyi
