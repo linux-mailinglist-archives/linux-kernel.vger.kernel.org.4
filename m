@@ -2,135 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59944718838
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E890D71883C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbjEaRM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
+        id S230173AbjEaRNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjEaRMY (ORCPT
+        with ESMTP id S230022AbjEaRND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:12:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CF593;
-        Wed, 31 May 2023 10:12:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D33BB60DE9;
-        Wed, 31 May 2023 17:12:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AD87C4339C;
-        Wed, 31 May 2023 17:12:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685553134;
-        bh=+Ml1j+mRUJgmXvowGAHL7NQaz1pxH/evVJuvs2hRgso=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=BYw8uvSKtQqAvjDQ1+aUtduoiKuESJASt6I+ZqQvJA20//6FeGNg1f866MI0WmXrT
-         ruslzv5W28Kb6NwsYa/Ad9LZOTko8KfxpqzYAE5WtJWktKj6c06tq4gtDVwv/0Pwaa
-         mDJqQwfoyV5LITBF0ptaPtkQU62PGfvfZrYX/EoeTekMyu8tbdC4xAoE58FqEESk2p
-         eFIBgNmgyA68cfWPAbwwdKubtp/VUXFKB8qg6me5gxLsMyb5ASRluj4WLsfXQxe4Un
-         /blsTaEObx/P02q5JlLcYRt8k4n4G5SotCTPWArugBDQtmsIg6K2A530cZDiM7CjtV
-         unjSWwsaoEZtA==
-Date:   Wed, 31 May 2023 12:12:12 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>
-Cc:     krzysztof.kozlowski@linaro.org, bhelgaas@google.com,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        lorenzo.pieralisi@arm.com, linux-arm-kernel@lists.infradead.org,
-        bharat.kumar.gogada@amd.com, michals@amd.com,
-        nagaradhesh.yeleswarapu@amd.com
-Subject: Re: [PATCH v4 3/3] PCI: xilinx-xdma: Add Xilinx XDMA Root Port driver
-Message-ID: <ZHd/7AaLaGyr1jNA@bhelgaas>
+        Wed, 31 May 2023 13:13:03 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B5E19B
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:12:42 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id 71dfb90a1353d-4573697b2cdso1625233e0c.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:12:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685553161; x=1688145161;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ha/IiHaH5j6Z2Cbh1nO+UGmSDQbqB1V+I93hhUI/9O8=;
+        b=mhhJO60JV+y4yC2WvXQhRUZyuDqeajiEG8mRNQu0Z11kY7HL+8EAExQLenYZqH7z+2
+         2Mzuf9o4IusHjj3MIZfkmPEGuHE5kI6AlerYuypAxDa9bcVAgVZ5UDmC8L+8kB35CRLQ
+         PLG+y1whclaJ2hDGwEHNZhA0uec3QSAi4hM9WfzLBBAVV1fN0YEEr/40yZPpgQzFvTt2
+         7rEhfgpLsOrEd35guANV18iRfJ+4089lf/mkJToW6y72IHKvYr5/tv6Jf15oIxwmEN2P
+         KBD4pK9y5HmuoSr5dGUw0aDtS6LEuwi2zPBapnZ9fOR4sYBv5bsmBaySBb1FXslIxQiH
+         882A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685553161; x=1688145161;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ha/IiHaH5j6Z2Cbh1nO+UGmSDQbqB1V+I93hhUI/9O8=;
+        b=dMHtq6JBu6PUY8fX4x0Zpj8Rht83rqhKxhh7KXKfKRLup3hXJK0tzQN2fSeMNVNClu
+         aYKd+LdfxcLflRh9Da+QFkkII1H/ynns/sIq0WqbLF3NmKZp0UoM+EL70oK5kWcCKh0s
+         CEQo2D7KbSwJqRSCoVz8hHmCzCxW/CQUNjwsO+qzkmk6TadjOgfWjGeYd4jmnfGu7VGy
+         G4BV3IuNLxeZSPuB6damE7s7hHu9WnJBOsThU39SRBbCE1RZYlWtzPOucyrsnXwAjIcX
+         p+nVrbEYlgam/pg3+/ffrDbeh0FJfE9di+/BzXu+iTjjCdBjghCSd9U+v6oIm7jo5OU1
+         EZLg==
+X-Gm-Message-State: AC+VfDxu5wqgxwDdcH5Gz3tf1WFsDAdpmyMJWgucN9t5sXoQEgQYza3G
+        LZIYwYGLY8TKLAljnIrmr0DA0Alz4b31EK+ssIC4uTNpGJ1+WYqt12Y=
+X-Google-Smtp-Source: ACHHUZ6oRlQHMt3xDrn+41gUpjU+uA1RCTiAOhFhwhwc1iVr5n/7DlebDHtwxCujodDYMCeRKw4G+OdExuKthRhprqg=
+X-Received: by 2002:a1f:cb44:0:b0:457:2d6a:7b4d with SMTP id
+ b65-20020a1fcb44000000b004572d6a7b4dmr2205147vkg.10.1685553161697; Wed, 31
+ May 2023 10:12:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531083825.985584-4-thippeswamy.havalige@amd.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1685464318-25031-1-git-send-email-quic_khsieh@quicinc.com>
+ <1685464318-25031-3-git-send-email-quic_khsieh@quicinc.com>
+ <dfa12c8b-ccec-261c-9c83-54536e17c02d@linaro.org> <157e8219-7af2-c7ed-6d99-3caa6fbc11ba@quicinc.com>
+In-Reply-To: <157e8219-7af2-c7ed-6d99-3caa6fbc11ba@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 31 May 2023 20:12:31 +0300
+Message-ID: <CAA8EJponkEne2vVsNP=2Fxmv=Uc6i_LzAGBSEz9hPPotCEpGzg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] drm/msm/dpu: retrieve DSI DSC struct at atomic_check()
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org, quic_abhinavk@quicinc.com,
+        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        marijn.suijten@somainline.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 02:08:25PM +0530, Thippeswamy Havalige wrote:
-> Add support for Xilinx XDMA Soft IP core as Root Port.
-> 
-> The Zynq UltraScale+ MPSoCs devices support XDMA soft IP module in
-> programmable logic.
-> 
-> The integrated XDMA soft IP block has integrated bridge function that
-> can act as PCIe Root Port.
-> 
-> Signed-off-by: Thippeswamy Havalige <thippeswamy.havalige@amd.com>
-> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>
+On Wed, 31 May 2023 at 18:41, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>
+>
+>
+> >>   +    if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_DSI) {
+> >
+> > INTF_DSI
+> >
+> >> +        struct drm_bridge *bridge;
+> >> +
+> >> +        if (!dpu_enc->dsc) {
+> >
+> > This condition is not correct. We should be updating the DSC even if
+> > there is one.
+> >
+> >> +            bridge = drm_bridge_chain_get_first_bridge(drm_enc);
+> >> +            dpu_enc->dsc = msm_dsi_bridge_get_dsc_config(bridge);
+> >
+> > This approach will not work for the hot-pluggable outputs. The dpu_enc
+> > is not a part of the state. It should not be touched before
+> > atomic_commit actually commits changes.
+> where can drm_dsc_config be stored?
 
-> |Reported-by: kernel test robot <lkp@intel.com>
-> |Reported-by: Dan Carpenter <error27@gmail.com>
-> |Closes: https://lore.kernel.org/r/202305261250.2cs1phTS-lkp@intel.com/
+I'd say, get it during atomic_check (and don't store it anywhere).
+Then get it during atomic_enable (and save in dpu_enc).
 
-Not relevant.  These are basically review comments.
+> >
+> > Also, I don't think I like the API. It makes it impossible for the
+> > driver to check that the bridge is the actually our DSI bridge or not.
+> > Once you add DP here, the code will explode.
+> >
+> > I think instead we should extend the drm_bridge API to be able to get
+> > the DSC configuration from it directly. Additional care should be put
+> > to design an assymetrical API. Theoretically a drm_bridge can be both
+> > DSC source and DSC sink. Imagine a DSI-to-DP or DSI-to-HDMI bridge,
+> > supporting DSC on the DSI side too.
+>
+> Form my understanding, a bridge contains two interfaces.
+>
+> Therefore I would think only one bridge for dsi-to-dp bridge? and this
+> bridge should represent the bridge chip?
+>
+> I am thinking adding an ops function, get_bridge_dsc() to struct
+> drm_bridge_funcs to retrieve drm_dsc_config.
 
-> +	  Add support for the Xilinx PL DMA PCIe host bridge,
-> +	  The controller is an soft IP which can act as Root Port.
-> +	  If you know your system provides xilinx PCIe host controller
-> +	  bridge DMA as soft IP say Y; if you are not sure, say N.
+So, for this DSI-to-DP bridge will get_bridge_dsc() return DSC
+configuration for  the DSI or for the DP side of the bridge?
 
-s/is an soft/is soft/
-s/xilinx/Xilinx/
+>
+> Do you have other suggestion?
 
-> +#define XILINX_PCIE_DMA_REG_IMR			0x0000013c
-> +#define XILINX_PCIE_DMA_REG_MSIBASE1		0x0000014c
-> +#define XILINX_PCIE_DMA_REG_MSI_HI_MASK		0x0000017c
-> ...
-> +#define XILINX_PCIE_DMA_IMR_ALL_MASK	0x0FF30FE9
-> +#define XILINX_PCIE_DMA_IDR_ALL_MASK	0xFFFFFFFF
+Let me think about it for a few days.
 
-Pick upper-case hex or lower-case hex and use it consistently.
-
-> +static inline bool xilinx_pl_dma_pcie_linkup(struct pl_dma_pcie *port)
-
-Name this *_pcie_link_up() (not *_pcie_linkup()) to match other drivers.
-
-> +static bool xilinx_pl_dma_pcie_valid_device(struct pci_bus *bus, unsigned int devfn)
-> +{
-> +	struct pl_dma_pcie *port = bus->sysdata;
-> +
-> +	/* Check if link is up when trying to access downstream ports */
-> +	if (!pci_is_root_bus(bus)) {
-> +		if (!xilinx_pl_dma_pcie_linkup(port))
-> +			return false;
-> +	} else if (devfn > 0)
-> +		/* Only one device down on each root port */
-> +		return false;
-> +
-> +	return true;
-> +}
-> +
-> +static void __iomem *xilinx_pl_dma_pcie_map_bus(struct pci_bus *bus,
-> +						unsigned int devfn, int where)
-> +{
-> +	struct pl_dma_pcie *port = bus->sysdata;
-> +
-> +	if (!xilinx_pl_dma_pcie_valid_device(bus, devfn))
-> +		return NULL;
-
-Checking whether the link is up is racy because the link may be up, so
-xilinx_pl_dma_pcie_valid_device() returns true, then the link may go
-down before the read below.
-
-What happens then?  If it's an error that you can recover from, it
-would better to skip the link up check and just handle the error.
-
-> +	return port->reg_base + PCIE_ECAM_OFFSET(bus->number, devfn, where);
-> +}
-
-> +	/*set the Bridge enable bit */
-
-  /* Set ... */ (add space before "Set" and capitalize it)
-
-Bjorn
+-- 
+With best wishes
+Dmitry
