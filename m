@@ -2,120 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1D371F6B7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 01:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5C071743E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 05:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbjFAXj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 19:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
+        id S234164AbjEaDP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 23:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbjFAXjt (ORCPT
+        with ESMTP id S234102AbjEaDPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 19:39:49 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E178136;
-        Thu,  1 Jun 2023 16:39:48 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id 006d021491bc7-5584f8ec30cso1085378eaf.0;
-        Thu, 01 Jun 2023 16:39:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685662788; x=1688254788;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y66S7nKcbyO9mw2veazWYNce7x29EbNWsEjy9gQwvT8=;
-        b=JgN6bMOPbZQQzmbjQOXjZR1MWbA658FbsmFwhmJTfIBw7YT4vVH5SbNbGOqDYNiykz
-         NsONTUM1dbTRUtPmxQi/H2LhtTn0Gt6DO8HcjDTOBUhoGjYv59NWvC5TZ17iskx80o1o
-         jZWxce7jFMBi1PMppTmfYEnMNSDmtgSD0HR7uL22/b+QOMO2srLfPklplvCwi4Zgpn/S
-         +RyIJ/nq+QgwVgiZe0DQp6ybDulRm25BGxz2VtBmAV3+cM3FYgqFrIm/4tiHZjNDFj3/
-         NVhs4YEuF3+R+IYByMBWLDGjNsegbKB3nzBunHXSaJIZCWh9PVtdIWIC9DuBPSNL49Un
-         OkfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685662788; x=1688254788;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y66S7nKcbyO9mw2veazWYNce7x29EbNWsEjy9gQwvT8=;
-        b=Kl6rnOXFgqoGrNqlLT8dnPnPlzHdmAVsxhGZhSVav0Wm46GJ6xbWllBqm5lNOhyCkD
-         kBlB5IuFgqe0C4Ckulu1zs30gpFrzI45AphfoPTzHPxCvEh/rr7/JBiKroR9X0x9eSqd
-         sxwBFRN2HfgxYvrcbEC/uQThpyvXsEhTq7Tco4jTgFgHJmkSfHxtBDUGq7wlbiymdSsM
-         YzoylbgJAWOATl2u1QDAffsgzoI381z7GTbvDU7xShkObfyNWiO7A000GaD7FrQKXqeE
-         tWXW4QvQE1Tv1Sft8mlgtuvy+NZqmUVpxCsLWIjdGZn+3kZrARd+6Fxzp4o3kWWKNJoA
-         M7QQ==
-X-Gm-Message-State: AC+VfDxIN6DIPPB9/MltVaGZlKkw8AjMC8H7vFnhhs8QYYIqJhNQ5f+2
-        rkwQh0PjKFJ+dYhud7rfZBFaG7GgPa5zbfRq
-X-Google-Smtp-Source: ACHHUZ5H3iz5f8fyOD3aj+Xa4IrVqtidCjhJ6HAZSYPdF8KVhqG0fRMzu2vPFMhJL5t8WczAz3B7Dw==
-X-Received: by 2002:a05:6358:9896:b0:123:5c29:c39a with SMTP id q22-20020a056358989600b001235c29c39amr7109173rwa.31.1685662787613;
-        Thu, 01 Jun 2023 16:39:47 -0700 (PDT)
-Received: from localhost (ec2-52-9-159-93.us-west-1.compute.amazonaws.com. [52.9.159.93])
-        by smtp.gmail.com with ESMTPSA id z15-20020aa791cf000000b0064d59e194c8sm5585299pfa.115.2023.06.01.16.39.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 16:39:47 -0700 (PDT)
-Date:   Wed, 31 May 2023 03:35:30 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Eric Dumazet <edumazet@google.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net] virtio/vsock: fix sock refcnt bug on owner set
- failure
-Message-ID: <ZHbAgkvSHEiQlFs6@bullseye>
-References: <20230531-b4-vsock-fix-refcnt-v1-1-0ed7b697cca5@bytedance.com>
- <35xlmp65lxd4eoal2oy3lwyjxd3v22aeo2nbuyknc4372eljct@vkilkppadayd>
+        Tue, 30 May 2023 23:15:36 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAED188
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 20:15:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685502934; x=1717038934;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/VL76X1WW1uKCaAq0pPGpA4itNI1rlmGDz9p+rE4p1w=;
+  b=Z8gFSqa/t1VFM6vrfo1By2Ua7EGYL9Ot54iUZ98RfZCvkUJoEr8A1UtO
+   +uPBOoDoQvSE/DY3JOZ2b+zkfl4HLV4Do+oE7asgUuaeN17Q5+wy7ZPoi
+   MyhHeURhtvyI/+iHkUMcEw9N4Irc8BAtoZ6H9P90ha0Ol9BVNzGFhSFLj
+   QHTrxzr479mjIsAHahpSgtXWno2ChxcqyfFaSRSkCmxm2orXrvCJxAfZ8
+   rBX97Ial1w+u8/ivA+2RDvrnKLvFSz+7rWzqHA05fZFa/uGxTVv+k4TgJ
+   tAKD1+wbdhylnBhrk2YKF3Ud1h+E6kmBQqiqHEoayxld9gkq+VT17mnOK
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="357507644"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="357507644"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 20:15:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="739769457"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="739769457"
+Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 20:15:32 -0700
+From:   Bard Liao <yung-chuan.liao@linux.intel.com>
+To:     alsa-devel@alsa-project.org, vkoul@kernel.org
+Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
+Subject: [PATCH 0/4] soundwire: allow for more than 8 devices, keep IDA for wake-capable devices
+Date:   Wed, 31 May 2023 11:37:32 +0800
+Message-Id: <20230531033736.792464-1-yung-chuan.liao@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <35xlmp65lxd4eoal2oy3lwyjxd3v22aeo2nbuyknc4372eljct@vkilkppadayd>
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 09:58:47AM +0200, Stefano Garzarella wrote:
-> On Wed, May 31, 2023 at 07:47:32PM +0000, Bobby Eshleman wrote:
-> > Previous to setting the owner the socket is found via
-> > vsock_find_connected_socket(), which returns sk after a call to
-> > sock_hold().
-> > 
-> > If setting the owner fails, then sock_put() needs to be called.
-> > 
-> > Fixes: f9d2b1e146e0 ("virtio/vsock: fix leaks due to missing skb owner")
-> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
-> > ---
-> > net/vmw_vsock/virtio_transport_common.c | 1 +
-> > 1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-> > index b769fc258931..f01cd6adc5cb 100644
-> > --- a/net/vmw_vsock/virtio_transport_common.c
-> > +++ b/net/vmw_vsock/virtio_transport_common.c
-> > @@ -1343,6 +1343,7 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
-> > 
-> > 	if (!skb_set_owner_sk_safe(skb, sk)) {
-> > 		WARN_ONCE(1, "receiving vsock socket has sk_refcnt == 0\n");
-> > +		sock_put(sk);
-> 
-> Did you have any warning, issue here?
-> 
-> IIUC skb_set_owner_sk_safe() can return false only if the ref counter
-> is 0, so calling a sock_put() on it should have no effect except to
-> produce a warning.
-> 
+This series suggests a hybrid strategy for device number allocation, where
+only wake-capable devices use a system-unique Device Number which will be
+used on LunarLake to handle wake-ups using the HDaudio WAKEEN and WAKESTS.
 
-Oh yeah, you're totally right. I did not recall how
-skb_set_owner_sk_safe() worked internally and thought I'd introduced an
-uneven hold/put count with that prior patch when reading through the
-code again. I haven't seen any live issue, just misread the code.
+Pierre-Louis Bossart (4):
+  soundwire: add enum to control device number allocation
+  soundwire: introduce SDW_DEV_NUM_ALLOC_IDA_WAKE_ONLY
+  soundwire: extend parameters of new_peripheral_assigned() callback
+  soundwire: intel_auxdevice: use SDW_DEV_NUM_ALLOC_IDA_WAKE_ONLY
 
-Sorry about that, feel free to ignore this patch.
+ drivers/soundwire/bus.c             | 28 ++++++++++++++++++++++------
+ drivers/soundwire/intel_auxdevice.c | 26 ++++++++++++++++++++++----
+ include/linux/soundwire/sdw.h       | 24 ++++++++++++++++++++++--
+ 3 files changed, 66 insertions(+), 12 deletions(-)
 
-Best,
-Bobby
+-- 
+2.25.1
+
