@@ -2,147 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977DD717BCD
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8A2717BCC
 	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235474AbjEaJXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
+        id S235495AbjEaJXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235393AbjEaJXb (ORCPT
+        with ESMTP id S235444AbjEaJXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:23:31 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA08BE
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:23:29 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-33b73741017so5532485ab.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:23:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685525009; x=1688117009;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hkehbS7//ferRXwM6kvo7oRNHn1QNtaSgYp/ExQ0jdM=;
-        b=jwezaxfaUWtfR62wBCm6nQcQVihAO87LksVgscSu+iYR71oqCzT7dg9trN4Mcl1t3F
-         pUOWJGlu+fg63SeGPua4KDd5/Km6Ky0jKMCsTTx86qjTONR/CjhiyuYvqCsFJjLwa2xa
-         7QHQnbeJ3NqVDZtNJlD5zpintmktBrldJaOCReUdHGrQyDX/msTjP6WwhC2zB4bqu4pm
-         K0x7sNwxF5JGH3aVWDIRb0X6yZfHbWS4Cb9uvH1MdL7gg+ZpaDbt4LcFQR0ko8AQpH2f
-         AXfhvMHO1efJk+b6J7sc3al/DAvDaeZX2+sDfe84r68ln1NG8xSl2CmcJzjrS+Xzv3hx
-         /ZCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685525009; x=1688117009;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hkehbS7//ferRXwM6kvo7oRNHn1QNtaSgYp/ExQ0jdM=;
-        b=SaIX90VFS7e5PfxxoguQ4GZDx1SvCEEsi2Upktme9MIpIyj0VLi9zy8hSFUFnYXrxR
-         Qkmrj5H2Jq3667dpIq+m0wlcGqaOxhunsNdC+koMTb9pRXI7nl0fsmyk75F8MUSi0yFF
-         YaYxJaHCp7f6NDWbThYHJtlCdH55f196D++DaNiyBI9TEzM3GXxt4HFYhmWYMW/5Gzgc
-         1m/nWzWVAnNjNs2rqT617j3Ujc90XZhjodr6Nb+gUMp2efas21udfudc/WXF37eIFT1o
-         NU0MxA4ppayuxN4iGxTK58aqGYzpNZYjIsFJuK449sItb8mlrbSs2m0J4F0QmHNsOEru
-         uZEg==
-X-Gm-Message-State: AC+VfDz6v9gOgvnYUOLaMiA4LCrH12rUwC+ka9UOmAey0+v3K7TuGF4L
-        Zw5ImV36FRsbdi2ioTHK3m8Kzp9Tsy7swxJ/EFGQ2A==
-X-Google-Smtp-Source: ACHHUZ70GbnB79GmkXTRMAGnGG/KKU1NUQSh6qgC/iLrY7CmzQsyxOazfkdFa/H20GQjdIwHhjjVzsSUdxUmKohoaIA=
-X-Received: by 2002:a92:c60f:0:b0:332:e5aa:f9ab with SMTP id
- p15-20020a92c60f000000b00332e5aaf9abmr1742865ilm.11.1685525009247; Wed, 31
- May 2023 02:23:29 -0700 (PDT)
+        Wed, 31 May 2023 05:23:33 -0400
+X-Greylist: delayed 140643 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 May 2023 02:23:30 PDT
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2386C0;
+        Wed, 31 May 2023 02:23:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1685525008; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=nm9Hi9A5UctHoqFjtC93BVffbJPaM7L6WOpkvur311D6dVMN8NrpiA+w0lz3DiRRLs
+    j+LmgWQb/qQk/oaSvqMWq2PzmKdNaqJFHOcI+ZYZI24uH8uFdMFrGlY7Kld3oSdEW4Vg
+    3NcBeCWjr+TfGLU+xPekaYL1x1r0C8UsAXNGXojRLZNUnuzAsxPFZwSxZSKSqWifoPJN
+    GZVuQq6NkLruy4up1WkHVSkJTfhWG2KKaIETEVWyOh7AqLaraLbpENxdicuzTrPQwsHS
+    bkPBRJG6d1n7ayTZrV+2e7W5pZLhfbY00CAtYP7P7uPpDNIfmZX9S/X9JC71yA31lqyg
+    eauA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685525008;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=O7FyB279Rp+Phddz55VXfH7fCqQWfLJZzJTaIeWqqyg=;
+    b=XoiYCRwRiXywrNMs6YyDbbl4CH+BZwJOlgCGcjKzYL9/UFPDdXRWzbPfMn9vlToWe0
+    HiRcdRvteODMCYC0Vo/zVKJxFdIxe9Wcj3TITMwqSLoj9SxHnJGfmzMT9wErczxg9IWr
+    w25tXoqZAmOYH9I4I5Nlxe+y8fmqnYyDiK1vn1cLkFu4u2HTqZiQk4U2XlImn89WtzRu
+    4T36jaZYHVbnNtG4MMQ2e8BAECMdv64mnx2qMBnlUiFafn2jb/mRZdWCDvu/LDZOK0eZ
+    uZV6cBvGMwg3iJBlK3y+pWbLT6KQJfDohaEbe6VyAARZmkVtN1uTovcLOPV3WLgsSYq0
+    Talw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685525008;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=O7FyB279Rp+Phddz55VXfH7fCqQWfLJZzJTaIeWqqyg=;
+    b=ZWLhCS/vhJ/FOqRZUZ4QoD7sQQjQRSkzhslLpBH1G1Or/KsfeKUPFCrr4p2ObkgIq+
+    nd0q2w+T7V+NEUwLMF7Ced0klinmD4DDCNEq6866Byq4+Nug+HIa1BvXz5y6fZ2S0CyO
+    JoDphi/6LRxrrmCd43n0WZsraeYNzb5bqmhaXgoI3ZHnkIsW3w+O5kluTfxRSxQsCH/j
+    fKQFCFdERJXwBceaWRTRrvPCchTL5obgwurU80vYsKsrEwFrnnPMmtH1BmLhU7LOWypz
+    AMRbI2WuRdxKIz3gF7GH5k1n2dG5W0grmI6ObqoLgcEc+vOoVY5x5jtvCLB09Oqso/1i
+    r86w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685525008;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=O7FyB279Rp+Phddz55VXfH7fCqQWfLJZzJTaIeWqqyg=;
+    b=aRfVrx+liZHuqZnJZvTLZESHcRH+5lTL36vKU4EzeWqDFwhmnXSkHpfvhKfJlqv9kP
+    /Y4NXJlOj8mBZYo43JAQ==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA9J/h"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
+    with ESMTPSA id j6420az4V9NRlix
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 31 May 2023 11:23:27 +0200 (CEST)
+Date:   Wed, 31 May 2023 11:23:22 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: venus: firmware: Use of_reserved_mem_lookup()
+Message-ID: <ZHcSAbu1yYuhnKSc@gerhold.net>
+References: <20230529-venus-of-rmem-v1-1-dfcdc5047ffb@gerhold.net>
+ <38a627a2-040d-23e2-5637-32f199d0fc31@quicinc.com>
+ <ZHbvkDkkS_pZltMG@gerhold.net>
+ <31b850f0-7ee4-67e0-8cdb-39b9651a9d57@quicinc.com>
+ <eefd371e-9c9c-2e29-8d6e-d657ee0db237@quicinc.com>
 MIME-Version: 1.0
-References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org>
- <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-13-56eb7a4d5b8e@linaro.org>
-In-Reply-To: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-13-56eb7a4d5b8e@linaro.org>
-From:   Nicolas Belin <nbelin@baylibre.com>
-Date:   Wed, 31 May 2023 11:23:17 +0200
-Message-ID: <CAJZgTGExa-Bx3uxEYr3KLEs84-GGR-=siY2UM+Z2kE9cJSUOcA@mail.gmail.com>
-Subject: Re: [PATCH v5 13/17] drm/panel: khadas-ts050: update timings to
- achieve 60Hz refresh rate
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "Lukas F. Hartmann" <lukas@mntre.com>,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-phy@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eefd371e-9c9c-2e29-8d6e-d657ee0db237@quicinc.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mar. 30 mai 2023 =C3=A0 09:38, Neil Armstrong
-<neil.armstrong@linaro.org> a =C3=A9crit :
->
-> This updates the panel timings to achieve a clean 60Hz refresh rate.
->
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  drivers/gpu/drm/panel/panel-khadas-ts050.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/gpu/drm/panel/panel-khadas-ts050.c b/drivers/gpu/drm=
-/panel/panel-khadas-ts050.c
-> index 1ab1ebe30882..b942a0162274 100644
-> --- a/drivers/gpu/drm/panel/panel-khadas-ts050.c
-> +++ b/drivers/gpu/drm/panel/panel-khadas-ts050.c
-> @@ -568,7 +568,7 @@ static const struct khadas_ts050_panel_cmd init_code[=
-] =3D {
->         {0xfb, 0x01},
->         /* Select CMD1 */
->         {0xff, 0x00},
-> -       {0xd3, 0x05}, /* RGBMIPICTRL: VSYNC back porch =3D 5 */
-> +       {0xd3, 0x22}, /* RGBMIPICTRL: VSYNC back porch =3D 34 */
->         {0xd4, 0x04}, /* RGBMIPICTRL: VSYNC front porch =3D 4 */
->  };
->
-> @@ -717,15 +717,15 @@ static int khadas_ts050_panel_disable(struct drm_pa=
-nel *panel)
->  }
->
->  static const struct drm_display_mode default_mode =3D {
-> -       .clock =3D 120000,
-> -       .hdisplay =3D 1088,
-> -       .hsync_start =3D 1088 + 104,
-> -       .hsync_end =3D 1088 + 104 + 4,
-> -       .htotal =3D 1088 + 104 + 4 + 127,
-> +       .clock =3D 160000,
-> +       .hdisplay =3D 1080,
-> +       .hsync_start =3D 1080 + 117,
-> +       .hsync_end =3D 1080 + 117 + 5,
-> +       .htotal =3D 1080 + 117 + 5 + 160,
->         .vdisplay =3D 1920,
->         .vsync_start =3D 1920 + 4,
-> -       .vsync_end =3D 1920 + 4 + 2,
-> -       .vtotal =3D 1920 + 4 + 2 + 3,
-> +       .vsync_end =3D 1920 + 4 + 3,
-> +       .vtotal =3D 1920 + 4 + 3 + 31,
->         .flags =3D DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
->  };
->
->
-> --
-> 2.34.1
->
-Reviewed-by: Nicolas Belin <nbelin@baylibre.com>
-Tested-by: Nicolas Belin <nbelin@baylibre.com> # on Khadas VIM3 + TS050 Pan=
-el
+On Wed, May 31, 2023 at 01:15:26PM +0530, Mukesh Ojha wrote:
+> 
+> 
+> On 5/31/2023 1:04 PM, Vikash Garodia wrote:
+> > 
+> > On 5/31/2023 12:26 PM, Stephan Gerhold wrote:
+> > > On Wed, May 31, 2023 at 11:36:52AM +0530, Vikash Garodia wrote:
+> > > > On 5/29/2023 11:46 PM, Stephan Gerhold wrote:
+> > > > > Reserved memory can be either looked up using the generic function
+> > > > > of_address_to_resource() or using the special of_reserved_mem_lookup().
+> > > > > The latter has the advantage that it ensures that the referenced memory
+> > > > > region was really reserved and is not e.g. status = "disabled".
+> > > > > 
+> > > > > of_reserved_mem also supports allocating reserved memory dynamically at
+> > > > > boot time. This works only when using of_reserved_mem_lookup() since
+> > > > > there won't be a fixed address in the device tree.
+> > > > IIUC, this would avoid precomputing the hard range for different firmware
+> > > > regions and also make it more flexible to adjust the sizes, if anyone wants a
+> > > > bigger size later.
+> > > > Incase a specific firmware needs a dedicate start address, do we have an option
+> > > > to specify the same ?
+> > > > 
+> > > 
+> > > If you want a specific start address (or in other words: a fixed base
+> > > address) then you should continue using static reservation for that
+> > > component. You can mix static and dynamic reservations. The static ones
+> > > (with fixed addresses) will be reserved first, then the dynamic ones
+> > > will be allocated from the free space.
+> > > 
+> > > I have this example for one device in my proposal at [1]:
+> > > 
+> > > 	/* Firmware must be loaded at address 0x8b600000 */
+> > > 	wcnss_mem: wcnss@8b600000 {
+> > > 		reg = <0x8b600000 0x600000>;
+> > > 		no-map;
+> > > 	};
+> > > 	/* Firmware can be loaded anywhere with 1 MiB alignment */
+> > > 	venus_mem: venus {
+> > > 		size = <0x500000>;
+> > > 		alignment = <0x100000>;
+> > > 		no-map;
+> > > 	};
+> > > 
+> > > The wcnss_mem will be always at 0x8b600000, but the venus_mem can be
+> > > loaded somewhere around that. If only certain regions need a fixed
+> > > address this still provides the flexibility to change sizes more easily.
+> > > 
+> > > Does that answer your question? I wasn't sure what exactly you mean with
+> > > a "dedicated start address". :)
+> > Yes, it clarified the need if any subsystem wants a specific start address.
+> > 
+> > One more thing, lets say, we keep it dynamic allocation and at the same time we
+> > need to pass the start address to TZ call in [1]. How do we get that allocated
+> > address so as to pass in [1] ?
+> 
+> +	*mem_phys = rmem->base;
+> 
+> It will provide the start, is not it ?
+> 
+
+Yes, when using of_reserved_mem_lookup() the allocated address is
+available in rmem->base. If you have this patch applied then it should
+be given to the TZ call as expected.
 
 Thanks,
-Nicolas
+Stephan
