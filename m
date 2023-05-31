@@ -2,151 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B10A717F5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2C4717F6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235785AbjEaL7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 07:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S235449AbjEaMCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232788AbjEaL7A (ORCPT
+        with ESMTP id S232018AbjEaMCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 07:59:00 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDFEE5;
-        Wed, 31 May 2023 04:58:58 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2af2602848aso59797531fa.2;
-        Wed, 31 May 2023 04:58:58 -0700 (PDT)
+        Wed, 31 May 2023 08:02:35 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEA0E5;
+        Wed, 31 May 2023 05:02:34 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f4f89f71b8so4482235e87.3;
+        Wed, 31 May 2023 05:02:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685534337; x=1688126337;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IX4gzV66YT4zrvW9HS28mQBpWf+TvKBCO6//YvTcJYQ=;
-        b=AYU4PNqVMIRw9Gwmb045moSUBW8/BbXR3Ld1NE78edC2mPBAeHOm2+0nwIj4JQtREq
-         5XcrgRqd6esjeRVx322/QD+kGGA1rC9CZfpul/DXdUWu5wP7Mq/OLfkD3+UZzXUfU2+g
-         uW5f/KyHWO3knis/EWwHFD+aF3uxeXzNxhq2rktYAxKrcRCeVYHdoDfbnYexdsb6vd2f
-         tuZHxTdG/9FZstvq+JUboVVNt4IKjlQXqKt/WJVq7HtaKDGd9SuILvb6tKLQMG3KNwMW
-         R7i9I47h/X4H9ciz7DToZYYiXV4fXDqh3i6c4GWw0peiptW4ujuTQA2caaIPNvBgKeXV
-         wj3w==
+        d=gmail.com; s=20221208; t=1685534552; x=1688126552;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+OqoXEp9byTnPWvb7ZYD/8jHmFgkssiOwA9B4Zryfxk=;
+        b=Gd+FG9bbIXeedDVDn6grbngYZLz9qRsEEwyq0XY5v9iBqz7qxUQBxre7KF3K5jDNTF
+         53NpLKbKYljeMO4fhGD0Tgust9dxpcmcvTA8MrG5m8d8GNLsI5U6hmufPIXuVYjQ7AKg
+         qqZKndGtOSY+/cKZCaf5fRt5BcO5QnJFsAhlOxSSCkCACCitqg95k1dY/xTnblx5MmcE
+         a3wFo5UDR58ZaLJAXfwI9okHWMALF1ZNOCawCPBMn/N45jzacjzx4z0I2GPGyELbfR+o
+         wn2gLahAq5t7aTriEUgjQEO3B49Vwy7G08Y+NtnTiCWXdeXY+1rgNd1tHs/w38DFXQ9w
+         gBBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685534337; x=1688126337;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IX4gzV66YT4zrvW9HS28mQBpWf+TvKBCO6//YvTcJYQ=;
-        b=Rloit+AiONL64ig2VGjVSq3km4WNK8RDGYO/lpaCq2Pv/H9qV54asQ04cHVRKAx/O9
-         C70Q11JQPOA3gxDcEvaqtQqN821KiSMcH6WUKH/bIz1ZmXlwPdkSDruPZOLLQ5RkmGhU
-         ph5/UVxBBQJ7zWpZjM+rM8m/VvyUgo7P+2QKmneK26/19oY4cAVdhaL2wBiayUU4sPO6
-         T+x8gYJKQaKt0UJZBNtxo2N9tU2RZuB9zaB/4/UXmhALGEQnjaKvyDuNKZV6WklnrBSZ
-         Ib1eq5ZMfuPeHaHPpF2K/CrALBMt0xEKkvRSkhuCFcUfg97i/FesSgwjcFmwAp2nqvhE
-         E0fw==
-X-Gm-Message-State: AC+VfDxqhwBo19+Wq1jC0G1hQnX2s+P+OG7jv32C4hZu3AOXri+mu7DZ
-        Ixbn1Qc83DS+Pimgs01SD/I=
-X-Google-Smtp-Source: ACHHUZ5SKzEs+gPeYQJC6iSOXmf4/OM5YKps36aprdVuouI9ByjmxeBEQzy0XVLwSTTp9I7BXjYzBg==
-X-Received: by 2002:a2e:8283:0:b0:2a8:e4d3:11e2 with SMTP id y3-20020a2e8283000000b002a8e4d311e2mr2738972ljg.39.1685534336824;
-        Wed, 31 May 2023 04:58:56 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id os5-20020a170906af6500b0094e62aa8bcesm8793829ejb.29.2023.05.31.04.58.55
+        d=1e100.net; s=20221208; t=1685534552; x=1688126552;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+OqoXEp9byTnPWvb7ZYD/8jHmFgkssiOwA9B4Zryfxk=;
+        b=VnJizC4SoLUr28s9mfiwJUJaHu2s50hqMp4eNIuuyTN+1WT/hOzcwCX+ikrn2FuzoK
+         s0twOVmJBESmnp/9E6m6QabO+/vzbGfdFiIDj9vALjok3hft3e800p4ESKQdJgJ4NXLp
+         40Hn7aTIXtW9js/rLaHEfRo107xRgJVQiSh8OkKYka8yxqvNLs9ZM2H5L8HZoo64PjJu
+         gdiGbt6FMCeb2sCKFwnyZh63dCg4pFjC4AwKAe0OHzRxunq+qKGlnyV8CKnpArPxdfEd
+         TP7TA7uwgYNZ/JhpjzJF2/uzr1229h5FLUJ6Fo/D2P5J+9AtZVCuKW11atSmp2PRO6wx
+         3JKw==
+X-Gm-Message-State: AC+VfDx9wbsboxu+XoR9RMBnQtHP6qWzRz0uACzHyJb+/41B/qP/RlUE
+        JZvVUIe6izreUoMMt6PF+Bg=
+X-Google-Smtp-Source: ACHHUZ4NDzU9U7SBybRM5oCjnlvhAJpbzub2cSUH58qR8pt3e/MPD/v4QgFftlsas1cN6HW8rDk54A==
+X-Received: by 2002:a05:6512:102d:b0:4f3:bbfe:db4e with SMTP id r13-20020a056512102d00b004f3bbfedb4emr2239462lfr.56.1685534551943;
+        Wed, 31 May 2023 05:02:31 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id f24-20020ac251b8000000b004f252a753e1sm691018lfk.22.2023.05.31.05.02.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 04:58:56 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 31 May 2023 13:58:54 +0200
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v8 1/4] fs/proc/kcore: avoid bounce buffer for ktext data
-Message-ID: <ZHc2fm+9daF6cgCE@krava>
-References: <cover.1679566220.git.lstoakes@gmail.com>
- <fd39b0bfa7edc76d360def7d034baaee71d90158.1679566220.git.lstoakes@gmail.com>
+        Wed, 31 May 2023 05:02:31 -0700 (PDT)
+Message-ID: <34fb3a9841bf4977413be799f7cbef78560aaa20.camel@gmail.com>
+Subject: Re: [PATCH] bpf, x86: allow function arguments up to 12 for TRACING
+From:   Eduard Zingerman <eddyz87@gmail.com>
+To:     Menglong Dong <menglong8.dong@gmail.com>,
+        Jiri Olsa <olsajiri@gmail.com>
+Cc:     dsahern@kernel.org, andrii@kernel.org, davem@davemloft.net,
+        ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Date:   Wed, 31 May 2023 15:02:29 +0300
+In-Reply-To: <CADxym3biE8WcMxWf1wok+s4pBYEi6+fYQAbZJVxm7eBfzWLjLQ@mail.gmail.com>
+References: <20230530044423.3897681-1-imagedong@tencent.com>
+         <ZHb+ypjE4Ybg3O18@krava>
+         <CADxym3biE8WcMxWf1wok+s4pBYEi6+fYQAbZJVxm7eBfzWLjLQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd39b0bfa7edc76d360def7d034baaee71d90158.1679566220.git.lstoakes@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 10:15:16AM +0000, Lorenzo Stoakes wrote:
-> Commit df04abfd181a ("fs/proc/kcore.c: Add bounce buffer for ktext data")
-> introduced the use of a bounce buffer to retrieve kernel text data for
-> /proc/kcore in order to avoid failures arising from hardened user copies
-> enabled by CONFIG_HARDENED_USERCOPY in check_kernel_text_object().
-> 
-> We can avoid doing this if instead of copy_to_user() we use _copy_to_user()
-> which bypasses the hardening check. This is more efficient than using a
-> bounce buffer and simplifies the code.
-> 
-> We do so as part an overall effort to eliminate bounce buffer usage in the
-> function with an eye to converting it an iterator read.
-> 
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> Reviewed-by: David Hildenbrand <david@redhat.com>
+On Wed, 2023-05-31 at 17:03 +0800, Menglong Dong wrote:
+> On Wed, May 31, 2023 at 4:01=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wr=
+ote:
+> >=20
+> > On Tue, May 30, 2023 at 12:44:23PM +0800, menglong8.dong@gmail.com wrot=
+e:
+> > > From: Menglong Dong <imagedong@tencent.com>
+> > >=20
+> > > For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be us=
+ed
+> > > on the kernel functions whose arguments count less than 6. This is no=
+t
+> > > friendly at all, as too many functions have arguments count more than=
+ 6.
+> > >=20
+> > > Therefore, let's enhance it by increasing the function arguments coun=
+t
+> > > allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
+> > >=20
+> > > For the case that we don't need to call origin function, which means
+> > > without BPF_TRAMP_F_CALL_ORIG, we need only copy the function argumen=
+ts
+> > > that stored in the frame of the caller to current frame. The argument=
+s
+> > > of arg6-argN are stored in "$rbp + 0x18", we need copy them to
+> > > "$rbp - regs_off + (6 * 8)".
+> > >=20
+> > > For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the argument=
+s
+> > > in stack before call origin function, which means we need alloc extra
+> > > "8 * (arg_count - 6)" memory in the top of the stack. Note, there sho=
+uld
+> > > not be any data be pushed to the stack before call the origin functio=
+n.
+> > > Then, we have to store rbx with 'mov' instead of 'push'.
+> > >=20
+> > > It works well for the FENTRY and FEXIT, I'm not sure if there are oth=
+er
+> > > complicated cases.
+> > >=20
+> > > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > > ---
+> > >  arch/x86/net/bpf_jit_comp.c | 88 ++++++++++++++++++++++++++++++++---=
+--
+> >=20
+> > please add selftests for this.. I had to add one to be able to check
+> > the generated trampoline
+> >=20
+>=20
+> Okay!
+>=20
+> BTW, I failed to compile the latest selftests/bpf with
+> the following errors:
+>=20
+> progs/verifier_and.c:58:16: error: invalid operand for instruction
+>         asm volatile ("                                 \
+>=20
 
-hi,
-sorry for late feedback, but looks like this one breaks reading
-/proc/kcore with objdump for me:
+These tests were moved to use inline assembly recently (2 month ago).
+Discussion at the time was whether to use \n\ or \ terminators at the
+end of each line. People opted for \ as easier to read.
+Replacing \ with \n\ and compiling this test using clang 14 shows
+more informative error message:
 
-  # cat /proc/kallsyms | grep ksys_read
-  ffffffff8150ebc0 T ksys_read
-  # objdump -d  --start-address=0xffffffff8150ebc0 --stop-address=0xffffffff8150ebd0 /proc/kcore 
+$ make -j14 `pwd`/verifier_and.bpf.o
+  CLNG-BPF [test_maps] verifier_and.bpf.o
+progs/verifier_and.c:68:1: error: invalid operand for instruction
+        w1 %%=3D 2;                                       \n\
+^
+<inline asm>:11:5: note: instantiated into assembly here
+        w1 %=3D 2;=20
 
-  /proc/kcore:     file format elf64-x86-64
+My guess is that clang 14 does not know how to handle operations on
+32-bit sub-registers w[0-9].
 
-  objdump: Reading section load1 failed because: Bad address
+But using clang 14 I get some errors not related to inline assembly as well=
+.
+Also, I recall that there were runtime issues with clang 14 and
+tests using enum64.
 
-reverting this makes it work again
+All-in-all, you need newer version of clang for tests nowadays,
+sorry for inconvenience.
 
-thanks,
-jirka
+> The version of clang I used is:
+>=20
+> clang --version
+> Debian clang version 14.0.6
+> Target: x86_64-pc-linux-gnu
+> Thread model: posix
+> InstalledDir: /usr/bin
+>=20
+> Does anyone know the reason?
+>=20
+> Thanks!
+> Menglong Dong
+>=20
+> > jirka
+> >=20
+> >=20
+>=20
 
-> ---
->  fs/proc/kcore.c | 17 +++++------------
->  1 file changed, 5 insertions(+), 12 deletions(-)
-> 
-> diff --git a/fs/proc/kcore.c b/fs/proc/kcore.c
-> index 71157ee35c1a..556f310d6aa4 100644
-> --- a/fs/proc/kcore.c
-> +++ b/fs/proc/kcore.c
-> @@ -541,19 +541,12 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
->  		case KCORE_VMEMMAP:
->  		case KCORE_TEXT:
->  			/*
-> -			 * Using bounce buffer to bypass the
-> -			 * hardened user copy kernel text checks.
-> +			 * We use _copy_to_user() to bypass usermode hardening
-> +			 * which would otherwise prevent this operation.
->  			 */
-> -			if (copy_from_kernel_nofault(buf, (void *)start, tsz)) {
-> -				if (clear_user(buffer, tsz)) {
-> -					ret = -EFAULT;
-> -					goto out;
-> -				}
-> -			} else {
-> -				if (copy_to_user(buffer, buf, tsz)) {
-> -					ret = -EFAULT;
-> -					goto out;
-> -				}
-> +			if (_copy_to_user(buffer, (char *)start, tsz)) {
-> +				ret = -EFAULT;
-> +				goto out;
->  			}
->  			break;
->  		default:
-> -- 
-> 2.39.2
-> 
