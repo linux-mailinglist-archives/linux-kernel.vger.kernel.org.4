@@ -2,95 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05CE718ABD
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3260718AC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjEaUEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 16:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
+        id S229902AbjEaUFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 16:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjEaUDw (ORCPT
+        with ESMTP id S229651AbjEaUFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 16:03:52 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F11188
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:03:46 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30ae141785bso23423f8f.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:03:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685563425; x=1688155425;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BcmFGFxmffRI2HChk9sT5pwagIsBSNan9n+k92cvRtU=;
-        b=f1erte/CcRNMZda9y0JJafdTWET6jUtD340N8WudldhR3gUe0Ha+W5l76ApTEiGk3w
-         F3N/lUj1aNKCuBCKVuVMqgOH1NNKa7XOYMTKakEzeySKWakd7rPHHpiC3On7F6Jw5M3t
-         KmUBjMlTT8yPRLIz9REuSkbMVFvV89aw8hzrl0l7QIjstaFYGXoiFXhD1/G9CHW1bbgH
-         X4GE6qL8iT0ZPJNCGJIoe8Fvqg5jqcqDVxs694Wh7iAVkW5iAlPRRFrpR9WGqZgHLTHK
-         uacOkwKg1d6qF/8v1vx2uBYJKXgOMQr2tj8hHXjVxujvuAlsabW82SL1DTBo8WInEZhc
-         AQRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685563425; x=1688155425;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BcmFGFxmffRI2HChk9sT5pwagIsBSNan9n+k92cvRtU=;
-        b=Q18rhgcLQSWnP3y7gzyuOvpV+uDs8+F/dbUvNg3TL+sUUpR8irSFzyWCp+JNCZH+LT
-         p+KzzZ48cME7EBNWDt454ratCXX5l4bJ5URXx1DNqX3CzUyWj4034xg1AJlQE+eYjcoZ
-         /I4mHhgQ0VKstD3Jz8FG+fxEdVjUgaKKeHJkG2TKe0gIQcC6v756TfIFmQf6I9DhzN7P
-         eJg6WwIO/vDZKIIDIO9ScxBciJJQ573iiLS0sGIrb/ppaMX63fNUmlyMczqqSEfPktyf
-         BcZArgpWnCZzQudLwzzhtmv3pEXd4SYg3WLSkUoCkiBzL/1VBsDYn3mnyoUki55pt5QQ
-         IVWw==
-X-Gm-Message-State: AC+VfDy9NhThozqKH1KhXIkwgjZW7mfLdSPSzTokOvx5epNp2TReiMfx
-        0Wn6xWSjTXOExMIZSmNYbhr/cbVATeem7ZsgtJA=
-X-Google-Smtp-Source: ACHHUZ7lnoqLaNTh7lMjljiCp1vJBVKokyRQDHr2Lsi8bW8VaNfGtV/m2wBbQ89WixGRdA4NCO71SA==
-X-Received: by 2002:adf:e382:0:b0:2ef:b052:1296 with SMTP id e2-20020adfe382000000b002efb0521296mr138172wrm.22.1685563424906;
-        Wed, 31 May 2023 13:03:44 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id r6-20020aa7d586000000b005153b12c9f7sm868891edq.32.2023.05.31.13.03.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 13:03:44 -0700 (PDT)
-Message-ID: <e9cc8600-5427-c4ac-1b58-54bd92fbf443@linaro.org>
-Date:   Wed, 31 May 2023 22:03:42 +0200
+        Wed, 31 May 2023 16:05:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF74137
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:04:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685563492;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kNA2ebP/Kk24u5JXiZiwF7lD7gfc/9bE909Ix3mRLxI=;
+        b=P3cOH955ZD771FQo0moJCIiRV3b2ValR/6q0KER2TacCw0CIcDxy9kJ2X/iFgkIokPCWEB
+        V+ZO8vve7+b1+Crag0hOmp2QmHpDdNpGRawynscB3lmXmNt/WpuC8O8UpfDlT3ReUuM1vp
+        ZyAfsEXSauRvJSuRf+cZi9d46M+V25o=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-315-noSna6GIOauu1C41_KaVCw-1; Wed, 31 May 2023 16:04:07 -0400
+X-MC-Unique: noSna6GIOauu1C41_KaVCw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 792A6858EEB;
+        Wed, 31 May 2023 20:03:45 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.22.8.223])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6228F492B0A;
+        Wed, 31 May 2023 20:03:45 +0000 (UTC)
+Received: by fedora.redhat.com (Postfix, from userid 1000)
+        id DCDB516EF93; Wed, 31 May 2023 16:03:44 -0400 (EDT)
+Date:   Wed, 31 May 2023 16:03:44 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Jingbo Xu <jefflexu@linux.alibaba.com>
+Cc:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
+        gerry@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        German Maglione <gmaglione@redhat.com>
+Subject: Re: [PATCH] fuse: fix return value of inode_inline_reclaim_one_dmap
+ in error path
+Message-ID: <ZHeoIFrp303f0E8d@redhat.com>
+References: <20230424123250.125404-1-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 6/6] arm64: defconfig: Enable sc828x0xp lpasscc clock
- controller
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     johan+linaro@kernel.org, agross@kernel.org,
-        konrad.dybcio@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230525122930.17141-1-srinivas.kandagatla@linaro.org>
- <20230525122930.17141-7-srinivas.kandagatla@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230525122930.17141-7-srinivas.kandagatla@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424123250.125404-1-jefflexu@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/05/2023 14:29, Srinivas Kandagatla wrote:
-> Enabled sc828x0xp lpasscc clock controller driver required for X13s laptop.
+On Mon, Apr 24, 2023 at 08:32:50PM +0800, Jingbo Xu wrote:
+> When range already got reclaimed by somebody else, return NULL so that
+> the caller could retry to allocate or reclaim another range, instead of
+> mistakenly returning the range already got reclaimed and reused by
+> others.
 > 
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Reported-by: Liu Jiang <gerry@linux.alibaba.com>
+> Fixes: 9a752d18c85a ("virtiofs: add logic to free up a memory range")
+> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+
+Hi Jingbo,
+
+This patch looks correct to me.
+
+Are you able to reproduce the problem? Or you are fixing it based on
+code inspection?
+
+How are you testing this? We don't have virtiofsd DAX implementation yet
+in rust virtiofsd yet. 
+
+I am not sure how to test this chagne now. We had out of tree patches
+in qemu and now qemu has gotten rid of C version of virtiofsd so these
+patches might not even work now.
+
+Thanks
+Vivek
 > ---
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+>  fs/fuse/dax.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/fs/fuse/dax.c b/fs/fuse/dax.c
+> index 8e74f278a3f6..59aadfd89ee5 100644
+> --- a/fs/fuse/dax.c
+> +++ b/fs/fuse/dax.c
+> @@ -985,6 +985,7 @@ inode_inline_reclaim_one_dmap(struct fuse_conn_dax *fcd, struct inode *inode,
+>  	node = interval_tree_iter_first(&fi->dax->tree, start_idx, start_idx);
+>  	/* Range already got reclaimed by somebody else */
+>  	if (!node) {
+> +		dmap = NULL;
+>  		if (retry)
+>  			*retry = true;
+>  		goto out_write_dmap_sem;
+> -- 
+> 2.19.1.6.gb485710b
+> 
 
