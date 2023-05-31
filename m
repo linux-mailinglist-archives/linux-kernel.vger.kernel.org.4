@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B195717737
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BF471773A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234434AbjEaGxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 02:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
+        id S234438AbjEaGxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 02:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234443AbjEaGxZ (ORCPT
+        with ESMTP id S234432AbjEaGxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 02:53:25 -0400
+        Wed, 31 May 2023 02:53:38 -0400
 Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2042.outbound.protection.outlook.com [40.107.8.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9375E183;
-        Tue, 30 May 2023 23:53:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E380B1B8;
+        Tue, 30 May 2023 23:53:24 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BTUlPR3UyP8dbnc25zSvxo1ujugHzslJ8qRVPNmR1WeMVa++CuPjAbLO/ETaQdfLxN/ZmAoEOaqpHr6mbrOyb+mq+csVCThISx3CSdTAGT6zy4KcN2hNrciasUtBCf7aJ33o2fv9O2Hbc2NR5dgYdklKmf7nl/odLSrQKhP//cfr7L91AOyq6qNvrR4T9EEIvPN5WptIhfVpst132oe7voV760DuTS/wLEzGzShMFSvCeEhB3F2+mwrMxp1IbTLFRiK+FTKaCRkh2bURMr3+dH6OxbFCdpOnxch4VsRcsYWsbrK2mYXKNmvP7GydXfXTxZjIdcC6Gq8dCz9swGYMfw==
+ b=hlf/DhdwhRFA645B6q8pSJHCPwnVp3LGMYoIlNJi+67gprWgcrjwkJgV0M9Wh/rVMGrN2HFCDT1d2USrER4+5kr5qCJMGKmmCetOmwlGEulWh4cZpTMj/kJp35rHz35JuC171bgvYTCmcfWb5WDn5iFoTqP7r1O4sB9FD4uUjli6ujWj/ygdiIAtH7UFxOmrGcr5dcYGEbHcsLys4Dlm7vzdyMrbtrwq+ZEQF0m5ZDf+2TWPi5oSZPgA16urfUkcnhnk09OZqDJ+ssPvSsUpRygYCEoG+0SwlnG59XlvAa7e/vDEK33rUDNpIVvWsCvcUZvPrqQQZ6VJaq4jD71UDQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qbeiposDPchdDHX1hgYIIbLynUXmwdHraPh+/lGK5C8=;
- b=Gen8Tu8n5bW3MclsHJ42UGSv6Gq8cnQq8pBd4W4WloHeAgmaCYB94aO5eE6hAX+mc+NujOL7jWVnLsSvk3eToD79dPNq12cC1UXrenVNonoF42xae8lpr8TvMHII0jY0BU/X4xJkKiElWEMQAxmzV8LXdnc5SATy/+F0Wmd11QGDX/I557FYV6+nSp7i2qGc+rIG4f54gX2DGXbnkAqdTXVPaW/OFBlBhCt+vioxEVzlY0VK5K7yuKAII1fxKCc/KLTuy35rsCH5BqvPOeG0TcLTsqxTlVfC0hWJiiYewFAcmmbb+kIa5lAgSnIZhKpBPhJ4RTrO8mb3LOL7YxoMyw==
+ bh=FhuLyZ1wbm+1q3bVqQyhAWAwcZ1Yg+s+BXcUwMAsPls=;
+ b=mMgZUBPedxfUi79/5diSMWifhRAtFMcxnVqND1IdXteP7QPqX8Pbq7n6BlJvCFKBbsUJifDm22Kkers6Ej49xNevBuG7Fsq7lL+hSElDUIj8iIhCjDyoaGtEOeupSkYM0QP99jIH+AN6dPVSBnFW2qwHDLwtO07fyH+g4dvRHy4zQV22bJ4fp4XkxM4MZGuV+XdEq6TjD0yZ4qNO7ABMs/O4GZf3UuauGRhHpzAsEAuXX0SnrAPiRa00p99UI5t4/74AS+RL3Awq+rqap2cjjebiiCnJNiKs/oNQmbWt2Xns3Q5j52iwHkC9vYPNE++oMupbi6ZemRSi5j/SENLQfQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qbeiposDPchdDHX1hgYIIbLynUXmwdHraPh+/lGK5C8=;
- b=fhQV8XxSwvshPxivmarKXolX9E5NhThiK58k3OSPz4gFnmqo1Ccr5807ZxgDSonDSXmHXP0gz7Xt6VUWzBWC4PiqDfChvUEQSnoh16gMVdoyMLpZBYkVJUuR82oV+aJlXozq04mm2QhE751pPorO38Acs9RgWIFKFA19YxQzo4Q=
+ bh=FhuLyZ1wbm+1q3bVqQyhAWAwcZ1Yg+s+BXcUwMAsPls=;
+ b=g3TYXZ8z8/1fKe44TAFEFGjyCIvnmyWbyGCFddYs+qssREFLEmurRGV+lKtXGTVEzJZTbwpfaK+fiwNmQ+knJj5FlYv+4QRXUL4tocOxz80T3WqzLeGnQKux9pmUIpV/PmVmZweO9zqDods+nNImNtfOT9S7a0tID105EKTTd1M=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB5925.eurprd04.prod.outlook.com (2603:10a6:20b:ab::19)
  by AM0PR04MB6771.eurprd04.prod.outlook.com (2603:10a6:208:18d::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Wed, 31 May
- 2023 06:53:15 +0000
+ 2023 06:53:21 +0000
 Received: from AM6PR04MB5925.eurprd04.prod.outlook.com
  ([fe80::1a8e:7e33:7f24:d77c]) by AM6PR04MB5925.eurprd04.prod.outlook.com
  ([fe80::1a8e:7e33:7f24:d77c%5]) with mapi id 15.20.6433.022; Wed, 31 May 2023
- 06:53:15 +0000
+ 06:53:21 +0000
 From:   Joy Zou <joy.zou@nxp.com>
 To:     ping.bai@nxp.com, lgirdwood@gmail.com, broonie@kernel.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -47,9 +47,9 @@ To:     ping.bai@nxp.com, lgirdwood@gmail.com, broonie@kernel.org,
 Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/3] regulator: pca9450: add pca9451a support
-Date:   Wed, 31 May 2023 14:57:23 +0800
-Message-Id: <20230531065724.3671795-3-joy.zou@nxp.com>
+Subject: [PATCH v1 3/3] arm64: dts: imx93-11x11-evk: add pca9451a support
+Date:   Wed, 31 May 2023 14:57:24 +0800
+Message-Id: <20230531065724.3671795-4-joy.zou@nxp.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230531065724.3671795-1-joy.zou@nxp.com>
 References: <20230531065724.3671795-1-joy.zou@nxp.com>
@@ -61,50 +61,50 @@ X-ClientProxiedBy: SI2PR02CA0011.apcprd02.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM6PR04MB5925:EE_|AM0PR04MB6771:EE_
-X-MS-Office365-Filtering-Correlation-Id: f173be87-6516-462b-ff91-08db61a3b54f
+X-MS-Office365-Filtering-Correlation-Id: cd1eb43c-db3d-4bc1-0fbe-08db61a3b91f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: t9PItByObyrLIxGnMjC3zUFDZYvhOMHsugi5/nStok/DQznapQNNVUftR/npxS6gjpX755jhyHdafCod+xWYxBBlp3UVCMNjAjfIKglrI4L/qanpJoy3Gq1zhA6PQ8m7aldrmkAa7kXs/8jrebnIjZXlor5AGAu/UYbkqctsaObeo5xloum4xvRJLlUcOJ1W6QOlhskSEqkSm00bR1zWwC1pSs9x4cQFyUb4XVopEIOe0TVcuKJXWXZxg4tCn0fL7GHRVgsuZ9TPV1AFY/qYxoMmdi7nf29WusBSaX3RPGqDrvlJbqDfBisQyI1Fm+Yk/Wed+IDGuooqBn9kEsEgKcWBfaW32YIRpUQL8n3s8SOqe0Nase7lHbzFKE2aodGGKIUIcGAHWHa4mneLMjTi185rDEmQKLuapJv1zrtUZ17j9IVWj5DJZXwt2l82+XJiTOBKTH/VxOXH2uC167Q7uz5GjEkmiDQLzY36Jo4VIP4bsdmO/B1Bl6dvYqQ6A+stQxoLcyvEGvFy/dXbNA+fcgP1O/bqi3oIIJXuzTUYzuljwCPBWtPAEbUxPE6z82PcNQODb1b5MijTUlLIpxRhfbC1G8P7WABIIJN9dc9Ma85+rBqeyS0QyGxhi/Ojq3qW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5925.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(366004)(396003)(376002)(451199021)(26005)(1076003)(38350700002)(38100700002)(41300700001)(52116002)(6666004)(6486002)(83380400001)(186003)(6512007)(6506007)(2616005)(478600001)(8676002)(4326008)(66476007)(66946007)(316002)(5660300002)(8936002)(86362001)(44832011)(7416002)(30864003)(66556008)(2906002)(36756003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 6Xl2EURUTPYVBvM0573F7pggQ8ln760KF01kR8/qMmo6Z50hE2x4VEu3df4KJQSQaVsSLpBl3bFo94i77oS+ghhURnB0NNYGDixVFs4ESYvpAxkhs7VULJFnmCcg45V75qH74zX98FmEUdgDCWURmwYtHleer5Z3Q7sL/sbeOV1ePu1o+mLSZRpIAt4VKG9sHbNUlCSwvGDwHjK7XrbFuqVXOGp2q4sxcBySkkJr4LMyLPk+otNwNMeRXvNra7NWYfXrQd3QEEG9C2PndMlt0kTA2mer+QIesrYI3yfSIUhCtGVjRuNZeth9pCrMRfyiUWQuSM1/IsxDt/34VBlGW3glmIwSBTfBSM8jAvM01ZXtIUnAaeRC4zHxgaTPiIn4qLtALAXkddepIvfuIMBNGPjbuVGIkDTUN/kSxWLdR7u5cLSc0e1l15oBOq+JgpiZDLojGbAk3CTXehfTZYg2UAKEIjNmJHIHb8Y2BALMxIhMG0MfvuBKOvP62MMtbLJthuV7K/cvorzteqtB6MQvP2zyF7xVVtNCYXUaSr1lcrwJrCOkIeZBtj0Iwxcus+Q8mxrmlHmytz4vskIAeRwughJ2tdX7hq5X5xBjnAPY/8OSA5AQzIcPPsXbcLhRFKZuLnnASvMopBOlyNJVekrEoQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5925.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(366004)(396003)(376002)(451199021)(26005)(1076003)(38350700002)(38100700002)(41300700001)(52116002)(6486002)(83380400001)(186003)(6512007)(6506007)(2616005)(478600001)(8676002)(4326008)(66476007)(66946007)(316002)(5660300002)(8936002)(86362001)(44832011)(7416002)(66556008)(2906002)(36756003)(473944003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ET9Oh1h4g4TvYrktV8Swcfp5LvCCeFbOYfqfSDOzqglghrmWdmjMDkG1bCWQ?=
- =?us-ascii?Q?qpteTNL+pGxZkhCNINSuRIxZ3d7/0QljdgVI0CQ9v3qCYhPrTV5KQU1fLR7g?=
- =?us-ascii?Q?7LnqozzbdZg6YsVkGC/CAXCFAkcEMKd7sUc/IC72a2SDGzihKm9exJm1+neT?=
- =?us-ascii?Q?sKMLoagXuesuBj1ttWKtZqDhvF/jSIF79s7A5ulpWUAMmdsud7jHXqZLR8ty?=
- =?us-ascii?Q?LxEoqEA6vd+P9SAn9z+PJuqVJl6gXHhU/fn+Tc43F4s/ZnoK3XritZln/SQ9?=
- =?us-ascii?Q?fET8piiANePkPuqJC5zsobAnCjYE4ba3vkjPlXZyauHThF0UatjwzRMlZ+XV?=
- =?us-ascii?Q?CxTuKEGjyz4rmCYnU1SyeuEQZlIDKEKTJPepJViJnD0PrTPWQYjzWjljPkTp?=
- =?us-ascii?Q?l9PVdCgBxKi9KcYAm12+Hp17E6b1SRL1R8lJm8iOaY4x2aBlBgeTqY7jBmWH?=
- =?us-ascii?Q?xDRsls+f0zGgIAYCNYBWKKBTQlQnUvvPPjGJtACX5OnxVqjsR+/uK73Zjxqq?=
- =?us-ascii?Q?ymvYn8a0vte0Wfw8xmM9yEnpkblHsPA75ThFnrPxDGbWJtz/a+jDUsQumKUs?=
- =?us-ascii?Q?RGyTKdPRyw5TE7PaArBsKV4JB/CmxctJCMsdEAKsFaoVOlMk/aB++XVSbte2?=
- =?us-ascii?Q?POID++lIKUi0LpGS0P2qCM8Fl9/e9zJJQkVHC6eHq0i3JuU9A5Mt4l+f5GFq?=
- =?us-ascii?Q?55ZKfJjqWlXl3lsigZK2ZFXerF50SaaaboJAIDc9CJnG6KrTy95dP1aVBZip?=
- =?us-ascii?Q?cLZNBQKLzImeYK0tjG2S13237sIVmcGmWTDBwDKZ0B44Bac53KBJjEyWJz9Q?=
- =?us-ascii?Q?0AZ2juthwycUCaDMr69Bivwkv0SmGd+OeJbI2I2SpwVy6snMC35w+yZmPbcm?=
- =?us-ascii?Q?/cToAELUtH7mw/JbE9ujqEkD0mlaBNp3ccTaTo0b7+fcd5ibmxbo4PtO35N9?=
- =?us-ascii?Q?wiarH7Xu/m14+hXWxZa6yX2NB4cU9EsSCJMcUgVP430h9k1LDw8ZgRLlm2GU?=
- =?us-ascii?Q?koq7O5jMnZUwAIPWZKtj81XLrD5174LbrTRJH16kKi/3mpS93l+Qhfx1iZ+e?=
- =?us-ascii?Q?NaxgJU3TIsaS6hzoRcXPSlpftuCCjNzbFOXfoCt5otH29NU8s8FY4eXYy8yN?=
- =?us-ascii?Q?qJ0ky/hs0JUYjXVE0UnTI3rCbeJfwnzXLuoWAw1K0j3o6UteEsgEmfTYRCR7?=
- =?us-ascii?Q?tURc4ETZ4j6yUjlIzRuPjGvZeiYJXKtwUpQE1xy/a/E1PeYqYfAGpPqWZ17d?=
- =?us-ascii?Q?HVnzI/Pc2NG5V7R+YyUSnHyLW8bsZrKyzNUFuurmtx7dYrzhG+4OTodCR+OO?=
- =?us-ascii?Q?i25J143dmNMeNMr+WHXQtYsodyTrSi0I+AXKIq7d2ammeH9wADPZrQn6hxOe?=
- =?us-ascii?Q?dEY800jJ4Nkp/x3CI1cE5ZbZYiCKiA0mkci4IPFKIrEtFAebx6iV+1TaFvN0?=
- =?us-ascii?Q?Sn3i2Th0ryj9DGYFGzdy3sktbtczODgxi+h1ZD6fmwIpruKVqvDFmMPrmpuS?=
- =?us-ascii?Q?5HXnCwR3BCl79rM7pXqb451N+nGrZ9N8S32Q6m6ytJ9sTDkFk50/IiNZXsAZ?=
- =?us-ascii?Q?5aSf/WFrm7CKey/D/NXUtb7pNwkwZyoXXp3Ucdtm?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?R5CbEXZBBewDW4h7eInRXH09+KmFshxdqTtBFwIV8wYC5ZkvYSEsa8Da6Qv9?=
+ =?us-ascii?Q?Rr2015zq0etp7Y3zyrWBD0Od3W4Cssj5y4nQt5gfoZFWeIeLsgseN4KVfK1Z?=
+ =?us-ascii?Q?XR89ZrJLj4qixjrUvIr0XZzpyKG8zd3rwsMA2qLHDKweNiH289Yf/RVI1fxP?=
+ =?us-ascii?Q?j3TRpDEGw/OYN0aYBuM+xnvF6f853mMQtQXZF1UXKZZ6bm5c94uMLzcXLwqB?=
+ =?us-ascii?Q?p8aCgT1f8bqMKED866q2kCHtQbv0a0e6AcszHqdfCJcPFAiREuT1k2o69N3K?=
+ =?us-ascii?Q?H7fIdvAi9KiRVZziUY2xaMvikm44xJ+YNBTVyI5gGm1DMmEluHK+Xsrpym06?=
+ =?us-ascii?Q?Wteek3pUEqdlM4mipYfAm3EaD1dlKCXLm16xiPtRlASdUEtCifLHKNGTUAr/?=
+ =?us-ascii?Q?QZ3lc0WWM5PRb7x6EEEU0EZ1gZ5vK0tJOzDQRL+BRof+cgDVsOkyCEYrqqf7?=
+ =?us-ascii?Q?4r+oALSNsfJ8V7jyqsj0v9CQoIV91I5bMFMcvYy6s8yqz8GeuowcDdPA97WU?=
+ =?us-ascii?Q?axjYMbwVu9Ww7SAFJ7vxcq2Rt+JImyLPZuiHm37yMkNssELCLFKl4GDS169U?=
+ =?us-ascii?Q?SfralSU8DL6Wzre2HNYp9gKBGm0cp5VYwPy4uH2VCRhZiRAGK04Hyhs1ibYx?=
+ =?us-ascii?Q?s4P298WM2DB1Jj03ThaxNCNen7rAQSMr5NqcqTZVnNLtHrw1W+3ITZdkmmwI?=
+ =?us-ascii?Q?RJT87/Apln23r/FsOafNzQZTT7I96ajsVibz3OKLhTBQkbl6qcJLynLGJE67?=
+ =?us-ascii?Q?ChPCcASd7FRZrITdBh+CWHE1rU1/PxDRGqxooSqfsoKH4kuWnEK7io6pd4xw?=
+ =?us-ascii?Q?Omwb8J5IHUIqF6BLuDsJZ0exf54yz7w/NFiZINZbrGA7mariuxtT8z6F/UUu?=
+ =?us-ascii?Q?M/HrZriNFMxnkE3CkcwV5kdIi178E7qphYD1hPAeNiJEmmbkAAiq8RyR/e4i?=
+ =?us-ascii?Q?PMn/ld6SF0buAfyb3H3biqkk4E3AfB/plhpWpZDmDAJJfor2Baf4z02UPbSo?=
+ =?us-ascii?Q?01j9M4fqPTP3NknMa4Erim/oo01cpvcxPs6i40O2KA94sgEt42DdsuhO3fVx?=
+ =?us-ascii?Q?RUj/ZY1pNdTJTz1a47qOtcAY0VsZye8RW6XuFj9oYDNwkW4egnse7gAKQm6V?=
+ =?us-ascii?Q?cbKx31ua2l8cpFgnVVZWqVbCfQx4FE0gA5RW/VglfoTTR+vCY7Y8LBbwp/vN?=
+ =?us-ascii?Q?RWFjDqvQxGvhiNhXFzdHQXIeeoz12T95O9Qx3fe0ny74ZuAZmj9u2znn/MbJ?=
+ =?us-ascii?Q?a4OVTIWGAOMbBmooAIP0SGcbbsRa3zwv11fAzZGFW2p5EegC/mrbUxgSW9dA?=
+ =?us-ascii?Q?W/D1KZu+Nihk/QPCmKME97hXovvUruv3qJYFPsgfsGnTbU/upQpPcAcSQcmA?=
+ =?us-ascii?Q?GlLmUu15p2P1qt59QfiMPtECKPCYxMWzRPhS67CORSuwzKsRXF6UybGaWLS1?=
+ =?us-ascii?Q?n4uFRxr7h7XFlGkgjZudreWN8CQ/bPDY8f6Z+QjC4KRKC0fvsagWagVNPS5S?=
+ =?us-ascii?Q?7G5YRoX2cxq1DNHe/EV8mTaKAxEOaDVi3xbyi2XYZLu6EnacPnfnhrnaD3sr?=
+ =?us-ascii?Q?cPx+leXuO+y/DcNW+OsscR5tUQiae5c74oZwouFZ?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f173be87-6516-462b-ff91-08db61a3b54f
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd1eb43c-db3d-4bc1-0fbe-08db61a3b91f
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB5925.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 06:53:15.5028
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 06:53:21.8364
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kpeX21F7Q3vYEft+dX6kZe3rKS7hGZikMMslJ0lET3JJHoK2epAMv/RO7Vnzo0dU
+X-MS-Exchange-CrossTenant-UserPrincipalName: TI6Gh94tCvEqhHw4Phu05Dbv9XLWtvL8HEgpn5tjxNrdqxDquUXTust/JmUovcgm
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6771
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -116,374 +116,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding support for pmic pca9451a.
-
-This patch support old and new pmic pca9451a. The new pmic trimed BUCK1.
-The default value of Toff_Deb is used to distinguish the old and new pmic.
+Support pca9451a on imx93-11x11-evk.
 
 Signed-off-by: Joy Zou <joy.zou@nxp.com>
 ---
- drivers/regulator/pca9450-regulator.c | 262 ++++++++++++++++++++++++--
- include/linux/regulator/pca9450.h     |   2 +
- 2 files changed, 252 insertions(+), 12 deletions(-)
+ .../boot/dts/freescale/imx93-11x11-evk.dts    | 111 ++++++++++++++++++
+ 1 file changed, 111 insertions(+)
 
-diff --git a/drivers/regulator/pca9450-regulator.c b/drivers/regulator/pca9450-regulator.c
-index 91bfb7e026c9..654aa4fbe494 100644
---- a/drivers/regulator/pca9450-regulator.c
-+++ b/drivers/regulator/pca9450-regulator.c
-@@ -104,7 +104,15 @@ static const struct regulator_ops pca9450_ldo_regulator_ops = {
-  * 0.60 to 2.1875V (12.5mV step)
-  */
- static const struct linear_range pca9450_dvs_buck_volts[] = {
--	REGULATOR_LINEAR_RANGE(600000,  0x00, 0x7F, 12500),
-+	REGULATOR_LINEAR_RANGE(600000, 0x00, 0x7F, 12500),
+diff --git a/arch/arm64/boot/dts/freescale/imx93-11x11-evk.dts b/arch/arm64/boot/dts/freescale/imx93-11x11-evk.dts
+index c50f46f06f62..4de08d628b66 100644
+--- a/arch/arm64/boot/dts/freescale/imx93-11x11-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx93-11x11-evk.dts
+@@ -120,6 +120,105 @@ &wdog3 {
+ 	status = "okay";
+ };
+ 
++&lpi2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	clock-frequency = <400000>;
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&pinctrl_lpi2c2>;
++	pinctrl-1 = <&pinctrl_lpi2c2>;
++	status = "okay";
++
++	pmic@25 {
++		compatible = "nxp,pca9451a";
++		reg = <0x25>;
++		interrupt-parent = <&pcal6524>;
++		interrupts = <11 IRQ_TYPE_EDGE_FALLING>;
++
++		regulators {
++			buck1: BUCK1 {
++				regulator-name = "BUCK1";
++				regulator-min-microvolt = <650000>;
++				regulator-max-microvolt = <2237500>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <3125>;
++			};
++
++			buck2: BUCK2 {
++				regulator-name = "BUCK2";
++				regulator-min-microvolt = <600000>;
++				regulator-max-microvolt = <2187500>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <3125>;
++			};
++
++			buck4: BUCK4{
++				regulator-name = "BUCK4";
++				regulator-min-microvolt = <600000>;
++				regulator-max-microvolt = <3400000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			buck5: BUCK5{
++				regulator-name = "BUCK5";
++				regulator-min-microvolt = <600000>;
++				regulator-max-microvolt = <3400000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			buck6: BUCK6 {
++				regulator-name = "BUCK6";
++				regulator-min-microvolt = <600000>;
++				regulator-max-microvolt = <3400000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo1: LDO1 {
++				regulator-name = "LDO1";
++				regulator-min-microvolt = <1600000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo4: LDO4 {
++				regulator-name = "LDO4";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo5: LDO5 {
++				regulator-name = "LDO5";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++		};
++	};
++
++	pcal6524: gpio@22 {
++		compatible = "nxp,pcal6524";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pcal6524>;
++		reg = <0x22>;
++		gpio-controller;
++		#gpio-cells = <2>;
++		interrupt-controller;
++		#interrupt-cells = <2>;
++		interrupt-parent = <&gpio3>;
++		interrupts = <27 IRQ_TYPE_LEVEL_LOW>;
++	};
++
 +};
 +
-+/*
-+ * BUCK1/3
-+ * 0.65 to 2.2375V (12.5mV step)
-+ */
-+static const struct linear_range pca9450_trim_dvs_buck_volts[] = {
-+	REGULATOR_LINEAR_RANGE(650000, 0x00, 0x7F, 12500),
- };
+ &iomuxc {
+ 	pinctrl_eqos: eqosgrp {
+ 		fsl,pins = <
+@@ -166,6 +265,18 @@ MX93_PAD_UART1_TXD__LPUART1_TX			0x31e
+ 		>;
+ 	};
  
- /*
-@@ -663,6 +671,207 @@ static const struct pca9450_regulator_desc pca9450bc_regulators[] = {
- 	},
- };
- 
-+static const struct pca9450_regulator_desc pca9451a_regulators[] = {
-+	{
-+		.desc = {
-+			.name = "buck1",
-+			.of_match = of_match_ptr("BUCK1"),
-+			.regulators_node = of_match_ptr("regulators"),
-+			.id = PCA9450_BUCK1,
-+			.ops = &pca9450_dvs_buck_regulator_ops,
-+			.type = REGULATOR_VOLTAGE,
-+			.n_voltages = PCA9450_BUCK1_VOLTAGE_NUM,
-+			.linear_ranges = pca9450_dvs_buck_volts,
-+			.n_linear_ranges = ARRAY_SIZE(pca9450_dvs_buck_volts),
-+			.vsel_reg = PCA9450_REG_BUCK1OUT_DVS0,
-+			.vsel_mask = BUCK1OUT_DVS0_MASK,
-+			.enable_reg = PCA9450_REG_BUCK1CTRL,
-+			.enable_mask = BUCK1_ENMODE_MASK,
-+			.enable_val = BUCK_ENMODE_ONREQ,
-+			.ramp_mask = BUCK1_RAMP_MASK,
-+			.ramp_delay_table = pca9450_dvs_buck_ramp_table,
-+			.n_ramp_values = ARRAY_SIZE(pca9450_dvs_buck_ramp_table),
-+			.owner = THIS_MODULE,
-+			.of_parse_cb = pca9450_set_dvs_levels,
-+		},
-+		.dvs = {
-+			.run_reg = PCA9450_REG_BUCK1OUT_DVS0,
-+			.run_mask = BUCK1OUT_DVS0_MASK,
-+			.standby_reg = PCA9450_REG_BUCK1OUT_DVS1,
-+			.standby_mask = BUCK1OUT_DVS1_MASK,
-+		},
-+	},
-+	{
-+		.desc = {
-+			.name = "buck1_trim",
-+			.of_match = of_match_ptr("BUCK1"),
-+			.regulators_node = of_match_ptr("regulators"),
-+			.id = PCA9450_BUCK1,
-+			.ops = &pca9450_dvs_buck_regulator_ops,
-+			.type = REGULATOR_VOLTAGE,
-+			.n_voltages = PCA9450_BUCK1_VOLTAGE_NUM,
-+			.linear_ranges = pca9450_trim_dvs_buck_volts,
-+			.n_linear_ranges = ARRAY_SIZE(pca9450_trim_dvs_buck_volts),
-+			.vsel_reg = PCA9450_REG_BUCK1OUT_DVS0,
-+			.vsel_mask = BUCK1OUT_DVS0_MASK,
-+			.enable_reg = PCA9450_REG_BUCK1CTRL,
-+			.enable_mask = BUCK1_ENMODE_MASK,
-+			.enable_val = BUCK_ENMODE_ONREQ,
-+			.ramp_mask = BUCK1_RAMP_MASK,
-+			.ramp_delay_table = pca9450_dvs_buck_ramp_table,
-+			.n_ramp_values = ARRAY_SIZE(pca9450_dvs_buck_ramp_table),
-+			.owner = THIS_MODULE,
-+			.of_parse_cb = pca9450_set_dvs_levels,
-+		},
-+		.dvs = {
-+			.run_reg = PCA9450_REG_BUCK1OUT_DVS0,
-+			.run_mask = BUCK1OUT_DVS0_MASK,
-+			.standby_reg = PCA9450_REG_BUCK1OUT_DVS1,
-+			.standby_mask = BUCK1OUT_DVS1_MASK,
-+		},
-+	},
-+	{
-+		.desc = {
-+			.name = "buck2",
-+			.of_match = of_match_ptr("BUCK2"),
-+			.regulators_node = of_match_ptr("regulators"),
-+			.id = PCA9450_BUCK2,
-+			.ops = &pca9450_dvs_buck_regulator_ops,
-+			.type = REGULATOR_VOLTAGE,
-+			.n_voltages = PCA9450_BUCK2_VOLTAGE_NUM,
-+			.linear_ranges = pca9450_dvs_buck_volts,
-+			.n_linear_ranges = ARRAY_SIZE(pca9450_dvs_buck_volts),
-+			.vsel_reg = PCA9450_REG_BUCK2OUT_DVS0,
-+			.vsel_mask = BUCK2OUT_DVS0_MASK,
-+			.enable_reg = PCA9450_REG_BUCK2CTRL,
-+			.enable_mask = BUCK2_ENMODE_MASK,
-+			.enable_val = BUCK_ENMODE_ONREQ_STBYREQ,
-+			.ramp_mask = BUCK2_RAMP_MASK,
-+			.ramp_delay_table = pca9450_dvs_buck_ramp_table,
-+			.n_ramp_values = ARRAY_SIZE(pca9450_dvs_buck_ramp_table),
-+			.owner = THIS_MODULE,
-+			.of_parse_cb = pca9450_set_dvs_levels,
-+		},
-+		.dvs = {
-+			.run_reg = PCA9450_REG_BUCK2OUT_DVS0,
-+			.run_mask = BUCK2OUT_DVS0_MASK,
-+			.standby_reg = PCA9450_REG_BUCK2OUT_DVS1,
-+			.standby_mask = BUCK2OUT_DVS1_MASK,
-+		},
-+	},
-+	{
-+		.desc = {
-+			.name = "buck4",
-+			.of_match = of_match_ptr("BUCK4"),
-+			.regulators_node = of_match_ptr("regulators"),
-+			.id = PCA9450_BUCK4,
-+			.ops = &pca9450_buck_regulator_ops,
-+			.type = REGULATOR_VOLTAGE,
-+			.n_voltages = PCA9450_BUCK4_VOLTAGE_NUM,
-+			.linear_ranges = pca9450_buck_volts,
-+			.n_linear_ranges = ARRAY_SIZE(pca9450_buck_volts),
-+			.vsel_reg = PCA9450_REG_BUCK4OUT,
-+			.vsel_mask = BUCK4OUT_MASK,
-+			.enable_reg = PCA9450_REG_BUCK4CTRL,
-+			.enable_mask = BUCK4_ENMODE_MASK,
-+			.enable_val = BUCK_ENMODE_ONREQ,
-+			.owner = THIS_MODULE,
-+		},
-+	},
-+	{
-+		.desc = {
-+			.name = "buck5",
-+			.of_match = of_match_ptr("BUCK5"),
-+			.regulators_node = of_match_ptr("regulators"),
-+			.id = PCA9450_BUCK5,
-+			.ops = &pca9450_buck_regulator_ops,
-+			.type = REGULATOR_VOLTAGE,
-+			.n_voltages = PCA9450_BUCK5_VOLTAGE_NUM,
-+			.linear_ranges = pca9450_buck_volts,
-+			.n_linear_ranges = ARRAY_SIZE(pca9450_buck_volts),
-+			.vsel_reg = PCA9450_REG_BUCK5OUT,
-+			.vsel_mask = BUCK5OUT_MASK,
-+			.enable_reg = PCA9450_REG_BUCK5CTRL,
-+			.enable_mask = BUCK5_ENMODE_MASK,
-+			.enable_val = BUCK_ENMODE_ONREQ,
-+			.owner = THIS_MODULE,
-+		},
-+	},
-+	{
-+		.desc = {
-+			.name = "buck6",
-+			.of_match = of_match_ptr("BUCK6"),
-+			.regulators_node = of_match_ptr("regulators"),
-+			.id = PCA9450_BUCK6,
-+			.ops = &pca9450_buck_regulator_ops,
-+			.type = REGULATOR_VOLTAGE,
-+			.n_voltages = PCA9450_BUCK6_VOLTAGE_NUM,
-+			.linear_ranges = pca9450_buck_volts,
-+			.n_linear_ranges = ARRAY_SIZE(pca9450_buck_volts),
-+			.vsel_reg = PCA9450_REG_BUCK6OUT,
-+			.vsel_mask = BUCK6OUT_MASK,
-+			.enable_reg = PCA9450_REG_BUCK6CTRL,
-+			.enable_mask = BUCK6_ENMODE_MASK,
-+			.enable_val = BUCK_ENMODE_ONREQ,
-+			.owner = THIS_MODULE,
-+		},
-+	},
-+	{
-+		.desc = {
-+			.name = "ldo1",
-+			.of_match = of_match_ptr("LDO1"),
-+			.regulators_node = of_match_ptr("regulators"),
-+			.id = PCA9450_LDO1,
-+			.ops = &pca9450_ldo_regulator_ops,
-+			.type = REGULATOR_VOLTAGE,
-+			.n_voltages = PCA9450_LDO1_VOLTAGE_NUM,
-+			.linear_ranges = pca9450_ldo1_volts,
-+			.n_linear_ranges = ARRAY_SIZE(pca9450_ldo1_volts),
-+			.vsel_reg = PCA9450_REG_LDO1CTRL,
-+			.vsel_mask = LDO1OUT_MASK,
-+			.enable_reg = PCA9450_REG_LDO1CTRL,
-+			.enable_mask = LDO1_EN_MASK,
-+			.owner = THIS_MODULE,
-+		},
-+	},
-+	{
-+		.desc = {
-+			.name = "ldo4",
-+			.of_match = of_match_ptr("LDO4"),
-+			.regulators_node = of_match_ptr("regulators"),
-+			.id = PCA9450_LDO4,
-+			.ops = &pca9450_ldo_regulator_ops,
-+			.type = REGULATOR_VOLTAGE,
-+			.n_voltages = PCA9450_LDO4_VOLTAGE_NUM,
-+			.linear_ranges = pca9450_ldo34_volts,
-+			.n_linear_ranges = ARRAY_SIZE(pca9450_ldo34_volts),
-+			.vsel_reg = PCA9450_REG_LDO4CTRL,
-+			.vsel_mask = LDO4OUT_MASK,
-+			.enable_reg = PCA9450_REG_LDO4CTRL,
-+			.enable_mask = LDO4_EN_MASK,
-+			.owner = THIS_MODULE,
-+		},
-+	},
-+	{
-+		.desc = {
-+			.name = "ldo5",
-+			.of_match = of_match_ptr("LDO5"),
-+			.regulators_node = of_match_ptr("regulators"),
-+			.id = PCA9450_LDO5,
-+			.ops = &pca9450_ldo_regulator_ops,
-+			.type = REGULATOR_VOLTAGE,
-+			.n_voltages = PCA9450_LDO5_VOLTAGE_NUM,
-+			.linear_ranges = pca9450_ldo5_volts,
-+			.n_linear_ranges = ARRAY_SIZE(pca9450_ldo5_volts),
-+			.vsel_reg = PCA9450_REG_LDO5CTRL_H,
-+			.vsel_mask = LDO5HOUT_MASK,
-+			.enable_reg = PCA9450_REG_LDO5CTRL_H,
-+			.enable_mask = LDO5H_EN_MASK,
-+			.owner = THIS_MODULE,
-+		},
-+	},
-+};
++	pinctrl_lpi2c2: lpi2c2grp {
++		fsl,pins = <
++			MX93_PAD_I2C2_SCL__LPI2C2_SCL			0x40000b9e
++			MX93_PAD_I2C2_SDA__LPI2C2_SDA			0x40000b9e
++		>;
++	};
 +
- static irqreturn_t pca9450_irq_handler(int irq, void *data)
- {
- 	struct pca9450 *pca9450 = data;
-@@ -708,8 +917,9 @@ static int pca9450_i2c_probe(struct i2c_client *i2c)
- 	const struct pca9450_regulator_desc	*regulator_desc;
- 	struct regulator_config config = { };
- 	struct pca9450 *pca9450;
--	unsigned int device_id, i;
-+	unsigned int device_id, i, val;
- 	unsigned int reset_ctrl;
-+	bool pmic_trim = false;
- 	int ret;
- 
- 	if (!i2c->irq) {
-@@ -721,6 +931,22 @@ static int pca9450_i2c_probe(struct i2c_client *i2c)
- 	if (!pca9450)
- 		return -ENOMEM;
- 
-+	pca9450->regmap = devm_regmap_init_i2c(i2c,
-+					       &pca9450_regmap_config);
-+	if (IS_ERR(pca9450->regmap)) {
-+		dev_err(&i2c->dev, "regmap initialization failed\n");
-+		return PTR_ERR(pca9450->regmap);
-+	}
-+
-+	ret = regmap_read(pca9450->regmap, PCA9450_REG_PWRCTRL, &val);
-+	if (ret) {
-+		dev_err(&i2c->dev, "Read device id error\n");
-+		return ret;
-+	}
-+
-+	if (val & PCA9450_REG_PWRCTRL_TOFF_DEB)
-+		pmic_trim = true;
-+
- 	switch (type) {
- 	case PCA9450_TYPE_PCA9450A:
- 		regulator_desc = pca9450a_regulators;
-@@ -730,6 +956,10 @@ static int pca9450_i2c_probe(struct i2c_client *i2c)
- 		regulator_desc = pca9450bc_regulators;
- 		pca9450->rcnt = ARRAY_SIZE(pca9450bc_regulators);
- 		break;
-+	case PCA9450_TYPE_PCA9451A:
-+		regulator_desc = pca9451a_regulators;
-+		pca9450->rcnt = ARRAY_SIZE(pca9451a_regulators);
-+		break;
- 	default:
- 		dev_err(&i2c->dev, "Unknown device type");
- 		return -EINVAL;
-@@ -741,13 +971,6 @@ static int pca9450_i2c_probe(struct i2c_client *i2c)
- 
- 	dev_set_drvdata(&i2c->dev, pca9450);
- 
--	pca9450->regmap = devm_regmap_init_i2c(i2c,
--					       &pca9450_regmap_config);
--	if (IS_ERR(pca9450->regmap)) {
--		dev_err(&i2c->dev, "regmap initialization failed\n");
--		return PTR_ERR(pca9450->regmap);
--	}
--
- 	ret = regmap_read(pca9450->regmap, PCA9450_REG_DEV_ID, &device_id);
- 	if (ret) {
- 		dev_err(&i2c->dev, "Read device id error\n");
-@@ -756,7 +979,8 @@ static int pca9450_i2c_probe(struct i2c_client *i2c)
- 
- 	/* Check your board and dts for match the right pmic */
- 	if (((device_id >> 4) != 0x1 && type == PCA9450_TYPE_PCA9450A) ||
--	    ((device_id >> 4) != 0x3 && type == PCA9450_TYPE_PCA9450BC)) {
-+	    ((device_id >> 4) != 0x3 && type == PCA9450_TYPE_PCA9450BC) ||
-+	    ((device_id >> 4) != 0x9 && type == PCA9450_TYPE_PCA9451A)) {
- 		dev_err(&i2c->dev, "Device id(%x) mismatched\n",
- 			device_id >> 4);
- 		return -EINVAL;
-@@ -767,7 +991,16 @@ static int pca9450_i2c_probe(struct i2c_client *i2c)
- 		struct regulator_dev *rdev;
- 		const struct pca9450_regulator_desc *r;
- 
--		r = &regulator_desc[i];
-+		if (type == PCA9450_TYPE_PCA9451A &&
-+		    !strcmp((&regulator_desc[i])->desc.name, "buck1") && pmic_trim) {
-+			r = &regulator_desc[i + 1];
-+			i = i + 1;
-+		} else if (type == PCA9450_TYPE_PCA9451A &&
-+			   !strcmp((&regulator_desc[i])->desc.name, "buck1")) {
-+			r = &regulator_desc[i];
-+			i = i + 1;
-+		} else
-+			r = &regulator_desc[i];
- 		desc = &r->desc;
- 
- 		config.regmap = pca9450->regmap;
-@@ -847,7 +1080,8 @@ static int pca9450_i2c_probe(struct i2c_client *i2c)
- 	}
- 
- 	dev_info(&i2c->dev, "%s probed.\n",
--		type == PCA9450_TYPE_PCA9450A ? "pca9450a" : "pca9450bc");
-+		type == PCA9450_TYPE_PCA9450A ? "pca9450a" :
-+		(type == PCA9450_TYPE_PCA9451A ? "pca9451a" : "pca9450bc"));
- 
- 	return 0;
- }
-@@ -865,6 +1099,10 @@ static const struct of_device_id pca9450_of_match[] = {
- 		.compatible = "nxp,pca9450c",
- 		.data = (void *)PCA9450_TYPE_PCA9450BC,
- 	},
-+	{
-+		.compatible = "nxp,pca9451a",
-+		.data = (void *)PCA9450_TYPE_PCA9451A,
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, pca9450_of_match);
-diff --git a/include/linux/regulator/pca9450.h b/include/linux/regulator/pca9450.h
-index 3c01c2bf84f5..5dd79f52165a 100644
---- a/include/linux/regulator/pca9450.h
-+++ b/include/linux/regulator/pca9450.h
-@@ -9,6 +9,7 @@
- enum pca9450_chip_type {
- 	PCA9450_TYPE_PCA9450A = 0,
- 	PCA9450_TYPE_PCA9450BC,
-+	PCA9450_TYPE_PCA9451A,
- 	PCA9450_TYPE_AMOUNT,
- };
- 
-@@ -93,6 +94,7 @@ enum {
- 	PCA9450_MAX_REGISTER	    = 0x2F,
- };
- 
-+#define PCA9450_REG_PWRCTRL_TOFF_DEB    BIT(5)
- /* PCA9450 BUCK ENMODE bits */
- #define BUCK_ENMODE_OFF			0x00
- #define BUCK_ENMODE_ONREQ		0x01
++	pinctrl_pcal6524: pcal6524grp {
++		fsl,pins = <
++			MX93_PAD_CCM_CLKO2__GPIO3_IO27			0x31e
++		>;
++	};
+ 	pinctrl_usdhc1: usdhc1grp {
+ 		fsl,pins = <
+ 			MX93_PAD_SD1_CLK__USDHC1_CLK		0x15fe
 -- 
 2.37.1
 
