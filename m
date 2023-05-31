@@ -2,132 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE33717848
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ADF2717841
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234608AbjEaHbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
+        id S234594AbjEaHad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232517AbjEaHbi (ORCPT
+        with ESMTP id S234615AbjEaHa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:31:38 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3B5E5
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:31:25 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.48.214]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N0X0U-1qG8Jq33SO-00wVdq; Wed, 31 May 2023 09:29:30 +0200
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-        id 16F453E7CB; Wed, 31 May 2023 09:29:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-        t=1685518165; bh=HpS8LrsnY/89NscygVkPsEBgTNTbHKpEGmsUMP/4T6Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wEOslFOPWf2p08nC8zApP5Rcoc6tiv/v6ERy4dGWcUUWrmTuj6q11wGLLkqqrj706
-         WLz0JzJsYSw/tI8bK5P97oE2bMKPLd3buMdXXfQ2Qr59505Ib/EfH3BZx9F1loHHxU
-         zTbg1mJTFRQv59eeJ32gfP9BJgg0wxr3D571i3Bg=
-Date:   Wed, 31 May 2023 09:29:24 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Leo Li <leoyang.li@nxp.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Kumar Gala <galak@kernel.crashing.org>
-Subject: Re: [PATCH v2 RESEND] soc/fsl/qe: fix usb.c build errors
-Message-ID: <ZHb3VD4OgqDd2oKR@fjasle.eu>
-References: <20230521225216.21795-1-rdunlap@infradead.org>
+        Wed, 31 May 2023 03:30:26 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE6C123;
+        Wed, 31 May 2023 00:30:09 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f3b5881734so6279890e87.0;
+        Wed, 31 May 2023 00:30:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685518208; x=1688110208;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Decr5ToKuusJ1vsOCi3GGboMucraQ2C0wQliP84kDVc=;
+        b=LtrOdGC7HJo1sApDCqRePuNWVdNNXV63xK9ISycJWamft6qwOtumOnVXflAwX6lFnm
+         JFjZAFJAXNyROl4nqsslRIpjXzpR4QP+WimLl/3zJqsOleavMjoI7ckDRqwQ8+EaidzQ
+         irPA70S61W0kkp8IawqhJKVGV0sJRPFbwZ7Pxsp/zAriJj4rMGl9nEUTaI+vK7wH6X6g
+         D6VYR9U5CYk8QAjKGMceTvX3RgPBQJKOgQF/iFYkfRRGc3Lc1waidQhPwyyFwk3uP1jo
+         Mlg7RgIeSYLwcbwdFs1mJJpCsWAngGw0iP9P2MWyxEDMIyfj6yie+FUMM9cu8US0pu6J
+         LtBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685518208; x=1688110208;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Decr5ToKuusJ1vsOCi3GGboMucraQ2C0wQliP84kDVc=;
+        b=TyW/Z74oVSr/zQq4V/M2KXLc2L12j+dn6Fr/Qjd0CN2CHFTnXCu7MuCCubxRjjrAEc
+         i0Zd8Xu65qy2FsTAruvmZglGnca/I1Tjdw70cmjB96oBvZEFHPFdvaDaJgqjx3Z5DhYk
+         fLZdYPo8x3F2CxSNIbmKznqKIAryjrjnlOyg17Yn83Dz81oYj2s0xKR4EXR4AFqO95fj
+         M7KUg0r0pd5NTssiAR0Sk9X0Ub4I4hZNKcFTMI2TL+48wgjlGzz/GwvXeu3+TgnZmzEX
+         0aQMJ3Pp68SBSISsV38BAl6+NDiYN58QGKciLF+rORC89Rl/b9VCRj9Cykbjj/L1wJ5j
+         GBQg==
+X-Gm-Message-State: AC+VfDxa+silfXMX30tFu4kbGARoAQRBluqM3O7EDvXNEL8eqlRfDc1o
+        brEMx9Q9/DT4nNu42Bmj+AffO3XZrLxg+g==
+X-Google-Smtp-Source: ACHHUZ6bUGgErD5qHlh8IDTMiiRSsiMsY0Sy2BjrFL/lJ52tDTu6aM/tYw+aZ3otauLHaaEkq7Ju9A==
+X-Received: by 2002:ac2:5237:0:b0:4f3:982a:8be1 with SMTP id i23-20020ac25237000000b004f3982a8be1mr1891949lfl.69.1685518207312;
+        Wed, 31 May 2023 00:30:07 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id q1-20020a1ce901000000b003f423dfc686sm19446289wmc.45.2023.05.31.00.30.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 00:30:06 -0700 (PDT)
+Message-ID: <90ad9b86-e03c-8e80-88d6-d514bbe9cacd@gmail.com>
+Date:   Wed, 31 May 2023 09:30:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] arm64: dts: mediatek: mt8183: kukui: Add scp
+ firmware-name
+Content-Language: en-US, ca-ES, es-ES
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230220093343.3447381-1-hsinyi@chromium.org>
+ <CAGXv+5E4_k1jKTnninYkuT6Tf=skB00AowHpM+hc8j_VFM-RfQ@mail.gmail.com>
+ <CAJMQK-hnK69iVJhqW_8UtKHHLQ3608Cb74Jk_b+xHH0BBu4yVw@mail.gmail.com>
+ <d39b0e77-e013-fe7e-9523-9bdbaacb5853@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <d39b0e77-e013-fe7e-9523-9bdbaacb5853@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230521225216.21795-1-rdunlap@infradead.org>
-X-Provags-ID: V03:K1:7aNwyNIJJGSwsSWIPPBCoqlbrWM1lrCsSwYfhj+nxprnIqzghd8
- j/UnBB7xn4z/O3bMZdwCnwu+sllhHuHQ67c9LORIPuBxHfh00uZ5KUPq/5MpX+jjxwUJMAJ
- Y6C00Sq4tZuCPiz6F1aURO30MU18l/y9gyUYnLTRdQvdQFteOKGecgPvTCZxvy6ZWMI0Rl2
- 2TGI7d6XRMv9fuzxYZKJQ==
-UI-OutboundReport: notjunk:1;M01:P0:I6wVgntK3Sg=;NSHbAXchRpYgja/Vb1QeEf5BXvp
- Z6oKfGH5z15YYNvK+7PnhU90nHWaN6Fqiw80Nwqa2UR8XgUl+ghc5lIDrYEqsG/aYtqeO+D9m
- hL6LOrbQKIPGS/c8uItjcNe2Y2ghWCUBc3PjYcQ71tDS1mvXiMdhPSeB94LFa+m8VL19BVn5/
- oVKbZOLnwwOPHQTqhivyIS5WtKkq01o5OAApkHtVaOoq+jp3wwdp7j5dS/8cdhA45aw6XD2dm
- 4bDFJJdLA0585If+XghsqRf9J+85XhztF11bbNx8aguCQpktsgw62vRLEPk46IdS4PbJzNuF2
- 1So3DrL8Gq4MjZfb4qHludFSRt5kETH5aq9UqNrv4BvkfHFByXLW6u3gETKJhU9YN65VQYuk5
- AMmGn52mjNBLn664WdNnH6H1APClRvMbiS5Qlw2dim0C1Z20LhZ+IiDtVXjAQt08rxJpF1rAI
- wBr8o1OYq7wABebD/gzrDR6y6nn2qT7iOVT+p7p82MoJd8C8RqzHFKiCXV1JqLUQiImjVAsH5
- 0zYJt0FZGxIrWBQQO3LVnQEkb2iGcdtiqRODFUSw9FHqwUqCK607DQ8vBYm0lFR1cMAlxjbOD
- PgjcuvKvj6frxNEb/x+bZURa3QRdmARwr0W5Lbi3qYnKoX5wJ8VsBbPUWsma2n/M4SWjbDDrh
- 3q39eVjP9FAtvmok8Uq6GfSQMnMKjPY1r/kH3zI5ww==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 03:52:16PM -0700 Randy Dunlap wrote:
-> Fix build errors in soc/fsl/qe/usb.c when QUICC_ENGINE is not set.
-> This happens when PPC_EP88XC is set, which selects CPM1 & CPM.
-> When CPM is set, USB_FSL_QE can be set without QUICC_ENGINE
-> being set. When USB_FSL_QE is set, QE_USB deafults to y, which
-> causes build errors when QUICC_ENGINE is not set. Making
-> QE_USB depend on QUICC_ENGINE prevents QE_USB from defaulting to y.
+
+
+On 30/05/2023 09:12, AngeloGioacchino Del Regno wrote:
+> Il 30/05/23 07:12, Hsin-Yi Wang ha scritto:
+>> On Tue, Feb 21, 2023 at 11:25 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
+>>>
+>>> On Mon, Feb 20, 2023 at 5:34 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>>>>
+>>>> The upstream SCP firmware path is /lib/firmware/mediatek/mt8183/scp.img
+>>>>
+>>>> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+>>>
+>>> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+>>
+>> hi Matthias,
+>>
+>> Kindly ping on the patch, thanks!
 > 
-> Fixes these build errors:
+> Agreed. Matthias, please pick this one.
 > 
-> drivers/soc/fsl/qe/usb.o: in function `qe_usb_clock_set':
-> usb.c:(.text+0x1e): undefined reference to `qe_immr'
-> powerpc-linux-ld: usb.c:(.text+0x2a): undefined reference to `qe_immr'
-> powerpc-linux-ld: usb.c:(.text+0xbc): undefined reference to `qe_setbrg'
-> powerpc-linux-ld: usb.c:(.text+0xca): undefined reference to `cmxgcr_lock'
-> powerpc-linux-ld: usb.c:(.text+0xce): undefined reference to `cmxgcr_lock'
+> Hsin-Yi, can you also please send a version of this patch for stable?
 > 
-> Fixes: 5e41486c408e ("powerpc/QE: add support for QE USB clocks routing")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/all/202301101500.pillNv6R-lkp@intel.com/
-> Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Leo Li <leoyang.li@nxp.com>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Nicolas Schier <nicolas@fjasle.eu>
-> Cc: Qiang Zhao <qiang.zhao@nxp.com>
-> Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: Kumar Gala <galak@kernel.crashing.org>
-> ---
 
-I can reproduce the build error and confirm the build dependency fix (but I
-have no hardware for testing).
-
-Acked-by: Nicolas Schier <nicolas@jasle.eu>
-
-
-
-> v2: drop Anton Vorontsov <avorontsov@ru.mvista.com>; rebase/resend
-> 
->  drivers/soc/fsl/qe/Kconfig |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff -- a/drivers/soc/fsl/qe/Kconfig b/drivers/soc/fsl/qe/Kconfig
-> --- a/drivers/soc/fsl/qe/Kconfig
-> +++ b/drivers/soc/fsl/qe/Kconfig
-> @@ -62,6 +62,7 @@ config QE_TDM
->  
->  config QE_USB
->  	bool
-> +	depends on QUICC_ENGINE
->  	default y if USB_FSL_QE
->  	help
->  	  QE USB Controller support
-
--- 
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
+Applied thanks!
