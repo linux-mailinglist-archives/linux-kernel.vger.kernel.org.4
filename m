@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171E5718B87
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 23:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5E8718B94
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 23:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjEaVCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 17:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
+        id S229922AbjEaVJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 17:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjEaVCU (ORCPT
+        with ESMTP id S229473AbjEaVJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 17:02:20 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1192E132
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 14:02:18 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-77479a531abso1735339f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 14:02:18 -0700 (PDT)
+        Wed, 31 May 2023 17:09:17 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13A7B3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 14:09:15 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f606e111d3so7085e9.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 14:09:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1685566937; x=1688158937;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1685567354; x=1688159354;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t7ze61W5mDpGIXFew1uV1U9LtQbd68RSAtyboOvbmuQ=;
-        b=iRTtzqloS/gnS3kPw16JPgRkCtoop1wn7no76IDFRJbNOOSaiBnCZtZ8jevulOJsWn
-         ANQq5Gp1IElGmG5zY8WjcnkGId6NiE8sc1seo8GRQXd8yWddGc0IMDS0oBTKLRpgqD/A
-         8JyYkyRhGIL5AQyIiaJmphoejPbvzCTvlidwM=
+        bh=4iMmkUuYGN1wsHW1StSPldTBX3FYQkgI1Gpxtxyr2Uo=;
+        b=GPhrX423T5+5XiyVCsehdQL0GiVyyx1i0L5dfg671U4aTQ5DldA6R7/IhwFtGLSu1p
+         a2rbeXz7vpqRU49TrWHNRlUuW12I/LvpE/boLoEq+QZ3o1MYZA5mF1R6xQFKlE3BA7Oz
+         Y81AyNsBUVEEBfMzSk1VY39jiE/g4T2NmBgYaR0mIPZDS44XZb5IXyyb1o334hW++dn7
+         YPjrta8hBeYHQjk5PXHaTRkwdiI+trck+EEavB8lUKd4aABAqVGNjIMxtHhH0yX2G8ti
+         1T427C+zWU8UnFSENDNpRYlQnK1u0KZYsx6UjgV6sro/Evgyr29/wjBSQw9HF+nSkcaJ
+         8Qww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685566937; x=1688158937;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=t7ze61W5mDpGIXFew1uV1U9LtQbd68RSAtyboOvbmuQ=;
-        b=CzzQNJuxKeN32gcubVYQggJZbqXBNh0qHD0Y43YCqm6uGHik6Mezz9E0lfQ0d4PA6L
-         5vSyD8gixbnDJ1zTM2acMNLmCe+2B90D5bF7XQ7zMMq9B/6WSIdhDPFddSWV2YDyb8AA
-         6sAxooD/lTFOYXlTUEE3y8uDc7f0D8WXOzgWRUQKmLPQC9IU8D+uUYhql9MsioCfdgZp
-         TSyFZOLkOrwktEY2G50TveUNtaWqyxP9zMcqXh0c59d0VYTRrIAWCnPHalencCawi9Oq
-         VO4eCzEOGnILzMDoOP6t4dCMAVY0D8TpwmPh2AGK33mW4f9ZRKXziM+8H2xYCGR3DcMi
-         uYyQ==
-X-Gm-Message-State: AC+VfDxKg/G4MsgbEAzTqycRmBKfN2tujTHKuQczHwuVLe2XLQhQGhpF
-        QpYit7n6fcFqyAnZt4ZZc9hjTw==
-X-Google-Smtp-Source: ACHHUZ77QomxYCAi5cPyxHMuVz8JK+42g9/BD2jLICSO9SzgvyhfKgjsmMXuyu95Qjf53d9ryxIsJA==
-X-Received: by 2002:a05:6e02:1d8d:b0:338:4b36:5097 with SMTP id h13-20020a056e021d8d00b003384b365097mr2204435ila.1.1685566937370;
-        Wed, 31 May 2023 14:02:17 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id t10-20020a92d14a000000b0032f240a0802sm3353407ilg.48.2023.05.31.14.02.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 14:02:16 -0700 (PDT)
-Message-ID: <55e5f74c-6599-e127-cc68-06f1a52711c5@linuxfoundation.org>
-Date:   Wed, 31 May 2023 15:02:16 -0600
+        d=1e100.net; s=20221208; t=1685567354; x=1688159354;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4iMmkUuYGN1wsHW1StSPldTBX3FYQkgI1Gpxtxyr2Uo=;
+        b=lTwNcvUwkvTtwWHXSjtq6HwFRmjVGYvpD8xm6mgdSHQ5COKx0J6ejohTck3yBNNvvN
+         8m2iB1tdS2+jFXYPlWIh7F17rF6bixzhRz19vrgOkvGK2XUc76lq9E/qeT2ltdAyacN2
+         wZ8OLy6qUXSBhIXYgfP8WQJnN6zHmy3CsYHykTfvSJ3PiI1LhkhLvd9JGBZL5QzAfgNK
+         Xzt+yDfFHr4T2frvbR80o17Ra81Hj8mFMD1nbdEg9w9VVonVe/A4935uBR9Rfee/YiPg
+         VRMl5QKH7grvqnUmyoslLLFu0XD05n/wWEN2ZWsUjkwCYN26RlqBbQVOZeCgLwgQqz/9
+         vlVg==
+X-Gm-Message-State: AC+VfDx9wKIPmBc0bbH0NMKUZAYZTXWCNx2yTIEw8TGy4+nQ8K/G+paf
+        mUkyBr+CdNeeAJXbe5AvNWTpyFduaVQXUsJKErR46w==
+X-Google-Smtp-Source: ACHHUZ6WVk08Z0g3UwGrixJdrfy8qflKdJLYUsk4Bum8cy4CrqhSLspr9E7h+SZLYrZub6o3/2Nmr64JQ67btOOOxCo=
+X-Received: by 2002:a05:600c:5108:b0:3f4:1dce:3047 with SMTP id
+ o8-20020a05600c510800b003f41dce3047mr67525wms.2.1685567353943; Wed, 31 May
+ 2023 14:09:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Takashi Iwai <tiwai@suse.de>
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: Linux 6.4-rc4 - audio doesn't work
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <168553315664.20663.13753087625689463092-0@git.sr.ht> <20230531191909.95136-1-kuniyu@amazon.com>
+In-Reply-To: <20230531191909.95136-1-kuniyu@amazon.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 31 May 2023 23:09:02 +0200
+Message-ID: <CANn89iK13jkbKXv-rKiUbTqMrk3KjVPGYH_Vv7FtJJ5pTdUAYQ@mail.gmail.com>
+Subject: Re: [PATCH linux] net/ipv4: ping_group_range: allow GID from
+ 2147483648 to 4294967294
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     akihirosuda@git.sr.ht, akihiro.suda.cz@hco.ntt.co.jp,
+        davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, segoon@openwall.com,
+        suda.kyoto@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,20 +73,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All,
+On Wed, May 31, 2023 at 9:19=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.co=
+m> wrote:
+>
+> From: ~akihirosuda <akihirosuda@git.sr.ht>
+> Date: Wed, 31 May 2023 19:42:49 +0900
+> > From: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+> >
+> > With this commit, all the GIDs ("0 4294967294") can be written to the
+> > "net.ipv4.ping_group_range" sysctl.
+> >
+> > Note that 4294967295 (0xffffffff) is an invalid GID (see gid_valid() in
+> > include/linux/uidgid.h), and an attempt to register this number will ca=
+use
+> > -EINVAL.
+> >
+> > Prior to this commit, only up to GID 2147483647 could be covered.
+> > Documentation/networking/ip-sysctl.rst had "0 4294967295" as an example
+> > value, but this example was wrong and causing -EINVAL.
+> >
+> > In the implementation, proc_dointvec_minmax is no longer used because i=
+t
+> > does not support numbers from 2147483648 to 4294967294.
+>
+> Good catch.
+>
+> I think we can use proc_doulongvec_minmax() instead of open coding.
+>
+> With the diff below:
+>
+> ---8<---
+> # sysctl -a | grep ping
+> net.ipv4.ping_group_range =3D 0   2147483647
+> # sysctl -w net.ipv4.ping_group_range=3D"0 4294967295"
+> sysctl: setting key "net.ipv4.ping_group_range": Invalid argument
+> # sysctl -w net.ipv4.ping_group_range=3D"0 4294967294"
+> net.ipv4.ping_group_range =3D 0 4294967294
+> # sysctl -a | grep ping
+> net.ipv4.ping_group_range =3D 0   4294967294
+> ---8<---
+>
+> ---8<---
+> diff --git a/include/net/ping.h b/include/net/ping.h
+> index 9233ad3de0ad..9b401b9a9d35 100644
+> --- a/include/net/ping.h
+> +++ b/include/net/ping.h
+> @@ -20,7 +20,7 @@
+>   * gid_t is either uint or ushort.  We want to pass it to
+>   * proc_dointvec_minmax(), so it must not be larger than MAX_INT
+>   */
+> -#define GID_T_MAX (((gid_t)~0U) >> 1)
+> +#define GID_T_MAX ((gid_t)~0U)
+>
+>  /* Compatibility glue so we can support IPv6 when it's compiled as a mod=
+ule */
+>  struct pingv6_ops {
+> diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
+> index 6ae3345a3bdf..11d401958673 100644
+> --- a/net/ipv4/sysctl_net_ipv4.c
+> +++ b/net/ipv4/sysctl_net_ipv4.c
+> @@ -35,8 +35,8 @@ static int ip_ttl_max =3D 255;
+>  static int tcp_syn_retries_min =3D 1;
+>  static int tcp_syn_retries_max =3D MAX_TCP_SYNCNT;
+>  static int tcp_syn_linear_timeouts_max =3D MAX_TCP_SYNCNT;
+> -static int ip_ping_group_range_min[] =3D { 0, 0 };
+> -static int ip_ping_group_range_max[] =3D { GID_T_MAX, GID_T_MAX };
+> +static unsigned long ip_ping_group_range_min[] =3D { 0, 0 };
+> +static unsigned long ip_ping_group_range_max[] =3D { GID_T_MAX, GID_T_MA=
+X };
+>  static u32 u32_max_div_HZ =3D UINT_MAX / HZ;
+>  static int one_day_secs =3D 24 * 3600;
+>  static u32 fib_multipath_hash_fields_all_mask __maybe_unused =3D
+> @@ -165,8 +165,8 @@ static int ipv4_ping_group_range(struct ctl_table *ta=
+ble, int write,
+>                                  void *buffer, size_t *lenp, loff_t *ppos=
+)
+>  {
+>         struct user_namespace *user_ns =3D current_user_ns();
+> +       unsigned long urange[2];
+>         int ret;
+> -       gid_t urange[2];
+>         kgid_t low, high;
+>         struct ctl_table tmp =3D {
+>                 .data =3D &urange,
+> @@ -179,7 +179,7 @@ static int ipv4_ping_group_range(struct ctl_table *ta=
+ble, int write,
+>         inet_get_ping_group_range_table(table, &low, &high);
+>         urange[0] =3D from_kgid_munged(user_ns, low);
+>         urange[1] =3D from_kgid_munged(user_ns, high);
+> -       ret =3D proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
+> +       ret =3D proc_doulongvec_minmax(&tmp, write, buffer, lenp, ppos);
+>
+>         if (write && ret =3D=3D 0) {
+>                 low =3D make_kgid(user_ns, urange[0]);
+> ---8<---
 
-I updated my laptop to Linux 6.4-rc4 and audio stopped working.
-I haven't done any debugging yet since this is my primary system.
 
-Here are the audio hardware details:
-
-lspci | grep Audio
-05:00.1 Audio device: Advanced Micro Devices, Inc. [AMD/ATI] Renoir Radeon High Definition Audio Controller
-05:00.5 Multimedia controller: Advanced Micro Devices, Inc. [AMD] ACP/ACP3X/ACP6x Audio Coprocessor (rev 01)
-05:00.6 Audio device: Advanced Micro Devices, Inc. [AMD] Family 17h/19h HD Audio Controller
-
-I see just the Dummy Output device in sound settings. I will
-start poking around later on today.
-
-thanks,
--- Shuah
+Will this work on 32bit build ?
