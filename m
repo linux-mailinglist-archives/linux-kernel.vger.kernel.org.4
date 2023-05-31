@@ -2,161 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF9F71888F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEE6718890
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjEaRhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
+        id S229898AbjEaRiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjEaRho (ORCPT
+        with ESMTP id S229473AbjEaRiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:37:44 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C822BE;
-        Wed, 31 May 2023 10:37:41 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8BxlPDkhXdk4wcDAA--.6671S3;
-        Thu, 01 Jun 2023 01:37:40 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxi7bjhXdkx7iCAA--.15108S3;
-        Thu, 01 Jun 2023 01:37:39 +0800 (CST)
-Message-ID: <b0faa79d-21e2-fe5d-f9bc-3abbf488ec1c@loongson.cn>
-Date:   Thu, 1 Jun 2023 01:37:39 +0800
+        Wed, 31 May 2023 13:38:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87252125
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:38:16 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685554694;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A857xLioc7wFyg93dl7T2qqOgf/640iThyj+3V7o+wA=;
+        b=bvFVrgaWD4+lw487AUcr4NNPBWFN+SQJjQNqtODltmv97QeyUIk67FkUJGGOk24+n6Q/zF
+        NhQMB8APQ/0+JasMdCyaodpkgf2s3Xul2tJmL03QNVUJaVkMKz6bb+eFkG5rVou9uRa+DE
+        yzmsnxry0dApgIsqWus8jEl8tcMDcTgWxJkit23RmolnKmWjJfn3j9v6yhOJN3sq1sfPdn
+        eo1BHnMooWny1Hwmae7nz/4xF/Y1kE8D5LUu4/LUCIjNxh4Jek2Flm5P8E+BmT50NAUlbU
+        lNd4WlhYAhI7jNC6MsL99oZ9ccxqHhAkop4LyB4LXsRox7cR7eUXa3E0InIguw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685554694;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A857xLioc7wFyg93dl7T2qqOgf/640iThyj+3V7o+wA=;
+        b=55LVieDR2fyNm6QK61sGsHZAn42vVfPxhqeSlfUHOlSjH6vIAWPOVXZfJF7/irRu9mmb6Q
+        vzJIvPRBWlsCAbDg==
+To:     Andrey Vagin <avagin@openvz.org>
+Cc:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Pavel Emelyanov <xemul@openvz.org>,
+        Mike Rapoport <mike.rapoport@gmail.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Adrian Reber <areber@redhat.com>
+Subject: Re: [RFD] posix-timers: CRIU woes
+In-Reply-To: <CANaxB-xFs2ZYnFBTtQsZxAGAJ6o9cgWM=k=d_EBXuOK5djLgkA@mail.gmail.com>
+References: <20230425181827.219128101@linutronix.de>
+ <20230425183312.932345089@linutronix.de> <ZFUXrCZtWyNG3Esi@lothringen>
+ <87zg6i2xn3.ffs@tglx> <87v8h62vwp.ffs@tglx> <878rdy32ri.ffs@tglx>
+ <87v8h126p2.ffs@tglx> <875y911xeg.ffs@tglx> <87ednpyyeo.ffs@tglx>
+ <CANaxB-wV9iUT6=Y9nZCWbJhiscMrnAQh4fUXs7Tb8pr=-HwSYQ@mail.gmail.com>
+ <cc8aa6a4-a187-f3ad-fec9-05f037a3886d@virtuozzo.com> <87r0rnciqo.ffs@tglx>
+ <CANaxB-xFs2ZYnFBTtQsZxAGAJ6o9cgWM=k=d_EBXuOK5djLgkA@mail.gmail.com>
+Date:   Wed, 31 May 2023 19:38:14 +0200
+Message-ID: <87edmwflkp.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] linux/pci.h: add a dummy implement for pci_clear_master()
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        kernel test robot <lkp@intel.com>
-References: <ZHeA6eB5FocARdwl@bhelgaas>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <ZHeA6eB5FocARdwl@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bxi7bjhXdkx7iCAA--.15108S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxGF15tF18ur48Ar4UWw1rWFg_yoW5CF4kpa
-        yUta4jkr4kJr4Fkwn2qw1SvFyFyw1fXa4Fkr98J3s09398ZFyFqr4DtF4DCF9xXr1FyF42
-        vr4Yga47uF45ZaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
-        14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv
-        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-        AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
-        67AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
-        8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5
-        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
-        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-        daVFxhVjvjDU0xZFpf9x07jwBMNUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Andrey!
 
-On 2023/6/1 01:16, Bjorn Helgaas wrote:
-> On Wed, May 31, 2023 at 12:25:10PM +0800, Sui Jingfeng wrote:
->> On 2023/5/31 04:11, Bjorn Helgaas wrote:
->>> On Tue, May 30, 2023 at 06:16:55PM +0800, Sui Jingfeng wrote:
->>>> As some arch(m68k for example) doesn't have config_pci enabled, drivers[1]
->>>> call pci_clear_master() without config_pci guard can not built.
->>>>
->>>>      drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:
->>>>      In function 'etnaviv_gpu_pci_fini':
->>>>>> drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:32:9:
->>>>      error: implicit declaration of function 'pci_clear_master';
->>>>      did you mean 'pci_set_master'? [-Werror=implicit-function-declaration]
->>>>         32 |         pci_clear_master(pdev);
->>>>            |         ^~~~~~~~~~~~~~~~
->>>>            |         pci_set_master
->>>>      cc1: some warnings being treated as errors
->>>>
->>>> [1] https://patchwork.freedesktop.org/patch/539977/?series=118522&rev=1
->>> I don't mind adding a stub if it's needed, but I don't understand why
->>> it's needed here.
->> For a single driver that supports both platform devices and PCI devices,
+On Thu, May 11 2023 at 18:21, Andrey Vagin wrote:
+> On Thu, May 11, 2023 at 2:36=E2=80=AFAM Thomas Gleixner <tglx@linutronix.=
+de> wrote:
 >>
->> Sometimes there is no way to separate the PCI driver part and the platform
->> driver part cleanly and clearly.
->>
->> For example, the module_init() and module_exit() functions,
->>
->> where we have to register PCI drivers and platform drivers there.
->>
->> We can't simply let the entire driver depend on PCI in Kconfig,
->>
->> This will make this driver unable to compile, which it's originally could.
->>
->> The PCI core could do such a thing for us, and
->>
->> There is no need to introduce a driver-specific guard then.
->>
->>
->> There is already a dummy stub for pci_set_master().
->>
->> Therefore, pci_clear_master() should also have a counterpart.
->>
->> They should emerge in pairs.
->>
->> This could probably eliminate pain for PCI driver writers,
->>
->> This patch is still useful.
->>
->>
->>>    The caller is in etnaviv_pci_drv.c, and if I
->>> understand the patch at [1], etnaviv_pci_drv.c is only compiled when
->>> CONFIG_PCI=y.
->> Yes, you are right. This is the right thing to do for the driver, though.
->>
->> Pure PCI device driver does not need to worry about this.
->>
->> Like drm/ast, drm/amdgpu, drm/radeon, etc.
->>
->> But drm/etnaviv is special; it's a platform driver that could pass the
->> compile test originally.
->>
->>
->> When patching it (Etnaviv) with PCI device driver support,
->>
->> This forces the PCI driver writer to add another config option.
->>
->> (which depends on the PCI config option.) in the Kconfig.
->>
->> For my case, it's theDRM_ETNAVIV_PCI_DRIVER config option.
-> So if I understand correctly, you would prefer not to add the
-> DRM_ETNAVIV_PCI_DRIVER config option, and if we add this stub, you
-> won't need to add it?
+>> You know the UABI regression rules of the kernel...
 >
-> That's a good reason to add this patch.
+> There is no rule without exceptions... With all pros and cons, we may
+> consider this case as an exception. From our side, we will try to make
+> everything to minimize the impact. Here are steps off the top of my
+> head:
+> * releasing the criu fix before the kernel release.
+> * update packages in Linux distros (Debian, Ubuntu, Fedora, and
+>   others that we will find).
+> * send an announcement to the criu mailing list and to users that we know.
+> * add the error to FAQ.
+> * create a GitHub issue with a full description.
 
-Yes, please add this patch.
+Thanks for this plan. After digging deeper I managed to resolve the
+actual problem I was chasing without changing that ID generator at
+all.
 
-Otherwise, other people may suffer from the same issue someday.
+The main pain point of having to do that lookup from the signal delivery
+path is gone, which made it trivial to do the fix for the SIG_IGN mess
+w/o these global lookups too.
 
-After  this patch added,  I will try respin my etnaviv patch set.
+Addressing this global ID issues I pointed out becomes therefore an
+orthogonal issue which we can handle completely independent of the
+kernel internal problems I'm trying to address.
 
-If the PCI core could shield the hazard for us.
+I still think we should do that for sanity sake, but we can stage that
+properly without dependencies outside of this particular ABI
+problem. That makes me way more comfortable as that's something which
+can be in the worst case reverted without doing any other damage.
 
-I would prefer my etnaviv don't introduce any config option.
+Thanks,
 
-Compile anywhere at any case.
-
-> Bjorn
-
--- 
-Jingfeng
-
+        tglx
