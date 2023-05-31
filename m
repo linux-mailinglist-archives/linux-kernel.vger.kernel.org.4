@@ -2,140 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7C67186B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 922967186AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233660AbjEaPtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
+        id S232226AbjEaPsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbjEaPtP (ORCPT
+        with ESMTP id S230501AbjEaPsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:49:15 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E63E8E;
-        Wed, 31 May 2023 08:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8oJ7XQjQQvPTBsFSzE7OAaziM4q+gdTbG0V6lcVctM8=; b=NwCLHsXKkQrP2W6vUDYbEtg+Ot
-        rxSrurOqvx3cYriiqxS1kFmmdVm6FYxAOdzb5v+XlxVXtmHHdRaZQwUGRaZhBDCQ1YRwRQfakQsJI
-        yfPuMM3MvdrLuQ4VRtVfRAmnloeQWodAC7XYLTnvtYDU8zPGJjn0wy4rCpv9KRWiWpBhK7tlHj8Wk
-        y5Leq2hXV136MifEnzPFEARHtWM+eN4pn5EEyrQj4FiB0SwSStKMstI5T6xEzXr3XEKia4SmwByKg
-        fpMVZ8B+9OtwtxRoOzwa06XBUKUsc1J8lRks2BEBrENxP0ZLOF3avAAvw04fj775SW0/Oc5jKQEf3
-        Fc3yfDsg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q4O3x-00FVGr-2s;
-        Wed, 31 May 2023 15:48:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7D8E33002A9;
-        Wed, 31 May 2023 17:48:32 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4D069243D244B; Wed, 31 May 2023 17:48:32 +0200 (CEST)
-Date:   Wed, 31 May 2023 17:48:32 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Tianyu Lan <ltykernel@gmail.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "srutherford@google.com" <srutherford@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
-        "sterritt@google.com" <sterritt@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>,
-        "pangupta@amd.com" <pangupta@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [RFC PATCH V6 02/14] x86/sev: Add Check of #HV event in path
-Message-ID: <20230531154832.GA428966@hirez.programming.kicks-ass.net>
-References: <20230515165917.1306922-1-ltykernel@gmail.com>
- <20230515165917.1306922-3-ltykernel@gmail.com>
- <20230516093225.GD2587705@hirez.programming.kicks-ass.net>
- <851f6305-2145-d756-91e3-55ab89bfcd42@gmail.com>
- <20230517130943.GE2665450@hirez.programming.kicks-ass.net>
- <BYAPR21MB16887196D3DFFCB52EAC546AD748A@BYAPR21MB1688.namprd21.prod.outlook.com>
+        Wed, 31 May 2023 11:48:36 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6231C97
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:48:35 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-33bcc8f0d21so822905ab.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:48:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685548115; x=1688140115;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xh+NM7DUxAEzTOJt7Ae/1UKGsTT1CaBWPKgHIK+Ua4s=;
+        b=TeV2nuosxCCQSaB5ZclhgFC3ci1TbhrLaLO7YeIa++CfuP3tLyp3XgFpxvgwElWYJB
+         tHOvz9UOWflYz0udLqW8SlXtramYgCn2tvTozp6JaEpMJEnUOIOc9htdjbFb9wvYSRcL
+         Q9sgHw0VEfQJl89cB8p6S3BmlVvQ51rl2tUtJAP0ZFYUgvBVXjltJCIrCS2NNtp+8Dxx
+         Ctg+EYHhUNQDa0WFaYpG+Dq1/lO8dS++A7XL0PkNnCt87heuEDDhP4nKE2bgY3mhTx8o
+         ejL2+csFEJTi2h+Flhy8H6ZBi8Zxqv3ks3EYKU54mH0IQkZju6Ym/N47UBAkeuuRGS/b
+         MQQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685548115; x=1688140115;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xh+NM7DUxAEzTOJt7Ae/1UKGsTT1CaBWPKgHIK+Ua4s=;
+        b=Y/8TvhH8tf7ktguwxk6deG6p51alKWHDvU2kW7fdZP0IJhqNU4GEDPyLp6L6w1ak5/
+         kedySkOFygcDLz4zIkCJEr4iYXvcmkte+c6fY4UArArtIRZxK5YBX4mdjE7Be9ASfzV+
+         mDY/f4PfPaoujU4L0bip3cvyQjy02nQ7dnBzBQJ8uIouHi0XZeK4AXecrKEnp/+ox3ko
+         +fqf//XIx/n/YwTUwvOalPTt3mPfbs3FGKZCakPl/fz7yWTgmfcQL3Ratqs5TeWX+aZh
+         6r7f0cFEp+UgWacMo4F30HUbkXCgtNU37hhks6l8JvRgxUlLREwehvThrz+kO5dVD3gR
+         zhEw==
+X-Gm-Message-State: AC+VfDwGgQ0UNnJ3OUrt3id+RNeKQ96vss32dzcc1vynajsrYrOZbngf
+        aWbm2U9lIiIpZmomCnQtaqbbDA==
+X-Google-Smtp-Source: ACHHUZ7olLMdzgJo49hRI+Brw+8ZbYH7IxOyZnrYIxdhWvtRY4fllkEJYDoAKqWowWyMCg9AG6Kdvg==
+X-Received: by 2002:a6b:8d53:0:b0:774:80fc:11a9 with SMTP id p80-20020a6b8d53000000b0077480fc11a9mr1999696iod.1.1685548114657;
+        Wed, 31 May 2023 08:48:34 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id f16-20020a02a110000000b004091d72f62dsm1552201jag.85.2023.05.31.08.48.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 08:48:33 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Christoph Hellwig <hch@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        David Howells <dhowells@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Jason Gunthorpe <jgg@ziepe.ca>
+In-Reply-To: <20230526214142.958751-1-dhowells@redhat.com>
+References: <20230526214142.958751-1-dhowells@redhat.com>
+Subject: Re: [PATCH v4 0/3] block: Make old dio use
+ iov_iter_extract_pages() and page pinning
+Message-Id: <168554811322.183150.13490236053670818511.b4-ty@kernel.dk>
+Date:   Wed, 31 May 2023 09:48:33 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB16887196D3DFFCB52EAC546AD748A@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 02:50:50PM +0000, Michael Kelley (LINUX) wrote:
 
-> I'm jumping in to answer some of the basic questions here.  Yesterday,
-> there was a discussion about nested #HV exceptions, so maybe some of
-> this is already understood, but let me recap at a higher level, provide some
-> references, and suggest the path forward.
+On Fri, 26 May 2023 22:41:39 +0100, David Howells wrote:
+> Here are three patches that go on top of the similar patches for bio
+> structs now in the block tree that make the old block direct-IO code use
+> iov_iter_extract_pages() and page pinning.
+> 
+> There are three patches:
+> 
+>  (1) Make page pinning neither add nor remove a pin to/from a ZERO_PAGE,
+>      thereby allowing the dio code to insert zero pages in the middle of
+>      dealing with pinned pages.  This also mitigates a potential problem
+>      whereby userspace could force the overrun the pin counter of a zero
+>      page.
+> 
+> [...]
 
-> 2) For the Restricted Interrupt Injection code, Tianyu will look at
-> how to absolutely minimize the impact in the hot code paths,
-> particularly when SEV-SNP is not active.  Hopefully the impact can
-> be a couple of instructions at most, or even less with the use of
-> other existing kernel techniques.  He'll look at the other things you've
-> commented on and get the code into a better state.  I'll work with
-> him on writing commit messages and comments that explain what's
-> going on.
+Applied, thanks!
 
-So from what I understand of all this SEV-SNP/#HV muck is that it is
-near impossible to get right without ucode/hw changes. Hence my request
-to Tom to look into that.
+[1/3] mm: Don't pin ZERO_PAGE in pin_user_pages()
+      commit: c8070b78751955e59b42457b974bea4a4fe00187
+[2/3] mm: Provide a function to get an additional pin on a page
+      commit: 1101fb8f89e5fc548c4d0ad66750e98980291815
+[3/3] block: Use iov_iter_extract_pages() and page pinning in direct-io.c
+      commit: 1ccf164ec866cb8575ab9b2e219fca875089c60e
 
-The feature as specified in the AMD documentation seems fundamentally
-buggered.
+Best regards,
+-- 
+Jens Axboe
 
-Specifically #HV needs to be IST because hypervisor can inject at any
-moment, irrespective of IF or anything else -- even #HV itself. This
-means also in the syscall gap.
 
-Since it is IST, a nested #HV is instant stack corruption -- #HV can
-attempt to play stack games as per the copied #VC crap (which I'm not at
-all convinced about being correct itself), but this doesn't actually fix
-anything, all you need is a single instruction window to wreck things.
-
-Because as stated, the whole premise is that the hypervisor is out to
-get you, you must not leave it room to wiggle. As is, this is security
-through prayer, and we don't do that.
-
-In short; I really want a solid proof that what you propose to implement
-is correct and not wishful thinking.
 
