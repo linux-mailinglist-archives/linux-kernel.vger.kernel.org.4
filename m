@@ -2,113 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E10C717B50
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49118717B5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234885AbjEaJIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
+        id S235367AbjEaJKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234815AbjEaJIo (ORCPT
+        with ESMTP id S234527AbjEaJKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:08:44 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F8D135;
-        Wed, 31 May 2023 02:08:18 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64d57cd373fso524838b3a.1;
-        Wed, 31 May 2023 02:08:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685524092; x=1688116092;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zNY4EKzfKsAn+Tw0pdU/DlskQLBEcbNUP9B//ABNXKo=;
-        b=HVxqm7U5R6Ltzm1U6CfDIcHedKqA6ItNj4qNL9ntOHlC4ImTd6w5SkwEOrZTodpQPo
-         8LFcVzQ91JtjMgezIC5DAmUPiOuPJXDAluOkF4Yrvc/MhHho1PMHzgrqlHVP8ddXIaN/
-         B/87YpqBufsonhciCiywd4e7BLiWbe8hgByfmxTfy79XwvuniUAJyB7BbAEVNgq9ECWX
-         dRq7vW3bon4Y9CCwefhthtdPAxsW0Q2Tk9SSwREhhJa/IkOZKwYk5Wbu95qG53n3viYu
-         al22pDkTECcvdGLTfVjQg4GSCmpq7sFlntIAXzi+t3kPZOBQCAfsn6A1EPP7pVZkHp0w
-         ow9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685524092; x=1688116092;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zNY4EKzfKsAn+Tw0pdU/DlskQLBEcbNUP9B//ABNXKo=;
-        b=L+w9DvSj9PkoORWI56nXRChJ4TOuu5kODpO54o7vtaVaC18v1RFUHqznb3KA6ZTyVl
-         3PdaOSls0niMfQCOgROOM4rsqH3+e+T04zrDDNtaqQ/CgU97gatPkIxJUlIadYlFM8Y+
-         h22L9Fie9ok204G6iHOHJzQ+SpH1/UeM0JSpGPBd1eRhHYY4c58of7adgz8s5yxWmORn
-         vMbzBo3JMWQOYLyQKSEJSMrZVLu2c4gsme2lptrpaBKdw9g7/faGScmoTJX3OERrWRsm
-         4SCcuS2xkCN0Lb3xF0+kqXajFJ2E/skoHNf1QiuUKiD7JwDNuDM3ZIMAcuxNZhBPwFoT
-         yvuA==
-X-Gm-Message-State: AC+VfDzVXSHAL2rtQM1BO7/Dr+tMV4C4qkiGXTR5Bd6Be2UUa8nRNrRr
-        QUWBwx2hDbUvdXhZU/iRLDA=
-X-Google-Smtp-Source: ACHHUZ7PlcGg25hqG5yK0pvujwaiLLSRqp1UCGBgYjGU+csBEfyU/PrJhHHWONWkARerQcIF7Cqqow==
-X-Received: by 2002:a17:903:120b:b0:1af:e10f:ba96 with SMTP id l11-20020a170903120b00b001afe10fba96mr5564993plh.1.1685524092348;
-        Wed, 31 May 2023 02:08:12 -0700 (PDT)
-Received: from dnptp-9.. ([111.198.57.33])
-        by smtp.gmail.com with ESMTPSA id ij17-20020a170902ab5100b001ae4e8e8edasm857822plb.18.2023.05.31.02.08.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 02:08:12 -0700 (PDT)
-From:   Yuezhen Luan <eggcar.luan@gmail.com>
-To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jacob.e.keller@intel.com,
-        Yuezhen Luan <eggcar.luan@gmail.com>
-Subject: [PATCH] igb: Fix extts capture value format for 82580/i354/i350
-Date:   Wed, 31 May 2023 09:08:05 +0000
-Message-Id: <20230531090805.3959-1-eggcar.luan@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 31 May 2023 05:10:03 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B3319A
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:09:37 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34V6NtW0031925;
+        Wed, 31 May 2023 04:08:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=zveEV9JuSBFs9WdDnNH2gJhjslm13ItkavaeTEwiuV4=;
+ b=FjeZPEVHau0oSJWYBUHUIv9HmdXGOLeuQiCyS+eIUZuyOoGrwCwAOVR/zDGnQCgmrF8F
+ pCqAA6KDVEpQoQhx3Nv1P143QUxexuipPRAFrOfveE1k0exsEm+2KmC+KjKntQ70ILI/
+ 0YFOcUPRwS5aRbEf+tXB73GyULr+lHpSVnC8Z1pE9fBwEv1VdddopgZCITwffZcvvtZu
+ 5D3/5ff+cZYp1Ea3R9EbSm25bQUghGA3+QApTaNNxXfotn/IQKwglQuNBy3qkmv32DDZ
+ 1XjPj5TmaBAinOpO4nrSMPEHN29g6xb44SQkNhdbhFn+v5YR7Dj2LKC+J01n8Lg0LGts Tg== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3que9mvgsu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 04:08:38 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 31 May
+ 2023 10:08:36 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 31 May 2023 10:08:36 +0100
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7FDA711C6;
+        Wed, 31 May 2023 09:08:36 +0000 (UTC)
+Date:   Wed, 31 May 2023 09:08:36 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Lizhe <sensor1010@163.com>
+CC:     <james.schulman@cirrus.com>, <david.rhodes@cirrus.com>,
+        <tanureal@opensource.cirrus.com>, <rf@opensource.cirrus.com>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dirvers/gpio: remove redundant reset gpio suffix
+Message-ID: <20230531090836.GI68926@ediswmail.ad.cirrus.com>
+References: <20230530163210.4324-1-sensor1010@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230530163210.4324-1-sensor1010@163.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: wwW61hLRNjV4K2LKGqteHli3JUbDQg54
+X-Proofpoint-ORIG-GUID: wwW61hLRNjV4K2LKGqteHli3JUbDQg54
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-82580/i354/i350 features circle-counter-like timestamp registers
-that are different with newer i210. The EXTTS capture value in
-AUXTSMPx should be converted from raw circle counter value to
-timestamp value in resolution of 1 nanosec by the driver.
+On Wed, May 31, 2023 at 12:32:10AM +0800, Lizhe wrote:
+> no need to add the suffix "gpio" or "gpios" after "reset", as they will
+> be automatically added, see of_find_gpio().
+> 
 
-Signed-off-by: Yuezhen Luan <eggcar.luan@gmail.com>
----
- drivers/net/ethernet/intel/igb/igb_main.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Patch itself looks fine, but the subject line should really be
+ASoC: cs35l34: ... rather than gpio.
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index 58872a4c2..187daa8ef 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -6947,6 +6947,7 @@ static void igb_extts(struct igb_adapter *adapter, int tsintr_tt)
- 	struct e1000_hw *hw = &adapter->hw;
- 	struct ptp_clock_event event;
- 	struct timespec64 ts;
-+	unsigned long flags;
- 
- 	if (pin < 0 || pin >= IGB_N_SDP)
- 		return;
-@@ -6954,9 +6955,12 @@ static void igb_extts(struct igb_adapter *adapter, int tsintr_tt)
- 	if (hw->mac.type == e1000_82580 ||
- 	    hw->mac.type == e1000_i354 ||
- 	    hw->mac.type == e1000_i350) {
--		s64 ns = rd32(auxstmpl);
-+		u64 ns = rd32(auxstmpl);
- 
--		ns += ((s64)(rd32(auxstmph) & 0xFF)) << 32;
-+		ns += ((u64)(rd32(auxstmph) & 0xFF)) << 32;
-+		spin_lock_irqsave(&adapter->tc, ns);
-+		ns = timecounter_cyc2time(&adapter->tc, ns);
-+		spin_unlock_irqrestore(&adapter->tc, ns);
- 		ts = ns_to_timespec64(ns);
- 	} else {
- 		ts.tv_nsec = rd32(auxstmpl);
--- 
-2.34.1
-
+Thanks,
+Charles
