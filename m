@@ -2,92 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F98717366
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD83717367
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231936AbjEaBzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 21:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
+        id S233519AbjEaB45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 21:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjEaBzx (ORCPT
+        with ESMTP id S230296AbjEaB44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 21:55:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AD210E;
-        Tue, 30 May 2023 18:55:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AF12635F4;
-        Wed, 31 May 2023 01:55:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8612EC4339B;
-        Wed, 31 May 2023 01:55:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685498152;
-        bh=RcqSU/tA4lflBhjbDWVwd0gV2CfAcsPxKWidByFH84s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VFTghQDEvafp/6c6zVXHhv+Z/9dj4kVGNg+Ogrr9Yi7WAytu16J57yw6G9bk1gdYP
-         7knONXSYvO/57jQI1m2rD+JhrjAq8iV5AuCAqe8NZ1vL+P/n2hQPLxxer+QzPqmHpG
-         9bnkfsYh4lKYnjmO7WJlAsNYZ/MZ7J6kggwUBIUAtfMnkZBnGkVEo9sWfaHQFnZBnH
-         3ZFIV1HuzsXku6eN6+Dq5Sis86xz7E6kBHcUqpGkOHmGZlfpz6fgUCBqM2Qb7sdJ6u
-         BGke6/2GjGozCk6jhQcCjzczcC4+FblghnMCKQeotFKiiaGvbpnzoj887k54HUpBcf
-         AdUIX4GnQZN0w==
-Date:   Tue, 30 May 2023 18:55:49 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     chenzhiyin <zhiyin.chen@intel.com>, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        nanhai.zou@intel.com
-Subject: Re: [PATCH] fs.h: Optimize file struct to prevent false sharing
-Message-ID: <20230531015549.GA1648@quark.localdomain>
-References: <20230530020626.186192-1-zhiyin.chen@intel.com>
- <20230530-wortbruch-extra-88399a74392e@brauner>
+        Tue, 30 May 2023 21:56:56 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F220EEC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 18:56:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685498215; x=1717034215;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tOkw6m2VVzV2BZPxty9ha1KSowUGEYzrh7agDrhOgUY=;
+  b=n8hc9NKTwE4KWoroqKcFuf+fDmzv/kLdzWwD9OVK9prTNcuD5N75I8Vg
+   eYvbDuz4RUMasP+2fwRPm9zjgreesjHrbThjgXJ+lLqq0+fYStv6Bd/lq
+   YKkA5ayPfPLwjnzTuANtzjuHW3ybPNQ4eTJ7FyolqtQ0iRMMX5IbSrX6Q
+   4oVEvAsqeGjEzm5MuaqfsMPzNsCWuchQ2eDj1A0fwp4RFadK7/i3dPgM7
+   F5y4x5MvlIhRcqZGojUSHDmXews791zDCEdSbO1mJhdXC0ZFnakAwsY39
+   mWfm2WlvnGbE3aIwUuDYFPmfF/AkuLsK+QJ/zOpG6p+gKmCatKUHnYhwN
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="344609141"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="344609141"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2023 18:56:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="796495005"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="796495005"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 May 2023 18:56:53 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4B52-0000yi-1I;
+        Wed, 31 May 2023 01:56:52 +0000
+Date:   Wed, 31 May 2023 09:56:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>
+Subject: cistpl.c:undefined reference to `ioremap'
+Message-ID: <202305310948.KgKox74N-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230530-wortbruch-extra-88399a74392e@brauner>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 10:50:42AM +0200, Christian Brauner wrote:
-> On Mon, May 29, 2023 at 10:06:26PM -0400, chenzhiyin wrote:
-> > In the syscall test of UnixBench, performance regression occurred
-> > due to false sharing.
-> > 
-> > The lock and atomic members, including file::f_lock, file::f_count
-> > and file::f_pos_lock are highly contended and frequently updated
-> > in the high-concurrency test scenarios. perf c2c indentified one
-> > affected read access, file::f_op.
-> > To prevent false sharing, the layout of file struct is changed as
-> > following
-> > (A) f_lock, f_count and f_pos_lock are put together to share the
-> > same cache line.
-> > (B) The read mostly members, including f_path, f_inode, f_op are
-> > put into a separate cache line.
-> > (C) f_mode is put together with f_count, since they are used
-> > frequently at the same time.
-> > 
-> > The optimization has been validated in the syscall test of
-> > UnixBench. performance gain is 30~50%, when the number of parallel
-> > jobs is 16.
-> > 
-> > Signed-off-by: chenzhiyin <zhiyin.chen@intel.com>
-> > ---
-> 
-> Sounds interesting, but can we see the actual numbers, please? 
-> So struct file is marked with __randomize_layout which seems to make
-> this whole reordering pointless or at least only useful if the
-> structure randomization Kconfig is turned off. Is there any precedence
-> to optimizing structures that are marked as randomizable?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   48b1320a674e1ff5de2fad8606bee38f724594dc
+commit: 04b38d012556199ba4c31195940160e0c44c64f0 seccomp: Add missing return in non-void function
+date:   2 years, 5 months ago
+config: s390-randconfig-c041-20230530 (https://download.01.org/0day-ci/archive/20230531/202305310948.KgKox74N-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=04b38d012556199ba4c31195940160e0c44c64f0
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 04b38d012556199ba4c31195940160e0c44c64f0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-Most people don't use CONFIG_RANDSTRUCT.  So it's still worth optimizing struct
-layouts for everyone else.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202305310948.KgKox74N-lkp@intel.com/
 
-- Eric
+All error/warnings (new ones prefixed by >>):
+
+>> s390-linux-ld: warning: drivers/of/unittest-data/testcases.dtb.o: missing .note.GNU-stack section implies executable stack
+   s390-linux-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+>> s390-linux-ld: warning: drivers/of/unittest-data/testcases.dtb.o: missing .note.GNU-stack section implies executable stack
+   s390-linux-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+   s390-linux-ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
+   s390-linux-ld: kernel/dma/coherent.o: in function `dma_init_coherent_memory':
+   coherent.c:(.text+0x55c): undefined reference to `memremap'
+   s390-linux-ld: coherent.c:(.text+0x6ca): undefined reference to `memunmap'
+   s390-linux-ld: kernel/dma/coherent.o: in function `dma_declare_coherent_memory':
+   coherent.c:(.text+0xfb4): undefined reference to `memunmap'
+   s390-linux-ld: drivers/phy/ingenic/phy-ingenic-usb.o: in function `ingenic_usb_phy_probe':
+   phy-ingenic-usb.c:(.text+0x7f0): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
+>> cistpl.c:(.text+0x1360): undefined reference to `ioremap'
+>> s390-linux-ld: cistpl.c:(.text+0x13fe): undefined reference to `iounmap'
+   s390-linux-ld: cistpl.c:(.text+0x1476): undefined reference to `iounmap'
+>> s390-linux-ld: cistpl.c:(.text+0x14b0): undefined reference to `ioremap'
+   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
+>> cistpl.c:(.text+0x20aa): undefined reference to `iounmap'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
