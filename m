@@ -2,85 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B96717995
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9270B717999
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbjEaIGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
+        id S232415AbjEaIGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235072AbjEaIF6 (ORCPT
+        with ESMTP id S235178AbjEaIGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:05:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB99125;
-        Wed, 31 May 2023 01:05:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C374637D8;
-        Wed, 31 May 2023 08:05:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF41BC4339C;
-        Wed, 31 May 2023 08:05:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685520356;
-        bh=K+KjKWAoGR9PcfqQVAwZ38Xz3lxK1J+DQ3Dth4s0hX8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dFLvv2D84CoINR4EOCzhFJsZUGK5vjc5+G4eied+ZYh/0xf6etM5Tg5ldSehmsDg3
-         CqdNYTjtN8X5ifZC4J+5jKfUoiop9ITh0l/a9ri9HZncPyoBK8DGwJ3Eu+2iERuD99
-         ew63Yzt5P3d+c0GV4bsG7dtlFR0LwHSNLcggY6IQ=
-Date:   Wed, 31 May 2023 09:05:53 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hongyu Xie <xiehongyu1@kylinos.cn>
-Cc:     linux@armlinux.org.uk, jirislaby@kernel.org, rdunlap@infradead.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xy521521@gmail.com
-Subject: Re: [RESEND RFC PATCH v3 -next] tty: serial: add panic serial helper
-Message-ID: <2023053113-surviving-ride-2dd6@gregkh>
-References: <20230531071802.414383-1-xiehongyu1@kylinos.cn>
+        Wed, 31 May 2023 04:06:44 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEED113;
+        Wed, 31 May 2023 01:06:40 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QWMKn05Gvz4f3lVQ;
+        Wed, 31 May 2023 16:06:37 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgAHvbAMAHdk5YFtKg--.48355S3;
+        Wed, 31 May 2023 16:06:37 +0800 (CST)
+Subject: Re: [PATCH -next v3 6/7] md/raid1-10: don't handle pluged bio by
+ daemon thread
+To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     song@kernel.org, neilb@suse.de, akpm@osdl.org,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230529131106.2123367-1-yukuai1@huaweicloud.com>
+ <20230529131106.2123367-7-yukuai1@huaweicloud.com>
+ <CALTww29ixKpcVknNe36D+x=2c1Aw-=z32SP-dJ_Hj8WxL2n4bg@mail.gmail.com>
+ <830352e1-ecfa-f5dc-ce7c-349553bd3003@huaweicloud.com>
+ <CALTww28_w3h1_viTp5L9SCytY7WmwmABqkXOmyvH_UD8T5odMg@mail.gmail.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <f5cc14ed-e9d9-42ed-22e1-186973b991b1@huaweicloud.com>
+Date:   Wed, 31 May 2023 16:06:35 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531071802.414383-1-xiehongyu1@kylinos.cn>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CALTww28_w3h1_viTp5L9SCytY7WmwmABqkXOmyvH_UD8T5odMg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgAHvbAMAHdk5YFtKg--.48355S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3AF4rCrWUWF45WFyrCFW3Wrg_yoWxGryUp3
+        yUJa1YkFWUJrW2vwnFva1jvFySqayDKFW7ZrykGws5WF9IqF9rGF4UGFW8urykZr15GFyx
+        Zr15KrZxGFyYvFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
+        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+        BIdaVFxhVjvjDU0xZFpf9x0JUp6wZUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 03:18:02PM +0800, Hongyu Xie wrote:
-> It was inspired by kgdboc.
-> 
-> This is a debug module that allows you to get all kernel logs
-> after panic.
-> 
-> Normally you need to attach a USB-to-UART tool or enable kdump
-> before panic happens to get log from kernel after panic. If you
-> didn't do that and kdump is not working, you can't get any log to
-> know what happened before panic. If you have a USB-to-UART tool
-> and the uart port on your computer is working. This module helps
-> you to get all kernel log after panic() is called.
-> 
-> To use this, see Documentation/dev-tools/panic_serial_helper.rst.
-> 
-> Tested on arm64 device.
-> 
-> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
-> ---
-> 
-> v3:
->  1. modify the document about this module.
->  2. provide case-ignored filter matching.
+Hi,
 
-Why is this a RESEND?
+在 2023/05/31 16:00, Xiao Ni 写道:
+> On Wed, May 31, 2023 at 3:55 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>
+>> Hi,
+>>
+>> 在 2023/05/31 15:50, Xiao Ni 写道:
+>>> On Mon, May 29, 2023 at 9:14 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>>>
+>>>> From: Yu Kuai <yukuai3@huawei.com>
+>>>>
+>>>> current->bio_list will be set under submit_bio() context, in this case
+>>>> bitmap io will be added to the list and wait for current io submission to
+>>>> finish, while current io submission must wait for bitmap io to be done.
+>>>> commit 874807a83139 ("md/raid1{,0}: fix deadlock in bitmap_unplug.") fix
+>>>> the deadlock by handling plugged bio by daemon thread.
+>>>
+>>> Thanks for the historic introduction. I did a test and printed the
+>>> logs in raid10_unplug. The tools I used are dd and mkfs. from_schedule
+>>> is always true during I/O and it's 0 when io finishes. So I have a
+>>> question here, how can I trigger the condition that from_schedule is 0
+>>> and current->list is not NULL? In other words, is there really a
+>>> deadlock here? Before your patch it looks like all bios are merged
+>>> into conf->pending_bio_list and are handled by raid10d. It can't
+>>> submit bio directly in the originating process which mentioned in
+>>> 57c67df48866
+>>>
+>> As I mentioned below, after commit a214b949d8e3, this deadlock doesn't
+>> exist anymore, and without this patch, patch 7 will introduce this
+>> scenario again.
+>>
+>> Thanks,
+>> Kuai
+>>>>
+>>>> On the one hand, the deadlock won't exist after commit a214b949d8e3
+>>>> ("blk-mq: only flush requests from the plug in blk_mq_submit_bio"). On
+>>>> the other hand, current solution makes it impossible to flush plugged bio
+>>>> in raid1/10_make_request(), because this will cause that all the writes
+>>>> will goto daemon thread.
+>>>>
+>>>> In order to limit the number of plugged bio, commit 874807a83139
+>>>> ("md/raid1{,0}: fix deadlock in bitmap_unplug.") is reverted, and the
+>>>> deadlock is fixed by handling bitmap io asynchronously.
+>>>>
+>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>>>> ---
+>>>>    drivers/md/raid1-10.c | 14 ++++++++++++++
+>>>>    drivers/md/raid1.c    |  4 ++--
+>>>>    drivers/md/raid10.c   |  8 +++-----
+>>>>    3 files changed, 19 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/drivers/md/raid1-10.c b/drivers/md/raid1-10.c
+>>>> index 73cc3cb9154d..17e55c1fd5a1 100644
+>>>> --- a/drivers/md/raid1-10.c
+>>>> +++ b/drivers/md/raid1-10.c
+>>>> @@ -151,3 +151,17 @@ static inline bool raid1_add_bio_to_plug(struct mddev *mddev, struct bio *bio,
+>>>>
+>>>>           return true;
+>>>>    }
+>>>> +
+>>>> +/*
+>>>> + * current->bio_list will be set under submit_bio() context, in this case bitmap
+>>>> + * io will be added to the list and wait for current io submission to finish,
+>>>> + * while current io submission must wait for bitmap io to be done. In order to
+>>>> + * avoid such deadlock, submit bitmap io asynchronously.
+>>>> + */
+>>>> +static inline void raid1_prepare_flush_writes(struct bitmap *bitmap)
+>>>> +{
+>>>> +       if (current->bio_list)
+>>>> +               md_bitmap_unplug_async(bitmap);
+>>>> +       else
+>>>> +               md_bitmap_unplug(bitmap);
+>>>> +}
+>>>> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
+>>>> index 0778e398584c..006620fed595 100644
+>>>> --- a/drivers/md/raid1.c
+>>>> +++ b/drivers/md/raid1.c
+>>>> @@ -794,7 +794,7 @@ static int read_balance(struct r1conf *conf, struct r1bio *r1_bio, int *max_sect
+>>>>    static void flush_bio_list(struct r1conf *conf, struct bio *bio)
+>>>>    {
+>>>>           /* flush any pending bitmap writes to disk before proceeding w/ I/O */
+>>>> -       md_bitmap_unplug(conf->mddev->bitmap);
+>>>> +       raid1_prepare_flush_writes(conf->mddev->bitmap);
+>>>
+>>> If we unplug bitmap asynchronously, can we make sure the bitmap are
+>>> flushed before the corresponding data?
+> 
+> Could you explain this question?
 
-It's a RFC, I can't apply it, as obviously you do not feel like it is
-completed.  What needs to be done to make you feel comfortable with it?
+Sorry that I missed this... See the new helper in patch 5,
+md_bitmap_unplug_async() will still wait for bitmap io to finish.
 
-thanks,
+md_bitmap_unplug_async
+  DECLARE_COMPLETION_ONSTACK(done)
+  ...
+  wait_for_completion(&done)
 
-greg k-h
+Thanks,
+Kuai
+> 
+> Regards
+> Xiao
+> 
+> 
+>>>
+>>> Regards
+>>> Xiao
+>>>
+>>>>           wake_up(&conf->wait_barrier);
+>>>>
+>>>>           while (bio) { /* submit pending writes */
+>>>> @@ -1166,7 +1166,7 @@ static void raid1_unplug(struct blk_plug_cb *cb, bool from_schedule)
+>>>>           struct r1conf *conf = mddev->private;
+>>>>           struct bio *bio;
+>>>>
+>>>> -       if (from_schedule || current->bio_list) {
+>>>> +       if (from_schedule) {
+>>>>                   spin_lock_irq(&conf->device_lock);
+>>>>                   bio_list_merge(&conf->pending_bio_list, &plug->pending);
+>>>>                   spin_unlock_irq(&conf->device_lock);
+>>>> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+>>>> index 6640507ecb0d..fb22cfe94d32 100644
+>>>> --- a/drivers/md/raid10.c
+>>>> +++ b/drivers/md/raid10.c
+>>>> @@ -902,9 +902,7 @@ static void flush_pending_writes(struct r10conf *conf)
+>>>>                   __set_current_state(TASK_RUNNING);
+>>>>
+>>>>                   blk_start_plug(&plug);
+>>>> -               /* flush any pending bitmap writes to disk
+>>>> -                * before proceeding w/ I/O */
+>>>> -               md_bitmap_unplug(conf->mddev->bitmap);
+>>>> +               raid1_prepare_flush_writes(conf->mddev->bitmap);
+>>>>                   wake_up(&conf->wait_barrier);
+>>>>
+>>>>                   while (bio) { /* submit pending writes */
+>>>> @@ -1108,7 +1106,7 @@ static void raid10_unplug(struct blk_plug_cb *cb, bool from_schedule)
+>>>>           struct r10conf *conf = mddev->private;
+>>>>           struct bio *bio;
+>>>>
+>>>> -       if (from_schedule || current->bio_list) {
+>>>> +       if (from_schedule) {
+>>>>                   spin_lock_irq(&conf->device_lock);
+>>>>                   bio_list_merge(&conf->pending_bio_list, &plug->pending);
+>>>>                   spin_unlock_irq(&conf->device_lock);
+>>>> @@ -1120,7 +1118,7 @@ static void raid10_unplug(struct blk_plug_cb *cb, bool from_schedule)
+>>>>
+>>>>           /* we aren't scheduling, so we can do the write-out directly. */
+>>>>           bio = bio_list_get(&plug->pending);
+>>>> -       md_bitmap_unplug(mddev->bitmap);
+>>>> +       raid1_prepare_flush_writes(mddev->bitmap);
+>>>>           wake_up(&conf->wait_barrier);
+>>>>
+>>>>           while (bio) { /* submit pending writes */
+>>>> --
+>>>> 2.39.2
+>>>>
+>>>
+>>> .
+>>>
+>>
+> 
+> .
+> 
+
