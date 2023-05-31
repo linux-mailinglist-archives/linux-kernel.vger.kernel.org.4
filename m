@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF052718EC9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC62718ECC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 00:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjEaWtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 18:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
+        id S229719AbjEaWvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 18:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbjEaWsz (ORCPT
+        with ESMTP id S229603AbjEaWvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 18:48:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D704A124;
-        Wed, 31 May 2023 15:48:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 31 May 2023 18:51:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D759F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:50:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685573415;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zpHJAAZtdS1eGDoBPdNCfJy7V4CHGDGY+NY0zDJG5HY=;
+        b=XxN7dlzJepmhs2+dOo1erZYTkHUU6dnVAh+N5dqjZpRK4ZWNA1YJKp5qd1dM2aNTN/S/sw
+        uyG566EOsgWmMolGMimrBFCt+XmbpE+bHz7KTU9fwIVTa+ef2lOrxo30T1qeIVgbOKupVz
+        AAh0IJuhy1Q90eQcxW+mQI0IpMirZ9A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-584-7f37sz9DMzaFOEFZovZXsQ-1; Wed, 31 May 2023 18:50:14 -0400
+X-MC-Unique: 7f37sz9DMzaFOEFZovZXsQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45D6063950;
-        Wed, 31 May 2023 22:48:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33EEAC433EF;
-        Wed, 31 May 2023 22:48:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685573325;
-        bh=lOe8yoG1y43dXiHsu5UEqoPiBRsH7i4oe9x4GdaWzmU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g7zP9/Ry0v7kXmOd7LSxIG+ciXvJb0op8gwKeV5l+eNvIN+Mq7fwL4EyMJq3cHTs+
-         EopAO5gAxqixNSQSYrBKjCGU6J4hebLLo8CTr+dkWDraJfzoml/V1lPCL+XxIdt0P3
-         8yCfmsxXhTaRilNtIaLIRe++QVFIb2Uks15DHcY67EOBs6BLbQhfquYniIWyWVHrTw
-         jA4uCVcpfWzG9kWHLQY35GpwXu4PvxRwG+BPn2+2PIHerfJ8+AEIlR8SX4fKMN2OpF
-         MygnmhYa2Rr3ZRnX+kMGdVsOVDetI1p1l1AusXsCIaEWHT5whvrVKJk0ABWj9saNEx
-         lsQ9S2qAZ+2Cg==
-Date:   Wed, 31 May 2023 15:48:43 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexey Dobriyan <adobriyan@gmail.com>
-Subject: Re: [PATCH] KVM: VMX: restore vmx_vmexit alignment
-Message-ID: <20230531224843.frnqfqyhvqcx27cs@treble>
-References: <20230531155821.80590-1-jon@nutanix.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 948E6800159;
+        Wed, 31 May 2023 22:50:13 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EE2932166B25;
+        Wed, 31 May 2023 22:50:12 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     Marc Dionne <marc.dionne@auristor.com>
+cc:     dhowells@redhat.com, linux-afs@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] afs: Fix setting of mtime when creating a file/dir/symlink
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230531155821.80590-1-jon@nutanix.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <808139.1685573412.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 31 May 2023 23:50:12 +0100
+Message-ID: <808140.1685573412@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,22 +63,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 11:58:21AM -0400, Jon Kohler wrote:
-> Commit 8bd200d23ec4 ("KVM: VMX: Flatten __vmx_vcpu_run()") changed
-> vmx_vmexit from SYM_FUNC_START to SYM_INNER_LABEL, accidentally
-> removing 16 byte alignment as SYM_FUNC_START uses SYM_A_ALIGN and
-> SYM_INNER_LABEL does not. Josh mentioned [1] this was unintentional.
-> 
-> Fix by changing to SYM_INNER_LABEL_ALIGN instead.
-> 
-> [1] https://lore.kernel.org/lkml/Y3adkSe%2FJ70PqUyt@p183
-> 
-> Fixes: 8bd200d23ec4 ("KVM: VMX: Flatten __vmx_vcpu_run()")
-> Signed-off-by: Jon Kohler <jon@nutanix.com>
-> Suggested-by: Alexey Dobriyan <adobriyan@gmail.com>
-> CC: Josh Poimboeuf <jpoimboe@kernel.org>
+    =
 
-Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
+kafs incorrectly passes a zero mtime (ie. 1st Jan 1970) to the server when
+creating a file, dir or symlink because commit 52af7105eceb caused the
+mtime recorded in the afs_operation struct to be passed to the server, but
+didn't modify the afs_mkdir(), afs_create() and afs_symlink() functions to
+set it first.
 
--- 
-Josh
+Those functions were written with the assumption that the mtime would be
+obtained from the server - but that fell foul of malsynchronised clocks, s=
+o
+it was decided that the mtime should be set from the client instead.
+
+Fix this by filling in op->mtime before calling the create op.
+
+Fixes: 52af7105eceb ("afs: Set mtime from the client for yfs create operat=
+ions")
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+cc: linux-fsdevel@vger.kernel.org
+---
+ fs/afs/dir.c |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/fs/afs/dir.c b/fs/afs/dir.c
+index 4dd97afa536c..5219182e52e1 100644
+--- a/fs/afs/dir.c
++++ b/fs/afs/dir.c
+@@ -1358,6 +1358,7 @@ static int afs_mkdir(struct mnt_idmap *idmap, struct=
+ inode *dir,
+ 	op->dentry	=3D dentry;
+ 	op->create.mode	=3D S_IFDIR | mode;
+ 	op->create.reason =3D afs_edit_dir_for_mkdir;
++	op->mtime	=3D current_time(dir);
+ 	op->ops		=3D &afs_mkdir_operation;
+ 	return afs_do_sync_operation(op);
+ }
+@@ -1661,6 +1662,7 @@ static int afs_create(struct mnt_idmap *idmap, struc=
+t inode *dir,
+ 	op->dentry	=3D dentry;
+ 	op->create.mode	=3D S_IFREG | mode;
+ 	op->create.reason =3D afs_edit_dir_for_create;
++	op->mtime	=3D current_time(dir);
+ 	op->ops		=3D &afs_create_operation;
+ 	return afs_do_sync_operation(op);
+ =
+
+@@ -1796,6 +1798,7 @@ static int afs_symlink(struct mnt_idmap *idmap, stru=
+ct inode *dir,
+ 	op->ops			=3D &afs_symlink_operation;
+ 	op->create.reason	=3D afs_edit_dir_for_symlink;
+ 	op->create.symlink	=3D content;
++	op->mtime		=3D current_time(dir);
+ 	return afs_do_sync_operation(op);
+ =
+
+ error:
+
