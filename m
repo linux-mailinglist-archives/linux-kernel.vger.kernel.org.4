@@ -2,169 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D538717E27
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A25717EA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234960AbjEaLgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 07:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
+        id S234678AbjEaLmi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 31 May 2023 07:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbjEaLgF (ORCPT
+        with ESMTP id S229765AbjEaLmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 07:36:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2C5B2;
-        Wed, 31 May 2023 04:36:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE54E639EB;
-        Wed, 31 May 2023 11:36:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEED4C433EF;
-        Wed, 31 May 2023 11:35:59 +0000 (UTC)
-Date:   Wed, 31 May 2023 12:35:57 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Marc Zyngier <maz@kernel.org>, ankita@nvidia.com,
-        alex.williamson@redhat.com, naoya.horiguchi@nec.com,
-        oliver.upton@linux.dev, aniketa@nvidia.com, cjia@nvidia.com,
-        kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com,
-        acurrid@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com,
-        danw@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Subject: Re: [PATCH v3 1/6] kvm: determine memory type from VMA
-Message-ID: <ZHcxHbCb439I1Uk2@arm.com>
-References: <20230405180134.16932-1-ankita@nvidia.com>
- <20230405180134.16932-2-ankita@nvidia.com>
- <86r0spl18x.wl-maz@kernel.org>
- <ZDarrZmLWlA+BHQG@nvidia.com>
+        Wed, 31 May 2023 07:42:36 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F064E5;
+        Wed, 31 May 2023 04:42:33 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 2765124E293;
+        Wed, 31 May 2023 19:42:26 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 31 May
+ 2023 19:42:26 +0800
+Received: from [192.168.125.108] (113.72.147.198) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 31 May
+ 2023 19:42:24 +0800
+Message-ID: <b289c78d-cc61-5fbf-94b9-e94d10eefb60@starfivetech.com>
+Date:   Wed, 31 May 2023 19:42:16 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZDarrZmLWlA+BHQG@nvidia.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 0/7] Add JH7110 USB and USB PHY driver support
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        "Vinod Koul" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Mason Huo" <mason.huo@starfivetech.com>
+References: <20230518112750.57924-1-minda.chen@starfivetech.com>
+ <e733829d-2314-aa6f-7e9a-053f1b074526@kernel.org>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <e733829d-2314-aa6f-7e9a-053f1b074526@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [113.72.147.198]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 10:01:33AM -0300, Jason Gunthorpe wrote:
-> On Wed, Apr 12, 2023 at 01:43:26PM +0100, Marc Zyngier wrote:
-> > What makes it safe? How does VFIO ensures that the memory type used is
-> > correct in all circumstances? This has to hold for *ANY* device, not
-> > just your favourite toy of the day. Nothing in this patch is horribly
-> > wrong, but the above question must be answered before we can consider
-> > any of this.
+
+
+On 2023/5/26 17:03, Roger Quadros wrote:
 > 
-> In VFIO we now have the concept of "variant drivers" which work with
-> specific PCI IDs. The variant drivers can inject device specific
-> knowledge into VFIO. In this series the driver injects the cachable
-> pgprot when it creates some of the VMAs because it knows the PCI IDs
-> it supports, parses the ACPI description, and knows for sure that the
-> memory it puts in the cachable VMA is linked with a cache coherent
-> interconnect.
 > 
-> The generic vfio-pci path is not changed, so 'any device' is not
-> relevant here.
+> On 18/05/2023 14:27, Minda Chen wrote:
+>> This patchset adds USB driver and USB PHY for the StarFive JH7110 SoC.
+>> USB work mode is peripheral and using USB 2.0 PHY in VisionFive 2 board.
+>> The patch has been tested on the VisionFive 2 board.
+>> 
+>> This patchset should be applied after the patchset [1], [2] and [3]:
+>> [1] https://patchwork.kernel.org/project/linux-riscv/cover/20230518101234.143748-1-xingyu.wu@starfivetech.com/
+>> [2] https://patchwork.kernel.org/project/linux-clk/cover/20230512022036.97987-1-xingyu.wu@starfivetech.com
+>> [3] https://patchwork.kernel.org/project/linux-phy/cover/20230412084540.295411-1-changhuang.liang@starfivetech.com/
+>> 
+>> This patchset is base on v6.4-rc1
+>> 
+>> patch 1 is usb phy dt-binding document.
+>> patch 2 is Pcie PHY dt-binding document.
+>> patch 3 is USB 2.0 PHY driver.
+>> patch 4 is PCIe PHY driver.
+>> patch 5 is usb dt-binding document.
+>> patch 6 is the wrapper module driver of Cadence USB3. USB controller IP is Cadence USB3.
+>> patch 7 is USB device tree configuration.
+>> 
+>> previous version
+>> ---
+>> version 1 patchset are split to different kernel organization. It is
+>> incorrect. But they were sent, and Emil sent comments. I think I should 
+>> reserve them in cover-letter. To read the change records and previous version, 
+>> please start with version 2. 
+>> 
+>> v1: https://patchwork.kernel.org/project/linux-usb/cover/20230306095212.25840-1-minda.chen@starfivetech.com/
+>> v2: https://patchwork.kernel.org/project/linux-usb/cover/20230308082800.3008-1-minda.chen@starfivetech.com/
+>> v3: https://patchwork.kernel.org/project/linux-usb/cover/20230315104411.73614-1-minda.chen@starfivetech.com/
+>> v4: https://patchwork.kernel.org/project/linux-usb/cover/20230406015216.27034-1-minda.chen@starfivetech.com/
+>> v5: https://patchwork.kernel.org/project/linux-usb/cover/20230420110052.3182-1-minda.chen@starfivetech.com/
+>> 
+>> changes
+>> v6:
+>>   1. (patch 3) remove the platform remove function.
+>>   2. (patch 4)
+>>      - add switch to pcie mode function.
+>>      - remove the redundant init/exit function.
+>>   3. (patch 5)
+>>      - dts split to wrapper layer and cdns node. The codes are
+>>        like v3.
+>>      - add cdns3 sub node dts-binding references.
+>>   4. (patch 6)
+>>      For stg-syscon iomem 0x10240000 - 0x10240010 actually is belonged
+>>      to usb, so USB contain its own registers. So do not merge the dts node.
+>>      The codes are like v3.
+>>      - remove the cdns3_platform_add function.
+>>      - remove phy ops because cdns3 contain all the phy ops.
+>>      - runtime suspend function just shutdown the clocks.
+>>   5. (patch 7)
+>>      - add cdns3 subnode again.
+>> 
+>> v5:
+>>   1. (patch 1) set correct model name and commit title.
+>>   2. (patch 2) change to '-item' in syscon property. change commit title.
+>>   3. (patch 5)
+>>      - change to '-item' in syscon configure.
+>>      - change commit title and doc title.
+>>   4. (patch 6)
+>>      - add clk and phy deinit function
+>>      - add clk deinit function if phy init failed.
+>>      - coding style changes and other format changes. 
+>> 
+>> v4:
+>>   1. (patch 1) split PCIe PHY dt-binding doc to patch 2.
+>>   2. (patch 2) PCIe PHY add stg and sys con configuration to dt-binding doc.
+>>   3. (patch 3)
+>>      - split PCIe PHY driver to patch 4.
+>>      - replace dr_mode to phy mode in jh7110_usb2_phy.
+>>   4. (patch 4) 
+>>      - Makefile and Kconfig sorted by alphabet sequence.
+>>      - Add PCIe PHY stg and syscon PHY connection configuration
+>>        for USB 3.0.
+>>   5. (patch 5)
+>>      - commit message changed.
+>>      - merge wrapper dts node and cdns3 node in example.
+>>      - Add interrupts, reg, phy and dr_mode in property.
+>>      - Add reset-name in property example.
+>>   6. (patch 6)
+>>      - For dts node is merged, Using platform_device_alloc and
+>>        platform_device_add to generate cadence sub device.
+>>      - IOMEM and IRQ resource are passed to Cadence sub device.
+>>      - Add PHY ops process for PHY dts setting can not be passed to
+>>        Cadence USB driver.
+>>      - remove the stg and sys USB 3.0 PHY configuration.
+>>      - Change the suspend clock reset and clock enable sequence.
+>>      - Get all reset and clock resources before enable them in 
+>>        cdns_clk_rst_init.
+>>      - commit message changed.
+>>   7. (patch 7)
+>>      - merge wrapper dts node and cdns3 node in usb dts.
+>>      - move the stg and sys USB 3.0 PHY confiuration to
+>>        PCIe PHY dts node.
+>>      - commit message changed.
+>>      - Add reset-names dts.
+>> 
+>> v3:
+>>   1. Add patch 1 - 4. Add USB PHY driver and dt-binding doc. 
+>>      USB PHY codes are moved to patch 3 and patch 4.
+>>   2. (patch 5)
+>>      - USB wrapper module dts document is moved to usb directory.
+>>      - Remove the 'dr_mode' and 'starfive,usb2-only' setting.
+>>      - Some dts format changes. dts binding check pass.
+>>   3. (patch 6)
+>>      - Remove the PHY codes. 
+>>      - Search 'dr_mode' and phy setting from Cadence subnode.
+>>   4. (patch 7)
+>>      - Add USB PHY dts configurion. 
+>>      - 'dr_mode' is moved to Cadence controller submode.
+>> 
+>> v2:
+>>   1. (patch 5) dt-binding changes. The document example is the same as dts config.
+>>   2. (patch 6) using dev_err_probe and syscon_regmap_lookup_by_phandle_args function. Some formats changes
+>>   3. (patch 7) dts nodes sorted by the address after @
+>> 
+>> Minda Chen (7):
+>>   dt-bindings: phy: Add StarFive JH7110 USB PHY
+>>   dt-bindings: phy: Add StarFive JH7110 PCIe PHY
+>>   phy: starfive: Add JH7110 USB 2.0 PHY driver
+>>   phy: starfive: Add JH7110 PCIE 2.0 PHY driver
+>>   dt-bindings: usb: Add StarFive JH7110 USB controller
+>>   usb: cdns3: Add StarFive JH7110 USB driver
+>>   riscv: dts: starfive: Add USB dts configuration for JH7110
+>> 
+>>  .../phy/starfive,jh7110-pcie-phy.yaml         |  58 +++++
+>>  .../bindings/phy/starfive,jh7110-usb-phy.yaml |  50 ++++
+>>  .../bindings/usb/starfive,jh7110-usb.yaml     | 115 ++++++++
+>>  MAINTAINERS                                   |  14 +
+>>  .../jh7110-starfive-visionfive-2.dtsi         |   5 +
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      |  53 ++++
+>>  drivers/phy/starfive/Kconfig                  |  21 ++
+>>  drivers/phy/starfive/Makefile                 |   2 +
+>>  drivers/phy/starfive/phy-jh7110-pcie.c        | 204 +++++++++++++++
+>>  drivers/phy/starfive/phy-jh7110-usb.c         | 150 +++++++++++
+>>  drivers/usb/cdns3/Kconfig                     |  11 +
+>>  drivers/usb/cdns3/Makefile                    |   1 +
+>>  drivers/usb/cdns3/cdns3-starfive.c            | 246 ++++++++++++++++++
+>>  13 files changed, 930 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-pcie-phy.yaml
+>>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
+>>  create mode 100644 Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
+>>  create mode 100644 drivers/phy/starfive/phy-jh7110-pcie.c
+>>  create mode 100644 drivers/phy/starfive/phy-jh7110-usb.c
+>>  create mode 100644 drivers/usb/cdns3/cdns3-starfive.c
+>> 
+> 
+> For this series:
+> Reviewed-by: Roger Quadros <rogerq@kernel.org>
 
-There were several off-list discussions, I'm trying to summarise my
-understanding here. This series aims to relax the VFIO mapping to
-cacheable and have KVM map it into the guest with the same attributes.
-Somewhat related past threads also tried to relax the KVM device
-pass-through mapping from Device_nGnRnE (pgprot_noncached) to Normal_NC
-(pgprot_writecombine). Those were initially using the PCIe prefetchable
-BAR attribute but that's not a reliable means to infer whether Normal vs
-Device is safe. Anyway, I think we'd need to unify these threads and
-come up with some common handling that can cater for various attributes
-required by devices/drivers. Therefore replying in this thread.
+Thanks Roger， Coner and Greg.
+Patch 6 (USB controller codes) are accepted. 
 
-Current status on arm64: vfio-pci user mapping (Qemu) of PCIe BARs is
-Device_nGnRnE. KVM also maps it at Stage 2 with the same attributes. The
-user mapping is fine since the VMM may not have detailed knowledge about
-how to safely map the BAR. KVM doesn't have such detailed knowledge
-either in the device pass-through case but for safety reasons it follows
-the same attributes as the user mapping.
+Thanks Rob and Krzysztof.
+  Dts-binding doc are reviewed.
 
-From a safety perspective, relaxing the KVM stage 2 mapping has some
-implications:
-
-1. It creates multiple memory aliases with different attributes.
-
-2. Speculative loads, unaligned accesses.
-
-3. Potentially new uncontained errors introduced by Normal NC vs Device
-   mappings.
-
-From the private discussions I had regarding point (3), Device doesn't
-really make any difference and it can be even worse. For example, Normal
-mappings would allow a contained error while Device would trigger an
-uncontained SError. So the only safe bet here is for the platform, root
-complex to behave properly when device pass-through is involved (e.g.
-PCIe to ignore writes, return 0xff on reads if there are errors). That's
-something Arm is working on to require in the BSA specs (base system
-architecture). Presumably cloud vendors allowing device pass-through
-already know their system well enough, no need for further policing in
-KVM (which it can't do properly anyway).
-
-As long as the errors are contained, point (2) becomes the
-responsibility of the guest, given its detailed knowledge of the device,
-using the appropriate attributes (whether x86 WC maps exactly onto arm64
-Normal NC is the subject of a separate discussion; so far that's the
-assumption we took in the arm64 kernel). Regarding vfio-pci, the user
-mapping must remain Device_nGnRnE on arm64 to avoid unexpected
-speculative loads.
-
-This leaves us with (1) and since the vfio-pci user mapping must remain
-Device, there's a potential mismatched alias if the guest maps the
-corresponding BAR as Normal NC. Luckily the Arm ARM constrains the
-hardware behaviour here to basically allowing the Device mapping in the
-VMM to behave somewhat the Normal NC mapping in the guest. IOW, the VMM
-loses the Device guarantees (non-speculation, ordering). That's not a
-problem for the device since the guest already deemed such mapping to be
-safe.
-
-While I think it's less likely for the VMM to access the same BAR that
-was mapped into the guest, if we want to be on the safe side from an ABI
-perspective (the returned mmap() now has different memory guarantees),
-we could make this an opt-in. That's pretty much the VMM stating that it
-is ok with losing some of the Device guarantees for the vfio-pci
-mapping. A question here is whether we want to this to be done at the
-vfio-pci level, the KVM memory slot or a big knob per VMM. Or whether we
-need to bother with this at all (if it's just theoretical, maybe we can
-have a global opt-out).
-
-Going back to this series, allowing Cacheable mapping in KVM has similar
-implications as above. (2) and (3) would be assumed safe by the platform
-vendors. Regarding (1), to avoid confusion, I would only allow it if FWB
-(force write-back) is present so that KVM can enforce a cacheable
-mapping at Stage 2 if the vfio variant driver also maps it as cacheable
-in user space.
-
-There were some other thoughts on only allowing different attributes in
-KVM if the user counterpart does not have any mapping (e.g. fd-based
-KVM memory slots). However, this won't work well with CXL-attached
-memory for example where the VMM may want access to it (e.g. virtio). So
-I wouldn't spend more thoughts on this.
-
-
-The TL;DR summary of what I think we should do:
-
-a) Relax the KVM Stage 2 mapping for vfio-pci to Normal NC
-   (pgprot_writecombine). TBD whether we need a VMM opt-in is at the
-   vfio-pci level, KVM slot or per-VMM level. Another option is to do
-   this by default and have a global opt-out (cmdline). I don't think
-   the latter is such a bad idea since I find it unlikely for the VMM to
-   also touch the same PCIe BAR _and_ expect different memory ordering
-   guarantees than the guest device driver.
-
-b) Map the KVM stage 2 mapping as cacheable+FWB iff the VMM has a
-   corresponding cacheable mapping.
-
-Thoughts?
-
--- 
-Catalin
+Hi Vinod , Kishon and Linux-PHY maintainer
+  Could you take time to review USB PHY codes (patch 3 and patch4) ? Thanks
