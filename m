@@ -2,66 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B87717A68
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C95717A73
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234819AbjEaIo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
+        id S235091AbjEaIok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235000AbjEaIoT (ORCPT
+        with ESMTP id S234979AbjEaIo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:44:19 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CA91AE;
-        Wed, 31 May 2023 01:43:56 -0700 (PDT)
-Received: from wsk (85-222-111-42.dynamic.chello.pl [85.222.111.42])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: lukma@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 113F8861A8;
-        Wed, 31 May 2023 10:43:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1685522634;
-        bh=j1UsfRe3ZI+3excUqUKbxozkjP+PYiTcZH3jP+0A9qg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Zn6t37LT/Na5zyk2YLQwzjQErfPrqnJhJglAiEdqIQgoqLARHuhjsOGsUXYtQZMds
-         aXWFx2qxyPwOJofdYKFkplkFU9ZLkcIvoBOY0EAXtC5Q2qZwVtktA7gLWTQgF+eYqP
-         JhYKmvP/RkxQ3wsKvsdxSPZB4EM6RpnmEirpqiXFC4Qbwr/bIQ3pIdpUL8nyHQVDsz
-         XTfsQ9sAE+FM3IazT1SWXT7+E8pjO68a/jYBqIC6Hw1aB05JecsKNULisURUXwRvXX
-         TCqf17iKs6p8JTMFhDIfdIbr6LmYViEQwHkCbKUOKpgf25eUGOCti6BQHnLWaABPl4
-         ZMvwN0L8PVr2A==
-Date:   Wed, 31 May 2023 10:43:46 +0200
-From:   Lukasz Majewski <lukma@denx.de>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC] net: dsa: slave: Advertise correct EEE capabilities at
- slave PHY setup
-Message-ID: <20230531104346.2a131c42@wsk>
-In-Reply-To: <ZHYRgIb6UCYq1n/Z@shell.armlinux.org.uk>
-References: <20230530122621.2142192-1-lukma@denx.de>
-        <ZHXzTBOtlPKqNfLw@shell.armlinux.org.uk>
-        <20230530160743.2c93a388@wsk>
-        <ZHYGv7zcJd/Ad4hH@shell.armlinux.org.uk>
-        <35546c34-17a6-4295-b263-3f2a97d53b94@lunn.ch>
-        <20230530164731.0b711649@wsk>
-        <ZHYRgIb6UCYq1n/Z@shell.armlinux.org.uk>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 31 May 2023 04:44:28 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AC8184
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:44:19 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-33b3fa2d560so5744665ab.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:44:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685522658; x=1688114658;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=htZDyIEWDuuAVMNaBx1l7dCV0mXn4Xe0g14NDVrYggY=;
+        b=Vk/HsALfnZXIjWY5AzFbrEedOgeacnOzPYd/QcRGxhUxf2wdu7U7SK6M+ayyeZokio
+         bWZkuJIEWNEvuOYpv9WSIKqEKLT2awiEf79916DYk/4+S7e8hht1Xg6KGwph2ZM2xHiF
+         cI/T0xqpssIDjM+OrZUCIQKh4lKvKh2PE6dQX4wGs4C/2CCAseZ1s3mRTanoqsm5nIk5
+         7qKYpHV30kHW/E0ajR708c3f4iEo6WUaY87bmeqw2awrbRqxla4pFlP7buC8929VGZjy
+         IAuQral0ZXIThoyzSFCgHyOA+etXxts+AVbFewYE9nX6YTcdVvlA9LV05FLPB0aNFJay
+         gVzg==
+X-Gm-Message-State: AC+VfDx3xq4dqUMN/OwKidomjWZxJXxjCBWksos40x2vJHCFDG/fln9T
+        vCKJcT0KznMCyVntrspGOCZpR4FTHfHrogn2v0/Nvcec23Fs
+X-Google-Smtp-Source: ACHHUZ5PmMLP+MHrPYj4mzjr8WhT1ThwwXq7MTffBjRXGJ+245Q0WyAL5OWyAs+QbGd7mpGvZ86+7TqNtOuG70ALXiR67vrEiXRr
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/h3oACLcYM6yL5d120wOvs.Q";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Received: by 2002:a92:db51:0:b0:33b:3d21:7db2 with SMTP id
+ w17-20020a92db51000000b0033b3d217db2mr1082394ilq.2.1685522658444; Wed, 31 May
+ 2023 01:44:18 -0700 (PDT)
+Date:   Wed, 31 May 2023 01:44:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000051530605fcf95365@google.com>
+Subject: [syzbot] Monthly gfs2 report (May 2023)
+From:   syzbot <syzbot+list419fa0b9f3f2be463473@syzkaller.appspotmail.com>
+To:     cluster-devel@redhat.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,137 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/h3oACLcYM6yL5d120wOvs.Q
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello gfs2 maintainers/developers,
 
-Hi Russell,
+This is a 31-day syzbot report for the gfs2 subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/gfs2
 
-> On Tue, May 30, 2023 at 04:47:31PM +0200, Lukasz Majewski wrote:
-> > Hi Andrew,
-> >  =20
-> > > > So, I'm wondering what's actually going on here... can you give
-> > > > any more details about the hardware setup?   =20
-> > >=20
-> > > And what switch it actually is. =20
-> >=20
-> > It is mv88e6071.
-> >  =20
-> > > I've not looked in too much detail,
-> > > but i think different switch families have different EEE
-> > > capabilities. =20
-> >=20
-> > Yes, some (like b53) have the ability to disable EEE in the HW.
-> >=20
-> > The above one from Marvell seems to have EEE always enabled (in
-> > silicon) and the only possibility is to not advertise it [*]. =20
->=20
-> Right, and that tells the remote end "we don't support EEE" so the
-> remote end should then disable EEE support.
->=20
-> Meanwhile the local MAC will _still_ signal LPI towards its PHY. I
-> have no idea whether the PHY will pass that LPI signal onwards to
-> the media in that case, or if it prevents entering low power mode.
->=20
-> It would be interesting to connect two of these switches together,
-> put a 'scope on the signals between the PHY and the media isolation
-> transformer, and see whether it's entering low power mode,
-> comparing when EEE is successfully negotiated vs not negotiated.
->=20
-> My suspicion would be that in the case where the MAC always signals
-> LPI to the PHY, the result of negotiation won't make a blind bit of
-> difference.
->=20
-> > > But in general, as Russell pointed out, there is no MAC support
-> > > for EEE in the mv88e6xxx driver. =20
-> >=20
-> > I may be wrong, but aren't we accessing this switch PHYs via c45 ?
-> > (MDIO_MMD_PCS devices and e.g. MDIO_PCS_EEE_ABLE registers)? =20
->=20
-> As I've said - EEE is a MAC-to-MAC thing. The PHYs do the capability
-> negotiation and handle the media dependent part of EEE. However, it's
-> the MACs that signal to the PHY "I'm idle, please enter low power
-> mode" and when both ends that they're idle, the media link only then
-> drops into low power mode. This is the basic high-level operation of
-> EEE in an 802.3 compliant system.
->=20
-> As I've also said, there are PHYs out there which do their own thing
-> as an "enhancement" to allow MACs that aren't EEE capable to gain
-> *some* of the power savings from EEE (and I previously noted one
-> such example.)
->=20
-> The PHY EEE configuration is always done via Clause 45 - either
-> through proper clause 45 cycles on the MDIO bus, or through the MMD
-> access through a couple of clause 22 registers. There aren't the
-> registers in the clause 22 address space for EEE.
->=20
-> The MDIO_PCS_EEE_ABLE registers describe what the capabilities of the
-> PHY is to the management software (in this case phylib). These are not
-> supposed to change. The advertisements are programmed via the
-> autonegotiation MMD register set. There's some additional
-> configuration bits in the PHY which control whether the clock to the
-> MAC is stopped when entering EEE low-power mode.
->=20
-> However, even with all that, the MAC is still what is involved in
-> giving the PHY permission to enter EEE low-power mode.
->=20
-> The broad outline sequence in an 802.3 compliant setup is:
->=20
-> - Whenever the MAC sends a packet, it resets the LPI timer.
-> - When LPI timer expires, MAC signals to PHY that it can enter
->   low-power mode.
-> - When the PHY at both ends both agree that they have permission from
->   their respective MACs to enter low power mode, they initiate the
->   process to put the media into low power mode.
-> - If the PHY has been given permission from management software to
-> stop clock, the PHY will stop the clock to the MAC.
-> - When the MAC has a packet to send, the MAC stops signalling
-> low-power mode to the PHY.
-> - The PHY restores the clock if it was stopped, and wakes up the link,
->   thereby causing the remote PHY to also wake up.
-> - Normal operation resumes.
->=20
-> 802.3 EEE is not a PHY-to-PHY thing, it's MAC-to-MAC.
->=20
+During the period, 1 new issues were detected and 0 were fixed.
+In total, 19 issues are still open and 17 have been fixed so far.
 
-Thanks for the detailed explanation.
+Some of the still happening issues:
 
-With "switch" setup - where I do have MAC from imx8 (fec driver)
-connected to e.g. mv88e6071 with "fixed-link", I do guess that the EEE
-management is done solely in mv88e6071?
+Ref Crashes Repro Title
+<1> 1592    Yes   WARNING in __folio_mark_dirty (2)
+                  https://syzkaller.appspot.com/bug?extid=e14d6cd6ec241f507ba7
+<2> 437     Yes   kernel BUG in gfs2_glock_nq (2)
+                  https://syzkaller.appspot.com/bug?extid=70f4e455dee59ab40c80
+<3> 51      Yes   INFO: task hung in gfs2_gl_hash_clear (3)
+                  https://syzkaller.appspot.com/bug?extid=ed7d0f71a89e28557a77
+<4> 34      Yes   WARNING in gfs2_check_blk_type
+                  https://syzkaller.appspot.com/bug?extid=092b28923eb79e0f3c41
+<5> 32      Yes   general protection fault in gfs2_dump_glock (2)
+                  https://syzkaller.appspot.com/bug?extid=427fed3295e9a7e887f2
+<6> 23      Yes   INFO: task hung in __gfs2_trans_begin
+                  https://syzkaller.appspot.com/bug?extid=a159cc6676345e04ff7d
+<7> 5       Yes   BUG: sleeping function called from invalid context in gfs2_glock_wait
+                  https://syzkaller.appspot.com/bug?extid=cdb448c6e82c20d7960c
 
-In other words - the mv88e6071 solely decides if its internal PHY shall
-signal EEE to the peer switch.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Just for the record - the mv88e6071 has a "register space" where one
-can tune assertion and wakeup timers. Unfortunately, there is no "bit"
-setting to disable EEE in the HW.
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
 
-Best regards,
-
-Lukasz Majewski
-
---
-
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/h3oACLcYM6yL5d120wOvs.Q
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmR3CMIACgkQAR8vZIA0
-zr0X5QgA5fMzeLSa4Fp2TNDYy79aUK9AOvRk2YITSAdUBD6cv5lF7ZZqhoPW1GJV
-VEfOnLNDo7hxS5uV3ghok5XFs24Xkyuf/hVL7SF8J57lxfeQV+kzFXe1vs2PgTO9
-rITCKZqOSaXGxA5pntrqZValme8isUrqB9CMiPJZ1TUsG1qr9ttK6cUKWj6LW0mF
-PNsWfsvyv6WVZngOE20ZLluNs2fFW2RiYSEPC8EUKPBgjSGijFoQeQLUawOzm46Y
-wkT+z19qlNgzNjSdoYRh2lK9z7gLyypnA3qyeFQpbv0VZ9PkYOekQfLLo29Zb7z6
-SxklIVMZvy5EblQuwRbggw+Ew8H2MQ==
-=ewf0
------END PGP SIGNATURE-----
-
---Sig_/h3oACLcYM6yL5d120wOvs.Q--
+You may send multiple commands in a single email message.
