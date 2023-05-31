@@ -2,120 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BB57172BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 02:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92ED97172C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 02:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233558AbjEaAtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 20:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
+        id S233681AbjEaAye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 20:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbjEaAth (ORCPT
+        with ESMTP id S231962AbjEaAyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 20:49:37 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AF1A0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 17:49:36 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64d1a0d640cso3894692b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 17:49:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685494176; x=1688086176;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BPd2wyhAkJ3YpAxbQZ8ec8dh+1Dyphp7NWb1XFVf7wI=;
-        b=WTADF+8ozE5wQEi8qcNO0PrWAPOAPAuNFYF0z/kGb3DV6REuux6tsP26CjIqmR6TTo
-         QElBuAOLQD2AxZa/enpBVgup4LGMFXEe4RN3JUSxG/7YPADZ3ZvYemVWq6A1QduR5mJW
-         wKi+00F/Dnzxv0tmwGb4JV3luyBNbU5TneTpY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685494176; x=1688086176;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BPd2wyhAkJ3YpAxbQZ8ec8dh+1Dyphp7NWb1XFVf7wI=;
-        b=TWkCdw8isecmZuSL6REv0dSmA1dww2r6iRpCj+wiCqK3PdmpqQfQvD95DiBEQ3xyMb
-         T6pLlKYBECP8witvFqD7lGTFiVmmrtxO4TnhAEtVb5zF9R2AOA08mAGRAGmC1rR7B4fr
-         PHRC3iPomHPlSY4XY518c7duh5regF8C+nnLPax0hkW1It6Y1icG468hQ3XfW2jfg/7i
-         d7qaK8+GQqZExrVsZFBXaliqzybxYtVBxR6XlAPOIH8fzy7W3q/lD2N/b2wU7im1l9zy
-         21I2ZkvV9wXJTqeM/qvYCxiAsrZsjIBtq+edtiFT6g2liIO3y9xynD5RE0QznzERWVCX
-         gmAQ==
-X-Gm-Message-State: AC+VfDzlMYWmHvOfnGgqb893qvAwkXDA24OuPB8+8DPSLDGxtyYrLMn0
-        aboTHXqpl8XMh5lo3JadDMKFiw0Q0IZglhPkRkA=
-X-Google-Smtp-Source: ACHHUZ49GdfBCckWeF+aIJZlU6nfDm5RqPdtw15ZUoPOaiLu9XfgLdDKJvGH0ie0FlxYU9qSUpn+sQ==
-X-Received: by 2002:a05:6a20:6a25:b0:106:4197:b7ff with SMTP id p37-20020a056a206a2500b001064197b7ffmr4699373pzk.30.1685494175985;
-        Tue, 30 May 2023 17:49:35 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id z5-20020aa791c5000000b0064fabbc047dsm2225131pfa.55.2023.05.30.17.49.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 17:49:35 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Andy Whitcroft <apw@canonical.com>
-Cc:     Kees Cook <keescook@chromium.org>, Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v4] checkpatch: Check for 0-length and 1-element arrays
-Date:   Tue, 30 May 2023 17:49:32 -0700
-Message-Id: <20230531004929.you.436-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 30 May 2023 20:54:33 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945A8F3;
+        Tue, 30 May 2023 17:54:31 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34UNjPps028314;
+        Wed, 31 May 2023 00:54:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=9893apps37Gc6TMLj9rCtbaVwTm0lOios8Idx+Pdc7k=;
+ b=Pk5CJ3thlJXIrF7MjKBQQHPnU+FUvSLng57SeuloCGNqvHew3zbEBL3eO/IU4vJolI5x
+ 8wyAXcnnfkAhcuQ5aUqgvma6ClDCf8Pha6e5phSV9u2o7Kr4jJt+4DE8YgxH7zUd5qQg
+ +XgPHj4i+Nt27oODXTEzRQqDEljwiP+WrASUEOCXOTfHVKkUWBNXeK6xbwlDQK3PxVSZ
+ E/Jsm/AiUYUqPLprRFpRjbkNW9DONYktNshEjYzOMz03ECtk2pl5UeQRO9LjBP+1jOX/
+ AyUlE3ymub3B7x793XAPJyjDIrr9pnCM5R3FbXqZVWoDbOGHVJhNgIYf20mIvNMnzLAV fg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qw8v4terk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 00:54:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34V0sH6W018899
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 00:54:17 GMT
+Received: from abhinavk-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 30 May 2023 17:54:16 -0700
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+To:     <freedreno@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>
+CC:     <dri-devel@lists.freedesktop.org>, <quic_jesszhan@quicinc.com>,
+        <quic_khsieh@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/msm/dpu: re-introduce dpu core revision to the catalog
+Date:   Tue, 30 May 2023 17:53:55 -0700
+Message-ID: <20230531005358.18090-1-quic_abhinavk@quicinc.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1845; h=from:subject:message-id; bh=GEL21VHX48Hc+3Yj+QiYsS2aI6hXB6UbODJ0k2u5hZU=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBkdpmcAHbDJqm8gmIbZ6eiJbOuoOVyek8OiALo7epp v8CgkPiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZHaZnAAKCRCJcvTf3G3AJsz/D/ 9UfeZNwPnNevZIHxAWOgNFu4kL49PAOf+nK0hZ2LpSWUM2mQQwbPwRGVz8PnWRRuzoN1lnwg7Zvhli DA+iwi8jdhznEBiOk5MWeQsWDuUOCKrBRfsy5JMbAx/8+7m6nGF6GosRv2974fVJ37rDSiWB/vSFm7 YwIaRUjSqXWMiGHovT0yrFbZlSwvvWIGYHtrdw1yQQ8s7Fisp1q7qKJm/LTAuZs8KMO1NLqhvZkNck o3pgcN/94V6g5p13xW99fABw44AlXSZ/mJD+gyQuxzdqO6QNZxT9t2vLLBSOP32IPWdRl+fWxWuycG aW4d5tGX3wGCQIsKcF5pRTq2vakex5WyTZx7/4XwKcNiWB7dGwR3nQ/TbyAMV7+nGcOLYSADMYY3Ti lU899gVrqYiRCki4W/HEzs2magklp8/hzFIEjlycXo0gL5p4Js0kZPAXUvfg9dKZwAWcu6+kxpi5eM 3hQkrl2I3+kzFv8lKvpESHebqYVRULZNUCRfa/VQ2rUeWhcAuj/gtprlSrCZHToWIfNxI8AGWz6ulV L1vNk8tSBFa+ES3UmTtpvu2kuZKjvbO8GmJG+jg8/slxuM3YZzAyML6QTb9zRHgrL6X1hrJeIPOxoZ v9O9MUvSq1pwmkXL3GaczkgNd+D5rEM9TENWvwU5HTF7QG6troisOg3bDf/Q==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ri8uiuUxcT3sxGIWj8fGWulFGqNefuoK
+X-Proofpoint-GUID: ri8uiuUxcT3sxGIWj8fGWulFGqNefuoK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-30_18,2023-05-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 spamscore=0 phishscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305310004
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fake flexible arrays have been deprecated since last millennium. Proper
-C99 flexible arrays must be used throughout the kernel so
-CONFIG_FORTIFY_SOURCE and CONFIG_UBSAN_BOUNDS can provide proper array
-bounds checking.
+With [1] dpu core revision was dropped in favor of using the
+compatible string from the device tree to select the dpu catalog
+being used in the device.
 
-Cc: Andy Whitcroft <apw@canonical.com>
-Cc: Joe Perches <joe@perches.com>
-Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>
-Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20230517204530.never.151-kees@kernel.org
----
-v4:
- - combine errors (joe)
- - switch to kerndoc url (joe)
- - add __packed for struct matching (joe)
-v3: https://lore.kernel.org/r/20230527020929.give.261-kees@kernel.org
-v2: https://lore.kernel.org/lkml/20230526173921.gonna.349-kees@kernel.org
-v1: https://lore.kernel.org/lkml/20230517204530.never.151-kees@kernel.org
----
- scripts/checkpatch.pl | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+This approach works well however also necessitates adding catalog
+entries for small register level details as dpu capabilities and/or
+features bloating the catalog unnecessarily. Examples include but
+are not limited to data_compress, interrupt register set, widebus etc.
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 30b0b4fdb3bf..64d21b6aa6df 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -7430,6 +7430,16 @@ sub process {
- 			}
- 		}
+Introduce the dpu core revision back as an entry to the catalog so that
+we can just use dpu revision checks and enable those bits which
+should be enabled unconditionally and not controlled by a catalog
+and also simplify the changes to do something like:
+
+if (dpu_core_revision > xxxxx && dpu_core_revision < xxxxx)
+	enable the bit;
+
+Also, add some of the useful macros back to be able to use dpu core
+revision effectively.
+
+[1]: https://patchwork.freedesktop.org/patch/530891/?series=113910&rev=4
+
+Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+---
+ .../msm/disp/dpu1/catalog/dpu_3_0_msm8998.h   |  1 +
+ .../msm/disp/dpu1/catalog/dpu_4_0_sdm845.h    |  1 +
+ .../msm/disp/dpu1/catalog/dpu_5_0_sm8150.h    |  1 +
+ .../msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h   |  1 +
+ .../msm/disp/dpu1/catalog/dpu_6_0_sm8250.h    |  1 +
+ .../msm/disp/dpu1/catalog/dpu_6_2_sc7180.h    |  1 +
+ .../msm/disp/dpu1/catalog/dpu_6_3_sm6115.h    |  1 +
+ .../msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h   |  1 +
+ .../msm/disp/dpu1/catalog/dpu_7_0_sm8350.h    |  1 +
+ .../msm/disp/dpu1/catalog/dpu_7_2_sc7280.h    |  1 +
+ .../msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h  |  1 +
+ .../msm/disp/dpu1/catalog/dpu_8_1_sm8450.h    |  1 +
+ .../msm/disp/dpu1/catalog/dpu_9_0_sm8550.h    |  1 +
+ .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    | 31 ++++++++++++++++++-
+ 14 files changed, 43 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+index 3c732a0360c7..16c2861e0359 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+@@ -185,6 +185,7 @@ static const struct dpu_perf_cfg msm8998_perf_data = {
+ };
  
-+# check for array definition/declarations that should use flexible arrays instead
-+		if ($sline =~ /^[\+ ]\s*}\s*;\s*$/ &&
-+		    $prevline =~ /^\+\s*(?:\}(?:\s*__packed\s*)?|$Type)\s*$Ident\s*\[\s*(0|1)\s*\]\s*;\s*$/) {
-+			if (ERROR("FLEXIBLE_ARRAY",
-+				  "Use C99 flexible arrays - see https://docs.kernel.org/process/deprecated.html#zero-length-and-one-element-arrays\n" . $hereprev) &&
-+			    $1 == '0' && $fix) {
-+				$fixed[$fixlinenr - 1] =~ s/\[\s*0\s*\]/[]/;
-+			}
-+		}
+ const struct dpu_mdss_cfg dpu_msm8998_cfg = {
++	.core_rev = DPU_HW_VER_300,
+ 	.caps = &msm8998_dpu_caps,
+ 	.ubwc = &msm8998_ubwc_cfg,
+ 	.mdp_count = ARRAY_SIZE(msm8998_mdp),
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+index 36ea1af10894..1c003935c948 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+@@ -183,6 +183,7 @@ static const struct dpu_perf_cfg sdm845_perf_data = {
+ };
+ 
+ const struct dpu_mdss_cfg dpu_sdm845_cfg = {
++	.core_rev = DPU_HW_VER_400,
+ 	.caps = &sdm845_dpu_caps,
+ 	.ubwc = &sdm845_ubwc_cfg,
+ 	.mdp_count = ARRAY_SIZE(sdm845_mdp),
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
+index b5f751354267..8c914be62a88 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
+@@ -208,6 +208,7 @@ static const struct dpu_perf_cfg sm8150_perf_data = {
+ };
+ 
+ const struct dpu_mdss_cfg dpu_sm8150_cfg = {
++	.core_rev = DPU_HW_VER_500,
+ 	.caps = &sm8150_dpu_caps,
+ 	.ubwc = &sm8150_ubwc_cfg,
+ 	.mdp_count = ARRAY_SIZE(sm8150_mdp),
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+index 8ed2b263c5ea..9465bde128eb 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+@@ -214,6 +214,7 @@ static const struct dpu_perf_cfg sc8180x_perf_data = {
+ };
+ 
+ const struct dpu_mdss_cfg dpu_sc8180x_cfg = {
++	.core_rev = DPU_HW_VER_510,
+ 	.caps = &sc8180x_dpu_caps,
+ 	.ubwc = &sc8180x_ubwc_cfg,
+ 	.mdp_count = ARRAY_SIZE(sc8180x_mdp),
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
+index daebd2170041..1b04ecfb7cde 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
+@@ -214,6 +214,7 @@ static const struct dpu_perf_cfg sm8250_perf_data = {
+ };
+ 
+ const struct dpu_mdss_cfg dpu_sm8250_cfg = {
++	.core_rev = DPU_HW_VER_600,
+ 	.caps = &sm8250_dpu_caps,
+ 	.ubwc = &sm8250_ubwc_cfg,
+ 	.mdp_count = ARRAY_SIZE(sm8250_mdp),
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
+index 0b05da2592c0..16e905e35025 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
+@@ -128,6 +128,7 @@ static const struct dpu_perf_cfg sc7180_perf_data = {
+ };
+ 
+ const struct dpu_mdss_cfg dpu_sc7180_cfg = {
++	.core_rev = DPU_HW_VER_620,
+ 	.caps = &sc7180_dpu_caps,
+ 	.ubwc = &sc7180_ubwc_cfg,
+ 	.mdp_count = ARRAY_SIZE(sc7180_mdp),
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
+index ba9de008519b..87ad7a765e4c 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
+@@ -103,6 +103,7 @@ static const struct dpu_perf_cfg sm6115_perf_data = {
+ };
+ 
+ const struct dpu_mdss_cfg dpu_sm6115_cfg = {
++	.core_rev = DPU_HW_VER_630,
+ 	.caps = &sm6115_dpu_caps,
+ 	.ubwc = &sm6115_ubwc_cfg,
+ 	.mdp_count = ARRAY_SIZE(sm6115_mdp),
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
+index 92ac348eea6b..a61140ab96ed 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
+@@ -93,6 +93,7 @@ static const struct dpu_perf_cfg qcm2290_perf_data = {
+ };
+ 
+ const struct dpu_mdss_cfg dpu_qcm2290_cfg = {
++	.core_rev = DPU_HW_VER_650,
+ 	.caps = &qcm2290_dpu_caps,
+ 	.ubwc = &qcm2290_ubwc_cfg,
+ 	.mdp_count = ARRAY_SIZE(qcm2290_mdp),
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+index 3c1b2c13398d..01abce7a311c 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+@@ -201,6 +201,7 @@ static const struct dpu_perf_cfg sm8350_perf_data = {
+ };
+ 
+ const struct dpu_mdss_cfg dpu_sm8350_cfg = {
++	.core_rev = DPU_HW_VER_700,
+ 	.caps = &sm8350_dpu_caps,
+ 	.ubwc = &sm8350_ubwc_cfg,
+ 	.mdp_count = ARRAY_SIZE(sm8350_mdp),
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
+index 5d894cbb0a62..4294f1d35d25 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
+@@ -141,6 +141,7 @@ static const struct dpu_perf_cfg sc7280_perf_data = {
+ };
+ 
+ const struct dpu_mdss_cfg dpu_sc7280_cfg = {
++	.core_rev = DPU_HW_VER_720,
+ 	.caps = &sc7280_dpu_caps,
+ 	.ubwc = &sc7280_ubwc_cfg,
+ 	.mdp_count = ARRAY_SIZE(sc7280_mdp),
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+index c3f1ae000a21..2108e531f13b 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+@@ -203,6 +203,7 @@ static const struct dpu_perf_cfg sc8280xp_perf_data = {
+ };
+ 
+ const struct dpu_mdss_cfg dpu_sc8280xp_cfg = {
++	.core_rev = DPU_HW_VER_800,
+ 	.caps = &sc8280xp_dpu_caps,
+ 	.ubwc = &sc8280xp_ubwc_cfg,
+ 	.mdp_count = ARRAY_SIZE(sc8280xp_mdp),
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+index 86c2e68ebd2c..b8d5d0ee8c82 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+@@ -209,6 +209,7 @@ static const struct dpu_perf_cfg sm8450_perf_data = {
+ };
+ 
+ const struct dpu_mdss_cfg dpu_sm8450_cfg = {
++	.core_rev = DPU_HW_VER_810,
+ 	.caps = &sm8450_dpu_caps,
+ 	.ubwc = &sm8450_ubwc_cfg,
+ 	.mdp_count = ARRAY_SIZE(sm8450_mdp),
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+index 85dc34458b88..87a7c06e3024 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+@@ -213,6 +213,7 @@ static const struct dpu_perf_cfg sm8550_perf_data = {
+ };
+ 
+ const struct dpu_mdss_cfg dpu_sm8550_cfg = {
++	.core_rev = DPU_HW_VER_900,
+ 	.caps = &sm8550_dpu_caps,
+ 	.ubwc = &sm8550_ubwc_cfg,
+ 	.mdp_count = ARRAY_SIZE(sm8550_mdp),
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+index 677048cc3b7d..cc4aa75a1219 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+@@ -19,6 +19,33 @@
+  */
+ #define MAX_BLOCKS    12
+ 
++#define DPU_HW_VER(MAJOR, MINOR, STEP)\
++		  ((((unsigned int)MAJOR & 0xF) << 28) |\
++		  ((MINOR & 0xFFF) << 16) |\
++		  (STEP & 0xFFFF))
 +
- # nested likely/unlikely calls
- 		if ($line =~ /\b(?:(?:un)?likely)\s*\(\s*!?\s*(IS_ERR(?:_OR_NULL|_VALUE)?|WARN)/) {
- 			WARN("LIKELY_MISUSE",
++#define DPU_HW_MAJOR(rev)((rev) >> 28)
++#define DPU_HW_MINOR(rev)(((rev) >> 16) & 0xFFF)
++#define DPU_HW_STEP(rev)((rev) & 0xFFFF)
++#define DPU_HW_MAJOR_MINOR(rev)((rev) >> 16)
++
++#define IS_DPU_MAJOR_MINOR_SAME(rev1, rev2)   \
++(DPU_HW_MAJOR_MINOR((rev1)) == DPU_HW_MAJOR_MINOR((rev2)))
++
++#define DPU_HW_VER_300 DPU_HW_VER(3, 0, 0) /* 8998 v1.0 */
++#define DPU_HW_VER_400 DPU_HW_VER(4, 0, 0) /* sdm845 v1.0 */
++#define DPU_HW_VER_500 DPU_HW_VER(5, 0, 0) /* sm8150 v1.0 */
++#define DPU_HW_VER_510 DPU_HW_VER(5, 1, 1) /* sc8180 */
++#define DPU_HW_VER_600 DPU_HW_VER(6, 0, 0) /* sm8250 */
++#define DPU_HW_VER_620 DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
++#define DPU_HW_VER_630 DPU_HW_VER(6, 3, 0) /* sm6115|sm4250 */
++#define DPU_HW_VER_650 DPU_HW_VER(6, 5, 0) /* qcm2290|sm4125 */
++#define DPU_HW_VER_700 DPU_HW_VER(7, 0, 0) /* sm8350 */
++#define DPU_HW_VER_720 DPU_HW_VER(7, 2, 0) /* sc7280 */
++#define DPU_HW_VER_800 DPU_HW_VER(8, 0, 0) /* sc8280xp */
++#define DPU_HW_VER_810 DPU_HW_VER(8, 1, 0) /* sm8450 */
++#define DPU_HW_VER_900 DPU_HW_VER(9, 0, 0) /* sm8550 */
++
+ #define DPU_HW_BLK_NAME_LEN	16
+ 
+ #define MAX_IMG_WIDTH 0x3fff
+@@ -769,7 +796,7 @@ struct dpu_perf_cfg {
+ /**
+  * struct dpu_mdss_cfg - information of MDSS HW
+  * This is the main catalog data structure representing
+- * this HW version. Contains number of instances,
++ * this HW version. Contains dpu core revision, number of instances,
+  * register offsets, capabilities of the all MDSS HW sub-blocks.
+  *
+  * @dma_formats        Supported formats for dma pipe
+@@ -778,6 +805,8 @@ struct dpu_perf_cfg {
+  * @mdss_irqs:         Bitmap with the irqs supported by the target
+  */
+ struct dpu_mdss_cfg {
++	u32 core_rev;
++
+ 	const struct dpu_caps *caps;
+ 
+ 	const struct dpu_ubwc_cfg *ubwc;
 -- 
-2.34.1
+2.40.1
 
