@@ -2,102 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4715D71814F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B4C71814C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236355AbjEaNVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
+        id S236224AbjEaNVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236303AbjEaNVf (ORCPT
+        with ESMTP id S230456AbjEaNVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:21:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E38B2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:20:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685539246;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qZVXm+IOCgmTsEqI3VXAOS0mHF1t0Jqm4WlZG/uBAgA=;
-        b=jVtxelwL1lcBmhyLOFrhfHFZ7EZ8O7z617p1J0IGkkf0d9jfq5bwgBhabL1QU+no6TlzGG
-        3sdX02iZJu7ceh28g/kKOi877gD7O0liYDxBqduT1qLcgZ9wplDK4rYXDw0ocsp0s0wWh9
-        jFSWKGl9zNSeW4w9eye/rLDBqITO+LI=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-517-NJbYHHPyNhahDKaEZCTUGw-1; Wed, 31 May 2023 09:20:45 -0400
-X-MC-Unique: NJbYHHPyNhahDKaEZCTUGw-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-75b02585128so399801485a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:20:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685539244; x=1688131244;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qZVXm+IOCgmTsEqI3VXAOS0mHF1t0Jqm4WlZG/uBAgA=;
-        b=SmyfPTfQZYtwef8LVmR6U/02GvQKSx/No0mBNUe1ASLpXq8wFpp3gcczW+EZu9b8aW
-         67TKve1Uytpu2PhJcNWu4HSv6NYxZqSagPXDSy4iPhy7y1hHJ7YJY/SxDRkBhrjV7e3Q
-         NHsFfyr4ZhyZwsXPjQcq49d4ET6O3pbvaCvgGR8v0ltCWj9zr9xGEFkaA/SAsn74Lv6Q
-         8cIhiCslg0Rbr3EgM2SXfKvRfdYhvcLdARS9epwuaaf7J2awU7lDmCX81TdApHk7rNVN
-         0VD/70T7uPsI89rQU98NpZSRS4LF6Xl3qtHxHWmVi1K/W4Occ4KuXAkH5knAsqyVSsyD
-         Ep9Q==
-X-Gm-Message-State: AC+VfDwrAbNoo3tZh+W7e8zizzO5OMMRhBKdNGT8W5jPQYv4Tk7QQ6wL
-        8G1ZYeJvxy8EXJh7HQ0M0jKb63YT/0GSJkIfJxcUCki0sSLnCCoFAhseRCk6Got5cDDZpDrE5iJ
-        +dhxT5yMkhgFtKoYpBIQDUAyW
-X-Received: by 2002:a05:6214:e4b:b0:5ea:d52:7042 with SMTP id o11-20020a0562140e4b00b005ea0d527042mr5919375qvc.31.1685539244764;
-        Wed, 31 May 2023 06:20:44 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7fkoMnFe/NS9uPFPjiSVB+gDPw+HMnw0nwLd0bciAqe6TJk7vFLomsCyZ6OqdJGwlkfWRidg==
-X-Received: by 2002:a05:6214:e4b:b0:5ea:d52:7042 with SMTP id o11-20020a0562140e4b00b005ea0d527042mr5919359qvc.31.1685539244549;
-        Wed, 31 May 2023 06:20:44 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:280:24f0:eb4a:c9d8:c8bb:c0b0? ([2a01:e0a:280:24f0:eb4a:c9d8:c8bb:c0b0])
-        by smtp.gmail.com with ESMTPSA id k18-20020a0cd692000000b006238ac6c3f3sm5787394qvi.33.2023.05.31.06.20.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 06:20:44 -0700 (PDT)
-Message-ID: <d4ad9b34-60d3-3ffb-ee88-8bcb3d0ec647@redhat.com>
-Date:   Wed, 31 May 2023 15:20:41 +0200
+        Wed, 31 May 2023 09:21:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74A5123;
+        Wed, 31 May 2023 06:21:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C78A63A67;
+        Wed, 31 May 2023 13:21:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8286BC4339B;
+        Wed, 31 May 2023 13:21:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685539263;
+        bh=38r927G2inyVMml0LWLz7BZPDRXvg4VePw65RoNKYtc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LdZne+qt+TBfcx78L1P/e2jFK0kSzM5OFwvU2lxOWm2TlFradzemowoi00+tmv6y0
+         sWY0vKMfcns0lX4vAY/CH6ckpM41qmMi1xxJxqhdUeryyDNpqMpv5VLXnjTFxKv5YT
+         30pidaxePH2tzlQBSPb4vfBLDSguMgjWY93t7Ya/SLeTzGPsOFra84VCLvf9MR2KbQ
+         vf2dSCmwUct0o7VADfK7uJOVALI/Hv4GXRwP19ty6V6ofqoGe4+N9AN+pZH+WtAalo
+         AsJXlkNLdL/RX27xAB+do3GU73RxNpW897H95tp6qq29koGhTPCIRNZF0s6kd6Xn8P
+         VIb+hnRbwW75g==
+Date:   Wed, 31 May 2023 14:20:57 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     William Qiu <william.qiu@starfivetech.com>
+Cc:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Ziv Xu <ziv.xu@starfivetech.com>
+Subject: Re: [PATCH v1 2/3] spi: cadence-quadspi: Add clock configuration for
+ StarFive JH7110 QSPI
+Message-ID: <075db1ba-e15c-4c3c-9430-99c866eca24d@sirena.org.uk>
+References: <20230526062529.46747-1-william.qiu@starfivetech.com>
+ <20230526062529.46747-3-william.qiu@starfivetech.com>
+ <fecc9d6a-022e-49d9-a452-8a63c409ebf3@sirena.org.uk>
+ <042c560d-1f36-8e97-3796-7423245592f4@starfivetech.com>
+ <86555925-b8dd-29a8-60cd-5c2ff2c1432a@starfivetech.com>
+ <eb68722b-bcab-4aa1-aa4e-54bfe95ef414@sirena.org.uk>
+ <93ba0b97-45aa-e59d-1454-80c4f245acc0@starfivetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/3] vfio: ap: realize the VFIO_DEVICE_GET_IRQ_INFO ioctl
-Content-Language: en-US
-To:     Anthony Krowiak <akrowiak@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     jjherne@linux.ibm.com, pasic@linux.ibm.com, farman@linux.ibm.com,
-        mjrosato@linux.ibm.com, alex.williamson@redhat.com,
-        borntraeger@linux.ibm.com
-References: <20230530223538.279198-1-akrowiak@linux.ibm.com>
- <20230530223538.279198-2-akrowiak@linux.ibm.com>
- <ee46966a-920a-37f6-9554-b2b10565cd58@redhat.com>
- <64d96082-8c05-0fb8-dfdd-96ad8efa6cd8@linux.ibm.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clegoate@redhat.com>
-In-Reply-To: <64d96082-8c05-0fb8-dfdd-96ad8efa6cd8@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="G6ktQj/BvBBSNjYO"
+Content-Disposition: inline
+In-Reply-To: <93ba0b97-45aa-e59d-1454-80c4f245acc0@starfivetech.com>
+X-Cookie: Will Rogers never met you.
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/23 15:05, Anthony Krowiak wrote:
-> 
-> 
-> On 5/31/23 8:54 AM, Cédric Le Goater wrote:
->> Reviewed-by: Cédric Le Goater <clg@redhat.com>
-> 
-> Thank you for the review.
-> 
 
-I also ran a few tests with the QEMU part on guests with passthrough
-crypto devices. This is probably a v6.5 candidate.
+--G6ktQj/BvBBSNjYO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-C.
+On Wed, May 31, 2023 at 02:19:16PM +0800, William Qiu wrote:
+> On 2023/5/30 18:33, Mark Brown wrote:
 
+> > You could always specify a different array of clocks depending on which
+> > compatible the driver sees, just like you'd conditionally request clocks
+> > individually.
+
+> 	If specify a different array of clocks depending on which compatible
+> the driver sees, since there will also be clock operations in the suspend
+> and resume interfaces, this can make the code look complicated.
+
+If you store the clock count and array in the driver data that should be
+fairly simple I think.
+
+> 	as following:
+
+> 	/* Obtain QSPI clock. */
+> 	cqspi->num_clks = devm_clk_bulk_get_all(dev, &cqspi->clks);
+> 	if (cqspi->num_clks < 0) {
+> 		dev_err(dev, "Cannot claim QSPI clock: %u\n", cqspi->num_clks);
+> 		return -EINVAL;
+> 	}
+
+> 	This way, the code will look simpler and clearer. How do you think
+> about it.
+
+I'm not clear how enable and disable would then work?
+
+--G6ktQj/BvBBSNjYO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR3SbkACgkQJNaLcl1U
+h9A5YAf6AyXRsEmaDvRUFjWZZNZoMgo2EFDR0Jl7tIiuqYCoBj6JUWnZZBV7bZnq
+tVBoRN8pUEPIdzISOFwas3GYdOHZdSMagbeH2d8DZp7Cn7YTBcHKdw4otXRB+4QN
+tXJITLg7JSbzgd6gP/wfMp+q9Yyf0q+T9kRsrBTFSYuJmh6yg8CRaHrHmdomTBAB
+ZvB/TwoNFJYrvpRIJXUQC3mOviO7eQCVr9z6ZG8iwlzlxym7ZSC/rRbG2MtKlxls
+zIaL56Kwe4MQg7LgQejCY+z4ZLUdqpLb9DiVOp9bRspzRuWdRABZsdzahkgEZCbL
+C2/G7xzOwRn0cvaF+TipvT73i+QPxA==
+=6EZR
+-----END PGP SIGNATURE-----
+
+--G6ktQj/BvBBSNjYO--
