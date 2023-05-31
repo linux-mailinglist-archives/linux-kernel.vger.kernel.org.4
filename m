@@ -2,55 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C26D7183F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAFC718420
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237477AbjEaNyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60726 "EHLO
+        id S236238AbjEaOEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237577AbjEaNu4 (ORCPT
+        with ESMTP id S237270AbjEaODk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:50:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132611711;
-        Wed, 31 May 2023 06:46:27 -0700 (PDT)
+        Wed, 31 May 2023 10:03:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A99930CF;
+        Wed, 31 May 2023 06:58:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 816E963B9D;
-        Wed, 31 May 2023 13:46:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED1C6C4339C;
-        Wed, 31 May 2023 13:46:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B454D63BDA;
+        Wed, 31 May 2023 13:48:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 984E3C433EF;
+        Wed, 31 May 2023 13:48:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540786;
-        bh=9TH9kbz82M/rlSZWTwKcCj2cFk5ctGnmCg3LAaqJ3eI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p22/GQ9z2/M4XwRfrpZySejAoXbRWMRfRZIfef1gGL2h42hF4g1BqzQWaGR4pESMd
-         RRkOI9Urn3F0toz5G5DE6tl2QJpzhT/L0LqBeFppu1nG7CqOwJ5HhE8+ca4kseF0ci
-         fsRd8U4n5Kqh5Xqk5T4ey5OZmAH8WPVoiMbNoHAJGeyj7rL3XdRy4hcLlQPNl/O5yr
-         fRKgGu7Y5cdDaWTKuY7L0IHwv3pEN+CEBX0Y8evrdpnsVHpe/GXvI5pn2CiGm/gTNQ
-         pIPXZUBtPhxSOwrO0ukgZv89zy/pkrDdyomjfXFhfCfxbNvuLujQ6xEwHn0MXg11zQ
-         jDmiwPn7Z9HIw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ross Lagerwall <ross.lagerwall@citrix.com>,
-        Juergen Gross <jgross@suse.com>,
-        Sasha Levin <sashal@kernel.org>, roger.pau@citrix.com,
-        sstabellini@kernel.org, axboe@kernel.dk,
-        xen-devel@lists.xenproject.org, linux-block@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 10/10] xen/blkfront: Only check REQ_FUA for writes
-Date:   Wed, 31 May 2023 09:46:06 -0400
-Message-Id: <20230531134606.3385210-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230531134606.3385210-1-sashal@kernel.org>
-References: <20230531134606.3385210-1-sashal@kernel.org>
+        s=k20201202; t=1685540926;
+        bh=5oiWn6L9rJqvMfCt+T7VTPNle9Rnvsv/ziJ/f7AOOsc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iQu9QtR0wBqSrRiiuepq4IExLg5r6UtNI9pderJLGcaJDMrkAbtMSLA/ccZClJHlh
+         ceLh1hziCxKv3Uv4cJ2ZP8FWOR8+cVonqIKTAOEnqtTxActK3j0LsiJDmDbd9JjgDn
+         l0uXBQLscmnWHb2ZfLooP0bsfPZLlJIQWifDetum5djG3yL3gtX4RRgiXxIPPei1ff
+         LbYkQf7aai9Yehjq/YOXfYVL+QQFnXKCc7d8bdZAyP8v1kIElycciWBQALnBmtu+MT
+         2eMI1Rm9LuqM2fio1ElVVnu3mCxr3iTgaZ7V0HqVcHPKoPDaCZcKUOmVmfyuan2W50
+         0fPO5tgMYxNTg==
+Date:   Wed, 31 May 2023 15:48:43 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Frank Oltmanns <frank@oltmanns.dev>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        Andre Przywara <andre.przywara@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>, Icenowy Zheng <icenowy@aosc.io>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [RFC PATCH 0/3] clk: sunxi-ng: Optimize rate selection for NKM
+ clocks
+Message-ID: <flngzi4henkzcpzwdexencdkw77h52g3nduup7pwctpwfiuznk@eewnnut5mvsq>
+References: <20230527132747.83196-1-frank@oltmanns.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4ll2i5xo7tjkazzo"
+Content-Disposition: inline
+In-Reply-To: <20230527132747.83196-1-frank@oltmanns.dev>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,43 +63,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ross Lagerwall <ross.lagerwall@citrix.com>
 
-[ Upstream commit b6ebaa8100090092aa602530d7e8316816d0c98d ]
+--4ll2i5xo7tjkazzo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The existing code silently converts read operations with the
-REQ_FUA bit set into write-barrier operations. This results in data
-loss as the backend scribbles zeroes over the data instead of returning
-it.
+Hi Frank,
 
-While the REQ_FUA bit doesn't make sense on a read operation, at least
-one well-known out-of-tree kernel module does set it and since it
-results in data loss, let's be safe here and only look at REQ_FUA for
-writes.
+On Sat, May 27, 2023 at 03:27:44PM +0200, Frank Oltmanns wrote:
+> I would like to bring your attention to the current process of setting
+> the rate of an NKM clock. As it stands, when setting the rate of an
+> NKM clock, the rate nearest but less than or equal to the requested
+> rate is found, instead of the nearest rate.
 
-Signed-off-by: Ross Lagerwall <ross.lagerwall@citrix.com>
-Acked-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/20230426164005.2213139-1-ross.lagerwall@citrix.com
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/block/xen-blkfront.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Yeah, it's actually pretty common, see clk_mux_determine_rate_flags()
+for example. Some devices require that we don't overshoot, while some
+prefer to have the closest rate.
 
-diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
-index cd58f582c50c1..b649f1a68b417 100644
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -780,7 +780,8 @@ static int blkif_queue_rw_req(struct request *req, struct blkfront_ring_info *ri
- 		ring_req->u.rw.handle = info->handle;
- 		ring_req->operation = rq_data_dir(req) ?
- 			BLKIF_OP_WRITE : BLKIF_OP_READ;
--		if (req_op(req) == REQ_OP_FLUSH || req->cmd_flags & REQ_FUA) {
-+		if (req_op(req) == REQ_OP_FLUSH ||
-+		    (req_op(req) == REQ_OP_WRITE && (req->cmd_flags & REQ_FUA))) {
- 			/*
- 			 * Ideally we can do an unordered flush-to-disk.
- 			 * In case the backend onlysupports barriers, use that.
--- 
-2.39.2
+Both are fine, and it's a bit context specific which one we should
+favour. If we were to do anything, it would be to support both and let
+the clock driver select which behaviour it wants.
 
+> Moreover, ccu_nkm_find_best() is called multiple times (footnote [1])
+> when setting a rate, each time iterating over all combinations of n,
+> k, and m.
+
+Yeah, that's expected as well.
+
+> In response to this, I propose the following refinements to optimize the NKM
+> clock setting:
+>  a. when finding the best rate use the nearest rate, even if it is greater than
+>     the requested rate (PATCH 1)
+>  b. utilize binary search to find the best rate by going through a
+>     precalculated, ordered list of all meaningful combinations of n, k, and m
+>     (PATCH 2)
+
+One thing you haven't really addressed is why we would be doing this? Is
+there some clocks that require a more precise clock and don't? Is the
+factor calculation a bottleneck for some workloads?
+
+Clocks in general are very regression-prone, so I'd rather be a bit
+conservative there, and "if it ain't broke, don't fix it".
+
+Maxime
+
+--4ll2i5xo7tjkazzo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZHdQOwAKCRDj7w1vZxhR
+xY7YAQCRMdM5sXe5+PRdsFQ42wN/ON/BTZv5VyjJjPNXDSV+fwEAxbyTFNxkGl7t
+ATFXYYJKY2m8tEcRbPXGriRr5AMQKQ0=
+=vNhW
+-----END PGP SIGNATURE-----
+
+--4ll2i5xo7tjkazzo--
