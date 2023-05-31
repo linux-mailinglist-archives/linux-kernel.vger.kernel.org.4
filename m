@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E869A717C74
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F49717C77
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235647AbjEaJwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
+        id S235652AbjEaJyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233199AbjEaJwn (ORCPT
+        with ESMTP id S232671AbjEaJyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:52:43 -0400
-Received: from frasgout12.his.huawei.com (unknown [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C12E2;
-        Wed, 31 May 2023 02:52:41 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4QWPQf0hfxz9xGWp;
-        Wed, 31 May 2023 17:40:58 +0800 (CST)
-Received: from [10.206.134.65] (unknown [10.206.134.65])
-        by APP2 (Coremail) with SMTP id GxC2BwAX513IGHdkaX3yAg--.2936S2;
-        Wed, 31 May 2023 10:52:16 +0100 (CET)
-Message-ID: <38048f0a-7706-12c4-dc85-4d2fa13df015@huaweicloud.com>
-Date:   Wed, 31 May 2023 11:52:06 +0200
+        Wed, 31 May 2023 05:54:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71BFE8
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:53:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685526829;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xn2QBqttB+dOYYBuMERj9tPY3tQCj+h6bHqi72Etugo=;
+        b=HL0Exjzd1A/K2FKRfX9G8gs4ikS2vnG4M4UyyM8aZcyJDeUHSlF4FeDRFaU9tdDDjX5obj
+        qz0ofHYtggjofP6VSMjgGYxb1QrDm5MSLu7oQrBz7zf9rtiMSmVXFzdcBaQfUD8n/3SG7g
+        MuEmyYoAeIfa+4qMb2E0GKiFA8tjnuU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-46-YoT3WvbRNtq9mfbC6sguhg-1; Wed, 31 May 2023 05:53:39 -0400
+X-MC-Unique: YoT3WvbRNtq9mfbC6sguhg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9C96101A53A;
+        Wed, 31 May 2023 09:53:38 +0000 (UTC)
+Received: from localhost (ovpn-12-54.pek2.redhat.com [10.72.12.54])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D80EB140E962;
+        Wed, 31 May 2023 09:53:37 +0000 (UTC)
+Date:   Wed, 31 May 2023 17:53:34 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Eric Biederman <ebiederm@xmission.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Michael Holzheu <holzheu@linux.vnet.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH 6/6] kexec: enable kexec_crash_size to support two crash
+ kernel regions
+Message-ID: <ZHcY/jsExa8t7hJW@MiWiFi-R3L-srv>
+References: <20230527123439.772-1-thunder.leizhen@huawei.com>
+ <20230527123439.772-7-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [syzbot] [reiserfs?] possible deadlock in open_xa_dir
-Content-Language: en-US
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Paul Moore <paul@paul-moore.com>,
-        syzbot <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com>
-Cc:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        roberto.sassu@huawei.com, syzkaller-bugs@googlegroups.com,
-        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        Jeff Mahoney <jeffm@suse.com>, Jan Kara <jack@suse.cz>
-References: <0000000000007bedb605f119ed9f@google.com>
- <00000000000000964605faf87416@google.com>
- <CAHC9VhTZ=Esk+JxgAjch2J44WuLixe-SZMXW2iGHpLdrdMKQ=g@mail.gmail.com>
- <1020d006-c698-aacc-bcc3-92e5b237ef91@huaweicloud.com>
-In-Reply-To: <1020d006-c698-aacc-bcc3-92e5b237ef91@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwAX513IGHdkaX3yAg--.2936S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF4fXFyxZrWxZw4DXr18Zrb_yoWrKw1rpr
-        W8ta1DKryqvr1kJr40q3WDW340qrsxG34UJr1DGFyUuanrZrnFqF4Ivw1Fgr45JrWkCFsx
-        Jr1jyw1UZrn5JwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
-        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-        xUOyCJDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAOBF1jj43qAwABsf
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230527123439.772-7-thunder.leizhen@huawei.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,132 +64,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/2023 11:49 AM, Roberto Sassu wrote:
-> On 5/5/2023 11:36 PM, Paul Moore wrote:
->> On Fri, May 5, 2023 at 4:51 PM syzbot
->> <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com> wrote:
->>>
->>> syzbot has bisected this issue to:
->>>
->>> commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
->>> Author: Roberto Sassu <roberto.sassu@huawei.com>
->>> Date:   Fri Mar 31 12:32:18 2023 +0000
->>>
->>>      reiserfs: Add security prefix to xattr name in 
->>> reiserfs_security_write()
->>>
->>> bisection log:  
->>> https://syzkaller.appspot.com/x/bisect.txt?x=14403182280000
->>> start commit:   3c4aa4434377 Merge tag 'ceph-for-6.4-rc1' of 
->>> https://githu..
->>> git tree:       upstream
->>> final oops:     
->>> https://syzkaller.appspot.com/x/report.txt?x=16403182280000
->>> console output: https://syzkaller.appspot.com/x/log.txt?x=12403182280000
->>> kernel config:  
->>> https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
->>> dashboard link: 
->>> https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
->>> syz repro:      
->>> https://syzkaller.appspot.com/x/repro.syz?x=12442414280000
->>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=176a7318280000
->>>
->>> Reported-by: syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com
->>> Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in 
->>> reiserfs_security_write()")
->>>
->>> For information about bisection process see: 
->>> https://goo.gl/tpsmEJ#bisection
->>
->> I don't think Roberto's patch identified above is the actual root
->> cause of this problem as reiserfs_xattr_set_handle() is called in
->> reiserfs_security_write() both before and after the patch.  However,
->> due to some bad logic in reiserfs_security_write() which Roberto
->> corrected, I'm thinking that it is possible this code is being
->> exercised for the first time and syzbot is starting to trigger a
->> locking issue in the reiserfs code ... ?
-> 
-> + Jan, Jeff (which basically restructured the lock)
+On 05/27/23 at 08:34pm, Zhen Lei wrote:
+> The crashk_low_res should be considered by /sys/kernel/kexec_crash_size
+> to support two crash kernel regions. Since crashk_res manages the memory
+> with high address and crashk_low_res manages the memory with low address,
+> crashk_low_res is shrunken only when all crashk_res is shrunken. And
+> because when there is only one crash kernel region, crashk_res is always
+> used. Therefore, if all crashk_res is shrunken and crashk_low_res still
+> exists, swap them.
 
-Actually adding Jan and Jeff.
+This looks good, otherwise someone else won't stop attempting to add
+support of crashk_low_res shrinking. Not sure if this will bring corner
+case issue in testing, let's see. For the patch log, I tried to
+rephrase, feel free to refer to.
 
-Roberto
+=====
+The crashk_low_res should be considered by /sys/kernel/kexec_crash_size
+to support two crash kernel regions shrinking if existing.
 
-> + Petr, Ingo, Will
+While doing it, crashk_low_res will only be shrunk when the entire
+crashk_res is empty; and if the crashk_res is empty and crahk_low_res
+is not, change crashk_low_res to be crashk_res.
+=====
+
+With the log updated, you can add:
+
+Acked-by: Baoquan He <bhe@redhat.com>
+
 > 
-> I involve the lockdep experts, to get a bit of help on this.
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  kernel/kexec_core.c | 43 ++++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 38 insertions(+), 5 deletions(-)
 > 
-> First of all, the lockdep warning is trivial to reproduce:
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index e82bc6d6634136a..c1d50f6566300d9 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -1091,6 +1091,11 @@ __bpf_kfunc void crash_kexec(struct pt_regs *regs)
+>  	}
+>  }
+>  
+> +static inline resource_size_t crash_resource_size(const struct resource *res)
+> +{
+> +	return !res->end ? 0 : resource_size(res);
+> +}
+> +
+>  ssize_t crash_get_memory_size(void)
+>  {
+>  	ssize_t size = 0;
+> @@ -1098,8 +1103,8 @@ ssize_t crash_get_memory_size(void)
+>  	if (!kexec_trylock())
+>  		return -EBUSY;
+>  
+> -	if (crashk_res.end != crashk_res.start)
+> -		size = resource_size(&crashk_res);
+> +	size += crash_resource_size(&crashk_res);
+> +	size += crash_resource_size(&crashk_low_res);
+>  
+>  	kexec_unlock();
+>  	return size;
+> @@ -1135,7 +1140,7 @@ int __crash_shrink_memory(struct resource *old_res, unsigned long new_size)
+>  int crash_shrink_memory(unsigned long new_size)
+>  {
+>  	int ret = 0;
+> -	unsigned long old_size;
+> +	unsigned long old_size, low_size;
+>  
+>  	if (!kexec_trylock())
+>  		return -EBUSY;
+> @@ -1144,14 +1149,42 @@ int crash_shrink_memory(unsigned long new_size)
+>  		ret = -ENOENT;
+>  		goto unlock;
+>  	}
+> -	old_size = !crashk_res.end ? 0 : resource_size(&crashk_res);
+> +
+> +	low_size = crash_resource_size(&crashk_low_res);
+> +	old_size = crash_resource_size(&crashk_res) + low_size;
+>  	new_size = roundup(new_size, KEXEC_CRASH_MEM_ALIGN);
+>  	if (new_size >= old_size) {
+>  		ret = (new_size == old_size) ? 0 : -EINVAL;
+>  		goto unlock;
+>  	}
+>  
+> -	ret = __crash_shrink_memory(&crashk_res, new_size);
+> +	/*
+> +	 * (low_size > new_size) implies that low_size is greater than zero.
+> +	 * This also means that if low_size is zero, the else branch is taken.
+> +	 *
+> +	 * If low_size is greater than 0, (low_size > new_size) indicates that
+> +	 * crashk_low_res also needs to be shrunken. Otherwise, only crashk_res
+> +	 * needs to be shrunken.
+> +	 */
+> +	if (low_size > new_size) {
+> +		ret = __crash_shrink_memory(&crashk_res, 0);
+> +		if (ret)
+> +			goto unlock;
+> +
+> +		ret = __crash_shrink_memory(&crashk_low_res, new_size);
+> +	} else {
+> +		ret = __crash_shrink_memory(&crashk_res, new_size - low_size);
+> +	}
+> +
+> +	/* Swap crashk_res and crashk_low_res if needed */
+> +	if (!crashk_res.end && crashk_low_res.end) {
+> +		crashk_res.start = crashk_low_res.start;
+> +		crashk_res.end   = crashk_low_res.end;
+> +		release_resource(&crashk_low_res);
+> +		crashk_low_res.start = 0;
+> +		crashk_low_res.end   = 0;
+> +		insert_resource(&iomem_resource, &crashk_res);
+> +	}
+>  
+>  unlock:
+>  	kexec_unlock();
+> -- 
+> 2.25.1
 > 
-> # dd if=/dev/zero of=reiserfs.img bs=1M count=100
-> # losetup -f --show reiserfs.img
-> /dev/loop0
-> # mkfs.reiserfs /dev/loop0
-> # mount /dev/loop0 /mnt/
-> # touch file0
-> 
-> In the testing system, Smack is the major LSM.
-> 
-> Ok, so the warning here is clear:
-> 
-> https://syzkaller.appspot.com/x/log.txt?x=12403182280000
-> 
-> However, I was looking if that can really happen. From this:
-> 
-> [   77.746561][ T5418] -> #1 (&sbi->lock){+.+.}-{3:3}:
-> [   77.753772][ T5418]        lock_acquire+0x23e/0x630
-> [   77.758792][ T5418]        __mutex_lock_common+0x1d8/0x2530
-> [   77.764504][ T5418]        mutex_lock_nested+0x1b/0x20
-> [   77.769868][ T5418]        reiserfs_write_lock+0x70/0xc0
-> [   77.775321][ T5418]        reiserfs_mkdir+0x321/0x870
-> 
-> I see that the lock is taken in reiserfs_write_lock(), while lockdep says:
-> 
-> [   77.710227][ T5418] but task is already holding lock:
-> [   77.717587][ T5418] ffff88807568d090 (&sbi->lock){+.+.}-{3:3}, at: 
-> reiserfs_write_lock_nested+0x4a/0xb0
-> 
-> which is in a different place, I believe here:
-> 
-> int reiserfs_paste_into_item(struct reiserfs_transaction_handle *th,
->                               /* Path to the pasted item. */
-> [...]
-> 
->          depth = reiserfs_write_unlock_nested(sb);
->          dquot_free_space_nodirty(inode, pasted_size);
->          reiserfs_write_lock_nested(sb, depth);
->          return retval;
-> }
-> 
-> This is called by reiserfs_add_entry(), which is called by 
-> reiserfs_create() (it is in the lockdep trace). After returning to 
-> reiserfs_create(), d_instantiate_new() is called.
-> 
-> I don't know exactly, I take the part that the lock is held. But if it 
-> is held, how d_instantiate_new() can be executed in another task?
-> 
-> static int reiserfs_create(struct mnt_idmap *idmap, struct inode *dir,
->                          struct dentry *dentry, umode_t mode, bool excl)
-> {
-> 
-> [...]
-> 
->          reiserfs_write_lock(dir->i_sb);
-> 
->          retval = journal_begin(&th, dir->i_sb, jbegin_count);
-> 
-> [...]
-> 
->          d_instantiate_new(dentry, inode);
->          retval = journal_end(&th);
-> 
-> out_failed:
->          reiserfs_write_unlock(dir->i_sb);
-> 
-> If the lock is held, the scenario lockdep describes cannot happen. Any 
-> thoughts?
-> 
-> Thanks
-> 
-> Roberto
 
