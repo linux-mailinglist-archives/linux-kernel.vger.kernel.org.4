@@ -2,77 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A79071742B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 05:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AD471742C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 05:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234051AbjEaDNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 23:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
+        id S234067AbjEaDNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 23:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234038AbjEaDNf (ORCPT
+        with ESMTP id S234048AbjEaDNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 23:13:35 -0400
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313C3EC
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 20:13:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Vjvoozt_1685502810;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0Vjvoozt_1685502810)
+        Tue, 30 May 2023 23:13:37 -0400
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E39AE5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 20:13:35 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R511e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Vjvo1do_1685502811;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0Vjvo1do_1685502811)
           by smtp.aliyun-inc.com;
-          Wed, 31 May 2023 11:13:31 +0800
+          Wed, 31 May 2023 11:13:32 +0800
 From:   Jingbo Xu <jefflexu@linux.alibaba.com>
 To:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
         linux-erofs@lists.ozlabs.org
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/5] erofs: cleanup of xattr handling
-Date:   Wed, 31 May 2023 11:13:25 +0800
-Message-Id: <20230531031330.3504-1-jefflexu@linux.alibaba.com>
+Subject: [PATCH v4 1/5] erofs: enhance erofs_xattr_iter_fixup() helper
+Date:   Wed, 31 May 2023 11:13:26 +0800
+Message-Id: <20230531031330.3504-2-jefflexu@linux.alibaba.com>
 X-Mailer: git-send-email 2.19.1.6.gb485710b
+In-Reply-To: <20230531031330.3504-1-jefflexu@linux.alibaba.com>
+References: <20230531031330.3504-1-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Enhance erofs_xattr_iter_fixup() helper so that it could be reused in
+the situation where it.ofs could not span the block boundary.
 
-changes since v3:
-- patch 1: make a unified erofs_xattr_iter_fixup() API with newly
-  introduced "bool nospan" argument; call erofs_init_metabuf() and
-  erofs_bread() separately instead of erofs_read_metabuf()
-- patch 2: avoid duplicated strlen() calculation in erofs_getxattr(); no
-  need zeroing other fields when initializing 'struct erofs_xattr_iter'
-- patch 4: don't explode 'struct erofs_xattr_iter' with inode/getxattr
-  fields; instead pass inode/getxattr parameters through function
-  parameters of erofs_iter_[inline|shared]_xattr()
-- patch 5: don't explode 'struct erofs_xattr_iter' with remaining field;
-  instead  calculate and check the remaining inside
-  erofs_iter_inline_xattr()
+Besides call erofs_init_metabuf() and erofs_bread() separately to avoid
+the repetition of assigning buf->inode when iterating xattrs.
 
-changes since v2:
-- rebase to v6.4-rc2
-- passes xattr tests (erofs/019,020,021) of erofs-utils [1]
+Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+---
+ fs/erofs/xattr.c | 82 +++++++++++++++++++++---------------------------
+ 1 file changed, 35 insertions(+), 47 deletions(-)
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/log/?h=experimental-tests
-
-v3: https://lore.kernel.org/lkml/20230518024551.123990-1-jefflexu@linux.alibaba.com/
-v2: https://lore.kernel.org/all/20230330082910.125374-1-jefflexu@linux.alibaba.com/
-v1: https://lore.kernel.org/all/20230323000949.57608-1-jefflexu@linux.alibaba.com/
-
-Jingbo Xu (5):
-  erofs: enhance erofs_xattr_iter_fixup() helper
-  erofs: unify xattr_iter structures
-  erofs: make the size of read data stored in buffer_ofs
-  erofs: unify inline/share xattr iterators for listxattr/getxattr
-  erofs: use separate xattr parsers for listxattr/getxattr
-
- fs/erofs/xattr.c | 683 ++++++++++++++++++-----------------------------
- 1 file changed, 265 insertions(+), 418 deletions(-)
-
+diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
+index bbfe7ce170d2..df6c4e6f1f4e 100644
+--- a/fs/erofs/xattr.c
++++ b/fs/erofs/xattr.c
+@@ -29,6 +29,24 @@ struct xattr_iter {
+ 	unsigned int ofs;
+ };
+ 
++static inline int erofs_xattr_iter_fixup(struct xattr_iter *it, bool nospan)
++{
++	if (it->ofs < it->sb->s_blocksize)
++		return 0;
++
++	if (nospan && it->ofs != it->sb->s_blocksize) {
++		DBG_BUGON(1);
++		return -EFSCORRUPTED;
++	}
++
++	it->blkaddr += erofs_blknr(it->sb, it->ofs);
++	it->kaddr = erofs_bread(&it->buf, it->blkaddr, EROFS_KMAP);
++	if (IS_ERR(it->kaddr))
++		return PTR_ERR(it->kaddr);
++	it->ofs = erofs_blkoff(it->sb, it->ofs);
++	return 0;
++}
++
+ static int erofs_init_inode_xattrs(struct inode *inode)
+ {
+ 	struct erofs_inode *const vi = EROFS_I(inode);
+@@ -80,6 +98,7 @@ static int erofs_init_inode_xattrs(struct inode *inode)
+ 		goto out_unlock;
+ 	}
+ 
++	it.sb = sb;
+ 	it.buf = __EROFS_BUF_INITIALIZER;
+ 	it.blkaddr = erofs_blknr(sb, erofs_iloc(inode) + vi->inode_isize);
+ 	it.ofs = erofs_blkoff(sb, erofs_iloc(inode) + vi->inode_isize);
+@@ -105,19 +124,11 @@ static int erofs_init_inode_xattrs(struct inode *inode)
+ 	it.ofs += sizeof(struct erofs_xattr_ibody_header);
+ 
+ 	for (i = 0; i < vi->xattr_shared_count; ++i) {
+-		if (it.ofs >= sb->s_blocksize) {
+-			/* cannot be unaligned */
+-			DBG_BUGON(it.ofs != sb->s_blocksize);
+-
+-			it.kaddr = erofs_read_metabuf(&it.buf, sb, ++it.blkaddr,
+-						      EROFS_KMAP);
+-			if (IS_ERR(it.kaddr)) {
+-				kfree(vi->xattr_shared_xattrs);
+-				vi->xattr_shared_xattrs = NULL;
+-				ret = PTR_ERR(it.kaddr);
+-				goto out_unlock;
+-			}
+-			it.ofs = 0;
++		ret = erofs_xattr_iter_fixup(&it, true);
++		if (ret) {
++			kfree(vi->xattr_shared_xattrs);
++			vi->xattr_shared_xattrs = NULL;
++			goto out_unlock;
+ 		}
+ 		vi->xattr_shared_xattrs[i] =
+ 			le32_to_cpu(*(__le32 *)(it.kaddr + it.ofs));
+@@ -150,20 +161,6 @@ struct xattr_iter_handlers {
+ 		      unsigned int len);
+ };
+ 
+-static inline int xattr_iter_fixup(struct xattr_iter *it)
+-{
+-	if (it->ofs < it->sb->s_blocksize)
+-		return 0;
+-
+-	it->blkaddr += erofs_blknr(it->sb, it->ofs);
+-	it->kaddr = erofs_read_metabuf(&it->buf, it->sb, it->blkaddr,
+-				       EROFS_KMAP);
+-	if (IS_ERR(it->kaddr))
+-		return PTR_ERR(it->kaddr);
+-	it->ofs = erofs_blkoff(it->sb, it->ofs);
+-	return 0;
+-}
+-
+ static int inline_xattr_iter_begin(struct xattr_iter *it,
+ 				   struct inode *inode)
+ {
+@@ -201,7 +198,7 @@ static int xattr_foreach(struct xattr_iter *it,
+ 	int err;
+ 
+ 	/* 0. fixup blkaddr, ofs, ipage */
+-	err = xattr_iter_fixup(it);
++	err = erofs_xattr_iter_fixup(it, false);
+ 	if (err)
+ 		return err;
+ 
+@@ -236,14 +233,9 @@ static int xattr_foreach(struct xattr_iter *it,
+ 	processed = 0;
+ 
+ 	while (processed < entry.e_name_len) {
+-		if (it->ofs >= it->sb->s_blocksize) {
+-			DBG_BUGON(it->ofs > it->sb->s_blocksize);
+-
+-			err = xattr_iter_fixup(it);
+-			if (err)
+-				goto out;
+-			it->ofs = 0;
+-		}
++		err = erofs_xattr_iter_fixup(it, true);
++		if (err)
++			goto out;
+ 
+ 		slice = min_t(unsigned int, it->sb->s_blocksize - it->ofs,
+ 			      entry.e_name_len - processed);
+@@ -271,14 +263,9 @@ static int xattr_foreach(struct xattr_iter *it,
+ 	}
+ 
+ 	while (processed < value_sz) {
+-		if (it->ofs >= it->sb->s_blocksize) {
+-			DBG_BUGON(it->ofs > it->sb->s_blocksize);
+-
+-			err = xattr_iter_fixup(it);
+-			if (err)
+-				goto out;
+-			it->ofs = 0;
+-		}
++		err = erofs_xattr_iter_fixup(it, true);
++		if (err)
++			goto out;
+ 
+ 		slice = min_t(unsigned int, it->sb->s_blocksize - it->ofs,
+ 			      value_sz - processed);
+@@ -444,13 +431,14 @@ int erofs_getxattr(struct inode *inode, int index,
+ 	if (it.name.len > EROFS_NAME_LEN)
+ 		return -ERANGE;
+ 
++	it.it.sb = inode->i_sb;
+ 	it.it.buf = __EROFS_BUF_INITIALIZER;
++	erofs_init_metabuf(&it.it.buf, it.it.sb);
+ 	it.name.name = name;
+ 
+ 	it.buffer = buffer;
+ 	it.buffer_size = buffer_size;
+ 
+-	it.it.sb = inode->i_sb;
+ 	ret = inline_getxattr(inode, &it);
+ 	if (ret == -ENOATTR)
+ 		ret = shared_getxattr(inode, &it);
+@@ -632,14 +620,14 @@ ssize_t erofs_listxattr(struct dentry *dentry,
+ 	if (ret)
+ 		return ret;
+ 
++	it.it.sb = dentry->d_sb;
+ 	it.it.buf = __EROFS_BUF_INITIALIZER;
++	erofs_init_metabuf(&it.it.buf, it.it.sb);
+ 	it.dentry = dentry;
+ 	it.buffer = buffer;
+ 	it.buffer_size = buffer_size;
+ 	it.buffer_ofs = 0;
+ 
+-	it.it.sb = dentry->d_sb;
+-
+ 	ret = inline_listxattr(&it);
+ 	if (ret >= 0 || ret == -ENOATTR)
+ 		ret = shared_listxattr(&it);
 -- 
 2.19.1.6.gb485710b
 
