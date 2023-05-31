@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E8F718944
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D00718943
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjEaSUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 14:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
+        id S230306AbjEaSUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 14:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbjEaST4 (ORCPT
+        with ESMTP id S230391AbjEaST4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 31 May 2023 14:19:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD3E191;
-        Wed, 31 May 2023 11:19:53 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B000193;
+        Wed, 31 May 2023 11:19:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0647563E90;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E983063E91;
         Wed, 31 May 2023 18:19:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 606D8C433EF;
-        Wed, 31 May 2023 18:19:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 558A1C433EF;
+        Wed, 31 May 2023 18:19:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685557159;
-        bh=v9YM8gQaPNLPkhe86wDCjn8lgM/GeKdHkJhnDW1pEuw=;
+        s=k20201202; t=1685557160;
+        bh=xVsaMV+9hD9hnhWwGlp3/jFFIjhY7IAh+Oqa9Da3rkA=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=JYo6TLZOlZsn7VKv+90qU4M7rNogKmc6C9F9CxPpWksSplOCmfphmHZxleni1+lC7
-         dkJGDsEa9g0pmzjoBwxJBxKyeRtox4/bZFvSKIu6nDe0njbLgcwuvvyxTABmy3nDpz
-         AqEvAH4cc1EuiVK1+DuZUUpzZyhDl916X0U2Xr7/mq4DEQdRO+Bs4NAJWJOlNStBey
-         2AZDCTJQX3volFE/pmjYuzRYUGoAptx3+6tyR8Zz6fhy0x2EiTLDiOX1QzSy11FIFy
-         4gufV5S5AFELGgJMlsr2KiRnbjDCMdrOnYM53yXOBRYhjW2AluvuBObuive4nnukNi
-         16ZHOnLKdpYYA==
+        b=F1bceTUGnOMkljXlMNnSRk7uKaOF67XyFGYc6bwkSHNSpolf+E8oOGo1niMgD6iX7
+         RR8lsMVL8ddsaR5Rl+dBJDJFWSZkMmBsejc3jLNoYrjyvIQvILuCy8KHTsrcNu5suV
+         fsDJ4vTNlHtGF7fmmErafZ7+a0cRsx0U5mo5vSDkbaoGa/ZHaXaegvSX7lEaRHg1dR
+         ZeXoZrjcXGu7uoKtM+dTmOu2OMexK5J/O2MyLTJ5+d+S2XctVCzjwRzyz86EeJGHar
+         J9fFS+C55dBI5jCrGyhVJjx0Atv9dB1Kj+F46WrjcU3iqLL14IdZXN9iA34/OruyGF
+         YpoIMGP9fyo6A==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 47445E52BF3;
-        Wed, 31 May 2023 18:19:19 +0000 (UTC)
-Subject: Re: [GIT PULL] ext4 fixes for 6.4-rc5
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42935E52BFB;
+        Wed, 31 May 2023 18:19:20 +0000 (UTC)
+Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230531154552.GA814122@mit.edu>
-References: <20230531154552.GA814122@mit.edu>
-X-PR-Tracked-List-Id: <linux-ext4.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230531154552.GA814122@mit.edu>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus_stable
-X-PR-Tracked-Commit-Id: eb1f822c76beeaa76ab8b6737ab9dc9f9798408c
+In-Reply-To: <ZHd8qRfFribp26D6@nvidia.com>
+References: <ZHd8qRfFribp26D6@nvidia.com>
+X-PR-Tracked-List-Id: <linux-rdma.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZHd8qRfFribp26D6@nvidia.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+X-PR-Tracked-Commit-Id: 5842d1d9c1b0d17e0c29eae65ae1f245f83682dd
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: fd2186d1c708fa0ec64291da5aa6b26fb44197c3
-Message-Id: <168555715928.4511.3440437819801629558.pr-tracker-bot@kernel.org>
-Date:   Wed, 31 May 2023 18:19:19 +0000
-To:     Theodore Ts'o <tytso@mit.edu>
+X-PR-Merge-Commit-Id: 884fe9da1b7ccbea31b118f902fbc78f58366b4a
+Message-Id: <168555716026.4511.10261751054544702219.pr-tracker-bot@kernel.org>
+Date:   Wed, 31 May 2023 18:19:20 +0000
+To:     Jason Gunthorpe <jgg@nvidia.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Leon Romanovsky <leonro@nvidia.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,12 +62,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 31 May 2023 11:45:52 -0400:
+The pull request you sent on Wed, 31 May 2023 13:58:17 -0300:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus_stable
+> git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/fd2186d1c708fa0ec64291da5aa6b26fb44197c3
+https://git.kernel.org/torvalds/c/884fe9da1b7ccbea31b118f902fbc78f58366b4a
 
 Thank you!
 
