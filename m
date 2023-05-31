@@ -2,96 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E55718520
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F51718527
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237076AbjEaOiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
+        id S237138AbjEaOka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236722AbjEaOiv (ORCPT
+        with ESMTP id S231603AbjEaOk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:38:51 -0400
-Received: from mta-64-226.siemens.flowmailer.net (mta-64-226.siemens.flowmailer.net [185.136.64.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3767D98
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:38:48 -0700 (PDT)
-Received: by mta-64-226.siemens.flowmailer.net with ESMTPSA id 20230531143844c395c61cb0bd186de3
-        for <linux-kernel@vger.kernel.org>;
-        Wed, 31 May 2023 16:38:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=alexander.sverdlin@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
- bh=Q5MncjXbUhGj9SPEdiG5OjpwELpZmxsuNDM0CyWnhpo=;
- b=Jet+87efV8bUdoa02xDT4dcyiIkIgPVfZh8m+0Y0+qs4fZ75RPUTbxk1zcXpexpFERIRQx
- LBejygdXaqbtjc9SfsSJg/FgOGaGDCyiBI1Z2RvxH9J9cRfWSkdi8WyER757m36r109J/EUf
- Fq3Iuy99Dh0jkdwahvxNB+hR1Jgic=;
-From:   "A. Sverdlin" <alexander.sverdlin@siemens.com>
-To:     netdev@vger.kernel.org
-Cc:     Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Egil Hjelmeland <privat@egil-hjelmeland.no>
-Subject: [PATCH] net: dsa: lan9303: allow vid != 0 in port_fdb_{add|del} methods
-Date:   Wed, 31 May 2023 16:38:26 +0200
-Message-Id: <20230531143826.477267-1-alexander.sverdlin@siemens.com>
-MIME-Version: 1.0
+        Wed, 31 May 2023 10:40:27 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2112.outbound.protection.outlook.com [40.107.215.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D177FB2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 07:40:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TPtvZ3x0wZL4N61HW3mpxeP+aZiO5p7usofAwh/jl+GGlsSBPSInzBsWHCFIQPM21OhqSPdC2Bt23c/n6Zutc35NjRW0Bdc3hYNIQKb569H7eystpNZfG4Dzy3S1DOlXb1FSBUsCZvCUeCNhsrFN0RMOJcgfgTpABkM3Bi6PlrKzgzYAVbfCeiLOWZOhwlSa4j24WdEXpfGaTYzJd3JzuAcqM6znjm2wCaRL8pB7+jEiQfJwSz36ib6OX0fYMNKoJ6Dtp5GGFwypWU+U03eBPThw7HI5+DVSmEwt0wvwDfYIqbkLxxQOpRP8iP2TCy/HIWk77s4/v+46LvibUQ3sGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mjOCgHIG1448Buvp+x7QYy9EYRlMqziddbNIa/zVseo=;
+ b=ccLDL5ni3SfP92+OOgPFLDRGfLVPSH9d4wIU4RDgQcc8iLDTV7bYnVY+fpdcx7yjVlBtyEF3NEsJHFW9qQzYUnhDsFBkufosWZUVWsR0wjBbHDA/4FWt4X0GhFU/bavXQeZHCYXHEGeMn7FaJx91S4mqBBwpuZIoVEz/1FpJDqmqMOOB0VCM4kebUPd3c4YglBnt2CHmFZ+tkvUyV24OU/cMh3RQKH9JiwXsr30nmEm4jcPPOmRB1sU0lFChkC5CZMGON3nGl9HjV7ewB5zv4b/qUAvMLCVCN92RFLDTwdF/HquCqHlYkYXiIpuJ6oRX+ooRfllr9umkuI33cUok0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mjOCgHIG1448Buvp+x7QYy9EYRlMqziddbNIa/zVseo=;
+ b=WwDzSIkr2nXE0vwIOer4eZ8EcEs11NzObI+/jzWzcuiLh5XqGrK3O4nHTkq5ak+6tfRYqDqslDgDYinQ4EUhYpJpuE5D09puhreCDuWhLE4ihdjQe5Z3hje+SYeWUtf2jYKmisvmzISf9BiL9ds1It13k7MtQ5ZSoCq8m0d5QWHUCfS3L7wXpIhjwHaB7NV/QjO524MbAR+04/B7I+jHHNcMlSmGMjHZc5DMJ/vxRWTeyVQNKZT9/9GVKcXjjxGdNapUE01dG3Aab3iNYocxmA76XFGI8qj1WOXis1u/10ygRp28ruIZihT/Nh4EC2kqIgW3a06ZpVl8ZQtxl1AXVQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SI2PR06MB4380.apcprd06.prod.outlook.com (2603:1096:4:13a::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Wed, 31 May
+ 2023 14:40:20 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965%3]) with mapi id 15.20.6455.020; Wed, 31 May 2023
+ 14:40:19 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>, Lu Hongfei <luhongfei@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] f2fs: enable nowait async buffered writes
+Date:   Wed, 31 May 2023 22:40:06 +0800
+Message-Id: <20230531144006.7307-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
 Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-456497:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SI2P153CA0021.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:190::20) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB4380:EE_
+X-MS-Office365-Filtering-Correlation-Id: 55a01ab8-806f-486b-379f-08db61e4f4a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bm1aAe2amkRR8TGOzDLbcbq/Rlm8Iqg9TcedMUU7Gs41JgGXT6CZLmLyxjrsDwF3+xVlEjE8pj/pYHou8xQio7DWXxyercYrZp+7gf//nHQX7sGThhl1wsxjJF/JVp6hbujGpKnR9NnutD6mX/Y5flC9oQdcc2ORQ60z+N6LADp+ZRAaE5mJn816o6kv81rJC5BYBfT6E/QJIesia3mgPQJE/j+qkusurURf7XBRCpdBB7JTnnvXrrgo5KNSCZPGQnIBOeu4p0561kQtZ5v8Evy55DUj5sHcfsd/BrEqogVul/6TH+qKVo/4fdynkgMCMLDdIJtITD3c2YucNphzyOWIoj1DHN4sSCElqZ0UxeqhQSRQGsmB/190PtHI9NREann/odrSWxy3ZfDPPnpJztzR9zFfHqOt22em60cqUovlaMC2OZvJhFgOFLy/eC5BdwxwEoJoED3Y/wB2mQQuIFHfhlFp5Mduda/SBKG4tmsbTGOmW5GtEsgtDI6YRng3liDL8lSWRLfiJITsOHgD+TyKH43ElF8YfLDeJgujgMbpod4kwUpJ5GLODJiUyh6kYmno8+vii7H9nQKw1PJUUl7R+WGmt882w5UbadS4nGn80LSbiXFdFNGY/1fX4aiI
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(376002)(396003)(346002)(136003)(451199021)(2906002)(54906003)(5660300002)(8676002)(8936002)(110136005)(316002)(26005)(41300700001)(6666004)(4326008)(66476007)(66946007)(478600001)(6486002)(36756003)(52116002)(66556008)(38350700002)(86362001)(6512007)(38100700002)(6506007)(186003)(1076003)(83380400001)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qzh6XUA2B8T2if74+PDHqI4Z+oXcJsB07xOhxS+5I/6SVmcRVMy5rcRXIg1o?=
+ =?us-ascii?Q?by/NWW+At0nAgSjyTADTPGRWsdGQQpfx0fhzqIT98B/ZZy8oY3ibNQExTrYt?=
+ =?us-ascii?Q?nOlHIEE4Ih/OSaoiQemCSa78ziG5ldIqTLDUbKeKMftVStiHLDW/HF3OxMGL?=
+ =?us-ascii?Q?cOhDuVVsjYeX05x9LvLAVFO0YPUmQglA3Pa8iy+dORReQh5lLOuBfvQ2qC8a?=
+ =?us-ascii?Q?hyFBySBoEPQ+4cyNR7EvMpJZfnOZr5vC/Pu4CRszPknRMvVyOKjGAoit7e1x?=
+ =?us-ascii?Q?p2lUX1O3n1bUmYXSek8byrw1IxvqIfQBJzx7+0L1dxDPwARUANkWLvFiiHwM?=
+ =?us-ascii?Q?6YEeeyaVOHfzbjiPrJuBbbLQjcwo73nzVE+KflZyCLto9RgfX60BkPdYvZNA?=
+ =?us-ascii?Q?P/n/3kZAiBrGCacNhEiOoCIRg/b1/3Jyo9bMgJ95MHqhcCo5+mTmrf3sB3vt?=
+ =?us-ascii?Q?9MCQwo6bzgyYhtj/WP+B5KU1UIBMmgwQNeZ2jYu58uGlR/xkgnlKLH+vm10y?=
+ =?us-ascii?Q?TIqeiQ7lHxLPcbrBodvLx/lVk9Stmmd3oEStOoOm7AFusv1rx+fapb5dpDuB?=
+ =?us-ascii?Q?f9FuTiWbCFab22ZPlPsUYZvKuyxtFKIocCzE9CGgxV/NGF5sMkbFCexrb9pY?=
+ =?us-ascii?Q?9//8Ty+lSJC1tyABJSgg+39QochUpx1OJYfuJgK/ns1Xg+RbUVJfffBU4rBG?=
+ =?us-ascii?Q?gbKOnhJVi01fj0YKHLF/CeRWRgTXuo0zsk425Ht4lan2miUsQhKGmXARPV/8?=
+ =?us-ascii?Q?UiUEDGlpN1P5jaz1fDvfzeR838H9J3MKGPE4Yvu9EMgFL429guh0qQwBMs8F?=
+ =?us-ascii?Q?dsWul/FvRPjeawaKFlzjHElU/s0qf5orPSngsUnRjYxPVxsbjZXkKFt54tsU?=
+ =?us-ascii?Q?FgDrafDF09l/IErLwOJxoSpJUILanJgYyaJiAKE1alN+g0yDQguW5q7aFQyf?=
+ =?us-ascii?Q?JPZu5K88gEvMsmN2SJakvjVSFv7jV9xpYvdqIsHXz/Fn6KKifFmCv5B4AZei?=
+ =?us-ascii?Q?P+90cLeyiRHInG4Usu7kg4CR40Yo3Y/PkNL3w7qBrVyOR7jZl9iMjqdP9Id0?=
+ =?us-ascii?Q?e++RPjSDQf5fOBwn49MWfrECmuh6KNWP2X0DRLCAcS90fQjzRxIZGN0gAy9t?=
+ =?us-ascii?Q?hv4HOFoANsVbpPcxEk1z2B5MtkahRUKmDyd9LmPPhwZ1YFB4SVQNRcQkDDSt?=
+ =?us-ascii?Q?I6q8tIAkPdNQxDulSYBhM3iGvKCRodzcpG/E4nHd0W7g0U2vUBV9nFCUGLRm?=
+ =?us-ascii?Q?AEVWRu/hFLZNq2tu8RTdSOfWuLV+9TJYLJ6p34NnDRcKHJD9WEWQXCs6llYk?=
+ =?us-ascii?Q?dVeW9Se/GIUFdKfsy9NTwtuK0OOmICx1ChYWhSBIvzhXTmCZXuF83XYu+Dsx?=
+ =?us-ascii?Q?OJcGOBcm96zx9h3xvjeSuiOcM1qgDoKzhv+Hxk59Q0srciovDkmaj7Cm93dB?=
+ =?us-ascii?Q?ebfhzxzxNdoekNzRnxM2dGG1O8T/qltF9FyE0kEVhzx6cDXNUwonmAsx5Sjd?=
+ =?us-ascii?Q?idJoXdkyI25Js3wwnSYUDbceVsSWqIcZ+2KMw0WpTlKAKPGCPNMkCsIYjHOP?=
+ =?us-ascii?Q?iglxd6+O2HjVnUhu60dz406kVbrFrjm+G1UH4GeM?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55a01ab8-806f-486b-379f-08db61e4f4a1
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 14:40:19.3317
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jjjXIXs4IsgMXEL+Ni2l7jE1pSQoak5KIv14gERHNGaL8S6OoMwS6GP1EGkC8xSMGV8zcZuAK5YvGI8K01H5nQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4380
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+This adds the async buffered write support to f2fs,
+the following is the relevant test data.
 
-LAN9303 doesn't associate FDB (ALR) entries with VLANs, it has just one
-global Address Logic Resolution table [1].
+iodepth      | 1    | 2    | 4    | 8    | 16   |
+before(M/s)  | 1012 | 1133 | 894  | 981  | 866  |
+after(M/s)   | 1488 | 1896 | 2081 | 2188 | 2207 |
 
-Ignore VID in port_fdb_{add|del} methods, go on with the global table. This
-is the same semantics as hellcreek or RZ/N1 implement.
-
-Visible symptoms:
-LAN9303_MDIO 5b050000.ethernet-1:00: port 2 failed to delete 00:xx:xx:xx:xx:cf vid 1 from fdb: -2
-LAN9303_MDIO 5b050000.ethernet-1:00: port 2 failed to add 00:xx:xx:xx:xx:cf vid 1 to fdb: -95
-
-[1] https://ww1.microchip.com/downloads/en/DeviceDoc/00002308A.pdf
-
-Fixes: 0620427ea0d6 ("net: dsa: lan9303: Add fdb/mdb manipulation")
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
 ---
- drivers/net/dsa/lan9303-core.c | 4 ----
- 1 file changed, 4 deletions(-)
+ fs/f2fs/file.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/net/dsa/lan9303-core.c b/drivers/net/dsa/lan9303-core.c
-index cbe831875347..c0215a8770f4 100644
---- a/drivers/net/dsa/lan9303-core.c
-+++ b/drivers/net/dsa/lan9303-core.c
-@@ -1188,8 +1188,6 @@ static int lan9303_port_fdb_add(struct dsa_switch *ds, int port,
- 	struct lan9303 *chip = ds->priv;
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 23c68ee946e5..4faf2c04e325 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -546,7 +546,7 @@ static int f2fs_file_open(struct inode *inode, struct file *filp)
+ 	if (err)
+ 		return err;
  
- 	dev_dbg(chip->dev, "%s(%d, %pM, %d)\n", __func__, port, addr, vid);
--	if (vid)
--		return -EOPNOTSUPP;
+-	filp->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC;
++	filp->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC | FMODE_BUF_WASYNC;
  
- 	return lan9303_alr_add_port(chip, addr, port, false);
+ 	return dquot_file_open(inode, filp);
  }
-@@ -1201,8 +1199,6 @@ static int lan9303_port_fdb_del(struct dsa_switch *ds, int port,
- 	struct lan9303 *chip = ds->priv;
+@@ -4515,9 +4515,6 @@ static ssize_t f2fs_buffered_write_iter(struct kiocb *iocb,
+ 	struct inode *inode = file_inode(file);
+ 	ssize_t ret;
  
- 	dev_dbg(chip->dev, "%s(%d, %pM, %d)\n", __func__, port, addr, vid);
--	if (vid)
+-	if (iocb->ki_flags & IOCB_NOWAIT)
 -		return -EOPNOTSUPP;
- 	lan9303_alr_del_port(chip, addr, port);
- 
- 	return 0;
+-
+ 	current->backing_dev_info = inode_to_bdi(inode);
+ 	ret = generic_perform_write(iocb, from);
+ 	current->backing_dev_info = NULL;
 -- 
-2.40.1
+2.39.0
 
