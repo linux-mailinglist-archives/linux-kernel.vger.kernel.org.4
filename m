@@ -2,112 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 416E171869D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C877186A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234858AbjEaPoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S231932AbjEaPqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234800AbjEaPny (ORCPT
+        with ESMTP id S230156AbjEaPqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:43:54 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E23B12E;
-        Wed, 31 May 2023 08:43:48 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5689335d2b6so38950167b3.3;
-        Wed, 31 May 2023 08:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685547828; x=1688139828;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7KHwUydY+5zoS1848/zD6XL7je/tk9XrUsLE3UP54E8=;
-        b=nKeihe+KQntJ2aHbe/LB66GoLLSJjdinttWW5cPlEHIrchO1LZkFH7hO5RGBYnVDh7
-         lWZwS4EbpqWQux8cFgmXz+nZdhZRose8bWa82rhReNfmKGgizuxV3FAmmWF9NngprLZC
-         aAV/9tpDlaTaJBLWldna5OPEN86vAoNiVLl1ufK3pJ38ZhFbtqbHmp8cx/SPiqwpMn1l
-         uQha1sX6IEixqC2rHoc8wXIZLyvnpOB33ae8KwBRzqmGlKVndJrvIIzAoVtuyBD/uA90
-         vdazQamE24W/6GiAuYxvqZcWvwWxcup3zXXhw+uP8qGvqqxMwuq4GCKlflUFMaQAD/na
-         NjWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685547828; x=1688139828;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7KHwUydY+5zoS1848/zD6XL7je/tk9XrUsLE3UP54E8=;
-        b=iOYyK0at3OrdfSahhLsO2uGG6sdZcfQvin/Xosb1qrzdXHC0MLY7dLZ+rG5kH1Ox0S
-         OvgJAl+wbXgstfufdpMIo0YGEp3rA76Sv60hXErcmSbImfVz5NS7eGySKb3TfjQKznkg
-         fohZAHxwnaNvhWKkQKx5JbryLX4fADK1Dvx8DfXPmPk0x1d/aefZXKEkgRgljPNe42g1
-         MhKbHbEwKLmkTXBZpZpjpF3XN1YZ9qHNDIJA3SPSJx00rp8lSTqWT4T/Ewme4Pb+gh7q
-         ENbT7ata0wgmpvOdV40O0GX8N/SQqXmtE19S8WYvRvGAUfAxiF2AvpmH6VRXc6qJYjrb
-         ewyg==
-X-Gm-Message-State: AC+VfDw2k5hCAPwQ/C1QFEPDB8AvkBFgQ8p2aNIimjJZSec+1ZxcMT+v
-        MN8O7eu6xECrgUG7XLE50wM=
-X-Google-Smtp-Source: ACHHUZ7T7XA+lEzMzdwLBHp1uaXoX/tLHf43qXSnLsFppT7I1XsQnulfFw9oacGR57nUycbK+LzjNA==
-X-Received: by 2002:a0d:d412:0:b0:55a:5dce:aa19 with SMTP id w18-20020a0dd412000000b0055a5dceaa19mr5139747ywd.51.1685547827699;
-        Wed, 31 May 2023 08:43:47 -0700 (PDT)
-Received: from localhost (128-092-077-170.biz.spectrum.com. [128.92.77.170])
-        by smtp.gmail.com with ESMTPSA id n5-20020a819c45000000b00545a081847fsm5453436ywa.15.2023.05.31.08.43.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 08:43:47 -0700 (PDT)
-Date:   Wed, 31 May 2023 08:43:46 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saeed Mahameed <saeedm@nvidia.com>,
-        Pawel Chmielewski <pawel.chmielewski@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Barry Song <baohua@kernel.org>
-Subject: Re: [PATCH v2 0/8] sched/topology: add for_each_numa_cpu() macro
-Message-ID: <ZHdrMiVSrPdM3xGn@yury-ThinkPad>
-References: <20230430171809.124686-1-yury.norov@gmail.com>
+        Wed, 31 May 2023 11:46:00 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56DDF9D
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:45:59 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-119-27.bstnma.fios.verizon.net [173.48.119.27])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 34VFjriK025092
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 11:45:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1685547954; bh=FpUO1HuGrYYO/m7lFjVgSypydmhgS0qjV/wEA4tclMY=;
+        h=Date:From:To:Cc:Subject;
+        b=UOS7k3fvT82P+loJuN52Z42w3KlPinRckHgfXaM0nWtpeBIcm1BKceu39pzui6wFn
+         vF7wz2QnXsjsIcKSPdeRP4tXwwgO7lt8EunwN4tW4dnLwXLUgp2yeZ3nvip/xUQp9v
+         7mS7Ej+jLtxa0SjQsv133Z7FvuwA9V3fBpD0TQ3nlLs8ls8MUfnwlV0Zd+UkLjG1Dv
+         tMV1ipkRhnOW3NXybcnm/xLwTjw9/3S3sQ86BLGUF2ilffIOqSyHAJFQpPGb5ufLMW
+         X02iyzQ4xv5bZs1sBvJ5Jdwe9ZLx9hba6eqNYOKk4a8TxGNWPVuMDYV1CQU3OficuP
+         lKXG8czP5+dyw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 0227715C02EE; Wed, 31 May 2023 11:45:52 -0400 (EDT)
+Date:   Wed, 31 May 2023 11:45:52 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] ext4 fixes for 6.4-rc5
+Message-ID: <20230531154552.GA814122@mit.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230430171809.124686-1-yury.norov@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 30, 2023 at 10:18:01AM -0700, Yury Norov wrote:
-> for_each_cpu() is widely used in kernel, and it's beneficial to create
-> a NUMA-aware version of the macro.
-> 
-> Recently added for_each_numa_hop_mask() works, but switching existing
-> codebase to it is not an easy process.
-> 
-> This series adds for_each_numa_cpu(), which is designed to be similar to
-> the for_each_cpu(). It allows to convert existing code to NUMA-aware as
-> simple as adding a hop iterator variable and passing it inside new macro.
-> for_each_numa_cpu() takes care of the rest.
+The following changes since commit 7877cb91f1081754a1487c144d85dc0d2e2e7fc4:
 
-Hi Jakub,
+  Linux 6.4-rc4 (2023-05-28 07:49:00 -0400)
 
-Now that the series reviewed, can you consider taking it in sched
-tree?
+are available in the Git repository at:
 
-Thanks,
-Yury
+  https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus_stable
+
+for you to fetch changes up to eb1f822c76beeaa76ab8b6737ab9dc9f9798408c:
+
+  ext4: enable the lazy init thread when remounting read/write (2023-05-30 15:33:57 -0400)
+
+----------------------------------------------------------------
+Fix two regressions in ext4 and a number of issues reported by syzbot.
+
+----------------------------------------------------------------
+Jan Kara (1):
+      ext4: fix fsync for non-directories
+
+Theodore Ts'o (5):
+      ext4: add EA_INODE checking to ext4_iget()
+      ext4: set lockdep subclass for the ea_inode in ext4_xattr_inode_cache_find()
+      ext4: disallow ea_inodes with extended attributes
+      ext4: add lockdep annotations for i_data_sem for ea_inode's
+      ext4: enable the lazy init thread when remounting read/write
+
+ fs/ext4/ext4.h  |  5 ++++-
+ fs/ext4/fsync.c |  7 +++++++
+ fs/ext4/inode.c | 34 +++++++++++++++++++++++++++++-----
+ fs/ext4/super.c | 24 ++++++++++++------------
+ fs/ext4/xattr.c | 41 ++++++++++++-----------------------------
+ 5 files changed, 64 insertions(+), 47 deletions(-)
