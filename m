@@ -2,209 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43080717962
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D39EF717969
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234944AbjEaIBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
+        id S235055AbjEaIBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235379AbjEaIAf (ORCPT
+        with ESMTP id S235023AbjEaIBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:00:35 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8FF10D9;
-        Wed, 31 May 2023 00:59:51 -0700 (PDT)
-Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QWM4Z0qGdz18Lsy;
-        Wed, 31 May 2023 15:55:10 +0800 (CST)
-Received: from [10.67.110.48] (10.67.110.48) by dggpemm500016.china.huawei.com
- (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 31 May
- 2023 15:59:47 +0800
-Message-ID: <83f6cfbd-d081-5a76-7c7f-5e0b90b4ac74@huawei.com>
-Date:   Wed, 31 May 2023 15:59:47 +0800
+        Wed, 31 May 2023 04:01:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBE3BE
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:00:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685520031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KAvQZliaHITssjxk0Fif22wZ/eyyqyNijkEgyxbBb/M=;
+        b=QQSUodLB9SQ8863QIIRCh8fUD7XBOrRlDwUACnspm38EMOaegWNEW+neijT8x9PuliwS/L
+        MO/1Vt+VLeL6y/5gkRgMJoC9+IGXW0W2ukMLf94I2YKrXA+xnnKylhkCQbm804g3FNVo2L
+        rZzgaNU4w0vvCb4sRIDk7B1FeBjFeR8=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-613-NM_icx8VOnWDkwnnlY6MwQ-1; Wed, 31 May 2023 04:00:28 -0400
+X-MC-Unique: NM_icx8VOnWDkwnnlY6MwQ-1
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-2566e9b14a4so3582400a91.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:00:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685520027; x=1688112027;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KAvQZliaHITssjxk0Fif22wZ/eyyqyNijkEgyxbBb/M=;
+        b=VF2tqpis6qSKqeTgFEu07OaOZe8Zb25ml/bGPa/hCIMIfjlJ7KIev5oVXAspSGMFXl
+         9KOaRRCSDvv/v+u73ywLQDuruYmygqIj5+kLp2IW3U21Yq9oPSetDXMFQ1NLWQqZyZNQ
+         v8YNbZ89WHao6ylYLtaoddb45NC5sz5ybmAapAqnyr7FV1tzhWQj6HcktEmBG04vpon2
+         HQKzAlUQZT8FaxXn4L0wYNBRYB8+ZGbzbrOxcBlUyaBipB6wJmWbsBFgJ2dCkB/MFFps
+         MWfyfHR4kYZ+YHfh8VyIA7ZI8sMjKO4nrvTXhXsFwjGbKXuvJ4wkwykOz/B+RR3BT0Sg
+         W2fA==
+X-Gm-Message-State: AC+VfDzMIfoxM0WeBWwBcun4M58U6fPOZE2+Lrv1W0l4z/k7K9x7od09
+        iKQADD5Yd3m41xO4DbOnjYmcgAM+Kos+8AwQhVlIUyQo7m0LsuiGQ84YL5mKfFIouj1/TRmjldV
+        2tCvBG8uBsmy3TpXvwOO6DpMRBkoTrauReu/Ajm4c
+X-Received: by 2002:a17:90a:a58b:b0:256:d4a:ea4c with SMTP id b11-20020a17090aa58b00b002560d4aea4cmr4734709pjq.30.1685520026971;
+        Wed, 31 May 2023 01:00:26 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7oru8zJf1UyeyyVm8LPPLnazLQhgnMurhTHbBS2RDSseMrxQ9S5zWOVTuUcuP9giy83td6lyly5BCldISqn+o=
+X-Received: by 2002:a17:90a:a58b:b0:256:d4a:ea4c with SMTP id
+ b11-20020a17090aa58b00b002560d4aea4cmr4734689pjq.30.1685520026507; Wed, 31
+ May 2023 01:00:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RFC v2] Randomized slab caches for kmalloc()
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>
-CC:     Vlastimil Babka <vbabka@suse.cz>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <linux-hardening@vger.kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Alexander Lobakin <aleksander.lobakin@intel.com>,
-        <kasan-dev@googlegroups.com>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pekka Enberg <penberg@kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "GONG, Ruiqi" <gongruiqi@huaweicloud.com>
-References: <20230508075507.1720950-1-gongruiqi1@huawei.com>
- <202305161204.CB4A87C13@keescook>
-From:   Gong Ruiqi <gongruiqi1@huawei.com>
-In-Reply-To: <202305161204.CB4A87C13@keescook>
+References: <20230529131106.2123367-1-yukuai1@huaweicloud.com>
+ <20230529131106.2123367-7-yukuai1@huaweicloud.com> <CALTww29ixKpcVknNe36D+x=2c1Aw-=z32SP-dJ_Hj8WxL2n4bg@mail.gmail.com>
+ <830352e1-ecfa-f5dc-ce7c-349553bd3003@huaweicloud.com>
+In-Reply-To: <830352e1-ecfa-f5dc-ce7c-349553bd3003@huaweicloud.com>
+From:   Xiao Ni <xni@redhat.com>
+Date:   Wed, 31 May 2023 16:00:15 +0800
+Message-ID: <CALTww28_w3h1_viTp5L9SCytY7WmwmABqkXOmyvH_UD8T5odMg@mail.gmail.com>
+Subject: Re: [PATCH -next v3 6/7] md/raid1-10: don't handle pluged bio by
+ daemon thread
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     song@kernel.org, neilb@suse.de, akpm@osdl.org,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.48]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the late reply. I was trapped by other in-house kernel issues
-these days.
+On Wed, May 31, 2023 at 3:55=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> w=
+rote:
+>
+> Hi,
+>
+> =E5=9C=A8 2023/05/31 15:50, Xiao Ni =E5=86=99=E9=81=93:
+> > On Mon, May 29, 2023 at 9:14=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.co=
+m> wrote:
+> >>
+> >> From: Yu Kuai <yukuai3@huawei.com>
+> >>
+> >> current->bio_list will be set under submit_bio() context, in this case
+> >> bitmap io will be added to the list and wait for current io submission=
+ to
+> >> finish, while current io submission must wait for bitmap io to be done=
+.
+> >> commit 874807a83139 ("md/raid1{,0}: fix deadlock in bitmap_unplug.") f=
+ix
+> >> the deadlock by handling plugged bio by daemon thread.
+> >
+> > Thanks for the historic introduction. I did a test and printed the
+> > logs in raid10_unplug. The tools I used are dd and mkfs. from_schedule
+> > is always true during I/O and it's 0 when io finishes. So I have a
+> > question here, how can I trigger the condition that from_schedule is 0
+> > and current->list is not NULL? In other words, is there really a
+> > deadlock here? Before your patch it looks like all bios are merged
+> > into conf->pending_bio_list and are handled by raid10d. It can't
+> > submit bio directly in the originating process which mentioned in
+> > 57c67df48866
+> >
+> As I mentioned below, after commit a214b949d8e3, this deadlock doesn't
+> exist anymore, and without this patch, patch 7 will introduce this
+> scenario again.
+>
+> Thanks,
+> Kuai
+> >>
+> >> On the one hand, the deadlock won't exist after commit a214b949d8e3
+> >> ("blk-mq: only flush requests from the plug in blk_mq_submit_bio"). On
+> >> the other hand, current solution makes it impossible to flush plugged =
+bio
+> >> in raid1/10_make_request(), because this will cause that all the write=
+s
+> >> will goto daemon thread.
+> >>
+> >> In order to limit the number of plugged bio, commit 874807a83139
+> >> ("md/raid1{,0}: fix deadlock in bitmap_unplug.") is reverted, and the
+> >> deadlock is fixed by handling bitmap io asynchronously.
+> >>
+> >> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> >> ---
+> >>   drivers/md/raid1-10.c | 14 ++++++++++++++
+> >>   drivers/md/raid1.c    |  4 ++--
+> >>   drivers/md/raid10.c   |  8 +++-----
+> >>   3 files changed, 19 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/drivers/md/raid1-10.c b/drivers/md/raid1-10.c
+> >> index 73cc3cb9154d..17e55c1fd5a1 100644
+> >> --- a/drivers/md/raid1-10.c
+> >> +++ b/drivers/md/raid1-10.c
+> >> @@ -151,3 +151,17 @@ static inline bool raid1_add_bio_to_plug(struct m=
+ddev *mddev, struct bio *bio,
+> >>
+> >>          return true;
+> >>   }
+> >> +
+> >> +/*
+> >> + * current->bio_list will be set under submit_bio() context, in this =
+case bitmap
+> >> + * io will be added to the list and wait for current io submission to=
+ finish,
+> >> + * while current io submission must wait for bitmap io to be done. In=
+ order to
+> >> + * avoid such deadlock, submit bitmap io asynchronously.
+> >> + */
+> >> +static inline void raid1_prepare_flush_writes(struct bitmap *bitmap)
+> >> +{
+> >> +       if (current->bio_list)
+> >> +               md_bitmap_unplug_async(bitmap);
+> >> +       else
+> >> +               md_bitmap_unplug(bitmap);
+> >> +}
+> >> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
+> >> index 0778e398584c..006620fed595 100644
+> >> --- a/drivers/md/raid1.c
+> >> +++ b/drivers/md/raid1.c
+> >> @@ -794,7 +794,7 @@ static int read_balance(struct r1conf *conf, struc=
+t r1bio *r1_bio, int *max_sect
+> >>   static void flush_bio_list(struct r1conf *conf, struct bio *bio)
+> >>   {
+> >>          /* flush any pending bitmap writes to disk before proceeding =
+w/ I/O */
+> >> -       md_bitmap_unplug(conf->mddev->bitmap);
+> >> +       raid1_prepare_flush_writes(conf->mddev->bitmap);
+> >
+> > If we unplug bitmap asynchronously, can we make sure the bitmap are
+> > flushed before the corresponding data?
 
-On 2023/05/17 3:34, Kees Cook wrote:
-> For new CCs, the start of this thread is here[0].
-> 
-> On Mon, May 08, 2023 at 03:55:07PM +0800, GONG, Ruiqi wrote:
->> When exploiting memory vulnerabilities, "heap spraying" is a common
->> technique targeting those related to dynamic memory allocation (i.e. the
->> "heap"), and it plays an important role in a successful exploitation.
->> Basically, it is to overwrite the memory area of vulnerable object by
->> triggering allocation in other subsystems or modules and therefore
->> getting a reference to the targeted memory location. It's usable on
->> various types of vulnerablity including use after free (UAF), heap out-
->> of-bound write and etc.
-> 
-> I heartily agree we need some better approaches to deal with UAF, and
-> by extension, heap spraying.
+Could you explain this question?
 
-Thanks Kees :) Good to hear that!
+Regards
+Xiao
 
-> 
->> There are (at least) two reasons why the heap can be sprayed: 1) generic
->> slab caches are shared among different subsystems and modules, and
->> 2) dedicated slab caches could be merged with the generic ones.
->> Currently these two factors cannot be prevented at a low cost: the first
->> one is a widely used memory allocation mechanism, and shutting down slab
->> merging completely via `slub_nomerge` would be overkill.
->>
->> To efficiently prevent heap spraying, we propose the following approach:
->> to create multiple copies of generic slab caches that will never be
->> merged, and random one of them will be used at allocation. The random
->> selection is based on the address of code that calls `kmalloc()`, which
->> means it is static at runtime (rather than dynamically determined at
->> each time of allocation, which could be bypassed by repeatedly spraying
->> in brute force). In this way, the vulnerable object and memory allocated
->> in other subsystems and modules will (most probably) be on different
->> slab caches, which prevents the object from being sprayed.
-> 
-> This is a nice balance between the best option we have now
-> ("slub_nomerge") and most invasive changes (type-based allocation
-> segregation, which requires at least extensive compiler support),
-> forcing some caches to be "out of reach".
 
-Yes it is, and it's also cost-effective: achieving a quite satisfactory
-mitigation with a small amount of code (only ~130 lines).
+> >
+> > Regards
+> > Xiao
+> >
+> >>          wake_up(&conf->wait_barrier);
+> >>
+> >>          while (bio) { /* submit pending writes */
+> >> @@ -1166,7 +1166,7 @@ static void raid1_unplug(struct blk_plug_cb *cb,=
+ bool from_schedule)
+> >>          struct r1conf *conf =3D mddev->private;
+> >>          struct bio *bio;
+> >>
+> >> -       if (from_schedule || current->bio_list) {
+> >> +       if (from_schedule) {
+> >>                  spin_lock_irq(&conf->device_lock);
+> >>                  bio_list_merge(&conf->pending_bio_list, &plug->pendin=
+g);
+> >>                  spin_unlock_irq(&conf->device_lock);
+> >> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> >> index 6640507ecb0d..fb22cfe94d32 100644
+> >> --- a/drivers/md/raid10.c
+> >> +++ b/drivers/md/raid10.c
+> >> @@ -902,9 +902,7 @@ static void flush_pending_writes(struct r10conf *c=
+onf)
+> >>                  __set_current_state(TASK_RUNNING);
+> >>
+> >>                  blk_start_plug(&plug);
+> >> -               /* flush any pending bitmap writes to disk
+> >> -                * before proceeding w/ I/O */
+> >> -               md_bitmap_unplug(conf->mddev->bitmap);
+> >> +               raid1_prepare_flush_writes(conf->mddev->bitmap);
+> >>                  wake_up(&conf->wait_barrier);
+> >>
+> >>                  while (bio) { /* submit pending writes */
+> >> @@ -1108,7 +1106,7 @@ static void raid10_unplug(struct blk_plug_cb *cb=
+, bool from_schedule)
+> >>          struct r10conf *conf =3D mddev->private;
+> >>          struct bio *bio;
+> >>
+> >> -       if (from_schedule || current->bio_list) {
+> >> +       if (from_schedule) {
+> >>                  spin_lock_irq(&conf->device_lock);
+> >>                  bio_list_merge(&conf->pending_bio_list, &plug->pendin=
+g);
+> >>                  spin_unlock_irq(&conf->device_lock);
+> >> @@ -1120,7 +1118,7 @@ static void raid10_unplug(struct blk_plug_cb *cb=
+, bool from_schedule)
+> >>
+> >>          /* we aren't scheduling, so we can do the write-out directly.=
+ */
+> >>          bio =3D bio_list_get(&plug->pending);
+> >> -       md_bitmap_unplug(mddev->bitmap);
+> >> +       raid1_prepare_flush_writes(mddev->bitmap);
+> >>          wake_up(&conf->wait_barrier);
+> >>
+> >>          while (bio) { /* submit pending writes */
+> >> --
+> >> 2.39.2
+> >>
+> >
+> > .
+> >
+>
 
-I get this impression also because (believe it or not) we did try to
-implement similar idea as the latter one you mention, and that was super
-complex, and the workload was really huge ...
-
-> 
->>
->> The overhead of performance has been tested on a 40-core x86 server by
->> comparing the results of `perf bench all` between the kernels with and
->> without this patch based on the latest linux-next kernel, which shows
->> minor difference. A subset of benchmarks are listed below:
->>
->> 			control		experiment (avg of 3 samples)
->> sched/messaging (sec)	0.019		0.019
->> sched/pipe (sec)	5.253		5.340
->> syscall/basic (sec)	0.741		0.742
->> mem/memcpy (GB/sec)	15.258789	14.860495
->> mem/memset (GB/sec)	48.828125	50.431069
->>
->> The overhead of memory usage was measured by executing `free` after boot
->> on a QEMU VM with 1GB total memory, and as expected, it's positively
->> correlated with # of cache copies:
->>
->> 		control		4 copies	8 copies	16 copies
->> total		969.8M		968.2M		968.2M		968.2M
->> used		20.0M		21.9M		24.1M		26.7M
->> free		936.9M		933.6M		931.4M		928.6M
->> available	932.2M		928.8M		926.6M		923.9M
-> 
-> Great to see the impact: it's relatively tiny. Nice!
-> 
-> Back when we looked at cache quarantines, Jann pointed out that it
-> was still possible to perform heap spraying -- it just needed more
-> allocations. In this case, I think that's addressed (probabilistically)
-> by making it less likely that a cache where a UAF is reachable is merged
-> with something with strong exploitation primitives (e.g. msgsnd).
-> 
-> In light of all the UAF attack/defense breakdowns in Jann's blog
-> post[1], I'm curious where this defense lands. It seems like it would
-> keep the primitives described there (i.e. "upgrading" the heap spray
-> into a page table "type confusion") would be addressed probabilistically
-> just like any other style of attack. Jann, what do you think, and how
-> does it compare to the KCTF work[2] you've been doing?
-
-A kindly ping to Jann ;)
-
-> 
-> In addition to this work, I'd like to see something like the kmalloc
-> caches, but for kmem_cache_alloc(), where a dedicated cache of
-> variably-sized allocations can be managed. With that, we can split off
-> _dedicated_ caches where we know there are strong exploitation
-> primitives (i.e. msgsnd, etc). Then we can carve off known weak heap
-> allocation caches as well as make merging probabilistically harder.
-
-Would you please explain more about the necessity of applying similar
-mitigation mechanism to dedicated caches?
-
-Based on my knowledge, usually we believe dedicated caches are more
-secure, although it's still possible to spray them, e.g. by the
-technique that allocates & frees large amounts of slab objects to
-manipulate the heap in pages. Nevertheless in most of cases they are
-still good since such spraying is (considered to be) hard to implement.
-
-Meanwhile, the aforementioned spraying technique can hardly be mitigated
-within SLAB since it operates at the page level, and our randomization
-idea cannot protect against it either, so it also makes me inclined to
-believe it's not meaningful to apply randomization to dedicated caches.
-
-> I imagine it would be possible to then split this series into two
-> halves: one that creates the "make arbitrary-sized caches" API, and the
-> second that applies that to kmalloc globally (as done here).
-> 
->>
->> Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
->> ---
->>
->> v2:
->>   - Use hash_64() and a per-boot random seed to select kmalloc() caches.
-> 
-> This is good: I was hoping there would be something to make it per-boot
-> randomized beyond just compile-time.
-> 
-> So, yes, I think this is worth it, but I'd like to see what design holes
-> Jann can poke in it first. :)
-
-Thanks again! I'm looking forward to receiving more comments from mm and
-hardening developers.
-
-> 
-> -Kees
-> 
-> [0] https://lore.kernel.org/lkml/20230508075507.1720950-1-gongruiqi1@huawei.com/
-> [1] https://googleprojectzero.blogspot.com/2021/10/how-simple-linux-kernel-memory.html
-> [2] https://github.com/thejh/linux/commit/a87ad16046f6f7fd61080ebfb93753366466b761
-> 
