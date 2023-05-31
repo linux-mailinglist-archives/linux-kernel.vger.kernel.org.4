@@ -2,83 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C06E7188CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E62E27188D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjEaRtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
+        id S229502AbjEaRuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbjEaRtG (ORCPT
+        with ESMTP id S229526AbjEaRuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:49:06 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30910135;
-        Wed, 31 May 2023 10:49:04 -0700 (PDT)
-Date:   Wed, 31 May 2023 17:49:01 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685555342;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oOn6x3AozCBBpfR6dbtaX2BxqOGwH5ggpmXeuAyznSc=;
-        b=R2KchUbkhf1S0kroPiZdGoO9uCLOX7ul7c/81CTBFRuGcFR2BiF74L3EkLOtp+c68tphya
-        pYQUDhoF7J3BhJN2e+SDPTyUAafmpHtmM8wiEShF+eVUtmLUndnp3Di7terfLJI5q7yfcn
-        pZUJRchrcwAdd9BjDvqpbSC88PjQxAL8ytlXia8tePx6wQ2O4pTIj8oXX/5gkVN856QPl9
-        zsalYjP8N8NTIDQ4vHOLeLbzcf4xP8CQl22lHqob8+/C2lRt3XuI1z9/CtZuLmawJVUI64
-        2aY8imgprt0V9t0Fpq9G8ZULNrYZhNFU2wR2/mGVYvj4CK346bhMIFvbaM6MqQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685555342;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oOn6x3AozCBBpfR6dbtaX2BxqOGwH5ggpmXeuAyznSc=;
-        b=qBReCQcT2ga27hCYuVOH3Zvv9X6n+jAXImNkhiKW8g8syI8gA3e1x2UCHZApuLaOTFHeBm
-        pFfFxJDWy82eQXBw==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/urgent] Merge tag 'irqchip-fixes-6.4-2' of
- git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into
- irq/urgent
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20230531160549.433528-1-maz@kernel.org>
-References: <20230531160549.433528-1-maz@kernel.org>
+        Wed, 31 May 2023 13:50:11 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06350125;
+        Wed, 31 May 2023 10:50:10 -0700 (PDT)
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9AD731EC055F;
+        Wed, 31 May 2023 19:50:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1685555408;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=HeNocnevqxmbVprsCbL6/2uK6NHhjksBwkoteVBBynM=;
+        b=UG0w0ZBMnCEc2QFpwu1ZFkyNFkDq53g3Rw7ejAYMI/DNWfGIry06ThfYWLe5/H8Kyj618Z
+        q3T1Q+J8CFsivNa2sJyBtWImCA1N/zLGf8YLEdTHpsHMNVYR5s+YDNYE4b31RSYyWfOjRb
+        R8Qm2ekUPG9DtQfZUIgZS+dM2Ypzu3Y=
+Date:   Wed, 31 May 2023 19:50:08 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCHv12 1/9] mm: Add support for unaccepted memory
+Message-ID: <20230531175008.GEZHeI0OgW3cyVuu6t@fat_crate.local>
+References: <20230518231434.26080-1-kirill.shutemov@linux.intel.com>
+ <20230518231434.26080-2-kirill.shutemov@linux.intel.com>
+ <20230531155159.GIZHdtH20Q0FsmN3OR@fat_crate.local>
+ <20230531162702.zfzex7vkhn3uqgvb@box.shutemov.name>
 MIME-Version: 1.0
-Message-ID: <168555534175.404.15649510085660741280.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230531162702.zfzex7vkhn3uqgvb@box.shutemov.name>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/urgent branch of tip:
+On Wed, May 31, 2023 at 07:27:02PM +0300, Kirill A. Shutemov wrote:
+> Does it look okay?
 
-Commit-ID:     2d5b205dfa32b5f0f357ebc9db73931d2186391e
-Gitweb:        https://git.kernel.org/tip/2d5b205dfa32b5f0f357ebc9db73931d2186391e
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Wed, 31 May 2023 19:42:53 +02:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Wed, 31 May 2023 19:42:53 +02:00
+Yap, thx.
 
-Merge tag 'irqchip-fixes-6.4-2' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent
+-- 
+Regards/Gruss,
+    Boris.
 
-Pull an irqchip fix from Marc Zyngier:
-
- - Fix regression introduced by the Mediatek workaround.
-
-Link: https://lore.kernel.org/lkml/20230531160549.433528-1-maz@kernel.org
----
+https://people.kernel.org/tglx/notes-about-netiquette
