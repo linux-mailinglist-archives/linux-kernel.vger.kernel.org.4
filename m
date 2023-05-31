@@ -2,69 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0034718835
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59944718838
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbjEaRMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        id S230175AbjEaRM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjEaRMV (ORCPT
+        with ESMTP id S229872AbjEaRMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:12:21 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27DB0136
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:12:10 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8AxxfDpf3dkeQYDAA--.2334S3;
-        Thu, 01 Jun 2023 01:12:09 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx08Tpf3dk+a+CAA--.16069S3;
-        Thu, 01 Jun 2023 01:12:09 +0800 (CST)
-Message-ID: <8b74e484-ed41-7f14-f46b-3951e645dd6b@loongson.cn>
-Date:   Thu, 1 Jun 2023 01:12:09 +0800
+        Wed, 31 May 2023 13:12:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CF593;
+        Wed, 31 May 2023 10:12:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D33BB60DE9;
+        Wed, 31 May 2023 17:12:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AD87C4339C;
+        Wed, 31 May 2023 17:12:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685553134;
+        bh=+Ml1j+mRUJgmXvowGAHL7NQaz1pxH/evVJuvs2hRgso=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=BYw8uvSKtQqAvjDQ1+aUtduoiKuESJASt6I+ZqQvJA20//6FeGNg1f866MI0WmXrT
+         ruslzv5W28Kb6NwsYa/Ad9LZOTko8KfxpqzYAE5WtJWktKj6c06tq4gtDVwv/0Pwaa
+         mDJqQwfoyV5LITBF0ptaPtkQU62PGfvfZrYX/EoeTekMyu8tbdC4xAoE58FqEESk2p
+         eFIBgNmgyA68cfWPAbwwdKubtp/VUXFKB8qg6me5gxLsMyb5ASRluj4WLsfXQxe4Un
+         /blsTaEObx/P02q5JlLcYRt8k4n4G5SotCTPWArugBDQtmsIg6K2A530cZDiM7CjtV
+         unjSWwsaoEZtA==
+Date:   Wed, 31 May 2023 12:12:12 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>
+Cc:     krzysztof.kozlowski@linaro.org, bhelgaas@google.com,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        lorenzo.pieralisi@arm.com, linux-arm-kernel@lists.infradead.org,
+        bharat.kumar.gogada@amd.com, michals@amd.com,
+        nagaradhesh.yeleswarapu@amd.com
+Subject: Re: [PATCH v4 3/3] PCI: xilinx-xdma: Add Xilinx XDMA Root Port driver
+Message-ID: <ZHd/7AaLaGyr1jNA@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v6 5/6] drm/etnaviv: add driver support for the PCI
- devices
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        loongson-kernel@lists.loongnix.cn, Li Yi <liyi@loongson.cn>
-References: <ZHZIXZPuCkFSMF4H@bhelgaas>
- <950fdaaa-b62c-7f36-a499-9eca71c8bc47@loongson.cn>
- <5e0b34054ca6fa540e481d93f3c1d9fbdd2defcd.camel@pengutronix.de>
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <5e0b34054ca6fa540e481d93f3c1d9fbdd2defcd.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx08Tpf3dk+a+CAA--.16069S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxJFyxtw13WF4DGr1UJFy5urg_yoW5Gw18pF
-        WYka1SyFWvgr1rtwn7tw45XF1ay3yftFy5Arn5JF1kCr90vry3Gr1rtr4Y9F9xur1xWa12
-        va1jkrW7uFn8CaDanT9S1TB71UUUU1UqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
-        14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv
-        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-        AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVW8ZVWrXwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jayxiUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531083825.985584-4-thippeswamy.havalige@amd.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,79 +57,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, May 31, 2023 at 02:08:25PM +0530, Thippeswamy Havalige wrote:
+> Add support for Xilinx XDMA Soft IP core as Root Port.
+> 
+> The Zynq UltraScale+ MPSoCs devices support XDMA soft IP module in
+> programmable logic.
+> 
+> The integrated XDMA soft IP block has integrated bridge function that
+> can act as PCIe Root Port.
+> 
+> Signed-off-by: Thippeswamy Havalige <thippeswamy.havalige@amd.com>
+> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>
 
-On 2023/6/1 00:23, Lucas Stach wrote:
-> Hi Sui Jingfeng,
->
-> Am Donnerstag, dem 01.06.2023 um 00:08 +0800 schrieb Sui Jingfeng:
->> Hi,
->>
->> On 2023/5/31 03:02, Bjorn Helgaas wrote:
->>> On Wed, May 31, 2023 at 12:06:42AM +0800, Sui Jingfeng wrote:
->>>> This patch adds PCI driver support on top of what already have. Take the
->>>> GC1000 in LS7A1000/LS2K1000 as the first instance of the PCI device driver.
->>>> There is only one GPU core for the GC1000 in the LS7A1000 and LS2K1000.
->>>> Therefore, component frameworks can be avoided. Because we want to bind the
->>>> DRM driver service to the PCI driver manually.
->>>> +	 * Loongson Mips and LoongArch CPU(ls3a5000, ls3a4000, ls2k1000la)
->>>> +	 * maintain cache coherency by hardware
->>>> +	 */
->>>> +	if (IS_ENABLED(CONFIG_CPU_LOONGSON64) || IS_ENABLED(CONFIG_LOONGARCH))
->>>> +		priv->has_cached_coherent = true;
->>> This looks like something that should be a runtime check, not a
->>> compile-time check.
->>>
->>> If it's possible to build a single kernel image that runs on Loongson
->>> MIPS or LoongArch CPU and, in addition, runs on other platforms, you
->>> cannot assume that all the others maintain this cache coherency.
->> Nice catch! I don't even realize this!
->>
->>
->> LS3A4000 is mips64r2 with MSA SIMD, while LS3A5000 is LoongArch,
->>
->> instruction set, compiler, and binary interface are totally changed.
->>
->> Therefore, it's impossible to build a single kernel image that runs on
->> all Loongson CPUs.
->>
->> Currently, I can guarantee that this works on the Loongson platform.
->>
->> My initial intent here is to let priv->has_cached_coherent be *true* on
->> the Loongson platform (both mips and loongarch).
->>
->> I do know there are some other vendors who bought GPU IP from Vivante.
->>
->> say GC7000, and integrate it into their discrete GPU product.
->>
->> But it is also a PCI device, but this is another story; it deserves
->> another patch.
->>
->> I don't know if Etnaviv folk find some similar hardware on Arm Arch,
->>
->> Some Arm CPUs do not maintain cached coherency on hardware.
->>
->> The has_cached_coherent member can be set to false on such hardware.
->>
->> For us, it seems that there is no need to do runtime checking,
->>
->> because they are all cached coherent by default.
->>
->>
->> Can I improve this in the future, currently I don't have a good idea.
-> I think I mentioned before that this needs to be a runtime check. What
-> does dev_is_dma_coherent() return for the Vivante GPU device on your
-> platform?
+> |Reported-by: kernel test robot <lkp@intel.com>
+> |Reported-by: Dan Carpenter <error27@gmail.com>
+> |Closes: https://lore.kernel.org/r/202305261250.2cs1phTS-lkp@intel.com/
 
-I have tested, it return *true*.
+Not relevant.  These are basically review comments.
 
-Yeah, out hardware is dma coherent.
+> +	  Add support for the Xilinx PL DMA PCIe host bridge,
+> +	  The controller is an soft IP which can act as Root Port.
+> +	  If you know your system provides xilinx PCIe host controller
+> +	  bridge DMA as soft IP say Y; if you are not sure, say N.
 
-Then,  we switching  to  dev_is_dma_coherent(dev) ?
+s/is an soft/is soft/
+s/xilinx/Xilinx/
 
-> Regards,
-> Lucas
+> +#define XILINX_PCIE_DMA_REG_IMR			0x0000013c
+> +#define XILINX_PCIE_DMA_REG_MSIBASE1		0x0000014c
+> +#define XILINX_PCIE_DMA_REG_MSI_HI_MASK		0x0000017c
+> ...
+> +#define XILINX_PCIE_DMA_IMR_ALL_MASK	0x0FF30FE9
+> +#define XILINX_PCIE_DMA_IDR_ALL_MASK	0xFFFFFFFF
 
--- 
-Jingfeng
+Pick upper-case hex or lower-case hex and use it consistently.
 
+> +static inline bool xilinx_pl_dma_pcie_linkup(struct pl_dma_pcie *port)
+
+Name this *_pcie_link_up() (not *_pcie_linkup()) to match other drivers.
+
+> +static bool xilinx_pl_dma_pcie_valid_device(struct pci_bus *bus, unsigned int devfn)
+> +{
+> +	struct pl_dma_pcie *port = bus->sysdata;
+> +
+> +	/* Check if link is up when trying to access downstream ports */
+> +	if (!pci_is_root_bus(bus)) {
+> +		if (!xilinx_pl_dma_pcie_linkup(port))
+> +			return false;
+> +	} else if (devfn > 0)
+> +		/* Only one device down on each root port */
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+> +static void __iomem *xilinx_pl_dma_pcie_map_bus(struct pci_bus *bus,
+> +						unsigned int devfn, int where)
+> +{
+> +	struct pl_dma_pcie *port = bus->sysdata;
+> +
+> +	if (!xilinx_pl_dma_pcie_valid_device(bus, devfn))
+> +		return NULL;
+
+Checking whether the link is up is racy because the link may be up, so
+xilinx_pl_dma_pcie_valid_device() returns true, then the link may go
+down before the read below.
+
+What happens then?  If it's an error that you can recover from, it
+would better to skip the link up check and just handle the error.
+
+> +	return port->reg_base + PCIE_ECAM_OFFSET(bus->number, devfn, where);
+> +}
+
+> +	/*set the Bridge enable bit */
+
+  /* Set ... */ (add space before "Set" and capitalize it)
+
+Bjorn
