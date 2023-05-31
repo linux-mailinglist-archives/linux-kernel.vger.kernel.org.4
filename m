@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1129E7182E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EE97182E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236833AbjEaNpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
+        id S236777AbjEaNp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235682AbjEaNoS (ORCPT
+        with ESMTP id S236664AbjEaNoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:44:18 -0400
+        Wed, 31 May 2023 09:44:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295D3E54;
-        Wed, 31 May 2023 06:42:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5449810F8;
+        Wed, 31 May 2023 06:42:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9F2263B64;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46E2A61476;
+        Wed, 31 May 2023 13:42:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC865C433D2;
         Wed, 31 May 2023 13:42:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A977C4339C;
-        Wed, 31 May 2023 13:42:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540546;
-        bh=RCHWS+o1hDInbDlH2a1xOIWLzTL1qLvXYRuq+jY8uqE=;
+        s=k20201202; t=1685540547;
+        bh=UL1wfdsUQBKlzGq2PJgrxBOWBUnxUBn/pysu3p7J4s0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=trr04afcP5u6M1N2bvuo8uB1Ao5YdLX3TJIDzydzTkA+AY7z8ZSvWI+CTmyD1lNXj
-         9NaMCxvMtHxzogVJS302JzCHeisiyPbSo0skwb/C7Sq/k5ZyHGgvrI8s0Kuofeymyz
-         +9FjvZnqGflVUltM96zk11wTZ86sJt2XP26s8/wdYpEz0Wf0gORZsH49tt7AkoDEBA
-         N33e4c6qWup8R/Dh1WDoka04OTjsrspWSKNxueW3hck2Ioq7vo6w7RfnBRWxAtthbP
-         pe/VoylsXQx1lpDPwPz5gTa9EhmNxAbDLrerJBUTWZQpOhxxMu4MKlvQm5/sxq8clG
-         QmQaj+Y9q5HHA==
+        b=VZvadNmW9dgjAtjr1zaqDROXRzr2XarGu8Z0hk8SCcW6IM756MASIQe6+tIpSqUMN
+         nrriforuIpWEntFKTl3TUA1pfQU8h6mdAxX4DWBwXsaMdnD1pG3j9MBFo/xLyCqIys
+         ilB03vh2K+sQnleGe/qoOnnmQ5Q638dTqcvNNt8nDXxwPbwUw6Dekuc2FjGEu1LEAi
+         1+xvnTPEA0ogiipjnV6XJ8VG4j2w3r0jyIlStVJLE+dPHCS1NwY+3HByZLd71Ty6LF
+         cGdxsSGdIrcxFwdbPEues4cWsDiOq/cIDvmIUfQ2pUExuQC6pULQhx5pnKk8tXeRY0
+         pvxoHjs7LCyCg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>,
+Cc:     Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>,
-        srinivas.kandagatla@linaro.org, bgoswami@quicinc.com,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 6.1 14/33] ASoC: lpass: Fix for KASAN use_after_free out of bounds
-Date:   Wed, 31 May 2023 09:41:40 -0400
-Message-Id: <20230531134159.3383703-14-sashal@kernel.org>
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 6.1 15/33] drm: panel-orientation-quirks: Change Air's quirk to support Air Plus
+Date:   Wed, 31 May 2023 09:41:41 -0400
+Message-Id: <20230531134159.3383703-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134159.3383703-1-sashal@kernel.org>
 References: <20230531134159.3383703-1-sashal@kernel.org>
@@ -51,78 +52,47 @@ X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>
+From: Maya Matuszczyk <maccraft123mc@gmail.com>
 
-[ Upstream commit 75e5fab7db0cecb6e16b22c34608f0b40a4c7cd1 ]
+[ Upstream commit 1aa7f416175619e0286fddc5fc44e968b06bf2aa ]
 
-When we run syzkaller we get below Out of Bounds error.
+It turned out that Aya Neo Air Plus had a different board name than
+expected.
+This patch changes Aya Neo Air's quirk to account for that, as both
+devices share "Air" in DMI product name.
 
-"KASAN: slab-out-of-bounds Read in regcache_flat_read"
+Tested on Air claiming to be an Air Pro, and on Air Plus.
 
-Below is the backtrace of the issue:
-
-BUG: KASAN: slab-out-of-bounds in regcache_flat_read+0x10c/0x110
-Read of size 4 at addr ffffff8088fbf714 by task syz-executor.4/14144
-CPU: 6 PID: 14144 Comm: syz-executor.4 Tainted: G        W
-Hardware name: Qualcomm Technologies, Inc. sc7280 CRD platform (rev5+) (DT)
-Call trace:
-dump_backtrace+0x0/0x4ec
-show_stack+0x34/0x50
-dump_stack_lvl+0xdc/0x11c
-print_address_description+0x30/0x2d8
-kasan_report+0x178/0x1e4
-__asan_report_load4_noabort+0x44/0x50
-regcache_flat_read+0x10c/0x110
-regcache_read+0xf8/0x5a0
-_regmap_read+0x45c/0x86c
-_regmap_update_bits+0x128/0x290
-regmap_update_bits_base+0xc0/0x15c
-snd_soc_component_update_bits+0xa8/0x22c
-snd_soc_component_write_field+0x68/0xd4
-tx_macro_put_dec_enum+0x1d0/0x268
-snd_ctl_elem_write+0x288/0x474
-
-By Error checking and checking valid values issue gets rectifies.
-
-Signed-off-by: Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com
-Link: https://lore.kernel.org/r/20230511112532.16106-1-quic_visr@quicinc.com
-Signed-off-by: Mark Brown <broonie@kernel.org
+Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20230515184843.1552612-1-maccraft123mc@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/lpass-tx-macro.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/gpu/drm/drm_panel_orientation_quirks.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-tx-macro.c
-index d1d9d8d2df2d2..9f59518005a5f 100644
---- a/sound/soc/codecs/lpass-tx-macro.c
-+++ b/sound/soc/codecs/lpass-tx-macro.c
-@@ -745,6 +745,8 @@ static int tx_macro_put_dec_enum(struct snd_kcontrol *kcontrol,
- 	struct tx_macro *tx = snd_soc_component_get_drvdata(component);
- 
- 	val = ucontrol->value.enumerated.item[0];
-+	if (val >= e->items)
-+		return -EINVAL;
- 
- 	switch (e->reg) {
- 	case CDC_TX_INP_MUX_ADC_MUX0_CFG0:
-@@ -771,6 +773,9 @@ static int tx_macro_put_dec_enum(struct snd_kcontrol *kcontrol,
- 	case CDC_TX_INP_MUX_ADC_MUX7_CFG0:
- 		mic_sel_reg = CDC_TX7_TX_PATH_CFG0;
- 		break;
-+	default:
-+		dev_err(component->dev, "Error in configuration!!\n");
-+		return -EINVAL;
- 	}
- 
- 	if (val != 0) {
+diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+index b1a38e6ce2f8f..0cb646cb04ee1 100644
+--- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
++++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+@@ -179,7 +179,7 @@ static const struct dmi_system_id orientation_data[] = {
+ 	}, {	/* AYA NEO AIR */
+ 		.matches = {
+ 		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AYANEO"),
+-		  DMI_MATCH(DMI_BOARD_NAME, "AIR"),
++		  DMI_MATCH(DMI_PRODUCT_NAME, "AIR"),
+ 		},
+ 		.driver_data = (void *)&lcd1080x1920_leftside_up,
+ 	}, {	/* AYA NEO NEXT */
 -- 
 2.39.2
 
