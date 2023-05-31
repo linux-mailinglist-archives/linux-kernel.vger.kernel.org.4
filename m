@@ -2,56 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8402E717F76
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0430717F7B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235726AbjEaMEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
+        id S235803AbjEaMEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbjEaMEu (ORCPT
+        with ESMTP id S234649AbjEaMEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 31 May 2023 08:04:50 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E87E5;
-        Wed, 31 May 2023 05:04:48 -0700 (PDT)
-Date:   Wed, 31 May 2023 12:04:46 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63693101;
+        Wed, 31 May 2023 05:04:49 -0700 (PDT)
+Date:   Wed, 31 May 2023 12:04:47 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685534687;
+        s=2020; t=1685534688;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lzOqD4nl4Lft64GN7/YBeqIBV9i4DrJ2Pe+IrFZ7GT0=;
-        b=azbTvVWM1gYHZJ08L0b1DtJKFH8KAJiHRIRvJOSb1ZE1iNkpbWkhc/7m2Jpr80nz+H4Cjl
-        QsDvVAlAHw+XnMXPC6DX9O2zpVri4TKqb2vIJ+uvWKGFHILDJzlGVoNspOCsfZEnrrNDr2
-        AQPtfjTwfN8oK5EUoU8UKOXi2SIZQLLh9eCT4SlOsDPGks7YNhaPuFwDeI6z87vMy9tg9+
-        ybFDLWH3HYPKZaXU3NlqvZ7RSy5qbn9MLpOC6lyRgyUXvrOeoJ4nuCMHsq2Jdueoel7yTJ
-        LrlMbcwHGOdLZOL+OS+uNMelTM8YAxo9HMf/PoAnHH5FAqLum6UR6GgeeAuRBA==
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=mkFR1p6NGaVWzqWo+3Ov+dWA/Fp3KYe2OtV0WYPqN04=;
+        b=nBrT/TPqM41GvLPhCmDpjc/a0IxKU0UeTYMWjU948RcZoLU5VeK0HkhuFoEWoRi6ItlU5z
+        92RxOwRSlnkTFOgUd39L0oFWoXs4VEol7Efu6Fqig/WU3Ou5WWpks+CKly26pULggh09CJ
+        JQgv0/UdecmscS3j062BJkeV2x510OHfhKmu5XepB9WYiPpDkf38c3TKlal3LDEgtJLTCw
+        Lr242c3S06MMhlmKTvlNBMyHXAkx7msg+0Ln8iGIGlJrY+4FDs2bNHsLwcW6R3UHolKGKI
+        tqySc3PInnxZ5X8b3HFdiE0joUyhV7kpjSuZUZhgSZNRv+lAP927xHnfpV4C5A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685534687;
+        s=2020e; t=1685534688;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lzOqD4nl4Lft64GN7/YBeqIBV9i4DrJ2Pe+IrFZ7GT0=;
-        b=r+3toCbplfE7Oy4FET3ORjfiQDhK9nF5z58Jl7tIlLeHRyy95JuuDy0FrhqnufKoxS3zkW
-        iClZk3XUUZGEisBA==
-From:   "tip-bot2 for Yicong Yang" <tip-bot2@linutronix.de>
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=mkFR1p6NGaVWzqWo+3Ov+dWA/Fp3KYe2OtV0WYPqN04=;
+        b=hGCRxsGF8qfCyZv5UuIc7qLThGLIDp9AuPgGt8kuS87j5yf/GlHrhHY7/vDHqWJXLgHEdp
+        eQJonsaWqtdDodCQ==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/fair: Don't balance task to its current running CPU
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Yicong Yang <yangyicong@hisilicon.com>,
+Subject: [tip: sched/core] sched/fair: Multi-LLC select_idle_sibling()
+Cc:     Tejun Heo <tj@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230530082507.10444-1-yangyicong@huawei.com>
-References: <20230530082507.10444-1-yangyicong@huawei.com>
 MIME-Version: 1.0
-Message-ID: <168553468695.404.4563102451298997337.tip-bot2@tip-bot2>
+Message-ID: <168553468754.404.2298362895524875073.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,95 +61,99 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     3a040184f873374c5b45eeed7b3deabe8c5b1c79
-Gitweb:        https://git.kernel.org/tip/3a040184f873374c5b45eeed7b3deabe8c5b1c79
-Author:        Yicong Yang <yangyicong@hisilicon.com>
-AuthorDate:    Tue, 30 May 2023 16:25:07 +08:00
+Commit-ID:     c7dfd6b9122d29d0e9a4587ab470c0564d7f92ab
+Gitweb:        https://git.kernel.org/tip/c7dfd6b9122d29d0e9a4587ab470c0564d7f92ab
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Tue, 30 May 2023 13:20:46 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 30 May 2023 22:46:27 +02:00
 
-sched/fair: Don't balance task to its current running CPU
+sched/fair: Multi-LLC select_idle_sibling()
 
-We've run into the case that the balancer tries to balance a migration
-disabled task and trigger the warning in set_task_cpu() like below:
+Tejun reported that when he targets workqueues towards a specific LLC
+on his Zen2 machine with 3 cores / LLC and 4 LLCs in total, he gets
+significant idle time.
 
- ------------[ cut here ]------------
- WARNING: CPU: 7 PID: 0 at kernel/sched/core.c:3115 set_task_cpu+0x188/0x240
- Modules linked in: hclgevf xt_CHECKSUM ipt_REJECT nf_reject_ipv4 <...snip>
- CPU: 7 PID: 0 Comm: swapper/7 Kdump: loaded Tainted: G           O       6.1.0-rc4+ #1
- Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 2280-V2 CS V5.B221.01 12/09/2021
- pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : set_task_cpu+0x188/0x240
- lr : load_balance+0x5d0/0xc60
- sp : ffff80000803bc70
- x29: ffff80000803bc70 x28: ffff004089e190e8 x27: ffff004089e19040
- x26: ffff007effcabc38 x25: 0000000000000000 x24: 0000000000000001
- x23: ffff80000803be84 x22: 000000000000000c x21: ffffb093e79e2a78
- x20: 000000000000000c x19: ffff004089e19040 x18: 0000000000000000
- x17: 0000000000001fad x16: 0000000000000030 x15: 0000000000000000
- x14: 0000000000000003 x13: 0000000000000000 x12: 0000000000000000
- x11: 0000000000000001 x10: 0000000000000400 x9 : ffffb093e4cee530
- x8 : 00000000fffffffe x7 : 0000000000ce168a x6 : 000000000000013e
- x5 : 00000000ffffffe1 x4 : 0000000000000001 x3 : 0000000000000b2a
- x2 : 0000000000000b2a x1 : ffffb093e6d6c510 x0 : 0000000000000001
- Call trace:
-  set_task_cpu+0x188/0x240
-  load_balance+0x5d0/0xc60
-  rebalance_domains+0x26c/0x380
-  _nohz_idle_balance.isra.0+0x1e0/0x370
-  run_rebalance_domains+0x6c/0x80
-  __do_softirq+0x128/0x3d8
-  ____do_softirq+0x18/0x24
-  call_on_irq_stack+0x2c/0x38
-  do_softirq_own_stack+0x24/0x3c
-  __irq_exit_rcu+0xcc/0xf4
-  irq_exit_rcu+0x18/0x24
-  el1_interrupt+0x4c/0xe4
-  el1h_64_irq_handler+0x18/0x2c
-  el1h_64_irq+0x74/0x78
-  arch_cpu_idle+0x18/0x4c
-  default_idle_call+0x58/0x194
-  do_idle+0x244/0x2b0
-  cpu_startup_entry+0x30/0x3c
-  secondary_start_kernel+0x14c/0x190
-  __secondary_switched+0xb0/0xb4
- ---[ end trace 0000000000000000 ]---
+This is, of course, because of how select_idle_sibling() will not
+consider anything outside of the local LLC, and since all these tasks
+are short running the periodic idle load balancer is ineffective.
 
-Further investigation shows that the warning is superfluous, the migration
-disabled task is just going to be migrated to its current running CPU.
-This is because that on load balance if the dst_cpu is not allowed by the
-task, we'll re-select a new_dst_cpu as a candidate. If no task can be
-balanced to dst_cpu we'll try to balance the task to the new_dst_cpu
-instead. In this case when the migration disabled task is not on CPU it
-only allows to run on its current CPU, load balance will select its
-current CPU as new_dst_cpu and later triggers the warning above.
+And while it is good to keep work cache local, it is better to not
+have significant idle time. Therefore, have select_idle_sibling() try
+other LLCs inside the same node when the local one comes up empty.
 
-The new_dst_cpu is chosen from the env->dst_grpmask. Currently it
-contains CPUs in sched_group_span() and if we have overlapped groups it's
-possible to run into this case. This patch makes env->dst_grpmask of
-group_balance_mask() which exclude any CPUs from the busiest group and
-solve the issue. For balancing in a domain with no overlapped groups
-the behaviour keeps same as before.
-
-Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+Reported-by: Tejun Heo <tj@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-Link: https://lore.kernel.org/r/20230530082507.10444-1-yangyicong@huawei.com
 ---
- kernel/sched/fair.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/sched/fair.c     | 38 ++++++++++++++++++++++++++++++++++++++
+ kernel/sched/features.h |  1 +
+ 2 files changed, 39 insertions(+)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 0172458..66ea982 100644
+index 48b6f0c..0172458 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -10780,7 +10780,7 @@ static int load_balance(int this_cpu, struct rq *this_rq,
- 		.sd		= sd,
- 		.dst_cpu	= this_cpu,
- 		.dst_rq		= this_rq,
--		.dst_grpmask    = sched_group_span(sd->groups),
-+		.dst_grpmask    = group_balance_mask(sd->groups),
- 		.idle		= idle,
- 		.loop_break	= SCHED_NR_MIGRATE_BREAK,
- 		.cpus		= cpus,
+@@ -7028,6 +7028,38 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool 
+ }
+ 
+ /*
++ * For the multiple-LLC per node case, make sure to try the other LLC's if the
++ * local LLC comes up empty.
++ */
++static int
++select_idle_node(struct task_struct *p, struct sched_domain *sd, int target)
++{
++	struct sched_domain *parent = sd->parent;
++	struct sched_group *sg;
++
++	/* Make sure to not cross nodes. */
++	if (!parent || parent->flags & SD_NUMA)
++		return -1;
++
++	sg = parent->groups;
++	do {
++		int cpu = cpumask_first(sched_group_span(sg));
++		struct sched_domain *sd_child;
++
++		sd_child = per_cpu(sd_llc, cpu);
++		if (sd_child != sd) {
++			int i = select_idle_cpu(p, sd_child, test_idle_cores(cpu), cpu);
++			if ((unsigned)i < nr_cpumask_bits)
++				return i;
++		}
++
++		sg = sg->next;
++	} while (sg != parent->groups);
++
++	return -1;
++}
++
++/*
+  * Scan the asym_capacity domain for idle CPUs; pick the first idle one on which
+  * the task fits. If no CPU is big enough, but there are idle ones, try to
+  * maximize capacity.
+@@ -7199,6 +7231,12 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+ 	if ((unsigned)i < nr_cpumask_bits)
+ 		return i;
+ 
++	if (sched_feat(SIS_NODE)) {
++		i = select_idle_node(p, sd, target);
++		if ((unsigned)i < nr_cpumask_bits)
++			return i;
++	}
++
+ 	return target;
+ }
+ 
+diff --git a/kernel/sched/features.h b/kernel/sched/features.h
+index ee7f23c..9e390eb 100644
+--- a/kernel/sched/features.h
++++ b/kernel/sched/features.h
+@@ -62,6 +62,7 @@ SCHED_FEAT(TTWU_QUEUE, true)
+  */
+ SCHED_FEAT(SIS_PROP, false)
+ SCHED_FEAT(SIS_UTIL, true)
++SCHED_FEAT(SIS_NODE, true)
+ 
+ /*
+  * Issue a WARN when we do multiple update_rq_clock() calls
