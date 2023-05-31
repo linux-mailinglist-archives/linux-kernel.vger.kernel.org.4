@@ -2,298 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75BD7186D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8610C7186D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234336AbjEaPzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
+        id S234171AbjEaP5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233993AbjEaPzO (ORCPT
+        with ESMTP id S231809AbjEaP5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:55:14 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2040.outbound.protection.outlook.com [40.107.22.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5669D;
-        Wed, 31 May 2023 08:55:12 -0700 (PDT)
+        Wed, 31 May 2023 11:57:02 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2136.outbound.protection.outlook.com [40.107.220.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574A1125;
+        Wed, 31 May 2023 08:57:00 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oe+CSbF3Ut6QRE1KP9zgI05vS6JeJlVD/Fel7sVG/nbzt2++hS8fCRCUyBaLsuwvfiOWXkh5dN7WKXc5RzmRG/QAJWYOqkvYRJ+FS0V+MahUUVGtTc8manfMWN7hKc9gGWm7zeYS3aCPyw+RIoH1xj/ialKyAVhqk8K6u5luaMaoKMPDzvqma9beh9gqfYzE7oNsFXCHuyfsfXUb4uvd8PjpnZ6oFQ6VVdSvxDk6Pv/UbLuMcFfrXwJJQvfkGzcBpporqDNNhpM7wWHQ72EdU15I9fz13XTU1/csPWc0/Br3WeG2qfscB5dtMLMx+uU2tvijAwL07DxSWvBdn7c01w==
+ b=hxGKsBtojCQog/FDCCLLSHNTxZiXyEz3dk0amqkl6prNE3AR/8XGvwmfox0XxmLVQRrLDtubnGwM2yVMFpxVEs6fSmLLvt3BTvcKqtdAS86uoheVQBB7sdS2euqnnBI49P71GUkAlzKv9MKnaLa2vuUEqzurqbpZ7qcU6ldka3WrwuxIWhIpGIg0dYsRLGudmLn4EhK+btV8DMkd1/EalhCKAhHiQYxXsYHfr8FMu57o1+g25avQ82r+YZxWdUNQ83f+1vHkXPR3cFzVQTFF/vOQNw+7Cjm8QpwkoTNHY1ccnmBDRyxxWYNPBj2BdReA/lzLOkzVUD6efCa7DVbV3Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sTQ5lQ0dx8t8kIW5j6FAlAY5EvbdBlLUO9pMQ9KQs1k=;
- b=VSDtuAl5n7gvi4fcbGHNMPKvVyr5C4Ti8YGZ3CS4ZBk8mmBSrLNNDNGgljbKcMid5BlNrlM2J5p8Z4opkI7I4+doiqp/rKrLTQsHJdutNdibTyLVCw/CMxXIQ0dtN56WWXy4P0tlCf6Ozr0bbCSKOztErux2/vnyhi+cLx7zyU0EIvSWorCht3sNYx2ZvCVh75V2C033YwhV0QrmRvKnaHl8r07RFJJLKheCSa3+n3sAcnY06amwog2a9pjsRzAQlZwjE3Oi7bRZA5EpMGUBYu6d/khvoT5OKhUTYFzlkPZiopq4N+gwQbnutA+48GIv1KBWh9uF2ulGTV1pOoSlsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.76) smtp.rcpttodomain=ucw.cz smtp.mailfrom=siemens.com; dmarc=pass
- (p=reject sp=reject pct=100) action=none header.from=siemens.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
+ bh=E/FD03qq7h+ACzK9S8OZnsjtSyuO5WfGZDIRnrcec7Q=;
+ b=jBP3XYi1CvK+mzoZoUAaJc8gUHyjkKl0SePwRrz0mRvO/uypSQZv2gjCm8G4igqCTBRq/0NroSxS5Pj0Qhe8/SRWyYKUmcrhiHGmG78vWsY0yFK3MgZ+TOjFVOZ9MGAcrO2H7DrVGd+vd3LDgZ/FEXOJjjHgfYyCU5g25QqPBOcGnSzLTjDUed2M+z6PC7jZAyZTE9wIGkC80jNc4o0AnnOQ8Dj2vS7F3mWgVBny+bboznsLd9bsqc10eJsnuhswHtds1qkouQWXFX1RGHo4v72FZE7OgYUXaaBF2zYlSFokS1HjYDAyDiYkqjpDauS9s/BB7l8opXOyF/2LvnLisQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sTQ5lQ0dx8t8kIW5j6FAlAY5EvbdBlLUO9pMQ9KQs1k=;
- b=VML7KefdycWSy3Vf4CIcLtg035uNntYrkBloLVp3zN5Vy5rTTSq3eroDg5Wkpc1JGnJ6acqLAKUHZJ1R0CjOcZxbo/uTvkKt908J9oJTGl+Kc+0N4jA+1DF8B9lxH3UGrNJBZHb0jqhduSYfkElxqJex7m1OdIzSY03Fo0RkTt9DPYSd79MEaKaZL+MnqvnYGUeNfeF1e6BQK13+u12+eDLg26vCpMzMg1uW/ZY2cB8BK3cT9JksHPBoVqBP9pI9RAKosK0csSMMGxRsNaBFl6iup/sORFrKLdZPlQMMCUWssh9INFQE21KMf/6zAwg9vJMfLHBxprXV/sp4q3ykMA==
-Received: from GV3PEPF000000E2.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:144:1:0:2:0:f) by DU0PR10MB6534.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:10:405::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Wed, 31 May
- 2023 15:55:09 +0000
-Received: from HE1EUR01FT036.eop-EUR01.prod.protection.outlook.com
- (2a01:111:f400:7e1f::201) by GV3PEPF000000E2.outlook.office365.com
- (2603:1026:900:3::f) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23 via Frontend
- Transport; Wed, 31 May 2023 15:55:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.76)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.76 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.76; helo=hybrid.siemens.com; pr=C
-Received: from hybrid.siemens.com (194.138.21.76) by
- HE1EUR01FT036.mail.protection.outlook.com (10.152.1.30) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.22 via Frontend Transport; Wed, 31 May 2023 15:55:08 +0000
-Received: from DEMCHDC8WBA.ad011.siemens.net (139.25.226.105) by
- DEMCHDC8VSA.ad011.siemens.net (194.138.21.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Wed, 31 May 2023 17:55:08 +0200
-Received: from md1za8fc.ad001.siemens.net (139.25.0.56) by
- DEMCHDC8WBA.ad011.siemens.net (139.25.226.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Wed, 31 May 2023 17:55:07 +0200
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>
-CC:     Henning Schild <henning.schild@siemens.com>
-Subject: [PATCH 1/1] leds: simatic-ipc-leds-gpio: add new model BX-21A
-Date:   Wed, 31 May 2023 17:54:57 +0200
-Message-ID: <20230531155457.31632-2-henning.schild@siemens.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20230531155457.31632-1-henning.schild@siemens.com>
-References: <20230531155457.31632-1-henning.schild@siemens.com>
+ bh=E/FD03qq7h+ACzK9S8OZnsjtSyuO5WfGZDIRnrcec7Q=;
+ b=chLyorS3FaWoKOnghkT9jMUupF60SN6dWtlGjR/xMvewhMGiDpEWmqieT7w1Q4X+XFZuWE1OzqoKVqJloqcauTKWR9+Bhf5aW1MAxGjOHVc3bhx7pti0b3gmzT2mUhfGXoXG/JRHXmOw+HFlLJB0q/UzTqRBDINVRkF4ZXRfJk8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BY5PR13MB4469.namprd13.prod.outlook.com (2603:10b6:a03:1d5::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.22; Wed, 31 May
+ 2023 15:56:56 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.024; Wed, 31 May 2023
+ 15:56:56 +0000
+Date:   Wed, 31 May 2023 17:56:48 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org
+Subject: Re: [PATCH RFC net-next v3 1/8] vsock/dgram: generalize recvmsg and
+ drop transport->dgram_dequeue
+Message-ID: <ZHduQMZG4an6A+DG@corigine.com>
+References: <20230413-b4-vsock-dgram-v3-0-c2414413ef6a@bytedance.com>
+ <20230413-b4-vsock-dgram-v3-1-c2414413ef6a@bytedance.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230413-b4-vsock-dgram-v3-1-c2414413ef6a@bytedance.com>
+X-ClientProxiedBy: AM0PR01CA0106.eurprd01.prod.exchangelabs.com
+ (2603:10a6:208:10e::47) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [139.25.0.56]
-X-ClientProxiedBy: DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) To
- DEMCHDC8WBA.ad011.siemens.net (139.25.226.105)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HE1EUR01FT036:EE_|DU0PR10MB6534:EE_
-X-MS-Office365-Filtering-Correlation-Id: b3748bf8-ebad-40f0-b8f6-08db61ef68f1
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY5PR13MB4469:EE_
+X-MS-Office365-Filtering-Correlation-Id: 61bf06ef-37df-42bd-be7b-08db61efa917
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aBlyNUanDwZeoEv4zBTVCbdaf9zWJVlXq+EBro5/XmyAeevZznyXLdHvQagyAhAg5vAhy76PD5vtXbSQKvOv00k5l+h1HpAS15D5CI6i9OF7Te8Zbh97QnGod38Fe8TQSxSYu2UABD9DOMWqtEQ6KTQZpSNvlpg2BQPMAMBH66TVApzkx4Aw5+dULUxQyqIjhFGcbmd5RiXIxk1ZSKgFpert0UjukQhQYdEuuNCrmydaeMT+FZ4g+E+9ZKheE3uY48I95XcyR1q5Ji/vuVnpsBc+GRxG8srOUzJ1zvxhDb3ocE+K/S6u8RFyNIkln7RVKeranv7xbeI6Cms5CqCRd2RtM3BM4oju8VLCdjSv1kfeXKt0z0fmShrKO2T775tjLnFcGVb/Rki6dsNOQDhOhI5MFPEe3kh7P131aLUxbcH+lL3J76Aovdt8xghkOBi7JI2HCC0SOS+2gQpZhr7FJPw5WTHwHRd/4ZqisB8u9kffGqNKqtj7snRMvhvbkycnRtOTEDV7nWyArGwNkR0an3hMYq+Qg2xi8kvo1oUT4R0FY3z/wtWQQV3EffKpAa0Z31CKNWDaE5r08c5GESRkpRva/Pm+YLuFi4z2XMSvserrtb7RY1i45oPEoYKZAsqj+Q9bAqFrllOA4C1ofmCsyTW8cE9xxbYHUdM9NlKJhTciSdlDCrXYjHJ4Pru6hP2AU2WP7DhC4jm4+bYhxSWaVeZ8yDrGfzq2dbdjPSeljs0YhUDbRpvALUXte5NwuL6eItaK4gbOoXkgEexMvmlPzw==
-X-Forefront-Antispam-Report: CIP:194.138.21.76;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(346002)(136003)(451199021)(46966006)(40470700004)(36840700001)(86362001)(40460700003)(83380400001)(44832011)(6666004)(8676002)(336012)(8936002)(82740400003)(5660300002)(36860700001)(36756003)(26005)(1076003)(47076005)(82960400001)(107886003)(40480700001)(2906002)(356005)(4326008)(70206006)(70586007)(110136005)(478600001)(16526019)(956004)(2616005)(82310400005)(316002)(186003)(41300700001)(81166007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 15:55:08.7869
+X-Microsoft-Antispam-Message-Info: zrb8SRr/Bnk/qqsdSXJQnnxhLUlydgIOJI7EJq0Zfn5W/ThQMjUJNU9q5S60MonjJIi7pCnlRHvDWpJBiUVMJqFVmCA9mNAOtEi3t8KPY8dAiZy761Cx0guv8OecpKu9ZYk9pqAPSZczCTMO3ZqJzCu1w7rjUCtdrHEjG6a3cjKLEcmElXGj83VX7A9FHNNW58jpJQsVgy1mPHb9rnyuuLaaWYc5aqFjNuy1t1DMqgBEnH1mnHKqRMxQEoMAvRD2PKkQ7/87OQRn6ff8dfbhauxmpWo7P0AI3m+nKDbSJEP5OjPjEHDeha/GLClVFQcFqVT6AI6qjzq34Bh56tHTdi/M1XosGa4aN6FIKNdQduFaBjrBc5llDIhot30ox7yorQ6dTsBwNGsIzaQBAwr67eLdxxkUJzNpjST9A7G8+4mnd4gy1fYZqZ+Qk8fDAvgISI7ZaCU4309KTIuOB+aAxnfB0A4Gd/FA102HyhwFYLU1xNaJZJRiJ8caqhCNNPb1GvwkE051BCnXy64jGzHmZobtG+g0EMiwDrBuK8dwNg2AUntzGa8Txutfjf8LYH1uRPde6Sx+DmZk0j6gF1Que3egUnWLUqgAfXpX9LjPAxc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(396003)(39830400003)(136003)(376002)(451199021)(6512007)(6506007)(186003)(2906002)(2616005)(54906003)(478600001)(44832011)(83380400001)(8676002)(8936002)(38100700002)(6486002)(41300700001)(66556008)(6666004)(66946007)(5660300002)(66476007)(316002)(86362001)(36756003)(7416002)(4326008)(6916009)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Wuo7ghWGi+4L4hNbSj6RX+0Bi6yJllK2VbhYVAXjoEz96xiALCQuNtk4bqdI?=
+ =?us-ascii?Q?UaTI3Q6rVxzuI1t67FIXbd7t9SqBW+scdwmBhy0WadRoKt/FUsSUvVPW0Le6?=
+ =?us-ascii?Q?7GLKbCBxzUvlX7dSNpu7+X+GKkxHBPah7UhR/TUgLMQV2Xdeff363lapLAzO?=
+ =?us-ascii?Q?CUiaUJ0iwLlsE0syQry+EU8Mk96u0fmiRn9wcYR4DFuQxWxbV2rLrRIUz5Dl?=
+ =?us-ascii?Q?qCPIIGAcKgiJWo35vfrzWny3Zqxxfhs1NAl5vUmYOWkCsV4jLXlIS+k7ZgOW?=
+ =?us-ascii?Q?N4UBZDVceESXe58lerussfHUOIpkZ4XUDBxwrZEl2vEjwAgJtm1p/4nJFp1Q?=
+ =?us-ascii?Q?Fsi7REMYvCn0YhzPZaupMqBal4jpW3wU/WtLHVBRRXHKJKQ//YCmRrCm/KOS?=
+ =?us-ascii?Q?vqQXznXCOyP9NDULz9ItqeelurobN2m54Dc1lXJS5+EPrRTpu16Xxv0SYKV8?=
+ =?us-ascii?Q?FXSxARfdSeKwXbReY+K/ro0me1EweSLTF4molOD/VtzHhP8GrVC+DBqdkYQT?=
+ =?us-ascii?Q?FTYNDv7JZ29JuNPd8u9AHLICuD9eopwYDNTZY8mbibpOCo0UtzAIW+63fbMk?=
+ =?us-ascii?Q?A5x38+7VlFQezRsfBb83PCHYzoISms0YKAlFD6fPN6Z5LAUAR8oI3KirPpyx?=
+ =?us-ascii?Q?9PCKcTsXSoRehBOMwxvawQ1E0exwdP+00x7x6qonP6zgfLxCKq8XPy0Ba3H0?=
+ =?us-ascii?Q?x0wNb/o7TZpQFnCntELxA+zXjwJ1fa0pKMlpbNgHQdSx/5lneZPlYNlxtKYA?=
+ =?us-ascii?Q?KMEHO3eF+Zp6sfrwGDjk0zKeT/NofQtqj6yqP6Cx557ajLxjjALR89sKDNO9?=
+ =?us-ascii?Q?8aOOTg46iZiFP1oYoeImj3zgwlxBTIMZ32wkke5YXx+Zru++rY9rLo6hR7yG?=
+ =?us-ascii?Q?nVSCr02HwbR5r4SBZ7tVXQx2ySLRTOAt/CcppADpb3SJ8fiQ4lhgPZLQdZT2?=
+ =?us-ascii?Q?SDobujmO528k23FsyfdpPhTJ6tFVJVKbVx36KwJku39LnzRxVjsXXoGrLcnR?=
+ =?us-ascii?Q?r6cueAFZi2Z075vTnQi8WB2xAXrbIQ5if5y4dXAICqkeEHLCpkbEa/ngwEXD?=
+ =?us-ascii?Q?tGVmXKTqkfySIcHJ0UFbNcAAk5OfsqrfavRZocJqrfu5fXSFcsSHUGa7KKw+?=
+ =?us-ascii?Q?GbsNfc7Fi00X+OWXYqmcFBacCjTR29b0CVz4gL5MKGNTRmg0BwC2WqhSO9dN?=
+ =?us-ascii?Q?iTi4+cJPbYP6im6pY+SxGJS5POi7Vn0yvnoKrBqUrIbFlnU/Af29FOinJIFz?=
+ =?us-ascii?Q?gtglC3wOILuWqscUSm2mi/R6Gd1ucH0mkB1Aq/4AtDkb0XEUEiVK5mIWIHAF?=
+ =?us-ascii?Q?ZxMU3XSI0PB01vMAcGTL/LdNpNVCCcj+c3Xpa+ItZB8QG0q7L3BpmzjMju/8?=
+ =?us-ascii?Q?I+dG8qcRC5c/LGZgKONImmwNignMb+eA1DEUTWWME7B6aTda+8XbPx/6i9BA?=
+ =?us-ascii?Q?9Xp51kNctf01ni7KsoqPRuey55RLmMgl1Nxp6HeEyHJ93q3TWx4+vitXW2pc?=
+ =?us-ascii?Q?x3LgXr3xyWRqC23tSXnqrU1B0yNFvsmpyjRurPoJeLr0IMPSc7N4WuaPxEQk?=
+ =?us-ascii?Q?NgQr0cfYtrZ/xmW5h8qKtiCOyCFXUEoqZgvpRqJ8S7UtDZyCK7PAVqDetEJ5?=
+ =?us-ascii?Q?gkIlzKTqjeXjiXlwkHcC+oXsNqK8o6yhmCZA8aPwSetS7dQyokUccys2WVgg?=
+ =?us-ascii?Q?PKlKxQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61bf06ef-37df-42bd-be7b-08db61efa917
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 15:56:56.7467
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3748bf8-ebad-40f0-b8f6-08db61ef68f1
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.76];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT036.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR10MB6534
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d6YgPNRBMXEqz9MklyI86fQ+PMXec81+NBqGEF44IRwHF7MrwdyDXRrE0ui/u+QTdI5Xa9fgs5hREnp1w0PEG2/EWY9G00KZ6ohROBkrlyk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR13MB4469
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds support for the Siemens Simatic IPC BX-21A. Its LEDs are
-connected to GPIO pins provided by the Intel Elkhart Lake pinctrl
-driver.
+On Wed, May 31, 2023 at 12:35:05AM +0000, Bobby Eshleman wrote:
+> This commit drops the transport->dgram_dequeue callback and makes
+> vsock_dgram_recvmsg() generic. It also adds additional transport
+> callbacks for use by the generic vsock_dgram_recvmsg(), such as for
+> parsing skbs for CID/port which vary in format per transport.
+> 
+> Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
 
-Signed-off-by: Henning Schild <henning.schild@siemens.com>
----
- drivers/leds/simple/Kconfig                   | 13 +++++
- drivers/leds/simple/Makefile                  |  1 +
- .../leds/simple/simatic-ipc-leds-gpio-core.c  |  4 ++
- .../simatic-ipc-leds-gpio-elkhartlake.c       | 57 +++++++++++++++++++
- drivers/platform/x86/simatic-ipc.c            |  3 +
- .../platform_data/x86/simatic-ipc-base.h      |  1 +
- include/linux/platform_data/x86/simatic-ipc.h |  3 +-
- 7 files changed, 81 insertions(+), 1 deletion(-)
- create mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio-elkhartlake.c
+...
 
-diff --git a/drivers/leds/simple/Kconfig b/drivers/leds/simple/Kconfig
-index 44fa0f93cb3b..626ab18ac09d 100644
---- a/drivers/leds/simple/Kconfig
-+++ b/drivers/leds/simple/Kconfig
-@@ -34,3 +34,16 @@ config LEDS_SIEMENS_SIMATIC_IPC_F7188X
- 
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called simatic-ipc-leds-gpio-f7188x.
-+
-+config LEDS_SIEMENS_SIMATIC_IPC_ELKHARTLAKE
-+	tristate "LED driver for Siemens Simatic IPCs based on Intel Elkhart Lake GPIO"
-+	depends on LEDS_GPIO
-+	depends on PINCTRL_ELKHARTLAKE
-+	depends on SIEMENS_SIMATIC_IPC
-+	default LEDS_SIEMENS_SIMATIC_IPC
-+	help
-+	  This option enables support for the LEDs of several Industrial PCs
-+	  from Siemens based on Elkhart Lake GPIO i.e. BX-21A.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called simatic-ipc-leds-gpio-elkhartlake.
-diff --git a/drivers/leds/simple/Makefile b/drivers/leds/simple/Makefile
-index e3e840cea275..783578f11bb0 100644
---- a/drivers/leds/simple/Makefile
-+++ b/drivers/leds/simple/Makefile
-@@ -2,3 +2,4 @@
- obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)			+= simatic-ipc-leds.o
- obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC_APOLLOLAKE)	+= simatic-ipc-leds-gpio-core.o simatic-ipc-leds-gpio-apollolake.o
- obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC_F7188X)		+= simatic-ipc-leds-gpio-core.o simatic-ipc-leds-gpio-f7188x.o
-+obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC_ELKHARTLAKE)	+= simatic-ipc-leds-gpio-core.o simatic-ipc-leds-gpio-elkhartlake.o
-diff --git a/drivers/leds/simple/simatic-ipc-leds-gpio-core.c b/drivers/leds/simple/simatic-ipc-leds-gpio-core.c
-index 2a21b663df87..c552ea73ed9d 100644
---- a/drivers/leds/simple/simatic-ipc-leds-gpio-core.c
-+++ b/drivers/leds/simple/simatic-ipc-leds-gpio-core.c
-@@ -57,6 +57,7 @@ int simatic_ipc_leds_gpio_probe(struct platform_device *pdev,
- 	switch (plat->devmode) {
- 	case SIMATIC_IPC_DEVICE_127E:
- 	case SIMATIC_IPC_DEVICE_227G:
-+	case SIMATIC_IPC_DEVICE_BX_21A:
- 		break;
- 	default:
- 		return -ENODEV;
-@@ -72,6 +73,9 @@ int simatic_ipc_leds_gpio_probe(struct platform_device *pdev,
- 		goto out;
- 	}
- 
-+	if (!table_extra)
-+		return 0;
-+
- 	table_extra->dev_id = dev_name(dev);
- 	gpiod_add_lookup_table(table_extra);
- 
-diff --git a/drivers/leds/simple/simatic-ipc-leds-gpio-elkhartlake.c b/drivers/leds/simple/simatic-ipc-leds-gpio-elkhartlake.c
-new file mode 100644
-index 000000000000..6ba21dbb3ba0
---- /dev/null
-+++ b/drivers/leds/simple/simatic-ipc-leds-gpio-elkhartlake.c
-@@ -0,0 +1,57 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Siemens SIMATIC IPC driver for GPIO based LEDs
-+ *
-+ * Copyright (c) Siemens AG, 2023
-+ *
-+ * Author:
-+ *  Henning Schild <henning.schild@siemens.com>
-+ */
-+
-+#include <linux/gpio/machine.h>
-+#include <linux/gpio/consumer.h>
-+#include <linux/leds.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/platform_data/x86/simatic-ipc-base.h>
-+
-+#include "simatic-ipc-leds-gpio.h"
-+
-+static struct gpiod_lookup_table simatic_ipc_led_gpio_table = {
-+	.dev_id = "leds-gpio",
-+	.table = {
-+		GPIO_LOOKUP_IDX("INTC1020:04", 72, NULL, 0, GPIO_ACTIVE_HIGH),
-+		GPIO_LOOKUP_IDX("INTC1020:04", 77, NULL, 1, GPIO_ACTIVE_HIGH),
-+		GPIO_LOOKUP_IDX("INTC1020:04", 78, NULL, 2, GPIO_ACTIVE_HIGH),
-+		GPIO_LOOKUP_IDX("INTC1020:04", 58, NULL, 3, GPIO_ACTIVE_HIGH),
-+		GPIO_LOOKUP_IDX("INTC1020:04", 60, NULL, 4, GPIO_ACTIVE_HIGH),
-+		GPIO_LOOKUP_IDX("INTC1020:04", 62, NULL, 5, GPIO_ACTIVE_HIGH),
-+		{} /* Terminating entry */
-+	},
-+};
-+
-+static int simatic_ipc_leds_gpio_elkhartlake_probe(struct platform_device *pdev)
-+{
-+	return simatic_ipc_leds_gpio_probe(pdev, &simatic_ipc_led_gpio_table,
-+					   NULL);
-+}
-+
-+static int simatic_ipc_leds_gpio_elkhartlake_remove(struct platform_device *pdev)
-+{
-+	return simatic_ipc_leds_gpio_remove(pdev, &simatic_ipc_led_gpio_table,
-+					    NULL);
-+}
-+
-+static struct platform_driver simatic_ipc_led_gpio_elkhartlake_driver = {
-+	.probe = simatic_ipc_leds_gpio_elkhartlake_probe,
-+	.remove = simatic_ipc_leds_gpio_elkhartlake_remove,
-+	.driver = {
-+		.name = KBUILD_MODNAME,
-+	},
-+};
-+module_platform_driver(simatic_ipc_led_gpio_elkhartlake_driver);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_ALIAS("platform:" KBUILD_MODNAME);
-+MODULE_SOFTDEP("pre: simatic-ipc-leds-gpio-core platform:elkhartlake-pinctrl");
-+MODULE_AUTHOR("Henning Schild <henning.schild@siemens.com>");
-diff --git a/drivers/platform/x86/simatic-ipc.c b/drivers/platform/x86/simatic-ipc.c
-index c773995b230d..4402cd354104 100644
---- a/drivers/platform/x86/simatic-ipc.c
-+++ b/drivers/platform/x86/simatic-ipc.c
-@@ -48,6 +48,7 @@ static struct {
- 	{SIMATIC_IPC_IPC477E, SIMATIC_IPC_DEVICE_NONE, SIMATIC_IPC_DEVICE_427E},
- 	{SIMATIC_IPC_IPCBX_39A, SIMATIC_IPC_DEVICE_227G, SIMATIC_IPC_DEVICE_227G},
- 	{SIMATIC_IPC_IPCPX_39A, SIMATIC_IPC_DEVICE_NONE, SIMATIC_IPC_DEVICE_227G},
-+	{SIMATIC_IPC_IPCBX_21A, SIMATIC_IPC_DEVICE_BX_21A, SIMATIC_IPC_DEVICE_NONE},
- };
- 
- static int register_platform_devices(u32 station_id)
-@@ -72,6 +73,8 @@ static int register_platform_devices(u32 station_id)
- 			pdevname = KBUILD_MODNAME "_leds_gpio_apollolake";
- 		if (ledmode == SIMATIC_IPC_DEVICE_227G)
- 			pdevname = KBUILD_MODNAME "_leds_gpio_f7188x";
-+		if (ledmode == SIMATIC_IPC_DEVICE_BX_21A)
-+			pdevname = KBUILD_MODNAME "_leds_gpio_elkhartlake";
- 		platform_data.devmode = ledmode;
- 		ipc_led_platform_device =
- 			platform_device_register_data(NULL,
-diff --git a/include/linux/platform_data/x86/simatic-ipc-base.h b/include/linux/platform_data/x86/simatic-ipc-base.h
-index 57d6a10dfc9e..00bf18ecb160 100644
---- a/include/linux/platform_data/x86/simatic-ipc-base.h
-+++ b/include/linux/platform_data/x86/simatic-ipc-base.h
-@@ -20,6 +20,7 @@
- #define SIMATIC_IPC_DEVICE_127E 3
- #define SIMATIC_IPC_DEVICE_227E 4
- #define SIMATIC_IPC_DEVICE_227G 5
-+#define SIMATIC_IPC_DEVICE_BX_21A 6
- 
- struct simatic_ipc_platform {
- 	u8	devmode;
-diff --git a/include/linux/platform_data/x86/simatic-ipc.h b/include/linux/platform_data/x86/simatic-ipc.h
-index a48bb5240977..1a8e4c1099e3 100644
---- a/include/linux/platform_data/x86/simatic-ipc.h
-+++ b/include/linux/platform_data/x86/simatic-ipc.h
-@@ -2,7 +2,7 @@
- /*
-  * Siemens SIMATIC IPC drivers
-  *
-- * Copyright (c) Siemens AG, 2018-2021
-+ * Copyright (c) Siemens AG, 2018-2023
-  *
-  * Authors:
-  *  Henning Schild <henning.schild@siemens.com>
-@@ -34,6 +34,7 @@ enum simatic_ipc_station_ids {
- 	SIMATIC_IPC_IPC227G = 0x00000F01,
- 	SIMATIC_IPC_IPCBX_39A = 0x00001001,
- 	SIMATIC_IPC_IPCPX_39A = 0x00001002,
-+	SIMATIC_IPC_IPCBX_21A = 0x00001101,
- };
- 
- static inline u32 simatic_ipc_get_station_id(u8 *data, int max_len)
--- 
-2.39.3
+> diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
+> index b370070194fa..b6a51afb74b8 100644
+> --- a/net/vmw_vsock/vmci_transport.c
+> +++ b/net/vmw_vsock/vmci_transport.c
+> @@ -1731,57 +1731,40 @@ static int vmci_transport_dgram_enqueue(
+>  	return err - sizeof(*dg);
+>  }
+>  
+> -static int vmci_transport_dgram_dequeue(struct vsock_sock *vsk,
+> -					struct msghdr *msg, size_t len,
+> -					int flags)
+> +int vmci_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid)
+>  {
+> -	int err;
+>  	struct vmci_datagram *dg;
+> -	size_t payload_len;
+> -	struct sk_buff *skb;
+>  
+> -	if (flags & MSG_OOB || flags & MSG_ERRQUEUE)
+> -		return -EOPNOTSUPP;
+> +	dg = (struct vmci_datagram *)skb->data;
+> +	if (!dg)
+> +		return -EINVAL;
+>  
+> -	/* Retrieve the head sk_buff from the socket's receive queue. */
+> -	err = 0;
+> -	skb = skb_recv_datagram(&vsk->sk, flags, &err);
+> -	if (!skb)
+> -		return err;
+> +	*cid = dg->src.context;
+> +	return 0;
+> +}
 
+Hi Bobby,
+
+clang-16 with W=1 seems a bit unhappy about this.
+
+  net/vmw_vsock/vmci_transport.c:1734:5: warning: no previous prototype for function 'vmci_transport_dgram_get_cid' [-Wmissing-prototypes]
+  int vmci_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid)
+      ^
+  net/vmw_vsock/vmci_transport.c:1734:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+  int vmci_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid)
+  ^
+  static 
+  net/vmw_vsock/vmci_transport.c:1746:5: warning: no previous prototype for function 'vmci_transport_dgram_get_port' [-Wmissing-prototypes]
+  int vmci_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port)
+      ^
+  net/vmw_vsock/vmci_transport.c:1746:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+  int vmci_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port)
+  ^
+  static 
+  net/vmw_vsock/vmci_transport.c:1758:5: warning: no previous prototype for function 'vmci_transport_dgram_get_length' [-Wmissing-prototypes]
+  int vmci_transport_dgram_get_length(struct sk_buff *skb, size_t *len)
+      ^
+  net/vmw_vsock/vmci_transport.c:1758:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+  int vmci_transport_dgram_get_length(struct sk_buff *skb, size_t *len)
+  ^
+
+I see similar warnings for net/vmw_vsock/af_vsock.c in patch 4/8.
+
+> +
+> +int vmci_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port)
+> +{
+> +	struct vmci_datagram *dg;
+>  
+>  	dg = (struct vmci_datagram *)skb->data;
+>  	if (!dg)
+> -		/* err is 0, meaning we read zero bytes. */
+> -		goto out;
+> -
+> -	payload_len = dg->payload_size;
+> -	/* Ensure the sk_buff matches the payload size claimed in the packet. */
+> -	if (payload_len != skb->len - sizeof(*dg)) {
+> -		err = -EINVAL;
+> -		goto out;
+> -	}
+> +		return -EINVAL;
+>  
+> -	if (payload_len > len) {
+> -		payload_len = len;
+> -		msg->msg_flags |= MSG_TRUNC;
+> -	}
+> +	*port = dg->src.resource;
+> +	return 0;
+> +}
+>  
+> -	/* Place the datagram payload in the user's iovec. */
+> -	err = skb_copy_datagram_msg(skb, sizeof(*dg), msg, payload_len);
+> -	if (err)
+> -		goto out;
+> +int vmci_transport_dgram_get_length(struct sk_buff *skb, size_t *len)
+> +{
+> +	struct vmci_datagram *dg;
+>  
+> -	if (msg->msg_name) {
+> -		/* Provide the address of the sender. */
+> -		DECLARE_SOCKADDR(struct sockaddr_vm *, vm_addr, msg->msg_name);
+> -		vsock_addr_init(vm_addr, dg->src.context, dg->src.resource);
+> -		msg->msg_namelen = sizeof(*vm_addr);
+> -	}
+> -	err = payload_len;
+> +	dg = (struct vmci_datagram *)skb->data;
+> +	if (!dg)
+> +		return -EINVAL;
+>  
+> -out:
+> -	skb_free_datagram(&vsk->sk, skb);
+> -	return err;
+> +	*len = dg->payload_size;
+> +	return 0;
+>  }
+>  
+>  static bool vmci_transport_dgram_allow(u32 cid, u32 port)
+
+...
