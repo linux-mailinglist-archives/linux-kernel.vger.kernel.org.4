@@ -2,104 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BD1718A54
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 406CE718A5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjEaTjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 15:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
+        id S230128AbjEaTmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 15:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjEaTjn (ORCPT
+        with ESMTP id S229484AbjEaTmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 15:39:43 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67709F;
-        Wed, 31 May 2023 12:39:41 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2af189d323fso17477801fa.1;
-        Wed, 31 May 2023 12:39:41 -0700 (PDT)
+        Wed, 31 May 2023 15:42:11 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C081E9F;
+        Wed, 31 May 2023 12:42:09 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-30ae901a9ffso4152f8f.2;
+        Wed, 31 May 2023 12:42:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685561980; x=1688153980;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=lIjT4mlISJu8jR4A4B3Vr7/4Ms0dWMMpltQFK9LUYNc=;
-        b=L58nvViZD0KH+VQ5yAqbKU2jFHE6oQB0HRCpn4oTQLxAQEXebHFUPqcOzrOGg5/C+A
-         WCo0xaRs+JM0GCvsA84QzNVc9bvd9byzc8UdePptAMcuSpGGW26DvBSjacJXtYKzV92K
-         hgibMm0TAGvBEgkhTqjqaaa4XIeQcLXCR2fdS2TAe8RlF3kw/Qm4dIJNK9J8hTvzTIvJ
-         bjhMfT54X2rSesOBQ/hnaYtr/JhcmXzCExJrM4vSaJCBGE4CFyQOuIe1jdmcQTOffd/D
-         rXZRardaTlta2RTDcjObfnjRcGGfqRaw/9SiUI0+LhjYvKlb+7S8/b2gui2zy3Q2IQ+J
-         /oEg==
+        d=gmail.com; s=20221208; t=1685562128; x=1688154128;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H+Lrg+cef4AzgdRPNwMc3JQ+W3n37RMN6RoH/5pQGBs=;
+        b=Pq+rb06tiVg+mAqAr48Y8tAJvGvxKMrtXmSN2iUJAAQdTnXhrKim1F1yrjTjVEcuhN
+         eBqSElUhXbc7/35Qj054/PzSUQpIas6insFVetQa3OdeG7g2jYlSvi5jGYvv5AMXQjXe
+         ESxHdhw7O4Vnpq2VAgj/MD66vVzRnXjgQZ8cGTjzhnwTgO/f7zlRG9OlREHxOC/hCQFz
+         1igMcgNFA3avLZ+Q0GJRUbjglAqOdOQqfrJvp3OEXS+kNZC9jcs/7OrjpiAupmfRLLQl
+         maUbEb4E3mH/i+HnUniSapWSE87MC+KkO6RlXoQWdaLt0oPmjgEu0jjlLSZ0OmrFDrnJ
+         v+RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685561980; x=1688153980;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lIjT4mlISJu8jR4A4B3Vr7/4Ms0dWMMpltQFK9LUYNc=;
-        b=a8InKojx2seoBv/9nJR8cGSJlxBmDaK2DB4T8Q8z/Ju5XHvxgkmrrjb91chfV3maEQ
-         U/b6x0C5wXKAXy9tD0xUApclgzMC9Lm258klxFM2/97EEhQoUYppo44BoGuX8DeNZgqr
-         3SXyv2fNikbvlnZzDDlX0I0szSbDYUZQGrjKsM2fx3egxJjHyYPDXtMw45nFQvjehfai
-         nNpNYp/hGXpXSpU4Zqf4kUo51jHDIYtmUs6xbq2TB2zBPExKwwGVWMrUnelMw88eNehE
-         0F30+FUJjmu+FGE8QaTnYRL32siWzG8+As9I19azOaGy21cUIkzB8xPbuasdopIkHOBV
-         k9DQ==
-X-Gm-Message-State: AC+VfDxzoQJPDfUzGIpeBsWYImR9NKW9KZaVhnsc3yKK1X+DNUrENVvm
-        xA4eGUoh4+igGaXjl32EdY8LAte7bDJdSX2jGoO8EKU/7DEpzW6y
-X-Google-Smtp-Source: ACHHUZ59hm9oaUSYvVzDdJBx6cyogcBsvy5MvOYD6rtwvjlf3/S83PwBZh3IJ8O3dd3+apQ4TdWFX0mqGNKPQbYtgUk=
-X-Received: by 2002:a2e:b626:0:b0:2ad:9edd:4e2 with SMTP id
- s6-20020a2eb626000000b002ad9edd04e2mr5673915ljn.20.1685561979662; Wed, 31 May
- 2023 12:39:39 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685562128; x=1688154128;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H+Lrg+cef4AzgdRPNwMc3JQ+W3n37RMN6RoH/5pQGBs=;
+        b=WCGdexas9Ps9bXQo55p/oUi7u154GZcCLe6Zj51kdLhfUWQyrVaYjVEU0s7StJeiM/
+         3f1MkOO7DSvkDalAywfPvVpq9rk49pX6zsSfgKy+G/WXxMCOQGcIUvMW3SFN5UkGu/zr
+         R59yxvx4o2QX1IdVGC5epN1Gqsyyt5NsxPddjeSi87UQY5sd/vQdwSeGAZWHmnTZp3+a
+         U3Rnx08wTJAC6Ix1jwfRD9dfXCl6QHQydfBeC7UQrqXRB2f7ZN4d9I30Jbq0675Sjg7t
+         FzmAqLNa+RMk+IqQZcr/fExy9KrX/YNFetfHCD95x2497MidaeAxkxGnlhJFwHpcs7KO
+         VKXg==
+X-Gm-Message-State: AC+VfDxNbrO9qUkcRAFQSYn9QoOlJGKgc+413Do5o+Z6mEfnqH/tp6Jr
+        AfEuVZoArC0pw3NLQn8jyQ==
+X-Google-Smtp-Source: ACHHUZ6RaZ6tKSDvEcd+c6MOPkOYZzF/6vqW3Uq46Du52RlraPAzAzTBHB6S2sKzPJEJb4EdDlYCMw==
+X-Received: by 2002:a5d:4249:0:b0:309:3bb5:7968 with SMTP id s9-20020a5d4249000000b003093bb57968mr124961wrr.16.1685562128024;
+        Wed, 31 May 2023 12:42:08 -0700 (PDT)
+Received: from p183 ([46.53.253.153])
+        by smtp.gmail.com with ESMTPSA id t6-20020adfdc06000000b003063a1cdaf2sm7804584wri.48.2023.05.31.12.42.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 12:42:07 -0700 (PDT)
+Date:   Wed, 31 May 2023 22:42:05 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Jon Kohler <jon@nutanix.com>, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: VMX: restore vmx_vmexit alignment
+Message-ID: <047566b9-c2ef-40c7-9a76-caa8607b3f6b@p183>
+References: <20230531155821.80590-1-jon@nutanix.com>
+ <ZHeP75vG8xA+UeHt@google.com>
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Wed, 31 May 2023 14:39:28 -0500
-Message-ID: <CAH2r5msPYB8mYc1caQoBP36UhOdJx1rzK3EsxZbQfuhRzu=MAw@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZHeP75vG8xA+UeHt@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-0d85b27b0cc6b5cf54567c5ad913a247a71583ce:
+On Wed, May 31, 2023 at 11:20:31AM -0700, Sean Christopherson wrote:
+> On Wed, May 31, 2023, Jon Kohler wrote:
+> > Commit 8bd200d23ec4 ("KVM: VMX: Flatten __vmx_vcpu_run()") changed
+> > vmx_vmexit from SYM_FUNC_START to SYM_INNER_LABEL, accidentally
+> > removing 16 byte alignment as SYM_FUNC_START uses SYM_A_ALIGN and
+> > SYM_INNER_LABEL does not. Josh mentioned [1] this was unintentional.
+> 
+> Anyone know if this is this stable material, or just nice to have?
 
-  Merge tag '6.4-rc3-smb3-client-fixes' of
-git://git.samba.org/sfrench/cifs-2.6 (2023-05-25 19:23:18 -0700)
-
-are available in the Git repository at:
-
-  git://git.samba.org/sfrench/cifs-2.6.git tags/6.4-rc4-smb3-client-fixes
-
-for you to fetch changes up to fdd7d1fff4e3b97c4706f4c0e000a38b134b7ae5:
-
-  cifs: address unused variable warning (2023-05-27 03:33:23 -0500)
-
-----------------------------------------------------------------
-four small smb3 client fixes
-- two small fixes suggested by kernel test robot
-- small cleanup fix
-- update Paulo's email address in the maintainer file
-----------------------------------------------------------------
-Dan Carpenter (1):
-      smb: delete an unnecessary statement
-
-Steve French (3):
-      smb3: update a reviewer email in MAINTAINERS file
-      smb3: missing null check in SMB2_change_notify
-      cifs: address unused variable warning
-
- MAINTAINERS             | 2 +-
- fs/smb/client/ioctl.c   | 6 +++++-
- fs/smb/client/smb2ops.c | 1 -
- fs/smb/client/smb2pdu.c | 2 +-
- 4 files changed, 7 insertions(+), 4 deletions(-)
-
-
--- 
-Thanks,
-
-Steve
+Can this improve vmexit latency? I didn't measure it.
