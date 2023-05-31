@@ -2,106 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33162718760
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC75718764
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 18:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjEaQbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 12:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
+        id S229708AbjEaQcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 12:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjEaQb3 (ORCPT
+        with ESMTP id S229567AbjEaQcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 12:31:29 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B928512B
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:31:20 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b041ccea75so24303645ad.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:31:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685550680; x=1688142680;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ByzmIR8bdGAXP2o41OwIixgXQi8QYuh3izNby61Iy4=;
-        b=hbrIeOvaeAKyyvxHsoe7u4SWuGGCrkUeYy9BIzH3pyZFfF87fzRN4hsBFOI/2I8AAX
-         c/uIbxHraDc7ffkJ/UgVcHCW2LDjOCDYPpUcVZ5sVfalNIU3me49YUi6YEKMRIT6CAB8
-         ZHYplMOe/l48NyiEudrdmRuN8OuSuhtSJp/1o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685550680; x=1688142680;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2ByzmIR8bdGAXP2o41OwIixgXQi8QYuh3izNby61Iy4=;
-        b=NCIBguldRKLm0tIsPjEy2GNBuDfeAv/cDNsKeBvnGnWVhIpNVxRdqIhs2fA8llc+m9
-         qTe0iCmBZ4JIQhuANTS8cdUcvrS+6Oxi67Ai0/jx1tQLu6hzTW5uRhkWpE/kYLuH6F9F
-         h8wchipVJtEzRoRJ3+b9WqabzYDGNyP4HYXWaO8/zNIlN2vrJFW70Cijj0fKhpHf5QXr
-         KwX0H8ZVCKR6pWTr9vv02xEe+Ii4BOGZyUS8GrDsRWLkblBN1td15OXnlV40QnNkUAS6
-         PMxjnxHA7Rd6MrWoFFU731PbieYx/5fYtGLgAxYwCDMsMyJzJwD4yBkRBEZbchBwK3IZ
-         SCqQ==
-X-Gm-Message-State: AC+VfDxpxtOXy30Lk3pemcSLl4AlLQu1ALRlRBM1RXHtDl1+tkX+Rn5H
-        EC/0WAzmUDKMWPfJc+2S5mxwyA==
-X-Google-Smtp-Source: ACHHUZ7+YRicU2hUq7DYy5WQBOqTFZW3O0RNpTvYGxbuQd/k91gpcaBhaOTyIxRwClClVq5v5gXBbw==
-X-Received: by 2002:a17:902:c94e:b0:1b1:8aa1:3a2f with SMTP id i14-20020a170902c94e00b001b18aa13a2fmr930782pla.27.1685550680219;
-        Wed, 31 May 2023 09:31:20 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id z3-20020a170903018300b001aface7bdd8sm1608614plg.31.2023.05.31.09.31.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 09:31:19 -0700 (PDT)
-Date:   Wed, 31 May 2023 09:31:18 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     arno@natisbad.org, arnd@kernel.org, schalla@marvell.com,
-        bbrezillon@kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH] crypto: marvell/cesa - Fix type mismatch warning
-Message-ID: <202305310930.844EBEA21C@keescook>
-References: <20230523083313.899332-1-arnd@kernel.org>
- <168548692863.1302890.6789778742527600870.b4-ty@chromium.org>
- <ZHcoQvWnzO0c1Cp9@gondor.apana.org.au>
+        Wed, 31 May 2023 12:32:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A070798;
+        Wed, 31 May 2023 09:32:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3747B62EB8;
+        Wed, 31 May 2023 16:32:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE3EAC433D2;
+        Wed, 31 May 2023 16:32:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685550739;
+        bh=96xh+pvt4FZ9RhX8I2cOmSjN4jqPa3fgUfHTq9AIyb8=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=b6d++uiC4FkX4fn9HjVahUZGbWLbXNGIKTw1siZgHLu2Fv2ar+hsKPLoSAmL9y2AF
+         ScvOM0e0scjJrCaPjuO9N+e0NnUnAhb9JblxdJnsxMOKpvaDUCvEK4tNE5ZtAgBTvA
+         OduuPTy9n7F4d/QWrXfZwOiLPrm+KG1nTXCE30jpIEJNZXXHv25x3l9J6RsytZ4OkF
+         pDjjbde2WOB6OFnpBBKrc/PWi64F+0be2fpDsx22a4OITLffOSRee4he5tt+6hKM1H
+         pW3hObKDCs0NBYM4gvu/QjAHTU4YjjWE1oeJbYrimoNz7o4jeMXbndt7ogxpdYAH0q
+         +iBWHtMJ3aTdA==
+Message-ID: <324df0fa5ad1f0508c5f62c25dd1f8d297d78813.camel@kernel.org>
+Subject: Re: [PATCH] tpm: factor out the user space mm from
+ tpm_vtpm_set_locality()
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Alejandro Cabrera <alejandro.cabreraaldaya@tuni.fi>,
+        Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>,
+        stable@vger.kernel.org, Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 31 May 2023 19:32:16 +0300
+In-Reply-To: <8f15feb5-7c6e-5a16-d9b4-008b7b45b01a@linux.ibm.com>
+References: <20230530205001.1302975-1-jarkko@kernel.org>
+         <8f15feb5-7c6e-5a16-d9b4-008b7b45b01a@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHcoQvWnzO0c1Cp9@gondor.apana.org.au>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 06:58:10PM +0800, Herbert Xu wrote:
-> On Tue, May 30, 2023 at 03:48:49PM -0700, Kees Cook wrote:
-> > On Tue, 23 May 2023 10:33:04 +0200, Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > > 
-> > > Commit df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3") uncovered
-> > > a type mismatch in cesa 3des support that leads to a memcpy beyond the
-> > > end of a structure:
-> > > 
-> > > In function 'fortify_memcpy_chk',
-> > >     inlined from 'mv_cesa_des3_ede_setkey' at drivers/crypto/marvell/cesa/cipher.c:307:2:
-> > > include/linux/fortify-string.h:583:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
-> > >   583 |                         __write_overflow_field(p_size_field, size);
-> > >       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > 
-> > > [...]
-> > 
-> > Applied to for-next/hardening, thanks!
-> > 
-> > [1/1] crypto: marvell/cesa - Fix type mismatch warning
-> >       https://git.kernel.org/kees/c/37f3abddda8d
-> 
-> Why did you apply it to your tree? This patch makes sense on its
-> own regardless of the fortify changes.
+On Wed, 2023-05-31 at 11:20 -0400, Stefan Berger wrote:
+>=20
+> On 5/30/23 16:50, Jarkko Sakkinen wrote:
+> > From: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
+> >=20
+> > vtpm_proxy_fops_set_locality() causes kernel buffers to be passed to
+> > copy_from_user() and copy_to_user().
+>=20
+> And what is the problem with that? Is it not working?
 
-I snagged it since a week had gone by with no additional discussion and
-it fixed an issue exposed by work in the hardening tree. Let me know if
-you'd prefer I drop it for you to carry instead.
+It is API contract and also clearly documented in the kernel documentation.
 
--Kees
+This should be obvious even if you have've consulted that documentation bec=
+ause
+both functions have 'user' suffix, and also the pointer is __user tagged.
 
--- 
-Kees Cook
+To make things worse it is architecture specific. I'm worried that it will
+break in one of the 23 microarchitectures. Have you actually ever checked i=
+t
+does not?
+
+I'm not also an expert of how all the possible CPUs in the world empower
+Linux to further restrict the move between different memory spaces. I'm
+quite sure that this does conflict neither with SMAP or SMEP on x86
+(because I know x86 pretty well), but who knows what they add in the
+future to the microarchitecture.
+
+> > Factor out the crippled code away with help of an internal API for
+> > managing struct proxy_dev instances.
+>=20
+> What is crippled code?
+
+Code that behaves badly, i.e. does not meat the expectations. Illegit use o=
+f
+in-kernel functions easily fits to the definition of crippled code.
+
+Bad API behavior put aside, it is very inefficient implementation because i=
+t
+unnecessarily recurses tpm_transmit(), which makes extending the driver to
+any direction so much involved process, but we don't really need this as a
+rationale.
+
+This needs to be fixed in a way or another. That is dictated by the API
+cotract so for that I do not really even need feedback because it is
+force majeure. I'm cool with alternatives or suggestions to the current
+fact, so please focus on that instead of asking question that kernel
+documentation provides you already all the answers.
+
+BR, Jarkko
