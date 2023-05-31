@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9998A71863A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56709718506
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234821AbjEaPYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S236625AbjEaOc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234078AbjEaPXv (ORCPT
+        with ESMTP id S231215AbjEaOcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:23:51 -0400
+        Wed, 31 May 2023 10:32:25 -0400
 Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105CB12B;
-        Wed, 31 May 2023 08:23:40 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VACNig011761;
-        Wed, 31 May 2023 16:09:50 +0200
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A904B8F;
+        Wed, 31 May 2023 07:32:24 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VCbU7h012987;
+        Wed, 31 May 2023 16:09:51 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=selector1;
- bh=Hbce7M506YQ/kUlqn8Nb764OuFLwoHqXqxGYsRsP5aQ=;
- b=h/UvMzYevTgsgj2AM/CuzlotEVh/h20a6LKtknq714l/FVdtMydBQyjMA+xcVtLCp4l9
- OB0hb9Rpx5rbeZsHr7f/mEeyVnvuCinRBXTM0h8jFcQVBU0G4i2avjeORFRg5DOy3dEK
- ndpPqYzaItZj6el9LIiA8XRWYm6S9PeQMNBv6vLqDSr6uNHtbfPfMHPrjhfsRad6xvgi
- EwqJpW2cMBCQ9gLLWTXiv+QLr37Pi/ZQdHbER/G5OtzicRaVZb4kt4sUvRkwbxdmJu5C
- RLs0Y6x9I1wg54XCtOWn8FbEYgUqMKpqok60eM6kE6uK4hrXyGRhe+T0Zfo0GDZVOgJi cg== 
+ bh=KybtY00M8BVeJLge9ZFOp3o7PKon2iInWCZuTEzDlrQ=;
+ b=Xr/oci/95QXVIf/FZjiMeXWocNxF1rilBsMMtSgHSkXHbx6RcWtmKhfPSdAI/MYypwBM
+ 3LUVsJa5E5bwwba5ylM3JPJ43QsIOdZq3yPv7sYgtfeH3vYu0yOsrPANNoXIe5kl74O8
+ Zb1TeIqG1ZP97zSlF4UZzzm2EGPus0LCKEbgpI1A5EvAWufxZwcHPvaQ3F4FRFPAOZFA
+ AFYccOrjeiTWoDJqG0FpobwKTPjqJh25BUnbCWz9ECgUFPfhfkQeRw5Ujgy+nHjYTI/x
+ +/MZ+M2vLeGmJKMcLKdJRQOszibnUzzd2Z6+AJ7jqp0IJCxFarFySjAiL/kX5OyS+gg1 uQ== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qvsnp008a-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qx36724jx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 16:09:50 +0200
+        Wed, 31 May 2023 16:09:51 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B7C11100034;
-        Wed, 31 May 2023 16:09:49 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8D0C7100038;
+        Wed, 31 May 2023 16:09:50 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AFB6424B8AE;
-        Wed, 31 May 2023 16:09:49 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 80A6724B8AE;
+        Wed, 31 May 2023 16:09:50 +0200 (CEST)
 Received: from localhost (10.252.16.99) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 31 May
- 2023 16:09:49 +0200
+ 2023 16:09:50 +0200
 From:   Olivier Moysan <olivier.moysan@foss.st.com>
-To:     Olivier Moysan <olivier.moysan@foss.st.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+To:     James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/3] ASoC: dt-bindings: stm32: document audio of graph port for i2s
-Date:   Wed, 31 May 2023 16:09:10 +0200
-Message-ID: <20230531140912.819373-2-olivier.moysan@foss.st.com>
+        Olivier Moysan <olivier.moysan@foss.st.com>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 2/3] ASoC: dt-bindings: document audio of graph port for cs42l51
+Date:   Wed, 31 May 2023 16:09:11 +0200
+Message-ID: <20230531140912.819373-3-olivier.moysan@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230531140912.819373-1-olivier.moysan@foss.st.com>
 References: <20230531140912.819373-1-olivier.moysan@foss.st.com>
@@ -80,22 +79,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When linking the STM32 I2S to another DAI component, according
+When linking the CS42L51 to another DAI component, according
 to audio graph cards bindings, an OF graph port property is expected
 in the node. Document the port property.
 
 Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
 ---
- Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml | 4 ++++
+ Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml b/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
-index a040d4d31412..3bc917a45802 100644
---- a/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
-+++ b/Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml
-@@ -61,6 +61,10 @@ properties:
-     description: Configure the I2S device as MCLK clock provider.
-     const: 0
+diff --git a/Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml b/Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml
+index 670b67ec0b61..668898a8bdda 100644
+--- a/Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml
++++ b/Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml
+@@ -44,6 +44,10 @@ properties:
+   VAHP-supply:
+     description: phandle to voltage regulator of headphone
  
 +  port:
 +    $ref: audio-graph-port.yaml#
@@ -103,7 +102,7 @@ index a040d4d31412..3bc917a45802 100644
 +
  required:
    - compatible
-   - "#sound-dai-cells"
+   - reg
 -- 
 2.25.1
 
