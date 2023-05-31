@@ -2,146 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E09F7189A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B747189B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjEaSwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 14:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
+        id S229752AbjEaTA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 15:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjEaSwR (ORCPT
+        with ESMTP id S229714AbjEaTAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 14:52:17 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82B310F
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:52:15 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51478f6106cso134386a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:52:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685559134; x=1688151134;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D8mhm7idTTwdobO8VYFJI/rBh8GvseokeCrJFHScjyQ=;
-        b=bqXJHM08t5TZHMjSxtosb6YTa615kIAiva0EtLAFyfpHwW+dw877RZ/o1DtXhy0OML
-         Arf70ALlnliZ4KLorEm8/YurfJxPfzCQjmUtLBj/Wapcendah8Z2vrl5hR+amjFBFnN/
-         MVo79+h72WbT2kXD77itbNsWrlVUZ3BO/mMjLA8Ue6aNxE7KWie9XCtYI+iJqcTYkU7e
-         BkFXbUaXVHTShsbCM0OupE+O9neLA6hg/NXWi0wCH/742cIvAhly9fseb/7BFp5wJeAO
-         LfEhT1Aj8Ur0/+nHAAymQw2ILzkNWxBBMsXtb8s4HQROheOkW+FMxHP7X0jqzfQ0m7hA
-         qTXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685559134; x=1688151134;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D8mhm7idTTwdobO8VYFJI/rBh8GvseokeCrJFHScjyQ=;
-        b=SwzzJb3SfauPw/noxFT6YR5pfT7XIks5yeHaOXIT3vUdqD219sZduk6uKckqwnduvr
-         OS49G853GOgWn9sY4MI7uBkwTJDrxf3u+ryufkS9+ZU/brz5cWccUigJEp+z+r2g1KCp
-         juKp3Wd2bhWBcPUBGzmksHJsp0V8xAOir5WluGMMQofD/75HUeBVBC0DRhN2dBKA7zWJ
-         jy807ooUZoj7nIxkp5YxbEfYyTA8AROFmRT6deF13Rerf9dORalpd2iNrcsiuSOrTiq/
-         rTYPZohAY45qZ9K6GHi22tEh9X+eMUQPE0mZJEvCm7FndZRhZzaqCvQUXU55GCBLa4IE
-         iumw==
-X-Gm-Message-State: AC+VfDz40r8WTVc4AlijIqL6U4AZn8x8AqkYsmR04BU1I+1UAZRogOqz
-        FnybSKcNZbrdWdOJWqkvBA9XEg==
-X-Google-Smtp-Source: ACHHUZ6eOrx4dIjp3wqkvG5513eaco+Qx5vesKTAid5KKQIWpiLWUF0vG/B6UCte/witxxniYeSIkw==
-X-Received: by 2002:a05:6402:1219:b0:510:db93:f034 with SMTP id c25-20020a056402121900b00510db93f034mr4219474edw.36.1685559134197;
-        Wed, 31 May 2023 11:52:14 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id d23-20020a50fe97000000b0051458c4ae68sm6138807edt.77.2023.05.31.11.52.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 11:52:13 -0700 (PDT)
-Message-ID: <a9b0202b-dd1f-3844-ac0a-7dc318d7c3fb@linaro.org>
-Date:   Wed, 31 May 2023 20:52:12 +0200
+        Wed, 31 May 2023 15:00:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B1D10F;
+        Wed, 31 May 2023 12:00:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C560636D3;
+        Wed, 31 May 2023 19:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 55AFCC433EF;
+        Wed, 31 May 2023 19:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685559621;
+        bh=7tIpZFIQl95R1cp6v/3cSGVf+Xav4tAXip6VYqUqPH4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=aBVzyo/wPSGhUN+f1BCkHEjYR4gSvrHHxpwyzFsRP50wJ/CnF0mwYsz7/PFk5bHWk
+         Z4dvIb63WA4bhpMiu+v5Wxh3AcBYjLmSIiYhO592qoSShMSAwF2NiLB8NSePZzVmqC
+         5a684OZc4hrv0ki91+w5DOrq3tPRsqjF6eGmEwUYpUBK0sSSpIgr2aJ8V2TUzx4cu+
+         ma7HATDPt13J567RdVLtKWfIxGYEqqyAbKiSRRnX0zWxyYEcOBv/E5fmZuZMRc0b3h
+         cULEzlfUby1SuREn2JY1fWuS7zBYDHQHwIzQSfympPMP1f02PxIAHOe5c3z5kHErov
+         h0Jqxk8U0oiaw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3629FE52C03;
+        Wed, 31 May 2023 19:00:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: ipq5332: add support for the RDP474
- variant
-Content-Language: en-US
-To:     Kathiravan T <quic_kathirav@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230531135048.19164-1-quic_kathirav@quicinc.com>
- <20230531135048.19164-5-quic_kathirav@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230531135048.19164-5-quic_kathirav@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] Bluetooth: L2CAP: Fix use-after-free in
+ l2cap_sock_ready_cb
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <168555962120.19706.18323323574942852959.git-patchwork-notify@kernel.org>
+Date:   Wed, 31 May 2023 19:00:21 +0000
+References: <20230531053955.2467043-1-iam@sung-woo.kim>
+In-Reply-To: <20230531053955.2467043-1-iam@sung-woo.kim>
+To:     Sungwoo Kim <iam@sung-woo.kim>
+Cc:     wuruoyu@me.com, benquike@gmail.com, daveti@purdue.edu,
+        marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 15:50, Kathiravan T wrote:
-> Add the initial device tree support for the Reference Design
-> Platform(RDP) 474 based on IPQ5332 family of SoC. This patch carries
-> the support for Console UART, eMMC, I2C and GPIO based buttons.
-> 
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/Makefile           |   1 +
->  arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts | 112 ++++++++++++++++++++
->  2 files changed, 113 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 4f9e81253e18..0f8c763a9bd9 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-ifc6640.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-mi01.2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-rdp442.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-rdp468.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-rdp474.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts b/arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts
-> new file mode 100644
-> index 000000000000..085729a0fdf1
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/ipq5332-rdp474.dts
-> @@ -0,0 +1,112 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * IPQ5332 RDP474 board device tree source
-> + *
-> + * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
-> +#include "ipq5332.dtsi"
-> +
-> +/ {
-> +	model = "Qualcomm Technologies, Inc. IPQ5332 MI01.9";
-> +	compatible = "qcom,ipq5332-ap-mi01.9", "qcom,ipq5332";
-> +
-> +	aliases {
-> +		serial0 = &blsp1_uart0;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0";
-> +	};
-> +
-> +	gpio_keys {
+Hello:
 
-Same problems as with most of recent patches. No underscores in node names.
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-Best regards,
-Krzysztof
+On Wed, 31 May 2023 01:39:56 -0400 you wrote:
+> l2cap_sock_release(sk) frees sk. However, sk's children are still alive
+> and point to the already free'd sk's address.
+> To fix this, l2cap_sock_release(sk) also cleans sk's children.
+> 
+> ==================================================================
+> BUG: KASAN: use-after-free in l2cap_sock_ready_cb+0xb7/0x100 net/bluetooth/l2cap_sock.c:1650
+> Read of size 8 at addr ffff888104617aa8 by task kworker/u3:0/276
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2] Bluetooth: L2CAP: Fix use-after-free in l2cap_sock_ready_cb
+    https://git.kernel.org/bluetooth/bluetooth-next/c/8f514cf70050
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
