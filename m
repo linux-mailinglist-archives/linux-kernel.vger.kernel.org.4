@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FB37182CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D165A71826B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236701AbjEaNp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
+        id S235459AbjEaNml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236626AbjEaNoJ (ORCPT
+        with ESMTP id S236601AbjEaNmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:44:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D9711F;
-        Wed, 31 May 2023 06:42:38 -0700 (PDT)
+        Wed, 31 May 2023 09:42:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8077D10FB;
+        Wed, 31 May 2023 06:41:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD98C628FE;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C7A761527;
+        Wed, 31 May 2023 13:41:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD8F6C4339B;
         Wed, 31 May 2023 13:41:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63D08C4339C;
-        Wed, 31 May 2023 13:41:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540482;
-        bh=awNbbUrZKfXcgaKH6JhIK8hfjJtLZGaowOiSziy/Zt0=;
+        s=k20201202; t=1685540483;
+        bh=e6FiqSpPzrIqBr4ifo3Fy2T912kqqu+DYRXAE8MmA+A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nwsBc2qTniZnVYmks18ef8j5xlNdAjWSkV9G9oUQVokly55zyIMx2JRWV3PpWI7cy
-         pgxljIbkmfm1mlXxoxfH2FnybRB1N1NxbagcVpE/vgNOXXu2FbzjCPfcYw/gK9PY1V
-         DjxAkIdBxGPWwV6jQ2atp1qgR2IkFR0f05J2bBdpQSeE3eWfVPszY7AaO6/pbrt2Uc
-         B5qa6VUrEIJpUEF5RTjfMwWQnzmFt6NYnXdqaw3Q9xlI2ThoTze4aGN/ivrJGcgluN
-         JJ8b4J+OBJ1jByUNzvG5xuPVecRBAcOGImXNixntciR7xurXxYjklNBi2mjuKM4cye
-         9Fk10SRZ3fMUg==
+        b=lM5Gf4c3fJiYTFcu/4MvT6RW4g62v9bgno8RmTgrW+4oLsyJBesv7aN3Bwphb1ykH
+         VpiRgMJFImfZJ4mhoLCHUDtLUk0fB2Juh+Tjp/sSvqK250B4yVHbm6k0lef8uOyolJ
+         CPVW8hFcGY6GdyCc11Sx8h1BARpBkuBmTOKqhaBdjPFuRJs6SaW2rsaceMeky8OJCN
+         xXqRS4W06nytudlUAqpyZ83x9b6GrLQMxPjUWC0qi0i2hwvZjRxODqk5Lh59cJ7q3i
+         vgXU2067PyJJrRBiSoxMCzSBWK6/9V9ClpfKuXS9Rm3wmrQi6N2IXIac3g2ExwwASI
+         9Fldel0C6+TtA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>,
-        James.Bottomley@HansenPartnership.com, airlied@redhat.com,
-        linux-parisc@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 6.3 26/37] parisc: Flush gatt writes and adjust gatt mask in parisc_agp_mask_memory()
-Date:   Wed, 31 May 2023 09:40:08 -0400
-Message-Id: <20230531134020.3383253-26-sashal@kernel.org>
+Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Yue Hu <huyue2@coolpad.com>,
+        Sandeep Dhavale <dhavale@google.com>,
+        Chao Yu <chao@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        xiang@kernel.org, linux-erofs@lists.ozlabs.org
+Subject: [PATCH AUTOSEL 6.3 27/37] erofs: use HIPRI by default if per-cpu kthreads are enabled
+Date:   Wed, 31 May 2023 09:40:09 -0400
+Message-Id: <20230531134020.3383253-27-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134020.3383253-1-sashal@kernel.org>
 References: <20230531134020.3383253-1-sashal@kernel.org>
@@ -47,8 +49,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,59 +59,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-[ Upstream commit d703797380c540bbeac03f104ebcfc364eaf47cc ]
+[ Upstream commit cf7f2732b4b83026842832e7e4e04bf862108ac2 ]
 
-Flush caches after changing gatt entries and calculate entry according
-to SBA requirements.
+As Sandeep shown [1], high priority RT per-cpu kthreads are
+typically helpful for Android scenarios to minimize the scheduling
+latencies.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
+Switch EROFS_FS_PCPU_KTHREAD_HIPRI on by default if
+EROFS_FS_PCPU_KTHREAD is on since it's the typical use cases for
+EROFS_FS_PCPU_KTHREAD.
+
+Also clean up unneeded sched_set_normal().
+
+[1] https://lore.kernel.org/r/CAB=BE-SBtO6vcoyLNA9F-9VaN5R0t3o_Zn+FW8GbO6wyUqFneQ@mail.gmail.com
+
+Reviewed-by: Yue Hu <huyue2@coolpad.com>
+Reviewed-by: Sandeep Dhavale <dhavale@google.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Link: https://lore.kernel.org/r/20230522092141.124290-1-hsiangkao@linux.alibaba.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/agp/parisc-agp.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ fs/erofs/Kconfig | 1 +
+ fs/erofs/zdata.c | 2 --
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/char/agp/parisc-agp.c b/drivers/char/agp/parisc-agp.c
-index d68d05d5d3838..514f9f287a781 100644
---- a/drivers/char/agp/parisc-agp.c
-+++ b/drivers/char/agp/parisc-agp.c
-@@ -90,6 +90,9 @@ parisc_agp_tlbflush(struct agp_memory *mem)
- {
- 	struct _parisc_agp_info *info = &parisc_agp_info;
- 
-+	/* force fdc ops to be visible to IOMMU */
-+	asm_io_sync();
-+
- 	writeq(info->gart_base | ilog2(info->gart_size), info->ioc_regs+IOC_PCOM);
- 	readq(info->ioc_regs+IOC_PCOM);	/* flush */
- }
-@@ -158,6 +161,7 @@ parisc_agp_insert_memory(struct agp_memory *mem, off_t pg_start, int type)
- 			info->gatt[j] =
- 				parisc_agp_mask_memory(agp_bridge,
- 					paddr, type);
-+			asm_io_fdc(&info->gatt[j]);
- 		}
- 	}
- 
-@@ -191,7 +195,16 @@ static unsigned long
- parisc_agp_mask_memory(struct agp_bridge_data *bridge, dma_addr_t addr,
- 		       int type)
- {
--	return SBA_PDIR_VALID_BIT | addr;
-+	unsigned ci;			/* coherent index */
-+	dma_addr_t pa;
-+
-+	pa = addr & IOVP_MASK;
-+	asm("lci 0(%1), %0" : "=r" (ci) : "r" (phys_to_virt(pa)));
-+
-+	pa |= (ci >> PAGE_SHIFT) & 0xff;/* move CI (8 bits) into lowest byte */
-+	pa |= SBA_PDIR_VALID_BIT;	/* set "valid" bit */
-+
-+	return cpu_to_le64(pa);
+diff --git a/fs/erofs/Kconfig b/fs/erofs/Kconfig
+index 704fb59577e09..f259d92c97207 100644
+--- a/fs/erofs/Kconfig
++++ b/fs/erofs/Kconfig
+@@ -121,6 +121,7 @@ config EROFS_FS_PCPU_KTHREAD
+ config EROFS_FS_PCPU_KTHREAD_HIPRI
+ 	bool "EROFS high priority per-CPU kthread workers"
+ 	depends on EROFS_FS_ZIP && EROFS_FS_PCPU_KTHREAD
++	default y
+ 	help
+ 	  This permits EROFS to configure per-CPU kthread workers to run
+ 	  at higher priority.
+diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+index f1708c77a9912..d7add72a09437 100644
+--- a/fs/erofs/zdata.c
++++ b/fs/erofs/zdata.c
+@@ -369,8 +369,6 @@ static struct kthread_worker *erofs_init_percpu_worker(int cpu)
+ 		return worker;
+ 	if (IS_ENABLED(CONFIG_EROFS_FS_PCPU_KTHREAD_HIPRI))
+ 		sched_set_fifo_low(worker->task);
+-	else
+-		sched_set_normal(worker->task, 0);
+ 	return worker;
  }
  
- static void
 -- 
 2.39.2
 
