@@ -2,81 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49118717B5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDBB717B52
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235367AbjEaJKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
+        id S235354AbjEaJJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234527AbjEaJKD (ORCPT
+        with ESMTP id S235017AbjEaJJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:10:03 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B3319A
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:09:37 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34V6NtW0031925;
-        Wed, 31 May 2023 04:08:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=zveEV9JuSBFs9WdDnNH2gJhjslm13ItkavaeTEwiuV4=;
- b=FjeZPEVHau0oSJWYBUHUIv9HmdXGOLeuQiCyS+eIUZuyOoGrwCwAOVR/zDGnQCgmrF8F
- pCqAA6KDVEpQoQhx3Nv1P143QUxexuipPRAFrOfveE1k0exsEm+2KmC+KjKntQ70ILI/
- 0YFOcUPRwS5aRbEf+tXB73GyULr+lHpSVnC8Z1pE9fBwEv1VdddopgZCITwffZcvvtZu
- 5D3/5ff+cZYp1Ea3R9EbSm25bQUghGA3+QApTaNNxXfotn/IQKwglQuNBy3qkmv32DDZ
- 1XjPj5TmaBAinOpO4nrSMPEHN29g6xb44SQkNhdbhFn+v5YR7Dj2LKC+J01n8Lg0LGts Tg== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3que9mvgsu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 04:08:38 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 31 May
- 2023 10:08:36 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 31 May 2023 10:08:36 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7FDA711C6;
-        Wed, 31 May 2023 09:08:36 +0000 (UTC)
-Date:   Wed, 31 May 2023 09:08:36 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Lizhe <sensor1010@163.com>
-CC:     <james.schulman@cirrus.com>, <david.rhodes@cirrus.com>,
-        <tanureal@opensource.cirrus.com>, <rf@opensource.cirrus.com>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
-        <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
-        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dirvers/gpio: remove redundant reset gpio suffix
-Message-ID: <20230531090836.GI68926@ediswmail.ad.cirrus.com>
-References: <20230530163210.4324-1-sensor1010@163.com>
+        Wed, 31 May 2023 05:09:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36982E48
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:09:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9033560BB5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 09:09:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A77C433EF;
+        Wed, 31 May 2023 09:09:03 +0000 (UTC)
+Date:   Wed, 31 May 2023 05:08:59 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>, Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH] x86/alternatives: Add cond_resched() to
+ text_poke_bp_batch()
+Message-ID: <20230531050859.218a6632@rorschach.local.home>
+In-Reply-To: <20230530120148.GD156198@hirez.programming.kicks-ass.net>
+References: <20230528084652.5f3b48f0@rorschach.local.home>
+        <20230530120148.GD156198@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230530163210.4324-1-sensor1010@163.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: wwW61hLRNjV4K2LKGqteHli3JUbDQg54
-X-Proofpoint-ORIG-GUID: wwW61hLRNjV4K2LKGqteHli3JUbDQg54
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 12:32:10AM +0800, Lizhe wrote:
-> no need to add the suffix "gpio" or "gpios" after "reset", as they will
-> be automatically added, see of_find_gpio().
+On Tue, 30 May 2023 14:01:48 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
+
+
+> > diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+> > index f615e0cb6d93..e024eddd457f 100644
+> > --- a/arch/x86/kernel/alternative.c
+> > +++ b/arch/x86/kernel/alternative.c
+> > @@ -1953,6 +1953,14 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
+> >  	 */
+> >  	atomic_set_release(&bp_desc.refs, 1);
+> >  
+> > +	/*
+> > +	 * Function tracing can enable thousands of places that need to be
+> > +	 * updated. This can take quite some time, and with full kernel debugging
+> > +	 * enabled, this could cause the softlockup watchdog to trigger.
+> > +	 * Add cond_resched() calls to each phase.
+> > +	 */
+> > +	cond_resched();  
 > 
+> But but but... you can only have TP_VEC_MAX pokes queued, which is 256
+> on normal setups.
+> 
+> Please explain how this leads to problems and why you need _3_
+> reschedule points here.
 
-Patch itself looks fine, but the subject line should really be
-ASoC: cs35l34: ... rather than gpio.
+I removed all but this first one and it works fine.
 
-Thanks,
-Charles
+I'll resend with the update.
+
+-- Steve
