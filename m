@@ -2,230 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7250B718570
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0306071857B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233509AbjEaPAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
+        id S233710AbjEaPCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233365AbjEaPAP (ORCPT
+        with ESMTP id S233726AbjEaPCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:00:15 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74341C0;
-        Wed, 31 May 2023 08:00:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=t8QJwDf3mZID2T9DPgkl1+dJxRUwSZ5+A++Qcf/Rniw=; b=xX61yxXxpOjNlrMJw13F5RNmue
-        8irpmpzggpyfC9GePxX8T4/eRJUYTw80VsHb7r51qBMFINBS8cr24ZVuWpNYhAcDFZKuu2PqXETVy
-        Iy4oWFmbZq/1uvAnc4kn9gMrXsIS758jUs0XvnNpZXwWWh1PpzBLtsFNV8S0JR0dRKwQ=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:34748 helo=debian-acer)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q4NIy-0001AW-O7; Wed, 31 May 2023 11:00:05 -0400
-Date:   Wed, 31 May 2023 11:00:03 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Lech Perczak <lech.perczak@camlingroup.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230531110003.86b96815986db3bef7b72635@hugovil.com>
-In-Reply-To: <20230531095608.e1b4358549562b8e1bdf5cb4@hugovil.com>
-References: <20230529140711.896830-1-hugo@hugovil.com>
-        <c15a90d6-b3c1-e432-9216-c4c1e2c44ce6@camlingroup.com>
-        <20230530090836.27b8d080d6b6c022b303ac9e@hugovil.com>
-        <c691858d-31af-2892-c0a3-89a37b19af86@camlingroup.com>
-        <20230531095608.e1b4358549562b8e1bdf5cb4@hugovil.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Wed, 31 May 2023 11:02:07 -0400
+Received: from mx0b-002c1b01.pphosted.com (mx0b-002c1b01.pphosted.com [148.163.155.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E48D98;
+        Wed, 31 May 2023 08:02:01 -0700 (PDT)
+Received: from pps.filterd (m0127843.ppops.net [127.0.0.1])
+        by mx0b-002c1b01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VETBmI004420;
+        Wed, 31 May 2023 08:01:31 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=proofpoint20171006;
+ bh=NhHqBaHaRbE7xCoTxDNN5fuF/rAzE5MjmdNybCg+c28=;
+ b=EjdZGNBdfvwQydGrtxMv+HFyg9WLcsv/qjF5+sC8yNXGv8Fpwz3O/3BiFDIkMzS41r30
+ ZQBGmo6QLstnQAq7xtHNSbu28msmEn6qlDBPhfcQups3HZKN94BINY4KNjbtEMY+vpjX
+ vD/XG42pa7T+hiuwAXzLbQ2KHiDvK8tw9hYbbZI8EGmJ/GPGCVtoNp4LHFmlsU/9pvNx
+ HAR49jIo8iSDiKLwUN47DeSESp0l2rHsg7T4Shb59Y34x6WoU/zZKZzx8RQaOL/QpBBM
+ 53VHg6u/b4oAk7ee1xr2mfc/kw/t1Dj0ro5bValFqX13xDpTt9ax67YjZLlF4bIjGTI2 WQ== 
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
+        by mx0b-002c1b01.pphosted.com (PPS) with ESMTPS id 3qufyfa406-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 08:01:29 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eay7k4m2hmd8mvDcAyoqcEd/u1iOTlgGzm3hqSdxSqld7ozIaIKfreIoUJQy+3jAq3V6Ds0Pny3io9KLAHb6BQkLgutjtPdthoBHBkIfmyotHa6eB+Syq4h+7nhQxzn2QjT4+6HBms/9bXDzsarS7MuOV1MYx3BMvcrRfcbrhBY2GC/tCQNyAnrZzHPguW37WwLEsQWEFhtLY7C1HVEx/74Pk2JjMHAPOwLN9paqGwHaYiqYNXoBhuyOxaNGm5llt5nsbN9Z6TVt7MnlWXL3zxR0XoBcg6Yq7HpeuWO86HkRKVidBeDOsZaSXG9qOWFJz7zsfWkEefJDI5fa9kjI1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NhHqBaHaRbE7xCoTxDNN5fuF/rAzE5MjmdNybCg+c28=;
+ b=b7gX8xbwz7pohgto23elFEnvMhYbPb0bWLMpx4cspfDqUzbQIl/V3iQMbvzcMDpn806hPoP45dLgyiu16I1iNB6lULRA8M3COiTUiS2GbPfaCQGASxZKwaRRutM6UDIWJRtQf5q1LwXfygC969QtWThhWiAYaJBm+3u2eYLy3NGqxqyKzXFid6OxZeTOupOEHLjZUoUHAxqq0dX8amxjhJ823ebY32Mzm3F8HLwMPUQCMcetnX3Noc3YNIVVocZMWDuVpAybve0T+jGPio1Xeqg0KWQCm9+JPgmZTUZh0Ca8HsSgbDSWyXVJvSWg3Dsa14gBfavh7PSk0TtW1K4joA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
+ dkim=pass header.d=nutanix.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NhHqBaHaRbE7xCoTxDNN5fuF/rAzE5MjmdNybCg+c28=;
+ b=nKs65px1gPNZRY0KsHcl2VPCtAEICbY4kHszAdYs1imKmf5hCt9G9mhDQX798Hqyz6qmpOUn6pNLamS8VNdNSfvy9HWEg5RC0YpUTUWl+oyJvg7vH4hpbFnE5L6MNlb2MBYJdLoEEK96Z3HXwh+h9puq/bx2sL3FHaJjLFMBSdMdot23CTOEFyju8FOQzBXiS053E/8I0orS+dZFyBeOnrBID18lqJf0M2juDvub2WU+Ap+3ntf2yrUhDBsS1ym6QvZzpk25222GTRqnUwzoZ0KByFMciJ5Gkpst/ndKXU3TkrNWfHXEFqkZu43tGkqrLOUrBpcQjm7IiGRl27NCXA==
+Received: from BL0PR02MB4579.namprd02.prod.outlook.com (2603:10b6:208:4b::10)
+ by IA1PR02MB8922.namprd02.prod.outlook.com (2603:10b6:208:3ae::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Wed, 31 May
+ 2023 15:01:26 +0000
+Received: from BL0PR02MB4579.namprd02.prod.outlook.com
+ ([fe80::b138:ab35:d489:67f]) by BL0PR02MB4579.namprd02.prod.outlook.com
+ ([fe80::b138:ab35:d489:67f%4]) with mapi id 15.20.6433.024; Wed, 31 May 2023
+ 15:01:26 +0000
+From:   Jon Kohler <jon@nutanix.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jon Kohler <jon@nutanix.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>
+Subject: [PATCH] KVM: VMX: remove LFENCE in vmx_spec_ctrl_restore_host()
+Date:   Wed, 31 May 2023 11:01:12 -0400
+Message-Id: <20230531150112.76156-1-jon@nutanix.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ2PR07CA0012.namprd07.prod.outlook.com
+ (2603:10b6:a03:505::13) To BL0PR02MB4579.namprd02.prod.outlook.com
+ (2603:10b6:208:4b::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL0PR02MB4579:EE_|IA1PR02MB8922:EE_
+X-MS-Office365-Filtering-Correlation-Id: 776f6559-2365-467a-0f69-08db61e7e801
+x-proofpoint-crosstenant: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: A0V/40pr5dgE6NTVImp1OKMfDfw1W4RnnOvSyGSkOEVatBOY09YdPvBOentegxSu9ZN3x261cZug1vL9KR5N+HKdhm4tc6S9oK6oZexM+3Y+2i9gJPmmiY++jOm+dCpZIE9LR/homvopoUjRHxN36//zlK3Fe91dYhjsw22/gz9M+6O3BBIJ86Ub6n69mT+2F0KMfkhWmqpgVWiOQSs0WjdasoQ0Q4nNwAQJt65GElQWb3m2rBVXTO82gNVEfuc8Urtph1wpmwgORZKOJaL7lMCcI3x2sTUAbL0iA1Um3Zr9AXMY9oT3mlGRClOVrWiul96ldDuWjhO95fOAr8fkVwfM9VQLo12yW61DhqpAvoxbhUbXRRvrQ0M3gXwHhQWflmNqnC/wMv1YOCUkBYSPEVc16L3sMspvHoeWTUNt3rUoCvIKKODEldy46cuuo3htIVckx5oPJNpKrWV+FpdpRcI91VDMrles63UuTboHNuarKnS89AdfMq5+qkUM2dnL/Yr6UFVvCfDI++A3UvT4RnZhN3WTexbv/Q6rhbjImNvsPdZrfOj4EO419vXvpBW2oqAvHb8itXoJu/s9tQlrJT+22ACjlhEX7xcZlwI6UGwznofFNdEke5bR71NJ8Snd
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR02MB4579.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(366004)(346002)(376002)(396003)(136003)(451199021)(66476007)(5660300002)(36756003)(7416002)(4326008)(66946007)(6666004)(66556008)(478600001)(110136005)(54906003)(8676002)(316002)(6486002)(52116002)(41300700001)(966005)(38100700002)(921005)(8936002)(86362001)(2616005)(6512007)(186003)(83380400001)(1076003)(6506007)(2906002)(46800400005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CGg5zUWI0oKzCnT7bsZBZKqXEctlLtEAKM5+R6V0cMjnrlcuSgTzxGkA18NZ?=
+ =?us-ascii?Q?+trjhwRJilgjObpmEK5AagSQzLKYOCoiVd3iI4fXU4mGYoL/qBeWI6l6oq+6?=
+ =?us-ascii?Q?P3bj4Kn4XWAIvPDRm+Z1tT/2t6RKphgl8pwutHLlTSjIaTy/ptRLXMbqqDc1?=
+ =?us-ascii?Q?KFlUQIqmiCpkSuu66QVWxAaWvREf3/DSCOMUQKGDNgvs8JcTmEURex+GNlQd?=
+ =?us-ascii?Q?5HJbZEFVmSsu9tPQO396VQ9qZ4vXKem9iytnsXiyJATw11XFOQ7I9QuQUike?=
+ =?us-ascii?Q?hZB7oQAhD6h1WgE3Shx3PXr3QVbVsF0+DabgNIPwUZ6fbSZ509qKUQtXYWzw?=
+ =?us-ascii?Q?oMXg4LfS+GuT1ZcGIszCted/c07hHiuPjs4VoGd12neqg1XNTcvZqKbT1RTy?=
+ =?us-ascii?Q?eKWu51Xqa0t++knG+plPOPvvdxed9dXp0V+MR1R03TZaGleU/xUsI98Kdasc?=
+ =?us-ascii?Q?kar7iZMacbxk6T/eUvBqPcGlnPWxz+QUVcgkJNVvwNJ+hK4ziVGA0Ui3y2P9?=
+ =?us-ascii?Q?ltL+Vf/oNo3PkSej4ZsTbe+7Mh8oiEIV0QDdrbHHeui6psxwMzrTc02TEV9o?=
+ =?us-ascii?Q?2+ovmGjI2hUK0VwJbAikx7TRefWeHy5CKKn+/UHG+PCpgZMWyW0aTNhQcwF2?=
+ =?us-ascii?Q?7qbx2H5mRAMFFQaZjrOGrNvE2C1FKw1MO6Zl+gmJtJ9mlGJPoLVdiJvF5d+g?=
+ =?us-ascii?Q?aPqOJcWpBO5REwX+MTNrFkD8Kq5EpzgEAkijiFaiS8hKEj1iqPDwLUWKKEMj?=
+ =?us-ascii?Q?UF0eZVFSKhm+XUyTJ5xxLe5JNtLTE4HlTmSapk8A4vQ0FuNTPzossMYEyYMY?=
+ =?us-ascii?Q?nRUafAAMpcPKq6X0TmB5HmNjweYEFt/OJYD0lVkrNkSmEDWiLq1R/E16fcYD?=
+ =?us-ascii?Q?PRnnU/QuReQHmQAyVde9RvRlkoHGHzxRWWyFyi+Q9aZzYAXh5Bmc+EbVyEHM?=
+ =?us-ascii?Q?A5dRfcEgP+fkV8Euz06xxzOvB98DIWFjEd/iBPTBEVTUssvfnZxPBlGiG1Nv?=
+ =?us-ascii?Q?JhoHDafcn8AW+yEL3LBzAuhtRLacUZ31gQZ7aqS5ITeIApTt5PHvXBBnUJTD?=
+ =?us-ascii?Q?3kA0Om7CAGBEMU75wFUu0YUcWEQqbDAcAd0yVcZeQvUTVhiN+Ko54s3h4LoA?=
+ =?us-ascii?Q?jECHmRnxXQ337RGjoH8u4dGxNMZklHTtL5JoKUVBdbLRAAfYUdKsr+Wb3U90?=
+ =?us-ascii?Q?bWfxmnSpIzXq3limUfsQucwQA4NF/hPFeaX6F/mAHvGLIbkn/OT1k3JhFqbG?=
+ =?us-ascii?Q?mTcx9IJeY4zhoEwDZ2zuOu2EzE5sOv9C06clgqTH4iOcr6SuzH8BKd2Kw+6e?=
+ =?us-ascii?Q?RjD6K6WNAm6avAg0ree7vd0QQp3YMEbVZnPyrNFJXzDTfmtxGgtmCHyaiMkr?=
+ =?us-ascii?Q?M+SNj+U9Yp+HnMDLiIfN7sI4I+zuOCCYFd90BBxkyRziXD4AoE1ni2+YKBU4?=
+ =?us-ascii?Q?fYqgkuHunyF1K2qhW82mSi2AUjq98lmJDsIcLCk1N2wXZAfw5bWCqDH7TDLG?=
+ =?us-ascii?Q?WTeaoF4P9d7cbNVIwBYNhjPPRnHIxVETGaNuqdrkeBLi1aBzoy46nyMdIh6Z?=
+ =?us-ascii?Q?ju+cwybk0vRq9bzi8aGFeJUt6g2gxARLPUhNSim29eG/Ap6USx5gJZmyRory?=
+ =?us-ascii?Q?D/nJnIlfQVSMMrBdJrUxHJPk5zOauFjiCE0lYNYFpF/Pr2cTPI0oUQaXrK3d?=
+ =?us-ascii?Q?wfOSNQ=3D=3D?=
+X-OriginatorOrg: nutanix.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 776f6559-2365-467a-0f69-08db61e7e801
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR02MB4579.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 15:01:26.3774
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bb047546-786f-4de1-bd75-24e5b6f79043
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QKciESiO9EVshNaZxrh6H2XDDa1d94RsHth6fX7hmKHs/uGzrn6+Ps1HL/oXtidgWPB4xDm5opXz9Qh3cJWEsxivRPyuqJwJnesG9vi1U7s=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR02MB8922
+X-Proofpoint-GUID: 3OB1zH215kTkNMh7nQfkuX21_1Z70DXi
+X-Proofpoint-ORIG-GUID: 3OB1zH215kTkNMh7nQfkuX21_1Z70DXi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_10,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v4 0/9] serial: sc16is7xx: fix GPIO regression and rs485
- improvements
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 May 2023 09:56:08 -0400
-Hugo Villeneuve <hugo@hugovil.com> wrote:
+Remove barrier_nospec(), which translates to LFENCE, in
+vmx_spec_ctrl_restore_host() as RSB-barriers (as defined by [1])
+already exist prior to this point.
 
-> On Wed, 31 May 2023 12:43:48 +0200
-> Lech Perczak <lech.perczak@camlingroup.com> wrote:
->=20
-> > W dniu 30.05.2023 o=A015:08, Hugo Villeneuve pisze:
-> > > On Tue, 30 May 2023 11:30:07 +0200
-> > > Lech Perczak <lech.perczak@camlingroup.com> wrote:
-> > >
-> > > > W dniu 29.05.2023 o=A016:07, Hugo Villeneuve pisze:
-> > > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > > >
-> > > > > Hello,
-> > > > > this patch series mainly fixes a GPIO regression and improve RS48=
-5 flags and
-> > > > > properties detection from DT.
-> > > > >
-> > > > > It now also includes various small fixes and improvements that we=
-re previously
-> > > > > sent as separate patches, but that made testing everything diffic=
-ult.
-> > > > >
-> > > > > Patch 1 fixes an issue when debugging IOcontrol register. After t=
-esting the GPIO
-> > > > > regression patches (patches 6 and 7, tests done by Lech Perczak),=
- it appers that
-> > > > > this patch is also necessary for having the correct IOcontrol reg=
-ister values.
-> > > > >
-> > > > > Patch 2 introduces a delay after a reset operation to respect dat=
-asheet
-> > > > > timing recommandations.
-> > > > >
-> > > > > Patch 3 fixes an issue with init of first port during probing.
-> > > > >
-> > > > > Patch 4 fixes a bug with the output value when first setting the =
-GPIO direction.
-> > > > >
-> > > > > Patch 5 is a refactor of GPIO registration code.
-> > > > >
-> > > > > Patches 6 and 7 fix a GPIO regression by (re)allowing to choose G=
-PIO function
-> > > > > for GPIO pins shared with modem status lines.
-> > > > >
-> > > > > Patch 8 allows to read common rs485 device-tree flags and propert=
-ies.
-> > > > >
-> > > > > Patch 9 improves comments about chip variants.
-> > > > >
-> > > > > I have tested the changes on a custom board with two SC16IS752 DU=
-ART using a
-> > > > > Variscite IMX8MN NANO SOM.
-> > > > >
-> > > > > Thank you.
-> > > > >
-> > > > > Link: [v1] https://lkml.org/lkml/2023/5/17/967 <https://lkml.org/=
-lkml/2023/5/17/967> <https://lkml.org/lkml/2023/5/17/967 <https://lkml.org/=
-lkml/2023/5/17/967>>
-> > > > > [v1] https://lkml.org/lkml/2023/5/17/777 <https://lkml.org/lkml/2=
-023/5/17/777> <https://lkml.org/lkml/2023/5/17/777 <https://lkml.org/lkml/2=
-023/5/17/777>>
-> > > > > [v1] https://lkml.org/lkml/2023/5/17/780 <https://lkml.org/lkml/2=
-023/5/17/780> <https://lkml.org/lkml/2023/5/17/780 <https://lkml.org/lkml/2=
-023/5/17/780>>
-> > > > > [v1] https://lkml.org/lkml/2023/5/17/785 <https://lkml.org/lkml/2=
-023/5/17/785> <https://lkml.org/lkml/2023/5/17/785 <https://lkml.org/lkml/2=
-023/5/17/785>>
-> > > > > [v1] https://lkml.org/lkml/2023/5/17/1311 <https://lkml.org/lkml/=
-2023/5/17/1311> <https://lkml.org/lkml/2023/5/17/1311 <https://lkml.org/lkm=
-l/2023/5/17/1311>>
-> > > > > [v2] https://lkml.org/lkml/2023/5/18/516 <https://lkml.org/lkml/2=
-023/5/18/516> <https://lkml.org/lkml/2023/5/18/516 <https://lkml.org/lkml/2=
-023/5/18/516>>
-> > > > > [v3] https://lkml.org/lkml/2023/5/25/7 <https://lkml.org/lkml/202=
-3/5/25/7> <https://lkml.org/lkml/2023/5/25/7 <https://lkml.org/lkml/2023/5/=
-25/7>>
-> > > > >
-> > > > > Changes for V3:
-> > > > > - Integrated all patches into single serie to facilitate debuggin=
-g and tests.
-> > > > > - Reduce number of exported GPIOs depending on new property
-> > > > > nxp,modem-control-line-ports
-> > > > > - Added additional example in DT bindings
-> > > > >
-> > > > > Changes for V4:
-> > > > > - Increase reset post delay to relax scheduler.
-> > > > > - Put comments patches at the end.
-> > > > > - Remove Fixes tag for patch "mark IOCONTROL register as volatile=
-".
-> > > > > - Improve commit messages after reviews.
-> > > > > - Fix coding style issues after reviews.
-> > > > > - Change GPIO registration to always register the maximum number =
-of GPIOs
-> > > > > supported by the chip, but maks-out GPIOs declared as modem contr=
-ol lines.
-> > > > > - Add patch to refactor GPIO registration.
-> > > > > - Remove patch "serial: sc16is7xx: fix syntax error in comments".
-> > > > > - Remove patch "add dump registers function"
-> > > > >
-> > > > > Hugo Villeneuve (9):
-> > > > > serial: sc16is7xx: mark IOCONTROL register as volatile
-> > > > > serial: sc16is7xx: add post reset delay
-> > > > > serial: sc16is7xx: fix broken port 0 uart init
-> > > > > serial: sc16is7xx: fix bug when first setting GPIO direction
-> > > > > serial: sc16is7xx: refactor GPIO controller registration
-> > > > > dt-bindings: sc16is7xx: Add property to change GPIO function
-> > > > > serial: sc16is7xx: fix regression with GPIO configuration
-> > > > > serial: sc16is7xx: add call to get rs485 DT flags and properties
-> > > > > serial: sc16is7xx: improve comments about variants
-> > > > >
-> > > > > .../bindings/serial/nxp,sc16is7xx.txt | 46 ++++++
-> > > > > drivers/tty/serial/sc16is7xx.c | 150 +++++++++++++-----
-> > > > > 2 files changed, 156 insertions(+), 40 deletions(-)
-> > > > >
-> > > > >
-> > > > > base-commit: 8b817fded42d8fe3a0eb47b1149d907851a3c942
-> > > >
-> > > > It would be a lot of sending, to do that for every patch separately=
-, so for whole series:
-> > > > Reviewed-by: Lech Perczak <lech.perczak@camlingroup.com>
-> > > >
-> > > > And where applicable - for code patches:
-> > > > Tested-by: Lech Perczak <lech.perczak@camlingroup.com>
-> > > >
-> > > > I tested whole series at the same time.
-> > > > I did my tests on an i.MX6 board with SC16IS760 over SPI, which dif=
-fers a tiny bit from SC16IS752,
-> > > > and everything works as it should.
-> > > > Thank you for fixing this!
-> > >
-> > > Hi Lech,
-> > > thank for your feedback.
-> > >
-> > > You mentioned before that without the patch "mark IOCONTROL register =
-as volatile", things were not working properly for you. Could you retest by=
- removing this patch and see if things are still working?
-> > >
-> > > Thank you, Hugo.
-> >=20
-> > Hello Hugo,
-> >=20
-> > Just checked - this patch is required, reverting it causes things to fa=
-il, so this patch should be marked as a pre-requisite for the actual fix an=
-d included in backports.
-> > Perhaps using direct write to this register made it work, but it was li=
-kely by accident.
->=20
-> Hi Lech,
-> thank you for the test, I will mark it as such in upcoming series V5.
->=20
-> Hugo.
+This LFENCE was added on commit fc02735b14ff ("KVM: VMX: Prevent guest
+RSB poisoning attacks with eIBRS") in the 5.19 timeframe; however,
+commit 2b1299322016 ("x86/speculation: Add RSB VM Exit protections") in
+6.0 timeframe added a LFENCE for X86_FEATURE_RSB_VMEXIT_LITE was added
+directly in vmx_vmexit, prior to CALL vmx_spec_ctrl_restore_host.
 
-Since I reworked a bit patch 5/9 in series 5, I removed your "Tested-by" an=
-d "Reviewed-by" tags only for this patch. Please reconfirm these tags when =
-you have tested series 5.
+For posterity, vmx_spec_ctrl_restore_host also will execute WRMSR to
+IA32_SPEC_CTRL for X86_FEATURE_KERNEL_IBRS or when guest/host MSR value
+does not match, which serves as an additional RSB-barrier.
 
-Thank you,
-Hugo.
+[1] https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/advisory-guidance/post-barrier-return-stack-buffer-predictions.html
 
---=20
-Hugo Villeneuve <hugo@hugovil.com>
+Fixes: fc02735b14ff ("KVM: VMX: Prevent guest RSB poisoning attacks with eIBRS")
+Fixes: 2b1299322016 ("x86/speculation: Add RSB VM Exit protections")
+Signed-off-by: Jon Kohler <jon@nutanix.com>
+CC: Andrew Cooper <andrew.cooper3@citrix.com>
+CC: Daniel Sneddon <daniel.sneddon@linux.intel.com>
+CC: Josh Poimboeuf <jpoimboe@kernel.org>
+CC: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+CC: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/kvm/vmx/vmx.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 44fb619803b8..98ca8b79aab1 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -7130,8 +7130,6 @@ void noinstr vmx_spec_ctrl_restore_host(struct vcpu_vmx *vmx,
+ 	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) ||
+ 	    vmx->spec_ctrl != hostval)
+ 		native_wrmsrl(MSR_IA32_SPEC_CTRL, hostval);
+-
+-	barrier_nospec();
+ }
+ 
+ static fastpath_t vmx_exit_handlers_fastpath(struct kvm_vcpu *vcpu)
+-- 
+2.30.1 (Apple Git-130)
+
