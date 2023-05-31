@@ -2,95 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC9C71897E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB0471898C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 20:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjEaSlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 14:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
+        id S229911AbjEaSrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 14:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjEaSlr (ORCPT
+        with ESMTP id S229711AbjEaSrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 14:41:47 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7176B2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:41:45 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f7024e66adso11215e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:41:45 -0700 (PDT)
+        Wed, 31 May 2023 14:47:47 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B21E132
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:47:45 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51458187be1so124475a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 11:47:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685558504; x=1688150504;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GF8VCrAhn66qLdsXW4ERcJHTpMGUMtRWJ1DJabZuEyQ=;
-        b=HAE9WEczf7c2MeIZ4h/RbK3Cjb5fN73gTSQSxUlfticM8Wm5+3KYNdCCUJkAMmb50S
-         6pYNN9JmiEHfp+puF6Ifg9QugBI77MhyZoDxYOh+QZyFuYfk0nVngkBqh1z+AlThZu7/
-         OaeQzy1P2JG30p6ok0sTys8algaPOd773TzibgbHDutaAN9cuIVnG8LlfoaH4u+raKA1
-         FH2cBJ9YzyYNDPnMLGEOazoBI1SCAc+cxtZ1DYqwLhsj0ee0rbYaj72Wa+ui8scxdq1f
-         XVfOTY7btHIFXAa0XWYdLsGaEn9goEFmfqWQfVdpKVwD5OqyB3FskfFPjBZs3OH+xcbu
-         fI+g==
+        d=linaro.org; s=google; t=1685558864; x=1688150864;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=57q4TdWvHlrEcIXeoi1W6gK5/9KE0SGJz/XNivOKPnk=;
+        b=oilRIHPnW2cKnSn+LS9AcMaGyPgbofIVDMmLVDknuvY7DrITlUY34BXtCpgQgCYiIM
+         /J1nY4WezjqAjMPOwSeq9pSDIVCD80AhJL4dlDFKI5RNcnWIn24TDlN8K6LASJ4ntUba
+         YjprkdTZEpRW0STsJhGyBCIbRvIgHKOyuBP5wWhym2AH+s7KAQrJjxHQau+fywgxIvk0
+         XCI7em/WbhCSiqLL0ffAIn8Rw2GnCj3L3wjUsL1xbnxZrINd8bMcxDSDB6kImuHe3hon
+         +qbotEqVxhHKsc20Ey/mIt3hsAi1U6F4owY3hNPpoQEMRFLq701/C8+TvNepKEmWFTsx
+         oexg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685558504; x=1688150504;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GF8VCrAhn66qLdsXW4ERcJHTpMGUMtRWJ1DJabZuEyQ=;
-        b=f+EQ/1wRXaM0dnIbtG4xaoM6CvNMVT7BrPRiubtzKD8qa87hl5jj2jVl95uSoyCXNO
-         eDYKIZ4T23/09sRW+uJ/uEZT1SHhKHwSEKx6lG5Jpxw85FyzmnTZx1nJW5iQBVi8qrcz
-         51Iq3BWF5o6hCRL48DKdhwF+2Ms//0KHwypVPQhnBq5E2rygmgs/yI1+VsTnmLITHmGR
-         1XREaubbp1SlhiWUOTiwmww/wNsi2pt4d9k2hjmrZupsFnaaoAR8Zo5mbsGNuR2liCT3
-         HeRauSoupGYXUn0dRiQu1b98K1BetEdqNgjZLGipaoXZTT2TP+wsnOx9FqRKsCBMvsS5
-         jekg==
-X-Gm-Message-State: AC+VfDy3aa/IdH2eG0OoVys37RvPyOKaSHDJ0kF+pKemqnCZBTN3Rgzn
-        B1AybJx77rA2VZoBNp7oV7p4hjhgo1vM/MEqrMlmvw==
-X-Google-Smtp-Source: ACHHUZ51wMBQEWCMC+5c+LGx8B/+gMlo8rk89yJlWD7BM/pwexrhob4l54bbfh0y6WLs45h7XR/TLt7eUJsSOGyXR/I=
-X-Received: by 2002:a05:600c:19d3:b0:3f1:70d1:21a6 with SMTP id
- u19-20020a05600c19d300b003f170d121a6mr23664wmq.0.1685558504053; Wed, 31 May
- 2023 11:41:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685558864; x=1688150864;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=57q4TdWvHlrEcIXeoi1W6gK5/9KE0SGJz/XNivOKPnk=;
+        b=E5iSrdw+XXE0KLK5pMMfUjyrJBcSuX4IP4Ss2uIoGGA/jWiuSvz09vEwLAWhaflIQl
+         O50vDiPJgt6aWul0H4F4em3yHwnWKUTHc5PgulN/0+jUHbVMgvMYna6EbXJdpZ+tmblN
+         moscZoE13xAk6KKSxETQ8Fop9lU9RVgsA0T5TH3XCf+hJq6p3mFb50sLv5qd3NdULKIH
+         Fly9/1WX5YkmAFFod8mRBkpC7Au4sKd7RlGQg2l8oYPQtHG0k7ceQDV8aagAja6i3Nu0
+         0rnVJu+qUPNNKXJiSEgvA5QvAU2SQsMRhEmBQEb5VeGrznVihlkgrMpvdCEnl8crsM+n
+         lmBA==
+X-Gm-Message-State: AC+VfDz9lU0MLQBdhS72Bng4Im57v6Vw7R/7ylZUVE0x91fSZnqmc0A/
+        Ygoug2286zW9B5DL66pkFC88xQ==
+X-Google-Smtp-Source: ACHHUZ5OHEWC/l7SwXXG0Ex4UcYj5G95i7V5T07Yf+NXLS4ZzBYzSv6/qXcHJtcqP3+UJEQM/h4YDQ==
+X-Received: by 2002:a17:907:7dab:b0:970:1bc9:2eeb with SMTP id oz43-20020a1709077dab00b009701bc92eebmr6064275ejc.30.1685558863716;
+        Wed, 31 May 2023 11:47:43 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id lv17-20020a170906bc9100b0095707b7dd04sm9258501ejb.42.2023.05.31.11.47.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 11:47:43 -0700 (PDT)
+Message-ID: <25d61668-0b79-8565-0de8-dad7e80e3798@linaro.org>
+Date:   Wed, 31 May 2023 20:47:41 +0200
 MIME-Version: 1.0
-References: <20230531104233.50645-1-dqfext@gmail.com> <20230531111602.7ecf401b@kernel.org>
-In-Reply-To: <20230531111602.7ecf401b@kernel.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 31 May 2023 20:41:32 +0200
-Message-ID: <CANn89iKRX2QTgS44Ky6Jua-+UNrFY3E7RCT_7OfG=GnFvAzdFQ@mail.gmail.com>
-Subject: Re: [PATCH net] neighbour: fix unaligned access to pneigh_entry
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Qingfang DENG <dqfext@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>,
-        Ville Nuorvala <vnuorval@tcs.hut.fi>,
-        Masahide NAKAMURA <nakam@linux-ipv6.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Qingfang DENG <qingfang.deng@siflower.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 04/11] dt-bindings: stm32: add st,stm32mp25 compatibles to
+ the stm32 family
+Content-Language: en-US
+To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        Conor Dooley <conor@kernel.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <20230529162034.20481-1-alexandre.torgue@foss.st.com>
+ <20230529162034.20481-5-alexandre.torgue@foss.st.com>
+ <20230529-backlit-dealing-b099e4eb5210@spud>
+ <c805cd5f-92b1-eb56-d9bc-66814705e848@foss.st.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <c805cd5f-92b1-eb56-d9bc-66814705e848@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 8:16=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Wed, 31 May 2023 18:42:33 +0800 Qingfang DENG wrote:
-> > +#ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-> >       u8                      key[];
-> > +#else
-> > +     u8                      key[] __aligned(4);
-> > +#endif
->
-> I'd appreciate a second opinion, but to me it's very unlikely we'd save
-> any memory even with efficient aligned access here. No reasonably key
-> will fit into 3 bytes, right? So we can as well avoid the ifdef and
-> make the key[] always aligned. Or preferably, if it doesn't cause
-> compilation issues, make the type of the key u32?
+On 30/05/2023 10:39, Alexandre TORGUE wrote:
+> Hi Conor
+> 
+> On 5/29/23 20:05, Conor Dooley wrote:
+>> On Mon, May 29, 2023 at 06:20:27PM +0200, Alexandre Torgue wrote:
+>>> STM32 family is extended by the addition of the STM32MP25 SoCs. It is composed
+>>> of 4 SoCs: STM32MP251, STM32MP253, STM32MP255 and STM32MP257.
+>>>
+>>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+>>> index 4af5b8f4f803..7d7ca33d2e61 100644
+>>> --- a/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+>>> +++ b/Documentation/devicetree/bindings/arm/stm32/stm32.yaml
+>>> @@ -161,6 +161,15 @@ properties:
+>>>             - const: phytec,phycore-stm32mp157c-som
+>>>             - const: st,stm32mp157
+>>>   
+>>> +      - items:
+>>> +          - const: st,stm32mp251
+>>> +      - items:
+>>> +          - const: st,stm32mp253
+>>> +      - items:
+>>> +          - const: st,stm32mp255
+>>> +      - items:
+>>> +          - const: st,stm32mp257
+>>
+>> I assume the slightly odd format is just to avoid churn when adding
+>> the board compatibles.
+> 
+> Yes, exactly.
+> 
 
-Same feeling, we could avoid the CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS ifd=
-ef.
+I don't get it. How are you going to extend it? Or rather - what are you
+documenting here? If these are SoCs, then this is not valid. We do not
+allow these alone.
+
+No, please drop it.
+
+Best regards,
+Krzysztof
+
