@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33DA717A93
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98488717A99
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235216AbjEaIru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
+        id S235042AbjEaIsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235104AbjEaIrV (ORCPT
+        with ESMTP id S235002AbjEaIr7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:47:21 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3AA193
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:47:13 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30aef0b8837so2338367f8f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:47:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685522832; x=1688114832;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7TO9Ladpb4eGEa20dlAq/EVgHDyPrCBaRGJh7KV6CMA=;
-        b=Ri7dl6WaPXXS1yhRJ+GdwC8aqakX9L/o4fQW5gvP5PWNu4dlh/0g2vCrIf+bsWlS0C
-         km1eV5xk1+ZWgJtQHe3kZa55w/XZUJ5f0LgClW4XMZrF8UubDiu/XvckVi4pK4+mFGkk
-         DnMMCvqQZvAkEkAUNfDpQ79Et994BpHWHVlj9j06LHNxN8aQjVZP7JlJz4HMbrEmrGF2
-         HjJGkanQ1ltmi5kL7E8lhs8jZlX6ul4s0tlO/6xS++7A/C7knKRJShlFi49+DFTsBlMc
-         lcO2dWIw37kswPeEIBjr7Jrjd8RCb/4/1PrWNwtu0wWe38uO48PTz2hrhfv4PhfMMGDl
-         6dcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685522832; x=1688114832;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7TO9Ladpb4eGEa20dlAq/EVgHDyPrCBaRGJh7KV6CMA=;
-        b=QwXyrIPaM9gImkT3IgQG0dvF031FcZkfIDM6+j6qfJb+RVG2mZSrL/YwaBdBf9mng6
-         CNoMF2rtLOtUt48167P9Zmw8KeVJ6bZDzXjLSaxqq2vmklbH0/FwM7fyKUQASCr97Wc4
-         6uNK73d7UhU3DaKcHpsYt9AucHoOiUv5F3mkNda54ZQBKTK6kuZdK3GQhJjNuO3lDKqE
-         72Ts1V7SGmW31sNNxw2oIa2gp7hV8yF6cCabGenG5c3rYUO4y9gGXQ0RC03PgnZ2DY3+
-         lyh7XYRlGz89YSk02Q1bdSSGBJxdnh5ISM5/Z2KdpYf/En/3KoQDn1ZCgDXEFiusmxBz
-         /piA==
-X-Gm-Message-State: AC+VfDwXWAZzUdF+gIGeY2JL6MFUhwllqiYeacz9WAMzaPHcUYNb6mXU
-        7cZ1jP7n379u2x13YdQ3BO3Dp+CpYLo0G0yEJGHwbA==
-X-Google-Smtp-Source: ACHHUZ7HPhBHbOTzQhEb0gT3a23/8UJMQW9gqf2YVA53AQrjVRRgVvTEeNGKzL4Fd3lDLV9AgoSNDheRPjtoQhvQV0I=
-X-Received: by 2002:a5d:470b:0:b0:306:2b40:1258 with SMTP id
- y11-20020a5d470b000000b003062b401258mr3225152wrq.21.1685522832086; Wed, 31
- May 2023 01:47:12 -0700 (PDT)
+        Wed, 31 May 2023 04:47:59 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726B0E4D
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:47:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685522865; x=1717058865;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=/t/IRQycrRsaywMENmlH357EbeiJB8Tfnj+9vXHLpmg=;
+  b=nZ6daK5+7n5taDo2qv7G1f4qSDUdsGWspor92J188P3jEk1lFId4kc3v
+   TXDtwgmWmmyxL1Xbii20jOZfseopIxFdJhTUgKbfBKIvMDGo4KCznQXty
+   decgXQyVLezlSVIEv25/UnK8zn0jUvR6gElcsyjL3SeAJpiit9WH31rZd
+   N4olxYJ5rTb5Rm9r2mQ2BoMbi2pqhUZtd2LRZZRK7OoLMgrISrec8HGRG
+   gzZsPFuggBIkbmkObgk6rnvEpmQAyTvfdKrnpqiev4buEwjIIDguQI18d
+   IY+SEs3WpC3BeKyifPJSXyBF6ARwYlpqCyCInMk/gOzaF2+w9A8BwfYu1
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="354023354"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="354023354"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 01:47:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="701025604"
+X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
+   d="scan'208";a="701025604"
+Received: from unknown (HELO ideak-desk) ([10.237.72.78])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 01:47:41 -0700
+Date:   Wed, 31 May 2023 11:47:40 +0300
+From:   Imre Deak <imre.deak@intel.com>
+To:     Rudi Heitbaum <rudi@heitbaum.com>
+Cc:     Dave Airlie <airlied@redhat.com>, Dave Airlie <airlied@gmail.com>,
+        intel-gfx@lists.freedesktop.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [v4,01/14] drm/i915: Fix PIPEDMC disabling for a bigjoiner
+ configuration
+Message-ID: <ZHcJhs4ySOGojBvZ@ideak-desk>
+Reply-To: imre.deak@intel.com
+References: <20230510103131.1618266-2-imre.deak@intel.com>
+ <20230530134907.GA8@5e905162a5a7>
 MIME-Version: 1.0
-References: <20230526184823.1230974-1-ericchancf@google.com> <ZHXF86CioMoyWD1d@FVFF77S0Q05N>
-In-Reply-To: <ZHXF86CioMoyWD1d@FVFF77S0Q05N>
-From:   Eric Chan <ericchancf@google.com>
-Date:   Wed, 31 May 2023 16:47:01 +0800
-Message-ID: <CADv+UJgbneWo7SAeXEaZZfqAxEy5ACSDPK3KKR8M4Y2D-AXq5A@mail.gmail.com>
-Subject: Re: [PATCH] arm64: Fix 'lock held when returning to user space'
- lockdep warning
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230530134907.GA8@5e905162a5a7>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,10 +71,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On Tue, May 30, 2023 at 01:49:07PM +0000, Rudi Heitbaum wrote:
+Hi Rudi,
 
-Thank you for your detailed response and guidance. I will prepare
-PATCH v2 promptly and resubmit it for review.
+Could you open a ticket at
+https://gitlab.freedesktop.org/drm/intel/-/issues/new
+
+attaching a dmesg log after booting with drm.debug=0xe, with the
+messages from boot-up until the issue happens?
 
 Thanks,
-Eric Chan
+Imre
+
+> Hi Imre/Dave,
+> 
+> Ref: [v4,01/14] drm/i915: Fix PIPEDMC disabling for a bigjoiner configuration
+>      [git pull] drm fixes for 6.4-rc4
+>      drm-fixes-2023-05-26:
+>      drm fixes for 6.4-rc4
+> 
+> This patch has caused a regression between 6.4-rc3 and 6.4-rc4. Other
+> tested kernels include 6.3.4 work fine. Dropping the patch allows the decode
+> playback of media via Kodi. Without dropping the patch - the media
+> starts and stutters then ceases to play.
+> 
+> There is an additional issue that 6.4-rc4 audio playback is also failing
+> (where 6.4-rc3 was fine), I have not yet tracked this down.
+> 
+> This is all on:
+> DMI: Intel(R) Client Systems NUC12WSKi7/NUC12WSBi7, BIOS WSADL357.0087.2023.0306.1931 03/06/2023
+> 12th Gen Intel(R) Core(TM) i7-1260P (family: 0x6, model: 0x9a, stepping: 0x3)
+> microcode: updated early: 0x429 -> 0x42a, date = 2023-02-14
+> 
+> Regards
+> 
+> Rudi
+> 
+> On Wed, May 10, 2023 at 01:31:18PM +0300, Imre Deak wrote:
+> > For a bigjoiner configuration display->crtc_disable() will be called
+> > first for the slave CRTCs and then for the master CRTC. However slave
+> > CRTCs will be actually disabled only after the master CRTC is disabled
+> > (from the encoder disable hooks called with the master CRTC state).
+> > Hence the slave PIPEDMCs can be disabled only after the master CRTC is
+> > disabled, make this so.
+> > 
+> > intel_encoders_post_pll_disable() must be called only for the master
+> > CRTC, as for the other two encoder disable hooks. While at it fix this
+> > up as well. This didn't cause a problem, since
+> > intel_encoders_post_pll_disable() will call the corresponding hook only
+> > for an encoder/connector connected to the given CRTC, however slave
+> > CRTCs will have no associated encoder/connector.
+> > 
+> > Fixes: 3af2ff0840be ("drm/i915: Enable a PIPEDMC whenever its corresponding pipe is enabled")
+> > Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> > Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+> > Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+> > Signed-off-by: Imre Deak <imre.deak@intel.com>
+> > ---
+> >  drivers/gpu/drm/i915/display/intel_display.c | 12 ++++++++++--
+> >  1 file changed, 10 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu/drm/i915/display/intel_display.c
+> > index 1d5d42a408035..116fa52290b84 100644
+> > --- a/drivers/gpu/drm/i915/display/intel_display.c
+> > +++ b/drivers/gpu/drm/i915/display/intel_display.c
+> > @@ -1702,9 +1702,17 @@ static void hsw_crtc_disable(struct intel_atomic_state *state,
+> >  
+> >  	intel_disable_shared_dpll(old_crtc_state);
+> >  
+> > -	intel_encoders_post_pll_disable(state, crtc);
+> > +	if (!intel_crtc_is_bigjoiner_slave(old_crtc_state)) {
+> > +		struct intel_crtc *slave_crtc;
+> > +
+> > +		intel_encoders_post_pll_disable(state, crtc);
+> >  
+> > -	intel_dmc_disable_pipe(i915, crtc->pipe);
+> > +		intel_dmc_disable_pipe(i915, crtc->pipe);
+> > +
+> > +		for_each_intel_crtc_in_pipe_mask(&i915->drm, slave_crtc,
+> > +						 intel_crtc_bigjoiner_slave_pipes(old_crtc_state))
+> > +			intel_dmc_disable_pipe(i915, slave_crtc->pipe);
+> > +	}
+> >  }
+> >  
+> >  static void i9xx_pfit_enable(const struct intel_crtc_state *crtc_state)
