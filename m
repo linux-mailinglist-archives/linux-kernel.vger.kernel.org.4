@@ -2,148 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4A97176D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A807176D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 08:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbjEaGaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 02:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37480 "EHLO
+        id S234069AbjEaGaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 02:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjEaGaL (ORCPT
+        with ESMTP id S230037AbjEaGaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 02:30:11 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5A811C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 23:30:09 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-39a3f2668bdso1156018b6e.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 23:30:09 -0700 (PDT)
+        Wed, 31 May 2023 02:30:14 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22A799;
+        Tue, 30 May 2023 23:30:13 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64d3fbb8c1cso6009181b3a.3;
+        Tue, 30 May 2023 23:30:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685514609; x=1688106609;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=E1OpRRIldUM8jbeDsCgHJ5B0G7dPQN5jSdROds/1gnM=;
-        b=x2SnnjMvophJanpT7imV8o8Qkovf+HPUwQN/5KQl3niG086cx6LZVDeKYaSR5fgD13
-         /ZiQquEy1cgWuQypSNCkWwXnVL1QNU9W1drTXXpIjYqJDMEON0L6wlig4C3hf0jun5Di
-         amYhYZPRdugSujRNi2uW2t/GPSCUl17Y7+in//0MvbL/GTriHlZnnx4xxcgVDmR7/jIl
-         paZpWPW/MoA5gtUGup7fSXEGt1wJsp5cibf1KYgIMIA00ptDyK10xoypGHeofdGs9WK/
-         m7L7+qvSBlF36lzbp3CteEwwiY1VOymZ9Yxl4Gx+JkMSuB3+8e9vzV62sx34zi/2JMyj
-         mrxw==
+        d=gmail.com; s=20221208; t=1685514613; x=1688106613;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QHVa7qx0Y3jBTDZnlucyg01NugOE8nypPp8hA0hG/dw=;
+        b=HBH9612+2knX82fth45xbRKdCtfbPytavOp7WDk3ypzmYifLwc5eSyA3HGAQYFHRRw
+         Rx3ZoRcpPfx6aXxB2NnoCD0SooWD2XfgJKo6vCg6yvpzgKgjPEyuGpEeECuEoGXil24C
+         4T7PgMvN24poTJ/gY7VvIDIaYep+7oKknut0Y/bvoGVhjCAc+E2XqzdtoB9PYY9YEIvS
+         Yy0WWxmCA79lvGp6Pp5eiInla7i5k4scmIxumtqZaqpQuWBTuZFlZ664xJpod0ZM4B6+
+         IgFIXhokFbKrziQXE+qFffqETujdtoUY1hUXshSPC/rYzoqabCFax8vCM4DDOwz6Wppz
+         2lGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685514609; x=1688106609;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E1OpRRIldUM8jbeDsCgHJ5B0G7dPQN5jSdROds/1gnM=;
-        b=FqzBFStPi0+PEewzUX7TUXoDq3rtoDMErpqe5zyta8sHHgxXm7+3Rw9g3G5CNKuyx1
-         YlSEH2DQlOb5eUVwgmwfEXkD3KAdZ3BsvH6D0kE3JAlG+7JCKx4Pfzxp0u1ynB6KlSko
-         l7441g919LsE94YfoK+3Ztq2JlnMGvV0TAd/sJxUoYP+Bkgl/shhRc+TAkoxHp94tcst
-         K0Iwu12Hts3zYNOLxHd+bw0pH1KIA221HgIIkFzHGYOW3i7GhKyXiHI28m9UI4AjFxcU
-         8oMCrMYUpxF1NTfoq6cj0hTOhQW2us9ahmmhxy1KKN1ADAkFH2D2wKfWOQ1vV18X0uwx
-         zT3Q==
-X-Gm-Message-State: AC+VfDxH8eaF5UXxQ74HekZeiIXsWar/YXeCGLAFjh1+N1u+jgeF+5F6
-        INdVIWCW+4WLXn35BFalagcXF5QRYmC4rjzrbQ==
-X-Google-Smtp-Source: ACHHUZ7FP+5ZnqUjMGXcbaLzxyktF5wU1Q4LTtszDkktWIiXviMTJH/V9NoQTPAK1XO/eYUiHygGmA==
-X-Received: by 2002:aca:f055:0:b0:397:ed3b:f1d5 with SMTP id o82-20020acaf055000000b00397ed3bf1d5mr2542780oih.11.1685514608972;
-        Tue, 30 May 2023 23:30:08 -0700 (PDT)
-Received: from thinkpad ([117.217.186.173])
-        by smtp.gmail.com with ESMTPSA id jb7-20020a170903258700b001ae0b373382sm431234plb.198.2023.05.30.23.30.06
+        d=1e100.net; s=20221208; t=1685514613; x=1688106613;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QHVa7qx0Y3jBTDZnlucyg01NugOE8nypPp8hA0hG/dw=;
+        b=BBMOMys5GIRAX4Du6sq5r4357zP8NpeIHthXwDKN2U5kWxh6cEFmYlzic85ygkb62u
+         Vb+O5XtanhpG7jmg0LyrSTcaoG7Y9hnf7ncj4vRkeNzeF3GL4fbdvtvZPAbwpMkgMg8p
+         e/PwuATpkzKiIPVFFsxnL8mhgoO255E847LHPG+6Hvz8b/tnb8bVh1BtMTeNruKH+A0P
+         UJtCks+I0wgU3OIJhSvfDGrLJQo31yOiLMrDObeTSOH+141UGScS33NBLGmd/FC6wvK4
+         D8Ya3daexvVanuaVbsE2FJJtam/xC/wjlitGZ0AjyYgRAK5rTmKD+jx9YHzpStVylyHX
+         wS7g==
+X-Gm-Message-State: AC+VfDxiyPijqWgRmxcbIv2D4gljC7EaQkcI5/Hq8D88x7RNQWmW8RYe
+        brCaDBSp8LtNjqJZ6z9N6oY=
+X-Google-Smtp-Source: ACHHUZ6l5RP0/ikc0bFoEqIOE7+0cjfMDe2SeELiqdDqA2CVkgeJsXgs0LfWt6L7uCReI1sEult8/g==
+X-Received: by 2002:a05:6a20:918a:b0:10b:7400:cef7 with SMTP id v10-20020a056a20918a00b0010b7400cef7mr5828869pzd.17.1685514612988;
+        Tue, 30 May 2023 23:30:12 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-81.three.co.id. [180.214.232.81])
+        by smtp.gmail.com with ESMTPSA id b15-20020aa7810f000000b0064ceb16a1a2sm2586467pfi.182.2023.05.30.23.30.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 23:30:08 -0700 (PDT)
-Date:   Wed, 31 May 2023 12:00:03 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     loic.poulain@linaro.org, quic_krichai@quicinc.com
-Subject: Re: [PATCH] bus: mhi: host: pci_generic: Add support for IP_SW0
- channels
-Message-ID: <20230531063003.GB7968@thinkpad>
-References: <20230519135803.13850-1-manivannan.sadhasivam@linaro.org>
+        Tue, 30 May 2023 23:30:12 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 5E445106A0B; Wed, 31 May 2023 13:30:08 +0700 (WIB)
+Date:   Wed, 31 May 2023 13:30:07 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Conor Dooley <conor.dooley@microchip.com>, soc@kernel.org
+Cc:     conor@kernel.org, corbet@lwn.net, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        olof@lixom.net, palmer@dabbelt.com, robh+dt@kernel.org,
+        arnd@arndb.de
+Subject: Re: [PATCH v2] Documentation/process: add soc maintainer handbook
+Message-ID: <ZHbpb98Yn7SDZ4XZ@debian.me>
+References: <20230530-multiple-whooping-ee5706fceb67@wendy>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yfE+yvsUjvQ597xx"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230519135803.13850-1-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230530-multiple-whooping-ee5706fceb67@wendy>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 07:28:03PM +0530, Manivannan Sadhasivam wrote:
-> IP_SW0 channels are used to transfer data over the networking interface
-> between MHI endpoint and the host. Define the channels in the MHI v1
-> channel config along with dedicated event rings.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Applied to mhi-next!
+--yfE+yvsUjvQ597xx
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-- Mani
-
-> ---
->  drivers/bus/mhi/host/pci_generic.c | 26 ++++++++++++++++++++++----
->  1 file changed, 22 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-> index db0a0b062d8e..70e37c490150 100644
-> --- a/drivers/bus/mhi/host/pci_generic.c
-> +++ b/drivers/bus/mhi/host/pci_generic.c
-> @@ -212,6 +212,19 @@ struct mhi_pci_dev_info {
->  		.offload_channel = false,	\
->  	}
->  
-> +#define MHI_EVENT_CONFIG_SW_DATA(ev_ring, el_count) \
-> +	{					\
-> +		.num_elements = el_count,	\
-> +		.irq_moderation_ms = 0,		\
-> +		.irq = (ev_ring) + 1,		\
-> +		.priority = 1,			\
-> +		.mode = MHI_DB_BRST_DISABLE,	\
-> +		.data_type = MHI_ER_DATA,	\
-> +		.hardware_event = false,	\
-> +		.client_managed = false,	\
-> +		.offload_channel = false,	\
-> +	}
+On Tue, May 30, 2023 at 01:49:36PM +0100, Conor Dooley wrote:
+> diff --git a/Documentation/process/maintainer-soc.rst b/Documentation/pro=
+cess/maintainer-soc.rst
+> new file mode 100644
+> index 000000000000..9683c7d199b2
+> --- /dev/null
+> +++ b/Documentation/process/maintainer-soc.rst
+> @@ -0,0 +1,178 @@
+> +.. SPDX-License-Identifier: GPL-2.0
 > +
->  #define MHI_EVENT_CONFIG_HW_DATA(ev_ring, el_count, ch_num) \
->  	{					\
->  		.num_elements = el_count,	\
-> @@ -237,8 +250,10 @@ static const struct mhi_channel_config modem_qcom_v1_mhi_channels[] = {
->  	MHI_CHANNEL_CONFIG_DL_AUTOQUEUE(21, "IPCR", 8, 0),
->  	MHI_CHANNEL_CONFIG_UL_FP(34, "FIREHOSE", 32, 0),
->  	MHI_CHANNEL_CONFIG_DL_FP(35, "FIREHOSE", 32, 0),
-> -	MHI_CHANNEL_CONFIG_HW_UL(100, "IP_HW0", 128, 2),
-> -	MHI_CHANNEL_CONFIG_HW_DL(101, "IP_HW0", 128, 3),
-> +	MHI_CHANNEL_CONFIG_UL(46, "IP_SW0", 64, 2),
-> +	MHI_CHANNEL_CONFIG_DL(47, "IP_SW0", 64, 3),
-> +	MHI_CHANNEL_CONFIG_HW_UL(100, "IP_HW0", 128, 4),
-> +	MHI_CHANNEL_CONFIG_HW_DL(101, "IP_HW0", 128, 5),
->  };
->  
->  static struct mhi_event_config modem_qcom_v1_mhi_events[] = {
-> @@ -246,9 +261,12 @@ static struct mhi_event_config modem_qcom_v1_mhi_events[] = {
->  	MHI_EVENT_CONFIG_CTRL(0, 64),
->  	/* DIAG dedicated event ring */
->  	MHI_EVENT_CONFIG_DATA(1, 128),
-> +	/* Software channels dedicated event ring */
-> +	MHI_EVENT_CONFIG_SW_DATA(2, 64),
-> +	MHI_EVENT_CONFIG_SW_DATA(3, 64),
->  	/* Hardware channels request dedicated hardware event rings */
-> -	MHI_EVENT_CONFIG_HW_DATA(2, 1024, 100),
-> -	MHI_EVENT_CONFIG_HW_DATA(3, 2048, 101)
-> +	MHI_EVENT_CONFIG_HW_DATA(4, 1024, 100),
-> +	MHI_EVENT_CONFIG_HW_DATA(5, 2048, 101)
->  };
->  
->  static const struct mhi_controller_config modem_qcom_v1_mhiv_config = {
-> -- 
-> 2.25.1
-> 
+> +.. _maintainer-soc:
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +SoC Subsystem
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Overview
+> +--------
+> +
+> +The SoC subsystem is a place of aggregation for SoC-specific code.
+> +The main components of the subsystem are:
+> +
+> +* devicetrees for 32- & 64-bit ARM and RISC-V
+> +* 32-bit ARM board files (arch/arm/mach*)
+> +* 32- & 64-bit ARM defconfigs
+> +* SoC specific drivers across architectures, in particular for 32- & 64-=
+bit
+> +  ARM, RISC-V and Loongarch
+> +
+> +These "SoC specific drivers" do not include clock, GPIO etc drivers that=
+ have
+> +other top-level maintainers. The drivers/soc/ directory is generally mea=
+nt
+> +for kernel-internal drivers that are used by other drivers to provide SoC
+> +specific functionality like identifying a SoC revision or interfacing wi=
+th
+> +power domains.
+> +
+> +The SoC subsystem also serves as an intermediate location for changes to
+> +drivers/bus, drivers/firmware, drivers/reset and drivers/memory.  The ad=
+dition
+> +of new platforms, or the removal of existing ones, often go through the =
+SoC
+> +tree as a dedicated branch covering multiple subsystems.
+> +
+> +The main SoC tree is housed on git.kernel.org:
+> +  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/
+> +
+> +Clearly this is quite a wide range of topics, which no one person, or ev=
+en
+> +small group of people are capable of maintaining.  Instead, the SoC subs=
+ystem
+> +is comprised of many submaintainers, each taking care of individual plat=
+forms
+> +and driver sub-directories.
+> +In this regard, "platform" usually refers to a series of SoCs from a giv=
+en
+> +vendor, for example, Nvidia's series of Tegra SoCs.  Many submaintainers=
+ operate
+> +on a vendor level, responsible for multiple product lines.  For several =
+reasons,
+> +including acquisitions/different business units in a company, things vary
+> +significantly here.  The various submaintainers are documented in the
+> +MAINTAINERS file.
+> +
+> +Most of these submaintainers have their own trees where they stage patch=
+es,
+> +sending pull requests to the main SoC tree.  These trees are usually, bu=
+t not
+> +always, listed in MAINTAINERS.  The main SoC maintainers can be reached =
+via the
+> +alias soc@kernel.org if there is no platform-specific maintainer, or if =
+they
+> +are unresponsive.
+> +
+> +What the SoC tree is not, however, is a location for architecture specif=
+ic code
+> +changes.  Each architecture has it's own maintainers that are responsibl=
+e for
+> +architectural details, cpu errata and the like.
+> +
+> +Information for (new) Submaintainers
+> +------------------------------------
+> +
+> +As new platforms spring up, they often bring with them new submaintainer=
+s,
+> +many of whom work for the silicon vendor, and may not be familiar with t=
+he
+> +process.
+> +
+> +Devicetree ABI Stability
+> +~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +Perhaps one of the most important things to highlight is that dt-bindings
+> +document the ABI between the devicetree and the kernel. Please see
+> +:ref:`devicetree-abi` more information on the ABI.
+> +
+> +If changes are being made to a devicetree that are incompatible with old
+> +kernels, the devicetree patch should not be applied until the driver is,=
+ or an
+Until the incompatible driver changes are merged?
+> +appropriate time later.  Most importantly, any incompatible changes shou=
+ld be
+> +clearly pointed out in the patch description and pull request, along wit=
+h the
+> +expected impact on existing users, such as bootloaders or other operating
+> +systems.
+> +
+> +Driver Branch Dependencies
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +A common problem is synchronizing changes between device drivers and dev=
+icetree
+> +files, even if a change is compatible in both directions, this may requi=
+re
+> +coordinating how the changes get merged through different maintainer tre=
+es.
+> +
+> +Usually the branch that includes a driver change will also include the
+> +corresponding change to the devicetree binding description, to ensure th=
+ey are
+> +in fact compatible.  This means that the devicetree branch can end up ca=
+using
+> +warnings in the "make dtbs_check" step.  If a devicetree change depends =
+on
+> +missing additions to a header file in include/dt-bindings/, it will fail=
+ the
+> +"make dtbs" step and not get merged.
 
--- 
-மணிவண்ணன் சதாசிவம்
+Sounds like passing `make dtbs` is a merging requirement.
+
+> +Pull requests for bugfixes for the current release can be sent at any ti=
+me, but
+> +again having multiple smaller branches is better than trying to combine =
+too many
+> +patches into one pull request.
+> +
+> +The subject line of a pull request should begin with "[GIT PULL]" and ma=
+de using
+> +a signed tag, rather than a branch.  This tag should contain a short des=
+cription
+> +summarising the changes in the pull request.  For more detail on sending=
+ pull
+> +requests, please see :ref:`pullrequests`.
+
+As jon had said, I simply prefer to write the last cross-ref as:
+
+```
+=2E.. For more details on sending pull requests, see Documentation/maintain=
+er/pull-requests.rst.
+```
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--yfE+yvsUjvQ597xx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZHbpaQAKCRD2uYlJVVFO
+o2CWAP9q7oPy97dPSpBlxmb3b8mi73z4mh1PJl8kp27n5DmHDAEA+JxXgVRwCfXd
+gpWxS2SpGlRx9lJqq4W6qaQbA+LF1Ac=
+=uOGN
+-----END PGP SIGNATURE-----
+
+--yfE+yvsUjvQ597xx--
