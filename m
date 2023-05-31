@@ -2,137 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D00718A40
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B86718A4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 21:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjEaTgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 15:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
+        id S230029AbjEaTir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 15:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjEaTgc (ORCPT
+        with ESMTP id S229484AbjEaTio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 15:36:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FA7126;
-        Wed, 31 May 2023 12:36:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B4B9637F7;
-        Wed, 31 May 2023 19:36:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20D38C433EF;
-        Wed, 31 May 2023 19:36:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685561790;
-        bh=qHIcBF1UUrBu0YMyCJL7nMbd4386Zetm4Fs3GDt140g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lpaJ/cA/CjMFz6VvrBKwuY1rSsrV8AVruZm55I2ucjWQEBydhP9NtwZEzbJiHOjxi
-         zXFwWhGkfWdglbiydndOp1AsUPRnawqjY4PTEoL11Owp7KwUu8p8sHA8oElut3LEiF
-         LMh6tS8PArcC6w6tt7BOwyYxR042GASziExwFozU=
-Date:   Wed, 31 May 2023 20:36:26 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Thorsten Leemhuis <linux@leemhuis.info>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, regressions@lists.linux.dev,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH v1] docs: handling-regressions: rework section about
- fixing procedures
-Message-ID: <2023053113-flakily-tipoff-ef5b@gregkh>
-References: <6971680941a5b7b9cb0c2839c75b5cc4ddb2d162.1684139586.git.linux@leemhuis.info>
+        Wed, 31 May 2023 15:38:44 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12737126
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:38:43 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-6260a2522d9so1029516d6.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 12:38:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1685561922; x=1688153922;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=qtsdmDZkcz9WP+ScrCuLkvKBjulK7W1o+fmubdTHRcs=;
+        b=Kf0FjU6ZM1HVd2aSsbai4aCI0svN14yZeVy9mM/z0DZhJHh9pZZSKc/8QlwC898URh
+         l+zUFsOIMUkjd0oJ+1+JrRzVu1PhLnzLfrbBZQBjjOp+vAYX02BbEpLhg5HlWeTUxzIy
+         MFU6jKLeXX4RU3EDNE/GARVK7U0vlC7CVKfxQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685561922; x=1688153922;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qtsdmDZkcz9WP+ScrCuLkvKBjulK7W1o+fmubdTHRcs=;
+        b=JSjShz5mXJeoJ5mHB2443BnBn0d0q1sRWS+scSVIfZLe+GnuPkVyc7+kbDgQCmLPCf
+         fXgHhdgWYalfcQ9xFCHG5b/S5Z4z3U4R5e19ds+BXZmeRXKHob8uY05FIbuIm5g+LO+H
+         GWDvXndnIu6ZeS0eggK22shqDPH2DkQ77FsGZhrQiyWZyKQDoFU8YdmBOW1DQqoajn5b
+         C2JkI+ALE6EK14qm94x+AKV8JgAwenT05N6MNvYSqU6OyHaBmBqxVvjmh5ssQCUDEJQm
+         bjPr3bwup5fuoVHNCYsQ694Kn4RKPOXa+LLjwao0sNNNS++lwKBLLkfINX/Z1vNSxanV
+         4lWg==
+X-Gm-Message-State: AC+VfDz0ta357RIyyk/xAXCDjwkg5PFLxkvERxkpu+ZLmIYubesK9P6h
+        A+u9a6ShyIUgCqEwqR2s/sh+WdYLZtZ1rIACn0g=
+X-Google-Smtp-Source: ACHHUZ5esaqhwQPw1yf8GE96hxjJeCVpk71Jd15efvVeX5CY65W92K7MVW8aX5wI80GZR8KUrTCwMg==
+X-Received: by 2002:a05:6214:f21:b0:626:1b2d:d78c with SMTP id iw1-20020a0562140f2100b006261b2dd78cmr8129864qvb.12.1685561922076;
+        Wed, 31 May 2023 12:38:42 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id fc20-20020ad44f34000000b006267daad667sm1648470qvb.94.2023.05.31.12.38.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 12:38:41 -0700 (PDT)
+Message-ID: <f0e3a10f-be6f-8e52-082f-70d2b8f42715@broadcom.com>
+Date:   Wed, 31 May 2023 12:38:24 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6971680941a5b7b9cb0c2839c75b5cc4ddb2d162.1684139586.git.linux@leemhuis.info>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net-next v5 2/6] dt-bindings: net: Brcm ASP 2.0 Ethernet
+ controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Justin Chen <justin.chen@broadcom.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        opendmb@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, richardcochran@gmail.com,
+        sumit.semwal@linaro.org, christian.koenig@amd.com,
+        simon.horman@corigine.com
+References: <1684969313-35503-1-git-send-email-justin.chen@broadcom.com>
+ <1684969313-35503-3-git-send-email-justin.chen@broadcom.com>
+ <ce7366d0-616d-f5f4-56be-714e65a0a96e@linaro.org>
+ <b21ca84f-a5a1-6dde-7efb-5d7ce0283263@broadcom.com>
+ <4810fb0f-2b0f-0118-435a-d7373553163a@linaro.org>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <4810fb0f-2b0f-0118-435a-d7373553163a@linaro.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000a20d5f05fd02771f"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 10:40:48AM +0200, Thorsten Leemhuis wrote:
-> This basically rewrites the 'Prioritize work on fixing regressions'
-> section of Documentation/process/handling-regressions.rst for various
-> reasons. Among them: some things were too demanding, some didn't align
-> well with the usual workflows, and some apparently were not clear enough
-> -- and of course a few things were missing that would be good to have in
-> there.
-> 
-> Linus for example recently stated that regressions introduced during the
-> past year should be handled similarly to regressions from the current
-> cycle, if it's a clear fix with no semantic subtlety. His exact
-> wording[1] didn't fit well into the text structure, but the author tried
-> to stick close to the apparent intention.
-> 
-> It was a noble goal from the original author to state "[prevent
-> situations that might force users to] continue running an outdated and
-> thus potentially insecure kernel version for more than two weeks after a
-> regression's culprit was identified"; this directly led to the goal "fix
-> regression in mainline within one week, if the issue made it into a
-> stable/longterm kernel", because the stable team needs time to pick up
-> and prepare a new release. But apparently all that was a bit too
-> demanding.
-> 
-> That "one week" target for example doesn't align well with the usual
-> habits of the subsystem maintainers, which normally send their fixes to
-> Linus once a week; and it doesn't align too well with stable/longterm
-> releases either, which often enter a -rc phase on Mondays or Tuesdays
-> and then are released two to three days later. And asking developers to
-> create, review, and mainline fixes within one week might be too much to
-> ask for in general. Hence tone the general goal down to three weeks and
-> use an approach that better aligns with the usual merging and release
-> habits.
-> 
-> While at it, also make the rules of thumb a bit easier to follow by
-> grouping them by topic (e.g. generic things, timing, procedures, ...).
-> 
-> Also add text for a few cases where recent discussions showed they need
-> covering. Among them are multiple points that better explain the
-> relations to stable and longterm kernels and the team that manages them;
-> they and the group seperators are the primary reason why this whole
-> section sadly grew somewhat in the rewrite.
-> 
-> The group about those relations led to one addition the author came up
-> with without any precedent from Linus: the text now tells developers to
-> add a stable tag for any regression that made it into a proper mainline
-> release during the past 12 months. This is meant to ensure the stable
-> team will definitely notice any fixes for recent regressions. That
-> includes those introduced shortly before a new mainline release and
-> found right after it; without such a rule the stable team might miss the
-> fix, which then would only reach users after weeks or months with later
-> releases.
-> 
-> Note, the aspect "Do not consider regressions from the current cycle as
-> something that can wait till the cycle's end [...]" might look like an
-> addition, but was kinda was in the old text as well -- but only
-> indirectly. That apparently was too subtle, as many developers seem to
-> assume waiting till the end of the cycle is fine (even for build
-> fixes).
-> 
-> In practice this was especially problematic when a cause of a regression
-> made it into a proper release (either directly or through a backport). A
-> revert performed by Linus shortly before the 6.3 release illustrated
-> that[2], as the developer of the culprit had been willing to revert the
-> culprit about three weeks earlier already -- but didn't do so when a fix
-> came into sight and a maintainer suggested it can wait. Due to that the
-> issue in the end plagued users of 6.2.y at least two weeks longer than
-> necessary, as the fix in the end didn't become ready in time. This issue
-> in fact could have been resolved one or two additional weeks earlier, if
-> the developer had reverted the culprit shortly after it had been
-> identified (which even the old version of the text suggest to do in such
-> cases).
-> 
-> [1] https://lore.kernel.org/all/CAHk-=wis_qQy4oDNynNKi5b7Qhosmxtoj1jxo5wmB6SRUwQUBQ@mail.gmail.com/
-> 
-> [2] https://lore.kernel.org/all/CAHk-=wgD98pmSK3ZyHk_d9kZ2bhgN6DuNZMAJaV0WTtbkf=RDw@mail.gmail.com/
-> 
-> CC: Linus Torvalds <torvalds@linux-foundation.org>
-> CC: Greg KH <gregkh@linuxfoundation.org>
-> CC: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
+--000000000000a20d5f05fd02771f
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On 5/31/23 12:31, Krzysztof Kozlowski wrote:
+> On 31/05/2023 21:29, Florian Fainelli wrote:
+>>>> +        required:
+>>>> +          - reg
+>>>> +          - brcm,channel
+>>>> +
+>>>> +    additionalProperties: false
+>>>> +
+>>>> +patternProperties:
+>>>> +  "^mdio@[0-9a-f]+$":
+>>>
+>>> Isn't mdio a property of each ethernet port? Existing users
+>>> (e.g.bcmgenet, owl-emac, switches) do it that way...
+>>
+>> They are sub-nodes of the larger Ethernet controller block, hence the
+>> property here.
+> 
+> This is the Ethernet controller. They are subnodes here, so what do you
+> mean by that? They are part of some other block?
+
+The block is not just an Ethernet controller it has other functions, 
+which is why we went with a top-level node with a 'ranges' property. One 
+of those functions are the MDIO bus controllers. The examples makes it 
+reasonably clear.
+
+> 
+>>
+>>>
+>>> Otherwise how do you define relation-ship? Can one mdio fit multiple ports?
+>>
+>> The relationship is established between Ethernet ports and children
+>> nodes of the MDIO controller, such as switches or Ethernet PHYs using
+>> 'phy-handle' for instance. And yes, a single/common MDIO controller
+>> could be serving multiple Ethernet ports.
+> 
+> We do not talk about generic case, but your device.
+
+The generic case is true here as well. We so happen to have a 1:1 
+mapping between the MDIO controller, PHY, and Ethernet port, in this 
+particular example.
+-- 
+Florian
+
+
+--000000000000a20d5f05fd02771f
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIQeQYJKoZIhvcNAQcCoIIQajCCEGYCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+gg3QMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
+MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
+rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
+aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
+e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
+cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
+MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
+KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
+/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
+TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
+YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
+b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
+CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
+BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
+jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
+9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
+/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
+jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
+AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
+dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
+MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
+IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
+SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
+XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
+J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
+nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMhFQfo07JjlLqhk
+807XG3ZWuhprBnW+sRc2rVKE6l3nMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDUzMTE5Mzg0MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDAOGd+FiZemE7n+5/IzzM1/bvuhJDTGsQv
+2ccKX1OCGnR8to4vmvBKhpLsHGHaFrjASh4ETrNWTb+pXK9hkkwybzYLfnVHneO4Tncmt6CbwJn5
+2A8EiJvFSKUu427o1e+R7uTl4P0zZ2c1T41luqyhyI8/dVSaVH6km2Hu/3j8iBTGR/ZsmuGGPUwM
+dLQ2TLMxKEU0+2WFYb6cJx1d8rVW/70bgPfd5Q+hav3AIBAGjvQM2CVhww/Vbw6dc8EiTGMLklVR
+cfgHK91JeWSRm1Rxdi7uu2C0g1mHCFUzihYQvEYs33trT92GIiN7ygxGCygx9IjhuRtDymbPMi+O
+aVwD
+--000000000000a20d5f05fd02771f--
