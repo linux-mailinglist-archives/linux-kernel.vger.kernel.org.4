@@ -2,100 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCE2718187
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2242D718190
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 15:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235993AbjEaNZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 09:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
+        id S235787AbjEaNZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 09:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232598AbjEaNYs (ORCPT
+        with ESMTP id S234861AbjEaNZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 09:24:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5F410C1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:24:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 083FE63ADF
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:24:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED708C433D2;
-        Wed, 31 May 2023 13:24:23 +0000 (UTC)
-Date:   Wed, 31 May 2023 09:24:19 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: [PATCH v2] x86/alternatives: Add cond_resched() to
- text_poke_bp_batch()
-Message-ID: <20230531092419.4d051374@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 31 May 2023 09:25:43 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A437A12B
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:25:41 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-565bd368e19so66005557b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 06:25:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685539541; x=1688131541;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fB0ipJPMm2rGF8sYHVKFVeFZVg6tsQPk0Fbm/0GB+ZA=;
+        b=OkIXsSIro8PmB3eVXXVblwo0+IvNv61W9g6ZXtPUKjyd3szYBvVs95tejOdWTIg+Q2
+         huu77at3xyWmSGt9hiw8WVtZ4n1UG3Sc2XVGP11LLELVEWLSDLVaplelASHjeZonGyd4
+         pm+1i0nMVJwP5h/vGuh7E7IDXavRNq15fBplPH+0aQzP6JSo0IxycriPCpQplWXdun0N
+         j2mfAzsRdaYAc3vz30lSKvv7fNx1/syMyUk2ipJfEzFNOoNxxxMFaw9e/kQv3KP/LlvQ
+         TT8mDVW/4TnfsquOJzfyXcY/YpSDOfoY2BO3/ECbEsXL3xoVPEcYxLsDGPH3KKzMAbyK
+         B9IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685539541; x=1688131541;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fB0ipJPMm2rGF8sYHVKFVeFZVg6tsQPk0Fbm/0GB+ZA=;
+        b=UC9NLnPN19aimGaQLF/93XgAot4wvFLG/xneiFuSM/bM/yHyMTfwSePmEVnUJg+EuX
+         yPAIL8EtzcOZYjhlfEMto5ja57VCrw8H/xVpPEzYmb9QDkAVXkJ2vogxf2LUcZ+Aw+4G
+         wfSXfKZE2KPH0/UZikmNNQ8oLnXzsfptYKMlQEokZURH9SICtvleFlmLkiXWD5ywzJJ6
+         rjRZiF0fpTSYtEPF1YC4VL7tuKBCj8ItUTOUtWxvugCBOi79IPZlSPsfV8lXYNbANRWv
+         xO5T+NWMDIp/QpDY/1Ky6Vp+qUm5c6loK/kHYtNbSVygN1zU7LLOhF558s+/mjeiCv3q
+         En6A==
+X-Gm-Message-State: AC+VfDwf9I0/6YNPj5XJL58HylAbPUC1H7Bd17pKI8qvWzL6QqM0/B70
+        /edwIrr3xprxwYdaWmlDghbZYcmU7uhd6jSVXk1r4Ym0+WYHuA6L
+X-Google-Smtp-Source: ACHHUZ5clsb5efhsDOL+wVqLr3HCnTlOhux7PAZi5smqMgqncIBI3VSw8E5cfc8meoA9/m/QT7vxpZnbaVgSVSRGBLk=
+X-Received: by 2002:a81:df12:0:b0:565:4eee:a4d4 with SMTP id
+ c18-20020a81df12000000b005654eeea4d4mr5693650ywn.10.1685539540818; Wed, 31
+ May 2023 06:25:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230530074943.5b196424@canb.auug.org.au> <20230530145625.2znyjfd2bujfii5l@ripper>
+In-Reply-To: <20230530145625.2znyjfd2bujfii5l@ripper>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 31 May 2023 15:25:29 +0200
+Message-ID: <CACRpkdZZS+UConPEyuiWxJNoC36Y+udbE0ZXnk4jRgNQ3FtF1w@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the qcom tree
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andy Gross <agross@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Tue, May 30, 2023 at 4:53=E2=80=AFPM Bjorn Andersson <andersson@kernel.o=
+rg> wrote:
 
-Debugging in the kernel has started slowing down the kernel by a
-noticeable amount. The ftrace start up tests are triggering the softlockup
-watchdog on some boxes. This is caused by the start up tests that enable
-function and function graph tracing several times. Sprinkling
-cond_resched() just in the start up test code was not enough to stop the
-softlockup from triggering. It would sometimes trigger in the
-text_poke_bp_batch() code.
+> >   Fixes: 04715461abf7 ("ARM: dts: qcom-msm8660: align RPM regulators no=
+de name with bindings")
+> >
+> > has these problem(s):
+> >
+> >   - Target SHA1 does not exist
+> >
+> > Maybe you meant
+> >
+> > Fixes: 85055a1eecc1 ("ARM: dts: qcom-msm8660: align RPM regulators node=
+ name with bindings")
+> >
+>
+> Thank you Stephen, the tag has now been corrected.
 
-When function tracing enables all functions, it will call
-text_poke_queue() to queue the places that need to be patched. Every
-256 entries will do a "flush" that calls text_poke_bp_batch() to do the
-update of the 256 locations. As this is in a scheduleable context,
-calling cond_resched() at the start of text_poke_bp_batch() will ensure
-that other tasks could get a chance to run while the patching is
-happening. This keeps the softlockup from triggering in the start up
-tests.
+Sorry for messing this up, thanks for fixing!
 
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-Changes since v1: https://lkml.kernel.org/r/20230528084652.5f3b48f0@rorschach.local.home
-
- - Just call cond_resched() once in text_poke_bp_batch() and not for
-   each phase, as it only needs to be called once every 256 entries.
-
- arch/x86/kernel/alternative.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index f615e0cb6d93..412ad66cd240 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -1953,6 +1953,16 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 	 */
- 	atomic_set_release(&bp_desc.refs, 1);
- 
-+	/*
-+	 * Function tracing can enable thousands of places that need to be
-+	 * updated. This can take quite some time, and with full kernel debugging
-+	 * enabled, this could cause the softlockup watchdog to trigger.
-+	 * This function gets called every 256 entries added to be patched.
-+	 * Call cond_resched() here to make sure that other tasks can get scheduled
-+	 * while processing all the functions being patched.
-+	 */
-+	cond_resched();
-+
- 	/*
- 	 * Corresponding read barrier in int3 notifier for making sure the
- 	 * nr_entries and handler are correctly ordered wrt. patching.
--- 
-2.39.2
-
+Yours,
+Linus Walleij
