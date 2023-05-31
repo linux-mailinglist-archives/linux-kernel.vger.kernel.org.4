@@ -2,94 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE6C71787A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3EC8717881
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234722AbjEaHn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
+        id S234330AbjEaHob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:44:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbjEaHnY (ORCPT
+        with ESMTP id S231838AbjEaHo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:43:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735B3E47
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685518951;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pu0dxF+jwnL1jQ+DhiyLdliDD3ireyhq8OENBi+96kc=;
-        b=fMh4OHxZJYZqhnDXp8oFtK50LNOUn3ha91Ubf2LNc9uvhGO9TSxkUQedkcbZHaJ575o+RZ
-        POZ0P4W1FswIAixnBoBWa3PtvOoAgwxZAiMY8lciJ7vclC+teC3SdN/6SpG/HdAbcXPnwy
-        7meGrC3hoKbH4QzRBHvraftUFYO9f/0=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-618-nLx13OLMPKmAOINEbppf8g-1; Wed, 31 May 2023 03:42:30 -0400
-X-MC-Unique: nLx13OLMPKmAOINEbppf8g-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30af3835de5so920604f8f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:42:30 -0700 (PDT)
+        Wed, 31 May 2023 03:44:28 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C49C0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:44:27 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-2566f66190dso3021858a91.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:44:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685519067; x=1688111067;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=j4nc3W4SI7d/HcZGsXX157wdAbHs0EiK5je8w50UqyQ=;
+        b=NTvt2q5xE99luFijzCiaKdgrJpfmjmv65/TgTQck8seI3zdcz2O0+d9d53gBoulgmj
+         Q8azOkszB+GhpKVJetOCb7uT9OpHB9aVghwW3gzcvys8enS9ICkccqD40EXLgB+d38pR
+         jxLv1bnFxJGe4RkAm8TUbfUH1kXV4ms5fTYDo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685518949; x=1688110949;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1685519067; x=1688111067;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pu0dxF+jwnL1jQ+DhiyLdliDD3ireyhq8OENBi+96kc=;
-        b=PZ8CeiLf/xeiikF3xEq01C9iqdhcD+WwHMm5LBGUoUwWFjXJMI6cJqMPmaViL35qPL
-         0ZVvYRSyLkbI5b0SJGmN6CjSrS3cb4C0gwv/5OuR1AUnW64naC1B/UaG2j5DLeyRZViu
-         cmBWTsWFP4qp/9Uc/BAu+3HBOUu4R9YErP6v7WwAvxTSGDnYnDlbWFymuVhdXLOiV0Gr
-         iaocPp5uhjCh73vRTiHNI0647l3XX9Sc7A/royUAeB1iaK2jJDxCCN1TjPy+swfhjflT
-         C6w9Q5Kr2meZvMlZEz1HC4FN0cAa/fvKG2L3KJfO78NgPBr/ucEIplZuN+mYT4HjDBE7
-         idzQ==
-X-Gm-Message-State: AC+VfDzV5ykAfB9gBkaw8pw7ffU2lJyHhrHwGaVRRjpHjToqLZoKQCYX
-        20Zju8oYMtoODfcAXcgaxjHMm+qjI5SMwxEC7FhrNk8YS0YSR0EJ0nPc5TiyQHNnW8+5pSGtVs3
-        C2uKZGqfLMJaIlof9MM8hCbSZ
-X-Received: by 2002:adf:fac6:0:b0:30a:ea8b:4488 with SMTP id a6-20020adffac6000000b0030aea8b4488mr3243062wrs.16.1685518949147;
-        Wed, 31 May 2023 00:42:29 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4/TwaL/29NG4Q1Wh9FQAc5H0Tf7tBtuQA1EX6A8ez87/GPRHlCFpKjZKyenEHxOPL3HkoPpg==
-X-Received: by 2002:adf:fac6:0:b0:30a:ea8b:4488 with SMTP id a6-20020adffac6000000b0030aea8b4488mr3243049wrs.16.1685518948739;
-        Wed, 31 May 2023 00:42:28 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c749:cb00:fc9f:d303:d4cc:9f26? (p200300cbc749cb00fc9fd303d4cc9f26.dip0.t-ipconnect.de. [2003:cb:c749:cb00:fc9f:d303:d4cc:9f26])
-        by smtp.gmail.com with ESMTPSA id p12-20020adfcc8c000000b0030adfa48e1esm5812964wrj.29.2023.05.31.00.42.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 00:42:28 -0700 (PDT)
-Message-ID: <de425aeb-4064-733a-52ed-e702c640c36f@redhat.com>
-Date:   Wed, 31 May 2023 09:42:26 +0200
+        bh=j4nc3W4SI7d/HcZGsXX157wdAbHs0EiK5je8w50UqyQ=;
+        b=QG8t+s8yh75iPOfC90iBcnIfw0JaQbaLz86JGN53wOCME2+P+0diCGm6GmguRP4wDT
+         buizlOSbhrx+F+K6qwmXdyuK9D6+a//NR+ZEPkUtO91qLie6e2WpsKfDKwRd3YVXIkrX
+         Eat2qJb/uKuXyePSrF9aUdFHgVOVDoVNDkwqJRcrF68qg9vUT1qQl9tGnIstoA5HmdEm
+         OSUJCZ3XN09bNexIiGPA8uzXBBY7QEiFqtbrINquTl3xDE8XkGKJUXtDrZZYyC5s+hm+
+         L9M7Q22Szn9HSrZvt5UySyOoOjhwxXQPUhWhjCvT5SB7sHsTKNhE/ZkI+x15eS4iesR+
+         vDcw==
+X-Gm-Message-State: AC+VfDxdzG81c5m9mpZBuEtt2p/AjeOLNhUHmdqaRoaOARgtfASYWASM
+        g5vzSQ7LKIW02JKrO8lopoOjOQ==
+X-Google-Smtp-Source: ACHHUZ5zzqgCNrh8XTUiFC/pDJbMydQ/sOdQ8Cgd8+eUrRvEpiSm6wVHUrcKlPo0bdwkNGNG4NPCUA==
+X-Received: by 2002:a17:902:ecc2:b0:1a6:a405:f714 with SMTP id a2-20020a170902ecc200b001a6a405f714mr5385355plh.63.1685519067154;
+        Wed, 31 May 2023 00:44:27 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:fbde:7ab0:3462:1188])
+        by smtp.gmail.com with ESMTPSA id c3-20020a170902d48300b001b050db1894sm647616plg.36.2023.05.31.00.44.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 00:44:26 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH stable 6.3] arm64: dts: mediatek: mt8183: kukui: Add scp firmware-name
+Date:   Wed, 31 May 2023 15:42:44 +0800
+Message-ID: <20230531074421.888652-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        John Hubbard <jhubbard@nvidia.com>
-References: <20230526214142.958751-1-dhowells@redhat.com>
- <20230526214142.958751-3-dhowells@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v4 2/3] mm: Provide a function to get an additional pin on
- a page
-In-Reply-To: <20230526214142.958751-3-dhowells@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,47 +71,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.05.23 23:41, David Howells wrote:
-> Provide a function to get an additional pin on a page that we already have
-> a pin on.  This will be used in fs/direct-io.c when dispatching multiple
-> bios to a page we've extracted from a user-backed iter rather than redoing
-> the extraction.
-> 
+The upstream SCP firmware path is /lib/firmware/mediatek/mt8183/scp.img
 
-I guess this function is only used for "replicating" an existing pin, 
-and not changing the semantics of an existing pin: something that was 
-pinned !FOLL_LONGTERM cannot suddenly become effectively pinned 
-FOLL_LONGTERM.
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+---
+ arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Out of curiosity, could we end up passing in an anonymous page, or is 
-this almost exclusively for pagecache+zero pages? (I rememebr John H. 
-had a similar patch where he said it would not apply to anon pages)
-
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Christoph Hellwig <hch@infradead.org>
-> cc: David Hildenbrand <david@redhat.com>
-> cc: Lorenzo Stoakes <lstoakes@gmail.com>
-> cc: Andrew Morton <akpm@linux-foundation.org>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Al Viro <viro@zeniv.linux.org.uk>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: Jan Kara <jack@suse.cz>
-> cc: Jeff Layton <jlayton@kernel.org>
-> cc: Jason Gunthorpe <jgg@nvidia.com>
-> cc: Logan Gunthorpe <logang@deltatee.com>
-> cc: Hillf Danton <hdanton@sina.com>
-> cc: Christian Brauner <brauner@kernel.org>
-> cc: Linus Torvalds <torvalds@linux-foundation.org>
-> cc: linux-fsdevel@vger.kernel.org
-> cc: linux-block@vger.kernel.org
-> cc: linux-kernel@vger.kernel.org
-> cc: linux-mm@kvack.org
-> ---
-
-Acked-by: David Hildenbrand <david@redhat.com>
-
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+index 63952c1251dfd..7b2b175370443 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+@@ -822,6 +822,8 @@ &pwm0 {
+ 
+ &scp {
+ 	status = "okay";
++
++	firmware-name = "mediatek/mt8183/scp.img";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&scp_pins>;
+ 
 -- 
-Thanks,
-
-David / dhildenb
+2.41.0.rc0.172.g3f132b7071-goog
 
