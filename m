@@ -2,184 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2C4717F6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8402E717F76
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 14:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235449AbjEaMCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 08:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
+        id S235726AbjEaMEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 08:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbjEaMCf (ORCPT
+        with ESMTP id S232018AbjEaMEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 08:02:35 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEA0E5;
-        Wed, 31 May 2023 05:02:34 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f4f89f71b8so4482235e87.3;
-        Wed, 31 May 2023 05:02:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685534552; x=1688126552;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+OqoXEp9byTnPWvb7ZYD/8jHmFgkssiOwA9B4Zryfxk=;
-        b=Gd+FG9bbIXeedDVDn6grbngYZLz9qRsEEwyq0XY5v9iBqz7qxUQBxre7KF3K5jDNTF
-         53NpLKbKYljeMO4fhGD0Tgust9dxpcmcvTA8MrG5m8d8GNLsI5U6hmufPIXuVYjQ7AKg
-         qqZKndGtOSY+/cKZCaf5fRt5BcO5QnJFsAhlOxSSCkCACCitqg95k1dY/xTnblx5MmcE
-         a3wFo5UDR58ZaLJAXfwI9okHWMALF1ZNOCawCPBMn/N45jzacjzx4z0I2GPGyELbfR+o
-         wn2gLahAq5t7aTriEUgjQEO3B49Vwy7G08Y+NtnTiCWXdeXY+1rgNd1tHs/w38DFXQ9w
-         gBBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685534552; x=1688126552;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+OqoXEp9byTnPWvb7ZYD/8jHmFgkssiOwA9B4Zryfxk=;
-        b=VnJizC4SoLUr28s9mfiwJUJaHu2s50hqMp4eNIuuyTN+1WT/hOzcwCX+ikrn2FuzoK
-         s0twOVmJBESmnp/9E6m6QabO+/vzbGfdFiIDj9vALjok3hft3e800p4ESKQdJgJ4NXLp
-         40Hn7aTIXtW9js/rLaHEfRo107xRgJVQiSh8OkKYka8yxqvNLs9ZM2H5L8HZoo64PjJu
-         gdiGbt6FMCeb2sCKFwnyZh63dCg4pFjC4AwKAe0OHzRxunq+qKGlnyV8CKnpArPxdfEd
-         TP7TA7uwgYNZ/JhpjzJF2/uzr1229h5FLUJ6Fo/D2P5J+9AtZVCuKW11atSmp2PRO6wx
-         3JKw==
-X-Gm-Message-State: AC+VfDx9wbsboxu+XoR9RMBnQtHP6qWzRz0uACzHyJb+/41B/qP/RlUE
-        JZvVUIe6izreUoMMt6PF+Bg=
-X-Google-Smtp-Source: ACHHUZ4NDzU9U7SBybRM5oCjnlvhAJpbzub2cSUH58qR8pt3e/MPD/v4QgFftlsas1cN6HW8rDk54A==
-X-Received: by 2002:a05:6512:102d:b0:4f3:bbfe:db4e with SMTP id r13-20020a056512102d00b004f3bbfedb4emr2239462lfr.56.1685534551943;
-        Wed, 31 May 2023 05:02:31 -0700 (PDT)
-Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id f24-20020ac251b8000000b004f252a753e1sm691018lfk.22.2023.05.31.05.02.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 05:02:31 -0700 (PDT)
-Message-ID: <34fb3a9841bf4977413be799f7cbef78560aaa20.camel@gmail.com>
-Subject: Re: [PATCH] bpf, x86: allow function arguments up to 12 for TRACING
-From:   Eduard Zingerman <eddyz87@gmail.com>
-To:     Menglong Dong <menglong8.dong@gmail.com>,
-        Jiri Olsa <olsajiri@gmail.com>
-Cc:     dsahern@kernel.org, andrii@kernel.org, davem@davemloft.net,
-        ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-Date:   Wed, 31 May 2023 15:02:29 +0300
-In-Reply-To: <CADxym3biE8WcMxWf1wok+s4pBYEi6+fYQAbZJVxm7eBfzWLjLQ@mail.gmail.com>
-References: <20230530044423.3897681-1-imagedong@tencent.com>
-         <ZHb+ypjE4Ybg3O18@krava>
-         <CADxym3biE8WcMxWf1wok+s4pBYEi6+fYQAbZJVxm7eBfzWLjLQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Wed, 31 May 2023 08:04:50 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E87E5;
+        Wed, 31 May 2023 05:04:48 -0700 (PDT)
+Date:   Wed, 31 May 2023 12:04:46 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685534687;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lzOqD4nl4Lft64GN7/YBeqIBV9i4DrJ2Pe+IrFZ7GT0=;
+        b=azbTvVWM1gYHZJ08L0b1DtJKFH8KAJiHRIRvJOSb1ZE1iNkpbWkhc/7m2Jpr80nz+H4Cjl
+        QsDvVAlAHw+XnMXPC6DX9O2zpVri4TKqb2vIJ+uvWKGFHILDJzlGVoNspOCsfZEnrrNDr2
+        AQPtfjTwfN8oK5EUoU8UKOXi2SIZQLLh9eCT4SlOsDPGks7YNhaPuFwDeI6z87vMy9tg9+
+        ybFDLWH3HYPKZaXU3NlqvZ7RSy5qbn9MLpOC6lyRgyUXvrOeoJ4nuCMHsq2Jdueoel7yTJ
+        LrlMbcwHGOdLZOL+OS+uNMelTM8YAxo9HMf/PoAnHH5FAqLum6UR6GgeeAuRBA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685534687;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lzOqD4nl4Lft64GN7/YBeqIBV9i4DrJ2Pe+IrFZ7GT0=;
+        b=r+3toCbplfE7Oy4FET3ORjfiQDhK9nF5z58Jl7tIlLeHRyy95JuuDy0FrhqnufKoxS3zkW
+        iClZk3XUUZGEisBA==
+From:   "tip-bot2 for Yicong Yang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/core] sched/fair: Don't balance task to its current running CPU
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230530082507.10444-1-yangyicong@huawei.com>
+References: <20230530082507.10444-1-yangyicong@huawei.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <168553468695.404.4563102451298997337.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-05-31 at 17:03 +0800, Menglong Dong wrote:
-> On Wed, May 31, 2023 at 4:01=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wr=
-ote:
-> >=20
-> > On Tue, May 30, 2023 at 12:44:23PM +0800, menglong8.dong@gmail.com wrot=
-e:
-> > > From: Menglong Dong <imagedong@tencent.com>
-> > >=20
-> > > For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be us=
-ed
-> > > on the kernel functions whose arguments count less than 6. This is no=
-t
-> > > friendly at all, as too many functions have arguments count more than=
- 6.
-> > >=20
-> > > Therefore, let's enhance it by increasing the function arguments coun=
-t
-> > > allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
-> > >=20
-> > > For the case that we don't need to call origin function, which means
-> > > without BPF_TRAMP_F_CALL_ORIG, we need only copy the function argumen=
-ts
-> > > that stored in the frame of the caller to current frame. The argument=
-s
-> > > of arg6-argN are stored in "$rbp + 0x18", we need copy them to
-> > > "$rbp - regs_off + (6 * 8)".
-> > >=20
-> > > For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the argument=
-s
-> > > in stack before call origin function, which means we need alloc extra
-> > > "8 * (arg_count - 6)" memory in the top of the stack. Note, there sho=
-uld
-> > > not be any data be pushed to the stack before call the origin functio=
-n.
-> > > Then, we have to store rbx with 'mov' instead of 'push'.
-> > >=20
-> > > It works well for the FENTRY and FEXIT, I'm not sure if there are oth=
-er
-> > > complicated cases.
-> > >=20
-> > > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > > ---
-> > >  arch/x86/net/bpf_jit_comp.c | 88 ++++++++++++++++++++++++++++++++---=
---
-> >=20
-> > please add selftests for this.. I had to add one to be able to check
-> > the generated trampoline
-> >=20
->=20
-> Okay!
->=20
-> BTW, I failed to compile the latest selftests/bpf with
-> the following errors:
->=20
-> progs/verifier_and.c:58:16: error: invalid operand for instruction
->         asm volatile ("                                 \
->=20
+The following commit has been merged into the sched/core branch of tip:
 
-These tests were moved to use inline assembly recently (2 month ago).
-Discussion at the time was whether to use \n\ or \ terminators at the
-end of each line. People opted for \ as easier to read.
-Replacing \ with \n\ and compiling this test using clang 14 shows
-more informative error message:
+Commit-ID:     3a040184f873374c5b45eeed7b3deabe8c5b1c79
+Gitweb:        https://git.kernel.org/tip/3a040184f873374c5b45eeed7b3deabe8c5b1c79
+Author:        Yicong Yang <yangyicong@hisilicon.com>
+AuthorDate:    Tue, 30 May 2023 16:25:07 +08:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 30 May 2023 22:46:27 +02:00
 
-$ make -j14 `pwd`/verifier_and.bpf.o
-  CLNG-BPF [test_maps] verifier_and.bpf.o
-progs/verifier_and.c:68:1: error: invalid operand for instruction
-        w1 %%=3D 2;                                       \n\
-^
-<inline asm>:11:5: note: instantiated into assembly here
-        w1 %=3D 2;=20
+sched/fair: Don't balance task to its current running CPU
 
-My guess is that clang 14 does not know how to handle operations on
-32-bit sub-registers w[0-9].
+We've run into the case that the balancer tries to balance a migration
+disabled task and trigger the warning in set_task_cpu() like below:
 
-But using clang 14 I get some errors not related to inline assembly as well=
-.
-Also, I recall that there were runtime issues with clang 14 and
-tests using enum64.
+ ------------[ cut here ]------------
+ WARNING: CPU: 7 PID: 0 at kernel/sched/core.c:3115 set_task_cpu+0x188/0x240
+ Modules linked in: hclgevf xt_CHECKSUM ipt_REJECT nf_reject_ipv4 <...snip>
+ CPU: 7 PID: 0 Comm: swapper/7 Kdump: loaded Tainted: G           O       6.1.0-rc4+ #1
+ Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 2280-V2 CS V5.B221.01 12/09/2021
+ pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+ pc : set_task_cpu+0x188/0x240
+ lr : load_balance+0x5d0/0xc60
+ sp : ffff80000803bc70
+ x29: ffff80000803bc70 x28: ffff004089e190e8 x27: ffff004089e19040
+ x26: ffff007effcabc38 x25: 0000000000000000 x24: 0000000000000001
+ x23: ffff80000803be84 x22: 000000000000000c x21: ffffb093e79e2a78
+ x20: 000000000000000c x19: ffff004089e19040 x18: 0000000000000000
+ x17: 0000000000001fad x16: 0000000000000030 x15: 0000000000000000
+ x14: 0000000000000003 x13: 0000000000000000 x12: 0000000000000000
+ x11: 0000000000000001 x10: 0000000000000400 x9 : ffffb093e4cee530
+ x8 : 00000000fffffffe x7 : 0000000000ce168a x6 : 000000000000013e
+ x5 : 00000000ffffffe1 x4 : 0000000000000001 x3 : 0000000000000b2a
+ x2 : 0000000000000b2a x1 : ffffb093e6d6c510 x0 : 0000000000000001
+ Call trace:
+  set_task_cpu+0x188/0x240
+  load_balance+0x5d0/0xc60
+  rebalance_domains+0x26c/0x380
+  _nohz_idle_balance.isra.0+0x1e0/0x370
+  run_rebalance_domains+0x6c/0x80
+  __do_softirq+0x128/0x3d8
+  ____do_softirq+0x18/0x24
+  call_on_irq_stack+0x2c/0x38
+  do_softirq_own_stack+0x24/0x3c
+  __irq_exit_rcu+0xcc/0xf4
+  irq_exit_rcu+0x18/0x24
+  el1_interrupt+0x4c/0xe4
+  el1h_64_irq_handler+0x18/0x2c
+  el1h_64_irq+0x74/0x78
+  arch_cpu_idle+0x18/0x4c
+  default_idle_call+0x58/0x194
+  do_idle+0x244/0x2b0
+  cpu_startup_entry+0x30/0x3c
+  secondary_start_kernel+0x14c/0x190
+  __secondary_switched+0xb0/0xb4
+ ---[ end trace 0000000000000000 ]---
 
-All-in-all, you need newer version of clang for tests nowadays,
-sorry for inconvenience.
+Further investigation shows that the warning is superfluous, the migration
+disabled task is just going to be migrated to its current running CPU.
+This is because that on load balance if the dst_cpu is not allowed by the
+task, we'll re-select a new_dst_cpu as a candidate. If no task can be
+balanced to dst_cpu we'll try to balance the task to the new_dst_cpu
+instead. In this case when the migration disabled task is not on CPU it
+only allows to run on its current CPU, load balance will select its
+current CPU as new_dst_cpu and later triggers the warning above.
 
-> The version of clang I used is:
->=20
-> clang --version
-> Debian clang version 14.0.6
-> Target: x86_64-pc-linux-gnu
-> Thread model: posix
-> InstalledDir: /usr/bin
->=20
-> Does anyone know the reason?
->=20
-> Thanks!
-> Menglong Dong
->=20
-> > jirka
-> >=20
-> >=20
->=20
+The new_dst_cpu is chosen from the env->dst_grpmask. Currently it
+contains CPUs in sched_group_span() and if we have overlapped groups it's
+possible to run into this case. This patch makes env->dst_grpmask of
+group_balance_mask() which exclude any CPUs from the busiest group and
+solve the issue. For balancing in a domain with no overlapped groups
+the behaviour keeps same as before.
 
+Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Link: https://lore.kernel.org/r/20230530082507.10444-1-yangyicong@huawei.com
+---
+ kernel/sched/fair.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 0172458..66ea982 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -10780,7 +10780,7 @@ static int load_balance(int this_cpu, struct rq *this_rq,
+ 		.sd		= sd,
+ 		.dst_cpu	= this_cpu,
+ 		.dst_rq		= this_rq,
+-		.dst_grpmask    = sched_group_span(sd->groups),
++		.dst_grpmask    = group_balance_mask(sd->groups),
+ 		.idle		= idle,
+ 		.loop_break	= SCHED_NR_MIGRATE_BREAK,
+ 		.cpus		= cpus,
