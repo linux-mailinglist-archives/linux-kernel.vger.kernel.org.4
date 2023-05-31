@@ -2,70 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 876C3717D6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA82717D6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 12:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234500AbjEaKvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 06:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
+        id S234838AbjEaKxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 06:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbjEaKvu (ORCPT
+        with ESMTP id S232198AbjEaKw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 06:51:50 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3680612B
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 03:51:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C130B218E0;
-        Wed, 31 May 2023 10:51:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1685530307; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uGlrXdScy+uQ/dFYb1kgYb+EfH5nNgJO7w5uHyZerhE=;
-        b=YzHkaBjGoO/rgvm7EzcjG2lw97hJgSM6S51v5Mp8H+MjgGRcWnOd7w94tNCuRFsAT2m9tk
-        0zL+tsWdMfQ9q0bQjz5Po+vSCFQcrpDEM7MxOlJ8uazYANLN+zCQsIGZlwRKsfcEyT3fWT
-        8GwUDEVLKC6fhlUIoXvQbKVA5LtbQWA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1685530307;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uGlrXdScy+uQ/dFYb1kgYb+EfH5nNgJO7w5uHyZerhE=;
-        b=Ob2hTF7PIFB0LQ3Kw5JOwggaMKS4A5h/JjZWqF73aPF5mzsZNKxI24/YVLCUr8BUBwHaAe
-        rZJQ8puebMTQK2DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8BF6D13488;
-        Wed, 31 May 2023 10:51:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id k+KvH8Mmd2SQLgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 31 May 2023 10:51:47 +0000
-Message-ID: <01973671-55e0-d701-ca38-a583d441a4fc@suse.de>
-Date:   Wed, 31 May 2023 12:51:45 +0200
+        Wed, 31 May 2023 06:52:58 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D08188;
+        Wed, 31 May 2023 03:52:54 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f4b384c09fso6653783e87.3;
+        Wed, 31 May 2023 03:52:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685530373; x=1688122373;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0mF96JxhPOfJm8OwVPyiERGBu/9SGI9YEMVv93ttrAE=;
+        b=K7S/m1yN1z3wihwPQ0aqTmA8KTPkPzoE4oY+Og9RwgyPhTsaOBXcjY7r2d300+ffca
+         kOLeizWVKQ6nVthj2EPf0aJSFkNGa5KAe4B/un7+eBje/DITcVV0Xd5UdvKMOLqqrGFX
+         1nOc6HcrUAFNIgZ4xd7xMUq4iLmwXgB3yDgc3N54GWlOER/f3wHDaTO3QojJ+oI7hTBl
+         msvwt1w7DAy76NtRu6/dGzXXgPoXKFpCGf1/PJXnx7Hzen6p/OuP/cavKe1B8J8U5Fzc
+         ZK3qKnDWhNH2Jde/ntE9HFFV5CpPfgJ8ohZT/gvfjPORjo6CLoEgR+hffPq2q9Y/lnC9
+         hiRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685530373; x=1688122373;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0mF96JxhPOfJm8OwVPyiERGBu/9SGI9YEMVv93ttrAE=;
+        b=OQLoEXiDAiGBnKweHT+Ngl/q4Apt7qML3ms8YfeWnhwR4QIPZgfHmao/mSCOXlWA6y
+         7LXhA596P5TBgc/OXFU2zZs+yU2xQ5QXBk+Yjh5VwxgYeQDYHrScsJxRogyq/lNYBAHU
+         I2KZ8g+SFgDS9uy9LsJ2USVgdO9rjGZSXT7ifeUyUm4oTU4yJ8vBk8kZJ4XDLupvJXD8
+         3qDv0TpjOVoeSxoBJewIZSpzJdHi7XCKOMs1X/kxWlRm55f0MByX8KJ8oB/sk2QZQtXx
+         RjOTW8orMBTtrdixrgavMLPzzkJvQpk+h36UW3pJzG1vSW3/xCd2p+ZKE/T+JQduNP06
+         G1xQ==
+X-Gm-Message-State: AC+VfDwaLfc6old6+wXBhGm956uIVJDKMhO3FfiRK5cYgRvmqs9kLmmL
+        B8xLLyoGVG3A8Hu8yFYCqljuxgklbLg=
+X-Google-Smtp-Source: ACHHUZ5j1XndLfbwk06LhgPRrqGIp7j60e08yFoVMYU25rWfrpw/W8XBPCZ+IWMBtNMWRfXQg7PnYg==
+X-Received: by 2002:ac2:5605:0:b0:4f4:ce78:2f17 with SMTP id v5-20020ac25605000000b004f4ce782f17mr2316420lfd.13.1685530372868;
+        Wed, 31 May 2023 03:52:52 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id z27-20020ac25dfb000000b004f13cd61ebbsm672102lfq.175.2023.05.31.03.52.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 03:52:52 -0700 (PDT)
+Date:   Wed, 31 May 2023 13:52:50 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Osama Muhammad <osmtendev@gmail.com>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] spi-dw-core.c: Fix error checking for
+ debugfs_create_dir
+Message-ID: <20230531105250.6pd5jpngwbnbnbbc@mobilestation>
+References: <20230520224025.14928-1-osmtendev@gmail.com>
+ <168546845148.691057.9965315836245052581.b4-ty@kernel.org>
+ <20230530211446.foqpcfha6hjruhow@mobilestation>
+ <30bcf77a-3e7c-4f13-94ab-f4efc52193dc@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2] drm/ast: Fix modeset failed on DisplayPort
-Content-Language: en-US
-To:     Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com,
-        airlied@gmail.com, daniel@ffwll.ch
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230525012918.11918-1-jammy_huang@aspeedtech.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230525012918.11918-1-jammy_huang@aspeedtech.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------bWGn0bHpltOcnfUMiQYxRtWn"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30bcf77a-3e7c-4f13-94ab-f4efc52193dc@sirena.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,91 +75,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------bWGn0bHpltOcnfUMiQYxRtWn
-Content-Type: multipart/mixed; boundary="------------g9zM0e2qrVQ4lm8aYK00AO00";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Jammy Huang <jammy_huang@aspeedtech.com>, airlied@redhat.com,
- airlied@gmail.com, daniel@ffwll.ch
-Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Message-ID: <01973671-55e0-d701-ca38-a583d441a4fc@suse.de>
-Subject: Re: [PATCH v2] drm/ast: Fix modeset failed on DisplayPort
-References: <20230525012918.11918-1-jammy_huang@aspeedtech.com>
-In-Reply-To: <20230525012918.11918-1-jammy_huang@aspeedtech.com>
+On Tue, May 30, 2023 at 10:16:00PM +0100, Mark Brown wrote:
+> On Wed, May 31, 2023 at 12:14:46AM +0300, Serge Semin wrote:
+> 
+> > Oh, thanks. I've absolutely missed the respinned version of the patch
+> > (it should have been marked as v2 though). Anyway the change looks
+> > good except it introduces a redundant empty line at the tail of the
+> > dw_spi_debugfs_init() function. Is it possible to rebase the branch
+> > and drop the line it? If it's not I'll send an incremental cleanup
+> > patch then.
+> 
+> I'd rather just take the incremental patch here.
 
---------------g9zM0e2qrVQ4lm8aYK00AO00
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Done. Please find the cleanup patch here:
+https://lore.kernel.org/linux-spi/20230530221725.26319-1-Sergey.Semin@baikalelectronics.ru
 
-SGkgSmFtbXkNCg0KQW0gMjUuMDUuMjMgdW0gMDM6Mjkgc2NocmllYiBKYW1teSBIdWFuZzoN
-Cj4gSWYgd2Ugc3dpdGNoIGRpc3BsYXkgYW5kIHVwZGF0ZSBjdXJzb3IgdG9nZXRoZXIsIGl0
-IGNvdWxkIGxlYWQgdG8NCj4gbW9kZXNldCBmYWlsZWQgYmVjYXVzZSBvZiBjb25jdXJyZW50
-IGFjY2VzcyB0byBJTyByZWdpc3RlcnMuDQo+IA0KPiBBZGQgbG9jayBwcm90ZWN0aW9uIGlu
-IERQJ3MgZWRpZCBhY2Nlc3MgdG8gYXZvaWQgdGhpcyBwcm9ibGVtLg0KPiANCj4gU2lnbmVk
-LW9mZi1ieTogSmFtbXkgSHVhbmcgPGphbW15X2h1YW5nQGFzcGVlZHRlY2guY29tPg0KPiAt
-LS0NCj4gICB2MiBjaGFuZ2VzOg0KPiAgICAtIEZpeCBidWlsZCBlcnJvciBzaW5jZSBuZXcg
-c3RydWN0IGFzdF9kZXZpY2UgaXMgdXNlZC4NCj4gLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJt
-L2FzdC9hc3RfbW9kZS5jIHwgMTEgKysrKysrKysrKysNCj4gICAxIGZpbGUgY2hhbmdlZCwg
-MTEgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9h
-c3QvYXN0X21vZGUuYyBiL2RyaXZlcnMvZ3B1L2RybS9hc3QvYXN0X21vZGUuYw0KPiBpbmRl
-eCAzNjM3NDgyOGY2YzguLjlmY2JmNTQwZDZmYyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9n
-cHUvZHJtL2FzdC9hc3RfbW9kZS5jDQo+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9hc3QvYXN0
-X21vZGUuYw0KPiBAQCAtMTY0Nyw2ICsxNjQ3LDggQEAgc3RhdGljIGludCBhc3RfZHA1MDFf
-b3V0cHV0X2luaXQoc3RydWN0IGFzdF9kZXZpY2UgKmFzdCkNCj4gICBzdGF0aWMgaW50IGFz
-dF9hc3RkcF9jb25uZWN0b3JfaGVscGVyX2dldF9tb2RlcyhzdHJ1Y3QgZHJtX2Nvbm5lY3Rv
-ciAqY29ubmVjdG9yKQ0KPiAgIHsNCj4gICAJdm9pZCAqZWRpZDsNCj4gKwlzdHJ1Y3QgZHJt
-X2RldmljZSAqZGV2ID0gY29ubmVjdG9yLT5kZXY7DQo+ICsJc3RydWN0IGFzdF9kZXZpY2Ug
-KmFzdCA9IHRvX2FzdF9kZXZpY2UoZGV2KTsNCj4gICANCj4gICAJaW50IHN1Y2M7DQo+ICAg
-CWludCBjb3VudDsNCj4gQEAgLTE2NTUsMTAgKzE2NTcsMTggQEAgc3RhdGljIGludCBhc3Rf
-YXN0ZHBfY29ubmVjdG9yX2hlbHBlcl9nZXRfbW9kZXMoc3RydWN0IGRybV9jb25uZWN0b3Ig
-KmNvbm5lY3RvcikNCj4gICAJaWYgKCFlZGlkKQ0KPiAgIAkJZ290byBlcnJfZHJtX2Nvbm5l
-Y3Rvcl91cGRhdGVfZWRpZF9wcm9wZXJ0eTsNCj4gICANCj4gKwkvKg0KPiArCSAqIFByb3Rl
-Y3QgYWNjZXNzIHRvIEkvTyByZWdpc3RlcnMgZnJvbSBjb25jdXJyZW50IG1vZGVzZXR0aW5n
-DQo+ICsJICogYnkgYWNxdWlyaW5nIHRoZSBJL08tcmVnaXN0ZXIgbG9jay4NCj4gKwkgKi8N
-Cj4gKwltdXRleF9sb2NrKCZhc3QtPmlvcmVnc19sb2NrKTsNCj4gKw0KPiAgIAlzdWNjID0g
-YXN0X2FzdGRwX3JlYWRfZWRpZChjb25uZWN0b3ItPmRldiwgZWRpZCk7DQo+ICAgCWlmIChz
-dWNjIDwgMCkNCj4gICAJCWdvdG8gZXJyX2tmcmVlOw0KPiAgIA0KPiArCW11dGV4X3VubG9j
-aygmYXN0LT5pb3JlZ3NfbG9jayk7DQo+ICsNCj4gICAJZHJtX2Nvbm5lY3Rvcl91cGRhdGVf
-ZWRpZF9wcm9wZXJ0eShjb25uZWN0b3IsIGVkaWQpOw0KPiAgIAljb3VudCA9IGRybV9hZGRf
-ZWRpZF9tb2Rlcyhjb25uZWN0b3IsIGVkaWQpOw0KPiAgIAlrZnJlZShlZGlkKTsNCj4gQEAg
-LTE2NjYsNiArMTY3Niw3IEBAIHN0YXRpYyBpbnQgYXN0X2FzdGRwX2Nvbm5lY3Rvcl9oZWxw
-ZXJfZ2V0X21vZGVzKHN0cnVjdCBkcm1fY29ubmVjdG9yICpjb25uZWN0b3IpDQo+ICAgCXJl
-dHVybiBjb3VudDsNCj4gICANCj4gICBlcnJfa2ZyZWU6DQoNClRoaXMgbGFiZWwgbmVlZHMg
-dG8gYmUgbmFtZWQgJ2Vycl9tdXRleF91bmxvY2snIHBsZWFzZS4gV2l0aCB0aGF0IGZpeGVk
-LCANCnlvdSBjYW4gYWRkDQoNClJldmlld2VkLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHpp
-bW1lcm1hbm5Ac3VzZS5kZT4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiArCW11dGV4
-X3VubG9jaygmYXN0LT5pb3JlZ3NfbG9jayk7DQo+ICAgCWtmcmVlKGVkaWQpOw0KPiAgIGVy
-cl9kcm1fY29ubmVjdG9yX3VwZGF0ZV9lZGlkX3Byb3BlcnR5Og0KPiAgIAlkcm1fY29ubmVj
-dG9yX3VwZGF0ZV9lZGlkX3Byb3BlcnR5KGNvbm5lY3RvciwgTlVMTCk7DQo+IA0KPiBiYXNl
-LWNvbW1pdDogOTMzMTc0YWUyOGJhNzJhYjhkZTViMzVjYjdjOThmYzIxMTIzNTA5Ng0KDQot
-LSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNF
-IFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0Niwg
-OTA0NjEgTnVlcm5iZXJnLCBHZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMs
-IEFuZHJldyBNY0RvbmFsZCwgQm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJu
-YmVyZykNCg==
+-Serge(y)
 
---------------g9zM0e2qrVQ4lm8aYK00AO00--
-
---------------bWGn0bHpltOcnfUMiQYxRtWn
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmR3JsEFAwAAAAAACgkQlh/E3EQov+Az
-kw/+MD9iFo6IaQbmiQraMWv4C8bb0Ku2tpruYx9AiaFS4AM/UIw1G45JiApJoZsRp3K9itbyDrra
-VmYigZ/Znt2c/svJk2eUeeMz3PCM1ypWTHov7MVvN6Hs6nMOIrjDHHf9Y9klzY/1jvV90nsvTCu3
-6vcsU4BQDVArgmknwvEyw4pz8wiv9Drdll+zQIWCeUmYBVeaLma+GsXL0yRIPYbMOjVihNRqr0wr
-RCNuMVtGCk0GgZ3LjtxKZm7rwo5V82OOU13DufmIDxZqF6BOMMcSzph75RyEzu4Ko2XkTpnH3Poh
-koQKMn60ko0eU+27rlo6HcMjljkYbz3KMEfI4f3CcjDDCSGFVpCR00WPekwTUoyPAluMO7JwX7UD
-+qUhNS6xlmOm42DTeDUHAe+h22TUBZVkkyFyYWbbsUaolQn12AHkC7tkfxlYWY9nQVZsZv2BUkcu
-MmEGBT13clckqlsTFgTMkavv9Iu73bIlM6Tl1a2JX6x/zwNt3n2MPa9JtzB4jBLqFsTIoZuNrkPJ
-Otd34WnapE76yo4LO7hsM0F0ku9JJgf2+qfQqPW2AIuqmOCm+I24oyQ8TuFs2wScVWK7MNxLtA/u
-oe+1Ofb0Ijka/PL+zut1hb8yVF2cf21xOq+JeNC3q5pYRGMtVinm5fB/FR50uLyhdR6vHzydc1OV
-2+4=
-=PHol
------END PGP SIGNATURE-----
-
---------------bWGn0bHpltOcnfUMiQYxRtWn--
