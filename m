@@ -2,86 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1DE717467
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 05:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B1D371F6B7
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 01:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234133AbjEaDcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 23:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
+        id S231790AbjFAXj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 19:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjEaDcd (ORCPT
+        with ESMTP id S232056AbjFAXjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 23:32:33 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8B4A0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 20:32:32 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-565a63087e9so68960547b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 May 2023 20:32:32 -0700 (PDT)
+        Thu, 1 Jun 2023 19:39:49 -0400
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E178136;
+        Thu,  1 Jun 2023 16:39:48 -0700 (PDT)
+Received: by mail-oo1-xc36.google.com with SMTP id 006d021491bc7-5584f8ec30cso1085378eaf.0;
+        Thu, 01 Jun 2023 16:39:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fasheh-com.20221208.gappssmtp.com; s=20221208; t=1685503951; x=1688095951;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iwIn9A/3h6kb4VvZG2aUfPXs9cJPwe4RAvyyxJjYKPk=;
-        b=2CNVHhuaVTG584FDACPkoosLtm5xST6kmLqLiv+9h42wJnfSaSf1kLL8OvTJSB6Bp3
-         cukhpJId7lTytvkDhlOj/lVIiv9OBAOM7q8yDoP3qkuPNnESZOWuWnrEduVTKarKbzLd
-         EHEES7P+R+DE7K2AycjgZPdPrtSJP5XqrEFm5kEtxlrG1WXGrx2RwH0hMzNJzl7ZKVLp
-         ximLQN0W4UgszV1DBwK4v3Qb5YHhNLVIx5vO9cvFadr1P6rL+VuPd8nxu7vdsQo65G8j
-         ejpqDUVBPoOgYfd1tvC2NfaQrFLpPQnqtXrkQLmPyIpF1N+YcG73/+JgwPK+UeitSiAz
-         3MPg==
+        d=gmail.com; s=20221208; t=1685662788; x=1688254788;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y66S7nKcbyO9mw2veazWYNce7x29EbNWsEjy9gQwvT8=;
+        b=JgN6bMOPbZQQzmbjQOXjZR1MWbA658FbsmFwhmJTfIBw7YT4vVH5SbNbGOqDYNiykz
+         NsONTUM1dbTRUtPmxQi/H2LhtTn0Gt6DO8HcjDTOBUhoGjYv59NWvC5TZ17iskx80o1o
+         jZWxce7jFMBi1PMppTmfYEnMNSDmtgSD0HR7uL22/b+QOMO2srLfPklplvCwi4Zgpn/S
+         +RyIJ/nq+QgwVgiZe0DQp6ybDulRm25BGxz2VtBmAV3+cM3FYgqFrIm/4tiHZjNDFj3/
+         NVhs4YEuF3+R+IYByMBWLDGjNsegbKB3nzBunHXSaJIZCWh9PVtdIWIC9DuBPSNL49Un
+         OkfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685503951; x=1688095951;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iwIn9A/3h6kb4VvZG2aUfPXs9cJPwe4RAvyyxJjYKPk=;
-        b=RHXjHOS4nDCT2Q5MmLCTCHTpyzmR7A4MZm0fyy8drsUWL5yyYhsys/JhknxO4w0SwX
-         sDwavluCE6sVAAq8OyyFNvJm22FtF7T9LBt6Es3CXAylnpuY9uzmpv2Kx4cI6mJsSF8n
-         9jv63ezizpP792/F9d7QgHDlw8zSrChhyn7o6Vi+9hgZCyuxvmWtJw4SrVZjpBFO9Qy+
-         RBuna6Y7R9f4zjfpcGuZfXT/5xhHvlzqmpfnMY6z5fPn8FPuEPloGzbykAswLOho7M8c
-         E3hZ8SVx5SH5jH0hYVi9etH0Qw0lRsG05KwJwSIrRSOiHDMJME6sbyWXaFw66x9lXVll
-         66+w==
-X-Gm-Message-State: AC+VfDy6eXQxU7aSV2pZnFCTPyvbWi56w2bAmtfSqCP9iUnKa4ha3oxi
-        Pyur2trMc/mq3U3Jdsj43vzlPFBVfzjVU+r8W22yhA==
-X-Google-Smtp-Source: ACHHUZ7EXnW0YcjSmJKT8Tx9qr3ImGNRICkccKl2sn7+ggBZczeplHrHQVfss+yln0MJrKESPw4iHtHFmQylrz1feaA=
-X-Received: by 2002:a0d:d412:0:b0:565:8c16:a0e1 with SMTP id
- w18-20020a0dd412000000b005658c16a0e1mr5507264ywd.13.1685503951455; Tue, 30
- May 2023 20:32:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685662788; x=1688254788;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y66S7nKcbyO9mw2veazWYNce7x29EbNWsEjy9gQwvT8=;
+        b=Kl6rnOXFgqoGrNqlLT8dnPnPlzHdmAVsxhGZhSVav0Wm46GJ6xbWllBqm5lNOhyCkD
+         kBlB5IuFgqe0C4Ckulu1zs30gpFrzI45AphfoPTzHPxCvEh/rr7/JBiKroR9X0x9eSqd
+         sxwBFRN2HfgxYvrcbEC/uQThpyvXsEhTq7Tco4jTgFgHJmkSfHxtBDUGq7wlbiymdSsM
+         YzoylbgJAWOATl2u1QDAffsgzoI381z7GTbvDU7xShkObfyNWiO7A000GaD7FrQKXqeE
+         tWXW4QvQE1Tv1Sft8mlgtuvy+NZqmUVpxCsLWIjdGZn+3kZrARd+6Fxzp4o3kWWKNJoA
+         M7QQ==
+X-Gm-Message-State: AC+VfDxIN6DIPPB9/MltVaGZlKkw8AjMC8H7vFnhhs8QYYIqJhNQ5f+2
+        rkwQh0PjKFJ+dYhud7rfZBFaG7GgPa5zbfRq
+X-Google-Smtp-Source: ACHHUZ5H3iz5f8fyOD3aj+Xa4IrVqtidCjhJ6HAZSYPdF8KVhqG0fRMzu2vPFMhJL5t8WczAz3B7Dw==
+X-Received: by 2002:a05:6358:9896:b0:123:5c29:c39a with SMTP id q22-20020a056358989600b001235c29c39amr7109173rwa.31.1685662787613;
+        Thu, 01 Jun 2023 16:39:47 -0700 (PDT)
+Received: from localhost (ec2-52-9-159-93.us-west-1.compute.amazonaws.com. [52.9.159.93])
+        by smtp.gmail.com with ESMTPSA id z15-20020aa791cf000000b0064d59e194c8sm5585299pfa.115.2023.06.01.16.39.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 16:39:47 -0700 (PDT)
+Date:   Wed, 31 May 2023 03:35:30 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Eric Dumazet <edumazet@google.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net] virtio/vsock: fix sock refcnt bug on owner set
+ failure
+Message-ID: <ZHbAgkvSHEiQlFs6@bullseye>
+References: <20230531-b4-vsock-fix-refcnt-v1-1-0ed7b697cca5@bytedance.com>
+ <35xlmp65lxd4eoal2oy3lwyjxd3v22aeo2nbuyknc4372eljct@vkilkppadayd>
 MIME-Version: 1.0
-References: <20230529152645.32680-1-lhenriques@suse.de>
-In-Reply-To: <20230529152645.32680-1-lhenriques@suse.de>
-From:   Mark Fasheh <mark@fasheh.com>
-Date:   Tue, 30 May 2023 20:32:20 -0700
-Message-ID: <CAGe7X7kxfrTvg0s3JGasnhFOLFS9FR7uTjwp+YGG7hTNi2UULw@mail.gmail.com>
-Subject: Re: [PATCH] ocfs2: check new file size on fallocate call
-To:     =?UTF-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
-Cc:     Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Heming Zhao <heming.zhao@suse.com>, ocfs2-devel@oss.oracle.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <35xlmp65lxd4eoal2oy3lwyjxd3v22aeo2nbuyknc4372eljct@vkilkppadayd>
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 8:26=E2=80=AFAM Lu=C3=ADs Henriques <lhenriques@sus=
-e.de> wrote:
->
-> When changing a file size with fallocate() the new size isn't being
-> checked.  In particular, the FSIZE ulimit isn't being checked, which make=
-s
-> fstest generic/228 fail.  Simply adding a call to inode_newsize_ok() fixe=
-s
-> this issue.
->
-> Signed-off-by: Lu=C3=ADs Henriques <lhenriques@suse.de>
+On Thu, Jun 01, 2023 at 09:58:47AM +0200, Stefano Garzarella wrote:
+> On Wed, May 31, 2023 at 07:47:32PM +0000, Bobby Eshleman wrote:
+> > Previous to setting the owner the socket is found via
+> > vsock_find_connected_socket(), which returns sk after a call to
+> > sock_hold().
+> > 
+> > If setting the owner fails, then sock_put() needs to be called.
+> > 
+> > Fixes: f9d2b1e146e0 ("virtio/vsock: fix leaks due to missing skb owner")
+> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> > ---
+> > net/vmw_vsock/virtio_transport_common.c | 1 +
+> > 1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+> > index b769fc258931..f01cd6adc5cb 100644
+> > --- a/net/vmw_vsock/virtio_transport_common.c
+> > +++ b/net/vmw_vsock/virtio_transport_common.c
+> > @@ -1343,6 +1343,7 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
+> > 
+> > 	if (!skb_set_owner_sk_safe(skb, sk)) {
+> > 		WARN_ONCE(1, "receiving vsock socket has sk_refcnt == 0\n");
+> > +		sock_put(sk);
+> 
+> Did you have any warning, issue here?
+> 
+> IIUC skb_set_owner_sk_safe() can return false only if the ref counter
+> is 0, so calling a sock_put() on it should have no effect except to
+> produce a warning.
+> 
 
-Looks good, thanks Luis.
+Oh yeah, you're totally right. I did not recall how
+skb_set_owner_sk_safe() worked internally and thought I'd introduced an
+uneven hold/put count with that prior patch when reading through the
+code again. I haven't seen any live issue, just misread the code.
 
-Reviewed-by: Mark Fasheh <mark@fasheh.com>
+Sorry about that, feel free to ignore this patch.
+
+Best,
+Bobby
