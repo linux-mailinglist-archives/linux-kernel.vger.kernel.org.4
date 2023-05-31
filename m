@@ -2,172 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0F4717DAE
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B9B717DB2
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 13:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235321AbjEaLHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 07:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
+        id S234934AbjEaLIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 07:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235271AbjEaLHg (ORCPT
+        with ESMTP id S232807AbjEaLIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 07:07:36 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2127.outbound.protection.outlook.com [40.107.255.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC74A8E
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 04:07:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zca6WHh8+x7eDDEnRIFLlbafGf/EaHJDdIRojOzRyk1OSf9cndv9SIFENQk0iIyRlc9Djft1vX8i5ZYJhGTHb4UIIUmGbxqll8L+8qLAOtNepL6gKTXIs5q+29KEaJyRcUGLGXa8vyZQf5toFHkCbcceudGC+QoZWpgASVvOV/P/+9nZLG0bPYi609lPEzHDQyMWU68ZDGUvo6QcCXdubmJA6MYq8KloH1mMYfwIz+gkV2AyF9+AF3+RfcEqkz4lwNRuJH48lG1r3N3DiBmukcObHlxFMowmHsoLcQuFiDuA7DgCV495Q2DpfAlHBoIwLGq9N5AV+JRR/S1qhkwSDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L5ulo8xH+IL2ybb8ZLIc6SEoHZL6IqKA6/fga5EvJyI=;
- b=ImvQ1pqNUahxDRwzVOAQyRL/ksemo+vmtWL9l9kKgGn50tQNfdAGanzcxUYGYFJJlLiPyhyJnvExUXV6uUoyHZvbzBwEIuM/TN3GOxO0NOM7lAxSJG12i5vZIZpp1DJrwGheN14RxzpughCONw2iz0FrhskR8bR2tvwsroQKjBNEWX0TKXlxKaBoD07XhkjpJgwSIHOhKV7kxZ7c8UlFA1seRK9hq+JW8bQCm9NN+QY7bp2VEWc4RvmpybjARywEHWyaSZKIVKnjJBjgVbBD6DTEc9yIiXyefLwym5T3evkpg4SVQZOY5PhmSe5ZG0ePKRiRoj9A9kvOViJPCWFGMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L5ulo8xH+IL2ybb8ZLIc6SEoHZL6IqKA6/fga5EvJyI=;
- b=T6fObKUZsimtbxUatnRvlfnSqBdEqA3HmT89dt2WLiGTp0HcU1+wUFjhNmSFpsRiRCE94q5tDPgZvatBL+Aokv1Aqo0C4M2o4n7unFXnFedA95N5/CYNgWF9xHUec5xWc1NQKBYVeYfTc5XPRCQK7Y9fOrg3IdCmTfvAjn3tr4CBoJhWwSUyAgm4ZZF4/O+zg/djhMmWm9wE+8c0b37S0X6CC0cWd11gpzHeZIP/mlodWIyNh4AufDUYdSZFeFLTo75ES10/nmjqdm6kyzbef76khB3EoGXqAZO92R6WGT7epQqzM+XeoaZF6EVU2GMFntWYLcCKMR8xFo7+s7xz+A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
- by TYZPR06MB5075.apcprd06.prod.outlook.com (2603:1096:400:1c5::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Wed, 31 May
- 2023 11:07:26 +0000
-Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
- ([fe80::f652:a96b:482:409e%5]) with mapi id 15.20.6433.018; Wed, 31 May 2023
- 11:07:26 +0000
-From:   Lu Hongfei <luhongfei@vivo.com>
-To:     Artur Weber <aweber.kernel@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org (open list:DRM PANEL DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
-Subject: [PATCH] gpu: drm/panel: Optimize the workflow of s6d7aa0_lock
-Date:   Wed, 31 May 2023 19:07:17 +0800
-Message-Id: <20230531110717.36896-1-luhongfei@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYAPR01CA0001.jpnprd01.prod.outlook.com (2603:1096:404::13)
- To TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
+        Wed, 31 May 2023 07:08:07 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B3C126;
+        Wed, 31 May 2023 04:08:05 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4D0625C00F1;
+        Wed, 31 May 2023 07:08:04 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 31 May 2023 07:08:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685531284; x=
+        1685617684; bh=aeL29fTibpX7OH1ns9iCpikawL6pyGgQIxFzUFIJ5mE=; b=x
+        UDCGtesaL634GL9eXdFKoKL1s1Tz9Ll4uk1Af1BMnvQGH4j9+1PhPANaEaVE379R
+        CdP85tpEg9YcUW2h5dFDnyNMAmMCkYWCYlWHtfBYAhuz7I36GZhVasYeXJhtrGKQ
+        9Lrd5hHztASe4grn656Fm1LxjoNjOG1JM3Ad9/lCi0sHtpjyf+ptypYz5yGO613d
+        qh8+Kv3Y5LpM1E1ielOLRn5Ok/JsogZMAHdTruPsKoySspbI4+TYmoxqI/VIiBEP
+        9NSI/2t5My7odxwCZX0DKZDp9MOjZtjLzlE2tfb83C3rAyCOX0y3uoPoI2tB10/o
+        jG1KAHIWcun/pGj4MxlRQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685531284; x=1685617684; bh=aeL29fTibpX7O
+        H1ns9iCpikawL6pyGgQIxFzUFIJ5mE=; b=CKpieIWYKmOkyyCDiuZP8D+PUVECt
+        T2ErndCGQJp98RFqZNoUkT/fLhMhJ/86fqOlgcQFwHL1AieUk9bVGqVQwn4r+E2W
+        f0BdsMG0bUxMm93eQ9DkRhxUnn/i/uxmRKJyngDMg7NgPssfHdpcqc4Ji8JdwWKu
+        KcmycyZC8ziSkBHUUx0EKF81JTIo9p1nky54jRBkScT+6/Vtg8YxhCTisfVZ1PtQ
+        DxAb3nZ6wlHPyxA4NCng2CaUSohgQo62Msc4qWAgBMoDuT6fhd6tjX3xJipyPlE8
+        6WncsmBPKzOXGkMG97UzW0dluJcZkHMNBSKLi7gH8TFXTIx7+dO3jVsvQ==
+X-ME-Sender: <xms:kCp3ZGhTVDV0DVu7dmcXkuzxkpXwEA9IwCIFbDRZWqgyIv8wnEJkFQ>
+    <xme:kCp3ZHAPrdO9QnDydIYpePwNPqTvQeT4rDLRRhSWppJUEyVQkKccYZjgigzReTWrC
+    K0XSDatK5L73o__kNY>
+X-ME-Received: <xmr:kCp3ZOGKLu-mTkNtzCsjRFXSA0mPL0O0V-GjwUeK0cpeJiwxiYZ1sNPmsq0FoVcs2JuCqQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeekledgfeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:kCp3ZPSz5hGKt8pyGe8Ue_MUxG7I7-LMRL0S8Maei_bY-CtDzDeDqg>
+    <xmx:kCp3ZDybG56imlj3lotFSk424EAyO4S3ZalWSFbkTcroWC2CEkq-8g>
+    <xmx:kCp3ZN6cb8NiInnM6MmJJINWLXlxFmXCECS2-MdbyVDlBUBQ7WTXsw>
+    <xmx:lCp3ZIQZa_9Yhyap2wMrdMHayAKX3jfVOiYwSdewsO8ergavPjSuDQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 31 May 2023 07:08:00 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id D69A310BD95; Wed, 31 May 2023 14:07:56 +0300 (+03)
+Date:   Wed, 31 May 2023 14:07:56 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [patch] x86/smpboot: Fix the parallel bringup decision
+Message-ID: <20230531110756.g4cz2tjnc7ypskre@box.shutemov.name>
+References: <87jzwqjeey.ffs@tglx>
+ <87cz2ija1e.ffs@tglx>
+ <20230530122951.2wu5rwcu26ofov6f@box.shutemov.name>
+ <87wn0pizbl.ffs@tglx>
+ <ZHYqwsCURnrFdsVm@google.com>
+ <87leh5iom8.ffs@tglx>
+ <8751e955-e975-c6d4-630c-02912b9ef9da@amd.com>
+ <871qiximen.ffs@tglx>
+ <b6323987-059e-5396-20b9-8b6a1687e289@amd.com>
+ <87ilc9gd2d.ffs@tglx>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|TYZPR06MB5075:EE_
-X-MS-Office365-Filtering-Correlation-Id: 571ba621-1a20-4a75-9797-08db61c73797
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BVepBBS9U2fJNjItGkDPOo5BAF+1PUEx6lQpcR79MnstIS4/diJx1nqa5wrOosJhhCA6uG2VwPgi2ILpo7Q5kRyzinZLMFh4A3n3+YI3WA63ka3u5MuIyyyo752d+8kvVix4F89r6FdjZFegVWjuSE4j8H2FScO44SEPjfnMy/4rM69lVHjq7+azhAHDQRrG3rttLGMp7eud/hDxiucgxIoLc/yug/wASxS1WP2yAvNmpCmuy+ZNanDwk4f8r3YHFvf+F0FQJvurTQLVXCKgpqHNvi7SrIO4EhoxEyGa0/KObEMpgZy6/Xz0G6sEksbf/frVGYJwPHRx5pX/hN0ikkC5sceLEB0oVy4MUiYQw5DsB/kHnWGtwJJ8foJ2epZ6lhJM2uOAbYkFmonkac+cTMMeZErqmgPWqKXI2i5f3MKPI69nkMJL0yxHajq2Z1JLbEEUbanlWlZmKTqZaHnIwiBe5XgKfZbMByCxjRzBK6ydCu6aYi2qxMEVkes8YjkX6J8O+ZDgF4aVlziyM2i13CcOFBADoLuoKlW38eH9m4y3DE+AhugFDHkbeFYpbfYx8C+zMHTOOkJi7p1Z3xVRpOOJEBetE8s34/Wy0oQCB+a8oQPBtgerNB0bq0WhWmYn
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(136003)(376002)(346002)(39850400004)(451199021)(110136005)(8936002)(5660300002)(8676002)(2906002)(66556008)(4326008)(66476007)(66946007)(316002)(41300700001)(478600001)(52116002)(107886003)(6486002)(6666004)(6506007)(6512007)(1076003)(186003)(26005)(83380400001)(36756003)(86362001)(2616005)(38100700002)(38350700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aUysZ0NyWFg82v0qiNMhBGL4QoY8lVMa8b+2fd8W+HUZIT9c/ZDp0F1jEYAi?=
- =?us-ascii?Q?Iz333F11wfSsWUXIvBiJPYG68Xn2eb1tN1SCy7MmMouyLzKohz2oZrjHDuht?=
- =?us-ascii?Q?XqPinNMxLZWmnyD4r0Lgpt/nm7vijySNEG0tDtYXYONBG2xBWzdwdMeXucXS?=
- =?us-ascii?Q?vDJz9vUMwPdBiTmBQqE6xKj+69ivmmCDkCojExRyoab0Uf91czQ+LUPMEk19?=
- =?us-ascii?Q?KzKm2+4egLloYDhwVCmUQ9k2bAhSdenTavoYtxgy6K8DSmdfIm5404eOwaoM?=
- =?us-ascii?Q?+1zQxUB1cKO5xF1dTcRw0Omo+ns4Bondpeb9Lh4O0czEMm6a1tGlcO0j+Ur9?=
- =?us-ascii?Q?t1Oji2LpkX9QOv6k+q03Al0EnFT0XyttuPMOjRFDrLbAO4KIZdzXfXlzSpbK?=
- =?us-ascii?Q?2Pxg8k3C2X9DC6X3FzHn55ujZ4dR2LDmrENylX4NuGT8lYin0l1ximlNFxRG?=
- =?us-ascii?Q?v939B3fCyRwN1M5U7ibBRNW4ha7eQi/BPioqLZWPP3xuAy2kS0yLt4n/i22f?=
- =?us-ascii?Q?j7T2LpfK4iIbreYR+styoPjPTSb5wdMDwR7gUen9ivCL6xOdwz8zVrgSXjuS?=
- =?us-ascii?Q?MC2vTcvTatzdhzXfqUoRrXZ5uT784t/bK2V/06UhnZEHIZ+aNkvSfjfB/bZu?=
- =?us-ascii?Q?CWVtvzrw0fZ/ClH+T+MYUwKr3Uz+3KLUdVWgFLgQNXXnKZ7CZI/4TJa05biF?=
- =?us-ascii?Q?xhGyNmteY15jc0xvvbwYJDEXxxDt6UPubtvDwhzszv98UhWYXJiBu+vYHB49?=
- =?us-ascii?Q?TVjA3N7i27Gk6DFQLpW7I5zCTyyjzCUcntTl6t4CV+pFvaf7IPvcWsB8znw3?=
- =?us-ascii?Q?ulmHIfIEgofXYrsVkZGD46WrasKP+Xm0QQA4amEW8DQZkzSeEO3LWJXlpZbR?=
- =?us-ascii?Q?nmrHHSCc1QREGSGpdQweVIphDoFJjtGPTFW+d7mxuRqUr1X2nK3LjIOc6wzy?=
- =?us-ascii?Q?6w+M/1qaDXPY8CKMjsDImHyIbzmIEz9KCXEHB69WDNuczLHeKzoxp/ul0wrM?=
- =?us-ascii?Q?zemKpLb8/g3R8CfxQx5nzA/FCSlk9x1xDCoR4NDtc5EbsHrT3w4iaV70Wx+G?=
- =?us-ascii?Q?hli0h3iFGyQ6Ci8BzPH3oNDPfdeeKkuA4xM5E7hIctt76ZmlMwYsXt1q32nG?=
- =?us-ascii?Q?iV3aQ56P+JDU2IeSnc1PrQfYH0+9LgGYziBOEngsHE4SxZn2cVQzUSeDGSdD?=
- =?us-ascii?Q?3+/twML4iCOd0dCkv2Rn/TjGSCbqsmMZ5DAFm0njxfLxsSz25PB1UhZb80CG?=
- =?us-ascii?Q?uoLtd36CN1J08QtqrhoV9zB0hrWnSPKAQ55N7YONrMAEskCxXexfET+IfssW?=
- =?us-ascii?Q?q9eCYQZUIQzZKVfhcUlpFfW5YPcaqTRm/GahxgDCWQoxn6EuBLQxj3fc3Qxn?=
- =?us-ascii?Q?xQiF26+GXfUakaWoVpZtxijHeGXLt9tiMOE3rIrFJwKUQ4X1QuxDqUeMkSD8?=
- =?us-ascii?Q?L64YOZKr/WVDjKCXxVyCWPYSdJl5aUJnkGygDKEZoXK/PU0gtlaZ3GKgdvUX?=
- =?us-ascii?Q?cYuxab6P6scZ3gWD/oRJXr0eoXQ6lGGuqoArj64FgR/mohLJR3mxxL/MA/Dy?=
- =?us-ascii?Q?XQGK08Xg0UJQegRW4NmMXpOP4xCs2qfLA88eJ/MW?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 571ba621-1a20-4a75-9797-08db61c73797
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 11:07:26.4203
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WxZfCDty5HzlxVU2Zn+Z9l1ARgf6DmkpazMQUmnjH8aBo62rvqD/L/CDadcxrgkWNP5eMBk9X6PFB+cT2S1EuA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB5075
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ilc9gd2d.ffs@tglx>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch optimized s6d7aa0_lock's workflow.
-Once mipi_dsi_dcs_write_seq failed, s6d7aa0_lock return immediately
-and no further actions will be taken.
+On Wed, May 31, 2023 at 09:44:26AM +0200, Thomas Gleixner wrote:
+> The decision to allow parallel bringup of secondary CPUs checks
+> CC_ATTR_GUEST_STATE_ENCRYPT to detect encrypted guests. Those cannot use
+> parallel bootup because accessing the local APIC is intercepted and raises
+> a #VC or #VE, which cannot be handled at that point.
+> 
+> The check works correctly, but only for AMD encrypted guests. TDX does not
+> set that flag.
+> 
+> As there is no real connection between CC attributes and the inability to
+> support parallel bringup, replace this with a generic control flag in
+> x86_cpuinit and let SEV-ES and TDX init code disable it.
+> 
+> Fixes: 0c7ffa32dbd6 ("x86/smpboot/64: Implement arch_cpuhp_init_parallel_bringup() and enable it")
+> Reported-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-Fixes: 6810bb390282 ("drm/panel: Add Samsung S6D7AA0 panel controller driver")
+Tested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
----
- drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c | 30 ++++++++++++++-----
- 1 file changed, 22 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-index 102e1fc7ee38..f98df32d1c55
---- a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-+++ b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
-@@ -69,15 +69,29 @@ static int s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
- 	int ret = 0;
- 
- 	if (lock) {
--		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0xa5, 0xa5);
--		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0xa5, 0xa5);
--		if (ctx->desc->use_passwd3)
--			mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0x5a, 0x5a);
-+		ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0xa5, 0xa5);
-+		if (ret < 0)
-+			return ret;
-+		ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0xa5, 0xa5);
-+		if (ret < 0)
-+			return ret;
-+		if (ctx->desc->use_passwd3) {
-+			ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0x5a, 0x5a);
-+			if (ret < 0)
-+				return ret;
-+		}
- 	} else {
--		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0x5a, 0x5a);
--		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0x5a, 0x5a);
--		if (ctx->desc->use_passwd3)
--			mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0xa5, 0xa5);
-+		ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0x5a, 0x5a);
-+		if (ret < 0)
-+			return ret;
-+		ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0x5a, 0x5a);
-+		if (ret < 0)
-+			return ret;
-+		if (ctx->desc->use_passwd3) {
-+			ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0xa5, 0xa5);
-+			if (ret < 0)
-+				return ret;
-+		}
- 	}
- 
- 	return ret;
 -- 
-2.39.0
-
+  Kiryl Shutsemau / Kirill A. Shutemov
