@@ -2,116 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A40717BE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8A0717BD6
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232316AbjEaJ37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
+        id S235214AbjEaJ0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235595AbjEaJ3z (ORCPT
+        with ESMTP id S231397AbjEaJ0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:29:55 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D3CC0;
-        Wed, 31 May 2023 02:29:54 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QWP9n5rnRz4f3nBf;
-        Wed, 31 May 2023 17:29:49 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgCX_7KNE3dk69dxKg--.3757S5;
-        Wed, 31 May 2023 17:29:51 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     hch@lst.de, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
-        yangerkun@huawei.com
-Subject: [PATCH -next v2] block: fix blktrace debugfs entries leak
-Date:   Wed, 31 May 2023 17:26:06 +0800
-Message-Id: <20230531092606.3037560-2-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230531092606.3037560-1-yukuai1@huaweicloud.com>
-References: <20230531092606.3037560-1-yukuai1@huaweicloud.com>
+        Wed, 31 May 2023 05:26:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26538BE;
+        Wed, 31 May 2023 02:26:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE1AF62CF3;
+        Wed, 31 May 2023 09:26:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 524B6C433EF;
+        Wed, 31 May 2023 09:26:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685525179;
+        bh=kCngoFLY3lyAAH4tsRcdWI7tJBxXdBmSNlRrvULPxEo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cN57/V1H77acTm/qT6l3T6VdkNRu0nkljtAkksa/ldX/AzR4pvcJmVYON5karjEuv
+         +OEPWvftye3sDhNO47XR2IpW8C2rIqyBYJuLmJVD1x7EWTTacoTRZtSPKtDWNmSeL5
+         ID/4jLdzuFb/q4pDcmWRvmf0OzJ761lDkB/2t7r0ndHmkDO6cNFYUvTQdMEKkKFIbu
+         1A8kjIWEIeW4nvfOCSaszPVUn9Ey5B5W5Oi18ZqwVvAdeynzZk5QnTQBxsi2/jSW8H
+         tCKkXMbShumUPNSa4KkssEOxcdr1CZbNRXqV3gza5xN4q0owe8BUmF5F+e6o9kksrR
+         NPWQ4uuPVvQ4A==
+Date:   Wed, 31 May 2023 10:26:14 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
+        stable@vger.kernel.org, Pierre Gondois <pierre.gondois@arm.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "open list:GENERIC ARCHITECTURE TOPOLOGY" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH stable 6.3 v2] arch_topology: Remove early cacheinfo
+ error message if -ENOENT
+Message-ID: <20230531-anatomy-rectified-6ed3555c5f16@spud>
+References: <20230530201955.848176-1-florian.fainelli@broadcom.com>
+ <20230530-basically-wildly-84415a94171d@spud>
+ <72d84100-55cf-566d-8301-7147ce14b1e9@broadcom.com>
+ <20230531085356.ru4fmtawyxo5cq5s@bogus>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCX_7KNE3dk69dxKg--.3757S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7uw4fWFyxGF1fury7Zr4DXFb_yoW8Cr13pa
-        9Ikw4YkrWjqr4avFyDuw17XF1xKa95Wr95JryfWFyYvrnrGrZ0qFZ2vr4IgrWrCrZa9FZ8
-        Wa4UWFsxCrW8XaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBC14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r1I6r4UM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY1x0262kKe7AKxVWUAVWUtw
-        CF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j
-        6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64
-        vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0x
-        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjfUe5r4UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Qnb73kesuk0hpnPs"
+Content-Disposition: inline
+In-Reply-To: <20230531085356.ru4fmtawyxo5cq5s@bogus>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
 
-Commit 99d055b4fd4b ("block: remove per-disk debugfs files in
-blk_unregister_queue") moves blk_trace_shutdown() from
-blk_release_queue() to blk_unregister_queue(), this is safe if blktrace
-is created through sysfs, however, there is a regression in corner
-case.
+--Qnb73kesuk0hpnPs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-blktrace can still be enabled after del_gendisk() through ioctl if
-the disk is opened before del_gendisk(), and if blktrace is not shutdown
-through ioctl before closing the disk, debugfs entries will be leaked.
+On Wed, May 31, 2023 at 09:53:56AM +0100, Sudeep Holla wrote:
+> On Tue, May 30, 2023 at 03:42:45PM -0700, Florian Fainelli wrote:
+> > Hi Conor,
+> >=20
+> > On 5/30/23 14:39, Conor Dooley wrote:
+> > > Yo Florian,
+> > >=20
+> > > On Tue, May 30, 2023 at 01:19:55PM -0700, Florian Fainelli wrote:
+> > > > From: Pierre Gondois <pierre.gondois@arm.com>
+> > > >=20
+> > > > commit 3522340199cc060b70f0094e3039bdb43c3f6ee1 upstream
+> > > >=20
+> > > > fetch_cache_info() tries to get the number of cache leaves/levels
+> > > > for each CPU in order to pre-allocate memory for cacheinfo struct.
+> > > > Allocating this memory later triggers a:
+> > > >    'BUG: sleeping function called from invalid context'
+> > > > in PREEMPT_RT kernels.
+> > > >=20
+> > > > If there is no cache related information available in DT or ACPI,
+> > > > fetch_cache_info() fails and an error message is printed:
+> > > >    'Early cacheinfo failed, ret =3D ...'
+> > > >=20
+> > > > Not having cache information should be a valid configuration.
+> > > > Remove the error message if fetch_cache_info() fails with -ENOENT.
+> > > >=20
+> > > > Suggested-by: Conor Dooley <conor.dooley@microchip.com>
+> > > > Link: https://lore.kernel.org/all/20230404-hatred-swimmer-6fecdf33b=
+57a@spud/
+> > > > Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> > > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > > > Link: https://lore.kernel.org/r/20230414081453.244787-4-pierre.gond=
+ois@arm.com
+> > > > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> > > > Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> > >=20
+> > > How come this now needs a backport? Did the rest of the series get
+> > > backported, but not this one since it has no fixes tag?
+> >=20
+> > Humm, indeed, this has been present in v6.3.2 since I requested it to be
+> > included. The error that I saw this morning was not -ENOENT, but -EINVA=
+L.
+> >=20
+> > With those patches applied, no more -EINVAL:
+> >=20
+> > cacheinfo: Allow early level detection when DT/ACPI info is missing/bro=
+ken
+> > cacheinfo: Add arm64 early level initializer implementation
+> > cacheinfo: Add arch specific early level initializer
+> > cacheinfo: Add use_arch[|_cache]_info field/function
+> >=20
+> > I will submit those shortly unless we think they better not be in 6.3, =
+in
+> > which case it would be nice to silence those -EINVAL errors.
+>=20
+> I prefer this option instead of back porting all the above 4 as there are
+> some pending fixes for the issues found in those patches. I am fine if Gr=
+eg
+> is happy with the backport, so no strong rejection from my side :).
 
-Fix this problem by shutdown blktrace in disk_release(), this is safe
-because blk_trace_shutdown() is reentrant.
+Just to be clear, I was not objecting, just curious!
 
-Noted that scsi sg can support blktrace without gendisk and still need
-special handling to avoid this problem.
+--Qnb73kesuk0hpnPs
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Fixes: 99d055b4fd4b ("block: remove per-disk debugfs files in blk_unregister_queue")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/genhd.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/block/genhd.c b/block/genhd.c
-index 1cb489b927d5..f5718367965c 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -25,8 +25,9 @@
- #include <linux/pm_runtime.h>
- #include <linux/badblocks.h>
- #include <linux/part_stat.h>
--#include "blk-throttle.h"
-+#include <linux/blktrace_api.h>
- 
-+#include "blk-throttle.h"
- #include "blk.h"
- #include "blk-mq-sched.h"
- #include "blk-rq-qos.h"
-@@ -1171,6 +1172,10 @@ static void disk_release(struct device *dev)
- 	might_sleep();
- 	WARN_ON_ONCE(disk_live(disk));
- 
-+	mutex_lock(&disk->queue->debugfs_mutex);
-+	blk_trace_shutdown(disk->queue);
-+	mutex_unlock(&disk->queue->debugfs_mutex);
-+
- 	/*
- 	 * To undo the all initialization from blk_mq_init_allocated_queue in
- 	 * case of a probe failure where add_disk is never called we have to
--- 
-2.39.2
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHcStgAKCRB4tDGHoIJi
+0vIEAQDdpFgU4o/G3Uwvv77EtTUObcme8oZvNeuRkgayXb63kAEAgdawFvzSpDJL
+Um0VmT9jcTispriQLw1RK4h2YSIliQo=
+=l1hc
+-----END PGP SIGNATURE-----
 
+--Qnb73kesuk0hpnPs--
