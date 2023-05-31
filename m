@@ -2,69 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D93A4717ABE
+	by mail.lfdr.de (Postfix) with ESMTP id 8E32B717ABD
 	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 10:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbjEaIxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 04:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
+        id S234918AbjEaIxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 04:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234938AbjEaIw4 (ORCPT
+        with ESMTP id S234848AbjEaIwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 04:52:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81E9124
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 01:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685523120;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WGo4qtRQ4pkJVWaEUVypZ+1I1vSFSgJTj8gN/jNbr24=;
-        b=gdIAnc/w2P6UWFdUZ+zqkF6egz/AAl0gKEF2kl0Q4TIoCpbkLGtzxhvTDz7XQJUI6ebrqR
-        gPnLIrDEj+7UZhnFLys+3qYwmlFHsp5XGAm/cQDGO1HmP2DlHp5XmAAkbfhY9F+4aH1aA5
-        Uam+Cno+V7OV02Nb36rswnCI0AIsW7s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-297-6A7MVqTQNyGeS8sO5Uaxog-1; Wed, 31 May 2023 04:51:57 -0400
-X-MC-Unique: 6A7MVqTQNyGeS8sO5Uaxog-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 31 May 2023 04:52:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D4AE6;
+        Wed, 31 May 2023 01:52:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD993280BC41;
-        Wed, 31 May 2023 08:51:56 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9FE4B40E6A43;
-        Wed, 31 May 2023 08:51:54 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230526201202.1cd35fe9@kernel.org>
-References: <20230526201202.1cd35fe9@kernel.org> <20230524144923.3623536-1-dhowells@redhat.com> <20230524144923.3623536-4-dhowells@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Tom Herbert <tom@herbertland.com>,
-        Tom Herbert <tom@quantonium.net>
-Subject: Re: [PATCH net-next 3/4] kcm: Support MSG_SPLICE_PAGES
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6AAC62904;
+        Wed, 31 May 2023 08:52:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AEBAC433EF;
+        Wed, 31 May 2023 08:52:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685523167;
+        bh=7blyzSvGlER5YAULyUBlu+Q1PhLaEhCVvqk8dtsJimE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B0Vk7X0y6o0Ad5WHjFxWvNXl9HBH3lMm8akSXHvdlJxWnRTAYTZTNcC1iCiF4ZhXu
+         kOm8rH8UGetRujQWvbKruaxhIxAY7gZsa/5RK9HEj5d6o0j4wE/a5cg3Uba6Gv8B1x
+         52NCLmtnT0lujmfJuDcHMFqTLjeGGMVpJjOO6Wo0SIzaxyncv1CUPSzmFLmThgRS+s
+         Q5RSzH3zV5V1NnCX1hwOpRu3FLKjQ4G+wTtvcm8yf6988FBlkNRnQ9Y1+jjR0xp0Br
+         D/lNU7yDYFsKklX+R4LeAWWCthZSIZC9SVcxi+CZJqSdLvadc/phS4Jho70lgg/0tn
+         5Rj6Jjd0FpduA==
+Date:   Wed, 31 May 2023 09:52:43 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] mailbox: mailbox-test: fix a locking issue in
+ mbox_test_message_write()
+Message-ID: <20230531085243.GB449117@google.com>
+References: <c3b517eb-3805-48bf-be89-0082bff65913@kili.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <574369.1685523113.1@warthog.procyon.org.uk>
-Date:   Wed, 31 May 2023 09:51:53 +0100
-Message-ID: <574370.1685523113@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c3b517eb-3805-48bf-be89-0082bff65913@kili.mountain>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,29 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org> wrote:
+Jassi,
 
-> On Wed, 24 May 2023 15:49:22 +0100 David Howells wrote:
-> > +			err = skb_splice_from_iter(skb, &msg->msg_iter, copy,
-> > +						   sk->sk_allocation);
-> > +			if (err < 0) {
-> > +				if (err == -EMSGSIZE)
-> > +					goto wait_for_memory;
-> > +				goto out_error;
-> > +			}
-> >  
+On Fri, 05 May 2023, Dan Carpenter wrote:
+
+> There was a bug where this code forgot to unlock the tdev->mutex if the
+> kzalloc() failed.  Fix this issue, by moving the allocation outside the
+> lock.
 > 
-> should there be a:
+> Fixes: 2d1e952a2b8e ("mailbox: mailbox-test: Fix potential double-free in mbox_test_message_write()")
+
+When are you planning on sending this to the -rcs?
+
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> ---
+>  drivers/mailbox/mailbox-test.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
 > 
-> 		copy = err;
-> or:
-> 		copy -= msg_data_left(msg);
+> diff --git a/drivers/mailbox/mailbox-test.c b/drivers/mailbox/mailbox-test.c
+> index c4a705c30331..fc6a12a51b40 100644
+> --- a/drivers/mailbox/mailbox-test.c
+> +++ b/drivers/mailbox/mailbox-test.c
+> @@ -98,6 +98,7 @@ static ssize_t mbox_test_message_write(struct file *filp,
+>  				       size_t count, loff_t *ppos)
+>  {
+>  	struct mbox_test_device *tdev = filp->private_data;
+> +	char *message;
+>  	void *data;
+>  	int ret;
+>  
+> @@ -113,12 +114,13 @@ static ssize_t mbox_test_message_write(struct file *filp,
+>  		return -EINVAL;
+>  	}
+>  
+> -	mutex_lock(&tdev->mutex);
+> -
+> -	tdev->message = kzalloc(MBOX_MAX_MSG_LEN, GFP_KERNEL);
+> -	if (!tdev->message)
+> +	message = kzalloc(MBOX_MAX_MSG_LEN, GFP_KERNEL);
+> +	if (!message)
+>  		return -ENOMEM;
+>  
+> +	mutex_lock(&tdev->mutex);
+> +
+> +	tdev->message = message;
+>  	ret = copy_from_user(tdev->message, userbuf, count);
+>  	if (ret) {
+>  		ret = -EFAULT;
+> -- 
+> 2.39.2
 > 
-> or some such here? Can we safely assume that skb_splice_from_iter() will
-> copy all or nothing? 
 
-Yeah.  Good point.  I didn't add one because the normal operation code doesn't
-do that - but I guess that's all-or-nothing.
-
-David
-
+-- 
+Lee Jones [李琼斯]
