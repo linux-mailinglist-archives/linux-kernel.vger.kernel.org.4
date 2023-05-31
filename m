@@ -2,124 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF4A7185A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D80E718583
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234077AbjEaPF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
+        id S233830AbjEaPDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234028AbjEaPFe (ORCPT
+        with ESMTP id S232598AbjEaPDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:05:34 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C6C132;
-        Wed, 31 May 2023 08:05:15 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VExh8o030623;
-        Wed, 31 May 2023 15:05:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=OAFzuVl4Gut14uWD2Yrg29PHYgjJzWmlExTNSTZT85A=;
- b=CHhUirO+VMbOOydiS24nX02mODkxdd2uIMIlrEd9nBax50aXyRJHFNUYgOnjLgEYvSru
- 8F76RrC6kQXsAUliMGxE0T8nUtIFtHalXenpwAoj0OhHsfzyfWqIFnSaIdTiteNayvws
- vuedf3YU6NLFPwfhWIFbb8IC68TEeR9jrVXBUDa0Cw43ztByg9AlXCZg+HMeV0hfLCDT
- qapEVJrGpoooor2I9PGtZGDpAIGaJM/wGZp1sTeCtY7xveLUfuTfCUEQ6OdxUSSx5/oh
- FhNUIp2baVeXwah6/q2+YaZJbQSMm+r69JAbM7dFMQRcEtkyQoK/cRQ0mq4ykF+kpYgF 1Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qx8g4r48m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 15:05:08 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34VF0iXM000431;
-        Wed, 31 May 2023 15:05:06 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qx8g4r3r2-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 15:05:06 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34VBQCfe008122;
-        Wed, 31 May 2023 14:51:58 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3qu9g8c563-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 14:51:58 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34VEpuMH36241942
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 31 May 2023 14:51:56 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2C3185805E;
-        Wed, 31 May 2023 14:51:56 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 425725805C;
-        Wed, 31 May 2023 14:51:55 +0000 (GMT)
-Received: from [9.61.34.174] (unknown [9.61.34.174])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 31 May 2023 14:51:55 +0000 (GMT)
-Message-ID: <30741787-441a-034f-f8d4-9f1060841051@linux.ibm.com>
-Date:   Wed, 31 May 2023 10:51:54 -0400
+        Wed, 31 May 2023 11:03:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E3B138
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:03:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91265614EF
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 15:03:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA719C433D2;
+        Wed, 31 May 2023 15:03:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685545410;
+        bh=1NyD5pfHsfbl2eDOdqvK6NDW3YPW7b+qYBFMf162c10=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QYOPA593iZ7cdIeo4ig0xhhoCxpVSRGSpY/eKabfzbbevQ/ffWUGbW5vp2ILTKV6A
+         2kS5mIsfINA1tZShCk6pL2cQiDKW0rmq4oCAo+QxN/UODvpU+0tUbut3Nzq24l6PV7
+         1jepZsuQh9ABIq9VDxKfzAh8gFLqtGbPdneXNpIL7nSWSssbfCW5MaMl7Al/4Fte2X
+         nG93WA9+UxNw8VWHCfjFqq1JZ7tTotbdLPoeHlWdLDcKOUmMo5gsbZquIwodlmOUZ5
+         InXqLasASiTWrT+/9oPMbpXeE2kgHoacn626XthkeOmIZnLfwcQjQLQZhuuzNr0Tzd
+         ZYd4b46NxrY1g==
+Date:   Wed, 31 May 2023 22:52:14 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] riscv: allow kmalloc() caches aligned to the
+ smallest value
+Message-ID: <ZHdfHgF3KO2PO/M2@xhacker>
+References: <20230526165958.908-1-jszhang@kernel.org>
+ <20230526165958.908-6-jszhang@kernel.org>
+ <20230529-fidelity-booted-0d4055d1f559@wendy>
+ <ZHXJDevEVwUEoOq4@arm.com>
+ <20230530-gyration-handheld-ef4e44e89d61@wendy>
+ <ZHX1OqjQQRheIvv+@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 0/3] s390/vfio-ap: fix hang when mdev attached to guest is
- removed
-Content-Language: en-US
-To:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        alex.williamson@redhat.com, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>
-Cc:     jjherne@linux.ibm.com, pasic@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, Cedric Le Goater <clegoate@redhat.com>
-References: <20230530223538.279198-1-akrowiak@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <20230530223538.279198-1-akrowiak@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: EmRd0YvUraoZ5bRlti79WC2E21bSGtE1
-X-Proofpoint-ORIG-GUID: W1E9D6ibbAfbdenIxC64kSkaJgZ7fQgd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_10,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- adultscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 mlxlogscore=999 malwarescore=0 clxscore=1015 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305310128
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZHX1OqjQQRheIvv+@arm.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/30/23 6:35 PM, Tony Krowiak wrote:
-> When a user attempts to remove a vfio-ap mediated device attached to a
-> guest, the operation hangs until the mdev's fd is closed by the guest
-> (i.e., the hostdev is detached or the guest is shut down). This patch 
-> series provides kernel-side code that allows userspace to set up a 
-> communication channel that will allow the vfio_ap device driver to notify 
-> userspace when a request to release the mdev is received, so that userspace
-> can close the mdev fd and avoid the hang. The patch series provides the 
-> following:  
+On Tue, May 30, 2023 at 02:08:10PM +0100, Catalin Marinas wrote:
+> On Tue, May 30, 2023 at 11:34:06AM +0100, Conor Dooley wrote:
+> > On Tue, May 30, 2023 at 10:59:41AM +0100, Catalin Marinas wrote:
+> > > On Mon, May 29, 2023 at 12:17:46PM +0100, Conor Dooley wrote:
+> > > > On Sat, May 27, 2023 at 12:59:57AM +0800, Jisheng Zhang wrote:
+> > > > > After this patch, a simple test of booting to a small buildroot rootfs
+> > > > > on qemu shows:
+> > > > > 
+> > > > > kmalloc-96           5041    5041     96  ...
+> > > > > kmalloc-64           9606    9606     64  ...
+> > > > > kmalloc-32           5128    5128     32  ...
+> > > > > kmalloc-16           7682    7682     16  ...
+> > > > > kmalloc-8           10246   10246      8  ...
+> > > > > 
+> > > > > So we save about 1268KB memory. The saving will be much larger in normal
+> > > > > OS env on real HW platforms.
+> > > > > 
+> > > > > [1] Link: https://lore.kernel.org/linux-arm-kernel/20230524171904.3967031-1-catalin.marinas@arm.com/
+> > 
+> > While I think of it, Link: goes at the start of the line, the [1] should
+> > go at the end (although I don't think you actually reference the link
+> > anywhere in the text & it'll probably not be particularly relevant if a
+> > subsequent revision of that patchset is applied.
 > 
-> 1. Introduces code to handle the VFIO_DEVICE_GET_IRQ_INFO and 
->    VFIO_DEVICE_SET_IRQS ioctl calls to set the eventfd_ctx for signaling a
->    device request to userspace. 
+> I plan to post at least one more. I'd suggest the risc-v patchset to
+> only go in once my series landed.
+
+Sure I will wait for your series landing in linus tree firstly.
+
 > 
-> 2. Wires up the VFIO bus driver callback to request a release of the mdev.
->    When invoked, the vfio_ap device driver will use the eventfd_ctx set up
->    in #1 to signal a request to userspace to release the mdev.
-> 
+> > > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > > 
+> > > > Fails to build chief, with loads of:
+> > > > linux/dma-mapping.h:546:19: error: redefinition of 'dma_get_cache_alignment'
+> > > > 
+> > > > And for 32-bit there's also a rake of:
+> > > > include/linux/slab.h:239:9: warning: 'ARCH_KMALLOC_MINALIGN' macro redefined [-Wmacro-redefined]
+> > > > 
+> > > > At the very least, reproducable with rv32_defconfig.
+> > > 
+> > > Have you this it on top of the KMALLOC_MINALIGN preparation series?
+> > > 
+> > > https://lore.kernel.org/r/20230524171904.3967031-1-catalin.marinas@arm.com/
+> > 
+> > Oh, no. Thanks for pointing that out.
+> > Our automation stuff only uses what is in riscv/{for-next,master,fixes}.
+> > Unless my reading comprehension is particularly bad of late it was
 
-As to how this series eventually reaches master...  It touches both s390 and vfio.  
+Aha I dunno this mechanism before.
 
-@Alex/@s390 maintainers -- I suggest it go through s390 given the diffstat, it's almost completely in s390 drivers code.  However there is a uapi hit to vfio.h (in patch 1) that should get at least an ACK from Alex beforehand.
+> > non-obvious that this depended on something that had not yet been
 
+Your reading comprehension is good ;) I just listed the dependency but
+didn't explictly mention its merge status.
 
+I will wait for Catalin's series being merged.
