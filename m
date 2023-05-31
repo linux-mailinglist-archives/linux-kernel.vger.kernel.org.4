@@ -2,151 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09635718B1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A003718B21
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 22:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbjEaUYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 16:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51122 "EHLO
+        id S229830AbjEaUZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 16:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjEaUYJ (ORCPT
+        with ESMTP id S230303AbjEaUYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 16:24:09 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547E0188
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:24:04 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565a336caa0so210357b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 13:24:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685564643; x=1688156643;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=APftvx9keMYUt1Xk5prtdAgJw5++/nh9oJ2TjaQ+44Q=;
-        b=PX/4QCBDJ9PLCDibCE4LoOf2U0DE4t/KWyS05NGIZcGzqK/qwcSjxPluWcaqwv1Stk
-         rMyraQASzxyWuHCUByRiPyI4r+TKzg18DQi23LqLbo8WEM0cjd44YF28bRWYO1A5spCy
-         C8uoUDWMPuMiaxHglFY6t+vlO8uFRPkrpIUD9WU6y/eI2MWpQZdCjDnBrvtPK2foPDM8
-         2b0pUD4qsLCE5pd4FfnukjL1T9+czSe/1aJuv1AeB5D9vgahqEpjGWaUrfGv4vRCGUgK
-         7d8Ob7qWLSyhaFm1bWvZd46hX/2rCmhkQhiUf9f78KTYzvmJ6/SxSLGkVtXf5wgn2kFJ
-         IIHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685564643; x=1688156643;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=APftvx9keMYUt1Xk5prtdAgJw5++/nh9oJ2TjaQ+44Q=;
-        b=TbcuPzS8Jj1O4GtUSljDRlvfIfQzHDW0IbWUYT717myxdQW3wnVCv3VZcGWzjlV1zh
-         LqalWYEV+l3riRIYym3/6QqLgWPsYJfIPfEEc54z6Kw0hnHXufW+88IYViwhLARnVKIF
-         J/iaS5jqW9pjc3avqhTbUViTV6MfiVVJ9H9bQUmfrk6PgdOmITvR62E8ipjAVKfURxNL
-         wKlqP8dAv2h6tXYV3iRJOjcxJj66BzsGKB6bWDCTERw7kWxGXispJXHtUgEUbPM81AhA
-         g7eKV/uBu+6FDeTqWFahBF4HA2usM4R1PsBc0GAViq/sj7a3kMk7juhkE1Dw/rqLj+Tv
-         bwhA==
-X-Gm-Message-State: AC+VfDyTX0dgXgLUMtvruWSbimg+V24YXh5JJ4wEuQ2XaH4+UqDyLSf1
-        ezUE9tPIXUPvRaNlRNIE+HCuTsigLro=
-X-Google-Smtp-Source: ACHHUZ4Rs9okzQlJSZpcwd3Z5dIegCtWutSFaW8eVk3gk4ZcP95GwA04TMkwmyC49mplI5lk+ocRWvQTqeQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:e305:0:b0:55d:ea61:d8e9 with SMTP id
- q5-20020a81e305000000b0055dea61d8e9mr4086306ywl.7.1685564643426; Wed, 31 May
- 2023 13:24:03 -0700 (PDT)
-Date:   Wed, 31 May 2023 13:24:01 -0700
-In-Reply-To: <fd1dd8bcc172093ad20243ac1e7bb8fce45b38ef.camel@intel.com>
-Mime-Version: 1.0
-References: <20230505152046.6575-1-mic@digikod.net> <93726a7b9498ec66db21c5792079996d5fed5453.camel@intel.com>
- <facfd178-3157-80b4-243b-a5c8dabadbfb@digikod.net> <58a803f6-c3de-3362-673f-767767a43f9c@digikod.net>
- <fd1dd8bcc172093ad20243ac1e7bb8fce45b38ef.camel@intel.com>
-Message-ID: <ZHes4a73Zg+6JuFB@google.com>
-Subject: Re: [RFC PATCH v1 0/9] Hypervisor-Enforced Kernel Integrity
-From:   Sean Christopherson <seanjc@google.com>
-To:     Rick P Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     "mic@digikod.net" <mic@digikod.net>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "wanpengli@tencent.com" <wanpengli@tencent.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
-        "liran.alon@oracle.com" <liran.alon@oracle.com>,
-        "marian.c.rotariu@gmail.com" <marian.c.rotariu@gmail.com>,
-        Alexander Graf <graf@amazon.com>,
-        John S Andersen <john.s.andersen@intel.com>,
-        "madvenka@linux.microsoft.com" <madvenka@linux.microsoft.com>,
-        "ssicleru@bitdefender.com" <ssicleru@bitdefender.com>,
-        "yuanyu@google.com" <yuanyu@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tgopinath@microsoft.com" <tgopinath@microsoft.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "dev@lists.cloudhypervisor.org" <dev@lists.cloudhypervisor.org>,
-        "mdontu@bitdefender.com" <mdontu@bitdefender.com>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "nicu.citu@icloud.com" <nicu.citu@icloud.com>,
-        "ztarkhani@microsoft.com" <ztarkhani@microsoft.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 31 May 2023 16:24:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44796101;
+        Wed, 31 May 2023 13:24:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D678F63F0E;
+        Wed, 31 May 2023 20:24:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C53ADC433D2;
+        Wed, 31 May 2023 20:24:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685564688;
+        bh=7r8nK+oO+zadbfBQmkkb4fRHaIJIBVonKzfYO5BLeJ8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=d1ewYAhFOgglzfl4VxYT6tvES1rLDUAGUGuYDf+vWFPrppA/pQmCxmrdqZ1EX/7NH
+         n0G6IGEqqCNLCv7dMvLTTjozqwyVgqEFuHm1r/YPSTYnaL2hwTj430Nu6yRA7cI8XW
+         CruOz9vwg6cp6Trv3cBsoC95rqTFU3PvOXdFNhJ6L2rWl/E6BnED05MzhnhJTy8qJl
+         azmTRWs3q6iQA/o2B0RyNVabhgl7/FVohnSKVwjF4VhehsRTEZ5SWVtONVzFX0I9In
+         R7GzTPZa8fzFWiKFXZnXjUolwBTwO4slzywzkHGRchdcG6ftqGNoC3dPHhirlEbav1
+         TOmgKmqgTpD3A==
+Date:   Wed, 31 May 2023 15:24:46 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     linux-pci@vger.kernel.org, netdev@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH pci] PCI: don't skip probing entire device if first fn OF
+ node has status = "disabled"
+Message-ID: <ZHetDo5PozWdtrxP@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531165819.phx7uwlgtvnt3tvb@skbuf>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023, Rick P Edgecombe wrote:
-> On Fri, 2023-05-26 at 17:22 +0200, Micka=EF=BF=BDl Sala=EF=BF=BDn wrote:
-> > > > Can the guest kernel ask the host VMM's emulated devices to DMA int=
-o
-> > > > the protected data? It should go through the host userspace mapping=
-s I
-> > > > think, which don't care about EPT permissions. Or did I miss where =
-you
-> > > > are protecting that another way? There are a lot of easy ways to as=
-k
-> > > > the host to write to guest memory that don't involve the EPT. You
-> > > > probably need to protect the host userspace mappings, and also the
-> > > > places in KVM that kmap a GPA provided by the guest.
-> > >=20
-> > > Good point, I'll check this confused deputy attack. Extended KVM
-> > > protections should indeed handle all ways to map guests' memory.  I'm
-> > > wondering if current VMMs would gracefully handle such new restrictio=
-ns
-> > > though.
-> >=20
-> > I guess the host could map arbitrary data to the guest, so that need to=
- be
-> > handled, but how could the VMM (not the host kernel) bypass/update EPT
-> > initially used for the guest (and potentially later mapped to the host)=
-?
->=20
-> Well traditionally both QEMU and KVM accessed guest memory via host
-> mappings instead of the EPT.=EF=BF=BDSo I'm wondering what is stopping th=
-e
-> guest from passing a protected gfn when setting up the DMA, and QEMU
-> being enticed to write to it? The emulator as well would use these host
-> userspace mappings and not consult the EPT IIRC.
->=20
-> I think Sean was suggesting host userspace should be more involved in
-> this process, so perhaps it could protect its own alias of the
-> protected memory, for example mprotect() it as read-only.
+[+cc Loongson folks, thread at
+https://lore.kernel.org/r/20230521115141.2384444-1-vladimir.oltean@nxp.com]
 
-Ya, though "suggesting" is really "demanding, unless someone provides super=
- strong
-justification for handling this directly in KVM".  It's basically the same =
-argument
-that led to Linux Security Modules: I'm all for KVM providing the framework=
- and
-plumbing, but I don't want KVM to get involved in defining policy, thread m=
-odels, etc.
+On Wed, May 31, 2023 at 07:58:19PM +0300, Vladimir Oltean wrote:
+> On Wed, May 31, 2023 at 11:56:02AM -0500, Bjorn Helgaas wrote:
+> > What bad things happen without this patch?
+> 
+> It's in the commit title: probing the entire device (PCI device!!!) is
+> skipped if function 0 has status = "disabled". Aka PCIe functions 1, 2, 3, 4, ...
+
+I guess I should have asked "what bad things happen without this patch
+and without the DT 'disabled' status"?
+
+I think 6fffbc7ae137 ("PCI: Honor firmware's device disabled status")
+was basically a workaround for Loongson making a device visible in PCI
+config space when it shouldn't have been [1].
+
+6fffbc7ae137 [2] means we pretend the PCI device doesn't exist if DT
+status is "disabled".  If the device happens to be Function 0, that
+means we don't look for any more functions.  I guess that doesn't
+matter for Loongson.  But it does matter for this NXP platform, where
+we don't want to use Function 0, but we *do* want to use other
+Functions.
+
+There are several PCIe things that are required to be in Function 0
+(MPS, ASPM, IDE, CMA/SPDM, etc), at least in certain cases.
+
+What would happen if instead of making pci_setup_device() fail (as
+both 6fffbc7ae137 and this patch do, which means the device doesn't
+even show up in "lspci"), we just prevent drivers from binding to it,
+e.g., by making pci_device_probe() fail?  The device would then appear
+in "lspci" and the PCI core would configure things as usual, but no
+drivers would be able to claim it.
+
+Bjorn
+
+[1] https://lore.kernel.org/all/20221114074346.23008-1-liupeibao@loongson.cn/
+[2] https://git.kernel.org/linus/6fffbc7ae137
