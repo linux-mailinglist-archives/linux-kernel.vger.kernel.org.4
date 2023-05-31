@@ -2,96 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3206718830
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0034718835
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjEaRLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S230158AbjEaRMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjEaRLo (ORCPT
+        with ESMTP id S229872AbjEaRMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:11:44 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC49191;
-        Wed, 31 May 2023 10:11:42 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-ba81ded8d3eso8632007276.3;
-        Wed, 31 May 2023 10:11:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685553102; x=1688145102;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ebXJVsSOUn2ugmT4rghMz7fEudpo4P8yANA/KrthHSQ=;
-        b=rWOXBBOyOrBpuPMg0lDoyufRLZkgu0GznDnPFyWVtJFifHw7Tw6NjeMYjynx7qz/46
-         SbPowBCnn5Lk0cECatibpEFOHYw25O9dkF8KZTssbGCQvS2bETkGgaFsDoPaVQFCgFF8
-         1Ag+EMJveJF1qPYsr7gYEYsuMPnSYtYucxdk8ZEODhO03hSbn8SKM+wKE5ZTsAfKfoGz
-         TRKvv0kCsk4cQuTvEyzYhPpwcN13N2MsgYpBhyqaUG77IHqcoPNzESguACv0Xag1z7x+
-         2rNMIFLpeUGL9PyE50gUuhWvoXnhXrmkTinHm30tpSKqm/dDqJU2GcxhmqFSrmAG1rnM
-         xVJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685553102; x=1688145102;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ebXJVsSOUn2ugmT4rghMz7fEudpo4P8yANA/KrthHSQ=;
-        b=ctrcaN9uy4H6uvOlk0huAfk96bxg2hDJSy6PGEMyPHEK0BkrKWuS1AHw++3n8Xqaik
-         wGXEfNCJ0IAPUalVjctSCXM/2cyTPOC/py2NvUO+o/pcclFaIp9Tv9dzYEkD6wxTI13Z
-         zGNLyNdRo9RjwOxiyL6LEt03a4Uoqe9Y+HgPSG+EYYlJXjzTw+J46BAGYepTOqTN/1km
-         yungQicd4WSU6FtW+0DduHJirWgE1k0khnY4C3Ltc4nW+3EanpJ36+zQC7NJZiZBIDG5
-         koW7cHgJ7r3F8+qytvm51sx8RCFzVCNNZkEVf+4kEsuspOGzAgLxlniCz5hZenU7Becw
-         KXQw==
-X-Gm-Message-State: AC+VfDzY0nm+JaSN3KcfuXCcVucFK7DHQlP4I6SO3nm6bp6Rf2+Y7evm
-        h8YHsDIRJ10tRpF1oBH8EaLKI3p/6UeZDOzR4gHYj9b4McAJTW0E6CM=
-X-Google-Smtp-Source: ACHHUZ70MMpnGtaiZiK8Wa0uRar/BTF3XWEcNJkZ9HluytIz1Q1g/E693M33BQVNFcwmkJ0i279u/zrdRM/51wlt1/8=
-X-Received: by 2002:a25:af54:0:b0:bad:13c4:3070 with SMTP id
- c20-20020a25af54000000b00bad13c43070mr6775546ybj.47.1685553101927; Wed, 31
- May 2023 10:11:41 -0700 (PDT)
+        Wed, 31 May 2023 13:12:21 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27DB0136
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:12:10 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8AxxfDpf3dkeQYDAA--.2334S3;
+        Thu, 01 Jun 2023 01:12:09 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx08Tpf3dk+a+CAA--.16069S3;
+        Thu, 01 Jun 2023 01:12:09 +0800 (CST)
+Message-ID: <8b74e484-ed41-7f14-f46b-3951e645dd6b@loongson.cn>
+Date:   Thu, 1 Jun 2023 01:12:09 +0800
 MIME-Version: 1.0
-References: <20230504064854.774820-1-aliceryhl@google.com>
-In-Reply-To: <20230504064854.774820-1-aliceryhl@google.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 31 May 2023 19:11:31 +0200
-Message-ID: <CANiq72=S+gUXcsp1k1ZUnRbsecnP5KCKVW-tJoqZB_NsT-2K+A@mail.gmail.com>
-Subject: Re: [PATCH v2] rust: error: add missing error codes
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 5/6] drm/etnaviv: add driver support for the PCI
+ devices
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        loongson-kernel@lists.loongnix.cn, Li Yi <liyi@loongson.cn>
+References: <ZHZIXZPuCkFSMF4H@bhelgaas>
+ <950fdaaa-b62c-7f36-a499-9eca71c8bc47@loongson.cn>
+ <5e0b34054ca6fa540e481d93f3c1d9fbdd2defcd.camel@pengutronix.de>
+Content-Language: en-US
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <5e0b34054ca6fa540e481d93f3c1d9fbdd2defcd.camel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Cx08Tpf3dk+a+CAA--.16069S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxJFyxtw13WF4DGr1UJFy5urg_yoW5Gw18pF
+        WYka1SyFWvgr1rtwn7tw45XF1ay3yftFy5Arn5JF1kCr90vry3Gr1rtr4Y9F9xur1xWa12
+        va1jkrW7uFn8CaDanT9S1TB71UUUU1UqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
+        14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv
+        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+        AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVW8ZVWrXwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jayxiUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 4, 2023 at 8:49=E2=80=AFAM Alice Ryhl <aliceryhl@google.com> wr=
-ote:
->
-> This adds the error codes from `include/linux/errno.h` to the list of
-> Rust error constants. These errors were not included originally, because
-> they are not supposed to be visible from userspace. However, they are
-> still a perfectly valid error to use when writing a kernel driver. For
-> example, you might want to return ERESTARTSYS if you receive a signal
-> during a call to `schedule`.
->
-> This patch inserts an annotation to skip rustfmt on the list of error
-> codes. Without it, three of the error codes are split over several
-> lines, which looks terribly inconsistent.
->
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+Hi,
 
-Applied to `rust-next` -- thanks everyone!
+On 2023/6/1 00:23, Lucas Stach wrote:
+> Hi Sui Jingfeng,
+>
+> Am Donnerstag, dem 01.06.2023 um 00:08 +0800 schrieb Sui Jingfeng:
+>> Hi,
+>>
+>> On 2023/5/31 03:02, Bjorn Helgaas wrote:
+>>> On Wed, May 31, 2023 at 12:06:42AM +0800, Sui Jingfeng wrote:
+>>>> This patch adds PCI driver support on top of what already have. Take the
+>>>> GC1000 in LS7A1000/LS2K1000 as the first instance of the PCI device driver.
+>>>> There is only one GPU core for the GC1000 in the LS7A1000 and LS2K1000.
+>>>> Therefore, component frameworks can be avoided. Because we want to bind the
+>>>> DRM driver service to the PCI driver manually.
+>>>> +	 * Loongson Mips and LoongArch CPU(ls3a5000, ls3a4000, ls2k1000la)
+>>>> +	 * maintain cache coherency by hardware
+>>>> +	 */
+>>>> +	if (IS_ENABLED(CONFIG_CPU_LOONGSON64) || IS_ENABLED(CONFIG_LOONGARCH))
+>>>> +		priv->has_cached_coherent = true;
+>>> This looks like something that should be a runtime check, not a
+>>> compile-time check.
+>>>
+>>> If it's possible to build a single kernel image that runs on Loongson
+>>> MIPS or LoongArch CPU and, in addition, runs on other platforms, you
+>>> cannot assume that all the others maintain this cache coherency.
+>> Nice catch! I don't even realize this!
+>>
+>>
+>> LS3A4000 is mips64r2 with MSA SIMD, while LS3A5000 is LoongArch,
+>>
+>> instruction set, compiler, and binary interface are totally changed.
+>>
+>> Therefore, it's impossible to build a single kernel image that runs on
+>> all Loongson CPUs.
+>>
+>> Currently, I can guarantee that this works on the Loongson platform.
+>>
+>> My initial intent here is to let priv->has_cached_coherent be *true* on
+>> the Loongson platform (both mips and loongarch).
+>>
+>> I do know there are some other vendors who bought GPU IP from Vivante.
+>>
+>> say GC7000, and integrate it into their discrete GPU product.
+>>
+>> But it is also a PCI device, but this is another story; it deserves
+>> another patch.
+>>
+>> I don't know if Etnaviv folk find some similar hardware on Arm Arch,
+>>
+>> Some Arm CPUs do not maintain cached coherency on hardware.
+>>
+>> The has_cached_coherent member can be set to false on such hardware.
+>>
+>> For us, it seems that there is no need to do runtime checking,
+>>
+>> because they are all cached coherent by default.
+>>
+>>
+>> Can I improve this in the future, currently I don't have a good idea.
+> I think I mentioned before that this needs to be a runtime check. What
+> does dev_is_dma_coherent() return for the Vivante GPU device on your
+> platform?
 
-Cheers,
-Miguel
+I have tested, it return *true*.
+
+Yeah, out hardware is dma coherent.
+
+Then,  we switching  to  dev_is_dma_coherent(dev) ?
+
+> Regards,
+> Lucas
+
+-- 
+Jingfeng
+
