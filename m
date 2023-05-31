@@ -2,94 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D06717876
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE6C71787A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 09:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234700AbjEaHmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 03:42:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
+        id S234722AbjEaHn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 03:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbjEaHmM (ORCPT
+        with ESMTP id S232077AbjEaHnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 03:42:12 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D54E93;
-        Wed, 31 May 2023 00:42:11 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QWLnV1Fgxz4f3xbG;
-        Wed, 31 May 2023 15:42:06 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgD3X7NN+nZkQ0hsKg--.57984S3;
-        Wed, 31 May 2023 15:42:07 +0800 (CST)
-Subject: Re: [PATCH -next] block: fix blktrace debugfs entries leak
-To:     Christoph Hellwig <hch@lst.de>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     ming.lei@redhat.com, axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230511065633.710045-1-yukuai1@huaweicloud.com>
- <20230511152808.GA8641@lst.de>
- <18db3894-d128-7857-4c11-25b59d82ff54@huaweicloud.com>
- <e26d37bc-0f09-426a-ef25-57bdbd716ae9@huaweicloud.com>
- <20230530142945.GA9553@lst.de>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <1a3cdcab-362b-1d6e-3988-9c07df4533ec@huaweicloud.com>
-Date:   Wed, 31 May 2023 15:42:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 31 May 2023 03:43:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735B3E47
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:42:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685518951;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pu0dxF+jwnL1jQ+DhiyLdliDD3ireyhq8OENBi+96kc=;
+        b=fMh4OHxZJYZqhnDXp8oFtK50LNOUn3ha91Ubf2LNc9uvhGO9TSxkUQedkcbZHaJ575o+RZ
+        POZ0P4W1FswIAixnBoBWa3PtvOoAgwxZAiMY8lciJ7vclC+teC3SdN/6SpG/HdAbcXPnwy
+        7meGrC3hoKbH4QzRBHvraftUFYO9f/0=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-618-nLx13OLMPKmAOINEbppf8g-1; Wed, 31 May 2023 03:42:30 -0400
+X-MC-Unique: nLx13OLMPKmAOINEbppf8g-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30af3835de5so920604f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 00:42:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685518949; x=1688110949;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pu0dxF+jwnL1jQ+DhiyLdliDD3ireyhq8OENBi+96kc=;
+        b=PZ8CeiLf/xeiikF3xEq01C9iqdhcD+WwHMm5LBGUoUwWFjXJMI6cJqMPmaViL35qPL
+         0ZVvYRSyLkbI5b0SJGmN6CjSrS3cb4C0gwv/5OuR1AUnW64naC1B/UaG2j5DLeyRZViu
+         cmBWTsWFP4qp/9Uc/BAu+3HBOUu4R9YErP6v7WwAvxTSGDnYnDlbWFymuVhdXLOiV0Gr
+         iaocPp5uhjCh73vRTiHNI0647l3XX9Sc7A/royUAeB1iaK2jJDxCCN1TjPy+swfhjflT
+         C6w9Q5Kr2meZvMlZEz1HC4FN0cAa/fvKG2L3KJfO78NgPBr/ucEIplZuN+mYT4HjDBE7
+         idzQ==
+X-Gm-Message-State: AC+VfDzV5ykAfB9gBkaw8pw7ffU2lJyHhrHwGaVRRjpHjToqLZoKQCYX
+        20Zju8oYMtoODfcAXcgaxjHMm+qjI5SMwxEC7FhrNk8YS0YSR0EJ0nPc5TiyQHNnW8+5pSGtVs3
+        C2uKZGqfLMJaIlof9MM8hCbSZ
+X-Received: by 2002:adf:fac6:0:b0:30a:ea8b:4488 with SMTP id a6-20020adffac6000000b0030aea8b4488mr3243062wrs.16.1685518949147;
+        Wed, 31 May 2023 00:42:29 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4/TwaL/29NG4Q1Wh9FQAc5H0Tf7tBtuQA1EX6A8ez87/GPRHlCFpKjZKyenEHxOPL3HkoPpg==
+X-Received: by 2002:adf:fac6:0:b0:30a:ea8b:4488 with SMTP id a6-20020adffac6000000b0030aea8b4488mr3243049wrs.16.1685518948739;
+        Wed, 31 May 2023 00:42:28 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c749:cb00:fc9f:d303:d4cc:9f26? (p200300cbc749cb00fc9fd303d4cc9f26.dip0.t-ipconnect.de. [2003:cb:c749:cb00:fc9f:d303:d4cc:9f26])
+        by smtp.gmail.com with ESMTPSA id p12-20020adfcc8c000000b0030adfa48e1esm5812964wrj.29.2023.05.31.00.42.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 00:42:28 -0700 (PDT)
+Message-ID: <de425aeb-4064-733a-52ed-e702c640c36f@redhat.com>
+Date:   Wed, 31 May 2023 09:42:26 +0200
 MIME-Version: 1.0
-In-Reply-To: <20230530142945.GA9553@lst.de>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3X7NN+nZkQ0hsKg--.57984S3
-X-Coremail-Antispam: 1UD129KBjvdXoWruF43Cr13uw1kJrW3CF43trb_yoWfJrb_Xa
-        1Uu3srGw1Ikr1vvw4rGr47ZFWaqFWkuwn8W34kXFZrZ34jvryrWFnrG395W3yrtrWvvFWY
-        9r43uFySvFsxWjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb4xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUU
-        UU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        John Hubbard <jhubbard@nvidia.com>
+References: <20230526214142.958751-1-dhowells@redhat.com>
+ <20230526214142.958751-3-dhowells@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v4 2/3] mm: Provide a function to get an additional pin on
+ a page
+In-Reply-To: <20230526214142.958751-3-dhowells@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-ÔÚ 2023/05/30 22:29, Christoph Hellwig Ð´µÀ:
-> On Tue, May 30, 2023 at 10:07:54AM +0800, Yu Kuai wrote:
->>> If we don't care about blktrace for passthrough io after del_gendisk(),
->>> and /dev/sg* has separate handling, I think it's better just to check
->>> QUEUE_FLAG_REGISTERED in blk_trace_setup(), and don't enable blktrace
->>> in the first place.
->>
->> Any suggestions about this problem? Should we use separate handling for
->> /dev/sd? Or just free blktrace in blk_free_queue().
-> 
-> I'd be fine with trying to either remove the /dev/sg blktrace handling
-> and / or splitting it up so that it doesn't interact with the main disk
-> based one.  I can look into this if you want, or leave it to you.
+On 26.05.23 23:41, David Howells wrote:
+> Provide a function to get an additional pin on a page that we already have
+> a pin on.  This will be used in fs/direct-io.c when dispatching multiple
+> bios to a page we've extracted from a user-backed iter rather than redoing
+> the extraction.
 > 
 
-Ok, I'll send a v2 to free blktrace in disk_release(), in the meantime
-I'll take a look how to handle blktrace for /dev/sg.
+I guess this function is only used for "replicating" an existing pin, 
+and not changing the semantics of an existing pin: something that was 
+pinned !FOLL_LONGTERM cannot suddenly become effectively pinned 
+FOLL_LONGTERM.
 
+Out of curiosity, could we end up passing in an anonymous page, or is 
+this almost exclusively for pagecache+zero pages? (I rememebr John H. 
+had a similar patch where he said it would not apply to anon pages)
+
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Christoph Hellwig <hch@infradead.org>
+> cc: David Hildenbrand <david@redhat.com>
+> cc: Lorenzo Stoakes <lstoakes@gmail.com>
+> cc: Andrew Morton <akpm@linux-foundation.org>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: Jan Kara <jack@suse.cz>
+> cc: Jeff Layton <jlayton@kernel.org>
+> cc: Jason Gunthorpe <jgg@nvidia.com>
+> cc: Logan Gunthorpe <logang@deltatee.com>
+> cc: Hillf Danton <hdanton@sina.com>
+> cc: Christian Brauner <brauner@kernel.org>
+> cc: Linus Torvalds <torvalds@linux-foundation.org>
+> cc: linux-fsdevel@vger.kernel.org
+> cc: linux-block@vger.kernel.org
+> cc: linux-kernel@vger.kernel.org
+> cc: linux-mm@kvack.org
+> ---
+
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
 Thanks,
-Kuai
-> .
-> 
+
+David / dhildenb
 
