@@ -2,86 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F67717630
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 07:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D84717632
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 07:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234165AbjEaFad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 01:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49648 "EHLO
+        id S234197AbjEaFar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 01:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbjEaFa3 (ORCPT
+        with ESMTP id S233929AbjEaFao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 01:30:29 -0400
-Received: from out0-197.mail.aliyun.com (out0-197.mail.aliyun.com [140.205.0.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573D911B;
-        Tue, 30 May 2023 22:30:27 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047204;MF=changxian.cqs@antgroup.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---.THCuFeH_1685511019;
-Received: from 30.177.18.117(mailfrom:changxian.cqs@antgroup.com fp:SMTPD_---.THCuFeH_1685511019)
-          by smtp.aliyun-inc.com;
-          Wed, 31 May 2023 13:30:20 +0800
-Message-ID: <170fa8d4-7851-cc1a-14ba-7213d0a5da0c@antgroup.com>
-Date:   Wed, 31 May 2023 13:30:18 +0800
+        Wed, 31 May 2023 01:30:44 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47EB185;
+        Tue, 30 May 2023 22:30:37 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2af2451b3f1so57932721fa.2;
+        Tue, 30 May 2023 22:30:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685511036; x=1688103036;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mimGVtxLE7vqxai4nDb2ohdrBI+gPPYDUXqmgm8ndBU=;
+        b=lV/eo88GcFoqMuG6kFVoYvMPP/yuWfVQ5BCaMyJAnn7D8dd0ao/J4vFEopYvFNL36J
+         g1NbK1slo9sAX8JYfqFfBHgplWUR8HRunJlcpbRmjY22iErzO4SBuZoWti9Y/8/5PZ6C
+         c6QMSLyighpaRqHif7u0V7WhSJusI1V/HOIMuTe8bdTCCEtJE+dtf7ugHRzp0TveGRck
+         jFyUXvyjwE20eoUzHGUUWwTUbe9bUOKRdf9gzuTbk7rHwCpNi9H3Yg6/76D++zcsBB0F
+         Ed/D0BC7CCx0QkomNCD4bZKUVNWF4CAye8YP6rh4SX05gMgIUCgF1/9lsgot1Zs8L3Wx
+         uBbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685511036; x=1688103036;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mimGVtxLE7vqxai4nDb2ohdrBI+gPPYDUXqmgm8ndBU=;
+        b=dKfvGm41ljTE4jdrOMwZYB09lM47UMkaLsPuEfpnqfmPK0/RJPp1nC97y4zpbQ/BB+
+         +CJQpzJ0TCbV+UULfAGi+PSmVKG63jJt5Vcmmyqc8vXwVX9xqFxyK0tLXmDVxwPxJgF+
+         hbCBnTE22W6ajMg1dHJkF6TIMn1pUTYkNdXpj9+Ei/hNVAB870AJwRtiXN+NTEwTg+84
+         38B6aZRDr4JjrGCeI6xi7eifAT0XziYHCN/urux+doESMR1TTzp0EXArlEspKrbUdhbV
+         WnhzrIJicvixEi701m9yLyIR577WJbmPcMvQRwhg4qp2ivBebqFoEPaIG8WK0UXISmnd
+         8jtA==
+X-Gm-Message-State: AC+VfDwimh8nDH0ZXqldv5S2PsklZ5vCIypR47NJqAqloCbGI/XcLaNb
+        vtvgjxNYmOSiY9DB4zfvDjcpnxpehp9QwExQM3G4p0N/DQw=
+X-Google-Smtp-Source: ACHHUZ7Gdj/kSjhNmjgyUDMdbH8mQKg49lircbw2Y3c2T7K9JvUZuNFObzpSqiH5NuvyxseYBKRz1lbdoO5AN41WRJk=
+X-Received: by 2002:a2e:a0c6:0:b0:2af:309b:5a40 with SMTP id
+ f6-20020a2ea0c6000000b002af309b5a40mr2099459ljm.12.1685511035763; Tue, 30 May
+ 2023 22:30:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] samples: rust: add `SgTable` and `ScatterList`
- selftests
-To:     Boqun Feng <boqun.feng@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     <linux-kernel@vger.kernel.org>,
-        "=?UTF-8?B?55Sw5rSq5Lqu?=" <tate.thl@antgroup.com>,
-        "Miguel Ojeda" <ojeda@kernel.org>,
-        "Alex Gaynor" <alex.gaynor@gmail.com>,
-        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
-        "Gary Guo" <gary@garyguo.net>,
-        "=?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?=" <bjorn3_gh@protonmail.com>,
-        "Benno Lossin" <benno.lossin@proton.me>,
-        "Martin Rodriguez Reboredo" <yakoyoku@gmail.com>,
-        "Asahi Lina" <lina@asahilina.net>,
-        "Sven Van Asbroeck" <thesven73@gmail.com>,
-        "Viktor Garske" <viktor@v-gar.de>, "Finn Behrens" <me@kloenk.dev>,
-        <rust-for-linux@vger.kernel.org>
-References: <20230530064821.1222290-1-changxian.cqs@antgroup.com>
- <20230530064821.1222290-3-changxian.cqs@antgroup.com>
- <2023053003-antitoxic-popcorn-b1ab@gregkh> <ZHZBacreRpd0D/FV@boqun-archlinux>
-From:   "Qingsong Chen" <changxian.cqs@antgroup.com>
-In-Reply-To: <ZHZBacreRpd0D/FV@boqun-archlinux>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230530070610.600063-1-starmiku1207184332@gmail.com> <4f37f760-048b-9d54-14ae-d1f979898625@meta.com>
+In-Reply-To: <4f37f760-048b-9d54-14ae-d1f979898625@meta.com>
+From:   Teng Qi <starmiku1207184332@gmail.com>
+Date:   Wed, 31 May 2023 13:30:23 +0800
+Message-ID: <CALyQVaxuONP8WXSVGhT2ih12ae0FwE3C+A1s4O7LArTHERmAxg@mail.gmail.com>
+Subject: Re: [PATCH v2] kernel: bpf: syscall: fix a possible sleep-in-atomic
+ bug in __bpf_prog_put()
+To:     Yonghong Song <yhs@meta.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> I would really like you to create a test case
+> to demonstrate with a rcu or spin-lock warnings based on existing code
+> base. With a test case, it would hard to see whether we need this
+> patch or not.
 
-On 5/31/23 2:33 AM, Boqun Feng wrote:
-> On Tue, May 30, 2023 at 08:31:26AM +0100, Greg KH wrote:
->> On Tue, May 30, 2023 at 02:48:21PM +0800, Qingsong Chen wrote:
->>> Add a selftest module to provide a temporary place to put "pure tests"
->>> for Rust funtionality and wrappers.
->> Is this for in-kernel tests, or userspace tests?  If userspace, you
->> should follow the proper test reporting protocol the rest of the kernel
->> uses.  If in-kernel, it should follow the format that the in-kernel test
->> currently has to be consistent.  From what I could tell here, you aren't
->> following either, but I might be totally wrong.
->>
-> It is for in-kernel tests, and you're right, we should follow the other
-> in-kernel test format.
+Ok, I will try to construct a test case.
+
+> Please put 'Fixes' right before 'Signed-off-by' in the above.
+
+Ok.
+
+> Could we have cases where in software context we have irqs_disabled()?
+
+What do you mean about software context?
+
+On Wed, May 31, 2023 at 1:46=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote:
 >
-> Some explanation about the background: when I was working on this little
-> "test framework", the Github CI of Rust-for-Linux (ab)used sample/rust/
-> for testing, that's why it was put there.
 >
-> Now my understanding is that Rust KUnit support is coming, so we should
-> use kunit tests if possible.
-
-Maybe I should place those use cases in the doc ( `Examples` section) 
-and remove this commit
-
-in next version. Thanks.
-
-
+>
+> On 5/30/23 12:06 AM, starmiku1207184332@gmail.com wrote:
+> > From: Teng Qi <starmiku1207184332@gmail.com>
+> >
+> > __bpf_prog_put() indirectly calls kvfree() through bpf_prog_put_deferre=
+d()
+> > which is unsafe under atomic context. The current
+> > condition =E2=80=98in_irq() || irqs_disabled()=E2=80=99 in __bpf_prog_p=
+ut() to ensure safety
+> > does not cover cases involving the spin lock region and rcu read lock r=
+egion.
+> > Since __bpf_prog_put() is called by various callers in kernel/, net/ an=
+d
+> > drivers/, and potentially more in future, it is necessary to handle tho=
+se
+> > cases as well.
+> >
+> > Although we haven`t found a proper way to identify the rcu read lock re=
+gion,
+> > we have noticed that vfree() calls vfree_atomic() with the
+> > condition 'in_interrupt()' to ensure safety.
+>
+> I would really like you to create a test case
+> to demonstrate with a rcu or spin-lock warnings based on existing code
+> base. With a test case, it would hard to see whether we need this
+> patch or not.
+>
+> >
+> > To make __bpf_prog_put() safe in practice, we propose calling
+> > bpf_prog_put_deferred() with the condition 'in_interrupt()' and
+> > using the work queue for any other context.
+> >
+> > We also added a comment to indicate that the safety of  __bpf_prog_put(=
+)
+> > relies implicitly on the implementation of vfree().
+> >
+> > Signed-off-by: Teng Qi <starmiku1207184332@gmail.com>
+> > ---
+> > v2:
+> > remove comments because of self explanatory of code.
+> >
+> > Fixes: d809e134be7a ("bpf: Prepare bpf_prog_put() to be called from irq=
+ context.")
+>
+> Please put 'Fixes' right before 'Signed-off-by' in the above.
+>
+> > ---
+> >   kernel/bpf/syscall.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > index 14f39c1e573e..96658e5874be 100644
+> > --- a/kernel/bpf/syscall.c
+> > +++ b/kernel/bpf/syscall.c
+> > @@ -2099,7 +2099,7 @@ static void __bpf_prog_put(struct bpf_prog *prog)
+> >       struct bpf_prog_aux *aux =3D prog->aux;
+> >
+> >       if (atomic64_dec_and_test(&aux->refcnt)) {
+> > -             if (in_irq() || irqs_disabled()) {
+> > +             if (!in_interrupt()) {
+>
+> Could we have cases where in software context we have irqs_disabled()?
+>
+> >                       INIT_WORK(&aux->work, bpf_prog_put_deferred);
+> >                       schedule_work(&aux->work);
+> >               } else {
