@@ -2,271 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF0B717B15
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4712717B2F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234986AbjEaJDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S235293AbjEaJFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235294AbjEaJDL (ORCPT
+        with ESMTP id S235270AbjEaJEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:03:11 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B4AE59
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:02:42 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-96f850b32caso1022158866b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:02:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685523747; x=1688115747;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eLGOgCTdN9b0I3RzLK+qTsPeSIXwIOR+lUiYzHLyqkA=;
-        b=hl/FuLnQZIjxtgYC0n4FAzTYUV3krumKQ/xsy+UH7E/f3dgqeMgPN/5AWK3SEAbCIr
-         FI5o6PsmvyimDsqt5v5W0X8JCTWp4IIqZ8x4bJAK1WuGUur4LrMbrSLlB4RyvOnzIWpj
-         UnB3gYbhh4tVYaSM44gFg9i9Vmw/5b+wvnLAVnsq+U/bFznueJbE05QomY6GoS+Thfyi
-         92yxam3PqKLAhtN2FkiFthHuejjWHvOd2bLzYlJhwaQRKPfYLKleciRdi3ZkGUkRYYwx
-         li9VHUt3YJlo2ixD5iK57yOeNvKQ5dkacN1nQ4J0gD5U8MxsmtBUBfgxsazERnuF8oTC
-         IkKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685523747; x=1688115747;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eLGOgCTdN9b0I3RzLK+qTsPeSIXwIOR+lUiYzHLyqkA=;
-        b=HnA/hlOjMMqvwrZ0p3QJmXYR1ORm5GquHyeK6BlJg+DE+bx/qk6qdTzYsKfFGIDnwv
-         +G15cXBZwxlBiGP3EMM36r4+4U3IRw2MeNmQxlvW7Bv+MlLOTC8LTLDxtd78iN8tb7QA
-         xt6LK5G4C7NJxp1iNhebiEVtRTmklHryvmVFShpmlijSXIOe+Bzmha6S2bqvJtsDYfw3
-         rC5HNyMGxcNoMTh3g21vCo2W6Xus6VhhVu1OB+IkyHMOGPMliTJnfhwNeVo4CSm42Oy7
-         36IdQ++mhRL1lWMtfiZ2vn/PYIeBpKYMKDTUyuWJK4MDBo5jWXX5aASJn0V+R1ySjWMP
-         O/sA==
-X-Gm-Message-State: AC+VfDwyy4a2YFY2nQT8mNMNlinLlvi2s1O8N2IZHA7eMmQJ8kWkGj+g
-        Xw2B6Sk9hc7yOpgwou4BK/yaFA==
-X-Google-Smtp-Source: ACHHUZ6y49DNKKcWtbOKQ31f6lJ93szs/HfhYKInuhEAs8m2uleiHDoOT2aH1n4H9RrcakuD5WjtOg==
-X-Received: by 2002:a17:907:7da5:b0:966:4d75:4a44 with SMTP id oz37-20020a1709077da500b009664d754a44mr4305321ejc.24.1685523747328;
-        Wed, 31 May 2023 02:02:27 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id b13-20020a1709065e4d00b00965e9b435dfsm8560598eju.65.2023.05.31.02.02.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 02:02:26 -0700 (PDT)
-Message-ID: <eef819db-4de3-06fe-8fe6-b0fe87ab5d84@linaro.org>
-Date:   Wed, 31 May 2023 11:02:24 +0200
+        Wed, 31 May 2023 05:04:37 -0400
+Received: from emcscan.emc.com.tw (emcscan.emc.com.tw [192.72.220.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 958CB194
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:04:12 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="6.00,205,1681142400"; 
+   d="scan'208";a="3082971"
+Received: from unknown (HELO webmail.emc.com.tw) ([192.168.10.1])
+  by emcscan.emc.com.tw with ESMTP; 31 May 2023 17:04:05 +0800
+Received: from 192.168.10.23
+        by webmail.emc.com.tw with MailAudit ESMTP Server V5.0(80156:0:AUTH_RELAY)
+        (envelope-from <jingle.wu@emc.com.tw>); Wed, 31 May 2023 17:04:03 +0800 (CST)
+Received: from 106.64.72.99
+        by webmail.emc.com.tw with Mail2000 ESMTPA Server V7.00(19172:0:AUTH_LOGIN)
+        (envelope-from <jingle.wu@emc.com.tw>); Wed, 31 May 2023 17:04:03 +0800 (CST)
+From:   "jingle.wu" <jingle.wu@emc.com.tw>
+To:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        dmitry.torokhov@gmail.com
+Cc:     phoenix@emc.com.tw, josh.chen@emc.com.tw, dave.wang@emc.com.tw,
+        "jingle.wu" <jingle.wu@emc.com.tw>
+Subject: [PATCH]  Input: elan_i2c - Implement inhibit/uninhibit functions.
+Date:   Wed, 31 May 2023 17:03:40 +0800
+Message-Id: <20230531090340.1035499-1-jingle.wu@emc.com.tw>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/6] dt-bindings: sound: cirrus,cs42l43: Add initial DT
- binding
-Content-Language: en-US
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
-        lee@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linus.walleij@linaro.org, vkoul@kernel.org
-Cc:     robh+dt@kernel.org, conor+dt@kernel.org, lgirdwood@gmail.com,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230530122112.1314458-1-ckeepax@opensource.cirrus.com>
- <20230530122112.1314458-3-ckeepax@opensource.cirrus.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230530122112.1314458-3-ckeepax@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 14:21, Charles Keepax wrote:
-> The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
-> (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
-> for portable applications. It provides a high dynamic range, stereo
-> DAC for headphone output, two integrated Class D amplifiers for
-> loudspeakers, and two ADCs for wired headset microphone input or
-> stereo line input. PDM inputs are provided for digital microphones.
-> 
-> Add a YAML DT binding document for this device.
-> 
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+ Add inhibit/uninhibit functions.
 
-Thank you for your patch. There is something to discuss/improve.
+ Signed-off-by: Jingle.wu <jingle.wu@emc.com.tw>
+---
+ drivers/input/mouse/elan_i2c_core.c | 207 ++++++++++++++++++++++++++++
+ 1 file changed, 207 insertions(+)
 
-
-> +  clocks:
-> +    items:
-> +      - description: Synchronous audio clock provided on mclk_in.
-> +
-> +  clock-names:
-> +    const: mclk
-> +
-> +  cirrus,bias-low:
-> +    type: boolean
-> +    description:
-> +      Select a 1.8V headset micbias rather than 2.8V.
-> +
-> +  cirrus,bias-sense-ua:
-
-"ua" looks like microamp. If so, microamp instead:
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
-
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Current at which the headset micbias sense clamp will engage, 0 to
-> +      disable.
-> +    enum: [ 0, 14, 23, 41, 50, 60, 68, 86, 95 ]
-> +    default: 0
-> +
-> +  cirrus,bias-ramp-ms:
-> +    description:
-> +      Time in milliseconds the hardware allows for the headset micbias to
-> +      ramp up.
-> +    enum: [ 10, 40, 90, 170 ]
-> +    default: 170
-> +
-> +  cirrus,detect-us:
-> +    description:
-> +      Time in microseconds the type detection will run for. Long values will
-> +      cause more audible effects, but give more accurate detection.
-> +    enum: [ 20, 100, 1000, 10000, 50000, 75000, 100000, 200000 ]
-> +    default: 10000
-> +
-> +  cirrus,button-automute:
-> +    type: boolean
-> +    description:
-> +      Enable the hardware automuting of decimator 1 when a headset button is
-> +      pressed.
-> +
-> +  cirrus,buttons-ohms:
-> +    description:
-> +      Impedance in Ohms for each headset button, these should be listed in
-> +      ascending order.
-> +    minItems: 1
-> +    maxItems: 6
-> +
-> +  cirrus,tip-debounce-ms:
-> +    description:
-> +      Software debounce on tip sense triggering in milliseconds.
-> +    default: 0
-> +
-> +  cirrus,tip-invert:
-> +    type: boolean
-> +    description:
-> +      Indicates tip detect polarity, inverted implies open-circuit whilst the
-> +      jack is inserted.
-> +
-> +  cirrus,tip-disable-pullup:
-> +    type: boolean
-> +    description:
-> +      Indicates if the internal pullup on the tip detect should be disabled.
-> +
-> +  cirrus,tip-fall-db-ms:
-> +    description:
-> +      Time in milliseconds a falling edge on the tip detect should be hardware
-> +      debounced for. Note the falling edge is considered after the invert.
-> +    enum: [ 0, 125, 250, 500, 750, 1000, 1250, 1500 ]
-> +    default: 500
-> +
-> +  cirrus,tip-rise-db-ms:
-> +    description:
-> +      Time in milliseconds a rising edge on the tip detect should be hardware
-> +      debounced for. Note the rising edge is considered after the invert.
-> +    enum: [ 0, 125, 250, 500, 750, 1000, 1250, 1500 ]
-> +    default: 500
-> +
-> +  cirrus,use-ring-sense:
-> +    type: boolean
-> +    description:
-> +      Indicates if the ring sense should be used.
-> +
-> +  cirrus,ring-invert:
-> +    type: boolean
-> +    description:
-> +      Indicates ring detect polarity, inverted implies open-circuit whilst the
-> +      jack is inserted.
-> +
-> +  cirrus,ring-disable-pullup:
-> +    type: boolean
-> +    description:
-> +      Indicates if the internal pullup on the ring detect should be disabled.
-> +
-> +  cirrus,ring-fall-db-ms:
-> +    description:
-> +      Time in milliseconds a falling edge on the ring detect should be hardware
-> +      debounced for. Note the falling edge is considered after the invert.
-> +    enum: [ 0, 125, 250, 500, 750, 1000, 1250, 1500 ]
-> +    default: 500
-> +
-> +  cirrus,ring-rise-db-ms:
-> +    description:
-> +      Time in milliseconds a rising edge on the ring detect should be hardware
-> +      debounced for. Note the rising edge is considered after the invert.
-> +    enum: [ 0, 125, 250, 500, 750, 1000, 1250, 1500 ]
-> +    default: 500
-> +
-> +  pinctrl:
-> +    type: object
-> +
-> +    allOf:
-
-Drop allOf, just "$ref: ......"
-
-> +      - $ref: /schemas/pinctrl/pinctrl.yaml#
-> +
-> +    additionalProperties: false
-
-Also drop blank lines between these three above.
-
-> +
-> +    properties:
-> +      gpio-controller: true
-> +
-> +      '#gpio-cells':
-> +        const: 2
-> +
-> +      gpio-ranges:
-> +        items:
-> +          - description: A phandle to the CODEC pinctrl node
-> +            minimum: 0
-> +          - const: 0
-> +          - const: 0
-> +          - const: 3
-> +
-> +    patternProperties:
-> +      "-state$":
-
-Use consistent quotes, either " or ' everywhere
-
-> +        oneOf:
-> +          - $ref: "#/$defs/cirrus-cs42l43-state"
-> +          - patternProperties:
-> +              "-pins$":
-> +                $ref: "#/$defs/cirrus-cs42l43-state"
-> +            additionalProperties: false
-> +
-> +  spi:
-> +    type: object
-> +
-> +    allOf:
-> +      - $ref: /schemas/spi/spi-controller.yaml#
-> +
-> +    unevaluatedProperties: false
-
-Same comments here.
-
-> +
-> +$defs:
-> +  cirrus-cs42l43-state:
-> +    type: object
-> +
-
-
-
-Best regards,
-Krzysztof
+diff --git a/drivers/input/mouse/elan_i2c_core.c b/drivers/input/mouse/elan_i2c_core.c
+index 5f0d75a45c80..4ea57f4c7bd4 100644
+--- a/drivers/input/mouse/elan_i2c_core.c
++++ b/drivers/input/mouse/elan_i2c_core.c
+@@ -56,6 +56,7 @@ struct elan_tp_data {
+ 	struct input_dev	*input;
+ 	struct input_dev	*tp_input; /* trackpoint input node */
+ 	struct regulator	*vcc;
++	struct list_head list;	/* for list of devices needing input handler */
+ 
+ 	const struct elan_transport_ops *ops;
+ 
+@@ -63,6 +64,11 @@ struct elan_tp_data {
+ 	struct completion	fw_completion;
+ 	bool			in_fw_update;
+ 
++	struct work_struct	lid_work;
++	bool			lid_switch;
++	int			lid_value;
++	bool			in_inhibit;
++
+ 	struct mutex		sysfs_mutex;
+ 
+ 	unsigned int		max_x;
+@@ -96,6 +102,9 @@ struct elan_tp_data {
+ 	u32			quirks;		/* Various quirks */
+ };
+ 
++static struct workqueue_struct *elan_mode_wq;
++static LIST_HEAD(elan_devices_with_lid_handler);
++
+ static u32 elan_i2c_lookup_quirks(u16 ic_type, u16 product_id)
+ {
+ 	static const struct {
+@@ -329,6 +338,74 @@ static int elan_initialize(struct elan_tp_data *data, bool skip_reset)
+ 	return error;
+ }
+ 
++static int elan_reactivate(struct elan_tp_data *data)
++{
++	struct device *dev = &data->client->dev;
++	int error;
++
++	error = elan_set_power(data, true);
++	if (error)
++		dev_err(dev, "failed to restore power: %d\n", error);
++
++	error = data->ops->sleep_control(data->client, false);
++	if (error) {
++		dev_err(dev,
++			"failed to wake device up: %d\n", error);
++		return error;
++	}
++
++	return error;
++}
++
++static int elan_inhibit(struct input_dev *input_dev)
++{
++	struct elan_tp_data *data = input_get_drvdata(input_dev);
++	struct i2c_client *client = data->client;
++	int error;
++
++	dev_dbg(&client->dev, "inhibiting\n");
++	/*
++	 * We are taking the mutex to make sure sysfs operations are
++	 * complete before we attempt to bring the device into low[er]
++	 * power mode.
++	 */
++	error = mutex_lock_interruptible(&data->sysfs_mutex);
++	if (error)
++		return error;
++
++	disable_irq(client->irq);
++
++	error = elan_set_power(data, false);
++	if (error)
++		enable_irq(client->irq);
++
++	data->in_inhibit = true;
++	mutex_unlock(&data->sysfs_mutex);
++
++	return error;
++}
++
++static int elan_uninhibit(struct input_dev *input_dev)
++{
++	struct elan_tp_data *data = input_get_drvdata(input_dev);
++	struct i2c_client *client = data->client;
++	int error;
++
++	dev_dbg(&client->dev, "uninhibiting\n");
++	error = mutex_lock_interruptible(&data->sysfs_mutex);
++	if (error)
++		return error;
++
++	error = elan_reactivate(data);
++	if (error == 0)
++		enable_irq(client->irq);
++
++	data->in_inhibit = false;
++	mutex_unlock(&data->sysfs_mutex);
++
++	return error;
++}
++
+ static int elan_query_device_info(struct elan_tp_data *data)
+ {
+ 	int error;
+@@ -1187,6 +1264,124 @@ static void elan_disable_regulator(void *_data)
+ 	regulator_disable(data->vcc);
+ }
+ 
++static void lid_work_handler(struct work_struct *work)
++{
++	struct elan_tp_data *data = container_of(work, struct elan_tp_data,
++					    lid_work);
++
++	if (data->lid_value)
++		elan_inhibit(data->input);
++	else
++		elan_uninhibit(data->input);
++
++}
++
++static void elan_input_lid_event(struct input_handle *handle, unsigned int type,
++			     unsigned int code, int value)
++{
++	struct elan_tp_data *data, *n;
++
++	if (type == EV_SW && code == SW_LID) {
++		list_for_each_entry_safe(data, n, &elan_devices_with_lid_handler, list) {
++			data->lid_value = value;
++			queue_work(elan_mode_wq, &data->lid_work);
++		}
++	}
++
++}
++
++struct elan_input_lid {
++	struct input_handle handle;
++};
++
++static int elan_input_lid_connect(struct input_handler *handler,
++				struct input_dev *dev,
++				const struct input_device_id *id)
++{
++	struct elan_input_lid *lid;
++	char *name;
++	int error;
++
++	lid = kzalloc(sizeof(*lid), GFP_KERNEL);
++	if (!lid)
++		return -ENOMEM;
++	name = kasprintf(GFP_KERNEL, "elan-i2c-lid-%s", dev_name(&dev->dev));
++	if (!name) {
++		error = -ENOMEM;
++		goto err_free_lid;
++	}
++	lid->handle.dev = dev;
++	lid->handle.handler = handler;
++	lid->handle.name = name;
++	lid->handle.private = lid;
++	error = input_register_handle(&lid->handle);
++	if (error)
++		goto err_free_name;
++	error = input_open_device(&lid->handle);
++	if (error)
++		goto err_unregister_handle;
++	return 0;
++err_unregister_handle:
++	input_unregister_handle(&lid->handle);
++err_free_name:
++	kfree(name);
++err_free_lid:
++	kfree(lid);
++	return error;
++}
++
++static void elan_input_lid_disconnect(struct input_handle *handle)
++{
++	struct elan_input_lid *lid = handle->private;
++
++	input_close_device(handle);
++	input_unregister_handle(handle);
++	kfree(handle->name);
++	kfree(lid);
++}
++
++static const struct input_device_id elan_input_lid_ids[] = {
++	{
++		.flags = INPUT_DEVICE_ID_MATCH_EVBIT | INPUT_DEVICE_ID_MATCH_SWBIT,
++		.evbit = { BIT_MASK(EV_SW) },
++		.swbit = { [BIT_WORD(SW_LID)] = BIT_MASK(SW_LID) },
++	},
++	{ },
++};
++
++static struct input_handler elan_input_lid_handler = {
++	.event =	elan_input_lid_event,
++	.connect =	elan_input_lid_connect,
++	.disconnect =	elan_input_lid_disconnect,
++	.name =		"elan-i2c-lid",
++	.id_table =	elan_input_lid_ids,
++};
++
++static int elan_create_lid_handler(struct elan_tp_data *data)
++{
++	int error = 0;
++
++	elan_mode_wq = create_singlethread_workqueue("elan-i2c-lid");
++	if (elan_mode_wq == NULL)
++		return -ENOMEM;
++	error = input_register_handler(&elan_input_lid_handler);
++	if (error)
++		goto remove_wq;
++
++	data->lid_switch = true;
++	INIT_LIST_HEAD(&data->list);
++	INIT_WORK(&data->lid_work, lid_work_handler);
++	list_add_tail(&data->list, &elan_devices_with_lid_handler);
++
++	return 0;
++
++remove_wq:
++	data->lid_switch = false;
++	destroy_workqueue(elan_mode_wq);
++	elan_mode_wq = NULL;
++	return error;
++}
++
+ static int elan_probe(struct i2c_client *client)
+ {
+ 	const struct elan_transport_ops *transport_ops;
+@@ -1325,6 +1520,10 @@ static int elan_probe(struct i2c_client *client)
+ 		}
+ 	}
+ 
++	error = elan_create_lid_handler(data);
++	if (error)
++		dev_err(dev, "failed to create lid handler: %d\n", error);
++
+ 	return 0;
+ }
+ 
+@@ -1334,6 +1533,10 @@ static int elan_suspend(struct device *dev)
+ 	struct elan_tp_data *data = i2c_get_clientdata(client);
+ 	int ret;
+ 
++	/* Wait for switch on completion */
++	if (data->lid_switch)
++		flush_workqueue(elan_mode_wq);
++
+ 	/*
+ 	 * We are taking the mutex to make sure sysfs operations are
+ 	 * complete before we attempt to bring the device into low[er]
+@@ -1371,6 +1574,10 @@ static int elan_resume(struct device *dev)
+ 	struct elan_tp_data *data = i2c_get_clientdata(client);
+ 	int error;
+ 
++	/* Wait for switch on completion */
++	if (data->lid_switch)
++		flush_workqueue(elan_mode_wq);
++
+ 	if (!device_may_wakeup(dev)) {
+ 		error = regulator_enable(data->vcc);
+ 		if (error) {
+-- 
+2.34.1
 
