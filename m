@@ -2,188 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0894D717C59
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6E4717C62
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 11:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235211AbjEaJrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 05:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
+        id S235611AbjEaJs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 05:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231981AbjEaJrR (ORCPT
+        with ESMTP id S235636AbjEaJsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 05:47:17 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11857D9
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:47:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685526436; x=1717062436;
-  h=date:from:to:cc:subject:message-id;
-  bh=k5dWzHm3JtGcVtvzGwiiffP2phvD2IawezXkFs4d5xA=;
-  b=maS56pFZlLYGgNH5dBcsdfXaD2Zelx49yueCdsQqlJbOotXlJ9azCynf
-   jQVa7ut/+QQJjt/+0BnUcN59D6UVD2jFRMVrSiPWxE35Hr0oAkblK5Dut
-   AJ2M2pfaw+YrindP5BHhQCX3jExgeqVv+cmAqHz0e8ahM2vs7N5YseGF0
-   5xEfCrAJiqV3NnS6S7vibIS8QtwK0eWi/R7Gc26MaUOUitMcpdfRM7c2g
-   7fl1lEIeib2ZCXCPrNrPYy8xZxFZv0T9IfopeSty5NeOFwZ5R70gliwoI
-   3lktGvsS47ZmSIMGbcue5Fc3k6wMMgy0/wFVK0xZxBjClO4OFu/bUhCXY
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="357580135"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="357580135"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 02:47:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10726"; a="710005264"
-X-IronPort-AV: E=Sophos;i="6.00,205,1681196400"; 
-   d="scan'208";a="710005264"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 31 May 2023 02:47:14 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q4IQD-0001F5-35;
-        Wed, 31 May 2023 09:47:13 +0000
-Date:   Wed, 31 May 2023 17:47:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/fam01-next20230530] BUILD SUCCESS WITH
- WARNING a2e8533878017f1874b21d78b6bf08a6c4095365
-Message-ID: <20230531094710.KZUOA%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 31 May 2023 05:48:51 -0400
+Received: from forward103c.mail.yandex.net (forward103c.mail.yandex.net [178.154.239.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B23186
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 02:48:47 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-46.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-46.sas.yp-c.yandex.net [IPv6:2a02:6b8:c08:4212:0:640:eaad:0])
+        by forward103c.mail.yandex.net (Yandex) with ESMTP id 4A3776012A;
+        Wed, 31 May 2023 12:48:45 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-46.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id PmJIwTgDTSw0-d00CHH58;
+        Wed, 31 May 2023 12:48:44 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1685526524;
+        bh=/+yrP7PJJrDTJFlfec0Z4gx8SGYdj6Pp6yB3C+HFcFA=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=osGjz3xkoP0YDkppDo8ILcDt0r6Uw3SsAsyXcheW034TzenmBUZsE9+wPQOrLsbH8
+         S/u0uX1fwwwZoQv5UnHJ5zU8Ro/pckcycPT8j6/dIhLD+3FeXskKlsC2BBvHPGHXi3
+         W0/GRN6PvftQqQqW4mNHb39hPDDz73uLbX+mHU6s=
+Authentication-Results: mail-nwsmtp-smtp-production-main-46.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+From:   Dmitry Antipov <dmantipov@yandex.ru>
+To:     Ingo Molnar <mingo@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Dmitry Antipov <dmantipov@yandex.ru>,
+        Dmitriy Antipov <Dmitriy.Antipov@softline.com>
+Subject: [PATCH] x86: add prototypes to fix 'make LLVM=1 W=1' build
+Date:   Wed, 31 May 2023 12:47:46 +0300
+Message-Id: <20230531094746.114547-1-dmantipov@yandex.ru>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230530
-branch HEAD: a2e8533878017f1874b21d78b6bf08a6c4095365  Makefile: Globally enable -Wstringop-overflow
+Add prototypes required to fix the following 'make LLVM=1 W=1'
+build errors:
 
-Warning reports:
+arch/x86/entry/common.c:238:24: error: no previous prototype for
+function 'do_SYSENTER_32' [-Werror,-Wmissing-prototypes]
+__visible noinstr long do_SYSENTER_32(struct pt_regs *regs)
+                       ^
 
-https://lore.kernel.org/oe-kbuild-all/202305310834.1iGa1DB5-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202305310857.whO1DJq1-lkp@intel.com
+arch/x86/entry/common.c:302:24: error: no previous prototype for
+function 'xen_pv_evtchn_do_upcall' [-Werror,-Wmissing-prototypes]
+__visible noinstr void xen_pv_evtchn_do_upcall(struct pt_regs *regs)
+                       ^
 
-Warning: (recently discovered and may have been fixed)
+Signed-off-by: Dmitriy Antipov <Dmitriy.Antipov@softline.com>
+---
+ arch/x86/include/asm/syscall.h    | 4 ++++
+ arch/x86/include/asm/xen/events.h | 2 ++
+ 2 files changed, 6 insertions(+)
 
-fs/smb/client/cifssmb.c:2987:31: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
-include/linux/fortify-string.h:57:33: warning: '__builtin_memcpy' specified bound between 2147483648 and 4294967295 exceeds maximum object size 2147483647 [-Wstringop-overflow=]
-include/linux/fortify-string.h:57:33: warning: writing 16 bytes into a region of size 0 [-Wstringop-overflow=]
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- arm64-allyesconfig
-|   `-- include-linux-fortify-string.h:warning:writing-bytes-into-a-region-of-size
-|-- i386-debian-10.3
-|   `-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-between-and-exceeds-maximum-object-size
-|-- i386-randconfig-i061-20230531
-|   `-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-between-and-exceeds-maximum-object-size
-|-- i386-randconfig-i063-20230531
-|   `-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-between-and-exceeds-maximum-object-size
-|-- i386-randconfig-i065-20230531
-|   `-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-between-and-exceeds-maximum-object-size
-|-- i386-randconfig-i066-20230531
-|   `-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-between-and-exceeds-maximum-object-size
-|-- mips-randconfig-r014-20230531
-|   `-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-between-and-exceeds-maximum-object-size
-`-- x86_64-rhel-8.3
-    `-- fs-smb-client-cifssmb.c:warning:writing-byte-into-a-region-of-size
-
-elapsed time: 723m
-
-configs tested: 82
-configs skipped: 6
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r015-20230531   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r013-20230531   gcc  
-arc                  randconfig-r043-20230531   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r034-20230531   clang
-arm                  randconfig-r046-20230531   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r011-20230531   clang
-arm64                randconfig-r031-20230531   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r006-20230531   gcc  
-hexagon              randconfig-r024-20230531   clang
-hexagon              randconfig-r041-20230531   clang
-hexagon              randconfig-r045-20230531   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i011-20230531   clang
-i386                 randconfig-i012-20230531   clang
-i386                 randconfig-i013-20230531   clang
-i386                 randconfig-i014-20230531   clang
-i386                 randconfig-i061-20230531   gcc  
-i386                 randconfig-i062-20230531   gcc  
-i386                 randconfig-i063-20230531   gcc  
-i386                 randconfig-i064-20230531   gcc  
-i386                 randconfig-i065-20230531   gcc  
-i386                 randconfig-i066-20230531   gcc  
-i386                 randconfig-r021-20230531   clang
-i386                 randconfig-r022-20230531   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r004-20230531   gcc  
-loongarch            randconfig-r012-20230531   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r005-20230531   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r016-20230531   gcc  
-m68k                 randconfig-r026-20230531   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r004-20230531   clang
-mips                 randconfig-r014-20230531   gcc  
-nios2        buildonly-randconfig-r002-20230531   gcc  
-nios2        buildonly-randconfig-r003-20230531   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r035-20230531   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r005-20230531   gcc  
-parisc               randconfig-r036-20230531   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230531   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230531   clang
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r001-20230531   gcc  
-sh                   randconfig-r001-20230531   gcc  
-sparc        buildonly-randconfig-r006-20230531   gcc  
-sparc                               defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-r003-20230531   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r032-20230531   gcc  
-
+diff --git a/arch/x86/include/asm/syscall.h b/arch/x86/include/asm/syscall.h
+index 5b85987a5e97..b7929c27dc4f 100644
+--- a/arch/x86/include/asm/syscall.h
++++ b/arch/x86/include/asm/syscall.h
+@@ -132,4 +132,8 @@ long do_fast_syscall_32(struct pt_regs *regs);
+ 
+ #endif	/* CONFIG_X86_32 */
+ 
++#if defined(CONFIG_X86_32) || defined(CONFIG_IA32_EMULATION)
++extern __visible noinstr long do_SYSENTER_32(struct pt_regs *regs);
++#endif
++
+ #endif	/* _ASM_X86_SYSCALL_H */
+diff --git a/arch/x86/include/asm/xen/events.h b/arch/x86/include/asm/xen/events.h
+index 62bdceb594f1..8177aa839e7c 100644
+--- a/arch/x86/include/asm/xen/events.h
++++ b/arch/x86/include/asm/xen/events.h
+@@ -34,5 +34,7 @@ static inline bool xen_support_evtchn_rebind(void)
+ 	return (!xen_hvm_domain() || xen_have_vector_callback);
+ }
+ 
++extern __visible noinstr void xen_pv_evtchn_do_upcall(struct pt_regs *regs);
++
+ extern bool xen_percpu_upcall;
+ #endif /* _ASM_X86_XEN_EVENTS_H */
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.40.1
+
