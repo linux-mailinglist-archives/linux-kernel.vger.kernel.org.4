@@ -2,121 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF7D7188B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3857188B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 19:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjEaRon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 13:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39702 "EHLO
+        id S229697AbjEaRpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 13:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjEaRol (ORCPT
+        with ESMTP id S229547AbjEaRpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 13:44:41 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342C3BE;
-        Wed, 31 May 2023 10:44:40 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VDisVh018055;
-        Wed, 31 May 2023 17:44:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=FP0IfVlmRQOpePEoLgxi5SYwXoJIQ5bpDSXFU7D5nxg=;
- b=h7+L/2Rmu8/ia8/DVsDom38AfaZqf/tYd2mPor8WLkyZxbGo78zpOGj9F7E5jU9UaO9r
- 9fCxTtTK2cv2DVWpI9SET2xCC2cAQ1wimdikkvaj5uvUl6Ns0XJA3dptesrO/nYaG4hs
- ZruOnVt+5GmKewPN5eQJDF5H7JiaDCL5A85+hnNrx/6LgNZPwGQcnW8q2vemtfmbZI2Z
- q20X2gKTTLTlT6Qf+SZLjdGudBHsll2KU9MBLJZfnX2gHj0X6AF7XJ+UmF7rDzMR7gOA
- jRiW81U5iuDClrKp1dYPTDE7dpIBe49wzLJPAoPsNgb0MUSymQvVI9qtHA+Z4m48PqSL Rw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwwbtj04p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 17:44:32 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34VHiVXx020027
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 17:44:31 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 31 May 2023 10:44:30 -0700
-Date:   Wed, 31 May 2023 10:44:29 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: reserved-memory: rmtfs: Allow dynamic
- allocation
-Message-ID: <20230531174429.GB112802@hu-bjorande-lv.qualcomm.com>
-References: <20230530193436.3833889-1-quic_bjorande@quicinc.com>
- <20230530193436.3833889-2-quic_bjorande@quicinc.com>
- <4337f333-0c78-8749-658d-3f7f69538571@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <4337f333-0c78-8749-658d-3f7f69538571@linaro.org>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8YXM3on_Kr2b7RiU6ga1Q3wOSnY6Kq9D
-X-Proofpoint-ORIG-GUID: 8YXM3on_Kr2b7RiU6ga1Q3wOSnY6Kq9D
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_12,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0
- malwarescore=0 mlxlogscore=941 adultscore=0 spamscore=0 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305310148
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 31 May 2023 13:45:22 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF69BE
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:45:16 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-babb52dbb00so13442230276.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 10:45:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685555116; x=1688147116;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ixsxZNXu/M3OVZiMitemEDxPF4LdK6ucQ3Y5NhAgzBo=;
+        b=HjBJ1RwOD8NBFHeZ93p5PlWWp7idk+djRZgJNBaOG+S2ZxyefEOxXiRFp1l0IH1rkd
+         b0/o0lKY/7GSD04VQgECi4ljdzajwT06ogTKbJUw4jLBMDM6TJRAe/IoQVIU6Sc8veyD
+         LFIZgDpz8t7kq95Gepu51pYqs6GCg1QcV8+7R+xX0BOZUdgYSoG22JYBZt9XUGqfuudp
+         UGrK4Jd/9Iocz9dtvQ3xokWhzqps07uuCSMjkqLGTgOrj7Moipl6HnPHl6SjWV2PmzJT
+         ED5dpjDTw3DY61odABawGqoawr39ZGrhtwIMAyVXSZba/z0es+7FyXS5slqkBXQjyoZT
+         nFiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685555116; x=1688147116;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ixsxZNXu/M3OVZiMitemEDxPF4LdK6ucQ3Y5NhAgzBo=;
+        b=fVbtIGYufSrz9SGVuzcwr5dM18bytSPFrHaOldrZRFQXkaEB56K4lqKZbDMEayVRZM
+         j2aS65K6XqrB+IiLf8wD2XaqlzfNeU5tR+jm0VttZ8CTUPN+dRLMztZLsxuxlPGuttyb
+         hUbF0juyci+vnSUOxAd2m+4p1j/KsJr+5F4d2/g4XolxT43DrJQVWYJI4W9+lB7qo+u4
+         Tx1bF1vZsMtWdY/bsIpGNrw6dmh4ftIRIsnila2aULNn2f2bX1yyOQTKSk/CcFPK+kgb
+         H4MCgX3hQsUdt/JXjXSCc8QILa5OIKkMC0fhUdm9VibYRr3j6fxcUVpbGJWiIAe98qV/
+         fx+A==
+X-Gm-Message-State: AC+VfDxGya1rh+HEkXp7ZwZ9oSl8Y+h0RqyCzRTRqZeZauZPHQSibPfy
+        tK9Nuzs0xLPFqI/wJSJ05nPIdQsKddR19Xs=
+X-Google-Smtp-Source: ACHHUZ55IUaRfDCO8+rKTBtQpf8sLbbhlT/ndhaIvhehFzwS9X3QN3q38STkEwIQoSNhMK4QiwGPewfj8QtFwlQ=
+X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
+ (user=aliceryhl job=sendgmr) by 2002:a25:84d1:0:b0:ba8:3401:a466 with SMTP id
+ x17-20020a2584d1000000b00ba83401a466mr2646176ybm.6.1685555116046; Wed, 31 May
+ 2023 10:45:16 -0700 (PDT)
+Date:   Wed, 31 May 2023 17:44:50 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230531174450.3733220-1-aliceryhl@google.com>
+Subject: [PATCH v1] rust: error: integrate Rust error type with `errname`
+From:   Alice Ryhl <aliceryhl@google.com>
+To:     rust-for-linux@vger.kernel.org
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        "=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 10:05:50AM +0200, Krzysztof Kozlowski wrote:
-> On 30/05/2023 21:34, Bjorn Andersson wrote:
-> > Allow instances of the qcom,rmtfs-mem either be defined as a
-> > reserved-memory regoin, or just standalone given just a size.
-> 
-> typo: region
-> 
-> I am pretty sure I saw some patches from Qualcomm also making one of
-> reserved-memory users a bit more dynamic (some boot-thingy?). Would be
-> nice to unify...
-> 
-> > 
-> > This relieve the DeviceTree source author the need to come up with a
-> > static memory region for the region.
-> 
-> If you region does not have to be static, why bothering with the size in
-> DT? I assume this can be really dynamic and nothing is needed in DT. Not
-> even size.
-> 
+From: Gary Guo <gary@garyguo.net>
 
-The size, client-id and vmid need to match the firmware and access
-policy configuration, and are as such device-specific properties for the
-region.
+This integrates the `Error` type with the `errname` by making it
+accessible via the `name` method or via the `Debug` trait.
 
-The desired size is available during the rmtfs handshake, so it's
-plausible that one could come up with a mechanism of dynamic allocation.
-But this would be complicated (as I'd prefer not to have the rmtfs
-service in the kernel...), and we'd still end up with something in DT to
-affect placement etc - often a reserved-memory region to specifically
-define the placement.
+Co-Developed-by: Wedson Almeida Filho <walmeida@microsoft.com>
+Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+Co-Developed-by: Sven Van Asbroeck <thesven73@gmail.com>
+Signed-off-by: Sven Van Asbroeck <thesven73@gmail.com>
+Signed-off-by: Gary Guo <gary@garyguo.net>
+Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+---
+ rust/bindings/bindings_helper.h |  1 +
+ rust/kernel/error.rs            | 39 +++++++++++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
 
-We'd still need the client-id and vmid properties, and we still need
-some mechanism to instantiate the rmtfs service and something that will
-configure the access permissions for the region...
+diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+index 50e7a76d5455..dc8691f83253 100644
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@ -10,6 +10,7 @@
+ #include <linux/refcount.h>
+ #include <linux/wait.h>
+ #include <linux/sched.h>
++#include <linux/errname.h>
+ 
+ /* `bindgen` gets confused at certain things. */
+ const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
+diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
+index 5f4114b30b94..59ff362028d0 100644
+--- a/rust/kernel/error.rs
++++ b/rust/kernel/error.rs
+@@ -4,12 +4,15 @@
+ //!
+ //! C header: [`include/uapi/asm-generic/errno-base.h`](../../../include/uapi/asm-generic/errno-base.h)
+ 
++use crate::str::CStr;
++
+ use alloc::{
+     alloc::{AllocError, LayoutError},
+     collections::TryReserveError,
+ };
+ 
+ use core::convert::From;
++use core::fmt;
+ use core::num::TryFromIntError;
+ use core::str::Utf8Error;
+ 
+@@ -113,6 +116,42 @@ impl Error {
+         // SAFETY: self.0 is a valid error due to its invariant.
+         unsafe { bindings::ERR_PTR(self.0.into()) as *mut _ }
+     }
++
++    /// Returns a string representing the error, if one exists.
++    #[cfg(not(testlib))]
++    pub fn name(&self) -> Option<&'static CStr> {
++        // SAFETY: Just an FFI call, there are no extra safety requirements.
++        let ptr = unsafe { bindings::errname(-self.0) };
++        if ptr.is_null() {
++            None
++        } else {
++            // SAFETY: The string returned by `errname` is static and `NUL`-terminated.
++            Some(unsafe { CStr::from_char_ptr(ptr) })
++        }
++    }
++
++    /// Returns a string representing the error, if one exists.
++    ///
++    /// When `testlib` is configured, this always returns `None` to avoid the dependency on a
++    /// kernel function so that tests that use this (e.g., by calling [`Result::unwrap`]) can still
++    /// run in userspace.
++    #[cfg(testlib)]
++    pub fn name(&self) -> Option<&'static CStr> {
++        None
++    }
++}
++
++impl fmt::Debug for Error {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        match self.name() {
++            // Print out number if no name can be found.
++            None => f.debug_tuple("Error").field(&-self.0).finish(),
++            // SAFETY: These strings are ASCII-only.
++            Some(name) => f
++                .debug_tuple(unsafe { core::str::from_utf8_unchecked(name) })
++                .finish(),
++        }
++    }
+ }
+ 
+ impl From<AllocError> for Error {
 
-Regards,
-Bjorn
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
+
