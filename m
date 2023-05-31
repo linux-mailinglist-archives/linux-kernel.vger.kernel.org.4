@@ -2,89 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE7B718565
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF76718563
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 16:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233058AbjEaO5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 10:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
+        id S232426AbjEaO5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 10:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbjEaO52 (ORCPT
+        with ESMTP id S232329AbjEaO5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 10:57:28 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C0E11D;
-        Wed, 31 May 2023 07:57:25 -0700 (PDT)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VEg85R030847;
-        Wed, 31 May 2023 14:56:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=OBYjAsiQnYeqsncNk244KPMIAGvoR7IKEXAV3+x3XmY=;
- b=VK4s0Z0LU5Q0JFwRrBWPdUE/BmlwNhytMGNfJyO7BjpGyJ+zdvyQjfXKbUn1TOITDfTH
- bjNTrNWoxSidiPbdO/teq2cNU8Qk8ADaDKTbai7AV+z8XLe/ZBQCM2YaVUPalIxEKYvW
- xOLFBvHQ/FpgspQC+jXzaZp2WG2C08Po4Ld0Bfbm/SFrKCJs4Odtzu2yJplCzqTC/D+W
- 2vy4jvGbtp385jyzAUmTgfgKkS43xFfBmJ0WhbA49qvViVzepsFheod9YgMRB9pkdiD7
- Lns0jelZ7KLOh7kDWOmoKufI5P/48rcUaYjESkzGqoGzOQzaQPtY0cm5qiav0r/ljDRH lA== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qx87s0fnv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 14:56:56 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34VBZs0T008110;
-        Wed, 31 May 2023 14:56:54 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3qu9g8c5pf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 May 2023 14:56:54 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34VEureu4784708
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 31 May 2023 14:56:53 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7584A58057;
-        Wed, 31 May 2023 14:56:52 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7298558059;
-        Wed, 31 May 2023 14:56:51 +0000 (GMT)
-Received: from lingrow.int.hansenpartnership.com (unknown [9.61.55.64])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 31 May 2023 14:56:51 +0000 (GMT)
-Message-ID: <25ef15e7601e1b4510cbbd40c6d1ab7c64213863.camel@linux.ibm.com>
-Subject: Re: [PATCH][next] scsi: lpfc: Avoid -Wstringop-overflow warning
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Date:   Wed, 31 May 2023 10:56:50 -0400
-In-Reply-To: <202305301529.1EEA11B@keescook>
-References: <ZHZq7AV9Q2WG1xRB@work>
-         <fe0739cbe279cf9db2ebff1146e7ae540cc1ad6c.camel@linux.ibm.com>
-         <202305301529.1EEA11B@keescook>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Wed, 31 May 2023 10:57:14 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47448C0;
+        Wed, 31 May 2023 07:57:13 -0700 (PDT)
+Date:   Wed, 31 May 2023 14:57:10 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1685545031;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9mc/72IgAy/2O0TiRmrTvAV+VaixFt6yGvsNgTMrAUs=;
+        b=OUZtwHuzuApJAqCk6uTHUh81FWcPiRbSrSkH8gOMt3Y3wITz8c24HJYXKwf//9gST1XC4E
+        x1knZFUpDMk+FJEjlDE/Q4otHTbEiDhuQdCRRnaA5aWuWpkBOk31/YhzWzpTq3+lUdJHjT
+        OSLlCG4u0jn0L1zxbb8WrVlbYRr3vcl0/TNybhSj8Yh/vmiU8ag9nMJmEv1cVkilCROfXs
+        aztmDMU8FuMslHTfrYkeTQD9K0pOGHoDyj3ggPKUlKXmamSo6z1uuhMbVTQDnskvIaqPKZ
+        zEF4kCUjy+Wr3xX1zzwZ7aLCismtoYmIvDbXxcfSwDDL3gmwFQxk6J3EWxWYvQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1685545031;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9mc/72IgAy/2O0TiRmrTvAV+VaixFt6yGvsNgTMrAUs=;
+        b=mKyhs2FO5PnkjviSP/NWtOxwLTqpRylwtfXKprmva6s4+lgg2nzHTB01FJRPzmkxeMDcZs
+        2KlvTXA3BqJH6GAw==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: smp/core] x86/smpboot: Fix the parallel bringup decision
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <87ilc9gd2d.ffs@tglx>
+References: <87ilc9gd2d.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: WBQatvEGQiKAHXw7oHidJWHURI-cBAD_
-X-Proofpoint-GUID: WBQatvEGQiKAHXw7oHidJWHURI-cBAD_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- bulkscore=0 lowpriorityscore=0 clxscore=1011 priorityscore=1501
- suspectscore=0 spamscore=0 impostorscore=0 mlxlogscore=999 malwarescore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305310124
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Message-ID: <168554503081.404.12282666738168010731.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,106 +66,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-05-30 at 15:44 -0700, Kees Cook wrote:
-> On Tue, May 30, 2023 at 05:36:06PM -0400, James Bottomley wrote:
-> > On Tue, 2023-05-30 at 15:30 -0600, Gustavo A. R. Silva wrote:
-> > > Avoid confusing the compiler about possible negative sizes.
-> > > Use size_t instead of int for variables size and copied.
-> > > 
-> > > Address the following warning found with GCC-13:
-> > > In function ‘lpfc_debugfs_ras_log_data’,
-> > >     inlined from ‘lpfc_debugfs_ras_log_open’ at
-> > > drivers/scsi/lpfc/lpfc_debugfs.c:2271:15:
-> > > drivers/scsi/lpfc/lpfc_debugfs.c:2210:25: warning: ‘memcpy’
-> > > specified
-> > > bound between 18446744071562067968 and 18446744073709551615
-> > > exceeds
-> > > maximum object size 9223372036854775807 [-Wstringop-overflow=]
-> > >  2210 |                         memcpy(buffer + copied, dmabuf-
-> > > >virt,
-> > >       |                        
-> > > ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >  2211 |                                size - copied - 1);
-> > >       |                                ~~~~~~~~~~~~~~~~~~
-> > > 
-> > 
-> > This looks like a compiler bug to me and your workaround would have
-> > us using unsigned types everywhere for sizes, which seems wrong. 
-> > There are calls which return size or error for which we have
-> > ssize_t and that type has to be usable in things like memcpy, so
-> > the compiler must be fixed or the warning disabled.
-> 
-> The compiler is (correctly) noticing that the calculation involving
-> "size" (from which "copied" is set) could go negative.
+The following commit has been merged into the smp/core branch of tip:
 
-It can?  But if it can, then changing size and copied to unsigned
-doesn't fix it, does it?
+Commit-ID:     ff3cfcb0d46adc541283a507560f88b7d7114dbe
+Gitweb:        https://git.kernel.org/tip/ff3cfcb0d46adc541283a507560f88b7d7114dbe
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Wed, 31 May 2023 09:44:26 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Wed, 31 May 2023 16:49:34 +02:00
 
-> The "unsigned types everywhere" is a slippery slope argument that
-> doesn't apply: this is fixing a specific case of a helper taking a
-> size that is never expected to go negative in multiple places
-> (open-coded multiplication, vmalloc, lpfc_debugfs_ras_log_data, etc).
-> It should be bounds checked at the least...
+x86/smpboot: Fix the parallel bringup decision
 
-So your claim is the compiler only gets it wrong in this one case and
-if we just change this one case it will never get it wrong again?  I
-think I prefer the idea that there's a problem in the bounds checking
-code which should be susceptible to fixing if we file a compiler bug
-(either it should get it right or ignore the case if it can't decide).
+The decision to allow parallel bringup of secondary CPUs checks
+CC_ATTR_GUEST_STATE_ENCRYPT to detect encrypted guests. Those cannot use
+parallel bootup because accessing the local APIC is intercepted and raises
+a #VC or #VE, which cannot be handled at that point.
 
-> struct lpfc_hba {
->         ...
->         uint32_t cfg_ras_fwlog_buffsize;
->         ...
-> };
-> 
-> lpfc_debugfs_ras_log_open():
->         ...
->         struct lpfc_hba *phba = inode->i_private;
->         int size;
->         ...
->         size = LPFC_RAS_MIN_BUFF_POST_SIZE * phba-
-> >cfg_ras_fwlog_buffsize;
->         debug->buffer = vmalloc(size);
->         ...
->         debug->len = lpfc_debugfs_ras_log_data(phba, debug->buffer,
-> size);
->         ...
-> 
-> lpfc_debugfs_ras_log_data():
->         ...
->                 if ((copied + LPFC_RAS_MAX_ENTRY_SIZE) >= (size - 1))
-> {
->                         memcpy(buffer + copied, dmabuf->virt,
->                                size - copied - 1);
-> 
-> Honestly, the "if" above is the weirdest part, and perhaps that
-> should
-> just be adjusted instead:
-> 
->         if (size <= LPFC_RAS_MAX_ENTRY_SIZE)
->                 return -ENOMEM;
->         ...
->                 if (size - copied <= LPFC_RAS_MAX_ENTRY_SIZE) {
->                         memcpy(..., size - copied - 1);
->                         copied += size - copied - 1;
->                         break;
->                 }
->                 ...
->         }
->         return copied;
+The check works correctly, but only for AMD encrypted guests. TDX does not
+set that flag.
 
-No one said you couldn't improve the code.  It was claiming a fix by
-changing a signed variable to unsigned that got my attention because
-it's a classic indicator of compiler problems.  I didn't say anything
-about all the strlcpy replacements where the source is guaranteed to be
-zero terminated so the problem alluded to in the changelog doesn't
-exist.  But since it all becomes about the inefficiency of the ignored
-strlen it did strike me that the most common pattern in sysfs code is
-strlcpy followed by strim or strstrip, which could be done slightly
-more efficiently as a single operation, if someone wanted actually to
-improve our sysfs use cases ...
+As there is no real connection between CC attributes and the inability to
+support parallel bringup, replace this with a generic control flag in
+x86_cpuinit and let SEV-ES and TDX init code disable it.
 
-James
+Fixes: 0c7ffa32dbd6 ("x86/smpboot/64: Implement arch_cpuhp_init_parallel_bringup() and enable it")
+Reported-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Tom Lendacky <thomas.lendacky@amd.com>
+Tested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Link: https://lore.kernel.org/r/87ilc9gd2d.ffs@tglx
 
+---
+ arch/x86/coco/tdx/tdx.c         | 11 +++++++++++
+ arch/x86/include/asm/x86_init.h |  3 +++
+ arch/x86/kernel/smpboot.c       | 19 ++-----------------
+ arch/x86/kernel/x86_init.c      |  1 +
+ arch/x86/mm/mem_encrypt_amd.c   | 15 +++++++++++++++
+ 5 files changed, 32 insertions(+), 17 deletions(-)
 
+diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+index e146b59..27ce10c 100644
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -871,5 +871,16 @@ void __init tdx_early_init(void)
+ 	x86_platform.guest.enc_tlb_flush_required   = tdx_tlb_flush_required;
+ 	x86_platform.guest.enc_status_change_finish = tdx_enc_status_changed;
+ 
++	/*
++	 * TDX intercepts the RDMSR to read the X2APIC ID in the parallel
++	 * bringup low level code. That raises #VE which cannot be handled
++	 * there.
++	 *
++	 * Intel-TDX has a secure RDMSR hypercall, but that needs to be
++	 * implemented seperately in the low level startup ASM code.
++	 * Until that is in place, disable parallel bringup for TDX.
++	 */
++	x86_cpuinit.parallel_bringup = false;
++
+ 	pr_info("Guest detected\n");
+ }
+diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
+index 88085f3..0bf4d73 100644
+--- a/arch/x86/include/asm/x86_init.h
++++ b/arch/x86/include/asm/x86_init.h
+@@ -177,11 +177,14 @@ struct x86_init_ops {
+  * struct x86_cpuinit_ops - platform specific cpu hotplug setups
+  * @setup_percpu_clockev:	set up the per cpu clock event device
+  * @early_percpu_clock_init:	early init of the per cpu clock event device
++ * @fixup_cpu_id:		fixup function for cpuinfo_x86::phys_proc_id
++ * @parallel_bringup:		Parallel bringup control
+  */
+ struct x86_cpuinit_ops {
+ 	void (*setup_percpu_clockev)(void);
+ 	void (*early_percpu_clock_init)(void);
+ 	void (*fixup_cpu_id)(struct cpuinfo_x86 *c, int node);
++	bool parallel_bringup;
+ };
+ 
+ struct timespec64;
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 660709e..aaa876c 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1267,23 +1267,8 @@ void __init smp_prepare_cpus_common(void)
+ /* Establish whether parallel bringup can be supported. */
+ bool __init arch_cpuhp_init_parallel_bringup(void)
+ {
+-	/*
+-	 * Encrypted guests require special handling. They enforce X2APIC
+-	 * mode but the RDMSR to read the APIC ID is intercepted and raises
+-	 * #VC or #VE which cannot be handled in the early startup code.
+-	 *
+-	 * AMD-SEV does not provide a RDMSR GHCB protocol so the early
+-	 * startup code cannot directly communicate with the secure
+-	 * firmware. The alternative solution to retrieve the APIC ID via
+-	 * CPUID(0xb), which is covered by the GHCB protocol, is not viable
+-	 * either because there is no enforcement of the CPUID(0xb)
+-	 * provided "initial" APIC ID to be the same as the real APIC ID.
+-	 *
+-	 * Intel-TDX has a secure RDMSR hypercall, but that needs to be
+-	 * implemented seperately in the low level startup ASM code.
+-	 */
+-	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
+-		pr_info("Parallel CPU startup disabled due to guest state encryption\n");
++	if (!x86_cpuinit.parallel_bringup) {
++		pr_info("Parallel CPU startup disabled by the platform\n");
+ 		return false;
+ 	}
+ 
+diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
+index d82f4fa..1da4baa 100644
+--- a/arch/x86/kernel/x86_init.c
++++ b/arch/x86/kernel/x86_init.c
+@@ -126,6 +126,7 @@ struct x86_init_ops x86_init __initdata = {
+ struct x86_cpuinit_ops x86_cpuinit = {
+ 	.early_percpu_clock_init	= x86_init_noop,
+ 	.setup_percpu_clockev		= setup_secondary_APIC_clock,
++	.parallel_bringup		= true,
+ };
+ 
+ static void default_nmi_init(void) { };
+diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
+index e0b51c0..4855e5f 100644
+--- a/arch/x86/mm/mem_encrypt_amd.c
++++ b/arch/x86/mm/mem_encrypt_amd.c
+@@ -501,6 +501,21 @@ void __init sme_early_init(void)
+ 	x86_platform.guest.enc_status_change_finish  = amd_enc_status_change_finish;
+ 	x86_platform.guest.enc_tlb_flush_required    = amd_enc_tlb_flush_required;
+ 	x86_platform.guest.enc_cache_flush_required  = amd_enc_cache_flush_required;
++
++	/*
++	 * AMD-SEV-ES intercepts the RDMSR to read the X2APIC ID in the
++	 * parallel bringup low level code. That raises #VC which cannot be
++	 * handled there.
++	 * It does not provide a RDMSR GHCB protocol so the early startup
++	 * code cannot directly communicate with the secure firmware. The
++	 * alternative solution to retrieve the APIC ID via CPUID(0xb),
++	 * which is covered by the GHCB protocol, is not viable either
++	 * because there is no enforcement of the CPUID(0xb) provided
++	 * "initial" APIC ID to be the same as the real APIC ID.
++	 * Disable parallel bootup.
++	 */
++	if (sev_status & MSR_AMD64_SEV_ES_ENABLED)
++		x86_cpuinit.parallel_bringup = false;
+ }
+ 
+ void __init mem_encrypt_free_decrypted_mem(void)
