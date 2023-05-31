@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48608718576
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 026FF71857C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 17:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233622AbjEaPBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 11:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S233769AbjEaPCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 11:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233543AbjEaPBg (ORCPT
+        with ESMTP id S233677AbjEaPCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 11:01:36 -0400
+        Wed, 31 May 2023 11:02:42 -0400
 Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F236EC0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:01:34 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id a640c23a62f3a-96fb396ee3dso480062566b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:01:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CAF123
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:02:31 -0700 (PDT)
+Received: by mail-ej1-x649.google.com with SMTP id a640c23a62f3a-96fd3757c1dso580154266b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 08:02:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685545293; x=1688137293;
+        d=google.com; s=20221208; t=1685545349; x=1688137349;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Q+2I5zSt9CeXJ84cI2DkRkCdZ4Svm4rmosqyRFgB4Q=;
-        b=bnNa4BzNnMkAV8sNhlJArseXSoa/Cp3RaANBWBzd9VxjyIDTlr4hV7uLR/Fqr9sPFg
-         V3T4M1u/Cqm0TGKtaApBthh754cK9SVYKk7sf7q3cjbDyz6YZOGdIstimjRAUVz5u2hR
-         8m671arTsCNlICRB/UITLp9bQ0bfiVv7ZPXC8NfTxKukxFdruO1EVpr8lAweg52Zhtt/
-         L3D8bfG+9M6OBkd6fuW1h7I971Cedkt4wE2UQtCSpAXNcu0eSmZhV39uhvD0x4mx1YER
-         ls/kFUZu9/H1vEW7IHInniok08Iozig+z3zNg4JUoo/DWBFqr6kTLIvM4uP263wWuHu9
-         tIyg==
+        bh=VjkkPXwWP2UuAC8i0OxxIXvE50xM+SJ4TuQh4LuQSuA=;
+        b=b9HP3fVC1WMLEISsNDvrmAx+7T6OCx606wh51FEYzDPSVAbudgUPILu4wPuhUmSsAj
+         88aIsX+eUupN+Ztym2x/N0KNysr0nbAL9lK3BHICx7QsVQ/6Br2OqpqKa0O6/zXQteCG
+         aJxkky9PCqkB6uHmZyY29AMStNAa62L34JltEfi5kSJHu7rGR3Gl5nV+Dr0RMmgPSEqV
+         aR6fyBkkqAbBaWy1RiADSlAfOw7OPBdc5KiFCtrObXZcSTIfDsDM99ito93Tm+3YP0IJ
+         En6qoIFZfB2w5hXi7viGmOgheLKG4sXaeBxtF9ByBdMfaAjej+owSATDIm16m5j03RfP
+         6zIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685545293; x=1688137293;
+        d=1e100.net; s=20221208; t=1685545349; x=1688137349;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Q+2I5zSt9CeXJ84cI2DkRkCdZ4Svm4rmosqyRFgB4Q=;
-        b=OxGD6oaR3LfwYl4fudrd7WPoDkbbQs0N/W0ljMnjw6YvdJveJRQwW2fZYtx2AF1AOc
-         ErxWh9tFKdTGfEG3pz5yhZ9wj9wfCZhxdUFklQo6z5S9clQtGghPL8L7B8PDGQZpF/Hw
-         elk88LFTeM9lO6qTWPWd/IxpfT6bwpl8pPcRGZ0BscXzg0wF9mo4U/Ec/m13ci/eYben
-         V2xlc3XqSw7xGZDLVVpZ2ezxUSCQfBbFpvlb9DwJw++uCgL/SyuY5IFtRveGF9/cujVf
-         KBFkEhbnv2fr5YV6qb4il4oKvk+aV3UGk4Viz5Sp+JmZSoWq47tfkuYw0LfauSOveMpr
-         k4tA==
-X-Gm-Message-State: AC+VfDz+rJqyQuEGKI4j/6UELh9AumNwcO6JdpuWmkyUaN/7QNlDvxlw
-        w+dmRYiKK0KmvyF/QmSWNFX8Ya7aOLLQBMo=
-X-Google-Smtp-Source: ACHHUZ4rFIpC5Ll9CIoCxXSbzxO4gKHoA+ZHFByEbtLUbWCcxVxu8ZUSKtcxpuigVxxLU6jw6KkDmlloVWmty3w=
+        bh=VjkkPXwWP2UuAC8i0OxxIXvE50xM+SJ4TuQh4LuQSuA=;
+        b=E3MCESR7Ij0CuOuOyonSUjo4miBi5K21Ig5+hVmIaRO6dbxNXsrol4S3vOkkEN7H+3
+         3aiQxlfkjgOeB3NFz3T0dlSxpl3dMrAyvHaaZSSb930f8htxsznZhxvsrid6HSAXqZMb
+         7ST2pjvi6bGgJ4+hEfcCymbe/8mNE6lDmUudVyLIRX8Un1kJTMmBpHLmQzx6MElwmCCk
+         y865GZYyKWjTT140e0BS4k+C3sDlWTvHG4Mx8959qir/01GDGz3sxE+J9Ikm1a2kXUMb
+         Lx8NCVqFLnjF5RFiWvaXMyHi1mTgMSssUgcK0E4OT9NNOmNSZr4TmHlYha71QU3nZnS+
+         heMw==
+X-Gm-Message-State: AC+VfDyKpZbr77VbjuosSJxM6Lk7y1wmDD9lnk+yYLPsCwkV6dCx9d0j
+        bufPLqbyrqs36lHjGs/Jqg+quKBlEqKmffw=
+X-Google-Smtp-Source: ACHHUZ42wsfRNkL/N1arfet+5Di2c/mNhloIBbuHgEuBaMc9ULTRP8O/zj0KwniRad+/E3n6OiJn4Zqy+whHr2U=
 X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a17:906:846d:b0:96f:5348:6ce0 with SMTP
- id hx13-20020a170906846d00b0096f53486ce0mr2119526ejc.5.1685545293508; Wed, 31
- May 2023 08:01:33 -0700 (PDT)
-Date:   Wed, 31 May 2023 14:59:37 +0000
+ (user=aliceryhl job=sendgmr) by 2002:a17:906:8a7b:b0:962:334b:ee1a with SMTP
+ id hy27-20020a1709068a7b00b00962334bee1amr1499837ejc.1.1685545349753; Wed, 31
+ May 2023 08:02:29 -0700 (PDT)
+Date:   Wed, 31 May 2023 14:59:38 +0000
 In-Reply-To: <20230531145939.3714886-1-aliceryhl@google.com>
 Mime-Version: 1.0
 References: <20230531145939.3714886-1-aliceryhl@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230531145939.3714886-3-aliceryhl@google.com>
-Subject: [PATCH v3 2/4] rust: sync: reword the `Arc` safety comment for `Sync`
+Message-ID: <20230531145939.3714886-4-aliceryhl@google.com>
+Subject: [PATCH v3 3/4] rust: specify when `ARef` is thread safe
 From:   Alice Ryhl <aliceryhl@google.com>
 To:     rust-for-linux@vger.kernel.org
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
@@ -80,39 +80,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The safety comment on `impl Sync for Arc` references the Send safety
-comment. This commit avoids that in case the two comments drift apart in
-the future.
+An `ARef` behaves just like the `Arc` when it comes to thread safety, so
+we can reuse the thread safety comments from `Arc` here.
 
-Suggested-by: Andreas Hindborg <a.hindborg@samsung.com>
+This is necessary because without this change, the Rust compiler will
+assume that things are not thread safe even though they are.
+
 Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
 Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
 Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
 Reviewed-by: Benno Lossin <benno.lossin@proton.me>
 ---
- rust/kernel/sync/arc.rs | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ rust/kernel/types.rs | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-index 3ad831603cf4..3da84187ecf4 100644
---- a/rust/kernel/sync/arc.rs
-+++ b/rust/kernel/sync/arc.rs
-@@ -150,9 +150,11 @@ impl<T: ?Sized + Unsize<U>, U: ?Sized> core::ops::DispatchFromDyn<Arc<U>> for Ar
- // mutable reference when the reference count reaches zero and `T` is dropped.
- unsafe impl<T: ?Sized + Sync + Send> Send for Arc<T> {}
+diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+index 29db59d6119a..1e5380b16ed5 100644
+--- a/rust/kernel/types.rs
++++ b/rust/kernel/types.rs
+@@ -321,6 +321,19 @@ pub struct ARef<T: AlwaysRefCounted> {
+     _p: PhantomData<T>,
+ }
  
--// SAFETY: It is safe to send `&Arc<T>` to another thread when the underlying `T` is `Sync` for the
--// same reason as above. `T` needs to be `Send` as well because a thread can clone an `&Arc<T>`
--// into an `Arc<T>`, which may lead to `T` being accessed by the same reasoning as above.
-+// SAFETY: It is safe to send `&Arc<T>` to another thread when the underlying `T` is `Sync`
++// SAFETY: It is safe to send `ARef<T>` to another thread when the underlying `T` is `Sync` because
++// it effectively means sharing `&T` (which is safe because `T` is `Sync`); additionally, it needs
++// `T` to be `Send` because any thread that has an `ARef<T>` may ultimately access `T` using a
++// mutable reference, for example, when the reference count reaches zero and `T` is dropped.
++unsafe impl<T: AlwaysRefCounted + Sync + Send> Send for ARef<T> {}
++
++// SAFETY: It is safe to send `&ARef<T>` to another thread when the underlying `T` is `Sync`
 +// because it effectively means sharing `&T` (which is safe because `T` is `Sync`); additionally,
-+// it needs `T` to be `Send` because any thread that has a `&Arc<T>` may clone it and get an
-+// `Arc<T>` on that thread, so the thread may ultimately access `T` using a mutable reference when
-+// the reference count reaches zero and `T` is dropped.
- unsafe impl<T: ?Sized + Sync + Send> Sync for Arc<T> {}
- 
- impl<T> Arc<T> {
++// it needs `T` to be `Send` because any thread that has a `&ARef<T>` may clone it and get an
++// `ARef<T>` on that thread, so the thread may ultimately access `T` using a mutable reference, for
++// example, when the reference count reaches zero and `T` is dropped.
++unsafe impl<T: AlwaysRefCounted + Sync + Send> Sync for ARef<T> {}
++
+ impl<T: AlwaysRefCounted> ARef<T> {
+     /// Creates a new instance of [`ARef`].
+     ///
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
