@@ -2,146 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF8371732D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93FF71733A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 May 2023 03:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbjEaB3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 May 2023 21:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
+        id S233057AbjEaBge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 May 2023 21:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjEaB33 (ORCPT
+        with ESMTP id S230233AbjEaBgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 May 2023 21:29:29 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A4DD9;
-        Tue, 30 May 2023 18:29:27 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QWBWR0SG3z4f3jLj;
-        Wed, 31 May 2023 09:29:23 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgBnHbHzonZk749YKg--.48279S3;
-        Wed, 31 May 2023 09:29:23 +0800 (CST)
-Subject: Re: [PATCH v2] md/raid5: don't allow concurrent reshape with recovery
-To:     Yu Kuai <yukuai1@huaweicloud.com>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>, song@kernel.org,
-        pmenzel@molgen.mpg.de
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230529133410.2125914-1-yukuai1@huaweicloud.com>
- <b9fd7105-eadc-29cb-fa2e-24109f4a99b7@linux.dev>
- <e26af7db-a283-47ca-fc61-89af99f52c17@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <829683eb-ecfa-62ff-af67-b86dfd6f95d3@huaweicloud.com>
-Date:   Wed, 31 May 2023 09:29:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 30 May 2023 21:36:32 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFDBF9;
+        Tue, 30 May 2023 18:36:31 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-397f6a71ee7so3529296b6e.3;
+        Tue, 30 May 2023 18:36:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685496990; x=1688088990;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sGGyS7PZ3izlD8uBHyD50YNbDhchZ2LRm+rdUWJP4bw=;
+        b=psGoUI86pEOj/HZhmzkG65J6nlnC4qWnwFmr9pO7FE5KoE0rQTN3uPvuXEk3eDY1g2
+         US5WjcAUMlNa1rF2LLkCh+bqlhD6Lms0UyqQJYP46Hle7kBSmpSl0ixQaIO2ahm6t9k9
+         cXFK/n7DMzhE/P5Hh6oeVRVueGXmBXkEWiVzT28LhZ8XpZbqeZQ5kOQUiJXjJFBp27L4
+         2fD9IF+iRJFLHJEWvOmtnMmt2q5ZgMFI888JekkOKjRRhKa0ExA7TfLBCjcVIkfuqJ87
+         DNMAPmy/AabJ2HmZv5NPDAG0i+vChOVOEr/xOKVxHU39AXJde2dh22SFQ42KNfeORu5z
+         nTuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685496990; x=1688088990;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sGGyS7PZ3izlD8uBHyD50YNbDhchZ2LRm+rdUWJP4bw=;
+        b=OR6hutPEkrN3lNI0G4+eXftztyByUgHsVdOSdBjDauNcfiRD1hs8THSNhMNd8r+/0e
+         a9DoOASMId7FEyJa0MPCBghKh3Vw4pRJ3JCrvUGG9+swt5TuoIwLszCRTKH6tfXeR8GE
+         r0dxvq77g1wiYJgwH+KMjJymvmJzVNlX7h6tm3+TyN7Rd9st038AEPhGL1DRuB6pCCdP
+         a/kt6qJrWfYjRhnLavc9hDMyT94EBlca9anE9+1aAy4wtX5+7lLqOBLtFfAXbLyEeTVB
+         xEhFnP5djE3E3OYMg2Eps6mkNIjIeCd+loi8HRohcg8zSX5bsw+LKd2YlBOuzXyVO7Du
+         B8uA==
+X-Gm-Message-State: AC+VfDwaOp+jWNWKLy8+mXb+FARSTS4lxNY7a07gAFzaWw3EtvxfUvnK
+        U8trND28RQbi3Mnt3miu1Vw=
+X-Google-Smtp-Source: ACHHUZ4J4Uv1VDY46ZEJ1JN/HequWr+HWLdhTcLel8YjgDuoyoK4icwe7BCMPHgi2JUZ3kyTsd9aqQ==
+X-Received: by 2002:aca:b5c4:0:b0:398:214d:16d4 with SMTP id e187-20020acab5c4000000b00398214d16d4mr2139701oif.30.1685496990271;
+        Tue, 30 May 2023 18:36:30 -0700 (PDT)
+Received: from fedora.hsd1.wa.comcast.net ([2601:602:9300:2710::f1c9])
+        by smtp.gmail.com with ESMTPSA id jb12-20020a170903258c00b001a69dfd918dsm6612877plb.187.2023.05.30.18.36.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 18:36:29 -0700 (PDT)
+From:   Prince Kumar Maurya <princekumarmaurya06@gmail.com>
+To:     skhan@linuxfoundation.org, brauner@kernel.org, dchinner@redhat.com,
+        viro@zeniv.linux.org.uk, chenzhongjin@huawei.com
+Cc:     Prince Kumar Maurya <princekumarmaurya06@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzkaller-bugs@googlegroups.com, linux-fsdevel@vger.kernel.org,
+        syzbot+aad58150cbc64ba41bdc@syzkaller.appspotmail.com
+Subject: [PATCH v4] fs/sysv: Null check to prevent null-ptr-deref bug
+Date:   Tue, 30 May 2023 18:31:41 -0700
+Message-Id: <20230531013141.19487-1-princekumarmaurya06@gmail.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230530-gefangen-ersonnen-d1f1b6eea903@brauner>
+References: <20230530-gefangen-ersonnen-d1f1b6eea903@brauner>
 MIME-Version: 1.0
-In-Reply-To: <e26af7db-a283-47ca-fc61-89af99f52c17@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBnHbHzonZk749YKg--.48279S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXF48ZF13XF1UCr47WFy5twb_yoW5XF13pa
-        yktFs8urWDurn3tF4Dtr1jyFyYkryUJ3y5Jr13Wa48Ars8tryI9rWUWFn09r1UXr4Fqw4j
-        qr1rtr9xur17KFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
-        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUZa9
-        -UUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+sb_getblk(inode->i_sb, parent) return a null ptr and taking lock on
+that leads to the null-ptr-deref bug.
 
-在 2023/05/31 9:22, Yu Kuai 写道:
-> Hi,
-> 
-> 在 2023/05/31 9:06, Guoqing Jiang 写道:
->>
->>
->> On 5/29/23 21:34, Yu Kuai wrote:
->>> From: Yu Kuai <yukuai3@huawei.com>
->>>
->>> Commit 0aecb06e2249 ("md/raid5: don't allow replacement while reshape
->>> is in progress") fixes that replacement can be set if reshape is
->>> interrupted, which will cause that array can't be assembled.
->>>
->>> There is a similar problem on the other side, if recovery is
->>> interrupted, then reshape can start, which will cause the same problem.
->>>
->>> Fix the problem by not starting to reshape while recovery is still in
->>> progress.
->>>
->>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->>> ---
->>> Changes in v2:
->>>   - fix some typo in commit message.
->>>
->>>   drivers/md/raid5.c | 8 ++++++++
->>>   1 file changed, 8 insertions(+)
->>>
->>> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
->>> index 8686d629e3f2..6615abf54d3f 100644
->>> --- a/drivers/md/raid5.c
->>> +++ b/drivers/md/raid5.c
->>> @@ -8525,6 +8525,7 @@ static int raid5_start_reshape(struct mddev 
->>> *mddev)
->>>       struct r5conf *conf = mddev->private;
->>>       struct md_rdev *rdev;
->>>       int spares = 0;
->>> +    int i;
->>>       unsigned long flags;
->>>       if (test_bit(MD_RECOVERY_RUNNING, &mddev->recovery))
->>> @@ -8536,6 +8537,13 @@ static int raid5_start_reshape(struct mddev 
->>> *mddev)
->>>       if (has_failed(conf))
->>>           return -EINVAL;
->>> +    /* raid5 can't handle concurrent reshape and recovery */
->>> +    if (mddev->recovery_cp < MaxSector)
->>> +        return -EBUSY;
->>> +    for (i = 0; i < conf->raid_disks; i++)
->>> +        if (rdev_mdlock_deref(mddev, conf->disks[i].replacement))
->>> +            return -EBUSY;
->>> +
->>
->> Does it mean reshape and recovery  can happen in parallel without the 
->> change?
->> I really doubt about it given any kind of internal io (resync, reshape 
->> and recovery)
->> is handled by resync thread. And IIUC either md_do_sync or 
->> md_check_recovery
->> should avoid it, no need to do it in personality layer.
->>
-> 
-> They can't, in this case recovery is interrupted, then recovery can't
-> make progress, and md_check_recovery() will start reshape, and after
-> reshape is done, recovery will continue, and data will be corrupted
-> because raid456 reshape doesn't handle replacement.
-> 
-> And by the way in raid456 is that if system reboot, this array can't be
-> assembled, raid5_run() will fail if reshape and replacement are both
-> set.
+Reported-by: syzbot+aad58150cbc64ba41bdc@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=aad58150cbc64ba41bdc 
+Signed-off-by: Prince Kumar Maurya <princekumarmaurya06@gmail.com>
+---
+Change since v3: Added cleanup code for the branch[n].key on 
+failure code path.
 
-And someone reported this reboot case, I also add new test for this
-case, you can take a look.
+ fs/sysv/itree.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks,
-Kuai
+diff --git a/fs/sysv/itree.c b/fs/sysv/itree.c
+index b22764fe669c..58d7f43a1371 100644
+--- a/fs/sysv/itree.c
++++ b/fs/sysv/itree.c
+@@ -145,6 +145,10 @@ static int alloc_branch(struct inode *inode,
+ 		 */
+ 		parent = block_to_cpu(SYSV_SB(inode->i_sb), branch[n-1].key);
+ 		bh = sb_getblk(inode->i_sb, parent);
++		if (!bh) {
++			sysv_free_block(inode->i_sb, branch[n].key);
++			break;
++		}
+ 		lock_buffer(bh);
+ 		memset(bh->b_data, 0, blocksize);
+ 		branch[n].bh = bh;
+-- 
+2.40.1
 
