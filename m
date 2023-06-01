@@ -2,58 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E45B71F677
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 01:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2296871F679
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 01:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232649AbjFAXTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 19:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
+        id S232771AbjFAXTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 19:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjFAXTD (ORCPT
+        with ESMTP id S232160AbjFAXTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 19:19:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6D4136;
-        Thu,  1 Jun 2023 16:19:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 1 Jun 2023 19:19:07 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E4AE2;
+        Thu,  1 Jun 2023 16:19:05 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA16864AB6;
-        Thu,  1 Jun 2023 23:19:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 503DAC433EF;
-        Thu,  1 Jun 2023 23:18:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685661540;
-        bh=l1ucpsdJie8Q+wDscNYyAkC+XvWBk1qhZVUjoE0kcaQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QBMXOFHB/rkoef+74ZA211FIUQ0gMWIuzkFG9dOocjUnjzByFKRUhaaHc86HBjxOj
-         X11eUO8qWThIXA4s2X0qTzFlQaTRnNBOeTHqAb4iEhf4nm/ERFCr2d7pQmFLZOjH1v
-         goII6VhAA6E674lAJt0K4LI8VZwC8ewvvrMXngPwyC2IlLcYNO6L2umeZaVhvSfwCF
-         WVikhLMCf0KjrOJejxcFPgjbDOpVR+Okpvndstw3YnD2WlowaH0qV/dxycYUPn1Ywu
-         tDB4yGfp8ckNhkdwA+IJP9KVBhjI9Yt3SotI+H/0DPUFIJAfBpd7Gq4I3g53FNcaI2
-         Y1C6GTVkblX/g==
-Message-ID: <c691d9bd-9596-373e-0abe-2e776eb0d54b@kernel.org>
-Date:   Fri, 2 Jun 2023 08:18:58 +0900
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QXMX75Zhsz4x3g;
+        Fri,  2 Jun 2023 09:19:03 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1685661543;
+        bh=YfUNQPQU6xY0T8WHIxn29KjtUFufkzwEa5i9H/VKgQA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mt0ptTFHhZv/sg+O3n6Q+CxZcGPd3NUuJdFHfZ9bLB9flIJ6IIxnSdO+8Gt9yDBG5
+         9z8/LQHwrYEfuVdqXNOB5lW4z1FCpfgNJBCOFqeCxViMn48OLnD6y0tPvKBY0EbLub
+         xSJXa7V9LRodkOjz5+KfGG479kQLtKRNPL8zde2o7smUWr7gfAT/Bu0G7Y3i1BmWoy
+         sKvGDhq0DA6hXfMPjRK0vgMyGzqoIHgQIF9Sf3EiM3JiaFBv4xIrMoD1aixMW2TNEB
+         LhyOkSMcA1L1ZIpgz9YpLaIwYqw4HU+oxMeGwK+uj7meMlDeLPk3sUGaOJAJLKnlX1
+         RVX80TCQIP8Dw==
+Date:   Fri, 2 Jun 2023 09:19:02 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Wim Van Sebroeck <wim@iguana.be>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: error when fetching the watchdog tree
+Message-ID: <20230602091902.5d191348@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 4/9] PCI: endpoint: Warn and return if EPC is
- started/stopped multiple times
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        lpieralisi@kernel.org, kw@linux.com
-Cc:     kishon@kernel.org, bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20230601145718.12204-1-manivannan.sadhasivam@linaro.org>
- <20230601145718.12204-5-manivannan.sadhasivam@linaro.org>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20230601145718.12204-5-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/J4Z6Eqd_9XdH9yrTI72NLE2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,38 +50,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/23 23:57, Manivannan Sadhasivam wrote:
-> When the EPC is started or stopped multiple times from configfs, just emit
-> a once time warning and return. There is no need to call the EPC start/stop
-> functions in those cases.
-> 
-> Reviewed-by: Kishon Vijay Abraham I <kishon@kernel.org>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  drivers/pci/endpoint/pci-ep-cfs.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/pci/endpoint/pci-ep-cfs.c b/drivers/pci/endpoint/pci-ep-cfs.c
-> index 4b8ac0ac84d5..62c8e09c59f4 100644
-> --- a/drivers/pci/endpoint/pci-ep-cfs.c
-> +++ b/drivers/pci/endpoint/pci-ep-cfs.c
-> @@ -178,6 +178,9 @@ static ssize_t pci_epc_start_store(struct config_item *item, const char *page,
->  	if (kstrtobool(page, &start) < 0)
->  		return -EINVAL;
->  
-> +	if (WARN_ON_ONCE(start == epc_group->start))
-> +		return 0;
+--Sig_/J4Z6Eqd_9XdH9yrTI72NLE2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-WARN will dump a backtrace which is fairly scary for the user. This case is
-simply a bad user manipulation of the device, so why not simply add a pr_err()
-(optional) and return -EALREADY ?
+Hi all,
 
-> +
->  	if (!start) {
->  		pci_epc_stop(epc);
->  		epc_group->start = 0;
+Fetching the watchdog tree
+(git://www.linux-watchdog.org/linux-watchdog-next.git#master) for the
+past few days produces this error:
 
--- 
-Damien Le Moal
-Western Digital Research
+fatal: read error: Connection reset by peer
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/J4Z6Eqd_9XdH9yrTI72NLE2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR5J2YACgkQAVBC80lX
+0Gx/OAf+O5LpMtGB/YIuUnNV5T2j8bfr36+thx/xYPofExZH9My9Bx2L5YvEKvvP
+xvDK7UObaNzihR+iM4hpAzmRizTprGMTjhOXzLysYO0ZJSMdWzQkwysMC+G1FgUK
+QGjiM4epGpYeRptXX+YflS41fcShodwqKpPfOcPHX4RZToVjQng37NyqChOnLm5O
+A02FBGo9hnuQesqRdpX+Z9WwfEQEhzaKxwuskuktYQp0xXKpHTGGVz/lVDXYH3HL
+0URMnLbPoRKeBZQKbPhyaazjbDaMJXmssUh9XrGcIcp1zDp3BZt/hMvuPPvb7T91
+vOc1puLcb1Dpx/N9lRwh2TJXyVVLFQ==
+=KBoJ
+-----END PGP SIGNATURE-----
+
+--Sig_/J4Z6Eqd_9XdH9yrTI72NLE2--
