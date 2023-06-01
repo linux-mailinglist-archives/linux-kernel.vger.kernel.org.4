@@ -2,154 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3F471F357
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0860371F359
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjFAUCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 16:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
+        id S231334AbjFAUDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjFAUCG (ORCPT
+        with ESMTP id S229524AbjFAUDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:02:06 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2070.outbound.protection.outlook.com [40.107.220.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB5B12C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 13:02:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PtmD9X1FtDOeoIbd6c5slhEQAwVcn3eZzB1o0g9WeAV1wOzn/v/3Fulmw96gSlbJtgZyfH81gGDLKoH4J74LIDlLC6EXiufhYicfk+oXWrRUYO0GW5sDCH+Xoc1VKaLtAFdz/3RelQxI2gLkvVQyX9IdN2JRNDdUWjO75yFwbTXulUdeYmR2Nkry3QQw5WHa0BV9aw/rQxTF+fDRRxMN/nIriMIatL6OTfyGrz+JuJe7CxkUsqMpDA+rPeMPncZmYigBL5i1DozMUbopK6Gvhbe4jbLDXTjpA8dmE9eICXKtJgJPN9xuN//fwHwGzHlbahjA+6y5TvR6KZibeeogLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bx9jmB/J+G0d4c+eLB09i+cNOaX8h895PVE83dtlZoc=;
- b=CKk7R10KWx3TXDEWpv3ci9jaTrFqdFgHDvfl9JFzREFkpFCIsO6eOYjqvWE3ARAdsQmEhxqpUEZ9670sXWADHH+B6Uhoc7m4dlrC1xFW/CKmECcBvgeD66CPdITptJXOa99AHsSeNLmE1qU3uIByDBZ+bYyoY/B9nALDtLnVIlbauTj0Ry+Ltyx1SXV6XFGNDdzMVm4fFjzhV3WIARVyCE7iibeMxVAOG8hdvBaquctrdmSHC291cAhEMk8j4eUioln8AnZnI7fKnFNI4d0XdJ1SD2EhoSSR5sdoHO2bVY5O2R4sn2+7DVm/X/RnrP3h+3y9dDcGLK+nGw2pUyx/kg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bx9jmB/J+G0d4c+eLB09i+cNOaX8h895PVE83dtlZoc=;
- b=V/dvAbgL/TWtdbeyxxVS5Dqskmiy67oXhTn0wDaD+BWOQfafIsfjfq1YNcKq4WSyrHwtw7p0c5B1HIUo7NT1LlyRna8Wpyqw5wz9deaWLUQHPtk5K2sA0CNUaXD6uG+hSHehTlqMsdwRtEVSh3ALVADJrGIJRJA3nQq218RevLo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5112.namprd12.prod.outlook.com (2603:10b6:208:316::16)
- by PH7PR12MB7187.namprd12.prod.outlook.com (2603:10b6:510:203::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.26; Thu, 1 Jun
- 2023 20:01:52 +0000
-Received: from BL1PR12MB5112.namprd12.prod.outlook.com
- ([fe80::5c06:6ce6:fe4f:41da]) by BL1PR12MB5112.namprd12.prod.outlook.com
- ([fe80::5c06:6ce6:fe4f:41da%5]) with mapi id 15.20.6455.024; Thu, 1 Jun 2023
- 20:01:52 +0000
-Message-ID: <16959c51-5877-07b3-7451-f620fa32724a@amd.com>
-Date:   Thu, 1 Jun 2023 16:01:49 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH -next] drm/amdkfd: clean up one inconsistent indenting
-To:     Yang Li <yang.lee@linux.alibaba.com>, airlied@gmail.com
-Cc:     daniel@ffwll.ch, alexander.deucher@amd.com,
-        christian.koenig@amd.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230531020811.110744-1-yang.lee@linux.alibaba.com>
-Content-Language: en-US
-From:   Felix Kuehling <felix.kuehling@amd.com>
-Organization: AMD Inc.
-In-Reply-To: <20230531020811.110744-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQZPR01CA0013.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:85::12) To BL1PR12MB5112.namprd12.prod.outlook.com
- (2603:10b6:208:316::16)
+        Thu, 1 Jun 2023 16:03:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA1613D;
+        Thu,  1 Jun 2023 13:03:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28883635D3;
+        Thu,  1 Jun 2023 20:03:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C279C433D2;
+        Thu,  1 Jun 2023 20:03:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685649793;
+        bh=F82WUzOdnr/NfRpYPJ5s+LlZ3AUJ/0QHGxbssVtekR8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GJqxA2BcVQnYeORdYB6lSOoOR5CXmnao2o4im+lV8fG/jS/LblFQEyh/INFIahx2z
+         fzvBNUhPEpDgZZ72eo1lUZ/7SIaQUzbcPVkNCsm731gdrJ2g9emLJPbXl6Eehrd9iN
+         6Q4W2bG7HMhjFyLmZNfalepduXuBIoHaYebcbH94vURVu3THb7adC6BXoKhSaBmq6T
+         TvLcXhM2cQg7fpifRPJsv+lmU449y0p2RZlEi7+eionFvLfNCPnLXX5vkbUCQIZyaU
+         rY3V7+VAAxBnwxtTyBs9hToQfijfWQvGLljuKXFHd6y1iltycQKS/FsTYh2AfpaUy1
+         WvGlryGNL6fOg==
+Date:   Thu, 1 Jun 2023 21:03:09 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sean Nyekjaer <sean@geanix.com>,
+        Conor Dooley <conor.dooley@microchip.com>, robh+dt@kernel.org,
+        Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        pascal Paillet <p.paillet@foss.st.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] dt-bindings: mfd: stpmic1: add fsl,pmic-poweroff
+ property
+Message-ID: <20230601-magnolia-liability-8cbe2e2e2d1e@spud>
+References: <20230516132225.3012541-3-sean@geanix.com>
+ <20230516-footprint-handoff-bcd553ff6146@spud>
+ <9B1EE405-77D3-4980-9A13-9D4F87C1A64F@geanix.com>
+ <20230523-flaccid-fossil-c9d09838dc64@spud>
+ <658510B5-702B-464A-BA55-01E2B315BE39@geanix.com>
+ <20230524-ellipse-dagger-72f850253ea0@wendy>
+ <24418459-DE19-4575-835B-8673F279993C@geanix.com>
+ <b9297205-82fa-8cdf-550e-a53c073e0a9d@linaro.org>
+ <4BD5682B-1A36-427A-8BDA-3159182DA057@geanix.com>
+ <24c2b94a-40de-b214-1931-ec44162f4973@linaro.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5112:EE_|PH7PR12MB7187:EE_
-X-MS-Office365-Filtering-Correlation-Id: 58401c2c-d472-443d-c5c4-08db62db0aaa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5nKHNNYD3fjL4AqAX8rS7NdsGOO9e3ouX96sKBwj/SW2ABmbcp4OFKVACYU0m1ZbbUHglKNYJYM9ltWS9dcKGhNHVs1U/wDZz2wERlJGKiY6RxGBPs/gkEk3pQKTshBgACbf1oMtfWS6MZ8dTH2Hhsyf6yZR1Ok3gQf/p/QeHGZuKjHV5IAnLys4BUP3t3aROqYXV3o7mXNELMNYiQ78lTXpQePwpA+DhkPGxOtPYShe+wIqe+onhQ2b9Rcg+cbDGPJAPL/DMQ2FM/FEBLw+AMFdk/NuHy/tWEOD9uVT3gMIa/dUKi2eSVcLe682SSGaoCii9egqdO/Aj0sMiI+cptMTxxMZqnFszxnqNDs1gyrfKuRH2lrGVuMPPA1sP29wZRytF/600enBlAt/1i5qD+k4pSSeyTfU4RjMHIA8iyDO7rUhuCgOeqK1EvVnDYSTxT49HWJj1iBIKAUOPYMSOP9N+PllvsXV46KiKdxwwrvOVtq3I7EiBfsoRfdpLPaTB8qb2tlOFt5+ksADZ+BGL+AUHoK7r1sYbiCPkbF/3QH0vvsz95Y7kze5hBhc6sjeevI6QzKvHs/n8i1l4PYLlXgRWoCB4XCgQlAsqcgdisagHFW32noEwBOYWHU34+tfmAeNUly2G4yH8N+Qy38zJw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5112.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(366004)(396003)(376002)(451199021)(478600001)(31686004)(26005)(6506007)(6512007)(83380400001)(53546011)(2616005)(2906002)(4744005)(186003)(44832011)(8676002)(36916002)(8936002)(38100700002)(6486002)(86362001)(6666004)(316002)(36756003)(31696002)(41300700001)(5660300002)(66556008)(66946007)(4326008)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?elJTTVlYYllQT0N5cE5GSk91Y3VZbEhFRHNxRlJ5b2JOT3hFOUhoUDhTWGlV?=
- =?utf-8?B?V2k4SFo5b2xRbWhnbWZub3JJWkIvMFhGalRXWDFORUh0OGFzRGZ4U1daaDRS?=
- =?utf-8?B?YVB3Z2IzWEZ0eGlIaGcydHNTUXZqTHE3c2dVTUpTT3luTGU4bUJwdTgzMU15?=
- =?utf-8?B?Z29veFVHK01veUR5YnJQVWRzNnA0U01OYjBoVmV5M1A2dU1XVjhKejR1YW1C?=
- =?utf-8?B?ZG5KamoxOGZDM1A0RHJCa2JIV1BTcmFPQjYrUFR5ZGt3SVlENVdTVmx5VTdL?=
- =?utf-8?B?bHp1Y0doeUx5UzdqQjgvNlZCR0krenhTNmlPaitjVFIwa2RVem1HWHlOTC82?=
- =?utf-8?B?MHl6dUxNcExoQm1iLzVXQjd5TEZHNE1lRVBVSmtUTTI3VnVwZWlXS0ZycWxq?=
- =?utf-8?B?bWlVdmJGejBmeGtyTmZpdDVCZUN0MDdQMi9PZ3ZoZ1k4Z2VCcUltOFZGbW5i?=
- =?utf-8?B?T3lNTUhYcHFmSzY1VEJkaCsyWDR5dUZTbVFaaGRFaThrbmZVNVZxd1E0dTd1?=
- =?utf-8?B?Z2V4UWxPM2tWa2ttTDlVUWx3Y2dwenN0OGdOa2UvSHN1TCtWRmZOa1YvWnNU?=
- =?utf-8?B?ZzB3RWs4WE1XYVEwMndDOTdTL1BEd01CZ2tCOGNJUEFicFEyYmVUdk4rUms2?=
- =?utf-8?B?bk00S0lWdGVEbDNvckhJT0FKaHEzK2NmdEZudzNFZk1lMHhTcTZNTjljWEV3?=
- =?utf-8?B?S2JaaGMzRkdEWDNkWHdNZnJhWFJpODgyV2hkd0NkSDdxS3RoeEhjSVA5R3po?=
- =?utf-8?B?ODNsRXpnTFRQVEZhV3BHNnF2ZWNnaWxKVWVaTE53OXpYK0pVN2VVclBzNFVO?=
- =?utf-8?B?MG1zeUtrR0Qzazh2d29qVnBVWGZTOUNhRll2RElDVzFBa3VYQXlzK2xMSjhk?=
- =?utf-8?B?V2hRWldEOGdkMDF1cVBrL2lUUFBFcGtXZVBhaFZmWWdOVlUySjZYNDR2M2dC?=
- =?utf-8?B?WHpmWno3RE5TV25Wb2w4UFdDdGhDNmxDSzRrbmlQVWtibWNZdHJXS1UycS9k?=
- =?utf-8?B?SUQzZW5xVjREbUtTeW9yQjZ6cjFUbmhLem53ZU5zaG1sbUNIc1pCRzc2c0JL?=
- =?utf-8?B?TEJTdTNGVzdOMkZQOGFHRjdWRmxPd0NqbWtiZHluY2JmL2hPVFN3RWNwVWxM?=
- =?utf-8?B?SjJJRW5Pdks4NTJ1enJYNG5hdHZLSllHci9CTkFqc2ZjT3BXM1d6NTY5ekFV?=
- =?utf-8?B?VGpRQXZXNGNicEI5TW5GNHpVQmtHOFNPSWo2OVpzM2d5bFZWUVdlcW9aNDZR?=
- =?utf-8?B?d21Hd3MwWnA2RkRWN1BBV2VsZEpmUllMWTFPYzVHOE0wbkhsc3VwRmFMR2VI?=
- =?utf-8?B?VVl6ZFYyOGZSbStGbVNZMmdoS0p2MlVyOGVEeWdSV3hDTFRWMTJIWDIrc1ds?=
- =?utf-8?B?VmJBZE12bFlJOWN2RGdaNnZIbHJyMzFqbEgxTmdPWllOcHdWUjVKVXJWMXk1?=
- =?utf-8?B?MDVLTUhKY1RBcWF1MFBsT3ZrWDB6VlNZUmgwLzByQ2xMWXhnTk5rUG5zd0VU?=
- =?utf-8?B?Zng2Q2RmLzdJZWRFN2JtcEhkM0tXb1Z0NnEweHl2c2Z2WlNnU3NGSk1ZK3BM?=
- =?utf-8?B?TmlYMUdIdzJPYVpoUHR6VStkejNlSjJBR0ZNS01hblZDOGNBdUxBRFJYQmJm?=
- =?utf-8?B?aFVSK043Q0pjMmZ4cm5tMk5MR0VFTHoyWUJIV1UzZUpQdU96MmU3L2Q2dEZr?=
- =?utf-8?B?d2xFSkMxSzJHWXovOVEwSVlCK0FTbWMrQ29hRU5WY1lQcGppUlUxUmRYZWw4?=
- =?utf-8?B?dlRNM1pYeE5DZ3NZWjBvWXV0ZVNsSGJZYm9oSFNpSEdoYUUvL3VGYWFJTVBH?=
- =?utf-8?B?U3R3OEtNTDUvVW1DMnBvOWZhK2RCQWE2bFRSYjdYMEVhM3hVWktYbno5d0cx?=
- =?utf-8?B?aUNuVmpjWWh3NnRUdVpOUlRDZG5WaWJRZXlwVmxkeXEvV2pIbmY2eitEUWVN?=
- =?utf-8?B?VFNoMWNZZ095NnY2UWpYdmZ2aE02VndkNjhpV2d5aDcyMkF5cFphRVNsQktG?=
- =?utf-8?B?Z3owM0xVeXVKNVM5bU9haTUycU92ZUtUalRxTWZ4bjlvOTRSQ3YyQ3ZHT2Z5?=
- =?utf-8?B?dzBZUE1lWm1ORHN1R2UxM3FocmxqL3MxL1ZjdEFxSkk0a2ZTaEFXVWthM3c0?=
- =?utf-8?Q?q2dOwkGDd+LIsNViHLo+EHBgo?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58401c2c-d472-443d-c5c4-08db62db0aaa
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5112.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 20:01:52.3408
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hCXYOG0bp/zw4hPAna2D/kevkfFEXmStpKvSGDxF9sAeI+5uN9BGvh3iLRWyUjX8/6x9BIjs07hZoOhPdpID+Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7187
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Yo3r8RT7fhIPzLah"
+Content-Disposition: inline
+In-Reply-To: <24c2b94a-40de-b214-1931-ec44162f4973@linaro.org>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-30 22:08, Yang Li wrote:
-> drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_device.c:1036 kgd2kfd_interrupt() warn: inconsistent indenting
->
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+--Yo3r8RT7fhIPzLah
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'm applying the patch to amd-staging-drm-next. Thanks!
+Not trimming any of this in case Lee wants to chime in and needs the
+context...
 
+On Thu, Jun 01, 2023 at 05:25:21PM +0200, Krzysztof Kozlowski wrote:
+> On 01/06/2023 16:05, Sean Nyekjaer wrote:
+> >> On 1 Jun 2023, at 09.12, Krzysztof Kozlowski <krzysztof.kozlowski@lina=
+ro.org> wrote:
+> >> On 24/05/2023 12:30, Sean Nyekjaer wrote:
+> >>>> On 24 May 2023, at 12.08, Conor Dooley <conor.dooley@microchip.com> =
+wrote:
+> >>>> On Wed, May 24, 2023 at 10:16:13AM +0200, Sean Nyekj=C3=A6r wrote:
+> >>>>>> On 23 May 2023, at 19.29, Conor Dooley <conor@kernel.org> wrote:
+> >>>>>> On Tue, May 23, 2023 at 11:55:50AM +0200, Sean Nyekj=C3=A6r wrote:
+> >>>>>>>> On 16 May 2023, at 20.06, Conor Dooley <conor@kernel.org> wrote:
+> >>>>>>>> On Tue, May 16, 2023 at 03:22:24PM +0200, Sean Nyekjaer wrote:
+> >>>>>>>>> Document the new optional "fsl,pmic-poweroff" property.
+> >>>>>>>>>
+> >>>>>>>>> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> >>>>>>>>> ---
+> >>>>>>>>> Documentation/devicetree/bindings/mfd/st,stpmic1.yaml | 8 +++++=
++++
+> >>>>>>>>> 1 file changed, 8 insertions(+)
+> >>>>>>>>>
+> >>>>>>>>> diff --git a/Documentation/devicetree/bindings/mfd/st,stpmic1.y=
+aml b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
+> >>>>>>>>> index 9573e4af949e..5183a7c660d2 100644
+> >>>>>>>>> --- a/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
+> >>>>>>>>> +++ b/Documentation/devicetree/bindings/mfd/st,stpmic1.yaml
+> >>>>>>>>> @@ -26,6 +26,14 @@ properties:
+> >>>>>>>>>
+> >>>>>>>>> interrupt-controller: true
+> >>>>>>>>>
+> >>>>>>>>> +  st,pmic-poweroff:
+> >>>>>>>>> +    $ref: /schemas/types.yaml#/definitions/flag
+> >>>>>>>>> +    description: |
+> >>>>>>>>> +      if present, configure the PMIC to shutdown all power rai=
+ls when
+> >>>>>>>>> +      power off sequence have finished.
+> >>>>>>>>> +      Use this option if the SoC should be powered off by exte=
+rnal power management
+> >>>>>>>>> +      IC (PMIC).
+> >>>>>>>>
+> >>>>>>>> Just reading this description, this is sounding quite like a "so=
+ftware
+> >>>>>>>> behaviour" type of property, which are not permitted, rather than
+> >>>>>>>> describing some element of the hardware. Clearly you are trying =
+to solve
+> >>>>>>>> an actual problem though, so try re-phrasing the description (and
+> >>>>>>>> property name) to focus on what exact hardware configuration it =
+is that
+> >>>>>>>> you are trying to special-case.
+> >>>>>>>> Krzysztof suggested that the samsung,s2mps11-acokb-ground proper=
+ty in
+> >>>>>>>> samsung,s2mps11.yaml is addressing a similar problem, so that co=
+uld be
+> >>>>>>>> good to look at.
+> >>>>>>>
+> >>>>>>> Better wording?
+> >>>>>>>    Indicates that the power management IC (PMIC) is used to power=
+ off the board.
+> >>>>>>>    So as the last step in the power off sequence set the SWOFF bi=
+t in the
+> >>>>>>>    main control register (MAIN_CR) register, to shutdown all powe=
+r rails.
+> >>>>>>
+> >>>>>> The description for the property that Krzysztof mentioned is
+> >>>>>> samsung,s2mps11-acokb-ground:
+> >>>>>>  description: |
+> >>>>>>    Indicates that ACOKB pin of S2MPS11 PMIC is connected to the gr=
+ound so
+> >>>>>>    the PMIC must manually set PWRHOLD bit in CTRL1 register to tur=
+n off the
+> >>>>>>    power. Usually the ACOKB is pulled up to VBATT so when PWRHOLD =
+pin goes
+> >>>>>>    low, the rising ACOKB will trigger power off.
+> >>>>>>
+> >>>>>> In other words, I am asking what (abnormal?) scenario there is tha=
+t means
+> >>>>>> you need the property, rather than what setting the property does.
+> >>>>>> Or am I totally off, and this is the only way this PMIC works?
+> >>>>>
+> >>>>> Indicates that the power management IC (PMIC) turn-off condition is=
+ met
+> >>>>> by setting the SWOFF bit in the main control register (MAIN_CR) reg=
+ister.
+> >>>>> Turn-off condition can still be reached by the PONKEY input.
+> >>>>>
+> >>>>> ?
+> >>>>>
+> >>>>> I must admit I=E2=80=99m somewhat lost here :)
+> >>>>
+> >>>> Sorry about that. I'm trying to understand what is different about y=
+our
+> >>>> hardware that it needs the property rather than what adding the prop=
+erty
+> >>>> does. If you look at the samsung one, it describes both the
+> >>>> configuration of the hardware ("ACOKB pin of S2MPS11 PMIC is connect=
+ed to
+> >>>> the ground") and how that is different from normal ("Usually the ACO=
+KB is
+> >>>> pulled up to VBATT so when PWRHOLD pin goes low, the rising ACOKB wi=
+ll
+> >>>> trigger power off.")
+> >>>>
+> >>>> Looking at your datasheet, you don't have such a pin though - just t=
+he
+> >>>> sw poweroff bit & the PONKEY stuff. My angle is just that I am trying
+> >>>> to figure out why you need this property when it has not been needed
+> >>>> before. Or why you would not always want to "shutdown all power rails
+> >>>> when power-off sequence have finished". I'm sorry if these are silly
+> >>>> questions.
+> >>>>
+> >>>
+> >>> No silly questions, maybe they trick me to come up with the correct a=
+nswer :D
+> >>>
+> >>> Basically without this, you won=E2=80=99t be able to power off the sy=
+stem
+> >>> other than hitting the PONKEY.
+> >>> So it=E2=80=99s a new feature that wasn=E2=80=99t supported before.
+> >>> Maybe this feature should not be optional?
 
-> ---
->   drivers/gpu/drm/amd/amdkfd/kfd_device.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device.c b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-> index 862a50f7b490..0398a8c52a44 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-> @@ -1033,7 +1033,7 @@ void kgd2kfd_interrupt(struct kfd_dev *kfd, const void *ih_ring_entry)
->   			    	is_patched ? patched_ihre : ih_ring_entry)) {
->   			kfd_queue_work(node->ih_wq, &node->interrupt_work);
->   			spin_unlock_irqrestore(&node->interrupt_lock, flags);
-> -				return;
-> +			return;
->   		}
->   		spin_unlock_irqrestore(&node->interrupt_lock, flags);
->   	}
+[1]
+
+> >>
+> >> You are still describing what driver should do with registers. What you
+> >> are missing is describing real cause for this. It's exactly the same
+> >> case as was with s2mps11.
+> >=20
+> > I didn=E2=80=99t mention anything with registers in the patch:
+> >=20
+> > if present, configure the PMIC to shutdown all power rails when
+> > power off sequence have finished.
+> > Use this option if the SoC should be powered off by external power mana=
+gement
+> > IC (PMIC).
+> >=20
+> > ^^ That=E2=80=99s is exactly what is happening if the option is enabled.
+> >=20
+> > Do you have a suggestion wording?
+> > What do you think about removing this option and make it default behavi=
+our?
+>=20
+> Again - you write what the driver should do ("configure the PMIC") when
+> something in Linux happens ("power off sequence have finished"). Exactly
+> the same case as s2mps11. Look how it was worded there. You need to find
+>  the real cause, why such actions are required on which board.
+>=20
+> Otherwise it does not warrant DT property and just perform it always.
+
+Yeah, Sean asked that a few messages back up [1] & having looked at the
+datasheet I am kinda struggling to see why you would not just always
+want to do this. There does not seem to be an equivalent pin in this
+PMIC as your Samsung one, so this patch isn't working around some
+flaw in a board design, but rather seems to be looking to implement the
+actual functionality.
+I vote for do it always, obviously unless Less disagrees, and if that
+causes problems we can revisit the dt property with more understanding
+of whatever use case breaks if this is done unilaterally.
+
+Cheers,
+Conor.
+
+--Yo3r8RT7fhIPzLah
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHj5fAAKCRB4tDGHoIJi
+0vL/AQDttfyRfESEKWkvfGQjrjQ5B9WlC8aqsFHsasj4EYqbfQD9EPQbMeFq+8Yz
+CQrn/26FP+hJVKknLAsqEY6ejLyoOwc=
+=VErF
+-----END PGP SIGNATURE-----
+
+--Yo3r8RT7fhIPzLah--
