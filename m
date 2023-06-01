@@ -2,82 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340407193CB
+	by mail.lfdr.de (Postfix) with ESMTP id 804A27193CC
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbjFAHA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 03:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
+        id S231446AbjFAHA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 03:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbjFAHAY (ORCPT
+        with ESMTP id S231712AbjFAHAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 03:00:24 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6811A2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 00:00:09 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-974265a1a40so388837666b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 00:00:09 -0700 (PDT)
+        Thu, 1 Jun 2023 03:00:52 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFAA0A3
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 00:00:50 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f6d01d390bso5176465e9.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 00:00:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685602808; x=1688194808;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nZDlrGzZznfoRh38IZ4BuhQJoDgfvEZtOrnmqrwUyyQ=;
-        b=ttZtbkT8BFN3nOIpl9ofTPk8v+Lt44fZo5uLadVUPBGWgA+x9LsdD42oeKoIE7R1vf
-         44aKBiwmeXDGrKsA65f8N7wvFT7bpRZV7Z2wopeH1jY3E8sKyg+sgBxb2anr1WQ51E8o
-         HHan2Ug0EP8LLF5yrYbFUprG4n5ZhnOSfacBYJtHID8jbq8yKhHZANzLMvFT7sZgxWRq
-         flj35ew+CxQjJFpXWQgzmXXxPYCj1eUImlMEFy2kaTWPTjpOEro3fv6QtkVuyi6Nbr1X
-         Ok/RDMX3/53noGbrXl6CtHAG/1Z8aSyxyfgT1GlCYBNQbVGJyePYc78jiVD9oZpCbQ2M
-         A1bg==
+        d=linaro.org; s=google; t=1685602849; x=1688194849;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OxRrgRUPXLg+KQfV8mbcGNrsYGuYiAw0+HbpYENHkuo=;
+        b=Q+U8feg49vDgFpsb7m0jneUFU2dpXKxRfKkHHZWFBk+CsusjfKM/aNSWZ+i2+GVUxe
+         8cyfcQlOHPwHOGe3A/jyX6e5eRlq1FsZttHd/EOOGUYLxCCI54gOB8lBZcbneTzUJtzW
+         2fA+UH9v3w50bHbp3trMRcnGdZrGrSXCOL95IFPWHjLKUMqdu+KnH3ovQ0AYqMT+XNqP
+         PQD9FPbrC32WLKnDuUQ9xfV5A+9VHg2XVTt1lT2pFJa55R0mlNefGiR2GR/eSeRA+kO6
+         KvWo5xahIRjnZSjwoNVSVzZU0KRCjuwKCGpP9Bi90PsO3yaaV6ubJ7Wp0N3KAKoClsNv
+         rsWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685602808; x=1688194808;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nZDlrGzZznfoRh38IZ4BuhQJoDgfvEZtOrnmqrwUyyQ=;
-        b=jlIMXJTCMpFG3xiQwQXvWE4AR3/Fp1quCbMJUuI7yz1yKFF0y2yhCp/Wfv5kcCe29k
-         RvsUog01AYe/GlexLVNAcaK/06GcyUAJC4Gr/+UoMZ4836Y2QkBpAI1zbCM3BS31n5Zl
-         J4pnfEQvwFHA3qDkNCEGtPuBAK+KBgGDqzN+0Z8w8wZq+i2QMd4Szrckb8SciKY1/Ae1
-         c7OR0BJnAfRAqbkaNtV3syFmqdpqq5WlyO3NYu16GvbIyKAnzsjTIvmGZmJyBp+TUtEB
-         l0SnwPoR2JH473dke4eNhQbksF4wRnxg6UABi+TjhIMQ782ac8D1CnucKlOdxYeDOJfg
-         jJSA==
-X-Gm-Message-State: AC+VfDx0cbOsN0eGYwXQgEjmqToc0Xk/t2eT8bxgkJCx15TDcmkdarNq
-        uUX4IDH9rO8JIT2SpSV7sFKG+g==
-X-Google-Smtp-Source: ACHHUZ4mh5gVUd0k89XyvS9Bk4MnVaXyEnyBLY0aoruOI8MoHI/h3NUE4U1qUwOiXUadHjPQ7cLlLw==
-X-Received: by 2002:a17:907:7d89:b0:96a:1ee9:4b0 with SMTP id oz9-20020a1709077d8900b0096a1ee904b0mr760202ejc.33.1685602808456;
-        Thu, 01 Jun 2023 00:00:08 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id dv22-20020a170906b81600b0096f78953b77sm10125944ejb.147.2023.06.01.00.00.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 00:00:07 -0700 (PDT)
-Message-ID: <96f40b17-ad7a-ede2-dcbc-a35b6b7df1d2@linaro.org>
-Date:   Thu, 1 Jun 2023 09:00:06 +0200
+        d=1e100.net; s=20221208; t=1685602849; x=1688194849;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OxRrgRUPXLg+KQfV8mbcGNrsYGuYiAw0+HbpYENHkuo=;
+        b=g60D+iRLQowm3V4R2d0wlSQ8U6YLspQuHDzgpDuzRQZXdnqEgaqxb6TX2RYQYP5FXU
+         Qf/jx1HOhmt7YLMBkCDz3eHM6lvUyQBHsyEkeHiqnYDUfoSn6fVb6tRVYsGurlF02Frm
+         U0yQPhFG5knFqN1h6pU89HYfRRIKJ62IlpndgFFGNF1dluRYDAD1aOz2NDBjabNWnh0t
+         s1cMAgG2SdT75pd2Ggq1gzYE/CbPgzSDzePUOVVeqsoqaqjlgAL2aHFLk8a3/2skahpS
+         7/RInVSq6JUulSREAS1gE9ygK6SzojanC+6/a+m682YV7EJbkwXuxgV2jKuSDn3AVlQf
+         kzhA==
+X-Gm-Message-State: AC+VfDzV+ujLf2yZgRXbYBkWnty6e54SzJr7EurZStW9ZLy8fpolHABL
+        YW/z98LhN+3VCiUEeTefDyv0fw==
+X-Google-Smtp-Source: ACHHUZ7yNt737oU21xIIW2lgNoIdEG8AG9XzKhuCs1zoBCZJWYS4cvQZIp3g+70eVynk7RddIPylHw==
+X-Received: by 2002:a5d:4a4d:0:b0:307:8718:7891 with SMTP id v13-20020a5d4a4d000000b0030787187891mr929355wrs.54.1685602849326;
+        Thu, 01 Jun 2023 00:00:49 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id l5-20020adffe85000000b00307a83ea722sm9207174wrr.58.2023.06.01.00.00.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 00:00:47 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 10:00:43 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Sukrut Bellary <sukrut.bellary@linux.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] misc: fastrpc: Fix double free of 'buf' in error path
+Message-ID: <22f7e4db-1380-4326-906f-83a85447471a@kadam.mountain>
+References: <20230518100829.515143-1-sukrut.bellary@linux.com>
+ <9194ebdf-f335-4cd6-bf89-bb4f86a57784@kili.mountain>
+ <f47b17c1-1c02-2aa3-ba10-fcef70cb25a8@linaro.org>
+ <b0115d7d-d15a-4948-8726-09a8b37f3f36@kili.mountain>
+ <4aa42c38-e0e2-4d2d-bfe2-15bc151f7117@linaro.org>
+ <ZGf+99vmXpN5nJ2f@dev-linux.lan>
+ <ZHgicqL/TKuXHM0o@dev-linux.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 3/4] arm64: dts: qcom: qdu1000: Add SDHCI pin
- configuration to DTSI
-Content-Language: en-US
-To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20230601065805.18079-1-quic_kbajaj@quicinc.com>
- <20230601065805.18079-4-quic_kbajaj@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230601065805.18079-4-quic_kbajaj@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHgicqL/TKuXHM0o@dev-linux.lan>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,13 +83,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 08:58, Komal Bajaj wrote:
-> Add required pins for SDHCI, so that the interface can work reliably.
+On Wed, May 31, 2023 at 09:45:38PM -0700, Sukrut Bellary wrote:
+> On Fri, May 19, 2023 at 03:57:59PM -0700, Sukrut Bellary wrote:
+> > On Fri, May 19, 2023 at 11:39:59AM +0100, Srinivas Kandagatla wrote:
+> > > 
+> > > 
+> > > On 19/05/2023 11:22, Dan Carpenter wrote:
+> > > > > ----------------------->cut<---------------------------
+> > > > > diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+> > > > > index f60bbf99485c..3fdd326e1ae8 100644
+> > > > > --- a/drivers/misc/fastrpc.c
+> > > > > +++ b/drivers/misc/fastrpc.c
+> > > > > @@ -1891,7 +1891,8 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl,
+> > > > > char __user *argp)
+> > > > >                                        &args[0]);
+> > > > >          if (err) {
+> > > > >                  dev_err(dev, "mmap error (len 0x%08llx)\n", buf->size);
+> > > > > -               goto err_invoke;
+> > > > > +               fastrpc_buf_free(buf);
+> > > > > +               return err;
+> > > > >          }
+> > > > > 
+> > > > >          /* update the buffer to be able to deallocate the memory on the DSP
+> > > > > */
+> > > > > @@ -1930,11 +1931,7 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl,
+> > > > > char __user *argp)
+> > > > >          return 0;
+> > > > > 
+> > > > >   err_assign:
+> > > > > -       fastrpc_req_munmap_impl(fl, buf);
+> > > > > -err_invoke:
+> > > > > -       fastrpc_buf_free(buf);
+> > > > > -
+> > > > > -       return err;
+> > > > > +       return fastrpc_req_munmap_impl(fl, buf);
+> > > > 
+> > > > This will return success if copy_to_user() fails.
+> > > > 
+> > > that is true, using return value of fastrpc_req_munmap_impl does not really
+> > > make sense here we should just return err in either case to the user.
+> > >
+> >
 > 
+> I have one follow-up question before I send the v2 patch.
+> With the following approach, I do see one issue.
+> 
+> ----------------------->cut<---------------------------
+> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+> index f60bbf99485c..3fdd326e1ae8 100644
+> --- a/drivers/misc/fastrpc.c
+> +++ b/drivers/misc/fastrpc.c
+> @@ -1891,7 +1891,8 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl,
+> char __user *argp)
+>                                       &args[0]);
+>         if (err) {
+>                 dev_err(dev, "mmap error (len 0x%08llx)\n", buf->size);
+> -               goto err_invoke;
+> +               fastrpc_buf_free(buf);
+> +               return err;
+>         }
+> 
+>         /* update the buffer to be able to deallocate the memory on the DSP */
+> @@ -1930,11 +1931,7 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl,
+> char __user *argp)
+>         return 0;
+> 
+>  err_assign:
+> -       fastrpc_req_munmap_impl(fl, buf);
+> -err_invoke:
+> -       fastrpc_buf_free(buf);
+> -
+> -       return err;
+> +       fastrpc_req_munmap_impl(fl, buf);
+> +       return err;
+>  }
+> ----------------------->cut<---------------------------
+> 
+> In this, if qcom_scm_assign_mem() fails, the buf is not added to the list.
+> But the call to fastrpc_req_munmap_impl() tries to delete the buf
+> from the list.
+> 
+> To avoid this, we can use the following approach.
 
-This is not a separate commit. The pin configuration by itself does not
-make sense and we don't need it. It's part of adding SDHCI, so squash it.
+The list is initialized in __fastrpc_buf_alloc().
 
-Best regards,
-Krzysztof
+	INIT_LIST_HEAD(&buf->node);
+
+So calling list_del(&buf->node); is fine.  It's not necessary but it's
+not harmful.
+
+regards,
+dan carpenter
 
