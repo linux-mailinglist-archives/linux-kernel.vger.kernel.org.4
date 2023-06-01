@@ -2,408 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 564CC71981D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACC971981E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbjFAKCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
+        id S233104AbjFAKCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbjFAKA7 (ORCPT
+        with ESMTP id S232055AbjFAKBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:00:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE1095;
-        Thu,  1 Jun 2023 03:00:34 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        Thu, 1 Jun 2023 06:01:12 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D90E54;
+        Thu,  1 Jun 2023 03:00:43 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ADB636602242;
-        Thu,  1 Jun 2023 11:00:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685613633;
-        bh=eSsaO6sWjfBDKFigck79tmjPTj7Lur5sngRF5kbxj5w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ay8CzNgFIo+vIAC7ZpNACub8SYO8j7KjxcsPEoLm+bSvAv3OKpX6P70Bs5Nkb0mup
-         NUzIc7M75QDxeYScSqr+7LBx7DAZV2s5BsS/FR1Ttquu/TZqTidX8Xlqo0VmhxUv34
-         5hcCrhsjc9DJEbOTQWlnDyl1OXCTI1xMwK9lIozbANq+YQFWvXXNOL3/Wt08EovmB6
-         NYEFuytqwYk11EmBfrslzICBwZe16uAVd0hOxU8RrWxzoS0GgE0c+1+7DQkr2mrCmu
-         HubHVJf9ubMWG1iQ01A6qvGx2D2AJnQT6/XOiXvHNPIrK4UfKpFldZ6ds0Z3+xf6IJ
-         UfxYLhJmuNSbQ==
-Message-ID: <c26f8cab-9509-1e8a-600f-4f61f38c8b17@collabora.com>
-Date:   Thu, 1 Jun 2023 12:00:30 +0200
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id AE3FA61E4052B;
+        Thu,  1 Jun 2023 12:00:35 +0200 (CEST)
+Message-ID: <f76f9920-7234-ef72-9e88-87713e3b0f8e@molgen.mpg.de>
+Date:   Thu, 1 Jun 2023 12:00:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2] mmc: mtk-sd: reduce CIT for better performance
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v8] Bluetooth: hci_qca: Add support for Qualcomm Bluetooth
+ SoC QCA2066
 Content-Language: en-US
-To:     =?UTF-8?B?V2VuYmluIE1laSAo5qKF5paH5b2sKQ==?= 
-        <Wenbin.Mei@mediatek.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?Q2hhb3RpYW4gSmluZyAo5LqV5pyd5aSpKQ==?= 
-        <Chaotian.Jing@mediatek.com>
-References: <20230510015851.11830-1-wenbin.mei@mediatek.com>
- <0df3968e-da34-b36c-4cb4-92d66508a46a@collabora.com>
- <e682b8b66261a71601707a4e74af2829f86800dc.camel@mediatek.com>
- <7f5e14e5-a814-efd7-6082-c4eff697c536@collabora.com>
- <59568b9e6d50135787932cf8e92624914f29e27b.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <59568b9e6d50135787932cf8e92624914f29e27b.camel@mediatek.com>
+To:     Tim Jiang <quic_tjiang@quicinc.com>
+Cc:     marcel@holtmann.org, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        quic_bgodavar@quicinc.com, quic_hemantg@quicinc.com
+References: <20230601091355.18097-1-quic_tjiang@quicinc.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230601091355.18097-1-quic_tjiang@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/06/23 05:16, Wenbin Mei (梅文彬) ha scritto:
-> On Wed, 2023-05-31 at 10:18 +0200, AngeloGioacchino Del Regno wrote:
-> External email : Please do not click links or open attachments until you have verified the sender or the content.
-> 
-> Il 31/05/23 09:32, Wenbin Mei (梅文彬) ha scritto:
-> 
->> On Thu, 2023-05-18 at 11:13 +0200, AngeloGioacchino Del Regno wrote:
-> 
->>> External email : Please do not click links or open attachments until
-> 
->>> you have verified the sender or the content.
-> 
->>>
-> 
->>>
-> 
->>> Il 10/05/23 03:58, Wenbin Mei ha scritto:
-> 
->>>> CQHCI_SSC1 indicates to CQE the polling period to use when using
-> 
->>>> periodic
-> 
->>>> SEND_QUEUE_STATUS(CMD13) polling.
-> 
->>>> The default value 0x1000 that corresponds to 150us, let's decrease
-> 
->>>> it to
-> 
->>>
-> 
->>> The default value 0x1000 (4096) corresponds to 4096 * 52.08uS =
-> 
->>> 231.33uS
-> 
->>> ...so the default is not 150uS.
-> 
->>>
-> 
->>> If I'm wrong, this means that the CQCAP field is not 0, which would
-> 
->>> mean
-> 
->>> that the expected 3uS would be wrong.
-> 
->>>
-> 
->>> Also, since the calculation can be done dynamically, this is what we
-> 
->>> should
-> 
->>> actually do in the driver, as this gives information to the next
-> 
->>> engineer
-> 
->>> checking this piece of code.
-> 
->>>
-> 
->>> Apart from this, by just writing 0x40 to the CQHCI_SSC1 register, you
-> 
->>> are
-> 
->>> assuming that the CQCAP value requirement is fullfilled, but you
-> 
->>> cannot
-> 
->>> assume that the bootloader has set the CQCAP's ITCFVAL and ITCFMUL
-> 
->>> fields
-> 
->>> as you expect on all platforms: this means that implementing this
-> 
->>> takes
-> 
->>> a little more effort.
-> 
->>>
-> 
->>> You have two ways to implement this:
-> 
->>>     *** First ***
-> 
->>>     1. Read ITCFMUL and ITCFVAL, then:
-> 
->>>        tclk_mul = itcfmul_to_mhz(ITCFMUL); /* pseudo function
-> 
->>> interprets reg value*/
-> 
->>>        tclk = ITCFVAL * tclk_mul;
-> 
->>>
-> 
->>>     2. Set SSC1 so that we get 3nS:
-> 
->>>        #define CQHCI_SSC1_CIT GENMASK(15, 0)
-> 
->>>        poll_time = cit_time_ns_to_regval(3);
-> 
->>>        sscit = FIELD_PREP(CQHCI_SSC1_CIT, poll_time)
-> 
->>>        cqhci_writel( ... )
-> 
->>>
-> 
->>>     *** Second **
-> 
->>>
-> 
->>>     1. Pre-set ITCFMUL and ITCFVAL to
-> 
->>>        ITCFVAL = 192 (decimal)
-> 
->>>        ITCFMUL = 2 (where 2 == 0.1MHz)
-> 
->>>
-> 
->>>     2. Set SSC1 so that we get 3nS:
-> 
->>>        #define CQHCI_SSC1_CIT GENMASK(15, 0)
-> 
->>>        poll_time = cit_time_ns_to_regval(3);
-> 
->>>        sscit = FIELD_PREP(CQHCI_SSC1_CIT, poll_time)
-> 
->>>        cqhci_writel( ... )
-> 
->>>
-> 
->>> I would implement the first way, as it paves the way to extend this
-> 
->>> to different
-> 
->>> tclk values if needed in the future.
-> 
->>>
-> 
->>> Regards,
-> 
->>> Angelo
-> 
->> Hi Angelo,
-> 
->>
-> 
->> Sorry for lately reply.
-> 
->>
-> 
->> For Mediatek mmc host IP, ITCFMUL is 0x2(0x1MHz), ITVFVAL reports 182,
-> 
->> and these fields are the same and are readonly for all IC, but since
-> 
->> Mediatek CQE uses msdc_hclk(273MHz), CMD13'interval calculation driver
-> 
->> should use 273MHz to get the actual time, so the actual clock is
-> 
->> 27.3MHz.
-> 
->>
-> 
-> 
-> You're right, I've misread the datasheet, just rechecked and it reports RO.
-> 
-> 
->> If CIT is 0x1000 by default, CMD idle time: 0x1000 * 1 / 27.3MHz =
-> 
->> around 150us.
-> 
->>
-> 
->> In addition the bootloader will not set the CQCAP's ITCFVAL and ITCFMUL
-> 
->> fields, because these fields of CQCAP register is RO(readonly), so we
-> 
->> can ignore the change for the CQCAP's ITCFVAL and ITCFMUL fields.
-> 
->>
-> 
-> 
-> Yes, that's right, again - this means that you should go for the first
-> 
-> proposed implementation, as future MediaTek SoCs may (or may not) change
-> 
-> that: if you implement as proposed, this is going to be a one-time thing
-> 
-> and future SoCs won't need specific changes.
-> 
-> 
-> That implementation also documents the flow about how we're getting to
-> 
-> the actual value, which is important for community people reading this
-> 
-> driver in the future for debugging purposes.
-> 
-> 
-> Regards,
-> 
-> Angelo
-> 
-> 
-> 
-> Thanks for your proposal.
-> 
-> 
-> I have discussed with our designer, and this fields of CQCAP's ITCFVAL and ITCFMUL will not change.
-> If we add more code for it, these codes will also affect the execution efficiency, even if it has a very
-> small effect.
-> I think if it's just for reading convenience, we can add mode comments to make it easier to read the code.
-> Do you think it's okay to add more comments?
-> 
-
-This isn't a performance path, but anyway, if you think that it will be at some
-point, you can read the two registers at probe time as part of the MMC_CAP2_CQE
-if branch, and then cache the invariable values to `struct msdc_host`: this
-will make you able to never perform register reads for ITCFVAL/FMUL in
-msdc_cqe_enable(), resolving the efficiency issue.
-
-Even better, instead of caching ITCFVAL/FMUL to two variables, since the idle
-timer value likely won't ever change during runtime, you can directly perform
-the calculation for SSC1 at probe time and cache that value instead, so that
-in msdc_cqe_enable() you will have something like...
-
-	/* Set the send status command idle timer */
-	cqhci_writel(cq_host, host->cq_ssc1_time, CQHCI_SSC1);
-
-where cq_ssc1_time is
-struct msdc_host {
-	.......
-	u32 cq_ssc1_time;
-	....
-}
-
-and where your probe function is
-
-static int msdc_drv_probe(struct platform_device *pdev)
-{
-	......
-
-	if (mmc->caps2 & MMC_CAP2_CQE) {
-		host->cq_host = ......
-		........
-		read itcfval;
-		read itcfmul;
-		host->cq_ssc1_time = calculated-value;
-		........
-	}
-
-	.......
-}
-
-Regards,
-Angelo
+Dear Tim,
 
 
-> Begards,
-> Wenbin
-> 
->> Thanks
-> 
->> Wenbin
-> 
->>>
-> 
->>>> 0x40 that corresponds to 3us, which can improve the performance of
-> 
->>>> some
-> 
->>>> eMMC devices.
-> 
->>>>
-> 
->>>> Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
-> 
->>>> ---
-> 
->>>>     drivers/mmc/host/mtk-sd.c | 4 ++++
-> 
->>>>     1 file changed, 4 insertions(+)
-> 
->>>>
-> 
->>>> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-> 
->>>> index edade0e54a0c..ffeccddcd028 100644
-> 
->>>> --- a/drivers/mmc/host/mtk-sd.c
-> 
->>>> +++ b/drivers/mmc/host/mtk-sd.c
-> 
->>>> @@ -2453,6 +2453,7 @@ static void msdc_hs400_enhanced_strobe(struct
-> 
->>>> mmc_host *mmc,
-> 
->>>>     static void msdc_cqe_enable(struct mmc_host *mmc)
-> 
->>>>     {
-> 
->>>>         struct msdc_host *host = mmc_priv(mmc);
-> 
->>>> +     struct cqhci_host *cq_host = mmc->cqe_private;
-> 
->>>>
-> 
->>>>         /* enable cmdq irq */
-> 
->>>>         writel(MSDC_INT_CMDQ, host->base + MSDC_INTEN);
-> 
->>>> @@ -2462,6 +2463,9 @@ static void msdc_cqe_enable(struct mmc_host
-> 
->>>> *mmc)
-> 
->>>>         msdc_set_busy_timeout(host, 20 * 1000000000ULL, 0);
-> 
->>>>         /* default read data timeout 1s */
-> 
->>>>         msdc_set_timeout(host, 1000000000ULL, 0);
-> 
->>>> +
-> 
->>>> +     /* decrease the send status command idle timer to 3us */
-> 
->>>> +     cqhci_writel(cq_host, 0x40, CQHCI_SSC1);
-> 
->>>>     }
-> 
->>>>
-> 
->>>>     static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
-> 
->>>
-> 
->>>
-> 
-> 
-> 
+Thank you for the interation.
 
+Am 01.06.23 um 11:13 schrieb Tim Jiang:
+> This patch adds support for QCA2066 firmware patch and nvm downloading.
+> as the RF performance of qca2066 soc chip from different foundries will
+> be difference, so we use different nvm to configure them by according
+
+s/difference/different/
+
+> to board id.
+
+chat.lmsys.org with the model vicuna-13b suggested the text below:
+
+> Please correct the spelling/grammar of […]:
+> Sure, here's the corrected version of the sentence:
+> This patch adds support for QCA2066 firmware patch and NVM
+> downloading, as the RF performance of QCA2066 SOC chips from
+> different foundries may vary. Therefore, we use different NVM to
+> configure them based on board ID.
+> I hope that helps!
+
+;-)
+
+> Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
+> ---
+
+In the future, it’d be great if you added a change-log between the patch 
+iterations so reviewers know what to look at.
+
+>   drivers/bluetooth/btqca.c   | 76 ++++++++++++++++++++++++++++++++++++-
+>   drivers/bluetooth/btqca.h   |  4 ++
+>   drivers/bluetooth/hci_qca.c | 40 +++++++++++++++++--
+>   3 files changed, 114 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
+> index e7e58a956d15..1f1b141b80f9 100644
+> --- a/drivers/bluetooth/btqca.c
+> +++ b/drivers/bluetooth/btqca.c
+> @@ -205,6 +205,46 @@ static int qca_send_reset(struct hci_dev *hdev)
+>   	return 0;
+>   }
+>   
+> +static int qca_read_fw_board_id(struct hci_dev *hdev, u16 *bid)
+> +{
+> +	u8 cmd;
+> +	struct sk_buff *skb;
+> +	struct edl_event_hdr *edl;
+> +	int err = 0;
+> +	int bid_len;
+
+As the length cannot be negative, why not use `unsigned int`? But also 
+see below.
+
+> +
+> +	cmd = EDL_GET_BID_REQ_CMD;
+> +	skb = __hci_cmd_sync_ev(hdev, EDL_PATCH_CMD_OPCODE, EDL_PATCH_CMD_LEN,
+> +				&cmd, 0, HCI_INIT_TIMEOUT);
+> +	if (IS_ERR(skb)) {
+> +		err = PTR_ERR(skb);
+> +		bt_dev_err(hdev, "Reading QCA board ID failed (%d)", err);
+> +		return err;
+> +	}
+> +
+> +	edl = skb_pull_data(skb, sizeof(*edl));
+> +	if (!edl) {
+> +		bt_dev_err(hdev, "QCA read board ID with no header");
+> +		err = -EILSEQ;
+> +		goto out;
+> +	}
+> +
+> +	if (edl->cresp != EDL_CMD_REQ_RES_EVT ||
+> +	    edl->rtype != EDL_GET_BID_REQ_CMD) {
+> +		bt_dev_err(hdev, "QCA Wrong packet: %d %d", edl->cresp, edl->rtype);
+> +		err = -EIO;
+> +		goto out;
+> +	}
+> +
+> +	bid_len = edl->data[0];
+> +	*bid = (edl->data[1] << 8) + edl->data[2];
+> +	bt_dev_dbg(hdev, "%s: bid len = %x, bid = %x", __func__, bid_len, *bid);
+
+Currently, you use `bid_len` only to log it, and not for anything else. 
+Should some sanity checks be added? Otherwise, I think, the variable can 
+be removed?
+
+> +
+> +out:
+> +	kfree_skb(skb);
+> +	return err;
+> +}
+> +
+>   int qca_send_pre_shutdown_cmd(struct hci_dev *hdev)
+>   {
+>   	struct sk_buff *skb;
+> @@ -574,6 +614,29 @@ int qca_set_bdaddr_rome(struct hci_dev *hdev, const bdaddr_t *bdaddr)
+>   }
+>   EXPORT_SYMBOL_GPL(qca_set_bdaddr_rome);
+>   
+> +static void qca_generate_nvm_name(struct hci_dev *hdev, char *fwname,
+> +		   size_t max_size, struct qca_btsoc_version ver, u16 bid)
+> +{
+> +	u8 rom_ver;
+> +	u32 soc_ver;
+> +	const char *variant;
+> +
+> +	soc_ver = get_soc_ver(ver.soc_id, ver.rom_ver);
+> +	rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
+> +
+> +	if ((le32_to_cpu(ver.soc_id) & 0x0000ff00) == QCA_HSP_GF_SOC_ID)  /* hsp gf chip */
+> +		variant = "g";
+> +	else
+> +		variant = "";
+> +
+> +	if (bid == 0x0)
+> +		snprintf(fwname, max_size, "qca/hpnv%02x%s.bin", rom_ver, variant);
+> +	else
+> +		snprintf(fwname, max_size, "qca/hpnv%02x%s.%x", rom_ver, variant, bid);
+> +
+> +	bt_dev_dbg(hdev, "%s: nvm name is %s", __func__, fwname);
+> +}
+> +
+>   int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+>   		   enum qca_btsoc_type soc_type, struct qca_btsoc_version ver,
+>   		   const char *firmware_name)
+> @@ -582,6 +645,7 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+>   	int err;
+>   	u8 rom_ver = 0;
+>   	u32 soc_ver;
+> +	u16 boardid = 0;
+
+Sorry, I didn’t get to reply to your v3 answer:
+
+> Why can’t you simply use `unsigned int` [1]?
+> [Tim] you can refer to function qca_uart_setup , which also use u32
+
+I meant `boardid`, which is newly introduced.
+
+
+Kind regards,
+
+Paul
+
+
+>   
+>   	bt_dev_dbg(hdev, "QCA setup on UART");
+>   
+> @@ -604,6 +668,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+>   	if (qca_is_wcn399x(soc_type)) {
+>   		snprintf(config.fwname, sizeof(config.fwname),
+>   			 "qca/crbtfw%02x.tlv", rom_ver);
+> +	} else if (soc_type == QCA_QCA2066) {
+> +		snprintf(config.fwname, sizeof(config.fwname),
+> +			 "qca/hpbtfw%02x.tlv", rom_ver);
+>   	} else if (soc_type == QCA_QCA6390) {
+>   		snprintf(config.fwname, sizeof(config.fwname),
+>   			 "qca/htbtfw%02x.tlv", rom_ver);
+> @@ -631,6 +698,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+>   	/* Give the controller some time to get ready to receive the NVM */
+>   	msleep(10);
+>   
+> +	if (soc_type == QCA_QCA2066)
+> +		qca_read_fw_board_id(hdev, &boardid);
+> +
+>   	/* Download NVM configuration */
+>   	config.type = TLV_TYPE_NVM;
+>   	if (firmware_name)
+> @@ -644,8 +714,10 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+>   			snprintf(config.fwname, sizeof(config.fwname),
+>   				 "qca/crnv%02x.bin", rom_ver);
+>   		}
+> -	}
+> -	else if (soc_type == QCA_QCA6390)
+> +	} else if (soc_type == QCA_QCA2066) {
+> +		qca_generate_nvm_name(hdev, config.fwname, sizeof(config.fwname),
+> +				ver, boardid);
+> +	} else if (soc_type == QCA_QCA6390)
+>   		snprintf(config.fwname, sizeof(config.fwname),
+>   			 "qca/htnv%02x.bin", rom_ver);
+>   	else if (soc_type == QCA_WCN6750)
+> diff --git a/drivers/bluetooth/btqca.h b/drivers/bluetooth/btqca.h
+> index b884095bcd9d..234a97a49bb9 100644
+> --- a/drivers/bluetooth/btqca.h
+> +++ b/drivers/bluetooth/btqca.h
+> @@ -13,6 +13,7 @@
+>   #define EDL_PATCH_TLV_REQ_CMD		(0x1E)
+>   #define EDL_GET_BUILD_INFO_CMD		(0x20)
+>   #define EDL_NVM_ACCESS_SET_REQ_CMD	(0x01)
+> +#define EDL_GET_BID_REQ_CMD		(0x23)
+>   #define EDL_PATCH_CONFIG_CMD		(0x28)
+>   #define MAX_SIZE_PER_TLV_SEGMENT	(243)
+>   #define QCA_PRE_SHUTDOWN_CMD		(0xFC08)
+> @@ -48,6 +49,8 @@
+>   
+>   #define QCA_FW_BUILD_VER_LEN		255
+>   
+> +#define QCA_HSP_GF_SOC_ID		0x1200
+> +
+>   
+>   enum qca_baudrate {
+>   	QCA_BAUDRATE_115200 	= 0,
+> @@ -148,6 +151,7 @@ enum qca_btsoc_type {
+>   	QCA_QCA6390,
+>   	QCA_WCN6750,
+>   	QCA_WCN6855,
+> +	QCA_QCA2066,
+>   };
+>   
+>   #if IS_ENABLED(CONFIG_BT_QCA)
+> diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+> index 1b064504b388..3c65b6b80461 100644
+> --- a/drivers/bluetooth/hci_qca.c
+> +++ b/drivers/bluetooth/hci_qca.c
+> @@ -1712,6 +1712,7 @@ static int qca_setup(struct hci_uart *hu)
+>   	const char *firmware_name = qca_get_firmware_name(hu);
+>   	int ret;
+>   	struct qca_btsoc_version ver;
+> +	const char *soc_name;
+>   
+>   	ret = qca_check_speeds(hu);
+>   	if (ret)
+> @@ -1726,10 +1727,35 @@ static int qca_setup(struct hci_uart *hu)
+>   	 */
+>   	set_bit(HCI_QUIRK_SIMULTANEOUS_DISCOVERY, &hdev->quirks);
+>   
+> -	bt_dev_info(hdev, "setting up %s",
+> -		qca_is_wcn399x(soc_type) ? "wcn399x" :
+> -		(soc_type == QCA_WCN6750) ? "wcn6750" :
+> -		(soc_type == QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390");
+> +	switch (soc_type) {
+> +	case QCA_AR3002:
+> +		soc_name = "ar300x";
+> +		break;
+> +	case QCA_ROME:
+> +		soc_name = "ROME";
+> +		break;
+> +	case QCA_WCN3990:
+> +	case QCA_WCN3991:
+> +	case QCA_WCN3998:
+> +		soc_name = "wcn399x";
+> +		break;
+> +	case QCA_QCA2066:
+> +		soc_name = "QCA2066";
+> +		break;
+> +	case QCA_QCA6390:
+> +		soc_name = "QCA6390";
+> +		break;
+> +	case QCA_WCN6750:
+> +		soc_name = "wcn6750";
+> +		break;
+> +	case QCA_WCN6855:
+> +		soc_name = "wcn6855";
+> +		break;
+> +	default:
+> +		soc_name = "unknown soc";
+> +		break;
+> +	}
+> +	bt_dev_info(hdev, "setting up %s", soc_name);
+>   
+>   	qca->memdump_state = QCA_MEMDUMP_IDLE;
+>   
+> @@ -1874,6 +1900,11 @@ static const struct qca_device_data qca_soc_data_qca6390 __maybe_unused = {
+>   	.num_vregs = 0,
+>   };
+>   
+> +static const struct qca_device_data qca_soc_data_qca2066 __maybe_unused = {
+> +	.soc_type = QCA_QCA2066,
+> +	.num_vregs = 0,
+> +};
+> +
+>   static const struct qca_device_data qca_soc_data_wcn6750 __maybe_unused = {
+>   	.soc_type = QCA_WCN6750,
+>   	.vregs = (struct qca_vreg []) {
+> @@ -2371,6 +2402,7 @@ MODULE_DEVICE_TABLE(of, qca_bluetooth_of_match);
+>   
+>   #ifdef CONFIG_ACPI
+>   static const struct acpi_device_id qca_bluetooth_acpi_match[] = {
+> +	{ "QCOM2066", (kernel_ulong_t)&qca_soc_data_qca2066 },
+>   	{ "QCOM6390", (kernel_ulong_t)&qca_soc_data_qca6390 },
+>   	{ "DLA16390", (kernel_ulong_t)&qca_soc_data_qca6390 },
+>   	{ "DLB16390", (kernel_ulong_t)&qca_soc_data_qca6390 },
