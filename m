@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EFA71F369
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E724E71F366
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231931AbjFAUGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 16:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41392 "EHLO
+        id S231955AbjFAUGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbjFAUGF (ORCPT
+        with ESMTP id S231663AbjFAUGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:06:05 -0400
+        Thu, 1 Jun 2023 16:06:06 -0400
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C0A134;
-        Thu,  1 Jun 2023 13:06:04 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 46F1A32002F9;
-        Thu,  1 Jun 2023 16:06:03 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6196195;
+        Thu,  1 Jun 2023 13:06:05 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id CF49A32001FC;
+        Thu,  1 Jun 2023 16:06:04 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 01 Jun 2023 16:06:03 -0400
+  by compute2.internal (MEProxy); Thu, 01 Jun 2023 16:06:05 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685649962; x=
-        1685736362; bh=aQVnrUtWK2iD10mHCHPBgoH3zv4+A/ErwEDXziIOT4Y=; b=A
-        1QHzVjZuTET09em988ya3g3r6xXQHIs6GQkU3VC3ZdUo2D2mV31RhrtJhn/SAbTP
-        MeMDfcWDROzN6frZYU3DYZf51+lyuAw9JW+QbYUuhZNsY3dz35IowNpwkPkPBdZV
-        jIuzu1GOQ7SvD6Z//aV2w8mWCVSIO4VcOgysZppZmsPEjSxOx0Iq529YIle+KyEC
-        g50B5NtoNnihpUsbFIcKBAQbQiiFZl2Vp3Z/JCCTqyrQa2JNtFhjIZ3vIsW2DLH8
-        /orZYIia97KCj0mpLJ+gJEY4W13E7BOZqzuNsMWzQJJif3cIoa+c40WbWWzrlD46
-        i7xOfgNmbIjKSVy13dqUA==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685649964; x=
+        1685736364; bh=Gu+WlP+2bsePT/P2fB0521Gn91OZaDLXsUxYcTQ73gA=; b=G
+        CLKakvDROosoZIhS9uesLtHiY9/K2xF8wnhlA7pr72YLGFl4XMm9Vwpf8kU8YZ4w
+        VLB4eWcz7DVNGF/wreqhbYtIm+kFDGmwNj6BMb715x+wIS+tLKxqI/XgeCeJ7G+e
+        plfGTCbL5hCI3ygPcDSdGR5ftBUFqFvsuB6VlfU6WvYBGInAwPM+fiOQ6rbTY+WC
+        YCsOGsLJO9pRylC+TTJgO8CFmY9PSlWG6JmtsKyPRqk2Q2bXAZ8Ix9F+3eYMSLd4
+        jOoPD/EiUMo43YMLlHdL5+Eecrvqdcfpj4FUJxZUg7pjSEBFBPFd9Sz8Z5QbANNy
+        U+t3QjZ3G8jEtCkGTFnPQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685649962; x=
-        1685736362; bh=aQVnrUtWK2iD10mHCHPBgoH3zv4+A/ErwEDXziIOT4Y=; b=h
-        qV+vs8PG36jy6iwxv7JFh7TKtwTbGMjlCDXhQR1DHbZIGuCiRUX7KQ/AcOT6SV8y
-        We4mx1jPHGg43a2eEGPm0C8rJfjTWeVd1CNDeagBRN97ri+J4PNiWFGhG3JoKjZU
-        AvWbyHC4g+TkByRS40Went7Z7VBc+od4T86O580i2fX7/51J3uZws0asLO4UYm90
-        wDC84Xj5ShEmMK5w899NhWFptzwujZFCx2fazw1dJYmfdZuCvV5QpBm+hoTHWmK1
-        aE0vo6f5KrHzWE08e6B4u9cvRMNnb2iDf+GyAUieYal5UG82hPvbBYwkjhwtYRSY
-        KE+5yhGxsRy2NzEEMULSA==
-X-ME-Sender: <xms:Kvp4ZGgwfAaPpP6MnXRpnqAkTocUWP9tdLEj1ftnwQHVtmFtFytmig>
-    <xme:Kvp4ZHAoNG4ERqKbzoQfZS1ZKVBTolTl40J_gG6F6gXxQVW37Ao0pn_IvR0EvclTG
-    ZU2qLmTlOXZtc7y3sM>
-X-ME-Received: <xmr:Kvp4ZOEvKieW4uwq7MiH9gDtIIeMSmocHUlqvjbpXKaQR6UMP_irmUpaCUmt3yRkIkNndkC3_hwhP_8vXHUgD-MTtrx4KZO359bpvBKqJWrXoBiKLOD6495qTQ>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685649964; x=
+        1685736364; bh=Gu+WlP+2bsePT/P2fB0521Gn91OZaDLXsUxYcTQ73gA=; b=u
+        iWm9XttH9QCd4fTbstd2YQ8a81N5ltimJSHXQEryNcSEoAEK42t0BijgHYKp3wC+
+        1KEnkoh4ZHfAS99NfNG3Jx7cPwGFBcr6L65ARWvqg2SxoWs9SQpbiQUlXlVKoZ4t
+        UwUG1ZN/YwkXFmXOYjGOB2tK5Q0qIIRwvEBo0LKsuuRdMzgDpCRcMBRsEJQG/YiN
+        zt3hKlf8yB9nRu/6WIcKt6bwNJVRC61Wdyk4JCgXq9a+7riEjj8LWvZqUWAd6hTM
+        4qt6EQAV13GF/nIXGuIdqfmDCGRLu7JdzsHOLAKFxlowVKbKGR7fOgSZmaTQVoGi
+        fx7OELSOEpNhB9At+50kA==
+X-ME-Sender: <xms:LPp4ZIdACL8kIvLUE097kgeBn0MJc32lYv_aIfIRnBMPm2mhxyjC_A>
+    <xme:LPp4ZKPf5pZg8CmMEOA3j85UivgcuzNy2p_Fw2YS17E_vnFlcfCkK7bjrPAVJZbIW
+    CNYYuNR_nanyA_15eY>
+X-ME-Received: <xmr:LPp4ZJgC3ihmQ3lrubbw1cnwNqD26b3P5s61bExtMH4wA5U8usTXSYrtatfs4y94klalmhVtGrRIGe3NNYvEVITjw3LOpamzsWkZUu8LEKvd7LCujiYgvcoHzQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeluddgudeghecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecuogetfedtuddqtdduucdludehmdenucfjughrpe
     fhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforghrkhcurfgvrghr
     shhonhcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggrqeenucggtf
     frrghtthgvrhhnpeeftddvjeefleffvefhgfejjeehudetteeigeeugfekhffhgeejudeu
-    teehgfdvffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    teehgfdvffenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhroh
     hmpehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
-X-ME-Proxy: <xmx:Kvp4ZPT0SRprddSJWexBoCWy7BPj7wy3vgTagf88Iy-Vse5wQeUTrA>
-    <xmx:Kvp4ZDxIxEg02vImg7oMogz-L6W2icpyTVvEPTs_EozrgK4ljS3-0Q>
-    <xmx:Kvp4ZN5Fr3QVkXVsAZ5UDX2VdbcjcxuHBXaH3ZaVBozF_5DrG_vivQ>
-    <xmx:Kvp4ZFtpNE9fGbOzjFNw-j7_UyOjJFDY3Y6iU42as0GQOoxFQZ54nA>
+X-ME-Proxy: <xmx:LPp4ZN8W31VoVtj1LZtUkNFLXLci45qd3PveXLBFKoawO-jjY0qjaA>
+    <xmx:LPp4ZEvbYLIZ4Ncw8Ra1Pf0Q9d0VG1BLs2KQ2tTMpZ3WX2HqAmm71Q>
+    <xmx:LPp4ZEFdTawHiCdBeN53wu5b2hRAlE8qaWKTpXjhiXlScraAcHqd9Q>
+    <xmx:LPp4ZGJu3N17KHlYtN3_N__Es3nxUuZ4b5Y7JgTetXHkYUn_Epmm5Q>
 Feedback-ID: ibe194615:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 1 Jun 2023 16:06:02 -0400 (EDT)
+ 1 Jun 2023 16:06:03 -0400 (EDT)
 From:   Mark Pearson <mpearson-lenovo@squebb.ca>
 To:     mpearson-lenovo@squebb.ca
 Cc:     hdegoede@redhat.com, markgross@kernel.org,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
         ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v4 5/8] platform/x86: think-lmi: Update password fields to use BIT
-Date:   Thu,  1 Jun 2023 16:05:49 -0400
-Message-Id: <20230601200552.4396-5-mpearson-lenovo@squebb.ca>
+Subject: [PATCH v4 6/8] platform/x86: think-lmi: Correct NVME password handling
+Date:   Thu,  1 Jun 2023 16:05:50 -0400
+Message-Id: <20230601200552.4396-6-mpearson-lenovo@squebb.ca>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230601200552.4396-1-mpearson-lenovo@squebb.ca>
 References: <mpearson-lenovo@squebb.ca>
@@ -87,37 +87,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Code clean up to use BIT macro as suggested.
+NVME passwords identifier have been standardised across the Lenovo
+systems and now use udrp and adrp (user and admin level) instead of
+unvp and mnvp.
 
+This should apparently be backwards compatible.
+
+Fixes: 640a5fa50a42 ("platform/x86: think-lmi: Opcode support")
 Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 ---
+Changes in v2 & v3: 
+ - None. Version bumped in series.
 Changes in v4:
- - New patch split out from previous patch #2.
+ - This patch was previously #2 and is now #6 in series.
+ - index default change split into new patch (next in series).
 
- drivers/platform/x86/think-lmi.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/platform/x86/think-lmi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
-index 564e3fc33cfb..e3be99b44ce0 100644
+index e3be99b44ce0..71bbe169c77e 100644
 --- a/drivers/platform/x86/think-lmi.c
 +++ b/drivers/platform/x86/think-lmi.c
-@@ -169,11 +169,11 @@ MODULE_PARM_DESC(debug_support, "Enable debug command support");
-  */
- #define LENOVO_CERT_THUMBPRINT_GUID "C59119ED-1C0D-4806-A8E9-59AA318176C4"
- 
--#define TLMI_POP_PWD (1 << 0) /* Supervisor */
--#define TLMI_PAP_PWD (1 << 1) /* Power-on */
--#define TLMI_HDD_PWD (1 << 2) /* HDD/NVME */
--#define TLMI_SMP_PWD (1 << 6) /* System Management */
--#define TLMI_CERT    (1 << 7) /* Certificate Based */
-+#define TLMI_POP_PWD BIT(0) /* Supervisor */
-+#define TLMI_PAP_PWD BIT(1) /* Power-on */
-+#define TLMI_HDD_PWD BIT(2) /* HDD/NVME */
-+#define TLMI_SMP_PWD BIT(6) /* System Management */
-+#define TLMI_CERT    BIT(7) /* Certificate Based */
- 
- #define to_tlmi_pwd_setting(kobj)  container_of(kobj, struct tlmi_pwd_setting, kobj)
- #define to_tlmi_attr_setting(kobj)  container_of(kobj, struct tlmi_attr_setting, kobj)
+@@ -461,9 +461,9 @@ static ssize_t new_password_store(struct kobject *kobj,
+ 				sprintf(pwd_type, "mhdp%d", setting->index);
+ 		} else if (setting == tlmi_priv.pwd_nvme) {
+ 			if (setting->level == TLMI_LEVEL_USER)
+-				sprintf(pwd_type, "unvp%d", setting->index);
++				sprintf(pwd_type, "udrp%d", setting->index);
+ 			else
+-				sprintf(pwd_type, "mnvp%d", setting->index);
++				sprintf(pwd_type, "adrp%d", setting->index);
+ 		} else {
+ 			sprintf(pwd_type, "%s", setting->pwd_type);
+ 		}
 -- 
 2.40.1
 
