@@ -2,100 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A297A7198AB
+	by mail.lfdr.de (Postfix) with ESMTP id 574857198AA
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233392AbjFAKMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
+        id S232977AbjFAKMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233263AbjFAKL1 (ORCPT
+        with ESMTP id S233349AbjFAKLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:11:27 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DD31AC
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:10:27 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2af2ef0d0daso8618001fa.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 03:10:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685614226; x=1688206226;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1Q2TK9IV5e/SKE5sW2ar1ad6dD9hRThXQ/HjCmzBBEI=;
-        b=VHVXIP8IBwmIk6uy5Y/4ljlX3saRkSiOFAZd8PjKEHLQ3L8Rrxdp58OLytu9u8/2O3
-         C04GaHMjjsGLQqGz4NzycFlOj8YK8vT2NKPbDIyBRZKjMbPzGe0aLeeQzWwKRVCrSu7a
-         L9JJrT0Pyfl3OAGrB7zZeiSYDAQHnxK97PemzIGrqFodD5WdaRVVWna79iIn6RHA+X6m
-         g27rrMx2/RdNVQKPDufbrIm0UoN10lXB7CjFveAeop9+eR0afe9uKvK4meBOxaZ1AM24
-         kMF3YdPAEd836T8c9b44Irhmjxz0piVTgTyxqSzuSYehUJArdo4Kenr9V8lobVwsVaYC
-         eK0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685614226; x=1688206226;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Q2TK9IV5e/SKE5sW2ar1ad6dD9hRThXQ/HjCmzBBEI=;
-        b=YJL2PiuMfj1yrIR/TlUI95+ZEdnE4VnTr5O1VvBZkKwJi9D82HqL3HPMM+Qe1P+SgI
-         O4bPBG9kY+4wkuXP4rZZ0wYcdgcr4vNBpm/104FVEg/CRF3JCHkVaAmvLbFTvDJnV/wv
-         R1OE52Jn8KJcZwRzgOSXay9okJTPBeusRtNZgm7DVb48CZVbXKLJaCA4m/p33LW2avCd
-         QyneGde01mI+uNehkZ8Qd68H6b0dgLAz5XCrSnqi+aBBwvgyzT9FQX13QOl3+H7hiwDe
-         mWIqEQqk8YaiJ+BwHvEAXfZG2kRxcybJeWeZA6Dg0prTxvdC5QPFtIpviKjbn6MZatEn
-         u51g==
-X-Gm-Message-State: AC+VfDx9qudysyWoN4b25nWVwG95jXGPjPwovuixio11oesA18wnj7cQ
-        XMhxbLaYz/AkV+rwR3NRmla9iQ==
-X-Google-Smtp-Source: ACHHUZ7KO4sSsaaSRtb/8O5xFncu5dOG9lEB0j3cTtYvD7LjYvNauzObHlRLGCgg29Gqmivyg1tAzQ==
-X-Received: by 2002:a2e:9f02:0:b0:2ac:e66c:e91 with SMTP id u2-20020a2e9f02000000b002ace66c0e91mr4289559ljk.19.1685614226137;
-        Thu, 01 Jun 2023 03:10:26 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id e11-20020a2e984b000000b002a9ebff8431sm3719950ljj.94.2023.06.01.03.10.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 03:10:25 -0700 (PDT)
-Message-ID: <932a4a57-792c-6d29-8c1a-3659652fa708@linaro.org>
-Date:   Thu, 1 Jun 2023 13:10:25 +0300
+        Thu, 1 Jun 2023 06:11:34 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A12E48
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:10:49 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3515qxE9012309;
+        Thu, 1 Jun 2023 05:10:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=n57MVcye861vqpd+7cbgKBm9G0JBu/LE6whTKr7WxlI=;
+ b=UNuynko4ERYwUnoyhTmu23SbFs+TOrLsUcnyHY2urE1DaxYQHLyQ/gqNu1SZ70ma+yYT
+ Ah8tA7198JwlbhUkSmut63pmUZQZmo69dsL3IGhagO35M6mC2nHBdqjdEM5rcA3l4AUd
+ a1hV+rjD8OizS5TCvCFYyLB3LI0lhKV+9DODTGZ1Up7ljXPOqBPhubLGV5rbcDZcuhu0
+ LDbHfKmvilWv1/qf5BBWCFw2iSmInRXzxzYsYegYrfpY0Wo3UjXln260Opq4x+GuaJbE
+ gD8+51+oyLhd4Zng2s79MmF2Ur8DPLiXyqdp6OEOCeuS4rUQA5kb4gor+xGffY3N2iJZ 2g== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3quf90wqub-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 05:10:45 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 1 Jun
+ 2023 11:10:36 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 1 Jun 2023 11:10:36 +0100
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 110B745;
+        Thu,  1 Jun 2023 10:10:36 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] regmap: regmap-irq: Move handle_post_irq to before pm_runtime_put
+Date:   Thu, 1 Jun 2023 11:10:35 +0100
+Message-ID: <20230601101036.1499612-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 15/20] interconnect: qcom: msm8916: Hook up RPM bus clk
- definitions
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>, Evan Green <evgreen@chromium.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org>
- <20230526-topic-smd_icc-v1-15-1bf8e6663c4e@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230526-topic-smd_icc-v1-15-1bf8e6663c4e@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: LnamJCVghHxhPaqopfmDgt0U0VSt30OO
+X-Proofpoint-ORIG-GUID: LnamJCVghHxhPaqopfmDgt0U0VSt30OO
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 13:20, Konrad Dybcio wrote:
-> Assign the necessary definitions to migrate to the new bus clock
-> handling mechanism.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/interconnect/qcom/msm8916.c | 3 +++
->   1 file changed, 3 insertions(+)
+Typically handle_post_irq is going to be used to manage some
+additional chip specific hardware operations required on each IRQ,
+these are very likely to want the chip to be resumed. For example the
+current in tree user max77620 uses this to toggle a global mask bit,
+which would obviously want the device resumed. It is worth noting this
+device does not specify the runtime_pm flag in regmap_irq_chip, so
+there is no actual issue.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Move the callback to before the pm_runtime_put, so it will be called
+whilst the device is still resumed.
 
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+---
+ drivers/base/regmap/regmap-irq.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
+index 330da5d6c8c3a..ced0dcf86e0bf 100644
+--- a/drivers/base/regmap/regmap-irq.c
++++ b/drivers/base/regmap/regmap-irq.c
+@@ -502,12 +502,12 @@ static irqreturn_t regmap_irq_thread(int irq, void *d)
+ 	}
+ 
+ exit:
+-	if (chip->runtime_pm)
+-		pm_runtime_put(map->dev);
+-
+ 	if (chip->handle_post_irq)
+ 		chip->handle_post_irq(chip->irq_drv_data);
+ 
++	if (chip->runtime_pm)
++		pm_runtime_put(map->dev);
++
+ 	if (handled)
+ 		return IRQ_HANDLED;
+ 	else
 -- 
-With best wishes
-Dmitry
+2.30.2
 
