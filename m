@@ -2,89 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7D87194ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2C27194EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbjFAIAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
+        id S231527AbjFAIBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbjFAIAI (ORCPT
+        with ESMTP id S230268AbjFAIAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:00:08 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDA41AB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 00:58:46 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1q4dCh-00013e-Hr; Thu, 01 Jun 2023 09:58:39 +0200
-Message-ID: <ab8c9f95-c9e9-de04-4e28-78163a32da80@leemhuis.info>
-Date:   Thu, 1 Jun 2023 09:58:38 +0200
+        Thu, 1 Jun 2023 04:00:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4E11B3
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 00:59:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685606342;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TS9b3RiFkUpCZDdrYBHho5/2B8BOEzYrjzr41mSr/Ds=;
+        b=cPtNYOLSLfv4FWlY5+YO+MnFpW/ONWD7pxxB13FsNly1SDGEPaCcIjzrVMbSlid5Fa+KSo
+        oIW9ZzmsnONClB9XYDFY1lP0HXUyueHlbJRBHklgRLdz6VE6wzgklMa3YS2vDVauZN6RHk
+        25wF6DQP3NuxYGmh3Y7Fxr0qzsbiJZE=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-586-4s7_UlxpPdKT0mJlqW7p5Q-1; Thu, 01 Jun 2023 03:58:57 -0400
+X-MC-Unique: 4s7_UlxpPdKT0mJlqW7p5Q-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-96f4f1bb838so31664166b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 00:58:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685606336; x=1688198336;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TS9b3RiFkUpCZDdrYBHho5/2B8BOEzYrjzr41mSr/Ds=;
+        b=KKMDsS958LR0XHWJagLH1cD7evvjsj6t+EnFJaKfA7ZBH3pmjzNGYTw2BTygmFsGE7
+         0fyoC/stMGrYFTkOSlUC7/UoJsp3BwqlXVFN3GmGnn/1iklEmpAHcdPhxDtdmRgQ/tmz
+         nlQ8BdmwwJxpDsq0K5Dnuy0XIPIWllngXBMMdrgSqT4lKhY0MsiL4YS3Y6i32ejCA9UG
+         6phK6EaOIoWHhOXY9LSlHbNTb4PIkzAy8Bi/QpqwllFp1imfnk+6n/iJ9XQcfEipu/x1
+         tbN4qSurS9TncA3t0Tm+l8FkQdLqgzhvARHDGWZmtX8zNMlBiINUJ6gvkdWRGwxrx5P1
+         KvuQ==
+X-Gm-Message-State: AC+VfDw0yZz79d2nrM7NWsgF5F09of4nQLwWtuk5buSOL//yKzkPFJFe
+        4/sYcY7n5BDC8ZIAhCWlKJ/mxFDqq+rmK4xQT2MwOHE08f1y5NIKYNcT2fGVCjWYFqRNi2641dP
+        CDjypj1hWTWN+AZWfmssW7C1S
+X-Received: by 2002:a17:907:6d1d:b0:96a:1c2a:5a38 with SMTP id sa29-20020a1709076d1d00b0096a1c2a5a38mr7615769ejc.11.1685606335956;
+        Thu, 01 Jun 2023 00:58:55 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6ie3v5LmwvGb/KlhSkOFjqXmTaLy6LzatU5TWS+dAPKf5UfysEeO19vXwVk6f6zCMci8fpbA==
+X-Received: by 2002:a17:907:6d1d:b0:96a:1c2a:5a38 with SMTP id sa29-20020a1709076d1d00b0096a1c2a5a38mr7615751ejc.11.1685606335678;
+        Thu, 01 Jun 2023 00:58:55 -0700 (PDT)
+Received: from sgarzare-redhat ([134.0.3.103])
+        by smtp.gmail.com with ESMTPSA id g5-20020a1709064e4500b0096f6647b5e8sm10183211ejw.64.2023.06.01.00.58.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 00:58:54 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 09:58:47 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] virtio/vsock: fix sock refcnt bug on owner set
+ failure
+Message-ID: <35xlmp65lxd4eoal2oy3lwyjxd3v22aeo2nbuyknc4372eljct@vkilkppadayd>
+References: <20230531-b4-vsock-fix-refcnt-v1-1-0ed7b697cca5@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, de-DE
-To:     Christian Brauner <brauner@kernel.org>,
-        Mike Christie <michael.christie@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     oleg@redhat.com, nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        hch@infradead.org, konrad.wilk@oracle.com
-References: <20230519-vormittag-dschungel-83607e9d2255@brauner>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [RFC PATCH 0/8] vhost_tasks: Use CLONE_THREAD/SIGHAND
-In-Reply-To: <20230519-vormittag-dschungel-83607e9d2255@brauner>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1685606327;6ba24a72;
-X-HE-SMSGID: 1q4dCh-00013e-Hr
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230531-b4-vsock-fix-refcnt-v1-1-0ed7b697cca5@bytedance.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.05.23 14:15, Christian Brauner wrote:
-> On Thu, May 18, 2023 at 10:25:11AM +0200, Christian Brauner wrote:
->> On Wed, May 17, 2023 at 07:09:12PM -0500, Mike Christie wrote:
->>> This patch allows the vhost and vhost_task code to use CLONE_THREAD,
->>> CLONE_SIGHAND and CLONE_FILES. It's a RFC because I didn't do all the
->>> normal testing, haven't coverted vsock and vdpa, and I know you guys
->>> will not like the first patch. However, I think it better shows what
->>
->> Just to summarize the core idea behind my proposal is that no signal
->> handling changes are needed unless there's a bug in the current way
->> io_uring workers already work. All that should be needed is
->> s/PF_IO_WORKER/PF_USER_WORKER/ in signal.c.
-[...]
->> So it feels like this should be achievable by adding a callback to
->> struct vhost_worker that get's called when vhost_worker() gets SIGKILL
->> and that all the users of vhost workers are forced to implement.
->>
->> Yes, it is more work but I think that's the right thing to do and not to
->> complicate our signal handling.
->>
->> Worst case if this can't be done fast enough we'll have to revert the
->> vhost parts. I think the user worker parts are mostly sane and are
-> 
-> As mentioned, if we can't settle this cleanly before -rc4 we should
-> revert the vhost parts unless Linus wants to have it earlier.
+On Wed, May 31, 2023 at 07:47:32PM +0000, Bobby Eshleman wrote:
+>Previous to setting the owner the socket is found via
+>vsock_find_connected_socket(), which returns sk after a call to
+>sock_hold().
+>
+>If setting the owner fails, then sock_put() needs to be called.
+>
+>Fixes: f9d2b1e146e0 ("virtio/vsock: fix leaks due to missing skb owner")
+>Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+>---
+> net/vmw_vsock/virtio_transport_common.c | 1 +
+> 1 file changed, 1 insertion(+)
+>
+>diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+>index b769fc258931..f01cd6adc5cb 100644
+>--- a/net/vmw_vsock/virtio_transport_common.c
+>+++ b/net/vmw_vsock/virtio_transport_common.c
+>@@ -1343,6 +1343,7 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
+>
+> 	if (!skb_set_owner_sk_safe(skb, sk)) {
+> 		WARN_ONCE(1, "receiving vsock socket has sk_refcnt == 0\n");
+>+		sock_put(sk);
 
-Meanwhile -rc5 is just a few days away and there are still a lot of
-discussions in the patch-set proposed to address the issues[1]. Which is
-kinda great (albeit also why I haven't given it a spin yet), but on the
-other hand makes we wonder:
+Did you have any warning, issue here?
 
-Is it maybe time to revert the vhost parts for 6.4 and try again next cycle?
+IIUC skb_set_owner_sk_safe() can return false only if the ref counter
+is 0, so calling a sock_put() on it should have no effect except to
+produce a warning.
 
-[1]
-https://lore.kernel.org/all/20230522025124.5863-1-michael.christie@oracle.com/
+Thanks,
+Stefano
 
-Ciao, Thorsten "not sure if I'm asking because I'm affected, or because
-it's my duty as regression tracker" Leemhuis
