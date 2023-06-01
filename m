@@ -2,70 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF30719A06
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9866B719A0B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjFAKoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45754 "EHLO
+        id S232683AbjFAKoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbjFAKoI (ORCPT
+        with ESMTP id S231954AbjFAKoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:44:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E207CD7
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:44:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B852640C5
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 10:44:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74766C433D2;
-        Thu,  1 Jun 2023 10:44:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685616246;
-        bh=5jcSWMWc4SV+na2MsxSB2GyOVnRit4I3ywESDLCzuAI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Nghb8Z22TRhIm14bGsPadLWrXlSCmA5WCub6FGvBjPnLuPTl5MnPyXm+c+Gy7BQlD
-         rWY/S41vqetrsKFkffPB0MxFLdp7wnp/9qnclgsOHKfb13LIJywR5kBRP3ee2Np8nh
-         AkEaQGIFLfMeA7nAzqfJDRToo8PUPxF0uamz4qwOB92gN5M13UccGSGcu/P+Gr/zmD
-         5BbfPSEJ9GNPWmDgkfG5LdNKVtgUt8kgZkwIe1bD+bl/iXbUv4HFnsV3RGYYQ7W6r9
-         6WVGHt24h2ZHDlEoBqRmV/WL/1dVsO/ZpffHCpr9l5UKATb8PCHToyHmbKxdVbJlsn
-         HVQXkQesO7yug==
-Date:   Thu, 1 Jun 2023 12:44:03 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>
-Subject: Re: [patch 10/20] posix-timers: Document sys_clock_getres() correctly
-Message-ID: <ZHh2cwLYb1pH8UBB@lothringen>
-References: <20230425181827.219128101@linutronix.de>
- <20230425183313.356427330@linutronix.de>
+        Thu, 1 Jun 2023 06:44:34 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC9D19D;
+        Thu,  1 Jun 2023 03:44:33 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id E9B7180F1;
+        Thu,  1 Jun 2023 10:44:32 +0000 (UTC)
+Date:   Thu, 1 Jun 2023 13:44:31 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Steven Price <steven.price@arm.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Dhruva Gole <d-gole@ti.com>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v12 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <20230601104431.GX14287@atomide.com>
+References: <20230525113034.46880-1-tony@atomide.com>
+ <f44b5fb0-2345-df07-abab-c04abd6f8a13@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230425183313.356427330@linutronix.de>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <f44b5fb0-2345-df07-abab-c04abd6f8a13@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 08:49:11PM +0200, Thomas Gleixner wrote:
-> +/**
-> + * sys_clock_getres - Get the resolution of a clock
-> + * @which_clock:	The clock to get the resolution for
-> + * @tp:			Pointer to a a user space timespec64 for storage
-                                           ^^^
-a_a
+Hi,
 
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+* Steven Price <steven.price@arm.com> [230601 10:04]:
+> I haven't studied this change in detail, but I assume the bug is that
+> serial_base_port_device_remove() shouldn't be dropping port_mutex. The
+> below hack gets my board booting again.
+
+You're right. I wonder how I managed to miss that.. Care to post a proper
+fix for this or do you want me to post it?
+
+> Thanks,
+> 
+> Steve
+> 
+> Hack fix:
+> ----8<----
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> index 29bd5ede0b25..044e4853341a 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -3234,8 +3234,7 @@ static void serial_core_remove_one_port(struct uart_driver *drv,
+>         wait_event(state->remove_wait, !atomic_read(&state->refcount));
+>         state->uart_port = NULL;
+>         mutex_unlock(&port->mutex);
+> -out:
+> -       mutex_unlock(&port_mutex);
+> +out:;
+>  }
+
+Seems you can remove out here and just do a return earlier instead of goto.
+
+Regards,
+
+Tony
