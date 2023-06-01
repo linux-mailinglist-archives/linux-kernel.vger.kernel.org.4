@@ -2,81 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C2071A350
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E333971A35B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233815AbjFAPyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 11:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
+        id S233845AbjFAPyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 11:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233723AbjFAPyF (ORCPT
+        with ESMTP id S233981AbjFAPy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 11:54:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C45AE2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 08:54:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED5EC646EE
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 15:54:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4EEDC433EF;
-        Thu,  1 Jun 2023 15:54:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685634843;
-        bh=xeSn3E1qJvyf4etDPi5a+zgCrfqeEF4F7L6zPoddoHY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=g9WVNsUWn6yFnQvSiyKbqL8LE4DBDYs8lSq7I2Ur7WdD1MPG2aDCb9M9vJ6Nz/e2f
-         OHCNlQ1LzoOsAoM6sMHAewiNiQGaTuJErLaAngEBiNjQrclwutSJ/EyJgscMIvpF16
-         F4FHdZJe+b9LYNdvMMBOzI8+lr+IC/vNrwNypoXo+pkMvWYPDiKOZjIQTO2DIRyVlW
-         yLZBGiatu02MU9HAdoNTNnv6i8jwo6SjQEeHWjiwiV9E1DC1jE2aEXH2tBH5RFwmSI
-         6ppcjAn4FjD2STyp0VCwE3QP6nUQq1LLtXHcafnNvJfkzWg89QY+4WqeqEIoxpQV7K
-         2MVgjCzTGxk3A==
-Date:   Thu, 1 Jun 2023 08:54:02 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        davthompson@nvidia.com, asmaa@nvidia.com, mkl@pengutronix.de,
-        limings@nvidia.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mlxbf_gige: Add missing check for platform_get_irq
-Message-ID: <20230601085402.01c2a385@kernel.org>
-In-Reply-To: <20230601065808.1137-1-jiasheng@iscas.ac.cn>
-References: <20230601065808.1137-1-jiasheng@iscas.ac.cn>
+        Thu, 1 Jun 2023 11:54:29 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88EA9137
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 08:54:27 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-33baee0235cso126905ab.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 08:54:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685634867; x=1688226867;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p75d/9vAo2QmHGYASe5pVB3mdXeN7tpGcCzjSSNDwCI=;
+        b=pB2M88fOWegLHbbo1d+tMCHh0Boi8N2ckCUoAxS2KH2mN6q2UpN0q7c4qh5+XGI80C
+         H98XGitwXYrWwX3tP0U5fCD5ZJgw1EG383lnBtrI8+PCIbqwXll5D7emj6m/M5ZioT/l
+         3vcpowBllTwJKTvCLOGwWEs6ZTEULLFRbzQx0+5pxfx7DOyM1sNXYYJehlRpBfYRQG4s
+         I5AYAnJ4VFup/fHUgNH9srrsXEVLLg9iDyeZJjhAgDDibGre1hYWgycudLgYvaQPP/sv
+         Ol4u1sfVJLUPLLXBGJCDQuxNem5gS3HrF4ttA4WEziqc8/wvs7YLa1pKxaN7W+F+HmAA
+         Yu0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685634867; x=1688226867;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p75d/9vAo2QmHGYASe5pVB3mdXeN7tpGcCzjSSNDwCI=;
+        b=kCirYv1S/vi+w01oyonzGuDiH3+dJ94+kxc5dkb1KCTC53oegoeNKs3z8imIvxVWGx
+         4KgngKvLwdIgoQkbGpSM+51sUJETkeN9EJW9TQLXMoPcVdfGLJ3ljYQOo9yknqxyqd0d
+         YjQs7vAmdXe1rJxZRics1eE5OuYSxV8ETaWI2XYWLwOGnZRlGhfJUGitIwVvh5ICcZBm
+         1eJVSlgCN77Oz0PXJCMshjBLsxaF1gYbmWzCyN2zgT5fLsDL9Hut2WS3mC7dUmpLkkQg
+         kjvAcxFfRcBgCrJObSjfsGfqmvmoIe6Nu8tpnGf/Iyy4abITEf7t7bSpbNjTborjNQNC
+         Zchg==
+X-Gm-Message-State: AC+VfDzIbFdmZTPzjuXW4dlVnhukN41U0YW3Hg52dzffPGMe1sgcxVCa
+        7vqKuGDyZftHRsJWrYL82wBWNauLCJo4mbyvCEpW6w==
+X-Google-Smtp-Source: ACHHUZ5iIWwTojAZAR2RN0XWGD2cCzkBc04L8Zy4/yB6TmM0Xtt7GPFCebiEEi/Bni+lRbbzZA73dV+y0VMVs4Z+V+c=
+X-Received: by 2002:a92:c261:0:b0:33b:4805:7333 with SMTP id
+ h1-20020a92c261000000b0033b48057333mr212113ild.26.1685634866619; Thu, 01 Jun
+ 2023 08:54:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1adda828-cf35-fb2c-6db5-f9ca91b5b62a@linaro.org> <20230525093151.2338370-1-yangcong5@huaqin.corp-partner.google.com>
+In-Reply-To: <20230525093151.2338370-1-yangcong5@huaqin.corp-partner.google.com>
+From:   Doug Anderson <dianders@google.com>
+Date:   Thu, 1 Jun 2023 08:54:15 -0700
+Message-ID: <CAD=FV=VsaiWVfyMhXavE8zRgCRnDdtYDUMZrp--3BKnJNWbk4A@mail.gmail.com>
+Subject: Re: [v4 0/4] Support Starry-himax83102-j02 and Starry-ili9882t TDDI
+ MIPI-DSI panel
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Cc:     daniel@ffwll.ch, neil.armstrong@linaro.org, sam@ravnborg.org,
+        airlied@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, hsinyi@google.com,
+        conor+dt@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  1 Jun 2023 14:58:08 +0800 Jiasheng Jiang wrote:
-> According to the documentation of submitting patches
-> (Link: https://docs.kernel.org/process/submitting-patches.html),
-> I used "scripts/get_maintainer.pl" to gain the appropriate recipients
-> for my patch.
-> However, the "limings@nvidia.com" is not contained in the following list.
+Hi,
 
-And I told you already to run the script on the _patch_ not on the file
-path.
+On Thu, May 25, 2023 at 2:32=E2=80=AFAM Cong Yang
+<yangcong5@huaqin.corp-partner.google.com> wrote:
+>
+> Copare V3:Resend without Conor's acks on patches 2 and 4.
+>
+> Cong Yang (4):
+>   dt-bindings: display: panel: Add compatible for Starry himax83102-j02
+>   drm/panel: Support for Starry-himax83102-j02 TDDI MIPI-DSI panel
+>   dt-bindings: display: panel: Add compatible for Starry ili9882t
+>   drm/panel: Support for Starry-ili9882t TDDI MIPI-DSI panel
+>
+>  .../display/panel/boe,tv101wum-nl6.yaml       |   4 +
+>  .../gpu/drm/panel/panel-boe-tv101wum-nl6.c    | 471 ++++++++++++++++++
+>  2 files changed, 475 insertions(+)
 
-$ ./scripts/get_maintainer.pl 0001-mlxbf_gige-Add-missing-check-for-platform_get_irq.patch
-"David S. Miller" <davem@davemloft.net> (maintainer:NETWORKING DRIVERS,blamed_fixes:1/1=100%)
-Eric Dumazet <edumazet@google.com> (maintainer:NETWORKING DRIVERS)
-Jakub Kicinski <kuba@kernel.org> (maintainer:NETWORKING DRIVERS,commit_signer:5/6=83%,authored:1/6=17%,removed_lines:1/20=5%)
-Paolo Abeni <pabeni@redhat.com> (maintainer:NETWORKING DRIVERS)
-Asmaa Mnebhi <asmaa@nvidia.com> (commit_signer:4/6=67%,blamed_fixes:1/1=100%)
-David Thompson <davthompson@nvidia.com> (commit_signer:4/6=67%,authored:4/6=67%,added_lines:94/99=95%,removed_lines:19/20=95%,blamed_fixes:1/1=100%)
-Marc Kleine-Budde <mkl@pengutronix.de> (commit_signer:1/6=17%)
-Jiasheng Jiang <jiasheng@iscas.ac.cn> (commit_signer:1/6=17%,authored:1/6=17%)
-vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-Liming Sun <limings@nvidia.com> (blamed_fixes:1/1=100%)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
-linux-kernel@vger.kernel.org (open list)
+For future reference: please don't send your patch series
+"In-Reply-To" the previous version (or in In-Reply-To anything). This
+messes up a bunch of threading and generally people don't like it. No
+need to resend this patch series.
