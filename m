@@ -2,94 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE61571937C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76472719390
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231825AbjFAGoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 02:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54912 "EHLO
+        id S231503AbjFAGut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 02:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231836AbjFAGoa (ORCPT
+        with ESMTP id S230410AbjFAGuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 02:44:30 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDD1C0;
-        Wed, 31 May 2023 23:44:27 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QWxM24m0gzqTZv;
-        Thu,  1 Jun 2023 14:39:42 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 1 Jun 2023 14:44:22 +0800
-CC:     <yangyicong@hisilicon.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <linuxarm@huawei.com>,
-        <shenyang39@huawei.com>, <prime.zeng@hisilicon.com>
-Subject: Re: [PATCH v2 3/3] docs: perf: Add new description for HiSilicon UC
- PMU
-To:     Junhao He <hejunhao3@huawei.com>, <will@kernel.org>,
-        <jonathan.cameron@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <mark.rutland@arm.com>
-References: <20230531104625.18296-1-hejunhao3@huawei.com>
- <20230531104625.18296-4-hejunhao3@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <cfd13726-5078-3a29-0e78-b8ab1faeaa8b@huawei.com>
-Date:   Thu, 1 Jun 2023 14:44:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Thu, 1 Jun 2023 02:50:46 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A784E2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 23:50:45 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51496f57e59so777434a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 23:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685602244; x=1688194244;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q3FPpYGCRQvqGtj5K7A51eFqGOlW0Bj/YEFDgkAuNzo=;
+        b=HatPd+F8H/aKab99kJgFnaeCtplLVrq56nqL2I0/WH1jiSgmjWG9PvbDSMCBHbnY6g
+         zSlbHMgSehUWW0ONEWn/zg0aDmY98jgPTZzR2N7jd8XpFBYJ/TzZR/+M/vCA5e8MY/PE
+         5Wkbyh/eah/92hgn9cR16pPgz5PbyPJbsexP76NkVVlgjyS92JP1tbkdnpa7tny6CsiD
+         hRih8p5yOZDDxM6irbA32cWINbP8j45+ST8WQZn4quYfDc+0pRlnZRlmCESVCMJHoT2x
+         rsANKZfOq6OBm05iQrtVzyGJRu+fGQWxwQh6MSWBnp5SvFbaSkf8NZPIqrsgBJxQ9xlQ
+         /mVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685602244; x=1688194244;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q3FPpYGCRQvqGtj5K7A51eFqGOlW0Bj/YEFDgkAuNzo=;
+        b=b8vZaWFk3yUHwnOszVZIxN0/4Pv4UWhZkfnxhoop1azOmoJc8noxKNyQIyF7oD87fn
+         sIiIClLrz/QIiMPmX0vLUE978BFJNA376258lVxZb+gbYx0wCeHmSYWQtMrNe7JSTMMn
+         ElhzM8xc/n7qRk8y6wLlr62QyVZf+SjnJKSybC5NA6/aAj6ui/Z5EKu/qjYJFlh2Wah/
+         8H/RZAPVfEZ1mW7/IbD4jy+EOw0onW0SDnBm1cuWwcOqZM5HfvPy+t5yqtn4OpOwOGfd
+         IxzSyzEjBeDYR8gVYkxbQf/0KxzFcba9rb8j+VrLZ0XJ54efo6XV2s8CL0eLS4aWWhOL
+         auNA==
+X-Gm-Message-State: AC+VfDx1wpiwyYtXKk97jOYWiQCluFVR8LJY0SsrDsPwrfAvfzrDudoQ
+        cBenITiMaV+/f1EJ6aTcOX+YqQ==
+X-Google-Smtp-Source: ACHHUZ5SHYblK1UbhYQwS3N7gHnmMWs5GtDzRfns223BYfbgzoaLLZz0fOjxOwqbOYidv0xKi/FRbQ==
+X-Received: by 2002:a50:fe8e:0:b0:514:9edb:185a with SMTP id d14-20020a50fe8e000000b005149edb185amr5244647edt.9.1685602243987;
+        Wed, 31 May 2023 23:50:43 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id j2-20020a50ed02000000b0050bc4600d38sm6260849eds.79.2023.05.31.23.50.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 23:50:43 -0700 (PDT)
+Message-ID: <a29985be-da0d-f9d4-956d-f00748f06dcc@linaro.org>
+Date:   Thu, 1 Jun 2023 08:50:40 +0200
 MIME-Version: 1.0
-In-Reply-To: <20230531104625.18296-4-hejunhao3@huawei.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/8] dt-bindings: soc: qcom,rpmh-rsc: Require
+ power-domains
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Gross <andy.gross@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+References: <20230531-topic-rsc-v1-0-b4a985f57b8b@linaro.org>
+ <20230531-topic-rsc-v1-1-b4a985f57b8b@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230531-topic-rsc-v1-1-b4a985f57b8b@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/31 18:46, Junhao He wrote:
-> A new function is added on HiSilicon uncore UC PMU.
+On 31/05/2023 15:22, Konrad Dybcio wrote:
+> The Linux RPMh implementation refrains from sending some RPMh votes until
+> the system is about to enter suspend (which is indicated by all CPU cores
+> entering a low-power state). Lack of the power-domains property will make
+> it such that these votes are never sent.
 > 
-> The UC PMU support to filter statistical information based on
-> the specified tx request uring channel. Make user configuration
-> through "uring_channel" parameter.
-> Document them to provide guidance on how to use them.
+> Require the power-domains property as discussed in [1].
 > 
-> Signed-off-by: Junhao He <hejunhao3@huawei.com>
+> [1] https://lore.kernel.org/linux-arm-msm/20230512150425.3171122-1-quic_bjorande@quicinc.com/
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-I still prefer this in the same patch with the driver support, anyway
-the docs alone looks good to me.
 
-Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> ---
->  Documentation/admin-guide/perf/hisi-pmu.rst | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/perf/hisi-pmu.rst b/Documentation/admin-guide/perf/hisi-pmu.rst
-> index 546979360513..939a524fa1d6 100644
-> --- a/Documentation/admin-guide/perf/hisi-pmu.rst
-> +++ b/Documentation/admin-guide/perf/hisi-pmu.rst
-> @@ -98,6 +98,14 @@ CCL/ICL-ID. For I/O die, the ICL-ID is followed by:
->  5'b00011: HAC_ICL;
->  5'b10000: PCIe_ICL;
->  
-> +(e) uring_channel: UC PMU events 0x47~0x59 supports filtering by tx request
-> +uring channel. It is 2 bits. Some important codes are as follows:
-> +2'b11: count the events which sent to the uring_ext (MATA) channel;
-> +2'b01: is the same as 2'b11;
-> +2'b10: count the events which sent to the uring (non-MATA) channel;
-> +2'b00: default value, count the events which sent to the both uring and
-> +       uring_ext channel;
-> +
->  Users could configure IDs to count data come from specific CCL/ICL, by setting
->  srcid_cmd & srcid_msk, and data desitined for specific CCL/ICL by setting
->  tgtid_cmd & tgtid_msk. A set bit in srcid_msk/tgtid_msk means the PMU will not
-> 
+Best regards,
+Krzysztof
+
