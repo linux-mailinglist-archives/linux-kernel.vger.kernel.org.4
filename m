@@ -2,83 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0B9719CA1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325DE719CB0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233231AbjFAMx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 08:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45632 "EHLO
+        id S232678AbjFAMz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 08:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbjFAMxY (ORCPT
+        with ESMTP id S233287AbjFAMzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 08:53:24 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D610124;
-        Thu,  1 Jun 2023 05:53:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 980B01F86C;
-        Thu,  1 Jun 2023 12:53:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1685624001; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 1 Jun 2023 08:55:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AF3E7
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 05:54:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685624076;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=1GpS19ZqsoBfrfSMjUhDc1t9f/kMOX3QizgwqenZt7k=;
-        b=Lcc6S79z/wB+hVF3dIJydM+hEqJ6f/5Rer4ghDkUY5NF5jyggpOTSLsEggGrkOZZ5SjTAq
-        eAP4jZqp3YOU4fUH0b099X8gBGHV+juLA+7bk9YSAQkYGLmcOgUbyNobE6M9K+rzcb2pch
-        EuYjYj6Yn4ONKTQM2c7BJ4MpPULh+6s=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EF0D0139B7;
-        Thu,  1 Jun 2023 12:53:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id o+/jOMCUeGTrGQAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 01 Jun 2023 12:53:20 +0000
-Message-ID: <f82f5bd0-6455-ffe7-fcc2-834517db1f42@suse.com>
-Date:   Thu, 1 Jun 2023 14:53:20 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v6 00/16] x86/mtrr: fix handling with PAT but without MTRR
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-hyperv@vger.kernel.org, linux-doc@vger.kernel.org,
-        mikelley@microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
+        bh=zyyQ6P4OiPQqIz2ajY3K5RuKb2ciiT0j+HS/foPHgko=;
+        b=V9ejdDPRSd8yBV0MkP5A5h69ritBaaygfncew2woOVf29yV5IptLHum57xX34S8gF9T81C
+        tE1ROlKLdKTjSEf7hyRyPR9/zJEzROemf3Hz53iikBroHo+7ML94Nh1qED7nP49mMwKiFE
+        sXohbYaj8bPmsf4AdKe+h9X/nGrtyLw=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-170-9h11uwgIOXCtS3jDFHdjpw-1; Thu, 01 Jun 2023 08:54:35 -0400
+X-MC-Unique: 9h11uwgIOXCtS3jDFHdjpw-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3062e5d0cd3so431816f8f.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 05:54:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685624074; x=1688216074;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zyyQ6P4OiPQqIz2ajY3K5RuKb2ciiT0j+HS/foPHgko=;
+        b=X3sTIx3KOceU/BmKW3Yi6VMTbA/lOxpkTsJ+HDbqflioqNU06xBogkzszDrJOfe9ye
+         XAqH3YzQDlRssVqU80pIMttAwTjgn8dDGakpVKFKrnNIj6IDRwECuTSHMVRvBgE0T2Rd
+         2CRXv9Dje9kLToL8e9dkxP1YKLCfktBQFuBOJtX7siO2ySRUrbiH5xBj5F4wq/8VrGZj
+         9G/lxlF3Se6arNeRoSbs63Lf8d//myHqQ1DZyTYtS0BN/OtDLs+CV0yxK+a1Kt4fq0UW
+         LRolNQrGt/JK1OgN8w8XZbPtehOWuV2WJi6bGK2ZxOfxgPRSIPAmeJSGcXkeSwZR1H47
+         oahQ==
+X-Gm-Message-State: AC+VfDyWpF1wi9FaNVbXVpg0TAeT+Uxd5/XAtC81FWwqr1IHKnRQraxR
+        wKHpMWE3lv8GesLoZTIzizUcB8QlhIKNkgZJQa8WtU46CM0ff/0YL94orRPLP9MuZk9xs/OOfnR
+        CNFwHa1rbjzd6S+k63hywAB1h
+X-Received: by 2002:a05:6000:11c7:b0:309:31ac:6663 with SMTP id i7-20020a05600011c700b0030931ac6663mr1977880wrx.16.1685624074115;
+        Thu, 01 Jun 2023 05:54:34 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7y+03rc+mH8f0CjAvN2cbS83wfAP3YE5dl7d4U7xdoyqWIDsowQO1s4HgAFuqC6Koy5vmAjg==
+X-Received: by 2002:a05:6000:11c7:b0:309:31ac:6663 with SMTP id i7-20020a05600011c700b0030931ac6663mr1977863wrx.16.1685624073722;
+        Thu, 01 Jun 2023 05:54:33 -0700 (PDT)
+Received: from localhost.localdomain ([176.206.22.140])
+        by smtp.gmail.com with ESMTPSA id l18-20020a5d5272000000b002fb60c7995esm10290986wrc.8.2023.06.01.05.54.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 05:54:33 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 14:54:30 +0200
+From:   Juri Lelli <juri.lelli@redhat.com>
+To:     Vineeth Pillai <vineeth@bitbyteword.org>
+Cc:     luca.abeni@santannapisa.it,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org, Jonathan Corbet <corbet@lwn.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20230510133024.GBZFuccC1FxIZNKL+8@fat_crate.local>
- <4c47a11c-0565-678d-3467-e01c5ec16600@suse.com>
- <20230511163208.GDZF0YiOfxQhSo4RDm@fat_crate.local>
- <0cd3899b-cf3b-61c1-14ae-60b6b49d14ab@suse.com>
- <20230530152825.GAZHYWGXAp8PHgN/w0@fat_crate.local>
- <888f860d-4307-54eb-01da-11f9adf65559@suse.com>
- <20230531083508.GAZHcGvB68PUAH7f+a@fat_crate.local>
- <efe79c9e-1e31-adb9-8f93-962249bf01bb@suse.com>
- <20230531174857.GDZHeIib57h5lT5Vh1@fat_crate.local>
- <6700dc14-98fa-232d-5f8c-68a418849671@suse.com>
- <20230601124844.GBZHiTrDQk+F3lbzGO@fat_crate.local>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20230601124844.GBZHiTrDQk+F3lbzGO@fat_crate.local>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------glPx74KYkbS4FWu7wZ5OyisT"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        youssefesmat@google.com,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] sched/deadline: Fix bandwidth reclaim equation in
+ GRUB
+Message-ID: <ZHiVBp4GMAcO2ncV@localhost.localdomain>
+References: <20230530135526.2385378-1-vineeth@bitbyteword.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530135526.2385378-1-vineeth@bitbyteword.org>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,131 +89,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------glPx74KYkbS4FWu7wZ5OyisT
-Content-Type: multipart/mixed; boundary="------------8XCU7dYDU8FOpXMIWeFEpAcb";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
- linux-hyperv@vger.kernel.org, linux-doc@vger.kernel.org,
- mikelley@microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>,
- Boris Ostrovsky <boris.ostrovsky@oracle.com>,
- xen-devel@lists.xenproject.org, Jonathan Corbet <corbet@lwn.net>,
- Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>
-Message-ID: <f82f5bd0-6455-ffe7-fcc2-834517db1f42@suse.com>
-Subject: Re: [PATCH v6 00/16] x86/mtrr: fix handling with PAT but without MTRR
-References: <20230510133024.GBZFuccC1FxIZNKL+8@fat_crate.local>
- <4c47a11c-0565-678d-3467-e01c5ec16600@suse.com>
- <20230511163208.GDZF0YiOfxQhSo4RDm@fat_crate.local>
- <0cd3899b-cf3b-61c1-14ae-60b6b49d14ab@suse.com>
- <20230530152825.GAZHYWGXAp8PHgN/w0@fat_crate.local>
- <888f860d-4307-54eb-01da-11f9adf65559@suse.com>
- <20230531083508.GAZHcGvB68PUAH7f+a@fat_crate.local>
- <efe79c9e-1e31-adb9-8f93-962249bf01bb@suse.com>
- <20230531174857.GDZHeIib57h5lT5Vh1@fat_crate.local>
- <6700dc14-98fa-232d-5f8c-68a418849671@suse.com>
- <20230601124844.GBZHiTrDQk+F3lbzGO@fat_crate.local>
-In-Reply-To: <20230601124844.GBZHiTrDQk+F3lbzGO@fat_crate.local>
+Hi!
 
---------------8XCU7dYDU8FOpXMIWeFEpAcb
-Content-Type: multipart/mixed; boundary="------------YzAsQx0reJf6zau9OVFEU2qd"
+On 30/05/23 09:55, Vineeth Pillai wrote:
+> According to the GRUB[1] rule, the runtime is depreciated as:
+>   "dq = -max{u, (1 - Uinact - Uextra)} dt" (1)
+> 
+> To guarantee that deadline tasks doesn't starve lower class tasks,
+> we do not allocate the full bandwidth of the cpu to deadline tasks.
+> Maximum bandwidth usable by deadline tasks is denoted by "Umax".
+> Considering Umax, equation (1) becomes:
+>   "dq = -(max{u, (Umax - Uinact - Uextra)} / Umax) dt" (2)
+> 
+> Current implementation has a minor bug in equation (2), which this
+> patch fixes.
+> 
+> The reclamation logic is verified by a sample program which creates
+> multiple deadline threads and observing their utilization. The tests
+> were run on an isolated cpu(isolcpus=3) on a 4 cpu system.
+> 
+> Tests on 6.3.0
+> ==============
+> 
+> RUN 1: runtime=7ms, deadline=period=10ms, RT capacity = 95%
+> TID[693]: RECLAIM=1, (r=7ms, d=10ms, p=10ms), Util: 93.33
+> TID[693]: RECLAIM=1, (r=7ms, d=10ms, p=10ms), Util: 93.35
+> 
+> RUN 2: runtime=1ms, deadline=period=100ms, RT capacity = 95%
+> TID[708]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 16.69
+> TID[708]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 16.69
+> 
+> RUN 3: 2 tasks
+>   Task 1: runtime=1ms, deadline=period=10ms
+>   Task 2: runtime=1ms, deadline=period=100ms
+> TID[631]: RECLAIM=1, (r=1ms, d=10ms, p=10ms), Util: 62.67
+> TID[632]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 6.37
+> TID[631]: RECLAIM=1, (r=1ms, d=10ms, p=10ms), Util: 62.38
+> TID[632]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 6.23
+> 
+> As seen above, the reclamation doesn't reclaim the maximum allowed
+> bandwidth and as the bandwidth of tasks gets smaller, the reclaimed
+> bandwidth also comes down.
+> 
+> Tests with this patch applied
+> =============================
+> 
+> RUN 1: runtime=7ms, deadline=period=10ms, RT capacity = 95%
+> TID[608]: RECLAIM=1, (r=7ms, d=10ms, p=10ms), Util: 95.19
+> TID[608]: RECLAIM=1, (r=7ms, d=10ms, p=10ms), Util: 95.16
+> 
+> RUN 2: runtime=1ms, deadline=period=100ms, RT capacity = 95%
+> TID[616]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 95.27
+> TID[616]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 95.21
+> 
+> RUN 3: 2 tasks
+>   Task 1: runtime=1ms, deadline=period=10ms
+>   Task 2: runtime=1ms, deadline=period=100ms
+> TID[620]: RECLAIM=1, (r=1ms, d=10ms, p=10ms), Util: 86.64
+> TID[621]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 8.66
+> TID[620]: RECLAIM=1, (r=1ms, d=10ms, p=10ms), Util: 86.45
+> TID[621]: RECLAIM=1, (r=1ms, d=100ms, p=100ms), Util: 8.73
+> 
+> Running tasks on all cpus allowing for migration also showed that
+> the utilization is reclaimed to the maximum. Running 10 tasks on
+> 3 cpus SCHED_FLAG_RECLAIM - top shows:
+> %Cpu0  : 94.6 us,  0.0 sy,  0.0 ni,  5.4 id,  0.0 wa
+> %Cpu1  : 95.2 us,  0.0 sy,  0.0 ni,  4.8 id,  0.0 wa
+> %Cpu2  : 95.8 us,  0.0 sy,  0.0 ni,  4.2 id,  0.0 wa
+> 
+> [1]: Abeni, Luca & Lipari, Giuseppe & Parri, Andrea & Sun, Youcheng.
+>      (2015). Parallel and sequential reclaiming in multicore
+>      real-time global scheduling.
+> 
+> Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
+> ---
 
---------------YzAsQx0reJf6zau9OVFEU2qd
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+This looks good to me too. Thanks a lot for working on this and of
+course to Luca and Daniel who reviewed and played with it as well.
 
-T24gMDEuMDYuMjMgMTQ6NDgsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVGh1LCBK
-dW4gMDEsIDIwMjMgYXQgMDg6Mzk6MTdBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
-Cj4+IERvZXMgdGhpcyB0cmFuc2xhdGUgdG86ICJ3ZSBzaG91bGQgcmVtb3ZlIHRoYXQgY2xl
-YW51cCBjcmFwIj8gSSdkIGJlDQo+PiBwb3NpdGl2ZSB0byB0aGF0LiA6LSkNCj4gDQo+IFdo
-eSwgd2hhdCdzIHdyb25nIHdpdGggdGhhdCB0aGluZz8NCj4gDQoNCldoeSBkbyB5b3UgbmVl
-ZCBpdCBpZiB5b3UgZG9uJ3QgdGhpbmsgYWRkaW5nIE1UUlJzIGR5bmFtaWNhbGx5IGlzDQpp
-bXBvcnRhbnQ/DQoNCkhhdmluZyBhIHN1Yi1vcHRpbWFsIE1UUlIgc2V0dXAgZG9lc24ndCBt
-YXR0ZXIgdW5sZXNzIHlvdSBhcmUgcnVubmluZw0Kb3V0IG9mIE1UUlJzIHRvIHVzZS4gV2hl
-biB5b3UgYXJlIG5vdCBhZGRpbmcgTVRSUnMsIHlvdSBjYW4ndCBydW4gb3V0DQpvZiB0aGVt
-Lg0KDQpUaGlzIGluIHR1cm4gbWVhbnMgeW91IGRvbid0IG5lZWQgbXRycl9jbGVhbnVwKCku
-DQoNCg0KSnVlcmdlbg0K
---------------YzAsQx0reJf6zau9OVFEU2qd
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Juri Lelli <juri.lelli@redhat.com>
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Best,
+Juri
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------YzAsQx0reJf6zau9OVFEU2qd--
-
---------------8XCU7dYDU8FOpXMIWeFEpAcb--
-
---------------glPx74KYkbS4FWu7wZ5OyisT
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmR4lMAFAwAAAAAACgkQsN6d1ii/Ey/q
-ogf8DWRYN0MvTXCw5FuBFQP73oNhAPrDKv/W1fX3czxVSBMXqls1dcWhHBznVR+w3Zye9itxeSsR
-g/mAx8SjZFcDm+WB/T0muZs4iCh8ftPAydZzO50ahqNikZzudPei3p1G+SrXUb9jPXtMOeaN5LbU
-HZxgJ2XIDpmlaIw9862yxobGS4EQqjYGxWYg217fxEx8NveZ5WWtAkb+NTsxJtQ9r2XFZuQrGUPQ
-kuQ8Rhns+OxcFCzEwEaCg8mIgqUcrchQeRur30ZroPn4LTb6ufqdpu2bLIeYHEpR8d5Q4c3E/JS2
-Zh9NavBuXglcXVS5uN93T77Hm8/6OnsF382kXXAttQ==
-=+P98
------END PGP SIGNATURE-----
-
---------------glPx74KYkbS4FWu7wZ5OyisT--
