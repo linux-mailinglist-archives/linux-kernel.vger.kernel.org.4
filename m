@@ -2,129 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6E7719B18
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D78F719B19
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbjFALlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 07:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
+        id S231363AbjFALqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 07:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbjFALlh (ORCPT
+        with ESMTP id S229880AbjFALq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:41:37 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C72129;
-        Thu,  1 Jun 2023 04:41:36 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351BBBxj005804;
-        Thu, 1 Jun 2023 11:41:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=aotPw+dYK7sxudCqVR0YLAk8+rt9UvEFInV/RtR4ZA8=;
- b=fKDeB8Qt3D5loVg6aR6NXqfSYweO1UaU554EXdngK/0zM7Fl5d0agbnDujHRXCl/agFP
- 1y2EVsNbcQMRXwl7znailcVQ3SeooNA230z50t6SzGGTqbvw/8QC3SgLsOqpVZOsgcdN
- dzB4PYXBjp6F/VB0B+j2TyLm413FhpuXSKvDbVQhnWM1zIqdatS9YQ+fYPuDGO/tEAa7
- /4QiCa1d7gd7rt6OrFHfq9E2p8p0GIMSP2b1AwNbEnvpu1nnK4aj3+O+EeNTX9kxEbuE
- b1K9aJXA2vcrb0cSCa9OrPI2C2vAQNKMjTQDlbSDQGR83bdqbRC0sJar3saR7L2n46Ul DA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxbt8hvjd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 11:41:20 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351BfImE009437
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Jun 2023 11:41:18 GMT
-Received: from [10.216.52.42] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
- 04:41:12 -0700
-Message-ID: <8146f367-c539-bea5-12b6-424213018488@quicinc.com>
-Date:   Thu, 1 Jun 2023 17:11:08 +0530
+        Thu, 1 Jun 2023 07:46:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD14129
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 04:45:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685619941;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X7ULdJ4Ab2b47vEWN486zFKO2o/CmnOZmXp0dkx+i0c=;
+        b=beCO+OOguuo21ENyvOmOF2+6BgNbuEBh26PgkqVSo97FEjY688mkOEOATdWUjBozSFWTbz
+        ZueXNleroNvh8ZWiah0C+GeruDW/lbmXIARN/ylsyf44bqQSe8TH+z3PVADFvdGHQy0Sft
+        UMtAdDADHn7Nbwa3IFnFFdAigDzZ11s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-338-mMIuAwj2MKiKI-pxk9nXWA-1; Thu, 01 Jun 2023 07:45:32 -0400
+X-MC-Unique: mMIuAwj2MKiKI-pxk9nXWA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 873C0802355;
+        Thu,  1 Jun 2023 11:45:32 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.22.8.115])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C2BD8C154D7;
+        Thu,  1 Jun 2023 11:45:31 +0000 (UTC)
+Received: by fedora.redhat.com (Postfix, from userid 1000)
+        id 5EE5716F1EC; Thu,  1 Jun 2023 07:45:31 -0400 (EDT)
+Date:   Thu, 1 Jun 2023 07:45:31 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Jingbo Xu <jefflexu@linux.alibaba.com>
+Cc:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
+        gerry@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        German Maglione <gmaglione@redhat.com>
+Subject: Re: [PATCH] fuse: fix return value of inode_inline_reclaim_one_dmap
+ in error path
+Message-ID: <ZHiE2zkFJKBl9GZ+@redhat.com>
+References: <20230424123250.125404-1-jefflexu@linux.alibaba.com>
+ <ZHeoIFrp303f0E8d@redhat.com>
+ <33fd8e03-7c99-c12d-255d-b7190612379b@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH V7 4/8] pinctrl: qcom: Add IPQ5018 pinctrl driver
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <andy.shevchenko@gmail.com>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <ulf.hansson@linaro.org>,
-        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <p.zabel@pengutronix.de>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <robimarko@gmail.com>
-References: <20230519125409.497439-1-quic_srichara@quicinc.com>
- <20230519125409.497439-5-quic_srichara@quicinc.com>
- <CAHp75VfVx+oGYKcija3h9-eWc6jggMx8p5SAQTEHTBEbjTaJKw@mail.gmail.com>
- <1823419a-6bb4-03f7-d5ae-e32204c5e598@quicinc.com>
- <ZHTK7uEzO7kcx_cV@surfacebook>
- <aefd0df1-8dfb-1b69-589b-974dea312845@quicinc.com>
- <664940c3-9ec1-b4bd-9db5-fa3529e3d1ff@linaro.org>
-From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
-In-Reply-To: <664940c3-9ec1-b4bd-9db5-fa3529e3d1ff@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: u2w7l7fePiABIueIjTPZ0bYV_TrEwmvo
-X-Proofpoint-ORIG-GUID: u2w7l7fePiABIueIjTPZ0bYV_TrEwmvo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 suspectscore=0 mlxscore=0 mlxlogscore=676
- priorityscore=1501 bulkscore=0 adultscore=0 clxscore=1015 spamscore=0
- malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2306010103
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <33fd8e03-7c99-c12d-255d-b7190612379b@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/1/2023 3:21 PM, Krzysztof Kozlowski wrote:
-> On 01/06/2023 11:50, Sricharan Ramabadhran wrote:
->>
->>
->> On 5/29/2023 9:25 PM, andy.shevchenko@gmail.com wrote:
->>> Mon, May 29, 2023 at 03:58:09PM +0530, Sricharan Ramabadhran kirjoitti:
->>>> On 5/20/2023 12:17 AM, Andy Shevchenko wrote:
->>>>> On Fri, May 19, 2023 at 3:55 PM Sricharan Ramabadhran
->>>>> <quic_srichara@quicinc.com> wrote:
->>>
->>> ...
->>>
->>>>>      depends on OF || COMPILE_TEST
->>>>
->>>>    Yeah sure. COMPILE_TEST could be standalone. Will fix it and repost.
->>>
->>> Standalone COMPILE_TEST will give you definitely NOT what you want.
->>> And actually it's strange to have it standalone.
->>>
->>
->>    Ho ok, i meant like this, "depends on ARM64 || COMPILE_TEST"
+On Thu, Jun 01, 2023 at 09:45:52AM +0800, Jingbo Xu wrote:
 > 
-> Don't do it differently than all other drivers. Open the Kconfig and
-> look at existing entries.
 > 
-   The latest added has this below, will use this
+> On 6/1/23 4:03 AM, Vivek Goyal wrote:
+> > On Mon, Apr 24, 2023 at 08:32:50PM +0800, Jingbo Xu wrote:
+> >> When range already got reclaimed by somebody else, return NULL so that
+> >> the caller could retry to allocate or reclaim another range, instead of
+> >> mistakenly returning the range already got reclaimed and reused by
+> >> others.
+> >>
+> >> Reported-by: Liu Jiang <gerry@linux.alibaba.com>
+> >> Fixes: 9a752d18c85a ("virtiofs: add logic to free up a memory range")
+> >> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+> > 
+> > Hi Jingbo,
+> > 
+> > This patch looks correct to me.
+> > 
+> > Are you able to reproduce the problem? Or you are fixing it based on
+> > code inspection?
+> 
+> It's spotted by Liu Jiang during code review.  Not tested yet.
+> 
+> > 
+> > How are you testing this? We don't have virtiofsd DAX implementation yet
+> > in rust virtiofsd yet. 
+> > 
+> > I am not sure how to test this chagne now. We had out of tree patches
+> > in qemu and now qemu has gotten rid of C version of virtiofsd so these
+> > patches might not even work now.
+> 
+> Yeah this exception path may not be so easy to be tested as it is only
+> triggered in the race condition.  I have the old branch (of qemu) with
+> support for DAX, and maybe I could try to reproduce the exception path
+> by configuring limited DAX window and heavy IO workload.
 
-	depends on OF || COMPILE_TEST
-	depends on ARM64 || COMPILE_TEST
+That would be great. Please test it with really small DAX window size.
+Also put some pr_debug() statements to make sure you are hitting this
+particular path during testing.
 
-Regards,
-  Sricharan
+Thanks
+Vivek
+
