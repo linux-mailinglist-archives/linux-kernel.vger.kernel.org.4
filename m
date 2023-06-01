@@ -2,132 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C3D7193E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C634E7193F0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbjFAHGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 03:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S230110AbjFAHKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 03:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbjFAHGk (ORCPT
+        with ESMTP id S231859AbjFAHJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 03:06:40 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB45EE7;
-        Thu,  1 Jun 2023 00:06:38 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aef03.dynamic.kabel-deutschland.de [95.90.239.3])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 09CC261E4052B;
-        Thu,  1 Jun 2023 09:06:05 +0200 (CEST)
-Message-ID: <2e36d874-4dd3-080c-3499-44f2f09b9169@molgen.mpg.de>
-Date:   Thu, 1 Jun 2023 09:06:04 +0200
+        Thu, 1 Jun 2023 03:09:59 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00C4128
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 00:09:57 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-96f50e26b8bso62809366b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 00:09:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685603396; x=1688195396;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=21iAnhfOCOE1fP1JIm6u9Hm6NZmMCUEF7VO5uMtx84k=;
+        b=LgREeLNor2SqPcJQCb4f4v9YKA1089fWRMS6umird7Dd4cduZww182HDUVxdw7MwjD
+         w0rneeWDz9908RaEHEqtyUN6qwER1pQpWROjTJo0n0PyEGeH8FHOujb/Hcww2ozrw/3Q
+         Z7lLmuHcy4XIXDWtXw9U4iBuPjdh7YeeSazlqy7RCL+ruHYlKZM0UWecCJ9aWcJ+l/CB
+         hSZfJx/SVzO+f+9zE29lflEWo31YJUYuRNY+W0dAkfdplnN8kKADdzRq3TWszwzv//3v
+         e4umrWvZONqATZ+g8KiyUUxiu+9I3nygQj4okz5sIBI6bV3ecTmqKFXb21Z5Rm+fRYY+
+         4fzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685603396; x=1688195396;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=21iAnhfOCOE1fP1JIm6u9Hm6NZmMCUEF7VO5uMtx84k=;
+        b=KtlBEGdcE9m2aa9q+up2OtZVzxCDiHW/pqaswYdWcRk2aCNi1bNgz9k+yQ93j9DWZ7
+         Xt02cI7z2bgd5dHU9GzC/09cBqgh1vIRgXLsBTVF2BjylXHjlBSStRjTzjOAkUXqndxy
+         GQdApJsPKkAlDoREuaQbpZrYvPG1PbG6igbOMmzM/CUXcH11sM+oRWPcDTT67tZ02Xju
+         w5QVTyms2qbOLbi6iHbSht9eGzYZVYuid2GYpqxdW5uXnKkOSQ3HHQeVZ8yxIBeSiqI+
+         5IvxXZklkTeidhmfvmx/exzGYz8fkP4UZ6yJDbu2V4mwI8TqT5O07JK9njm0Lu2CM/cw
+         cOng==
+X-Gm-Message-State: AC+VfDyVmjCIRFS18yWWbbvObkV2iqw0HxxTan0sLkdnVOOyzhoJ7ksR
+        waKJpE3GFRbr+Tf5FZJCB62ILg==
+X-Google-Smtp-Source: ACHHUZ7tcNLG3ERUSLkHz+IPljRSIaIgjYdPAmT7rfGQr6wZ7veiS6P62xUWniNzQ0icZFFat2U3jA==
+X-Received: by 2002:a17:907:168c:b0:973:dd61:d427 with SMTP id hc12-20020a170907168c00b00973dd61d427mr3642963ejc.66.1685603396362;
+        Thu, 01 Jun 2023 00:09:56 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id fi13-20020a170906da0d00b0096fbc516a93sm9979942ejb.211.2023.06.01.00.09.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 00:09:42 -0700 (PDT)
+Message-ID: <009679e5-792f-a872-bc02-dda3ff8781bb@linaro.org>
+Date:   Thu, 1 Jun 2023 09:09:40 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v5 1/2] md/raid10: fix incorrect done of recovery
-To:     linan666@huaweicloud.com
-Cc:     song@kernel.org, neilb@suse.de, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linan122@huawei.com,
-        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com
-References: <20230601062424.3613218-1-linan666@huaweicloud.com>
- <20230601062424.3613218-2-linan666@huaweicloud.com>
+Subject: Re: [PATCH v2 4/6] dt-bindings: sram: qcom,ocmem: Add msm8226 support
 Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20230601062424.3613218-2-linan666@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Brian Masney <masneyb@onstation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230506-msm8226-ocmem-v2-0-177d697e43a9@z3ntu.xyz>
+ <20230506-msm8226-ocmem-v2-4-177d697e43a9@z3ntu.xyz>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230506-msm8226-ocmem-v2-4-177d697e43a9@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Li,
-
-
-Thank you for your patch.
-
-Am 01.06.23 um 08:24 schrieb linan666@huaweicloud.com:
-> From: Li Nan <linan122@huawei.com>
-
-Unfortunately, I do not understand your commit message summary “fix 
-incorrect done of recovery”. Maybe:
-
-Do not add sparse disk when recovery aborts
-
-> In raid10_sync_request(), if data cannot be read from any disk for
-> recovery, it will go to 'giveup' and let 'chunks_skipped' + 1. After
-> multiple 'giveup', when 'chunks_skipped >= geo.raid_disks', it will
-> return 'max_sector', indicating that the recovery has been completed.
-> However, the recovery is just aborted and the data remains inconsistent.
+On 23/05/2023 22:55, Luca Weiss wrote:
+> Add the compatible for the OCMEM found on msm8226 which compared to
+> msm8974 only has a core clock and no iface clock.
 > 
-> Fix it by setting mirror->recovery_disabled, which will prevent the spare
-> disk from being added to this mirror. The same issue also exists during
-> resync, it will be fixed afterwards.
-> 
-> Signed-off-by: Li Nan <linan122@huawei.com>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 > ---
->   drivers/md/raid10.c | 18 +++++++++++++++++-
->   1 file changed, 17 insertions(+), 1 deletion(-)
+>  .../devicetree/bindings/sram/qcom,ocmem.yaml         | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> index d93d8cb2b620..3ba1516ea160 100644
-> --- a/drivers/md/raid10.c
-> +++ b/drivers/md/raid10.c
-> @@ -3303,6 +3303,7 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
->   	int chunks_skipped = 0;
->   	sector_t chunk_mask = conf->geo.chunk_mask;
->   	int page_idx = 0;
-> +	int error_disk = -1;
->   
->   	/*
->   	 * Allow skipping a full rebuild for incremental assembly
-> @@ -3386,7 +3387,20 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
->   		return reshape_request(mddev, sector_nr, skipped);
->   
->   	if (chunks_skipped >= conf->geo.raid_disks) {
-> -		/* if there has been nothing to do on any drive,
-> +		pr_err("md/raid10:%s: %s fail\n", mdname(mddev),
-> +			test_bit(MD_RECOVERY_SYNC, &mddev->recovery) ?  "resync" : "recovery");
-> +		if (error_disk >= 0 &&
-> +		    !test_bit(MD_RECOVERY_SYNC, &mddev->recovery)) {
-> +			/*
-> +			 * recovery fail, set mirrors.recovory_disabled,
+> diff --git a/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml b/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
+> index 4bbf6db0b6bd..02e4da9649fd 100644
+> --- a/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
+> +++ b/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
+> @@ -15,7 +15,9 @@ description: |
+>  
+>  properties:
+>    compatible:
+> -    const: qcom,msm8974-ocmem
+> +    enum:
+> +      - qcom,msm8226-ocmem  # v1.1.0
+> +      - qcom,msm8974-ocmem  # v1.4.0
+>  
+>    reg:
+>      items:
+> @@ -28,11 +30,13 @@ properties:
+>        - const: mem
+>  
+>    clocks:
+> +    minItems: 1
+>      items:
+>        - description: Core clock
+>        - description: Interface clock
+>  
+>    clock-names:
+> +    minItems: 1
+>      items:
+>        - const: core
+>        - const: iface
+> @@ -58,6 +62,20 @@ required:
+>  
+>  additionalProperties: false
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,msm8974-ocmem
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 2
+> +        clock-names:
+> +          minItems: 2
 
-recov*e*ry
+else:
+maxItems: 1?
 
-> +			 * device shouldn't be added to there.
-> +			 */
-> +			conf->mirrors[error_disk].recovery_disabled =
-> +						mddev->recovery_disabled;
-> +			return 0;
-> +		}
-> +		/*
-> +		 * if there has been nothing to do on any drive,
->   		 * then there is nothing to do at all..
+Best regards,
+Krzysztof
 
-Just one dot/period at the end?
-
->   		 */
->   		*skipped = 1;
-> @@ -3638,6 +3652,8 @@ static sector_t raid10_sync_request(struct mddev *mddev, sector_t sector_nr,
->   						       mdname(mddev));
->   					mirror->recovery_disabled
->   						= mddev->recovery_disabled;
-> +				} else {
-> +					error_disk = i;
->   				}
->   				put_buf(r10_bio);
->   				if (rb2)
-
-
-Kind regards,
-
-Paul
