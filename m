@@ -2,70 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED12719EFD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2099719F62
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbjFAOBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53812 "EHLO
+        id S234094AbjFAOOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233230AbjFAOBA (ORCPT
+        with ESMTP id S233955AbjFAOOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:01:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBE9184;
-        Thu,  1 Jun 2023 07:00:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B90E64562;
-        Thu,  1 Jun 2023 14:00:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ECD8C4339B;
-        Thu,  1 Jun 2023 14:00:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685628058;
-        bh=k0lroTYvtzGNwTev1CPUc1dbilaAPIIZm6XNUqRGNLg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hRoX7cPhPvvJnIoEKa2MoFUn8l+YPPLQxGZp0KkE4D5M4OMjdNFagc1pic1TaDzFC
-         zWOlIfTCBiIqQA//MIYLdhzh1BCBls/zq3gN062MoZvhKDRcsuJgdUqw6FGzIeSOll
-         bH1QVDhTDzc74GjUpmfUajEk2dz80+XbokU4WwhLMX2y1oQCEpdPlZaL8B3xxEjxng
-         nMJmY1yqGm2h2qt2uN22hTOgF7cq0eS1Nlfy5c8HLnL9I/ekUP0UUeati+kvqHi/v+
-         ddhgngSXrIlfX6iJb7ax8iP9q55cnnjYoFMqssj8+Qx+RJfU5VY/M60CtPrWaxW1tj
-         PUIwhunq6gX8Q==
-Date:   Thu, 1 Jun 2023 15:00:49 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Grimler <henrik@grimler.se>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v6 00/10 RESEND] Add RT5033 charger device driver
-Message-ID: <20230601140049.GF449117@google.com>
-References: <cover.1684182964.git.jahau.ref@rocketmail.com>
- <cover.1684182964.git.jahau@rocketmail.com>
- <a308cd6f-0f72-6a12-aa34-ce06290ce0bb@rocketmail.com>
+        Thu, 1 Jun 2023 10:14:05 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232B0189;
+        Thu,  1 Jun 2023 07:14:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685628844; x=1717164844;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=vTRJOxwQXt++VylGI6XPC00FlfcuDdAU0Tqyf98i4nU=;
+  b=BP51SdUV07WuFpulmDSrnF/FD+KyCdzxjGzKhrT9qp4YJcY/CL6K0Sfr
+   GHeFsA8hMRdAlkboemI6sdotlH905F0SKqopFzMqINSPyE7psif0X2O0t
+   yLD0QoNmIArf36pa+nMrI0zS7cxR6pPHVTMQqXgvzGK84ZIayBZwYgZ7m
+   8cXhvkQzP5xSJR+ALThcVbQpT3CCtP5Qx5nsN5REkDt+Kw6shcvUOCpl7
+   YRL8SOcmVu+JUFBbolgmUp3+2X8p+fZ9wRw8QiwLRLATO7nfu6IrnfadW
+   IhlyxUViZvBxZ3Kh98bUEa6TvDaztMbMaCB3Th76HFY6BaMiGalwZDYmt
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="358859183"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="358859183"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 07:03:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="772433684"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="772433684"
+Received: from dperchan-mobl1.ger.corp.intel.com (HELO terminus) ([10.214.197.5])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 07:03:08 -0700
+Message-ID: <50e54f3d3eaaaff95f31d79ddd731731bfc054ae.camel@intel.com>
+Subject: Re: [PATCH v3] media: uvcvideo: Enable Intel RealSense metadata for
+ devices.
+From:   Dmitry Perchanov <dmitry.perchanov@intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
+        linux-kernel@vger.kernel.org, evgeni.raikhel@intel.com,
+        demisrael@gmail.com, sakari.ailus@iki.fi
+Date:   Thu, 01 Jun 2023 17:03:06 +0300
+In-Reply-To: <20230420103143.GB11005@pendragon.ideasonboard.com>
+References: <5587a4f1a0a7f3e2bd0ce886bb4ee3bcbf8f522a.camel@intel.com>
+         <20230420103143.GB11005@pendragon.ideasonboard.com>
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a308cd6f-0f72-6a12-aa34-ce06290ce0bb@rocketmail.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,83 +65,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 May 2023, Jakob Hauser wrote:
+Bump.
+All questions are answered.
 
-> Dear all,
-> 
-> On 15.05.23 22:57, Jakob Hauser wrote:
-> > This patchset adds the charger driver "rt5033-charger". It is part of the
-> > multifunction device rt5033. The patchset is based on an older version by
-> > Beomho Seo of March 2015. For more information on the history and setup of
-> > the patchset see the cover sheet of version v1, there is a link further down
-> > below the changelog.
-> > 
-> > RESEND: Sorry for spamming. The first try of sending v6 got interrupted and
-> > was split into two threads on the lore list. Therefore sending it again.
-> > 
-> > Changes in v6:
-> >   - Patch 5: In function rt5033_charger_probe() after
-> >     calling rt5033_charger_dt_init() replaced the return value from "-ENODEV"
-> >     to "PTR_ERR(charger->chg)", as suggested by Christophe.
-> >   - Patch 9: Changed the patch from adding "power-supplies: true" to replacing
-> >     "additionalProperties: false" by "unevaluatedProperties: false", as
-> >     suggested by Krzysztof.
-> > 
-> > v1: https://lore.kernel.org/linux-pm/cover.1677620677.git.jahau@rocketmail.com/T/#t
-> > v2: https://lore.kernel.org/linux-pm/cover.1681646904.git.jahau@rocketmail.com/T/#t
-> > v3: https://lore.kernel.org/linux-pm/cover.1682636929.git.jahau@rocketmail.com/T/#t
-> > v4: https://lore.kernel.org/linux-pm/20230506155435.3005-1-jahau@rocketmail.com/T/#t
-> > v5: https://lore.kernel.org/linux-pm/20230514123130.41172-1-jahau@rocketmail.com/T/#t
-> > 
-> > The result of the patchset v6 can be seen at:
-> > https://github.com/Jakko3/linux/blob/rt5033-charger_v6/drivers/power/supply/rt5033_charger.c
-> 
-> What's missing on this patchset? I'm not familiar with the procedures. If
-> all patches need ack's, then the ones for mfd (patches 2 & 4) and for
-> dt-bindings (patch 10) are missing.
 
-You're waiting on me.  I will apply all of the patches and submit a PR.
+On Thu, 2023-04-20 at 13:31 +0300, Laurent Pinchart wrote:
+> Hi Dmitry,
+> =
 
-You're in the queue - please stand-by.
- 
-> Link to the current patchset v6:
-> - on lore: https://lore.kernel.org/linux-pm/cover.1684182964.git.jahau@rocketmail.com/T/#t
-> - on patchwork: https://patchwork.kernel.org/project/linux-pm/list/?series=747771&state=%2A&archive=both
-> 
-> > Jakob Hauser (9):
-> >    mfd: rt5033: Fix chip revision readout
-> >    mfd: rt5033: Fix STAT_MASK, HZ_MASK and AICR defines
-> >    mfd: rt5033: Apply preparatory changes before adding rt5033-charger
-> >      driver
-> >    power: supply: rt5033_charger: Add RT5033 charger device driver
-> >    power: supply: rt5033_charger: Add cable detection and USB OTG supply
-> >    power: supply: rt5033_battery: Move struct rt5033_battery to battery
-> >      driver
-> >    power: supply: rt5033_battery: Adopt status property from charger
-> >    dt-bindings: power: supply: rt5033-battery: Apply
-> >      unevaluatedProperties
-> >    dt-bindings: Add rt5033 mfd, regulator and charger
-> > 
-> > Stephan Gerhold (1):
-> >    mfd: rt5033: Drop rt5033-battery sub-device
-> > 
-> >   .../bindings/mfd/richtek,rt5033.yaml          | 138 ++++
-> >   .../power/supply/richtek,rt5033-battery.yaml  |   2 +-
-> >   .../power/supply/richtek,rt5033-charger.yaml  |  65 ++
-> >   drivers/mfd/rt5033.c                          |   8 +-
-> >   drivers/power/supply/Kconfig                  |   8 +
-> >   drivers/power/supply/Makefile                 |   1 +
-> >   drivers/power/supply/rt5033_battery.c         |  38 +-
-> >   drivers/power/supply/rt5033_charger.c         | 744 ++++++++++++++++++
-> >   include/linux/mfd/rt5033-private.h            |  64 +-
-> >   include/linux/mfd/rt5033.h                    |  24 -
-> >   10 files changed, 1034 insertions(+), 58 deletions(-)
-> >   create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
-> >   create mode 100644 drivers/power/supply/rt5033_charger.c
-> 
-> Kind regards,
-> Jakob
+> Thank you for the patch.
+> =
 
--- 
-Lee Jones [李琼斯]
+> On Thu, Apr 20, 2023 at 12:06:55PM +0300, Dmitry Perchanov wrote:
+> > Intel RealSense UVC Depth cameras produce metadata in a
+> > vendor-specific format that is already supported by the uvcvideo driver.
+> > Enable handling of this metadata for 7 additional RealSense devices.
+> > =
+
+> > Co-developed-by: Yu MENG <yu1.meng@intel.com>
+> > Co-developed-by: Evgeni Raikhel <evgeni.raikhel@intel.com>
+> > Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
+> =
+
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> =
+
+> I will wait for the answer to Sakari's question before merging this
+> though.
+> =
+
+> > ---
+> >  drivers/media/usb/uvc/uvc_driver.c | 63 ++++++++++++++++++++++++++++++
+> >  1 file changed, 63 insertions(+)
+> > =
+
+> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc=
+/uvc_driver.c
+> > index 7aefa76a42b3..f69573e2de96 100644
+> > --- a/drivers/media/usb/uvc/uvc_driver.c
+> > +++ b/drivers/media/usb/uvc/uvc_driver.c
+> > @@ -3014,6 +3014,33 @@ static const struct usb_device_id uvc_ids[] =3D {
+> >  	  .bInterfaceSubClass	=3D 1,
+> >  	  .bInterfaceProtocol	=3D 0,
+> >  	  .driver_info		=3D (kernel_ulong_t)&uvc_ctrl_power_line_limited },
+> > +	/* Intel D410/ASR depth camera */
+> > +	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
+> > +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> > +	  .idVendor		=3D 0x8086,
+> > +	  .idProduct		=3D 0x0ad2,
+> > +	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
+> > +	  .bInterfaceSubClass	=3D 1,
+> > +	  .bInterfaceProtocol	=3D 0,
+> > +	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> > +	/* Intel D415/ASRC depth camera */
+> > +	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
+> > +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> > +	  .idVendor		=3D 0x8086,
+> > +	  .idProduct		=3D 0x0ad3,
+> > +	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
+> > +	  .bInterfaceSubClass	=3D 1,
+> > +	  .bInterfaceProtocol	=3D 0,
+> > +	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> > +	/* Intel D430/AWG depth camera */
+> > +	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
+> > +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> > +	  .idVendor		=3D 0x8086,
+> > +	  .idProduct		=3D 0x0ad4,
+> > +	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
+> > +	  .bInterfaceSubClass	=3D 1,
+> > +	  .bInterfaceProtocol	=3D 0,
+> > +	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> >  	/* Intel RealSense D4M */
+> >  	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
+> >  				| USB_DEVICE_ID_MATCH_INT_INFO,
+> > @@ -3023,6 +3050,42 @@ static const struct usb_device_id uvc_ids[] =3D {
+> >  	  .bInterfaceSubClass	=3D 1,
+> >  	  .bInterfaceProtocol	=3D 0,
+> >  	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> > +	/* Intel D435/AWGC depth camera */
+> > +	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
+> > +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> > +	  .idVendor		=3D 0x8086,
+> > +	  .idProduct		=3D 0x0b07,
+> > +	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
+> > +	  .bInterfaceSubClass	=3D 1,
+> > +	  .bInterfaceProtocol	=3D 0,
+> > +	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> > +	/* Intel D435i depth camera */
+> > +	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
+> > +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> > +	  .idVendor		=3D 0x8086,
+> > +	  .idProduct		=3D 0x0b3a,
+> > +	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
+> > +	  .bInterfaceSubClass	=3D 1,
+> > +	  .bInterfaceProtocol	=3D 0,
+> > +	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> > +	/* Intel D405 Depth Camera */
+> > +	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
+> > +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> > +	  .idVendor		=3D 0x8086,
+> > +	  .idProduct		=3D 0x0b5b,
+> > +	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
+> > +	  .bInterfaceSubClass	=3D 1,
+> > +	  .bInterfaceProtocol	=3D 0,
+> > +	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> > +	/* Intel D455 Depth Camera */
+> > +	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
+> > +				| USB_DEVICE_ID_MATCH_INT_INFO,
+> > +	  .idVendor		=3D 0x8086,
+> > +	  .idProduct		=3D 0x0b5c,
+> > +	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
+> > +	  .bInterfaceSubClass	=3D 1,
+> > +	  .bInterfaceProtocol	=3D 0,
+> > +	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
+> >  	/* Generic USB Video Class */
+> >  	{ USB_INTERFACE_INFO(USB_CLASS_VIDEO, 1, UVC_PC_PROTOCOL_UNDEFINED) },
+> >  	{ USB_INTERFACE_INFO(USB_CLASS_VIDEO, 1, UVC_PC_PROTOCOL_15) },
+
+---------------------------------------------------------------------
+Intel Israel (74) Limited
+
+This e-mail and any attachments may contain confidential material for
+the sole use of the intended recipient(s). Any review or distribution
+by others is strictly prohibited. If you are not the intended
+recipient, please contact the sender and delete all copies.
+
