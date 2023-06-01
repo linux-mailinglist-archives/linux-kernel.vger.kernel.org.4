@@ -2,196 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDC971F5CF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4A071F5D4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233118AbjFAWN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 18:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
+        id S231659AbjFAWOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 18:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbjFAWNG (ORCPT
+        with ESMTP id S229498AbjFAWOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:13:06 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE9918C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 15:13:00 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-75b17b80834so144648985a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 15:13:00 -0700 (PDT)
+        Thu, 1 Jun 2023 18:14:11 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2CB1B4;
+        Thu,  1 Jun 2023 15:13:44 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-561d1c4846cso328887b3.1;
+        Thu, 01 Jun 2023 15:13:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1685657580; x=1688249580;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=M9aQ39c+6bjHrAtIPQFBDHHmGbMVd3kk+lrTWzFae+g=;
-        b=TIjzYKrFP8NzDNYye0/uvbJ/JyCW9F/rUcJRleufhssrswyCStw0zUDvaHnzf8OfpV
-         0ZkH5f7VW+BqzOZApJkXsGAIcOtqsmEYSZ1Mb3BNzqVwKcvx6+2F1E3GPkwpG7CafwpC
-         oE9iQEGm7WjTQAuvWChhAlWnqf8dRNEwgFLnM=
+        d=gmail.com; s=20221208; t=1685657608; x=1688249608;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wgSe4yPKC4Ie6mfk+f6dt8MfVPoiPfF24WwsiP2m7pk=;
+        b=JgiWv+DBFw3orHyGwm/A7Uj0Gs+A/6iLpp2/S9llhZLFWJMa15tbHWSk1y3lxd7h82
+         8RAPPWHHwbu3MUu4vQA/COZM00+v+t7UCp7cpz5cv0BBHc0C8xjM4gCK5Xj8HiF2FmeG
+         jMm3+dKcEjlsemIMyw92zoiqg7CG1qzxJCxbqHuZkikIG39ZIAHNWz+Hooo/qGxSnR4D
+         5mXmfMwj4FJsNx5oYSvSd5G50gVb6XVr2wyKDe+68oq3Nqi/StZqAImiIzW9ja8g7bQ+
+         Kb3MLgjMCVuZK1iDbmCpD05cV+ErJyilmWbmWPho0ChMxZa5tLEtKtNGRTVyE26QbN09
+         bWOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685657580; x=1688249580;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M9aQ39c+6bjHrAtIPQFBDHHmGbMVd3kk+lrTWzFae+g=;
-        b=aUf4FJ8nr4Yr/+KyxVJ/tDMxXg9ZRvMBZIiosXcaIBfpk6Ufy9rPNFwEcjw+c2wvB5
-         VGEB8tzvttYnUdt+EkeKQLDAXcRCRUv8VU/xfp62FynUf5GC2lmvFp2mWiAxZ+YZ7ckZ
-         oEwVwJyQ9Lam50E7YMMUxaR9dw5k0vJd3YP8NqeqnJA9ZUv6+hziTZrMviPSftjGjxEC
-         PFxa1XclzAAs4SVKYN6ROCNMJS0W+TS0PKcEWKbjqzqWddb79OkLC9FcP+MvYDengK6f
-         DiIrRMxcHNpEbmOyRdmgA5NMDIvOmh237CGjuaMs0xYPOkok8XA3V8pSGQqROZZcIcU2
-         j+CQ==
-X-Gm-Message-State: AC+VfDw2J+PzVqkLG728PRkJq6KlmcbVljL5EB4G6s1Mank+omUvpnEY
-        aydxi9G02wbTnKPMNnI13A3Zwg==
-X-Google-Smtp-Source: ACHHUZ5niOrYzCIDjF4lF2lg8/PzpPcRVLKnQabV6DmZV/cYAh4x1/K/Kv43MYGGuGTZqsBqE4FAZA==
-X-Received: by 2002:a05:620a:cc3:b0:75b:23a1:442 with SMTP id b3-20020a05620a0cc300b0075b23a10442mr9307655qkj.8.1685657579902;
-        Thu, 01 Jun 2023 15:12:59 -0700 (PDT)
-Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id f5-20020a05620a068500b00759554bbe48sm7180430qkh.4.2023.06.01.15.12.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 01 Jun 2023 15:12:59 -0700 (PDT)
-From:   Justin Chen <justin.chen@broadcom.com>
-To:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        bcm-kernel-feedback-list@broadcom.com
-Cc:     florian.fainelli@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, opendmb@gmail.com, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux@armlinux.org.uk,
-        richardcochran@gmail.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, simon.horman@corigine.com,
-        Justin Chen <justin.chen@broadcom.com>
-Subject: [PATCH net-next v6 6/6] MAINTAINERS: ASP 2.0 Ethernet driver maintainers
-Date:   Thu,  1 Jun 2023 15:12:31 -0700
-Message-Id: <1685657551-38291-7-git-send-email-justin.chen@broadcom.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1685657551-38291-1-git-send-email-justin.chen@broadcom.com>
-References: <1685657551-38291-1-git-send-email-justin.chen@broadcom.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000048eb2c05fd18bd03"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        MIME_HEADER_CTYPE_ONLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1685657608; x=1688249608;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wgSe4yPKC4Ie6mfk+f6dt8MfVPoiPfF24WwsiP2m7pk=;
+        b=Vwn2NDKRieZkeYq/cYbTRn16wfRCq1K/ttBAfk6NmsXrTudUASD36Gfdkxdkru+p2I
+         EOX3kf/RT8LFxsbQrThQazDQ4AKgeVg9gkwZiab3hr33n5qMoJN5MfM2w0kjuaXsUUUH
+         yMkjDSwKGo41uVi3peCH+FfqheZJebLPsivosb1+TSxmuoxmhDLn31/LRT0Sp7H6QlB4
+         icXrWTPZGgB4m61hDs6llzf4Dyamr95QL41QABjx0FXQJcaIkMtQ6ZMQQ9JH3DRKIZMt
+         nH8xv8TlOhWvYc6ES+azbFSkN0pj3xzmmIBRve9kHrf241bfy1Pfj7E0UJNA3Gxizlzo
+         3hwA==
+X-Gm-Message-State: AC+VfDyOEURppr2UbtEXlLCjZDYiDCntnC4N11Ea4NWCP0SGH05BAizN
+        aaWuZzADbpePDpkETcmqBtG1DIcgiZ8qhC/sJ0o=
+X-Google-Smtp-Source: ACHHUZ7FdK1COpLoHURlQ5kwJbzc1UrbXE+KoasqlIFy7FrHIBtaKwzHqkHZ7GjiaEbsOFUcXfnJ9clIDEHuKMWLkSY=
+X-Received: by 2002:a81:70cd:0:b0:561:eb6d:c0db with SMTP id
+ l196-20020a8170cd000000b00561eb6dc0dbmr8043695ywc.2.1685657607097; Thu, 01
+ Jun 2023 15:13:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <ZHZq7AV9Q2WG1xRB@work> <fe0739cbe279cf9db2ebff1146e7ae540cc1ad6c.camel@linux.ibm.com>
+ <202305301529.1EEA11B@keescook> <25ef15e7601e1b4510cbbd40c6d1ab7c64213863.camel@linux.ibm.com>
+ <202306010931.92796DC@keescook>
+In-Reply-To: <202306010931.92796DC@keescook>
+From:   Justin Tee <justintee8345@gmail.com>
+Date:   Thu, 1 Jun 2023 15:13:16 -0700
+Message-ID: <CABPRKS8zyzrbsWt4B5fp7kMowAZFiMLKg5kW26uELpg1cDKY3A@mail.gmail.com>
+Subject: Re: [PATCH][next] scsi: lpfc: Avoid -Wstringop-overflow warning
+To:     Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000048eb2c05fd18bd03
+I understand the desire to satisfy a compiler warning, but for what
+it=E2=80=99s worth I don=E2=80=99t think "size" could ever be negative here=
+.
 
-Add maintainers entry for ASP 2.0 Ethernet driver.
+size =3D LPFC_RAS_MIN_BUFF_POST_SIZE * phba->cfg_ras_fwlog_buffsize;
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Signed-off-by: Justin Chen <justin.chen@broadcom.com>
----
-v3
-	- Change from gmail to broadcom emails
+phba->cfg_ras_fwlog_buffsize could never be larger than 4 because it
+is restricted via lpfc_ras_fwlog_buffsize_set and LPFC_ATTR=E2=80=99s call =
+to
+lpfc_rangecheck(val, 0, 4).
 
- MAINTAINERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+And, #define LPFC_RAS_MIN_BUFF_POST_SIZE (256 * 1024).
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c25172d6471a..986b975b1d67 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4198,6 +4198,15 @@ F:	drivers/net/mdio/mdio-bcm-unimac.c
- F:	include/linux/platform_data/bcmgenet.h
- F:	include/linux/platform_data/mdio-bcm-unimac.h
- 
-+BROADCOM ASP 2.0 ETHERNET DRIVER
-+M:	Justin Chen <justin.chen@broadcom.com>
-+M:	Florian Fainelli <florian.fainelli@broadcom.com>
-+L:	bcm-kernel-feedback-list@broadcom.com
-+L:	netdev@vger.kernel.org
-+S:	Supported
-+F:	Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
-+F:	drivers/net/ethernet/broadcom/asp2/
-+
- BROADCOM IPROC ARM ARCHITECTURE
- M:	Ray Jui <rjui@broadcom.com>
- M:	Scott Branden <sbranden@broadcom.com>
--- 
-2.7.4
+So, 256 * 1024 * 4 =3D 1,048,576 =3D 0x00100000 is the max =E2=80=9Csize=E2=
+=80=9D could ever be.
 
-
---00000000000048eb2c05fd18bd03
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-NhTY3E+cXCB11wty89QStajwXdhGJTYEvUgvsq1h8CwJj9w/38ldAQf5WjhPmApYeJR2ewFrBMCM
-4lHkdRJ6TDc9nXoEkypUfjJkJHe7Eal06tosh6JpAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
-BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
-Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
-NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
-A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
-aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
-cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
-MBqBGGp1c3Rpbi5jaGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
-GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUIWGeYuaTsnIada5Xx8TR3cheUbgw
-DQYJKoZIhvcNAQELBQADggEBAHNQlMqQOFYPYFO71A+8t+qWMmtOdd2iGswSOvpSZ/pmGlfw8ZvY
-dRTkl27m37la84AxRkiVMes14JyOZJoMh/g7fbgPlU14eBc6WQWkIA6AmNkduFWTr1pRezkjpeo6
-xVmdBLM4VY1TFDYj7S8H2adPuypd62uHMY/MZi+BIUys4uAFA+N3NuUBNjcVZXYPplYxxKEuIFq6
-sDL+OV16G+F9CkNMN3txsym8Nnx5WAYZb6+rBUIhMGz70V05xsHQfzvo2s7f0J1tJ5BoRlPPhL0h
-VOnWA3h71u9TfSsv+PXVm3P21TfOS2uc1hbzEqyENCP4i5XQ0rv0TmPW42GZ0o4xggJtMIICaQIB
-ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
-bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwj8BKLXNpALfemdRAwDQYJ
-YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDVcNbjChrfS4tNhAIJjvSew5OOi0N6m56uM
-yBx5M51OMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYwMTIy
-MTMwMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
-AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
-BgkqhkiG9w0BAQEFAASCAQAF1BQ02lH0rYRXpKGNtKbz2LaqA/e81Wn3veY/jaVf+fXN9d2kT/Ad
-Scg8kCN047EU51+4oQyUQwrlqsmws0RoKyVKZ6axRFs2QNgmRQKeH43yBhuwAbJza147T386v754
-/rANpfeKTiYyxzPM45lFN3zRr0K/Vih78Yv74QpNW/SIZ008cFAZX6mISqq01Z32n1x1oarGG6/Q
-BI3Lksmb7Y0sISjuEWZcq0BeUglSh1P26ikL3PYT8gwzoaGWv64+ji+/KvpeVR3aLR8sZkjRZ6bR
-HHW0E633MllJVJMsjtvGVoyh6QYhDkb29DMVcoI5mD8aPKnVb4bcgQvkARpa
---00000000000048eb2c05fd18bd03--
+On Thu, Jun 1, 2023 at 9:49=E2=80=AFAM Kees Cook <keescook@chromium.org> wr=
+ote:
+>
+> On Wed, May 31, 2023 at 10:56:50AM -0400, James Bottomley wrote:
+> > On Tue, 2023-05-30 at 15:44 -0700, Kees Cook wrote:
+> > > On Tue, May 30, 2023 at 05:36:06PM -0400, James Bottomley wrote:
+> > > > On Tue, 2023-05-30 at 15:30 -0600, Gustavo A. R. Silva wrote:
+> > > > > Avoid confusing the compiler about possible negative sizes.
+> > > > > Use size_t instead of int for variables size and copied.
+> > > > >
+> > > > > Address the following warning found with GCC-13:
+> > > > > In function =E2=80=98lpfc_debugfs_ras_log_data=E2=80=99,
+> > > > >     inlined from =E2=80=98lpfc_debugfs_ras_log_open=E2=80=99 at
+> > > > > drivers/scsi/lpfc/lpfc_debugfs.c:2271:15:
+> > > > > drivers/scsi/lpfc/lpfc_debugfs.c:2210:25: warning: =E2=80=98memcp=
+y=E2=80=99
+> > > > > specified
+> > > > > bound between 18446744071562067968 and 18446744073709551615
+> > > > > exceeds
+> > > > > maximum object size 9223372036854775807 [-Wstringop-overflow=3D]
+> > > > >  2210 |                         memcpy(buffer + copied, dmabuf-
+> > > > > >virt,
+> > > > >       |
+> > > > > ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > >  2211 |                                size - copied - 1);
+> > > > >       |                                ~~~~~~~~~~~~~~~~~~
+> > > > >
+> > > >
+> > > > This looks like a compiler bug to me and your workaround would have
+> > > > us using unsigned types everywhere for sizes, which seems wrong.
+> > > > There are calls which return size or error for which we have
+> > > > ssize_t and that type has to be usable in things like memcpy, so
+> > > > the compiler must be fixed or the warning disabled.
+> > >
+> > > The compiler is (correctly) noticing that the calculation involving
+> > > "size" (from which "copied" is set) could go negative.
+> >
+> > It can?  But if it can, then changing size and copied to unsigned
+> > doesn't fix it, does it?
+>
+> Yes:
+>
+>         (int)   (const expression 256 * 1024)           (u32)
+>         size =3D LPFC_RAS_MIN_BUFF_POST_SIZE * phba->cfg_ras_fwlog_buffsi=
+ze;
+>
+> this can wrap to negative if cfg_ras_fwlog_buffsize is large enough. If
+> "size" is size_t, it can't wrap, and is therefore never negative.
+>
+> > So your claim is the compiler only gets it wrong in this one case and
+> > if we just change this one case it will never get it wrong again?
+>
+> What? No, I'm saying this is a legitimate diagnostic, and the wrong type
+> was chosen for "size": it never needs to carry a negative value, and it
+> potentially needs to handle values greater than u32.
+>
+> But you're right -- there is still a potential for runtime confusion in
+> that the return from lpfc_debugfs_ras_log_data() must be signed. So
+> perhaps the best option is to check for overflow directly.
+>
+> Gustavo, does this fix it?
+>
+>
+> diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_de=
+bugfs.c
+> index bdf34af4ef36..7f9b221e7c34 100644
+> --- a/drivers/scsi/lpfc/lpfc_debugfs.c
+> +++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+> @@ -2259,11 +2259,15 @@ lpfc_debugfs_ras_log_open(struct inode *inode, st=
+ruct file *file)
+>                 goto out;
+>         }
+>         spin_unlock_irq(&phba->hbalock);
+> -       debug =3D kmalloc(sizeof(*debug), GFP_KERNEL);
+> +
+> +       if (check_mul_overflow(LPFC_RAS_MIN_BUFF_POST_SIZE,
+> +                              phba->cfg_ras_fwlog_buffsize, &size))
+> +               goto out;
+> +
+> +       debug =3D kzalloc(sizeof(*debug), GFP_KERNEL);
+>         if (!debug)
+>                 goto out;
+>
+> -       size =3D LPFC_RAS_MIN_BUFF_POST_SIZE * phba->cfg_ras_fwlog_buffsi=
+ze;
+>         debug->buffer =3D vmalloc(size);
+>         if (!debug->buffer)
+>                 goto free_debug;
+>
+>
+> -Kees
+>
+> --
+> Kees Cook
