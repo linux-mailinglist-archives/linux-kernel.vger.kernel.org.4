@@ -2,117 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6748071F14C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E29071F154
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjFASA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 14:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S232164AbjFASFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 14:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjFASA0 (ORCPT
+        with ESMTP id S232144AbjFASEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 14:00:26 -0400
-Received: from out-8.mta1.migadu.com (out-8.mta1.migadu.com [IPv6:2001:41d0:203:375::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E172E198
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 11:00:23 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 14:00:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685642421;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rikKWdy6FkJZ7TxOeuVv2no4Uvw2FbvFXrknlku2Lr0=;
-        b=atiaOaKv+uGgVWrIBgEc7yMVho95zk+yXn7HmIb/JWzdFNNRD8GsFkaCojYLUmxdGEZj8D
-        7Ioc6S8oiCxOeWCOlyVYprsSznLfrTEBk/hh6wsG3yyt6B+kTftpXgtdtqd4vLEbQHfUux
-        KWvBLALHSXDpFUTZKzUX7J9eP0pgECQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "song@kernel.org" <song@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH 12/13] x86/jitalloc: prepare to allocate exectuatble
- memory as ROX
-Message-ID: <ZHjcr26YskTm+0EF@moria.home.lan>
-References: <20230601101257.530867-1-rppt@kernel.org>
- <20230601101257.530867-13-rppt@kernel.org>
- <0f50ac52a5280d924beeb131e6e4717b6ad9fdf7.camel@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0f50ac52a5280d924beeb131e6e4717b6ad9fdf7.camel@intel.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 1 Jun 2023 14:04:53 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2448E
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 11:04:52 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b0213d4b43so5411495ad.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 11:04:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685642692; x=1688234692;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=efFhcI9QiJJlyiXbBpdpKvDvm23k7AyskbJFQ1uKZ7w=;
+        b=qBMI7+8PByQ26gmjTNFpl5OS+p9zL4Bm8vUg1wsBHVDIMcf2t6c89urPLcbI/PxUGP
+         131NtdXZg/BwyvSWQqyYDwHPhGflmy2+WkaGmE+muB8yG1NoSvSfozQr4CCgW+uWbeER
+         2GV+aYCGMf3Rw5CNJrMJIVSvoCWPiN/RwHlMdm+sTMT55M3pLCyaholQqcz3wY0qcvHO
+         8ymSDCLyRknAnkR6DPNzpu5jEu+Hb4YitGPw/sguqval3CxB9SThUCyOV0Rts3bzT4eH
+         E4CyNUcvuspktTikCVPDMl9PqxOKWePCVYXd8p/VYUcThizQJJROGnVWgKE7wMZW9sJ8
+         saYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685642692; x=1688234692;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=efFhcI9QiJJlyiXbBpdpKvDvm23k7AyskbJFQ1uKZ7w=;
+        b=BukgJndAjSPjAjb0ysPVzcV4UsA/SZEocyktktSqvotMo0SLVKBAsquy/E9Irsn1ZM
+         Csm4HBfEuom9zoz/DYAdqDDrdPmnck2WvV1UXKP3caDlE9P56WRy4pLQHCprZn9c00OQ
+         a/DVtwE169GbuAHzp8Kr/Ofwu+IPQNDc620CuPwb++pzxm1bv9HWqWN9rC3GjPwzslbE
+         Vgv1Y59KQpKqal8hG6Ibpvlp/sw2bQJtV+LuRhVLv13Z4U+k5wdPblZOLzQOiVJRc7Zx
+         e9pLpxtCA8iQTHLI8ZRd30Hc6yZjf4cCFwE0cc0xxsnqrdFFMpB3SrUY/182T/uZPehV
+         E4rQ==
+X-Gm-Message-State: AC+VfDws8pEPhWrIXq8aHo9UAyz239dNuYpU9cQomrT+URM4QqeskSsY
+        h5ZGyN/e9yaKz8L1tNkcAeiP6FqSnDE=
+X-Google-Smtp-Source: ACHHUZ70fHIYCH1V8hLAwmSV1wOcIYsKxXA/hGoZLaWx/5dd7PLqjgqJnn3MpQExpWKJIlEYEs7fpcsP0qs=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:2449:b0:1ae:83eb:eaa with SMTP id
+ l9-20020a170903244900b001ae83eb0eaamr74757pls.0.1685642691862; Thu, 01 Jun
+ 2023 11:04:51 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 11:04:43 -0700
+In-Reply-To: <af74ae7c-ae81-38ed-97bb-75e39088d4ef@maciej.szmigiero.name>
+Mime-Version: 1.0
+References: <be4ca192eb0c1e69a210db3009ca984e6a54ae69.1684495380.git.maciej.szmigiero@oracle.com>
+ <ZGebCSwAA4W10atN@google.com> <af74ae7c-ae81-38ed-97bb-75e39088d4ef@maciej.szmigiero.name>
+Message-ID: <ZHjdu2CQU8RytUr7@google.com>
+Subject: Re: [PATCH] KVM: SVM: vNMI pending bit is V_NMI_PENDING_MASK not V_NMI_BLOCKING_MASK
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Santosh Shukla <santosh.shukla@amd.com>, vkuznets@redhat.com,
+        jmattson@google.com, thomas.lendacky@amd.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 04:54:27PM +0000, Edgecombe, Rick P wrote:
-> It is just a local flush, but I wonder how much text_poke()ing is too
-> much. A lot of the are even inside loops. Can't it do the batch version
-> at least?
+On Thu, Jun 01, 2023, Maciej S. Szmigiero wrote:
+> On 19.05.2023 17:51, Sean Christopherson wrote:
+> > On Fri, May 19, 2023, Maciej S. Szmigiero wrote:
+> > > From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+> > > 
+> > > While testing Hyper-V enabled Windows Server 2019 guests on Zen4 hardware
+> > > I noticed that with vCPU count large enough (> 16) they sometimes froze at
+> > > boot.
+> > > With vCPU count of 64 they never booted successfully - suggesting some kind
+> > > of a race condition.
+> > > 
+> > > Since adding "vnmi=0" module parameter made these guests boot successfully
+> > > it was clear that the problem is most likely (v)NMI-related.
+> > > 
+> > > Running kvm-unit-tests quickly showed failing NMI-related tests cases, like
+> > > "multiple nmi" and "pending nmi" from apic-split, x2apic and xapic tests
+> > > and the NMI parts of eventinj test.
+> > > 
+> > > The issue was that once one NMI was being serviced no other NMI was allowed
+> > > to be set pending (NMI limit = 0), which was traced to
+> > > svm_is_vnmi_pending() wrongly testing for the "NMI blocked" flag rather
+> > > than for the "NMI pending" flag.
+> > > 
+> > > Fix this by testing for the right flag in svm_is_vnmi_pending().
+> > > Once this is done, the NMI-related kvm-unit-tests pass successfully and
+> > > the Windows guest no longer freezes at boot.
+> > > 
+> > > Fixes: fa4c027a7956 ("KVM: x86: Add support for SVM's Virtual NMI")
+> > > Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> > 
+> > Reviewed-by: Sean Christopherson <seanjc@google.com>
+> > 
 > 
-> The other thing, and maybe this is in paranoia category, but it's
-> probably at least worth noting. Before the modules were not made
-> executable until all of the code was finalized. Now they are made
-> executable in an intermediate state and then patched later. It might
-> weaken the CFI stuff, but also it just kind of seems a bit unbounded
-> for dealing with executable code.
+> I can't see this in kvm/kvm.git trees or the kvm-x86 ones on GitHub -
+> is this patch planned to be picked up for -rc5 soon?
+> 
+> Technically, just knowing the final commit id would be sufficit for my
+> purposes.
 
-I believe bpf starts out by initializing new executable memory with
-illegal opcodes, maybe we should steal that and make it standard.
-
-> Preparing the modules in a separate RW mapping, and then text_poke()ing
-> the whole thing in when you are done would resolve both of these.
-
-text_poke() _does_ create a separate RW mapping.
-
-The thing that sucks about text_poke() is that it always does a full TLB
-flush, and AFAICT that's not remotely needed. What it really wants to be
-doing is conceptually just
-
-kmap_local()
-mempcy()
-kunmap_loca()
-flush_icache();
-
-...except that kmap_local() won't actually create a new mapping on
-non-highmem architectures, so text_poke() open codes it.
+If Paolo doesn't pick it up by tomorrow, I'll apply it and send a fixes pull
+request for -rc5.
