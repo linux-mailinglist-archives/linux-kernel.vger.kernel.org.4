@@ -2,145 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7151571F2D8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 756BF71F2DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbjFATVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 15:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
+        id S231573AbjFATVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 15:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjFATVj (ORCPT
+        with ESMTP id S230526AbjFATVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 15:21:39 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1510A98;
-        Thu,  1 Jun 2023 12:21:37 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351IWT64021738;
-        Thu, 1 Jun 2023 19:21:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=EFa/NmBtii/RjNtJcSA+b7nC2BASDp2x0P9xuuJoJ8c=;
- b=C44go066ITZPRfVic9csx3exufeUwC/i4mS/KtGotJH0JgrM8bscHqZBrw/a8uN2yvi8
- 8rcbcXjKzOc7LC56KhXJYy08BRlTmBGMAYIO3FIXWbAIjQhVSwjyizb5c0JiXnWfK8wv
- Y8+iPi0Bw8wbV3wQI6r1WAzOH+QB4WZyl18rctUx+kIOAUsmzOnaTQezX/gZTXGWlFOe
- Grx0s6J6bkUl33oLgSW8ekpe1yROqZEcHM9SH1imQFzvv5+ihBbB/PZ0LzEnp5rx8Ntn
- 2woewvQtlczuf07jGStJzT5kpLeeS3RQbfqd4AQIpycous8peXHHAFyUm7T9Q6axTUj+ BA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxnwv1xuu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 19:21:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351JL1UM007473
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Jun 2023 19:21:01 GMT
-Received: from [10.110.26.45] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
- 12:20:58 -0700
-Message-ID: <932ee149-c524-25e7-ee49-5ea1a7e6708c@quicinc.com>
-Date:   Thu, 1 Jun 2023 12:20:56 -0700
+        Thu, 1 Jun 2023 15:21:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284F013E;
+        Thu,  1 Jun 2023 12:21:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A857C64924;
+        Thu,  1 Jun 2023 19:21:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C2BC433EF;
+        Thu,  1 Jun 2023 19:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685647302;
+        bh=R8ZXq4/9sL/Vcs0YG2bdwjiu82BUxaSwNos4HHu++pU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=V0nupLbxwoYLeb6REcRZ2P8ENisI1muZ2wVYPTgNPdmg6pDHnJoxHuuy0+7JkD2Z9
+         PNPCUoZ4SwvJIrGRad+tgaj2WsJ7Q9tz9PYHa+7XVdD3O9aIP61U2byQWfZ7bWK/KR
+         p/SK1dukZM1pzCXlKTZK823WVQAGxFL7u33uRdaH3Xutomp7/vKFlKanfZvOmFJJer
+         OlE4c8rsjQAW7rzaNod4IPu5cuJei0JIIoRZQ6LP1Tbkmi+0/qFs1EyjMAhymD7H8r
+         b+UL09VMz02+fxtz7pNnzc3JjlNBFualmYtl4Oz/rDMvQ8p8l/8/u5XmOkCq9kPWx9
+         fWtr6SPCoQk5Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A3F99CE04B0; Thu,  1 Jun 2023 12:21:41 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 12:21:41 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Z qiang <qiang.zhang1211@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org, hch@lst.de,
+        Sachin Sant <sachinp@linux.ibm.com>,
+        "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Subject: Re: [PATCH rcu 11/20] srcu: Move grace-period fields from
+ srcu_struct to srcu_usage
+Message-ID: <bb71b53a-6913-480d-a519-04e2b6b3e0b6@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <f1b6cd5f-f0b7-4748-abd5-0dcfef0ce126@paulmck-laptop>
+ <20230330224726.662344-11-paulmck@kernel.org>
+ <6549da46-dddc-67ac-73c4-966965addad7@nvidia.com>
+ <CALm+0cVXGdLNQpfJxnAnq2j2Ybs_rVAEqNzxgLSq7bDJp1KnfA@mail.gmail.com>
+ <0a35ce9d-8eec-4e10-a607-a2e84c8fc5a0@paulmck-laptop>
+ <3e2b38f7-95a3-3d7a-9ac5-3d7712d181ab@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Freedreno] [PATCH] Revert "drm/msm/dp: Remove INIT_SETUP delay"
-Content-Language: en-US
-To:     Leonard Lausen <leonard@lausen.nl>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     <freedreno@lists.freedesktop.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        <regressions@lists.linux.dev>, David Airlie <airlied@gmail.com>,
-        "Nikita Travkin" <nikita@trvn.ru>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>, <linux-arm-msm@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Johan Hovold <johan+linaro@kernel.org>
-References: <e547edf4-1b48-5d12-1600-45f78e7cab49@quicinc.com>
- <1345a125-f745-4fe3-0f5e-bfe84225958d@quicinc.com>
- <b0cc40d5-6de1-91cc-e2cd-f47cc53551e4@quicinc.com>
- <ebbcd56ac883d3c3d3024d368fab63d26e02637a@lausen.nl>
- <20230508021536.txtamifw2vkfncnx@ripper>
- <3802269cd54ce105ef6dece03b1b9af575b4fa06@lausen.nl>
- <ad351c02-1c29-3601-53e8-f8cdeca2ac63@linaro.org>
- <49d175ec16e3f65a18265063e51092ee8d0d79c1@lausen.nl>
- <f2d1bb37-ea83-4d5d-6ef5-ae84c26d6ac1@quicinc.com>
- <b9c8243ed53c5c9d7c1b5711237f6130976ea99b@lausen.nl>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <b9c8243ed53c5c9d7c1b5711237f6130976ea99b@lausen.nl>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: NEEKnNQnkoXQnQdsGsQfqb3d1ckaav82
-X-Proofpoint-ORIG-GUID: NEEKnNQnkoXQnQdsGsQfqb3d1ckaav82
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- priorityscore=1501 lowpriorityscore=0 phishscore=0 suspectscore=0
- bulkscore=0 clxscore=1015 malwarescore=0 impostorscore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306010167
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3e2b38f7-95a3-3d7a-9ac5-3d7712d181ab@nvidia.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leonard
+On Thu, Jun 01, 2023 at 06:14:21PM +0100, Jon Hunter wrote:
+> Hi Paul, Zqiang,
+> 
+> On 01/06/2023 14:46, Paul E. McKenney wrote:
+> 
+> ...
+> 
+> > Thank you both!
+> > 
+> > Huh.  It looks like Chen-Yu Tsai sent a patch to this effect and
+> > AngeloGioacchino Del Regno tested it.  No one has picked it up yet.
+> > 
+> > https://lore.kernel.org/all/20230526073539.339203-1-wenst@chromium.org/
+> > 
+> > This is clearly a regression, and I don't see it in -next.  I will pick
+> > it up and send it along in a few days if Matthias or Rafael don't beat
+> > me to it.
+> > 
+> > In the meantime, I would be happy to add Jon's Reported-by and Tested-by,
+> > along with Qiang's Acked-by or Reviewed-by.
+> 
+> 
+> Thanks for the rapid response. Yes that does fix the problem for me so ...
+> 
+> Tested-by: Jon Hunter <jonathanh@nvidia.com>
 
-On 5/24/2023 5:58 AM, Leonard Lausen wrote:
->>>>>>> [  275.025497] [drm:dpu_encoder_phys_vid_wait_for_commit_done:488]
->>>>>>> [dpu error]vblank timeout
->>>>>>> [  275.025514] [drm:dpu_kms_wait_for_commit_done:510] [dpu error]wait
->>>>>>> for commit done returned -110
->>>>>>> [  275.064141] [drm:dpu_encoder_frame_done_timeout:2382] [dpu
->>>>>>> error]enc33 frame done timeout
->>>>>
->>>>> This is a different crash but the root-cause of both the issues is the
->>>>> bridge hpd_enable/disable series.
->>>>>
->>>>> https://patchwork.freedesktop.org/patch/514414/
->>>
->>> Yes, the new patch to fix this issue is here
->>>
->>> https://patchwork.freedesktop.org/patch/538601/?series=118148&rev=3
->>>
->>> Apologies if you were not CCed on this, if a next version is CCed,
->>> will ask kuogee to cc you.
->>>
->>> Meanwhile, will be great if you can verify if it works for you and
->>> provide Tested-by tags.
->>
->> Hi Leonard,
->>
->> I had  cc you with v5 patches.
->>
->> Would you please verify it.
-> 
-> Hi Kuogee,
-> 
-> thank you. Verified the v6 patch fixes the regression when ported to
-> 6.3.3. One non-fatal issue remains: Suspending and resuming the system
-> while USB-C DP monitor is connected triggers an error, though the system
-> recovers within a second without the need to unplug the cable.
-> 
-> [drm:drm_mode_config_helper_resume] *ERROR* Failed to resume (-107)
-> 
+Added, and again, thank you!
 
-We are not able to recreate this on sc7280 chromebooks , will need to 
-check on sc7180. This does not seem directly related to any of the 
-hotplug changes though so needs to be checked separately. So please feel 
-free to raise a gitlab bug for this and assign to me.
+							Thanx, Paul
