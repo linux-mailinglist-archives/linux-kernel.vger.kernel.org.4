@@ -2,146 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EA271EEA2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E2E71EEB4
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231343AbjFAQVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 12:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S230046AbjFAQWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 12:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbjFAQVD (ORCPT
+        with ESMTP id S229630AbjFAQWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 12:21:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94464137
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 09:21:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC66C6114E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 16:21:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F37BC433D2;
-        Thu,  1 Jun 2023 16:21:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685636461;
-        bh=5bjcADpccbmZ62QA2CPcr2CQsIlOFFWbag5E1XqJJYs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=CtcXYpwXrMGjpIxJ+jC0yiVkKqBU3/R9HElsMN7titQsuUXZEp08QaKeJue9BRvaK
-         xkb8zKragDuT6zmyvo7Ss2sv1+hdirI2smeYGVz0xQ9qd9pp/ugZzO3TDiFMUYMEaS
-         dV+pwXXjIU3IH5BcLBqU6xV3ot4wz2Bm8gHZIYh9Er6oT58Iqqbbn/4W0ccc44pchA
-         BUV8K3SRq5uBQgS38DtTmbcg83/7Y2mAb2oJEtJwGJOp9eQPFQxUSoZWjH63CDpVKj
-         sSRcbxiNsafn8ZUnuV29hBKlikfrWMCC4B/7kRz16CwbHOCCDJHf2zfGZRuLZEt5mw
-         IMnyelnKI1F8g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id AA7B4CE04B0; Thu,  1 Jun 2023 09:21:00 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 09:21:00 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     peterz@infradead.org, jgross@suse.com, vschneid@redhat.com,
-        yury.norov@gmail.com, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
-Subject: Re: [RESEND PATCH 2/2] smp: Reduce NMI traffic from CSD waiters to
- CSD destination.
-Message-ID: <8a30005f-e87c-40bf-a49f-c9f049cfbdb2@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230508223124.1438167-1-imran.f.khan@oracle.com>
- <20230508223124.1438167-3-imran.f.khan@oracle.com>
- <c0ca0c9f-a93b-4159-a7cc-b73eeac3fdc2@paulmck-laptop>
- <a29619cc-4195-75c4-e49a-0e4ab433cf53@oracle.com>
+        Thu, 1 Jun 2023 12:22:38 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C74133;
+        Thu,  1 Jun 2023 09:22:37 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-2566e60cc5aso758365a91.3;
+        Thu, 01 Jun 2023 09:22:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685636557; x=1688228557;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FFU/5Iv9owlTTt86pLJPmhqgSRLxIfPlWHSZUPcuZc4=;
+        b=d+NEA05T2No89c3k15b1IHVESm59uCdSRC8Juyn95Dz+Bnd9r7QpSoj/JLeMofTquf
+         0/M8aU+N7lfs37n0z+ecYD64QED2a0ezIizANK2jaAaz6RWUnTQnzfH8HGQJA5duLh2N
+         kc4PAGywyZGT053Oez0OooMP3+y7uPDPFY4bAFBV41aa/2nglCzVZpjQqFiXwWgxIBmW
+         oRwTcBLIcFHQ1iqhYBu9EudNL5IDVGn63BZqtv3oCp1Y84uUY7Fb0DjGO4WAORHcoN6W
+         ieVhnA+cY10zWZHpvl2VXJC54+Xvl89pXS7sWKQ1E+SsXPUw0lkZ6ALm754k7xGHDZOn
+         TpvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685636557; x=1688228557;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FFU/5Iv9owlTTt86pLJPmhqgSRLxIfPlWHSZUPcuZc4=;
+        b=RyHiv1PR3JvQw5bfr39+wK90e5BoWO6AwnQBCpR0G8Qxm+CdXbKm1pDrxBkV1tznKW
+         XenmT7vzM5NVNJvEO/GwaFM65J9V6O86es54dhlZze5mFxNnIoZzZDfJ2ji9lBlcMmhd
+         gcs4LThlrTd1aJGa5SdWaOLejCL1iZcZ010jac9z5DNKIrk7WJxoJabt6lsqKwz1LrtX
+         KCVewdgebnA0iLqJy+iwoCmgLKnbCSvhEktyQKg5/NXweK4bBjQWMmQIEnibDjBKxccI
+         W28Y5Y+t6Yy3ejIm+b8Jb94UwgTkg1u886SsHOBF/n4aQpv+b0Q2b+1yXJhHoLquej2J
+         8mfQ==
+X-Gm-Message-State: AC+VfDyxssVXb7IEp09kX8SiX76bhCgJSdpi4WZB/xuR9NRM/t242GtH
+        UWl4wuY5EXy6yKtAzB+GiE/dVcbqFaqxuw==
+X-Google-Smtp-Source: ACHHUZ5MxBd74DfWqf5JtmxcE4FhjBn6koOuiM99hOW3cotRFG8LyaW/sttp/jZrwO8St8jDqZMkgA==
+X-Received: by 2002:a17:90a:ee8c:b0:256:959f:3443 with SMTP id i12-20020a17090aee8c00b00256959f3443mr9903062pjz.25.1685636557273;
+        Thu, 01 Jun 2023 09:22:37 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id fa2-20020a17090af0c200b00256353eb8f2sm1651166pjb.5.2023.06.01.09.22.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 09:22:36 -0700 (PDT)
+Message-ID: <2c22b77b-3f35-0810-ab40-595c07451973@gmail.com>
+Date:   Thu, 1 Jun 2023 09:22:34 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a29619cc-4195-75c4-e49a-0e4ab433cf53@oracle.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 5.10 00/22] 5.10.182-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230601131933.727832920@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230601131933.727832920@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 11:24:00AM +1000, Imran Khan wrote:
-> Hello Paul,
-> 
-> On 16/5/2023 10:09 pm, Paul E. McKenney wrote:
-> > On Tue, May 09, 2023 at 08:31:24AM +1000, Imran Khan wrote:
-> >> On systems with hundreds of CPUs, if few hundred or most of the CPUs
-> >> detect a CSD hang, then all of these waiters endup sending an NMI to
-> >> destination CPU to dump its backtrace.
-> >> Depending on the number of such NMIs, destination CPU can spent
-> >> a significant amount of time handling these NMIs and thus making
-> >> it more difficult for this CPU to address those pending CSDs timely.
-> >> In worst case it can happen that by the time destination CPU is done
-> >> handling all of the above mentioned backtrace NMIs, csd wait time
-> >> may have elapsed and all of the waiters start sending backtrace NMI
-> >> again and this behaviour continues in loop.
-> >>
-> >> To avoid the above mentioned scenario, issue backtrace NMI only from
-> >> first waiter. The other waiters to same CSD destination can make use
-> >> of backtrace obtained via fist waiter's NMI.
-> >>
-> >> Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
-> > 
-> > Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
-> 
-> Thanks a lot for reviewing this and [1]. Could you kindly let me know
-> if you plan to pick these in your tree, at some point of time.
 
-I have done so, and they should make it to -next early next week,
-assuming testing goes well.
 
-							Thanx, Paul
+On 6/1/2023 6:20 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.182 release.
+> There are 22 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 03 Jun 2023 13:19:19 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.182-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-> Thanks,
-> Imran
-> 
-> [1]:
-> https://lore.kernel.org/all/088edfa0-c1b7-407f-8b20-caf0fecfbb79@paulmck-laptop/
-> 
-> >> ---
-> >>  kernel/smp.c | 10 +++++++++-
-> >>  1 file changed, 9 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/kernel/smp.c b/kernel/smp.c
-> >> index b7ccba677a0a0..a1cd21ea8b308 100644
-> >> --- a/kernel/smp.c
-> >> +++ b/kernel/smp.c
-> >> @@ -43,6 +43,8 @@ static DEFINE_PER_CPU_ALIGNED(struct call_function_data, cfd_data);
-> >>  
-> >>  static DEFINE_PER_CPU_SHARED_ALIGNED(struct llist_head, call_single_queue);
-> >>  
-> >> +static DEFINE_PER_CPU(atomic_t, trigger_backtrace) = ATOMIC_INIT(1);
-> >> +
-> >>  static void __flush_smp_call_function_queue(bool warn_cpu_offline);
-> >>  
-> >>  int smpcfd_prepare_cpu(unsigned int cpu)
-> >> @@ -242,7 +244,8 @@ static bool csd_lock_wait_toolong(struct __call_single_data *csd, u64 ts0, u64 *
-> >>  			 *bug_id, !cpu_cur_csd ? "unresponsive" : "handling this request");
-> >>  	}
-> >>  	if (cpu >= 0) {
-> >> -		dump_cpu_task(cpu);
-> >> +		if (atomic_cmpxchg_acquire(&per_cpu(trigger_backtrace, cpu), 1, 0))
-> >> +			dump_cpu_task(cpu);
-> >>  		if (!cpu_cur_csd) {
-> >>  			pr_alert("csd: Re-sending CSD lock (#%d) IPI from CPU#%02d to CPU#%02d\n", *bug_id, raw_smp_processor_id(), cpu);
-> >>  			arch_send_call_function_single_ipi(cpu);
-> >> @@ -423,9 +426,14 @@ static void __flush_smp_call_function_queue(bool warn_cpu_offline)
-> >>  	struct llist_node *entry, *prev;
-> >>  	struct llist_head *head;
-> >>  	static bool warned;
-> >> +	atomic_t *tbt;
-> >>  
-> >>  	lockdep_assert_irqs_disabled();
-> >>  
-> >> +	/* Allow waiters to send backtrace NMI from here onwards */
-> >> +	tbt = this_cpu_ptr(&trigger_backtrace);
-> >> +	atomic_set_release(tbt, 1);
-> >> +
-> >>  	head = this_cpu_ptr(&call_single_queue);
-> >>  	entry = llist_del_all(head);
-> >>  	entry = llist_reverse_order(entry);
-> >> -- 
-> >> 2.34.1
-> >>
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
+
+Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
