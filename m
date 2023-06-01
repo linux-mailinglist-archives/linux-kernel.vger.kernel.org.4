@@ -2,54 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1733571F444
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4653471F447
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbjFAU5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 16:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
+        id S232661AbjFAU6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjFAU53 (ORCPT
+        with ESMTP id S229693AbjFAU6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:57:29 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559BE192
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 13:57:28 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-763c3442563so30383839f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 13:57:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685653047; x=1688245047;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H+l1U73mbKH9j4OejDCTya2AgY4321krTJ/ukN0/34Q=;
-        b=GkOrteolB9nTRrUjx6JGVzkcypF56vDGKPFSYwXFw81tiyxdUtY5DEYvhe1FbC90Xv
-         HWIdcy5v2rflq6S0SdnO0NMQQg/MfcrQNBMRPjnw3yykvBddFSSfiICrOl7QGAlNTGtF
-         iniTqnVb7gHxqrHHSEKK1BTK1DTp+DdiqMyI+ATdNIL9gk6xJziFVQVwLFlPlgmHC3QY
-         qQDouVlQfgbHg/byubqHb3Dgmw8xlZTwU8yeGp1RUeaprowieRBCCUtNQPuPPRrL9M6C
-         ONgNRRWS2lfOw3GagwYfwVegX94IP0EmP9DkdH33hNEvf5mkMqJHnzGQGi/XhSFO4o5H
-         n3xg==
-X-Gm-Message-State: AC+VfDzQ+bpeFlrDtmFneM3S2mJVf++msEKrExaLikSzQTlaZ/erl3jA
-        UIOoxsfiqZQvoxpEca3WMpAShB+fR7adhTNg1Jy6liqe3LUD
-X-Google-Smtp-Source: ACHHUZ7bUwXBbZVCrZNRxrQa5023b/GTViYVQBHHLxfBXUh0nMyBSQxMYlCW5YBYKTlxmQRiZvA4raYDP+qvoq/e80zbSI2rTWxg
+        Thu, 1 Jun 2023 16:58:32 -0400
+Received: from smtp-fw-80009.amazon.com (smtp-fw-80009.amazon.com [99.78.197.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550ADB3;
+        Thu,  1 Jun 2023 13:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1685653111; x=1717189111;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0//iUfwElF6+Ol5SZRiYFlOIxvlZ/qXnBBIyuRbnzNg=;
+  b=MnPQiEPjqAJ+nbgcNruMDa6ww83bE66OseZF9QEnLO25R6jVymwZ+FMX
+   1U9IL5kdJ0pREJW5UKlwx+Bipuw5iluyZDNjefzwSMZxJCTci1Irdt73y
+   qyjcRJJcAzW44g9u3CMOrsRKZrzQ8fx+jiorSTwTEfdQ/qu89kUwj5r13
+   I=;
+X-IronPort-AV: E=Sophos;i="6.00,210,1681171200"; 
+   d="scan'208";a="7512814"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-8a14c045.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80009.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 20:58:31 +0000
+Received: from EX19MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-m6i4x-8a14c045.us-west-2.amazon.com (Postfix) with ESMTPS id B85D68B58C;
+        Thu,  1 Jun 2023 20:58:30 +0000 (UTC)
+Received: from EX19D002UWC001.ant.amazon.com (10.13.138.148) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 1 Jun 2023 20:58:30 +0000
+Received: from EX19MTAUWC001.ant.amazon.com (10.250.64.145) by
+ EX19D002UWC001.ant.amazon.com (10.13.138.148) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 1 Jun 2023 20:58:30 +0000
+Received: from dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com
+ (10.189.73.169) by mail-relay.amazon.com (10.250.64.145) with Microsoft SMTP
+ Server id 15.2.1118.26 via Frontend Transport; Thu, 1 Jun 2023 20:58:30 +0000
+Received: by dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com (Postfix, from userid 22673075)
+        id 4D47EE6E; Thu,  1 Jun 2023 20:58:30 +0000 (UTC)
+From:   Rishabh Bhatnagar <risbhat@amazon.com>
+To:     <gregkh@linuxfoundation.org>, <sfrench@samba.org>
+CC:     <stable@vger.kernel.org>, <linux-cifs@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Rishabh Bhatnagar <risbhat@amazon.com>
+Subject: [PATCH 5.4 0/2] Backport few dfs related fixes to cifs
+Date:   Thu, 1 Jun 2023 20:58:15 +0000
+Message-ID: <20230601205817.3957-1-risbhat@amazon.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8f89:0:b0:770:2afa:25ae with SMTP id
- l9-20020a5d8f89000000b007702afa25aemr325298iol.1.1685653047714; Thu, 01 Jun
- 2023 13:57:27 -0700 (PDT)
-Date:   Thu, 01 Jun 2023 13:57:27 -0700
-In-Reply-To: <ffde7908-be73-cc56-2646-72f4f94cb51b@huaweicloud.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001faca405fd17af1b@google.com>
-Subject: Re: [syzbot] [reiserfs?] possible deadlock in open_xa_dir
-From:   syzbot <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com,
-        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
-        roberto.sassu@huaweicloud.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,20 +67,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Recently we have been seeing kernel panic in cifs_reconnect function
+while accessing tgt_list. Looks like tgt_list is not initialized
+correctly. There are fixes already present in 5.10 and later trees.
+Backporting them to 5.4
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+ CIFS VFS: \\172.30.1.14 cifs_reconnect: no target servers for DFS
+ failover
+ BUG: unable to handle page fault for address: fffffffffffffff8
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 260e067 P4D 260e067 PUD 2610067 PMD 0
+ Oops: 0000 [#1] SMP PTI
+ RIP: 0010:cifs_reconnect+0x51d/0xef0 [cifs]
+ RSP: 0018:ffffc90000693da0 EFLAGS: 00010282
+ RAX: fffffffffffffff8 RBX: ffff8887fa63b800 RCX: fffffffffffffff8
+ Call Trace:
+ cifs_handle_standard+0x18d/0x1b0 [cifs]
+ cifs_demultiplex_thread+0xa5c/0xc90 [cifs]
+ kthread+0x113/0x130
 
-Reported-and-tested-by: syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com
+Paulo Alcantara (2):
+  cifs: get rid of unused parameter in reconn_setup_dfs_targets()
+  cifs: handle empty list of targets in cifs_reconnect()
 
-Tested on:
+ fs/cifs/connect.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-commit:         929ed21d Merge tag '6.4-rc4-smb3-client-fixes' of git:..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16c69fed280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=162cf2103e4a7453
-dashboard link: https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1159c149280000
+-- 
+2.39.2
 
-Note: testing is done by a robot and is best-effort only.
