@@ -2,110 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D78F719B19
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEAB719B1F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbjFALqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 07:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
+        id S232509AbjFALtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 07:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjFALq2 (ORCPT
+        with ESMTP id S230268AbjFALtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:46:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD14129
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 04:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685619941;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=X7ULdJ4Ab2b47vEWN486zFKO2o/CmnOZmXp0dkx+i0c=;
-        b=beCO+OOguuo21ENyvOmOF2+6BgNbuEBh26PgkqVSo97FEjY688mkOEOATdWUjBozSFWTbz
-        ZueXNleroNvh8ZWiah0C+GeruDW/lbmXIARN/ylsyf44bqQSe8TH+z3PVADFvdGHQy0Sft
-        UMtAdDADHn7Nbwa3IFnFFdAigDzZ11s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-338-mMIuAwj2MKiKI-pxk9nXWA-1; Thu, 01 Jun 2023 07:45:32 -0400
-X-MC-Unique: mMIuAwj2MKiKI-pxk9nXWA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 873C0802355;
-        Thu,  1 Jun 2023 11:45:32 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.22.8.115])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C2BD8C154D7;
-        Thu,  1 Jun 2023 11:45:31 +0000 (UTC)
-Received: by fedora.redhat.com (Postfix, from userid 1000)
-        id 5EE5716F1EC; Thu,  1 Jun 2023 07:45:31 -0400 (EDT)
-Date:   Thu, 1 Jun 2023 07:45:31 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>
-Cc:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
-        gerry@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        German Maglione <gmaglione@redhat.com>
-Subject: Re: [PATCH] fuse: fix return value of inode_inline_reclaim_one_dmap
- in error path
-Message-ID: <ZHiE2zkFJKBl9GZ+@redhat.com>
-References: <20230424123250.125404-1-jefflexu@linux.alibaba.com>
- <ZHeoIFrp303f0E8d@redhat.com>
- <33fd8e03-7c99-c12d-255d-b7190612379b@linux.alibaba.com>
+        Thu, 1 Jun 2023 07:49:18 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07CD129;
+        Thu,  1 Jun 2023 04:49:16 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 351Bn0N7025725;
+        Thu, 1 Jun 2023 06:49:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1685620140;
+        bh=1AgyYwFTyh3L8MGDOaJ940Fe09PyF2HGWDtN+2rsesE=;
+        h=Date:Subject:From:To:CC:References:In-Reply-To;
+        b=R0ncVuNx1mKz4Grfo3pZDdz5qPDgvellBY+AnwjIiWd3Ed9Zl1DDTqP8s22x2hUwt
+         zFxUTZMInccJHpwg08fAe8yV9cRBYVTCnik7U4eQCqqCbDh+hQLEl/vM9JmrTGBhLC
+         v86OZsYosmdYzVdCY5ate08XkMulzwNQ9l2Z1yGY=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 351Bn0Tp116576
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 1 Jun 2023 06:49:00 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 1
+ Jun 2023 06:49:00 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 1 Jun 2023 06:49:00 -0500
+Received: from [172.24.147.77] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 351Bmufi112293;
+        Thu, 1 Jun 2023 06:48:57 -0500
+Message-ID: <4aee3a8f-66ff-387b-73a1-31fc16eb7ffc@ti.com>
+Date:   Thu, 1 Jun 2023 17:18:56 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33fd8e03-7c99-c12d-255d-b7190612379b@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] arm64: dts: ti: k3-j784s4: Fix wakeup pinmux range and
+ pinctrl node offsets
+From:   Thejasvi Konduru <t-konduru@ti.com>
+To:     Nishanth Menon <nm@ti.com>
+CC:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Davis <afd@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Apurva Nandan <a-nandan@ti.com>, Udit Kumar <u-kumar1@ti.com>
+References: <20230503083143.32369-1-t-konduru@ti.com>
+ <20230503114625.gqnijd3bog5bwemz@parameter>
+ <31b31af7-6c54-7d05-f7ef-fcceba48580e@ti.com>
+ <20230504115207.h6trzy4mqjcbkcm3@comment>
+ <67eccecb-f4a4-7f15-5316-27fd39e65b51@ti.com>
+ <20230504142239.hqhni2c52k3a3asz@prune>
+ <efab17de-aeb4-9fdb-6c97-ab2f2bc8c8f4@ti.com>
+Content-Language: en-US
+In-Reply-To: <efab17de-aeb4-9fdb-6c97-ab2f2bc8c8f4@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SCC_BODY_URI_ONLY,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 09:45:52AM +0800, Jingbo Xu wrote:
-> 
-> 
-> On 6/1/23 4:03 AM, Vivek Goyal wrote:
-> > On Mon, Apr 24, 2023 at 08:32:50PM +0800, Jingbo Xu wrote:
-> >> When range already got reclaimed by somebody else, return NULL so that
-> >> the caller could retry to allocate or reclaim another range, instead of
-> >> mistakenly returning the range already got reclaimed and reused by
-> >> others.
-> >>
-> >> Reported-by: Liu Jiang <gerry@linux.alibaba.com>
-> >> Fixes: 9a752d18c85a ("virtiofs: add logic to free up a memory range")
-> >> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
-> > 
-> > Hi Jingbo,
-> > 
-> > This patch looks correct to me.
-> > 
-> > Are you able to reproduce the problem? Or you are fixing it based on
-> > code inspection?
-> 
-> It's spotted by Liu Jiang during code review.  Not tested yet.
-> 
-> > 
-> > How are you testing this? We don't have virtiofsd DAX implementation yet
-> > in rust virtiofsd yet. 
-> > 
-> > I am not sure how to test this chagne now. We had out of tree patches
-> > in qemu and now qemu has gotten rid of C version of virtiofsd so these
-> > patches might not even work now.
-> 
-> Yeah this exception path may not be so easy to be tested as it is only
-> triggered in the race condition.  I have the old branch (of qemu) with
-> support for DAX, and maybe I could try to reproduce the exception path
-> by configuring limited DAX window and heavy IO workload.
-
-That would be great. Please test it with really small DAX window size.
-Also put some pr_debug() statements to make sure you are hitting this
-particular path during testing.
-
-Thanks
-Vivek
-
+On 09/05/23 15:19, Thejasvi Konduru wrote:
+>
+> On 04/05/23 19:52, Nishanth Menon wrote:
+>> On 17:40-20230504, Thejasvi Konduru wrote:
+>>> On 04/05/23 17:22, Nishanth Menon wrote:
+>>>> On 14:36-20230504, Thejasvi Konduru wrote:
+>>>>> On 03/05/23 17:16, Nishanth Menon wrote:
+>>>>>> On 14:01-20230503, Thejasvi Konduru wrote:
+>>>>>>> The wkup_pmx register region in j784s4 has multiple non-addressable
+>>>>>>> regions, hence the existing wkup_pmx region is split as follows to
+>>>>>>> avoid the non-addressable regions. The pinctrl node offsets are
+>>>>>>> also corrected as per the newly split wkup_pmx* nodes.
+>>>>>>>
+>>>>>>> wkup_pmx0 -> 13 pins (WKUP_PADCONFIG 0 - 12)
+>>>>>>> wkup_pmx1 -> 11 pins (WKUP_PADCONFIG 14 - 24)
+>>>>>>> wkup_pmx2 -> 72 pins (WKUP_PADCONFIG 26 - 97)
+>>>>>>> wkup_pmx3 -> 1 pin (WKUP_PADCONFIG 100)
+>>>>>>>
+>>>>>>> Fixes: 4664ebd8346a ("arm64: dts: ti: Add initial support for 
+>>>>>>> J784S4 SoC")
+>>>>>>> Signed-off-by: Thejasvi Konduru <t-konduru@ti.com>
+>>>>>>> ---
+>>>>>> Could you provide a link to the output of:
+>>>>>> $ cat /sys/kernel/debug/pinctrl/*/pins
+>>>>> https://gist.github.com/thejasvikonduru/05b1a8e0fd8176116b7a3cc4e43b244a 
+>>>>>
+>>>> Was this failing prior to this patch? Trying to understand the "Fix"
+>>>> aspect of this patch.
+>>>>
+>>> Yes,it was failing prior to this patch.
+>>>
+>> next time some asks this question - give summary AND give a log. Even
+>> better, please don't make folks even ask the question in the first
+>> place by including the logs in the diffstat of the patch.
+>>
+>> Please share the log to understand what kind of "failure" was occurring.
+>
+> Link to logs:
+> Before Fix: 
+> https://gist.github.com/thejasvikonduru/e217edf4839c348793a5671aa9331595
+> After Fix : 
+> https://gist.github.com/thejasvikonduru/05b1a8e0fd8176116b7a3cc4e43b244a
+>
+Are these logs fine and can we go forward with this patch?
