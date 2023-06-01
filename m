@@ -2,218 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DD5719538
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948D571953B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbjFAIRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
+        id S231938AbjFAIRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbjFAIRg (ORCPT
+        with ESMTP id S231622AbjFAIRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:17:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C027EE2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:16:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685607406;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wKmPbrFwESFZJl2H01/KcKj6DErTerOIUGeta+Cdp9Q=;
-        b=XkdvHPV7VHERKN7F2igr0ACbR/e1rF9zs3rmgOw6ADwvwAWovuaO9axvKUi9EVR7fEeK2k
-        Km0yCV95Sa6C4sf9SKV9FFa/fzHa0Q0o2r1vs21mFpIJ5i9EKOj9Rabl5zGEzeCzkXV9hS
-        BzxL34A1RdAI0Bnbqlj9Cuq09uv1se8=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-349-vymh8J-iN4CFPJdve2MmcA-1; Thu, 01 Jun 2023 04:16:44 -0400
-X-MC-Unique: vymh8J-iN4CFPJdve2MmcA-1
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4edc7406cbaso349849e87.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:16:44 -0700 (PDT)
+        Thu, 1 Jun 2023 04:17:52 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09202191
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:17:48 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-7748054f861so165086039f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:17:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685607403; x=1688199403;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wKmPbrFwESFZJl2H01/KcKj6DErTerOIUGeta+Cdp9Q=;
-        b=QZzi8P3CpAKv8Zai3PKuq2ydVrwM19/05ZL5fFjr8ulDuUPwj+nApq0wRtylAErZ3U
-         bXmpKWLhrLQRvSPPSLkzZ9mp0pln8noCS5N6A21F6JTBI+A+ysDjgFDUT4EQ1NkfMKXF
-         5/DsLgOLyvUAUGtSpYnZSH5+oJQkr5s4QYKYPRO56Pw3aewXRVbjJk88tOPnPVXL0fbx
-         U2vayWu1TziRuxsagcrlFg1AxEhTJeBoFI3Jlvy6+8NiS98m5buh3ugY46XZ7e0dKzwE
-         weFot9oT7lfOhhalrivBQ96QfnsSahTgkp1jFfPx4zCKUUDPpN62Nmljq1VeF7/SeRbQ
-         iQNA==
-X-Gm-Message-State: AC+VfDwKtMiYvDOemq9KyCSoP0lLBOq0E10R9cxgdeWq7SLVij1D3xZS
-        FSeFl+ZSN0d9I/wFXtPU4Hsxaanz/X7xl0ENQE6Rur4fKELZb0yusWb+XZ2SzoTyrE0ifDqLPle
-        ejVa733YZmrK/URBcbMMbUL9l
-X-Received: by 2002:ac2:4149:0:b0:4f3:7c24:1029 with SMTP id c9-20020ac24149000000b004f37c241029mr741606lfi.60.1685607403369;
-        Thu, 01 Jun 2023 01:16:43 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7NS61bKX6pql0N3/fkWSFJqZb3sUgTR7ldIN/Kjqcc3QC+WNlSkFZRaDsvl0e+iAa0OgTh0A==
-X-Received: by 2002:ac2:4149:0:b0:4f3:7c24:1029 with SMTP id c9-20020ac24149000000b004f37c241029mr741593lfi.60.1685607402876;
-        Thu, 01 Jun 2023 01:16:42 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id z16-20020a7bc7d0000000b003f605814850sm1388319wmk.37.2023.06.01.01.16.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 01:16:42 -0700 (PDT)
-Message-ID: <fa6009d4-643e-97ec-5317-a57a535e0495@redhat.com>
-Date:   Thu, 1 Jun 2023 10:16:41 +0200
+        d=1e100.net; s=20221208; t=1685607467; x=1688199467;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b3edtjvnj88PndoVpUzOMvroFERuTIEvu1uDTqw3VI4=;
+        b=OPQKzKlnXqBdCgmJCf2iPGhsG9f4umjEO6Mt+6p2Cp+W/o+Lz5YO+1lEg/VgvgPTa6
+         EFm/bOlHJF2VVwAaD1Y6wDtfrUTiWWxIQmv7I0r7+n0AQqO/gu6VBDGprxnvXZxrD3p3
+         guIlHgDDAi23IM/LpGj/Yhb6Mdi6QmfnDzKjpA5yfXboEotbb5paH/6PLlPaoDWHDhPh
+         5IDLHBpk97SSK+98kHKvYbwX9aqRaLv49HZO/Q4lkTItu0mK3P6Tc/CVhF7GFyCjllJ0
+         Kw8RKPz5ofPygea1rM6M80ugb1cZb3+I2y4oIqhHYgdlA6ThkSKIVOchWYX8SpYtj44/
+         sevQ==
+X-Gm-Message-State: AC+VfDwRnN2GZxlENOqvEUL4afKJNKp5cEDb6/sWiORbNIJXKppV+UyF
+        i7cDaJ21u8YfzyJRNdxiwSwABXR/wMkAYiJouMMOGrZ6sWYC
+X-Google-Smtp-Source: ACHHUZ5jvU5W7NceH/iaowoBjYeMRtnXvxExH2I6rRvZ8cupRZ55oFVxQGVJXOnAIHX+Y64w9OZm44Rvy/Aq20MNg3T9H8zHudbA
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>
-References: <20230519102723.185721-1-david@redhat.com>
- <20230519102723.185721-3-david@redhat.com>
- <be2346e4-e8c0-4470-9bf4-59eb864063a8@lucifer.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 2/3] selftests/mm: gup_longterm: new functional test
- for FOLL_LONGTERM
-In-Reply-To: <be2346e4-e8c0-4470-9bf4-59eb864063a8@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:2283:0:b0:40f:8f07:e28e with SMTP id
+ o125-20020a022283000000b0040f8f07e28emr526717jao.1.1685607467279; Thu, 01 Jun
+ 2023 01:17:47 -0700 (PDT)
+Date:   Thu, 01 Jun 2023 01:17:47 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000516d5905fd0d12ec@google.com>
+Subject: [syzbot] [net?] [bpf?] general protection fault in sk_psock_verdict_data_ready
+From:   syzbot <syzbot+8252ac3e16614ea0ea04@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com,
+        jakub@cloudflare.com, john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.05.23 17:03, Lorenzo Stoakes wrote:
-> On Fri, May 19, 2023 at 12:27:22PM +0200, David Hildenbrand wrote:
->> Let's add a new test for checking whether GUP long-term page pinning
->> works as expected (R/O vs. R/W, MAP_PRIVATE vs. MAP_SHARED, GUP vs.
->> GUP-fast). Note that COW handling with long-term R/O pinning in private
->> mappings, and pinning of anonymous memory in general, is tested by the
->> COW selftest. This test, therefore, focuses on page pinning in
->> file mappings.
->>
->> The most interesting case is probably the "local tmpfile" case, as that
->> will likely end up on a "real" filesystem such as ext4 or xfs, not on a
->> virtual one like tmpfs or hugetlb where any long-term page pinning is
->> always expected to succeed.
->>
->> For now, only add tests that use the "/sys/kernel/debug/gup_test"
->> interface. We'll add tests based on liburing separately next.
->>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
->> ---
+Hello,
 
-[...]
+syzbot found the following issue on:
 
->> +static void do_test(int fd, size_t size, enum test_type type, bool shared)
->> +{
->> +	__fsword_t fs_type = get_fs_type(fd);
->> +	bool should_work;
->> +	char *mem;
->> +	int ret;
->> +
->> +	if (ftruncate(fd, size)) {
->> +		ksft_test_result_fail("ftruncate() failed\n");
->> +		return;
->> +	}
->> +
->> +	if (fallocate(fd, 0, 0, size)) {
->> +		if (size == pagesize)
->> +			ksft_test_result_fail("fallocate() failed\n");
->> +		else
->> +			ksft_test_result_skip("need more free huge pages\n");
->> +		return;
->> +	}
->> +
->> +	mem = mmap(NULL, size, PROT_READ | PROT_WRITE,
->> +		   shared ? MAP_SHARED : MAP_PRIVATE, fd, 0);
->> +	if (mem == MAP_FAILED) {
->> +		if (size == pagesize || shared)
->> +			ksft_test_result_fail("mmap() failed\n");
->> +		else
->> +			ksft_test_result_skip("need more free huge pages\n");
->> +		return;
->> +	}
->> +
->> +	/*
->> +	 * Fault in the page writable such that GUP-fast can eventually pin
->> +	 * it immediately.
->> +	 */
->> +	memset(mem, 0, size);
-> 
+HEAD commit:    4781e965e655 net: phy: broadcom: Register dummy IRQ handler
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=117277de280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5335204dcdecfda
+dashboard link: https://syzkaller.appspot.com/bug?extid=8252ac3e16614ea0ea04
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-For shared mappings, MAP_POPULATE will not fault-in the pages writable. 
-See mm/gup.c:populate_vma_page_range().
+Unfortunately, I don't have any reproducer for this issue yet.
 
-[There is also the case that mmap() doesn't fail if populate fails, but 
-that's only a side note regarding weird semantics of MAP_POPULATE]
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/7a839a1e1e20/disk-4781e965.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ceb0a7674b18/vmlinux-4781e965.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f3e82748f103/bzImage-4781e965.xz
 
-[...]
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8252ac3e16614ea0ea04@syzkaller.appspotmail.com
 
->> +	int flags = MFD_HUGETLB;
->> +	int fd;
->> +
->> +	ksft_print_msg("[RUN] %s ... with memfd hugetlb (%zu kB)\n", desc,
->> +		       hugetlbsize / 1024);
->> +
->> +	flags |= __builtin_ctzll(hugetlbsize) << MFD_HUGE_SHIFT;
-> 
-> Hm this feels a little cute :)
+general protection fault, probably for non-canonical address 0xdffffc000000005c: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x00000000000002e0-0x00000000000002e7]
+CPU: 0 PID: 15 Comm: ksoftirqd/0 Not tainted 6.4.0-rc3-syzkaller-00588-g4781e965e655 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/16/2023
+RIP: 0010:sk_psock_verdict_data_ready+0x19f/0x3c0 net/core/skmsg.c:1213
+Code: 4c 89 e6 e8 63 70 5e f9 4d 85 e4 75 75 e8 19 74 5e f9 48 8d bb e0 02 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 07 02 00 00 48 89 ef ff 93 e0 02 00 00 e8 29 fd
+RSP: 0018:ffffc90000147688 EFLAGS: 00010206
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000100
+RDX: 000000000000005c RSI: ffffffff8825ceb7 RDI: 00000000000002e0
+RBP: ffff888076518c40 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000008000 R15: ffff888076518c40
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f901375bab0 CR3: 000000004bf26000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ tcp_data_ready+0x10a/0x520 net/ipv4/tcp_input.c:5006
+ tcp_data_queue+0x25d3/0x4c50 net/ipv4/tcp_input.c:5080
+ tcp_rcv_established+0x829/0x1f90 net/ipv4/tcp_input.c:6019
+ tcp_v4_do_rcv+0x65a/0x9c0 net/ipv4/tcp_ipv4.c:1726
+ tcp_v4_rcv+0x2cbf/0x3340 net/ipv4/tcp_ipv4.c:2148
+ ip_protocol_deliver_rcu+0x9f/0x480 net/ipv4/ip_input.c:205
+ ip_local_deliver_finish+0x2ec/0x520 net/ipv4/ip_input.c:233
+ NF_HOOK include/linux/netfilter.h:303 [inline]
+ NF_HOOK include/linux/netfilter.h:297 [inline]
+ ip_local_deliver+0x1ae/0x200 net/ipv4/ip_input.c:254
+ dst_input include/net/dst.h:468 [inline]
+ ip_rcv_finish+0x1cf/0x2f0 net/ipv4/ip_input.c:449
+ NF_HOOK include/linux/netfilter.h:303 [inline]
+ NF_HOOK include/linux/netfilter.h:297 [inline]
+ ip_rcv+0xae/0xd0 net/ipv4/ip_input.c:569
+ __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5491
+ __netif_receive_skb+0x1f/0x1c0 net/core/dev.c:5605
+ process_backlog+0x101/0x670 net/core/dev.c:5933
+ __napi_poll+0xb7/0x6f0 net/core/dev.c:6499
+ napi_poll net/core/dev.c:6566 [inline]
+ net_rx_action+0x8a9/0xcb0 net/core/dev.c:6699
+ __do_softirq+0x1d4/0x905 kernel/softirq.c:571
+ run_ksoftirqd kernel/softirq.c:939 [inline]
+ run_ksoftirqd+0x31/0x60 kernel/softirq.c:931
+ smpboot_thread_fn+0x659/0x9e0 kernel/smpboot.c:164
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:sk_psock_verdict_data_ready+0x19f/0x3c0 net/core/skmsg.c:1213
+Code: 4c 89 e6 e8 63 70 5e f9 4d 85 e4 75 75 e8 19 74 5e f9 48 8d bb e0 02 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 07 02 00 00 48 89 ef ff 93 e0 02 00 00 e8 29 fd
+RSP: 0018:ffffc90000147688 EFLAGS: 00010206
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000100
+RDX: 000000000000005c RSI: ffffffff8825ceb7 RDI: 00000000000002e0
+RBP: ffff888076518c40 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000008000 R15: ffff888076518c40
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f901375bab0 CR3: 000000004bf26000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	4c 89 e6             	mov    %r12,%rsi
+   3:	e8 63 70 5e f9       	callq  0xf95e706b
+   8:	4d 85 e4             	test   %r12,%r12
+   b:	75 75                	jne    0x82
+   d:	e8 19 74 5e f9       	callq  0xf95e742b
+  12:	48 8d bb e0 02 00 00 	lea    0x2e0(%rbx),%rdi
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 07 02 00 00    	jne    0x23b
+  34:	48 89 ef             	mov    %rbp,%rdi
+  37:	ff 93 e0 02 00 00    	callq  *0x2e0(%rbx)
+  3d:	e8                   	.byte 0xe8
+  3e:	29 fd                	sub    %edi,%ebp
 
-It's a weird interfacing, having to specify the desired size via flags 
-... see the man page of memfd_create, which links to the man page of 
-mmap: "the desired huge page size can be configured by encoding the 
-base-2 logarithm of the desired page size in the six bits at the offset 
-MAP_HUGE_SHIFT".
 
-FWIW, we're using the same approach in cow.c already [and other memfd 
-users like QEMU do it just like that, using ctz].
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-[...]
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
->> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
->> index 4893eb60d96d..b6b1eb6a8a6b 100644
->> --- a/tools/testing/selftests/mm/run_vmtests.sh
->> +++ b/tools/testing/selftests/mm/run_vmtests.sh
->> @@ -24,7 +24,7 @@ separated by spaces:
->>   - mmap
->>   	tests for mmap(2)
->>   - gup_test
->> -	tests for gup using gup_test interface
->> +	tests for gup
-> 
-> Super nitty again, but I'm guessing this means the CONFIG_GUP_TEST
-> interface, perhaps worth keeping?
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-With this patch, agreed. But not longer with the next patch -- guess I 
-simplified when splitting it up. If there are no strong feelings I'll 
-leave it in this patch.
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-[...]
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
 
->>
-> 
-> OK this patch is really nice + well implemented, I can only point out a
-> couple EXTREMELY nitty comments :) Thanks very much for adding a test for
-> this, it's super useful!
-> 
-> Therefore,
-> 
-> Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> 
-
-Thanks for the review! My selftest patches rarely get that much 
-attention, so highly appreciated :)
-
--- 
-Thanks,
-
-David / dhildenb
-
+If you want to undo deduplication, reply with:
+#syz undup
