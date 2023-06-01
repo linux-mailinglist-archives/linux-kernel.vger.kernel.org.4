@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69806719AF1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AEC571921A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 07:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232799AbjFALZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 07:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S231327AbjFAFVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 01:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbjFALZj (ORCPT
+        with ESMTP id S229851AbjFAFVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:25:39 -0400
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12234123;
-        Thu,  1 Jun 2023 04:25:37 -0700 (PDT)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Thu, 1 Jun 2023 01:21:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D974312C
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 22:21:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4QX3hr1bhPz9scT;
-        Thu,  1 Jun 2023 13:25:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1685618732;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pwp2W8cQUmBk1nwG6nolUJv04uH+qo31sa1TLF5qFwQ=;
-        b=LRylmHsg4FUbZTcfmCgHjVYLcjWKChNx7sUBgD/hPw17j7dcrd6xCcnFTR6vSzqy96k0i5
-        IeEMLETJObiBboemmSJwvzag/ItT4bFc7WalRWUjTJLG7G6EFmlrDMG41JVck/IWpuX3+n
-        j82eUbYLdooxtcdFg6tPjysXRRNND5XACZBJ6OEPkVghyJZNsnDM4gPYKJdAjTZqHJ+oQa
-        jRGqOPpYe+nRXEW92IAUeP+NlEY2UoICqF4kaAzPtdDBKBo5647B8JJjmoaZ5U6Vz7fR6W
-        tsBiPWo8E0lCI9Jpixu+eVQ9RYRDVK8dAtDj0ZZu1MBfFhDAd097q4AadxAiwg==
-References: <20230527132747.83196-1-frank@oltmanns.dev>
- <flngzi4henkzcpzwdexencdkw77h52g3nduup7pwctpwfiuznk@eewnnut5mvsq>
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        Andre Przywara <andre.przywara@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>, Icenowy Zheng <icenowy@aosc.io>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC PATCH 0/3] clk: sunxi-ng: Optimize rate selection for NKM
- clocks
-Date:   Thu, 01 Jun 2023 07:16:45 +0200
-In-reply-to: <flngzi4henkzcpzwdexencdkw77h52g3nduup7pwctpwfiuznk@eewnnut5mvsq>
-Message-ID: <87mt1jbf18.fsf@oltmanns.dev>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51C4D614CE
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 05:21:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B3D5C433EF;
+        Thu,  1 Jun 2023 05:21:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685596903;
+        bh=Koxe39K4Rpi6vC8WW4spnDTwr5GtFMwjDnN5f/mDfKo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Znlc28ycUx7Q2gzFML6vW1pP7LS1yC266N7++xoSeif/pDycBYwl9E3HHAfo7fGCw
+         17m6m6B6WCSyqQWPyekZiVyrgwDd/G3iFN6lvn/uureuSSmLGcpq93ULQ+c0SN9su0
+         xbW9+KYYmizVg+Czp19NyaA3nnDMvwfAP8M6pvTsOl2cNI/JX8BUUhJjVtoSg6kOip
+         SiISVDMIm7mpJ54S2NiagwtrPsTKJEAshsPbxNzdO88VdcPvCX9UNsqaoDhEVWbsDj
+         gPuR16qOhCVlX0dNPzUbnfbdIoohVnFH1FJgCCH5tGkX0ftis4oYf1UZCvtRScOqcC
+         JmenaeXsKyNDQ==
+Date:   Thu, 1 Jun 2023 08:21:16 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Yuwei Guan <ssawgyw@gmail.com>
+Cc:     akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
+        anshuman.khandual@arm.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] memblock: Update nid info in memblock debugfs
+Message-ID: <20230601052116.GC395338@kernel.org>
+References: <20230529062002.157-1-ssawgyw@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Rspamd-Queue-Id: 4QX3hr1bhPz9scT
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230529062002.157-1-ssawgyw@gmail.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,128 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+On Mon, May 29, 2023 at 02:20:02PM +0800, Yuwei Guan wrote:
+> The node id for memblock reserved regions will be wrong,
+> so let's show 'x' for reg->nid == MAX_NUMNODES in debugfs to keep it align.
+> 
+> Suggested-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Signed-off-by: Yuwei Guan <ssawgyw@gmail.com>
 
-On 2023-05-31 at 15:48:43 +0200, Maxime Ripard <mripard@kernel.org> wrote:
-> [[PGP Signed Part:Undecided]]
-> Hi Frank,
->
-> On Sat, May 27, 2023 at 03:27:44PM +0200, Frank Oltmanns wrote:
->> I would like to bring your attention to the current process of setting
->> the rate of an NKM clock. As it stands, when setting the rate of an
->> NKM clock, the rate nearest but less than or equal to the requested
->> rate is found, instead of the nearest rate.
->
-> Yeah, it's actually pretty common, see clk_mux_determine_rate_flags()
-> for example. Some devices require that we don't overshoot, while some
-> prefer to have the closest rate.
->
-> Both are fine, and it's a bit context specific which one we should
-> favour. If we were to do anything, it would be to support both and let
-> the clock driver select which behaviour it wants.
->
+I believe this could use Co-developed-by tags.
+Please take a look at Documentation/process/submitting-patches.rst
 
-Ok, understood. Thank you for the explanation! Now, I'm wondering if
-anyone would be using such a flag, if I added it.
+> ---
+>  mm/memblock.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index c5c80d9bcea3..3d449aaba052 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -2169,17 +2169,21 @@ static int memblock_debug_show(struct seq_file *m, void *private)
+>  {
+>  	struct memblock_type *type = m->private;
+>  	struct memblock_region *reg;
+> -	int i, j;
+> +	int i, j, nid;
+>  	unsigned int count = ARRAY_SIZE(flagname);
+>  	phys_addr_t end;
+>  
+>  	for (i = 0; i < type->cnt; i++) {
+>  		reg = &type->regions[i];
+>  		end = reg->base + reg->size - 1;
+> +		nid = memblock_get_region_node(reg);
+>  
+>  		seq_printf(m, "%4d: ", i);
+>  		seq_printf(m, "%pa..%pa ", &reg->base, &end);
+> -		seq_printf(m, "%4d ", memblock_get_region_node(reg));
+> +		if (nid != MAX_NUMNODES)
+> +			seq_printf(m, "%4d ", nid);
+> +		else
+> +			seq_printf(m, "%4c ", 'x');
+>  		if (reg->flags) {
+>  			for (j = 0; j < count; j++) {
+>  				if (reg->flags & (1U << j)) {
+> -- 
+> 2.34.1
+> 
 
->
->> Moreover, ccu_nkm_find_best() is called multiple times (footnote [1])
->> when setting a rate, each time iterating over all combinations of n,
->> k, and m.
->
-> Yeah, that's expected as well.
-
-I'm wondering though, if iterating over all combinations is set in
-stone, or if some kind of optimization would be in order.
-
->
->> In response to this, I propose the following refinements to optimize the NKM
->> clock setting:
->>  a. when finding the best rate use the nearest rate, even if it is greater than
->>     the requested rate (PATCH 1)
->>  b. utilize binary search to find the best rate by going through a
->>     precalculated, ordered list of all meaningful combinations of n, k, and m
->>     (PATCH 2)
->
-> One thing you haven't really addressed is why we would be doing this? Is
-> there some clocks that require a more precise clock and don't? Is the
-> factor calculation a bottleneck for some workloads?
-
-Background
-==========
-I'm a pinephone user (ccu-sun50i-a64). I'm using U-Boot which sets the
-pll-video0 to 294 MHz on boot. The phone's panel requires DCLK to run at
-108 MHz to get a nice 60 Hz vertical refresh rate. The clock structure
-is this:
-
-    clock                       clock type
-    --------------------------------------
-    pll-video0                  ccu_nm
-       pll-mipi                 ccu_nkm
-          tcon0                 ccu_mux
-             tcon-data-clock    sun4i_dclk
-
-The divider between tcon0 and tcon-data-clock is fixed at 4. So, I need
-pll-mipi to run at 432 MHz to get the desired vertical refresh rate.
-When pll-vdeo0 is at 294 MHz this is that rate cannot be matched exactly
-with any combination. The best we can get is 431.2 MHz (n=11, k=2,
-m=15).
-
-The pinephone has some "vendor" patches (megi kernel) that
- a. add HDMI
- b. allow re-setting pll-mipi's rate when pll-video0 changes
-
-Re: Who needs a more precise clock?
-===================================
-When plugging in HDMI, pll-video's rate is set to 297 MHz, which - in
-the vendor kernel, not mainline - triggers recalculation of pll-mipi
-(trying to set it to 431.2 MHz). It ends up with a rate of 424.285714
-MHz, because this is the nearest, but less than 431.2 MHz (n=5, k=2,
-m=7). The nearest rate would be 432 MHz.
-
-So, while analyzing the whole situation that I described above, I found
-out that the NKM clocks are not set to the closest rate and wondered why
-that is. Hence my request for comments.
-
-Now, one could argue that pll-video0 should be set to 297MHz at boot or
-that pll-mipi should try to set the *requested* rate instead of the
-previous rate when the pll-video0 changes. And I think that both are
-valid or even better approaches than my proposal in this RFC to address
-this specific problem and I'll probably sent patches to discuss this as
-well.
-
-
-Re: Why speed up factor calculation?
-====================================
-I'm not aware that the current implementation of calculating n, k, and m
-poses a bottleneck in any situation. Again, while going through the
-code, I wondered why not save a few CPU cycles by precalculating the
-meaningful combinations. In my opinion, it does not have any side
-effects, so we might as well do it. (There is of course the side effect
-of using a higher rate, but this is unrelated to precalculation as I
-could as well employ a rate comparison that only allows lower rates, or
-only optionally higher rates.)
-
-> Clocks in general are very regression-prone, so I'd rather be a bit
-> conservative there, and "if it ain't broke, don't fix it".
-
-Sure, I get that.
-
-As I stated in my cover letter:
-"The motivation for these proposed changes lies in the current behavior
-of rate selection for NKM clocks, which doesn't observe the
-CLK_SET_RATE_PARENT flag. I.e. it does not select a different rate for
-the parent clock to find the optimal rate."
-
-I thought that this required this optimization to be implemented, but by
-now, I'm no longer sure. I'll probably continue investigating different
-paths for CLK_SET_RATE_PARENT for NKM clocks and follow up with new
-findings.
-
-Thanks,
-  Frank
-
->
-> Maxime
->
-> [[End of PGP Signed Part]]
+-- 
+Sincerely yours,
+Mike.
