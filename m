@@ -2,97 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D039C71F4E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA8B71F4ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232767AbjFAVj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 17:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55986 "EHLO
+        id S233014AbjFAVlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 17:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbjFAVjy (ORCPT
+        with ESMTP id S232984AbjFAVlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 17:39:54 -0400
-Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B90E6B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 14:39:27 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw23.mail.saunalahti.fi (Halon) with ESMTP
-        id c73ded7f-00c4-11ee-b972-005056bdfda7;
-        Fri, 02 Jun 2023 00:39:25 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Fri, 2 Jun 2023 00:39:25 +0300
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v8 1/1] gpio: add sloppy logic analyzer using polling
-Message-ID: <ZHkQDTvk6I2q-9CF@surfacebook>
-References: <20220329091126.4730-1-wsa+renesas@sang-engineering.com>
- <20220329091126.4730-2-wsa+renesas@sang-engineering.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220329091126.4730-2-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 1 Jun 2023 17:41:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78146196
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 14:41:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE29D64A78
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 21:40:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 55A12C433D2;
+        Thu,  1 Jun 2023 21:40:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685655640;
+        bh=EmFaRNESXp24m392Z9FFvkoAt9Tu3v3zI6uBJPBkC6Y=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=jfsjUMgrZrYffmfnH+gs5nB+jSsZWoDLwz/CmvgSpmxU/rzfT3sAamAXMrQpK3s4x
+         qqG18TydL8PPvMSJ2U5xrHRSpso1p6d3cVAKenrhVJDYmPs5tjNQ8P7TKfVVuQS6vn
+         s2Xvglhj4nQMQFu7JP3PZf8RskhbszOLPct8idQH/cW0MISxiVFwgmARrXDrkMS1UJ
+         mLph9FQd+MU69IGlqe4eHoA4GneK+o7GYU56l9mc1ZmM0C1R7xw6Q+SrO7WL8fzQGM
+         p5A70HLEw5cejh5HRElIJA/6npN+SZpTdaH0FTWXfuTkdUdI/+19Ze7jA+erUk49S6
+         3uphIRA9VbCAg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3D8E6E52C02;
+        Thu,  1 Jun 2023 21:40:40 +0000 (UTC)
+Subject: Re: [GIT PULL] Networking for v6.4-rc5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230601180906.238637-1-kuba@kernel.org>
+References: <20230601180906.238637-1-kuba@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230601180906.238637-1-kuba@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git net-6.4-rc5
+X-PR-Tracked-Commit-Id: a451b8eb96e521ebabc9c53fefa2bcfad6f80f25
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 714069daa5d345483578e2ff77fb6f06f4dcba6a
+Message-Id: <168565564024.17545.9325041927544084632.pr-tracker-bot@kernel.org>
+Date:   Thu, 01 Jun 2023 21:40:40 +0000
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tue, Mar 29, 2022 at 11:11:26AM +0200, Wolfram Sang kirjoitti:
-> This is a sloppy logic analyzer using GPIOs. It comes with a script to
-> isolate a CPU for polling. While this is definitely not a production
-> level analyzer, it can be a helpful first view when remote debugging.
-> Read the documentation for details.
+The pull request you sent on Thu,  1 Jun 2023 11:09:06 -0700:
 
-One note since I have done recent review and realize one issue with debugfs.
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git net-6.4-rc5
 
-...
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/714069daa5d345483578e2ff77fb6f06f4dcba6a
 
-> +	priv->debug_dir = debugfs_create_dir(devname, gpio_la_poll_debug_dir);
-
-If this fails with NULL...
-
-> +	debugfs_create_blob("meta_data", 0400, priv->debug_dir, &priv->meta);
-> +	debugfs_create_ulong("delay_ns", 0600, priv->debug_dir, &priv->delay_ns);
-> +	debugfs_create_ulong("delay_ns_acquisition", 0400, priv->debug_dir, &priv->acq_delay);
-> +	debugfs_create_file_unsafe("buf_size", 0600, priv->debug_dir, priv, &fops_buf_size);
-> +	debugfs_create_file_unsafe("capture", 0200, priv->debug_dir, priv, &fops_capture);
-> +	debugfs_create_file_unsafe("trigger", 0200, priv->debug_dir, priv, &fops_trigger);
-
-...and any of these is not, we will end up with the file in a root folder of debugfs...
-
-> +	dev_info(dev, "initialized");
-
-...
-
-> +static int gpio_la_poll_remove(struct platform_device *pdev)
-> +{
-> +	struct gpio_la_poll_priv *priv = platform_get_drvdata(pdev);
-> +
-> +	mutex_lock(&priv->lock);
-> +	debugfs_remove_recursive(priv->debug_dir);
-
-...and this one won't remove it.
-
-> +	mutex_unlock(&priv->lock);
-> +	mutex_destroy(&priv->lock);
-> +
-> +	return 0;
-> +}
-
-...
-
-However, I haven't checked if it's pure theoretical issue with the current code
-base of debugfs or a potential problem. Easy fix is to check an error code and
-skip the files creation. Not sure if driver will be useful in that case.
+Thank you!
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
