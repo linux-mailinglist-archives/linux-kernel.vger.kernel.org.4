@@ -2,119 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F793719CC8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C995719CD0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233328AbjFAM5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 08:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
+        id S232820AbjFAM7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 08:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232820AbjFAM5X (ORCPT
+        with ESMTP id S231607AbjFAM7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 08:57:23 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6C1123;
-        Thu,  1 Jun 2023 05:57:21 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351CpSKJ023806;
-        Thu, 1 Jun 2023 12:57:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=BhnFPD9WBpyKOH+EIz0yZ5u6juJOqEY0p6yS3SSS1KE=;
- b=LqemEYbxjAzoL4l51mevRW7W1Dg/eX0ZC18892oKfS3taSLxFCdRq3efxiLc3tUqlu6y
- FTrfX7AR937ewo0p578Ne9X4sqpj5hZsjxRLtZPvF/sf+eO4cntAV6/BUNElZDY7Wgj2
- zjlxGZD0ulITmG9Js1ZfwUB8wPQF5llYwhaF/Ekb/+HvYAd2z0M1SRAh8qKoZScZDYhe
- whH/adxea1loAPH1utzu44PH8fJ1/EWIRcKLrr7pDhC0Fvujap4dG0fq6r5LyTcA0d3p
- hF81LlyoTzd0LsprJPz0YZXTnne2p2GjHmWQ+E0PMvtMsr7HMCkPBinRDM+HNQzBdb95 2w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxucrgwjn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 12:57:20 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 351CUoLH021478;
-        Thu, 1 Jun 2023 12:57:20 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxucrgwj5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 12:57:19 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 351CsoGL016816;
-        Thu, 1 Jun 2023 12:57:19 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3qu9g6yr45-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 12:57:19 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 351CvH1B61276604
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Jun 2023 12:57:17 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 18C1958051;
-        Thu,  1 Jun 2023 12:57:17 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 389875805E;
-        Thu,  1 Jun 2023 12:57:16 +0000 (GMT)
-Received: from [9.61.34.174] (unknown [9.61.34.174])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Jun 2023 12:57:16 +0000 (GMT)
-Message-ID: <85a26195-1f75-6cae-14e4-b474afe780d2@linux.ibm.com>
-Date:   Thu, 1 Jun 2023 08:57:15 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 0/3] s390/vfio-ap: fix hang when mdev attached to guest is
- removed
-Content-Language: en-US
-To:     Anthony Krowiak <akrowiak@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, alex.williamson@redhat.com
-Cc:     jjherne@linux.ibm.com, pasic@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>
-References: <20230530223538.279198-1-akrowiak@linux.ibm.com>
- <9837da27-e224-aded-fe3e-4f4db6b1599c@linux.ibm.com>
- <17cf1288-03c5-4143-c62b-9234ed9c4d9a@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <17cf1288-03c5-4143-c62b-9234ed9c4d9a@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: a0KaCMB5W9lSE1E8OilX4lGScHL3YP1-
-X-Proofpoint-ORIG-GUID: QEEHxB9iNyct_MeLtsoIY5Fwyws3v18t
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 1 Jun 2023 08:59:36 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890F7E7;
+        Thu,  1 Jun 2023 05:59:34 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QX5lH6yzBz67n3K;
+        Thu,  1 Jun 2023 20:57:47 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 1 Jun
+ 2023 13:59:31 +0100
+Date:   Thu, 1 Jun 2023 13:59:31 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Terry Bowman <terry.bowman@amd.com>
+CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
+        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
+        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: Re: [PATCH v4 09/23] cxl/pci: Early setup RCH dport component
+ registers from RCRB
+Message-ID: <20230601135931.000046fa@Huawei.com>
+In-Reply-To: <20230523232214.55282-10-terry.bowman@amd.com>
+References: <20230523232214.55282-1-terry.bowman@amd.com>
+        <20230523232214.55282-10-terry.bowman@amd.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- lowpriorityscore=0 impostorscore=0 spamscore=0 malwarescore=0 mlxscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=975 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306010111
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/23 8:15 AM, Anthony Krowiak wrote:
-> 
-> 
-> On 5/31/23 10:48 AM, Matthew Rosato wrote:
+On Tue, 23 May 2023 18:22:00 -0500
+Terry Bowman <terry.bowman@amd.com> wrote:
 
->> I also did some testing using the companion qemu series at
->> https://lore.kernel.org/qemu-devel/20230530225544.280031-1-akrowiak@linux.ibm.com
+> From: Robert Richter <rrichter@amd.com>
 > 
-> Shall I credit you with Tested-by also?
+> CXL RAS capabilities must be enabled and accessible as soon as the CXL
+> endpoint is detected in the PCI hierarchy and bound to the cxl_pci
+> driver. This needs to be independent of other modules such as cxl_port
+> or cxl_mem.
 > 
+> CXL RAS capabilities reside in the Component Registers. For an RCH
+> this is determined by probing RCRB which is implemented very late once
+> the CXL Memory Device is created.
+> 
+> Change this by moving the RCRB probe to the cxl_pci driver. Do this by
+> using a new introduced function cxl_pci_find_port() similar to
+> cxl_mem_find_port() to determine the involved dport by the endpoint's
+> PCI handle. Plug this into the existing cxl_pci_setup_regs() function
+> to setup Component Registers. Probe the RCRB in case the Component
+> Registers cannot be located through the CXL Register Locator
+> capability.
+> 
+> This unifies code and early sets up the Component Registers at the
+> same time for both, VH and RCH mode. Only the cxl_pci driver is
+> involved for this. This allows an early mapping of the CXL RAS
+> capability registers.
+> 
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
 
-Sure.
+One minor wording suggestion inline. I'm don't really care
+that much about it though, so.
 
-Thanks,
-Matt
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+
+> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+> index 945ca0304d68..54c486cd65dd 100644
+> --- a/drivers/cxl/pci.c
+> +++ b/drivers/cxl/pci.c
+> @@ -274,13 +274,48 @@ static int cxl_pci_setup_mailbox(struct cxl_dev_state *cxlds)
+>  	return 0;
+>  }
+>  
+> +/* Extract RCRB, use same function interface as cxl_find_regblock(). */
+> +static int cxl_rcrb_get_comp_regs(struct pci_dev *pdev,
+> +				  enum cxl_regloc_type type,
+> +				  struct cxl_register_map *map)
+> +{
+> +	struct cxl_dport *dport;
+> +	resource_size_t component_reg_phys;
+> +
+> +	memset(map, 0, sizeof(*map));
+> +	map->dev = &pdev->dev;
+> +	map->resource = CXL_RESOURCE_NONE;
+> +
+> +	if (type != CXL_REGLOC_RBI_COMPONENT)
+> +		return -ENODEV;
+> +
+> +	if (!cxl_pci_find_port(pdev, &dport) || !dport->rch)
+> +		return -ENXIO;
+> +
+> +	component_reg_phys = cxl_probe_rcrb(&pdev->dev, dport->rcrb.base,
+> +					    NULL, CXL_RCRB_UPSTREAM);
+> +	if (component_reg_phys == CXL_RESOURCE_NONE)
+> +		return -ENXIO;
+> +
+> +	map->resource = component_reg_phys;
+> +	map->reg_type = type;
+> +	map->max_size = CXL_COMPONENT_REG_BLOCK_SIZE;
+> +
+> +	return 0;
+> +}
+> +
+>  static int cxl_pci_setup_regs(struct pci_dev *pdev, enum cxl_regloc_type type,
+>  			      struct cxl_register_map *map)
+>  {
+>  	int rc;
+>  
+> +	/*
+> +	 * If the Register Locator DVSEC does not contain the
+> +	 * Component Registers, try to extract them from the RCRB if
+> +	 * it is an RCH.
+
+My instinct here was to wonder why having said 'if it is an RCH'
+you don't seem to be checking that first.  Perhaps
+change this text to something like.
+* Component Registers, assume it is an RCH and try to extra them
+* from an RCRB.
+*/
+?
+
+> +	 */
+>  	rc = cxl_find_regblock(pdev, type, map);
+> -	if (rc)
+> +	if (rc && cxl_rcrb_get_comp_regs(pdev, type, map))
+>  		return rc;
+>  
+>  	return cxl_setup_regs(map);
 
