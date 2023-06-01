@@ -2,153 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90D4B71EE74
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4A671EE82
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbjFAQPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 12:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
+        id S230445AbjFAQQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 12:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbjFAQO4 (ORCPT
+        with ESMTP id S230399AbjFAQP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 12:14:56 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0495B134
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 09:14:55 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-53202149ae2so566525a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 09:14:54 -0700 (PDT)
+        Thu, 1 Jun 2023 12:15:59 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E6012C;
+        Thu,  1 Jun 2023 09:15:57 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351E4Qbe028520;
+        Thu, 1 Jun 2023 16:15:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=47N0iO/K8kpEWk9ko9c7XKdPzcZMLSLzkGSeLddazH8=;
+ b=QSUIWOEWCBAu7ArdlaXTn0TN7UcNqBRBKPDowV6cO4htd1xHuahZreCC63FCO38cKyrr
+ BaJE9wsPBh7i+FUVNMOtwvUvox/aeKt1Ovhz7Alk8c7z9xPHgDMXHUARa3Y1QQZOgmqg
+ 7tvV/S4obu/60l1N2gZ6LEbeHRHFP+KfiOYzXvhNfRhtfng9Sz+/QfYFL4v8vZTAeuta
+ zN5CvvKHHc2J+iOdq5/wTLxXlv3YGMgIEgD9AGT+x+XoE28kZtjxrKnikyaX88UOhL3I
+ 1Cyr9qbcEMLKLMItVjgHdKrgYkuzwgIo5KzE/DkYgYHcBFjl5iQ7q6q3q4IZCa9Ube2W jQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qvhjks7mp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Jun 2023 16:15:34 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 351GAVOB019721;
+        Thu, 1 Jun 2023 16:15:34 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2170.outbound.protection.outlook.com [104.47.56.170])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qu8a7nd76-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Jun 2023 16:15:34 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AJ/4uZP8t+Oj8DNpidVKZCmLD9ANQdC+pxpHfG3Dn8e377He699QFWmEEshtdHhF35ZB/gQfHWfahoZsfrZwcOoE7kU+JHEMhJ9YcDKss/NCn4416NGuf0gzT68NiyucJM39FQ9Pgoc1ftQ6sopRMZvlHda4DVMXfpUI81YletK0RiIwEmIqLYd8B+YL70Btdrb7AtOWkyorLXM0JdxsJvlfWCAsqkaxyH7AWwyqetxK91SK1Ww31mVNDpTSDbUUciYimXaeR1FhbxZ7pkuvHcqWEDe0F7Bc+0DNL6S1K6AgviHmWECCZd9cBJlzL+l2/YsuOt7zzpQyYLth6TEkDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=47N0iO/K8kpEWk9ko9c7XKdPzcZMLSLzkGSeLddazH8=;
+ b=WXCcRP6gEKidUFhbkZwxHSAq3z81iKGZR86OWDx6CXgHVIqeDJKnNTM/+QtzQ4DI15k7L1l5mLVz/wQwDYhh5q+7VS7kghTKN0cQfED5sjm+YWp+PFzGVd/BOKoTZv6ghAYJuhWFzxCu4WLfA9e59E33XRWIPrdtO6oT0tw5KizGRBqADeNITPrHYhwfipbA00igLyKP/Xq/uI/YPobk93ZSrJ99qwgbimQ+atirhOrkh5tFq10trYN58EHzqJhdjAsa40eQ2CeIKuJ1ew81darRSiyOUSf6SRuV0Z3+GfPbS+U8EuibuOsmq6wI1W4gxjgtzdl5qkZuBme6cnhiig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685636094; x=1688228094;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hf1MMDnk8ATuiHQnpftM3deH6vV2jBlcAPqcuKGi0Ek=;
-        b=BLOJsskDJTv8yn+ZTSU8DPbhPH9VAEpQcNphr4RmScmbAmgWrp0GukfjFro2r265wS
-         6nmFRGSXXGa7RcbInQP2zovN07D4+fErz4lNsHF1JQiB5r265YWCLnVrXvfV9fIuuPKD
-         bp9H8NF/OqTzmF7dGtp2dpe9nzNFgZX5Yid94=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685636094; x=1688228094;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hf1MMDnk8ATuiHQnpftM3deH6vV2jBlcAPqcuKGi0Ek=;
-        b=C0INuGVVO7D4Q0Icc3mV6EpEOeYXqcICKBj4Xs8wBgJfRf7WJ4R3ZtrjVJdU9NStGK
-         +tg+jjDx5Wf+29JPBck2hH135fNQ2F0Ff+iLqa0zm07ULzmhLxSJmWD9Lst1PPourhNw
-         +1+15XAXDXuNaJMjTnNrc2Gw7oD1LwHsKJN/J3zJaB7TDn8OqOGqZV0R8/ZJ/9AVuH6R
-         Xzk4nZplTOnWZB5fU5qjyyJdm2NbPbVG4gBnbqzin38LsYNMp8pR2Lerfr5yLqNhX/DZ
-         uVGSDtnLISfi7n9YDyoMnVwyCk2F9/smQzf9i4jqWO0v6LBNx2SYtUp9ECYF4+B6b4b/
-         Vg/A==
-X-Gm-Message-State: AC+VfDxV8HHDApdz/62ta6DZ1HB2dL2HZfA1EtKa2HGc0KPmUZjKonAZ
-        p6bMQ8ofn97XkX7jYKLs+LZ1ug==
-X-Google-Smtp-Source: ACHHUZ6ljnrlP3/ilIjQD+BaM7rS5m1dEr3AyuNBWAGikj0kydZDXi/vDU4GxazSWUNgX9O+Y6PY3A==
-X-Received: by 2002:a17:902:c20d:b0:1ac:6d4c:c24b with SMTP id 13-20020a170902c20d00b001ac6d4cc24bmr6045835pll.3.1685636094447;
-        Thu, 01 Jun 2023 09:14:54 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id g14-20020a1709029f8e00b001b176ba9f17sm3680035plq.149.2023.06.01.09.14.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 09:14:53 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 09:14:53 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     kasan-dev@googlegroups.com, ryabinin.a.a@gmail.com,
-        glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
-        vincenzo.frascino@arm.com, elver@google.com,
-        linux-media@vger.kernel.org, linux-crypto@vger.kernel.org,
-        herbert@gondor.apana.org.au, ardb@kernel.org, mchehab@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] [RFC] ubsan: disallow bounds checking with gcov on
- broken gcc
-Message-ID: <202306010909.89C4BED@keescook>
-References: <20230601151832.3632525-1-arnd@kernel.org>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=47N0iO/K8kpEWk9ko9c7XKdPzcZMLSLzkGSeLddazH8=;
+ b=xEIbv0XLHEoy+rO3A0cF9Rr/SZK6CKOqgFjxvgObNPromKUe0K/q6UXWfnJ2bNzKhJn4zUOX197lUyaPgpXT1T0I6UPOdkgZcbU+d/Rx/L+6DB8uP787/khB/5tP6RmI48iqvzJfiDK4Yg+xq8Rh+K0KFIVuNoOAZZwSVmEBGzY=
+Received: from BY5PR10MB4129.namprd10.prod.outlook.com (2603:10b6:a03:210::21)
+ by MN2PR10MB4176.namprd10.prod.outlook.com (2603:10b6:208:1da::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Thu, 1 Jun
+ 2023 16:15:31 +0000
+Received: from BY5PR10MB4129.namprd10.prod.outlook.com
+ ([fe80::ec9b:ef74:851b:6aa9]) by BY5PR10MB4129.namprd10.prod.outlook.com
+ ([fe80::ec9b:ef74:851b:6aa9%5]) with mapi id 15.20.6455.020; Thu, 1 Jun 2023
+ 16:15:31 +0000
+From:   Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "zbr@ioremap.net" <zbr@ioremap.net>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "socketcan@hartkopp.net" <socketcan@hartkopp.net>,
+        "petrm@nvidia.com" <petrm@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v4 1/6] netlink: Reverse the patch which removed filtering
+Thread-Topic: [PATCH v4 1/6] netlink: Reverse the patch which removed
+ filtering
+Thread-Index: AQHZZCxJt7hHR9OT2UmzMPODBe2VMK8V1x8AgADu1gCAAA1sAIAAevWAgALFEQCAJFpdAIABHiYAgBXwRACAIQQKAA==
+Date:   Thu, 1 Jun 2023 16:15:31 +0000
+Message-ID: <BF7B6B37-10BF-41C0-BA77-F34C31ED886E@oracle.com>
+References: <20230331235528.1106675-1-anjali.k.kulkarni@oracle.com>
+ <20230331235528.1106675-2-anjali.k.kulkarni@oracle.com>
+ <20230331210920.399e3483@kernel.org>
+ <88FD5EFE-6946-42C4-881B-329C3FE01D26@oracle.com>
+ <20230401121212.454abf11@kernel.org>
+ <4E631493-D61F-4778-A392-3399DF400A9D@oracle.com>
+ <20230403135008.7f492aeb@kernel.org>
+ <57A9B006-C6FC-463D-BA05-D927126899BB@oracle.com>
+ <20230427100304.1807bcde@kernel.org>
+ <472D6877-F434-4537-A075-FE1AE0ED078A@oracle.com>
+In-Reply-To: <472D6877-F434-4537-A075-FE1AE0ED078A@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY5PR10MB4129:EE_|MN2PR10MB4176:EE_
+x-ms-office365-filtering-correlation-id: aa8a966e-f661-4ffc-61b7-08db62bb6c2c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: hAbPdCVkvyX8KveOtXDc64Xk7bn74qzbU3TFM2perez9mozW6Gc04mX6o4MLyiEub6AkejUQcMHPjdL3uFAfOcumM8lE7CWHP/DoyclQZ9WMcqk2cEawXdprqHp+0XUYBbgt4UnxXQkGttTstK3vuN5U1MSHB8VHD1AKdsMhtDZwp77by2tPFjLeIVdlQuAAqpwfh95t4IOxkbXY5P0VRkHwgXKtzQOxsrB0y7D4lXZnyZPKiz7Y/PInxAWtQFitcWMSo2oe2hx9r6imiDWkiT6MB0bdIkqNsJS4DR0wKosPjunwNkr88Y5UILMpkYkbzl1ttvfd3WR0N5lI8dadJQyF6S9W8NiGJrVq6K3DzlhYzAqKgGSUslQaDDtf+mG3jBHxwfhXDnz9uPitP+TfwFIxe9+9rH7bAAP2nRFkjFdu5W3WCgF1lVfdGkQ52WsjyhRUZIQxUPiAzptp/+xQPdU1D5Oh/De7SE8QK8XDRt0ogG21N9hLygSknz8TSBVKbennZLTClzTaUbtA0VHK1A4Lc19dDCZsuIRUeMWe5PbDnyQkM9P7EpE24NCFqQLfguG3VgbvKic1aOBzwjLMj4h9q2DBfITBTMgfYN/ZAz5P8Jy+K31I62kc1eSHRnMEX/tBBSnPapCAVx/3w1gU4Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4129.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(396003)(346002)(39860400002)(136003)(451199021)(54906003)(8936002)(8676002)(4744005)(66446008)(66476007)(76116006)(66556008)(2906002)(4326008)(64756008)(66946007)(6916009)(91956017)(41300700001)(316002)(5660300002)(7416002)(478600001)(71200400001)(6486002)(33656002)(122000001)(6512007)(6506007)(53546011)(186003)(26005)(36756003)(38070700005)(86362001)(2616005)(38100700002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?bXpGFUpMmpYnJJ6bLuHimWaFKrLmMcIYvlk7ixVm6G6AeGrHf+u4AWJ6ixdB?=
+ =?us-ascii?Q?MTw0FMZFhdeu11duBkp3QC0RPI8DnOBRsmufuN/Pxedjz/w2mxnAF7O9YVKM?=
+ =?us-ascii?Q?UGaG0wg45I4HnANFDrs3I2nbXzngic7ZYiW9fEMI0LI8v+m4/WqUME9jKlc4?=
+ =?us-ascii?Q?NINNIKtid6OLk71siJSB/nOdT0pcKAoht+coAfnQSNY8L6DSRsrFqF8q52hy?=
+ =?us-ascii?Q?FMVhae0GPl2lT8skkh1B4fxajXslf//TdEqpTLbzL5FeTb+Bo4RcHfURMpAC?=
+ =?us-ascii?Q?XnpU2+Gs8YYAXZ2a6IVezH8OaMLdSotWRmVrQVM8ANnd9b/y9fWMuh7CDv1U?=
+ =?us-ascii?Q?/X64Tr4uJBx2NtXlCttH7i0tdmh8gVA49W36R7FGRtQQJDIo2hHsjEsCtChH?=
+ =?us-ascii?Q?APwRv+XIDlMxoDiE/IYtgy5zG6Q0lMGI+w9oHb7AYXobISbKBjpZ8XiqncPh?=
+ =?us-ascii?Q?dqmSZCP5OIM6GrWDTdecU3jPbf7KTv/ZV9m+BUveDD2wFmodWwdTFWP2Lzd4?=
+ =?us-ascii?Q?ooUr0YJr5z9katr4MS+rrvabvE8cI8Ly98bGGk47jbgDjrzX7JeSqwcnlJH+?=
+ =?us-ascii?Q?l612v/9FhwgBGD52aE5IR+YpzU3+Jua1QVgbF4aF4aVQjVTq+XKHrPh5c+XD?=
+ =?us-ascii?Q?AXj0I/MAWnSs9n+cH9GOSCjcM5Oi13i8tj9+TxPQpENgml++yCinalCspLuD?=
+ =?us-ascii?Q?A+I27ak8OmCtJkT149JcQ+VkXtd17618DC3WTglXSgeXdGWP77jlYJFsAPIP?=
+ =?us-ascii?Q?mwcOUqUlsxeq62IkGrukiyaDyTb0B/ZQW6RvVzRh7+dOmko/B0Aga7nTo/6+?=
+ =?us-ascii?Q?LGOTfbDfq69pkWI2Zxn/bEQ36vl1cuD3JDaI8LC4foz3fQa+utzUAKngaaVz?=
+ =?us-ascii?Q?AbN4qjcbGJvLS7Rl2dHujNJ6tC/J5s8SJABmen9HJBTEBAMeHTohsv9QS3AW?=
+ =?us-ascii?Q?Xe/V9lT5ovbZE90yR56uCTbhie4P5m1rGvsDb0LCH+ctGP1SWDDKkW/gpSIc?=
+ =?us-ascii?Q?PZx4RH1OGSgGl+bIQtZEKdnROFuyxflaTQlm58nCrr6Dy+SoCDeK30IrZ5Ab?=
+ =?us-ascii?Q?vnKVEAOhoL674QSEw3L1oLRegmnOuowuVKai91ks775/1ZWLt0v250CWBlzJ?=
+ =?us-ascii?Q?nSOIJpjJYq6OEWFqFZ7zXqOJr5rPbC2kUOktmUi5oSpxjNg6vzvZm81zRZaj?=
+ =?us-ascii?Q?DsxXTvP6k7NwtA1QL0346uYmnMyNqx+O+Oz7OjlJhMg+Xw7AFd/iorK40wn0?=
+ =?us-ascii?Q?Kdh7srLE4B0eKr5gmTuyduoWaWHYPPzL6FkmS9LkNVAdbaYlL4SXijDbWGZ2?=
+ =?us-ascii?Q?qGbTlkyNcdSyTy982e4bc8cGQytyETzDvDuZtGftEnDB295mlMWuk5fa731b?=
+ =?us-ascii?Q?gVS1Kb17DYTmeiHdRMy/HE8jVVksvH9mQmjhcZFGU6UTCQwDvZtGr4+6qoCK?=
+ =?us-ascii?Q?KmTgMZVhQ03byqjsEJ3rulEB7PGWFsbJNTV6OGYiGCIbp/gYKGUyQ+sswKHt?=
+ =?us-ascii?Q?9LTrUJkQ0C4aWv80jfRiKTXlB9HSUPEsEiUIIPf7FZTtWQzJepoXuIrQA1f5?=
+ =?us-ascii?Q?J0m+OUkJ3QWE+2WjSM5JeA1qdDs1AedZPqXlU5CRUntuilGtqJ3/M32TnC8E?=
+ =?us-ascii?Q?ZA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <428C00E8454E7E42A338E0A86451E53E@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230601151832.3632525-1-arnd@kernel.org>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?3UM0HcOX5ljh3RJnhn/ZQtlryY1eQ6MMgaOa7zjDZMQTO47vMFTCenM3hXPU?=
+ =?us-ascii?Q?EWsyin0p/pbyvH7FXfJSBw6hbQN26WMP+p8RZrWfS1t6AufG5sC20w3ODpGY?=
+ =?us-ascii?Q?6aRS65fUdVUVWjS5ySqpBCQa4fsbPjnjEaA6f1OaYqpnpdCvDAy+GBhNoAVa?=
+ =?us-ascii?Q?aoGCKbE7KLPczzLDRQzeFnXuk4GLWZfBxv16mzKjzlVRLXqF/3xqotUgRTh1?=
+ =?us-ascii?Q?a3MNudcLJUkbJteI0KwUn9RL6PA2y69N3de5QExogWoJu7xuvXJnVPnjLgQs?=
+ =?us-ascii?Q?oAwGo+kOiKXn8q5UZ26Kxq/k1mcqxzrhe0+2p3zAHTYxjgTnco4uitKDmMJL?=
+ =?us-ascii?Q?Ka8iEym1okAx5ZqsZSnAHolLYQdDOS0n+/CFyPEwh3cN7bZ7HX+nNVbG+nGN?=
+ =?us-ascii?Q?tGhdS3PeCZ/ZJGZDf5NCPZSnl3gsRPmJzfGsQfRgebuPHltarXgBAqcy9YVp?=
+ =?us-ascii?Q?rGFVKtBFO0oN38luiUoxRUclsNP2KQpb9W5UM1u+sWqdX34ctTo/9YSA6Jjn?=
+ =?us-ascii?Q?Bp01ioJmQWosMWsSTSNPxvSFRxWrqymwTSJWPCygme1EX742um+5ep3Nodam?=
+ =?us-ascii?Q?zR1d8GvvS+c5SZNnqdpLyLZdPwHFpi+ibQaR1gEBl8l3LwBoXAM5JTX1DbwY?=
+ =?us-ascii?Q?7miHnl+SEt2lzMKyZhqrgmJdGWbgQQ6eAS6bQXhN+WskhxJF41VucQ4klKSv?=
+ =?us-ascii?Q?zmQ57HEZp9b9ItVjzpdlmaeyUR4Uesx1GzeAOIPyL1SdR1cGFbDH8bsN02NI?=
+ =?us-ascii?Q?GA1HW6qZMkkzV43OqhbaVm0p2zPGzVJ+nX/gQ+paO3oLCOgn6XUd2rxjHiRh?=
+ =?us-ascii?Q?LNh124IhoTKuEzJF1rK7x5gZT2ylLvcOqlAzF60JhHPCcz7nULlreeRCDYFd?=
+ =?us-ascii?Q?ZwqyuU+ep5NEuepYiISmtNRnLnlJhozC4GCZaifwNOtOQNOTWmNborMz5iaN?=
+ =?us-ascii?Q?k3lsari73UQ2I/mmxYYWN7An+2P12Hktk3tge2LLJbdbJk5w9cg1EAbmk3jG?=
+ =?us-ascii?Q?1AAq/t+tuycVEx+g8LEDKd9jLiYcPOFiMtTDAD0LiafbHizVrq7OJuWzXcQ0?=
+ =?us-ascii?Q?pCR/PnpCXIJLEMwCz0FOpdh4VOSE2w=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4129.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa8a966e-f661-4ffc-61b7-08db62bb6c2c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2023 16:15:31.5861
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5UO0MyifsoPqmD9d1IK/zyW2Y36CMaXs7WKMbOo5vwvtMr57JBSHiqyWqotNmIOG0ADiCAQpt8QboF8qulcyyxw/e/+LQkGiPdz+upNm/00=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB4176
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 phishscore=0
+ bulkscore=0 adultscore=0 mlxscore=0 suspectscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2306010141
+X-Proofpoint-ORIG-GUID: t99WNdSed58ZTYvg08uPL1ZaI5pYUsYt
+X-Proofpoint-GUID: t99WNdSed58ZTYvg08uPL1ZaI5pYUsYt
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 05:18:11PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Combining UBSAN and GCOV in randconfig builds results in a number of
-> stack frame size warnings, such as:
-> 
-> crypto/twofish_common.c:683:1: error: the frame size of 2040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-> drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c:1589:1: error: the frame size of 1696 bytes is larger than 1400 bytes [-Werror=frame-larger-than=]
-> drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c:754:1: error: the frame size of 1260 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-> drivers/staging/media/ipu3/ipu3-css-params.c:1206:1: error: the frame size of 1080 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-> drivers/staging/media/rkvdec/rkvdec-vp9.c:1042:1: error: the frame size of 2176 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-> drivers/staging/media/rkvdec/rkvdec-vp9.c:995:1: error: the frame size of 1656 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-> 
-> I managed to track this down to the -fsanitize=bounds option clashing
-> with the -fprofile-arcs option, which leads a lot of spilled temporary
-> variables in generated instrumentation code.
-> 
-> Hopefully this can be addressed in future gcc releases the same way
-> that clang handles the combination, but for existing compiler releases,
-> it seems best to disable one of the two flags. This can be done either
-> globally by just not passing both at the same time, or locally using
-> the no_sanitize or no_instrument_function attributes in the affected
-> functions.
-> 
-> Try the simplest approach here, and turn off -fsanitize=bounds on
-> gcc when GCOV is enabled, leaving the rest of UBSAN working. Doing
-> this globally also helps avoid inefficient code from the same
-> problem that did not push the build over the warning limit.
-> 
-> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Link: https://lore.kernel.org/stable/6b1a0ee6-c78b-4873-bfd5-89798fce9899@kili.mountain/
-> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110074
-> Link: https://godbolt.org/z/zvf7YqK5K
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-I think more production systems will have CONFIG_UBSAN_BOUNDS enabled
-(e.g. Ubuntu has had it enabled for more than a year now) than GCOV,
-so I'd prefer we maintain all*config coverage for the more commonly
-used config.
 
-> ---
->  lib/Kconfig.ubsan | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-> index f7cbbad2bb2f4..8f71ff8f27576 100644
-> --- a/lib/Kconfig.ubsan
-> +++ b/lib/Kconfig.ubsan
-> @@ -29,6 +29,8 @@ config UBSAN_TRAP
->  
->  config CC_HAS_UBSAN_BOUNDS_STRICT
->  	def_bool $(cc-option,-fsanitize=bounds-strict)
-> +	# work around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110074
-> +	depends on GCC_VERSION > 140000 || !GCOV_PROFILE_ALL
->  	help
->  	  The -fsanitize=bounds-strict option is only available on GCC,
->  	  but uses the more strict handling of arrays that includes knowledge
+> On May 11, 2023, at 9:04 AM, Anjali Kulkarni <Anjali.K.Kulkarni@oracle.co=
+m> wrote:
+>=20
+>=20
+>=20
+>> On Apr 27, 2023, at 10:03 AM, Jakub Kicinski <kuba@kernel.org> wrote:
+>>=20
+>> On Wed, 26 Apr 2023 23:58:55 +0000 Anjali Kulkarni wrote:
+>>> Jakub, could you please look into reviewing patches 3,4 & 5 as well?
+>>> Patch 4 is just test code. Patch 3 is fixing bug fixes in current
+>>> code so should be good to have - also it is not too connector
+>>> specific. I can explain patch 5 in more detail if needed.
+>>=20
+>> I don't have sufficient knowledge to review that code, sorry :(
+>=20
+> Is there anyone who can please help review this code?=20
+> Christian, could you please help take a look?
+> Thanks
+> Anjali
+>=20
 
-Alternatively, how about falling back to -fsanitize=bounds instead, as
-that (which has less coverage) wasn't triggering the stack frame
-warnings?
+Gentle ping again - Christian could you please help review?
+Anjali
 
-i.e. fall back through these:
-	-fsanitize=array-bounds (Clang)
-	-fsanitize=bounds-strict (!GCOV || bug fixed in GCC)
-	-fsanitize=bounds
-
--- 
-Kees Cook
