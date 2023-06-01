@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72BD071F3C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579FF71F400
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbjFAUVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 16:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
+        id S231663AbjFAUjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbjFAUU7 (ORCPT
+        with ESMTP id S229598AbjFAUjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:20:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D94B1A6;
-        Thu,  1 Jun 2023 13:20:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24BB064978;
-        Thu,  1 Jun 2023 20:19:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E2E4C433D2;
-        Thu,  1 Jun 2023 20:19:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685650777;
-        bh=RGs/SUKoPaxdkxluJ+b5vvGwrcwCDZO9iUhGSIQLzOE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iYn0faRCsPjSa/kRRtYadpBK2Nym8KAbriZULBoh8Yg7Qh4zlyruNg8YrJFo4IeYC
-         ua4AnK/AUipZ992fbbvqIFprmoGsNWt7vV9OLI5o8qcnf/7cFU8hzcs583bUKRA0Uq
-         XD4etari9U1zlWy3UoXY/rYcAG+DzpLTOJkup6Il7nkKwIJwWf38o/9jdyk64TRNyv
-         crChNj2APexeg2miknXqNJT1loPYIo41fL/UpIBd9Bmy3C7vjir55pO4YLRSciV5xq
-         X0mbRgTGCjcMHJVZx73Q33bv1kXrxZZE3kDrn4HxMerPwRWnzpVM5oLfOwb0dXtd2E
-         FIINcBhdL6eQg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id C706F40692; Thu,  1 Jun 2023 17:19:34 -0300 (-03)
-Date:   Thu, 1 Jun 2023 17:19:34 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] perf pmu: Only warn about unsupported configs once
-Message-ID: <ZHj9Vq6K6Oq9caZL@kernel.org>
-References: <20230601023644.587584-1-irogers@google.com>
- <CAM9d7ciz744BuEkjKRpRov4VsfASJHxskwzzE_L8mmekE6HuZA@mail.gmail.com>
+        Thu, 1 Jun 2023 16:39:37 -0400
+Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204D3128;
+        Thu,  1 Jun 2023 13:39:36 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4QXHKs4mKPz9xyNB;
+        Fri,  2 Jun 2023 04:09:53 +0800 (CST)
+Received: from [10.81.220.232] (unknown [10.81.220.232])
+        by APP1 (Coremail) with SMTP id LxC2BwCX79pf_XhkTA8AAw--.3309S2;
+        Thu, 01 Jun 2023 21:19:55 +0100 (CET)
+Message-ID: <8a48ede1-3a45-7c3c-39e9-36001ac09283@huaweicloud.com>
+Date:   Thu, 1 Jun 2023 22:19:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAM9d7ciz744BuEkjKRpRov4VsfASJHxskwzzE_L8mmekE6HuZA@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [syzbot] [reiserfs?] possible deadlock in open_xa_dir
+Content-Language: en-US
+To:     syzbot <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com>,
+        hdanton@sina.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com,
+        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
+        syzkaller-bugs@googlegroups.com, Jan Kara <jack@suse.cz>,
+        Jeff Mahoney <jeffm@suse.com>
+References: <00000000000000964605faf87416@google.com>
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <00000000000000964605faf87416@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwCX79pf_XhkTA8AAw--.3309S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAry8Zw4rAF45Kry5tFWfAFb_yoW5Xw47pr
+        WrKryDKwsYvr1DWr1kt3WDuw10qryak347JrnrKryv9anrXwnrtFWIv3yfGrs5trWDGFZ3
+        Ja1jk3yUAw4fuwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
+        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBF1jj4oC1gAAsm
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,65 +68,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Jun 01, 2023 at 01:04:30PM -0700, Namhyung Kim escreveu:
-> On Wed, May 31, 2023 at 7:36 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > Avoid scanning format list for each event parsed.
+On 5/5/2023 10:51 PM, syzbot wrote:
+> syzbot has bisected this issue to:
 > 
-> Maybe it's better to change the subject that it's about format..
-> Other than that,
+> commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
+> Author: Roberto Sassu <roberto.sassu@huawei.com>
+> Date:   Fri Mar 31 12:32:18 2023 +0000
+> 
+>      reiserfs: Add security prefix to xattr name in reiserfs_security_write()
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14403182280000
+> start commit:   3c4aa4434377 Merge tag 'ceph-for-6.4-rc1' of https://githu..
+> git tree:       upstream
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=16403182280000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12403182280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12442414280000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=176a7318280000
+> 
+> Reported-by: syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com
+> Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in reiserfs_security_write()")
+> 
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-Ok, I can fix that, applying.
- 
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
-> 
-> Thanks,
-> Namhyung
-> 
-> 
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/util/pmu.c | 5 +++++
-> >  tools/perf/util/pmu.h | 5 +++++
-> >  2 files changed, 10 insertions(+)
-> >
-> > diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-> > index 0520aa9fe991..204ce3f02e63 100644
-> > --- a/tools/perf/util/pmu.c
-> > +++ b/tools/perf/util/pmu.c
-> > @@ -934,6 +934,11 @@ void perf_pmu__warn_invalid_formats(struct perf_pmu *pmu)
-> >  {
-> >         struct perf_pmu_format *format;
-> >
-> > +       if (pmu->formats_checked)
-> > +               return;
-> > +
-> > +       pmu->formats_checked = true;
-> > +
-> >         /* fake pmu doesn't have format list */
-> >         if (pmu == &perf_pmu__fake)
-> >                 return;
-> > diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-> > index 287f593b15c7..7a1535dc1f12 100644
-> > --- a/tools/perf/util/pmu.h
-> > +++ b/tools/perf/util/pmu.h
-> > @@ -76,6 +76,11 @@ struct perf_pmu {
-> >          * specific code.
-> >          */
-> >         bool auxtrace;
-> > +       /**
-> > +        * @formats_checked: Only check PMU's formats are valid for
-> > +        * perf_event_attr once.
-> > +        */
-> > +       bool formats_checked;
-> >         /**
-> >          * @max_precise: Number of levels of :ppp precision supported by the
-> >          * PMU, read from
-> > --
-> > 2.41.0.rc0.172.g3f132b7071-goog
-> >
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 
--- 
+--- a/fs/reiserfs/namei.c
++++ b/fs/reiserfs/namei.c
+@@ -689,7 +689,9 @@ static int reiserfs_create(struct mnt_idmap *idmap, struct inode *dir,
+         reiserfs_update_inode_transaction(inode);
+         reiserfs_update_inode_transaction(dir);
 
-- Arnaldo
++       reiserfs_write_unlock(dir->i_sb);
+         d_instantiate_new(dentry, inode);
++       reiserfs_write_lock(dir->i_sb);
+         retval = journal_end(&th);
+
+  out_failed:
+@@ -773,7 +775,9 @@ static int reiserfs_mknod(struct mnt_idmap *idmap, struct inode *dir,
+                 goto out_failed;
+         }
+
++       reiserfs_write_unlock(dir->i_sb);
+         d_instantiate_new(dentry, inode);
++       reiserfs_write_lock(dir->i_sb);
+         retval = journal_end(&th);
+
+  out_failed:
+@@ -874,7 +878,9 @@ static int reiserfs_mkdir(struct mnt_idmap *idmap, struct inode *dir,
+         /* the above add_entry did not update dir's stat data */
+         reiserfs_update_sd(&th, dir);
+
++       reiserfs_write_unlock(dir->i_sb);
+         d_instantiate_new(dentry, inode);
++       reiserfs_write_lock(dir->i_sb);
+         retval = journal_end(&th);
+  out_failed:
+         reiserfs_write_unlock(dir->i_sb);
+@@ -1191,7 +1197,9 @@ static int reiserfs_symlink(struct mnt_idmap *idmap,
+                 goto out_failed;
+         }
+
++       reiserfs_write_unlock(parent_dir->i_sb);
+         d_instantiate_new(dentry, inode);
++       reiserfs_write_lock(parent_dir->i_sb);
+         retval = journal_end(&th);
+  out_failed:
+         reiserfs_write_unlock(parent_dir->i_sb);
+
