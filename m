@@ -2,117 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3914719755
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A337471978C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232891AbjFAJn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59112 "EHLO
+        id S233038AbjFAJql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232910AbjFAJnu (ORCPT
+        with ESMTP id S233026AbjFAJqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:43:50 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03D0E48
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:43:30 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3515TBNB016524;
-        Thu, 1 Jun 2023 04:42:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=8slAiQhtNeEDPH5cE2i6jmsGl9SnzMbGOVBPNnG5StQ=;
- b=QsDRgCTBFtDzm+U2RhfKxqISLvpAdcBvJLxn1OBMIjtbZz+TJrBNQyQCwVpcx37oWgly
- Grr7uqq/g9B5WkWboIK5GJ5ayKOrz0btQbggtnHN0hVvTBzxBZR3yLSlpoISBJi6A4aW
- VKionq2LYUI3Kcn7OtZl4+VGsyKr3qtNOZfIchWRwR2zNFc3NF0sqMWBvbx8DZicXQDR
- ykauWIX2J3OOy/00HExLWTl6F13ZNinWvY9PYfNAeSEPiXHUthOoZp71MSmrSzc9cOcI
- 1hI+83D9F3hlfRZjo+G/NjPcwUtP5PLsCbm1bcOzfy4SRolc8kFTDt1A6HtbTyPOMTyS 1Q== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3que9mx33j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 04:42:58 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 1 Jun
- 2023 10:42:56 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Thu, 1 Jun 2023 10:42:56 +0100
-Received: from [198.90.251.45] (EDIN6T9W333.ad.cirrus.com [198.90.251.45])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 92A8745;
-        Thu,  1 Jun 2023 09:42:56 +0000 (UTC)
-Message-ID: <78488c71-eef5-1a44-0b85-73c7ad0848c9@opensource.cirrus.com>
-Date:   Thu, 1 Jun 2023 10:42:56 +0100
+        Thu, 1 Jun 2023 05:46:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E163185;
+        Thu,  1 Jun 2023 02:46:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09E0F642A2;
+        Thu,  1 Jun 2023 09:46:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B577C433EF;
+        Thu,  1 Jun 2023 09:46:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685612780;
+        bh=Gg96iZLMK8kzUxxht+t3UCZqIJdqGyKJzoxElzCHMTw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G41V2nFtvaFiwye0ois2vOYZ7ldqNDE+p9UzFe0Yk5SdBPDyZTZmJ4y7DYc/ijJUR
+         4OWaxzb1EsWig0l391kuS0m1m5i+kJ4lb2uO2YE1qE1znilIS1Iucyvs34i8H5NGOk
+         bZQRNxOPiwPopXLjSUsXh/Mtf7IrBB87RkWsjll1uHeXcT+5F5BmVTwCBDBTDhR/MP
+         KXK/LC9VvseIWD6nAmkcof7+j+CrvBH1UGzjnh5b3/WVnHrGOV4xuz9SK6eQTlCpT3
+         no61vbYDc29I07HzzxUqml0X76CbqGSH3yCJl0yC+x5RvKqM2rtapFx4twx0u/j4t5
+         AagXuirb/O0SA==
+Date:   Thu, 1 Jun 2023 11:46:13 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        David Vernet <void@manifault.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Dave Thaler <dthaler@microsoft.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
+Message-ID: <20230601-urenkel-holzofen-cd9403b9cadd@brauner>
+References: <20230508163751.841-1-beaub@linux.microsoft.com>
+ <CAADnVQLYL-ZaP_2vViaktw0G4UKkmpOK2q4ZXBa+f=M7cC25Rg@mail.gmail.com>
+ <20230509130111.62d587f1@rorschach.local.home>
+ <20230509163050.127d5123@rorschach.local.home>
+ <20230515165707.hv65ekwp2djkjj5i@MacBook-Pro-8.local>
+ <20230515192407.GA85@W11-BEAU-MD.localdomain>
+ <20230517003628.aqqlvmzffj7fzzoj@MacBook-Pro-8.local>
+ <20230516212658.2f5cc2c6@gandalf.local.home>
+ <20230517165028.GA71@W11-BEAU-MD.localdomain>
+ <CAADnVQK3-NBLSVRVsgArUEjqsuY2S_8mWsWmLEAtTzo+U49CKQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: CSC3551 and devices missing related _DSD bits
-To:     Armas Spann <armas@codux.tech>, Luke Jones <luke@ljones.dev>,
-        Takashi Iwai <tiwai@suse.de>
-CC:     <linux-kernel@vger.kernel.org>, <tiwai@suse.com>,
-        <sbinding@opensource.cirrus.com>, <perex@perex.cz>,
-        <tangmeng@uniontech.com>, <andy.chi@canonical.com>,
-        <p.jungkamp@gmx.net>, <kasper93@gmail.com>,
-        <yangyuchi66@gmail.com>, <ealex95@gmail.com>,
-        <james.schulman@cirrus.com>, <david.rhodes@cirrus.com>,
-        <tanureal@opensource.cirrus.com>, <rf@opensource.cirrus.com>,
-        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>
-References: <1991650.PYKUYFuaPT@fedora> <87jzx3zaf8.wl-tiwai@suse.de>
- <b4c202b2-ab29-e2aa-b141-0c967b2c1645@opensource.cirrus.com>
- <19d69a5da8f1d4017ac14ed87f927ab82278073d.camel@ljones.dev>
- <12102f7419c5e44cd2133aa769e25dbd16f4e0c9.camel@codux.tech>
-From:   Stuart Henderson <stuarth@opensource.cirrus.com>
-In-Reply-To: <12102f7419c5e44cd2133aa769e25dbd16f4e0c9.camel@codux.tech>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: PgAw9JbGgD11sbnj0iAibcqjVuEEYWGw
-X-Proofpoint-ORIG-GUID: PgAw9JbGgD11sbnj0iAibcqjVuEEYWGw
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAADnVQK3-NBLSVRVsgArUEjqsuY2S_8mWsWmLEAtTzo+U49CKQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 17, 2023 at 05:10:47PM -0700, Alexei Starovoitov wrote:
+> On Wed, May 17, 2023 at 9:50 AM Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> > >
+> > > >
+> > > > Looks like user events were designed with intention to be unprivileged.
+> > > > When I looked at kernel/trace/trace_events_user.c I assumed root.
+> > > > I doubt other people reviewed it from security perspective.
+> > > >
+> > > > Recommending "chmod a+rw /sys/kernel/tracing/user_events_data" doesn't sound like a good idea.
+> > > >
+> > > > For example, I think the following is possible:
+> > > > fd = open("/sys/kernel/tracing/user_events_data")
+> > > > ioclt(fd, DIAG_IOCSDEL)
+> > > >   user_events_ioctl_del
+> > > >      delete_user_event(info->group, name);
+> > > >
+> > > > 'info' is different for every FD, but info->group is the same for all users/processes/fds,
+> > > > because only one global init_group is created.
+> > > > So one user can unregister other user event by knowing 'name'.
+> > > > A security hole, no?
+> 
+> ...
+> 
+> > Regarding deleting events, only users that are given access can delete
+> > events. They must know the event name, just like users with access to
+> > delete files must know a path (and have access to it). Since the
+> > write_index and other details are per-process, unless the user has
+> > access to either /sys/kernel/tracing/events/user_events/* or
+> > /sys/kernel/tracing/user_events_status, they do not know which names are
+> > being used.
+> >
+> > If that is not enough, we could require CAP_SYSADMIN to be able to
+> > delete events even when they have access to the file. Users can also
+> > apply SELinux policies per-file to achieve further isolation, if
+> > required.
+> 
+> Whether /sys/kernel/tracing/user_events_status gets g+rw
+> or it gets a+rw (as your documentation recommends)
+> it is still a security issue.
+> The "event name" is trivial to find out by looking at the source code
+> of the target process or just "string target_binary".
+> Restricting to cap_sysadmin is not the answer, since you want unpriv.
+> SElinux is not the answer either.
+> Since it's unpriv, different processes should not be able to mess with
+> user events of other processes.
+> It's a fundamental requirement of any kernel api.
+> This has to be fixed before any bpf discussion.
+> If it means that you need to redesign user_events do it now and
+> excuses like "it's uapi now, so we cannot fix it" are not going to fly.
 
-> Hi Takashi, Hi Stuart (and of course, all others in here),
->
-> would you mind to evaluate this small (pseudo-)patch to be harmless?
-> (concerning the blow-up theory the first answer in this converstion)
->
-> I won't push it upstream right now but I want to know if this patch
-> might be harmfull. I'm owning a GA402XY myself and we digged out that
-> the initial setting of the cr3551 can be done via:
->
-> diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
-> index 75020edd39e7..eaa06751bd48 100644
-> --- a/sound/pci/hda/cs35l41_hda.c
-> +++ b/sound/pci/hda/cs35l41_hda.c
-> @@ -1243,6 +1243,12 @@ static int cs35l41_no_acpi_dsd(struct
-> cs35l41_hda *cs35l41, struct device *physd
->   		hw_cfg->bst_type = CS35L41_EXT_BOOST;
->   		hw_cfg->gpio1.func = CS35l41_VSPK_SWITCH;
->   		hw_cfg->gpio1.valid = true;
-> +	} else if (strncmp(hid, "CSC3551", 7) == 0 && strcmp(cs35l41-
->> acpi_subsystem_id, "10431463") == 0) {
-> +		// TESTING - (Hook for GA402X)
-> +		dev_warn(cs35l41->dev, "Warning: ASUS didn't provide
-> the needed ACPI _DSD properties for GA402X series, using defaults..");
-> +		hw_cfg->bst_type = CS35L41_EXT_BOOST;
-> +		hw_cfg->gpio1.func = CS35l41_VSPK_SWITCH;
-> +		hw_cfg->gpio1.valid = true;
->   	} else {
->   		/*
->   		 * Note: CLSA010(0/1) are special cases which use a
-> slightly different design.
-I wouldn't recommend making speculative changes like the above. There 
-are no "default" values as these attributes describe the hardware for 
-the particular device and these can be different on each SKU.  In this 
-case, it looks like the boost is being set incorrectly.  We're looking 
-into how we can support these older devices, so please bear with us 
-while we investigate.
+Looking at this a little because I have a few minutes.
+What's all this unused code?
 
+static inline struct user_event_group
+*user_event_group_from_user_ns(struct user_namespace *user_ns)
+{
+        if (user_ns == &init_user_ns)
+                return init_group;
+
+        return NULL;
+}
+
+static struct user_event_group *current_user_event_group(void)
+{
+        struct user_namespace *user_ns = current_user_ns();
+        struct user_event_group *group = NULL;
+
+        while (user_ns) {
+                group = user_event_group_from_user_ns(user_ns);
+
+                if (group)
+                        break;
+
+                user_ns = user_ns->parent;
+        }
+
+        return group;
+}
+
+User namespaces form strict hierarchies so you always end up at
+init_user_ns no matter where you start from in the hierarchy. Return the
+init_group and delete that code above.
+
+static char *user_event_group_system_name(struct user_namespace *user_ns)
+{
+        char *system_name;
+        int len = sizeof(USER_EVENTS_SYSTEM) + 1;
+
+        if (user_ns != &init_user_ns) {
+                /*
+                 * Unexpected at this point:
+                 * We only currently support init_user_ns.
+                 * When we enable more, this will trigger a failure so log.
+                 */
+                pr_warn("user_events: Namespace other than init_user_ns!\n");
+                return NULL;
+        }
+
+Your delegation model is premised on file permissions of a single file
+in global tracefs. It won't work with user namespaces so let's not give
+the false impression that this is on the table.
+
+Plus, all of this is also called in a single place during
+trace_events_user_init() which is called from fs_initcall() so you
+couldn't even pass a different user namespace if you wanted to because
+only init_user_ns exists.
