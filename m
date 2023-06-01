@@ -2,222 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 835FF719B5F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6C5719B66
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233146AbjFAMAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 08:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
+        id S233167AbjFAMAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 08:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233126AbjFAL7s (ORCPT
+        with ESMTP id S233200AbjFAMAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:59:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 490B6129
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 04:59:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 334741063;
-        Thu,  1 Jun 2023 05:00:31 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CC2743F7D8;
-        Thu,  1 Jun 2023 04:59:44 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     will@kernel.org
-Cc:     mark.rutland@arm.com, suzuki.poulose@arm.com,
-        bwicaksono@nvidia.com, ilkka@os.amperecomputing.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] perf/arm_cspmu: Decouple APMT dependency
-Date:   Thu,  1 Jun 2023 12:59:32 +0100
-Message-Id: <3509b299b19b8bf89700c77c2bb695c740926ae7.1685619571.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.39.2.101.g768bb238c484.dirty
-In-Reply-To: <cover.1685619571.git.robin.murphy@arm.com>
-References: <cover.1685619571.git.robin.murphy@arm.com>
+        Thu, 1 Jun 2023 08:00:21 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F5BE4C;
+        Thu,  1 Jun 2023 05:00:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DnUacDApiSAYSf9fnZt98RUJRFIHjjaMl8c0ihb+od0=; b=EPUoO4BmncQnw4jKUU4aYbjuM5
+        NmEHIBvjh4uKw0Mk3fTsRKs5HHoPoyGFmSQKpaD9k9XFmmbBoL4w75y9aBm7wahZpJFhZcVZwWWzl
+        zuG3TpUMVZHB9J5tIBQgk32NNNyrGMPcnWUYS6oRpXLNckYzYON3aqEohu8ShbwifgT3VZGSjvwGi
+        8nXemVSAh0Zz2v/RPj8DLQ4k5pT4OFbWGoHLNCz1nKehIlR+v/l7I5S048nf0z1BN7paMPsxfTl5t
+        kGa0+fSFDLBFuqnPxZMzWjYFXtCPInHFp//EQDHNAHD5Jf2R5e156qULvOe/bVGfJpPT22XJZPAkg
+        UOWIsMRg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q4gyH-008LT9-NT; Thu, 01 Jun 2023 12:00:01 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3FE0D300220;
+        Thu,  1 Jun 2023 14:00:01 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 21721202BDCB1; Thu,  1 Jun 2023 14:00:01 +0200 (CEST)
+Date:   Thu, 1 Jun 2023 14:00:01 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     K Prateek Nayak <kprateek.nayak@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>, x86@kernel.org,
+        Gautham Shenoy <gautham.shenoy@amd.com>
+Subject: Re: [tip: sched/core] sched/fair: Multi-LLC select_idle_sibling()
+Message-ID: <20230601120001.GJ38236@hirez.programming.kicks-ass.net>
+References: <168553468754.404.2298362895524875073.tip-bot2@tip-bot2>
+ <3de5c24f-6437-f21b-ed61-76b86a199e8c@amd.com>
+ <20230601111326.GV4253@hirez.programming.kicks-ass.net>
+ <20230601115643.GX4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601115643.GX4253@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The functional paths of the driver need not care about ACPI, so abstract
-the property of atomic doubleword access as its own flag (repacking the
-structure for a better fit). We also do not need to go poking directly
-at the APMT for standard resources which the ACPI layer has already
-dealt with, so deal with the optional MMIO page and interrupt in the
-normal firmware-agnostic manner. The few remaining portions of probing
-that *are* APMT-specific can still easily retrieve the APMT pointer as
-needed without us having to carry a duplicate copy around everywhere.
+On Thu, Jun 01, 2023 at 01:56:43PM +0200, Peter Zijlstra wrote:
+> On Thu, Jun 01, 2023 at 01:13:26PM +0200, Peter Zijlstra wrote:
+> > 
+> > This DeathStarBench thing seems to suggest that scanning up to 4 CCDs
+> > isn't too much of a bother; so perhaps something like so?
+> > 
+> > (on top of tip/sched/core from just a few hours ago, as I had to 'fix'
+> > this patch and force pushed the thing)
+> > 
+> > And yeah, random hacks and heuristics here :/ Does there happen to be
+> > additional topology that could aid us here? Does the CCD fabric itself
+> > have a distance metric we can use?
+> 
+>   https://www.anandtech.com/show/16529/amd-epyc-milan-review/4
+> 
+> Specifically:
+> 
+>   https://images.anandtech.com/doci/16529/Bounce-7763.png
+> 
+> That seems to suggest there are some very minor distance effects in the
+> CCD fabric. I didn't read the article too closely, but you'll note that
+> the first 4 CCDs have inter-CCD latency < 100 while the rest has > 100.
+> 
+> Could you also test on a Zen2 Epyc, does that require nr=8 instead of 4?
+> Should we perhaps write it like: 32 / llc_size ?
+> 
+> The Zen2 picture:
+> 
+>   https://images.anandtech.com/doci/16315/Bounce-7742.png
+> 
+> Shows a more pronounced CCD fabric topology, you can really see the 2
+> CCX inside the CCD but also there's two ligher green squares around the
+> CCDs themselves.
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
- drivers/perf/arm_cspmu/arm_cspmu.c | 45 ++++++++----------------------
- drivers/perf/arm_cspmu/arm_cspmu.h |  4 +--
- 2 files changed, 13 insertions(+), 36 deletions(-)
-
-diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
-index 3b91115c376d..f8daf252a488 100644
---- a/drivers/perf/arm_cspmu/arm_cspmu.c
-+++ b/drivers/perf/arm_cspmu/arm_cspmu.c
-@@ -100,10 +100,6 @@
- #define ARM_CSPMU_ACTIVE_CPU_MASK		0x0
- #define ARM_CSPMU_ASSOCIATED_CPU_MASK		0x1
- 
--/* Check if field f in flags is set with value v */
--#define CHECK_APMT_FLAG(flags, f, v) \
--	((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
--
- /* Check and use default if implementer doesn't provide attribute callback */
- #define CHECK_DEFAULT_IMPL_OPS(ops, callback)			\
- 	do {							\
-@@ -155,12 +151,6 @@ static u64 read_reg64_hilohi(const void __iomem *addr, u32 max_poll_count)
- 	return val;
- }
- 
--/* Check if PMU supports 64-bit single copy atomic. */
--static inline bool supports_64bit_atomics(const struct arm_cspmu *cspmu)
--{
--	return CHECK_APMT_FLAG(cspmu->apmt_node->flags, ATOMIC, SUPP);
--}
--
- /* Check if cycle counter is supported. */
- static inline bool supports_cycle_counter(const struct arm_cspmu *cspmu)
- {
-@@ -319,7 +309,7 @@ static const char *arm_cspmu_get_name(const struct arm_cspmu *cspmu)
- 	static atomic_t pmu_idx[ACPI_APMT_NODE_TYPE_COUNT] = { 0 };
- 
- 	dev = cspmu->dev;
--	apmt_node = cspmu->apmt_node;
-+	apmt_node = dev_get_platdata(dev);
- 	pmu_type = apmt_node->type;
- 
- 	if (pmu_type >= ACPI_APMT_NODE_TYPE_COUNT) {
-@@ -396,8 +386,8 @@ static const struct impl_match impl_match[] = {
- static int arm_cspmu_init_impl_ops(struct arm_cspmu *cspmu)
- {
- 	int ret;
--	struct acpi_apmt_node *apmt_node = cspmu->apmt_node;
- 	struct arm_cspmu_impl_ops *impl_ops = &cspmu->impl.ops;
-+	struct acpi_apmt_node *apmt_node = dev_get_platdata(cspmu->dev);
- 	const struct impl_match *match = impl_match;
- 
- 	/*
-@@ -719,7 +709,7 @@ static u64 arm_cspmu_read_counter(struct perf_event *event)
- 		offset = counter_offset(sizeof(u64), event->hw.idx);
- 		counter_addr = cspmu->base1 + offset;
- 
--		return supports_64bit_atomics(cspmu) ?
-+		return cspmu->has_atomic_dword ?
- 			       readq(counter_addr) :
- 			       read_reg64_hilohi(counter_addr, HILOHI_MAX_POLL);
- 	}
-@@ -910,24 +900,18 @@ static struct arm_cspmu *arm_cspmu_alloc(struct platform_device *pdev)
- {
- 	struct acpi_apmt_node *apmt_node;
- 	struct arm_cspmu *cspmu;
--	struct device *dev;
--
--	dev = &pdev->dev;
--	apmt_node = *(struct acpi_apmt_node **)dev_get_platdata(dev);
--	if (!apmt_node) {
--		dev_err(dev, "failed to get APMT node\n");
--		return NULL;
--	}
-+	struct device *dev = &pdev->dev;
- 
- 	cspmu = devm_kzalloc(dev, sizeof(*cspmu), GFP_KERNEL);
- 	if (!cspmu)
- 		return NULL;
- 
- 	cspmu->dev = dev;
--	cspmu->apmt_node = apmt_node;
--
- 	platform_set_drvdata(pdev, cspmu);
- 
-+	apmt_node = dev_get_platdata(dev);
-+	cspmu->has_atomic_dword = apmt_node->flags & ACPI_APMT_FLAGS_ATOMIC;
-+
- 	return cspmu;
- }
- 
-@@ -935,11 +919,9 @@ static int arm_cspmu_init_mmio(struct arm_cspmu *cspmu)
- {
- 	struct device *dev;
- 	struct platform_device *pdev;
--	struct acpi_apmt_node *apmt_node;
- 
- 	dev = cspmu->dev;
- 	pdev = to_platform_device(dev);
--	apmt_node = cspmu->apmt_node;
- 
- 	/* Base address for page 0. */
- 	cspmu->base0 = devm_platform_ioremap_resource(pdev, 0);
-@@ -950,7 +932,7 @@ static int arm_cspmu_init_mmio(struct arm_cspmu *cspmu)
- 
- 	/* Base address for page 1 if supported. Otherwise point to page 0. */
- 	cspmu->base1 = cspmu->base0;
--	if (CHECK_APMT_FLAG(apmt_node->flags, DUAL_PAGE, SUPP)) {
-+	if (platform_get_resource(pdev, IORESOURCE_MEM, 1)) {
- 		cspmu->base1 = devm_platform_ioremap_resource(pdev, 1);
- 		if (IS_ERR(cspmu->base1)) {
- 			dev_err(dev, "ioremap failed for page-1 resource\n");
-@@ -1047,19 +1029,14 @@ static int arm_cspmu_request_irq(struct arm_cspmu *cspmu)
- 	int irq, ret;
- 	struct device *dev;
- 	struct platform_device *pdev;
--	struct acpi_apmt_node *apmt_node;
- 
- 	dev = cspmu->dev;
- 	pdev = to_platform_device(dev);
--	apmt_node = cspmu->apmt_node;
- 
- 	/* Skip IRQ request if the PMU does not support overflow interrupt. */
--	if (apmt_node->ovflw_irq == 0)
--		return 0;
--
--	irq = platform_get_irq(pdev, 0);
-+	irq = platform_get_irq_optional(pdev, 0);
- 	if (irq < 0)
--		return irq;
-+		return irq == -ENXIO ? 0 : irq;
- 
- 	ret = devm_request_irq(dev, irq, arm_cspmu_handle_irq,
- 			       IRQF_NOBALANCING | IRQF_NO_THREAD, dev_name(dev),
-@@ -1109,7 +1086,7 @@ static int arm_cspmu_acpi_get_cpus(struct arm_cspmu *cspmu)
- 	int cpu;
- 
- 	dev = cspmu->pmu.dev;
--	apmt_node = cspmu->apmt_node;
-+	apmt_node = dev_get_platdata(dev);
- 	affinity_flag = apmt_node->flags & ACPI_APMT_FLAGS_AFFINITY;
- 
- 	if (affinity_flag == ACPI_APMT_FLAGS_AFFINITY_PROC) {
-diff --git a/drivers/perf/arm_cspmu/arm_cspmu.h b/drivers/perf/arm_cspmu/arm_cspmu.h
-index 51323b175a4a..7892e587f606 100644
---- a/drivers/perf/arm_cspmu/arm_cspmu.h
-+++ b/drivers/perf/arm_cspmu/arm_cspmu.h
-@@ -118,16 +118,16 @@ struct arm_cspmu_impl {
- struct arm_cspmu {
- 	struct pmu pmu;
- 	struct device *dev;
--	struct acpi_apmt_node *apmt_node;
- 	const char *name;
- 	const char *identifier;
- 	void __iomem *base0;
- 	void __iomem *base1;
--	int irq;
- 	cpumask_t associated_cpus;
- 	cpumask_t active_cpu;
- 	struct hlist_node cpuhp_node;
-+	int irq;
- 
-+	bool has_atomic_dword;
- 	u32 pmcfgr;
- 	u32 num_logical_ctrs;
- 	u32 num_set_clr_reg;
--- 
-2.39.2.101.g768bb238c484.dirty
-
+I can't seem to find pretty pictures for Zen4 Epyc; what does that want?
+That's even bigger at 96/8=12 LLCs afaict.
