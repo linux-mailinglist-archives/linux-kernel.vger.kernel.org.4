@@ -2,79 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C8D7198D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F6E7198F0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232789AbjFAKPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
+        id S233370AbjFAKQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233393AbjFAKOx (ORCPT
+        with ESMTP id S233346AbjFAKPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:14:53 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6131D1BC
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:12:31 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5147aee9d7cso999481a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 03:12:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685614349; x=1688206349;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lzBh9mt20nfbX1HPDV7qUtSParf3lregFrOcYZNJYTg=;
-        b=RaRPkC6VX2Q/BjwDKUPe+k/HHA2K3PeWdWSAlQMRdEG/tnmTVrcItIo7UYOv/QMizh
-         fXun4KbthwnGlMhHwbgtd1oo0pSD4tiWSV8j6L+PqAHjUoVQCnLEH1tSQLXECiMPP5v6
-         bgZKjutzE6DvR4vNMNFNrJxz+V+Ag7u9SgM08zR4S7s0q2pXk03J6eaL6GcmetjkLuDG
-         7xJkZdck6h+X2pSZdQWxMjsKNExIzpLdVou7k01rUwpL9J1GZ4IJHi0UJ8BEy/5/Bixs
-         vM/7MUOZaU7XwYyyYoDTTz41nXYpYF8yiasDYOtkzXoJQisFzrA35rh9BfkblJBmsXhr
-         6aFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685614349; x=1688206349;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lzBh9mt20nfbX1HPDV7qUtSParf3lregFrOcYZNJYTg=;
-        b=hniqPQr0aQpkdF5/nmHzYxjAarnO9cDrmFQimfA0j1h62t8qqHN+wlhf5GJvMrm8vO
-         JobtFG+yJhdNMklHvtGIH1jU8JQ/7CBxDRjGTrgBP0Tj+k/+kVc6043JDWuqLS1B0a7V
-         /PN4TsH7Svgz3G+r+Q6PuFHTITYr1aO7mUwxhc+vWEasOhBCHjsXiyaQ6v49mIPZdG2f
-         rzESLpp7x4ohb591DZxq3+U8quOuyQZQjElz9kYfvBqozxYxm7afJk3m2pBRNvfeMmKa
-         J5VQ/VJmOpKP0tqCSkA1e+YhghB+NjlmnflMTaLW3WXENHZbk/u4VF6ZG24zXzyGzFfv
-         Aytw==
-X-Gm-Message-State: AC+VfDxlITomSdYWDdb/M2XrpCcEpUKxkdcUobEKSl7j9ENmV1dUhNaO
-        OVFPh77AThTdPO2/SJERZlp9i2wDi5JWKIvoyQ0=
-X-Google-Smtp-Source: ACHHUZ6Nyi5zWDsnRjCwCJM1Qxx+HYhDiHldJG4dN+0BYNHIkTDm05bT22FK85uiKCYBn46fmDiSdQ==
-X-Received: by 2002:aa7:c390:0:b0:514:9eae:b0a7 with SMTP id k16-20020aa7c390000000b005149eaeb0a7mr5187743edq.17.1685614348806;
-        Thu, 01 Jun 2023 03:12:28 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id l18-20020aa7c3d2000000b0051499320435sm5620034edr.14.2023.06.01.03.12.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 03:12:28 -0700 (PDT)
-Message-ID: <608f0c96-e01e-20e7-6227-1d2066223aac@linaro.org>
-Date:   Thu, 1 Jun 2023 12:12:26 +0200
+        Thu, 1 Jun 2023 06:15:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32852111;
+        Thu,  1 Jun 2023 03:13:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E691C64300;
+        Thu,  1 Jun 2023 10:13:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB9EC433EF;
+        Thu,  1 Jun 2023 10:13:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685614396;
+        bh=AFUoVH57IicSC1SUB3rNbSa55KIIf5fvCH3QgG43svk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mW6qnl+Iscw1AVEmuh/+zsjQC3Skvf6tgVrd8H0mW7nk/Q4kR8aZiIus1dGIFP0tu
+         g3rQeS6P4z2sg2eRb4NVK2fSVZyk7O67J0bqoAY5zsHBwd4m5pGbhDwVNj62iw489S
+         WwJRyB2rENdRnYC5sKzXzzMfTG9/RUH5Fq0wJ8oT8tMyy9YYy4BnDsnxhAjT9MeepB
+         H1tV4aCIaB0/6raud9FT8L5dMFEDagbhbs3liHazB+zv7gap/xaJMb6C7mJsHMki13
+         b3RfbDTWSX2rQpcBObYqwwehSGuzsUPwmJr6dpDHZ0JMs7xXA+oJ8tyL/OL1vetfWT
+         OQoViqeiM1NHQ==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: [PATCH 00/13] mm: jit/text allocator
+Date:   Thu,  1 Jun 2023 13:12:44 +0300
+Message-Id: <20230601101257.530867-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] dt-bindings: serial: 8250_omap: add
- rs485-rts-active-high
-Content-Language: en-US
-To:     Francesco Dolcini <francesco@dolcini.it>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        linux-kernel@vger.kernel.org
-References: <20230531111038.6302-1-francesco@dolcini.it>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230531111038.6302-1-francesco@dolcini.it>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,20 +76,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 13:10, Francesco Dolcini wrote:
-> From: Francesco Dolcini <francesco.dolcini@toradex.com>
-> 
-> Add rs485-rts-active-high property, this was removed by mistake.
-> In general we just use rs485-rts-active-low property, however the OMAP
-> UART for legacy reason uses the -high one.
-> 
-> Fixes: 767d3467eb60 ("dt-bindings: serial: 8250_omap: drop rs485 properties")
-> Closes: https://lore.kernel.org/all/ZGefR4mTHHo1iQ7H@francesco-nb.int.toradex.com/
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+
+Hi,
+
+module_alloc() is used everywhere as a mean to allocate memory for code.
+
+Beside being semantically wrong, this unnecessarily ties all subsystmes
+that need to allocate code, such as ftrace, kprobes and BPF to modules
+and puts the burden of code allocation to the modules code.
+
+Several architectures override module_alloc() because of various
+constraints where the executable memory can be located and this causes
+additional obstacles for improvements of code allocation.
+
+This set splits code allocation from modules by introducing
+jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces call
+sites of module_alloc() and module_memfree() with the new APIs and
+implements core text and related allocation in a central place.
+
+Instead of architecture specific overrides for module_alloc(), the
+architectures that require non-default behaviour for text allocation must
+fill jit_alloc_params structure and implement jit_alloc_arch_params() that
+returns a pointer to that structure. If an architecture does not implement
+jit_alloc_arch_params(), the defaults compatible with the current
+modules::module_alloc() are used.
+
+The new jitalloc infrastructure allows decoupling of kprobes and ftrace
+from modules, and most importantly it enables ROX allocations for
+executable memory.
+
+A centralized infrastructure for code allocation allows future
+optimizations for allocations of executable memory, caching large pages for
+better iTLB performance and providing sub-page allocations for users that
+only need small jit code snippets.
+
+patches 1-5: split out the code allocation from modules and arch
+patch 6: add dedicated API for data allocations with constraints similar to
+code allocations
+patches 7-9: decouple dynamic ftrace and kprobes form CONFIG_MODULES
+patches 10-13: enable ROX allocations for executable memory on x86
+
+Mike Rapoport (IBM) (11):
+  nios2: define virtual address space for modules
+  mm: introduce jit_text_alloc() and use it instead of module_alloc()
+  mm/jitalloc, arch: convert simple overrides of module_alloc to jitalloc
+  mm/jitalloc, arch: convert remaining overrides of module_alloc to jitalloc
+  module, jitalloc: drop module_alloc
+  mm/jitalloc: introduce jit_data_alloc()
+  x86/ftrace: enable dynamic ftrace without CONFIG_MODULES
+  arch: make jitalloc setup available regardless of CONFIG_MODULES
+  kprobes: remove dependcy on CONFIG_MODULES
+  modules, jitalloc: prepare to allocate executable memory as ROX
+  x86/jitalloc: make memory allocated for code ROX
+
+Song Liu (2):
+  ftrace: Add swap_func to ftrace_process_locs()
+  x86/jitalloc: prepare to allocate exectuatble memory as ROX
+
+ arch/Kconfig                     |   5 +-
+ arch/arm/kernel/module.c         |  32 ------
+ arch/arm/mm/init.c               |  35 ++++++
+ arch/arm64/kernel/module.c       |  47 --------
+ arch/arm64/mm/init.c             |  42 +++++++
+ arch/loongarch/kernel/module.c   |   6 -
+ arch/loongarch/mm/init.c         |  16 +++
+ arch/mips/kernel/module.c        |   9 --
+ arch/mips/mm/init.c              |  19 ++++
+ arch/nios2/include/asm/pgtable.h |   5 +-
+ arch/nios2/kernel/module.c       |  24 ++--
+ arch/parisc/kernel/module.c      |  11 --
+ arch/parisc/mm/init.c            |  21 +++-
+ arch/powerpc/kernel/kprobes.c    |   4 +-
+ arch/powerpc/kernel/module.c     |  37 -------
+ arch/powerpc/mm/mem.c            |  41 +++++++
+ arch/riscv/kernel/module.c       |  10 --
+ arch/riscv/mm/init.c             |  18 +++
+ arch/s390/kernel/ftrace.c        |   4 +-
+ arch/s390/kernel/kprobes.c       |   4 +-
+ arch/s390/kernel/module.c        |  46 +-------
+ arch/s390/mm/init.c              |  35 ++++++
+ arch/sparc/kernel/module.c       |  34 +-----
+ arch/sparc/mm/Makefile           |   2 +
+ arch/sparc/mm/jitalloc.c         |  21 ++++
+ arch/sparc/net/bpf_jit_comp_32.c |   8 +-
+ arch/x86/Kconfig                 |   2 +
+ arch/x86/kernel/alternative.c    |  43 ++++---
+ arch/x86/kernel/ftrace.c         |  59 +++++-----
+ arch/x86/kernel/kprobes/core.c   |   4 +-
+ arch/x86/kernel/module.c         |  75 +------------
+ arch/x86/kernel/static_call.c    |  10 +-
+ arch/x86/kernel/unwind_orc.c     |  13 ++-
+ arch/x86/mm/init.c               |  52 +++++++++
+ arch/x86/net/bpf_jit_comp.c      |  22 +++-
+ include/linux/ftrace.h           |   2 +
+ include/linux/jitalloc.h         |  69 ++++++++++++
+ include/linux/moduleloader.h     |  15 ---
+ kernel/bpf/core.c                |  14 +--
+ kernel/kprobes.c                 |  51 +++++----
+ kernel/module/Kconfig            |   1 +
+ kernel/module/main.c             |  56 ++++------
+ kernel/trace/ftrace.c            |  13 ++-
+ kernel/trace/trace_kprobe.c      |  11 ++
+ mm/Kconfig                       |   3 +
+ mm/Makefile                      |   1 +
+ mm/jitalloc.c                    | 185 +++++++++++++++++++++++++++++++
+ mm/mm_init.c                     |   2 +
+ 48 files changed, 777 insertions(+), 462 deletions(-)
+ create mode 100644 arch/sparc/mm/jitalloc.c
+ create mode 100644 include/linux/jitalloc.h
+ create mode 100644 mm/jitalloc.c
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+-- 
+2.35.1
 
