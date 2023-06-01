@@ -2,145 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B50719A23
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B163719A2A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbjFAKuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
+        id S232525AbjFAKvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232821AbjFAKuU (ORCPT
+        with ESMTP id S229589AbjFAKvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:50:20 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C474F2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:50:18 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f3b9e54338so809324e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 03:50:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685616617; x=1688208617;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a6+t0uy+ketxaAQlCOq5q5RS6euSThxMjwTvlYKC7DQ=;
-        b=Xk6DJfF3St/zpKIBsqM2fp+ED1i18fmPgE1IEu1CNaFqg1wtqx5VONv3nKVJuZeGyA
-         3iHwpo9jEl/7TtIaGUWQHA5lQD3cS52Fs0kaJyU4cgr34PbmWKyazQh09Ok3Ug1MnevE
-         q48eddQtPyNmla6efGBVzbqqTqgOdd5DzIQFfdY66NV+t5OEWwBmCBW4D3UDf90EfoYJ
-         SNHw5GJfGOfNlNkCmbiZVyj1YowKb5TzlwwP6EJ7y8eBMeKKFz6EghqLRzl8RSzyTPo+
-         zAHzUL1ik1Tur69dtDJx3zMGm2sJ2se6dzFd0u5Ccr2GPrINPhlvPDRf3slX5OprKS99
-         k+oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685616617; x=1688208617;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a6+t0uy+ketxaAQlCOq5q5RS6euSThxMjwTvlYKC7DQ=;
-        b=FbkEY3p531Yxr3Q8aa80WEUDeMg2+dBGrk86IcgDdQZtCChKuQpfzHE1U2gXqSfB/j
-         4ixSJkQjF+FFL9zNtCILgT4g+xpNAoTO69jroBxOgSVFI5nfYglb6hy4gb+j0ZPC6tVP
-         lic+k0c0yY8lX8AEBObC7okJZ16OSEfC8ewnXXiPC0lE9c6yEvKbRCl8HUp8cTkrqjZR
-         AGX1jrtu05WtxI6IJF21hmJN/Oe+8Tak/lXvGu0FUakKf3kk0qqHx3Bb2HpoMMpO9ogL
-         eBa0Bt8W12GvBjCj09pKcsiij93Av2Kf3rJuk4XuhXOAfPJ10ix0ed2hAbsMzc3mi6Bx
-         Vdtw==
-X-Gm-Message-State: AC+VfDw3QbBz/bfEs5LBKijn0wDtOwp1/YnEKejGI26a4aUWR1g6ff9G
-        1L+a3i6YTfyCtCj2HEd21zj1HQ==
-X-Google-Smtp-Source: ACHHUZ6qJU54CrXN5+nToeFKN/q0UGyTUCBzFZunDM946Pa2xvHWK6L7HbM/y56Ojhx0IZ+uW0gL0g==
-X-Received: by 2002:ac2:5505:0:b0:4f3:b221:558c with SMTP id j5-20020ac25505000000b004f3b221558cmr1084547lfk.43.1685616616811;
-        Thu, 01 Jun 2023 03:50:16 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id g21-20020ac25395000000b004f2ce4b0f2esm1040575lfh.168.2023.06.01.03.50.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 03:50:16 -0700 (PDT)
-Message-ID: <bede29c5-d4e0-7925-dcdc-c724b98d25ca@linaro.org>
-Date:   Thu, 1 Jun 2023 12:50:15 +0200
+        Thu, 1 Jun 2023 06:51:11 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AAD9D;
+        Thu,  1 Jun 2023 03:51:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sqOkmNSuBD7GBtb46itE8ZDvhkHRWIc2NbvPp9qeOiw=; b=KZkC2WT4XQMr05qEkGpBjCv7TG
+        Ak6b/9n5dS5ZPNEFM10/VvLJvSS1D5ylwPHzd2DaQkM+piIbsvAz/pGM04U57+k94ayIQeNYv/Zpr
+        p75C1W/ZCqWn3ZEDzShydO0ovDBfnP1AqQJwgcDzODs4ufgi5DRaXCvhf1ySS+x4TLywE5eK3nk8v
+        3XQKlVIoFYPn55+2ybBmZuzlaHrG7I/QAPJb5OtatUGXyIlhc26higj14zyA/1vT2iclbpfYPL3TA
+        Nx806QJ6JOI2IEjvEs6POHy4WF448K4MQtyi2wClcFurUdFMq5GGHx9JYbaGa2fFQNILHK/d8n61V
+        wBRZ/4Zw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q4fsv-008IFd-Tl; Thu, 01 Jun 2023 10:50:26 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E2E913002F0;
+        Thu,  1 Jun 2023 12:50:21 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 96C9A21AA6F9B; Thu,  1 Jun 2023 12:50:21 +0200 (CEST)
+Date:   Thu, 1 Jun 2023 12:50:21 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Helge Deller <deller@gmx.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-crypto@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-parisc@vger.kernel.org,
+        John David Anglin <dave.anglin@bell.net>,
+        Sam James <sam@gentoo.org>
+Subject: Re: [PATCH v2 07/12] parisc/percpu: Work around the lack of
+ __SIZEOF_INT128__
+Message-ID: <20230601105021.GU4253@hirez.programming.kicks-ass.net>
+References: <20230531130833.635651916@infradead.org>
+ <20230531132323.722039569@infradead.org>
+ <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com>
+ <20230601101409.GS4253@hirez.programming.kicks-ass.net>
+ <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] arm64: dts: qcom: sm8550: Add missing interconnect path
- to USB HC
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20230601103817.4066446-1-abel.vesa@linaro.org>
- <34cd6db8-9f05-23cc-cd41-7fd48ec1a286@linaro.org>
- <ZHh3pyQprqKDn+TS@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZHh3pyQprqKDn+TS@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <14c50e58-fecc-e96a-ee73-39ef4e4617c7@gmx.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 01, 2023 at 12:32:38PM +0200, Helge Deller wrote:
+> On 6/1/23 12:14, Peter Zijlstra wrote:
+> > On Wed, May 31, 2023 at 04:21:22PM +0200, Arnd Bergmann wrote:
+> > 
+> > > It would be nice to have the hack more localized to parisc
+> > > and guarded with a CONFIG_GCC_VERSION check so we can kill
+> > > it off in the future, once we drop either gcc-10 or parisc
+> > > support.
+> > 
+> > I vote for dropping parisc -- it's the only 64bit arch that doesn't have
+> > sane atomics.
+> 
+> Of course I'm against dropping parisc.
 
+:-)
 
-On 1.06.2023 12:49, Abel Vesa wrote:
-> On 23-06-01 12:42:22, Konrad Dybcio wrote:
->>
->>
->> On 1.06.2023 12:38, Abel Vesa wrote:
->>> The USB HC node is missing the interconnect paths, so add them.
->>>
->>> Fixes: 7f7e5c1b037f ("arm64: dts: qcom: sm8550: Add USB PHYs and controller nodes")
->> For context, it's a fix in the context of "we should prooobably have
->> this if we want to fix the icc driver to include sync state".
+> > Anyway, the below seems to work -- build tested with GCC-10.1
 > 
-> Fair enough...
+> I don't think we need to care about gcc-10 on parisc.
+> Debian and Gentoo are the only supported distributions, while Debian
+> requires gcc-12 to build > 6.x kernels, and I assume Gentoo uses at least
+> gcc-12 as well.
 > 
->>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->>> ---
->> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>
->>
->>
->> sidenote:
->>
->> on recent SoCs there's also an USB-IPA path:
->>
->> aggre1_noc MASTER_USB3_0 <-> &config_noc SLAVE_IPA_CFG
-> 
-> AFAIK, support for IPA on SM8550 is not added yet.
-> 
-> We can worry about this 3rd path when IPA support for this platform is
-> upstreamed.
-Right, that's what I'm saying. I'm not even sure we have tethering
-acceleration upstream (where IPA pushes data quickly for sharing mobile
-data via USB).
+> So raising the gcc limit for parisc only (at least temporarily for now)
+> should be fine and your workaround below wouldn't be necessary, right?
 
-Konrad
-> 
->>
->> I don't think we really make use of that upstream today or whether it
->> would make enabling IPA necessary (to enable the clocks and reach the
->> IPA hardware), but it's something to think about.
->>
->> Konrad
->>>  arch/arm64/boot/dts/qcom/sm8550.dtsi | 4 ++++
->>>  1 file changed, 4 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
->>> index 75cd374943eb..4991b2e962d1 100644
->>> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
->>> @@ -2793,6 +2793,10 @@ usb_1: usb@a6f8800 {
->>>  
->>>  			resets = <&gcc GCC_USB30_PRIM_BCR>;
->>>  
->>> +			interconnects = <&aggre1_noc MASTER_USB3_0 0 &mc_virt SLAVE_EBI1 0>,
->>> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_0 0>;
->>> +			interconnect-names = "usb-ddr", "apps-usb";
->>> +
->>>  			status = "disabled";
->>>  
->>>  			usb_1_dwc3: usb@a600000 {
+Correct, if you're willing to set minimum GCC version to 11 for parisc
+all is well and this patch can go play in the bit bucket.
