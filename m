@@ -2,253 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D6171A055
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 735AF71A065
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232850AbjFAOhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
+        id S232673AbjFAOi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233423AbjFAOgo (ORCPT
+        with ESMTP id S232425AbjFAOi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:36:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2567510E0;
-        Thu,  1 Jun 2023 07:36:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68B4B60C86;
-        Thu,  1 Jun 2023 14:36:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57D5AC433EF;
-        Thu,  1 Jun 2023 14:36:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685630168;
-        bh=/xK7oMYZYUP4DJKjzDrCOCYODgLlz31gSGqfZuxsvp4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ShlBKkZxsn9Zji6NNyspbCGu03d/o/KDauuHeJa3dbnJeG+D3HVvdj1Y3ktbYQkLI
-         5ChVW6QfyXx9neTbXJmLT4upiAG3Kegae2grCC41VjUVJABp7nnN05Mk75Cmvdq3jo
-         cB+cMW6i3Kh97FUF3V8nWJpKwsX4J+6OU61IP7Iw=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 5.15 00/37] 5.15.115-rc2 review
-Date:   Thu,  1 Jun 2023 15:36:06 +0100
-Message-Id: <20230601143331.405588582@linuxfoundation.org>
-X-Mailer: git-send-email 2.40.1
+        Thu, 1 Jun 2023 10:38:27 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2069.outbound.protection.outlook.com [40.107.215.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0DCE75
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:38:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C+0llvVMveDchMehDCntivXtGiT/gwbQrlRz97QRJuYkIYJQCWvhVDYyNI0aPHF7f+oDRGbW8to/jRBnhJ+7y7HGazx31HBdEK2x4GGfhGN6n9KuSoMJnCfeN8ebUoq475AVAacMk1Cw4p0xefd8rv3nJjbc6oOh0FdcOO39TRZTwT9ttehu6Iq37tXR3lyaXgo0TNISGzX5RbbJ6SqNp4bHDDbx2Gs/yAF1kfXThfLQpEXeUAyJ+D5HbemxVqnfIPxUUOAuIGBmp7KOuSpppFLaadMWeNpfZxI2PmQVAC/nKmYfcmnktouiklpSWXhZmSosuuDG1NLYjI7SlMGxFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dqNw+Pw8Pc/qPdLXNgzyXTTWBPNjQes+YJGdDqgr6k8=;
+ b=ZggXdcVi4gtwKdrf6lMIxMlR1XdYNh+Bsix8PEfFRRHxl5p+mqDAuf9BND5BoVdviwwejBJitSTOHGTNULmS10u1wKYeK6XbjdSl5zgTpUzkMAvI0xhDDLTLR/GPkQYvbKIpXTgkhRiQZvtYwzNM2FLZw+3wuObeDqwSu0A8c3sw14JGMIsT3oV2zwLu+llBHQtp2bXEz3i1LpP2doYFU1z+Vphw0d5nPGI9YoV9x2SEh4jj0yYC/eyzEtNmGWtXhlDgPk28Fi0/LxdRcoJ2TSw/Aiv4tIR1I9a/JxdVsWYRy6FnM31GsSdss1mSbNb7chLYxonq6F72CHwrUkRmOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dqNw+Pw8Pc/qPdLXNgzyXTTWBPNjQes+YJGdDqgr6k8=;
+ b=i1jDort5Bk1gTafB9WbC64LpZbZn1tyantIFNZHHSQTK46zxNEiIqgX5/VPg5gEFJgSrOPauSXlqDpOqopw9u9YiJArBPoQoXLeOT6yRSpysex/CoZD88NYOTC+7VfFTs7cFmR12Qnjh8uPYDlZ2rlvoErlKg/PxesypteoJ5vo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oppo.com;
+Received: from SI2PR02MB5148.apcprd02.prod.outlook.com (2603:1096:4:153::6) by
+ TYZPR02MB5988.apcprd02.prod.outlook.com (2603:1096:400:1f3::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6477.8; Thu, 1 Jun 2023 14:37:27 +0000
+Received: from SI2PR02MB5148.apcprd02.prod.outlook.com
+ ([fe80::1bc4:fbb5:b757:83ee]) by SI2PR02MB5148.apcprd02.prod.outlook.com
+ ([fe80::1bc4:fbb5:b757:83ee%5]) with mapi id 15.20.6455.020; Thu, 1 Jun 2023
+ 14:37:27 +0000
+Message-ID: <d156c532-3531-c1ca-7d9f-fd77df47242a@oppo.com>
+Date:   Thu, 1 Jun 2023 22:37:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [f2fs-dev] [PATCH] f2fs: add f2fs_ioc_[get|set]_extra_attr
+Content-Language: en-US
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     jaegeuk@kernel.org, chao@kernel.org, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20230529013502.2230810-1-shengyong@oppo.com>
+ <20230601031658.GA728@quark.localdomain>
+From:   Sheng Yong <shengyong@oppo.com>
+In-Reply-To: <20230601031658.GA728@quark.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR02CA0025.apcprd02.prod.outlook.com
+ (2603:1096:3:18::13) To SI2PR02MB5148.apcprd02.prod.outlook.com
+ (2603:1096:4:153::6)
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.115-rc2.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.15.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.15.115-rc2
-X-KernelTest-Deadline: 2023-06-03T14:33+00:00
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SI2PR02MB5148:EE_|TYZPR02MB5988:EE_
+X-MS-Office365-Filtering-Correlation-Id: f03563c0-ea3a-4d08-7f30-08db62adb8cc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /sE5GZyGlCuI9c7m4aIp+wteo9yO5T8EmjFPqcM5X8g+tl6HeME65eQCYFjVb3ghnoOX0WhZVlXtwAtoRnZ3LRpE+4dvYppBMydIrFt6LW0F+JUMZHvFfnJBPfqMJnPH8LyQlmWs8EXDrCadByo7pmxSqSI0p5zMD4rVL7tenM4VV09IYnY/AolGUEHaZ0duMCe9VjvhcC4v2R4rODRRABa7AWLfBfj0ZyUhsJiA4oYRO9jV5XIROR7tnbB+gTU9AupkjSFBsqyw6Cpn9sqZ5ZaWkPFmVAbzV1qFWu5LU7OslUdmtKYdA3M8RHx6Qjwb2yn4LskzuhneyZwp4D80DS/GXJpZC6wuIztgWGbpJ8xS5Yr2DASJvKyUuKifYdEQNr8P2wu+v37Z3/TlWP0mOJyaZSfCQsiBIRAwK6FdORiWff0EKoG5XVrYdtSv2SvTbKkLoJGTl5fBV3JqPD05JQEWG0NC5tHkLi7i8nMq8m2LjRwvTfVEGRiHW1JTE0TMXIvSnIFmMmE5E2OcSXJ5bcvXgQ4HKsxix3Jro/gYt/0M9vWesVpAfgYUGCHZSk4wcY4Go38CXoSpBPZyvKluXQdrrZf1FUFmdL1S89ULSSMthAenqxYp1PuESbJpUW1B1hiaL/ArTiEfpe0IUMsTpA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR02MB5148.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(366004)(346002)(39860400002)(136003)(451199021)(478600001)(8676002)(8936002)(5660300002)(36756003)(2906002)(31696002)(86362001)(6916009)(4326008)(66946007)(66476007)(316002)(66556008)(38100700002)(41300700001)(83380400001)(31686004)(186003)(6506007)(26005)(6512007)(53546011)(2616005)(6486002)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SkV2Tjg0NXVrT253Vy8vam54bXcrOXcvVVZhWW5pSjFUL0ZuZTRNU0JULyt3?=
+ =?utf-8?B?TDR2TzJybHlIbHcwUXYwOGZOSDhXWlNkQUo5Wjh3K1V6OUdaZnVoTDdTUXpq?=
+ =?utf-8?B?QUtPMWd0RXYzc0s1d0dFRVl4ZkpCUlR0ZmdHSG1EQ0RFZ2FrVWh0amovYk8x?=
+ =?utf-8?B?Z3dCbk8weEdjeUtDYU9Sb09vbTZjcFY1UkNnTk9YUVFMU2habXpTd3huaExN?=
+ =?utf-8?B?Rk9aNHlFZGI2bE1jY2pucHJRWmRyRXhpcjNlYUJOeUxoNWpRbGllOWI2NStJ?=
+ =?utf-8?B?UmcweWJ2MkFGeGNzNW41K1pmZk5lTzVnNFpLV0NJM1lsbS9pRFBKM0VLUm4w?=
+ =?utf-8?B?S0JUYXloRmpaSC9CWVdFV1R0VERQOGl3TXNzVmh0T2I0am9YT0hFT1FSZmt3?=
+ =?utf-8?B?Mm9Ub29ZYU43TlIyaXRZZFM4cG13ckJETGVuTU44UnhDekxsTE4rS1pia1Bn?=
+ =?utf-8?B?ak4vMkdyRmduS2dQTm9kVmJLQTlCTGg3T0JrUFNHcDZ6M1ZsMUZoakpRdHpZ?=
+ =?utf-8?B?QW5hbEhGbVRZcEFGYUx5SmJnYklod3RjdmhwSlVLbWZmTU9RWW92ZjVtT1h2?=
+ =?utf-8?B?UGdNekJwTE9UU1hndHlJdDdBV1YzSFg2dEJETldYS3BrTUNRWnRoRGxtRTZp?=
+ =?utf-8?B?d2JDRXFnaUxmZmw5L25kVWppdHhFMS9udi9oTTNOMmdhSXgrcFA3WWR4Nm5p?=
+ =?utf-8?B?NGF2WXdIM2hURWtoaVZVM2NoNUFVV1MvemJuWFRaeHJ1Vm0rRjgxVWxFcUJ4?=
+ =?utf-8?B?RlMraGhZTGQ1aU1HcTk0d3E0RVI3NlBNcDlhVjBPOTRjOVo3dGhKV0NCQmFT?=
+ =?utf-8?B?bytJZVNMOXd5cUhzQ2Q3NElUdGljUW16TkJ3M243K1dVaXFUQ3BoWjVSWE9F?=
+ =?utf-8?B?THNsZHdXa1M2YVIxY0xpV1YvbUxVMXNsekRtZmwvQzBOdlVVc3YrSThBdzJJ?=
+ =?utf-8?B?OU5WMkwxQklqQ2RDSjIxeWs0T1Vpbk9Nb2RzTllmRDRZSXFQbzdGekVCTmNV?=
+ =?utf-8?B?TTllSm1wRjkwT2pNV2E5MVNsR3ZYVFVWVU9FSmRTazArU3FQd1A1Z1NEZm5R?=
+ =?utf-8?B?WFNUZHhORXVzMDE3SUFVNHZ6aGNUR0V3LzZvczNBVlZaV1hQRllnOXNESUdx?=
+ =?utf-8?B?UHNjUTFtSVdOZldEVlpxN2JaZ0lnQ3VCeE1JYzQvb3h2OFdQQUNEQ2w3TGFr?=
+ =?utf-8?B?R2t1YnFSRENvSkd3bStYSXNuaEpObERjUmZlcnY4M3RtcGpEcVNLMDhBZitJ?=
+ =?utf-8?B?OEpWZXJQSHY3OHhoUU12S3JvMTFtTHpwQUt1cVpjZGZ3Tmp1UVdBSVc3aUM5?=
+ =?utf-8?B?eEk1SmFRRHZLY1R4aGxnYUtIV3RZNFpyNDg0MmJpRnhoUnRjMnVBbndOQWRK?=
+ =?utf-8?B?THZEaGJmbXFYUEZwTWVQcDJJcDZoRnBLNXRYODRIL084VkRlVzZyMVlGK3l4?=
+ =?utf-8?B?c0pTWGpoRjZEOExBd24rcWZmNmNTYU9GUjlwb1NhbXoxWVQxWk5FTzlrb3RZ?=
+ =?utf-8?B?bHhvUURrVFdPM3dFYnNuM21LY2FJTkdEUnZobW5EQWJnYXR4S1Z4UDlEWXAy?=
+ =?utf-8?B?cWUrZDkwaTg5di9TQmM4akRaUlZvK2V4eXNlT0RnUkVvdE9ycFJzbUR5c29r?=
+ =?utf-8?B?WFlyem9rblZjMEM0MGIrQWJZR0xjb2VJM1B4ZDliSlVVSk1KYkNXczhCUEpz?=
+ =?utf-8?B?T0VVSitsQmU2RzZlL0JUbFJFak5DUFluL2xQV1dzTTZZNHdKVVdrUUdQeFNL?=
+ =?utf-8?B?SCt2azBDTHFzb01DMjRoMHdhSjVOU2p0SmpSM1Y2RzJ1WVMvZWdwNDhXd3J1?=
+ =?utf-8?B?V2RXalNzMFVQMTdZNkhneG1GZzZoR3JNbmpNQ2JmQUY0OTFqSjFxM241Tzdi?=
+ =?utf-8?B?WTFPaG9zeEErR1M0ZWlJUzI2MHJvMXU3QkU3bisxclp0TFAxZmJUN2srK3dz?=
+ =?utf-8?B?bE5VQlB6T3ZjMVVLcy9pUlA1VGdzNjBnVnI0MjM5SDZKckZCb0krSUxFWTBJ?=
+ =?utf-8?B?THZ5RkZVWGRidGVyeFNSQnBhM3RqRDZqbHNpc011S3hRSk5sTmQzLytPOGpF?=
+ =?utf-8?B?a05EUlVLdWZoV1ltczZNTzhwMFdjTlFwZ3NlT1p0WjdKZUZYMm9rZER1OFJy?=
+ =?utf-8?Q?vSFA8kWdb0ajBdQHddBvww0dJ?=
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f03563c0-ea3a-4d08-7f30-08db62adb8cc
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR02MB5148.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 14:37:27.3301
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +HcCrOxbCvnGvHMUJUGJlIeD5oDKvVGZU62yo/Nu4n7zUNGEY2g2Ev6tyDsRydepRI2YuBPKyfm47GeAGIl4/g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR02MB5988
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.15.115 release.
-There are 37 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
 
-Responses should be made by Sat, 03 Jun 2023 14:33:22 +0000.
-Anything received after that time might be too late.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.115-rc2.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-and the diffstat can be found below.
+On 2023/6/1 11:16, Eric Biggers wrote:
+> On Mon, May 29, 2023 at 09:35:00AM +0800, Sheng Yong via Linux-f2fs-devel wrote:
+>> This patch introduces two ioctls:
+>>    * f2fs_ioc_get_extra_attr
+>>    * f2fs_ioc_set_extra_attr
+>> to get or modify values in extra attribute area.
+>>
+>> The argument of these two ioctls is `struct f2fs_extra_attr', which has
+>> three members:
+>>    * field: indicates which field in extra attribute area is handled
+>>    * attr: value or userspace pointer
+>>    * attr_size: size of `attr'
+>>
+>> The `field' member could help extend functionality of these two ioctls
+>> without modify or add new interfaces, if more fields are added into
+>> extra attributes ares in the feture.
+>>
+>> Signed-off-by: Sheng Yong <shengyong@oppo.com>
+> 
+> Aren't there enough things called extra or extended attributes already?  Besides
+> the standard "extended attributes" retrievable with the getxattr() system call,
+> there is already the FS_IOC_FSGETXATTR ioctl too.
+Hi, Eric,
+
+The name extra_attr is a bit confusing :-(
+But f2fs usually extends new features through extra_attr, like compression, inode
+chksum. Since this area is easy to extend, new features could also be added here
+in the future. To avoid adding new ioctls for new features, these two could help
+integrate with all extra_attr related ioctls. And it seems not appropriate to add
+new fields or get/set f2fs-only attributes by FS_IOC_FSGETXATTR/FS_IOC_FSGETXATTR.
+xattrs could not be accessed through these two, only inline xattr size is allowed
+to be modified for an empty file.
 
 thanks,
+shengyong
 
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.15.115-rc2
-
-Paul Blakey <paulb@nvidia.com>
-    netfilter: ctnetlink: Support offloaded conntrack entry deletion
-
-Nicolas Dichtel <nicolas.dichtel@6wind.com>
-    ipv{4,6}/raw: fix output xfrm lookup wrt protocol
-
-Carlos Llamas <cmllamas@google.com>
-    binder: fix UAF of alloc->vma in race with munmap()
-
-Carlos Llamas <cmllamas@google.com>
-    binder: add lockless binder_alloc_(set|get)_vma()
-
-Carlos Llamas <cmllamas@google.com>
-    Revert "android: binder: stop saving a pointer to the VMA"
-
-Carlos Llamas <cmllamas@google.com>
-    Revert "binder_alloc: add missing mmap_lock calls when using the VMA"
-
-Ruihan Li <lrh2000@pku.edu.cn>
-    bluetooth: Add cmd validity checks at the start of hci_sock_ioctl()
-
-Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-    xdp: xdp_mem_allocator can be NULL in trace_mem_connect().
-
-Jiaxun Yang <jiaxun.yang@flygoat.com>
-    irqchip/mips-gic: Don't touch vl_map if a local interrupt is not routable
-
-Yunsheng Lin <linyunsheng@huawei.com>
-    page_pool: fix inconsistency for page_pool_ring_[un]lock()
-
-Qingfang DENG <qingfang.deng@siflower.com.cn>
-    net: page_pool: use in_softirq() instead
-
-Toke Høiland-Jørgensen <toke@redhat.com>
-    xdp: Allow registering memory model without rxq reference
-
-Rahul Rameshbabu <rrameshbabu@nvidia.com>
-    net/mlx5e: Fix SQ wake logic in ptp napi_poll context
-
-Jiaxun Yang <jiaxun.yang@flygoat.com>
-    irqchip/mips-gic: Use raw spinlock for gic_lock
-
-Marc Zyngier <maz@kernel.org>
-    irqchip/mips-gic: Get rid of the reliance on irq_cpu_online()
-
-Carlos Llamas <cmllamas@google.com>
-    binder: fix UAF caused by faulty buffer cleanup
-
-Hangbin Liu <liuhangbin@gmail.com>
-    bonding: fix send_peer_notif overflow
-
-Hangbin Liu <liuhangbin@gmail.com>
-    Bonding: add arp_missed_max option
-
-Arınç ÜNAL <arinc.unal@arinc9.com>
-    net: dsa: mt7530: fix network connectivity with multiple CPU ports
-
-Daniel Golle <daniel@makrotopia.org>
-    net: dsa: mt7530: split-off common parts from mt7531_setup
-
-Frank Wunderlich <frank-w@public-files.de>
-    net: dsa: mt7530: rework mt753[01]_setup
-
-Vladimir Oltean <vladimir.oltean@nxp.com>
-    net: dsa: introduce helpers for iterating through ports using dp
-
-Claudio Imbrenda <imbrenda@linux.ibm.com>
-    KVM: s390: fix race in gmap_make_secure()
-
-Claudio Imbrenda <imbrenda@linux.ibm.com>
-    KVM: s390: pv: add export before import
-
-David Epping <david.epping@missinglinkelectronics.com>
-    net: phy: mscc: enable VSC8501/2 RGMII RX clock
-
-Steve Wahl <steve.wahl@hpe.com>
-    platform/x86: ISST: Remove 8 socket limit
-
-Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-    platform/x86: ISST: PUNIT device mapping with Sub-NUMA clustering
-
-Shay Drory <shayd@nvidia.com>
-    net/mlx5: Devcom, serialize devcom registration
-
-Vlad Buslov <vladbu@nvidia.com>
-    net/mlx5e: Fix deadlock in tc route query code
-
-Mark Bloch <mbloch@nvidia.com>
-    net/mlx5: devcom only supports 2 ports
-
-Anton Protopopov <aspsk@isovalent.com>
-    bpf: fix a memory leak in the LRU and LRU_PERCPU hash maps
-
-Hans de Goede <hdegoede@redhat.com>
-    power: supply: bq24190: Call power_supply_changed() after updating input current
-
-Hans de Goede <hdegoede@redhat.com>
-    power: supply: core: Refactor power_supply_set_input_current_limit_from_supplier()
-
-Hans de Goede <hdegoede@redhat.com>
-    power: supply: bq27xxx: After charger plug in/out wait 0.5s for things to stabilize
-
-Hans de Goede <hdegoede@redhat.com>
-    power: supply: bq27xxx: Ensure power_supply_changed() is called on current sign changes
-
-Hans de Goede <hdegoede@redhat.com>
-    power: supply: bq27xxx: Move bq27xxx_battery_update() down
-
-Sicelo A. Mhlongo <absicsz@gmail.com>
-    power: supply: bq27xxx: expose battery data when CI=1
-
-
--------------
-
-Diffstat:
-
- Documentation/networking/bonding.rst               |  11 ++
- Makefile                                           |   4 +-
- arch/s390/kernel/uv.c                              |  56 ++++---
- drivers/android/binder.c                           |  26 +++-
- drivers/android/binder_alloc.c                     |  64 +++-----
- drivers/android/binder_alloc.h                     |   2 +-
- drivers/android/binder_alloc_selftest.c            |   2 +-
- drivers/irqchip/irq-mips-gic.c                     |  65 +++++---
- drivers/net/bonding/bond_main.c                    |  17 +-
- drivers/net/bonding/bond_netlink.c                 |  22 ++-
- drivers/net/bonding/bond_options.c                 |  36 ++++-
- drivers/net/bonding/bond_procfs.c                  |   2 +
- drivers/net/bonding/bond_sysfs.c                   |  13 ++
- drivers/net/dsa/mt7530.c                           | 124 +++++++++------
- drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c   |   2 +
- drivers/net/ethernet/mellanox/mlx5/core/en/txrx.h  |   2 +
- drivers/net/ethernet/mellanox/mlx5/core/en_tc.c    |  19 +--
- drivers/net/ethernet/mellanox/mlx5/core/en_tx.c    |  19 ++-
- .../net/ethernet/mellanox/mlx5/core/lib/devcom.c   |  81 +++++++---
- .../net/ethernet/mellanox/mlx5/core/lib/devcom.h   |   3 +
- drivers/net/phy/mscc/mscc.h                        |   1 +
- drivers/net/phy/mscc/mscc_main.c                   |  54 +++----
- .../x86/intel/speed_select_if/isst_if_common.c     |  49 ++++--
- drivers/power/supply/bq24190_charger.c             |  13 +-
- drivers/power/supply/bq27xxx_battery.c             | 171 +++++++++++----------
- drivers/power/supply/power_supply_core.c           |  57 +++----
- include/linux/power/bq27xxx_battery.h              |   3 +
- include/linux/power_supply.h                       |   5 +-
- include/net/bond_options.h                         |   1 +
- include/net/bonding.h                              |   3 +-
- include/net/dsa.h                                  |  28 ++++
- include/net/ip.h                                   |   2 +
- include/net/page_pool.h                            |  18 ---
- include/net/xdp.h                                  |   3 +
- include/uapi/linux/if_link.h                       |   1 +
- include/uapi/linux/in.h                            |   2 +
- kernel/bpf/hashtab.c                               |   6 +-
- net/bluetooth/hci_sock.c                           |  28 ++++
- net/core/page_pool.c                               |  34 +++-
- net/core/xdp.c                                     |  93 +++++++----
- net/ipv4/ip_sockglue.c                             |  12 +-
- net/ipv4/raw.c                                     |   5 +-
- net/ipv6/raw.c                                     |   3 +-
- net/netfilter/nf_conntrack_netlink.c               |   8 -
- tools/include/uapi/linux/if_link.h                 |   1 +
- 45 files changed, 763 insertions(+), 408 deletions(-)
-
-
+> 
+> - Eric
