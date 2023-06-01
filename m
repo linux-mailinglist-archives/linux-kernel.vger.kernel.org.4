@@ -2,167 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36BC719923
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B206719962
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbjFAKR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:17:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
+        id S233373AbjFAKSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233384AbjFAKRZ (ORCPT
+        with ESMTP id S232499AbjFAKSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:17:25 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BAA1FC0;
-        Thu,  1 Jun 2023 03:14:52 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QX23j5PWSz67MCd;
-        Thu,  1 Jun 2023 18:11:45 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 1 Jun
- 2023 11:13:29 +0100
-Date:   Thu, 1 Jun 2023 11:13:28 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Terry Bowman <terry.bowman@amd.com>
-CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
-        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
-        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
-        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
-Subject: Re: [PATCH v4 01/23] cxl/acpi: Probe RCRB later during RCH
- downstream port creation
-Message-ID: <20230601111328.00005620@Huawei.com>
-In-Reply-To: <20230523232214.55282-2-terry.bowman@amd.com>
-References: <20230523232214.55282-1-terry.bowman@amd.com>
-        <20230523232214.55282-2-terry.bowman@amd.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 1 Jun 2023 06:18:06 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF58A1FDB;
+        Thu,  1 Jun 2023 03:15:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=G1trJdY7ybtDfb34YzOEZVtQJ+4O7zYES3kMJ7sRdCU=; b=pytfcabSQbAioNogqcJyIjWxkb
+        I3OIRz0nPyGAHQCouHiezAZ3WYDnbr+0H5ASElPr4+OfQuPcqSEVXUzQNdmNT0vDCq0lYth70hxc+
+        nIxwWeL5rSBkZoelbLSxxySFndCPqg76D3wq86BEGZ1gkD10CrGs9NABCiAJPJkEv81csRGvvoVja
+        EaBwzktB36vi1XtuFtdCEjY2KE+yJjTGMIB4mjx3jEx3iBh0aM1LDhfieu9IZABiemcJgKbkPFNuq
+        /6ksBvE3iaE68Sn2CQ4733UmzPnTQKsAKE8EvFRBt0Ej6Ani+wvx452hsmvy64dZ4tGLH+6z41/Rs
+        43i6i9qw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q4fJv-008GIu-Pp; Thu, 01 Jun 2023 10:14:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 66A3C3002F0;
+        Thu,  1 Jun 2023 12:14:09 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 374AA21484A8B; Thu,  1 Jun 2023 12:14:09 +0200 (CEST)
+Date:   Thu, 1 Jun 2023 12:14:09 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-crypto@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org
+Subject: [PATCH v2 07/12] parisc/percpu: Work around the lack of
+ __SIZEOF_INT128__
+Message-ID: <20230601101409.GS4253@hirez.programming.kicks-ass.net>
+References: <20230531130833.635651916@infradead.org>
+ <20230531132323.722039569@infradead.org>
+ <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <70a69deb-7ad4-45b2-8e13-34955594a7ce@app.fastmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 18:21:52 -0500
-Terry Bowman <terry.bowman@amd.com> wrote:
+On Wed, May 31, 2023 at 04:21:22PM +0200, Arnd Bergmann wrote:
 
-> From: Robert Richter <rrichter@amd.com>
-> 
-> The RCRB is extracted already during ACPI CEDT table parsing while the
-> data of this is needed not earlier than dport creation. This
-> implementation comes with drawbacks: During ACPI table scan there is
-> already MMIO access including mapping and unmapping, but only ACPI
-> data should be collected here. The collected data must be transferred
-> through a couple of interfaces until it is finally consumed when
-> creating the dport. This causes complex data structures and function
-> interfaces. Additionally, RCRB parsing will be extended to also
-> extract AER data, it would be much easier do this at a later point
-> during port and dport creation when the data structures are available
-> to hold that data.
-> 
-> To simplify all that, probe the RCRB at a later point during RCH
-> downstream port creation. Change ACPI table parser to only extract the
-> base address of either the component registers or the RCRB. Parse and
-> extract the RCRB in devm_cxl_add_rch_dport().
-> 
-> This is in preparation to centralize all RCRB scanning.
-> 
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> It would be nice to have the hack more localized to parisc
+> and guarded with a CONFIG_GCC_VERSION check so we can kill
+> it off in the future, once we drop either gcc-10 or parisc
+> support.
 
-Hi,
+I vote for dropping parisc -- it's the only 64bit arch that doesn't have
+sane atomics.
 
-Some comments inline, though one of them (about extensibility of CDAT
-structures) applies just as much to the existing code so doesn't affect
+Anyway, the below seems to work -- build tested with GCC-10.1
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-for this patch.
+---
+Subject: parisc/percpu: Work around the lack of __SIZEOF_INT128__
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Tue May 30 22:27:40 CEST 2023
 
+HPPA64 is unique in not providing __SIZEOF_INT128__ across all
+supported compilers, specifically it only started doing this with
+GCC-11.
 
-> ---
->  drivers/cxl/acpi.c      | 52 ++++++++++++++++-------------------------
->  drivers/cxl/core/port.c | 21 +++++++++++++----
->  drivers/cxl/cxl.h       |  1 -
->  3 files changed, 36 insertions(+), 38 deletions(-)
-> 
-> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
-> index 7e1765b09e04..39227070da9b 100644
-> --- a/drivers/cxl/acpi.c
-> +++ b/drivers/cxl/acpi.c
-> @@ -373,20 +373,18 @@ static int add_host_bridge_uport(struct device *match, void *arg)
->  }
->  
->  struct cxl_chbs_context {
-> -	struct device *dev;
->  	unsigned long long uid;
-> -	resource_size_t rcrb;
-> -	resource_size_t chbcr;
-> +	resource_size_t base;
->  	u32 cxl_version;
->  };
->  
-> -static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
-> +static int cxl_get_chbs(union acpi_subtable_headers *header, void *arg,
->  			 const unsigned long end)
->  {
->  	struct cxl_chbs_context *ctx = arg;
->  	struct acpi_cedt_chbs *chbs;
->  
-> -	if (ctx->chbcr)
-> +	if (ctx->base)
->  		return 0;
->  
->  	chbs = (struct acpi_cedt_chbs *) header;
-> @@ -395,23 +393,16 @@ static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
->  		return 0;
->  
->  	ctx->cxl_version = chbs->cxl_version;
-> -	ctx->rcrb = CXL_RESOURCE_NONE;
-> -	ctx->chbcr = CXL_RESOURCE_NONE;
-> +	ctx->base = CXL_RESOURCE_NONE;
->  
->  	if (!chbs->base)
->  		return 0;
->  
-> -	if (chbs->cxl_version != ACPI_CEDT_CHBS_VERSION_CXL11) {
-> -		ctx->chbcr = chbs->base;
+Since the per-cpu ops are universally availably, and
+this_cpu_{,try_}cmpxchg128() is expected to be available on all 64bit
+architectures a wee bodge is in order.
 
-Trivial: This is a functional change and should be called out -
-previously the base address was stashed even if the length test
-fails, now it isn't. May make no difference because it was never used
-if that's the case, but would be nice to still mention it in patch description.
+Sadly, while C reverts to memcpy() for assignment of POD types, it does
+not revert to memcmp() for for equality. Therefore frob that manually.
 
-Also, ACPI tables are designed to be extensible and I think that
-applies to CDAT tables as well - so this code should not be
-checking for a precise match, but rather that it is greater than
-or equal to the size we will read from.
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/parisc/include/asm/percpu.h |   77 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
 
-
-> +	if (chbs->cxl_version == ACPI_CEDT_CHBS_VERSION_CXL11 &&
-> +	    chbs->length != CXL_RCRB_SIZE)
->  		return 0;
-> -	}
-
->  
-> -	if (chbs->length != CXL_RCRB_SIZE)
-> -		return 0;
-> -
-> -	ctx->rcrb = chbs->base;
-> -	ctx->chbcr = cxl_rcrb_to_component(ctx->dev, chbs->base,
-> -					   CXL_RCRB_DOWNSTREAM);
-> +	ctx->base = chbs->base;
->  
->  	return 0;
->  }
-
+--- /dev/null
++++ b/arch/parisc/include/asm/percpu.h
+@@ -0,0 +1,77 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_PARISC_PERCPU_H
++#define _ASM_PARISC_PERCPU_H
++
++#include <linux/types.h>
++
++#if defined(CONFIG_64BIT) && CONFIG_GCC_VERSION < 1100000
++
++/*
++ * GCC prior to 11 does not provide __SIZEOF_INT128__ on HPPA64
++ * as such we need to provide an alternative implementation of
++ * {raw,this}_cpu_{,try_}cmpxchg128().
++ *
++ * This obviously doesn't function as u128 should, but for the purpose
++ * of per-cpu cmpxchg128 it might just do.
++ */
++typedef struct {
++	u64 a, b;
++} u128 __attribute__((aligned(16)));
++
++#define raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)		\
++({									\
++	typeof(pcp) *__p = raw_cpu_ptr(&(pcp));				\
++	typeof(pcp) __val = *__p, __old = *(ovalp);			\
++	bool __ret;							\
++	if (!__builtin_memcmp(&__val, &__old, sizeof(pcp))) {		\
++		*__p = nval;						\
++		__ret = true;						\
++	} else {							\
++		*(ovalp) = __val;					\
++		__ret = false;						\
++	}								\
++	__ret;								\
++})
++
++#define raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)			\
++({									\
++	typeof(pcp) __old = (oval);					\
++	raw_cpu_generic_try_cmpxchg_memcpy(pcp, &__old, nval);		\
++	__old;								\
++})
++
++#define raw_cpu_cmpxchg128(pcp, oval, nval) \
++	raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)
++#define raw_cpu_try_cmpxchg128(pcp, ovalp, nval) \
++	raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)
++
++#define this_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)		\
++({									\
++	bool __ret;							\
++	unsigned long __flags;						\
++	raw_local_irq_save(__flags);					\
++	__ret = raw_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval);	\
++	raw_local_irq_restore(__flags);					\
++	__ret;								\
++})
++
++#define this_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)		\
++({									\
++	typeof(pcp) __ret;						\
++	unsigned long __flags;						\
++	raw_local_irq_save(__flags);					\
++	__ret = raw_cpu_generic_cmpxchg_memcmp(pcp, oval, nval);	\
++	raw_local_irq_restore(__flags);					\
++	__ret;								\
++})
++
++#define this_cpu_cmpxchg128(pcp, oval, nval) \
++	this_cpu_generic_cmpxchg_memcmp(pcp, oval, nval)
++#define this_cpu_try_cmpxchg128(pcp, ovalp, nval) \
++	this_cpu_generic_try_cmpxchg_memcmp(pcp, ovalp, nval)
++
++#endif /* !__SIZEOF_INT128__ */
++
++#include <asm-generic/percpu.h>
++
++#endif /* _ASM_PARISC_PERCPU_H */
