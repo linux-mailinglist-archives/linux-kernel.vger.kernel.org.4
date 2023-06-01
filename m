@@ -2,107 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADEF971F5B1
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 912BA71F5C0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbjFAWLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 18:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        id S232994AbjFAWM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 18:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjFAWLK (ORCPT
+        with ESMTP id S230268AbjFAWMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:11:10 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCEC197
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 15:11:09 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f5f728c4aaso1427956e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 15:11:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685657468; x=1688249468;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cUjU1QLapAN+UOQb7bMW7gqVswYS7FmmwKe3gGeC7nU=;
-        b=NzQu6xWyAFPvysWLbKbjyISj5llZOGjpXFor0IW7wWZYGGutpqSrbRPegCB1UNXbj1
-         +Cfo6V6omcyq+wguGbUPSpbmATrIfifLQFztqwQ6zwKuyhp7cYRUceC5BzwBguLzGOG4
-         HMh/jBDMKhW7pSVQGRt6iviF3gkVXhuU0fwbSdeSKwt4bDV3R3xrdccEGuie2JFzOwjX
-         UYt7JQ3Sw4Wi5FObT3oob6cNsgLye6KZePYWne+7CYZBM+Dw10aZSZSKH5V3xxj2XjZ6
-         UOQWGJxst7qfSD7cqJ8yHghKi1KL3dCUrtnmzAhC7eud1LJx/flZqmDAaNHsI/Jwb6FJ
-         99Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685657468; x=1688249468;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cUjU1QLapAN+UOQb7bMW7gqVswYS7FmmwKe3gGeC7nU=;
-        b=KvVmJfkKgQKXgOi7xq4dYVp3qrLuEHSOtiga0G2QdETFNYPfw876Zv2xG9/T0MeQL0
-         wEi6hMJom2iblmbdcSi4EvdB0mS6Cc5otwfZElHiS058guBi3QQ63zQ2vyQtBe8Nwuqz
-         TNEp1FztRtK2VA2niXqReK2FFJqzTO/UFLFiRt+VqC2SXO6AOIM/+9EPcsTwNpccRvt8
-         0KzVIwcWcVUGyJOGps2LLyDCF9hU7P/qGKWVNe/Pdf0qOWQyydaWwON8SwquRnsdEJyQ
-         4oyirZXgT/+3CAdoPQNgI4xsv9NNdEOoHn2XIu3P4VlPw4jryb+Nuuo623imEj5j0ZR5
-         hATg==
-X-Gm-Message-State: AC+VfDwm22RFpf4jvETywrqqJa7ytJQBYnGIaWZnCP1s7vbRNVnGMAx6
-        MrNTqAymyRKlFdVb+uFDWdY9rA==
-X-Google-Smtp-Source: ACHHUZ4Z1RCAMlDskOyhcoYf/TmzLDNh/sz5WfMVyoGVLrhlKAvsxKhMJilmOZ4JHXoYcwc2vHQpug==
-X-Received: by 2002:ac2:560c:0:b0:4f0:13e3:a291 with SMTP id v12-20020ac2560c000000b004f013e3a291mr319581lfd.28.1685657467880;
-        Thu, 01 Jun 2023 15:11:07 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id e2-20020ac25462000000b004f38e55ae79sm1205559lfn.278.2023.06.01.15.11.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 15:11:07 -0700 (PDT)
-Message-ID: <22853a86-b327-60db-3c47-cbb2e407c10e@linaro.org>
-Date:   Fri, 2 Jun 2023 01:11:06 +0300
+        Thu, 1 Jun 2023 18:12:49 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2086.outbound.protection.outlook.com [40.107.94.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A49B18D;
+        Thu,  1 Jun 2023 15:12:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=le5joztdBVSdCOJAz5HmViaDRK6E32+Or/3byNAPxGM+FTinmmiJ49yiCVWuxlQ39SiRPg5teq7Kb18rNj2qZK+3/rGW9domxzamtsPLDhLYUb3qfskCykUliPRvHQGFh3JXjbIweM87hW7dJBm92RruoPSW0ZEPbRMngOvHo//k1Mn2bfWOuBz589Q0qWc5bfVGq6CqVRBK+SlKAp82BaaZVFF624XqjBdTW1WYzI9QqzFs44f9z9YP1vctuFlrqgdD7hCqNuCNlXuf24b/4lFZNpF3KHpuL8Y2J1ON8ZQvOk65gotX5j1Drb7W92IKCr8ksQ8tTpx8kDqiins+VA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A2uvnyadgmPv/UplCy3dfHolCS1iQD6or73uaLQ6l4c=;
+ b=D+26heNBkij45LzY9LmCDJpChCTl1Spbb72ZwpMh2aHSu0RQb5VB8fcelqS5XClKjWoZFeruUMvROn++3Ll27sgIBytO0wjTXMhOWtZCFbs7QLM00QAs8Bm8BLqLCh7w2nlP2vglqZqLZz1zq/2gIvEmxk63+v9395RypU+Y+L0yTIH2waWbRzT0/E0zi6fqT0Crg1cneo5NtlOnTCIcm+k1wvogQFKwW20clU6EVVXd1RNblevBEL0qZ5zFD4xY+LPFHrVXtdxEM+p36D9XVcweaXLeXsEKuMJ+8U5Y+YML9F+hc4o8kMw24CIytukQ/trnkn3fYZOlaSNkTtmbyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=A2uvnyadgmPv/UplCy3dfHolCS1iQD6or73uaLQ6l4c=;
+ b=FCnTumqEKrTMqujE4Yag4djkJbe/HKrn6pna/auerDlmYd1yZXCOTFEOdPHSp/W68wK93xKc5Bwt1t8GnXkjaAsXAJPk1rbe93KdfMQMyLfl4vCru9fT+ZYkCVibHywenGj+3dur+U/N8LC8i/q+LQqnDjeTOi1RUdFKUBySuW8=
+Received: from MW4P222CA0009.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::14)
+ by PH0PR12MB8006.namprd12.prod.outlook.com (2603:10b6:510:28d::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Thu, 1 Jun
+ 2023 22:12:41 +0000
+Received: from CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:114:cafe::69) by MW4P222CA0009.outlook.office365.com
+ (2603:10b6:303:114::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.23 via Frontend
+ Transport; Thu, 1 Jun 2023 22:12:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT019.mail.protection.outlook.com (10.13.175.57) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6455.24 via Frontend Transport; Thu, 1 Jun 2023 22:12:41 +0000
+Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 1 Jun
+ 2023 17:12:40 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <linux-acpi@vger.kernel.org>, <rafael@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        <ofenfisch@googlemail.com>, <wse@tuxedocomputers.com>,
+        <adam.niederer@gmail.com>, <adrian@freund.io>,
+        <jirislaby@kernel.org>, <Renjith.Pananchikkal@amd.com>,
+        <anson.tsao@amd.com>, <Richard.Gong@amd.com>,
+        Chuanhong Guo <gch981213@gmail.com>, <evilsnoo@proton.me>,
+        <ruinairas1992@gmail.com>, <nmschulte@gmail.com>
+Subject: [PATCH v3] ACPI: resource: Remove "Zen" specific match and quirks
+Date:   Thu, 1 Jun 2023 17:11:51 -0500
+Message-ID: <20230601221151.670-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 0/2] retrieve DSI DSC through DRM bridge
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
-        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1685657331-23280-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1685657331-23280-1-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT019:EE_|PH0PR12MB8006:EE_
+X-MS-Office365-Filtering-Correlation-Id: e3dd9812-acf7-4f12-2c4a-08db62ed516b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: phR9WnBwNhSLKCkV3U9b+6BrCSwl2/Wp/+loX/lEmHgnAeqQe3WK0EUzdHuzdllcLYS+d9OXaogEM5ohtsIiBSA66jfer8ILD346bixuCPIXjXGlbjgqHV5nupkW/KlPw6OE5jMihR3D/AIfY6uy20MjMg9+JW1uxBDLhGdcm8nLVQ0chGTwHoa2tWq9qWOhq6lzRjRbgIoWGnOd1hYuZ2WJGFFY3+8ROif7BwHL0zvCa/2lmwzEarx1QxFl/hlhX8B43tTciwIGRK4+XN2RZXW7Gb3ykeR42xAlsgOPpfoWM19Q+ylTPNb6gtAS9IJ0uOgVTYjzUsVF5DeIHe8/zJobECPYTfecVaAdcC7reLS48BOr967NS8VD1fhRqKQGhjhVpPrYUcNLXJYZHBsSRoYbLxUpYGKpVkXxgYj5scXF0MEkXW7dJekBCeNOSsLdtelS7I+DsdHpE1AFgs2RnCLZVC6ZQhhguxcwk6dPdf6u9w6UsoJyPLmOrmHsUR0RbLtmHYjhGPjIzTkaLLpFh6/ZZYWxOk3pn8UH/Ax6Avu5klZkZze/Dt6NUlHwrT34oY/2+86CNQ1IYhK3IQ3NVw0MuOzJREXzNxSnWV7uNtjoGcL+94gHDKw1Q6phaL2AbgxRX4YSCApYTXoSmcHFx7eKHUebWw6NYPSzEBenSUn5M9KLz+Ai00en0R/qztgy1U2ZQ3fc0WyVNS4hv+HUWGttujY4QmDYxVaSHAFzkUzoEONdB8useQnNwYJHEAT/y4a6IzGzNo/VbOCcy/ZsqhLVS3lYv49zvkjhqeLaRA0=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(136003)(346002)(396003)(451199021)(40470700004)(46966006)(36840700001)(36756003)(82740400003)(86362001)(110136005)(4326008)(478600001)(316002)(54906003)(70206006)(966005)(70586007)(7416002)(44832011)(6666004)(83380400001)(41300700001)(2906002)(8676002)(40480700001)(82310400005)(7696005)(81166007)(2616005)(356005)(5660300002)(36860700001)(47076005)(426003)(26005)(336012)(1076003)(16526019)(8936002)(186003)(40460700003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 22:12:41.4400
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3dd9812-acf7-4f12-2c4a-08db62ed516b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8006
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/06/2023 01:08, Kuogee Hsieh wrote:
-> move retrieving DSC from setup_display to atomic_check() and delete struct drm_dsc_config
-> from struct msm_display_info.
+commit 9946e39fe8d0 ("ACPI: resource: skip IRQ override on
+AMD Zen platforms") attempted to overhaul the override logic so it
+didn't apply on X86 AMD Zen systems.  This was intentional so that
+systems would prefer DSDT values instead of default MADT value for
+IRQ 1 on Ryzen 6000 systems which typically uses ActiveLow for IRQ1.
 
-This is obvious from the patches themselves. You should be describing 
-_why_ the changes are necessary, not what is changed.
+This turned out to be a bad assumption because several vendors
+add Interrupt Source Override but don't fix the DSDT. A pile of
+quirks was collecting that proved this wasn't sustaintable.
 
+Furthermore some vendors have used ActiveHigh for IRQ1.
+To solve this problem revert the following commits:
+* commit 17bb7046e7ce ("ACPI: resource: Do IRQ override on all TongFang
+GMxRGxx")
+* commit f3cb9b740869 ("ACPI: resource: do IRQ override on Lenovo 14ALC7")
+* commit bfcdf58380b1 ("ACPI: resource: do IRQ override on LENOVO IdeaPad")
+* commit 7592b79ba4a9 ("ACPI: resource: do IRQ override on XMG Core 15")
+* commit 9946e39fe8d0 ("ACPI: resource: skip IRQ override on AMD Zen
+platforms")
 
-What was changed between v1 and v2?
+Cc: ofenfisch@googlemail.com
+Cc: wse@tuxedocomputers.com
+Cc: adam.niederer@gmail.com
+Cc: adrian@freund.io
+Cc: jirislaby@kernel.org
+Cc: Renjith.Pananchikkal@amd.com
+Cc: anson.tsao@amd.com
+Cc: Richard.Gong@amd.com
+Cc: Chuanhong Guo <gch981213@gmail.com>
+Reported-by: evilsnoo@proton.me
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217394
+Reported-by: ruinairas1992@gmail.com
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217406
+Reported-by: nmschulte@gmail.com
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217336
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+v2->v3:
+ * Adjust to drop heuristics entirely
+ * Drop tested tags
+ * Add more links and people to Cc
+ * Drop Fixes tag as this got a lot more risky
+v1->v2:
+ * Rebase on 71a485624c4c ("ACPI: resource: Add IRQ override quirk for LG UltraPC 17U70P")
+ * Pick up tag
 
-> 
-> Kuogee Hsieh (2):
->    drm/msm/dpu: retrieve DSI DSC struct at atomic_check()
->    drm/msm/dpu: remove struct drm_dsc_config from struct msm_display_info
-> 
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 18 +++++++++++++-----
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  1 -
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 --
->   3 files changed, 13 insertions(+), 8 deletions(-)
-> 
+Rafael,
+Please hold off on picking this up until the majority of those on CC
+have tested it on hardware they have and reported results.
 
+Everyone else,
+Please test. If you have problems with this applied, please share
+an acpidump and dmesg either on a bug or to me privately.
+---
+ drivers/acpi/resource.c | 60 -----------------------------------------
+ 1 file changed, 60 deletions(-)
+
+diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
+index 0800a9d77558..1dd8d5aebf67 100644
+--- a/drivers/acpi/resource.c
++++ b/drivers/acpi/resource.c
+@@ -470,52 +470,6 @@ static const struct dmi_system_id asus_laptop[] = {
+ 	{ }
+ };
+ 
+-static const struct dmi_system_id lenovo_laptop[] = {
+-	{
+-		.ident = "LENOVO IdeaPad Flex 5 14ALC7",
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "82R9"),
+-		},
+-	},
+-	{
+-		.ident = "LENOVO IdeaPad Flex 5 16ALC7",
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "82RA"),
+-		},
+-	},
+-	{ }
+-};
+-
+-static const struct dmi_system_id tongfang_gm_rg[] = {
+-	{
+-		.ident = "TongFang GMxRGxx/XMG CORE 15 (M22)/TUXEDO Stellaris 15 Gen4 AMD",
+-		.matches = {
+-			DMI_MATCH(DMI_BOARD_NAME, "GMxRGxx"),
+-		},
+-	},
+-	{ }
+-};
+-
+-static const struct dmi_system_id maingear_laptop[] = {
+-	{
+-		.ident = "MAINGEAR Vector Pro 2 15",
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "Micro Electronics Inc"),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "MG-VCP2-15A3070T"),
+-		}
+-	},
+-	{
+-		.ident = "MAINGEAR Vector Pro 2 17",
+-		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "Micro Electronics Inc"),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "MG-VCP2-17A3070T"),
+-		},
+-	},
+-	{ }
+-};
+-
+ static const struct dmi_system_id lg_laptop[] = {
+ 	{
+ 		.ident = "LG Electronics 17U70P",
+@@ -539,10 +493,6 @@ struct irq_override_cmp {
+ static const struct irq_override_cmp override_table[] = {
+ 	{ medion_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
+ 	{ asus_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
+-	{ lenovo_laptop, 6, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
+-	{ lenovo_laptop, 10, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
+-	{ tongfang_gm_rg, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
+-	{ maingear_laptop, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
+ 	{ lg_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
+ };
+ 
+@@ -562,16 +512,6 @@ static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
+ 			return entry->override;
+ 	}
+ 
+-#ifdef CONFIG_X86
+-	/*
+-	 * IRQ override isn't needed on modern AMD Zen systems and
+-	 * this override breaks active low IRQs on AMD Ryzen 6000 and
+-	 * newer systems. Skip it.
+-	 */
+-	if (boot_cpu_has(X86_FEATURE_ZEN))
+-		return false;
+-#endif
+-
+ 	return true;
+ }
+ 
 -- 
-With best wishes
-Dmitry
+2.34.1
 
