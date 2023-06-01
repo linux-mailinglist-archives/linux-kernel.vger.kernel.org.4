@@ -2,118 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A59971F082
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9A271F08C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232699AbjFART1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Jun 2023 13:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
+        id S232739AbjFARVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 13:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbjFART0 (ORCPT
+        with ESMTP id S231947AbjFARU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 13:19:26 -0400
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4059DF2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 10:19:25 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-bacfc573647so1140170276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 10:19:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685639964; x=1688231964;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ssDpVvbH3HXkVvaZfL5D19DzNcQ2WkA1YRPv1fTXD3U=;
-        b=bHrsd01b6klOZTIjg7YjxGbC0EghAcYjS6IhAhpvZ6l1oDQEaHTtz4YOPhKroSwG9y
-         NCplpfUf33HzKq98txYCKoI/rk/7s8bnByocET5/4ZuB2ZvPpGj1Qb1h/mNRt3rOPNS0
-         G7mC3DVTlSs5LAqnf5YdDp6pW4uKnxDynS/pIpkd2SZbtY4mxA+3G5bOZM1rIoeE2I5S
-         0lY/pwaFSDLEHn+HKANILE61awe7ZBhNvAcruC6g0eB6zEWKLrE0ogvDW8XkygQINPbe
-         nbAwb4XtYmxc9U0f3JLZznVluKQjFZYGPCdXZtSg69sq1awmJ2VTXmRup71D4fmhHxxs
-         x4+A==
-X-Gm-Message-State: AC+VfDznGs8CdGTEkGQVzP8qkiuoDITAXMFhDYf0SEY3eQ+SSdxDPNd9
-        hU9u3QhHfCPjtJ/unT1UX8fbp+oqKhxQde49DZI=
-X-Google-Smtp-Source: ACHHUZ7wG1uiT6t0n4PKQx51l8YGX6XIZ4fYwSbVSRnvTbX5kXUqVOL7cJ0O1FQJlxod0UC2ST++NtbNECa+gebrh1w=
-X-Received: by 2002:a25:86c9:0:b0:bab:d9b1:ad63 with SMTP id
- y9-20020a2586c9000000b00babd9b1ad63mr535878ybm.38.1685639964290; Thu, 01 Jun
- 2023 10:19:24 -0700 (PDT)
+        Thu, 1 Jun 2023 13:20:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0973B136;
+        Thu,  1 Jun 2023 10:20:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B96664835;
+        Thu,  1 Jun 2023 17:20:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81995C433D2;
+        Thu,  1 Jun 2023 17:20:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685640056;
+        bh=9EaqC1DnJMuk4AMWEh9JBON4F0FRodQtCo6RrSC2wsc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lZdpfz5JapOz2Y0YELeTlVq+OU8fVjl+6hfGwZNBz3pxMSdwsyuN1PoPIxtCi6WhT
+         Nq9efP1eCyxIOXD3HPrwhWWvJiIOlgH6Sqk4XYk5YEaEmSXVpz6CenikE5KiEmiP89
+         6SYgjpMPdkF9aCLQsMnNr/htH5TflxeDBbVKGAOo=
+Date:   Thu, 1 Jun 2023 18:20:53 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Danila Chernetsov <listdansp@mail.ru>
+Cc:     stable@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
+        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dave Chinner <dchinner@redhat.com>,
+        Dave Chinner <david@fromorbit.com>
+Subject: Re: [PATCH 5.10 1/1] xfs: verify buffer contents when we skip log
+ replay
+Message-ID: <2023060127-flick-velcro-ca45@gregkh>
+References: <20230601164439.15404-1-listdansp@mail.ru>
+ <20230601164439.15404-2-listdansp@mail.ru>
 MIME-Version: 1.0
-References: <20230531143533.196835-1-paniii94@gmail.com>
-In-Reply-To: <20230531143533.196835-1-paniii94@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 1 Jun 2023 10:19:13 -0700
-Message-ID: <CAM9d7chBsVJ=_phHHn4gYcgj6Wn8Ua+gQ62K4rf-edA=8vL9Wg@mail.gmail.com>
-Subject: Re: [PATCH] Subject: perf jit: Fix incorrect file name in DWARF line table
-To:     elisabeth <paniii94@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601164439.15404-2-listdansp@mail.ru>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 7:35 AM elisabeth <paniii94@gmail.com> wrote:
->
-> Fix an issue where an incorrect file name was added in the DWARF line table
-> due to not checking the filename against the repeated name marker (/xff/0).
-> This can be seen with `objdump --dwarf=line` on the ELF file after perf inject.
->
-> Signed-off-by: elisabeth <paniii94@gmail.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/util/genelf_debug.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/perf/util/genelf_debug.c b/tools/perf/util/genelf_debug.c
-> index aa5dcc56b2ac..2928b59bb9a5 100644
-> --- a/tools/perf/util/genelf_debug.c
-> +++ b/tools/perf/util/genelf_debug.c
-> @@ -349,6 +349,7 @@ static void emit_lineno_info(struct buffer_ext *be,
->          */
->
->         /* start state of the state machine we take care of */
-> +       char const repeated_name_marker[] = {'\xff', '\0'};
+On Thu, Jun 01, 2023 at 04:44:39PM +0000, Danila Chernetsov wrote:
+> From: "Darrick J. Wong" <djwong@kernel.org>
+> 
+> commit 22ed903eee23a5b174e240f1cdfa9acf393a5210 upstream.
+> 
+> syzbot detected a crash during log recovery:
 
-Can you please mention that it's from the jitdump format
-either by renaming or adding a comment?
+XFS patches for stable come from the XFS maintainers, so please work
+with them if you feel any specific patch is missing from a stable tree.
 
+thanks,
 
->         unsigned long last_vma = 0;
->         char const  *cur_filename = NULL;
->         unsigned long cur_file_idx = 0;
-> @@ -363,7 +364,8 @@ static void emit_lineno_info(struct buffer_ext *be,
->                 /*
->                  * check if filename changed, if so add it
->                  */
-> -               if (!cur_filename || strcmp(cur_filename, ent->name)) {
-> +               if ((!cur_filename || strcmp(cur_filename, ent->name)) &&
-> +                       memcmp(repeated_name_marker, ent->name, sizeof(repeated_name_marker)) != 0) {
-
-I think you can just use strcmp().
-
-Thanks,
-Namhyung
-
-
->                         emit_lne_define_filename(be, ent->name);
->                         cur_filename = ent->name;
->                         emit_set_file(be, ++cur_file_idx);
-> --
-> 2.34.1
->
+greg k-h
