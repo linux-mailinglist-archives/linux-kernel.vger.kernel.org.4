@@ -2,69 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2224719148
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834EB71914B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbjFADZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 23:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
+        id S230503AbjFAD0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 23:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjFADZh (ORCPT
+        with ESMTP id S229588AbjFAD0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 23:25:37 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9475CC9;
-        Wed, 31 May 2023 20:25:32 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-ba818eb96dcso284521276.0;
-        Wed, 31 May 2023 20:25:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685589932; x=1688181932;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1075G3HvSg/kvHdmmCcsIFr2YDRXoh3FI/k1IiFmQCg=;
-        b=G8s7iRtzkkILLueWvrQxne0xcEFcpNJrcdR/YeaVrghsHmRQjtzV4lOb44UqaSlk5O
-         g+8TIdrrmZ916KDcK1zR0q7qc5a6uSmgH6Fs8FXNUWCfGKe97FclYordRz6Z0+vzJlti
-         gXItJkQurx+CDCuhL13EGYJZVebGTB7pv4WCWD8RzVtIQR0KwUIcI/PjUxINHx41zlew
-         UjnHx9ShOY3ioU2O6DAKlXiEhXwEHZvtpK5eigAWGIHDnrd5M6Aiy719f9mTj//b6v1L
-         f66yUtf43J0J3P0lGKTLH6vpfaw88bHKy+Rzay/3agJY/mCUpy7MQbmN3cUJdKbqNwHu
-         zeQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685589932; x=1688181932;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1075G3HvSg/kvHdmmCcsIFr2YDRXoh3FI/k1IiFmQCg=;
-        b=KPIKA+Nt8ruu0KC1jUe7ujqAfb1wkc3WM0X+MucMcYz7EMa/6TG8uwlEpDKi0EwS0h
-         BpQdAtqHr2NoQNmYy2aENwIwq14OQDTTFe2P/ic9k287FVWV5AqsXDwYUgXVaGkl9XWL
-         4I/Lepko5DyZf8KzUeocOQF7XEVo2GqRvem1q8M5MIFHYkHQvNZEKD6lPraVn7CTlBbG
-         KfVIEgS5DoY/tCEy8M8iyde6S4xKKN62nnZqDJJNVw/wBgpqLm3l1vIjE8ZAz9sZYDCz
-         0pZ1rcJYIRr7EO+CgkVtrUxFrUDP9Ul7cfR6oLTq5EuB7KNtGqFvRb6zV+7LUWhYAdn1
-         fQqw==
-X-Gm-Message-State: AC+VfDwrShl9hCnQCmomM8s1xjoHcO+y9KpjejAx/yJ9ReGOoPalrafK
-        659U8MC7ITp+ZSWuS2LNPjdqI8HnS+97fJLzmlY=
-X-Google-Smtp-Source: ACHHUZ7dB0ExZANHMOCXMBLjVatsOxCNoXw4FyZluu58OkcExYMv1y4Ju5SZSyN+Q2dfeGWmh+J8mwzxfQilEMVMSh4=
-X-Received: by 2002:a25:e713:0:b0:b72:4ca:b3ce with SMTP id
- e19-20020a25e713000000b00b7204cab3cemr7594658ybh.16.1685589931691; Wed, 31
- May 2023 20:25:31 -0700 (PDT)
+        Wed, 31 May 2023 23:26:15 -0400
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACFA123
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 20:26:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vk-zNp2_1685589970;
+Received: from 30.97.48.255(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vk-zNp2_1685589970)
+          by smtp.aliyun-inc.com;
+          Thu, 01 Jun 2023 11:26:11 +0800
+Message-ID: <82d09500-46a2-1f21-96bb-1ffd75b3419f@linux.alibaba.com>
+Date:   Thu, 1 Jun 2023 11:26:08 +0800
 MIME-Version: 1.0
-References: <168557950756.14226.6470993129419598644-0@git.sr.ht> <20230601012708.69681-1-kuniyu@amazon.com>
-In-Reply-To: <20230601012708.69681-1-kuniyu@amazon.com>
-From:   Akihiro Suda <suda.kyoto@gmail.com>
-Date:   Thu, 1 Jun 2023 12:25:20 +0900
-Message-ID: <CAG8fp8TExDuswLyBaudhAuSG9NEyPKf3=QbUGb8Gq1KtBt6Tag@mail.gmail.com>
-Subject: Re: [PATCH linux v2] net/ipv4: ping_group_range: allow GID from
- 2147483648 to 4294967294
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     akihirosuda@git.sr.ht, akihiro.suda.cz@hco.ntt.co.jp,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, segoon@openwall.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH v5 3/6] erofs: unify xattr_iter structures
+To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
+        chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20230601024347.108469-1-jefflexu@linux.alibaba.com>
+ <20230601024347.108469-4-jefflexu@linux.alibaba.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230601024347.108469-4-jefflexu@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,132 +44,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks, submitted v3 with your suggestions
-https://patchwork.kernel.org/project/netdevbpf/patch/20230601031305.55901-1=
--akihiro.suda.cz@hco.ntt.co.jp/
 
-2023=E5=B9=B46=E6=9C=881=E6=97=A5(=E6=9C=A8) 10:27 Kuniyuki Iwashima <kuniy=
-u@amazon.com>:
->
-> From: ~akihirosuda <akihirosuda@git.sr.ht>
-> Date: Wed, 31 May 2023 19:42:49 +0900
-> > From: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
-> >
-> > With this commit, all the GIDs ("0 4294967294") can be written to the
-> > "net.ipv4.ping_group_range" sysctl.
-> >
-> > Note that 4294967295 (0xffffffff) is an invalid GID (see gid_valid() in
-> > include/linux/uidgid.h), and an attempt to register this number will ca=
-use
-> > -EINVAL.
-> >
-> > Prior to this commit, only up to GID 2147483647 could be covered.
-> > Documentation/networking/ip-sysctl.rst had "0 4294967295" as an example
-> > value, but this example was wrong and causing -EINVAL.
-> >
-> > v1->v2: Simplified the patch (Thanks to Kuniyuki Iwashima for suggestio=
-n)
->
-> Changelog should be placed under '---'.
->
-> Also could you use 'net' instead of 'linux' in Subject so that
-> patchwork will be happy ?
->
-> https://patchwork.kernel.org/project/netdevbpf/patch/168557950756.14226.6=
-470993129419598644-0@git.sr.ht/
->
->
-> >
-> > Fixes: c319b4d76b9e ("net: ipv4: add IPPROTO_ICMP socket kind")
-> > Signed-off-by: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
-> > ---
-> >  Documentation/networking/ip-sysctl.rst | 4 ++--
-> >  include/net/ping.h                     | 6 +-----
-> >  net/ipv4/sysctl_net_ipv4.c             | 8 ++++----
-> >  3 files changed, 7 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/net=
-working/ip-sysctl.rst
-> > index 6ec06a33688a..80b8f73a0244 100644
-> > --- a/Documentation/networking/ip-sysctl.rst
-> > +++ b/Documentation/networking/ip-sysctl.rst
-> > @@ -1352,8 +1352,8 @@ ping_group_range - 2 INTEGERS
-> >       Restrict ICMP_PROTO datagram sockets to users in the group range.
-> >       The default is "1 0", meaning, that nobody (not even root) may
-> >       create ping sockets.  Setting it to "100 100" would grant permiss=
-ions
-> > -     to the single group. "0 4294967295" would enable it for the world=
-, "100
-> > -     4294967295" would enable it for the users, but not daemons.
-> > +     to the single group. "0 4294967294" would enable it for the world=
-, "100
-> > +     4294967294" would enable it for the users, but not daemons.
-> >
-> >  tcp_early_demux - BOOLEAN
-> >       Enable early demux for established TCP sockets.
-> > diff --git a/include/net/ping.h b/include/net/ping.h
-> > index 9233ad3de0ad..bc7779262e60 100644
-> > --- a/include/net/ping.h
-> > +++ b/include/net/ping.h
-> > @@ -16,11 +16,7 @@
-> >  #define PING_HTABLE_SIZE     64
-> >  #define PING_HTABLE_MASK     (PING_HTABLE_SIZE-1)
-> >
-> > -/*
-> > - * gid_t is either uint or ushort.  We want to pass it to
-> > - * proc_dointvec_minmax(), so it must not be larger than MAX_INT
-> > - */
-> > -#define GID_T_MAX (((gid_t)~0U) >> 1)
-> > +#define GID_T_MAX (((gid_t)~0U) - 1)
-> >
-> >  /* Compatibility glue so we can support IPv6 when it's compiled as a m=
-odule */
-> >  struct pingv6_ops {
-> > diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-> > index 40fe70fc2015..bb49d9407c45 100644
-> > --- a/net/ipv4/sysctl_net_ipv4.c
-> > +++ b/net/ipv4/sysctl_net_ipv4.c
-> > @@ -34,8 +34,8 @@ static int ip_ttl_min =3D 1;
-> >  static int ip_ttl_max =3D 255;
-> >  static int tcp_syn_retries_min =3D 1;
-> >  static int tcp_syn_retries_max =3D MAX_TCP_SYNCNT;
-> > -static int ip_ping_group_range_min[] =3D { 0, 0 };
-> > -static int ip_ping_group_range_max[] =3D { GID_T_MAX, GID_T_MAX };
-> > +static long ip_ping_group_range_min[] =3D { 0, 0 };
-> > +static long ip_ping_group_range_max[] =3D { GID_T_MAX, GID_T_MAX };
->
-> nit: s/long/unsigned long/
->
-> Then, add
->
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
->
-> Thanks!
->
->
-> >  static u32 u32_max_div_HZ =3D UINT_MAX / HZ;
-> >  static int one_day_secs =3D 24 * 3600;
-> >  static u32 fib_multipath_hash_fields_all_mask __maybe_unused =3D
-> > @@ -165,7 +165,7 @@ static int ipv4_ping_group_range(struct ctl_table *=
-table, int write,
-> >  {
-> >       struct user_namespace *user_ns =3D current_user_ns();
-> >       int ret;
-> > -     gid_t urange[2];
-> > +     unsigned long urange[2];
-> >       kgid_t low, high;
-> >       struct ctl_table tmp =3D {
-> >               .data =3D &urange,
-> > @@ -178,7 +178,7 @@ static int ipv4_ping_group_range(struct ctl_table *=
-table, int write,
-> >       inet_get_ping_group_range_table(table, &low, &high);
-> >       urange[0] =3D from_kgid_munged(user_ns, low);
-> >       urange[1] =3D from_kgid_munged(user_ns, high);
-> > -     ret =3D proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
-> > +     ret =3D proc_doulongvec_minmax(&tmp, write, buffer, lenp, ppos);
-> >
-> >       if (write && ret =3D=3D 0) {
-> >               low =3D make_kgid(user_ns, urange[0]);
-> > --
-> > 2.38.4
->
+
+On 2023/6/1 10:43, Jingbo Xu wrote:
+> Unify xattr_iter/listxattr_iter/getxattr_iter structures into
+> erofs_xattr_iter structure.
+> 
+> This is in preparation for the following further cleanup.
+> 
+> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+
+Thanks,
+Gao Xiang
