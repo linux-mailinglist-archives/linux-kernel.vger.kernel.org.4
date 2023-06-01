@@ -2,153 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F027E71EEEE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75F371EEF6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbjFAQ1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 12:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
+        id S231610AbjFAQ2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 12:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjFAQ1q (ORCPT
+        with ESMTP id S229880AbjFAQ2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 12:27:46 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F125212C;
-        Thu,  1 Jun 2023 09:27:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685636865; x=1717172865;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Re3XUbJYE5wz7BKtwG+m2aCGFJz7ak2dDNPkBnP/kmg=;
-  b=LYgA2WPWdZssZmEPeY1Rr7lbbbRrKYNF+Zx9CsW+bPHxHc/Jlcrw8oiJ
-   ofN7lYLmBsbsCHD8m3dkobK24qeA5W0mlyrxABaxLDG1aEREmk0AqVRW3
-   QV+25pR3UC2lrQjiotkiHroCv7FQ2XYhGq+v+4EFYyTtkMOO7I/U3EJ0Q
-   jrQwCMxIL7WbP+Tw7TyRifglzAMurA3XfL+2KRSk/h40phCt0L0uS9aGR
-   bckw71Gv8lbaIoau2digHUiKJrNB1eTd7QtzfsuTXzudG4qOCGmMEmpSv
-   bsylEhnfUSIK7Z+5f/FiYr7d+VHztapVvasLBya//SzcV1LdMNfrN+3av
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="345169915"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="345169915"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:27:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="657859553"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="657859553"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 01 Jun 2023 09:27:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q4l98-000SZF-0S;
-        Thu, 01 Jun 2023 19:27:30 +0300
-Date:   Thu, 1 Jun 2023 19:27:29 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonas Gorski <jonas.gorski@gmail.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-pci@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Andrew Lunn <andrew@lunn.ch>, sparclinux@vger.kernel.org,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-acpi@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        xen-devel@lists.xenproject.org, Matt Turner <mattst88@gmail.com>,
-        Anatolij Gustschin <agust@denx.de>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Juergen Gross <jgross@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-mips@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        linux-alpha@vger.kernel.org,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>
-Subject: Re: [PATCH v8 0/7] Add pci_dev_for_each_resource() helper and update
- users
-Message-ID: <ZHjG8cBIdZsjhDOe@smile.fi.intel.com>
-References: <ZF6YIezraETr9iNM@bhelgaas>
- <ZHZpcli2UmdzHgme@bhelgaas>
- <CAOiHx==5YWhDiZP2PyHZiJrmtqRzvqCqoSO59RwuYuR85BezBg@mail.gmail.com>
- <ZHjGik12vSFgi1eO@smile.fi.intel.com>
+        Thu, 1 Jun 2023 12:28:43 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737B313D;
+        Thu,  1 Jun 2023 09:28:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=wS5z5XZ3GwNBhgY0jkt2hM/yAdpoSIWainSnIml/Rz4=; b=dYw32r9m48hdVLk/6D2V2fbqUP
+        p2KufS/wPNdPzllKZPB1OM37qvcHOj+7y+mluZrTD9YmqsljOYZC0dPJBcH1Pl8QZn5JTH9gAW/N1
+        +OscDg1XJ2Bze+lT7Y1a9eVUuXepOqkGXvO+2PJmlPEPiCyadjyad5w1cIoYBNG3j/dc87nbjeXBg
+        sJsVfI63fE2fMqg+27klri3ElflTyYm3Pm6iOrYp0aHG3GyijuFiQ0Ua35xkybNXGWuw1dZvfOdXC
+        oAk5xYQCnyQ1B/ft0/UfN/66jLEs3qekhReMHXPZ9blydffBwSU5L6lrMUtgInNRJLvvSB2CIi4RS
+        GXx0hFQQ==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q4lAH-004FYf-0I;
+        Thu, 01 Jun 2023 16:28:41 +0000
+Message-ID: <3c6d7ab9-dac5-6950-db8d-3119e4529eb7@infradead.org>
+Date:   Thu, 1 Jun 2023 09:28:39 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHjGik12vSFgi1eO@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3] Documentation: subsystem-apis: Categorize remaining
+ subsystems
+Content-Language: en-US
+To:     Costa Shulyupin <costa.shul@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        "open list:BPF [MISC]" <bpf@vger.kernel.org>
+References: <ZHgM0qKWP3OusjUW@debian.me>
+ <20230601145556.3927838-1-costa.shul@redhat.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230601145556.3927838-1-costa.shul@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 07:25:46PM +0300, Andy Shevchenko wrote:
-> On Wed, May 31, 2023 at 08:48:35PM +0200, Jonas Gorski wrote:
-> > On Tue, 30 May 2023 at 23:34, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Fri, May 12, 2023 at 02:48:51PM -0500, Bjorn Helgaas wrote:
+Hi--
 
-...
+On 6/1/23 07:55, Costa Shulyupin wrote:
+> From: Bagas Sanjaya <bagasdotme@gmail.com>
+> 
+> Add classes:
+> * Core subsystems
+> * Storage
+> * Networking
+> * Peripherals and devices
+> * Embedded systems
+> * Integrity
+> * Virtualization
+> * Miscellaneous
+> 
+> There is a FIXME that says to organize subsystems listed in
+> subsystem-apis.rst. Fulfill it by categorize remaining subsytems
+> by purpose/themes, while sorting entries in each category.
+> 
+> HID devices are already categorized in 3c591cc954d56e ("docs:
+> consolidate human interface subsystems").
+> 
+> Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
 
-> > > Where are we at?  Are we going to ignore this because some Coverity
-> > > reports are false positives?
-> > 
-> > Looking at the code I understand where coverity is coming from:
-> > 
-> > #define __pci_dev_for_each_res0(dev, res, ...)                         \
-> >        for (unsigned int __b = 0;                                      \
-> >             res = pci_resource_n(dev, __b), __b < PCI_NUM_RESOURCES;   \
-> >             __b++)
-> > 
-> >  res will be assigned before __b is checked for being less than
-> > PCI_NUM_RESOURCES, making it point to behind the array at the end of
-> > the last loop iteration.
-> 
-> Which is fine and you stumbled over the same mistake I made, that's why the
-> documentation has been added to describe why the heck this macro is written
-> the way it's written.
-> 
-> Coverity sucks.
-> 
-> > Rewriting the test expression as
-> > 
-> > __b < PCI_NUM_RESOURCES && (res = pci_resource_n(dev, __b));
-> > 
-> > should avoid the (coverity) warning by making use of lazy evaluation.
-> 
-> Obviously NAK.
-> 
-> > It probably makes the code slightly less performant as res will now be
-> > checked for being not NULL (which will always be true), but I doubt it
-> > will be significant (or in any hot paths).
+This is a worthy goal, I am sure, but I am also sure that there is
+a lot of bikeshedding that can go on here.
+(examples below)
 
-Oh my god, I mistakenly read this as bus macro, sorry for my rant,
-it's simply wrong.
+> 
+> ---
+> 
+> Changes:
+> v3: add Integrity, Virtualization and Miscellaneous per Bagas Sanjaya
+> v2: add Core subsystems, Networking, Peripherals and Embedded
+> v1: add Storgre category
 
+          Storage
+
+> ---
+>  Documentation/subsystem-apis.rst | 119 ++++++++++++++++++++++---------
+>  1 file changed, 86 insertions(+), 33 deletions(-)
+> 
+> diff --git a/Documentation/subsystem-apis.rst b/Documentation/subsystem-apis.rst
+> index 55c90d5383ef..2c0b18a66e4e 100644
+> --- a/Documentation/subsystem-apis.rst
+> +++ b/Documentation/subsystem-apis.rst
+> @@ -10,58 +10,111 @@ is taken directly from the kernel source, with supplemental material added
+>  as needed (or at least as we managed to add it — probably *not* all that is
+>  needed).
+>  
+> +Core subsystems
+> +---------------
+> +
+> +.. toctree::
+> +   :maxdepth: 1
+> +
+> +   core-api/index
+> +   cpu-freq/index
+> +   driver-api/index
+> +   locking/index
+> +   mm/index
+> +   power/index
+> +   scheduler/index
+> +   timers/index
+> +   wmi/index
+> +
+>  Human interfaces
+>  ----------------
+>  
+>  .. toctree::
+>     :maxdepth: 1
+>  
+> -   input/index
+> +   fb/index
+> +   gpu/index
+>     hid/index
+> +   input/index
+>     sound/index
+> -   gpu/index
+> -   fb/index
+>  
+> -**Fixme**: much more organizational work is needed here.
+> +Storage
+> +-------
+>  
+>  .. toctree::
+>     :maxdepth: 1
+>  
+> -   driver-api/index
+> -   core-api/index
+> -   locking/index
+> -   accounting/index
+>     block/index
+>     cdrom/index
+> -   cpu-freq/index
+> -   fpga/index
+> -   i2c/index
+> -   iio/index
+> -   isdn/index
+> +   filesystems/index
+> +   pcmcia/index
+
+Why is pcmcia in the storage category?
+It's just an interface (or a bus).
+
+> +   scsi/index
+
+SCSI is also just a bus, but most (all?) of our drivers
+are for storage controllers AFAIK, although I have seen
+SCSI printer drivers, maybe even a SCSI toaster driver. :)
+
+> +   target/index
+> +
+> +
+> +Networking
+> +----------
+> +
+> +.. toctree::
+> +   :maxdepth: 1
+> +
+> +   bpf/index
+>     infiniband/index
+> -   leds/index
+> +   isdn/index
+> +   mhi/index
+>     netlabel/index
+>     networking/index
+> -   pcmcia/index
+> -   power/index
+> -   target/index
+> -   timers/index
+> +
+> +
+> +Peripherals and devices
+> +-----------------------
+> +
+> +.. toctree::
+> +   :maxdepth: 1
+> +
+> +   PCI/index
+> +   hwmon/index
+> +   leds/index
+> +   misc-devices/index
+> +   usb/index
+> +
+> +
+> +Embedded systems
+> +----------------
+> +
+> +.. toctree::
+> +   :maxdepth: 1
+> +
+> +   fpga/index
+> +   i2c/index
+
+I2C is just a bus IMO.
+Same with SPI and W1.
+Should we have a "Bus Interfaces" category?
+
+> +   iio/index
+> +   peci/index
+>     spi/index
+>     w1/index
+> -   watchdog/index
+> +
+> +Integrity
+> +---------
+> +
+> +.. toctree::
+> +   :maxdepth: 1
+> +
+> +   crypto/index
+> +   security/index
+> +
+> +Virtualization
+> +--------------
+> +
+> +.. toctree::
+> +   :maxdepth: 1
+> +
+>     virt/index
+> -   hwmon/index
+> +
+> +Miscellaneous
+> +-------------
+> +
+> +.. toctree::
+> +   :maxdepth: 1
+> +
+>     accel/index
+> -   security/index
+> -   crypto/index
+> -   filesystems/index
+> -   mm/index
+> -   bpf/index
+> -   usb/index
+> -   PCI/index
+> -   scsi/index
+> -   misc-devices/index
+> -   scheduler/index
+> -   mhi/index
+> -   peci/index
+> -   wmi/index
+> +   accounting/index
+> +   watchdog/index
+
+Thanks.
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+~Randy
