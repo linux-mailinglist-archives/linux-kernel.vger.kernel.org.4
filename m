@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB4D71F361
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EDF471F362
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbjFAUGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 16:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
+        id S231603AbjFAUGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFAUGB (ORCPT
+        with ESMTP id S229667AbjFAUGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Jun 2023 16:06:01 -0400
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22456133;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E8C134;
         Thu,  1 Jun 2023 13:05:59 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 96B8C3200923;
-        Thu,  1 Jun 2023 16:05:56 -0400 (EDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 6EB7C32001FC;
+        Thu,  1 Jun 2023 16:05:58 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 01 Jun 2023 16:05:57 -0400
+  by compute6.internal (MEProxy); Thu, 01 Jun 2023 16:05:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685649956; x=
-        1685736356; bh=wwrl/88jn/a0BD/DhG3Tosh5K8gTAwVmFmge7TvKrps=; b=B
-        uY+uBQFNanNfjzjPdJlEEe2l9Akf4nGuX8V9jVo/dJ8AcDSrVD0veNWC1cOrzt9y
-        o6Fu2y2UpTEPl4GOjCuWfV9YWnzfo5GIWCM6OSsPr1G6TbKNu4enm7hobBWL6ZZB
-        WSZ3UF3ASfhkyyWidsIfhUMlrcavgcmYbrea7n1xUQTUi1ZvdAfmMD3niUUtm0uq
-        IXUL1/liGSYy1YNfdBYGLmXFKWqRA/AMDxBKxfSqU51/jAGzbm3b/v8D9RICEqvC
-        FeT69bM1p4uSEZlqphXPoXR6QFUgoce8lRTdUAn39vcAv3WpAji4Kbfr3g4CFsT3
-        /6GBPOHhvMxRVXRjqpJyA==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685649958; x=
+        1685736358; bh=BuihjXCY0FZRPM1FRQ1H6wx+Ft5lKyW8JMDLJbKUpdE=; b=p
+        TFEbXB2nZmJpBzR2g/prdstVVpfbEzaj0wJ+vCmlyrCotpnJ0G8igJajZ4DojHKh
+        jez4xHv2Fx9WV0jggwH0FRO7vRhqTuveCjU6cif3iLa9wgkpxO0c4IcU+tSbVOk5
+        CqWECsJzplVCsGSYOYQsVc3tiBb0lrKs8wiGQAaTZx+w58wswgpgqh8+5Jya0YSM
+        rQpZmVqszmP6uWqgjXJqjPJofHHifPzr+KAyNEXfu+RgZ/Mbp6itog3L6+J3UGiH
+        PsBO34LrY8WFxTS9nAh44VeLhs3yQ3NtBd2ykDjY9z/ffr0U2MTIFsk8M95VSLjn
+        nakJIIhLnIX1Yap9usQ2w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685649956; x=
-        1685736356; bh=wwrl/88jn/a0BD/DhG3Tosh5K8gTAwVmFmge7TvKrps=; b=r
-        ifA9ljKY3Z8xZ06pU6OxoXVtYH6dhC3I8WMoktWHJQTJWtIW+ly49U5Pc3mChvOU
-        AyF5y9FmDxafr4D8oWfRooGXQVwXss7iRjXdhR8OdKXaJURAt2FttQ4GAkEcsJD7
-        xvxrF2ytVlPot1C2vEoiixuE1rbbwOS6IFdytM3KqpuRaeOEAoJttWJS17oYiZRT
-        lcez2S3CRW9Fxf0yHoYY2/82KgLHDD9iDbLwbL4BHXQVA+w7Sgs3JWOPV+/rrG/c
-        eleDjghMaWaaUOGKzLuWNiMpSPU8fRUbUZp10xkgVWfnjXcjTZXogjAXxP3lJasf
-        hgZTM0m2B/yq0JRqDUsUQ==
-X-ME-Sender: <xms:I_p4ZInSxsa9nK3siSanLGBAKHB-pZL7O7k-ywnwyYLzxrrrr1kOsg>
-    <xme:I_p4ZH3WEHCPJ6fYrGJbOv38aZQSOiRheWpB1SO_gcK43iFBms8f9Del4JzpnLVxI
-    iGnV5WRvR2kvOFMayg>
-X-ME-Received: <xmr:I_p4ZGr5e_Cu90pew3xTbeuuvtIT7xWVT-37xkogVgKTh3CvdPxhKpxJ0vKZv24GxSuQNcaNuaIJXgP_pZiblm0UVWUPlbCVfX9Sw2sBO4YzjfpGp2Gl2CBz4Q>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685649958; x=
+        1685736358; bh=BuihjXCY0FZRPM1FRQ1H6wx+Ft5lKyW8JMDLJbKUpdE=; b=g
+        3aoVubITj4Yqj+bVpLgZA+HbXFBGAKK87N1jZ84aYdeYO60D/NlOYIfe+hMGaK/H
+        Z+TnLHdUAIdWY96g0zSNU46LbTYJGLBDy6BeUS0x5Fq9pIs280qnsBMDFEwHbDB8
+        AVBviyOr0Enw9y627yU14MEnz/DGTyawEM+UC1wDnvVuTpYs88Z1D7GktrLd9SpI
+        cHAhJaCjaDD6QxLGH7w+AaXkDgKBkqpA4i2M2DIoU1wvXECyDvsnh22CLUGecKxC
+        XlV9S5Lr58b+cKTAzTdkfe9pFkas8ayBN77mM65xqCjARtVQAMCkAeUACF0SBsRR
+        UtdBq+Ng6hu6yyuBZlIag==
+X-ME-Sender: <xms:Jfp4ZEzsw39U6kKUrKRVOyiQaIC0QnrKnAPKYoyt83JbppXWTq9gAw>
+    <xme:Jfp4ZIQAvnKwMsARyIjbaLNqFuKKq75ldffc2Tl9IQfrCitJ3lAb-vMbzSoz68yc4
+    hViex7NeGrCWpj4Ft0>
+X-ME-Received: <xmr:Jfp4ZGUobXidmF6RDJjLrJjqFkZk_N1V1PhJBgLFTpd6mVaTgEmYsipwqlowZ-mQXktIrzZ02wBav4GHSfYJO6OX1PF7KGtP0DvANZm6ZxGV71CS73jXmLNoww>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeluddgudeghecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecuogetfedtuddqtdduucdludehmdenucfjughrpe
@@ -56,111 +56,100 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeluddgudeghecutefuodetgg
     frrghtthgvrhhnpeeftddvjeefleffvefhgfejjeehudetteeigeeugfekhffhgeejudeu
     teehgfdvffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
     hmpehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
-X-ME-Proxy: <xmx:I_p4ZEnaeeUUk5cAzFDBk4wv7UcRYhzS5x2_CyXjY3azpUFHPNwfJQ>
-    <xmx:I_p4ZG1Lj_SQZ8T07EeCsw-z_oYNKYQQ9XnOX4ECmgMMqtVtCpk3Mw>
-    <xmx:I_p4ZLunKW5PBAyvaimtafIACKICgaOBZQHO_iIQptkj4hcxbUd5qQ>
-    <xmx:JPp4ZJRMk1ngy1oUMqZSojv_ssdZ4irxp-HdlTwlo82Fc6K_r4yk3A>
+X-ME-Proxy: <xmx:Jfp4ZChdxHCfaVVozUizkKiAJevq9rsQTL8WWZgRH5cJCizugVjomA>
+    <xmx:Jfp4ZGBecTz0K1S-qhgTtAmKFhcWdkAOoSUMVdWY6FbOSW7G61RUyQ>
+    <xmx:Jfp4ZDILdlh1IZX2G87iYmNDprFRRNcCom8019KrOJ36Ez1lLxyToA>
+    <xmx:Jvp4ZJ860YOogXffU9xcTd-WVG0NvMcaKdcHHR7TyLJQszujvIpk9A>
 Feedback-ID: ibe194615:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 1 Jun 2023 16:05:55 -0400 (EDT)
+ 1 Jun 2023 16:05:57 -0400 (EDT)
 From:   Mark Pearson <mpearson-lenovo@squebb.ca>
 To:     mpearson-lenovo@squebb.ca
 Cc:     hdegoede@redhat.com, markgross@kernel.org,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
         ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v4 1/8] platform/x86: think-lmi: mutex protection around multiple WMI calls
-Date:   Thu,  1 Jun 2023 16:05:45 -0400
-Message-Id: <20230601200552.4396-1-mpearson-lenovo@squebb.ca>
+Subject: [PATCH v4 2/8] platform/x86: think-lmi: Enable opcode support on BIOS settings
+Date:   Thu,  1 Jun 2023 16:05:46 -0400
+Message-Id: <20230601200552.4396-2-mpearson-lenovo@squebb.ca>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <mpearson-lenovo@squebb.ca>
+In-Reply-To: <20230601200552.4396-1-mpearson-lenovo@squebb.ca>
 References: <mpearson-lenovo@squebb.ca>
+ <20230601200552.4396-1-mpearson-lenovo@squebb.ca>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,TVD_PH_BODY_ACCOUNTS_PRE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When an attribute is being changed if the Admin account is enabled, or if a password
-is being updated then multiple WMI calls are needed.
-Add mutex protection to ensure no race conditions are introduced.
+Whilst reviewing some documentation from the FW team on using WMI on
+Lenovo system I noticed that we weren't using Opcode support when
+changing BIOS settings in the thinkLMI driver.
 
-Fixes: b49f72e7f96d ("platform/x86: think-lmi: Certificate authentication support")
+We should be doing this to ensure we're future proof as the old
+non-opcode mechanism has been deprecated.
+
+Tested on X1 Carbon G10 and G11.
+
 Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 ---
 Changes in v2:
- - New commit added after review of other patches in series.
+ - Update comment for clearer explanation of what the driver is doing.
 Changes in v3:
- - Simplified mutex handling as recommended.
+ - None. Version bump with rest of series.
 Changes in v4:
- - This was the 5th patch in the series but moved to be first.
- - Added Fixes tag.
- - Improved commit information to be clearer.
+ - Fixed code alignment as requested.
+ - changed 'non opcode' to 'non-opcode'.
+ - Missing space added at end of comment.
+ - This patch was previously #1 and is now #2 in series.
 
- drivers/platform/x86/think-lmi.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/platform/x86/think-lmi.c | 28 +++++++++++++++++++++++++++-
+ 1 file changed, 27 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
-index 1138f770149d..6cf77bc26b05 100644
+index 6cf77bc26b05..80a5c989db03 100644
 --- a/drivers/platform/x86/think-lmi.c
 +++ b/drivers/platform/x86/think-lmi.c
-@@ -14,6 +14,7 @@
- #include <linux/acpi.h>
- #include <linux/errno.h>
- #include <linux/fs.h>
-+#include <linux/mutex.h>
- #include <linux/string.h>
- #include <linux/types.h>
- #include <linux/dmi.h>
-@@ -195,6 +196,7 @@ static const char * const level_options[] = {
- };
- static struct think_lmi tlmi_priv;
- static struct class *fw_attr_class;
-+static DEFINE_MUTEX(tlmi_mutex);
- 
- /* ------ Utility functions ------------*/
- /* Strip out CR if one is present */
-@@ -437,6 +439,9 @@ static ssize_t new_password_store(struct kobject *kobj,
- 	/* Strip out CR if one is present, setting password won't work if it is present */
- 	strip_cr(new_pwd);
- 
-+	/* Use lock in case multiple WMI operations needed */
-+	mutex_lock(&tlmi_mutex);
+@@ -1010,7 +1010,33 @@ static ssize_t current_value_store(struct kobject *kobj,
+ 				tlmi_priv.pwd_admin->save_signature);
+ 		if (ret)
+ 			goto out;
+-	} else { /* Non certiifcate based authentication */
++	} else if (tlmi_priv.opcode_support) {
++		/*
++		 * If opcode support is present use that interface.
++		 * Note - this sets the variable and then the password as separate
++		 * WMI calls. Function tlmi_save_bios_settings will error if the
++		 * password is incorrect.
++		 */
++		set_str = kasprintf(GFP_KERNEL, "%s,%s;", setting->display_name,
++				    new_setting);
++		if (!set_str) {
++			ret = -ENOMEM;
++			goto out;
++		}
 +
- 	pwdlen = strlen(new_pwd);
- 	/* pwdlen == 0 is allowed to clear the password */
- 	if (pwdlen && ((pwdlen < setting->minlen) || (pwdlen > setting->maxlen))) {
-@@ -493,6 +498,7 @@ static ssize_t new_password_store(struct kobject *kobj,
- 		kfree(auth_str);
- 	}
- out:
-+	mutex_unlock(&tlmi_mutex);
- 	kfree(new_pwd);
- 	return ret ?: count;
- }
-@@ -981,6 +987,9 @@ static ssize_t current_value_store(struct kobject *kobj,
- 	/* Strip out CR if one is present */
- 	strip_cr(new_setting);
- 
-+	/* Use lock in case multiple WMI operations needed */
-+	mutex_lock(&tlmi_mutex);
++		ret = tlmi_simple_call(LENOVO_SET_BIOS_SETTINGS_GUID, set_str);
++		if (ret)
++			goto out;
 +
- 	/* Check if certificate authentication is enabled and active */
- 	if (tlmi_priv.certificate_support && tlmi_priv.pwd_admin->cert_installed) {
- 		if (!tlmi_priv.pwd_admin->signature || !tlmi_priv.pwd_admin->save_signature) {
-@@ -1039,6 +1048,7 @@ static ssize_t current_value_store(struct kobject *kobj,
- 		kobject_uevent(&tlmi_priv.class_dev->kobj, KOBJ_CHANGE);
- 	}
- out:
-+	mutex_unlock(&tlmi_mutex);
- 	kfree(auth_str);
- 	kfree(set_str);
- 	kfree(new_setting);
++		if (tlmi_priv.pwd_admin->valid && tlmi_priv.pwd_admin->password[0]) {
++			ret = tlmi_opcode_setting("WmiOpcodePasswordAdmin",
++						  tlmi_priv.pwd_admin->password);
++			if (ret)
++				goto out;
++		}
++
++		ret = tlmi_save_bios_settings("");
++	} else { /* old non-opcode based authentication method (deprecated) */
+ 		if (tlmi_priv.pwd_admin->valid && tlmi_priv.pwd_admin->password[0]) {
+ 			auth_str = kasprintf(GFP_KERNEL, "%s,%s,%s;",
+ 					tlmi_priv.pwd_admin->password,
 -- 
 2.40.1
 
