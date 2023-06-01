@@ -2,201 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5E371A1F9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F66A71A1FF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235018AbjFAPGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 11:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42802 "EHLO
+        id S234952AbjFAPGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 11:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234956AbjFAPEy (ORCPT
+        with ESMTP id S235170AbjFAPFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 11:04:54 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA06E7F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 08:03:39 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-39a523e8209so577316b6e.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 08:03:39 -0700 (PDT)
+        Thu, 1 Jun 2023 11:05:13 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2F41BC;
+        Thu,  1 Jun 2023 08:04:16 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-53fb4ee9ba1so450068a12.3;
+        Thu, 01 Jun 2023 08:04:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1685631818; x=1688223818;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eNsTwu+7vxM1RFU/Tn3oHzsU6bxLHTIeMbI3R+ogjXA=;
-        b=LeTKb0EILlqE1OXr+Mlwp65bVj3bWGlDOkp3U/oOIOaKnlmPetNZ2uFhIwBkEztbz9
-         X8Eq3mRBsLJmCE4K4DTCqCpcp1srAigSRD88Ihel3lvVHD2J4OD9kcyYjZO1jiwg2So7
-         DG5P8XTk4CeOP3AiOoZ7+6tR+N+NbwtxNOy7zQqsKOZYHjQdUptGXEG76aV2A3jLOSCx
-         9c27yUVnoHI7KwHBX2bWsoPLbJO7uH1yRhe0JrjnfzmWkHSjaKyAd4fIrAI0W0ZXQ8bv
-         LvY+nHDQzNQEvIdQX5hpTyVd9eYHrfBC63ZARTw2+Bs/cmJYluDGAEM0ASqc1iQrWgN9
-         IasA==
+        d=gmail.com; s=20221208; t=1685631844; x=1688223844;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=uK5uD6mrs680QG5ZmOnn4rSAVBfFbZfxfM8tNBrb058=;
+        b=ceovWaLmO/oFqHSbSTBIXk3xpZsswwzaga5keHs9O/mS7z7hEUSta7Yr8vMPRgvMTV
+         WQiZUZqKD9i11NoejYmr9TQtGDDXnvgGlkv3pMvSizVgvkDe0P7h2VdrDt2bvAzgbsro
+         zAqoFZySRTuwFs5AIOhgOecYdfzjI9cskmwWrHuIZOHmJyFBGyrLb8C7vpXk1uKl9QD8
+         xTsVcRfcjLnLev4k5dIJmOAwEEtWDqgmYiMIS6of/Qtwhf33A9ZG9+pCBqEiC4PzVAfd
+         xLEslY9zg8YKQwyCYxV/DewxvxOBCgVbsmTNBSDWi8m+gxGmeIBH8YgR+c2istDqgnYt
+         68Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685631818; x=1688223818;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eNsTwu+7vxM1RFU/Tn3oHzsU6bxLHTIeMbI3R+ogjXA=;
-        b=FF9UwDV5Oyf1+X/lqL+1TL+FkxEJYN0zmfXimS0hvKQhPiVPJDfDXzYyPnDXjKwN2L
-         sez0IxNBmjKp4jgVoqyY28gv8RctpvOblMpRxeZuGTVz1yJ4s+smAD7Nel+BatOZnuO1
-         tvb/QvAjh2GFBYSbAiEzYcHzVk+BOTxLKXihLd4Zjk+V7WX2d1T/Y2NVPJ30CP1gYJLo
-         7BdN0XF4e9DgjwhbYoGcufAuYkuPaQxtjuMzB08QVAsTPN+fPzu588UF0vYhgV/hUPXu
-         1XLJMDQpuAufl2P27z145En16SoiztKL1Wp32oEKlIfu22JSac8SOnX5/Cx9MxHfqIfl
-         bHJA==
-X-Gm-Message-State: AC+VfDxQ+xue9uUJw6QXJwhLIQ5nxxnS6GKxRY1p+zIBZ1bn9ibUqlkQ
-        b4IpypjN5Ywdk5hNfp+57UZ2KA==
-X-Google-Smtp-Source: ACHHUZ5PJp/Xx8aqEvA22Sw24+fxrSppG/Z2XySDE6JBF3CFlK8LUtkzy2a6JJBy1oUh1SohxS4i1w==
-X-Received: by 2002:a54:4e01:0:b0:398:2b60:dbf7 with SMTP id a1-20020a544e01000000b003982b60dbf7mr5988323oiy.17.1685631817976;
-        Thu, 01 Jun 2023 08:03:37 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:ec58])
-        by smtp.gmail.com with ESMTPSA id o9-20020a056214108900b005fdbcab3065sm2951524qvr.72.2023.06.01.08.03.37
+        d=1e100.net; s=20221208; t=1685631844; x=1688223844;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uK5uD6mrs680QG5ZmOnn4rSAVBfFbZfxfM8tNBrb058=;
+        b=FhFhRcXUGNLRpfdjOe69tQe35xWoW9sE/cX3bz5ZhbOJKQSNeHbZO5TFrV+6OJdizf
+         iNSu6oTxTGYTUuYAcRKDKrWsD5JzstlZ9/xscrUQnwGR9OT0doeIa8fAMPwapQUmZf0G
+         /dF9Gwup4iSUPj6whF/D+Zhv7SEdE+tRs3Wjphn+idxRAOh+VoIw3MhNnR5doWRz44wf
+         KjktpmrBwtOp2d6locko3LezpOgPAQQyfRiI0KPx6nVOWTUUHbCWg4c42IHZgyL2SkBz
+         E8sA8UFruEbC2rHrhBTvhA8S9ke9uDAJDciSjOiRmNMtUU0CfzncldkV6MSyKRiu6Gaf
+         rlhg==
+X-Gm-Message-State: AC+VfDzYlnJTizVHri2Zb8IN689/e04yc5Uyjr+QUnI5qL4ii85qaTQ6
+        o4Rt8fJt2gNP12NYXpmsntA=
+X-Google-Smtp-Source: ACHHUZ4IbiBQSVqKfeqcz/0yixtHbKKuW5gVkmqW0iPt+iOTvLQ6dO7Q4BFs20SBeMYhFrUr/hSvUg==
+X-Received: by 2002:a17:903:245:b0:1a9:7b5e:14ba with SMTP id j5-20020a170903024500b001a97b5e14bamr7070241plh.29.1685631843704;
+        Thu, 01 Jun 2023 08:04:03 -0700 (PDT)
+Received: from ?IPv6:2605:59c8:448:b800:82ee:73ff:fe41:9a02? ([2605:59c8:448:b800:82ee:73ff:fe41:9a02])
+        by smtp.googlemail.com with ESMTPSA id 17-20020a170902e9d100b001affb590696sm3574251plk.216.2023.06.01.08.04.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 08:03:37 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 11:03:36 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
-        yosryahmed@google.com, kernel-team@fb.com,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v3] mm: zswap: shrink until can accept
-Message-ID: <20230601150336.GE102494@cmpxchg.org>
-References: <20230526183227.793977-1-cerasuolodomenico@gmail.com>
+        Thu, 01 Jun 2023 08:04:03 -0700 (PDT)
+Message-ID: <135a45b2c388fbaf9db4620cb01b95230709b9ac.camel@gmail.com>
+Subject: Re: [PATCH net-next] net: ethtool: Fix out-of-bounds copy to user
+From:   Alexander H Duyck <alexander.duyck@gmail.com>
+To:     Ding Hui <dinghui@sangfor.com.cn>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn
+Date:   Thu, 01 Jun 2023 08:04:01 -0700
+In-Reply-To: <20230601112839.13799-1-dinghui@sangfor.com.cn>
+References: <20230601112839.13799-1-dinghui@sangfor.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-3.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526183227.793977-1-cerasuolodomenico@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks like Andrew wasn't CC'd on this one.
+On Thu, 2023-06-01 at 19:28 +0800, Ding Hui wrote:
+> When we get statistics by ethtool during changing the number of NIC
+> channels greater, the utility may crash due to memory corruption.
+>=20
+> The NIC drivers callback get_sset_count() could return a calculated
+> length depends on current number of channels (e.g. i40e, igb).
+>=20
 
-Andrew, would you mind picking this up? Thanks!
+The drivers shouldn't be changing that value. If the drivers are doing
+this they should be fixed to provide a fixed length in terms of their
+strings.
 
-On Fri, May 26, 2023 at 08:32:27PM +0200, Domenico Cerasuolo wrote:
-> This update addresses an issue with the zswap reclaim mechanism, which
-> hinders the efficient offloading of cold pages to disk, thereby
-> compromising the preservation of the LRU order and consequently
-> diminishing, if not inverting, its performance benefits.
-> 
-> The functioning of the zswap shrink worker was found to be inadequate,
-> as shown by basic benchmark test. For the test, a kernel build was
-> utilized as a reference, with its memory confined to 1G via a cgroup and
-> a 5G swap file provided. The results are presented below, these are
-> averages of three runs without the use of zswap:
-> 
-> real 46m26s
-> user 35m4s
-> sys 7m37s
-> 
-> With zswap (zbud) enabled and max_pool_percent set to 1 (in a 32G
-> system), the results changed to:
-> 
-> real 56m4s
-> user 35m13s
-> sys 8m43s
-> 
-> written_back_pages: 18
-> reject_reclaim_fail: 0
-> pool_limit_hit:1478
-> 
-> Besides the evident regression, one thing to notice from this data is
-> the extremely low number of written_back_pages and pool_limit_hit.
-> 
-> The pool_limit_hit counter, which is increased in zswap_frontswap_store
-> when zswap is completely full, doesn't account for a particular
-> scenario: once zswap hits his limit, zswap_pool_reached_full is set to
-> true; with this flag on, zswap_frontswap_store rejects pages if zswap is
-> still above the acceptance threshold. Once we include the rejections due
-> to zswap_pool_reached_full && !zswap_can_accept(), the number goes from
-> 1478 to a significant 21578266.
-> 
-> Zswap is stuck in an undesirable state where it rejects pages because
-> it's above the acceptance threshold, yet fails to attempt memory
-> reclaimation. This happens because the shrink work is only queued when
-> zswap_frontswap_store detects that it's full and the work itself only
-> reclaims one page per run.
-> 
-> This state results in hot pages getting written directly to disk,
-> while cold ones remain memory, waiting only to be invalidated. The LRU
-> order is completely broken and zswap ends up being just an overhead
-> without providing any benefits.
-> 
-> This commit applies 2 changes: a) the shrink worker is set to reclaim
-> pages until the acceptance threshold is met and b) the task is also
-> enqueued when zswap is not full but still above the threshold.
-> 
-> Testing this suggested update showed much better numbers:
-> 
-> real 36m37s
-> user 35m8s
-> sys 9m32s
-> 
-> written_back_pages: 10459423
-> reject_reclaim_fail: 12896
-> pool_limit_hit: 75653
-> 
-> V2:
-> - loop against == -EAGAIN rather than != -EINVAL and also break the loop
-> on MAX_RECLAIM_RETRIES (thanks Yosry)
-> - cond_resched() to ensure that the loop doesn't burn the cpu (thanks
-> Vitaly)
-> 
-> V3:
-> - fix wrong loop break, should continue on !ret (thanks Johannes)
-> 
-> Fixes: 45190f01dd40 ("mm/zswap.c: add allocation hysteresis if pool limit is hit")
-> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> The ethtool allocates a user buffer with the first ioctl returned
+> length and invokes the second ioctl to get data. The kernel copies
+> data to the user buffer but without checking its length. If the length
+> returned by the second get_sset_count() is greater than the length
+> allocated by the user, it will lead to an out-of-bounds copy.
+>=20
+> Fix it by restricting the copy length not exceed the buffer length
+> specified by userspace.
+>=20
+> Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+
+Changing the copy size would not fix this. The problem is the driver
+will be overwriting with the size that it thinks it should be using.
+Reducing the value that is provided for the memory allocations will
+cause the driver to corrupt memory.
+
 > ---
->  mm/zswap.c | 17 ++++++++++++++---
->  1 file changed, 14 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index 59da2a415fbb..bcb82e09eb64 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -37,6 +37,7 @@
->  #include <linux/workqueue.h>
->  
->  #include "swap.h"
-> +#include "internal.h"
->  
->  /*********************************
->  * statistics
-> @@ -587,9 +588,19 @@ static void shrink_worker(struct work_struct *w)
->  {
->  	struct zswap_pool *pool = container_of(w, typeof(*pool),
->  						shrink_work);
-> +	int ret, failures = 0;
->  
-> -	if (zpool_shrink(pool->zpool, 1, NULL))
-> -		zswap_reject_reclaim_fail++;
-> +	do {
-> +		ret = zpool_shrink(pool->zpool, 1, NULL);
-> +		if (ret) {
-> +			zswap_reject_reclaim_fail++;
-> +			if (ret != -EAGAIN)
-> +				break;
-> +			if (++failures == MAX_RECLAIM_RETRIES)
-> +				break;
-> +		}
-> +		cond_resched();
-> +	} while (!zswap_can_accept());
->  	zswap_pool_put(pool);
->  }
->  
-> @@ -1188,7 +1199,7 @@ static int zswap_frontswap_store(unsigned type, pgoff_t offset,
->  	if (zswap_pool_reached_full) {
->  	       if (!zswap_can_accept()) {
->  			ret = -ENOMEM;
-> -			goto reject;
-> +			goto shrink;
->  		} else
->  			zswap_pool_reached_full = false;
->  	}
-> -- 
-> 2.34.1
-> 
+>  net/ethtool/ioctl.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
+> index 6bb778e10461..82a975a9c895 100644
+> --- a/net/ethtool/ioctl.c
+> +++ b/net/ethtool/ioctl.c
+> @@ -1902,7 +1902,7 @@ static int ethtool_self_test(struct net_device *dev=
+, char __user *useraddr)
+>  	if (copy_from_user(&test, useraddr, sizeof(test)))
+>  		return -EFAULT;
+> =20
+> -	test.len =3D test_len;
+> +	test.len =3D min_t(u32, test.len, test_len);
+>  	data =3D kcalloc(test_len, sizeof(u64), GFP_USER);
+>  	if (!data)
+>  		return -ENOMEM;
+
+This is the wrong spot to be doing this. You need to use test_len for
+your allocation as that is what the driver will be writing to. You
+should look at adjusting after the allocation call and before you do
+the copy
+
+> @@ -1915,7 +1915,8 @@ static int ethtool_self_test(struct net_device *dev=
+, char __user *useraddr)
+>  	if (copy_to_user(useraddr, &test, sizeof(test)))
+>  		goto out;
+>  	useraddr +=3D sizeof(test);
+> -	if (copy_to_user(useraddr, data, array_size(test.len, sizeof(u64))))
+> +	if (test.len &&
+> +	    copy_to_user(useraddr, data, array_size(test.len, sizeof(u64))))
+>  		goto out;
+>  	ret =3D 0;
+> =20
+
+I don't believe this is adding any value. I wouldn't bother with
+checking for lengths of 0.
+
+> @@ -1940,10 +1941,10 @@ static int ethtool_get_strings(struct net_device =
+*dev, void __user *useraddr)
+>  		return -ENOMEM;
+>  	WARN_ON_ONCE(!ret);
+> =20
+> -	gstrings.len =3D ret;
+> +	gstrings.len =3D min_t(u32, gstrings.len, ret);
+> =20
+>  	if (gstrings.len) {
+> -		data =3D vzalloc(array_size(gstrings.len, ETH_GSTRING_LEN));
+> +		data =3D vzalloc(array_size(ret, ETH_GSTRING_LEN));
+>  		if (!data)
+>  			return -ENOMEM;
+> =20
+
+Same here. We should be using the returned value for the allocations
+and tests, and then doing the min adjustment after the allocationis
+completed.
+
+> @@ -2055,9 +2056,9 @@ static int ethtool_get_stats(struct net_device *dev=
+, void __user *useraddr)
+>  	if (copy_from_user(&stats, useraddr, sizeof(stats)))
+>  		return -EFAULT;
+> =20
+> -	stats.n_stats =3D n_stats;
+> +	stats.n_stats =3D min_t(u32, stats.n_stats, n_stats);
+> =20
+> -	if (n_stats) {
+> +	if (stats.n_stats) {
+>  		data =3D vzalloc(array_size(n_stats, sizeof(u64)));
+>  		if (!data)
+>  			return -ENOMEM;
+
+Same here. We should be using n_stats, not stats.n_stats and adjust
+before you do the final copy.
+
+> @@ -2070,7 +2071,8 @@ static int ethtool_get_stats(struct net_device *dev=
+, void __user *useraddr)
+>  	if (copy_to_user(useraddr, &stats, sizeof(stats)))
+>  		goto out;
+>  	useraddr +=3D sizeof(stats);
+> -	if (n_stats && copy_to_user(useraddr, data, array_size(n_stats, sizeof(=
+u64))))
+> +	if (stats.n_stats &&
+> +	    copy_to_user(useraddr, data, array_size(stats.n_stats, sizeof(u64))=
+))
+>  		goto out;
+>  	ret =3D 0;
+> =20
+
+Again. I am not sure what value is being added. If n_stats is 0 then I
+am pretty sure this will do nothing anyway.
