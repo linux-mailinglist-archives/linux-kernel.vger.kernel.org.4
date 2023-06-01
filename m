@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59A171F4DC
+	by mail.lfdr.de (Postfix) with ESMTP id 5FBAD71F4DB
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232817AbjFAVhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 17:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
+        id S232881AbjFAVhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 17:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbjFAVhJ (ORCPT
+        with ESMTP id S229618AbjFAVhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 17:37:09 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB6E19B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 14:37:08 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-65292f79456so414788b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 14:37:08 -0700 (PDT)
+        Thu, 1 Jun 2023 17:37:11 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5248C184
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 14:37:10 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-651ffcc1d3dso610747b3a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 14:37:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685655427; x=1688247427;
+        d=chromium.org; s=google; t=1685655430; x=1688247430;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HjRakdb30yszASmxf/wTOyUnLRsbS0tBSqMyHI/mgmg=;
-        b=BuG16CgsJZuRqklwqhtraGtO9mDBkjKRduhSYXiCHYmDshIggjlraGD2H9A4z6yorm
-         wBu2dEQorFkxnRHLq3Cn+M+LkZWex3ajMYBEgSEujM238OkqShSG0aa2MrkveBlrCXC5
-         p6NW7FtAcuIScDFj5KSELcmbgvEEVbSabk3PI=
+        bh=3FwIy9pdxSPLLDGVrHowuSMAgkehvs21QOIs4DuKC6A=;
+        b=MRdCoSujmCnjjOacpNHectteICFpfTy0Q7HRW6iFcJoXa0fZhuuEBFYooU/G8NXg2X
+         HfAG3gvX2a17Cc1yGXHsw3CBdxIMjz24Xa8DvLZVxCCds24Mumi4TVNGg8ZmNyV/Svls
+         MmHnVj0glIpRBoHcvAP9y7A/SWAwUDBE3yhk0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685655427; x=1688247427;
+        d=1e100.net; s=20221208; t=1685655430; x=1688247430;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HjRakdb30yszASmxf/wTOyUnLRsbS0tBSqMyHI/mgmg=;
-        b=i9Kd6y9nYYJi94gxAISYewPWIy5HSmm33S2QV8Q3RLEzO7lWH4Yrbn2BtQdXshMOwH
-         +KAb9zHKYqSwyIG1jlkCvLnPbPNGRi09ixmjsR8c1xDpNl2RchKA9zAxqVrgJpfNgaoG
-         1HttAbunsSW6bXL0Enn/F28/1jYPkf2DmnGAqKVVT4uesfuG/hQsnf94hOrW3CJznI+y
-         g+hvpa3yrH8oaaH0qpDtmrR1OzZpXAWCKEkaTu9jeHnk/wkSuda9ldJ4rBv5kp2o7hod
-         47+V9+D5YmQuK1WzYHqW72auoUda+dS79TKnLa0fcjyGb9RFSL2ACLZ1xvT7nmJl8okn
-         Ccug==
-X-Gm-Message-State: AC+VfDzSANHt6dZc74+pkklc4rBd9gyJXwvuNicZK6ePs8/hKHSGOuKu
-        FLR5OR3k7tngwyQrCkiiO8DkLW3Y0IzUkvOpLgs=
-X-Google-Smtp-Source: ACHHUZ7X4JWk69pwtWfobliPNOJVZLyvG8aXSBcL3S43aA7yIba6lfLCLzZNDwufKt9JnCsD52RTZQ==
-X-Received: by 2002:a05:6a21:1647:b0:111:6a14:7d0 with SMTP id no7-20020a056a21164700b001116a1407d0mr6606398pzb.60.1685655427621;
-        Thu, 01 Jun 2023 14:37:07 -0700 (PDT)
+        bh=3FwIy9pdxSPLLDGVrHowuSMAgkehvs21QOIs4DuKC6A=;
+        b=cAZxwfcXAFllZAtAnINbZeBM6rvIcq8m+s+rrAgWZ+cAKdOhgeohUKyt4iXmliuLwu
+         didABgGHCEMXSnV9lC3ykbcUdG15B7hFbqL83SzZPJ4jRbDlVL894JOeGQNGa8yaoNiF
+         IJ24NzKU+Rzv4mr/A2G7pNLIEIVIA0oDQxKb41Oe5Ocph+d3dVWpUf/N6MTUieigQ44p
+         /2zQauZc5SWJVvmPfaVB4dmbqgHvHnLXlnINWqE28ZwMZVXJLKb8JBgsG2tUlAf467qC
+         uRFM9Ty1mIaldepxyGD91Y+Xu0N6xukC8nUBjGS5NVUL3wGS6sdTJSb2TVDmI1LWVcG/
+         0vpg==
+X-Gm-Message-State: AC+VfDwgIpj1Fo+P8VbMvSuQNCgvm0cg6tGW2tEo5osxAzeBnktbjTBZ
+        WjMNiuU6a0W33YWhBIn3zIE1qw==
+X-Google-Smtp-Source: ACHHUZ50Zg9SNzhD1Ge9escgQjcb0Fjlmif9dRJ8OFu2NuLSDjuQFm2OhosoWIATYrGHV8blhpW1FQ==
+X-Received: by 2002:a05:6a20:2451:b0:106:c9b7:c92f with SMTP id t17-20020a056a20245100b00106c9b7c92fmr8938270pzc.49.1685655429931;
+        Thu, 01 Jun 2023 14:37:09 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:11b8:2d2:7e02:6bff])
-        by smtp.gmail.com with ESMTPSA id g22-20020aa78756000000b0064d48d98260sm5319534pfo.156.2023.06.01.14.37.05
+        by smtp.gmail.com with ESMTPSA id g22-20020aa78756000000b0064d48d98260sm5319534pfo.156.2023.06.01.14.37.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 14:37:07 -0700 (PDT)
+        Thu, 01 Jun 2023 14:37:09 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Mark Rutland <mark.rutland@arm.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
@@ -64,12 +64,13 @@ Cc:     linux-perf-users@vger.kernel.org, ito-yuichi@fujitsu.com,
         Masayoshi Mizuma <msys.mizuma@gmail.com>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>,
         Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v9 1/7] irqchip/gic-v3: Enable support for SGIs to act as NMIs
-Date:   Thu,  1 Jun 2023 14:31:45 -0700
-Message-ID: <20230601143109.v9.1.I1223c11c88937bd0cbd9b086d4ef216985797302@changeid>
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH v9 2/7] arm64: idle: Tag the arm64 idle functions as __cpuidle
+Date:   Thu,  1 Jun 2023 14:31:46 -0700
+Message-ID: <20230601143109.v9.2.I4baba13e220bdd24d11400c67f137c35f07f82c7@changeid>
 X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
 In-Reply-To: <20230601213440.2488667-1-dianders@chromium.org>
 References: <20230601213440.2488667-1-dianders@chromium.org>
@@ -77,7 +78,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,113 +86,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sumit Garg <sumit.garg@linaro.org>
+As per the (somewhat recent) comment before the definition of
+`__cpuidle`, the tag is like `noinstr` but also marks a function so it
+can be identified by cpu_in_idle(). Let'a add this.
 
-Add support to handle SGIs as pseudo NMIs. As SGIs or IPIs default to a
-special flow handler: handle_percpu_devid_fasteoi_ipi(), so skip NMI
-handler update in case of SGIs.
+After doing this then when we dump stack traces of all processors
+using nmi_cpu_backtrace() then instead of getting useless backtraces
+we get things like:
 
-Also, enable NMI support prior to gic_smp_init() as allocation of SGIs
-as IRQs/NMIs happen as part of this routine.
+  NMI backtrace for cpu N skipped: idling at cpu_do_idle+0x94/0x98
 
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-Reviewed-by: Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>
-Tested-by: Chen-Yu Tsai <wens@csie.org>
+NOTE: this patch won't make cpu_in_idle() work perfectly for arm64,
+but it doesn't hurt and does catch some cases. Specifically an example
+that wasn't caught in my testing looked like this:
+
+ gic_cpu_sys_reg_init+0x1f8/0x314
+ gic_cpu_pm_notifier+0x40/0x78
+ raw_notifier_call_chain+0x5c/0x134
+ cpu_pm_notify+0x38/0x64
+ cpu_pm_exit+0x20/0x2c
+ psci_enter_idle_state+0x48/0x70
+ cpuidle_enter_state+0xb8/0x260
+ cpuidle_enter+0x44/0x5c
+ do_idle+0x188/0x30c
+
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
-(no changes since v1)
+Changes in v9:
+- Added to commit message that this doesn't catch all cases.
 
- drivers/irqchip/irq-gic-v3.c | 29 +++++++++++++++++++++--------
- 1 file changed, 21 insertions(+), 8 deletions(-)
+Changes in v8:
+- "Tag the arm64 idle functions as __cpuidle" new for v8
 
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index 0c6c1af9a5b7..ed37e02d4c5f 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -525,6 +525,7 @@ static u32 gic_get_ppi_index(struct irq_data *d)
- static int gic_irq_nmi_setup(struct irq_data *d)
+ arch/arm64/kernel/idle.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/kernel/idle.c b/arch/arm64/kernel/idle.c
+index c1125753fe9b..05cfb347ec26 100644
+--- a/arch/arm64/kernel/idle.c
++++ b/arch/arm64/kernel/idle.c
+@@ -20,7 +20,7 @@
+  *	ensure that interrupts are not masked at the PMR (because the core will
+  *	not wake up if we block the wake up signal in the interrupt controller).
+  */
+-void noinstr cpu_do_idle(void)
++void __cpuidle cpu_do_idle(void)
  {
- 	struct irq_desc *desc = irq_to_desc(d->irq);
-+	u32 idx;
+ 	struct arm_cpuidle_irq_context context;
  
- 	if (!gic_supports_nmi())
- 		return -EINVAL;
-@@ -542,16 +543,22 @@ static int gic_irq_nmi_setup(struct irq_data *d)
- 		return -EINVAL;
- 
- 	/* desc lock should already be held */
--	if (gic_irq_in_rdist(d)) {
--		u32 idx = gic_get_ppi_index(d);
-+	switch (get_intid_range(d)) {
-+	case SGI_RANGE:
-+		break;
-+	case PPI_RANGE:
-+	case EPPI_RANGE:
-+		idx = gic_get_ppi_index(d);
- 
- 		/* Setting up PPI as NMI, only switch handler for first NMI */
- 		if (!refcount_inc_not_zero(&ppi_nmi_refs[idx])) {
- 			refcount_set(&ppi_nmi_refs[idx], 1);
- 			desc->handle_irq = handle_percpu_devid_fasteoi_nmi;
- 		}
--	} else {
-+		break;
-+	default:
- 		desc->handle_irq = handle_fasteoi_nmi;
-+		break;
- 	}
- 
- 	gic_irq_set_prio(d, GICD_INT_NMI_PRI);
-@@ -562,6 +569,7 @@ static int gic_irq_nmi_setup(struct irq_data *d)
- static void gic_irq_nmi_teardown(struct irq_data *d)
+@@ -35,7 +35,7 @@ void noinstr cpu_do_idle(void)
+ /*
+  * This is our default idle handler.
+  */
+-void noinstr arch_cpu_idle(void)
++void __cpuidle arch_cpu_idle(void)
  {
- 	struct irq_desc *desc = irq_to_desc(d->irq);
-+	u32 idx;
- 
- 	if (WARN_ON(!gic_supports_nmi()))
- 		return;
-@@ -579,14 +587,20 @@ static void gic_irq_nmi_teardown(struct irq_data *d)
- 		return;
- 
- 	/* desc lock should already be held */
--	if (gic_irq_in_rdist(d)) {
--		u32 idx = gic_get_ppi_index(d);
-+	switch (get_intid_range(d)) {
-+	case SGI_RANGE:
-+		break;
-+	case PPI_RANGE:
-+	case EPPI_RANGE:
-+		idx = gic_get_ppi_index(d);
- 
- 		/* Tearing down NMI, only switch handler for last NMI */
- 		if (refcount_dec_and_test(&ppi_nmi_refs[idx]))
- 			desc->handle_irq = handle_percpu_devid_irq;
--	} else {
-+		break;
-+	default:
- 		desc->handle_irq = handle_fasteoi_irq;
-+		break;
- 	}
- 
- 	gic_irq_set_prio(d, GICD_INT_DEF_PRI);
-@@ -2001,6 +2015,7 @@ static int __init gic_init_bases(phys_addr_t dist_phys_base,
- 
- 	gic_dist_init();
- 	gic_cpu_init();
-+	gic_enable_nmi_support();
- 	gic_smp_init();
- 	gic_cpu_pm_init();
- 
-@@ -2013,8 +2028,6 @@ static int __init gic_init_bases(phys_addr_t dist_phys_base,
- 			gicv2m_init(handle, gic_data.domain);
- 	}
- 
--	gic_enable_nmi_support();
--
- 	return 0;
- 
- out_free:
+ 	/*
+ 	 * This should do all the clock switching and wait for interrupt
 -- 
 2.41.0.rc2.161.g9c6817b8e7-goog
 
