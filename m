@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA87571A259
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6406D71A25A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234418AbjFAPT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 11:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
+        id S234940AbjFAPTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 11:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234915AbjFAPTD (ORCPT
+        with ESMTP id S229498AbjFAPTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 11:19:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C626DB3;
-        Thu,  1 Jun 2023 08:18:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F85664675;
-        Thu,  1 Jun 2023 15:18:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C525FC4339C;
-        Thu,  1 Jun 2023 15:18:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685632727;
-        bh=zt7KZMmx/oJBYdfFdtNG8ZQh916ADU8eGaXVMVWxHLE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lOsYcDeZ6FDbxshIu7kdv+ump9fNlSvRpNRm6K6kLV3mxZKqoX7/SeZaOn5gv9gYd
-         jUGbk6YWUoRlA6uXYqUPeKRY+B/G7Gtt6DRjGqb/rofNXy1cgD4lv6tend69ihuddC
-         /Xs5cKYacjSj7o/Ch3PcbC+S5wqM/cwEt5cNvibv8wmRxcg74v43euAPEUPlY7fG5a
-         I0xFlAuT7pGfRRlcmRdc3Ln/9JyPCzJ1R8eqd4eYbhqcuvyFxOQPjvsczQhU1vqyNd
-         nWIyEt9HR0ur9SlpXBuqSzw77gRjWK2aT6fdvn0eK1AeOTk3eXPGF0sk7UpCqBMB8s
-         Un4YXvEvE8kcg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     kasan-dev@googlegroups.com, ryabinin.a.a@gmail.com
-Cc:     glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
-        vincenzo.frascino@arm.com, elver@google.com,
-        linux-media@vger.kernel.org, linux-crypto@vger.kernel.org,
-        herbert@gondor.apana.org.au, ardb@kernel.org, mchehab@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-Subject: [PATCH] [RFC] ubsan: disallow bounds checking with gcov on broken gcc
-Date:   Thu,  1 Jun 2023 17:18:11 +0200
-Message-Id: <20230601151832.3632525-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Thu, 1 Jun 2023 11:19:07 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DEB3FC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 08:18:59 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-96f8d485ef3so135121466b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 08:18:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685632737; x=1688224737;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dqfj7XT7ypNuOm5Zdn1QVpcZDvXLZqNRb5KEDxhoVAE=;
+        b=cN5aaBEvgj50xDP9QJ/O48t98czXZVlgqoDh97w6f91k9kTWAQKpbSvTek/AOedAjh
+         OBNOys9mp7nvLS/eDF2YEDcb0frrQSJoLRgdbx65elgL/OF7szfY98Z+UeTl177NIpyb
+         lYkIqm/WRbrD4E4Q5x7PULuHG41eaJAim/FgPkNwO//u0G+0Q82/vkgnRJSGDqd0sNRr
+         WzXMPMNY5qUGiy4Zs63b2Oi3EVPhkDIsJbvFWMYAwdbV82ad9UIOnDqffv8+wiW3N40S
+         nu6kDfE+qfur9PoB3Gyh9pC0vv39dTRX07Y+f/lUOtsgn/bVSZKWTeni2Tw+Vb6rckGi
+         wv0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685632737; x=1688224737;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Dqfj7XT7ypNuOm5Zdn1QVpcZDvXLZqNRb5KEDxhoVAE=;
+        b=MjSVOYJa/zID9GA22zN/0JLyeUOubmBsGu9cNbrWvu+SdYxAKWQMvhgkAT1kPZQmfu
+         cY82WWeBcSGGb8OnSTqAy78y9BQbRRwuRal7nan5ApKm0KzAUirWb+IT6n0/xuRy0aDN
+         UVKsBrTtWa/u14BDzXcrpyKnc/gHvxCCWWURIwcOQcWyJnExYoKg6Gv07oVXcmzVOyJN
+         Z0LkeEPJUVF0xjDJus1aKdpHDjXijW5Idxj6wZsx1JNsNfRHYP/oLKV8/YBgCBSjSC3i
+         tSR9U8a6xf4egNyjCRhoJ6hL6MP6x5eGSEcu8Lnoo6tfKHeoE+3lsvLPzmoZvxGurbOF
+         B7PA==
+X-Gm-Message-State: AC+VfDynaQm+MunNBVvX2naVM2kM27k7UyBWjiYu1CfztcsDPAikLj3Y
+        jJqZAAy7iUjC7npjc97pTML9cnCyQ/HGp2pRPK8=
+X-Google-Smtp-Source: ACHHUZ7LVBpC+oIwc0ERPssPK4gHs4qTJHslJQsI72Uez/Ox+8OUC0HYgk3WFO7aTSAKzgUQOSepYJM/RgiWH6J3AtM=
+X-Received: by 2002:a17:907:7285:b0:96b:e92:4feb with SMTP id
+ dt5-20020a170907728500b0096b0e924febmr8235977ejc.60.1685632737163; Thu, 01
+ Jun 2023 08:18:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAAhV-H6uZWgZQsVh=1-U2B4ZZZz6EPJ3gkv0mxHSNGOMPB=VwQ@mail.gmail.com>
+ <87zg5lj1yb.ffs@tglx>
+In-Reply-To: <87zg5lj1yb.ffs@tglx>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 1 Jun 2023 23:18:44 +0800
+Message-ID: <CAAhV-H5u_fqa_0p6dcduDW0xhJGYJKzc6FfANB9KuOpjLB9ZPw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] genirq/msi, platform-msi: Adjust return value of msi_domain_prepare_irqs()
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi, Thomas,
 
-Combining UBSAN and GCOV in randconfig builds results in a number of
-stack frame size warnings, such as:
+On Tue, May 30, 2023 at 11:03=E2=80=AFPM Thomas Gleixner <tglx@linutronix.d=
+e> wrote:
+>
+> On Tue, May 30 2023 at 16:34, Huacai Chen wrote:
+> > On Tue, May 30, 2023 at 4:19=E2=80=AFAM Thomas Gleixner <tglx@linutroni=
+x.de> wrote:
+> >> Let's take a step back and look at the larger picture:
+> >>
+> >>  1) A PCI/MSI irqdomain is attached to a PCI bus
+> >>
+> >>  2) The number of PCI devices on that PCI bus is usually known at boot
+> >>     time _before_ the first device driver is probed.
+> >>
+> >>     That's not entirely true for PCI hotplug devices, but that's hardl=
+y
+> >>     relevant for an architecture which got designed less than 10 years
+> >>     ago and the architects decided that 256 MSI vectors are good enoug=
+h
+> >>     for up to 256 CPUs. The concept of per CPU queues was already know=
+n
+> >>     at that time, no?
+> > Does this solution depend on the per-device msi domain? Can we do that
+> > if we use the global msi domain?
+>
+> In principle it should not depend on per-device MSI domains, but I
+> really don't want to add new functionality to the old operating models
+> as that does not create an incentive for people to convert their stuff
+> over.
+Thank you for your advice, but for our scenario, its effect is no
+better than this patch (because not all devices are aggressive
+devices), so we give up. :)
 
-crypto/twofish_common.c:683:1: error: the frame size of 2040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c:1589:1: error: the frame size of 1696 bytes is larger than 1400 bytes [-Werror=frame-larger-than=]
-drivers/media/platform/verisilicon/hantro_g2_vp9_dec.c:754:1: error: the frame size of 1260 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-drivers/staging/media/ipu3/ipu3-css-params.c:1206:1: error: the frame size of 1080 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-drivers/staging/media/rkvdec/rkvdec-vp9.c:1042:1: error: the frame size of 2176 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-drivers/staging/media/rkvdec/rkvdec-vp9.c:995:1: error: the frame size of 1656 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+And as Jason said in another thread, this problem can be solved by
+simply reducing the number of queues by ethtool. So let's ignore this
+patch since it is not acceptable.
 
-I managed to track this down to the -fsanitize=bounds option clashing
-with the -fprofile-arcs option, which leads a lot of spilled temporary
-variables in generated instrumentation code.
-
-Hopefully this can be addressed in future gcc releases the same way
-that clang handles the combination, but for existing compiler releases,
-it seems best to disable one of the two flags. This can be done either
-globally by just not passing both at the same time, or locally using
-the no_sanitize or no_instrument_function attributes in the affected
-functions.
-
-Try the simplest approach here, and turn off -fsanitize=bounds on
-gcc when GCOV is enabled, leaving the rest of UBSAN working. Doing
-this globally also helps avoid inefficient code from the same
-problem that did not push the build over the warning limit.
-
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Link: https://lore.kernel.org/stable/6b1a0ee6-c78b-4873-bfd5-89798fce9899@kili.mountain/
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110074
-Link: https://godbolt.org/z/zvf7YqK5K
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- lib/Kconfig.ubsan | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-index f7cbbad2bb2f4..8f71ff8f27576 100644
---- a/lib/Kconfig.ubsan
-+++ b/lib/Kconfig.ubsan
-@@ -29,6 +29,8 @@ config UBSAN_TRAP
- 
- config CC_HAS_UBSAN_BOUNDS_STRICT
- 	def_bool $(cc-option,-fsanitize=bounds-strict)
-+	# work around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110074
-+	depends on GCC_VERSION > 140000 || !GCOV_PROFILE_ALL
- 	help
- 	  The -fsanitize=bounds-strict option is only available on GCC,
- 	  but uses the more strict handling of arrays that includes knowledge
--- 
-2.39.2
-
+Huacai
+>
+> >> So the irqdomain can tell the PCI/MSI core the maximum number of vecto=
+rs
+> >> available for a particular bus, right?
+> >>
+> >> The default, i.e if the irqdomain does not expose that information,
+> >> would be "unlimited", i.e. ULONG_MAX.
+> > OK, thanks, but how to expose? By msi_domain_info::hwsize?
+>
+> Probably. Needs a proper helper around it.
+>
+> Thanks,
+>
+>         tglx
