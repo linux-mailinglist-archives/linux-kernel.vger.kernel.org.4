@@ -2,129 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506C6719A73
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B883719A7F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232617AbjFALCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 07:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
+        id S231560AbjFALGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 07:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbjFALBo (ORCPT
+        with ESMTP id S230268AbjFALGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:01:44 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2077.outbound.protection.outlook.com [40.107.93.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B2E128;
-        Thu,  1 Jun 2023 04:01:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bayxSJTlnE604mXtn51MapUBlv7SmvxUUoz8TMZOmnOLryYcMtYfxFn5OTXvJqQUlSfw/R8vTMuSO58VLa7ZHLdfuaJ04Z7aH4KgFtYQZSQSFQV60J0beMF3RZU9o1zJw7fBjJie0b4UeTbSogjjRTN/SzWu4cLA//GiizzRrNlzYwX5hfqrt/un/q4nKmMloG5oytk9t/JzH72kajP/tN/rKLkx3oiXMizuecRSfIBpIgBLyIzeMWQ5gfE1HMGd27TmvhkXptYbYTa6kGWTAMIBQBVMffLluZZ0utXLUQdrGvLoZ7WEoi6BupNPtLOtcdvdaj5YdZDkqphWn6kfuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+Q2PtWE7cqpL1/tHHT8h+6n6I/sHzBmw/rTopN7DgFc=;
- b=PqAmiJs5iFItkEiWXzBDn7XFhnu1V8yGkZqUbRxh84BbMEuEY5xYn1MS1x5bo1iHq8mkrCnla0hz58qHdsRV9rz9gTdm58yKpl4I31CnntP3ku8eiWzDl1iPR0W1+vMxWrbnpX7tsA2NJmqp8N0JBxyH4BWcVK+GzBy+RudOe5NjIXtdXqgdaWGrahNDWBuyFsdj6c9VLHx9rejLTecyYC1usw5DIEQA1f7GIY8TWiRIPqszPUAa5cyBssDDgENUl2EwreErcjHOtsiGNEc7bDVOensX1572QwGbXfaxCimvbTRNAqac5gnnS7VqQRb2IE/2x5uj9E/H1O+orpY/PA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=infinera.com; dmarc=pass action=none header.from=infinera.com;
- dkim=pass header.d=infinera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+Q2PtWE7cqpL1/tHHT8h+6n6I/sHzBmw/rTopN7DgFc=;
- b=Vswon7wZhjGoUUmeU5dNVSseBumlBgFJn3z1jLfouB+jus82t6cs3KtZ/RYOJofm32sl0bIG/DGxfLljbBdp9v8LiJXAG8/WyWkLNVZvKtLozRoCtRAryMtpof8pHI9vwyAm8LxiqAgSaKgVcBEx6u6yQ2iJ447RRBs5Jss6MoUWdkIRt1Ke/izjFgdzQky9aQxgggXVhzOZoy/R2ET1X2RWR7UkZLuYzkNBcVUR5yI2oT70LHyS8uZ/Fb4HKmWpHwqOy9H5T1kgZNd6O0UO80oIVDMQ+t8JE9zU8RGB7Ao7uqVZ5J+TAKku0XKV1jNXxlZnJcHekC2Iv6YktyOQhQ==
-Received: from PH0PR10MB4615.namprd10.prod.outlook.com (2603:10b6:510:36::24)
- by SA1PR10MB5733.namprd10.prod.outlook.com (2603:10b6:806:231::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Thu, 1 Jun
- 2023 11:01:40 +0000
-Received: from PH0PR10MB4615.namprd10.prod.outlook.com
- ([fe80::f01a:585:8d6:3d3c]) by PH0PR10MB4615.namprd10.prod.outlook.com
- ([fe80::f01a:585:8d6:3d3c%6]) with mapi id 15.20.6455.020; Thu, 1 Jun 2023
- 11:01:39 +0000
-From:   Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
-To:     "perex@perex.cz" <perex@perex.cz>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tiwai@suse.com" <tiwai@suse.com>
-CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] ALSA: usb-audio: Logitech P710e: Add quirk to fix setting
- sample rate.
-Thread-Topic: [PATCH] ALSA: usb-audio: Logitech P710e: Add quirk to fix
- setting sample rate.
-Thread-Index: AQHZk76tOTrERb/qZ064LfUyAGXe4691wx+AgAAGQwA=
-Date:   Thu, 1 Jun 2023 11:01:39 +0000
-Message-ID: <4c0d3476f554530e61a7c41580997e021056cce9.camel@infinera.com>
-References: <20230531125148.892100-1-joakim.tjernlund@infinera.com>
-         <bef94a3bbcb933e0c9128b602a973b7996ba337e.camel@infinera.com>
-In-Reply-To: <bef94a3bbcb933e0c9128b602a973b7996ba337e.camel@infinera.com>
-Accept-Language: en-GB, en-US
+        Thu, 1 Jun 2023 07:06:13 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293E1F2;
+        Thu,  1 Jun 2023 04:06:12 -0700 (PDT)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351At57K018580;
+        Thu, 1 Jun 2023 11:02:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=Tfr0WJBAMZ7HcGa+FXMjnKOcQ5ZhtjrOBu2OYyx3ED0=;
+ b=tL3hWm/r5T0lnpg6UdAPPiu1deHgZMVnPah+kHQO3o1ovspZ9h+zEYKZRrWO1VsGELf6
+ KqQXdDuyUE7wMkrUsXsF0veeZ5kMPwib2L5ZurlrZI9lH8LLNcXgJjw9B6QbevMKtttU
+ H4rdCrZ4hEEaGcFeT9/P7p6sTnNhhUJc14TJliaNnTrow3bssBBSwLL+GgGc6Y5t7ApU
+ lctHuXCFLi1xQcMiPIastEih1pRlKLJYiKmBKzVr6cdsRSRMJu/OXoTZoGqeZG9r323Y
+ OYLTDXNf7bKnpPSbA81mjlf4V9cHZ6Ezv6ZgT08BUD6R+cEGuHSkS0bdM98ybFml1BCg eA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxt0hr79u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 11:02:37 +0000
+Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 351At6hJ018630;
+        Thu, 1 Jun 2023 11:02:36 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxt0hr78c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 11:02:36 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 351704I8011520;
+        Thu, 1 Jun 2023 11:02:33 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3qu9g522ju-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 11:02:33 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 351B2Vdm42140272
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 1 Jun 2023 11:02:31 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 522BD2004E;
+        Thu,  1 Jun 2023 11:02:31 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C92EE20043;
+        Thu,  1 Jun 2023 11:02:30 +0000 (GMT)
+Received: from [9.152.212.239] (unknown [9.152.212.239])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  1 Jun 2023 11:02:30 +0000 (GMT)
+Message-ID: <aa2f8581-6440-87c0-1578-157719f7543e@linux.ibm.com>
+Date:   Thu, 1 Jun 2023 13:02:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 3/4] perf/core: Remove pmu linear searching code
+To:     Ian Rogers <irogers@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Nathan Chancellor <nathan@kernel.org>, namhyung@kernel.org,
+        eranian@google.com, acme@kernel.org, mark.rutland@arm.com,
+        jolsa@kernel.org, bp@alien8.de, kan.liang@linux.intel.com,
+        adrian.hunter@intel.com, maddy@linux.ibm.com, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com,
+        santosh.shukla@amd.com, kvmarm@lists.linux.dev
+References: <20230504110003.2548-1-ravi.bangoria@amd.com>
+ <20230504110003.2548-4-ravi.bangoria@amd.com>
+ <20230524214133.GA2359762@dev-arch.thelio-3990X>
+ <f02c78e2-34b9-4985-640a-279dae1004a9@amd.com> <ZG8KLbZSECiYaKFc@linux.dev>
+ <20230525142031.GU83892@hirez.programming.kicks-ass.net>
+ <ZG+FLdP2kkfI1m2Z@linux.dev>
+ <CAP-5=fWYbzmTETgqJ11y22=JaXDM0gnb4qR6KYeRGmFXw08f-Q@mail.gmail.com>
+ <86jzwtdhmk.wl-maz@kernel.org>
+ <CAP-5=fVW6KbUbbEfF3mEFvTfFDC5yKSjSpa+w3D55dG3CNUERw@mail.gmail.com>
+ <86h6rxd3gh.wl-maz@kernel.org>
+ <0075d8a9-2df4-86eb-8171-8995f59904e0@linux.ibm.com>
+ <CAP-5=fXo0t+buDrmf7SyTD97gmTWGoDAO2YXWyav+_79O3MZ0w@mail.gmail.com>
+ <a1f27798-0b06-7dc3-028b-038512947306@linux.ibm.com>
+ <CAP-5=fVw3vSEu7yGFDnZi8c3VUFJu_XEZtY9ZcTsD7ip2imR6Q@mail.gmail.com>
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.48.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=infinera.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR10MB4615:EE_|SA1PR10MB5733:EE_
-x-ms-office365-filtering-correlation-id: 74954b38-a82e-4cf3-f042-08db628f9379
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pexXtAFGsE2twvcuunEYmjbneR2unR56xcKha8P9iazAVUag+iVpR8nJRnGWB72f8r0Zs4hOKBifagqL9QU14IsZ8UxHOilWAcUk4niJ3rCgZ50SFWMmNMvT5T18Uviy2vIzWcjN14iU9Jnfe2APW03L4b/x4iP/n7Z+TCsPabeJl35cxx2q7qLkhutmQGvkAA6Zybkkl+V5xoCKOjFZNnoGQKruPBWyXAORX279o28ycLCSij+HXrP1ddFPu3xrnTBmbDqvQ0PglB5ZrsolY2oV0NsCvUujmhTZ+S5l0SayIBzARfsB2U6C5gZaJhVSikw3cVKHpEBtryRu9FneE6iur13GJjflFZYrgZ0c5LOU2A/fSRncxejdpiDDhxRWjZdcuCNKbuebTr+Lg12G1BYKRBPW0vO8ozZaArJXu9pBzPTYx1at3TY4aATt8XnyoMvQDB01DYFJksDF/CeRrKojRMbm7n1BDz4MMhPg8iyD/hZNmYgZXyQUpLRQ2JOrxJn0ntJAL02CoesO2NXmJWXT1g7LQczbSyPfCigA9+CLTBMcTKAbr8aJ2Z+Fn8EDYRIgyHBI/pTtlTmlDxtISHomTmlqsqWTit1wvbpD6xnXBYE+clhn1ZcUKh3CVhLu
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4615.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(366004)(136003)(376002)(451199021)(86362001)(36756003)(122000001)(38100700002)(38070700005)(71200400001)(478600001)(110136005)(64756008)(6486002)(8936002)(5660300002)(66446008)(2906002)(91956017)(66476007)(66946007)(66556008)(316002)(76116006)(41300700001)(8676002)(4326008)(6506007)(2616005)(186003)(6512007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TG1ESHlqa0h3QmZpazU3V3lWNURLNWpSdDBmeFpGd3hHakNHSGs4NGxzNWI3?=
- =?utf-8?B?VHlUNCsrZmJ4UXpzOFc4b0lHSVYzUU9KQ2l3NG0vbDN4KzNtYnpJMVE5Q0Rl?=
- =?utf-8?B?WEtFRHovYTJaYmt5a0w3S0tadDhndTdZdlRtODAwUkJ1bXp0dk50UXU1dXh1?=
- =?utf-8?B?N1NJVU5Za3d6dVc1NmIyYWVYN0tOL2w3czNsclNDWDFGTkdvL2J1Tkg0dmdl?=
- =?utf-8?B?eVVPM3BFeHRpbEF2YTJpWWNrN3pYK21xUFZUTjk1TnJMWmZDNUNyVTIxalNH?=
- =?utf-8?B?cG5PeHFPbVErVWQ5TW5Sa1JyS0JLYTRGNFFOSFhwNWNSQjhGZW03RzlZbmNI?=
- =?utf-8?B?OUFwUW1Xby9vV1VySnpmSG5RZDl5bVdoRk83aGp3UUtHL3JwMWxaUHVnNlhX?=
- =?utf-8?B?aHoxb2c3U3VmMXIwUWhjMHNzMjM3R08rZ0pOTEtxcnlLbG1PdDRXSE9QZUxm?=
- =?utf-8?B?eFJaUGd2eVRCdk1wV1pEdG92NlhtaXpBZ0JBT3pkdTFlOUlpc3lxZXZWblRK?=
- =?utf-8?B?U2x4cG1QUmUxbVZNZ3c3aDFtbC9HUkY4eitxTjBuM1pLdnFpUTJLdldGVXc2?=
- =?utf-8?B?UWFpQmZzejlvaFRoWE1pRklNZThSeld5d3Nmb1R5ejRQSDJCWE1uTDRIcW8v?=
- =?utf-8?B?azZTcHkrZnhSM2c5dndZcHdKSGVDaWxOd2poZkFrOVQxdHdNMERPR2FqMXJN?=
- =?utf-8?B?TGZUUFlaK1pNc2dGc1N5cnpWWm81T0lwM3JqTkpkQnQ1YUhYbUEyWkUrcGtN?=
- =?utf-8?B?Tkk2emFHQzhLK01sV215VE1QRkxuVXNvODdFeXZFUVdxUmI2SkdLUDNlZDhm?=
- =?utf-8?B?VjhiT0hwTGNwZTZ2RzIveE5Id0NVMENSclhRVkRuUnhjSkRqR1BOQzdMWkcw?=
- =?utf-8?B?OXEyRVFJWGdQRHNsRUdNWlZlTlZ2Y0J1TUpNT0dnTmc4SWtPbmxvK1ZxdCtz?=
- =?utf-8?B?THpBTHBXb3R0b0JKS2hMUlVuMmd6dzVtU1piVnhyTU5mT0NxbU5OOEU2dkt3?=
- =?utf-8?B?ZlZmc3c2U0x1SktxL1gwei8wM0tjL3RiVGRJdHhRR0NmV3VTZjVBQ2o4L09q?=
- =?utf-8?B?clBETHcyQ09aUWlPbHZGMnJVNjQ3ckVPLytDM21zMm9hd044aE4xY2lLN2No?=
- =?utf-8?B?d3dCTDRObkpHV3k5ZEFhakM4b1ZOeXJWU0Iva0JmMVU3eE1tazFoS1hDS1VZ?=
- =?utf-8?B?OEZzVjZlMkc1ZzRpbXgyZXhweEtSTkRUb3B3UytnTldtbjBoNEExbW9IY3Y5?=
- =?utf-8?B?Sm9QeXVOd2pMRnpjV2E5b1hJakFLOW5naGxkVUY5T29kRk1TKzROWW9OQm1R?=
- =?utf-8?B?V0R6Ukp1NFBQVHhSeG44ay9vMVV1SHY5Tm05RS9Vc2hoMVNXYnRBTkw1M24z?=
- =?utf-8?B?S3Y3bFpIQUl4UUFTU0Z2Szh1bVRCZjdwTU83dFFpZjRmTjZaa09LdU5aSU81?=
- =?utf-8?B?dnU0L2p4aWhPeUUvNzVFd2hhbXhvU1h6Wlpya29mY09DWFFsOEptVm9aVlBT?=
- =?utf-8?B?N3pSK1IxeFJiOWllbEtaVnUxbm56UFFybFhlMExPNDRuK1o1VUV3dS9JbTJY?=
- =?utf-8?B?dUNjVWRMQXZrdkVPekw5L3k5WkN0cVUwQkE3aHhnY3kyZ1FnUnYrR0x2aGUr?=
- =?utf-8?B?VEVGU2dpSmdwbTN3V2dzdzBIWTczNFM4TUI0VVVGeG9ZWExYbE4wSlZ4MWdL?=
- =?utf-8?B?Q3k0RHc4dkpRZEh1ZHkrRHQ3bGYvZDg1WVdyV2ovZllJb1JSOXc1cldjeEZv?=
- =?utf-8?B?L0M0TFVhM3lBK2FFUW9FSldFK0dRNXNlbXI1ajZ5STZLL0ZJdlNGM1hJSllD?=
- =?utf-8?B?TitDUTd6UW91MnJyRVB2dHI3cTJhMVA0YXY5aVNTMnlkY3oyOWl4S0t3QjUx?=
- =?utf-8?B?dGdscG5xZGMvRXQ4TWJERTJhQVBFZ3J6TmFiK0Jja2tyb3lvNmVicEJ0dzg5?=
- =?utf-8?B?NVBYdmlHMUJyS205MFUzQWhSOVdUemlaNWhyTHhRd2VXR1llT05OLy9RZHFv?=
- =?utf-8?B?T2R4NE80MWZTRlh1RnVLWERWZnRUbkszdGZtYTRnTjY0ZjY4UlRiUDl6Z3Ay?=
- =?utf-8?B?WUwwbXpZQ0xMZkdXVXc0aFpYZExUZU5lMHRsemRMREw2cUloYnY5S0lxM0Ey?=
- =?utf-8?B?M0JmYzdRZGdCcmJudE4ySGpqUkYxMlZPSHpYZjQvdlEvREVLcDFBeTBaVFIr?=
- =?utf-8?Q?W41QzME3yTtSinqGt7jgwBBHRtwRlJIfR0zIbgnGDlez?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5F037939D4339B438BA323C711386532@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: base64
+From:   Thomas Richter <tmricht@linux.ibm.com>
+Organization: IBM
+In-Reply-To: <CAP-5=fVw3vSEu7yGFDnZi8c3VUFJu_XEZtY9ZcTsD7ip2imR6Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: o3n4wIYJTnGjfax92N3nUdByl_UpL3Zo
+X-Proofpoint-GUID: lyONYjpzQy5cwArCYVv9fVjBxg18AULn
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-OriginatorOrg: infinera.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4615.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74954b38-a82e-4cf3-f042-08db628f9379
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2023 11:01:39.6602
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: X6Z1jaIgEDBhsv9QkqzG2+qy5UbEurZtLdufvUXGUe262k3zXtXPOFkDot3q+/eGD0O4BHy6YKSgYkJ0j0jgbw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB5733
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_07,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 malwarescore=0 lowpriorityscore=0 bulkscore=0
+ clxscore=1015 mlxscore=0 adultscore=0 phishscore=0 suspectscore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2306010098
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,38 +118,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTA2LTAxIGF0IDEyOjM5ICswMjAwLCBKb2FraW0gVGplcm5sdW5kIHdyb3Rl
-Og0KPiBPbiBXZWQsIDIwMjMtMDUtMzEgYXQgMTQ6NTEgKzAyMDAsIEpvYWtpbSBUamVybmx1bmQg
-d3JvdGU6DQo+ID4gUDcxMGUsIHdpbGwgdGhyb3cgYW4gImNhbm5vdCBzZXQgZnJlcSA0ODAwMCB0
-byBlcCAweDMiIGVycm9yLCBubw0KPiA+IG1hdHRlciBhZGRpbmcgbWRlbGF5cyBhcm91bmQgc2V0
-dGluZyBzYW1wbGUgcmF0ZS4NCj4gDQo+IFBsZWFzZSBpZ25vcmUgdGhpcyBwYXRjaCwgdGhlICJj
-YW5ub3Qgc2V0IGZyZXEgNDgwMDAgdG8gZXAgMHgzIiBvbmx5IGhhcHBlbnMgd2hlbg0KPiBrZXJu
-ZWwoNi4xLjMxKSBpbml0aWFsbHkgcHJvYmVzIHRoZSBkZXZpY2U6DQo+IA0KPiBbICA1NTUuMjAw
-MTY2XSB1c2IgMy0xOiBVU0IgZGlzY29ubmVjdCwgZGV2aWNlIG51bWJlciAxNA0KPiBbICA1NjAu
-OTA2NTUzXSB1c2IgMy0xOiBuZXcgZnVsbC1zcGVlZCBVU0IgZGV2aWNlIG51bWJlciAxNSB1c2lu
-ZyB4aGNpX2hjZA0KPiBbICA1NjEuMTA0MzQwXSB1c2IgMy0xOiAyOjE6IGNhbm5vdCBzZXQgZnJl
-cSA0ODAwMCB0byBlcCAweDMNCj4gWyAgNTY2LjM0MjQyMF0gdXNiIDMtMTogMjoxOiBjYW5ub3Qg
-Z2V0IGZyZXEgYXQgZXAgMHgzDQo+IFsgIDU2Ni40OTcwNTZdIGlucHV0OiBMb2dpdGVjaCBTcGVh
-a2VycGhvbmUgUDcxMGUgQ29uc3VtZXIgQ29udHJvbCBhcyAvZGV2aWNlcy9wY2kwMDAwOjAwLzAw
-MDA6MDA6MTQuMC91c2IzLzMtMS8zLTE6MS4zLzAwMDM6MDQ2RDowQTRFLjAwMDgvaW5wdXQvaW5w
-dXQyOQ0KPiBbICA1NjYuNTQ4ODI4XSBpbnB1dDogTG9naXRlY2ggU3BlYWtlcnBob25lIFA3MTBl
-IGFzIC9kZXZpY2VzL3BjaTAwMDA6MDAvMDAwMDowMDoxNC4wL3VzYjMvMy0xLzMtMToxLjMvMDAw
-MzowNDZEOjBBNEUuMDAwOC9pbnB1dC9pbnB1dDMwDQo+IFsgIDU2Ni41NDkwODZdIGhpZC1nZW5l
-cmljIDAwMDM6MDQ2RDowQTRFLjAwMDg6IGlucHV0LGhpZGRldjk3LGhpZHJhdzU6IFVTQiBISUQg
-djEuMTEgRGV2aWNlIFtMb2dpdGVjaCBTcGVha2VycGhvbmUgUDcxMGVdIG9uIHVzYi0wMDAwOjAw
-OjE0LjAtMS9pbnB1dDMNCj4gDQo+IEkgaGF2ZSBhIEphYnJhIFNQRUFLIDUxMCB3aGljaCBiZWhh
-dmVzIHRoZSBzYW1lLg0KPiBPbmNlIGF0dGFjaGVkIHNldHRpbmcgc2FtcGxlIHJhdGUgd29ya3Mu
-DQo+ICANCj4gU2VlbXMgbGlrZSB0aGUgZGV2aWNlcyBhcmUgbm90IHJlYWR5IHRvIGhhbmRsZSBz
-YW1wbGUgcmF0ZQ0KPiB0aGlzIGVhcmx5IHdoZW4gZGV2aWNlIGlzIGJlZWluZyBhdHRhY2hlZC4g
-RG9lcyB0aGUga2VybmVsIG5lZWQgdG8gbWFuYWdlDQo+IHNhbXBsZSByYXRlIGJlZm9yZSBkZXZp
-Y2UgaXMgZnVsbHkgYXR0YWNoZWQ/DQoNClRoaXMgc3dhcCBhcHBlYXJzIHRvIG1ha2UgdGhlIGlu
-aXRpYWwgZXJyb3IgZ28gYXdheToNCmRpZmYgLXUgc3RyZWFtLmMub3JnIHN0cmVhbS5jDQotLS0g
-c3RyZWFtLmMub3JnCTIwMjMtMDYtMDEgMTI6NTQ6NDEuMjI5MTQ1OTg5ICswMjAwDQorKysgc3Ry
-ZWFtLmMJMjAyMy0wNi0wMSAxMjo1Nzo0Ni40Mjc1MTQ2MzggKzAyMDANCkBAIC0xMjI2LDggKzEy
-MjYsOCBAQA0KIAkJLyogdHJ5IHRvIHNldCB0aGUgaW50ZXJmYWNlLi4uICovDQogCQl1c2Jfc2V0
-X2ludGVyZmFjZShjaGlwLT5kZXYsIGlmYWNlX25vLCAwKTsNCiAJCXNuZF91c2JfaW5pdF9waXRj
-aChjaGlwLCBmcCk7DQotCQlzbmRfdXNiX2luaXRfc2FtcGxlX3JhdGUoY2hpcCwgZnAsIGZwLT5y
-YXRlX21heCk7DQogCQl1c2Jfc2V0X2ludGVyZmFjZShjaGlwLT5kZXYsIGlmYWNlX25vLCBhbHRu
-byk7DQorCQlzbmRfdXNiX2luaXRfc2FtcGxlX3JhdGUoY2hpcCwgZnAsIGZwLT5yYXRlX21heCk7
-DQogCX0NCiAJcmV0dXJuIDA7DQogfQ0KDQpCdXQgSSBkb24ndCByZWFsbHkgbm93IHdoYXQgSSBh
-bSBkb2luZyB3LnIudCBVU0IvQXVkaW8gDQoNCiBKb2NrZQ0KDQo=
+On 5/31/23 22:20, Ian Rogers wrote:
+> On Wed, May 31, 2023 at 2:09 AM Thomas Richter <tmricht@linux.ibm.com> wrote:
+>>
+>> On 5/30/23 16:00, Ian Rogers wrote:
+>>> ls /sys/devices/*/cpu*
+>>
+>> Hi Ian,
+>>
+>> here is the output yo requested:
+>>
+>> # ls /sys/devices/*/cpu*
+>> cpu0  cpu3  cpu6         hotplug     modalias  possible  smt
+>> cpu1  cpu4  cpu7         isolated    offline   present   uevent
+>> cpu2  cpu5  dispatching  kernel_max  online    rescan    vulnerabilities
+>> #
+>>
+>> In fact it is the same as
+>> # ls  /sys/devices/system/cpu/
+>> cpu0  cpu3  cpu6         hotplug     modalias  possible  smt
+>> cpu1  cpu4  cpu7         isolated    offline   present   uevent
+>> cpu2  cpu5  dispatching  kernel_max  online    rescan    vulnerabilities
+>> #
+>> This directory tree has nothing to do with events for perf, it is
+>> merely used to support CPU hotplug on s390.
+>>
+>> The PMUs on s390 are
+>> # ls -ld /sys/devices/{cpum_,pai_}*
+>> drwxr-xr-x 4 root root 0 May 25 15:45 /sys/devices/cpum_cf
+>> drwxr-xr-x 4 root root 0 May 25 15:45 /sys/devices/cpum_cf_diag
+>> drwxr-xr-x 4 root root 0 May 25 15:45 /sys/devices/cpum_sf
+>> drwxr-xr-x 4 root root 0 May 25 15:45 /sys/devices/pai_crypto
+>> drwxr-xr-x 4 root root 0 May 25 15:45 /sys/devices/pai_ext
+>> #
+>>
+>> I hope his helps.
+> 
+> Thanks Thomas,
+> 
+> The perf tool has a notion of "core" and "other" PMUs - other means
+> uncore and things like interconnect PMUs. The distinction matters as
+> PMUs may have a list of CPUs with them, for "other" PMUs the CPU list
+> (known in the tool as the CPU map) is a suggestion of the CPU to open
+> events on. For example, on my laptop:
+> ```
+> $ cat /sys/devices/system/cpu/online
+> 0-15
+> $ cat /sys/devices/uncore_imc_free_running_0/cpumask
+> 0
+> ```
+> So I have 16 "CPUs" and the memory controller is suggesting opening
+> the events on CPU 0. However, if I do:
+> ```
+> $ sudo perf stat -e 'uncore_imc_free_running_0/data_read/' -C 8 -a -A sleep 1
+> 
+> Performance counter stats for 'system wide':
+> 
+> CPU8                 4,617.60 MiB
+> uncore_imc_free_running_0/data_read/
+> 
+> 
+>       1.001094684 seconds time elapsed
+> ```
+> Then things are good and the event was recorded on CPU 8, even though
+> the cpumask of the PMU only said CPU 0.
+> 
+> For "core" PMUs the CPU map works differently. A CPU outside of the
+> map is an error. For example, if I have a heterogeneous system with 2
+> CPUs, the first CPU on 1 PMU and the second CPU on a different PMU, if
+> I try to open events for the wrong PMU  type for the CPU then it
+> should fail. The CPU map should be interpreted as the set of CPUs
+> events are valid on.
+> 
+> The logic to determine if a PMU is "core" or "other" is here:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/pmu.c?h=perf-tools-next#n1417
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/pmu.c?h=perf-tools-next#n609
+> 
+> That is, a PMU is a "core" PMU if it is called "cpu" or if there is a
+> file called "cpus" inside the PMU's sysfs directory. It seems on s390
+> none of the PMUs are considered "core" and this is why we're having
+> issues.
+> 
+> Looking at:
+> https://lore.kernel.org/lkml/20180416132314.33249-1-tmricht@linux.ibm.com/
+> 
+> It would seem to make sense that "cpu", "cpum_cf" and "cpum_sf" should
+> all cause "is_pmu_core" to return true, From your output I suspect the
+> issue is that cpum_cf and cpum_sf both lack the "cpus" file - which is
+> also true on homogeneous x86's "cpu" PMU. We can fix the code with:
+> 
+> ```
+> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> index 0520aa9fe991..bdc3f3b148fc 100644
+> --- a/tools/perf/util/pmu.c
+> +++ b/tools/perf/util/pmu.c
+> @@ -1414,7 +1414,9 @@ void perf_pmu__del_formats(struct list_head *formats)
+> 
+> bool is_pmu_core(const char *name)
+> {
+> -       return !strcmp(name, "cpu") || is_sysfs_pmu_core(name);
+> +       return !strcmp(name, "cpu") ||
+> +              !strcmp(name, "cpum_cf") || !strcmp(name, "cpum_sf") ||
+> +              is_sysfs_pmu_core(name);
+> }
+> 
+> bool perf_pmu__supports_legacy_cache(const struct perf_pmu *pmu)
+> ```
+> 
+> Wdyt? Thanks,
+> Ian
+> 
+
+Ian, thanks very much for your help. I changed the code as you
+suggested and added s390's PMU cpum_cf as in
+
+bool is_pmu_core(const char *name)
+{
+        return !strcmp(name, "cpu") || !strcmp(name, "cpum_cf") ||
+               is_sysfs_pmu_core(name);
+}
+
+The result is much better, now the
+- test case 6.1 fails only 2 times and for a different reason:
+  running test 2 'r1a'
+  FAILED tests/parse-events.c:125 Raw PMU not matched
+  Event test failure: test 2 'r1a' rc -1
+  ...
+  running test 14 'r1a:kp'
+  FAILED tests/parse-events.c:125 Raw PMU not matched
+  Event test failure: test 14 'r1a:kp' rc -1
+  
+- test case 10.2 fails for an unknown event bp_l1_btb_correct.
+   10.2: PMU event map aliases         :
+   --- start ---
+   Using CPUID IBM,8561,703,T01,3.6,002f
+   testing aliases core PMU cpum_cf: no alias, alias_table->name=bp_l1_btb_correct
+   testing core PMU cpum_cf aliases: failed
+   ---- end ----
+   PMU events subtest 2: FAILED!
+- test case 68 now succeeds:
+  # ./perf test  68
+  68: Parse and process metrics        : Ok
+  #
+
+Regarding test case 6.1: 
+Raw PMU not matched is printed in tests/parse-events.c::125
+Debugging revealed that function
+  test_event()
+  +--> parse_events() which returns 0
+  +--> e->check() ---> test__checkevent_raw()
+This function has TEST_ASSERT_VAL("Raw PMU not matched", raw_type_match);
+triggering -1 because the PMU has type 8 which is not PERF_TYPE_RAW
+
+Maybe make type >= PERF_TYPE_RAW to succeed the test?
+
+Regarding test case 10.2: the event bp_l1_btb_correct does not exist on
+s390. It is defined in
+- pmu-events/empty-pmu-events.c
+- pmu-events/arch/test/test_soc/cpu/branch.json
+Not sure which one is used.
+But this event is unknown on s390
+
+What is the best way to fix these issues.
+
+PS: I have the feeling, it gets complicated to have multiple hardware PMUs
+per platform.
+
+-- 
+Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
+--
+Vorsitzender des Aufsichtsrats: Gregor Pillen
+Geschäftsführung: David Faller
+Sitz der Gesellschaft: Böblingen / Registergericht: Amtsgericht Stuttgart, HRB 243294
+
