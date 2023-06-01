@@ -2,83 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A504A71F3C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9714171F3CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbjFAUXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 16:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
+        id S231926AbjFAUYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbjFAUXl (ORCPT
+        with ESMTP id S232102AbjFAUX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:23:41 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3399AE79;
-        Thu,  1 Jun 2023 13:23:14 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351JeNJH015302;
-        Thu, 1 Jun 2023 20:23:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=W+jeNyPb1+d2e3DhT9PLjOuuWFn2hh9XeemreQjMQG8=;
- b=DOCEkTgW1Zg8E3jan8UeaLT4XFcpLTluhT7jzinR3yeKnNu+LTzKmY9HZM8hvCnNR2ll
- ph5XI3jvhZhqA8hjgX9hXWAq4vrZ7XypiEmal3ps72U7NsjCX8h+wmFBqmdQ+SDBFab6
- XD4KBYek/G9BbhURcX+1jGeuuPm5LM/Mz4Q2huDRpNF4CLNQd7GhyOv0LUSKyn2sEWHy
- gsWfL+C9jxJnJkvzeSpN3IZhwmfV/WQLPgTR+j9ZJxrfG3AsoJEqRSf6Qg7J2yn4Qhr5
- fl6MLXT4cA8iMVFbE2IV5B8hIEwEltZJMAo/xiJhWAPLb6wipqbNNRDbaBz87fN8aOo5 Hw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qy1bcg3g1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 20:23:07 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351KN67u031675
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Jun 2023 20:23:06 GMT
-Received: from [10.71.113.210] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
- 13:23:06 -0700
-Message-ID: <cb090bfb-6ff5-7200-076d-b99dc13a6b71@quicinc.com>
-Date:   Thu, 1 Jun 2023 13:23:05 -0700
+        Thu, 1 Jun 2023 16:23:57 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C05419D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 13:23:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=KHOfwolgp9XhN7STp1l0dexkTZzW2Pcs/mHiDWhkhXI=; b=lVug5T1raKnst0iLVKJVuj0iZo
+        tw5+d34F0rJrIDMYTxT8bJqtA5jnw89Y6Ri3siDGv1CFagjvYPl0JYMXv7ASS3FZjLSwcIqF4Lb2L
+        gxfw9+DYM3rVDwrK68a+F3UJTNV4XuhAd9TnIXUSol45TZQ4Bv/DoRKY38XGo9fmLuhg3FMqeZ3XU
+        YYk63+DXJsurDmtWeUm2Enk9OWU2Cg2gq3kXqhgT4raIEQ5gHYXcK8Hk7u87y8fKThYzSSh4GpkF2
+        ixgdxIU7CcL7BeNLXNMJjWTqmdaiVrjXwTm7npZWOqCqQUzO2MkGMI5w3Eaplpw2GLdVqvQUSR8nU
+        4ksDo8Xw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q4opU-004rIk-26;
+        Thu, 01 Jun 2023 20:23:28 +0000
+Message-ID: <c9770ddc-d1fe-d49f-adec-a413a7bf65ec@infradead.org>
+Date:   Thu, 1 Jun 2023 13:23:27 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] usb: dwc3: Skip TRBs while removing requests in
- disconnect path
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] firewire: fix warnings to generate UAPI documentation
 Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <1685562871-17024-1-git-send-email-quic_eserrao@quicinc.com>
- <20230531231951.vg7x2w7gnnm77alq@synopsys.com>
- <38255534-f242-dc06-9216-1568da9b0285@quicinc.com>
- <20230601012953.47xh7meyr2woowpc@synopsys.com>
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <20230601012953.47xh7meyr2woowpc@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20230601144937.121179-1-o-takashi@sakamocchi.jp>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230601144937.121179-1-o-takashi@sakamocchi.jp>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: uP_S7e7dcVMFuaE97Hvf1fIGSCoDkGWC
-X-Proofpoint-GUID: uP_S7e7dcVMFuaE97Hvf1fIGSCoDkGWC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
- mlxlogscore=807 adultscore=0 clxscore=1011 priorityscore=1501 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2306010175
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,87 +54,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 5/31/2023 6:30 PM, Thinh Nguyen wrote:
-> On Wed, May 31, 2023, Elson Serrao wrote:
->>
->>
->> On 5/31/2023 4:20 PM, Thinh Nguyen wrote:
->>> On Wed, May 31, 2023, Elson Roy Serrao wrote:
->>>> Consider a scenario where cable disconnect happens when there is an active
->>>> usb reqest queued to the UDC. As part of the disconnect we would issue an
->>>> end transfer with no interrupt-on-completion before giving back this
->>>> request. Since we are giving back the request without skipping TRBs the
->>>> num_trbs field of dwc3_request still holds the stale value previously used.
->>>> Function drivers re-use same request for a given bind-unbind session and
->>>> hence their dwc3_request context gets preserved across cable
->>>> disconnect/connect. When such a request gets re-queued after cable connect,
->>>
->>> Why would we preserve the request after a disconnect? The request is
->>> associated with an endpoint, and after disconnect, the endpoint is no
->>> longer valid. Shouldn't the request be freed then?
->>>
->>
->>
->> Function drivers generally allocate usb requests during bind when an
->> endpoint is allocated to it (through usb_ep_autoconfig). These requests are
->> freed when an unbind is called as the function is no longer associated with
->> any end point. The function driver is free to re-use these requests
->> throughout this bind-unbind session. The only restriction is that the
->> function drivers wont be able to queue any requests as long as the endpoint
+On 6/1/23 07:49, Takashi Sakamoto wrote:
+> Any target to generate UAPI documentation reports warnings to missing
+> annotation for padding member in structures added recently.
 > 
->> is disabled. But that doesn't enforce function drivers to free the requests
->> with ep_disable(). Even though the endpoint is disabled with cable
->> disconnect, that endpoint is still associated with that particular function
->> driver until that function is unbound.
->>
->> As an example below is how f_ncm driver allocates and frees the requests
->> during bind/unbind
->>
->> Bind()
->> ...
->> ep = usb_ep_autoconfig(cdev->gadget, &fs_ncm_notify_desc);
->> if (!ep)
->> 	goto fail;
->> ncm->notify = ep;
->>
->> status = -ENOMEM;
->>
->> /* allocate notification request and buffer */
->> ncm->notify_req = usb_ep_alloc_request(ep, GFP_KERNEL);
->> ...
->>
->> The endpoint is enabled later when set_alt is received and disabled in
->> ncm_disable when the connection goes down (cable disconnect scenario)
->>
->>
->> Unbind()
->> ....
->> kfree(ncm->notify_req->buf);
->> usb_ep_free_request(ncm->notify, ncm->notify_req);
->>
->> I see similar implementation in other function drivers as well. That is,
->> keep the usb requests allocated throughout the bind-unbind session and
->> independent of ep_enable/ep_disable .
->>
->> Thanks
->> Elson
->>
+> This commit suppresses the warnings.
 > 
-> Thanks for the clarification. Then you just need to reset the num_trbs
-> count when giving back the request. Can we do that in
-> dwc3_gadget_del_and_unmap_request()?
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Closes: https://lore.kernel.org/lkml/20230531135306.43613a59@canb.auug.org.au/
+> Fixes: 7c22d4a92bb2 ("firewire: cdev: add new event to notify request subaction with time stamp")
+> Fixes: fc2b52cf2e0e ("firewire: cdev: add new event to notify response subaction with time stamp")
+> Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+> ---
+>  include/uapi/linux/firewire-cdev.h | 14 ++++++--------
+>  1 file changed, 6 insertions(+), 8 deletions(-)
 > 
-> Please add a fix tag.
 
+You can do it as this patch shows, or you can hide those padding fields as
+described in Documentation/doc-guide/kernel-doc.rst:
 
-Yes we can just reset num_trbs in dwc3_gadget_del_and_unmap_request. I 
-had used skip trb function so that the trb_dequeue pointer and HWO field 
-also gets modified accordingly. But we dont really care about it in the 
-disconnect path as we reset that in the subsequent ep enable.
-Thanks for this suggestion!
-I will add a fix tag and re-upload the patch with above modification.
+Inside a struct or union description, you can use the ``private:`` and
+``public:`` comment tags. Structure fields that are inside a ``private:``
+area are not listed in the generated output documentation.
 
-Thanks
-Elson
+The ``private:`` and ``public:`` tags must begin immediately following a
+``/*`` comment marker. They may optionally include comments between the
+``:`` and the ending ``*/`` marker.
+
+See below.
+
+> diff --git a/include/uapi/linux/firewire-cdev.h b/include/uapi/linux/firewire-cdev.h
+> index 99e823935427..1f2c9469f921 100644
+> --- a/include/uapi/linux/firewire-cdev.h
+> +++ b/include/uapi/linux/firewire-cdev.h
+> @@ -130,6 +130,9 @@ struct fw_cdev_event_response {
+>   * @length:	Data length, i.e. the response's payload size in bytes
+>   * @request_tstamp:	The time stamp of isochronous cycle at which the request was sent.
+>   * @response_tstamp:	The time stamp of isochronous cycle at which the response was sent.
+> + * @padding:	Padding to keep the size of structure as multiples of 8 in various architectures
+> + *		since 4 byte alignment is used for 8 byte of object type in System V ABI for i386
+> + *		architecture.
+
+You could drop that change.
+
+>   * @data:	Payload data, if any
+>   *
+>   * This event is sent when the stack receives a response to an outgoing request
+> @@ -155,10 +158,6 @@ struct fw_cdev_event_response2 {
+>  	__u32 length;
+>  	__u32 request_tstamp;
+>  	__u32 response_tstamp;
+
+	/* private: */
+> -	/*
+> -	 * Padding to keep the size of structure as multiples of 8 in various architectures since
+> -	 * 4 byte alignment is used for 8 byte of object type in System V ABI for i386 architecture.
+> -	 */
+>  	__u32 padding;
+
+	/* public: */
+
+>  	__u32 data[];
+>  };
+> @@ -231,6 +230,9 @@ struct fw_cdev_event_request2 {
+>   * @handle:	Reference to the kernel-side pending request
+>   * @length:	Data length, i.e. the request's payload size in bytes
+>   * @tstamp:	The time stamp of isochronous cycle at which the request arrived.
+> + * @padding:	Padding to keep the size of structure as multiples of 8 in various architectures
+> + *		since 4 byte alignment is used for 8 byte of object type in System V ABI for i386
+> + *		architecture.
+
+drop that.
+
+>   * @data:	Incoming data, if any
+>   *
+>   * This event is sent when the stack receives an incoming request to an address
+> @@ -284,10 +286,6 @@ struct fw_cdev_event_request3 {
+>  	__u32 handle;
+>  	__u32 length;
+>  	__u32 tstamp;
+
+	/* private: */
+
+> -	/*
+> -	 * Padding to keep the size of structure as multiples of 8 in various architectures since
+> -	 * 4 byte alignment is used for 8 byte of object type in System V ABI for i386 architecture.
+> -	 */
+>  	__u32 padding;
+
+	/* public: */
+
+>  	__u32 data[];
+>  };
+
+-- 
+~Randy
