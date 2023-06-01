@@ -2,122 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0574971F6B9
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 01:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9BE71F6C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 01:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232959AbjFAXkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 19:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
+        id S230037AbjFAXm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 19:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232746AbjFAXjv (ORCPT
+        with ESMTP id S229651AbjFAXmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 19:39:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FEE136;
-        Thu,  1 Jun 2023 16:39:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B6EE646B3;
-        Thu,  1 Jun 2023 23:39:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DA09C433EF;
-        Thu,  1 Jun 2023 23:39:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685662789;
-        bh=3jR6coTEIcQtDZcNzSMSFv+M4QM62RvBoRRP0rTVqDY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=fwc7Tv0DaRLNwBp0LIrrU8Ot+TZ8GxkknFOtF7HdZbG2BM2+QkEHGkrNQAhjeqfKC
-         95COu5tIu/DBAA9fFFzhQzVZG0gZBic5SJzHbJJIGGUGSyuDRZQfJgSRWRjOjahJtL
-         v5QQVcdPfunXzlsLY0XhxNr9yg0W2SMHZO6Me3den1nsWJWcablV46r1Wh+rSqhM+3
-         8OT+OgEPDdJf+Dy37ih6KM1QJ75q7NnSQj42MVexWoBqIWxH48DlgR1d5Q/IEw6Q0R
-         MhBTJXdyGFnICpULkSxMc/POPCMFpRJJCCMErrRmjGRxyZN2/B3A8B6qNtral0teVk
-         s7p9MKckvfIVw==
-Date:   Thu, 1 Jun 2023 17:40:41 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v2][next] scsi: lpfc: Avoid -Wstringop-overflow warning
-Message-ID: <ZHkseX6TiFahvxJA@work>
+        Thu, 1 Jun 2023 19:42:55 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4EE189
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 16:42:53 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f6094cb2d2so15051705e9.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 16:42:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685662972; x=1688254972;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O0zmHP8JGK6g/aq3iYcHo/6GKlgds8CC7jKahig4m+o=;
+        b=nrU64l8FrW2dwcmzwlsxiKsxcLQQNfsBWjX/80cpMU0NRuCwejzmnqkvOH+BNJ/J9y
+         NMp7skqjFj0afUGLQUhPxdcVD2tuTWZCzNikcJRTHMZir9gG+V1uiNiJ2z72lQnRgopB
+         h4z6PcO0ZS2MhnzMXxVLUDaNwyWDpZSP/pT2w5x6xXSH00SV5Bdu0gI0Rk0u/2+6e5MD
+         leM39t0uJa6Rjw6/dh8hWjDHqfc4dHMv+Bdyg1XGeZg5B0eUN+2hSUO5K19sOlhnqXYU
+         cdOCGQXWHn+aPMg1zpDPcXKphaiB1WXZWUsmexg4q1ItlqAlNrAq0OikTSrqeg3Oq4br
+         /rIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685662972; x=1688254972;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O0zmHP8JGK6g/aq3iYcHo/6GKlgds8CC7jKahig4m+o=;
+        b=gUJFkorv/oNXX5H1ePL/AGtOZn0iuzvyBOfpexaEKm02J2CIhZrx3pPKI95Qb4qMk6
+         WDQKXCE2w+X09j2AuW4rnFVd12MGkE5f+aj1B40WN9bMhrA6TTKnffNbfT3kVp6bHzN1
+         tmi7mRkQwtQiOr4O6/FFGo+woWdTdGnsuMloA2lFWCEdTIuu1SUelJwkIuMESO1WV4dQ
+         nxSggdUOJh63+FUbbr+hhn1+wo65fzFWR/rHJabHN5Kf69oUWTnAqPX/1S8WHhYtsZWm
+         za114cU8O3Dg5KBR9R23gR5oJ6sjY2nwmhXZhEs/9nbKOjJHS9RNu0/iqLUT7IlFsQs1
+         Orwg==
+X-Gm-Message-State: AC+VfDzyYv6WYO+dp3UpUWDMp2/j2Y8V6H8ymIW6TrgMjVsgRUHzAM7g
+        TIVKdryZxrVlY1EPuyNznplf9jx5IyUtKnup1gJFhQ==
+X-Google-Smtp-Source: ACHHUZ7DtFXG0k9ql1QidgJih9xorFkvlA0pbNtLecjSeL0Nycq8xnN2F2dyADPE/uLQlrJIGb+4rmj8etHFqA3sE6A=
+X-Received: by 2002:adf:fc87:0:b0:30a:dce8:f8b5 with SMTP id
+ g7-20020adffc87000000b0030adce8f8b5mr3005225wrr.58.1685662972198; Thu, 01 Jun
+ 2023 16:42:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230601230456.2234972-1-royluo@google.com> <4f049d62-d103-4491-9c7e-16c7cf94eac1@rowland.harvard.edu>
+In-Reply-To: <4f049d62-d103-4491-9c7e-16c7cf94eac1@rowland.harvard.edu>
+From:   Roy Luo <royluo@google.com>
+Date:   Thu, 1 Jun 2023 16:42:16 -0700
+Message-ID: <CA+zupgxPfAwbLq=CUy_frj9CMqYKmQKj2enC1_VvkMFAiA5FCg@mail.gmail.com>
+Subject: Re: [PATCH v1] usb: core: add sysfs entry for usb device state
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     raychi@google.com, badhri@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Bastien Nocera <hadess@hadess.net>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Douglas Anderson <dianders@chromium.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prevent any potential integer wrapping issue, and avoid a
--Wstringop-overflow warning by using the check_mul_overflow() helper.
+On Thu, Jun 1, 2023 at 4:21=E2=80=AFPM Alan Stern <stern@rowland.harvard.ed=
+u> wrote:
+>
+> On Thu, Jun 01, 2023 at 11:04:56PM +0000, Roy Luo wrote:
+> > Expose usb device state to userland as the information is useful in
+> > detecting non-compliant setups and diagnosing enumeration failures.
+> > For example:
+> > - End-to-end signal integrity issues: the device would fail port reset
+> >   repeatedly and thus be stuck in POWERED state.
+> > - Charge-only cables (missing D+/D- lines): the device would never ente=
+r
+> >   POWERED state as the HC would not see any pullup.
+> >
+> > What's the status quo?
+> > We do have error logs such as "Cannot enable. Maybe the USB cable is ba=
+d?"
+> > to flag potential setup issues, but there's no good way to expose them =
+to
+> > userspace.
+> >
+> > Why add a sysfs entry in struct usb_port instead of struct usb_device?
+> > The struct usb_device is not device_add() to the system until it's in
+> > ADDRESS state hence we would miss the first two states. The struct
+> > usb_port is a better place to keep the information because its life
+> > cycle is longer than the struct usb_device that is attached to the port=
+.
+> >
+> > Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+> > Signed-off-by: Roy Luo <royluo@google.com>
+> > ---
+>
+> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > index 97a0f8faea6e..35d94288726b 100644
+> > --- a/drivers/usb/core/hub.c
+> > +++ b/drivers/usb/core/hub.c
+> > @@ -2018,6 +2018,23 @@ bool usb_device_is_owned(struct usb_device *udev=
+)
+> >       return !!hub->ports[udev->portnum - 1]->port_owner;
+> >  }
+> >
+> > +static void update_port_device_state(struct usb_device *udev)
+> > +{
+> > +     struct usb_port *port_dev =3D NULL;
+> > +     struct usb_hub *hub =3D NULL;
+> > +     struct kernfs_node *state_node =3D NULL;
+> > +
+> > +     if (udev->parent) {
+> > +             hub =3D usb_hub_to_struct_hub(udev->parent);
+> > +             port_dev =3D hub->ports[udev->portnum - 1];
+> > +             WRITE_ONCE(port_dev->state, udev->state);
+> > +             state_node =3D sysfs_get_dirent(port_dev->dev.kobj.sd, "s=
+tate");
+> > +             if (state_node) {
+> > +                     sysfs_notify_dirent(state_node);
+> > +             }
+> > +     }
+> > +}
+>
+> I didn't notice the "=3D NULL" initializers before.  You might want to
+> remove them, since they are completely unnecessary.
+>
+> Alan Stern
 
-drivers/scsi/lpfc/lpfc.h:
-837:#define LPFC_RAS_MIN_BUFF_POST_SIZE (256 * 1024)
+Ack, sending out v2.
 
-drivers/scsi/lpfc/lpfc_debugfs.c:
-2266 size = LPFC_RAS_MIN_BUFF_POST_SIZE * phba->cfg_ras_fwlog_buffsize;
-
-this can wrap to negative if cfg_ras_fwlog_buffsize is large
-enough. And even when in practice this is not possible (due to
-phba->cfg_ras_fwlog_buffsize never being larger than 4[1]), the
-compiler is legitimately warning us about potentially buggy code.
-
-Fix the following warning seen under GCC-13:
-In function ‘lpfc_debugfs_ras_log_data’,
-    inlined from ‘lpfc_debugfs_ras_log_open’ at drivers/scsi/lpfc/lpfc_debugfs.c:2271:15:
-drivers/scsi/lpfc/lpfc_debugfs.c:2210:25: warning: ‘memcpy’ specified bound between 18446744071562067968 and 18446744073709551615 exceeds maximum object size 9223372036854775807 [-Wstringop-overflow=]
- 2210 |                         memcpy(buffer + copied, dmabuf->virt,
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 2211 |                                size - copied - 1);
-      |                                ~~~~~~~~~~~~~~~~~~
-
-Link: https://github.com/KSPP/linux/issues/305
-Link: https://lore.kernel.org/linux-hardening/CABPRKS8zyzrbsWt4B5fp7kMowAZFiMLKg5kW26uELpg1cDKY3A@mail.gmail.com/ [1]
-Co-developed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
-Changes in v2:
- - Use check_mul_overflow() helper (Kees).
-
-v1:
- - Link: https://lore.kernel.org/linux-hardening/ZHZq7AV9Q2WG1xRB@work/
-
- drivers/scsi/lpfc/lpfc_debugfs.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
-index bdf34af4ef36..7f9b221e7c34 100644
---- a/drivers/scsi/lpfc/lpfc_debugfs.c
-+++ b/drivers/scsi/lpfc/lpfc_debugfs.c
-@@ -2259,11 +2259,15 @@ lpfc_debugfs_ras_log_open(struct inode *inode, struct file *file)
- 		goto out;
- 	}
- 	spin_unlock_irq(&phba->hbalock);
--	debug = kmalloc(sizeof(*debug), GFP_KERNEL);
-+
-+	if (check_mul_overflow(LPFC_RAS_MIN_BUFF_POST_SIZE,
-+			       phba->cfg_ras_fwlog_buffsize, &size))
-+		goto out;
-+
-+	debug = kzalloc(sizeof(*debug), GFP_KERNEL);
- 	if (!debug)
- 		goto out;
- 
--	size = LPFC_RAS_MIN_BUFF_POST_SIZE * phba->cfg_ras_fwlog_buffsize;
- 	debug->buffer = vmalloc(size);
- 	if (!debug->buffer)
- 		goto free_debug;
--- 
-2.34.1
-
+Thanks,
+Roy
