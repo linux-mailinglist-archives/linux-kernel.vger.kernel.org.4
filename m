@@ -2,153 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7542D719C35
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C89C719C45
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232694AbjFAMeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 08:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38812 "EHLO
+        id S232445AbjFAMg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 08:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjFAMeM (ORCPT
+        with ESMTP id S229589AbjFAMg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 08:34:12 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79838133;
-        Thu,  1 Jun 2023 05:34:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1685622848; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=S3TBJ4EETCTJKpfs1QEg8mc0iQOxrlN0wStMeC5mPmNTQBeTWoCFzc+/KsfzGpSHbW
-    hXatTPRtsR1pQ05kaNiqf1uHM6EmZyZ7+zp/lN+dMpApVomP11+VbHL8AqpsjJQVvRRZ
-    4+wwhy4sxQgCawlC6oQEixBPGh9LxvZ/s0/ek2JFmbnd0CTIWAeMclJr5pC+AumPafNm
-    AciTyhiaUHhxiWBNUQZYnDllKX802z3zJSBrU2c4BAVJduaZ4Q6yARUAF1uSDfxvUqKn
-    x7Zm+LT7hI8AhJP8/30MRU/ZU0Eu/f6JhB2T55kHsjOuloiAVyeVtccrkHvGYo3E9UXt
-    C90Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1685622848;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=+p5IHgtCJ++8nSCghrBfYm3V7/hpk9AekMBHzhUufmw=;
-    b=TCIbyLUdBwYatC5Qzcv+0rNQMwMgi4FxnNfiuO/UmeFeafA0/LZCHPgpJYnmn1qg+S
-    UKcrUUC7FYfTlXymbXoYyXUcys1LO8O/0cuWM0fR2o+Ubgk6tPTkWw7FIP/gxcW/rQXz
-    4SwI1wxMjFr734f7qqGj5oxlyUkgBrNLHgwonRI32mwud25qV3NWwgPEtK2e4/Dwfikd
-    kxzx3A7/BQX5F3Wqgfdl4r6M1+VqNsGJzzBKMWFIzhFXrp8o/dyTeKnkN5EGQt2JwSbc
-    fV/SzW5nhpBS4vS2BJeWx0sE/s8d8RoeiC6WIxM7rEhSKlGVvKTXgcPtV8HrdQvwbF9v
-    icyQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1685622848;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=+p5IHgtCJ++8nSCghrBfYm3V7/hpk9AekMBHzhUufmw=;
-    b=XLt1PbAKn5SRWofP0EC/8zRj9xmoVvk5qlUiOwIme2QmDSBmBx6AS80jQQQ0Nz1PCY
-    ++BieydRN9J92FdNrsYVIWjNT/UttScAdvFTBCvRJpSzpKU0osbUZHUS4kms3BTboJ1R
-    e8WoiyimUrye08j0fAT54jgPZwu5hgCQQ8TYtAb5c+2yOgfEh3xGE0kByYD7EyJbrw/V
-    yt03/KqT9w+Prf+ktKoNYW/1wjfcMHQTrtIztRydV6SsjIDk6hU8O1NATbyWtjbT7V+e
-    V+gvKEqjlvL80dM++Baq/0ZamodxrUVg2ru6fAYANPZTMDHqGFHafm/ptwQy8nBIJ2/c
-    XRyw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1685622848;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=+p5IHgtCJ++8nSCghrBfYm3V7/hpk9AekMBHzhUufmw=;
-    b=Bdcp32Svcck/rleKarQHmuINUKKaHfaMODtq8EDOz5RPqzMylJ0xDzd50lOUL02/sc
-    tyhyOlDYXjWfjT8pj7CQ==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA9J/h"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az51CY7qxR
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 1 Jun 2023 14:34:07 +0200 (CEST)
-Date:   Thu, 1 Jun 2023 14:34:00 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: reserved-memory: rmtfs: Allow guard
- pages
-Message-ID: <ZHiQON3Or-JCGMur@gerhold.net>
-References: <20230530233643.4044823-1-quic_bjorande@quicinc.com>
- <20230530233643.4044823-2-quic_bjorande@quicinc.com>
+        Thu, 1 Jun 2023 08:36:56 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA6F119;
+        Thu,  1 Jun 2023 05:36:55 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-96f53c06babso99794066b.3;
+        Thu, 01 Jun 2023 05:36:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685623014; x=1688215014;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ehHBfTfHpFq9gN1tp3vpZxZbCv0h8WUkNnRmVixaHus=;
+        b=IYocw7LtLTtELs1lzYQjnzI+3n69AYNQEshwVrvy9Prnghlr8U/plLV/F9I8cU//9g
+         Y3dhjiVb6PBaZjbXqngC3Iq07GkjEovEjrbqXve8vXuVnvRpzi3nfU3eqorEJeLYuI5/
+         S8nu1SzkkK7bD0PfKSgLnu2Rj7cS78wliniOUPnKU2bSsTvIxRgEaxLz24RMLkAypLPk
+         cCaJ64KPOLBtiW8BRSClQfZp3uoocrnUe/2PP3YDbWtdGHnfPc0ZzO5QbLqC4zeG3NDC
+         WkYTJXj1hSykRJF+vWZAvI064AtIcXHMkaOCEeB9ft3RcGitzHxbPZAlHyMhy+czzszR
+         55Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685623014; x=1688215014;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ehHBfTfHpFq9gN1tp3vpZxZbCv0h8WUkNnRmVixaHus=;
+        b=JTS3TS+86XlJOICKADT0OVs/Ca5p7HOuwG8dJHGYZiVXHPOlsfOM24agEcVSSIv30I
+         TDRWXCSJ8s5CTG2VPdvasjqcrHhQu4yj3oVeB/KELmEEgKvvizQg22pREGkqpbISh0j1
+         /rTK58Ut03QnSzIXwuu7oYoBBluCzxNsXjD5kOJWBBzdq7D+xjhXOVl4lJR4yl/Pnlra
+         JnKq21IRPHAu7ggXHYZCyTbDsmwPbB6ejbhmpyAOYzoHipJ/gcRz1hrpRVdmWHLSOxpV
+         xlm6JrGpnH1R0RlKWMaXNA055lxtBkvx/gk8sbAViT4BH4WWaPlqqdEVHT1uUz3qONch
+         7HMg==
+X-Gm-Message-State: AC+VfDzKA9xV66ygHHgR1cemQvG1dKkIgr2TbV5mDSgW9OsFJDsSv7Le
+        TIkZB3fZjCLYBepCRDV8fYM=
+X-Google-Smtp-Source: ACHHUZ73F5LLoOz2NNjkClTA4o4LIKaH39YUgnRg7PnrldgoFgqlQNVX1P6hwTrbD41XmMFEXq0S9w==
+X-Received: by 2002:a17:907:25c2:b0:973:8cb7:4d81 with SMTP id ae2-20020a17090725c200b009738cb74d81mr9144506ejc.49.1685623013899;
+        Thu, 01 Jun 2023 05:36:53 -0700 (PDT)
+Received: from orome (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id se24-20020a170906ce5800b009662b4230cesm10664574ejb.148.2023.06.01.05.36.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 05:36:53 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 14:36:51 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        "jsnitsel@redhat.com" <jsnitsel@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
+Message-ID: <ZHiQ44gAL3YEZPUh@orome>
+References: <20230421091309.2672-3-kyarlagadda@nvidia.com>
+ <CS48A9Y752N4.QEM73WVMZYLQ@suppilovahvero>
+ <3df39f0b-70dc-4b42-bae1-72c07607cbc7@sirena.org.uk>
+ <ZEaWQD_QTs2usVl8@orome>
+ <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
+ <ZEag1lAonYcmNFXk@orome>
+ <DM4PR12MB5769BB69B97F77DBA9ED2935C3779@DM4PR12MB5769.namprd12.prod.outlook.com>
+ <DM4PR12MB5769499349B6B936FE46BF0CC3419@DM4PR12MB5769.namprd12.prod.outlook.com>
+ <ZHhW_wFvRWInR_iM@orome>
+ <dec901be-4bef-43e0-a125-23c5c4e92789@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="BiFkO/AwryVjPFkW"
 Content-Disposition: inline
-In-Reply-To: <20230530233643.4044823-2-quic_bjorande@quicinc.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <dec901be-4bef-43e0-a125-23c5c4e92789@sirena.org.uk>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 04:36:41PM -0700, Bjorn Andersson wrote:
-> On some Qualcomm platforms it's required that the rmtfs memory is not
-> placed adjacent to allocations performed by other clients. Some
-> DeviceTree authors have solved this by reserving the space around
-> the region, but this prevents such author to use rely on the OS to place
-> the region, through the use of "size" (instead of a fixed location).
-> 
-> So introduce a flag to indicate that guard pages should be carved at the
-> beginning and end of the memory region. The user shall account for the
-> two 4k blocks in the defined size.
-> 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-> 
-> Changes since v1:
-> - Drop qcom,alloc-size in favour of using reserved-memory/size
-> - Introduce explicit property to signal that guard pages should be
->   carved out from this region (rather than always do it in the dynamic
->   case).
-> 
->  .../bindings/reserved-memory/qcom,rmtfs-mem.yaml           | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
-> index bab982f00485..26e24e7b08cf 100644
-> --- a/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
-> +++ b/Documentation/devicetree/bindings/reserved-memory/qcom,rmtfs-mem.yaml
-> @@ -26,6 +26,13 @@ properties:
->      description: >
->        identifier of the client to use this region for buffers
->  
-> +  qcom,use-guard-pages:
-> +    type: boolean
-> +    description: >
-> +      Indicates that the OS should ignore the first and last 4k block of the
-> +      memory region, for the purpose of ensuring that the allocation is not
-> +      adjacent to other protected regions.
-> +
 
-The name "page(s)" is kind of ambiguous nowadays given that systems are
-configured with a variety of page sizes other than 4k.
+--BiFkO/AwryVjPFkW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I wonder if it would be more clear to add the actual size of the guard
-pages to the device tree, e.g.
+On Thu, Jun 01, 2023 at 12:04:59PM +0100, Mark Brown wrote:
+> On Thu, Jun 01, 2023 at 10:29:51AM +0200, Thierry Reding wrote:
+>=20
+> > any ideas on how we can best get this merged? I guess at this point it
+> > could go through either tree since the SPI dependency has been in Linus'
+> > tree since v6.4-rc1.
+>=20
+> I would expect it to go via whatever path TPM patches usually take given
+> that it's a TPM patch.
 
-	rmtfs {
-		compatible = "qcom,rmtfs-mem";
-		size = <(2*1024*1024 + 2*4096)>;
-		qcom,guard-size = <4096>;
-	};
+There might have been a misunderstanding. My recollection was that you
+had said a few weeks ago that you would pick this up. Going through the
+thread again I realize that may not have been what you meant. Perhaps
+Jarkko misinterpreted this in the same way.
 
-This could also handle a different padding - in the unlikely case that
-this is needed on some platform...
+Jarkko, can you pick this up for v6.5?
 
-It's probably also fine the way you added it though, this is just
-a random thought I had. :)
+Thierry
 
-Thanks,
-Stephan
+--BiFkO/AwryVjPFkW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmR4kOMACgkQ3SOs138+
+s6GCWA//dGR7DSaUdohkzVJ5x9tBnEEhCZH9ZliQHAL6CV9h8/rs7jHZTlpmlgaa
+HUz4RPp/EMwziWPzhD6BHw8VTRqyhQhOiIRFqU9CA3x0VhClnIaH3gt6zqHSSCiC
+ie4Sn8IMKWq7ZERuwizxBiYS80x8VjWJq+DGcFP2V+DbraPL1GdsfEWbbRuwOtj2
+bqw0Uvo7wd1NCtcV/oYfv2vV7ebdsPnQ7cHmyAslmcYRzcZce0C/mYYRzr/BahkX
+nNwovE0ADj9jIma4qMgDfeVFq0IODhCSqOI+dThv7hfnL2vuV1zrbeWJ5N6jVq1j
+mV84Yq0TQDPeGgb7xXjYi22m2KF7FZAWdI/d3Ep+WOTR4r76aVYFSOO0mBaNn1f7
+BE3ZDBsRj06GHJifR8eW+Vrev0MIj5+1wvalhUiVQ8VmZt6hPirLjH8hzcUposOw
+c5as4w6IaoOeUQVl/iz0ScQg0BySTd2whg2Rk1tyYZEz+hY2ndmxF6yhz/lFK8ob
+8PtXQ+Sz/NFdPBRl/bpBzVMItOG8nT1DHsntVQZLxqt3W2B/oglUc7Fa+hZB0kN+
+LlzKZmFgYHX2jUeCYDEnmHnlyio3XqsHmkLqeeI4IJKBFTCazNXbiTJWWWSFXEkc
+qIJFEMOrUjFARVKsFbgNMD7wQ4zAYEOftP3GLpYi09SWbCCoVVI=
+=E3jj
+-----END PGP SIGNATURE-----
+
+--BiFkO/AwryVjPFkW--
