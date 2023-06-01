@@ -2,105 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9999719F4A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5413719F55
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233883AbjFAOMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
+        id S233734AbjFAOMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233831AbjFAOMb (ORCPT
+        with ESMTP id S233839AbjFAOMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:12:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E97FC
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:12:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D205A63A3A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 14:12:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E41C4339B;
-        Thu,  1 Jun 2023 14:12:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685628749;
-        bh=dtgREO1rMn6LkUwpPKQhnN0y9K6Zffo816EVEew9pHQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Fb3putoiBUseFxJkwI+s9QSkuvasX8/A5gDmxQ/w+TyYMG/Llp8B7QBEANUoL3TVf
-         3KTFmwfVkMp6gdOD6qu/yIyW3otXaK3GSmzcZHIZ78D22dYUBZiyvVbvhYNwQBB+Q8
-         /7LFB3TfGtd6w2fCNPxg0sDfgWxq8xY/eXxGHZwvLeJhCbxj5YUwdFLfeVCFG8q6SP
-         rqQJ6mQoJkHMx9+ciFXdNxltmvar6WyiIO2K/rfAdIHwWLYJksfL7pOmDow5tH5Pmp
-         L7OqQZXGNbn/AW1Pzsu/79pnsKVx93OBf/Z1fDVMLaS6vtL++NK14gemju4XYvG1SB
-         XhNTl8argwSCA==
-From:   Mark Brown <broonie@kernel.org>
-To:     pierre-louis.bossart@linux.intel.com,
-        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        daniel.baluta@nxp.com, lgirdwood@gmail.com, tiwai@suse.com,
-        perex@perex.cz, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        Trevor Wu <trevor.wu@mediatek.com>
-Cc:     yc.hung@mediatek.com, tinghan.shen@mediatek.com,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230601034939.15802-1-trevor.wu@mediatek.com>
-References: <20230601034939.15802-1-trevor.wu@mediatek.com>
-Subject: Re: [PATCH v3 0/1] ASoC: SOF: add mt8188 audio support
-Message-Id: <168562874539.66708.811919351455149149.b4-ty@kernel.org>
-Date:   Thu, 01 Jun 2023 15:12:25 +0100
+        Thu, 1 Jun 2023 10:12:36 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED15B129;
+        Thu,  1 Jun 2023 07:12:34 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QX7M31N99z6D91s;
+        Thu,  1 Jun 2023 22:10:23 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 1 Jun
+ 2023 15:12:32 +0100
+Date:   Thu, 1 Jun 2023 15:12:31 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Terry Bowman <Terry.Bowman@amd.com>
+CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
+        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
+        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: Re: [PATCH v4 20/23] cxl/pci: Prepare for logging RCH downstream
+ port protocol errors
+Message-ID: <20230601151231.00003f9f@Huawei.com>
+In-Reply-To: <11c99f76-2473-bf71-c2d5-f697b1b0e412@amd.com>
+References: <20230523232214.55282-1-terry.bowman@amd.com>
+        <20230523232214.55282-21-terry.bowman@amd.com>
+        <20230601144942.000075f5@Huawei.com>
+        <11c99f76-2473-bf71-c2d5-f697b1b0e412@amd.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 01 Jun 2023 11:49:38 +0800, Trevor Wu wrote:
-> This series adds mt8188 audio support and dbg_dump callback for
-> mt8186 and mt8188.
+On Thu, 1 Jun 2023 09:06:23 -0500
+Terry Bowman <Terry.Bowman@amd.com> wrote:
+
+> Hi Jonathan, thanks for reviewing.
 > 
-> Changes since v2:
->   - resend the correct patch for adsp debug dump
+> On 6/1/23 08:49, Jonathan Cameron wrote:
+> > On Tue, 23 May 2023 18:22:11 -0500
+> > Terry Bowman <terry.bowman@amd.com> wrote:
+> > 
+> > The title is very vague.  Can it be more specific to what
+> > is in this patch?  The description makes it seem like a bunch of
+> > unconnected things, but in reality they all chain together
+> > to get the registers and disable the interrupt.
+> >   
 > 
-> Changes since v1:
->   - fix typo
->   - adopt reviewer's suggestion
-> 
-> [...]
+> How about I split this into 2 patches (along lines of register mapping
+> and root port interrupt disable) and title as:
+> cxl/pci: Map RCH downstream registers for AER protocol error logging
+> cxl/pci: Disable root port interrupts in RCH mode
 
-Applied to
+Sounds good to me.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-
-Thanks!
-
-[1/1] ASoC: SOF: mediatek: add adsp debug dump
-      commit: 089adf33701426869dd50d1b8b8a4abd25ae39ae
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Jonathan
