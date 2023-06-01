@@ -2,85 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F326F7197A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BD57197A6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbjFAJuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
+        id S231918AbjFAJuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231812AbjFAJuH (ORCPT
+        with ESMTP id S232339AbjFAJuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:50:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21394138
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:49:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685612962;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2bSBV8Q60GdSQ9cSAx/GWXvbTZ/nLQNHe8IPVOifGAA=;
-        b=W0qgd7793UnjKotRFcLnHY8JrUmH9oxnBMnJ2Sg1FkrRSaVrezEJzjssRwkBpDNAxtsG0E
-        ioKbT29BqcM5nOTiT2m4ORp6YK4XdPRFmZDuMCGQyCql+A4xOITJ5OsJaVWuxNJHsPoXXC
-        caVL4CMSxmLBhexLXqDnaEYPtogjS4Y=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-320-UNkL2QV4NoippsKJzAC3LA-1; Thu, 01 Jun 2023 05:49:20 -0400
-X-MC-Unique: UNkL2QV4NoippsKJzAC3LA-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-75cb47e5507so7112685a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 02:49:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685612960; x=1688204960;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2bSBV8Q60GdSQ9cSAx/GWXvbTZ/nLQNHe8IPVOifGAA=;
-        b=GpCvghk8JhqPlDbnnGvZBbetOc9fUkhv0b9AHWwZlsm9SVO+4fzzlLGIETqKgt8of+
-         eVuKyxKLu3nI1XWjahfEX9PYoPVtmeqm1i4slUcKj99429aK+k81pHVLjWkYCq462XiF
-         lniBHor9DLbwG3MHt0tOuHk47epJmXI9jvoDu6IeZa8E4OfNDG2qIOJjJzhSZIlEc9oJ
-         qocBhnDcK7Z3Faw8nPSpPPT4ffdM5nfUN1ZDiel8aDbPKNKa/g4ye+QBZEe6s9+SG4Jf
-         bnpKjASUGBN79J5rRt7FFe9dXH7oosa9PlR+uMjKLwwG6LRhvxfwPrZIPE9g3mBGBBxt
-         9qdA==
-X-Gm-Message-State: AC+VfDwhhzf1eIB+HWrwxt2+q8Fm4mV1BW8aBMjufeTrgv/REndyEmXQ
-        PnJYRETp+bAMzAfq6DvXJM9kUdgMr87nlmJnX8w8ywHZzNI+mXa/yZdUKqRfF5lNHiX82iq4YPq
-        YAIklXvcgAvA/aIzQC03h6uoU
-X-Received: by 2002:a05:620a:17ab:b0:75b:23a1:829f with SMTP id ay43-20020a05620a17ab00b0075b23a1829fmr5373383qkb.0.1685612960368;
-        Thu, 01 Jun 2023 02:49:20 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5yBracybuX3X6v4h6rND3GfM88+X6dv2LFLqr5nImNW+d0uKGReZCHar0BcmPXwrs9IoB7eg==
-X-Received: by 2002:a05:620a:17ab:b0:75b:23a1:829f with SMTP id ay43-20020a05620a17ab00b0075b23a1829fmr5373359qkb.0.1685612960126;
-        Thu, 01 Jun 2023 02:49:20 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-242-89.dyn.eolo.it. [146.241.242.89])
-        by smtp.gmail.com with ESMTPSA id t15-20020a05620a004f00b0075d22e15f1bsm367441qkt.129.2023.06.01.02.49.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 02:49:19 -0700 (PDT)
-Message-ID: <bd2750e52b47af1782233e254114eb8d627f1073.camel@redhat.com>
-Subject: Re: [PATCH net-next v2 08/10] crypto: af_alg: Support
- MSG_SPLICE_PAGES
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-crypto@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Date:   Thu, 01 Jun 2023 11:49:15 +0200
-In-Reply-To: <20230530141635.136968-9-dhowells@redhat.com>
-References: <20230530141635.136968-1-dhowells@redhat.com>
-         <20230530141635.136968-9-dhowells@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 1 Jun 2023 05:50:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD5A95;
+        Thu,  1 Jun 2023 02:50:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D43756425C;
+        Thu,  1 Jun 2023 09:50:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7162C433EF;
+        Thu,  1 Jun 2023 09:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685613009;
+        bh=fUFnP8JClGnkC9Vy2F7MOXl5BeYzlX+HFhd4pvaRKEY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hw085gAQLoUmZavmnB+3G/SMg5IaFloQgLLlbOstLecC/Fu3S/lz7yXW31YFirolX
+         S/1RtdLNWznxI8Fwb+T1hELUWKQciw6y7RnT+qNt7APCDD2YDzXlKS5NReVgI0GaqI
+         8kDRekd5510mPBJ6FzrhdxyuOhW3uChD8gX9B82v31SB50XVD2mhPdlVFwq9glSH6L
+         S3q+TWbVA5o9L400RNtiznTZ5cBdHWjpq+J7dCD0wOcxIbSKw1DyWjgbO+2c0jeruV
+         xHYuEvsnQGhD/5aMf5O4u9WRSadRMQx5Nf17fK2hF1AmcsFs3n+iiisksQESTiV+zt
+         ax2QzrDwZIZ6g==
+Date:   Thu, 1 Jun 2023 11:49:59 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     chenzhiyin <zhiyin.chen@intel.com>
+Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nanhai.zou@intel.com,
+        Dave Chinner <david@fromorbit.com>
+Subject: Re: [PATCH] fs.h: Optimize file struct to prevent false sharing
+Message-ID: <20230601-pelle-gemustert-4ba4b700c3db@brauner>
+References: <20230531-wahlkabine-unantastbar-9f73a13262c0@brauner>
+ <20230601092400.27162-1-zhiyin.chen@intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230601092400.27162-1-zhiyin.chen@intel.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,78 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-05-30 at 15:16 +0100, David Howells wrote:
-> Make AF_ALG sendmsg() support MSG_SPLICE_PAGES.  This causes pages to be
-> spliced from the source iterator.
->=20
-> This allows ->sendpage() to be replaced by something that can handle
-> multiple multipage folios in a single transaction.
->=20
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Herbert Xu <herbert@gondor.apana.org.au>
-> cc: "David S. Miller" <davem@davemloft.net>
-> cc: Eric Dumazet <edumazet@google.com>
-> cc: Jakub Kicinski <kuba@kernel.org>
-> cc: Paolo Abeni <pabeni@redhat.com>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: linux-crypto@vger.kernel.org
-> cc: netdev@vger.kernel.org
+On Thu, Jun 01, 2023 at 05:24:00AM -0400, chenzhiyin wrote:
+> In the syscall test of UnixBench, performance regression occurred due
+> to false sharing.
+> 
+> The lock and atomic members, including file::f_lock, file::f_count and
+> file::f_pos_lock are highly contended and frequently updated in the
+> high-concurrency test scenarios. perf c2c indentified one affected
+> read access, file::f_op.
+> To prevent false sharing, the layout of file struct is changed as
+> following
+> (A) f_lock, f_count and f_pos_lock are put together to share the same
+> cache line.
+> (B) The read mostly members, including f_path, f_inode, f_op are put
+> into a separate cache line.
+> (C) f_mode is put together with f_count, since they are used frequently
+>  at the same time.
+> Due to '__randomize_layout' attribute of file struct, the updated layout
+> only can be effective when CONFIG_RANDSTRUCT_NONE is 'y'.
+> 
+> The optimization has been validated in the syscall test of UnixBench.
+> performance gain is 30~50%. Furthermore, to confirm the optimization
+> effectiveness on the other codes path, the results of fsdisk, fsbuffer
+> and fstime are also shown.
+> 
+> Here are the detailed test results of unixbench.
+> 
+> Command: numactl -C 3-18 ./Run -c 16 syscall fsbuffer fstime fsdisk
+> 
+> Without Patch
+> ------------------------------------------------------------------------
+> File Copy 1024 bufsize 2000 maxblocks   875052.1 KBps  (30.0 s, 2 samples)
+> File Copy 256 bufsize 500 maxblocks     235484.0 KBps  (30.0 s, 2 samples)
+> File Copy 4096 bufsize 8000 maxblocks  2815153.5 KBps  (30.0 s, 2 samples)
+> System Call Overhead                   5772268.3 lps   (10.0 s, 7 samples)
+> 
+> System Benchmarks Partial Index         BASELINE       RESULT    INDEX
+> File Copy 1024 bufsize 2000 maxblocks     3960.0     875052.1   2209.7
+> File Copy 256 bufsize 500 maxblocks       1655.0     235484.0   1422.9
+> File Copy 4096 bufsize 8000 maxblocks     5800.0    2815153.5   4853.7
+> System Call Overhead                     15000.0    5772268.3   3848.2
+>                                                               ========
+> System Benchmarks Index Score (Partial Only)                    2768.3
+> 
+> With Patch
+> ------------------------------------------------------------------------
+> File Copy 1024 bufsize 2000 maxblocks  1009977.2 KBps  (30.0 s, 2 samples)
+> File Copy 256 bufsize 500 maxblocks     264765.9 KBps  (30.0 s, 2 samples)
+> File Copy 4096 bufsize 8000 maxblocks  3052236.0 KBps  (30.0 s, 2 samples)
+> System Call Overhead                   8237404.4 lps   (10.0 s, 7 samples)
+> 
+> System Benchmarks Partial Index         BASELINE       RESULT    INDEX
+> File Copy 1024 bufsize 2000 maxblocks     3960.0    1009977.2   2550.4
+> File Copy 256 bufsize 500 maxblocks       1655.0     264765.9   1599.8
+> File Copy 4096 bufsize 8000 maxblocks     5800.0    3052236.0   5262.5
+> System Call Overhead                     15000.0    8237404.4   5491.6
+>                                                               ========
+> System Benchmarks Index Score (Partial Only)                    3295.3
+> 
+> Signed-off-by: chenzhiyin <zhiyin.chen@intel.com>
 > ---
->  crypto/af_alg.c         | 28 ++++++++++++++++++++++++++--
->  crypto/algif_aead.c     | 22 +++++++++++-----------
->  crypto/algif_skcipher.c |  8 ++++----
->  3 files changed, 41 insertions(+), 17 deletions(-)
->=20
-> diff --git a/crypto/af_alg.c b/crypto/af_alg.c
-> index fd56ccff6fed..62f4205d42e3 100644
-> --- a/crypto/af_alg.c
-> +++ b/crypto/af_alg.c
-> @@ -940,6 +940,10 @@ int af_alg_sendmsg(struct socket *sock, struct msghd=
-r *msg, size_t size,
->  	bool init =3D false;
->  	int err =3D 0;
-> =20
-> +	if ((msg->msg_flags & MSG_SPLICE_PAGES) &&
-> +	    !iov_iter_is_bvec(&msg->msg_iter))
-> +		return -EINVAL;
-> +
->  	if (msg->msg_controllen) {
->  		err =3D af_alg_cmsg_send(msg, &con);
->  		if (err)
-> @@ -985,7 +989,7 @@ int af_alg_sendmsg(struct socket *sock, struct msghdr=
- *msg, size_t size,
->  	while (size) {
->  		struct scatterlist *sg;
->  		size_t len =3D size;
-> -		size_t plen;
-> +		ssize_t plen;
-> =20
->  		/* use the existing memory in an allocated page */
->  		if (ctx->merge) {
-> @@ -1030,7 +1034,27 @@ int af_alg_sendmsg(struct socket *sock, struct msg=
-hdr *msg, size_t size,
->  		if (sgl->cur)
->  			sg_unmark_end(sg + sgl->cur - 1);
-> =20
-> -		if (1 /* TODO check MSG_SPLICE_PAGES */) {
-> +		if (msg->msg_flags & MSG_SPLICE_PAGES) {
-> +			struct sg_table sgtable =3D {
-> +				.sgl		=3D sg,
-> +				.nents		=3D sgl->cur,
-> +				.orig_nents	=3D sgl->cur,
-> +			};
-> +
-> +			plen =3D extract_iter_to_sg(&msg->msg_iter, len, &sgtable,
-> +						  MAX_SGL_ENTS, 0);
 
-It looks like the above expect/supports only ITER_BVEC iterators, what
-about adding a WARN_ON_ONCE(<other iov type>)?
-
-Also, I'm keeping this series a bit more in pw to allow Herbert or
-others to have a look.
-
-Cheers,
-
-Paolo
-
+Dave had some more concerns and perf analysis requests for this. So this
+will be put on hold until these are addressed.
