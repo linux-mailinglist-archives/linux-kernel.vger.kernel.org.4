@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEC571F05F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079D071F062
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbjFARLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 13:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
+        id S232502AbjFARM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 13:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232311AbjFARL1 (ORCPT
+        with ESMTP id S231970AbjFARMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 13:11:27 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58742184
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 10:11:23 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-bad102ce9eeso1141145276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 10:11:23 -0700 (PDT)
+        Thu, 1 Jun 2023 13:12:24 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD48E2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 10:12:23 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51491b87565so1717675a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 10:12:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685639482; x=1688231482;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2RYUgEYxXFi1ZF21Col8g6vBwno/bBmJUkRFch0DaQM=;
-        b=UVdnJ7BpN6sHBSdOMr7NGH8HcUdYjWOQtQqoEA1adtfZsyom8iNmq5UdedDkfDhRer
-         9b48g/Ii4kszW54ESZgZmO2/RpuYOW3IPzGNPBubY/a60iKbGmaafPracLZ48Gfws4bk
-         A+nQd1fxmjI1afLhCh9Df8fpTdmCXGx5WNdfGH67ftg5rJmtGJ3S6+nJfZBPpkp+L7P5
-         SsTvCWOfI7Si48vDoM0KkkDJ06V2IrimJr3gvaV81Sa5sRmQthRFwfcLD0dJfY1PoW4c
-         Add18Zi93boaWSz/M+ZWU9WO5Lg9CqElBiXJP+G2PNQggV3w45Xc6a+rkkJqMdQ8yE27
-         Ff1Q==
+        d=linaro.org; s=google; t=1685639542; x=1688231542;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zN+Iz8iy1OdFPcTqO+tGqAKxTpsLm6Wu34sfJYFaDB4=;
+        b=Rmfv/7AS/T6IhRwWMUDtMKZXevyfYNNzN+x7SujEpEwyBqVlx3kNFAo1HB1iDAAN5i
+         HIYyO70/yCUKx4Nq6TZBT8OknFcbW3cIYh4rU+Q2AJoxtDsklSksDLJ9jOuMqytrbMcX
+         RImRKDTc9M8W3c0nqt/JcRn7X2TIOa0MdVlpoIlxKFFVLsYeVWacNyaO4jgqxAzRuyN7
+         pSgCE97pLuHD2ZT9uFICfPh6gpynGypVbGrnWhaMfJGl2C40/ErnRvLRC+lwe1QmM73/
+         SHKbTj24F4+Xu6xQFw3iwHmFYdIOwrbYQUKIt29+f0dcD2TPHOPLuJS94M/0E0bJh8A6
+         KQrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685639482; x=1688231482;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2RYUgEYxXFi1ZF21Col8g6vBwno/bBmJUkRFch0DaQM=;
-        b=bwNNF0Tb8X42lH00JZg3wO5n8GY37ABolnwezeOhjvQXjWmV//UAG+7Aw4coDia8kg
-         208vJxjIZYxlLCJ+imCgwJ22ciW4I6r/cxgynfTF2UfxVpP3miQqG7Km+OfZcgjRUSAW
-         Ie6ZSjvzmw5HUgE3QTjyzCG1pgWAqaQiqJP4hWWuYc+3lczPIwkR27C6HjRGGKtP5mqS
-         geH2N8gFWrZ29jUtVxf+KjPSfcoq7AizpIlcncGk3RtMAnMI99T+vc2UGSv5fvLr9LvR
-         WULRu/gxEheWr0euiTVrYaCui6uXYJ0wivBmse4bF0MxvfC62290CWTtFk7Ly0vhAy25
-         PdKQ==
-X-Gm-Message-State: AC+VfDyQ8CuipsZYxAmzm922yvbiC0pJ95EvcgslPTxmSCk7ZUI8Hc1H
-        EwrYlN31/a1eiOvdqmsqPlOms5eCsSvbLIvdWjxn6w==
-X-Google-Smtp-Source: ACHHUZ4lFj0bWB6jMU3gvWBHimujzrWTdc7mbWeL3/S54GjekR5BYZtKjoQH7YngQMCdyLxjtsgfE3wU8mHqvj+RSKg=
-X-Received: by 2002:a25:b099:0:b0:b99:53e9:ba89 with SMTP id
- f25-20020a25b099000000b00b9953e9ba89mr459824ybj.50.1685639482511; Thu, 01 Jun
- 2023 10:11:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685639542; x=1688231542;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zN+Iz8iy1OdFPcTqO+tGqAKxTpsLm6Wu34sfJYFaDB4=;
+        b=cdl+rskBZI9ZlSt3rFl6zDKVQsQxOQT0UQvlwMLhGmkwwZCzqBTxz+Nn77XaQ+XjMR
+         1AmZGul7/4sydjkR18AZT9Ypm8CCtygx9lWt7BgeHFtHF0NAhvGxQ0q29zzufCQZpu1n
+         PhPi3ydsAkCQThBmlzRsxNeV32wetyZebmW+8xPxrbvbUgYzXSTYjt6i7GURhXsYiMA3
+         hboPb50+TiSor9LImlqkbFhth0XfpiMzLZvk8MhqnramHsAYm9yiae4VCNBifP1juUGi
+         e/PW6GbI3dV+P8pn4LjY7jQWW70c/JVvt96rcX4rdMVrrVOKo2nJWHsRlEXcSipv3x4L
+         M7Rg==
+X-Gm-Message-State: AC+VfDx70xM0TvVhXfXsRWBIXelcueHyV2jLxLbxuFndfonqSWQj2mlR
+        j0hfXttNW5bnbLLabOwRZQh4SckzImh54V4+ooc=
+X-Google-Smtp-Source: ACHHUZ5tbdqIlWXh3ppNIGyLPzCSZo4nvtvSIJcMrD+Rx6dN75SJFKz9/v5Rhku80RuOYFI2n64Nvg==
+X-Received: by 2002:a17:907:84b:b0:973:9492:bcd6 with SMTP id ww11-20020a170907084b00b009739492bcd6mr8974670ejb.38.1685639541889;
+        Thu, 01 Jun 2023 10:12:21 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id se24-20020a170906ce5800b009662b4230cesm10949491ejb.148.2023.06.01.10.12.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 10:12:21 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: [GIT PULL] w1: drivers for v6.5
+Date:   Thu,  1 Jun 2023 19:12:14 +0200
+Message-Id: <20230601171214.1187837-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230531151918.105223-1-nick.hawkins@hpe.com> <20230531151918.105223-5-nick.hawkins@hpe.com>
- <07b2a2f7-5ddc-0f10-6b1f-184dc21fa580@roeck-us.net> <DM4PR84MB19274F575858CBCB2FA5C23E88489@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
- <b1d8f851-4e87-333c-229c-b9dc37ea3c40@roeck-us.net> <DM4PR84MB19273A008BB11589CEEF697188499@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-In-Reply-To: <DM4PR84MB19273A008BB11589CEEF697188499@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 1 Jun 2023 19:11:10 +0200
-Message-ID: <CACRpkdarJCSCif+r1e_jXbbAgv03OgGAO6pkW9x-yiYZJxdGeQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] hwmon: (gxp_fan_ctrl) Provide fan info via gpio
-To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,39 +71,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 1, 2023 at 5:48=E2=80=AFPM Hawkins, Nick <nick.hawkins@hpe.com>=
- wrote:
+Hi Greg,
 
-> Thank you for your valuable feedback with the solutions you have provided=
-.
-> Before I proceed though I have a quick query about the fan driver.
-> If I were to let the user space "own" gpio pins, would it be permissible =
-for
-> the userspace to feed a kernel driver data via sysfs?
->
-> Ex:
-> GPIO Driver -> (OpenBMC) -> Fandriver (sysfs).
->
-> Here the GPIO driver would provide fan presence information to OpenBMC
-> and then OpenBMC would provide fan presence info to the fan driver.
+My first W1-bus drivers pull.  I collected current and ~1.5 year old patches
+from the list.
 
-But why? Don't be so obsessed about userspace doing stuff using
-sysfs, usually it is a better idea to let the kernel handle hardware.
+The git tag for pull is signed with my usual key which you can get
+from kernel.org pgp keys repo: keys/1B93437D3B41629B.asc
 
-I think this is a simple thermal zone you can define in the device
-tree as indicated in my previous comment.
+Best regards,
+Krzysztof
 
-> If it were permissible to provide data to the driver via this method I co=
-uld
-> apply it to the PSU driver as well. the PSU driver which requires presenc=
-e
-> info to verify a PSU is inserted / removed.
 
-It feels like you are looking for a way for two drivers to communicate
-with each other.
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-This can be done several ways, the most straight-forward is notifiers.
-include/linux/notifier.h
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-Yours,
-Linus Walleij
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-w1.git tags/w1-drv-6.5
+
+for you to fetch changes up to b332af5398a3aa1a2fdd69bb6968a8f866cc39aa:
+
+  w1: Replace usage of found with dedicated list iterator variable (2023-05-13 21:15:02 +0200)
+
+----------------------------------------------------------------
+1-Wire bus drivers for v6.5
+
+1. Several older cleanups and minor improvements like dropping redundant
+   match function, fixing indentation and typos, simplifying sysfs
+   attribute show, removing redundant variable initializations, using max()
+   instead of open-coding it and constifying pointer to
+   struct hwmon_channel_info.
+
+2. w1_therm: fix inverted lock handling causing spurious temperature
+   reads.
+
+3. sgi: Use strscpy() over strlcpy().
+
+4. w1 bus fixes:
+   - Correct missing OF node reference put in error path.
+   - Correct iterating over master device list while removing items from
+     it.
+   - Don't use loop iterator past the loop.
+
+----------------------------------------------------------------
+Colin Ian King (2):
+      w1: remove redundant initialization to variable result
+      w1: ds2438: remove redundant initialization of variable crc
+
+Dan Carpenter (1):
+      w1: fix loop in w1_fini()
+
+Haowen Bai (1):
+      w1: w1_therm: Use max() instead of doing it manually
+
+Jakob Koschel (1):
+      w1: Replace usage of found with dedicated list iterator variable
+
+Jason Wang (1):
+      w1: no need to initialise statics to 0
+
+Julia Lawall (1):
+      w1: w1_therm: fix typo in comment
+
+Krzysztof Kozlowski (2):
+      w1: Fix Kconfig indentation
+      w1: therm: constify pointers to hwmon_channel_info
+
+Liang He (1):
+      w1: Add missing of_node_put() in w1.c
+
+Lizhe (1):
+      w1: Remove driver match function
+
+Stefan Wahren (1):
+      w1: w1_therm: fix locking behavior in convert_t
+
+Wolfram Sang (1):
+      w1: sgi: move from strlcpy with unused retval to strscpy
+
+zuoqilin (1):
+      w1: Simplify the atribute show
+
+ drivers/w1/masters/sgi_w1.c   |  2 +-
+ drivers/w1/slaves/Kconfig     |  4 ++--
+ drivers/w1/slaves/w1_ds2438.c |  2 --
+ drivers/w1/slaves/w1_therm.c  | 37 +++++++++++++----------------
+ drivers/w1/w1.c               | 55 +++++++++++++++++--------------------------
+ 5 files changed, 42 insertions(+), 58 deletions(-)
