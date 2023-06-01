@@ -2,54 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF2A71914D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56301719152
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbjFAD2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 23:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
+        id S231169AbjFAD2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 23:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjFAD2B (ORCPT
+        with ESMTP id S229588AbjFAD2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 23:28:01 -0400
+        Wed, 31 May 2023 23:28:06 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE41123
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 20:28:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E764D124;
+        Wed, 31 May 2023 20:28:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685590080; x=1717126080;
-  h=date:from:to:cc:subject:message-id;
-  bh=a8wIP5Ysb5BjyFHwKuKYIpUrI1N/Yc1ZljY64wI4rUY=;
-  b=Ql0FLrK5uaF43sY1U6OXb4MpTDLT3bjE9slqfHipA4exNfF3Qebz4EZr
-   bKDMn7R6pcaqx2ZUoLKxg1TADzUPZMfdbiImMYEAiWl9XlJlj8BHyOdKV
-   932U3EMiXwAruJJjnDsNPTw084YZVdP61iqMzxokpkx1PUalhL12mj6Sy
-   G7DVcdHtxFMyF69n2Tbk3Uy0h9wBCoDstRNEAyFFjsR/labe1YkPBvtK1
-   XWGc+46bFfvjDlllsFwDAgNeNBkYQ4CcmS5NHzAEHper8UznRYKoaFIuk
-   sTZ53HPmXk4gOe9+LkcAjVz2zsmXKqLOX0X75iSYi1ua3SoMC+g8onEiE
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="357839134"
+  t=1685590085; x=1717126085;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+xq448q5qTkKIgFiYOhT+ecVXzgHvJWPPv1d0I8oCrk=;
+  b=Xr0zQSdnLb1YUATP3SkBcSrMq7Ej5OhOr3RiVBO37hWhQRAH7Q/7mcQY
+   dOISuqIGW7re9tROk3CmqnMn0u9wFvBjpYFENLUkb5t47V36YLiZ390tV
+   odz1BIlbdD5sQcp+38av27FAAM7Mu8skNpyUHie/5LJXLRWk5G47uH/pQ
+   xNcYPBbY2UnqrXEd7zOvi2BxIkySsazbKpLYBojyy3ElGeOw4EBAOjdiF
+   8pTI9fi0Ofs614Bji0BiFOsMNwt/lqSdMZqdoZoSYrSv27XDDFCqZO2DB
+   wMDm2qwYN8tL7CDRuyD0C4QCnG0Iz9+ENWXZy7pMdfivz8ybm0AMg1Dy7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="357839165"
 X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="357839134"
+   d="scan'208";a="357839165"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 20:28:00 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 20:28:04 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="736913521"
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="736913522"
 X-IronPort-AV: E=Sophos;i="6.00,207,1681196400"; 
-   d="scan'208";a="736913521"
+   d="scan'208";a="736913522"
 Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
   by orsmga008.jf.intel.com with ESMTP; 31 May 2023 20:27:59 -0700
 Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1q4Yyk-0001s3-1x;
+        id 1q4Yyk-0001s0-1r;
         Thu, 01 Jun 2023 03:27:58 +0000
-Date:   Thu, 01 Jun 2023 11:27:34 +0800
+Date:   Thu, 1 Jun 2023 11:27:43 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 3b49da612e9054a9b38dd46600eec249587aa9d3
-Message-ID: <20230601032734.7ZYcn%lkp@intel.com>
-User-Agent: s-nail v14.9.24
+To:     Breno Leitao <leitao@debian.org>, dsahern@kernel.org,
+        willemdebruijn.kernel@gmail.com,
+        Remi Denis-Courmont <courmisch@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org, leit@fb.com,
+        axboe@kernel.dk, asml.silence@gmail.com,
+        linux-kernel@vger.kernel.org, dccp@vger.kernel.org,
+        linux-wpan@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-sctp@vger.kernel.org
+Subject: Re: [PATCH net-next v4] net: ioctl: Use kernel memory on protocol
+ ioctl callbacks
+Message-ID: <202306011128.2sM3vsBl-lkp@intel.com>
+References: <20230530175403.2434218-1-leitao@debian.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530175403.2434218-1-leitao@debian.org>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -60,58 +82,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 3b49da612e9054a9b38dd46600eec249587aa9d3  Merge x86/alternatives into tip/master
+Hi Breno,
 
-elapsed time: 921m
+kernel test robot noticed the following build errors:
 
-configs tested: 40
-configs skipped: 2
+[auto build test ERROR on net-next/main]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+url:    https://github.com/intel-lab-lkp/linux/commits/Breno-Leitao/net-ioctl-Use-kernel-memory-on-protocol-ioctl-callbacks/20230531-015554
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20230530175403.2434218-1-leitao%40debian.org
+patch subject: [PATCH net-next v4] net: ioctl: Use kernel memory on protocol ioctl callbacks
+config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20230601/202306011128.2sM3vsBl-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/f97a3206f5ae59ecb0c7105225c5230b343c6c54
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Breno-Leitao/net-ioctl-Use-kernel-memory-on-protocol-ioctl-callbacks/20230531-015554
+        git checkout f97a3206f5ae59ecb0c7105225c5230b343c6c54
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sparc                               defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                               rhel-8.3   gcc  
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306011128.2sM3vsBl-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   mips-linux-ld: net/core/sock.o: in function `sk_ioctl':
+>> sock.c:(.text.sk_ioctl+0x12c): undefined reference to `ip6mr_sk_ioctl'
 
 -- 
 0-DAY CI Kernel Test Service
