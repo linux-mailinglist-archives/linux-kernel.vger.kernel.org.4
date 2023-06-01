@@ -2,85 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE70A7199BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B2E7199C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232273AbjFAK3p convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Jun 2023 06:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
+        id S232731AbjFAKa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232812AbjFAK30 (ORCPT
+        with ESMTP id S232488AbjFAKaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:29:26 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF202170A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:28:51 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-318-0fhv99D0OlqPvimtjd92WA-1; Thu, 01 Jun 2023 11:28:49 +0100
-X-MC-Unique: 0fhv99D0OlqPvimtjd92WA-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 1 Jun
- 2023 11:28:45 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Thu, 1 Jun 2023 11:28:45 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christoph Hellwig' <hch@lst.de>,
-        Daniel Gomez <da.gomez@samsung.com>
-CC:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        "Sagi Grimberg" <sagi@grimberg.me>,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] nvme: Increase block size variable size to 32-bit
-Thread-Topic: [PATCH] nvme: Increase block size variable size to 32-bit
-Thread-Index: AQHZk8CokMhanTXaB0ibg7NXJWn+ba91vvfg
-Date:   Thu, 1 Jun 2023 10:28:45 +0000
-Message-ID: <e203876fc20d4c7b932bbff35e8b5e1e@AcuMS.aculab.com>
-References: <CGME20230530154254eucas1p241e57af99e4d4ee0e1a677904c3db68c@eucas1p2.samsung.com>
- <20230530154231.8313-1-da.gomez@samsung.com> <20230531130325.GE27468@lst.de>
-In-Reply-To: <20230531130325.GE27468@lst.de>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 1 Jun 2023 06:30:10 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3D010DA
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:29:47 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f3b314b1d7so713218e87.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 03:29:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685615386; x=1688207386;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Bp5xxOt20GHMe9x9oOlssfGvZFl/WMiJaJ496BlN+YU=;
+        b=kP/zj0HAKnPgUuu7Tgrr++eMwujhAUwYvyrnwCZ/9sgnT+z3G/B9L7afSaX3QAuF8P
+         OTVqXxoPZuNQoH3tVYg3GcEoXykvO+m9pSIXC9dc6fIAIgBFju39VCg+nwYFuEyaghAa
+         WowicwdIuIuZCFgRVT3glsVxtcr+I6blVFTOjMWrdlQ2auo+WkrX3ll5yCzHnJIUTjpV
+         0feMbLTg9/RnvDvZa75U8hZjLJgblauY4ofKLWvvOENre3/Rr2JdodDXLwLkMMxjz7QM
+         Jwc2xLW5XnqBplIZRlUS6StIxQO0xDRRhS+JYilIIrao7koEBMod3b6pIgtByUeHTFAg
+         QAWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685615386; x=1688207386;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bp5xxOt20GHMe9x9oOlssfGvZFl/WMiJaJ496BlN+YU=;
+        b=a8s/FrvKFu4g7fTd+8FN9Hn+u2zvJefBO9b9zn+2X7PCcxODnY+pWp+r1Dh2ShhSNj
+         /jaNKp9RebfME5CxpJ4gxOCpn2cBPiqTWBm+U9wUSoiE7/P/eXyeBLa9S/bOHonPJ0Wi
+         XhsBhsXGaM33Grhm+qHaCPaDEH8iq99OoBEIRLkIyQd21587UOM1TQJlNURteJsqDNKK
+         hTNNdp2wWaToMVjZ6MUfHYH9OnlgYBc3mP+l+Rv+SwdhWFX3EmapIKeLpbbh/fNubuAA
+         N5HcFEScEFgs8ZzFZxyPAgobDH686TSUYJCF5IiacJ0tjwMKecvqpvGAWEyE0TnqRtqv
+         bOOQ==
+X-Gm-Message-State: AC+VfDy+7KNO+RRdlXRvJtWP2dm35NnftQilMdaXMBiLWRb5d7Ts63iA
+        fYhSOkl/XDqNl0ewrkKGpLpCQA==
+X-Google-Smtp-Source: ACHHUZ4OWftVrfoV87qYQLL4OGbRoiW1uL9XruidkQ3APydLZi5AlKND7uOLjblqaNOABc+5UzXDmQ==
+X-Received: by 2002:a05:6512:66:b0:4f4:b3a6:4140 with SMTP id i6-20020a056512006600b004f4b3a64140mr1036037lfo.42.1685615385755;
+        Thu, 01 Jun 2023 03:29:45 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id x28-20020ac25ddc000000b004f4b0493749sm1038511lfq.303.2023.06.01.03.29.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 03:29:45 -0700 (PDT)
+Message-ID: <8e5380cd-2ee4-95be-14df-add5ff440088@linaro.org>
+Date:   Thu, 1 Jun 2023 12:29:43 +0200
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] soundwire: qcom: fix storing port config out-of-bounds
 Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>
+References: <20230601102525.609627-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230601102525.609627-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig
-> Sent: 31 May 2023 14:03
+
+
+On 1.06.2023 12:25, Krzysztof Kozlowski wrote:
+> The 'qcom_swrm_ctrl->pconfig' has size of QCOM_SDW_MAX_PORTS (14),
+> however we index it starting from 1, not 0, to match real port numbers.
+> This can lead to writing port config past 'pconfig' bounds and
+> overwriting next member of 'qcom_swrm_ctrl' struct.  Reported also by
+> smatch:
 > 
-> > +	u32 bs = 1 << ns->lba_shift;
+>   drivers/soundwire/qcom.c:1269 qcom_swrm_get_port_config() error: buffer overflow 'ctrl->pconfig' 14 <= 14
 > 
-> Make that 1 a 1U so that we're not going to run into sign extension
-> issues when using up all bits in the u32 :)
+> Fixes: 9916c02ccd74 ("soundwire: qcom: cleanup internal port config indexing")
+> Cc: <stable@vger.kernel.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://lore.kernel.org/r/202305201301.sCJ8UDKV-lkp@intel.com/
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Not 'sign extension' but obscure integer shift/conversion issues
-that really only affect 1's compliment and sign-overpunch cpu.
-I'm not even sure gcc/clang support any non 2's compliment systems.
-
-> Otherwise looks good:
-
-Probably improves the generated code as well.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Konrad
+>  drivers/soundwire/qcom.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+> index 7cb1b7eba814..88a772075907 100644
+> --- a/drivers/soundwire/qcom.c
+> +++ b/drivers/soundwire/qcom.c
+> @@ -202,7 +202,8 @@ struct qcom_swrm_ctrl {
+>  	u32 intr_mask;
+>  	u8 rcmd_id;
+>  	u8 wcmd_id;
+> -	struct qcom_swrm_port_config pconfig[QCOM_SDW_MAX_PORTS];
+> +	/* Port numbers are 1 - 14 */
+> +	struct qcom_swrm_port_config pconfig[QCOM_SDW_MAX_PORTS + 1];
+>  	struct sdw_stream_runtime *sruntime[SWRM_MAX_DAIS];
+>  	enum sdw_slave_status status[SDW_MAX_DEVICES + 1];
+>  	int (*reg_read)(struct qcom_swrm_ctrl *ctrl, int reg, u32 *val);
