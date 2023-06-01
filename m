@@ -2,84 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C799719B13
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6E7719B18
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232887AbjFALkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 07:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S232507AbjFALlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 07:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbjFALkW (ORCPT
+        with ESMTP id S231878AbjFALlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:40:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5AE129;
-        Thu,  1 Jun 2023 04:40:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A426B643DB;
-        Thu,  1 Jun 2023 11:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F1044C433EF;
-        Thu,  1 Jun 2023 11:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685619620;
-        bh=tWKWC14NSUd9pJRuuWFe1qj5v2WPgvywMtEEIdSejIQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=OAid/USZoUrsOwc/UoTVAc9n8Ib6Bb98eKvWIutHzXLvme7rZuzV03ywKtqEr5yis
-         d2nqmszqr2+DxstOFkZENbQfg6BpEgMY1VJZG4wf7YFo5uJ8uE3vgCqVRwnz7IpfhZ
-         +7TeifzsaKJkQOe+Db3OLHjoOrSYOtD02aEmh+5H9qG3p+6mDXlrEmSRiwMofDi1yq
-         H+VcLfUj0f+B2sMEjhHMeoKEz87LPqa4uCS+evPsz5IyE/bbUh3RDuCOrHF6BjbzXP
-         WlJRiJvJWPPU/EihT9Cqqzy5EgI6F4uBmOxfwO6YOzVDEW1WSY4cEIwBqE9qPYvvue
-         dS5SSdeaHq/TA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CD2DCC395E5;
-        Thu,  1 Jun 2023 11:40:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 1 Jun 2023 07:41:37 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C72129;
+        Thu,  1 Jun 2023 04:41:36 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351BBBxj005804;
+        Thu, 1 Jun 2023 11:41:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=aotPw+dYK7sxudCqVR0YLAk8+rt9UvEFInV/RtR4ZA8=;
+ b=fKDeB8Qt3D5loVg6aR6NXqfSYweO1UaU554EXdngK/0zM7Fl5d0agbnDujHRXCl/agFP
+ 1y2EVsNbcQMRXwl7znailcVQ3SeooNA230z50t6SzGGTqbvw/8QC3SgLsOqpVZOsgcdN
+ dzB4PYXBjp6F/VB0B+j2TyLm413FhpuXSKvDbVQhnWM1zIqdatS9YQ+fYPuDGO/tEAa7
+ /4QiCa1d7gd7rt6OrFHfq9E2p8p0GIMSP2b1AwNbEnvpu1nnK4aj3+O+EeNTX9kxEbuE
+ b1K9aJXA2vcrb0cSCa9OrPI2C2vAQNKMjTQDlbSDQGR83bdqbRC0sJar3saR7L2n46Ul DA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxbt8hvjd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 11:41:20 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351BfImE009437
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Jun 2023 11:41:18 GMT
+Received: from [10.216.52.42] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
+ 04:41:12 -0700
+Message-ID: <8146f367-c539-bea5-12b6-424213018488@quicinc.com>
+Date:   Thu, 1 Jun 2023 17:11:08 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH V7 4/8] pinctrl: qcom: Add IPQ5018 pinctrl driver
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <andy.shevchenko@gmail.com>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <ulf.hansson@linaro.org>,
+        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <robimarko@gmail.com>
+References: <20230519125409.497439-1-quic_srichara@quicinc.com>
+ <20230519125409.497439-5-quic_srichara@quicinc.com>
+ <CAHp75VfVx+oGYKcija3h9-eWc6jggMx8p5SAQTEHTBEbjTaJKw@mail.gmail.com>
+ <1823419a-6bb4-03f7-d5ae-e32204c5e598@quicinc.com>
+ <ZHTK7uEzO7kcx_cV@surfacebook>
+ <aefd0df1-8dfb-1b69-589b-974dea312845@quicinc.com>
+ <664940c3-9ec1-b4bd-9db5-fa3529e3d1ff@linaro.org>
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+In-Reply-To: <664940c3-9ec1-b4bd-9db5-fa3529e3d1ff@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3] net: ipa: Use correct value for IPA_STATUS_SIZE
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168561961983.20738.2293135915204536945.git-patchwork-notify@kernel.org>
-Date:   Thu, 01 Jun 2023 11:40:19 +0000
-References: <20230531103618.102608-1-spasswolf@web.de>
-In-Reply-To: <20230531103618.102608-1-spasswolf@web.de>
-To:     Bert Karwatzki <spasswolf@web.de>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: u2w7l7fePiABIueIjTPZ0bYV_TrEwmvo
+X-Proofpoint-ORIG-GUID: u2w7l7fePiABIueIjTPZ0bYV_TrEwmvo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 suspectscore=0 mlxscore=0 mlxlogscore=676
+ priorityscore=1501 bulkscore=0 adultscore=0 clxscore=1015 spamscore=0
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2306010103
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
 
-On Wed, 31 May 2023 12:36:19 +0200 you wrote:
-> IPA_STATUS_SIZE was introduced in commit b8dc7d0eea5a as a replacement
-> for the size of the removed struct ipa_status which had size
-> sizeof(__le32[8]). Use this value as IPA_STATUS_SIZE.
+On 6/1/2023 3:21 PM, Krzysztof Kozlowski wrote:
+> On 01/06/2023 11:50, Sricharan Ramabadhran wrote:
+>>
+>>
+>> On 5/29/2023 9:25 PM, andy.shevchenko@gmail.com wrote:
+>>> Mon, May 29, 2023 at 03:58:09PM +0530, Sricharan Ramabadhran kirjoitti:
+>>>> On 5/20/2023 12:17 AM, Andy Shevchenko wrote:
+>>>>> On Fri, May 19, 2023 at 3:55 PM Sricharan Ramabadhran
+>>>>> <quic_srichara@quicinc.com> wrote:
+>>>
+>>> ...
+>>>
+>>>>>      depends on OF || COMPILE_TEST
+>>>>
+>>>>    Yeah sure. COMPILE_TEST could be standalone. Will fix it and repost.
+>>>
+>>> Standalone COMPILE_TEST will give you definitely NOT what you want.
+>>> And actually it's strange to have it standalone.
+>>>
+>>
+>>    Ho ok, i meant like this, "depends on ARM64 || COMPILE_TEST"
 > 
-> Fixes: b8dc7d0eea5a ("net: ipa: stop using sizeof(status)")
-> Signed-off-by: Bert Karwatzki <spasswolf@web.de>
+> Don't do it differently than all other drivers. Open the Kconfig and
+> look at existing entries.
 > 
-> [...]
+   The latest added has this below, will use this
 
-Here is the summary with links:
-  - [net,v3] net: ipa: Use correct value for IPA_STATUS_SIZE
-    https://git.kernel.org/netdev/net/c/be7f8012a513
+	depends on OF || COMPILE_TEST
+	depends on ARM64 || COMPILE_TEST
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Regards,
+  Sricharan
