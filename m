@@ -2,89 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E351F719AA8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8C2719AAC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbjFALKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 07:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S232747AbjFALLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 07:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbjFALKk (ORCPT
+        with ESMTP id S230268AbjFALLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:10:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5F7107
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 04:10:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4EAF643AD
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 11:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EC958C4339B;
-        Thu,  1 Jun 2023 11:10:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685617820;
-        bh=6KkexGhJ46cI86YrxWzyDynW2Ra0U5h1qcMfn2jQgYE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TNNCoWAQLMdouk10ckVumNA6y7Rvo6wHfSTVPEljRa9dr1C6dGAWbsFKqfjkBFFdw
-         8my0AaIMHXkTkO3xfLAQuD7D9v7MAhza0qFJ7YTtFGvEUh8/7MXVDhYI/4so0P7p1y
-         dpunlyCBVoIDulKCwjbSVKxbmDsHUDCi40uDb3QRwSys+kGgkXYWbO7E9m+NX7guiG
-         0i5GLRVIM3K8+CsYeNI39TjXJA2itL/w3RV1U/roPrVzwNgwcUjbbeGuV92lg6CF+/
-         WSHqv1SCpJmmzHu1feZsZEXCRx7sV15Wc2JKPKwtGVPjHJK20A4vuYWSMnk3GvIej5
-         CG/D92qcCN3fg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C358FE52C02;
-        Thu,  1 Jun 2023 11:10:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2] net/sched: flower: fix possible OOB write in
- fl_set_geneve_opt()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168561781979.6344.740416824710659310.git-patchwork-notify@kernel.org>
-Date:   Thu, 01 Jun 2023 11:10:19 +0000
-References: <20230531102805.27090-1-hbh25y@gmail.com>
-In-Reply-To: <20230531102805.27090-1-hbh25y@gmail.com>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, simon.horman@corigine.com,
-        pieter.jansen-van-vuuren@amd.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 1 Jun 2023 07:11:40 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B6B107;
+        Thu,  1 Jun 2023 04:11:39 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351Au0ik025517;
+        Thu, 1 Jun 2023 11:11:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=JaqcpbTTaQeCo4nvGyRTbJ+Ro+hMel/HHf2SIx4Z5BM=;
+ b=VtARMNBE3ySnlYQsGgoObdch4YYP8vHE9NyD3gKGFhwQrurgwvpHQ068CdlXhEOJ8ham
+ b6JzxKMotmoykiChEb5Zwan2iKezayxiTKIDkZnK9rw3Eg10po3dy9PbUT2B0bbe+znR
+ /dmRyt3segWm8NJbCF2oP1ZKKdpkrbTuyMfRLRcdXLCtM9AexW2gQz4YMQWg9VFgCevE
+ KOF1634kTF3z9hL3OL3x3IlyXJvwzv2VdOnJ7e0Dc26jf3YdRonAnUFGGhdPp7NxkLBl
+ kX0H75tz9Q0jHmbYjpvPPPDofOM9/dB6porPqqv5JWrN0aS4aCrQB8+w6dPD0TE2izrV lQ== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxpt70gfx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 11:11:36 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 351BBVva010973;
+        Thu, 1 Jun 2023 11:11:31 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3quaxm8j1w-1;
+        Thu, 01 Jun 2023 11:11:31 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 351BBVtQ010967;
+        Thu, 1 Jun 2023 11:11:31 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-kbajaj-hyd.qualcomm.com [10.147.247.189])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 351BBV91010966;
+        Thu, 01 Jun 2023 11:11:31 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2340697)
+        id BFDAC529754; Thu,  1 Jun 2023 16:41:30 +0530 (+0530)
+From:   Komal Bajaj <quic_kbajaj@quicinc.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     Komal Bajaj <quic_kbajaj@quicinc.com>, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v5 0/3] arm64: dts: qcom: qdu1000: add SDHCI
+Date:   Thu,  1 Jun 2023 16:41:25 +0530
+Message-Id: <20230601111128.19562-1-quic_kbajaj@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: vdccAigW2QydXYrlUq7gXPA_XYKtqB-O
+X-Proofpoint-GUID: vdccAigW2QydXYrlUq7gXPA_XYKtqB-O
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_07,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 impostorscore=0 spamscore=0 malwarescore=0
+ mlxlogscore=878 priorityscore=1501 phishscore=0 mlxscore=0 clxscore=1015
+ bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306010098
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Changes in v5 -
+ * Combined sdhc node addition and pin configuration into one commit.
 
-This patch was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+Changes in v4 -
+ * Fixed the subject prefix to arm64.
+ * Updated the pinctrl entries alphabetically.
 
-On Wed, 31 May 2023 18:28:04 +0800 you wrote:
-> If we send two TCA_FLOWER_KEY_ENC_OPTS_GENEVE packets and their total
-> size is 252 bytes(key->enc_opts.len = 252) then
-> key->enc_opts.len = opt->length = data_len / 4 = 0 when the third
-> TCA_FLOWER_KEY_ENC_OPTS_GENEVE packet enters fl_set_geneve_opt. This
-> bypasses the next bounds check and results in an out-of-bounds.
-> 
-> Fixes: 0a6e77784f49 ("net/sched: allow flower to match tunnel options")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> 
-> [...]
+Changes in v3 -
+ * Removed aliases and dropped "_1" suffix as suggested by Bjorn.
+ * Changed pinconfig names.
 
-Here is the summary with links:
-  - [net,v2] net/sched: flower: fix possible OOB write in fl_set_geneve_opt()
-    https://git.kernel.org/netdev/net/c/4d56304e5827
+Changes in v2-
+ * Updated the binding alphabetically.
+ * Removed extra comments as suggested by Bhupesh.
+ * Moved non-removable, no-sd, no-sdio and other properties from
+   soc to board dts file as suggested by Bhupesh and Konrad.
+ * Removed extra newlines and leading zeroes as suggested by Konrad.
+ * Modified sdhc1_opp_table.
+ * Updated the SDHC node entries alphabetically.
+ * Moved the status entry at the end.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Komal Bajaj (3):
+  dt-bindings: mmc: sdhci-msm: Document the QDU1000/QRU1000 compatible
+  arm64: dts: qcom: qdu1000: Add SDHCI node
+  arm64: dts: qcom: qdu1000-idp: add SDHCI for emmc
 
+ .../devicetree/bindings/mmc/sdhci-msm.yaml    |  1 +
+ arch/arm64/boot/dts/qcom/qdu1000-idp.dts      | 23 +++++
+ arch/arm64/boot/dts/qcom/qdu1000.dtsi         | 97 +++++++++++++++++++
+ 3 files changed, 121 insertions(+)
+
+--
+2.17.1
 
