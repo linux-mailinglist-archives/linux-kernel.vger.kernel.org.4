@@ -2,145 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC72671F370
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D79671F373
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbjFAUKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 16:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
+        id S231209AbjFAUMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjFAUKu (ORCPT
+        with ESMTP id S229459AbjFAUMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:10:50 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B3D134;
-        Thu,  1 Jun 2023 13:10:48 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685650245;
+        Thu, 1 Jun 2023 16:12:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C538D1
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 13:12:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685650323;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=chRIhlGc1ewVpa0H2/yhfREyLjRPBthRnCPNhZqy3w4=;
-        b=EqHSk8bEiOWSuwySTSmsQgtq830ssjROGQtit5HNEHYJ/gjR34yN8yXUz7ZMRh/Qnz3bsX
-        3q/i/8ubGcuRoJ9LNSOm4tE6yCne0OUWv7MBaao8tXdHM6EZkZUmK41E8orcToCH6B5LK7
-        Lmrcag+YuWD231i7hncnKtyPl2gvKJ78IKeMCI9gshnm6QdKevb0EZTNqShOV8AD8IiVcl
-        A1ru55rc0KpZTSV2CCf3S3ot8HR9GgiqOUILX/9fN/a/g8aZMRL8PrNgPR9x3YmDzfH5Dt
-        wgt12ihLEiy0/bVOzA41ZBMVyo2LuqhWOSBwWr2XKLDoM8BzfTK3qOgmTC2zZA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685650245;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=chRIhlGc1ewVpa0H2/yhfREyLjRPBthRnCPNhZqy3w4=;
-        b=17MZUD2EjWUZBS3/xwGd6iUUcbbrPxMb6Kq6j0xq9Ck8dwTyIwKe7JOvBAYABUorn99+vq
-        wiodoJbf/sg1+ICg==
-To:     Steven Noonan <steven@uplinklabs.net>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>, kernel@collabora.com
-Subject: Re: Direct rdtsc call side-effect
-In-Reply-To: <L9sTQNWVFoNxz-HmzFoXBX4twp84wuAx5Mf4LcxWw9k0rTAXI32rSl7WEOr7058iN6_Nyf8fLN-Ye3sq5THHjJCKG2vQLlpnVs77kKlLFV4=@uplinklabs.net>
-References: <6719fb05-382c-8ec4-ccda-72798906a54b@collabora.com>
- <87mt1jeax1.ffs@tglx> <87h6rrdoy0.ffs@tglx>
- <L9sTQNWVFoNxz-HmzFoXBX4twp84wuAx5Mf4LcxWw9k0rTAXI32rSl7WEOr7058iN6_Nyf8fLN-Ye3sq5THHjJCKG2vQLlpnVs77kKlLFV4=@uplinklabs.net>
-Date:   Thu, 01 Jun 2023 22:10:45 +0200
-Message-ID: <871qivdjui.ffs@tglx>
+        bh=wH52BVikKcnaVU74ot3GHAVVa3YUi3Nj+bJLSNVnGpE=;
+        b=BFzbfEf4Dgh3pzn11IEVGIS5h69yYH6KpZFrmMlrO93754o7375SGvAZtLUE2hy1+54y4b
+        9dpP67z3iNuHptEgUckZZe58Gat8GTJSfKKYuXPJ/k3iefD8pxGZKU3SoE74fO2fg2tP9l
+        SB9JD4LEQEOsg9KV0olzLN/d0zQ/FnQ=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-220-DjXWBQwzOpa2a6x8pyLUyw-1; Thu, 01 Jun 2023 16:12:02 -0400
+X-MC-Unique: DjXWBQwzOpa2a6x8pyLUyw-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3f6b46e281eso537731cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 13:12:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685650322; x=1688242322;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wH52BVikKcnaVU74ot3GHAVVa3YUi3Nj+bJLSNVnGpE=;
+        b=TLLXZ4Zg6V0BRhXTAW74aT/ThJA468rAkTpC9c1vBQ5tdGuIsawDSZnZdZjrLBANYS
+         R2P9tqedkOxrVK1ll3g+8lJCFIRv1KCCMSqqKSdSaA/wRc6ohllAKJ5XQ8+3ACUXbopV
+         DXSIwxMBRqsz4gi4ExyFbjq9hRo2VK54B/qW53IzyuModoYa2zWNZH05L/bOiPHsMzeK
+         0QMR/hVYEkUzirJW/mXNN31yeLiFmOFA37GVPZhY+3FXmcB47QVLiH+LRNmQIWw+jrJC
+         2jRthu4fH0f52TydDKeb5AYng6OVry9weg8FbB0QxaQtIsZSq7UZg+E4KP/fMmu2BrZk
+         EGKQ==
+X-Gm-Message-State: AC+VfDxlIOT07CmDalUnWlfPgfhhRV1Qdk8IkMhz0H9WzTLrgE3Kby/J
+        5f8fIH7DlMX5ZI1CtmEYiIcJXeFFrmhQhbAjUfTPgcFA37qKaHQN4PP3Kah6d13KCK578wbsvtB
+        3xVJ4WYnMMw2Ht1SIJXC6ptQY
+X-Received: by 2002:a05:622a:1a88:b0:3f7:f680:c922 with SMTP id s8-20020a05622a1a8800b003f7f680c922mr8739832qtc.6.1685650321869;
+        Thu, 01 Jun 2023 13:12:01 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7OfTVISeOqiiBH02lQgPBMM7D4JAZD66lhueZp/1aHJ1mThhbWTlF7toVIXysrHqgK2Sdawg==
+X-Received: by 2002:a05:622a:1a88:b0:3f7:f680:c922 with SMTP id s8-20020a05622a1a8800b003f7f680c922mr8739796qtc.6.1685650321514;
+        Thu, 01 Jun 2023 13:12:01 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id h18-20020ac85152000000b003f6b0562ad7sm8041197qtn.16.2023.06.01.13.11.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 13:12:00 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 16:11:58 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v16 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <ZHj7jmJ5fKla1Rax@x1n>
+References: <20230525085517.281529-1-usama.anjum@collabora.com>
+ <20230525085517.281529-3-usama.anjum@collabora.com>
+ <ZHfAOAKj1ZQJ+zSy@x1n>
+ <aeaaa33e-4d23-fd3a-1357-4751007aa3bd@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aeaaa33e-4d23-fd3a-1357-4751007aa3bd@collabora.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01 2023 at 19:07, Steven Noonan wrote:
-> On Thursday, June 1st, 2023 at 11:20 AM, Thomas Gleixner <tglx@linutronix.de> wrote:
->> Here is an example where it falls flat on its nose.
->> 
->> One of the early Ryzen laptops had a broken BIOS which came up with
->> unsynchronized TSCs. I tried to fix that up, but couldn't get it to sync
->> on all CPUs because for some stupid reason the TSC write got
->> arbritrarily delayed (assumably by SMI/SMM).
->
-> Hah, I remember that. That was actually my laptop. A Lenovo ThinkPad
-> A485 with a Ryzen 2700U. I've seen the problem since then occasionally
-> on newer Ryzen laptops (and even desktops). Without the awful
-> "tsc=directsync" patch I wrote, which I've been carrying for years now
-> in my own kernel builds, it just falls back to HPET. It's not
-> pleasant, but at least it's a stable clock.
+On Thu, Jun 01, 2023 at 01:16:14PM +0500, Muhammad Usama Anjum wrote:
+> On 6/1/23 2:46 AM, Peter Xu wrote:
+> > Muhammad,
+> > 
+> > Sorry, I probably can only review the non-interface part, and leave the
+> > interface/buffer handling, etc. review for others and real potential users
+> > of it..
+> Thank you so much for the review. I think mostly we should be okay with
+> interface as everybody has been making suggestions over the past revisions.
+> 
+> > 
+> > On Thu, May 25, 2023 at 01:55:14PM +0500, Muhammad Usama Anjum wrote:
+> >> +static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+> >> +					 unsigned long addr, pte_t *ptep,
+> >> +					 pte_t ptent)
+> >> +{
+> >> +	pte_t old_pte;
+> >> +
+> >> +	if (!huge_pte_none(ptent)) {
+> >> +		old_pte = huge_ptep_modify_prot_start(vma, addr, ptep);
+> >> +		ptent = huge_pte_mkuffd_wp(old_pte);
+> >> +		ptep_modify_prot_commit(vma, addr, ptep, old_pte, ptent);
+> > 
+> > huge_ptep_modify_prot_start()?
+> Sorry, I didn't realized that huge_ptep_modify_prot_start() is different
+> from its pte version.
 
-Well, yours seem at least to sync. The silly box I tried refused due to
-SMM value add magic.
+Here I meant huge_ptep_modify_prot_commit()..
 
-> Agreed, TSC_ADJUST is the ultimate solution for any of these kinds of
-> issues. But last I heard from AMD, it's still several years out in
-> silicon, and there's plenty of hardware to maintain compatibility
-> with. Ugh.
+> 
+> > 
+> > The other thing is what if it's a pte marker already?  What if a hugetlb
+> > migration entry?  Please check hugetlb_change_protection().
+> I've updated it in more better way. Please let me know what do you think
+> about the following:
+> 
+> static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
+> 					 unsigned long addr, pte_t *ptep,
+> 					 pte_t ptent)
+> {
+> 	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
+> 		return;
+> 
+> 	if (is_hugetlb_entry_migration(ptent))
+> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
+> 				pte_swp_mkuffd_wp(ptent));
+> 	else if (!huge_pte_none(ptent))
+> 		ptep_modify_prot_commit(vma, addr, ptep, ptent,
+> 					huge_pte_mkuffd_wp(ptent));
+> 	else
+> 		set_huge_pte_at(vma->vm_mm, addr, ptep,
+> 				make_pte_marker(PTE_MARKER_UFFD_WP));
+> }
 
-Yes.
+the is_pte_marker() check can be extended to double check
+pte_marker_uffd_wp() bit, but shouldn't matter a lot since besides the
+uffd-wp bit currently we only support swapin error which should sigbus when
+accessed, so no point in tracking anyway.
 
-> A software solution would be preferable in the meantime, but I don't
-> know what options are left at this point.
+> 
+> As we always set UNPOPULATED, so markers are always set on none ptes
+> initially. Is it possible that a none pte becomes present, then swapped and
+> finally none again? So I'll do the following addition for make_uffd_wp_pte():
+> 
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -1800,6 +1800,9 @@ static inline void make_uffd_wp_pte(struct
+> vm_area_struct *vma,
+>  	} else if (is_swap_pte(ptent)) {
+>  		ptent = pte_swp_mkuffd_wp(ptent);
+>  		set_pte_at(vma->vm_mm, addr, pte, ptent);
+> +	} else {
+> +		set_pte_at(vma->vm_mm, addr, pte,
+> +			   make_pte_marker(PTE_MARKER_UFFD_WP));
+>  	}
+>  }
 
-Not that many.
+Makes sense, you can leverage userfaultfd_wp_use_markers() here, and you
+should probably keep the protocol (only set the marker when WP_UNPOPULATED
+for anon).
 
-> The trap-and-emulate via SIGSEGV approach proposed earlier in the
-> thread is unfortunately not likely to be practical, assuming I
-> implemented it properly.
+> 
+> 
+> 
+> 
+> > 
+> >> +	} else {
+> >> +		set_huge_pte_at(vma->vm_mm, addr, ptep,
+> >> +				make_pte_marker(PTE_MARKER_UFFD_WP));
+> >> +	}
+> >> +}
+> >> +#endif
+> > 
+> > [...]
+> > 
+> >> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+> >> +				  unsigned long end, struct mm_walk *walk)
+> >> +{
+> >> +	struct pagemap_scan_private *p = walk->private;
+> >> +	struct vm_area_struct *vma = walk->vma;
+> >> +	unsigned long addr = end;
+> >> +	pte_t *pte, *orig_pte;
+> >> +	spinlock_t *ptl;
+> >> +	bool is_written;
+> >> +	int ret = 0;
+> >> +
+> >> +	arch_enter_lazy_mmu_mode();
+> >> +
+> >> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> >> +	ptl = pmd_trans_huge_lock(pmd, vma);
+> >> +	if (ptl) {
+> >> +		unsigned long n_pages = (end - start)/PAGE_SIZE;
+> >> +
+> >> +		if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+> >> +			n_pages = p->max_pages - p->found_pages;
+> >> +
+> >> +		is_written = !is_pmd_uffd_wp(*pmd);
+> >> +
+> >> +		/*
+> >> +		 * Break huge page into small pages if the WP operation need to
+> >> +		 * be performed is on a portion of the huge page.
+> >> +		 */
+> >> +		if (is_written && IS_PM_SCAN_WP(p->flags) &&
+> >> +		    n_pages < HPAGE_SIZE/PAGE_SIZE) {
+> >> +			spin_unlock(ptl);
+> >> +
+> >> +			split_huge_pmd(vma, pmd, start);
+> >> +			goto process_smaller_pages;
+> >> +		}
+> >> +
+> >> +		if (IS_PM_SCAN_GET(p->flags))
+> >> +			ret = pagemap_scan_output(is_written, vma->vm_file,
+> >> +						  pmd_present(*pmd),
+> >> +						  is_swap_pmd(*pmd),
+> >> +						  p, start, n_pages);
+> >> +
+> >> +		if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
+> >> +			make_uffd_wp_pmd(vma, addr, pmd);
+> >> +
+> >> +		if (IS_PM_SCAN_WP(p->flags))
+> >> +			flush_tlb_range(vma, start, end);
+> >> +
+> >> +		spin_unlock(ptl);
+> >> +
+> >> +		arch_leave_lazy_mmu_mode();
+> >> +		return ret;
+> >> +	}
+> >> +
+> >> +process_smaller_pages:
+> >> +	if (pmd_trans_unstable(pmd)) {
+> >> +		arch_leave_lazy_mmu_mode();
+> >> +		return 0;
+> > 
+> > I'm not sure whether this is right..  Shouldn't you return with -EAGAIN and
+> > let the user retry?  Returning 0 means you'll move on with the next pmd
+> > afaict and ignoring this one.
+> This has come up before. We are just replicating pagemap_pmd_range() here
+> as we are doing almost the same thing through IOCTL. It doesn't return any
+> error in this case and just skips it. So we are doing the same.
 
-That's why I said we need to ask Microsoft to do the same so that the
-applications get fixed. :)
+Hmm, is it a bug for pagemap?  pagemapread.buffer should be linear to the
+address range to be scanned to me.  If it skips some unstable pmd without
+filling in anything it seems everything later will be shifted with
+PMD_SIZE..  I had a feeling that it should set walk->action==ACTION_AGAIN
+before return.
 
-> Most Windows games that use this instruction directly are doing so
-> under the assumption that the TSC is faster to read than any of the
-> native Windows API clock sources.
+-- 
+Peter Xu
 
-The recommended interface QueryPerformanceCounter() is actually not much
-slower and safe. But sure performance first and correctness is overrated.
-
-So back to the options:
-
-   1) Kernel
-
-      If at all then this needs to be disabled by default and enabled by
-      a command line option along with a big fat warning that it might
-      disable TSC for timekeeping and bug reports related to this are
-      going to be ignored.
-
-      Honestly I'm not too interested in this. It's yet another piece of
-      art which needs to be maintained and kept alive for a long time.
-
-      The fact that we need to check for synchronized TSCs in the first
-      place is hillarious already. TSC_ADJUST makes the resynchronization
-      attempt at least halfways sensible.
-
-      Without it, it's just a pile of never going to be correct
-      heuristics with a flood of "this fixes it for my machine (and
-      breaks the rest)" patches.
-
-
-   2) Binary patching
-
-      Unfortunately RDTSC is only a two byte instruction, but there are
-      enough advanced binary patching tools to deal with that.
-
-      It might be a completely crazy idea, but I wouldn't dismiss it
-      before trying.
-
-Thanks,
-
-        tglx
-
-      
-      
