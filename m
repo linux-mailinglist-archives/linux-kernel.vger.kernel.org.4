@@ -2,113 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C4B7195FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF270719605
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbjFAItO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
+        id S232251AbjFAIvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbjFAItJ (ORCPT
+        with ESMTP id S230468AbjFAIvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:49:09 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0487D1;
-        Thu,  1 Jun 2023 01:49:08 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 1B49F3200951;
-        Thu,  1 Jun 2023 04:49:06 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 01 Jun 2023 04:49:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1685609345; x=1685695745; bh=eCFpniw22qDie5oeMCbZFBk/KMmwPbOSe7i
-        8BTT45wg=; b=L8xExEjLpQNsoKnji8d+A/N0BZLx5irY/WkqTe1zH1yQrRPZk7Q
-        zLNwxAOzNsFXLTom275zEYf2xh3/BHbfbSCPt1ekZ1ANs4TkDsb1VMIffDCC4lIW
-        8+ZC9tBftMJDG8k6m+0ZyEKMElh9BsSuJq+wRV6efCXET728Ukn96F7r3DrcIts3
-        D0nkxaULN9JvPlcxamelGZvYvGdsfP0gYkhWSw5zgAnSnzXZ9QJQvmCRcxXtVBp2
-        xGPjkKqUUdk/R3gXeiUMi+Ca5/IAQEr/tLTZN8b8nicVIO+6lycRQ4ohm38UEICJ
-        oxQrG5O9oFF8B4lHYlkcCNFhi3wkvVrjnTQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1685609345; x=1685695745; bh=eCFpniw22qDie5oeMCbZFBk/KMmwPbOSe7i
-        8BTT45wg=; b=B9NyJNbFmVrZeL4fR9Hwr3P9i/NzWRq6wBlit2TccIwyy+4YRZW
-        6F8wfE+jopOwQ995bR/ReyfC/HdcevdKv7iRyiH7wl98Usb1Htj/1Ojc9y6k7voN
-        5jWXBGlnjUB0pO75jNQNvXNH9oYTDxp88SiWM3SEa3vkqYgOncv6sXPWBshjckRh
-        xXuLg20wjuYxsb0zSjIUcxAqRzmLqUppMCI6DxpUo4TZ/bdlFvUrRhBAmpUOzwpS
-        YAvhvdfFQDzcKqvMxeTTxgh11mEs4Cq88XP/frnF70xoJIKopK0XA6bUys4H4u5B
-        DiAw85zHd/oqDEbvXOnuNuWPBYvHqRzQYLg==
-X-ME-Sender: <xms:gVt4ZMIcms5FSWkeryyQVQZaYFZ0EG7FW11EpeTNS0wqQ5-BytubOw>
-    <xme:gVt4ZMKmQnSsmsR62gXj5cTxSjNxEy7oMqRYJrtlE2V19sAiYwM9z_9oSbPLlav1J
-    wOBJ44BRkcHFqEwo38>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeluddgtdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
-    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:gVt4ZMuka1A5xQb1bhbkOM0_sBLsDexmH_FlTLYnMEfpXfLwglUXfw>
-    <xmx:gVt4ZJb46i0S0-3TEUg2nfkKMsDV91qXs_hHezxWV3Iemet_OispKQ>
-    <xmx:gVt4ZDZg7iI_YwnSjQdmbG9a0trgRfPWkuOpR6OnZS9bz_0ldPvngg>
-    <xmx:gVt4ZCn-FL0nl0gXfcqxaU5pAnhTSyJNXZI2jg75LTiR0Ds46BQbeA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 28D7FB60086; Thu,  1 Jun 2023 04:49:05 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
-Mime-Version: 1.0
-Message-Id: <e3bc3d54-53df-46e2-9ebd-08a958be370e@app.fastmail.com>
-In-Reply-To: <CACRpkdYneu+c0d5jGgZqEHqyoAbcx6UbkQYHXsNeFvGnehp6SQ@mail.gmail.com>
-References: <20230525092202.78a1fb01@canb.auug.org.au>
- <CACRpkdYUPmaBWDwH_ARHp-bFtpML3aShd_mKBBq+ndQATGEJjQ@mail.gmail.com>
- <1b757588-66cc-4946-a9fb-a2a88c5c54cf@app.fastmail.com>
- <CACRpkdYneu+c0d5jGgZqEHqyoAbcx6UbkQYHXsNeFvGnehp6SQ@mail.gmail.com>
-Date:   Thu, 01 Jun 2023 10:48:44 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Walleij" <linus.walleij@linaro.org>
-Cc:     "Stephen Rothwell" <sfr@canb.auug.org.au>,
-        "Will Deacon" <will@kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the asm-generic tree
-Content-Type: text/plain;charset=utf-8
+        Thu, 1 Jun 2023 04:51:21 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7D89F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:51:18 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685609477;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aij0dxNSnkPSFxsZp9Idyq4pHH6ncKRFbkXLyxSBtm8=;
+        b=ZSCGXA1M5DkFUx58phdUGNJTzLp2X22ctXjxdoPLBRz7A4MjF4OExiabMynMaZReUqqaua
+        REguxRt5MOD81mIdx3cATP9WHmjsJnaBIc59gDlW79EgaUTT6RDPfTt16PeUphLqVI7Tp+
+        1G3pBgkzsvxUOJA5Zr4q94eumLl14cdgkjFNLjC+y0PwIxA3VzyRP/Ryfy/Ye5RW46Q9yf
+        HVB2F2aOf4W7U5Jqj4Us1P3yWRGKZ2wLS/mGm5xR/PfnoV4lPJ6q5mm/9tWxsVH68l9HJO
+        mIk/Io+FZmJCfy+2vQexAkbEHvxCBxN5XaMHvsz2B9Ig1b8NrQGP/aNDwiU/Pw==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4DB87240003;
+        Thu,  1 Jun 2023 08:51:16 +0000 (UTC)
+Date:   Thu, 1 Jun 2023 10:51:14 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] nvmem: core: Expose cells through sysfs
+Message-ID: <20230601105114.58749075@xps-13>
+In-Reply-To: <2023053132-divorcee-aqueduct-70fa@gregkh>
+References: <20230530100929.285235-1-miquel.raynal@bootlin.com>
+        <20230530100929.285235-3-miquel.raynal@bootlin.com>
+        <2023053132-divorcee-aqueduct-70fa@gregkh>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023, at 13:36, Linus Walleij wrote:
-> On Thu, May 25, 2023 at 6:41=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
-wrote:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrato=
-r.git
-> tags/virt-to-pfn-for-arch-v6.5-2
->
-> for you to fetch changes up to ef7d0f5d03b9e65c9daa8dfe8b405b10566055e=
-b:
->
->   m68k/mm: Make pfn accessors static inlines (2023-05-29 11:27:08 +020=
-0)
->
-> ----------------------------------------------------------------
-> This is an attempt to harden the typing on virt_to_pfn()
-> and pfn_to_virt().
+Hi Greg,
 
-Updated now, thanks.,
+gregkh@linuxfoundation.org wrote on Wed, 31 May 2023 20:16:37 +0100:
 
-     Arnd
+> On Tue, May 30, 2023 at 12:09:29PM +0200, Miquel Raynal wrote:
+> > The binary content of nvmem devices is available to the user so in the
+> > easiest cases, finding the content of a cell is rather easy as it is
+> > just a matter of looking at a known and fixed offset. However, nvmem
+> > layouts have been recently introduced to cope with more advanced
+> > situations, where the offset and size of the cells is not known in
+> > advance or is dynamic. When using layouts, more advanced parsers are
+> > used by the kernel in order to give direct access to the content of each
+> > cell, regardless of its position/size in the underlying
+> > device. Unfortunately, these information are not accessible by users,
+> > unless by fully re-implementing the parser logic in userland.
+> >=20
+> > Let's expose the cells and their content through sysfs to avoid these
+> > situations.
+> >=20
+> > Exposed cells are read-only. There is, in practice, everything in the
+> > core to support a write path, but as I don't see any need for that, I
+> > prefer to keep the interface simple (and probably safer). The interface
+> > is documented as being in the "testing" state which means we can later
+> > add a write attribute if though relevant.
+> >=20
+> > Of course the relevant NVMEM sysfs Kconfig option must be enabled for
+> > this support to be compiled-in.
+> >=20
+> > The current implementation leads to the 'cells' folder to be always
+> > present even when no cell is actually exposed. This is due to a sysfs
+> > limitation which might in the future be overcome. In order to be as
+> > close as how sysfs was designed, despite the cells .bin_attrs attribute
+> > group member being assigned at runtime (and thus, not movable to a RO
+> > section), we provide a .is_bin_visible hook which might become really
+> > useful if the series avoiding the creation of empty directories borns.
+> >=20
+> > There is one limitation though: if a layout is built as a module but is
+> > not properly installed in the system and loaded manually with insmod
+> > while the nvmem device driver was built-in, the cells won't appear in
+> > sysfs. But if done like that, the cells won't be usable by the built-in
+> > kernel drivers anyway.
+> >=20
+> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> > ---
+> >  drivers/nvmem/core.c | 145 +++++++++++++++++++++++++++++++++++++++++--
+> >  1 file changed, 141 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> > index 342cd380b420..02b70f065ebc 100644
+> > --- a/drivers/nvmem/core.c
+> > +++ b/drivers/nvmem/core.c
+> > @@ -325,6 +325,76 @@ static umode_t nvmem_bin_attr_is_visible(struct ko=
+bject *kobj,
+> >  	return nvmem_bin_attr_get_umode(nvmem);
+> >  }
+> > =20
+> > +static struct nvmem_cell *nvmem_create_cell(struct nvmem_cell_entry *e=
+ntry,
+> > +					    const char *id, int index);
+> > +
+> > +static ssize_t nvmem_cell_attr_read(struct file *filp, struct kobject =
+*kobj,
+> > +				    struct bin_attribute *attr, char *buf,
+> > +				    loff_t pos, size_t count)
+> > +{
+> > +	struct nvmem_cell_entry *entry;
+> > +	struct nvmem_cell *cell =3D NULL;
+> > +	struct nvmem_device *nvmem;
+> > +	size_t cell_sz, read_len;
+> > +	struct device *dev;
+> > +	void *content;
+> > +
+> > +	if (attr->private)
+> > +		dev =3D attr->private;
+> > +	else
+> > +		dev =3D kobj_to_dev(kobj);
+> > +	nvmem =3D to_nvmem_device(dev);
+> > +
+> > +	mutex_lock(&nvmem_mutex);
+> > +	list_for_each_entry(entry, &nvmem->cells, node) {
+> > +		if (strncmp(entry->name, attr->attr.name, XATTR_NAME_MAX))
+> > +			continue;
+> > +
+> > +		cell =3D nvmem_create_cell(entry, entry->name, 0);
+> > +		if (IS_ERR(cell)) {
+> > +			mutex_unlock(&nvmem_mutex);
+> > +			return PTR_ERR(cell);
+> > +		}
+> > +
+> > +		break;
+> > +	}
+> > +	mutex_unlock(&nvmem_mutex);
+> > +
+> > +	if (!cell)
+> > +		return -EINVAL;
+> > +
+> > +	content =3D nvmem_cell_read(cell, &cell_sz);
+> > +	if (IS_ERR(content)) {
+> > +		read_len =3D PTR_ERR(content);
+> > +		goto destroy_cell;
+> > +	}
+> > +
+> > +	read_len =3D min_t(unsigned int, cell_sz - pos, count);
+> > +	memcpy(buf, content + pos, read_len);
+> > +	kfree(content);
+> > +
+> > +destroy_cell:
+> > +	kfree_const(cell->id);
+> > +	kfree(cell);
+> > +
+> > +	return read_len;
+> > +}
+> > +
+> > +static umode_t nvmem_cells_is_visible(struct kobject *kobj,
+> > +				      struct bin_attribute *attr, int i)
+> > +{
+> > +	struct device *dev =3D kobj_to_dev(kobj);
+> > +	struct nvmem_device *nvmem =3D to_nvmem_device(dev);
+> > +	umode_t mode =3D 0444;
+> > +
+> > +	mutex_lock(&nvmem_mutex);
+> > +	if (list_empty(&nvmem->cells))
+> > +		mode =3D 0;
+> > +	mutex_unlock(&nvmem_mutex); =20
+>=20
+> As the list can change right after you have unlocked this, why care
+> about the locking at all?
+
+Just to mimic the existing code which protects this list. I don't think
+a race can happen here anyway, the locks are not needed indeed.
+
+>=20
+> But in looking deeper here, is this really even needed?  As you manually
+> create the attributes in here anyway, the group starts out empty and
+> then you manually add them, so this should never fail, right?
+
+Absolutely. I put these lines in the commit log:
+
+"In order to be as close as how sysfs was designed, despite the cells
+.bin_attrs attribute group member being assigned at runtime (and thus,
+not movable to a RO section), we provide a .is_bin_visible hook which
+might become really useful if the series avoiding the creation of empty
+directories borns."
+
+It was a try to prepare the future :) But I agree it is not needed,
+statically defining the rights is more than enough, so I'll just get
+rid of it.
+
+>=20
+> > +
+> > +	return mode;
+> > +}
+> > +
+> >  /* default read/write permissions */
+> >  static struct bin_attribute bin_attr_rw_nvmem =3D {
+> >  	.attr	=3D {
+> > @@ -346,8 +416,15 @@ static const struct attribute_group
+> > nvmem_bin_group =3D { .is_bin_visible =3D nvmem_bin_attr_is_visible,
+> >  };
+> > =20
+> > +/* Cell attributes will be dynamically allocated */
+> > +static struct attribute_group nvmem_cells_group =3D {
+> > +	.name		=3D "cells",
+> > +	.is_bin_visible =3D nvmem_cells_is_visible,
+> > +};
+> > +
+> >  static const struct attribute_group *nvmem_dev_groups[] =3D {
+> >  	&nvmem_bin_group,
+> > +	&nvmem_cells_group,
+> >  	NULL,
+> >  };
+> > =20
+> > @@ -406,6 +483,60 @@ static void nvmem_sysfs_remove_compat(struct
+> > nvmem_device *nvmem, device_remove_bin_file(nvmem->base_dev,
+> > &nvmem->eeprom); }
+> > =20
+> > +static int nvmem_populate_sysfs_cells(struct nvmem_device *nvmem)
+> > +{
+> > +	struct bin_attribute **cells_attrs, *attrs;
+> > +	struct nvmem_cell_entry *entry;
+> > +	unsigned int ncells =3D 0, i =3D 0;
+> > +	int ret =3D 0;
+> > +
+> > +	mutex_lock(&nvmem_mutex);
+> > +
+> > +	list_for_each_entry(entry, &nvmem->cells, node)
+> > +		ncells++;
+> > +
+> > +	/* Allocate an array of attributes with a sentinel */
+> > +	cells_attrs =3D devm_kcalloc(&nvmem->dev, ncells + 1,
+> > +				   sizeof(struct bin_attribute *),
+> > GFP_KERNEL);
+> > +	if (!cells_attrs) {
+> > +		ret =3D -ENOMEM;
+> > +		goto unlock_mutex;
+> > +	}
+> > +
+> > +	nvmem_cells_group.bin_attrs =3D cells_attrs;
+> > +
+> > +	/* Without exposed cells, successfully exit after
+> > assigning an empty attributes array */
+> > +	if (!ncells)
+> > +		goto unlock_mutex; =20
+>=20
+> Shouldn't this check be higher up _before_ you allocate any memory?
+> If the attribute group list is empty, nothing should be created,
+> right?  Or will the driver core crash?
+
+As you rightfully guessed it, the core will crash if no list is
+provided at all. I need to provide an empty list with just an empty
+member and everything goes smoothly.=20
+
+Thanks,
+Miqu=C3=A8l
