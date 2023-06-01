@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43EEB71F4D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFEEA71F4D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232754AbjFAVez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 17:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
+        id S232759AbjFAVge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 17:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232986AbjFAVev (ORCPT
+        with ESMTP id S230001AbjFAVgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 17:34:51 -0400
+        Thu, 1 Jun 2023 17:36:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF7519D;
-        Thu,  1 Jun 2023 14:34:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56887184
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 14:36:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0641E649ED;
-        Thu,  1 Jun 2023 21:34:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF33EC433EF;
-        Thu,  1 Jun 2023 21:34:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E27AB64399
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 21:36:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82DE6C433EF;
+        Thu,  1 Jun 2023 21:36:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685655284;
-        bh=AbHfTr5p4zXcglalc0/KHf9eaa46MDixzs0334/nXsk=;
+        s=k20201202; t=1685655391;
+        bh=yOSVSaBHwx99uPQB7KLl4DIUi1SqOYChg3IttbqyV3s=;
         h=From:To:Cc:Subject:Date:From;
-        b=VW0jA7Mwu5T2MtFg9L0vQu1b9YVdZekxH9ULe+m0nXatTeu6X8r9m9FiG1BsE+FOl
-         WdZ7GxIsHpuUSnndQ+1LYlfe/nXD5SbyLxtMPQE5d91G+su3YyMruiUFSBSxgCe+Pp
-         cIvF7mNE3Ti4ZHkgj78V0jgXWnM9LcPXckXXESitFhUXzBrh8qEWC6Sg4F5IFfMD8L
-         3KbQp1gKVzLCMZ22wEOo+ANXEj0SwHIKsN3d9RXq0IcAwFzH5P2h1LIyitVwu99MoP
-         YWwj13wlayXxtVOBkxkM25bHaBNE7EQ/bexf19RG+LA3tDgdxbYiq8uIehYldPm+SI
-         dNCn+CP0KKWIA==
+        b=Sljypvo10RdZDzMPSueWmMp22OytLYWcXo1+/y3i1x/uVunStdLlpLopvGA7c069d
+         Fmf7lV8XkrHq9uO+wrtziKrSGRV+zmTmecN6elCyO1Li4eFR/mZj3Z1G7+nPBefPKT
+         ZX1rd5xEYM0HffHF3CZiepUxJcV815NfhdF27u6VFZNEoF29vc2+vg4dssw+BjEcc5
+         NiAV4B7ebvhRN3DtoXx8zd0fSVdUf0PlAx7aSm1SL2FMtETCBBMe9PdqYSy/2Tt+H3
+         rDBZft6N4Z8a1w3LeOMTRofsdAJyKzmsPFeroG7mj6RNBENHvRXIAGhEXYOk9Camak
+         9ydAGaZ2jSZtg==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Yauhen Kharuzhy <jekhor@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-leds@vger.kernel.org,
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Radhakrishna Sripada <radhakrishna.sripada@intel.com>,
+        Alan Previn <alan.previn.teres.alexis@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] leds: cht-wcove: mark cht_wc_leds_brightness_get static
-Date:   Thu,  1 Jun 2023 23:34:33 +0200
-Message-Id: <20230601213439.3398794-1-arnd@kernel.org>
+Subject: [PATCH] drm/i915/pxp: use correct format string for size_t
+Date:   Thu,  1 Jun 2023 23:36:10 +0200
+Message-Id: <20230601213624.3510244-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,29 +62,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-This was apparently made global but is not called from anywhere else:
+While 'unsigned long' needs the %ld format string, size_t needs the %z
+modifier:
 
-drivers/leds/leds-cht-wcove.c:144:21: error: no previous prototype for 'cht_wc_leds_brightness_get' [-Werror=missing-prototypes]
+drivers/gpu/drm/i915/pxp/intel_pxp_gsccs.c: In function 'gsccs_send_message':
+include/drm/drm_print.h:456:39: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Werror=format=]
+  456 |         dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
 
-Fixes: 047da762b9a93 ("leds: Add Intel Cherry Trail Whiskey Cove PMIC LED driver")
+Fixes: dc9ac125d81fa ("drm/i915/pxp: Add GSC-CS backend to send GSC fw messages")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/leds/leds-cht-wcove.c | 2 +-
+ drivers/gpu/drm/i915/pxp/intel_pxp_gsccs.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/leds/leds-cht-wcove.c b/drivers/leds/leds-cht-wcove.c
-index 0cfebee989107..0a5c30e5ed5d4 100644
---- a/drivers/leds/leds-cht-wcove.c
-+++ b/drivers/leds/leds-cht-wcove.c
-@@ -141,7 +141,7 @@ static int cht_wc_leds_brightness_set(struct led_classdev *cdev,
- 	return ret;
- }
+diff --git a/drivers/gpu/drm/i915/pxp/intel_pxp_gsccs.c b/drivers/gpu/drm/i915/pxp/intel_pxp_gsccs.c
+index 8dc41de3f6f74..290ed5ac487de 100644
+--- a/drivers/gpu/drm/i915/pxp/intel_pxp_gsccs.c
++++ b/drivers/gpu/drm/i915/pxp/intel_pxp_gsccs.c
+@@ -143,7 +143,7 @@ gsccs_send_message(struct intel_pxp *pxp,
  
--enum led_brightness cht_wc_leds_brightness_get(struct led_classdev *cdev)
-+static enum led_brightness cht_wc_leds_brightness_get(struct led_classdev *cdev)
- {
- 	struct cht_wc_led *led = container_of(cdev, struct cht_wc_led, cdev);
- 	unsigned int val;
+ 	reply_size = header->message_size - sizeof(*header);
+ 	if (reply_size > msg_out_size_max) {
+-		drm_warn(&i915->drm, "caller with insufficient PXP reply size %u (%ld)\n",
++		drm_warn(&i915->drm, "caller with insufficient PXP reply size %u (%zd)\n",
+ 			 reply_size, msg_out_size_max);
+ 		reply_size = msg_out_size_max;
+ 	}
 -- 
 2.39.2
 
