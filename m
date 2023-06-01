@@ -2,62 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D635571F105
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD89471F108
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233001AbjFARns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 13:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
+        id S233003AbjFARor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 13:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231931AbjFARnq (ORCPT
+        with ESMTP id S231284AbjFARop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 13:43:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CD51AD
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 10:43:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DA3364869
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 17:43:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF30C433D2;
-        Thu,  1 Jun 2023 17:43:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685641416;
-        bh=b2gcd3dJB++dyO99vAGT9rIkgCvbeypWxYxoChQXHXY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=tqHvoIYQCtkmBJcXfzi5Bifu/Ja0qfXqNcCvM0UurkX11FYxuANVpQz/bs7T1oB17
-         y01rsU+dhuiDX460ANq1Mwmh9Jtm1Xo8RJEMZU5MU9n4gkpBz5ZoPaOGXimV0f3lOk
-         2YRv3JH82u+zAIVBOW38Ik7Wj3bitGiT0oNQBzUichFAqwwI9tC2nVr9LhCN04FhA5
-         4twBsPeiO9izaWy30sOF0LftUlI2ieaxfOPsk9v15dZTqxkWJVP9uzrVvcebzPd4r3
-         NQzKJN9S883XO5iYq67+vbhfiHkDznmchHEwQ65cv65U705bdZroVMqDrPp7Gs6EkA
-         voErZ5DxEPriw==
-Message-ID: <63ee166d-6b33-2293-4ff2-2c42d350580a@kernel.org>
-Date:   Thu, 1 Jun 2023 11:43:35 -0600
+        Thu, 1 Jun 2023 13:44:45 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD9313D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 10:44:44 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3f6b34d2fdcso8830351cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 10:44:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1685641483; x=1688233483;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Jh+prt1Qedz+R2YQyLQJ98x5jS9YCmSuxBtda0nWMw=;
+        b=YVq3hU+MSG51EgNIOqbNDZTrpMTxdb6YhHGFmro0I+N+93/u5gxEvWYimZKFn85mzu
+         gMZzFwFTBVPUYvYnGHx/NkepcihoCSOJDhtsdQrt9boaSXJ6vnjNmNXMQC7tZ/0HVKTo
+         5io/CXZDEA1iYeursUj/Y/3ICvcLgXmI4fiQo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685641483; x=1688233483;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0Jh+prt1Qedz+R2YQyLQJ98x5jS9YCmSuxBtda0nWMw=;
+        b=dtbipQH5FzVLS0ZBcUFW66qFXJZ3JhjHdY+utJtCaUOhn2lns+165KHECMxekdWMxE
+         WbzDuJBGNK8M1Y9Qn4o+K8/QKvPS3kpaY9R1gBNr9Qkr0R1t+Q5ozVEXbjqjhfb8r+yD
+         riJiHU6bTrP3SUnOnuaahcwtXKhzdYKmR2njms/+tP/S23k8ldeW7FTjhNEsFCPAKd/k
+         T32Gy16aoxyG3PcsmNCMRlt430wBW9/vIlOwg+4q1uJcDT9ucjEQm1UizR1GQhgsFn8p
+         YJ34kTVpZgn94gJz+oqDUn//Z0bGjYhPpK4qzmlJy2xK61t4/ZH5QUSjfhwC8IWjB3H7
+         UfAg==
+X-Gm-Message-State: AC+VfDyAB0v54HQcbx609/F4cBYVvVtRzrFiu1IeimeMW4x80K+WD1EB
+        KkH4dgrhdfDT1McxaVibq9F1Vg==
+X-Google-Smtp-Source: ACHHUZ4qW8ypUShSY7qeSh/g7zr61nei1Gi5YxOh7xuJQmYfb9nvPItheaGa0ZJ7fqq4EtMhAJQF7A==
+X-Received: by 2002:ac8:5a4a:0:b0:3e9:243a:c35b with SMTP id o10-20020ac85a4a000000b003e9243ac35bmr9303429qta.51.1685641483197;
+        Thu, 01 Jun 2023 10:44:43 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id u8-20020a05622a17c800b003f38b4167e5sm8118170qtk.2.2023.06.01.10.44.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 10:44:41 -0700 (PDT)
+Message-ID: <32dcedc7-3cf6-62b1-f9b4-e02ba41e5c49@broadcom.com>
+Date:   Thu, 1 Jun 2023 10:44:30 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH net-next RFC] net: skip printing "link become ready" v6
- msg
-Content-Language: en-US
-To:     Stephen Hemminger <stephen@networkplumber.org>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mat Martineau <martineau@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230601-net-next-skip_print_link_becomes_ready-v1-1-c13e64c14095@tessares.net>
- <20230601103742.71285cf1@hermes.local>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20230601103742.71285cf1@hermes.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] net: systemport: Replace platform_get_irq with
+ platform_get_irq_optional
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, justin.chen@broadcom.com,
+        f.fainelli@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230601033002.869-1-jiasheng@iscas.ac.cn>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <20230601033002.869-1-jiasheng@iscas.ac.cn>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000d7874105fd14fd3c"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,21 +73,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/23 11:37 AM, Stephen Hemminger wrote:
-> On Thu, 01 Jun 2023 16:34:36 +0200
-> Matthieu Baerts <matthieu.baerts@tessares.net> wrote:
-> 
->> This following message is printed in the console each time a network
->> device configured with an IPv6 addresses is ready to be used:
->>
->>   ADDRCONF(NETDEV_CHANGE): <iface>: link becomes ready
->>
->> When netns are being extensively used -- e.g. by re-creating netns with
->> veth to discuss with each other for testing purposes like mptcp_join.sh
->> selftest does -- it generates a lot of messages: more than 700 when
->> executing mptcp_join.sh with the latest version.
-> 
-> Don't add yet another network nerd knob.
-> Just change message from pr_info to pr_debug.
+--000000000000d7874105fd14fd3c
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-+1
+On 5/31/23 20:30, Jiasheng Jiang wrote:
+> Replace platform_get_irq with platform_get_irq_optional because wol_irq
+> is optional.
+> 
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+
+I suppose this works as far as communicating the intent and the nature 
+of the interrupt, not that this is a functional change though:
+
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
+
+
+--000000000000d7874105fd14fd3c
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILfwF54K8tl9SpOt
+XmJrjCeBrnECb3gYjyqHtSUbMFcCMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDYwMTE3NDQ0M1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDu3eNu4pAJ98aqj4zDHNjHdBtpnJ9AZ+en
+0ZeZd7nW5wP9gmZX2l3wfGqJJFxRUYgi6bkQ2gIdXgpdrLL4Q2sRxKl1P0pFEkzCNNTInsIZl507
+QLCOlMqk2cji6aEmKiMe7ghEQ3Ca//ZAlKQDDHIJ6Ngcu2vArwx00CaPnf4CraiCG34ndX7D0WAA
+sN2XreQZHEoUp2TuA8XcskTF5JEhIvUlDhahUE3IP2kEYAiybmpqRtKKNWzjcMbpa1pl6wtXJIIm
+BEH1yh9Wc0AZ3pdqaJPBG0TWS0zZVW5BBUS/Nuel820V5Z+rVTFMb8UDCIkYg8J8b1rrXAw/zFyL
+tNlz
+--000000000000d7874105fd14fd3c--
