@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F6E7198F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E79F7198F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233370AbjFAKQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
+        id S233433AbjFAKQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233346AbjFAKPw (ORCPT
+        with ESMTP id S233390AbjFAKQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:15:52 -0400
+        Thu, 1 Jun 2023 06:16:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32852111;
-        Thu,  1 Jun 2023 03:13:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DF1269E;
+        Thu,  1 Jun 2023 03:13:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E691C64300;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4CBA63EAA;
+        Thu,  1 Jun 2023 10:13:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE72DC433D2;
         Thu,  1 Jun 2023 10:13:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB9EC433EF;
-        Thu,  1 Jun 2023 10:13:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685614396;
-        bh=AFUoVH57IicSC1SUB3rNbSa55KIIf5fvCH3QgG43svk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=mW6qnl+Iscw1AVEmuh/+zsjQC3Skvf6tgVrd8H0mW7nk/Q4kR8aZiIus1dGIFP0tu
-         g3rQeS6P4z2sg2eRb4NVK2fSVZyk7O67J0bqoAY5zsHBwd4m5pGbhDwVNj62iw489S
-         WwJRyB2rENdRnYC5sKzXzzMfTG9/RUH5Fq0wJ8oT8tMyy9YYy4BnDsnxhAjT9MeepB
-         H1tV4aCIaB0/6raud9FT8L5dMFEDagbhbs3liHazB+zv7gap/xaJMb6C7mJsHMki13
-         b3RfbDTWSX2rQpcBObYqwwehSGuzsUPwmJr6dpDHZ0JMs7xXA+oJ8tyL/OL1vetfWT
-         OQoViqeiM1NHQ==
+        s=k20201202; t=1685614405;
+        bh=5LdCoQSeBVgn7R6MjCYCn6phsa2E0t2qbJ7tK4qa+uI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=F6EpbVfGLuXjbFiyYyZc+fUuN02wx1QczJja/uiqdutB8m95JvNFZw7nIytxmrtuT
+         aTdIs1QEsDFvn0SybJwKeGIZVZcQpvm0uOONMDF3szIrx6y8Hx9xgX8lYS/c2uD5kI
+         YoTU1JxtwCM1CoCtBppK1e4spjISdibEmzTo021jHOZNSRooDproCfJ4QHfFqjAjqs
+         Dbeq3rvYfN6/K690GGLQMIS0wcwWM7BpgPoOpnLHwPYHV+Dof7f6MUU6DTr+AIayT3
+         JuM5Oy3IMM7Kt1YgUoXGAOq1OFOmnqM9HYtRqlMMBSLmIZTCqQmog0rztgkodFXPpc
+         +OolDOUgDfEeQ==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -60,10 +60,12 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
         netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: [PATCH 00/13] mm: jit/text allocator
-Date:   Thu,  1 Jun 2023 13:12:44 +0300
-Message-Id: <20230601101257.530867-1-rppt@kernel.org>
+Subject: [PATCH 01/13] nios2: define virtual address space for modules
+Date:   Thu,  1 Jun 2023 13:12:45 +0300
+Message-Id: <20230601101257.530867-2-rppt@kernel.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20230601101257.530867-1-rppt@kernel.org>
+References: <20230601101257.530867-1-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -78,117 +80,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-Hi,
+nios2 uses kmalloc() to implement module_alloc() because CALL26/PCREL26
+cannot reach all of vmalloc address space.
 
-module_alloc() is used everywhere as a mean to allocate memory for code.
+Define module space as 32MiB below the kernel base and switch nios2 to
+use vmalloc for module allocations.
 
-Beside being semantically wrong, this unnecessarily ties all subsystmes
-that need to allocate code, such as ftrace, kprobes and BPF to modules
-and puts the burden of code allocation to the modules code.
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+---
+ arch/nios2/include/asm/pgtable.h |  5 ++++-
+ arch/nios2/kernel/module.c       | 19 ++++---------------
+ 2 files changed, 8 insertions(+), 16 deletions(-)
 
-Several architectures override module_alloc() because of various
-constraints where the executable memory can be located and this causes
-additional obstacles for improvements of code allocation.
-
-This set splits code allocation from modules by introducing
-jit_text_alloc(), jit_data_alloc() and jit_free() APIs, replaces call
-sites of module_alloc() and module_memfree() with the new APIs and
-implements core text and related allocation in a central place.
-
-Instead of architecture specific overrides for module_alloc(), the
-architectures that require non-default behaviour for text allocation must
-fill jit_alloc_params structure and implement jit_alloc_arch_params() that
-returns a pointer to that structure. If an architecture does not implement
-jit_alloc_arch_params(), the defaults compatible with the current
-modules::module_alloc() are used.
-
-The new jitalloc infrastructure allows decoupling of kprobes and ftrace
-from modules, and most importantly it enables ROX allocations for
-executable memory.
-
-A centralized infrastructure for code allocation allows future
-optimizations for allocations of executable memory, caching large pages for
-better iTLB performance and providing sub-page allocations for users that
-only need small jit code snippets.
-
-patches 1-5: split out the code allocation from modules and arch
-patch 6: add dedicated API for data allocations with constraints similar to
-code allocations
-patches 7-9: decouple dynamic ftrace and kprobes form CONFIG_MODULES
-patches 10-13: enable ROX allocations for executable memory on x86
-
-Mike Rapoport (IBM) (11):
-  nios2: define virtual address space for modules
-  mm: introduce jit_text_alloc() and use it instead of module_alloc()
-  mm/jitalloc, arch: convert simple overrides of module_alloc to jitalloc
-  mm/jitalloc, arch: convert remaining overrides of module_alloc to jitalloc
-  module, jitalloc: drop module_alloc
-  mm/jitalloc: introduce jit_data_alloc()
-  x86/ftrace: enable dynamic ftrace without CONFIG_MODULES
-  arch: make jitalloc setup available regardless of CONFIG_MODULES
-  kprobes: remove dependcy on CONFIG_MODULES
-  modules, jitalloc: prepare to allocate executable memory as ROX
-  x86/jitalloc: make memory allocated for code ROX
-
-Song Liu (2):
-  ftrace: Add swap_func to ftrace_process_locs()
-  x86/jitalloc: prepare to allocate exectuatble memory as ROX
-
- arch/Kconfig                     |   5 +-
- arch/arm/kernel/module.c         |  32 ------
- arch/arm/mm/init.c               |  35 ++++++
- arch/arm64/kernel/module.c       |  47 --------
- arch/arm64/mm/init.c             |  42 +++++++
- arch/loongarch/kernel/module.c   |   6 -
- arch/loongarch/mm/init.c         |  16 +++
- arch/mips/kernel/module.c        |   9 --
- arch/mips/mm/init.c              |  19 ++++
- arch/nios2/include/asm/pgtable.h |   5 +-
- arch/nios2/kernel/module.c       |  24 ++--
- arch/parisc/kernel/module.c      |  11 --
- arch/parisc/mm/init.c            |  21 +++-
- arch/powerpc/kernel/kprobes.c    |   4 +-
- arch/powerpc/kernel/module.c     |  37 -------
- arch/powerpc/mm/mem.c            |  41 +++++++
- arch/riscv/kernel/module.c       |  10 --
- arch/riscv/mm/init.c             |  18 +++
- arch/s390/kernel/ftrace.c        |   4 +-
- arch/s390/kernel/kprobes.c       |   4 +-
- arch/s390/kernel/module.c        |  46 +-------
- arch/s390/mm/init.c              |  35 ++++++
- arch/sparc/kernel/module.c       |  34 +-----
- arch/sparc/mm/Makefile           |   2 +
- arch/sparc/mm/jitalloc.c         |  21 ++++
- arch/sparc/net/bpf_jit_comp_32.c |   8 +-
- arch/x86/Kconfig                 |   2 +
- arch/x86/kernel/alternative.c    |  43 ++++---
- arch/x86/kernel/ftrace.c         |  59 +++++-----
- arch/x86/kernel/kprobes/core.c   |   4 +-
- arch/x86/kernel/module.c         |  75 +------------
- arch/x86/kernel/static_call.c    |  10 +-
- arch/x86/kernel/unwind_orc.c     |  13 ++-
- arch/x86/mm/init.c               |  52 +++++++++
- arch/x86/net/bpf_jit_comp.c      |  22 +++-
- include/linux/ftrace.h           |   2 +
- include/linux/jitalloc.h         |  69 ++++++++++++
- include/linux/moduleloader.h     |  15 ---
- kernel/bpf/core.c                |  14 +--
- kernel/kprobes.c                 |  51 +++++----
- kernel/module/Kconfig            |   1 +
- kernel/module/main.c             |  56 ++++------
- kernel/trace/ftrace.c            |  13 ++-
- kernel/trace/trace_kprobe.c      |  11 ++
- mm/Kconfig                       |   3 +
- mm/Makefile                      |   1 +
- mm/jitalloc.c                    | 185 +++++++++++++++++++++++++++++++
- mm/mm_init.c                     |   2 +
- 48 files changed, 777 insertions(+), 462 deletions(-)
- create mode 100644 arch/sparc/mm/jitalloc.c
- create mode 100644 include/linux/jitalloc.h
- create mode 100644 mm/jitalloc.c
-
-
-base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
+index 0f5c2564e9f5..0073b289c6a4 100644
+--- a/arch/nios2/include/asm/pgtable.h
++++ b/arch/nios2/include/asm/pgtable.h
+@@ -25,7 +25,10 @@
+ #include <asm-generic/pgtable-nopmd.h>
+ 
+ #define VMALLOC_START		CONFIG_NIOS2_KERNEL_MMU_REGION_BASE
+-#define VMALLOC_END		(CONFIG_NIOS2_KERNEL_REGION_BASE - 1)
++#define VMALLOC_END		(CONFIG_NIOS2_KERNEL_REGION_BASE - SZ_32M - 1)
++
++#define MODULES_VADDR		(CONFIG_NIOS2_KERNEL_REGION_BASE - SZ_32M)
++#define MODULES_END		(CONFIG_NIOS2_KERNEL_REGION_BASE - 1)
+ 
+ struct mm_struct;
+ 
+diff --git a/arch/nios2/kernel/module.c b/arch/nios2/kernel/module.c
+index 76e0a42d6e36..9c97b7513853 100644
+--- a/arch/nios2/kernel/module.c
++++ b/arch/nios2/kernel/module.c
+@@ -21,23 +21,12 @@
+ 
+ #include <asm/cacheflush.h>
+ 
+-/*
+- * Modules should NOT be allocated with kmalloc for (obvious) reasons.
+- * But we do it for now to avoid relocation issues. CALL26/PCREL26 cannot reach
+- * from 0x80000000 (vmalloc area) to 0xc00000000 (kernel) (kmalloc returns
+- * addresses in 0xc0000000)
+- */
+ void *module_alloc(unsigned long size)
+ {
+-	if (size == 0)
+-		return NULL;
+-	return kmalloc(size, GFP_KERNEL);
+-}
+-
+-/* Free memory returned from module_alloc */
+-void module_memfree(void *module_region)
+-{
+-	kfree(module_region);
++	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
++				    GFP_KERNEL, PAGE_KERNEL_EXEC,
++				    VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
++				    __builtin_return_address(0));
+ }
+ 
+ int apply_relocate_add(Elf32_Shdr *sechdrs, const char *strtab,
 -- 
 2.35.1
 
