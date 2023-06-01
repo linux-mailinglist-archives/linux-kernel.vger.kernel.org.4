@@ -2,147 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC49719016
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 03:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012BC71901A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 03:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbjFABiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 21:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
+        id S230314AbjFABio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 21:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjFABiR (ORCPT
+        with ESMTP id S229527AbjFABin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 21:38:17 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2104.outbound.protection.outlook.com [40.107.215.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79EEA3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 18:38:15 -0700 (PDT)
+        Wed, 31 May 2023 21:38:43 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2048.outbound.protection.outlook.com [40.107.220.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E6213E
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 18:38:38 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bpq4UpBY3i+TzfzeWcBGMtfLeHmi8IryazdDhxgwI4irb5i1ZG5ZxyZiHBBvoqVDEaKosQBpAdLfGkwez4cbM39RKT7lV6pU2XBGlIqvq/X2GbXGeVT6U4Cz1KODiObEFyOETbwTn2LK3gTAWUiOL+kWYfH4ZIWO9NlklFgtq5H2Xdvs4pBn4f2EQ0zHPDKSw/sNskrnxoXOvslNR40b03379zn+o8thn0lxXhau92j6E9kXRuXczI1s9FkObJq1nk1Pk3iB7csuFeIshh1LCotn4kcr1TK8G63hzsRN1+k3JrYPH8SlkGpYI624vfZiv3tBwZB1bm76HM5XOJgBDg==
+ b=lsaRp30FSC0olwDPvo2mvxKXlv3PS5ys3vlMZDSe1fioPI0vfHLn33J07gjCpx8Kc7TW9jXxH/kroJtE2G9RPAl9LElE5/r78dYi7pw8vREDCV0I5jvh1XlBZSu9LH2yiNa7QRsvBQM3ch6Dr3K1b6zxdGgLl50tvOufs3RT+RQ8d+TyyzyXl44xZ5k5HYG0ukapxTvnv6uWvT+OFUTZO+2swqdLD3n2xia890ia52Qywcz+mBIrd03DlB6uk5ju7Iv+8Nb0WNxxLXIfhixcYkdfdtY6GKCGOlAYfi2XFKqw1K/Jb+vbaat8KVQwxt5LUyr/S4GQN3n3u3YLGsLo0A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1+xDjwK/G5Ell5goJsjITLwZleVeL666IQ0nhhzjTmQ=;
- b=DIQ+ENCbypw29sqxDV2RJjpoFlwt7QlVmqFDgosu6TipsHNNQhp+wWiVBFRVemLHYSM83SRIoEIIEaKVTIT+iEibKW2q9EZeZcI3bAx4z6+G8x2K1cI3M08JdkXCBVztbd4Db3SJdfwtBn6aSKcsfV7GWPSzeFHdxEbUtAM19NXK/6NEBaWzoQZFPkkjksS86RYoCRlOAxAJxjyaDQnHW9q5NmPsm02zuFtQEnsmLh/6S5+nvQX9RnEmHLhYC0Z1ggz+GOCK12x+rlWtZSIOAllL2lkn9mzhL25u/AFhgvffcStUIInmFWvslP9uYY9G2SR9hgERNkM6srQi6DNa+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ bh=0vfN1xyKl7lw0CpABFH0akPL2vBfQZyRU1ONOnJYq9A=;
+ b=AV3rHBWgDBf5x51r68fr/YmiYjUJm7aZMHtjJffX2fxwhsWJ4eKIx4cF0J2SMgMi0898j69O76SJWOKoH6PibECdzH0ULIxa8Puf2GoA8L5yKmOrE6U6ix2Q7a/mlwmIYOSh6i8Wcnzo7JrA3k3lfBGyURx3jSETJytDiR/yoEmRGrbDj9X9cBwayiig+6r+UV7gGLLvhDZE3TaZkgmSK49U0a4OcCAXifkF/jri3AcHnVxyUssCuq0zvx+y1NwaTlCsPOxAVXZY+PB47cMVvF7yd3m2s51wfpELgUPZYFn5SKZkVgBacbZg1chkUadmz6rj4rCN3FBQ1atE181Nvg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1+xDjwK/G5Ell5goJsjITLwZleVeL666IQ0nhhzjTmQ=;
- b=Fu+vJnmJmD3TAoOKATuLT9ZlRq7/JUdmbLQC53ASYUqkBTmOGP4F52v2mnFd3DxOXCp7k8cgKFdxVQd2a5PPQAOLnZZIIQjODfx5WNDN8+fhNRVnE6LjvWpTNj53DxU6nzp6jhPGmB09QV8Dd3Lw/V240yq/mAmnMX7n+cwtfPwRoVTHV6XBpe3vhK6EWNdNY4kB/ytWHb+zv03rvrm/+MJZ3ehSExgNe42yMtQLVHyDw+QQhptH/JWIapsvz5OM5FTJi6jRrTQyW6LZ/JCZNoqz3M/h6vky92cZYAJhFCF9D/jd7sSR6kOLmQsTD+yeAk7h4GhwXsHa9XtbRJDsdw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SL2PR06MB3017.apcprd06.prod.outlook.com (2603:1096:100:3a::16)
- by SEYPR06MB5645.apcprd06.prod.outlook.com (2603:1096:101:c2::14) with
+ bh=0vfN1xyKl7lw0CpABFH0akPL2vBfQZyRU1ONOnJYq9A=;
+ b=xvm2YVH/L9muCoOq4sSX+gkzgx94gZ6V5oNSPKFE23mWMA92EABKHYLUsFWr3U3IxTkcDDXHI47TLGm2sFDQhg4+vdVxRwT3T4+DdMWAe0QDcIkeWCEeSSXa3Y/QWhS4mLKSRxnI91xmu5Kp4owLXi7A3aslkrxVMwCnmLlwSbA=
+Received: from BN8PR16CA0002.namprd16.prod.outlook.com (2603:10b6:408:4c::15)
+ by PH0PR12MB5497.namprd12.prod.outlook.com (2603:10b6:510:eb::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Thu, 1 Jun
- 2023 01:38:11 +0000
-Received: from SL2PR06MB3017.apcprd06.prod.outlook.com
- ([fe80::a9b5:e147:e85a:96d5]) by SL2PR06MB3017.apcprd06.prod.outlook.com
- ([fe80::a9b5:e147:e85a:96d5%6]) with mapi id 15.20.6455.020; Thu, 1 Jun 2023
- 01:38:11 +0000
-From:   Wu Bo <bo.wu@vivo.com>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, wubo.oduw@gmail.com,
-        Wu Bo <bo.wu@vivo.com>
-Subject: [PATCH v3 1/1] f2fs: fix args passed to trace_f2fs_lookup_end
-Date:   Thu,  1 Jun 2023 09:37:59 +0800
-Message-Id: <20230601013759.75500-1-bo.wu@vivo.com>
-X-Mailer: git-send-email 2.35.3
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Thu, 1 Jun
+ 2023 01:38:36 +0000
+Received: from BL02EPF000145B9.namprd05.prod.outlook.com
+ (2603:10b6:408:4c:cafe::7c) by BN8PR16CA0002.outlook.office365.com
+ (2603:10b6:408:4c::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.23 via Frontend
+ Transport; Thu, 1 Jun 2023 01:38:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF000145B9.mail.protection.outlook.com (10.167.241.209) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6455.18 via Frontend Transport; Thu, 1 Jun 2023 01:38:35 +0000
+Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 31 May
+ 2023 20:38:35 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
+ (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 31 May
+ 2023 18:38:35 -0700
+Received: from archlinux.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Wed, 31 May 2023 20:38:32 -0500
+From:   Wenyou Yang <WenYou.Yang@amd.com>
+To:     <alexander.deucher@amd.com>, <mario.limonciello@amd.com>,
+        <christian.koenig@amd.com>, <Xinhui.Pan@amd.com>,
+        <evan.quan@amd.com>
+CC:     <weiyuan2@amd.com>, <richardqi.liang@amd.com>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, Wenyou Yang <WenYou.Yang@amd.com>
+Subject: [PATCH] drm/amd/pm: Vangogh: Add new gpu_metrics_v2_4 to acquire gpu_metrics
+Date:   Thu, 1 Jun 2023 09:38:26 +0800
+Message-ID: <20230601013826.265885-1-WenYou.Yang@amd.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0156.apcprd04.prod.outlook.com (2603:1096:4::18)
- To SL2PR06MB3017.apcprd06.prod.outlook.com (2603:1096:100:3a::16)
-MIME-Version: 1.0
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SL2PR06MB3017:EE_|SEYPR06MB5645:EE_
-X-MS-Office365-Filtering-Correlation-Id: d28b7ccc-e8b5-4bba-dd88-08db6240db36
+X-MS-TrafficTypeDiagnostic: BL02EPF000145B9:EE_|PH0PR12MB5497:EE_
+X-MS-Office365-Filtering-Correlation-Id: 77520a6d-d3c1-426e-27de-08db6240eaba
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D38IGCYG+B52zXqu0AC487yO5ibeY6sFqcDs7oW/MuSn9bqgEWiRtnttBZsEMVPx1EEdDyLMTpPLEryiz67E9oc79zq2bW/DZqamOQLqoiu6ykdpxqA0lYhacctqAWSK7T4zvHfz7vuuzEhar1Y/KLYAtdYlfOtq4+bYaEzUShg18dYj1jcsxoTmUrzA0p6UcrmhuiYie/Ep8MeTlsVVrP6xWZSpPCKz5+GIv7YvojOhRKEzuvAglYSk1AuOoy4CcydfK+e2CLmN7ez3K1gKeNJqVfHlbrUN2J9i3H0Jcq+CRXE0Y3BzLVGOXxmQhbrgb+IIWQFdMfIlWdX019laSqSoXYXY1oK36XC7aDwHOXGWBAQxRl/nIqmJ8pRKW7h/7kdNQqe60QiUIgpF1gBYhY17Cm0m5l+emnoI7TPLg0yHKRpXG3Ej/w1rpB4gpD7l4GJEDoMxDtkAjZ5IUiQ1k912apUM+kJ75975Ju/dlpaY/UR2EFh6kgUXMclnK0eLttsuOsKlyrc+cVStrbNTBBnoJxiDa9vhwUESLwl31iwlcMTwwRkxBQM3nbjpD0P4LMGeNovZHhxhJfbtoyC0Grg8nINpO4vXl4ZwfPidzJDLW7XUaGwPUJ4O3+TzXye9
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SL2PR06MB3017.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(366004)(39860400002)(136003)(376002)(451199021)(8936002)(8676002)(5660300002)(186003)(478600001)(110136005)(52116002)(6486002)(41300700001)(6666004)(316002)(6512007)(6506007)(4326008)(1076003)(26005)(107886003)(66476007)(66946007)(66556008)(2616005)(2906002)(83380400001)(38350700002)(38100700002)(86362001)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HDo9W5zc6mJt5ud6KufUcGEr9YlSckh+p8/Boaq4zVG2smMAO9Lh3TsyVLo+?=
- =?us-ascii?Q?6aMLB5Zuz1PLpJaN36xLFzfILDqaY5QjPfNO8ns/WkXF8jF61dLNY7hx8aHp?=
- =?us-ascii?Q?keOd5hxYURnHOJdCUUjhoraFS3veRVK9e264eTZVs7DV7oroBHVQeZc+0SZK?=
- =?us-ascii?Q?UU9/xw0+sgn0l7MegBsieem6CeRbQn9yVKNSQ/ArLmMwkT/qIyhKQyJ93XuC?=
- =?us-ascii?Q?eqobDfk1mGyj9GuIzyrq6IV7f9+WLPL83iN60LM8e8RfnJTHWWlPSIV1VBNR?=
- =?us-ascii?Q?GMJud4oO0gRSm7BXdc7kV5jGvH82DepDCCxaXnAkQHaCq2AlQchc+IK0s4C8?=
- =?us-ascii?Q?aqEsMlEJlEC9Z6Y8+znNTBgr9AoGE3CDy6aI3KYV1rt/IrFtEPik8yY3GATs?=
- =?us-ascii?Q?tO0WzrPJkz5KeQyubin8bp5lhFIqAImtnqUIYzMjWW+H8XzurnFvRu+T8jrV?=
- =?us-ascii?Q?TZeksT0LPwEMpAmguAg2FhkUNtJ/eeSZrC6FzSGqPg6pVMAAX1heh/vxOOCw?=
- =?us-ascii?Q?xwZ/gMFXM5olhEE07O+8977M5wzFFnu0gnLkKv/e09jfM7j8NilI6umwJBF6?=
- =?us-ascii?Q?gW9Lltl+PnA6GegDriMvv1q9tfE6vGMBzrTCQwlyL0mvjetDC/9hSupXnxca?=
- =?us-ascii?Q?KxY4k6aZ7ZP+pFVODH/PkH0jkbbat9ALU27DY/DNxP+D/AdAOUgJfedQtE5O?=
- =?us-ascii?Q?fV1bP5P0SQR7gyWipQYHf1sAk2TpQ12xR0BCBRni5De4fZCQmjTXL3iWn+1J?=
- =?us-ascii?Q?LizuYtFOPaAoQ+Qk93Gx2/u4nI+dE3gOPxZDYFmJ2nOVBEyww2/vkSGD9O9g?=
- =?us-ascii?Q?8dWzaUV6NO6R5mkZSdRaPHjjIDTOV7/OX+Qn9EVBJxDOHrk1gbqwDYQeKtNn?=
- =?us-ascii?Q?nNTf0hfXclzEVn8llGuqHHgsg36sozNsIGULFLUMGzdzPMJQ6Fu6gdYmCkmD?=
- =?us-ascii?Q?tWkqmhrAJf5/qKhOoLhZKJQ9WDtKn7YGIEp+38NcmO+mfNYCqJmHkBPrjA8R?=
- =?us-ascii?Q?JjLeb1dh1MNOe+9Tvten44vvU0/XQ45XCc2MKKFDj1xQ0g4PSMiAPpevLAV0?=
- =?us-ascii?Q?I9+I9ISygHRTMXidDpN2El1c2wMfVE0AHmGPDc0BDTWoTW0Z2IH75P7ZYehY?=
- =?us-ascii?Q?CXWuU3dVQpGJwIwVkSUhuIi/wDck/x6CK+OeeR1wl+DKwR+gL/X/w2XF1H6O?=
- =?us-ascii?Q?cSQfpS54Mkg98nU7Q0N+vlg+ICT5Xl3eftwk0roP/7ntKPmH7TUReJlJt28j?=
- =?us-ascii?Q?a6rKAPt60F3UOPbCEopHkGvuYjhWjBXTbzsjfFG1SES1LUUOn5RRW2c68UT7?=
- =?us-ascii?Q?je8xzfI65NqGIcgnQhLpna3/tpMOfHgY9q58saHL7Vi4K9GXoskMw1BfLBuQ?=
- =?us-ascii?Q?DloZ9XI4w3W9amjgCt//H+0BQNKPKz9nRRQ8C/vSaUYpuIRNMkS8S1+ANAnM?=
- =?us-ascii?Q?fx1cn4LzJQ/2NqPmyi2LkwzVASiKxC8ViEMVcdyXVZCM1U1DD64so7jtxdsk?=
- =?us-ascii?Q?wbB7nQ9jVISU4S2TUWPGk7kNRz7KWm9uhEraw1WijCtz1Sa1BDmiERRH0+AR?=
- =?us-ascii?Q?lrzrn0dZqg3JMI6PWe28aHEsLm1MLDDBAuI8jcua?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d28b7ccc-e8b5-4bba-dd88-08db6240db36
-X-MS-Exchange-CrossTenant-AuthSource: SL2PR06MB3017.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 01:38:10.5433
+X-Microsoft-Antispam-Message-Info: /y77472i82d4cZ05Htc1LDmFB1l+VmwFJHVMbA5kdiac8Q332hdoKNmk8uYgDUzax1mRUShJJqJCwOYWnfSrFkJcXJt37RFK3qyHMQYjRE6nr1BzAiOOOccZlvvsiCGVcfVOn1BLpjMTK6HTinyWFJHbf63WHbu8KItjtzvqUtsWKewmX1nQahJfer8YInpLcIdCfggmuYpprHqa3e5HEi6JCgh7gagctq5tF4AqkcV7TcYLHe5wKUTtS5eh7SwF+MGfdIUKcHpYLHOs/rmiqsTQZl8C8YC2aUvut0Ry+UZPtw+yqPx1MgpszWIvmTkN1eEhO3zmBgD3Jv0o0pn8jGRAQGT0qC1kh9nAEngjpCYvt3nFA6wBs9tY4u/7s/9pLMBseXLQ4rqRLoILzsEM8dTAK2qpFOUhs9trQtR0g5kbWMlcRPKFogOWL2PxmLy1OHQtO+AqfJljdxBzvS3nUrr8h6sXa0neAoAeJi76E1eZdWO7XjryXPKhQA82bVzhVdW2tzd9kokdh31zzzSQWytx8P//Kyt6cFOJL5+9d3xEZKeG384Q3Wzxzj477CnrJ+XbsS/ZhultauCq+kGH/HZhwUavNENXgdK1vH1t3jESBNVEU/ZIlccrVmQKxNkiFytU3gMM5b3kBvmjuxCqiiy/+9fUlKsyJ5qI2+DIx+xc88YNxCR4e4/V9zVe9wpJAgm9Ari7E6DP7m1czs6cCImlpLLCb0xSr+wiFFpRokAAj+lhlMDOCpJRqfPu+EJTL71BqaoioTJsfWM4DcnE1g==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(396003)(39860400002)(451199021)(40470700004)(36840700001)(46966006)(82310400005)(7696005)(41300700001)(86362001)(40480700001)(6636002)(4326008)(40460700003)(6666004)(316002)(36756003)(70586007)(70206006)(47076005)(186003)(83380400001)(2616005)(1076003)(26005)(478600001)(36860700001)(426003)(336012)(5660300002)(2906002)(356005)(8676002)(81166007)(110136005)(54906003)(82740400003)(8936002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 01:38:35.8085
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4T5eeC7vEkX34E+cMzWptOQowqg+p+a8Zu7DGec4tWXwkI5qSH5pZ5y4PsGIO9n9fqTE6lhKEoNzUdkI7mHpSw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5645
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 77520a6d-d3c1-426e-27de-08db6240eaba
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000145B9.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5497
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The NULL return of 'd_splice_alias' dosen't mean error. Thus the
-successful case will also return NULL, which makes the tracepoint always
-print 'err=-ENOENT'.
+To acquire the voltage and current info from gpu_metrics interface,
+but gpu_metrics_v2_3 doesn't contain them, and to be backward compatible,
+add new gpu_metrics_v2_4 structure.
 
-And the different cases of 'new' & 'err' are list as following:
-1) dentry exists: err(0) with new(NULL) --> dentry, err=0
-2) dentry exists: err(0) with new(VALID) --> new, err=0
-3) dentry exists: err(0) with new(ERR) --> dentry, err=ERR
-4) no dentry exists: err(-ENOENT) with new(NULL) --> dentry, err=-ENOENT
-5) no dentry exists: err(-ENOENT) with new(VALID) --> new, err=-ENOENT
-6) no dentry exists: err(-ENOENT) with new(ERR) --> dentry, err=ERR
-
-Signed-off-by: Wu Bo <bo.wu@vivo.com>
+Acked-by: Evan Quan <evan.quan@amd.com>
+Signed-off-by: Wenyou Yang <WenYou.Yang@amd.com>
 ---
- fs/f2fs/namei.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../gpu/drm/amd/include/kgd_pp_interface.h    |  69 +++++++++++
+ .../gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c  | 109 ++++++++++++++++--
+ drivers/gpu/drm/amd/pm/swsmu/smu_cmn.c        |   3 +
+ 3 files changed, 172 insertions(+), 9 deletions(-)
 
-diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
-index 77a71276ecb1..3e35eb7dbb8f 100644
---- a/fs/f2fs/namei.c
-+++ b/fs/f2fs/namei.c
-@@ -576,8 +576,8 @@ static struct dentry *f2fs_lookup(struct inode *dir, struct dentry *dentry,
- 	}
+diff --git a/drivers/gpu/drm/amd/include/kgd_pp_interface.h b/drivers/gpu/drm/amd/include/kgd_pp_interface.h
+index 9f542f6e19ed..0f37dafafcf9 100644
+--- a/drivers/gpu/drm/amd/include/kgd_pp_interface.h
++++ b/drivers/gpu/drm/amd/include/kgd_pp_interface.h
+@@ -892,4 +892,73 @@ struct gpu_metrics_v2_3 {
+ 	uint16_t			average_temperature_core[8]; // average CPU core temperature on APUs
+ 	uint16_t			average_temperature_l3[2];
+ };
++
++struct gpu_metrics_v2_4 {
++	struct metrics_table_header	common_header;
++
++	/* Temperature */
++	uint16_t			temperature_gfx;
++	uint16_t			temperature_soc;
++	uint16_t			temperature_core[8];
++	uint16_t			temperature_l3[2];
++
++	/* Utilization */
++	uint16_t			average_gfx_activity;
++	uint16_t			average_mm_activity;
++
++	/* Driver attached timestamp (in ns) */
++	uint64_t			system_clock_counter;
++
++	/* Power/Energy */
++	uint16_t			average_socket_power;
++	uint16_t			average_cpu_power;
++	uint16_t			average_soc_power;
++	uint16_t			average_gfx_power;
++	uint16_t			average_core_power[8];
++
++	/* Average clocks */
++	uint16_t			average_gfxclk_frequency;
++	uint16_t			average_socclk_frequency;
++	uint16_t			average_uclk_frequency;
++	uint16_t			average_fclk_frequency;
++	uint16_t			average_vclk_frequency;
++	uint16_t			average_dclk_frequency;
++
++	/* Current clocks */
++	uint16_t			current_gfxclk;
++	uint16_t			current_socclk;
++	uint16_t			current_uclk;
++	uint16_t			current_fclk;
++	uint16_t			current_vclk;
++	uint16_t			current_dclk;
++	uint16_t			current_coreclk[8];
++	uint16_t			current_l3clk[2];
++
++	/* Throttle status (ASIC dependent) */
++	uint32_t			throttle_status;
++
++	/* Fans */
++	uint16_t			fan_pwm;
++
++	uint16_t			padding[3];
++
++	/* Throttle status (ASIC independent) */
++	uint64_t			indep_throttle_status;
++
++	/* Average Temperature */
++	uint16_t			average_temperature_gfx;
++	uint16_t			average_temperature_soc;
++	uint16_t			average_temperature_core[8];
++	uint16_t			average_temperature_l3[2];
++
++	/* Power/Voltage */
++	uint16_t			average_cpu_voltage;
++	uint16_t			average_soc_voltage;
++	uint16_t			average_gfx_voltage;
++
++	/* Power/Current */
++	uint16_t			average_cpu_current;
++	uint16_t			average_soc_current;
++	uint16_t			average_gfx_current;
++};
  #endif
- 	new = d_splice_alias(inode, dentry);
--	err = PTR_ERR_OR_ZERO(new);
--	trace_f2fs_lookup_end(dir, dentry, ino, !new ? -ENOENT : err);
-+	trace_f2fs_lookup_end(dir, !IS_ERR_OR_NULL(new) ? new : dentry,
-+				ino, IS_ERR(new) ? PTR_ERR(new) : err);
- 	return new;
- out_iput:
- 	iput(inode);
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
+index 067b4e0b026c..185d0b50ee8e 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
+@@ -1854,6 +1854,86 @@ static ssize_t vangogh_get_gpu_metrics_v2_3(struct smu_context *smu,
+ 	return sizeof(struct gpu_metrics_v2_3);
+ }
+ 
++static ssize_t vangogh_get_gpu_metrics_v2_4(struct smu_context *smu,
++					    void **table)
++{
++	SmuMetrics_t metrics;
++	struct smu_table_context *smu_table = &smu->smu_table;
++	struct gpu_metrics_v2_4 *gpu_metrics =
++				(struct gpu_metrics_v2_4 *)smu_table->gpu_metrics_table;
++	int ret = 0;
++
++	ret = smu_cmn_get_metrics_table(smu, &metrics, true);
++	if (ret)
++		return ret;
++
++	smu_cmn_init_soft_gpu_metrics(gpu_metrics, 2, 4);
++
++	gpu_metrics->temperature_gfx = metrics.Current.GfxTemperature;
++	gpu_metrics->temperature_soc = metrics.Current.SocTemperature;
++	memcpy(&gpu_metrics->temperature_core[0],
++	       &metrics.Current.CoreTemperature[0],
++	       sizeof(uint16_t) * 4);
++	gpu_metrics->temperature_l3[0] = metrics.Current.L3Temperature[0];
++
++	gpu_metrics->average_temperature_gfx = metrics.Average.GfxTemperature;
++	gpu_metrics->average_temperature_soc = metrics.Average.SocTemperature;
++	memcpy(&gpu_metrics->average_temperature_core[0],
++	       &metrics.Average.CoreTemperature[0],
++	       sizeof(uint16_t) * 4);
++	gpu_metrics->average_temperature_l3[0] = metrics.Average.L3Temperature[0];
++
++	gpu_metrics->average_gfx_activity = metrics.Current.GfxActivity;
++	gpu_metrics->average_mm_activity = metrics.Current.UvdActivity;
++
++	gpu_metrics->average_socket_power = metrics.Current.CurrentSocketPower;
++	gpu_metrics->average_cpu_power = metrics.Current.Power[0];
++	gpu_metrics->average_soc_power = metrics.Current.Power[1];
++	gpu_metrics->average_gfx_power = metrics.Current.Power[2];
++
++	gpu_metrics->average_cpu_voltage = metrics.Current.Voltage[0];
++	gpu_metrics->average_soc_voltage = metrics.Current.Voltage[1];
++	gpu_metrics->average_gfx_voltage = metrics.Current.Voltage[2];
++
++	gpu_metrics->average_cpu_current = metrics.Current.Current[0];
++	gpu_metrics->average_soc_current = metrics.Current.Current[1];
++	gpu_metrics->average_gfx_current = metrics.Current.Current[2];
++
++	memcpy(&gpu_metrics->average_core_power[0],
++	       &metrics.Average.CorePower[0],
++	       sizeof(uint16_t) * 4);
++
++	gpu_metrics->average_gfxclk_frequency = metrics.Average.GfxclkFrequency;
++	gpu_metrics->average_socclk_frequency = metrics.Average.SocclkFrequency;
++	gpu_metrics->average_uclk_frequency = metrics.Average.MemclkFrequency;
++	gpu_metrics->average_fclk_frequency = metrics.Average.MemclkFrequency;
++	gpu_metrics->average_vclk_frequency = metrics.Average.VclkFrequency;
++	gpu_metrics->average_dclk_frequency = metrics.Average.DclkFrequency;
++
++	gpu_metrics->current_gfxclk = metrics.Current.GfxclkFrequency;
++	gpu_metrics->current_socclk = metrics.Current.SocclkFrequency;
++	gpu_metrics->current_uclk = metrics.Current.MemclkFrequency;
++	gpu_metrics->current_fclk = metrics.Current.MemclkFrequency;
++	gpu_metrics->current_vclk = metrics.Current.VclkFrequency;
++	gpu_metrics->current_dclk = metrics.Current.DclkFrequency;
++
++	memcpy(&gpu_metrics->current_coreclk[0],
++	       &metrics.Current.CoreFrequency[0],
++	       sizeof(uint16_t) * 4);
++	gpu_metrics->current_l3clk[0] = metrics.Current.L3Frequency[0];
++
++	gpu_metrics->throttle_status = metrics.Current.ThrottlerStatus;
++	gpu_metrics->indep_throttle_status =
++			smu_cmn_get_indep_throttler_status(metrics.Current.ThrottlerStatus,
++							   vangogh_throttler_map);
++
++	gpu_metrics->system_clock_counter = ktime_get_boottime_ns();
++
++	*table = (void *)gpu_metrics;
++
++	return sizeof(struct gpu_metrics_v2_4);
++}
++
+ static ssize_t vangogh_get_gpu_metrics(struct smu_context *smu,
+ 				      void **table)
+ {
+@@ -1923,23 +2003,34 @@ static ssize_t vangogh_common_get_gpu_metrics(struct smu_context *smu,
+ {
+ 	uint32_t if_version;
+ 	uint32_t smu_version;
++	uint32_t smu_program;
++	uint32_t fw_version;
+ 	int ret = 0;
+ 
+ 	ret = smu_cmn_get_smc_version(smu, &if_version, &smu_version);
+-	if (ret) {
++	if (ret)
+ 		return ret;
+-	}
+ 
+-	if (smu_version >= 0x043F3E00) {
+-		if (if_version < 0x3)
+-			ret = vangogh_get_legacy_gpu_metrics_v2_3(smu, table);
++	smu_program = (smu_version >> 24) & 0xff;
++	fw_version = smu_version & 0xffffff;
++	if (smu_program == 6) {
++		if (fw_version >= 0x3F0800)
++			ret = vangogh_get_gpu_metrics_v2_4(smu, table);
+ 		else
+ 			ret = vangogh_get_gpu_metrics_v2_3(smu, table);
++
+ 	} else {
+-		if (if_version < 0x3)
+-			ret = vangogh_get_legacy_gpu_metrics(smu, table);
+-		else
+-			ret = vangogh_get_gpu_metrics(smu, table);
++		if (smu_version >= 0x043F3E00) {
++			if (if_version < 0x3)
++				ret = vangogh_get_legacy_gpu_metrics_v2_3(smu, table);
++			else
++				ret = vangogh_get_gpu_metrics_v2_3(smu, table);
++		} else {
++			if (if_version < 0x3)
++				ret = vangogh_get_legacy_gpu_metrics(smu, table);
++			else
++				ret = vangogh_get_gpu_metrics(smu, table);
++		}
+ 	}
+ 
+ 	return ret;
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu_cmn.c b/drivers/gpu/drm/amd/pm/swsmu/smu_cmn.c
+index 3ecb900e6ecd..cee5e32b4ff9 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu_cmn.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu_cmn.c
+@@ -996,6 +996,9 @@ void smu_cmn_init_soft_gpu_metrics(void *table, uint8_t frev, uint8_t crev)
+ 	case METRICS_VERSION(2, 3):
+ 		structure_size = sizeof(struct gpu_metrics_v2_3);
+ 		break;
++	case METRICS_VERSION(2, 4):
++		structure_size = sizeof(struct gpu_metrics_v2_4);
++		break;
+ 	default:
+ 		return;
+ 	}
 -- 
-2.35.3
+2.39.2
 
