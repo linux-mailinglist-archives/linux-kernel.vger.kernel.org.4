@@ -2,231 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D9C719136
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5684671913A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbjFADQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 23:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
+        id S230493AbjFADRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 23:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbjFADPu (ORCPT
+        with ESMTP id S231325AbjFADRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 23:15:50 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA23D134;
-        Wed, 31 May 2023 20:15:48 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-76c64da0e46so23841639f.0;
-        Wed, 31 May 2023 20:15:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685589348; x=1688181348;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VnFUK3AK9ccdMYcC5L+XEoGh2B4wy2q1Ks5rW38z4m8=;
-        b=o69nwRA4cQXyvnhAxwyUVDfxSXtIKMb++hg4FAjoxq1LDkjWx6OnPVIEq+sHhk2lah
-         hk3LCuxHoi6Pqw3dvm2V7Y0NDzhG+37fgolk8ReU/GH/zvd/24gm1JwJ/65ZyRQQw95j
-         lXnRYE/9kY7feBwK1EiRQdtFwY8LMMYiBuu/2SzbvcCpkpn9zV0xfreRWhLxLPJt8kRb
-         2xRZIgHKdmi3vDuE/QSjFXuo5qtTrMPE6xTquxvSKKnHw02oUeUy3GPVfmpr7aJBDIzU
-         ANvzXVQoOnV9llP0dTdeD1GmdO49TcWdIyne7N0+pZcWDG8JNkCoIk5hWwv0iSuN3GHH
-         UJ7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685589348; x=1688181348;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VnFUK3AK9ccdMYcC5L+XEoGh2B4wy2q1Ks5rW38z4m8=;
-        b=RKneCejhHYt559zF+XtALQXeVDHzNkOtiCudfX6lC0h8c8w52b+QWqdDENbDbTJt5V
-         yAipxjKf3FnTGmf6NvDY3zBM1fETJBJ+xtZ5KEgOvdXyeH83TV7BnsuBGWvDx+4femXq
-         di1Ast5zJjRSbRXUaVuyl+ESG9ktRSXahGZsmgOovcCMnii9Gzlz+slBCir/d1UNyAZx
-         1MoaWpCxN/bbn4GRDiNAc+EP4RmzpZykGRVSPXGx8yyAZSLR4g5XnMXzBehGCdu5eYy7
-         /d+N8H211YhDDqOCz/zbt/zZouR3gInKPECF3OE4ityclNPKWtRrQDmsbmSGEWpm+Bt3
-         ecOg==
-X-Gm-Message-State: AC+VfDxCRx1OR2jUFa9AHWimhwNjSUUutYGKKQYloSSHtjgHkC+Rna3X
-        UJvNvssrc7C26aN7OKdCPvM=
-X-Google-Smtp-Source: ACHHUZ59xvtI2CmUt1mPLj+A2MDIVMNZf608RPM/vi8HGm8YNUpFJ2FQO5wtpr4MVeCUCbTfk4rE4Q==
-X-Received: by 2002:a6b:6402:0:b0:776:f992:78cf with SMTP id t2-20020a6b6402000000b00776f99278cfmr6531210iog.12.1685589348140;
-        Wed, 31 May 2023 20:15:48 -0700 (PDT)
-Received: from aford-B741.lan ([2601:447:d001:897f:6ae0:d0f8:5d79:f782])
-        by smtp.gmail.com with ESMTPSA id b66-20020a0295c8000000b004165d7d6711sm1852590jai.71.2023.05.31.20.15.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 20:15:47 -0700 (PDT)
-From:   Adam Ford <aford173@gmail.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] arm64: dts: imx8mm-beacon: Add HDMI video with sound
-Date:   Wed, 31 May 2023 22:15:26 -0500
-Message-Id: <20230601031527.271232-3-aford173@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230601031527.271232-1-aford173@gmail.com>
-References: <20230601031527.271232-1-aford173@gmail.com>
+        Wed, 31 May 2023 23:17:11 -0400
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399C3C9;
+        Wed, 31 May 2023 20:16:51 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowABXXDCNDXhk6FzJCA--.6399S2;
+        Thu, 01 Jun 2023 11:16:29 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     justin.chen@broadcom.com, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, bcm-kernel-feedback-list@broadcom.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: [PATCH] net: systemport: Add and correct check for platform_get_irq
+Date:   Thu,  1 Jun 2023 11:16:35 +0800
+Message-Id: <20230601031635.28361-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: rQCowABXXDCNDXhk6FzJCA--.6399S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFW8Zr4DGFyxJF1UAw4kXrb_yoW8Ww43pa
+        1DJrWrX3y8WF4Yvas7Z3W8AFsxZw4Fvw4UGrW7tr13Z3s0yr1xAa48KF13uFnrAr4rGw43
+        ZFyjva93CFn8ZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
+        628vn2kIc2xKxwCY02Avz4vE14v_Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxh
+        VjvjDU0xZFpf9x0JU-miiUUUUU=
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Beacon Embedded imx8mm development kit has a DSI
-to HDMI bridge chip.  The bridge supports stereo audio
-and hot-plugging.
+On Thu, Jun 01, 2023 at 06:42:26AM +0800, Justin Chen wrote:
+> On 5/31/23 2:11 AM, Jiasheng Jiang wrote:
+>> Add the missing check for "priv->wol_irq".
+>> Use "<" instead of "<=" to check the irqs since the platform_get_irq
+>> returns non-zero IRQ number on success and negative error number on
+>> failure, shown in `driver/base/platform.c`.
+>> 
+>> Fixes: 83e82f4c706b ("net: systemport: add Wake-on-LAN support")
+>> Fixes: 80105befdb4b ("net: systemport: add Broadcom SYSTEMPORT Ethernet MAC driver")
+>> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+>> ---
+>>   drivers/net/ethernet/broadcom/bcmsysport.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>> 
+>> diff --git a/drivers/net/ethernet/broadcom/bcmsysport.c b/drivers/net/ethernet/broadcom/bcmsysport.c
+>> index 38d0cdaf22a5..16c9c0be1a33 100644
+>> --- a/drivers/net/ethernet/broadcom/bcmsysport.c
+>> +++ b/drivers/net/ethernet/broadcom/bcmsysport.c
+>> @@ -2535,7 +2535,7 @@ static int bcm_sysport_probe(struct platform_device *pdev)
+>>   	} else {
+>>   		priv->wol_irq = platform_get_irq(pdev, 1);
+>>   	}
+>> -	if (priv->irq0 <= 0 || (priv->irq1 <= 0 && !priv->is_lite)) {
+>> +	if (priv->irq0 < 0 || (priv->irq1 < 0 && !priv->is_lite) || priv->wol_irq < 0) {
+>>   		ret = -EINVAL;
+>>   		goto err_free_netdev;
+>>   	}
+> 
+> wol_irq is optional so we don't want to error out. Guess we should 
+> probably replace platform_get_irq with platform_get_irq_optional(). "<=" 
+> is fine. As you mentioned, a non-zero is success, so zero is considered 
+> invalid.
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
+Yes, you are right.
+I will submit a new patch that replace platform_get_irq with
+platform_get_irq_optional.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dts b/arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dts
-index 74a7b0cc10c2..4454bc1b6b9a 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dts
-@@ -16,4 +16,136 @@ / {
- 	chosen {
- 		stdout-path = &uart2;
- 	};
-+
-+	connector {
-+		compatible = "hdmi-connector";
-+		type = "a";
-+
-+		port {
-+			hdmi_connector_in: endpoint {
-+				remote-endpoint = <&adv7535_out>;
-+			};
-+		};
-+	};
-+
-+	reg_hdmi: regulator-hdmi-dvdd {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_reg_hdmi>;
-+		compatible = "regulator-fixed";
-+		regulator-name = "hdmi_pwr_en";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		gpio = <&gpio2 11 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		startup-delay-us = <70000>;
-+		regulator-always-on;
-+	};
-+
-+	sound-hdmi {
-+		compatible = "simple-audio-card";
-+		simple-audio-card,name = "sound-hdmi";
-+		simple-audio-card,format = "i2s";
-+
-+		simple-audio-card,cpu {
-+			sound-dai = <&sai5 0>;
-+			system-clock-direction-out;
-+		};
-+
-+		simple-audio-card,codec {
-+			sound-dai = <&adv_bridge>;
-+		};
-+	};
-+};
-+
-+&i2c2 {
-+	adv_bridge: hdmi@3d {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_hdmi_bridge>;
-+		compatible = "adi,adv7535";
-+		reg = <0x3d>, <0x3b>;
-+		reg-names = "main", "cec";
-+		adi,dsi-lanes = <4>;
-+		adi,fixed-lanes;
-+		dvdd-supply = <&reg_hdmi>;
-+		v3p3-supply = <&reg_hdmi>;
-+		v1p2-supply = <&reg_hdmi>;
-+		a2vdd-supply = <&reg_hdmi>;
-+		avdd-supply = <&reg_hdmi>;
-+		pvdd-supply = <&reg_hdmi>;
-+		interrupt-parent = <&gpio1>;
-+		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
-+		#sound-dai-cells = <0>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+
-+				adv7535_in: endpoint {
-+					remote-endpoint = <&dsi_out>;
-+				};
-+			};
-+
-+			port@1 {
-+				reg = <1>;
-+
-+				adv7535_out: endpoint {
-+					remote-endpoint = <&hdmi_connector_in>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&lcdif {
-+	status = "okay";
-+};
-+
-+&mipi_dsi {
-+	samsung,esc-clock-frequency = <20000000>;
-+	status = "okay";
-+
-+	ports {
-+		port@1 {
-+			reg = <1>;
-+
-+			dsi_out: endpoint {
-+				remote-endpoint = <&adv7535_in>;
-+			};
-+		};
-+	};
-+};
-+
-+&sai5 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sai5>;
-+	assigned-clocks = <&clk IMX8MM_CLK_SAI5>;
-+	assigned-clock-parents = <&clk IMX8MM_AUDIO_PLL1_OUT>;
-+	assigned-clock-rates = <24576000>;
-+	#sound-dai-cells = <0>;
-+	status = "okay";
-+};
-+
-+&iomuxc {
-+	pinctrl_hdmi_bridge: hdmibridgegrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_GPIO1_IO09_GPIO1_IO9		0x19
-+		>;
-+	};
-+
-+	pinctrl_reg_hdmi: reghdmigrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SD1_STROBE_GPIO2_IO11              0x16
-+		>;
-+	};
-+
-+	pinctrl_sai5: sai5grp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SAI5_RXD3_SAI5_TX_DATA0	0xd6
-+			MX8MM_IOMUXC_SAI5_RXD2_SAI5_TX_BCLK	0xd6
-+			MX8MM_IOMUXC_SAI5_RXD1_SAI5_TX_SYNC	0xd6
-+		>;
-+	};
- };
--- 
-2.39.2
+Thanks,
+Jiasheng
 
