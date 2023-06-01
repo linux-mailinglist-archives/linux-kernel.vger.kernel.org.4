@@ -2,142 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03A071A143
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 454F971A0F7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234659AbjFAO7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
+        id S233923AbjFAOvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233108AbjFAO64 (ORCPT
+        with ESMTP id S233476AbjFAOvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:58:56 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090E9E61;
-        Thu,  1 Jun 2023 07:58:24 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-39a505b901dso794458b6e.0;
-        Thu, 01 Jun 2023 07:58:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685631500; x=1688223500;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=R3xlSxMTcF87QzSJRGtR3aRtTi9/A1XGfTJRaxTHZ/A=;
-        b=fXO2nt4DOPXlgg55dIYo1i7lx9PQKx6f6Gpm0Rz30qheWnJIe4t4diKELxC+EMXRPl
-         C+Noee33vW4BzAGQQlGLAFj/kgiodUXGvnpaJCSPJUXZprlzOZ9+yoSnd4suYiwwOc13
-         NZ0ekwF67I6viF3BTtiZ+9w8Ir548CDqvndoLfFr7nAfIJDX3FHCY5MKoDqs2PT/JXda
-         bsSrz22wG3UMqXwtHua06wYFDH/Khw8mgsBBXKGbOKVa+y0jNhUGxQHJ8qG8g9MEqzKj
-         1xqW56V8/hAsI+cjrM9r5aKqX2v9wmv1mO6B6ODJDOuybd3qyWV4YPxKr6J+9vcTrWPq
-         AUiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685631500; x=1688223500;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R3xlSxMTcF87QzSJRGtR3aRtTi9/A1XGfTJRaxTHZ/A=;
-        b=PnKwq/xQnzC5Op6hnSh+SKQO9D1b8o1om/PUO+ibYRfMQ2ozF31CZW1Fz7az/GHdDQ
-         MPDmjrxtvrdBW9HOBx8H92DUo4l7iIx8FItQT6B0qX6ST4FMLtQWmc/wY7FD/kyXqL0x
-         2uKRlz2TKpvSnx54sRtEyfRvCj+7w9D5p/0znvW76ZghSr/mMq4pwPdjARPLh+Fln2Ag
-         /ukxVHO/D6jkJjASLr4vKaTqmDp2Rh4Ra9O8VHPhsG2ZUDGi7acTCy7hcz6zVjg5tPaC
-         Srtw/MftFfklanZJZ9r2Z8Cyw83RFMB5Bm6Ej1k6G3ray5tGkRHe3tLsiFUr9B+yXkoU
-         pQow==
-X-Gm-Message-State: AC+VfDyvVSBUoNB+fBRLZ6QAs2e+6oW62C1yos8I0aDHIsfNAdepJrCQ
-        q/2TCE8Ib97HqyalfuO5EHM=
-X-Google-Smtp-Source: ACHHUZ7CNoLcRMmNdTH38tnwna/r/qhwjihgBIYPHH3F4/5lfaci8KOua5Jzv6Hpir4E3/bCTC69rQ==
-X-Received: by 2002:aca:100f:0:b0:398:50f1:ad17 with SMTP id 15-20020aca100f000000b0039850f1ad17mr7309363oiq.4.1685631500443;
-        Thu, 01 Jun 2023 07:58:20 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id a19-20020a05680802d300b00397c07e8061sm1738511oid.6.2023.06.01.07.58.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 07:58:20 -0700 (PDT)
-Message-ID: <91a968e2-7c18-1bd8-84a4-b9c1eb9cca91@gmail.com>
-Date:   Thu, 1 Jun 2023 11:50:52 -0300
+        Thu, 1 Jun 2023 10:51:22 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C12C0;
+        Thu,  1 Jun 2023 07:51:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1JQ8H5SWLeF9hOjl0b6jkGrksawhL5bRI40mRJFX8jI=; b=AQipA1TAR5OQm4luUa3IrhuR+Q
+        FgALeD2E/Nc+RT2aOlQFunr2BdKZkbGkQ7Q+nDWwOFxAJWAaWXg/8NU6mvJng/EZ1Fc+rMaF9yq3N
+        dNO6Kh1F4gAbUz3hz/m/xU129pQ12UMkZbg8sAcvVmzn+P9/B7xN7QLozGANCPwRAmnweqK4Vonnd
+        d1oNWX0fJDB3PbN7wHOov41U6yqHvMD/hEE78WiE0T2vIXe6rfTKY51/wUJGVaHCggdJWLyL7aavQ
+        iIQmdoxx1BNYf+EoXMQ705PGwT0Hwzjg0c7j5eAX1xi0QymrQD/YJ3CfXFsmi/6MzM9RthImW4J5B
+        g6i9DJtA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q4jdz-00HB7j-0r;
+        Thu, 01 Jun 2023 14:51:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id ED838300269;
+        Thu,  1 Jun 2023 16:51:13 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CFD43202BDCAC; Thu,  1 Jun 2023 16:51:13 +0200 (CEST)
+Date:   Thu, 1 Jun 2023 16:51:13 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     K Prateek Nayak <kprateek.nayak@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>, x86@kernel.org,
+        Gautham Shenoy <gautham.shenoy@amd.com>
+Subject: Re: [tip: sched/core] sched/fair: Multi-LLC select_idle_sibling()
+Message-ID: <20230601145113.GA559993@hirez.programming.kicks-ass.net>
+References: <168553468754.404.2298362895524875073.tip-bot2@tip-bot2>
+ <3de5c24f-6437-f21b-ed61-76b86a199e8c@amd.com>
+ <20230601111326.GV4253@hirez.programming.kicks-ass.net>
+ <20230601115643.GX4253@hirez.programming.kicks-ass.net>
+ <20230601120001.GJ38236@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Subject: Re: [PATCH v2 5/8] rust: workqueue: add helper for defining
- work_struct fields
-To:     Alice Ryhl <aliceryhl@google.com>, rust-for-linux@vger.kernel.org
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-References: <20230601134946.3887870-1-aliceryhl@google.com>
- <20230601134946.3887870-6-aliceryhl@google.com>
-Content-Language: en-US
-In-Reply-To: <20230601134946.3887870-6-aliceryhl@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601120001.GJ38236@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/23 10:49, Alice Ryhl wrote:
-> The main challenge with defining `work_struct` fields is making sure
-> that the function pointer stored in the `work_struct` is appropriate for
-> the work item type it is embedded in. It needs to know the offset of the
-> `work_struct` field being used (even if there are several!) so that it
-> can do a `container_of`, and it needs to know the type of the work item
-> so that it can call into the right user-provided code. All of this needs
-> to happen in a way that provides a safe API to the user, so that users
-> of the workqueue cannot mix up the function pointers.
+On Thu, Jun 01, 2023 at 02:00:01PM +0200, Peter Zijlstra wrote:
+> On Thu, Jun 01, 2023 at 01:56:43PM +0200, Peter Zijlstra wrote:
+> > On Thu, Jun 01, 2023 at 01:13:26PM +0200, Peter Zijlstra wrote:
+> > > 
+> > > This DeathStarBench thing seems to suggest that scanning up to 4 CCDs
+> > > isn't too much of a bother; so perhaps something like so?
+> > > 
+> > > (on top of tip/sched/core from just a few hours ago, as I had to 'fix'
+> > > this patch and force pushed the thing)
+> > > 
+> > > And yeah, random hacks and heuristics here :/ Does there happen to be
+> > > additional topology that could aid us here? Does the CCD fabric itself
+> > > have a distance metric we can use?
+> > 
+> >   https://www.anandtech.com/show/16529/amd-epyc-milan-review/4
+> > 
+> > Specifically:
+> > 
+> >   https://images.anandtech.com/doci/16529/Bounce-7763.png
+> > 
+> > That seems to suggest there are some very minor distance effects in the
+> > CCD fabric. I didn't read the article too closely, but you'll note that
+> > the first 4 CCDs have inter-CCD latency < 100 while the rest has > 100.
+> > 
+> > Could you also test on a Zen2 Epyc, does that require nr=8 instead of 4?
+> > Should we perhaps write it like: 32 / llc_size ?
+> > 
+> > The Zen2 picture:
+> > 
+> >   https://images.anandtech.com/doci/16315/Bounce-7742.png
+> > 
+> > Shows a more pronounced CCD fabric topology, you can really see the 2
+> > CCX inside the CCD but also there's two ligher green squares around the
+> > CCDs themselves.
 > 
-> There are three important pieces that are relevant when doing this:
-> 
->   * The pointer type.
->   * The work item struct. This is what the pointer points at.
->   * The `work_struct` field. This is a field of the work item struct.
-> 
-> This patch introduces a separate trait for each piece. The pointer type
-> is given a `WorkItemPointer` trait, which pointer types need to
-> implement to be usable with the workqueue. This trait will be
-> implemented for `Arc` and `Box` in a later patch in this patchset.
-> Implementing this trait is unsafe because this is where the
-> `container_of` operation happens, but user-code will not need to
-> implement it themselves.
-> 
-> The work item struct should then implement the `WorkItem` trait. This
-> trait is where user-code specifies what they want to happen when a work
-> item is executed. It also specifies what the correct pointer type is.
-> 
-> Finally, to make the work item struct know the offset of its
-> `work_struct` field, we use a trait called `HasWork<T, ID>`. If a type
-> implements this trait, then the type declares that, at the given offset,
-> there is a field of type `Work<T, ID>`. The trait is marked unsafe
-> because the OFFSET constant must be correct, but we provide an
-> `impl_has_work!` macro that can safely implement `HasWork<T>` on a type.
-> The macro expands to something that only compiles if the specified field
-> really has the type `Work<T>`. It is used like this:
-> 
-> ```
-> struct MyWorkItem {
->      work_field: Work<MyWorkItem, 1>,
-> }
-> 
-> impl_has_work! {
->      impl HasWork<MyWorkItem, 1> for MyWorkItem { self.work_field }
-> }
-> ```
-> 
-> Note that since the `Work` type is annotated with an id, you can have
-> several `work_struct` fields by using a different id for each one.
-> 
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> ---
-> [...]
+> I can't seem to find pretty pictures for Zen4 Epyc; what does that want?
+> That's even bigger at 96/8=12 LLCs afaict.
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Going by random pictures on the interweb again, it looks like this Zen4
+thing wants either 2 groups of 6 each, or 4 groups of 3.
+
+But you have the hardware, so I'll let you figure it out.
