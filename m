@@ -2,145 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203BA71F5EB
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A10271F5ED
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233127AbjFAW1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 18:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
+        id S233185AbjFAW2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 18:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbjFAW1C (ORCPT
+        with ESMTP id S229612AbjFAW2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:27:02 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D40133;
-        Thu,  1 Jun 2023 15:27:01 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 917AE5C00E9;
-        Thu,  1 Jun 2023 18:27:00 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 01 Jun 2023 18:27:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1685658420; x=1685744820; bh=iy/GUaaPPTaS6rwFy0PBDtNgCO5kwW/eHTt
-        pnmc0zuM=; b=Z4CU56AmPFLmSjNIWicm+SUnvn06uYZdblO+4TbIMCkPjvv3Ln1
-        PUGtE16bSWofN22Vt+X2zZGIJGkuyouG/D5XPX8FvyTvcTrnvhzAuXCfY6ReCRCg
-        DiP6PNnaBxDU3OKY+F4z5pvJd1q5JvD5Kro6Nm/M3m6hYgGN7smjJSFilEt8t4zB
-        COaptwSpXohvxx2Gtb4UQ9U3UD7gU6gielaRyN58klN5CzFW+a4rUrI76DvkM/tR
-        wZV1J7+zVS+99LLzT780Rgd8aVgzRUqggLcsEDZyEIBXZ/5V9Vfr0VueVc3fKVGe
-        Rr1JnCq40cUvesA+lXIWJiE4XaxF4hbYslQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685658420; x=1685744820; bh=iy/GUaaPPTaS6
-        rwFy0PBDtNgCO5kwW/eHTtpnmc0zuM=; b=Scu4bR1SCTs286aPBJ/DD1KjDzD/I
-        8RxwId/3DCAKrMCzel/o2GuBy11qjd0/saTJzkxC9YQ7W5i1HQkQgsZYDNDkhKCc
-        1ktSFIQWP/HgA3TwfskAKrmbngIVbgpj58M3qeHRQw/8A+6Fuszl+N0TNADd2cOS
-        DmYiSHJgB/XGiYuIRG7aUyOQWrU5IQ6B0gutiBrATt9WODw73zImss9wLnbj43ow
-        Hxb7d9FRjkaeHWMu4VA+TXX273Q2GbSvRIEuOMqeNbRbRW+FXLCND3HiDlQdGQSJ
-        fPyGd0o/NyhaV82tXsUsGqbTlPt20GIaDtNlTHL5YZlq9YMXvOtJmdiAg==
-X-ME-Sender: <xms:NBt5ZOa1I9p2HrXSxmQ3PBPozIP2-Cing6xVgtVvXLwfBtpDazriSg>
-    <xme:NBt5ZBYzn2JCOnrKyXy0zUnn4QQyZC8xHzl7HcUQu0-5UYkHk8wf-ybaZX44NjKXk
-    cihMOnejmeWDWA>
-X-ME-Received: <xmr:NBt5ZI_cVimzQC8DvwhLNzjI5VxDhKfONe3kogA74XzI3DZgRkDUzmLe8ybYu_0Jgqd6EFrPT3o>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelvddguddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgvmhhiucfo
-    rghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhnghhslh
-    grsgdrtghomheqnecuggftrfgrthhtvghrnhepvdefgeekvdekgfffgeekhfeijedtffek
-    hefhleehfeejueetgfelgefgtdevieelnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhslhgr
-    sgdrtghomh
-X-ME-Proxy: <xmx:NBt5ZArP2z5ceXGfT-WnNAic88zSfXGiefzY0w7GCi8gY__mgqfqPg>
-    <xmx:NBt5ZJrnFQUM_pwfKg91jPfqXOgvhvtJ3e4MtUgG6qzzFfJBiMuZnw>
-    <xmx:NBt5ZOSURmcj3xPqFh8zXkD4AAFuGtgGFoRa5CV93AzUfZgyGNmmaA>
-    <xmx:NBt5ZKDxtd3dhzdgCmQxN2-98JyvDX0oo8PKnvrFn3_v8qjit326dA>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 1 Jun 2023 18:26:59 -0400 (EDT)
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] block, loop: Increment diskseq when releasing a loop device
-Date:   Thu,  1 Jun 2023 18:26:56 -0400
-Message-Id: <20230601222656.2062-1-demi@invisiblethingslab.com>
-X-Mailer: git-send-email 2.40.1
+        Thu, 1 Jun 2023 18:28:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A3212C;
+        Thu,  1 Jun 2023 15:28:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2A3364A7F;
+        Thu,  1 Jun 2023 22:28:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C511C4339B;
+        Thu,  1 Jun 2023 22:28:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685658516;
+        bh=R7TPrCl84YiuCBQfEPy70uaHWlIn5vuvHUQAmc+LCvA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oO9ExzI3xpC85rpluTYF03EIjweEG7BDEzkV4XmEOXEeRmHXV7eqb+Run/hlIrkoz
+         q3toDgOfeP559QiU8jcSPuy+c4ng9vYCrIaUhBFfesCNAMYHASxFxIx+UeC+sXK0+i
+         eylvQiqMvgmXERO3NQkYe/U7tu9F4AMKY+xrjDOe5QCHLtJST2/W7zci/+62/4UYEe
+         OCEeJu4lIHeFXJtbqqoSAbvOmtiPBClrDufMhQFJOicZc9bIiFu5zffUco73gJGDoX
+         83K5jXtsmhNuMY4pethqAZFJpnthtvFhkV8nECpzJaR+d8EE0TCoKV88H3hEqDKqFz
+         ZM5FqjLX+uKDg==
+Date:   Thu, 1 Jun 2023 16:29:27 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] scsi: lpfc: Avoid -Wstringop-overflow warning
+Message-ID: <ZHkbxyw8vLom2YEV@work>
+References: <ZHZq7AV9Q2WG1xRB@work>
+ <fe0739cbe279cf9db2ebff1146e7ae540cc1ad6c.camel@linux.ibm.com>
+ <202305301529.1EEA11B@keescook>
+ <25ef15e7601e1b4510cbbd40c6d1ab7c64213863.camel@linux.ibm.com>
+ <202306010931.92796DC@keescook>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <202306010931.92796DC@keescook>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The previous patch for checking diskseq in blkback is not enough to
-prevent the following race:
+On Thu, Jun 01, 2023 at 09:48:55AM -0700, Kees Cook wrote:
+> On Wed, May 31, 2023 at 10:56:50AM -0400, James Bottomley wrote:
+> > On Tue, 2023-05-30 at 15:44 -0700, Kees Cook wrote:
+> > > On Tue, May 30, 2023 at 05:36:06PM -0400, James Bottomley wrote:
+> > > > On Tue, 2023-05-30 at 15:30 -0600, Gustavo A. R. Silva wrote:
+> > > > > Avoid confusing the compiler about possible negative sizes.
+> > > > > Use size_t instead of int for variables size and copied.
+> > > > > 
+> > > > > Address the following warning found with GCC-13:
+> > > > > In function ‘lpfc_debugfs_ras_log_data’,
+> > > > >     inlined from ‘lpfc_debugfs_ras_log_open’ at
+> > > > > drivers/scsi/lpfc/lpfc_debugfs.c:2271:15:
+> > > > > drivers/scsi/lpfc/lpfc_debugfs.c:2210:25: warning: ‘memcpy’
+> > > > > specified
+> > > > > bound between 18446744071562067968 and 18446744073709551615
+> > > > > exceeds
+> > > > > maximum object size 9223372036854775807 [-Wstringop-overflow=]
+> > > > >  2210 |                         memcpy(buffer + copied, dmabuf-
+> > > > > >virt,
+> > > > >       |                        
+> > > > > ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > >  2211 |                                size - copied - 1);
+> > > > >       |                                ~~~~~~~~~~~~~~~~~~
+> > > > > 
+> > > > 
+> > > > This looks like a compiler bug to me and your workaround would have
+> > > > us using unsigned types everywhere for sizes, which seems wrong. 
+> > > > There are calls which return size or error for which we have
+> > > > ssize_t and that type has to be usable in things like memcpy, so
+> > > > the compiler must be fixed or the warning disabled.
+> > > 
+> > > The compiler is (correctly) noticing that the calculation involving
+> > > "size" (from which "copied" is set) could go negative.
+> > 
+> > It can?  But if it can, then changing size and copied to unsigned
+> > doesn't fix it, does it?
+> 
+> Yes:
+> 
+> 	(int)	(const expression 256 * 1024)		(u32)
+>         size = LPFC_RAS_MIN_BUFF_POST_SIZE * phba->cfg_ras_fwlog_buffsize;
+> 
+> this can wrap to negative if cfg_ras_fwlog_buffsize is large enough. If
+> "size" is size_t, it can't wrap, and is therefore never negative.
+> 
+> > So your claim is the compiler only gets it wrong in this one case and
+> > if we just change this one case it will never get it wrong again?
+> 
+> What? No, I'm saying this is a legitimate diagnostic, and the wrong type
+> was chosen for "size": it never needs to carry a negative value, and it
+> potentially needs to handle values greater than u32.
+> 
+> But you're right -- there is still a potential for runtime confusion in
+> that the return from lpfc_debugfs_ras_log_data() must be signed. So
+> perhaps the best option is to check for overflow directly.
+> 
+> Gustavo, does this fix it?
 
-1. Program X opens a loop device
-2. Program X gets the diskseq of the loop device.
-3. Program X associates a file with the loop device.
-4. Program X passes the loop device major, minor, and diskseq to
-   something.
-5. Program X exits.
-6. Program Y detaches the file from the loop device.
-7. Program Y attaches a different file to the loop device.
-8. The opener finally gets around to opening the loop device and checks
-   that the diskseq is what it expects it to be.  Even though the
-   diskseq is the expected value, the result is that the opener is
-   accessing the wrong file.
+Yep; it does.
 
-To prevent this race condition, increment the diskseq of a loop device
-when it is detached from its file descriptor.  This causes blkback (or
-any other program, for that matter) to fail at step 8.  Export the
-inc_diskseq() function to make this possible.
+I think we can go with this solution.
 
-Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
----
-I considered destroying the loop device altogether instead of bumping
-its diskseq, but was not able to accomplish that.  Suggestions welcome.
----
- block/genhd.c        | 1 +
- drivers/block/loop.c | 6 ++++++
- 2 files changed, 7 insertions(+)
+Thanks!
+--
+Gustavo
 
-diff --git a/block/genhd.c b/block/genhd.c
-index 1cb489b927d50ab06a84a4bfd6913ca8ba7318d4..c0ca2c387732171321555cd57565fbc606768505 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -1502,3 +1502,4 @@ void inc_diskseq(struct gendisk *disk)
- {
- 	disk->diskseq = atomic64_inc_return(&diskseq);
- }
-+EXPORT_SYMBOL(inc_diskseq);
-diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index bc31bb7072a2cb7294d32066f5d0aa14130349b4..05ea5fb41508b4106f184dd6b4c37942716bdcac 100644
---- a/drivers/block/loop.c
-+++ b/drivers/block/loop.c
-@@ -1205,6 +1205,12 @@ static void __loop_clr_fd(struct loop_device *lo, bool release)
- 	if (!part_shift)
- 		set_bit(GD_SUPPRESS_PART_SCAN, &lo->lo_disk->state);
- 	mutex_lock(&lo->lo_mutex);
-+
-+	/*
-+	 * Increment the disk sequence number, so that userspace knows this
-+	 * device now points to something else.
-+	 */
-+	inc_diskseq(lo->lo_disk);
- 	lo->lo_state = Lo_unbound;
- 	mutex_unlock(&lo->lo_mutex);
- 
--- 
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
-
+> 
+> 
+> diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
+> index bdf34af4ef36..7f9b221e7c34 100644
+> --- a/drivers/scsi/lpfc/lpfc_debugfs.c
+> +++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+> @@ -2259,11 +2259,15 @@ lpfc_debugfs_ras_log_open(struct inode *inode, struct file *file)
+>  		goto out;
+>  	}
+>  	spin_unlock_irq(&phba->hbalock);
+> -	debug = kmalloc(sizeof(*debug), GFP_KERNEL);
+> +
+> +	if (check_mul_overflow(LPFC_RAS_MIN_BUFF_POST_SIZE,
+> +			       phba->cfg_ras_fwlog_buffsize, &size))
+> +		goto out;
+> +
+> +	debug = kzalloc(sizeof(*debug), GFP_KERNEL);
+>  	if (!debug)
+>  		goto out;
+>  
+> -	size = LPFC_RAS_MIN_BUFF_POST_SIZE * phba->cfg_ras_fwlog_buffsize;
+>  	debug->buffer = vmalloc(size);
+>  	if (!debug->buffer)
+>  		goto free_debug;
+> 
+> 
+> -Kees
+> 
+> -- 
+> Kees Cook
