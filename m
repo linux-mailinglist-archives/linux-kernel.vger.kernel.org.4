@@ -2,137 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2E471F5FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABFB371F607
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232900AbjFAWco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 18:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
+        id S231862AbjFAWgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 18:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbjFAWcl (ORCPT
+        with ESMTP id S229542AbjFAWgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:32:41 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D716C1A8;
-        Thu,  1 Jun 2023 15:32:33 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3090d3e9c92so1390259f8f.2;
-        Thu, 01 Jun 2023 15:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685658752; x=1688250752;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9/TmEA+PoC7xu6/KU/ll32pvJQ2ck1CrGNuRyF6FIV0=;
-        b=PONnEob4cS799koyjCLxAEsadb0C5Fdkmzoc9mRcit0XlOSYJQv+wlsMZI1/KUhrq0
-         EmiI5N6UUlzX07g4bppV5fM/ERH0Kc1q6C1Ecwo+XK/lBO+kqZhSWdHRQTJn/r+xHJ3Q
-         /RBLLfLxgIVRLbYYoZgGQ+EM/XZH2dpFGccTFJrYUZ3AkWEYYPMaVSTUYmlnEKCu306P
-         mM31tPQ8fqWiFZRgKAMLFy8HVh/vqXa11YJMlUmyGKmSiVSSfBBkOZuln7xeu0urBO3P
-         kdwBI+K529QyXPDED8jvlTPhU96rtmoSs6MoFIw1vWgaQmEoeT+EXp2xw9pGcPw+t1ZH
-         J4Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685658752; x=1688250752;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9/TmEA+PoC7xu6/KU/ll32pvJQ2ck1CrGNuRyF6FIV0=;
-        b=g0LNO0f2Uzn11IScvna4IFRB3R89Xpt6LCLn/IsLcQxQKnwupTvq25fXoih4W6iEvS
-         A/wkGyWc5qKcljBxdRTeAmFO6GUvAVA3vU+jGmjo2DPUNpxOf3REqHb8kmNuFl8ZmBtG
-         jXQJ4qgGHABTTHMN4xMAB58HhG6det4qcBi7r7Mi0gYI27SRrM95qO8grmUhdlYjOnd1
-         iXJP+xKWOacPh9z9WvzVN4Kg3+Dr8a2yMQdhjVnMynm94g0ngqba01w8tgAkr+HZemHh
-         QhqDBIezJAobcwBW4/pau2LsapFzR0EbJci6U/sFR8bB6vJdmjKApalKxElXbAwcGMPg
-         WRzg==
-X-Gm-Message-State: AC+VfDxPE2rK4GNhP1ZrcEZhuEyxU00aVhWIAwrth70QsJ5Znbnlr+/o
-        puivxxvhd6RStuGFztRJK4YdM2aV9emR3cI2
-X-Google-Smtp-Source: ACHHUZ7+6YZkcaeG6CeOS2iTlIxdCLfJll9IA+N/ujkTvPbYMeBBBBx/fSq02syrGNxPfUZeojqXWg==
-X-Received: by 2002:a5d:6709:0:b0:30a:eac8:e5c1 with SMTP id o9-20020a5d6709000000b0030aeac8e5c1mr3088955wru.6.1685658751871;
-        Thu, 01 Jun 2023 15:32:31 -0700 (PDT)
-Received: from user-PC.. ([178.134.198.138])
-        by smtp.gmail.com with ESMTPSA id b7-20020a5d4d87000000b0030af8da022dsm8619149wru.44.2023.06.01.15.32.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 15:32:31 -0700 (PDT)
-From:   Maksim Kiselev <bigunclemax@gmail.com>
-To:     linux-iio@vger.kernel.org
-Cc:     Maxim Kiselev <bigunclemax@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH v2 3/3] riscv: dts: allwinner: d1: Add GPADC node
-Date:   Fri,  2 Jun 2023 01:30:41 +0300
-Message-Id: <20230601223104.1243871-4-bigunclemax@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230601223104.1243871-1-bigunclemax@gmail.com>
-References: <20230601223104.1243871-1-bigunclemax@gmail.com>
+        Thu, 1 Jun 2023 18:36:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A623133;
+        Thu,  1 Jun 2023 15:36:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 906E364AA7;
+        Thu,  1 Jun 2023 22:36:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED82AC43443;
+        Thu,  1 Jun 2023 22:36:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685658962;
+        bh=HByQUJENQcDPWiijaDFhYT8jA4bRcfOqcVglu/ddG6U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=re2I/9LpOnn67cRoh6PMZZOHT8vdfHha/bz6wtCDfOYdb5vZzGUctvTnWl4LYy/9m
+         NwPwQViyZ7XqHLQBspSOOwlfhUwQAtJo+yIL5HnTKCCgUiXqtggXTsskTfnNpG7vN9
+         VK+9AhJpq2nZ3mf3rthk6G8xSKwWwiHUzWquyx91XgpIn8z8MdRB3+bYCub3NDdJsU
+         MBXCxXfkbcJxxlc8t1IXtz79Bkfq9TSzEwYW0lg8eC1Maz9RVf0VpdqrZpUNbjK7/t
+         roE+PBwSYAYsytt+Ua6jTizptS+lu0Z7pWJc7cPm4JVKQxLN5o5FZMLtghbCRvoQ8N
+         h5KrxNOdHSCXg==
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4f3ba703b67so1883166e87.1;
+        Thu, 01 Jun 2023 15:36:01 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwCfcoWvJSmhQPKGLk4na5gWDVfbKoT0+70BSdxCghnn0LsO9eE
+        mHJX70nFS4hM1gSoxd7YkjITBewiMbLpXXglhsE=
+X-Google-Smtp-Source: ACHHUZ5IpAtCBKLINxhk+Z0SWINwbFkPqmi++HI/k6BNegfGNCzvnzTim5Gy3oJJLp9NHmq3+FFn0pl72eGk9Pzb3ws=
+X-Received: by 2002:ac2:48ba:0:b0:4ec:8816:f4fc with SMTP id
+ u26-20020ac248ba000000b004ec8816f4fcmr792426lfg.6.1685658959623; Thu, 01 Jun
+ 2023 15:35:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230601101257.530867-1-rppt@kernel.org> <20230601101257.530867-5-rppt@kernel.org>
+In-Reply-To: <20230601101257.530867-5-rppt@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 1 Jun 2023 15:35:47 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW70o=8QwcNJPx=qxaKoPkOzwYt8xxzjK38dF2tJB-18jQ@mail.gmail.com>
+Message-ID: <CAPhsuW70o=8QwcNJPx=qxaKoPkOzwYt8xxzjK38dF2tJB-18jQ@mail.gmail.com>
+Subject: Re: [PATCH 04/13] mm/jitalloc, arch: convert remaining overrides of
+ module_alloc to jitalloc
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Kiselev <bigunclemax@gmail.com>
+On Thu, Jun 1, 2023 at 3:13=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wrot=
+e:
+>
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>
+> Extend jitalloc parameters to accommodate more complex overrides of
+> module_alloc() by architectures.
+>
+> This includes specification of a fallback range required by arm, arm64
+> and powerpc and support for allocation of KASAN shadow required by
+> arm64, s390 and x86.
+>
+> The core implementation of jit_alloc() takes care of suppressing warnings
+> when the initial allocation fails but there is a fallback range defined.
+>
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-This patch adds declaration of the general purpose ADC for D1
-and T113s SoCs.
+[...]
 
-Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
----
- arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+>
+> diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
+> index 5af4975caeb5..ecf1f4030317 100644
+> --- a/arch/arm64/kernel/module.c
+> +++ b/arch/arm64/kernel/module.c
+> @@ -17,56 +17,49 @@
+>  #include <linux/moduleloader.h>
+>  #include <linux/scs.h>
+>  #include <linux/vmalloc.h>
+> +#include <linux/jitalloc.h>
+>  #include <asm/alternative.h>
+>  #include <asm/insn.h>
+>  #include <asm/scs.h>
+>  #include <asm/sections.h>
+>
+> -void *module_alloc(unsigned long size)
+> +static struct jit_alloc_params jit_alloc_params =3D {
+> +       .alignment      =3D MODULE_ALIGN,
+> +       .flags          =3D JIT_ALLOC_KASAN_SHADOW,
+> +};
+> +
+> +struct jit_alloc_params *jit_alloc_arch_params(void)
+>  {
+>         u64 module_alloc_end =3D module_alloc_base + MODULES_VSIZE;
 
-diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-index 922e8e0e2c09..90c79041cfba 100644
---- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-+++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-@@ -138,6 +138,16 @@ ccu: clock-controller@2001000 {
- 			#reset-cells = <1>;
- 		};
- 
-+		gpadc: adc@2009000 {
-+			compatible = "allwinner,sun20i-d1-gpadc";
-+			reg = <0x2009000 0x1000>;
-+			clocks = <&ccu CLK_BUS_GPADC>;
-+			resets = <&ccu RST_BUS_GPADC>;
-+			interrupts = <SOC_PERIPHERAL_IRQ(57) IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
-+			#io-channel-cells = <1>;
-+		};
-+
- 		dmic: dmic@2031000 {
- 			compatible = "allwinner,sun20i-d1-dmic",
- 				     "allwinner,sun50i-h6-dmic";
--- 
-2.39.2
+module_alloc_base() is initialized in kaslr_init(), which is called after
+mm_core_init(). We will need some special logic for this.
 
+Thanks,
+Song
+
+> -       gfp_t gfp_mask =3D GFP_KERNEL;
+> -       void *p;
+> -
+> -       /* Silence the initial allocation */
+> -       if (IS_ENABLED(CONFIG_ARM64_MODULE_PLTS))
+> -               gfp_mask |=3D __GFP_NOWARN;
+>
+
+[...]
