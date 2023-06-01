@@ -2,151 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFCA7192E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:01:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A603F7192F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbjFAGA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 02:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
+        id S230427AbjFAGGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 02:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231830AbjFAF7w (ORCPT
+        with ESMTP id S229682AbjFAGGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 01:59:52 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332DBE5D
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 22:59:20 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b03ae23cf7so1285925ad.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 22:59:20 -0700 (PDT)
+        Thu, 1 Jun 2023 02:06:04 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E969F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 23:05:39 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b0201d9a9eso4302105ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 23:05:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685599159; x=1688191159;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nl83JFmq5DGiAWWnIdFRVnY3DNvwp/CATr/wZmCpEuo=;
-        b=ViVgx/PuN9MLmdNybo41KvSJ+mqfr/QrzY3xE1C+mEnv4qvIG8Vh4e4lAZq8o/pi+6
-         BuAai3UElvNic61P7FJHBK+0xOElM9YDgRpupsAZv1HIXfQmHojcQ++RThtOAZJB6D0K
-         bxY2XDj3I7lytKbMUskON/IwrVL/HImFBiAiwCqo0NzGWFYJDfkXpysgIwln2UjsXC0e
-         AvYTEnwtdIZZSq7h5TsIHyjlmWOQDHDKAujHxLqnwpcZ6OY5V+v0PlkibSTLcFnleBdn
-         yTvV9sN/zEDtIsOld6sHqGEou51tPudWF8Gc4dGA+lmXHxjeaqBO6R0jETCk7lNAA4cI
-         V0oA==
+        d=bytedance.com; s=google; t=1685599539; x=1688191539;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w/lIb62bgMbP4e/zPofOhlyDZgPMCQyADbXeoDyIi8c=;
+        b=PArR2lh/P5dohb7UE2FbUsB3+ndYM7MuICjFy8EwJHT4xmxq0NT0tUeoWw55dEYljQ
+         RSpE3F6tcdpjLkxfvR6ntwrMG2t0engCXMTJOquLUXDRvFm0m2Jpdug4ZFluDM4LbLzx
+         sbw3XfV7aMJNJUtmulpu8XiSavIWbjTc1Cw8Sum+LDebH6P9amcP7zMmqoYfNlQBq6Kg
+         44u8IeUv8Z6jY9RpKLKS0sbN6FI9YLATE/oMA56RnWDEDENk0r8pdOrppiUHSRhHM2Kg
+         e5ZASUuTz5NP20mQ4WX+xuzdycbmqqKJ5BwIhzIn/xwORIn/RTOfx+ocsLlin+Xa/Ebj
+         L8jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685599159; x=1688191159;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nl83JFmq5DGiAWWnIdFRVnY3DNvwp/CATr/wZmCpEuo=;
-        b=XQ2nRmJfQYaYx4GuVvJ5cJvGp2WYSGYwyzlDJJnqABiKd7AjokHv+KdNIoHJVFPvtB
-         n7Dfpnu1pcRLE2NQ+44EPZ5PviUu8IX1DP/g+QPbbqG4Rd4AfcVKQstcUBeh1aCuwhWp
-         UCjpvjbiYS7RGt6uUjNp1tSqYsdbXTKRZR6JnI+kRDHtF0Qc1EWsH2PpTROdLJuhsI6H
-         11hde5t3ITWIAAuWi448tdKZuK5mYk71MYD3fFEO9Qpzwz5mWv7jkER80L8sOgS6fhuR
-         /kctzMpdPFtDb9v/rGWykHLp5Yormp5c6+zo+EF00sF6CgmtEjXSjGUBct+COIqOSUnK
-         zBaA==
-X-Gm-Message-State: AC+VfDz3E9mbcCmXIpVmgsDxlyQTPogAeXHY77aA1i04GeFBvx0wnXnF
-        tdc5oTe04ARoxBGPqg1/mK0zvsDhTWx508P5/kHU9AEMaaQZr66yKdxocu6OEvENkynCTVR58ma
-        x+0BWsJTasVrPeL4vvL4iR2mhT2LtyO4/40Z0Hs5nDLKDbtTL1v6NPSunVmFrosMe6JqHOTk=
-X-Google-Smtp-Source: ACHHUZ5czSEkrQ1QvdESejXEehzuZ9LeefxgyNbdSBV49grdID/qUzTJS4qb46VGW9GXN1fKEWt03ww/lf9w
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a17:902:8486:b0:1a6:6bdb:b542 with SMTP id
- c6-20020a170902848600b001a66bdbb542mr1830304plo.9.1685599159247; Wed, 31 May
- 2023 22:59:19 -0700 (PDT)
-Date:   Thu,  1 Jun 2023 05:58:16 +0000
-In-Reply-To: <20230601055846.2349566-1-jstultz@google.com>
-Mime-Version: 1.0
-References: <20230601055846.2349566-1-jstultz@google.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230601055846.2349566-14-jstultz@google.com>
-Subject: [PATCH v4 13/13] sched: Fixups to find_exec_ctx
-From:   John Stultz <jstultz@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <jstultz@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Qais Yousef <qyousef@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Zimuzo Ezeozue <zezeozue@google.com>,
-        Youssef Esmat <youssefesmat@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1685599539; x=1688191539;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=w/lIb62bgMbP4e/zPofOhlyDZgPMCQyADbXeoDyIi8c=;
+        b=jDx+1pPVg43pvToGA89zpgIwOjDHW9orNVYwNrGDRAQDq0L1ochRJEV5NCQ9iQ3sXJ
+         QlCE/xCCjtqMt36+wCSKlp4wZueyKMsVSjsukyWXp/TdiZ6mCt8MCL7WLZn5SwT1QDnp
+         F87v2ffgjm1QKFS/P/NZj6c+h3FzbNMsM3ZP1ihbOIHPr8GNUFF6NlpqjBeKj1CN4nKA
+         UlvWLInFOHUIdLpGUaEiv4kCpsKJnhZHumDgzdbBnBqXkGbN0Q5Fq8YmSMsIbz3UuZUq
+         OPmHIrlWXhuuLresDMUnxuNV7KHnUVFBykvFbgCN0zCracGI35nJsqcaEosRiSlshsRq
+         ruHg==
+X-Gm-Message-State: AC+VfDyp9SeO0GJDdZTpcA8m3Uii0MTCZgBdmo2DxzemYB3HvIHDea6j
+        TQWQCSiKMzO11pGh5YIjSjAf+/S6eIxnJpd2Fxg=
+X-Google-Smtp-Source: ACHHUZ7S9UnbjFCAvnVC5VyrHgbmzTHAaJsUa6kpXQdgHvzEPnQM9gBYarxQfF8/hH/dcocIPnJQWQ==
+X-Received: by 2002:a17:903:2447:b0:1af:ac49:e048 with SMTP id l7-20020a170903244700b001afac49e048mr1049198pls.25.1685599538890;
+        Wed, 31 May 2023 23:05:38 -0700 (PDT)
+Received: from [10.71.57.173] ([203.208.167.147])
+        by smtp.gmail.com with ESMTPSA id 6-20020a170902c24600b001ac84f5559csm2464746plg.126.2023.05.31.23.05.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 23:05:38 -0700 (PDT)
+Message-ID: <20881602-9afc-96b7-3d58-51c31e3f50b7@bytedance.com>
+Date:   Thu, 1 Jun 2023 14:05:31 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: Re: [PATCH bpf-next] bpf: getsockopt hook to get optval without
+ checking kernel retval
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org
+References: <20230601024900.22902-1-zhoufeng.zf@bytedance.com>
+ <5bc1ac0d-cea8-19e5-785a-cd72140d8cdb@linux.dev>
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+In-Reply-To: <5bc1ac0d-cea8-19e5-785a-cd72140d8cdb@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-find_exec_ctx() would sometimes cause the rt task pushing
-to try to push tasks in the chain that ends in the rq->curr.
+在 2023/6/1 13:37, Martin KaFai Lau 写道:
+> On 5/31/23 7:49 PM, Feng zhou wrote:
+>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>
+>> Remove the judgment on retval and pass bpf ctx by default. The
+>> advantage of this is that it is more flexible. Bpf getsockopt can
+>> support the new optname without using the module to call the
+>> nf_register_sockopt to register.
+>>
+>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+>> ---
+>>   kernel/bpf/cgroup.c | 35 +++++++++++++----------------------
+>>   1 file changed, 13 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+>> index 5b2741aa0d9b..ebad5442d8bb 100644
+>> --- a/kernel/bpf/cgroup.c
+>> +++ b/kernel/bpf/cgroup.c
+>> @@ -1896,30 +1896,21 @@ int __cgroup_bpf_run_filter_getsockopt(struct 
+>> sock *sk, int level,
+>>       if (max_optlen < 0)
+>>           return max_optlen;
+>> -    if (!retval) {
+>> -        /* If kernel getsockopt finished successfully,
+>> -         * copy whatever was returned to the user back
+>> -         * into our temporary buffer. Set optlen to the
+>> -         * one that kernel returned as well to let
+>> -         * BPF programs inspect the value.
+>> -         */
+>> -
+>> -        if (get_user(ctx.optlen, optlen)) {
+>> -            ret = -EFAULT;
+>> -            goto out;
+>> -        }
+>> +    if (get_user(ctx.optlen, optlen)) {
+>> +        ret = -EFAULT;
+>> +        goto out;
+>> +    }
+>> -        if (ctx.optlen < 0) {
+>> -            ret = -EFAULT;
+>> -            goto out;
+>> -        }
+>> -        orig_optlen = ctx.optlen;
+>> +    if (ctx.optlen < 0) {
+>> +        ret = -EFAULT;
+>> +        goto out;
+>> +    }
+>> +    orig_optlen = ctx.optlen;
+>> -        if (copy_from_user(ctx.optval, optval,
+>> -                   min(ctx.optlen, max_optlen)) != 0) {
+>> -            ret = -EFAULT;
+>> -            goto out;
+>> -        }
+>> +    if (copy_from_user(ctx.optval, optval,
+>> +                min(ctx.optlen, max_optlen)) != 0) {
+> What is in optval that is useful to copy from if the kernel didn't 
+> handle the optname?
 
-This caused lots of migration noise and effecively livelock
- where tasks would get pushed off to other cpus, then
-proxy-migrated back to the lockowner's cpu, over and over.
+For example, if the user customizes a new optname, it will not be 
+processed if the kernel does not support it. Then the data stored in 
+optval is the data put by the user. If this part can be seen by bpf 
+prog, the user can implement processing logic of the custom optname 
+through bpf prog.
 
-This kept other cpus constantly proxy-migrating away and
-never actually selecting a task to run  - effectively
-hanging the system.
+> 
+> and there is no selftest also.
+> 
 
-So this patch reworks some of the find_exec_ctx logic
-so we stop when we hit rq->curr, and changes the logic
-that was returning NULL when we came across
-rq_selected(), as I'm not sure why we'd stop there.
+Yes, if remove this restriction, everyone thinks it's ok, I'll add it in 
+the next version.
 
-Cc: Joel Fernandes <joelaf@google.com>
-Cc: Qais Yousef <qyousef@google.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Valentin Schneider <vschneid@redhat.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ben Segall <bsegall@google.com>
-Cc: Zimuzo Ezeozue <zezeozue@google.com>
-Cc: Youssef Esmat <youssefesmat@google.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Waiman Long <longman@redhat.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: "Paul E . McKenney" <paulmck@kernel.org>
-Cc: kernel-team@android.com
-Signed-off-by: John Stultz <jstultz@google.com>
----
- kernel/sched/core.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index e0e6c2feefd0..9cdabb79d450 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3881,7 +3881,15 @@ struct task_struct *find_exec_ctx(struct rq *rq, struct task_struct *p)
- 		if (owner == exec_ctx)
- 			break;
- 
--		if (!task_queued_on_rq(rq, owner) || task_current_selected(rq, owner)) {
-+		/* If we get to current, that's the exec ctx! */
-+		if (task_current(rq, owner))
-+			return owner;
-+
-+		/*
-+		 * XXX This previously was checking task_current_selected()
-+		 * but that doesnt' make much sense to me. -jstultz
-+		 */
-+		if (!task_queued_on_rq(rq, owner)) {
- 			exec_ctx = NULL;
- 			break;
- 		}
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+>> +        ret = -EFAULT;
+>> +        goto out;
+>>       }
+>>       lock_sock(sk);
+> 
 
