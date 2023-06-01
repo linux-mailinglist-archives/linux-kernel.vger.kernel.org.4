@@ -2,99 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F6D719399
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD2671939B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231793AbjFAGx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 02:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
+        id S231842AbjFAGyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 02:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjFAGxy (ORCPT
+        with ESMTP id S231800AbjFAGx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 02:53:54 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4E5107
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 23:53:53 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-96fdc081cb3so55605966b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 23:53:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685602431; x=1688194431;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wy1nuKe9dp+eWuPldOf3TtXePfHrrKoH9eFDnQbPB2k=;
-        b=ftFG+tInwul7DileJC7NDnJAXc5+mJ3bgyw1BujBWgZDXPjhLRNjPR788l2+dJOji3
-         4yZ1W3mMltATahD5LFmm4nTdnflz7BA+odHKi+L/MpDbE7eFZKJLwS1Ck//C9iWtm6ht
-         JVI/vq/aJAttbnZGSA8swxmGiJy621j1+vyvHcLMS5DqGGw36WdhJotMi0U9mtDKYHNj
-         cwgwnwW8Ciqag4lTA65W4viTKLmoKJvQ00SGInpHwLsDHP65ME1KdWCH+qfQgx91vSqL
-         SF29aHRsMGvtTvnZFf08XtBpRL+bIk7oy+/XN6+s+hvwYHAjXu3zrGXMUXBydRJajnGr
-         710A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685602431; x=1688194431;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wy1nuKe9dp+eWuPldOf3TtXePfHrrKoH9eFDnQbPB2k=;
-        b=Udls5fp3oZg82JDVnbvoexw1h2FfLuRjDPTC2BA+GIBoeRl04jBitLmLQdn33s7SAt
-         AUikPQbfE7ORwHIZcs4FlYsC0xxrBA46+YclczQSHNj5xjHjedREmTh5zNZ4z+tZ9EOk
-         1jiQKfXe0nxA0RhGIX0Eqr0f40EoNbUpbNv/ssTGMGNCoTtKxuv9LbJdAzADWXiLjVqg
-         /SL7s0xDjnoqlVzNs2VNvHIzo+6CUgzVNTmXQ18P1dSTaZZKbHeAkcsPvw52qlJB7J2p
-         xtE32uM31xXuX1mYRLeC9PfZYHfmPQUTVMgTd0U/EqsBMzUYwxhbkNeQ431Pf35MXXHG
-         lodA==
-X-Gm-Message-State: AC+VfDzdsCs8LClBJWdsOroCNNd7Ee5MRH0XBZAObw0R8geohfxvdcJs
-        ZYWnm26peYjxQn6nSfK1FOF1Og==
-X-Google-Smtp-Source: ACHHUZ7AcpoTcnH2btdZ20lRMn5AeEGvUeXhNkieDRwTI+omxRnH9Avyf/dCT/n9xHbBm+RMWQTd7g==
-X-Received: by 2002:a17:907:6d23:b0:973:d9ad:273f with SMTP id sa35-20020a1709076d2300b00973d9ad273fmr6964433ejc.46.1685602431496;
-        Wed, 31 May 2023 23:53:51 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id h21-20020a1709062dd500b0097404f4a124sm5264376eji.2.2023.05.31.23.53.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 23:53:51 -0700 (PDT)
-Message-ID: <d2232369-c7e9-c572-8528-243800f0bc08@linaro.org>
-Date:   Thu, 1 Jun 2023 08:53:48 +0200
+        Thu, 1 Jun 2023 02:53:59 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39AAE7;
+        Wed, 31 May 2023 23:53:57 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QWxZ33l7VzqTfv;
+        Thu,  1 Jun 2023 14:49:15 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 1 Jun 2023 14:53:55 +0800
+Subject: Re: [PATCH v2 2/3] drivers/perf: hisi: Add support for HiSilicon UC
+ PMU driver
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Junhao He <hejunhao3@huawei.com>
+CC:     <will@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mark.rutland@arm.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <yangyicong@huawei.com>,
+        <shenyang39@huawei.com>, <prime.zeng@hisilicon.com>,
+        <yangyicong@hisilicon.com>, Linuxarm <linuxarm@huawei.com>
+References: <20230531104625.18296-1-hejunhao3@huawei.com>
+ <20230531104625.18296-3-hejunhao3@huawei.com>
+ <20230531165908.000022b0@Huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <17ff38e8-7965-8bba-5a4a-a28d219ea637@huawei.com>
+Date:   Thu, 1 Jun 2023 14:53:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 3/5] dt-bindings: hwmon: hpe,gxp-fanctrl: remove fn2
- and pl regs
-Content-Language: en-US
-To:     nick.hawkins@hpe.com, verdun@hpe.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jdelvare@suse.com,
-        linux@roeck-us.net, andy.shevchenko@gmail.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20230531151918.105223-1-nick.hawkins@hpe.com>
- <20230531151918.105223-4-nick.hawkins@hpe.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230531151918.105223-4-nick.hawkins@hpe.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20230531165908.000022b0@Huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 17:19, nick.hawkins@hpe.com wrote:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
+On 2023/5/31 23:59, Jonathan Cameron wrote:
+> On Wed, 31 May 2023 18:46:24 +0800
+> Junhao He <hejunhao3@huawei.com> wrote:
 > 
-> Remove the fn2 register and pl register references as these memory areas
-> are now consumed by the GXP GPIO driver. The fan driver now gathers fan
-> information from GPIO driver.
-
-How is it expressed in bindings? I don't see it.
-
+> Hi Junhao,
 > 
-> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+> A few small comments inline.
 > 
-> ---
+>> On HiSilicon Hip09 platform, there is a UC (unified cache) module
+>> on each chip SCCL (Super CPU Cluster). UC is a cache that provides
+>> coherence between NUMA and UMA domains. It is located between L2
+>> and Memory System. While PA uncore PMU model is the same as other
+>> Hip09 PMU modules and many PMU events are supported. 
+> 
+> I don't follow what this sentence means.  Normally you'd have
+> While A, B is different..
+> 
+> 
+>> Let's support
+>> the PMU driver using the HiSilicon uncore PMU framework.
+>>
+>> * rd_req_en : rd_req_en is the abbreviation of read request tracetag enable
+>> and allows user to count only read operations.
+>> details are listed in the hisi-pmu document.
+> Details are .. Also no need for the ine break
+>   and allows user to count only read operations. Details are listed
+>   in the hisi-pmu document at ....
+> 
+>>
+>> * srcid_en & srcid: allows user to filter statistics that come from
+> 
+> Allows
+> for consistency with the uring_channel description that follows.
+> 
+>> specific CPU/ICL by configuration source ID.
+>>
+>> * uring_channel: Allows users to filter statistical information based on
+>> the specified tx request uring channel.
+>> uring_channel only supported events: [0x47 ~ 0x59].
+>>
+>> Signed-off-by: Junhao He <hejunhao3@huawei.com>
+> 
+> 
+>> diff --git a/drivers/perf/hisilicon/hisi_uncore_uc_pmu.c b/drivers/perf/hisilicon/hisi_uncore_uc_pmu.c
+>> new file mode 100644
+>> index 000000000000..d27f28584fd7
+>> --- /dev/null
+>> +++ b/drivers/perf/hisilicon/hisi_uncore_uc_pmu.c
+>> @@ -0,0 +1,577 @@
+> ...
+> 
+> 
+> 
+> 
+>> +static int hisi_uc_pmu_init_data(struct platform_device *pdev,
+>> +				 struct hisi_pmu *uc_pmu)
+>> +{
+>> +	/*
+>> +	 * Use SCCL (Super CPU Cluster) ID and CCL (CPU Cluster) ID to
+>> +	 * identify the topology information of UC PMU devices in the chip.
+>> +	 */
+> 
+>>From patch description, I'd assume there is only one of these
+> per sccl so why do we care about the cluster level or the sub-id?
+> Perhaps that description is missleading?
+> 
+>> +	if (device_property_read_u32(&pdev->dev, "hisilicon,scl-id",
+>> +				     &uc_pmu->sccl_id)) {
+>> +		dev_err(&pdev->dev, "Can not read uc sccl-id!\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	if (device_property_read_u32(&pdev->dev, "hisilicon,ccl-id",
+>> +				     &uc_pmu->ccl_id)) {
+>> +		dev_err(&pdev->dev, "Can not read uc ccl-id!\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	if (device_property_read_u32(&pdev->dev, "hisilicon,sub-id",
+>> +				     &uc_pmu->sub_id)) {
+>> +		dev_err(&pdev->dev, "Can not read sub-id!\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	uc_pmu->base = devm_platform_ioremap_resource(pdev, 0);
+>> +	if (IS_ERR(uc_pmu->base)) {
+>> +		dev_err(&pdev->dev, "ioremap failed for uc_pmu resource\n");
+>> +		return PTR_ERR(uc_pmu->base);
+>> +	}
+>> +
+>> +	uc_pmu->identifier = readl(uc_pmu->base + HISI_UC_VERSION_REG);
+>> +
+>> +	return 0;
+>> +}
+> 
+> 
+>> +static struct platform_driver hisi_uc_pmu_driver = {
+>> +	.driver = {
+>> +		.name = "hisi_uc_pmu",
+>> +		.acpi_match_table = hisi_uc_pmu_acpi_match,
+>> +		/*
+>> +		 * We have not worked out a safe bind/unbind process,
+>> +		 * so this is not supported yet.
+> 
+> If you can reference more info on this that would be great.
+> Perhaps a thread talking about why?
+> 
 
+We handle like this from this patch,
+https://lore.kernel.org/linux-arm-kernel/1594975763-32966-1-git-send-email-liuqi115@huawei.com/
 
-Best regards,
-Krzysztof
-
+>> +		 */
+>> +		.suppress_bind_attrs = true,
+>> +	},
+>> +	.probe = hisi_uc_pmu_probe,
+>> +};
+> .
+> 
