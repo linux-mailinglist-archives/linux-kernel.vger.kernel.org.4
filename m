@@ -2,63 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50AD9718F6D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 02:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E3C8718F6E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 02:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjFAAOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 20:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S230233AbjFAAPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 20:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjFAAOR (ORCPT
+        with ESMTP id S229604AbjFAAPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 20:14:17 -0400
+        Wed, 31 May 2023 20:15:42 -0400
 Received: from sequoia-grove.ad.secure-endpoints.com (sequoia-grove.ad.secure-endpoints.com [IPv6:2001:470:1f07:f77:70f5:c082:a96a:5685])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7B4124
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 17:14:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3B0121
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 17:15:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed;
-        d=auristor.com; s=MDaemon; r=y; t=1685578454; x=1686183254;
+        d=auristor.com; s=MDaemon; r=y; t=1685578539; x=1686183339;
         i=jaltman@auristor.com; q=dns/txt; h=Message-ID:Date:
-        MIME-Version:User-Agent:Subject:To:Cc:References:
-        Content-Language:From:Organization:In-Reply-To:Content-Type;
-        bh=LNStOPfOIuOWsgox6l/zSnIfO1/ExWDWZbwjbk2aEYQ=; b=euESbeTFkk5t6
-        /B8WH+hQYcfpb+oBYhPaSA0OuorZMvYhjsWS+X6xUNxlq1B5EN/NErSq7TpyWcpy
-        iTvZDJtFM+wsV1uG/f6UF0kKcWOvgicbCD7QtJmsRRo7o46FKdjBgE1szwG3o96y
-        pGaLJtAjsZGx/RxO5n+rHmVznwOQc4=
+        MIME-Version:User-Agent:Subject:Content-Language:To:Cc:
+        References:From:Organization:In-Reply-To:Content-Type; bh=Ba6Nfb
+        AlZjooTNzC08xLujS6IOv8AY7/By4Y/0T23EY=; b=WnfpxX3VJ4RbVB387w2WAk
+        KMdiNgkrss2f9tjLx9Qqqxa/Z7MfogETvMrWoQIyzfXOhJEGmiwpNLD2YV1o2x5A
+        EELBmXqDqBYWAbLrblw8Ev+9nKNnOcFXckAnKLbtNTB74ckFvHVvEJNw/bgOUdmd
+        n5oLmQj1DgyBWS3yOxHmI=
 X-MDAV-Result: clean
-X-MDAV-Processed: sequoia-grove.ad.secure-endpoints.com, Wed, 31 May 2023 20:14:14 -0400
+X-MDAV-Processed: sequoia-grove.ad.secure-endpoints.com, Wed, 31 May 2023 20:15:39 -0400
 Received: from [IPV6:2603:7000:73c:9c99:cc97:6df8:a457:33bf] by auristor.com (IPv6:2001:470:1f07:f77:28d9:68fb:855d:c2a5) (MDaemon PRO v23.0.2d) 
-        with ESMTPSA id md5001003481696.msg; Wed, 31 May 2023 20:14:13 -0400
-X-Spam-Processed: sequoia-grove.ad.secure-endpoints.com, Wed, 31 May 2023 20:14:13 -0400
+        with ESMTPSA id md5001003481698.msg; Wed, 31 May 2023 20:15:38 -0400
+X-Spam-Processed: sequoia-grove.ad.secure-endpoints.com, Wed, 31 May 2023 20:15:38 -0400
         (not processed: message from trusted or authenticated source)
 X-MDRemoteIP: 2603:7000:73c:9c99:cc97:6df8:a457:33bf
 X-MDHelo: [IPV6:2603:7000:73c:9c99:cc97:6df8:a457:33bf]
-X-MDArrival-Date: Wed, 31 May 2023 20:14:13 -0400
+X-MDArrival-Date: Wed, 31 May 2023 20:15:38 -0400
 X-MDOrigin-Country: US, NA
 X-Authenticated-Sender: jaltman@auristor.com
 X-Return-Path: prvs=1516548fbb=jaltman@auristor.com
 X-Envelope-From: jaltman@auristor.com
 X-MDaemon-Deliver-To: linux-kernel@vger.kernel.org
-Message-ID: <83d7f550-7216-6ff4-bc8a-859e752e12a3@auristor.com>
-Date:   Wed, 31 May 2023 20:14:02 -0400
+Message-ID: <7546a4b2-7421-990c-3165-bda80c637127@auristor.com>
+Date:   Wed, 31 May 2023 20:15:33 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: How to get my krb5 crypto lib upstream?
-To:     David Howells <dhowells@redhat.com>,
-        Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "linux-afs@lists.infradead.org" <linux-afs@lists.infradead.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <8C32DD7C-719D-4CC5-A1E3-33BCE0A7FEFF@oracle.com>
- <723506.1685552525@warthog.procyon.org.uk>
- <726863.1685563684@warthog.procyon.org.uk>
+Subject: Re: [PATCH] afs: Fix setting of mtime when creating a
+ file/dir/symlink
 Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>
+Cc:     linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <808140.1685573412@warthog.procyon.org.uk>
 From:   Jeffrey E Altman <jaltman@auristor.com>
 Organization: AuriStor, Inc.
-In-Reply-To: <726863.1685563684@warthog.procyon.org.uk>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms070606000804060500030007"
+In-Reply-To: <808140.1685573412@warthog.procyon.org.uk>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms010903000007040704090906"
 X-MDCFSigsAdded: auristor.com
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -72,53 +68,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 This is a cryptographically signed message in MIME format.
 
---------------ms070606000804060500030007
+--------------ms010903000007040704090906
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 5/31/2023 4:08 PM, David Howells wrote:
-> Fair point.  In rxgk, I use key_len, key_bytes, block_len, cksum_len plus the
-> name for procfs purposes.  I also wonder if I need separate key_len and
-> key_bytes if I'm not supporting DES (DES keys gets expanded IIRC).  Also, some
-> of the checks I'm doing could perhaps be moved into the krb5 lib.
+On 5/31/2023 6:50 PM, David Howells wrote:
+>      
+> kafs incorrectly passes a zero mtime (ie. 1st Jan 1970) to the server when
+> creating a file, dir or symlink because commit 52af7105eceb caused the
+> mtime recorded in the afs_operation struct to be passed to the server, but
+> didn't modify the afs_mkdir(), afs_create() and afs_symlink() functions to
+> set it first.
+>
+> Those functions were written with the assumption that the mtime would be
+> obtained from the server - but that fell foul of malsynchronised clocks, so
+> it was decided that the mtime should be set from the client instead.
+>
+> Fix this by filling in op->mtime before calling the create op.
+>
+> Fixes: 52af7105eceb ("afs: Set mtime from the client for yfs create operations")
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Marc Dionne <marc.dionne@auristor.com>
+> cc: linux-afs@lists.infradead.org
+> cc: linux-fsdevel@vger.kernel.org
+> ---
+>   fs/afs/dir.c |    3 +++
+>   1 file changed, 3 insertions(+)
+>
+> diff --git a/fs/afs/dir.c b/fs/afs/dir.c
+> index 4dd97afa536c..5219182e52e1 100644
+> --- a/fs/afs/dir.c
+> +++ b/fs/afs/dir.c
+> @@ -1358,6 +1358,7 @@ static int afs_mkdir(struct mnt_idmap *idmap, struct inode *dir,
+>   	op->dentry	= dentry;
+>   	op->create.mode	= S_IFDIR | mode;
+>   	op->create.reason = afs_edit_dir_for_mkdir;
+> +	op->mtime	= current_time(dir);
+>   	op->ops		= &afs_mkdir_operation;
+>   	return afs_do_sync_operation(op);
+>   }
+> @@ -1661,6 +1662,7 @@ static int afs_create(struct mnt_idmap *idmap, struct inode *dir,
+>   	op->dentry	= dentry;
+>   	op->create.mode	= S_IFREG | mode;
+>   	op->create.reason = afs_edit_dir_for_create;
+> +	op->mtime	= current_time(dir);
+>   	op->ops		= &afs_create_operation;
+>   	return afs_do_sync_operation(op);
+>   
+> @@ -1796,6 +1798,7 @@ static int afs_symlink(struct mnt_idmap *idmap, struct inode *dir,
+>   	op->ops			= &afs_symlink_operation;
+>   	op->create.reason	= afs_edit_dir_for_symlink;
+>   	op->create.symlink	= content;
+> +	op->mtime		= current_time(dir);
+>   	return afs_do_sync_operation(op);
+>   
+>   error:
+>
+Reviewed-by: Jeffrey Altman <jaltman@auristor.com>
 
-The "K" in RXGK is RFC3961 without support for weak ciphers.  No DES, no 
-3DES
-and no RC4-HMAC.   DES keys are never expanded.
-
-The supported ciphers are
-
-  * aes128-cts-hmac-sha1-96 (RFC3962)
-  * aes256-cts-hmac-sha1-96 (RFC3962)
-  * aes128-cts-hmac-sha256-128  (RFC8009)
-  * aes256-cts-hmac-sha384-192  (RFC8009)
-
-There are other Kerberos ciphers that could be used with RXGK but there 
-are no RXGK server implementations that use them.   None of the RFC3961 
-ciphers or the RFC3961 interfaces support AEAD modes.
-
-Luke Howard proposed "AEAD Encryption Types for Kerberos 5" 
-https://datatracker.ietf.org/doc/draft-howard-krb-aead/ to IETF Kitten 
-which would add AES128 and AES256 GCM, CCM, and OCB modes. However, 
-there is some resistance to these additions because at the moment all 
-RFC3961 ciphers are safe for use with long term keys and repeating 
-cipher state; AEAD modes are not.
-
-RXGK can be constrained such that it is safe for use with AEAD modes and 
-I would like to see Luke's draft be adopted if only because CTS-HMAC is 
-not supported by Intel QAT and GCM is. Adoption of Luke's draft would 
-not only benefit AuriStorFS but NFSv4 gss-krb5 as well.
-
-My suggestion is that the kernel should provide an RFC3961 API for use 
-by gss_krb5 applications.   AEAD modes can be added to that if and when 
-Luke's draft is adopted.
-
-Jeffrey Altman
 
 
-
-
---------------ms070606000804060500030007
+--------------ms010903000007040704090906
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -187,17 +197,17 @@ p/BscizYdNk2WXJMTnH+wVLN8sLEwEtQR4eTLoFmQvrK2AMBS9kW5sBkMzINt/ZbbcZ3F+eA
 MDGCAxQwggMQAgEBME4wOjELMAkGA1UEBhMCVVMxEjAQBgNVBAoTCUlkZW5UcnVzdDEXMBUG
 A1UEAxMOVHJ1c3RJRCBDQSBBMTMCEEABgmmaL+s+f8XR8nIOXMwwDQYJYIZIAWUDBAIBBQCg
 ggGXMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYwMTAw
-MTQwMlowLwYJKoZIhvcNAQkEMSIEIHuvJ7Wh61tm0h12NdyxfuhsrlzpMqj4+Wvetiad+dfA
+MTUzM1owLwYJKoZIhvcNAQkEMSIEIAY9ugkmjLFZq5ZIEdq4OZD+AFYtQDRCAJoHgW/MoD8q
 MF0GCSsGAQQBgjcQBDFQME4wOjELMAkGA1UEBhMCVVMxEjAQBgNVBAoTCUlkZW5UcnVzdDEX
 MBUGA1UEAxMOVHJ1c3RJRCBDQSBBMTMCEEABgmmaL+s+f8XR8nIOXMwwXwYLKoZIhvcNAQkQ
 AgsxUKBOMDoxCzAJBgNVBAYTAlVTMRIwEAYDVQQKEwlJZGVuVHJ1c3QxFzAVBgNVBAMTDlRy
 dXN0SUQgQ0EgQTEzAhBAAYJpmi/rPn/F0fJyDlzMMGwGCSqGSIb3DQEJDzFfMF0wCwYJYIZI
 AWUDBAEqMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYIKoZI
-hvcNAwICAUAwBwYFKw4DAgcwDQYIKoZIhvcNAwICASgwDQYJKoZIhvcNAQEBBQAEggEATcyg
-O+z0jXcOli3OvTOCUVxLwTyo2/5DWnmpLnrNDcQbvGgZQ6gjF8dlaMco9TZQbwsmfNXg3a+2
-kIkdzln67/s89rWZi4imhxsfg/aQ7WiKiuY0F8LkdWHw5zpxOGbARY4bms6D4RygtVyRSRB4
-RJrmR+X6z6l/5eLrDrAS7LWPnfmneHYugj8JHF7fulMeV5aHcwwlfRjMBbgXeyCSrPWUbgPc
-Q3u7e/3M6s72KMUeepgXYeT8bV75PiXor1HTJfwutCKKjlhdn3E/r793E9Xgh5bWA5cUNPOg
-4fmSZCQBSBHRG0IMIeUrmGZZyqqx1qPRPji1D0+ulnhIKa3fbQAAAAAAAA==
---------------ms070606000804060500030007--
+hvcNAwICAUAwBwYFKw4DAgcwDQYIKoZIhvcNAwICASgwDQYJKoZIhvcNAQEBBQAEggEAmPpW
+W5iDf9iWHrJKjKX0ZvHHz0HDT/ur+yyapuY550iY+r8rj/G57O0MOTzdb3V8tjJfhHb+QFP3
+xne4EeCAdcF0UzlFfTCm23IvY4za+nesXG4bQ9nKwmjOtAqGvDnVMGgz0LC1S2VaI5znRK3f
+GcC35pAdRW+4a3aEduacp1x4DOpEETlcD4JkVGckoV4D7fjE6YXSizOiCqRq8i5PJYp0s7Kg
+dMirMoSCkGvxOWZ1rjQWs+M58tgCUL6xOq7ddzcClHt9QBZrUww7aXFEcmt1Q7/oTkE4lUj1
+SDgzwPgUZqeFbZao2j4eeio3/iBDMc9Om0CqUAo/FMZkEyjXgAAAAAAAAA==
+--------------ms010903000007040704090906--
 
