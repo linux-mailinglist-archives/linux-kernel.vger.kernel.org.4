@@ -2,110 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763707196C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817047196CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232779AbjFAJXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S232807AbjFAJXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbjFAJXB (ORCPT
+        with ESMTP id S232795AbjFAJXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:23:01 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FBF18F;
-        Thu,  1 Jun 2023 02:22:46 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2af2f4e719eso8096021fa.2;
-        Thu, 01 Jun 2023 02:22:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685611364; x=1688203364;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xu73A7SyMQ/vKw4V8FoQHHfsJoxdUL8BzyNw5Jd0gzg=;
-        b=sStLMxnsUA9kUOztr2UAtURKy0UOcEjCG/kCIZ1ItM2EBpXHMYms/al8bzIhiAd3KD
-         Bz3BJccK8rqfDE6icjls9TQXlZ6xZz4O01LPUykDpyiymqZJKOll+KgTmnmX3StLa7GM
-         x1T+3T1jKsgZI+zAY/Qqlhec+bSXP7yCON8l1dDzIpzfs8yf8vKSG9tFsK8ZbWDtm7xE
-         yVUjtkq8GpH/3VSQMdC4hgOipki6EM0ECUHCmgS+pMTwL+B1NpHEhoqDZZCei4N0o2mt
-         Ctg/uGoZwduo/SAjE+evrztFryl1tCb8JoeQ/O780johZBI/N/maSC4apzvK0DUfwf1M
-         Yw9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685611364; x=1688203364;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xu73A7SyMQ/vKw4V8FoQHHfsJoxdUL8BzyNw5Jd0gzg=;
-        b=T3WvFOaAom0xfCmv/Q7hcewPiFrXBq4jQiyLwM+Gk2yjOpnw8dGvR6vJaHe7ifu6+0
-         Mt31V0rN5gh/YXF5zjvrRdcbogv4lMwqjwbmMRFEV0WGh2yS5yunVWT6I++SILej5Ubt
-         MZ4d1aLQDHMP7i69gtX/7x5C/MOAJO4DaE9T6XH9iN+eNS9dTUQqL+IKR4gx/lBbgzRs
-         qI0+6hg669cZYGuaN5Hq4ro0yKl2pAQu5DIzzBzBea6DGVS67X4Xx4U6cRgewbxIcLoG
-         pYVopENBL8IFBNCye/Tx3YPxHCD/EocZ+wCh1UzUK8E4G1km4Uq1sKFN5O9tbgZYU6uB
-         jE7w==
-X-Gm-Message-State: AC+VfDx4LKfXFGmnfdlA2r2s4s4VVOJ/JkcPxVksClzBUiVqRxoyAXe4
-        xO0ST8Dy1t+n86jsc6b1X+gEivQxCslG4lRxjpo=
-X-Google-Smtp-Source: ACHHUZ41+G57HVbaglyNiCY5aDprCsUSXQubwUCQ4eRJQdir+a5S0eph3E6DQfQlk01eGgpuKDZKTr2BP9dbVWyJaV8=
-X-Received: by 2002:a2e:96d1:0:b0:2b1:a3ce:b709 with SMTP id
- d17-20020a2e96d1000000b002b1a3ceb709mr660982ljj.39.1685611364364; Thu, 01 Jun
- 2023 02:22:44 -0700 (PDT)
+        Thu, 1 Jun 2023 05:23:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18A95129;
+        Thu,  1 Jun 2023 02:23:05 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 38BDB169C;
+        Thu,  1 Jun 2023 02:23:50 -0700 (PDT)
+Received: from [10.57.22.124] (unknown [10.57.22.124])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 34C703F663;
+        Thu,  1 Jun 2023 02:23:02 -0700 (PDT)
+Message-ID: <4e413a50-001d-cfbf-99a4-7e612f44ed38@arm.com>
+Date:   Thu, 1 Jun 2023 10:23:00 +0100
 MIME-Version: 1.0
-References: <20230421223154.115312-1-krzysztof.kozlowski@linaro.org> <4a53ed0d-c34b-cea5-b407-066242500611@linaro.org>
-In-Reply-To: <4a53ed0d-c34b-cea5-b407-066242500611@linaro.org>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Thu, 1 Jun 2023 12:22:33 +0300
-Message-ID: <CAP6Zq1gQ0YdEkRw6_aDd_OOkFixQA06jmM_9VOM=uvPnwahoUg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: nuvoton: add missing cache properties
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.1
+Subject: Re: [PATCH v4 06/11] coresight-tpdm: Add node to set dsb programming
+ mode
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org
+References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
+ <1682586037-25973-7-git-send-email-quic_taozha@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <1682586037-25973-7-git-send-email-quic_taozha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On 27/04/2023 10:00, Tao Zhang wrote:
+> Add node to set and show programming mode for TPDM DSB subunit.
+> Once the DSB programming mode is set, it will be written to the
+> register DSB_CR.
+> 
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> ---
+>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 15 ++++++
+>   drivers/hwtracing/coresight/coresight-tpdm.c       | 62 ++++++++++++++++++++++
+>   drivers/hwtracing/coresight/coresight-tpdm.h       | 16 ++++++
+>   3 files changed, 93 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> index 77e67f2..348e167 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> @@ -45,3 +45,18 @@ Description:
+>   		Accepts only one of the 2 values -  0 or 1.
+>   		0 : Set the DSB trigger type to false
+>   		1 : Set the DSB trigger type to true
+> +
+> +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_mode
+> +Date:		March 2023
+> +KernelVersion	6.3
+> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
+> +Description:
+> +		(Write) Set the mode of DSB tpdm. Read the mode of DSB
+> +		tpdm.
+> +
+> +		Accepts the value needs to be greater than 0. What data
+> +		bits do is listed below.
+> +		Bit[0:1] : Test mode control bit for choosing the inputs.
+> +		Bit[3] : Set to 0 for low performance mode.
+> +				 Set to 1 for high performance mode.
+> +		Bit[4:8] : Select byte lane for high performance mode.
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
+> index 14f4352..1bacaa5 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+> @@ -4,6 +4,7 @@
+>    */
+>   
+>   #include <linux/amba/bus.h>
+> +#include <linux/bitfield.h>
+>   #include <linux/bitmap.h>
+>   #include <linux/coresight.h>
+>   #include <linux/coresight-pmu.h>
+> @@ -43,6 +44,32 @@ static void tpdm_reset_datasets(struct tpdm_drvdata *drvdata)
+>   	}
+>   }
+>   
+> +static void set_dsb_test_mode(struct tpdm_drvdata *drvdata, u32 *val)
+> +{
+> +	u32 mode;
+> +
+> +	mode = TPDM_DSB_MODE_TEST(drvdata->dsb->mode);
+> +	*val &= ~TPDM_DSB_TEST_MODE;
+> +	*val |= FIELD_PREP(TPDM_DSB_TEST_MODE, mode);
+> +}
+> +
+> +static void set_dsb_hpsel_mode(struct tpdm_drvdata *drvdata, u32 *val)
+> +{
+> +	u32 mode;
+> +
+> +	mode = TPDM_DSB_MODE_HPBYTESEL(drvdata->dsb->mode);
+> +	*val &= ~TPDM_DSB_HPSEL;
+> +	*val |= FIELD_PREP(TPDM_DSB_HPSEL, mode);
+> +}
+> +
+> +static void set_dsb_perf_mode(struct tpdm_drvdata *drvdata, u32 *val)
+> +{
+> +	if (drvdata->dsb->mode & TPDM_DSB_MODE_PERF)
+> +		*val |= TPDM_DSB_CR_MODE;
+> +	else
+> +		*val &= ~TPDM_DSB_CR_MODE;
+> +}
+> +
+>   static void set_trigger_type(struct tpdm_drvdata *drvdata, u32 *val)
+>   {
+>   	if (drvdata->dsb->trig_type)
+> @@ -64,6 +91,12 @@ static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
+>   	writel_relaxed(val, drvdata->base + TPDM_DSB_TIER);
+>   
+>   	val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
+> +	/* Set the test accurate mode */
+> +	set_dsb_test_mode(drvdata, &val);
+> +	/* Set the byte lane for high-performance mode */
+> +	set_dsb_hpsel_mode(drvdata, &val);
+> +	/* Set the performance mode */
+> +	set_dsb_perf_mode(drvdata, &val);
+>   	/* Set trigger type */
+>   	set_trigger_type(drvdata, &val);
+>   	/* Set the enable bit of DSB control register to 1 */
+> @@ -252,6 +285,34 @@ static struct attribute_group tpdm_attr_grp = {
+>   	.attrs = tpdm_attrs,
+>   };
+>   
+> +static ssize_t dsb_mode_show(struct device *dev,
+> +				  struct device_attribute *attr,
+> +				  char *buf)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +
+> +	return sysfs_emit(buf, "%lx\n",
+> +			 (unsigned long)drvdata->dsb->mode);
+> +}
+> +
+> +static ssize_t dsb_mode_store(struct device *dev,
+> +				   struct device_attribute *attr,
+> +				   const char *buf,
+> +				   size_t size)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +	unsigned long val;
+> +
+> +	if ((kstrtoul(buf, 0, &val)) || val < 0)
+> +		return -EINVAL;
+> +
+> +	spin_lock(&drvdata->spinlock);
+> +	drvdata->dsb->mode = val & TPDM_MODE_ALL;
+> +	spin_unlock(&drvdata->spinlock);
+> +	return size;
+> +}
+> +static DEVICE_ATTR_RW(dsb_mode);
+> +
+>   static ssize_t dsb_trig_type_show(struct device *dev,
+>   				     struct device_attribute *attr, char *buf)
+>   {
+> @@ -323,6 +384,7 @@ static ssize_t dsb_trig_ts_store(struct device *dev,
+>   static DEVICE_ATTR_RW(dsb_trig_ts);
+>   
+>   static struct attribute *tpdm_dsb_attrs[] = {
+> +	&dev_attr_dsb_mode.attr,
+>   	&dev_attr_dsb_trig_ts.attr,
+>   	&dev_attr_dsb_trig_type.attr,
+>   	NULL,
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
+> index 68f33bd..79df07e 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
+> @@ -15,11 +15,25 @@
+>   
+>   /* Enable bit for DSB subunit */
+>   #define TPDM_DSB_CR_ENA		BIT(0)
+> +/* Enable bit for DSB subunit perfmance mode */
+> +#define TPDM_DSB_CR_MODE		BIT(1)
+>   /* Enable bit for DSB subunit trigger type */
+>   #define TPDM_DSB_CR_TRIG_TYPE		BIT(12)
+> +
+>   /* Enable bit for DSB subunit trigger timestamp */
+>   #define TPDM_DSB_TIER_XTRIG_TSENAB		BIT(1)
+>   
+> +/* DSB programming modes */
+> +/* Test mode control bit*/
+> +#define TPDM_DSB_MODE_TEST(val)	(val & GENMASK(1, 0))
+> +/* Perforceman mode */
 
-Sorry for the late reply and thanks for your patch.
+minor nit: typo ^^
 
-On Tue, 16 May 2023 at 19:30, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 22/04/2023 00:31, Krzysztof Kozlowski wrote:
-> > As all level 2 and level 3 caches are unified, add required
-> > cache-unified and cache-level properties to fix warnings like:
-> >
-> >   nuvoton-npcm845-evb.dtb: l2-cache: 'cache-level' is a required property
-> >   nuvoton-npcm845-evb.dtb: l2-cache: 'cache-unified' is a required property
-I didn't get these warnings in kernel 6.4-rc4, but still, the patch
-has been tested on EVB-NPCM8XX and everything looks good.
-> >
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >
-> > ---
-> >
-> > Please take the patch via sub-arch SoC tree.
-> > ---
->
-> Hi Tomer, Tali, Patrick and others,
->
-> Anyone picking this up?
->
-> Best regards,
-> Krzysztof
->
-Reviewed-by: Tomer Maimon <tmaimon77@gmail.com>
+> +#define TPDM_DSB_MODE_PERF		BIT(3)
+> +/* High performance mode */
+> +#define TPDM_DSB_MODE_HPBYTESEL(val)	(val & GENMASK(8, 4))
+> +#define TPDM_MODE_ALL			(0xFFFFFFF)
 
-Best regards,
+GENMASK(27, 0) ?
 
-Tomer
+Also, why do we cover bits 27-0 ?
+
+Suzuki
