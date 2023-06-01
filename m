@@ -2,121 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A3E726686
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 560997194E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbjFGQyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
+        id S231920AbjFAH73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 03:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbjFGQyL (ORCPT
+        with ESMTP id S231824AbjFAH7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:54:11 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61011FE9;
-        Wed,  7 Jun 2023 09:54:03 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53fbb3a013dso6950723a12.1;
-        Wed, 07 Jun 2023 09:54:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686156843; x=1688748843;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=54+qi/h0dgjEiscE3jr8CCpbJikBz1EP/4AV4WdE4uA=;
-        b=Y0KoLQYaVs/x/uZp6sPOZL1DtjPxKsuHogteQgI7gi4ksgnssk/h5AP4Xqi7YXS4Du
-         X0YYdyTW49qXUruen2a9EoNULB27nBj2CcCR7X2DZ3H1RaRpAEsqaCL23H3fIEMWm8Da
-         GGB2+I4XzJxZFY94NjuHz2XMfuHYaXGAwAbgPD+1zRw33J4YOWC1EntopGcp/Mlnesld
-         Y2OuAu5rjgEvMwcf9jgvfO02siSdQhKJlfMKczIykXGR32n8P2nQTFiTs2VAvNdJkrkn
-         hhKWCcdNOkJVT/TVfR0uRpyW9d6UfOdxhzo1yeaoAYXj/6X5BA+TtuGdFNmKpSMOM+9f
-         MebA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686156843; x=1688748843;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=54+qi/h0dgjEiscE3jr8CCpbJikBz1EP/4AV4WdE4uA=;
-        b=LrH2h9EJu00IkdiFlxkZkZbH5rFJOgqXqPXN5oD0pkPml35LhuuLGh++fm081N95cx
-         CVPdhor9vXdgdHgQjxLPunDjN6UQwn7rjJQj03Nufc3Wx32Vd/sFe8/o9ZaMRhDhl2Km
-         vFWnDkm+4UYM6txrHop4D8N5Ds2MFrO0zXahujy1IdZ7Z07qNUwv72sHVPHIUYd6IFv7
-         kGiZZ5Zw7qvXJQtPZnV4zmxouOv8DlgunG0UQzYGfLS9IV6lY2EZoHTpm+mOFWa8Z+15
-         nnbolBEFErJoXx7D+A/EgzGhYK1BNue5nfTFyecLv3CiIEi4TF1dCR1zFZoAZ1/U/0vG
-         e2iQ==
-X-Gm-Message-State: AC+VfDzbfkAqjUUyg+U4HbLFAiOQ0KfeTNOGgMfmBqwc4EDwcsN1Amju
-        ht1WnqtPMOTsCHqyiK1+xls=
-X-Google-Smtp-Source: ACHHUZ5Q6QKhrwvqRGpZjrJLLYXFFObmXo+JbPl75BNIiN9vCn525+V+0eOVVMY/7ACsH9rbz6VtZg==
-X-Received: by 2002:a17:903:41c6:b0:1b1:ac87:b47a with SMTP id u6-20020a17090341c600b001b1ac87b47amr6806648ple.65.1686156843148;
-        Wed, 07 Jun 2023 09:54:03 -0700 (PDT)
-Received: from localhost (ec2-52-8-182-0.us-west-1.compute.amazonaws.com. [52.8.182.0])
-        by smtp.gmail.com with ESMTPSA id ik8-20020a170902ab0800b001ae0152d280sm10792502plb.193.2023.06.07.09.54.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 09:54:02 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 07:54:07 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Simon Horman <simon.horman@corigine.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH RFC net-next v3 6/8] virtio/vsock: support dgrams
-Message-ID: <ZHhOn7QKdByqc3m+@bullseye>
-References: <20230413-b4-vsock-dgram-v3-0-c2414413ef6a@bytedance.com>
- <20230413-b4-vsock-dgram-v3-6-c2414413ef6a@bytedance.com>
- <ZHdxJxjXDkkO03L4@corigine.com>
- <d2e9c45f-bcbd-4e6a-98c1-c98283450626@kadam.mountain>
+        Thu, 1 Jun 2023 03:59:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0499E10E6;
+        Thu,  1 Jun 2023 00:56:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8755F63A53;
+        Thu,  1 Jun 2023 07:56:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1564AC433EF;
+        Thu,  1 Jun 2023 07:56:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685606186;
+        bh=zy6FD3ieq9VzpaczjqQeq4turLjMaDfUirLGdrUvrRQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hzrpdr+vftwHjZujbikxA7vGJd48YfbEE7beZiaLvSofMfOTfdYZxvoLnJnl5fSLI
+         LS/gbTJ28xOK0yBM2aTT0CsdWZuW7J8AjXMMAzOUNmUFZUQFFbOyz8qFtBggIxYAtH
+         xusfTFvu5Qs3P8J7CpoIrMLI1HAWQGgOafA93PyV6/+pfMjn0M9mpubH/ZrcGNnTd1
+         b47x/Mj+emASiuhI45Nog1aPycW4wbvZmrGr03UZ+I+0PpIjBl66aau6c8x6vvJ4Us
+         R4rCj5U0UmY89xiSt6D1lLKn8t+f9+qeWOgllP4EJSqR7zbB6/Tpau6TZtByfStvyo
+         N8CO/qbQ4NOZw==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Prince Kumar Maurya <princekumarmaurya06@gmail.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzkaller-bugs@googlegroups.com, linux-fsdevel@vger.kernel.org,
+        syzbot+aad58150cbc64ba41bdc@syzkaller.appspotmail.com,
+        skhan@linuxfoundation.org, dchinner@redhat.com,
+        viro@zeniv.linux.org.uk, chenzhongjin@huawei.com
+Subject: Re: [PATCH v4] fs/sysv: Null check to prevent null-ptr-deref bug
+Date:   Thu,  1 Jun 2023 09:55:45 +0200
+Message-Id: <20230601-puder-unbekannt-9d74525f40d7@brauner>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230528184422.596947-1-princekumarmaurya06@gmail.com>
+References: <000000000000cafb9305fc4fe588@google.com> <20230531013141.19487-1-princekumarmaurya06@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d2e9c45f-bcbd-4e6a-98c1-c98283450626@kadam.mountain>
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=795; i=brauner@kernel.org; h=from:subject:message-id; bh=zy6FD3ieq9VzpaczjqQeq4turLjMaDfUirLGdrUvrRQ=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaRU+L11uWbFsP+T8uqmzbkBs2fWmWxNcp59hCXr6RrLrvz2 +Ul5HaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABOZGszIsKSrrMWh/MryuA8rfOpX9J ZFd1zdLXxIQGVmW7IqzwKJZkaG9+8z7yZrmzalXNuRFrho2lv59cvsV/NxKGSXCEi4FJ7lBQA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 09:13:04PM +0300, Dan Carpenter wrote:
-> On Wed, May 31, 2023 at 06:09:11PM +0200, Simon Horman wrote:
-> > > @@ -102,6 +144,7 @@ virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
-> > 
-> > Smatch that err may not be initialised in the out label below.
-> > 
-> > Just above this context the following appears:
-> > 
-> > 	if (info->vsk && !skb_set_owner_sk_safe(skb, sk_vsock(info->vsk))) {
-> > 		WARN_ONCE(1, "failed to allocate skb on vsock socket with sk_refcnt == 0\n");
-> > 		goto out;
-> > 	}
-> > 
-> > So I wonder if in that case err may not be initialised.
-> > 
+On Sun, 28 May 2023 11:44:22 -0700, Prince Kumar Maurya wrote:
+> sb_getblk(inode->i_sb, parent) return a null ptr and taking lock on
+> that leads to the null-ptr-deref bug.
 > 
-> Yep, exactly right.  I commented out the goto and it silenced the
-> warning.  I also initialized err to zero at the start hoping that it
-> would trigger a different warning but it didn't.  :(
-> 
-> regards,
-> dan carpenter
 > 
 
-Thanks for checking that Dan. Fixed in the next rev.
+Applied to the vfs.misc branch of the vfs/vfs.git tree.
+Patches in the vfs.misc branch should appear in linux-next soon.
 
-Best,
-Bobby
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
+
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.misc
+
+[1/1] fs/sysv: Null check to prevent null-ptr-deref bug
+      https://git.kernel.org/vfs/vfs/c/47f9da4bc5e6
