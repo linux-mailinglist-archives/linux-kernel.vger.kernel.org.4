@@ -2,74 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7140971F129
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7978671F12C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbjFARwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 13:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        id S233122AbjFARvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 13:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbjFARwT (ORCPT
+        with ESMTP id S231298AbjFARvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 13:52:19 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEFD107
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 10:52:17 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-96f7bf3cf9eso174147266b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 10:52:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685641936; x=1688233936;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=exz8jHGGlbFPTRIu+KyeFYPOTRAMQRA0KdQTa6tuVIE=;
-        b=oljK7KQegUu/ksQiF7GvxgyFAZG+MiCBFiyIKiNj2w+1uZBsrFOHgLSC2L/0ZnVYFM
-         6VBKZBA/Dt3N/TO8Lx/zPWDUeVoGQAMg1c0HhQGkkAD9iC3mkPtlRPgTuusSNdxupaqp
-         5I2kvigrFxUPPwhpF6lX04XqUxAODnOYjiDAV+xC4tyEMtOq0fC0Fn/4kUfYf4VXd7rI
-         6VNNBJuqOuINji+spMEJX71PNLV4ByoV+JBkVFn+KU4WPHykAG9mhln1/KmX065XdzV0
-         UaOOqdkUaNM7dHwLHz06buezQfuU8bRyrcDmzN+mCDbXYY/Z4AeX+OeG1AzrUUWOj3CN
-         ML/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685641936; x=1688233936;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=exz8jHGGlbFPTRIu+KyeFYPOTRAMQRA0KdQTa6tuVIE=;
-        b=U4ehy+8RPhPNSoxBy3QiIPVRCcTOoou/zeb+mtX2sO452XqeMfWa++ymO/P97q/nDs
-         MXdU5T5aPa8aILA17wEApEk8wWVdnhOydhRzWgjWdY9GASz7TTS6VOt2Nfe6m8EJN9CP
-         SHd9Rjg0oGhDAp1jWT5Xjy9TY2eBFK2G287+Uw3EaAb8FUkHzisR1WnplovG2wKlALNy
-         74DcEvqH5Ew1NjSB8/+rmm4kYUsJ/yauBUDadX/XArQqEHgZMlJuT4He4/q9hWI+Vt2p
-         Uqh5k4xCOCYWo57Ow5FsLjysqz0RqSmQttOMoB5TorjYOKeDntPurvalUKn6zkt/5z3Z
-         Bk7Q==
-X-Gm-Message-State: AC+VfDzLTNvizl5GXvNtAlUyT7Mf3qThFVYuDEKDpH217lSgHJJGxPMs
-        xn6YeXUGn7NfFdPd5CRjWZaxKJQ7sYlv8qePZpOG+JNMz8WJIyFc3bU=
-X-Google-Smtp-Source: ACHHUZ7jUZ20nfXDXBJOWeN1B+zdMiLbbuPEEwVtKmpUrCxLVy+CVxDqO/kvCxTU201DxZwdbr6g7wzpQ6FEeR7cvic=
-X-Received: by 2002:a17:907:6297:b0:974:1c98:d2d9 with SMTP id
- nd23-20020a170907629700b009741c98d2d9mr8477764ejc.3.1685641936158; Thu, 01
- Jun 2023 10:52:16 -0700 (PDT)
+        Thu, 1 Jun 2023 13:51:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A2D13D;
+        Thu,  1 Jun 2023 10:51:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C4E36486D;
+        Thu,  1 Jun 2023 17:51:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF39EC433EF;
+        Thu,  1 Jun 2023 17:51:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685641901;
+        bh=BcWxCff8oE/YsPUBsGehbmDrmj07BGqbxcPNn2h5cJo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=fFOrDkoM5rEkTdvjobzjwFbt16t1TBCYRLHVs2FgKO0FNOup2ioKLZbM5zrZf9xak
+         WGUtTaA/vfr+RxrHZaPG0gYQL1hysfuDJLZwaJc1kw8VIpokGhHTqgv0VXoxc6UkK6
+         k+E0oIe67nW4oCNfSqovYVQBQ69fg3MZ1qEwxtDw4qgpSWbUBtI2F3hBABZm+Kosc1
+         kmXTqQDHdt6+IkThycrGkE1ozdgKYGGuVdEc4zqUV6lLYhiMoMX8TGu+HBBtl6snIn
+         Z4lw3dpapAL/USDYjHkdtz1hYQ8eI0mcJ2SOBXKSGklvaAzflv49btHF6Lk+3gfnnD
+         k+cvKU0pO7zIQ==
+Date:   Thu, 1 Jun 2023 12:51:39 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     linux-pci@vger.kernel.org, netdev@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH pci] PCI: don't skip probing entire device if first fn OF
+ node has status = "disabled"
+Message-ID: <ZHjaq+TDW/RFcoxW@bhelgaas>
 MIME-Version: 1.0
-References: <20230531022911.1168524-1-yosryahmed@google.com> <20230601155825.GF102494@cmpxchg.org>
-In-Reply-To: <20230601155825.GF102494@cmpxchg.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 1 Jun 2023 10:51:39 -0700
-Message-ID: <CAJD7tkaFSfpTtB_ua_9QzR2voE1-hixv6RMJZd=WqpGmY93dSw@mail.gmail.com>
-Subject: Re: [PATCH] mm: zswap: multiple zpool support
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        Nhat Pham <nphamcs@gmail.com>,
-        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
-        Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601163335.6zw4ojbqxz2ws6vx@skbuf>
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,204 +60,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 1, 2023 at 8:58=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.org>=
- wrote:
->
-> On Wed, May 31, 2023 at 02:29:11AM +0000, Yosry Ahmed wrote:
-> > Support using multiple zpools of the same type in zswap, for concurrenc=
-y
-> > purposes. Add CONFIG_ZSWAP_NR_ZPOOLS_ORDER to control the number of
-> > zpools. The order is specific by the config rather than the absolute
-> > number to guarantee a power of 2. This is useful so that we can use
-> > deterministically link each entry to a zpool by hashing the zswap_entry
-> > pointer.
-> >
-> > On a setup with zswap and zsmalloc, comparing a single zpool (current
-> > default) to 32 zpools (by setting CONFIG_ZSWAP_NR_ZPOOLS_ORDER=3D32) sh=
-ows
-> > improvements in the zsmalloc lock contention, especially on the swap ou=
-t
-> > path.
-> >
-> > The following shows the perf analysis of the swapout path when 10
-> > workloads are simulatenously reclaiming and refaulting tmpfs pages.
-> > There are some improvements on the swapin path as well, but much less
-> > significant.
-> >
-> > 1 zpool:
-> >
-> >  |--28.99%--zswap_frontswap_store
-> >        |     |
-> >        <snip>
-> >        |     |
-> >        |     |--8.98%--zpool_map_handle
-> >        |     |     |
-> >        |     |      --8.98%--zs_zpool_map
-> >        |     |           |
-> >        |     |            --8.95%--zs_map_object
-> >        |     |                 |
-> >        |     |                  --8.38%--_raw_spin_lock
-> >        |     |                       |
-> >        |     |                        --7.39%--queued_spin_lock_slowpat=
-h
-> >        |     |
-> >        |     |--8.82%--zpool_malloc
-> >        |     |     |
-> >        |     |      --8.82%--zs_zpool_malloc
-> >        |     |           |
-> >        |     |            --8.80%--zs_malloc
-> >        |     |                 |
-> >        |     |                 |--7.21%--_raw_spin_lock
-> >        |     |                 |     |
-> >        |     |                 |      --6.81%--queued_spin_lock_slowpat=
-h
-> >        <snip>
-> >
-> > 32 zpools:
-> >
-> >  |--16.73%--zswap_frontswap_store
-> >        |     |
-> >        <snip>
-> >        |     |
-> >        |     |--1.81%--zpool_malloc
-> >        |     |     |
-> >        |     |      --1.81%--zs_zpool_malloc
-> >        |     |           |
-> >        |     |            --1.79%--zs_malloc
-> >        |     |                 |
-> >        |     |                  --0.73%--obj_malloc
-> >        |     |
-> >        |     |--1.06%--zswap_update_total_size
-> >        |     |
-> >        |     |--0.59%--zpool_map_handle
-> >        |     |     |
-> >        |     |      --0.59%--zs_zpool_map
-> >        |     |           |
-> >        |     |            --0.57%--zs_map_object
-> >        |     |                 |
-> >        |     |                  --0.51%--_raw_spin_lock
-> >        <snip>
-> >
-> > Suggested-by: Yu Zhao <yuzhao@google.com>
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > ---
-> >  mm/Kconfig | 12 +++++++
-> >  mm/zswap.c | 95 ++++++++++++++++++++++++++++++++++++------------------
-> >  2 files changed, 76 insertions(+), 31 deletions(-)
-> >
-> > diff --git a/mm/Kconfig b/mm/Kconfig
-> > index 92c30879bf67..de1da56d2c07 100644
-> > --- a/mm/Kconfig
-> > +++ b/mm/Kconfig
-> > @@ -59,6 +59,18 @@ config ZSWAP_EXCLUSIVE_LOADS
-> >         The cost is that if the page was never dirtied and needs to be
-> >         swapped out again, it will be re-compressed.
-> >
-> > +config ZSWAP_NR_ZPOOLS_ORDER
-> > +     int "Number of zpools in zswap, as power of 2"
-> > +     default 0
-> > +     depends on ZSWAP
-> > +     help
-> > +       This options determines the number of zpools to use for zswap, =
-it
-> > +       will be 1 << CONFIG_ZSWAP_NR_ZPOOLS_ORDER.
-> > +
-> > +       Having multiple zpools helps with concurrency and lock contenti=
-on
-> > +       on the swap in and swap out paths, but uses a little bit of ext=
-ra
-> > +       space.
->
-> This is nearly impossible for a user, let alone a distribution, to
-> answer adequately.
->
-> The optimal value needs to be found empirically. And it varies heavily
-> not just by workload but by implementation changes. If we make changes
-> to the lock holding time or redo the data structures, a previously
-> chosen value might no longer be a net positive, and even be harmful.
+On Thu, Jun 01, 2023 at 07:33:35PM +0300, Vladimir Oltean wrote:
+> On Thu, Jun 01, 2023 at 10:44:45AM -0500, Bjorn Helgaas wrote:
+> > To make sure I understand you, I think you're saying that if Function
+> > 0 has DT status "disabled", 6fffbc7ae137 ("PCI: Honor firmware's
+> > device disabled status") breaks things because we don't enumerate
+> > Function 0 and the driver can't temporarily claim it to zero out its
+> > piece of the shared memory.
+> > 
+> > With just 6fffbc7ae137, we don't enumerate Function 0, which means we
+> > don't see that it's a multi-function device, so we don't enumerate
+> > Functions 1, 2, etc, either.
+> > 
+> > With both 6fffbc7ae137 and your current patch, we would enumerate
+> > Functions 1, 2, etc, but we still skip Function 0, so its piece of the
+> > shared memory still doesn't get zeroed.
+> 
+> I'm saying that as long as commit 6fffbc7ae137 ("PCI: Honor firmware's
+> device disabled status") exists in the form where the pci_driver :: probe()
+> is completely skipped for disabled functions, the NXP ENETC PCIe device
+> has a problem no matter what the function number is.
 
-Yeah, I agree that this can only be tuned empirically, but there is a
-real benefit to tuning it, at least in our experience. I imagined
-having the config option with a default of 0 gives those who want to
-tune it the option, while not messing with users that do not care.
+Yep.
 
->
-> Architecturally, the pool scoping and the interaction with zswap_tree
-> is currently a mess. We're aware of lifetime bugs, where swapoff kills
-> the tree but the pool still exists with entries making dead references
-> e.g. We likely need to rearchitect this in the near future - maybe tie
-> pools to trees to begin with.
->
-> (I'm assuming you're already using multiple swap files to avoid tree
-> lock contention, because it has the same scope as the pool otherwise.)
->
-> Such changes quickly invalidate any settings the user or distro might
-> make here. Exposing the implementation detail of the pools might even
-> get in the way of fixing bugs and cleaning up the architecture.
+> That problem is:
+> the device drivers of all PCIe functions need to clear some memory
+> before they ultimately fail to probe (as they should), because of some
+> hardware design oversight. That is no longer possible if the driver has
+> no hook to execute code for those devices that are disabled.
 
-I was under the impression that config options are not very stable.
-IOW, if we fix the lock contention on an architectural level, and
-there is no more benefit to tuning the number of zpools per zswap
-pool, we can remove the config option. Is this incorrect?
+Yep.  If there's no pci_dev, there's no nice way to do anything to the
+device.
 
->
-> > @@ -263,11 +266,13 @@ static void zswap_update_total_size(void)
-> >  {
-> >       struct zswap_pool *pool;
-> >       u64 total =3D 0;
-> > +     int i;
-> >
-> >       rcu_read_lock();
-> >
-> >       list_for_each_entry_rcu(pool, &zswap_pools, list)
-> > -             total +=3D zpool_get_total_size(pool->zpool);
-> > +             for (i =3D 0; i < zswap_nr_zpools; i++)
-> > +                     total +=3D zpool_get_total_size(pool->zpools[i]);
->
-> This adds a O(nr_pools) operation to every load and store. It's easy
-> for this to dominate or outweigh locking costs as workload concurrency
-> changes, or data structures and locking change inside the kernel.
+> On top of that, function 0 having status = "disabled" is extra
+> problematic, because the PCI core will now just assume that functions 1 .. N
+> don't exist at all, which is simply false, because the usefulness of
+> ENETC port 0 (PCIe function 0) from a networking perspective is
+> independent from the usefulness of ENETC port 1 (PCIe function 1), ENETC
+> port 2 etc.
 
-Right, which is why this is empirically tuned. In the perf analysis in
-the commit log, the lock contention gains far outweigh this cost.
-FWIW, the cost here is constant, we just iterate the pools and read a
-value.
+Yes.
 
->
-> > @@ -587,14 +603,17 @@ static void shrink_worker(struct work_struct *w)
-> >  {
-> >       struct zswap_pool *pool =3D container_of(w, typeof(*pool),
-> >                                               shrink_work);
-> > +     int i;
-> >
-> > -     if (zpool_shrink(pool->zpool, 1, NULL))
-> > -             zswap_reject_reclaim_fail++;
-> > +     for (i =3D 0; i < zswap_nr_zpools; i++)
-> > +             if (zpool_shrink(pool->zpools[i], 1, NULL))
-> > +                     zswap_reject_reclaim_fail++;
-> >       zswap_pool_put(pool);
->
-> This scales reclaim batch size by the number of zpools, which can lead
-> to varying degrees of overreclaim especially on small zswap sizes with
-> high pool concurrency.
+> > > The ENETC is not a hot-pluggable PCIe device. It uses Enhanced Allocation
+> > > to essentially describe on-chip memory spaces, which are always present.
+> > > So presumably, a different system-level solution to initialize those
+> > > shared memories (U-Boot?) may be chosen, if implementing this workaround
+> > > in Linux puts too much pressure on the PCIe core and the way in which it
+> > > does things. Initially I didn't want to do this in prior boot stages
+> > > because we only enable the RCEC in Linux, nothing is broken other than
+> > > the spurious AER messages, and, you know.. the kernel may still run
+> > > indefinitely on top of bootloaders which don't have the workaround applied.
+> > > So working around it in Linux avoids one dependency.
+> > 
+> > If I understand correctly, something (bootloader or Linux) needs to do
+> > something to Function 0 (e.g., clear memory).
+> 
+> To more than just function 0 (also 1, 2 and 6).
 
-I was under the assumption that with Domenico's patch we will mostly
-be reclaiming multiple pages anyway, but I can certainly remove this
-part and only reclaim one page at a time from one zpool. We can select
-one at random or round robin through the zpools.
+Yes.
 
->
-> I don't think this patch is ready for primetime. A user build time
-> setting is not appropriate for an optimization that is heavily tied to
-> implementation details and workload dynamics.
+> There are 2 confounding
+> problems, the latter being something that was exposed by your question:
+> what will happen that's bad with the current mainline code structure,
+> *notwithstanding* the fact that function 0 may have status = "disabled"
+> (which currently will skip enumeration for the rest of the functions
+> which don't have status = "disabled").
+> 
+> > Doing it in Linux would minimize dependences on the bootloader, so
+> > that seems desirable to me. That means Linux needs to enumerate
+> > Function 0 so it is visible to a driver or possibly a quirk.
+> 
+> Uhm... no, that wouldn't be enough. Only a straight revert would satisfy
+> the workaround that we currently have for NXP ENETC in Linux.
 
-What would you suggest instead? We do find value in having multiple
-zpools, at least for the current architecture.
+I guess you mean a revert of 6fffbc7ae137?  This whole conversation is
+about whether we can rework 6fffbc7ae137 to work both for Loongson and
+for you, so nothing is decided yet.
 
-An internal implementation that we have exposes this as a module
-parameter instead, but that is more complicated (I image), because you
-need to set it before enabling zswap, or before changing the zswap
-pool, otherwise changing it is nop because the zpool(s) is already
-allocated. I am also guessing module params are more stable than
-config options. Hence, I thought a config option might be more
-appropriate.
+The point is, I assume you agree that it's preferable if we don't have
+to depend on a bootloader to clear the memory.
+
+> Also, I'm not sure if it was completely reasonable of me in the first
+> place to exploit this quirk of the Linux PCI bus - that the probe
+> function is called even if a device is disabled in the device tree.
+> I would understand if I was forced to rethink that.
+
+After 6fffbc7ae137, the probe function is not called if the device is
+disabled in DT because there's no pci_dev for it at all.
+
+> > I think we could contemplate implementing 6fffbc7ae137 in a different
+> > way.  Checking DT status at driver probe-time would probably work for
+> > Loongson, but wouldn't quite solve the NXP problem because the driver
+> > wouldn't be able to claim Function 0 even temporarily.
+> 
+> Not sure what you mean by "checking DT status at driver probe-time".
+> Does enetc_pf_probe() -> of_device_is_available() qualify? You probably
+> mean earlier than that.
+
+I was thinking about something in pci_device_probe(), e.g., by
+extending pci_device_can_probe().  But again, we're just exploring the
+solution space; I'm not saying this is the best or only path.
+
+> My problem is that I don't really understand what was the functional
+> need for commit 6fffbc7ae137 ("PCI: Honor firmware's device disabled
+> status") in the first place, considering that any device driver can
+> already fail to probe based on the same condition at its own will.
+
+In general, PCI drivers shouldn't rely on DT.  If the bus driver (PCI
+in this case) calls a driver's probe function, the driver can assume
+the device exists.  But enetc is not a general-purpose driver, and if
+DT is the only way to discover this property, I guess you're stuck
+doing that.
+
+> > Is DT the only way to learn the NXP SERDES configuration?  I think it
+> > would be much better if there were a way to programmatically learn it,
+> > because then you wouldn't have to worry about syncing the DT with the
+> > platform configuration, and it would decouple this from the Loongson
+> > situation.
+> 
+> Syncing the DT with the platform configuration will always be necessary,
+> because for networking we will also need extra information which is
+> completely non-discoverable, like a phy-handle or such, and that depends
+> on the wiring and static pinmuxing of the SoC. So it is practically
+> reasonable to expect that what is usable has status = "okay", and what
+> isn't has status = "disabled". Not to mention, there are already device
+> trees in circulation which are written that way, and those need to
+> continue to work.
+
+Just because we need DT for non-discoverable info A doesn't mean we
+should depend on it for B if B *is* discoverable.
+
+This question of disabling a device via DT but still needing to do
+things to the device is ... kind of a sticky wicket.
+
+Maybe this should be a different DT property (not "status").  Then PCI
+enumeration could work normally and 6fffbc7ae137 wouldn't be in the
+way.
+
+> > (If there were a way to actually discover the Loongson situation
+> > instead of relying on DT, e.g., by keying off a Device ID or
+> > something, that would be much better, too.  I assume we explored that,
+> > but I don't remember the details.)
+> 
+> What is it that's special about the Loongson situation?
