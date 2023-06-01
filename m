@@ -2,508 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A6A726671
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 186EA7194DA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbjFGQvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
+        id S231975AbjFAH7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 03:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjFGQvp (ORCPT
+        with ESMTP id S232011AbjFAH6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:51:45 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1589A1FE5;
-        Wed,  7 Jun 2023 09:51:43 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b0314f057cso39855215ad.1;
-        Wed, 07 Jun 2023 09:51:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686156702; x=1688748702;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9HvkrROz2drFh8xFYBPmF+VNzTPGb5WOTqzBg4sKnoM=;
-        b=reo+WQMeLQPt/SsvO9XQxnkV8qphwYlW+o8PILevVu572jDamMEzful0KxjzC6t1P9
-         TafBxuTLkOHxqjuT8uwFiGEXPEMSMpBlRsknucMi0k8Eu2MlRQFeyVcZinKBV97/KYkq
-         iPGaMAHaPrOfSZYmCaL9PCYpL5kMtOXvDdhV3MMDoCjlffG1ERobuCr6XQWv1knU+QtU
-         YS+EHNw0wjLrc0ENoOt0Nl2cjveLvKA9v9pZd+UYk3095YLy+801kfbBMc0qqMlWBleL
-         An5qcmdIoQvO8CpEi9H2PhMnZmuZhNK1TKj90CBx4ep4P3nN2hwEzLSwkfgjEcbYI9zZ
-         NCJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686156702; x=1688748702;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9HvkrROz2drFh8xFYBPmF+VNzTPGb5WOTqzBg4sKnoM=;
-        b=OomGwYWB9gcUR6kQFHEiykMrGBCLkvQI4ariMZ6GWASpdnhahPeV7nGOZ0d/YPd22w
-         A4Ps5LjjtkHrcDtyJnrA8OaKoURjHnsjBOBoQ40/jw3mB5daq5fI12rVvSmwwdkpdbcd
-         wdWNUUwaquhyts3eYIBSXYbkNKD0aBpBqO8NPU5HxtQY+jyP43bmQy5kUCEMbZegkjCQ
-         N3Q0ykLQi+aZrywCRrcX9RvnNy7YVm/52W04+2uMN90punlreinvAWCBgwXQkhs1hNOE
-         R/Up3KVogqMIs5vS3J4sCjODHepBJt4IgbX9fY0IyOo4InznX+RvswAm4HO8grdQ5frn
-         JoIg==
-X-Gm-Message-State: AC+VfDwjsm94wqWJcsl2wSUPmyS/i5nWCLNS/M9HQ6kKQU+UjIllpe3C
-        np6NkefFam46/RxXHcIQkgk=
-X-Google-Smtp-Source: ACHHUZ7tMqgn7UppBe0n1R+zcXc1AuD7MgVV1Rl7wsvMiJteNcAL4yyoJEciphxyfserOSjWbFSPRA==
-X-Received: by 2002:a17:902:c40a:b0:1af:babd:7b6d with SMTP id k10-20020a170902c40a00b001afbabd7b6dmr3776435plk.52.1686156702253;
-        Wed, 07 Jun 2023 09:51:42 -0700 (PDT)
-Received: from localhost (c-67-166-91-86.hsd1.wa.comcast.net. [67.166.91.86])
-        by smtp.gmail.com with ESMTPSA id e12-20020a170902ed8c00b001ac7f583f72sm10664727plj.209.2023.06.07.09.51.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 09:51:41 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 07:51:34 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH RFC net-next v3 8/8] tests: add vsock dgram tests
-Message-ID: <ZHhOBrmU7tzSX3zE@bullseye>
-References: <7dbec78e-ea44-4684-6d02-5d6d5051187e@sberdevices.ru>
- <0bd40fd8-e666-e2a3-04da-501a0e7b97a9@sberdevices.ru>
+        Thu, 1 Jun 2023 03:58:39 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B49173A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 00:51:46 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685605905;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+e3wI1fiGsWTXmwy45Q9EAm7dA/PfrhNn8PVmuub8MY=;
+        b=TgHA9VRFQkRXiNheNuKMUqBNVBf4NnoNZONHtuauHx+qh42PQfCljDf+8E1hPkA8QC2oc8
+        fa8Nnerjm7B1SBFxtQVgQyrSeJa+fN1ljPwppadYcpWzF8xgK3Hz/1gmtkizHWroa5BDZj
+        A/u0Qt1FrkOCkcHPaIXAXkvshawn9JTLP6LKc5rUbCTWoQPEvy/5ZeMgjNeDiqU+uOtLVB
+        DUaADvukxsrrfeE5QKp/Asymr3fuJW2eGCF5Wwj75vrlWYxgfEHiEFqO4xNnWbUoKhmFmc
+        UAryJpQBYJjvGF6WUrUkFZweWcI39buTkk0JpF8WVKwWpN+bql/oDquB6GrsYw==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7D4D7E000D;
+        Thu,  1 Jun 2023 07:51:43 +0000 (UTC)
+Date:   Thu, 1 Jun 2023 09:51:42 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v5 1/6] mtd: rawnand: meson: fix ready/busy command
+Message-ID: <20230601095142.3a611b5a@xps-13>
+In-Reply-To: <20230601061850.3907800-2-AVKrasnov@sberdevices.ru>
+References: <20230601061850.3907800-1-AVKrasnov@sberdevices.ru>
+        <20230601061850.3907800-2-AVKrasnov@sberdevices.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0bd40fd8-e666-e2a3-04da-501a0e7b97a9@sberdevices.ru>
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 12:34:22PM +0300, Arseniy Krasnov wrote:
-> Sorry, CC mailing lists
-> 
-> On 06.06.2023 12:29, Arseniy Krasnov wrote:
-> > Hello Bobby and Jiang! Small remarks(sorry for this letter layout, I add multiple newline over comments):
-> > 
+Hi Arseniy,
 
-Hey Arseniy!
+AVKrasnov@sberdevices.ru wrote on Thu, 1 Jun 2023 09:18:44 +0300:
 
-> > diff --git a/tools/testing/vsock/util.c b/tools/testing/vsock/util.c
-> > index 01b636d3039a..45e35da48b40 100644
-> > --- a/tools/testing/vsock/util.c
-> > +++ b/tools/testing/vsock/util.c
-> > @@ -260,6 +260,57 @@ void send_byte(int fd, int expected_ret, int flags)
-> >  	}
-> >  }
-> >  
-> > +/* Transmit one byte and check the return value.
-> > + *
-> > + * expected_ret:
-> > + *  <0 Negative errno (for testing errors)
-> > + *   0 End-of-file
-> > + *   1 Success
-> > + */
-> > +void sendto_byte(int fd, const struct sockaddr *dest_addr, int len, int expected_ret,
-> > +		 int flags)
-> > +{
-> > +	const uint8_t byte = 'A';
-> > +	ssize_t nwritten;
-> > +
-> > +	timeout_begin(TIMEOUT);
-> > +	do {
-> > +		nwritten = sendto(fd, &byte, sizeof(byte), flags, dest_addr,
-> > +				  len);
-> > +		timeout_check("write");
-> > +	} while (nwritten < 0 && errno == EINTR);
-> > +	timeout_end();
-> > +
-> > +	if (expected_ret < 0) {
-> > +		if (nwritten != -1) {
-> > +			fprintf(stderr, "bogus sendto(2) return value %zd\n",
-> > +				nwritten);
-> > +			exit(EXIT_FAILURE);
-> > +		}
-> > +		if (errno != -expected_ret) {
-> > +			perror("write");
-> > +			exit(EXIT_FAILURE);
-> > +		}
-> > +		return;
-> > +	}
-> > +
-> > +	if (nwritten < 0) {
-> > +		perror("write");
-> > +		exit(EXIT_FAILURE);
-> > +	}
-> > +	if (nwritten == 0) {
-> > +		if (expected_ret == 0)
-> > +			return;
-> > +
-> > +		fprintf(stderr, "unexpected EOF while sending byte\n");
-> > +		exit(EXIT_FAILURE);
-> > +	}
-> > +	if (nwritten != sizeof(byte)) {
-> > +		fprintf(stderr, "bogus sendto(2) return value %zd\n", nwritten);
-> > +		exit(EXIT_FAILURE);
-> > +
-> > 	}
-> > 
-> > 
-> > 
-> > ^^^
-> > May be short check that 'nwritten' != 'expected_ret' will be enough? Then print expected and
-> > real value. Here and in 'recvfrom_byte()' below.
-> > 
+> This fixes ready/busy command value.
 
-Right now this is really just a copy/paste of the send_byte() that
-stream uses, so that would probably make the two report errors slightly
-different. If desired for some specific reason, I'm open to it.
+nit: "Fix the ready/busy command value."
+>=20
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> ---
+>  drivers/mtd/nand/raw/meson_nand.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/mes=
+on_nand.c
+> index 074e14225c06..9dd4a676497b 100644
+> --- a/drivers/mtd/nand/raw/meson_nand.c
+> +++ b/drivers/mtd/nand/raw/meson_nand.c
+> @@ -37,7 +37,7 @@
+>  #define NFC_CMD_SCRAMBLER_ENABLE	BIT(19)
+>  #define NFC_CMD_SCRAMBLER_DISABLE	0
+>  #define NFC_CMD_SHORTMODE_DISABLE	0
+> -#define NFC_CMD_RB_INT		BIT(14)
+> +#define NFC_CMD_RB_INT		((0xb << 10) | BIT(18) | BIT(16))
+> =20
+>  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
+> =20
 
-> > 
-> > 
-> > 
-> > +}
-> > +
-> >  /* Receive one byte and check the return value.
-> >   *
-> >   * expected_ret:
-> > @@ -313,6 +364,60 @@ void recv_byte(int fd, int expected_ret, int flags)
-> >  	}
-> >  }
-> >  
-> > +/* Receive one byte and check the return value.
-> > + *
-> > + * expected_ret:
-> > + *  <0 Negative errno (for testing errors)
-> > + *   0 End-of-file
-> > + *   1 Success
-> > + */
-> > +void recvfrom_byte(int fd, struct sockaddr *src_addr, socklen_t *addrlen,
-> > +		   int expected_ret, int flags)
-> > +{
-> > +	uint8_t byte;
-> > +	ssize_t nread;
-> > +
-> > +	timeout_begin(TIMEOUT);
-> > +	do {
-> > +		nread = recvfrom(fd, &byte, sizeof(byte), flags, src_addr, addrlen);
-> > +		timeout_check("read");
-> > +	} while (nread < 0 && errno == EINTR);
-> > +	timeout_end();
-> > +
-> > +	if (expected_ret < 0) {
-> > +		if (nread != -1) {
-> > +			fprintf(stderr, "bogus recvfrom(2) return value %zd\n",
-> > +				nread);
-> > +			exit(EXIT_FAILURE);
-> > +		}
-> > +		if (errno != -expected_ret) {
-> > +			perror("read");
-> > +			exit(EXIT_FAILURE);
-> > +		}
-> > +		return;
-> > +	}
-> > +
-> > +	if (nread < 0) {
-> > +		perror("read");
-> > +		exit(EXIT_FAILURE);
-> > +	}
-> > +	if (nread == 0) {
-> > +		if (expected_ret == 0)
-> > +			return;
-> > +
-> > +		fprintf(stderr, "unexpected EOF while receiving byte\n");
-> > +		exit(EXIT_FAILURE);
-> > +	}
-> > +	if (nread != sizeof(byte)) {
-> > +		fprintf(stderr, "bogus recvfrom(2) return value %zd\n", nread);
-> > +		exit(EXIT_FAILURE);
-> > +	}
-> > +	if (byte != 'A') {
-> > +		fprintf(stderr, "unexpected byte read %c\n", byte);
-> > +		exit(EXIT_FAILURE);
-> > +	}
-> > +}
-> > +
-> >  /* Run test cases.  The program terminates if a failure occurs. */
-> >  void run_tests(const struct test_case *test_cases,
-> >  	       const struct test_opts *opts)
-> > diff --git a/tools/testing/vsock/util.h b/tools/testing/vsock/util.h
-> > index fb99208a95ea..6e5cd610bf05 100644
-> > --- a/tools/testing/vsock/util.h
-> > +++ b/tools/testing/vsock/util.h
-> > @@ -43,7 +43,11 @@ int vsock_seqpacket_accept(unsigned int cid, unsigned int port,
-> >  			   struct sockaddr_vm *clientaddrp);
-> >  void vsock_wait_remote_close(int fd);
-> >  void send_byte(int fd, int expected_ret, int flags);
-> > +void sendto_byte(int fd, const struct sockaddr *dest_addr, int len, int expected_ret,
-> > +		 int flags);
-> >  void recv_byte(int fd, int expected_ret, int flags);
-> > +void recvfrom_byte(int fd, struct sockaddr *src_addr, socklen_t *addrlen,
-> > +		   int expected_ret, int flags);
-> >  void run_tests(const struct test_case *test_cases,
-> >  	       const struct test_opts *opts);
-> >  void list_tests(const struct test_case *test_cases);
-> > diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
-> > index ac1bd3ac1533..851c3d65178d 100644
-> > --- a/tools/testing/vsock/vsock_test.c
-> > +++ b/tools/testing/vsock/vsock_test.c
-> > @@ -202,6 +202,113 @@ static void test_stream_server_close_server(const struct test_opts *opts)
-> >  	close(fd);
-> >  }
-> >  
-> > +static void test_dgram_sendto_client(const struct test_opts *opts)
-> > +{
-> > +	union {
-> > +		struct sockaddr sa;
-> > +		struct sockaddr_vm svm;
-> > +	} addr = {
-> > +		.svm = {
-> > +			.svm_family = AF_VSOCK,
-> > +			.svm_port = 1234,
-> > +			.svm_cid = opts->peer_cid,
-> > +		},
-> > +	};
-> > +	int fd;
-> > +
-> > +	/* Wait for the server to be ready */
-> > +	control_expectln("BIND");
-> > +
-> > +	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
-> > +	if (fd < 0) {
-> > +		perror("socket");
-> > +		exit(EXIT_FAILURE);
-> > +	}
-> > +
-> > +	sendto_byte(fd, &addr.sa, sizeof(addr.svm), 1, 0);
-> > +
-> > +	/* Notify the server that the client has finished */
-> > +	control_writeln("DONE");
-> > +
-> > +	close(fd);
-> > +}
-> > +
-> > +static void test_dgram_sendto_server(const struct test_opts *opts)
-> > +{
-> > +	union {
-> > +		struct sockaddr sa;
-> > +		struct sockaddr_vm svm;
-> > +	} addr = {
-> > +		.svm = {
-> > +			.svm_family = AF_VSOCK,
-> > +			.svm_port = 1234,
-> > +			.svm_cid = VMADDR_CID_ANY,
-> > +		},
-> > +	};
-> > +	int fd;
-> > +	int len = sizeof(addr.sa);
-> > +
-> > +	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
-> > 
-> > 
-> > 
-> > ^^^
-> > I think we can check 'socket()' return value;
-> > 
 
-Gotcha, I'll add in next rev.
-
-> > 
-> > 
-> > 
-> > +
-> > +	if (bind(fd, &addr.sa, sizeof(addr.svm)) < 0) {
-> > +		perror("bind");
-> > +		exit(EXIT_FAILURE);
-> > +	}
-> > +
-> > +	/* Notify the client that the server is ready */
-> > +	control_writeln("BIND");
-> > +
-> > +	recvfrom_byte(fd, &addr.sa, &len, 1, 0);
-> > +
-> > +	/* Wait for the client to finish */
-> > +	control_expectln("DONE");
-> > +
-> > +	close(fd);
-> > +}
-> > +
-> > +static void test_dgram_connect_client(const struct test_opts *opts)
-> > +{
-> > +	union {
-> > +		struct sockaddr sa;
-> > +		struct sockaddr_vm svm;
-> > +	} addr = {
-> > +		.svm = {
-> > +			.svm_family = AF_VSOCK,
-> > +			.svm_port = 1234,
-> > +			.svm_cid = opts->peer_cid,
-> > +		},
-> > +	};
-> > +	int fd;
-> > +	int ret;
-> > +
-> > +	/* Wait for the server to be ready */
-> > +	control_expectln("BIND");
-> > +
-> > +	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
-> > +	if (fd < 0) {
-> > +		perror("bind");
-> > +		exit(EXIT_FAILURE);
-> > +	}
-> > +
-> > +	ret = connect(fd, &addr.sa, sizeof(addr.svm));
-> > +	if (ret < 0) {
-> > +		perror("connect");
-> > +		exit(EXIT_FAILURE);
-> > +	}
-> > +
-> > +	send_byte(fd, 1, 0);
-> > +
-> > +	/* Notify the server that the client has finished */
-> > +	control_writeln("DONE");
-> > +
-> > +	close(fd);
-> > +}
-> > +
-> > +static void test_dgram_connect_server(const struct test_opts *opts)
-> > +{
-> > +	test_dgram_sendto_server(opts);
-> > +}
-> > +
-> >  /* With the standard socket sizes, VMCI is able to support about 100
-> >   * concurrent stream connections.
-> >   */
-> > @@ -255,6 +362,77 @@ static void test_stream_multiconn_server(const struct test_opts *opts)
-> >  		close(fds[i]);
-> >  }
-> >  
-> > +static void test_dgram_multiconn_client(const struct test_opts *opts)
-> > +{
-> > +	int fds[MULTICONN_NFDS];
-> > +	int i;
-> > +	union {
-> > +		struct sockaddr sa;
-> > +		struct sockaddr_vm svm;
-> > +	} addr = {
-> > +		.svm = {
-> > +			.svm_family = AF_VSOCK,
-> > +			.svm_port = 1234,
-> > +			.svm_cid = opts->peer_cid,
-> > +		},
-> > +	};
-> > +
-> > +	/* Wait for the server to be ready */
-> > +	control_expectln("BIND");
-> > +
-> > +	for (i = 0; i < MULTICONN_NFDS; i++) {
-> > +		fds[i] = socket(AF_VSOCK, SOCK_DGRAM, 0);
-> > +		if (fds[i] < 0) {
-> > +			perror("socket");
-> > +			exit(EXIT_FAILURE);
-> > +		}
-> > +	}
-> > +
-> > +	for (i = 0; i < MULTICONN_NFDS; i++)
-> > +		sendto_byte(fds[i], &addr.sa, sizeof(addr.svm), 1, 0);
-> > +
-> > +	/* Notify the server that the client has finished */
-> > +	control_writeln("DONE");
-> > +
-> > +	for (i = 0; i < MULTICONN_NFDS; i++)
-> > +		close(fds[i]);
-> > +}
-> > +
-> > +static void test_dgram_multiconn_server(const struct test_opts *opts)
-> > +{
-> > +	union {
-> > +		struct sockaddr sa;
-> > +		struct sockaddr_vm svm;
-> > +	} addr = {
-> > +		.svm = {
-> > +			.svm_family = AF_VSOCK,
-> > +			.svm_port = 1234,
-> > +			.svm_cid = VMADDR_CID_ANY,
-> > +		},
-> > +	};
-> > +	int fd;
-> > +	int len = sizeof(addr.sa);
-> > +	int i;
-> > +
-> > +	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
-> > 
-> > 
-> > 
-> > ^^^
-> > I think we can check 'socket()' return value;
-> > 
-> > 
-> > 
-> > +
-> > +	if (bind(fd, &addr.sa, sizeof(addr.svm)) < 0) {
-> > +		perror("bind");
-> > +		exit(EXIT_FAILURE);
-> > +	}
-> > +
-> > +	/* Notify the client that the server is ready */
-> > +	control_writeln("BIND");
-> > +
-> > +	for (i = 0; i < MULTICONN_NFDS; i++)
-> > +		recvfrom_byte(fd, &addr.sa, &len, 1, 0);
-> > +
-> > +	/* Wait for the client to finish */
-> > +	control_expectln("DONE");
-> > +
-> > +	close(fd);
-> > +}
-> > +
-> >  static void test_stream_msg_peek_client(const struct test_opts *opts)
-> >  {
-> >  	int fd;
-> > @@ -1128,6 +1306,21 @@ static struct test_case test_cases[] = {
-> >  		.run_client = test_stream_virtio_skb_merge_client,
-> >  		.run_server = test_stream_virtio_skb_merge_server,
-> >  	},
-> > +	{
-> > +		.name = "SOCK_DGRAM client close",
-> > +		.run_client = test_dgram_sendto_client,
-> > +		.run_server = test_dgram_sendto_server,
-> > +	},
-> > +	{
-> > +		.name = "SOCK_DGRAM client connect",
-> > +		.run_client = test_dgram_connect_client,
-> > +		.run_server = test_dgram_connect_server,
-> > +	},
-> > +	{
-> > +		.name = "SOCK_DGRAM multiple connections",
-> > +		.run_client = test_dgram_multiconn_client,
-> > +		.run_server = test_dgram_multiconn_server,
-> > +	},
-> > 
-> > 
-> > 
-> > 
-> > SOCK_DGRAM guarantees message bounds, I think it will be good to add such test like in SOCK_SEQPACKET tests.
-
-Agreed, I'll write one for the next rev.
-
-> > 
-> > Thanks, Arseniy
-
-Thanks for the review!
-> > 
-> > 
-> >  	{},
-> >  };
-> >  
-> > 
+Thanks,
+Miqu=C3=A8l
