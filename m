@@ -2,209 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA7D719532
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30DD5719538
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231693AbjFAIQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
+        id S231859AbjFAIRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbjFAIQa (ORCPT
+        with ESMTP id S231622AbjFAIRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:16:30 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE33E2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:16:27 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96fa4a6a79bso66018066b.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:16:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685607386; x=1688199386;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+ZlmtiF4KA9ocnxQPoaWgoJR4/5KSbrAx1dT+mr7mGM=;
-        b=W7NFa7T/Oae6bC96fLKOOD7Sb+BPavX6Psf0Cwp9e8TPJgPtXT/35jB3AE2+2yMRkz
-         9UlpledBPB25lpNULBYhsiKQf/hEqyMzQQqB3eU62AnDBtlBFAsigfMCs5zi63gloBGv
-         ikvR2pv0+B6jIzpVq/msFLaKiDbA+uAjvE9MR0youdgb4jhbgvZdI0H6llksNEtOsm1I
-         0ngAdtY+2HAQhJubh5BaiSGaMBFSlaGrSBaZfwk+SOvZkHgNJ5yp1yUWKGXb/x3o4Ou8
-         6804uC9lSlsEgDO93F02hK7wDaF1jMN8ecPSzlmcnMDeXWVQQxnIpiSHNT57jeeqc9mR
-         1dqA==
+        Thu, 1 Jun 2023 04:17:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C027EE2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:16:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685607406;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wKmPbrFwESFZJl2H01/KcKj6DErTerOIUGeta+Cdp9Q=;
+        b=XkdvHPV7VHERKN7F2igr0ACbR/e1rF9zs3rmgOw6ADwvwAWovuaO9axvKUi9EVR7fEeK2k
+        Km0yCV95Sa6C4sf9SKV9FFa/fzHa0Q0o2r1vs21mFpIJ5i9EKOj9Rabl5zGEzeCzkXV9hS
+        BzxL34A1RdAI0Bnbqlj9Cuq09uv1se8=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-349-vymh8J-iN4CFPJdve2MmcA-1; Thu, 01 Jun 2023 04:16:44 -0400
+X-MC-Unique: vymh8J-iN4CFPJdve2MmcA-1
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4edc7406cbaso349849e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:16:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685607386; x=1688199386;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+ZlmtiF4KA9ocnxQPoaWgoJR4/5KSbrAx1dT+mr7mGM=;
-        b=HZ4vtlOz+uC2CcbByZpR0xZz8/lzvtU9mpeUxGHrRYH1vl0b/b1hJ5kHVbGLBEsthg
-         eaCtt0RSXcGUoVfwVYwgugp98bsIUt/xKCu9W67t6f9cGQIXyufmJH56xeQtF6uxpB0S
-         lZJ7ucWvHb0rBdxDUPmMbvbW2lEO3YUk2KQiTo61zh8syz4/UyVlcv3SnrlwTibtV5T1
-         ohvOX/n9kOyexwwfmN21FW9wVnG6DnxF3QVIvXdYLUbaxIajoC9tO3DeLFI9DreJGokD
-         FFFo3L54eD7iY/Junjb4cvcK9wB1FGM8JFahh2Iimq51I+qsODwpOar8Lyft0vl8673R
-         6nBQ==
-X-Gm-Message-State: AC+VfDxBUwSMUsEJNt0POwsX8hpCRKke/LpoYQRUKGfPpjmctCpMetqt
-        7ogos61F4dHit9hSuCus/dMb+A==
-X-Google-Smtp-Source: ACHHUZ4DljKcRGOWxpVfB5cYXTsZTWw0PALbkS9QuMfQOSfa87E03D8Hwpa9RKx4sHT8U0nU+uktzg==
-X-Received: by 2002:a17:906:fd82:b0:96a:6f35:d1a5 with SMTP id xa2-20020a170906fd8200b0096a6f35d1a5mr7805033ejb.67.1685607386283;
-        Thu, 01 Jun 2023 01:16:26 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id u8-20020a1709060b0800b0096f920858afsm10170697ejg.102.2023.06.01.01.16.24
+        d=1e100.net; s=20221208; t=1685607403; x=1688199403;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wKmPbrFwESFZJl2H01/KcKj6DErTerOIUGeta+Cdp9Q=;
+        b=QZzi8P3CpAKv8Zai3PKuq2ydVrwM19/05ZL5fFjr8ulDuUPwj+nApq0wRtylAErZ3U
+         bXmpKWLhrLQRvSPPSLkzZ9mp0pln8noCS5N6A21F6JTBI+A+ysDjgFDUT4EQ1NkfMKXF
+         5/DsLgOLyvUAUGtSpYnZSH5+oJQkr5s4QYKYPRO56Pw3aewXRVbjJk88tOPnPVXL0fbx
+         U2vayWu1TziRuxsagcrlFg1AxEhTJeBoFI3Jlvy6+8NiS98m5buh3ugY46XZ7e0dKzwE
+         weFot9oT7lfOhhalrivBQ96QfnsSahTgkp1jFfPx4zCKUUDPpN62Nmljq1VeF7/SeRbQ
+         iQNA==
+X-Gm-Message-State: AC+VfDwKtMiYvDOemq9KyCSoP0lLBOq0E10R9cxgdeWq7SLVij1D3xZS
+        FSeFl+ZSN0d9I/wFXtPU4Hsxaanz/X7xl0ENQE6Rur4fKELZb0yusWb+XZ2SzoTyrE0ifDqLPle
+        ejVa733YZmrK/URBcbMMbUL9l
+X-Received: by 2002:ac2:4149:0:b0:4f3:7c24:1029 with SMTP id c9-20020ac24149000000b004f37c241029mr741606lfi.60.1685607403369;
+        Thu, 01 Jun 2023 01:16:43 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7NS61bKX6pql0N3/fkWSFJqZb3sUgTR7ldIN/Kjqcc3QC+WNlSkFZRaDsvl0e+iAa0OgTh0A==
+X-Received: by 2002:ac2:4149:0:b0:4f3:7c24:1029 with SMTP id c9-20020ac24149000000b004f37c241029mr741593lfi.60.1685607402876;
+        Thu, 01 Jun 2023 01:16:42 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id z16-20020a7bc7d0000000b003f605814850sm1388319wmk.37.2023.06.01.01.16.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 01:16:25 -0700 (PDT)
-Message-ID: <88a6ba33-2494-e4c7-eba2-d31c0deeb308@linaro.org>
-Date:   Thu, 1 Jun 2023 10:16:23 +0200
+        Thu, 01 Jun 2023 01:16:42 -0700 (PDT)
+Message-ID: <fa6009d4-643e-97ec-5317-a57a535e0495@redhat.com>
+Date:   Thu, 1 Jun 2023 10:16:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1 17/43] dt-bindings: spi: Add Cirrus EP93xx
+ Thunderbird/102.10.0
 Content-Language: en-US
-To:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Michael Peters <mpeters@embeddedTS.com>,
-        Kris Bahnsen <kris@embeddedTS.com>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230601053546.9574-18-nikita.shubin@maquefel.me>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230601053546.9574-18-nikita.shubin@maquefel.me>
-Content-Type: text/plain; charset=UTF-8
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>
+References: <20230519102723.185721-1-david@redhat.com>
+ <20230519102723.185721-3-david@redhat.com>
+ <be2346e4-e8c0-4470-9bf4-59eb864063a8@lucifer.local>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 2/3] selftests/mm: gup_longterm: new functional test
+ for FOLL_LONGTERM
+In-Reply-To: <be2346e4-e8c0-4470-9bf4-59eb864063a8@lucifer.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 07:34, Nikita Shubin wrote:
-> Add YAML bindings for ep93xx SoC SPI.
+On 28.05.23 17:03, Lorenzo Stoakes wrote:
+> On Fri, May 19, 2023 at 12:27:22PM +0200, David Hildenbrand wrote:
+>> Let's add a new test for checking whether GUP long-term page pinning
+>> works as expected (R/O vs. R/W, MAP_PRIVATE vs. MAP_SHARED, GUP vs.
+>> GUP-fast). Note that COW handling with long-term R/O pinning in private
+>> mappings, and pinning of anonymous memory in general, is tested by the
+>> COW selftest. This test, therefore, focuses on page pinning in
+>> file mappings.
+>>
+>> The most interesting case is probably the "local tmpfile" case, as that
+>> will likely end up on a "real" filesystem such as ext4 or xfs, not on a
+>> virtual one like tmpfs or hugetlb where any long-term page pinning is
+>> always expected to succeed.
+>>
+>> For now, only add tests that use the "/sys/kernel/debug/gup_test"
+>> interface. We'll add tests based on liburing separately next.
+>>
+>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>> ---
+
+[...]
+
+>> +static void do_test(int fd, size_t size, enum test_type type, bool shared)
+>> +{
+>> +	__fsword_t fs_type = get_fs_type(fd);
+>> +	bool should_work;
+>> +	char *mem;
+>> +	int ret;
+>> +
+>> +	if (ftruncate(fd, size)) {
+>> +		ksft_test_result_fail("ftruncate() failed\n");
+>> +		return;
+>> +	}
+>> +
+>> +	if (fallocate(fd, 0, 0, size)) {
+>> +		if (size == pagesize)
+>> +			ksft_test_result_fail("fallocate() failed\n");
+>> +		else
+>> +			ksft_test_result_skip("need more free huge pages\n");
+>> +		return;
+>> +	}
+>> +
+>> +	mem = mmap(NULL, size, PROT_READ | PROT_WRITE,
+>> +		   shared ? MAP_SHARED : MAP_PRIVATE, fd, 0);
+>> +	if (mem == MAP_FAILED) {
+>> +		if (size == pagesize || shared)
+>> +			ksft_test_result_fail("mmap() failed\n");
+>> +		else
+>> +			ksft_test_result_skip("need more free huge pages\n");
+>> +		return;
+>> +	}
+>> +
+>> +	/*
+>> +	 * Fault in the page writable such that GUP-fast can eventually pin
+>> +	 * it immediately.
+>> +	 */
+>> +	memset(mem, 0, size);
 > 
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-> ---
+
+For shared mappings, MAP_POPULATE will not fault-in the pages writable. 
+See mm/gup.c:populate_vma_page_range().
+
+[There is also the case that mmap() doesn't fail if populate fails, but 
+that's only a side note regarding weird semantics of MAP_POPULATE]
+
+[...]
+
+>> +	int flags = MFD_HUGETLB;
+>> +	int fd;
+>> +
+>> +	ksft_print_msg("[RUN] %s ... with memfd hugetlb (%zu kB)\n", desc,
+>> +		       hugetlbsize / 1024);
+>> +
+>> +	flags |= __builtin_ctzll(hugetlbsize) << MFD_HUGE_SHIFT;
 > 
-> Notes:
->     v0 -> v1:
->     Krzysztof Kozlowski:
->     - replaced maintainers
->     - removed wildcards
->     - use fallback compatible and list all possible compatibles
->     - drop quotes in ref
->     - dropped "clock-names"
->     - dropped label
->     - fix ident
+> Hm this feels a little cute :)
+
+It's a weird interfacing, having to specify the desired size via flags 
+... see the man page of memfd_create, which links to the man page of 
+mmap: "the desired huge page size can be configured by encoding the 
+base-2 logarithm of the desired page size in the six bits at the offset 
+MAP_HUGE_SHIFT".
+
+FWIW, we're using the same approach in cow.c already [and other memfd 
+users like QEMU do it just like that, using ctz].
+
+[...]
+
+>> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+>> index 4893eb60d96d..b6b1eb6a8a6b 100644
+>> --- a/tools/testing/selftests/mm/run_vmtests.sh
+>> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+>> @@ -24,7 +24,7 @@ separated by spaces:
+>>   - mmap
+>>   	tests for mmap(2)
+>>   - gup_test
+>> -	tests for gup using gup_test interface
+>> +	tests for gup
 > 
->  .../devicetree/bindings/spi/spi-ep9301.yaml   | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/spi-ep9301.yaml
+> Super nitty again, but I'm guessing this means the CONFIG_GUP_TEST
+> interface, perhaps worth keeping?
+
+With this patch, agreed. But not longer with the next patch -- guess I 
+simplified when splitting it up. If there are no strong feelings I'll 
+leave it in this patch.
+
+[...]
+
+>>
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/spi-ep9301.yaml b/Documentation/devicetree/bindings/spi/spi-ep9301.yaml
-> new file mode 100644
-> index 000000000000..c363b25a3074
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/spi-ep9301.yaml
-> @@ -0,0 +1,69 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/spi-ep9301.yaml#
+> OK this patch is really nice + well implemented, I can only point out a
+> couple EXTREMELY nitty comments :) Thanks very much for adding a test for
+> this, it's super useful!
+> 
+> Therefore,
+> 
+> Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> 
 
-Filename based on compatible, so missing prefix, wrong order of name
-components.
+Thanks for the review! My selftest patches rarely get that much 
+attention, so highly appreciated :)
 
-This applies everywhere, not to some files only. Applied to all your
-bindings.
+-- 
+Thanks,
 
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: EP93xx SoC SPI controller
-> +
-> +maintainers:
-> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> +  - Nikita Shubin <nikita.shubin@maquefel.me>
-> +
-> +allOf:
-> +  - $ref: spi-controller.yaml#
-> +
-> +properties:
-> +  "#address-cells": true
-> +  "#size-cells": true
-
-Drop these two.
-
-> +
-> +  compatible:
-
-Anyway, compatible is always first.
-
-> +    oneOf:
-> +      - const: cirrus,ep9301-spi
-> +      - items:
-> +          - enum:
-> +              - cirrus,ep9302-spi
-> +              - cirrus,ep9307-spi
-> +              - cirrus,ep9312-spi
-> +              - cirrus,ep9315-spi
-> +          - const: cirrus,ep9301-spi
-> +
-> +  reg:
-> +    items:
-> +      - description: SPI registers region
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: SPI Controller reference clock source
-> +
-> +  cs-gpios: true
-
-Drop, not needed.
-
-> +
-> +  cirrus,ep9301-use-dma:
-> +    description: Flag indicating that the SPI should use dma
-> +    type: boolean
-
-In such case where are dmas? Unless you meant some internal dma
-controller? In such case extend the description because now it just
-duplicates property name.
-
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/cirrus,ep93xx-clock.h>
-> +    spi@808a0000 {
-> +      compatible = "cirrus,ep9301-spi";
-> +      reg = <0x808a0000 0x18>;
-> +      interrupt-parent = <&vic1>;
-> +      interrupts = <21>;
-> +      clocks = <&syscon EP93XX_CLK_SPI>;
-> +      cs-gpios = <&gpio5 2 0>;
-
-Use proper gpio defines for flags.
-
-> +      cirrus,ep9301-use-dma;
-> +    };
-> +
-> +...
-
-Best regards,
-Krzysztof
+David / dhildenb
 
