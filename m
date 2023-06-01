@@ -2,162 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7EB71A034
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C824671A02D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234059AbjFAOeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S234320AbjFAOf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233850AbjFAOeJ (ORCPT
+        with ESMTP id S234299AbjFAOfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:34:09 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2048.outbound.protection.outlook.com [40.107.220.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B467D1;
-        Thu,  1 Jun 2023 07:34:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gczYBgu6/WI9dnxLQZ3HGl8HWFuWzctqTpiwPDHFf1bNdh9xVwIqfd72TP342FAULiExpAKysfojBiBW+jjBwscgm4a4PIWka5LjF1mCLGSFPbRTvGLn4Z1ao+1CRJPIHv7cZPx6uTad3Qe6SYNKLU3KvtbPUfSprWOjwRWBtg5zbXMIw9MtaIjMCwMnVmhbNmIJ27m5XrpYHwpzE5rzHzTTmjay2jXCeQm6ZnG+EzbZC1BEtJfRrFW8CnLMBHOQkSNQ84ugzHuupgegCBwzvcPndDBBryQnnmtL0p518lJWkLDRF4CzbP+kaOrwAOxhQW7I8lPAxrAcQAxyS/iajw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4byVYc3piYLFHOMuNXRNYjzoaRWwqK9pc5O9hghsaL4=;
- b=YmSGivTu4EpnKvOLurGNCoYV1fOEtzUfpAqcI2PSXQDHIXaULYTGg1+7TgBzQAwTZVxX3kBl0HDMFsdcUn3IT+GjLIVKDDhmYzWzkcF4e950l+FY/V9N2AYy+o68n/NBBJGDv6oH37JmkcBclQsCQLoR8ZSiPWND8VBMQvZ6fQcQ7+uQt5gZQhOyD7zLd2MR8CBq5TuSduybRuCaZ/MWCevWsgTBIWe6Mg0qR/SYvGfkUC41srdAqnT5CPQnfxHWeMxNJaPAfvcOiWxZy5v7dBXfjHn0LWfCcrh7Z9ImhLbYZffgyJcq++tWKuZHPNFlBah1vSNfNJR3UnpudvghEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4byVYc3piYLFHOMuNXRNYjzoaRWwqK9pc5O9hghsaL4=;
- b=lb280PJHdhJHrn8lTQXk7sMLilNdJG8NetzeBx+mlyDF+1lGndlgV0VMEVQ4QMVQgqi+MoRFFyzS583YL+cDDUXhu275/MGqb1wRh8un8up91nEeMwb6IR02aDUlVIunT8EWAJo9DFowkk4VxGg+ZNpdYMjtZIctF2Wizr+Ahbk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by PH7PR12MB6636.namprd12.prod.outlook.com (2603:10b6:510:212::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Thu, 1 Jun
- 2023 14:34:05 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::907f:26e2:673a:2ad2]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::907f:26e2:673a:2ad2%6]) with mapi id 15.20.6455.020; Thu, 1 Jun 2023
- 14:34:05 +0000
-Message-ID: <81371d0d-5093-5aa8-f757-2f11f24366eb@amd.com>
-Date:   Thu, 1 Jun 2023 16:34:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm/radeon: fix race condition UAF in
- radeon_gem_set_domain_ioctl
-Content-Language: en-US
-To:     Min Li <lm0963hack@gmail.com>, alexander.deucher@amd.com
-Cc:     Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        sumit.semwal@linaro.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-References: <20230526123753.16160-1-lm0963hack@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230526123753.16160-1-lm0963hack@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0085.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1f::22) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Thu, 1 Jun 2023 10:35:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A091A8
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:34:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685630065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5cWnXN2OJgEdtvyQPWdKWzOTqRw1rxRQiL55xfvSEwM=;
+        b=GJ8PJH6sfa0yK5hdH6QMqnNQiCqVt0IsVDmOpm+e11OD/pI/LvUVvROtCLtfGvYpUxDjrD
+        nCrisSTeH7V9ZxKQR5VNvyjjH+nAgLwPbTPwu0KqDbILME7iWaMpT1rZ6X8doiHCITKRTW
+        t023m/Z+uPF0WWNC+z4Wu9xP6c18q1o=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-518-B2F83YmsP2aeqexs1ttJDQ-1; Thu, 01 Jun 2023 10:34:18 -0400
+X-MC-Unique: B2F83YmsP2aeqexs1ttJDQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B28721C01719;
+        Thu,  1 Jun 2023 14:34:17 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A3ABE48205E;
+        Thu,  1 Jun 2023 14:34:14 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAHk-=wghhHghtvU_SzXxAzfaX35BkNs-x91-Vj6+6tnVEhPrZg@mail.gmail.com>
+References: <CAHk-=wghhHghtvU_SzXxAzfaX35BkNs-x91-Vj6+6tnVEhPrZg@mail.gmail.com> <20230524153311.3625329-1-dhowells@redhat.com> <20230524153311.3625329-10-dhowells@redhat.com> <20230526180844.73745d78@kernel.org> <499791.1685485603@warthog.procyon.org.uk> <CAHk-=wgeixW3cc=Ys8eL0_+22FUhqeEru=nzRrSXy1U4YQdE-w@mail.gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dhowells@redhat.com, Jakub Kicinski <kuba@kernel.org>,
+        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: Bug in short splice to socket?
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|PH7PR12MB6636:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6c832bb5-0494-4052-4d62-08db62ad406f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EalTvypGyVlpEctFuv7RZ7Ttfoj8GaUbLeF0QF45NX60DtoPQ8A0dqUmkQGlzp5QE6FF/BJYMqF9gZ2rAwJzICbBIuQEk2nfNASHpNPKesbseN8MTzZjOvHd6RC+c/RNUnZHvu3MzjlnVtX68wJ+JezbZeEQhkMWojJlnMrdUYGeykZK2CfLGaVUhpUMRAquHKl90dZ8inpWcnNxHtklaYKtOdwgX+5dfrr2aWBgHbD5UauPl23PWF8xYjVaPne+oSLZkXUi9NnIuKDCkwKBRfp7uomQu/Fi9ITvnTgN9Bc8zQrc9KyM4looNLjuphirrv2jHChp/RI6968PhZ4rJmLa9ga/q/kg0g5S8PHZIUYyJvYCY/0g6C0wR6eppm7OGuq1+27iy+nXW+VuYtkLcnGr9LwXonTQ7w+ylozXagJEPpXgIfUIp9v9N0AppZiNSzzjo7ITlADmP6hy0u+mcd3IhAQSFO3JJcKTP3eWjZ+vGL4RQesMnd0wUeEdMKNyWbivDbXFkATZcsgUAAgRS4tA9Wimhlz6Blu0D3QxLV86/l6GIwoIbbSbvPZqRtPUDJpRST0SOcL16HaeTtDe6/WJLGPqBU5mSw8DUsIwSy2AyiKM/zX+71yutsXWWjLR/Q2wm6suxwsps7pnHrT+Ag==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(396003)(376002)(346002)(136003)(451199021)(6666004)(86362001)(2616005)(316002)(2906002)(6486002)(36756003)(5660300002)(186003)(31696002)(41300700001)(83380400001)(8936002)(8676002)(38100700002)(478600001)(31686004)(6506007)(6512007)(4326008)(6636002)(66476007)(66946007)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TTdCdjkrTXhxMHh2bVU2NFFwZlREYU9wdFlJYklJbTZ0TEZxb29LUFVwajBD?=
- =?utf-8?B?REZBZmxWWDRETzBNOCtEVWUrVnZBVTBzWTV4Sm0yaTdZN2F6ZFVUNEU2T3Nr?=
- =?utf-8?B?N3R3Y0I3OHRHZWQrcmpFbmZMSjUwcmtJU0Z1bS9tbjg2eGJoaXM5MmRpZ2lw?=
- =?utf-8?B?UVRXb3JyU2ZMS2xsZFpMWmdDNWRmMUZzRzdpUlRoeFhIcGx3dmR6WWFIaG9Q?=
- =?utf-8?B?NlJnYllOVEZlTHhDWGdJQmVIYk9UNHZKMTR3T0FZMVYrcklNcXorS0RQam1t?=
- =?utf-8?B?dHk5SDdaWWRyY0FTZjUrNm1lQVpLUGtSeGVGMEx0UjRvbGVQV284ZGJIeS9j?=
- =?utf-8?B?dmNlRytzbEVpOHVmVVhrMEJ1d3NlTjMxYnIzSk51R1M5WjBqT3UzWHVJMkUx?=
- =?utf-8?B?MUdabnM5eFFsZ1daZ3JrUHNnRFRBRm9aUXB4cG9DRzY3dG03eExYV0VOTFRq?=
- =?utf-8?B?VUNXV292Y25JS1R3c0tBc09VZ2Z4VWJTUzUwZ0tpZ1JpRjVZeFBDeDBwTXRy?=
- =?utf-8?B?Y0liV1ZnOVZzWDBVcVNyQnlKeEZEZ2RzV2VZTWc1K0I1ampSa3ZXNVZZMEhp?=
- =?utf-8?B?N1gxbFZTZWM1cWxkVDJkYlJ1MkU4UXVKNTJYVHNndWtFeStrM2ZHOFFERy9G?=
- =?utf-8?B?UVVnRi9vRm1GVlpiNEhnOUpybGRYYWZPMnR6TFY3RXAveGg4Nm1wWmo1TzZE?=
- =?utf-8?B?NFNjdW4vMisyS2ppQlVHRlBSRzFEdG1GZ0lxME53MU4zMWphNU9sVHJXbjhD?=
- =?utf-8?B?MS9SNlY1YmRQM2hSVnExQnNBMHNRc2NRdDF2c21NeldiRDk2TURUZk1UamdX?=
- =?utf-8?B?N3Byb0lTT0V4WFBtaTcwS3lYaUZmaEFLem84NlAvbUdNQ1VJdlROaUtuOXoy?=
- =?utf-8?B?d2I0WG1iWmlKWENJeWloK2ZZcnhDUXpzeTJycGd5SGFGeWNlMVhqYUJqa0Iw?=
- =?utf-8?B?Q3VtZXpIaW9aSmZEdi93N3lQYXpWODFidmZ6VkdCRlhyVHNDZStiYk1ZWHA2?=
- =?utf-8?B?d2F0akZFRjJCS3FNS05QSWN5NG15M3l4cFRXOVlCUUVXWnRmajlDa3BMZGVh?=
- =?utf-8?B?R2s4ek1ZczM2U1Vsa21UczEwM1NJcTlnVmNlYzdCVnB3VG0zeXZrNTRsTGt2?=
- =?utf-8?B?eWxVNUhUaFBHdlZpb1MxdEl4dGxSWjZOejlIZFA4eDJ3UUROOEVhU05JSHUy?=
- =?utf-8?B?SURYSGEyWEFMOW1HYnBxSTFWS3ZHL05hVnREcjRyL1N0ai9oSEQ2M0lLOGJj?=
- =?utf-8?B?d0h4ZzMvQ3Y2SGVyY0NaeUdaTHJCNjBOaHMrTlAzSi9jK2NuS3lIditmeWpq?=
- =?utf-8?B?VGpNT01naHc3dFJPOVE4a1c4Mk5hTlptV2J6VVlYZnVTektna1Yva3BKYmtH?=
- =?utf-8?B?WU1QUnU0VWhaT0FyU2F1RjJucWs1amNiQ256eFJpRzFwLzF1dktKaEczdmhG?=
- =?utf-8?B?WDFFS29DV005SWs3dDYzWnE3b3BmeERqejl5UktjR0d5SGxVY25FYzN2UlVC?=
- =?utf-8?B?azQzeDRNVDhqMjFiKzRRa1hKMDJxZWxIOVB3VWZrb0dhQlNFdkhVd1dmbDZK?=
- =?utf-8?B?VStKTDd5SEc4cWEvdGg5bURSVHpCa0N2bmlFZHBMbDNSN05OUCtNMFU4cVBP?=
- =?utf-8?B?cG9CcDJ0dmR3Zk9DeDB6ZE5qUTlKTWh3Nm83cFExV3NDRUsvanl2R2hYSHcz?=
- =?utf-8?B?cjI2RE4wWi9xWXNIaGxORCt0bVdPckJ2VmZYVHh1YWR2Y3YyWDB3NzQrcjEy?=
- =?utf-8?B?TE1QcWZTc2ZMM3BWT2JUbi9nR0J5T1ZxeDFWdUF2NmtyeTkyQTNFQWVlUkMx?=
- =?utf-8?B?MEI1NHdSZ2Fuc0V6elhOdm9BSXNCMVM1dkFqd0M5ZjN6T09QOUtPaFNObllM?=
- =?utf-8?B?RXJPY1l0NDh4ODhvcnlCSm9sSitUb3lEb2dlN3hFYndhVUlONzZna1NuTHNj?=
- =?utf-8?B?U3FzNlVUclhXRXdzc1pMeTlMWExtM0ZackRad2NkUGp2Mm9ROTNSalROeVk0?=
- =?utf-8?B?S0FiZHZ5cnZscnlROTVFWVgrUWN6dUVFbVpiSUFwZFVwN1NqT1ZhMGdxUzhJ?=
- =?utf-8?B?Mld6ZjQybUJuWlRQOHVOSkVZdEU4Y0hCeDI3NnVpV1JFODZMNUZIdHFrMW5B?=
- =?utf-8?B?YUpPZkJLZ2puQVRDa3lrU1U4SDBra2tnMk1Zdi9DTUhWenpFRE9lSDJEY2I4?=
- =?utf-8?Q?AEzFvh6dTpSz0zAJPJ6QiDk8aBB5vgSXU04GTkDJKVAV?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c832bb5-0494-4052-4d62-08db62ad406f
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 14:34:05.5681
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /Cb2IuamGLVNljb7NxHuy4GKGZicOhjrZMNtbMXmBxAvpf0sIBaTtTKhN+J8XXS+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6636
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 01 Jun 2023 15:34:08 +0100
+Message-ID: <832277.1685630048@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 26.05.23 um 14:37 schrieb Min Li:
-> Userspace can race to free the gobj(robj converted from), robj should not
-> be accessed again after drm_gem_object_put, otherwith it will result in
-> use-after-free.
->
-> Signed-off-by: Min Li <lm0963hack@gmail.com>
-> ---
->   drivers/gpu/drm/radeon/radeon_gem.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
-> index bdc5af23f005..450c7cbdd28a 100644
-> --- a/drivers/gpu/drm/radeon/radeon_gem.c
-> +++ b/drivers/gpu/drm/radeon/radeon_gem.c
-> @@ -478,7 +478,7 @@ int radeon_gem_set_domain_ioctl(struct drm_device *dev, void *data,
->   
->   	drm_gem_object_put(gobj);
->   	up_read(&rdev->exclusive_lock);
-> -	r = radeon_gem_handle_lockup(robj->rdev, r);
-> +	r = radeon_gem_handle_lockup(rdev, r);
 
-This also makes the robj unused which the kernel test robot also 
-complained about.
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Please remove that local variable and re-submit.
+> On Thu, Jun 1, 2023 at 9:09=E2=80=AFAM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > The reason the old code is garbage is that it sets SPLICE_F_MORE
+> > entirely in the wrong place. It sets it *after* it has done the
+> > splice(). That's just crazy.
+>=20
+> Clarification, because there are two splice's (from and to): by "after
+> the splice" I mean after the splice source, of course. It's still set
+> before the splice _to_ the network.
+>=20
+> (But it is still true that I hope the networking code itself then sets
+> MSG_MORE even if SPLICE_F_MORE wasn't set, if it gets a buffer that is
+> bigger than what it can handle right now - so there are two
+> *different* reasons for "more data" - either the source knows it has
+> more to give, or the destination knows it didn't use everything it
+> got).
 
-Apart from that the patch looks good to me,
-Christian.
+I'm in the process of changing things so that ->sendpage() is removed and
+replaced with sendmsg() with MSG_SPLICE_PAGES.  The aim is to end up with a
+splice_to_socket() function (see attached) that transcribes a chunk of the
+pipe into a BVEC iterator and does a single sendmsg() that pushes a whole
+chunk of data to the socket in one go.
 
->   	return r;
->   }
->   
+In the network protocol, the loop inside sendmsg splices those pages into
+socket buffers, sleeping as necessary to gain sufficient memory to transcri=
+be
+all of them.  It can return partly done and the fully consumed pages will be
+consumed and then it'll return to gain more data.
+
+At the moment, it transcribes 16 pages at a time.  I could make it set
+MSG_MORE only if (a) SPLICE_F_MORE was passed into the splice() syscall or =
+(b)
+there's yet more data in the buffer.
+
+However, this might well cause a malfunction in UDP, for example.  MSG_MORE
+corks the current packet, so if I ask sendfile() say shove 32K into a packe=
+t,
+if, say, 16K is read from the source and entirely transcribed into the pack=
+et,
+if I understand what you're proposing, MSG_MORE wouldn't get set and the
+packet would be transmitted early.  A similar issue might exist for AF_TLS,
+where the lack of MSG_MORE triggers an end-of-record.
+
+The problem isn't that the buffer supplied is bigger than the protocol could
+handle in one go, it's that what we read was less than the amount that the
+user requested - but we don't know if there will be more data.
+
+One solution might be to pass MSG_MORE regardless, and then follow up with a
+null sendmsg() if we then hit a zero-length read (ie. EOF) or -ENODATA (ie.=
+ a
+hole).
+
+> The point is that the splice *source* knows whether there is more data
+> to be had, and that's where the "there is more" should be set.
+
+Actually, that's not necessarily true.  If the source is a pipe or a socket,
+there may not be more, but we don't know that until the far end is closed -
+but for a file it probably is (we could be racing with a writer).  And then
+there's seqfile-based things like the trace buffer or procfiles which are
+really a class of their own.
+
+> Basically my argument is that the whole "there is more data" should be
+> set by "->splice_read()" not by some hack in some generic
+> splice_direct_to_actor() function that is absolutely not supposed to
+> know about the internals of the source or the destination.
+>=20
+> Do we have a good interface for that? No. I get the feeling that to
+> actually fix this, we'd have to pass in the 'struct splice_desc"
+> pointer to ->splice_read().
+
+That might become more feasible, actually.  In Jens's tree are the patches =
+to
+clean up splice_read a lot and get rid of ITER_PIPE.  Most of the
+->splice_reads are going to be direct calls to copy_splice_read() and
+filemap_splice_read() or wrappers around filemap_splice_read().  The latter,
+at least, might be in a good position to note EOF, perhaps by marking a pipe
+buffer as "no more".
+
+copy_splice_read() is more problematic because ->read_iter() doesn't indica=
+te
+if it hit EOF (or hit a hole).
+
+David
+---
+ssize_t splice_to_socket(struct pipe_inode_info *pipe, struct file *out,
+			 loff_t *ppos, size_t len, unsigned int flags)
+{
+	struct socket *sock =3D sock_from_file(out);
+	struct bio_vec bvec[16];
+	struct msghdr msg =3D {};
+	ssize_t ret;
+	size_t spliced =3D 0;
+	bool need_wakeup =3D false;
+
+	pipe_lock(pipe);
+
+	while (len > 0) {
+		unsigned int head, tail, mask, bc =3D 0;
+		size_t remain =3D len;
+
+		/*
+		 * Check for signal early to make process killable when there
+		 * are always buffers available
+		 */
+		ret =3D -ERESTARTSYS;
+		if (signal_pending(current))
+			break;
+
+		while (pipe_empty(pipe->head, pipe->tail)) {
+			ret =3D 0;
+			if (!pipe->writers)
+				goto out;
+
+			if (spliced)
+				goto out;
+
+			ret =3D -EAGAIN;
+			if (flags & SPLICE_F_NONBLOCK)
+				goto out;
+
+			ret =3D -ERESTARTSYS;
+			if (signal_pending(current))
+				goto out;
+
+			if (need_wakeup) {
+				wakeup_pipe_writers(pipe);
+				need_wakeup =3D false;
+			}
+
+			pipe_wait_readable(pipe);
+		}
+
+		head =3D pipe->head;
+		tail =3D pipe->tail;
+		mask =3D pipe->ring_size - 1;
+
+		while (!pipe_empty(head, tail)) {
+			struct pipe_buffer *buf =3D &pipe->bufs[tail & mask];
+			size_t seg;
+
+			if (!buf->len) {
+				tail++;
+				continue;
+			}
+
+			seg =3D min_t(size_t, remain, buf->len);
+			seg =3D min_t(size_t, seg, PAGE_SIZE);
+
+			ret =3D pipe_buf_confirm(pipe, buf);
+			if (unlikely(ret)) {
+				if (ret =3D=3D -ENODATA)
+					ret =3D 0;
+				break;
+			}
+
+			bvec_set_page(&bvec[bc++], buf->page, seg, buf->offset);
+			remain -=3D seg;
+			if (seg >=3D buf->len)
+				tail++;
+			if (bc >=3D ARRAY_SIZE(bvec))
+				break;
+		}
+
+		if (!bc)
+			break;
+
+		msg.msg_flags =3D 0;
+		if (flags & SPLICE_F_MORE)
+			msg.msg_flags =3D MSG_MORE;
+		if (remain && pipe_occupancy(pipe->head, tail) > 0)
+			msg.msg_flags =3D MSG_MORE;
+		msg.msg_flags |=3D MSG_SPLICE_PAGES;
+
+		iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, bvec, bc, len - remain);
+		ret =3D sock_sendmsg(sock, &msg);
+		if (ret <=3D 0)
+			break;
+
+		spliced +=3D ret;
+		len -=3D ret;
+		tail =3D pipe->tail;
+		while (ret > 0) {
+			struct pipe_buffer *buf =3D &pipe->bufs[tail & mask];
+			size_t seg =3D min_t(size_t, ret, buf->len);
+
+			buf->offset +=3D seg;
+			buf->len -=3D seg;
+			ret -=3D seg;
+
+			if (!buf->len) {
+				pipe_buf_release(pipe, buf);
+				tail++;
+			}
+		}
+
+		if (tail !=3D pipe->tail) {
+			pipe->tail =3D tail;
+			if (pipe->files)
+				need_wakeup =3D true;
+		}
+	}
+
+out:
+	pipe_unlock(pipe);
+	if (need_wakeup)
+		wakeup_pipe_writers(pipe);
+	return spliced ?: ret;
+}
 
