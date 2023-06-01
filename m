@@ -2,113 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064E371904E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 04:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E917719051
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 04:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbjFAB77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 21:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
+        id S230433AbjFACC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 22:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbjFAB7w (ORCPT
+        with ESMTP id S229499AbjFACC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 21:59:52 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950FFA3;
-        Wed, 31 May 2023 18:59:51 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-53f70f7c2d2so130506a12.3;
-        Wed, 31 May 2023 18:59:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685584791; x=1688176791;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jdxxh2L1GD1WdZkYYziFAmyUtgwXwDB1emmhtFEA2sM=;
-        b=Oih3AhNmb0cusPW/ZitzBoCgoGC9evQgOEor7/GXLLHcV2qvdgZW2RWLChJ/xN7MaB
-         t1zaNsQdUfHkCeeYPV1IugTm5maq28JVw3Y6fGEdVeEzkiSApOaB3ofagN1IR7EB4pkI
-         9ur+SucXtYGfu/pAVhVRdPPq2p0udQme+keM6rPYgdH8kAevZubYO6aUhjpEcSUapXTR
-         uokZ9DTzTWeqp1h466cWiHfX8f7voZGZLJVUEnGTmjePdl64svrWQPTODffe3VwuEeCP
-         aCleDFmHNfiEFeZX+GJyVPEx9X9KkO8mRNVezGoK7QwpJ9xdFq6c4+KqBJQ0P4qqr71w
-         BRmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685584791; x=1688176791;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jdxxh2L1GD1WdZkYYziFAmyUtgwXwDB1emmhtFEA2sM=;
-        b=d3t+KHwlWpEwO0rmTagzowZ6BIaXYRuGtB2j0vf6I0NU3J0QEaDOEM19DCovxt8UB9
-         Rj8yM/jbw2/ck51SbbjhXOXXJT1mwirEmY7rK40UeCgltfDEBqZ7F5AJRehHv/79Yarx
-         0rYPy89QYP6PWIaTU5uugVcMLdTE24QyvJqxQy3gGkqvrHyeWIU+NCuexVyPXYcuC39Y
-         EFX8GHO0Ie8hyfmW2EHkdbwu066qRWzJb5kvqrg9XOq5EXZ18Ul93gSXG3258XTVrvJR
-         8941y2xDte9EGh/stoqhX/ySOVn1pcyiQQCd7bJkB/3C19KTT5OoVfFFSC7m0oG4Kh82
-         XKPQ==
-X-Gm-Message-State: AC+VfDzpxxdZohkyPWgBXewL2LIt26pGmZBDATrb489VUzdvODthyspv
-        +zLop8JtHsioWuMH4tqpYIk=
-X-Google-Smtp-Source: ACHHUZ7ZFmpjxk6hnAAfSXhlZcWQV0HmU+rN1vBZNd7ozRoimzKvZknP67nyT/0Ui5qaytH93QtCww==
-X-Received: by 2002:a17:90a:c20d:b0:256:44f3:35e2 with SMTP id e13-20020a17090ac20d00b0025644f335e2mr5834673pjt.4.1685584790967;
-        Wed, 31 May 2023 18:59:50 -0700 (PDT)
-Received: from dnptp-9.. ([111.198.57.33])
-        by smtp.gmail.com with ESMTPSA id k59-20020a17090a4cc100b0024df7d7c35esm189547pjh.43.2023.05.31.18.59.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 18:59:50 -0700 (PDT)
-From:   Yuezhen Luan <eggcar.luan@gmail.com>
-To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jacob.e.keller@intel.com,
-        Yuezhen Luan <eggcar.luan@gmail.com>
-Subject: [PATCH] igb: Fix extts capture value format for 82580/i354/i350
-Date:   Thu,  1 Jun 2023 01:59:43 +0000
-Message-Id: <20230601015943.1815-1-eggcar.luan@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 31 May 2023 22:02:28 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9D2A3;
+        Wed, 31 May 2023 19:02:25 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QWqBz5Fkpz4x42;
+        Thu,  1 Jun 2023 12:02:19 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1685584941;
+        bh=EKqPUa5BbsNp2IS+PVeURMLivGy9/PqofQB8JVPKzHk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=iVM+pWfOIbhHL9f9DmsNTYSYsnsKADtZjQT9IBkW+solKs/5jaM7HmHXujPBPR3sR
+         wMMXiW8q5QUIc2tF+b7pContzFBOjsvsrQZp+PB993f8ACrE562bCVTAPxc4nHPlVT
+         1JaDyr37YE8RGysSYBHCWpx6blwoqIhVENU7L02HS4t35C05grIv/jnerzHXtBFxkr
+         LlFZ4pTbtpMi1kzvCtW/E0KSPxtdyhZedudAUHM4yCfBKpWkN+tj7x/zD6gocR2QVp
+         hI0nknDZgWcSY2pAmQYBBAJ+nUybSxOQcns2PjvlZPakzmphOIgWmf3ANOTX/gtTkW
+         24NljidWcxz/Q==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Maninder Singh <maninder1.s@samsung.com>
+Cc:     bcain@quicinc.com, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        keescook@chromium.org, nathanl@linux.ibm.com, ustavoars@kernel.org,
+        alex.gaynor@gmail.com, gary@garyguo.net, ojeda@kernel.org,
+        pmladek@suse.com, wedsonaf@google.com,
+        linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, Onkarnath <onkarnath.1@samsung.com>
+Subject: Re: [PATCH 2/2] powerpc/xmon: use KSYM_NAME_LEN in array size
+In-Reply-To: <CANiq72=QeTgtZL4k9=4CJP6C_Hv=rh3fsn3B9S3KFoPXkyWk3w@mail.gmail.com>
+References: <CGME20230529111404epcas5p2d540d726dcf3e21aae2a6a0958e2eea5@epcas5p2.samsung.com>
+ <20230529111337.352990-1-maninder1.s@samsung.com>
+ <20230529111337.352990-2-maninder1.s@samsung.com>
+ <CANiq72=QeTgtZL4k9=4CJP6C_Hv=rh3fsn3B9S3KFoPXkyWk3w@mail.gmail.com>
+Date:   Thu, 01 Jun 2023 12:02:16 +1000
+Message-ID: <87ilc8ym6v.fsf@mail.lhotse>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-82580/i354/i350 features circle-counter-like timestamp registers
-that are different with newer i210. The EXTTS capture value in
-AUXTSMPx should be converted from raw circle counter value to
-timestamp value in resolution of 1 nanosec by the driver.
+Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> writes:
+> On Mon, May 29, 2023 at 1:14=E2=80=AFPM Maninder Singh <maninder1.s@samsu=
+ng.com> wrote:
+>>
+>> +static char tmpstr[KSYM_NAME_LEN];
+>
+> Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+>
+> Side-note: in `get_function_bounds()`, I see `kallsyms_lookup()` being
+> used, but the name seems discarded? Can
+> `kallsyms_lookup_size_offset()` be used instead, thus avoiding the
+> usage of the buffer there to begin with?
 
-Signed-off-by: Yuezhen Luan <eggcar.luan@gmail.com>
----
- drivers/net/ethernet/intel/igb/igb_main.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+A few lines below it uses the modname, and AFAICS there's no (easy) way
+to lookup the modname without also looking up the name.
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index 58872a4c2..bb3db387d 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -6947,6 +6947,7 @@ static void igb_extts(struct igb_adapter *adapter, int tsintr_tt)
- 	struct e1000_hw *hw = &adapter->hw;
- 	struct ptp_clock_event event;
- 	struct timespec64 ts;
-+	unsigned long flags;
- 
- 	if (pin < 0 || pin >= IGB_N_SDP)
- 		return;
-@@ -6954,9 +6955,12 @@ static void igb_extts(struct igb_adapter *adapter, int tsintr_tt)
- 	if (hw->mac.type == e1000_82580 ||
- 	    hw->mac.type == e1000_i354 ||
- 	    hw->mac.type == e1000_i350) {
--		s64 ns = rd32(auxstmpl);
-+		u64 ns = rd32(auxstmpl);
- 
--		ns += ((s64)(rd32(auxstmph) & 0xFF)) << 32;
-+		ns += ((u64)(rd32(auxstmph) & 0xFF)) << 32;
-+		spin_lock_irqsave(&adapter->tmreg_lock, flags);
-+		ns = timecounter_cyc2time(&adapter->tc, ns);
-+		spin_unlock_irqrestore(&adapter->tmreg_lock, flags);
- 		ts = ns_to_timespec64(ns);
- 	} else {
- 		ts.tv_nsec = rd32(auxstmpl);
--- 
-2.34.1
+> Side-note 2: in `scanhex()`, I see a loop `i<63` using `tmpstr` which
+> then is used to do a `kallsyms_lookup_name()`, so I guess symbols
+> larger than 64 couldn't be found. I have no idea about what are the
+> external constraints here, but perhaps it is possible to increase the
+> `line` buffer etc. to then allow for bigger symbols to be found.
 
+Yeah that looks wrong. I don't see any symbols that long in current
+kernels, but we should fix it.
+
+Thanks for looking.
+
+cheers
