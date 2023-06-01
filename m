@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9EC71A2A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C34071A2A1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234935AbjFAP1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 11:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
+        id S234633AbjFAP0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 11:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234392AbjFAP0v (ORCPT
+        with ESMTP id S234249AbjFAP0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 11:26:51 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA1D18F;
-        Thu,  1 Jun 2023 08:26:49 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 351FQemM050936;
+        Thu, 1 Jun 2023 11:26:50 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698158E;
+        Thu,  1 Jun 2023 08:26:48 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 351FQev2105282;
         Thu, 1 Jun 2023 10:26:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1685633200;
-        bh=l8LH4bc3UvZsHDmMwyr0vkI5eilpV6ZfnSFVleM4byQ=;
+        bh=imAZA47NhHkp24Gd31nBomcRDQPDCsU2LxBq7t0uT+A=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=pfTMa334pI9Otl4Kfii/uBhXqI1j7yzXdYMcxIJdoYuoh0l5spVQNM3fDYjYVLQzs
-         LIIzj+794t0YM4fUOzkO3xAlFQ4FxE9loQ2oPkIMPeTRe+lIn6GSg/tISNO7XKCycQ
-         f0oPUgF0b2TcGTCi0JMjM4TJrZtBv2bDFuODKbfw=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 351FQexM038128
+        b=SnZ939RxZAebU3u3mvhntdXRUkDwZ8+U0hzxr1eqg/j6/4YJSlGqjOfR/KnB+R6LS
+         JWJsel90vKmX7o9CNckVXqt2HC2Wempzm3P2ZTwEliFWtIW8doVy/WRMlBY3UjgFh9
+         7VIhJj3eTmW/++cwJNf9chwG26Zse0F0EqtOOY68=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 351FQels086522
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Thu, 1 Jun 2023 10:26:40 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 1
- Jun 2023 10:26:39 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE111.ent.ti.com
  (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 1
+ Jun 2023 10:26:40 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 1 Jun 2023 10:26:40 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 351FQesM123542;
+ Frontend Transport; Thu, 1 Jun 2023 10:26:39 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 351FQeM5017652;
         Thu, 1 Jun 2023 10:26:40 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Conor Dooley <conor+dt@kernel.org>,
@@ -49,9 +49,9 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Tero Kristo <kristo@kernel.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Nishanth Menon <nm@ti.com>, Udit Kumar <u-kumar1@ti.com>
-Subject: [PATCH 11/12] arm64: dts: ti: k3-am654-base-board: Fixup reference to phandles array
-Date:   Thu, 1 Jun 2023 10:26:35 -0500
-Message-ID: <20230601152636.858553-12-nm@ti.com>
+Subject: [PATCH 12/12] arm64: dts: ti: k3-am68-sk-base-board: Fixup reference to phandles array
+Date:   Thu, 1 Jun 2023 10:26:36 -0500
+Message-ID: <20230601152636.858553-13-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230601152636.858553-1-nm@ti.com>
 References: <20230601152636.858553-1-nm@ti.com>
@@ -76,29 +76,22 @@ the rest of the usage.
 
 Signed-off-by: Nishanth Menon <nm@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-am654-base-board.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am654-base-board.dts b/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-index 615c2395484d..64f847383b04 100644
---- a/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am654-base-board.dts
-@@ -481,13 +481,13 @@ mbox_mcu_r5fss0_core1: mbox-mcu-r5fss0-core1 {
- &mcu_r5fss0_core0 {
- 	memory-region = <&mcu_r5fss0_core0_dma_memory_region>,
- 			<&mcu_r5fss0_core0_memory_region>;
--	mboxes = <&mailbox0_cluster0 &mbox_mcu_r5fss0_core0>;
-+	mboxes = <&mailbox0_cluster0>, <&mbox_mcu_r5fss0_core0>;
+diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+index 27a43a8ecffd..ae9116655a83 100644
+--- a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
++++ b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+@@ -287,7 +287,7 @@ &main_sdhci1 {
+ 
+ &mcu_cpsw {
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&mcu_cpsw_pins_default &mcu_mdio_pins_default>;
++	pinctrl-0 = <&mcu_cpsw_pins_default>, <&mcu_mdio_pins_default>;
  };
  
- &mcu_r5fss0_core1 {
- 	memory-region = <&mcu_r5fss0_core1_dma_memory_region>,
- 			<&mcu_r5fss0_core1_memory_region>;
--	mboxes = <&mailbox0_cluster1 &mbox_mcu_r5fss0_core1>;
-+	mboxes = <&mailbox0_cluster1>, <&mbox_mcu_r5fss0_core1>;
- };
- 
- &ospi0 {
+ &davinci_mdio {
 -- 
 2.40.0
 
