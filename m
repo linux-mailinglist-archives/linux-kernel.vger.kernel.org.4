@@ -2,136 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3702671F26C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 520E271F275
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231339AbjFASxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 14:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47756 "EHLO
+        id S231487AbjFAS4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 14:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbjFASxC (ORCPT
+        with ESMTP id S229490AbjFASz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 14:53:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEE2137;
-        Thu,  1 Jun 2023 11:53:01 -0700 (PDT)
-Received: from arisu.localnet (unknown [23.233.251.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: detlev)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 621166606ECA;
-        Thu,  1 Jun 2023 19:52:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685645579;
-        bh=HA9WLCD2ceWYBo2r9YOQjN+RA/kPiPSlzAQ3oEd40Ng=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pha/7fjJpKB9OGSkoq37gQXG8fTg0POKJKClZoPz6/0RvQPywX/k9YoOC1WxRQ2uM
-         jxn1n8rbEfdEkLFpBxbueb+GArIjeL+pork23RNdJtHJzfM8FGpEATYAi+lORycX8b
-         nSqnE8RIyYATLyDAH8xCXBzmxJi/9P3sL6kuodZu4zD0gsBHpZUPcbcdhJwDfG3WnV
-         D4Mu9HHJZxIkU8Aya0Yyf1X3wVbSBhWGxsDp14Bj2OMQMHLBToXqedhZN58Appkh1w
-         7KwYMdgfpVVShy200svEQTO1RbeoRePQALXfUjbPSvhoYuGBLOa5Kltp6z0mTUzhoZ
-         BgwUDiBPdbYWA==
-From:   Detlev Casanova <detlev.casanova@collabora.com>
-To:     linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/2] net: phy: realtek: Add optional external PHY clock
-Date:   Thu, 01 Jun 2023 14:53:02 -0400
-Message-ID: <5682492.DvuYhMxLoT@arisu>
-In-Reply-To: <4a6c413c-8791-fd00-a73e-7a12413693e3@gmail.com>
-References: <20230531150340.522994-1-detlev.casanova@collabora.com>
- <20230531150340.522994-2-detlev.casanova@collabora.com>
- <4a6c413c-8791-fd00-a73e-7a12413693e3@gmail.com>
+        Thu, 1 Jun 2023 14:55:58 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8993137;
+        Thu,  1 Jun 2023 11:55:56 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-514953b3aa6so1767951a12.1;
+        Thu, 01 Jun 2023 11:55:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685645755; x=1688237755;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E3lDxoepCotRm5g8FmHuYHCp7Kw5DHj9NlnnBObc7C0=;
+        b=LspfDwwu0agFSlesNyPc16GF73NRIzLGQX0dggyRENMz5sxChLm+2fO9GJdhtloMu2
+         uzCqa511Tn9y8kg4OVqMFBaYucEaSUhGsGiOF8r7Qke5fN56Ci3JGb7AaSM8cYn9X2Y2
+         2u2f3g7voyelZ07YV8cLRcFui+u9NRL9Ussoa9OG7WSMsFKGCqyQ3quGp9UpcEd2yDn1
+         9UgQ5j8PxLqmzsfpzaMuvGY+T1pIWF9wdYhVpIPxmmjYBpAM9LfB8KdioJS+ATSSOU80
+         PmcOHOeVHSYb8Dl4VdkSU3ir+p3jJAz6vrJGBQJZu6FOWBoPK0spka7zBwj2kT9eq195
+         wtPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685645755; x=1688237755;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E3lDxoepCotRm5g8FmHuYHCp7Kw5DHj9NlnnBObc7C0=;
+        b=hYm272baur9NULWH+TZuhqR4qYVXfImTzwLshJ2Pwze8GE/Bei6Ildi97pqEvqXzTj
+         OJcIFSV+HT4ccxEuFr2uOZ7WOGmGUJI8V4w6sFAyyM/SjU6YZypStWkccbI5WlZSXjFu
+         Yr4ZMYEL4hJ66ksBAdtGv+j5j/9LOzEpXg1kJl1mq6ocd/OIb4vQ4vOR1R/FPYnWVsOR
+         l1SlfASJxWT1459RbRhZ2HoGfhPKCxa7/+3QfdMoLlKg2zbF0oZLjrqDj6ljkNHoZGjb
+         hAyyuMem8vvVwS9FxYKsMqVj34e46ogXpUZejQUYB3vzpopY3XlqL7ANGB2cVjNVkaEv
+         LmiA==
+X-Gm-Message-State: AC+VfDxodby5Hbl9c7mhhedeFZaqNk+ll5pNzWTfPMDM8sEyZGLWLc4n
+        mIHV1/zBxMzSbGrwrqPe6ShQzLcRnBuS3A==
+X-Google-Smtp-Source: ACHHUZ5v17sxhOVW4SbCe8kdp+/1vwAyqZlUA/agwNrEA3Z8CZkWH1W1KIEfT1VywtH+5JP5hGZFjQ==
+X-Received: by 2002:aa7:d403:0:b0:50b:c397:bbac with SMTP id z3-20020aa7d403000000b0050bc397bbacmr573668edq.29.1685645755137;
+        Thu, 01 Jun 2023 11:55:55 -0700 (PDT)
+Received: from [192.168.3.32] (dh207-98-93.xnet.hr. [88.207.98.93])
+        by smtp.gmail.com with ESMTPSA id i12-20020aa7dd0c000000b005149c3fa632sm5876632edv.13.2023.06.01.11.55.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 11:55:54 -0700 (PDT)
+Message-ID: <d64b9718-0c85-6e5d-7c5b-6ea617e36a32@gmail.com>
+Date:   Thu, 1 Jun 2023 20:55:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH V2 04/13] dt-bindings: clock: qcom: gcc-ipq5018: remove q6
+ clocks macros
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, jassisinghbrar@gmail.com,
+        mathieu.poirier@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, quic_eberman@quicinc.com, quic_mojha@quicinc.com,
+        kvalo@kernel.org, loic.poulain@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com, quic_varada@quicinc.com,
+        quic_devipriy@quicinc.com
+References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
+ <20230521222852.5740-5-quic_mmanikan@quicinc.com>
+ <514a9e26-aeb9-ce05-1055-337646098ec1@linaro.org>
+From:   Robert Marko <robimarko@gmail.com>
+In-Reply-To: <514a9e26-aeb9-ce05-1055-337646098ec1@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, May 31, 2023 3:08:53 P.M. EDT Heiner Kallweit wrote:
-> On 31.05.2023 17:03, Detlev Casanova wrote:
-> > In some cases, the PHY can use an external clock source instead of a
-> > crystal.
-> > 
-> > Add an optional clock in the phy node to make sure that the clock source
-> > is enabled, if specified, before probing.
-> > 
-> > Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> > ---
-> > 
-> >  drivers/net/phy/realtek.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> > 
-> > diff --git a/drivers/net/phy/realtek.c b/drivers/net/phy/realtek.c
-> > index 3d99fd6664d7..70c75dbbf799 100644
-> > --- a/drivers/net/phy/realtek.c
-> > +++ b/drivers/net/phy/realtek.c
-> > @@ -12,6 +12,7 @@
-> > 
-> >  #include <linux/phy.h>
-> >  #include <linux/module.h>
-> >  #include <linux/delay.h>
-> > 
-> > +#include <linux/clk.h>
-> > 
-> >  #define RTL821x_PHYSR				0x11
-> >  #define RTL821x_PHYSR_DUPLEX			BIT(13)
-> > 
-> > @@ -80,6 +81,7 @@ struct rtl821x_priv {
-> > 
-> >  	u16 phycr1;
-> >  	u16 phycr2;
-> >  	bool has_phycr2;
-> > 
-> > +	struct clk *clk;
-> > 
-> >  };
-> >  
-> >  static int rtl821x_read_page(struct phy_device *phydev)
-> > 
-> > @@ -103,6 +105,11 @@ static int rtl821x_probe(struct phy_device *phydev)
-> > 
-> >  	if (!priv)
-> >  	
-> >  		return -ENOMEM;
-> > 
-> > +	priv->clk = devm_clk_get_optional_enabled(dev, "xtal");
-> 
-> Why add priv->clk if it isn't used outside probe()?
-> 
-> How about suspend/resume? Would it make sense to stop the clock
-> whilst PHY is suspended?
+On 30. 05. 2023. 13:01, Krzysztof Kozlowski wrote:
 
-I'm not sure about this. Isn't the clock still necessary when suspended for 
-things like wake on lan ?
+> On 22/05/2023 00:28, Manikanta Mylavarapu wrote:
+>> Since Q6 firmware takes care of bring up clocks in multipd
+>> model, remove bring up clock macros.
+>>
+>> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+>> ---
+>>   include/dt-bindings/clock/qcom,gcc-ipq5018.h | 21 --------------------
+>>   1 file changed, 21 deletions(-)
+>>
+> I am fine with this if it still compiles... I have doubts about it,
+> unless of some depedencies (you mentioned three !)... but then it gets
+> complicated.
+>
+> Keep patches doing same logical change in same patchset. This dependency
+> dance in recent submissions is making things tricky and prolonging your
+> upstreaming process significantly.
 
-> > +	if (IS_ERR(priv->clk))
-> > +		return dev_err_probe(dev, PTR_ERR(priv->clk),
-> > +				     "failed to get phy xtal 
-clock\n");
-> > +
-> > 
-> >  	ret = phy_read_paged(phydev, 0xa43, RTL8211F_PHYCR1);
-> >  	if (ret < 0)
-> >  	
-> >  		return ret;
+Considering that the basic IPQ5018 patchset that this series depends on
+has not yet been merged, why not just drop these there instead?
 
+Regards,
+Robert
 
-
-
+>
+> Best regards,
+> Krzysztof
+>
+>
+>
