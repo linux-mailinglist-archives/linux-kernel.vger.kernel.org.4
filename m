@@ -2,230 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817047196CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BB47196D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232807AbjFAJXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
+        id S232802AbjFAJYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232795AbjFAJXJ (ORCPT
+        with ESMTP id S232102AbjFAJYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:23:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18A95129;
-        Thu,  1 Jun 2023 02:23:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 38BDB169C;
-        Thu,  1 Jun 2023 02:23:50 -0700 (PDT)
-Received: from [10.57.22.124] (unknown [10.57.22.124])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 34C703F663;
-        Thu,  1 Jun 2023 02:23:02 -0700 (PDT)
-Message-ID: <4e413a50-001d-cfbf-99a4-7e612f44ed38@arm.com>
-Date:   Thu, 1 Jun 2023 10:23:00 +0100
+        Thu, 1 Jun 2023 05:24:20 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5C597;
+        Thu,  1 Jun 2023 02:24:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685611458; x=1717147458;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+Ymm/6OWObb7Kf1VIHZ9ZMQKmwWlMpFwhEfUVyzgGx4=;
+  b=a/0o6/NT2eCWAPZMxcqYC7YnHIL6uHNqxst6n6TV4Ur9na+EHo527SyM
+   U6Dd6EyIzgzsH6ElSidZ8XBL0g+qRjnyPy0EJBrjLne8w5FqfZIZGIAQ4
+   zyOv5TTCgqG/wzBcHtvZS/PjtUaIvXu2IRsMnELTWHPIhpuN4g1Y01vpI
+   7ykwnbsoB8CM6NeQp2XeKXof1/8LagU8ZZc3qvq3q2tIxggkB455UGIL1
+   phG0BiEOkin5v8exXIQpfVRHeqsEraryfG9EC3CVrbNKz6FnyR6PhLN87
+   dMm9itF5bYe4b+57CUu8/CRDT0BfP55Pbx5QJ7m38tQMVHquExaSC9vcA
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="340108023"
+X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
+   d="scan'208";a="340108023"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 02:24:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="819691220"
+X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
+   d="scan'208";a="819691220"
+Received: from crt-e302.sh.intel.com (HELO localhost.localdomain) ([10.239.45.181])
+  by fmsmga002.fm.intel.com with ESMTP; 01 Jun 2023 02:24:16 -0700
+From:   chenzhiyin <zhiyin.chen@intel.com>
+To:     zhiyin.chen@intel.com, viro@zeniv.linux.org.uk, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        nanhai.zou@intel.com
+Subject: [PATCH] fs.h: Optimize file struct to prevent false sharing
+Date:   Thu,  1 Jun 2023 05:24:00 -0400
+Message-Id: <20230601092400.27162-1-zhiyin.chen@intel.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230531-wahlkabine-unantastbar-9f73a13262c0@brauner>
+References: <20230531-wahlkabine-unantastbar-9f73a13262c0@brauner>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.1
-Subject: Re: [PATCH v4 06/11] coresight-tpdm: Add node to set dsb programming
- mode
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org
-References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
- <1682586037-25973-7-git-send-email-quic_taozha@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <1682586037-25973-7-git-send-email-quic_taozha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2023 10:00, Tao Zhang wrote:
-> Add node to set and show programming mode for TPDM DSB subunit.
-> Once the DSB programming mode is set, it will be written to the
-> register DSB_CR.
-> 
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> ---
->   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 15 ++++++
->   drivers/hwtracing/coresight/coresight-tpdm.c       | 62 ++++++++++++++++++++++
->   drivers/hwtracing/coresight/coresight-tpdm.h       | 16 ++++++
->   3 files changed, 93 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> index 77e67f2..348e167 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> @@ -45,3 +45,18 @@ Description:
->   		Accepts only one of the 2 values -  0 or 1.
->   		0 : Set the DSB trigger type to false
->   		1 : Set the DSB trigger type to true
-> +
-> +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_mode
-> +Date:		March 2023
-> +KernelVersion	6.3
-> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
-> +Description:
-> +		(Write) Set the mode of DSB tpdm. Read the mode of DSB
-> +		tpdm.
-> +
-> +		Accepts the value needs to be greater than 0. What data
-> +		bits do is listed below.
-> +		Bit[0:1] : Test mode control bit for choosing the inputs.
-> +		Bit[3] : Set to 0 for low performance mode.
-> +				 Set to 1 for high performance mode.
-> +		Bit[4:8] : Select byte lane for high performance mode.
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
-> index 14f4352..1bacaa5 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-> @@ -4,6 +4,7 @@
->    */
->   
->   #include <linux/amba/bus.h>
-> +#include <linux/bitfield.h>
->   #include <linux/bitmap.h>
->   #include <linux/coresight.h>
->   #include <linux/coresight-pmu.h>
-> @@ -43,6 +44,32 @@ static void tpdm_reset_datasets(struct tpdm_drvdata *drvdata)
->   	}
->   }
->   
-> +static void set_dsb_test_mode(struct tpdm_drvdata *drvdata, u32 *val)
-> +{
-> +	u32 mode;
-> +
-> +	mode = TPDM_DSB_MODE_TEST(drvdata->dsb->mode);
-> +	*val &= ~TPDM_DSB_TEST_MODE;
-> +	*val |= FIELD_PREP(TPDM_DSB_TEST_MODE, mode);
-> +}
-> +
-> +static void set_dsb_hpsel_mode(struct tpdm_drvdata *drvdata, u32 *val)
-> +{
-> +	u32 mode;
-> +
-> +	mode = TPDM_DSB_MODE_HPBYTESEL(drvdata->dsb->mode);
-> +	*val &= ~TPDM_DSB_HPSEL;
-> +	*val |= FIELD_PREP(TPDM_DSB_HPSEL, mode);
-> +}
-> +
-> +static void set_dsb_perf_mode(struct tpdm_drvdata *drvdata, u32 *val)
-> +{
-> +	if (drvdata->dsb->mode & TPDM_DSB_MODE_PERF)
-> +		*val |= TPDM_DSB_CR_MODE;
-> +	else
-> +		*val &= ~TPDM_DSB_CR_MODE;
-> +}
-> +
->   static void set_trigger_type(struct tpdm_drvdata *drvdata, u32 *val)
->   {
->   	if (drvdata->dsb->trig_type)
-> @@ -64,6 +91,12 @@ static void tpdm_enable_dsb(struct tpdm_drvdata *drvdata)
->   	writel_relaxed(val, drvdata->base + TPDM_DSB_TIER);
->   
->   	val = readl_relaxed(drvdata->base + TPDM_DSB_CR);
-> +	/* Set the test accurate mode */
-> +	set_dsb_test_mode(drvdata, &val);
-> +	/* Set the byte lane for high-performance mode */
-> +	set_dsb_hpsel_mode(drvdata, &val);
-> +	/* Set the performance mode */
-> +	set_dsb_perf_mode(drvdata, &val);
->   	/* Set trigger type */
->   	set_trigger_type(drvdata, &val);
->   	/* Set the enable bit of DSB control register to 1 */
-> @@ -252,6 +285,34 @@ static struct attribute_group tpdm_attr_grp = {
->   	.attrs = tpdm_attrs,
->   };
->   
-> +static ssize_t dsb_mode_show(struct device *dev,
-> +				  struct device_attribute *attr,
-> +				  char *buf)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +
-> +	return sysfs_emit(buf, "%lx\n",
-> +			 (unsigned long)drvdata->dsb->mode);
-> +}
-> +
-> +static ssize_t dsb_mode_store(struct device *dev,
-> +				   struct device_attribute *attr,
-> +				   const char *buf,
-> +				   size_t size)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +	unsigned long val;
-> +
-> +	if ((kstrtoul(buf, 0, &val)) || val < 0)
-> +		return -EINVAL;
-> +
-> +	spin_lock(&drvdata->spinlock);
-> +	drvdata->dsb->mode = val & TPDM_MODE_ALL;
-> +	spin_unlock(&drvdata->spinlock);
-> +	return size;
-> +}
-> +static DEVICE_ATTR_RW(dsb_mode);
-> +
->   static ssize_t dsb_trig_type_show(struct device *dev,
->   				     struct device_attribute *attr, char *buf)
->   {
-> @@ -323,6 +384,7 @@ static ssize_t dsb_trig_ts_store(struct device *dev,
->   static DEVICE_ATTR_RW(dsb_trig_ts);
->   
->   static struct attribute *tpdm_dsb_attrs[] = {
-> +	&dev_attr_dsb_mode.attr,
->   	&dev_attr_dsb_trig_ts.attr,
->   	&dev_attr_dsb_trig_type.attr,
->   	NULL,
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
-> index 68f33bd..79df07e 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpdm.h
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.h
-> @@ -15,11 +15,25 @@
->   
->   /* Enable bit for DSB subunit */
->   #define TPDM_DSB_CR_ENA		BIT(0)
-> +/* Enable bit for DSB subunit perfmance mode */
-> +#define TPDM_DSB_CR_MODE		BIT(1)
->   /* Enable bit for DSB subunit trigger type */
->   #define TPDM_DSB_CR_TRIG_TYPE		BIT(12)
-> +
->   /* Enable bit for DSB subunit trigger timestamp */
->   #define TPDM_DSB_TIER_XTRIG_TSENAB		BIT(1)
->   
-> +/* DSB programming modes */
-> +/* Test mode control bit*/
-> +#define TPDM_DSB_MODE_TEST(val)	(val & GENMASK(1, 0))
-> +/* Perforceman mode */
+In the syscall test of UnixBench, performance regression occurred due
+to false sharing.
 
-minor nit: typo ^^
+The lock and atomic members, including file::f_lock, file::f_count and
+file::f_pos_lock are highly contended and frequently updated in the
+high-concurrency test scenarios. perf c2c indentified one affected
+read access, file::f_op.
+To prevent false sharing, the layout of file struct is changed as
+following
+(A) f_lock, f_count and f_pos_lock are put together to share the same
+cache line.
+(B) The read mostly members, including f_path, f_inode, f_op are put
+into a separate cache line.
+(C) f_mode is put together with f_count, since they are used frequently
+ at the same time.
+Due to '__randomize_layout' attribute of file struct, the updated layout
+only can be effective when CONFIG_RANDSTRUCT_NONE is 'y'.
 
-> +#define TPDM_DSB_MODE_PERF		BIT(3)
-> +/* High performance mode */
-> +#define TPDM_DSB_MODE_HPBYTESEL(val)	(val & GENMASK(8, 4))
-> +#define TPDM_MODE_ALL			(0xFFFFFFF)
+The optimization has been validated in the syscall test of UnixBench.
+performance gain is 30~50%. Furthermore, to confirm the optimization
+effectiveness on the other codes path, the results of fsdisk, fsbuffer
+and fstime are also shown.
 
-GENMASK(27, 0) ?
+Here are the detailed test results of unixbench.
 
-Also, why do we cover bits 27-0 ?
+Command: numactl -C 3-18 ./Run -c 16 syscall fsbuffer fstime fsdisk
 
-Suzuki
+Without Patch
+------------------------------------------------------------------------
+File Copy 1024 bufsize 2000 maxblocks   875052.1 KBps  (30.0 s, 2 samples)
+File Copy 256 bufsize 500 maxblocks     235484.0 KBps  (30.0 s, 2 samples)
+File Copy 4096 bufsize 8000 maxblocks  2815153.5 KBps  (30.0 s, 2 samples)
+System Call Overhead                   5772268.3 lps   (10.0 s, 7 samples)
+
+System Benchmarks Partial Index         BASELINE       RESULT    INDEX
+File Copy 1024 bufsize 2000 maxblocks     3960.0     875052.1   2209.7
+File Copy 256 bufsize 500 maxblocks       1655.0     235484.0   1422.9
+File Copy 4096 bufsize 8000 maxblocks     5800.0    2815153.5   4853.7
+System Call Overhead                     15000.0    5772268.3   3848.2
+                                                              ========
+System Benchmarks Index Score (Partial Only)                    2768.3
+
+With Patch
+------------------------------------------------------------------------
+File Copy 1024 bufsize 2000 maxblocks  1009977.2 KBps  (30.0 s, 2 samples)
+File Copy 256 bufsize 500 maxblocks     264765.9 KBps  (30.0 s, 2 samples)
+File Copy 4096 bufsize 8000 maxblocks  3052236.0 KBps  (30.0 s, 2 samples)
+System Call Overhead                   8237404.4 lps   (10.0 s, 7 samples)
+
+System Benchmarks Partial Index         BASELINE       RESULT    INDEX
+File Copy 1024 bufsize 2000 maxblocks     3960.0    1009977.2   2550.4
+File Copy 256 bufsize 500 maxblocks       1655.0     264765.9   1599.8
+File Copy 4096 bufsize 8000 maxblocks     5800.0    3052236.0   5262.5
+System Call Overhead                     15000.0    8237404.4   5491.6
+                                                              ========
+System Benchmarks Index Score (Partial Only)                    3295.3
+
+Signed-off-by: chenzhiyin <zhiyin.chen@intel.com>
+---
+ include/linux/fs.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 133f0640fb24..cf1388e4dad0 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -962,23 +962,23 @@ struct file {
+ 		struct rcu_head 	f_rcuhead;
+ 		unsigned int 		f_iocb_flags;
+ 	};
+-	struct path		f_path;
+-	struct inode		*f_inode;	/* cached value */
+-	const struct file_operations	*f_op;
+ 
+ 	/*
+ 	 * Protects f_ep, f_flags.
+ 	 * Must not be taken from IRQ context.
+ 	 */
+ 	spinlock_t		f_lock;
+-	atomic_long_t		f_count;
+-	unsigned int 		f_flags;
+ 	fmode_t			f_mode;
++	atomic_long_t		f_count;
+ 	struct mutex		f_pos_lock;
+ 	loff_t			f_pos;
++	unsigned int		f_flags;
+ 	struct fown_struct	f_owner;
+ 	const struct cred	*f_cred;
+ 	struct file_ra_state	f_ra;
++	struct path		f_path;
++	struct inode		*f_inode;	/* cached value */
++	const struct file_operations	*f_op;
+ 
+ 	u64			f_version;
+ #ifdef CONFIG_SECURITY
+-- 
+2.39.1
+
