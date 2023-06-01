@@ -2,138 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8D371F11D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7140971F129
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbjFARvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 13:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
+        id S231360AbjFARwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 13:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbjFARvH (ORCPT
+        with ESMTP id S231298AbjFARwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 13:51:07 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CA913D;
-        Thu,  1 Jun 2023 10:51:06 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 5FF8832006F5;
-        Thu,  1 Jun 2023 13:51:02 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 01 Jun 2023 13:51:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1685641861; x=1685728261; bh=rI
-        kHOu2cJZ+vhgMgLgXQFIzSc/FfETBAe+GmKBqE/d8=; b=YsbtSfmNvp2eXNoM+R
-        izu+ChEdBnznPH+LsBdjf2+h6LdAHRujYmHDAet9DAX1gmlHLKguMCLBwmLdAHEO
-        D+UVABb2eTTzqr0726+/7NHAOtmHqLCAXINuJsiG1IDxhjaITt017WqUNsBVChzh
-        D90g8W2yX8ZoFDket0s7THCrhtfyEuY5C0Ndajkk/+9tv8wElxHd4U/Gn7Ea7xEx
-        XbVfxHdS58S6O5Mq/yj2OHukD1a2RvVB62BOr0d3rvYg6DdO9l1EU2kX/KReg33O
-        fPR6tKEUO0F7F771g7sulSQlHpOBfGP9yais1MeBS4eMz09WTiPZ3dXkonAtsOj3
-        MpDQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685641861; x=1685728261; bh=rIkHOu2cJZ+vh
-        gMgLgXQFIzSc/FfETBAe+GmKBqE/d8=; b=x278PMWMnWwyz8MB2+Pq6j4xDniu0
-        TlaDyapGkeiQFJNSM0ckJ1vVqYHPh1dpmpNaqeJMLl7g8wk5al2PlkQc7NvB9v+b
-        GnN6504fYOB+Hl1GRaqPa+18Zkb5vE0BQjoUe3wngRik4cKBXar65yZzHfpoMhTt
-        qksemY29jYOi6hdi0fsHGM5w4bTXLGf859Bz8PCzkDPKVPKbejaWAQPDdVsLH/fK
-        p6meRZqBmViLevJg6759hN/hDoAdYDzWXmViGsF+HwJAAA/2GYyXAVdAVpvsFx8m
-        N21D6im9GWBMQvaasV8H05L7MAuS6ST5q8RBgJocWC9hR3Er14DmqCocw==
-X-ME-Sender: <xms:hNp4ZEB47iSnUPOggsaPyqB3htwwzNbBYiP2c2CDEU-GAelh2g8d0g>
-    <xme:hNp4ZGjPiJzGYKEOKXF8ZVG6qJObsay-XWlXTArfI2edvCGmlHvO6H8hcnSw2yE8S
-    M_zWTR4S9o1_3Selek>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeluddguddukecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeeigfeiieeiheejjeeiudekleevvddvffetieehteeikeeigeeiffdttdef
-    tdeggfenucffohhmrghinhepghhnuhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:hNp4ZHkX2OtLDMVwiM9pUSRildLjmx7b470Z9Ca5GPuJafo5YZtD1A>
-    <xmx:hNp4ZKwgiGYOpOdmKAbTAywxVof93l8RU1AQtJKMm8M8XxQ-KJalsw>
-    <xmx:hNp4ZJQ1JHiPxb1I71yRvpM9eN-KRrOUQGwapN-tDspykREevQDiyg>
-    <xmx:hdp4ZICyxJxKWz4v3ZWf754mlZqb1XGQlvWDQ_AdPqLkWWJ3D8psOg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 38825B60086; Thu,  1 Jun 2023 13:51:00 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
-Mime-Version: 1.0
-Message-Id: <f6fcae8a-9b50-48e4-84e9-c37613226c63@app.fastmail.com>
-In-Reply-To: <202306010909.89C4BED@keescook>
-References: <20230601151832.3632525-1-arnd@kernel.org>
- <202306010909.89C4BED@keescook>
-Date:   Thu, 01 Jun 2023 19:50:38 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Kees Cook" <keescook@chromium.org>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     kasan-dev@googlegroups.com,
-        "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
-        "Alexander Potapenko" <glider@google.com>,
-        "Andrey Konovalov" <andreyknvl@gmail.com>,
-        "Dmitry Vyukov" <dvyukov@google.com>,
-        "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
-        "Marco Elver" <elver@google.com>, linux-media@vger.kernel.org,
-        linux-crypto@vger.kernel.org,
-        "Herbert Xu" <herbert@gondor.apana.org.au>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Dan Carpenter" <dan.carpenter@linaro.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@collabora.com>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Tom Rix" <trix@redhat.com>,
-        "Josh Poimboeuf" <jpoimboe@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] [RFC] ubsan: disallow bounds checking with gcov on broken gcc
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 1 Jun 2023 13:52:19 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEFD107
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 10:52:17 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-96f7bf3cf9eso174147266b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 10:52:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685641936; x=1688233936;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=exz8jHGGlbFPTRIu+KyeFYPOTRAMQRA0KdQTa6tuVIE=;
+        b=oljK7KQegUu/ksQiF7GvxgyFAZG+MiCBFiyIKiNj2w+1uZBsrFOHgLSC2L/0ZnVYFM
+         6VBKZBA/Dt3N/TO8Lx/zPWDUeVoGQAMg1c0HhQGkkAD9iC3mkPtlRPgTuusSNdxupaqp
+         5I2kvigrFxUPPwhpF6lX04XqUxAODnOYjiDAV+xC4tyEMtOq0fC0Fn/4kUfYf4VXd7rI
+         6VNNBJuqOuINji+spMEJX71PNLV4ByoV+JBkVFn+KU4WPHykAG9mhln1/KmX065XdzV0
+         UaOOqdkUaNM7dHwLHz06buezQfuU8bRyrcDmzN+mCDbXYY/Z4AeX+OeG1AzrUUWOj3CN
+         ML/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685641936; x=1688233936;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=exz8jHGGlbFPTRIu+KyeFYPOTRAMQRA0KdQTa6tuVIE=;
+        b=U4ehy+8RPhPNSoxBy3QiIPVRCcTOoou/zeb+mtX2sO452XqeMfWa++ymO/P97q/nDs
+         MXdU5T5aPa8aILA17wEApEk8wWVdnhOydhRzWgjWdY9GASz7TTS6VOt2Nfe6m8EJN9CP
+         SHd9Rjg0oGhDAp1jWT5Xjy9TY2eBFK2G287+Uw3EaAb8FUkHzisR1WnplovG2wKlALNy
+         74DcEvqH5Ew1NjSB8/+rmm4kYUsJ/yauBUDadX/XArQqEHgZMlJuT4He4/q9hWI+Vt2p
+         Uqh5k4xCOCYWo57Ow5FsLjysqz0RqSmQttOMoB5TorjYOKeDntPurvalUKn6zkt/5z3Z
+         Bk7Q==
+X-Gm-Message-State: AC+VfDzLTNvizl5GXvNtAlUyT7Mf3qThFVYuDEKDpH217lSgHJJGxPMs
+        xn6YeXUGn7NfFdPd5CRjWZaxKJQ7sYlv8qePZpOG+JNMz8WJIyFc3bU=
+X-Google-Smtp-Source: ACHHUZ7jUZ20nfXDXBJOWeN1B+zdMiLbbuPEEwVtKmpUrCxLVy+CVxDqO/kvCxTU201DxZwdbr6g7wzpQ6FEeR7cvic=
+X-Received: by 2002:a17:907:6297:b0:974:1c98:d2d9 with SMTP id
+ nd23-20020a170907629700b009741c98d2d9mr8477764ejc.3.1685641936158; Thu, 01
+ Jun 2023 10:52:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230531022911.1168524-1-yosryahmed@google.com> <20230601155825.GF102494@cmpxchg.org>
+In-Reply-To: <20230601155825.GF102494@cmpxchg.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 1 Jun 2023 10:51:39 -0700
+Message-ID: <CAJD7tkaFSfpTtB_ua_9QzR2voE1-hixv6RMJZd=WqpGmY93dSw@mail.gmail.com>
+Subject: Re: [PATCH] mm: zswap: multiple zpool support
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Nhat Pham <nphamcs@gmail.com>,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
+        Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 1, 2023, at 18:14, Kees Cook wrote:
-> On Thu, Jun 01, 2023 at 05:18:11PM +0200, Arnd Bergmann wrote:
+On Thu, Jun 1, 2023 at 8:58=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.org>=
+ wrote:
 >
-> I think more production systems will have CONFIG_UBSAN_BOUNDS enabled
-> (e.g. Ubuntu has had it enabled for more than a year now) than GCOV,
-> so I'd prefer we maintain all*config coverage for the more commonly
-> used config.
-
-Fair enough, I can send that as v2, but let's see what the others
-think first.
-
->>  config CC_HAS_UBSAN_BOUNDS_STRICT
->>  	def_bool $(cc-option,-fsanitize=bounds-strict)
->> +	# work around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=110074
->> +	depends on GCC_VERSION > 140000 || !GCOV_PROFILE_ALL
->>  	help
->>  	  The -fsanitize=bounds-strict option is only available on GCC,
->>  	  but uses the more strict handling of arrays that includes knowledge
+> On Wed, May 31, 2023 at 02:29:11AM +0000, Yosry Ahmed wrote:
+> > Support using multiple zpools of the same type in zswap, for concurrenc=
+y
+> > purposes. Add CONFIG_ZSWAP_NR_ZPOOLS_ORDER to control the number of
+> > zpools. The order is specific by the config rather than the absolute
+> > number to guarantee a power of 2. This is useful so that we can use
+> > deterministically link each entry to a zpool by hashing the zswap_entry
+> > pointer.
+> >
+> > On a setup with zswap and zsmalloc, comparing a single zpool (current
+> > default) to 32 zpools (by setting CONFIG_ZSWAP_NR_ZPOOLS_ORDER=3D32) sh=
+ows
+> > improvements in the zsmalloc lock contention, especially on the swap ou=
+t
+> > path.
+> >
+> > The following shows the perf analysis of the swapout path when 10
+> > workloads are simulatenously reclaiming and refaulting tmpfs pages.
+> > There are some improvements on the swapin path as well, but much less
+> > significant.
+> >
+> > 1 zpool:
+> >
+> >  |--28.99%--zswap_frontswap_store
+> >        |     |
+> >        <snip>
+> >        |     |
+> >        |     |--8.98%--zpool_map_handle
+> >        |     |     |
+> >        |     |      --8.98%--zs_zpool_map
+> >        |     |           |
+> >        |     |            --8.95%--zs_map_object
+> >        |     |                 |
+> >        |     |                  --8.38%--_raw_spin_lock
+> >        |     |                       |
+> >        |     |                        --7.39%--queued_spin_lock_slowpat=
+h
+> >        |     |
+> >        |     |--8.82%--zpool_malloc
+> >        |     |     |
+> >        |     |      --8.82%--zs_zpool_malloc
+> >        |     |           |
+> >        |     |            --8.80%--zs_malloc
+> >        |     |                 |
+> >        |     |                 |--7.21%--_raw_spin_lock
+> >        |     |                 |     |
+> >        |     |                 |      --6.81%--queued_spin_lock_slowpat=
+h
+> >        <snip>
+> >
+> > 32 zpools:
+> >
+> >  |--16.73%--zswap_frontswap_store
+> >        |     |
+> >        <snip>
+> >        |     |
+> >        |     |--1.81%--zpool_malloc
+> >        |     |     |
+> >        |     |      --1.81%--zs_zpool_malloc
+> >        |     |           |
+> >        |     |            --1.79%--zs_malloc
+> >        |     |                 |
+> >        |     |                  --0.73%--obj_malloc
+> >        |     |
+> >        |     |--1.06%--zswap_update_total_size
+> >        |     |
+> >        |     |--0.59%--zpool_map_handle
+> >        |     |     |
+> >        |     |      --0.59%--zs_zpool_map
+> >        |     |           |
+> >        |     |            --0.57%--zs_map_object
+> >        |     |                 |
+> >        |     |                  --0.51%--_raw_spin_lock
+> >        <snip>
+> >
+> > Suggested-by: Yu Zhao <yuzhao@google.com>
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > ---
+> >  mm/Kconfig | 12 +++++++
+> >  mm/zswap.c | 95 ++++++++++++++++++++++++++++++++++++------------------
+> >  2 files changed, 76 insertions(+), 31 deletions(-)
+> >
+> > diff --git a/mm/Kconfig b/mm/Kconfig
+> > index 92c30879bf67..de1da56d2c07 100644
+> > --- a/mm/Kconfig
+> > +++ b/mm/Kconfig
+> > @@ -59,6 +59,18 @@ config ZSWAP_EXCLUSIVE_LOADS
+> >         The cost is that if the page was never dirtied and needs to be
+> >         swapped out again, it will be re-compressed.
+> >
+> > +config ZSWAP_NR_ZPOOLS_ORDER
+> > +     int "Number of zpools in zswap, as power of 2"
+> > +     default 0
+> > +     depends on ZSWAP
+> > +     help
+> > +       This options determines the number of zpools to use for zswap, =
+it
+> > +       will be 1 << CONFIG_ZSWAP_NR_ZPOOLS_ORDER.
+> > +
+> > +       Having multiple zpools helps with concurrency and lock contenti=
+on
+> > +       on the swap in and swap out paths, but uses a little bit of ext=
+ra
+> > +       space.
 >
-> Alternatively, how about falling back to -fsanitize=bounds instead, as
-> that (which has less coverage) wasn't triggering the stack frame
-> warnings?
+> This is nearly impossible for a user, let alone a distribution, to
+> answer adequately.
 >
-> i.e. fall back through these:
-> 	-fsanitize=array-bounds (Clang)
-> 	-fsanitize=bounds-strict (!GCOV || bug fixed in GCC)
-> 	-fsanitize=bounds
+> The optimal value needs to be found empirically. And it varies heavily
+> not just by workload but by implementation changes. If we make changes
+> to the lock holding time or redo the data structures, a previously
+> chosen value might no longer be a net positive, and even be harmful.
 
-From what I can tell, -fsanitize=bounds has the same problem
-as -fsanitize=bounds-strict, so that would not help.
+Yeah, I agree that this can only be tuned empirically, but there is a
+real benefit to tuning it, at least in our experience. I imagined
+having the config option with a default of 0 gives those who want to
+tune it the option, while not messing with users that do not care.
 
-     Arnd
+>
+> Architecturally, the pool scoping and the interaction with zswap_tree
+> is currently a mess. We're aware of lifetime bugs, where swapoff kills
+> the tree but the pool still exists with entries making dead references
+> e.g. We likely need to rearchitect this in the near future - maybe tie
+> pools to trees to begin with.
+>
+> (I'm assuming you're already using multiple swap files to avoid tree
+> lock contention, because it has the same scope as the pool otherwise.)
+>
+> Such changes quickly invalidate any settings the user or distro might
+> make here. Exposing the implementation detail of the pools might even
+> get in the way of fixing bugs and cleaning up the architecture.
+
+I was under the impression that config options are not very stable.
+IOW, if we fix the lock contention on an architectural level, and
+there is no more benefit to tuning the number of zpools per zswap
+pool, we can remove the config option. Is this incorrect?
+
+>
+> > @@ -263,11 +266,13 @@ static void zswap_update_total_size(void)
+> >  {
+> >       struct zswap_pool *pool;
+> >       u64 total =3D 0;
+> > +     int i;
+> >
+> >       rcu_read_lock();
+> >
+> >       list_for_each_entry_rcu(pool, &zswap_pools, list)
+> > -             total +=3D zpool_get_total_size(pool->zpool);
+> > +             for (i =3D 0; i < zswap_nr_zpools; i++)
+> > +                     total +=3D zpool_get_total_size(pool->zpools[i]);
+>
+> This adds a O(nr_pools) operation to every load and store. It's easy
+> for this to dominate or outweigh locking costs as workload concurrency
+> changes, or data structures and locking change inside the kernel.
+
+Right, which is why this is empirically tuned. In the perf analysis in
+the commit log, the lock contention gains far outweigh this cost.
+FWIW, the cost here is constant, we just iterate the pools and read a
+value.
+
+>
+> > @@ -587,14 +603,17 @@ static void shrink_worker(struct work_struct *w)
+> >  {
+> >       struct zswap_pool *pool =3D container_of(w, typeof(*pool),
+> >                                               shrink_work);
+> > +     int i;
+> >
+> > -     if (zpool_shrink(pool->zpool, 1, NULL))
+> > -             zswap_reject_reclaim_fail++;
+> > +     for (i =3D 0; i < zswap_nr_zpools; i++)
+> > +             if (zpool_shrink(pool->zpools[i], 1, NULL))
+> > +                     zswap_reject_reclaim_fail++;
+> >       zswap_pool_put(pool);
+>
+> This scales reclaim batch size by the number of zpools, which can lead
+> to varying degrees of overreclaim especially on small zswap sizes with
+> high pool concurrency.
+
+I was under the assumption that with Domenico's patch we will mostly
+be reclaiming multiple pages anyway, but I can certainly remove this
+part and only reclaim one page at a time from one zpool. We can select
+one at random or round robin through the zpools.
+
+>
+> I don't think this patch is ready for primetime. A user build time
+> setting is not appropriate for an optimization that is heavily tied to
+> implementation details and workload dynamics.
+
+What would you suggest instead? We do find value in having multiple
+zpools, at least for the current architecture.
+
+An internal implementation that we have exposes this as a module
+parameter instead, but that is more complicated (I image), because you
+need to set it before enabling zswap, or before changing the zswap
+pool, otherwise changing it is nop because the zpool(s) is already
+allocated. I am also guessing module params are more stable than
+config options. Hence, I thought a config option might be more
+appropriate.
