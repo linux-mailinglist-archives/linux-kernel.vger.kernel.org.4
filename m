@@ -2,62 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5029171A050
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CD671A04C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233577AbjFAOhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
+        id S234341AbjFAOgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233793AbjFAOg6 (ORCPT
+        with ESMTP id S234383AbjFAOgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:36:58 -0400
+        Thu, 1 Jun 2023 10:36:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBDCE7A;
-        Thu,  1 Jun 2023 07:36:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D49CE58;
+        Thu,  1 Jun 2023 07:36:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12BDE645AE;
-        Thu,  1 Jun 2023 14:36:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766AFC433D2;
-        Thu,  1 Jun 2023 14:36:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685630184;
-        bh=q1nm3XJmvtIncOu+ub6wBefta37W073Fq2RfF3BrwDA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LE40csoZczJkWldp40THH+Zdkrug4V3qCiiGTMCHovAP5L53U7rCfGoH7brYaYPLu
-         pTRgmznANKlibPSIjoOc3ePcv+AkSLvEVMmo/FOFoTuvkABUbt2wzvU0LhJbaTpyjR
-         8wdfk6GFIFQhzdvOJa3Kxwwzz22Y316Quw8oQpqbw4ipd4wfm+yNJNVFZe/eUIX0gO
-         pr/hpnjSsK5wCd5ECoe4WviYL0qA9D2kItgny4/NOxbl1/lWlM93zGuQq/LBndfqsS
-         1ZyYaOW92/x4Rs5pHszq/9XGftSXTnv/h47DPhD34prD2ih8aUE6eWeHZZ9F2FPiaz
-         x7d/oDSVI0SJA==
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-39810ce3e13so736485b6e.2;
-        Thu, 01 Jun 2023 07:36:24 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzfHNJzVLMjQ+LMGQIq6X4beW5hEeZ6V0uf/WBwxqydozoBhkNE
-        T91+Jm2LN3bt35J8WBs5EK7KpqxhJvCjoTohFEo=
-X-Google-Smtp-Source: ACHHUZ5pUe+/Kf89/ly7ZacrZOuVJ/6VUnojFj9HTrAI35BR4gk4B4HGEQvavxSygBDSsGq2RMFOP/CbSCp/LJOlihI=
-X-Received: by 2002:a05:6808:150a:b0:398:34b9:5200 with SMTP id
- u10-20020a056808150a00b0039834b95200mr9477506oiw.51.1685630183791; Thu, 01
- Jun 2023 07:36:23 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F627645BC;
+        Thu,  1 Jun 2023 14:36:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 848DBC433D2;
+        Thu,  1 Jun 2023 14:35:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685630160;
+        bh=0SeYZDYYFhDVAQXu0vufGhDp6XBSc1TwdOd8xaXMv7o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gS6uMO8MU6Cv2fiNdRWpdwhm5ubCFpDhOQhM+xzQkN3iBCPKtSE3nydiHwNmlkB0p
+         1kMePpqxa2wMz1yuKWz5pipDqmP9ozI//jv1UOVDVHGaI+BGaurl4KPLloOaluIO2Z
+         bR8OyRSa6TKPF2o4iZZUEYxu/Fmv3u4S23R4TgQ4=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: [PATCH 6.1 00/39] 6.1.32-rc2 review
+Date:   Thu,  1 Jun 2023 15:35:57 +0100
+Message-Id: <20230601143327.479886832@linuxfoundation.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230601121001.1071533-1-masahiroy@kernel.org>
- <20230601121001.1071533-8-masahiroy@kernel.org> <CAMj1kXFJOHsgopUOR7+jvC8s6bvSCZ3XAkQM1FbnZ8Qj6azvQA@mail.gmail.com>
-In-Reply-To: <CAMj1kXFJOHsgopUOR7+jvC8s6bvSCZ3XAkQM1FbnZ8Qj6azvQA@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 1 Jun 2023 23:35:47 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATDJmh1aas86YW4yrG_8Rqgz7r82NwaPj1x5c7tg-d-jg@mail.gmail.com>
-Message-ID: <CAK7LNATDJmh1aas86YW4yrG_8Rqgz7r82NwaPj1x5c7tg-d-jg@mail.gmail.com>
-Subject: Re: [PATCH 7/7] modpost: detect section mismatch for R_ARM_REL32
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.32-rc2.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-6.1.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 6.1.32-rc2
+X-KernelTest-Deadline: 2023-06-03T14:33+00:00
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,59 +63,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 1, 2023 at 9:40=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> wro=
-te:
->
-> On Thu, 1 Jun 2023 at 14:10, Masahiro Yamada <masahiroy@kernel.org> wrote=
-:
-> >
-> > For ARM, modpost fails to detect some types of section mismatches.
-> >
-> >   [test code]
-> >
-> >     .section .init.data,"aw"
-> >     bar:
-> >             .long 0
-> >
-> >     .section .data,"aw"
-> >     .globl foo
-> >     foo:
-> >             .long bar - .
-> >
-> > It is apparently a bad reference, but modpost does not report anything.
-> >
-> > The test code above produces the following relocations.
-> >
-> >   Relocation section '.rel.data' at offset 0xe8 contains 1 entry:
-> >    Offset     Info    Type            Sym.Value  Sym. Name
-> >   00000000  00000403 R_ARM_REL32       00000000   .init.data
-> >
-> > Currently, R_ARM_REL32 is just skipped.
-> >
-> > Handle it like R_ARM_ABS32.
->
-> OK, so the reason we can handle these in the same way is because we
-> never calculate the resulting value, right? Because that value would
-> be different for these cases.
+This is the start of the stable review cycle for the 6.1.32 release.
+There are 39 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-Right.
+Responses should be made by Sat, 03 Jun 2023 14:33:15 +0000.
+Anything received after that time might be too late.
 
-'- loc' is unnecessary here because modpost never calculates the
-resulting instruction.
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.32-rc2.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+and the diffstat can be found below.
 
-modpost wants to know the location of the referenced symbol.
-(the offset from the start of the section).
+thanks,
 
-For the same reason, I omitted '- loc' for
-PC-relative ones such as R_ARM_CALL, R_ARM_JUMP24, etc.
+greg k-h
+
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 6.1.32-rc2
+
+Yanteng Si <siyanteng@loongson.cn>
+    tools headers UAPI: Sync the linux/in.h with the kernel sources
+
+Paul Blakey <paulb@nvidia.com>
+    netfilter: ctnetlink: Support offloaded conntrack entry deletion
+
+Gautham R. Shenoy <gautham.shenoy@amd.com>
+    cpufreq: amd-pstate: Add ->fast_switch() callback
+
+Wyes Karny <wyes.karny@amd.com>
+    cpufreq: amd-pstate: Update policy->cur in amd_pstate_adjust_perf()
+
+Anuj Gupta <anuj20.g@samsung.com>
+    block: fix bio-cache for passthru IO
+
+Ido Schimmel <idosch@nvidia.com>
+    Revert "thermal/drivers/mellanox: Use generic thermal_zone_get_trip() function"
+
+Ruihan Li <lrh2000@pku.edu.cn>
+    bluetooth: Add cmd validity checks at the start of hci_sock_ioctl()
+
+Mario Limonciello <mario.limonciello@amd.com>
+    drm/amd: Don't allow s0ix on APUs older than Raven
+
+Hariprasad Kelam <hkelam@marvell.com>
+    octeontx2-af: Add validation for lmac type
+
+Zhu Yanjun <yanjun.zhu@linux.dev>
+    RDMA/rxe: Fix the error "trying to register non-static key in rxe_cleanup_task"
+
+Johannes Berg <johannes.berg@intel.com>
+    wifi: iwlwifi: mvm: fix potential memory leak
+
+Haim Dreyfuss <haim.dreyfuss@intel.com>
+    wifi: iwlwifi: mvm: support wowlan info notification version 2
+
+Eric Huang <echuang@realtek.com>
+    wifi: rtw89: correct 5 MHz mask setting
+
+David Epping <david.epping@missinglinkelectronics.com>
+    net: phy: mscc: enable VSC8501/2 RGMII RX clock
+
+Yunsheng Lin <linyunsheng@huawei.com>
+    page_pool: fix inconsistency for page_pool_ring_[un]lock()
+
+Qingfang DENG <qingfang.deng@siflower.com.cn>
+    net: page_pool: use in_softirq() instead
+
+Yan Zhao <yan.y.zhao@intel.com>
+    vfio/type1: check pfn valid before converting to struct page
+
+Tian Lan <tian.lan@twosigma.com>
+    blk-mq: fix race condition in active queue accounting
+
+John Fastabend <john.fastabend@gmail.com>
+    bpf, sockmap: Incorrectly handling copied_seq
+
+John Fastabend <john.fastabend@gmail.com>
+    bpf, sockmap: Wake up polling after data copy
+
+John Fastabend <john.fastabend@gmail.com>
+    bpf, sockmap: TCP data stall on recv before accept
+
+John Fastabend <john.fastabend@gmail.com>
+    bpf, sockmap: Handle fin correctly
+
+John Fastabend <john.fastabend@gmail.com>
+    bpf, sockmap: Improved check for empty queue
+
+John Fastabend <john.fastabend@gmail.com>
+    bpf, sockmap: Reschedule is now done through backlog
+
+John Fastabend <john.fastabend@gmail.com>
+    bpf, sockmap: Convert schedule_work into delayed_work
+
+John Fastabend <john.fastabend@gmail.com>
+    bpf, sockmap: Pass skb ownership through read_skb
+
+Henning Schild <henning.schild@siemens.com>
+    gpio-f7188x: fix chip name and pin count on Nuvoton chip
+
+Shay Drory <shayd@nvidia.com>
+    net/mlx5: E-switch, Devcom, sync devcom events and devcom comp register
+
+Jakub Kicinski <kuba@kernel.org>
+    tls: rx: strp: preserve decryption status of skbs when needed
+
+Jakub Kicinski <kuba@kernel.org>
+    tls: rx: strp: factor out copying skb data
+
+Jakub Kicinski <kuba@kernel.org>
+    tls: rx: strp: force mixed decrypted records into copy mode
+
+Jakub Kicinski <kuba@kernel.org>
+    tls: rx: strp: fix determining record length in copy mode
+
+Jakub Kicinski <kuba@kernel.org>
+    tls: rx: strp: set the skb->len of detached / CoW'ed skbs
+
+Jakub Kicinski <kuba@kernel.org>
+    tls: rx: device: fix checking decryption status
+
+Mario Limonciello <mario.limonciello@amd.com>
+    platform/x86/amd/pmf: Fix CnQF and auto-mode after resume
+
+Jeremy Sowden <jeremy@azazel.net>
+    selftests/bpf: Fix pkg-config call building sign-file
+
+Sudeep Holla <sudeep.holla@arm.com>
+    firmware: arm_ffa: Fix usage of partition info get count flag
+
+Nicolas Dichtel <nicolas.dichtel@6wind.com>
+    ipv{4,6}/raw: fix output xfrm lookup wrt protocol
+
+Jakub Sitnicki <jakub@cloudflare.com>
+    inet: Add IP_LOCAL_PORT_RANGE socket option
 
 
+-------------
+
+Diffstat:
+
+ Makefile                                           |   4 +-
+ block/blk-map.c                                    |   2 +-
+ block/blk-mq-tag.c                                 |  12 +-
+ drivers/cpufreq/amd-pstate.c                       |  45 ++++-
+ drivers/firmware/arm_ffa/driver.c                  |   3 +-
+ drivers/gpio/Kconfig                               |   2 +-
+ drivers/gpio/gpio-f7188x.c                         |  28 +--
+ drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c           |   3 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |   7 +-
+ drivers/infiniband/sw/rxe/rxe_qp.c                 |   7 +-
+ drivers/net/ethernet/marvell/octeontx2/af/cgx.c    |   8 +
+ drivers/net/ethernet/mellanox/mlx5/core/eswitch.h  |   1 +
+ .../ethernet/mellanox/mlx5/core/eswitch_offloads.c |   9 +-
+ drivers/net/ethernet/mellanox/mlxsw/core_thermal.c | 209 ++++++++++++++++-----
+ drivers/net/phy/mscc/mscc.h                        |   1 +
+ drivers/net/phy/mscc/mscc_main.c                   |  54 +++---
+ drivers/net/wireless/intel/iwlwifi/fw/api/d3.h     |  37 +++-
+ drivers/net/wireless/intel/iwlwifi/mvm/d3.c        |  35 +++-
+ drivers/net/wireless/realtek/rtw89/rtw8852c.c      |   9 +-
+ drivers/platform/x86/amd/pmf/core.c                |  32 +++-
+ drivers/vfio/vfio_iommu_type1.c                    |   5 +
+ include/linux/skbuff.h                             |  10 +
+ include/linux/skmsg.h                              |   3 +-
+ include/net/inet_sock.h                            |   4 +
+ include/net/ip.h                                   |   5 +-
+ include/net/page_pool.h                            |  18 --
+ include/net/tcp.h                                  |  10 +
+ include/net/tls.h                                  |   1 +
+ include/uapi/linux/in.h                            |   2 +
+ net/bluetooth/hci_sock.c                           |  28 +++
+ net/core/page_pool.c                               |  34 +++-
+ net/core/skmsg.c                                   |  81 ++++----
+ net/core/sock_map.c                                |   3 +-
+ net/ipv4/inet_connection_sock.c                    |  25 ++-
+ net/ipv4/inet_hashtables.c                         |   2 +-
+ net/ipv4/ip_sockglue.c                             |  30 ++-
+ net/ipv4/raw.c                                     |   5 +-
+ net/ipv4/tcp.c                                     |  11 +-
+ net/ipv4/tcp_bpf.c                                 |  79 +++++++-
+ net/ipv4/udp.c                                     |   9 +-
+ net/ipv6/raw.c                                     |   3 +-
+ net/netfilter/nf_conntrack_netlink.c               |   8 -
+ net/sctp/socket.c                                  |   2 +-
+ net/tls/tls.h                                      |   5 +
+ net/tls/tls_device.c                               |  22 +--
+ net/tls/tls_strp.c                                 | 185 ++++++++++++++----
+ net/unix/af_unix.c                                 |   7 +-
+ tools/include/uapi/linux/in.h                      |   1 +
+ tools/testing/selftests/bpf/Makefile               |   2 +-
+ 49 files changed, 827 insertions(+), 281 deletions(-)
 
 
-
-
-
---
-Best Regards
-
-Masahiro Yamada
