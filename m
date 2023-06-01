@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A0171F4C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C86B71F4C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbjFAVcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 17:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
+        id S232540AbjFAVcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 17:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjFAVcX (ORCPT
+        with ESMTP id S229610AbjFAVcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 17:32:23 -0400
+        Thu, 1 Jun 2023 17:32:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B00A195;
-        Thu,  1 Jun 2023 14:32:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6F6184;
+        Thu,  1 Jun 2023 14:32:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D490E649ED;
-        Thu,  1 Jun 2023 21:32:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA003C433D2;
-        Thu,  1 Jun 2023 21:32:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F45164A01;
+        Thu,  1 Jun 2023 21:32:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4923C433EF;
+        Thu,  1 Jun 2023 21:32:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685655141;
-        bh=ZayG3JtKeRHBP3Of0x1sbbjcfUFrfkdCXWyh5YaG/eA=;
+        s=k20201202; t=1685655171;
+        bh=g2rzy9p5nDkRT5WQ+jqTex7ivDzoyB3d1o/6rkyQ008=;
         h=From:To:Cc:Subject:Date:From;
-        b=dHow6iXjWYevbjQ3KEQ4bE5SmRC4qESv9PCCRjo3MZazJoiwBgDufOlI8fwXvn4Z4
-         HnEaxdRrvyT0N6smSTH5kxL5aL/LGmFLFe1o+h5Lf/e2G2ODOGil3HVkd1D7E8nKAQ
-         /ssQPVfNTow/IiKVw2Mf7WGvL+AfPDov641uyqeMp4wtldDMjyjyKd9guZMJnWx2P4
-         jnL/lxvF5fn6Vz+1q5CxgX5+fJR+RHmfZkDRn43jY6+oTX+I3Cz323F6j9ynG3RAwq
-         i2OSIkJdTkGYrKgTGWzaAzOcr+ztFZTiZmBeJ2cKh+6karepdZqx9jpzAfCkwgWXIe
-         sz9CnHZ8g6Z7Q==
+        b=Qt2KlGyjZVky0lAKv82opTBW9mUDkM0Vd5xFaNjCWso1aWryPa/Nb4exeTSfkSDTH
+         GW1Jw1c0j3TeKqjmlsh5ccslCVjDMlnzCLX2YBzVnoUIrD3+viiRt7LloUH63oM/+/
+         18jNbCe4745xU19oWfP0BkDw5RXimB4jgzkd6ZMCBVPRhzRkvK9Gi+rIdUIxutt8iZ
+         CvncHntkYE6bnLHhCULprPYzhr46zG/GQxwDU80HRnFS7ckLmzC4p2Kr5qMj4fwwtO
+         LZ0VUlvFlDY9sacDCiCIvMJtqjyF/pCYOCsbnF8wzC0ahpWlktBeRX7mTgWfJxdaDE
+         fsxzgrF0KAnLQ==
 From:   Arnd Bergmann <arnd@kernel.org>
-To:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-hwmon@vger.kernel.org,
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Lukasz Luba <lukasz.luba@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: hp-wmi-sensors: fix debugfs check
-Date:   Thu,  1 Jun 2023 23:31:54 +0200
-Message-Id: <20230601213216.3220550-1-arnd@kernel.org>
+Subject: [PATCH] powercap: intel_rapl: fix CONFIG_IOSF_MBI dependency
+Date:   Thu,  1 Jun 2023 23:32:41 +0200
+Message-Id: <20230601213246.3271412-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,59 +57,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Checking for Kconfig symbols with #if is wrong:
+When the intel_rapl driver is built-in, but iosf_mbi is a loadable module,
+the kernel fails to link:
 
-drivers/hwmon/hp-wmi-sensors.c:1141:5: error: "CONFIG_DEBUG_FS" is not defined, evaluates to 0 [-Werror=undef]
+x86_64-linux-ld: vmlinux.o: in function `set_floor_freq_atom':
+intel_rapl_common.c:(.text+0x2dac9b8): undefined reference to `iosf_mbi_write'
+x86_64-linux-ld: intel_rapl_common.c:(.text+0x2daca66): undefined reference to `iosf_mbi_read'
 
-This could be an #ifdef, but an IS_ENABLED() check is even better to
-give the best compile coverage.
+The driver can work with iosf_mbi completely disabled, so add a dependency
+that still allows this configuration, but otherwise forces it to not be
+built-in when iosf_mbi is a loadable module.
 
-Fixes: 602bef0fa281f ("hwmon: add HP WMI Sensors driver")
+Fixes: 9eef7f9da928c ("powercap: intel_rapl: Introduce RAPL TPMI interface driver")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/hwmon/hp-wmi-sensors.c | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
+ drivers/powercap/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/hwmon/hp-wmi-sensors.c b/drivers/hwmon/hp-wmi-sensors.c
-index 7218945bd03fc..ebe2fb5134805 100644
---- a/drivers/hwmon/hp-wmi-sensors.c
-+++ b/drivers/hwmon/hp-wmi-sensors.c
-@@ -1138,8 +1138,6 @@ static int hp_wmi_update_info(struct hp_wmi_sensors *state,
- 	return ret;
- }
- 
--#if CONFIG_DEBUG_FS
--
- static int basic_string_show(struct seq_file *seqf, void *ignored)
- {
- 	const char *str = seqf->private;
-@@ -1341,16 +1339,6 @@ static void hp_wmi_debugfs_init(struct device *dev, struct hp_wmi_info *info,
- 	}
- }
- 
--#else
--
--static void hp_wmi_debugfs_init(struct device *dev, struct hp_wmi_info *info,
--				struct hp_wmi_platform_events *pevents,
--				u8 icount, u8 pcount, bool is_new)
--{
--}
--
--#endif
--
- static umode_t hp_wmi_hwmon_is_visible(const void *drvdata,
- 				       enum hwmon_sensor_types type,
- 				       u32 attr, int channel)
-@@ -1959,7 +1947,8 @@ static int hp_wmi_sensors_init(struct hp_wmi_sensors *state)
- 	if (err)
- 		return err;
- 
--	hp_wmi_debugfs_init(dev, info, pevents, icount, pcount, is_new);
-+	if (IS_ENABLED(CONFIG_DEBUG_FS))
-+		hp_wmi_debugfs_init(dev, info, pevents, icount, pcount, is_new);
- 
- 	if (!count)
- 		return 0;	/* No connected sensors; debugfs only. */
+diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
+index e71399804c143..21ad50b22d6b9 100644
+--- a/drivers/powercap/Kconfig
++++ b/drivers/powercap/Kconfig
+@@ -36,6 +36,7 @@ config INTEL_RAPL
+ config INTEL_RAPL_TPMI
+ 	tristate "Intel RAPL Support via TPMI Interface"
+ 	depends on X86
++	depends on IOSF_MBI || IOSF_MBI=n
+ 	depends on INTEL_TPMI
+ 	select INTEL_RAPL_CORE
+ 	help
 -- 
 2.39.2
 
