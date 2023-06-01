@@ -2,163 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F1171A21F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110B071A226
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233563AbjFAPMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 11:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
+        id S233752AbjFAPPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 11:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233520AbjFAPMl (ORCPT
+        with ESMTP id S233267AbjFAPPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 11:12:41 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B728F123
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 08:12:38 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2af30a12e84so14120151fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 08:12:38 -0700 (PDT)
+        Thu, 1 Jun 2023 11:15:22 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14B1D1
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 08:15:21 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-33bcc8f0d21so385955ab.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 08:15:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1685632356; x=1688224356;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ph7ftW5cejm+zmzrjTmdD1HUI/Koyz77q7cE4rVNfqE=;
-        b=IMhCo74zneEuKMWiRVobthi+gLDn7dJxBRgHxTAOes2/kMwkR9caK9KBYWCPzw6WLg
-         zFrc5cHUsczAYMJLH7gq/BaaNu4dxy9mZVnwfTJlLcg2yjoFq2nWT5AwfV37/bd9D2NI
-         4/aKFd0Y+cutsBT8LL8il+hHP2+jzjmrNIif0=
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685632521; x=1688224521;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o+F3XMekuXHuWIgCSsQ++NIeXO+URcOh8EvMjy2nv14=;
+        b=doSleAE9iQ/fpG1saj/46RDsYLT1lJm+nUEQsc0hOBi+JduFCGX96cOElqbWWtLJF4
+         otk+cVw4cPewhN61uTgHXhQ1aIa4zlsFklZ41SKrLAeCn2hYw4OkhYIZxFjYyPN3BmZL
+         awbRRWPTT2o0041A9dZq2lnUA6vVwNL/muHUvut5+YwI+K7PbOeVAqUGmL/+IhXzhNmT
+         ZLHEpBB2gMuTXIG542iAz5cyOSEebnKuIhZ4OntHaLZdaeNUhbVUQniG7iHVdRN1q3/f
+         bmXELU8QSBhq8dtaUJCuMVD0UCxVP4rDRSwBOmtJLuKLwLWNshaLztUOWIW1m3CB92eP
+         h8ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685632356; x=1688224356;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ph7ftW5cejm+zmzrjTmdD1HUI/Koyz77q7cE4rVNfqE=;
-        b=BqF075tzfH94AByOfbVxxhgfP3lwuh6YqLpozyMCzQEQp7iWG/IcMQMU5XH/2Fe8MR
-         9Ah0UoC1xX4saYtes6EMEiDfysus1mcnl8Hvb1Ja+9gq9iOIfHLZs88Guz+4Wntix47P
-         pK/TQ1FcGEPTFPOu6IL/OQpYDl1W7smvtYIRzLew6+ItS3XBgWM3ZjjyaMAHJ2PtjH7B
-         sritBWWZgpjFJtvKzQKaEIOWMQTCeq0c/QKEji8MRkvXzd9/FZ61KH8CLQ7Gz46FCJ0h
-         lD4dWbhP5b97M07ifWNxoUT09eMAa2/2PUrA3vsE19iF8oKQ9FzPLJ6NeaUujmwHuobv
-         rDGQ==
-X-Gm-Message-State: AC+VfDySYspGV5ACxriKnbq/qJGD9QBYpa+eruPKBoRmQvrEmVWbfvoT
-        pyu2BGYSFYI3phbZcCznwgfyu7Xp0VBLbpHpPJ5bqtfy
-X-Google-Smtp-Source: ACHHUZ77O5vA6s71HAviH4qFbGFJ68tDH7QdKOmMWpeaLI8E5pquGzj1rf7Gtgbjs8YTawmc13eLQQ==
-X-Received: by 2002:a2e:a176:0:b0:2a8:bdff:8556 with SMTP id u22-20020a2ea176000000b002a8bdff8556mr5220274ljl.13.1685632356239;
-        Thu, 01 Jun 2023 08:12:36 -0700 (PDT)
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
-        by smtp.gmail.com with ESMTPSA id r3-20020a170906a20300b00965ffb8407asm10618122ejy.87.2023.06.01.08.12.35
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1685632521; x=1688224521;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o+F3XMekuXHuWIgCSsQ++NIeXO+URcOh8EvMjy2nv14=;
+        b=fr65LpS/RebXwiiK/jeP8CVbdH+xBrsmsaqU4/1E0fcibFxDUgDhcXF5G5Yoqt3W6r
+         Eppb4YbTMSpJ8HX1WxGD6ByBBDHHyArFx4Qbewjq+/cnQ7oFvKhAb5xTL70HHVHQNQta
+         uicjDJRlHk205Z8X9NiL3Upsbwh+nOpyyOa05+YRRU/FoI5rgnhvf2x9ZyD8tZ0vkwR3
+         3bDz7Wn5zh3OzjzFnFHae95thq4+gCC/Vpo7lIP17qqMscCt1uKYcxE8B32CO6sZw0Rw
+         ieNalRjd/zkwn0xh70hImGbQTCwhi1PqyaoBexFeHDLnrepLg4gGlo+Jj9D+Q6qIiEYW
+         9jzQ==
+X-Gm-Message-State: AC+VfDwbjOdJ8uJA1fFeMVF7HXLREDoUkhxz99s5jveCaVIMpx15WBn2
+        syfIlFbSoAIghswhtY4C+jd6Eg==
+X-Google-Smtp-Source: ACHHUZ4aDwWmm0SZGc5Yo3Cxv+brXsxD3GkC3hDRE0VQJCew9TUC5FzFyjCzBbRrX2pALjky/Pryvw==
+X-Received: by 2002:a92:3652:0:b0:33b:1b5d:9723 with SMTP id d18-20020a923652000000b0033b1b5d9723mr3255265ilf.3.1685632520982;
+        Thu, 01 Jun 2023 08:15:20 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id h17-20020a92d091000000b0033079f435f7sm3862149ilh.65.2023.06.01.08.14.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 08:12:35 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-96fe88cd2fcso126401866b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 08:12:35 -0700 (PDT)
-X-Received: by 2002:a17:907:a42a:b0:96f:912d:7922 with SMTP id
- sg42-20020a170907a42a00b0096f912d7922mr7892507ejc.53.1685632355228; Thu, 01
- Jun 2023 08:12:35 -0700 (PDT)
+        Thu, 01 Jun 2023 08:14:30 -0700 (PDT)
+Message-ID: <416030d0-f8f1-23b0-875c-ad75880aca4f@kernel.dk>
+Date:   Thu, 1 Jun 2023 09:14:09 -0600
 MIME-Version: 1.0
-References: <20230524153311.3625329-1-dhowells@redhat.com> <20230524153311.3625329-10-dhowells@redhat.com>
- <20230526180844.73745d78@kernel.org> <499791.1685485603@warthog.procyon.org.uk>
- <CAHk-=wgeixW3cc=Ys8eL0_+22FUhqeEru=nzRrSXy1U4YQdE-w@mail.gmail.com>
- <CAHk-=wghhHghtvU_SzXxAzfaX35BkNs-x91-Vj6+6tnVEhPrZg@mail.gmail.com> <832277.1685630048@warthog.procyon.org.uk>
-In-Reply-To: <832277.1685630048@warthog.procyon.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 1 Jun 2023 11:12:17 -0400
-X-Gmail-Original-Message-ID: <CAHk-=wji_2UwFMkUYkygsYRek05NwaQkH-vA=yKQtQS9Js+urQ@mail.gmail.com>
-Message-ID: <CAHk-=wji_2UwFMkUYkygsYRek05NwaQkH-vA=yKQtQS9Js+urQ@mail.gmail.com>
-Subject: Re: Bug in short splice to socket?
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: linux-next: build failure after merge of the block tree
+Content-Language: en-US
+To:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230601105006.199a32ee@canb.auug.org.au>
+ <012599f4-61cf-47df-0fda-4294d8573b83@wdc.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <012599f4-61cf-47df-0fda-4294d8573b83@wdc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 1, 2023 at 10:34=E2=80=AFAM David Howells <dhowells@redhat.com>=
- wrote:
->
-> At the moment, it transcribes 16 pages at a time.  I could make it set
-> MSG_MORE only if (a) SPLICE_F_MORE was passed into the splice() syscall o=
-r (b)
-> there's yet more data in the buffer.
+On 6/1/23 2:27 AM, Johannes Thumshirn wrote:
+> On 01.06.23 02:50, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the block tree, today's linux-next build (x86_64
+>> allmodconfig) failed like this:
+>>
+>> In file included from include/linux/slab.h:15,
+>>                  from drivers/md/raid1.c:26:
+>> drivers/md/raid1.c: In function 'alloc_behind_master_bio':
+>> include/linux/gfp.h:320:36: error: passing argument 1 of 'free_pages' makes integer from pointer without a cast [-Werror=int-conversion]
+>>   320 | #define free_page(addr) free_pages((addr), 0)
+>>       |                                    ^~~~~~
+>>       |                                    |
+>>       |                                    struct page *
+>> drivers/md/raid1.c:1151:25: note: in expansion of macro 'free_page'
+>>  1151 |                         free_page(page);
+>>       |                         ^~~~~~~~~
+>> include/linux/gfp.h:303:38: note: expected 'long unsigned int' but argument is of type 'struct page *'
+>>   303 | extern void free_pages(unsigned long addr, unsigned int order);
+>>       |                        ~~~~~~~~~~~~~~^~~~
+>>
+>> Caused by commit
+>>
+>>   6473bc325644 ("md: check for failure when adding pages in alloc_behind_master_bio")
+>>
+>> I have used the block tree from next-20230531 for today.
+>>
+> 
+> This obviously has to be:
+> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
+> index ff89839455ec..3570da63969b 100644
+> --- a/drivers/md/raid1.c
+> +++ b/drivers/md/raid1.c
+> @@ -1148,7 +1148,7 @@ static void alloc_behind_master_bio(struct r1bio *r1_bio,
+>                         goto free_pages;
+>  
+>                 if (!bio_add_page(behind_bio, page, len, 0)) {
+> -                       free_page(page);
+> +                       put_page(page);
+>                         goto free_pages;
+>                 }
+>  
+> 
+> But I wonder why I dint see it in my allmodconfig build. 
+> 
+> Jens can you fold that in or do you want me to update the patch?
 
-That would at least be a good first step.
+Done
 
-> However, this might well cause a malfunction in UDP, for example.  MSG_MO=
-RE
-> corks the current packet, so if I ask sendfile() say shove 32K into a pac=
-ket,
-> if, say, 16K is read from the source and entirely transcribed into the pa=
-cket,
+-- 
+Jens Axboe
 
-If you use splice() for UDP, I don't think you would normally expect
-to get all that well-defined packet boundaries.
 
-That said, I think *this* part of splice_direct_to_actor() is correct:
-
-                if (read_len < len)
-                        sd->flags |=3D SPLICE_F_MORE;    <- WRONG
-                else if (!more)
-                        sd->flags &=3D ~SPLICE_F_MORE; <- CORRECT
-
-ie if we've used up all of the 'len' argument, *and* 'more' wasn't set
-in the incoming flags, then at that point we should clear
-SPLICE_F_MORE.
-
-So that means that UDP packets boundaries will be honored at the
-'splice()' system call 'len' argument.
-
-Obviously packet boundaries might happen before that - ie depending on
-what the packet size limits are.
-
-But the "set SPLICE_F_MORE" bit is just wrong. The generic code simply
-does not know enough to make that determination.
-
-> if I understand what you're proposing, MSG_MORE wouldn't get set and the
-> packet would be transmitted early.
-
-No, I'm saying that MSG_MORE should be set depending on what the
-splice *input* says.
-
-If the splice input knows that it has more to give but stopped early
-for whatever reason (typically that the splice pipe buffers filled up,
-but that's not necessarily the *only* reason), then it should set
-SPLICE_F_MORE.
-
-But this is literally only something that the input side *can* know.
-
-And as you mention, some input sides cannot know even that. Regular
-files typically know if there is more data. Other dynamic sources may
-simply not know. And if they know, they just shouldn't set
-SPLICE_F_MORE.
-
-Of course, SPLICE_F_MORE may then be set because the *user* passed in
-that flag, but that's a completely separate issue. The user may pass
-in that flag because the user wants maximally sized packets, and knows
-that other things will be fed into the destination (not even
-necessarily through splice) after the splice.
-
-So you really have multiple different reasons why SPLICE_F_MORE might
-get set, but that
-
-                if (read_len < len)
-
-is *not* a valid reason. And no, extending that logic with more random
-logic is still not a valid reason.
-
-            Linus
