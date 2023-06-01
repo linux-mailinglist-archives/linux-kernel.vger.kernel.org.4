@@ -2,95 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC917195BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8C67195C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232199AbjFAIhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
+        id S232237AbjFAIil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbjFAIgR (ORCPT
+        with ESMTP id S232221AbjFAIiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:36:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6792192;
-        Thu,  1 Jun 2023 01:35:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B517641D5;
-        Thu,  1 Jun 2023 08:35:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6921C433A1;
-        Thu,  1 Jun 2023 08:35:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685608514;
-        bh=+YUAD//YlVKY5+gBa+79P7cJwXwdOQ+Jp7VlD1PAbyo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=P4bEPbdddBPCb87kzpJv07aaMARtLmWwzjkiom41+hsHBrl62JD1r1aBz8cKHjU9c
-         X9iu9Wm74cvVi+piVFvjrw7RVk0QYFoTynZ3NC6QR2BuP4tDEL8RlNr3ZPur330cOE
-         Q6uVHeKmiYvhBPIOugw4mRA7dnNrWHiZzN/9fuX0WChgHkQocHT/uKqzmvR8j8a3xw
-         dANIclAdTMyw005A1Kw25L9j1KqzX2r1j9bLbYGOxFPlY0SXFBFdPb7X1uyBilfPr9
-         +pNf2rydGlsyZHIev0KsctUhTFsYOZvW3tt6L2NCAtgArx6weXCnZIr4u9vMZ31IeT
-         +ckxpbqXZSRow==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4f3b9755961so598204e87.0;
-        Thu, 01 Jun 2023 01:35:14 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwG8OUV65sSOLepcZtLPNJwOI/zgGdQPBSrfQsgACF0xvXj2iwe
-        jgA7Le8A73OIEWq2DtcM7Weg1x/jUqEENch6P8I=
-X-Google-Smtp-Source: ACHHUZ6xuvvb5BPVfNACe6MUpNkE8UndZ+3fIhVFWcRPk2HabAj3IPXudsw5v84/8PYDOGj4ekJgWMf32Q1K1poixK8=
-X-Received: by 2002:ac2:59cf:0:b0:4f3:7b3c:2e16 with SMTP id
- x15-20020ac259cf000000b004f37b3c2e16mr887897lfn.39.1685608512676; Thu, 01 Jun
- 2023 01:35:12 -0700 (PDT)
+        Thu, 1 Jun 2023 04:38:04 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4D7A10C6;
+        Thu,  1 Jun 2023 01:36:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 916DC169C;
+        Thu,  1 Jun 2023 01:37:28 -0700 (PDT)
+Received: from [10.57.22.124] (unknown [10.57.22.124])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A51083F67D;
+        Thu,  1 Jun 2023 01:36:40 -0700 (PDT)
+Message-ID: <d8f74a05-d3b0-a39b-6fe4-bbea2e98e653@arm.com>
+Date:   Thu, 1 Jun 2023 09:36:39 +0100
 MIME-Version: 1.0
-References: <20230530155501.222213-1-azeemshaikh38@gmail.com> <CACRpkdbf_biFPFC62uF1byXrMnK=0XbbBiZpJwT=GVnx5ZpP=g@mail.gmail.com>
-In-Reply-To: <CACRpkdbf_biFPFC62uF1byXrMnK=0XbbBiZpJwT=GVnx5ZpP=g@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 1 Jun 2023 10:35:01 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGETX_zD=Us+E3+c0f1Cs3OA3gmZrR3Q-xhdh047V3-TQ@mail.gmail.com>
-Message-ID: <CAMj1kXGETX_zD=Us+E3+c0f1Cs3OA3gmZrR3Q-xhdh047V3-TQ@mail.gmail.com>
-Subject: Re: [PATCH] ARM: Replace all non-returning strlcpy with strscpy
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Azeem Shaikh <azeemshaikh38@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.1
+Subject: Re: [PATCH v4 00/11] Add support to configure TPDM DSB subunit
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org
+References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
+ <7e2eaf1f-369a-d664-1011-3da6efb382a3@arm.com>
+ <725b6ccd-ff70-a3d2-fe44-797c0509e643@quicinc.com>
+ <13686cd8-c887-32ef-d314-0955be366373@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <13686cd8-c887-32ef-d314-0955be366373@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 May 2023 at 15:30, Linus Walleij <linus.walleij@linaro.org> wrot=
-e:
->
-> On Tue, May 30, 2023 at 5:55=E2=80=AFPM Azeem Shaikh <azeemshaikh38@gmail=
-.com> wrote:
->
-> > strlcpy() reads the entire source buffer first.
-> > This read may exceed the destination size limit.
-> > This is both inefficient and can lead to linear read
-> > overflows if a source string is not NUL-terminated [1].
-> > In an effort to remove strlcpy() completely [2], replace
-> > strlcpy() here with strscpy().
-> > No return values were used, so direct replacement is safe.
-> >
-> > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strl=
-cpy
-> > [2] https://github.com/KSPP/linux/issues/89
-> >
-> > Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
->
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->
-> Please put this into Russell's patch tracker:
-> https://www.arm.linux.org.uk/developer/patches/
->
+On 01/06/2023 09:17, Tao Zhang wrote:
+> 
+> On 5/23/2023 3:50 PM, Tao Zhang wrote:
+>> On 4/28/2023 12:53 AM, Suzuki K Poulose wrote:
+>>> On 27/04/2023 10:00, Tao Zhang wrote:
+>>>> Introduction of TPDM DSB subunit
+>>>> DSB subunit is responsible for creating a dataset element, and is also
+>>>> optionally responsible for packing it to fit multiple elements on a
+>>>> single ATB transfer if possible in the configuration. The TPDM Core
+>>>> Datapath requests timestamps be stored by the TPDA and then delivering
+>>>> ATB sized data (depending on ATB width and element size, this could
+>>>> be smaller or larger than a dataset element) to the ATB Mast FSM.
+>>>>
+>>>> The DSB subunit must be configured prior to enablement. This series
+>>>> adds support for TPDM to configure the configure DSB subunit.
 
-https://www.armlinux.org.uk/developer/patches/viewpatch.php?id=3D9300/1
+...
+
+>>> There is v6 available for the above and there may be changes in the data
+>>> structures. But the series is stable now, and may be you could cordinate
+>>> with James and repost the series at rc1 ?
+>>
+>> This patch series has depended on James's v6 patch series. It's a 
+>> description mistake.
+>>
+>> The link I posted is James's v6 patch series.
+>>
+>> Would you mind continue to review this patch series first?
+>>
+>>
+>> Tao
+>>
+> Hi Suzuki,
+> 
+> 
+> Do you have more review comments on the rest of the patches(#5-#11) in 
+> this series?
+> 
+> Or do you prefer me to update patches(#1-#4) and resubmit first?
+
+Apologoies for the delay. I will try to complete this series this week.
+
+Thanks
+Suzuki
+
