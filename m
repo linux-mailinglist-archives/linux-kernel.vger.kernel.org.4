@@ -2,159 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56CE71EEDE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F027E71EEEE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231577AbjFAQ1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 12:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
+        id S231602AbjFAQ1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 12:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbjFAQ1C (ORCPT
+        with ESMTP id S229880AbjFAQ1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 12:27:02 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C710186
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 09:27:01 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-517bdc9e81dso451873a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 09:27:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1685636820; x=1688228820;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ACJ9Qwha81LGr+RoxzBokRD6gcXSKrY0efwdDtNyXI=;
-        b=dg0s4ZFVNYn6tepQuLsU2NKYtfl+oKWqpjFftzP47VwcfA0Ize5oVpiPgWqlAWp+5j
-         xQBDKj3yUXWWxyz5/RCb+lkiDGZP4sRos+T9SN8FlMZ7XUZGVaVQIJTEypfh5ezqMjS0
-         uO1rmmHWRmVZUclfyHBGsUnZso2/aBY4CMXnsSi8ZIsh+yjhj79StoTGtdfVC07Z5ZcI
-         LxvTdjr+etxaN2x/tqmZHe1+fUJYt/sTgD8S3HF9QyFqNCB+UTT4IFVkXUZl4bjwvIbY
-         a60PPtBL5WOun5rAgCPL8svmav5dhdOsWr0p4QH+tfPKP7YTYl3LJIGqPk209bvx+HGA
-         oH/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685636820; x=1688228820;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4ACJ9Qwha81LGr+RoxzBokRD6gcXSKrY0efwdDtNyXI=;
-        b=ix3wloF/sPp8FLk8jMSwwoNsr6ztYu/6pzZgldYInWFyHl/iYo538gUSAIvIon1czk
-         UppR6FmltOBKf0Pc6qdV4JXBizZUwNFctVoM2jO9obOvCvdcYlfSX8R3IoMTOtxOorIz
-         S33pQ1dsXwEEpzwVTdeWts/YYY7SsPvnL2Skjd3Z4xd0oJ5QYLvcU/QyPgnOYjGc3Var
-         cC8Ge1/GG1+KvTbuWGJsoYOHt+tTF588MFmK1QcIy2bAz/SGrUgVg25QFKkOhWDDqcLq
-         TOx36zrRQ2Tr2TpD71j5kusUd0NiUEnn68pvysBSUvsqSujqrp6aOCSCwluZFeGAApx4
-         SLAw==
-X-Gm-Message-State: AC+VfDy7B5IhacpCgnfyMGHgJMMQu7U2NcafRrgkT3Q7biQsP3pc5UwY
-        /loK2K0UPdXtqk55gQWhxHjNrw==
-X-Google-Smtp-Source: ACHHUZ5ZKzhnwfchbLJtNrudHDOJef/3ChfLyjHB1poNZDA0WJGKeMYyQ+glJ+rHoAHIrsc+xr0HEQ==
-X-Received: by 2002:a17:902:f682:b0:1af:a058:cc2d with SMTP id l2-20020a170902f68200b001afa058cc2dmr7831816plg.57.1685636820614;
-        Thu, 01 Jun 2023 09:27:00 -0700 (PDT)
-Received: from ubuntu-hf2.default.svc.cluster.local ([101.127.248.173])
-        by smtp.gmail.com with ESMTPSA id b7-20020a170902650700b001acaf7e26bbsm3750487plk.53.2023.06.01.09.26.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 09:27:00 -0700 (PDT)
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-To:     david@redhat.com
-Cc:     osalvador@suse.de, rppt@kernel.org, mhocko@kernel.org,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Haifeng Xu <haifeng.xu@shopee.com>
-Subject: [PATCH 2/2] mm/mm_init.c: remove reset_node_present_pages()
-Date:   Thu,  1 Jun 2023 16:26:26 +0000
-Message-Id: <20230601162626.1030-2-haifeng.xu@shopee.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 1 Jun 2023 12:27:46 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F125212C;
+        Thu,  1 Jun 2023 09:27:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685636865; x=1717172865;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Re3XUbJYE5wz7BKtwG+m2aCGFJz7ak2dDNPkBnP/kmg=;
+  b=LYgA2WPWdZssZmEPeY1Rr7lbbbRrKYNF+Zx9CsW+bPHxHc/Jlcrw8oiJ
+   ofN7lYLmBsbsCHD8m3dkobK24qeA5W0mlyrxABaxLDG1aEREmk0AqVRW3
+   QV+25pR3UC2lrQjiotkiHroCv7FQ2XYhGq+v+4EFYyTtkMOO7I/U3EJ0Q
+   jrQwCMxIL7WbP+Tw7TyRifglzAMurA3XfL+2KRSk/h40phCt0L0uS9aGR
+   bckw71Gv8lbaIoau2digHUiKJrNB1eTd7QtzfsuTXzudG4qOCGmMEmpSv
+   bsylEhnfUSIK7Z+5f/FiYr7d+VHztapVvasLBya//SzcV1LdMNfrN+3av
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="345169915"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="345169915"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:27:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="657859553"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="657859553"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 01 Jun 2023 09:27:34 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q4l98-000SZF-0S;
+        Thu, 01 Jun 2023 19:27:30 +0300
+Date:   Thu, 1 Jun 2023 19:27:29 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jonas Gorski <jonas.gorski@gmail.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        linux-pci@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Andrew Lunn <andrew@lunn.ch>, sparclinux@vger.kernel.org,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-acpi@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        xen-devel@lists.xenproject.org, Matt Turner <mattst88@gmail.com>,
+        Anatolij Gustschin <agust@denx.de>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Juergen Gross <jgross@suse.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-mips@vger.kernel.org,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        linux-alpha@vger.kernel.org,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>
+Subject: Re: [PATCH v8 0/7] Add pci_dev_for_each_resource() helper and update
+ users
+Message-ID: <ZHjG8cBIdZsjhDOe@smile.fi.intel.com>
+References: <ZF6YIezraETr9iNM@bhelgaas>
+ <ZHZpcli2UmdzHgme@bhelgaas>
+ <CAOiHx==5YWhDiZP2PyHZiJrmtqRzvqCqoSO59RwuYuR85BezBg@mail.gmail.com>
+ <ZHjGik12vSFgi1eO@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHjGik12vSFgi1eO@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-reset_node_present_pages() only get called in hotadd_init_pgdat(), move
-the action that clear present pages to free_area_init_core_hotplug(), so
-the helper can be removed.
+On Thu, Jun 01, 2023 at 07:25:46PM +0300, Andy Shevchenko wrote:
+> On Wed, May 31, 2023 at 08:48:35PM +0200, Jonas Gorski wrote:
+> > On Tue, 30 May 2023 at 23:34, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > On Fri, May 12, 2023 at 02:48:51PM -0500, Bjorn Helgaas wrote:
 
-Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
----
- mm/memory_hotplug.c | 18 ------------------
- mm/mm_init.c        | 14 ++++++++++++--
- 2 files changed, 12 insertions(+), 20 deletions(-)
+...
 
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index 65e385f34679..ee1c0d9a4d5a 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -1172,16 +1172,6 @@ int __ref online_pages(unsigned long pfn, unsigned long nr_pages,
- 	return ret;
- }
- 
--static void reset_node_present_pages(pg_data_t *pgdat)
--{
--	struct zone *z;
--
--	for (z = pgdat->node_zones; z < pgdat->node_zones + MAX_NR_ZONES; z++)
--		z->present_pages = 0;
--
--	pgdat->node_present_pages = 0;
--}
--
- /* we are OK calling __meminit stuff here - we have CONFIG_MEMORY_HOTPLUG */
- static pg_data_t __ref *hotadd_init_pgdat(int nid)
- {
-@@ -1204,14 +1194,6 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
- 	 */
- 	build_all_zonelists(pgdat);
- 
--	/*
--	 * When memory is hot-added, all the memory is in offline state. So
--	 * clear all zones' present_pages because they will be updated in
--	 * online_pages() and offline_pages().
--	 * TODO: should be in free_area_init_core_hotplug?
--	 */
--	reset_node_present_pages(pgdat);
--
- 	return pgdat;
- }
- 
-diff --git a/mm/mm_init.c b/mm/mm_init.c
-index 78e67041ae9f..e24ea1db9e26 100644
---- a/mm/mm_init.c
-+++ b/mm/mm_init.c
-@@ -1491,6 +1491,7 @@ void __ref free_area_init_core_hotplug(struct pglist_data *pgdat)
- {
- 	int nid = pgdat->node_id;
- 	enum zone_type z;
-+	struct zone *zone;
- 	int cpu;
- 
- 	pgdat_init_internals(pgdat);
-@@ -1507,6 +1508,8 @@ void __ref free_area_init_core_hotplug(struct pglist_data *pgdat)
- 	pgdat->kswapd_order = 0;
- 	pgdat->kswapd_highest_zoneidx = 0;
- 	pgdat->node_start_pfn = 0;
-+	pgdat->node_present_pages = 0;
-+
- 	for_each_online_cpu(cpu) {
- 		struct per_cpu_nodestat *p;
- 
-@@ -1514,8 +1517,15 @@ void __ref free_area_init_core_hotplug(struct pglist_data *pgdat)
- 		memset(p, 0, sizeof(*p));
- 	}
- 
--	for (z = 0; z < MAX_NR_ZONES; z++)
--		zone_init_internals(&pgdat->node_zones[z], z, nid, 0);
-+	/* When memory is hot-added, all the memory is in offline state. So
-+	 * clear all zones' present_pages and managed_pages because they will
-+	 * be updated in online_pages() and offline_pages().
-+	 */
-+	for (z = 0; z < MAX_NR_ZONES; z++) {
-+		zone = &pgdat->node_zones[z];
-+		zone->present_pages = 0;
-+		zone_init_internals(zone, z, nid, 0);
-+	}
- }
- #endif
- 
+> > > Where are we at?  Are we going to ignore this because some Coverity
+> > > reports are false positives?
+> > 
+> > Looking at the code I understand where coverity is coming from:
+> > 
+> > #define __pci_dev_for_each_res0(dev, res, ...)                         \
+> >        for (unsigned int __b = 0;                                      \
+> >             res = pci_resource_n(dev, __b), __b < PCI_NUM_RESOURCES;   \
+> >             __b++)
+> > 
+> >  res will be assigned before __b is checked for being less than
+> > PCI_NUM_RESOURCES, making it point to behind the array at the end of
+> > the last loop iteration.
+> 
+> Which is fine and you stumbled over the same mistake I made, that's why the
+> documentation has been added to describe why the heck this macro is written
+> the way it's written.
+> 
+> Coverity sucks.
+> 
+> > Rewriting the test expression as
+> > 
+> > __b < PCI_NUM_RESOURCES && (res = pci_resource_n(dev, __b));
+> > 
+> > should avoid the (coverity) warning by making use of lazy evaluation.
+> 
+> Obviously NAK.
+> 
+> > It probably makes the code slightly less performant as res will now be
+> > checked for being not NULL (which will always be true), but I doubt it
+> > will be significant (or in any hot paths).
+
+Oh my god, I mistakenly read this as bus macro, sorry for my rant,
+it's simply wrong.
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
