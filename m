@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9A47191F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 06:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FDB7191F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 06:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbjFAElz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 00:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
+        id S230437AbjFAEnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 00:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjFAElx (ORCPT
+        with ESMTP id S229499AbjFAEnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 00:41:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96FAD1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 21:41:52 -0700 (PDT)
+        Thu, 1 Jun 2023 00:43:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1348BD1;
+        Wed, 31 May 2023 21:43:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 545EB63F7C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 04:41:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6318AC433EF;
-        Thu,  1 Jun 2023 04:41:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BAE664096;
+        Thu,  1 Jun 2023 04:43:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEB09C433A4;
+        Thu,  1 Jun 2023 04:43:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685594511;
-        bh=ky4mR1cJE7WCesKxH6aaf+JK5+lIqgajYd9irBlEbY4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pB3wpVHxZZar5qF3MQ9DLa2z79UUtaxFs2gPclrFKJvyigPrAS25/N3E0GYo6ej58
-         uwD6gtP/WdOObwuHRL0x1xi0QLR2SrOY+eLXuv6aHqAEyMnIqdbRPfm8TNiU02TR9X
-         879GYrjN0ddGnWtZlqsLCce1BG1VYrhrSdGf4/8XJOKXiGjWkq9qU/7mcYk57bHBDL
-         UIK7BO03MA8HaPzQlPobzV5q3B4rGlRmUuKv/HVLrJih8luoPVox1YPii5ykrYJ8FD
-         jHNfR8mN3I5mFEcLZ3uMGYxuYcfqnIbWwW2uyIgcjGDYck+7WgfwAj9YaOaaFaHh7y
-         2SXK9dnsQZRsQ==
-Date:   Wed, 31 May 2023 21:41:50 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>,
-        "privat@egil-hjelmeland.no" <privat@egil-hjelmeland.no>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: dsa: lan9303: allow vid != 0 in port_fdb_{add|del}
- methods
-Message-ID: <20230531214150.2e0f03d1@kernel.org>
-In-Reply-To: <20230531153519.t3go47caebkchltv@skbuf>
-References: <20230531143826.477267-1-alexander.sverdlin@siemens.com>
-        <20230531151620.rqdaf2dlp5jsn6mk@skbuf>
-        <426c54cdaa001d55cdcacee4ae9e7712cee617c2.camel@siemens.com>
-        <20230531153519.t3go47caebkchltv@skbuf>
+        s=k20201202; t=1685594593;
+        bh=glxEErfBF3rHdX2Urzd+1Qp5ZZmjQW4jC0j3rig2bd4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eJppZiLfpsup79yOmIoJDe2feYX0jjKFJgJ9XoDNWkX2xBnQmQWwOId5NiG1+K93q
+         lyFC1cwabbl0+RfyypvfRuKmrZSAaHfH4IwQXQglE2N4MQ0hnUYd8mfbyOwQjuyPze
+         ky0RlW+lKBET4OIwuGJPa3cC/l6uri0Yec/mKviXt3gL2TcMB26kiYu9il4yoOEbzv
+         TmxJwzPVcUAxTSFxMKKDmY0zIq8hLR+aeX1CSZ5vjG/g8yfWonEHLUtrkAraaw/AYk
+         bsNju0GBVzFj/UZ2SraPiSeNCMlcrhkF8HRPnlJlM2PXAgsA7KnuVxO3rCdxd3Ml3p
+         DuU7JLbQrT1aQ==
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5147dce372eso799013a12.0;
+        Wed, 31 May 2023 21:43:13 -0700 (PDT)
+X-Gm-Message-State: AC+VfDycyF8FE2N83BVIgUdGqcNwLChYNXHnTHMk/AtSpDaU18XJNOgk
+        W83bgP9lHV1XLy/vmZOj7ft0ZW1GjvImLoWWOpQ=
+X-Google-Smtp-Source: ACHHUZ7WYfywbSzqGOxvRRYAxq7nURM10ufCPK0jjetP4TSKkDNLozvsGovCGYbXJafAZ1bgYgshJ3tbcnwZI3XfxrM=
+X-Received: by 2002:a05:6402:14c9:b0:514:9423:65a5 with SMTP id
+ f9-20020a05640214c900b00514942365a5mr5538713edx.19.1685594592071; Wed, 31 May
+ 2023 21:43:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230523165502.2592-1-jszhang@kernel.org> <20230523165502.2592-3-jszhang@kernel.org>
+In-Reply-To: <20230523165502.2592-3-jszhang@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 1 Jun 2023 12:43:00 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS1EcEw0VWGgd-bezKh=s7zPnFBdyuJc1wuH_SXEwoXbA@mail.gmail.com>
+Message-ID: <CAJF2gTS1EcEw0VWGgd-bezKh=s7zPnFBdyuJc1wuH_SXEwoXbA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] riscv: vmlinux-xip.lds.S: remove .alternative section
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,11 +67,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 May 2023 18:35:19 +0300 Vladimir Oltean wrote:
-> If you want to be completely sure I didn't just throw a wrench into
-> your plans, feel free to resend a v2 with just my review tag
-> (dropping my Fixes tag)
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-FWIW if you worry that the Fixes tag will get added automatically - 
-for whatever reason that still doesn't work. We add them manually
-when someone provides a tag in response.
+On Wed, May 24, 2023 at 1:10=E2=80=AFAM Jisheng Zhang <jszhang@kernel.org> =
+wrote:
+>
+> ALTERNATIVE mechanism can't work on XIP, and this is also reflected by
+> below Kconfig dependency:
+>
+> RISCV_ALTERNATIVE
+>         ...
+>         depends on !XIP_KERNEL
+>         ...
+>
+> So there's no .alternative section at all for XIP case, remove it.
+>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  arch/riscv/kernel/vmlinux-xip.lds.S |   6 ------
+>  1 files changed, 6 deletions(-)
+>
+> diff --git a/arch/riscv/kernel/vmlinux-xip.lds.S b/arch/riscv/kernel/vmli=
+nux-xip.lds.S
+> index eab9edc3b631..50767647fbc6 100644
+> --- a/arch/riscv/kernel/vmlinux-xip.lds.S
+> +++ b/arch/riscv/kernel/vmlinux-xip.lds.S
+> @@ -98,12 +98,6 @@ SECTIONS
+>                 __soc_builtin_dtb_table_end =3D .;
+>         }
+>
+> -       . =3D ALIGN(8);
+> -       .alternative : {
+> -               __alt_start =3D .;
+> -               *(.alternative)
+> -               __alt_end =3D .;
+> -       }
+>         __init_end =3D .;
+>
+>         . =3D ALIGN(16);
+> --
+> 2.40.1
+>
+
+
+--=20
+Best Regards
+ Guo Ren
