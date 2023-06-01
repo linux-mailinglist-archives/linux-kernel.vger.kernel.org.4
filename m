@@ -2,88 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F8E719865
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A7771986D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232801AbjFAKI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
+        id S232377AbjFAKJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232937AbjFAKIe (ORCPT
+        with ESMTP id S233298AbjFAKJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:08:34 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DCC138;
-        Thu,  1 Jun 2023 03:06:37 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 167DF320069B;
-        Thu,  1 Jun 2023 06:06:34 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 01 Jun 2023 06:06:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.fm; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1685613993; x=1685700393; bh=8ZuU8TLDMySBnmghexzuWEa4NXd1xIu7Ee2
-        fhDFog6Y=; b=B0NeQNg24xK+OoIFrVSls7ao2BGeZayfqlYJJn1anYHjnO50rkv
-        NOO6fnvCOXoPpvFB2671T6AswEIcuH/uEPX5EsT3z8YqU7xyiJ6vWtVxK5ya/1zr
-        90S7kJRE1peSTKNgVIKSDy9F23lOhokUaJz1jy7vTKbjjdMR2EyLaXaWLHu+TEXj
-        PpdF/Y8Fma0Uai7uvV0YkvkCD85Sdv5rJpm90bNw1HTVQiiCIo8MfNiy5eEwC5nI
-        3nuNPxvMUO1K3kFroe1fwcIMqxN/PgjZ76HtO0UpMFY6JIIwSC3ygLVor56gT//g
-        th8ZfLVbc03nEavoBPctF8gRTnp3f4UcIZA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1685613993; x=1685700393; bh=8ZuU8TLDMySBnmghexzuWEa4NXd1xIu7Ee2
-        fhDFog6Y=; b=aaIgCVU34yJfwMFzTrrBwqx/Qcu9VgCYnru+25FPEX07Qp0P1XT
-        1TLfjcVS/U9KVUyBXZzVTTkAfqhID3GjsQJbxfJp378jHS89KYISzaEVIodrLi9L
-        P/5mOg0VVsoVlykbF+3cEgAJewoJxGwTr3p1lkLlwLNsoymVTOh6BNaXKhdcxauf
-        XBkg/ZFUNDwPFR+OJClF3JX5M9ldUHPK9K//nwimWLd5E28ANTN08QhSjMg7HKQ4
-        E1MRpv/Coaz2BTopEp2n/1gsF059oABqWearEc9CRZaEUKCHTv3CCOKGjxVOyY/8
-        IT+4eRUgADN1fFePoxiadhs2V+0lmdb+dvw==
-X-ME-Sender: <xms:qW14ZAPQUbn6w14w9ITrWgoDhBqhOIwabnwRyGOhartZGpQHWeDGDg>
-    <xme:qW14ZG9fcg3m7HypuSQW09wrizA5xV40GmtYO12mAwvUvhddYkS_9yOeu3PpeQXn4
-    UgwDbkbSeUIvptF>
-X-ME-Received: <xmr:qW14ZHS0JK9tm-ygtF0unYYYIo4LRHHmUbl-5kIrWXN4tWPdW9sv7JRzaplfW6NN_7Gspnk-qaTFUL2nLwW93GtCUEjEVfSlWLORTXMu4pukJSPmgr7w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeluddgvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefkffggfgfuvfevfhfhjggtgfesth
-    ejredttdefjeenucfhrhhomhepuegvrhhnugcuufgthhhusggvrhhtuceosggvrhhnugdr
-    shgthhhusggvrhhtsehfrghsthhmrghilhdrfhhmqeenucggtffrrghtthgvrhhnpeekhe
-    evkeelkeekjefhheegfedtffduudejjeeiheehudeuleelgefhueekfeevudenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsvghrnhgurdhstg
-    hhuhgsvghrthesfhgrshhtmhgrihhlrdhfmh
-X-ME-Proxy: <xmx:qW14ZIt5lMTI4aRpvjIgsAu_miSGHKvs9dG6RPthSfSsBgP2u9yKVQ>
-    <xmx:qW14ZIdm0urElOxyJS8Y1S7Q5L6qHZtRXM0AF5dOTTB0IE6Moocfhg>
-    <xmx:qW14ZM2NDRuHY9q4WXT6oN4bvPXtI8HmPQVeSz3FSjyWqLQmIObhTw>
-    <xmx:qW14ZH45BwoF92PdEuFVlY6HnZgW7At2GkcncX-LC8jHYV4mhHnlrQ>
-Feedback-ID: id8a24192:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 1 Jun 2023 06:06:32 -0400 (EDT)
-Message-ID: <a00dc6d7-05b6-b0c2-7e89-262de91f5f18@fastmail.fm>
-Date:   Thu, 1 Jun 2023 12:06:30 +0200
+        Thu, 1 Jun 2023 06:09:15 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316D9E78
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:07:19 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f60a27c4a2so273102e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 03:07:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685614037; x=1688206037;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DlJOSvTxFqzu1vsBnWmNhHSpMwuNc6ynDx6kXiqQq/s=;
+        b=nbT1m2mtrTLzOU9m6eAg8yofW8n66e5RRkLFWVa0QPNp3fwVSxjFrNVQzaD0NOJ1LZ
+         vyVuUF3mUyvKVJFVRWGCeCLhEsj9ocIHGD1o7VXLLsU7cQPqERVbI8V/705Xuc1BETxt
+         UNIqAWPVFcOx/EwiiGWM9bokeAcPsLKw4pBVbuzwrFJsAkRIRDYtvSIUryT2sUbb2922
+         VZLhshEme/tUlCyCzNELf6Pp+EupBwxGNI/T37SZX7PuRbNVj654fNE6p4Gl/L737wlP
+         9Fwg7wv5xqKYCu+6vkpE+TdLyPXntqFrhHs67z8I8zhGGhFEz2/EyCug7fS4IghA0AvQ
+         Nf9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685614037; x=1688206037;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DlJOSvTxFqzu1vsBnWmNhHSpMwuNc6ynDx6kXiqQq/s=;
+        b=VK08enSDLDFP3ZWP+MAhmg2ov27ep3kw3hCp5O1wCvtZ64EMvQ3sBuyH3UVAqlzGQ3
+         X782eoRqPlIaRI5or+X7TomOVqcrxc7lwmEuIkqjkbUWnH1a/FSNn8Fp1DpDd4+VT9oE
+         +Vgn3/lO8VC/at/JozfTbx/T3IMofaf19V0x71atK/EVDEPIy8ioWU/aSZ3LQ2eo8lQw
+         9oUC0StkvvC1ldTMYm9/yXuYRsXbSOE2vGnvJaApI9DDnyCmxruMCdj1cBk20Ix7LabR
+         j9y6ANv166JlUc84vPz+WQt+es1zmDurB6HKc3I+j/+UO0JAq/IzK7GUOljXTYhrR7bI
+         BAXg==
+X-Gm-Message-State: AC+VfDxTDbraCOigaQkApAdWRmGNOGbvBfBBc0xCbh1OOSCqwxCdTPu0
+        9ZppzIpPrEsTPpHtT+doqwGBYA==
+X-Google-Smtp-Source: ACHHUZ6vrphQJG8VEMbFrXbIFxbypPJ2w6EZDqBQ8tTjg3Dbl3MS3eNa0c3nwi3DZ6i270/KWqfKGQ==
+X-Received: by 2002:ac2:548c:0:b0:4f4:ca61:82ba with SMTP id t12-20020ac2548c000000b004f4ca6182bamr914748lfk.67.1685614037444;
+        Thu, 01 Jun 2023 03:07:17 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id t20-20020ac243b4000000b004eb0c18efc2sm1030578lfl.221.2023.06.01.03.07.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 03:07:17 -0700 (PDT)
+Message-ID: <a361aa49-49a7-d26b-d417-e7ebcf2eae37@linaro.org>
+Date:   Thu, 1 Jun 2023 12:07:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH] fs.h: Optimize file struct to prevent false sharing
-To:     chenzhiyin <zhiyin.chen@intel.com>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        nanhai.zou@intel.com
-References: <20230531-wahlkabine-unantastbar-9f73a13262c0@brauner>
- <20230601092400.27162-1-zhiyin.chen@intel.com>
-Content-Language: en-US, de-DE
-From:   Bernd Schubert <bernd.schubert@fastmail.fm>
-In-Reply-To: <20230601092400.27162-1-zhiyin.chen@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 07/20] interconnect: qcom: Fold smd-rpm.h into icc-rpm.h
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, Evan Green <evgreen@chromium.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org>
+ <20230526-topic-smd_icc-v1-7-1bf8e6663c4e@linaro.org>
+ <ea21f29f-482e-1dd3-12d7-b9f685b1d5dd@linaro.org>
+ <4de7d05a-91da-501c-2889-4eee8e3bd34f@linaro.org>
+ <21f6b17b-366b-1233-e8f8-c9ac8503eeab@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <21f6b17b-366b-1233-e8f8-c9ac8503eeab@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -92,110 +88,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 6/1/23 11:24, chenzhiyin wrote:
-> In the syscall test of UnixBench, performance regression occurred due
-> to false sharing.
+On 1.06.2023 12:04, Dmitry Baryshkov wrote:
+> On 01/06/2023 13:00, Konrad Dybcio wrote:
+>>
+>>
+>> On 1.06.2023 11:57, Dmitry Baryshkov wrote:
+>>> On 30/05/2023 13:20, Konrad Dybcio wrote:
+>>>> smd-rpm.h is not very useful as-is and both files are always included
+>>>> anyway.. Combine them.
+>>>
+>>> If we ever add interconnect driver for non-SMD RPM platforms (like MSM8960/APQ8064), we can just ignore the smd part.
+>> icc-rpm sends requests via smd so that doesn't sound unifiable
 > 
-> The lock and atomic members, including file::f_lock, file::f_count and
-> file::f_pos_lock are highly contended and frequently updated in the
-> high-concurrency test scenarios. perf c2c indentified one affected
-> read access, file::f_op.
-> To prevent false sharing, the layout of file struct is changed as
-> following
-> (A) f_lock, f_count and f_pos_lock are put together to share the same
-> cache line.
-> (B) The read mostly members, including f_path, f_inode, f_op are put
-> into a separate cache line.
-> (C) f_mode is put together with f_count, since they are used frequently
->   at the same time.
-> Due to '__randomize_layout' attribute of file struct, the updated layout
-> only can be effective when CONFIG_RANDSTRUCT_NONE is 'y'.
-> 
-> The optimization has been validated in the syscall test of UnixBench.
-> performance gain is 30~50%. Furthermore, to confirm the optimization
-> effectiveness on the other codes path, the results of fsdisk, fsbuffer
-> and fstime are also shown.
-> 
-> Here are the detailed test results of unixbench.
-> 
-> Command: numactl -C 3-18 ./Run -c 16 syscall fsbuffer fstime fsdisk
-> 
-> Without Patch
-> ------------------------------------------------------------------------
-> File Copy 1024 bufsize 2000 maxblocks   875052.1 KBps  (30.0 s, 2 samples)
-> File Copy 256 bufsize 500 maxblocks     235484.0 KBps  (30.0 s, 2 samples)
-> File Copy 4096 bufsize 8000 maxblocks  2815153.5 KBps  (30.0 s, 2 samples)
-> System Call Overhead                   5772268.3 lps   (10.0 s, 7 samples)
-> 
-> System Benchmarks Partial Index         BASELINE       RESULT    INDEX
-> File Copy 1024 bufsize 2000 maxblocks     3960.0     875052.1   2209.7
-> File Copy 256 bufsize 500 maxblocks       1655.0     235484.0   1422.9
-> File Copy 4096 bufsize 8000 maxblocks     5800.0    2815153.5   4853.7
-> System Call Overhead                     15000.0    5772268.3   3848.2
->                                                                ========
-> System Benchmarks Index Score (Partial Only)                    2768.3
-> 
-> With Patch
-> ------------------------------------------------------------------------
-> File Copy 1024 bufsize 2000 maxblocks  1009977.2 KBps  (30.0 s, 2 samples)
-> File Copy 256 bufsize 500 maxblocks     264765.9 KBps  (30.0 s, 2 samples)
-> File Copy 4096 bufsize 8000 maxblocks  3052236.0 KBps  (30.0 s, 2 samples)
-> System Call Overhead                   8237404.4 lps   (10.0 s, 7 samples)
-> 
-> System Benchmarks Partial Index         BASELINE       RESULT    INDEX
-> File Copy 1024 bufsize 2000 maxblocks     3960.0    1009977.2   2550.4
-> File Copy 256 bufsize 500 maxblocks       1655.0     264765.9   1599.8
-> File Copy 4096 bufsize 8000 maxblocks     5800.0    3052236.0   5262.5
-> System Call Overhead                     15000.0    8237404.4   5491.6
->                                                                ========
-> System Benchmarks Index Score (Partial Only)                    3295.3
-> 
-> Signed-off-by: chenzhiyin <zhiyin.chen@intel.com>
-> ---
->   include/linux/fs.h | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index 133f0640fb24..cf1388e4dad0 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -962,23 +962,23 @@ struct file {
->   		struct rcu_head 	f_rcuhead;
->   		unsigned int 		f_iocb_flags;
->   	};
-> -	struct path		f_path;
-> -	struct inode		*f_inode;	/* cached value */
-> -	const struct file_operations	*f_op;
->   
->   	/*
->   	 * Protects f_ep, f_flags.
->   	 * Must not be taken from IRQ context.
->   	 */
->   	spinlock_t		f_lock;
-> -	atomic_long_t		f_count;
-> -	unsigned int 		f_flags;
->   	fmode_t			f_mode;
-> +	atomic_long_t		f_count;
->   	struct mutex		f_pos_lock;
->   	loff_t			f_pos;
-> +	unsigned int		f_flags;
->   	struct fown_struct	f_owner;
->   	const struct cred	*f_cred;
->   	struct file_ra_state	f_ra;
-> +	struct path		f_path;
-> +	struct inode		*f_inode;	/* cached value */
-> +	const struct file_operations	*f_op;
->   
->   	u64			f_version;
->   #ifdef CONFIG_SECURITY
+> Ack. Should we rename it to icc-smd-rpm.c while doing the merge?
+I'd stay it's fine if it stays as-is for now, until (if) somebody
+tackles "old" RPM.
 
-Maybe add a comment for the struct that values are cache line optimized? 
-I.e. any change in the structure that does not check for cache lines 
-might/will invalidate your optimization - your patch adds maintenance 
-overhead, without giving a hint about that.
-
-
-Thanks,
-Bernd
-
-
+Konrad
+> 
+>>
+>> Konrad
+>>>
+>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>> ---
+>>>>    drivers/interconnect/qcom/icc-rpm.c |  1 -
+>>>>    drivers/interconnect/qcom/icc-rpm.h |  5 +++++
+>>>>    drivers/interconnect/qcom/msm8916.c |  1 -
+>>>>    drivers/interconnect/qcom/msm8939.c |  1 -
+>>>>    drivers/interconnect/qcom/msm8974.c |  2 +-
+>>>>    drivers/interconnect/qcom/msm8996.c |  1 -
+>>>>    drivers/interconnect/qcom/qcm2290.c |  1 -
+>>>>    drivers/interconnect/qcom/qcs404.c  |  1 -
+>>>>    drivers/interconnect/qcom/sdm660.c  |  1 -
+>>>>    drivers/interconnect/qcom/smd-rpm.c |  2 +-
+>>>>    drivers/interconnect/qcom/smd-rpm.h | 15 ---------------
+>>>>    11 files changed, 7 insertions(+), 24 deletions(-)
+>>>
+>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>>
+> 
