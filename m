@@ -2,249 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912BA71F5C0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7362671F5B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbjFAWM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 18:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
+        id S232005AbjFAWMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 18:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjFAWMt (ORCPT
+        with ESMTP id S229724AbjFAWMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:12:49 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2086.outbound.protection.outlook.com [40.107.94.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A49B18D;
-        Thu,  1 Jun 2023 15:12:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=le5joztdBVSdCOJAz5HmViaDRK6E32+Or/3byNAPxGM+FTinmmiJ49yiCVWuxlQ39SiRPg5teq7Kb18rNj2qZK+3/rGW9domxzamtsPLDhLYUb3qfskCykUliPRvHQGFh3JXjbIweM87hW7dJBm92RruoPSW0ZEPbRMngOvHo//k1Mn2bfWOuBz589Q0qWc5bfVGq6CqVRBK+SlKAp82BaaZVFF624XqjBdTW1WYzI9QqzFs44f9z9YP1vctuFlrqgdD7hCqNuCNlXuf24b/4lFZNpF3KHpuL8Y2J1ON8ZQvOk65gotX5j1Drb7W92IKCr8ksQ8tTpx8kDqiins+VA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A2uvnyadgmPv/UplCy3dfHolCS1iQD6or73uaLQ6l4c=;
- b=D+26heNBkij45LzY9LmCDJpChCTl1Spbb72ZwpMh2aHSu0RQb5VB8fcelqS5XClKjWoZFeruUMvROn++3Ll27sgIBytO0wjTXMhOWtZCFbs7QLM00QAs8Bm8BLqLCh7w2nlP2vglqZqLZz1zq/2gIvEmxk63+v9395RypU+Y+L0yTIH2waWbRzT0/E0zi6fqT0Crg1cneo5NtlOnTCIcm+k1wvogQFKwW20clU6EVVXd1RNblevBEL0qZ5zFD4xY+LPFHrVXtdxEM+p36D9XVcweaXLeXsEKuMJ+8U5Y+YML9F+hc4o8kMw24CIytukQ/trnkn3fYZOlaSNkTtmbyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A2uvnyadgmPv/UplCy3dfHolCS1iQD6or73uaLQ6l4c=;
- b=FCnTumqEKrTMqujE4Yag4djkJbe/HKrn6pna/auerDlmYd1yZXCOTFEOdPHSp/W68wK93xKc5Bwt1t8GnXkjaAsXAJPk1rbe93KdfMQMyLfl4vCru9fT+ZYkCVibHywenGj+3dur+U/N8LC8i/q+LQqnDjeTOi1RUdFKUBySuW8=
-Received: from MW4P222CA0009.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::14)
- by PH0PR12MB8006.namprd12.prod.outlook.com (2603:10b6:510:28d::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Thu, 1 Jun
- 2023 22:12:41 +0000
-Received: from CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:114:cafe::69) by MW4P222CA0009.outlook.office365.com
- (2603:10b6:303:114::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.23 via Frontend
- Transport; Thu, 1 Jun 2023 22:12:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT019.mail.protection.outlook.com (10.13.175.57) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6455.24 via Frontend Transport; Thu, 1 Jun 2023 22:12:41 +0000
-Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 1 Jun
- 2023 17:12:40 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <linux-acpi@vger.kernel.org>, <rafael@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        <ofenfisch@googlemail.com>, <wse@tuxedocomputers.com>,
-        <adam.niederer@gmail.com>, <adrian@freund.io>,
-        <jirislaby@kernel.org>, <Renjith.Pananchikkal@amd.com>,
-        <anson.tsao@amd.com>, <Richard.Gong@amd.com>,
-        Chuanhong Guo <gch981213@gmail.com>, <evilsnoo@proton.me>,
-        <ruinairas1992@gmail.com>, <nmschulte@gmail.com>
-Subject: [PATCH v3] ACPI: resource: Remove "Zen" specific match and quirks
-Date:   Thu, 1 Jun 2023 17:11:51 -0500
-Message-ID: <20230601221151.670-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT019:EE_|PH0PR12MB8006:EE_
-X-MS-Office365-Filtering-Correlation-Id: e3dd9812-acf7-4f12-2c4a-08db62ed516b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: phR9WnBwNhSLKCkV3U9b+6BrCSwl2/Wp/+loX/lEmHgnAeqQe3WK0EUzdHuzdllcLYS+d9OXaogEM5ohtsIiBSA66jfer8ILD346bixuCPIXjXGlbjgqHV5nupkW/KlPw6OE5jMihR3D/AIfY6uy20MjMg9+JW1uxBDLhGdcm8nLVQ0chGTwHoa2tWq9qWOhq6lzRjRbgIoWGnOd1hYuZ2WJGFFY3+8ROif7BwHL0zvCa/2lmwzEarx1QxFl/hlhX8B43tTciwIGRK4+XN2RZXW7Gb3ykeR42xAlsgOPpfoWM19Q+ylTPNb6gtAS9IJ0uOgVTYjzUsVF5DeIHe8/zJobECPYTfecVaAdcC7reLS48BOr967NS8VD1fhRqKQGhjhVpPrYUcNLXJYZHBsSRoYbLxUpYGKpVkXxgYj5scXF0MEkXW7dJekBCeNOSsLdtelS7I+DsdHpE1AFgs2RnCLZVC6ZQhhguxcwk6dPdf6u9w6UsoJyPLmOrmHsUR0RbLtmHYjhGPjIzTkaLLpFh6/ZZYWxOk3pn8UH/Ax6Avu5klZkZze/Dt6NUlHwrT34oY/2+86CNQ1IYhK3IQ3NVw0MuOzJREXzNxSnWV7uNtjoGcL+94gHDKw1Q6phaL2AbgxRX4YSCApYTXoSmcHFx7eKHUebWw6NYPSzEBenSUn5M9KLz+Ai00en0R/qztgy1U2ZQ3fc0WyVNS4hv+HUWGttujY4QmDYxVaSHAFzkUzoEONdB8useQnNwYJHEAT/y4a6IzGzNo/VbOCcy/ZsqhLVS3lYv49zvkjhqeLaRA0=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(136003)(346002)(396003)(451199021)(40470700004)(46966006)(36840700001)(36756003)(82740400003)(86362001)(110136005)(4326008)(478600001)(316002)(54906003)(70206006)(966005)(70586007)(7416002)(44832011)(6666004)(83380400001)(41300700001)(2906002)(8676002)(40480700001)(82310400005)(7696005)(81166007)(2616005)(356005)(5660300002)(36860700001)(47076005)(426003)(26005)(336012)(1076003)(16526019)(8936002)(186003)(40460700003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 22:12:41.4400
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e3dd9812-acf7-4f12-2c4a-08db62ed516b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT019.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8006
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 1 Jun 2023 18:12:46 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CCC18D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 15:12:43 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-75ce1196bd7so130609685a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 15:12:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1685657563; x=1688249563;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ORDxf2WWSF+fEXj2e6sOlzWBxr+iKtAzJO2hIOuWmAQ=;
+        b=R2nydqX+spRTJBQAeRdgkqh3cAfPX2t6tv40YNFlTmYf2AmWySJ/8378Zwr5zEoTpA
+         iIC54Yy0MRIIVDUg32rXJnvIi1jGPQMH0EFsXLw8jYbxHFwSno0zUkHgo7iV1Fd/erHd
+         J5tL6smBjFd/2qaJGhf9BHLqwmDxwJUPWcSvs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685657563; x=1688249563;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ORDxf2WWSF+fEXj2e6sOlzWBxr+iKtAzJO2hIOuWmAQ=;
+        b=BiexEgIhzqgoXP/kfjxSSOCz2lcY7eMWz8iykxq/7QGuXMCBuJX/HE+dZRCS53OH+G
+         G/f6WB+5VkEqh2mR8Rp+47mbM++78kM+HMk5RLEKjfIsCmVTDcXdHWVybvV4Fc8BKckT
+         F68bhlRiq0C29Rg85jxynAQdutHyJo6jujUe2tX0Bv1Wz3RtFqODUDKoiUDMz9h1Abcf
+         T6AWbw72JQIPJe574w2wgSOfrHSmQGvL7BOBJMFigBEZpH7z/qLmIIb3E6RBjHcEraaf
+         1Yhk+PAeXaRbY2D7/sENNet4nyL6dzaFmEyn5gIFT20B7P4FShxX34SZnF34zCNGVpe/
+         ciow==
+X-Gm-Message-State: AC+VfDxvJ3c1Wm08dNX19xIWostKXcPBmzwXWxjPWYIYnt+wTqdFsD+H
+        8IETqg7sDgJpxOcHwl/qFqHNRA==
+X-Google-Smtp-Source: ACHHUZ4sMymG/6wqFok/B8wPgYeFN3UUAWC0zHJG8jj/vUMPf58EXxUDVCFrIPRmIsI5sXC5z02Lng==
+X-Received: by 2002:a37:849:0:b0:75b:23a0:d9d1 with SMTP id 70-20020a370849000000b0075b23a0d9d1mr9439089qki.39.1685657563047;
+        Thu, 01 Jun 2023 15:12:43 -0700 (PDT)
+Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id f5-20020a05620a068500b00759554bbe48sm7180430qkh.4.2023.06.01.15.12.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 01 Jun 2023 15:12:42 -0700 (PDT)
+From:   Justin Chen <justin.chen@broadcom.com>
+To:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     florian.fainelli@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, opendmb@gmail.com, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux@armlinux.org.uk,
+        richardcochran@gmail.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, simon.horman@corigine.com,
+        Justin Chen <justin.chen@broadcom.com>
+Subject: [PATCH net-next v6 0/6] Brcm ASP 2.0 Ethernet Controller
+Date:   Thu,  1 Jun 2023 15:12:25 -0700
+Message-Id: <1685657551-38291-1-git-send-email-justin.chen@broadcom.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000046cd5405fd18bc88"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        MIME_HEADER_CTYPE_ONLY,MIME_NO_TEXT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_TVD_MIME_NO_HEADERS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 9946e39fe8d0 ("ACPI: resource: skip IRQ override on
-AMD Zen platforms") attempted to overhaul the override logic so it
-didn't apply on X86 AMD Zen systems.  This was intentional so that
-systems would prefer DSDT values instead of default MADT value for
-IRQ 1 on Ryzen 6000 systems which typically uses ActiveLow for IRQ1.
+--00000000000046cd5405fd18bc88
 
-This turned out to be a bad assumption because several vendors
-add Interrupt Source Override but don't fix the DSDT. A pile of
-quirks was collecting that proved this wasn't sustaintable.
+Add support for the Broadcom ASP 2.0 Ethernet controller which is first
+introduced with 72165.
 
-Furthermore some vendors have used ActiveHigh for IRQ1.
-To solve this problem revert the following commits:
-* commit 17bb7046e7ce ("ACPI: resource: Do IRQ override on all TongFang
-GMxRGxx")
-* commit f3cb9b740869 ("ACPI: resource: do IRQ override on Lenovo 14ALC7")
-* commit bfcdf58380b1 ("ACPI: resource: do IRQ override on LENOVO IdeaPad")
-* commit 7592b79ba4a9 ("ACPI: resource: do IRQ override on XMG Core 15")
-* commit 9946e39fe8d0 ("ACPI: resource: skip IRQ override on AMD Zen
-platforms")
+Florian Fainelli (2):
+  dt-bindings: net: Brcm ASP 2.0 Ethernet controller
+  net: phy: bcm7xxx: Add EPHY entry for 74165
 
-Cc: ofenfisch@googlemail.com
-Cc: wse@tuxedocomputers.com
-Cc: adam.niederer@gmail.com
-Cc: adrian@freund.io
-Cc: jirislaby@kernel.org
-Cc: Renjith.Pananchikkal@amd.com
-Cc: anson.tsao@amd.com
-Cc: Richard.Gong@amd.com
-Cc: Chuanhong Guo <gch981213@gmail.com>
-Reported-by: evilsnoo@proton.me
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217394
-Reported-by: ruinairas1992@gmail.com
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217406
-Reported-by: nmschulte@gmail.com
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217336
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v2->v3:
- * Adjust to drop heuristics entirely
- * Drop tested tags
- * Add more links and people to Cc
- * Drop Fixes tag as this got a lot more risky
-v1->v2:
- * Rebase on 71a485624c4c ("ACPI: resource: Add IRQ override quirk for LG UltraPC 17U70P")
- * Pick up tag
+Justin Chen (4):
+  dt-bindings: net: brcm,unimac-mdio: Add asp-v2.0
+  net: bcmasp: Add support for ASP2.0 Ethernet controller
+  net: phy: mdio-bcm-unimac: Add asp v2.0 support
+  MAINTAINERS: ASP 2.0 Ethernet driver maintainers
 
-Rafael,
-Please hold off on picking this up until the majority of those on CC
-have tested it on hardware they have and reported results.
+ .../devicetree/bindings/net/brcm,asp-v2.0.yaml     |  153 ++
+ .../devicetree/bindings/net/brcm,unimac-mdio.yaml  |    2 +
+ MAINTAINERS                                        |    9 +
+ drivers/net/ethernet/broadcom/Kconfig              |   11 +
+ drivers/net/ethernet/broadcom/Makefile             |    1 +
+ drivers/net/ethernet/broadcom/asp2/Makefile        |    2 +
+ drivers/net/ethernet/broadcom/asp2/bcmasp.c        | 1467 ++++++++++++++++++++
+ drivers/net/ethernet/broadcom/asp2/bcmasp.h        |  638 +++++++++
+ .../net/ethernet/broadcom/asp2/bcmasp_ethtool.c    |  568 ++++++++
+ drivers/net/ethernet/broadcom/asp2/bcmasp_intf.c   | 1393 +++++++++++++++++++
+ .../net/ethernet/broadcom/asp2/bcmasp_intf_defs.h  |  238 ++++
+ drivers/net/mdio/mdio-bcm-unimac.c                 |    2 +
+ drivers/net/phy/bcm7xxx.c                          |    1 +
+ include/linux/brcmphy.h                            |    1 +
+ 14 files changed, 4486 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+ create mode 100644 drivers/net/ethernet/broadcom/asp2/Makefile
+ create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp.c
+ create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp.h
+ create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp_ethtool.c
+ create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp_intf.c
+ create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp_intf_defs.h
 
-Everyone else,
-Please test. If you have problems with this applied, please share
-an acpidump and dmesg either on a bug or to me privately.
----
- drivers/acpi/resource.c | 60 -----------------------------------------
- 1 file changed, 60 deletions(-)
-
-diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
-index 0800a9d77558..1dd8d5aebf67 100644
---- a/drivers/acpi/resource.c
-+++ b/drivers/acpi/resource.c
-@@ -470,52 +470,6 @@ static const struct dmi_system_id asus_laptop[] = {
- 	{ }
- };
- 
--static const struct dmi_system_id lenovo_laptop[] = {
--	{
--		.ident = "LENOVO IdeaPad Flex 5 14ALC7",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "82R9"),
--		},
--	},
--	{
--		.ident = "LENOVO IdeaPad Flex 5 16ALC7",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "82RA"),
--		},
--	},
--	{ }
--};
--
--static const struct dmi_system_id tongfang_gm_rg[] = {
--	{
--		.ident = "TongFang GMxRGxx/XMG CORE 15 (M22)/TUXEDO Stellaris 15 Gen4 AMD",
--		.matches = {
--			DMI_MATCH(DMI_BOARD_NAME, "GMxRGxx"),
--		},
--	},
--	{ }
--};
--
--static const struct dmi_system_id maingear_laptop[] = {
--	{
--		.ident = "MAINGEAR Vector Pro 2 15",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "Micro Electronics Inc"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "MG-VCP2-15A3070T"),
--		}
--	},
--	{
--		.ident = "MAINGEAR Vector Pro 2 17",
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "Micro Electronics Inc"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "MG-VCP2-17A3070T"),
--		},
--	},
--	{ }
--};
--
- static const struct dmi_system_id lg_laptop[] = {
- 	{
- 		.ident = "LG Electronics 17U70P",
-@@ -539,10 +493,6 @@ struct irq_override_cmp {
- static const struct irq_override_cmp override_table[] = {
- 	{ medion_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
- 	{ asus_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
--	{ lenovo_laptop, 6, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
--	{ lenovo_laptop, 10, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, true },
--	{ tongfang_gm_rg, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
--	{ maingear_laptop, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
- 	{ lg_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
- };
- 
-@@ -562,16 +512,6 @@ static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
- 			return entry->override;
- 	}
- 
--#ifdef CONFIG_X86
--	/*
--	 * IRQ override isn't needed on modern AMD Zen systems and
--	 * this override breaks active low IRQs on AMD Ryzen 6000 and
--	 * newer systems. Skip it.
--	 */
--	if (boot_cpu_has(X86_FEATURE_ZEN))
--		return false;
--#endif
--
- 	return true;
- }
- 
 -- 
-2.34.1
+2.7.4
 
+
+--00000000000046cd5405fd18bc88
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+NhTY3E+cXCB11wty89QStajwXdhGJTYEvUgvsq1h8CwJj9w/38ldAQf5WjhPmApYeJR2ewFrBMCM
+4lHkdRJ6TDc9nXoEkypUfjJkJHe7Eal06tosh6JpAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
+BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
+Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
+NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
+A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
+aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
+cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
+MBqBGGp1c3Rpbi5jaGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
+GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUIWGeYuaTsnIada5Xx8TR3cheUbgw
+DQYJKoZIhvcNAQELBQADggEBAHNQlMqQOFYPYFO71A+8t+qWMmtOdd2iGswSOvpSZ/pmGlfw8ZvY
+dRTkl27m37la84AxRkiVMes14JyOZJoMh/g7fbgPlU14eBc6WQWkIA6AmNkduFWTr1pRezkjpeo6
+xVmdBLM4VY1TFDYj7S8H2adPuypd62uHMY/MZi+BIUys4uAFA+N3NuUBNjcVZXYPplYxxKEuIFq6
+sDL+OV16G+F9CkNMN3txsym8Nnx5WAYZb6+rBUIhMGz70V05xsHQfzvo2s7f0J1tJ5BoRlPPhL0h
+VOnWA3h71u9TfSsv+PXVm3P21TfOS2uc1hbzEqyENCP4i5XQ0rv0TmPW42GZ0o4xggJtMIICaQIB
+ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
+bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwj8BKLXNpALfemdRAwDQYJ
+YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBJYA7JTG3szPkhkVP4R8jeZacGyo/cH1Bvt
+DoG1W8XfMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYwMTIy
+MTI0M1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
+AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
+BgkqhkiG9w0BAQEFAASCAQB/+YvTStSWh1e1hOJcuXs+4Ix4jAK4f79LmfGOF4a3zevArElgZ+LF
++E2FeDihU6wu0kl+ezmIx5hDKViXt0nsDOdlOpkI7yvxaYSs6lGKcYWeDny060a/VN9pweSVBxbT
+t8nlYDqnhXzqYQTIzStCCzZM/kqQ90QNmRF/HCFIVe9aWrjMciKMxFAiMzH447kxER50rZMTqFz/
+vMPBPPdIl04xi1eqlA/tZyge/CGfYHJlZEykuLcxE9NiZbJbAOT7eGQU3hzf3FpHlEtIYh6sqqxa
+X5PjB4Dwsfy4efihPZf0gP9RsVGnpJCSMNCJGwXmTQP90zlj2wBhRyuguMaX
+--00000000000046cd5405fd18bc88--
