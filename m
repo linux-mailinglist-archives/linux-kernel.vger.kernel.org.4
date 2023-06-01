@@ -2,162 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D8371EF25
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E711371EF1E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbjFAQeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 12:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
+        id S231667AbjFAQdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 12:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbjFAQeF (ORCPT
+        with ESMTP id S229498AbjFAQdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 12:34:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07056128
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 09:33:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685637201;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lKfNaN4l/MR8zlLzyVVW3/Ll4oj7wzuBoASQm/awxOs=;
-        b=R9TqJXdwZO/16nglc0belNuDy2umOpByCMZBSSJ8Kuk3fR5th/5pDQPcdf+e4YVD0LHttL
-        3hqFHACSTEe/UXAM/kRgh+LGeo00zzhpuF/hHzrNe9/8wA8pyI475+udb51o4xYfMZsvka
-        zG2DdyDxDl3aYm2DBQGbXbLI1IxbS68=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-135-CqO_qo4oO7a_GGVTspWHsg-1; Thu, 01 Jun 2023 12:33:19 -0400
-X-MC-Unique: CqO_qo4oO7a_GGVTspWHsg-1
-Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2af1cf1a118so29911fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 09:33:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685637198; x=1688229198;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lKfNaN4l/MR8zlLzyVVW3/Ll4oj7wzuBoASQm/awxOs=;
-        b=lDc+egFnBrH2POtslgrZYRFh7MSvlOFLA7oF44ZX0voXecXNeqxlMeSyZhoUE2uKY5
-         83gioI5XK+2i425ph/upef6vO0RVpxsUJ29f1nJYQ1JDYpl5zZG1flkU/nYV2vY2lH5O
-         AguWIGwIdHIbNkrcs55tGB2oFabYPJg0RLrzGByK/AOmF9VfFEaDVpGaz8HQ7ingxOH/
-         bMhw5pk1s7q5hOqa4ZSgo07n43l3MoBSBc5IrLBllsaCJqhxP8EDvJCzUokWKhD/W0oH
-         VOz9mRs/apErDnx6TnyBPl8SnHqgoePdWJVWfvvjb2YwaKkoQyqhXfS4dsMBziecVBKz
-         sKbA==
-X-Gm-Message-State: AC+VfDzUtFDMUdPyj+N67BG4G9pWrQ96qoXqtwmpa2EQvMeXnW7aatXL
-        Wl4EU8q8CW+iYQmO9x5Hm0BhpWB+YAK/DmglGFql2iPlSCnrKMmjsGmbcbjtlLnmyc0X1Llaimi
-        s6BsNpxx8uSaNKk8gl9VQY7/fOEBuVzBE9oUao+kr
-X-Received: by 2002:a2e:a4ac:0:b0:2b1:a69e:6a8e with SMTP id g12-20020a2ea4ac000000b002b1a69e6a8emr925280ljm.3.1685637198424;
-        Thu, 01 Jun 2023 09:33:18 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6sX+gZm7ZA5+9vSBRoryBdVNamolMuCnhrtAuIzv4GVF3xl6ftjdZdgSxoZfJGJTNBJipxrwFfnfQLsuMLFeU=
-X-Received: by 2002:a2e:a4ac:0:b0:2b1:a69e:6a8e with SMTP id
- g12-20020a2ea4ac000000b002b1a69e6a8emr925265ljm.3.1685637198130; Thu, 01 Jun
- 2023 09:33:18 -0700 (PDT)
+        Thu, 1 Jun 2023 12:33:36 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CACC13E;
+        Thu,  1 Jun 2023 09:33:35 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351E4UIM021342;
+        Thu, 1 Jun 2023 16:33:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=s6ryvar9YU9CNBCR1TwGSQ80/eQ0OlwZI1pKsPxhyy8=;
+ b=GnTC3lOGYglhL7fLKvEAiKhU5Z4JbAtQAmlKcVAcpD76YttstSwkErBlE6b45UFbHSIx
+ PZeqmBPl+0er/0/yZ1DCl8wRLf/cYjLTYOnhfjMB32vpi7yEUCqgminGCe7UO5Yv1T19
+ YTiFwJEVtvbG+Et2sFf/TZL6wJbVyInWqrUwndfpHhMhbqsDvNwPYqHXRKoQ3bVYIixE
+ K7L6yV1cXwxG2uZZbQUXt0lgmTc5kveiuxnZu2UL6qIyP9m7sZh7+rCNmmRT8tpZxHJU
+ Z75fC7cQTfWykyTuHwtWQdi7ZTjNwPTdVewt30AIwRmVp8HNdnwzuJwf1E92qrybIevq LA== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qvhb997f3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Jun 2023 16:33:29 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 351FnTgJ014722;
+        Thu, 1 Jun 2023 16:33:29 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2174.outbound.protection.outlook.com [104.47.59.174])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qu8a7eb0d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Jun 2023 16:33:28 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=abfRnqrwEomqE8ohlXTD/ibs1cFCySYj452X0RR8U1CNjeE+5s4a/GymJcoIaw5bH581HFiXPfFlAtUNlkE/iswGswnCO9QqkG3ZIuUqCHs/ST1T+jaqaT67Oa8HPm4beejje6Ja+WZgQKD4hbq8uwZLNiyBY2vdK3oby8p45l5xSMs29/cDPxoUgJelfNqJWX+Z3phiEoZOzC6GKS9SZ71c9of9J3wGKhPDdC8GAaUHw+JBVe5P+Ysb5IR+ydE6VI3Wb4AFGbvtTgyjSo9xG1ea9W6WNwCKQ4VfW/09TpQIUZzwtq1TpNEeqf+9z4UZeRkeUmQYBvtQZHf+Hp39UQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s6ryvar9YU9CNBCR1TwGSQ80/eQ0OlwZI1pKsPxhyy8=;
+ b=Klq+UA+1+slszxDqqnH2pssB2CFOh0BK6RR50BSfXnI/e+9b9Qyx0I9NwzBCMcmM4FgsMmuBgopOwvXgI/q1bqOz1FPLfC2ySq07wK7URDT+FotjjKtRSKRm/mWFczVYFgqyggO85W6MQBf7NhL5jVj+ReB4ivBND0SQtV2JRpytqtFTi+GU8+vJ8h8E+I8yNU56WXoCaD/Kyihw0yHG50xq3stD/tpYR/HTChzDZ2BPJoMk0KWGCOU2Cue5qSv28ejc3ftQj4Ecqr2z9ktjX25DDS7asqk+KTbUOoBv4AtMSpAke8CWgEIJrIdye3/BFF5Unj3QFsccePLGfaD+gg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s6ryvar9YU9CNBCR1TwGSQ80/eQ0OlwZI1pKsPxhyy8=;
+ b=wX/vzCyy377YQbjrIR5NpBQqo7HxgW8BerwkRdztiwL0evt16/xXGnJnaFi0tliJnXZRrsU4/0WK6VYcRwXAFdQr+FtOZp5ucModlnmakKvyJjPfH2J37VDXX4KZLD8rZEn4HKnipgg/5C83NaPLEKs+ZtbHNpWT19+dCbz01/8=
+Received: from CY8PR10MB7243.namprd10.prod.outlook.com (2603:10b6:930:7c::10)
+ by DS0PR10MB6725.namprd10.prod.outlook.com (2603:10b6:8:132::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Thu, 1 Jun
+ 2023 16:33:11 +0000
+Received: from CY8PR10MB7243.namprd10.prod.outlook.com
+ ([fe80::13d6:c3f3:2447:6559]) by CY8PR10MB7243.namprd10.prod.outlook.com
+ ([fe80::13d6:c3f3:2447:6559%5]) with mapi id 15.20.6433.024; Thu, 1 Jun 2023
+ 16:33:11 +0000
+Message-ID: <b5a845e9-1fa0-ea36-98c4-b5da989c44c6@oracle.com>
+Date:   Thu, 1 Jun 2023 11:33:09 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [syzbot] [kvm?] [net?] [virt?] general protection fault in
+ vhost_work_queue
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        syzbot <syzbot+d0d442c22fa8db45ff0e@syzkaller.appspotmail.com>,
+        jasowang@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        virtualization@lists.linux-foundation.org, stefanha@redhat.com
+References: <0000000000001777f605fce42c5f@google.com>
+ <20230530072310-mutt-send-email-mst@kernel.org>
+ <CAGxU2F7O7ef3mdvNXtiC0VtWiS2DMnoiGwSR=Z6SWbzqcrBF-g@mail.gmail.com>
+ <CAGxU2F7HK5KRggiY7xnKHeXFRXJmqcKbjf3JnXC3mbmn9xqRtw@mail.gmail.com>
+ <e4589879-1139-22cc-854f-fed22cc18693@oracle.com>
+ <6p7pi6mf3db3gp3xqarap4uzrgwlzqiz7wgg5kn2ep7hvrw5pg@wxowhbw4e7w7>
+ <035e3423-c003-3de9-0805-2091b9efb45d@oracle.com>
+ <CAGxU2F5oTLY_weLixRKMQVqmjpDG_09yL6tS2rF8mwJ7K+xP0Q@mail.gmail.com>
+ <43f67549-fe4d-e3ca-fbb0-33bea6e2b534@oracle.com>
+ <bbe697b6-dd9e-5a8d-21c5-315ab59f0456@oracle.com>
+ <7vk2uizpmf4fi54tmmopnbwwb7fs2xg6vae6ynrcvs26hjmshb@hpjzu4jfj35i>
+Content-Language: en-US
+From:   Mike Christie <michael.christie@oracle.com>
+In-Reply-To: <7vk2uizpmf4fi54tmmopnbwwb7fs2xg6vae6ynrcvs26hjmshb@hpjzu4jfj35i>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: DS7PR03CA0015.namprd03.prod.outlook.com
+ (2603:10b6:5:3b8::20) To CY8PR10MB7243.namprd10.prod.outlook.com
+ (2603:10b6:930:7c::10)
 MIME-Version: 1.0
-References: <168471337231.1913606.15905047692536779158.reportbug@xps>
- <ZHKrC4/G6ZyvRReI@xps> <ZHL5cCNUzVdleiag@eldamar.lan> <ab12984e-be17-903d-ba0a-f9c85b8c544f@amd.com>
- <ZHP4IqxBUPuVRvRV@xps> <09e24386-de63-e9e9-9e7f-5d04bad62d83@amd.com>
- <ZHQhPcKUF76Kplwm@xps> <ZHUt9xQKCwCflvVC@xps> <8537d965-ddf4-7f45-6459-d5acf520376e@amd.com>
- <ZHWfMBeAONerAJmd@xps> <ZHfa/wQlaVCeUC22@xps> <fe0ab1fa-6ed6-dc64-8165-8fc70669317b@amd.com>
-In-Reply-To: <fe0ab1fa-6ed6-dc64-8165-8fc70669317b@amd.com>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Thu, 1 Jun 2023 18:33:07 +0200
-Message-ID: <CACO55tsuO1kQUFfPdPFUHm4WEQseCR2tQSDhFRzR+8wOECZCyA@mail.gmail.com>
-Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI string"?
- (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of system)
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Nick Hastings <nicholaschastings@gmail.com>,
-        Lyude Paul <lyude@redhat.com>, Lukas Wunner <lukas@wunner.de>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        1036530@bugs.debian.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, regressions@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY8PR10MB7243:EE_|DS0PR10MB6725:EE_
+X-MS-Office365-Filtering-Correlation-Id: 45c90095-a072-41f4-a938-08db62bde3b0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Mhif9NguuubHf+C1MWA0vmsvPJNIis8Xwex9mFt3bx1StOxPUsog7MbPvXqSAfXR1/8oramdpInPL76pCCVAK1MpddeCNyxKzhK5N5eQtpVlW43KEmmtxOPFzl2Pe90Kh17XAITYgJW+417cFAqd4BVYAjUFEu4IgU8y2PTN1Km64lWsMqzbQtSes1OblEoovJohy3TtFNSTLFd65pVBSg35/BlQtcHFcAorx2l+U1orhm7PRBMDxr0ug3K26hWrUaXdXBxiNNQcgqnoEeiEl2gsS0eXVFh0rf+evnft3/jjawO0pIahPFRzjAicwB47YRzqxYSZleJc0H3s5cRiZa2QX9sZ1i6E6h+qvLB/bpcQpq208u1bcLZhNrsLO5jsk31n5VdPHrV2G+vo6qpxobTsU0ppniAxBx04ujWDs548laJEApGoeTtg9+zWojkuLhOyCzoQlz5ziu0bLEoWtF05r0M+Y33QMUn4yw+nd1swNRvA29qV50tmJ/oucFri8M2LSIVU3oDSIdAtadvNQiyfxYMSUI9XH4uLSLmAGPhOTRNuMNf0metMBhR/mkbw7yaAY6Xi1C90CAjTe8O4xmsUvwIBLochYrn/BoXlKLrl/BLBIaUYx7Ne6c6w+5jKwiViJmIojxMbMutlHCG0TQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR10MB7243.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(376002)(396003)(366004)(39860400002)(346002)(451199021)(2906002)(186003)(38100700002)(6506007)(6512007)(26005)(83380400001)(53546011)(54906003)(2616005)(478600001)(7416002)(31686004)(5660300002)(8936002)(8676002)(6486002)(4326008)(6916009)(66476007)(36756003)(86362001)(31696002)(316002)(66556008)(41300700001)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SkVkNXlZWWh3VTg4Z2hrM0xsNGRqaGdnMFN3ZVdKZ3h1Ni83a1lNeUlCOGpO?=
+ =?utf-8?B?bHUzZDF6bWFVTDlWU0N3ZEs5M3VRVE1zZ1E2MFVwR3RpcnpNNVpBZmhaQytz?=
+ =?utf-8?B?WCszZ1RTV24wenQxd0hXUGZiZE0xMHZoZzh4TU5iZ3Flb3BDTVlOU2Nrellk?=
+ =?utf-8?B?QTVvM0tZa2tPZGVGTGdKOGNOdjNScktrWTY2Y1BycFhhK1BYSlh4aFQ0OEFq?=
+ =?utf-8?B?N2tLOFJYK3A2bW5OWGFLOE1pekM2Lzc4SFRPaVlBWkRqcTVRMVZGaTY3Y2NF?=
+ =?utf-8?B?aWVEbEN5M2tSb3ZialdaaHJ6ZzhyWXJGdlQxVkJMd0hrYWJRTElhdjhNTHdT?=
+ =?utf-8?B?NTJRVGdrLy9EU3dtTk02TWhma3g5QUN6ZnFpY3FjellJUHpHbk1DRDFGODZ5?=
+ =?utf-8?B?RHEzNldKWU9WTHk4K1gyZU1UVkpybC8zN0NCWEFmaFh4Rk0xdGQ2TFdZQ2Fa?=
+ =?utf-8?B?U2RsQUJFQUNvRm5STmNMM0Z4bU52bG5OdUlWY2tCcGJyMm9GUW44SEhEQzVx?=
+ =?utf-8?B?RnRkVnljdHVKbVo4ZmdkWWpyZ0lzbUc2dXZLWnBIS25ReWZFN1hJelNFaElJ?=
+ =?utf-8?B?RjdYN3dRZnUwY1BmdVduczI0V002R1AzSlZjb1VOTVpMc3RlYVUzUXV0bm4x?=
+ =?utf-8?B?OUR1OTU5ZUZuSWE4WVYxU0FIV3lsV2E1dDVUanhKZGZadFZpNkc0VjhEVkVB?=
+ =?utf-8?B?VnV4V2FBdzNERTdjdXlkK2RKTEdzSWVBZ3h0U3pqallCWU5GWDJvVXllMmIz?=
+ =?utf-8?B?R3gwdCtjZUdNT3Z5OUxHbUFhSFhkNlRUQ25ySTNrT0NTb2RveGRqdVB6TUsr?=
+ =?utf-8?B?aVpBdFc4L1FxWDFJL1dPUm1zM216NGZJcmpsT0FtZU0yN0JROWc3eWN5WW8z?=
+ =?utf-8?B?U0crOW1SN0laS0ZiMWVGeGJueHlWOXp4ODhycmFsT05BMjV2UDJoWHVqOGhB?=
+ =?utf-8?B?eFVzTUJDT1M1QmhEcFJRM0tWVTRlcGRsR2hocHN0RzZ5MnQxOU9GbmZiMXJ5?=
+ =?utf-8?B?d3lvODVRd3V5a2grcFVlYlMwcjU1QWNIUEUyYVg1c3FXcEJ6Yy80L1hNS1Rq?=
+ =?utf-8?B?bGFRQWtVOGhST0dmYTVORERQTDVGYzlGZVNBeG1UR3JTTEZGZGhrc1VPWng5?=
+ =?utf-8?B?bWNydEdXekVzSzNnbmNwVUIySjBPM1pmNzBVYlkvT3ZSRFJBeFZxODU0SERs?=
+ =?utf-8?B?SjVzZjlYWUh1ZnVKbDR6UXNkZ1JyV2haVkMzQ0FQY1EweGQ1TGhrMFRjWHZl?=
+ =?utf-8?B?UzdJMG1ubkVaeTRSWFVEUzZyZzZwTEhCUDZrZ3VSenpWMGxJaE9jWjlWVTlS?=
+ =?utf-8?B?YkRBMjFBczRJN09OYnVSVmFBb1R5MDlGakZraGQyK25KRVhaU3NnblU1VkJz?=
+ =?utf-8?B?WTZLZERVZGNYa3Zyd0RLS2g3ZXNtbVp5b3JDSjNDK1JEUVlGd1p4c0NiMitY?=
+ =?utf-8?B?UGJ6Smw5WG9CUmR5S0ZBQjdoV2UvNUQ5V2l5RjFsQVFLcmN2ZGY3aU5pekNN?=
+ =?utf-8?B?S1lqNm9hR0pqUU9rL2tnOHNYSmlhbTl5dE1sNnVsOCtmT2U5VWhFMS9lYlJr?=
+ =?utf-8?B?c2xGUGxJdjhrQ3lGOGdwSnB3Ym5SN2lZaVNWZWQ2eUY0ZlVuVmg1RE9OSXZR?=
+ =?utf-8?B?R01DSlV1NVoyUWk1cThCejBibW04Tlk4V2tyRHlBNlh5djU5TkNhdzdsc08v?=
+ =?utf-8?B?OWg5bHZVVENwU2NRa0hxLzdBNW5PNnFEK3AvMlJ6emVrcS80aUVwcGJXandC?=
+ =?utf-8?B?cHVsV3BpeWlnU2xHdUFsVFFqc2lML2RiUzJkcVNUS0RnUmRUZGoyQkdDTVQy?=
+ =?utf-8?B?OXpKR2lUeGVROHk0NGp1cWhVeml3NVIrWjZZRHdXRGxjeU1UdFlreCtYYlRJ?=
+ =?utf-8?B?R2RKMFpPd2hIVTRaaEgwWlM0ZFR5MmljV0FlaWJFNlRtWkFYWWtBOXJ3OENL?=
+ =?utf-8?B?R2M2RzBlS0hzVnNtWXlvcGd3MmZsNVJqYWlWYkM4ejRuTE82RzRaUEswVU5W?=
+ =?utf-8?B?ZXJRVExXZEpyOWRxZTY3aDlCREsvMCtHTVY2bFRMVmxvTER3YVFiWExKSEFK?=
+ =?utf-8?B?eWtid0NURVQ5Vm5RMjNXSTRmeldoU0ZBOWlBUmlmT0J3elNUTHErOFNoNGoz?=
+ =?utf-8?B?ZnpKb0FIMkU2TmNoSUlDTW9VTEp3NE1LY0xtU2c5WFR5bGR4TUhidm10c3FV?=
+ =?utf-8?B?bkE9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?NC9ZTFQ4WkZUcyt5aUNHcGYrZUNVeWl1NW0yaVdua3JTa2x2RkIwWktPZFA0?=
+ =?utf-8?B?REY3UlFUczJwZmZKY3VzZm10Z0pvZEhZK0EwTkpkS2FBczdSV0FzQVdiQUZ1?=
+ =?utf-8?B?WWNxNWZ2cjRsR3k1YVlKMWJpWnhrR2JINGQxOXlvNTZvblB3QVhFWW8vNXBN?=
+ =?utf-8?B?NCtnNGhRem9uTVhWSElrN0k5S3FZZzdIWXhxQ0ttS1NCVnN1MXduTVZGdXp5?=
+ =?utf-8?B?LytCaTN2dWZxd3o4YUpDMmVCZVlJbDFDWGZPdjZCQ2JuWE9MREpidTdmMi81?=
+ =?utf-8?B?cmJoaGRidGdRaWJ2VXVYUnpRTGo0aTA0VnZ6aVhGYnJ2OGVpMC95K2M5UWxO?=
+ =?utf-8?B?d3R3NkVnUUJxVUJ5SnNtTVNBa3NFS0UrdER1ZWZQdXdZVk9WZXBFN24wYldS?=
+ =?utf-8?B?VlJNZiszKzRWTXE4M1BLMjdvMGdFRmhodzJNUG9nbGJKMnhYeTBuVVBaUkEy?=
+ =?utf-8?B?VzY4bE5OYWNhbGpMRmpHNUFTTGcrMnVBcFpLVGpxeVM5Z1ZqN1E1SE5MUUk0?=
+ =?utf-8?B?aSthTmNwc0xwYnpZc0xzWXAreU0vYjR2T2lWbmpCZFU4eHBaZEpZOUJqWFZz?=
+ =?utf-8?B?dHFkTFpwakhzNlNtOS96M2VDT2UzakRzbXhKNy9xN1hOVGRaTVlCZURWbjQ4?=
+ =?utf-8?B?NDRJd3VMRmVuaHd1SkNuMVBqZlJTQnl2NU1ENFZOUGY2MEFhZU5JTGJ3THhl?=
+ =?utf-8?B?NGVPMUhQcS92MWtFYXNOOFNHR2xHNkI4UWJndCtkbU1jRTlSR0xJT3E0Mzlx?=
+ =?utf-8?B?ZWVUd1NBOTZMRytTYjh3Vi9RUkhnRVdKa0xYbms0bmFHREhNdEpxdHRoOERH?=
+ =?utf-8?B?YjBVV1VMZ3p4SVNReFVyNGNEblBqNytPekcrYXMxckx4Nk1RQk51cHdQZlZ1?=
+ =?utf-8?B?SkR4SEhhN2cvU00vQjlVQXdDa0R0RzNTcDB0Y1VVVTY1czI0UmdVMlg4Z1Ar?=
+ =?utf-8?B?MkNvZlJxVW9oMlVsUS9iZGpQTkcxNEUvZ2NnTHdlU2JxSU53SUlMdytuZkFi?=
+ =?utf-8?B?VE5zT3hOVHNqTHRaeHFhUkh3bkNiV1VMTm1GbkJLM01wL1BGeXJ4QU9wQjhF?=
+ =?utf-8?B?VG5DT2cwdTFobXdYMHFMWm5vS002TTZTS1FhUDVEVXA1aDRpWWIvNXNlK1ha?=
+ =?utf-8?B?enkrTTMvV0s2NStyb2dzcXRNQ2xTTHYwby9WS21Jb0JrNk5rQjB4ZzFmaFpV?=
+ =?utf-8?B?MmtyQXhNSFh4Wmd5M21jL044V2RDVWs2VFhuNTZxY3c4Y2Myb3JCRG5DZmpQ?=
+ =?utf-8?B?S1p1dUVBQk5LdDZXY3lUeERmM3V6U0tKLzJnUXMreEUwdUdZUExHY3lGa05i?=
+ =?utf-8?Q?qrB1jKUqVrRYc=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45c90095-a072-41f4-a938-08db62bde3b0
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR10MB7243.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 16:33:11.2551
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vyV/1I0GbyPJtDwvI2I1LaTjnSlZvuycNqFZTQHWWtFBBfSVhsubWFFPn7QadUVFz7wXBH6+amPN1uQNo1hBiWL53otWEei4jSDmitw4AHI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB6725
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 spamscore=0
+ phishscore=0 malwarescore=0 mlxlogscore=770 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2306010144
+X-Proofpoint-GUID: yHHNFO-IelSXUJKehf1SO_Cg8l3LWYB_
+X-Proofpoint-ORIG-GUID: yHHNFO-IelSXUJKehf1SO_Cg8l3LWYB_
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 1, 2023 at 6:18=E2=80=AFPM Limonciello, Mario
-<mario.limonciello@amd.com> wrote:
->
-> +Lyude, Lukas, Karol
->
-> On 5/31/2023 6:40 PM, Nick Hastings wrote:
-> > Hi,
-> >
-> > * Nick Hastings <nicholaschastings@gmail.com> [230530 16:01]:
-> >> * Mario Limonciello <mario.limonciello@amd.com> [230530 13:00]:
-> > <snip>
-> >>> As you're actually loading nouveau, can you please try nouveau.runpm=
-=3D0 on
-> >>> the kernel command line?
-> >> I'm not intentionally loading it. This machine also has intel graphics
-> >> which is what I prefer. Checking my
-> >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
-> >> I see:
-> >>
-> >> blacklist nvidia
-> >> blacklist nvidia-drm
-> >> blacklist nvidia-modeset
-> >> blacklist nvidia-uvm
-> >> blacklist ipmi_msghandler
-> >> blacklist ipmi_devintf
-> >>
-> >> So I thought I had blacklisted it but it seems I did not. Since I do n=
-ot
-> >> want to use it maybe it is better to check if the lock up occurs with
-> >> nouveau blacklisted. I will try that now.
-> > I blacklisted nouveau and booted into a 6.1 kernel:
-> > % uname -a
-> > Linux xps 6.1.0-9-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.27-1 (2023-05=
--08) x86_64 GNU/Linux
-> >
-> > It has been running without problems for nearly two days now:
-> > % uptime
-> >   08:34:48 up 1 day, 16:22,  2 users,  load average: 1.33, 1.26, 1.27
-> >
-> > Regards,
-> >
-> > Nick.
->
-> Thanks, that makes a lot more sense now.
->
-> Nick, Can you please test if nouveau works with runtime PM in the
-> latest 6.4-rc?
->
-> If it works in 6.4-rc, there are probably nouveau commits that need
-> to be backported to 6.1 LTS.
->
-> If it's still broken in 6.4-rc, I believe you should file a bug:
->
-> https://gitlab.freedesktop.org/drm/nouveau/
->
->
-> Lyude, Lukas, Karol
->
-> This thread is in relation to this commit:
->
-> 24867516f06d ("ACPI: OSI: Remove Linux-Dell-Video _OSI string")
->
-> Nick has found that runtime PM is *not* working for nouveau.
->
+On 6/1/23 2:47 AM, Stefano Garzarella wrote:
+>>
+>> static void vhost_worker_free(struct vhost_dev *dev)
+>> {
+>> -    struct vhost_worker *worker = dev->worker;
+>> +    struct vhost_task *vtsk = READ_ONCE(dev->worker.vtsk);
+>>
+>> -    if (!worker)
+>> +    if (!vtsk)
+>>         return;
+>>
+>> -    dev->worker = NULL;
+>> -    WARN_ON(!llist_empty(&worker->work_list));
+>> -    vhost_task_stop(worker->vtsk);
+>> -    kfree(worker);
+>> +    vhost_task_stop(vtsk);
+>> +    WARN_ON(!llist_empty(&dev->worker.work_list));
+>> +    WRITE_ONCE(dev->worker.vtsk, NULL);
+> 
+> The patch LGTM, I just wonder if we should set dev->worker to zero here,
 
-keep in mind we have a list of PCIe controllers where we apply a
-workaround: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git/tree/drivers/gpu/drm/nouveau/nouveau_drm.c?h=3Dv6.4-rc4#n682
+We might want to just set kcov_handle to zero for now.
 
-And I suspect there might be one or two more IDs we'll have to add
-there. Do we have any logs? And could anybody test if adding the
-controller in play here does resolve the problem?
+In 6.3 and older, I think we could do:
 
-> If you recall we did 24867516f06d because 5775b843a619 was
-> supposed to have fixed it.
->
+1. vhost_dev_set_owner could successfully set dev->worker.
+2. vhost_transport_send_pkt runs vhost_work_queue and sees worker
+is set and adds the vhost_work to the work_list.
+3. vhost_dev_set_owner fails in vhost_attach_cgroups, so we stop
+the worker before the work can be run and set worker to NULL.
+4. We clear kcov_handle and return.
+
+We leave the work on the work_list.
+
+5. Userspace can then retry vhost_dev_set_owner. If that works, then the
+work gets executed ok eventually.
+
+OR
+
+Userspace can just close the device. vhost_vsock_dev_release would
+eventually call vhost_dev_cleanup (vhost_dev_flush won't see a worker
+so will just return), and that will hit the WARN_ON but we would
+proceed ok.
+
+If I do a memset of the worker, then if userspace were to retry
+VHOST_SET_OWNER, we would lose the queued work since the work_list would
+get zero'd. I think it's unlikely this ever happens, but you know best
+so let me know if this a real issue.
 
