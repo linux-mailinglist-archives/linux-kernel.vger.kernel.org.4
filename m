@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319A0723E8C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED7C719E5E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237532AbjFFJ5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58864 "EHLO
+        id S233224AbjFANi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 09:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237477AbjFFJ5F (ORCPT
+        with ESMTP id S232329AbjFANiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:57:05 -0400
+        Thu, 1 Jun 2023 09:38:54 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE24E73;
-        Tue,  6 Jun 2023 02:57:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C60107;
+        Thu,  1 Jun 2023 06:38:50 -0700 (PDT)
 Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qb5S708Cdz67KPR;
-        Tue,  6 Jun 2023 17:55:03 +0800 (CST)
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QX6cc1HPkz67FSP;
+        Thu,  1 Jun 2023 21:37:04 +0800 (CST)
 Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
  (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 6 Jun
- 2023 10:57:00 +0100
-Date:   Thu, 1 Jun 2023 14:36:53 +0100
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 1 Jun
+ 2023 14:38:48 +0100
+Date:   Thu, 1 Jun 2023 14:38:47 +0100
 From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To:     Terry Bowman <terry.bowman@amd.com>
 CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
@@ -32,23 +32,22 @@ CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
         <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
 Subject: Re: [PATCH v4 17/23] cxl/pci: Add RCH downstream port AER register
  discovery
-Message-ID: <20230601143653.00000ee0@Huawei.com>
+Message-ID: <20230601143847.000058ff@Huawei.com>
 In-Reply-To: <20230523232214.55282-18-terry.bowman@amd.com>
 References: <20230523232214.55282-1-terry.bowman@amd.com>
         <20230523232214.55282-18-terry.bowman@amd.com>
 Organization: Huawei Technologies Research and Development (UK) Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+MIME-Version: 1.0
 Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-MIME-Version: 1.0
 X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
  lhrpeml500005.china.huawei.com (7.191.163.240)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,4 +84,6 @@ Terry Bowman <terry.bowman@amd.com> wrote:
 > Co-developed-by: Robert Richter <rrichter@amd.com>
 > Signed-off-by: Robert Richter <rrichter@amd.com>
 > Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+Seems reasonable.  
+
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
