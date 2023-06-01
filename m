@@ -2,128 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE182719AFA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC1C719AFD
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232939AbjFAL3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 07:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
+        id S232948AbjFAL3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 07:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbjFAL27 (ORCPT
+        with ESMTP id S232364AbjFAL33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:28:59 -0400
-Received: from mail-m12745.qiye.163.com (mail-m12745.qiye.163.com [115.236.127.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AC818F;
-        Thu,  1 Jun 2023 04:28:47 -0700 (PDT)
-Received: from localhost.localdomain (unknown [IPV6:240e:3b7:327f:140:e827:966c:49bc:3060])
-        by mail-m12745.qiye.163.com (Hmail) with ESMTPA id 94D9E9A0A0F;
-        Thu,  1 Jun 2023 19:28:42 +0800 (CST)
-From:   Ding Hui <dinghui@sangfor.com.cn>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn,
-        Ding Hui <dinghui@sangfor.com.cn>
-Subject: [PATCH net-next] net: ethtool: Fix out-of-bounds copy to user
-Date:   Thu,  1 Jun 2023 19:28:39 +0800
-Message-Id: <20230601112839.13799-1-dinghui@sangfor.com.cn>
-X-Mailer: git-send-email 2.17.1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDQkxOVkxJGkpOHUxKHUlKT1UTARMWGhIXJBQOD1
-        lXWRgSC1lBWUlPSx5BSBlMQUhJTB1BSk9LQR5DSUxBQk1NGEFPQhkYQUhLTUtZV1kWGg8SFR0UWU
-        FZT0tIVUpKS0hKTFVKS0tVS1kG
-X-HM-Tid: 0a8876b79570b218kuuu94d9e9a0a0f
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OFE6Tgw5FD1CDD4qKhNCKx8Z
-        Iw5PCjpVSlVKTUNOTUpDQklISEtNVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
-        QVlJT0seQUgZTEFISUwdQUpPS0EeQ0lMQUJNTRhBT0IZGEFIS01LWVdZCAFZQUhDTks3Bg++
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 1 Jun 2023 07:29:29 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF50123
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 04:29:27 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q4gUa-0001Kx-7O; Thu, 01 Jun 2023 13:29:20 +0200
+Message-ID: <ea040d59-8760-32d3-ce5b-4120ed0efaa5@leemhuis.info>
+Date:   Thu, 1 Jun 2023 13:29:19 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US, de-DE
+To:     Christian Brauner <brauner@kernel.org>,
+        Mike Christie <michael.christie@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     oleg@redhat.com, nicolas.dichtel@6wind.com, axboe@kernel.dk,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        hch@infradead.org, konrad.wilk@oracle.com
+References: <20230519-vormittag-dschungel-83607e9d2255@brauner>
+ <ab8c9f95-c9e9-de04-4e28-78163a32da80@leemhuis.info>
+ <20230601-herzallerliebst-dschungel-4515db351a0c@brauner>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [RFC PATCH 0/8] vhost_tasks: Use CLONE_THREAD/SIGHAND
+In-Reply-To: <20230601-herzallerliebst-dschungel-4515db351a0c@brauner>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1685618968;fd8f4357;
+X-HE-SMSGID: 1q4gUa-0001Kx-7O
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we get statistics by ethtool during changing the number of NIC
-channels greater, the utility may crash due to memory corruption.
+On 01.06.23 12:47, Christian Brauner wrote:
+> On Thu, Jun 01, 2023 at 09:58:38AM +0200, Thorsten Leemhuis wrote:
+>> On 19.05.23 14:15, Christian Brauner wrote:
+>>> On Thu, May 18, 2023 at 10:25:11AM +0200, Christian Brauner wrote:
+>>>> On Wed, May 17, 2023 at 07:09:12PM -0500, Mike Christie wrote:
+>>>>> This patch allows the vhost and vhost_task code to use CLONE_THREAD,
+>>>>> CLONE_SIGHAND and CLONE_FILES. It's a RFC because I didn't do all the
+>>>>> normal testing, haven't coverted vsock and vdpa, and I know you guys
+>>>>> will not like the first patch. However, I think it better shows what
+>>>>
+>>>> Just to summarize the core idea behind my proposal is that no signal
+>>>> handling changes are needed unless there's a bug in the current way
+>>>> io_uring workers already work. All that should be needed is
+>>>> s/PF_IO_WORKER/PF_USER_WORKER/ in signal.c.
+>> [...]
+>>>> So it feels like this should be achievable by adding a callback to
+>>>> struct vhost_worker that get's called when vhost_worker() gets SIGKILL
+>>>> and that all the users of vhost workers are forced to implement.
+>>>>
+>>>> Yes, it is more work but I think that's the right thing to do and not to
+>>>> complicate our signal handling.
+>>>>
+>>>> Worst case if this can't be done fast enough we'll have to revert the
+>>>> vhost parts. I think the user worker parts are mostly sane and are
+>>>
+>>> As mentioned, if we can't settle this cleanly before -rc4 we should
+>>> revert the vhost parts unless Linus wants to have it earlier.
+>>
+>> Meanwhile -rc5 is just a few days away and there are still a lot of
+>> discussions in the patch-set proposed to address the issues[1]. Which is
+>> kinda great (albeit also why I haven't given it a spin yet), but on the
+>> other hand makes we wonder:
+> 
+> You might've missed it in the thread but it seems everyone is currently
+> operating under the assumption that the preferred way is to fix this is
+> rather than revert. 
 
-The NIC drivers callback get_sset_count() could return a calculated
-length depends on current number of channels (e.g. i40e, igb).
+I saw that, but that was also a week ago already, so I slowly started to
+wonder if plans might have/should be changed. Anyway: if that's still
+the plan forward it's totally fine for me if it's fine for Linus. :-D
 
-The ethtool allocates a user buffer with the first ioctl returned
-length and invokes the second ioctl to get data. The kernel copies
-data to the user buffer but without checking its length. If the length
-returned by the second get_sset_count() is greater than the length
-allocated by the user, it will lead to an out-of-bounds copy.
+BTW: I for now didn't sit down to test Mike's patches, as due to all the
+discussions I assumed new ones would be coming sooner or later anyway.
+If it's worth giving them a shot, please let me know.
 
-Fix it by restricting the copy length not exceed the buffer length
-specified by userspace.
+> [...]
 
-Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
----
- net/ethtool/ioctl.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+Thx for the update!
 
-diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
-index 6bb778e10461..82a975a9c895 100644
---- a/net/ethtool/ioctl.c
-+++ b/net/ethtool/ioctl.c
-@@ -1902,7 +1902,7 @@ static int ethtool_self_test(struct net_device *dev, char __user *useraddr)
- 	if (copy_from_user(&test, useraddr, sizeof(test)))
- 		return -EFAULT;
- 
--	test.len = test_len;
-+	test.len = min_t(u32, test.len, test_len);
- 	data = kcalloc(test_len, sizeof(u64), GFP_USER);
- 	if (!data)
- 		return -ENOMEM;
-@@ -1915,7 +1915,8 @@ static int ethtool_self_test(struct net_device *dev, char __user *useraddr)
- 	if (copy_to_user(useraddr, &test, sizeof(test)))
- 		goto out;
- 	useraddr += sizeof(test);
--	if (copy_to_user(useraddr, data, array_size(test.len, sizeof(u64))))
-+	if (test.len &&
-+	    copy_to_user(useraddr, data, array_size(test.len, sizeof(u64))))
- 		goto out;
- 	ret = 0;
- 
-@@ -1940,10 +1941,10 @@ static int ethtool_get_strings(struct net_device *dev, void __user *useraddr)
- 		return -ENOMEM;
- 	WARN_ON_ONCE(!ret);
- 
--	gstrings.len = ret;
-+	gstrings.len = min_t(u32, gstrings.len, ret);
- 
- 	if (gstrings.len) {
--		data = vzalloc(array_size(gstrings.len, ETH_GSTRING_LEN));
-+		data = vzalloc(array_size(ret, ETH_GSTRING_LEN));
- 		if (!data)
- 			return -ENOMEM;
- 
-@@ -2055,9 +2056,9 @@ static int ethtool_get_stats(struct net_device *dev, void __user *useraddr)
- 	if (copy_from_user(&stats, useraddr, sizeof(stats)))
- 		return -EFAULT;
- 
--	stats.n_stats = n_stats;
-+	stats.n_stats = min_t(u32, stats.n_stats, n_stats);
- 
--	if (n_stats) {
-+	if (stats.n_stats) {
- 		data = vzalloc(array_size(n_stats, sizeof(u64)));
- 		if (!data)
- 			return -ENOMEM;
-@@ -2070,7 +2071,8 @@ static int ethtool_get_stats(struct net_device *dev, void __user *useraddr)
- 	if (copy_to_user(useraddr, &stats, sizeof(stats)))
- 		goto out;
- 	useraddr += sizeof(stats);
--	if (n_stats && copy_to_user(useraddr, data, array_size(n_stats, sizeof(u64))))
-+	if (stats.n_stats &&
-+	    copy_to_user(useraddr, data, array_size(stats.n_stats, sizeof(u64))))
- 		goto out;
- 	ret = 0;
- 
--- 
-2.17.1
-
+Ciao, Thorsten
