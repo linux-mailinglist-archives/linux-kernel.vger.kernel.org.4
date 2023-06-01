@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2AF7195A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A523719580
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232298AbjFAIcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
+        id S231542AbjFAI1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbjFAIbQ (ORCPT
+        with ESMTP id S229589AbjFAI07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:31:16 -0400
-X-Greylist: delayed 357 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Jun 2023 01:30:45 PDT
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D4E133;
-        Thu,  1 Jun 2023 01:30:45 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowACnrpLJVXhkdUgwCQ--.53814S2;
-        Thu, 01 Jun 2023 16:24:42 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl, palmer@dabbelt.com,
-        paul.walmsley@sifive.com
-Cc:     linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] gpio: sifive: Add missing check for platform_get_irq
-Date:   Thu,  1 Jun 2023 16:24:40 +0800
-Message-Id: <20230601082440.30110-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 1 Jun 2023 04:26:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A40FB
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685607970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vzamysyMQrXM2G/k2OexOLkxj2XMsJJyutAVuKEvN7A=;
+        b=Gi1cq+f/rKKsrlZpkx7knZADi3K/iFp1GgP+Jev3ibt5AVzxisKEpKtfjbPIQ1wLBC4OiP
+        rXr2xfvyJPjsEsuc7WlHvd+GHQgcsQfzrMYo8/Oeiwy761xWjn6T9Ltw5rAVQ1lje/YRa6
+        pnO9psdVrExdApjnZRa45tvntBCR6MU=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-299-e4UmfeH5NDWvY2HDiby9BA-1; Thu, 01 Jun 2023 04:26:08 -0400
+X-MC-Unique: e4UmfeH5NDWvY2HDiby9BA-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-96f4f1bb838so33901466b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:26:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685607967; x=1688199967;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vzamysyMQrXM2G/k2OexOLkxj2XMsJJyutAVuKEvN7A=;
+        b=MPAXujkDE/oiwsOKNpOeE0S2eZBCQwMDrLbIGwQK3Y8MYFIK8OTpmVK2uNcA/a8OEh
+         ZCjGukXgK3Ag9JuEVF5CREtvwo1HlqaoIUthg3upT6yxIuvbnVWfGcbLR9m1GkQ93xmb
+         09h6Dxs1Y9bMH/HEXRkAIZvF9yL6E53TVyyYpkplXUFzR7VAtLzH6crNuQcifJ1lEDc4
+         YjW94spXuU6aRAwff6Y+iPOvjmrQz+FCTzbiii3F8W+hoVQxPGfLf9vOTNJfhWiOif+S
+         prBn8pJp/6jQAu66mEGnfiU2wHiPSwka7DK6CM3wi74u+1NUX6MWTBsqSOUzif3Axf41
+         dVlg==
+X-Gm-Message-State: AC+VfDwmISMq0g0KcCp0wkpwoMFYkJof19ke7+9b+M4eK+ZqzN+A10n9
+        0gnBe8/+V0uAGMtCWzqLOdV/bTQ3V/tOQv1k2khbLYN4w3rpgR/lA+8HZcIAhQntUVYEDonSYAC
+        BAGAPNAxAv/WaWMugdYz2omJJuJiJJNqAqMCF7Ab7
+X-Received: by 2002:a17:907:1ca2:b0:96b:1608:3563 with SMTP id nb34-20020a1709071ca200b0096b16083563mr7253949ejc.58.1685607967665;
+        Thu, 01 Jun 2023 01:26:07 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6Z/VwEnPjyGSKqfUflBU9/ovfi6znyKV8z4UMFz8tIFJ3bkPV3n5wUqi3rzVrrhn6dsjIBzc9jOQE560mDKJ8=
+X-Received: by 2002:a17:907:1ca2:b0:96b:1608:3563 with SMTP id
+ nb34-20020a1709071ca200b0096b16083563mr7253934ejc.58.1685607967405; Thu, 01
+ Jun 2023 01:26:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowACnrpLJVXhkdUgwCQ--.53814S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jw1UtrykKF17Ww43Ww4DJwb_yoWfJFg_Gw
-        1kuFW7X3y0vFn0gF12y3yayr92vF95Wrn3ursakFyftryDu348ur17Xrs5ZFnxXr4UtFy7
-        Gay8uw47Aa13GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
-        ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUhdbbUUUUU=
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230601072043.24439-1-ltao@redhat.com> <ZHhTDXpPqFL+3m5h@MiWiFi-R3L-srv>
+In-Reply-To: <ZHhTDXpPqFL+3m5h@MiWiFi-R3L-srv>
+From:   Tao Liu <ltao@redhat.com>
+Date:   Thu, 1 Jun 2023 16:25:31 +0800
+Message-ID: <CAO7dBbVXD+3tq_iQMKtX+Vw7csPfzPJdOWVduMENyO6i7p0b0w@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/kexec: Add EFI config table identity mapping for
+ kexec kernel
+To:     Baoquan He <bhe@redhat.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        ardb@kernel.org, linux-kernel@vger.kernel.org, dyoung@redhat.com,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,32 +78,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing check for platform_get_irq and return error
-if it fails.
+Hi Baoquan,
 
-Fixes: f52d6d8b43e5 ("gpio: sifive: To get gpio irq offset from device tree data")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/gpio/gpio-sifive.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+On Thu, Jun 1, 2023 at 4:13=E2=80=AFPM Baoquan He <bhe@redhat.com> wrote:
+>
+> On 06/01/23 at 03:20pm, Tao Liu wrote:
+> > A kexec kernel bootup hang is observed on Intel Atom cpu due to unmappe=
+d
+> > EFI config table.
+> >
+> > Currently EFI system table is identity-mapped for the kexec kernel, but=
+ EFI
+> > config table is not mapped explicitly:
+> >
+> >     commit 6bbeb276b71f ("x86/kexec: Add the EFI system tables and ACPI
+> >                           tables to the ident map")
+> >
+> > Later in the following 2 commits, EFI config table will be accessed whe=
+n
+> > enabling sev at kernel startup. This may result in a page fault due to =
+EFI
+> > config table's unmapped address. Since the page fault occurs at an earl=
+y
+> > stage, it is unrecoverable and kernel hangs.
+> >
+> >     commit ec1c66af3a30 ("x86/compressed/64: Detect/setup SEV/SME featu=
+res
+> >                           earlier during boot")
+> >     commit c01fce9cef84 ("x86/compressed: Add SEV-SNP feature
+> >                           detection/setup")
+> >
+> > In addition, the issue doesn't appear on all systems, because the kexec
+> > kernel uses Page Size Extension (PSE) for identity mapping. In most cas=
+es,
+> > EFI config table can end up to be mapped into due to 1 GB page size.
+> > However if nogbpages is set, or cpu doesn't support pdpe1gb feature
+> > (e.g Intel Atom x6425RE cpu), EFI config table may not be mapped into
+> > due to 2 MB page size, thus a page fault hang is more likely to happen.
+> >
+> > This patch will make sure the EFI config table is always mapped.
+> >
+> > Signed-off-by: Tao Liu <ltao@redhat.com>
+> > ---
+> > Changes in v2:
+> > - Rephrase the change log based on Baoquan's suggestion.
+> > - Rename map_efi_sys_cfg_tab() to map_efi_tables().
+> > - Link to v1: https://lore.kernel.org/kexec/20230525094914.23420-1-ltao=
+@redhat.com/
+> > ---
+> >  arch/x86/kernel/machine_kexec_64.c | 35 ++++++++++++++++++++++++++----
+> >  1 file changed, 31 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machi=
+ne_kexec_64.c
+> > index 1a3e2c05a8a5..664aefa6e896 100644
+> > --- a/arch/x86/kernel/machine_kexec_64.c
+> > +++ b/arch/x86/kernel/machine_kexec_64.c
+> > @@ -28,6 +28,7 @@
+> >  #include <asm/setup.h>
+> >  #include <asm/set_memory.h>
+> >  #include <asm/cpu.h>
+> > +#include <asm/efi.h>
+> >
+> >  #ifdef CONFIG_ACPI
+> >  /*
+> > @@ -86,10 +87,12 @@ const struct kexec_file_ops * const kexec_file_load=
+ers[] =3D {
+> >  #endif
+> >
+> >  static int
+> > -map_efi_systab(struct x86_mapping_info *info, pgd_t *level4p)
+> > +map_efi_tables(struct x86_mapping_info *info, pgd_t *level4p)
+> >  {
+> >  #ifdef CONFIG_EFI
+> >       unsigned long mstart, mend;
+> > +     void *kaddr;
+> > +     int ret;
+> >
+> >       if (!efi_enabled(EFI_BOOT))
+> >               return 0;
+> > @@ -105,6 +108,30 @@ map_efi_systab(struct x86_mapping_info *info, pgd_=
+t *level4p)
+> >       if (!mstart)
+> >               return 0;
+> >
+> > +     ret =3D kernel_ident_mapping_init(info, level4p, mstart, mend);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     kaddr =3D memremap(mstart, mend - mstart, MEMREMAP_WB);
+> > +     if (!kaddr) {
+> > +             pr_err("Could not map UEFI system table\n");
+> > +             return -ENOMEM;
+> > +     }
+> > +
+> > +     mstart =3D efi_config_table;
+> > +
+> > +     if (efi_enabled(EFI_64BIT)) {
+> > +             efi_system_table_64_t *stbl =3D (efi_system_table_64_t *)=
+kaddr;
+> > +
+> > +             mend =3D mstart + sizeof(efi_config_table_64_t) * stbl->n=
+r_tables;
+> > +     } else {
+> > +             efi_system_table_32_t *stbl =3D (efi_system_table_32_t *)=
+kaddr;
+> > +
+> > +             mend =3D mstart + sizeof(efi_config_table_32_t) * stbl->n=
+r_tables;
+> > +     }
+> > +
+> > +     memunmap(kaddr);
+> > +
+> >       return kernel_ident_mapping_init(info, level4p, mstart, mend);
+> >  #endif
+> >       return 0;
+> > @@ -244,10 +271,10 @@ static int init_pgtable(struct kimage *image, uns=
+igned long start_pgtable)
+> >       }
+> >
+> >       /*
+> > -      * Prepare EFI systab and ACPI tables for kexec kernel since they=
+ are
+> > -      * not covered by pfn_mapped.
+> > +      * Prepare EFI systab, config table and ACPI tables for kexec ker=
+nel
+>
+> The code comment need be updated too?
+>
+>          * Prepare EFI tables and ACPI tables for kexec kernel since they=
+ are
+>          * not covered by pfn_mapped.
+>
+> Other than this nit, this patch looks good to me, thanks.
+>
 
-diff --git a/drivers/gpio/gpio-sifive.c b/drivers/gpio/gpio-sifive.c
-index 98939cd4a71e..7bca9c415564 100644
---- a/drivers/gpio/gpio-sifive.c
-+++ b/drivers/gpio/gpio-sifive.c
-@@ -221,8 +221,11 @@ static int sifive_gpio_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
--	for (i = 0; i < ngpio; i++)
-+	for (i = 0; i < ngpio; i++) {
- 		chip->irq_number[i] = platform_get_irq(pdev, i);
-+		if (chip->irq_number[i] < 0)
-+			return -ENODEV;
-+	}
- 
- 	ret = bgpio_init(&chip->gc, dev, 4,
- 			 chip->base + SIFIVE_GPIO_INPUT_VAL,
--- 
-2.25.1
+Thanks for the patch review! I'm OK with the comment update, but I
+prefer to leave it as it is. Since the comment provides more details:
+there are systab and config tables mapped instead of all efi tables.
+
+Thanks,
+Tao Liu
+
+> Acked-by: Baoquan He <bhe@redhat.com>
+>
+>
+> > +      * since they are not covered by pfn_mapped.
+> >        */
+> > -     result =3D map_efi_systab(&info, level4p);
+> > +     result =3D map_efi_tables(&info, level4p);
+> >       if (result)
+> >               return result;
+> >
+> > --
+> > 2.33.1
+> >
+>
 
