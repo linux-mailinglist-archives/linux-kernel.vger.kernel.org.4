@@ -2,82 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F91719623
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B83071962C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbjFAI6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
+        id S232435AbjFAI7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbjFAI6E (ORCPT
+        with ESMTP id S232401AbjFAI7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:58:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF79E7
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:58:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 491886176D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 08:58:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F31C433EF;
-        Thu,  1 Jun 2023 08:57:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685609882;
-        bh=WIWcxj+OlLyjzD4msN15S3QwPv0kqqO3yJBhFxLx1ao=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XesTDaHB0OnBd9c67cK824VH0jTx2mRXAvkSHA67zKL0RAUgXngTzyFyT1HVUkNJJ
-         FRt7H64lpA4E0AD3sBvtMpEJFxPCN8PPA81yoA6BB7s2idIc5Iv1JnxvKskmxlmqyb
-         gSEv8m3KCSoYSFUSRVCifySirD6O2plCTobExFymU1WSDl52jNK2zovDRbk+2jLQts
-         xWbWXk7s7xmHdc2XdmT+oy6gOnTDpabDCohBZ8508Ul2NAr+pb2Lu9JzP6h/+P9hVv
-         yz0H+vQN6KrWz0+SGJCE+wMCHnjijsgcXMwsv42PQPu9fBPoa13X86RHJP0g8r5MOK
-         kMN+P761m4bOQ==
-Message-ID: <5cc4995f-47a6-136e-3263-d7e68668cf0c@kernel.org>
-Date:   Thu, 1 Jun 2023 10:57:54 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: drivers/soundwire/qcom.c:1269 qcom_swrm_get_port_config() error:
- buffer overflow 'ctrl->pconfig' 14 <= 14
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@linaro.org>, oe-kbuild@lists.linux.dev
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-References: <ea98850b-3b56-4306-87be-a5853a3cdf50@kili.mountain>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <ea98850b-3b56-4306-87be-a5853a3cdf50@kili.mountain>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Jun 2023 04:59:01 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5BAE7
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:58:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685609938; x=1717145938;
+  h=date:from:to:cc:subject:message-id;
+  bh=bI04po/eK1H1qpKN8XdWnVH3kCj9h3k0RBK7LNfcsUg=;
+  b=K/JcUTkz93pacaocwQbEHHLg14kNgrwz0SJ1exGgi9eBduQCxuDV+DFr
+   30qcP/uIwsIQwoQjeFXTghSSkQwOdkF5NhhJ722ZPMJfTgcvJ6gOvOwka
+   XQpvoyTltmlf7L59uHHjThncGZK2N9mq9Zgpd6fkTEJL2iZbWc2wiQ6pD
+   5WSSeXeUQt1Ne74D9SSiItNA14GUgBm/yW8Bxf6mxye9+6jxv68qY3zm0
+   75ZsIDvLVWJu2tqKOnqlmKLrG0954z5thkCxZ0twCm38LwrEXmJqzzRFg
+   jEQz2vD3vzDkaCSKja0kmvZEovQ0amfPsjwANC8vfIShn9MVJYZLCrInB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="441862774"
+X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
+   d="scan'208";a="441862774"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 01:58:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="831509379"
+X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
+   d="scan'208";a="831509379"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 01 Jun 2023 01:58:56 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4e92-00027q-0n;
+        Thu, 01 Jun 2023 08:58:56 +0000
+Date:   Thu, 01 Jun 2023 16:58:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/alternatives] BUILD SUCCESS
+ 3496d1c64a0fcc9bae3ed40decc3ecd7f8ac072f
+Message-ID: <20230601085805.G_oh-%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/05/2023 10:35, Dan Carpenter wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   d635f6cc934bcd467c5d67148ece74632fd96abf
-> commit: 2367e0ecb498764e95cfda691ff0828f7d25f9a4 soundwire: qcom: gracefully handle too many ports in DT
-> config: ia64-randconfig-m041-20230514
-> compiler: ia64-linux-gcc (GCC) 12.1.0
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Reported-by: Dan Carpenter <error27@gmail.com>
-> | Closes: https://lore.kernel.org/r/202305201301.sCJ8UDKV-lkp@intel.com/
-> 
-> New smatch warnings:
-> drivers/soundwire/qcom.c:1269 qcom_swrm_get_port_config() error: buffer 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/alternatives
+branch HEAD: 3496d1c64a0fcc9bae3ed40decc3ecd7f8ac072f  x86/nospec: Shorten RESET_CALL_DEPTH
 
-Thanks, I'll fix it. issue was present in original code, my commit just
-made it obvious :)
+Unverified Warning (likely false positive, please contact us if interested):
 
-Best regards,
-Krzysztof
+arch/x86/kernel/alternative.c:1471:32: warning: no previous prototype for '__alt_reloc_selftest' [-Wmissing-prototypes]
 
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- i386-allyesconfig
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-debian-10.3
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- i386-defconfig
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- x86_64-allyesconfig
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- x86_64-defconfig
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+|-- x86_64-kexec
+|   `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+`-- x86_64-rhel-8.3
+    `-- arch-x86-kernel-alternative.c:warning:no-previous-prototype-for-__alt_reloc_selftest
+
+elapsed time: 1252m
+
+configs tested: 40
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
