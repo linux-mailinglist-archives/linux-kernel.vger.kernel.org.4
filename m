@@ -2,63 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3AA871F187
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDBF71F18B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbjFASPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 14:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
+        id S231933AbjFASPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 14:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232224AbjFASPC (ORCPT
+        with ESMTP id S231847AbjFASPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 14:15:02 -0400
+        Thu, 1 Jun 2023 14:15:21 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2891B6
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 11:14:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF5413D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 11:14:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685643250;
+        s=mimecast20190719; t=1685643273;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=yAXWvO+rbRz76kR38MiqP2PBm7rvHKr57C2NYNrSHKM=;
-        b=BMT5YOrvYoUzA4f+DDLwKyWvBGfpDx/C7S1rX8UW9qF4S7MJJjy659891fQEXQy/MMPje1
-        EDRf0mGsPb/E/3D4s5voqmtk99Xo5iv4d+9H0n9E4z8LY+mYRewcooUKAHTmefhUpedgkn
-        2lC+YnrPRNSHW8pPg71ogjf3LaSCuKc=
+        bh=7upMiNAR9+4z3Vj7VjoE6UJazN2Bsg6RUcSnR0glX6s=;
+        b=YUhxgMPQvfKsElRpGM1dqBybhlMb7HvvIQ7uilWYDcU8p7wGAPmFdCpHDC4+5YqhpSbzdy
+        T1IXRxSzbQCA2jmxM0a/QtSOT9a90N7cm02pxGq6w91qfyGpvBJjAT76GRjXJdhUGowIZF
+        cyZvhtGA6/xP6IaXf1xWxKs8HS6Hv9Y=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-192-ZbWf3b_NOsSE21DsYMy7wA-1; Thu, 01 Jun 2023 14:14:08 -0400
-X-MC-Unique: ZbWf3b_NOsSE21DsYMy7wA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+ us-mta-84-p9MYtEy2MkWf5VubT3B2TA-1; Thu, 01 Jun 2023 14:14:28 -0400
+X-MC-Unique: p9MYtEy2MkWf5VubT3B2TA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A6ACA1C01EAB;
-        Thu,  1 Jun 2023 18:14:06 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1C67B14171BB;
-        Thu,  1 Jun 2023 18:14:06 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 2647440155719; Thu,  1 Jun 2023 15:13:49 -0300 (-03)
-Date:   Thu, 1 Jun 2023 15:13:49 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E6A113C0C88A;
+        Thu,  1 Jun 2023 18:14:26 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.135])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 92F94112132C;
+        Thu,  1 Jun 2023 18:14:19 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu,  1 Jun 2023 20:14:07 +0200 (CEST)
+Date:   Thu, 1 Jun 2023 20:13:59 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Brian Cain <bcain@quicinc.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Stafford Horne <shorne@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
         Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH 3/4] workqueue: add schedule_on_each_cpumask helper
-Message-ID: <ZHjf3Y99VuC51Ipr@tpad>
-References: <20230530145234.968927611@redhat.com>
- <20230530145335.930262644@redhat.com>
- <20230530130947.37edbab6b672bfce6f481295@linux-foundation.org>
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Hu Chunyu <chuhu@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Luis Goncalves <lgoncalv@redhat.com>
+Subject: Re: [PATCH v9] kernel/fork: beware of __put_task_struct calling
+ context
+Message-ID: <20230601181359.GA23852@redhat.com>
+References: <20230516191441.34377-1-wander@redhat.com>
+ <20230517152632.GC1286@redhat.com>
+ <CAAq0SUkE_4qF5RuWE7MxnzcbchE4SHkyMvJxHAQeJ+=ZTEwdgg@mail.gmail.com>
+ <20230529122256.GA588@redhat.com>
+ <CAAq0SUkjFiN3Xap-S2awymDqDWZceCnAWBQnESVMVya7RpFFUw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230530130947.37edbab6b672bfce6f481295@linux-foundation.org>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAq0SUkjFiN3Xap-S2awymDqDWZceCnAWBQnESVMVya7RpFFUw@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,180 +92,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 01:09:47PM -0700, Andrew Morton wrote:
-> On Tue, 30 May 2023 11:52:37 -0300 Marcelo Tosatti <mtosatti@redhat.com> wrote:
-> 
-> > Add a schedule_on_each_cpumask function, equivalent to
-> > schedule_on_each_cpu but accepting a cpumask to operate.
-> > 
-> > Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> > 
-> > ---
-> > 
-> > Index: linux-vmstat-remote/kernel/workqueue.c
-> > ===================================================================
-> > --- linux-vmstat-remote.orig/kernel/workqueue.c
-> > +++ linux-vmstat-remote/kernel/workqueue.c
-> > @@ -3455,6 +3455,56 @@ int schedule_on_each_cpu(work_func_t fun
-> >  	return 0;
-> >  }
-> >  
-> > +
-> > +/**
-> > + * schedule_on_each_cpumask - execute a function synchronously on each
-> > + * CPU in "cpumask", for those which are online.
-> > + *
-> > + * @func: the function to call
-> > + * @mask: the CPUs which to call function on
-> > + *
-> > + * schedule_on_each_cpu() executes @func on each specified CPU that is online,
-> > + * using the system workqueue and blocks until all such CPUs have completed.
-> > + * schedule_on_each_cpu() is very slow.
-> > + *
-> > + * Return:
-> > + * 0 on success, -errno on failure.
-> > + */
-> > +int schedule_on_each_cpumask(work_func_t func, cpumask_t *cpumask)
-> > +{
-> > +	int cpu;
-> > +	struct work_struct __percpu *works;
-> > +	cpumask_var_t effmask;
-> > +
-> > +	works = alloc_percpu(struct work_struct);
-> > +	if (!works)
-> > +		return -ENOMEM;
-> > +
-> > +	if (!alloc_cpumask_var(&effmask, GFP_KERNEL)) {
-> > +		free_percpu(works);
-> > +		return -ENOMEM;
-> > +	}
-> > +
-> > +	cpumask_and(effmask, cpumask, cpu_online_mask);
-> > +
-> > +	cpus_read_lock();
-> > +
-> > +	for_each_cpu(cpu, effmask) {
-> 
-> Should we check here that the cpu is still online?
-> 
-> > +		struct work_struct *work = per_cpu_ptr(works, cpu);
-> > +
-> > +		INIT_WORK(work, func);
-> > +		schedule_work_on(cpu, work);
-> > +	}
-> > +
-> > +	for_each_cpu(cpu, effmask)
-> > +		flush_work(per_cpu_ptr(works, cpu));
-> > +
-> > +	cpus_read_unlock();
-> > +	free_percpu(works);
-> > +	free_cpumask_var(effmask);
-> > +	return 0;
-> > +}
-> > +
-> >  /**
-> >   * execute_in_process_context - reliably execute the routine with user context
-> >   * @fn:		the function to execute
-> > --- linux-vmstat-remote.orig/include/linux/workqueue.h
-> > +++ linux-vmstat-remote/include/linux/workqueue.h
-> > @@ -450,6 +450,7 @@ extern void __flush_workqueue(struct wor
-> >  extern void drain_workqueue(struct workqueue_struct *wq);
-> >  
-> >  extern int schedule_on_each_cpu(work_func_t func);
-> > +extern int schedule_on_each_cpumask(work_func_t func, cpumask_t *cpumask);
-> 
-> May as well make schedule_on_each_cpu() call
-> schedule_on_each_cpumask()?  Save a bit of text, and they're hardly
-> performance-critical to that extent.
+On 06/01, Wander Lairson Costa wrote:
+>
+> On Mon, May 29, 2023 at 9:23 AM Oleg Nesterov <oleg@redhat.com> wrote:
+> >
+> > On 05/17, Wander Lairson Costa wrote:
+> > >
+> > > On Wed, May 17, 2023 at 12:26 PM Oleg Nesterov <oleg@redhat.com> wrote:
+> > > >
+> > > > LGTM but we still need to understand the possible problems with CONFIG_PROVE_RAW_LOCK_NESTING ...
+> > > >
+> > > > Again, I'll try to investigate when I have time although I am not sure I can really help.
+> > > >
+> > > > Perhaps you too can try to do this ? ;)
+> > > >
+> > >
+> > > FWIW, I tested this patch with CONFIG_PROVE_LOCK_NESTING in RT and
+> > > stock kernels. No splat happened.
+> >
+> > Strange... FYI, I am running the kernel with this patch
+> >
+> >         diff --git a/kernel/sys.c b/kernel/sys.c
+> >         index 339fee3eff6a..3169cceddf3b 100644
+> >         --- a/kernel/sys.c
+> >         +++ b/kernel/sys.c
+> >         @@ -2412,6 +2412,17 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+> >
+> >                 error = 0;
+> >                 switch (option) {
+> >         +       case 666: {
+> >         +               static DEFINE_SPINLOCK(l);
+> >         +               static DEFINE_RAW_SPINLOCK(r);
+> >         +
+> >         +               raw_spin_lock(&r);
+> >         +               spin_lock(&l);
+> >         +               spin_unlock(&l);
+> >         +               raw_spin_unlock(&r);
+> >         +
+> >         +               break;
+> >         +       }
+> >                 case PR_SET_PDEATHSIG:
+> >                         if (!valid_signal(arg2)) {
+> >                                 error = -EINVAL;
+> >
+> > applied (because I am too lazy to compile a module ;) and
+> >
+>
+> FWIW, I converted it to a module [1]
 
-Agree, will wait for Michal's review before resending -v2.
+where is [1] ?  not that I think this matters though...
 
+> >         # perl -e 'syscall 157,666'
+> >
+> > triggers the lockdep bug
+> >
+> >         =============================
+> >         [ BUG: Invalid wait context ]
+> >         6.4.0-rc2-00018-g4d6d4c7f541d-dirty #1176 Not tainted
+> >         -----------------------------
+> >         perl/35 is trying to lock:
+> >         ffffffff81c4cc18 (l){....}-{3:3}, at: __do_sys_prctl+0x21b/0x87b
+> >         other info that might help us debug this:
+> >         context-{5:5}
+> >         ...
+> >
+> > as expected.
+> >
+>
+> Yeah, I tried it here and I had the same results,
 
-workqueue: add schedule_on_each_cpumask helper
+OK,
 
-Add a schedule_on_each_cpumask function, equivalent to
-schedule_on_each_cpu but accepting a cpumask to operate.
+> but only in the RT kernel
 
-Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+this again suggests that your testing was wrong or I am totally confused (quite
+possible, I know nothing about RT). I did the testing without CONFIG_PREEMPT_RT.
 
----
+> But running the reproducer for put_task_struct(), works fine.
 
-v2: - cpu_online_mask reference should happen with cpus_read_lock held	(Andrew Morton)
-    - have schedule_on_each_cpu call _cpumask variant			(Andrew Morton)
+which reproducer ?
 
-Index: linux-vmstat-remote/kernel/workqueue.c
-===================================================================
---- linux-vmstat-remote.orig/kernel/workqueue.c
-+++ linux-vmstat-remote/kernel/workqueue.c
-@@ -3431,27 +3431,56 @@ EXPORT_SYMBOL(cancel_delayed_work_sync);
-  */
- int schedule_on_each_cpu(work_func_t func)
- {
-+	return schedule_on_each_cpumask(func, cpu_possible_mask);
-+}
-+
-+
-+/**
-+ * schedule_on_each_cpumask - execute a function synchronously on each
-+ * CPU in "cpumask", for those which are online.
-+ *
-+ * @func: the function to call
-+ * @mask: the CPUs which to call function on
-+ *
-+ * schedule_on_each_cpu() executes @func on each specified CPU that is online,
-+ * using the system workqueue and blocks until all such CPUs have completed.
-+ * schedule_on_each_cpu() is very slow.
-+ *
-+ * Return:
-+ * 0 on success, -errno on failure.
-+ */
-+int schedule_on_each_cpumask(work_func_t func, cpumask_t *cpumask)
-+{
- 	int cpu;
- 	struct work_struct __percpu *works;
-+	cpumask_var_t effmask;
- 
- 	works = alloc_percpu(struct work_struct);
- 	if (!works)
- 		return -ENOMEM;
- 
-+	if (!alloc_cpumask_var(&effmask, GFP_KERNEL)) {
-+		free_percpu(works);
-+		return -ENOMEM;
-+	}
-+
- 	cpus_read_lock();
- 
--	for_each_online_cpu(cpu) {
-+	cpumask_and(effmask, cpumask, cpu_online_mask);
-+
-+	for_each_cpu(cpu, effmask) {
- 		struct work_struct *work = per_cpu_ptr(works, cpu);
- 
- 		INIT_WORK(work, func);
- 		schedule_work_on(cpu, work);
- 	}
- 
--	for_each_online_cpu(cpu)
-+	for_each_cpu(cpu, effmask)
- 		flush_work(per_cpu_ptr(works, cpu));
- 
- 	cpus_read_unlock();
- 	free_percpu(works);
-+	free_cpumask_var(effmask);
- 	return 0;
- }
- 
-Index: linux-vmstat-remote/include/linux/workqueue.h
-===================================================================
---- linux-vmstat-remote.orig/include/linux/workqueue.h
-+++ linux-vmstat-remote/include/linux/workqueue.h
-@@ -450,6 +450,7 @@ extern void __flush_workqueue(struct wor
- extern void drain_workqueue(struct workqueue_struct *wq);
- 
- extern int schedule_on_each_cpu(work_func_t func);
-+extern int schedule_on_each_cpumask(work_func_t func, cpumask_t *cpumask);
- 
- int execute_in_process_context(work_func_t fn, struct execute_work *);
- 
+Oleg.
 
