@@ -2,64 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F45171EFB4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4575A71EF35
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbjFAQwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 12:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
+        id S231550AbjFAQiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 12:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbjFAQwZ (ORCPT
+        with ESMTP id S229682AbjFAQis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 12:52:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D686FE54
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 09:51:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685638319; x=1717174319;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=unaIhnrbLjV7sEpHjjq64t0b2CFQcNQSWZs0Xy3lg8E=;
-  b=XsLZv5GzLoxuKi7Bhw7lOwkV46rMWOTWftWQjAvsoibkC93eihy2ukds
-   gaZT8VyaFaA/YYvQz/37tMjBYdzwjchYty6hILBaUfNoJC/YPntYQZP/m
-   SSqgc+kLD5BXfE8G26wosEm2SUjbb3a/fa159uUiV4X5ap4cKPegGFzhJ
-   o32sfcGWxIlZW4uzBVGNyheC7NaPxHa/xstMSPcS/360f8mNuNO/RJ6ao
-   NNh4Z4SZVHJdTWa156bWc/kbP1M8PHwxSTPkyRrjNuht1DyeC5SEUzYvz
-   HVuJyukGe9q5UbaOPhG3BVmHlc6u8Icoh3XwM2qW/R5k+Uj5Q8Y1qjQpy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="421426868"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="421426868"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:51:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="777283278"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="777283278"
-Received: from rcelisco-mobl.amr.corp.intel.com (HELO [10.212.207.82]) ([10.212.207.82])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:51:54 -0700
-Message-ID: <40d09b30-3323-f438-0f12-bc322ee389e9@linux.intel.com>
-Date:   Thu, 1 Jun 2023 11:37:33 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH 3/4] soundwire: stream: Remove unnecessary gotos
+        Thu, 1 Jun 2023 12:38:48 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F104B18D;
+        Thu,  1 Jun 2023 09:38:46 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351E4dM4022425;
+        Thu, 1 Jun 2023 16:38:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=nGS7VcP3mPhSwKCHZv3eUjGTvfpR6oGGclPOQ9MbbWQ=;
+ b=YXLSl6SVcEfQ/hU66slZvvD1iGrH++ybpk5db0xEu5IsYLakvvJ3YonspMBzX8P9Sobm
+ NxlrL84/KDtoCLaA0/WSGf5Rys9ghb3AuECbp5xaOzTO1zj12EPsypdXKxWwPbJCH6Xf
+ Sy5FqvtqxtDxOkLapIJiNnGlxYAQwJcCWPFDg9I7QxnrNv7Kvh08hWr/0QoYxnkPbgFL
+ i08vs925qAp8pvNSac6kpD6UoT41H4+L4LJzFtL1V6MT7B2aWw0wdmkiX8+ALx9BBu3n
+ p+vItvf1O8akMCYQ3AraFB951AgYREktxXjKk0dcXLYU1jEcNuIcWEcPjKynv51DTueC Zg== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qvhb997st-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Jun 2023 16:38:28 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 351G37wt014607;
+        Thu, 1 Jun 2023 16:38:27 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2108.outbound.protection.outlook.com [104.47.55.108])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qu8a7eh30-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Jun 2023 16:38:27 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hrcFVjrlpPin5hodDfoRkqecyeHcowhS6eX2gwwEHomfC6tE7NihgLFBG47Qd2vodwaRAzbwJgFAZ6uPNX/3qgjYey5q83k84GpC8U5zV1qRTEHvjRB+hCwgTH5s6gVXWkXbm4uoHl0g0Plwg8pTBnjw2swQwvbjESnJU4VtLpnviYBd16rw4HjM82oRb0KKHbUUR7bzVpPHq/GYPyk/uuKZl8RqNYrBaJAr58d2o9j9ck2ipuuhhxwY8TNE/p71yLp8NEQvh1+3ErFhviXhgjtEPL5FHy1kKx8y4qS9NiUXsKUtO7zaPxsLwgtD6WjCx87XmHwtn62t5pi6C/PkNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nGS7VcP3mPhSwKCHZv3eUjGTvfpR6oGGclPOQ9MbbWQ=;
+ b=gA7IJQepr9c0Vc0j1HO3oOg2Uv0fsiu0QE4u0llTAsgSOCsxQYPTk1AS7ueIxEHYAj42fu+xDltJMtjR8/qMAsbyVnx2893xAK3jK3+CN2lRBl3ndLn6hyyCeMr+kCC0Rljf6hpfjMGeQNMj/qRKB7qRX9D9kwVVkRKrlbbQBVLydg0c5Il6sCdEeXsIFc9DoWqJuDRWsP//ufxn/gv8fKDg+wbEcMWu9sgs1AMoNodmX7XVpps3VFnJhl0vgnvGLvbc39b93Wob4nmNBZrKFjdSpPKgXTFal8BCtCV3opC9R5L6bNRECj9UYO4iD5xtwJr+AZyO9IjunaKkKK7aWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nGS7VcP3mPhSwKCHZv3eUjGTvfpR6oGGclPOQ9MbbWQ=;
+ b=vtrH023YDVVHndsn3ecaZkw1XRKq6peo9n1YX0abvoB6Y1mQr+Q43CxtCB7ca1+d0LckFoT2sQx/QWXdeYDjA4wnA5fNfTrSEx0migUP5EPilFo/mDD/ToIKH/d4jNdtAvPisbdhFB+w5h8MysfJnaXVCf33wH9F9z/NRhktdT4=
+Received: from BY5PR10MB4129.namprd10.prod.outlook.com (2603:10b6:a03:210::21)
+ by IA0PR10MB7370.namprd10.prod.outlook.com (2603:10b6:208:3dd::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Thu, 1 Jun
+ 2023 16:38:04 +0000
+Received: from BY5PR10MB4129.namprd10.prod.outlook.com
+ ([fe80::ec9b:ef74:851b:6aa9]) by BY5PR10MB4129.namprd10.prod.outlook.com
+ ([fe80::ec9b:ef74:851b:6aa9%5]) with mapi id 15.20.6455.020; Thu, 1 Jun 2023
+ 16:38:04 +0000
+From:   Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        Christian Brauner <brauner@kernel.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "socketcan@hartkopp.net" <socketcan@hartkopp.net>,
+        "petrm@nvidia.com" <petrm@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v4 5/6] connector/cn_proc: Performance improvements
+Thread-Topic: [PATCH v4 5/6] connector/cn_proc: Performance improvements
+Thread-Index: AQHZZCxMA20H0kIuSECLZNtWm5vHUK92gweAgAADfoA=
+Date:   Thu, 1 Jun 2023 16:38:04 +0000
+Message-ID: <B9B5E492-36A1-4ED5-97ED-1ED048F51FCF@oracle.com>
+References: <20230331235528.1106675-1-anjali.k.kulkarni@oracle.com>
+ <20230331235528.1106675-6-anjali.k.kulkarni@oracle.com>
+ <20230601092533.05270ab1@kernel.org>
+In-Reply-To: <20230601092533.05270ab1@kernel.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>, vkoul@kernel.org
-Cc:     yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-References: <20230601161622.1808135-1-ckeepax@opensource.cirrus.com>
- <20230601161622.1808135-3-ckeepax@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230601161622.1808135-3-ckeepax@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY5PR10MB4129:EE_|IA0PR10MB7370:EE_
+x-ms-office365-filtering-correlation-id: 1fd5b240-27c6-44ee-0b3e-08db62be925e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: NWxg0z5sjD7dD/lJAwSTB4W9OTvUzpVvCgNLM8wLt/Y4BFkTBUSBK+FjK6i1I2pFptVc4MOunfIVCnHQCRoUiUsMgdM4uVJdqkR8LDSki15AINVVdqlC7OXRt2yrlr0mVxmTbIEjLGKlBy3l6NUdk0Ren/RVM78Czj+N1tGRpGdcfHh56bKvmEtU8SmJN6UFqLMahb3jRfxI5diGXGg2Nr+uC+tf8vWhgFKot7N9/cgvpuvRXmdGlAy6KBh7yNjpbIF9rQtv4PeRVICAC5q1v8XMXGz9hzuyJoGyWbBStHquDakm7dmd0wNtmWPkd1MY89AWnBsLOtZTIwIhOhry46Eyri+za8iUmpCjdKnBe5C0imB47PKWgtm457TA30Eaj3uUd3z05ECcU01MAkBKltSKbCyyX5wlyROfS3pHuNluQPF0DJxGKtkKxDf4hkxVjQpkP3/WSYK5ng47MFCh5eC6nCoRaDw4RNP5FxT3P/xOMDLDwfsVBvh96KLeNLTK7qlYF9BAC64Dqkl62/qCStw+liHperQwPId+BlBdGsJxk1gi7/5b6lG0LqrRuIoe/bC5FFh1+Xq5HXDyQR6JXUhgphij9+FKqGOnhkYZLmmwAgks77xwnFbfBDBlFmrYyfGs2Ecu4Yq6nWBStgViLA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4129.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(346002)(136003)(396003)(39860400002)(366004)(451199021)(8676002)(8936002)(478600001)(33656002)(54906003)(41300700001)(5660300002)(86362001)(71200400001)(6486002)(316002)(76116006)(7416002)(64756008)(6512007)(66946007)(4326008)(66446008)(6916009)(66556008)(66476007)(26005)(6506007)(53546011)(186003)(38070700005)(83380400001)(2616005)(2906002)(4744005)(36756003)(122000001)(38100700002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/4ZhalhOb/CmXHmChgESaQKrmve4WqsTXQopXgCRZOe8xFzV6//ex2tqBo3c?=
+ =?us-ascii?Q?fOSMI8fkamFZxLmKQtxDSy5hd/PMJwEqFFEm5DVYXx+DWNyaDnztI9LaVDth?=
+ =?us-ascii?Q?0mK8/smG2wlneHimZhyMlY8Ce8R/1r8EYVhGQeQp8Z2a7ugyWaYWxCP3j/Zb?=
+ =?us-ascii?Q?T0nbG97UCOal9kgoWe05OgJTzT8y0BV8c+W1rayrLgUQrsO4AeCTMBclzzyK?=
+ =?us-ascii?Q?rynvQ/1R9RKOAZxj5RjtLTjmzhnkpy+dkcurv16X8f2OcUPuf+S+GD9NBGpr?=
+ =?us-ascii?Q?3FWcCA/0GPPUt9xq2LeyAwc44Td1VnYLNNiQeRrVfj5LsOb8ad/Xz3Uxz4kI?=
+ =?us-ascii?Q?Ho+wGX59kTquCc3pWvOF0nWqvOOkN38CUB/hYtUr8KNuQuzj5QhR9RJuJlpx?=
+ =?us-ascii?Q?l+niehHJyiDFHsNdUh1KOCAWjJjcjiZCivMy7syL92VDhTl9YVirMzo+z//a?=
+ =?us-ascii?Q?oK/AD1wtjfBy74gYbH60m0FIz891SyW/jiDNQEE1OazXDXD5d1bLjBHfc26+?=
+ =?us-ascii?Q?X3Puf8p5Y2y67QInIPKv+cXddtvzWVKXDaFsdUxsy4pyT32dU/OQ4Jpqeema?=
+ =?us-ascii?Q?cgW6cd+PsFvD4xrhgQtFd/6+CMk4mBc+FNoScWbChed9xYdsPvfQ/pJP3zwU?=
+ =?us-ascii?Q?zNfZ3MzQSILlRRzuGNFFpkD/dUk/JTX5Tig4D0xuIzozg5cDAKFE0I48PPWW?=
+ =?us-ascii?Q?zKqtfqhNt010Kd9btXLToufU7N/+/dfolDSgSlz+LRy4FeikY9Zxc8UalRre?=
+ =?us-ascii?Q?sDeYhaCvmMmOYGcP0e3BbIswYsDY6ONRY5+My9pRLV3W14/VYbaOHXS/XNJR?=
+ =?us-ascii?Q?//uHhYDr+2CtJlUq5mpnq+mTgkK7LaXoI8kTHXDtnUjDCTWTHHxwNc9HIJ0g?=
+ =?us-ascii?Q?gU7qFxYF9rTsyhKHu3RYGkpZRbCYLViL0i2Zzdh77c0j9mmTxPV2qoxrSZOc?=
+ =?us-ascii?Q?vnfIO27BXXu5r5vnwVC31V1nty5Rm3pth3N/q+U9B49YhkJQsWurlJL2VO8D?=
+ =?us-ascii?Q?erJs3smRY2o98XIu3FSNYFXbnXJUkRoiv3XkiTwlmytG+MR3Hu0/X3wD+2CK?=
+ =?us-ascii?Q?qsRyPY/uGXzAVqasOjgNOkr+w8AZElkH+b96CB0SXU2xvJNv/+/JOpiuP6JH?=
+ =?us-ascii?Q?VHGqp1tHuRv8w/JqcScRDvuOtNXwwj9pIv1Dmu6wD9SdQ5d2XPSIBlQJPGAJ?=
+ =?us-ascii?Q?UqAl3ugVTcAVoCerz1WoJgDj0WG+TqKMePYzLqpIDn5w1/6hGBxhWm5CxWpj?=
+ =?us-ascii?Q?M+eHLC3HgwhwR99Nth3BUSPVl4dao4CJA6slfOgZa52ATwSm/466suBjQ8TJ?=
+ =?us-ascii?Q?1xmceNRt5UcPxBjRUo0GH22qIeHNaId2ZCZZLIhlxJZ1zpKlA3RHoQrIoXGw?=
+ =?us-ascii?Q?Sa58QIoiwyFZoDRH7HJWRyo+qKAHfoTUzOR4ZRuIKBuXUpVaRH+PI8yGXCQe?=
+ =?us-ascii?Q?8mBLY707JSXcZ/hgVcBy9SVAcEEB5Vn74FSBnlIPyce/RWCGsOFTrn/nPrcy?=
+ =?us-ascii?Q?uLmPHfOrVGZN9l4H29c35KQnR/2i0iABoSNqigDPxkWXd4f8KDOCH2HG+c10?=
+ =?us-ascii?Q?Ea9T364nDN5+WUwIJHwmVbFVOXDkXwgaoSe0eSXk+RcjbhtthwKcUq+GAIhR?=
+ =?us-ascii?Q?Vw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <E4467883B049014DB2BBA336531C837F@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?Ii3gtfkR75dfq+VHuWRK+yrRrhZjOwJmh+8wvdAxOmB9RIvPsOMGP1o84fCq?=
+ =?us-ascii?Q?cJUsk1t5VBIEhJY4ZEgQbiFHNjo5MNDt8uYUdAyRYS71uPERGYtQNmf4k8u4?=
+ =?us-ascii?Q?9CPmPh6HpLBLt+0rPbUg3PxGzhUBi+ulCzMUhdUgTMGMHRh+g9OVy/W4ZR8F?=
+ =?us-ascii?Q?xyv0PO3fgCl1iV3550NrsL2iHkV+AD69LKrBTNi0Oa/OHLFyWSbUZaEIurTf?=
+ =?us-ascii?Q?KxXvx20sXn4s3YHDFPmsL4AKTr2k9cKm5wW9kSi76lSniKw8Y5vea+bmE6n5?=
+ =?us-ascii?Q?b1mVzRgVBAFTYc5sGgCRjoZilyMxQYxaBrWx5FEsPK06wSi12eFPEMEHrH/A?=
+ =?us-ascii?Q?RLEp6+f3vJ4Hy6pj3isekLWnZje4Fvm2Fjz9SOR74erKDgqMmdLiB1KdJPXO?=
+ =?us-ascii?Q?/Ku+aAadwGqAb4ulX1HbEm9f+6XwVEkkYCUP0Z1UqlfxEciqrVaEeO5ifkoP?=
+ =?us-ascii?Q?gSxSB3/+Phwz+O2qTEd6g1Xw8fyM9cvoiB/3ofPge4vNdtQMuefg2ltY/mZ4?=
+ =?us-ascii?Q?BrZAnFzOaI1v5pfhrL+bjtMC6tCcyAh0dE5QzGm+vEj9oYzz0ydPwBcK1KHd?=
+ =?us-ascii?Q?4fXDKnn5boQ3MouBtOCEoUtEP2UaDjcz2eJFkXMb6oz1jsR+5StBMlCe3IWv?=
+ =?us-ascii?Q?Dx6dnhA3o8MusNfiX9VpapV2bbRvtzL430RvESNy8XfEto2FHESZChbVR198?=
+ =?us-ascii?Q?e6q16Zun6dj0kq/+mc4f+N3UUlIoqJnWFEKIrg5vqzdnxEV+yshUgMhV/jrO?=
+ =?us-ascii?Q?sb4IcG0IVgUhDyRp3LaQkTdgXSWHNNB2p+kgu1Kdmfn3oIVfzAE1gK7tUv0a?=
+ =?us-ascii?Q?4eGkLtxTOzjTjvAHtoM9WUnpicNzcGk9ER/+w35ra3CRYt/gh5gf9MN+MEVH?=
+ =?us-ascii?Q?OPD8vW8P5U7aIsfq0HkyMBcm6RuS8woOWBUOLPXbUeArzg/Kzrcjusfd0XsC?=
+ =?us-ascii?Q?zx6o1BKVobcYFHOeiUZnAZ4UWOfWsj4kRU7CiuMAkGeITmVKpHK9CBa6kCC5?=
+ =?us-ascii?Q?Qgu/z/8ewsRW0CVbhpEe43hQV62HhgN1lhwxluHb6wzy4PUEfuKXOMDrX1Bf?=
+ =?us-ascii?Q?92HWId5AexnCGH5R1ADsMfWrP8dz7g=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4129.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1fd5b240-27c6-44ee-0b3e-08db62be925e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2023 16:38:04.1763
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ssftjggalYsIgjRd4uK8nsHuOa8iYFWp4MDsIvseRic9b7RHFu9qVVP6y+Jok+ecQT35b4RBqGSuze5gH5WjDxUQk/sK8MASscbIBDbCXWg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR10MB7370
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 spamscore=0
+ phishscore=0 malwarescore=0 mlxlogscore=937 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2306010145
+X-Proofpoint-GUID: KXf4nvLu58LR86ehq2WG8AII9adEyPLP
+X-Proofpoint-ORIG-GUID: KXf4nvLu58LR86ehq2WG8AII9adEyPLP
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,207 +183,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 6/1/23 11:16, Charles Keepax wrote:
-> There is a lot of code using gotos to skip small sections of code, this
-> is a fairly dubious use of a goto, especially when the level of
-> intentation is really low. Most of this code doesn't even breach 80
-> characters when naively shifted over.
-> 
-> Simplify the code a bit, by replacing these unnecessary gotos with
-> simple ifs.
+> On Jun 1, 2023, at 9:25 AM, Jakub Kicinski <kuba@kernel.org> wrote:
+>=20
+> On Fri, 31 Mar 2023 16:55:27 -0700 Anjali Kulkarni wrote:
+>> +#define FILTER
+>> +
+>> +#ifdef FILTER
+>> +#define NL_MESSAGE_SIZE (sizeof(struct nlmsghdr) + sizeof(struct cn_msg=
+) + \
+>> +			 sizeof(struct proc_input))
+>> +#else
+>> #define NL_MESSAGE_SIZE (sizeof(struct nlmsghdr) + sizeof(struct cn_msg)=
+ + \
+>> 			 sizeof(int))
+>> +#endif
+>=20
+> The #define FILTER and ifdefs around it need to go, this much I can
+> tell you without understanding what it does :S We have the git history
+> we don't need to keep dead code around.
 
-it's probably ok but far from simple to review with the inverted states
-for variables. I don't have the time and energy to revisit this...
+The FILTER option is for backwards compatibility for those who may be using=
+ the proc connector today - so they do not need to immediately switch to us=
+ing the new method - the example just shows the old method which does not b=
+reak or need changes - do you still want me to remove the FILTER?=20
 
-I would err on the side of if it ain't broke don't fix it here.
+Anjali
 
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-> ---
->  drivers/soundwire/stream.c | 131 +++++++++++++++++--------------------
->  1 file changed, 59 insertions(+), 72 deletions(-)
-> 
-> diff --git a/drivers/soundwire/stream.c b/drivers/soundwire/stream.c
-> index 379228f221869..248ab243ec6e4 100644
-> --- a/drivers/soundwire/stream.c
-> +++ b/drivers/soundwire/stream.c
-> @@ -1355,25 +1355,23 @@ static int _sdw_prepare_stream(struct sdw_stream_runtime *stream,
->  			return -EINVAL;
->  		}
->  
-> -		if (!update_params)
-> -			goto program_params;
-> -
-> -		/* Increment cumulative bus bandwidth */
-> -		/* TODO: Update this during Device-Device support */
-> -		bus->params.bandwidth += m_rt->stream->params.rate *
-> -			m_rt->ch_count * m_rt->stream->params.bps;
-> -
-> -		/* Compute params */
-> -		if (bus->compute_params) {
-> -			ret = bus->compute_params(bus);
-> -			if (ret < 0) {
-> -				dev_err(bus->dev, "Compute params failed: %d\n",
-> -					ret);
-> -				goto restore_params;
-> +		if (update_params) {
-> +			/* Increment cumulative bus bandwidth */
-> +			/* TODO: Update this during Device-Device support */
-> +			bus->params.bandwidth += m_rt->stream->params.rate *
-> +				m_rt->ch_count * m_rt->stream->params.bps;
-> +
-> +			/* Compute params */
-> +			if (bus->compute_params) {
-> +				ret = bus->compute_params(bus);
-> +				if (ret < 0) {
-> +					dev_err(bus->dev, "Compute params failed: %d\n",
-> +						ret);
-> +					goto restore_params;
-> +				}
->  			}
->  		}
->  
-> -program_params:
->  		/* Program params */
->  		ret = sdw_program_params(bus, true);
->  		if (ret < 0) {
-> @@ -1864,7 +1862,7 @@ int sdw_stream_add_master(struct sdw_bus *bus,
->  			  struct sdw_stream_runtime *stream)
->  {
->  	struct sdw_master_runtime *m_rt;
-> -	bool alloc_master_rt = true;
-> +	bool alloc_master_rt = false;
->  	int ret;
->  
->  	mutex_lock(&bus->bus_lock);
-> @@ -1886,30 +1884,25 @@ int sdw_stream_add_master(struct sdw_bus *bus,
->  	 * it first), if so skip allocation and go to configuration
->  	 */
->  	m_rt = sdw_master_rt_find(bus, stream);
-> -	if (m_rt) {
-> -		alloc_master_rt = false;
-> -		goto skip_alloc_master_rt;
-> -	}
-> -
-> -	m_rt = sdw_master_rt_alloc(bus, stream);
->  	if (!m_rt) {
-> -		dev_err(bus->dev, "%s: Master runtime alloc failed for stream:%s\n",
-> -			__func__, stream->name);
-> -		ret = -ENOMEM;
-> -		goto unlock;
-> -	}
-> -skip_alloc_master_rt:
-> -
-> -	if (sdw_master_port_allocated(m_rt))
-> -		goto skip_alloc_master_port;
-> +		m_rt = sdw_master_rt_alloc(bus, stream);
-> +		if (!m_rt) {
-> +			dev_err(bus->dev, "%s: Master runtime alloc failed for stream:%s\n",
-> +				__func__, stream->name);
-> +			ret = -ENOMEM;
-> +			goto unlock;
-> +		}
->  
-> -	ret = sdw_master_port_alloc(m_rt, num_ports);
-> -	if (ret)
-> -		goto alloc_error;
-> +		alloc_master_rt = true;
-> +	}
->  
-> -	stream->m_rt_count++;
-> +	if (!sdw_master_port_allocated(m_rt)) {
-> +		ret = sdw_master_port_alloc(m_rt, num_ports);
-> +		if (ret)
-> +			goto alloc_error;
->  
-> -skip_alloc_master_port:
-> +		stream->m_rt_count++;
-> +	}
->  
->  	ret = sdw_master_rt_config(m_rt, stream_config);
->  	if (ret < 0)
-> @@ -1990,8 +1983,8 @@ int sdw_stream_add_slave(struct sdw_slave *slave,
->  {
->  	struct sdw_slave_runtime *s_rt;
->  	struct sdw_master_runtime *m_rt;
-> -	bool alloc_master_rt = true;
-> -	bool alloc_slave_rt = true;
-> +	bool alloc_master_rt = false;
-> +	bool alloc_slave_rt = false;
->  
->  	int ret;
->  
-> @@ -2002,47 +1995,41 @@ int sdw_stream_add_slave(struct sdw_slave *slave,
->  	 * and go to configuration
->  	 */
->  	m_rt = sdw_master_rt_find(slave->bus, stream);
-> -	if (m_rt) {
-> -		alloc_master_rt = false;
-> -		goto skip_alloc_master_rt;
-> -	}
-> -
-> -	/*
-> -	 * If this API is invoked by Slave first then m_rt is not valid.
-> -	 * So, allocate m_rt and add Slave to it.
-> -	 */
-> -	m_rt = sdw_master_rt_alloc(slave->bus, stream);
->  	if (!m_rt) {
-> -		dev_err(&slave->dev, "%s: Master runtime alloc failed for stream:%s\n",
-> -			__func__, stream->name);
-> -		ret = -ENOMEM;
-> -		goto unlock;
-> -	}
-> +		/*
-> +		 * If this API is invoked by Slave first then m_rt is not valid.
-> +		 * So, allocate m_rt and add Slave to it.
-> +		 */
-> +		m_rt = sdw_master_rt_alloc(slave->bus, stream);
-> +		if (!m_rt) {
-> +			dev_err(&slave->dev, "%s: Master runtime alloc failed for stream:%s\n",
-> +				__func__, stream->name);
-> +			ret = -ENOMEM;
-> +			goto unlock;
-> +		}
->  
-> -skip_alloc_master_rt:
-> -	s_rt = sdw_slave_rt_find(slave, stream);
-> -	if (s_rt) {
-> -		alloc_slave_rt = false;
-> -		goto skip_alloc_slave_rt;
-> +		alloc_master_rt = true;
->  	}
->  
-> -	s_rt = sdw_slave_rt_alloc(slave, m_rt);
-> +	s_rt = sdw_slave_rt_find(slave, stream);
->  	if (!s_rt) {
-> -		dev_err(&slave->dev, "Slave runtime alloc failed for stream:%s\n", stream->name);
-> -		alloc_slave_rt = false;
-> -		ret = -ENOMEM;
-> -		goto alloc_error;
-> -	}
-> +		s_rt = sdw_slave_rt_alloc(slave, m_rt);
-> +		if (!s_rt) {
-> +			dev_err(&slave->dev, "Slave runtime alloc failed for stream:%s\n",
-> +				stream->name);
-> +			ret = -ENOMEM;
-> +			goto alloc_error;
-> +		}
->  
-> -skip_alloc_slave_rt:
-> -	if (sdw_slave_port_allocated(s_rt))
-> -		goto skip_port_alloc;
-> +		alloc_slave_rt = true;
-> +	}
->  
-> -	ret = sdw_slave_port_alloc(slave, s_rt, num_ports);
-> -	if (ret)
-> -		goto alloc_error;
-> +	if (!sdw_slave_port_allocated(s_rt)) {
-> +		ret = sdw_slave_port_alloc(slave, s_rt, num_ports);
-> +		if (ret)
-> +			goto alloc_error;
-> +	}
->  
-> -skip_port_alloc:
->  	ret =  sdw_master_rt_config(m_rt, stream_config);
->  	if (ret)
->  		goto unlock;
