@@ -2,60 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1C3719A24
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B50719A23
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233135AbjFAKul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
+        id S233106AbjFAKuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232821AbjFAKu2 (ORCPT
+        with ESMTP id S232821AbjFAKuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:50:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160D49D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685616579;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YbR9CXr6tf+W2x5hw6RwEAlyQOocli6uAUnQNn0VL3M=;
-        b=FoMcLCEpTEiKc0BzN+0lcmycaA3EsTTUrDV3+e5Qa71jHdPl2ZZSuxXcMQqNoDe5uMTGza
-        kIfIyR7koBsujpjOpcPsiDl5OSAumGlSzC4KA6w7vysyeQM9CTlAiS8lA2pv2xmja3bruh
-        0w7NfC2kdDoH64FpVXaQjH9tJ1SsjVo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-491-SxdGd6MvNq2cNu63Kpr6Xg-1; Thu, 01 Jun 2023 06:49:36 -0400
-X-MC-Unique: SxdGd6MvNq2cNu63Kpr6Xg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 854C41C04327;
-        Thu,  1 Jun 2023 10:49:35 +0000 (UTC)
-Received: from localhost (ovpn-12-54.pek2.redhat.com [10.72.12.54])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 98AE4492B0A;
-        Thu,  1 Jun 2023 10:49:34 +0000 (UTC)
-Date:   Thu, 1 Jun 2023 18:49:31 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Simon Horman <horms@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kexec: Avoid calculating array size twice
-Message-ID: <ZHh3u+9H/OBHFKlC@MiWiFi-R3L-srv>
-References: <20230525-kexec-array_size-v1-1-8b4bf4f7500a@kernel.org>
- <ZHh1kBxfOf6hCvo8@MiWiFi-R3L-srv>
+        Thu, 1 Jun 2023 06:50:20 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C474F2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:50:18 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f3b9e54338so809324e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 03:50:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685616617; x=1688208617;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a6+t0uy+ketxaAQlCOq5q5RS6euSThxMjwTvlYKC7DQ=;
+        b=Xk6DJfF3St/zpKIBsqM2fp+ED1i18fmPgE1IEu1CNaFqg1wtqx5VONv3nKVJuZeGyA
+         3iHwpo9jEl/7TtIaGUWQHA5lQD3cS52Fs0kaJyU4cgr34PbmWKyazQh09Ok3Ug1MnevE
+         q48eddQtPyNmla6efGBVzbqqTqgOdd5DzIQFfdY66NV+t5OEWwBmCBW4D3UDf90EfoYJ
+         SNHw5GJfGOfNlNkCmbiZVyj1YowKb5TzlwwP6EJ7y8eBMeKKFz6EghqLRzl8RSzyTPo+
+         zAHzUL1ik1Tur69dtDJx3zMGm2sJ2se6dzFd0u5Ccr2GPrINPhlvPDRf3slX5OprKS99
+         k+oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685616617; x=1688208617;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a6+t0uy+ketxaAQlCOq5q5RS6euSThxMjwTvlYKC7DQ=;
+        b=FbkEY3p531Yxr3Q8aa80WEUDeMg2+dBGrk86IcgDdQZtCChKuQpfzHE1U2gXqSfB/j
+         4ixSJkQjF+FFL9zNtCILgT4g+xpNAoTO69jroBxOgSVFI5nfYglb6hy4gb+j0ZPC6tVP
+         lic+k0c0yY8lX8AEBObC7okJZ16OSEfC8ewnXXiPC0lE9c6yEvKbRCl8HUp8cTkrqjZR
+         AGX1jrtu05WtxI6IJF21hmJN/Oe+8Tak/lXvGu0FUakKf3kk0qqHx3Bb2HpoMMpO9ogL
+         eBa0Bt8W12GvBjCj09pKcsiij93Av2Kf3rJuk4XuhXOAfPJ10ix0ed2hAbsMzc3mi6Bx
+         Vdtw==
+X-Gm-Message-State: AC+VfDw3QbBz/bfEs5LBKijn0wDtOwp1/YnEKejGI26a4aUWR1g6ff9G
+        1L+a3i6YTfyCtCj2HEd21zj1HQ==
+X-Google-Smtp-Source: ACHHUZ6qJU54CrXN5+nToeFKN/q0UGyTUCBzFZunDM946Pa2xvHWK6L7HbM/y56Ojhx0IZ+uW0gL0g==
+X-Received: by 2002:ac2:5505:0:b0:4f3:b221:558c with SMTP id j5-20020ac25505000000b004f3b221558cmr1084547lfk.43.1685616616811;
+        Thu, 01 Jun 2023 03:50:16 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id g21-20020ac25395000000b004f2ce4b0f2esm1040575lfh.168.2023.06.01.03.50.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 03:50:16 -0700 (PDT)
+Message-ID: <bede29c5-d4e0-7925-dcdc-c724b98d25ca@linaro.org>
+Date:   Thu, 1 Jun 2023 12:50:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHh1kBxfOf6hCvo8@MiWiFi-R3L-srv>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] arm64: dts: qcom: sm8550: Add missing interconnect path
+ to USB HC
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20230601103817.4066446-1-abel.vesa@linaro.org>
+ <34cd6db8-9f05-23cc-cd41-7fd48ec1a286@linaro.org>
+ <ZHh3pyQprqKDn+TS@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <ZHh3pyQprqKDn+TS@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,58 +83,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/23 at 06:40pm, Baoquan He wrote:
-> On 05/25/23 at 04:26pm, Simon Horman wrote:
-> > Avoid calculating array size twice in kexec_purgatory_setup_sechdrs().
-> > Once using array_size(), and once open-coded.
-> > 
-> > Flagged by Coccinelle:
-> > 
-> >   .../kexec_file.c:881:8-25: WARNING: array_size is already used (line 877) to compute the same size
-> 
-> Amazingly smart. Thanks.
-> 
-> Acked-by: Baoquan He <bhe@redhat.com>
 
-Just noticed Andrew has picked this one, please ignore this.
 
+On 1.06.2023 12:49, Abel Vesa wrote:
+> On 23-06-01 12:42:22, Konrad Dybcio wrote:
+>>
+>>
+>> On 1.06.2023 12:38, Abel Vesa wrote:
+>>> The USB HC node is missing the interconnect paths, so add them.
+>>>
+>>> Fixes: 7f7e5c1b037f ("arm64: dts: qcom: sm8550: Add USB PHYs and controller nodes")
+>> For context, it's a fix in the context of "we should prooobably have
+>> this if we want to fix the icc driver to include sync state".
 > 
-> > 
-> > No functional change intended.
-> > Compile tested only.
-> > 
-> > Signed-off-by: Simon Horman <horms@kernel.org>
-> > ---
-> >  kernel/kexec_file.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> > index f989f5f1933b..3f5677679744 100644
-> > --- a/kernel/kexec_file.c
-> > +++ b/kernel/kexec_file.c
-> > @@ -867,6 +867,7 @@ static int kexec_purgatory_setup_sechdrs(struct purgatory_info *pi,
-> >  {
-> >  	unsigned long bss_addr;
-> >  	unsigned long offset;
-> > +	size_t sechdrs_size;
-> >  	Elf_Shdr *sechdrs;
-> >  	int i;
-> >  
-> > @@ -874,11 +875,11 @@ static int kexec_purgatory_setup_sechdrs(struct purgatory_info *pi,
-> >  	 * The section headers in kexec_purgatory are read-only. In order to
-> >  	 * have them modifiable make a temporary copy.
-> >  	 */
-> > -	sechdrs = vzalloc(array_size(sizeof(Elf_Shdr), pi->ehdr->e_shnum));
-> > +	sechdrs_size = array_size(sizeof(Elf_Shdr), pi->ehdr->e_shnum);
-> > +	sechdrs = vzalloc(sechdrs_size);
-> >  	if (!sechdrs)
-> >  		return -ENOMEM;
-> > -	memcpy(sechdrs, (void *)pi->ehdr + pi->ehdr->e_shoff,
-> > -	       pi->ehdr->e_shnum * sizeof(Elf_Shdr));
-> > +	memcpy(sechdrs, (void *)pi->ehdr + pi->ehdr->e_shoff, sechdrs_size);
-> >  	pi->sechdrs = sechdrs;
-> >  
-> >  	offset = 0;
-> > 
+> Fair enough...
 > 
+>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>>> ---
+>> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>
+>>
+>>
+>> sidenote:
+>>
+>> on recent SoCs there's also an USB-IPA path:
+>>
+>> aggre1_noc MASTER_USB3_0 <-> &config_noc SLAVE_IPA_CFG
+> 
+> AFAIK, support for IPA on SM8550 is not added yet.
+> 
+> We can worry about this 3rd path when IPA support for this platform is
+> upstreamed.
+Right, that's what I'm saying. I'm not even sure we have tethering
+acceleration upstream (where IPA pushes data quickly for sharing mobile
+data via USB).
 
+Konrad
+> 
+>>
+>> I don't think we really make use of that upstream today or whether it
+>> would make enabling IPA necessary (to enable the clocks and reach the
+>> IPA hardware), but it's something to think about.
+>>
+>> Konrad
+>>>  arch/arm64/boot/dts/qcom/sm8550.dtsi | 4 ++++
+>>>  1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>>> index 75cd374943eb..4991b2e962d1 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>>> @@ -2793,6 +2793,10 @@ usb_1: usb@a6f8800 {
+>>>  
+>>>  			resets = <&gcc GCC_USB30_PRIM_BCR>;
+>>>  
+>>> +			interconnects = <&aggre1_noc MASTER_USB3_0 0 &mc_virt SLAVE_EBI1 0>,
+>>> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_0 0>;
+>>> +			interconnect-names = "usb-ddr", "apps-usb";
+>>> +
+>>>  			status = "disabled";
+>>>  
+>>>  			usb_1_dwc3: usb@a600000 {
