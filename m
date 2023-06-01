@@ -2,224 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BC6726680
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B79B7194EC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjFGQxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
+        id S231752AbjFAIAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjFGQxi (ORCPT
+        with ESMTP id S231823AbjFAH7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:53:38 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FB91FE0;
-        Wed,  7 Jun 2023 09:53:25 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-662f0feafb2so79620b3a.1;
-        Wed, 07 Jun 2023 09:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686156805; x=1688748805;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b7l4QEpU0+LQkmsHXgVOh37YgpJ+290D8omMu7e7uYk=;
-        b=knwnj2+fd6vq6FbFstDS35YGJ++HxkyO5xhWNIcrlBOTKoiZszvzNQ5+VKppnE6tup
-         1/52xt/D1hQ7vLiuFfpbbFRjjg+urgFg5Wz9ALfvVeKt5u9dzgET3lMxuxdU+E8kSWSy
-         t1Jyt63SD0xf78qxeGH/HH6Mdvr5rCqfb7/uTFAy7hqTlBaRR65mKIb8afbWyTRnCDXO
-         KLfEgh8t3ys9a8OqMAAmxsTN0+xIIdiFy/bj217NTrtDrPSDAPA/juD2rb8pPdvA1T6c
-         75Sr89EYvQIhccQgAOTm03X7oMNFFspmfd5IsqxA3TiHvrPOalvoomvZZ8DyWiy7OcuE
-         60dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686156805; x=1688748805;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b7l4QEpU0+LQkmsHXgVOh37YgpJ+290D8omMu7e7uYk=;
-        b=RmQGa6TLcu3iBJch0gidVHgD+6+yj1cEGpaDewzgAG/45zaTyrYgTREnG0/wEkV56H
-         Ps7dJbVx4kFl7gW6a32nmXdOqCpfX0H54qTTNMrJsiG6fKHJnbhmNxQ4t7S6KETkxE0y
-         xHHgio/UkMetjwtmOElTUnIvafKb81lrYq16YgCXrgyaaSMI6y/A9M7u+J76IV6dUhQp
-         iwiWja890hp46t14y1RY2uLz9VYEB0LoZvH/U7So39xmzuVCB7T5KEKRt5bSuLbl1bbN
-         do5oQZl6JpGry2UEDOy1JYHdQfrWJIRnupV+UMqaF60kVuHMhjnU5Ajv9rWZAxBIWyhi
-         2P2w==
-X-Gm-Message-State: AC+VfDw46bTOJ6iS74N7DoAkoIyBqD6OFWnhSCB3yX2T7mwL7v7tDJfZ
-        kFhwSWF1RtXMmcuBv+vumuQ=
-X-Google-Smtp-Source: ACHHUZ78alg6kEwnhhJV/R4JA3Ql5IDIU8JKFwnCuRQ5xFw33MHp+HePQxLoOo5307wad7eQaZ/Wlg==
-X-Received: by 2002:a05:6a00:16d1:b0:64f:ad7c:70fb with SMTP id l17-20020a056a0016d100b0064fad7c70fbmr6644193pfc.17.1686156804938;
-        Wed, 07 Jun 2023 09:53:24 -0700 (PDT)
-Received: from localhost (ec2-52-8-182-0.us-west-1.compute.amazonaws.com. [52.8.182.0])
-        by smtp.gmail.com with ESMTPSA id v11-20020a63480b000000b0053f22b76cdcsm9270839pga.82.2023.06.07.09.53.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 09:53:24 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 07:53:25 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH RFC net-next v3 1/8] vsock/dgram: generalize recvmsg and
- drop transport->dgram_dequeue
-Message-ID: <ZHhOdfQPHQvxmndh@bullseye>
-References: <20230413-b4-vsock-dgram-v3-0-c2414413ef6a@bytedance.com>
- <20230413-b4-vsock-dgram-v3-1-c2414413ef6a@bytedance.com>
- <ZHduQMZG4an6A+DG@corigine.com>
+        Thu, 1 Jun 2023 03:59:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F9910CC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 00:54:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685606071;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1PTMKpxFumUzKTXDLE1yEQKvLzCbeb3ImXvRfnizV7U=;
+        b=chnS3vujw0ARr8MuDZtqMKqh0TaKT/x+7+nknPCnLV1rUi1NaGFk9zWFvKeOiUmeyLOA7y
+        +rnAit9CMrojr8rkHo0fqTeRRbtVwXm1Ry19n4NCXcD38zUlkasxd2tiO3GO2T2r4V+d/G
+        OfXZ3OaLgiyw1Z7C2crkYSL13ftGGNg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-562-oc2kClVyPS2B7D_gxQTZaw-1; Thu, 01 Jun 2023 03:54:28 -0400
+X-MC-Unique: oc2kClVyPS2B7D_gxQTZaw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A01DE185A794;
+        Thu,  1 Jun 2023 07:54:27 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.192.247])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BF61D2166B25;
+        Thu,  1 Jun 2023 07:54:09 +0000 (UTC)
+From:   =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>
+To:     ojeda@kernel.org, danny@kdrag0n.dev
+Cc:     masahiroy@kernel.org, jgg@nvidia.com, mic@digikod.net,
+        linux-kernel@vger.kernel.org, corbet@lwn.net, joe@perches.com,
+        linux@rasmusvillemoes.dk, willy@infradead.org,
+        mailhol.vincent@wanadoo.fr,
+        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>
+Subject: [PATCH v4] Add .editorconfig file for basic formatting
+Date:   Thu,  1 Jun 2023 09:53:33 +0200
+Message-Id: <20230601075333.14021-1-ihuguet@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHduQMZG4an6A+DG@corigine.com>
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 05:56:48PM +0200, Simon Horman wrote:
-> On Wed, May 31, 2023 at 12:35:05AM +0000, Bobby Eshleman wrote:
-> > This commit drops the transport->dgram_dequeue callback and makes
-> > vsock_dgram_recvmsg() generic. It also adds additional transport
-> > callbacks for use by the generic vsock_dgram_recvmsg(), such as for
-> > parsing skbs for CID/port which vary in format per transport.
-> > 
-> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
-> 
-> ...
-> 
-> > diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
-> > index b370070194fa..b6a51afb74b8 100644
-> > --- a/net/vmw_vsock/vmci_transport.c
-> > +++ b/net/vmw_vsock/vmci_transport.c
-> > @@ -1731,57 +1731,40 @@ static int vmci_transport_dgram_enqueue(
-> >  	return err - sizeof(*dg);
-> >  }
-> >  
-> > -static int vmci_transport_dgram_dequeue(struct vsock_sock *vsk,
-> > -					struct msghdr *msg, size_t len,
-> > -					int flags)
-> > +int vmci_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid)
-> >  {
-> > -	int err;
-> >  	struct vmci_datagram *dg;
-> > -	size_t payload_len;
-> > -	struct sk_buff *skb;
-> >  
-> > -	if (flags & MSG_OOB || flags & MSG_ERRQUEUE)
-> > -		return -EOPNOTSUPP;
-> > +	dg = (struct vmci_datagram *)skb->data;
-> > +	if (!dg)
-> > +		return -EINVAL;
-> >  
-> > -	/* Retrieve the head sk_buff from the socket's receive queue. */
-> > -	err = 0;
-> > -	skb = skb_recv_datagram(&vsk->sk, flags, &err);
-> > -	if (!skb)
-> > -		return err;
-> > +	*cid = dg->src.context;
-> > +	return 0;
-> > +}
-> 
-> Hi Bobby,
-> 
-> clang-16 with W=1 seems a bit unhappy about this.
-> 
->   net/vmw_vsock/vmci_transport.c:1734:5: warning: no previous prototype for function 'vmci_transport_dgram_get_cid' [-Wmissing-prototypes]
->   int vmci_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid)
->       ^
->   net/vmw_vsock/vmci_transport.c:1734:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->   int vmci_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid)
->   ^
->   static 
->   net/vmw_vsock/vmci_transport.c:1746:5: warning: no previous prototype for function 'vmci_transport_dgram_get_port' [-Wmissing-prototypes]
->   int vmci_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port)
->       ^
->   net/vmw_vsock/vmci_transport.c:1746:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->   int vmci_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port)
->   ^
->   static 
->   net/vmw_vsock/vmci_transport.c:1758:5: warning: no previous prototype for function 'vmci_transport_dgram_get_length' [-Wmissing-prototypes]
->   int vmci_transport_dgram_get_length(struct sk_buff *skb, size_t *len)
->       ^
->   net/vmw_vsock/vmci_transport.c:1758:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->   int vmci_transport_dgram_get_length(struct sk_buff *skb, size_t *len)
->   ^
-> 
-> I see similar warnings for net/vmw_vsock/af_vsock.c in patch 4/8.
-> 
-> > +
-> > +int vmci_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port)
-> > +{
-> > +	struct vmci_datagram *dg;
-> >  
-> >  	dg = (struct vmci_datagram *)skb->data;
-> >  	if (!dg)
-> > -		/* err is 0, meaning we read zero bytes. */
-> > -		goto out;
-> > -
-> > -	payload_len = dg->payload_size;
-> > -	/* Ensure the sk_buff matches the payload size claimed in the packet. */
-> > -	if (payload_len != skb->len - sizeof(*dg)) {
-> > -		err = -EINVAL;
-> > -		goto out;
-> > -	}
-> > +		return -EINVAL;
-> >  
-> > -	if (payload_len > len) {
-> > -		payload_len = len;
-> > -		msg->msg_flags |= MSG_TRUNC;
-> > -	}
-> > +	*port = dg->src.resource;
-> > +	return 0;
-> > +}
-> >  
-> > -	/* Place the datagram payload in the user's iovec. */
-> > -	err = skb_copy_datagram_msg(skb, sizeof(*dg), msg, payload_len);
-> > -	if (err)
-> > -		goto out;
-> > +int vmci_transport_dgram_get_length(struct sk_buff *skb, size_t *len)
-> > +{
-> > +	struct vmci_datagram *dg;
-> >  
-> > -	if (msg->msg_name) {
-> > -		/* Provide the address of the sender. */
-> > -		DECLARE_SOCKADDR(struct sockaddr_vm *, vm_addr, msg->msg_name);
-> > -		vsock_addr_init(vm_addr, dg->src.context, dg->src.resource);
-> > -		msg->msg_namelen = sizeof(*vm_addr);
-> > -	}
-> > -	err = payload_len;
-> > +	dg = (struct vmci_datagram *)skb->data;
-> > +	if (!dg)
-> > +		return -EINVAL;
-> >  
-> > -out:
-> > -	skb_free_datagram(&vsk->sk, skb);
-> > -	return err;
-> > +	*len = dg->payload_size;
-> > +	return 0;
-> >  }
-> >  
-> >  static bool vmci_transport_dgram_allow(u32 cid, u32 port)
-> 
-> ...
+EditorConfig is a specification to define the most basic code formatting
+stuff, and it's supported by many editors and IDEs, either directly or
+via plugins, including VSCode/VSCodium, Vim, emacs and more.
 
-Thanks for the review! Your feedback from both emails will be
-incorporated in the next rev (with C=1 and W=1 output clearing).
+It allows to define formatting style related to indentation, charset,
+end of lines and trailing whitespaces. It also allows to apply different
+formats for different files based on wildcards, so for example it is
+possible to apply different configs to *.{c,h}, *.py and *.rs.
 
-Thanks again,
-Bobby
+In linux project, defining a .editorconfig might help to those people
+that work on different projects with different indentation styles, so
+they cannot define a global style. Now they will directly see the
+correct indentation on every fresh clone of the project.
+
+See https://editorconfig.org
+
+Co-developed-by: Danny Lin <danny@kdrag0n.dev>
+Signed-off-by: Danny Lin <danny@kdrag0n.dev>
+Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
+---
+v2:
+- added special rule for patch files so it doesn't remove
+  trailing whitespaces, making them unusable.
+v3:
+- moved all rules from [*] section to all the individual
+  sections so they doesn't affect to unexpected files.
+- added some extensions and files from a patch from Danny
+  Lin that didn't get to be merged:
+  https://lore.kernel.org/lkml/20200703073143.423557-1-danny@kdrag0n.dev/
+  However, the following file types hasn't been added
+  because they don't have a clear common style:
+  rst,pl,cocci,tc,bconf,svg,xsl,manual pages
+v4:
+- Analyzed with a script the styles used by different file types
+- Added rules for awd, dts, dtsi, dtso, s, S
+- Removed rules for rb and pm that has very few files in the tree
+- Removed rules for tools/perf/scripts/*/bin/*
+- Changed rules for py to better match the 2 styles that are present in
+  the tree: 4 spaces by default and tabs for files in subdirectories
+  tools/{perf,power,rcu,testing/kunit}
+---
+ .editorconfig                          | 32 ++++++++++++++++++++++++++
+ .gitignore                             |  1 +
+ Documentation/process/4.Coding.rst     |  4 ++++
+ Documentation/process/coding-style.rst |  4 ++++
+ 4 files changed, 41 insertions(+)
+ create mode 100644 .editorconfig
+
+diff --git a/.editorconfig b/.editorconfig
+new file mode 100644
+index 000000000000..854773350cc5
+--- /dev/null
++++ b/.editorconfig
+@@ -0,0 +1,32 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++root = true
++
++[{*.{awk,c,dts,dtsi,dtso,h,mk,s,S},Kconfig,Makefile,Makefile.*}]
++charset = utf-8
++end_of_line = lf
++trim_trailing_whitespace = true
++insert_final_newline = true
++indent_style = tab
++indent_size = 8
++
++[*.{json,py,rs}]
++charset = utf-8
++end_of_line = lf
++trim_trailing_whitespace = true
++insert_final_newline = true
++indent_style = space
++indent_size = 4
++
++# this must be below the general *.py to overwrite it
++[tools/{perf,power,rcu,testing/kunit}/**.py,]
++indent_style = tab
++indent_size = 8
++
++[*.yaml]
++charset = utf-8
++end_of_line = lf
++trim_trailing_whitespace = unset
++insert_final_newline = true
++indent_style = space
++indent_size = 2
+diff --git a/.gitignore b/.gitignore
+index 70ec6037fa7a..e4b3fe1d029b 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -100,6 +100,7 @@ modules.order
+ #
+ !.clang-format
+ !.cocciconfig
++!.editorconfig
+ !.get_maintainer.ignore
+ !.gitattributes
+ !.gitignore
+diff --git a/Documentation/process/4.Coding.rst b/Documentation/process/4.Coding.rst
+index 1f0d81f44e14..c2046dec0c2f 100644
+--- a/Documentation/process/4.Coding.rst
++++ b/Documentation/process/4.Coding.rst
+@@ -66,6 +66,10 @@ for aligning variables/macros, for reflowing text and other similar tasks.
+ See the file :ref:`Documentation/process/clang-format.rst <clangformat>`
+ for more details.
+ 
++Some basic editor settings, such as indentation and line endings, will be
++set automatically if you are using an editor that is compatible with
++EditorConfig. See the official EditorConfig website for more information:
++https://editorconfig.org/
+ 
+ Abstraction layers
+ ******************
+diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
+index 007e49ef6cec..ec96462fa8be 100644
+--- a/Documentation/process/coding-style.rst
++++ b/Documentation/process/coding-style.rst
+@@ -735,6 +735,10 @@ for aligning variables/macros, for reflowing text and other similar tasks.
+ See the file :ref:`Documentation/process/clang-format.rst <clangformat>`
+ for more details.
+ 
++Some basic editor settings, such as indentation and line endings, will be
++set automatically if you are using an editor that is compatible with
++EditorConfig. See the official EditorConfig website for more information:
++https://editorconfig.org/
+ 
+ 10) Kconfig configuration files
+ -------------------------------
+-- 
+2.39.2
+
