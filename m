@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD1F71908D
+	by mail.lfdr.de (Postfix) with ESMTP id 98AB571908E
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 04:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbjFAChE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 22:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
+        id S231160AbjFAChG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 22:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjFACgv (ORCPT
+        with ESMTP id S230387AbjFAChC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 22:36:51 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957A6101
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 19:36:50 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-babb76a9831so462973276.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 19:36:50 -0700 (PDT)
+        Wed, 31 May 2023 22:37:02 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42CC101
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 19:36:52 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-556011695d1so4626987b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 19:36:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685587010; x=1688179010;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=D1dYs8NsS8zSviHkbXQN/+l3Vz/vpBxXbApD/cmgUTQ=;
-        b=3nBl5W23S2jMMqJOCr3anyDU3tdu89hKDJVizpYwQB67k66Fw36mUU4Va8PkwJn0yt
-         gIluXi2w1ckpMwAafH4s0HGHP5i+7JtQhPNWt0jlXQk++f57KYtl4IQTTxRCkW4ilYb+
-         CwZe+bldbWuxw3e9kaPc3fFA7hMjm/SfZp9pTbyHaDp+d0nh9D1lmuLBk+IHKzuJNOwN
-         2uAwK+hQjQjFcIIaqLAqv+EGU4i2sxdkfjkk3hM4AaKxLus1fLERbk9kglh4215K7MPO
-         NfBP409/YPZM6S/uFNzb67GCezlbFFH/PvzoaBtUXi2Cp2onzes6f0IxJRpkksAjSDQQ
-         6bzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685587010; x=1688179010;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+        d=google.com; s=20221208; t=1685587012; x=1688179012;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=D1dYs8NsS8zSviHkbXQN/+l3Vz/vpBxXbApD/cmgUTQ=;
-        b=gnrcoW7VxZ1IL6BjZsSVylH+bSPDcrKu/OZbN4dNm9HSXwjHvJF01c/h0Etn15Feuw
-         4Dfhcltehjxr+JpvrvNewjyQ1xtgq+l+suzfotJosikCJnsb4in3aiNAlLcommi14iJz
-         1VwxkoWGh0drFK+9+X7/h//Ax5thK14CfllqliyrEYO8h9Xsllkm8MhMXEM0aDzSjm1F
-         JapeIAuAskJnWU1Wo1UO1pNisM7Ktk1bXv265s0YmjcVz9vxXfWTlZMg2xdvnQUP99bX
-         LVbs8UXh/w/92lucY4TOUa7gweSedV9osP4j4ITMURhVwQ/4F6M5bHWBo4vddIf4x3VJ
-         VmmQ==
-X-Gm-Message-State: AC+VfDy3CY0wDJ1HJXUxNF0lz2P57O1dYl8aplf5NkOtodi+KG5pzgi0
-        zOJDT5aRrcmq3aitBWrmSr1Q6pZq1q9S
-X-Google-Smtp-Source: ACHHUZ5jEIfpSDW67W1Y/nhfP8jc7d4B85CfHRK1XD9m5MsTQPHlw7KFaIJn2zbNle7jN79NAZJ8ONtqAJqL
+        bh=Un+d9bbUUo6eEPh9c0X/g9yc3mMd6V9G/fsRspSIKFQ=;
+        b=WDHOMUBimLBjijATPaSZrfFdO/tqHc6mI4Z/rvpnqjOOam8G4SaD4TBifOq0qfIfFr
+         7jGx+dw8fJHUX02UvgWlPS2lGTM7eEKoyRRMdo6L+C9VWQogmOcyeaCj5bDF1T/Jbykx
+         HqUjHzC4v6PzfO4COYaFJ/pkvn8kAwO/btUG6lbHH1iSvcWf05D5nqgjmH6eickavmmS
+         3Eqss/OdpEa3HXJvnCSTMal81ujG8rupihX0h1OqAfNljEhI/LK7Z6X0cuYtY6inKofr
+         sAilyePm+tT5QOG+BcmJDxAJ9zzYqYGUhoznv9e+k3/leTk9DqsiXmW1jDCCWrzgL/r+
+         XZ6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685587012; x=1688179012;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Un+d9bbUUo6eEPh9c0X/g9yc3mMd6V9G/fsRspSIKFQ=;
+        b=lEIm2A8Xj2tYilkVQXnDQYyWND4iXWTavTp8V0LWxK/IT51GnpWU6fGFdGbzKxznX3
+         UFdwgeUUD+sx1hfVuj57Q0hPXDIk0TSDZT07BZrZHkPKvrb1aGd/ihfG7SFGtvBuk3z2
+         6nCMvptkQacUqnuGaXvByBep2hic7jYpzp/iIpEKxQI38BpJSecQXOgqDdY1CsBXeSdP
+         HlBpCquL+qg1Zx+f8OE7PLXoi6ey9ywdiF3TXPyq0u58dC+RZfS5nSc9h1Bsk7fHEoJT
+         TPBySCURJgzS9G3UiizGF5xxXmsU/NUGj0iDTIl4J8U4R9WoiQIThC/+KGTdAFO49j23
+         Ev3A==
+X-Gm-Message-State: AC+VfDwAc/0WC2DwNADdaXBl7iBuUCx/itj1SCICaSQcoieYXXCFik96
+        Vyt5vg1ux0uge/YQibU76JDaO/c3bfn0
+X-Google-Smtp-Source: ACHHUZ4bFlhxm6tfUccKpil4vsQdmEyhfC1jgqvMA4NBA7QbbaTxBKR80pjeY5fYpBCR8e85xJPjJaNsC7g5
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a344:94b4:9b8d:a089])
- (user=irogers job=sendgmr) by 2002:a05:6902:1022:b0:bb1:35e6:6c4 with SMTP id
- x2-20020a056902102200b00bb135e606c4mr2490459ybt.9.1685587009798; Wed, 31 May
- 2023 19:36:49 -0700 (PDT)
-Date:   Wed, 31 May 2023 19:36:43 -0700
-Message-Id: <20230601023644.587584-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a81:ad45:0:b0:568:f4f8:6d59 with SMTP id
+ l5-20020a81ad45000000b00568f4f86d59mr2024229ywk.3.1685587012083; Wed, 31 May
+ 2023 19:36:52 -0700 (PDT)
+Date:   Wed, 31 May 2023 19:36:44 -0700
+In-Reply-To: <20230601023644.587584-1-irogers@google.com>
+Message-Id: <20230601023644.587584-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20230601023644.587584-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v1 1/2] perf pmu: Only warn about unsupported configs once
+Subject: [PATCH v1 2/2] perf pmu: Warn about invalid config for all PMUs and configs
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -78,46 +80,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid scanning format list for each event parsed.
+Don't just check the raw PMU type, the only core PMU on homogeneous
+x86, check raw and all dynamically added PMUs. Extend the
+perf_pmu__warn_invalid_config to check all 4 config values. Rather
+than process the format list once per event, store the computed masks
+for each config value. Don't ignore the mask being zero, which is
+likely for config2 and config3, add config_masks_present so config
+values can be ignored only when no format information is present.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/pmu.c | 5 +++++
- tools/perf/util/pmu.h | 5 +++++
- 2 files changed, 10 insertions(+)
+ tools/perf/util/parse-events.c | 13 +++++++++---
+ tools/perf/util/pmu.c          | 38 ++++++++++++++++++++++++----------
+ tools/perf/util/pmu.h          | 13 +++++++++++-
+ 3 files changed, 49 insertions(+), 15 deletions(-)
 
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index 7f047ac11168..9f60607b0d86 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -245,9 +245,16 @@ __add_event(struct list_head *list, int *idx,
+ 	if (pmu)
+ 		perf_pmu__warn_invalid_formats(pmu);
+ 
+-	if (pmu && attr->type == PERF_TYPE_RAW)
+-		perf_pmu__warn_invalid_config(pmu, attr->config, name);
+-
++	if (pmu && (attr->type == PERF_TYPE_RAW || attr->type >= PERF_TYPE_MAX)) {
++		perf_pmu__warn_invalid_config(pmu, attr->config, name,
++					      PERF_PMU_FORMAT_VALUE_CONFIG, "config");
++		perf_pmu__warn_invalid_config(pmu, attr->config1, name,
++					      PERF_PMU_FORMAT_VALUE_CONFIG1, "config1");
++		perf_pmu__warn_invalid_config(pmu, attr->config2, name,
++					      PERF_PMU_FORMAT_VALUE_CONFIG2, "config2");
++		perf_pmu__warn_invalid_config(pmu, attr->config3, name,
++					      PERF_PMU_FORMAT_VALUE_CONFIG3, "config3");
++	}
+ 	if (init_attr)
+ 		event_attr_init(attr);
+ 
 diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index 0520aa9fe991..204ce3f02e63 100644
+index 204ce3f02e63..b0443406fd57 100644
 --- a/tools/perf/util/pmu.c
 +++ b/tools/perf/util/pmu.c
-@@ -934,6 +934,11 @@ void perf_pmu__warn_invalid_formats(struct perf_pmu *pmu)
+@@ -1611,37 +1611,53 @@ int perf_pmu__caps_parse(struct perf_pmu *pmu)
+ 	return pmu->nr_caps;
+ }
+ 
+-void perf_pmu__warn_invalid_config(struct perf_pmu *pmu, __u64 config,
+-				   const char *name)
++static void perf_pmu__compute_config_masks(struct perf_pmu *pmu)
  {
  	struct perf_pmu_format *format;
- 
-+	if (pmu->formats_checked)
+-	__u64 masks = 0, bits;
+-	char buf[100];
+-	unsigned int i;
++
++	if (pmu->config_masks_computed)
 +		return;
+ 
+ 	list_for_each_entry(format, &pmu->format, list)	{
+-		if (format->value != PERF_PMU_FORMAT_VALUE_CONFIG)
++		unsigned int i;
++		__u64 *mask;
 +
-+	pmu->formats_checked = true;
++		if (format->value >= PERF_PMU_FORMAT_VALUE_CONFIG_END)
+ 			continue;
+ 
++		pmu->config_masks_present = true;
++		mask = &pmu->config_masks[format->value];
 +
- 	/* fake pmu doesn't have format list */
- 	if (pmu == &perf_pmu__fake)
+ 		for_each_set_bit(i, format->bits, PERF_PMU_FORMAT_BITS)
+-			masks |= 1ULL << i;
++			*mask |= 1ULL << i;
+ 	}
++	pmu->config_masks_computed = true;
++}
++
++void perf_pmu__warn_invalid_config(struct perf_pmu *pmu, __u64 config,
++				   const char *name, int config_num,
++				   const char *config_name)
++{
++	__u64 bits;
++	char buf[100];
++
++	perf_pmu__compute_config_masks(pmu);
+ 
+ 	/*
+ 	 * Kernel doesn't export any valid format bits.
+ 	 */
+-	if (masks == 0)
++	if (!pmu->config_masks_present)
  		return;
+ 
+-	bits = config & ~masks;
++	bits = config & ~pmu->config_masks[config_num];
+ 	if (bits == 0)
+ 		return;
+ 
+ 	bitmap_scnprintf((unsigned long *)&bits, sizeof(bits) * 8, buf, sizeof(buf));
+ 
+-	pr_warning("WARNING: event '%s' not valid (bits %s of config "
++	pr_warning("WARNING: event '%s' not valid (bits %s of %s "
+ 		   "'%llx' not supported by kernel)!\n",
+-		   name ?: "N/A", buf, config);
++		   name ?: "N/A", buf, config_name, config);
+ }
+ 
+ int perf_pmu__match(char *pattern, char *name, char *tok)
 diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-index 287f593b15c7..7a1535dc1f12 100644
+index 7a1535dc1f12..d98b0feec022 100644
 --- a/tools/perf/util/pmu.h
 +++ b/tools/perf/util/pmu.h
-@@ -76,6 +76,11 @@ struct perf_pmu {
- 	 * specific code.
+@@ -81,6 +81,10 @@ struct perf_pmu {
+ 	 * perf_event_attr once.
  	 */
- 	bool auxtrace;
-+	/**
-+	 * @formats_checked: Only check PMU's formats are valid for
-+	 * perf_event_attr once.
-+	 */
-+	bool formats_checked;
+ 	bool formats_checked;
++	/** @config_masks_present: Are there config format values? */
++	bool config_masks_present;
++	/** @config_masks_computed: Set when masks are lazily computed. */
++	bool config_masks_computed;
  	/**
  	 * @max_precise: Number of levels of :ppp precision supported by the
  	 * PMU, read from
+@@ -125,6 +129,12 @@ struct perf_pmu {
+ 	/** @list: Element on pmus list in pmu.c. */
+ 	struct list_head list;
+ 
++	/**
++	 * @config_masks: Derived from the PMU's format data, bits that are
++	 * valid within the config value.
++	 */
++	__u64 config_masks[PERF_PMU_FORMAT_VALUE_CONFIG_END];
++
+ 	/**
+ 	 * @missing_features: Features to inhibit when events on this PMU are
+ 	 * opened.
+@@ -255,7 +265,8 @@ int perf_pmu__convert_scale(const char *scale, char **end, double *sval);
+ int perf_pmu__caps_parse(struct perf_pmu *pmu);
+ 
+ void perf_pmu__warn_invalid_config(struct perf_pmu *pmu, __u64 config,
+-				   const char *name);
++				   const char *name, int config_num,
++				   const char *config_name);
+ void perf_pmu__warn_invalid_formats(struct perf_pmu *pmu);
+ 
+ int perf_pmu__match(char *pattern, char *name, char *tok);
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
