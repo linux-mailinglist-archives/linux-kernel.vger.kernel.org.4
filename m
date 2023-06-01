@@ -2,126 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5F071F2D1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A453971F2CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232777AbjFATS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 15:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
+        id S232545AbjFATS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 15:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232681AbjFATS0 (ORCPT
+        with ESMTP id S232556AbjFATSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 15:18:26 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6965213E;
-        Thu,  1 Jun 2023 12:18:25 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6af7a84b2bdso1022564a34.2;
-        Thu, 01 Jun 2023 12:18:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685647104; x=1688239104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2+8XSE+hTxJh0x+IXE7UwOHc7LEY5yIqcbqta7lvj5o=;
-        b=cuq20YMDgyky2o0sbM3CFiMOfCKtBr9IpDBxO9x6kz6qOyWmCbsuTDsB/jxs4wm7z3
-         VF7Y1aUpoEVFQQN83DUKjnjqnf2BQ4ArJtEIDE/8eyFrQRuLgpkedSyhJHudiOLjXlEU
-         c8MKrKit/Hm2PGE71HpcDlXFcDvrr+erGZOlhDFsDGlYaQM4u/rMRXDQzf7Wa6r1f8S4
-         kzwNf1P9e+8HxAIO0Q7bFpYi5BhBDlbpqK5kSBgMQr48Ryc4NIgY9GtYI2GL7Z722d4V
-         8OqdxuNyqkpjcKgM1RHCaDfV4Ok6IuFhQM75GClbEkIRLB5Hrb3MnKlSceIZmoc60cKU
-         CxPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685647104; x=1688239104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2+8XSE+hTxJh0x+IXE7UwOHc7LEY5yIqcbqta7lvj5o=;
-        b=cihltkLwQeg9koqTfGjSVN/2i1F4PNLYHtd1gmXquKtIhLJBKnkM7ibmDAIq7QBLzq
-         y8qJMV0RJgFJvFoAMbl7yAepll67PAsIvky1VmmsKlpF9FwP6KCNWjEItqEsxm1nOuGM
-         /l1dfmPFPETGY1YgQw8Kf128zkGfx13m/cXmCy3LnG//qN387SazYSbYWMeBxspTzdPw
-         EWM23rmwG2vxv/eJGzP0VuUfLW+hFtS8O0e1VX8YccAr+csvaEPwBAlW96kQa+iHcWYd
-         Ltx51WKhffG15opg/lFpugHzjL2G7WUsEhbcaINor8orySvgNyJpL5BJ5RdjWpx7uEb1
-         451w==
-X-Gm-Message-State: AC+VfDxHXiJsDe7aPLpLyYFkJIczU5PM8L00ax+R1g0rG+dKMwP2kDsI
-        uPJ8H8oJq38YWRsvS13H4D2IJNcOSe/7X1lNy0w=
-X-Google-Smtp-Source: ACHHUZ7rG3SUNcRD+jPSFP3uOY/pmSqd1IagwYri/eGsMLMz/fVziDHA7e8OgoEb7jNn820VVlnCod+k8kiEblfvCEo=
-X-Received: by 2002:a9d:7d0d:0:b0:6af:6de9:1c24 with SMTP id
- v13-20020a9d7d0d000000b006af6de91c24mr372684otn.18.1685647104647; Thu, 01 Jun
- 2023 12:18:24 -0700 (PDT)
+        Thu, 1 Jun 2023 15:18:25 -0400
+Received: from out-12.mta0.migadu.com (out-12.mta0.migadu.com [91.218.175.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EB118C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 12:18:22 -0700 (PDT)
+Message-ID: <95b5da7c-ee52-3ecb-0a4e-f6a7a114f269@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685647100;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IgQZpjSw84vHYzWJzYdDrGuuO8eVETVsB+aIQNPgeJo=;
+        b=T5TRCpFPEJWIYl7mNS9gOtoXuy3z/cFxsJM4qoVYA9XPtITZxRANGN4Ldk58dRi1mIrA3X
+        6ADfH8TO+l/v9ZFMMpebcSUEey5zfCSEGLYrSu6Vp6oanVkUFdySPYHH37YcEdcTWD1x86
+        qJHP6DVnwIpsrsOc/JPIJgNEj6W58Fw=
+Date:   Thu, 1 Jun 2023 12:18:15 -0700
 MIME-Version: 1.0
-References: <20230601184451.358272-1-afd@ti.com>
-In-Reply-To: <20230601184451.358272-1-afd@ti.com>
-From:   Robert Nelson <robertcnelson@gmail.com>
-Date:   Thu, 1 Jun 2023 14:17:58 -0500
-Message-ID: <CAOCHtYjDutbNDwQqzA9AruivCPtBeo5u4kYpnCzwZtjQdrcjhg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: ti: k3-am625-beagleplay: Use UART name in
- pinmux name
-To:     Andrew Davis <afd@ti.com>, Tony Lindgren <tony@atomide.com>
-Cc:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf] bpf: Fix elem_size not being set for inner maps
+Content-Language: en-US
+To:     Rhys Rustad-Elliott <me@rhysre.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20230601000713.506358-1-me@rhysre.net>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20230601000713.506358-1-me@rhysre.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andew, since we are touching this section, do you want to match with
-@Tony Lindgren rename changes here in omap...
-
-https://www.spinics.net/lists/linux-omap/msg166406.html
-
-Regards,
-
-On Thu, Jun 1, 2023 at 1:56=E2=80=AFPM Andrew Davis <afd@ti.com> wrote:
->
-> The main_uart0 may not always be the console, but it will always be
-> the UART0 in MAIN domain. Name the pinmux node to match. This makes
-> it consistent with all other TI SoC based boards.
->
-> Signed-off-by: Andrew Davis <afd@ti.com>
+On 5/31/23 5:08 PM, Rhys Rustad-Elliott wrote:
+> Commit d937bc3449fa ("bpf: make uniform use of array->elem_size
+> everywhere in arraymap.c") changed array_map_gen_lookup to use
+> array->elem_size instead of round_up(map->value_size, 8) as the element
+> size when generating code to access a value in an array map.
+> 
+> array->elem_size, however, is not set by bpf_map_meta_alloc when
+> initializing an BPF_MAP_TYPE_ARRAY_OF_MAPS or BPF_MAP_TYPE_HASH_OF_MAPS.
+> This results in array_map_gen_lookup incorrectly outputting code that
+> always accesses index 0 in the array (as the index will be calculated
+> via a multiplication with the element size, which is incorrectly set to
+> 0).
+> 
+> Set elem_size on the bpf_array object when allocating an array or hash
+> of maps and add a selftest that accesses an inner map at a nonzero index
+> to prevent regressions.
+> 
+> Fixes: d937bc3449fa ("bpf: make uniform use of array->elem_size everywhere in arraymap.c")
+> Signed-off-by: Rhys Rustad-Elliott <me@rhysre.net>
 > ---
->  arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts b/arch/arm64/=
-boot/dts/ti/k3-am625-beagleplay.dts
-> index cb46c38ce2cc1..29c51705c2f17 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
-> @@ -397,7 +397,7 @@ AM62X_IOPAD(0x01a8, PIN_INPUT, 7) /* (D20) MCASP0_AFS=
-X.GPIO1_12 */
->                 >;
->         };
->
-> -       console_pins_default: console-pins-default {
-> +       main_uart0_pins_default: main-uart0-pins-default {
->                 pinctrl-single,pins =3D <
->                         AM62X_IOPAD(0x01c8, PIN_INPUT, 0) /* (D14) UART0_=
-RXD */
->                         AM62X_IOPAD(0x01cc, PIN_OUTPUT, 0) /* (E14) UART0=
-_TXD */
-> @@ -736,7 +736,7 @@ wlcore: wlcore@2 {
->
->  &main_uart0 {
->         pinctrl-names =3D "default";
-> -       pinctrl-0 =3D <&console_pins_default>;
-> +       pinctrl-0 =3D <&main_uart0_pins_default>;
->         status =3D "okay";
->  };
->
-> --
-> 2.39.2
->
+>   kernel/bpf/map_in_map.c                       |  8 +++-
+>   .../map_in_map_inner_array_lookup.c           | 33 ++++++++++++++
+>   .../test_map_in_map_inner_array_lookup.c      | 45 +++++++++++++++++++
+>   3 files changed, 84 insertions(+), 2 deletions(-)
+>   create mode 100644 tools/testing/selftests/bpf/prog_tests/map_in_map_inner_array_lookup.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/test_map_in_map_inner_array_lookup.c
+> 
+> diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
+> index 2c5c64c2a53b..8d65b12e0834 100644
+> --- a/kernel/bpf/map_in_map.c
+> +++ b/kernel/bpf/map_in_map.c
+> @@ -69,9 +69,13 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
+>   	/* Misc members not needed in bpf_map_meta_equal() check. */
+>   	inner_map_meta->ops = inner_map->ops;
+>   	if (inner_map->ops == &array_map_ops) {
+> +		struct bpf_array *inner_array_meta =
+> +			container_of(inner_map_meta, struct bpf_array, map);
+> +		struct bpf_array *inner_array = container_of(inner_map, struct bpf_array, map);
+> +
+> +		inner_array_meta->index_mask = inner_array->index_mask;
+> +		inner_array_meta->elem_size = round_up(inner_map->value_size, 8);
 
+How about directly use inner_array->elem_size instead of
+"round_up(inner_map->value_size, 8)"?
 
---=20
-Robert Nelson
-https://rcn-ee.com/
+>   		inner_map_meta->bypass_spec_v1 = inner_map->bypass_spec_v1;
+> -		container_of(inner_map_meta, struct bpf_array, map)->index_mask =
+> -		     container_of(inner_map, struct bpf_array, map)->index_mask;
+>   	}
+>   
+>   	fdput(f);
+> diff --git a/tools/testing/selftests/bpf/prog_tests/map_in_map_inner_array_lookup.c b/tools/testing/selftests/bpf/prog_tests/map_in_map_inner_array_lookup.c
+> new file mode 100644
+> index 000000000000..264d4788e5fd
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/map_in_map_inner_array_lookup.c
+
+Separate the selftests into another patch.
+
+> @@ -0,0 +1,33 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include <test_progs.h>
+> +
+> +#include "test_map_in_map_inner_array_lookup.skel.h"
+> +
+> +static int duration;
+
+Use the ASSERT_* macro instead of CHECK, then no need for
+"static int duration;".
+
+> +
+> +void test_map_in_map_inner_array_lookup(void)
+
+nit. A shorter name? may be test_inner_array_lookup().
+
+> +{
+> +	int map1_fd, err;
+> +	int key = 3;
+> +	int val = 1;
+> +	struct test_map_in_map_inner_array_lookup *skel;
+> +
+> +	skel = test_map_in_map_inner_array_lookup__open_and_load();
+> +	if (CHECK(!skel, "skel_open", "failed to open&load skeleton\n"))
+> +		return;
+> +
+> +	err = test_map_in_map_inner_array_lookup__attach(skel);
+> +	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
+> +		goto cleanup;
+> +
+> +	map1_fd = bpf_map__fd(skel->maps.inner_map1);
+> +	bpf_map_update_elem(map1_fd, &key, &val, 0);
+> +	usleep(1);
+
+Why usleep is needed?
+
+> +	/* Probe should have set the element at index 3 to 2 */
+> +	bpf_map_lookup_elem(map1_fd, &key, &val);
+> +	CHECK(val != 2, "inner1", "got %d != exp %d\n", val, 2);
+> +
+> +cleanup:
+> +	test_map_in_map_inner_array_lookup__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_map_in_map_inner_array_lookup.c b/tools/testing/selftests/bpf/progs/test_map_in_map_inner_array_lookup.c
+> new file mode 100644
+> index 000000000000..c2c8f2fa451d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_map_in_map_inner_array_lookup.c
+
+nit. A shorter name also, inner_array_lookup.c?
+
+> @@ -0,0 +1,45 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +
+> +struct inner_map {
+> +	__uint(type, BPF_MAP_TYPE_ARRAY);
+> +	__uint(max_entries, 5);
+> +	__type(key, int);
+> +	__type(value, int);
+> +} inner_map1 SEC(".maps");
+> +
+> +struct outer_map {
+> +	__uint(type, BPF_MAP_TYPE_HASH_OF_MAPS);
+> +	__uint(max_entries, 3);
+> +	__type(key, int);
+> +	__array(values, struct inner_map);
+> +} outer_map1 SEC(".maps") = {
+> +	.values = {
+> +		[2] = &inner_map1,
+> +	},
+> +};
+> +
+> +SEC("raw_tp/sys_enter")
+> +int handle__sys_enter(void *ctx)
+> +{
+> +	int outer_key = 2, inner_key = 3;
+> +	int *val;
+> +	void *map;
+> +
+> +	map = bpf_map_lookup_elem(&outer_map1, &outer_key);
+> +	if (!map)
+> +		return 1;
+> +
+> +	val = bpf_map_lookup_elem(map, &inner_key);
+> +	if (!val)
+> +		return 1;
+> +
+> +	if (*val == 1)
+> +		*val = 2;
+> +
+> +	return 0;
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
+
