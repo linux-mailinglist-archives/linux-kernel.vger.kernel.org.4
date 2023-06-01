@@ -2,149 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FC971F63B
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4D071F642
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231901AbjFAWtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 18:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
+        id S232102AbjFAWuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 18:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjFAWtf (ORCPT
+        with ESMTP id S232579AbjFAWtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:49:35 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 434BA137;
-        Thu,  1 Jun 2023 15:49:34 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7693120FCD27;
-        Thu,  1 Jun 2023 15:49:32 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7693120FCD27
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1685659772;
-        bh=Al6Gkocw7whHT52Bc4ElZbslNdqBvx6ntA83ZjEnGCw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eBkE6tthDxKoqBO9Fwv67XKmq0g+Sy+bnMV3haP3kpSA4FOId5penjiuwuUqu0fqc
-         0yrQbjbQ+UgZSpC/6MYwDHiYcWqMJ1v36hHtX3iMOPoePgNeWl9WAKYtBiCVij64ij
-         I90KenDa9WpQitzqgEfNzHCHKiIoNaLGCsvrWMak=
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        brauner@kernel.org
-Subject: [PATCH] tracing/user_events: Remove user_ns walk for groups
-Date:   Thu,  1 Jun 2023 15:49:28 -0700
-Message-Id: <20230601224928.301-1-beaub@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 1 Jun 2023 18:49:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B363138;
+        Thu,  1 Jun 2023 15:49:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B91BF64AAF;
+        Thu,  1 Jun 2023 22:49:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 266E3C433A8;
+        Thu,  1 Jun 2023 22:49:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685659793;
+        bh=s5scddDgq8SCu6I0UWPQExKWJjas9UFzehdQi3Sw4tA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=K25ToaEbCp02bMG+wiJikwHyiXiwwQBkm/MmN8qlrLj5yam240H0kFAxxnFa3RlG8
+         bu4BSS/frooyZ20B2VklohnrYULCfishpBQ/wfdUaMkt+oR8gS4E1+AjfNshKja3vS
+         Rv+moH0Y5isDfBQyF8Rj722+0entBKGogJrcfr++cvzRmW73HdsIB35hoxtRn829Ae
+         fyn3i/1QAGvtS1oiJarw65vHM76zJn0jBvddq9Vcz7E6Icr7CQW2U08iG1Oryzm6d3
+         58DCK+DxQNJ2Qn/JWEej+n8GVZwut1/xKU3k6dkfSYsQUQ9uCCopruEXev0WWNFxor
+         G4HpcCwxRlB1w==
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-4f5f728c4aaso1458699e87.0;
+        Thu, 01 Jun 2023 15:49:52 -0700 (PDT)
+X-Gm-Message-State: AC+VfDygFaQyEGlCK+cBn5k10kr0LSS4LPF8TjiwLA5nWkYlIg34T11I
+        usjdwtcH1xjP2uCYF0St+hKlyfYIRh4gdi5zNt4=
+X-Google-Smtp-Source: ACHHUZ4uA6ym60CkoL3kD4Xme876wGBHsdD1XRoswJZBV/GnrkgRlI3npJzU+tR131QuPJoGC+7UxG4nzuqJElDeBo4=
+X-Received: by 2002:ac2:4a8b:0:b0:4f3:aa81:2a6e with SMTP id
+ l11-20020ac24a8b000000b004f3aa812a6emr364328lfp.19.1685659791105; Thu, 01 Jun
+ 2023 15:49:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <20230601101257.530867-1-rppt@kernel.org> <20230601101257.530867-13-rppt@kernel.org>
+In-Reply-To: <20230601101257.530867-13-rppt@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 1 Jun 2023 15:49:39 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4Q2d7=7yBMQLgz+7Bz_q==_F+N3C8O4LStXva73ECCTg@mail.gmail.com>
+Message-ID: <CAPhsuW4Q2d7=7yBMQLgz+7Bz_q==_F+N3C8O4LStXva73ECCTg@mail.gmail.com>
+Subject: Re: [PATCH 12/13] x86/jitalloc: prepare to allocate exectuatble
+ memory as ROX
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During discussions it was suggested that user_ns is not a good place to
-try to attach a tracing namespace. The current code has stubs to enable
-that work that are very likely to change and incur a performance cost.
+On Thu, Jun 1, 2023 at 3:15=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wrot=
+e:
+>
+> From: Song Liu <song@kernel.org>
+>
+> Replace direct memory writes to memory allocated for code with text pokin=
+g
+> to allow allocation of executable memory as ROX.
+>
+> The only exception is arch_prepare_bpf_trampoline() that cannot jit
+> directly into module memory yet, so it uses set_memory calls to
+> unprotect the memory before writing to it and to protect memory in the
+> end.
+>
+> Signed-off-by: Song Liu <song@kernel.org>
+> Co-developed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> ---
+>  arch/x86/kernel/alternative.c | 43 +++++++++++++++++++++++------------
+>  arch/x86/kernel/ftrace.c      | 41 +++++++++++++++++++++------------
+>  arch/x86/kernel/module.c      | 24 +++++--------------
+>  arch/x86/kernel/static_call.c | 10 ++++----
+>  arch/x86/kernel/unwind_orc.c  | 13 +++++++----
+>  arch/x86/net/bpf_jit_comp.c   | 22 +++++++++++++-----
 
-Remove the user_ns walk when creating a group and determining the system
-name to use, since it's unlikely user_ns will be used in the future.
+We need the following in this patch (or before this patch).
+Otherwise, the system will crash at the VIRTUAL_BUG_ON()
+in vmalloc_to_page().
 
-Link: https://lore.kernel.org/all/20230601-urenkel-holzofen-cd9403b9cadd@brauner/
+Thanks,
+Song
 
-Suggested-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
----
- kernel/trace/trace_events_user.c | 42 ++++----------------------------
- 1 file changed, 5 insertions(+), 37 deletions(-)
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index bf954d2721c1..4efa8a795ebc 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1084,7 +1084,7 @@ bpf_jit_binary_pack_alloc(unsigned int proglen,
+u8 **image_ptr,
+                return NULL;
+        }
 
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index b1ecd7677642..55e362484b66 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -180,21 +180,11 @@ static void user_event_group_destroy(struct user_event_group *group)
- 	kfree(group);
- }
- 
--static char *user_event_group_system_name(struct user_namespace *user_ns)
-+static char *user_event_group_system_name(void)
- {
- 	char *system_name;
- 	int len = sizeof(USER_EVENTS_SYSTEM) + 1;
- 
--	if (user_ns != &init_user_ns) {
--		/*
--		 * Unexpected at this point:
--		 * We only currently support init_user_ns.
--		 * When we enable more, this will trigger a failure so log.
--		 */
--		pr_warn("user_events: Namespace other than init_user_ns!\n");
--		return NULL;
--	}
--
- 	system_name = kmalloc(len, GFP_KERNEL);
- 
- 	if (!system_name)
-@@ -205,34 +195,12 @@ static char *user_event_group_system_name(struct user_namespace *user_ns)
- 	return system_name;
- }
- 
--static inline struct user_event_group
--*user_event_group_from_user_ns(struct user_namespace *user_ns)
--{
--	if (user_ns == &init_user_ns)
--		return init_group;
--
--	return NULL;
--}
--
- static struct user_event_group *current_user_event_group(void)
- {
--	struct user_namespace *user_ns = current_user_ns();
--	struct user_event_group *group = NULL;
--
--	while (user_ns) {
--		group = user_event_group_from_user_ns(user_ns);
--
--		if (group)
--			break;
--
--		user_ns = user_ns->parent;
--	}
--
--	return group;
-+	return init_group;
- }
- 
--static struct user_event_group
--*user_event_group_create(struct user_namespace *user_ns)
-+static struct user_event_group *user_event_group_create(void)
- {
- 	struct user_event_group *group;
- 
-@@ -241,7 +209,7 @@ static struct user_event_group
- 	if (!group)
- 		return NULL;
- 
--	group->system_name = user_event_group_system_name(user_ns);
-+	group->system_name = user_event_group_system_name();
- 
- 	if (!group->system_name)
- 		goto error;
-@@ -2543,7 +2511,7 @@ static int __init trace_events_user_init(void)
- 	if (!fault_cache)
- 		return -ENOMEM;
- 
--	init_group = user_event_group_create(&init_user_ns);
-+	init_group = user_event_group_create();
- 
- 	if (!init_group) {
- 		kmem_cache_destroy(fault_cache);
+-       *rw_header =3D kvmalloc(size, GFP_KERNEL);
++       *rw_header =3D kvzalloc(size, GFP_KERNEL);
+        if (!*rw_header) {
+                bpf_arch_text_copy(&ro_header->size, &size, sizeof(size));
+                bpf_prog_pack_free(ro_header);
+@@ -1092,8 +1092,6 @@ bpf_jit_binary_pack_alloc(unsigned int proglen,
+u8 **image_ptr,
+                return NULL;
+        }
 
-base-commit: 3862f86c1529fa0016de6344eb974877b4cd3838
--- 
-2.25.1
+-       /* Fill space with illegal/arch-dep instructions. */
+-       bpf_fill_ill_insns(*rw_header, size);
+        (*rw_header)->size =3D size;
 
+        hole =3D min_t(unsigned int, size - (proglen + sizeof(*ro_header)),
