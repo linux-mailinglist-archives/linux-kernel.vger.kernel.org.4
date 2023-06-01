@@ -2,166 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458A471951F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F227A719525
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbjFAIL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
+        id S232118AbjFAIMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbjFAIL5 (ORCPT
+        with ESMTP id S232066AbjFAIMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:11:57 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20DEC0
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:11:51 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-96ff9c0a103so67610266b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:11:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685607110; x=1688199110;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a/aAPNbwdm0BPn5PUgLp4hktWQaK2+uFNT4kN1UiiV4=;
-        b=noBu4GFo9o3K31KSzM6zLXaqNSmfMChm9oSwgyqduSqkh+q29FAY/1uCqxBNWnDE43
-         d36A38bwZ64J5xryHZzKKXCirlaQPolkLgkuTj3Pb7gf1KSetTMW6TL4DCTmrrW0YJCJ
-         8kFPneS+nrSiGsbgg1frnaP32OKmvDUSmXcwWQsIkWpQG7F5TJEHIb9rX8VXJf/dwQo+
-         uIOloDXkzuvmT7sLEkHBgH1woFhKHNTWj/nNRvpvGNJ3RenBcG6vT5LEoOrU5+vWiYMM
-         d9ozFrKUIgtc++4ieYsff8RQrU482JbaPkGCCgQC+n2nE72CBBvN8GvSQCLHXoIKZM6O
-         D8VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685607110; x=1688199110;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a/aAPNbwdm0BPn5PUgLp4hktWQaK2+uFNT4kN1UiiV4=;
-        b=VjqNlkXOQZ7lvps/Tb5Woq8q8yhiWqJX/M9P6YMZH6P1KArDoZkoZVVIKrhGiGqQei
-         dsIw938a1WT5CdNKFHTaH+fd3E/RA+i6dotXVNmnBCSQ8O7vkal/ctFCcmzrasPp/xrr
-         rwD2/XSQlkq9KKnNo3K8JVn6nBsmW+y/cHe+8qWNIByDyzwLFMaKmRNhrARXdyUfLIxc
-         1iJQev/CoQIvoBuAIw2wwtdbL0bSy0SkMNVLb1jR1UkdkVAHuSDujYHSxrks4y11ptL2
-         NgNtyHFQCFTv7JTR3SqKYzJFA/m8r6unSzMqbyzJ8aoRMPZZ1EBt1/NT2uKpavmYaMEJ
-         vfJQ==
-X-Gm-Message-State: AC+VfDx+v4uUkBMEGPBHogVmh9axEx050QLyVm3iHb7pJejzlvHlf3Wj
-        kpb/zFZ7rf/zcHWyreGNlQETxBR6e21V5ZeWJw8=
-X-Google-Smtp-Source: ACHHUZ59OUxz1x6flGeMGoLbNndoi2EK6EwfZcyjgNCpA1L9+RbhXlv0PBwyXltBSS9baZu1GRh/2A==
-X-Received: by 2002:a17:907:7b92:b0:96a:52e:5379 with SMTP id ne18-20020a1709077b9200b0096a052e5379mr7774277ejc.63.1685607110379;
-        Thu, 01 Jun 2023 01:11:50 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id l17-20020a1709067d5100b0096f72424e00sm10129750ejp.131.2023.06.01.01.11.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 01:11:49 -0700 (PDT)
-Message-ID: <65124d19-474a-ce95-2cb3-bb8273a8e3b7@linaro.org>
-Date:   Thu, 1 Jun 2023 10:11:47 +0200
+        Thu, 1 Jun 2023 04:12:08 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2085.outbound.protection.outlook.com [40.107.22.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094E912F;
+        Thu,  1 Jun 2023 01:12:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DKZ7VRvQARdBrRHQCo02/rZssRxCE9MtZSdmrFgoSUFJ8v6EoesRD5gWby6oxbbQxT8vuIv7ZZR2LRV8eyI065yvGi8A9TcY8jsr4h0IO3OWXHEUBCPDZfxL9lz+Tm/EEB58ysTYpSLP5uAeIT456fbiWNTIs2+Aky1uiTzc6zcpLUzGZ89lrYzFjXztCXoFWlE+jFIBkdvmxj13N9SS4XHB8w/f2imYs78Ia49Of/zMOX94kX6ATQ1BjqSNCxoDMYJeD/1Xp7ymy2WNO+84+hLkWKjZkv4KDOIPDXtK39FP0Hr/eYk6a/kJkoYuUCbcMzp7bJl0G3KEic7L71RjRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jilFZmG1Bfom4yOTIX/1xudHi3d/zUFB/dxf3A/NdDc=;
+ b=OaR+fqMJVubQim3D8VOzZTQH0mi3bttI2TdlzEWeK3Qq/UzJr366voY6gbBNJl3YbtbOL0/k39RArWwR1nS/37Wc4q6l2ou/F+qnME8nylM6vUE3er5JGj41hIoADNzUKYKiL+XBfKOCvT70Yzplcg3KWGVoX2HWrXKGykHbrE6Jmkemg6yiCFkAo8sMcA0jUjaLrnFFWmiPh55F7PAukuSPzc+vdvpWbHQ37/ouPBwJuw39nj21EGxoCL1muYaMaunGab6UzcEqOd4wkLNbGXnd0STJnCXGnu9zOBtErOuBN7R4eXrd8mvGNKoLPcKHDq1c/kzgFrNEm65FlqsiKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jilFZmG1Bfom4yOTIX/1xudHi3d/zUFB/dxf3A/NdDc=;
+ b=ga6ReZbFFHXe6/Y0/2N/p7vm4HG/lFVmdEUYiXwlIKAa9M4eHU1e45fLQvMwQb2JrnPFEOE0R07oT/0tluaSswN/3d8Tc3BOhviuhK4VgdhuA3pGbg2cCRnxX/qxynua7rmu3VPBW61La/cZsgDEWtFymjDQFpfJcumlVVPDfhU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by DBAPR04MB7399.eurprd04.prod.outlook.com (2603:10a6:10:1a8::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.23; Thu, 1 Jun
+ 2023 08:12:01 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::47e4:eb1:e83c:fa4a]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::47e4:eb1:e83c:fa4a%4]) with mapi id 15.20.6455.020; Thu, 1 Jun 2023
+ 08:12:01 +0000
+Date:   Thu, 1 Jun 2023 11:11:56 +0300
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org, netdev@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH pci] PCI: don't skip probing entire device if first fn OF
+ node has status = "disabled"
+Message-ID: <20230601081156.zyymihd565fscuha@skbuf>
+References: <20230531165819.phx7uwlgtvnt3tvb@skbuf>
+ <ZHetDo5PozWdtrxP@bhelgaas>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZHetDo5PozWdtrxP@bhelgaas>
+X-ClientProxiedBy: FR3P281CA0190.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a4::8) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1 23/43] dt-bindings: mtd: Add ts7250 nand-controller
-To:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Michael Peters <mpeters@embeddedTS.com>,
-        Kris Bahnsen <kris@embeddedTS.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230601054549.10843-5-nikita.shubin@maquefel.me>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230601054549.10843-5-nikita.shubin@maquefel.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|DBAPR04MB7399:EE_
+X-MS-Office365-Filtering-Correlation-Id: cd8df577-436d-4dd7-566b-08db6277dfea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yDVa2oWlWbkAA03QlQOLglL7nLWEhTSrjHwOoNoqV2dzMTCDq3cDbRfiuQ4oQxABe5ccjaQb1bZFsmztGC+2dHjN0z7Ftd2CbW39pJiG0v+fb8IY6NxsNX6fg/dkgAMM+x2Y+gqEB3dTgOmV8l8vlwUIQceIE8fhlnMKR4Dw/fsD+fS5ODdGml/WOs3Lq7eL8O41RE0Pzm8SVEsOqCK9XLVLVb7fc2vV/nXn8ida6fQkwl6SA9iCwJE9YneF0IN4C/TVqJWFw39/HhZ+Ztun8LJrSxDPW6D+bQ4LPSHSW+r+wHaElOXjQwRx73BbMAFL6J2Uclxh1vQH453SQYmtPxhpVssLk7TWh83E3Ibc23i/WiT+OVZ8rIOTnUz3eRu+gj6Ivj6PwSGcaZxLI8SbSk9L2bVXCDhx50V6RcE6PRxz0GBGnwJy++nAvV3Zz0Rduyw3QmoBrfKiO4me7EBcOf7hnsdWE9iuiqB2qGr8as3cStZFDoZFJmcjBCm6hMwc6tzZe0h3BH24R+QiEsktDkIGebOR5QMdtlvYCNMTMK30SQlEaAUNAwPWHSGOsr4y
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(366004)(39860400002)(346002)(136003)(396003)(376002)(451199021)(33716001)(38100700002)(86362001)(66899021)(8936002)(8676002)(41300700001)(7416002)(5660300002)(26005)(44832011)(1076003)(6506007)(6512007)(9686003)(66556008)(2906002)(186003)(83380400001)(6666004)(66476007)(316002)(6486002)(66946007)(478600001)(54906003)(4326008)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0vN4br9sQRWld9dGsUGbryiCTnjqU42L3od8TKm5llxaWeP+8da/U56/UPc9?=
+ =?us-ascii?Q?x2dwe7t5rV0RAMer98Lb9XLPhksbbkQbznFrCJgDdHU9Gc3TCYvpuWB8mn8E?=
+ =?us-ascii?Q?rxNGchjVj75on291OXpl90ktWmJ3lM6m4qR+hMWQ5b59UWPL9qfeuoWWFD7e?=
+ =?us-ascii?Q?+tjZjbihOMqwExv9lOOB5wodHph2ar5omad6mwrhgv05LS+Qk9o4I0mYr501?=
+ =?us-ascii?Q?uLJQaLZQpTFkHQNzmbVfLPMJa6CORB0mqBDlCHlJeJEtX7dGLJONMRBosmYF?=
+ =?us-ascii?Q?cnFnVjybBugWC/H8zz5nFPhIRrmAhvasRUWeREbEvAE9tUxZf3WIR9e466yf?=
+ =?us-ascii?Q?u4tfABA4GrGy2IMX9q3iFYJIEpSbtN7sQtQUQ1kPxnjhJ30WfWQ9005HoqAI?=
+ =?us-ascii?Q?FXmvpeFqih3vZyJyAnPaCixowyJwPqDAmDOMKVGcrs7cpxT3mbTD3ga7G2Se?=
+ =?us-ascii?Q?mZpBczZvz7mHfpUanvvKVS/ELZlUe/vTrz+3RJqsFH2uVMCzIJ8sLvBMEu5y?=
+ =?us-ascii?Q?a1W911yoJDzMeksjqFC9MfTltQt+Fw3K98v/VPqKycH8a0lBYZqrzqGPSZyV?=
+ =?us-ascii?Q?/BzYflHOCEt/so8blVYe6nztvqRgbA7GZtMFtd38kiWIcMec62L/6kOu/gYm?=
+ =?us-ascii?Q?UBVnI6x1SvuwPpFPOordhXQpaWNX0noHDq9+W0qhImjozmuveiic/G6iVHHn?=
+ =?us-ascii?Q?Q+w6/xm8u72nHpoinl9IJifzEZ+slnv3Pf5ayDLv131zELBSrAisDRAcpCln?=
+ =?us-ascii?Q?y9sQVV42LQ7BdRm0gcxsXmAEXuwvHKMHd+FEJ0mgYn7kw/xdBJY6h0750ZZa?=
+ =?us-ascii?Q?p61xWhagpztM3oBvKsAP0owIAjWFh5g4hRhfB21rO7MDjYQO7MQYXId3qstb?=
+ =?us-ascii?Q?7Mxh8JE8RuNYuxcy8wGIBo9+cr2PCLFrx3jKNEfVbGWz8C4R4Az4zwJwIXyH?=
+ =?us-ascii?Q?ARV4pwLwdAxrJxlB+tyoGEqEtNL4QyEdA+jXMK7R4JPnop6WCcgFIfxQY2fq?=
+ =?us-ascii?Q?OPwiFE5EmXazajaMr9zAJ7xFg/Qhf8O0EqMAQGftP2hnE4l2VehxJ1PUaioI?=
+ =?us-ascii?Q?tkFQgBrIEd5hpPEBxBeoqaqvhPqKO49KLgZ9ur2TSJWFHDnW2boU3NfbYgeE?=
+ =?us-ascii?Q?EmwJd5CGDQduj0OD+Ti+L6ZLlRWWj7PZRF3F6xO5W1RW/R6XW3nTLSCqgxe+?=
+ =?us-ascii?Q?xo+6ahLtZjffmREQQMZ1LA1uYlbTJrQPEcqOwbnlMW6dat7BtdcW3nk1Yl6Y?=
+ =?us-ascii?Q?0EYglDcbz01jf8/6oSkXweJR8qnu4sbYe40krFDNi5zOwxZ4gSICUtBF0tPJ?=
+ =?us-ascii?Q?KGlF6Mye+uT2c40FJpPv2sXs2WjGoovGgp7mWeA/hGN3Y1yF68w3Wkhy9viw?=
+ =?us-ascii?Q?ytthETNZeBnUMfWmq2Cylh/pNSca2tvas/3U7FfEq2PaYDsADllA4TvauoOF?=
+ =?us-ascii?Q?6vjFdwVhoz34NHkDQTBJPk5eM7y5py5HV2/F5rwkojq3XIelYeZz6Av8u8mU?=
+ =?us-ascii?Q?uRfuh09taCE0XApoZPZq/88BNFru2Tnql5GomSu5g8TuIqRMRK4zCI8Q3a3x?=
+ =?us-ascii?Q?Pesnvm/cDr5qEXTAVDEtR8mrtp8wbCtenwDUVOp4eDG5y4Tg8Q8rzL1TZALG?=
+ =?us-ascii?Q?sA=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd8df577-436d-4dd7-566b-08db6277dfea
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 08:12:01.3156
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2mwEiYylBgTrneKSI4Gpqo57he/KkFL/UMCXj2UjKrxRfxcBshlDgMuWpnEAzewIupyG41bREBq8/pTkMvbAfQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7399
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 07:45, Nikita Shubin wrote:
-> Add YAML bindings for ts7250 NAND Controller.
-> 
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-> ---
-> 
-> Notes:
->     v0 -> v1:
->     
->     make it a nand contoller
-> 
->  .../bindings/mtd/technologic,nand.yaml        | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mtd/technologic,nand.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mtd/technologic,nand.yaml b/Documentation/devicetree/bindings/mtd/technologic,nand.yaml
-> new file mode 100644
-> index 000000000000..26d1d9c3331d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mtd/technologic,nand.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mtd/technologic,nand.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Technologic Systems NAND controller
-> +
-> +maintainers:
-> +  - Nikita Shubin <nikita.shubin@maquefel.me>
-> +
-> +allOf:
-> +  - $ref: nand-controller.yaml
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: technologic,ts7200-nand
-> +      - items:
-> +          - enum:
-> +              - technologic,ts7300-nand
-> +              - technologic,ts7260-nand
-> +              - technologic,ts7250-nand
-> +          - const: technologic,ts7200-nand
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#address-cells': true
-> +  '#size-cells': true
+On Wed, May 31, 2023 at 03:24:46PM -0500, Bjorn Helgaas wrote:
+> I guess I should have asked "what bad things happen without this patch
+> and without the DT 'disabled' status"?
 
-Except what Miquel wrote - drop these two.
+Well, now that you put it this way, I do realize that things are not so
+ideal for me.
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: true
-> +
-> +examples:
-> +  - |
-> +    nand-controller@60000000 {
-> +      compatible = "technologic,ts7200-nand";
-> +      reg = <0x60000000 0x8000000>;
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
+Our drivers for the functions of this device were already checking for
+of_device_is_available() during probe. So, reverting the core PCIe
+patch, they would still not register a network interface, which is good.
 
-Incomplete example. address/size cells do not make sense here alone.
-Finish the example.
+However (and this is the bad part), multiple functions of this PCIe
+device unfortunately share a common memory, which is not zeroized by
+hardware, and so, to avoid multi-bit ECC errors, it must be zeroized by
+software, using some memory space accesses from all functions that have
+access to that shared memory (every function zeroizes its piece of it).
+This, sadly, includes functions which have status = "disabled". See
+commit 3222b5b613db ("net: enetc: initialize RFS/RSS memories for unused
+ports too").
 
-> +    };
-> +
-> +...
+What we used to do was start probing a bit in enetc_pf_probe(), enable
+the memory space, zeroize our part of the shared memory, then check
+of_device_is_available() and finally, we disable the memory space again
+and exit probing with -ENODEV.
 
-Best regards,
-Krzysztof
+That is not possible anymore with the core patch, because the PCIe core
+will not probe our disabled functions at all anymore.
 
+The ENETC is not a hot-pluggable PCIe device. It uses Enhanced Allocation
+to essentially describe on-chip memory spaces, which are always present.
+So presumably, a different system-level solution to initialize those
+shared memories (U-Boot?) may be chosen, if implementing this workaround
+in Linux puts too much pressure on the PCIe core and the way in which it
+does things. Initially I didn't want to do this in prior boot stages
+because we only enable the RCEC in Linux, nothing is broken other than
+the spurious AER messages, and, you know.. the kernel may still run
+indefinitely on top of bootloaders which don't have the workaround applied.
+So working around it in Linux avoids one dependency.
