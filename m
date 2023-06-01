@@ -2,147 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E5971E9E6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E589D71E9EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234784AbjFAQJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 12:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
+        id S231425AbjFAQKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 12:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234751AbjFAQJz (ORCPT
+        with ESMTP id S230397AbjFAQKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 12:09:55 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2043.outbound.protection.outlook.com [40.107.237.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F7013E;
-        Thu,  1 Jun 2023 09:09:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d7kAyrrQ9mS/G7CzAd/kMv1vDmjapeHE8zWojfyeqxcTt7RFqWmGNSTu95xpSy98j7/cFwVC3buEe7JukHlHSMnAh1Lpz981HuyDTdHUNv/uAWDq8DXaDibZ+i+OXE7pQQuiJkXMVYMwW1AAX7wVZCBHGGqOvYzev2gred7ncO4PMSRg+eVQ6ZXdyKJnh847GM6exB27IVABDdiseai9v7ISdfAUlWzZ0eJ7dZw6Z0Z8q7Wb/6061wIhwYJMTYLGXX37n+fwQLGVAy/srtCJTIaZ8m8R683HZNGJGcagkimRT5R4mwh+4YMmKFNp1HrV2RArN6Ih2mYLcQ8CjDLkgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NSkXLqg9Fj03i+0P7Ipn4hXC/1ezroKA81yxUktkQ3U=;
- b=cPtqFHQHfuZiITI+hXIQHc+B1JYWVJ7aUw7Ls8RTgHLBpnTgxeiUw1G2aQsmas7ofGeFYMlX9AaoRShqk8NFpPzoB6E2zeevBYy+srRAA1A0JHWrn/fKgv6fKhUePhtF4PS1hzE2Y7aBMGjiSdq+qVqs6kU+OU5kOeJZVx3c3RXt57X38NvuBXApgZbqL/o6JLFBYejgfNqSYOYC74utksa6XJLZm+Afa4SszX/p6n3FhVbcoKxAKnYUX5ycDSnUf864w7UtH0vU1DjhyDQrmvZJYWf3kDSWnNHLZ06q5fu3lmOE2QLJIGZiLoIPinGeuTynQ8IwM5dGW6sKceh9Tw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NSkXLqg9Fj03i+0P7Ipn4hXC/1ezroKA81yxUktkQ3U=;
- b=bsRSHMOBD1c8yJ7HMkbzsgP/Ml3QK+kmUUGGfTcDIpiG9u9Z81t83/RQYs7qfLaeXdVBIBEhVnV2mLqKgf324GTmv5dy+uCXFMavyw0Ue6Q2Y6XCOPfYihKz/yEWxp6JTrggbxSWHfVg+tfcJw9a+MeJcE7bk7tx5GjvQ40Znqb5D/qBfgpUEFQWjYaXlEZENhIr2JSidEFz+WmT7epCsF1xC/T67mkNIf5DZbCZLzEdO2pL2nes/As8Ke/J/bZ5UaSwu6ORjX8VVRA9oy/vXS8J6snJAWAKWhqg+rFlj9V23mqShSvzAPRJFn+zZcZ5wR6UZu3UACNXSISGUxp/JA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SA0PR12MB4542.namprd12.prod.outlook.com (2603:10b6:806:73::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Thu, 1 Jun
- 2023 16:09:51 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6433.024; Thu, 1 Jun 2023
- 16:09:51 +0000
-Date:   Thu, 1 Jun 2023 13:09:48 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Mustafa Ismail <mustafa.ismail@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Sindhu-Devale <sindhu.devale@intel.com>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RDMA/irdma: avoid fortify-string warning in
- irdma_clr_wqes
-Message-ID: <ZHjCzHfNPubWUXcL@nvidia.com>
-References: <20230523111859.2197825-1-arnd@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523111859.2197825-1-arnd@kernel.org>
-X-ClientProxiedBy: SJ0PR03CA0364.namprd03.prod.outlook.com
- (2603:10b6:a03:3a1::9) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Thu, 1 Jun 2023 12:10:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3E0E137;
+        Thu,  1 Jun 2023 09:10:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D73651063;
+        Thu,  1 Jun 2023 09:11:33 -0700 (PDT)
+Received: from pluto.. (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DC87E3F663;
+        Thu,  1 Jun 2023 09:10:46 -0700 (PDT)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        f.fainelli@gmail.com, vincent.guittot@linaro.org,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Subject: [PATCH] powercap: arm_scmi: Remove recursion while parsing zones
+Date:   Thu,  1 Jun 2023 17:10:18 +0100
+Message-Id: <20230601161018.2269564-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SA0PR12MB4542:EE_
-X-MS-Office365-Filtering-Correlation-Id: 23d62477-f241-4471-995d-08db62baa10d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cx4iqf9HpvP4rBaoAG5IF/tS8ii73eaVfQ51iS53ZbEy3xo8qC+uiTC4jNwVEkmaixcUZv7OFhySOSHd6k2Vv3fgcnbe/H2AUpKQSchZQPUNEf26Gmioijp8XTVfximjwqKcpTvCU04wpWDtuDu7NIu+Xf862zEZ3SFlkIqGmbaaKa+78LaIIP6LPojlA5ZAXEcYb6WZMPWod5YS/Evo7OpcE0SQLauIFrjVRUcDN2VYmeWm6zRWRKgRiGxwXbSkpXU0ptpAurslr8tTE2jA15us07+tuD6QpGmSmdneYdajrE34zv0wjsPzN1T7C9pDj+hw8jRC1mqZ1a2h/j5oA3rhBXUAessOVFm7GmnXRl5hEPHYoN44z5xazFnuGEqgtaCueyAIOhlWzb0uiu55kNKByTA/8alBPL3m7lyDaxD3V3r92veFHhAbLPENY/bjB6VZjDxSy3DonguMVTAmmEz/mB6f/QQomCtq/HQTdYtjgiaAUjln3aiO9sWnC9j8kFxzXb1Sm+bSN9nL8/HoAs/X7fAzsMzQNYQiFcTmo4Mt9MiBWSXhEWuj9p72HChN
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(39860400002)(376002)(346002)(396003)(451199021)(26005)(41300700001)(38100700002)(6486002)(6666004)(186003)(6512007)(83380400001)(6506007)(2616005)(478600001)(54906003)(66946007)(6916009)(66476007)(4326008)(66556008)(86362001)(316002)(5660300002)(8936002)(36756003)(2906002)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QdNwZZaZXdT9pgSeopOFMjup0fOgmTszBBg56XTlCtT233c9k4rqzhGP7kbk?=
- =?us-ascii?Q?PRndRqWKkayjkLDpoNYjl0o/4WEB5wmhxY/sBMlPjWGwpeSTX5cu7xAGmfN3?=
- =?us-ascii?Q?u1xRSL7fchCWNnyAjgp2GNgFkAVOqEmXNt/RamhbOBf7LA98wD/BZidpLgd1?=
- =?us-ascii?Q?OCcP+aLxd1G1EkqF7/9tU54xyYFT6mRwUsEjXmSJOgeaRIvWgE/UGt7Jm+gd?=
- =?us-ascii?Q?svRTCxIp6TIz5JMK4X7Xym0nddE7qAsu9yHXit2KlMAzlj/eEs2rLVktkUvY?=
- =?us-ascii?Q?2FMLuoPL+SQC+yNhPPNaNsW8pMQxX4DZrf8KbxzbgQAcPiVrfIFY6ixLMcuh?=
- =?us-ascii?Q?BU19VQk4RMsF8C9jzi/QKT9aXCOKssdkLDQ+rM0qDWKY4czPf9L+Ol2sSln4?=
- =?us-ascii?Q?3oP84++HXI54gokhrpHFDwkehI7B5LVWrrU4XPnjre8KXk/VwRaj1Og5UBMh?=
- =?us-ascii?Q?fDwsQoTjJf5ZmXwTdzKmPYYUtdY8BbUhRz9j8TgJvq19RfGej55I/753zcb1?=
- =?us-ascii?Q?0MpT4mvegnZWKOhe7Qb7zf2QcxFlqT5W7f4EnWS4avIAvSuLbhS6JxTqFJ4H?=
- =?us-ascii?Q?pbFoYF6BISp6E26OGFGotrLRkhSuA99i2JL9kNNVIBXET/yJ/cI3j3zgM7Xx?=
- =?us-ascii?Q?EkBHjE3IZRNnqXGOw+eaJ6MftvXKA9U+OPhXbttiIJYhgzx/+Zsv1fALGOSN?=
- =?us-ascii?Q?8VXvVbQPnH3/rtjvBgX1L+zZ78BX89LQn2f5/P92KpcKs5M2Sm9vgKU2Qalf?=
- =?us-ascii?Q?i2dnBcPP8RRU4ZwKRLDU/JKLwPVrOh4VEOYaiqwfVnkHvvGUYyTqufDFpZDT?=
- =?us-ascii?Q?a4vwG1zALi6u6UJLSco52LdKdTayCQAmuj71OHIxnBfQ5HOaX3pjC8wdjRCt?=
- =?us-ascii?Q?qdK4py6Wx9PVR5f0Lc1qIZWKckT3SZyRLN0rMAfklHn5TdrIbRsxfUwYsNHz?=
- =?us-ascii?Q?o7n9C8QVpPAlCzoxcVuyQx5r3rL5aUl2xtLTXDkGVfC4v+e2tHd99mL5JWIJ?=
- =?us-ascii?Q?RHTN8S28AdW06pg1rqFTjwUZMFpE0kI1ETbX37Ao/rQyGGSPzw10AsIIXypV?=
- =?us-ascii?Q?lHCHdY6qsrjQBSJYollOwyueF0V35YohAR/5eim8m8Fv5CYH/rhJLs1AEQ1C?=
- =?us-ascii?Q?oEgMcKCV94fGNG03LYM8ExvHj8wiwi5QvijMffdL0JLL9kNNcajCljOFxGRm?=
- =?us-ascii?Q?qEtDT7BvYtHs5OJ5ujgZvQ4LYLVoVbjfoq8l9WbCYl3OFowknPlzbWbzLz3X?=
- =?us-ascii?Q?fAm0AMz2Uzg/pbum19VwGQAqytVQAwt0x8Us4K0DNoyajb716O/Kdvd+BehQ?=
- =?us-ascii?Q?AptN/xiGKtMGleo8gQbxRQTTwsJZ66dnjyUHsOgJFTd2cCYtx+C2hYl9MvrG?=
- =?us-ascii?Q?8KqDIpVBZsdoA4a9JceyU+yCFP5oBVcU8qLV7mVYDE9lM1ME/LfCxfrDOxcw?=
- =?us-ascii?Q?7+nWnay+JCVVSdBWZCO9k7IPElmtj72PPcFaan+C9cXnCP1Y6qFEqgCZ/eat?=
- =?us-ascii?Q?Di2aFXUogMRjzKLQPjXshmScB4j6kxBiaYUDIKJK/rpRLFVyiSuI9jHeOqZ4?=
- =?us-ascii?Q?e9rqj0r1jBVMlmQAHNjis0md+VfHYNRINM+CdAjm?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23d62477-f241-4471-995d-08db62baa10d
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 16:09:50.9950
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0yPXSFUQ8ntMmBd4mJlKqfTIMsNZtFWY7wH03WmhnHSSIQj7iprPYHwxkb52hzYU
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4542
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 01:18:45PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Commit df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3") triggers
-> a warning for fortified memset():
-> 
-> In function 'fortify_memset_chk',
->     inlined from 'irdma_clr_wqes' at drivers/infiniband/hw/irdma/uk.c:103:4:
-> include/linux/fortify-string.h:493:25: error: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror=attribute-warning]
->   493 |                         __write_overflow_field(p_size_field, size);
->       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> The problem here isthat the inner array only has four 8-byte elements,
-> so clearing 4096 bytes overflows that. As this structure is part of an
-> outer array, change the code to pass a pointer to the irdma_qp_quanta
-> instead, and change the size argument for readability, matching the
-> comment above it.
-> 
-> Fixes: 551c46edc769 ("RDMA/irdma: Add user/kernel shared libraries")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> Acked-by: Shiraz Saleem <shiraz.saleem@intel.com>
-> ---
->  drivers/infiniband/hw/irdma/uk.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+Powercap zones can be defined as arranged in a hierarchy of trees and when
+registering a zone with powercap_register_zone(), the kernel powercap
+subsystem expects this to happen starting from the root zones down to the
+leaves; on the other side, de-registration by powercap_deregister_zone()
+must begin from the leaf zones.
 
-Applied to for-next, thanks
+Available SCMI powercap zones are retrieved dynamically from the platform
+at probe time and, while any defined hierarchy between the zones is
+described properly in the zones descriptor, the platform returns the
+availables zones with no particular well-defined order: as a consequence,
+the trees possibly composing the hierarchy of zones have to be somehow
+walked properly to register the retrieved zones from the root.
 
-Jason
+Currently the ARM SCMI Powercap driver walks the zones using a recursive
+algorithm; this approach, even though correct and tested can lead to kernel
+stack overflow when processing a returned hierarchy of zones composed by
+particularly high trees.
+
+Avoid possible kernel stack overflow by substituting the recursive approach
+with an iterative one supported by a dynamically allocated stack-like data
+structure.
+
+Cc: Rafael J. Wysocki <rafael@kernel.org>
+Fixes: b55eef5226b7 ("powercap: arm_scmi: Add SCMI Powercap based driver")
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+---
+Was able to cause a kernel stack overflow on arm64 while processing a set
+of 256 zones organized in a single list returned by SCMI platform in reversed
+order from the last child zone up to the root: this causes 256 recursions and
+hits the kernel stack overflow.
+
+Based on v6.4-rc4.
+---
+ drivers/powercap/arm_scmi_powercap.c | 159 ++++++++++++++++-----------
+ 1 file changed, 92 insertions(+), 67 deletions(-)
+
+diff --git a/drivers/powercap/arm_scmi_powercap.c b/drivers/powercap/arm_scmi_powercap.c
+index 05d0e516176a..5d7330280bd8 100644
+--- a/drivers/powercap/arm_scmi_powercap.c
++++ b/drivers/powercap/arm_scmi_powercap.c
+@@ -12,6 +12,7 @@
+ #include <linux/module.h>
+ #include <linux/powercap.h>
+ #include <linux/scmi_protocol.h>
++#include <linux/slab.h>
+ 
+ #define to_scmi_powercap_zone(z)		\
+ 	container_of(z, struct scmi_powercap_zone, zone)
+@@ -19,6 +20,8 @@
+ static const struct scmi_powercap_proto_ops *powercap_ops;
+ 
+ struct scmi_powercap_zone {
++	bool registered;
++	bool invalid;
+ 	unsigned int height;
+ 	struct device *dev;
+ 	struct scmi_protocol_handle *ph;
+@@ -32,6 +35,7 @@ struct scmi_powercap_root {
+ 	unsigned int num_zones;
+ 	struct scmi_powercap_zone *spzones;
+ 	struct list_head *registered_zones;
++	struct list_head scmi_zones;
+ };
+ 
+ static struct powercap_control_type *scmi_top_pcntrl;
+@@ -255,12 +259,6 @@ static void scmi_powercap_unregister_all_zones(struct scmi_powercap_root *pr)
+ 	}
+ }
+ 
+-static inline bool
+-scmi_powercap_is_zone_registered(struct scmi_powercap_zone *spz)
+-{
+-	return !list_empty(&spz->node);
+-}
+-
+ static inline unsigned int
+ scmi_powercap_get_zone_height(struct scmi_powercap_zone *spz)
+ {
+@@ -279,11 +277,46 @@ scmi_powercap_get_parent_zone(struct scmi_powercap_zone *spz)
+ 	return &spz->spzones[spz->info->parent_id];
+ }
+ 
++static int scmi_powercap_register_zone(struct scmi_powercap_root *pr,
++				       struct scmi_powercap_zone *spz,
++				       struct scmi_powercap_zone *parent)
++{
++	int ret = 0;
++	struct powercap_zone *z;
++
++	if (spz->invalid) {
++		list_del(&spz->node);
++		return -EINVAL;
++	}
++
++	z = powercap_register_zone(&spz->zone, scmi_top_pcntrl, spz->info->name,
++				   parent ? &parent->zone : NULL,
++				   &zone_ops, 1, &constraint_ops);
++	if (!IS_ERR(z)) {
++		spz->height = scmi_powercap_get_zone_height(spz);
++		spz->registered = true;
++		list_move(&spz->node, &pr->registered_zones[spz->height]);
++		dev_dbg(spz->dev, "Registered node %s - parent %s - height:%d\n",
++			spz->info->name, parent ? parent->info->name : "ROOT",
++			spz->height);
++	} else {
++		list_del(&spz->node);
++		ret = PTR_ERR(z);
++		dev_err(spz->dev,
++			"Error registering node:%s - parent:%s - h:%d - ret:%d\n",
++			spz->info->name,
++			parent ? parent->info->name : "ROOT",
++			spz->height, ret);
++	}
++
++	return ret;
++}
++
+ /**
+- * scmi_powercap_register_zone  - Register an SCMI powercap zone recursively
++ * scmi_zones_register- Register SCMI powercap zones starting from parent zones
+  *
++ * @dev: A reference to the SCMI device
+  * @pr: A reference to the root powercap zones descriptors
+- * @spz: A reference to the SCMI powercap zone to register
+  *
+  * When registering SCMI powercap zones with the powercap framework we should
+  * take care to always register zones starting from the root ones and to
+@@ -293,10 +326,10 @@ scmi_powercap_get_parent_zone(struct scmi_powercap_zone *spz)
+  * zones provided by the SCMI platform firmware is built to comply with such
+  * requirement.
+  *
+- * This function, given an SCMI powercap zone to register, takes care to walk
+- * the SCMI powercap zones tree up to the root looking recursively for
+- * unregistered parent zones before registering the provided zone; at the same
+- * time each registered zone height in such a tree is accounted for and each
++ * This function, given the set of SCMI powercap zones to register, takes care
++ * to walk the SCMI powercap zones trees up to the root registering any
++ * unregistered parent zone before registering the child zones; at the same
++ * time each registered-zone height in such a tree is accounted for and each
+  * zone, once registered, is stored in the @registered_zones array that is
+  * indexed by zone height: this way will be trivial, at unregister time, to walk
+  * the @registered_zones array backward and unregister all the zones starting
+@@ -314,57 +347,55 @@ scmi_powercap_get_parent_zone(struct scmi_powercap_zone *spz)
+  *
+  * Return: 0 on Success
+  */
+-static int scmi_powercap_register_zone(struct scmi_powercap_root *pr,
+-				       struct scmi_powercap_zone *spz)
++static int scmi_zones_register(struct device *dev,
++			       struct scmi_powercap_root *pr)
+ {
+ 	int ret = 0;
+-	struct scmi_powercap_zone *parent;
+-
+-	if (!spz->info)
+-		return ret;
++	unsigned int sp = 0, reg_zones = 0;
++	struct scmi_powercap_zone *spz, **zones_stack;
+ 
+-	parent = scmi_powercap_get_parent_zone(spz);
+-	if (parent && !scmi_powercap_is_zone_registered(parent)) {
+-		/*
+-		 * Bail out if a parent domain was marked as unsupported:
+-		 * only domains participating as leaves can be skipped.
+-		 */
+-		if (!parent->info)
+-			return -ENODEV;
++	zones_stack = kcalloc(pr->num_zones, sizeof(spz), GFP_KERNEL);
++	if (!zones_stack)
++		return -ENOMEM;
+ 
+-		ret = scmi_powercap_register_zone(pr, parent);
+-		if (ret)
+-			return ret;
+-	}
++	spz = list_first_entry_or_null(&pr->scmi_zones,
++				       struct scmi_powercap_zone, node);
++	while (spz) {
++		struct scmi_powercap_zone *parent;
+ 
+-	if (!scmi_powercap_is_zone_registered(spz)) {
+-		struct powercap_zone *z;
+-
+-		z = powercap_register_zone(&spz->zone,
+-					   scmi_top_pcntrl,
+-					   spz->info->name,
+-					   parent ? &parent->zone : NULL,
+-					   &zone_ops, 1, &constraint_ops);
+-		if (!IS_ERR(z)) {
+-			spz->height = scmi_powercap_get_zone_height(spz);
+-			list_add(&spz->node,
+-				 &pr->registered_zones[spz->height]);
+-			dev_dbg(spz->dev,
+-				"Registered node %s - parent %s - height:%d\n",
+-				spz->info->name,
+-				parent ? parent->info->name : "ROOT",
+-				spz->height);
+-			ret = 0;
++		parent = scmi_powercap_get_parent_zone(spz);
++		if (parent && !parent->registered) {
++			zones_stack[sp++] = spz;
++			spz = parent;
+ 		} else {
+-			ret = PTR_ERR(z);
+-			dev_err(spz->dev,
+-				"Error registering node:%s - parent:%s - h:%d - ret:%d\n",
+-				 spz->info->name,
+-				 parent ? parent->info->name : "ROOT",
+-				 spz->height, ret);
++			ret = scmi_powercap_register_zone(pr, spz, parent);
++			if (!ret) {
++				reg_zones++;
++			} else if (sp) {
++				/* Failed to register a non-leaf zone.
++				 * Bail-out.
++				 */
++				dev_err(dev,
++					"Failed to register non-leaf zone - ret:%d\n",
++					ret);
++				scmi_powercap_unregister_all_zones(pr);
++				reg_zones = 0;
++				goto out;
++			}
++			/* Pick next zone to process */
++			if (sp)
++				spz = zones_stack[--sp];
++			else
++				spz = list_first_entry_or_null(&pr->scmi_zones,
++							       struct scmi_powercap_zone,
++							       node);
+ 		}
+ 	}
+ 
++out:
++	kfree(zones_stack);
++	dev_info(dev, "Registered %d SCMI Powercap domains !\n", reg_zones);
++
+ 	return ret;
+ }
+ 
+@@ -408,6 +439,8 @@ static int scmi_powercap_probe(struct scmi_device *sdev)
+ 	if (!pr->registered_zones)
+ 		return -ENOMEM;
+ 
++	INIT_LIST_HEAD(&pr->scmi_zones);
++
+ 	for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
+ 		/*
+ 		 * Powercap domains are validate by the protocol layer, i.e.
+@@ -422,6 +455,7 @@ static int scmi_powercap_probe(struct scmi_device *sdev)
+ 		INIT_LIST_HEAD(&spz->node);
+ 		INIT_LIST_HEAD(&pr->registered_zones[i]);
+ 
++		list_add_tail(&spz->node, &pr->scmi_zones);
+ 		/*
+ 		 * Forcibly skip powercap domains using an abstract scale.
+ 		 * Note that only leaves domains can be skipped, so this could
+@@ -432,7 +466,7 @@ static int scmi_powercap_probe(struct scmi_device *sdev)
+ 			dev_warn(dev,
+ 				 "Abstract power scale not supported. Skip %s.\n",
+ 				 spz->info->name);
+-			spz->info = NULL;
++			spz->invalid = true;
+ 			continue;
+ 		}
+ 	}
+@@ -441,21 +475,12 @@ static int scmi_powercap_probe(struct scmi_device *sdev)
+ 	 * Scan array of retrieved SCMI powercap domains and register them
+ 	 * recursively starting from the root domains.
+ 	 */
+-	for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
+-		ret = scmi_powercap_register_zone(pr, spz);
+-		if (ret) {
+-			dev_err(dev,
+-				"Failed to register powercap zone %s - ret:%d\n",
+-				spz->info->name, ret);
+-			scmi_powercap_unregister_all_zones(pr);
+-			return ret;
+-		}
+-	}
++	ret = scmi_zones_register(dev, pr);
++	if (ret)
++		return ret;
+ 
+ 	dev_set_drvdata(dev, pr);
+ 
+-	dev_info(dev, "Registered %d SCMI Powercap domains !\n", pr->num_zones);
+-
+ 	return ret;
+ }
+ 
+-- 
+2.40.1
+
