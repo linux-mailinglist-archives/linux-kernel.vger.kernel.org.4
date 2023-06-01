@@ -2,47 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD457195C8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8867195D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbjFAIkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44784 "EHLO
+        id S231661AbjFAImL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232320AbjFAIj2 (ORCPT
+        with ESMTP id S231439AbjFAImJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:39:28 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C12819B;
-        Thu,  1 Jun 2023 01:38:07 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0Vk3n4AU_1685608664;
-Received: from 30.221.128.127(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0Vk3n4AU_1685608664)
+        Thu, 1 Jun 2023 04:42:09 -0400
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5078E7;
+        Thu,  1 Jun 2023 01:42:05 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R511e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0Vk3oFOT_1685608912;
+Received: from h68b04305.sqa.eu95.tbsite.net(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0Vk3oFOT_1685608912)
           by smtp.aliyun-inc.com;
-          Thu, 01 Jun 2023 16:38:04 +0800
-Message-ID: <9b4d26c9-bc63-3491-c118-60a345667583@linux.alibaba.com>
-Date:   Thu, 1 Jun 2023 16:37:42 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH net 2/2] net/smc: Don't use RMBs not mapped to new link in
- SMCRv2 ADD LINK
-To:     Wenjia Zhang <wenjia@linux.ibm.com>, kgraul@linux.ibm.com,
-        jaka@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
+          Thu, 01 Jun 2023 16:42:02 +0800
+From:   Wen Gu <guwen@linux.alibaba.com>
+To:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, jaka@linux.ibm.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
 Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <1685101741-74826-1-git-send-email-guwen@linux.alibaba.com>
- <1685101741-74826-3-git-send-email-guwen@linux.alibaba.com>
- <f134294c-2919-6069-d362-87a84c846690@linux.ibm.com>
- <34e6b564-a658-4461-ebec-f53dd80a9125@linux.alibaba.com>
- <f309d525-7e12-ee81-8d59-ad07f94f9e9d@linux.ibm.com>
-From:   Wen Gu <guwen@linux.alibaba.com>
-In-Reply-To: <f309d525-7e12-ee81-8d59-ad07f94f9e9d@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Subject: [PATCH net] net/smc: Avoid to access invalid RMBs' MRs in SMCRv1 ADD LINK CONT
+Date:   Thu,  1 Jun 2023 16:41:52 +0800
+Message-Id: <1685608912-124996-1-git-send-email-guwen@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,73 +39,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+SMCRv1 has a similar issue to SMCRv2 (see link below) that may access
+invalid MRs of RMBs when construct LLC ADD LINK CONT messages.
 
+ BUG: kernel NULL pointer dereference, address: 0000000000000014
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ PGD 0 P4D 0
+ Oops: 0000 [#1] PREEMPT SMP PTI
+ CPU: 5 PID: 48 Comm: kworker/5:0 Kdump: loaded Tainted: G W   E      6.4.0-rc3+ #49
+ Workqueue: events smc_llc_add_link_work [smc]
+ RIP: 0010:smc_llc_add_link_cont+0x160/0x270 [smc]
+ RSP: 0018:ffffa737801d3d50 EFLAGS: 00010286
+ RAX: ffff964f82144000 RBX: ffffa737801d3dd8 RCX: 0000000000000000
+ RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff964f81370c30
+ RBP: ffffa737801d3dd4 R08: ffff964f81370000 R09: ffffa737801d3db0
+ R10: 0000000000000001 R11: 0000000000000060 R12: ffff964f82e70000
+ R13: ffff964f81370c38 R14: ffffa737801d3dd3 R15: 0000000000000001
+ FS:  0000000000000000(0000) GS:ffff9652bfd40000(0000) knlGS:0000000000000000
+ CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ CR2: 0000000000000014 CR3: 000000008fa20004 CR4: 00000000003706e0
+ DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+ DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+ Call Trace:
+  <TASK>
+  smc_llc_srv_rkey_exchange+0xa7/0x190 [smc]
+  smc_llc_srv_add_link+0x3ae/0x5a0 [smc]
+  smc_llc_add_link_work+0xb8/0x140 [smc]
+  process_one_work+0x1e5/0x3f0
+  worker_thread+0x4d/0x2f0
+  ? __pfx_worker_thread+0x10/0x10
+  kthread+0xe5/0x120
+  ? __pfx_kthread+0x10/0x10
+  ret_from_fork+0x2c/0x50
+  </TASK>
 
-On 2023/5/31 04:34, Wenjia Zhang wrote:
-> 
-> 
-> 
-> Hi Wen,
-> 
-> Sorry for the late answer because of the public holiday here!
-> 
-> I really like the test scenario, thank you for the elaboration and the fixes!
-> They look good to me.
-> 
-> Why I asked that was that the first patch looked very reasonable, but I was wondering why I didn't meet any problem with 
-> that before ;-) and if it would trigger some problem during processing the SMCRv1 ADD Link Continuation Messages. After 
-> checking the code again, I don't think there would be any problem with the patch, because in the case of processing the 
-> SMCRv1 ADD Link Continuation Messages, it's about the same RMB.
-> 
-> Hi @Paolo, I would appreciate it if you could give us more time to review and test the patches. Because we have to make 
-> sure that they can work on our platform (s390) without problem, not only on x86.
-> 
-> Thanks
-> Wenjia
-> 
-> 
+When an alernate RNIC is available in system, SMC will try to add a new
+link based on the RNIC for resilience. All the RMBs in use will be mapped
+to the new link. Then the RMBs' MRs corresponding to the new link will
+be filled into LLC messages. For SMCRv1, they are ADD LINK CONT messages.
 
-Inspired by your comments, I check the SMCRv1 and find it has the similar issue in smc_llc_add_link_cont().
-The cause and way to reproduce it are similar to the issue in SMCRv2. I will fix this as well.
+However smc_llc_add_link_cont() may mistakenly access to unused RMBs which
+haven't been mapped to the new link and have no valid MRs, thus causing a
+crash. So this patch fixes it.
 
-[  361.813390] BUG: kernel NULL pointer dereference, address: 0000000000000014
-[  361.814121] #PF: supervisor read access in kernel mode
-[  361.814646] #PF: error_code(0x0000) - not-present page
-[  361.815160] PGD 0 P4D 0
-[  361.815431] Oops: 0000 [#1] PREEMPT SMP PTI
-[  361.815866] CPU: 5 PID: 48 Comm: kworker/5:0 Kdump: loaded Tainted: G        W   E      6.4.0-rc3+ #49
-[  361.817952] Workqueue: events smc_llc_add_link_work [smc]
-[  361.818527] RIP: 0010:smc_llc_add_link_cont+0x160/0x270 [smc]
-[  361.820973] RSP: 0018:ffffa737801d3d50 EFLAGS: 00010286
-[  361.821517] RAX: ffff964f82144000 RBX: ffffa737801d3dd8 RCX: 0000000000000000
-[  361.822246] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff964f81370c30
-[  361.822957] RBP: ffffa737801d3dd4 R08: ffff964f81370000 R09: ffffa737801d3db0
-[  361.823678] R10: 0000000000000001 R11: 0000000000000060 R12: ffff964f82e70000
-[  361.824409] R13: ffff964f81370c38 R14: ffffa737801d3dd3 R15: 0000000000000001
-[  361.825119] FS:  0000000000000000(0000) GS:ffff9652bfd40000(0000) knlGS:0000000000000000
-[  361.825934] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  361.826515] CR2: 0000000000000014 CR3: 000000008fa20004 CR4: 00000000003706e0
-[  361.827251] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  361.827989] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  361.828712] Call Trace:
-[  361.828964]  <TASK>
-[  361.829182]  smc_llc_srv_rkey_exchange+0xa7/0x190 [smc]
-[  361.829726]  smc_llc_srv_add_link+0x3ae/0x5a0 [smc]
-[  361.830246]  smc_llc_add_link_work+0xb8/0x140 [smc]
-[  361.830752]  process_one_work+0x1e5/0x3f0
-[  361.831173]  worker_thread+0x4d/0x2f0
-[  361.831531]  ? __pfx_worker_thread+0x10/0x10
-[  361.831925]  kthread+0xe5/0x120
-[  361.832239]  ? __pfx_kthread+0x10/0x10
-[  361.832630]  ret_from_fork+0x2c/0x50
-[  361.833004]  </TASK>
-[  361.833236] Modules linked in: binfmt_misc(E) smc_diag(E) smc(E) rfkill(E) intel_rapl_msr(E) intel_rapl_common(E) 
-mousedev(E) psmouse(E) i2c_piix4(E) pcspkr(E) ip_tables(E) mlx5_ib(E) ib_uverbs(E) ib_core(E) cirrus(E) ata_generic(E) 
-drm_shmem_helper(E) drm_kms_helper(E) syscopyarea(E) ata_piix(E) sysfillrect(E) crct10dif_pclmul(E) sysimgblt(E) 
-mlx5_core(E) crc32_pclmul(E) drm(E) virtio_net(E) mlxfw(E) crc32c_intel(E) ghash_clmulni_intel(E) net_failover(E) 
-psample(E) i2c_core(E) failover(E) pci_hyperv_intf(E) serio_raw(E) libata(E) dm_mirror(E) dm_region_hash(E) dm_log(E) 
-dm_mod(E)
-[  361.839180] CR2: 0000000000000014
+Fixes: 87f88cda2128 ("net/smc: rkey processing for a new link as SMC client")
+Link: https://lore.kernel.org/r/1685101741-74826-3-git-send-email-guwen@linux.alibaba.com
+Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+---
+ net/smc/smc_llc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-Wen Gu
+diff --git a/net/smc/smc_llc.c b/net/smc/smc_llc.c
+index 7a8d916..90f0b60 100644
+--- a/net/smc/smc_llc.c
++++ b/net/smc/smc_llc.c
+@@ -851,6 +851,8 @@ static int smc_llc_add_link_cont(struct smc_link *link,
+ 	addc_llc->num_rkeys = *num_rkeys_todo;
+ 	n = *num_rkeys_todo;
+ 	for (i = 0; i < min_t(u8, n, SMC_LLC_RKEYS_PER_CONT_MSG); i++) {
++		while (*buf_pos && !(*buf_pos)->used)
++			*buf_pos = smc_llc_get_next_rmb(lgr, buf_lst, *buf_pos);
+ 		if (!*buf_pos) {
+ 			addc_llc->num_rkeys = addc_llc->num_rkeys -
+ 					      *num_rkeys_todo;
+@@ -867,8 +869,6 @@ static int smc_llc_add_link_cont(struct smc_link *link,
+ 
+ 		(*num_rkeys_todo)--;
+ 		*buf_pos = smc_llc_get_next_rmb(lgr, buf_lst, *buf_pos);
+-		while (*buf_pos && !(*buf_pos)->used)
+-			*buf_pos = smc_llc_get_next_rmb(lgr, buf_lst, *buf_pos);
+ 	}
+ 	addc_llc->hd.common.llc_type = SMC_LLC_ADD_LINK_CONT;
+ 	addc_llc->hd.length = sizeof(struct smc_llc_msg_add_link_cont);
+-- 
+1.8.3.1
+
