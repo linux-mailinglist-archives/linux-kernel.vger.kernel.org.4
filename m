@@ -2,138 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A110E71F4F2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7CC71F4F0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233173AbjFAVlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 17:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58138 "EHLO
+        id S233075AbjFAVlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 17:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233252AbjFAVlo (ORCPT
+        with ESMTP id S233269AbjFAVl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 17:41:44 -0400
-Received: from mail-4022.proton.ch (mail-4022.proton.ch [185.70.40.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0249C1AB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 14:41:31 -0700 (PDT)
-Date:   Thu, 01 Jun 2023 21:41:15 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uplinklabs.net;
-        s=protonmail; t=1685655688; x=1685914888;
-        bh=ncMVbNCtSXe0DvnH0neUKu6XvupvEmA5tfm8tyhtji0=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=eJT6VUtdeyED77CihDB3HvGSY7PsZ4IPKLgt9ikls1HSxZTKlFIp9OMj3I6vFkKxj
-         4Q71uP1dDu5e0AAfR00kGQzYyd9pXSmddw5sQRauaSOJA9sAp5OaLAOIpkG6rtAgGH
-         KVD6304oI6a9XDO5F6QEIuzuAdhybaj39Ig5o/j8er5E1bO5H5JoqGinzU8/MAaHr0
-         c6Nd/jJEyJdO3gJGNTR5/xKU21N05VT3CY57yJhzWW5hbBPzAXMMB775/55VXc3UXi
-         XBeijehgmVeXjGlpUG6dmy2kxrlRZIUoJvUy6nMs3XgtgDzmcoRPkUADILlJ6ngXCo
-         Ia9c9jgUvPonQ==
-To:     Peter Zijlstra <peterz@infradead.org>
-From:   Steven Noonan <steven@uplinklabs.net>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>, kernel@collabora.com
-Subject: Re: Direct rdtsc call side-effect
-Message-ID: <YveIgyZYN48CEPKlxf6r_CfVBGuON83brWVxnVJGtXW70bDprPOiAtEMeKELDJj3lVYuZm7fTDQnMIuheMN01YfqfWbCGYia0uWcWIx59oM=@uplinklabs.net>
-In-Reply-To: <20230601203127.GY4253@hirez.programming.kicks-ass.net>
-References: <6719fb05-382c-8ec4-ccda-72798906a54b@collabora.com> <87mt1jeax1.ffs@tglx> <87h6rrdoy0.ffs@tglx> <L9sTQNWVFoNxz-HmzFoXBX4twp84wuAx5Mf4LcxWw9k0rTAXI32rSl7WEOr7058iN6_Nyf8fLN-Ye3sq5THHjJCKG2vQLlpnVs77kKlLFV4=@uplinklabs.net> <20230601203127.GY4253@hirez.programming.kicks-ass.net>
-Feedback-ID: 10620438:user:proton
+        Thu, 1 Jun 2023 17:41:26 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43D61AB;
+        Thu,  1 Jun 2023 14:41:20 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30adc51b65cso1284117f8f.0;
+        Thu, 01 Jun 2023 14:41:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685655679; x=1688247679;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=axm7gWfA5Bz2zISfLReqOuWM4uugQUqN8yYC/Fksz6E=;
+        b=YZSlWv4ZRTQrtBhg3PQzZua0HI+2SFQ6DVd2Bx8xgGekGmRuK9f8yJ5kXzevfEebGJ
+         bucJgtW1H96KQ9FvVilYQGKt3XZoTwjQEwF2O0W1xpw1L8r/MC8vgMaeBIF52HNhL50P
+         /NSkVOvlvcL0qcW8QPRHK71tAbxiyBwhld75ewICg7hsBYfqExnDnK7hzYW7vWyaMVIK
+         9fwPDib6jPpa7owSGwZfa/cyHecswJxl8TExBrc1+4kpqHQoOJkAeESleA6xKBT3YB2W
+         msg6fEThLJQo/ha+hc6/maQT3ptl156aGXgRK3enrAhrHR2yzAcpY3ONhaXCn0H2vIxo
+         e0bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685655679; x=1688247679;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=axm7gWfA5Bz2zISfLReqOuWM4uugQUqN8yYC/Fksz6E=;
+        b=jhnfS260KmITXM/KTGxhPDiCHyKQgW9bJzCuec8UEIiv7Gl0vMYjLU+LV+vakqhthl
+         3LHhRUNECVOifuwzDOJhtxuoXYStG1xgEQretJugWUZFyujrLt4MaCeWzbAr56FDtBxW
+         wN575bbxD0iBXJfUVY2Pd255v2XHCWeFrWekNchoDqIYyeud9Qx2ViVkjVeOqTANZ3zS
+         MPWdcY8IH4Ez4HRoCKJ1aaD3/dAev0doScogj1SJyc8f49KEsfhrnctRn/HVLY+Xihc/
+         Y6WrzZlUTR3/2nbher86zvTvukVychZf7EX0JLvAnenj7p/3W5db/ql6fWXnw9fz1wn7
+         c32A==
+X-Gm-Message-State: AC+VfDzDNjALw/jaF9qMFScPgZYMA3Ci1yZP+j1cCXfT70Uou0bhoIAV
+        9Ty5xFFcjYokj66Dp77z0VF2W8ML9v8=
+X-Google-Smtp-Source: ACHHUZ7LYqeF93KRE7QDwkmLW/473nUeONnAulQMEPgBiMAGpBIIpvYu2qiK+F5rppMScPdQKgWYKg==
+X-Received: by 2002:adf:ce81:0:b0:306:30ea:a060 with SMTP id r1-20020adfce81000000b0030630eaa060mr2860269wrn.51.1685655678619;
+        Thu, 01 Jun 2023 14:41:18 -0700 (PDT)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id l9-20020adfe589000000b00307c8d6b4a0sm11440534wrm.26.2023.06.01.14.41.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 14:41:17 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 22:41:16 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH v1 2/3] selftests/mm: gup_longterm: new functional test
+ for FOLL_LONGTERM
+Message-ID: <85dc50c7-459a-4cbb-abd3-16f35a8e10b0@lucifer.local>
+References: <20230519102723.185721-1-david@redhat.com>
+ <20230519102723.185721-3-david@redhat.com>
+ <be2346e4-e8c0-4470-9bf4-59eb864063a8@lucifer.local>
+ <fa6009d4-643e-97ec-5317-a57a535e0495@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pgp-signature"; micalg=pgp-sha512; boundary="------66abe1e2681810bd2ab224c8c40637c46d62c8a8760c5753c9d567431424fd5c"; charset=utf-8
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fa6009d4-643e-97ec-5317-a57a535e0495@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------66abe1e2681810bd2ab224c8c40637c46d62c8a8760c5753c9d567431424fd5c
-Content-Type: multipart/mixed;boundary=---------------------b7acdc7d3b503f22c0cb7da76c5decd3
+On Thu, Jun 01, 2023 at 10:16:41AM +0200, David Hildenbrand wrote:
+> On 28.05.23 17:03, Lorenzo Stoakes wrote:
+> > On Fri, May 19, 2023 at 12:27:22PM +0200, David Hildenbrand wrote:
+> > > Let's add a new test for checking whether GUP long-term page pinning
+> > > works as expected (R/O vs. R/W, MAP_PRIVATE vs. MAP_SHARED, GUP vs.
+> > > GUP-fast). Note that COW handling with long-term R/O pinning in private
+> > > mappings, and pinning of anonymous memory in general, is tested by the
+> > > COW selftest. This test, therefore, focuses on page pinning in
+> > > file mappings.
+> > >
+> > > The most interesting case is probably the "local tmpfile" case, as that
+> > > will likely end up on a "real" filesystem such as ext4 or xfs, not on a
+> > > virtual one like tmpfs or hugetlb where any long-term page pinning is
+> > > always expected to succeed.
+> > >
+> > > For now, only add tests that use the "/sys/kernel/debug/gup_test"
+> > > interface. We'll add tests based on liburing separately next.
+> > >
+> > > Signed-off-by: David Hildenbrand <david@redhat.com>
+> > > ---
+>
+> [...]
+>
+> > > +static void do_test(int fd, size_t size, enum test_type type, bool shared)
+> > > +{
+> > > +	__fsword_t fs_type = get_fs_type(fd);
+> > > +	bool should_work;
+> > > +	char *mem;
+> > > +	int ret;
+> > > +
+> > > +	if (ftruncate(fd, size)) {
+> > > +		ksft_test_result_fail("ftruncate() failed\n");
+> > > +		return;
+> > > +	}
+> > > +
+> > > +	if (fallocate(fd, 0, 0, size)) {
+> > > +		if (size == pagesize)
+> > > +			ksft_test_result_fail("fallocate() failed\n");
+> > > +		else
+> > > +			ksft_test_result_skip("need more free huge pages\n");
+> > > +		return;
+> > > +	}
+> > > +
+> > > +	mem = mmap(NULL, size, PROT_READ | PROT_WRITE,
+> > > +		   shared ? MAP_SHARED : MAP_PRIVATE, fd, 0);
+> > > +	if (mem == MAP_FAILED) {
+> > > +		if (size == pagesize || shared)
+> > > +			ksft_test_result_fail("mmap() failed\n");
+> > > +		else
+> > > +			ksft_test_result_skip("need more free huge pages\n");
+> > > +		return;
+> > > +	}
+> > > +
+> > > +	/*
+> > > +	 * Fault in the page writable such that GUP-fast can eventually pin
+> > > +	 * it immediately.
+> > > +	 */
+> > > +	memset(mem, 0, size);
+> >
+>
+> For shared mappings, MAP_POPULATE will not fault-in the pages writable. See
+> mm/gup.c:populate_vma_page_range().
 
------------------------b7acdc7d3b503f22c0cb7da76c5decd3
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;charset=utf-8
+Ughhh yeah, I was aware but hadn't considered the shared case, here. Fair
+enough.
 
-On Thursday, June 1st, 2023 at 1:31 PM, Peter Zijlstra <peterz@infradead.o=
-rg> wrote:
-> What about kernel based emulation? You could tie it into user_dispatch
-> and have a user_dispatch tsc offset.
-> =
+>
+> [There is also the case that mmap() doesn't fail if populate fails, but
+> that's only a side note regarding weird semantics of MAP_POPULATE]
 
+Yes this is... a thing. And mm_populate() explicitly (void)-casting
+__mm_populate() is the cherry on that particular cake :)
 
-> So regular kernel emulation simply returns the native value (keeps the
-> VDSO working for one), but then from a user_dispatch range, it returns
-> +offset.
-> =
+>
+> [...]
+>
+> > > +	int flags = MFD_HUGETLB;
+> > > +	int fd;
+> > > +
+> > > +	ksft_print_msg("[RUN] %s ... with memfd hugetlb (%zu kB)\n", desc,
+> > > +		       hugetlbsize / 1024);
+> > > +
+> > > +	flags |= __builtin_ctzll(hugetlbsize) << MFD_HUGE_SHIFT;
+> >
+> > Hm this feels a little cute :)
+>
+> It's a weird interfacing, having to specify the desired size via flags ...
+> see the man page of memfd_create, which links to the man page of mmap: "the
+> desired huge page size can be configured by encoding the base-2 logarithm of
+> the desired page size in the six bits at the offset MAP_HUGE_SHIFT".
+>
+> FWIW, we're using the same approach in cow.c already [and other memfd users
+> like QEMU do it just like that, using ctz].
 
+Ack, yeah I had assumed so, just felt slightly odd. Thanks for the
+explanation!
 
-> That is; how slow is the below?
+>
+> [...]
+>
+> > > diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> > > index 4893eb60d96d..b6b1eb6a8a6b 100644
+> > > --- a/tools/testing/selftests/mm/run_vmtests.sh
+> > > +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> > > @@ -24,7 +24,7 @@ separated by spaces:
+> > >   - mmap
+> > >   	tests for mmap(2)
+> > >   - gup_test
+> > > -	tests for gup using gup_test interface
+> > > +	tests for gup
+> >
+> > Super nitty again, but I'm guessing this means the CONFIG_GUP_TEST
+> > interface, perhaps worth keeping?
+>
+> With this patch, agreed. But not longer with the next patch -- guess I
+> simplified when splitting it up. If there are no strong feelings I'll leave
+> it in this patch.
+>
+> [...]
+>
+> > >
+> >
+> > OK this patch is really nice + well implemented, I can only point out a
+> > couple EXTREMELY nitty comments :) Thanks very much for adding a test for
+> > this, it's super useful!
+> >
+> > Therefore,
+> >
+> > Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> >
+>
+> Thanks for the review! My selftest patches rarely get that much attention,
+> so highly appreciated :)
 
-It's around 1800-1900 clock cycles on this system (modified patch attached=
-, compile fix + rdtscp support).
+No worries, this is very much in my wheelhouse (relating directly to my
+recent GUP series) so this is actually very useful and relevant to me. Also
+I am very much in favour of improved test coverage, is a bug bear of mine.
 
-It's definitely better than the userspace signal handler (20x vs 100x). Al=
-so compared to reading one of the clock_gettime() clocks when current_cloc=
-ksource is 'hpet', it's about twice as fast. So that's at least in the rea=
-lm of being usable.
-
-Since faulting would still make the vDSO clocks go through this path we'd =
-have to be careful that whatever offsets we throw into this path don't aff=
-ect the correctness of the other clocks.
------------------------b7acdc7d3b503f22c0cb7da76c5decd3
-Content-Type: application/octet-stream; filename="tsc-test.patch"; name="tsc-test.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="tsc-test.patch"; name="tsc-test.patch"
-
-ZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC90cmFwcy5jIGIvYXJjaC94ODYva2VybmVsL3Ry
-YXBzLmMKaW5kZXggZDMxN2RjM2QwNmEzLi5hNjA3MmM0ZTBhOTcgMTAwNjQ0Ci0tLSBhL2FyY2gv
-eDg2L2tlcm5lbC90cmFwcy5jCisrKyBiL2FyY2gveDg2L2tlcm5lbC90cmFwcy5jCkBAIC02NDUs
-NiArNjQ1LDM2IEBAIHN0YXRpYyBib29sIGZpeHVwX2lvcGxfZXhjZXB0aW9uKHN0cnVjdCBwdF9y
-ZWdzICpyZWdzKQogCXJldHVybiB0cnVlOwogfQogCitzdGF0aWMgYm9vbCBmaXh1cF9yZHRzY19l
-eGNlcHRpb24oc3RydWN0IHB0X3JlZ3MgKnJlZ3MpCit7CisJdW5zaWduZWQgaW50IGJ5dGVzOwor
-CXVuc2lnbmVkIGxvbmcgaXA7CisJdTMyIGVheCwgZWN4LCBlZHg7CisKKwlpZiAoaW5zbl9nZXRf
-ZWZmZWN0aXZlX2lwKHJlZ3MsICZpcCkpCisJCXJldHVybiBmYWxzZTsKKworCWlmIChnZXRfdXNl
-cihieXRlcywgKGNvbnN0IGludCBfX3VzZXIgKilpcCkpCisJCXJldHVybiBmYWxzZTsKKworCWlm
-ICgoYnl0ZXMgJiAweEZGRkYpID09IDB4MzEwZikgeworCQlhc20gdm9sYXRpbGUgKCJyZHRzYyIg
-OiAiPWEiIChlYXgpLCAiPWQiIChlZHgpIDo6KTsKKwkJcmVncy0+YXggPSBlYXg7CisJCXJlZ3Mt
-PmR4ID0gZWR4OworCQlyZWdzLT5pcCArPSAyOworCQlyZXR1cm4gdHJ1ZTsKKwl9IGVsc2UgaWYg
-KChieXRlcyAmIDB4RkZGRkZGKSA9PSAweGY5MDEwZikgeworCQlhc20gdm9sYXRpbGUgKCJyZHRz
-Y3AiIDogIj1hIiAoZWF4KSwgIj1kIiAoZWR4KSwgIj1jIiAoZWN4KTo6KTsKKwkJcmVncy0+YXgg
-PSBlYXg7CisJCXJlZ3MtPmN4ID0gZWN4OworCQlyZWdzLT5keCA9IGVkeDsKKwkJcmVncy0+aXAg
-Kz0gMzsKKwkJcmV0dXJuIHRydWU7CisJfQorCisJcmV0dXJuIGZhbHNlOworfQorCiAvKgogICog
-VGhlIHVucHJpdmlsZWdlZCBFTlFDTUQgaW5zdHJ1Y3Rpb24gZ2VuZXJhdGVzICNHUHMgaWYgdGhl
-CiAgKiBJQTMyX1BBU0lEIE1TUiBoYXMgbm90IGJlZW4gcG9wdWxhdGVkLiAgSWYgcG9zc2libGUs
-IHBvcHVsYXRlCkBAIC03NTIsNiArNzgyLDkgQEAgREVGSU5FX0lEVEVOVFJZX0VSUk9SQ09ERShl
-eGNfZ2VuZXJhbF9wcm90ZWN0aW9uKQogCQlpZiAoZml4dXBfaW9wbF9leGNlcHRpb24ocmVncykp
-CiAJCQlnb3RvIGV4aXQ7CiAKKwkJaWYgKGZpeHVwX3JkdHNjX2V4Y2VwdGlvbihyZWdzKSkKKwkJ
-CWdvdG8gZXhpdDsKKwogCQlpZiAoZml4dXBfdmRzb19leGNlcHRpb24ocmVncywgWDg2X1RSQVBf
-R1AsIGVycm9yX2NvZGUsIDApKQogCQkJZ290byBleGl0OwogCg==
------------------------b7acdc7d3b503f22c0cb7da76c5decd3--
-
---------66abe1e2681810bd2ab224c8c40637c46d62c8a8760c5753c9d567431424fd5c
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-Version: ProtonMail
-
-wnUEARYKACcFgmR5EGIJkAi2TYeeRSZQFiEE707zOy6TKdatSeTPCLZNh55F
-JlAAAPDAAP4uwiUg9w+2pjjQun/Or7s8ILn75ADZ364ArYdpgetOHgEAhFh6
-nfHKyAB9fLR/4Mgs/2KZvBGrn/lHGzzSy9IlNQs=
-=Y+zl
------END PGP SIGNATURE-----
-
-
---------66abe1e2681810bd2ab224c8c40637c46d62c8a8760c5753c9d567431424fd5c--
-
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>
