@@ -2,74 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1BE719739
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F82719740
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232634AbjFAJkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
+        id S232792AbjFAJkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbjFAJjr (ORCPT
+        with ESMTP id S232227AbjFAJkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:39:47 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3D210C6;
-        Thu,  1 Jun 2023 02:39:21 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-96f7377c86aso82331966b.1;
-        Thu, 01 Jun 2023 02:39:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685612354; x=1688204354;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rC5Mt14VowRy48GhWbY/bbPfnc3e4XQZGJKCwvTP6ko=;
-        b=fmuq76LBD/BKMfC3X4c2kFRL8sTgZbczaJn52qRjd8YtoPzFDjCEUBSzpNujsGujFy
-         XivSodLO+1PFuPikCZ6/WWYhw6Spa1d0HkH7WonfCbAfeUSEcGOAtwrEv5J9hWalGlEx
-         VA6zd7rWZKjii/15yOj6sz3UkwI4isdyDBbSB2ZVydBC/frwV0O6gFLz8QXobXAojT5P
-         lQFNhZU3tONYzX6mZDcS9g6TsvAd8XoAl39xDPdKNRtpaVp6h6bh9zxWVgrZrtxVpGfU
-         fyv361XSbQfjBP9JzSkZeUWLU/hBf5Xt7vJO2PRrYK/PiWICFFWXkOT9nf9bfu6/tAj9
-         lb4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685612354; x=1688204354;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rC5Mt14VowRy48GhWbY/bbPfnc3e4XQZGJKCwvTP6ko=;
-        b=E3TC6O9fDcdWA8bxdPfC3juNIoiAAP7cNpLxU2v/qyowtEYnoa4q9+w3iCSz9Fxg0b
-         DR3FWmjhuDzFD7kXdTX6E4u9y7pdXc6L1XBgnsH2TZYc9wvOi+b2eFkwIpw5yM/7c5Po
-         kjrxK/4g0OeZR9dSMtzbKEX2CYrZAHOTV4VHlI/ZF6HDgqJNTHE71JLhJxxJJ8QlwpXR
-         xicKI5lh9MTmfGbRkWNQ2IwJv/MiyOUxSKHKRaanJmp0i3dIXMjmNAnX3JH80fGbJyuX
-         yWT6MJyFDV1x6lMZVBEJnGRuqLUaGzIbeIqyS9MHAzTtSLFx4A1WLuRzOwnxHrhw9BEP
-         v86Q==
-X-Gm-Message-State: AC+VfDx7L1Oc/SKb1c2wuSTcQQN1xzUUb/waFxnFQr4+kWihsn8dd7SW
-        YgYkgA08lMD7apgdultUh1M=
-X-Google-Smtp-Source: ACHHUZ6ILEXI3QJmp4nRG4KOpkeYq8Pt7UaWqDtHvvuvoVXfwFQaWKwGPE2d8M3iV0SJByYpeyRvow==
-X-Received: by 2002:a17:907:3fa8:b0:973:93d6:189f with SMTP id hr40-20020a1709073fa800b0097393d6189fmr8278145ejc.61.1685612353929;
-        Thu, 01 Jun 2023 02:39:13 -0700 (PDT)
-Received: from orome (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id l2-20020a056402230200b00510d110db58sm6826402eda.80.2023.06.01.02.39.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 02:39:13 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 11:39:11 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     jckuo@nvidia.com, vkoul@kernel.org, kishon@kernel.org,
-        jonathanh@nvidia.com, nkristam@nvidia.com,
-        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] phy: tegra: xusb: check return value of devm_kzalloc()
-Message-ID: <ZHhnP506sBQ3EGGf@orome>
-References: <20230531073950.145339-1-claudiu.beznea@microchip.com>
+        Thu, 1 Jun 2023 05:40:25 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA01818C;
+        Thu,  1 Jun 2023 02:40:05 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3517cRGl015717;
+        Thu, 1 Jun 2023 09:39:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=4niwuDJfbdAZvAjkQw3lg4yiatiTUKprN86ccKm4Fog=;
+ b=FMbUWxR0T2BqriEfede7MR2VNnZfECZcpQq96CQ6I1230bBrZuhZXHgMsB18qauEtpg+
+ vd4EhjphtMhayZYh6wNgs9DpG8zwlLYa5dO3swzENvkjxNPROg0WVMGZjDuweEM3ZGeN
+ wjAczfeK0kW7O5PsCSw9SWpcCYLWqis0srD6XKgV+n7hvJDmEBwbVzVKaK+2IUbRbxVq
+ v4MrIt77PwpQ5jt8Wg5GAjrD35E1NpbiLp6Oi4C61H6Qp2Y/xykGLhMotz36tSE3L1BI
+ 156SpNNCuU2zsI5+qQTaGNffv7/bcK4uBaEYcihMq5UK13v7So5CZlGPQVyQNl9ZUUN6 KA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwx8qbknp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 09:39:31 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3519dUUD008114
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Jun 2023 09:39:30 GMT
+Received: from [10.50.56.241] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
+ 02:39:25 -0700
+Message-ID: <574f6333-80b3-b54d-ef3c-12ba12114f5a@quicinc.com>
+Date:   Thu, 1 Jun 2023 15:09:21 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SzK0EoW6aJTj4hu0"
-Content-Disposition: inline
-In-Reply-To: <20230531073950.145339-1-claudiu.beznea@microchip.com>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v4 16/17] media: venus: Use newly-introduced
+ hfi_buffer_requirements accessors
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Hans Verkuil <hans.verkuil@cisco.com>
+CC:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Marijn Suijten" <marijn.suijten@somainline.org>
+References: <20230228-topic-venus-v4-0-feebb2f6e9b8@linaro.org>
+ <20230228-topic-venus-v4-16-feebb2f6e9b8@linaro.org>
+From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
+In-Reply-To: <20230228-topic-venus-v4-16-feebb2f6e9b8@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -2CHr1l1NRWBfypP9JzVhzuS2X_aqMrM
+X-Proofpoint-GUID: -2CHr1l1NRWBfypP9JzVhzuS2X_aqMrM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_06,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 impostorscore=0 malwarescore=0 clxscore=1015
+ spamscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306010085
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,54 +95,115 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---SzK0EoW6aJTj4hu0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 31, 2023 at 10:39:50AM +0300, Claudiu Beznea wrote:
-> devm_kzalloc() returns a pointer to dynamically allocated memory.
-> Pointer could be NULL in case allocation fails. Check pointer validity.
-> Identified with coccinelle (kmerr.cocci script).
->=20
-> Fixes: f67213cee2b3 ("phy: tegra: xusb: Add usb-role-switch support")
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+On 5/30/2023 6:00 PM, Konrad Dybcio wrote:
+> Now that we have a way which is independent of the HFI version to set
+> the correct fields in hfi_buffer_requirements, use it!
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Reviewed-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+
 > ---
->=20
-> Hi,
->=20
-> This has been addressed using kmerr.cocci script proposed for update
-> at [1].
->=20
-> Thank you,
-> Claudiu Beznea
->=20
-> [1] https://lore.kernel.org/all/20230530074044.1603426-1-claudiu.beznea@m=
-icrochip.com/
->=20
->  drivers/phy/tegra/xusb.c | 3 +++
->  1 file changed, 3 insertions(+)
-
-Acked-by: Thierry Reding <treding@nvidia.com>
-
---SzK0EoW6aJTj4hu0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmR4Zz0ACgkQ3SOs138+
-s6GGHBAAtshFSZ3QcyCHwyKBFbTQGF3yAnYM6G6AkNLNP6wp3gPNnFalHh5khzoz
-uOWAroLAJrkmk9BLwwonPFbwdirJW7tkJzhc8Ed2wuEqpHoqnri26zXJerzUIVqZ
-nRSzIqgLVLZberDqE7wtWORJe/DEvJZm3nVi0Fm9UvpUUDaQERId4dznkMz6RD8K
-8Ir7AOy8UubrL3eWUO82suI986h8P7wSSF5bf99TChpzwkamiFV/HtbXUmRez/Ve
-JdBpS7UyflCycZc/5toHvRMZiOBnUbeZKqtApRJ6P/ef5Yc0uEd1TcIkq5EPhNw2
-ik8PO1g9Uktykvr5nJG13uUj11ESd8avT5yI/+PL7y4g/l5qWFWxtH84chbrZD+5
-0NcPWcoZqtP9wMvzi347zU+nD4TVhRPU0F9ATCSYr7LbKrbmrJSpb7FZNTPpkx2b
-YLSni3X+d3Q74XxhP9lS+0G1gd3G4upCdD0QwAEVAbvk5iMMVPCknzibariu5mfI
-7gMZTBwynWXFV8F1NFiIhvFPU+0+u+lPys+hi6tMoP9Ly4d/unJqQxJ3MAmU4PT8
-3xpMQacse1AK2qYuU6HRM8KYRC7rSZw4syOdW5Tf4w//cC89IDWKiu2w3FNQ8KSo
-Hs/baYySpA5iUCFBHnMXhyQnr3hIjwdeZPD/cH15VozAKLLdPP0=
-=qovl
------END PGP SIGNATURE-----
-
---SzK0EoW6aJTj4hu0--
+>  drivers/media/platform/qcom/venus/helpers.c        |  5 +++--
+>  .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   | 22 +++++++++++-----------
+>  2 files changed, 14 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+> index b70bd3dac4df..8295542e1a7c 100644
+> --- a/drivers/media/platform/qcom/venus/helpers.c
+> +++ b/drivers/media/platform/qcom/venus/helpers.c
+> @@ -668,6 +668,7 @@ int venus_helper_get_bufreq(struct venus_inst *inst, u32 type,
+>  			    struct hfi_buffer_requirements *req)
+>  {
+>  	u32 ptype = HFI_PROPERTY_CONFIG_BUFFER_REQUIREMENTS;
+> +	enum hfi_version ver = inst->core->res->hfi_version;
+>  	union hfi_get_property hprop;
+>  	unsigned int i;
+>  	int ret;
+> @@ -675,12 +676,12 @@ int venus_helper_get_bufreq(struct venus_inst *inst, u32 type,
+>  	memset(req, 0, sizeof(*req));
+>  
+>  	if (type == HFI_BUFFER_OUTPUT || type == HFI_BUFFER_OUTPUT2)
+> -		req->count_min = inst->fw_min_cnt;
+> +		hfi_bufreq_set_count_min(req, ver, inst->fw_min_cnt);
+>  
+>  	ret = platform_get_bufreq(inst, type, req);
+>  	if (!ret) {
+>  		if (type == HFI_BUFFER_OUTPUT || type == HFI_BUFFER_OUTPUT2)
+> -			inst->fw_min_cnt = req->count_min;
+> +			inst->fw_min_cnt = hfi_bufreq_get_count_min(req, ver);
+>  		return 0;
+>  	}
+>  
+> diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
+> index e97ff8cf6d64..f5a655973c08 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
+> @@ -1215,24 +1215,24 @@ static int bufreq_dec(struct hfi_plat_buffers_params *params, u32 buftype,
+>  
+>  	out_min_count = output_buffer_count(VIDC_SESSION_TYPE_DEC, codec);
+>  	/* Max of driver and FW count */
+> -	out_min_count = max(out_min_count, bufreq->count_min);
+> +	out_min_count = max(out_min_count, hfi_bufreq_get_count_min(bufreq, version));
+>  
+>  	bufreq->type = buftype;
+>  	bufreq->region_size = 0;
+> -	bufreq->count_min = 1;
+>  	bufreq->count_actual = 1;
+> -	bufreq->hold_count = 1;
+> +	hfi_bufreq_set_count_min(bufreq, version, 1);
+> +	hfi_bufreq_set_hold_count(bufreq, version, 1);
+>  	bufreq->contiguous = 1;
+>  	bufreq->alignment = 256;
+>  
+>  	if (buftype == HFI_BUFFER_INPUT) {
+> -		bufreq->count_min = MIN_INPUT_BUFFERS;
+> +		hfi_bufreq_set_count_min(bufreq, version, MIN_INPUT_BUFFERS);
+>  		bufreq->size =
+>  			calculate_dec_input_frame_size(width, height, codec,
+>  						       max_mbs_per_frame,
+>  						       buffer_size_limit);
+>  	} else if (buftype == HFI_BUFFER_OUTPUT || buftype == HFI_BUFFER_OUTPUT2) {
+> -		bufreq->count_min = out_min_count;
+> +		hfi_bufreq_set_count_min(bufreq, version, out_min_count);
+>  		bufreq->size =
+>  			venus_helper_get_framesz_raw(params->hfi_color_fmt,
+>  						     out_width, out_height);
+> @@ -1269,7 +1269,7 @@ static int bufreq_enc(struct hfi_plat_buffers_params *params, u32 buftype,
+>  	u32 work_mode = params->enc.work_mode;
+>  	u32 rc_type = params->enc.rc_type;
+>  	u32 num_vpp_pipes = params->num_vpp_pipes;
+> -	u32 num_ref;
+> +	u32 num_ref, count_min;
+>  
+>  	switch (codec) {
+>  	case V4L2_PIX_FMT_H264:
+> @@ -1289,21 +1289,21 @@ static int bufreq_enc(struct hfi_plat_buffers_params *params, u32 buftype,
+>  
+>  	bufreq->type = buftype;
+>  	bufreq->region_size = 0;
+> -	bufreq->count_min = 1;
+>  	bufreq->count_actual = 1;
+> -	bufreq->hold_count = 1;
+> +	hfi_bufreq_set_count_min(bufreq, version, 1);
+> +	hfi_bufreq_set_hold_count(bufreq, version, 1);
+>  	bufreq->contiguous = 1;
+>  	bufreq->alignment = 256;
+>  
+>  	if (buftype == HFI_BUFFER_INPUT) {
+> -		bufreq->count_min = MIN_INPUT_BUFFERS;
+> +		hfi_bufreq_set_count_min(bufreq, version, MIN_INPUT_BUFFERS);
+>  		bufreq->size =
+>  			venus_helper_get_framesz_raw(params->hfi_color_fmt,
+>  						     width, height);
+>  	} else if (buftype == HFI_BUFFER_OUTPUT ||
+>  		   buftype == HFI_BUFFER_OUTPUT2) {
+> -		bufreq->count_min =
+> -			output_buffer_count(VIDC_SESSION_TYPE_ENC, codec);
+> +		count_min = output_buffer_count(VIDC_SESSION_TYPE_ENC, codec);
+> +		hfi_bufreq_set_count_min(bufreq, version, count_min);
+>  		bufreq->size = calculate_enc_output_frame_size(width, height,
+>  							       rc_type);
+>  	} else if (buftype == HFI_BUFFER_INTERNAL_SCRATCH(version)) {
+> 
