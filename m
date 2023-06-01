@@ -2,150 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103DC7192C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 07:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6C5719272
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 07:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbjFAFyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 01:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
+        id S231460AbjFAFms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 01:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbjFAFyF (ORCPT
+        with ESMTP id S231436AbjFAFmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 01:54:05 -0400
-X-Greylist: delayed 590 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 May 2023 22:52:38 PDT
-Received: from out-6.mta0.migadu.com (out-6.mta0.migadu.com [91.218.175.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAFE198E
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 22:52:38 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1685598097;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=wMraD2clGsbsww7FgpOj2nLzIuUm/oP4AQqhudlO+CU=;
-        b=FkyWsbBZ2oZLCAcBImfx6W1IHJc3i/7Zx7aiKeb4ibNEDe4ItNvXQ055eYXhHUKeeeNI80
-        QsTlFsysUgtFRAULTHNVAFK4WDrfCURYAnLgKGeK5GJUpW1ybrWuwAm/fo5xXor0NoIPCo
-        pKfYZcuMo1xdrXJyz/zYeU/YONzok2g=
-From:   chengming.zhou@linux.dev
-To:     tj@kernel.org, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH] blk-mq: fix incorrect rq start_time_ns and alloc_time_ns after throttled
-Date:   Thu,  1 Jun 2023 13:39:19 +0800
-Message-Id: <20230601053919.3639954-1-chengming.zhou@linux.dev>
+        Thu, 1 Jun 2023 01:42:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9571BB
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 22:42:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E73666411F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 05:40:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3FB22C4339C;
+        Thu,  1 Jun 2023 05:40:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685598021;
+        bh=9VRWBEJhrWb/3G3bXkrO2WxkPaRrh2Yu36UNolKKbL0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=jeD//TAH1mFDt57ZEQr0QyetZEtXKOWAzBU6vDEgcNVL9fOZxR4OPkMS4D2TwQEH5
+         kkAdzhLkYYJWmwTzo3dDoJ8CoGRUcI+peq3giKQ3jO5xmvCw8RcH/twwa+bI9p6nMX
+         +/0eURJYF+jIKnkqdj99ESzvtfeAkiNC3cGtBDjggiZaAHKn+rN1rfoEH+9LusgxH9
+         P+dTnTtXCJGe2YNMx82hhnU1cUu+ldMvEgpDSdT9u8Lg35QzhLTLGMfTbwviyybftV
+         3dRwbkNNamEjbvIs/OtPhz0I29RcGY4Pxx+Y34SYtE6yjsaGDjSmkJmtnM5s6gERjR
+         JVPv8O0xrTllA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 20F85C395E5;
+        Thu,  1 Jun 2023 05:40:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH net-next v5 0/2] Add support for VSC85xx DT RGMII delays
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168559802112.10778.15941032546106214780.git-patchwork-notify@kernel.org>
+Date:   Thu, 01 Jun 2023 05:40:21 +0000
+References: <20230529122017.10620-1-harini.katakam@amd.com>
+In-Reply-To: <20230529122017.10620-1-harini.katakam@amd.com>
+To:     Harini Katakam <harini.katakam@amd.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, vladimir.oltean@nxp.com,
+        wsa+renesas@sang-engineering.com, simon.horman@corigine.com,
+        david.epping@missinglinkelectronics.com, mk+kernel@armlinux.org.uk,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        harinikatakamlinux@gmail.com, michal.simek@amd.com,
+        radhey.shyam.pandey@amd.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengming Zhou <zhouchengming@bytedance.com>
+Hello:
 
-iocost rely on rq start_time_ns and alloc_time_ns to tell the saturation
-state of the block device.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-If any qos ->throttle() end up blocking, the cached rq start_time_ns and
-alloc_time_ns will include its throtted time, which can confuse its user.
+On Mon, 29 May 2023 17:50:15 +0530 you wrote:
+> Provide an option to change RGMII delay value via devicetree.
+> 
+> v5:
+> - Rebase after VSC8501 series is merged, to avoid conflicts
+> - Rename _internal_delay to use vsc86xx, move declaration and
+> simplify format of pointer to above
+> - Acquire DT delay values in vsc85xx_update_rgmii_cntl instead of
+> vsc85xx_config_init to accommodate all VSC phy versions
+> 
+> [...]
 
-This patch add nr_flush counter in blk_plug, so we can tell if the task
-has throttled in any qos ->throttle(), in which case we need to correct
-the rq start_time_ns and alloc_time_ns.
+Here is the summary with links:
+  - [net-next,v5,1/2] phy: mscc: Use PHY_ID_MATCH_VENDOR to minimize PHY ID table
+    https://git.kernel.org/netdev/net-next/c/31605c01fb24
+  - [net-next,v5,2/2] phy: mscc: Add support for RGMII delay configuration
+    https://git.kernel.org/netdev/net-next/c/dbb050d2bfc8
 
-Another solution may be make rq_qos_throttle() return bool to indicate
-if it has throttled in any qos ->throttle(). But this need more changes.
-
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
- block/blk-core.c       |  3 +++
- block/blk-mq.c         | 18 ++++++++++++++++++
- include/linux/blkdev.h |  8 +++++---
- 3 files changed, 26 insertions(+), 3 deletions(-)
-
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 00c74330fa92..5109f7f5606c 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -1053,6 +1053,7 @@ void blk_start_plug_nr_ios(struct blk_plug *plug, unsigned short nr_ios)
- 	plug->cached_rq = NULL;
- 	plug->nr_ios = min_t(unsigned short, nr_ios, BLK_MAX_REQUEST_COUNT);
- 	plug->rq_count = 0;
-+	plug->nr_flush = 0;
- 	plug->multiple_queues = false;
- 	plug->has_elevator = false;
- 	plug->nowait = false;
-@@ -1150,6 +1151,8 @@ void __blk_flush_plug(struct blk_plug *plug, bool from_schedule)
- 	 */
- 	if (unlikely(!rq_list_empty(plug->cached_rq)))
- 		blk_mq_free_plug_rqs(plug);
-+
-+	plug->nr_flush++;
- }
- 
- /**
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index f6dad0886a2f..8731f2815790 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2871,6 +2871,7 @@ static inline struct request *blk_mq_get_cached_request(struct request_queue *q,
- {
- 	struct request *rq;
- 	enum hctx_type type, hctx_type;
-+	unsigned short nr_flush;
- 
- 	if (!plug)
- 		return NULL;
-@@ -2897,8 +2898,25 @@ static inline struct request *blk_mq_get_cached_request(struct request_queue *q,
- 	 * before we throttle.
- 	 */
- 	plug->cached_rq = rq_list_next(rq);
-+	nr_flush = plug->nr_flush;
- 	rq_qos_throttle(q, *bio);
- 
-+	/*
-+	 * If any qos ->throttle() end up blocking, we will have flushed the
-+	 * plug and we need to correct the rq start_time_ns and alloc_time_ns.
-+	 */
-+	if (nr_flush != plug->nr_flush) {
-+		if (blk_mq_need_time_stamp(rq)) {
-+			u64 now = ktime_get_ns();
-+
-+#ifdef CONFIG_BLK_RQ_ALLOC_TIME
-+			if (rq->alloc_time_ns)
-+				rq->alloc_time_ns += now - rq->start_time_ns;
-+#endif
-+			rq->start_time_ns = now;
-+		}
-+	}
-+
- 	rq->cmd_flags = (*bio)->bi_opf;
- 	INIT_LIST_HEAD(&rq->queuelist);
- 	return rq;
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index e3242e67a8e3..cf66871a1844 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -978,9 +978,11 @@ struct blk_plug {
- 
- 	unsigned short rq_count;
- 
--	bool multiple_queues;
--	bool has_elevator;
--	bool nowait;
-+	unsigned short nr_flush;
-+
-+	bool multiple_queues:1;
-+	bool has_elevator:1;
-+	bool nowait:1;
- 
- 	struct list_head cb_list; /* md requires an unplug callback */
- };
+You are awesome, thank you!
 -- 
-2.39.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
