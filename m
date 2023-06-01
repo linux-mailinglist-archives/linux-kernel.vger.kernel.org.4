@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333BF71933E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B33719340
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbjFAGa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 02:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
+        id S231422AbjFAGbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 02:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbjFAGa2 (ORCPT
+        with ESMTP id S229927AbjFAGbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 02:30:28 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DD8119
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 23:30:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685601027; x=1717137027;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z668EnpKrSGrlD56vE6qiil0fRmPsI7NbSqs14itwR8=;
-  b=LOrS8hXUrUnKHzgUug2gvU0vsTpCFBDtzhfXKsJ4vvkewu58zN9VIUp0
-   Epa+8JNDV8UA3AbXACPKSEKdImHzuGIJZ+S+tR0PaB1FgAQ4DWWmTFdcT
-   1NhJhqsVxdIgR5W85XHQBk9L746Bc/xKuwVrcvOcOOIWnB9X39znzvuXu
-   K1dw/cO3jrW36XonSRGgph5hArKjQ+g4xySwe06Cxm6OzsGwnQTXL0wV/
-   xLaB4gecp4eQmq5m+cog90+OrwrIlYQfKc3TRFz5iEbQmCiTlEE4Hjzn+
-   4w2mJ8CL8QW+nUjet2/cm87ibLt0BGBg6rs/SITZg0ZOsqziYR0JZLEiq
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="352966993"
-X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
-   d="scan'208";a="352966993"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2023 23:30:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="881499754"
-X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
-   d="scan'208";a="881499754"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 31 May 2023 23:30:07 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q4bp0-00020L-2m;
-        Thu, 01 Jun 2023 06:30:06 +0000
-Date:   Thu, 1 Jun 2023 14:29:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     beomsu kim <beomsu7.kim@samsung.com>,
-        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-        "chao@kernel.org" <chao@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Yonggil Song <yonggil.song@samsung.com>,
-        Seokhwan Kim <sukka.kim@samsung.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        Seonghun Kim <seonghun-sui.kim@samsung.com>
-Subject: Re: [PATCH] f2fs: including waf data in f2fs status information
-Message-ID: <202306011410.W02TPFn1-lkp@intel.com>
-References: <20230531082038epcms2p256f9db0d7ac377d404694354db1c3ebc@epcms2p2>
+        Thu, 1 Jun 2023 02:31:34 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034D6E2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 23:31:33 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5149b63151aso758117a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 23:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685601091; x=1688193091;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IBMwt1BKmcTv1Q96e1R6bySbFByacC9PxCMzst7QHI0=;
+        b=uFBp1Ykgm1ySYkYR6y3mqLku3EbkpzNMBnGY9pTm4LJam+ZLSUpENQOSGXk8b85MU6
+         lKHUQjpPo18cb+yE18TAYtjQiZXvMeh0cjDgJ5z8C6yln6gIZ3uKwegwk6f16h7hARb8
+         +BLNFY+VKDi5EYacYde0WDRacAQHv139+RjqGvUE07sWX/ELGjTrY+h3TZURnZmpWa7X
+         S7R39vBZnPZUmtubJKR6co/amSPvJSH9Kr0T1uzuq4DNykQ6ATxEAf0Q84G8Buj9BpCg
+         zjReXS0VK7aJMB2vzhK36Mc3zJz2YAFClW/Fe2LhNXtRWEYvZcYh22MYPTNI3NTVUNYP
+         BW0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685601091; x=1688193091;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IBMwt1BKmcTv1Q96e1R6bySbFByacC9PxCMzst7QHI0=;
+        b=UNl02Qj0MbOEjBH/uXfgRATssz999pdl3/z/RYjcAqPiUhYB2+UpfIKZ44oR/iVOTL
+         bsbZkexkdqhoM2PcsAml+J6UpvTjxlPDz9fLS23ZIyOviIppT9qZy6hXxZc8pDnv3ynG
+         /gu1wswU7ebMvIsDxuTHgmIPLWNwk0CKLSuPL0N+l6XiDfb9E5E1KIv/Hk6AyyYRWlIW
+         QNChmqLzdcYGThem6craVoiLEMFKJ9mKlORASP+BNOwbl5kOdiMeLwJwkvjaKkg63tsW
+         mff4NERd+S4SeMWiPoBJniB/UUJSo1t95EpzFYfwaLW4vtU7NSiNTXZSsdkEpVo9casQ
+         G1WQ==
+X-Gm-Message-State: AC+VfDyvhhRaJ8cc13feHuSomzexWPPy4VM12Aw4l2QUtS7vVdIIVLRg
+        h5ZLgIr37KQmy2aIt6NpaAQD2w==
+X-Google-Smtp-Source: ACHHUZ78B9G4/RBXOop0xSPO5CUd8uex2xfXTI1svDqDV63Ds3Eq1cZzCKRRclQhiblnPMBoRyTYnQ==
+X-Received: by 2002:a17:907:d15:b0:971:2ead:e161 with SMTP id gn21-20020a1709070d1500b009712eade161mr7470546ejc.6.1685601091175;
+        Wed, 31 May 2023 23:31:31 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id va15-20020a17090711cf00b0094ee99eeb01sm10051977ejb.150.2023.05.31.23.31.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 23:31:30 -0700 (PDT)
+Message-ID: <3843deaf-2913-d850-0422-d411031947b4@linaro.org>
+Date:   Thu, 1 Jun 2023 08:31:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531082038epcms2p256f9db0d7ac377d404694354db1c3ebc@epcms2p2>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] power: supply: rt9467: Make charger-enable control as
+ logic level
+To:     cy_huang@richtek.com, sre@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, chiaen_wu@richtek.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1685600676-25124-1-git-send-email-cy_huang@richtek.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1685600676-25124-1-git-send-email-cy_huang@richtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,143 +76,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi beomsu,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on v6.4-rc4]
-[also build test ERROR on linus/master next-20230601]
-[cannot apply to jaegeuk-f2fs/dev-test jaegeuk-f2fs/dev]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/beomsu-kim/f2fs-including-waf-data-in-f2fs-status-information/20230531-162208
-base:   7877cb91f1081754a1487c144d85dc0d2e2e7fc4
-patch link:    https://lore.kernel.org/r/20230531082038epcms2p256f9db0d7ac377d404694354db1c3ebc%40epcms2p2
-patch subject: [PATCH] f2fs: including waf data in f2fs status information
-config: x86_64-randconfig-x065-20230531 (https://download.01.org/0day-ci/archive/20230601/202306011410.W02TPFn1-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3a2228fdedf76cc8448b358d07b77eb26d1299a4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review beomsu-kim/f2fs-including-waf-data-in-f2fs-status-information/20230531-162208
-        git checkout 3a2228fdedf76cc8448b358d07b77eb26d1299a4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/f2fs/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306011410.W02TPFn1-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
->> fs/f2fs/iostat.c:37:30: error: implicit declaration of function 'F2FS_STAT' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           struct f2fs_stat_info *si = F2FS_STAT(sbi);
-                                       ^
->> fs/f2fs/iostat.c:37:25: warning: incompatible integer to pointer conversion initializing 'struct f2fs_stat_info *' with an expression of type 'int' [-Wint-conversion]
-           struct f2fs_stat_info *si = F2FS_STAT(sbi);
-                                  ^    ~~~~~~~~~~~~~~
->> fs/f2fs/iostat.c:46:32: error: incomplete definition of type 'struct f2fs_stat_info'
-                   data_written_to_storage += si->sbi->iostat_bytes[j];
-                                              ~~^
-   fs/f2fs/iostat.c:37:9: note: forward declaration of 'struct f2fs_stat_info'
-           struct f2fs_stat_info *si = F2FS_STAT(sbi);
-                  ^
-   fs/f2fs/iostat.c:48:29: error: incomplete definition of type 'struct f2fs_stat_info'
-                   data_written_by_user += si->sbi->iostat_bytes[j];
-                                           ~~^
-   fs/f2fs/iostat.c:37:9: note: forward declaration of 'struct f2fs_stat_info'
-           struct f2fs_stat_info *si = F2FS_STAT(sbi);
-                  ^
-   1 warning and 3 errors generated.
+On 01/06/2023 08:24, cy_huang@richtek.com wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> The current coding make 'charger-enable-gpio' control as real hardware
+> level. This conflicts with the default binding example. For driver
+> behavior, no need to use real hardware level, just logic level is
+> enough. This change can make this flexibility keep in dts gpio active
+> level about this pin.
+> 
+> Fixes: 6f7f70e3a8dd ("power: supply: rt9467: Add Richtek RT9467 charger driver")
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+> Hi,
 
 
-vim +/F2FS_STAT +37 fs/f2fs/iostat.c
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-    26	
-    27	#define IOSTAT_INFO_SHOW(name, type)					\
-    28		seq_printf(seq, "%-23s %-16llu %-16llu %-16llu\n",		\
-    29				name":", sbi->iostat_bytes[type],		\
-    30				sbi->iostat_count[type],			\
-    31				iostat_get_avg_bytes(sbi, type))
-    32	
-    33	int __maybe_unused iostat_info_seq_show(struct seq_file *seq, void *offset)
-    34	{
-    35		struct super_block *sb = seq->private;
-    36		struct f2fs_sb_info *sbi = F2FS_SB(sb);
-  > 37		struct f2fs_stat_info *si = F2FS_STAT(sbi);
-    38		int j;
-    39		unsigned long long waf = 0;
-    40		unsigned long long data_written_to_storage = 0, data_written_by_user = 0;
-    41	
-    42		if (!sbi->iostat_enable)
-    43			return 0;
-    44	
-    45		for (j = FS_DATA_IO; j <= FS_CP_META_IO; j++)
-  > 46			data_written_to_storage += si->sbi->iostat_bytes[j];
-    47		for (j = FS_DATA_IO; j <= FS_CDATA_IO; j++)
-    48			data_written_by_user += si->sbi->iostat_bytes[j];
-    49	
-    50		if (data_written_by_user > 0)
-    51			waf = data_written_to_storage * 100 / data_written_by_user;
-    52	
-    53		seq_printf(seq, "time:		%-16llu\n", ktime_get_real_seconds());
-    54		seq_printf(seq, "\t\t\t%-16s %-16s %-16s\n",
-    55					"io_bytes", "count", "avg_bytes");
-    56	
-    57		/* print app write IOs */
-    58		seq_puts(seq, "[WRITE]\n");
-    59		IOSTAT_INFO_SHOW("app buffered data", APP_BUFFERED_IO);
-    60		IOSTAT_INFO_SHOW("app direct data", APP_DIRECT_IO);
-    61		IOSTAT_INFO_SHOW("app mapped data", APP_MAPPED_IO);
-    62		IOSTAT_INFO_SHOW("app buffered cdata", APP_BUFFERED_CDATA_IO);
-    63		IOSTAT_INFO_SHOW("app mapped cdata", APP_MAPPED_CDATA_IO);
-    64	
-    65		/* print fs write IOs */
-    66		IOSTAT_INFO_SHOW("fs data", FS_DATA_IO);
-    67		IOSTAT_INFO_SHOW("fs cdata", FS_CDATA_IO);
-    68		IOSTAT_INFO_SHOW("fs node", FS_NODE_IO);
-    69		IOSTAT_INFO_SHOW("fs meta", FS_META_IO);
-    70		IOSTAT_INFO_SHOW("fs gc data", FS_GC_DATA_IO);
-    71		IOSTAT_INFO_SHOW("fs gc node", FS_GC_NODE_IO);
-    72		IOSTAT_INFO_SHOW("fs cp data", FS_CP_DATA_IO);
-    73		IOSTAT_INFO_SHOW("fs cp node", FS_CP_NODE_IO);
-    74		IOSTAT_INFO_SHOW("fs cp meta", FS_CP_META_IO);
-    75	
-    76		/* print app read IOs */
-    77		seq_puts(seq, "[READ]\n");
-    78		IOSTAT_INFO_SHOW("app buffered data", APP_BUFFERED_READ_IO);
-    79		IOSTAT_INFO_SHOW("app direct data", APP_DIRECT_READ_IO);
-    80		IOSTAT_INFO_SHOW("app mapped data", APP_MAPPED_READ_IO);
-    81		IOSTAT_INFO_SHOW("app buffered cdata", APP_BUFFERED_CDATA_READ_IO);
-    82		IOSTAT_INFO_SHOW("app mapped cdata", APP_MAPPED_CDATA_READ_IO);
-    83	
-    84		/* print fs read IOs */
-    85		IOSTAT_INFO_SHOW("fs data", FS_DATA_READ_IO);
-    86		IOSTAT_INFO_SHOW("fs gc data", FS_GDATA_READ_IO);
-    87		IOSTAT_INFO_SHOW("fs cdata", FS_CDATA_READ_IO);
-    88		IOSTAT_INFO_SHOW("fs node", FS_NODE_READ_IO);
-    89		IOSTAT_INFO_SHOW("fs meta", FS_META_READ_IO);
-    90	
-    91		/* print other IOs */
-    92		seq_puts(seq, "[OTHER]\n");
-    93		IOSTAT_INFO_SHOW("fs discard", FS_DISCARD_IO);
-    94		IOSTAT_INFO_SHOW("fs flush", FS_FLUSH_IO);
-    95	
-    96		/* print waf */
-    97		seq_puts(seq, "[WAF]\n");
-    98		seq_printf(seq, "fs waf:		%llu.%02llu\n", waf / 100, waf % 100);
-    99	
-   100		return 0;
-   101	}
-   102	
+Best regards,
+Krzysztof
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
