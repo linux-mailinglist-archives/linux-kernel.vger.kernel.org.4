@@ -2,82 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18907193FD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2554D7193FF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbjFAHRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 03:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
+        id S231559AbjFAHSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 03:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjFAHRK (ORCPT
+        with ESMTP id S230215AbjFAHSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 03:17:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E48F129;
-        Thu,  1 Jun 2023 00:17:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6F6B641CE;
-        Thu,  1 Jun 2023 07:17:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6881BC433EF;
-        Thu,  1 Jun 2023 07:17:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685603828;
-        bh=lFxVqHllcG3lgD1iV1Z0FPSYL2IAzqEz/TFrgzuj/GE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JwRgk1d9gEBP9CbER7TDB8+paz2PnwQBNBP1/61cr1B4pNsTwx4mxnaMinxnzfHJf
-         OJX1ngqsE9Y+K/bZp/suNhK55GaKN4HkF55QZCrTyYC1tRvDkmXpDaXWg4Rc9B7J/8
-         h19sUk8AUsHX3Rpd/VBc2voLbUvT5g8sDi9+KF1Gk4d0fZX86YP3DvC0yqrkaR9WeR
-         z+7YQ3hHPjjEUFs70kgeuE8qHSWscE+PfUl3vtcKzrywjv1tPK0UOWigy9jfQoV/C/
-         5bemy6mv3f3kC6gYvdAkNsaQt30wC9dyfIlrZcqddlDKjPwJt+ZBFTS+JHdz7DNvJq
-         9/scfj3CQb6NA==
-Date:   Thu, 1 Jun 2023 12:47:03 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 07/15] arm64: dts: qcom: sc8180x: Add interconnects
- and lmh
-Message-ID: <ZHhF7zbPYyqdfURV@matsya>
-References: <20230530162454.51708-1-vkoul@kernel.org>
- <20230530162454.51708-8-vkoul@kernel.org>
- <7d4089df-e572-4d3b-6fb7-061d69479dce@linaro.org>
+        Thu, 1 Jun 2023 03:18:00 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B6C129;
+        Thu,  1 Jun 2023 00:17:59 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so465943e87.3;
+        Thu, 01 Jun 2023 00:17:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685603878; x=1688195878;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2dYgoP0dKtnWukHVHoIhlwiSBe9FEkEN+rmu7C7LDaM=;
+        b=UouH19Ic52/Z1QTEIzPBJFntquI04luY9vhkfhksgYeAEMHm6g7KnxvaMlCw9SjIfl
+         JU7JejjhO8+Ewswx245cYshTx9BRxvEvBYVx6clTMO2/gdFBtEjg/Ufn4vNlnh5+h1Z/
+         8jkKz76oMcEWTa1hD9H27CLRP4X8CmG+naS6A90RaxIOje5TDtvWIV6U2TsX+dl3jLeE
+         8a/Q/tHGNBXmbh0yPS+yQV2o+MnFstqQFdZdwpTqaDdQrGmHe4yHoKwK9u2RKcCoXmC1
+         T2mswwdic2dfnP6vG2tEfMgFUErZnEXykJKWS51bxWZ/mmWzsNo15T7qpIdYoMq7WorH
+         H8IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685603878; x=1688195878;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2dYgoP0dKtnWukHVHoIhlwiSBe9FEkEN+rmu7C7LDaM=;
+        b=dzNxO6uqvPIlzenhq1CuyWdkGTr1QBSxwCTGee6g8Z7AJHsQdv5RhPHx4DjbwwNEMB
+         ILCPws42JcMLbjJsEMhK7ODKmudQDqsoV2Mt+vYWWKEGPVYIG3KwGmhk3SbP1TaWl7H/
+         RMkY6fLjwNoasIKVYI5qaFt20AY3joBqYhE5G2EcKstOF4KiJ7kWguyrMXp0M/PNUBhg
+         TCX7X02XSPzIh8M71TCI7ulSs4BXMXUSh9s2kjiWJKRbcsKWS7DLt2TYHFPmuNFlbpmY
+         bCBiXEr/v6V5/dKYJxu/hT8SwldjMC2evEpU0sfYSvDdtSTkyBUiLNcgAaPPNRv8QxJw
+         nKvw==
+X-Gm-Message-State: AC+VfDwcxj/7YmNV/HDqtLW9UIG8OWMbhe08THByNrWEE4n/Ist7fcAU
+        2G/ponMeLN08wyxgXPAmp6zx90UtqTV/ksRtIxY=
+X-Google-Smtp-Source: ACHHUZ4YsDXmVxroVd09wZZv0wGnsGrpz6E4BezVuqpgVn82Iup5xPvW7wUs630DRe3ijJ0F2LN6gwzSWxoSLe0mEYs=
+X-Received: by 2002:a2e:3511:0:b0:2a7:a30e:d11b with SMTP id
+ z17-20020a2e3511000000b002a7a30ed11bmr4257080ljz.7.1685603877335; Thu, 01 Jun
+ 2023 00:17:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7d4089df-e572-4d3b-6fb7-061d69479dce@linaro.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 1 Jun 2023 02:17:46 -0500
+Message-ID: <CAH2r5ms4QAu6Kets9riO5CN6d-4wOaGoawoyadL0EviKdf-9Bw@mail.gmail.com>
+Subject: [GIT PULL] smb3 server fixes
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Namjae Jeon <linkinjeon@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31-05-23, 10:26, Krzysztof Kozlowski wrote:
-> On 30/05/2023 18:24, Vinod Koul wrote:
-> > This add interconnect nodes and add LMH to sc8180x SoC dtsi
-> > 
-> > Co-developed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > ---
-> 
-> I don't understand why this was split. We talked on IRC many times on
-> this - artificial splits are not "release early, release often". Your
-> previous patchset was correct in that approach, but why this is separate
-> patch?
+Please pull the following changes since commit
+0d85b27b0cc6b5cf54567c5ad913a247a71583ce:
 
-Coz the patch was big to review. This is usual Linux approach to break a
-change into smaller chunks for review!
+  Merge tag '6.4-rc3-smb3-client-fixes' of
+git://git.samba.org/sfrench/cifs-2.6 (2023-05-25 19:23:18 -0700)
+
+are available in the Git repository at:
+
+  git://git.samba.org/ksmbd.git tags/6.4-rc4-smb3-server-fixes
+
+for you to fetch changes up to 6fe55c2799bc29624770c26f98ba7b06214f43e0:
+
+  ksmbd: call putname after using the last component (2023-05-26 20:27:46 -0500)
+
+----------------------------------------------------------------
+Eight server fixes (most also for stable)
+- Two fixes for uninitialized pointer reads (rename and link)
+- Fix potential UAF in oplock break
+- Two fixes for potential out of bound reads in negotiate
+- Fix crediting bug
+- Two fixes for xfstests (allocation size fix for test 694 and lookup
+issue shown by test 464)
+----------------------------------------------------------------
+Kuan-Ting Chen (2):
+      ksmbd: fix slab-out-of-bounds read in smb2_handle_negotiate
+      ksmbd: fix multiple out-of-bounds read during context decoding
+
+Namjae Jeon (6):
+      ksmbd: fix uninitialized pointer read in ksmbd_vfs_rename()
+      ksmbd: fix uninitialized pointer read in smb2_create_link()
+      ksmbd: fix credit count leakage
+      ksmbd: fix UAF issue from opinfo->conn
+      ksmbd: fix incorrect AllocationSize set in smb2_get_info
+      ksmbd: call putname after using the last component
+
+ fs/smb/server/oplock.c  | 72
++++++++++++++++++++++++++++++++++++++++++++++++-------------------------
+ fs/smb/server/smb2pdu.c | 96
+++++++++++++++++++++++++++++++++++++++++++++++--------------------------------------------------
+ fs/smb/server/vfs.c     |  9 +++++++--
+ 3 files changed, 100 insertions(+), 77 deletions(-)
 
 -- 
-~Vinod
+Thanks,
+
+Steve
