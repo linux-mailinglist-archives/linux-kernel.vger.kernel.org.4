@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CA1719AF7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFF5719AF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbjFAL2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 07:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
+        id S232854AbjFAL20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 07:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbjFAL2T (ORCPT
+        with ESMTP id S232332AbjFAL2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:28:19 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2092123;
-        Thu,  1 Jun 2023 04:28:18 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351AuEPp003428;
-        Thu, 1 Jun 2023 11:27:49 GMT
+        Thu, 1 Jun 2023 07:28:20 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1F0124;
+        Thu,  1 Jun 2023 04:28:19 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35157EpB004438;
+        Thu, 1 Jun 2023 11:27:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
  bh=cfMQqCdL/Z44EbSVXa1lxsAa6Ha3jxDNZTaevoUb3Fs=;
- b=CTkU7QF4R9+0M7s+rxOYIc28mHHdRjTjAYQ00TjqVz0RA+zKoTJOOCIHTBgJUlhXApTm
- NqcpvqbZrd1VqMrZ7OfHvBfUtpZgE71bHCODCGjVrcPKpVdbLdeAI2p+2ZCEGrhcNKEP
- 9uDyOGlF5pkTuGqhAxkhOIuxohmMWXIhls+ajjBanoZG0z2I3eWGcbE7niNGV34cC7Wf
- +suiPVjql+aOrqd8elwA2C9mFrQT2dvahPgBElfse9bUmHEogPbQze6JZH45WipLtPcg
- nwS5Xn0ZTp+SjQTAg77w1od6SW4zH+2WsSPN5HBeZ/IMd/v/lxEQcIpnK/VwGaZGO5a6 kA== 
+ b=pQnPSYB5UQSTmMiF6FwPNUmI7mlWPGPGBSVLhzGzT7cDgOmu++W4eeX8jtYgTFWn2u1l
+ USS7BygZ6pv8+3ohuQdH/xRH0KPTaCaMedsK26XgFs/EKu20FxtHYYPHpvIvu7V4+q16
+ D06IvqP+Fo9G9XukDST7t5QMyZuyZG685BTZaYekFnhJpVPs89pRbHBRmWuoF5eLVbT3
+ vo+Kr12Ax1MxY8QGPwWhRtauV/lrp0AcgQPjb5rIX4/f/5JUax7SRIvaQdT9gmjzIvOz
+ qmcA0pCi7RkwVqY54oFKwGbH9uQLiEhotZbuPlvazp50Ivsi9HH6xrAebNSWXyRinurn uw== 
 Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxqne8dwg-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxdr99jsh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 11:27:49 +0000
+        Thu, 01 Jun 2023 11:27:53 +0000
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351BRlCk021091
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351BRqhY021128
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Jun 2023 11:27:48 GMT
+        Thu, 1 Jun 2023 11:27:52 GMT
 Received: from stor-berry.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 1 Jun 2023 04:27:47 -0700
+ 15.2.986.42; Thu, 1 Jun 2023 04:27:52 -0700
 From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
 To:     <quic_asutoshd@quicinc.com>, <quic_cang@quicinc.com>,
         <bvanassche@acm.org>, <mani@kernel.org>,
@@ -50,10 +51,12 @@ CC:     <linux-scsi@vger.kernel.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         Alice Chao <alice.chao@mediatek.com>,
         open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 1/1] ufs: mcq: Fix the sq_head_slot wrap around logic
-Date:   Thu, 1 Jun 2023 04:27:00 -0700
-Message-ID: <f711489c6b95ec410e500543fd24ca9fc0f462cd.1685618737.git.quic_nguyenb@quicinc.com>
+Subject: [PATCH v1 1/1] ufs: mcq: Fix the variable wraparound logic
+Date:   Thu, 1 Jun 2023 04:27:01 -0700
+Message-ID: <e6e8559eee9626afa38f88e18080398e7296e1bb.1685617541.git.quic_nguyenb@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <f711489c6b95ec410e500543fd24ca9fc0f462cd.1685618737.git.quic_nguyenb@quicinc.com>
+References: <f711489c6b95ec410e500543fd24ca9fc0f462cd.1685618737.git.quic_nguyenb@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
@@ -61,20 +64,19 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: AaL5nLy1M8LHUbisPLPI8T9Gkaiy9ZSh
-X-Proofpoint-GUID: AaL5nLy1M8LHUbisPLPI8T9Gkaiy9ZSh
+X-Proofpoint-ORIG-GUID: mJ528_cE8svJtbdhtniCiM-9-Rkc5UZf
+X-Proofpoint-GUID: mJ528_cE8svJtbdhtniCiM-9-Rkc5UZf
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- impostorscore=0 suspectscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0
- priorityscore=1501 malwarescore=0 spamscore=0 mlxlogscore=999 phishscore=0
+ definitions=2023-06-01_07,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ impostorscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0 phishscore=0
+ spamscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
  definitions=main-2306010101
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
