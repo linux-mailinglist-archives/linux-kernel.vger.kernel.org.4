@@ -2,273 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395B071A1FC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9C171A215
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233558AbjFAPJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 11:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
+        id S233906AbjFAPKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 11:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234403AbjFAPJK (ORCPT
+        with ESMTP id S234382AbjFAPJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 11:09:10 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06C11AB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 08:08:44 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f3b9755961so1228181e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 08:08:44 -0700 (PDT)
+        Thu, 1 Jun 2023 11:09:51 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9E213E;
+        Thu,  1 Jun 2023 08:09:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=miKQnn+Aa0qOsoWOLqplcPNY5AMCvatbykd7HlvGdqC5PgLWmqKOuZGDD8Zl0hc1teUdsHjTNSdvK9HDMA1tetV5kBLf3rSy/IlWwjQ+3kRJ4Sw9aP56wuWTLXvBCFiuyvGvwlDCtXRnd2K0txO7f528tA2uR5m6FFSD0TR9BO7R/PjPr/GCGBJQp+O3CjRpAybe7qwyAqUkWepbC3R3ZB0H2LenzXRuvzCh080eRLQprd6Awrlut7HfUj7pm3sk344wpZzbWgIDlUsTTbTwLlKxl6bsL6FWdCBuhbpNPzZuH8mx7WTiHKj7YT1EyMqX3Fb4zXvDYjCIr2FKEg8ung==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mXbKKOmhLoLJTjl5ubSlKCH3SaWmZ+Rl9XZdFWzo+Nk=;
+ b=KJKKIjW/HoumYpVT2Ahmye9w3O3/8zdTwzrOQWpplgNKp+0+c1U5Fb9CixaZ87w6c3JgCx0DYq/XdgkjiMd72X2n8J8y1zHVepioWAfAFlKtU6ZHpMhSa5RWpvZYYkCReZKKojNts4UlNAAJB1FGGciHnt/LvfSNM6V0V1F06hZ7SzidBtZT4CuyYEpJatJ2+6UIUiAo9QUyJOJExxIW7wiioSmuUJ71grwUmBY5Y7BLD8OwtmswRaCsG1kiApY8PumoHahboD4og/IQukjbsR6e7yLhrvL6B8xxz6StQE61cjnQzwSg/ncv08AJJQBn6bovcd3SObkuRIoHoSawCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685632038; x=1688224038;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Nhrt/1kbZo1WGd9bqUxFgUA77aZYWI2EtqRfb5cofNk=;
-        b=p+j+QHsYedatEunjmIsqmYJ+EZNRzUY4GsYzlTe+eRDXQuT7Vh5cELtoFVRr30kj4/
-         SXwgGC6QnmxzDTuUJiAMMkUF6fI7v44fJXPLqiPKlEmPMbDKNQpu3uFTAFdXd+38n3Zs
-         cVhFXnGB1aclcPqYcoflRwNruUwORUMNOBNLtZv7JnJU4fd+TtY9KmlHinPQbGAh06Bg
-         rM3m/jGLNFHC5a8ApOjz70IjhwWD37nNLKOz2IJoVSvnnDFn8m3sj614i6ZKDn7ly8UW
-         /MZ5eHqkKRLqmbSxpnxds/k7M2QjEkjfAgaqDrxLR1tiICdikXQfG2vVoNKqYTq/M2/6
-         yKng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685632038; x=1688224038;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nhrt/1kbZo1WGd9bqUxFgUA77aZYWI2EtqRfb5cofNk=;
-        b=Jq/Q4hhcjK5F5v6KTF/g9ON87laWWYXJykbPxmKLGSznDGMUeytGe5A87cJY3vG7XR
-         2rGjgsYZFpcOGjiTrGCWSl/lks5Jw9Rn+nhLkffuCIdeNqzaeQQb1+8TNRQu67pgAMP/
-         yE4AaSld65uUoyS5RPnh5HJvuDjAq25scQnnRYWjZHtP6+1SqNA8vFWoi9UnjdFCU+Ng
-         7fJwW8BoZLhdcF/hFq6If2kxQfcZmujKhvdriW17yb2IOCm/nS4FmpDACNjmL7Vm38+W
-         OOhR5xa17svsUvUIWrL8Br9vJ2BEkLd+GKaVRJ/lzaZM3ZazjZzafdByF7n6yFQzQLyD
-         iO1g==
-X-Gm-Message-State: AC+VfDw4x8dmfKOVTwNs5prb/pagbAJej42xd+BPx7cXqjXbfFJ+miQ2
-        vGyNSfXtivMKjSB/qIGWMQFfDw==
-X-Google-Smtp-Source: ACHHUZ7uf4fti3eUJKD/fDjTjB1esmiPNPYdbZUliBqEDu/Toj34vBdtzDVLCniLeKc4i8kl+dnNyA==
-X-Received: by 2002:ac2:5605:0:b0:4f2:4419:932c with SMTP id v5-20020ac25605000000b004f24419932cmr151494lfd.23.1685632038174;
-        Thu, 01 Jun 2023 08:07:18 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id m1-20020ac24ac1000000b004f13634da05sm1116245lfp.180.2023.06.01.08.07.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 08:07:17 -0700 (PDT)
-Message-ID: <517f8b82-1230-985a-811a-2100f0dd339e@linaro.org>
-Date:   Thu, 1 Jun 2023 18:07:17 +0300
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mXbKKOmhLoLJTjl5ubSlKCH3SaWmZ+Rl9XZdFWzo+Nk=;
+ b=KhvN6uo+uhSksN3+j7nCE/VPNC8dPslrqB8YB1ApbtYFKgx1MFMLpIWIHoAXp5k9xHFUyYBbqaIMp4/Pguj8afE0V1u5iXvoK4qZLDDYjUHDRNZnWkfMRp/gQYziFz7Po0HaHcDEia9DoVYoyBm2pPXsxRrRqb3bw/N1ejmh66s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH0PR13MB5517.namprd13.prod.outlook.com (2603:10b6:510:142::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Thu, 1 Jun
+ 2023 15:09:02 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.024; Thu, 1 Jun 2023
+ 15:09:02 +0000
+Date:   Thu, 1 Jun 2023 17:08:54 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, davthompson@nvidia.com, asmaa@nvidia.com,
+        mkl@pengutronix.de, limings@nvidia.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mlxbf_gige: Add missing check for platform_get_irq
+Message-ID: <ZHi0ht8efLmgJTgQ@corigine.com>
+References: <20230601065808.1137-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601065808.1137-1-jiasheng@iscas.ac.cn>
+X-ClientProxiedBy: AM0PR02CA0129.eurprd02.prod.outlook.com
+ (2603:10a6:20b:28c::26) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESEND PATCH v2 2/2] cpufreq: qcom-nvmem: add support for
- IPQ8064
-Content-Language: en-GB
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Robert Marko <robimarko@gmail.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, ilia.lin@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230530165807.642084-1-robimarko@gmail.com>
- <20230530165807.642084-2-robimarko@gmail.com>
- <3f1bfaf9-35ff-59ae-6756-84fc8900ed92@linaro.org>
- <647708e2.050a0220.514c7.feab@mx.google.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <647708e2.050a0220.514c7.feab@mx.google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5517:EE_
+X-MS-Office365-Filtering-Correlation-Id: 613fe8d5-a319-44be-ae85-08db62b22217
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9GF96b8GdslezHu124uQ2TLZmg3KXnCQDKhakDMEdepCLZGFWy2Dcp4dY4TDX7iG7j1BaoUxozwBfFiyKDeD4oOkje7IyyZNziIwQCSr7Viu1ARLYiu3ZdbfUeawLRSx0QtFmrmn/KYdh9/WzfMAfe0t6/ZXpf26U/ND28QCAfVh7lNKq1PiHwIe4OeC5EGXDISHcavj29Ey6JickA/TtjnOAnnssVZAX46eMfhfckkI31nOPHW2A1GtfCz5x8eLiAJ4zkjhOjClPGYjmko/yryTTOU0qC4nQYcvXw3b8uoeIqjbDVZ3/gepTTcDVz1H7Piw3qfWZkcKrCUQqeK3BrODNZoISM+A23GQ4sl+yuMDw+4nL+cJIaZW5DaxfK9wEO00pl1nA/OE+8aGCVQuW0j6wEiOGmg672L+AsEI5SibYNcneOSCbqXv7N1y4tXNFu996viBzVdtkyay5RvEpFLg01Y17UZ/vu8zeMnmBAQbGfvJoxYLuWJY+cWaWbv49IdKJSXfVKA9TBVqsSLWOxqCM/J0mxc7NVwMwjGLOUlR1WSl8RTKVG9LYYgvbp96r/C+FI6VGpSAEIjK80a8ATQiGPMhuyXjUmlKLEE//zjZYxIE9D+DT2edn7pGmXMtC4x/aOmKinJb88xyi+TzdQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(366004)(136003)(39830400003)(346002)(451199021)(6512007)(6506007)(44832011)(7416002)(2616005)(83380400001)(2906002)(26005)(186003)(8936002)(6916009)(66476007)(4326008)(66946007)(316002)(8676002)(41300700001)(478600001)(66556008)(6486002)(36756003)(966005)(38100700002)(5660300002)(6666004)(86362001)(478994003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pXcE4fY/s4+lisu/3k/2Uj2M5NW9MJ/8qJKwJVS9tJ2KjR/g13zXJafTuO6x?=
+ =?us-ascii?Q?QRwPhSWXStAfHSoFNVoAEAWbWdUJhAg/k9dEFDoOZMp2XY0IoIF/ATmHB8Gd?=
+ =?us-ascii?Q?G2xw6DsjK7BuZyIGdwXmpfc/HouRhbMIMcsSeqsrIE3oqt1Kff9I+FGijv9V?=
+ =?us-ascii?Q?31E8KnoeVk5PWCgLKFJ0AMpgFvUt1XkRlTRQGoQBfiB0wcx6uhDbbcNvR39M?=
+ =?us-ascii?Q?Qpyoiyg51JY9ahNbWH4JBxZKDqukf4W5Pne/4k1I8LYxIOW9rPq3Wlx5f570?=
+ =?us-ascii?Q?1LhxFxJ19olT6blsnEf1EDXBtaSMUvnXMMJ/hN+DGwn5kV4ISCzngAMh9aNC?=
+ =?us-ascii?Q?QTeAKQiBa3cNGV4K+O80TvgSJ6U/us6z/RaN1WlLSqLT+QjssmWKNNNm9UNo?=
+ =?us-ascii?Q?sfV4EjiZYe4NyYpkO5Z0ySCvAIXG0jY37jxtFP9UOjDpwlfqlvIAvXu3LGtA?=
+ =?us-ascii?Q?irrzPtVhtal03GK9qL6hqoRmNd7bkCFY4S76qlpqyGJ/tHHfYp3gEl0j/raS?=
+ =?us-ascii?Q?3e7A+waFmAKUgzhS6Aua+za838yEcmA8xdCVCK07WBYeJwvKEIOEHjxvbB7R?=
+ =?us-ascii?Q?xkPAvYV+XbzC6+QqcRUQDKTNb4q7BWKC7kW8FQi90c7ve1f4tjSJuZRa7Tbt?=
+ =?us-ascii?Q?p8VjzCs4vY+fQh2GGi+BjdarUsHCw0cr6vaRTNOn0jhAaFcLBGYHmW+5LhtR?=
+ =?us-ascii?Q?8S0qjTa2WI858AGk+sBwdSjcZ1I0P7zqLUYgKV7n8T/UeMEQEh6gUzG0DXom?=
+ =?us-ascii?Q?uBPIz4tdZ9y1VkW4adETxqyzj9h69FWdlrJX/gA2PovLzbk+YuTriKT13C+H?=
+ =?us-ascii?Q?t6+DMBRhZcNQmd0T23woUOKSB7MLoaDpN10VY/QgZY7b/yQeI1eJiNW/gIb7?=
+ =?us-ascii?Q?UBWkEha6TwFOdHRzoqbM/kNH24U84X7iYT2me4ZiCTGTOcfvq1yq9k1XLyOL?=
+ =?us-ascii?Q?/fyl9pyq4+dj11iTIbBy9a/OUMnVWXWVE0C+I1TvIz5VGKoVJ6fyNwONaevA?=
+ =?us-ascii?Q?7t0fsWVwVgaJTj6+xZxtJaPJ3qHSm+A6Y53l8v7WKgu72g/dauT08DX1gUCA?=
+ =?us-ascii?Q?3lAE9/E1DZi1EtsGkYA1tWkXJ7ZF4LGKwsE7MF7TC6M9KDEzguYbK+CqeDT8?=
+ =?us-ascii?Q?sMqS4P8OOeMehQdDImod66LKbA5BL+6EqAV+4/DPPRI6L/OkP34MlJv2EO28?=
+ =?us-ascii?Q?CgnusvIYKCJakX7M4FEm9VGnlQdmPxPWHqGGx3YOyRGPPS5U0lGvwwZrAJWy?=
+ =?us-ascii?Q?WShAihuqaVRIvFyaErf2Oe+jOVPtgwoKA5XyieExvGL49CQJnQJFeMXjwx23?=
+ =?us-ascii?Q?kt378lY9KDIsIfGAKxnRVd7yMtrQQ/gXC79QI/PJ8PsXXnaxbndtXWFq8sDf?=
+ =?us-ascii?Q?87Nk3vnBA8SeAdxMj2y5GL9Miu8Of1Xl0zuwWCaV9K1wIFxPzVAm1IoUXQs/?=
+ =?us-ascii?Q?2bg3JxjS71qCTNZT9eQlz8/WRZOSxHBjXvn7WsnY2mSPweGIeqwiPmhz45Ir?=
+ =?us-ascii?Q?CTA4yZGiS5nVkFQawHDPcthDVGPX6ANHHaWfv9WNjPYb/6Xr7QONBDMHHuxF?=
+ =?us-ascii?Q?3zEtewh0sozrv4HKZLAWpq67cwKCZREyl/sQrbTS8ZJbG5zIZjQNA+L9BdjX?=
+ =?us-ascii?Q?Cg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 613fe8d5-a319-44be-ae85-08db62b22217
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 15:09:02.2134
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zqDHSnrMk5tDeIlmw4rimlelDhu4GDS2DAdKoqlwDfJ2SKpw8io1hPuWriqq+HqWq1opFJ7qPfIcLTizNorHs5PYoDSgsujzKZ4Qlho2CYY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5517
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 04:36, Christian Marangi wrote:
-> On Wed, May 31, 2023 at 05:03:01AM +0300, Dmitry Baryshkov wrote:
->> On 30/05/2023 19:58, Robert Marko wrote:
->>> From: Christian Marangi <ansuelsmth@gmail.com>
->>>
->>> IPQ8064 comes in 3 families:
->>> * IPQ8062 up to 1.0GHz
->>> * IPQ8064/IPQ8066/IPQ8068 up to 1.4GHz
->>> * IPQ8065/IPQ8069 up to 1.7Ghz
->>>
->>> So, in order to be able to share one OPP table, add support for
->>> IPQ8064 family based of SMEM SoC ID-s as speedbin fuse is always 0 on
->>> IPQ8064.
->>>
->>> Bit are set with the following logic:
->>> * IPQ8062 BIT 0
->>> * IPQ8064/IPQ8066/IPQ8068 BIT 1
->>> * IPQ8065/IPQ8069 BIT 2
->>>
->>> speed is never fused, only psv values are fused.
->>> Set speed to the versions to permit a unified opp table following
->>> this named opp:
->>>
->>> opp-microvolt-speed<SPEED_VALUE>-pvs<PSV_VALUE>-v0
->>>
->>> Example:
->>> - for ipq8062 psv2
->>>     opp-microvolt-speed0-pvs2-v0 = < 925000 878750 971250>
->>> - for ipq8064 psv2
->>>     opp-microvolt-speed2-pvs2-v0 = <925000 878750 971250>;
->>> - for ipq8065 psv2
->>>     opp-microvolt-speed4-pvs2-v0 = <950000 902500 997500>;
->>>
->>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
->>> Signed-off-by: Robert Marko <robimarko@gmail.com>
->>> ---
->>>    drivers/cpufreq/qcom-cpufreq-nvmem.c | 73 +++++++++++++++++++++++++++-
->>>    1 file changed, 72 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>> index ce444b5962f2..c644138680ba 100644
->>> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>> @@ -34,6 +34,10 @@
->>>    #define IPQ8074_HAWKEYE_VERSION		BIT(0)
->>>    #define IPQ8074_ACORN_VERSION		BIT(1)
->>> +#define IPQ8062_VERSION		BIT(0)
->>> +#define IPQ8064_VERSION		BIT(1)
->>> +#define IPQ8065_VERSION		BIT(2)
->>
->> I think it would be more logical to change these defines to consecutive enum
->> instead of BIT(n) values. Another (and better in my opinion) option is to
->> drop versions completely (and remove speedN from the opp names) and to have
->> per-SoC tables in per-SoC dtsi files. There are already separate
->> ipq8064.dtsi, ipq8062.dtsi and ipq8065.dtsi files. It makes little sense to
->> overcomplicate the OPP tables.
->>
+On Thu, Jun 01, 2023 at 02:58:08PM +0800, Jiasheng Jiang wrote:
+> On Thu,  1 Jun 2023 14:27:21 +0800 Jakub Kicinski wrote:
+> > On Thu,  1 Jun 2023 14:19:08 +0800 Jiasheng Jiang wrote:
+> >> Add the check for the return value of the platform_get_irq and
+> >> return error if it fails.
+> >> 
+> >> Fixes: f92e1869d74e ("Add Mellanox BlueField Gigabit Ethernet driver")
+> >> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> > 
+> > BTW I looked thru my sent messages and I complained to you about not
+> > CCing people at least twice before. Please start paying attention or
+> > we'll stop paying attention to your patches.
 > 
-> That is what was used downstream but it was also wrong and against the
-> normal implementation of this driver itself.
+> According to the documentation of submitting patches
+> (Link: https://docs.kernel.org/process/submitting-patches.html),
+> I used "scripts/get_maintainer.pl" to gain the appropriate recipients
+> for my patch.
+> However, the "limings@nvidia.com" is not contained in the following list.
 > 
-> OPP have opp-supported-hw just for the task with the principle of
-> declaring a single table in dtsi and automatically select the right one.
+> "David S. Miller" <davem@davemloft.net> (maintainer:NETWORKING DRIVERS)
+> Eric Dumazet <edumazet@google.com> (maintainer:NETWORKING DRIVERS)
+> Jakub Kicinski <kuba@kernel.org> (maintainer:NETWORKING DRIVERS,commit_signer:5/6=83%,authored:1/6=17%,removed_lines:1/20=5%)
+> Paolo Abeni <pabeni@redhat.com> (maintainer:NETWORKING DRIVERS)
+> Asmaa Mnebhi <asmaa@nvidia.com> (commit_signer:4/6=67%)
+> David Thompson <davthompson@nvidia.com> (commit_signer:4/6=67%,authored:4/6=67%,added_lines:94/99=95%,removed_lines:19/20=95%)
+> Marc Kleine-Budde <mkl@pengutronix.de> (commit_signer:1/6=17%)
+> netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
+> linux-kernel@vger.kernel.org (open list)
 > 
-> Using the implementation downstream (opp table in each dtsi) is actually
-> worse as ipq8065 have 1.4ghz and not 1.2ghz and that can correctly be
-> handled with opp-supported-hw (and this change) or using delete-property
-> in dtsi (that I don't really like and it's ugly)
-> 
-> Also this implementation would match what is currently secribed for the
-> use of OPP in the documentation.
-> 
-> Hope you can understand the reason of this change, the intention is to
-> clear and trying to use standard OPP stuff instead of hacks in the DTS.
+> There may be a problem with the script.
+> The best way is to fix it.
 
-I'm fine with the opp-supported-hw part (I forgot that it is used by 
-default with the help of drv->versions). I do not like the idea of 
-encoding the same value into the -speedN part. If it is not needed, it's 
-better be dropped than using a semi-dummy value there.
+Let's take a step back.
 
-So, I'd suggest to define an enum, use BIT(enum_value) for drv->versions 
-and drop the speed%d part.
+The script is here, so you can take a look at what it does.
+And I dare say that changes can be proposed.
 
-Also, while we are at it, could you please define a schema for your opp 
-extensions? An example would make it easier to understand the bindings 
-(and will also provide a reference for possible other implementers).
+  https://github.com/kuba-moo/nipa/blob/master/tests/patch/cc_maintainers/test.py
 
-> 
->>> +
->>>    struct qcom_cpufreq_drv;
->>>    struct qcom_cpufreq_match_data {
->>> @@ -207,6 +211,69 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
->>>    	return ret;
->>>    }
->>> +static int qcom_cpufreq_ipq8064_name_version(struct device *cpu_dev,
->>> +					     struct nvmem_cell *speedbin_nvmem,
->>> +					     char **pvs_name,
->>> +					     struct qcom_cpufreq_drv *drv)
->>> +{
->>> +	int speed = 0, pvs = 0, pvs_ver = 0;
->>> +	int msm_id, ret = 0;
->>> +	u8 *speedbin;
->>> +	size_t len;
->>> +
->>> +	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
->>> +
->>> +	if (IS_ERR(speedbin))
->>> +		return PTR_ERR(speedbin);
->>> +
->>> +	switch (len) {
->>> +	case 4:
->>> +		get_krait_bin_format_a(cpu_dev, &speed, &pvs, &pvs_ver,
->>> +				       speedbin);
->>> +		break;
->>> +	default:
->>> +		dev_err(cpu_dev, "Unable to read nvmem data. Defaulting to 0!\n");
->>> +		ret = -ENODEV;
->>> +		goto len_error;
->>> +	}
->>> +
->>> +	ret = qcom_smem_get_soc_id(&msm_id);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	switch (msm_id) {
->>> +	case QCOM_ID_IPQ8062:
->>> +		drv->versions = IPQ8062_VERSION;
->>> +		break;
->>> +	case QCOM_ID_IPQ8064:
->>> +	case QCOM_ID_IPQ8066:
->>> +	case QCOM_ID_IPQ8068:
->>> +		drv->versions = IPQ8064_VERSION;
->>> +		break;
->>> +	case QCOM_ID_IPQ8065:
->>> +	case QCOM_ID_IPQ8069:
->>> +		drv->versions = IPQ8065_VERSION;
->>> +		break;
->>> +	default:
->>> +		dev_err(cpu_dev,
->>> +			"SoC ID %u is not part of IPQ8064 family, limiting to 1.0GHz!\n",
->>> +			msm_id);
->>> +		drv->versions = IPQ8062_VERSION;
->>> +		break;
->>> +	}
->>> +
->>> +	/*
->>> +	 * IPQ8064 speed is never fused. Only psv values are fused.
->>> +	 * Set speed to the versions to permit a unified opp table.
->>> +	 */
->>> +	snprintf(*pvs_name, sizeof("speedXX-pvsXX-vXX"), "speed%d-pvs%d-v%d",
->>> +		 drv->versions, pvs, pvs_ver);
->>> +
->>> +len_error:
->>> +	kfree(speedbin);
->>> +	return ret;
->>> +}
->>> +
->>>    static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
->>>    					     struct nvmem_cell *speedbin_nvmem,
->>>    					     char **pvs_name,
->>> @@ -256,6 +323,10 @@ static const struct qcom_cpufreq_match_data match_data_qcs404 = {
->>>    	.genpd_names = qcs404_genpd_names,
->>>    };
->>> +static const struct qcom_cpufreq_match_data match_data_ipq8064 = {
->>> +	.get_version = qcom_cpufreq_ipq8064_name_version,
->>> +};
->>> +
->>>    static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
->>>    	.get_version = qcom_cpufreq_ipq8074_name_version,
->>>    };
->>> @@ -404,7 +475,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
->>>    	{ .compatible = "qcom,apq8096", .data = &match_data_kryo },
->>>    	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
->>>    	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
->>> -	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
->>> +	{ .compatible = "qcom,ipq8064", .data = &match_data_ipq8064 },
->>>    	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
->>>    	{ .compatible = "qcom,apq8064", .data = &match_data_krait },
->>>    	{ .compatible = "qcom,msm8974", .data = &match_data_krait },
->>
->> -- 
->> With best wishes
->> Dmitry
->>
-> 
+I'd also say that the problem here is that Liming Sun <limings@nvidia.com>
+appears in the above mentioned commit that is being fixed.
 
--- 
-With best wishes
-Dmitry
+I think that get_maintainer will dell you this if you run it
+on your patch. Which is what the script appears to do.
 
+Locally, I see:
+
+  $ ./scripts/get_maintainer.pl --git-min-percent 25 this.patch
+  "David S. Miller" <davem@davemloft.net> (maintainer:NETWORKING DRIVERS,blamed_fixes:1/1=100%)
+  Eric Dumazet <edumazet@google.com> (maintainer:NETWORKING DRIVERS)
+  Jakub Kicinski <kuba@kernel.org> (maintainer:NETWORKING DRIVERS,commit_signer:5/5=100%)
+  Paolo Abeni <pabeni@redhat.com> (maintainer:NETWORKING DRIVERS)
+  Asmaa Mnebhi <asmaa@nvidia.com> (commit_signer:4/5=80%,blamed_fixes:1/1=100%)
+  David Thompson <davthompson@nvidia.com> (commit_signer:4/5=80%,authored:4/5=80%,added_lines:94/95=99%,removed_lines:19/20=95%,blamed_fixes:1/1=100%)
+  Liming Sun <limings@nvidia.com> (blamed_fixes:1/1=100%)
+  netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
+  linux-kernel@vger.kernel.org (open list)
+
+N.B.: The script excludes linux-kernel@vger.kernel.org
+
+
+As an aside. This patch is missing v2.
+
+  Subject: [PATCH v2] ...
