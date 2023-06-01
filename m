@@ -2,105 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F2F71F2A3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3401971F2A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbjFATJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 15:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
+        id S231889AbjFATKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 15:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjFATJA (ORCPT
+        with ESMTP id S232895AbjFATJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 15:09:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BA3184
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 12:08:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7ED6A648DB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 19:08:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFA17C433D2;
-        Thu,  1 Jun 2023 19:08:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685646537;
-        bh=nXTFrPXF1ChSi7Q/RomOwojoV8TWIeh5JlHOhyUhLqY=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=rH2z5zPAJVPJc6Ka7MVDMN6XrTQZvF3UO/d4RWcksb0q1OGdEdcEqdfNwfnhOOmxB
-         KT3HvRGotOKVVi8lkyJYfbH9ZZv4af7DeJ97elGGiq+0146nGNP4jbHF6V26hFvGdU
-         mKOit+UwES7p/kAt2iEw6Olu1+rocFF6qGN0H8Fv9Mn0YZ23A96R0RWegahe7kWZ3j
-         RU4Q93Dd6qMEtoCe2iFgO//enWJgsV7ySY0Q5JKigkLN3QMg2xpogwpxHBMVOscnpW
-         Q6XCByBKCXwxj6bjg14Lt/BPYxyVaHdsi7knHy7fkUUJCdMHRK1ZH3ZNkf1EkcMSh1
-         OwloaU+9Te0UQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5DC0CCE04B0; Thu,  1 Jun 2023 12:08:57 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 12:08:57 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     tj@kernel.org, jiangshanlai@gmail.com, qiang.zhang1211@gmail.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [BUG] wait_task_inactive() WARN_ON() in __kthread_bind_mask()
-Message-ID: <0329dbe3-c7a0-4dad-a244-14061168d7b7@paulmck-laptop>
-Reply-To: paulmck@kernel.org
+        Thu, 1 Jun 2023 15:09:59 -0400
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620C213E;
+        Thu,  1 Jun 2023 12:09:58 -0700 (PDT)
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-64d3bc502ddso1534394b3a.0;
+        Thu, 01 Jun 2023 12:09:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685646598; x=1688238598;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=prM0tuKlBBKG5IevqlWAEtXhMFCl0wz5wWu0cFBWnos=;
+        b=Z/xtv9Q9vzNgEo44ropTHFVgqnR0EUwwsoxitJtSuta+YykLQa/czQQ7c8A4di6dCv
+         k+gLJS2gx8rdK57HNlFu2XAc+IHBzqpCLKq18P4M6OVIkKzeZ/8iN3NoQOKGKMuSyKja
+         rLaUfo5nPPx68bp5/XI0iHDBriYGD7QQ2MPeL7hg0TptrYE6XddA/wB8Idv/eYwLT1A9
+         WTL15/HnHqnT4kG2BH2cqML5uGMGlaJm2Nd511sXVWcouHOytuLaSP4K2LJXxFAgGiq+
+         jegu0D1c/qsKfw2GtQe9utpeWp7/3dO7eOX/KINSQwXiFADJHQ0xlR8hMknRkH7bhjrq
+         d2Lw==
+X-Gm-Message-State: AC+VfDzqfDeF9nKoLHfXEsLPWOqKseMLzZMC0a30CB4OxpKQzHwrBkZR
+        tnczpnNgo6j5i/FQu6Mxna4=
+X-Google-Smtp-Source: ACHHUZ5TQRMB2GWJUD6fo3f13pKPUl5IwVeNt8wJwJ7QN5OXSo+0wJzUwDrP7i3rcjdyFziSEHxYjg==
+X-Received: by 2002:a05:6a00:22c9:b0:652:98e9:fb1 with SMTP id f9-20020a056a0022c900b0065298e90fb1mr786888pfj.32.1685646597408;
+        Thu, 01 Jun 2023 12:09:57 -0700 (PDT)
+Received: from dev-linux.lan (cpe-70-95-21-110.san.res.rr.com. [70.95.21.110])
+        by smtp.gmail.com with ESMTPSA id t4-20020aa79384000000b0064d57ecaa1dsm5449471pfe.28.2023.06.01.12.09.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 12:09:57 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 12:09:53 -0700
+From:   Sukrut Bellary <sukrut.bellary@linux.com>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] misc: fastrpc: Fix double free of 'buf' in error path
+Message-ID: <ZHjtAdHAwH7CAyAE@dev-linux.lan>
+References: <20230518100829.515143-1-sukrut.bellary@linux.com>
+ <9194ebdf-f335-4cd6-bf89-bb4f86a57784@kili.mountain>
+ <f47b17c1-1c02-2aa3-ba10-fcef70cb25a8@linaro.org>
+ <b0115d7d-d15a-4948-8726-09a8b37f3f36@kili.mountain>
+ <4aa42c38-e0e2-4d2d-bfe2-15bc151f7117@linaro.org>
+ <ZGf+99vmXpN5nJ2f@dev-linux.lan>
+ <ZHgicqL/TKuXHM0o@dev-linux.lan>
+ <22f7e4db-1380-4326-906f-83a85447471a@kadam.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <22f7e4db-1380-4326-906f-83a85447471a@kadam.mountain>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Thu, Jun 01, 2023 at 10:00:43AM +0300, Dan Carpenter wrote:
+> On Wed, May 31, 2023 at 09:45:38PM -0700, Sukrut Bellary wrote:
+> > On Fri, May 19, 2023 at 03:57:59PM -0700, Sukrut Bellary wrote:
+> > > On Fri, May 19, 2023 at 11:39:59AM +0100, Srinivas Kandagatla wrote:
+> > > > 
+> > > > 
+> > > > On 19/05/2023 11:22, Dan Carpenter wrote:
+> > > > > > ----------------------->cut<---------------------------
+> > > > > > diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+> > > > > > index f60bbf99485c..3fdd326e1ae8 100644
+> > > > > > --- a/drivers/misc/fastrpc.c
+> > > > > > +++ b/drivers/misc/fastrpc.c
+> > > > > > @@ -1891,7 +1891,8 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl,
+> > > > > > char __user *argp)
+> > > > > >                                        &args[0]);
+> > > > > >          if (err) {
+> > > > > >                  dev_err(dev, "mmap error (len 0x%08llx)\n", buf->size);
+> > > > > > -               goto err_invoke;
+> > > > > > +               fastrpc_buf_free(buf);
+> > > > > > +               return err;
+> > > > > >          }
+> > > > > > 
+> > > > > >          /* update the buffer to be able to deallocate the memory on the DSP
+> > > > > > */
+> > > > > > @@ -1930,11 +1931,7 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl,
+> > > > > > char __user *argp)
+> > > > > >          return 0;
+> > > > > > 
+> > > > > >   err_assign:
+> > > > > > -       fastrpc_req_munmap_impl(fl, buf);
+> > > > > > -err_invoke:
+> > > > > > -       fastrpc_buf_free(buf);
+> > > > > > -
+> > > > > > -       return err;
+> > > > > > +       return fastrpc_req_munmap_impl(fl, buf);
+> > > > > 
+> > > > > This will return success if copy_to_user() fails.
+> > > > > 
+> > > > that is true, using return value of fastrpc_req_munmap_impl does not really
+> > > > make sense here we should just return err in either case to the user.
+> > > >
+> > >
+> > 
+> > I have one follow-up question before I send the v2 patch.
+> > With the following approach, I do see one issue.
+> > 
+> > ----------------------->cut<---------------------------
+> > diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+> > index f60bbf99485c..3fdd326e1ae8 100644
+> > --- a/drivers/misc/fastrpc.c
+> > +++ b/drivers/misc/fastrpc.c
+> > @@ -1891,7 +1891,8 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl,
+> > char __user *argp)
+> >                                       &args[0]);
+> >         if (err) {
+> >                 dev_err(dev, "mmap error (len 0x%08llx)\n", buf->size);
+> > -               goto err_invoke;
+> > +               fastrpc_buf_free(buf);
+> > +               return err;
+> >         }
+> > 
+> >         /* update the buffer to be able to deallocate the memory on the DSP */
+> > @@ -1930,11 +1931,7 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl,
+> > char __user *argp)
+> >         return 0;
+> > 
+> >  err_assign:
+> > -       fastrpc_req_munmap_impl(fl, buf);
+> > -err_invoke:
+> > -       fastrpc_buf_free(buf);
+> > -
+> > -       return err;
+> > +       fastrpc_req_munmap_impl(fl, buf);
+> > +       return err;
+> >  }
+> > ----------------------->cut<---------------------------
+> > 
+> > In this, if qcom_scm_assign_mem() fails, the buf is not added to the list.
+> > But the call to fastrpc_req_munmap_impl() tries to delete the buf
+> > from the list.
+> > 
+> > To avoid this, we can use the following approach.
+> 
+> The list is initialized in __fastrpc_buf_alloc().
+> 
+> 	INIT_LIST_HEAD(&buf->node);
+> 
+> So calling list_del(&buf->node); is fine.  It's not necessary but it's
+> not harmful.
+>
 
-I just now saw this in SRCU-P rcutorture testing.  It might well be a
-one-off, but I thought I should pass it along in case someone else is
-seeing similar things.
+OK, Thanks Dan. I will submit the v2 with 1st approach.
 
-I don't immediately see how this would be related, but who knows?
+Regards,
+Sukrut Bellary
 
-https://lore.kernel.org/lkml/20230524035339.25185-1-qiang.zhang1211@gmail.com/
-
-Thoughts?
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-[ 1726.040567] ------------[ cut here ]------------
-[ 1726.040569] WARNING: CPU: 3 PID: 2016 at kernel/kthread.c:515 __kthread_bind_mask+0x18/0x60
-[ 1726.040581] Modules linked in:
-[ 1726.040584] CPU: 3 PID: 2016 Comm: kworker/7:3 Not tainted 6.4.0-rc1-00072-g99f9f93c0bce #5209
-[ 1726.040588] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-[ 1726.040594] RIP: 0010:__kthread_bind_mask+0x18/0x60
-[ 1726.040598] Code: 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 41 55 41 54 55 48 89 f5 89 d6 53 48 89 fb e8 8d 5a 01 00 48 85 c0 75 0d <0f> 0b 5b 5d 41 5c 41 5d c3 cc cc cc cc 4c 8d a3 00 09 00 00 4c 89
-[ 1726.040601] RSP: 0000:ffff97c7c1ecfe78 EFLAGS: 00010246
-[ 1726.040604] RAX: 0000000000000000 RBX: ffff90ce82918000 RCX: 0000000000000000
-[ 1726.040606] RDX: 0000000000000000 RSI: 0000000000000002 RDI: ffff90ce82918000
-[ 1726.040607] RBP: ffff90ce81047248 R08: 0000000000000001 R09: ffffffff9cab5d97
-[ 1726.040609] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000004
-[ 1726.040610] R13: ffff90ce9f5ee460 R14: ffff97c7c1ecfea0 R15: ffff90ce812ef840
-[ 1726.040614] FS:  0000000000000000(0000) GS:ffff90ce9f4c0000(0000) knlGS:0000000000000000
-[ 1726.040616] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 1726.040618] CR2: 0000000000000000 CR3: 0000000014648000 CR4: 00000000000006e0
-[ 1726.040619] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[ 1726.040621] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[ 1726.040622] Call Trace:
-[ 1726.040624]  <TASK>
-[ 1726.040630]  create_worker+0xf1/0x220
-[ 1726.040637]  worker_thread+0x2e4/0x3b0
-[ 1726.040641]  ? __pfx_worker_thread+0x10/0x10
-[ 1726.040643]  kthread+0xe6/0x120
-[ 1726.040648]  ? __pfx_kthread+0x10/0x10
-[ 1726.040651]  ret_from_fork+0x2c/0x50
-[ 1726.040658]  </TASK>
-[ 1726.040659] irq event stamp: 34
-[ 1726.040661] hardirqs last  enabled at (33): [<ffffffff9da014ea>] asm_sysvec_call_function_single+0x1a/0x20
-[ 1726.040668] hardirqs last disabled at (34): [<ffffffff9d95cead>] __schedule+0x67d/0xd20
-[ 1726.040675] softirqs last  enabled at (0): [<ffffffff9ca82da8>] copy_process+0xb98/0x1f10
-[ 1726.040681] softirqs last disabled at (0): [<0000000000000000>] 0x0
-[ 1726.040685] ---[ end trace 0000000000000000 ]---
+> regards,
+> dan carpenter
+> 
