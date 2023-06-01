@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6567194F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09307194F9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbjFAIC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
+        id S231203AbjFAID2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbjFAICt (ORCPT
+        with ESMTP id S229882AbjFAID1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:02:49 -0400
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7510E56
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:02:37 -0700 (PDT)
-Received: by mail-oo1-xc30.google.com with SMTP id 006d021491bc7-546ee6030e5so274165eaf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:02:37 -0700 (PDT)
+        Thu, 1 Jun 2023 04:03:27 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21093E6A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:03:10 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-75b17aa343dso46229985a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:03:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685606557; x=1688198557;
+        d=google.com; s=20221208; t=1685606589; x=1688198589;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tFj+kT/VBusdgZog+iDZ1ooQoiEYtKUuWkkl3xIlR2I=;
-        b=OhqzkRJGfG1+JD4yVtA8DAeV9NZBCL4nRgB7u1r+sBe3HdedZWr7Zk8RA6s8DoRzXe
-         sT9Q8G1+z2DbkbcgRScqS/9t9Y457dDsxLt0D/qecTvoP5Og7DJ7gvfVtHCbEpjOkQHq
-         Dzm72NElUOxLqw/CzCXevoFsO1A1t7dlw1B1cYpkOr27a+OhP+wEfkncLSt5GzjKAsBs
-         ZB8FSD0clVT3WDx2t6D3kHdsTZyXORSmQXTVwmwGlBhacuXGLrRiFPtoi4nPjm8U6zYl
-         9IClnINlV+vQEp66W6SxgwTrZbos9DJsEDeWBHkvL0qB4q1jmhrlgxwka7XpJuLt8fl4
-         1cOQ==
+        bh=qIxWoQMPbMs3SyYnNFpd12uvUzGg1vQdtEK/LhLStOc=;
+        b=L+cEiy60nrnsyZr30rVoBm80T3+W3sdW+AT5zAPegICSqtvz7TWzCY2+Dk0r6D8PtV
+         N0VO9ijzSqk2gJBxZ0pIAfZ9n0k9l6lAPn3Vcz3LwpaPHUO4SZhrbMQESkdsMvJaG/JW
+         DlaHPnrT+DLQYK922xcUOZjzChtgQEkH8Op7u1d8czKB0CgxnDLRbBn9k6Wb1Vp0I2VO
+         6g2PIlxWp/ZJm0GF8GUO+DtF2x2r+Yc2DI92e2x1cWWDypBwDyYSnmmzrb9YYuiSzlTS
+         3PM+7wWomGxY/1jaC+N/OMtn0QSLLe+HugIMWQhcylKS4/UDdxCZimMmn2TWiExaUhyV
+         D/bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685606557; x=1688198557;
+        d=1e100.net; s=20221208; t=1685606589; x=1688198589;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tFj+kT/VBusdgZog+iDZ1ooQoiEYtKUuWkkl3xIlR2I=;
-        b=DKMf6c7MszpL+zo2/vcl75qfM/TuW5YC7fTgWKKOnZA+nptPkdybLd4TjY5v7KPMKm
-         CDz9MSFXCzXYbjYtTrMAZz1g9aBUrsLHdIhsKC1vrk7Dfgefabn7oQBo3XlJx7603za4
-         G8410BMkdJpNnGrLE3J3cd8edxd1cAqzSzfFo5ppKULCPCQdrWFcV8e1okLU8/wFf6Hu
-         YgU+MOnhIYdyvxim44y9LyjNvzMUBXwijnvAnsXZg1QeI/feQN/U9i+Z6tbHTZiP1APq
-         WxJnnUzT4lOPtl13kdxhapE0f5m+un+gh9sQo0ggg5eQuya1mQsVaNSiC4xxFMmbm7NS
-         zzcQ==
-X-Gm-Message-State: AC+VfDxF3KZRUYc3FxcQl8XsN1YnGbaJ8ooxapBMm+xwy/BcoDBY+VOJ
-        nH0rnpnfEd+o3AbxxQNwvqLGmKCUG0QTvXRbYKay4w==
-X-Google-Smtp-Source: ACHHUZ6U11TNquIEIVZC+F2sDbjEhIWog9gz4EgT+L7KWQXwOLZBFnHQOMc5AkC1hYLE6UOkXIIQklZPzZvzVHyLEVw=
-X-Received: by 2002:a05:6358:9499:b0:122:956c:b356 with SMTP id
- i25-20020a056358949900b00122956cb356mr2392943rwb.22.1685606556968; Thu, 01
- Jun 2023 01:02:36 -0700 (PDT)
+        bh=qIxWoQMPbMs3SyYnNFpd12uvUzGg1vQdtEK/LhLStOc=;
+        b=RiX3sJg4LWaT6RJCiukmINM4SN0d+kVv63B9B9LdutHTWdMnwJDSgQeCdgn3Pukt90
+         70NirsM8O2xktU1F+jwWYZ3PnJqfWhJFq67y091Tor/dzoprp8Rz92HvuWoJP4hyFcLu
+         Xqqewfi+h0r4B44SDeCUNn6V3B7K+Yh7QC/bmZ4erZmvKhis1wMv9h2nvQO9lLBmuC9+
+         VczAw1QPrfZ6g1cEbkYvWVMmg/yzV9icZwlAap67EPDCVQplpUx9/Qmr3cZHMgFiVZ8X
+         JBMvSB4ahkKU2d6pFmcBvi/Adv5hUelT7C5OfBFAsrV4DYAqbNBwXSQZdx+RF2KXCy+X
+         UdzQ==
+X-Gm-Message-State: AC+VfDxfbk3AeaFiRli8o/QbA+MZgSEMSt2PQueQB1SqjqjLh9gBN1F7
+        PdPMEwt/q6X85GbqbiMBLJotq9Qws4ZXo+vCeSpFAA==
+X-Google-Smtp-Source: ACHHUZ7lA3uZW1Vp6G1Pyowwp2MLXBsBc7ROCQLXc9vzJ3EoQ+1jC8tVutyGhc5nYrDdvncql1nRlKBQBJ2OKxmdYj4=
+X-Received: by 2002:a05:620a:e92:b0:75b:23a1:8308 with SMTP id
+ w18-20020a05620a0e9200b0075b23a18308mr8724732qkm.3.1685606588982; Thu, 01 Jun
+ 2023 01:03:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230522112058.2965866-1-talumbau@google.com> <20230522112058.2965866-3-talumbau@google.com>
-In-Reply-To: <20230522112058.2965866-3-talumbau@google.com>
+References: <20230522112058.2965866-1-talumbau@google.com> <20230522112058.2965866-4-talumbau@google.com>
+In-Reply-To: <20230522112058.2965866-4-talumbau@google.com>
 From:   Yuanchu Xie <yuanchu@google.com>
-Date:   Thu, 1 Jun 2023 16:02:26 +0800
-Message-ID: <CAJj2-QEFYapMq2YeaAAeQUovMSsGP7m1G9m0O12AR23MfH-Ufg@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable 3/4] mm: multi-gen LRU: add helpers in page
- table walks
+Date:   Thu, 1 Jun 2023 16:02:58 +0800
+Message-ID: <CAJj2-QHSBPNhuM2EY3Hki=-Xq_H-k2zutm7xJGCP+fCqfCqt1g@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable 4/4] mm: multi-gen LRU: cleanup lru_gen_test_recent()
 To:     "T.J. Alumbaugh" <talumbau@google.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org,
@@ -75,95 +74,123 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Mon, May 22, 2023 at 7:21=E2=80=AFPM T.J. Alumbaugh <talumbau@google.com=
 > wrote:
 >
-> Add helpers to page table walking code:
->  - Clarifies intent via name "should_walk_mmu" and "should_clear_pmd_youn=
-g"
-I wonder if these should be called "can_walk_mmu" and
-"can_clear_pmd_young", but that's rather minor.
-
->  - Avoids repeating same logic in two places
+> Avoid passing memcg* and pglist_data* to lru_gen_test_recent()
+> since we only use the lruvec anyway.
 >
 > Signed-off-by: T.J. Alumbaugh <talumbau@google.com>
 > ---
->  mm/vmscan.c | 20 +++++++++++++++-----
->  1 file changed, 15 insertions(+), 5 deletions(-)
+>  mm/workingset.c | 46 ++++++++++++++++------------------------------
+>  1 file changed, 16 insertions(+), 30 deletions(-)
 >
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index e088db138f5f..ad0f589d32e6 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -3234,6 +3234,16 @@ DEFINE_STATIC_KEY_ARRAY_FALSE(lru_gen_caps, NR_LRU=
-_GEN_CAPS);
->  #define get_cap(cap)   static_branch_unlikely(&lru_gen_caps[cap])
->  #endif
+> diff --git a/mm/workingset.c b/mm/workingset.c
+> index 90ae785d4c9c..5796e927e6d7 100644
+> --- a/mm/workingset.c
+> +++ b/mm/workingset.c
+> @@ -257,59 +257,46 @@ static void *lru_gen_eviction(struct folio *folio)
 >
-> +static bool should_walk_mmu(void)
-> +{
-> +       return arch_has_hw_pte_young() && get_cap(LRU_GEN_MM_WALK);
-> +}
-> +
-> +static bool should_clear_pmd_young(void)
-> +{
-> +       return arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEAF=
-_YOUNG);
-> +}
-> +
->  /***********************************************************************=
-*******
->   *                          shorthand helpers
->   ***********************************************************************=
-*******/
-> @@ -4098,7 +4108,7 @@ static void walk_pmd_range_locked(pud_t *pud, unsig=
-ned long addr, struct vm_area
->                         goto next;
+>  /*
+>   * Tests if the shadow entry is for a folio that was recently evicted.
+> - * Fills in @memcgid, @pglist_data, @token, @workingset with the values
+> - * unpacked from shadow.
+> + * Fills in @lruvec, @token, @workingset with the values unpacked from s=
+hadow.
+>   */
+> -static bool lru_gen_test_recent(void *shadow, bool file, int *memcgid,
+> -               struct pglist_data **pgdat, unsigned long *token, bool *w=
+orkingset)
+> +static bool lru_gen_test_recent(void *shadow, bool file, struct lruvec *=
+*lruvec,
+> +                               unsigned long *token, bool *workingset)
+>  {
+> -       struct mem_cgroup *eviction_memcg;
+> -       struct lruvec *lruvec;
+> -       struct lru_gen_folio *lrugen;
+> +       int memcg_id;
+>         unsigned long min_seq;
+> +       struct mem_cgroup *memcg;
+> +       struct pglist_data *pgdat;
 >
->                 if (!pmd_trans_huge(pmd[i])) {
-> -                       if (arch_has_hw_nonleaf_pmd_young() && get_cap(LR=
-U_GEN_NONLEAF_YOUNG))
-> +                       if (should_clear_pmd_young())
->                                 pmdp_test_and_clear_young(vma, addr, pmd =
-+ i);
->                         goto next;
->                 }
-> @@ -4191,7 +4201,7 @@ static void walk_pmd_range(pud_t *pud, unsigned lon=
-g start, unsigned long end,
->  #endif
->                 walk->mm_stats[MM_NONLEAF_TOTAL]++;
+> -       unpack_shadow(shadow, memcgid, pgdat, token, workingset);
+> -       eviction_memcg =3D mem_cgroup_from_id(*memcgid);
+> +       unpack_shadow(shadow, &memcg_id, &pgdat, token, workingset);
 >
-> -               if (arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NO=
-NLEAF_YOUNG)) {
-> +               if (should_clear_pmd_young()) {
->                         if (!pmd_young(val))
->                                 continue;
+> -       lruvec =3D mem_cgroup_lruvec(eviction_memcg, *pgdat);
+> -       lrugen =3D &lruvec->lrugen;
+> +       memcg =3D mem_cgroup_from_id(memcg_id);
+> +       *lruvec =3D mem_cgroup_lruvec(memcg, pgdat);
 >
-> @@ -4493,7 +4503,7 @@ static bool try_to_inc_max_seq(struct lruvec *lruve=
-c, unsigned long max_seq,
->          * handful of PTEs. Spreading the work out over a period of time =
-usually
->          * is less efficient, but it avoids bursty page faults.
->          */
-> -       if (!arch_has_hw_pte_young() || !get_cap(LRU_GEN_MM_WALK)) {
-> +       if (!should_walk_mmu()) {
->                 success =3D iterate_mm_list_nowalk(lruvec, max_seq);
->                 goto done;
->         }
-> @@ -5730,10 +5740,10 @@ static ssize_t enabled_show(struct kobject *kobj,=
- struct kobj_attribute *attr, c
->         if (get_cap(LRU_GEN_CORE))
->                 caps |=3D BIT(LRU_GEN_CORE);
+> -       min_seq =3D READ_ONCE(lrugen->min_seq[file]);
+> +       min_seq =3D READ_ONCE((*lruvec)->lrugen.min_seq[file]);
+>         return (*token >> LRU_REFS_WIDTH) =3D=3D (min_seq & (EVICTION_MAS=
+K >> LRU_REFS_WIDTH));
+>  }
 >
-> -       if (arch_has_hw_pte_young() && get_cap(LRU_GEN_MM_WALK))
-> +       if (should_walk_mmu())
->                 caps |=3D BIT(LRU_GEN_MM_WALK);
+>  static void lru_gen_refault(struct folio *folio, void *shadow)
+>  {
+>         int hist, tier, refs;
+> -       int memcg_id;
+>         bool workingset;
+>         unsigned long token;
+> -       unsigned long min_seq;
+>         struct lruvec *lruvec;
+>         struct lru_gen_folio *lrugen;
+> -       struct mem_cgroup *memcg;
+> -       struct pglist_data *pgdat;
+>         int type =3D folio_is_file_lru(folio);
+>         int delta =3D folio_nr_pages(folio);
 >
-> -       if (arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEAF_YO=
-UNG))
-> +       if (should_clear_pmd_young())
->                 caps |=3D BIT(LRU_GEN_NONLEAF_YOUNG);
+>         rcu_read_lock();
 >
->         return sysfs_emit(buf, "0x%04x\n", caps);
+> -       if (!lru_gen_test_recent(shadow, type, &memcg_id, &pgdat, &token,
+> -                       &workingset))
+> +       if (!lru_gen_test_recent(shadow, type, &lruvec, &token, &workings=
+et))
+>                 goto unlock;
+>
+> -       memcg =3D folio_memcg_rcu(folio);
+> -       if (memcg_id !=3D mem_cgroup_id(memcg))
+> +       if (lruvec !=3D folio_lruvec(folio))
+>                 goto unlock;
+>
+> -       if (pgdat !=3D folio_pgdat(folio))
+> -               goto unlock;
+> -
+> -       lruvec =3D mem_cgroup_lruvec(memcg, pgdat);
+>         lrugen =3D &lruvec->lrugen;
+> -       min_seq =3D READ_ONCE(lrugen->min_seq[type]);
+>
+> -       hist =3D lru_hist_from_seq(min_seq);
+> +       hist =3D lru_hist_from_seq(READ_ONCE(lrugen->min_seq[type]));
+>         /* see the comment in folio_lru_refs() */
+>         refs =3D (token & (BIT(LRU_REFS_WIDTH) - 1)) + workingset;
+>         tier =3D lru_tier_from_refs(refs);
+> @@ -339,8 +326,8 @@ static void *lru_gen_eviction(struct folio *folio)
+>         return NULL;
+>  }
+>
+> -static bool lru_gen_test_recent(void *shadow, bool file, int *memcgid,
+> -               struct pglist_data **pgdat, unsigned long *token, bool *w=
+orkingset)
+> +static bool lru_gen_test_recent(void *shadow, bool file, struct lruvec *=
+*lruvec,
+> +                               unsigned long *token, bool *workingset)
+>  {
+>         return false;
+>  }
+> @@ -435,8 +422,7 @@ bool workingset_test_recent(void *shadow, bool file, =
+bool *workingset)
+>         unsigned long eviction;
+>
+>         if (lru_gen_enabled())
+> -               return lru_gen_test_recent(shadow, file, &memcgid, &pgdat=
+, &eviction,
+> -                       workingset);
+> +               return lru_gen_test_recent(shadow, file, &eviction_lruvec=
+, &eviction, workingset);
+>
+>         unpack_shadow(shadow, &memcgid, &pgdat, &eviction, workingset);
+>         eviction <<=3D bucket_order;
 > --
 > 2.40.1.698.g37aff9b760-goog
 >
-Other than that,
 Reviewed-by: Yuanchu Xie <yuanchu@google.com>
