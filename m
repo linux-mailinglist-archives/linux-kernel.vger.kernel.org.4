@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CD671A04C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D6171A055
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234341AbjFAOgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
+        id S232850AbjFAOhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234383AbjFAOgT (ORCPT
+        with ESMTP id S233423AbjFAOgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:36:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D49CE58;
-        Thu,  1 Jun 2023 07:36:01 -0700 (PDT)
+        Thu, 1 Jun 2023 10:36:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2567510E0;
+        Thu,  1 Jun 2023 07:36:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F627645BC;
-        Thu,  1 Jun 2023 14:36:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 848DBC433D2;
-        Thu,  1 Jun 2023 14:35:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68B4B60C86;
+        Thu,  1 Jun 2023 14:36:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57D5AC433EF;
+        Thu,  1 Jun 2023 14:36:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685630160;
-        bh=0SeYZDYYFhDVAQXu0vufGhDp6XBSc1TwdOd8xaXMv7o=;
+        s=korg; t=1685630168;
+        bh=/xK7oMYZYUP4DJKjzDrCOCYODgLlz31gSGqfZuxsvp4=;
         h=From:To:Cc:Subject:Date:From;
-        b=gS6uMO8MU6Cv2fiNdRWpdwhm5ubCFpDhOQhM+xzQkN3iBCPKtSE3nydiHwNmlkB0p
-         1kMePpqxa2wMz1yuKWz5pipDqmP9ozI//jv1UOVDVHGaI+BGaurl4KPLloOaluIO2Z
-         bR8OyRSa6TKPF2o4iZZUEYxu/Fmv3u4S23R4TgQ4=
+        b=ShlBKkZxsn9Zji6NNyspbCGu03d/o/KDauuHeJa3dbnJeG+D3HVvdj1Y3ktbYQkLI
+         5ChVW6QfyXx9neTbXJmLT4upiAG3Kegae2grCC41VjUVJABp7nnN05Mk75Cmvdq3jo
+         cB+cMW6i3Kh97FUF3V8nWJpKwsX4J+6OU61IP7Iw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,23 +38,24 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 6.1 00/39] 6.1.32-rc2 review
-Date:   Thu,  1 Jun 2023 15:35:57 +0100
-Message-Id: <20230601143327.479886832@linuxfoundation.org>
+Subject: [PATCH 5.15 00/37] 5.15.115-rc2 review
+Date:   Thu,  1 Jun 2023 15:36:06 +0100
+Message-Id: <20230601143331.405588582@linuxfoundation.org>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.32-rc2.gz
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.115-rc2.gz
 X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-6.1.y
+X-KernelTest-Branch: linux-5.15.y
 X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 6.1.32-rc2
+X-KernelTest-Version: 5.15.115-rc2
 X-KernelTest-Deadline: 2023-06-03T14:33+00:00
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,18 +64,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 6.1.32 release.
-There are 39 patches in this series, all will be posted as a response
+This is the start of the stable review cycle for the 5.15.115 release.
+There are 37 patches in this series, all will be posted as a response
 to this one.  If anyone has any issues with these being applied, please
 let me know.
 
-Responses should be made by Sat, 03 Jun 2023 14:33:15 +0000.
+Responses should be made by Sat, 03 Jun 2023 14:33:22 +0000.
 Anything received after that time might be too late.
 
 The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.32-rc2.gz
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.115-rc2.gz
 or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
 and the diffstat can be found below.
 
 thanks,
@@ -85,49 +86,34 @@ greg k-h
 Pseudo-Shortlog of commits:
 
 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 6.1.32-rc2
-
-Yanteng Si <siyanteng@loongson.cn>
-    tools headers UAPI: Sync the linux/in.h with the kernel sources
+    Linux 5.15.115-rc2
 
 Paul Blakey <paulb@nvidia.com>
     netfilter: ctnetlink: Support offloaded conntrack entry deletion
 
-Gautham R. Shenoy <gautham.shenoy@amd.com>
-    cpufreq: amd-pstate: Add ->fast_switch() callback
+Nicolas Dichtel <nicolas.dichtel@6wind.com>
+    ipv{4,6}/raw: fix output xfrm lookup wrt protocol
 
-Wyes Karny <wyes.karny@amd.com>
-    cpufreq: amd-pstate: Update policy->cur in amd_pstate_adjust_perf()
+Carlos Llamas <cmllamas@google.com>
+    binder: fix UAF of alloc->vma in race with munmap()
 
-Anuj Gupta <anuj20.g@samsung.com>
-    block: fix bio-cache for passthru IO
+Carlos Llamas <cmllamas@google.com>
+    binder: add lockless binder_alloc_(set|get)_vma()
 
-Ido Schimmel <idosch@nvidia.com>
-    Revert "thermal/drivers/mellanox: Use generic thermal_zone_get_trip() function"
+Carlos Llamas <cmllamas@google.com>
+    Revert "android: binder: stop saving a pointer to the VMA"
+
+Carlos Llamas <cmllamas@google.com>
+    Revert "binder_alloc: add missing mmap_lock calls when using the VMA"
 
 Ruihan Li <lrh2000@pku.edu.cn>
     bluetooth: Add cmd validity checks at the start of hci_sock_ioctl()
 
-Mario Limonciello <mario.limonciello@amd.com>
-    drm/amd: Don't allow s0ix on APUs older than Raven
+Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+    xdp: xdp_mem_allocator can be NULL in trace_mem_connect().
 
-Hariprasad Kelam <hkelam@marvell.com>
-    octeontx2-af: Add validation for lmac type
-
-Zhu Yanjun <yanjun.zhu@linux.dev>
-    RDMA/rxe: Fix the error "trying to register non-static key in rxe_cleanup_task"
-
-Johannes Berg <johannes.berg@intel.com>
-    wifi: iwlwifi: mvm: fix potential memory leak
-
-Haim Dreyfuss <haim.dreyfuss@intel.com>
-    wifi: iwlwifi: mvm: support wowlan info notification version 2
-
-Eric Huang <echuang@realtek.com>
-    wifi: rtw89: correct 5 MHz mask setting
-
-David Epping <david.epping@missinglinkelectronics.com>
-    net: phy: mscc: enable VSC8501/2 RGMII RX clock
+Jiaxun Yang <jiaxun.yang@flygoat.com>
+    irqchip/mips-gic: Don't touch vl_map if a local interrupt is not routable
 
 Yunsheng Lin <linyunsheng@huawei.com>
     page_pool: fix inconsistency for page_pool_ring_[un]lock()
@@ -135,129 +121,134 @@ Yunsheng Lin <linyunsheng@huawei.com>
 Qingfang DENG <qingfang.deng@siflower.com.cn>
     net: page_pool: use in_softirq() instead
 
-Yan Zhao <yan.y.zhao@intel.com>
-    vfio/type1: check pfn valid before converting to struct page
+Toke Høiland-Jørgensen <toke@redhat.com>
+    xdp: Allow registering memory model without rxq reference
 
-Tian Lan <tian.lan@twosigma.com>
-    blk-mq: fix race condition in active queue accounting
+Rahul Rameshbabu <rrameshbabu@nvidia.com>
+    net/mlx5e: Fix SQ wake logic in ptp napi_poll context
 
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: Incorrectly handling copied_seq
+Jiaxun Yang <jiaxun.yang@flygoat.com>
+    irqchip/mips-gic: Use raw spinlock for gic_lock
 
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: Wake up polling after data copy
+Marc Zyngier <maz@kernel.org>
+    irqchip/mips-gic: Get rid of the reliance on irq_cpu_online()
 
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: TCP data stall on recv before accept
+Carlos Llamas <cmllamas@google.com>
+    binder: fix UAF caused by faulty buffer cleanup
 
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: Handle fin correctly
+Hangbin Liu <liuhangbin@gmail.com>
+    bonding: fix send_peer_notif overflow
 
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: Improved check for empty queue
+Hangbin Liu <liuhangbin@gmail.com>
+    Bonding: add arp_missed_max option
 
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: Reschedule is now done through backlog
+Arınç ÜNAL <arinc.unal@arinc9.com>
+    net: dsa: mt7530: fix network connectivity with multiple CPU ports
 
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: Convert schedule_work into delayed_work
+Daniel Golle <daniel@makrotopia.org>
+    net: dsa: mt7530: split-off common parts from mt7531_setup
 
-John Fastabend <john.fastabend@gmail.com>
-    bpf, sockmap: Pass skb ownership through read_skb
+Frank Wunderlich <frank-w@public-files.de>
+    net: dsa: mt7530: rework mt753[01]_setup
 
-Henning Schild <henning.schild@siemens.com>
-    gpio-f7188x: fix chip name and pin count on Nuvoton chip
+Vladimir Oltean <vladimir.oltean@nxp.com>
+    net: dsa: introduce helpers for iterating through ports using dp
+
+Claudio Imbrenda <imbrenda@linux.ibm.com>
+    KVM: s390: fix race in gmap_make_secure()
+
+Claudio Imbrenda <imbrenda@linux.ibm.com>
+    KVM: s390: pv: add export before import
+
+David Epping <david.epping@missinglinkelectronics.com>
+    net: phy: mscc: enable VSC8501/2 RGMII RX clock
+
+Steve Wahl <steve.wahl@hpe.com>
+    platform/x86: ISST: Remove 8 socket limit
+
+Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+    platform/x86: ISST: PUNIT device mapping with Sub-NUMA clustering
 
 Shay Drory <shayd@nvidia.com>
-    net/mlx5: E-switch, Devcom, sync devcom events and devcom comp register
+    net/mlx5: Devcom, serialize devcom registration
 
-Jakub Kicinski <kuba@kernel.org>
-    tls: rx: strp: preserve decryption status of skbs when needed
+Vlad Buslov <vladbu@nvidia.com>
+    net/mlx5e: Fix deadlock in tc route query code
 
-Jakub Kicinski <kuba@kernel.org>
-    tls: rx: strp: factor out copying skb data
+Mark Bloch <mbloch@nvidia.com>
+    net/mlx5: devcom only supports 2 ports
 
-Jakub Kicinski <kuba@kernel.org>
-    tls: rx: strp: force mixed decrypted records into copy mode
+Anton Protopopov <aspsk@isovalent.com>
+    bpf: fix a memory leak in the LRU and LRU_PERCPU hash maps
 
-Jakub Kicinski <kuba@kernel.org>
-    tls: rx: strp: fix determining record length in copy mode
+Hans de Goede <hdegoede@redhat.com>
+    power: supply: bq24190: Call power_supply_changed() after updating input current
 
-Jakub Kicinski <kuba@kernel.org>
-    tls: rx: strp: set the skb->len of detached / CoW'ed skbs
+Hans de Goede <hdegoede@redhat.com>
+    power: supply: core: Refactor power_supply_set_input_current_limit_from_supplier()
 
-Jakub Kicinski <kuba@kernel.org>
-    tls: rx: device: fix checking decryption status
+Hans de Goede <hdegoede@redhat.com>
+    power: supply: bq27xxx: After charger plug in/out wait 0.5s for things to stabilize
 
-Mario Limonciello <mario.limonciello@amd.com>
-    platform/x86/amd/pmf: Fix CnQF and auto-mode after resume
+Hans de Goede <hdegoede@redhat.com>
+    power: supply: bq27xxx: Ensure power_supply_changed() is called on current sign changes
 
-Jeremy Sowden <jeremy@azazel.net>
-    selftests/bpf: Fix pkg-config call building sign-file
+Hans de Goede <hdegoede@redhat.com>
+    power: supply: bq27xxx: Move bq27xxx_battery_update() down
 
-Sudeep Holla <sudeep.holla@arm.com>
-    firmware: arm_ffa: Fix usage of partition info get count flag
-
-Nicolas Dichtel <nicolas.dichtel@6wind.com>
-    ipv{4,6}/raw: fix output xfrm lookup wrt protocol
-
-Jakub Sitnicki <jakub@cloudflare.com>
-    inet: Add IP_LOCAL_PORT_RANGE socket option
+Sicelo A. Mhlongo <absicsz@gmail.com>
+    power: supply: bq27xxx: expose battery data when CI=1
 
 
 -------------
 
 Diffstat:
 
+ Documentation/networking/bonding.rst               |  11 ++
  Makefile                                           |   4 +-
- block/blk-map.c                                    |   2 +-
- block/blk-mq-tag.c                                 |  12 +-
- drivers/cpufreq/amd-pstate.c                       |  45 ++++-
- drivers/firmware/arm_ffa/driver.c                  |   3 +-
- drivers/gpio/Kconfig                               |   2 +-
- drivers/gpio/gpio-f7188x.c                         |  28 +--
- drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c           |   3 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c            |   7 +-
- drivers/infiniband/sw/rxe/rxe_qp.c                 |   7 +-
- drivers/net/ethernet/marvell/octeontx2/af/cgx.c    |   8 +
- drivers/net/ethernet/mellanox/mlx5/core/eswitch.h  |   1 +
- .../ethernet/mellanox/mlx5/core/eswitch_offloads.c |   9 +-
- drivers/net/ethernet/mellanox/mlxsw/core_thermal.c | 209 ++++++++++++++++-----
+ arch/s390/kernel/uv.c                              |  56 ++++---
+ drivers/android/binder.c                           |  26 +++-
+ drivers/android/binder_alloc.c                     |  64 +++-----
+ drivers/android/binder_alloc.h                     |   2 +-
+ drivers/android/binder_alloc_selftest.c            |   2 +-
+ drivers/irqchip/irq-mips-gic.c                     |  65 +++++---
+ drivers/net/bonding/bond_main.c                    |  17 +-
+ drivers/net/bonding/bond_netlink.c                 |  22 ++-
+ drivers/net/bonding/bond_options.c                 |  36 ++++-
+ drivers/net/bonding/bond_procfs.c                  |   2 +
+ drivers/net/bonding/bond_sysfs.c                   |  13 ++
+ drivers/net/dsa/mt7530.c                           | 124 +++++++++------
+ drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c   |   2 +
+ drivers/net/ethernet/mellanox/mlx5/core/en/txrx.h  |   2 +
+ drivers/net/ethernet/mellanox/mlx5/core/en_tc.c    |  19 +--
+ drivers/net/ethernet/mellanox/mlx5/core/en_tx.c    |  19 ++-
+ .../net/ethernet/mellanox/mlx5/core/lib/devcom.c   |  81 +++++++---
+ .../net/ethernet/mellanox/mlx5/core/lib/devcom.h   |   3 +
  drivers/net/phy/mscc/mscc.h                        |   1 +
- drivers/net/phy/mscc/mscc_main.c                   |  54 +++---
- drivers/net/wireless/intel/iwlwifi/fw/api/d3.h     |  37 +++-
- drivers/net/wireless/intel/iwlwifi/mvm/d3.c        |  35 +++-
- drivers/net/wireless/realtek/rtw89/rtw8852c.c      |   9 +-
- drivers/platform/x86/amd/pmf/core.c                |  32 +++-
- drivers/vfio/vfio_iommu_type1.c                    |   5 +
- include/linux/skbuff.h                             |  10 +
- include/linux/skmsg.h                              |   3 +-
- include/net/inet_sock.h                            |   4 +
- include/net/ip.h                                   |   5 +-
- include/net/page_pool.h                            |  18 --
- include/net/tcp.h                                  |  10 +
- include/net/tls.h                                  |   1 +
+ drivers/net/phy/mscc/mscc_main.c                   |  54 +++----
+ .../x86/intel/speed_select_if/isst_if_common.c     |  49 ++++--
+ drivers/power/supply/bq24190_charger.c             |  13 +-
+ drivers/power/supply/bq27xxx_battery.c             | 171 +++++++++++----------
+ drivers/power/supply/power_supply_core.c           |  57 +++----
+ include/linux/power/bq27xxx_battery.h              |   3 +
+ include/linux/power_supply.h                       |   5 +-
+ include/net/bond_options.h                         |   1 +
+ include/net/bonding.h                              |   3 +-
+ include/net/dsa.h                                  |  28 ++++
+ include/net/ip.h                                   |   2 +
+ include/net/page_pool.h                            |  18 ---
+ include/net/xdp.h                                  |   3 +
+ include/uapi/linux/if_link.h                       |   1 +
  include/uapi/linux/in.h                            |   2 +
- net/bluetooth/hci_sock.c                           |  28 +++
+ kernel/bpf/hashtab.c                               |   6 +-
+ net/bluetooth/hci_sock.c                           |  28 ++++
  net/core/page_pool.c                               |  34 +++-
- net/core/skmsg.c                                   |  81 ++++----
- net/core/sock_map.c                                |   3 +-
- net/ipv4/inet_connection_sock.c                    |  25 ++-
- net/ipv4/inet_hashtables.c                         |   2 +-
- net/ipv4/ip_sockglue.c                             |  30 ++-
+ net/core/xdp.c                                     |  93 +++++++----
+ net/ipv4/ip_sockglue.c                             |  12 +-
  net/ipv4/raw.c                                     |   5 +-
- net/ipv4/tcp.c                                     |  11 +-
- net/ipv4/tcp_bpf.c                                 |  79 +++++++-
- net/ipv4/udp.c                                     |   9 +-
  net/ipv6/raw.c                                     |   3 +-
  net/netfilter/nf_conntrack_netlink.c               |   8 -
- net/sctp/socket.c                                  |   2 +-
- net/tls/tls.h                                      |   5 +
- net/tls/tls_device.c                               |  22 +--
- net/tls/tls_strp.c                                 | 185 ++++++++++++++----
- net/unix/af_unix.c                                 |   7 +-
- tools/include/uapi/linux/in.h                      |   1 +
- tools/testing/selftests/bpf/Makefile               |   2 +-
- 49 files changed, 827 insertions(+), 281 deletions(-)
+ tools/include/uapi/linux/if_link.h                 |   1 +
+ 45 files changed, 763 insertions(+), 408 deletions(-)
 
 
