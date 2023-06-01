@@ -2,178 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A068971F0D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4867F71F0DB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232693AbjFARdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 13:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
+        id S232800AbjFAReD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 13:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbjFARdK (ORCPT
+        with ESMTP id S231315AbjFAReA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 13:33:10 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2085.outbound.protection.outlook.com [40.107.244.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5B7134;
-        Thu,  1 Jun 2023 10:33:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GcZVE0/j5rW172lYkaZYvlLsbObIbtNFUHRZPcockM7oVjJp8x8FyLoGck3l3IhmeLkmgCuy7LFzTtksPOMCALeAzFM/v8ZyFSuqdAYpH60fnO+QRWh1xkaLq1tgGoLCPJnuxAvcACkwPI+0H3n+EQ8OliIBX9hdJD4K017xT6l3m7kN6YvYe1Az5OnHxy6+4goxWancoWUxQWGVTfeRe/q+B5VGTag8BL0ycOoF4lvvhFE/6EToIFwsHPrrhGJxXMFt5MM/tSXdsHSNskz8mgS/tvsfsTmABDOiORWPS/ysvl1OxRa2kc4k9ekfD/4yGLpBhhu3tTzMIUPgixp68w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F1kYD0+rHW23MPEdimxsHzdxyle2+HxNGyw9SxMpee8=;
- b=hwFmHus/Cm7/QRGxHjc+E+Ahs7bMP6gru/nwmnNGTHwZTlCGPfnsScIVwmQof3+fvedvghsTCp38sDAp3E7lKdPjF6h22LoIbHRz8VlcjVQ5cuZ5/aZi0D/jZuCyuF1P3RWmyQPX/IEE265Zbel7hhqHmJvOz7RnUN4YPSCEP39mOv2RJYrZYK3H/NKTqMhMdU3DxE8NDMQsk62XmctfGJ+YrRnGMAhFp58H8OK6Ti938q48CWsr+lei4sM4U0MEKYfwOcgX+5VI3OyOxyHK/aaJfZsZ4NG7sfWOe3xPWKw5cxdt61l9ff0Gv57iwA40Mm3mSxfnygGtlNDlg8UNuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F1kYD0+rHW23MPEdimxsHzdxyle2+HxNGyw9SxMpee8=;
- b=MpeG1XhWrkdFDltBm6EpbfpzdlFI6UYAMpQ/rZT2ejhoOrZsaOucrlat3pE18uWjLyz5ztjWYUOChiT1Hq7dFSvDWDdyIxebAcobqZt/kS0Urs45lu2cXj+DJa7Z6OzwCb3agloUyLYh2Lqsn3AJsPi3L5Ne5FIqUHp1d+IuYQo/TsFjTbt5azRlMEEwGnMF6i87Oa1ATO1Os0KV3RzO5wrtt9ao+WVwmEKBDhm7LlbYoQ77gF+jwXzEYKyXevwJjPEIcTMm711thlZ/40lpRDEfjSAueyP3YOtTW6u2WC30AOM3TmZHclKs+RVhF1loQ9OOuw6YcJY9RX71VnnXsQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SN7PR12MB7201.namprd12.prod.outlook.com (2603:10b6:806:2a8::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Thu, 1 Jun
- 2023 17:33:06 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6433.024; Thu, 1 Jun 2023
- 17:33:06 +0000
-Date:   Thu, 1 Jun 2023 14:33:03 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Li Zhijian <lizhijian@fujitsu.com>
-Cc:     haris.iqbal@ionos.com, jinpu.wang@ionos.com,
-        linux-rdma@vger.kernel.org, leon@kernel.org,
-        guoqing.jiang@linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH for-next v3 3/3] RDMA/rtrs: Fix rxe_dealloc_pd warning
-Message-ID: <ZHjWTyW3our+RTCw@nvidia.com>
-References: <1682384563-2-1-git-send-email-lizhijian@fujitsu.com>
- <1682384563-2-4-git-send-email-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1682384563-2-4-git-send-email-lizhijian@fujitsu.com>
-X-ClientProxiedBy: SJ0PR13CA0036.namprd13.prod.outlook.com
- (2603:10b6:a03:2c2::11) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Thu, 1 Jun 2023 13:34:00 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FFC137;
+        Thu,  1 Jun 2023 10:33:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 33F822198E;
+        Thu,  1 Jun 2023 17:33:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1685640835; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bhh+WbNovcJY32/ZmD2ytQlFKOEBfg7zTQ3V3+mleLM=;
+        b=GyZM6g34CDsG/6yBK741e7b69x3H2uugU01hI+rOGMe7wMtff7G67jUvgZEDxMzZkPrlKv
+        R0/EO0BxJu6AuNfIGHtebfrjDdJrMUUlKPP8+VDC+ByhCkxIauMW4XxDc9xuken5TUdtIX
+        XyOn4MVb1gCRwmpMY9IzH9EFSJNA3rQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0B30D139B7;
+        Thu,  1 Jun 2023 17:33:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OCrIAYPWeGRXKQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Thu, 01 Jun 2023 17:33:55 +0000
+Date:   Thu, 1 Jun 2023 19:33:53 +0200
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Xiu Jianfeng <xiujianfeng@huaweicloud.com>
+Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cuigaosheng1@huawei.com
+Subject: Re: [PATCH] cgroup: Stop task iteration when rebinding subsystem
+Message-ID: <ojymhf4m3p52py6sezwbc2zamxm46wmhxs577uucima6evj2sc@djoi3dhzbdf6>
+References: <20230526114139.70274-1-xiujianfeng@huaweicloud.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SN7PR12MB7201:EE_
-X-MS-Office365-Filtering-Correlation-Id: 977373ee-6855-45b1-e2b0-08db62c64278
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dhEW8Z3uyX7iBbbuk/AI2WeFIUd/SwdEMrqrW4TpIAoELdAqgo2j+nGVb2CWgiNocfa/BDZ6888IK7gp8glarPR9mu3wZjxyzC3Zi9cWSObfTgvceJlG89hWSb6VEFBjYbNyUMERpfzL3zxz7Crbj6kUsj0kEzgStW4P44xrfUKt88A4vo09w0MIPPyHipKIfBx0RSo4OyP/WzmNsOcSU8Oei+NRMSSr/3ENwRRlnAH3jspoKzjyTPhwcl7YJo+zXOWDiN+S8QIcbDBJfQvfzE+UpT4UUewCTekvLwPQPcq33P0XodT0hx6MkSCchZ/lEGJ9jAcHKpEaFNQs0uRNtnfzgowNDKDDGMXRZh30HOomeMxxXIE75rn/HD2GZODkKhEpH1e+KkKUIvmyRvrr93T8wD90zxWQk1Fah2/EZt4hY3+ufhRyhy0WqI4doUaGvyWhHo3c3OTHqC6jqCl3+wdBqTXlJK7Y+JEz4el7esLRnZ8qmS71k5D6PJiN1JiSSsBsv5/clTGMaDqyBdNLv6OJ7ay92oSaP+u94aquPv4LmiYv8imVN1jjbL1Rg74R5J2rL6ng8c1v1Kt3OuP1OaVhMGpeLAr6IfjS0cZRAiY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(366004)(396003)(39860400002)(451199021)(45080400002)(316002)(66556008)(478600001)(6666004)(66946007)(66899021)(6916009)(4326008)(66476007)(6512007)(26005)(6506007)(2616005)(8676002)(41300700001)(8936002)(2906002)(5660300002)(186003)(83380400001)(86362001)(38100700002)(36756003)(6486002)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mWXurYmlaKFZ5nur14KfaAXlZANx2nEqJAF91CDQwQs87t2m3us83FrcXWNy?=
- =?us-ascii?Q?9+b2v+V1cHdb/qwaZ7giOnWQ9jBA8wSq+9zX8IhOBqPFNsbN1VvId+X54OND?=
- =?us-ascii?Q?R0pDPL7gARhIP8WfrQgseG1vEVV9zTaYNGHQp6syg3A8zvdHLzqhy5tPBGaD?=
- =?us-ascii?Q?2JzzVc0hIID3Q2DOxK3NiK3bad25UVeM7aHVm94TV26HYcT0Pv+JrpcqYkZq?=
- =?us-ascii?Q?raJiLpcmsS7CZnUwALOSKYYQd/7Ob81Y1ksLYV2yEQ7o/kn4WsjooTJmLTMt?=
- =?us-ascii?Q?AmRn8mCgePsyRr7U4VcMNMnKLxaDl4J38wKJfZmx/A9Py2qwmY4J0sSHwLkW?=
- =?us-ascii?Q?OIYGN3jqXD1scHtf8dpT3Hsu7hTUOIvHzUvulaICh4sZOG5U3FjzRvUCkgBA?=
- =?us-ascii?Q?BqmRW6tS0JekLsuQC1G2vgjVfqDzPdEscLEgmzJ2CuzkfiwK3MNL9z+TnUu5?=
- =?us-ascii?Q?xryjKkWHgsP18FctfY6w3BGpd6GX4fiVX5brYai9Mmg9N1lf9GmN8v41WC0p?=
- =?us-ascii?Q?edsh0sSqpc6tLyCCkw4kakFW9UWxD5QZ0OsWGO+TiTUPLql8gh2RBroUPmCK?=
- =?us-ascii?Q?pqB/9go5Oz6PtKErOgLxuWzPbZIfLNdN535n4hyMR8MLytOxmdeim62XkNAm?=
- =?us-ascii?Q?cYdzJtU4OweAHAnm3gXGv6xZoqp6p18iM4s8f9eofqkOsMIpuVH6XAy51sgh?=
- =?us-ascii?Q?aJqwR2JXul9tcTZLHGjCIjIbjdIE8es0/rfX+juJ+huwF2QeYWJlSY1UDKou?=
- =?us-ascii?Q?HpSLra04Qm9VrFhJbowAVcxtnvTlrQy6W7W7Jnf8mEL/7k6GCdoGTyWYamFr?=
- =?us-ascii?Q?3YTdzIGsVIOnQMNqlBlb6rHRqFkA4ONrP8n1aKcRObrbUk6cwS4qYOUgvGpo?=
- =?us-ascii?Q?VV1Rl/9b7Y77bZnG7uihMWNVnm5mAMC9sv9ojU/YtoUTsYOFdMXCZHKeTp39?=
- =?us-ascii?Q?uzmOx/xIEoIZ5Ecu36C53U1nOQVgPwclqHBPmlUwEY+3+TtnxkjeQ+68L6az?=
- =?us-ascii?Q?8TfdYwXgPIQQy25TAr+F4VHQydK00P8dahHVgPVzpBK2OkG5VLECBiuaR3cX?=
- =?us-ascii?Q?gp9YDGJG4RrpOcVN3d48qI/9iCxGHCU8xFhFTLjpDj5mbkpFHajrUr/D+cWg?=
- =?us-ascii?Q?oslFXUcqi+usyYj5PtVUlHZO4y7F8AGilytBwF0UXYDm3FbfNWzA8quNFQNg?=
- =?us-ascii?Q?Tw48caqsLBCtNsqUOGI0v/2k9Dd7zY0vCaiR6UAdTAM1wnjYd1Cl9bhmmlmM?=
- =?us-ascii?Q?jTZ9nATAwKciY/RW9vExHrbUoYJV3B+4emZoM8lx6p2ZF+Y63cDGhyitbOPM?=
- =?us-ascii?Q?W416mGaAO+Yd46Av0niznz0Wu9h97iqL8PzMHoWJqHC3Z/FsgmR1Z2Q8ll/s?=
- =?us-ascii?Q?ZezLJfdvTgp/RuUVaemGWherd+xWd9EqCZt/xpW7WD1E1JtDVfKUbSHn6fLw?=
- =?us-ascii?Q?jzh5aDej2a7NNT75AS63OIF8KyJLyepuzHL4Tb33oOWurVo3MFUknVoKggMq?=
- =?us-ascii?Q?Yp6G5OgKDH7nTJ7VTJHU9bJKMs+NOWzilD7df5Er0gYrgnSd8k82gJxGZNVD?=
- =?us-ascii?Q?LueJH0kNVNnowbGueEquSPI6DzxmarwqHdIlFff7?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 977373ee-6855-45b1-e2b0-08db62c64278
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 17:33:06.3529
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YBvmIk2pv9f7EQP+TVB8HthSxQRslCYK9fo4oISddUaXJhrMVXNuABQGQyClYD1e
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7201
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vmv26htnxfuy7rbb"
+Content-Disposition: inline
+In-Reply-To: <20230526114139.70274-1-xiujianfeng@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 01:02:43AM +0000, Li Zhijian wrote:
-> In current design:
-> 1. PD and clt_path->s.dev are shared among connections.
-> 2. every con[n]'s cleanup phase will call destroy_con_cq_qp()
-> 3. clt_path->s.dev will be always decreased in destroy_con_cq_qp(), and
->    when clt_path->s.dev become zero, it will destroy PD.
-> 4. when con[1] failed to create, con[1] will not take clt_path->s.dev,
->    but it try to decreased clt_path->s.dev
-> 
-> So, in case create_cm(con[0]) succeeds but create_cm(con[1])
-> fails, destroy_con_cq_qp(con[1]) will be called first which will destory
-> the PD while this PD is still taken by con[0].
-> 
-> Here, we refactor the error path of create_cm() and init_conns(), so that
-> we do the cleanup in the order they are created.
-> 
-> The warning occurs when destroying RXE PD whose reference count is not
-> zero.
-> -----------------------------------------------
->  rnbd_client L597: Mapping device /dev/nvme0n1 on session client, (access_mode: rw, nr_poll_queues: 0)
->  ------------[ cut here ]------------
->  WARNING: CPU: 0 PID: 26407 at drivers/infiniband/sw/rxe/rxe_pool.c:256 __rxe_cleanup+0x13a/0x170 [rdma_rxe]
->  Modules linked in: rpcrdma rdma_ucm ib_iser rnbd_client libiscsi rtrs_client scsi_transport_iscsi rtrs_core rdma_cm iw_cm ib_cm crc32_generic rdma_rxe udp_tunnel ib_uverbs ib_core kmem device_dax nd_pmem dax_pmem nd_
-> vme crc32c_intel fuse nvme_core nfit libnvdimm dm_multipath scsi_dh_rdac scsi_dh_emc scsi_dh_alua dm_mirror dm_region_hash dm_log dm_mod
->  CPU: 0 PID: 26407 Comm: rnbd-client.sh Kdump: loaded Not tainted 6.2.0-rc6-roce-flush+ #53
->  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
->  RIP: 0010:__rxe_cleanup+0x13a/0x170 [rdma_rxe]
->  Code: 45 84 e4 0f 84 5a ff ff ff 48 89 ef e8 5f 18 71 f9 84 c0 75 90 be c8 00 00 00 48 89 ef e8 be 89 1f fa 85 c0 0f 85 7b ff ff ff <0f> 0b 41 bc ea ff ff ff e9 71 ff ff ff e8 84 7f 1f fa e9 d0 fe ff
->  RSP: 0018:ffffb09880b6f5f0 EFLAGS: 00010246
->  RAX: 0000000000000000 RBX: ffff99401f15d6a8 RCX: 0000000000000000
->  RDX: 0000000000000001 RSI: ffffffffbac8234b RDI: 00000000ffffffff
->  RBP: ffff99401f15d6d0 R08: 0000000000000001 R09: 0000000000000001
->  R10: 0000000000002d82 R11: 0000000000000000 R12: 0000000000000001
->  R13: ffff994101eff208 R14: ffffb09880b6f6a0 R15: 00000000fffffe00
->  FS:  00007fe113904740(0000) GS:ffff99413bc00000(0000) knlGS:0000000000000000
->  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->  CR2: 00007ff6cde656c8 CR3: 000000001f108004 CR4: 00000000001706f0
->  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->  Call Trace:
->   <TASK>
->   rxe_dealloc_pd+0x16/0x20 [rdma_rxe]
->   ib_dealloc_pd_user+0x4b/0x80 [ib_core]
->   rtrs_ib_dev_put+0x79/0xd0 [rtrs_core]
->   destroy_con_cq_qp+0x8a/0xa0 [rtrs_client]
->   init_path+0x1e7/0x9a0 [rtrs_client]
->   ? __pfx_autoremove_wake_function+0x10/0x10
->   ? lock_is_held_type+0xd7/0x130
->   ? rcu_read_lock_sched_held+0x43/0x80
->   ? pcpu_alloc+0x3dd/0x7d0
->   ? rtrs_clt_init_stats+0x18/0x40 [rtrs_client]
->   rtrs_clt_open+0x24f/0x5a0 [rtrs_client]
->   ? __pfx_rnbd_clt_link_ev+0x10/0x10 [rnbd_client]
->   rnbd_clt_map_device+0x6a5/0xe10 [rnbd_client]
-> 
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> Acked-by: Jack Wang <jinpu.wang@ionos.com>
-> Tested-by: Jack Wang <jinpu.wang@ionos.com>
 
-It would be good to have a fixes line for this?
+--vmv26htnxfuy7rbb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Jason
+Hello Jianfeng.
+
+On Fri, May 26, 2023 at 07:41:39PM +0800, Xiu Jianfeng <xiujianfeng@huaweic=
+loud.com> wrote:
+> The race that cause this bug can be shown as below:
+>=20
+> (hotplug cpu)                | (umount cpuset)
+> mutex_lock(&cpuset_mutex)    | mutex_lock(&cgroup_mutex)
+> cpuset_hotplug_workfn        |
+>  rebuild_root_domains        |  rebind_subsystems
+>   update_tasks_root_domain   |   spin_lock_irq(&css_set_lock)
+>    css_task_iter_start       |    list_move_tail(&cset->e_cset_node[ss->i=
+d]
+>    while(css_task_iter_next) |                  &dcgrp->e_csets[ss->id]);
+>    css_task_iter_end         |   spin_unlock_irq(&css_set_lock)
+> mutex_unlock(&cpuset_mutex)  | mutex_unlock(&cgroup_mutex)
+
+Good catch!
+
+>=20
+> Inside css_task_iter_start/next/end, css_set_lock is hold and then
+> released, so when iterating task(left side), the css_set may be moved to
+> another list(right side), then it->cset_head points to the old list head
+> and it->cset_pos->next points to the head node of new list, which can't
+> be used as struct css_set.
+
+I find your analysis sane -- the stale it->cset_head is problematic.
+
+> To fix this issue, introduce CSS_TASK_ITER_STOPPED flag for css_task_iter.
+> when moving css_set to dcgrp->e_csets[ss->id] in rebind_subsystems(), stop
+> the task iteration.
+
+Does it mean that iteration would not yield all tasks that are
+associated with give cs->css? That sounds like broken correctness of the
+iterator.
+
+I may suggest a slightly different approach that should not affect
+running iterators.
+- I had to switch from all css_sets to only scgrp's css_sets since
+  css_set_table order of css_sets may be different than scgrp->e_csets
+- Not sure how portable is using array element as a `member` argument of
+  offsetof (in expansion of list_for_each_entry_safe).
+
+This is only to illustrate the idea, i.e. merely compile tested.
+
+WDYT?
+
+Regards,
+Michal
+
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 625d7483951c..e67d2a0776c1 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -1798,7 +1798,7 @@ int rebind_subsystems(struct cgroup_root *dst_root, u=
+16 ss_mask)
+ {
+ 	struct cgroup *dcgrp =3D &dst_root->cgrp;
+ 	struct cgroup_subsys *ss;
+-	int ssid, i, ret;
++	int ssid, ret;
+ 	u16 dfl_disable_ss_mask =3D 0;
+=20
+ 	lockdep_assert_held(&cgroup_mutex);
+@@ -1842,7 +1842,8 @@ int rebind_subsystems(struct cgroup_root *dst_root, u=
+16 ss_mask)
+ 		struct cgroup_root *src_root =3D ss->root;
+ 		struct cgroup *scgrp =3D &src_root->cgrp;
+ 		struct cgroup_subsys_state *css =3D cgroup_css(scgrp, ss);
+-		struct css_set *cset;
++		struct css_set *cset, *cset_pos;
++		struct css_task_iter *it;
+=20
+ 		WARN_ON(!css || cgroup_css(dcgrp, ss));
+=20
+@@ -1860,9 +1861,18 @@ int rebind_subsystems(struct cgroup_root *dst_root, =
+u16 ss_mask)
+ 		css->cgroup =3D dcgrp;
+=20
+ 		spin_lock_irq(&css_set_lock);
+-		hash_for_each(css_set_table, i, cset, hlist)
++		WARN_ON(!list_empty(&dcgrp->e_csets[ss->id]));
++		list_for_each_entry_safe(cset, cset_pos, &scgrp->e_csets[ss->id], e_cset=
+_node[ss->id]) {
+ 			list_move_tail(&cset->e_cset_node[ss->id],
+ 				       &dcgrp->e_csets[ss->id]);
++			/* all css_sets of scgrp together in same order to dcgrp,
++			 * patch in-flight iterators to preserve correct iteration,
++			 * cset_head is under css_set_lock */
++			list_for_each_entry(it, &cset->task_iters, iters_node) {
++				if (it->cset_head =3D=3D &scgrp->e_csets[ss->id])
++					it->cset_head =3D &dcgrp->e_csets[ss->id];
++			}
++		}
+ 		spin_unlock_irq(&css_set_lock);
+=20
+ 		if (ss->css_rstat_flush) {
+
+--vmv26htnxfuy7rbb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZHjWfwAKCRAkDQmsBEOq
+uYdwAP9NTo9oYu1o7d0GiJXma1Lp+QYKGqjf1QdRIHmnJu9FiQD6A6tMliFa6BqD
+z89g4VthZWDKKSIs2NmvhIsqOsqXOww=
+=rREO
+-----END PGP SIGNATURE-----
+
+--vmv26htnxfuy7rbb--
