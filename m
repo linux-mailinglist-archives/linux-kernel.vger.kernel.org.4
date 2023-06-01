@@ -2,163 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A74D3718F63
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 02:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86589718F65
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 02:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbjFAAIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 20:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
+        id S230267AbjFAAIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 20:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjFAAI3 (ORCPT
+        with ESMTP id S229469AbjFAAIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 20:08:29 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3312F124;
-        Wed, 31 May 2023 17:08:28 -0700 (PDT)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VKlVXJ020034;
-        Thu, 1 Jun 2023 00:08:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2023-03-30;
- bh=NFHJyiTWyS6Fz5W9l2lNc+PwnhCC1e39D4yEkf4rieU=;
- b=VlosdDj/4lIlCtWTXCK96nyt1rLygdjxt0PZEAEJ268yazcg+55Hd6B7KYQiCQmJLZ+g
- oH/HlawfwrXt1//hvKq0wc1q9fe6Fp6Anpi2E3N5SiFFRPXMn10A0sB45R2n2G+Enggc
- BldkgsnVJ2B9QTh3kbv1z6XruQb2/fx4alpZAuQriODyewcWGtQ+bvfhuJe5kqtVl5vb
- /UGtjNdqSCmn4WM9Y3QpxFbZA6L+jbpIUIydweyFs/6Dw7sVd5w/Hl6dA5Y19fwEEq51
- qChn7k3CUZMUZQK8/j+E48hiAtXIhGTMU/OHOuW4Le0/7z4+YTBiMUg+7ZFXxm8QOH8r vA== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qvhjh7a81-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Jun 2023 00:08:26 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34VNuSRF000471;
-        Thu, 1 Jun 2023 00:08:24 GMT
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2044.outbound.protection.outlook.com [104.47.56.44])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qu8qawvkk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Jun 2023 00:08:24 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k21+3rtx0moP2c/x7gP3uR0TDfmi8ZhXCUUcfu0rcmKIpnEtuqWAWpIqojofi/9w/uzXRErcxOQjGQ/oau1xVAOIKPyBNuZFda1UayP7LtNGJqcq7uIDQXFCOLmZFBHlfRuGchvielHPhvm8XmrcG41ECXLkMUE3BEM/azUPsJyCrnuHchFAdkkjR2cr2jDXAJ7/FrR+qjCPIxRcZbKHE7DbNqZkJFkehJkJv3ZioKlPkVi1wGwKZUJ9yyK170FHNhPS94OhowfFsCi4PvY9m/IFpZIXDVWuNCPrAqpN7KHeRb/3NvozcfqUFBBBFPuKgU7ziW3FSkr/ZS7hnVLXHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NFHJyiTWyS6Fz5W9l2lNc+PwnhCC1e39D4yEkf4rieU=;
- b=gzRdWMSIRVaw5MYNc9+n3/ppJO7QQp8wRL9/XQOY2mXIaKElDA6jfSFGlf2z3kv3gPcOuSVhLOk9toQtsnNgk1IAasiRo8kwYYKuZ9loaZBkPmYr1fBS1m2oQ4xgNF0yz8wNlAq3McHSFnPf2Lrj1iOHgWX/Z046ahf72lOSNs63xmkISTqdb8oyZPZpxgd1y8qwF1WvmWOcJXz9EtFcw76Sk2vPHJVhZ+e1y3xUyKUsNWX4ihRLG8vcW1zE8xLtOQq3736vENQP/0l4W0e+o6m3J6mFKsAWitEm9JYAShA/fRMxnxsfayxtI0OLFPJWvhOCVw4wCS8mTqS3fvz09A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NFHJyiTWyS6Fz5W9l2lNc+PwnhCC1e39D4yEkf4rieU=;
- b=r5EZKIgv0F/0glDhcSH2cvTjgE1JWXoR3Ef+u8pe5ypyj2JwOGczat155TBGwRwgom38QaHA7GSR0TWQbtJOSVqQKfv5yONg3hksZr9gLCjWsbmmMU2bnrvMawdmpsdsbf0jd5X4jlxmInYRcz70RK1xJoVP6WpGD6HTDR+uRus=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by CY8PR10MB6490.namprd10.prod.outlook.com (2603:10b6:930:5e::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Thu, 1 Jun
- 2023 00:08:06 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::9a52:4c2f:9ec1:5f16]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::9a52:4c2f:9ec1:5f16%7]) with mapi id 15.20.6433.022; Thu, 1 Jun 2023
- 00:08:06 +0000
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Satish Kharat <satishkh@cisco.com>,
-        Sesidhar Baddela <sebaddel@cisco.com>,
-        Karan Tilak Kumar <kartilak@cisco.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: fnic: Use vzalloc()
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1cz2gavtu.fsf@ca-mkp.ca.oracle.com>
-References: <a1179941a6d440140513e681f4f3a1b92c8d83ae.1685210773.git.christophe.jaillet@wanadoo.fr>
-Date:   Wed, 31 May 2023 20:08:03 -0400
-In-Reply-To: <a1179941a6d440140513e681f4f3a1b92c8d83ae.1685210773.git.christophe.jaillet@wanadoo.fr>
-        (Christophe JAILLET's message of "Sat, 27 May 2023 20:06:37 +0200")
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR13CA0094.namprd13.prod.outlook.com
- (2603:10b6:a03:2c5::9) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        Wed, 31 May 2023 20:08:36 -0400
+Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41FF124;
+        Wed, 31 May 2023 17:08:31 -0700 (PDT)
+Date:   Thu, 01 Jun 2023 00:08:17 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rhysre.net;
+        s=protonmail2; t=1685578109; x=1685837309;
+        bh=ZmyJWhx3fktYZQdFy32ON1t+Qe9jELp1qwHtWiiLc5o=;
+        h=Date:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=YqKetOG3WbWUUv3XHh2wvRPvRb8Gty+KWMZ92uXnAXBtKzh3jY8TBgGg5BQUJ7J8c
+         oPyHeFmv2QS3b1UQg62ZrWtNAfKA4P7YVvee0kYKlN0tvScB9E3TqXvRulDKCGYGig
+         e4yBS/4o3qFRpMBrJDGinbdLB/ducPL2ii/NwKyE2rjn7R7N5QmOqaCAqKYQ0WPFC0
+         eW9exkcABk04r3r/b5QLorTeQtN5B9PeVRuMEBDKtg63WWYyy7qkFsitKupsxyCFQs
+         beGXFRzFIiqTmTgLh96Mugy3NF17FEJUN6E6TT4gT81JlnL50favtern6UshI65JPb
+         4MWmjoV3TdJgA==
+From:   Rhys Rustad-Elliott <me@rhysre.net>
+Cc:     me@rhysre.net, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf] bpf: Fix elem_size not being set for inner maps
+Message-ID: <20230601000713.506358-1-me@rhysre.net>
+Feedback-ID: 51368404:user:proton
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|CY8PR10MB6490:EE_
-X-MS-Office365-Filtering-Correlation-Id: b4c39318-2369-447a-af75-08db62344662
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tV+AQmmbcWeMv0OY8NUjH5GAFnICn17wlQZ4CZp+Vxq0Za95Jbdm8qpTqCSYFM/XnS0z+ACYhAfB0lT0yew8Qca4FeazTRY10x3zgUaED0clWcDQqCh/6UCn9j+SDosHxEG62Ad3UMjCATsyyZSeytw3KT/M1YOxejHVIn5ge9ptEDhZYGJ5+0AO3YX2VxIxcNNx5ObZGmflPdHtSha5qksoDQforS6M9r3g8Lbi427Dd2ewu+hvYUfQUDLW4McUnY2bYXQNg+yWUYKAH5InO0EqnF6AnK6+01a2CoG1aMe83xXl0H4lrSlHc771LMzo5AB6WznpnEFepPwJx0Tg7+Gk44k0jp+ZDnyIuh25HJZSoxZ70QGB+HdbNn+P4DU53TarA6gDz5q0y+xcnQ8cejAqXwEuQyFVtk4YHSUA9OL83n5waugRDGzSk5Kes6sVsKcmRLCdI8SxQXsQDccXdlMX5rDa3wIk5q7s5uX8xcUM/vADLjudFZ3cmWVJL37psWDGauzTFrSeAdYVy/SOIeMfF8MKEteXxleeW1v7vZRAp3gANpuFuVBzv+jrqKg5
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(136003)(376002)(39860400002)(366004)(396003)(451199021)(186003)(41300700001)(38100700002)(26005)(6486002)(6506007)(36916002)(6666004)(6512007)(478600001)(54906003)(66476007)(6916009)(66946007)(66556008)(316002)(2906002)(8936002)(5660300002)(8676002)(4326008)(86362001)(558084003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IRWEzx5/SBtHpYaTuatTsk2u+OV/BVndQwo28l9FB+D6mP7TmkzMsGpSWGr8?=
- =?us-ascii?Q?aObjBj7+3x8Kt2HVX8CtmaV4WR7pjsLZoSQmKgIz8bafpLn9oyqLXmS9mpQN?=
- =?us-ascii?Q?lRuMZ76XLFPReVA1PDfY6BWAiPQby31eB2eqeN8g76ESfvGaAWUK5ZvMgcs+?=
- =?us-ascii?Q?zvWhSTZ+ynLUmjbfIrJS7eAfkR5ui4Pz5vaq2Ce03Hr3q8DO932ojpjMGnCM?=
- =?us-ascii?Q?B4HiDHNm2IkKKrvri83DxRIb8A/2gDfAu2kgUGlPnRCRql0NqCR2J2Lf68Hv?=
- =?us-ascii?Q?Q2rckLNq8oysQZ1OUUUxDLwI1lBYK5CyQqEIMfNpkayfRhqMmVJBz174YwKU?=
- =?us-ascii?Q?ev8PeeA2MzmMvuCL1KBuzON7mu2qxRp6xbQCtjoRGX3oYwnqyvGqpQddU86l?=
- =?us-ascii?Q?zFQLQGF7FjyePHkf4vjpLS78u67leZMAud49lWAvnxjo4S6boJOt6+9eWS2d?=
- =?us-ascii?Q?FXbdj36x6Qj/gd5qMoAmpfEKHKYizSh0eP9gmvfzRP0ml+W1KIRr+KWnt9PP?=
- =?us-ascii?Q?It24i1ngf9Xnh5W/9X6SiPlG0kI/zy4cGcTaUDk4NSVYo9wRSu3TIxXtg+bX?=
- =?us-ascii?Q?JY9nYwYzi1YhHeogJw7axbTSqlv43me/ZyHyl9u04LpaGTvZ4Ci/eOkr8mKv?=
- =?us-ascii?Q?i1LALEpEHVBUipdGgeXin2CSCeqAZlK5jncDX29TkHq/bkPM5RAj4EuVhHzP?=
- =?us-ascii?Q?OsrRKssggbHks+Xa0DXpbPFfYi2eD0bu9btcUQ7rveIDIyrpTNx1M3g3Iscc?=
- =?us-ascii?Q?aK7+JSNnTn7qLbqo8o8g8Ef8gxukytKzhC3U0zPefUsxGLZPx+v2xVDikBMB?=
- =?us-ascii?Q?uM5YJAtHttJqUx5zxf/ln0TKbDiwvOt5gGGoXWkzqDsSg9eracp/EcsECK29?=
- =?us-ascii?Q?9B229qoBGOppOKOh4S+0TXd+dx+Kd7USIn7Ct6Ql8Pi9qQrCvlZOcvDkeeEg?=
- =?us-ascii?Q?4SSw0g6kjipWnpr4Y9IRdHWO0islcWoxJupDenLOkNvcsoBbjXJ3OBEzu0AQ?=
- =?us-ascii?Q?gl/4aKgej5grTRdJwUHLcwRpV0FEmlDSKwR03Z+57uHRlxk0oBoO3rXQJk1X?=
- =?us-ascii?Q?dr79q7CYzKZjNZGsrwyA3GmTzVIdnCW86sMr4URD0h+Kti7Z2PmVYd7aFaVi?=
- =?us-ascii?Q?8/S1LZpQDpFcUrrGMafjiGpyWJGAdIh6vkOjNkPoeQmAuy26u5EZubUn4s2U?=
- =?us-ascii?Q?9MvMJ5b77h7hD7DFKysAzYpVmFvOiphvfBmDdq8VkeAv8AUmOjmQhEys33Rh?=
- =?us-ascii?Q?WuugvpgnrbphIOTiJJ9jM9bO86zM5aHdMHhJmDMfliIkstFlk398c3h2Fzau?=
- =?us-ascii?Q?f7vAqXGEyxTnrx+26U6G9Rh3qaES5sJ7oXb91omXsWdaQ6oBDPr9fbKFgQjr?=
- =?us-ascii?Q?+CHcr5TTP932/1KQUnFBbTLKpStqCIPaX4qSDfhgdGiGJRi1qcaosmk/wTnz?=
- =?us-ascii?Q?/RzJwSGxrUCEhQ8eevn1IInb66l2c3ofCKW5IC+gpTDvNjbA1OGjwTainOhL?=
- =?us-ascii?Q?6NzwCSg2abvNQZTX51rRG3FpjscNh2LB5xGNQx98RKJHspPgvzAJKVwwlWY1?=
- =?us-ascii?Q?YNehN6272oj5+nGKDtQts/+1v0lZtqGvWuSFJoK78Y6zVfDdRVQj+XHtQYad?=
- =?us-ascii?Q?8Q=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: +8PNpHEsd6IfXfmULnKIrSX8n0xf0vPaK4NIwJpVyPxUN8djhUmRlX2K1c6CVKWCo/NgTIWn/BksBEdpX2tF43ujF359dLSd7Y+VLyTNSjZjyuUSWk6t/T5ddMnaFh6/RNnHuZRi5xM2vtAS4Em8GgbQTqaoDcPuj/zcyErbbHYYNGhb6kelCpntcId+godhJMggatTNNStUwoS0mQCAWS3/JAnmBK6S6RwDf/rqTiooZ9e3yffDXfpdCsnRa/NB0Th/UZtCaRxS0JLFMcGBrGy9X0w9jbihrBHiXKVIVrq3pCegSIRe1m2H2NO5/G9CLlQ8VlbQMY6Ee/AeUU5HdL5lFLCaNL02d/z/nhpYadqLjacaV1YsVbecLt1QVZFmAZsA5pR14iNghWznTF7XIj8u7ZvBhUybFcL2A/jvWBhWuHjI/Rhxxltgzs/5X2fW6tcp7MplzhL27983KMMLxk9esEHIs1vN/EKDViu+/+1ppZp6nlAExGTyRHIRQ5iVhPYIqJ4WBw2tg7PEj7I6ha7qT6ngmCxeLjNwEzzGFGegNvQ9uCZQSa6Gh2bKWJYCQyVeGTddci/jlKKT4/boJm5yAEqnSFvI1/yXymxhPPJxWkbpwENu+d0uKk6M6vPQtZidrtke7GJqyyaVzk5QbSpjJRbmJ0Z9RCLG1cHL/Q01oVm821U4SEU2rKV+v36EM3twpLlAPNqPmM6d+pK7/cQRpK8cGBeN1/LYYqUViaL5MZZV6M546m9HG+VXGP5Tjov1ElISFEKaj0ERmUd2g7Wyt69AFNd9eHSys5Cq2Qz4EceGa5uBxJNL8xIsF4pVcLG0lkQ+eyHTTt8L7C8IP4VSJBOpOLulkaWDDxmRDYM=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b4c39318-2369-447a-af75-08db62344662
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 00:08:06.3247
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1RB23jhnG0bWsBoQnZXsYKvqOpwv2/vYSAHjFcqHkxJ3qDL1ZCI1rOWgljGQnDtK9fWGEttmehR1IF7hKyzvF2vEcLgQ330WFtkP2QTE5L0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR10MB6490
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-31_18,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 mlxlogscore=785
- suspectscore=0 malwarescore=0 adultscore=0 phishscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305310204
-X-Proofpoint-GUID: CYGZI-j76BiEhWWZmB3VEspv07K3jpi3
-X-Proofpoint-ORIG-GUID: CYGZI-j76BiEhWWZmB3VEspv07K3jpi3
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,MISSING_HEADERS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit d937bc3449fa ("bpf: make uniform use of array->elem_size
+everywhere in arraymap.c") changed array_map_gen_lookup to use
+array->elem_size instead of round_up(map->value_size, 8) as the element
+size when generating code to access a value in an array map.
 
-Christophe,
+array->elem_size, however, is not set by bpf_map_meta_alloc when
+initializing an BPF_MAP_TYPE_ARRAY_OF_MAPS or BPF_MAP_TYPE_HASH_OF_MAPS.
+This results in array_map_gen_lookup incorrectly outputting code that
+always accesses index 0 in the array (as the index will be calculated
+via a multiplication with the element size, which is incorrectly set to
+0).
 
-> Use vzalloc() instead of hand writing it with vmalloc()+memset().
-> This is less verbose.
+Set elem_size on the bpf_array object when allocating an array or hash
+of maps and add a selftest that accesses an inner map at a nonzero index
+to prevent regressions.
 
-Applied to 6.5/scsi-staging, thanks!
+Fixes: d937bc3449fa ("bpf: make uniform use of array->elem_size everywhere =
+in arraymap.c")
+Signed-off-by: Rhys Rustad-Elliott <me@rhysre.net>
+---
+ kernel/bpf/map_in_map.c                       |  8 +++-
+ .../map_in_map_inner_array_lookup.c           | 33 ++++++++++++++
+ .../test_map_in_map_inner_array_lookup.c      | 45 +++++++++++++++++++
+ 3 files changed, 84 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/map_in_map_inner=
+_array_lookup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_map_in_map_inner=
+_array_lookup.c
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
+index 2c5c64c2a53b..8d65b12e0834 100644
+--- a/kernel/bpf/map_in_map.c
++++ b/kernel/bpf/map_in_map.c
+@@ -69,9 +69,13 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
+ =09/* Misc members not needed in bpf_map_meta_equal() check. */
+ =09inner_map_meta->ops =3D inner_map->ops;
+ =09if (inner_map->ops =3D=3D &array_map_ops) {
++=09=09struct bpf_array *inner_array_meta =3D
++=09=09=09container_of(inner_map_meta, struct bpf_array, map);
++=09=09struct bpf_array *inner_array =3D container_of(inner_map, struct bpf=
+_array, map);
++
++=09=09inner_array_meta->index_mask =3D inner_array->index_mask;
++=09=09inner_array_meta->elem_size =3D round_up(inner_map->value_size, 8);
+ =09=09inner_map_meta->bypass_spec_v1 =3D inner_map->bypass_spec_v1;
+-=09=09container_of(inner_map_meta, struct bpf_array, map)->index_mask =3D
+-=09=09     container_of(inner_map, struct bpf_array, map)->index_mask;
+ =09}
+=20
+ =09fdput(f);
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_in_map_inner_array_=
+lookup.c b/tools/testing/selftests/bpf/prog_tests/map_in_map_inner_array_lo=
+okup.c
+new file mode 100644
+index 000000000000..264d4788e5fd
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/map_in_map_inner_array_lookup.=
+c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <test_progs.h>
++
++#include "test_map_in_map_inner_array_lookup.skel.h"
++
++static int duration;
++
++void test_map_in_map_inner_array_lookup(void)
++{
++=09int map1_fd, err;
++=09int key =3D 3;
++=09int val =3D 1;
++=09struct test_map_in_map_inner_array_lookup *skel;
++
++=09skel =3D test_map_in_map_inner_array_lookup__open_and_load();
++=09if (CHECK(!skel, "skel_open", "failed to open&load skeleton\n"))
++=09=09return;
++
++=09err =3D test_map_in_map_inner_array_lookup__attach(skel);
++=09if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
++=09=09goto cleanup;
++
++=09map1_fd =3D bpf_map__fd(skel->maps.inner_map1);
++=09bpf_map_update_elem(map1_fd, &key, &val, 0);
++=09usleep(1);
++=09/* Probe should have set the element at index 3 to 2 */
++=09bpf_map_lookup_elem(map1_fd, &key, &val);
++=09CHECK(val !=3D 2, "inner1", "got %d !=3D exp %d\n", val, 2);
++
++cleanup:
++=09test_map_in_map_inner_array_lookup__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_map_in_map_inner_array_=
+lookup.c b/tools/testing/selftests/bpf/progs/test_map_in_map_inner_array_lo=
+okup.c
+new file mode 100644
+index 000000000000..c2c8f2fa451d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_map_in_map_inner_array_lookup.=
+c
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++struct inner_map {
++=09__uint(type, BPF_MAP_TYPE_ARRAY);
++=09__uint(max_entries, 5);
++=09__type(key, int);
++=09__type(value, int);
++} inner_map1 SEC(".maps");
++
++struct outer_map {
++=09__uint(type, BPF_MAP_TYPE_HASH_OF_MAPS);
++=09__uint(max_entries, 3);
++=09__type(key, int);
++=09__array(values, struct inner_map);
++} outer_map1 SEC(".maps") =3D {
++=09.values =3D {
++=09=09[2] =3D &inner_map1,
++=09},
++};
++
++SEC("raw_tp/sys_enter")
++int handle__sys_enter(void *ctx)
++{
++=09int outer_key =3D 2, inner_key =3D 3;
++=09int *val;
++=09void *map;
++
++=09map =3D bpf_map_lookup_elem(&outer_map1, &outer_key);
++=09if (!map)
++=09=09return 1;
++
++=09val =3D bpf_map_lookup_elem(map, &inner_key);
++=09if (!val)
++=09=09return 1;
++
++=09if (*val =3D=3D 1)
++=09=09*val =3D 2;
++
++=09return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
+--=20
+2.40.1
+
+
