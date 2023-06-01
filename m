@@ -2,151 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B883171F2BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F02671F2BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbjFATQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 15:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56538 "EHLO
+        id S232224AbjFATR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 15:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjFATQV (ORCPT
+        with ESMTP id S231599AbjFATR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 15:16:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D915107
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 12:15:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685646933;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sTw7D4C+tdrDjUAl3eL33ndjxBJJWM8+IdlGnpSawqo=;
-        b=A+sCeyl9PrI2rk3SJdsbGcD3xfhKoiO9hxxReWu7DL5Qn/WKjYz73gOrcTcbE8NDQ3dmWZ
-        ZAzmnbIsIhwjMRgRpzqpNjvMlqVcyn/ijxcqeyZEwaD3kWwD9WQhAR5to8ca8GTFoqksGd
-        XdaG8sgGV+bkfSDPtXjfuXm32Gk8CZk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-126-VjBtih65NBieEvKm0UOqAg-1; Thu, 01 Jun 2023 15:15:30 -0400
-X-MC-Unique: VjBtih65NBieEvKm0UOqAg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 82189800B2A;
-        Thu,  1 Jun 2023 19:15:29 +0000 (UTC)
-Received: from [10.22.8.52] (unknown [10.22.8.52])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E1EA9202696C;
-        Thu,  1 Jun 2023 19:15:28 +0000 (UTC)
-Message-ID: <e6ae97f4-cdae-e655-d118-a11b3d679fd6@redhat.com>
-Date:   Thu, 1 Jun 2023 15:15:28 -0400
+        Thu, 1 Jun 2023 15:17:27 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D9E184
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 12:17:24 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-510d6b939bfso1870440a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 12:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google; t=1685647043; x=1688239043;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zo1U5HjvaK03DXqrCprpS4VDfzdzOJdKOESiQPKKnX0=;
+        b=XQY38fkNEvO13DFa0mEXLSr1W0A1RHjTaldXEmhl6VU/hSG/EwWvXT10372SUhGYzW
+         28TCKSN+qlEhRemix+UE7z0Enhn7rTmASR0MYO7inHG4uSdUtwF42Nofiy8WbsfEMafE
+         tD0PJhuglXH5PvsoVck4Ouw1qe8ENSb/oh4u6V7IJbcuPR9p3JIzNLBPMgYRXJ3upyvt
+         VzUeaWZdeKzjlo4gc2NBSywHBPYzTtl2LH3nhKoYyr3IdqqcAy5g+G3U6J6kLlTFo0uI
+         dKn+87DKFR8ad2rriiAKwizn/Xy51LT6y+m8YvM/MIVKbhuOh3ZmTJ8U8B2y7O0WLv8R
+         2oUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685647043; x=1688239043;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Zo1U5HjvaK03DXqrCprpS4VDfzdzOJdKOESiQPKKnX0=;
+        b=arDwizfN9t0ysdpoOeA4mXTV3EvCkcN2S6lBeG6luVQjHsr02XKO/ne5AKvhVDyWpZ
+         H0Mk1PTgseWY4hsKUU1mxzu6qADT1p2S0RYxlvDU/shrQel3eR0cyQleo92UXvYFH6OA
+         C0SUA9doovuyc5yuxjktSJKFB47eynIreg+vfpXmzxfi6Q310o0NgnkUl0qJNWr+eUFR
+         jzYz+EnInvDaK0uoAZlglc3NipC2lt1Yq53xH9rNS0C7wz3jM5QaHeNJAdYodH5sTvDj
+         e/M6PAKwsux6wjmc8B3mtp9Lbqg9ysiZFe7WpT7+Zad1/coNVqk5MB9/k4wInQXmXtPO
+         2soQ==
+X-Gm-Message-State: AC+VfDzGoeyjMY2y635mucEVtUha5cfRRm4fzXZAdNbqbkP5wMwp23kI
+        vx2Ax+bp2cp5QTcIOeb11BGqDaa9v57/Cb6p966QuQ==
+X-Google-Smtp-Source: ACHHUZ6jpSm7hcwB9rtx/wDj31i/Wbi5xnvUtAHFVT8aqPvTyQinnaipZgFyngJLcf3gstrju9/SAaB15w1Jfc1B7ek=
+X-Received: by 2002:a05:6402:618:b0:514:9284:237f with SMTP id
+ n24-20020a056402061800b005149284237fmr569745edv.31.1685647043233; Thu, 01 Jun
+ 2023 12:17:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] Documentation: Clarify usage of memory limits
-Content-Language: en-US
-To:     Dan Schatzberg <schatzberg.dan@gmail.com>,
-        Tejun Heo <tj@kernel.org>
-Cc:     Chris Down <chris@chrisdown.name>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230601183820.3839891-1-schatzberg.dan@gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230601183820.3839891-1-schatzberg.dan@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1682384563-2-1-git-send-email-lizhijian@fujitsu.com>
+ <1682384563-2-4-git-send-email-lizhijian@fujitsu.com> <ZHjWTyW3our+RTCw@nvidia.com>
+In-Reply-To: <ZHjWTyW3our+RTCw@nvidia.com>
+From:   Jinpu Wang <jinpu.wang@ionos.com>
+Date:   Thu, 1 Jun 2023 21:17:12 +0200
+Message-ID: <CAMGffEkttF77x3upyb2FO28FHod7-V81rZAn2N0uQ6uxCDWWwA@mail.gmail.com>
+Subject: Re: [PATCH for-next v3 3/3] RDMA/rtrs: Fix rxe_dealloc_pd warning
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Li Zhijian <lizhijian@fujitsu.com>, haris.iqbal@ionos.com,
+        linux-rdma@vger.kernel.org, leon@kernel.org,
+        guoqing.jiang@linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/23 14:38, Dan Schatzberg wrote:
-> The existing documentation refers to memory.high as the "main mechanism
-> to control memory usage." This seems incorrect to me - memory.high can
-> result in reclaim pressure which simply leads to stalls unless some
-> external component observes and actions on it (e.g. systemd-oomd can be
-> used for this purpose). While this is feasible, users are unaware of
-> this interaction and are led to believe that memory.high alone is an
-> effective mechanism for limiting memory.
+On Thu, Jun 1, 2023 at 7:33=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wro=
+te:
 >
-> The documentation should recommend the use of memory.max as the
-> effective way to enforce memory limits - it triggers reclaim and results
-> in OOM kills by itself.
-
-That is not how my understanding of memory.high works. When memory usage 
-goes past memory.high, memory reclaim will be initiated to reclaim the 
-memory back. Stall happens when memory.usage keep increasing like by 
-consuming memory faster than what memory reclaim can recover. When 
-memory.max is reached, OOM killer will then kill off the tasks.
-
-IOW, memory consumption should not go past memory.high in normal usage 
-scenario. I believe what you describe here isn't quite correct.
-
-Cheers,
-Longman
-
-> Signed-off-by: Dan Schatzberg <schatzberg.dan@gmail.com>
-> ---
->   Documentation/admin-guide/cgroup-v2.rst | 22 ++++++++++------------
->   1 file changed, 10 insertions(+), 12 deletions(-)
+> On Tue, Apr 25, 2023 at 01:02:43AM +0000, Li Zhijian wrote:
+> > In current design:
+> > 1. PD and clt_path->s.dev are shared among connections.
+> > 2. every con[n]'s cleanup phase will call destroy_con_cq_qp()
+> > 3. clt_path->s.dev will be always decreased in destroy_con_cq_qp(), and
+> >    when clt_path->s.dev become zero, it will destroy PD.
+> > 4. when con[1] failed to create, con[1] will not take clt_path->s.dev,
+> >    but it try to decreased clt_path->s.dev
+> >
+> > So, in case create_cm(con[0]) succeeds but create_cm(con[1])
+> > fails, destroy_con_cq_qp(con[1]) will be called first which will destor=
+y
+> > the PD while this PD is still taken by con[0].
+> >
+> > Here, we refactor the error path of create_cm() and init_conns(), so th=
+at
+> > we do the cleanup in the order they are created.
+> >
+> > The warning occurs when destroying RXE PD whose reference count is not
+> > zero.
+> > -----------------------------------------------
+> >  rnbd_client L597: Mapping device /dev/nvme0n1 on session client, (acce=
+ss_mode: rw, nr_poll_queues: 0)
+> >  ------------[ cut here ]------------
+> >  WARNING: CPU: 0 PID: 26407 at drivers/infiniband/sw/rxe/rxe_pool.c:256=
+ __rxe_cleanup+0x13a/0x170 [rdma_rxe]
+> >  Modules linked in: rpcrdma rdma_ucm ib_iser rnbd_client libiscsi rtrs_=
+client scsi_transport_iscsi rtrs_core rdma_cm iw_cm ib_cm crc32_generic rdm=
+a_rxe udp_tunnel ib_uverbs ib_core kmem device_dax nd_pmem dax_pmem nd_
+> > vme crc32c_intel fuse nvme_core nfit libnvdimm dm_multipath scsi_dh_rda=
+c scsi_dh_emc scsi_dh_alua dm_mirror dm_region_hash dm_log dm_mod
+> >  CPU: 0 PID: 26407 Comm: rnbd-client.sh Kdump: loaded Not tainted 6.2.0=
+-rc6-roce-flush+ #53
+> >  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0=
+-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> >  RIP: 0010:__rxe_cleanup+0x13a/0x170 [rdma_rxe]
+> >  Code: 45 84 e4 0f 84 5a ff ff ff 48 89 ef e8 5f 18 71 f9 84 c0 75 90 b=
+e c8 00 00 00 48 89 ef e8 be 89 1f fa 85 c0 0f 85 7b ff ff ff <0f> 0b 41 bc=
+ ea ff ff ff e9 71 ff ff ff e8 84 7f 1f fa e9 d0 fe ff
+> >  RSP: 0018:ffffb09880b6f5f0 EFLAGS: 00010246
+> >  RAX: 0000000000000000 RBX: ffff99401f15d6a8 RCX: 0000000000000000
+> >  RDX: 0000000000000001 RSI: ffffffffbac8234b RDI: 00000000ffffffff
+> >  RBP: ffff99401f15d6d0 R08: 0000000000000001 R09: 0000000000000001
+> >  R10: 0000000000002d82 R11: 0000000000000000 R12: 0000000000000001
+> >  R13: ffff994101eff208 R14: ffffb09880b6f6a0 R15: 00000000fffffe00
+> >  FS:  00007fe113904740(0000) GS:ffff99413bc00000(0000) knlGS:0000000000=
+000000
+> >  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >  CR2: 00007ff6cde656c8 CR3: 000000001f108004 CR4: 00000000001706f0
+> >  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> >  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> >  Call Trace:
+> >   <TASK>
+> >   rxe_dealloc_pd+0x16/0x20 [rdma_rxe]
+> >   ib_dealloc_pd_user+0x4b/0x80 [ib_core]
+> >   rtrs_ib_dev_put+0x79/0xd0 [rtrs_core]
+> >   destroy_con_cq_qp+0x8a/0xa0 [rtrs_client]
+> >   init_path+0x1e7/0x9a0 [rtrs_client]
+> >   ? __pfx_autoremove_wake_function+0x10/0x10
+> >   ? lock_is_held_type+0xd7/0x130
+> >   ? rcu_read_lock_sched_held+0x43/0x80
+> >   ? pcpu_alloc+0x3dd/0x7d0
+> >   ? rtrs_clt_init_stats+0x18/0x40 [rtrs_client]
+> >   rtrs_clt_open+0x24f/0x5a0 [rtrs_client]
+> >   ? __pfx_rnbd_clt_link_ev+0x10/0x10 [rnbd_client]
+> >   rnbd_clt_map_device+0x6a5/0xe10 [rnbd_client]
+> >
+> > Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> > Acked-by: Jack Wang <jinpu.wang@ionos.com>
+> > Tested-by: Jack Wang <jinpu.wang@ionos.com>
 >
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index f67c0829350b..e592a9364473 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -1213,23 +1213,25 @@ PAGE_SIZE multiple when read back.
->   	A read-write single value file which exists on non-root
->   	cgroups.  The default is "max".
->   
-> -	Memory usage throttle limit.  This is the main mechanism to
-> -	control memory usage of a cgroup.  If a cgroup's usage goes
-> +	Memory usage throttle limit.  If a cgroup's usage goes
->   	over the high boundary, the processes of the cgroup are
->   	throttled and put under heavy reclaim pressure.
->   
->   	Going over the high limit never invokes the OOM killer and
-> -	under extreme conditions the limit may be breached.
-> +	under extreme conditions the limit may be breached. The high
-> +	limit should be used in scenarios where an external process
-> +	monitors the limited cgroup to alleviate heavy reclaim
-> +	pressure.
->   
->     memory.max
->   	A read-write single value file which exists on non-root
->   	cgroups.  The default is "max".
->   
-> -	Memory usage hard limit.  This is the final protection
-> -	mechanism.  If a cgroup's memory usage reaches this limit and
-> -	can't be reduced, the OOM killer is invoked in the cgroup.
-> -	Under certain circumstances, the usage may go over the limit
-> -	temporarily.
-> +	Memory usage hard limit.  This is the main mechanism to limit
-> +	memory usage of a cgroup.  If a cgroup's memory usage reaches
-> +	this limit and can't be reduced, the OOM killer is invoked in
-> +	the cgroup. Under certain circumstances, the usage may go
-> +	over the limit temporarily.
->   
->   	In default configuration regular 0-order allocations always
->   	succeed unless OOM killer chooses current task as a victim.
-> @@ -1238,10 +1240,6 @@ PAGE_SIZE multiple when read back.
->   	Caller could retry them differently, return into userspace
->   	as -ENOMEM or silently ignore in cases like disk readahead.
->   
-> -	This is the ultimate protection mechanism.  As long as the
-> -	high limit is used and monitored properly, this limit's
-> -	utility is limited to providing the final safety net.
-> -
->     memory.reclaim
->   	A write-only nested-keyed file which exists for all cgroups.
->   
+> It would be good to have a fixes line for this?
+It should be:
+ Fixes: 6a98d71daea1 ("RDMA/rtrs: client: main functionality")
 
+Could you amend it  to the commit?
+>
+> Jason
+Thx!
