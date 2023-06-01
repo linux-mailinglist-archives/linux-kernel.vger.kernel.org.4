@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3A87190E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C32B7190EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbjFADE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 23:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39164 "EHLO
+        id S229611AbjFADFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 23:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbjFADDr (ORCPT
+        with ESMTP id S231513AbjFADEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 23:03:47 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085D3E7F;
-        Wed, 31 May 2023 20:03:15 -0700 (PDT)
-X-UUID: d5e72f82002811ee9cb5633481061a41-20230601
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=kfzsVwq4kwdIaN2A+3CpUgKdzPymer9PLdgPbfm9u2c=;
-        b=ipswqk/2ub/Yh7NzGw1A5jdN9S4tM2yowAayh375jN41kMxDoSgC2Ede7Yb6lnYDAOBYFrPCx023BzYdsbpyzw4a2a7S/OPDGDtuPSt4QfEvDYkZ1uzx6snYHoVSgAqojOAWVaNQMOArvXgA2sV3cdvd8R0FSrUDNE9UxIvXIMs=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:c9d30a1f-162d-4e0a-9721-d4c300bb70f2,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.25,REQID:c9d30a1f-162d-4e0a-9721-d4c300bb70f2,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:8cae023d-de1e-4348-bc35-c96f92f1dcbb,B
-        ulkID:230601110311B41RDIPO,BulkQuantity:0,Recheck:0,SF:19|48|38|29|28|17,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: d5e72f82002811ee9cb5633481061a41-20230601
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 857799592; Thu, 01 Jun 2023 11:03:08 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 1 Jun 2023 11:03:06 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 1 Jun 2023 11:03:06 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>, Nathan Hebert <nhebert@chromium.org>
-CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 8/8] mediatek: vcodec: separate decoder and encoder
-Date:   Thu, 1 Jun 2023 11:02:56 +0800
-Message-ID: <20230601030256.29875-9-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230601030256.29875-1-yunfei.dong@mediatek.com>
-References: <20230601030256.29875-1-yunfei.dong@mediatek.com>
+        Wed, 31 May 2023 23:04:53 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9AF1AB;
+        Wed, 31 May 2023 20:03:41 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QWrYb4F16z4f3vdW;
+        Thu,  1 Jun 2023 11:03:31 +0800 (CST)
+Received: from [10.67.110.48] (unknown [10.67.110.48])
+        by APP4 (Coremail) with SMTP id gCh0CgBnGKxqCnhkJuKpKg--.28425S2;
+        Thu, 01 Jun 2023 11:03:31 +0800 (CST)
+Message-ID: <0d7ec376-bdf1-036f-2b18-7692197f14d4@huaweicloud.com>
+Date:   Thu, 1 Jun 2023 11:03:06 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] LSM: Infrastructure management of the sock
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>
+Cc:     linux-kernel@vger.kernel.org, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Wang Weiyang <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>, gongruiqi1@huawei.com
+References: <20230531110506.142951-1-gongruiqi@huaweicloud.com>
+ <fe6a0f1e-6378-a4f2-f995-46799ed5248e@schaufler-ca.com>
+Content-Language: en-US
+From:   "GONG, Ruiqi" <gongruiqi@huaweicloud.com>
+In-Reply-To: <fe6a0f1e-6378-a4f2-f995-46799ed5248e@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: gCh0CgBnGKxqCnhkJuKpKg--.28425S2
+X-Coremail-Antispam: 1UD129KBjvAXoWfAF43Gw45JF4UJF17JF1kKrg_yoW5KF43Xo
+        Wxtws7AFWxJry3GrW7W34SyFsruas5Ww45Ar4rXFsrZ3Wayw4UGrsrJF1rJanFqF1UtF4k
+        C3WkA3yxZF4Utr45n29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UjIYCTnIWjp_UUUYI7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK
+        8VAvwI8IcIk0rVWUuVWrJwAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF
+        7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7
+        CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCYjI0SjxkI
+        62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+        tVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
+        uYvjxUrR6zUUUUU
+X-CM-SenderInfo: pjrqw2pxltxq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,492 +74,899 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move all decoder files to folder video-decoder.
-Move all encoder files to folder video-encoder.
-Move common files which shared for encoder and decoder to folder video-common.
 
-Change include header files and Makefile to fix build error.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
- .../media/platform/mediatek/vcodec/Makefile   | 55 +------------------
- .../mediatek/vcodec/video-common/Makefile     | 21 +++++++
- .../{ => video-common}/mtk_vcodec_com_drv.h   |  0
- .../{ => video-common}/mtk_vcodec_dbgfs.c     |  0
- .../{ => video-common}/mtk_vcodec_dbgfs.h     |  0
- .../vcodec/{ => video-common}/mtk_vcodec_fw.c |  0
- .../vcodec/{ => video-common}/mtk_vcodec_fw.h |  0
- .../{ => video-common}/mtk_vcodec_fw_priv.h   |  0
- .../{ => video-common}/mtk_vcodec_fw_scp.c    |  0
- .../{ => video-common}/mtk_vcodec_fw_vpu.c    |  0
- .../{ => video-common}/mtk_vcodec_intr.c      |  0
- .../{ => video-common}/mtk_vcodec_intr.h      |  0
- .../{ => video-common}/mtk_vcodec_util.c      |  0
- .../{ => video-common}/mtk_vcodec_util.h      |  0
- .../mediatek/vcodec/video-decoder/Makefile    | 25 +++++++++
- .../{ => video-decoder}/mtk_vcodec_dec.c      |  0
- .../{ => video-decoder}/mtk_vcodec_dec.h      |  0
- .../{ => video-decoder}/mtk_vcodec_dec_drv.c  |  0
- .../{ => video-decoder}/mtk_vcodec_dec_drv.h  |  0
- .../{ => video-decoder}/mtk_vcodec_dec_hw.c   |  0
- .../{ => video-decoder}/mtk_vcodec_dec_hw.h   |  0
- .../{ => video-decoder}/mtk_vcodec_dec_pm.c   |  0
- .../{ => video-decoder}/mtk_vcodec_dec_pm.h   |  0
- .../mtk_vcodec_dec_stateful.c                 |  0
- .../mtk_vcodec_dec_stateless.c                |  0
- .../vdec/vdec_av1_req_lat_if.c                |  0
- .../{ => video-decoder}/vdec/vdec_h264_if.c   |  0
- .../vdec/vdec_h264_req_common.c               |  0
- .../vdec/vdec_h264_req_common.h               |  0
- .../vdec/vdec_h264_req_if.c                   |  0
- .../vdec/vdec_h264_req_multi_if.c             |  0
- .../vdec/vdec_hevc_req_multi_if.c             |  0
- .../{ => video-decoder}/vdec/vdec_vp8_if.c    |  0
- .../vdec/vdec_vp8_req_if.c                    |  0
- .../{ => video-decoder}/vdec/vdec_vp9_if.c    |  0
- .../vdec/vdec_vp9_req_lat_if.c                |  0
- .../{ => video-decoder}/vdec_drv_base.h       |  0
- .../vcodec/{ => video-decoder}/vdec_drv_if.c  |  0
- .../vcodec/{ => video-decoder}/vdec_drv_if.h  |  0
- .../vcodec/{ => video-decoder}/vdec_ipi_msg.h |  0
- .../{ => video-decoder}/vdec_msg_queue.c      |  0
- .../{ => video-decoder}/vdec_msg_queue.h      |  0
- .../vcodec/{ => video-decoder}/vdec_vpu_if.c  |  0
- .../vcodec/{ => video-decoder}/vdec_vpu_if.h  |  0
- .../mediatek/vcodec/video-encoder/Makefile    | 11 ++++
- .../{ => video-encoder}/mtk_vcodec_enc.c      |  0
- .../{ => video-encoder}/mtk_vcodec_enc.h      |  0
- .../{ => video-encoder}/mtk_vcodec_enc_drv.c  |  0
- .../{ => video-encoder}/mtk_vcodec_enc_drv.h  |  0
- .../{ => video-encoder}/mtk_vcodec_enc_pm.c   |  0
- .../{ => video-encoder}/mtk_vcodec_enc_pm.h   |  0
- .../{ => video-encoder}/venc/venc_h264_if.c   |  0
- .../{ => video-encoder}/venc/venc_vp8_if.c    |  0
- .../{ => video-encoder}/venc_drv_base.h       |  0
- .../vcodec/{ => video-encoder}/venc_drv_if.c  |  0
- .../vcodec/{ => video-encoder}/venc_drv_if.h  |  0
- .../vcodec/{ => video-encoder}/venc_ipi_msg.h |  0
- .../vcodec/{ => video-encoder}/venc_vpu_if.c  |  0
- .../vcodec/{ => video-encoder}/venc_vpu_if.h  |  0
- 59 files changed, 60 insertions(+), 52 deletions(-)
- create mode 100644 drivers/media/platform/mediatek/vcodec/video-common/Makefile
- rename drivers/media/platform/mediatek/vcodec/{ => video-common}/mtk_vcodec_com_drv.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-common}/mtk_vcodec_dbgfs.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-common}/mtk_vcodec_dbgfs.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-common}/mtk_vcodec_fw.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-common}/mtk_vcodec_fw.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-common}/mtk_vcodec_fw_priv.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-common}/mtk_vcodec_fw_scp.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-common}/mtk_vcodec_fw_vpu.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-common}/mtk_vcodec_intr.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-common}/mtk_vcodec_intr.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-common}/mtk_vcodec_util.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-common}/mtk_vcodec_util.h (100%)
- create mode 100644 drivers/media/platform/mediatek/vcodec/video-decoder/Makefile
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/mtk_vcodec_dec.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/mtk_vcodec_dec.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/mtk_vcodec_dec_drv.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/mtk_vcodec_dec_drv.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/mtk_vcodec_dec_hw.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/mtk_vcodec_dec_hw.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/mtk_vcodec_dec_pm.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/mtk_vcodec_dec_pm.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/mtk_vcodec_dec_stateful.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/mtk_vcodec_dec_stateless.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec/vdec_av1_req_lat_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec/vdec_h264_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec/vdec_h264_req_common.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec/vdec_h264_req_common.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec/vdec_h264_req_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec/vdec_h264_req_multi_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec/vdec_hevc_req_multi_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec/vdec_vp8_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec/vdec_vp8_req_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec/vdec_vp9_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec/vdec_vp9_req_lat_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec_drv_base.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec_drv_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec_drv_if.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec_ipi_msg.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec_msg_queue.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec_msg_queue.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec_vpu_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-decoder}/vdec_vpu_if.h (100%)
- create mode 100644 drivers/media/platform/mediatek/vcodec/video-encoder/Makefile
- rename drivers/media/platform/mediatek/vcodec/{ => video-encoder}/mtk_vcodec_enc.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-encoder}/mtk_vcodec_enc.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-encoder}/mtk_vcodec_enc_drv.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-encoder}/mtk_vcodec_enc_drv.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-encoder}/mtk_vcodec_enc_pm.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-encoder}/mtk_vcodec_enc_pm.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-encoder}/venc/venc_h264_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-encoder}/venc/venc_vp8_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-encoder}/venc_drv_base.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-encoder}/venc_drv_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-encoder}/venc_drv_if.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-encoder}/venc_ipi_msg.h (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-encoder}/venc_vpu_if.c (100%)
- rename drivers/media/platform/mediatek/vcodec/{ => video-encoder}/venc_vpu_if.h (100%)
+On 2023/05/31 22:00, Casey Schaufler wrote:
+> On 5/31/2023 4:05 AM, GONG, Ruiqi wrote:
+>> As the security infrastructure has taken over the management of multiple
+>> *_security blobs that are accessed by multiple security modules, and
+>> sk->sk_security shares the same situation, move its management out of
+>> individual security modules and into the security infrastructure as
+>> well. The infrastructure does the memory allocation, and each relavant
+>> module uses its own share.
+> 
+> Do you have a reason to make this change? The LSM infrastructure
+> manages other security blobs to enable multiple concurrently active
+> LSMs to use the blob. If only one LSM on a system can use the
+> socket blob there's no reason to move the management.
 
-diff --git a/drivers/media/platform/mediatek/vcodec/Makefile b/drivers/media/platform/mediatek/vcodec/Makefile
-index 5f4c30fec85a..c4f032764123 100644
---- a/drivers/media/platform/mediatek/vcodec/Makefile
-+++ b/drivers/media/platform/mediatek/vcodec/Makefile
-@@ -1,54 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--obj-$(CONFIG_VIDEO_MEDIATEK_VCODEC) += mtk-vcodec-dec.o \
--				       mtk-vcodec-enc.o \
--				       mtk-vcodec-common.o \
--				       mtk-vcodec-dec-hw.o
--
--mtk-vcodec-dec-y := vdec/vdec_h264_if.o \
--		vdec/vdec_vp8_if.o \
--		vdec/vdec_vp8_req_if.o \
--		vdec/vdec_vp9_if.o \
--		vdec/vdec_vp9_req_lat_if.o \
--		vdec/vdec_av1_req_lat_if.o \
--		vdec/vdec_h264_req_if.o \
--		vdec/vdec_h264_req_common.o \
--		vdec/vdec_h264_req_multi_if.o \
--		vdec/vdec_hevc_req_multi_if.o \
--		mtk_vcodec_dec_drv.o \
--		vdec_drv_if.o \
--		vdec_vpu_if.o \
--		vdec_msg_queue.o \
--		mtk_vcodec_dec.o \
--		mtk_vcodec_dec_stateful.o \
--		mtk_vcodec_dec_stateless.o \
--		mtk_vcodec_dec_pm.o \
--
--mtk-vcodec-dec-hw-y := mtk_vcodec_dec_hw.o
--
--mtk-vcodec-enc-y := venc/venc_vp8_if.o \
--		venc/venc_h264_if.o \
--		mtk_vcodec_enc.o \
--		mtk_vcodec_enc_drv.o \
--		mtk_vcodec_enc_pm.o \
--		venc_drv_if.o \
--		venc_vpu_if.o \
--
--
--mtk-vcodec-common-y := mtk_vcodec_intr.o \
--		mtk_vcodec_util.o \
--		mtk_vcodec_fw.o \
--
--ifneq ($(CONFIG_VIDEO_MEDIATEK_VCODEC_VPU),)
--mtk-vcodec-common-y += mtk_vcodec_fw_vpu.o
--endif
--
--ifneq ($(CONFIG_VIDEO_MEDIATEK_VCODEC_SCP),)
--mtk-vcodec-common-y += mtk_vcodec_fw_scp.o
--endif
--
--ifneq ($(CONFIG_DEBUG_FS),)
--obj-$(CONFIG_VIDEO_MEDIATEK_VCODEC) += mtk-vcodec-dbgfs.o
--
--mtk-vcodec-dbgfs-y := mtk_vcodec_dbgfs.o
--endif
-\ No newline at end of file
-+obj-y += video-common/
-+obj-y += video-encoder/
-+obj-y += video-decoder/
-diff --git a/drivers/media/platform/mediatek/vcodec/video-common/Makefile b/drivers/media/platform/mediatek/vcodec/video-common/Makefile
-new file mode 100644
-index 000000000000..d0479914dfb3
---- /dev/null
-+++ b/drivers/media/platform/mediatek/vcodec/video-common/Makefile
-@@ -0,0 +1,21 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-$(CONFIG_VIDEO_MEDIATEK_VCODEC) += mtk-vcodec-common.o
-+
-+mtk-vcodec-common-y := mtk_vcodec_intr.o \
-+		mtk_vcodec_util.o \
-+		mtk_vcodec_fw.o \
-+
-+ifneq ($(CONFIG_VIDEO_MEDIATEK_VCODEC_VPU),)
-+mtk-vcodec-common-y += mtk_vcodec_fw_vpu.o
-+endif
-+
-+ifneq ($(CONFIG_VIDEO_MEDIATEK_VCODEC_SCP),)
-+mtk-vcodec-common-y += mtk_vcodec_fw_scp.o
-+endif
-+
-+ifneq ($(CONFIG_DEBUG_FS),)
-+obj-$(CONFIG_VIDEO_MEDIATEK_VCODEC) += mtk-vcodec-dbgfs.o
-+
-+mtk-vcodec-dbgfs-y := mtk_vcodec_dbgfs.o
-+endif
-\ No newline at end of file
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_com_drv.h b/drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_com_drv.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_com_drv.h
-rename to drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_com_drv.h
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c b/drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_dbgfs.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.c
-rename to drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_dbgfs.c
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h b/drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_dbgfs.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dbgfs.h
-rename to drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_dbgfs.h
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.c b/drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_fw.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.c
-rename to drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_fw.c
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.h b/drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_fw.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw.h
-rename to drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_fw.h
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_priv.h b/drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_fw_priv.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_priv.h
-rename to drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_fw_priv.h
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c b/drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_fw_scp.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_scp.c
-rename to drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_fw_scp.c
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c b/drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_fw_vpu.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_fw_vpu.c
-rename to drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_fw_vpu.c
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_intr.c b/drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_intr.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_intr.c
-rename to drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_intr.c
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_intr.h b/drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_intr.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_intr.h
-rename to drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_intr.h
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c b/drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_util.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.c
-rename to drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_util.c
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h b/drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_util.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
-rename to drivers/media/platform/mediatek/vcodec/video-common/mtk_vcodec_util.h
-diff --git a/drivers/media/platform/mediatek/vcodec/video-decoder/Makefile b/drivers/media/platform/mediatek/vcodec/video-decoder/Makefile
-new file mode 100644
-index 000000000000..904cd22def84
---- /dev/null
-+++ b/drivers/media/platform/mediatek/vcodec/video-decoder/Makefile
-@@ -0,0 +1,25 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-$(CONFIG_VIDEO_MEDIATEK_VCODEC) += mtk-vcodec-dec.o \
-+				       mtk-vcodec-dec-hw.o
-+
-+mtk-vcodec-dec-y := vdec/vdec_h264_if.o \
-+		vdec/vdec_vp8_if.o \
-+		vdec/vdec_vp8_req_if.o \
-+		vdec/vdec_vp9_if.o \
-+		vdec/vdec_vp9_req_lat_if.o \
-+		vdec/vdec_av1_req_lat_if.o \
-+		vdec/vdec_h264_req_if.o \
-+		vdec/vdec_h264_req_common.o \
-+		vdec/vdec_h264_req_multi_if.o \
-+		vdec/vdec_hevc_req_multi_if.o \
-+		mtk_vcodec_dec_drv.o \
-+		vdec_drv_if.o \
-+		vdec_vpu_if.o \
-+		vdec_msg_queue.o \
-+		mtk_vcodec_dec.o \
-+		mtk_vcodec_dec_stateful.o \
-+		mtk_vcodec_dec_stateless.o \
-+		mtk_vcodec_dec_pm.o \
-+
-+mtk-vcodec-dec-hw-y := mtk_vcodec_dec_hw.o
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec.c
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.h b/drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.h
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec.h
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_drv.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_drv.c
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.h b/drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_drv.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.h
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_drv.h
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c b/drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_hw.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_hw.c
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.h b/drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_hw.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.h
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_hw.h
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_pm.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_pm.c
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.h b/drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_pm.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.h
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_pm.h
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_stateful.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_stateful.c
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_stateless.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/mtk_vcodec_dec_stateless.c
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_av1_req_lat_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec/vdec_av1_req_lat_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_av1_req_lat_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_if.c b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_h264_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_h264_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.c b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_h264_req_common.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_h264_req_common.c
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.h b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_h264_req_common.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.h
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_h264_req_common.h
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_h264_req_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_h264_req_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_h264_req_multi_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_h264_req_multi_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_hevc_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_hevc_req_multi_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec/vdec_hevc_req_multi_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_hevc_req_multi_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp8_if.c b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_vp8_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec/vdec_vp8_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_vp8_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp8_req_if.c b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_vp8_req_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec/vdec_vp8_req_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_vp8_req_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_vp9_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_vp9_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_vp9_req_lat_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec/vdec_vp9_req_lat_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_drv_base.h b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec_drv_base.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec_drv_base.h
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec_drv_base.h
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec_drv_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec_drv_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.h b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec_drv_if.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec_drv_if.h
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec_drv_if.h
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_ipi_msg.h b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec_ipi_msg.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec_ipi_msg.h
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec_ipi_msg.h
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec_msg_queue.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec_msg_queue.c
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec_msg_queue.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec_msg_queue.h
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec_msg_queue.h
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec_vpu_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec_vpu_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.h b/drivers/media/platform/mediatek/vcodec/video-decoder/vdec_vpu_if.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/vdec_vpu_if.h
-rename to drivers/media/platform/mediatek/vcodec/video-decoder/vdec_vpu_if.h
-diff --git a/drivers/media/platform/mediatek/vcodec/video-encoder/Makefile b/drivers/media/platform/mediatek/vcodec/video-encoder/Makefile
-new file mode 100644
-index 000000000000..e621b5b7e5e6
---- /dev/null
-+++ b/drivers/media/platform/mediatek/vcodec/video-encoder/Makefile
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+obj-$(CONFIG_VIDEO_MEDIATEK_VCODEC) += mtk-vcodec-enc.o
-+
-+mtk-vcodec-enc-y := venc/venc_vp8_if.o \
-+		venc/venc_h264_if.o \
-+		mtk_vcodec_enc.o \
-+		mtk_vcodec_enc_drv.o \
-+		mtk_vcodec_enc_pm.o \
-+		venc_drv_if.o \
-+		venc_vpu_if.o \
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mediatek/vcodec/video-encoder/mtk_vcodec_enc.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.c
-rename to drivers/media/platform/mediatek/vcodec/video-encoder/mtk_vcodec_enc.c
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.h b/drivers/media/platform/mediatek/vcodec/video-encoder/mtk_vcodec_enc.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc.h
-rename to drivers/media/platform/mediatek/vcodec/video-encoder/mtk_vcodec_enc.h
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mediatek/vcodec/video-encoder/mtk_vcodec_enc_drv.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.c
-rename to drivers/media/platform/mediatek/vcodec/video-encoder/mtk_vcodec_enc_drv.c
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.h b/drivers/media/platform/mediatek/vcodec/video-encoder/mtk_vcodec_enc_drv.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_drv.h
-rename to drivers/media/platform/mediatek/vcodec/video-encoder/mtk_vcodec_enc_drv.h
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mediatek/vcodec/video-encoder/mtk_vcodec_enc_pm.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.c
-rename to drivers/media/platform/mediatek/vcodec/video-encoder/mtk_vcodec_enc_pm.c
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.h b/drivers/media/platform/mediatek/vcodec/video-encoder/mtk_vcodec_enc_pm.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/mtk_vcodec_enc_pm.h
-rename to drivers/media/platform/mediatek/vcodec/video-encoder/mtk_vcodec_enc_pm.h
-diff --git a/drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c b/drivers/media/platform/mediatek/vcodec/video-encoder/venc/venc_h264_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/venc/venc_h264_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-encoder/venc/venc_h264_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/venc/venc_vp8_if.c b/drivers/media/platform/mediatek/vcodec/video-encoder/venc/venc_vp8_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/venc/venc_vp8_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-encoder/venc/venc_vp8_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/venc_drv_base.h b/drivers/media/platform/mediatek/vcodec/video-encoder/venc_drv_base.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/venc_drv_base.h
-rename to drivers/media/platform/mediatek/vcodec/video-encoder/venc_drv_base.h
-diff --git a/drivers/media/platform/mediatek/vcodec/venc_drv_if.c b/drivers/media/platform/mediatek/vcodec/video-encoder/venc_drv_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/venc_drv_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-encoder/venc_drv_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/venc_drv_if.h b/drivers/media/platform/mediatek/vcodec/video-encoder/venc_drv_if.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/venc_drv_if.h
-rename to drivers/media/platform/mediatek/vcodec/video-encoder/venc_drv_if.h
-diff --git a/drivers/media/platform/mediatek/vcodec/venc_ipi_msg.h b/drivers/media/platform/mediatek/vcodec/video-encoder/venc_ipi_msg.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/venc_ipi_msg.h
-rename to drivers/media/platform/mediatek/vcodec/video-encoder/venc_ipi_msg.h
-diff --git a/drivers/media/platform/mediatek/vcodec/venc_vpu_if.c b/drivers/media/platform/mediatek/vcodec/video-encoder/venc_vpu_if.c
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/venc_vpu_if.c
-rename to drivers/media/platform/mediatek/vcodec/video-encoder/venc_vpu_if.c
-diff --git a/drivers/media/platform/mediatek/vcodec/venc_vpu_if.h b/drivers/media/platform/mediatek/vcodec/video-encoder/venc_vpu_if.h
-similarity index 100%
-rename from drivers/media/platform/mediatek/vcodec/venc_vpu_if.h
-rename to drivers/media/platform/mediatek/vcodec/video-encoder/venc_vpu_if.h
--- 
-2.25.1
+I proposed this patch because I was dealing with a kmemleak problem on
+5.10 caused by disabling SELinux at runtime these days, which involed
+the key and sk blobs, and got surprised that they were not managed by
+the security infrastructure even in linux-next. I thought maybe they
+were just left out temporarily, so let's unify the whole thing...
+
+Since it seems there's no urgent demand for this, and the LSM stacking
+is already in progress, I'm ok to just leave it for now.
+
+> 
+>>
+>> Signed-off-by: GONG, Ruiqi <gongruiqi@huaweicloud.com>
+>> ---
+>>  include/linux/lsm_hooks.h         |  1 +
+>>  security/apparmor/include/net.h   |  2 +-
+>>  security/apparmor/lsm.c           | 20 +-------
+>>  security/security.c               | 35 ++++++++++++-
+>>  security/selinux/hooks.c          | 81 ++++++++++++++-----------------
+>>  security/selinux/include/objsec.h |  4 ++
+>>  security/selinux/netlabel.c       | 22 ++++-----
+>>  security/smack/smack.h            |  5 ++
+>>  security/smack/smack_lsm.c        | 65 +++++++++++--------------
+>>  security/smack/smack_netfilter.c  |  4 +-
+>>  10 files changed, 125 insertions(+), 114 deletions(-)
+>>
+>> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+>> index ab2b2fafa4a4..67b6e87ca6ec 100644
+>> --- a/include/linux/lsm_hooks.h
+>> +++ b/include/linux/lsm_hooks.h
+>> @@ -62,6 +62,7 @@ struct lsm_blob_sizes {
+>>  	int	lbs_superblock;
+>>  	int	lbs_ipc;
+>>  	int	lbs_msg_msg;
+>> +	int	lbs_sock;
+>>  	int	lbs_task;
+>>  };
+>>  
+>> diff --git a/security/apparmor/include/net.h b/security/apparmor/include/net.h
+>> index 6fa440b5daed..9eb159c09578 100644
+>> --- a/security/apparmor/include/net.h
+>> +++ b/security/apparmor/include/net.h
+>> @@ -51,7 +51,7 @@ struct aa_sk_ctx {
+>>  	struct aa_label *peer;
+>>  };
+>>  
+>> -#define SK_CTX(X) ((X)->sk_security)
+>> +#define SK_CTX(X) ((X)->sk_security + apparmor_blob_sizes.lbs_sock)
+>>  #define SOCK_ctx(X) SOCK_INODE(X)->i_security
+>>  #define DEFINE_AUDIT_NET(NAME, OP, SK, F, T, P)				  \
+>>  	struct lsm_network_audit NAME ## _net = { .sk = (SK),		  \
+>> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+>> index f431251ffb91..3dd849a6d7a1 100644
+>> --- a/security/apparmor/lsm.c
+>> +++ b/security/apparmor/lsm.c
+>> @@ -818,22 +818,6 @@ static int apparmor_task_kill(struct task_struct *target, struct kernel_siginfo
+>>  	return error;
+>>  }
+>>  
+>> -/**
+>> - * apparmor_sk_alloc_security - allocate and attach the sk_security field
+>> - */
+>> -static int apparmor_sk_alloc_security(struct sock *sk, int family, gfp_t flags)
+>> -{
+>> -	struct aa_sk_ctx *ctx;
+>> -
+>> -	ctx = kzalloc(sizeof(*ctx), flags);
+>> -	if (!ctx)
+>> -		return -ENOMEM;
+>> -
+>> -	SK_CTX(sk) = ctx;
+>> -
+>> -	return 0;
+>> -}
+>> -
+>>  /**
+>>   * apparmor_sk_free_security - free the sk_security field
+>>   */
+>> @@ -841,10 +825,8 @@ static void apparmor_sk_free_security(struct sock *sk)
+>>  {
+>>  	struct aa_sk_ctx *ctx = SK_CTX(sk);
+>>  
+>> -	SK_CTX(sk) = NULL;
+>>  	aa_put_label(ctx->label);
+>>  	aa_put_label(ctx->peer);
+>> -	kfree(ctx);
+>>  }
+>>  
+>>  /**
+>> @@ -1212,6 +1194,7 @@ static int apparmor_inet_conn_request(const struct sock *sk, struct sk_buff *skb
+>>  struct lsm_blob_sizes apparmor_blob_sizes __ro_after_init = {
+>>  	.lbs_cred = sizeof(struct aa_label *),
+>>  	.lbs_file = sizeof(struct aa_file_ctx),
+>> +	.lbs_sock = sizeof(struct aa_sk_ctx),
+>>  	.lbs_task = sizeof(struct aa_task_ctx),
+>>  };
+>>  
+>> @@ -1250,7 +1233,6 @@ static struct security_hook_list apparmor_hooks[] __ro_after_init = {
+>>  	LSM_HOOK_INIT(getprocattr, apparmor_getprocattr),
+>>  	LSM_HOOK_INIT(setprocattr, apparmor_setprocattr),
+>>  
+>> -	LSM_HOOK_INIT(sk_alloc_security, apparmor_sk_alloc_security),
+>>  	LSM_HOOK_INIT(sk_free_security, apparmor_sk_free_security),
+>>  	LSM_HOOK_INIT(sk_clone_security, apparmor_sk_clone_security),
+>>  
+>> diff --git a/security/security.c b/security/security.c
+>> index b720424ca37d..e71f4717cde5 100644
+>> --- a/security/security.c
+>> +++ b/security/security.c
+>> @@ -30,6 +30,7 @@
+>>  #include <linux/string.h>
+>>  #include <linux/msg.h>
+>>  #include <net/flow.h>
+>> +#include <net/sock.h>
+>>  
+>>  #define MAX_LSM_EVM_XATTR	2
+>>  
+>> @@ -210,6 +211,7 @@ static void __init lsm_set_blob_sizes(struct lsm_blob_sizes *needed)
+>>  	lsm_set_blob_size(&needed->lbs_inode, &blob_sizes.lbs_inode);
+>>  	lsm_set_blob_size(&needed->lbs_ipc, &blob_sizes.lbs_ipc);
+>>  	lsm_set_blob_size(&needed->lbs_msg_msg, &blob_sizes.lbs_msg_msg);
+>> +	lsm_set_blob_size(&needed->lbs_sock, &blob_sizes.lbs_sock);
+>>  	lsm_set_blob_size(&needed->lbs_superblock, &blob_sizes.lbs_superblock);
+>>  	lsm_set_blob_size(&needed->lbs_task, &blob_sizes.lbs_task);
+>>  }
+>> @@ -376,6 +378,7 @@ static void __init ordered_lsm_init(void)
+>>  	init_debug("inode blob size      = %d\n", blob_sizes.lbs_inode);
+>>  	init_debug("ipc blob size        = %d\n", blob_sizes.lbs_ipc);
+>>  	init_debug("msg_msg blob size    = %d\n", blob_sizes.lbs_msg_msg);
+>> +	init_debug("sock blob size       = %d\n", blob_sizes.lbs_sock);
+>>  	init_debug("superblock blob size = %d\n", blob_sizes.lbs_superblock);
+>>  	init_debug("task blob size       = %d\n", blob_sizes.lbs_task);
+>>  
+>> @@ -733,6 +736,27 @@ static int lsm_superblock_alloc(struct super_block *sb)
+>>  	return 0;
+>>  }
+>>  
+>> +/**
+>> + * lsm_sock_alloc - allocate a composite socket blob
+>> + * @sk: the socket that needs a blob
+>> + *
+>> + * Allocate the socket blob for all the modules
+>> + *
+>> + * Returns 0, or -ENOMEM if memory can't be allocated.
+>> + */
+>> +static int lsm_sock_alloc(struct sock *sk)
+>> +{
+>> +	if (blob_sizes.lbs_sock == 0) {
+>> +		sk->sk_security = NULL;
+>> +		return 0;
+>> +	}
+>> +
+>> +	sk->sk_security = kzalloc(blob_sizes.lbs_sock, GFP_KERNEL);
+>> +	if (sk->sk_security == NULL)
+>> +		return -ENOMEM;
+>> +	return 0;
+>> +}
+>> +
+>>  /*
+>>   * The default value of the LSM hook is defined in linux/lsm_hook_defs.h and
+>>   * can be accessed with:
+>> @@ -4369,7 +4393,14 @@ EXPORT_SYMBOL(security_socket_getpeersec_dgram);
+>>   */
+>>  int security_sk_alloc(struct sock *sk, int family, gfp_t priority)
+>>  {
+>> -	return call_int_hook(sk_alloc_security, 0, sk, family, priority);
+>> +	int rc = lsm_sock_alloc(sk);
+>> +
+>> +	if (unlikely(rc))
+>> +		return rc;
+>> +	rc = call_int_hook(sk_alloc_security, 0, sk, family, priority);
+>> +	if (unlikely(rc))
+>> +		security_sk_free(sk);
+>> +	return rc;
+>>  }
+>>  
+>>  /**
+>> @@ -4381,6 +4412,8 @@ int security_sk_alloc(struct sock *sk, int family, gfp_t priority)
+>>  void security_sk_free(struct sock *sk)
+>>  {
+>>  	call_void_hook(sk_free_security, sk);
+>> +	kfree(sk->sk_security);
+>> +	sk->sk_security = NULL;
+>>  }
+>>  
+>>  /**
+>> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+>> index d06e350fedee..f8397f05dc90 100644
+>> --- a/security/selinux/hooks.c
+>> +++ b/security/selinux/hooks.c
+>> @@ -4497,7 +4497,7 @@ static int socket_sockcreate_sid(const struct task_security_struct *tsec,
+>>  
+>>  static int sock_has_perm(struct sock *sk, u32 perms)
+>>  {
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  	struct common_audit_data ad;
+>>  	struct lsm_network_audit net = {0,};
+>>  
+>> @@ -4552,7 +4552,7 @@ static int selinux_socket_post_create(struct socket *sock, int family,
+>>  	isec->initialized = LABEL_INITIALIZED;
+>>  
+>>  	if (sock->sk) {
+>> -		sksec = sock->sk->sk_security;
+>> +		sksec = selinux_sock(sock->sk);
+>>  		sksec->sclass = sclass;
+>>  		sksec->sid = sid;
+>>  		/* Allows detection of the first association on this socket */
+>> @@ -4568,8 +4568,8 @@ static int selinux_socket_post_create(struct socket *sock, int family,
+>>  static int selinux_socket_socketpair(struct socket *socka,
+>>  				     struct socket *sockb)
+>>  {
+>> -	struct sk_security_struct *sksec_a = socka->sk->sk_security;
+>> -	struct sk_security_struct *sksec_b = sockb->sk->sk_security;
+>> +	struct sk_security_struct *sksec_a = selinux_sock(socka->sk);
+>> +	struct sk_security_struct *sksec_b = selinux_sock(sockb->sk);
+>>  
+>>  	sksec_a->peer_sid = sksec_b->sid;
+>>  	sksec_b->peer_sid = sksec_a->sid;
+>> @@ -4584,7 +4584,7 @@ static int selinux_socket_socketpair(struct socket *socka,
+>>  static int selinux_socket_bind(struct socket *sock, struct sockaddr *address, int addrlen)
+>>  {
+>>  	struct sock *sk = sock->sk;
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  	u16 family;
+>>  	int err;
+>>  
+>> @@ -4717,7 +4717,7 @@ static int selinux_socket_connect_helper(struct socket *sock,
+>>  					 struct sockaddr *address, int addrlen)
+>>  {
+>>  	struct sock *sk = sock->sk;
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  	int err;
+>>  
+>>  	err = sock_has_perm(sk, SOCKET__CONNECT);
+>> @@ -4895,9 +4895,9 @@ static int selinux_socket_unix_stream_connect(struct sock *sock,
+>>  					      struct sock *other,
+>>  					      struct sock *newsk)
+>>  {
+>> -	struct sk_security_struct *sksec_sock = sock->sk_security;
+>> -	struct sk_security_struct *sksec_other = other->sk_security;
+>> -	struct sk_security_struct *sksec_new = newsk->sk_security;
+>> +	struct sk_security_struct *sksec_sock = selinux_sock(sock);
+>> +	struct sk_security_struct *sksec_other = selinux_sock(other);
+>> +	struct sk_security_struct *sksec_new = selinux_sock(newsk);
+>>  	struct common_audit_data ad;
+>>  	struct lsm_network_audit net = {0,};
+>>  	int err;
+>> @@ -4928,8 +4928,8 @@ static int selinux_socket_unix_stream_connect(struct sock *sock,
+>>  static int selinux_socket_unix_may_send(struct socket *sock,
+>>  					struct socket *other)
+>>  {
+>> -	struct sk_security_struct *ssec = sock->sk->sk_security;
+>> -	struct sk_security_struct *osec = other->sk->sk_security;
+>> +	struct sk_security_struct *ssec = selinux_sock(sock->sk);
+>> +	struct sk_security_struct *osec = selinux_sock(other->sk);
+>>  	struct common_audit_data ad;
+>>  	struct lsm_network_audit net = {0,};
+>>  
+>> @@ -4968,7 +4968,7 @@ static int selinux_sock_rcv_skb_compat(struct sock *sk, struct sk_buff *skb,
+>>  				       u16 family)
+>>  {
+>>  	int err = 0;
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  	u32 sk_sid = sksec->sid;
+>>  	struct common_audit_data ad;
+>>  	struct lsm_network_audit net = {0,};
+>> @@ -5000,7 +5000,7 @@ static int selinux_sock_rcv_skb_compat(struct sock *sk, struct sk_buff *skb,
+>>  static int selinux_socket_sock_rcv_skb(struct sock *sk, struct sk_buff *skb)
+>>  {
+>>  	int err;
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  	u16 family = sk->sk_family;
+>>  	u32 sk_sid = sksec->sid;
+>>  	struct common_audit_data ad;
+>> @@ -5073,7 +5073,7 @@ static int selinux_socket_getpeersec_stream(struct socket *sock,
+>>  	int err = 0;
+>>  	char *scontext = NULL;
+>>  	u32 scontext_len;
+>> -	struct sk_security_struct *sksec = sock->sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sock->sk);
+>>  	u32 peer_sid = SECSID_NULL;
+>>  
+>>  	if (sksec->sclass == SECCLASS_UNIX_STREAM_SOCKET ||
+>> @@ -5131,34 +5131,27 @@ static int selinux_socket_getpeersec_dgram(struct socket *sock, struct sk_buff *
+>>  
+>>  static int selinux_sk_alloc_security(struct sock *sk, int family, gfp_t priority)
+>>  {
+>> -	struct sk_security_struct *sksec;
+>> -
+>> -	sksec = kzalloc(sizeof(*sksec), priority);
+>> -	if (!sksec)
+>> -		return -ENOMEM;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  
+>>  	sksec->peer_sid = SECINITSID_UNLABELED;
+>>  	sksec->sid = SECINITSID_UNLABELED;
+>>  	sksec->sclass = SECCLASS_SOCKET;
+>>  	selinux_netlbl_sk_security_reset(sksec);
+>> -	sk->sk_security = sksec;
+>>  
+>>  	return 0;
+>>  }
+>>  
+>>  static void selinux_sk_free_security(struct sock *sk)
+>>  {
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  
+>> -	sk->sk_security = NULL;
+>>  	selinux_netlbl_sk_security_free(sksec);
+>> -	kfree(sksec);
+>>  }
+>>  
+>>  static void selinux_sk_clone_security(const struct sock *sk, struct sock *newsk)
+>>  {
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> -	struct sk_security_struct *newsksec = newsk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>> +	struct sk_security_struct *newsksec = selinux_sock(newsk);
+>>  
+>>  	newsksec->sid = sksec->sid;
+>>  	newsksec->peer_sid = sksec->peer_sid;
+>> @@ -5172,7 +5165,7 @@ static void selinux_sk_getsecid(struct sock *sk, u32 *secid)
+>>  	if (!sk)
+>>  		*secid = SECINITSID_ANY_SOCKET;
+>>  	else {
+>> -		struct sk_security_struct *sksec = sk->sk_security;
+>> +		struct sk_security_struct *sksec = selinux_sock(sk);
+>>  
+>>  		*secid = sksec->sid;
+>>  	}
+>> @@ -5182,7 +5175,7 @@ static void selinux_sock_graft(struct sock *sk, struct socket *parent)
+>>  {
+>>  	struct inode_security_struct *isec =
+>>  		inode_security_novalidate(SOCK_INODE(parent));
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  
+>>  	if (sk->sk_family == PF_INET || sk->sk_family == PF_INET6 ||
+>>  	    sk->sk_family == PF_UNIX)
+>> @@ -5199,7 +5192,7 @@ static int selinux_sctp_process_new_assoc(struct sctp_association *asoc,
+>>  {
+>>  	struct sock *sk = asoc->base.sk;
+>>  	u16 family = sk->sk_family;
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  	struct common_audit_data ad;
+>>  	struct lsm_network_audit net = {0,};
+>>  	int err;
+>> @@ -5256,7 +5249,7 @@ static int selinux_sctp_process_new_assoc(struct sctp_association *asoc,
+>>  static int selinux_sctp_assoc_request(struct sctp_association *asoc,
+>>  				      struct sk_buff *skb)
+>>  {
+>> -	struct sk_security_struct *sksec = asoc->base.sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(asoc->base.sk);
+>>  	u32 conn_sid;
+>>  	int err;
+>>  
+>> @@ -5289,7 +5282,7 @@ static int selinux_sctp_assoc_request(struct sctp_association *asoc,
+>>  static int selinux_sctp_assoc_established(struct sctp_association *asoc,
+>>  					  struct sk_buff *skb)
+>>  {
+>> -	struct sk_security_struct *sksec = asoc->base.sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(asoc->base.sk);
+>>  
+>>  	if (!selinux_policycap_extsockclass())
+>>  		return 0;
+>> @@ -5388,8 +5381,8 @@ static int selinux_sctp_bind_connect(struct sock *sk, int optname,
+>>  static void selinux_sctp_sk_clone(struct sctp_association *asoc, struct sock *sk,
+>>  				  struct sock *newsk)
+>>  {
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> -	struct sk_security_struct *newsksec = newsk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>> +	struct sk_security_struct *newsksec = selinux_sock(newsk);
+>>  
+>>  	/* If policy does not support SECCLASS_SCTP_SOCKET then call
+>>  	 * the non-sctp clone version.
+>> @@ -5405,8 +5398,8 @@ static void selinux_sctp_sk_clone(struct sctp_association *asoc, struct sock *sk
+>>  
+>>  static int selinux_mptcp_add_subflow(struct sock *sk, struct sock *ssk)
+>>  {
+>> -	struct sk_security_struct *ssksec = ssk->sk_security;
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *ssksec = selinux_sock(ssk);
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  
+>>  	ssksec->sclass = sksec->sclass;
+>>  	ssksec->sid = sksec->sid;
+>> @@ -5421,7 +5414,7 @@ static int selinux_mptcp_add_subflow(struct sock *sk, struct sock *ssk)
+>>  static int selinux_inet_conn_request(const struct sock *sk, struct sk_buff *skb,
+>>  				     struct request_sock *req)
+>>  {
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  	int err;
+>>  	u16 family = req->rsk_ops->family;
+>>  	u32 connsid;
+>> @@ -5442,7 +5435,7 @@ static int selinux_inet_conn_request(const struct sock *sk, struct sk_buff *skb,
+>>  static void selinux_inet_csk_clone(struct sock *newsk,
+>>  				   const struct request_sock *req)
+>>  {
+>> -	struct sk_security_struct *newsksec = newsk->sk_security;
+>> +	struct sk_security_struct *newsksec = selinux_sock(newsk);
+>>  
+>>  	newsksec->sid = req->secid;
+>>  	newsksec->peer_sid = req->peer_secid;
+>> @@ -5459,7 +5452,7 @@ static void selinux_inet_csk_clone(struct sock *newsk,
+>>  static void selinux_inet_conn_established(struct sock *sk, struct sk_buff *skb)
+>>  {
+>>  	u16 family = sk->sk_family;
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  
+>>  	/* handle mapped IPv4 packets arriving via IPv6 sockets */
+>>  	if (family == PF_INET6 && skb->protocol == htons(ETH_P_IP))
+>> @@ -5540,7 +5533,7 @@ static int selinux_tun_dev_attach_queue(void *security)
+>>  static int selinux_tun_dev_attach(struct sock *sk, void *security)
+>>  {
+>>  	struct tun_security_struct *tunsec = security;
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  
+>>  	/* we don't currently perform any NetLabel based labeling here and it
+>>  	 * isn't clear that we would want to do so anyway; while we could apply
+>> @@ -5666,7 +5659,7 @@ static unsigned int selinux_ip_output(void *priv, struct sk_buff *skb,
+>>  			return NF_ACCEPT;
+>>  
+>>  		/* standard practice, label using the parent socket */
+>> -		sksec = sk->sk_security;
+>> +		sksec = selinux_sock(sk);
+>>  		sid = sksec->sid;
+>>  	} else
+>>  		sid = SECINITSID_KERNEL;
+>> @@ -5689,7 +5682,7 @@ static unsigned int selinux_ip_postroute_compat(struct sk_buff *skb,
+>>  	sk = skb_to_full_sk(skb);
+>>  	if (sk == NULL)
+>>  		return NF_ACCEPT;
+>> -	sksec = sk->sk_security;
+>> +	sksec = selinux_sock(sk);
+>>  
+>>  	ad.type = LSM_AUDIT_DATA_NET;
+>>  	ad.u.net = &net;
+>> @@ -5779,9 +5772,8 @@ static unsigned int selinux_ip_postroute(void *priv,
+>>  		 * selinux_inet_conn_request().  See also selinux_ip_output()
+>>  		 * for similar problems. */
+>>  		u32 skb_sid;
+>> -		struct sk_security_struct *sksec;
+>> +		struct sk_security_struct *sksec = selinux_sock(sk);
+>>  
+>> -		sksec = sk->sk_security;
+>>  		if (selinux_skb_peerlbl_sid(skb, family, &skb_sid))
+>>  			return NF_DROP;
+>>  		/* At this point, if the returned skb peerlbl is SECSID_NULL
+>> @@ -5810,7 +5802,7 @@ static unsigned int selinux_ip_postroute(void *priv,
+>>  	} else {
+>>  		/* Locally generated packet, fetch the security label from the
+>>  		 * associated socket. */
+>> -		struct sk_security_struct *sksec = sk->sk_security;
+>> +		struct sk_security_struct *sksec = selinux_sock(sk);
+>>  		peer_sid = sksec->sid;
+>>  		secmark_perm = PACKET__SEND;
+>>  	}
+>> @@ -5856,7 +5848,7 @@ static int selinux_netlink_send(struct sock *sk, struct sk_buff *skb)
+>>  	unsigned int data_len = skb->len;
+>>  	unsigned char *data = skb->data;
+>>  	struct nlmsghdr *nlh;
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  	u16 sclass = sksec->sclass;
+>>  	u32 perm;
+>>  
+>> @@ -6814,6 +6806,7 @@ struct lsm_blob_sizes selinux_blob_sizes __ro_after_init = {
+>>  	.lbs_inode = sizeof(struct inode_security_struct),
+>>  	.lbs_ipc = sizeof(struct ipc_security_struct),
+>>  	.lbs_msg_msg = sizeof(struct msg_security_struct),
+>> +	.lbs_sock = sizeof(struct sk_security_struct),
+>>  	.lbs_superblock = sizeof(struct superblock_security_struct),
+>>  };
+>>  
+>> diff --git a/security/selinux/include/objsec.h b/security/selinux/include/objsec.h
+>> index 2953132408bf..49221f441c68 100644
+>> --- a/security/selinux/include/objsec.h
+>> +++ b/security/selinux/include/objsec.h
+>> @@ -194,4 +194,8 @@ static inline struct superblock_security_struct *selinux_superblock(
+>>  	return superblock->s_security + selinux_blob_sizes.lbs_superblock;
+>>  }
+>>  
+>> +static inline struct sk_security_struct *selinux_sock(const struct sock *sk)
+>> +{
+>> +	return sk->sk_security + selinux_blob_sizes.lbs_sock;
+>> +}
+>>  #endif /* _SELINUX_OBJSEC_H_ */
+>> diff --git a/security/selinux/netlabel.c b/security/selinux/netlabel.c
+>> index 528f5186e912..9755561aa466 100644
+>> --- a/security/selinux/netlabel.c
+>> +++ b/security/selinux/netlabel.c
+>> @@ -68,7 +68,7 @@ static int selinux_netlbl_sidlookup_cached(struct sk_buff *skb,
+>>  static struct netlbl_lsm_secattr *selinux_netlbl_sock_genattr(struct sock *sk)
+>>  {
+>>  	int rc;
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  	struct netlbl_lsm_secattr *secattr;
+>>  
+>>  	if (sksec->nlbl_secattr != NULL)
+>> @@ -100,7 +100,7 @@ static struct netlbl_lsm_secattr *selinux_netlbl_sock_getattr(
+>>  							const struct sock *sk,
+>>  							u32 sid)
+>>  {
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  	struct netlbl_lsm_secattr *secattr = sksec->nlbl_secattr;
+>>  
+>>  	if (secattr == NULL)
+>> @@ -239,7 +239,7 @@ int selinux_netlbl_skbuff_setsid(struct sk_buff *skb,
+>>  	 * being labeled by it's parent socket, if it is just exit */
+>>  	sk = skb_to_full_sk(skb);
+>>  	if (sk != NULL) {
+>> -		struct sk_security_struct *sksec = sk->sk_security;
+>> +		struct sk_security_struct *sksec = selinux_sock(sk);
+>>  
+>>  		if (sksec->nlbl_state != NLBL_REQSKB)
+>>  			return 0;
+>> @@ -276,7 +276,7 @@ int selinux_netlbl_sctp_assoc_request(struct sctp_association *asoc,
+>>  {
+>>  	int rc;
+>>  	struct netlbl_lsm_secattr secattr;
+>> -	struct sk_security_struct *sksec = asoc->base.sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(asoc->base.sk);
+>>  	struct sockaddr_in addr4;
+>>  	struct sockaddr_in6 addr6;
+>>  
+>> @@ -355,7 +355,7 @@ int selinux_netlbl_inet_conn_request(struct request_sock *req, u16 family)
+>>   */
+>>  void selinux_netlbl_inet_csk_clone(struct sock *sk, u16 family)
+>>  {
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  
+>>  	if (family == PF_INET)
+>>  		sksec->nlbl_state = NLBL_LABELED;
+>> @@ -373,8 +373,8 @@ void selinux_netlbl_inet_csk_clone(struct sock *sk, u16 family)
+>>   */
+>>  void selinux_netlbl_sctp_sk_clone(struct sock *sk, struct sock *newsk)
+>>  {
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> -	struct sk_security_struct *newsksec = newsk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>> +	struct sk_security_struct *newsksec = selinux_sock(newsk);
+>>  
+>>  	newsksec->nlbl_state = sksec->nlbl_state;
+>>  }
+>> @@ -392,7 +392,7 @@ void selinux_netlbl_sctp_sk_clone(struct sock *sk, struct sock *newsk)
+>>  int selinux_netlbl_socket_post_create(struct sock *sk, u16 family)
+>>  {
+>>  	int rc;
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  	struct netlbl_lsm_secattr *secattr;
+>>  
+>>  	if (family != PF_INET && family != PF_INET6)
+>> @@ -506,7 +506,7 @@ int selinux_netlbl_socket_setsockopt(struct socket *sock,
+>>  {
+>>  	int rc = 0;
+>>  	struct sock *sk = sock->sk;
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  	struct netlbl_lsm_secattr secattr;
+>>  
+>>  	if (selinux_netlbl_option(level, optname) &&
+>> @@ -544,7 +544,7 @@ static int selinux_netlbl_socket_connect_helper(struct sock *sk,
+>>  						struct sockaddr *addr)
+>>  {
+>>  	int rc;
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  	struct netlbl_lsm_secattr *secattr;
+>>  
+>>  	/* connected sockets are allowed to disconnect when the address family
+>> @@ -583,7 +583,7 @@ static int selinux_netlbl_socket_connect_helper(struct sock *sk,
+>>  int selinux_netlbl_socket_connect_locked(struct sock *sk,
+>>  					 struct sockaddr *addr)
+>>  {
+>> -	struct sk_security_struct *sksec = sk->sk_security;
+>> +	struct sk_security_struct *sksec = selinux_sock(sk);
+>>  
+>>  	if (sksec->nlbl_state != NLBL_REQSKB &&
+>>  	    sksec->nlbl_state != NLBL_CONNLABELED)
+>> diff --git a/security/smack/smack.h b/security/smack/smack.h
+>> index aa15ff56ed6e..2d0163076eca 100644
+>> --- a/security/smack/smack.h
+>> +++ b/security/smack/smack.h
+>> @@ -355,6 +355,11 @@ static inline struct superblock_smack *smack_superblock(
+>>  	return superblock->s_security + smack_blob_sizes.lbs_superblock;
+>>  }
+>>  
+>> +static inline struct socket_smack *smack_sock(const struct sock *sk)
+>> +{
+>> +	return sk->sk_security + smack_blob_sizes.lbs_sock;
+>> +}
+>> +
+>>  /*
+>>   * Is the directory transmuting?
+>>   */
+>> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+>> index 6e270cf3fd30..ab026ff79504 100644
+>> --- a/security/smack/smack_lsm.c
+>> +++ b/security/smack/smack_lsm.c
+>> @@ -1502,7 +1502,7 @@ static int smack_inode_getsecurity(struct mnt_idmap *idmap,
+>>  		if (sock == NULL || sock->sk == NULL)
+>>  			return -EOPNOTSUPP;
+>>  
+>> -		ssp = sock->sk->sk_security;
+>> +		ssp = smack_sock(sock->sk);
+>>  
+>>  		if (strcmp(name, XATTR_SMACK_IPIN) == 0)
+>>  			isp = ssp->smk_in;
+>> @@ -1890,7 +1890,7 @@ static int smack_file_receive(struct file *file)
+>>  
+>>  	if (inode->i_sb->s_magic == SOCKFS_MAGIC) {
+>>  		sock = SOCKET_I(inode);
+>> -		ssp = sock->sk->sk_security;
+>> +		ssp = smack_sock(sock->sk);
+>>  		tsp = smack_cred(current_cred());
+>>  		/*
+>>  		 * If the receiving process can't write to the
+>> @@ -2310,11 +2310,7 @@ static void smack_task_to_inode(struct task_struct *p, struct inode *inode)
+>>  static int smack_sk_alloc_security(struct sock *sk, int family, gfp_t gfp_flags)
+>>  {
+>>  	struct smack_known *skp = smk_of_current();
+>> -	struct socket_smack *ssp;
+>> -
+>> -	ssp = kzalloc(sizeof(struct socket_smack), gfp_flags);
+>> -	if (ssp == NULL)
+>> -		return -ENOMEM;
+>> +	struct socket_smack *ssp = smack_sock(sk);
+>>  
+>>  	/*
+>>  	 * Sockets created by kernel threads receive web label.
+>> @@ -2328,8 +2324,6 @@ static int smack_sk_alloc_security(struct sock *sk, int family, gfp_t gfp_flags)
+>>  	}
+>>  	ssp->smk_packet = NULL;
+>>  
+>> -	sk->sk_security = ssp;
+>> -
+>>  	return 0;
+>>  }
+>>  
+>> @@ -2355,7 +2349,6 @@ static void smack_sk_free_security(struct sock *sk)
+>>  		rcu_read_unlock();
+>>  	}
+>>  #endif
+>> -	kfree(sk->sk_security);
+>>  }
+>>  
+>>  /**
+>> @@ -2367,8 +2360,8 @@ static void smack_sk_free_security(struct sock *sk)
+>>   */
+>>  static void smack_sk_clone_security(const struct sock *sk, struct sock *newsk)
+>>  {
+>> -	struct socket_smack *ssp_old = sk->sk_security;
+>> -	struct socket_smack *ssp_new = newsk->sk_security;
+>> +	struct socket_smack *ssp_old = smack_sock(sk);
+>> +	struct socket_smack *ssp_new = smack_sock(newsk);
+>>  
+>>  	*ssp_new = *ssp_old;
+>>  }
+>> @@ -2484,7 +2477,7 @@ static struct smack_known *smack_ipv6host_label(struct sockaddr_in6 *sip)
+>>   */
+>>  static int smack_netlbl_add(struct sock *sk)
+>>  {
+>> -	struct socket_smack *ssp = sk->sk_security;
+>> +	struct socket_smack *ssp = smack_sock(sk);
+>>  	struct smack_known *skp = ssp->smk_out;
+>>  	int rc;
+>>  
+>> @@ -2516,7 +2509,7 @@ static int smack_netlbl_add(struct sock *sk)
+>>   */
+>>  static void smack_netlbl_delete(struct sock *sk)
+>>  {
+>> -	struct socket_smack *ssp = sk->sk_security;
+>> +	struct socket_smack *ssp = smack_sock(sk);
+>>  
+>>  	/*
+>>  	 * Take the label off the socket if one is set.
+>> @@ -2548,7 +2541,7 @@ static int smk_ipv4_check(struct sock *sk, struct sockaddr_in *sap)
+>>  	struct smack_known *skp;
+>>  	int rc = 0;
+>>  	struct smack_known *hkp;
+>> -	struct socket_smack *ssp = sk->sk_security;
+>> +	struct socket_smack *ssp = smack_sock(sk);
+>>  	struct smk_audit_info ad;
+>>  
+>>  	rcu_read_lock();
+>> @@ -2621,7 +2614,7 @@ static void smk_ipv6_port_label(struct socket *sock, struct sockaddr *address)
+>>  {
+>>  	struct sock *sk = sock->sk;
+>>  	struct sockaddr_in6 *addr6;
+>> -	struct socket_smack *ssp = sock->sk->sk_security;
+>> +	struct socket_smack *ssp = smack_sock(sock->sk);
+>>  	struct smk_port_label *spp;
+>>  	unsigned short port = 0;
+>>  
+>> @@ -2709,7 +2702,7 @@ static int smk_ipv6_port_check(struct sock *sk, struct sockaddr_in6 *address,
+>>  				int act)
+>>  {
+>>  	struct smk_port_label *spp;
+>> -	struct socket_smack *ssp = sk->sk_security;
+>> +	struct socket_smack *ssp = smack_sock(sk);
+>>  	struct smack_known *skp = NULL;
+>>  	unsigned short port;
+>>  	struct smack_known *object;
+>> @@ -2803,7 +2796,7 @@ static int smack_inode_setsecurity(struct inode *inode, const char *name,
+>>  	if (sock == NULL || sock->sk == NULL)
+>>  		return -EOPNOTSUPP;
+>>  
+>> -	ssp = sock->sk->sk_security;
+>> +	ssp = smack_sock(sock->sk);
+>>  
+>>  	if (strcmp(name, XATTR_SMACK_IPIN) == 0)
+>>  		ssp->smk_in = skp;
+>> @@ -2851,7 +2844,7 @@ static int smack_socket_post_create(struct socket *sock, int family,
+>>  	 * Sockets created by kernel threads receive web label.
+>>  	 */
+>>  	if (unlikely(current->flags & PF_KTHREAD)) {
+>> -		ssp = sock->sk->sk_security;
+>> +		ssp = smack_sock(sock->sk);
+>>  		ssp->smk_in = &smack_known_web;
+>>  		ssp->smk_out = &smack_known_web;
+>>  	}
+>> @@ -2876,8 +2869,8 @@ static int smack_socket_post_create(struct socket *sock, int family,
+>>  static int smack_socket_socketpair(struct socket *socka,
+>>  		                   struct socket *sockb)
+>>  {
+>> -	struct socket_smack *asp = socka->sk->sk_security;
+>> -	struct socket_smack *bsp = sockb->sk->sk_security;
+>> +	struct socket_smack *asp = smack_sock(socka->sk);
+>> +	struct socket_smack *bsp = smack_sock(sockb->sk);
+>>  
+>>  	asp->smk_packet = bsp->smk_out;
+>>  	bsp->smk_packet = asp->smk_out;
+>> @@ -2940,7 +2933,7 @@ static int smack_socket_connect(struct socket *sock, struct sockaddr *sap,
+>>  		if (__is_defined(SMACK_IPV6_SECMARK_LABELING))
+>>  			rsp = smack_ipv6host_label(sip);
+>>  		if (rsp != NULL) {
+>> -			struct socket_smack *ssp = sock->sk->sk_security;
+>> +			struct socket_smack *ssp = smack_sock(sock->sk);
+>>  
+>>  			rc = smk_ipv6_check(ssp->smk_out, rsp, sip,
+>>  					    SMK_CONNECTING);
+>> @@ -3671,9 +3664,9 @@ static int smack_unix_stream_connect(struct sock *sock,
+>>  {
+>>  	struct smack_known *skp;
+>>  	struct smack_known *okp;
+>> -	struct socket_smack *ssp = sock->sk_security;
+>> -	struct socket_smack *osp = other->sk_security;
+>> -	struct socket_smack *nsp = newsk->sk_security;
+>> +	struct socket_smack *ssp = smack_sock(sock);
+>> +	struct socket_smack *osp = smack_sock(other);
+>> +	struct socket_smack *nsp = smack_sock(newsk);
+>>  	struct smk_audit_info ad;
+>>  	int rc = 0;
+>>  #ifdef CONFIG_AUDIT
+>> @@ -3719,8 +3712,8 @@ static int smack_unix_stream_connect(struct sock *sock,
+>>   */
+>>  static int smack_unix_may_send(struct socket *sock, struct socket *other)
+>>  {
+>> -	struct socket_smack *ssp = sock->sk->sk_security;
+>> -	struct socket_smack *osp = other->sk->sk_security;
+>> +	struct socket_smack *ssp = smack_sock(sock->sk);
+>> +	struct socket_smack *osp = smack_sock(other->sk);
+>>  	struct smk_audit_info ad;
+>>  	int rc;
+>>  
+>> @@ -3757,7 +3750,7 @@ static int smack_socket_sendmsg(struct socket *sock, struct msghdr *msg,
+>>  	struct sockaddr_in6 *sap = (struct sockaddr_in6 *) msg->msg_name;
+>>  #endif
+>>  #ifdef SMACK_IPV6_SECMARK_LABELING
+>> -	struct socket_smack *ssp = sock->sk->sk_security;
+>> +	struct socket_smack *ssp = smack_sock(sock->sk);
+>>  	struct smack_known *rsp;
+>>  #endif
+>>  	int rc = 0;
+>> @@ -3969,7 +3962,7 @@ static struct smack_known *smack_from_netlbl(const struct sock *sk, u16 family,
+>>  	netlbl_secattr_init(&secattr);
+>>  
+>>  	if (sk)
+>> -		ssp = sk->sk_security;
+>> +		ssp = smack_sock(sk);
+>>  
+>>  	if (netlbl_skbuff_getattr(skb, family, &secattr) == 0) {
+>>  		skp = smack_from_secattr(&secattr, ssp);
+>> @@ -3991,7 +3984,7 @@ static struct smack_known *smack_from_netlbl(const struct sock *sk, u16 family,
+>>   */
+>>  static int smack_socket_sock_rcv_skb(struct sock *sk, struct sk_buff *skb)
+>>  {
+>> -	struct socket_smack *ssp = sk->sk_security;
+>> +	struct socket_smack *ssp = smack_sock(sk);
+>>  	struct smack_known *skp = NULL;
+>>  	int rc = 0;
+>>  	struct smk_audit_info ad;
+>> @@ -4090,12 +4083,11 @@ static int smack_socket_getpeersec_stream(struct socket *sock,
+>>  					  sockptr_t optval, sockptr_t optlen,
+>>  					  unsigned int len)
+>>  {
+>> -	struct socket_smack *ssp;
+>> +	struct socket_smack *ssp = smack_sock(sock->sk);
+>>  	char *rcp = "";
+>>  	u32 slen = 1;
+>>  	int rc = 0;
+>>  
+>> -	ssp = sock->sk->sk_security;
+>>  	if (ssp->smk_packet != NULL) {
+>>  		rcp = ssp->smk_packet->smk_known;
+>>  		slen = strlen(rcp) + 1;
+>> @@ -4145,7 +4137,7 @@ static int smack_socket_getpeersec_dgram(struct socket *sock,
+>>  
+>>  	switch (family) {
+>>  	case PF_UNIX:
+>> -		ssp = sock->sk->sk_security;
+>> +		ssp = smack_sock(sock->sk);
+>>  		s = ssp->smk_out->smk_secid;
+>>  		break;
+>>  	case PF_INET:
+>> @@ -4194,7 +4186,7 @@ static void smack_sock_graft(struct sock *sk, struct socket *parent)
+>>  	    (sk->sk_family != PF_INET && sk->sk_family != PF_INET6))
+>>  		return;
+>>  
+>> -	ssp = sk->sk_security;
+>> +	ssp = smack_sock(sk);
+>>  	ssp->smk_in = skp;
+>>  	ssp->smk_out = skp;
+>>  	/* cssp->smk_packet is already set in smack_inet_csk_clone() */
+>> @@ -4214,7 +4206,7 @@ static int smack_inet_conn_request(const struct sock *sk, struct sk_buff *skb,
+>>  {
+>>  	u16 family = sk->sk_family;
+>>  	struct smack_known *skp;
+>> -	struct socket_smack *ssp = sk->sk_security;
+>> +	struct socket_smack *ssp = smack_sock(sk);
+>>  	struct sockaddr_in addr;
+>>  	struct iphdr *hdr;
+>>  	struct smack_known *hskp;
+>> @@ -4300,7 +4292,7 @@ static int smack_inet_conn_request(const struct sock *sk, struct sk_buff *skb,
+>>  static void smack_inet_csk_clone(struct sock *sk,
+>>  				 const struct request_sock *req)
+>>  {
+>> -	struct socket_smack *ssp = sk->sk_security;
+>> +	struct socket_smack *ssp = smack_sock(sk);
+>>  	struct smack_known *skp;
+>>  
+>>  	if (req->peer_secid != 0) {
+>> @@ -4868,6 +4860,7 @@ struct lsm_blob_sizes smack_blob_sizes __ro_after_init = {
+>>  	.lbs_inode = sizeof(struct inode_smack),
+>>  	.lbs_ipc = sizeof(struct smack_known *),
+>>  	.lbs_msg_msg = sizeof(struct smack_known *),
+>> +	.lbs_sock = sizeof(struct socket_smack),
+>>  	.lbs_superblock = sizeof(struct superblock_smack),
+>>  };
+>>  
+>> diff --git a/security/smack/smack_netfilter.c b/security/smack/smack_netfilter.c
+>> index b945c1d3a743..bad71b7e648d 100644
+>> --- a/security/smack/smack_netfilter.c
+>> +++ b/security/smack/smack_netfilter.c
+>> @@ -26,8 +26,8 @@ static unsigned int smack_ip_output(void *priv,
+>>  	struct socket_smack *ssp;
+>>  	struct smack_known *skp;
+>>  
+>> -	if (sk && sk->sk_security) {
+>> -		ssp = sk->sk_security;
+>> +	if (sk) {
+>> +		ssp = smack_sock(sk);
+>>  		skp = ssp->smk_out;
+>>  		skb->secmark = skp->smk_secid;
+>>  	}
 
