@@ -2,264 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215B871A123
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB1571A129
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234561AbjFAO5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39020 "EHLO
+        id S234038AbjFAO5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234149AbjFAO47 (ORCPT
+        with ESMTP id S234413AbjFAO5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:56:59 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AF518C;
-        Thu,  1 Jun 2023 07:56:56 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 08D153F6C1;
-        Thu,  1 Jun 2023 16:56:52 +0200 (CEST)
-Date:   Thu, 1 Jun 2023 16:56:51 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev
-Subject: Re: [PATCH v5 08/12] drm/msm/dpu: Add SM6375 support
-Message-ID: <h56lpxfxujaia6jfgvbpu2dp3dqdilaormxr5plms44vev2qdf@qhkrsuhlarga>
-References: <20230411-topic-straitlagoon_mdss-v5-0-998b4d2f7dd1@linaro.org>
- <20230411-topic-straitlagoon_mdss-v5-8-998b4d2f7dd1@linaro.org>
+        Thu, 1 Jun 2023 10:57:39 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39253189
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:57:37 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b041ccea75so4279315ad.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 07:57:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685631456; x=1688223456;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rmnvesiHm2PCRYYtqBcPxBFWmAHluzsL+dqvf9/FLR0=;
+        b=TNhODOFe3VPpymqxm+ucXF7xfwzIVA6pOK2an6amjX7VFTE7lTOrDmS2K0/q8Wksmk
+         gXvwWEAodZkrt7tASZY40Tb2IaMjMuc265O+eDLDT+Aoppkv7yi26HO1A6NsMhu1h049
+         PzHiojGO/toLGLVlKyXCZaXtbUxUrNXs5PCpkNFh5fvazx3urVm65Lw9Xo2sRFbX2eKp
+         11rQh0qvgPLDiGNmwM4TR3NrOSJmeBMeRyheCQvGte0P1kPdXxIUnR5EjsmB8tV+h/Vh
+         70LcRWie4DKZ22SDG3TaGwfwaYjopTs7JDDu6NStyp83Y5I3GvlWgB+Yqr43SZFgVYyO
+         hauw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685631456; x=1688223456;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rmnvesiHm2PCRYYtqBcPxBFWmAHluzsL+dqvf9/FLR0=;
+        b=ftg2S3/K0iAbgtpGr/b3kIt6EBhMMiY8xH+E/Xjy4gNtugZnKEnOigLJZZrAJktc6g
+         wsLvyEFMIfxgHh2QrdYcEyc/wAsE5amqeGuCu0T5iefB3uWCksxLOfJFEQ3YrIPt5Ndv
+         ZDcnQ1lPlzhkaGroqEy0RvzG8VK5WIAjCcSPSVf4uTXaCuASN0TAD0Wy2QPMeIXlUNJw
+         67JQx8iQi9mquSZJJZS42A23umO4g+ABjisOHXhmsusJa6WGy3p359uefAk+4jlk+Kwo
+         fjeYvGJCr9Z28B51vdtBY9bqo5836GJQlOqOJepn19hvOKlr7BQ+ShOCzegoiZZczCsU
+         OjEA==
+X-Gm-Message-State: AC+VfDyDMs17QhLNrCE6jxImuECiL6cFIQCIVyJl+jmjRg7tkkKeVr2j
+        QAFtuF/Cj28NQn30NYevqswT
+X-Google-Smtp-Source: ACHHUZ7/dnL69tsFA7uB9Tx68drmjDhTy9/bpwpA9IGEOCy4MaKUApeF6G/EOFIJAPKK4yx3GvNwqQ==
+X-Received: by 2002:a17:902:e886:b0:1b1:84c5:8abf with SMTP id w6-20020a170902e88600b001b184c58abfmr2798729plg.49.1685631456620;
+        Thu, 01 Jun 2023 07:57:36 -0700 (PDT)
+Received: from localhost.localdomain ([117.217.186.123])
+        by smtp.gmail.com with ESMTPSA id o17-20020a170902d4d100b001b0603829a0sm3577826plg.199.2023.06.01.07.57.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 07:57:36 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     lpieralisi@kernel.org, kw@linux.com
+Cc:     kishon@kernel.org, bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v5 0/9] Add support for MHI Endpoint function driver
+Date:   Thu,  1 Jun 2023 20:27:09 +0530
+Message-Id: <20230601145718.12204-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411-topic-straitlagoon_mdss-v5-8-998b4d2f7dd1@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-23 09:46:19, Konrad Dybcio wrote:
-> Add basic SM6375 support to the DPU1 driver to enable display output.
+Hello,
 
-Nit: The SM6350 commit doesn't use the word "basic" here: what does it
-mean?  Is this addition not complete (because it seems so)?
+This series adds support for Modem Host Interface (MHI) Endpoint function
+driver and few updates to the PCI endpoint core.
 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h | 139 +++++++++++++++++++++
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   1 +
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   1 +
->  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   1 +
->  4 files changed, 142 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
-> new file mode 100644
-> index 000000000000..924f2526c06a
-> --- /dev/null
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
-> @@ -0,0 +1,139 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights reserved.
-> + * Copyright (c) 2015-2018, 2020 The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2023, Linaro Limited
-> + */
-> +
-> +#ifndef _DPU_6_9_SM6375_H
-> +#define _DPU_6_9_SM6375_H
-> +
-> +static const struct dpu_caps sm6375_dpu_caps = {
-> +	.max_mixer_width = DEFAULT_DPU_LINE_WIDTH,
-> +	.max_mixer_blendstages = 0x4,
-> +	.qseed_type = DPU_SSPP_SCALER_QSEED4,
-> +	.has_dim_layer = true,
-> +	.has_idle_pc = true,
-> +	.max_linewidth = 2160,
-> +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
-> +};
-> +
-> +static const struct dpu_ubwc_cfg sm6375_ubwc_cfg = {
-> +	.ubwc_version = DPU_HW_UBWC_VER_20,
-> +	.ubwc_swizzle = 6,
-> +	.highest_bank_bit = 1,
-> +};
-> +
-> +static const struct dpu_mdp_cfg sm6375_mdp[] = {
-> +	{
-> +	.name = "top_0", .id = MDP_TOP,
-> +	.base = 0x0, .len = 0x494,
-> +	.features = 0,
-> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0 },
-> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = { .reg_off = 0x2ac, .bit_off = 8 },
-> +	},
-> +};
-> +
-> +static const struct dpu_ctl_cfg sm6375_ctl[] = {
-> +	{
-> +	.name = "ctl_0", .id = CTL_0,
-> +	.base = 0x1000, .len = 0x1dc,
-> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
-> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
-> +	},
-> +};
-> +
-> +static const struct dpu_sspp_cfg sm6375_sspp[] = {
-> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, 0x1f8, VIG_SC7180_MASK,
-> +		sm6115_vig_sblk_0, 0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
-> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000, 0x1f8, DMA_SDM845_MASK,
-> +		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
-> +};
-> +
-> +static const struct dpu_lm_cfg sm6375_lm[] = {
-> +	LM_BLK("lm_0", LM_0, 0x44000, MIXER_QCM2290_MASK,
-> +		&qcm2290_lm_sblk, PINGPONG_0, 0, DSPP_0),
-> +};
-> +
-> +static const struct dpu_dspp_cfg sm6375_dspp[] = {
-> +	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
-> +		&sm8150_dspp_sblk),
-> +};
-> +
-> +static const struct dpu_pingpong_cfg sm6375_pp[] = {
-> +	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
-> +		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
-> +		-1),
-> +};
-> +
-> +static const struct dpu_dsc_cfg sm6375_dsc[] = {
-> +	DSC_BLK("dsc_0", DSC_0, 0x80000, BIT(DPU_DSC_OUTPUT_CTRL)),
-> +};
-> +
-> +static const struct dpu_intf_cfg sm6375_intf[] = {
-> +	INTF_BLK("intf_0", INTF_0, 0x00000, 0x280, INTF_NONE, 0, 0, 0, 0, 0),
-> +	INTF_BLK_DSI_TE("intf_1", INTF_1, 0x6a800, 0x2c0, INTF_DSI, 0, 24, INTF_SC7280_MASK,
+MHI
+===
 
-Did you forget to set this back to SC7180?  This will be enabling
-DPU_INTF_DATA_COMPRESS otherwise, which is a DPU 7.x feature.
+MHI is the communication protocol used by the host machines to control and
+communicate with the Qualcomm modems/WLAN devices over any high speed physical
+bus like PCIe. In Linux kernel, MHI is modeled as a bus driver [1] and there
+are two instances of MHI used in a typical setup.
 
-- Marijn
+1. MHI host - MHI implementation for the host machines like x86/ARM64.
+2. MHI Endpoint - MHI implementation for the endpoint devices like modems.
 
-> +		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 26),
-> +		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 27),
-> +		DPU_IRQ_IDX(MDP_INTF1_TEAR_INTR, 2)),
-> +};
-> +
-> +static const struct dpu_perf_cfg sm6375_perf_data = {
-> +	.max_bw_low = 5200000,
-> +	.max_bw_high = 6200000,
-> +	.min_core_ib = 2500000,
-> +	.min_llcc_ib = 0, /* No LLCC on this SoC */
-> +	.min_dram_ib = 1600000,
-> +	.min_prefill_lines = 24,
-> +	/* TODO: confirm danger_lut_tbl */
-> +	.danger_lut_tbl = {0xffff, 0xffff, 0x0},
-> +	.safe_lut_tbl = {0xfe00, 0xfe00, 0xffff},
-> +	.qos_lut_tbl = {
-> +		{.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
-> +		.entries = sm6350_qos_linear_macrotile
-> +		},
-> +		{.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
-> +		.entries = sm6350_qos_linear_macrotile
-> +		},
-> +		{.nentry = ARRAY_SIZE(sc7180_qos_nrt),
-> +		.entries = sc7180_qos_nrt
-> +		},
-> +	},
-> +	.cdp_cfg = {
-> +		{.rd_enable = 1, .wr_enable = 1},
-> +		{.rd_enable = 1, .wr_enable = 0}
-> +	},
-> +	.clk_inefficiency_factor = 105,
-> +	.bw_inefficiency_factor = 120,
-> +};
-> +
-> +const struct dpu_mdss_cfg dpu_sm6375_cfg = {
-> +	.caps = &sm6375_dpu_caps,
-> +	.ubwc = &sm6375_ubwc_cfg,
-> +	.mdp_count = ARRAY_SIZE(sm6375_mdp),
-> +	.mdp = sm6375_mdp,
-> +	.ctl_count = ARRAY_SIZE(sm6375_ctl),
-> +	.ctl = sm6375_ctl,
-> +	.sspp_count = ARRAY_SIZE(sm6375_sspp),
-> +	.sspp = sm6375_sspp,
-> +	.mixer_count = ARRAY_SIZE(sm6375_lm),
-> +	.mixer = sm6375_lm,
-> +	.dspp_count = ARRAY_SIZE(sm6375_dspp),
-> +	.dspp = sm6375_dspp,
-> +	.dsc_count = ARRAY_SIZE(sm6375_dsc),
-> +	.dsc = sm6375_dsc,
-> +	.pingpong_count = ARRAY_SIZE(sm6375_pp),
-> +	.pingpong = sm6375_pp,
-> +	.intf_count = ARRAY_SIZE(sm6375_intf),
-> +	.intf = sm6375_intf,
-> +	.vbif_count = ARRAY_SIZE(sdm845_vbif),
-> +	.vbif = sdm845_vbif,
-> +	.perf = &sm6375_perf_data,
-> +	.mdss_irqs = BIT(MDP_SSPP_TOP0_INTR) | \
-> +		     BIT(MDP_SSPP_TOP0_INTR2) | \
-> +		     BIT(MDP_SSPP_TOP0_HIST_INTR) | \
-> +		     BIT(MDP_INTF1_INTR) | \
-> +		     BIT(MDP_INTF1_TEAR_INTR),
-> +};
-> +
-> +#endif
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> index 6e338d569632..7cfdcf7aa486 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> @@ -750,6 +750,7 @@ static const struct dpu_qos_lut_entry sc7180_qos_nrt[] = {
->  #include "catalog/dpu_6_3_sm6115.h"
->  #include "catalog/dpu_6_4_sm6350.h"
->  #include "catalog/dpu_6_5_qcm2290.h"
-> +#include "catalog/dpu_6_9_sm6375.h"
->  
->  #include "catalog/dpu_7_0_sm8350.h"
->  #include "catalog/dpu_7_2_sc7280.h"
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> index ed4311f6aaf0..b84c14318449 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> @@ -836,6 +836,7 @@ extern const struct dpu_mdss_cfg dpu_sc7180_cfg;
->  extern const struct dpu_mdss_cfg dpu_sm6115_cfg;
->  extern const struct dpu_mdss_cfg dpu_sm6350_cfg;
->  extern const struct dpu_mdss_cfg dpu_qcm2290_cfg;
-> +extern const struct dpu_mdss_cfg dpu_sm6375_cfg;
->  extern const struct dpu_mdss_cfg dpu_sm8350_cfg;
->  extern const struct dpu_mdss_cfg dpu_sc7280_cfg;
->  extern const struct dpu_mdss_cfg dpu_sc8280xp_cfg;
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index d9925097626c..d3ca8c3c808c 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -1329,6 +1329,7 @@ static const struct of_device_id dpu_dt_match[] = {
->  	{ .compatible = "qcom,sc8280xp-dpu", .data = &dpu_sc8280xp_cfg, },
->  	{ .compatible = "qcom,sm6115-dpu", .data = &dpu_sm6115_cfg, },
->  	{ .compatible = "qcom,sm6350-dpu", .data = &dpu_sm6350_cfg, },
-> +	{ .compatible = "qcom,sm6375-dpu", .data = &dpu_sm6375_cfg, },
->  	{ .compatible = "qcom,sm8150-dpu", .data = &dpu_sm8150_cfg, },
->  	{ .compatible = "qcom,sm8250-dpu", .data = &dpu_sm8250_cfg, },
->  	{ .compatible = "qcom,sm8350-dpu", .data = &dpu_sm8350_cfg, },
-> 
-> -- 
-> 2.40.1
-> 
+MHI EPF
+=======
+
+The MHI Endpoint function driver (MHI EPF) is used on the MHI endpoint devices
+like modems. The MHI EPF driver sits in between the PCIe EP and MHI EP bus and
+carries out all of the PCIe related activities like BAR config, PCIe Event
+handling, MMIO read/write etc,... for the MHI EP bus.
+
+Below is the simple representation of the setup:
+
+
+                 +----------------------------------------------------+
+                 |                  Endpoint CPU                      |                   
+                 |                                                    |
++------------+   |   +------------+   +-----------+   +-----------+   |
+|            |   |   |            |   |           |   |           |   |
+|            |   |   |   MHI EP   |   |           |   |           |   | PCIe Bus
+|  Modem DSP +---+---+    Bus     +---+  MHI EPF  +---+  PCIe EP  +---+---------
+|            |   |   |            |   |           |   |           |   |
+|            |   |   |            |   |           |   |           |   |
++------------+   |   +------------+   +-----------+   +-----------+   |
+                 |                                                    |
+                 |                                                    |
+                 +----------------------------------------------------+
+
+The data packets will be read from the Modem DSP by the MHI stack and will be
+transmitted to the host machine over PCIe bus with the help of MHI EPF driver.
+
+Test setup
+==========
+
+This series has been tested on Snapdragon X55 modem a.k.a SDX55 connected to
+the ARM64 host machine.
+
+Thanks,
+Mani
+
+[1] https://www.kernel.org/doc/html/latest/mhi/mhi.html
+
+Changes in v5:
+
+* Moved the PCI EPF driver match logic to pci_epf_match_id() function and used
+  that to get the matched driver ID for passing to driver probe instead of
+  storing the id during match.
+* Added a patch to fix the missing documentation about MSI/MSI-X start vector.
+* Addressed the review comments on the MHI EPF driver. Most notably, got rid of
+  local variable for tracking MHI registration and used the mhi_dev pointer.
+  Also, modified the MSI vector increment comment to make it clear.
+* Added a patch for adding MHI EPF driver to MAINTAINERS file
+
+Changes in v4:
+
+* Collected review tag from Kishon
+* Changed the IP_SW0 channel numbers as per latest MHI spec
+
+Changes in v3:
+
+* Fixed the probe function of EPF_VNTB driver
+
+Changes in v2:
+
+* Rebased on top of v6.3-rc1
+* Switched to the new callback interface for passing events from EPC to EPF
+* Dropped one patch related to notifier
+
+Manivannan Sadhasivam (9):
+  MAINTAINERS: Add entry for MHI networking drivers under MHI bus
+  PCI: endpoint: Add missing documentation about the MSI/MSI-X range
+  PCI: endpoint: Pass EPF device ID to the probe function
+  PCI: endpoint: Warn and return if EPC is started/stopped multiple
+    times
+  PCI: endpoint: Add linkdown notifier support
+  PCI: endpoint: Add BME notifier support
+  PCI: qcom-ep: Add support for Link down notification
+  PCI: qcom-ep: Add support for BME notification
+  PCI: endpoint: Add PCI Endpoint function driver for MHI bus
+
+ MAINTAINERS                                   |   1 +
+ drivers/pci/controller/dwc/pcie-qcom-ep.c     |   2 +
+ drivers/pci/endpoint/functions/Kconfig        |  10 +
+ drivers/pci/endpoint/functions/Makefile       |   1 +
+ drivers/pci/endpoint/functions/pci-epf-mhi.c  | 462 ++++++++++++++++++
+ drivers/pci/endpoint/functions/pci-epf-ntb.c  |   3 +-
+ drivers/pci/endpoint/functions/pci-epf-test.c |   2 +-
+ drivers/pci/endpoint/functions/pci-epf-vntb.c |   2 +-
+ drivers/pci/endpoint/pci-ep-cfs.c             |   3 +
+ drivers/pci/endpoint/pci-epc-core.c           |  56 ++-
+ drivers/pci/endpoint/pci-epf-core.c           |  20 +-
+ include/linux/pci-epc.h                       |   2 +
+ include/linux/pci-epf.h                       |   8 +-
+ 13 files changed, 559 insertions(+), 13 deletions(-)
+ create mode 100644 drivers/pci/endpoint/functions/pci-epf-mhi.c
+
+-- 
+2.25.1
+
