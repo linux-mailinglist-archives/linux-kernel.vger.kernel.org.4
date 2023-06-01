@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D254F719043
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 03:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064E371904E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 04:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjFABy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 21:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
+        id S230348AbjFAB77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 21:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjFABy1 (ORCPT
+        with ESMTP id S230460AbjFAB7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 21:54:27 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C705A3;
-        Wed, 31 May 2023 18:54:26 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d3bc502ddso473695b3a.0;
-        Wed, 31 May 2023 18:54:26 -0700 (PDT)
+        Wed, 31 May 2023 21:59:52 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950FFA3;
+        Wed, 31 May 2023 18:59:51 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-53f70f7c2d2so130506a12.3;
+        Wed, 31 May 2023 18:59:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685584465; x=1688176465;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PFuYwyFBcWrT5mue1dYYY+Cg2zEWocJdVmRUK721EAY=;
-        b=Eo+L8FR5w4IVrh50+mjZbbIKGEoWzThvxeryn150Uj7iuj29kUkZ8bkTyHu7UxykiV
-         MJ87rke5qBpO3WgWnzdcjzOgDyQr5g2MAV9w5qvHfS+hii/JkWKpEvVSZIcFAoGOnPj5
-         ftkJ3Jj5zbVKyY3E4aPNpbr38yH3ybSPeDKeeGj7OqpJmUWPPMR2HsWoTOJFYDQZjnvL
-         62GnU7BLl9eZzOgXEoTRLYPbi5fsGnNHW3t8uKJKf8comMurHRTVjE2xNBq0QksAjhK2
-         1PnjRjvutoqbukvts5u5bp+g+tj5IguDDWy/8bl4PqAQ0OSubhSYDVipZ1k29uHMspGm
-         xVng==
+        d=gmail.com; s=20221208; t=1685584791; x=1688176791;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jdxxh2L1GD1WdZkYYziFAmyUtgwXwDB1emmhtFEA2sM=;
+        b=Oih3AhNmb0cusPW/ZitzBoCgoGC9evQgOEor7/GXLLHcV2qvdgZW2RWLChJ/xN7MaB
+         t1zaNsQdUfHkCeeYPV1IugTm5maq28JVw3Y6fGEdVeEzkiSApOaB3ofagN1IR7EB4pkI
+         9ur+SucXtYGfu/pAVhVRdPPq2p0udQme+keM6rPYgdH8kAevZubYO6aUhjpEcSUapXTR
+         uokZ9DTzTWeqp1h466cWiHfX8f7voZGZLJVUEnGTmjePdl64svrWQPTODffe3VwuEeCP
+         aCleDFmHNfiEFeZX+GJyVPEx9X9KkO8mRNVezGoK7QwpJ9xdFq6c4+KqBJQ0P4qqr71w
+         BRmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685584465; x=1688176465;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PFuYwyFBcWrT5mue1dYYY+Cg2zEWocJdVmRUK721EAY=;
-        b=j5VwuhvsVw8BH0dJPXoxhdkXpCsw6gcJxiqRNexHzj6kHimKt7LnH5OUIjsm4fXKW6
-         ssw0e3yGo8noYqiUSd8+9aLTeofQFRRPaKh2ntMD/U9gsUDvjPSSm9IzmGvPFj1vRDNQ
-         RSQdXcC2eQMbnXXlVHMMCY/d2JnSD9gWcM7jbQo5bowf4atAffkJj1MoHJm6UIOLsP57
-         J+RrK3NhTvzaEtb+oWmy6kMKx0Th1I5TwgjhCwSyvuqblm2oN048HZ68vUgteFBHZsdz
-         4HVYlggp3GYdvcNthCg9ZOcuKvBHExbja3A0n30sCsY7I8408OIH0geIi0L1oVREILTK
-         m33w==
-X-Gm-Message-State: AC+VfDxPkDEUgl9QQiBOLSO3mzyC4qx15IcNm3o7JKBsft8ItuErWt9a
-        9U6XHrJ+JNmeAPRBVhFNbxBrvaEKGPbAsEHc
-X-Google-Smtp-Source: ACHHUZ7S9n+qUfCvkYHxAINOiUjk3ra3BccTYx/4bGtDp06qetX0Jgsgvf7vpr1md2NRqSOCbQ24Hg==
-X-Received: by 2002:a05:6a00:856:b0:64b:f03b:2642 with SMTP id q22-20020a056a00085600b0064bf03b2642mr9556866pfk.23.1685584465511;
-        Wed, 31 May 2023 18:54:25 -0700 (PDT)
-Received: from DESKTOP-4R0U3NR.siflower.com ([180.164.63.52])
-        by smtp.gmail.com with ESMTPSA id e14-20020aa78c4e000000b0064381853bfcsm3928430pfd.89.2023.05.31.18.54.22
+        d=1e100.net; s=20221208; t=1685584791; x=1688176791;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jdxxh2L1GD1WdZkYYziFAmyUtgwXwDB1emmhtFEA2sM=;
+        b=d3t+KHwlWpEwO0rmTagzowZ6BIaXYRuGtB2j0vf6I0NU3J0QEaDOEM19DCovxt8UB9
+         Rj8yM/jbw2/ck51SbbjhXOXXJT1mwirEmY7rK40UeCgltfDEBqZ7F5AJRehHv/79Yarx
+         0rYPy89QYP6PWIaTU5uugVcMLdTE24QyvJqxQy3gGkqvrHyeWIU+NCuexVyPXYcuC39Y
+         EFX8GHO0Ie8hyfmW2EHkdbwu066qRWzJb5kvqrg9XOq5EXZ18Ul93gSXG3258XTVrvJR
+         8941y2xDte9EGh/stoqhX/ySOVn1pcyiQQCd7bJkB/3C19KTT5OoVfFFSC7m0oG4Kh82
+         XKPQ==
+X-Gm-Message-State: AC+VfDzpxxdZohkyPWgBXewL2LIt26pGmZBDATrb489VUzdvODthyspv
+        +zLop8JtHsioWuMH4tqpYIk=
+X-Google-Smtp-Source: ACHHUZ7ZFmpjxk6hnAAfSXhlZcWQV0HmU+rN1vBZNd7ozRoimzKvZknP67nyT/0Ui5qaytH93QtCww==
+X-Received: by 2002:a17:90a:c20d:b0:256:44f3:35e2 with SMTP id e13-20020a17090ac20d00b0025644f335e2mr5834673pjt.4.1685584790967;
+        Wed, 31 May 2023 18:59:50 -0700 (PDT)
+Received: from dnptp-9.. ([111.198.57.33])
+        by smtp.gmail.com with ESMTPSA id k59-20020a17090a4cc100b0024df7d7c35esm189547pjh.43.2023.05.31.18.59.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 18:54:24 -0700 (PDT)
-From:   Qingfang DENG <dqfext@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>,
-        Masahide NAKAMURA <nakam@linux-ipv6.org>,
-        Ville Nuorvala <vnuorval@tcs.hut.fi>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Qingfang DENG <qingfang.deng@siflower.com.cn>
-Subject: [PATCH net v2] neighbour: fix unaligned access to pneigh_entry
-Date:   Thu,  1 Jun 2023 09:54:32 +0800
-Message-Id: <20230601015432.159066-1-dqfext@gmail.com>
+        Wed, 31 May 2023 18:59:50 -0700 (PDT)
+From:   Yuezhen Luan <eggcar.luan@gmail.com>
+To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jacob.e.keller@intel.com,
+        Yuezhen Luan <eggcar.luan@gmail.com>
+Subject: [PATCH] igb: Fix extts capture value format for 82580/i354/i350
+Date:   Thu,  1 Jun 2023 01:59:43 +0000
+Message-Id: <20230601015943.1815-1-eggcar.luan@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CANn89iKRX2QTgS44Ky6Jua-+UNrFY3E7RCT_7OfG=GnFvAzdFQ@mail.gmail.com>
-References: <CANn89iKRX2QTgS44Ky6Jua-+UNrFY3E7RCT_7OfG=GnFvAzdFQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,36 +72,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qingfang DENG <qingfang.deng@siflower.com.cn>
+82580/i354/i350 features circle-counter-like timestamp registers
+that are different with newer i210. The EXTTS capture value in
+AUXTSMPx should be converted from raw circle counter value to
+timestamp value in resolution of 1 nanosec by the driver.
 
-After the blamed commit, the member key is longer 4-byte aligned. On
-platforms that do not support unaligned access, e.g., MIPS32R2 with
-unaligned_action set to 1, this will trigger a crash when accessing
-an IPv6 pneigh_entry, as the key is cast to an in6_addr pointer.
-
-Change the type of the key to u32 to make it aligned.
-
-Fixes: 62dd93181aaa ("[IPV6] NDISC: Set per-entry is_router flag in Proxy NA.")
-Signed-off-by: Qingfang DENG <qingfang.deng@siflower.com.cn>
+Signed-off-by: Yuezhen Luan <eggcar.luan@gmail.com>
 ---
-v2: remove the ifdef, and use u32 type
+ drivers/net/ethernet/intel/igb/igb_main.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
- include/net/neighbour.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/net/neighbour.h b/include/net/neighbour.h
-index 3fa5774bddac..f6a8ecc6b1fa 100644
---- a/include/net/neighbour.h
-+++ b/include/net/neighbour.h
-@@ -180,7 +180,7 @@ struct pneigh_entry {
- 	netdevice_tracker	dev_tracker;
- 	u32			flags;
- 	u8			protocol;
--	u8			key[];
-+	u32			key[];
- };
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index 58872a4c2..bb3db387d 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -6947,6 +6947,7 @@ static void igb_extts(struct igb_adapter *adapter, int tsintr_tt)
+ 	struct e1000_hw *hw = &adapter->hw;
+ 	struct ptp_clock_event event;
+ 	struct timespec64 ts;
++	unsigned long flags;
  
- /*
+ 	if (pin < 0 || pin >= IGB_N_SDP)
+ 		return;
+@@ -6954,9 +6955,12 @@ static void igb_extts(struct igb_adapter *adapter, int tsintr_tt)
+ 	if (hw->mac.type == e1000_82580 ||
+ 	    hw->mac.type == e1000_i354 ||
+ 	    hw->mac.type == e1000_i350) {
+-		s64 ns = rd32(auxstmpl);
++		u64 ns = rd32(auxstmpl);
+ 
+-		ns += ((s64)(rd32(auxstmph) & 0xFF)) << 32;
++		ns += ((u64)(rd32(auxstmph) & 0xFF)) << 32;
++		spin_lock_irqsave(&adapter->tmreg_lock, flags);
++		ns = timecounter_cyc2time(&adapter->tc, ns);
++		spin_unlock_irqrestore(&adapter->tmreg_lock, flags);
+ 		ts = ns_to_timespec64(ns);
+ 	} else {
+ 		ts.tv_nsec = rd32(auxstmpl);
 -- 
 2.34.1
 
