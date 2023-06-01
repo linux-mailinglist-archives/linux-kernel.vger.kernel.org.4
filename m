@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D879371965A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E913771965C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbjFAJGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S232077AbjFAJGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbjFAJGC (ORCPT
+        with ESMTP id S232353AbjFAJG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:06:02 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE7E21B8;
-        Thu,  1 Jun 2023 02:05:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9323C169C;
-        Thu,  1 Jun 2023 02:06:02 -0700 (PDT)
-Received: from [10.57.22.124] (unknown [10.57.22.124])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 901053F663;
-        Thu,  1 Jun 2023 02:05:14 -0700 (PDT)
-Message-ID: <ccdc58ff-f86b-6ca8-cdf6-299cc454873c@arm.com>
-Date:   Thu, 1 Jun 2023 10:05:13 +0100
+        Thu, 1 Jun 2023 05:06:29 -0400
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67686119;
+        Thu,  1 Jun 2023 02:06:21 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0Vk4g27q_1685610375;
+Received: from 30.221.149.38(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0Vk4g27q_1685610375)
+          by smtp.aliyun-inc.com;
+          Thu, 01 Jun 2023 17:06:16 +0800
+Message-ID: <0992b68a-8015-26f3-4a90-6ebde7877c8b@linux.alibaba.com>
+Date:   Thu, 1 Jun 2023 17:06:13 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.1
-Subject: Re: [PATCH v4 05/11] coresight-tpdm: Add nodes to set trigger
- timestamp and type
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH v3 3/7] perf vendor events: Add JSON metrics for CMN
+To:     Shuai Xue <xueshuai@linux.alibaba.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     James Clark <james.clark@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
         Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org
-References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
- <1682586037-25973-6-git-send-email-quic_taozha@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <1682586037-25973-6-git-send-email-quic_taozha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Mark Rutland <mark.rutland@arm.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1685438374-33287-4-git-send-email-renyu.zj@linux.alibaba.com>
+ <a31c7578-93fe-193e-1c4b-fa8fa187f5dd@linux.alibaba.com>
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+In-Reply-To: <a31c7578-93fe-193e-1c4b-fa8fa187f5dd@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,181 +58,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2023 10:00, Tao Zhang wrote:
-> The nodes are needed to set or show the trigger timestamp and
-> trigger type. This change is to add these nodes to achieve these
-> function.
+
+
+在 2023/5/31 上午10:43, Shuai Xue 写道:
 > 
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> ---
->   .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 24 ++++++
->   drivers/hwtracing/coresight/coresight-tpdm.c       | 95 ++++++++++++++++++++++
->   2 files changed, 119 insertions(+)
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> index 686bdde..77e67f2 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-> @@ -21,3 +21,27 @@ Description:
->   
->   		Accepts only one value -  1.
->   		1 : Reset the dataset of the tpdm
-> +
-> +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_trig_type
-> +Date:		March 2023
-> +KernelVersion	6.3
+> On 2023/5/30 17:19, Jing Zhang wrote:
+>> Add JSON metrics for arm CMN. Currently just add part of CMN PMU
+>> metrics which are general and compatible for any SoC and CMN-ANY.
+> 
+> Is it a typo? You mean "any SoC integration with CMN-ANY" right?
+> 
 
-This would need updating. We are not sure if this can make it to 6.5, 
-with dependency on James' series. Fix this with 6.5 here and we can take
-a shot.
+Yes, I will fix it in the next version.
 
-> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
-> +Description:
-> +		(Write) Set the trigger type of DSB tpdm. Read the trigger
-> +		type of DSB tpdm.
-> +
-> +		Accepts only one of the 2 values -  0 or 1.
-> +		0 : Set the DSB trigger type to false
-> +		1 : Set the DSB trigger type to true
-> +
-> +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_trig_ts
-> +Date:		March 2023
-> +KernelVersion	6.3
+Thanks,
+Jing
 
-Same here
-> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
-> +Description:
-> +		(Write) Set the trigger timestamp of DSB tpdm. Read the
-> +		trigger timestamp of DSB tpdm.
-> +
-> +		Accepts only one of the 2 values -  0 or 1.
-> +		0 : Set the DSB trigger type to false
-> +		1 : Set the DSB trigger type to true
-> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
-> index 2e64cfd..14f4352 100644
-> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
-> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-> @@ -20,6 +20,19 @@
->   
->   DEFINE_CORESIGHT_DEVLIST(tpdm_devs, "tpdm");
->   
-> +static umode_t tpdm_dsb_is_visible(struct kobject *kobj,
-> +								   struct attribute *attr, int n)
-
-minor nit: alignment ?
-
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +
-> +	if (drvdata)
-> +		if (drvdata && (drvdata->datasets & TPDM_PIDR0_DS_DSB))
-> +			return attr->mode;
-
-Duplicate check for drvdata ?
-
-	if (drvdata && (drvdata->datasets & TPDM_PIDR0_DS_DSB))
-		return attr->mode;
-> +
-> +	return 0;
-> +}
-> +
->   static void tpdm_reset_datasets(struct tpdm_drvdata *drvdata)
->   {
->   	if (drvdata->datasets & TPDM_PIDR0_DS_DSB) {
-> @@ -239,8 +252,90 @@ static struct attribute_group tpdm_attr_grp = {
->   	.attrs = tpdm_attrs,
->   };
->   
-> +static ssize_t dsb_trig_type_show(struct device *dev,
-> +				     struct device_attribute *attr, char *buf)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +
-> +	return sysfs_emit(buf, "%u\n",
-> +			 (unsigned int)drvdata->dsb->trig_type);
-> +}
-> +
-> +/*
-> + * Trigger type (boolean):
-> + * false - Disable trigger type.
-> + * true  - Enable trigger type.
-> + */
-> +static ssize_t dsb_trig_type_store(struct device *dev,
-> +				      struct device_attribute *attr,
-> +				      const char *buf,
-> +				      size_t size)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +	unsigned long val;
-> +
-> +	if ((kstrtoul(buf, 0, &val)) || (val & ~1UL))
-> +		return -EINVAL;
-> +
-> +	spin_lock(&drvdata->spinlock);
-> +	if (val)
-> +		drvdata->dsb->trig_type = true;
-> +	else
-> +		drvdata->dsb->trig_type = false;
-> +	spin_unlock(&drvdata->spinlock);
-> +	return size;
-> +}
-> +static DEVICE_ATTR_RW(dsb_trig_type);
-> +
-> +static ssize_t dsb_trig_ts_show(struct device *dev,
-> +				     struct device_attribute *attr, char *buf)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +
-> +	return sysfs_emit(buf, "%u\n",
-> +			 (unsigned int)drvdata->dsb->trig_ts);
-> +}
-> +
-> +/*
-> + * Trigger timestamp (boolean):
-> + * false - Disable trigger timestamp.
-> + * true  - Enable trigger timestamp.
-> + */
-> +static ssize_t dsb_trig_ts_store(struct device *dev,
-> +				      struct device_attribute *attr,
-> +				      const char *buf,
-> +				      size_t size)
-> +{
-> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +	unsigned long val;
-> +
-> +	if ((kstrtoul(buf, 0, &val)) || (val & ~1UL))
-> +		return -EINVAL;
-> +
-> +	spin_lock(&drvdata->spinlock);
-> +	if (val)
-> +		drvdata->dsb->trig_ts = true;
-> +	else
-> +		drvdata->dsb->trig_ts = false;
-> +	spin_unlock(&drvdata->spinlock);
-> +	return size;
-> +}
-> +static DEVICE_ATTR_RW(dsb_trig_ts);
-> +
-> +static struct attribute *tpdm_dsb_attrs[] = {
-> +	&dev_attr_dsb_trig_ts.attr,
-> +	&dev_attr_dsb_trig_type.attr,
-> +	NULL,
-> +};
-> +
-> +static struct attribute_group tpdm_dsb_attr_grp = {
-> +	.attrs = tpdm_dsb_attrs,
-> +	.is_visible = tpdm_dsb_is_visible,
-> +};
-> +
->   static const struct attribute_group *tpdm_attr_grps[] = {
->   	&tpdm_attr_grp,
-> +	&tpdm_dsb_attr_grp,
->   	NULL,
->   };
->   
-
-Rest looks fine to me
-
-Suzuki
-
+> Thanks,
+> Shuai
+> 
+>>
+>> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+>> ---
+>>  .../pmu-events/arch/arm64/arm/cmn/sys/metrics.json | 74 ++++++++++++++++++++++
+>>  tools/perf/pmu-events/jevents.py                   |  1 +
+>>  2 files changed, 75 insertions(+)
+>>  create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json
+>>
+>> diff --git a/tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json
+>> new file mode 100644
+>> index 0000000..e70ac1a
+>> --- /dev/null
+>> +++ b/tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json
+>> @@ -0,0 +1,74 @@
+>> +[
+>> +	{
+>> +		"MetricName": "slc_miss_rate",
+>> +		"BriefDescription": "The system level cache miss rate include.",
+>> +		"MetricGroup": "arm_cmn",
+>> +		"MetricExpr": "hnf_cache_miss / hnf_slc_sf_cache_access",
+>> +		"ScaleUnit": "100%",
+>> +		"Unit": "arm_cmn",
+>> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
+>> +	},
+>> +	{
+>> +		"MetricName": "hnf_message_retry_rate",
+>> +		"BriefDescription": "HN-F message retry rate indicates whether a lack of credits is causing the bottlenecks.",
+>> +		"MetricGroup": "arm_cmn",
+>> +		"MetricExpr": "hnf_pocq_retry / hnf_pocq_reqs_recvd",
+>> +		"ScaleUnit": "100%",
+>> +		"Unit": "arm_cmn",
+>> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
+>> +	},
+>> +	{
+>> +		"MetricName": "sf_hit_rate",
+>> +		"BriefDescription": "Snoop filter hit rate can be used to measure the Snoop Filter efficiency.",
+>> +		"MetricGroup": "arm_cmn",
+>> +		"MetricExpr": "hnf_sf_hit / hnf_slc_sf_cache_access",
+>> +		"ScaleUnit": "100%",
+>> +		"Unit": "arm_cmn",
+>> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
+>> +	},
+>> +	{
+>> +		"MetricName": "mc_message_retry_rate",
+>> +		"BriefDescription": "The memory controller request retries rate indicates whether the memory controller is the bottleneck.",
+>> +		"MetricGroup": "arm_cmn",
+>> +		"MetricExpr": "hnf_mc_retries / hnf_mc_reqs",
+>> +		"ScaleUnit": "100%",
+>> +		"Unit": "arm_cmn",
+>> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
+>> +	},
+>> +	{
+>> +		"MetricName": "rni_actual_read_bandwidth.all",
+>> +		"BriefDescription": "This event measure the actual bandwidth(MB/sec) that RN-I bridge sends to the interconnect.",
+>> +		"MetricGroup": "arm_cmn",
+>> +		"MetricExpr": "rnid_rxdat_flits * 32 / 1e6 / duration_time",
+>> +		"ScaleUnit": "1MB/s",
+>> +		"Unit": "arm_cmn",
+>> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
+>> +	},
+>> +	{
+>> +		"MetricName": "rni_actual_write_bandwidth.all",
+>> +		"BriefDescription": "This event measures the actual write bandwidth(MB/sec) at RN-I bridges.",
+>> +		"MetricGroup": "arm_cmn",
+>> +		"MetricExpr": "rnid_txdat_flits * 32 / 1e6 / duration_time",
+>> +		"ScaleUnit": "1MB/s",
+>> +		"Unit": "arm_cmn",
+>> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
+>> +	},
+>> +	{
+>> +		"MetricName": "rni_retry_rate",
+>> +		"BriefDescription": "RN-I bridge retry rate indicates whether the memory controller is the bottleneck.",
+>> +		"MetricGroup": "arm_cmn",
+>> +		"MetricExpr": "rnid_txreq_flits_retried / rnid_txreq_flits_total",
+>> +		"ScaleUnit": "100%",
+>> +		"Unit": "arm_cmn",
+>> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
+>> +	},
+>> +	{
+>> +		"MetricName": "sbsx_actual_write_bandwidth.all",
+>> +		"BriefDescription": "sbsx actual write bandwidth(MB/sec).",
+>> +		"MetricGroup": "arm_cmn",
+>> +		"MetricExpr": "sbsx_txdat_flitv * 32 / 1e6 / duration_time",
+>> +		"ScaleUnit": "1MB/s",
+>> +		"Unit": "arm_cmn",
+>> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
+>> +	}
+>> +]
+>> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+>> index 2bcd07c..7cff2c6 100755
+>> --- a/tools/perf/pmu-events/jevents.py
+>> +++ b/tools/perf/pmu-events/jevents.py
+>> @@ -256,6 +256,7 @@ class JsonEvent:
+>>            'DFPMC': 'amd_df',
+>>            'cpu_core': 'cpu_core',
+>>            'cpu_atom': 'cpu_atom',
+>> +          'arm_cmn': 'arm_cmn',
+>>        }
+>>        return table[unit] if unit in table else f'uncore_{unit.lower()}'
+>>  
