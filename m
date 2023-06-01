@@ -2,238 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F59271A362
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D73D171A361
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234503AbjFAPz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 11:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
+        id S234282AbjFAPzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 11:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234261AbjFAPzs (ORCPT
+        with ESMTP id S234122AbjFAPzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 11:55:48 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD82A19D
+        Thu, 1 Jun 2023 11:55:47 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF4F19B
         for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 08:55:37 -0700 (PDT)
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2E02E3F554
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 15:55:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1685634936;
-        bh=0jAabHqdSvSI81GcjIi2ShyL+hAnr5Nv9d2pTfh5lts=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=aqB5WeaqfzZByzeT6mHsWKeIF55yloO8OKRRd8eJxEtLm9aYtrZjUO1kELWZayOuM
-         p7xgqxLT05I+YKlweMNJ0zoVCASzgQeiBOqiMFlhuS7gSDQNV6Mw1ir3bXsWxs3WdK
-         t9A+KwTGpfcDV4aZF2z+RJX36y9srYeUu4fVNrYeoRaeSD4rHx+28EY+YOKI5otXF1
-         wLuTLMndTZd/dwzNWeZ2oYwznwkE6uxN5SZq+HxNxIfnau3o2JpHMD6P5JM1fGRy0k
-         w0I/4uNNOe/nWKbvArjtxmRn5ng6bbX9CEmXsMZyMP7mnZ8MbJ+QUAcJs6LhPbgi+j
-         /9lQsOhKmKCkA==
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-64d413b25caso1085599b3a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 08:55:36 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-33bf12b5fb5so130365ab.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 08:55:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1685634937; x=1688226937;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KJnr0nAI79FbGcEzwusG2c1oxXOAZlwGtMuVl8TkMiU=;
+        b=F5ig9ehUjDqdxIKiSKJHREsI10xOX38A0QXUHK8VNB5hnRo7A4nuB5c1oqPzQ7C4m4
+         esj2spCXlIiXTwhCAdjn/TSxlJceR8dNBjfDTN2T1dVO9wYHIm37J8f/tTZB/uoenLG9
+         mfP5FfovaPngf3Zli2QGTeNbKETa4l+SzSPA/GvBYfYSuWeQ8m3K2E5R6Q2j7VIC5ooW
+         O06ZajcRKWL3YyiO5uwDYngWTnziiJHwoPbu9Xd0X0HqWf4ZaBiWR8YQeJs13RWyiqhK
+         Z8hilvcXYi/HQuMJpB/R55TCMNXCy1zoUAtvSGLNuzQggGw56C1pHpfTCmcCKl35QoTl
+         kiQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685634933; x=1688226933;
+        d=1e100.net; s=20221208; t=1685634937; x=1688226937;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0jAabHqdSvSI81GcjIi2ShyL+hAnr5Nv9d2pTfh5lts=;
-        b=fL8Gu6nCxv8SfyRcM6VhP9UDywMbUXfLXkW5fTdJ4o7FSEV7TjQKoIfr9uKn/N+hqY
-         7AK8SU8TeEzDM2SrSR03X0j3Z+Q34cqZJ5wGfKtC9dK31+EjPqmW+CQvqXTYRxKQ0Cz0
-         p3cG5KYf/YlgbRvzUpJHZcT6ZePwfYK9xB5SQZedL/z724apFBTM9jcYnWjIgF44KqOT
-         epvgfH4i2zHxClXzzZ6WdEpFLwwJe+TSGrolGH2CGWS7sIdCj9TJIzAqoFjnQhcVOXPL
-         MaM2lasZFG2fADtEtRrfXgk9SETTO08BCA2nRRG23NVs+0YAVk96ulbb2x/UKJbU29Cx
-         hVgQ==
-X-Gm-Message-State: AC+VfDyhPtAaxCpSrKRuQ8M+i550VkIFTZlUIctjnDNh3MnxZxVQPEbT
-        NCDfcacUqW5rU/ZGhivq7op9PCzWFZt52usYEDUWcsQpPfSxI5lD9WG/97cMCD3tPR8Wu0map/0
-        7LOqXddCddU7a7rU62dvyKCKOb7WPJ4s6MC4AN1tGLw/9kQhsM067eUFFs43AqTv59Ekb
-X-Received: by 2002:a05:6a20:8f04:b0:106:c9b7:c93d with SMTP id b4-20020a056a208f0400b00106c9b7c93dmr12612835pzk.19.1685634932906;
-        Thu, 01 Jun 2023 08:55:32 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7pvvJJKpMvAFbtIuz7/+acgXHck5G0WosfwFB94/V2cO+3iqB/cNFrT2JZeoiXuxJej081VjB1P5xpca6/ccI=
-X-Received: by 2002:a05:6a20:8f04:b0:106:c9b7:c93d with SMTP id
- b4-20020a056a208f0400b00106c9b7c93dmr12612804pzk.19.1685634932503; Thu, 01
- Jun 2023 08:55:32 -0700 (PDT)
+        bh=KJnr0nAI79FbGcEzwusG2c1oxXOAZlwGtMuVl8TkMiU=;
+        b=UIHm06pIlQp2ljXiNAgRAjvR5SWhlxWd2FxoAXl3WbBoutipH3C+7vVLbulMVXVlxa
+         p3sFCFr06u0ubC3tSs16bm6DYA+OUHvmLyURGi6AIVE1T+6o4kstPw4gmePG27bAmSnn
+         sqPlZS3vZxNslpYIM7oech7rWWY1pAgN6cFN8gZuyYB5bDs4F1tFSvQNsi2alNi/O9Sg
+         ZjD7q6zKQsewq0azuRjse6Bt4nUoeVd0lUWRUJGfg4739yQbKdNA2Znnqba9C4lVDpKf
+         8dpGeBGaDfRYYLuh7xFmEPa0oYVcQUTkaOQvdQgDWqirSKPVDgEc9RhPF92p9Jtarmoi
+         VR+g==
+X-Gm-Message-State: AC+VfDxpdI0ledvQJpd/N0vKSsLUAwn13HxXl6f5xd7cW6e1in4hThgl
+        NFlJrjH2MAFL//+ULeXImDPRnqpimaVk7nve1xFQDA==
+X-Google-Smtp-Source: ACHHUZ5M77PykdR9xQv90jShpkPZX5SDCZzIQ6mgVZzgThumvHXN/x1LRc07L7DTNmktmo0tu9ZbvFJsmNSZXID1HUg=
+X-Received: by 2002:a05:6e02:1a25:b0:33b:4a8c:2147 with SMTP id
+ g5-20020a056e021a2500b0033b4a8c2147mr261587ile.8.1685634936701; Thu, 01 Jun
+ 2023 08:55:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230502150435.423770-1-kai.heng.feng@canonical.com>
- <20230502150435.423770-2-kai.heng.feng@canonical.com> <8eea2352-1d4f-aa3a-7c86-9306adb0aaae@kernel.org>
-In-Reply-To: <8eea2352-1d4f-aa3a-7c86-9306adb0aaae@kernel.org>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Thu, 1 Jun 2023 23:55:21 +0800
-Message-ID: <CAAd53p7H2C+LenmzynRHqnxd-qgc2+p9ZLKidVUOAtXMyU2rmQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] ata: libata: Defer rescan on suspended device
-To:     Damien Le Moal <dlemoal@kernel.org>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        bblock@linux.ibm.com, acelan.kao@canonical.com,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1adda828-cf35-fb2c-6db5-f9ca91b5b62a@linaro.org>
+ <20230525093151.2338370-1-yangcong5@huaqin.corp-partner.google.com> <20230525093151.2338370-4-yangcong5@huaqin.corp-partner.google.com>
+In-Reply-To: <20230525093151.2338370-4-yangcong5@huaqin.corp-partner.google.com>
+From:   Doug Anderson <dianders@google.com>
+Date:   Thu, 1 Jun 2023 08:55:25 -0700
+Message-ID: <CAD=FV=VxQcoYpE4OJYB9JVbiOQVUi_bkDzynR=VVfuNb4eQB9Q@mail.gmail.com>
+Subject: Re: [v4 3/4] dt-bindings: display: panel: Add compatible for Starry ili9882t
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Cc:     daniel@ffwll.ch, neil.armstrong@linaro.org, sam@ravnborg.org,
+        airlied@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, hsinyi@google.com,
+        conor+dt@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 7, 2023 at 5:23=E2=80=AFPM Damien Le Moal <dlemoal@kernel.org> =
-wrote:
->
-> On 2023/05/03 0:04, Kai-Heng Feng wrote:
-> > During system resume, if an EH is schduled after ATA host is resumed
-> > (i.e. ATA_PFLAG_PM_PENDING cleared), but before the disk device is
-> > fully resumed, the device_lock hold by scsi_rescan_device() is never
-> > released so the dpm_resume() of the disk is blocked forerver.
-> >
-> > That's because scsi_attach_vpd() is expecting the disk device is in
-> > operational state, as it doesn't work on suspended device.
-> >
-> > To avoid such deadlock, defer rescan if the disk is still suspended so
-> > the resume process of the disk device can proceed. At the end of the
-> > resume process, use the complete() callback to schedule the rescan task=
-.
-> >
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > ---
-> > v4:
-> >  - No change.
-> >
-> > v3:
-> >  - New patch to resolve undefined pm_suspend_target_state.
-> >
-> > v2:
-> >  - Schedule rescan task at the end of system resume phase.
-> >  - Wording.
-> >
-> >  drivers/ata/libata-core.c | 11 +++++++++++
-> >  drivers/ata/libata-eh.c   | 11 +++++++++--
-> >  include/linux/libata.h    |  1 +
-> >  3 files changed, 21 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-> > index 8bf612bdd61a..bdd244bdb8a2 100644
-> > --- a/drivers/ata/libata-core.c
-> > +++ b/drivers/ata/libata-core.c
-> > @@ -5093,6 +5093,16 @@ static int ata_port_pm_poweroff(struct device *d=
-ev)
-> >       return 0;
-> >  }
-> >
-> > +static void ata_port_pm_complete(struct device *dev)
-> > +{
-> > +     struct ata_port *ap =3D to_ata_port(dev);
-> > +
-> > +     if (ap->pflags & ATA_PFLAG_DEFER_RESCAN)
-> > +             schedule_work(&(ap->scsi_rescan_task));
-> > +
-> > +     ap->pflags &=3D ~ATA_PFLAG_DEFER_RESCAN;
->
-> Is this called with the port lock held ? Otherwise, there is a race with
-> ata_eh_revalidate_and_attach() and we may end up never actually revalidat=
-ing the
-> drive. At the very least, I think that ATA_PFLAG_DEFER_RESCAN needs to be
-> cleared before calling schedule_work().
+Hi,
 
-OK. Maybe all of these are unnecessary if the rescanning can wait for
-disk device to be resumed.
+On Thu, May 25, 2023 at 2:32=E2=80=AFAM Cong Yang
+<yangcong5@huaqin.corp-partner.google.com> wrote:
+>
+> The STARRY ili9882t is a 10.51" WUXGA TFT LCD panel,
+> which fits in nicely with the existing panel-boe-tv101wum-nl6
+> driver. Hence, we add a new compatible with panel specific config.
+>
+> Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../devicetree/bindings/display/panel/boe,tv101wum-nl6.yaml     | 2 ++
+>  1 file changed, 2 insertions(+)
 
->
-> > +}
-> > +
-> >  static const unsigned int ata_port_resume_ehi =3D ATA_EHI_NO_AUTOPSY
-> >                                               | ATA_EHI_QUIET;
-> >
-> > @@ -5158,6 +5168,7 @@ static const struct dev_pm_ops ata_port_pm_ops =
-=3D {
-> >       .thaw =3D ata_port_pm_resume,
-> >       .poweroff =3D ata_port_pm_poweroff,
-> >       .restore =3D ata_port_pm_resume,
-> > +     .complete =3D ata_port_pm_complete,
-> >
-> >       .runtime_suspend =3D ata_port_runtime_suspend,
-> >       .runtime_resume =3D ata_port_runtime_resume,
-> > diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
-> > index a6c901811802..0881b590fb7e 100644
-> > --- a/drivers/ata/libata-eh.c
-> > +++ b/drivers/ata/libata-eh.c
-> > @@ -15,6 +15,7 @@
-> >  #include <linux/blkdev.h>
-> >  #include <linux/export.h>
-> >  #include <linux/pci.h>
-> > +#include <linux/suspend.h>
-> >  #include <scsi/scsi.h>
-> >  #include <scsi/scsi_host.h>
-> >  #include <scsi/scsi_eh.h>
-> > @@ -2983,8 +2984,14 @@ static int ata_eh_revalidate_and_attach(struct a=
-ta_link *link,
-> >                        */
-> >                       ehc->i.flags |=3D ATA_EHI_SETMODE;
-> >
-> > -                     /* schedule the scsi_rescan_device() here */
-> > -                     schedule_work(&(ap->scsi_rescan_task));
-> > +                     /* Schedule the scsi_rescan_device() here.
->
-> Code style: please start multi-line comment with a line starting with "/*=
-"
-> without text after it.
+Applied to drm-misc-next:
 
-OK. Will do.
-
->
-> > +                      * Defer the rescan if it's in process of
-> > +                      * suspending or resuming.
-> > +                      */
-> > +                     if (pm_suspend_target_state !=3D PM_SUSPEND_ON)
->
-> Why ? Shouldn't this be "pm_suspend_target_state =3D=3D PM_SUSPEND_ON" ? =
-Because if
-> the device is already resumed, why would we need to defer the rescan ?
-
-"pm_suspend_target_state !=3D PM_SUSPEND_ON" means the system is not
-"ON" state. For this particular issue, it means the system is still in
-resume process.
-
->
-> > +                             ap->pflags |=3D ATA_PFLAG_DEFER_RESCAN;
-> > +                     else
-> > +                             schedule_work(&(ap->scsi_rescan_task));
-> >               } else if (dev->class =3D=3D ATA_DEV_UNKNOWN &&
-> >                          ehc->tries[dev->devno] &&
-> >                          ata_class_enabled(ehc->classes[dev->devno])) {
-> > diff --git a/include/linux/libata.h b/include/linux/libata.h
-> > index 311cd93377c7..1696c9ebd168 100644
-> > --- a/include/linux/libata.h
-> > +++ b/include/linux/libata.h
-> > @@ -189,6 +189,7 @@ enum {
-> >       ATA_PFLAG_UNLOADING     =3D (1 << 9), /* driver is being unloaded=
- */
-> >       ATA_PFLAG_UNLOADED      =3D (1 << 10), /* driver is unloaded */
-> >
-> > +     ATA_PFLAG_DEFER_RESCAN  =3D (1 << 16), /* peform deferred rescan =
-on system resume */
->
-> Do we really need a new flag ? Can't we use ATA_PFLAG_PM_PENDING correctl=
-y ?
-> From the rather sparse commit message description, it sounds like this fl=
-ag is
-> being cleared too early. Not sure though. Need to dig further into this.
-
-Defer clearing ATA_PFLAG_PM_PENDING doesn't seem to be trivial.
-I'll send a new version which IMO is a lot simpler.
-
-Kai-Heng
-
->
-> >       ATA_PFLAG_SUSPENDED     =3D (1 << 17), /* port is suspended (powe=
-r) */
-> >       ATA_PFLAG_PM_PENDING    =3D (1 << 18), /* PM operation pending */
-> >       ATA_PFLAG_INIT_GTM_VALID =3D (1 << 19), /* initial gtm data valid=
- */
->
-> --
-> Damien Le Moal
-> Western Digital Research
->
+0a73471ca1f7 dt-bindings: display: panel: Add compatible for Starry ili9882=
+t
