@@ -2,80 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0A3719744
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3914719755
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbjFAJmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56684 "EHLO
+        id S232891AbjFAJn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbjFAJmU (ORCPT
+        with ESMTP id S232910AbjFAJnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:42:20 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427B218B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:42:05 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2afb2875491so7676061fa.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 02:42:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685612523; x=1688204523;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iU4xmtUMX9w6zebg9MlJSqLt7G1H1md/4T/8wkl1MeQ=;
-        b=q7ZGGNGiaXJhXgsEQWO1S8RqG6AWF14Y+cBOPc35YykwyaMUlD5oQDTXyEoRhZ11ze
-         Fw+RugGz+bpPvN97e/rQukvJg5GfDlQSUEOMpWE5R0KT1HHemYFBAFUQUddg6gf+TVZ6
-         1SQkpF0O7D9CNMbZKp5FhrKOxS7C550nnFPgl0TL24zz7aQQGJAMj5wY9jJQ7QaVkg0n
-         MLjFgpDBQALUq22J0P11GPtA8f024aeFPoEdNNcxoYjT9yD2N+jfbYU1PqT9mBdosOWE
-         x7T1JEnHZfk7YRH7rMjIKzFdrCI9ONkNcWmzSvGxyJ52MkYi2O2Ii78cxeifCMiQU8Ro
-         cPWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685612523; x=1688204523;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iU4xmtUMX9w6zebg9MlJSqLt7G1H1md/4T/8wkl1MeQ=;
-        b=ZvhZ2NoKtqiyu6d7be746HM0kvl1+FErZRi+/s2eYbCWVPJ9SxO24T6lX58xN6lBNR
-         5mgOLQYHNikhc1AX2m0fEGJEflZ20yO3xyBuytCjJh9Gz64Vb6S/fJP0lgvgWX+qSXZh
-         4sFs9ujpK0SB0HeQQ0W2A0tpkRklsUXyTZqwhjZ7RqNJWtpvCOkc21B7BRQzIfsTP9yx
-         bCtIjLJV8iTnuzvDM4voXvmyxH4RkSY49Cijm518YxLDGCfmir2eAgx5QO59meyC/Mvw
-         hizHSjSGIfxd18pA6z73Cs70GZWwDBSHvLc265M5zdULgMD7PpNPAd37bdWhZkqph8Kv
-         l0Aw==
-X-Gm-Message-State: AC+VfDxLp3BU+HOXC2KDTT7aH7RcBk7QjMIt/6GjJlEFRpBoJT/61cE5
-        IUBFiLmXz9haPHmxykUE/mKOAQ==
-X-Google-Smtp-Source: ACHHUZ6dR77rVYZoSpQxjUEWeCWY+lvjsNiArIBtcpXi+EJlqEv8hdhlSjqXQkiVKje2MmkgtVVpyQ==
-X-Received: by 2002:a2e:8402:0:b0:2b0:360f:5752 with SMTP id z2-20020a2e8402000000b002b0360f5752mr4457807ljg.2.1685612523522;
-        Thu, 01 Jun 2023 02:42:03 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id w5-20020a2e9985000000b002adb0164258sm3722531lji.112.2023.06.01.02.42.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 02:42:03 -0700 (PDT)
-Message-ID: <979f665e-5ca5-afff-17a8-d967fefca6cb@linaro.org>
-Date:   Thu, 1 Jun 2023 11:42:01 +0200
+        Thu, 1 Jun 2023 05:43:50 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03D0E48
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:43:30 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3515TBNB016524;
+        Thu, 1 Jun 2023 04:42:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=8slAiQhtNeEDPH5cE2i6jmsGl9SnzMbGOVBPNnG5StQ=;
+ b=QsDRgCTBFtDzm+U2RhfKxqISLvpAdcBvJLxn1OBMIjtbZz+TJrBNQyQCwVpcx37oWgly
+ Grr7uqq/g9B5WkWboIK5GJ5ayKOrz0btQbggtnHN0hVvTBzxBZR3yLSlpoISBJi6A4aW
+ VKionq2LYUI3Kcn7OtZl4+VGsyKr3qtNOZfIchWRwR2zNFc3NF0sqMWBvbx8DZicXQDR
+ ykauWIX2J3OOy/00HExLWTl6F13ZNinWvY9PYfNAeSEPiXHUthOoZp71MSmrSzc9cOcI
+ 1hI+83D9F3hlfRZjo+G/NjPcwUtP5PLsCbm1bcOzfy4SRolc8kFTDt1A6HtbTyPOMTyS 1Q== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3que9mx33j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 04:42:58 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 1 Jun
+ 2023 10:42:56 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Thu, 1 Jun 2023 10:42:56 +0100
+Received: from [198.90.251.45] (EDIN6T9W333.ad.cirrus.com [198.90.251.45])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 92A8745;
+        Thu,  1 Jun 2023 09:42:56 +0000 (UTC)
+Message-ID: <78488c71-eef5-1a44-0b85-73c7ad0848c9@opensource.cirrus.com>
+Date:   Thu, 1 Jun 2023 10:42:56 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] phy: qcom: qmp-combo: fix Display Port PHY configuration
- for SM8550
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230601-topic-sm8550-upstream-dp-phy-init-fix-v1-1-4e9da9f97991@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230601-topic-sm8550-upstream-dp-phy-init-fix-v1-1-4e9da9f97991@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: CSC3551 and devices missing related _DSD bits
+To:     Armas Spann <armas@codux.tech>, Luke Jones <luke@ljones.dev>,
+        Takashi Iwai <tiwai@suse.de>
+CC:     <linux-kernel@vger.kernel.org>, <tiwai@suse.com>,
+        <sbinding@opensource.cirrus.com>, <perex@perex.cz>,
+        <tangmeng@uniontech.com>, <andy.chi@canonical.com>,
+        <p.jungkamp@gmx.net>, <kasper93@gmail.com>,
+        <yangyuchi66@gmail.com>, <ealex95@gmail.com>,
+        <james.schulman@cirrus.com>, <david.rhodes@cirrus.com>,
+        <tanureal@opensource.cirrus.com>, <rf@opensource.cirrus.com>,
+        <patches@opensource.cirrus.com>, <alsa-devel@alsa-project.org>
+References: <1991650.PYKUYFuaPT@fedora> <87jzx3zaf8.wl-tiwai@suse.de>
+ <b4c202b2-ab29-e2aa-b141-0c967b2c1645@opensource.cirrus.com>
+ <19d69a5da8f1d4017ac14ed87f927ab82278073d.camel@ljones.dev>
+ <12102f7419c5e44cd2133aa769e25dbd16f4e0c9.camel@codux.tech>
+From:   Stuart Henderson <stuarth@opensource.cirrus.com>
+In-Reply-To: <12102f7419c5e44cd2133aa769e25dbd16f4e0c9.camel@codux.tech>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: PgAw9JbGgD11sbnj0iAibcqjVuEEYWGw
+X-Proofpoint-ORIG-GUID: PgAw9JbGgD11sbnj0iAibcqjVuEEYWGw
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,78 +79,40 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+> Hi Takashi, Hi Stuart (and of course, all others in here),
+>
+> would you mind to evaluate this small (pseudo-)patch to be harmless?
+> (concerning the blow-up theory the first answer in this converstion)
+>
+> I won't push it upstream right now but I want to know if this patch
+> might be harmfull. I'm owning a GA402XY myself and we digged out that
+> the initial setting of the cr3551 can be done via:
+>
+> diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
+> index 75020edd39e7..eaa06751bd48 100644
+> --- a/sound/pci/hda/cs35l41_hda.c
+> +++ b/sound/pci/hda/cs35l41_hda.c
+> @@ -1243,6 +1243,12 @@ static int cs35l41_no_acpi_dsd(struct
+> cs35l41_hda *cs35l41, struct device *physd
+>   		hw_cfg->bst_type = CS35L41_EXT_BOOST;
+>   		hw_cfg->gpio1.func = CS35l41_VSPK_SWITCH;
+>   		hw_cfg->gpio1.valid = true;
+> +	} else if (strncmp(hid, "CSC3551", 7) == 0 && strcmp(cs35l41-
+>> acpi_subsystem_id, "10431463") == 0) {
+> +		// TESTING - (Hook for GA402X)
+> +		dev_warn(cs35l41->dev, "Warning: ASUS didn't provide
+> the needed ACPI _DSD properties for GA402X series, using defaults..");
+> +		hw_cfg->bst_type = CS35L41_EXT_BOOST;
+> +		hw_cfg->gpio1.func = CS35l41_VSPK_SWITCH;
+> +		hw_cfg->gpio1.valid = true;
+>   	} else {
+>   		/*
+>   		 * Note: CLSA010(0/1) are special cases which use a
+> slightly different design.
+I wouldn't recommend making speculative changes like the above. There 
+are no "default" values as these attributes describe the hardware for 
+the particular device and these can be different on each SKU.  In this 
+case, it looks like the boost is being set incorrectly.  We're looking 
+into how we can support these older devices, so please bear with us 
+while we investigate.
 
-On 1.06.2023 11:39, Neil Armstrong wrote:
-> The SM8550 PHY also uses a different offset for the CMN_STATUS reg,
-> use the right one for the v6 Display Port configuration.
-> 
-> Fixes: 49742e9edab3 ("phy: qcom-qmp-combo: Add support for SM8550")
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
-Must have been fun to debug.. 
-
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> index 33cc99d9c77d..bebce8c591a3 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> @@ -2151,6 +2151,7 @@ static void qmp_v4_configure_dp_tx(struct qmp_combo *qmp)
->  static int qmp_v456_configure_dp_phy(struct qmp_combo *qmp,
->  				     unsigned int com_resetm_ctrl_reg,
->  				     unsigned int com_c_ready_status_reg,
-> +				     unsigned int com_cmn_status_reg,
->  				     unsigned int dp_phy_status_reg)
->  {
->  	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
-> @@ -2207,14 +2208,14 @@ static int qmp_v456_configure_dp_phy(struct qmp_combo *qmp,
->  			10000))
->  		return -ETIMEDOUT;
->  
-> -	if (readl_poll_timeout(qmp->dp_serdes + QSERDES_V4_COM_CMN_STATUS,
-> +	if (readl_poll_timeout(qmp->dp_serdes + com_cmn_status_reg,
->  			status,
->  			((status & BIT(0)) > 0),
->  			500,
->  			10000))
->  		return -ETIMEDOUT;
->  
-> -	if (readl_poll_timeout(qmp->dp_serdes + QSERDES_V4_COM_CMN_STATUS,
-> +	if (readl_poll_timeout(qmp->dp_serdes + com_cmn_status_reg,
->  			status,
->  			((status & BIT(1)) > 0),
->  			500,
-> @@ -2250,6 +2251,7 @@ static int qmp_v4_configure_dp_phy(struct qmp_combo *qmp)
->  
->  	ret = qmp_v456_configure_dp_phy(qmp, QSERDES_V4_COM_RESETSM_CNTRL,
->  					QSERDES_V4_COM_C_READY_STATUS,
-> +					QSERDES_V4_COM_CMN_STATUS,
->  					QSERDES_V4_DP_PHY_STATUS);
->  	if (ret < 0)
->  		return ret;
-> @@ -2314,6 +2316,7 @@ static int qmp_v5_configure_dp_phy(struct qmp_combo *qmp)
->  
->  	ret = qmp_v456_configure_dp_phy(qmp, QSERDES_V4_COM_RESETSM_CNTRL,
->  					QSERDES_V4_COM_C_READY_STATUS,
-> +					QSERDES_V4_COM_CMN_STATUS,
->  					QSERDES_V4_DP_PHY_STATUS);
->  	if (ret < 0)
->  		return ret;
-> @@ -2373,6 +2376,7 @@ static int qmp_v6_configure_dp_phy(struct qmp_combo *qmp)
->  
->  	ret = qmp_v456_configure_dp_phy(qmp, QSERDES_V6_COM_RESETSM_CNTRL,
->  					QSERDES_V6_COM_C_READY_STATUS,
-> +					QSERDES_V6_COM_CMN_STATUS,
->  					QSERDES_V6_DP_PHY_STATUS);
->  	if (ret < 0)
->  		return ret;
-> 
-> ---
-> base-commit: d4cee89031c80066ec461bb77b5e13a4f37d5fd2
-> change-id: 20230601-topic-sm8550-upstream-dp-phy-init-fix-ed90c001592d
-> 
-> Best regards,
