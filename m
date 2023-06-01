@@ -2,68 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A8171916E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BA0719173
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 05:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbjFADjj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 31 May 2023 23:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
+        id S231190AbjFADlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 23:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjFADjh (ORCPT
+        with ESMTP id S231211AbjFADlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 23:39:37 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AED2123;
-        Wed, 31 May 2023 20:39:34 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id B065D24DC28;
-        Thu,  1 Jun 2023 11:39:26 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Jun
- 2023 11:39:26 +0800
-Received: from [192.168.125.80] (113.72.147.198) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 1 Jun
- 2023 11:39:25 +0800
-Message-ID: <94ec74dd-2f04-8dca-35ff-a537811d1ccf@starfivetech.com>
-Date:   Thu, 1 Jun 2023 11:39:24 +0800
+        Wed, 31 May 2023 23:41:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0045F128
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 20:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685590819;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7v5kuFeKdd0FbY1t+cfVsvYVz22RqAFpoIgWaiWaDmw=;
+        b=MLv7gMulY4oEZHOU+bzvZJzhUcksKzycFLRy1NVnm2bVYlYeV/zCzRu9z21XC2M+cGobSy
+        XNYeo1oav2uky9Hw5eCHmN4Pd/YPopWnAwxQX0keTO+45NqfqsvhOhqHHUzrlgbT1B6OBN
+        32lT0AB89xkPzfsNIdSJsdO0szedqsE=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-225-4DKO62LHOGidHwYJajvFjA-1; Wed, 31 May 2023 23:40:17 -0400
+X-MC-Unique: 4DKO62LHOGidHwYJajvFjA-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30c3ad3238bso80330f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 20:40:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685590816; x=1688182816;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7v5kuFeKdd0FbY1t+cfVsvYVz22RqAFpoIgWaiWaDmw=;
+        b=VBoH+dLyNFxjCjAkAVw01LuIy8bz2zG6PU7SuSx36HD55qWLa2abE0flYxPBCSFq4t
+         Et3m4bL+6Gr8Xuf4eAw7BA5o3r2DaTurgjKa1xa7Sn2sGa9WNZkfSQG/cp8W5r+jJB3L
+         o1/C2duKK1IpiEDPLVb/axiTdJaLdHIVmIk5zsOCT/BMsdgXFpmnqpn1Ckj+uYaASIXX
+         KRMcQ9HQyVH7NwQL1aHJw/kmYpg/hJTo6Wrokug6Rz3qZkH5GRzxYVDZAd1SPhNB23k/
+         1X3ARM3k/2hsg0r5Gb/sy/tojW0n8YhuK1LRuHm2wmUrOGO/ep9GbR2ZTwp3tbigNqW2
+         7dbA==
+X-Gm-Message-State: AC+VfDw1Z38BL2xXK6lfsaPKyL//BeBER1edzr+q1WYvM5KuvMghVaP4
+        lC11tUveaKk4ax2u6gfpBGNm81ElYIG5E9LYWPMzchQZZfrvTxbCwv9+bZg6kEexgYuHNxb83eo
+        JztwQahnyRvngvOPntESw7mU2BiT5WFca
+X-Received: by 2002:adf:ef10:0:b0:2f9:ee8c:a2fa with SMTP id e16-20020adfef10000000b002f9ee8ca2famr652484wro.64.1685590816036;
+        Wed, 31 May 2023 20:40:16 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6GjT+wjNUUjRw2icdmfT7+gkcuBv7GhnOk8Vv9EbIqy1CJmU7O0vcgPJVlIJfhx38YJs7NPw==
+X-Received: by 2002:adf:ef10:0:b0:2f9:ee8c:a2fa with SMTP id e16-20020adfef10000000b002f9ee8ca2famr652472wro.64.1685590815593;
+        Wed, 31 May 2023 20:40:15 -0700 (PDT)
+Received: from redhat.com ([2.52.143.63])
+        by smtp.gmail.com with ESMTPSA id n13-20020adfe78d000000b003078681a1e8sm8628687wrm.54.2023.05.31.20.40.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 20:40:14 -0700 (PDT)
+Date:   Wed, 31 May 2023 23:40:12 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     xuanzhuo@linux.alibaba.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virtio_ring: validate used buffer length
+Message-ID: <20230531233454-mutt-send-email-mst@kernel.org>
+References: <20230526063041.18359-1-jasowang@redhat.com>
+ <20230528033037-mutt-send-email-mst@kernel.org>
+ <CACGkMEs9Ztavn2JyuUAb47Sk1fYHiXLLkQQPQR5Czhb2yu_R3w@mail.gmail.com>
+ <20230529055729-mutt-send-email-mst@kernel.org>
+ <CACGkMEsW1+BFtMoLg4c_FyxYTZJcSVh4BoEdJ-Q9_WGg_DcReA@mail.gmail.com>
+ <20230531014326-mutt-send-email-mst@kernel.org>
+ <CACGkMEvok6HjBK_ZMR4EYzWxpJQVeh++EMErnHjJ6cu9m3R-1A@mail.gmail.com>
+ <CACGkMEuDWL30J7D8v+xLCvvspRBoz8X7q23FymBVRm9bT1pVUQ@mail.gmail.com>
+ <20230531062108-mutt-send-email-mst@kernel.org>
+ <CACGkMEvE=e1tRFScbzija=oUMqznqMDs7jQKCie9ya1NehwnVA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v7 19/22] riscv: dts: starfive: Add initial StarFive
- JH7110 device tree
-To:     Shengyu Qu <wiagn233@outlook.com>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-CC:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230401111934.130844-1-hal.feng@starfivetech.com>
- <20230401111934.130844-20-hal.feng@starfivetech.com>
- <TY3P286MB2611C61D1EDB70BF0A37E65298709@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
-Content-Language: en-US
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <TY3P286MB2611C61D1EDB70BF0A37E65298709@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [113.72.147.198]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACGkMEvE=e1tRFScbzija=oUMqznqMDs7jQKCie9ya1NehwnVA@mail.gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,100 +89,466 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 7 May 2023 18:03:19 +0800, Shengyu Qu wrote:
-> Hi Hal,
->> From: Emil Renner Berthing <kernel@esmil.dk>
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> new file mode 100644
->> index 000000000000..d484ecdf93f7
->> --- /dev/null
->> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> @@ -0,0 +1,509 @@
->> +// SPDX-License-Identifier: GPL-2.0 OR MIT
->> +/*
->> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
->> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
->> + */
->> +
->> +/dts-v1/;
->> +#include <dt-bindings/clock/starfive,jh7110-crg.h>
->> +#include <dt-bindings/reset/starfive,jh7110-crg.h>
->> +
->> +/ {
-[...]
->> +
->> +    soc {
->> +        compatible = "simple-bus";
->> +        interrupt-parent = <&plic>;
+On Thu, Jun 01, 2023 at 09:27:08AM +0800, Jason Wang wrote:
+> On Wed, May 31, 2023 at 6:25 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Wed, May 31, 2023 at 04:26:38PM +0800, Jason Wang wrote:
+> > > On Wed, May 31, 2023 at 3:36 PM Jason Wang <jasowang@redhat.com> wrote:
+> > > >
+> > > > On Wed, May 31, 2023 at 1:50 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > >
+> > > > > On Wed, May 31, 2023 at 09:05:00AM +0800, Jason Wang wrote:
+> > > > > > On Mon, May 29, 2023 at 6:03 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > >
+> > > > > > > On Mon, May 29, 2023 at 09:18:10AM +0800, Jason Wang wrote:
+> > > > > > > > On Sun, May 28, 2023 at 3:57 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > > > >
+> > > > > > > > > On Fri, May 26, 2023 at 02:30:41PM +0800, Jason Wang wrote:
+> > > > > > > > > > This patch validate
+> > > > > > > > >
+> > > > > > > > > validates
+> > > > > > > > >
+> > > > > > > > > > the used buffer length provided by the device
+> > > > > > > > > > before trying to use it.
+> > > > > > > > >
+> > > > > > > > > before returning it to caller
+> > > > > > > > >
+> > > > > > > > > > This is done by remembering the in buffer
+> > > > > > > > > > length in a dedicated array during virtqueue_add(), then we can fail
+> > > > > > > > > > the virtqueue_get_buf() when we find the device is trying to give us a
+> > > > > > > > > > used buffer length which is greater than we stored before.
+> > > > > > > > >
+> > > > > > > > > than what we stored
+> > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > This validation is disable
+> > > > > > > > >
+> > > > > > > > > disabled
+> > > > > > > > >
+> > > > > > > > > > by default via module parameter to unbreak
+> > > > > > > > > > some existing devices since some legacy devices are known to report
+> > > > > > > > > > buggy used length.
+> > > > > > > > > >
+> > > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > > > > > > >
+> > > > > > > > > First I'm not merging this without more data about
+> > > > > > > > > what is known to be broken and what is known to work well
+> > > > > > > > > in the commit log. And how exactly do things work if used length
+> > > > > > > > > is wrong?
+> > > > > > > >
+> > > > > > > > Assuming the device is malicious, it would be very hard to answer.
+> > > > > > > > Auditing and fuzzing won't cover every case. Instead of trying to seek
+> > > > > > > > the answer, we can simply make sure the used in buffer length is
+> > > > > > > > validated then we know we're fine or not.
+> > > > > > >
+> > > > > > > To restate the question, you said above "some legacy devices are known
+> > > > > > > to report buggy used length". If they report buggy length then how
+> > > > > > > can things work?
+> > > > > >
+> > > > > > The validation is disabled for legacy device (as stated in the changelog):
+> > > > > >
+> > > > > > static bool vring_needs_used_validation(const struct virtio_device *vdev)
+> > > > > > {
+> > > > > >         /*
+> > > > > >          * Several legacy devices are known to produce buggy used
+> > > > > >          * length. In order to let driver work, we won't validate used
+> > > > > >          * buffer length in this case.
+> > > > > >          */
+> > > > > >         if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
+> > > > > >                 return false;
+> > > > > >         if (force_used_validation)
+> > > > > >                 return true;
+> > > > > >         return false;
+> > > > > > }
+> > > > > >
+> > > > > > This seems to be what we've agreed in last version:
+> > > > > >
+> > > > > > https://lore.kernel.org/all/CANLsYkxfhamUU0bb4j7y6N4_G9odKxLCjXxgXEx4SJ6_Kf+M2Q@mail.gmail.com/T/#m31f3b06f9032beec175c312dfa2532cb08b15c56
+> > > > > >
+> > > > > > Thanks
+> > > > > >
+> > > > >
+> > > > > I don't get it. You wrote:
+> > > > >
+> > > > >         This validation is disable
+> > > > >         by default via module parameter to unbreak
+> > > > >         some existing devices since some legacy devices are known to report
+> > > > >         buggy used length.
+> > > > >
+> > > > > which devices?
+> > > >
+> > > > legacy rpmsg and vsock device (before 49d8c5ffad07) at least.
+> > > >
+> > > > > why do you need a module parameter?
+> > > >
+> > > > If we enable it unconditionally for modern devices, it may break some
+> > > > buggy moden device (vsock without a fix as an example).
+> > > >
+> > > > >
+> > > > >
+> > > > > > >
+> > > > > > > > > Second what's wrong with dma_desc_extra that we already maintain?
+> > > > > > > > > Third motivation - it's part and parcel of the hardening effort yes?
+> > > > > > > >
+> > > > > > > > They are different. dma_desc_extra is for a descriptor ring, but this
+> > > > > > > > is for a used ring. Technically we can go back to iterate on the
+> > > > > > > > descriptor ring for a legal used in buffer length. But it will have
+> > > > > > > > worse performance.
+> > > > > > >
+> > > > > > > I don't really understand. We already iterate when we unmap -
+> > > > > > > all that is necessary is to subtract it from used length, if at
+> > > > > > > the end of the process it is >0 then we know used length is too
+> > > > > > > large.
+> > > > > >
+> > > > > > Yes, but it is the job that is done in the driver level not the virtio
+> > > > > > core.
+> > > > >
+> > > > > What job?
+> > > >
+> > > > I meant the driver can do the validation since it has the knowledge of
+> > > > the buffer length if it wants.
+> > > >
+> > > > > unmap is done in detach_buf_split and detach_buf_packed respectively.
+> > > > > vring_desc_extra isn't even visible outside drivers/virtio/virtio_ring.c
+> > > >
+> > > > desc_extra doesn't contain buffer length for the case of indirect
+> > > > descriptors. So we need to iterate in the descriptors when it looks
+> > > > expensive if we don't need unmap.
+> > > >
+> > > > Thanks
+> > > >
+> > > > >
+> > > > > For drivers that do unmap at driver level - I guess they can do
+> > > > > validation there too.
+> > > > >
+> > > > > > Validation in virtio core is still necessary since they're
+> > > > > > working at different levels and it's hard to force the validation in
+> > > > > > all drivers by codes. Last version introduces a
+> > > > > > suppress_driver_validation to allow the driver to suppress the core
+> > > > > > validation which seems not good, we need a way to force the
+> > > > > > virtio_ring code to do validation before.
+> > > > >
+> > > > > Why do we? If driver validates length virtio_ring does not need to
+> > > > > validate.
+> > >
+> > > To be more safe, there's no guarantee that there's no bug in the driver.
+> >
+> > Extra options increase testing matrix size so - there be bugs.
+> > We need to make these decisions for (most) users.
 > 
-> Do we really need this interrupt-parent? Seems it is causing a dependency cycle:
+> In some cases the requirement is conflict:
 > 
-> platform soc: Fixed dependency cycle(s) with /soc/interrupt-controller@c000000
+> 1) for "legacy users", the requirement is not to break existing setups
+> 2) for confidential users, the requirement is to detect and fail early
+> instead of trying to mitigate silently
+
+I think 2 is a red herring. No one wants panics/failures, it is just
+tolerated in the confidential setup.
+
+> If we are trying to go in the middle (for example, doing a cap) it may
+> end up with a result that can satisfy neither:
 > 
-> And seems fu740 dts doesn't have this.
+> 1) it might still break in some drivers and setups like legacy, then
+> we need an option to disable it
 
-Sorry to reply too late. If we drop this line, we need to add 'interrupt-parent'
-to every node which uses interrupt. And I found some other platform did the same
-such as 
+I don't see how cap can break anything.
 
-arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
-arch/riscv/boot/dts/canaan/k210.dtsi
-arch/riscv/boot/dts/renesas/r9a07g043f.dtsi
-
-Best regards,
-Hal
-
+> 2) it won't satisfy the users that ask for security
 > 
->> +        #address-cells = <2>;
->> +        #size-cells = <2>;
->> +        ranges;
->> +
->> +        clint: timer@2000000 {
->> +            compatible = "starfive,jh7110-clint", "sifive,clint0";
->> +            reg = <0x0 0x2000000 0x0 0x10000>;
->> +            interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>,
->> +                          <&cpu1_intc 3>, <&cpu1_intc 7>,
->> +                          <&cpu2_intc 3>, <&cpu2_intc 7>,
->> +                          <&cpu3_intc 3>, <&cpu3_intc 7>,
->> +                          <&cpu4_intc 3>, <&cpu4_intc 7>;
->> +        };
->> +
->> +        ccache: cache-controller@2010000 {
->> +            compatible = "starfive,jh7110-ccache", "sifive,ccache0", "cache";
->> +            reg = <0x0 0x2010000 0x0 0x4000>;
->> +            interrupts = <1>, <3>, <4>, <2>;
->> +            cache-block-size = <64>;
->> +            cache-level = <2>;
->> +            cache-sets = <2048>;
->> +            cache-size = <2097152>;
->> +            cache-unified;
->> +        };
->> +
->> +        plic: interrupt-controller@c000000 {
->> +            compatible = "starfive,jh7110-plic", "sifive,plic-1.0.0";
->> +            reg = <0x0 0xc000000 0x0 0x4000000>;
->> +            interrupts-extended = <&cpu0_intc 11>,
->> +                          <&cpu1_intc 11>, <&cpu1_intc 9>,
->> +                          <&cpu2_intc 11>, <&cpu2_intc 9>,
->> +                          <&cpu3_intc 11>, <&cpu3_intc 9>,
->> +                          <&cpu4_intc 11>, <&cpu4_intc 9>;
->> +            interrupt-controller;
->> +            #interrupt-cells = <1>;
->> +            #address-cells = <0>;
->> +            riscv,ndev = <136>;
->> +        };
->> +
->> +        uart0: serial@10000000 {
->> +            compatible = "snps,dw-apb-uart";
->> +            reg = <0x0 0x10000000 0x0 0x10000>;
->> +            clocks = <&syscrg JH7110_SYSCLK_UART0_CORE>,
->> +                 <&syscrg JH7110_SYSCLK_UART0_APB>;
->> +            clock-names = "baudclk", "apb_pclk";
->> +            resets = <&syscrg JH7110_SYSRST_UART0_APB>;
->> +            interrupts = <32>;
->> +            reg-io-width = <4>;
->> +            reg-shift = <2>;
->> +            status = "disabled";
->> +        };
->> +
-[...]
+> If we had an option, the management layer can choose to provision
+> VM/guests with the good kernel command line then we are fine.
+> 
+> >
+> > > >  If driver does not use length virtio_ring does not need to
+> > > > > validate.
+> > >
+> > > This could be done on top assuming the validation is disabled by
+> > > default. But if the administrator wants to have belt and braces we
+> > > need to leave an option for them.
+> > >
+> > > Thanks
+> >
+> > No, we don't regress then fix on top.
+> 
+> I'm not sure I understand here. It would be very hard to say there
+> won't be regression for any new codes, especially virtio had already
+> supported several different types of devices and drivers.
+
+Sure. We test what we can, just don't introduce untested code or known
+regressions.
+
+> > As for mod parameter I am not impressed -
+> > no one's going to have the time or inclination to do the requisite
+> > testing to know whether the module parameter is safe.
+> 
+> Actually, that's one advantage, most of the users don't care so the
+> validation is just suppressed for them. Otherwise they might get
+> surprised after upgrading. This is what I learnt from the past
+> hardening effort like this and the IRQ hardening.
+> 
+> For the rest like confidential vendors, they need to test and make
+> sure such kernel command line were provisioned to the VM.
+> 
+> Thanks
+
+Each new boolean option doubles QE effort.  One of the reasons
+confidential seems to be successful where previous DRM schemes mostly
+failed is because it allows running Linux without many changes.
+
+> >
+> > > > core can provide this service for the gazillion non
+> > > > > performance critical drivers that just want to keep things simple,
+> > > > > but the 4-5 critical ones can do their own validation if they want to.
+> > > > >
+> > > > > > Or such stuff could be added
+> > > > > > on top since the validation is by default anyway.
+> > > > > >
+> > > > > > Thanks
+> > > > >
+> > > > >
+> > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > > > I'd like to know the fate of VIRTIO_HARDEN_NOTIFICATION before
+> > > > > > > > > we do more hardening. If it's irrevocably broken let's rip it out?
+> > > > > > > >
+> > > > > > > > So the plan is
+> > > > > > > >
+> > > > > > > > 1) finish used ring validation (this had been proposed, merged and
+> > > > > > > > reverted before notification hardening)
+> > > > > > > > 2) do notification hardening on top.
+> > > > > > > >
+> > > > > > > > So let's leave it as is and I will do a rework after we finalize the
+> > > > > > > > used ring validation.
+> > > > > > > >
+> > > > > > > > Thanks
+> > > > > > > >
+> > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > > ---
+> > > > > > > > > > Changes since V4:
+> > > > > > > > > > - drop the flat for driver to suppress the check
+> > > > > > > > > > - validation is disabled by default
+> > > > > > > > > > - don't do validation for legacy device
+> > > > > > > > > > - rebase and support virtqueue resize
+> > > > > > > > > > ---
+> > > > > > > > > >  drivers/virtio/virtio_ring.c | 75 ++++++++++++++++++++++++++++++++++++
+> > > > > > > > > >  1 file changed, 75 insertions(+)
+> > > > > > > > > >
+> > > > > > > > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > > > > > > > > > index 143f380baa1c..5b151605aaf8 100644
+> > > > > > > > > > --- a/drivers/virtio/virtio_ring.c
+> > > > > > > > > > +++ b/drivers/virtio/virtio_ring.c
+> > > > > > > > > > @@ -15,6 +15,9 @@
+> > > > > > > > > >  #include <linux/spinlock.h>
+> > > > > > > > > >  #include <xen/xen.h>
+> > > > > > > > > >
+> > > > > > > > > > +static bool force_used_validation = false;
+> > > > > > > > > > +module_param(force_used_validation, bool, 0444);
+> > > > > > > > > > +
+> > > > > > > > > >  #ifdef DEBUG
+> > > > > > > > > >  /* For development, we want to crash whenever the ring is screwed. */
+> > > > > > > > > >  #define BAD_RING(_vq, fmt, args...)                          \
+> > > > > > > > > > @@ -105,6 +108,9 @@ struct vring_virtqueue_split {
+> > > > > > > > > >       struct vring_desc_state_split *desc_state;
+> > > > > > > > > >       struct vring_desc_extra *desc_extra;
+> > > > > > > > > >
+> > > > > > > > > > +     /* Maximum in buffer length, NULL means no used validation */
+> > > > > > > > > > +     u32 *buflen;
+> > > > > > > > > > +
+> > > > > > > > > >       /* DMA address and size information */
+> > > > > > > > > >       dma_addr_t queue_dma_addr;
+> > > > > > > > > >       size_t queue_size_in_bytes;
+> > > > > > > > > > @@ -145,6 +151,9 @@ struct vring_virtqueue_packed {
+> > > > > > > > > >       struct vring_desc_state_packed *desc_state;
+> > > > > > > > > >       struct vring_desc_extra *desc_extra;
+> > > > > > > > > >
+> > > > > > > > > > +     /* Maximum in buffer length, NULL means no used validation */
+> > > > > > > > > > +     u32 *buflen;
+> > > > > > > > > > +
+> > > > > > > > > >       /* DMA address and size information */
+> > > > > > > > > >       dma_addr_t ring_dma_addr;
+> > > > > > > > > >       dma_addr_t driver_event_dma_addr;
+> > > > > > > > > > @@ -552,6 +561,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
+> > > > > > > > > >       unsigned int i, n, avail, descs_used, prev, err_idx;
+> > > > > > > > > >       int head;
+> > > > > > > > > >       bool indirect;
+> > > > > > > > > > +     u32 buflen = 0;
+> > > > > > > > > >
+> > > > > > > > > >       START_USE(vq);
+> > > > > > > > > >
+> > > > > > > > > > @@ -635,6 +645,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
+> > > > > > > > > >                                                    VRING_DESC_F_NEXT |
+> > > > > > > > > >                                                    VRING_DESC_F_WRITE,
+> > > > > > > > > >                                                    indirect);
+> > > > > > > > > > +                     buflen += sg->length;
+> > > > > > > > > >               }
+> > > > > > > > > >       }
+> > > > > > > > > >       /* Last one doesn't continue. */
+> > > > > > > > > > @@ -675,6 +686,10 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
+> > > > > > > > > >       else
+> > > > > > > > > >               vq->split.desc_state[head].indir_desc = ctx;
+> > > > > > > > > >
+> > > > > > > > > > +     /* Store in buffer length if necessary */
+> > > > > > > > > > +     if (vq->split.buflen)
+> > > > > > > > > > +             vq->split.buflen[head] = buflen;
+> > > > > > > > > > +
+> > > > > > > > > >       /* Put entry in available array (but don't update avail->idx until they
+> > > > > > > > > >        * do sync). */
+> > > > > > > > > >       avail = vq->split.avail_idx_shadow & (vq->split.vring.num - 1);
+> > > > > > > > > > @@ -861,6 +876,11 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue *_vq,
+> > > > > > > > > >               BAD_RING(vq, "id %u is not a head!\n", i);
+> > > > > > > > > >               return NULL;
+> > > > > > > > > >       }
+> > > > > > > > > > +     if (vq->split.buflen && unlikely(*len > vq->split.buflen[i])) {
+> > > > > > > > > > +             BAD_RING(vq, "used len %d is larger than max in buffer len %u\n",
+> > > > > > > > > > +                     *len, vq->split.buflen[i]);
+> > > > > > > > > > +             return NULL;
+> > > > > > > > > > +     }
+> > > > > > > > > >
+> > > > > > > > > >       /* detach_buf_split clears data, so grab it now. */
+> > > > > > > > > >       ret = vq->split.desc_state[i].data;
+> > > > > > > > > > @@ -1085,10 +1105,25 @@ static void vring_free_split(struct vring_virtqueue_split *vring_split,
+> > > > > > > > > >                        vring_split->queue_dma_addr,
+> > > > > > > > > >                        dma_dev);
+> > > > > > > > > >
+> > > > > > > > > > +     kfree(vring_split->buflen);
+> > > > > > > > > >       kfree(vring_split->desc_state);
+> > > > > > > > > >       kfree(vring_split->desc_extra);
+> > > > > > > > > >  }
+> > > > > > > > > >
+> > > > > > > > > > +static bool vring_needs_used_validation(const struct virtio_device *vdev)
+> > > > > > > > > > +{
+> > > > > > > > > > +     /*
+> > > > > > > > > > +      * Several legacy devices are known to produce buggy used
+> > > > > > > > > > +      * length. In order to let driver work, we won't validate used
+> > > > > > > > > > +      * buffer length in this case.
+> > > > > > > > > > +      */
+> > > > > > > > > > +     if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
+> > > > > > > > > > +             return false;
+> > > > > > > > > > +     if (force_used_validation)
+> > > > > > > > > > +             return true;
+> > > > > > > > > > +     return false;
+> > > > > > > > > > +}
+> > > > > > > > > > +
+> > > > > > > > > >  static int vring_alloc_queue_split(struct vring_virtqueue_split *vring_split,
+> > > > > > > > > >                                  struct virtio_device *vdev,
+> > > > > > > > > >                                  u32 num,
+> > > > > > > > > > @@ -1137,7 +1172,19 @@ static int vring_alloc_queue_split(struct vring_virtqueue_split *vring_split,
+> > > > > > > > > >       vring_split->vring_align = vring_align;
+> > > > > > > > > >       vring_split->may_reduce_num = may_reduce_num;
+> > > > > > > > > >
+> > > > > > > > > > +     if (vring_needs_used_validation(vdev)) {
+> > > > > > > > > > +             vring_split->buflen =
+> > > > > > > > > > +                     kmalloc_array(num, sizeof(*vring_split->buflen),
+> > > > > > > > > > +                                   GFP_KERNEL);
+> > > > > > > > > > +             if (!vring_split->buflen)
+> > > > > > > > > > +                     goto err_buflen;
+> > > > > > > > > > +     }
+> > > > > > > > > > +
+> > > > > > > > > >       return 0;
+> > > > > > > > > > +
+> > > > > > > > > > +err_buflen:
+> > > > > > > > > > +     vring_free_split(vring_split, vdev, dma_dev);
+> > > > > > > > > > +     return -ENOMEM;
+> > > > > > > > > >  }
+> > > > > > > > > >
+> > > > > > > > > >  static struct virtqueue *vring_create_virtqueue_split(
+> > > > > > > > > > @@ -1297,6 +1344,7 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+> > > > > > > > > >       unsigned int i, n, err_idx;
+> > > > > > > > > >       u16 head, id;
+> > > > > > > > > >       dma_addr_t addr;
+> > > > > > > > > > +     u32 buflen = 0;
+> > > > > > > > > >
+> > > > > > > > > >       head = vq->packed.next_avail_idx;
+> > > > > > > > > >       desc = alloc_indirect_packed(total_sg, gfp);
+> > > > > > > > > > @@ -1325,6 +1373,8 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+> > > > > > > > > >                       desc[i].addr = cpu_to_le64(addr);
+> > > > > > > > > >                       desc[i].len = cpu_to_le32(sg->length);
+> > > > > > > > > >                       i++;
+> > > > > > > > > > +                     if (n >= out_sgs)
+> > > > > > > > > > +                             buflen += sg->length;
+> > > > > > > > > >               }
+> > > > > > > > > >       }
+> > > > > > > > > >
+> > > > > > > > > > @@ -1379,6 +1429,10 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+> > > > > > > > > >       vq->packed.desc_state[id].last = id;
+> > > > > > > > > >       vq->packed.desc_state[id].premapped = premapped;
+> > > > > > > > > >
+> > > > > > > > > > +     /* Store in buffer length if necessary */
+> > > > > > > > > > +     if (vq->packed.buflen)
+> > > > > > > > > > +             vq->packed.buflen[id] = buflen;
+> > > > > > > > > > +
+> > > > > > > > > >       vq->num_added += 1;
+> > > > > > > > > >
+> > > > > > > > > >       pr_debug("Added buffer head %i to %p\n", head, vq);
+> > > > > > > > > > @@ -1416,6 +1470,7 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
+> > > > > > > > > >       __le16 head_flags, flags;
+> > > > > > > > > >       u16 head, id, prev, curr, avail_used_flags;
+> > > > > > > > > >       int err;
+> > > > > > > > > > +     u32 buflen = 0;
+> > > > > > > > > >
+> > > > > > > > > >       START_USE(vq);
+> > > > > > > > > >
+> > > > > > > > > > @@ -1498,6 +1553,8 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
+> > > > > > > > > >                                       1 << VRING_PACKED_DESC_F_AVAIL |
+> > > > > > > > > >                                       1 << VRING_PACKED_DESC_F_USED;
+> > > > > > > > > >                       }
+> > > > > > > > > > +                     if (n >= out_sgs)
+> > > > > > > > > > +                             buflen += sg->length;
+> > > > > > > > > >               }
+> > > > > > > > > >       }
+> > > > > > > > > >
+> > > > > > > > > > @@ -1518,6 +1575,10 @@ static inline int virtqueue_add_packed(struct virtqueue *_vq,
+> > > > > > > > > >       vq->packed.desc_state[id].last = prev;
+> > > > > > > > > >       vq->packed.desc_state[id].premapped = premapped;
+> > > > > > > > > >
+> > > > > > > > > > +     /* Store in buffer length if necessary */
+> > > > > > > > > > +     if (vq->packed.buflen)
+> > > > > > > > > > +             vq->packed.buflen[id] = buflen;
+> > > > > > > > > > +
+> > > > > > > > > >       /*
+> > > > > > > > > >        * A driver MUST NOT make the first descriptor in the list
+> > > > > > > > > >        * available before all subsequent descriptors comprising
+> > > > > > > > > > @@ -1718,6 +1779,11 @@ static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
+> > > > > > > > > >               BAD_RING(vq, "id %u is not a head!\n", id);
+> > > > > > > > > >               return NULL;
+> > > > > > > > > >       }
+> > > > > > > > > > +     if (vq->packed.buflen && unlikely(*len > vq->packed.buflen[id])) {
+> > > > > > > > > > +             BAD_RING(vq, "used len %d is larger than max in buffer len %u\n",
+> > > > > > > > > > +                     *len, vq->packed.buflen[id]);
+> > > > > > > > > > +             return NULL;
+> > > > > > > > > > +     }
+> > > > > > > > > >
+> > > > > > > > > >       /* detach_buf_packed clears data, so grab it now. */
+> > > > > > > > > >       ret = vq->packed.desc_state[id].data;
+> > > > > > > > > > @@ -1937,6 +2003,7 @@ static void vring_free_packed(struct vring_virtqueue_packed *vring_packed,
+> > > > > > > > > >                                vring_packed->device_event_dma_addr,
+> > > > > > > > > >                                dma_dev);
+> > > > > > > > > >
+> > > > > > > > > > +     kfree(vring_packed->buflen);
+> > > > > > > > > >       kfree(vring_packed->desc_state);
+> > > > > > > > > >       kfree(vring_packed->desc_extra);
+> > > > > > > > > >  }
+> > > > > > > > > > @@ -1988,6 +2055,14 @@ static int vring_alloc_queue_packed(struct vring_virtqueue_packed *vring_packed,
+> > > > > > > > > >
+> > > > > > > > > >       vring_packed->vring.num = num;
+> > > > > > > > > >
+> > > > > > > > > > +     if (vring_needs_used_validation(vdev)) {
+> > > > > > > > > > +             vring_packed->buflen =
+> > > > > > > > > > +                     kmalloc_array(num, sizeof(*vring_packed->buflen),
+> > > > > > > > > > +                                   GFP_KERNEL);
+> > > > > > > > > > +             if (!vring_packed->buflen)
+> > > > > > > > > > +                     goto err;
+> > > > > > > > > > +     }
+> > > > > > > > > > +
+> > > > > > > > > >       return 0;
+> > > > > > > > > >
+> > > > > > > > > >  err:
+> > > > > > > > > > --
+> > > > > > > > > > 2.25.1
+> > > > > > > > >
+> > > > > > >
+> > > > >
+> >
+
