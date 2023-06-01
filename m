@@ -2,101 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7D171A386
+	by mail.lfdr.de (Postfix) with ESMTP id D8D6171A387
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbjFAP7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 11:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
+        id S234375AbjFAP7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 11:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233663AbjFAP71 (ORCPT
+        with ESMTP id S234349AbjFAP7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 11:59:27 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC09E19B;
-        Thu,  1 Jun 2023 08:59:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685635162; x=1717171162;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vQCl0k1HS2FOiiCRWugQq4VpCXw0LJEwXLGRbREcVuE=;
-  b=CU/wMJ84xIuHwS031mA+OVLQy8wnlBUsCvxSQYVFkPldNHlM70Ub7WMF
-   OyhZ5TAPajRSzmAKVpxuVfYqyvqI6TpZnisqvGbvazATnE2kvI5H+ZnnX
-   r71Bt0laC2jeBtQFHsYUgA1Ufd9+He7aZMycOeZXgBjGeqUyesLKTNcFI
-   VVJxX+GKj7mI+lBDdZp7DjNbfWoWUQeGLTHkt9W/FD/IJuo+xLoYCcYNO
-   IQajxRyBkAqxS3XRvlnXCfOp/AI7FyI35fExRD1+88X6aySk52aGac52O
-   X3fgQxud51UK3BCJRQDQ04r1sVurtYFNs8R2yeFa7sxO1yZ5JWyFVny7f
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="358895107"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="358895107"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 08:59:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="710549976"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="710549976"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Jun 2023 08:59:20 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q4khq-000SGs-2E;
-        Thu, 01 Jun 2023 18:59:18 +0300
-Date:   Thu, 1 Jun 2023 18:59:18 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v8 1/1] gpio: add sloppy logic analyzer using polling
-Message-ID: <ZHjAVnDAM/YzZSem@smile.fi.intel.com>
-References: <20220329091126.4730-1-wsa+renesas@sang-engineering.com>
- <20220329091126.4730-2-wsa+renesas@sang-engineering.com>
- <YkRuXtTzd11R9IrY@smile.fi.intel.com>
- <Yo5GO5RkBC3PQLTg@shikoro>
- <ZHjAF6xg1fAaJhQV@smile.fi.intel.com>
+        Thu, 1 Jun 2023 11:59:35 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AB9186
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 08:59:33 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-25691a1b2b8so408318a91.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 08:59:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685635173; x=1688227173;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4MuPvAtXgrayU/+paihVmHV/NLsrj/uUfRtuTGAgZxg=;
+        b=MNrNgNNLXR0DRNunOBuMjsANe7pVfDPnhXcwtn8rqaqHXcLsKVrSUgwYvSup0e1O4g
+         jYMwYxykLARoWtTn4HOMhktO3jX6QReekFssDHQvyyClGC+fwDnifB9SWT1mfSFD47Mo
+         ogcNG6YN5AeDcoIceUb1MsHaPK9+CkjVG1XEdvN5xbiJqpOZ7Nq1Oa42VCyYLwvjNKTt
+         E1ZrOguOGoWmmIycZENOUD6wep1DU7H0CSnOq6ELJA4XO+O9mslJxZ4Tz2N+0tR1yXTH
+         uXtfkaSAujmNNRWbjXRlvvqTtKYHCFGf0Zomdjp1o1lCUINEUlAmD/0XV+AwK1IsEGUd
+         2r9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685635173; x=1688227173;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4MuPvAtXgrayU/+paihVmHV/NLsrj/uUfRtuTGAgZxg=;
+        b=B0i/iTefHekheOQLoo+vBn9BNS7jO8iYV5FDCqev4fDUP5ACKINnAQTlpgyyDfDCPH
+         rziuph5g2LeVwR5T35rZs1frbbmHPvYrRqaJa7yFck9C6MhBYlbDejl83BN252m7xWDM
+         v+ZyH9Dh4HUh5mooYoBZrlulr3UCobz5x+KvC2wrdN85cb+7T4CSxIanwjhktqNJ9FI/
+         Nsiw/gIHysPAeSiCep5wfh7T4UfDMBXEC9GlQIvaHo3UaSLQPUeSSnv0PV5/MEiQ4GoG
+         CBO1dnJlTAi/ckM5tbBzfOQOvtlkPJbgDVyQUNPb73sxBzvl02i+U7Iup0AaAVuBUSyL
+         cdmw==
+X-Gm-Message-State: AC+VfDz9LtO2qY60vo1+btbopZzdnrZMQLU0Dd6x8Er9xvp3lYumb6S6
+        yGtuZcjDZCCzXzBHN2mSJPerp5A1ASMuLn74XWZdkQ==
+X-Google-Smtp-Source: ACHHUZ6f2M5VSRmCC8uXrz23WnJD1bGhwjOB0DeyvQzUqAYuSD1Lpmr46IQaoMOYA04zRfY76oAQddG79oXmPBtsU5o=
+X-Received: by 2002:a17:90b:180b:b0:256:d945:23c with SMTP id
+ lw11-20020a17090b180b00b00256d945023cmr4853188pjb.14.1685635173296; Thu, 01
+ Jun 2023 08:59:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHjAF6xg1fAaJhQV@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230525095807.1379811-1-suzuki.poulose@arm.com>
+In-Reply-To: <20230525095807.1379811-1-suzuki.poulose@arm.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Thu, 1 Jun 2023 16:59:22 +0100
+Message-ID: <CAJ9a7Vi2qwjrL13dUC7AvYpvMwyn9w0nL=OaiDmXt3-+aiL9NA@mail.gmail.com>
+Subject: Re: [RFC PATCH] coresight: etm4x: Match all ETM4 instances based on
+ DEVARCH and DEVTYPE
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        james.clark@arm.com, anshuman.khandual@arm.com,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        frowand.list@gmail.com, linux@armlinux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 06:58:15PM +0300, Andy Shevchenko wrote:
-> On Wed, May 25, 2022 at 05:07:39PM +0200, Wolfram Sang wrote:
-> > On Wed, Mar 30, 2022 at 05:51:10PM +0300, Andy Shevchenko wrote:
-> > > On Tue, Mar 29, 2022 at 11:11:26AM +0200, Wolfram Sang wrote:
-> > > > This is a sloppy logic analyzer using GPIOs. It comes with a script to
-> > > > isolate a CPU for polling. While this is definitely not a production
-> > > > level analyzer, it can be a helpful first view when remote debugging.
-> > > > Read the documentation for details.
-> > > 
-> > > Good enough I think,
-> > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > 
-> > Thanks, Andy!
-> > 
-> > To GPIO maintainers: can we apply the "new-driver-rule" and still have
-> > it in 5.19? There can't be any regression and it has all comments
-> > addressed. Also, I am talking about this project at Kernel Recipes late
-> > next week and it would be great to say that it is finally merged :)
-> 
-> Year passed. Any news here?
+HI Suzuki,
 
-Ah, GPIO maintainers probably missed this since no Cc.
+On Thu, 25 May 2023 at 10:58, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>
+> All,
+>
+> This is an RFC patch to allow all ETM4 instances to be detected via AMBA driver
+> without having to add the PIDs to the list. The AMBA driver already supports
+> checking the DEVTYPE and DEVARCH registers for CoreSight components. This patch
+> adds a pid,mask value that is bound to match all PIDs (with PIDR2.JEDEC field
+> mandated to be RA0).
+>
+> With this patch, we wouldn't need to add the PIDs for newer CPUs to be able to
+> use them. An entry in the device tree is all we need. The only side effect of
+> this patch is :
+>     If a DT description exists for an ETM and the CPU ETM has an erratum, the
+>     driver may still probe it and use it. But then the DT shouldn't have
+>     described it in the first place.
+>
 
--- 
-With Best Regards,
-Andy Shevchenko
+Don't think this is an issue.
+
+In the previous mechanism, with an ETM with an erratum - or indeed
+need of some arch specific extension as we allow now - someone would
+have added the PID - tested it, hit the erratum, and would have to
+investigate and fix according to what is required. This changes
+nothing in terms of handling errata on ETM hardware - it just removes
+the add PID step.
+
+For new ETM that work out of the box, this saves time re-spinning the
+driver every time - which is kind of what we want from device tree!
+
+I'd go for it.
+
+Moreover, the same principle could be added to the CTI drivers -
+though these are generally pretty standard anyway (i.e. based on
+Coresight Soc 600/400), so may be no pressing need for this right now.
+
+Mike
 
 
+
+> Thoughts?
+>
+> Suzuki
+>
+> ---8>---
+>
+> coresight: etm4x: Match all ETM4 instances based on DEVARCH
+>
+> Instead of adding the PIDs forever to the list for the new CPUs, let us detect
+> a component to be ETMv4 based on the CoreSight CID, DEVTYPE=PE_TRACE and
+> DEVARCH=ETMv4. This is already done for some of the ETMs. We can extend the PID
+> matching to match the PIDR2:JEDEC, BIT[3], which must be 1 (RA0) always.
+>
+> Link: https://lkml.kernel.org/r/20230317030501.1811905-1-anshuman.khandual@arm.com
+> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: frowand.list@gmail.com
+> Cc: linux@armlinux.org.uk
+> Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+> ---
+>  .../coresight/coresight-etm4x-core.c          |  5 +++++
+>  drivers/hwtracing/coresight/coresight-priv.h  | 19 +++++++++++++++++--
+>  2 files changed, 22 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> index 4c15fae534f3..8a2e24d5686a 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> @@ -2260,6 +2260,11 @@ static const struct amba_id etm4_ids[] = {
+>         CS_AMBA_UCI_ID(0x000cc0af, uci_id_etm4),/* Marvell ThunderX2 */
+>         CS_AMBA_UCI_ID(0x000b6d01, uci_id_etm4),/* HiSilicon-Hip08 */
+>         CS_AMBA_UCI_ID(0x000b6d02, uci_id_etm4),/* HiSilicon-Hip09 */
+> +       /*
+> +        * Match all PIDs with ETM4 DEVARCH. No need for adding any of the new
+> +        * CPUs to the list here.
+> +        */
+> +       CS_AMBA_MATCH_ALL_UCI(uci_id_etm4),
+>         {},
+>  };
+>
+> diff --git a/drivers/hwtracing/coresight/coresight-priv.h b/drivers/hwtracing/coresight/coresight-priv.h
+> index 595ce5862056..72ec36c9232c 100644
+> --- a/drivers/hwtracing/coresight/coresight-priv.h
+> +++ b/drivers/hwtracing/coresight/coresight-priv.h
+> @@ -193,12 +193,27 @@ extern void coresight_remove_cti_ops(void);
+>         }
+>
+>  /* coresight AMBA ID, full UCI structure: id table entry. */
+> -#define CS_AMBA_UCI_ID(pid, uci_ptr)           \
+> +#define __CS_AMBA_UCI_ID(pid, m, uci_ptr)      \
+>         {                                       \
+>                 .id     = pid,                  \
+> -               .mask   = 0x000fffff,           \
+> +               .mask   = m,                    \
+>                 .data   = (void *)uci_ptr       \
+>         }
+> +#define CS_AMBA_UCI_ID(pid, uci)       __CS_AMBA_UCI_ID(pid, 0x000fffff, uci)
+> +/*
+> + * PIDR2[JEDEC], BIT(3) must be 1 (Read As One) to indicate that rest of the
+> + * PIDR1, PIDR2 DES_* fields follow JEDEC encoding for the designer. Use that
+> + * as a match value for blanket matching all devices in the given CoreSight
+> + * device type and architecture.
+> + */
+> +#define PIDR2_JEDEC                    BIT(3)
+> +#define PID_PIDR2_JEDEC                        (PIDR2_JEDEC << 16)
+> +/*
+> + * Match all PIDs in a given CoreSight device type and architecture, defined
+> + * by the uci.
+> + */
+> +#define CS_AMBA_MATCH_ALL_UCI(uci)                                     \
+> +       __CS_AMBA_UCI_ID(PID_PIDR2_JEDEC, PID_PIDR2_JEDEC, uci)
+>
+>  /* extract the data value from a UCI structure given amba_id pointer. */
+>  static inline void *coresight_get_uci_data(const struct amba_id *id)
+> --
+> 2.34.1
+>
+
+
+--
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK
