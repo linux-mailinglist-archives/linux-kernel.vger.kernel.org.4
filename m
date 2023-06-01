@@ -2,186 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D87E7195B7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC487195BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232287AbjFAIgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
+        id S232365AbjFAIgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232262AbjFAIfl (ORCPT
+        with ESMTP id S232083AbjFAIgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:35:41 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E70FB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685608466; x=1717144466;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=Dw4/JMP5fmj5cSyenQZaj/+2G4vt7MLin7aH992MCQ0=;
-  b=E2yFVtvCQH701dH2CvPxBlhh27gh7F1pQ7UWbclv1RU4n0h5whUPlwwj
-   edJWt/ZGslyJLfxDk5Z3rpAGPExQyuPENsrzKjPCTdz+9143binxTO43f
-   VVCOgLJQ9rFR4eLafIHTJTw4bV/TIYi8QrQAu19gWQ1b9xMKCO5Dhlxlo
-   +9JLb4+O3cW6lpFmVnThlmv6xH2s7lZMy8Tqv6IFmIGcFwFYBnI6RxRT2
-   az5cxkRPU6a6dIqr5RMsdUxfZKnqCoOiNaQyIoQf4XredgU5aUpRpwXyB
-   tZ1SzroAsJKuT9YJmPueplUHxSFZUcOdLyvnJ+ZJLeRgNdmHe98MnAD6L
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="441856384"
-X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
-   d="scan'208";a="441856384"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 01:34:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="710398505"
-X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
-   d="scan'208";a="710398505"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Jun 2023 01:34:24 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 1 Jun 2023 01:34:23 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 1 Jun 2023 01:34:22 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 1 Jun 2023 01:34:22 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.177)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 1 Jun 2023 01:34:22 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cy5GdZ41cIOkawl6MI/sov+GNprfX99M/XNHxRIU+1U8omo4AlC/ezcFhQ8lWH2cZMTRNfyEcztyKsHNqrdyGYqo8xJ9Q2F311ElZ8LH/oeIZmqlPBLERijIax+lthhJpPYnIbwQ1ji8NY39MEH0+LI8Mu58GIj4jZdQaR1oFcP/piItUOpdE5fNYJbAeJ3i9gk7acQUe0fwd2Ha1pcZ1QInYyf5fJ90IXtkednismkX7xR38hT6maqZqcuiVIx5r85XO6KPYQTqvYOtkkHMZ7MhTOKQryUmng4A+fwGN7VqfhCypmFH3YissmUG235VIqbXSHjZIY5fjE/hVtExGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Dw4/JMP5fmj5cSyenQZaj/+2G4vt7MLin7aH992MCQ0=;
- b=LSGB8ORWMWE/4PylKtrNjWtgc43ULlTm9lcuDa6RTUje7QrS4MsFQYLhgO1hwcvIbfRdPrcJwr6XNEAoPdqqzKi9aFlq2v/JJS46zlndSIv56pG0/teZoyocjqKaixNlWNmOVPE4MuRFDE9qZ5fuNDaDBByYYXgqofveVJMvMhmm5UUfyCIaZ/Bunqeckl0utqJQQcoZyca2j7ygYM8q1hdQu4nr8BB/3uzEWbSpykDnQpfH4vGKaX5YIsKWG/DDObEbmUOGIBqFqjCFFqWXcGX4g4SWeDgf9qR6m3PVBapvu4KQiGqUWWEKyq8MpBIWCapaS9VrfGSSMDdFzGzXGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MW4PR11MB5823.namprd11.prod.outlook.com (2603:10b6:303:186::12)
- by CO1PR11MB4801.namprd11.prod.outlook.com (2603:10b6:303:9c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Thu, 1 Jun
- 2023 08:34:21 +0000
-Received: from MW4PR11MB5823.namprd11.prod.outlook.com
- ([fe80::67e5:1ba2:5837:339e]) by MW4PR11MB5823.namprd11.prod.outlook.com
- ([fe80::67e5:1ba2:5837:339e%4]) with mapi id 15.20.6455.020; Thu, 1 Jun 2023
- 08:34:21 +0000
-From:   "Winiarska, Iwona" <iwona.winiarska@intel.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] PECI fixes for v6.4
-Thread-Topic: [GIT PULL] PECI fixes for v6.4
-Thread-Index: AQHZjPPJ5i7UoODNFEO5sN2db5uHlq9xUBWAgARduoA=
-Date:   Thu, 1 Jun 2023 08:34:21 +0000
-Message-ID: <1693fe7002af39c4efc899a6e60dbafc906d6b25.camel@intel.com>
-References: <f8506bf66b8bdaa85b5a2bec48bcdcc6a2853da7.camel@intel.com>
-         <2023052904-platypus-mower-0e01@gregkh>
-In-Reply-To: <2023052904-platypus-mower-0e01@gregkh>
-Accept-Language: en-US, pl-PL
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MW4PR11MB5823:EE_|CO1PR11MB4801:EE_
-x-ms-office365-filtering-correlation-id: a5206099-2edf-4c01-b9c2-08db627aff98
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /zOg2jABR+jRAGpeLaKy4Mosu56wqKqjWWWIYiTHm20/8LIzeYs9oCCVE2tUcP/46b27y6xRsb6Vdx1AbUWjY1IwuBCsCdL/JGB0JTLryM0rwTFUPVQGG9k5WSeHpVJAmhFy47Iu4ALOxOWGtsCAewVbSUVtVU8XgjyiDOviJTQzqIt8dryFwC/okIchvb3C5qIcMJnaAwBCuVw4gaGlvShqF1ncs1eUgH5BwqiSA1aQSTEr4BGe/eJu0YMrDMe5UJ5fjF1JnwHXbuZ3htvzXXxqSAcd95dsnsbOJRX0IlUZqx6eSsa2bdGnwMFBpMQLm0dZwx5NyV/FFIwsYqciKMUQWzzwbRPqoZpKK9EbFSyjPQqzzC3qDKx8+Wz1Ek2iBw0pseBJW9RTASpfSS/Il8wxYnDXQ8IJUH5Tz1wTsVOgtlOJgm9RgX8vIWTBcVldRCM/Up+8aJOwgD18i3g6ywfF26wCUJOTxymNCd7+Eez2TN5G6KFDx/PY/6eZ06H9/m5/d9E9cQCA5wBSeJRuBU0W9p9EFHHgH6fRXlu1EWrV3ioas3B4br7NCXG346gCwB8UOtmNpLVjJ4U+/Ej9/WEoTMjLSc7px1dE597VfIFZXkb4lcfmAYi7e6mVhR7u
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5823.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(136003)(346002)(376002)(39860400002)(396003)(451199021)(54906003)(38070700005)(66446008)(26005)(6506007)(91956017)(83380400001)(122000001)(4326008)(2616005)(86362001)(316002)(6512007)(66946007)(6916009)(82960400001)(478600001)(66476007)(64756008)(66556008)(2906002)(76116006)(41300700001)(5660300002)(71200400001)(186003)(6486002)(38100700002)(8676002)(8936002)(36756003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K09mZnB3WTlJeEV3dVRncHlHYWd1NmQxL1M1RHpBY1pSVkYwWHBmRTI1aG5w?=
- =?utf-8?B?RTRNZzZvem5ORklVSGhWOXVJK0c2ZEhSaTh6YU1uNm1FRnQxV2M4RVhGcGtO?=
- =?utf-8?B?R3ZHVW5FdFRUQ0ExQkhOVWxXNWtodjhXM0R1YklRVWl2Y0JxZzR4WExwR2Np?=
- =?utf-8?B?cmxGck1sb3VSaXhxM056ZFRqL25uZjhSRHA2UTBqYUN3VllwMzJYNVI4UTF3?=
- =?utf-8?B?UUI2bis1Q1ZlMTAxdktNeklyUnI5Y1gwd0VLd2pRSGNyZVJDMmJRYWRTQnQx?=
- =?utf-8?B?Rnk1RTgyMkNycUdFMjZvTlFYbGJXKzdYTzA2YVc3WTNPUkcxR3V1WVd4M054?=
- =?utf-8?B?Mk41TGk1RGlXSWdIZnYwbG9EdjkxSjFLR0hVem9YOTJtelkweFRPZmNQcUZj?=
- =?utf-8?B?T0t5K0NjTGVmb0dzUlFjb3pzcXpyZkZBcWZRQ3RSVG8vRmc3a0FneW93WHBF?=
- =?utf-8?B?L1N6YW9BY2tvbzlzcEZNSHdTb21GcDdRRGtEUzc1VlppR25sYnlsTUdRVFJn?=
- =?utf-8?B?UVF3SnAwR0pMQit6aU1EbmlCcElHeWdzb1ZwT0pBM2lDK3orVDVTQm1NdUM4?=
- =?utf-8?B?KzNYMEMwMDQreG1iRmZ3Z0NSWTgxbFM3VTJQei94WmFHYTJScHdGQWRlc2lI?=
- =?utf-8?B?YUZhYkNpL1JyWjhrZkJ6Ty9mSG9UWi9mdHlkci9KMzA3YWM0eC9ENU9ZaFpi?=
- =?utf-8?B?YUI3MjdCU3phTDhSVFovcWpkcnVOeEhQL2VLYlgwdjI1eHpCamg4MHJQUTUv?=
- =?utf-8?B?VHBuVnBIaS9aWXpvemRVRjdTMmNTYVNIcDljdHRRT0xYSDR1ZDZUb2pST3FW?=
- =?utf-8?B?ZHBNdWtCa2N0S0ZxaVdUNEJsZ0lqMlVITUhnS2h1cytKVGdrbmRUQXM0MzI1?=
- =?utf-8?B?WncrOHByU05JZFBOakZ6YkRRT0tpNFhQK2l2dmVwOHNSK2F3a09WN1hVVVp0?=
- =?utf-8?B?eWpicG1QOSsvcmFLWkNRQVRSdWFsUmJPSVpFMGJaZWJaUzVUMU9xcjlOMGhq?=
- =?utf-8?B?d0NIK3hWcWJCaTZadXBmZXZ0Y3ZTeHlLRzhxaEc2SVMyZGY2alMxMlJuYkNp?=
- =?utf-8?B?dEJhOFBselpmM1FvcUI1OU96MXZRUGg2N0c2dWxuMDh1dGJtV0VWL0VOSnk1?=
- =?utf-8?B?NzVWRTVpbFBYMTd0UHdOYUl6bW92Vjdjc2l5WVEyODdHZXJPS2N3UDZkQ3dI?=
- =?utf-8?B?WnpFTzM2UGJTa1BtYVFSUlJ3cTVmMjRlWkRHNGlucThVYmlEaW4zT3FwdVRs?=
- =?utf-8?B?YTZJb214UGF1d2hJVGg4bmFvNWRnKzBvUXF1RkY4SzNWTTU4S21URjk0MFdY?=
- =?utf-8?B?WVo1N1A3RjdTTG93UTFBMS9POTNMeFZNeUtwcHBEcnBtRXk1eEJDNVhQczRt?=
- =?utf-8?B?MUFLQTRnTHR3L0dGSm8vQUZEUHJUNXhhZm0yVWxyVFNEb0R2UXVEcHVyQmgx?=
- =?utf-8?B?VmRkZGl6a3kzSmxNRFZmNWN2UWFXemF0d0V5M2Z3b1NkYS9sVmNHM3FwUXl4?=
- =?utf-8?B?MU9FOFBhWGt0aXNDaTU5TSs0TDkzQ0FXSjNCdUlucWtSODNGMksrczBNaU1Z?=
- =?utf-8?B?bTlvVnBVQ08xN2RERVpWeFJOZ2ZBZmFjNHNlQ2JoU3hnaERiK2oxemV5UU9M?=
- =?utf-8?B?NTBDZlpFTEJsNkN1V29hU0d3VUtBeFRNSXBoTWd2Vy9hamZONEs4VnFQaUFO?=
- =?utf-8?B?Yk9iRjVsbEw2Z0trOTV5OGo5QTh1bXdscXhrNXJBVzVsNjJuL3dHQXlpaVJi?=
- =?utf-8?B?YkM5alkzNWdIZ0pTclplTFNLY3p3NWNQMS8xZHZDQk82S2FGdEJsQVZCTVIy?=
- =?utf-8?B?Rm5mTDRPbThPVXdTRFZldlhoY1dVK0Jmek9PNysvZ05NL3BYeDZGamJMcU5u?=
- =?utf-8?B?azY2enp2d0RtTWtVbVU4NzJOWjVzNVpiQ1FmanA4Yi9aWUlUVHlpdU1uV2gy?=
- =?utf-8?B?TVdFOTlCUjVlVXlVQnhvdWRNZHJmMEt6RFpoSXozSU5HZGtPV3ZXRHUyblRt?=
- =?utf-8?B?N3FQQkZMbUhkbTlsb1FKZEdhczdxMDliWC90RVdNbTZsWFMrNU5adS9Nb000?=
- =?utf-8?B?WXJDbHZ2OXVWa1NnOGZPQmZKbjRsb3BaSlpmRStudHZyYkhIVU1tZ2xaWkx0?=
- =?utf-8?B?ZFhtM2wybkdveUhOdlFISElObFNtUmdFa1VQeExkaVVxOHlYd0l5dDAzWnpI?=
- =?utf-8?B?VXc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <71BD1E81D1CCD5468FBDAD2FE6CD1F74@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 1 Jun 2023 04:36:00 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675011BF;
+        Thu,  1 Jun 2023 01:34:44 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126205251136.34.openmobile.ne.jp [126.205.251.136])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 14E272B6;
+        Thu,  1 Jun 2023 10:34:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1685608460;
+        bh=gjjeif7oGjHL6hoGkZVclWwy0gG6mXm12g9c6do6TMY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JUUnACbDpEB6bOR3h2O5ln8qOzpTqf9VBhkZ21myMqir6gqWJBUH2lhbgPljo3AUr
+         ZLmbW7sTAYzT5ej8JCl0YnN2x2g7F+RvAmu0lgbeX4QT61LRIobNk04EA1PyP66ClH
+         YW/Xq3c4rgNzXp9p+1Ol32sfvdB3/t8nHUJEqQMg=
+Date:   Thu, 1 Jun 2023 11:34:38 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>, tfiga@chromium.org,
+        m.szyprowski@samsung.com, mchehab@kernel.org, ming.qian@nxp.com,
+        shijie.qin@nxp.com, eagle.zhou@nxp.com, bin.liu@mediatek.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        tiffany.lin@mediatek.com, andrew-ct.chen@mediatek.com,
+        yunfei.dong@mediatek.com, stanimir.k.varbanov@gmail.com,
+        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, daniel.almeida@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v2 3/8] media: videobuf2: Add a module param to limit vb2
+ queue buffer storage
+Message-ID: <20230601083438.GE22609@pendragon.ideasonboard.com>
+References: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
+ <20230321102855.346732-4-benjamin.gaignard@collabora.com>
+ <6c4658fd-3a64-b3f8-67cd-17ed2d7d3567@xs4all.nl>
+ <20230531080331.GB6496@pendragon.ideasonboard.com>
+ <608ae7d6-3f3b-137d-08d2-d41a240be2c4@xs4all.nl>
+ <20230531123945.GF27043@pendragon.ideasonboard.com>
+ <6f53b5f6-6649-f194-1808-5f5757b449f4@collabora.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5823.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5206099-2edf-4c01-b9c2-08db627aff98
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2023 08:34:21.6411
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eL1IHvIs7L8uHlrpNLmB5G9vUx4RkS91VCsQPLklrNC0zM+4xMIC1mnTHycNqM/wrRYP9Hxw+QQ5M4moR45wsG943KtFqUahyabrm+jmk1Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4801
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6f53b5f6-6649-f194-1808-5f5757b449f4@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIzLTA1LTI5IGF0IDE0OjUzICswMTAwLCBncmVna2hAbGludXhmb3VuZGF0aW9u
-Lm9yZyB3cm90ZToNCj4gT24gTW9uLCBNYXkgMjIsIDIwMjMgYXQgMDk6MjQ6MjZQTSArMDAwMCwg
-V2luaWFyc2thLCBJd29uYSB3cm90ZToNCj4gPiBIaSBHcmVnLA0KPiA+IA0KPiA+IHBsZWFzZSBw
-dWxsIFBFQ0kgdXBkYXRlIGZvciBMaW51eCB2Ni40Lg0KPiA+IA0KPiA+IFRoYW5rcw0KPiA+IC1J
-d29uYQ0KPiA+IA0KPiA+IFRoZSBmb2xsb3dpbmcgY2hhbmdlcyBzaW5jZSBjb21taXQgYzIxYzBm
-OWEyMGE5NjNmNWExODc0NjU3YTRlM2Q2NTc1MDNmNzgxNToNCj4gPiANCj4gPiDCoCBCaW5kZXI6
-IEFkZCBhc3luYyBmcm9tIHRvIHRyYW5zYWN0aW9uIHJlY29yZCAoMjAyMy0wNS0xMyAyMDozODox
-MiArMDkwMCkNCj4gPiANCj4gPiBhcmUgYXZhaWxhYmxlIGluIHRoZSBHaXQgcmVwb3NpdG9yeSBh
-dDoNCj4gPiANCj4gPiDCoCBnaXQ6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5l
-bC9naXQvaXdpL2xpbnV4LmdpdCB0YWdzL3BlY2ktDQo+ID4gZml4ZXMtNi40DQo+IA0KPiBUaGlz
-IGluY2x1ZGVzIHNvbWUgcmFuZG9tIEJpbmRlciBjaGFuZ2VzIHRoYXQgZG8gbm90IGJlbG9uZyBp
-biBteQ0KPiBjaGFyLW1pc2MtbGludXMgYnJhbmNoIHJpZ2h0IG5vdyBmb3IgNi40LWZpbmFsDQoN
-ClNvcnJ5IC0gSSBiYXNlZCBpdCBvbiBjaGFyLW1pc2MtdGVzdGluZyAvIGNoYXItbWlzYy1uZXh0
-Lg0KDQo+IA0KPiA+IA0KPiA+IGZvciB5b3UgdG8gZmV0Y2ggY2hhbmdlcyB1cCB0byA4NDliMzkx
-MjU0YmY2NDc5NjY1NTg2OGRiYjZkZWUyMzU1MWZmN2QzOg0KPiA+IA0KPiA+IMKgIHBlY2k6IENv
-bnN0aWZ5IHN0cnVjdCBwZWNpX2NvbnRyb2xsZXJfb3BzICgyMDIzLTA1LTIyIDIyOjE2OjE2ICsw
-MjAwKQ0KPiANCj4gV2h5IGlzIHRoaXMgYSBidWdmaXggdGhhdCBuZWVkcyB0byBnZXQgbWVyZ2Vk
-IG5vdz/CoCBTaG91bGRuJ3QgdGhpcyBiZQ0KPiBmb3IgNi41LXJjMT8NCg0KSXQncyBhIHNtYWxs
-IGZpeCAtIGl0IGNhbiB3YWl0IGZvciA2LjUtcmMxLg0KDQpUaGFua3MNCi1Jd29uYQ0KDQo+IA0K
-PiB0aGFua3MsDQo+IA0KPiBncmVnIGstaA0KDQo=
+Hi Benjamin,
+
+On Thu, Jun 01, 2023 at 10:03:39AM +0200, Benjamin Gaignard wrote:
+> Le 31/05/2023 à 14:39, Laurent Pinchart a écrit :
+> > On Wed, May 31, 2023 at 10:30:36AM +0200, Hans Verkuil wrote:
+> >> On 5/31/23 10:03, Laurent Pinchart wrote:
+> >>> On Wed, May 31, 2023 at 08:36:59AM +0200, Hans Verkuil wrote:
+> >>>> On 21/03/2023 11:28, Benjamin Gaignard wrote:
+> >>>>> Add module parameter "max_vb_buffer_per_queue" to be able to limit
+> >>>>> the number of vb2 buffers store in queue.
+> >>>>>
+> >>>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> >>>>> ---
+> >>>>>   drivers/media/common/videobuf2/videobuf2-core.c | 15 +++------------
+> >>>>>   include/media/videobuf2-core.h                  | 11 +++++++++--
+> >>>>>   2 files changed, 12 insertions(+), 14 deletions(-)
+> >>>>>
+> >>>>> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+> >>>>> index ae9d72f4d181..f4da917ccf3f 100644
+> >>>>> --- a/drivers/media/common/videobuf2/videobuf2-core.c
+> >>>>> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
+> >>>>> @@ -34,6 +34,8 @@
+> >>>>>   static int debug;
+> >>>>>   module_param(debug, int, 0644);
+> >>>>>   
+> >>>>> +module_param(max_vb_buffer_per_queue, ulong, 0644);
+> >>>> There is no MODULE_PARM_DESC here? Please add. I see it is not there for
+> >>>> the debug param either, it should be added for that as well.
+> >>> Would this be the right time to consider resource accounting in V4L2 for
+> >>> buffers ? Having a module parameter doesn't sound very useful, an
+> >>> application could easily allocate more buffers by using buffer orphaning
+> >>> (allocating buffers, exporting them as dmabuf objects, and freeing them,
+> >>> which leaves the memory allocated). Repeating allocation cycles up to
+> >>> max_vb_buffer_per_queue will allow allocating an unbounded number of
+> >>> buffers, using all the available system memory. I'd rather not add a
+> >>> module argument that only gives the impression of some kind of safety
+> >>> without actually providing any value.
+> >> Does dmabuf itself provide some accounting mechanism? Just wondering.
+> >>
+> >> More specific to V4L2: I'm not so sure about this module parameter either.
+> >> It makes sense to have a check somewhere against ridiculous values (i.e.
+> >> allocating MAXINT buffers), but that can be a define as well. But otherwise
+> >> I am fine with allowing applications to allocate buffers until the memory
+> >> is full.
+> >>
+> >> The question is really: what is this parameter supposed to do? The only
+> >> thing it does is to sanitize unlikely inputs (e.g. allocating MAXINT buffers).
+> >>
+> >> I prefer that as a define, to be honest.
+> >>
+> >> I think it is perfectly fine for users to try to request more buffers than
+> >> memory allows. It will just fail in that case, not a problem.
+> >>
+> >> And if an application is doing silly things like buffer orphaning, then so
+> >> what? Is that any different than allocating memory and not freeing it?
+> >> Eventually it will run out of memory and crash, which is normal.
+> >
+> > Linux provides APIs to account for and limit usage of resources,
+> > including memory. A system administrator can prevent rogue processes
+> > from starving system resources. The memory consumed by vb2 buffer isn't
+> > taken into account, making V4L2 essentially unsafe for untrusted
+> > processes.
+> >
+> > Now, to be fair, there are many reasons why allowing access to v4L2
+> > devices to untrusted applications is a bad idea, and memory consumption
+> > is likely not even the worst one. Still, is this something we want to
+> > fix, or do we want to consider V4L2 to be priviledged API only ? Right
+> > now we can't do so, but with many Linux systems moving towards pipewire,
+> > we could possibly have a system daemon isolating untrusted applications
+> > from the rest of the system. We may thus not need to fix this in the
+> > V4L2 API.
+> 
+> I'm working in v3 where I'm using Xarray API.
+> 
+> Just to be sure to understand you well:
+> I can just remove VB2_MAX_FRAME limit without adding a new one ?
+
+As long as the code is protected against overflows (e.g. if it uses
+num_buffers + 1 in some calculations and allows num_buffers to be
+UINT_MAX, you'll have an issue), it should be fine for the vb2 and V4L2
+core. Limiting the number of buffers doesn't really protect against
+much.
+
+-- 
+Regards,
+
+Laurent Pinchart
