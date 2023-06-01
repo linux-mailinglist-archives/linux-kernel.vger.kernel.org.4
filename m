@@ -2,194 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FCCD719E11
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78BAE719E04
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234068AbjFAN2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 09:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
+        id S234007AbjFAN2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 09:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233982AbjFAN2X (ORCPT
+        with ESMTP id S233864AbjFAN2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 09:28:23 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C84E6D;
-        Thu,  1 Jun 2023 06:28:07 -0700 (PDT)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351DDUYp018739;
-        Thu, 1 Jun 2023 13:27:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=bPE9AxXhG80C4torBNp1dgqNJL9dzxzABLAPHZlRU4c=;
- b=ZtVj7QfP7IaRKJkngAiqZPkdIdLpxo3dz9kg7bawD1r3/JUrkOoKmNZEAY6ztjsFWXjb
- Wzn+DNiWS9M9E3rhsdi32yPUbVTol70R/IVUPnTKmt2p0XGjXQCjbLanQFXwhNsO1CSX
- IytfDJRa+qAIHhkfdsFuAnOimhf1BSOu3dnsW1p6GIjGXlT8hrp3trb8UbfoiezhStlk
- rFQo/bqSV5X1i8u2Ka88dctnU8GImgNpK38EgNBjyT+zKak6AB0qvRbLvlsk9B7S+ctp
- B/XuUUulM9tRXQ74eBP6SMWxwAu/tZ8NZHcGWLrx8nFY791bKcvacMZSVNUQv58zhxbO NQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxv1a8ksv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 13:27:36 +0000
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 351DE17r022544;
-        Thu, 1 Jun 2023 13:27:36 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxv1a8krq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 13:27:35 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3510vbWW006682;
-        Thu, 1 Jun 2023 13:27:34 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3qu94e2hyt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 13:27:33 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 351DRV6j32113240
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Jun 2023 13:27:31 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 97E5C2004B;
-        Thu,  1 Jun 2023 13:27:31 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3A4AC20043;
-        Thu,  1 Jun 2023 13:27:31 +0000 (GMT)
-Received: from [9.144.159.119] (unknown [9.144.159.119])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Jun 2023 13:27:31 +0000 (GMT)
-Message-ID: <5752a488-be54-61a0-6d18-647456abc4ee@linux.ibm.com>
-Date:   Thu, 1 Jun 2023 15:27:30 +0200
+        Thu, 1 Jun 2023 09:28:19 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636BB1B8
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 06:28:03 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1q4iLJ-0005D4-Cc; Thu, 01 Jun 2023 15:27:53 +0200
+Received: from mtr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1q4iLF-0002Wl-RG; Thu, 01 Jun 2023 15:27:49 +0200
+Date:   Thu, 1 Jun 2023 15:27:49 +0200
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, m.szyprowski@samsung.com,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        kernel@pengutronix.de, nicolas.dufresne@collabora.com,
+        didi.debian@cknow.org, hverkuil-cisco@xs4all.nl
+Subject: Re: [PATCH v2] media: verisilicon: Fix crash when probing encoder
+Message-ID: <20230601132749.GA31313@pengutronix.de>
+Mail-Followup-To: Michael Tretter <m.tretter@pengutronix.de>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, m.szyprowski@samsung.com,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        kernel@pengutronix.de, nicolas.dufresne@collabora.com,
+        didi.debian@cknow.org, hverkuil-cisco@xs4all.nl
+References: <20230413104756.356695-1-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH 8/9] powerpc: Add HOTPLUG_SMT support
-To:     Michael Ellerman <mpe@ellerman.id.au>, linux-kernel@vger.kernel.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
-        mingo@redhat.com, x86@kernel.org
-References: <20230524155630.794584-1-mpe@ellerman.id.au>
- <20230524155630.794584-8-mpe@ellerman.id.au>
-Content-Language: en-US
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-In-Reply-To: <20230524155630.794584-8-mpe@ellerman.id.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: eTDF-zGZ2zA_y9IcYigGwfomNzbW0tV5
-X-Proofpoint-ORIG-GUID: dun_0TqE2rOk885f52-ndoe6QkF9Vmkk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 impostorscore=0 mlxlogscore=999 phishscore=0
- clxscore=1011 malwarescore=0 adultscore=0 mlxscore=0 bulkscore=0
- suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306010115
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230413104756.356695-1-benjamin.gaignard@collabora.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/05/2023 17:56:29, Michael Ellerman wrote:
-> Add support for HOTPLUG_SMT, which enables the generic sysfs SMT support
-> files in /sys/devices/system/cpu/smt, as well as the "nosmt" boot
-> parameter.
+Hi Benjamin,
 
-Hi Michael,
-
-It seems that there is now a conflict between with the PPC 'smt-enabled'
-boot option.
-
-Booting the patched kernel with 'smt-enabled=4', later, change to the SMT
-level (for instance to 6) done through /sys/devices/system/cpu/smt/control
-are not applied. Nothing happens.
-Based on my early debug, I think the reasons is that cpu_smt_num_threads=8
-when entering __store_smt_control(). But I need to dig further.
-
-BTW, should the 'smt-enabled' PPC specific option remain?
-
-Cheers,
-Laurent.
-
-> Implement the recently added hooks to allow partial SMT states, allow
-> any number of threads per core.
+On Thu, 13 Apr 2023 12:47:56 +0200, Benjamin Gaignard wrote:
+> ctx->vpu_dst_fmt is no more initialized before calling hantro_try_fmt()
+> so assigne it to vpu_fmt led to crash the kernel.
+> Like for decoder case use 'fmt' as format for encoder and clean up
+> the code.
 > 
-> Tie the config symbol to HOTPLUG_CPU, which enables it on the major
-> platforms that support SMT. If there are other platforms that want the
-> SMT support that can be tweaked in future.
-> 
-> Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Fixes: db6f68b51e5c ("media: verisilicon: Do not set context src/dst formats in reset functions")
 > ---
->  arch/powerpc/Kconfig                |  1 +
->  arch/powerpc/include/asm/topology.h | 25 +++++++++++++++++++++++++
->  arch/powerpc/kernel/smp.c           |  3 +++
->  3 files changed, 29 insertions(+)
+> version 2:
+> - Remove useless vpu_fmt.
 > 
-> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> index 539d1f03ff42..5cf87ca10a9c 100644
-> --- a/arch/powerpc/Kconfig
-> +++ b/arch/powerpc/Kconfig
-> @@ -273,6 +273,7 @@ config PPC
->  	select HAVE_SYSCALL_TRACEPOINTS
->  	select HAVE_VIRT_CPU_ACCOUNTING
->  	select HAVE_VIRT_CPU_ACCOUNTING_GEN
-> +	select HOTPLUG_SMT			if HOTPLUG_CPU
->  	select HUGETLB_PAGE_SIZE_VARIABLE	if PPC_BOOK3S_64 && HUGETLB_PAGE
->  	select IOMMU_HELPER			if PPC64
->  	select IRQ_DOMAIN
-> diff --git a/arch/powerpc/include/asm/topology.h b/arch/powerpc/include/asm/topology.h
-> index 8a4d4f4d9749..1e9117a22d14 100644
-> --- a/arch/powerpc/include/asm/topology.h
-> +++ b/arch/powerpc/include/asm/topology.h
-> @@ -143,5 +143,30 @@ static inline int cpu_to_coregroup_id(int cpu)
->  #endif
->  #endif
+>  drivers/media/platform/verisilicon/hantro_v4l2.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> index 8f1414085f47..d71f79471396 100644
+> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
+> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
+> @@ -275,7 +275,7 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
+>  			  struct v4l2_pix_format_mplane *pix_mp,
+>  			  enum v4l2_buf_type type)
+>  {
+> -	const struct hantro_fmt *fmt, *vpu_fmt;
+> +	const struct hantro_fmt *fmt;
+>  	bool capture = V4L2_TYPE_IS_CAPTURE(type);
+>  	bool coded;
 >  
-> +#ifdef CONFIG_HOTPLUG_SMT
-> +#include <linux/cpu_smt.h>
-> +#include <asm/cputhreads.h>
-> +
-> +static inline bool topology_smt_supported(void)
-> +{
-> +	return threads_per_core > 1;
-> +}
-> +
-> +static inline bool topology_smt_threads_supported(unsigned int num_threads)
-> +{
-> +	return num_threads <= threads_per_core;
-> +}
-> +
-> +static inline bool topology_is_primary_thread(unsigned int cpu)
-> +{
-> +	return cpu == cpu_first_thread_sibling(cpu);
-> +}
-> +
-> +static inline bool topology_smt_thread_allowed(unsigned int cpu)
-> +{
-> +	return cpu_thread_in_core(cpu) < cpu_smt_num_threads;
-> +}
-> +#endif
-> +
->  #endif /* __KERNEL__ */
->  #endif	/* _ASM_POWERPC_TOPOLOGY_H */
-> diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-> index 265801a3e94c..eed20b9253b7 100644
-> --- a/arch/powerpc/kernel/smp.c
-> +++ b/arch/powerpc/kernel/smp.c
-> @@ -1154,6 +1154,9 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+> @@ -295,11 +295,7 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
 >  
->  	if (smp_ops && smp_ops->probe)
->  		smp_ops->probe();
-> +
-> +	// Initalise the generic SMT topology support
-> +	cpu_smt_check_topology(threads_per_core);
->  }
+>  	if (coded) {
+>  		pix_mp->num_planes = 1;
+> -		vpu_fmt = fmt;
+> -	} else if (ctx->is_encoder) {
+> -		vpu_fmt = ctx->vpu_dst_fmt;
+> -	} else {
+> -		vpu_fmt = fmt;
+> +	} else if (!ctx->is_encoder) {
+>  		/*
+>  		 * Width/height on the CAPTURE end of a decoder are ignored and
+>  		 * replaced by the OUTPUT ones.
+> @@ -311,7 +307,7 @@ static int hantro_try_fmt(const struct hantro_ctx *ctx,
+>  	pix_mp->field = V4L2_FIELD_NONE;
 >  
->  void smp_prepare_boot_cpu(void)
+>  	v4l2_apply_frmsize_constraints(&pix_mp->width, &pix_mp->height,
+> -				       &vpu_fmt->frmsize);
+> +				       &fmt->frmsize);
 
+This causes a regression on the OUTPUT device of the encoder. fmt->frmsize is
+only valid for coded ("bitstream") formats, but fmt on the OUTPUT of an
+encoder will be a raw format. This results in width and height to be clamped
+to 0.
+
+I think the correct fix would be to apply the frmsize constraints of the
+currently configured coded format, but as ctx->vpu_dst_fmt is not initialized
+before calling this code, I don't know how to get the coded format.
+
+Michael
+
+>  
+>  	if (!coded) {
+>  		/* Fill remaining fields */
+> -- 
+> 2.34.1
+> 
