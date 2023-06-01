@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9057871EFEE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A714B71EFF0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbjFAQ6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 12:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41436 "EHLO
+        id S229977AbjFAQ71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 12:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjFAQ6l (ORCPT
+        with ESMTP id S231334AbjFAQ7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 12:58:41 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784F0E59
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 09:58:19 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-652a6cf1918so21862b3a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 09:58:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1685638693; x=1688230693;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZKhobPWnbnSn8CDc9kRmjr1ySZ7qWKXo8uFk6p1fSNc=;
-        b=Ip4GuH7fzRSkg92E6MBt8yERcsjSIl6SBEW0a6W0BjK4GL0EYHnxVSKP5ft6N1od5b
-         lyHo4TZvcaxB5l6uE/2KI1t3v9PNKA0leWBjb0XnBuYyNdBbZM7WdB5K2eoco9pQ6ra8
-         Y+kpQcwoPCCWQTIA80IwkReDeWu2zdurcwcVM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685638693; x=1688230693;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZKhobPWnbnSn8CDc9kRmjr1ySZ7qWKXo8uFk6p1fSNc=;
-        b=XLz7qKd2MGVaPL/yPc1Le2bpKrXbNpCeFAowX9SDhaXcCncKvORlC9GXUiIW8REenU
-         B7D/SCa37ccINfo+jepSO0mUeQdDoaK+jw/j/WwLGdLBH62S8Ziw8nFwWtXN6C2N1ftW
-         l1QSXHHGO8D3v/4ZSMbrNJQKrfKjQizyas8JPJzStEfxaWMa7v95jZ3SI8rn24i40hCG
-         EXh2BaABvR97joPRQePINPbQniwUNQjuVaARbvHyCZeGnKO5J8st5ab9cDsQx9t1FtCN
-         mX3zrnICHe7uQA+0B7CQPULRKINLXVixnDuRN0Evs8PM+WoRuxYRFG9KDqVGguxzSEhb
-         8p/A==
-X-Gm-Message-State: AC+VfDxvoSHGYd8TmrLHxWJGBwWjl6WC1TZOopZ0VnXNAjiI0PCLkfrn
-        hVrkrv+uIV72PV2bpkMpbtmZpA==
-X-Google-Smtp-Source: ACHHUZ4ocg0kDCSGY6dDEOBfTbyf8G1qcPcG5mE1VEZzsqR4n0GkRXskDTI+ucZpVS7d3MneJ/xEYA==
-X-Received: by 2002:a05:6a00:2286:b0:646:8a8:9334 with SMTP id f6-20020a056a00228600b0064608a89334mr8620845pfe.20.1685638692984;
-        Thu, 01 Jun 2023 09:58:12 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id n22-20020a62e516000000b006501b37e5e1sm2080978pff.194.2023.06.01.09.58.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 09:58:12 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     keescook@chromium.org, hca@linux.ibm.com
-Cc:     svens@linux.ibm.com, gustavoars@kernel.org, agordeev@linux.ibm.com,
-        linux@leemhuis.info, gor@linux.ibm.com, borntraeger@linux.ibm.com,
-        linux-s390@vger.kernel.org, nathan@kernel.org,
-        linux-hardening@vger.kernel.org, masahiroy@kernel.org,
-        lkft@linaro.org, joanbrugueram@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] s390/purgatory: Do not use fortified string functions
-Date:   Thu,  1 Jun 2023 09:58:11 -0700
-Message-Id: <168563869054.2890249.18018278036948799346.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230531003414.never.050-kees@kernel.org>
-References: <20230531003414.never.050-kees@kernel.org>
+        Thu, 1 Jun 2023 12:59:25 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243371A2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 09:59:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685638763; x=1717174763;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rQr060zH9KUjmdwUDYfSZFTdHmf4ecv0Iqn3RGTCXWg=;
+  b=VZOdg6G21va8CnPEd5jW7m/5legCr0sWi20UOSTib1SIOBoqYC35mqnO
+   13bxOjhrTaFbBLfgBxGH/e7Z2yd8bylcLDKt637UCjqAU/ROQWRoFotca
+   0eo3blqAc2bErafEDWyNl8HPzQ5rX7ZqVi0/7KPo3ZdqdtWywwoxafrT4
+   EySFXbRD/eRDrgFtbiNcvfQ57LKuZ3gVXK5oRNgb3kp/NsVlt+IMrDDC0
+   D6Lq1FRItK4La2w4xU4a4fqFVpk9XzG+KpFRF88ZxvmJN0GL5JRYLlwnu
+   1oVOlopjJpKzxXUpy2C6dsQP6onyVuWpfj2x0SJvu5o3Hhje4PfvPncgv
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="340238074"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="340238074"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:58:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="737182158"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="737182158"
+Received: from jdboswor-mobl.amr.corp.intel.com (HELO [10.212.227.45]) ([10.212.227.45])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 09:58:36 -0700
+Message-ID: <b8b118ef-d250-f331-fd8f-9853bf72d102@intel.com>
+Date:   Thu, 1 Jun 2023 09:58:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] x86/csum: Move csum_tail result parameter to a local
+ variable.
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        ndesaulniers@google.com, goldstein.w.n@gmail.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230530135953.3341174-1-trix@redhat.com>
+ <20230530152016.GA3503416@dev-arch.thelio-3990X>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230530152016.GA3503416@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,23 +68,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 May 2023 17:34:15 -0700, Kees Cook wrote:
-> With the addition of -fstrict-flex-arrays=3, struct sha256_state's
-> trailing array is no longer ignored by CONFIG_FORTIFY_SOURCE:
+On 5/30/23 08:20, Nathan Chancellor wrote:
+> Dave picked it up yesterday, I guess -tip's auto-latest was not
+> refreshed for today's -next:
 > 
-> struct sha256_state {
->         u32 state[SHA256_DIGEST_SIZE / 4];
->         u64 count;
->         u8 buf[SHA256_BLOCK_SIZE];
-> };
-> 
-> [...]
+> https://git.kernel.org/tip/2fe1e67e6987b6f05329740da79c8150a2205b0d
 
-Applied to for-next/hardening, thanks!
-
-[1/1] s390/purgatory: Do not use fortified string functions
-      https://git.kernel.org/kees/c/d11f44513655
-
--- 
-Kees Cook
-
+BTW, thank you _both_ for the patches!
