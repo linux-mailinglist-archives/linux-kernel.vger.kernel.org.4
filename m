@@ -2,84 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076CC71A2F4
+	by mail.lfdr.de (Postfix) with ESMTP id 538F471A2F5
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233888AbjFAPoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 11:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
+        id S234966AbjFAPpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 11:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234619AbjFAPor (ORCPT
+        with ESMTP id S233742AbjFAPpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 11:44:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FA4136;
-        Thu,  1 Jun 2023 08:44:37 -0700 (PDT)
+        Thu, 1 Jun 2023 11:45:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB3D196;
+        Thu,  1 Jun 2023 08:44:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2793E646D1;
-        Thu,  1 Jun 2023 15:44:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C6C8C4339B;
-        Thu,  1 Jun 2023 15:44:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685634276;
-        bh=DqnmHsGETvKUOxciKJwJgUxc/bfquKkln00h6FokanM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=htB3jkipoBCacSu4F2LqM/7ySFNoqm+YAEJtNT1zH1sMPGEgILC4KRF+WDfSmOfzA
-         ACw7rcP5ysXsvHn8nHLQhGRlIBZaXOk3PA8JLXtzJPAahDL82jmlgwZ13bKGDAFJ0K
-         1AhRxiMDLHYmru3eo4CKuK0aQLIe7hcjtvOOO1ds=
-Date:   Thu, 1 Jun 2023 16:44:34 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial: core: Fix probing serial_base_bus devices
-Message-ID: <2023060123-shelf-bagging-4463@gregkh>
-References: <20230601141445.11321-1-tony@atomide.com>
- <CGME20230601142147eucas1p1ae331f80a07ad6280f8f759b2d03ade7@eucas1p1.samsung.com>
- <2023060112-onion-disparate-8ce8@gregkh>
- <d7c857b8-4aa1-cd5d-4c45-392f7ed6857b@samsung.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47FFF646AC;
+        Thu,  1 Jun 2023 15:44:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79D45C433EF;
+        Thu,  1 Jun 2023 15:44:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685634287;
+        bh=TlsHW3xGl9O05igYMwgPuflqBQiSb2C3fhWdkJ/oxX4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=SFhxXITCjK5fxIlcrNTolKholg0bYpuFYKhF6PLBPIvonugcDMVkUy3LCJ26nMyBV
+         khnOe8Y3YfDXvGkPZ1OuU76+YJaL5egqFfnELXYw6mZTSDPy+aGT3Rro8wArTk9QY4
+         MWoZi9uPUE3BFo2xcnTT2FikiuQjOJ79oXNSTO2jHKNqleRkVSM2DeRN9EIkrIclel
+         DaVdVG1btL1M1AZ1H3/d6vfmx3RWeHw0VsoXvkQNYjPCN6NcboCnnzwElCZbhS+UJW
+         q17+lm0d+JB9r2I7AIMX0c+o9mUKCrfh9zAj23MSKE1OphXOM/hHWHXysJK9DCeZrf
+         hmW6eg7Gln49Q==
+Date:   Thu, 1 Jun 2023 10:44:45 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     linux-pci@vger.kernel.org, netdev@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Binbin Zhou <zhoubinbin@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH pci] PCI: don't skip probing entire device if first fn OF
+ node has status = "disabled"
+Message-ID: <ZHi87bqTFQGKDhYO@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d7c857b8-4aa1-cd5d-4c45-392f7ed6857b@samsung.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230601081156.zyymihd565fscuha@skbuf>
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 05:09:52PM +0200, Marek Szyprowski wrote:
-> On 01.06.2023 16:21, Greg Kroah-Hartman wrote:
-> > On Thu, Jun 01, 2023 at 05:14:44PM +0300, Tony Lindgren wrote:
-> >> If a physical serial port device driver uses arch_initcall() we fail to
-> >> probe the serial_base_bus devices and the serial port tx fails. This is
-> >> because as serial_base_bus uses module_initcall().
-> >>
-> >> Let's fix the issue by changing serial_base_bus to use arch_initcall().
-> > This will only work if the linking order is such that this will always
-> > come before the drivers.  Is that the case here?
+On Thu, Jun 01, 2023 at 11:11:56AM +0300, Vladimir Oltean wrote:
+> On Wed, May 31, 2023 at 03:24:46PM -0500, Bjorn Helgaas wrote:
+> > I guess I should have asked "what bad things happen without this patch
+> > and without the DT 'disabled' status"?
 > 
-> Yes, serial_base_bus is linked as a second object, just after the 
-> serial_core. Device drivers come later.
+> Well, now that you put it this way, I do realize that things are not so
+> ideal for me.
+> 
+> Our drivers for the functions of this device were already checking for
+> of_device_is_available() during probe. So, reverting the core PCIe
+> patch, they would still not register a network interface, which is good.
+> 
+> However (and this is the bad part), multiple functions of this PCIe
+> device unfortunately share a common memory, which is not zeroized by
+> hardware, and so, to avoid multi-bit ECC errors, it must be zeroized by
+> software, using some memory space accesses from all functions that have
+> access to that shared memory (every function zeroizes its piece of it).
+> This, sadly, includes functions which have status = "disabled". See
+> commit 3222b5b613db ("net: enetc: initialize RFS/RSS memories for unused
+> ports too").
+> 
+> What we used to do was start probing a bit in enetc_pf_probe(), enable
+> the memory space, zeroize our part of the shared memory, then check
+> of_device_is_available() and finally, we disable the memory space again
+> and exit probing with -ENODEV.
+> 
+> That is not possible anymore with the core patch, because the PCIe core
+> will not probe our disabled functions at all anymore.
 
-Oh good, I guess it wouldn't work at all as the serial_core is needed by
-all of those drivers first too, so this should work, thanks for
-checking.
+To make sure I understand you, I think you're saying that if Function
+0 has DT status "disabled", 6fffbc7ae137 ("PCI: Honor firmware's
+device disabled status") breaks things because we don't enumerate
+Function 0 and the driver can't temporarily claim it to zero out its
+piece of the shared memory.
 
-greg k-h
+With just 6fffbc7ae137, we don't enumerate Function 0, which means we
+don't see that it's a multi-function device, so we don't enumerate
+Functions 1, 2, etc, either.
+
+With both 6fffbc7ae137 and your current patch, we would enumerate
+Functions 1, 2, etc, but we still skip Function 0, so its piece of the
+shared memory still doesn't get zeroed.
+
+> The ENETC is not a hot-pluggable PCIe device. It uses Enhanced Allocation
+> to essentially describe on-chip memory spaces, which are always present.
+> So presumably, a different system-level solution to initialize those
+> shared memories (U-Boot?) may be chosen, if implementing this workaround
+> in Linux puts too much pressure on the PCIe core and the way in which it
+> does things. Initially I didn't want to do this in prior boot stages
+> because we only enable the RCEC in Linux, nothing is broken other than
+> the spurious AER messages, and, you know.. the kernel may still run
+> indefinitely on top of bootloaders which don't have the workaround applied.
+> So working around it in Linux avoids one dependency.
+
+If I understand correctly, something (bootloader or Linux) needs to do
+something to Function 0 (e.g., clear memory).  Doing it in Linux would
+minimize dependences on the bootloader, so that seems desirable to me.
+That means Linux needs to enumerate Function 0 so it is visible to a
+driver or possibly a quirk.
+
+I think we could contemplate implementing 6fffbc7ae137 in a different
+way.  Checking DT status at driver probe-time would probably work for
+Loongson, but wouldn't quite solve the NXP problem because the driver
+wouldn't be able to claim Function 0 even temporarily.
+
+Is DT the only way to learn the NXP SERDES configuration?  I think it
+would be much better if there were a way to programmatically learn it,
+because then you wouldn't have to worry about syncing the DT with the
+platform configuration, and it would decouple this from the Loongson
+situation.
+
+(If there were a way to actually discover the Loongson situation
+instead of relying on DT, e.g., by keying off a Device ID or
+something, that would be much better, too.  I assume we explored that,
+but I don't remember the details.)
+
+Bjorn
