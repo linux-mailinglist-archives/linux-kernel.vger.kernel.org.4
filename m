@@ -2,107 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C8F71F484
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E346871F489
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjFAVSb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Jun 2023 17:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
+        id S231284AbjFAVXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 17:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjFAVS3 (ORCPT
+        with ESMTP id S229497AbjFAVXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 17:18:29 -0400
-Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01on2098.outbound.protection.outlook.com [40.107.222.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCB9184
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 14:18:28 -0700 (PDT)
+        Thu, 1 Jun 2023 17:23:07 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2064.outbound.protection.outlook.com [40.107.104.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7405C184;
+        Thu,  1 Jun 2023 14:23:05 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q2fN2tvRkjYL0wDmQTkNy0v2/zuGCQOtn27OoNqm9nThpBMV2nVmd6fjlKEYH1gLuPsYwyMQzKU5Uho/U1DKxJJbC6/2GKRRNfXd7JJrPdT67YKvmm21eymhovQj8QhidlXkj62eX2ZZIp7mcuxNuNxqXPkWhx6BpDfFUj6J9UdRdx/DZmH6/igQtVNpnbzvNd0EnZ6gbA+K3aLHFzf2HcKd85FCppz0ycKXuzXCbsPlgwGe0aL+6PclrpfCyy3TxThYHDB6btw5aqUksiPpTSeow+iA8xED+zmKJgoJPw2oP3F44fKwiMHYSsHlMvw9RCCdPYgdTaIWufx1Xwgkfw==
+ b=drwO0Io9qhuQLIZpo+8yx2RUBeuruzR3JGiFZQF3IVYicHoT9zl2IFsJZtITeF6uzS+1KFgsZlGCsircDGQ2BBv3YTsgkDzLLyYX8CHksFRscdAQUwl1o4i5vVVOmYmDSBwOBSsAoaSkpQYXDd4gju7UnNWYKzbi/ILx8p2Dt1EzPpXuyIo0yzqprtvGnsMHirq4LEaLNAluVj9Yu4PVDdlaZKsNR+uRi3qgDlOiIg/1zdD+DuGPpdMPY9Mql1Zm6wsJrIkldZflpzTtE46bw18xNS5SPeRyS6OBoIzRJbHtdr3wx7mhJgZksGL5ceVdHFwViVrcixHOAFEbAp6zVQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XcVIo9ipl2cd7dKJ9T8pAhWAQiRJiKKoXRStQShzCpg=;
- b=eZYsezy+9AF7ZUG6ypJJF/EPd/tdSiYQfK+rAzKhC0A1kwuwnXy9cTv1tE4pWVnJHtUpMWpxyvApAEJtO5fW6d+FunhzE2jPDUyAbNB5CRd30LqQZmvm3UWiaUqLwxFVwxENLtsVg2NUxSKy6MTXevtvFtrv2/rWIYIacpaNplPxGdR+ai2jtQY3ozClH4/0LGsnWM5IFh0Xejo+vuljmQBWdUZ2LLic+UVfurxYvLz1vFviEWaRIR3hekrGAtQMVRNxSTc6y1dz6mpzWUi8ylNLdUkGrRI0YLUGkaQGIBk9BI/CzAbyPMsPg8zog9+2hERLCDNmV2mv0euANfELEg==
+ bh=JHm/wLjaXbRtHbLiJPV0mrtBAtky9Eog48Ym5ZYeMUM=;
+ b=oFM6koubA0ivdNeRTqIbxYRX49X8GcLtv1MYhU0E0KOhM/EsLrgok5U42mESIX9upkUWyMqCXrSpFuXOMjsao1Br1gJAUpsigO+yWWCekxsEgtzaWm18t547e+TI2CnY6ExaVOumZUwgp2XEowGaZWNroj0AABu7XUiJdQRiuWD3cRTxf+c3h+pLL6a19f0I1MQAUx9VumB0xBVRPKDTPiKcthsmkDiK1j0h+bb3ctltB8y1PBrkDxb/yZIxIRYGF89ON7bzraICaSQ+sWpLn+J8i0dH8pQSj3kAzhwH+RXeQ81L9k5quPg2vMYpILXP1V0Kg4/EGzhNqs+4PhkM/w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bizprospectinsights.com; dmarc=pass action=none
- header.from=bizprospectinsights.com; dkim=pass
- header.d=bizprospectinsights.com; arc=none
-Received: from MA0PR01MB7626.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:28::12)
- by MAZPR01MB7874.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:25::12) with
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JHm/wLjaXbRtHbLiJPV0mrtBAtky9Eog48Ym5ZYeMUM=;
+ b=kGvbgibgq2Rj2CBQxjgvrRlhhJIYNG4ajyJaOqOtKSrk8iNnXlTTe/0F7exfd90jeA/ma/+RE+njJnvQVNuuUfsTZ0E6NLSUYL3BPwUNpKw9LSAJZarDhrplikEQz4aJIJjtZ6lfvKsSUEQNa4NNL2Ioni3K9L6beBo4BE4MFhgUeq4/Q6CGyO2lCRYI94X5GQROMoFlBxe9yn+80eZGYaVZ40b36kXrCKR/XB0qBQyGGS60+XoSYhAQ5gfv30dgM9D0IPX8Ub2sEeVAmX9FzsPtDbp20rgfDgbhDtTjzx17uVXpevThkKVRCg9YI9dHWWUhF7Of2eWc2hD7naHp+Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from PAXPR04MB9155.eurprd04.prod.outlook.com (2603:10a6:102:22e::15)
+ by VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.16; Thu, 1 Jun
- 2023 21:18:25 +0000
-Received: from MA0PR01MB7626.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::a922:93a4:289c:a3d6]) by MA0PR01MB7626.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::a922:93a4:289c:a3d6%4]) with mapi id 15.20.6433.015; Thu, 1 Jun 2023
- 21:18:25 +0000
-From:   Lalaine Loffer <lalaine.loffer@bizprospectinsights.com>
-To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Techno graphic Audience Contacts
-Thread-Topic: Techno graphic Audience Contacts
-Thread-Index: AdUsJ8uUlO5zo0N9Ty6OEOcWS7AZAA==
-Date:   Thu, 1 Jun 2023 21:18:25 +0000
-Message-ID: <MA0PR01MB76268F2B78259FE416A49AB69549A@MA0PR01MB7626.INDPRD01.PROD.OUTLOOK.COM>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.26; Thu, 1 Jun
+ 2023 21:23:01 +0000
+Received: from PAXPR04MB9155.eurprd04.prod.outlook.com
+ ([fe80::5a2a:3622:97b3:8004]) by PAXPR04MB9155.eurprd04.prod.outlook.com
+ ([fe80::5a2a:3622:97b3:8004%6]) with mapi id 15.20.6455.024; Thu, 1 Jun 2023
+ 21:23:01 +0000
+Message-ID: <29fcea18-d720-d5df-0e00-eb448e6bbfcf@suse.com>
+Date:   Thu, 1 Jun 2023 17:22:54 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bizprospectinsights.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MA0PR01MB7626:EE_|MAZPR01MB7874:EE_
-x-ms-office365-filtering-correlation-id: ecd1c327-9d47-4870-f137-08db62e5bc64
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XAF9s5UYIoLuoap6eHO3KZANvvSDKMrzmEBRyvEk+uYPw4L3WaEMMpy69MOs2cwhhZv9QzQww6dAd0AUNYfryqxJ/jspG67ilczsyPEZk/5lvQIC7xyaHJf5wM0/7JVJZjdhVqu3fe9QDf6L+ROq4LFzzG02/E32CNAirzi9u3iD45st/NzqmTpsTajH8hSb8jh+HMUWN0ApNr3yLuvyoxdIZ46QOqpJ8KYpCDg15Eujn8uQCKY4eh5n1lkUQhISwy8Yf4e45Oodoy6MSTnKUz9366QBJhe4z9qX6Xpbp9JjZeR9DrgYbVik2Bjm5zDaWk1P6Jxkvhu80MgfWExVCCODmJa/7s9OeyLXA5iGzjGQBsb0Zq6GpFKJpFpxaT21YamMUEpH0qeNAWu+haZyk4zsDO8xNRjPfJCv8+gGqIHIvWNB5eJPfuFVsH69a438WdxxTRJn+Z9FdoEhwrI3VxaLnosmmIpBU8BK5wHM+L2CqfF3TwMStGK3lUIKZDNt2fMFoo96KLHAnWgsmtHuHyK5c3QmkJ7Oyu4LomdIunEhf4UplnbjoaaZKfuv2eA+VxZeluT9vhAiAAy9duCPlhzvdG17xVO09H4hs9Y4UMnm8funGXdLmm/K1IcA2efJ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MA0PR01MB7626.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(136003)(39850400004)(346002)(396003)(451199021)(38070700005)(83380400001)(2906002)(186003)(33656002)(86362001)(38100700002)(122000001)(55016003)(8676002)(8936002)(64756008)(66946007)(6916009)(66476007)(66446008)(5660300002)(66556008)(478600001)(71200400001)(41300700001)(316002)(44832011)(7696005)(6506007)(9686003)(76116006)(66899021)(52536014);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?qjgHwU6iC4RYyofX3EL6WLhmrSevBAI0Dxzy2H9oZeS3+0nLgSrg158Xc6?=
- =?iso-8859-1?Q?oUOtLgqi7+AitCrun63NbFjc+9B9XkxFDBbxY82+OXLWFbwjD/Oe3iqS1Q?=
- =?iso-8859-1?Q?ZplooczCm6TxMOR4llaKLzy7wan/FwAi22+99q7NanPGuJdC7macJyfhf2?=
- =?iso-8859-1?Q?SwMOrex1tZ1yy/5XZI7ESU4xuC5zT135KuH9kEVBpCCoyafqAlvJVyldd4?=
- =?iso-8859-1?Q?aEPskfYu0wfJDzenxZkmSd3h7EC7bhzyfWyZTYSfkw5rL69Jx7pfRBZWaa?=
- =?iso-8859-1?Q?yZ0vsAgDh1G+xhXPcEho0FkUv6YtsIlBOUzaXXda0dq7+hlzpkyDRA9Xq2?=
- =?iso-8859-1?Q?xUWPANhfXM27OYTO2AnsA79Afs/xc35z1/Loasf8LBiUIV8kN/vehTCQnG?=
- =?iso-8859-1?Q?LOORfkakFOGP1jIMYMBYChZSAJcVTjTOL+Uvk8xOaEuvy43jCSzd9VHgxr?=
- =?iso-8859-1?Q?xCHXcsTum2f6+lR7/NqcI6h1/MH4q+iETDWkmg6S25bbhnsuYZuQkSmS0S?=
- =?iso-8859-1?Q?qY7xTDlyvXxkO4XZiidi04Wgf1GJKr/y/TkUdHrQLDG0veYYddeCWDC9uA?=
- =?iso-8859-1?Q?/ac+4oa8/5Ph1bfWRypc/DScMKlYM9jmQvuWtYjovA997XlxmeQdIsApz7?=
- =?iso-8859-1?Q?rO8MPOwF9j5MqtPZPlthvFHpWGeCvqfa3D5yU6DFEBI1vy8xB56WvdWX6V?=
- =?iso-8859-1?Q?Utt0od9houvt6HhLoC+8BNJTgm+6rQFQtFem2bIRpihSAPPnRJ1tPmoJh9?=
- =?iso-8859-1?Q?3LdYDJIsX3UFfIvOp4LvoxMWcnIg/boqEuDYME3iPGuIe6KNyq6MTh+H+3?=
- =?iso-8859-1?Q?uUc6Lkxf3oiDQyW35SeuWEY2PnoFbnCAhn+PGJnKYyRIhPl/AcSPYAul9q?=
- =?iso-8859-1?Q?/9V8IyOVfJxbSC0ULlp+8Z+ZVhkaNrcAVZj/jWXlflughILVSY/7hmRKiK?=
- =?iso-8859-1?Q?ZSTRPTOYnqLBNGe8HJz/QusEIbdRfKux6zf6w9PgDEVCsa3zIsujWuZY7D?=
- =?iso-8859-1?Q?z7vHUlq2bztMLow6tMwU97uz9q9P6iluwlLMjeoqAomOk3c2ngcs/RGiv4?=
- =?iso-8859-1?Q?llAA+zGmSecO++0v0pEMrspF46bM/D8c2PLErILS9ud8X9Rc9udWWjBqyk?=
- =?iso-8859-1?Q?EY4dSNaQrV42118waC6LDpCGV+o2pKhbeM6rZjCzESMN3x9lQcjMIEpKgf?=
- =?iso-8859-1?Q?lolVrRm5O+hwC6GFDeoJUycf0GZ6eOE0Pd23NQT1h+sQh7jQM3jK+Y/0vE?=
- =?iso-8859-1?Q?9kUASjPwEQcreRSlaQX4tTOBE/KWBk5zmC4X1Cgf7efIrZLaP6YiabORVJ?=
- =?iso-8859-1?Q?iy7vdglBsNHFAAlVObKojp9KslOc4pp0WXxiyG9vNHxSr22wgrq10djzRA?=
- =?iso-8859-1?Q?kndV3oUAJ6LIQuJHVAfEu73E9YbFczx81HmCKrhnPudUS70A886CAdcebI?=
- =?iso-8859-1?Q?kVZ3N3QzuJfavf3mTi0rbANhm9XWpUuCF4EZmkhIl3Khr2ARUdvw0TYzqK?=
- =?iso-8859-1?Q?x7T91Zxl31elOHtFeboB18tN2MX+i35qeT+mcyetHfwOAjanHtlRlu5Lj1?=
- =?iso-8859-1?Q?a8fG3L/SXT/1mT3IftS5yvtFZhUWh22o9wfDzoxQ2RsreSypWltevHm8l7?=
- =?iso-8859-1?Q?FY2GfIrJ5JpfGToEB+UaybUNodwOtcPBdWjTA1wsfaForAWi/BLa+v6/LX?=
- =?iso-8859-1?Q?H+ONUcThDw35VUwaPDLVqLpqfdsYOjl90ot1vrucs2JG6hbb97wixinLwZ?=
- =?iso-8859-1?Q?EJwK8ECWXfZpNJ/otc1jO6o9M=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Paul Moore <paul@paul-moore.com>,
+        syzbot <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com>
+Cc:     hdanton@sina.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        roberto.sassu@huawei.com, syzkaller-bugs@googlegroups.com,
+        peterz@infradead.org, mingo@redhat.com, will@kernel.org
+References: <0000000000007bedb605f119ed9f@google.com>
+ <00000000000000964605faf87416@google.com>
+ <CAHC9VhTZ=Esk+JxgAjch2J44WuLixe-SZMXW2iGHpLdrdMKQ=g@mail.gmail.com>
+ <1020d006-c698-aacc-bcc3-92e5b237ef91@huaweicloud.com>
+From:   Jeff Mahoney <jeffm@suse.com>
+Subject: Re: [syzbot] [reiserfs?] possible deadlock in open_xa_dir
+In-Reply-To: <1020d006-c698-aacc-bcc3-92e5b237ef91@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MN2PR11CA0002.namprd11.prod.outlook.com
+ (2603:10b6:208:23b::7) To PAXPR04MB9155.eurprd04.prod.outlook.com
+ (2603:10a6:102:22e::15)
 MIME-Version: 1.0
-X-OriginatorOrg: bizprospectinsights.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9155:EE_|VI1PR04MB7104:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0e9d1e18-dd12-435a-39b0-08db62e660d4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pCQ/TUibiJ4C9DItCEM/+QKMeUPGS+waJNs6oaRCdAErMUAMg+wA+d7EpPH2bDE9ycXrM5kXBiBr0etlYPyDheGNHswdyS+85xUEOJ2F3KJx6JsWEzFZxFB/kldB/DVMh4MhHliRZfr+EzFIEvqN7PHAAXFCUrp1VQ61NXRRLfWDSjBuoNO3tkCJyLdUMJEU9zdVBTg8a4yU01MaB7LMsn/ivbX3O/4E43xmLOEG+ziZxKY0XT+Gvhs+QFEfMWb//gZ9CoQu1Kb/8mLEmTcjoWx51RN7BvT06NXw1/8cUDhmNKfYzGTfi5gUf5cj8mW8n0nAkhYKEKOFMbTUgF9eXwwFRilnb954UGFI27fqkZuQ9E15FheMjjW3JZiFmsNxL2/9AkzrmZK+eNnZXrdSirCDPwAHF7huq95wIBwb8ZDMJsuetAYH6qAvY7NomJMNNUPBrAhDxYlHfnndl5J/oWlJ+ugrmU0n0xjfdgDvtIODECqE3ur0Gl1/NnOqSNXEk7ZgPNSjZyTCdqCtq+EXxOD1TCZ2FFVD+gwzrYA2xW11FNmVmPlgYQ5O4l6t84D78iAnYW6WkDZxyVms5l0L/oyz3qG5nZlF0/oUJvhWm1xYUKdrW4tU9uXgz2E6p1+mZmbjGw0Cehgpsnglec3i2wB3HQJeWVPPilXz85nd8ZDnKxiuAF+xGl+jG17d81YqKKoQ+jDPaZWfFxqUCn/CYQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9155.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(396003)(136003)(39860400002)(366004)(376002)(451199021)(6506007)(6512007)(186003)(53546011)(6666004)(966005)(6486002)(2616005)(83380400001)(41300700001)(316002)(2906002)(7416002)(8936002)(5660300002)(8676002)(478600001)(66476007)(66556008)(66946007)(110136005)(86362001)(31696002)(36756003)(4326008)(38100700002)(31686004)(99710200001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eTdnZkVIaWdWNHdEOFJBT25QbkFGZjJDOEMrMzdOaUpIaVFSRUtHWk93RUtn?=
+ =?utf-8?B?UlJXNFJ1aFdOUTFaeVl0MlAvd01BQUlQMGNxaDhwSkVOSndaMDZwVWg3NUdh?=
+ =?utf-8?B?T0R1R3Y5bkc5cEl3akNNcUFPME1WQVM2QjhyWGNUdWZaWk84aUNFMzRkaGdv?=
+ =?utf-8?B?UWl5ekxxSEpGdGpPeU5xcFgvbU5GYWQvQkVIMHlMWU91RXJ0VlFudHlaczdo?=
+ =?utf-8?B?Vkp4a1Y3aHA1WkdjQkFWVy9NamhkZVZvNWdncWszV2xSZmxRQXBCT3UvQ3F3?=
+ =?utf-8?B?bTA5VjRtZlF0QXNCRXQxTEpoVHA0SDRlOUpsclNtbUlnMElaMGduY1Z6VG1w?=
+ =?utf-8?B?SHp1L3Q4RFNpUUNUQzgvZlJLU2RJLzVDdFpIMG1NUDNKT3h5ejdPTlJWQm5D?=
+ =?utf-8?B?Y1BWNUFWUHdoN0lNVUJyUHVORUhHTmVUaWF4cEl1ODRhWDZlQ0RkNmxUYmpY?=
+ =?utf-8?B?VmJ3dHNDUk1kclpMaDdQTXp3Wm1WOVdSQmxqTzJsV3h4UjhhY2lVUDRTUEtt?=
+ =?utf-8?B?RTVpN1hQSmpsMUc3SS9TUVhJVVlnSkl5d3drM1M4dzdZei95VyswdytGbnE5?=
+ =?utf-8?B?WllaU1VQeDBEMUxNN2pXWTBlb2tNQVgwNDZ1ajJXTDFxMm9RdEIwVWJXK1Er?=
+ =?utf-8?B?RGNyL3NYa2VHUE5ndzBHNVR2MksvT3NPUnFIS3NMc2ZBVyt4MGlMcGF6bXdz?=
+ =?utf-8?B?ZTc4TGYzblVJV2xnV1YxQTJLZXJNcUxUZUpvZlBNZGlCV2lVQWw0alZPNllT?=
+ =?utf-8?B?cFI4ak9OMUVtNlJMSFIyTDNNRWhzZXRDcUFTY3BERjhUQnY2WFNpcUZZY3RB?=
+ =?utf-8?B?cTBUeVZueDQ4cjMyZzl0RUtZb1hYUkxhdXoxUnU1L09yYVZ6QVJHeFNKZ1o0?=
+ =?utf-8?B?d2IrZjBKNHB1QUVrWXJuUngybllCMUVxVGlPVUtNbDJ5MzFGVW1RVjdhSkVJ?=
+ =?utf-8?B?ZS9JcC9UQmpUT0RobkJ1WE00K21TUDl0Z00xUGFHVHlKT0RPRDhsZEptQi9D?=
+ =?utf-8?B?Y1BVSXdSL08vM3R4M0FKRllhSzk3U21scTYydWpURlNOSXR4dlRobDc1SmpS?=
+ =?utf-8?B?bnVvNlkxL1Vja1NqK3VaamZXMW80OGkrTFhJNDRUU0dETE1mbmtwL2ZvS1l2?=
+ =?utf-8?B?L1NlNW9wclJ2V3oycUUwRVp1L3k1SEo4RmZTTllxcGRHd1FvV2NGNThyQjFV?=
+ =?utf-8?B?RDVFY2JXRnZjL09hT3dOVVZQMjQxeTk0NzRZUGlQTWpQZDJDZlkxdzVDN3hG?=
+ =?utf-8?B?OTg4RlhjQ0dGemErMllzNXhlclgybThibnprb0ZlSHhTcmdaSkJPZ242N2ln?=
+ =?utf-8?B?bC9VdE5GRnJtN2RKeHdmRWZIc3dGWW5JazRGUnQ3bnRxQ2NFVkNDUHFvaGh3?=
+ =?utf-8?B?b3ROOFFGcW9uVWw4ZnVZMjNrdnZLVE9jaEJyUVgraHVscGlkT2VEekE2cVVa?=
+ =?utf-8?B?bHJSczZsNGRhOU1GYkRTNEp4bGFIOTkvUTIxWm1GYm42Uk43U21hL3l4NCtj?=
+ =?utf-8?B?c3krK3AvbkVKVGhuZEhEU0J5TW9kY3FzWTZDVXFiY3B4MGU4RU1BTkp0VS9X?=
+ =?utf-8?B?QUdXZ0FZQWxkQnJ6SFlTaHFCWUwvdjhZd29ZVzN2L0tlWThjSG1yNUFUVE9n?=
+ =?utf-8?B?ak9ieHVtQ0FmbWltQlN5QWhkU0FwRVUzRDNPYmlsYWFBZllFYzVFU2FUV25N?=
+ =?utf-8?B?WDJuU0Y2Y3BoV2p3VDhGY1Fka2hpa3AyYUZFdUczMkQ1YXd0bno1WHhnWHVS?=
+ =?utf-8?B?T0V1OTlLQ1VsN0s2WHcyeTlML1VXc25tUC81NFVhWSs4WllycWp5czNSTkUr?=
+ =?utf-8?B?NVBLa2J4dTNxZEprTnBzNkZEQW9Kc2NwdHVzOTR5VkYwd3hCcyttVDk3V2hO?=
+ =?utf-8?B?U1dCRmJMdm5RWVJ6YktZdnBSY3ZZT1dkckFzaXQ4S1dHSXhoOHNKUnBMYWk5?=
+ =?utf-8?B?azRUQ0Z0VjNMaTdFdlh3UFNKM3RYUmxLdU1oZmZBZWhGdFRXYXorVjlVam1Q?=
+ =?utf-8?B?dnFQR1JUY2tNSU1mZEJtcCtuK0g5ZnV3WUpBejNqYjB1TVZXbTJ4MDRzZzUw?=
+ =?utf-8?B?STh3U3RGN3MxK2ZmVitUekpzYWlhZ1N1K1RtZkxETGE1U0pEcjBVWmZ3WlVN?=
+ =?utf-8?B?N20vQXZRbzBVSC9oc0daT3V1TzEyUktrRmNUV0dPUVYyeWtYcnpKb01Jbk93?=
+ =?utf-8?B?QkE9PQ==?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0e9d1e18-dd12-435a-39b0-08db62e660d4
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9155.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MA0PR01MB7626.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: ecd1c327-9d47-4870-f137-08db62e5bc64
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2023 21:18:25.0625
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 21:23:01.2483
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 35678ef3-00a6-4fd8-b0e9-f182b69f214d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Rtcd3kx9ULisfe+iPTx1RRXO1fpZV3lzDcDKshRAlvNKdPt40G1ZjDVdxeaPZf5fVVufGOQSfAkT7G16kYv7US3ZIqY7OKkMhTGNsE6QHlPyYxXc+KbFhJpewh4AETv3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MAZPR01MB7874
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lnXNwl4w9GJeIifbVOBoRPp9Yqigs3uUx6v0xXaBBHC7leYzcDZM39oY1a3T9Ek5
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7104
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,19 +132,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 5/31/23 05:49, Roberto Sassu wrote:
+> On 5/5/2023 11:36 PM, Paul Moore wrote:
+>> On Fri, May 5, 2023 at 4:51 PM syzbot
+>> <syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com> wrote:
+>>>
+>>> syzbot has bisected this issue to:
+>>>
+>>> commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
+>>> Author: Roberto Sassu <roberto.sassu@huawei.com>
+>>> Date:   Fri Mar 31 12:32:18 2023 +0000
+>>>
+>>>      reiserfs: Add security prefix to xattr name in 
+>>> reiserfs_security_write()
+>>>
+>>> bisection log:  
+>>> https://syzkaller.appspot.com/x/bisect.txt?x=14403182280000
+>>> start commit:   3c4aa4434377 Merge tag 'ceph-for-6.4-rc1' of 
+>>> https://githu..
+>>> git tree:       upstream
+>>> final oops:     
+>>> https://syzkaller.appspot.com/x/report.txt?x=16403182280000
+>>> console output: https://syzkaller.appspot.com/x/log.txt?x=12403182280000
+>>> kernel config:  
+>>> https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
+>>> dashboard link: 
+>>> https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
+>>> syz repro:      
+>>> https://syzkaller.appspot.com/x/repro.syz?x=12442414280000
+>>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=176a7318280000
+>>>
+>>> Reported-by: syzbot+8fb64a61fdd96b50f3b8@syzkaller.appspotmail.com
+>>> Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in 
+>>> reiserfs_security_write()")
+>>>
+>>> For information about bisection process see: 
+>>> https://goo.gl/tpsmEJ#bisection
+>>
+>> I don't think Roberto's patch identified above is the actual root
+>> cause of this problem as reiserfs_xattr_set_handle() is called in
+>> reiserfs_security_write() both before and after the patch.  However,
+>> due to some bad logic in reiserfs_security_write() which Roberto
+>> corrected, I'm thinking that it is possible this code is being
+>> exercised for the first time and syzbot is starting to trigger a
+>> locking issue in the reiserfs code ... ?
+> 
+> + Jan, Jeff (which basically restructured the lock)
+> 
+> + Petr, Ingo, Will
+> 
+> I involve the lockdep experts, to get a bit of help on this.
 
-Are you interested in acquiring the contact information of Install Tech Users and IT decision Makers?
+Yep, looks like that's been broken since it was added in 2009.  Since 
+there can't be any users of it, it'd make sense to drop the security 
+xattr support from reiserfs entirely.
 
-Titles: CEOs, CTOs, CIOs, VPs, IT Directors, IT Managers and many more.....
+> First of all, the lockdep warning is trivial to reproduce:
+> 
+> # dd if=/dev/zero of=reiserfs.img bs=1M count=100
+> # losetup -f --show reiserfs.img
+> /dev/loop0
+> # mkfs.reiserfs /dev/loop0
+> # mount /dev/loop0 /mnt/
+> # touch file0
+> 
+> In the testing system, Smack is the major LSM.
+> 
+> Ok, so the warning here is clear:
+> 
+> https://syzkaller.appspot.com/x/log.txt?x=12403182280000
+> 
+> However, I was looking if that can really happen. From this:
+> 
+> [   77.746561][ T5418] -> #1 (&sbi->lock){+.+.}-{3:3}:
+> [   77.753772][ T5418]        lock_acquire+0x23e/0x630
+> [   77.758792][ T5418]        __mutex_lock_common+0x1d8/0x2530
+> [   77.764504][ T5418]        mutex_lock_nested+0x1b/0x20
+> [   77.769868][ T5418]        reiserfs_write_lock+0x70/0xc0
+> [   77.775321][ T5418]        reiserfs_mkdir+0x321/0x870
+> 
+> I see that the lock is taken in reiserfs_write_lock(), while lockdep says:
+> 
+> [   77.710227][ T5418] but task is already holding lock:
+> [   77.717587][ T5418] ffff88807568d090 (&sbi->lock){+.+.}-{3:3}, at: 
+> reiserfs_write_lock_nested+0x4a/0xb0
+> 
+> which is in a different place, I believe here:
+> 
+> int reiserfs_paste_into_item(struct reiserfs_transaction_handle *th,
+>                               /* Path to the pasted item. */
+> [...]
+> 
+>          depth = reiserfs_write_unlock_nested(sb);
+>          dquot_free_space_nodirty(inode, pasted_size);
+>          reiserfs_write_lock_nested(sb, depth);
+>          return retval;
+> }
+> 
+> This is called by reiserfs_add_entry(), which is called by 
+> reiserfs_create() (it is in the lockdep trace). After returning to 
+> reiserfs_create(), d_instantiate_new() is called.
+> 
+> I don't know exactly, I take the part that the lock is held. But if it 
+> is held, how d_instantiate_new() can be executed in another task?
+> 
+> static int reiserfs_create(struct mnt_idmap *idmap, struct inode *dir,
+>                          struct dentry *dentry, umode_t mode, bool excl)
+> {
+> 
+> [...]
+> 
+>          reiserfs_write_lock(dir->i_sb);
+> 
+>          retval = journal_begin(&th, dir->i_sb, jbegin_count);
+> 
+> [...]
+> 
+>          d_instantiate_new(dentry, inode);
+>          retval = journal_end(&th);
+> 
+> out_failed:
+>          reiserfs_write_unlock(dir->i_sb);
+> 
+> If the lock is held, the scenario lockdep describes cannot happen. Any 
+> thoughts?
 
-Air Watch, Cisco, Web root, Symantec, IBM, SAP,MS Users, Oracle, Sage, Accounting Software's, MS Dynamic, MS Exchange Server, Siebel, Sales force, Goldmine and any ERP, CRM, Storage, Cloud, Security Users and other Technology users list.
+It's important to understand that the reiserfs write lock was added as a 
+subsystem-specific replacement for the BKL.  Given that reiserfs was 
+dying already back then, it made more sense from a time management 
+perspective to emulate that behavior internally rather than use new 
+locking when practically nobody cared anymore.
 
-We do have verified contacts for various industry verticals like Technology, Networking, Telecommunication, Healthcare, Finance, Manufacturing, Education, Chemical, Construction, Human Resources, Automotive, Printing & Publishing, Marketing and Advertising, Hospitality, Real Estate and many more...
+See reiserfs_write_unlock_nested and reiserfs_write_lock_nested paired 
+throughout the code.  It drops the lock when it passes a point where 
+it's likely to schedule, just like the BKL would have.
 
-If you could send me your target audience, I would be glad to send you the exact information of your requirement ASAP. If there is someone else in your organization that I need to speak with in this regard. Please let me know.
+Yes, it's a mess.  Just let it die quietly.
 
-Appreciate your time and look forward to hear from you.
+-Jeff
 
-Kind Regards,
-Lalaine Loffer
+-- 
+Jeff Mahoney
+VP Engineering, Linux Systems
+
