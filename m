@@ -2,109 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6421871F3A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BD071F3C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbjFAUTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 16:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
+        id S232100AbjFAUVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbjFAUTN (ORCPT
+        with ESMTP id S231139AbjFAUU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:19:13 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8436BD1;
-        Thu,  1 Jun 2023 13:19:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Vpxb2SEuweBhIUfqr9sMJSgr1YIceBLIzWJb0gIKyDM=; b=BIUmMmAr9GatHdMUUcSz5PzXSd
-        dsfinzY59MdfFVWTE+oEuxHNswWjlwG6DSsTg2Vmricbgb1eJeCzugwycHYrih9V0kTGraFAYXu4/
-        dh3Motr5UdhBFH1k6+PGsRZzOyK8uX7Xuf0skzZWwTmEyz0eZOdhJVQj5YCUWxPqGe3w=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:39204 helo=pettiford.lan)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q4olA-000686-2c; Thu, 01 Jun 2023 16:19:00 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com
-Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hugo@hugovil.com,
-        linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Lech Perczak <lech.perczak@camlingroup.com>
-Date:   Thu,  1 Jun 2023 16:18:44 -0400
-Message-Id: <20230601201844.3739926-10-hugo@hugovil.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230601201844.3739926-1-hugo@hugovil.com>
-References: <20230601201844.3739926-1-hugo@hugovil.com>
+        Thu, 1 Jun 2023 16:20:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D94B1A6;
+        Thu,  1 Jun 2023 13:20:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24BB064978;
+        Thu,  1 Jun 2023 20:19:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E2E4C433D2;
+        Thu,  1 Jun 2023 20:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685650777;
+        bh=RGs/SUKoPaxdkxluJ+b5vvGwrcwCDZO9iUhGSIQLzOE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iYn0faRCsPjSa/kRRtYadpBK2Nym8KAbriZULBoh8Yg7Qh4zlyruNg8YrJFo4IeYC
+         ua4AnK/AUipZ992fbbvqIFprmoGsNWt7vV9OLI5o8qcnf/7cFU8hzcs583bUKRA0Uq
+         XD4etari9U1zlWy3UoXY/rYcAG+DzpLTOJkup6Il7nkKwIJwWf38o/9jdyk64TRNyv
+         crChNj2APexeg2miknXqNJT1loPYIo41fL/UpIBd9Bmy3C7vjir55pO4YLRSciV5xq
+         X0mbRgTGCjcMHJVZx73Q33bv1kXrxZZE3kDrn4HxMerPwRWnzpVM5oLfOwb0dXtd2E
+         FIINcBhdL6eQg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C706F40692; Thu,  1 Jun 2023 17:19:34 -0300 (-03)
+Date:   Thu, 1 Jun 2023 17:19:34 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] perf pmu: Only warn about unsupported configs once
+Message-ID: <ZHj9Vq6K6Oq9caZL@kernel.org>
+References: <20230601023644.587584-1-irogers@google.com>
+ <CAM9d7ciz744BuEkjKRpRov4VsfASJHxskwzzE_L8mmekE6HuZA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+In-Reply-To: <CAM9d7ciz744BuEkjKRpRov4VsfASJHxskwzzE_L8mmekE6HuZA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v6 9/9] serial: sc16is7xx: improve comments about variants
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Em Thu, Jun 01, 2023 at 01:04:30PM -0700, Namhyung Kim escreveu:
+> On Wed, May 31, 2023 at 7:36 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > Avoid scanning format list for each event parsed.
+> 
+> Maybe it's better to change the subject that it's about format..
+> Other than that,
 
-Replace 740/750/760 with generic terms like 74x/75x/76x to account for
-variants like 741, 752 and 762.
-
-Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Reviewed-by: Lech Perczak <lech.perczak@camlingroup.com>
----
- drivers/tty/serial/sc16is7xx.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-index 9b2d58023c55..59338f5ca180 100644
---- a/drivers/tty/serial/sc16is7xx.c
-+++ b/drivers/tty/serial/sc16is7xx.c
-@@ -223,7 +223,7 @@
-  * trigger levels. Trigger levels from 4 characters to 60 characters are
-  * available with a granularity of four.
-  *
-- * When the trigger level setting in TLR is zero, the SC16IS740/750/760 uses the
-+ * When the trigger level setting in TLR is zero, the SC16IS74x/75x/76x uses the
-  * trigger level setting defined in FCR. If TLR has non-zero trigger level value
-  * the trigger level defined in FCR is discarded. This applies to both transmit
-  * FIFO and receive FIFO trigger level setting.
-@@ -234,7 +234,7 @@
- #define SC16IS7XX_TLR_TX_TRIGGER(words)	((((words) / 4) & 0x0f) << 0)
- #define SC16IS7XX_TLR_RX_TRIGGER(words)	((((words) / 4) & 0x0f) << 4)
+Ok, I can fix that, applying.
  
--/* IOControl register bits (Only 750/760) */
-+/* IOControl register bits (Only 75x/76x) */
- #define SC16IS7XX_IOCONTROL_LATCH_BIT	(1 << 0) /* Enable input latching */
- #define SC16IS7XX_IOCONTROL_MODEM_A_BIT	(1 << 1) /* Enable GPIO[7:4] as modem A pins */
- #define SC16IS7XX_IOCONTROL_MODEM_B_BIT	(1 << 2) /* Enable GPIO[3:0] as modem B pins */
-@@ -249,9 +249,9 @@
- #define SC16IS7XX_EFCR_RTS_INVERT_BIT	(1 << 5) /* RTS output inversion */
- #define SC16IS7XX_EFCR_IRDA_MODE_BIT	(1 << 7) /* IrDA mode
- 						  * 0 = rate upto 115.2 kbit/s
--						  *   - Only 750/760
-+						  *   - Only 75x/76x
- 						  * 1 = rate upto 1.152 Mbit/s
--						  *   - Only 760
-+						  *   - Only 76x
- 						  */
- 
- /* EFR register bits */
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
+> 
+> Thanks,
+> Namhyung
+> 
+> 
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/util/pmu.c | 5 +++++
+> >  tools/perf/util/pmu.h | 5 +++++
+> >  2 files changed, 10 insertions(+)
+> >
+> > diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> > index 0520aa9fe991..204ce3f02e63 100644
+> > --- a/tools/perf/util/pmu.c
+> > +++ b/tools/perf/util/pmu.c
+> > @@ -934,6 +934,11 @@ void perf_pmu__warn_invalid_formats(struct perf_pmu *pmu)
+> >  {
+> >         struct perf_pmu_format *format;
+> >
+> > +       if (pmu->formats_checked)
+> > +               return;
+> > +
+> > +       pmu->formats_checked = true;
+> > +
+> >         /* fake pmu doesn't have format list */
+> >         if (pmu == &perf_pmu__fake)
+> >                 return;
+> > diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+> > index 287f593b15c7..7a1535dc1f12 100644
+> > --- a/tools/perf/util/pmu.h
+> > +++ b/tools/perf/util/pmu.h
+> > @@ -76,6 +76,11 @@ struct perf_pmu {
+> >          * specific code.
+> >          */
+> >         bool auxtrace;
+> > +       /**
+> > +        * @formats_checked: Only check PMU's formats are valid for
+> > +        * perf_event_attr once.
+> > +        */
+> > +       bool formats_checked;
+> >         /**
+> >          * @max_precise: Number of levels of :ppp precision supported by the
+> >          * PMU, read from
+> > --
+> > 2.41.0.rc0.172.g3f132b7071-goog
+> >
+
 -- 
-2.30.2
 
+- Arnaldo
