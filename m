@@ -2,83 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330CE71A3C2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F26E71A3BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 18:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234677AbjFAQGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 12:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S234890AbjFAQGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 12:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234575AbjFAQGr (ORCPT
+        with ESMTP id S234705AbjFAQG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 12:06:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC2E186
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 09:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685635553;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xaF4LAIG2oh7wL99Qq3/230ZZVPiSunURcG7vN9wEJM=;
-        b=KABWM3grHnlINgHy4yt65wruXh9kqxlc28Pund8/Q7DDhFi2TYljJadQMyLBvOQam4ghSl
-        5yYPVlWl4k0sazeVSsLm4m8BlYCLyFm8F7A12SfXDSlq5tOjedTz3xOLQbl1YbZjoe+v9P
-        eFAE5TXZdJsyh5utlcOAutqOf5/JN0g=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-344-Bp022dJnNxqRvvYjhAjQEA-1; Thu, 01 Jun 2023 12:05:51 -0400
-X-MC-Unique: Bp022dJnNxqRvvYjhAjQEA-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-96f6fee8123so71052366b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 09:05:50 -0700 (PDT)
+        Thu, 1 Jun 2023 12:06:28 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FFAC0
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 09:06:26 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64d3e5e5980so1265167b3a.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 09:06:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1685635586; x=1688227586;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2eOOqjN+PIiYI5ZExNxAoyDJGJiX7/+eSzb019vDm9Y=;
+        b=K0iegWJjaW9mH/T3pRWJ7G/M65aTd3e3+/biI3QuWdIaY+7/2lYnspXXfTOLeKTWSo
+         S6KVoYeaCoQf3/pSStOWIEpzLi4f/xEMG+Kz9ME/MJrmLwja6a+BrSF8Mtu0BJY5yd3o
+         g0mZG6qoS+IW5FJIQP1vL0lMQ1ZucXMOEROSs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685635548; x=1688227548;
-        h=content-transfer-encoding:cc:to:content-language:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xaF4LAIG2oh7wL99Qq3/230ZZVPiSunURcG7vN9wEJM=;
-        b=CqSCiwlfLXNPuEvtm9UMuZqEbV9f+H/pXcbDP8c6eT4Q8W89oRKVIgjZtNL60emo8l
-         ttVt/d1bsDQAQ4g8Hpny+/ucT5IoxqPA0gNuph/JGm4r5Y/3pVrdlKmBJr71jtfyKiPB
-         LKjEyG02WudKkKYL05sVG3RIhIJKgIxDD2AwACQKfw4IkpWkguNCHlGTm4z8yF1gws4m
-         yFdaI32P0Nm2DB0MaIxlEysh/Da54ZwutUSDrOEV+PFYYm21r3Q0FUMsOOLkYoy2Hn4m
-         l+CqoD4d5usVD+QG26YJD2rtLC/gxanBTE4pK/GnM+83rQ32Ly4Mo8dZaJ338PPuIWbu
-         20QA==
-X-Gm-Message-State: AC+VfDxG1phzv4QfyuXmckAOFORTXgvp6RTAQFDeNiQd58+SB83L2fU3
-        +1ePHzEeTMpbrKJNLw798QifHSu4XSVe31QwzV/TB0SKSONyFIfanc631TuBjQG3hwjHdNxjav1
-        qz0/kdjDMpC7BxX5YH/I/nUd5j29pIloceZm/TJ/X32yMUzBHxBMcqP9YbJEyWFgcZuR87jw2t5
-        Z38hwZcS6NFA==
-X-Received: by 2002:a17:907:da5:b0:973:ea41:3ef8 with SMTP id go37-20020a1709070da500b00973ea413ef8mr9118528ejc.35.1685635548354;
-        Thu, 01 Jun 2023 09:05:48 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7GEbYoaLH8nR2gIno0mTHMpUiTE8b+YcwJJ8T11rbucvlJZgqgJIYMM5a0gtgwd1t1ua/VlA==
-X-Received: by 2002:a17:907:da5:b0:973:ea41:3ef8 with SMTP id go37-20020a1709070da500b00973ea413ef8mr9118493ejc.35.1685635548050;
-        Thu, 01 Jun 2023 09:05:48 -0700 (PDT)
-Received: from [192.168.0.224] (host-87-12-203-248.business.telecomitalia.it. [87.12.203.248])
-        by smtp.gmail.com with ESMTPSA id la11-20020a170906ad8b00b00965f5d778e3sm10766381ejb.120.2023.06.01.09.05.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 09:05:42 -0700 (PDT)
-Message-ID: <b20d1687-b808-2c63-d73d-c962456b3f56@redhat.com>
-Date:   Thu, 1 Jun 2023 18:05:36 +0200
+        d=1e100.net; s=20221208; t=1685635586; x=1688227586;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2eOOqjN+PIiYI5ZExNxAoyDJGJiX7/+eSzb019vDm9Y=;
+        b=Aa9WsmqQ15OKc5fU+ZfzgPyI8xCYv5QGuQI3lC88qLKXd8qTD0QPlfrsjA4qoR+wAk
+         6z6+/XdwLTSkqp4aEg9b1FKCFDNor57oQetz/O06hIa1ymd6EgWiiAFg2kFVJfGvNYZ4
+         8shL9bFYNMKPcZC6KD+YaEuPhRy9oLX+a7pPR5OZaGiprWvL9YkfdTp0prKpIYukZrDc
+         I1TqWi+zAYGvsaKwg5pHz3+/hleiBynkjEZtjl4pPwd+7zTIDL1qRs644EJyLcjoiaXC
+         6t830VNM6Asm5CHSAJW8mlmx5ERmSy/LDKNsOizpUnh0v1NkXz8Rh5iaMDbg5EaI1EcJ
+         CrMw==
+X-Gm-Message-State: AC+VfDxTiWeQZFKGxLPk5wxWLukbLwZL7fxlhpJWw7p9AfIxeBpNXBcl
+        gltfbNuddhqUYqCJWc0XZ0R1sg==
+X-Google-Smtp-Source: ACHHUZ7ggT8cTZTPts5u8DP6/HtiHZwzkxdKqCuLNHHvcyqQXzew8mZFEIjTsjf3XQoMyOw6qh4/8w==
+X-Received: by 2002:a05:6a20:2d27:b0:10c:ff51:99bb with SMTP id g39-20020a056a202d2700b0010cff5199bbmr11880335pzl.20.1685635586444;
+        Thu, 01 Jun 2023 09:06:26 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id e25-20020aa78259000000b0065017055cb4sm2491967pfn.203.2023.06.01.09.06.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 09:06:25 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 09:06:25 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v4] checkpatch: Check for 0-length and 1-element arrays
+Message-ID: <202306010906.DEC4F7EED1@keescook>
+References: <20230531004929.you.436-kees@kernel.org>
+ <f8efee7cd9f6f685dcf8b90f9169029fec6481e3.camel@perches.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-From:   Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: [ANNOUNCEMENT] Real-time Linux Summit 2023 at EOSS Prague
-Content-Language: en-US
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>
-Cc:     Kate Stewart <kstewart@linuxfoundation.org>,
-        Min Yu <myu@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Copperman, Elana (Mobileye)" <elana.copperman@mobileye.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f8efee7cd9f6f685dcf8b90f9169029fec6481e3.camel@perches.com>
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,25 +72,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Linux Foundation Real-Time Linux (RTL) collaborative project
-organizes the Real-Time Linux Summit at the Embedded Open Source
-Summit 2023. The event is intended to gather developers and users
-of Linux as a Real-Time Operating System. The main intent is to
-provide room for discussion between developers, tooling experts,
-and users, in a friendly environment.
+On Wed, May 31, 2023 at 10:50:58AM -0700, Joe Perches wrote:
+> On Tue, 2023-05-30 at 17:49 -0700, Kees Cook wrote:
+> > Fake flexible arrays have been deprecated since last millennium. Proper
+> > C99 flexible arrays must be used throughout the kernel so
+> > CONFIG_FORTIFY_SOURCE and CONFIG_UBSAN_BOUNDS can provide proper array
+> > bounds checking.
+> > 
+> > Cc: Andy Whitcroft <apw@canonical.com>
+> > Cc: Joe Perches <joe@perches.com>
+> > Cc: Dwaipayan Ray <dwaipayanray1@gmail.com>
+> > Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > Link: https://lore.kernel.org/r/20230517204530.never.151-kees@kernel.org
+> > ---
+> > v4:
+> >  - combine errors (joe)
+> >  - switch to kerndoc url (joe)
+> >  - add __packed for struct matching (joe)
+> > v3: https://lore.kernel.org/r/20230527020929.give.261-kees@kernel.org
+> > v2: https://lore.kernel.org/lkml/20230526173921.gonna.349-kees@kernel.org
+> > v1: https://lore.kernel.org/lkml/20230517204530.never.151-kees@kernel.org
+> > ---
+> >  scripts/checkpatch.pl | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> > 
+> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> > index 30b0b4fdb3bf..64d21b6aa6df 100755
+> > --- a/scripts/checkpatch.pl
+> > +++ b/scripts/checkpatch.pl
+> > @@ -7430,6 +7430,16 @@ sub process {
+> >  			}
+> >  		}
+> >  
+> > +# check for array definition/declarations that should use flexible arrays instead
+> > +		if ($sline =~ /^[\+ ]\s*}\s*;\s*$/ &&
+> > +		    $prevline =~ /^\+\s*(?:\}(?:\s*__packed\s*)?|$Type)\s*$Ident\s*\[\s*(0|1)\s*\]\s*;\s*$/) {
+> 
+> __packed could be used when a struct is defined and so
+> needs to also be added to $sline.
 
-The event will take place on June 26th afternoon.
+Agh. Yes, thank you. v5 on the way...
 
-Topics to be discussed include:
-
-  - Debugging latencies with ftrace
-  - Best practices of Linux on safety-critical systems
-  - rtla timerlat auto-analysis
-  - The famous Q&A with Thomas Gleixner
-
-To learn more, visit the event Page [1]. Also, feel free to reach us out!
-
-[1] https://events.linuxfoundation.org/embedded-open-source-summit/features/co-located-events/#real-time-linux-summit
-
--- Daniel
-
+-- 
+Kees Cook
