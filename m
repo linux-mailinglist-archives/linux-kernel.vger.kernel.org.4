@@ -2,99 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C3F719CED
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001D1719CEC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233390AbjFANGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 09:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        id S233332AbjFANGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 09:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233266AbjFANGV (ORCPT
+        with ESMTP id S232848AbjFANGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 09:06:21 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89069124
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 06:06:19 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-2568fc3d8a9so240430a91.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 06:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685624779; x=1688216779;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w+80VYIfhjZ5fSjcUibNsG+b2Hi4A7lyy0lDCFEbZBs=;
-        b=RdSP/OEUyw387gUXs4br35uVFKo5guW8++Hou3cYfb7YCLhJMNQHx0nY5w8nffjBkM
-         DddJF2l7xiFfCvYAErVvbOKXfXK87LvjsJyA1Wn1/uGZEg6vADkS6jE+tfwI+Yp9H3Jw
-         2pkiNKyMxdsBS+3ZLMANxPjzX0Pm/VO4EJkb9FGd2St73BTQStxSN1CXVYXLWE50MBsB
-         fwYmcu2bUrLeWKCerok1e7fFLabA58hrgW56dnTDv6ls37XYC1yS7V/fVcMMkbLS9u3h
-         qYOP+U4DY3n3gNtJavEp19/1aICn9Y/ZtpQf2jdHQE8+ylIove6pIe9U6hVMfZEbRSN7
-         1oFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685624779; x=1688216779;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w+80VYIfhjZ5fSjcUibNsG+b2Hi4A7lyy0lDCFEbZBs=;
-        b=BdAxgT/umuOsGo2W8LhJaZi4PshpzWTNbsTcgCAVgTsr8Tb/7GL6mgrvZu8MUITNzM
-         BW1LAOEUq4nI+X2CNLo3MgN6Hlq49e3pfqqNmI9HwAsGFOYapFKnhGq031XWQqGvutMA
-         60rGI7t7Os+qYlfurHucZt1ac4XWR8idp1L2ZlFdF0ff786Mh8kPFZR/M7CkcVqir6Ot
-         tzcksaI+hUM0rkot65hQlmRk4hKPDf7fWGYx0yccUox7oEsUnQEnuyK65TGtm1XnFXwP
-         cqgq4DAgh/jhzULThnjcRsAtb7tT9/XVyBOLqrXkXGPfMG5NnQp+mHwgEOUcl9hRt04f
-         I7zQ==
-X-Gm-Message-State: AC+VfDye4LHlJFhPuLy2sCa8ksnRd5kzuTtKdKPg/DGmPmCv9x5WunHG
-        gWHHFXp0KqmiV1oh5amIRuo=
-X-Google-Smtp-Source: ACHHUZ4/y8r7bunqlmbBydPYg4Y2Y9+zIUnPo4YaUaKfFxXcl6U6oJWx60TAFQel2zyVw3KAkTfULw==
-X-Received: by 2002:a17:90b:17ca:b0:253:572f:79b2 with SMTP id me10-20020a17090b17ca00b00253572f79b2mr6352859pjb.36.1685624778892;
-        Thu, 01 Jun 2023 06:06:18 -0700 (PDT)
-Received: from ryan-ThinkPad-T470.. (c-24-6-63-212.hsd1.ca.comcast.net. [24.6.63.212])
-        by smtp.gmail.com with ESMTPSA id s34-20020a17090a2f2500b0024df6bbf5d8sm1430096pjd.30.2023.06.01.06.06.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 06:06:18 -0700 (PDT)
-From:   =?UTF-8?q?=E2=80=9CRyan?= <ryan.lee.analog@gmail.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, ryans.lee@analog.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Cc:     jairaj.arava@intel.com
-Subject: [PATCH 2/2] ASoC: max98363: limit the number of channel to 1
-Date:   Thu,  1 Jun 2023 06:06:00 -0700
-Message-Id: <20230601130600.25344-2-ryan.lee.analog@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230601130600.25344-1-ryan.lee.analog@gmail.com>
-References: <20230601130600.25344-1-ryan.lee.analog@gmail.com>
+        Thu, 1 Jun 2023 09:06:08 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C341D97;
+        Thu,  1 Jun 2023 06:06:06 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QX5tr3TJMz67lVg;
+        Thu,  1 Jun 2023 21:04:20 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 1 Jun
+ 2023 14:06:04 +0100
+Date:   Thu, 1 Jun 2023 14:06:03 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Terry Bowman <terry.bowman@amd.com>
+CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
+        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
+        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: Re: [PATCH v4 10/23] cxl/port: Store the port's Component Register
+ mappings in struct cxl_port
+Message-ID: <20230601140603.00007ba2@Huawei.com>
+In-Reply-To: <20230523232214.55282-11-terry.bowman@amd.com>
+References: <20230523232214.55282-1-terry.bowman@amd.com>
+        <20230523232214.55282-11-terry.bowman@amd.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ryan Lee <ryans.lee@analog.com>
+On Tue, 23 May 2023 18:22:01 -0500
+Terry Bowman <terry.bowman@amd.com> wrote:
 
-MAX98363 is a mono amplifier. The number of channel needs to be always 1.
+> From: Robert Richter <rrichter@amd.com>
+> 
+> CXL capabilities are stored in the Component Registers. To use them,
+> the specific I/O ranges of the capabilities must be determined by
+> probing the registers. For this, the whole Component Register range
+> needs to be mapped temporarily to detect the offset and length of a
+> capability range.
+> 
+> In order to use more than one capability of a component (e.g. RAS and
+> HDM) the Component Register are probed and its mappings created
+> multiple times. This also causes overlapping I/O ranges as the whole
+> Component Register range must be mapped again while a capability's I/O
+> range is already mapped.
+> 
+> Different capabilities cannot be setup at the same time. E.g. the RAS
+> capability must be made available as soon as the PCI driver is bound,
+> the HDM decoder is setup later during port enumeration. Moreover,
+> during early setup it is still unknown if a certain capability is
+> needed. A central capability setup is therefore not possible,
+> capabilities must be individually enabled once needed during
+> initialization.
+> 
+> To avoid a duplicate register probe and overlapping I/O mappings, only
+> probe the Component Registers one time and store the Component
+> Register mapping in struct port. The stored mappings can be used later
+> to iomap the capability register range when enabling the capability,
+> which will be implemented in a follow-on patch.
+> 
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+Some minor comments...
 
-Signed-off-by: Ryan Lee <ryans.lee@analog.com>
----
- sound/soc/codecs/max98363.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/max98363.c b/sound/soc/codecs/max98363.c
-index 8aa9d9c67aa2..7f5062ac4523 100644
---- a/sound/soc/codecs/max98363.c
-+++ b/sound/soc/codecs/max98363.c
-@@ -246,7 +246,7 @@ static int max98363_sdw_dai_hw_params(struct snd_pcm_substream *substream,
- 	stream_config.frame_rate = params_rate(params);
- 	stream_config.bps = snd_pcm_format_width(params_format(params));
- 	stream_config.direction = direction;
--	stream_config.ch_count = params_channels(params);
-+	stream_config.ch_count = 1;
- 
- 	if (stream_config.ch_count > runtime->hw.channels_max) {
- 		stream_config.ch_count = runtime->hw.channels_max;
--- 
-2.34.1
+> ---
+>  drivers/cxl/core/port.c | 26 ++++++++++++++++++++++++++
+>  drivers/cxl/cxl.h       |  2 ++
+>  2 files changed, 28 insertions(+)
+> 
+> diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
+> index eff91f141fde..34e929f1723b 100644
+> --- a/drivers/cxl/core/port.c
+> +++ b/drivers/cxl/core/port.c
+> @@ -686,6 +686,28 @@ static struct cxl_port *cxl_port_alloc(struct device *uport,
+>  	return ERR_PTR(rc);
+>  }
+>  
+> +static int cxl_setup_comp_regs(struct device *dev, struct cxl_register_map *map,
+> +			       resource_size_t component_reg_phys)
+> +{
+> +	if (component_reg_phys == CXL_RESOURCE_NONE)
+> +		return -ENODEV;
+> +
+> +	memset(map, 0, sizeof(*map));
+> +	map->dev = dev;
+> +	map->reg_type = CXL_REGLOC_RBI_COMPONENT;
+> +	map->resource = component_reg_phys;
+> +	map->max_size = CXL_COMPONENT_REG_BLOCK_SIZE;
+setting most elements. Maybe
+	*map = (struct cxl_register_map) {
+		.dev = ...
+etc is cleaner and effectively the same thing.
+	};
+> +
+> +	return cxl_setup_regs(map);
+> +}
+> +
+> +static inline int cxl_port_setup_regs(struct cxl_port *port,
+> +				      resource_size_t component_reg_phys)
+> +{
+> +	return cxl_setup_comp_regs(&port->dev, &port->comp_map,
+> +				   component_reg_phys);
+> +}
+> +
+>  static struct cxl_port *__devm_cxl_add_port(struct device *host,
+>  					    struct device *uport,
+>  					    resource_size_t component_reg_phys,
+> @@ -709,6 +731,10 @@ static struct cxl_port *__devm_cxl_add_port(struct device *host,
+>  	if (rc)
+>  		goto err;
+>  
+> +	rc = cxl_port_setup_regs(port, component_reg_phys);
+> +	if (rc && rc != -ENODEV)
+> +		goto err;
+
+I'd add a comment on why not being present is fine here.
+
+
+> +
+>  	rc = device_add(dev);
+>  	if (rc)
+>  		goto err;
+> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+> index e5ae5f4e6669..c76e1f84ba61 100644
+> --- a/drivers/cxl/cxl.h
+> +++ b/drivers/cxl/cxl.h
+> @@ -552,6 +552,7 @@ struct cxl_dax_region {
+>   * @regions: cxl_region_ref instances, regions mapped by this port
+>   * @parent_dport: dport that points to this port in the parent
+>   * @decoder_ida: allocator for decoder ids
+> + * @comp_map: component register capability mappings
+>   * @nr_dports: number of entries in @dports
+>   * @hdm_end: track last allocated HDM decoder instance for allocation ordering
+>   * @commit_end: cursor to track highest committed decoder for commit ordering
+> @@ -571,6 +572,7 @@ struct cxl_port {
+>  	struct xarray regions;
+>  	struct cxl_dport *parent_dport;
+>  	struct ida decoder_ida;
+> +	struct cxl_register_map comp_map;
+>  	int nr_dports;
+>  	int hdm_end;
+>  	int commit_end;
 
