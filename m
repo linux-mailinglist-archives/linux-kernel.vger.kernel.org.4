@@ -2,174 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BF0719BC8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB25719BD3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbjFAMQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 08:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
+        id S232828AbjFAMSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 08:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231812AbjFAMQM (ORCPT
+        with ESMTP id S231970AbjFAMSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 08:16:12 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6040AE5B;
-        Thu,  1 Jun 2023 05:15:33 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351Bi332000405;
-        Thu, 1 Jun 2023 12:15:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Mlje/RaJdlmD9ePUf3BFJnhwhirMg1nNdyphFJM62R8=;
- b=YtBuJNW1q+7RYiica59ME6cYRZbBEkKfnkCCEhDyU/yXY6/Dac8YUlDJahT60HpTXaCD
- B/mzD52fZXwv7S+eSrMoUbibtshqyHFhY8mC2n8Si82MQDusW4lk/XOljLgR45hjDkVn
- GUfW51Gj5r9UExHyLhCq37l23MlzIK8QnGNNSjGD9f1If57s3ufGB0u1I9ri60qoAk1o
- PBgyinrJ/6Ef/DQ8Wm5BWp4+t5XND94h+Shd7yQZDHJZAcP2hQrmVPzr7s+LQFSZIe8U
- FW/tiTwXDj+sz37enCzZxe5fThKMaO0GdwzCPBmWJ09LBgDy2ycsaEDCnl7x0Y5Fmc0Y JQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxtqerx2d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 12:15:32 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 351C9JwP031544;
-        Thu, 1 Jun 2023 12:15:31 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxtqerx21-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 12:15:31 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 351AV70u016822;
-        Thu, 1 Jun 2023 12:15:31 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3qu9g6yf5w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 12:15:31 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 351CFT9W46006680
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Jun 2023 12:15:29 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E9E0E5805E;
-        Thu,  1 Jun 2023 12:15:28 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1F10C58043;
-        Thu,  1 Jun 2023 12:15:28 +0000 (GMT)
-Received: from [9.61.88.233] (unknown [9.61.88.233])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Jun 2023 12:15:28 +0000 (GMT)
-Message-ID: <17cf1288-03c5-4143-c62b-9234ed9c4d9a@linux.ibm.com>
-Date:   Thu, 1 Jun 2023 08:15:27 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 0/3] s390/vfio-ap: fix hang when mdev attached to guest is
- removed
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, alex.williamson@redhat.com
-Cc:     jjherne@linux.ibm.com, pasic@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>
-References: <20230530223538.279198-1-akrowiak@linux.ibm.com>
- <9837da27-e224-aded-fe3e-4f4db6b1599c@linux.ibm.com>
-From:   Anthony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <9837da27-e224-aded-fe3e-4f4db6b1599c@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: TezVMj9sko83d63D3C8eAoqm9aFBu3l8
-X-Proofpoint-ORIG-GUID: K3fMyt5eZNMG7j-xWpFuz07VIipQ4NVX
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 1 Jun 2023 08:18:31 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0109D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 05:18:29 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-96f7bf29550so102770366b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 05:18:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google; t=1685621908; x=1688213908;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6TjKKwQ7YZ52K1F/sXvcot46oThTtzilfqhAodws70s=;
+        b=CsDnRRS5uBym/ALZvCHGm7OVO8VYPXC64GNn1FNTOnKgg5jOg+iOXhAtG66CKfdOd+
+         UPXHtlKvdlXjgSlLL+BM5UOjTJVvXB3W3bNTbmPXlP/wSVxZXEPl4s/zZG20uM6c54SO
+         gm6uJ0Ltny7bOCl5S+z77XWhByJWJjWtyW9yg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685621908; x=1688213908;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6TjKKwQ7YZ52K1F/sXvcot46oThTtzilfqhAodws70s=;
+        b=FdP42fOgJNMsE86dCylqAJJ12T42sygLWapE0EQhGDuCfu+4pP+erEv04q4Pvqqr1N
+         w+IgjOyyf81O7dkZvqfcbqaCnog8sYS7RTlqA0ZKuVKhITYp1PkLg0AYSJQUFXJ9T2Qu
+         lyn+xifczy3pUCEh9nbQK5CRYlPa8BKpRHJijA//HhLM2diY/ULOPEUDG4AF7DV7sBfO
+         WoZO1I0qlhQaGe6z1lKcg7CsGGjxRMOri2ChU1nOkHApw2axcLIBC87+MVDJ4i8ytKVR
+         TysLbm8uMK2JH44wgt/dfCmlnBEqzRNUa5STtXe3l80yEzDDR5jvQF4k8TBuGAbNKuYQ
+         ua1A==
+X-Gm-Message-State: AC+VfDzfHdKc4MGkG7QV9Fs1HHbp1ynWt+3h9rNsOHpN1AgUifiaA0Sc
+        GaA9eu4nhODmDc/I1S4LVH5hA3h6pzqSOrJMBCUO0Q==
+X-Google-Smtp-Source: ACHHUZ55F5DRBseT4RmqqRQQ91PxbqrS+uhYpVfbuYrfQBpqlSD3QfHRGiR4nhu24vV3ldqVRa5Eq7dAl71hm9xTI8A=
+X-Received: by 2002:a17:907:6e09:b0:973:eac4:a24d with SMTP id
+ sd9-20020a1709076e0900b00973eac4a24dmr7988792ejc.57.1685621908409; Thu, 01
+ Jun 2023 05:18:28 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- malwarescore=0 suspectscore=0 bulkscore=0 mlxscore=0 adultscore=0
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 mlxlogscore=999
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306010107
+References: <20220517100744.26849-1-dharamhans87@gmail.com>
+ <CAJfpegsDxsMsyfP4a_5H1q91xFtwcEdu9-WBnzWKwjUSrPNdmw@mail.gmail.com>
+ <ccfd2c96-35c7-8e33-9c5e-a1623d969f39@ddn.com> <CAJfpegswePPhVrDrwjZHbHb91iOkbfObnxFqzJU88U7pH86Row@mail.gmail.com>
+ <805d122a-34d0-b097-c3e3-f3cc7c95aa46@ddn.com>
+In-Reply-To: <805d122a-34d0-b097-c3e3-f3cc7c95aa46@ddn.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Thu, 1 Jun 2023 14:18:17 +0200
+Message-ID: <CAJfpegs7DFvP3ZctPcgzYC+4CKg3nqag69oRxH0H339R-M+z8A@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] FUSE: Implement atomic lookup + open/create
+To:     Bernd Schubert <bschubert@ddn.com>
+Cc:     Dharmendra Singh <dharamhans87@gmail.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Horst Birthelmer <horst@birthelmer.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 1 Jun 2023 at 14:01, Bernd Schubert <bschubert@ddn.com> wrote:
+>
+> On 6/1/23 13:50, Miklos Szeredi wrote:
+> > On Thu, 1 Jun 2023 at 13:17, Bernd Schubert <bschubert@ddn.com> wrote:
+> >>
+> >> Hi Miklos,
+> >>
+> >> On 5/19/22 11:39, Miklos Szeredi wrote:
+> >>> On Tue, 17 May 2022 at 12:08, Dharmendra Singh <dharamhans87@gmail.com> wrote:
+> >>>>
+> >>>> In FUSE, as of now, uncached lookups are expensive over the wire.
+> >>>> E.g additional latencies and stressing (meta data) servers from
+> >>>> thousands of clients. These lookup calls possibly can be avoided
+> >>>> in some cases. Incoming three patches address this issue.
+> >>>>
+> >>>>
+> >>>> Fist patch handles the case where we are creating a file with O_CREAT.
+> >>>> Before we go for file creation, we do a lookup on the file which is most
+> >>>> likely non-existent. After this lookup is done, we again go into libfuse
+> >>>> to create file. Such lookups where file is most likely non-existent, can
+> >>>> be avoided.
+> >>>
+> >>> I'd really like to see a bit wider picture...
+> >>>
+> >>> We have several cases, first of all let's look at plain O_CREAT
+> >>> without O_EXCL (assume that there were no changes since the last
+> >>> lookup for simplicity):
+> >>>
+> >>> [not cached, negative]
+> >>>      ->atomic_open()
+> >>>         LOOKUP
+> >>>         CREATE
+> >>>
+> >>
+> >> [...]
+> >>
+> >>> [not cached]
+> >>>      ->atomic_open()
+> >>>          OPEN_ATOMIC
+> >>
+> >> new patch version is eventually going through xfstests (and it finds
+> >> some issues), but I have a question about wording here. Why
+> >> "OPEN_ATOMIC" and not "ATOMIC_OPEN". Based on your comment  @Dharmendra
+> >> renamed all functions and this fuse op "open atomic" instead of "atomic
+> >> open" - for my non native English this sounds rather weird. At best it
+> >> should be "open atomically"?
+> >
+> > FUSE_OPEN_ATOMIC is a specialization of FUSE_OPEN.  Does that explain
+> > my thinking?
+>
+> Yeah, just the vfs function is also called atomic_open. We now have
+>
+>
+> static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
+>                  struct file *file, unsigned flags,
+>                  umode_t mode)
+> {
+>      struct fuse_conn *fc = get_fuse_conn(dir);
+>
+>      if (fc->no_open_atomic)
+>          return fuse_open_nonatomic(dir, entry, file, flags, mode);
+>      else
+>          return fuse_open_atomic(dir, entry, file, flags, mode);
+> }
+>
+>
+> Personally I would use something like _fuse_atomic_open() and
+> fuse_create_open() (instead of fuse_open_nonatomic). The order of "open
+> atomic" also made it into libfuse and comments - it just sounds a bit
+> weird ;) I have to live with it, if you prefer it like this.
 
+I'd prefer FUSE_OPEN_ATOMIC for the API, but I don't care about
+function names, as long as the purpose is clear.
 
-On 5/31/23 10:48 AM, Matthew Rosato wrote:
-> On 5/30/23 6:35 PM, Tony Krowiak wrote:
->> When a user attempts to remove a vfio-ap mediated device attached to a
->> guest, the operation hangs until the mdev's fd is closed by the guest
->> (i.e., the hostdev is detached or the guest is shut down). This patch
->> series provides kernel-side code that allows userspace to set up a
->> communication channel that will allow the vfio_ap device driver to notify
->> userspace when a request to release the mdev is received, so that userspace
->> can close the mdev fd and avoid the hang. The patch series provides the
->> following:
->>
->> 1. Introduces code to handle the VFIO_DEVICE_GET_IRQ_INFO and
->>     VFIO_DEVICE_SET_IRQS ioctl calls to set the eventfd_ctx for signaling a
->>     device request to userspace.
->>
->> 2. Wires up the VFIO bus driver callback to request a release of the mdev.
->>     When invoked, the vfio_ap device driver will use the eventfd_ctx set up
->>     in #1 to signal a request to userspace to release the mdev.
->>
->>
->> Note:
->> ----
->> If a user subsequently attempts to restart the guest or re-attach the mdev,
->> the operation will fail with a message indicating the domain is already
->> active. This is a libvirt problem resolved with the following commit:
->>
->> commit ebd004a03dbd ("security: do not remember/recall labels for VFIO
->> MDEVs")
-> 
-> For the series:
-> 
-> Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
-
-Thanks for the review.
-
-> 
-> 
-> I also did some testing using the companion qemu series at
-> https://lore.kernel.org/qemu-devel/20230530225544.280031-1-akrowiak@linux.ibm.com
-
-Shall I credit you with Tested-by also?
-
-> 
-> Before kernel+qemu changes:
-> 1. mdevctl start -u <uuid>, where <uuid> references a vfio-ap mdev
-> 2. start a qemu guest with <uuid> attached
-> 3. mdvectl stop -u <uuid>
-> 4. -mdevctl will now hang indefinitely; the mdev remains in-use by the guest-
-> Note: detaching the device or powering off the guest will allow the mdevctl command to complete.
-> 
-> After kernel+qemu changes:
-> 1. mdevctl start -u <uuid>, where <uuid> references a vfio-ap mdev
-> 2. start a qemu guest with <uuid> attached
-> 3. mdvectl stop -u <uuid>
-> 4. -device is detached from the guest and stopped-
-> 5. Using a libvirt that includes ebd004a03dbd I also verified that the mdev can be started again and re-attached to the running guest without error.
-> 
-> 
->>
->> Tony Krowiak (3):
->>    vfio: ap: realize the VFIO_DEVICE_GET_IRQ_INFO ioctl
->>    vfio: ap: realize the VFIO_DEVICE_SET_IRQS ioctl
->>    s390/vfio-ap: Wire in the vfio_device_ops request callback
->>
->>   drivers/s390/crypto/vfio_ap_ops.c     | 134 +++++++++++++++++++++++++-
->>   drivers/s390/crypto/vfio_ap_private.h |   3 +
->>   include/uapi/linux/vfio.h             |   9 ++
->>   3 files changed, 145 insertions(+), 1 deletion(-)
->>
-> 
+Thanks,
+Miklos
