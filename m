@@ -2,122 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFF5719AF8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE182719AFA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 13:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232854AbjFAL20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 07:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
+        id S232939AbjFAL3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 07:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232332AbjFAL2U (ORCPT
+        with ESMTP id S232670AbjFAL27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 07:28:20 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1F0124;
-        Thu,  1 Jun 2023 04:28:19 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35157EpB004438;
-        Thu, 1 Jun 2023 11:27:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=cfMQqCdL/Z44EbSVXa1lxsAa6Ha3jxDNZTaevoUb3Fs=;
- b=pQnPSYB5UQSTmMiF6FwPNUmI7mlWPGPGBSVLhzGzT7cDgOmu++W4eeX8jtYgTFWn2u1l
- USS7BygZ6pv8+3ohuQdH/xRH0KPTaCaMedsK26XgFs/EKu20FxtHYYPHpvIvu7V4+q16
- D06IvqP+Fo9G9XukDST7t5QMyZuyZG685BTZaYekFnhJpVPs89pRbHBRmWuoF5eLVbT3
- vo+Kr12Ax1MxY8QGPwWhRtauV/lrp0AcgQPjb5rIX4/f/5JUax7SRIvaQdT9gmjzIvOz
- qmcA0pCi7RkwVqY54oFKwGbH9uQLiEhotZbuPlvazp50Ivsi9HH6xrAebNSWXyRinurn uw== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxdr99jsh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 11:27:53 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351BRqhY021128
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Jun 2023 11:27:52 GMT
-Received: from stor-berry.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 1 Jun 2023 04:27:52 -0700
-From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
-To:     <quic_asutoshd@quicinc.com>, <quic_cang@quicinc.com>,
-        <bvanassche@acm.org>, <mani@kernel.org>,
-        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
-        <beanhuo@micron.com>, <avri.altman@wdc.com>,
-        <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>,
-        "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Alice Chao <alice.chao@mediatek.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 1/1] ufs: mcq: Fix the variable wraparound logic
-Date:   Thu, 1 Jun 2023 04:27:01 -0700
-Message-ID: <e6e8559eee9626afa38f88e18080398e7296e1bb.1685617541.git.quic_nguyenb@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <f711489c6b95ec410e500543fd24ca9fc0f462cd.1685618737.git.quic_nguyenb@quicinc.com>
-References: <f711489c6b95ec410e500543fd24ca9fc0f462cd.1685618737.git.quic_nguyenb@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: mJ528_cE8svJtbdhtniCiM-9-Rkc5UZf
-X-Proofpoint-GUID: mJ528_cE8svJtbdhtniCiM-9-Rkc5UZf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_07,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- impostorscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0 phishscore=0
- spamscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2306010101
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Jun 2023 07:28:59 -0400
+Received: from mail-m12745.qiye.163.com (mail-m12745.qiye.163.com [115.236.127.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AC818F;
+        Thu,  1 Jun 2023 04:28:47 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPV6:240e:3b7:327f:140:e827:966c:49bc:3060])
+        by mail-m12745.qiye.163.com (Hmail) with ESMTPA id 94D9E9A0A0F;
+        Thu,  1 Jun 2023 19:28:42 +0800 (CST)
+From:   Ding Hui <dinghui@sangfor.com.cn>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn,
+        Ding Hui <dinghui@sangfor.com.cn>
+Subject: [PATCH net-next] net: ethtool: Fix out-of-bounds copy to user
+Date:   Thu,  1 Jun 2023 19:28:39 +0800
+Message-Id: <20230601112839.13799-1-dinghui@sangfor.com.cn>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDQkxOVkxJGkpOHUxKHUlKT1UTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlPSx5BSBlMQUhJTB1BSk9LQR5DSUxBQk1NGEFPQhkYQUhLTUtZV1kWGg8SFR0UWU
+        FZT0tIVUpKS0hKTFVKS0tVS1kG
+X-HM-Tid: 0a8876b79570b218kuuu94d9e9a0a0f
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OFE6Tgw5FD1CDD4qKhNCKx8Z
+        Iw5PCjpVSlVKTUNOTUpDQklISEtNVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlJT0seQUgZTEFISUwdQUpPS0EeQ0lMQUJNTRhBT0IZGEFIS01LWVdZCAFZQUhDTks3Bg++
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the hwq's queue depth is not a multiple of 4s, the
-logic used for wrapping around the increase-by-1 sq_head_slot
-variable in ufshcd_mcq_sqe_search() will give an incorrect
-result because the binary expression of the mask is not
-a uniform of all 1s.
+When we get statistics by ethtool during changing the number of NIC
+channels greater, the utility may crash due to memory corruption.
 
-Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
+The NIC drivers callback get_sset_count() could return a calculated
+length depends on current number of channels (e.g. i40e, igb).
+
+The ethtool allocates a user buffer with the first ioctl returned
+length and invokes the second ioctl to get data. The kernel copies
+data to the user buffer but without checking its length. If the length
+returned by the second get_sset_count() is greater than the length
+allocated by the user, it will lead to an out-of-bounds copy.
+
+Fix it by restricting the copy length not exceed the buffer length
+specified by userspace.
+
+Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
 ---
- drivers/ufs/core/ufs-mcq.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ net/ethtool/ioctl.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-index 66ac02e..8e5bc88 100644
---- a/drivers/ufs/core/ufs-mcq.c
-+++ b/drivers/ufs/core/ufs-mcq.c
-@@ -585,7 +585,6 @@ static bool ufshcd_mcq_sqe_search(struct ufs_hba *hba,
- {
- 	struct ufshcd_lrb *lrbp = &hba->lrb[task_tag];
- 	struct utp_transfer_req_desc *utrd;
--	u32 mask = hwq->max_entries - 1;
- 	__le64  cmd_desc_base_addr;
- 	bool ret = false;
- 	u64 addr, match;
-@@ -610,7 +609,10 @@ static bool ufshcd_mcq_sqe_search(struct ufs_hba *hba,
- 			ret = true;
- 			goto out;
- 		}
--		sq_head_slot = (sq_head_slot + 1) & mask;
-+
-+		sq_head_slot++;
-+		if (sq_head_slot == hwq->max_entries)
-+			sq_head_slot = 0;
- 	}
+diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
+index 6bb778e10461..82a975a9c895 100644
+--- a/net/ethtool/ioctl.c
++++ b/net/ethtool/ioctl.c
+@@ -1902,7 +1902,7 @@ static int ethtool_self_test(struct net_device *dev, char __user *useraddr)
+ 	if (copy_from_user(&test, useraddr, sizeof(test)))
+ 		return -EFAULT;
  
- out:
+-	test.len = test_len;
++	test.len = min_t(u32, test.len, test_len);
+ 	data = kcalloc(test_len, sizeof(u64), GFP_USER);
+ 	if (!data)
+ 		return -ENOMEM;
+@@ -1915,7 +1915,8 @@ static int ethtool_self_test(struct net_device *dev, char __user *useraddr)
+ 	if (copy_to_user(useraddr, &test, sizeof(test)))
+ 		goto out;
+ 	useraddr += sizeof(test);
+-	if (copy_to_user(useraddr, data, array_size(test.len, sizeof(u64))))
++	if (test.len &&
++	    copy_to_user(useraddr, data, array_size(test.len, sizeof(u64))))
+ 		goto out;
+ 	ret = 0;
+ 
+@@ -1940,10 +1941,10 @@ static int ethtool_get_strings(struct net_device *dev, void __user *useraddr)
+ 		return -ENOMEM;
+ 	WARN_ON_ONCE(!ret);
+ 
+-	gstrings.len = ret;
++	gstrings.len = min_t(u32, gstrings.len, ret);
+ 
+ 	if (gstrings.len) {
+-		data = vzalloc(array_size(gstrings.len, ETH_GSTRING_LEN));
++		data = vzalloc(array_size(ret, ETH_GSTRING_LEN));
+ 		if (!data)
+ 			return -ENOMEM;
+ 
+@@ -2055,9 +2056,9 @@ static int ethtool_get_stats(struct net_device *dev, void __user *useraddr)
+ 	if (copy_from_user(&stats, useraddr, sizeof(stats)))
+ 		return -EFAULT;
+ 
+-	stats.n_stats = n_stats;
++	stats.n_stats = min_t(u32, stats.n_stats, n_stats);
+ 
+-	if (n_stats) {
++	if (stats.n_stats) {
+ 		data = vzalloc(array_size(n_stats, sizeof(u64)));
+ 		if (!data)
+ 			return -ENOMEM;
+@@ -2070,7 +2071,8 @@ static int ethtool_get_stats(struct net_device *dev, void __user *useraddr)
+ 	if (copy_to_user(useraddr, &stats, sizeof(stats)))
+ 		goto out;
+ 	useraddr += sizeof(stats);
+-	if (n_stats && copy_to_user(useraddr, data, array_size(n_stats, sizeof(u64))))
++	if (stats.n_stats &&
++	    copy_to_user(useraddr, data, array_size(stats.n_stats, sizeof(u64))))
+ 		goto out;
+ 	ret = 0;
+ 
 -- 
-2.7.4
+2.17.1
 
