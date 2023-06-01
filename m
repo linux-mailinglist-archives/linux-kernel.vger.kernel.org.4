@@ -2,133 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC72D719EF4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0556F719FC8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233486AbjFAN7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 09:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        id S233689AbjFAOYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjFAN7N (ORCPT
+        with ESMTP id S233499AbjFAOYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 09:59:13 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55844136;
-        Thu,  1 Jun 2023 06:59:12 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351Dm9hh015701;
-        Thu, 1 Jun 2023 13:58:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=qT8kRrIQamscJRst5pRHoKfdEH4/busNADa3JrTVC3g=;
- b=EcF02Jqmvf+6HAT9LaMZa+MhPEGs9/+dTMTHpBaDRYrD5RPuGnr/K2/HP64SQalUJkHk
- ZWCjCaw2lONRj2AhM3Crarlu/K6+od0DBexSl1zjUar0MrEQxfRIg/K7oY8QhHG4KQXL
- FdBCF9dVOXSp8UoJLVE/juG1zcIni6dNQ6K9we5th1ge6iX8NT1b3WKIBNGdBdfaq4c2
- CzoTcRaNiE6ez9GoMWOuDymKC2ot745yFN19iHAxlwHlTTDmga8lIyU9/qTJhslkaaLq
- jfZtcwiIOHA/pscR30JBpqbSY7VooS5bEAnLZQmzhsJp9ZR59g9tYAqGE4DeTia9Cf1r Nw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxvhdg9mn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 13:58:01 +0000
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 351DmkhY017127;
-        Thu, 1 Jun 2023 13:58:00 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qxvhdg9je-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 13:58:00 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 351119CB028926;
-        Thu, 1 Jun 2023 13:57:57 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qu9g52jpr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 13:57:57 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 351DvrTb43450766
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Jun 2023 13:57:54 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E094820040;
-        Thu,  1 Jun 2023 13:57:53 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BB4BD20043;
-        Thu,  1 Jun 2023 13:57:52 +0000 (GMT)
-Received: from thinkpad-T15 (unknown [9.152.212.238])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Jun 2023 13:57:52 +0000 (GMT)
-Date:   Thu, 1 Jun 2023 15:57:51 +0200
-From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: Re: [PATCH 05/12] powerpc: add pte_free_defer() for pgtables
- sharing page
-Message-ID: <20230601155751.7c949ca4@thinkpad-T15>
-In-Reply-To: <a8df11d-55ae-64bc-edcb-d383a7a941ea@google.com>
-References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
-        <28eb289f-ea2c-8eb9-63bb-9f7d7b9ccc11@google.com>
-        <ZHSwWgLWaEd+zi/g@casper.infradead.org>
-        <a8df11d-55ae-64bc-edcb-d383a7a941ea@google.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Thu, 1 Jun 2023 10:24:36 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FC9FC;
+        Thu,  1 Jun 2023 07:24:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685629473; x=1717165473;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=a21Bq6Sjdj/JyHm5wqh7wSxYryZ6wTGMMTZyPDza/H0=;
+  b=ZRT4MmXgrOQq00M4+jDLZSN/7Perlirff+D3NVT8ZIGlsA7k6b+ciLRk
+   5R2hU2FOLr2cBgpVzagK8oCHJXcSi4X/PA1ikbIAewsQqnd4rrGGzoOJO
+   hMoQvnEHNMc8/kTS73hNnXUE0tLHsqOCFkscBhBHBqNF/8dbpIsN16z/5
+   Erl96iJazSzDwKzVYkTGJquE3jygkSOFPpCQf0p5t+S0ay9vqEVT57Sp/
+   EGIPUDxrdhSyEiWBfORr0CafBTUf5qG17SbLCxiw17UCtH/VjL7uqTAk3
+   FboopAo4kOhgBqaN0PRsBgwBVTac5INMujH6rIKYtVSMUXXEvF/GLzxmI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="421369369"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="421369369"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 06:59:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="797156201"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="797156201"
+Received: from linux.intel.com ([10.54.29.200])
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Jun 2023 06:59:23 -0700
+Received: from [10.212.129.33] (kliang2-mobl1.ccr.corp.intel.com [10.212.129.33])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id EC418580BF6;
+        Thu,  1 Jun 2023 06:59:21 -0700 (PDT)
+Message-ID: <07b1f8d9-3839-81cd-0c46-3742f6273901@linux.intel.com>
+Date:   Thu, 1 Jun 2023 09:59:20 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 0/4] Hybrid event parsing fixes
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Richter <tmricht@linux.ibm.com>
+References: <20230601082954.754318-1-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230601082954.754318-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: SzHo2UjAE6P2WmSmv78QU1Y8kPZW3VM5
-X-Proofpoint-GUID: 3TDd0Cl2h1aUFcqmXlzGLt1BVByjS4S3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- impostorscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
- suspectscore=0 phishscore=0 mlxlogscore=999 malwarescore=0 clxscore=1011
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306010119
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -136,49 +79,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 May 2023 07:36:40 -0700 (PDT)
-Hugh Dickins <hughd@google.com> wrote:
 
-> On Mon, 29 May 2023, Matthew Wilcox wrote:
-> > On Sun, May 28, 2023 at 11:20:21PM -0700, Hugh Dickins wrote:  
-> > > +void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
-> > > +{
-> > > +	struct page *page;
-> > > +
-> > > +	page = virt_to_page(pgtable);
-> > > +	call_rcu(&page->rcu_head, pte_free_now);
-> > > +}  
-> > 
-> > This can't be safe (on ppc).  IIRC you might have up to 16x4k page
-> > tables sharing one 64kB page.  So if you have two page tables from the
-> > same page being defer-freed simultaneously, you'll reuse the rcu_head
-> > and I cannot imagine things go well from that point.  
-> 
-> Oh yes, of course, thanks for catching that so quickly.
-> So my s390 and sparc implementations will be equally broken.
-> 
-> > 
-> > I have no idea how to solve this problem.  
-> 
-> I do: I'll have to go back to the more complicated implementation we
-> actually ran with on powerpc - I was thinking those complications just
-> related to deposit/withdraw matters, forgetting the one-rcu_head issue.
-> 
-> It uses large (0x10000) increments of the page refcount, avoiding
-> call_rcu() when already active.
-> 
-> It's not a complication I had wanted to explain or test for now,
-> but we shall have to.  Should apply equally well to sparc, but s390
-> more of a problem, since s390 already has its own refcount cleverness.
 
-Yes, we have 2 pagetables in one 4K page, which could result in same
-rcu_head reuse. It might be possible to use the cleverness from our
-page_table_free() function, e.g. to only do the call_rcu() once, for
-the case where both 2K pagetable fragments become unused, similar to
-how we decide when to actually call __free_page().
+On 2023-06-01 4:29 a.m., Ian Rogers wrote:
+> Correct various issues that have come up in mailing list discussions,
+> the most impactful of which is the wildcard opening of events of type
+> PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE. But also try to avoid a
+> parse-error without a warning, have more fall-back behaviors and be
+> liberal with the definition of software events.
+> 
+> The majority of the change is in correcting the parse-event test to
+> match the new hybrid parsing.
+> 
+> Ian Rogers (4):
+>   perf pmu: Correct perf_pmu__auto_merge_stats affecting hybrid
+>   perf evsel: Add verbose 3 print of evsel name when opening
+>   perf parse-events: Wildcard most "numeric" events
+>   perf test: Update parse-events expectations
 
-However, it might be much worse, and page->rcu_head from a pagetable
-page cannot be used at all for s390, because we also use page->lru
-to keep our list of free 2K pagetable fragments. I always get confused
-by struct page unions, so not completely sure, but it seems to me that
-page->rcu_head would overlay with page->lru, right?
+The patch set fixes the issues I found on a hybrid machine.
+
+Tested-by: Kan Liang <kan.liang@linux.intel.com>
+
+It's better to fold the examples (especially for the patch 1) in the
+description. So we can understand what's it trying to fix and what's the
+expected result now.
+
+Thanks,
+Kan
+
+> 
+>  tools/perf/tests/parse-events.c | 1108 ++++++++++++++++---------------
+>  tools/perf/util/evsel.c         |    1 +
+>  tools/perf/util/parse-events.c  |  104 ++-
+>  tools/perf/util/parse-events.y  |   10 +-
+>  tools/perf/util/pmu.c           |   18 +-
+>  tools/perf/util/pmu.h           |    5 +
+>  tools/perf/util/pmus.c          |    5 +
+>  tools/perf/util/pmus.h          |    1 +
+>  8 files changed, 698 insertions(+), 554 deletions(-)
+> 
