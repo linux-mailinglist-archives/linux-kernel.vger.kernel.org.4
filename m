@@ -2,79 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A51817197DC
+	by mail.lfdr.de (Postfix) with ESMTP id 50B097197DB
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbjFAJ4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
+        id S232064AbjFAJ4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbjFAJyh (ORCPT
+        with ESMTP id S233245AbjFAJyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:54:37 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0836E7B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:54:05 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f3ba703b67so665326e87.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 02:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685613244; x=1688205244;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AJIoI2l+WIN05o9c4IUijVvVA2Ux7esddHxAo4SWQzc=;
-        b=a2wB1Jnkb6fPSvHZYLILxpfoh2hFdQ+t3Xv4JhlrN9Tpql0pIBTdeg++CsPGwuTmu2
-         K/PBOOt++5CYWYGtWP9/1VbHxY1J22rTHuRLeI4OK35b1xhPKLeaFXE8ZBBr6Z5rEqD4
-         O+TD9A3lGqrlkaeDe90LfiaBk6JFb8mezu7/2wYnmJ4d/YYSX+Iggn+BuJX6AT/qaTh5
-         XcnO30/rvjmrdJYe24EbegXw+t7W6F65nJxY9bdgMdAp2N29UBtHdfV86pxFhsbBRkQd
-         yPX1aod00PC7HuRl9ZBUYvoDEgJYO1Oyl+HctkzUsKFR0elAAkFUZavEveA4LKA3WCIS
-         NWWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685613244; x=1688205244;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AJIoI2l+WIN05o9c4IUijVvVA2Ux7esddHxAo4SWQzc=;
-        b=eliKffqd2IWANwBtADeXHZ/FvmX9lsiNuT92xIzcYfAgQePQs8GtzE2kijCTFI4wcx
-         NoKHLHamxwE3dv0mm1QX/HsOnWylhaVaI+/0Cmlr1JE4b243CFMYHQcwuwcp7AwKpnNT
-         OdE4TancAGip2zDvRAPHDOGWURElJEo8D0weIeFdJ26WchBpINr3MCke9nIkcpXDXd9Z
-         VFMajf80a6o7WtdJ25J76xjFKjRSdsc6hBIe4AjVTFssbtwzsg9W6BWJUoWu0Qb8jPl6
-         OmwCMtKpQyygcWI3MF64NVpN65d9cQggz2/QLfgNXoSL6Nbo8bavRp8Jx5ZKwsedrnLM
-         nRTA==
-X-Gm-Message-State: AC+VfDwwz+OC1e2LAcFVK64Phv2L8p4hEUBa3bItAc0LMP6qvCY1GVmK
-        ii2r/M1LHsI9FE/cd9aO4tY0jg==
-X-Google-Smtp-Source: ACHHUZ4544N4JJji/KF2ebzl/FR5R8obPE9gcqJuAb0oZW/oh8LRsvrltyJvpgdDGRBY3wnqEl2IBg==
-X-Received: by 2002:a19:c50b:0:b0:4f3:b708:f554 with SMTP id w11-20020a19c50b000000b004f3b708f554mr957382lfe.47.1685613244025;
-        Thu, 01 Jun 2023 02:54:04 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id a21-20020ac25215000000b004eed8de597csm1033132lfl.32.2023.06.01.02.54.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 02:54:03 -0700 (PDT)
-Message-ID: <536a962f-6276-ee87-fdad-5414251bc606@linaro.org>
-Date:   Thu, 1 Jun 2023 12:54:03 +0300
+        Thu, 1 Jun 2023 05:54:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D35E53;
+        Thu,  1 Jun 2023 02:54:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C70F5642AA;
+        Thu,  1 Jun 2023 09:54:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1341EC433A1;
+        Thu,  1 Jun 2023 09:54:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685613270;
+        bh=LBqHWjOXWHLVP7NmjizqJrn/SFhLwC0EcVXIWfRrzzg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U8qkzq8ezNBbLMhO9LpawjTYIaqNQh0SCLdz5SaKDrPvhpL2zgR7715KEN+2T1vFb
+         k2x8QauBDIfHsGNLsEio1PmSNZhQTJd/VAJylkO99Is6feBHTh7zMibzPgPGZsOQ1L
+         834yZXO3LiDdVIuNTUboop9qwM2GBC9ghdToFJcy5hJ1tlg56L6qydc/kv0SOcNfpK
+         Gpua8g0mQMBWSgOPLYJBkukReICp5WS6WyohrajcbuFyFS46HTT4HuJW/+iUKhdAAE
+         LX7TrBQshW+fH3Fpl2cfEzv/9CMBey0wg1ZgS8JaFOwBJdtwnUl5IyKDONb6IGq62N
+         kAEz1i3wIidFw==
+Date:   Thu, 1 Jun 2023 05:54:28 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Lucas Tanure <tanure@linux.com>, Rob Herring <robh@kernel.org>,
+        robh+dt@kernel.org, frowand.list@gmail.com,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 6.3 06/11] of: fdt: Scan /memreserve/ last
+Message-ID: <ZHhq1DKT1CBSTQlz@sashalap>
+References: <20230511193757.623114-1-sashal@kernel.org>
+ <20230511193757.623114-6-sashal@kernel.org>
+ <20230515-headroom-swirl-a0a845584a58@spud>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 05/20] interconnect: qcom: icc-rpm: Introduce keep_alive
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>, Evan Green <evgreen@chromium.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org>
- <20230526-topic-smd_icc-v1-5-1bf8e6663c4e@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230526-topic-smd_icc-v1-5-1bf8e6663c4e@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230515-headroom-swirl-a0a845584a58@spud>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,39 +58,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/05/2023 13:20, Konrad Dybcio wrote:
-> The downstream kernel employs the concept of "keeping the bus alive"
-> by voting for the minimum (XO/19.2MHz) rate at all times on certain
-> (well, most) buses.
-> This is a very important thing to have, as if we
-> either have a lackluster/wrong DT that doesn't specify a (high enough)
-> vote on a certain bus, we may lose access to the entire bus altogether.
-> This is very apparent when we only start introducing interconnect
-> support on a given platform and haven't yet introduced voting on all
-> peripherals.
-> 
-> The same can happen if we only have a single driver casting a vote on
-> a certain bus and that driver exits/crashes/suspends.
-> 
-> The keepalive vote is limited to the ACTIVE bucket, as keeping a
-> permanent vote on the SLEEP one could prevent the platform from properly
-> entering low power mode states.
-> 
-> Introduce the very same concept, with a slight twist: the vendor
-> kernel checks whether the rate is zero before setting the minimum
-> vote, but that's rather silly, as in doing so we're at the mercy
-> of CCF. Instead, explicitly clamp the rates to always be >= 19.2 MHz
-> for providers with keep_alive=true.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/interconnect/qcom/icc-rpm.c | 10 ++++++++++
->   drivers/interconnect/qcom/icc-rpm.h |  3 +++
->   2 files changed, 13 insertions(+)
+On Mon, May 15, 2023 at 09:21:04PM +0100, Conor Dooley wrote:
+>Hey Sasha,
+>
+>On Thu, May 11, 2023 at 03:37:49PM -0400, Sasha Levin wrote:
+>> From: Lucas Tanure <tanure@linux.com>
+>>
+>> [ Upstream commit b413281876292de44ae84e9a9ce9d62e47f266e9 ]
+>>
+>> Change the scanning /memreserve/ and /reserved-memory node order to fix
+>> Kernel panic on Khadas Vim3 Board.
+>>
+>> If /memreserve/ goes first, the memory is reserved, but nomap can't be
+>> applied to the region. So the memory won't be used by Linux, but it is
+>> still present in the linear map as normal memory, which allows
+>> speculation. Legitimate access to adjacent pages will cause the CPU
+>> to end up prefetching into them leading to Kernel panic.
+>>
+>> So /reserved-memory node should go first, as it has a more updated
+>> description of the memory regions and can apply flags, like nomap.
+>>
+>> Link: https://lore.kernel.org/all/CAJX_Q+1Tjc+-TjZ6JW9X0NxEdFe=82a9626yL63j7uVD4LpxEA@mail.gmail.com/
+>> Signed-off-by: Lucas Tanure <tanure@linux.com>
+>> Link: https://lore.kernel.org/r/20230424113846.46382-1-tanure@linux.com
+>> Signed-off-by: Rob Herring <robh@kernel.org>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>
+>Rob requested that this patch (and it's bretheren in other AUTOSEL
+>series) not be backported immediately:
+>| Going to let this sit in linux-next for a bit. I also didn't tag for
+>| stable kernels. I want it to get some exposure in mainline at least for
+>| a few -rc releases rather than getting backported right away. Please
+>| help ensure that happens if you see stable review emails. I'm going to
+>| be offline most of the next month.
+>https://lore.kernel.org/linux-devicetree/168262872454.3491083.6407810340850053636.robh@kernel.org/
+>
+>Perhaps delaying it for another couple of weeks, since we have only just
+>had -rc2, is a good idead?
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+I'll drop it, let me know when you want it included back. Thanks!
 
 -- 
-With best wishes
-Dmitry
-
+Thanks,
+Sasha
