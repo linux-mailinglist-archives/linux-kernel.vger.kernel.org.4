@@ -2,266 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4649F71F51A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8EB71F527
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 23:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbjFAVxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 17:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
+        id S232852AbjFAV5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 17:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbjFAVxK (ORCPT
+        with ESMTP id S229724AbjFAV5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 17:53:10 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF9D195;
-        Thu,  1 Jun 2023 14:53:08 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-5289ce6be53so2025739a12.0;
-        Thu, 01 Jun 2023 14:53:08 -0700 (PDT)
+        Thu, 1 Jun 2023 17:57:53 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C264718D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 14:57:52 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-38ede2e0e69so921854b6e.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 14:57:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685656388; x=1688248388;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G68pkf+EjV1cJeNi8PG38UDN9hb7qm/88/NxhsQ9ajQ=;
-        b=qPShLCalzxPyskuTUtXZ7Rfu3OmvacivFQo9Tdli8QuHYwxvsavpZksdzUj+JLa5N7
-         /rDvwBZ+i+5sqwj34S+D0T1JHpugEWa0m2h+b3o5x2WXGUnJKLqs7YsvKhNEUyylbfOo
-         LV7YZxGKYNCZYl3EUV148rFXC0LsEu9t7X17R7/xkM+C9huYqS5BSW3nZAXkXf0nVMk/
-         67At7Dihrqjz1O1qxtxPvuuDveooVDbZj1gpidQC3F5DQxH+EDWomFgdmuhNGn0JlL31
-         fr/P85Wq+1jgWvo/NP8c+2ElLEqT5Q84sq+F7VaZ/seJqFPxJeAnGTfhsnblA66BGA56
-         UleQ==
+        d=linaro.org; s=google; t=1685656672; x=1688248672;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ruzONHVQNNLn5cbL5oGqVupApwre43YqM07fYPN5vjI=;
+        b=xJ3xHiRVsz8R7jMctT41qJPcKiBMuq002UN7r9mY5OoIHL4nk4TNU9bO882krVSeYl
+         F+LcWIkkh8dut/CrRkIeYQNJv6Ztxuc0L2yqyg4BJkzX/oLWAjHj8uUVy2NMG38qcZHc
+         gC/em/1iWrZyeWApUBNlPAkCo7rQzXVHwMr/25D/rcQHwBuJfqUlvl4MeK/Hpv3W5dRW
+         70yYkXlrOJMMOozJJKV0N9A775LDDzO0Gx7E/gUu6vBu7eExVkS/OZkNP5tdatwIjnaY
+         ZHjT+b0sxqybeL48s/zonqK9gyu1fGwFq+/ETOHCM407OJwxK06Qr+TFUBzsrmmQNnRj
+         EfKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685656388; x=1688248388;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G68pkf+EjV1cJeNi8PG38UDN9hb7qm/88/NxhsQ9ajQ=;
-        b=AcWeGHIm0UeYcKXF0aihIHu8NuXoNorMH/yFyagfW+rB61BA1PiitYKye1VmHsVMT7
-         tdEIzOqtL7uDBd9p8Mlzewbfy/6413flogUrU5oMGLKE5e/x3R4mwW51/5CKR3X2ltPQ
-         wx8+hAO2zt9bDpxmcH7VoF63GsQ1FTkwwXf6rF4MFrpDLBsk6UQWsPsIT0P6FjqdNlXz
-         pKUNkGJrAUGjs3AEuH0dF1u7ufQweeLZJYi98pqWu0RQo9VIM/lLMAR+EDST+0mOx6Tf
-         l+faDMJQZJlb/meouzPsLCzbxc5utQRzPk4v2U58yUeOAPygN8t++Uf8k4YMW4NkdHBk
-         ygAw==
-X-Gm-Message-State: AC+VfDypi18hvFs+1JTX9roq0TatFDe0phS+AMyhMgbx30qjSqw2wD9l
-        4StAGAu7i5eQP8raf/9PjZI=
-X-Google-Smtp-Source: ACHHUZ4XZw/TCgBBXeCw4ofQdb31hqwKZnZeGlgkaYFxQEsbFoQbQp0RTtP6YgUCAVPjwpruBATcSg==
-X-Received: by 2002:a17:902:c945:b0:1af:b5af:367b with SMTP id i5-20020a170902c94500b001afb5af367bmr535957pla.29.1685656387852;
-        Thu, 01 Jun 2023 14:53:07 -0700 (PDT)
-Received: from babbage.. (162-227-164-7.lightspeed.sntcca.sbcglobal.net. [162.227.164.7])
-        by smtp.gmail.com with ESMTPSA id b7-20020a170902650700b001b034d2e71csm4049207plk.34.2023.06.01.14.53.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 14:53:07 -0700 (PDT)
-From:   msmulski2@gmail.com
-To:     andrew@lunn.ch
-Cc:     f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux@armlinux.org.uk, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, simon.horman@corigine.com,
-        kabel@kernel.org, Michal Smulski <michal.smulski@ooma.com>
-Subject: [PATCH net-next v5 1/1] net: dsa: mv88e6xxx: implement USXGMII mode for mv88e6393x
-Date:   Thu,  1 Jun 2023 14:52:51 -0700
-Message-Id: <20230601215251.3529-2-msmulski2@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230601215251.3529-1-msmulski2@gmail.com>
-References: <20230601215251.3529-1-msmulski2@gmail.com>
+        d=1e100.net; s=20221208; t=1685656672; x=1688248672;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ruzONHVQNNLn5cbL5oGqVupApwre43YqM07fYPN5vjI=;
+        b=Qb5f7Lg5NsS5eApM7bdxxbalbHc5IR3jt5QdLNGDt2bzE7CI6AmlTrP43MGnRqIxbe
+         rZfkMs7fAceT2YZQizmMrBGa+QcAAIhzMd2an16y7jTmDGLajMf7/4Lpumfrir1QCCjd
+         SncZFynOiIbOgX93Jo0czvlrXUmTtb2Rx1v3cIzddDba/vKxqGxYJ8D0meHiL+4J9ZO/
+         nI1UiBDjdyRwoEr7j9S1Gg9PCj8ogQKae8fKdulhAdSfB2TGsJWG6Lrq2zj5cQui54qP
+         CTB4k62J6sG2dNsUhhkcAj3FJco9nVmAkbfcCC22XNMd/UaEEovZozPoN8zcJpjLj4ye
+         P5pw==
+X-Gm-Message-State: AC+VfDzxRVEa8lc8a0k4DbfrurCE0aTmIh/YHD/bAPRBv6K1xPCX/bcm
+        mJgjvksH3nNMmYxnx4Tu14v8+Tv8Bh7mV9k78+05WQ==
+X-Google-Smtp-Source: ACHHUZ56tRKln5Zko0KXJAcfvYlxi6GxnyaGVCrS/sW2jiWiCLzSvzQWu0NgIDvAnsayfumJnSDtE29yp2/8bVVKkD8=
+X-Received: by 2002:a05:6358:3408:b0:123:896:851e with SMTP id
+ h8-20020a056358340800b001230896851emr4756088rwd.12.1685656671940; Thu, 01 Jun
+ 2023 14:57:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230601213416.3373599-1-arnd@kernel.org>
+In-Reply-To: <20230601213416.3373599-1-arnd@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 2 Jun 2023 00:57:40 +0300
+Message-ID: <CAA8EJpqRUf2bp1SxyvKg9t+1AM9gqd_6JHq8LAp=6Dd32+h2rA@mail.gmail.com>
+Subject: Re: [PATCH] clk: qcom: gcc-ipq6018: remove duplicate initializers
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mantas Pucka <mantas@8devices.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Smulski <michal.smulski@ooma.com>
+On Fri, 2 Jun 2023 at 00:34, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> A recent change added new initializers for .config_ctl_val and
+> .config_ctl_hi_val but left the old values in place:
+>
+> drivers/clk/qcom/gcc-ipq6018.c:4155:27: error: initialized field overwritten [-Werror=override-init]
+>  4155 |         .config_ctl_val = 0x240d4828,
+>       |                           ^~~~~~~~~~
+> drivers/clk/qcom/gcc-ipq6018.c:4156:30: error: initialized field overwritten [-Werror=override-init]
+>  4156 |         .config_ctl_hi_val = 0x6,
+>       |                              ^~~
+>
+> Remove the unused ones now to avoid confusion.
+>
+> Fixes: f4f0c8acee0e4 ("clk: qcom: gcc-ipq6018: update UBI32 PLL")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/clk/qcom/gcc-ipq6018.c | 2 --
+>  1 file changed, 2 deletions(-)
 
-Enable USXGMII mode for mv88e6393x chips. Tested on Marvell 88E6191X.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Signed-off-by: Michal Smulski <michal.smulski@ooma.com>
----
- drivers/net/dsa/mv88e6xxx/chip.c   |  3 +-
- drivers/net/dsa/mv88e6xxx/port.c   |  3 ++
- drivers/net/dsa/mv88e6xxx/serdes.c | 70 +++++++++++++++++++++++++++++-
- drivers/net/dsa/mv88e6xxx/serdes.h | 13 ++++++
- 4 files changed, 85 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 8731af6d79de..5a92ccfd08ea 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -815,8 +815,7 @@ static void mv88e6393x_phylink_get_caps(struct mv88e6xxx_chip *chip, int port,
- 				config->mac_capabilities |= MAC_5000FD |
- 					MAC_10000FD;
- 			}
--			/* FIXME: USXGMII is not supported yet */
--			/* __set_bit(PHY_INTERFACE_MODE_USXGMII, supported); */
-+			__set_bit(PHY_INTERFACE_MODE_USXGMII, supported);
- 		}
- 	}
- 
-diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
-index e9b4a6ea4d09..dd66ec902d4c 100644
---- a/drivers/net/dsa/mv88e6xxx/port.c
-+++ b/drivers/net/dsa/mv88e6xxx/port.c
-@@ -566,6 +566,9 @@ static int mv88e6xxx_port_set_cmode(struct mv88e6xxx_chip *chip, int port,
- 	case PHY_INTERFACE_MODE_10GBASER:
- 		cmode = MV88E6393X_PORT_STS_CMODE_10GBASER;
- 		break;
-+	case PHY_INTERFACE_MODE_USXGMII:
-+		cmode = MV88E6393X_PORT_STS_CMODE_USXGMII;
-+		break;
- 	default:
- 		cmode = 0;
- 	}
-diff --git a/drivers/net/dsa/mv88e6xxx/serdes.c b/drivers/net/dsa/mv88e6xxx/serdes.c
-index 72faec8f44dc..e4f3dc39bc46 100644
---- a/drivers/net/dsa/mv88e6xxx/serdes.c
-+++ b/drivers/net/dsa/mv88e6xxx/serdes.c
-@@ -683,7 +683,8 @@ int mv88e6393x_serdes_get_lane(struct mv88e6xxx_chip *chip, int port)
- 	    cmode == MV88E6XXX_PORT_STS_CMODE_SGMII ||
- 	    cmode == MV88E6XXX_PORT_STS_CMODE_2500BASEX ||
- 	    cmode == MV88E6393X_PORT_STS_CMODE_5GBASER ||
--	    cmode == MV88E6393X_PORT_STS_CMODE_10GBASER)
-+	    cmode == MV88E6393X_PORT_STS_CMODE_10GBASER ||
-+	    cmode == MV88E6393X_PORT_STS_CMODE_USXGMII)
- 		lane = port;
- 
- 	return lane;
-@@ -984,6 +985,64 @@ static int mv88e6393x_serdes_pcs_get_state_10g(struct mv88e6xxx_chip *chip,
- 			state->speed = SPEED_10000;
- 		state->duplex = DUPLEX_FULL;
- 	}
-+	return 0;
-+}
-+
-+/* USXGMII registers for Marvell switch 88e639x are undocumented and this function is based
-+ * on some educated guesses. It appears that there are no status bits related to
-+ * autonegotiation complete or flow control.
-+ */
-+static int mv88e639x_serdes_pcs_get_state_usxgmii(struct mv88e6xxx_chip *chip,
-+						  int port, int lane,
-+						  struct phylink_link_state *state)
-+{
-+	u16 status, lp_status;
-+	int err;
-+
-+	err = mv88e6390_serdes_read(chip, lane, MDIO_MMD_PHYXS,
-+				    MV88E6390_USXGMII_LP_STATUS, &lp_status);
-+	if (err) {
-+		dev_err(chip->dev, "can't read Serdes USXGMII LP status: %d\n", err);
-+		return err;
-+	}
-+	dev_dbg(chip->dev, "USXGMII LP statsus: 0x%x\n", lp_status);
-+
-+	err = mv88e6390_serdes_read(chip, lane, MDIO_MMD_PHYXS,
-+				    MV88E6390_USXGMII_PHY_STATUS, &status);
-+	if (err) {
-+		dev_err(chip->dev, "can't read Serdes USXGMII PHY status: %d\n", err);
-+		return err;
-+	}
-+	dev_dbg(chip->dev, "USXGMII PHY statsus: 0x%x\n", status);
-+
-+	state->link = !!(status & MV88E6390_USXGMII_PHY_STATUS_LINK);
-+	state->duplex = status &
-+		MV88E6390_USXGMII_PHY_STATUS_DUPLEX_FULL ?
-+		DUPLEX_FULL : DUPLEX_HALF;
-+
-+	switch (status & MV88E6390_USXGMII_PHY_STATUS_SPEED_MASK) {
-+	case MV88E6390_USXGMII_PHY_STATUS_SPEED_10000:
-+		state->speed = SPEED_10000;
-+		break;
-+	case MV88E6390_USXGMII_PHY_STATUS_SPEED_5000:
-+		state->speed = SPEED_5000;
-+		break;
-+	case MV88E6390_USXGMII_PHY_STATUS_SPEED_2500:
-+		state->speed = SPEED_2500;
-+		break;
-+	case MV88E6390_USXGMII_PHY_STATUS_SPEED_1000:
-+		state->speed = SPEED_1000;
-+		break;
-+	case MV88E6390_USXGMII_PHY_STATUS_SPEED_100:
-+		state->speed = SPEED_100;
-+		break;
-+	case MV88E6390_USXGMII_PHY_STATUS_SPEED_10:
-+		state->speed = SPEED_10;
-+		break;
-+	default:
-+		dev_err(chip->dev, "invalid PHY speed\n");
-+		return -EINVAL;
-+	}
- 
- 	return 0;
- }
-@@ -1020,6 +1079,9 @@ int mv88e6393x_serdes_pcs_get_state(struct mv88e6xxx_chip *chip, int port,
- 	case PHY_INTERFACE_MODE_10GBASER:
- 		return mv88e6393x_serdes_pcs_get_state_10g(chip, port, lane,
- 							   state);
-+	case PHY_INTERFACE_MODE_USXGMII:
-+		return mv88e639x_serdes_pcs_get_state_usxgmii(chip, port, lane,
-+							   state);
- 
- 	default:
- 		return -EOPNOTSUPP;
-@@ -1173,6 +1235,7 @@ int mv88e6393x_serdes_irq_enable(struct mv88e6xxx_chip *chip, int port,
- 		return mv88e6390_serdes_irq_enable_sgmii(chip, lane, enable);
- 	case MV88E6393X_PORT_STS_CMODE_5GBASER:
- 	case MV88E6393X_PORT_STS_CMODE_10GBASER:
-+	case MV88E6393X_PORT_STS_CMODE_USXGMII:
- 		return mv88e6393x_serdes_irq_enable_10g(chip, lane, enable);
- 	}
- 
-@@ -1213,6 +1276,7 @@ irqreturn_t mv88e6393x_serdes_irq_status(struct mv88e6xxx_chip *chip, int port,
- 		break;
- 	case MV88E6393X_PORT_STS_CMODE_5GBASER:
- 	case MV88E6393X_PORT_STS_CMODE_10GBASER:
-+	case MV88E6393X_PORT_STS_CMODE_USXGMII:
- 		err = mv88e6393x_serdes_irq_status_10g(chip, lane, &status);
- 		if (err)
- 			return err;
-@@ -1477,7 +1541,8 @@ static int mv88e6393x_serdes_erratum_5_2(struct mv88e6xxx_chip *chip, int lane,
- 	 * to SERDES operating in 10G mode. These registers only apply to 10G
- 	 * operation and have no effect on other speeds.
- 	 */
--	if (cmode != MV88E6393X_PORT_STS_CMODE_10GBASER)
-+	if (cmode != MV88E6393X_PORT_STS_CMODE_10GBASER &&
-+	    cmode != MV88E6393X_PORT_STS_CMODE_USXGMII)
- 		return 0;
- 
- 	for (i = 0; i < ARRAY_SIZE(fixes); ++i) {
-@@ -1582,6 +1647,7 @@ int mv88e6393x_serdes_power(struct mv88e6xxx_chip *chip, int port, int lane,
- 		break;
- 	case MV88E6393X_PORT_STS_CMODE_5GBASER:
- 	case MV88E6393X_PORT_STS_CMODE_10GBASER:
-+	case MV88E6393X_PORT_STS_CMODE_USXGMII:
- 		err = mv88e6390_serdes_power_10g(chip, lane, on);
- 		break;
- 	default:
-diff --git a/drivers/net/dsa/mv88e6xxx/serdes.h b/drivers/net/dsa/mv88e6xxx/serdes.h
-index 29bb4e91e2f6..899b8518113a 100644
---- a/drivers/net/dsa/mv88e6xxx/serdes.h
-+++ b/drivers/net/dsa/mv88e6xxx/serdes.h
-@@ -48,6 +48,19 @@
- #define MV88E6393X_10G_INT_LINK_CHANGE	BIT(2)
- #define MV88E6393X_10G_INT_STATUS	0x9001
- 
-+/* USXGMII */
-+#define MV88E6390_USXGMII_LP_STATUS       0xf0a2
-+#define MV88E6390_USXGMII_PHY_STATUS      0xf0a6
-+#define MV88E6390_USXGMII_PHY_STATUS_SPEED_MASK	GENMASK(11, 9)
-+#define MV88E6390_USXGMII_PHY_STATUS_SPEED_5000	0xa00
-+#define MV88E6390_USXGMII_PHY_STATUS_SPEED_2500	0x800
-+#define MV88E6390_USXGMII_PHY_STATUS_SPEED_10000	0x600
-+#define MV88E6390_USXGMII_PHY_STATUS_SPEED_1000	0x400
-+#define MV88E6390_USXGMII_PHY_STATUS_SPEED_100	0x200
-+#define MV88E6390_USXGMII_PHY_STATUS_SPEED_10	0x000
-+#define MV88E6390_USXGMII_PHY_STATUS_DUPLEX_FULL	BIT(12)
-+#define MV88E6390_USXGMII_PHY_STATUS_LINK		BIT(15)
-+
- /* 1000BASE-X and SGMII */
- #define MV88E6390_SGMII_BMCR		(0x2000 + MII_BMCR)
- #define MV88E6390_SGMII_BMSR		(0x2000 + MII_BMSR)
 -- 
-2.34.1
-
+With best wishes
+Dmitry
