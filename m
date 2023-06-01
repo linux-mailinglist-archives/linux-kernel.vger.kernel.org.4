@@ -2,245 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C89718FD9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 03:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2BF4718FC6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 02:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230383AbjFABHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 21:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
+        id S229915AbjFAA5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 20:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjFABHO (ORCPT
+        with ESMTP id S229562AbjFAA5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 21:07:14 -0400
-X-Greylist: delayed 312 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 May 2023 18:07:10 PDT
-Received: from forward501c.mail.yandex.net (forward501c.mail.yandex.net [IPv6:2a02:6b8:c03:500:1:45:d181:d501])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D65119;
-        Wed, 31 May 2023 18:07:10 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:4e18:0:640:bf32:0])
-        by forward501c.mail.yandex.net (Yandex) with ESMTP id DF30E5F08E;
-        Thu,  1 Jun 2023 03:57:13 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id AvBYmkxDemI0-xmefqHym;
-        Thu, 01 Jun 2023 03:57:12 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1685581032;
-        bh=jwTFdF6Jc4HXQmg9VAOI45bTrfpn1DcuZsOOAkfIXxs=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=n3xuoI4yrBr8y+ddKMSfKazGR+ICb6Pkvg45czOq93hr+jLSnXjhZz+zxw/9NQQfV
-         zIaXgvhlUPK+AXWZwlOt3EXFgR56Y5sk35If3hLD7P0BwZI/gWCOwyXwykM9VxTLjB
-         nhY68N26vN2DkAN7yKAtMifojqO7BrnBI+bFDnJ8=
-Authentication-Results: mail-nwsmtp-smtp-production-main-39.myt.yp-c.yandex.net; dkim=pass header.i=@ya.ru
-Message-ID: <bab60fe4-964c-43a6-ecce-4cbd4981d875@ya.ru>
-Date:   Thu, 1 Jun 2023 03:57:10 +0300
+        Wed, 31 May 2023 20:57:43 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474A7119;
+        Wed, 31 May 2023 17:57:42 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3510jJjt026755;
+        Thu, 1 Jun 2023 00:57:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=S9xW2FXa8oHpx98ia8cc1fOPh4UByyYSjvylsIzy418=;
+ b=C+u0Yg0PSEQrYGg8XqBtryXqT44jzje14zHXr/VEaExicZorKmoS+N4VwOKwXPznBguh
+ +FUVXqA6NryUYJfvYbHZItSBrFdL4yYeYap/Y1dZBX6GawnF2cGmQrhEWEt8jTeon+rC
+ zb6XIbcBs+Tgc+Dw51wNcFjFVXUuRLChVMkLUPsrrlbagRE3jNx2hjAIba9nPeydIPKE
+ SnrRlrB4pMzmpv/OV4M95/8y3HGZPcCDCimfTHxIoR3YGOZWDb5oPnXbRybkIWAAbFIZ
+ sxIpiJ2bWB3B06vKB+KsqA4xv52KVy+TzakwK0m55lJiwZdDd0kGPNUo3QCquQRDZTtT NA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qwx8qanmn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 00:57:39 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3510vRFH013733
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Jun 2023 00:57:27 GMT
+Received: from [10.110.57.221] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 31 May
+ 2023 17:57:25 -0700
+Message-ID: <38255534-f242-dc06-9216-1568da9b0285@quicinc.com>
+Date:   Wed, 31 May 2023 17:57:14 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [linus:master] [mm] f95bdb700b: stress-ng.ramfs.ops_per_sec
- -88.8% regression
-To:     Qi Zheng <qi.zheng@linux.dev>, paulmck@kernel.org
-Cc:     RCU <rcu@vger.kernel.org>, Yujie Liu <yujie.liu@intel.com>,
-        oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        David Hildenbrand <david@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Shi <shy828301@gmail.com>, linux-mm@kvack.org,
-        ying.huang@intel.com, feng.tang@intel.com, fengwei.yin@intel.com
-References: <202305230837.db2c233f-yujie.liu@intel.com>
- <eba38fce-2454-d7a4-10ef-240b4686f23d@linux.dev>
- <ZG29ULGNJdErnatI@yujie-X299>
- <896bbb09-d400-ec73-ba3a-b64c6e9bbe46@linux.dev>
- <e5fb8b34-c1ad-92e0-e7e5-f7ed1605dbc6@linux.dev>
- <bfb36563-fac9-4c84-96db-87dd28892088@linux.dev>
- <be04dc3e-a671-ec70-6cf6-70dc702f4184@linux.dev>
- <44407892-b7bc-4d6c-8e4a-6452f0ee88b9@paulmck-laptop>
- <d4b1599d-14c1-071c-6205-09fe60f2ed8b@linux.dev>
- <095806f1-f7f0-4914-b04b-c874fb25bb83@paulmck-laptop>
- <26da75a6-115f-a17a-73bb-381a6b4a3a75@linux.dev>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: dwc3: Skip TRBs while removing requests in
+ disconnect path
 Content-Language: en-US
-From:   Kirill Tkhai <tkhai@ya.ru>
-In-Reply-To: <26da75a6-115f-a17a-73bb-381a6b4a3a75@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+References: <1685562871-17024-1-git-send-email-quic_eserrao@quicinc.com>
+ <20230531231951.vg7x2w7gnnm77alq@synopsys.com>
+From:   Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <20230531231951.vg7x2w7gnnm77alq@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: dkHDw27BNv6DOdX_4PNMQglySMuphrGN
+X-Proofpoint-GUID: dkHDw27BNv6DOdX_4PNMQglySMuphrGN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_18,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 impostorscore=0 malwarescore=0 clxscore=1015
+ spamscore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306010006
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 30.05.2023 06:07, Qi Zheng wrote:
-> Hi,
+
+On 5/31/2023 4:20 PM, Thinh Nguyen wrote:
+> On Wed, May 31, 2023, Elson Roy Serrao wrote:
+>> Consider a scenario where cable disconnect happens when there is an active
+>> usb reqest queued to the UDC. As part of the disconnect we would issue an
+>> end transfer with no interrupt-on-completion before giving back this
+>> request. Since we are giving back the request without skipping TRBs the
+>> num_trbs field of dwc3_request still holds the stale value previously used.
+>> Function drivers re-use same request for a given bind-unbind session and
+>> hence their dwc3_request context gets preserved across cable
+>> disconnect/connect. When such a request gets re-queued after cable connect,
 > 
-> On 2023/5/29 20:51, Paul E. McKenney wrote:
->> On Mon, May 29, 2023 at 10:39:21AM +0800, Qi Zheng wrote:
+> Why would we preserve the request after a disconnect? The request is
+> associated with an endpoint, and after disconnect, the endpoint is no
+> longer valid. Shouldn't the request be freed then?
 > 
-> [...]
+
+
+Function drivers generally allocate usb requests during bind when an 
+endpoint is allocated to it (through usb_ep_autoconfig). These requests 
+are freed when an unbind is called as the function is no longer 
+associated with any end point. The function driver is free to re-use 
+these requests throughout this bind-unbind session. The only restriction 
+is that the function drivers wont be able to queue any requests as long 
+as the endpoint is disabled. But that doesn't enforce function drivers 
+to free the requests with ep_disable(). Even though the endpoint is 
+disabled with cable disconnect, that endpoint is still associated with 
+that particular function driver until that function is unbound.
+
+As an example below is how f_ncm driver allocates and frees the requests 
+during bind/unbind
+
+Bind()
+...
+ep = usb_ep_autoconfig(cdev->gadget, &fs_ncm_notify_desc);
+if (!ep)
+	goto fail;
+ncm->notify = ep;
+
+status = -ENOMEM;
+
+/* allocate notification request and buffer */
+ncm->notify_req = usb_ep_alloc_request(ep, GFP_KERNEL);
+...
+
+The endpoint is enabled later when set_alt is received and disabled in 
+ncm_disable when the connection goes down (cable disconnect scenario)
+
+
+Unbind()
+....
+kfree(ncm->notify_req->buf);
+usb_ep_free_request(ncm->notify, ncm->notify_req);
+
+I see similar implementation in other function drivers as well. That is, 
+keep the usb requests allocated throughout the bind-unbind session and 
+independent of ep_enable/ep_disable .
+
+Thanks
+Elson
+
+
 > 
->>>
->>> Thanks for such a detailed explanation.
->>>
->>> Now I think we can continue to try to complete the idea[1] from
->>> Kirill Tkhai. The patch moves heavy synchronize_srcu() to delayed
->>> work, so it doesn't affect on user-visible unregistration speed.
->>>
->>> [1]. https://lore.kernel.org/lkml/153365636747.19074.12610817307548583381.stgit@localhost.localdomain/
+>> we would increase the num_trbs field on top of the previous stale value
+>> thus incorrectly representing the number of TRBs used. Fix this by invoking
+>> skip_trbs() in the ep disable path.
 >>
->> A blast from the past!  ;-)
+>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/gadget.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
 >>
->> But yes, moving the long-latency synchronize_srcu() off the user-visible
->> critical code path can be even better.
-> 
-> Yeah, I applied these patches  ([PATCH RFC 04/10]~[PATCH RFC 10/10],
-> with few conflicts), the ops/s does get back to the previous levels.
-> 
-> I'll continue updating this patchset after doing more testing.
-
-You may also fix the issue using the below generic solution.
-
-In addition to this we need patch, which calls unregister_shrinker_delayed_initiate()
-instead of unregister_shrinker() in deactivate_locked_super(), and calls
-unregister_shrinker_delayed_finalize() from destroy_super_work(). Compilation tested only.
-
----
- include/linux/shrinker.h |  2 ++
- mm/vmscan.c              | 38 ++++++++++++++++++++++++++++++--------
- 2 files changed, 32 insertions(+), 8 deletions(-)
-diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
-index 224293b2dd06..4ba2986716d3 100644
---- a/include/linux/shrinker.h
-+++ b/include/linux/shrinker.h
-@@ -4,6 +4,7 @@
- 
- #include <linux/atomic.h>
- #include <linux/types.h>
-+#include <linux/rwsem.h>
- 
- /*
-  * This struct is used to pass information from page reclaim to the shrinkers.
-@@ -83,6 +84,7 @@ struct shrinker {
- #endif
- 	/* objs pending delete, per node */
- 	atomic_long_t *nr_deferred;
-+	struct rw_semaphore rwsem;
- };
- #define DEFAULT_SEEKS 2 /* A good number if you don't know better. */
- 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index eeca83e28c9b..19fc129771ce 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -706,6 +706,7 @@ static int __prealloc_shrinker(struct shrinker *shrinker)
- 	if (!shrinker->nr_deferred)
- 		return -ENOMEM;
- 
-+	init_rwsem(&shrinker->rwsem);
- 	return 0;
- }
- 
-@@ -757,7 +758,9 @@ void register_shrinker_prepared(struct shrinker *shrinker)
- {
- 	mutex_lock(&shrinker_mutex);
- 	list_add_tail_rcu(&shrinker->list, &shrinker_list);
-+	down_write(&shrinker->rwsem);
- 	shrinker->flags |= SHRINKER_REGISTERED;
-+	up_write(&shrinker->rwsem);
- 	shrinker_debugfs_add(shrinker);
- 	mutex_unlock(&shrinker_mutex);
- }
-@@ -802,7 +805,7 @@ EXPORT_SYMBOL(register_shrinker);
- /*
-  * Remove one
-  */
--void unregister_shrinker(struct shrinker *shrinker)
-+void unregister_shrinker_delayed_initiate(struct shrinker *shrinker)
- {
- 	struct dentry *debugfs_entry;
- 	int debugfs_id;
-@@ -812,20 +815,33 @@ void unregister_shrinker(struct shrinker *shrinker)
- 
- 	mutex_lock(&shrinker_mutex);
- 	list_del_rcu(&shrinker->list);
-+	down_write(&shrinker->rwsem);
- 	shrinker->flags &= ~SHRINKER_REGISTERED;
-+	up_write(&shrinker->rwsem);
- 	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
- 		unregister_memcg_shrinker(shrinker);
- 	debugfs_entry = shrinker_debugfs_detach(shrinker, &debugfs_id);
- 	mutex_unlock(&shrinker_mutex);
- 
-+	shrinker_debugfs_remove(debugfs_entry, debugfs_id); // This is moved in your patch
-+}
-+EXPORT_SYMBOL(unregister_shrinker_delayed_initiate);
-+
-+void unregister_shrinker_delayed_finalize(struct shrinker *shrinker)
-+{
- 	atomic_inc(&shrinker_srcu_generation);
- 	synchronize_srcu(&shrinker_srcu);
- 
--	shrinker_debugfs_remove(debugfs_entry, debugfs_id);
--
- 	kfree(shrinker->nr_deferred);
- 	shrinker->nr_deferred = NULL;
- }
-+EXPORT_SYMBOL(unregister_shrinker_delayed_finalize);
-+
-+void unregister_shrinker(struct shrinker *shrinker)
-+{
-+	unregister_shrinker_delayed_initiate(shrinker);
-+	unregister_shrinker_delayed_finalize(shrinker);
-+}
- EXPORT_SYMBOL(unregister_shrinker);
- 
- /**
-@@ -856,9 +872,14 @@ static unsigned long do_shrink_slab(struct shrink_control *shrinkctl,
- 					  : SHRINK_BATCH;
- 	long scanned = 0, next_deferred;
- 
-+	down_read(&shrinker->rwsem);
-+	if (!(shrinker->flags & SHRINKER_REGISTERED))
-+		goto unlock;
- 	freeable = shrinker->count_objects(shrinker, shrinkctl);
--	if (freeable == 0 || freeable == SHRINK_EMPTY)
--		return freeable;
-+	if (freeable == 0 || freeable == SHRINK_EMPTY) {
-+		freed = freeable;
-+		goto unlock;
-+	}
- 
- 	/*
- 	 * copy the current shrinker scan count into a local variable
-@@ -935,6 +956,8 @@ static unsigned long do_shrink_slab(struct shrink_control *shrinkctl,
- 	 * manner that handles concurrent updates.
- 	 */
- 	new_nr = add_nr_deferred(next_deferred, shrinker, shrinkctl);
-+unlock:
-+	up_read(&shrinker->rwsem);
- 
- 	trace_mm_shrink_slab_end(shrinker, shrinkctl->nid, freed, nr, new_nr, total_scan);
- 	return freed;
-@@ -968,9 +991,8 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
- 		struct shrinker *shrinker;
- 
- 		shrinker = idr_find(&shrinker_idr, i);
--		if (unlikely(!shrinker || !(shrinker->flags & SHRINKER_REGISTERED))) {
--			if (!shrinker)
--				clear_bit(i, info->map);
-+		if (unlikely(!shrinker)) {
-+			clear_bit(i, info->map);
- 			continue;
- 		}
- 
-
-
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 578804d..b45e917 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -986,6 +986,8 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
+>>   	return 0;
+>>   }
+>>   
+>> +static void dwc3_gadget_ep_skip_trbs(struct dwc3_ep *dep, struct dwc3_request *req);
+>> +
+>>   void dwc3_remove_requests(struct dwc3 *dwc, struct dwc3_ep *dep, int status)
+>>   {
+>>   	struct dwc3_request		*req;
+>> @@ -1000,6 +1002,7 @@ void dwc3_remove_requests(struct dwc3 *dwc, struct dwc3_ep *dep, int status)
+>>   	while (!list_empty(&dep->started_list)) {
+>>   		req = next_request(&dep->started_list);
+>>   
+>> +		dwc3_gadget_ep_skip_trbs(dep, req);
+>>   		dwc3_gadget_giveback(dep, req, status);
+>>   	}
+>>   
+>> @@ -1012,6 +1015,7 @@ void dwc3_remove_requests(struct dwc3 *dwc, struct dwc3_ep *dep, int status)
+>>   	while (!list_empty(&dep->cancelled_list)) {
+>>   		req = next_request(&dep->cancelled_list);
+>>   
+>> +		dwc3_gadget_ep_skip_trbs(dep, req);
+>>   		dwc3_gadget_giveback(dep, req, status);
+>>   	}
+>>   }
+>> -- 
+>> 2.7.4
