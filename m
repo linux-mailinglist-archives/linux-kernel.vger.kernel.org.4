@@ -2,144 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58628719709
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D32F719704
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232879AbjFAJeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
+        id S232613AbjFAJdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 05:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232163AbjFAJeM (ORCPT
+        with ESMTP id S231969AbjFAJdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:34:12 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A0FAA;
-        Thu,  1 Jun 2023 02:34:10 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3515CI1L008219;
-        Thu, 1 Jun 2023 09:33:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Hgbf3woOoF0tvi6jSiGPRe7Xj3L8FRe/vc2hBfX2dho=;
- b=S//rtBGAZO2+WLswCGC0/HiVBCeHGikHTNJAgeSCzekykYHuOPKBrhtrPJ4efF4H8g0c
- k01jXWUJULLZt4PcUYgu+91xqz1vf1uMsJq4xxjlWsaQMeJs7IKFgUxJzCBwT2DKvrCf
- MxgTYs6otag+mUzkRZrcus1vaO7wNfkgp1j7AbvYorOsEKMJk9o3GVDX6RDY+TCsRMWT
- b9Bmo+sZRvvkUAkmk8fQdDlixnOT/RqSLG5RU8UZ+gFEQ6NE8W3MWH81thYsjuD7OvYj
- qDw21hBySiwmMGC1OVTacWQdHcJhiwyIwWGoT3JmcT4FHvynwFSoip6vsPRQnvA3Csse Ng== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxkbu0q2x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Jun 2023 09:33:38 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3519Xbex032015
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Jun 2023 09:33:37 GMT
-Received: from [10.50.56.241] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
- 02:33:31 -0700
-Message-ID: <85b17da3-d547-a8d3-8356-20c9fe511b92@quicinc.com>
-Date:   Thu, 1 Jun 2023 15:03:28 +0530
+        Thu, 1 Jun 2023 05:33:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB69AA
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 02:33:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D5C264290
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 09:33:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 528C2C433D2;
+        Thu,  1 Jun 2023 09:33:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1685612020;
+        bh=FbISwwZyQ9hntnqdSS4jFuij2bzfWzgJBzsrXpq9if8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ClM6HpOCQMQpDcY/EjiV5L0IggnjCll0g9DiKNZJvX+F+05qUjYoQ8tZ6v0QQHx7+
+         JOB1bwM3FScJ/J6OBAZ5Uyp76kpGy0GXYIE4ibOyWulMgqsU101qeIU4SGw+va9kHQ
+         MFq/B7mFgfwi9JxXxL6Fl0LcOWClRM+bHiDccA7c=
+Date:   Thu, 1 Jun 2023 10:33:38 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Coresight ML <coresight@lists.linaro.org>
+Subject: Re: [PATCH v4 1/4] devres: Provide krealloc_array
+Message-ID: <2023060104-removal-map-b194@gregkh>
+References: <20230509094942.396150-1-james.clark@arm.com>
+ <20230509094942.396150-2-james.clark@arm.com>
+ <2023051340-sinuous-darkroom-2497@gregkh>
+ <89ad5070-db72-7bf1-5d86-a89fea54e789@arm.com>
+ <2023051530-immunize-pony-49ef@gregkh>
+ <46bb773c-31a8-c57a-0cde-39c27d0a6e36@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v4 06/17] media: venus: hfi_venus: Sanitize
- venus_boot_core() per-VPU-version
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mansur Alisha Shaik <mansur@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Hans Verkuil <hans.verkuil@cisco.com>
-CC:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Marijn Suijten" <marijn.suijten@somainline.org>
-References: <20230228-topic-venus-v4-0-feebb2f6e9b8@linaro.org>
- <20230228-topic-venus-v4-6-feebb2f6e9b8@linaro.org>
-From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
-In-Reply-To: <20230228-topic-venus-v4-6-feebb2f6e9b8@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 2B30Lxjv6mJyC8Q-W-KxeS77gczyboqW
-X-Proofpoint-GUID: 2B30Lxjv6mJyC8Q-W-KxeS77gczyboqW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-01_06,2023-05-31_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- spamscore=0 malwarescore=0 phishscore=0 clxscore=1015 priorityscore=1501
- suspectscore=0 impostorscore=0 mlxlogscore=999 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306010085
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <46bb773c-31a8-c57a-0cde-39c27d0a6e36@arm.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 31, 2023 at 11:44:55PM +0100, Suzuki K Poulose wrote:
+> (Removed irrelevant recipients), +Cc: coresight ml
+> 
+> Hi Greg,
+> 
+> On 15/05/2023 12:55, Greg KH wrote:
+> > On Mon, May 15, 2023 at 08:55:33AM +0100, James Clark wrote:
+> > > 
+> > > 
+> > > On 13/05/2023 12:04, Greg KH wrote:
+> > > > On Tue, May 09, 2023 at 10:49:38AM +0100, James Clark wrote:
+> > > > > There is no krealloc_array equivalent in devres. Users would have to
+> > > > > do their own multiplication overflow check so provide one.
+> > > > > 
+> > > > > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > > > Signed-off-by: James Clark <james.clark@arm.com>
+> > > > > ---
+> > > > >   Documentation/driver-api/driver-model/devres.rst |  1 +
+> > > > >   include/linux/device.h                           | 11 +++++++++++
+> > > > >   2 files changed, 12 insertions(+)
+> 
+> ...
+> 
+> > > Maybe something could be done with some macro magic, but it would
+> > > probably end up being worse than just copying them and would affect the
+> > > real ones as well. So yeah I can't think of any easy gains either.
+> > 
+> > Ok, that's good.  Given a lack of objections from others, I'll just take
+> > this through my driver core tree in a few days.
+> 
+> Apologies for hijacking the thread. We have a series for CoreSight[1]
+> that depends on this series, which I see that, is queued in your
+> driver-core-next.
+> 
+> I would like to queue [1] for the next version (as there are other
+> work that depend on this, e.g., [2]). Do you have any
+> recommendations/comments on the proposal ? Are you able to share a
+> stable branch which can be merged to coresight/next and queue the
+> series ontop ? (PS: I haven't queued anything for coresight/next yet).
 
+You can pull from my driver-core-next branch just fine and assume it
+will be stable.  So just pull in that one commit and all should be good
+in the future.
 
-On 5/30/2023 6:00 PM, Konrad Dybcio wrote:
-> The current assumption of IS_V6 is overgeneralized. Adjust the logic
-> to take the VPU hardware version into account.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/media/platform/qcom/venus/hfi_venus.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/platform/qcom/venus/hfi_venus.c b/drivers/media/platform/qcom/venus/hfi_venus.c
-> index 5506a0d196ef..9e36ef9076a0 100644
-> --- a/drivers/media/platform/qcom/venus/hfi_venus.c
-> +++ b/drivers/media/platform/qcom/venus/hfi_venus.c
-> @@ -447,19 +447,20 @@ static int venus_boot_core(struct venus_hfi_device *hdev)
->  {
->  	struct device *dev = hdev->core->dev;
->  	static const unsigned int max_tries = 100;
-> -	u32 ctrl_status = 0, mask_val;
-> +	u32 ctrl_status = 0, mask_val = 0;
->  	unsigned int count = 0;
->  	void __iomem *cpu_cs_base = hdev->core->cpu_cs_base;
->  	void __iomem *wrapper_base = hdev->core->wrapper_base;
->  	int ret = 0;
->  
-> -	if (IS_V6(hdev->core)) {
-> +	if (IS_IRIS2(hdev->core) || IS_IRIS2_1(hdev->core)) {
->  		mask_val = readl(wrapper_base + WRAPPER_INTR_MASK);
->  		mask_val &= ~(WRAPPER_INTR_MASK_A2HWD_BASK_V6 |
->  			      WRAPPER_INTR_MASK_A2HCPU_MASK);
->  	} else {
->  		mask_val = WRAPPER_INTR_MASK_A2HVCODEC_MASK;
->  	}
-> +
->  	writel(mask_val, wrapper_base + WRAPPER_INTR_MASK);
->  	writel(1, cpu_cs_base + CPU_CS_SCIACMDARG3);
->  
-> @@ -479,7 +480,7 @@ static int venus_boot_core(struct venus_hfi_device *hdev)
->  	if (count >= max_tries)
->  		ret = -ETIMEDOUT;
->  
-> -	if (IS_V6(hdev->core)) {
-> +	if (IS_IRIS2(hdev->core) || IS_IRIS2_1(hdev->core)) {
->  		writel(0x1, cpu_cs_base + CPU_CS_H2XSOFTINTEN_V6);
->  		writel(0x0, cpu_cs_base + CPU_CS_X2RPMH_V6);
->  	}
-> 
-Reviewed-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+thanks,
+
+greg k-h
