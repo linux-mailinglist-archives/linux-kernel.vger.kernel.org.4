@@ -2,213 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6338F7195B3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CCF97195B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbjFAIfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41704 "EHLO
+        id S232330AbjFAIgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232348AbjFAIez (ORCPT
+        with ESMTP id S232199AbjFAIfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:34:55 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E4F1712
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:33:30 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-96fe2a1db26so66841566b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:33:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685608408; x=1688200408;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7BF4PtOkqXGCIjG5sZKC2cc3dbGT96AwN/tCA5yl4J8=;
-        b=H8kqwOz1+oeAMAnwWRIn6XbrBpxt92VOI8IVd92jpNDPNug0aqr0htiUtWi/3Fbg2A
-         vn/NI9DbSGe8OiuS5z6EvO69a2up2iOGx1LKNVYiUVjhN9gwgm32TM0DoGE2HKECOSuZ
-         rdysxreDH55Bb44PVnwumb1vhfEPjFma2V/M86VlsRdbcOKTGovQQ693irZ2zNbvDLuY
-         pIvCq/dWxH+K4ehfTHUx9D1cFLowKiwLpUcg9K0VnaxaHqmTEGe+ioDVwih6M/5D92ju
-         LQSEDgbLN778UPxceff5jHwdr/10ppAGJR+JLpb+sB+RYH11Tf8/AgYmWVUEybZCdyWp
-         e5yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685608408; x=1688200408;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7BF4PtOkqXGCIjG5sZKC2cc3dbGT96AwN/tCA5yl4J8=;
-        b=U8E6qw7cs4vCVLk/juHUbNBCBHl00coBFqIKl+6hbK/RC7GBON7Ot7H9jgdTURflbh
-         oMpktkX1wnHK6Cd4RBoQ728yuKZv7fi5bRIwLtf5nQFOO7RPPied2GBmksUC480MGrvG
-         d9ixl6TAiHnBB8kPcs+QaQq2atI2x+W5gjHSoctyK2GYWhvt+1p+ZBpItXbEeT3nqLZ9
-         WodJkdnZmJptMDLoMv1YIHEDsEcZSRdIWoR8wscgiyqwgnGckvL1dHWDcT79p3N4GM+c
-         itCMDRJRZPaM9Ks+PM3/PDGn7UkEZ1w4acdqW5GgWyPJJmJaTxSe/Gbp9n1O8xvjFOcD
-         3pdA==
-X-Gm-Message-State: AC+VfDxtTNR4XOH7OKGjZ1seEZZql97m30/8IgZuPhzQD0RVpnOYg4M4
-        VuCSNm2ymOLL35yO8ZMDoTRdmg==
-X-Google-Smtp-Source: ACHHUZ5W5YuWUPGwqtAYMza3MvhyXmFhj9gL70htopC+b47t/2eJYICooxV4xCv4TdVFXyomVgWfqA==
-X-Received: by 2002:a17:907:7e8c:b0:96f:c676:a917 with SMTP id qb12-20020a1709077e8c00b0096fc676a917mr8035429ejc.35.1685608408688;
-        Thu, 01 Jun 2023 01:33:28 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id lf4-20020a170907174400b0096f7500502csm10224090ejc.199.2023.06.01.01.33.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 01:33:28 -0700 (PDT)
-Message-ID: <147fba8a-8c3b-6ed5-22ef-599d9f52ca1d@linaro.org>
-Date:   Thu, 1 Jun 2023 10:33:25 +0200
+        Thu, 1 Jun 2023 04:35:38 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A89E70
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:34:11 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1685608450;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=663IAskSouGvSvR75PHPprqPibZidxQMt5gFnwQhwKw=;
+        b=N9LC6jiIgSsRnMoqd4fOu94yzBOqz5ZALVcfI3eIolqZxTZyzsAg+yxpRCz6ELtRAiUYyd
+        2h6byanGwpXngLqwp3gUhuHEfSyj/SCVJVT+I/d5FWTnC7LzH3dTcUM64dmXYVpeWndXWh
+        mqOpXCTwAyJmoS7ROmQUVES/ShT7mwcZT5rmgSUDM5mi8X44jotikO6TXQiQn5PB6gWjKu
+        ErHfcirIYe6jeMSa2E2dPwz5wM1/fGZBjLEPRtSHccM+72dHg2g6CkGN1A9TCfhTeilir+
+        82nF6inbzu008F/EWwZvmxFHvUy++vpVi2EPyEsrzqJckmGMbifrX4icsAWlLg==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EA7B3C000E;
+        Thu,  1 Jun 2023 08:34:07 +0000 (UTC)
+Date:   Thu, 1 Jun 2023 10:34:05 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v5 4/6] mtd: rawnand: meson: use macro for OOB area
+Message-ID: <20230601103405.51cb459a@xps-13>
+In-Reply-To: <20230601061850.3907800-5-AVKrasnov@sberdevices.ru>
+References: <20230601061850.3907800-1-AVKrasnov@sberdevices.ru>
+        <20230601061850.3907800-5-AVKrasnov@sberdevices.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1 42/43] ARM: dts: ep93xx: Add EDB9302 DT
-Content-Language: en-US
-To:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Michael Peters <mpeters@embeddedTS.com>,
-        Kris Bahnsen <kris@embeddedTS.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230601054549.10843-24-nikita.shubin@maquefel.me>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230601054549.10843-24-nikita.shubin@maquefel.me>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 07:45, Nikita Shubin wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> 
-> Add device tree for Cirrus EDB9302.
-> 
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+Hi Arseniy,
+
+AVKrasnov@sberdevices.ru wrote on Thu, 1 Jun 2023 09:18:47 +0300:
+
+> This replaces constants and same patterns for OOB handling with special
+> macroses.
+>=20
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
 > ---
-> 
-> Notes:
->     v0 -> v1:
->     
->     - added USB
->     - dropped 'Missing USB' in commit message
->     - add mdio + eth phy
-> 
->  arch/arm/boot/dts/ep93xx-edb9302.dts | 160 +++++++++++++++++++++++++++
->  1 file changed, 160 insertions(+)
->  create mode 100644 arch/arm/boot/dts/ep93xx-edb9302.dts
-> 
-> diff --git a/arch/arm/boot/dts/ep93xx-edb9302.dts b/arch/arm/boot/dts/ep93xx-edb9302.dts
-> new file mode 100644
-> index 000000000000..3ec89f7587db
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/ep93xx-edb9302.dts
-> @@ -0,0 +1,160 @@
-> +// SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +/*
-> + * Device Tree file for Cirrus Logic EDB9302 board based on EP9302 SoC
-> + */
-> +/dts-v1/;
-> +#include "ep93xx.dtsi"
-> +
-> +/ {
-> +	#address-cells = <1>;
-> +	#size-cells = <1>;
-> +	compatible = "cirrus,edb9302", "cirrus,ep9301";
-> +	model = "cirrus,edb9302";
-> +
-> +	chosen {
-> +	};
-> +
-> +	memory {
-> +		device_type = "memory";
-> +	};
-> +
-> +	soc {
-> +		flash@60000000 {
+>  drivers/mtd/nand/raw/meson_nand.c | 33 ++++++++++++++++++-------------
+>  1 file changed, 19 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/mes=
+on_nand.c
+> index e42c28be02f3..23a73268421b 100644
+> --- a/drivers/mtd/nand/raw/meson_nand.c
+> +++ b/drivers/mtd/nand/raw/meson_nand.c
+> @@ -108,6 +108,9 @@
+> =20
+>  #define PER_INFO_BYTE		8
+> =20
+> +#define NFC_USER_BYTES		2
+> +#define NFC_OOB_PER_ECC(nand)	((nand)->ecc.bytes + NFC_USER_BYTES)
 
-Same comments - override by label/phandle.
+OOB per ECC for me does not make sense.
+OOB is the whole area after the data.
+What about NFC_OOB_SZ_PER_ECC_STEP ?
 
-> +			compatible = "cfi-flash";
-> +			reg = <0x60000000 0x1000000>;
-
-Are you sure that your board adds things to the SoC? The code suggests
-that, but I would like to see such circuit.
-
-> +			bank-width = <2>;
-> +		};
-> +	};
 > +
-> +	sound {
-> +		compatible = "simple-audio-card";
-> +		simple-audio-card,name = "EDB93XX";
-> +		simple-audio-card,format = "i2s";
-> +		simple-audio-card,mclk-fs = <256>;
-> +		simple-audio-card,convert-channels = <2>;
-> +		simple-audio-card,convert-sample-format = "s32_le";
+>  struct meson_nfc_nand_chip {
+>  	struct list_head node;
+>  	struct nand_chip nand;
+> @@ -339,7 +342,7 @@ static u8 *meson_nfc_oob_ptr(struct nand_chip *nand, =
+int i)
+>  	struct meson_nfc_nand_chip *meson_chip =3D to_meson_nand(nand);
+>  	int len;
+> =20
+> -	len =3D nand->ecc.size * (i + 1) + (nand->ecc.bytes + 2) * i;
+> +	len =3D nand->ecc.size * (i + 1) + NFC_OOB_PER_ECC(nand) * i;
+> =20
+>  	return meson_chip->data_buf + len;
+>  }
+> @@ -350,7 +353,7 @@ static u8 *meson_nfc_data_ptr(struct nand_chip *nand,=
+ int i)
+>  	int len, temp;
+> =20
+>  	temp =3D nand->ecc.size + nand->ecc.bytes;
+> -	len =3D (temp + 2) * i;
+> +	len =3D (temp + NFC_USER_BYTES) * i;
+> =20
+>  	return meson_chip->data_buf + len;
+>  }
+> @@ -364,7 +367,7 @@ static void meson_nfc_get_data_oob(struct nand_chip *=
+nand,
+>  	u8 *dsrc, *osrc;
+>  	u8 *oobtail;
+> =20
+> -	oob_len =3D nand->ecc.bytes + 2;
+> +	oob_len =3D NFC_OOB_PER_ECC(nand);
+>  	for (i =3D 0; i < nand->ecc.steps; i++) {
+>  		if (buf) {
+>  			dsrc =3D meson_nfc_data_ptr(nand, i);
+> @@ -393,7 +396,7 @@ static void meson_nfc_set_data_oob(struct nand_chip *=
+nand,
+>  	u8 *dsrc, *osrc;
+>  	u8 *oobtail;
+> =20
+> -	oob_len =3D nand->ecc.bytes + 2;
+> +	oob_len =3D NFC_OOB_PER_ECC(nand);
+>  	for (i =3D 0; i < nand->ecc.steps; i++) {
+>  		if (buf) {
+>  			dsrc =3D meson_nfc_data_ptr(nand, i);
+> @@ -452,7 +455,7 @@ static void meson_nfc_set_user_byte(struct nand_chip =
+*nand, u8 *oob_buf)
+>  	__le64 *info;
+>  	int i, count;
+> =20
+> -	for (i =3D 0, count =3D 0; i < nand->ecc.steps; i++, count +=3D (nand->=
+ecc.bytes + 2)) {
+> +	for (i =3D 0, count =3D 0; i < nand->ecc.steps; i++, count +=3D NFC_OOB=
+_PER_ECC(nand)) {
+>  		info =3D &meson_chip->info_buf[i];
+>  		*info |=3D oob_buf[count];
+>  		*info |=3D oob_buf[count + 1] << 8;
+> @@ -465,7 +468,7 @@ static void meson_nfc_get_user_byte(struct nand_chip =
+*nand, u8 *oob_buf)
+>  	__le64 *info;
+>  	int i, count;
+> =20
+> -	for (i =3D 0, count =3D 0; i < nand->ecc.steps; i++, count +=3D (nand->=
+ecc.bytes + 2)) {
+> +	for (i =3D 0, count =3D 0; i < nand->ecc.steps; i++, count +=3D NFC_OOB=
+_PER_ECC(nand)) {
+>  		info =3D &meson_chip->info_buf[i];
+>  		oob_buf[count] =3D *info;
+>  		oob_buf[count + 1] =3D *info >> 8;
+> @@ -661,7 +664,7 @@ static u32 meson_nfc_oob_free_bytes(struct nand_chip =
+*nand)
+>  {
+>  	struct mtd_info *mtd =3D nand_to_mtd(nand);
+> =20
+> -	return mtd->oobsize - nand->ecc.steps * (nand->ecc.bytes + 2);
+> +	return mtd->oobsize - nand->ecc.steps * NFC_OOB_PER_ECC(nand);
+>  }
+> =20
+>  static int meson_nfc_write_oob(struct nand_chip *nand, int page)
+> @@ -712,11 +715,11 @@ static int meson_nfc_read_oob(struct nand_chip *nan=
+d, int page)
+>  	/* Read ECC codes and user bytes. */
+>  	for (i =3D 0; i < nand->ecc.steps; i++) {
+>  		u32 ecc_offs =3D nand->ecc.size * (i + 1) +
+> -			       (nand->ecc.bytes + 2) * i;
+> +			       NFC_OOB_PER_ECC(nand) * i;
+> =20
+>  		ret =3D nand_change_read_column_op(nand, ecc_offs,
+> -						 oob_buf + i * (nand->ecc.bytes + 2),
+> -						 (nand->ecc.bytes + 2), false);
+> +						 oob_buf + i * NFC_OOB_PER_ECC(nand),
+> +						 NFC_OOB_PER_ECC(nand), false);
+>  		if (ret)
+>  			return ret;
+>  	}
+> @@ -918,12 +921,14 @@ static int meson_nfc_read_page_hwecc(struct nand_ch=
+ip *nand, u8 *buf,
+> =20
+>  		for (i =3D 0; i < nand->ecc.steps ; i++) {
+>  			u8 *data =3D buf + i * ecc->size;
+> -			u8 *oob =3D nand->oob_poi + i * (ecc->bytes + 2);
+> +			u8 *oob =3D nand->oob_poi + i * NFC_OOB_PER_ECC(nand);
+> =20
+>  			if (correct_bitmap & BIT_ULL(i))
+>  				continue;
 > +
-> +		simple-audio-card,cpu {
-> +			sound-dai = <&i2s>;
-> +			system-clock-direction-out;
-> +			frame-master;
-> +			bitclock-master;
-> +			dai-sample-format = "s32_le";
-> +			dai-channels = <2>;
-> +		};
-> +
-> +		simple-audio-card,codec {
-> +			sound-dai = <&codec>;
-> +		};
-> +	};
-> +};
-> +
-> +&pinctrl {
-> +	compatible = "cirrus,ep9301-pinctrl";
-> +};
-> +
-> +&gpio0 {
-> +	gpio-ranges = <&pinctrl 0 153 1>,
-> +		      <&pinctrl 1 152 1>,
-> +		      <&pinctrl 2 151 1>,
-> +		      <&pinctrl 3 148 1>,
-> +		      <&pinctrl 4 147 1>,
-> +		      <&pinctrl 5 146 1>,
-> +		      <&pinctrl 6 145 1>,
-> +		      <&pinctrl 7 144 1>;
-> +};
-> +
-> +&gpio1 {
-> +	gpio-ranges = <&pinctrl 0 143 1>,
-> +		      <&pinctrl 1 142 1>,
-> +		      <&pinctrl 2 141 1>,
-> +		      <&pinctrl 3 140 1>,
-> +		      <&pinctrl 4 165 1>,
-> +		      <&pinctrl 5 164 1>,
-> +		      <&pinctrl 6 163 1>,
-> +		      <&pinctrl 7 160 1>;
-> +};
-> +
-> +&gpio2 {
-> +	gpio-ranges = <&pinctrl 0 115 1>;
-> +	/delete-property/ status;
+>  			ret =3D nand_check_erased_ecc_chunk(data,	ecc->size,
+> -							  oob, ecc->bytes + 2,
+> +							  oob,
+> +							  NFC_OOB_PER_ECC(nand),
+>  							  NULL, 0,
+>  							  ecc->strength);
+>  			if (ret < 0) {
+> @@ -1073,7 +1078,7 @@ static int meson_ooblayout_ecc(struct mtd_info *mtd=
+, int section,
+>  	if (section >=3D nand->ecc.steps)
+>  		return -ERANGE;
+> =20
+> -	oobregion->offset =3D  2 + (section * (2 + nand->ecc.bytes));
+> +	oobregion->offset =3D NFC_USER_BYTES + (section * NFC_OOB_PER_ECC(nand)=
+);
 
-???
+No, the first "2" here is for bad block markers, it is not related to
+your ECC engine layout I believe.
 
-> +	/delete-property/ pinctrl-0;
-> +	/delete-property/ pinctrl-names;
+>  	oobregion->length =3D nand->ecc.bytes;
+> =20
+>  	return 0;
+> @@ -1091,7 +1096,7 @@ static int meson_ooblayout_free(struct mtd_info *mt=
+d, int section,
+>  	/* Split rest of OOB area (not covered by ECC engine) per each
+>  	 * ECC section. This will be OOB data available to user.
+>  	 */
+> -	oobregion->offset =3D (section + nand->ecc.steps) * (2 + nand->ecc.byte=
+s);
+> +	oobregion->offset =3D (section + nand->ecc.steps) * NFC_OOB_PER_ECC(nan=
+d);
+>  	oobregion->length =3D oob_bytes / nand->ecc.steps;
+> =20
+>  	return 0;
 
-???
 
-I have no clue what you are trying to achieve here but this is a proof
-your DTSI is bogus.
-
-You should never remove statuses. You should never need to remove
-pinctrl as these are board dependent, not SoC. If you remove them, it
-means they are not part of SoC in the first place!
-Best regards,
-Krzysztof
-
+Thanks,
+Miqu=C3=A8l
