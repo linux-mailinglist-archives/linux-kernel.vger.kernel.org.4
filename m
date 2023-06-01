@@ -2,104 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D974719A33
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7C2719A38
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:55:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233125AbjFAKxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
+        id S233089AbjFAKzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232146AbjFAKxc (ORCPT
+        with ESMTP id S233207AbjFAKyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:53:32 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D1C8107;
-        Thu,  1 Jun 2023 03:53:31 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CE902F4;
-        Thu,  1 Jun 2023 03:54:16 -0700 (PDT)
-Received: from [10.1.26.32] (e122027.cambridge.arm.com [10.1.26.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 185603F7D8;
-        Thu,  1 Jun 2023 03:53:28 -0700 (PDT)
-Message-ID: <fca99838-991d-66a7-0c2c-16ae901e3935@arm.com>
-Date:   Thu, 1 Jun 2023 11:53:27 +0100
+        Thu, 1 Jun 2023 06:54:51 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F302F2;
+        Thu,  1 Jun 2023 03:54:50 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QX2zN4Smcz67Ph9;
+        Thu,  1 Jun 2023 18:53:04 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 1 Jun
+ 2023 11:54:48 +0100
+Date:   Thu, 1 Jun 2023 11:54:47 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Terry Bowman <terry.bowman@amd.com>
+CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
+        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
+        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: Re: [PATCH v4 06/23] cxl/acpi: Moving add_host_bridge_uport()
+ around
+Message-ID: <20230601115447.000055e6@Huawei.com>
+In-Reply-To: <20230523232214.55282-7-terry.bowman@amd.com>
+References: <20230523232214.55282-1-terry.bowman@amd.com>
+        <20230523232214.55282-7-terry.bowman@amd.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v12 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-Content-Language: en-GB
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20230525113034.46880-1-tony@atomide.com>
- <f44b5fb0-2345-df07-abab-c04abd6f8a13@arm.com>
- <20230601104431.GX14287@atomide.com>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <20230601104431.GX14287@atomide.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 11:44, Tony Lindgren wrote:
-> Hi,
+On Tue, 23 May 2023 18:21:57 -0500
+Terry Bowman <terry.bowman@amd.com> wrote:
+
+> From: Robert Richter <rrichter@amd.com>
 > 
-> * Steven Price <steven.price@arm.com> [230601 10:04]:
->> I haven't studied this change in detail, but I assume the bug is that
->> serial_base_port_device_remove() shouldn't be dropping port_mutex. The
->> below hack gets my board booting again.
+> Just moving code to reorder functions to later share cxl_get_chbs()
+> with add_host_bridge_uport().
 > 
-> You're right. I wonder how I managed to miss that.. Care to post a proper
-> fix for this or do you want me to post it?
-
-I'll post a proper fix shortly. Thanks for the confirmation of the fix.
-
->> Thanks,
->>
->> Steve
->>
->> Hack fix:
->> ----8<----
->> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
->> index 29bd5ede0b25..044e4853341a 100644
->> --- a/drivers/tty/serial/serial_core.c
->> +++ b/drivers/tty/serial/serial_core.c
->> @@ -3234,8 +3234,7 @@ static void serial_core_remove_one_port(struct uart_driver *drv,
->>         wait_event(state->remove_wait, !atomic_read(&state->refcount));
->>         state->uart_port = NULL;
->>         mutex_unlock(&port->mutex);
->> -out:
->> -       mutex_unlock(&port_mutex);
->> +out:;
->>  }
+> This makes changes in the next patch visible. No other changes at all.
 > 
-> Seems you can remove out here and just do a return earlier instead of goto.
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+Given it's just a move FWIW
 
-Yes, this was just the smallest change. I'll do it properly with an
-early return in the proper patch.
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Thanks,
-
-Steve
-
-> Regards,
+> ---
+>  drivers/cxl/acpi.c | 90 +++++++++++++++++++++++-----------------------
+>  1 file changed, 45 insertions(+), 45 deletions(-)
 > 
-> Tony
+> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
+> index 39227070da9b..4fd9fe32f830 100644
+> --- a/drivers/cxl/acpi.c
+> +++ b/drivers/cxl/acpi.c
+> @@ -327,51 +327,6 @@ __mock struct acpi_device *to_cxl_host_bridge(struct device *host,
+>  	return NULL;
+>  }
+>  
+> -/*
+> - * A host bridge is a dport to a CFMWS decode and it is a uport to the
+> - * dport (PCIe Root Ports) in the host bridge.
+> - */
+> -static int add_host_bridge_uport(struct device *match, void *arg)
+> -{
+> -	struct cxl_port *root_port = arg;
+> -	struct device *host = root_port->dev.parent;
+> -	struct acpi_device *hb = to_cxl_host_bridge(host, match);
+> -	struct acpi_pci_root *pci_root;
+> -	struct cxl_dport *dport;
+> -	struct cxl_port *port;
+> -	struct device *bridge;
+> -	int rc;
+> -
+> -	if (!hb)
+> -		return 0;
+> -
+> -	pci_root = acpi_pci_find_root(hb->handle);
+> -	bridge = pci_root->bus->bridge;
+> -	dport = cxl_find_dport_by_dev(root_port, bridge);
+> -	if (!dport) {
+> -		dev_dbg(host, "host bridge expected and not found\n");
+> -		return 0;
+> -	}
+> -
+> -	if (dport->rch) {
+> -		dev_info(bridge, "host supports CXL (restricted)\n");
+> -		return 0;
+> -	}
+> -
+> -	rc = devm_cxl_register_pci_bus(host, bridge, pci_root->bus);
+> -	if (rc)
+> -		return rc;
+> -
+> -	port = devm_cxl_add_port(host, bridge, dport->component_reg_phys,
+> -				 dport);
+> -	if (IS_ERR(port))
+> -		return PTR_ERR(port);
+> -
+> -	dev_info(bridge, "host supports CXL\n");
+> -
+> -	return 0;
+> -}
+> -
+>  struct cxl_chbs_context {
+>  	unsigned long long uid;
+>  	resource_size_t base;
+> @@ -464,6 +419,51 @@ static int add_host_bridge_dport(struct device *match, void *arg)
+>  	return 0;
+>  }
+>  
+> +/*
+> + * A host bridge is a dport to a CFMWS decode and it is a uport to the
+> + * dport (PCIe Root Ports) in the host bridge.
+> + */
+> +static int add_host_bridge_uport(struct device *match, void *arg)
+> +{
+> +	struct cxl_port *root_port = arg;
+> +	struct device *host = root_port->dev.parent;
+> +	struct acpi_device *hb = to_cxl_host_bridge(host, match);
+> +	struct acpi_pci_root *pci_root;
+> +	struct cxl_dport *dport;
+> +	struct cxl_port *port;
+> +	struct device *bridge;
+> +	int rc;
+> +
+> +	if (!hb)
+> +		return 0;
+> +
+> +	pci_root = acpi_pci_find_root(hb->handle);
+> +	bridge = pci_root->bus->bridge;
+> +	dport = cxl_find_dport_by_dev(root_port, bridge);
+> +	if (!dport) {
+> +		dev_dbg(host, "host bridge expected and not found\n");
+> +		return 0;
+> +	}
+> +
+> +	if (dport->rch) {
+> +		dev_info(bridge, "host supports CXL (restricted)\n");
+> +		return 0;
+> +	}
+> +
+> +	rc = devm_cxl_register_pci_bus(host, bridge, pci_root->bus);
+> +	if (rc)
+> +		return rc;
+> +
+> +	port = devm_cxl_add_port(host, bridge, dport->component_reg_phys,
+> +				 dport);
+> +	if (IS_ERR(port))
+> +		return PTR_ERR(port);
+> +
+> +	dev_info(bridge, "host supports CXL\n");
+> +
+> +	return 0;
+> +}
+> +
+>  static int add_root_nvdimm_bridge(struct device *match, void *data)
+>  {
+>  	struct cxl_decoder *cxld;
 
