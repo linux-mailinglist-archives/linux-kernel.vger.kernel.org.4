@@ -2,119 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E819671F58E
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B481E71F5A5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Jun 2023 00:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232214AbjFAWFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 18:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38124 "EHLO
+        id S232622AbjFAWJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 18:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjFAWFq (ORCPT
+        with ESMTP id S229542AbjFAWJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 18:05:46 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D32180;
-        Thu,  1 Jun 2023 15:05:42 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-256e1d87998so1118210a91.3;
-        Thu, 01 Jun 2023 15:05:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685657142; x=1688249142;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r6m06uJZ1FcfQQQ+zQbt4FBMdkqZwEjZRMbiHdQiMhk=;
-        b=MVRjfvzuQmigtaIpnBg868k8EJAvZXM6L0PhCAaZrPI8Yqi/CeUJlFgroYi+DdS3PB
-         MLZGiK3HIgyG6uxdk0K7CafGbmBWwyCnwYJzBO6Mp2pfD6tgUFJq+J3DPvTyFnyxQaYl
-         2aYbS9pPxD352nvrEboI7bMwf6wdOwWoelqQh1+m19Djq/glMR0pYoKXxXYcSFAZ716A
-         UhlxfJ6IVGRHQel0p28pi5FxFGzbgK6gtpvJr4DAX3wJoOlDQ7aTiUvfd0trNr0upJs4
-         H4UIerjjHqGWr0ColesVFer1vJO5kR+8IqZADcfGClvKuXiqwszWmMaBTzfmpJr/5XUx
-         4Xhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685657142; x=1688249142;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r6m06uJZ1FcfQQQ+zQbt4FBMdkqZwEjZRMbiHdQiMhk=;
-        b=iWaYFBeX0fVnj1XtiKBX3brIpz2/0xa4lUdWiOaQYD6QVHZg3p2Ed2VtXqrK0FE7U9
-         R0myr2O8PyVGwa62YdcjwXp31GRuNdHAsmdP/AaaQnCyjlF2YOpwzeAzrQWIP3Nr0qEh
-         BTVG3zZBQnIp7rNoFchD22+sqo9+T5/RQOgUw73pwFG6e8zJ6ofoAxYTSXcDItXGh4B3
-         WFMTJuqksokEuhIqV5EGmviRftFpw41aAmBpRJdkCz9ecigI1eRpxCnjRZquL1ahyPIc
-         fwsogpSKgxbLu2qW0cjfbdhZECb0XTkS8TinWPr97LskytbVOXyloa6HY5Uv6+XwRi2O
-         VYmQ==
-X-Gm-Message-State: AC+VfDw+4PKp9xS/KSyYZ/KCBsQ1RScwhRxltDgcVsjZd5/JM7UQF5Gd
-        pWRDD6laaFv1hyLxo6iRvRsxQjsLfTXXk9Uo/Ik=
-X-Google-Smtp-Source: ACHHUZ4gT9Uz11PX2It9sJbwkqfOByKhOKQcVu6O4hJx58nfJehfCdmwKcEoYgo5RwTms1ghyvToylm8obOwqw9fgmU=
-X-Received: by 2002:a17:90b:fc9:b0:24d:f59a:d331 with SMTP id
- gd9-20020a17090b0fc900b0024df59ad331mr611951pjb.26.1685657142032; Thu, 01 Jun
- 2023 15:05:42 -0700 (PDT)
+        Thu, 1 Jun 2023 18:09:35 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2A0132;
+        Thu,  1 Jun 2023 15:09:34 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351Lq0th007693;
+        Thu, 1 Jun 2023 22:09:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=imJcHdUPlXDBoCqG9a/BhfyE1Qcc+zecm0QutRPyjO0=;
+ b=kJXrovA3w65mGpM7Ulx7lhLM+6Wwv+WTasX6k0ae5YSRjaoTfggvfTkLrGqyusOicnEh
+ im0Gh1mv32lTRYUEIp0027DnUA+zQGRJGG7xmupWRfZzsBTip9HTdxKhXY9x8CNs0Qs0
+ iJypXXT5tEpADMhngy+xfu3rbbG6YPFYPsiBmJIzrH8JFH/0LiM1iBeCnzWd49SOuFMr
+ uE+Q28N2rUD9gyuhDUpMGiW73YNcD8Btwsreozuirn4GcOPP5vlHduVZyj2Jd1vS/1ey
+ SYEBL6IzjNrEajvvKXtYBH8HwqUAQ2r45CbTbJNQyiD9DHnJFFz2BwDr/Yki3CntyT7S hA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qy1bcg8e1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 22:09:23 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351M90vL023502
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Jun 2023 22:09:00 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 1 Jun 2023 15:08:59 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <andersson@kernel.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/2] retrieve DSI DSC through DRM bridge
+Date:   Thu, 1 Jun 2023 15:08:49 -0700
+Message-ID: <1685657331-23280-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20230601213416.3373599-1-arnd@kernel.org>
-In-Reply-To: <20230601213416.3373599-1-arnd@kernel.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Fri, 2 Jun 2023 00:05:30 +0200
-Message-ID: <CAOX2RU7mQgwVV=aNXxMQKd4Xrf6iHi8gBCzccE0gz-3_UwW6jQ@mail.gmail.com>
-Subject: Re: [PATCH] clk: qcom: gcc-ipq6018: remove duplicate initializers
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Mantas Pucka <mantas@8devices.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: azCt6zEaKs_4PlDP8-uOhAbHMoq4b0kY
+X-Proofpoint-GUID: azCt6zEaKs_4PlDP8-uOhAbHMoq4b0kY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ malwarescore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ mlxlogscore=907 adultscore=0 clxscore=1015 priorityscore=1501 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2306010191
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Jun 2023 at 23:34, Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> A recent change added new initializers for .config_ctl_val and
-> .config_ctl_hi_val but left the old values in place:
->
-> drivers/clk/qcom/gcc-ipq6018.c:4155:27: error: initialized field overwritten [-Werror=override-init]
->  4155 |         .config_ctl_val = 0x240d4828,
->       |                           ^~~~~~~~~~
-> drivers/clk/qcom/gcc-ipq6018.c:4156:30: error: initialized field overwritten [-Werror=override-init]
->  4156 |         .config_ctl_hi_val = 0x6,
->       |                              ^~~
->
-> Remove the unused ones now to avoid confusion.
->
-> Fixes: f4f0c8acee0e4 ("clk: qcom: gcc-ipq6018: update UBI32 PLL")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+move retrieving DSC from setup_display to atomic_check() and delete struct drm_dsc_config
+from struct msm_display_info.
 
-Thanks for fixing my mess up.
-Reviewed-by: Robert Marko <robimarko@gmail.com>
+Kuogee Hsieh (2):
+  drm/msm/dpu: retrieve DSI DSC struct at atomic_check()
+  drm/msm/dpu: remove struct drm_dsc_config from struct msm_display_info
 
-Regards,
-Robert
-> ---
->  drivers/clk/qcom/gcc-ipq6018.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/drivers/clk/qcom/gcc-ipq6018.c b/drivers/clk/qcom/gcc-ipq6018.c
-> index 48f9bff7c80fb..86b43175b0422 100644
-> --- a/drivers/clk/qcom/gcc-ipq6018.c
-> +++ b/drivers/clk/qcom/gcc-ipq6018.c
-> @@ -4150,8 +4150,6 @@ static struct clk_branch gcc_dcc_clk = {
->  static const struct alpha_pll_config ubi32_pll_config = {
->         .l = 0x3e,
->         .alpha = 0x6667,
-> -       .config_ctl_val = 0x240d6aa8,
-> -       .config_ctl_hi_val = 0x3c2,
->         .config_ctl_val = 0x240d4828,
->         .config_ctl_hi_val = 0x6,
->         .main_output_mask = BIT(0),
-> --
-> 2.39.2
->
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 18 +++++++++++++-----
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  1 -
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 --
+ 3 files changed, 13 insertions(+), 8 deletions(-)
+
+-- 
+2.7.4
+
