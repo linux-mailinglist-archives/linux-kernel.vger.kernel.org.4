@@ -2,135 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E83571F10C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47CC671F10F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233064AbjFARpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 13:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
+        id S233081AbjFARpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 13:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbjFARpO (ORCPT
+        with ESMTP id S233072AbjFARpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 13:45:14 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68529189;
-        Thu,  1 Jun 2023 10:45:13 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b05e96dabbso6864005ad.2;
-        Thu, 01 Jun 2023 10:45:13 -0700 (PDT)
+        Thu, 1 Jun 2023 13:45:30 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE1519F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 10:45:28 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5147e441c33so2643120a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 10:45:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685641513; x=1688233513;
+        d=linaro.org; s=google; t=1685641527; x=1688233527;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=FYUbj1PxaWtwh4DzW6Vay4H94hGaPyKVZYWuV3ZbcXc=;
-        b=OZaoMOIBOQ/WOz1KN5ulk6CR+Y5gFgXSaO22TTBv+bmZLnL+Ld1I5u4DYlklnEQyde
-         aW54XdWuPR5ilO0qi3REMv/tarOQi6Dm5vDOWDhxrG7S0kmhygCNWnmWMbUbiKla4F42
-         wlnkhqEVBaNuV3nJh7oKwDRSAoROzdcqlu1jom2iZJghbk8a5SH8Fym1duIEYuVXipWr
-         8gIc+wA3v8ga9RnPbOVuskX3ZBwHeFUsDUSPkmtRyhA60RkR/aGE9IJjfyPNvlQS9jvz
-         JWvTuj2M6Rw37IdWXleSCzSNDXhiBgn/0dZrfQSG4Rr8pRm8lCHP7ICsnuEwGBTJAr60
-         ke4g==
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CBRDIKv9pFHHAnzSCCPWxz8E2s9GC4jBbWRxKZHWfIc=;
+        b=u+Y5wfCebXA7ka7woUFCIcXqRRZJnjDVXm+r6UIoZoD6rYdgUmg6RTJk98psKqP/Sk
+         1FpJk99QsDASd9QZNZQEpAYASYc8cNOYZv2Bf9mNMH2nHjQ41+nDmFXY4R8CIDrLcPPl
+         gRDmuhrvnZzyXAh6HL5uaXSCOHO8LYUHBKZgHXm8+ee7nufTlW9g4bvSW9v1FIlSB1eX
+         H4hZwftzd+dxrjJs2/n1B5/SkrqKb7ZpDXV4KNF3zu5DJNXOci9nwrhSsKjYRADxkcPI
+         teBDJVf/u36rvJ1j0Jwdc5QdqUPysrkdwcXOHgwPAeOzj+ly2LDU7VZpZgVABuH4gS0W
+         QkZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685641513; x=1688233513;
+        d=1e100.net; s=20221208; t=1685641527; x=1688233527;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FYUbj1PxaWtwh4DzW6Vay4H94hGaPyKVZYWuV3ZbcXc=;
-        b=S9y1ovQLZhImZl+9pdRQa6qhXvykMFT8hUuF4NKp5kJoFScrFJHWAmU0ijRAVa9QOG
-         sIPk5M/+PlUT/KThkoINwmoUKfjG7V/WB9aVE49gH7fkIiVqjCK5xY0PD4YxgLCjRCF6
-         EWv0B6KTpRDWLvfIgD7fkgXpJ6z9gf7pk0kbnK3Q/Kne2F98xRIBVi+M37AHHSW7Rhhe
-         rYkoTUT+B+reudGF6V6wpAvShphUvG1V3Toy13sgTUA4WsSt7imumUxZ+6Ldc4uQIZcU
-         bTKyqtDXE9egY8zgrQ4bcQYtVAqtMfjgSp9o+jo1mQg8h0x4M55rsQjmlXSuuFjMbJsn
-         Zl4g==
-X-Gm-Message-State: AC+VfDzHcZaA70EURqPELBlY6B7lNPApiYEqDhbHJWTTwiJgSd3lI8GO
-        sCybTYBX59SLEuIR/z9iq8E=
-X-Google-Smtp-Source: ACHHUZ4zagpsQ+SjZ4Qm58lG7Do6V5t3Qo41xpHVOqY52Y6876LAbjAqiXp98gMaeErSNLCycz6LFw==
-X-Received: by 2002:a17:902:aa96:b0:1b0:4687:ba0c with SMTP id d22-20020a170902aa9600b001b04687ba0cmr151029plr.8.1685641512798;
-        Thu, 01 Jun 2023 10:45:12 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b1-20020a170902d50100b001b01547d0e8sm3794525plg.142.2023.06.01.10.45.11
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CBRDIKv9pFHHAnzSCCPWxz8E2s9GC4jBbWRxKZHWfIc=;
+        b=DC3aaxncmNutH3VrZUdWWItymD7Ui3Ep3an5I99wpfzXjJydCrHU4n7MAy+DvL7H0S
+         z9+sOLzK+u66Of6In6i66RidEsATwfOC2Ga/jhhxJPvBZ7QzmO87X4O4zX0hpf3vYmIP
+         1vWlB2KV0AVO581V13Kf3hHLp0HVWYMRAsalOTFB3vVRc5HEDs61/au5SD0mP8avPOsd
+         8FH1ITha2q7x8SG7+0cEf3inPdxtyd69HOkVgOq92kIsNUOaKbMC/5L4PAhjRFcN0vEu
+         POS0yLRTqEu++HALlgF5I4ZuiFsANavAa6F59ArGvRvj8H7Ts/GHg8liHhBtaSWsKxm+
+         J6MQ==
+X-Gm-Message-State: AC+VfDxNX8gXDSMIcBmBHHigy+h280kXFztQPcOG41yv6lc9Xp4+00Rc
+        lEws/CcSxlnkHZ+dbbtabAqtGA==
+X-Google-Smtp-Source: ACHHUZ7Unk95/39P64w6MIuE0m9e+mNxNCBz6qY02E+GST/o0s5lxoRIlH/bV7R9zajjnFD7YNu7aQ==
+X-Received: by 2002:a05:6402:3582:b0:514:a5cf:745b with SMTP id y2-20020a056402358200b00514a5cf745bmr637933edc.3.1685641526752;
+        Thu, 01 Jun 2023 10:45:26 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id p16-20020a056402045000b005147f604965sm7519209edw.24.2023.06.01.10.45.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 10:45:12 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8bd7d122-18b5-b9b4-0090-6344caf903fd@roeck-us.net>
-Date:   Thu, 1 Jun 2023 10:45:10 -0700
+        Thu, 01 Jun 2023 10:45:26 -0700 (PDT)
+Message-ID: <bd257ed0-71a7-0504-0bfe-14775ac93571@linaro.org>
+Date:   Thu, 1 Jun 2023 19:45:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 4/5] hwmon: (gxp_fan_ctrl) Provide fan info via gpio
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: display: bridge: Add NXP i.MX93
+ parallel display format configuration
 Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        "Hawkins, Nick" <nick.hawkins@hpe.com>
-Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <20230531151918.105223-1-nick.hawkins@hpe.com>
- <20230531151918.105223-5-nick.hawkins@hpe.com>
- <07b2a2f7-5ddc-0f10-6b1f-184dc21fa580@roeck-us.net>
- <DM4PR84MB19274F575858CBCB2FA5C23E88489@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
- <b1d8f851-4e87-333c-229c-b9dc37ea3c40@roeck-us.net>
- <DM4PR84MB19273A008BB11589CEEF697188499@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
- <CACRpkdarJCSCif+r1e_jXbbAgv03OgGAO6pkW9x-yiYZJxdGeQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CACRpkdarJCSCif+r1e_jXbbAgv03OgGAO6pkW9x-yiYZJxdGeQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+To:     Liu Ying <victor.liu@nxp.com>, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        rfoss@kernel.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com
+References: <20230531093206.3893469-1-victor.liu@nxp.com>
+ <20230531093206.3893469-2-victor.liu@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230531093206.3893469-2-victor.liu@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/23 10:11, Linus Walleij wrote:
-> On Thu, Jun 1, 2023 at 5:48 PM Hawkins, Nick <nick.hawkins@hpe.com> wrote:
+On 31/05/2023 11:32, Liu Ying wrote:
+> NXP i.MX93 mediamix blk-ctrl contains one DISPLAY_MUX register which
+> configures parallel display format by using the "PARALLEL_DISP_FORMAT"
+> field. Add device tree bindings for the display format configuration.
 > 
->> Thank you for your valuable feedback with the solutions you have provided.
->> Before I proceed though I have a quick query about the fan driver.
->> If I were to let the user space "own" gpio pins, would it be permissible for
->> the userspace to feed a kernel driver data via sysfs?
->>
->> Ex:
->> GPIO Driver -> (OpenBMC) -> Fandriver (sysfs).
->>
->> Here the GPIO driver would provide fan presence information to OpenBMC
->> and then OpenBMC would provide fan presence info to the fan driver.
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> ---
+> v1->v2:
+> * No change.
+
+How did you implement Rob's comment?
+
 > 
-> But why? Don't be so obsessed about userspace doing stuff using
-> sysfs, usually it is a better idea to let the kernel handle hardware.
-> 
-> I think this is a simple thermal zone you can define in the device
-> tree as indicated in my previous comment.
-> 
->> If it were permissible to provide data to the driver via this method I could
->> apply it to the PSU driver as well. the PSU driver which requires presence
->> info to verify a PSU is inserted / removed.
-> 
-> It feels like you are looking for a way for two drivers to communicate
-> with each other.
-> 
-> This can be done several ways, the most straight-forward is notifiers.
-> include/linux/notifier.h
+>  .../display/bridge/nxp,imx93-pdfc.yaml        | 78 +++++++++++++++++++
+>  1 file changed, 78 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/bridge/nxp,imx93-pdfc.yaml
 > 
 
-This is all unnecessary. The hwmon driver could register a gpio pin,
-including interrupt, and then report state changes to userspace with
-sysfs or udev events on the registered hwmon sysfs attributes.
 
-If they really want to use userspace for everything, they should
-just use userspace for everything and not bother with a kernel driver.
-
-Guenter
+Best regards,
+Krzysztof
 
