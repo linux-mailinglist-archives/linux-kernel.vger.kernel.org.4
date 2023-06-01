@@ -2,142 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813397195DC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9677195E3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231723AbjFAImx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
+        id S232145AbjFAInu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbjFAImu (ORCPT
+        with ESMTP id S232048AbjFAIno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:42:50 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E30F119
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:42:46 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-3f7fd59bb13so4824271cf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:42:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexus-software-ie.20221208.gappssmtp.com; s=20221208; t=1685608965; x=1688200965;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mOHClv3EmZ5BC3wC17xcl4hTpc6sk/oBTzMD5jV9A1U=;
-        b=T+fEJ8MlR4KHrrWHZaVkuXopdtCLepCVfBAECMwZjmqdNEwNC6Bgag4lvkdnJttjqG
-         kvPSAHJclDqCmk2FjFHQ8uyCRrJL2PaHeluGbzlQRi2NqgfZZVRdL0GQ0LwzKQ3jHmnZ
-         v/AFlGwYnGklHBhYx7Fn/2CeFAkzTYucPr/j3zZXXc3msN9KyfKR3n1sZN09ALFhkdW8
-         dVL8TVf7xu9Nohbt/DNVjnHEaW1Ys4IYv5QQBOnhZZBb/KSkKorVUDMf6CjnuKulVZvP
-         cF7QiDngi14DRKbYW9qE4Ls9dcr33RkZHy8U8iT+bt0YF+2buWVR7Vqv3UeL86eGGN3M
-         B2KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685608965; x=1688200965;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mOHClv3EmZ5BC3wC17xcl4hTpc6sk/oBTzMD5jV9A1U=;
-        b=IThcn1SfW261eeoct8ms/39pZzM/n7E5O6a41Oxtc28ppzezrsaAQNj6AEQjHWUt74
-         PQjc8qXyNojMZq6tkyjljySzpDRanPDFJ/Xucg1Nxh/G/QZ8pdkDn5I+qGVtAx0RRs4V
-         IkIUMLZ94HZ6K6Ey0Yek32gdgeELPFmDaf0uzUrS9Tz7Bv1Y0KBxFn/hLM/S+5eTJtJs
-         fpU+EbCX0bQn6wS+S4xq5N8mLPpYepHf85ISu5EAOj7sze4n4Li39ufY4UCbTzsqjN+c
-         G5HEnkysk5GrfijaD8sLTtGhqGz3PV941iFWOUlz0+G+6xltQk1FyI8yGJ8VZYWz/v8c
-         n7rQ==
-X-Gm-Message-State: AC+VfDxyIrTr1lpp1HQyrezt6n8bZKUWXNleJGtlqlM7IoLep7NKczPt
-        KNsK3WjZsikBAPrctB6z1UGFeTe0cSZiISJXs7bmrw==
-X-Google-Smtp-Source: ACHHUZ64B9aPj3MnaxAoV1VqJcmNXpqutdESG4B/ynheLTITdb7rBWLgFOJzuXb75zVf3DoZRlJQepZrwBTnxNF+Mtc=
-X-Received: by 2002:a05:622a:58a:b0:3f6:b151:7db1 with SMTP id
- c10-20020a05622a058a00b003f6b1517db1mr9299207qtb.62.1685608965598; Thu, 01
- Jun 2023 01:42:45 -0700 (PDT)
+        Thu, 1 Jun 2023 04:43:44 -0400
+Received: from out-41.mta1.migadu.com (out-41.mta1.migadu.com [IPv6:2001:41d0:203:375::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C4EFB
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:43:41 -0700 (PDT)
+Message-ID: <b85c0d63-f6a5-73c4-e574-163b0b07d80a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1685609019;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GrV1KM3/y3S5hBdJqzM74vPmzXw6kimHKx1fZTZGaeI=;
+        b=D81vOtJuXcfgtNau4PafJgR+tR3LuhpfN/OgTKmkEmM+eZZJnb+fqBG1j2aMobjbEuGL/h
+        bnnqxNLO7ovuGmBZAWSKGlfQ1ZrgInPMLp7O4m8wvHw5mM2vXYwnHDdUwuTRZHp32SWOW/
+        0esYzjRYjctiv6T19eWTOTn0tmnh7eQ=
+Date:   Thu, 1 Jun 2023 16:43:32 +0800
 MIME-Version: 1.0
-References: <20230531-topic-8998_mmssclk-v1-0-2b5a8fc90991@linaro.org> <20230531-topic-8998_mmssclk-v1-1-2b5a8fc90991@linaro.org>
-In-Reply-To: <20230531-topic-8998_mmssclk-v1-1-2b5a8fc90991@linaro.org>
-From:   "Bryan O'Donoghue" <pure.logic@nexus-software.ie>
-Date:   Thu, 1 Jun 2023 10:42:33 +0200
-Message-ID: <CAJB8c076FOXDzCzYWmzfm_PF6UieYx-XMwAqUBHTc+UubjYu6g@mail.gmail.com>
-Subject: Re: [PATCH 1/4] arm64: dts: qcom: msm8998: Properly describe MMSS SMMU
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        Imran Khan <kimran@codeaurora.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Joonwoo Park <joonwoop@codeaurora.org>,
-        Jeffrey Hugo <jhugo@codeaurora.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 6/8] xfs: introduce xfs_fs_destroy_super()
+Content-Language: en-US
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     akpm@linux-foundation.org, tkhai@ya.ru, roman.gushchin@linux.dev,
+        vbabka@suse.cz, viro@zeniv.linux.org.uk, brauner@kernel.org,
+        djwong@kernel.org, hughd@google.com, paulmck@kernel.org,
+        muchun.song@linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
+References: <20230531095742.2480623-1-qi.zheng@linux.dev>
+ <20230531095742.2480623-7-qi.zheng@linux.dev>
+ <ZHfc3V4KKmW8QTR2@dread.disaster.area>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Qi Zheng <qi.zheng@linux.dev>
+In-Reply-To: <ZHfc3V4KKmW8QTR2@dread.disaster.area>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 11:01=E2=80=AFAM Konrad Dybcio <konrad.dybcio@linar=
-o.org> wrote:
->
-> The MMSS SMMU has been abusingly consuming the exposed RPM interconnect
-> clock and not describing the power domain it needs. Put an end to that.
->
-> Fixes: 05ce21b54423 ("arm64: dts: qcom: msm8998: Configure the multimedia=
- subsystem iommu")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/msm8998.dtsi | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/=
-qcom/msm8998.dtsi
-> index f0e943ff0046..a4016085b750 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> @@ -2737,10 +2737,10 @@ mmss_smmu: iommu@cd00000 {
->
->                         clocks =3D <&mmcc MNOC_AHB_CLK>,
->                                  <&mmcc BIMC_SMMU_AHB_CLK>,
-> -                                <&rpmcc RPM_SMD_MMAXI_CLK>,
->                                  <&mmcc BIMC_SMMU_AXI_CLK>;
-> -                       clock-names =3D "iface-mm", "iface-smmu",
-> -                                     "bus-mm", "bus-smmu";
-> +                       clock-names =3D "iface-mm",
-> +                                     "iface-smmu",
-> +                                     "bus-smmu";
->
->                         #global-interrupts =3D <0>;
->                         interrupts =3D
-> @@ -2764,6 +2764,8 @@ mmss_smmu: iommu@cd00000 {
->                                 <GIC_SPI 261 IRQ_TYPE_LEVEL_HIGH>,
->                                 <GIC_SPI 262 IRQ_TYPE_LEVEL_HIGH>,
->                                 <GIC_SPI 272 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +                       power-domains =3D <&mmcc BIMC_SMMU_GDSC>;
->                 };
->
->                 remoteproc_adsp: remoteproc@17300000 {
->
-> --
-> 2.40.1
->
+Hi Dave,
 
-I think you should split this up.
+On 2023/6/1 07:48, Dave Chinner wrote:
+> On Wed, May 31, 2023 at 09:57:40AM +0000, Qi Zheng wrote:
+>> From: Kirill Tkhai <tkhai@ya.ru>
+>>
+>> xfs_fs_nr_cached_objects() touches sb->s_fs_info,
+>> and this patch makes it to be destructed later.
+>>
+>> After this patch xfs_fs_nr_cached_objects() is safe
+>> for splitting unregister_shrinker(): mp->m_perag_tree
+>> is stable till destroy_super_work(), while iteration
+>> over it is already RCU-protected by internal XFS
+>> business.
+>>
+>> Signed-off-by: Kirill Tkhai <tkhai@ya.ru>
+>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>> ---
+>>   fs/xfs/xfs_super.c | 25 ++++++++++++++++++++++---
+>>   1 file changed, 22 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/fs/xfs/xfs_super.c b/fs/xfs/xfs_super.c
+>> index 7e706255f165..694616524c76 100644
+>> --- a/fs/xfs/xfs_super.c
+>> +++ b/fs/xfs/xfs_super.c
+>> @@ -743,11 +743,18 @@ xfs_fs_drop_inode(
+>>   }
+>>   
+>>   static void
+>> -xfs_mount_free(
+>> +xfs_free_names(
+>>   	struct xfs_mount	*mp)
+>>   {
+>>   	kfree(mp->m_rtname);
+>>   	kfree(mp->m_logname);
+>> +}
+>> +
+>> +static void
+>> +xfs_mount_free(
+>> +	struct xfs_mount	*mp)
+>> +{
+>> +	xfs_free_names(mp);
+>>   	kmem_free(mp);
+>>   }
+>>   
+>> @@ -1136,8 +1143,19 @@ xfs_fs_put_super(
+>>   	xfs_destroy_mount_workqueues(mp);
+>>   	xfs_close_devices(mp);
+>>   
+>> -	sb->s_fs_info = NULL;
+>> -	xfs_mount_free(mp);
+>> +	xfs_free_names(mp);
+>> +}
+>> +
+>> +static void
+>> +xfs_fs_destroy_super(
+>> +	struct super_block	*sb)
+>> +{
+>> +	if (sb->s_fs_info) {
+>> +		struct xfs_mount	*mp = XFS_M(sb);
+>> +
+>> +		kmem_free(mp);
+>> +		sb->s_fs_info = NULL;
+>> +	}
+>>   }
+>>   
+>>   static long
+>> @@ -1165,6 +1183,7 @@ static const struct super_operations xfs_super_operations = {
+>>   	.dirty_inode		= xfs_fs_dirty_inode,
+>>   	.drop_inode		= xfs_fs_drop_inode,
+>>   	.put_super		= xfs_fs_put_super,
+>> +	.destroy_super		= xfs_fs_destroy_super,
+>>   	.sync_fs		= xfs_fs_sync_fs,
+>>   	.freeze_fs		= xfs_fs_freeze,
+>>   	.unfreeze_fs		= xfs_fs_unfreeze,
+> 
+> I don't really like this ->destroy_super() callback, especially as
+> it's completely undocumented as to why it exists. This is purely a
+> work-around for handling extended filesystem superblock shrinker
+> functionality, yet there's nothing that tells the reader this.
+> 
+> It also seems to imply that the superblock shrinker can continue to
+> run after the existing unregister_shrinker() call before ->kill_sb()
+> is called. This violates the assumption made in filesystems that the
+> superblock shrinkers have been stopped and will never run again
+> before ->kill_sb() is called. Hence ->kill_sb() implementations
+> assume there is nothing else accessing filesystem owned structures
+> and it can tear down internal structures safely.
+> 
+> Realistically, the days of XFS using this superblock shrinker
+> extension are numbered. We've got a lot of the infrastructure we
+> need in place to get rid of the background inode reclaim
+> infrastructure that requires this shrinker extension, and it's on my
+> list of things that need to be addressed in the near future.
+> 
+> In fact, now that I look at it, I think the shmem usage of this
+> superblock shrinker interface is broken - it returns SHRINK_STOP to
+> ->free_cached_objects(), but the only valid return value is the
+> number of objects freed (i.e. 0 is nothing freed). These special
+> superblock extension interfaces do not work like a normal
+> shrinker....
+> 
+> Hence I think the shmem usage should be replaced with an separate
+> internal shmem shrinker that is managed by the filesystem itself
+> (similar to how XFS has multiple internal shrinkers).
+> 
+> At this point, then the only user of this interface is (again) XFS.
+> Given this, adding new VFS methods for a single filesystem
+> for functionality that is planned to be removed is probably not the
+> best approach to solving the problem.
 
-This should be two patches. One to describe the power-domain and
-another for the removal of interconnect clocks.
+Thanks for such a detailed analysis. Kirill Tkhai just proposeed a
+new method[1], I cc'd you on the email.
 
-I guess none of the multi-media connected stuff on 8998 works ... no
-venus, mdp, camera - which would surely fail without the multi-media
-AXI clock being on..
+[1]. 
+https://lore.kernel.org/lkml/bab60fe4-964c-43a6-ecce-4cbd4981d875@ya.ru/
 
-Anyway please split this patch up !
+Thanks,
+Qi
+
+> 
+> Cheers,
+> 
+> Dave.
+
