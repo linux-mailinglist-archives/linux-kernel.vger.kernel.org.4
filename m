@@ -2,57 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8C67195C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD457195C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232237AbjFAIil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44490 "EHLO
+        id S231624AbjFAIkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232221AbjFAIiE (ORCPT
+        with ESMTP id S232320AbjFAIj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:38:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4D7A10C6;
-        Thu,  1 Jun 2023 01:36:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 916DC169C;
-        Thu,  1 Jun 2023 01:37:28 -0700 (PDT)
-Received: from [10.57.22.124] (unknown [10.57.22.124])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A51083F67D;
-        Thu,  1 Jun 2023 01:36:40 -0700 (PDT)
-Message-ID: <d8f74a05-d3b0-a39b-6fe4-bbea2e98e653@arm.com>
-Date:   Thu, 1 Jun 2023 09:36:39 +0100
+        Thu, 1 Jun 2023 04:39:28 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C12819B;
+        Thu,  1 Jun 2023 01:38:07 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0Vk3n4AU_1685608664;
+Received: from 30.221.128.127(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0Vk3n4AU_1685608664)
+          by smtp.aliyun-inc.com;
+          Thu, 01 Jun 2023 16:38:04 +0800
+Message-ID: <9b4d26c9-bc63-3491-c118-60a345667583@linux.alibaba.com>
+Date:   Thu, 1 Jun 2023 16:37:42 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.1
-Subject: Re: [PATCH v4 00/11] Add support to configure TPDM DSB subunit
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org
-References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
- <7e2eaf1f-369a-d664-1011-3da6efb382a3@arm.com>
- <725b6ccd-ff70-a3d2-fe44-797c0509e643@quicinc.com>
- <13686cd8-c887-32ef-d314-0955be366373@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <13686cd8-c887-32ef-d314-0955be366373@quicinc.com>
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH net 2/2] net/smc: Don't use RMBs not mapped to new link in
+ SMCRv2 ADD LINK
+To:     Wenjia Zhang <wenjia@linux.ibm.com>, kgraul@linux.ibm.com,
+        jaka@linux.ibm.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1685101741-74826-1-git-send-email-guwen@linux.alibaba.com>
+ <1685101741-74826-3-git-send-email-guwen@linux.alibaba.com>
+ <f134294c-2919-6069-d362-87a84c846690@linux.ibm.com>
+ <34e6b564-a658-4461-ebec-f53dd80a9125@linux.alibaba.com>
+ <f309d525-7e12-ee81-8d59-ad07f94f9e9d@linux.ibm.com>
+From:   Wen Gu <guwen@linux.alibaba.com>
+In-Reply-To: <f309d525-7e12-ee81-8d59-ad07f94f9e9d@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,48 +50,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 09:17, Tao Zhang wrote:
-> 
-> On 5/23/2023 3:50 PM, Tao Zhang wrote:
->> On 4/28/2023 12:53 AM, Suzuki K Poulose wrote:
->>> On 27/04/2023 10:00, Tao Zhang wrote:
->>>> Introduction of TPDM DSB subunit
->>>> DSB subunit is responsible for creating a dataset element, and is also
->>>> optionally responsible for packing it to fit multiple elements on a
->>>> single ATB transfer if possible in the configuration. The TPDM Core
->>>> Datapath requests timestamps be stored by the TPDA and then delivering
->>>> ATB sized data (depending on ATB width and element size, this could
->>>> be smaller or larger than a dataset element) to the ATB Mast FSM.
->>>>
->>>> The DSB subunit must be configured prior to enablement. This series
->>>> adds support for TPDM to configure the configure DSB subunit.
 
-...
 
->>> There is v6 available for the above and there may be changes in the data
->>> structures. But the series is stable now, and may be you could cordinate
->>> with James and repost the series at rc1 ?
->>
->> This patch series has depended on James's v6 patch series. It's a 
->> description mistake.
->>
->> The link I posted is James's v6 patch series.
->>
->> Would you mind continue to review this patch series first?
->>
->>
->> Tao
->>
-> Hi Suzuki,
+On 2023/5/31 04:34, Wenjia Zhang wrote:
 > 
 > 
-> Do you have more review comments on the rest of the patches(#5-#11) in 
-> this series?
 > 
-> Or do you prefer me to update patches(#1-#4) and resubmit first?
+> Hi Wen,
+> 
+> Sorry for the late answer because of the public holiday here!
+> 
+> I really like the test scenario, thank you for the elaboration and the fixes!
+> They look good to me.
+> 
+> Why I asked that was that the first patch looked very reasonable, but I was wondering why I didn't meet any problem with 
+> that before ;-) and if it would trigger some problem during processing the SMCRv1 ADD Link Continuation Messages. After 
+> checking the code again, I don't think there would be any problem with the patch, because in the case of processing the 
+> SMCRv1 ADD Link Continuation Messages, it's about the same RMB.
+> 
+> Hi @Paolo, I would appreciate it if you could give us more time to review and test the patches. Because we have to make 
+> sure that they can work on our platform (s390) without problem, not only on x86.
+> 
+> Thanks
+> Wenjia
+> 
+> 
 
-Apologoies for the delay. I will try to complete this series this week.
+Inspired by your comments, I check the SMCRv1 and find it has the similar issue in smc_llc_add_link_cont().
+The cause and way to reproduce it are similar to the issue in SMCRv2. I will fix this as well.
 
-Thanks
-Suzuki
+[  361.813390] BUG: kernel NULL pointer dereference, address: 0000000000000014
+[  361.814121] #PF: supervisor read access in kernel mode
+[  361.814646] #PF: error_code(0x0000) - not-present page
+[  361.815160] PGD 0 P4D 0
+[  361.815431] Oops: 0000 [#1] PREEMPT SMP PTI
+[  361.815866] CPU: 5 PID: 48 Comm: kworker/5:0 Kdump: loaded Tainted: G        W   E      6.4.0-rc3+ #49
+[  361.817952] Workqueue: events smc_llc_add_link_work [smc]
+[  361.818527] RIP: 0010:smc_llc_add_link_cont+0x160/0x270 [smc]
+[  361.820973] RSP: 0018:ffffa737801d3d50 EFLAGS: 00010286
+[  361.821517] RAX: ffff964f82144000 RBX: ffffa737801d3dd8 RCX: 0000000000000000
+[  361.822246] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff964f81370c30
+[  361.822957] RBP: ffffa737801d3dd4 R08: ffff964f81370000 R09: ffffa737801d3db0
+[  361.823678] R10: 0000000000000001 R11: 0000000000000060 R12: ffff964f82e70000
+[  361.824409] R13: ffff964f81370c38 R14: ffffa737801d3dd3 R15: 0000000000000001
+[  361.825119] FS:  0000000000000000(0000) GS:ffff9652bfd40000(0000) knlGS:0000000000000000
+[  361.825934] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  361.826515] CR2: 0000000000000014 CR3: 000000008fa20004 CR4: 00000000003706e0
+[  361.827251] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  361.827989] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  361.828712] Call Trace:
+[  361.828964]  <TASK>
+[  361.829182]  smc_llc_srv_rkey_exchange+0xa7/0x190 [smc]
+[  361.829726]  smc_llc_srv_add_link+0x3ae/0x5a0 [smc]
+[  361.830246]  smc_llc_add_link_work+0xb8/0x140 [smc]
+[  361.830752]  process_one_work+0x1e5/0x3f0
+[  361.831173]  worker_thread+0x4d/0x2f0
+[  361.831531]  ? __pfx_worker_thread+0x10/0x10
+[  361.831925]  kthread+0xe5/0x120
+[  361.832239]  ? __pfx_kthread+0x10/0x10
+[  361.832630]  ret_from_fork+0x2c/0x50
+[  361.833004]  </TASK>
+[  361.833236] Modules linked in: binfmt_misc(E) smc_diag(E) smc(E) rfkill(E) intel_rapl_msr(E) intel_rapl_common(E) 
+mousedev(E) psmouse(E) i2c_piix4(E) pcspkr(E) ip_tables(E) mlx5_ib(E) ib_uverbs(E) ib_core(E) cirrus(E) ata_generic(E) 
+drm_shmem_helper(E) drm_kms_helper(E) syscopyarea(E) ata_piix(E) sysfillrect(E) crct10dif_pclmul(E) sysimgblt(E) 
+mlx5_core(E) crc32_pclmul(E) drm(E) virtio_net(E) mlxfw(E) crc32c_intel(E) ghash_clmulni_intel(E) net_failover(E) 
+psample(E) i2c_core(E) failover(E) pci_hyperv_intf(E) serio_raw(E) libata(E) dm_mirror(E) dm_region_hash(E) dm_log(E) 
+dm_mod(E)
+[  361.839180] CR2: 0000000000000014
 
+Thanks,
+Wen Gu
