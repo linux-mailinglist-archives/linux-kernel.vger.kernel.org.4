@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5767192A9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 07:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A4F7192AB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 07:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbjFAFr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 01:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
+        id S231756AbjFAFsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 01:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbjFAFrD (ORCPT
+        with ESMTP id S231602AbjFAFrE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 01:47:03 -0400
-Received: from forward100a.mail.yandex.net (forward100a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA001AB
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 22:46:30 -0700 (PDT)
+        Thu, 1 Jun 2023 01:47:04 -0400
+Received: from forward100a.mail.yandex.net (forward100a.mail.yandex.net [178.154.239.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0540D10EC;
+        Wed, 31 May 2023 22:46:30 -0700 (PDT)
 Received: from mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net [IPv6:2a02:6b8:c1f:5e51:0:640:23ee:0])
-        by forward100a.mail.yandex.net (Yandex) with ESMTP id 4991E46CD6;
-        Thu,  1 Jun 2023 08:46:28 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id pjGDMhnDduQ0-AwSLvKHg;
+        by forward100a.mail.yandex.net (Yandex) with ESMTP id 37FD046CD1;
+        Thu,  1 Jun 2023 08:46:29 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id pjGDMhnDduQ0-g8stdGLu;
         Thu, 01 Jun 2023 08:46:28 +0300
 X-Yandex-Fwd: 1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1685598388;
-        bh=cfidUNhLl2ben6D10QceNGfJXqqis/yhEUlfiH2umJA=;
-        h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
-        b=PttJ9OBEfFdKwvbjEM1czzrbr0lztNbJWlD8+v0b+E01iXu6iHwTVQqR3LHrFdtaC
-         Szu+6P7ynK9fjBfOWy2pZl/4WQHpyKlDXMUALI4/y/dCYv2xiYzLFQARFkXP7HAeev
-         F4tuJjp+TX0KVZiGQrEQRA6nwSLmO7E6SEV80z3Y=
+        bh=EOmo+RE2lmZbsgHFDMmAtXJCZ5Gk2K8xR39C2HP8i6U=;
+        h=Cc:Message-Id:References:Date:In-Reply-To:Subject:To:From;
+        b=VdnyYB/VNrOd+qfrFT1H4Id+8uaguK42lktXQ2n82X1822UuFEV66jyQl/8cAvFvT
+         zc6ol3NJhdpumMgNgS+vGH9LgISgn+Eu/XLS1aqDEGovd92q2Drdo4PREXBCyf8pEB
+         CTcBI91a+WZbwYnhK5lLp18OLCcBpZ8pHgmPNdmw=
 Authentication-Results: mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
 From:   Nikita Shubin <nikita.shubin@maquefel.me>
 To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
 Cc:     Nikita Shubin <nikita.shubin@maquefel.me>,
         Michael Peters <mpeters@embeddedTS.com>,
-        Kris Bahnsen <kris@embeddedTS.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 36/43] ARM: ep93xx: DT for the Cirrus ep93xx SoC platforms
-Date:   Thu,  1 Jun 2023 08:45:41 +0300
-Message-Id: <20230601054549.10843-18-nikita.shubin@maquefel.me>
+        Kris Bahnsen <kris@embeddedTS.com>, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 37/43] pwm: ep93xx: drop legacy pinctrl
+Date:   Thu,  1 Jun 2023 08:45:42 +0300
+Message-Id: <20230601054549.10843-19-nikita.shubin@maquefel.me>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20230424123522.18302-1-nikita.shubin@maquefel.me>
 References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -61,106 +58,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds compulsory device tree support to the Cirrus ep93xx ARMv4
-platform.
-
-- We select PINCTRL_EP93xx
-- We select COMMON_CLK_EP93XX, as clock driver moved out of platform
-  code
-- We select ARCH_HAS_RESET_CONTROLLER
-
-And also we need ARM_ATAG_DTB_COMPAT to update device tree with
-information about memory passed from bootloader.
-
-We have to leave all MACH options as they are used for board checking
-before decomp, to turn off watchdog and ethernet DMA.
+Drop legacy gpio request/free since we are using
+pinctrl for this now.
 
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- arch/arm/Makefile             |  1 -
- arch/arm/mach-ep93xx/Kconfig  | 20 ++++++++++----------
- arch/arm/mach-ep93xx/Makefile | 11 -----------
- 3 files changed, 10 insertions(+), 22 deletions(-)
- delete mode 100644 arch/arm/mach-ep93xx/Makefile
 
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index 547e5856eaa0..0e3d637cae6c 100644
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -179,7 +179,6 @@ machine-$(CONFIG_ARCH_CLPS711X)		+= clps711x
- machine-$(CONFIG_ARCH_DAVINCI)		+= davinci
- machine-$(CONFIG_ARCH_DIGICOLOR)	+= digicolor
- machine-$(CONFIG_ARCH_DOVE)		+= dove
--machine-$(CONFIG_ARCH_EP93XX)		+= ep93xx
- machine-$(CONFIG_ARCH_EXYNOS)		+= exynos
- machine-$(CONFIG_ARCH_FOOTBRIDGE)	+= footbridge
- machine-$(CONFIG_ARCH_GEMINI)		+= gemini
-diff --git a/arch/arm/mach-ep93xx/Kconfig b/arch/arm/mach-ep93xx/Kconfig
-index 703f3d232a60..812b71dcf60e 100644
---- a/arch/arm/mach-ep93xx/Kconfig
-+++ b/arch/arm/mach-ep93xx/Kconfig
-@@ -3,27 +3,27 @@ menuconfig ARCH_EP93XX
- 	bool "EP93xx-based"
- 	depends on ATAGS
- 	depends on ARCH_MULTI_V4T
-+	# CONFIG_ARCH_MULTI_V7 is not set
- 	depends on CPU_LITTLE_ENDIAN
-+	select ARCH_HAS_RESET_CONTROLLER
- 	select ARCH_SPARSEMEM_ENABLE
- 	select ARM_AMBA
- 	select ARM_VIC
-+	select ARM_APPENDED_DTB # Old Redboot bootloaders deployed
-+	select ARM_ATAG_DTB_COMPAT # we need this to update dt memory node
-+	select COMMON_CLK_EP93XX
-+	select EP93XX_TIMER
- 	select CLKSRC_MMIO
- 	select CPU_ARM920T
- 	select GPIOLIB
-+	select PINCTRL
-+	select PINCTRL_EP93XX
- 	help
- 	  This enables support for the Cirrus EP93xx series of CPUs.
+Notes:
+    v0 -> v1:
+    
+    - dropped leagcy soc header
+
+ drivers/pwm/pwm-ep93xx.c | 18 ------------------
+ 1 file changed, 18 deletions(-)
+
+diff --git a/drivers/pwm/pwm-ep93xx.c b/drivers/pwm/pwm-ep93xx.c
+index 361984ef4c0b..ac08bd0e7572 100644
+--- a/drivers/pwm/pwm-ep93xx.c
++++ b/drivers/pwm/pwm-ep93xx.c
+@@ -27,8 +27,6 @@
  
- if ARCH_EP93XX
+ #include <asm/div64.h>
  
--menu "Cirrus EP93xx Implementation Options"
+-#include <linux/soc/cirrus/ep93xx.h>	/* for ep93xx_pwm_{acquire,release}_gpio() */
 -
--config EP93XX_SOC_COMMON
--	bool
--	default y
--	select SOC_BUS
--	select LEDS_GPIO_REGISTER
--
--comment "EP93xx Platforms"
-+# menu "EP93xx Platforms"
+ #define EP93XX_PWMx_TERM_COUNT	0x00
+ #define EP93XX_PWMx_DUTY_CYCLE	0x04
+ #define EP93XX_PWMx_ENABLE	0x08
+@@ -45,20 +43,6 @@ static inline struct ep93xx_pwm *to_ep93xx_pwm(struct pwm_chip *chip)
+ 	return container_of(chip, struct ep93xx_pwm, chip);
+ }
  
- config MACH_BK3
- 	bool "Support Liebherr BK3.1"
-@@ -103,6 +103,6 @@ config MACH_VISION_EP9307
- 	  Say 'Y' here if you want your kernel to support the
- 	  Vision Engraving Systems EP9307 SoM.
- 
--endmenu
-+# endmenu
- 
- endif
-diff --git a/arch/arm/mach-ep93xx/Makefile b/arch/arm/mach-ep93xx/Makefile
-deleted file mode 100644
-index 62e37403df14..000000000000
---- a/arch/arm/mach-ep93xx/Makefile
-+++ /dev/null
-@@ -1,11 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0
--#
--# Makefile for the linux kernel.
--#
--obj-y			:= core.o clock.o timer-ep93xx.o
+-static int ep93xx_pwm_request(struct pwm_chip *chip, struct pwm_device *pwm)
+-{
+-	struct platform_device *pdev = to_platform_device(chip->dev);
 -
--obj-$(CONFIG_EP93XX_DMA)	+= dma.o
+-	return ep93xx_pwm_acquire_gpio(pdev);
+-}
 -
--obj-$(CONFIG_MACH_EDB93XX)	+= edb93xx.o
--obj-$(CONFIG_MACH_TS72XX)	+= ts72xx.o
--obj-$(CONFIG_MACH_VISION_EP9307)+= vision_ep9307.o
+-static void ep93xx_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
+-{
+-	struct platform_device *pdev = to_platform_device(chip->dev);
+-
+-	ep93xx_pwm_release_gpio(pdev);
+-}
+-
+ static int ep93xx_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ 			    const struct pwm_state *state)
+ {
+@@ -157,8 +141,6 @@ static int ep93xx_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+ }
+ 
+ static const struct pwm_ops ep93xx_pwm_ops = {
+-	.request = ep93xx_pwm_request,
+-	.free = ep93xx_pwm_free,
+ 	.apply = ep93xx_pwm_apply,
+ 	.owner = THIS_MODULE,
+ };
 -- 
 2.37.4
 
