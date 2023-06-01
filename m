@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6169271959F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC9E7195A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbjFAIao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
+        id S232204AbjFAIav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232180AbjFAIa1 (ORCPT
+        with ESMTP id S232198AbjFAIaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:30:27 -0400
+        Thu, 1 Jun 2023 04:30:30 -0400
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFB812F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:30:11 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba81b238ee8so838834276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:30:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00629136
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:30:15 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bacfa4eefcbso1632507276.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:30:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685608211; x=1688200211;
+        d=google.com; s=20221208; t=1685608215; x=1688200215;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2W+D3X61SHji5TdcPTT7aQE7+SKMk9nGQHSrp9XR3js=;
-        b=hFIvLmGP3lv7GenwMucp7vgjD92bKKVaKTHzPrnD0d5s2WVEN+JDM4TmLgr1bPgKy1
-         7IjnHzCWR6v9OjFGON+bq8ILrk/5KyCBmclQhLXrjVcmxKksBw33B/w3G3YtehGwyaj3
-         5/pvgPkxiT739fYEk0zq8KuyIg12SXt8xRW9V5bkDXq5ArJu4hDz5dWZ1Bl4h0B3k57p
-         7GS5yHSKPem6KDK8XLnNVHoyQUcPiURYWAAjWIYExIORyP4qYAGBSnKVmox7VGE0fPBP
-         DE1oiy1aDLl5M4KG/5VKbR3FkAy3/+uVJYIumaGGr64vDXs5m6FB4mAlnbGkms9glEKs
-         +ohg==
+        bh=wurxTZMR4W9bTkdZ76nTitTE2haDL5hMwJafmdPt+XU=;
+        b=1Nb90uGX28SiglpD6/hWe0rJqlSKDtEC1Ca+e2T8imvVmOoD5KtJENUTdDaePyGvrD
+         TEfoCfGl7UAbVFjyzSINDSEoKXLbx1lgt3bfxxe1jAtjlNhLDm1hvbbMwSTxEMczjrAe
+         ZhzHidQIFwLFzNQ0ou8njAMKSpxxldWdFxDLkKSZrsRSR/JVDM462FP/aYUFDIn1KUvz
+         oMGtCwZrlDh/ILqbPJGXZpfB3ng8DKWDS8s0cjkkK8r5RO+Zn+UG9rKRLK2q5PPyTnt3
+         LH4MEhGEatGsJT7+W9Ksw1zMKuAeMvHtI7/MvTF8t3NcusJK4Q13apiRTrlSgorFOXG+
+         BNWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685608211; x=1688200211;
+        d=1e100.net; s=20221208; t=1685608215; x=1688200215;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2W+D3X61SHji5TdcPTT7aQE7+SKMk9nGQHSrp9XR3js=;
-        b=NU202zsx3gmJ7N3WJbpwCrYIhBFGq1kWr9NbVJwc9Prhqphs80/vo9mK9GbizdtWaW
-         fHeLIikoZRi7rBZhgvaWpYhfWsKRlrgPXNjAYqTJFnDKlAShikaaowubSxqIkm62jmuq
-         FjqALbIrny/Z5q6zW6v32UETfRmfsw34dJi/iG+g6MPAnqcbV4SsfYaDrc42a2pqO70U
-         4z4mb7d60BZL4wdMaXqGW+v2pCccYKy+wW0DGXF5BHQLSovkbGsOXtsmRzTQg3ULsMGZ
-         53iKWIZH1V23lPR+g3Rc1UBqFru6w3FPykpI/qcWbm/hchisXSv2OO7TBNJnqE0A62Sc
-         Xylg==
-X-Gm-Message-State: AC+VfDzbeqUMKRiBvYodr977ytXy0y+l0Yk7JKyO5WMxgnF6VdeKYAHY
-        z9gNy93FuMKnHjVvbVLdjJn/jtcpwjxu
-X-Google-Smtp-Source: ACHHUZ4CtvHxqbmMlOebUnOkHAbQEfnmI2HybhjxUjmo0bcgbzA6MKi2iuDhUt8X/cL0NStkjLBjtimTjIwJ
+        bh=wurxTZMR4W9bTkdZ76nTitTE2haDL5hMwJafmdPt+XU=;
+        b=iKaPETXmi+nCITYbQj4ry8YQrNk2ZdzPlwRPSb9TmMTQAcN4kqe+7CHe4ousJTjfOo
+         0NiVFYbPaWFNeSOMyfbl/jel/66IVhgp+5CYnddvtTu/Z7vJL3qwmAsxWF4MCR8UQxVf
+         SnJV8nwn+cw84kg3W04FRDaZ9BlZK6TzEDA2H27tud6KMjGXOC5bmxAxZ5CxLJQI6g/Z
+         /Y1eQq0KcDSa59WT+M1NcRo+PlKzIOxoCOJ6QpT8qEOUISR3shsOmTmJVW2XuMdpMrGk
+         VxSryJeny9PZ4SZtOV6KL2seVXXFkKGettAJqrL8q+7P3ggh5gSqzz9xcuy77cOS4zsy
+         eQSA==
+X-Gm-Message-State: AC+VfDwEYFcNdnuATNp4Rm6wZYuY3AEoQAZP8OYVTJ3SxKNHY6Te5j3B
+        Kainal/kQp4Bhy5mESFgny+hRYC4310f
+X-Google-Smtp-Source: ACHHUZ6vjlbU1JOgJ5lIyMLX1Xx1uW7RznI2TiBom37rF7u2vwQWRJZPo2Sm3VSmNyTT7eFLCxeDklvptbFB
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a344:94b4:9b8d:a089])
- (user=irogers job=sendgmr) by 2002:a05:6902:729:b0:bb1:445a:6f05 with SMTP id
- l9-20020a056902072900b00bb1445a6f05mr2517804ybt.4.1685608211098; Thu, 01 Jun
- 2023 01:30:11 -0700 (PDT)
-Date:   Thu,  1 Jun 2023 01:29:52 -0700
+ (user=irogers job=sendgmr) by 2002:a05:6902:1024:b0:ba8:1e5f:8514 with SMTP
+ id x4-20020a056902102400b00ba81e5f8514mr841811ybt.5.1685608214029; Thu, 01
+ Jun 2023 01:30:14 -0700 (PDT)
+Date:   Thu,  1 Jun 2023 01:29:53 -0700
 In-Reply-To: <20230601082954.754318-1-irogers@google.com>
-Message-Id: <20230601082954.754318-3-irogers@google.com>
+Message-Id: <20230601082954.754318-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20230601082954.754318-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v2 2/4] perf evsel: Add verbose 3 print of evsel name when opening
+Subject: [PATCH v2 3/4] perf parse-events: Wildcard most "numeric" events
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -73,35 +73,340 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is often useful to know not just the attribute and perf_event_open
-details when opening an evsel, but also the evsel's name. Add this
-debug output for verbose 3 so that it won't interfere with the current
-verbose 2 output.
+Numeric events are either raw events or those with ABI defined numbers
+matched by the lexer. PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE events
+should wildcard match on hybrid systems. So "cycles" should match each
+PMU type with an extended type, not just PERF_TYPE_HARDWARE.
 
+Change wildcard matching to add the event even if wildcard PMU
+scanning fails, there will be no extended type but this best matches
+previous behavior.
+
+Only set the extended type when the event type supports it and when
+perf_pmus__supports_extended_type is true. This new function returns
+true if >1 core PMU and avoids potential errors on older kernels.
+
+Modify evsel__compute_group_pmu_name using a helper
+perf_pmu__is_software to determine when grouping should occur. Try to
+use PMUs, and evsel__find_pmu, as being more dependable than
+evsel->pmu_name.
+
+Set a parse events error if a hardware term's PMU lookup fails, to
+provide extra diagnostics.
+
+Reported-by: Kan Liang <kan.liang@linux.intel.com>
+Fixes: 8bc75f699c14 ("perf parse-events: Support wildcards on raw events")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/evsel.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/perf/util/parse-events.c | 104 +++++++++++++++++++++++----------
+ tools/perf/util/parse-events.y |  10 ++--
+ tools/perf/util/pmu.c          |  16 +++++
+ tools/perf/util/pmu.h          |   5 ++
+ tools/perf/util/pmus.c         |   5 ++
+ tools/perf/util/pmus.h         |   1 +
+ 6 files changed, 106 insertions(+), 35 deletions(-)
 
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 46da3f0bb47e..779bc2b574f4 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -2038,6 +2038,7 @@ static int evsel__open_cpu(struct evsel *evsel, struct perf_cpu_map *cpus,
- fallback_missing_features:
- 	evsel__disable_missing_features(evsel);
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index 7f047ac11168..26979a47f4ac 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -372,7 +372,7 @@ static int config_attr(struct perf_event_attr *attr,
+  *                                     contain hyphens and the longest name
+  *                                     should always be selected.
+  */
+-int parse_events__decode_legacy_cache(const char *name, int pmu_type, __u64 *config)
++int parse_events__decode_legacy_cache(const char *name, int extended_pmu_type, __u64 *config)
+ {
+ 	int len, cache_type = -1, cache_op = -1, cache_result = -1;
+ 	const char *name_end = &name[strlen(name) + 1];
+@@ -423,8 +423,9 @@ int parse_events__decode_legacy_cache(const char *name, int pmu_type, __u64 *con
+ 	if (cache_result == -1)
+ 		cache_result = PERF_COUNT_HW_CACHE_RESULT_ACCESS;
  
-+	pr_debug3("Opening: %s\n", evsel__name(evsel));
- 	display_attr(&evsel->core.attr);
+-	*config = ((__u64)pmu_type << PERF_PMU_TYPE_SHIFT) |
+-		cache_type | (cache_op << 8) | (cache_result << 16);
++	*config = cache_type | (cache_op << 8) | (cache_result << 16);
++	if (perf_pmus__supports_extended_type())
++		*config |= (__u64)extended_pmu_type << PERF_PMU_TYPE_SHIFT;
+ 	return 0;
+ }
  
- 	for (idx = start_cpu_map_idx; idx < end_cpu_map_idx; idx++) {
+@@ -1204,11 +1205,17 @@ static int config_term_pmu(struct perf_event_attr *attr,
+ 		const struct perf_pmu *pmu = perf_pmus__find_by_type(attr->type);
+ 
+ 		if (!pmu) {
+-			pr_debug("Failed to find PMU for type %d", attr->type);
++			char *err_str;
++
++			if (asprintf(&err_str, "Failed to find PMU for type %d", attr->type) >= 0)
++				parse_events_error__handle(err, term->err_term,
++							   err_str, /*help=*/NULL);
+ 			return -EINVAL;
+ 		}
+ 		attr->type = PERF_TYPE_HARDWARE;
+-		attr->config = ((__u64)pmu->type << PERF_PMU_TYPE_SHIFT) | term->val.num;
++		attr->config = term->val.num;
++		if (perf_pmus__supports_extended_type())
++			attr->config |= (__u64)pmu->type << PERF_PMU_TYPE_SHIFT;
+ 		return 0;
+ 	}
+ 	if (term->type_term == PARSE_EVENTS__TERM_TYPE_USER ||
+@@ -1435,8 +1442,8 @@ int parse_events_add_tracepoint(struct list_head *list, int *idx,
+ 
+ static int __parse_events_add_numeric(struct parse_events_state *parse_state,
+ 				struct list_head *list,
+-				struct perf_pmu *pmu, u32 type, u64 config,
+-				struct list_head *head_config)
++				struct perf_pmu *pmu, u32 type, u32 extended_type,
++				u64 config, struct list_head *head_config)
+ {
+ 	struct perf_event_attr attr;
+ 	LIST_HEAD(config_terms);
+@@ -1446,6 +1453,10 @@ static int __parse_events_add_numeric(struct parse_events_state *parse_state,
+ 	memset(&attr, 0, sizeof(attr));
+ 	attr.type = type;
+ 	attr.config = config;
++	if (extended_type && (type == PERF_TYPE_HARDWARE || type == PERF_TYPE_HW_CACHE)) {
++		assert(perf_pmus__supports_extended_type());
++		attr.config |= (u64)extended_type << PERF_PMU_TYPE_SHIFT;
++	};
+ 
+ 	if (head_config) {
+ 		if (config_attr(&attr, head_config, parse_state->error,
+@@ -1474,24 +1485,26 @@ int parse_events_add_numeric(struct parse_events_state *parse_state,
+ 	struct perf_pmu *pmu = NULL;
+ 	bool found_supported = false;
+ 
+-	if (!wildcard)
+-		return __parse_events_add_numeric(parse_state, list, /*pmu=*/NULL,
+-						  type, config, head_config);
+-
+ 	/* Wildcards on numeric values are only supported by core PMUs. */
+-	while ((pmu = perf_pmus__scan_core(pmu)) != NULL) {
+-		int ret;
++	if (wildcard && perf_pmus__supports_extended_type()) {
++		while ((pmu = perf_pmus__scan_core(pmu)) != NULL) {
++			int ret;
+ 
+-		if (parse_events__filter_pmu(parse_state, pmu))
+-			continue;
++			found_supported = true;
++			if (parse_events__filter_pmu(parse_state, pmu))
++				continue;
+ 
+-		found_supported = true;
+-		ret = __parse_events_add_numeric(parse_state, list, pmu, pmu->type,
+-						 config, head_config);
+-		if (ret)
+-			return ret;
++			ret = __parse_events_add_numeric(parse_state, list, pmu,
++							 type, pmu->type,
++							 config, head_config);
++			if (ret)
++				return ret;
++		}
++		if (found_supported)
++			return 0;
+ 	}
+-	return found_supported ? 0 : -EINVAL;
++	return __parse_events_add_numeric(parse_state, list, perf_pmus__find_by_type(type),
++					type, /*extended_type=*/0, config, head_config);
+ }
+ 
+ int parse_events_add_tool(struct parse_events_state *parse_state,
+@@ -1989,8 +2002,22 @@ static int evsel__compute_group_pmu_name(struct evsel *evsel,
+ {
+ 	struct evsel *leader = evsel__leader(evsel);
+ 	struct evsel *pos;
+-	const char *group_pmu_name = evsel->pmu_name ?: "cpu";
++	const char *group_pmu_name;
++	struct perf_pmu *pmu = evsel__find_pmu(evsel);
+ 
++	if (!pmu) {
++		/*
++		 * For PERF_TYPE_HARDWARE and PERF_TYPE_HW_CACHE types the PMU
++		 * is a core PMU, but in heterogeneous systems this is
++		 * unknown. For now pick the first core PMU.
++		 */
++		pmu = perf_pmus__scan_core(NULL);
++	}
++	if (!pmu) {
++		pr_debug("No PMU found for '%s'", evsel__name(evsel));
++		return -EINVAL;
++	}
++	group_pmu_name = pmu->name;
+ 	/*
+ 	 * Software events may be in a group with other uncore PMU events. Use
+ 	 * the pmu_name of the first non-software event to avoid breaking the
+@@ -1999,24 +2026,41 @@ static int evsel__compute_group_pmu_name(struct evsel *evsel,
+ 	 * Aux event leaders, like intel_pt, expect a group with events from
+ 	 * other PMUs, so substitute the AUX event's PMU in this case.
+ 	 */
+-	if (evsel->core.attr.type == PERF_TYPE_SOFTWARE || evsel__is_aux_event(leader)) {
++	if (perf_pmu__is_software(pmu) || evsel__is_aux_event(leader)) {
++		struct perf_pmu *leader_pmu = evsel__find_pmu(leader);
++
++		if (!leader_pmu) {
++			/* As with determining pmu above. */
++			leader_pmu = perf_pmus__scan_core(NULL);
++		}
+ 		/*
+ 		 * Starting with the leader, find the first event with a named
+-		 * PMU. for_each_group_(member|evsel) isn't used as the list
+-		 * isn't yet sorted putting evsel's in the same group together.
++		 * non-software PMU. for_each_group_(member|evsel) isn't used as
++		 * the list isn't yet sorted putting evsel's in the same group
++		 * together.
+ 		 */
+-		if (leader->pmu_name) {
+-			group_pmu_name = leader->pmu_name;
++		if (leader_pmu && !perf_pmu__is_software(leader_pmu)) {
++			group_pmu_name = leader_pmu->name;
+ 		} else if (leader->core.nr_members > 1) {
+ 			list_for_each_entry(pos, head, core.node) {
+-				if (evsel__leader(pos) == leader && pos->pmu_name) {
+-					group_pmu_name = pos->pmu_name;
++				struct perf_pmu *pos_pmu;
++
++				if (pos == leader || evsel__leader(pos) != leader)
++					continue;
++				pos_pmu = evsel__find_pmu(pos);
++				if (!pos_pmu) {
++					/* As with determining pmu above. */
++					pos_pmu = perf_pmus__scan_core(NULL);
++				}
++				if (pos_pmu && !perf_pmu__is_software(pos_pmu)) {
++					group_pmu_name = pos_pmu->name;
+ 					break;
+ 				}
+ 			}
+ 		}
+ 	}
+-	evsel->group_pmu_name = strdup(group_pmu_name);
++	/* Assign the actual name taking care that the fake PMU lacks a name. */
++	evsel->group_pmu_name = strdup(group_pmu_name ?: "fake");
+ 	return evsel->group_pmu_name ? 0 : -ENOMEM;
+ }
+ 
+diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+index abd6ab460e12..f96afb0edd0c 100644
+--- a/tools/perf/util/parse-events.y
++++ b/tools/perf/util/parse-events.y
+@@ -445,11 +445,11 @@ value_sym '/' event_config '/'
+ 	int type = $1 >> 16;
+ 	int config = $1 & 255;
+ 	int err;
++	bool wildcard = (type == PERF_TYPE_HARDWARE || type == PERF_TYPE_HW_CACHE);
+ 
+ 	list = alloc_list();
+ 	ABORT_ON(!list);
+-	err = parse_events_add_numeric(_parse_state, list, type, config, $3,
+-				       /*wildcard=*/false);
++	err = parse_events_add_numeric(_parse_state, list, type, config, $3, wildcard);
+ 	parse_events_terms__delete($3);
+ 	if (err) {
+ 		free_list_evsel(list);
+@@ -463,12 +463,12 @@ value_sym sep_slash_slash_dc
+ 	struct list_head *list;
+ 	int type = $1 >> 16;
+ 	int config = $1 & 255;
++	bool wildcard = (type == PERF_TYPE_HARDWARE || type == PERF_TYPE_HW_CACHE);
+ 
+ 	list = alloc_list();
+ 	ABORT_ON(!list);
+ 	ABORT_ON(parse_events_add_numeric(_parse_state, list, type, config,
+-					  /*head_config=*/NULL,
+-					  /*wildcard=*/false));
++					  /*head_config=*/NULL, wildcard));
+ 	$$ = list;
+ }
+ |
+@@ -635,7 +635,7 @@ PE_RAW opt_event_config
+ 	ABORT_ON(errno);
+ 	free($1);
+ 	err = parse_events_add_numeric(_parse_state, list, PERF_TYPE_RAW, num, $2,
+-				       /*wildcard=*/true);
++				       /*wildcard=*/false);
+ 	parse_events_terms__delete($2);
+ 	if (err) {
+ 		free(list);
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index 36e163f38368..1dd44b2f73f3 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -1438,6 +1438,22 @@ bool perf_pmu__have_event(const struct perf_pmu *pmu, const char *name)
+ 	return false;
+ }
+ 
++bool perf_pmu__is_software(const struct perf_pmu *pmu)
++{
++	if (pmu->is_core || pmu->is_uncore || pmu->auxtrace)
++		return false;
++	switch (pmu->type) {
++	case PERF_TYPE_HARDWARE:	return false;
++	case PERF_TYPE_SOFTWARE:	return true;
++	case PERF_TYPE_TRACEPOINT:	return true;
++	case PERF_TYPE_HW_CACHE:	return false;
++	case PERF_TYPE_RAW:		return false;
++	case PERF_TYPE_BREAKPOINT:	return true;
++	default: break;
++	}
++	return !strcmp(pmu->name, "kprobe") || !strcmp(pmu->name, "uprobe");
++}
++
+ FILE *perf_pmu__open_file(struct perf_pmu *pmu, const char *name)
+ {
+ 	char path[PATH_MAX];
+diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+index 287f593b15c7..13a9a893e665 100644
+--- a/tools/perf/util/pmu.h
++++ b/tools/perf/util/pmu.h
+@@ -224,6 +224,11 @@ bool is_pmu_core(const char *name);
+ bool perf_pmu__supports_legacy_cache(const struct perf_pmu *pmu);
+ bool perf_pmu__auto_merge_stats(const struct perf_pmu *pmu);
+ bool perf_pmu__have_event(const struct perf_pmu *pmu, const char *name);
++/**
++ * perf_pmu_is_software - is the PMU a software PMU as in it uses the
++ *                        perf_sw_context in the kernel?
++ */
++bool perf_pmu__is_software(const struct perf_pmu *pmu);
+ 
+ FILE *perf_pmu__open_file(struct perf_pmu *pmu, const char *name);
+ FILE *perf_pmu__open_file_at(struct perf_pmu *pmu, int dirfd, const char *name);
+diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
+index 53f11f6ce878..e1d0a93147e5 100644
+--- a/tools/perf/util/pmus.c
++++ b/tools/perf/util/pmus.c
+@@ -477,6 +477,11 @@ int perf_pmus__num_core_pmus(void)
+ 	return count;
+ }
+ 
++bool perf_pmus__supports_extended_type(void)
++{
++	return perf_pmus__num_core_pmus() > 1;
++}
++
+ struct perf_pmu *evsel__find_pmu(const struct evsel *evsel)
+ {
+ 	struct perf_pmu *pmu = evsel->pmu;
+diff --git a/tools/perf/util/pmus.h b/tools/perf/util/pmus.h
+index 1e710720aec7..d02ffea5d3a4 100644
+--- a/tools/perf/util/pmus.h
++++ b/tools/perf/util/pmus.h
+@@ -19,5 +19,6 @@ int perf_pmus__num_mem_pmus(void);
+ void perf_pmus__print_pmu_events(const struct print_callbacks *print_cb, void *print_state);
+ bool perf_pmus__have_event(const char *pname, const char *name);
+ int perf_pmus__num_core_pmus(void);
++bool perf_pmus__supports_extended_type(void);
+ 
+ #endif /* __PMUS_H */
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
