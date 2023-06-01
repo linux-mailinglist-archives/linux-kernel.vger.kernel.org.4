@@ -2,56 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E913771965C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 11:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6070871F185
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbjFAJGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 05:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S231831AbjFASQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 14:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232353AbjFAJG3 (ORCPT
+        with ESMTP id S231278AbjFASQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 05:06:29 -0400
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67686119;
-        Thu,  1 Jun 2023 02:06:21 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0Vk4g27q_1685610375;
-Received: from 30.221.149.38(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0Vk4g27q_1685610375)
-          by smtp.aliyun-inc.com;
-          Thu, 01 Jun 2023 17:06:16 +0800
-Message-ID: <0992b68a-8015-26f3-4a90-6ebde7877c8b@linux.alibaba.com>
-Date:   Thu, 1 Jun 2023 17:06:13 +0800
+        Thu, 1 Jun 2023 14:16:44 -0400
+X-Greylist: delayed 30039 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Jun 2023 11:16:40 PDT
+Received: from mail.freenet.com.ua (mail.freenet.com.ua [109.251.0.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19501A1
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 11:16:40 -0700 (PDT)
+Received: from mail.freenet.com.ua ([109.251.0.11]:17593)
+        by mail.freenet.com.ua with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (envelope-from <natasha@freenet.com.ua>)
+        id 1q4eH9-000MJ2-Hm; Thu, 01 Jun 2023 12:07:19 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v3 3/7] perf vendor events: Add JSON metrics for CMN
-To:     Shuai Xue <xueshuai@linux.alibaba.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1685438374-33287-4-git-send-email-renyu.zj@linux.alibaba.com>
- <a31c7578-93fe-193e-1c4b-fa8fa187f5dd@linux.alibaba.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <a31c7578-93fe-193e-1c4b-fa8fa187f5dd@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Thu, 01 Jun 2023 02:07:19 -0700
+From:   oxford foundation <natasha@freenet.com.ua>
+To:     undisclosed-recipients:;
+Subject: FROM OXFORD FOUNDATION GRANT
+Reply-To: info@oxfordfoundations.com
+Mail-Reply-To: info@oxfordfoundations.com
+Message-ID: <70c41a9f29c00b1ea9bdb4444feefd71@freenet.com.ua>
+X-Sender: natasha@freenet.com.ua
+User-Agent: Roundcube Webmail/1.3.10
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DATE_IN_PAST_06_12,
+        LOTS_OF_MONEY,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.5 DATE_IN_PAST_06_12 Date: is 6 to 12 hours before Received: date
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,121 +55,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2023/5/31 上午10:43, Shuai Xue 写道:
-> 
-> 
-> On 2023/5/30 17:19, Jing Zhang wrote:
->> Add JSON metrics for arm CMN. Currently just add part of CMN PMU
->> metrics which are general and compatible for any SoC and CMN-ANY.
-> 
-> Is it a typo? You mean "any SoC integration with CMN-ANY" right?
-> 
+-- 
+Oxford Foundation Trust
+The County Hall,
+13th Street. 47 W 13th St, New York, NY 10011
+Email:info@oxfordfoundations.com
+Phone:+1 305 590 8254
 
-Yes, I will fix it in the next version.
+Dear Cash Grant Beneficiary
 
-Thanks,
-Jing
+Your information mail has been received.
 
-> Thanks,
-> Shuai
-> 
->>
->> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
->> ---
->>  .../pmu-events/arch/arm64/arm/cmn/sys/metrics.json | 74 ++++++++++++++++++++++
->>  tools/perf/pmu-events/jevents.py                   |  1 +
->>  2 files changed, 75 insertions(+)
->>  create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json
->>
->> diff --git a/tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json
->> new file mode 100644
->> index 0000000..e70ac1a
->> --- /dev/null
->> +++ b/tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json
->> @@ -0,0 +1,74 @@
->> +[
->> +	{
->> +		"MetricName": "slc_miss_rate",
->> +		"BriefDescription": "The system level cache miss rate include.",
->> +		"MetricGroup": "arm_cmn",
->> +		"MetricExpr": "hnf_cache_miss / hnf_slc_sf_cache_access",
->> +		"ScaleUnit": "100%",
->> +		"Unit": "arm_cmn",
->> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +	},
->> +	{
->> +		"MetricName": "hnf_message_retry_rate",
->> +		"BriefDescription": "HN-F message retry rate indicates whether a lack of credits is causing the bottlenecks.",
->> +		"MetricGroup": "arm_cmn",
->> +		"MetricExpr": "hnf_pocq_retry / hnf_pocq_reqs_recvd",
->> +		"ScaleUnit": "100%",
->> +		"Unit": "arm_cmn",
->> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +	},
->> +	{
->> +		"MetricName": "sf_hit_rate",
->> +		"BriefDescription": "Snoop filter hit rate can be used to measure the Snoop Filter efficiency.",
->> +		"MetricGroup": "arm_cmn",
->> +		"MetricExpr": "hnf_sf_hit / hnf_slc_sf_cache_access",
->> +		"ScaleUnit": "100%",
->> +		"Unit": "arm_cmn",
->> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +	},
->> +	{
->> +		"MetricName": "mc_message_retry_rate",
->> +		"BriefDescription": "The memory controller request retries rate indicates whether the memory controller is the bottleneck.",
->> +		"MetricGroup": "arm_cmn",
->> +		"MetricExpr": "hnf_mc_retries / hnf_mc_reqs",
->> +		"ScaleUnit": "100%",
->> +		"Unit": "arm_cmn",
->> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +	},
->> +	{
->> +		"MetricName": "rni_actual_read_bandwidth.all",
->> +		"BriefDescription": "This event measure the actual bandwidth(MB/sec) that RN-I bridge sends to the interconnect.",
->> +		"MetricGroup": "arm_cmn",
->> +		"MetricExpr": "rnid_rxdat_flits * 32 / 1e6 / duration_time",
->> +		"ScaleUnit": "1MB/s",
->> +		"Unit": "arm_cmn",
->> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +	},
->> +	{
->> +		"MetricName": "rni_actual_write_bandwidth.all",
->> +		"BriefDescription": "This event measures the actual write bandwidth(MB/sec) at RN-I bridges.",
->> +		"MetricGroup": "arm_cmn",
->> +		"MetricExpr": "rnid_txdat_flits * 32 / 1e6 / duration_time",
->> +		"ScaleUnit": "1MB/s",
->> +		"Unit": "arm_cmn",
->> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +	},
->> +	{
->> +		"MetricName": "rni_retry_rate",
->> +		"BriefDescription": "RN-I bridge retry rate indicates whether the memory controller is the bottleneck.",
->> +		"MetricGroup": "arm_cmn",
->> +		"MetricExpr": "rnid_txreq_flits_retried / rnid_txreq_flits_total",
->> +		"ScaleUnit": "100%",
->> +		"Unit": "arm_cmn",
->> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +	},
->> +	{
->> +		"MetricName": "sbsx_actual_write_bandwidth.all",
->> +		"BriefDescription": "sbsx actual write bandwidth(MB/sec).",
->> +		"MetricGroup": "arm_cmn",
->> +		"MetricExpr": "sbsx_txdat_flitv * 32 / 1e6 / duration_time",
->> +		"ScaleUnit": "1MB/s",
->> +		"Unit": "arm_cmn",
->> +		"Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->> +	}
->> +]
->> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
->> index 2bcd07c..7cff2c6 100755
->> --- a/tools/perf/pmu-events/jevents.py
->> +++ b/tools/perf/pmu-events/jevents.py
->> @@ -256,6 +256,7 @@ class JsonEvent:
->>            'DFPMC': 'amd_df',
->>            'cpu_core': 'cpu_core',
->>            'cpu_atom': 'cpu_atom',
->> +          'arm_cmn': 'arm_cmn',
->>        }
->>        return table[unit] if unit in table else f'uncore_{unit.lower()}'
->>  
+I am Professor Pierre Louise, the authorization officer hired by
+the Oxford Grant Foundation; a British/American based charity 
+organization to
+coordinate the selection program clearance and grant release process.
+
+The main objective of this selection program basically aims at
+reaching out to individuals outside the United States by empowering
+and to make notable changes in improving the standard of living of
+people in the developing countries of the world and also in crisis
+torn regions including places that have experienced natural disasters
+in recent and past times.
+
+Your details emerged along with Nine (9) other as beneficiaries of the
+$495,000 US Dollars Cash Grant/subvention in the selection program
+involving over 850,000 E-mail addresses drawn from shopping cash
+invoices.
+,
+Once the above correspondence by you has been received and verified to 
+be
+authentic, you will be referred to our official paying bank.
+
+Sincerely.
+Professor pierre louise,
+Authorization/Claims Consultant
