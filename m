@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB2D719B9C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7F0719BA1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 14:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233308AbjFAMKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 08:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
+        id S232813AbjFAMK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 08:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233266AbjFAMK3 (ORCPT
+        with ESMTP id S233283AbjFAMKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 08:10:29 -0400
+        Thu, 1 Jun 2023 08:10:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD32FC;
-        Thu,  1 Jun 2023 05:10:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1DD185;
+        Thu,  1 Jun 2023 05:10:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6B4463AD1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E16D8641A9;
+        Thu,  1 Jun 2023 12:10:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96BC9C433EF;
         Thu,  1 Jun 2023 12:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6299FC433A0;
-        Thu,  1 Jun 2023 12:10:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685621427;
-        bh=l8pAEKo80YCNxNTbkTmM13VW7qxFsKV/QhE7nwuJWrQ=;
+        s=k20201202; t=1685621429;
+        bh=TumhD82QuLF3iemxAixVbZIrBkyosIOpPKFtYaO9xHU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KrhuaH7LZ/RQ/+MSwWzLiNquVNkd0wGhx/fRtIGdvLCiXXpQqO2FqmGhcSWZXYD1C
-         FIGbKvip4KGcAUy48afS7bWi3lsEKbIf1OedIGJKxtK441R00ObOih5QJnDOpWiFnf
-         LaZzKgcngiLE0AKqyN7xALGJWRlEQ790MDueiPj6itTFSTpBnOE8Lx5nnKSqh/2lpb
-         Nnq5CrlxdbfQoXLODJdV6mQOhNlUsZTwrmSCwrTh9vQIMrnS7lVAbhR76z+dopkW7j
-         IVT7pjpIOUaS8kPmMYR9GplggmIeUn9NeMJiKDIxuyuzAWT9zdprm09VicLdOO8lkv
-         6T+yeXs8xDLbw==
+        b=hGgyvVuZ5OVhoGMX5ceciMv+KWLO8ZPAesvX1NWRUurLKmwfbYvxzOqdr54Vue2/6
+         EOVfYclvxj7ruH6+I9anSh7koqj0GmxAq+VSrJLipKoykEL2pJSeOQqNdGZaE5eed4
+         RnhpQY9NeXw2fskX+uNs0feNwN51vqkrP84jkz9DaminwiWeNNP1hbq/fON/6JiW/W
+         9mOPaHzGkMdioEcOZUH4pH14c7a6HJzJizPXBAtfuvNbaTrXjMRUpnzl7K0tf1W3PT
+         Y6kZ9OqTIBHmqYwhuSiSkKpt7RqU539SLl29uSg8l3wUJubpTIWu2W9634H5YzReiz
+         f4Z4hPIw0Sw8w==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
@@ -41,9 +41,9 @@ Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nicolas Schier <nicolas@fjasle.eu>
-Subject: [PATCH 3/7] modpost: detect section mismatch for R_ARM_{MOVW_ABS_NC,MOVT_ABS}
-Date:   Thu,  1 Jun 2023 21:09:57 +0900
-Message-Id: <20230601121001.1071533-4-masahiroy@kernel.org>
+Subject: [PATCH 4/7] modpost: refactor find_fromsym() and find_tosym()
+Date:   Thu,  1 Jun 2023 21:09:58 +0900
+Message-Id: <20230601121001.1071533-5-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230601121001.1071533-1-masahiroy@kernel.org>
 References: <20230601121001.1071533-1-masahiroy@kernel.org>
@@ -59,75 +59,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For ARM defconfig (i.e. multi_v7_defconfig), modpost fails to detect
-some types of section mismatches.
+find_fromsym() and find_tosym() are similar - both of them iterate
+in the .symtab section and return the nearest symbol.
 
-  [test code]
+The difference between them is that find_tosym() allows a negative
+distance, but the distance must be less than 20.
 
-    #include <linux/init.h>
-
-    int __initdata foo;
-    int get_foo(void) { return foo; }
-
-It is apparently a bad reference, but modpost does not report anything.
-
-The test code above produces the following relocations.
-
-  Relocation section '.rel.text' at offset 0x200 contains 2 entries:
-   Offset     Info    Type            Sym.Value  Sym. Name
-  00000000  0000062b R_ARM_MOVW_ABS_NC 00000000   .LANCHOR0
-  00000004  0000062c R_ARM_MOVT_ABS    00000000   .LANCHOR0
-
-Currently, R_ARM_MOVW_ABS_NC and R_ARM_MOVT_ABS are just skipped.
-
-Add code to handle them. I checked arch/arm/kernel/module.c to learn
-how the offset is encoded in the instruction.
-
-The referenced symbol in relocation might be a local anchor.
-If is_valid_name() returns false, let's search for a better symbol name.
+Factor out the common part into find_nearest_sym().
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- scripts/mod/modpost.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ scripts/mod/modpost.c | 95 ++++++++++++++++---------------------------
+ 1 file changed, 36 insertions(+), 59 deletions(-)
 
 diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index e47bba7cfad2..5a5e802b160c 100644
+index 5a5e802b160c..32d56efe3f3b 100644
 --- a/scripts/mod/modpost.c
 +++ b/scripts/mod/modpost.c
-@@ -1078,7 +1078,7 @@ static inline int is_valid_name(struct elf_info *elf, Elf_Sym *sym)
- /**
-  * Find symbol based on relocation record info.
-  * In some cases the symbol supplied is a valid symbol so
-- * return refsym. If st_name != 0 we assume this is a valid symbol.
-+ * return refsym. If is_valid_name() == true, we assume this is a valid symbol.
-  * In other cases the symbol needs to be looked up in the symbol table
-  * based on section and address.
-  *  **/
-@@ -1091,7 +1091,7 @@ static Elf_Sym *find_tosym(struct elf_info *elf, Elf64_Sword addr,
- 	Elf64_Sword d;
- 	unsigned int relsym_secindex;
+@@ -1075,81 +1075,58 @@ static inline int is_valid_name(struct elf_info *elf, Elf_Sym *sym)
+ 	return !is_mapping_symbol(name);
+ }
  
--	if (relsym->st_name != 0)
-+	if (is_valid_name(elf, relsym))
- 		return relsym;
+-/**
+- * Find symbol based on relocation record info.
+- * In some cases the symbol supplied is a valid symbol so
+- * return refsym. If is_valid_name() == true, we assume this is a valid symbol.
+- * In other cases the symbol needs to be looked up in the symbol table
+- * based on section and address.
+- *  **/
+-static Elf_Sym *find_tosym(struct elf_info *elf, Elf64_Sword addr,
+-			   Elf_Sym *relsym)
++/* Look up the nearest symbol based on the section and the address */
++static Elf_Sym *find_nearest_sym(struct elf_info *elf, Elf_Addr addr,
++				 unsigned int secndx, bool allow_negative,
++				 Elf_Addr min_distance)
+ {
+ 	Elf_Sym *sym;
+ 	Elf_Sym *near = NULL;
+-	Elf64_Sword distance = 20;
+-	Elf64_Sword d;
+-	unsigned int relsym_secindex;
+-
+-	if (is_valid_name(elf, relsym))
+-		return relsym;
+-
+-	/*
+-	 * Strive to find a better symbol name, but the resulting name may not
+-	 * match the symbol referenced in the original code.
+-	 */
+-	relsym_secindex = get_secindex(elf, relsym);
+-	for (sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
+-		if (get_secindex(elf, sym) != relsym_secindex)
+-			continue;
+-		if (ELF_ST_TYPE(sym->st_info) == STT_SECTION)
+-			continue;
+-		if (!is_valid_name(elf, sym))
+-			continue;
+-		if (sym->st_value == addr)
+-			return sym;
+-		/* Find a symbol nearby - addr are maybe negative */
+-		d = sym->st_value - addr;
+-		if (d < 0)
+-			d = addr - sym->st_value;
+-		if (d < distance) {
+-			distance = d;
+-			near = sym;
+-		}
+-	}
+-	/* We need a close match */
+-	if (distance < 20)
+-		return near;
+-	else
+-		return NULL;
+-}
+-
+-/*
+- * Find symbols before or equal addr and after addr - in the section sec.
+- * If we find two symbols with equal offset prefer one with a valid name.
+- * The ELF format may have a better way to detect what type of symbol
+- * it is, but this works for now.
+- **/
+-static Elf_Sym *find_fromsym(struct elf_info *elf, Elf_Addr addr,
+-			     unsigned int secndx)
+-{
+-	Elf_Sym *sym;
+-	Elf_Sym *near = NULL;
+-	Elf_Addr distance = ~0;
++	Elf_Addr distance;
  
- 	/*
-@@ -1297,6 +1297,13 @@ static int addend_arm_rel(struct elf_info *elf, Elf_Shdr *sechdr, Elf_Rela *r)
- 		inst = TO_NATIVE(*(uint32_t *)loc);
- 		r->r_addend = inst + sym->st_value;
- 		break;
-+	case R_ARM_MOVW_ABS_NC:
-+	case R_ARM_MOVT_ABS:
-+		inst = TO_NATIVE(*(uint32_t *)loc);
-+		offset = sign_extend32(((inst & 0xf0000) >> 4) | (inst & 0xfff),
-+				       15);
-+		r->r_addend = offset + sym->st_value;
-+		break;
- 	case R_ARM_PC24:
- 	case R_ARM_CALL:
- 	case R_ARM_JUMP24:
+ 	for (sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
+ 		if (get_secindex(elf, sym) != secndx)
+ 			continue;
+ 		if (!is_valid_name(elf, sym))
+ 			continue;
+-		if (sym->st_value <= addr && addr - sym->st_value <= distance) {
++
++		if (addr >= sym->st_value)
+ 			distance = addr - sym->st_value;
++		else if (allow_negative)
++			distance = sym->st_value - addr;
++		else
++			continue;
++
++		if (distance <= min_distance) {
++			min_distance = distance;
+ 			near = sym;
+ 		}
++
++		if (min_distance == 0)
++			break;
+ 	}
+ 	return near;
+ }
+ 
++static Elf_Sym *find_fromsym(struct elf_info *elf, Elf_Addr addr,
++			     unsigned int secndx)
++{
++	return find_nearest_sym(elf, addr, secndx, false, ~0);
++}
++
++static Elf_Sym *find_tosym(struct elf_info *elf, Elf_Addr addr, Elf_Sym *sym)
++{
++	/* If the supplied symbol has a valid name, return it */
++	if (is_valid_name(elf, sym))
++		return sym;
++
++	/*
++	 * Strive to find a better symbol name, but the resulting name may not
++	 * match the symbol referenced in the original code.
++	 */
++	return find_nearest_sym(elf, addr, get_secindex(elf, sym), true, 20);
++}
++
+ static bool is_executable_section(struct elf_info *elf, unsigned int secndx)
+ {
+ 	if (secndx > elf->num_sections)
 -- 
 2.39.2
 
