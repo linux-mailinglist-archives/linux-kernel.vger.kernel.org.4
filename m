@@ -2,60 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB7D719528
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F86671952C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbjFAIOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
+        id S232039AbjFAIPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjFAIOG (ORCPT
+        with ESMTP id S231526AbjFAIPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:14:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33DF126
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:13:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685607188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jQr/kw8KY2m9/jhReJPWSEFuXiZAud2Ssfj7R6UaNzc=;
-        b=RK5PwYq/snOy0MkDcwpyldQYPkvea9SBPx3p/yGEonMDdaXZO3/cwU80WARJ1wN/9P8ohl
-        xzyEEBlBSrz4JDgZheO5eGxyHruFqpeewv2Zt75yW1L54CJDXdU8MjpfbCqQ085IHt50IS
-        sZz9LEOF/nZoszu2w/qK2L/C7V88HDM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-147-FN98zEp4MKWkVbxUhy_NrA-1; Thu, 01 Jun 2023 04:13:05 -0400
-X-MC-Unique: FN98zEp4MKWkVbxUhy_NrA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 34E13811E8F;
-        Thu,  1 Jun 2023 08:13:05 +0000 (UTC)
-Received: from localhost (ovpn-12-54.pek2.redhat.com [10.72.12.54])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4828B170EB;
-        Thu,  1 Jun 2023 08:13:03 +0000 (UTC)
-Date:   Thu, 1 Jun 2023 16:13:01 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Tao Liu <ltao@redhat.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        ardb@kernel.org, linux-kernel@vger.kernel.org, dyoung@redhat.com,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org
-Subject: Re: [PATCH v2] x86/kexec: Add EFI config table identity mapping for
- kexec kernel
-Message-ID: <ZHhTDXpPqFL+3m5h@MiWiFi-R3L-srv>
-References: <20230601072043.24439-1-ltao@redhat.com>
+        Thu, 1 Jun 2023 04:15:22 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCC5C0
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:15:17 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2af28303127so7299611fa.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:15:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685607316; x=1688199316;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/wwwjM9P/GD9y2WtF65nLtVcIMEiwxXul9Ob8jZmYYk=;
+        b=XI3ldMgL0wgSZCxVcqoTaJKj8OW3UmqWeaQ0GC3A0n00XtrjXX71IOLLTytWsCZmfS
+         ZBhojKovQxnkZWjbYM3OqfmBKiYKw67kSgXDGgx9OekKZHP2vCfF3/H9pEBNED5pR+B0
+         HbivpF/e5u9dbmyoIU3uFFpXTlxwkzWCyfytvv3dAN615J781KE7nUQiSrM7qQhpXFqR
+         q5jlql1mv1I2hjm6ogx+fYQuBBAxwSqZR6X3weutBUdTXWEGYyWu/8kfEDub7nqAptrc
+         WlkYyRBO8W1cvyn3Wg/AdZHc5849fmMfy/8AF4M2JvCJWZ47dBOsFCZdLkBPM/xywO2s
+         Lgpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685607316; x=1688199316;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/wwwjM9P/GD9y2WtF65nLtVcIMEiwxXul9Ob8jZmYYk=;
+        b=coxGDmQjR7m4Ig/U/mGv8cITFNbfE4julyDEHUPb0P+OtDgpC/STsj8iRoBCXxZcTH
+         RTGk2ZhC2DrAToOneyBJ5nKfdJdwdwdRsaplnLi1oadweyiSdJssSpwTVMdxO3W17er2
+         0r4883QHz1oQvLf+SAoraMFmCZZWVG3dZKwY5Z1eJU+QuHr0lsFxGJXhxoFXXYpMzLV4
+         8QCYihEkNbYiFeIOdmRO4/29jwW1G+dcYR47vI1D9Q8QsaVfmtwAAmIo/GOthdAtrkWj
+         Kq8ONTwc9csXb7+0RazIORaLDySwZdJ4w5/Yc9juJdeaWZFygl4X4b4J1gejXVCuOlP8
+         M/EQ==
+X-Gm-Message-State: AC+VfDxXISzsm6kcRmLby0+1X8ax7fhIMLYtJWdE6nSvMIoMQdDJp54D
+        CKitYZtK+lqghIIhVGEf3hiTLg==
+X-Google-Smtp-Source: ACHHUZ6iiQPR2tf93aAvw7Aij8815QXY9Vq0T9piVYxnhMCB9kcVvtlaaPViZzJ/DeRWFf/5vVtajg==
+X-Received: by 2002:a2e:9dc1:0:b0:2ac:819f:f73f with SMTP id x1-20020a2e9dc1000000b002ac819ff73fmr4470033ljj.20.1685607316119;
+        Thu, 01 Jun 2023 01:15:16 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id v12-20020a2e990c000000b002af01da6c67sm3692769lji.32.2023.06.01.01.15.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 01:15:15 -0700 (PDT)
+Message-ID: <e98a2901-7ad4-5a1f-5739-64750836d396@linaro.org>
+Date:   Thu, 1 Jun 2023 10:15:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230601072043.24439-1-ltao@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 0/8] Flush RSC votes properly on more RPMh platforms
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andy Gross <andy.gross@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>
+References: <20230531-topic-rsc-v1-0-b4a985f57b8b@linaro.org>
+ <f5875c10-21c1-43b6-4ce6-25b968588412@linaro.org>
+ <CAD=FV=Um8U2MQsrv+ngQg_h-aQMi5_yy6Lrj3ovr7eV1PC+Wnw@mail.gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CAD=FV=Um8U2MQsrv+ngQg_h-aQMi5_yy6Lrj3ovr7eV1PC+Wnw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,128 +95,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/01/23 at 03:20pm, Tao Liu wrote:
-> A kexec kernel bootup hang is observed on Intel Atom cpu due to unmapped
-> EFI config table.
-> 
-> Currently EFI system table is identity-mapped for the kexec kernel, but EFI
-> config table is not mapped explicitly:
-> 
->     commit 6bbeb276b71f ("x86/kexec: Add the EFI system tables and ACPI
->                           tables to the ident map")
-> 
-> Later in the following 2 commits, EFI config table will be accessed when
-> enabling sev at kernel startup. This may result in a page fault due to EFI
-> config table's unmapped address. Since the page fault occurs at an early
-> stage, it is unrecoverable and kernel hangs.
-> 
->     commit ec1c66af3a30 ("x86/compressed/64: Detect/setup SEV/SME features
->                           earlier during boot")
->     commit c01fce9cef84 ("x86/compressed: Add SEV-SNP feature
->                           detection/setup")
-> 
-> In addition, the issue doesn't appear on all systems, because the kexec
-> kernel uses Page Size Extension (PSE) for identity mapping. In most cases,
-> EFI config table can end up to be mapped into due to 1 GB page size.
-> However if nogbpages is set, or cpu doesn't support pdpe1gb feature
-> (e.g Intel Atom x6425RE cpu), EFI config table may not be mapped into
-> due to 2 MB page size, thus a page fault hang is more likely to happen.
-> 
-> This patch will make sure the EFI config table is always mapped.
-> 
-> Signed-off-by: Tao Liu <ltao@redhat.com>
-> ---
-> Changes in v2:
-> - Rephrase the change log based on Baoquan's suggestion.
-> - Rename map_efi_sys_cfg_tab() to map_efi_tables().
-> - Link to v1: https://lore.kernel.org/kexec/20230525094914.23420-1-ltao@redhat.com/
-> ---
->  arch/x86/kernel/machine_kexec_64.c | 35 ++++++++++++++++++++++++++----
->  1 file changed, 31 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machine_kexec_64.c
-> index 1a3e2c05a8a5..664aefa6e896 100644
-> --- a/arch/x86/kernel/machine_kexec_64.c
-> +++ b/arch/x86/kernel/machine_kexec_64.c
-> @@ -28,6 +28,7 @@
->  #include <asm/setup.h>
->  #include <asm/set_memory.h>
->  #include <asm/cpu.h>
-> +#include <asm/efi.h>
->  
->  #ifdef CONFIG_ACPI
->  /*
-> @@ -86,10 +87,12 @@ const struct kexec_file_ops * const kexec_file_loaders[] = {
->  #endif
->  
->  static int
-> -map_efi_systab(struct x86_mapping_info *info, pgd_t *level4p)
-> +map_efi_tables(struct x86_mapping_info *info, pgd_t *level4p)
->  {
->  #ifdef CONFIG_EFI
->  	unsigned long mstart, mend;
-> +	void *kaddr;
-> +	int ret;
->  
->  	if (!efi_enabled(EFI_BOOT))
->  		return 0;
-> @@ -105,6 +108,30 @@ map_efi_systab(struct x86_mapping_info *info, pgd_t *level4p)
->  	if (!mstart)
->  		return 0;
->  
-> +	ret = kernel_ident_mapping_init(info, level4p, mstart, mend);
-> +	if (ret)
-> +		return ret;
-> +
-> +	kaddr = memremap(mstart, mend - mstart, MEMREMAP_WB);
-> +	if (!kaddr) {
-> +		pr_err("Could not map UEFI system table\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	mstart = efi_config_table;
-> +
-> +	if (efi_enabled(EFI_64BIT)) {
-> +		efi_system_table_64_t *stbl = (efi_system_table_64_t *)kaddr;
-> +
-> +		mend = mstart + sizeof(efi_config_table_64_t) * stbl->nr_tables;
-> +	} else {
-> +		efi_system_table_32_t *stbl = (efi_system_table_32_t *)kaddr;
-> +
-> +		mend = mstart + sizeof(efi_config_table_32_t) * stbl->nr_tables;
-> +	}
-> +
-> +	memunmap(kaddr);
-> +
->  	return kernel_ident_mapping_init(info, level4p, mstart, mend);
->  #endif
->  	return 0;
-> @@ -244,10 +271,10 @@ static int init_pgtable(struct kimage *image, unsigned long start_pgtable)
->  	}
->  
->  	/*
-> -	 * Prepare EFI systab and ACPI tables for kexec kernel since they are
-> -	 * not covered by pfn_mapped.
-> +	 * Prepare EFI systab, config table and ACPI tables for kexec kernel
-
-The code comment need be updated too?
-
-         * Prepare EFI tables and ACPI tables for kexec kernel since they are
-         * not covered by pfn_mapped.
-
-Other than this nit, this patch looks good to me, thanks.
-
-Acked-by: Baoquan He <bhe@redhat.com>
 
 
-> +	 * since they are not covered by pfn_mapped.
->  	 */
-> -	result = map_efi_systab(&info, level4p);
-> +	result = map_efi_tables(&info, level4p);
->  	if (result)
->  		return result;
->  
-> -- 
-> 2.33.1
+On 31.05.2023 23:45, Doug Anderson wrote:
+> Hi,
 > 
+> On Wed, May 31, 2023 at 7:26 AM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>> On 31.05.2023 15:22, Konrad Dybcio wrote:
+>>> As pointed out in [1], the Linux implementation of RSC basically requires
+>>> (even if not explicitly) that we point it to a power domain which
+>>> represents the power state of the CPUs. In an effort to fulfill that
+>>> requirement, make it required in bindings and hook it up on all platforms
+>>> where I was able to do. This means all RPMh platforms, except
+>>>
+>>> - SC7180
+>>> - SC7280
+>>> - SA8775
+>>>
+>>> As there wasn't an idle-states setup (which may be on purpose for CrOS
+>>> devices, certainly not for Windows SC7[12]80s) that I could validate.
+>>> (Doug, Bartosz, could you guys look into your respective platforms of
+>>> interest here?)
+>>>
+>>> This series also adds support for idle states on SM6350, as I was able
+>>> to add and test that.
+>> I noticed that 7280 is WIP:
+>>
+>> https://lore.kernel.org/lkml/20230424110933.3908-4-quic_mkshah@quicinc.com/
+> 
+> Right. For sc7180 Chromebooks we don't use OSI (OS Initiated) mode but
+> instead use PC (Platform Coordinated) mode. As I understand it, that
+> means we take a different path through all this stuff.
+> 
+> That being said, in the sc7280 thread you pointed at, Bjorn and Ulf
+> said that we could use the new device tree snippets for sc7280 even
+> before the ATF update. If I'm reading the thread correctly and the
+> same applies to sc7180:
+> 
+> 1. New DT plus firmware that doesn't support OSI - OK
+> 2. New DT plus firmware that supports OSI - OK after code changes
+> 3. Old DT plus firmware that doesn't support OSI - OK
+> 4. Old DT plus firmware that supports OSI - Not OK
+> 
+> For sc7180 Chromebooks we'll never have firmware that supports OSI.
+> That means that, assuming I'm understanding correctly, we actually
+> could move the DT to represent things the new way. Presumably this
+> would be important for sc7180 devices that originally shipped with
+> Windows (I think support for one of these is underway).
+It's even merged now!
 
+Yeah, AFAICT all you said makes sense
+
+I don't however know how you tell RSC driver that your platform is
+going to sleep when using PC mode..
+
+KOnrad
+> 
+> -Doug
