@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CAE7192E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70987192E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231788AbjFAGAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 02:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
+        id S231807AbjFAGAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 02:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbjFAF7j (ORCPT
+        with ESMTP id S231791AbjFAF7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 01:59:39 -0400
+        Thu, 1 Jun 2023 01:59:46 -0400
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FD7E44
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 22:59:15 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5659c7dad06so7675827b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 22:59:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F036E4E
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 22:59:16 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-568a8704f6dso6802827b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 22:59:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1685599154; x=1688191154;
+        d=google.com; s=20221208; t=1685599155; x=1688191155;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=akU7syuB1Kx4qpn7Uy+Yr+VxoiONi5TpTWs8ayG4zr0=;
-        b=m4fwMK5bDUCAE+/OfwoTw/BIlN4EhbQ18rCUTHajji86kngwCfEn7ejf/syIqockRx
-         t+PB7dPxWdmH4htk6K3SasBf2sOtJaTxpWAA/kRqvvC3qRzTtKtLvoVTp8SlJ7ZQuLVd
-         3DwIzipvceN/tkYnmm6J1iPKQTJ2tlda1cqj1t3WqyMpBIB+aqrqVgn5h+OzvMkTIYVQ
-         ONjFWYQN/kkcTzKv3tcTvBrlaD4xyi7iB7omNfI8hhfKs+BYc8nt/tjiBVyrEg59XETV
-         7RrWno+kd7klPCWmedw1TQ73FEEgy5xycJ3npqOqqQe643+DiyFB9YDFX9Sr0WibCb0q
-         TAXA==
+        bh=sjSiEVFvwgKwRefW1DaGSRLOPMcqZfNZ3si0heaKz+s=;
+        b=b1+z3n6FNugQyOLOwnC3N2SWHkOrz7xV94xG8m9n8T+0UtNRNf7tXQzr1gSb+gwSsE
+         oKuKYcSx1oWajoDSZJZYCZ1EYISY9gpjvfSeIsDpBqO73H+ysVsENVAN+wDDw75sgj11
+         zdnsq3MoAdutrtns1l7bJzmL6oFwp+FLqJ1DYtK5cBt7iQEoYzg8oBHu0fr99Vc5tMgh
+         amfxXyWpjoC3CX5ZtaUQ3ScErPeOQDErr9+Funxhn69wsf6+/LOeU8oCRkIdqYo39cJT
+         SXqZ6Db9Ls1W59tP78/BE4pOtP39ZF+OyFG1LJPMX/k7FbxbN52LaJ14p0CppD1kyKD6
+         xdyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685599154; x=1688191154;
+        d=1e100.net; s=20221208; t=1685599155; x=1688191155;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=akU7syuB1Kx4qpn7Uy+Yr+VxoiONi5TpTWs8ayG4zr0=;
-        b=HlXc3L2novZnX2aLzBro79PZgnw4Oin2f2nvuLd/AkMHPj/mWVnJjiq9MhvZbCs+dB
-         BCjBkl5bB9dYM3wgjGAnJ4M8tUtw3r4nmtnmkqxjXdJwZwUil4EeL+qfQejx6ianszeb
-         K1b6/UcbOzdGsWgv7syrC09PgVlMYNhzosw06BPVnEC8U8qrwh4jQLO1Zd1ktAnx/6hX
-         SeePt5SaQtYBoOvzMtuCT38Fk+4fvvwVskIT/mX/z1RbD4aZ4Y/A3k+Fm1qb59OzjXTb
-         +x3arKMKcD+DyZ/ahSbXscrOmsDYev+XZqNltTEkGBgGZo3kC1x8VAwlryivz2em6sse
-         WxxA==
-X-Gm-Message-State: AC+VfDwRmOW6i54WXgAeIyUS1RO836S9Rzws0rYWR0PLeJ3i1xpK22Io
-        271QDRZ2NTrUsV6gk+SILBLfVX0VfhDLTG81Grt/o/rKK6YO7uqjDF64lpfrC1js15PtfUCDBMc
-        ycbDLYUimstIRAk8mVU851hG+KOXH/ZHw5v5WAdT2Vt5VGcbXv2rtelv34b9BAMVb1bJk7z8=
-X-Google-Smtp-Source: ACHHUZ7Yx13lcijwiBfNbyigouS/PkQ3hC4O1oFFkjiKEUdNj48UqOUa0y+3XHux3gDMgHXHasPHaRPgn2pW
+        bh=sjSiEVFvwgKwRefW1DaGSRLOPMcqZfNZ3si0heaKz+s=;
+        b=VWCTB998tITwkqMLxFIz7rdhiaohAYGGMPiCPv2VR+MS4fx1bycD2nOCuME7EujqcY
+         ZDgtRN1ltD5Jtu3oUZnvaawTp27f/LQ4TU54S5Wf5ktr1ZODWXCFEY2BgiY/toNwXjfm
+         jEow4dLhPe5Uhkl9vXXPLvGwwAtOcMuFLltKjKOXA5Wct0FmerZn7xqXGXSHMOy3v2FU
+         9RgoYYbh0ezfon7YVZYI+dvPTk3cei3a9bWasqtE4jmCeghK+XcN8XpSALmO22b7sbqu
+         /lnmebJ4tza2nDlV8F26bocTSlVh3nSZ8DzXQeskbUEr9ebsqdfqb3OSj3wrv5600QEG
+         EA6w==
+X-Gm-Message-State: AC+VfDxN+TYbHMOGmWFS4N6xhhkJJ8p77wP7a+PecB1KWgqyxhZd9gRC
+        yyBsxycZW1IMdF+eyuW2TaA0DTN/ox7m5uOmuHLWnYcuxHk2Sc74zhI6YS66kcTgc9B2qRyOQBn
+        ASjQMRpC+GFjBHcg25r0tN6J0APNG00x1M6AlDRkTPdi6eTHT6CtkfX8j5khq2N+y6fvX7q8=
+X-Google-Smtp-Source: ACHHUZ4ae+ByRjg7oFCP5l58qYx1ruaRX97pztd56Cuj+KYgcUUo5vzWbgY5iH3Ls6sfPyyTTIb9IkgcGi5R
 X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a81:e244:0:b0:565:ba68:3c2 with SMTP id
- z4-20020a81e244000000b00565ba6803c2mr4728822ywl.8.1685599153883; Wed, 31 May
- 2023 22:59:13 -0700 (PDT)
-Date:   Thu,  1 Jun 2023 05:58:13 +0000
+ (user=jstultz job=sendgmr) by 2002:a81:af4d:0:b0:565:9e73:f92f with SMTP id
+ x13-20020a81af4d000000b005659e73f92fmr4558928ywj.10.1685599155660; Wed, 31
+ May 2023 22:59:15 -0700 (PDT)
+Date:   Thu,  1 Jun 2023 05:58:14 +0000
 In-Reply-To: <20230601055846.2349566-1-jstultz@google.com>
 Mime-Version: 1.0
 References: <20230601055846.2349566-1-jstultz@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230601055846.2349566-11-jstultz@google.com>
-Subject: [PATCH v4 10/13] sched/rt: Fix proxy/current (push,pull)ability
+Message-ID: <20230601055846.2349566-12-jstultz@google.com>
+Subject: [PATCH v4 11/13] sched: Fix runtime accounting w/ proxy-execution
 From:   John Stultz <jstultz@google.com>
 To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Valentin Schneider <valentin.schneider@arm.com>,
+Cc:     John Stultz <jstultz@google.com>,
         Joel Fernandes <joelaf@google.com>,
         Qais Yousef <qyousef@google.com>,
         Ingo Molnar <mingo@redhat.com>,
@@ -74,9 +74,7 @@ Cc:     Valentin Schneider <valentin.schneider@arm.com>,
         Will Deacon <will@kernel.org>,
         Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>, kernel-team@android.com,
-        "Connor O'Brien" <connoro@google.com>,
-        John Stultz <jstultz@google.com>
+        "Paul E . McKenney" <paulmck@kernel.org>, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -88,43 +86,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Valentin Schneider <valentin.schneider@arm.com>
+The idea here is we want to charge the selected task's vruntime
+but charge the executed task's sum_exec_runtime.
 
-Proxy execution forms atomic pairs of tasks: a proxy (scheduling context)
-and an owner (execution context). The proxy, along with the rest of the
-blocked chain, follows the owner wrt CPU placement.
-
-They can be the same task, in which case push/pull doesn't need any
-modification. When they are different, however,
-FIFO1 & FIFO42:
-
-	      ,->  RT42
-	      |     | blocked-on
-	      |     v
-blocked_donor |   mutex
-	      |     | owner
-	      |     v
-	      `--  RT1
-
-   RT1
-   RT42
-
-  CPU0            CPU1
-   ^                ^
-   |                |
-  overloaded    !overloaded
-  rq prio = 42  rq prio = 0
-
-RT1 is eligible to be pushed to CPU1, but should that happen it will
-"carry" RT42 along. Clearly here neither RT1 nor RT42 must be seen as
-push/pullable.
-
-Furthermore, tasks becoming blocked on a mutex don't need an explicit
-dequeue/enqueue cycle to be made (push/pull)able: they have to be running
-to block on a mutex, thus they will eventually hit put_prev_task().
-
-XXX: pinned tasks becoming unblocked should be removed from the push/pull
-lists, but those don't get to see __schedule() straight away.
+This way cputime accounting goes against the task actually running
+but vruntime accounting goes against the selected task so we get
+proper fairness.
 
 Cc: Joel Fernandes <joelaf@google.com>
 Cc: Qais Yousef <qyousef@google.com>
@@ -145,146 +112,57 @@ Cc: Waiman Long <longman@redhat.com>
 Cc: Boqun Feng <boqun.feng@gmail.com>
 Cc: "Paul E . McKenney" <paulmck@kernel.org>
 Cc: kernel-team@android.com
-Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-Signed-off-by: Connor O'Brien <connoro@google.com>
 Signed-off-by: John Stultz <jstultz@google.com>
 ---
-v3:
-* Tweaked comments & commit message
+ kernel/sched/fair.c | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
-TODO: Rework the wording of the commit message to match the rq_selected
-renaming. (XXX Maybe "Delegator" for the task being proxied for?)
----
- kernel/sched/core.c | 36 +++++++++++++++++++++++++++---------
- kernel/sched/rt.c   | 22 +++++++++++++++++-----
- 2 files changed, 44 insertions(+), 14 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 328776421c7a..c56921dc427e 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6989,12 +6989,29 @@ proxy(struct rq *rq, struct task_struct *next, struct rq_flags *rf)
- 	WARN_ON_ONCE(owner && !owner->on_rq);
- 	return owner;
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 43efc576d2c6..c2e17bfa6b31 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -891,22 +891,36 @@ static void update_tg_load_avg(struct cfs_rq *cfs_rq)
  }
-+
-+static inline void proxy_tag_curr(struct rq *rq, struct task_struct *next)
-+{
-+	/*
-+	 * pick_next_task() calls set_next_task() on the selected task
-+	 * at some point, which ensures it is not push/pullable.
-+	 * However, the selected task *and* the ,mutex owner form an
-+	 * atomic pair wrt push/pull.
-+	 *
-+	 * Make sure owner is not pushable. Unfortunately we can only
-+	 * deal with that by means of a dequeue/enqueue cycle. :-/
-+	 */
-+	dequeue_task(rq, next, DEQUEUE_NOCLOCK | DEQUEUE_SAVE);
-+	enqueue_task(rq, next, ENQUEUE_NOCLOCK | ENQUEUE_RESTORE);
-+}
- #else /* PROXY_EXEC */
- static struct task_struct *
- proxy(struct rq *rq, struct task_struct *next, struct rq_flags *rf)
+ #endif /* CONFIG_SMP */
+ 
+-static s64 update_curr_se(struct rq *rq, struct sched_entity *curr)
++static s64 update_curr_se(struct rq *rq, struct sched_entity *se)
  {
- 	return next;
- }
-+
-+static inline void proxy_tag_curr(struct rq *rq, struct task_struct *next) { }
- #endif /* PROXY_EXEC */
+ 	u64 now = rq_clock_task(rq);
+ 	s64 delta_exec;
  
- /*
-@@ -7043,6 +7060,7 @@ static void __sched notrace __schedule(unsigned int sched_mode)
- 	unsigned long prev_state;
- 	struct rq_flags rf;
- 	struct rq *rq;
-+	bool proxied;
- 	int cpu;
- 	bool preserve_need_resched = false;
+-	delta_exec = now - curr->exec_start;
++	/* Calculate the delta from selected se */
++	delta_exec = now - se->exec_start;
+ 	if (unlikely(delta_exec <= 0))
+ 		return delta_exec;
  
-@@ -7116,19 +7134,11 @@ static void __sched notrace __schedule(unsigned int sched_mode)
- 				atomic_inc(&rq->nr_iowait);
- 				delayacct_blkio_start();
- 			}
--		} else {
--			/*
--			 * Let's make this task, which is blocked on
--			 * a mutex, (push/pull)able (RT/DL).
--			 * Unfortunately we can only deal with that by
--			 * means of a dequeue/enqueue cycle. :-/
--			 */
--			dequeue_task(rq, prev, 0);
--			enqueue_task(rq, prev, 0);
- 		}
- 		switch_count = &prev->nvcsw;
+-	curr->exec_start = now;
+-	curr->sum_exec_runtime += delta_exec;
++	/* Update selected se's exec_start */
++	se->exec_start = now;
++	if (entity_is_task(se)) {
++		struct task_struct *running = rq->curr;
++		/*
++		 * If se is a task, we account the time
++		 * against the running task, as w/ proxy-exec
++		 * they may not be the same.
++		 */
++		running->se.exec_start = now;
++		running->se.sum_exec_runtime += delta_exec;
++	} else {
++		/* If not task, account the time against se */
++		se->sum_exec_runtime += delta_exec;
++	}
+ 
+ 	if (schedstat_enabled()) {
+ 		struct sched_statistics *stats;
+ 
+-		stats = __schedstats_from_se(curr);
++		stats = __schedstats_from_se(se);
+ 		__schedstat_set(stats->exec_max,
+ 				max(delta_exec, stats->exec_max));
  	}
- 
-+	proxied = !!prev->blocked_donor;
- pick_again:
- 	/*
- 	 * If picked task is actually blocked it means that it can act as a
-@@ -7165,6 +7175,10 @@ static void __sched notrace __schedule(unsigned int sched_mode)
- 		 * changes to task_struct made by pick_next_task().
- 		 */
- 		RCU_INIT_POINTER(rq->curr, next);
-+
-+		if (unlikely(!task_current_selected(rq, next)))
-+			proxy_tag_curr(rq, next);
-+
- 		/*
- 		 * The membarrier system call requires each architecture
- 		 * to have a full memory barrier after updating
-@@ -7189,6 +7203,10 @@ static void __sched notrace __schedule(unsigned int sched_mode)
- 		/* Also unlocks the rq: */
- 		rq = context_switch(rq, prev, next, &rf);
- 	} else {
-+		/* In case next was already curr but just got blocked_donor*/
-+		if (unlikely(!proxied && next->blocked_donor))
-+			proxy_tag_curr(rq, next);
-+
- 		rq->clock_update_flags &= ~(RQCF_ACT_SKIP|RQCF_REQ_SKIP);
- 
- 		rq_unpin_lock(rq, &rf);
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index f5b1075e8170..d6bffcf31de0 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -1537,9 +1537,21 @@ enqueue_task_rt(struct rq *rq, struct task_struct *p, int flags)
- 
- 	enqueue_rt_entity(rt_se, flags);
- 
--	if (!task_current(rq, p) && p->nr_cpus_allowed > 1 &&
--	    !task_is_blocked(p))
--		enqueue_pushable_task(rq, p);
-+	/*
-+	 * Current can't be pushed away. Proxy is tied to current, so don't
-+	 * push it either.
-+	 */
-+	if (task_current(rq, p) || task_current_selected(rq, p))
-+		return;
-+
-+	/*
-+	 * Pinned tasks can't be pushed.
-+	 * Affinity of blocked tasks doesn't matter.
-+	 */
-+	if (!task_is_blocked(p) && p->nr_cpus_allowed == 1)
-+		return;
-+
-+	enqueue_pushable_task(rq, p);
- }
- 
- static void dequeue_task_rt(struct rq *rq, struct task_struct *p, int flags)
-@@ -1828,9 +1840,9 @@ static void put_prev_task_rt(struct rq *rq, struct task_struct *p)
- 
- 	/*
- 	 * The previous task needs to be made eligible for pushing
--	 * if it is still active
-+	 * if it is still active. Affinity of blocked task doesn't matter.
- 	 */
--	if (on_rt_rq(&p->rt) && p->nr_cpus_allowed > 1)
-+	if (on_rt_rq(&p->rt) && (p->nr_cpus_allowed > 1 || task_is_blocked(p)))
- 		enqueue_pushable_task(rq, p);
- }
- 
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
