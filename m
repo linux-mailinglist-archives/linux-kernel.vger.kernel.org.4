@@ -2,163 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1399A71F29F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33EBC71F2A1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 21:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjFATHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 15:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
+        id S231417AbjFATIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 15:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjFATHk (ORCPT
+        with ESMTP id S229693AbjFATIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 15:07:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA8413E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 12:07:39 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1685646457;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jk3OoUH/vZ/PG3PRxTx2YkNfM1UU6F5mJBsyBA6TRrs=;
-        b=nIt1sJEqQB6By3BxH5cEPmu1YnS5qbn+FgaDghURYc8HcWrS9HvQ4QiMyL/ztPdXADCohE
-        nZrhgbdMoArVnJLLHhmfsMwV/NihjleXWqcdSL8O6SqmQDPgiNlPTOhTop6LnUCsPl4yHF
-        EJYLV8D4TPnFsefhvZMaYpC4Zx9WQbqqZwfl10rW1nYQ2e4uEoxugYnD/0D6gmLy2JCyLO
-        H31I0+IPrHP3rH6IMulFZt63TTW6Ik5i3ZEfglRFVi6nmXDKwBPk8GVxKt6yIFXQHd3fXC
-        BJSsqRg2pj1IKuPKyeUxH9g3NJrQfd0jvfdTx9cQRm50kKP9QR9Wtsvh3iCWzQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1685646457;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jk3OoUH/vZ/PG3PRxTx2YkNfM1UU6F5mJBsyBA6TRrs=;
-        b=0XqM433XX03aY9XDC63CjR6M1lCyncWLejBoFggnpDCkbPIAUP5HJ9wFhLv3zIJgM/QY4T
-        LpdBehvpCuBgUJCw==
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: Re: [patch 18/20] posix-timers: Clarify posix_timer_fn() comments
-In-Reply-To: <ZHibcwrDgegKwQeQ@lothringen>
-References: <20230425181827.219128101@linutronix.de>
- <20230425183313.777610259@linutronix.de> <ZHibcwrDgegKwQeQ@lothringen>
-Date:   Thu, 01 Jun 2023 21:07:37 +0200
-Message-ID: <874jnrdmrq.ffs@tglx>
+        Thu, 1 Jun 2023 15:08:10 -0400
+Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F049F184;
+        Thu,  1 Jun 2023 12:08:03 -0700 (PDT)
+Date:   Thu, 01 Jun 2023 19:07:38 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uplinklabs.net;
+        s=protonmail; t=1685646480; x=1685905680;
+        bh=lovUSrk93ENXOhw8lq+zt1tvyB45dc+7JHQ1bHcHwCY=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=eqBIFUXyFnfkuDCUZzZLc82UrgimdrumUq0evWnuDTVgSEMc6wj7aYVVtxBs9tv4l
+         tOETU39au2AkYJEx+aGHwlPBJCMvh8Rx/Gcpw2BnPQz/QFGEOo/Fw2rjmoO81ADhC7
+         /1ceHpAHBW6pteof5+L/07v30IfL72OyGTOHgiroFlFTL3Uky9nUQwcJSQ4alQhYie
+         0pNFPSrhzX8jW1sE7gPMNBiS+ZscISyEuEE0ZAdglV5Z/BnmVvVTOeWBOvOLz9+oXk
+         sCtt0lkY7PQglZZhgVu+S6tBjP68oIGt8P/x4YtI/8QvQj0mZp4qIcspNl3d30jMkK
+         RjkZV+mVA7vJw==
+To:     Thomas Gleixner <tglx@linutronix.de>
+From:   Steven Noonan <steven@uplinklabs.net>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>, kernel@collabora.com
+Subject: Re: Direct rdtsc call side-effect
+Message-ID: <L9sTQNWVFoNxz-HmzFoXBX4twp84wuAx5Mf4LcxWw9k0rTAXI32rSl7WEOr7058iN6_Nyf8fLN-Ye3sq5THHjJCKG2vQLlpnVs77kKlLFV4=@uplinklabs.net>
+In-Reply-To: <87h6rrdoy0.ffs@tglx>
+References: <6719fb05-382c-8ec4-ccda-72798906a54b@collabora.com> <87mt1jeax1.ffs@tglx> <87h6rrdoy0.ffs@tglx>
+Feedback-ID: 10620438:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; protocol="application/pgp-signature"; micalg=pgp-sha512; boundary="------796aa968aad2e57f8079f70824c4c45caea1f91b291b6bed56b8f34038fce5eb"; charset=utf-8
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the issues vs. SIG_IGN understandable and remove the 15 years old
-promise that a proper solution is already on the horizon.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------796aa968aad2e57f8079f70824c4c45caea1f91b291b6bed56b8f34038fce5eb
+Content-Type: multipart/mixed;boundary=---------------------17872929c4a151b04539e62bfec4da60
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
-V2: Clarify comments and use TICK_NSECS - Frederic
----
- kernel/time/posix-timers.c |   62 +++++++++++++++++++++++----------------------
- 1 file changed, 32 insertions(+), 30 deletions(-)
+-----------------------17872929c4a151b04539e62bfec4da60
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;charset=utf-8
 
---- a/kernel/time/posix-timers.c
-+++ b/kernel/time/posix-timers.c
-@@ -326,11 +326,11 @@ int posix_timer_event(struct k_itimer *t
- }
- 
- /*
-- * This function gets called when a POSIX.1b interval timer expires.  It
-- * is used as a callback from the kernel internal timer.  The
-- * run_timer_list code ALWAYS calls with interrupts on.
--
-- * This code is for CLOCK_REALTIME* and CLOCK_MONOTONIC* timers.
-+ * This function gets called when a POSIX.1b interval timer expires from
-+ * the HRTIMER interrupt (soft interrupt on RT kernels).
-+ *
-+ * Handles CLOCK_REALTIME, CLOCK_MONOTONIC, CLOCK_BOOTTIME and CLOCK_TAI
-+ * based timers.
-  */
- static enum hrtimer_restart posix_timer_fn(struct hrtimer *timer)
- {
-@@ -348,9 +348,10 @@ static enum hrtimer_restart posix_timer_
- 
- 	if (posix_timer_event(timr, si_private)) {
- 		/*
--		 * signal was not sent because of sig_ignor
--		 * we will not get a call back to restart it AND
--		 * it should be restarted.
-+		 * The signal was not queued due to SIG_IGN. As a
-+		 * consequence the timer is not going to be rearmed from
-+		 * the signal delivery path. But as a real signal handler
-+		 * can be installed later the timer must be rearmed here.
- 		 */
- 		if (timr->it_interval != 0) {
- 			ktime_t now = hrtimer_cb_get_time(timer);
-@@ -359,34 +360,35 @@ static enum hrtimer_restart posix_timer_
- 			 * FIXME: What we really want, is to stop this
- 			 * timer completely and restart it in case the
- 			 * SIG_IGN is removed. This is a non trivial
--			 * change which involves sighand locking
--			 * (sigh !), which we don't want to do late in
--			 * the release cycle.
-+			 * change to the signal handling code.
-+			 *
-+			 * For now let timers with an interval less than a
-+			 * jiffie expire every jiffie and recheck for a
-+			 * valid signal handler.
-+			 *
-+			 * This avoids interrupt starvation in case of a
-+			 * very small interval, which would expire the
-+			 * timer immediately again.
- 			 *
--			 * For now we just let timers with an interval
--			 * less than a jiffie expire every jiffie to
--			 * avoid softirq starvation in case of SIG_IGN
--			 * and a very small interval, which would put
--			 * the timer right back on the softirq pending
--			 * list. By moving now ahead of time we trick
--			 * hrtimer_forward() to expire the timer
--			 * later, while we still maintain the overrun
--			 * accuracy, but have some inconsistency in
--			 * the timer_gettime() case. This is at least
--			 * better than a starved softirq. A more
--			 * complex fix which solves also another related
--			 * inconsistency is already in the pipeline.
-+			 * Moving now ahead of time by one jiffie tricks
-+			 * hrtimer_forward() to expire the timer later,
-+			 * while it still maintains the overrun accuracy
-+			 * for the price of a slight inconsistency in the
-+			 * timer_gettime() case. This is at least better
-+			 * than a starved softirq.
-+			 *
-+			 * Only required when high resolution timers are
-+			 * enabled as the periodic tick based timers are
-+			 * automatically aligned to the next tick.
- 			 */
--#ifdef CONFIG_HIGH_RES_TIMERS
--			{
--				ktime_t kj = NSEC_PER_SEC / HZ;
-+			if (IS_ENABLED(CONFIG_HIGHRES_TIMERS)) {
-+				ktime_t kj = TICK_NSECS;
- 
- 				if (timr->it_interval < kj)
- 					now = ktime_add(now, kj);
- 			}
--#endif
--			timr->it_overrun += hrtimer_forward(timer, now,
--							    timr->it_interval);
-+
-+			timr->it_overrun += hrtimer_forward(timer, now, timr->it_interval);
- 			ret = HRTIMER_RESTART;
- 			++timr->it_requeue_pending;
- 			timr->it_active = 1;
+On Thursday, June 1st, 2023 at 11:20 AM, Thomas Gleixner <tglx@linutronix.=
+de> wrote:
+> Here is an example where it falls flat on its nose.
+> =
+
+
+> One of the early Ryzen laptops had a broken BIOS which came up with
+> unsynchronized TSCs. I tried to fix that up, but couldn't get it to sync
+> on all CPUs because for some stupid reason the TSC write got
+> arbritrarily delayed (assumably by SMI/SMM).
+
+Hah, I remember that. That was actually my laptop. A Lenovo ThinkPad A485 =
+with a Ryzen 2700U. I've seen the problem since then occasionally on newer=
+ Ryzen laptops (and even desktops). Without the awful "tsc=3Ddirectsync" p=
+atch I wrote, which I've been carrying for years now in my own kernel buil=
+ds, it just falls back to HPET. It's not pleasant, but at least it's a sta=
+ble clock.
+
+> After the vendor fixed the BIOS, I tried again and the problem
+> persisted.
+> =
+
+
+> So on such a machine the 'fixup time' mechanism would simply render an
+> otherwise perfectly fine TSC unusable for timekeeping.
+> =
+
+
+> We asked both Intel and AMD to add TSC_ADJUST probably 15 years
+> ago. Intel added it with some HSW variants (IIRC) and since SKL all CPUs
+> have it. I don't know why AMD thought it's not required. That could have
+> spared a gazillion of bugzilla entries vs. the early Ryzen machines.
+>
+
+Agreed, TSC_ADJUST is the ultimate solution for any of these kinds of issu=
+es. But last I heard from AMD, it's still several years out in silicon, an=
+d there's plenty of hardware to maintain compatibility with. Ugh.
+
+A software solution would be preferable in the meantime, but I don't know =
+what options are left at this point.
+
+The trap-and-emulate via SIGSEGV approach proposed earlier in the thread i=
+s unfortunately not likely to be practical, assuming I implemented it prop=
+erly.
+
+One issue is how much overhead it has. This is an instruction that normall=
+y executes in roughly 50 clock cycles (RDTSC) to 100 clock cycles (RDTSCP)=
+ on Zen 3. Based on a proof-of-concept I wrote, the overhead of trapping a=
+nd emulating with a signal handler is roughly 100x. On my Zen 3 system, it=
+ goes up to around 10000 clock cycles per trapped read of RDTSCP. Most Win=
+dows games that use this instruction directly are doing so under the assum=
+ption that the TSC is faster to read than any of the native Windows API cl=
+ock sources. If it's suddenly ~100x slower than even the slowest-to-read W=
+indows clocksource, those games would likely become entirely unplayable, d=
+epending on how frequently they do TSC reads. (And many do so quite often!=
+)
+
+Also, my proof-of-concept doesn't actually do the emulation part. It just =
+traps the instruction and then executes that same instruction in the signa=
+l handler, putting the results in the right registers. So it's a pass-thro=
+ugh approach, which is about the best you can do performance wise.
+
+Another issue is that the implementation might be tricky. In the case of W=
+ine, you'd need to enable PR_TSC_SIGSEGV whenever entering the Windows exe=
+cutable and PR_TSC_ENABLE whenever leaving it. If you don't, any of the no=
+rmally well-behaved clock sources implemented using the TSC (e.g. CLOCK_MO=
+NOTONIC_RAW, etc) would also fault on the Wine side. Also, there's some Wi=
+ndows-specific trickery, in that the Windows registry exposes the TSC freq=
+uency in a couple of places, so those would need to be replaced with the f=
+requency of the emulated clocksource.
+
+- Steven
+-----------------------17872929c4a151b04539e62bfec4da60--
+
+--------796aa968aad2e57f8079f70824c4c45caea1f91b291b6bed56b8f34038fce5eb
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: ProtonMail
+
+wnUEARYKACcFgmR47GEJkAi2TYeeRSZQFiEE707zOy6TKdatSeTPCLZNh55F
+JlAAAJDdAQD0c+SXDqA1PASyKgtok2FQ+jAcie8g0u2Rd/Grlp49QwEAzASw
+DKrwVDCAWWVHMgksqgsdcchcU5d4UJu9AW2nIAk=
+=lfCX
+-----END PGP SIGNATURE-----
+
+
+--------796aa968aad2e57f8079f70824c4c45caea1f91b291b6bed56b8f34038fce5eb--
+
