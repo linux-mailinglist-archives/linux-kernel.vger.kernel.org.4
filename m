@@ -2,613 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90496719005
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 03:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9CB71900C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 03:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbjFAB2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 21:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
+        id S230119AbjFABao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 21:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjFAB2O (ORCPT
+        with ESMTP id S229536AbjFABam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 21:28:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F6212F
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 18:27:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685582844;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uXCu9Z2wRxrXdCLjrFqtw+Pc6jnHmSDNhIHMLD9aB2Q=;
-        b=QXlORUAtH5F8j9VJj7MUSwI+8vln6QwIgCAZ4lmshmA4eobNkEEV0z05ZkzxRP4wc5nOvo
-        +un5drM4fuv5/04iYeOS9iZMOOPpmpynTadzPIFOTfT4zQ1oCOWCo54HreKT3/tAM06aJV
-        FsKGNbMaWVwSVgZiAtYKJGkDebC0sBE=
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
- [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-265-c7535LHkOgmkxQEZ1NHl0g-1; Wed, 31 May 2023 21:27:22 -0400
-X-MC-Unique: c7535LHkOgmkxQEZ1NHl0g-1
-Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2af8a985ab2so2127741fa.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 18:27:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685582841; x=1688174841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uXCu9Z2wRxrXdCLjrFqtw+Pc6jnHmSDNhIHMLD9aB2Q=;
-        b=S63/n+C73ZBDkOd2qiHAEa2f1Y++G3L8oNdQb0GJX4Ly6+Mpxo6DLiZBwhagPXshMj
-         epmpTEKEqGn7OZFN7f0ZQg/qVYnp8It9CnIVZDB5lmrOtnF7954KM833X8PmpWHbnU6z
-         HPbTV9bM/fqjM7FnEEedd/Tyvec0dnBOXekatul3FSWM2GQb2gTddyavLJ7jKuUdRFxv
-         0QO8AqP3bApmcoxH3PWs6KOYHCc452JZsmyB8TUKce7rpCpbc9nh3IKTpI+1ZDjGrNWS
-         aMzd6ZPbBMSxMB5iy3fADSEs1hOdB/TwfMv3qpGQyie11zrLN69f44bCLpPeD9wreWBS
-         XsyQ==
-X-Gm-Message-State: AC+VfDwQozPvQZDVAT2jy6Pc+k+MIfVmCKekYAbEGLL5IQ1NZOcAT2ig
-        FsglSvU4TRBX6MEduhDQ++C3bQ07tHZn2JC1/h5HhLYNRxhDX6oRWP8CHQDptLcQWXtPc6E0h+Q
-        xg7VG+fVO0Gz3cn+XfladYYzktxaqqPdkUr0mrZ+NgfQ6cVAwNEo=
-X-Received: by 2002:a2e:8255:0:b0:2ad:a9c0:1236 with SMTP id j21-20020a2e8255000000b002ada9c01236mr3640333ljh.6.1685582840753;
-        Wed, 31 May 2023 18:27:20 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6+AsQyrWZ4QhV01P3lN1wU7DjAsi65W65x0eXbKxrO3zSpa9JNj+Jtnafxsiv7PGJbTZVmx7hQvu8VbIgc7Zg=
-X-Received: by 2002:a2e:8255:0:b0:2ad:a9c0:1236 with SMTP id
- j21-20020a2e8255000000b002ada9c01236mr3640321ljh.6.1685582840325; Wed, 31 May
- 2023 18:27:20 -0700 (PDT)
+        Wed, 31 May 2023 21:30:42 -0400
+Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD7C93;
+        Wed, 31 May 2023 18:30:41 -0700 (PDT)
+Received: from pps.filterd (m0098572.ppops.net [127.0.0.1])
+        by mx0b-00230701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34VLH2Hh023097;
+        Wed, 31 May 2023 18:30:12 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pfptdkimsnps;
+ bh=57M5vbrnueEgycmhoO4wszsriogdDcYJkmefM/hbMFM=;
+ b=Qrrux8ke76zSgkEyQ55R7v/5XRjysxZqXMSMkwfw47Pd9mRVILtOqAbRgxY8wKelSC2o
+ O4nEAzwxEtTn4e9MNa/AmYwZKKUKufyiB8IPtQhtB3k44v2ctJ77nRU1EKIVqXJl/kz4
+ /PH5xGr9sC83KpRf7z6BZpd+mC2+bUEvFWV6269Dj0eJkCLizIAemzMvKJlIGFWxI/uB
+ jyIiKBjYG5/1Qc5UOKBG4LQwC7XSpNJICY/ycplIZSvCZB2OWAdlbsTHafYmIPqsNF1v
+ CAN6Bl5IxibzbttgX8qOstEihOtHqE2+b41c7F31Nk3uoixjGAQFvPY0t1jnmgpuuMyH eQ== 
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
+        by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 3qugge63a6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 May 2023 18:30:12 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1685583011; bh=57M5vbrnueEgycmhoO4wszsriogdDcYJkmefM/hbMFM=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=G+37mdPEdgTlQtAGfvov+OH+l9+IWMDWxz0f63KQ2RidO+gGZKTt7f1YFl1qN14br
+         m0mxKM5F3AqZ7ENEN0GXHHgHYTedWLCl1Jj+eA/LmgMIh1kqlhS/+Dr0FjaPOhPzNi
+         DBZWpL51UvjGI/G9qsSfsMsih1V1UtY4Po+dKoGmNsloRX6qmO9F43v7vdOWSTEayI
+         Qz2HS8OnX3CLjexq8zrz8TUkWJFF2NfrgRAdXPLzJVm1hNF7zNRlsharZxNyRRC07S
+         HF28F6G+/TS8p5tf3V0MyIewLrBtdDxGgZfKSnSmFR5FuH/I3/IN1WqFxbNmWUoY+2
+         IzUexIDbB85cQ==
+Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits)
+         client-signature RSA-PSS (2048 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 03A5D40147;
+        Thu,  1 Jun 2023 01:30:10 +0000 (UTC)
+Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 5F893A0062;
+        Thu,  1 Jun 2023 01:30:10 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=DBW/4VUB;
+        dkim-atps=neutral
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 43C4A40136;
+        Thu,  1 Jun 2023 01:30:09 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IQXNxfZ+KSBMMZ2wAPNymGrnW3p0VDxmgeV9iPYk7WA0PuiJbNktH+tyFzP34zJGGgUFS+6jGI1BD3PisQRpAqtu6TVc3CJ9+tF+CcwSBkSrZOVQwZRFKz3u8vFAWpycENJlEd2JryB4szDhXr/Lzwe5KEC4kXbYXVQxj4kU2BGuAYJLkPsME5rMLIqNIxO9fDTO9bilYGhl4qFtBOGOsSR+iPfRyAKWdi7UBY3lszv7vgmJrGp11Orrotnl5PNNFu8i8Zs/bYhWCX6KeU5xeXiMl2aSheYppZm+0nfkYHLgKWkiY9l98rZ16amrzDD4KuecjE6BtHVI4H7ryuigMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=57M5vbrnueEgycmhoO4wszsriogdDcYJkmefM/hbMFM=;
+ b=KDdcLf836AwHvRjZPORxNuhl4EdRV5F49Jp8FqniNFzGCFBF7A8WQfV94xOHNJv9PgrKF947ZzagNZbfcfwLedZ1CtgGgUa2UJ3Q4A62KZRSag/7yL4UdffNQeDnpqxTIxec3xMT+cCzCb5Rzze7ySiBrwjpWeX3oa3RsK/1Qqbzl9ffi8CNvhf2YbpCbtcVI0OT3yEv2G7Ysb7PLjUU3fEcMaFy2xfbWxlm6XD3e2gv6tu0q2qxdBMn43iSpLCp5P+P7n7qd7QKbAh3nZVKUiHPS6F2e/YV7Bsva/TJ2nEMGWgJGPV6gRR/UyyjsSil0mwoiGWj+8OnxRZHJixHPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=57M5vbrnueEgycmhoO4wszsriogdDcYJkmefM/hbMFM=;
+ b=DBW/4VUB9acCGC2Rv1rqKo7HsTo2owLXWRMdx444HfL/eQ3xmBXfQ1HVz2SO+9fYpBFZzBLilqYyIBD3KqQXVXUQzetaYesfj3cXbqfmdKazKPtSr5Mbu/21YOLNrJNKpBtur18QVWUSODX6VVJn8i/EKZ+bJwaMOLLGSkj+wKw=
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
+ by CYYPR12MB8653.namprd12.prod.outlook.com (2603:10b6:930:c5::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Thu, 1 Jun
+ 2023 01:30:03 +0000
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::3400:81ff:f191:b312]) by BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::3400:81ff:f191:b312%6]) with mapi id 15.20.6433.022; Thu, 1 Jun 2023
+ 01:30:02 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Elson Serrao <quic_eserrao@quicinc.com>
+CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
+Subject: Re: [PATCH] usb: dwc3: Skip TRBs while removing requests in
+ disconnect path
+Thread-Topic: [PATCH] usb: dwc3: Skip TRBs while removing requests in
+ disconnect path
+Thread-Index: AQHZk/nVxQI+NeMmWkCDLCh1fe8pO691BNiAgAAbNgCAAAkfgA==
+Date:   Thu, 1 Jun 2023 01:30:02 +0000
+Message-ID: <20230601012953.47xh7meyr2woowpc@synopsys.com>
+References: <1685562871-17024-1-git-send-email-quic_eserrao@quicinc.com>
+ <20230531231951.vg7x2w7gnnm77alq@synopsys.com>
+ <38255534-f242-dc06-9216-1568da9b0285@quicinc.com>
+In-Reply-To: <38255534-f242-dc06-9216-1568da9b0285@quicinc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR12MB4791:EE_|CYYPR12MB8653:EE_
+x-ms-office365-filtering-correlation-id: 0a0507c3-104f-4eab-086c-08db623fb8ea
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: n5+F/9avtcQhZCw8vV7y8md238EYBLEyZlGyCdIF9is4Pt6ulvPrl/zAJVLGoV6228EU1/jNw7S4QOWYXGou2TIdXNNdLeGTw92nETDFyhM/+S0B3bi+guT5kG0RTDW6XzitCnwlyoE/ICHEFogmYiFTbZEb93hMoD1VOXHi/cUh9ZqkhvU0zUnp4r+8bvlFmcB1hxd5XtcPjlL6Ysikpztvbx6m193zMlktWQFJIguOkFz5go42r3GvftSrFAbw/rsiz6UWyoto0wCkEb1LKOmz2/Y1t249AMEBMc3rah7LalVwEd9Emqqjc0ve+H4N8erZ33Ix/BuBOjHbcVeBZEz1OeLoxYNUhA3GyZOfBJKfp+Jn9x3e4w8irVt0AXhNsxVSZey+aR25Hsxah2e/3EvF9DKLAcK997gMTAOp3/ucX/lLRniuNyIZfVLjHIiQwkWs8ISwn+5fAOfT5E7bAXa7JxSdgy93pvT32fYmGa1ZHake85j20skc3Jr90IToYJ3/2DnR/tAl4yTSnIHAFJUSYtBL/r/qpzhnuUx98ua3WLTZI8w4M/VsXkpvq8pIPvZSejC79BtROfAkwCNbP1cH7X6nvXznlTf4ONeaCavZQhHeY9Xs+5GBsLfRQ4eW
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(136003)(346002)(396003)(376002)(39860400002)(451199021)(38100700002)(122000001)(36756003)(86362001)(38070700005)(8936002)(26005)(8676002)(41300700001)(6506007)(5660300002)(6512007)(53546011)(1076003)(2906002)(186003)(2616005)(83380400001)(66476007)(66556008)(71200400001)(66446008)(66946007)(6486002)(316002)(478600001)(76116006)(54906003)(6916009)(64756008)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TnFvNFgxeW40WFBnNThlNDJTQjFDQmNEc2tJeUZqZ29aYnhBZjlkbzM5TGRJ?=
+ =?utf-8?B?L3QwYVR1bTREOHZoWGVtbWlUYmhnaUlvaG95MTdHUEFhU0ptakJMNTNqT1Zs?=
+ =?utf-8?B?NE1FakhTaEJCUEJ0aHVIUkxxRFdXZ2oyNmZIcHFNMUxsMFNOSk9ydXRaRXZW?=
+ =?utf-8?B?Tms1eVJ1Mm1oazg4OXVDM0VJTGQzb05uY01nTnBUS2c0K1ZoYWhUTjJlKzM3?=
+ =?utf-8?B?QzBuR0hGVWJPeW1wejNsa09kQ0lvY0g1SEswdUMxYzV1d3M1YUxuUVdWMVFw?=
+ =?utf-8?B?L0dqQ1p3OUt4VU55aExEeGdjajlldm1TUmE2NXVnYkNZN2E5OE9lRWdneVRu?=
+ =?utf-8?B?TEhzRkxBcHBOQ0NzN0E0RUtzM3dveGlxOGVVa2VUWWRhREJubmVESzRTNGJJ?=
+ =?utf-8?B?NkJwU2RxQ3Z6b1VkaEszeXFCazZIalpUQnVJZThyaFJad0k1VEMyMWljNGpW?=
+ =?utf-8?B?aFNld2pMM3YxYmladzladEl1aGQ1eVFUb1JEMkVsNE80VHZGR1puZGlMLzho?=
+ =?utf-8?B?ekJ1Tlh3THBseGd4a0dFVFZzdjg0QWJucVBtMUp0cVUxTWtWN1pMVXFkNm5I?=
+ =?utf-8?B?YVVZNjJaeE5XYkZGZGR6eWp4TTJoaEdUVUNOMTdhYkV3SDQybytVVXU3ZjRm?=
+ =?utf-8?B?ZmQwZklWV25QTm53Qk0wQTkzam0xSDlBZEU2bWdEcFF1OVJWN2NLZjVIcStF?=
+ =?utf-8?B?YWNTckFMVjZhMFpSSS9NalVVTDJFU2lFK3dZUlgzdGRoZU84Yy9yZ2F3Q25p?=
+ =?utf-8?B?RllQRGZSMjU2ODB0Y05xbXNNQksrVG1pL1FUL2FKSUlOeUU3Z01HNEp0RnJi?=
+ =?utf-8?B?dGttVHk3S3JqSHg3NXIwRDBpZ0p6bmdZRGxxa0dUNzdFb254UkM2QjhkbjdI?=
+ =?utf-8?B?K0FiajNDTWQyTjB5aFZXUkd2UnlHeVE5WkhQckVwRWlYZGJKRXcwcVNEQXRm?=
+ =?utf-8?B?MHR0dkFaV3FPUEplckZxV3F2TmtGR2NhSmpMSFZsb1dVQkRzQS9ETEM0Ym5G?=
+ =?utf-8?B?ZlVjQWNNbVo3UEN4andTRkR1aDNGWFJkRU9vWUEvZUFmUEtQYzFyWnhuR054?=
+ =?utf-8?B?QUg3NnJSdVM3clhUQkxYemJTQ3pocHBJdFFDTVlqdCs4WE8vL0Q0SmRXY2FW?=
+ =?utf-8?B?ODA1Z0o2S0hUT1QyYkhWR2RudDg1MThtWmlDekRQVitGRklSSHRWYVQ1ZmFB?=
+ =?utf-8?B?dW5uUVhvZjNGaXpkYjl5MlRLdm1YV1RXL1g0Q25zSzFacWk2YzloY0NvNlJz?=
+ =?utf-8?B?SzUvOU5HRmlsbFlrelpMbCtHTnc1eHRuNVhiRjNJUkExTFVTSFhwcVBTWVhi?=
+ =?utf-8?B?VmRlQWhvcm1BcE81RFZYMDcvTzhnVGFrb1ZLTkxQNXB6d0hCSWYzM2pVTXhZ?=
+ =?utf-8?B?RTliOE9DQ013VWN1Mk1xVFk2QmthZ3o1NTNoK3hpc1ZOelBmdXBUdFEyVkdt?=
+ =?utf-8?B?cjJMVnNYRk9kNkJUd1VZSnUxTHVWdlE3aXJGUzdDL3Bvd3FiL3FHNnJLQSts?=
+ =?utf-8?B?WDhBeWlJWUNzbXlVNGpPMTNibTJ4YkdEUjlnUFJneVZXU3NYcFB0VGRWYlIy?=
+ =?utf-8?B?dGFrNitBL2dCdHdJQk81dGNNVW5GQ2UwZnpmaTRuRnpCc1hwMGR1S1VtTzF0?=
+ =?utf-8?B?bE8xS01XakFDeHU4SU8zUUVmY1I3L2Nzbnh6endkc1BlRzFNY0Z1YUluM1VN?=
+ =?utf-8?B?d0dhTnllcHk3YmlsUDBlTld6eUlsemVmdzhncXpLdEErbUVBQ0VWVEV4dnVM?=
+ =?utf-8?B?VnB3eWlZaTFQa2Z4cTlBSFo1MkV6ZmRVNzhUL2FKQWlsVTBGM3l6R2pvWkVU?=
+ =?utf-8?B?RnRLSTZPZ05waXZCQjZwRWRPQ2tFOTh4bXhINm1mejM3ci9nL2hGQXNHN0hE?=
+ =?utf-8?B?WVNsSmF6YWJLcmNHd0pjaENMTmdUTW9mTXdaQ3JvSjZVTVZLaW8ybjhDVmZr?=
+ =?utf-8?B?SXZGSk90bCt1cW4xdUlPQlZoM3NMb1IvK3ZmMzJiV3RScU1PNmJkekthaTFR?=
+ =?utf-8?B?bDY1eEdzL2tSQ3U1WW5vTWhMWUMxc05HSGlDUEs2WEJkS2ZsV2JzSlBPWHRY?=
+ =?utf-8?B?L2NzemNtM0FkWFpnOWRMcWl2dDlNb1RramJGMHpWc0RUcGpmdFl6ZEd3UkZG?=
+ =?utf-8?Q?735yFzm9JYoAwCf2SuBXteW+r?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6991597A3C34954E8E58B7350BE21C7F@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230526063041.18359-1-jasowang@redhat.com> <20230528033037-mutt-send-email-mst@kernel.org>
- <CACGkMEs9Ztavn2JyuUAb47Sk1fYHiXLLkQQPQR5Czhb2yu_R3w@mail.gmail.com>
- <20230529055729-mutt-send-email-mst@kernel.org> <CACGkMEsW1+BFtMoLg4c_FyxYTZJcSVh4BoEdJ-Q9_WGg_DcReA@mail.gmail.com>
- <20230531014326-mutt-send-email-mst@kernel.org> <CACGkMEvok6HjBK_ZMR4EYzWxpJQVeh++EMErnHjJ6cu9m3R-1A@mail.gmail.com>
- <CACGkMEuDWL30J7D8v+xLCvvspRBoz8X7q23FymBVRm9bT1pVUQ@mail.gmail.com> <20230531062108-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230531062108-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 1 Jun 2023 09:27:08 +0800
-Message-ID: <CACGkMEvE=e1tRFScbzija=oUMqznqMDs7jQKCie9ya1NehwnVA@mail.gmail.com>
-Subject: Re: [PATCH] virtio_ring: validate used buffer length
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     xuanzhuo@linux.alibaba.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: HB8ULRqvar89XZAz83od2Pi6BDrqUbGRcbfMi52ccQIJkapgolqbmqjs250b7ftCKxPq70CS76gZS8pAeoqB6DdB6w5Ifo6kSVOyNq11IkdFttz+EQkr13nR34l8Ip62bk/jzl1GKMXc2Qnn6eIQwWKoruDYUp/0OHGjLxhMpFCUK+G8NLN5a7QoawafKX4nJqm0BEOCuhkmDxWp4KHEqQaL3jgESmJ0RGy+V7Our7++3qvrHmOYX/qH+BCwK/mFVKxFbCWz6Z32d3QinmC2iL4qnplp2xD0e3mRfrxxO4ajQbxJLnVxyuy+LaqI0yR+XzVeuZijc5Xylec+IparlqLCJxQL24B6AOM2Qp1N7ShvDse6Kh53+SgNdAMthMqtPz+yChTab/OfOubT7rhreFJJ2WpcVwaIAJWaUPAm21UL82Jw9kqmJeyPMCLDeWJ0+UTzYCnRrNy6BZck2rZSz0RFvgXzES8U+rLdgXTjL1MW1lwWtb7ii4OWyXrIoVgNOSqdr9kCCXBCQVNVluNJ1GzK2buZ0nEq1S+AdGk2jcQKZm1SirQhO2OKZ0lWFTerurhr4JsZSLHeFxKxnnS/3koQOPrpV7yXqywv2K4R3KjmPdfvZE7v1MfOhakO64lQgDVjTLZmC+NHrjKE+9fQXgq9DK2wiJWmKg+a+vBF1PDYz7afIPSrqFzkZsXCwiEvYEIfADpnu00rxbx+1SA007N0wVGQmsHN5P3u5eOmpAUNs5oLR938IAGNMO5DiMLdJyK4gO80z5Y31b7JJEYcnAI3CWtsHzcaOthqwbAqHZAPhVYV3L2+ZQGDfHmdI/u85RQJ0s2N4iUqGivKGIl+dQI4bEdgeUAg4tgLq52IHTAhN3nEtKeHWTEk3kvBh00j
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a0507c3-104f-4eab-086c-08db623fb8ea
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2023 01:30:02.7854
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tj3gQxatBQCs3Pd6fTQaFjIIwGYkSvkvpKUMYsHmHfWXItTCqIZK9OncT/0no+sSd4ysF/7IwxJ7EGaskhOPwg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8653
+X-Proofpoint-GUID: If52Rrp12ER-GXqf_b17xmBHWgQaA1Od
+X-Proofpoint-ORIG-GUID: If52Rrp12ER-GXqf_b17xmBHWgQaA1Od
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-31_18,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
+ impostorscore=0 adultscore=0 priorityscore=1501 malwarescore=0 spamscore=0
+ mlxlogscore=754 bulkscore=0 clxscore=1015 mlxscore=0 phishscore=0
+ suspectscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2306010009
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 6:25=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com>=
- wrote:
->
-> On Wed, May 31, 2023 at 04:26:38PM +0800, Jason Wang wrote:
-> > On Wed, May 31, 2023 at 3:36=E2=80=AFPM Jason Wang <jasowang@redhat.com=
-> wrote:
-> > >
-> > > On Wed, May 31, 2023 at 1:50=E2=80=AFPM Michael S. Tsirkin <mst@redha=
-t.com> wrote:
-> > > >
-> > > > On Wed, May 31, 2023 at 09:05:00AM +0800, Jason Wang wrote:
-> > > > > On Mon, May 29, 2023 at 6:03=E2=80=AFPM Michael S. Tsirkin <mst@r=
-edhat.com> wrote:
-> > > > > >
-> > > > > > On Mon, May 29, 2023 at 09:18:10AM +0800, Jason Wang wrote:
-> > > > > > > On Sun, May 28, 2023 at 3:57=E2=80=AFPM Michael S. Tsirkin <m=
-st@redhat.com> wrote:
-> > > > > > > >
-> > > > > > > > On Fri, May 26, 2023 at 02:30:41PM +0800, Jason Wang wrote:
-> > > > > > > > > This patch validate
-> > > > > > > >
-> > > > > > > > validates
-> > > > > > > >
-> > > > > > > > > the used buffer length provided by the device
-> > > > > > > > > before trying to use it.
-> > > > > > > >
-> > > > > > > > before returning it to caller
-> > > > > > > >
-> > > > > > > > > This is done by remembering the in buffer
-> > > > > > > > > length in a dedicated array during virtqueue_add(), then =
-we can fail
-> > > > > > > > > the virtqueue_get_buf() when we find the device is trying=
- to give us a
-> > > > > > > > > used buffer length which is greater than we stored before=
-.
-> > > > > > > >
-> > > > > > > > than what we stored
-> > > > > > > >
-> > > > > > > > >
-> > > > > > > > > This validation is disable
-> > > > > > > >
-> > > > > > > > disabled
-> > > > > > > >
-> > > > > > > > > by default via module parameter to unbreak
-> > > > > > > > > some existing devices since some legacy devices are known=
- to report
-> > > > > > > > > buggy used length.
-> > > > > > > > >
-> > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > > > >
-> > > > > > > > First I'm not merging this without more data about
-> > > > > > > > what is known to be broken and what is known to work well
-> > > > > > > > in the commit log. And how exactly do things work if used l=
-ength
-> > > > > > > > is wrong?
-> > > > > > >
-> > > > > > > Assuming the device is malicious, it would be very hard to an=
-swer.
-> > > > > > > Auditing and fuzzing won't cover every case. Instead of tryin=
-g to seek
-> > > > > > > the answer, we can simply make sure the used in buffer length=
- is
-> > > > > > > validated then we know we're fine or not.
-> > > > > >
-> > > > > > To restate the question, you said above "some legacy devices ar=
-e known
-> > > > > > to report buggy used length". If they report buggy length then =
-how
-> > > > > > can things work?
-> > > > >
-> > > > > The validation is disabled for legacy device (as stated in the ch=
-angelog):
-> > > > >
-> > > > > static bool vring_needs_used_validation(const struct virtio_devic=
-e *vdev)
-> > > > > {
-> > > > >         /*
-> > > > >          * Several legacy devices are known to produce buggy used
-> > > > >          * length. In order to let driver work, we won't validate=
- used
-> > > > >          * buffer length in this case.
-> > > > >          */
-> > > > >         if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
-> > > > >                 return false;
-> > > > >         if (force_used_validation)
-> > > > >                 return true;
-> > > > >         return false;
-> > > > > }
-> > > > >
-> > > > > This seems to be what we've agreed in last version:
-> > > > >
-> > > > > https://lore.kernel.org/all/CANLsYkxfhamUU0bb4j7y6N4_G9odKxLCjXxg=
-XEx4SJ6_Kf+M2Q@mail.gmail.com/T/#m31f3b06f9032beec175c312dfa2532cb08b15c56
-> > > > >
-> > > > > Thanks
-> > > > >
-> > > >
-> > > > I don't get it. You wrote:
-> > > >
-> > > >         This validation is disable
-> > > >         by default via module parameter to unbreak
-> > > >         some existing devices since some legacy devices are known t=
-o report
-> > > >         buggy used length.
-> > > >
-> > > > which devices?
-> > >
-> > > legacy rpmsg and vsock device (before 49d8c5ffad07) at least.
-> > >
-> > > > why do you need a module parameter?
-> > >
-> > > If we enable it unconditionally for modern devices, it may break some
-> > > buggy moden device (vsock without a fix as an example).
-> > >
-> > > >
-> > > >
-> > > > > >
-> > > > > > > > Second what's wrong with dma_desc_extra that we already mai=
-ntain?
-> > > > > > > > Third motivation - it's part and parcel of the hardening ef=
-fort yes?
-> > > > > > >
-> > > > > > > They are different. dma_desc_extra is for a descriptor ring, =
-but this
-> > > > > > > is for a used ring. Technically we can go back to iterate on =
-the
-> > > > > > > descriptor ring for a legal used in buffer length. But it wil=
-l have
-> > > > > > > worse performance.
-> > > > > >
-> > > > > > I don't really understand. We already iterate when we unmap -
-> > > > > > all that is necessary is to subtract it from used length, if at
-> > > > > > the end of the process it is >0 then we know used length is too
-> > > > > > large.
-> > > > >
-> > > > > Yes, but it is the job that is done in the driver level not the v=
-irtio
-> > > > > core.
-> > > >
-> > > > What job?
-> > >
-> > > I meant the driver can do the validation since it has the knowledge o=
-f
-> > > the buffer length if it wants.
-> > >
-> > > > unmap is done in detach_buf_split and detach_buf_packed respectivel=
-y.
-> > > > vring_desc_extra isn't even visible outside drivers/virtio/virtio_r=
-ing.c
-> > >
-> > > desc_extra doesn't contain buffer length for the case of indirect
-> > > descriptors. So we need to iterate in the descriptors when it looks
-> > > expensive if we don't need unmap.
-> > >
-> > > Thanks
-> > >
-> > > >
-> > > > For drivers that do unmap at driver level - I guess they can do
-> > > > validation there too.
-> > > >
-> > > > > Validation in virtio core is still necessary since they're
-> > > > > working at different levels and it's hard to force the validation=
- in
-> > > > > all drivers by codes. Last version introduces a
-> > > > > suppress_driver_validation to allow the driver to suppress the co=
-re
-> > > > > validation which seems not good, we need a way to force the
-> > > > > virtio_ring code to do validation before.
-> > > >
-> > > > Why do we? If driver validates length virtio_ring does not need to
-> > > > validate.
-> >
-> > To be more safe, there's no guarantee that there's no bug in the driver=
-.
->
-> Extra options increase testing matrix size so - there be bugs.
-> We need to make these decisions for (most) users.
-
-In some cases the requirement is conflict:
-
-1) for "legacy users", the requirement is not to break existing setups
-2) for confidential users, the requirement is to detect and fail early
-instead of trying to mitigate silently
-
-If we are trying to go in the middle (for example, doing a cap) it may
-end up with a result that can satisfy neither:
-
-1) it might still break in some drivers and setups like legacy, then
-we need an option to disable it
-2) it won't satisfy the users that ask for security
-
-If we had an option, the management layer can choose to provision
-VM/guests with the good kernel command line then we are fine.
-
->
-> > >  If driver does not use length virtio_ring does not need to
-> > > > validate.
-> >
-> > This could be done on top assuming the validation is disabled by
-> > default. But if the administrator wants to have belt and braces we
-> > need to leave an option for them.
-> >
-> > Thanks
->
-> No, we don't regress then fix on top.
-
-I'm not sure I understand here. It would be very hard to say there
-won't be regression for any new codes, especially virtio had already
-supported several different types of devices and drivers.
-
-> As for mod parameter I am not impressed -
-> no one's going to have the time or inclination to do the requisite
-> testing to know whether the module parameter is safe.
-
-Actually, that's one advantage, most of the users don't care so the
-validation is just suppressed for them. Otherwise they might get
-surprised after upgrading. This is what I learnt from the past
-hardening effort like this and the IRQ hardening.
-
-For the rest like confidential vendors, they need to test and make
-sure such kernel command line were provisioned to the VM.
-
-Thanks
-
->
-> > > core can provide this service for the gazillion non
-> > > > performance critical drivers that just want to keep things simple,
-> > > > but the 4-5 critical ones can do their own validation if they want =
-to.
-> > > >
-> > > > > Or such stuff could be added
-> > > > > on top since the validation is by default anyway.
-> > > > >
-> > > > > Thanks
-> > > >
-> > > >
-> > > >
-> > > > > >
-> > > > > >
-> > > > > > > > I'd like to know the fate of VIRTIO_HARDEN_NOTIFICATION bef=
-ore
-> > > > > > > > we do more hardening. If it's irrevocably broken let's rip =
-it out?
-> > > > > > >
-> > > > > > > So the plan is
-> > > > > > >
-> > > > > > > 1) finish used ring validation (this had been proposed, merge=
-d and
-> > > > > > > reverted before notification hardening)
-> > > > > > > 2) do notification hardening on top.
-> > > > > > >
-> > > > > > > So let's leave it as is and I will do a rework after we final=
-ize the
-> > > > > > > used ring validation.
-> > > > > > >
-> > > > > > > Thanks
-> > > > > > >
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > > ---
-> > > > > > > > > Changes since V4:
-> > > > > > > > > - drop the flat for driver to suppress the check
-> > > > > > > > > - validation is disabled by default
-> > > > > > > > > - don't do validation for legacy device
-> > > > > > > > > - rebase and support virtqueue resize
-> > > > > > > > > ---
-> > > > > > > > >  drivers/virtio/virtio_ring.c | 75 ++++++++++++++++++++++=
-++++++++++++++
-> > > > > > > > >  1 file changed, 75 insertions(+)
-> > > > > > > > >
-> > > > > > > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virti=
-o/virtio_ring.c
-> > > > > > > > > index 143f380baa1c..5b151605aaf8 100644
-> > > > > > > > > --- a/drivers/virtio/virtio_ring.c
-> > > > > > > > > +++ b/drivers/virtio/virtio_ring.c
-> > > > > > > > > @@ -15,6 +15,9 @@
-> > > > > > > > >  #include <linux/spinlock.h>
-> > > > > > > > >  #include <xen/xen.h>
-> > > > > > > > >
-> > > > > > > > > +static bool force_used_validation =3D false;
-> > > > > > > > > +module_param(force_used_validation, bool, 0444);
-> > > > > > > > > +
-> > > > > > > > >  #ifdef DEBUG
-> > > > > > > > >  /* For development, we want to crash whenever the ring i=
-s screwed. */
-> > > > > > > > >  #define BAD_RING(_vq, fmt, args...)                     =
-     \
-> > > > > > > > > @@ -105,6 +108,9 @@ struct vring_virtqueue_split {
-> > > > > > > > >       struct vring_desc_state_split *desc_state;
-> > > > > > > > >       struct vring_desc_extra *desc_extra;
-> > > > > > > > >
-> > > > > > > > > +     /* Maximum in buffer length, NULL means no used val=
-idation */
-> > > > > > > > > +     u32 *buflen;
-> > > > > > > > > +
-> > > > > > > > >       /* DMA address and size information */
-> > > > > > > > >       dma_addr_t queue_dma_addr;
-> > > > > > > > >       size_t queue_size_in_bytes;
-> > > > > > > > > @@ -145,6 +151,9 @@ struct vring_virtqueue_packed {
-> > > > > > > > >       struct vring_desc_state_packed *desc_state;
-> > > > > > > > >       struct vring_desc_extra *desc_extra;
-> > > > > > > > >
-> > > > > > > > > +     /* Maximum in buffer length, NULL means no used val=
-idation */
-> > > > > > > > > +     u32 *buflen;
-> > > > > > > > > +
-> > > > > > > > >       /* DMA address and size information */
-> > > > > > > > >       dma_addr_t ring_dma_addr;
-> > > > > > > > >       dma_addr_t driver_event_dma_addr;
-> > > > > > > > > @@ -552,6 +561,7 @@ static inline int virtqueue_add_split=
-(struct virtqueue *_vq,
-> > > > > > > > >       unsigned int i, n, avail, descs_used, prev, err_idx=
-;
-> > > > > > > > >       int head;
-> > > > > > > > >       bool indirect;
-> > > > > > > > > +     u32 buflen =3D 0;
-> > > > > > > > >
-> > > > > > > > >       START_USE(vq);
-> > > > > > > > >
-> > > > > > > > > @@ -635,6 +645,7 @@ static inline int virtqueue_add_split=
-(struct virtqueue *_vq,
-> > > > > > > > >                                                    VRING_=
-DESC_F_NEXT |
-> > > > > > > > >                                                    VRING_=
-DESC_F_WRITE,
-> > > > > > > > >                                                    indire=
-ct);
-> > > > > > > > > +                     buflen +=3D sg->length;
-> > > > > > > > >               }
-> > > > > > > > >       }
-> > > > > > > > >       /* Last one doesn't continue. */
-> > > > > > > > > @@ -675,6 +686,10 @@ static inline int virtqueue_add_spli=
-t(struct virtqueue *_vq,
-> > > > > > > > >       else
-> > > > > > > > >               vq->split.desc_state[head].indir_desc =3D c=
-tx;
-> > > > > > > > >
-> > > > > > > > > +     /* Store in buffer length if necessary */
-> > > > > > > > > +     if (vq->split.buflen)
-> > > > > > > > > +             vq->split.buflen[head] =3D buflen;
-> > > > > > > > > +
-> > > > > > > > >       /* Put entry in available array (but don't update a=
-vail->idx until they
-> > > > > > > > >        * do sync). */
-> > > > > > > > >       avail =3D vq->split.avail_idx_shadow & (vq->split.v=
-ring.num - 1);
-> > > > > > > > > @@ -861,6 +876,11 @@ static void *virtqueue_get_buf_ctx_s=
-plit(struct virtqueue *_vq,
-> > > > > > > > >               BAD_RING(vq, "id %u is not a head!\n", i);
-> > > > > > > > >               return NULL;
-> > > > > > > > >       }
-> > > > > > > > > +     if (vq->split.buflen && unlikely(*len > vq->split.b=
-uflen[i])) {
-> > > > > > > > > +             BAD_RING(vq, "used len %d is larger than ma=
-x in buffer len %u\n",
-> > > > > > > > > +                     *len, vq->split.buflen[i]);
-> > > > > > > > > +             return NULL;
-> > > > > > > > > +     }
-> > > > > > > > >
-> > > > > > > > >       /* detach_buf_split clears data, so grab it now. */
-> > > > > > > > >       ret =3D vq->split.desc_state[i].data;
-> > > > > > > > > @@ -1085,10 +1105,25 @@ static void vring_free_split(stru=
-ct vring_virtqueue_split *vring_split,
-> > > > > > > > >                        vring_split->queue_dma_addr,
-> > > > > > > > >                        dma_dev);
-> > > > > > > > >
-> > > > > > > > > +     kfree(vring_split->buflen);
-> > > > > > > > >       kfree(vring_split->desc_state);
-> > > > > > > > >       kfree(vring_split->desc_extra);
-> > > > > > > > >  }
-> > > > > > > > >
-> > > > > > > > > +static bool vring_needs_used_validation(const struct vir=
-tio_device *vdev)
-> > > > > > > > > +{
-> > > > > > > > > +     /*
-> > > > > > > > > +      * Several legacy devices are known to produce bugg=
-y used
-> > > > > > > > > +      * length. In order to let driver work, we won't va=
-lidate used
-> > > > > > > > > +      * buffer length in this case.
-> > > > > > > > > +      */
-> > > > > > > > > +     if (!virtio_has_feature(vdev, VIRTIO_F_VERSION_1))
-> > > > > > > > > +             return false;
-> > > > > > > > > +     if (force_used_validation)
-> > > > > > > > > +             return true;
-> > > > > > > > > +     return false;
-> > > > > > > > > +}
-> > > > > > > > > +
-> > > > > > > > >  static int vring_alloc_queue_split(struct vring_virtqueu=
-e_split *vring_split,
-> > > > > > > > >                                  struct virtio_device *vd=
-ev,
-> > > > > > > > >                                  u32 num,
-> > > > > > > > > @@ -1137,7 +1172,19 @@ static int vring_alloc_queue_split=
-(struct vring_virtqueue_split *vring_split,
-> > > > > > > > >       vring_split->vring_align =3D vring_align;
-> > > > > > > > >       vring_split->may_reduce_num =3D may_reduce_num;
-> > > > > > > > >
-> > > > > > > > > +     if (vring_needs_used_validation(vdev)) {
-> > > > > > > > > +             vring_split->buflen =3D
-> > > > > > > > > +                     kmalloc_array(num, sizeof(*vring_sp=
-lit->buflen),
-> > > > > > > > > +                                   GFP_KERNEL);
-> > > > > > > > > +             if (!vring_split->buflen)
-> > > > > > > > > +                     goto err_buflen;
-> > > > > > > > > +     }
-> > > > > > > > > +
-> > > > > > > > >       return 0;
-> > > > > > > > > +
-> > > > > > > > > +err_buflen:
-> > > > > > > > > +     vring_free_split(vring_split, vdev, dma_dev);
-> > > > > > > > > +     return -ENOMEM;
-> > > > > > > > >  }
-> > > > > > > > >
-> > > > > > > > >  static struct virtqueue *vring_create_virtqueue_split(
-> > > > > > > > > @@ -1297,6 +1344,7 @@ static int virtqueue_add_indirect_p=
-acked(struct vring_virtqueue *vq,
-> > > > > > > > >       unsigned int i, n, err_idx;
-> > > > > > > > >       u16 head, id;
-> > > > > > > > >       dma_addr_t addr;
-> > > > > > > > > +     u32 buflen =3D 0;
-> > > > > > > > >
-> > > > > > > > >       head =3D vq->packed.next_avail_idx;
-> > > > > > > > >       desc =3D alloc_indirect_packed(total_sg, gfp);
-> > > > > > > > > @@ -1325,6 +1373,8 @@ static int virtqueue_add_indirect_p=
-acked(struct vring_virtqueue *vq,
-> > > > > > > > >                       desc[i].addr =3D cpu_to_le64(addr);
-> > > > > > > > >                       desc[i].len =3D cpu_to_le32(sg->len=
-gth);
-> > > > > > > > >                       i++;
-> > > > > > > > > +                     if (n >=3D out_sgs)
-> > > > > > > > > +                             buflen +=3D sg->length;
-> > > > > > > > >               }
-> > > > > > > > >       }
-> > > > > > > > >
-> > > > > > > > > @@ -1379,6 +1429,10 @@ static int virtqueue_add_indirect_=
-packed(struct vring_virtqueue *vq,
-> > > > > > > > >       vq->packed.desc_state[id].last =3D id;
-> > > > > > > > >       vq->packed.desc_state[id].premapped =3D premapped;
-> > > > > > > > >
-> > > > > > > > > +     /* Store in buffer length if necessary */
-> > > > > > > > > +     if (vq->packed.buflen)
-> > > > > > > > > +             vq->packed.buflen[id] =3D buflen;
-> > > > > > > > > +
-> > > > > > > > >       vq->num_added +=3D 1;
-> > > > > > > > >
-> > > > > > > > >       pr_debug("Added buffer head %i to %p\n", head, vq);
-> > > > > > > > > @@ -1416,6 +1470,7 @@ static inline int virtqueue_add_pac=
-ked(struct virtqueue *_vq,
-> > > > > > > > >       __le16 head_flags, flags;
-> > > > > > > > >       u16 head, id, prev, curr, avail_used_flags;
-> > > > > > > > >       int err;
-> > > > > > > > > +     u32 buflen =3D 0;
-> > > > > > > > >
-> > > > > > > > >       START_USE(vq);
-> > > > > > > > >
-> > > > > > > > > @@ -1498,6 +1553,8 @@ static inline int virtqueue_add_pac=
-ked(struct virtqueue *_vq,
-> > > > > > > > >                                       1 << VRING_PACKED_D=
-ESC_F_AVAIL |
-> > > > > > > > >                                       1 << VRING_PACKED_D=
-ESC_F_USED;
-> > > > > > > > >                       }
-> > > > > > > > > +                     if (n >=3D out_sgs)
-> > > > > > > > > +                             buflen +=3D sg->length;
-> > > > > > > > >               }
-> > > > > > > > >       }
-> > > > > > > > >
-> > > > > > > > > @@ -1518,6 +1575,10 @@ static inline int virtqueue_add_pa=
-cked(struct virtqueue *_vq,
-> > > > > > > > >       vq->packed.desc_state[id].last =3D prev;
-> > > > > > > > >       vq->packed.desc_state[id].premapped =3D premapped;
-> > > > > > > > >
-> > > > > > > > > +     /* Store in buffer length if necessary */
-> > > > > > > > > +     if (vq->packed.buflen)
-> > > > > > > > > +             vq->packed.buflen[id] =3D buflen;
-> > > > > > > > > +
-> > > > > > > > >       /*
-> > > > > > > > >        * A driver MUST NOT make the first descriptor in t=
-he list
-> > > > > > > > >        * available before all subsequent descriptors comp=
-rising
-> > > > > > > > > @@ -1718,6 +1779,11 @@ static void *virtqueue_get_buf_ctx=
-_packed(struct virtqueue *_vq,
-> > > > > > > > >               BAD_RING(vq, "id %u is not a head!\n", id);
-> > > > > > > > >               return NULL;
-> > > > > > > > >       }
-> > > > > > > > > +     if (vq->packed.buflen && unlikely(*len > vq->packed=
-.buflen[id])) {
-> > > > > > > > > +             BAD_RING(vq, "used len %d is larger than ma=
-x in buffer len %u\n",
-> > > > > > > > > +                     *len, vq->packed.buflen[id]);
-> > > > > > > > > +             return NULL;
-> > > > > > > > > +     }
-> > > > > > > > >
-> > > > > > > > >       /* detach_buf_packed clears data, so grab it now. *=
-/
-> > > > > > > > >       ret =3D vq->packed.desc_state[id].data;
-> > > > > > > > > @@ -1937,6 +2003,7 @@ static void vring_free_packed(struc=
-t vring_virtqueue_packed *vring_packed,
-> > > > > > > > >                                vring_packed->device_event=
-_dma_addr,
-> > > > > > > > >                                dma_dev);
-> > > > > > > > >
-> > > > > > > > > +     kfree(vring_packed->buflen);
-> > > > > > > > >       kfree(vring_packed->desc_state);
-> > > > > > > > >       kfree(vring_packed->desc_extra);
-> > > > > > > > >  }
-> > > > > > > > > @@ -1988,6 +2055,14 @@ static int vring_alloc_queue_packe=
-d(struct vring_virtqueue_packed *vring_packed,
-> > > > > > > > >
-> > > > > > > > >       vring_packed->vring.num =3D num;
-> > > > > > > > >
-> > > > > > > > > +     if (vring_needs_used_validation(vdev)) {
-> > > > > > > > > +             vring_packed->buflen =3D
-> > > > > > > > > +                     kmalloc_array(num, sizeof(*vring_pa=
-cked->buflen),
-> > > > > > > > > +                                   GFP_KERNEL);
-> > > > > > > > > +             if (!vring_packed->buflen)
-> > > > > > > > > +                     goto err;
-> > > > > > > > > +     }
-> > > > > > > > > +
-> > > > > > > > >       return 0;
-> > > > > > > > >
-> > > > > > > > >  err:
-> > > > > > > > > --
-> > > > > > > > > 2.25.1
-> > > > > > > >
-> > > > > >
-> > > >
->
-
+T24gV2VkLCBNYXkgMzEsIDIwMjMsIEVsc29uIFNlcnJhbyB3cm90ZToNCj4gDQo+IA0KPiBPbiA1
+LzMxLzIwMjMgNDoyMCBQTSwgVGhpbmggTmd1eWVuIHdyb3RlOg0KPiA+IE9uIFdlZCwgTWF5IDMx
+LCAyMDIzLCBFbHNvbiBSb3kgU2VycmFvIHdyb3RlOg0KPiA+ID4gQ29uc2lkZXIgYSBzY2VuYXJp
+byB3aGVyZSBjYWJsZSBkaXNjb25uZWN0IGhhcHBlbnMgd2hlbiB0aGVyZSBpcyBhbiBhY3RpdmUN
+Cj4gPiA+IHVzYiByZXFlc3QgcXVldWVkIHRvIHRoZSBVREMuIEFzIHBhcnQgb2YgdGhlIGRpc2Nv
+bm5lY3Qgd2Ugd291bGQgaXNzdWUgYW4NCj4gPiA+IGVuZCB0cmFuc2ZlciB3aXRoIG5vIGludGVy
+cnVwdC1vbi1jb21wbGV0aW9uIGJlZm9yZSBnaXZpbmcgYmFjayB0aGlzDQo+ID4gPiByZXF1ZXN0
+LiBTaW5jZSB3ZSBhcmUgZ2l2aW5nIGJhY2sgdGhlIHJlcXVlc3Qgd2l0aG91dCBza2lwcGluZyBU
+UkJzIHRoZQ0KPiA+ID4gbnVtX3RyYnMgZmllbGQgb2YgZHdjM19yZXF1ZXN0IHN0aWxsIGhvbGRz
+IHRoZSBzdGFsZSB2YWx1ZSBwcmV2aW91c2x5IHVzZWQuDQo+ID4gPiBGdW5jdGlvbiBkcml2ZXJz
+IHJlLXVzZSBzYW1lIHJlcXVlc3QgZm9yIGEgZ2l2ZW4gYmluZC11bmJpbmQgc2Vzc2lvbiBhbmQN
+Cj4gPiA+IGhlbmNlIHRoZWlyIGR3YzNfcmVxdWVzdCBjb250ZXh0IGdldHMgcHJlc2VydmVkIGFj
+cm9zcyBjYWJsZQ0KPiA+ID4gZGlzY29ubmVjdC9jb25uZWN0LiBXaGVuIHN1Y2ggYSByZXF1ZXN0
+IGdldHMgcmUtcXVldWVkIGFmdGVyIGNhYmxlIGNvbm5lY3QsDQo+ID4gDQo+ID4gV2h5IHdvdWxk
+IHdlIHByZXNlcnZlIHRoZSByZXF1ZXN0IGFmdGVyIGEgZGlzY29ubmVjdD8gVGhlIHJlcXVlc3Qg
+aXMNCj4gPiBhc3NvY2lhdGVkIHdpdGggYW4gZW5kcG9pbnQsIGFuZCBhZnRlciBkaXNjb25uZWN0
+LCB0aGUgZW5kcG9pbnQgaXMgbm8NCj4gPiBsb25nZXIgdmFsaWQuIFNob3VsZG4ndCB0aGUgcmVx
+dWVzdCBiZSBmcmVlZCB0aGVuPw0KPiA+IA0KPiANCj4gDQo+IEZ1bmN0aW9uIGRyaXZlcnMgZ2Vu
+ZXJhbGx5IGFsbG9jYXRlIHVzYiByZXF1ZXN0cyBkdXJpbmcgYmluZCB3aGVuIGFuDQo+IGVuZHBv
+aW50IGlzIGFsbG9jYXRlZCB0byBpdCAodGhyb3VnaCB1c2JfZXBfYXV0b2NvbmZpZykuIFRoZXNl
+IHJlcXVlc3RzIGFyZQ0KPiBmcmVlZCB3aGVuIGFuIHVuYmluZCBpcyBjYWxsZWQgYXMgdGhlIGZ1
+bmN0aW9uIGlzIG5vIGxvbmdlciBhc3NvY2lhdGVkIHdpdGgNCj4gYW55IGVuZCBwb2ludC4gVGhl
+IGZ1bmN0aW9uIGRyaXZlciBpcyBmcmVlIHRvIHJlLXVzZSB0aGVzZSByZXF1ZXN0cw0KPiB0aHJv
+dWdob3V0IHRoaXMgYmluZC11bmJpbmQgc2Vzc2lvbi4gVGhlIG9ubHkgcmVzdHJpY3Rpb24gaXMg
+dGhhdCB0aGUNCj4gZnVuY3Rpb24gZHJpdmVycyB3b250IGJlIGFibGUgdG8gcXVldWUgYW55IHJl
+cXVlc3RzIGFzIGxvbmcgYXMgdGhlIGVuZHBvaW50DQoNCj4gaXMgZGlzYWJsZWQuIEJ1dCB0aGF0
+IGRvZXNuJ3QgZW5mb3JjZSBmdW5jdGlvbiBkcml2ZXJzIHRvIGZyZWUgdGhlIHJlcXVlc3RzDQo+
+IHdpdGggZXBfZGlzYWJsZSgpLiBFdmVuIHRob3VnaCB0aGUgZW5kcG9pbnQgaXMgZGlzYWJsZWQg
+d2l0aCBjYWJsZQ0KPiBkaXNjb25uZWN0LCB0aGF0IGVuZHBvaW50IGlzIHN0aWxsIGFzc29jaWF0
+ZWQgd2l0aCB0aGF0IHBhcnRpY3VsYXIgZnVuY3Rpb24NCj4gZHJpdmVyIHVudGlsIHRoYXQgZnVu
+Y3Rpb24gaXMgdW5ib3VuZC4NCj4gDQo+IEFzIGFuIGV4YW1wbGUgYmVsb3cgaXMgaG93IGZfbmNt
+IGRyaXZlciBhbGxvY2F0ZXMgYW5kIGZyZWVzIHRoZSByZXF1ZXN0cw0KPiBkdXJpbmcgYmluZC91
+bmJpbmQNCj4gDQo+IEJpbmQoKQ0KPiAuLi4NCj4gZXAgPSB1c2JfZXBfYXV0b2NvbmZpZyhjZGV2
+LT5nYWRnZXQsICZmc19uY21fbm90aWZ5X2Rlc2MpOw0KPiBpZiAoIWVwKQ0KPiAJZ290byBmYWls
+Ow0KPiBuY20tPm5vdGlmeSA9IGVwOw0KPiANCj4gc3RhdHVzID0gLUVOT01FTTsNCj4gDQo+IC8q
+IGFsbG9jYXRlIG5vdGlmaWNhdGlvbiByZXF1ZXN0IGFuZCBidWZmZXIgKi8NCj4gbmNtLT5ub3Rp
+ZnlfcmVxID0gdXNiX2VwX2FsbG9jX3JlcXVlc3QoZXAsIEdGUF9LRVJORUwpOw0KPiAuLi4NCj4g
+DQo+IFRoZSBlbmRwb2ludCBpcyBlbmFibGVkIGxhdGVyIHdoZW4gc2V0X2FsdCBpcyByZWNlaXZl
+ZCBhbmQgZGlzYWJsZWQgaW4NCj4gbmNtX2Rpc2FibGUgd2hlbiB0aGUgY29ubmVjdGlvbiBnb2Vz
+IGRvd24gKGNhYmxlIGRpc2Nvbm5lY3Qgc2NlbmFyaW8pDQo+IA0KPiANCj4gVW5iaW5kKCkNCj4g
+Li4uLg0KPiBrZnJlZShuY20tPm5vdGlmeV9yZXEtPmJ1Zik7DQo+IHVzYl9lcF9mcmVlX3JlcXVl
+c3QobmNtLT5ub3RpZnksIG5jbS0+bm90aWZ5X3JlcSk7DQo+IA0KPiBJIHNlZSBzaW1pbGFyIGlt
+cGxlbWVudGF0aW9uIGluIG90aGVyIGZ1bmN0aW9uIGRyaXZlcnMgYXMgd2VsbC4gVGhhdCBpcywN
+Cj4ga2VlcCB0aGUgdXNiIHJlcXVlc3RzIGFsbG9jYXRlZCB0aHJvdWdob3V0IHRoZSBiaW5kLXVu
+YmluZCBzZXNzaW9uIGFuZA0KPiBpbmRlcGVuZGVudCBvZiBlcF9lbmFibGUvZXBfZGlzYWJsZSAu
+DQo+IA0KPiBUaGFua3MNCj4gRWxzb24NCj4gDQoNClRoYW5rcyBmb3IgdGhlIGNsYXJpZmljYXRp
+b24uIFRoZW4geW91IGp1c3QgbmVlZCB0byByZXNldCB0aGUgbnVtX3RyYnMNCmNvdW50IHdoZW4g
+Z2l2aW5nIGJhY2sgdGhlIHJlcXVlc3QuIENhbiB3ZSBkbyB0aGF0IGluDQpkd2MzX2dhZGdldF9k
+ZWxfYW5kX3VubWFwX3JlcXVlc3QoKT8NCg0KUGxlYXNlIGFkZCBhIGZpeCB0YWcuDQoNClRoYW5r
+cywNClRoaW5o
