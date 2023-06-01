@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E125D71A1D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC0A71A1CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 17:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbjFAPEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 11:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
+        id S234770AbjFAPEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 11:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233637AbjFAPEK (ORCPT
+        with ESMTP id S234726AbjFAPDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 11:04:10 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED4F1700
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 08:03:11 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b01d912924so8846255ad.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 08:03:11 -0700 (PDT)
+        Thu, 1 Jun 2023 11:03:49 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0962E42
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 08:02:48 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b02fcde49aso4869145ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 08:02:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685631696; x=1688223696;
+        d=linaro.org; s=google; t=1685631700; x=1688223700;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hYZvtGezswvgwNKpdFwjsrVB2tlNlkIcg9dibR8Jyd4=;
-        b=yWfa1cfsbNuv8SL7i0k37kcW+rev8gxSikZmYhFIW5TZlc5nLt/soh558LQsSCrCPQ
-         2PJw+jVJOPLWH3zLAS04Y5iKpReBZQWWy3VabC3iEFV+Bcb003y/bRIHBoYm06ZDIcL5
-         BqB2JvBVg556zdAzKG+D+o6p5mseda+6gfiSiqD9mm9eBNjpNA0qKoXK+9ycp5OB3aGT
-         nkr5tmiwYpCSRAmcbSNu1eIOEJuxjXCR5J7LYamuMVkQoxTH9KAoiNgE0SRzmkFP4KlJ
-         G9xjm3vWeagD6NoMpM1dBmBxONM+RUVeEr+WXg5VWhwY0T18z6Fh3UNBrXZAQ5UhqRuF
-         jkkg==
+        bh=sY5A5rnt2NOAJyTtKsWtQc3JsasD9KssrsfBlXW2O/Q=;
+        b=qkwtr+3caPcrNzUHlEnueJTGwkGmT/ICcH4ZDX2YRSvbY6IvMtnGH7MXWH/eQMiwlF
+         04TqeBB0E7MRDK8uSqHwM422fPAirj+Mr2LQQ7eFvyJPDPXLLJdGCXtRl1IEha1LQfAI
+         cETUcUIr45csA2J0YWw7Wb32LqW3Zupfv/ogbzC62VTlAZTp/WDl9IN1xe4u+lHUp/9c
+         DC1R74kTns/W82XGI6oXFKPHI+BxekP3MEg9TFtwDE/Gjtk2L37aPvpB5SWR1xPCEH8R
+         Pj3VfaB5GNSqXu1s/AiWLPWO+xRwfPF5b5q6+GAe467W0hMreMEl/78l534bXC8KKaJT
+         pl+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685631696; x=1688223696;
+        d=1e100.net; s=20221208; t=1685631700; x=1688223700;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hYZvtGezswvgwNKpdFwjsrVB2tlNlkIcg9dibR8Jyd4=;
-        b=B4Xc6UsUD/RpFUhgvVoK+R6b3wHZ9/J+FFV5olZhNmlzRhP99ziLVICcl4quvUjUkK
-         +ts5GhO0tbeYIQyV4gebWhCaEkvjr4JyvU5Dn1FdLnfUjC8qQ32Qc+3KEir4LTWePT5s
-         bXNLN5ND5Y2Pqbu3n/rq2rUwd6Vq0kz7pzWcvh6uA52b/GyJst19jFHVaIcMtgHsQi+L
-         PFHYjNISMCCKLeQE65MHG05zbCCSFUaCyAbJMkghscfl2wmDTmCcWahhKYBOOdKAv51I
-         wqvmiKYHkL4WY4r9wI6KY0rhUYgdD+c+lrzVdcnKY3RMGJoJStSEJpLHSeI0gZ2EZWpo
-         ex/Q==
-X-Gm-Message-State: AC+VfDynCIntHokrQHcRMDDqHqs5wsNpFer8pDiK+y9BFShFs9fvwPlR
-        gj0PJi+472ce0snqPLNuEvsH
-X-Google-Smtp-Source: ACHHUZ7k4hmla9PPwp8Ro6hgXlR4liPGoGzlIYSOkhU9h84fCDC1o1FoFi49GCXzeMXq0+h0mDfMHQ==
-X-Received: by 2002:a17:902:6b8a:b0:1b1:80ba:39d0 with SMTP id p10-20020a1709026b8a00b001b180ba39d0mr4411729plk.30.1685631696116;
-        Thu, 01 Jun 2023 08:01:36 -0700 (PDT)
+        bh=sY5A5rnt2NOAJyTtKsWtQc3JsasD9KssrsfBlXW2O/Q=;
+        b=FumfWq8+rFiDDkIk0alc+KDhFi4Vwx4ODA2XonjdEEnPsVgOCFs2kmTMovYiAXBsre
+         5iZuR+jljgYpWRIfxrQz2VvfJ6UoZi51gBggZYA9f4bI+TMMgFFH6LzsyorBSx6U3Irc
+         rIWQekOy2B2WUA1wj1KqwfSA2QprD2oS0l2Vr4l7NVtPEa+3juaS/LuIB9M8zwaemRw5
+         4Q0wBPD9bmYKblw3VM6Y5uOKlt2HS6sxzTBOG/9GsDFNp8DEIBokz5W4VxKKvCbAl54t
+         05quHisP1YrRKQrOi55RMixANV1kgg50l460LRosbbelY02pCzdjx8oT96MR/AhjFglo
+         u6Rw==
+X-Gm-Message-State: AC+VfDy2qhqP46gpBmfaeGMNdWlsYwWmyt6aa032ZHhyIY1Ttmz8XzIY
+        fm4oVeRWRoD8S24NM/xevfAb
+X-Google-Smtp-Source: ACHHUZ5QIApGEkASZ+/Sra/tPB5WJ3LGBnkl1wIBNCXuESJP9laCAO2TyzNYbYU4aiK7jZ1V2wBCzg==
+X-Received: by 2002:a17:903:2643:b0:1af:e63f:5bb1 with SMTP id je3-20020a170903264300b001afe63f5bb1mr5811966plb.7.1685631699668;
+        Thu, 01 Jun 2023 08:01:39 -0700 (PDT)
 Received: from localhost.localdomain ([117.217.186.123])
-        by smtp.gmail.com with ESMTPSA id q7-20020a170902dac700b001b0499bee11sm3595480plx.240.2023.06.01.08.01.33
+        by smtp.gmail.com with ESMTPSA id q7-20020a170902dac700b001b0499bee11sm3595480plx.240.2023.06.01.08.01.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 08:01:35 -0700 (PDT)
+        Thu, 01 Jun 2023 08:01:39 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     lpieralisi@kernel.org, kw@linux.com
 Cc:     kishon@kernel.org, bhelgaas@google.com, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [RESEND PATCH v5 5/9] PCI: endpoint: Add BME notifier support
-Date:   Thu,  1 Jun 2023 20:30:59 +0530
-Message-Id: <20230601150103.12755-6-manivannan.sadhasivam@linaro.org>
+Subject: [RESEND PATCH v5 6/9] PCI: qcom-ep: Add support for Link down notification
+Date:   Thu,  1 Jun 2023 20:31:00 +0530
+Message-Id: <20230601150103.12755-7-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230601150103.12755-1-manivannan.sadhasivam@linaro.org>
 References: <20230601150103.12755-1-manivannan.sadhasivam@linaro.org>
@@ -65,7 +65,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,84 +73,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to notify the EPF device about the Bus Master Enable (BME)
-event received by the EPC device from the Root complex.
+Add support to pass Link down notification to Endpoint function driver
+so that the LINK_DOWN event can be processed by the function.
 
 Reviewed-by: Kishon Vijay Abraham I <kishon@kernel.org>
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/pci/endpoint/pci-epc-core.c | 26 ++++++++++++++++++++++++++
- include/linux/pci-epc.h             |  1 +
- include/linux/pci-epf.h             |  2 ++
- 3 files changed, 29 insertions(+)
+ drivers/pci/controller/dwc/pcie-qcom-ep.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
-index e0570b52698d..6c54fa5684d2 100644
---- a/drivers/pci/endpoint/pci-epc-core.c
-+++ b/drivers/pci/endpoint/pci-epc-core.c
-@@ -758,6 +758,32 @@ void pci_epc_init_notify(struct pci_epc *epc)
- }
- EXPORT_SYMBOL_GPL(pci_epc_init_notify);
- 
-+/**
-+ * pci_epc_bme_notify() - Notify the EPF device that the EPC device has received
-+ *			  the BME event from the Root complex
-+ * @epc: the EPC device that received the BME event
-+ *
-+ * Invoke to Notify the EPF device that the EPC device has received the Bus
-+ * Master Enable (BME) event from the Root complex
-+ */
-+void pci_epc_bme_notify(struct pci_epc *epc)
-+{
-+	struct pci_epf *epf;
-+
-+	if (!epc || IS_ERR(epc))
-+		return;
-+
-+	mutex_lock(&epc->list_lock);
-+	list_for_each_entry(epf, &epc->pci_epf, list) {
-+		mutex_lock(&epf->lock);
-+		if (epf->event_ops && epf->event_ops->bme)
-+			epf->event_ops->bme(epf);
-+		mutex_unlock(&epf->lock);
-+	}
-+	mutex_unlock(&epc->list_lock);
-+}
-+EXPORT_SYMBOL_GPL(pci_epc_bme_notify);
-+
- /**
-  * pci_epc_destroy() - destroy the EPC device
-  * @epc: the EPC device that has to be destroyed
-diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
-index 63a6cc5e5282..5cb694031072 100644
---- a/include/linux/pci-epc.h
-+++ b/include/linux/pci-epc.h
-@@ -205,6 +205,7 @@ int pci_epc_add_epf(struct pci_epc *epc, struct pci_epf *epf,
- void pci_epc_linkup(struct pci_epc *epc);
- void pci_epc_linkdown(struct pci_epc *epc);
- void pci_epc_init_notify(struct pci_epc *epc);
-+void pci_epc_bme_notify(struct pci_epc *epc);
- void pci_epc_remove_epf(struct pci_epc *epc, struct pci_epf *epf,
- 			enum pci_epc_interface_type type);
- int pci_epc_write_header(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
-diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
-index f8e5a63d0c83..f34b3b32a0e7 100644
---- a/include/linux/pci-epf.h
-+++ b/include/linux/pci-epf.h
-@@ -72,11 +72,13 @@ struct pci_epf_ops {
-  * @core_init: Callback for the EPC initialization complete event
-  * @link_up: Callback for the EPC link up event
-  * @link_down: Callback for the EPC link down event
-+ * @bme: Callback for the EPC BME (Bus Master Enable) event
-  */
- struct pci_epc_event_ops {
- 	int (*core_init)(struct pci_epf *epf);
- 	int (*link_up)(struct pci_epf *epf);
- 	int (*link_down)(struct pci_epf *epf);
-+	int (*bme)(struct pci_epf *epf);
- };
- 
- /**
+diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+index 19b32839ea26..4ce01ff7527c 100644
+--- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
++++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+@@ -569,6 +569,7 @@ static irqreturn_t qcom_pcie_ep_global_irq_thread(int irq, void *data)
+ 	if (FIELD_GET(PARF_INT_ALL_LINK_DOWN, status)) {
+ 		dev_dbg(dev, "Received Linkdown event\n");
+ 		pcie_ep->link_status = QCOM_PCIE_EP_LINK_DOWN;
++		pci_epc_linkdown(pci->ep.epc);
+ 	} else if (FIELD_GET(PARF_INT_ALL_BME, status)) {
+ 		dev_dbg(dev, "Received BME event. Link is enabled!\n");
+ 		pcie_ep->link_status = QCOM_PCIE_EP_LINK_ENABLED;
 -- 
 2.25.1
 
