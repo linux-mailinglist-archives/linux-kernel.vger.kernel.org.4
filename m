@@ -2,96 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D4D71902E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 03:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6B8719030
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 03:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbjFABs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 21:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
+        id S230332AbjFABu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 21:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjFABsy (ORCPT
+        with ESMTP id S229618AbjFABu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 21:48:54 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C5BA3;
-        Wed, 31 May 2023 18:48:52 -0700 (PDT)
-Received: from dggpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QWpqy5DdHzLqM9;
-        Thu,  1 Jun 2023 09:45:50 +0800 (CST)
-Received: from [10.174.178.247] (10.174.178.247) by
- dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 1 Jun 2023 09:48:49 +0800
-Subject: Re: [PATCH] acpi: Fix header declaration of acpi_arch_dma_setup() w/o
- CONFIG_ACPI
-To:     Dave Jiang <dave.jiang@intel.com>, <lpieralisi@kernel.org>,
-        <sudeep.holla@arm.com>
-CC:     kernel test robot <lkp@intel.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        <rafael@kernel.org>, <lenb@kernel.org>,
-        <linux-acpi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <168477156440.3873520.6153672647621739139.stgit@djiang5-mobl3>
-From:   Hanjun Guo <guohanjun@huawei.com>
-Message-ID: <0953941a-ad4e-ba7e-4f4e-64c47de71f0b@huawei.com>
-Date:   Thu, 1 Jun 2023 09:48:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Wed, 31 May 2023 21:50:26 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E736D121;
+        Wed, 31 May 2023 18:50:25 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QWpxB06Fkz4f3v4v;
+        Thu,  1 Jun 2023 09:50:22 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgBH_rFe+Xdk2ySmKg--.17522S3;
+        Thu, 01 Jun 2023 09:50:22 +0800 (CST)
+Subject: Re: [PATCH -next v2] block: fix blktrace debugfs entries leak
+To:     Christoph Hellwig <hch@lst.de>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230531092606.3037560-1-yukuai1@huaweicloud.com>
+ <20230531124404.GA27412@lst.de>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <509bcea6-21f6-3f64-01c3-02215955283d@huaweicloud.com>
+Date:   Thu, 1 Jun 2023 09:50:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <168477156440.3873520.6153672647621739139.stgit@djiang5-mobl3>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.247]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500002.china.huawei.com (7.185.36.229)
+In-Reply-To: <20230531124404.GA27412@lst.de>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBH_rFe+Xdk2ySmKg--.17522S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYz7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0
+        xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfUF9a9DUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
+Hi, Christoph
 
-Sorry for the late reply, I have some comments inline.
+ÔÚ 2023/05/31 20:44, Christoph Hellwig Ð´µÀ:
+> I like where this is going, but did you check that this doesn't
+> introduce a potential crash with the current /dev/sg based blktrace?
 
-On 2023/5/23 0:06, Dave Jiang wrote:
-> arm64 build can be done without CONFIG_ACPI. The ifdef bits for
-> acpi_arch_dma_setup() is placed inside CONFIG_ACPI. When CONFIG_ACPI is
-> not set, this causes warning reported by kernel test bot. Move the
-> prototype declaration for acpi_arch_dma_setup() outside of CONFIG_ACPI.
+I just start to look at how /dev/sg is created and destroyed, however,
+I'm confused here, do you mean that the added blk_trace_shutdown() here
+might cause that /dev/sg blktrace to access freed momory or NULL
+pointer?
 
-...
-
+Thanks,
+Kuai
 > 
->>> drivers/acpi/arm64/dma.c:7:6: warning: no previous prototype for function 'acpi_arch_dma_setup' [-Wmissing-prototypes]
->     void acpi_arch_dma_setup(struct device *dev)
->          ^
->     drivers/acpi/arm64/dma.c:7:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->     void acpi_arch_dma_setup(struct device *dev)
->     ^
->     static
->     1 warning generated.
-
-drivers/acpi can only be compiled with CONFIG_ACPI=y, so
-drivers/acpi/arm64/ will be the same, not sure how to trigger
-this compile warning.
-
-I disable CONFIG_ACPI on my ARM64 machine, but didn't get the
-warning you reported.
-
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202305200933.afKCLlxS-lkp@intel.com/
+> .
+> 
 
-How to generate the kernel config file as you kindly attached in the
-link?
-
-Thanks
-Hanjun
