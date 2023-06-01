@@ -2,67 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BA1719F56
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A997719F54
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233988AbjFAOMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
+        id S234056AbjFAONF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233922AbjFAOMt (ORCPT
+        with ESMTP id S233955AbjFAOM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:12:49 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3639186
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:12:44 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6af713338ccso757404a34.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 07:12:44 -0700 (PDT)
+        Thu, 1 Jun 2023 10:12:58 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A031B0
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:12:49 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-3094910b150so963598f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 07:12:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685628764; x=1688220764;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pGewkI3ZGhs7NmIEmWJMKJtAyCliT7h0BVcktsJwU3o=;
-        b=iLrGKN6wIAPT9VVUhQldt4cxeaEohbI3mrUxqNSXhhr2+olaCXGHGoXXI5YMjbDm5/
-         l5cS0i7lU5vrj8y3EhX87F/ubTpnrEk5/NjdrLdlZtTVPGGANkVz9hLdBLU7I3lVbRHS
-         aWnjfKhtA8uD7/hVWFMo7JN+iMtB7RgB1maLxPHR/TaZs9FzNIJrG+BJSXUlZwFM15of
-         9eccft+2iGMn8SaEcqR2360vFutF1hMMiTV11K6/w66te4YQo64OsCir4ihzPRWuziYO
-         rIjfd/kA4SXGjfIHPalzJP1pc4jpbMlcYWq7JmeQEr+9XeScn/KMdpBbEtFHKjpXnSat
-         Hm5w==
+        d=linaro.org; s=google; t=1685628768; x=1688220768;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=blRDmP8zwUxnWYu3O2q7G8SVs+SLeK3eRrnyEq5ozP4=;
+        b=qdN3sFmE0bkWjRKWetOAT0HHLZIxe86o4BV9VjIYHiUK3XPu2S8gc0aoVmeWcrs4cy
+         agjoc2/Hh7uBRXSKUK6reJT3RUJmkZAEwpys5HDX5bJr6n6VJa7oPa+LItSY9540le1v
+         c5xeuCTZ1QVljMhR3nmnMXrrL0arqyhLw8IIxDSf/EhE6ILbEj1sEW03f3QystUPuj5Z
+         bDEUctCPLc84Ov0ke0ettWxLK3yjWZ3RCAHD2zRdmVaAybo0NiXe5TLVYrUVI645Qq06
+         9BbZlfyjNk5aeQp4Zj1+EaGkNAjjCWOgccsS3/JaCUwjXDNUT+G0TrhVnq5XV5ORs7dF
+         6+6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685628764; x=1688220764;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pGewkI3ZGhs7NmIEmWJMKJtAyCliT7h0BVcktsJwU3o=;
-        b=Pdo2ZrS1ChgC3b45MHO05xXVfNZsamOu/gGmCn5/V7nrYZuBPRGHAFpBGi+ShXXvvq
-         FE/WgqqtxuMKezoy7D+8fADHq3i2FlJO2AXjVSU+2hczNsvWFyAd8EWvs88D8wGOtEeR
-         YN/GxbzRKUS7x0JlJVqAKl2UwU9FcTh+KK0qrM+8zE4VtyOfpi+DzJk/J9pn+dxGIayz
-         I0dK5/YXeVlHWvKysxtkdqLJdBQgJfb+IKW+hsr5835tEydxjKuFPegInyrCeZcxTwlV
-         NGaMuMiq3pkLn8NBXk+KnAqI2iMdqXMRlKYmQxzhiJVMpEB4KNDj5YoR+PhxDX3f3GOs
-         FzQw==
-X-Gm-Message-State: AC+VfDzgCYMnGNq9q3kELBgZAzbnVJlIdM31HOrNRmH8yCUITHL+r6s5
-        EOWE5YpMTCCrGr10gZdvTAPwRLWNBZrymm1g1AZRig==
-X-Google-Smtp-Source: ACHHUZ4wquHJpPIxqvZcCQ0uKolewssm+RvOtOWUpV4z+7UxM0U9tgUV5c7HdMpqTP2Z1ClfiwF8GrWs42/u2xrYFnI=
-X-Received: by 2002:a05:6358:4322:b0:123:3346:593e with SMTP id
- r34-20020a056358432200b001233346593emr3701190rwc.6.1685628763883; Thu, 01 Jun
- 2023 07:12:43 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685628768; x=1688220768;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=blRDmP8zwUxnWYu3O2q7G8SVs+SLeK3eRrnyEq5ozP4=;
+        b=gA+qkdxTeWBBekrl+fkRI2eeZWxK7Orog4lZ4djxmFyZcc8nmUeFf8XAtpa3414/RT
+         1k8DR60+qydbv+ZfjRaxvnt06p24z77GlOccFnucR5f0QNWLGNtn/mDG5Pjj+V2QBgiR
+         jGP8LSkgHR6mmIo44xybAn3vEMFwuhI02MkJ8+10Zpwna8P6NcqZfwYG7gk/TECx7KLQ
+         13d0aCBSGM+vPnjwfhfn9wtdSWJTrfLY3KFyWo58yBuV94jQTOcFUTQbKpisSw3gV984
+         GZJ5fxSCFMgDndf38+qxr0rbVM6s6pByg2k4Zh+/O5lh03dW3MhaEy5De1F9Rt0BwSrt
+         XSHA==
+X-Gm-Message-State: AC+VfDyaolKhvhUhsSeEPEZv5y1S1i8HMGzdxxt6eehtgruObSQgAse+
+        JnnQdqsbdmAEVgwWDO2hELwhtQ==
+X-Google-Smtp-Source: ACHHUZ6/ivQPA2lY433i2n8DT8ybJaluMhJNQm/WfFkDzmtsk8A31ifylaUb4N2I4BWnvbWtYj/ztw==
+X-Received: by 2002:adf:f244:0:b0:2f6:bf04:c8cc with SMTP id b4-20020adff244000000b002f6bf04c8ccmr2034350wrp.55.1685628767960;
+        Thu, 01 Jun 2023 07:12:47 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id p12-20020adfcc8c000000b0030adfa48e1esm10629591wrj.29.2023.06.01.07.12.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 07:12:47 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     "Lukas F. Hartmann" <lukas@mntre.com>,
+        Nicolas Belin <nbelin@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-phy@lists.infradead.org, Rob Herring <robh@kernel.org>,
+        Jagan Teki <jagan@amarulasolutions.com>
+In-Reply-To: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org>
+References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org>
+Subject: Re: (subset) [PATCH v5 00/17] drm/meson: add support for MIPI DSI
+ Display
+Message-Id: <168562876692.86739.7052062833690353953.b4-ty@linaro.org>
+Date:   Thu, 01 Jun 2023 16:12:46 +0200
 MIME-Version: 1.0
-References: <20230601131936.699199833@linuxfoundation.org>
-In-Reply-To: <20230601131936.699199833@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 1 Jun 2023 19:42:32 +0530
-Message-ID: <CA+G9fYt9d+bZwao0ia_7kp1maKLWepci6R4gUnb_FN2OjCSjyg@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/42] 5.15.115-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -73,47 +92,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Jun 2023 at 18:54, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.115 release.
-> There are 42 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 03 Jun 2023 13:19:19 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.115-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi,
 
+On Tue, 30 May 2023 09:38:01 +0200, Neil Armstrong wrote:
+> The Amlogic G12A, G12B & SM1 SoCs embeds a Synopsys DW-MIPI-DSI transceiver (ver 1.21a),
+> with a custom glue managing the IP resets, clock and data input similar to the DW-HDMI
+> glue on the same Amlogic SoCs.
+> 
+> This adds support for the glue managing the transceiver, mimicing the init flow provided
+> by Amlogic to setup the ENCL encoder, the glue, the transceiver, the digital D-PHY and the
+> Analog PHY in the proper way.
+> 
+> [...]
 
-Following build errors noticed on 6.1 and 5.15.
+Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
 
-drivers/dma/at_xdmac.c: In function 'atmel_xdmac_resume':
-drivers/dma/at_xdmac.c:2049:9: error: implicit declaration of function
-'pm_runtime_get_noresume' [-Werror=implicit-function-declaration]
- 2049 |         pm_runtime_get_noresume(atxdmac->dev);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~
-drivers/dma/at_xdmac.c:2049:40: error: 'struct at_xdmac' has no member
-named 'dev'
- 2049 |         pm_runtime_get_noresume(atxdmac->dev);
-      |                                        ^~
-cc1: some warnings being treated as errors
+[06/17] dt-bindings: display: add Amlogic MIPI DSI Host Controller bindings
+        https://cgit.freedesktop.org/drm/drm-misc/commit/?id=0628f2341e96213c9f2d074853b255f65acd3795
+[07/17] dt-bindings: display: meson-vpu: add third DPI output port
+        https://cgit.freedesktop.org/drm/drm-misc/commit/?id=25b3b35cd51ef0d98165666d250a51f39db6a1fc
+[08/17] drm/meson: fix unbind path if HDMI fails to bind
+        https://cgit.freedesktop.org/drm/drm-misc/commit/?id=6a044642988b5f8285f3173b8e88784bef2bc306
+[09/17] drm/meson: only use components with dw-hdmi
+        https://cgit.freedesktop.org/drm/drm-misc/commit/?id=44e16166e0e9b94d8bcdf55fc0e5fcceca1154f0
+[10/17] drm/meson: venc: add ENCL encoder setup for MIPI-DSI output
+        https://cgit.freedesktop.org/drm/drm-misc/commit/?id=51fc01a03442cce5e4c21375a1ceb2e4ec93c833
+[11/17] drm/meson: add DSI encoder
+        https://cgit.freedesktop.org/drm/drm-misc/commit/?id=42dcf15f901c8222352da31d622b4ee844068f42
+[12/17] drm/meson: add support for MIPI-DSI transceiver
+        https://cgit.freedesktop.org/drm/drm-misc/commit/?id=77d9e1e6b8468f701ab024a060aa9c0339356870
+[13/17] drm/panel: khadas-ts050: update timings to achieve 60Hz refresh rate
+        https://cgit.freedesktop.org/drm/drm-misc/commit/?id=29c6df0d942454cb43334cf0e36de068f4124b94
 
-reported link:
-https://lore.kernel.org/stable/CA+G9fYswtPyrYJbwcGFhc5o7mkRmWZEWCCeSjmR64M+N-odQhQ@mail.gmail.com/
+-- 
+Neil
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
