@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68A9719CEE
+	by mail.lfdr.de (Postfix) with ESMTP id 79C3F719CED
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 15:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233385AbjFANGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 09:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
+        id S233390AbjFANGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 09:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbjFANGT (ORCPT
+        with ESMTP id S233266AbjFANGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 09:06:19 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2E4138
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 06:06:18 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-25673e8c464so287441a91.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 06:06:18 -0700 (PDT)
+        Thu, 1 Jun 2023 09:06:21 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89069124
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 06:06:19 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-2568fc3d8a9so240430a91.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 06:06:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685624778; x=1688216778;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tm7KDaSSjYvTYPu798lAyVQ8TuXxD3ciaiRSHMe2MWI=;
-        b=cRNwyrR6RhCtm54eNkfyDGqAwseqfMo+xydQcUdKy/QlVcZqFRAlkI3bQCOaN1cDu7
-         9d6pDMsFJC703p+mSJAHYKXwKJfhiv+Fv6yeoln1PUPfZvi4RBw1AedgK+hc9fazXGqN
-         YI4kXpD4+O6j3R5pvJzSFx9Eo50ooTzwSOI+oqFQPglxckMxS/CGqotCZCb2AQWvrlv2
-         DD3BASB+s/Rnsb/Fwi5Jr2rJiCPDeA7cKgjinyR/+9l6NFzj1l5eRpN2tvDDdCMoiN99
-         oqBYLUgewJAAb4/T43J0AF+fLzTPbkkB75g0c/+HahjIt0tlrAkeJVkOOfKKZfLKM7Qg
-         Djzg==
+        d=gmail.com; s=20221208; t=1685624779; x=1688216779;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w+80VYIfhjZ5fSjcUibNsG+b2Hi4A7lyy0lDCFEbZBs=;
+        b=RdSP/OEUyw387gUXs4br35uVFKo5guW8++Hou3cYfb7YCLhJMNQHx0nY5w8nffjBkM
+         DddJF2l7xiFfCvYAErVvbOKXfXK87LvjsJyA1Wn1/uGZEg6vADkS6jE+tfwI+Yp9H3Jw
+         2pkiNKyMxdsBS+3ZLMANxPjzX0Pm/VO4EJkb9FGd2St73BTQStxSN1CXVYXLWE50MBsB
+         fwYmcu2bUrLeWKCerok1e7fFLabA58hrgW56dnTDv6ls37XYC1yS7V/fVcMMkbLS9u3h
+         qYOP+U4DY3n3gNtJavEp19/1aICn9Y/ZtpQf2jdHQE8+ylIove6pIe9U6hVMfZEbRSN7
+         1oFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685624778; x=1688216778;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tm7KDaSSjYvTYPu798lAyVQ8TuXxD3ciaiRSHMe2MWI=;
-        b=BX3l2N2ie+SSnyqGRse9x/YHiccv5GEyinnda4Gp8yzbUK4BhkWMfj2SI14HNwifCT
-         zMtSVJAbOdpBhaLEpwr2nl//p1xm1rBKgQzcwCKznBlxcmFM9B7gQEr7bKRfpt0Nlxui
-         zJpbQoxCfKaeUFQSpUORJiv5LZYbeih/Py8inPDvKq12H/e2UtMjTadwN4Z5wI8Rs+YJ
-         RjiYran6q13AtiQSJe/qTZg5WF+Sq4eguEFN6B0vlrHT876hkLb/kGqQ669Rg2YVEsfX
-         PWxW6/R6aezZk5XoF1R+XRfk7+3lqT6QIW9KxA0DmIcJOFFxJkGYwdpHCyKGuOyy1H6U
-         n1og==
-X-Gm-Message-State: AC+VfDxulwww7JRn2ap2tGJRJPOleuhPn1PPMfVPb9f1XX6kypxVTJgS
-        h/Puyoa772oRqQ1SZXOFp5oQ8c8by00=
-X-Google-Smtp-Source: ACHHUZ417r58s1N53t2yURhkDqH5J9VetxhvfpIj4hjoAzs3iSk/8iUou1gI/nCvjvcxUdqMBSoWtg==
-X-Received: by 2002:a17:90a:a40e:b0:256:8cb7:2b2b with SMTP id y14-20020a17090aa40e00b002568cb72b2bmr6413171pjp.14.1685624777949;
-        Thu, 01 Jun 2023 06:06:17 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685624779; x=1688216779;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w+80VYIfhjZ5fSjcUibNsG+b2Hi4A7lyy0lDCFEbZBs=;
+        b=BdAxgT/umuOsGo2W8LhJaZi4PshpzWTNbsTcgCAVgTsr8Tb/7GL6mgrvZu8MUITNzM
+         BW1LAOEUq4nI+X2CNLo3MgN6Hlq49e3pfqqNmI9HwAsGFOYapFKnhGq031XWQqGvutMA
+         60rGI7t7Os+qYlfurHucZt1ac4XWR8idp1L2ZlFdF0ff786Mh8kPFZR/M7CkcVqir6Ot
+         tzcksaI+hUM0rkot65hQlmRk4hKPDf7fWGYx0yccUox7oEsUnQEnuyK65TGtm1XnFXwP
+         cqgq4DAgh/jhzULThnjcRsAtb7tT9/XVyBOLqrXkXGPfMG5NnQp+mHwgEOUcl9hRt04f
+         I7zQ==
+X-Gm-Message-State: AC+VfDye4LHlJFhPuLy2sCa8ksnRd5kzuTtKdKPg/DGmPmCv9x5WunHG
+        gWHHFXp0KqmiV1oh5amIRuo=
+X-Google-Smtp-Source: ACHHUZ4/y8r7bunqlmbBydPYg4Y2Y9+zIUnPo4YaUaKfFxXcl6U6oJWx60TAFQel2zyVw3KAkTfULw==
+X-Received: by 2002:a17:90b:17ca:b0:253:572f:79b2 with SMTP id me10-20020a17090b17ca00b00253572f79b2mr6352859pjb.36.1685624778892;
+        Thu, 01 Jun 2023 06:06:18 -0700 (PDT)
 Received: from ryan-ThinkPad-T470.. (c-24-6-63-212.hsd1.ca.comcast.net. [24.6.63.212])
-        by smtp.gmail.com with ESMTPSA id s34-20020a17090a2f2500b0024df6bbf5d8sm1430096pjd.30.2023.06.01.06.06.16
+        by smtp.gmail.com with ESMTPSA id s34-20020a17090a2f2500b0024df6bbf5d8sm1430096pjd.30.2023.06.01.06.06.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 06:06:17 -0700 (PDT)
+        Thu, 01 Jun 2023 06:06:18 -0700 (PDT)
 From:   =?UTF-8?q?=E2=80=9CRyan?= <ryan.lee.analog@gmail.com>
 To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
         tiwai@suse.com, ryans.lee@analog.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
 Cc:     jairaj.arava@intel.com
-Subject: [PATCH 1/2] ASoC: max98363: Removed 32bit support
-Date:   Thu,  1 Jun 2023 06:05:59 -0700
-Message-Id: <20230601130600.25344-1-ryan.lee.analog@gmail.com>
+Subject: [PATCH 2/2] ASoC: max98363: limit the number of channel to 1
+Date:   Thu,  1 Jun 2023 06:06:00 -0700
+Message-Id: <20230601130600.25344-2-ryan.lee.analog@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230601130600.25344-1-ryan.lee.analog@gmail.com>
+References: <20230601130600.25344-1-ryan.lee.analog@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,9 +75,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ryan Lee <ryans.lee@analog.com>
 
-MAX98363 does not support 32bit depth audio.
-Removed 32bit from the supported format list.
-Instead, added 16bit and 24bit to the list.
+MAX98363 is a mono amplifier. The number of channel needs to be always 1.
 
 Signed-off-by: Ryan Lee <ryans.lee@analog.com>
 ---
@@ -82,18 +83,18 @@ Signed-off-by: Ryan Lee <ryans.lee@analog.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/sound/soc/codecs/max98363.c b/sound/soc/codecs/max98363.c
-index 4585ebb1e82c..8aa9d9c67aa2 100644
+index 8aa9d9c67aa2..7f5062ac4523 100644
 --- a/sound/soc/codecs/max98363.c
 +++ b/sound/soc/codecs/max98363.c
-@@ -211,7 +211,7 @@ static int max98363_io_init(struct sdw_slave *slave)
- }
+@@ -246,7 +246,7 @@ static int max98363_sdw_dai_hw_params(struct snd_pcm_substream *substream,
+ 	stream_config.frame_rate = params_rate(params);
+ 	stream_config.bps = snd_pcm_format_width(params_format(params));
+ 	stream_config.direction = direction;
+-	stream_config.ch_count = params_channels(params);
++	stream_config.ch_count = 1;
  
- #define MAX98363_RATES SNDRV_PCM_RATE_8000_192000
--#define MAX98363_FORMATS (SNDRV_PCM_FMTBIT_S32_LE)
-+#define MAX98363_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S24_LE)
- 
- static int max98363_sdw_dai_hw_params(struct snd_pcm_substream *substream,
- 				      struct snd_pcm_hw_params *params,
+ 	if (stream_config.ch_count > runtime->hw.channels_max) {
+ 		stream_config.ch_count = runtime->hw.channels_max;
 -- 
 2.34.1
 
