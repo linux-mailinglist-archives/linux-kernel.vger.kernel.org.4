@@ -2,56 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C91B719627
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B527194FC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbjFAI6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
+        id S231548AbjFAIEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbjFAI6a (ORCPT
+        with ESMTP id S231468AbjFAIDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:58:30 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56447132;
-        Thu,  1 Jun 2023 01:58:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685609909; x=1717145909;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lAcYtInKsopDQxJmwLovdpYraiB6bLABcfqZaZEP/bA=;
-  b=hr0E/i/Carr7jpUivviGHY0neE+xZHcet2QuN1XNukBmT92nT/QkvFVi
-   dlRRyrf7iqm4wYed0vJB+S191FHgMPQZJwAlpq5i3hOyYAUXc2VSWNb/1
-   mLA53OybmI8tkw1f0AMzQSpYRN72yxpjQ5jr0EKeOm7pTk8feh7b6MhHY
-   kKwk4fUZYGZFMy0W/udbLqBFC3rgsWXImnlBL93iu4OszNM67hij2MfvZ
-   uyKyNOgyzZKQo/4M+Bu9cgZ82CvaKlYbf5uSaT4DueKa9jEGs4MecJFVk
-   XdVoaqQqlntI+T9aqVwwWKjwX0pvLUnMHHZbk1RLwzXtdLu0JbThJlQGI
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="354354439"
-X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
-   d="scan'208";a="354354439"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 01:58:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10727"; a="710411048"
-X-IronPort-AV: E=Sophos;i="6.00,209,1681196400"; 
-   d="scan'208";a="710411048"
-Received: from skxmcp01.bj.intel.com ([10.240.193.86])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Jun 2023 01:58:25 -0700
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     seanjc@google.com, pbonzini@redhat.com, shuah@kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] KVM: selftests: Add new CFLAGS to generate dependency files
-Date:   Thu,  1 Jun 2023 16:03:38 +0800
-Message-Id: <20230601080338.212942-1-yu.c.zhang@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 1 Jun 2023 04:03:55 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A4413E;
+        Thu,  1 Jun 2023 01:03:43 -0700 (PDT)
+Received: from [IPV6:2a01:e0a:120:3210:7d6d:c387:79e6:807d] (unknown [IPv6:2a01:e0a:120:3210:7d6d:c387:79e6:807d])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7B7B06606ECE;
+        Thu,  1 Jun 2023 09:03:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685606622;
+        bh=vPNmJuzIG5LIGX1QupTZo+d2rc1g3ZOc8ocjPfDkdis=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ivmwB1xugtA/DX4q4/kiYM/kIk+j9+L4NiQmrVIcwcdV6gg0U+iWYiU0xZ1AXopEi
+         QheNpVN0eNxmBFxGffDQk0HPSGK/BDVfBuBAWXnJ1JFTtl227w2Hulv2hqk09hySHi
+         eAFn8Orzpi+coXcr33KbBKxxFPexw+BaEWjSINhuiNEyLrePTmMQ4+scsGdVKzHSSw
+         5Tp+GfUY2JmKI8Vi5xZvnUhIhilFbsJy9ChG9HgzYMW0XBmvNz+nY9VbqEt9FpaZYH
+         vEUTki+ViM+K8uodCrfLjt1ZwnVxmGLgkYDiNQd1S2pw6Jx+IZ5H/yzfXHmfz9xcEO
+         S4h+TMa/sWBhQ==
+Message-ID: <6f53b5f6-6649-f194-1808-5f5757b449f4@collabora.com>
+Date:   Thu, 1 Jun 2023 10:03:39 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 3/8] media: videobuf2: Add a module param to limit vb2
+ queue buffer storage
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
+        bin.liu@mediatek.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        daniel.almeida@collabora.com, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+References: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
+ <20230321102855.346732-4-benjamin.gaignard@collabora.com>
+ <6c4658fd-3a64-b3f8-67cd-17ed2d7d3567@xs4all.nl>
+ <20230531080331.GB6496@pendragon.ideasonboard.com>
+ <608ae7d6-3f3b-137d-08d2-d41a240be2c4@xs4all.nl>
+ <20230531123945.GF27043@pendragon.ideasonboard.com>
+Content-Language: en-US
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <20230531123945.GF27043@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,69 +74,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add "-MD" in CFLAGS to generate dependency files. Currently, each
-time a header file is updated in KVM selftest, we will have to run
-"make clean && make" to rebuild the whole test suite. By adding new
-compiling flags and dependent rules in Makefile, we do not need to
-make clean && make each time a header file is updated.
 
-Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
-v3: Strip the $(OUTPUT) prefix from source files to fix the build
-    failure reported by kernel test robot <lkp@intel.com> in
-    https://lore.kernel.org/oe-kbuild-all/202305302015.D8PglEU7-lkp@intel.com/
+Le 31/05/2023 à 14:39, Laurent Pinchart a écrit :
+> On Wed, May 31, 2023 at 10:30:36AM +0200, Hans Verkuil wrote:
+>> On 5/31/23 10:03, Laurent Pinchart wrote:
+>>> On Wed, May 31, 2023 at 08:36:59AM +0200, Hans Verkuil wrote:
+>>>> On 21/03/2023 11:28, Benjamin Gaignard wrote:
+>>>>> Add module parameter "max_vb_buffer_per_queue" to be able to limit
+>>>>> the number of vb2 buffers store in queue.
+>>>>>
+>>>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>>>>> ---
+>>>>>   drivers/media/common/videobuf2/videobuf2-core.c | 15 +++------------
+>>>>>   include/media/videobuf2-core.h                  | 11 +++++++++--
+>>>>>   2 files changed, 12 insertions(+), 14 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+>>>>> index ae9d72f4d181..f4da917ccf3f 100644
+>>>>> --- a/drivers/media/common/videobuf2/videobuf2-core.c
+>>>>> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
+>>>>> @@ -34,6 +34,8 @@
+>>>>>   static int debug;
+>>>>>   module_param(debug, int, 0644);
+>>>>>   
+>>>>> +module_param(max_vb_buffer_per_queue, ulong, 0644);
+>>>> There is no MODULE_PARM_DESC here? Please add. I see it is not there for
+>>>> the debug param either, it should be added for that as well.
+>>> Would this be the right time to consider resource accounting in V4L2 for
+>>> buffers ? Having a module parameter doesn't sound very useful, an
+>>> application could easily allocate more buffers by using buffer orphaning
+>>> (allocating buffers, exporting them as dmabuf objects, and freeing them,
+>>> which leaves the memory allocated). Repeating allocation cycles up to
+>>> max_vb_buffer_per_queue will allow allocating an unbounded number of
+>>> buffers, using all the available system memory. I'd rather not add a
+>>> module argument that only gives the impression of some kind of safety
+>>> without actually providing any value.
+>> Does dmabuf itself provide some accounting mechanism? Just wondering.
+>>
+>> More specific to V4L2: I'm not so sure about this module parameter either.
+>> It makes sense to have a check somewhere against ridiculous values (i.e.
+>> allocating MAXINT buffers), but that can be a define as well. But otherwise
+>> I am fine with allowing applications to allocate buffers until the memory
+>> is full.
+>>
+>> The question is really: what is this parameter supposed to do? The only
+>> thing it does is to sanitize unlikely inputs (e.g. allocating MAXINT buffers).
+>>
+>> I prefer that as a define, to be honest.
+>>
+>> I think it is perfectly fine for users to try to request more buffers than
+>> memory allows. It will just fail in that case, not a problem.
+>>
+>> And if an application is doing silly things like buffer orphaning, then so
+>> what? Is that any different than allocating memory and not freeing it?
+>> Eventually it will run out of memory and crash, which is normal.
+> Linux provides APIs to account for and limit usage of resources,
+> including memory. A system administrator can prevent rogue processes
+> from starving system resources. The memory consumed by vb2 buffer isn't
+> taken into account, making V4L2 essentially unsafe for untrusted
+> processes.
+>
+> Now, to be fair, there are many reasons why allowing access to v4L2
+> devices to untrusted applications is a bad idea, and memory consumption
+> is likely not even the worst one. Still, is this something we want to
+> fix, or do we want to consider V4L2 to be priviledged API only ? Right
+> now we can't do so, but with many Linux systems moving towards pipewire,
+> we could possibly have a system daemon isolating untrusted applications
+> from the rest of the system. We may thus not need to fix this in the
+> V4L2 API.
 
-v2: Use "-MD" in CFLAGS instead of "EXTRA_CFLAGS". [Sean]
----
+I'm working in v3 where I'm using Xarray API.
 
- tools/testing/selftests/kvm/Makefile | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+Just to be sure to understand you well:
+I can just remove VB2_MAX_FRAME limit without adding a new one ?
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 7a5ff646e7e7..dd16969aaf6c 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -183,6 +183,8 @@ TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(ARCH_DIR))
- TEST_GEN_PROGS_EXTENDED += $(TEST_GEN_PROGS_EXTENDED_$(ARCH_DIR))
- LIBKVM += $(LIBKVM_$(ARCH_DIR))
- 
-+OVERRIDE_TARGETS = 1
-+
- # lib.mak defines $(OUTPUT), prepends $(OUTPUT)/ to $(TEST_GEN_PROGS), and most
- # importantly defines, i.e. overwrites, $(CC) (unless `make -e` or `make CC=`,
- # which causes the environment variable to override the makefile).
-@@ -197,7 +199,7 @@ else
- LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
- endif
- CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
--	-Wno-gnu-variable-sized-type-not-at-end \
-+	-Wno-gnu-variable-sized-type-not-at-end -MD\
- 	-fno-builtin-memcmp -fno-builtin-memcpy -fno-builtin-memset \
- 	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
- 	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
-@@ -224,7 +226,18 @@ LIBKVM_S_OBJ := $(patsubst %.S, $(OUTPUT)/%.o, $(LIBKVM_S))
- LIBKVM_STRING_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBKVM_STRING))
- LIBKVM_OBJS = $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ) $(LIBKVM_STRING_OBJ)
- 
--EXTRA_CLEAN += $(LIBKVM_OBJS) cscope.*
-+TEST_GEN_OBJ = $(patsubst %, %.o, $(TEST_GEN_PROGS))
-+TEST_GEN_OBJ += $(patsubst %, %.o, $(TEST_GEN_PROGS_EXTENDED))
-+TEST_DEP_FILES = $(patsubst %.o, %.d, $(TEST_GEN_OBJ))
-+TEST_DEP_FILES += $(patsubst %.o, %.d, $(LIBKVM_OBJS))
-+-include $(TEST_DEP_FILES)
-+
-+$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): %: %.o
-+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $< $(LIBKVM_OBJS) $(LDLIBS) -o $@
-+$(TEST_GEN_OBJ): $(OUTPUT)/%.o: %.c
-+	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
-+
-+EXTRA_CLEAN += $(LIBKVM_OBJS) $(TEST_DEP_FILES) $(TEST_GEN_OBJ) cscope.*
- 
- x := $(shell mkdir -p $(sort $(dir $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ))))
- $(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c
-
-base-commit: 56f413f2cd373d6ed7c4ecb2e0e3e740cc2fdc8c
--- 
-2.25.1
-
+>
