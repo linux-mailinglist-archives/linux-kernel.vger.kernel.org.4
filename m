@@ -2,149 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE06718F85
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 02:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D97D718F92
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 02:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbjFAA30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 20:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
+        id S230323AbjFAAg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 20:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjFAA3Z (ORCPT
+        with ESMTP id S229536AbjFAAg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 20:29:25 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17C22124;
-        Wed, 31 May 2023 17:29:24 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 4232520FC4D7;
-        Wed, 31 May 2023 17:29:23 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4232520FC4D7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1685579363;
-        bh=Z1v23pKuDidufXUFzDrQNxKmqMUYtqq8BJ7JNDupZo4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qmYGJlSoh7f0xBpo5W3+HkiMx/HVXZWbN4pUegNCqMEK11HYXZgDC7HVEmqmPsjr7
-         xyyg+bFpoSa6kk3bscIa7QVMDSVKydbvV6rnGr90w6Kt1G1YfkCVmrhlpsUReHZ9OZ
-         sSer5LjpQbfPzKKgIMCWbSnYqzenSWiCWRGMX8xQ=
-Date:   Wed, 31 May 2023 17:29:17 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        ast@kernel.org, dcook@linux.microsoft.com, brauner@kernel.org,
-        dthaler@microsoft.com, bpf@vger.kernel.org
-Subject: Re: [PATCH 0/5] tracing/user_events: Add auto-del flag for events
-Message-ID: <20230601002917.GA25634@W11-BEAU-MD.localdomain>
-References: <20230530235304.2726-1-beaub@linux.microsoft.com>
- <20230531214444.5dqcbclgycfk3q77@MacBook-Pro-8.local>
+        Wed, 31 May 2023 20:36:28 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF79911F;
+        Wed, 31 May 2023 17:36:26 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bb15165ba06so181533276.2;
+        Wed, 31 May 2023 17:36:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685579786; x=1688171786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4sqJL/rMkklfFhbl1Ni87E9CJg3Zr6eX+Yy8CWLUH6c=;
+        b=JmpQPaf/UJfzh2krStUvAzSS5hoGnhLjgYL5+8bt0LrQvqohKHDMNGHhBQkksuXphc
+         BtKaVJRDr/w7bLrB9HO4B9BBc/TChvGjXA/BQBULp/8YvG3K8iIanvQwDvWfiljY/1Nn
+         n0YSv4XqrJPOwpgWjZP6dC1Fk2i6eD4jIxEsnBNsPvR1N9L8ujm+f/FYrICC/8fYkNQF
+         4FKJCYiQErZ5E2tOAoduTlA/tH1iDcVc5Gz3+fW1Fr96J5Eok1iV7C46BO6Crxsc3zNZ
+         h0heO2MIjeQHqMsuNLuF+FF3U2yQEYVVSmVpcHStpS91Dl/GYy45CmivpfzM/BJRMvMl
+         5UGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685579786; x=1688171786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4sqJL/rMkklfFhbl1Ni87E9CJg3Zr6eX+Yy8CWLUH6c=;
+        b=hqhpCvHkVeVSTJOYS9RMIagf5Ykh05WYhTFWZo+0p8iFNUXKy0tNFswT0zWe22Pxr9
+         dh5qrwy1k2Tfe0bAhPXClg3H6ZF8dI7feLgLBPpg3xbFtZQNTu7TO3ekAtgtCjE+bR1U
+         TEAk9Px6XvpveCCgp8tb65T5i2eCxlpPbUeJfE9ivh721rOJMz+/jH9u1B1qZf78NxTB
+         TvuY1re2ODcXBWdeAX7UxvnKkGjIjUEK+5bXbbRfDS2ZAdNvjyQ5cN2bLpV7vZtEAiJN
+         dW8OHdtFcgnG/bSdShbi8n40zXmAWndexWF5S8EpRCz/c2EYRtpA38dyok7BjLvluqZ2
+         KwnA==
+X-Gm-Message-State: AC+VfDyN6FDk+gjGpfK+d5YHKrjIiBL0Ol7lS/rsNoE2mhbY47UOllBD
+        pPw8SxlvxGVeDilprAEAGDeR9dvy1uaHkxBEZL50vZHNNSw=
+X-Google-Smtp-Source: ACHHUZ5+fGGG1EBTvFeNQe1LCsw72dhPGvRkxGvgAcKeqpqZv7CWJ9xTS0NVogL3Uk54GeSCtR23SWMJoq8jyFhQwGo=
+X-Received: by 2002:a25:764b:0:b0:ba8:26da:3147 with SMTP id
+ r72-20020a25764b000000b00ba826da3147mr7214008ybc.59.1685579785840; Wed, 31
+ May 2023 17:36:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531214444.5dqcbclgycfk3q77@MacBook-Pro-8.local>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <CANn89iK13jkbKXv-rKiUbTqMrk3KjVPGYH_Vv7FtJJ5pTdUAYQ@mail.gmail.com>
+ <20230531225947.38239-1-kuniyu@amazon.com>
+In-Reply-To: <20230531225947.38239-1-kuniyu@amazon.com>
+From:   Akihiro Suda <suda.kyoto@gmail.com>
+Date:   Thu, 1 Jun 2023 09:36:14 +0900
+Message-ID: <CAG8fp8TmupTpgCmjk6pWWTMbKAmeKSCLP_A_fq=3hn8JkWioww@mail.gmail.com>
+Subject: Re: [PATCH linux] net/ipv4: ping_group_range: allow GID from
+ 2147483648 to 4294967294
+To:     Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     edumazet@google.com, akihiro.suda.cz@hco.ntt.co.jp,
+        akihirosuda@git.sr.ht, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, segoon@openwall.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 02:44:44PM -0700, Alexei Starovoitov wrote:
-> On Tue, May 30, 2023 at 04:52:59PM -0700, Beau Belgrave wrote:
-> > As part of the discussions for user_events aligning to be used with eBPF
-> > it became clear [1] we needed a way to delete events without having to rely
-> > upon the delete IOCTL. Steven suggested that we simply have an owner
-> 
-> This patch set is not addressing the issues I pointed out earlier.
-> It adds a new flag and new api. It's not a fix.
-> 
+> I think we can use proc_doulongvec_minmax() instead of open coding.
 
-Can you point out the scenario you are worried about?
+Thanks, sent v2 with your suggestion
+https://lore.kernel.org/lkml/168557950756.14226.6470993129419598644-0@git.s=
+r.ht/
 
-For example, if anything is using a per-FD event, it cannot be deleted,
-it will return -EBUSY. If perf, ftrace, or any user-process still has a
-reference to the event, the delete will not go through (even without
-these changes).
-
-I read your previous issues as, we cannot let anyone delete events while
-others are using them. And I also heard Steven state, we need to not let
-things pile up, since manual deletes are unlikely.
-
-> > for the event, however, the event can be held by more than just the
-> > first register FD, such as perf/ftrace or additional registers. In order
-> > to handle all those cases, we must only delete after all references are
-> > gone from both user and kernel space.
-> > 
-> > This series adds a new register flag, USER_EVENT_REG_AUTO_DEL, which
-> > causes the event to delete itself upon the last put reference. We cannot
-> 
-> Do not introduce a new flag. Make this default.
-> 
-
-If this is to be default, then I would have to have a flag for
-persistent events, which seems reasonable.
-
-> > fully drop the delete IOCTL, since we still want to enable events to be
-> > registered early via dynamic_events and persist. If the auto delete flag
-> > was used during dynamic_events, the event would delete immediately.
-> 
-> You have to delete this broken "delete via ioctl" api.
-> For persistent events you need a different api in its own name scope,
-> so it doesn't conflict with per-fd events.
-> 
-
-We have certain events we want persistent, that don't go away if the
-process crashes, etc. and we don't yet have a ring buffer up via
-perf_events.
-
-In these cases, we want the name to be the same for all processes, since
-it's a common event. An example is a common library that emits out
-assert messages. We want to watch for any asserts on the system,
-regardless of which process emits them.
-
-I'm not sure I understand how you think they would conflict?
-
-Another process cannot come in and register the same event name while
-it's in use. They can only do so once everything has been closed down.
-
-If another process uses the same name for an event, it must match the
-previous events arguments, and is treated as the same event. If they
-don't match then the register fails. The only way to get a conflict is
-to delete the event and then create a new one, but that only works if
-no one is still using it at all.
-
-Thanks,
--Beau
-
-> > We have a few key events that we enable immediately after boot and are
-> > monitored in our environments. Today this is done via dynamic events,
-> > however, it could also be done directly via the ABI by not passing the
-> > auto delete flag.
+2023=E5=B9=B46=E6=9C=881=E6=97=A5(=E6=9C=A8) 8:00 Kuniyuki Iwashima <kuniyu=
+@amazon.com>:
+>
+> From: Eric Dumazet <edumazet@google.com>
+> Date: Wed, 31 May 2023 23:09:02 +0200
+> > On Wed, May 31, 2023 at 9:19=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazo=
+n.com> wrote:
+> > >
+> > > From: ~akihirosuda <akihirosuda@git.sr.ht>
+> > > Date: Wed, 31 May 2023 19:42:49 +0900
+> > > > From: Akihiro Suda <akihiro.suda.cz@hco.ntt.co.jp>
+> > > >
+> > > > With this commit, all the GIDs ("0 4294967294") can be written to t=
+he
+> > > > "net.ipv4.ping_group_range" sysctl.
+> > > >
+> > > > Note that 4294967295 (0xffffffff) is an invalid GID (see gid_valid(=
+) in
+> > > > include/linux/uidgid.h), and an attempt to register this number wil=
+l cause
+> > > > -EINVAL.
+> > > >
+> > > > Prior to this commit, only up to GID 2147483647 could be covered.
+> > > > Documentation/networking/ip-sysctl.rst had "0 4294967295" as an exa=
+mple
+> > > > value, but this example was wrong and causing -EINVAL.
+> > > >
+> > > > In the implementation, proc_dointvec_minmax is no longer used becau=
+se it
+> > > > does not support numbers from 2147483648 to 4294967294.
+> > >
+> > > Good catch.
+> > >
+> > > I think we can use proc_doulongvec_minmax() instead of open coding.
+> > >
+> > > With the diff below:
+> > >
+> > > ---8<---
+> > > # sysctl -a | grep ping
+> > > net.ipv4.ping_group_range =3D 0   2147483647
+> > > # sysctl -w net.ipv4.ping_group_range=3D"0 4294967295"
+> > > sysctl: setting key "net.ipv4.ping_group_range": Invalid argument
+> > > # sysctl -w net.ipv4.ping_group_range=3D"0 4294967294"
+> > > net.ipv4.ping_group_range =3D 0 4294967294
+> > > # sysctl -a | grep ping
+> > > net.ipv4.ping_group_range =3D 0   4294967294
+> > > ---8<---
+> > >
+> > > ---8<---
+> > > diff --git a/include/net/ping.h b/include/net/ping.h
+> > > index 9233ad3de0ad..9b401b9a9d35 100644
+> > > --- a/include/net/ping.h
+> > > +++ b/include/net/ping.h
+> > > @@ -20,7 +20,7 @@
+> > >   * gid_t is either uint or ushort.  We want to pass it to
+> > >   * proc_dointvec_minmax(), so it must not be larger than MAX_INT
+> > >   */
+> > > -#define GID_T_MAX (((gid_t)~0U) >> 1)
+> > > +#define GID_T_MAX ((gid_t)~0U)
+> > >
+> > >  /* Compatibility glue so we can support IPv6 when it's compiled as a=
+ module */
+> > >  struct pingv6_ops {
+> > > diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
+> > > index 6ae3345a3bdf..11d401958673 100644
+> > > --- a/net/ipv4/sysctl_net_ipv4.c
+> > > +++ b/net/ipv4/sysctl_net_ipv4.c
+> > > @@ -35,8 +35,8 @@ static int ip_ttl_max =3D 255;
+> > >  static int tcp_syn_retries_min =3D 1;
+> > >  static int tcp_syn_retries_max =3D MAX_TCP_SYNCNT;
+> > >  static int tcp_syn_linear_timeouts_max =3D MAX_TCP_SYNCNT;
+> > > -static int ip_ping_group_range_min[] =3D { 0, 0 };
+> > > -static int ip_ping_group_range_max[] =3D { GID_T_MAX, GID_T_MAX };
+> > > +static unsigned long ip_ping_group_range_min[] =3D { 0, 0 };
+> > > +static unsigned long ip_ping_group_range_max[] =3D { GID_T_MAX, GID_=
+T_MAX };
+> > >  static u32 u32_max_div_HZ =3D UINT_MAX / HZ;
+> > >  static int one_day_secs =3D 24 * 3600;
+> > >  static u32 fib_multipath_hash_fields_all_mask __maybe_unused =3D
+> > > @@ -165,8 +165,8 @@ static int ipv4_ping_group_range(struct ctl_table=
+ *table, int write,
+> > >                                  void *buffer, size_t *lenp, loff_t *=
+ppos)
+> > >  {
+> > >         struct user_namespace *user_ns =3D current_user_ns();
+> > > +       unsigned long urange[2];
+> > >         int ret;
+> > > -       gid_t urange[2];
+> > >         kgid_t low, high;
+> > >         struct ctl_table tmp =3D {
+> > >                 .data =3D &urange,
+> > > @@ -179,7 +179,7 @@ static int ipv4_ping_group_range(struct ctl_table=
+ *table, int write,
+> > >         inet_get_ping_group_range_table(table, &low, &high);
+> > >         urange[0] =3D from_kgid_munged(user_ns, low);
+> > >         urange[1] =3D from_kgid_munged(user_ns, high);
+> > > -       ret =3D proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos)=
+;
+> > > +       ret =3D proc_doulongvec_minmax(&tmp, write, buffer, lenp, ppo=
+s);
+> > >
+> > >         if (write && ret =3D=3D 0) {
+> > >                 low =3D make_kgid(user_ns, urange[0]);
+> > > ---8<---
 > >
-> > NOTE: I'll need to merge this work once we take these [2] [3] patches
-> > into for-next. I'm happy to do so once they land there.
-> > 
-> > 1: https://lore.kernel.org/linux-trace-kernel/20230518093600.3f119d68@rorschach.local.home/
-> > 2: https://lore.kernel.org/linux-trace-kernel/20230529032100.286534-1-sunliming@kylinos.cn/
-> > 3: https://lore.kernel.org/linux-trace-kernel/20230519230741.669-1-beaub@linux.microsoft.com/
-> > 
-> > Beau Belgrave (5):
-> >   tracing/user_events: Store register flags on events
-> >   tracing/user_events: Track refcount consistently via put/get
-> >   tracing/user_events: Add flag to auto-delete events
-> >   tracing/user_events: Add self-test for auto-del flag
-> >   tracing/user_events: Add auto-del flag documentation
-> > 
-> >  Documentation/trace/user_events.rst           |  21 +-
-> >  include/uapi/linux/user_events.h              |  10 +-
-> >  kernel/trace/trace_events_user.c              | 183 ++++++++++++++----
-> >  .../testing/selftests/user_events/abi_test.c  | 115 ++++++++++-
-> >  4 files changed, 278 insertions(+), 51 deletions(-)
-> > 
-> > 
-> > base-commit: 3862f86c1529fa0016de6344eb974877b4cd3838
-> > -- 
-> > 2.25.1
-> > 
+> >
+> > Will this work on 32bit build ?
+>
+> It worked at least on my i686 build and qemu.
+>
+> ---8<---
+> # uname -a
+> Linux (none) 6.4.0-rc3-00648-g75455b906d82-dirty #76 SMP PREEMPT_DYNAMIC =
+Wed May 31 21:30:31 UTC 2023 i686 GNU/Linux
+> # sysctl -a | grep ping
+> net.ipv4.ping_group_range =3D 1   0
+> # sysctl -w net.ipv4.ping_group_range=3D"0 4294967295"
+> sysctl: setting key "net.ipv4.ping_group_range": Invalid argument
+> # sysctl -w net.ipv4.ping_group_range=3D"0 4294967294"
+> net.ipv4.ping_group_range =3D 0 4294967294
+> # sysctl -a | grep ping
+> net.ipv4.ping_group_range =3D 0   4294967294
+> ---8<---
