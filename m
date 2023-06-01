@@ -2,339 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 365CD719535
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA7D719532
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 10:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbjFAIQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 04:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
+        id S231693AbjFAIQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 04:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbjFAIQw (ORCPT
+        with ESMTP id S230222AbjFAIQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 04:16:52 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D119F;
-        Thu,  1 Jun 2023 01:16:50 -0700 (PDT)
-Received: from [192.168.127.158] (unknown [118.107.131.147])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 995F86606E8C;
-        Thu,  1 Jun 2023 09:16:37 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685607409;
-        bh=BA3QmEKFqxqHdhhS4O9rOqqxg4EqkWr8qScJTtUpscw=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=BW8rTdw4F+NWs34EXLaSqYAKE0lj+Cv98P4+2+RNl+iH0+ECZUTXf4/7QhoYlrZJ1
-         tHsJU8Mv9S2CiDymCEnw6J1uQVLylqwpKTuU8OZx7ObMcJ6tDqmYGsaOaV9XWTrlKu
-         0TDMFNgWAZ2pXvXEwxr7mtw9LLAIOXXiW/Hz3wy1p6ZQk2aJiqZzKluI8obkWl5yyf
-         Dfe93RFyS8Q7qzJ7hH6RxATRLtXGd8q7qpubaBB6coat4mHcZcaSgYe5F0ubVvzUws
-         APPbBmq5x4AxTM/ddC2/4NMC2YoQisDIS3nI3YOhZAFLyM5eMAOzLpFTvwEfjbukgV
-         poxEWcIJUaduA==
-Message-ID: <aeaaa33e-4d23-fd3a-1357-4751007aa3bd@collabora.com>
-Date:   Thu, 1 Jun 2023 13:16:14 +0500
+        Thu, 1 Jun 2023 04:16:30 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE33E2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 01:16:27 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96fa4a6a79bso66018066b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 01:16:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685607386; x=1688199386;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+ZlmtiF4KA9ocnxQPoaWgoJR4/5KSbrAx1dT+mr7mGM=;
+        b=W7NFa7T/Oae6bC96fLKOOD7Sb+BPavX6Psf0Cwp9e8TPJgPtXT/35jB3AE2+2yMRkz
+         9UlpledBPB25lpNULBYhsiKQf/hEqyMzQQqB3eU62AnDBtlBFAsigfMCs5zi63gloBGv
+         ikvR2pv0+B6jIzpVq/msFLaKiDbA+uAjvE9MR0youdgb4jhbgvZdI0H6llksNEtOsm1I
+         0ngAdtY+2HAQhJubh5BaiSGaMBFSlaGrSBaZfwk+SOvZkHgNJ5yp1yUWKGXb/x3o4Ou8
+         6804uC9lSlsEgDO93F02hK7wDaF1jMN8ecPSzlmcnMDeXWVQQxnIpiSHNT57jeeqc9mR
+         1dqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685607386; x=1688199386;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ZlmtiF4KA9ocnxQPoaWgoJR4/5KSbrAx1dT+mr7mGM=;
+        b=HZ4vtlOz+uC2CcbByZpR0xZz8/lzvtU9mpeUxGHrRYH1vl0b/b1hJ5kHVbGLBEsthg
+         eaCtt0RSXcGUoVfwVYwgugp98bsIUt/xKCu9W67t6f9cGQIXyufmJH56xeQtF6uxpB0S
+         lZJ7ucWvHb0rBdxDUPmMbvbW2lEO3YUk2KQiTo61zh8syz4/UyVlcv3SnrlwTibtV5T1
+         ohvOX/n9kOyexwwfmN21FW9wVnG6DnxF3QVIvXdYLUbaxIajoC9tO3DeLFI9DreJGokD
+         FFFo3L54eD7iY/Junjb4cvcK9wB1FGM8JFahh2Iimq51I+qsODwpOar8Lyft0vl8673R
+         6nBQ==
+X-Gm-Message-State: AC+VfDxBUwSMUsEJNt0POwsX8hpCRKke/LpoYQRUKGfPpjmctCpMetqt
+        7ogos61F4dHit9hSuCus/dMb+A==
+X-Google-Smtp-Source: ACHHUZ4DljKcRGOWxpVfB5cYXTsZTWw0PALbkS9QuMfQOSfa87E03D8Hwpa9RKx4sHT8U0nU+uktzg==
+X-Received: by 2002:a17:906:fd82:b0:96a:6f35:d1a5 with SMTP id xa2-20020a170906fd8200b0096a6f35d1a5mr7805033ejb.67.1685607386283;
+        Thu, 01 Jun 2023 01:16:26 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id u8-20020a1709060b0800b0096f920858afsm10170697ejg.102.2023.06.01.01.16.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 01:16:25 -0700 (PDT)
+Message-ID: <88a6ba33-2494-e4c7-eba2-d31c0deeb308@linaro.org>
+Date:   Thu, 1 Jun 2023 10:16:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v16 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Peter Xu <peterx@redhat.com>
-References: <20230525085517.281529-1-usama.anjum@collabora.com>
- <20230525085517.281529-3-usama.anjum@collabora.com> <ZHfAOAKj1ZQJ+zSy@x1n>
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1 17/43] dt-bindings: spi: Add Cirrus EP93xx
 Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZHfAOAKj1ZQJ+zSy@x1n>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Michael Peters <mpeters@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230601053546.9574-18-nikita.shubin@maquefel.me>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230601053546.9574-18-nikita.shubin@maquefel.me>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/23 2:46 AM, Peter Xu wrote:
-> Muhammad,
+On 01/06/2023 07:34, Nikita Shubin wrote:
+> Add YAML bindings for ep93xx SoC SPI.
 > 
-> Sorry, I probably can only review the non-interface part, and leave the
-> interface/buffer handling, etc. review for others and real potential users
-> of it..
-Thank you so much for the review. I think mostly we should be okay with
-interface as everybody has been making suggestions over the past revisions.
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> ---
+> 
+> Notes:
+>     v0 -> v1:
+>     Krzysztof Kozlowski:
+>     - replaced maintainers
+>     - removed wildcards
+>     - use fallback compatible and list all possible compatibles
+>     - drop quotes in ref
+>     - dropped "clock-names"
+>     - dropped label
+>     - fix ident
+> 
+>  .../devicetree/bindings/spi/spi-ep9301.yaml   | 69 +++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/spi-ep9301.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/spi-ep9301.yaml b/Documentation/devicetree/bindings/spi/spi-ep9301.yaml
+> new file mode 100644
+> index 000000000000..c363b25a3074
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/spi-ep9301.yaml
+> @@ -0,0 +1,69 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/spi-ep9301.yaml#
 
-> 
-> On Thu, May 25, 2023 at 01:55:14PM +0500, Muhammad Usama Anjum wrote:
->> +static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
->> +					 unsigned long addr, pte_t *ptep,
->> +					 pte_t ptent)
->> +{
->> +	pte_t old_pte;
->> +
->> +	if (!huge_pte_none(ptent)) {
->> +		old_pte = huge_ptep_modify_prot_start(vma, addr, ptep);
->> +		ptent = huge_pte_mkuffd_wp(old_pte);
->> +		ptep_modify_prot_commit(vma, addr, ptep, old_pte, ptent);
-> 
-> huge_ptep_modify_prot_start()?
-Sorry, I didn't realized that huge_ptep_modify_prot_start() is different
-from its pte version.
+Filename based on compatible, so missing prefix, wrong order of name
+components.
 
-> 
-> The other thing is what if it's a pte marker already?  What if a hugetlb
-> migration entry?  Please check hugetlb_change_protection().
-I've updated it in more better way. Please let me know what do you think
-about the following:
+This applies everywhere, not to some files only. Applied to all your
+bindings.
 
-static inline void make_uffd_wp_huge_pte(struct vm_area_struct *vma,
-					 unsigned long addr, pte_t *ptep,
-					 pte_t ptent)
-{
-	if (is_hugetlb_entry_hwpoisoned(ptent) || is_pte_marker(ptent))
-		return;
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: EP93xx SoC SPI controller
+> +
+> +maintainers:
+> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> +  - Nikita Shubin <nikita.shubin@maquefel.me>
+> +
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +
+> +properties:
+> +  "#address-cells": true
+> +  "#size-cells": true
 
-	if (is_hugetlb_entry_migration(ptent))
-		set_huge_pte_at(vma->vm_mm, addr, ptep,
-				pte_swp_mkuffd_wp(ptent));
-	else if (!huge_pte_none(ptent))
-		ptep_modify_prot_commit(vma, addr, ptep, ptent,
-					huge_pte_mkuffd_wp(ptent));
-	else
-		set_huge_pte_at(vma->vm_mm, addr, ptep,
-				make_pte_marker(PTE_MARKER_UFFD_WP));
-}
+Drop these two.
 
-As we always set UNPOPULATED, so markers are always set on none ptes
-initially. Is it possible that a none pte becomes present, then swapped and
-finally none again? So I'll do the following addition for make_uffd_wp_pte():
+> +
+> +  compatible:
 
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -1800,6 +1800,9 @@ static inline void make_uffd_wp_pte(struct
-vm_area_struct *vma,
- 	} else if (is_swap_pte(ptent)) {
- 		ptent = pte_swp_mkuffd_wp(ptent);
- 		set_pte_at(vma->vm_mm, addr, pte, ptent);
-+	} else {
-+		set_pte_at(vma->vm_mm, addr, pte,
-+			   make_pte_marker(PTE_MARKER_UFFD_WP));
- 	}
- }
+Anyway, compatible is always first.
+
+> +    oneOf:
+> +      - const: cirrus,ep9301-spi
+> +      - items:
+> +          - enum:
+> +              - cirrus,ep9302-spi
+> +              - cirrus,ep9307-spi
+> +              - cirrus,ep9312-spi
+> +              - cirrus,ep9315-spi
+> +          - const: cirrus,ep9301-spi
+> +
+> +  reg:
+> +    items:
+> +      - description: SPI registers region
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: SPI Controller reference clock source
+> +
+> +  cs-gpios: true
+
+Drop, not needed.
+
+> +
+> +  cirrus,ep9301-use-dma:
+> +    description: Flag indicating that the SPI should use dma
+> +    type: boolean
+
+In such case where are dmas? Unless you meant some internal dma
+controller? In such case extend the description because now it just
+duplicates property name.
 
 
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/cirrus,ep93xx-clock.h>
+> +    spi@808a0000 {
+> +      compatible = "cirrus,ep9301-spi";
+> +      reg = <0x808a0000 0x18>;
+> +      interrupt-parent = <&vic1>;
+> +      interrupts = <21>;
+> +      clocks = <&syscon EP93XX_CLK_SPI>;
+> +      cs-gpios = <&gpio5 2 0>;
 
+Use proper gpio defines for flags.
 
-> 
->> +	} else {
->> +		set_huge_pte_at(vma->vm_mm, addr, ptep,
->> +				make_pte_marker(PTE_MARKER_UFFD_WP));
->> +	}
->> +}
->> +#endif
-> 
-> [...]
-> 
->> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
->> +				  unsigned long end, struct mm_walk *walk)
->> +{
->> +	struct pagemap_scan_private *p = walk->private;
->> +	struct vm_area_struct *vma = walk->vma;
->> +	unsigned long addr = end;
->> +	pte_t *pte, *orig_pte;
->> +	spinlock_t *ptl;
->> +	bool is_written;
->> +	int ret = 0;
->> +
->> +	arch_enter_lazy_mmu_mode();
->> +
->> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
->> +	ptl = pmd_trans_huge_lock(pmd, vma);
->> +	if (ptl) {
->> +		unsigned long n_pages = (end - start)/PAGE_SIZE;
->> +
->> +		if (p->max_pages && n_pages > p->max_pages - p->found_pages)
->> +			n_pages = p->max_pages - p->found_pages;
->> +
->> +		is_written = !is_pmd_uffd_wp(*pmd);
->> +
->> +		/*
->> +		 * Break huge page into small pages if the WP operation need to
->> +		 * be performed is on a portion of the huge page.
->> +		 */
->> +		if (is_written && IS_PM_SCAN_WP(p->flags) &&
->> +		    n_pages < HPAGE_SIZE/PAGE_SIZE) {
->> +			spin_unlock(ptl);
->> +
->> +			split_huge_pmd(vma, pmd, start);
->> +			goto process_smaller_pages;
->> +		}
->> +
->> +		if (IS_PM_SCAN_GET(p->flags))
->> +			ret = pagemap_scan_output(is_written, vma->vm_file,
->> +						  pmd_present(*pmd),
->> +						  is_swap_pmd(*pmd),
->> +						  p, start, n_pages);
->> +
->> +		if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
->> +			make_uffd_wp_pmd(vma, addr, pmd);
->> +
->> +		if (IS_PM_SCAN_WP(p->flags))
->> +			flush_tlb_range(vma, start, end);
->> +
->> +		spin_unlock(ptl);
->> +
->> +		arch_leave_lazy_mmu_mode();
->> +		return ret;
->> +	}
->> +
->> +process_smaller_pages:
->> +	if (pmd_trans_unstable(pmd)) {
->> +		arch_leave_lazy_mmu_mode();
->> +		return 0;
-> 
-> I'm not sure whether this is right..  Shouldn't you return with -EAGAIN and
-> let the user retry?  Returning 0 means you'll move on with the next pmd
-> afaict and ignoring this one.
-This has come up before. We are just replicating pagemap_pmd_range() here
-as we are doing almost the same thing through IOCTL. It doesn't return any
-error in this case and just skips it. So we are doing the same.
+> +      cirrus,ep9301-use-dma;
+> +    };
+> +
+> +...
 
-> 
->> +	}
->> +#endif
->> +
->> +	orig_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
-> 
-> Just a heads-up that this may start to fail at some point if Hugh's work
-> will land earlier:
-> 
-> https://lore.kernel.org/linux-mm/68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com/
-Thank you so much for the heads up.
+Best regards,
+Krzysztof
 
-> 
->> +	for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE) {
->> +		is_written = !is_pte_uffd_wp(*pte);
->> +
->> +		if (IS_PM_SCAN_GET(p->flags))
->> +			ret = pagemap_scan_output(is_written, vma->vm_file,
->> +						  pte_present(*pte),
->> +						  is_swap_pte(*pte),
->> +						  p, addr, 1);
->> +
->> +		if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
->> +			make_uffd_wp_pte(vma, addr, pte);
->> +	}
->> +
->> +	if (IS_PM_SCAN_WP(p->flags))
->> +		flush_tlb_range(vma, start, addr);
->> +
->> +	pte_unmap_unlock(orig_pte, ptl);
->> +	arch_leave_lazy_mmu_mode();
->> +
->> +	cond_resched();
->> +	return ret;
->> +}
->> +
->> +#ifdef CONFIG_HUGETLB_PAGE
->> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
->> +				      unsigned long start, unsigned long end,
->> +				      struct mm_walk *walk)
->> +{
->> +	unsigned long n_pages = (end - start)/PAGE_SIZE;
->> +	struct pagemap_scan_private *p = walk->private;
->> +	struct vm_area_struct *vma = walk->vma;
->> +	struct hstate *h = hstate_vma(vma);
->> +	spinlock_t *ptl;
->> +	bool is_written;
->> +	int ret = 0;
->> +	pte_t pte;
->> +
->> +	arch_enter_lazy_mmu_mode();
-> 
-> This _seems_ to be not needed for hugetlb entries.
-I'll remove it.
-
-> 
->> +
->> +	if (p->max_pages && n_pages > p->max_pages - p->found_pages)
->> +		n_pages = p->max_pages - p->found_pages;
->> +
->> +	if (IS_PM_SCAN_WP(p->flags)) {
->> +		i_mmap_lock_write(vma->vm_file->f_mapping);
->> +		ptl = huge_pte_lock(h, vma->vm_mm, ptep);
->> +	}
->> +
->> +	pte = huge_ptep_get(ptep);
->> +	is_written = !is_huge_pte_uffd_wp(pte);
->> +
->> +	/*
->> +	 * Partial hugetlb page clear isn't supported
->> +	 */
->> +	if (is_written && IS_PM_SCAN_WP(p->flags) &&
->> +	    n_pages < HPAGE_SIZE/PAGE_SIZE) {
->> +		ret = -EPERM;
->> +		goto unlock_and_return;
->> +	}
->> +
->> +	if (IS_PM_SCAN_GET(p->flags)) {
->> +		ret = pagemap_scan_output(is_written, vma->vm_file,
->> +					  pte_present(pte), is_swap_pte(pte),
->> +					  p, start, n_pages);
->> +		if (ret < 0)
->> +			goto unlock_and_return;
->> +	}
->> +
->> +	if (is_written && IS_PM_SCAN_WP(p->flags)) {
->> +		make_uffd_wp_huge_pte(vma, start, ptep, pte);
->> +		flush_hugetlb_tlb_range(vma, start, end);
->> +	}
->> +
->> +unlock_and_return:
->> +	if (IS_PM_SCAN_WP(p->flags)) {
->> +		spin_unlock(ptl);
->> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
->> +	}
->> +
->> +	arch_leave_lazy_mmu_mode();
-> 
-> Same here.
-> 
->> +
->> +	return ret;
->> +}
-> 
-> [...]
-> 
-
--- 
-BR,
-Muhammad Usama Anjum
