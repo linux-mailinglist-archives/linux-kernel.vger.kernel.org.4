@@ -2,112 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76472719390
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:50:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8804071939F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 08:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbjFAGut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 02:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
+        id S231860AbjFAGzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 02:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbjFAGuq (ORCPT
+        with ESMTP id S231800AbjFAGy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 02:50:46 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A784E2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 23:50:45 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51496f57e59so777434a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 23:50:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685602244; x=1688194244;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q3FPpYGCRQvqGtj5K7A51eFqGOlW0Bj/YEFDgkAuNzo=;
-        b=HatPd+F8H/aKab99kJgFnaeCtplLVrq56nqL2I0/WH1jiSgmjWG9PvbDSMCBHbnY6g
-         zSlbHMgSehUWW0ONEWn/zg0aDmY98jgPTZzR2N7jd8XpFBYJ/TzZR/+M/vCA5e8MY/PE
-         5Wkbyh/eah/92hgn9cR16pPgz5PbyPJbsexP76NkVVlgjyS92JP1tbkdnpa7tny6CsiD
-         hRih8p5yOZDDxM6irbA32cWINbP8j45+ST8WQZn4quYfDc+0pRlnZRlmCESVCMJHoT2x
-         rsANKZfOq6OBm05iQrtVzyGJRu+fGQWxwQh6MSWBnp5SvFbaSkf8NZPIqrsgBJxQ9xlQ
-         /mVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685602244; x=1688194244;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q3FPpYGCRQvqGtj5K7A51eFqGOlW0Bj/YEFDgkAuNzo=;
-        b=b8vZaWFk3yUHwnOszVZIxN0/4Pv4UWhZkfnxhoop1azOmoJc8noxKNyQIyF7oD87fn
-         sIiIClLrz/QIiMPmX0vLUE978BFJNA376258lVxZb+gbYx0wCeHmSYWQtMrNe7JSTMMn
-         ElhzM8xc/n7qRk8y6wLlr62QyVZf+SjnJKSybC5NA6/aAj6ui/Z5EKu/qjYJFlh2Wah/
-         8H/RZAPVfEZ1mW7/IbD4jy+EOw0onW0SDnBm1cuWwcOqZM5HfvPy+t5yqtn4OpOwOGfd
-         IxzSyzEjBeDYR8gVYkxbQf/0KxzFcba9rb8j+VrLZ0XJ54efo6XV2s8CL0eLS4aWWhOL
-         auNA==
-X-Gm-Message-State: AC+VfDx1wpiwyYtXKk97jOYWiQCluFVR8LJY0SsrDsPwrfAvfzrDudoQ
-        cBenITiMaV+/f1EJ6aTcOX+YqQ==
-X-Google-Smtp-Source: ACHHUZ5SHYblK1UbhYQwS3N7gHnmMWs5GtDzRfns223BYfbgzoaLLZz0fOjxOwqbOYidv0xKi/FRbQ==
-X-Received: by 2002:a50:fe8e:0:b0:514:9edb:185a with SMTP id d14-20020a50fe8e000000b005149edb185amr5244647edt.9.1685602243987;
-        Wed, 31 May 2023 23:50:43 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id j2-20020a50ed02000000b0050bc4600d38sm6260849eds.79.2023.05.31.23.50.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 23:50:43 -0700 (PDT)
-Message-ID: <a29985be-da0d-f9d4-956d-f00748f06dcc@linaro.org>
-Date:   Thu, 1 Jun 2023 08:50:40 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/8] dt-bindings: soc: qcom,rpmh-rsc: Require
- power-domains
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 1 Jun 2023 02:54:56 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCCB134;
+        Wed, 31 May 2023 23:54:50 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3516fRfn009049;
+        Thu, 1 Jun 2023 08:53:28 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=8H8AEU7eqzWAvBjrD3F5quK0OnexjZy8CtWYJysXkfQ=;
+ b=kvvJtq6O+ns505n1+MyUEyqPmRLUPe0/+YetQ8I8X5vaaXVagY+sZay/FqxJbCIMnJKE
+ PibodwZoAYC/VeRB6kbH/GYeY7gfRfZdD0XJKhn8EUciutXYT+r1X6fdHwzBIHxpFEIZ
+ y6rJ+ztamNVno3e7NkisbrE5NP7TtLKEVxWzwLQRZW+dtcsG/FoV9JNZ4RcOtLnnRqBs
+ RMiB4ztk46LqfwQfw7xgurzplqqENNK9iPsDPwyrNUaJExC/nEx/EAHeeZuMBr13l3IU
+ kbYnUMBpL7PWXzqZFv/hvLbrRUGWNnHx20NSZMUcUjggTOb2GNSMubKqJpzkdGjRJ0vc tQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qx95rc2kn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 08:53:27 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 97E9D100038;
+        Thu,  1 Jun 2023 08:52:25 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8FF9B20E1E2;
+        Thu,  1 Jun 2023 08:52:25 +0200 (CEST)
+Received: from localhost (10.129.178.213) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 1 Jun
+ 2023 08:52:25 +0200
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Richard Acayan <mailingradian@gmail.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <andy.gross@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-References: <20230531-topic-rsc-v1-0-b4a985f57b8b@linaro.org>
- <20230531-topic-rsc-v1-1-b4a985f57b8b@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230531-topic-rsc-v1-1-b4a985f57b8b@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     <linux-media@vger.kernel.org>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ARM: dts: stm32: add required supplies of ov5640 in stm32mp157c-ev1
+Date:   Thu, 1 Jun 2023 08:52:21 +0200
+Message-ID: <20230601065222.2594700-1-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.129.178.213]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_04,2023-05-31_03,2023-05-22_02
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 15:22, Konrad Dybcio wrote:
-> The Linux RPMh implementation refrains from sending some RPMh votes until
-> the system is about to enter suspend (which is indicated by all CPU cores
-> entering a low-power state). Lack of the power-domains property will make
-> it such that these votes are never sent.
-> 
-> Require the power-domains property as discussed in [1].
-> 
-> [1] https://lore.kernel.org/linux-arm-msm/20230512150425.3171122-1-quic_bjorande@quicinc.com/
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Correct the following warnings by adding the required supplies (AVDD, DVDD)
+for the ov5640 node.
 
+arch/arm/boot/dts/stm32mp157c-ev1.dtb: camera@3c: 'AVDD-supply' is a required property
+From schema: Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml
+arch/arm/boot/dts/stm32mp157c-ev1.dtb: camera@3c: 'DVDD-supply' is a required property
+From schema: Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+---
+ arch/arm/boot/dts/stm32mp157c-ev1.dts | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/arch/arm/boot/dts/stm32mp157c-ev1.dts b/arch/arm/boot/dts/stm32mp157c-ev1.dts
+index ba8e9d9a42fa..f27d6dcb6651 100644
+--- a/arch/arm/boot/dts/stm32mp157c-ev1.dts
++++ b/arch/arm/boot/dts/stm32mp157c-ev1.dts
+@@ -185,7 +185,9 @@ ov5640: camera@3c {
+ 		reg = <0x3c>;
+ 		clocks = <&clk_ext_camera>;
+ 		clock-names = "xclk";
++		AVDD-supply = <&v2v8>;
+ 		DOVDD-supply = <&v2v8>;
++		DVDD-supply = <&v2v8>;
+ 		powerdown-gpios = <&stmfx_pinctrl 18 (GPIO_ACTIVE_HIGH | GPIO_PUSH_PULL)>;
+ 		reset-gpios = <&stmfx_pinctrl 19 (GPIO_ACTIVE_LOW | GPIO_PUSH_PULL)>;
+ 		rotation = <180>;
+-- 
+2.25.1
 
