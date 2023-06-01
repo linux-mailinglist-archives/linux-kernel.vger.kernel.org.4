@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C238371944F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18AE8719450
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 09:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbjFAHbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 03:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
+        id S231786AbjFAHa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 03:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbjFAHa7 (ORCPT
+        with ESMTP id S231774AbjFAHay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 03:30:59 -0400
-Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3130134;
-        Thu,  1 Jun 2023 00:30:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-        s=the; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=5R1BHC0gXtbz/0Z2uW7Pc5h9Efmbp8Ceo5/wsspQkEM=; b=NwaiNQQaonrok2bcrK9PdEqsDW
-        ki1pWFn/jaST9w8KfVTlfJNmvoheojlmbgcfnkOhU5SzZ7VFpfQMTvxzMkTdDDX/T0b3O0/yB6jCl
-        WivI0/XnMx/74gFgrtZDK4aiqYDx9HQC+XRYzS9BHRBXj+oH76975bI6BYFxNaYl6AJLkY9W4EBMI
-        N6VL7gpwRbiiDnTEDm+/7LI28q11+2sfdQ036PlL/KbafJ0xbLiapaVK3HrvRTryuDk/jHPyiU0M+
-        oOYBAKsAhBXAAqEybqnPRbge/G9Rg/0jAFo4ZWoiRbQMpNQXtfP29Z0bGDGGRPpWJGI6C37EUqJyN
-        F0D5ci8g==;
-Received: from noodles by the.earth.li with local (Exim 4.94.2)
-        (envelope-from <noodles@earth.li>)
-        id 1q4clZ-00FO5U-6b; Thu, 01 Jun 2023 08:30:37 +0100
-Date:   Thu, 1 Jun 2023 08:30:37 +0100
-From:   Jonathan McDowell <noodles@earth.li>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] pinctrl: axp209: Add support for GPIO3 on the
- AXP209
-Message-ID: <ZHhJHQl+/oVeLOOO@earth.li>
-References: <cover.1681580558.git.noodles@earth.li>
- <cover.1683719613.git.noodles@earth.li>
- <f9b643ff0d0ed770f5a841111f213f8481dc920f.1683719613.git.noodles@earth.li>
- <CACRpkdb-wp2631KphG+iwnVaYk0Sm9JCLpoz1DuSQd4jXvEdAg@mail.gmail.com>
+        Thu, 1 Jun 2023 03:30:54 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C93AFB
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 00:30:53 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QWyV354nPz4x3s;
+        Thu,  1 Jun 2023 17:30:51 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1685604651;
+        bh=3pSew9k6P5Gtc4GC6KdLUot/OsZwv+jd76EFbmDpIk4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=SA/OoBhnuuIWzUOhL08upnPl4ERBqykcIUj24b33w/hUV01t300CfacaI6RCoVSmo
+         uwxDVxHrlaHoAng4/N7sDzVzEGuBTBA5LLG8DjaGI4aKfs/5mAUg8gRnDFm1tVHZ42
+         m6pZ6MX2KJCFZ5cXVSOEoUdB6Dx/pFUr+ps2zsnj2/zAGIbV+0MSyvPWvFwJ3UH+dS
+         mOJKGTu7vXhI5SUhr7SUro6ttrH0KoBJHGbu6VvcmdTTjNcc9/acF6lzBPFliQCJQA
+         l5IJW3rk0lnG2+nZQA8f4iJBfbcwQSstaJRoloINI4Vw8LBN7EQyFokEX8YVr/5pkf
+         tpVh92mCDDCLQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Finn Thain <fthain@linux-m68k.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Joshua Thompson <funaho@jurai.org>, linuxppc-dev@lists.ozlabs.org,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Exclude m68k-only drivers from powerpc entry
+In-Reply-To: <f020b46c-f291-ad2f-6c4c-6bc79955e6f2@linux-m68k.org>
+References: <20230531125023.1121060-1-mpe@ellerman.id.au>
+ <CAMuHMdUbVmjcYyXmparBm6pQwu3q7HpTKsKfi_aAHGOSX97MUw@mail.gmail.com>
+ <f020b46c-f291-ad2f-6c4c-6bc79955e6f2@linux-m68k.org>
+Date:   Thu, 01 Jun 2023 17:30:51 +1000
+Message-ID: <87mt1jhc5w.fsf@mail.lhotse>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdb-wp2631KphG+iwnVaYk0Sm9JCLpoz1DuSQd4jXvEdAg@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,25 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 11:51:46AM +0200, Linus Walleij wrote:
-> On Wed, May 10, 2023 at 2:01 PM Jonathan McDowell <noodles@earth.li> wrote:
-> > The AXP209 device has a 4th GPIO which has a slightly different register
-> > setup, where the control + status bits are held in a single register
-> > rather than sharing AXP20X_GPIO20_SS with GPIOs 0-2.
-> >
-> > Signed-off-by: Jonathan McDowell <noodles@earth.li>
-> 
-> This patch 2/5 applied to the pinctrl tree.
-> 
-> I just assume it is fine to apply this one patch, Bartosz already
-> applied the binding patch.
-> 
-> Tell me if this works.
+Finn Thain <fthain@linux-m68k.org> writes:
+> On Wed, 31 May 2023, Geert Uytterhoeven wrote:
+>> On Wed, May 31, 2023 at 2:50=E2=80=AFPM Michael Ellerman <mpe@ellerman.i=
+d.au> wrote:
+>> > The powerpc section has a "F:" entry for drivers/macintosh, matching=20
+>> > all files in or below drivers/macintosh. That is correct for the most=
+=20
+>> > part, but there are a couple of m68k-only drivers in the directory, so=
+=20
+>> > exclude those.
+>> >
+>> > Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+>>=20
+>> Thanks for your patch!
+>>=20
+>> > --- a/MAINTAINERS
+>> > +++ b/MAINTAINERS
+>> > @@ -11916,6 +11916,8 @@ L:      linuxppc-dev@lists.ozlabs.org
+>> >  S:     Odd Fixes
+>> >  F:     arch/powerpc/platforms/powermac/
+>> >  F:     drivers/macintosh/
+>> > +X:     drivers/macintosh/adb-iop.c
+>> > +X:     drivers/macintosh/via-macii.c
+>> >
+>> >  LINUX FOR POWERPC (32-BIT AND 64-BIT)
+>> >  M:     Michael Ellerman <mpe@ellerman.id.au>
+>>=20
+>> LGTM, as there are already entries for these two files under
+>> "M68K ON APPLE MACINTOSH".
+>
+> Right. I should have addded those "X files" in commit 2ae92e8b9b7.
 
-Everything else seems to have been picked up, so that works for me.
+Or I should have suggested it when I acked that commit :}
 
-
-J.
-
--- 
-Revd Jonathan McDowell, ULC | Even the Evening Herald slags me off.
+cheers
