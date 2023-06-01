@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8565A71F36B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2EB71F368
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbjFAUGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 16:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
+        id S231838AbjFAUGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231418AbjFAUGC (ORCPT
+        with ESMTP id S231605AbjFAUGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:06:02 -0400
+        Thu, 1 Jun 2023 16:06:03 -0400
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0331613D;
-        Thu,  1 Jun 2023 13:06:01 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 20D563200934;
-        Thu,  1 Jun 2023 16:06:00 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADC7133;
+        Thu,  1 Jun 2023 13:06:02 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 9F68632001FC;
+        Thu,  1 Jun 2023 16:06:01 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 01 Jun 2023 16:06:00 -0400
+  by compute3.internal (MEProxy); Thu, 01 Jun 2023 16:06:02 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685649959; x=
-        1685736359; bh=cLRPgHTyo6c+6/oybL3A1mBCEIZMGkL9lFVRPDGt43Y=; b=o
-        irn+iISfJ2v2EiO0BiBzXMNutmFAim0Ed/VDO69SfSuvKkpMGIyrkoEou54p4Ywk
-        dQVgAUOUWp75+MLcMWliJb7TV2brHPzaK0fZ51pV9iPevQa3wyi1naqTo352fqv3
-        moQIzmxsVhiThXMAaJGhjFN1oRiXmn4s1941y0srcLleyIYyKP7SY8jNNpF8aAyf
-        LrgQVscA/8iz7Wlfp0JLHKE0X2ZlqnoS4+hrvk8UFtYT96gEcclBfDSTeMqBooFF
-        /LZ1UMbP79a03LtgTxkgHbnB/07sy8MlWPNjdehrVPDrn8xmgeDlN3MGY8M4UvFu
-        QkYCaN4SXcN/z9Lj5Vilg==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685649961; x=
+        1685736361; bh=rsnvI6ZEp/JoaUhAmxQlv079Dx9MuMsySoRPjlJZ+pM=; b=K
+        FF8XJIVr5n6Lz38MWifQ9Tdz7OCINt4PZoioIkSQi3a2sY/e7pRQ1rBpUfS6FetT
+        iUG4CpcffnXIdsuth/mdBIl0vWUJ7gT1Kh4RgEbVb6l+RpPHulPoEzKk8YC7m/02
+        bsC5xk/n2/tU2ZzjPdz2T9tazzPpKeMfD4ORSXSPIMCb7Zn1nrFRiB5laSOy4OPR
+        UJv3MzYE0L167rQrDNMWLLx2ZzFAvIvEaqfe8SdajUyw92FBYD9geit/NTbG/qC/
+        voLHWOkw/1oMHaMHxMVGQbPCblh8EXYpOF5lDuF1/0Mrtbc0CzjiWK5dVDaa7ta0
+        AUz/8bHXWVacy+qghE+qQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685649959; x=
-        1685736359; bh=cLRPgHTyo6c+6/oybL3A1mBCEIZMGkL9lFVRPDGt43Y=; b=m
-        wD3SyB2r5oQrgbxOuR+t45kOCGcEil8va8a6hZnmLKu/TFZCP3G8VSU1sAQCOcOW
-        +H0jpBJs3jNRPw9KrSkemqoKt5nNmGTzgP/mk2P17O+rDQj38VEKOKQy/qHcW9eg
-        Z9x0THnN/e5Bq02TIGEIBSkJVZXag7Cs2qGF8EzRkqQ6eeOqkq0U/eTT2tvv0q0H
-        rDoqQORPjyz0bDwZGc3yV1oaAfNy3mlZRaQQK5CGODC9vpNJIcny7913ZAUtXduq
-        JpeWdWDbtwOvAnJFxkV+stPQTOUUCCIoqwo2++BY4URZqv5mKbD8hDj3Dz4d1WSg
-        h5dHuMGtQBX9BgVCXc0oQ==
-X-ME-Sender: <xms:J_p4ZNQhZ6qRHXlulFoQEdSlrlUDH1bbqERtV2ahA2wxGMfzxRwzIQ>
-    <xme:J_p4ZGz7s4VGKqUQQrgvppd49djtDYQ9KL2KdC80x9eBelmoMXt60Te9rHejyqJuX
-    IlyIXPVf1unvBKTjL4>
-X-ME-Received: <xmr:J_p4ZC1tdQjVpAGjLOod_HD9Vs0CiS52HYHURm9k4BJ8_5-ul7anaIcQGjO7OsZfS7xjE35_QgwXfvWCEbeeGQV5G7ivzEO7ddGfX-BGjhzBm7pa7LTj_oHDmQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeluddgudeghecutefuodetggdotefrod
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685649961; x=
+        1685736361; bh=rsnvI6ZEp/JoaUhAmxQlv079Dx9MuMsySoRPjlJZ+pM=; b=x
+        prHedPveuDoLuTck2jbZWnGzbszvRSALvtisZ5K4ngeeQY0GJF0ofMXjugrWt2EP
+        Kck52VghWMj2sNZLgWJdl2Ggxjr6XTHV6ess96QaYx5PEuivM6urr7mXfEcmbWNM
+        0sB8l509q2kAT5oCRkMqUz+dc/BY6Agq1LuGTyxVGK0b9IQByu/TIl3kCoo7kzOR
+        fpleESsAQ8Gc+MM55UkD0vTiGGpvv9bBzxQ91dxAzqdnu6DP3Sl8L3DQsVWYBx03
+        DvBqCAXp+Bt5IyOe6aPi5dHAuhqljKP1zG7g9mJ1jhhYrjGCfrZ0TPeua1l5QWC+
+        0UKTE7sOXsJ5IaamU2ofA==
+X-ME-Sender: <xms:Kfp4ZGHbAIGpMRpnEyH6DG9rTjuz_JnLYw8UIPGBDiXG99eeVc3Q2w>
+    <xme:Kfp4ZHWq2FVYLe5Y9oBILdonihGx2xxBIvTNhdAS9ZuS1XSu-QmdgeYW5PlHeKl8Q
+    1GkZqp6RTbiUleAPrg>
+X-ME-Received: <xmr:Kfp4ZAIKosfbsIU1OrMHe5c5ko8l6VFT0vzPNzkFSANlEaQdePyi1-5WzASa9t7X9xhf0hu_7zhbHdWtcupvKX8de_ExdTIUST3jTPw0vegoYC3m5Eb536Z4ag>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeluddgudeggecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecuogetfedtuddqtdduucdludehmdenucfjughrpe
     fhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforghrkhcurfgvrghr
@@ -56,21 +56,21 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeluddgudeghecutefuodetgg
     frrghtthgvrhhnpeeftddvjeefleffvefhgfejjeehudetteeigeeugfekhffhgeejudeu
     teehgfdvffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
     hmpehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
-X-ME-Proxy: <xmx:J_p4ZFBWdQrwoGK-DlaYbQ6hoMB0Sir1H5F0unhgQQplAF994MFy7g>
-    <xmx:J_p4ZGhkhQ2Z_sO6ED6zhEtPiDKVTv8bCIZF0_aAInroFjrh54UNOw>
-    <xmx:J_p4ZJrMx9r6eknezFImJAFN0P4Qm8JXsdZ9oZ9Z5vETBaBOhLK3Cw>
-    <xmx:J_p4ZOfkCJlU2LEWDqoIO_yluZ94Qd4HzMXchDgvbw4IRqlPRc3Q5A>
+X-ME-Proxy: <xmx:Kfp4ZAF7t88LCE_dBO6X4Z0Cit9u0EhEryS1LR_EzpyY7WShS-GRsg>
+    <xmx:Kfp4ZMUJ0siPu7r8AnPwpgX3GRBSS5oX7fS2OfCn3E4X8ipuGNhSNA>
+    <xmx:Kfp4ZDPDt450MI5AXi7OwIGwil3KCwFU_kCOMCgJmAP4nDzPR3WssA>
+    <xmx:Kfp4ZKz5l1bBJGth7lEGVfasTe0a8M9pFxKrHZDf0vDMQc4ZlcIkbQ>
 Feedback-ID: ibe194615:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 1 Jun 2023 16:05:59 -0400 (EDT)
+ 1 Jun 2023 16:06:00 -0400 (EDT)
 From:   Mark Pearson <mpearson-lenovo@squebb.ca>
 To:     mpearson-lenovo@squebb.ca
 Cc:     hdegoede@redhat.com, markgross@kernel.org,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
         ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v4 3/8] platform/x86: think-lmi: Correct System password interface
-Date:   Thu,  1 Jun 2023 16:05:47 -0400
-Message-Id: <20230601200552.4396-3-mpearson-lenovo@squebb.ca>
+Subject: [PATCH v4 4/8] platform/x86: think-lmi: Update password attribute comments
+Date:   Thu,  1 Jun 2023 16:05:48 -0400
+Message-Id: <20230601200552.4396-4-mpearson-lenovo@squebb.ca>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230601200552.4396-1-mpearson-lenovo@squebb.ca>
 References: <mpearson-lenovo@squebb.ca>
@@ -87,54 +87,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The system password identification was incorrect. This means that if
-the password was enabled it wouldn't be detected correctly; and setting
-it would not work.
-Also updated code to use TLMI_SMP_PWD instead of TLMI_SYS_PWD to be in
-sync with Lenovo documentation.
+Add comments to clarify what the different password attributes
+are (as requested).
 
-Fixes: 640a5fa50a42 ("platform/x86: think-lmi: Opcode support")
 Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 ---
-Changes in v2:
- - Updated define name to be SMP_PWD instead of SYS_PWD.
- - Clarified in comments what each password type is.
-Changes in v3:
- - None. Version bump with rest of series.
 Changes in v4:
- - This patch was previously #2 and is now #3 in series.
- - Patch split so comment updates moved into new patch (next in series).
+ - New patch split out from previous patch #2.
 
- drivers/platform/x86/think-lmi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/platform/x86/think-lmi.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
-index 80a5c989db03..f6d1931540f1 100644
+index f6d1931540f1..564e3fc33cfb 100644
 --- a/drivers/platform/x86/think-lmi.c
 +++ b/drivers/platform/x86/think-lmi.c
-@@ -172,7 +172,7 @@ MODULE_PARM_DESC(debug_support, "Enable debug command support");
- #define TLMI_POP_PWD (1 << 0)
- #define TLMI_PAP_PWD (1 << 1)
- #define TLMI_HDD_PWD (1 << 2)
--#define TLMI_SYS_PWD (1 << 3)
-+#define TLMI_SMP_PWD (1 << 6) /* System Management */
- #define TLMI_CERT    (1 << 7)
+@@ -169,11 +169,11 @@ MODULE_PARM_DESC(debug_support, "Enable debug command support");
+  */
+ #define LENOVO_CERT_THUMBPRINT_GUID "C59119ED-1C0D-4806-A8E9-59AA318176C4"
+ 
+-#define TLMI_POP_PWD (1 << 0)
+-#define TLMI_PAP_PWD (1 << 1)
+-#define TLMI_HDD_PWD (1 << 2)
++#define TLMI_POP_PWD (1 << 0) /* Supervisor */
++#define TLMI_PAP_PWD (1 << 1) /* Power-on */
++#define TLMI_HDD_PWD (1 << 2) /* HDD/NVME */
+ #define TLMI_SMP_PWD (1 << 6) /* System Management */
+-#define TLMI_CERT    (1 << 7)
++#define TLMI_CERT    (1 << 7) /* Certificate Based */
  
  #define to_tlmi_pwd_setting(kobj)  container_of(kobj, struct tlmi_pwd_setting, kobj)
-@@ -1519,11 +1519,11 @@ static int tlmi_analyze(void)
- 		tlmi_priv.pwd_power->valid = true;
- 
- 	if (tlmi_priv.opcode_support) {
--		tlmi_priv.pwd_system = tlmi_create_auth("sys", "system");
-+		tlmi_priv.pwd_system = tlmi_create_auth("smp", "system");
- 		if (!tlmi_priv.pwd_system)
- 			goto fail_clear_attr;
- 
--		if (tlmi_priv.pwdcfg.core.password_state & TLMI_SYS_PWD)
-+		if (tlmi_priv.pwdcfg.core.password_state & TLMI_SMP_PWD)
- 			tlmi_priv.pwd_system->valid = true;
- 
- 		tlmi_priv.pwd_hdd = tlmi_create_auth("hdd", "hdd");
+ #define to_tlmi_attr_setting(kobj)  container_of(kobj, struct tlmi_attr_setting, kobj)
 -- 
 2.40.1
 
