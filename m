@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C294A71F221
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E422871F208
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 20:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbjFAScb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 14:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
+        id S232877AbjFASc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 14:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232319AbjFAScI (ORCPT
+        with ESMTP id S232062AbjFAScH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 14:32:08 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9306D1A4;
+        Thu, 1 Jun 2023 14:32:07 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A411A1;
         Thu,  1 Jun 2023 11:32:05 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 351IVrAt014490;
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 351IVr3h091645;
         Thu, 1 Jun 2023 13:31:53 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1685644313;
-        bh=2VUuyHFSKVTgqy5FS7onxI5CWMUgHFfocdfhtBzQ7BE=;
-        h=From:To:CC:Subject:Date;
-        b=c/n1m+SxGXSsaMARfFlKuig1uttIs4ls9haB+ZTHI5CO/eul6unJ3g967wdPyDWDp
-         LyqQZcvfBPdAfPgkaIJsMzDt9jv3JyEYxz+U3B8Gj3lcy7q6nKYsjPaESPEXM/7FxD
-         MX8oiE6fc9cvba+gQMVOgw/t/DE+/EhdXBBb0rQI=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 351IVrVR069833
+        s=ti-com-17Q1; t=1685644314;
+        bh=jBmi77Dkh7N5eQtgiJ3RWIehaeWbAIRPMWVgM24xnLY=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=g0pwjwtSL3Jx1L+WWtWld2WDuHYXdeetxq5sIg+HLGga1pSnTmhBwgrhGpObCQf0N
+         d/+BimGnO5tr7mG22yo+Ke050PS1+dvJeIi9q4aZbrdHVtIHegP8O5mL8wPDJV20Ya
+         Yk1zQgo5Gq607heWw8SlnK4Q7iurL2e0zKvtbR3c=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 351IVruF008357
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Thu, 1 Jun 2023 13:31:53 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 1
  Jun 2023 13:31:53 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
  Frontend Transport; Thu, 1 Jun 2023 13:31:53 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 351IVrOP002963;
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 351IVrmY033837;
         Thu, 1 Jun 2023 13:31:53 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Conor Dooley <conor+dt@kernel.org>,
@@ -50,10 +50,12 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, Nishanth Menon <nm@ti.com>,
         Udit Kumar <u-kumar1@ti.com>,
         Neha Malcom Francis <n-francis@ti.com>
-Subject: [PATCH 0/9] arm64: dts: ti: k3-j721e-*: Fix up pinmux and aliases
-Date:   Thu, 1 Jun 2023 13:31:42 -0500
-Message-ID: <20230601183151.1000157-1-nm@ti.com>
+Subject: [PATCH 1/9] arm64: dts: ti: k3-j721e-sk: Add missing uart pinmuxes
+Date:   Thu, 1 Jun 2023 13:31:43 -0500
+Message-ID: <20230601183151.1000157-2-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230601183151.1000157-1-nm@ti.com>
+References: <20230601183151.1000157-1-nm@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -68,38 +70,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Rather than depend on the default pinmuxes, explicitly describe the
+pinmux
 
-This series cleansup k3-j721e platforms for pinmuxes and aliases.
-Provide complete description of uart and i2c instead of piggy-backing on
-bootloader configurations, ensure board detection eeproms are defined,
-aliases be defined in the board files as well.
+Signed-off-by: Nishanth Menon <nm@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-j721e-sk.dts | 31 ++++++++++++++++++++++++--
+ 1 file changed, 29 insertions(+), 2 deletions(-)
 
-Many of these changes were maintained in u-boot tree, and this moves
-those orphan changes to the super set definition in kernel.
-
-Sample bootlog: j721e-common-proc-board in idk-gw configuration:
-	https://gist.github.com/nmenon/65fee02cb7a5207ac0d078f6abac6b6e
-
-Nishanth Menon (9):
-  arm64: dts: ti: k3-j721e-sk: Add missing uart pinmuxes
-  arm64: dts: ti: k3-j721e-sk: Enable wakeup_i2c0 and eeprom
-  arm64: dts: ti: j721e-som/common-proc-board: Add product links
-  arm64: dts: ti: j721e-common-proc-board: Add uart pinmux
-  arm64: dts: ti: k3-j721e-som-p0: Enable wakeup_i2c0 and eeprom
-  arm64: dts: ti: k3-j721e-beagleboneai64: Add wakeup_uart pinmux
-  arm64: dts: ti: k3-j721e-sk: Define aliases at board level
-  arm64: dts: ti: k3-j721e-common-proc-board: Define aliases at board
-    level
-  arm64: dts: ti: k3-j721e: Drop SoC level aliases
-
- .../boot/dts/ti/k3-j721e-beagleboneai64.dts   |  9 +++
- .../dts/ti/k3-j721e-common-proc-board.dts     | 76 ++++++++++++++++++-
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts        | 53 ++++++++++++-
- arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi   | 15 ++++
- arch/arm64/boot/dts/ti/k3-j721e.dtsi          | 19 -----
- 5 files changed, 147 insertions(+), 25 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
+index c04e845547fa..c068fa46f60e 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
++++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
+@@ -302,6 +302,13 @@ J721E_IOPAD(0x1ec, PIN_OUTPUT, 0) /* (AB3) UART0_TXD */
+ 		>;
+ 	};
+ 
++	main_uart1_pins_default: main-uart1-pins-default {
++		pinctrl-single,pins = <
++			J721E_IOPAD(0x1f8, PIN_INPUT, 0) /* (AA4) UART1_RXD */
++			J721E_IOPAD(0x1fc, PIN_OUTPUT, 0) /* (AB4) UART1_TXD */
++		>;
++	};
++
+ 	main_i2c0_pins_default: main-i2c0-pins-default {
+ 		pinctrl-single,pins = <
+ 			J721E_IOPAD(0x220, PIN_INPUT_PULLUP, 0) /* (AC5) I2C0_SCL */
+@@ -495,6 +502,22 @@ J721E_WKUP_IOPAD(0xd4, PIN_OUTPUT, 7) /* (G26) WKUP_GPIO0_9 */
+ 		>;
+ 	};
+ 
++	wkup_uart0_pins_default: wkup-uart0-pins-default {
++		pinctrl-single,pins = <
++			J721E_WKUP_IOPAD(0xa0, PIN_INPUT, 0) /* (J29) WKUP_UART0_RXD */
++			J721E_WKUP_IOPAD(0xa4, PIN_OUTPUT, 0) /* (J28) WKUP_UART0_TXD */
++		>;
++	};
++
++	mcu_uart0_pins_default: mcu-uart0-pins-default {
++		pinctrl-single,pins = <
++			J721E_WKUP_IOPAD(0xf0, PIN_INPUT, 2) /* (D26) MCU_I3C0_SCL.MCU_UART0_CTSn */
++			J721E_WKUP_IOPAD(0xf4, PIN_OUTPUT, 2)/* (D25) MCU_I3C0_SDA.MCU_UART0_RTSn */
++			J721E_WKUP_IOPAD(0xe4, PIN_INPUT, 0) /* (H28) WKUP_GPIO0_13.MCU_UART0_RXD */
++			J721E_WKUP_IOPAD(0xe0, PIN_OUTPUT, 0)/* (G29) WKUP_GPIO0_12.MCU_UART0_TXD */
++		>;
++	};
++
+ 	wkup_i2c0_pins_default: wkup-i2c0-pins-default {
+ 		pinctrl-single,pins = <
+ 			J721E_WKUP_IOPAD(0xf8, PIN_INPUT_PULLUP, 0) /* (J25) WKUP_I2C0_SCL */
+@@ -513,11 +536,14 @@ J721E_WKUP_IOPAD(0xdc, PIN_INPUT, 7) /* (H27) WKUP_GPIO0_11 */
+ &wkup_uart0 {
+ 	/* Wakeup UART is used by System firmware */
+ 	status = "reserved";
++	pinctrl-names = "default";
++	pinctrl-0 = <&wkup_uart0_pins_default>;
+ };
+ 
+ &mcu_uart0 {
+ 	status = "okay";
+-	/* Default pinmux */
++	pinctrl-names = "default";
++	pinctrl-0 = <&mcu_uart0_pins_default>;
+ };
+ 
+ &main_uart0 {
+@@ -530,7 +556,8 @@ &main_uart0 {
+ 
+ &main_uart1 {
+ 	status = "okay";
+-	/* Default pinmux */
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_uart1_pins_default>;
+ };
+ 
+ &main_sdhci0 {
 -- 
 2.40.0
 
