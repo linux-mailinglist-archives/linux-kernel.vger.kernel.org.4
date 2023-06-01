@@ -2,229 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C6F71A0D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7135E71A06D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 16:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234504AbjFAOsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 10:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
+        id S233614AbjFAOjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 10:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233840AbjFAOsx (ORCPT
+        with ESMTP id S232942AbjFAOjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 10:48:53 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D40C0
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 07:48:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685630931; x=1717166931;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2FTXpZZUjF4O+XNBC7fuiImWeTKkrfWGkyKkf1TaJnM=;
-  b=L/X5WJRmLFxkwCkMkXsDJy/3Ve7ZvRs6RJV8KrWquAAT6AC8UYrsLNJg
-   wM8C/vDQI/mq4NPAuD267ld8LpFigy7wzwo/ygao7k2YBfyyB3UhC4HjQ
-   xnGQ/92E5G9m91AWW7DVte9ud+xNvfbUjwxtWcT/ddrYnlOlhEJCMmp/m
-   7txaUJjPQ4qjPPimTMsUhcmWZENgd8CMGnte3ZhLazTz2Xu5Wdo5cTnL0
-   6N9M6wG/8tBPRNkBZwxtvfaa3Y02uGEecQ5Pmmthn4e9aEfPcXXH45XCJ
-   qIibl6qs6OZiJYgVhNG4wVU47OmD2ydfzaABV2nbuSZjp/X+xGv7Do7SJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="421382767"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="421382767"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 07:38:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="819828394"
-X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="819828394"
-Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Jun 2023 07:38:23 -0700
-Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q4jRW-0002NW-14;
-        Thu, 01 Jun 2023 14:38:22 +0000
-Date:   Thu, 1 Jun 2023 22:37:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lu Hongfei <luhongfei@vivo.com>,
-        Artur Weber <aweber.kernel@gmail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, opensource.kernel@vivo.com,
-        luhongfei@vivo.com
-Subject: Re: [PATCH] gpu: drm/panel: Optimize the workflow of s6d7aa0_lock
-Message-ID: <202306012249.Sm2dlQLk-lkp@intel.com>
-References: <20230531110717.36896-1-luhongfei@vivo.com>
+        Thu, 1 Jun 2023 10:39:11 -0400
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9611AE;
+        Thu,  1 Jun 2023 07:38:51 -0700 (PDT)
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5289cf35eeaso1664693a12.1;
+        Thu, 01 Jun 2023 07:38:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685630331; x=1688222331;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wXHq1UONbnZiz36F4lxFd4Y3lZ4zBSqIvo4+1HlfBRI=;
+        b=KIEJgAczmje8pviilWN4jpZDXAGsdugi5D8+rBUSantm+994urueieLjvjHBmtqSzQ
+         gGRVdnJzwN/88TxySXhrPUKUEqxkLfH2cdG02cd4W0ry10FhG0xZ8Y42pwIjcRI2YL+S
+         M8s3GlhsIZdNF+J2De1ae2BUrDySPZgBP4lIPhDOHjee9fZnnrcHudN0QeTbbURrV+Wj
+         2m0vx76cCQFmH9/A0x8YB8pDjzZUPE7z1dg7Q7sf9JWLisq2NC7vNVrJb7y9FjIZAyVn
+         299EhL1flHbBUeaGeyKtMxPRl7gAtAEYbYXUz13yzKHgEtoADflAp2WJykV4IiuXA9iu
+         45UQ==
+X-Gm-Message-State: AC+VfDwS3KHZzVghZbiwKPDcvHPOnuKvIlFUGAj7MIMp2/Xb3iBX0Mhx
+        wLqsUqzAyViUoLe9fmowKyQk537Cc+0=
+X-Google-Smtp-Source: ACHHUZ5zBhzSMBxdcBSPgIJ+gpOms+7QsXzG8xr+P5SVzyzxvrL8VPh8md7dtAuE77q15BErprIWow==
+X-Received: by 2002:a17:903:449:b0:1b0:3d03:4179 with SMTP id iw9-20020a170903044900b001b03d034179mr2055861plb.6.1685630330637;
+        Thu, 01 Jun 2023 07:38:50 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id g23-20020a1709029f9700b001ac381f1ce9sm3575354plq.185.2023.06.01.07.38.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 07:38:49 -0700 (PDT)
+Message-ID: <4f092b70-bfaf-8c6a-9f30-cd7b797ba2db@acm.org>
+Date:   Thu, 1 Jun 2023 07:38:48 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531110717.36896-1-luhongfei@vivo.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1] ufs: core: Remove the nolock version of
+ ufshcd_mcq_poll_cqe()
+Content-Language: en-US
+To:     Stanley Chu <stanley.chu@mediatek.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        avri.altman@wdc.com, alim.akhtar@samsung.com, jejb@linux.ibm.com
+References: <20230601090202.27035-1-stanley.chu@mediatek.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230601090202.27035-1-stanley.chu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lu,
+On 6/1/23 02:02, Stanley Chu wrote:
+> Since ufshcd_mcq_poll_cqe_nolock() is no longer used by any users,
+> it should be removed.
 
-kernel test robot noticed the following build errors:
+This description is not correct. ufshcd_mcq_poll_cqe_nolock() is called
+by ufshcd_mcq_poll_cqe_lock().
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on next-20230601]
-[cannot apply to linus/master v6.4-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Bart.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lu-Hongfei/gpu-drm-panel-Optimize-the-workflow-of-s6d7aa0_lock/20230531-190848
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230531110717.36896-1-luhongfei%40vivo.com
-patch subject: [PATCH] gpu: drm/panel: Optimize the workflow of s6d7aa0_lock
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230601/202306012249.Sm2dlQLk-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e1ade7d20fb0efb9aa0b332d5ac5da2863f8e68e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lu-Hongfei/gpu-drm-panel-Optimize-the-workflow-of-s6d7aa0_lock/20230531-190848
-        git checkout e1ade7d20fb0efb9aa0b332d5ac5da2863f8e68e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/gpu/drm/panel/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306012249.Sm2dlQLk-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:17:
-   drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c: In function 's6d7aa0_lock':
->> include/drm/drm_mipi_dsi.h:326:9: error: expected expression before 'do'
-     326 |         do {                                                               \
-         |         ^~
-   drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:72:23: note: in expansion of macro 'mipi_dsi_dcs_write_seq'
-      72 |                 ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0xa5, 0xa5);
-         |                       ^~~~~~~~~~~~~~~~~~~~~~
->> include/drm/drm_mipi_dsi.h:326:9: error: expected expression before 'do'
-     326 |         do {                                                               \
-         |         ^~
-   drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:75:23: note: in expansion of macro 'mipi_dsi_dcs_write_seq'
-      75 |                 ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0xa5, 0xa5);
-         |                       ^~~~~~~~~~~~~~~~~~~~~~
->> include/drm/drm_mipi_dsi.h:326:9: error: expected expression before 'do'
-     326 |         do {                                                               \
-         |         ^~
-   drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:79:31: note: in expansion of macro 'mipi_dsi_dcs_write_seq'
-      79 |                         ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0x5a, 0x5a);
-         |                               ^~~~~~~~~~~~~~~~~~~~~~
->> include/drm/drm_mipi_dsi.h:326:9: error: expected expression before 'do'
-     326 |         do {                                                               \
-         |         ^~
-   drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:84:23: note: in expansion of macro 'mipi_dsi_dcs_write_seq'
-      84 |                 ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0x5a, 0x5a);
-         |                       ^~~~~~~~~~~~~~~~~~~~~~
->> include/drm/drm_mipi_dsi.h:326:9: error: expected expression before 'do'
-     326 |         do {                                                               \
-         |         ^~
-   drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:87:23: note: in expansion of macro 'mipi_dsi_dcs_write_seq'
-      87 |                 ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD2, 0x5a, 0x5a);
-         |                       ^~~~~~~~~~~~~~~~~~~~~~
->> include/drm/drm_mipi_dsi.h:326:9: error: expected expression before 'do'
-     326 |         do {                                                               \
-         |         ^~
-   drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:91:31: note: in expansion of macro 'mipi_dsi_dcs_write_seq'
-      91 |                         ret = mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0xa5, 0xa5);
-         |                               ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c:68:33: warning: unused variable 'dsi' [-Wunused-variable]
-      68 |         struct mipi_dsi_device *dsi = ctx->dsi;
-         |                                 ^~~
-
-
-vim +/do +326 include/drm/drm_mipi_dsi.h
-
-3d9a8fcf1c6a90 Thierry Reding           2014-08-05  268  
-960dd616f61c84 Thierry Reding           2014-07-21  269  ssize_t mipi_dsi_dcs_write_buffer(struct mipi_dsi_device *dsi,
-960dd616f61c84 Thierry Reding           2014-07-21  270  				  const void *data, size_t len);
-960dd616f61c84 Thierry Reding           2014-07-21  271  ssize_t mipi_dsi_dcs_write(struct mipi_dsi_device *dsi, u8 cmd,
-960dd616f61c84 Thierry Reding           2014-07-21  272  			   const void *data, size_t len);
-3c523d7d38a17b Thierry Reding           2014-07-21  273  ssize_t mipi_dsi_dcs_read(struct mipi_dsi_device *dsi, u8 cmd, void *data,
-3c523d7d38a17b Thierry Reding           2014-07-21  274  			  size_t len);
-083d573fd013c9 Thierry Reding           2014-08-05  275  int mipi_dsi_dcs_nop(struct mipi_dsi_device *dsi);
-2f16b89737e24b Thierry Reding           2014-08-05  276  int mipi_dsi_dcs_soft_reset(struct mipi_dsi_device *dsi);
-3d9a8fcf1c6a90 Thierry Reding           2014-08-05  277  int mipi_dsi_dcs_get_power_mode(struct mipi_dsi_device *dsi, u8 *mode);
-5cc0af16fc08cf Thierry Reding           2014-08-05  278  int mipi_dsi_dcs_get_pixel_format(struct mipi_dsi_device *dsi, u8 *format);
-42fe1e755d08b8 YoungJun Cho             2014-08-05  279  int mipi_dsi_dcs_enter_sleep_mode(struct mipi_dsi_device *dsi);
-42fe1e755d08b8 YoungJun Cho             2014-08-05  280  int mipi_dsi_dcs_exit_sleep_mode(struct mipi_dsi_device *dsi);
-42fe1e755d08b8 YoungJun Cho             2014-08-05  281  int mipi_dsi_dcs_set_display_off(struct mipi_dsi_device *dsi);
-42fe1e755d08b8 YoungJun Cho             2014-08-05  282  int mipi_dsi_dcs_set_display_on(struct mipi_dsi_device *dsi);
-3b46d4a0def157 Thierry Reding           2014-08-05  283  int mipi_dsi_dcs_set_column_address(struct mipi_dsi_device *dsi, u16 start,
-3b46d4a0def157 Thierry Reding           2014-08-05  284  				    u16 end);
-3b46d4a0def157 Thierry Reding           2014-08-05  285  int mipi_dsi_dcs_set_page_address(struct mipi_dsi_device *dsi, u16 start,
-3b46d4a0def157 Thierry Reding           2014-08-05  286  				  u16 end);
-42fe1e755d08b8 YoungJun Cho             2014-08-05  287  int mipi_dsi_dcs_set_tear_off(struct mipi_dsi_device *dsi);
-42fe1e755d08b8 YoungJun Cho             2014-08-05  288  int mipi_dsi_dcs_set_tear_on(struct mipi_dsi_device *dsi,
-42fe1e755d08b8 YoungJun Cho             2014-08-05  289  			     enum mipi_dsi_dcs_tear_mode mode);
-5cc0af16fc08cf Thierry Reding           2014-08-05  290  int mipi_dsi_dcs_set_pixel_format(struct mipi_dsi_device *dsi, u8 format);
-bbdcf516a6187d Thierry Reding           2016-08-24  291  int mipi_dsi_dcs_set_tear_scanline(struct mipi_dsi_device *dsi, u16 scanline);
-1a9d759331b832 Vinay Simha BN           2016-07-31  292  int mipi_dsi_dcs_set_display_brightness(struct mipi_dsi_device *dsi,
-1a9d759331b832 Vinay Simha BN           2016-07-31  293  					u16 brightness);
-1a9d759331b832 Vinay Simha BN           2016-07-31  294  int mipi_dsi_dcs_get_display_brightness(struct mipi_dsi_device *dsi,
-1a9d759331b832 Vinay Simha BN           2016-07-31  295  					u16 *brightness);
-c9d27c6be518b4 Daniel Mentz             2023-01-16  296  int mipi_dsi_dcs_set_display_brightness_large(struct mipi_dsi_device *dsi,
-c9d27c6be518b4 Daniel Mentz             2023-01-16  297  					     u16 brightness);
-c9d27c6be518b4 Daniel Mentz             2023-01-16  298  int mipi_dsi_dcs_get_display_brightness_large(struct mipi_dsi_device *dsi,
-c9d27c6be518b4 Daniel Mentz             2023-01-16  299  					     u16 *brightness);
-068a0023396983 Andrzej Hajda            2013-12-04  300  
-a9015ce593204f Javier Martinez Canillas 2023-01-02  301  /**
-a9015ce593204f Javier Martinez Canillas 2023-01-02  302   * mipi_dsi_generic_write_seq - transmit data using a generic write packet
-a9015ce593204f Javier Martinez Canillas 2023-01-02  303   * @dsi: DSI peripheral device
-a9015ce593204f Javier Martinez Canillas 2023-01-02  304   * @seq: buffer containing the payload
-a9015ce593204f Javier Martinez Canillas 2023-01-02  305   */
-a9015ce593204f Javier Martinez Canillas 2023-01-02  306  #define mipi_dsi_generic_write_seq(dsi, seq...)                                \
-a9015ce593204f Javier Martinez Canillas 2023-01-02  307  	do {                                                                   \
-a9015ce593204f Javier Martinez Canillas 2023-01-02  308  		static const u8 d[] = { seq };                                 \
-a9015ce593204f Javier Martinez Canillas 2023-01-02  309  		struct device *dev = &dsi->dev;                                \
-a9015ce593204f Javier Martinez Canillas 2023-01-02  310  		int ret;                                                       \
-a9015ce593204f Javier Martinez Canillas 2023-01-02  311  		ret = mipi_dsi_generic_write(dsi, d, ARRAY_SIZE(d));           \
-a9015ce593204f Javier Martinez Canillas 2023-01-02  312  		if (ret < 0) {                                                 \
-a9015ce593204f Javier Martinez Canillas 2023-01-02  313  			dev_err_ratelimited(dev, "transmit data failed: %d\n", \
-a9015ce593204f Javier Martinez Canillas 2023-01-02  314  					    ret);                              \
-a9015ce593204f Javier Martinez Canillas 2023-01-02  315  			return ret;                                            \
-a9015ce593204f Javier Martinez Canillas 2023-01-02  316  		}                                                              \
-a9015ce593204f Javier Martinez Canillas 2023-01-02  317  	} while (0)
-a9015ce593204f Javier Martinez Canillas 2023-01-02  318  
-2a9e9daf75231c Joel Selvaraj            2022-06-01  319  /**
-2a9e9daf75231c Joel Selvaraj            2022-06-01  320   * mipi_dsi_dcs_write_seq - transmit a DCS command with payload
-2a9e9daf75231c Joel Selvaraj            2022-06-01  321   * @dsi: DSI peripheral device
-2a9e9daf75231c Joel Selvaraj            2022-06-01  322   * @cmd: Command
-2a9e9daf75231c Joel Selvaraj            2022-06-01  323   * @seq: buffer containing data to be transmitted
-2a9e9daf75231c Joel Selvaraj            2022-06-01  324   */
-51d3c0e7dc3cf1 Javier Martinez Canillas 2023-01-02  325  #define mipi_dsi_dcs_write_seq(dsi, cmd, seq...)                           \
-51d3c0e7dc3cf1 Javier Martinez Canillas 2023-01-02 @326  	do {                                                               \
-2a9e9daf75231c Joel Selvaraj            2022-06-01  327  		static const u8 d[] = { cmd, seq };                        \
-2a9e9daf75231c Joel Selvaraj            2022-06-01  328  		struct device *dev = &dsi->dev;                            \
-2a9e9daf75231c Joel Selvaraj            2022-06-01  329  		int ret;                                                   \
-2a9e9daf75231c Joel Selvaraj            2022-06-01  330  		ret = mipi_dsi_dcs_write_buffer(dsi, d, ARRAY_SIZE(d));    \
-2a9e9daf75231c Joel Selvaraj            2022-06-01  331  		if (ret < 0) {                                             \
-51d3c0e7dc3cf1 Javier Martinez Canillas 2023-01-02  332  			dev_err_ratelimited(                               \
-51d3c0e7dc3cf1 Javier Martinez Canillas 2023-01-02  333  				dev, "sending command %#02x failed: %d\n", \
-51d3c0e7dc3cf1 Javier Martinez Canillas 2023-01-02  334  				cmd, ret);                                 \
-2a9e9daf75231c Joel Selvaraj            2022-06-01  335  			return ret;                                        \
-2a9e9daf75231c Joel Selvaraj            2022-06-01  336  		}                                                          \
-2a9e9daf75231c Joel Selvaraj            2022-06-01  337  	} while (0)
-2a9e9daf75231c Joel Selvaraj            2022-06-01  338  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
