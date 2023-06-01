@@ -2,71 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981217190A9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 04:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 654237190B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 04:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbjFACpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 May 2023 22:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
+        id S231239AbjFACth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 May 2023 22:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjFACpE (ORCPT
+        with ESMTP id S229873AbjFACtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 May 2023 22:45:04 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1CD3F126;
-        Wed, 31 May 2023 19:44:32 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Dx_+sHBnhklSkDAA--.6901S3;
-        Thu, 01 Jun 2023 10:44:23 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxOLYDBnhkHnGDAA--.16216S3;
-        Thu, 01 Jun 2023 10:44:20 +0800 (CST)
-Subject: Re: [PATCH v3 0/5] perf tools: Modify mksyscalltbl
-To:     Leo Yan <leo.yan@linaro.org>
-References: <1685440265-7021-1-git-send-email-yangtiezhu@loongson.cn>
- <20230531235455.GA132356@leoy-huanghe>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Hans-Peter Nilsson <hp@axis.com>,
-        Alexander Kapshuk <alexander.kapshuk@gmail.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <b0498d76-7e66-1060-2555-be1a09018c88@loongson.cn>
-Date:   Thu, 1 Jun 2023 10:44:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Wed, 31 May 2023 22:49:35 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5F197
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 19:49:10 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6af6f49e41cso411660a34.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 May 2023 19:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1685587750; x=1688179750;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gxLmPWSnGEJp9jYQrAzo0Lj6e0Kr/zNbCeEBhHwKB60=;
+        b=hu/4HijiVBPYn82So3d2DaA499ZATcXicSwjIkrBMNR0Lk2sKY9WB21AprHj8KQXKG
+         9E+2/YML/Kq6o1Mpkh+HBCl3vYvL6//hOEI+tayubuF11vdspkFlo7nHzy0CTkWhTSmG
+         jAj5eQeYbPbM/bnoCAfzwfENSQjaloxM1xrGdpE/jRra48tNV7z1TvoH/rgXqsB85yIF
+         +hLtls15XjMRLXhZiVLh5XY/1Hd7PTd1PhN8F2bDoszjgoHY+snJBzB+ntsXGF4cwHF5
+         HrvflSqIjJJ+fAy/TLGxHYvGWLTOHsFxwqCng7tGo65geJYLjdXIYx9jv5N7VLE5NZXS
+         vAaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685587750; x=1688179750;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gxLmPWSnGEJp9jYQrAzo0Lj6e0Kr/zNbCeEBhHwKB60=;
+        b=A1qIjTrbQFQOJxmCp0nYpuUG68ex59pd/wwZ1Sy59yXa7CKOmR7E3br427B6mipKms
+         PMZtxnuE9+kuYaWmp+hejNbIlP0FuR5d6tN/bJ9yR8BKRGV8JUO51szxxLeaFmO5GiAW
+         WxHNxAX7rWokOFTbC7WMJ8KqNLuJMfTbHdWU9j0ywd6YlaHz3NNi+PeMXLr9o54oZD68
+         BR/Jlph8VQVv0DMS0AQphYrJotYvhyHUmDG3Z4BRj0+sqWwyOP0+EYkb5AfhX4P7xx3T
+         hANXSHC8KBphLvh4mjV7ea9EYPBkTBd7vyarwjpYCFfgbd0mBVji2kGOFUuIit/Pj6Ov
+         Eh5A==
+X-Gm-Message-State: AC+VfDyfuNTGBGoVDw0V9tCom4AGyRRBvgndpHooNnDh7J1IS12HrPl/
+        6va48k46LOdcY2AXJNphIOyh8w==
+X-Google-Smtp-Source: ACHHUZ4hGZuAkPLf2CHpFCdNg5z7eUawxXSFiEr8KIx8HvRyXkXOk9OZG3ApdnVSdfBM+swzkXqi2w==
+X-Received: by 2002:a05:6830:3a1a:b0:6af:7143:3b3c with SMTP id di26-20020a0568303a1a00b006af71433b3cmr4665495otb.9.1685587749871;
+        Wed, 31 May 2023 19:49:09 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([203.208.167.147])
+        by smtp.gmail.com with ESMTPSA id e10-20020a62ee0a000000b0064d5b82f987sm4076564pfi.140.2023.05.31.19.49.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 May 2023 19:49:09 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
+        zhoufeng.zf@bytedance.com
+Subject: [PATCH bpf-next] bpf: getsockopt hook to get optval without checking kernel retval
+Date:   Thu,  1 Jun 2023 10:49:00 +0800
+Message-Id: <20230601024900.22902-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-In-Reply-To: <20230531235455.GA132356@leoy-huanghe>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8DxOLYDBnhkHnGDAA--.16216S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoWrKFykXryrKr1kKr1DCr1UAwb_yoW3CFb_WF
-        nFgr1UC3y5Wr17KF4DKan8ZFyaqF9rXFs8t3s7Ww1kXw13Xr9xJFZa9ryrua1jyrWvqFZI
-        kFs8Xry8ZFZ8ujkaLaAFLSUrUUUUob8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
-        n7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAa
-        w2AFwI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCa
-        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0L0ePUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,30 +73,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
+Remove the judgment on retval and pass bpf ctx by default. The
+advantage of this is that it is more flexible. Bpf getsockopt can
+support the new optname without using the module to call the
+nf_register_sockopt to register.
 
-On 06/01/2023 07:55 AM, Leo Yan wrote:
-> Hi Tiezhu,
->
-> On Tue, May 30, 2023 at 05:51:00PM +0800, Tiezhu Yang wrote:
->
-> [...]
->
->> Tiezhu Yang (5):
->>   perf tools: Declare syscalltbl_*[] as const for all archs
->>   perf arm64: Rename create_table_from_c() to create_sc_table()
->>   perf arm64: Handle __NR3264_ prefixed syscall number
->>   perf arm64: Use max_nr to define SYSCALLTBL_ARM64_MAX_ID
->>   perf LoongArch: Simplify mksyscalltbl
->
-> Either in my mail inbox or on lore site [1], it only shows up 3 patches
-> but not the 5 patches.  Please consider to resend the series.
+Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+---
+ kernel/bpf/cgroup.c | 35 +++++++++++++----------------------
+ 1 file changed, 13 insertions(+), 22 deletions(-)
 
-Here is the complete patchset:
-
-[PATCH RESEND v3 0/5] perf tools: Modify mksyscalltbl
-https://lore.kernel.org/linux-perf-users/1685441401-8709-1-git-send-email-yangtiezhu@loongson.cn/
-
-Thanks,
-Tiezhu
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 5b2741aa0d9b..ebad5442d8bb 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1896,30 +1896,21 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 	if (max_optlen < 0)
+ 		return max_optlen;
+ 
+-	if (!retval) {
+-		/* If kernel getsockopt finished successfully,
+-		 * copy whatever was returned to the user back
+-		 * into our temporary buffer. Set optlen to the
+-		 * one that kernel returned as well to let
+-		 * BPF programs inspect the value.
+-		 */
+-
+-		if (get_user(ctx.optlen, optlen)) {
+-			ret = -EFAULT;
+-			goto out;
+-		}
++	if (get_user(ctx.optlen, optlen)) {
++		ret = -EFAULT;
++		goto out;
++	}
+ 
+-		if (ctx.optlen < 0) {
+-			ret = -EFAULT;
+-			goto out;
+-		}
+-		orig_optlen = ctx.optlen;
++	if (ctx.optlen < 0) {
++		ret = -EFAULT;
++		goto out;
++	}
++	orig_optlen = ctx.optlen;
+ 
+-		if (copy_from_user(ctx.optval, optval,
+-				   min(ctx.optlen, max_optlen)) != 0) {
+-			ret = -EFAULT;
+-			goto out;
+-		}
++	if (copy_from_user(ctx.optval, optval,
++				min(ctx.optlen, max_optlen)) != 0) {
++		ret = -EFAULT;
++		goto out;
+ 	}
+ 
+ 	lock_sock(sk);
+-- 
+2.20.1
 
