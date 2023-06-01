@@ -2,228 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F70071F35C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB4D71F361
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbjFAUFY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Jun 2023 16:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
+        id S231670AbjFAUGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjFAUFW (ORCPT
+        with ESMTP id S229490AbjFAUGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:05:22 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86CA133;
-        Thu,  1 Jun 2023 13:05:20 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-bad010e1e50so1337379276.1;
-        Thu, 01 Jun 2023 13:05:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685649920; x=1688241920;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S7ybGJR51tiJdbi6kkpyvQG8Yr1ailpxWvd45KdWn10=;
-        b=kPcWuflZSeaNcCwMXJKOn4Hq6t2mtf1iD9bFbf1iquT78prP2Mcz9IJj8DCliTcs6k
-         2qP70Xl0v+uufgCeLV2nTe2l7ZHqfX5tzWhxeAjRJDgIVKBT0y35bkHM+AgGRZFHzUAn
-         NmUcPmXpchyFMLYIAvSMo5FBoyhVjxyJkuAvZJevKX4KQUJKdYfKB96f2sG5K3v9VC48
-         p0WPsBL7ZEYTxiIbLwGGjM0aMywofCu0Z1BstYaC6cl92VV3oHB3y804qFu3OGIfcXjn
-         TrWtk7m05MfqOfo3pfSMlmWs5f8kFkqZrvdN9XjEEVC58575zahaqD7LEipQD3EfiIpA
-         4Xzg==
-X-Gm-Message-State: AC+VfDziEQLPzh/HFXTxNYnHvyJqNhtIh5X4fqg58TJk/VgTgmeIbW4K
-        MrGioX1MY5PHkkjnNKp1fRNsMoVOfO8dJywwer4=
-X-Google-Smtp-Source: ACHHUZ5WNr9YQErwu6PWtvQsRdu1d1vFTuOFh6tkYs7KWigc/QinTq9gpxNk6CThU+yUFAuHRB07+ziC5OkTQEheIL0=
-X-Received: by 2002:a25:e312:0:b0:ba8:fe6:8e3f with SMTP id
- z18-20020a25e312000000b00ba80fe68e3fmr961071ybd.5.1685649919797; Thu, 01 Jun
- 2023 13:05:19 -0700 (PDT)
+        Thu, 1 Jun 2023 16:06:01 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22456133;
+        Thu,  1 Jun 2023 13:05:59 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 96B8C3200923;
+        Thu,  1 Jun 2023 16:05:56 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 01 Jun 2023 16:05:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1685649956; x=
+        1685736356; bh=wwrl/88jn/a0BD/DhG3Tosh5K8gTAwVmFmge7TvKrps=; b=B
+        uY+uBQFNanNfjzjPdJlEEe2l9Akf4nGuX8V9jVo/dJ8AcDSrVD0veNWC1cOrzt9y
+        o6Fu2y2UpTEPl4GOjCuWfV9YWnzfo5GIWCM6OSsPr1G6TbKNu4enm7hobBWL6ZZB
+        WSZ3UF3ASfhkyyWidsIfhUMlrcavgcmYbrea7n1xUQTUi1ZvdAfmMD3niUUtm0uq
+        IXUL1/liGSYy1YNfdBYGLmXFKWqRA/AMDxBKxfSqU51/jAGzbm3b/v8D9RICEqvC
+        FeT69bM1p4uSEZlqphXPoXR6QFUgoce8lRTdUAn39vcAv3WpAji4Kbfr3g4CFsT3
+        /6GBPOHhvMxRVXRjqpJyA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1685649956; x=
+        1685736356; bh=wwrl/88jn/a0BD/DhG3Tosh5K8gTAwVmFmge7TvKrps=; b=r
+        ifA9ljKY3Z8xZ06pU6OxoXVtYH6dhC3I8WMoktWHJQTJWtIW+ly49U5Pc3mChvOU
+        AyF5y9FmDxafr4D8oWfRooGXQVwXss7iRjXdhR8OdKXaJURAt2FttQ4GAkEcsJD7
+        xvxrF2ytVlPot1C2vEoiixuE1rbbwOS6IFdytM3KqpuRaeOEAoJttWJS17oYiZRT
+        lcez2S3CRW9Fxf0yHoYY2/82KgLHDD9iDbLwbL4BHXQVA+w7Sgs3JWOPV+/rrG/c
+        eleDjghMaWaaUOGKzLuWNiMpSPU8fRUbUZp10xkgVWfnjXcjTZXogjAXxP3lJasf
+        hgZTM0m2B/yq0JRqDUsUQ==
+X-ME-Sender: <xms:I_p4ZInSxsa9nK3siSanLGBAKHB-pZL7O7k-ywnwyYLzxrrrr1kOsg>
+    <xme:I_p4ZH3WEHCPJ6fYrGJbOv38aZQSOiRheWpB1SO_gcK43iFBms8f9Del4JzpnLVxI
+    iGnV5WRvR2kvOFMayg>
+X-ME-Received: <xmr:I_p4ZGr5e_Cu90pew3xTbeuuvtIT7xWVT-37xkogVgKTh3CvdPxhKpxJ0vKZv24GxSuQNcaNuaIJXgP_pZiblm0UVWUPlbCVfX9Sw2sBO4YzjfpGp2Gl2CBz4Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeluddgudeghecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecuogetfedtuddqtdduucdludehmdenucfjughrpe
+    fhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforghrkhcurfgvrghr
+    shhonhcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggrqeenucggtf
+    frrghtthgvrhhnpeeftddvjeefleffvefhgfejjeehudetteeigeeugfekhffhgeejudeu
+    teehgfdvffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
+X-ME-Proxy: <xmx:I_p4ZEnaeeUUk5cAzFDBk4wv7UcRYhzS5x2_CyXjY3azpUFHPNwfJQ>
+    <xmx:I_p4ZG1Lj_SQZ8T07EeCsw-z_oYNKYQQ9XnOX4ECmgMMqtVtCpk3Mw>
+    <xmx:I_p4ZLunKW5PBAyvaimtafIACKICgaOBZQHO_iIQptkj4hcxbUd5qQ>
+    <xmx:JPp4ZJRMk1ngy1oUMqZSojv_ssdZ4irxp-HdlTwlo82Fc6K_r4yk3A>
+Feedback-ID: ibe194615:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 1 Jun 2023 16:05:55 -0400 (EDT)
+From:   Mark Pearson <mpearson-lenovo@squebb.ca>
+To:     mpearson-lenovo@squebb.ca
+Cc:     hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ilpo.jarvinen@linux.intel.com
+Subject: [PATCH v4 1/8] platform/x86: think-lmi: mutex protection around multiple WMI calls
+Date:   Thu,  1 Jun 2023 16:05:45 -0400
+Message-Id: <20230601200552.4396-1-mpearson-lenovo@squebb.ca>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <mpearson-lenovo@squebb.ca>
+References: <mpearson-lenovo@squebb.ca>
 MIME-Version: 1.0
-References: <20230601023644.587584-1-irogers@google.com> <20230601023644.587584-2-irogers@google.com>
-In-Reply-To: <20230601023644.587584-2-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 1 Jun 2023 13:05:08 -0700
-Message-ID: <CAM9d7cgN8qNHUog9uUx91BuQk_koce1DGu_Aw+nbVp6LWvtRTg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] perf pmu: Warn about invalid config for all PMUs
- and configs
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,TVD_PH_BODY_ACCOUNTS_PRE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 7:36 PM Ian Rogers <irogers@google.com> wrote:
->
-> Don't just check the raw PMU type, the only core PMU on homogeneous
-> x86, check raw and all dynamically added PMUs. Extend the
-> perf_pmu__warn_invalid_config to check all 4 config values. Rather
-> than process the format list once per event, store the computed masks
-> for each config value. Don't ignore the mask being zero, which is
-> likely for config2 and config3, add config_masks_present so config
-> values can be ignored only when no format information is present.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
+When an attribute is being changed if the Admin account is enabled, or if a password
+is being updated then multiple WMI calls are needed.
+Add mutex protection to ensure no race conditions are introduced.
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+Fixes: b49f72e7f96d ("platform/x86: think-lmi: Certificate authentication support")
+Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+---
+Changes in v2:
+ - New commit added after review of other patches in series.
+Changes in v3:
+ - Simplified mutex handling as recommended.
+Changes in v4:
+ - This was the 5th patch in the series but moved to be first.
+ - Added Fixes tag.
+ - Improved commit information to be clearer.
 
-Thanks,
-Namhyung
+ drivers/platform/x86/think-lmi.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
+diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+index 1138f770149d..6cf77bc26b05 100644
+--- a/drivers/platform/x86/think-lmi.c
++++ b/drivers/platform/x86/think-lmi.c
+@@ -14,6 +14,7 @@
+ #include <linux/acpi.h>
+ #include <linux/errno.h>
+ #include <linux/fs.h>
++#include <linux/mutex.h>
+ #include <linux/string.h>
+ #include <linux/types.h>
+ #include <linux/dmi.h>
+@@ -195,6 +196,7 @@ static const char * const level_options[] = {
+ };
+ static struct think_lmi tlmi_priv;
+ static struct class *fw_attr_class;
++static DEFINE_MUTEX(tlmi_mutex);
+ 
+ /* ------ Utility functions ------------*/
+ /* Strip out CR if one is present */
+@@ -437,6 +439,9 @@ static ssize_t new_password_store(struct kobject *kobj,
+ 	/* Strip out CR if one is present, setting password won't work if it is present */
+ 	strip_cr(new_pwd);
+ 
++	/* Use lock in case multiple WMI operations needed */
++	mutex_lock(&tlmi_mutex);
++
+ 	pwdlen = strlen(new_pwd);
+ 	/* pwdlen == 0 is allowed to clear the password */
+ 	if (pwdlen && ((pwdlen < setting->minlen) || (pwdlen > setting->maxlen))) {
+@@ -493,6 +498,7 @@ static ssize_t new_password_store(struct kobject *kobj,
+ 		kfree(auth_str);
+ 	}
+ out:
++	mutex_unlock(&tlmi_mutex);
+ 	kfree(new_pwd);
+ 	return ret ?: count;
+ }
+@@ -981,6 +987,9 @@ static ssize_t current_value_store(struct kobject *kobj,
+ 	/* Strip out CR if one is present */
+ 	strip_cr(new_setting);
+ 
++	/* Use lock in case multiple WMI operations needed */
++	mutex_lock(&tlmi_mutex);
++
+ 	/* Check if certificate authentication is enabled and active */
+ 	if (tlmi_priv.certificate_support && tlmi_priv.pwd_admin->cert_installed) {
+ 		if (!tlmi_priv.pwd_admin->signature || !tlmi_priv.pwd_admin->save_signature) {
+@@ -1039,6 +1048,7 @@ static ssize_t current_value_store(struct kobject *kobj,
+ 		kobject_uevent(&tlmi_priv.class_dev->kobj, KOBJ_CHANGE);
+ 	}
+ out:
++	mutex_unlock(&tlmi_mutex);
+ 	kfree(auth_str);
+ 	kfree(set_str);
+ 	kfree(new_setting);
+-- 
+2.40.1
 
-> ---
->  tools/perf/util/parse-events.c | 13 +++++++++---
->  tools/perf/util/pmu.c          | 38 ++++++++++++++++++++++++----------
->  tools/perf/util/pmu.h          | 13 +++++++++++-
->  3 files changed, 49 insertions(+), 15 deletions(-)
->
-> diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-> index 7f047ac11168..9f60607b0d86 100644
-> --- a/tools/perf/util/parse-events.c
-> +++ b/tools/perf/util/parse-events.c
-> @@ -245,9 +245,16 @@ __add_event(struct list_head *list, int *idx,
->         if (pmu)
->                 perf_pmu__warn_invalid_formats(pmu);
->
-> -       if (pmu && attr->type == PERF_TYPE_RAW)
-> -               perf_pmu__warn_invalid_config(pmu, attr->config, name);
-> -
-> +       if (pmu && (attr->type == PERF_TYPE_RAW || attr->type >= PERF_TYPE_MAX)) {
-> +               perf_pmu__warn_invalid_config(pmu, attr->config, name,
-> +                                             PERF_PMU_FORMAT_VALUE_CONFIG, "config");
-> +               perf_pmu__warn_invalid_config(pmu, attr->config1, name,
-> +                                             PERF_PMU_FORMAT_VALUE_CONFIG1, "config1");
-> +               perf_pmu__warn_invalid_config(pmu, attr->config2, name,
-> +                                             PERF_PMU_FORMAT_VALUE_CONFIG2, "config2");
-> +               perf_pmu__warn_invalid_config(pmu, attr->config3, name,
-> +                                             PERF_PMU_FORMAT_VALUE_CONFIG3, "config3");
-> +       }
->         if (init_attr)
->                 event_attr_init(attr);
->
-> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-> index 204ce3f02e63..b0443406fd57 100644
-> --- a/tools/perf/util/pmu.c
-> +++ b/tools/perf/util/pmu.c
-> @@ -1611,37 +1611,53 @@ int perf_pmu__caps_parse(struct perf_pmu *pmu)
->         return pmu->nr_caps;
->  }
->
-> -void perf_pmu__warn_invalid_config(struct perf_pmu *pmu, __u64 config,
-> -                                  const char *name)
-> +static void perf_pmu__compute_config_masks(struct perf_pmu *pmu)
->  {
->         struct perf_pmu_format *format;
-> -       __u64 masks = 0, bits;
-> -       char buf[100];
-> -       unsigned int i;
-> +
-> +       if (pmu->config_masks_computed)
-> +               return;
->
->         list_for_each_entry(format, &pmu->format, list) {
-> -               if (format->value != PERF_PMU_FORMAT_VALUE_CONFIG)
-> +               unsigned int i;
-> +               __u64 *mask;
-> +
-> +               if (format->value >= PERF_PMU_FORMAT_VALUE_CONFIG_END)
->                         continue;
->
-> +               pmu->config_masks_present = true;
-> +               mask = &pmu->config_masks[format->value];
-> +
->                 for_each_set_bit(i, format->bits, PERF_PMU_FORMAT_BITS)
-> -                       masks |= 1ULL << i;
-> +                       *mask |= 1ULL << i;
->         }
-> +       pmu->config_masks_computed = true;
-> +}
-> +
-> +void perf_pmu__warn_invalid_config(struct perf_pmu *pmu, __u64 config,
-> +                                  const char *name, int config_num,
-> +                                  const char *config_name)
-> +{
-> +       __u64 bits;
-> +       char buf[100];
-> +
-> +       perf_pmu__compute_config_masks(pmu);
->
->         /*
->          * Kernel doesn't export any valid format bits.
->          */
-> -       if (masks == 0)
-> +       if (!pmu->config_masks_present)
->                 return;
->
-> -       bits = config & ~masks;
-> +       bits = config & ~pmu->config_masks[config_num];
->         if (bits == 0)
->                 return;
->
->         bitmap_scnprintf((unsigned long *)&bits, sizeof(bits) * 8, buf, sizeof(buf));
->
-> -       pr_warning("WARNING: event '%s' not valid (bits %s of config "
-> +       pr_warning("WARNING: event '%s' not valid (bits %s of %s "
->                    "'%llx' not supported by kernel)!\n",
-> -                  name ?: "N/A", buf, config);
-> +                  name ?: "N/A", buf, config_name, config);
->  }
->
->  int perf_pmu__match(char *pattern, char *name, char *tok)
-> diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-> index 7a1535dc1f12..d98b0feec022 100644
-> --- a/tools/perf/util/pmu.h
-> +++ b/tools/perf/util/pmu.h
-> @@ -81,6 +81,10 @@ struct perf_pmu {
->          * perf_event_attr once.
->          */
->         bool formats_checked;
-> +       /** @config_masks_present: Are there config format values? */
-> +       bool config_masks_present;
-> +       /** @config_masks_computed: Set when masks are lazily computed. */
-> +       bool config_masks_computed;
->         /**
->          * @max_precise: Number of levels of :ppp precision supported by the
->          * PMU, read from
-> @@ -125,6 +129,12 @@ struct perf_pmu {
->         /** @list: Element on pmus list in pmu.c. */
->         struct list_head list;
->
-> +       /**
-> +        * @config_masks: Derived from the PMU's format data, bits that are
-> +        * valid within the config value.
-> +        */
-> +       __u64 config_masks[PERF_PMU_FORMAT_VALUE_CONFIG_END];
-> +
->         /**
->          * @missing_features: Features to inhibit when events on this PMU are
->          * opened.
-> @@ -255,7 +265,8 @@ int perf_pmu__convert_scale(const char *scale, char **end, double *sval);
->  int perf_pmu__caps_parse(struct perf_pmu *pmu);
->
->  void perf_pmu__warn_invalid_config(struct perf_pmu *pmu, __u64 config,
-> -                                  const char *name);
-> +                                  const char *name, int config_num,
-> +                                  const char *config_name);
->  void perf_pmu__warn_invalid_formats(struct perf_pmu *pmu);
->
->  int perf_pmu__match(char *pattern, char *name, char *tok);
-> --
-> 2.41.0.rc0.172.g3f132b7071-goog
->
