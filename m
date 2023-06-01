@@ -2,292 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BE4719998
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E36BC719923
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233539AbjFAKVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
+        id S231529AbjFAKR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233468AbjFAKTf (ORCPT
+        with ESMTP id S233384AbjFAKRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 06:19:35 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37FE41994
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:16:22 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8AxQ_A_b3hk5T8DAA--.7183S3;
-        Thu, 01 Jun 2023 18:13:19 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx8a8+b3hkAw2EAA--.18413S3;
-        Thu, 01 Jun 2023 18:13:18 +0800 (CST)
-Message-ID: <d8d87496-e695-7d48-4433-0be18ec41caf@loongson.cn>
-Date:   Thu, 1 Jun 2023 18:13:18 +0800
+        Thu, 1 Jun 2023 06:17:25 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BAA1FC0;
+        Thu,  1 Jun 2023 03:14:52 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QX23j5PWSz67MCd;
+        Thu,  1 Jun 2023 18:11:45 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 1 Jun
+ 2023 11:13:29 +0100
+Date:   Thu, 1 Jun 2023 11:13:28 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Terry Bowman <terry.bowman@amd.com>
+CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
+        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
+        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: Re: [PATCH v4 01/23] cxl/acpi: Probe RCRB later during RCH
+ downstream port creation
+Message-ID: <20230601111328.00005620@Huawei.com>
+In-Reply-To: <20230523232214.55282-2-terry.bowman@amd.com>
+References: <20230523232214.55282-1-terry.bowman@amd.com>
+        <20230523232214.55282-2-terry.bowman@amd.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v6 6/6] drm/etnaviv: allow usperspace create cached
- coherent bo
-Content-Language: en-US
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-References: <20230530160643.2344551-1-suijingfeng@loongson.cn>
- <20230530160643.2344551-7-suijingfeng@loongson.cn>
- <35c15c0912b4a9372b9c2194a46b518ce515ce3d.camel@pengutronix.de>
- <5c2faf7e-002c-dad0-c4fe-63aab04f7e87@loongson.cn>
- <e0b35447ef41b2dfc92ebba6f841f996b43ef42d.camel@pengutronix.de>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <e0b35447ef41b2dfc92ebba6f841f996b43ef42d.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bx8a8+b3hkAw2EAA--.18413S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3Xw48JFyDKF13Xr4xAr1DZFb_yoWfJw4xpF
-        W7AFyYkrW8ZrWjkw1Iv3Z8A34fKw12qFWvk34ktw1q9398tFsrKr18KFW5Crn5Ar1fCr1a
-        qr1jyry3uF1UArJanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
-        jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E
-        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2JKsUUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 23 May 2023 18:21:52 -0500
+Terry Bowman <terry.bowman@amd.com> wrote:
+
+> From: Robert Richter <rrichter@amd.com>
+> 
+> The RCRB is extracted already during ACPI CEDT table parsing while the
+> data of this is needed not earlier than dport creation. This
+> implementation comes with drawbacks: During ACPI table scan there is
+> already MMIO access including mapping and unmapping, but only ACPI
+> data should be collected here. The collected data must be transferred
+> through a couple of interfaces until it is finally consumed when
+> creating the dport. This causes complex data structures and function
+> interfaces. Additionally, RCRB parsing will be extended to also
+> extract AER data, it would be much easier do this at a later point
+> during port and dport creation when the data structures are available
+> to hold that data.
+> 
+> To simplify all that, probe the RCRB at a later point during RCH
+> downstream port creation. Change ACPI table parser to only extract the
+> base address of either the component registers or the RCRB. Parse and
+> extract the RCRB in devm_cxl_add_rch_dport().
+> 
+> This is in preparation to centralize all RCRB scanning.
+> 
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+
 Hi,
 
-On 2023/6/1 01:53, Lucas Stach wrote:
-> Am Donnerstag, dem 01.06.2023 um 01:29 +0800 schrieb Sui Jingfeng:
->> Hi,
->>
->> On 2023/6/1 00:33, Lucas Stach wrote:
->>> Hi Sui Jingfeng,
->>>
->>> Am Mittwoch, dem 31.05.2023 um 00:06 +0800 schrieb Sui Jingfeng:
->>>> cached system RAM is coherent on loongson CPUs, and the GPU and DC allways
->>>> snoop the CPU's cache. write-combine caching property is not suitiable for
->>>> us.
->>>>
->>> As previously mentioned in the Mesa MR, I don't think this is the right
->>> approach.
->>>
->>> ETNA_BO_CACHED already looks coherent to userspace, as all accesses are
->>> bracketed via the ETNAVIV_GEM_CPU_PREP and ETNAVIV_GEM_CPU_FINI ioctls,
->>> which will do the necessary cache maintenance on platforms where device
->>> coherence isn't enforced by the hardware, so there is no need for a
->>> separate ETNA_BO_CACHED_COHERENT.
->> As far as I can see,  ETNA_BO_CACHED_COHERENT could probably help to
->> bypass the overhead of
->>
->> dma_sync_sgtable_for_cpu() and dma_sync_sgtable_for_device() brings to us.
->>
->>
->> I have tested long time ago, there no need call this function on our
->> platform.
->>
->> The glmark2 works as before if I comment out thoes two function.
->>
->> Are you serious, sir?
->>
-> The dma_sync* functions are more or less no-ops when the device is
-> marked as being coherent. ce
-> instance, you might need to propagate the coherent property from the
-> GPU core device to the virtual DRM device, along the lines of how we
-> propagate other DMA properties from the GPU device to the DRM device in
-> etnaviv_pdev_probe.
->
-> Other than that things should just work with minimal overhead.
->>> Instead we just need a new ETNAVIV_PARAM to inform userspace about
->>> hardware cache coherence being available for a specific GPU core,
->> Ok, let me think about for a while how to implement this.
->>
-> Simple: add new ETNAVIV_PARAM_GPU_COHERENT to
-> include/uapi/drm/etnaviv_drm.h, return the result from
-> dev_is_dma_coherent in etnaviv_gpu_get_param().
-Okay, agree
->> But How about we merge this first, I create another patch to improve it
->>
->> with a roughly working base first? I'm just asking if the answer is No :-)
->>
-> The answer is a firm no.
->
-> This impacts UAPI, so there is no chance to ever get rid of any wrong
-> decisions here, as any added UAPI needs to be supported indefinitely.
-> I'm not signing up for maintaining something I believe is implemented
-> upside down.
->
-> Please don't take this the wrong way: I'm pretty excited to see etnaviv
-> used on more architectures and outside of the proven platform device
-> paths, so I'm happy to assist in working out the design and help you
-> get things merged in both kernel and Mesa. But I think we are still
-> quite a few steps away from having things worked out enough to even
-> think about merging those patchsets.
->
-> Also please allow me to comment on the other patches of the series, so
-> I can get a better understanding of your platform/integration, before
-> sending another revision of those patches.
+Some comments inline, though one of them (about extensibility of CDAT
+structures) applies just as much to the existing code so doesn't affect
 
-I go to sleep yesterday.
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+for this patch.
 
-Okay, this sound fine.
 
-> Regards,
-> Lucas
->
->>>    in
->>> which case the userspace driver should switch to preferring
->>> ETNA_BO_CACHED over ETNA_BO_WC.
->> Yeah,  ETNA_BO_CACHED is enough.
->>
->> ETNA_BO_CACHED_COHERENT is actually a special case of ETNA_BO_CACHED.
->>
->>> Regards,
->>> Lucas
->>>
->>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->>>> ---
->>>>    drivers/gpu/drm/etnaviv/etnaviv_drv.c       |  2 +-
->>>>    drivers/gpu/drm/etnaviv/etnaviv_gem.c       | 22 +++++++++++++++++++--
->>>>    drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c |  9 ++++++++-
->>>>    include/uapi/drm/etnaviv_drm.h              | 11 ++++++-----
->>>>    4 files changed, 35 insertions(+), 9 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
->>>> index 052f745cecc0..2816c654c023 100644
->>>> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
->>>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
->>>> @@ -274,7 +274,7 @@ static int etnaviv_ioctl_gem_new(struct drm_device *dev, void *data,
->>>>    	struct drm_etnaviv_gem_new *args = data;
->>>>    
->>>>    	if (args->flags & ~(ETNA_BO_CACHED | ETNA_BO_WC | ETNA_BO_UNCACHED |
->>>> -			    ETNA_BO_FORCE_MMU))
->>>> +			    ETNA_BO_CACHED_COHERENT | ETNA_BO_FORCE_MMU))
->>>>    		return -EINVAL;
->>>>    
->>>>    	return etnaviv_gem_new_handle(dev, file, args->size,
->>>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.c b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
->>>> index b5f73502e3dd..d8b559bd33d3 100644
->>>> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem.c
->>>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
->>>> @@ -343,6 +343,7 @@ void *etnaviv_gem_vmap(struct drm_gem_object *obj)
->>>>    static void *etnaviv_gem_vmap_impl(struct etnaviv_gem_object *obj)
->>>>    {
->>>>    	struct page **pages;
->>>> +	pgprot_t prot;
->>>>    
->>>>    	lockdep_assert_held(&obj->lock);
->>>>    
->>>> @@ -350,8 +351,20 @@ static void *etnaviv_gem_vmap_impl(struct etnaviv_gem_object *obj)
->>>>    	if (IS_ERR(pages))
->>>>    		return NULL;
->>>>    
->>>> -	return vmap(pages, obj->base.size >> PAGE_SHIFT,
->>>> -			VM_MAP, pgprot_writecombine(PAGE_KERNEL));
->>>> +	switch (obj->flags) {
->>>> +	case ETNA_BO_CACHED_COHERENT:
->>>> +	case ETNA_BO_CACHED:
->>>> +		prot = PAGE_KERNEL;
->>>> +		break;
->>>> +	case ETNA_BO_UNCACHED:
->>>> +		prot = pgprot_noncached(PAGE_KERNEL);
->>>> +		break;
->>>> +	case ETNA_BO_WC:
->>>> +	default:
->>>> +		prot = pgprot_writecombine(PAGE_KERNEL);
->>>> +	}
->>>> +
->>>> +	return vmap(pages, obj->base.size >> PAGE_SHIFT, VM_MAP, prot);
->>>>    }
->>>>    
->>>>    static inline enum dma_data_direction etnaviv_op_to_dma_dir(u32 op)
->>>> @@ -545,6 +558,7 @@ static const struct drm_gem_object_funcs etnaviv_gem_object_funcs = {
->>>>    static int etnaviv_gem_new_impl(struct drm_device *dev, u32 size, u32 flags,
->>>>    	const struct etnaviv_gem_ops *ops, struct drm_gem_object **obj)
->>>>    {
->>>> +	struct etnaviv_drm_private *priv = dev->dev_private;
->>>>    	struct etnaviv_gem_object *etnaviv_obj;
->>>>    	unsigned sz = sizeof(*etnaviv_obj);
->>>>    	bool valid = true;
->>>> @@ -555,6 +569,10 @@ static int etnaviv_gem_new_impl(struct drm_device *dev, u32 size, u32 flags,
->>>>    	case ETNA_BO_CACHED:
->>>>    	case ETNA_BO_WC:
->>>>    		break;
->>>> +	case ETNA_BO_CACHED_COHERENT:
->>>> +		if (priv->has_cached_coherent)
->>>> +			break;
->>>> +		fallthrough;
->>>>    	default:
->>>>    		valid = false;
->>>>    	}
->>>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
->>>> index 3524b5811682..671d91d8f1c6 100644
->>>> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
->>>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
->>>> @@ -112,11 +112,18 @@ static const struct etnaviv_gem_ops etnaviv_gem_prime_ops = {
->>>>    struct drm_gem_object *etnaviv_gem_prime_import_sg_table(struct drm_device *dev,
->>>>    	struct dma_buf_attachment *attach, struct sg_table *sgt)
->>>>    {
->>>> +	struct etnaviv_drm_private *priv = dev->dev_private;
->>>>    	struct etnaviv_gem_object *etnaviv_obj;
->>>>    	size_t size = PAGE_ALIGN(attach->dmabuf->size);
->>>> +	u32 cache_flags;
->>>>    	int ret, npages;
->>>>    
->>>> -	ret = etnaviv_gem_new_private(dev, size, ETNA_BO_WC,
->>>> +	if (priv->has_cached_coherent)
->>>> +		cache_flags = ETNA_BO_CACHED_COHERENT;
->>>> +	else
->>>> +		cache_flags = ETNA_BO_WC;
->>>> +
->>>> +	ret = etnaviv_gem_new_private(dev, size, cache_flags,
->>>>    				      &etnaviv_gem_prime_ops, &etnaviv_obj);
->>>>    	if (ret < 0)
->>>>    		return ERR_PTR(ret);
->>>> diff --git a/include/uapi/drm/etnaviv_drm.h b/include/uapi/drm/etnaviv_drm.h
->>>> index af024d90453d..474b0db286de 100644
->>>> --- a/include/uapi/drm/etnaviv_drm.h
->>>> +++ b/include/uapi/drm/etnaviv_drm.h
->>>> @@ -90,13 +90,14 @@ struct drm_etnaviv_param {
->>>>     * GEM buffers:
->>>>     */
->>>>    
->>>> -#define ETNA_BO_CACHE_MASK   0x000f0000
->>>> +#define ETNA_BO_CACHE_MASK              0x000f0000
->>>>    /* cache modes */
->>>> -#define ETNA_BO_CACHED       0x00010000
->>>> -#define ETNA_BO_WC           0x00020000
->>>> -#define ETNA_BO_UNCACHED     0x00040000
->>>> +#define ETNA_BO_CACHED                  0x00010000
->>>> +#define ETNA_BO_WC                      0x00020000
->>>> +#define ETNA_BO_UNCACHED                0x00040000
->>>> +#define ETNA_BO_CACHED_COHERENT         0x00080000
->>>>    /* map flags */
->>>> -#define ETNA_BO_FORCE_MMU    0x00100000
->>>> +#define ETNA_BO_FORCE_MMU               0x00100000
->>>>    
->>>>    struct drm_etnaviv_gem_new {
->>>>    	__u64 size;           /* in */
+> ---
+>  drivers/cxl/acpi.c      | 52 ++++++++++++++++-------------------------
+>  drivers/cxl/core/port.c | 21 +++++++++++++----
+>  drivers/cxl/cxl.h       |  1 -
+>  3 files changed, 36 insertions(+), 38 deletions(-)
+> 
+> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
+> index 7e1765b09e04..39227070da9b 100644
+> --- a/drivers/cxl/acpi.c
+> +++ b/drivers/cxl/acpi.c
+> @@ -373,20 +373,18 @@ static int add_host_bridge_uport(struct device *match, void *arg)
+>  }
+>  
+>  struct cxl_chbs_context {
+> -	struct device *dev;
+>  	unsigned long long uid;
+> -	resource_size_t rcrb;
+> -	resource_size_t chbcr;
+> +	resource_size_t base;
+>  	u32 cxl_version;
+>  };
+>  
+> -static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
+> +static int cxl_get_chbs(union acpi_subtable_headers *header, void *arg,
+>  			 const unsigned long end)
+>  {
+>  	struct cxl_chbs_context *ctx = arg;
+>  	struct acpi_cedt_chbs *chbs;
+>  
+> -	if (ctx->chbcr)
+> +	if (ctx->base)
+>  		return 0;
+>  
+>  	chbs = (struct acpi_cedt_chbs *) header;
+> @@ -395,23 +393,16 @@ static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
+>  		return 0;
+>  
+>  	ctx->cxl_version = chbs->cxl_version;
+> -	ctx->rcrb = CXL_RESOURCE_NONE;
+> -	ctx->chbcr = CXL_RESOURCE_NONE;
+> +	ctx->base = CXL_RESOURCE_NONE;
+>  
+>  	if (!chbs->base)
+>  		return 0;
+>  
+> -	if (chbs->cxl_version != ACPI_CEDT_CHBS_VERSION_CXL11) {
+> -		ctx->chbcr = chbs->base;
 
--- 
-Jingfeng
+Trivial: This is a functional change and should be called out -
+previously the base address was stashed even if the length test
+fails, now it isn't. May make no difference because it was never used
+if that's the case, but would be nice to still mention it in patch description.
+
+Also, ACPI tables are designed to be extensible and I think that
+applies to CDAT tables as well - so this code should not be
+checking for a precise match, but rather that it is greater than
+or equal to the size we will read from.
+
+
+> +	if (chbs->cxl_version == ACPI_CEDT_CHBS_VERSION_CXL11 &&
+> +	    chbs->length != CXL_RCRB_SIZE)
+>  		return 0;
+> -	}
+
+>  
+> -	if (chbs->length != CXL_RCRB_SIZE)
+> -		return 0;
+> -
+> -	ctx->rcrb = chbs->base;
+> -	ctx->chbcr = cxl_rcrb_to_component(ctx->dev, chbs->base,
+> -					   CXL_RCRB_DOWNSTREAM);
+> +	ctx->base = chbs->base;
+>  
+>  	return 0;
+>  }
 
