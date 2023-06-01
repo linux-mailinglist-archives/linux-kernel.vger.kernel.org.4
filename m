@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9FB71F421
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7F571F42A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 22:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjFAUrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 16:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
+        id S232270AbjFAUsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 16:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjFAUrQ (ORCPT
+        with ESMTP id S232045AbjFAUsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 16:47:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F80F189
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 13:46:30 -0700 (PDT)
+        Thu, 1 Jun 2023 16:48:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC43D1AD
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 13:47:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1685652389;
+        s=mimecast20190719; t=1685652446;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mKfOoPxKXKTaQ3RA/2u3I6KvcI8YXFqEVhkLpnR7WjE=;
-        b=G+XPJJ8t3Gn0vdncwys81GZ7iZzbZp6buFOJ5favAH8aMc8roNghYIbVLvikLV7HRWK7iH
-        /fUrwnHtTmhQRTvANhj5OEUoUiq2xmoOpy7lPehERhmDd7LInY0j2vjyha4rPmtdCIaG3s
-        p+WYdUBdtuj37NbYHVVu2Uu0cI1lwHQ=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=rmRZRfKWVEY0SEozIOD2eDdbXyNH6CzhN64nvWsaek4=;
+        b=hcoGCZHX/bF7dj/+y+LhNr3cEo7qCC2h1wN64+IkzT1BpWyPosxhb3CSiUjkgz7LLjk7i0
+        fiDyNlIQP3jmMgcvW1hgl79RdruhK79oR+vNiKC69I6/Kwhc4lRNYLfxpmosOSQE5k+haW
+        OsK5BgKoECZazjNOZgi3ICq7km+hGf4=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-635-gCpmQ5HjNzuutB8_uV70Bg-1; Thu, 01 Jun 2023 16:46:28 -0400
-X-MC-Unique: gCpmQ5HjNzuutB8_uV70Bg-1
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-33bf805e901so10394795ab.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 13:46:28 -0700 (PDT)
+ us-mta-642-owt8NyfZOl60kgTjel_Jvg-1; Thu, 01 Jun 2023 16:47:24 -0400
+X-MC-Unique: owt8NyfZOl60kgTjel_Jvg-1
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7776dd75224so29529339f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 13:47:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685652387; x=1688244387;
+        d=1e100.net; s=20221208; t=1685652444; x=1688244444;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mKfOoPxKXKTaQ3RA/2u3I6KvcI8YXFqEVhkLpnR7WjE=;
-        b=aHsgRCjbpjoYj1mgnj1cS+FWIkK56ZYkcdTqpEhODE24APuIyVnHWaJqpHnXphgRwn
-         TvssluU9J8JHxccmhMiznUuPCsKKK2FcFsCjdX+XGZCcjw636be6giZsOSSiZm6F6qZe
-         OYCBQB4nyartXyhe8hIQg2KVYjtZ8FuEtzGKGXBFATyc1LqoSTT9aGrPk/ny0dMF5mbG
-         QN+6GsPCFM9RbwIErUq501eALAo5wqqG6gaW/h7SIzYGmCLWpDZZBvB5GJUoe821uMJA
-         qihUMdZClPP5slojXPa6Zmv0t5KGVDezTb+gyhcpPzHqm1H1ZFxR+7eR2nHXVOWBpUC3
-         1hog==
-X-Gm-Message-State: AC+VfDwOrYKDEo4VHqbPqrHAUXy81Dm6fRqjwCoVCk+SojN+rRK/njQe
-        BUSf5CeUUpeqRNg2FDCwM+JesiiV1VaA/ISBHCb/VrYnf12ZkrgN4bPBnT8AX16iLCvczgbM/V6
-        XWKgfgR9vpck0+p4J0l873AVNjamhtsOg
-X-Received: by 2002:a92:de0e:0:b0:33a:a6de:65be with SMTP id x14-20020a92de0e000000b0033aa6de65bemr5672192ilm.21.1685652387609;
-        Thu, 01 Jun 2023 13:46:27 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4ywpMG3vtlHLLEM1U239mV9AK6gm9PprEslu+sHDJULivPRXsgppL7UaHjCclklcKCTTg9FA==
-X-Received: by 2002:a92:de0e:0:b0:33a:a6de:65be with SMTP id x14-20020a92de0e000000b0033aa6de65bemr5672186ilm.21.1685652387435;
-        Thu, 01 Jun 2023 13:46:27 -0700 (PDT)
+        bh=rmRZRfKWVEY0SEozIOD2eDdbXyNH6CzhN64nvWsaek4=;
+        b=G7fjP43j8ryikkM2Cv0arXw2vbgY3XC/9aRIUBGiSi5TIX3OYPb1zJc42kAb2dOtgF
+         18AX3GJWuK27nHU1ltIhAcWMo7OvfkPSO9ckKu+mst17i3WUQWmISs4k/A+eyTdlHp+k
+         xxDidXfmM6V59xaCaAxcZP/RmV3PK3SKQBS42Az7bvKhm5wPVj25FQhDIHFHd3GztwSN
+         qhzpjQqJAgMlRKAaEx7iutwF6H+xTCUHn7y/fGu9oEmUm3A5TPBcyrPDG/aCtKzNQYS8
+         eHjiqrN/Jx+EN/DyL3KoMHHvXnlGcrNhTKKT/Pjof5wSArkBr8///tlOB5qlI1Po6X7J
+         ipxg==
+X-Gm-Message-State: AC+VfDwZNW7fnAVXmDx6yQD9hmV18lpBdjU7tXhKco8hGTC4A9uypPxE
+        Gs4WEJQRkbEIJsPGIcecQtdkzVrXQkqx4ss/9sVVcsgQPpi1aN+vwA6jnsKd0OKXYVjKikkCVuO
+        v+fgQMKaX6Cq9fEylnwYjIrHa
+X-Received: by 2002:a6b:6314:0:b0:774:982e:cb0a with SMTP id p20-20020a6b6314000000b00774982ecb0amr439745iog.15.1685652443991;
+        Thu, 01 Jun 2023 13:47:23 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5SzX6PbeMg9q9vvXLKsxsPVcmec31tIfdfceJjEB6+21sbwbfrKA2JAoEEGHsUYkyz/sbdhA==
+X-Received: by 2002:a6b:6314:0:b0:774:982e:cb0a with SMTP id p20-20020a6b6314000000b00774982ecb0amr439722iog.15.1685652443672;
+        Thu, 01 Jun 2023 13:47:23 -0700 (PDT)
 Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id u22-20020a056638135600b00411be337516sm2570727jad.24.2023.06.01.13.46.26
+        by smtp.gmail.com with ESMTPSA id l23-20020a056638221700b004164fe77c06sm2571841jas.26.2023.06.01.13.47.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 13:46:26 -0700 (PDT)
-Date:   Thu, 1 Jun 2023 14:46:26 -0600
+        Thu, 01 Jun 2023 13:47:23 -0700 (PDT)
+Date:   Thu, 1 Jun 2023 14:47:22 -0600
 From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Tony Krowiak <akrowiak@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, jjherne@linux.ibm.com, pasic@linux.ibm.com,
-        farman@linux.ibm.com, mjrosato@linux.ibm.com,
-        borntraeger@linux.ibm.com
-Subject: Re: [PATCH 1/3] vfio: ap: realize the VFIO_DEVICE_GET_IRQ_INFO
- ioctl
-Message-ID: <20230601144626.577a94d3.alex.williamson@redhat.com>
-In-Reply-To: <20230530223538.279198-2-akrowiak@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     Tony Krowiak <akrowiak@linux.ibm.com>, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        jjherne@linux.ibm.com, pasic@linux.ibm.com, farman@linux.ibm.com,
+        borntraeger@linux.ibm.com, Cedric Le Goater <clegoate@redhat.com>
+Subject: Re: [PATCH 0/3] s390/vfio-ap: fix hang when mdev attached to guest
+ is removed
+Message-ID: <20230601144722.6eba9c49.alex.williamson@redhat.com>
+In-Reply-To: <30741787-441a-034f-f8d4-9f1060841051@linux.ibm.com>
 References: <20230530223538.279198-1-akrowiak@linux.ibm.com>
-        <20230530223538.279198-2-akrowiak@linux.ibm.com>
+        <30741787-441a-034f-f8d4-9f1060841051@linux.ibm.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -83,17 +86,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 May 2023 18:35:36 -0400
-Tony Krowiak <akrowiak@linux.ibm.com> wrote:
+On Wed, 31 May 2023 10:51:54 -0400
+Matthew Rosato <mjrosato@linux.ibm.com> wrote:
 
-> Realize the VFIO_DEVICE_GET_IRQ_INFO ioctl to retrieve the information for
-> the VFIO device request IRQ.
+> On 5/30/23 6:35 PM, Tony Krowiak wrote:
+> > When a user attempts to remove a vfio-ap mediated device attached to a
+> > guest, the operation hangs until the mdev's fd is closed by the guest
+> > (i.e., the hostdev is detached or the guest is shut down). This patch 
+> > series provides kernel-side code that allows userspace to set up a 
+> > communication channel that will allow the vfio_ap device driver to notify 
+> > userspace when a request to release the mdev is received, so that userspace
+> > can close the mdev fd and avoid the hang. The patch series provides the 
+> > following:  
+> > 
+> > 1. Introduces code to handle the VFIO_DEVICE_GET_IRQ_INFO and 
+> >    VFIO_DEVICE_SET_IRQS ioctl calls to set the eventfd_ctx for signaling a
+> >    device request to userspace. 
+> > 
+> > 2. Wires up the VFIO bus driver callback to request a release of the mdev.
+> >    When invoked, the vfio_ap device driver will use the eventfd_ctx set up
+> >    in #1 to signal a request to userspace to release the mdev.
+> >   
 > 
-> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
-> ---
->  drivers/s390/crypto/vfio_ap_ops.c | 30 +++++++++++++++++++++++++++++-
->  include/uapi/linux/vfio.h         |  9 +++++++++
->  2 files changed, 38 insertions(+), 1 deletion(-)
+> As to how this series eventually reaches master...  It touches both s390 and vfio.  
+> 
+> @Alex/@s390 maintainers -- I suggest it go through s390 given the
+> diffstat, it's almost completely in s390 drivers code.  However there
+> is a uapi hit to vfio.h (in patch 1) that should get at least an ACK
+> from Alex beforehand.
 
-Acked-by: Alex Williamson <alex.williamson@redhat.com>
+Ack'd, I'll expect this to go through the s390 tree.  Thanks,
+
+Alex
 
