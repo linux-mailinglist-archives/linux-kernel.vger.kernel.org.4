@@ -2,60 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3732B7199AA
+	by mail.lfdr.de (Postfix) with ESMTP id 81B547199AB
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 12:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233511AbjFAK1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 06:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
+        id S233688AbjFAK1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 06:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233582AbjFAK0p (ORCPT
+        with ESMTP id S233592AbjFAK0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Jun 2023 06:26:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994F2E6F;
-        Thu,  1 Jun 2023 03:25:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3224C60E9C;
-        Thu,  1 Jun 2023 10:25:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 158C2C433D2;
-        Thu,  1 Jun 2023 10:25:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1685615124;
-        bh=MVjY6Lvr05SnVvdkaw/FELmaccjqgSRgM74IdOpoDGY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wsqgoahs87B6Pl5vF7c58NFI+kiIRc+GY2M2BA+OwMiFKx05ZrqCWzC/NH1UgvOBm
-         Ie/BdF0JjeccFePocMWgN8Q+sTHv/Gn1e7sKPksRagqYfWNpsSCOr2UoeBkePQJh4p
-         fJqUKAj2q7+XEXECW1+Otg/aOD/0nIUBNdB+Z9lA=
-Date:   Thu, 1 Jun 2023 11:25:22 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
-        Conor Dooley <conor@kernel.org>, stable@vger.kernel.org,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "open list:GENERIC ARCHITECTURE TOPOLOGY" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH stable 6.3 v2] arch_topology: Remove early cacheinfo
- error message if -ENOENT
-Message-ID: <2023060131-letdown-cope-ddf7@gregkh>
-References: <20230530201955.848176-1-florian.fainelli@broadcom.com>
- <20230530-basically-wildly-84415a94171d@spud>
- <72d84100-55cf-566d-8301-7147ce14b1e9@broadcom.com>
- <20230531085356.ru4fmtawyxo5cq5s@bogus>
- <7eae52f6-ca7e-5017-629e-43761d4eb5d7@broadcom.com>
- <20230531154338.x7rivfpxj2wtjpq6@bogus>
- <0f2e3a2b-477b-cbd7-e756-4b3f4df8e045@broadcom.com>
- <20230601063231.dyvrl37afhk65zit@bogus>
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C70171D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 03:25:30 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96f850b32caso91517866b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Jun 2023 03:25:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685615128; x=1688207128;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Biydlf7PIGQ7H2/3MOSbK0GWIW8cjwIGbXqmPIt7ZJ8=;
+        b=gmeGoT8OHlZgbn+14JgZQxDwt4oFmVtRUNaFe9JQFXp11mJL0oa7mHcHcMHdcLoWWU
+         6GeY4xGQ7rX8jKxEGb8XOlqxV3drixKvl4jyK9ziTlW8RwLo7EIYRMjLhb4QLzLWKids
+         MhSkPlaF50xsVbywzC1461158Ea86YsxyPuxlXGmvsM4ZJpXRXRhOwcWrOkPwEkoVU09
+         z13bpTcElB3Tv5tW4qDW5e+8S/699KeSHrRT5JVrAc8FDAZ+toX3Yvbp+4DZreCAIMnN
+         vo3DeqtKpXZL8sMhUKtPN+3iDcr3E0JR9kaTj0oDGou+ntk1dBJMb7PexIOH4vQoYrnh
+         SqxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685615129; x=1688207129;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Biydlf7PIGQ7H2/3MOSbK0GWIW8cjwIGbXqmPIt7ZJ8=;
+        b=TT5E11xE8znJyUkYKibyf46TbQat/BAwZJbLkyIibERpxgZ0ZR11NZygW9QeUedviU
+         d269ZVWt+5AkkBdTkQF33JoXGpRwiiSZf7ZBYZDw9VVrsPnok7s4tvIGb/RNpIgYdCoq
+         L7eLS3lD4JWUWwI92tXXu4UrPz6YFFSqql0k5WBZGcNNVdiq4IYPLSrDbuaxXPgt7qYN
+         qV83AMPWCk/7KMZweB1wGETmafVTlQOCP5IBngEEp6+NKRmiqvVyI2sB68lav0VHuXC5
+         epLYBcA77e/x56RM0OhzOArAz+MPLoYTXaxoqz9RYOmEQapV8Rl5rhvdWf9jzS/wfz4H
+         ipHA==
+X-Gm-Message-State: AC+VfDxb2OkM0xHg474CnftBJ6vG0vYGwaItgS9eaGjgoGkaLkwqtgS7
+        C1YjOZ3hBxOZP1FeOR3R1tMg2A==
+X-Google-Smtp-Source: ACHHUZ5m3bbTuSL6NcGE8tNmlnw3gV+4MJQV0FHwNUM7U8AKi7QylF5r3rjXHxygr3xpmsbU/xYORw==
+X-Received: by 2002:a17:906:fd8b:b0:96a:3e39:f567 with SMTP id xa11-20020a170906fd8b00b0096a3e39f567mr7427867ejb.47.1685615128682;
+        Thu, 01 Jun 2023 03:25:28 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id dk5-20020a170906f0c500b00965b2d3968csm10247758ejb.84.2023.06.01.03.25.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 03:25:28 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH] soundwire: qcom: fix storing port config out-of-bounds
+Date:   Thu,  1 Jun 2023 12:25:25 +0200
+Message-Id: <20230601102525.609627-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230601063231.dyvrl37afhk65zit@bogus>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,107 +79,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 07:32:31AM +0100, Sudeep Holla wrote:
-> On Wed, May 31, 2023 at 12:52:22PM -0700, Florian Fainelli wrote:
-> > 
-> > 
-> > On 5/31/2023 8:43 AM, Sudeep Holla wrote:
-> > > On Wed, May 31, 2023 at 08:28:26AM -0700, Florian Fainelli wrote:
-> > > > 
-> > > > 
-> > > > On 5/31/2023 1:53 AM, Sudeep Holla wrote:
-> > > > > On Tue, May 30, 2023 at 03:42:45PM -0700, Florian Fainelli wrote:
-> > > > > > Hi Conor,
-> > > > > > 
-> > > > > > On 5/30/23 14:39, Conor Dooley wrote:
-> > > > > > > Yo Florian,
-> > > > > > > 
-> > > > > > > On Tue, May 30, 2023 at 01:19:55PM -0700, Florian Fainelli wrote:
-> > > > > > > > From: Pierre Gondois <pierre.gondois@arm.com>
-> > > > > > > > 
-> > > > > > > > commit 3522340199cc060b70f0094e3039bdb43c3f6ee1 upstream
-> > > > > > > > 
-> > > > > > > > fetch_cache_info() tries to get the number of cache leaves/levels
-> > > > > > > > for each CPU in order to pre-allocate memory for cacheinfo struct.
-> > > > > > > > Allocating this memory later triggers a:
-> > > > > > > >      'BUG: sleeping function called from invalid context'
-> > > > > > > > in PREEMPT_RT kernels.
-> > > > > > > > 
-> > > > > > > > If there is no cache related information available in DT or ACPI,
-> > > > > > > > fetch_cache_info() fails and an error message is printed:
-> > > > > > > >      'Early cacheinfo failed, ret = ...'
-> > > > > > > > 
-> > > > > > > > Not having cache information should be a valid configuration.
-> > > > > > > > Remove the error message if fetch_cache_info() fails with -ENOENT.
-> > > > > > > > 
-> > > > > > > > Suggested-by: Conor Dooley <conor.dooley@microchip.com>
-> > > > > > > > Link: https://lore.kernel.org/all/20230404-hatred-swimmer-6fecdf33b57a@spud/
-> > > > > > > > Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> > > > > > > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > > > > > > > Link: https://lore.kernel.org/r/20230414081453.244787-4-pierre.gondois@arm.com
-> > > > > > > > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > > > > > > > Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
-> > > > > > > 
-> > > > > > > How come this now needs a backport? Did the rest of the series get
-> > > > > > > backported, but not this one since it has no fixes tag?
-> > > > > > 
-> > > > > > Humm, indeed, this has been present in v6.3.2 since I requested it to be
-> > > > > > included. The error that I saw this morning was not -ENOENT, but -EINVAL.
-> > > > > > 
-> > > > > > With those patches applied, no more -EINVAL:
-> > > > > > 
-> > > > > > cacheinfo: Allow early level detection when DT/ACPI info is missing/broken
-> > > > > > cacheinfo: Add arm64 early level initializer implementation
-> > > > > > cacheinfo: Add arch specific early level initializer
-> > > > > > cacheinfo: Add use_arch[|_cache]_info field/function
-> > > > > > 
-> > > > > > I will submit those shortly unless we think they better not be in 6.3, in
-> > > > > > which case it would be nice to silence those -EINVAL errors.
-> > > > > 
-> > > > > I prefer this option instead of back porting all the above 4 as there are
-> > > > > some pending fixes for the issues found in those patches. I am fine if Greg
-> > > > > is happy with the backport, so no strong rejection from my side :).
-> > > > 
-> > > > OK, so are you suggesting that we specific check for -EINVAL and -ENOENT
-> > > > rather than take all of the 4 above patches,
-> > > 
-> > > Yes that is my preference ATM or if possible to wait until all the fixes
-> > > are sorted for the bugs associated with above 4 commits [1] and [2].
-> > > I have queued [1] but waiting for response/patch on [2] and hence not yet
-> > > bothered Greg.
-> > > 
-> > > > if so, any preference on how to do it given the state of 6.3 stable?
-> > > 
-> > > I don't understand what exactly do you mean ?
-> > 
-> > Linux 6.3.y currently contains:
-> > 
-> > cacheinfo: Check sib_leaf in cache_leaves_are_shared()
-> > cacheinfo: Check cache properties are present in DT
-> > arch_topology: Remove early cacheinfo error message if -ENOENT
-> > 
-> > however my logs are full of:
-> > 
-> > [    0.001484] Early cacheinfo failed, ret = -22
-> > 
-> > reverting these 3 patches mentioned above does not eliminate the error.
-> > 
-> > What I am asking is if we need a targeted fix for 6.3 like this:
-> >
-> 
-> I am fine with that. Please note Greg has now pulled the fixes I pointed.
-> So I am fine if you want to backport the 4 patches discussed earlier as
-> the stable will get the fixes soon which was my main concern earlier.
-> 
-> The other issue I pointed should also be resolved soon based on [1]
+The 'qcom_swrm_ctrl->pconfig' has size of QCOM_SDW_MAX_PORTS (14),
+however we index it starting from 1, not 0, to match real port numbers.
+This can lead to writing port config past 'pconfig' bounds and
+overwriting next member of 'qcom_swrm_ctrl' struct.  Reported also by
+smatch:
 
-Ok, I don't know what to do here.  I think I'll take this simple patch,
-and not the longer series as that seems to be too much for 6.3.y now,
-especially as the fixes for it are not in Linus's tree yet.
+  drivers/soundwire/qcom.c:1269 qcom_swrm_get_port_config() error: buffer overflow 'ctrl->pconfig' 14 <= 14
 
-If, after a bit, all of those need to go to 6.3.y, can someone please
-send them here for inclusion?
+Fixes: 9916c02ccd74 ("soundwire: qcom: cleanup internal port config indexing")
+Cc: <stable@vger.kernel.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://lore.kernel.org/r/202305201301.sCJ8UDKV-lkp@intel.com/
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/soundwire/qcom.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-thanks,
+diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+index 7cb1b7eba814..88a772075907 100644
+--- a/drivers/soundwire/qcom.c
++++ b/drivers/soundwire/qcom.c
+@@ -202,7 +202,8 @@ struct qcom_swrm_ctrl {
+ 	u32 intr_mask;
+ 	u8 rcmd_id;
+ 	u8 wcmd_id;
+-	struct qcom_swrm_port_config pconfig[QCOM_SDW_MAX_PORTS];
++	/* Port numbers are 1 - 14 */
++	struct qcom_swrm_port_config pconfig[QCOM_SDW_MAX_PORTS + 1];
+ 	struct sdw_stream_runtime *sruntime[SWRM_MAX_DAIS];
+ 	enum sdw_slave_status status[SDW_MAX_DEVICES + 1];
+ 	int (*reg_read)(struct qcom_swrm_ctrl *ctrl, int reg, u32 *val);
+-- 
+2.34.1
 
-greg k-h
