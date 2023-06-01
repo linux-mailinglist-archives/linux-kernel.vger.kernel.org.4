@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B8A71F074
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B405A71F078
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Jun 2023 19:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbjFARP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Jun 2023 13:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
+        id S232278AbjFARQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Jun 2023 13:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232633AbjFARPU (ORCPT
+        with ESMTP id S229899AbjFARQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Jun 2023 13:15:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAA819D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 10:15:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A36F6481C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Jun 2023 17:15:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06855C433EF;
-        Thu,  1 Jun 2023 17:15:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685639715;
-        bh=QfAZcd+QCdE7N/hMns1wsimPjoZruesbkhbU/kUhZRk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LIn4UV/P7WgWduHTuZ0c1iI3s6nt1m7E1jgUbW0nOhv/DTJsV1vqpAIJoBupS0Atx
-         AqeebYcwXjYAwkIzc9xY9H/2NicvfGv59NgdCe0HNHWsshKhdIPFjk8PoFzn+hcQZ5
-         AtMBSonHzBFAOZF3wti2uPz3Qhs79m+y8T1mXApr3BwvmYXzU0y/FBRqXor2HY8a6c
-         CTZKrpve3wSvLgy/YjNYjdRJS+Fvu+d4dzgyjF39kEFZwdI4Q15Rad/58BPmZQw3St
-         wFnVYpAxHVYo+wp2QOOryb9jeP75jFYNKQ2gcTQq3jnPGsrlVMwm7fArAG0nkSkMyz
-         DYXGLui2oeAHg==
-Date:   Thu, 1 Jun 2023 10:15:14 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-Cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>,
-        Christian Brauner <brauner@kernel.org>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "socketcan@hartkopp.net" <socketcan@hartkopp.net>,
-        "petrm@nvidia.com" <petrm@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v4 5/6] connector/cn_proc: Performance improvements
-Message-ID: <20230601101514.775c631a@kernel.org>
-In-Reply-To: <FD84A5B5-8C98-4796-8F69-5754C34D2172@oracle.com>
-References: <20230331235528.1106675-1-anjali.k.kulkarni@oracle.com>
-        <20230331235528.1106675-6-anjali.k.kulkarni@oracle.com>
-        <20230601092533.05270ab1@kernel.org>
-        <B9B5E492-36A1-4ED5-97ED-1ED048F51FCF@oracle.com>
-        <20230601094827.60bd8db1@kernel.org>
-        <FD84A5B5-8C98-4796-8F69-5754C34D2172@oracle.com>
+        Thu, 1 Jun 2023 13:16:37 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD75E2;
+        Thu,  1 Jun 2023 10:16:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685639796; x=1717175796;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UlXomx0LpGtimrE1GNCoJHUNdcnqBvFlD2s/tho2i9E=;
+  b=hUzL8hausZ/ahyVFNoNSlL0APs2wepS2dz/5JuUTpdyDDmZ1lWas0d4G
+   3Xmo/Z/p2/5TnzkB/2YrmU69qWut6qyLXI1kf9GMZCroZEucJleOW8k3v
+   MNfmx8aST06cONcXn7U3W7SGqBvJNGrkwmxWRoC2Xl5P47uFmFziye53C
+   mvOxva0jZbxuXMsevUkcL7IbwiUGOnw8vsSbCSn5+q/ysnJFghoDEwUSc
+   VD5rHFfbW3e7NfDyIPofkx3Dwfbf5q1xfa5eDi12ud6eai43ZGUPNzvWD
+   X36f7AbQbNrmdbEqXxey8pOfo3x9uFEiewJCOtA/n84mDVY96pMzEa//s
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="335244925"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="335244925"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 10:16:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="1037583743"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="1037583743"
+Received: from lkp-server01.sh.intel.com (HELO fb1ced2c09fb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Jun 2023 10:16:33 -0700
+Received: from kbuild by fb1ced2c09fb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q4lua-0002WN-2m;
+        Thu, 01 Jun 2023 17:16:32 +0000
+Date:   Fri, 2 Jun 2023 01:15:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        rcu <rcu@vger.kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>
+Subject: Re: [PATCH 3/9] rcu: Rename jiffies_till_flush to jiffies_lazy_flush
+Message-ID: <202306020130.M1c0QAFE-lkp@intel.com>
+References: <20230531101736.12981-4-frederic@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531101736.12981-4-frederic@kernel.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,25 +70,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Jun 2023 16:53:07 +0000 Anjali Kulkarni wrote:
-> > Is it possible to recode the sample so the format can be decided based
-> > on cmd line argument? To be honest samples are kinda dead, it'd be best
-> > if the code was rewritten to act as a selftest.  
-> 
-> Yes, I can recode to use a cmd line argument. Where would a selftest
-> be committed?
+Hi Frederic,
 
-The path flow is the same as for the sample, the file just goes to
-tools/testing/selftests rather than samples/.
+kernel test robot noticed the following build warnings:
 
-> This is kind of a self test in the sense that this is
-> working code  to test the other kernel code. What else is needed to
-> make it a selftest?
+[auto build test WARNING on paulmck-rcu/dev]
+[also build test WARNING on linus/master v6.4-rc4 next-20230601]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Not much, really. I think the requirement is to exit with a non-zero
-return code on failure, which you already do. 0 means success; 1 means
-failure; 2 means skip, IIRC.
+url:    https://github.com/intel-lab-lkp/linux/commits/Frederic-Weisbecker/rcu-Assume-IRQS-disabled-from-rcu_report_dead/20230531-182004
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev
+patch link:    https://lore.kernel.org/r/20230531101736.12981-4-frederic%40kernel.org
+patch subject: [PATCH 3/9] rcu: Rename jiffies_till_flush to jiffies_lazy_flush
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20230602/202306020130.M1c0QAFE-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/c07a1bea9df8b80429d4e24052d83de94f5ee160
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Frederic-Weisbecker/rcu-Assume-IRQS-disabled-from-rcu_report_dead/20230531-182004
+        git checkout c07a1bea9df8b80429d4e24052d83de94f5ee160
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash kernel/
 
-The main work in your case would be that the selftest needs to do its
-checking and exit, so the stimuli must be triggered automatically.
-(You can use a bash script to drive the events.)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306020130.M1c0QAFE-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from kernel/rcu/tree.c:5018:
+>> kernel/rcu/tree_nocb.h:271:6: warning: no previous prototype for 'rcu_lazy_set_jiffies_lazy_flush' [-Wmissing-prototypes]
+     271 | void rcu_lazy_set_jiffies_lazy_flush(unsigned long jif)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/rcu/tree_nocb.h:277:15: warning: no previous prototype for 'rcu_lazy_get_jiffies_lazy_flush' [-Wmissing-prototypes]
+     277 | unsigned long rcu_lazy_get_jiffies_lazy_flush(void)
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/rcu_lazy_set_jiffies_lazy_flush +271 kernel/rcu/tree_nocb.h
+
+   268	
+   269	#ifdef CONFIG_RCU_LAZY
+   270	// To be called only from test code.
+ > 271	void rcu_lazy_set_jiffies_lazy_flush(unsigned long jif)
+   272	{
+   273		jiffies_lazy_flush = jif;
+   274	}
+   275	EXPORT_SYMBOL(rcu_lazy_set_jiffies_lazy_flush);
+   276	
+ > 277	unsigned long rcu_lazy_get_jiffies_lazy_flush(void)
+   278	{
+   279		return jiffies_lazy_flush;
+   280	}
+   281	EXPORT_SYMBOL(rcu_lazy_get_jiffies_lazy_flush);
+   282	#endif
+   283	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
